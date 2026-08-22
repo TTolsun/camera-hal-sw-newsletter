@@ -9,6 +9,7 @@ const {
   readRuntimeConfig,
   validateRuntimeConfig,
   sanitizeRuntimeConfig,
+  resolveRunMode,
   parseCsv,
   parseBoolean,
   parseInteger,
@@ -811,4 +812,54 @@ test('GEMINI_TEMPERATURE_* — 범위 밖 값은 파싱 단계에서 에러', ()
     () => readRuntimeConfig({ GEMINI_TEMPERATURE_REPORTER: '-0.1' }),
     /GEMINI_TEMPERATURE_REPORTER must be >= 0/
   );
+});
+
+test('COVERAGE_WEEK_KEY 기본값은 빈 문자열이다', () => {
+  const config = readRuntimeConfig({});
+  assert.equal(config.coverageWeekKeyOverride, '');
+});
+
+test('COVERAGE_WEEK_KEY가 YYYY-Www 형식이면 그대로 읽힌다', () => {
+  const config = readRuntimeConfig({ COVERAGE_WEEK_KEY: '2026-W34' });
+  assert.equal(config.coverageWeekKeyOverride, '2026-W34');
+});
+
+test('COVERAGE_WEEK_KEY 형식 오류는 조용히 무시되지 않고 throw한다', () => {
+  assert.throws(
+    () => readRuntimeConfig({ COVERAGE_WEEK_KEY: '2026-08-21' }),
+    /COVERAGE_WEEK_KEY must be empty or match YYYY-Www/
+  );
+  assert.throws(
+    () => readRuntimeConfig({ COVERAGE_WEEK_KEY: 'W34-2026' }),
+    /COVERAGE_WEEK_KEY must be empty or match YYYY-Www/
+  );
+});
+
+test('CARRY_SOURCE_PATH 기본값은 빈 문자열이고, 값이 있으면 그대로 읽힌다(존재 검증은 소비자 몫)', () => {
+  const defaultConfig = readRuntimeConfig({});
+  assert.equal(defaultConfig.carrySourcePathOverride, '');
+
+  const config = readRuntimeConfig({
+    CARRY_SOURCE_PATH: 'articles/content/collected-news/2026-W34/carry.json'
+  });
+  assert.equal(config.carrySourcePathOverride, 'articles/content/collected-news/2026-W34/carry.json');
+});
+
+test('resolveRunMode — GITHUB_EVENT_NAME=schedule이면 scheduled, 그 외는 전부 manual', () => {
+  assert.equal(resolveRunMode({ GITHUB_EVENT_NAME: 'schedule' }), 'scheduled');
+  assert.equal(resolveRunMode({ GITHUB_EVENT_NAME: 'workflow_dispatch' }), 'manual');
+  assert.equal(resolveRunMode({ GITHUB_EVENT_NAME: '' }), 'manual');
+  assert.equal(resolveRunMode({}), 'manual');
+  // 'migration'은 Task 4 마이그레이션 도구 전용 상수이며 runtime-config가 만들지 않는다.
+  assert.equal(resolveRunMode({ GITHUB_EVENT_NAME: 'migration' }), 'manual');
+});
+
+test('sanitizeRuntimeConfig가 coverage/carry override를 그대로 노출한다', () => {
+  const config = readRuntimeConfig({
+    COVERAGE_WEEK_KEY: '2026-W34',
+    CARRY_SOURCE_PATH: 'articles/content/collected-news/2026-W34/carry.json'
+  });
+  const sanitized = sanitizeRuntimeConfig(config);
+  assert.equal(sanitized.coverageWeekKeyOverride, '2026-W34');
+  assert.equal(sanitized.carrySourcePathOverride, 'articles/content/collected-news/2026-W34/carry.json');
 });

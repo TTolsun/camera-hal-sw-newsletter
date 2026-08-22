@@ -60,7 +60,7 @@ function linkedScoreCandidate(overrides = {}) {
     summary: 'Camera HAL stream buffer metadata update.',
     api_or_component: 'Camera HAL stream',
     behavior_change: 'Updates stream buffer metadata handling.',
-    published_date: '2026-05-03',
+    published_date: '2026-05-01',
     hasDatedEvidence: true,
     finalSelectionEligibility: 'main',
     reliability: 'official',
@@ -107,11 +107,11 @@ function watchLinkedEvidence(impactType = 'build_dependency_fix') {
 
 test('linked evidence main hint adjusts total only', () => {
   const baseCandidate = linkedScoreCandidate();
-  const base = scoreCandidate(baseCandidate, '2026-05-03');
+  const base = scoreCandidate(baseCandidate, '2026-05-10');
   const linked = scoreCandidate({
     ...baseCandidate,
     ...mainLinkedEvidence()
-  }, '2026-05-03');
+  }, '2026-05-10');
 
   assert.equal(base.base_total, base.total);
   assert.equal(linked.base_total, base.base_total);
@@ -127,12 +127,12 @@ test('linked evidence watch hint adjusts ordering total only without hard exclus
     title: 'Camera HAL stream buffer metadata watch',
     url: 'https://example.com/linked-score-watch'
   });
-  const base = scoreCandidate(baseCandidate, '2026-05-03');
+  const base = scoreCandidate(baseCandidate, '2026-05-10');
   const linked = scoreCandidate({
     ...baseCandidate,
     ...watchLinkedEvidence()
-  }, '2026-05-03');
-  const report = buildShortlistReport('2026-05-03', [
+  }, '2026-05-10');
+  const report = buildShortlistReport('2026-05-10', [
     linkedScoreCandidate({ title: 'AOSP Camera provider session configuration', url: 'https://example.com/linked-score-peer' }),
     { ...baseCandidate, ...watchLinkedEvidence() },
     linkedScoreCandidate({ title: 'Android Camera API capture request update', url: 'https://example.com/linked-score-c' }),
@@ -155,21 +155,21 @@ test('linked evidence watch hint adjusts ordering total only without hard exclus
 
 test('linked evidence adjustment requires count and valid impact classification', () => {
   const baseCandidate = linkedScoreCandidate();
-  const base = scoreCandidate(baseCandidate, '2026-05-03');
+  const base = scoreCandidate(baseCandidate, '2026-05-10');
   const zeroCount = scoreCandidate({
     ...baseCandidate,
     linked_evidence_summary: { total_count: 0 },
     impact_classification: mainLinkedEvidence().impact_classification
-  }, '2026-05-03');
+  }, '2026-05-10');
   const missingImpact = scoreCandidate({
     ...baseCandidate,
     linked_evidence_summary: { total_count: 1 }
-  }, '2026-05-03');
+  }, '2026-05-10');
   const malformedImpact = scoreCandidate({
     ...baseCandidate,
     linked_evidence_summary: { total_count: 1 },
     impact_classification: 'main'
-  }, '2026-05-03');
+  }, '2026-05-10');
 
   for (const score of [zeroCount, missingImpact, malformedImpact]) {
     assert.equal(score.base_total, base.base_total);
@@ -198,14 +198,14 @@ test('linked evidence adjustment does not change threshold eligibility', () => {
       camera_hal_relevance_score: 0,
       evidence_score: 2
     });
-    const score = scoreCandidate({ ...item, ...mainLinkedEvidence() }, '2026-05-03');
+    const score = scoreCandidate({ ...item, ...mainLinkedEvidence() }, '2026-05-10');
     if (score.base_total < MAIN_ARTICLE_SCORE_THRESHOLD && score.total >= MAIN_ARTICLE_SCORE_THRESHOLD) {
       thresholdCandidate = item;
     }
   }
   assert.ok(thresholdCandidate, 'expected a synthetic candidate crossing threshold by linked evidence bonus');
 
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     { ...thresholdCandidate, ...mainLinkedEvidence() }
   ], { minArticles: 1 });
   const [item] = report.shortlisted_candidates;
@@ -225,7 +225,7 @@ test('linked evidence bonus does not bypass exclusion contracts', () => {
     linkedScoreCandidate({ title: 'Watchlist linked evidence', url: 'https://example.com/excluded-watch', finalSelectionEligibility: 'watchlist' }),
     linkedScoreCandidate({ title: 'Main ineligible linked evidence', url: 'https://example.com/excluded-main', main_eligible: false })
   ].map(item => ({ ...item, ...mainLinkedEvidence() }));
-  const report = buildShortlistReport('2026-05-03', items, { minArticles: 1 });
+  const report = buildShortlistReport('2026-05-10', items, { minArticles: 1 });
   const reasonsByUrl = new Map(report.excluded_candidates.map(item => [item.url, item.exclusion_reasons]));
 
   assert.ok(reasonsByUrl.get('https://example.com/excluded-date').includes('missing dated evidence'));
@@ -251,7 +251,7 @@ test('reporter input omits linked evidence diagnostics without changing order or
     candidate({ title: 'Android Camera API metadata update C', url: 'https://example.com/reporter-c' }),
     candidate({ title: 'Camera HAL buffer compatibility update D', url: 'https://example.com/reporter-d' })
   ];
-  const report = buildShortlistReport('2026-05-03', rawCandidates);
+  const report = buildShortlistReport('2026-05-10', rawCandidates);
   const selectedUrls = new Set(report.selected_articles.map(item => item.normalized_url));
   const input = reporterInputFromShortlist(report);
 
@@ -293,7 +293,7 @@ test('deterministic score ordering is stable and shortlist is capped', () => {
     reliability: index % 2 === 0 ? 'official' : 'community',
     camera_hal_relevance_score: 100 - index
   }));
-  const report = buildShortlistReport('2026-05-03', items);
+  const report = buildShortlistReport('2026-05-10', items);
 
   assert.equal(report.shortlisted_candidates.length, 12);
   assert.equal(report.shortlisted_candidates[0].title, 'CameraX release 0 component A');

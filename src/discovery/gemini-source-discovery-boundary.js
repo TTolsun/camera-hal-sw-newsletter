@@ -91,10 +91,22 @@ const {
   validateCandidateEvidence
 } = require('./validate-candidate-evidence');
 const {
+  candidateDate,
   candidateTitle,
   candidateUrl,
   text
 } = require('../shared/collect/source-intelligence-utils');
+const {
+  classifyCoverageWindow
+} = require('../shared/common/coverage-week');
+const {
+  capNotYetEligible,
+  urlDedupeKey,
+  writeNotYetEligibleOverflowIfNeeded
+} = require('../shared/cli/collect-news-candidates');
+const {
+  resolveCarryForwardStatus
+} = require('../shared/collect/carry-forward');
 
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
 const SEED_ONLY_LLM_CREDENTIALS_MISSING = 'SEED_ONLY_LLM_CREDENTIALS_MISSING';
@@ -475,6 +487,54 @@ function candidatePayload(date, candidates, basePayload = {}) {
     candidates,
     failures: Array.isArray(basePayload.failures) ? basePayload.failures : []
   };
+}
+
+function isPlainObject(value) {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+// 병합 단계가 새로 만든 후보의 origin. stage 1이 이미 만든 manual 후보는 여기 없다 —
+// stage 1의 partitionByCoverageEligibility가 그 경계를 이미 적용했기 때문이다.
+const NEW_MERGE_CANDIDATE_ORIGINS = new Set([
+  'gemini_discovery',
+  'seed_url_evidence',
+  'gemini_linked_discovery'
+]);
+
+// Task 10: 병합 단계가 새로 만든 후보 중 coverage 경계 밖([E, U), 즉 이번 coverage 주보다
+// 최신)인 것을 분리한다. LLM 판정·score·rank·cap 이전에 걸러내야 다음 실행 carry-forward
+// 원천이 이번 selection 파생값으로 오염되지 않는다. coverage가 없으면(레거시 payload 등)
+// 분리를 건너뛰고 전부 파이프라인으로 흘려보낸다 — coverage 없이 판정하면 전부
+// 'unknown'이 되어 오탐(false not_yet_eligible)이 없는 안전한 기본값이다.
+function splitMergeStageNotYetEligible(candidates, coverage) {
+  if (!coverage) return { eligible: candidates, notYetEligible: [] };
+  const eligible = [];
+  const notYetEligible = [];
+  for (const item of candidates) {
+    const isNewOrigin = NEW_MERGE_CANDIDATE_ORIGINS.has(item.origin);
+    const isNotYetEligible = isNewOrigin &&
+      classifyCoverageWindow(candidateDate(item), coverage) === 'not_yet_eligible';
+    if (isNotYetEligible) {
+      notYetEligible.push(item);
+    } else {
+      eligible.push(item);
+    }
+  }
+  return { eligible, notYetEligible };
+}
+
+// stage 1이 넘긴 not_yet_eligible 목록과 이번 병합 단계가 새로 걸러낸 목록을 URL 기준으로
+// dedupe해 합친다. 같은 URL이 양쪽에 있으면 stage 1 항목을 우선한다(먼저 순회).
+function mergeNotYetEligibleByUrl(stage1List, mergeStageList) {
+  const seen = new Set();
+  const merged = [];
+  for (const item of [...stage1List, ...mergeStageList]) {
+    const key = urlDedupeKey(candidateUrl(item) || item.url || '');
+    if (key && seen.has(key)) continue;
+    if (key) seen.add(key);
+    merged.push(item);
+  }
+  return merged;
 }
 
 function boolTrue(value) {
@@ -1214,7 +1274,16 @@ async function runEnabled({
   const seedUsed = seedExpansion?.stats?.seed_used === true;
   const mergeMode = seedUsed ? 'seed_evidence_plus_gemini_discovery' : 'gemini_source_discovery';
 
-  const scored = scoreSourceCandidates(mergedInput, { newsletterDate: date });
+  // Task 10: 병합 단계가 새로 만든 후보(gemini_discovery·seed_url_evidence·
+  // gemini_linked_discovery origin)에도 stage 1과 같은 coverage 경계 [E, U)를 적용한다.
+  // LLM 판정·score·rank·cap을 타기 전에 분리해야 다음 실행 carry-forward 원천이 이번
+  // selection 파생값(cap·rank)으로 오염되지 않는다. manual 후보는 stage 1이 이미 이
+  // 경계로 걸러냈으므로 대상에서 뺀다.
+  const mergeStageCoverage = isPlainObject(manualPayload.coverage) ? manualPayload.coverage : null;
+  const mergeStageSplit = splitMergeStageNotYetEligible(mergedInput, mergeStageCoverage);
+  const pipelineCandidates = mergeStageSplit.eligible;
+
+  const scored = scoreSourceCandidates(pipelineCandidates, { newsletterDate: date });
   writeJson(sourceQualityReportPath(root, date), scored.report);
   fs.writeFileSync(sourceQualityReportMarkdownPath(root, date), renderSourceQualityMarkdown(scored.report), 'utf8');
 
@@ -1260,6 +1329,31 @@ async function runEnabled({
     proposalValidations: discovery.proposalValidationReport.validations
   }));
   const mergedPayload = candidatePayload(date, evidence.annotatedCandidates, manualPayload);
+  // Task 10: stage 1이 넘겨준 not_yet_eligible과 이번 병합 단계에서 새로 걸러낸 후보를
+  // URL 기준으로 dedupe해 합치고, stage 1과 같은 상한(60건/262144바이트) 규칙을 재적용한다.
+  const notYetEligibleMerged = mergeNotYetEligibleByUrl(
+    Array.isArray(manualPayload.not_yet_eligible) ? manualPayload.not_yet_eligible : [],
+    mergeStageSplit.notYetEligible
+  );
+  const notYetEligibleCap = capNotYetEligible(notYetEligibleMerged);
+  mergedPayload.not_yet_eligible = notYetEligibleCap.committed;
+  mergedPayload.not_yet_eligible_overflow = notYetEligibleCap.overflow;
+  // 리뷰 fix: 병합 단계 자체가 상한을 새로 넘겼다면 stage 1과 같은 우선순위 규칙
+  // (carry-forward.js의 resolveCarryForwardStatus -- overflow가 항상 최우선)으로
+  // carry_forward_status를 'overflow'로 승격한다. mergedPayload는 candidatePayload()가
+  // manualPayload(stage 1의 carry_forward_status)를 그대로 스프레드해 넘어온 상태라, 이 줄이
+  // 없으면 orchestrator 게이트(status 필드만 봄)가 병합 단계 overflow를 못 보고 통과시킨다.
+  // overflow가 false면 stage 1이 정한 status를 그대로 둔다.
+  mergedPayload.carry_forward_status = resolveCarryForwardStatus({
+    status: mergedPayload.carry_forward_status,
+    overflow: notYetEligibleCap.overflow
+  });
+  // fix round 1: 상한을 넘기면 stage 1과 같은 규칙으로 전체 목록을 .tmp에 남긴다 — 안 그러면
+  // stage 2 신규 후보가 합류하며 상한을 넘긴 항목이 committed에도 진단 파일에도 없이 완전히
+  // 사라진다(silent truncate 금지 계약 위반). stage 1이 이미 이번 run에서 같은 파일을 썼어도
+  // 이 합산 전체 목록(stage 1 목록 ∪ 병합 단계 신규분)이 항상 상위 집합이므로 덮어써도 정보
+  // 유실이 없다.
+  writeNotYetEligibleOverflowIfNeeded(root, notYetEligibleCap);
   const geminiPayload = candidatePayload(date, geminiAnnotatedCandidates, {
     failures: discovery.rejectedProposals
   });
@@ -1278,7 +1372,7 @@ async function runEnabled({
     llmUsed: true,
     seedUsed,
     status: 'PASS',
-    manifestSchemaVersion: 2,
+    manifestSchemaVersion: 3,
     discoveryStats,
     reportRefs: {
       usage_report: geminiUsageReportRelPath(date),
@@ -1515,6 +1609,7 @@ module.exports = {
   SEED_ONLY_LLM_CREDENTIALS_MISSING,
   buildSourceDiscoveryFeedbackReport,
   findManualCandidatePath,
+  mergeNotYetEligibleByUrl,
   normalizeRejectedReason,
   parseArgs,
   rejectedReasonSummary,
@@ -1522,5 +1617,6 @@ module.exports = {
   renderSourceDiscoveryFeedbackMarkdown,
   run,
   selectEvidenceFetchTargets,
-  sourceDiscoveryHandoff
+  sourceDiscoveryHandoff,
+  splitMergeStageNotYetEligible
 };

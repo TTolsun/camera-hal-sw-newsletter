@@ -306,6 +306,26 @@ test('혼합 stamp로 거부된 weekly 기록의 사유가 generation-status에 
   }, { weeklyThrows: new Error(mixedStampRejection) });
 });
 
+// M1(#934 리뷰): weekly upsert가 coverage mismatch로 거부돼 weeklyOutputStatus가 'failed'로
+// 남으면, 나머지 조건이 전부 강한 PASS(finalPublishReady=true)라도 편집자 검토를 강제로 켠다.
+// 위 '혼합 stamp' 테스트가 보여주듯 이 실패는 기존 try/catch에 잡혀 데일리 발행을 막지
+// 않는데, 그 상태를 finalEditorReviewRequired가 놓치면 mismatch가 조용히 finalPublishReady=true
+// 뒤에 숨어 사람 검토 없이 나갈 수 있었다(carryForwardNeedsReview와 같은 방식으로 OR).
+test('weekly 기록이 coverage mismatch로 실패하면 강한 PASS 입력에서도 editor_review_required를 강제로 켠다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    const out = await decide(baseArgs(newsroomDir, newsletterDir));
+
+    assert.equal(calls.selectionStatusExtraOptions.length, 1);
+    const options = calls.selectionStatusExtraOptions[0];
+    // finalPublishReady·공개 산출물 기록은 이 게이트가 손대지 않는다(carry-forward 게이트와 동일 원칙).
+    assert.equal(options.finalPublishReady, true);
+    assert.equal(options.editorReviewRequired, true);
+    assert.equal(out.generationStatusArtifact.weekly_output_status, 'failed');
+  }, { weeklyThrows: new Error('weekly upsert coverage mismatch: article_count=3 weekly_theme_ids=2') });
+});
+
 // weekly 3종과 인덱스는 정상 기록됐는데 부가 산출물(weekly-merge-report.json) 쓰기만 실패한 주.
 // 상태 마킹을 try 끝으로 되돌리면 catch가 'failed'로 덮어, 커밋된 generation-status는 실패인데
 // 같은 PR 변경 파일 목록에는 weekly가 들어 있는 상태가 된다 — 새 필드가 만들려던 구분이 정확히
@@ -394,6 +414,55 @@ test('editor가 기록한 hard block을 status coverage 입력으로 넘긴다',
       ['group:dropped']
     );
   });
+});
+
+// carry-forward가 이번 주 후보 풀을 완전히 채우지 못했으면(missing_expected/invalid/overflow)
+// 나머지 조건이 전부 강한 PASS라도 편집자 검토를 강제로 켠다. 발행 산출물 자체(공개 파일
+// 기록 여부·finalPublishReady)는 이 게이트가 손대지 않는다 — review-only 강등이지 발행
+// 차단이 아니다(게이트 약화 금지: 추가만 한다).
+test('carry_forward_status가 overflow면 강한 PASS 입력에서도 editor_review_required를 강제로 켠다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    const out = await decide(baseArgs(newsroomDir, newsletterDir, {
+      shortlistReport: {
+        underfilled: false,
+        publish_ready: true,
+        composition_mode: 'normal',
+        editor_review_required: false,
+        carry_forward_status: 'overflow'
+      }
+    }));
+
+    assert.equal(calls.selectionStatusExtraOptions.length, 1);
+    const options = calls.selectionStatusExtraOptions[0];
+    assert.equal(options.editorReviewRequired, true);
+    // finalPublishReady·공개 산출물 기록은 이 게이트가 손대지 않는다.
+    assert.equal(options.finalPublishReady, true);
+    assert.equal(out.shouldWritePublicArtifacts, true);
+    assert.ok(fs.existsSync(path.join(newsletterDir, 'newsletter.md')));
+  });
+});
+
+test('carry_forward_status가 loaded/not_applicable이면 editor_review_required를 건드리지 않는다', async () => {
+  for (const carryForwardStatus of ['loaded', 'not_applicable']) {
+    await withStubbedCollaborators(async (decide, calls) => {
+      const newsroomDir = tempRoot('publish-decision-newsroom-');
+      const newsletterDir = tempRoot('publish-decision-newsletter-');
+      await decide(baseArgs(newsroomDir, newsletterDir, {
+        shortlistReport: {
+          underfilled: false,
+          publish_ready: true,
+          composition_mode: 'normal',
+          editor_review_required: false,
+          carry_forward_status: carryForwardStatus
+        }
+      }));
+
+      const options = calls.selectionStatusExtraOptions[0];
+      assert.equal(options.editorReviewRequired, false);
+    });
+  }
 });
 
 // #870: weekly 병합 검증기에 (1) 병합 전 원본과 (2) 오늘 editor draft의 계약 마커가 실제로

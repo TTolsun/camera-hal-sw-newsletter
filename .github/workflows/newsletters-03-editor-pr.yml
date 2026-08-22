@@ -27,10 +27,20 @@ on:
         required: false
         default: ""
         type: string
+      coverage_week_key:
+        description: "Coverage 주 override, 형식 YYYY-Www(예: 2026-W34). 비우면 실행일 기준 자동 계산."
+        required: false
+        default: ""
+        type: string
   workflow_call:
     inputs:
       newsletter_date:
         description: "Newsletter date in YYYY-MM-DD. Empty means today in KST."
+        required: false
+        type: string
+        default: ""
+      coverage_week_key:
+        description: "Coverage 주 override, 형식 YYYY-Www. 비우면 실행일 기준 자동 계산."
         required: false
         type: string
         default: ""
@@ -52,6 +62,13 @@ jobs:
       NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
       NEWSROOM_CANDIDATE_INPUT_MODE: artifact
       NEWSROOM_CANDIDATE_INPUT_PATH: ""
+      # Task 12: generate(npm run generate → gemini-newsroom-newsletter.js)가 shortlist/최종
+      # 후보를 select 체인으로 다시 계산하며 이 override를 coverage 앵커로 쓴다
+      # (newsroom-selection.js). collect(01)와 같은 값을 못 받으면 같은 주 안에서 서로 다른
+      # 대상 주를 계산해 weekly upsert hard-fail(Task 11)을 오탐시킬 수 있다.
+      # CARRY_SOURCE_PATH는 여기서 전달하지 않는다 — carry-forward 로딩은 collect(01) 단계의
+      # collect-news-candidates.js에서만 일어나고, 이 워크플로는 그 호출부를 갖지 않는다.
+      COVERAGE_WEEK_KEY: ${{ inputs.coverage_week_key || github.event.inputs.coverage_week_key || '' }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '2' }}
       GEMINI_RETRY_DELAYS_MS: ${{ vars.GEMINI_RETRY_DELAYS_MS || '20000,10000' }}

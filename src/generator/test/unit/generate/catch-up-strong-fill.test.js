@@ -46,7 +46,7 @@ function weakRelease(overrides = {}) {
 }
 
 function report(candidates, policyOverrides = {}) {
-  return buildShortlistReport('2026-06-03', { candidates }, {
+  return buildShortlistReport('2026-06-10', { candidates }, {
     exposureHistory: { articles: [] },
     homepageHeadlineState: EMPTY_HEADLINE_STATE,
     catchUpPolicy: { ...CATCH_UP_POLICY, ...policyOverrides }
@@ -62,7 +62,7 @@ test('weak reference catch-up candidate is not promoted to fill a thin week', ()
     }),
     weakRelease({
       title: 'Google I/O camera roundup', url: 'https://developer.android.com/jetpack/androidx/releases/camera#io-roundup',
-      published_date: '2026-03-25', version_or_release: 'I/O 2025', behavior_change: 'roundup'
+      published_date: '2026-05-08', version_or_release: 'I/O 2025', behavior_change: 'roundup'
     })
   ]);
   assert.equal(result.catch_up_used_count, 0, 'floor-failing catch-up candidate must not be promoted');

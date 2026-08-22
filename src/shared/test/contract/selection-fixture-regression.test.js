@@ -58,7 +58,14 @@ test('good selection fixtures remain eligible final main article inputs', () => 
     'selection/good/dated-aosp-camera-main-candidate.json',
     'selection/good/libcamera-driver-pipeline-main-candidate.json'
   ].map(readJsonFixture);
-  const report = buildShortlistReport('2026-05-03', goodFixtures.map(fixture => candidate(fixture.candidate)));
+  // 앵커(2026-05-14, coverage 주 2026-05-04~05-10) 기준: 날짜 없는 기본 후보(2026-05-01)는
+  // fallback 창(9일), 명시적으로 05-06을 쓰는 두 후보는 primary 창(4일)에 들어간다. primary만
+  // 으로도 min(1)을 채우므로 fallback이 자동 참조되지 않는데, 이 테스트는 세 fixture 모두
+  // 선정에 남아야 한다는 계약을 검증하는 목적이라 minArticles를 3으로 올려 fallback도
+  // 명시적으로 채우게 한다.
+  const report = buildShortlistReport('2026-05-14', goodFixtures.map(fixture => candidate(fixture.candidate)), {
+    minArticles: 3
+  });
   const excludedUrls = new Set(report.excluded_candidates.map(item => item.url));
   const selectedUrls = new Set(report.selected_articles.map(item => item.url));
 

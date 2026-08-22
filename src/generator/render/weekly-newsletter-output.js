@@ -26,6 +26,7 @@ const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../reporter/weekly-article-limits');
 const { resolveWeeklyArticles, sectionIdentity } = require('../reporter/weekly-duplicate-merge');
 const { indexContractVersionField } = require('../../shared/common/story-contract-version');
+const { coverageForAnchorDate } = require('../../shared/common/coverage-week');
 
 // Browser-safe (https) image for a weekly article section, used to show one article image on the
 // homepage Latest card. Returns '' when the section has no usable https image.
@@ -205,10 +206,35 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
   return result;
 }
 
-async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, editor, mergeDuplicate, validateMerged } = {}) {
+async function writeWeeklyNewsletterArtifacts({
+  root = process.cwd(),
+  date,
+  editor,
+  mergeDuplicate,
+  validateMerged,
+  coverageWeekKeyOverride
+} = {}) {
   const weeklyKey = weeklyKeyForDate(date);
   const existingIssue = loadExistingWeeklyIssue(root, weeklyKey);
   const existingSections = existingIssue ? ensureArray(existingIssue.sections) : [];
+
+  // 이번 실행의 대상 주(coverage)를 이 시점에 한 번 정하고, 이미 이 위클리 이슈에 실린
+  // 대상 주와 어긋나면 그 자리에서 멈춘다. weekly coverage backfill(phase 2, 별도 PR로
+  // 이미 라이브에 반영됨) 이후에는 라이브의 모든 위클리 이슈가 coverage_week_key를 갖고
+  // 있어야 하므로, 그 값이 없거나 이번 실행이 계산한 값과 다르면 같은 identity 주
+  // (weeklyKey) 안에 서로 다른 대상 주의 기사가 섞인다는 뜻이다 — 페이지 파일을 쓰기
+  // **전에** throw해 절반만 갱신된 상태를 막는다(indexContractVersionField의
+  // "쓰기 전 throw" 선례와 같은 자리).
+  const coverage = coverageForAnchorDate(date, coverageWeekKeyOverride);
+  if (existingIssue) {
+    const existingCoverageWeekKey = existingIssue.coverage_week_key;
+    if (!existingCoverageWeekKey) {
+      throw new Error(`missing coverage_week_key on existing issue ${weeklyKey}`);
+    }
+    if (existingCoverageWeekKey !== coverage.coverage_week_key) {
+      throw new Error(`weekly coverage mismatch: existing=${existingCoverageWeekKey} incoming=${coverage.coverage_week_key}`);
+    }
+  }
 
   const resolved = await resolveWeeklyArticles({
     existingArticles: existingSections,
@@ -223,13 +249,20 @@ async function writeWeeklyNewsletterArtifacts({ root = process.cwd(), date, edit
   // 필터가 비어 버린다) 대신, 그 주 기사(section)들의 relevance bucket 을 topic 태그로 집계한다.
   const mergedTags = weeklyTopicTags(articles);
 
-  // coverage(대상 주) 5필드는 이 태스크에서 생산하지 않고 있으면 그대로 옮기기만 한다(pass-through).
-  // 새 draft(editor)가 가진 값을 우선하고, 없으면 기존 이슈에 이미 실린 값을 보존한다 — 그래야
-  // coverage 필드가 없는 draft로 같은 주를 재-upsert해도(과거호, 전환 전 실행 등) 앞서 실린
-  // coverage 표시가 지워지지 않는다.
+  // coverage(대상 주) 5필드: 새 draft(editor)가 가진 값을 우선하고, 없으면 기존 이슈에 이미
+  // 실린 값을 보존하며(pass-through), 그마저 없으면 이 함수가 방금 계산한 coverage로 채운다.
+  // 그래야 coverage 필드가 없는 draft로 같은 주를 재-upsert해도(과거호, 전환 전 실행 등) 앞서
+  // 실린 coverage 표시가 지워지지 않고, 처음 쓰는 주는 계산값으로 바로 채워진다.
+  const computedCoverageFields = {
+    coverage_week_key: coverage.coverage_week_key,
+    coverage_start_date: coverage.coverage_start_date,
+    coverage_end_date: coverage.coverage_end_date,
+    coverage_mode: 'iso_week',
+    generation_anchor_date: date
+  };
   const coverageCarryFields = {};
   for (const field of ['coverage_week_key', 'coverage_start_date', 'coverage_end_date', 'coverage_mode', 'generation_anchor_date']) {
-    const value = (editor && editor[field]) || (existingIssue && existingIssue[field]);
+    const value = (editor && editor[field]) || (existingIssue && existingIssue[field]) || computedCoverageFields[field];
     if (value) coverageCarryFields[field] = value;
   }
 

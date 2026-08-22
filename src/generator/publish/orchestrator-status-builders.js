@@ -287,7 +287,18 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     release_class_catch_up: report.release_class_catch_up || diagnostics.release_class_catch_up || null,
     exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
     final_exclusion_reason_summary: ensureArray(diagnostics.final_exclusion_reason_summary).slice(0, 10),
-    candidate_selection_note: diagnostics.note
+    candidate_selection_note: diagnostics.note,
+    // coverage lineage(대상 주·carry-forward 판정)는 buildShortlistReport가 수집 payload에서
+    // 옮겨 담은 값이다. generation-status.json·PR 본문·artifact manifest가 모두 이 자리를
+    // 거쳐 같은 값을 읽으므로, 여기서 빠지면 세 곳이 각자 'unknown'을 찍는다.
+    coverage_week_key: report.coverage_week_key || '',
+    coverage_start_date: report.coverage_start_date || '',
+    coverage_end_date: report.coverage_end_date || '',
+    generation_anchor_date: report.generation_anchor_date || '',
+    carry_forward_status: report.carry_forward_status || '',
+    carry_source: report.carry_source || null,
+    not_yet_eligible_count: report.not_yet_eligible_count ?? null,
+    not_yet_eligible_overflow: report.not_yet_eligible_overflow === true
   };
 }
 

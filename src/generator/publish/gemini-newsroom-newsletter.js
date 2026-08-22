@@ -394,7 +394,8 @@ async function main() {
 
   const cacheDir = path.join(root, 'cache', 'news-summary');
   let shortlistReport = buildShortlistReport(date, candidates, {
-    selectionWindowPolicy: runtimeConfig.selectionWindowPolicy
+    selectionWindowPolicy: runtimeConfig.selectionWindowPolicy,
+    coverageWeekKeyOverride: runtimeConfig.coverageWeekKeyOverride || undefined
   });
   generationRunState.shortlistReport = shortlistReport;
   generationRunState.selectedInputs = shortlistReport.selected_articles;

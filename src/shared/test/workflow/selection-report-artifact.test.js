@@ -98,3 +98,29 @@ test('deterministic pre-LLM failure artifacts include date, status, and selectio
   assert.equal(fs.existsSync(path.join(newsroomDir, 'selection-report.md')), true);
   assert.equal(fs.existsSync(path.join(newsroomDir, 'selection-diagnostics.md')), true);
 });
+
+// coverage lineage(대상 주·생성 anchor)는 shortlistReport가 수집 payload에서 옮겨 온 값을
+// selection-report.json까지 그대로 실어야 한다 — 리뷰어가 이 파일 하나만 보고도 이번 실행이
+// 어느 대상 주를 다뤘는지 알 수 있어야 한다.
+test('selection-report.json에 coverage lineage(대상 주·생성 anchor) 3+1 필드가 실린다', () => {
+  const date = '2026-08-17';
+  const root = tempRoot('selection-report-coverage-lineage-');
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
+  const shortlistReport = {
+    ...deterministicFailureShortlist(date),
+    coverage_week_key: '2026-W33',
+    coverage_start_date: '2026-08-10',
+    coverage_end_date: '2026-08-16',
+    generation_anchor_date: date,
+    carry_forward_status: 'loaded'
+  };
+
+  writeNewsletterDate(date, root);
+  writeSelectionDiagnosticsArtifact(newsroomDir, shortlistReport);
+
+  const report = readJson(path.join(newsroomDir, 'selection-report.json'));
+  assert.equal(report.coverage_week_key, '2026-W33');
+  assert.equal(report.coverage_start_date, '2026-08-10');
+  assert.equal(report.coverage_end_date, '2026-08-16');
+  assert.equal(report.generation_anchor_date, date);
+});

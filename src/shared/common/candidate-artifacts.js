@@ -46,7 +46,9 @@ const CANDIDATE_INPUT_MODES = Object.freeze({
 // 후보 artifact에 기록되는 schema_version 계약값. 생산자(collect CLI, source-monitor,
 // seed-evidence)가 공유한다. 아래 strict 검증 하한(>= 5)은 "5 이상 수용"이라는 의도된
 // 하한이라 이 값과 별개다.
-const CANDIDATE_SCHEMA_VERSION = 6;
+// 7(Task 8): collect(01) payload에 top-level coverage/generation_anchor_date/
+// collection_observed_at/run_mode/not_yet_eligible/not_yet_eligible_overflow가 추가됐다.
+const CANDIDATE_SCHEMA_VERSION = 7;
 
 class CandidateArtifactValidationError extends Error {
   constructor(message, details = {}) {
@@ -256,11 +258,11 @@ function manifestSchemaVersion(manifest = {}) {
   return Number.isFinite(value) ? value : NaN;
 }
 
-function validateMergedManifestSchema(root, manifest, manifestRelPath, validationMode) {
+function validateMergedManifestSchema(root, manifest, manifestRelPath, validationMode, payload = null) {
   if (manifest.manifest_type !== 'merged_candidate') return;
   const version = manifestSchemaVersion(manifest);
-  if (!Number.isInteger(version) || version < 1 || version > 2) {
-    throw new CandidateArtifactValidationError(`Merged candidate manifest schema_version must be 1 or 2: ${manifestRelPath}`, {
+  if (!Number.isInteger(version) || version < 1 || version > 3) {
+    throw new CandidateArtifactValidationError(`Merged candidate manifest schema_version must be 1, 2, or 3: ${manifestRelPath}`, {
       manifestRelPath,
       schema_version: manifest.schema_version
     });
@@ -336,6 +338,28 @@ function validateMergedManifestSchema(root, manifest, manifestRelPath, validatio
         });
       }
     }
+  }
+
+  if (version < 3) return;
+
+  // Task 10: 병합 단계가 새로 만든 후보에도 stage 1과 같은 [E, U) coverage 경계를
+  // 적용했다는 계약을 강제한다. not_yet_eligible 배열·coverage 객체가 merged candidate
+  // payload에 없으면 다음 실행의 carry-forward 원천이 끊긴 것이므로 validated 판정을
+  // 내릴 수 없다. v1·v2로 이미 커밋된 과거 artifact는 이 분기에 닿지 않아 그대로 통과한다.
+  if (!isObject(payload) || !Array.isArray(payload.not_yet_eligible)) {
+    throw new CandidateArtifactValidationError(`Merged candidate manifest schema_version 3 requires payload.not_yet_eligible array: ${manifestRelPath}`, {
+      manifestRelPath
+    });
+  }
+  if (!isObject(payload.coverage)) {
+    throw new CandidateArtifactValidationError(`Merged candidate manifest schema_version 3 requires payload.coverage object: ${manifestRelPath}`, {
+      manifestRelPath
+    });
+  }
+  if (String(manifest.carry_forward_status || '').trim() === '') {
+    throw new CandidateArtifactValidationError(`Merged candidate manifest schema_version 3 requires carry_forward_status: ${manifestRelPath}`, {
+      manifestRelPath
+    });
   }
 }
 
@@ -607,6 +631,16 @@ function buildMergedCandidateManifest({
     manifest.seed_merge_report = reportRefs.seed_merge_report || '';
     manifest.seed_merge_report_markdown = reportRefs.seed_merge_report_markdown || '';
   }
+  if (schemaVersion >= 3) {
+    // Task 10: merged-candidates.json이 이미 들고 있는 coverage·not_yet_eligible·
+    // carry_forward_status의 요약을 manifest에도 얹는다 — 전체 파일을 열지 않고
+    // manifest만으로 이번 병합이 [E, U) 경계를 지켰는지 확인할 수 있게 한다.
+    const coverage = isObject(payload.coverage) ? payload.coverage : null;
+    manifest.coverage_week_key = coverage ? String(coverage.coverage_week_key || '') : '';
+    manifest.carry_forward_status = String(payload.carry_forward_status || '');
+    manifest.not_yet_eligible_count = Array.isArray(payload.not_yet_eligible) ? payload.not_yet_eligible.length : 0;
+    manifest.not_yet_eligible_overflow = payload.not_yet_eligible_overflow === true;
+  }
   return manifest;
 }
 
@@ -727,7 +761,7 @@ function validateCandidateArtifact({
     });
   }
   validateRawManifestSchema(root, manifest, result.manifestRelPath, validationMode);
-  validateMergedManifestSchema(root, manifest, result.manifestRelPath, validationMode);
+  validateMergedManifestSchema(root, manifest, result.manifestRelPath, validationMode, payloadValidation.payload);
   const expectedHash = artifactHash(manifest);
   if (!expectedHash) {
     throw new CandidateArtifactValidationError(`Candidate manifest is missing artifact_hash: ${result.manifestRelPath}`, result);

@@ -3,7 +3,8 @@ const path = require('path');
 const {
   decodeHtml,
   kstDate,
-  readJson
+  readJson,
+  writeJson
 } = require('../common/common');
 const {
   collectedNewsDir,
@@ -14,9 +15,10 @@ const {
   writeManualCandidateArtifacts
 } = require('../common/candidate-artifacts');
 const { parseManualSourceUrls } = require('../collect/collection-intent');
-const { readRuntimeConfig } = require('../common/runtime-config');
+const { readRuntimeConfig, resolveRunMode } = require('../common/runtime-config');
 const { monthRangeOverlapsWindow } = require('../common/date-signals');
-const { getSelectionWindowPolicy } = require('../common/newsletter-policy');
+const { coverageForAnchorDate, classifyCoverageWindow } = require('../common/coverage-week');
+const { loadCarryForward, resolveCarryForwardStatus } = require('../collect/carry-forward');
 const {
   extractImageCandidatesFromHtml,
   extractImageCandidatesFromRssBlock,
@@ -93,6 +95,12 @@ const AUDIENCE = 'AOSP Camera / Camera Driver / SoC Platform / C++ engineer';
 // useful camera-driver / V4L2 / libcamera / ISP leads before the slice.
 const MAX_FINAL_CANDIDATES = 40;
 const MAX_CANDIDATES_PER_SOURCE = 8;
+
+// coverage 경계 밖([E, U))에서 분리해 다음 실행 carry-forward로 넘기는 목록의 상한. 소스가
+// 폭주해도 collect payload가 무한정 커지지 않게 건수와 바이트 양쪽에 상한을 둔다.
+const NOT_YET_ELIGIBLE_MAX_COUNT = 60;
+const NOT_YET_ELIGIBLE_MAX_BYTES = 262144;
+const NOT_YET_ELIGIBLE_OVERFLOW_REL_PATH = path.join('.tmp', 'not-yet-eligible-full.json');
 
 const PRIORITY_WEIGHT = { high: 3, medium: 2, low: 1 };
 const RELIABILITY_WEIGHT = { official: 3, 'project-official': 2, 'official-community': 2 };
@@ -1233,19 +1241,81 @@ function withinLookback(candidate, now, lookbackDays) {
 // 가점만 빼고 후보는 풀에 그대로 남는다 — 35일 풀 필터(아래 withinLookback 호출)는 건드리지
 // 않는다. 다만 전역 캡(MAX_FINAL_CANDIDATES)은 그 뒤에 한 번 더 걸리므로, 순위가 밀린 nodate
 // 후보가 최종 후보 파일에서 빠질 수는 있다.
-function withinPrimarySelectionWindow(candidate, now) {
-  if (!isSourceChangeEventCandidate(candidate) && !parseDate(candidate.publishedAt)) return false;
-  return withinLookback(candidate, now, getSelectionWindowPolicy().primarySelectionDays);
+//
+// primary 판정은 coverage-week.js의 classifyCoverageWindow로 통일한다(Task 8) — "이번 주
+// 신호"는 이제 now로부터 뒤로 며칠이 아니라, coverage 주(직전 완결 ISO 주) 안(0~6일)인지로
+// 정의된다. source_change_event 후보는 여전히 가드 밖에 둔다: publishedAt이 항상 빈 문자열
+// 이라 classifyCoverageWindow가 이 후보를 절대 'primary'로 분류할 수 없으므로, 위 주석이
+// 설명하는 "이 lane의 순위는 이번 변경으로 달라지지 않는다"를 지키려면 무조건 true를
+// 유지해야 한다.
+function withinPrimarySelectionWindow(candidate, coverage) {
+  if (isSourceChangeEventCandidate(candidate)) return true;
+  if (!parseDate(candidate.publishedAt)) return false;
+  return classifyCoverageWindow(candidate.publishedAt, coverage) === 'primary';
 }
 
-function candidateRankOrder(now) {
+// coverage를 생략한 호출부(테스트 포함)를 위해 now의 날짜를 anchor로 삼아 기본 coverage를
+// 계산한다. main()은 override(coverageWeekKeyOverride)를 반영한 coverage를 명시적으로 넘긴다.
+function candidateRankOrder(now, coverage = coverageForAnchorDate(now.toISOString().slice(0, 10))) {
   return (a, b) => {
     const priorityDelta = (PRIORITY_WEIGHT[b.source_priority] || 0) - (PRIORITY_WEIGHT[a.source_priority] || 0);
     const reliabilityDelta = (RELIABILITY_WEIGHT[b.source_reliability] || 0) - (RELIABILITY_WEIGHT[a.source_reliability] || 0);
-    const primaryWindowDelta = Number(withinPrimarySelectionWindow(b, now)) -
-      Number(withinPrimarySelectionWindow(a, now));
+    const primaryWindowDelta = Number(withinPrimarySelectionWindow(b, coverage)) -
+      Number(withinPrimarySelectionWindow(a, coverage));
     return priorityDelta || reliabilityDelta || primaryWindowDelta || b.relevanceScore - a.relevanceScore;
   };
+}
+
+// dedupe 직후·cap 이전에 coverage 경계 밖([E, U)) 후보를 떼어낸다. 이번 호 대상이 아니므로
+// 소스별/전역 캡에 끼어 이번 주 신호를 밀어내면 안 되고, 다음 실행이 carry-forward로 읽을 수
+// 있게 원시 재평가 payload 그대로 보존한다. source_change_event 후보는 publishedAt이 항상
+// 빈 문자열이라 classifyCoverageWindow가 이미 'not_yet_eligible'로 분류하지 않지만, 이
+// lane(source-monitor.js가 만드는 evidence_id 적립 후보)의 순위가 절대 이번 변경으로
+// 흔들리면 안 되므로 명시적으로도 분리 대상에서 뺀다(위 withinPrimarySelectionWindow
+// 주석 참조).
+function partitionByCoverageEligibility(candidates, coverage, now, lookbackDays) {
+  const notYetEligible = [];
+  const currentCoveragePool = [];
+  for (const item of candidates) {
+    const isNotYetEligible = !isSourceChangeEventCandidate(item) &&
+      withinLookback(item, now, lookbackDays) &&
+      classifyCoverageWindow(item.publishedAt, coverage) === 'not_yet_eligible';
+    if (isNotYetEligible) {
+      notYetEligible.push(item);
+    } else {
+      currentCoveragePool.push(item);
+    }
+  }
+  return { notYetEligible, currentCoveragePool };
+}
+
+function compareNotYetEligible(a, b) {
+  const aTime = Date.parse(a.publishedAt);
+  const bTime = Date.parse(b.publishedAt);
+  if (aTime !== bTime) return aTime - bTime;
+  return String(a.url || '').localeCompare(String(b.url || ''));
+}
+
+// 정렬(publishedAt 오름차순, 동률 url 사전순) 후 건수(60)·바이트(262144, JSON.stringify 기준)
+// 양쪽 상한을 적용한다. 상한을 넘는 쪽만 잘라내므로 committed는 항상 정렬된 전체 목록의 접두어다.
+function capNotYetEligible(notYetEligible) {
+  const full = [...notYetEligible].sort(compareNotYetEligible);
+  let committed = full.slice(0, NOT_YET_ELIGIBLE_MAX_COUNT);
+  while (committed.length > 0 && Buffer.byteLength(JSON.stringify(committed), 'utf8') > NOT_YET_ELIGIBLE_MAX_BYTES) {
+    committed = committed.slice(0, committed.length - 1);
+  }
+  return {
+    full,
+    committed,
+    overflow: committed.length < full.length
+  };
+}
+
+// 상한을 넘겼을 때만 전체 목록을 .tmp에 남긴다(미커밋 — 다음 실행의 참고용 진단 산출물).
+// 정상 경로(상한 안)는 payload.not_yet_eligible 자체가 이미 전체 목록이라 별도 파일이 불필요하다.
+function writeNotYetEligibleOverflowIfNeeded(rootDir, capResult) {
+  if (!capResult.overflow) return;
+  writeJson(path.join(rootDir, NOT_YET_ELIGIBLE_OVERFLOW_REL_PATH), capResult.full);
 }
 
 function titleKey(title) {
@@ -1628,10 +1698,32 @@ async function main() {
     failures.push({ source: 'source-monitor', message: error.message });
   }
 
-  const rankedCandidates = dedupe(candidates)
+  const coverage = coverageForAnchorDate(date, runtimeConfig.coverageWeekKeyOverride);
+  const collectionObservedAt = new Date().toISOString();
+
+  // 직전 주 scheduled coverage run이 [E, U) 밖이라 남겨둔 not_yet_eligible 후보를 이번 풀에
+  // 합류시킨다(Task 9). 이 후보는 원시(raw) 상태이므로 live 후보 뒤에 붙여 dedupe 이하 기존
+  // 필터 체인을 그대로 재통과시킨다 — 파생 판정을 우회하지 않는다. dedupe는 배열 앞쪽을
+  // 우선하므로(first-win) live 후보 뒤에 붙이면 URL/제목이 같을 때 항상 live가 이긴다.
+  const carryForward = loadCarryForward({
+    root,
+    coverage,
+    carrySourcePathOverride: runtimeConfig.carrySourcePathOverride
+  });
+  candidates.push(...carryForward.candidates);
+
+  // [E, U) 후보(이번 coverage 주보다 최신인 후보)는 이번 호 대상이 아니다 — cap 이전에 떼어내
+  // 다음 실행 carry-forward 원천으로 보존한다(Task 8/9).
+  const { notYetEligible, currentCoveragePool } = partitionByCoverageEligibility(
+    dedupe(candidates), coverage, now, lookbackDays
+  );
+  const notYetEligibleCap = capNotYetEligible(notYetEligible);
+  writeNotYetEligibleOverflowIfNeeded(root, notYetEligibleCap);
+
+  const rankedCandidates = currentCoveragePool
     .filter(item => withinLookback(item, now, lookbackDays))
     .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high')
-    .sort(candidateRankOrder(now));
+    .sort(candidateRankOrder(now, coverage));
   candidates = capPerSource(collapseSeriesRepresentatives(rankedCandidates), MAX_CANDIDATES_PER_SOURCE).slice(0, MAX_FINAL_CANDIDATES);
 
   const enrichedCandidates = [];
@@ -1666,6 +1758,17 @@ async function main() {
     generated_at: generatedAt,
     sources_path: path.relative(root, activeSourcesPath).replace(/\\/g, '/'),
     section_map: sectionMap,
+    coverage,
+    generation_anchor_date: date,
+    collection_observed_at: collectionObservedAt,
+    run_mode: resolveRunMode(process.env),
+    not_yet_eligible: notYetEligibleCap.committed,
+    not_yet_eligible_overflow: notYetEligibleCap.overflow,
+    carry_forward_status: resolveCarryForwardStatus({
+      status: carryForward.status,
+      overflow: notYetEligibleCap.overflow
+    }),
+    carry_source: carryForward.carrySource,
     candidates,
     failures
   };
@@ -1695,8 +1798,11 @@ if (require.main === module) {
 module.exports = {
   MAX_FINAL_CANDIDATES,
   MAX_CANDIDATES_PER_SOURCE,
+  NOT_YET_ELIGIBLE_MAX_COUNT,
+  NOT_YET_ELIGIBLE_MAX_BYTES,
   canonicalContentUrl,
   candidateRankOrder,
+  capNotYetEligible,
   capPerSource,
   collapseSeriesRepresentatives,
   componentFromText,
@@ -1709,8 +1815,11 @@ module.exports = {
   normalizeCandidate,
   parseHtmlPage,
   parseRss,
+  partitionByCoverageEligibility,
   renderCandidateMarkdown: markdown,
   resolveLinkedReleaseNoteEvidenceItems,
+  urlDedupeKey,
   withinLookback,
+  writeNotYetEligibleOverflowIfNeeded,
   writeCollectArtifactsThenAccrueDeepDiveTopics
 };

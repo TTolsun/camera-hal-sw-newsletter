@@ -17,6 +17,16 @@ on:
         required: false
         default: ""
         type: string
+      coverage_week_key:
+        description: "Coverage 주 override, 형식 YYYY-Www(예: 2026-W34). 비우면 실행일 기준 자동 계산."
+        required: false
+        default: ""
+        type: string
+      carry_source_path:
+        description: "Carry-forward 원천 merged-candidates.json 경로 override(저장소 상대 또는 절대 경로). 비우면 직전 주 scheduled 실행분을 자동으로 찾는다."
+        required: false
+        default: ""
+        type: string
   workflow_call:
     inputs:
       newsletter_date:
@@ -34,6 +44,16 @@ on:
         required: false
         type: boolean
         default: false
+      coverage_week_key:
+        description: "Coverage 주 override, 형식 YYYY-Www. 비우면 실행일 기준 자동 계산."
+        required: false
+        type: string
+        default: ""
+      carry_source_path:
+        description: "Carry-forward 원천 경로 override. 비우면 직전 주 scheduled 실행분을 자동으로 찾는다."
+        required: false
+        type: string
+        default: ""
     outputs:
       date:
         description: "Resolved newsletter date (YYYY-MM-DD)"
@@ -62,6 +82,11 @@ jobs:
       # (runtime-config.js)도 35일이며, 여기서 동일 값을 명시 전달한다.
       LOOKBACK_DAYS: ${{ inputs.lookback_days || github.event.inputs.lookback_days || '35' }}
       NEWSROOM_MANUAL_SOURCE_URLS: ${{ github.event.inputs.manual_source_urls }}
+      # Task 12: coverage 주·carry-forward 원천 override. runtime-config.js가 형식을 검증하며
+      # (COVERAGE_WEEK_KEY는 ^\d{4}-W\d{2}$ 위반 시 throw), 값이 비어 있으면 자동 계산/자동
+      # lineage 선택으로 그대로 폴백한다(collect-news-candidates.js).
+      COVERAGE_WEEK_KEY: ${{ inputs.coverage_week_key || github.event.inputs.coverage_week_key || '' }}
+      CARRY_SOURCE_PATH: ${{ inputs.carry_source_path || github.event.inputs.carry_source_path || '' }}
 
     steps:
       - name: Checkout repository
@@ -195,6 +220,7 @@ jobs:
             articles/content/newsroom/${{ steps.raw-meta.outputs.date }}/news-candidates.md
             state/source-snapshots/**
             state/deep-dive-topic-queue.json
+            .tmp/not-yet-eligible-full.json
           if-no-files-found: warn
           retention-days: 14
 

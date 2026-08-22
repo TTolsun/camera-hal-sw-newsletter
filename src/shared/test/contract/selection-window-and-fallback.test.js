@@ -5,7 +5,8 @@ const test = require('node:test');
 
 const {
   freshnessWindowMetadata,
-  scoreCandidate
+  scoreCandidate,
+  selectFinalArticlesWithDiagnostics
 } = require('../../../generator/select/newsroom-selection');
 const {
   articlePolicy
@@ -18,18 +19,23 @@ const {
   FALLBACK_WINDOW_TEST_MIN_ARTICLES
 } = require('../helpers/selection-builders');
 
+// 이 파일 전체는 직전 완결 coverage 주(coverage-week.js)를 anchor로 쓴다. 실행일(newsletterDate)
+// 2026-08-19(수)의 coverage 주는 2026-W33(2026-08-10~2026-08-16, 일요일 종료)이다. 창은
+// primary=coverage 주 안(0~6일), fallback=그 전 2주(7~20일), reference=그 전전 2주(21~34일),
+// stale=35일 이상, not_yet_eligible=coverage 주가 끝난 뒤(E 이후, 음수 나이)다.
+
 test('month-level dated candidates do not receive exact-day freshness scoring', () => {
   const exact = scoreCandidate(candidate({
     title: 'Camera ITS exact release note',
     url: 'https://example.com/exact',
-    published_date: '2026-05-01'
-  }), '2026-05-03');
+    published_date: '2026-08-14'
+  }), '2026-08-19');
   const month = scoreCandidate(candidate({
     title: 'Camera ITS monthly site update',
     url: 'https://example.com/month',
-    published_date: '2026-05-01',
+    published_date: '2026-08-14',
     datePrecision: 'month'
-  }), '2026-05-03');
+  }), '2026-08-19');
 
   assert.equal(exact.freshness_score, 3);
   assert.equal(month.freshness_score, 1);
@@ -38,17 +44,18 @@ test('month-level dated candidates do not receive exact-day freshness scoring', 
   const monthWindow = freshnessWindowMetadata(candidate({
     title: 'Camera ITS monthly site update',
     url: 'https://example.com/month-window',
-    published_date: '2026-05-01',
+    published_date: '2026-08-14',
     datePrecision: 'month'
-  }), '2026-05-03');
+  }), '2026-08-19');
   assert.match(monthWindow.selection_window_reason, /month-level date precision/);
 });
 
 // 실측 2026-08-10: AOSP Site Updates의 'July 2026' 행(Camera ITS 문서 갱신 2건)이 07-01로
-// 채워져 40일령으로 계산됐고, reference 창(35일)을 넘겨 main·reference 어느 레인에도 남지
-// 못했다. 수집(collect-news-candidates.js의 withinLookback)은 같은 후보를 달 범위 겹침으로
-// 창 안이라 판단하는데 선정만 달의 1일을 점으로 잘라내서 생긴 불일치였다.
-// 나이는 그대로 보수적으로(달의 1일 기준) 재고, stale 탈락만 겹침으로 구제한다.
+// 채워져 39일령(coverage 기준)으로 계산됐고, reference 창(35일)을 넘겨 main·reference 어느
+// 레인에도 남지 못했다. 수집(collect-news-candidates.js의 withinLookback)은 같은 후보를 달
+// 범위 겹침으로 창 안이라 판단하는데 선정만 1일 기준 점으로 잘라내서 생긴 불일치였다.
+// 나이는 그대로 보수적으로(달의 1일 기준) 재고, stale 탈락만 겹침으로 구제한다. 겹침 판정의
+// 창 상한은 이제 실행일이 아니라 coverage 주의 끝(E)이다.
 test('a month-level candidate whose month still overlaps the reference window is rescued from stale', () => {
   const metadata = freshnessWindowMetadata(candidate({
     title: 'AOSP Site Updates - Camera ITS tests',
@@ -57,22 +64,23 @@ test('a month-level candidate whose month still overlaps the reference window is
     datePrecision: 'month'
   }), '2026-08-10');
 
-  assert.equal(metadata.days_since_published, 40, '나이는 달의 1일 기준으로 보수적으로 잰다');
+  assert.equal(metadata.days_since_published, 39, '나이는 달의 1일 기준으로, coverage 주 끝(E) 대비로 보수적으로 잰다');
   assert.equal(metadata.freshness_window, 'reference');
   assert.match(metadata.selection_window_reason, /month range still overlaps/);
 });
 
-// month 정밀도가 main 선정 창(primary 7 / fallback 21)을 느슨하게 만들면 안 된다.
-// 최대 한 달 된 묶음 행이 '이번 주 신호'로 승격되는 경로를 막는다.
+// month 정밀도가 main 선정 창(primary/fallback)을 느슨하게 만들면 안 된다. 그 달의 실제
+// 날짜(예: 말일)를 썼다면 더 가까운 창에 들어갈 법한 경우에도, 보수적으로 1일 기준으로 재서
+// reference에 머무르는지 확인한다.
 test('month-level date precision never upgrades a candidate into the main selection windows', () => {
   const metadata = freshnessWindowMetadata(candidate({
     title: 'AOSP Site Updates - July camera row',
     url: 'https://source.android.com/docs/whatsnew/site-updates#july',
     published_date: '2026-07-01',
     datePrecision: 'month'
-  }), '2026-07-31');
+  }), '2026-08-08');
 
-  assert.equal(metadata.days_since_published, 30, '달 말일이 아니라 1일 기준으로 잰다');
+  assert.equal(metadata.days_since_published, 32, '달 말일이 아니라 1일 기준으로 잰다');
   assert.equal(metadata.freshness_window, 'reference', 'main 창(primary/fallback)이 아니라 reference에 머문다');
 });
 
@@ -80,7 +88,7 @@ test('a month-level candidate whose month no longer overlaps the reference windo
   const metadata = freshnessWindowMetadata(candidate({
     title: 'AOSP Site Updates - stale month row',
     url: 'https://source.android.com/docs/whatsnew/site-updates#old',
-    published_date: '2026-05-01',
+    published_date: '2026-01-01',
     datePrecision: 'month'
   }), '2026-08-10');
 
@@ -131,20 +139,20 @@ test('day-precision candidates keep exact-day aging and are not rescued', () => 
     published_date: '2026-07-01'
   }), '2026-08-10');
 
-  assert.equal(metadata.days_since_published, 40);
+  assert.equal(metadata.days_since_published, 39);
   assert.equal(metadata.freshness_window, 'stale');
 });
 
 test('freshness window metadata maps candidate age without changing freshness score semantics', () => {
   const cases = [
-    ['2026-05-07', 'primary', 3],
-    ['2026-05-03', 'primary', 7],
-    ['2026-04-26', 'fallback', 14],
-    ['2026-04-19', 'fallback', 21],
-    ['2026-04-12', 'reference', 28],
-    ['2026-04-05', 'reference', 35],
-    ['2026-03-11', 'stale', 60],
-    ['2026-01-10', 'stale', 120]
+    ['2026-08-16', 'primary', 0],
+    ['2026-08-10', 'primary', 6],
+    ['2026-08-09', 'fallback', 7],
+    ['2026-07-27', 'fallback', 20],
+    ['2026-07-26', 'reference', 21],
+    ['2026-07-13', 'reference', 34],
+    ['2026-07-12', 'stale', 35],
+    ['2026-01-10', 'stale', 218]
   ];
 
   for (const [published_date, expectedWindow, expectedAge] of cases) {
@@ -152,39 +160,104 @@ test('freshness window metadata maps candidate age without changing freshness sc
       title: `Camera freshness ${expectedWindow} ${expectedAge}`,
       url: `https://example.com/freshness-${expectedAge}`,
       published_date
-    }), '2026-05-10');
+    }), '2026-08-19');
     assert.equal(metadata.freshness_window, expectedWindow);
     assert.equal(metadata.days_since_published, expectedAge);
-    assert.match(metadata.selection_window_reason, new RegExp(`${expectedAge} day\\(s\\) since published`));
+    if (expectedWindow === 'primary') {
+      assert.match(metadata.selection_window_reason, /within coverage week 2026-W33/);
+    } else if (expectedWindow === 'stale') {
+      assert.match(metadata.selection_window_reason, /older than coverage week 2026-W33.*reference window/);
+    } else {
+      assert.match(metadata.selection_window_reason, new RegExp(`${expectedAge} day\\(s\\) before coverage week 2026-W33`));
+    }
   }
 
   const unknown = freshnessWindowMetadata({
     title: 'Camera freshness missing date',
     url: 'https://example.com/freshness-missing'
-  }, '2026-05-10');
+  }, '2026-08-19');
   assert.equal(unknown.freshness_window, 'unknown');
   assert.equal(unknown.days_since_published, null);
 
-  const futureCandidate = candidate({
-    title: 'Camera future dated metadata-only source',
-    url: 'https://example.com/freshness-future',
-    published_date: '2026-05-15'
-  });
-  const future = freshnessWindowMetadata(futureCandidate, '2026-05-10');
-  assert.equal(future.freshness_window, 'primary');
-  assert.equal(future.days_since_published, 0);
-  assert.equal(scoreCandidate(futureCandidate, '2026-05-10').freshness_score, 3);
-
-  const report = buildShortlistReport('2026-05-10', [
-    policyPrimaryCandidate(0, { published_date: '2026-05-07' }),
-    policyPrimaryCandidate(1, { published_date: '2026-04-26' }),
-    policyPrimaryCandidate(2, { published_date: '2026-03-11' })
+  const report = buildShortlistReport('2026-08-19', [
+    policyPrimaryCandidate(0, { published_date: '2026-08-14' }),
+    policyPrimaryCandidate(1, { published_date: '2026-08-05' }),
+    policyPrimaryCandidate(2, { published_date: '2026-01-10' })
   ], { minArticles: 1 });
 
   assert.equal(report.selection_policy.selection_window_policy.enforcement, 'main_selection_enforced');
   assert.equal(report.selection_policy.selection_window_policy.primarySelectionDays, 7);
   assert.ok(report.shortlisted_candidates.every(item => item.freshness_window));
   assert.ok(report.selected_articles.every(item => item.days_since_published !== undefined));
+});
+
+// coverage 주가 끝난 뒤(E 이후)에 발행된 후보는 '아직 오지 않은 다음 주 신호'다. 오래된 게
+// 아니므로 stale이 아니라 별도 등급 not_yet_eligible로 분류되고, 참고 섹션에도 main
+// shortlist에도 들어가지 않는다 — 대신 진단 카운트(not_yet_eligible_count)로만 남는다.
+test('a candidate published after the coverage week ends is not_yet_eligible and excluded from the shortlist', () => {
+  const metadata = freshnessWindowMetadata(candidate({
+    title: 'Just-published candidate ahead of coverage week',
+    url: 'https://example.com/not-yet-eligible-metadata',
+    published_date: '2026-08-17T08:00:00Z'
+  }), '2026-08-17');
+  assert.equal(metadata.freshness_window, 'not_yet_eligible');
+  assert.ok(metadata.days_since_published < 0);
+
+  const report = buildShortlistReport('2026-08-17', [
+    policyPrimaryCandidate(0, {
+      title: 'Just-published candidate ahead of coverage week',
+      url: 'https://example.com/not-yet-eligible-shortlist',
+      published_date: '2026-08-17T08:00:00Z'
+    })
+  ], { minArticles: 1, catchUpPolicy: { enabled: false } });
+
+  assert.equal(
+    report.shortlisted_candidates.some(item => item.url === 'https://example.com/not-yet-eligible-shortlist'),
+    false
+  );
+  assert.equal(
+    report.selected_articles.some(item => item.url === 'https://example.com/not-yet-eligible-shortlist'),
+    false
+  );
+  assert.equal(report.not_yet_eligible_count, 1);
+});
+
+// 창 등급은 실행 요일이 아니라 coverage 주(고정된 월요일~일요일)로만 갈린다. 수요일에
+// 실행하든 어느 요일에 실행하든, 같은 coverage 주 안의 기사는 그대로 primary다 — 기존
+// rolling 계산이면 실행일 기준 9일 전이라 fallback으로 떨어졌을 케이스다.
+test('a candidate inside the coverage week is primary regardless of the weekday the run happens on', () => {
+  const metadata = freshnessWindowMetadata(candidate({
+    title: 'Camera driver update inside coverage week',
+    url: 'https://example.com/coverage-week-primary',
+    published_date: '2026-08-10'
+  }), '2026-08-19');
+  assert.equal(metadata.freshness_window, 'primary');
+});
+
+// freshnessScore도 같은 coverage 앵커를 쓴다. 실행일 2026-08-17 기준 rolling 나이였다면
+// 7일(경계)이었을 기사가, coverage 앵커(2026-W33 종료일 2026-08-16)로는 6일이라 만점(3점)
+// 계단에 그대로 남는다.
+test('freshness score is anchored to the coverage week, not the run day', () => {
+  const score = scoreCandidate(candidate({
+    title: 'Camera driver update anchored to coverage week',
+    url: 'https://example.com/coverage-week-freshness-score',
+    published_date: '2026-08-10'
+  }), '2026-08-17').freshness_score;
+  assert.equal(score, 3);
+});
+
+// coverage 정합의 전제: 후보를 아직 창(freshness_window)으로 decorate하지 않았는데 anchor도
+// 없으면, 예전처럼 조용히 오늘로 폴백해 실행 요일에 따라 다른 창으로 mislabel되게 두지 않고
+// throw한다. override(coverageWeekKeyOverride)가 있으면 anchor 없이도 통과한다.
+test('selectFinalArticlesWithDiagnostics throws when the coverage anchor is missing for undecorated candidates', () => {
+  const undecorated = [candidate({
+    title: 'Undecorated candidate missing an anchor',
+    url: 'https://example.com/missing-anchor'
+  })];
+
+  assert.throws(() => selectFinalArticlesWithDiagnostics(undecorated, {}), /coverage anchor/);
+  assert.doesNotThrow(() => selectFinalArticlesWithDiagnostics(undecorated, { date: '2026-08-19' }));
+  assert.doesNotThrow(() => selectFinalArticlesWithDiagnostics(undecorated, { coverageWeekKeyOverride: '2026-W33' }));
 });
 
 test('selection window enforcement keeps fallback out when primary window is sufficient', () => {
@@ -199,7 +272,7 @@ test('selection window enforcement keeps fallback out when primary window is suf
       url: `https://example.com/window-primary-${index}`,
       source: `Primary Window Source ${index}`,
       api_or_component: primaryTitles[index][1],
-      published_date: '2026-05-09',
+      published_date: '2026-08-14',
       camera_hal_relevance_score: 60 - index
     })
   );
@@ -207,11 +280,11 @@ test('selection window enforcement keeps fallback out when primary window is suf
     title: 'Fallback window high score candidate',
     url: 'https://example.com/window-fallback-high',
     source: 'Fallback Window Source',
-    published_date: '2026-04-26',
+    published_date: '2026-08-05',
     camera_hal_relevance_score: 100
   });
 
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     fallbackCandidate,
     ...primaryCandidates
   ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
@@ -233,18 +306,18 @@ test('selection window enforcement keeps fallback out when primary window is suf
 });
 
 test('selection window enforcement promotes fallback only when primary window is short', () => {
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     policyPrimaryCandidate(0, {
       title: 'Only primary window camera source',
       url: 'https://example.com/window-primary-only',
       source: 'Primary Shortage Source',
-      published_date: '2026-05-09'
+      published_date: '2026-08-14'
     }),
     policySupportingCandidate(0, {
       title: 'Fallback window SoC support source',
       url: 'https://example.com/window-fallback-soc',
       source: 'Fallback SoC Source',
-      published_date: '2026-04-26',
+      published_date: '2026-08-05',
       relevance_bucket: 'soc_platform_signal',
       soc_platform_relevance: 5,
       native_tooling_relevance: 0,
@@ -255,7 +328,7 @@ test('selection window enforcement promotes fallback only when primary window is
       title: 'Fallback window native workflow source',
       url: 'https://example.com/window-fallback-native',
       source: 'Fallback Native Source',
-      published_date: '2026-04-26'
+      published_date: '2026-08-05'
     })
   ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
@@ -310,22 +383,22 @@ test('fallback rescue uses uncapped selection pool when primary fills shortlist 
       evidence_score: 0,
       practical_actionability_score: 0,
       reliability: '',
-      published_date: '2026-05-09'
+      published_date: '2026-08-14'
     })
   );
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     policyPrimaryCandidate(0, {
       title: 'Primary selected source before cap boundary',
       url: 'https://example.com/window-primary-selected-before-cap',
       source: 'Primary Selected Source',
-      published_date: '2026-05-09'
+      published_date: '2026-08-14'
     }),
     ...primaryFillers,
     policySupportingCandidate(0, {
       title: 'Fallback rescue SoC source after cap boundary',
       url: 'https://example.com/window-fallback-rescue-soc',
       source: 'Fallback Rescue SoC Source',
-      published_date: '2026-04-26',
+      published_date: '2026-08-05',
       relevance_bucket: 'soc_platform_signal',
       soc_platform_relevance: 5,
       native_tooling_relevance: 0,
@@ -338,7 +411,7 @@ test('fallback rescue uses uncapped selection pool when primary fills shortlist 
       source: 'Fallback Rescue Native Source',
       summary: 'LLDB native debugger workflow improves camera HAL triage and validation.',
       api_or_component: 'LLDB camera HAL debugger',
-      published_date: '2026-04-26'
+      published_date: '2026-08-05'
     })
   ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
   const selectedUrls = new Set(report.selected_articles.map(item => item.url));
@@ -356,12 +429,12 @@ test('fallback rescue uses uncapped selection pool when primary fills shortlist 
 });
 
 test('fallback consulted remains distinct from fallback promotion', () => {
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     policyPrimaryCandidate(0, {
       title: 'Primary short source before ineligible fallback',
       url: 'https://example.com/window-primary-before-ineligible-fallback',
       source: 'Primary Before Ineligible Fallback Source',
-      published_date: '2026-05-09'
+      published_date: '2026-08-14'
     }),
     candidate({
       title: 'Fallback ineligible generic source A',
@@ -381,7 +454,7 @@ test('fallback consulted remains distinct from fallback promotion', () => {
       evidence_score: 0,
       practical_actionability_score: 0,
       reliability: '',
-      published_date: '2026-04-26'
+      published_date: '2026-08-05'
     }),
     candidate({
       title: 'Fallback ineligible generic source B',
@@ -401,7 +474,7 @@ test('fallback consulted remains distinct from fallback promotion', () => {
       evidence_score: 0,
       practical_actionability_score: 0,
       reliability: '',
-      published_date: '2026-04-26'
+      published_date: '2026-08-05'
     })
   ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
@@ -422,12 +495,12 @@ test('selection window enforcement excludes reference stale and unknown candidat
     practical_actionability_score: 5,
     reliability: 'official'
   };
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     policyPrimaryCandidate(0, {
       ...candidateBase,
       title: 'Primary low deterministic source',
       url: 'https://example.com/metadata-primary-low',
-      published_date: '2026-05-09',
+      published_date: '2026-08-14',
       camera_hal_relevance_score: 40
     }),
     policyPrimaryCandidate(1, {
@@ -442,7 +515,7 @@ test('selection window enforcement excludes reference stale and unknown candidat
       ...candidateBase,
       title: 'Reference medium deterministic source',
       url: 'https://example.com/metadata-reference-medium',
-      published_date: '2026-04-12',
+      published_date: '2026-07-20',
       camera_hal_relevance_score: 80
     }),
     policyPrimaryCandidate(3, {
@@ -480,7 +553,7 @@ test('selection window enforcement excludes reference stale and unknown candidat
 });
 
 test('fallback reserve is marked when primary reserve is short', () => {
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     ...Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) =>
       policyPrimaryCandidate(index, {
         title: [
@@ -490,7 +563,7 @@ test('fallback reserve is marked when primary reserve is short', () => {
         ][index],
         url: `https://example.com/reserve-primary-${index}`,
         source: `Reserve Primary Source ${index}`,
-        published_date: '2026-05-09'
+        published_date: '2026-08-14'
       })
     ),
     ...Array.from({ length: 4 }, (_, index) =>
@@ -503,7 +576,7 @@ test('fallback reserve is marked when primary reserve is short', () => {
         ][index],
         url: `https://example.com/reserve-fallback-${index}`,
         source: `Reserve Fallback Source ${index}`,
-        published_date: '2026-04-26'
+        published_date: '2026-08-05'
       })
     )
   ], { maxArticles: articlePolicy.mainArticleCount.min });
@@ -517,32 +590,35 @@ test('fallback reserve is marked when primary reserve is short', () => {
   assert.ok(fallbackReserve.every(item => item.freshness_window === 'fallback'));
 });
 
-test('custom selection window policy drives fallback classification and promotion', () => {
+// selectionWindowPolicy.fallbackSelectionDays/referenceContextDays는 fallback/reference 경계로
+// classifyCoverageWindow에 그대로 전달된다(리뷰 fix 1) — primarySelectionDays만 예외다. coverage
+// 주 자체가 ISO 주(7일) 고정이라 primary 경계(0~6일)는 어떤 정책값으로도 못 바꾼다.
+test('custom selection window policy narrows fallback classification via coverage age boundaries', () => {
   const customPolicy = {
     primarySelectionDays: 3,
     fallbackSelectionDays: 10,
     referenceContextDays: 30
   };
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     policyPrimaryCandidate(0, {
       title: 'Custom policy primary source',
       url: 'https://example.com/custom-policy-primary',
       source: 'Custom Primary Source',
-      published_date: '2026-05-09'
+      published_date: '2026-08-14'
     }),
     policySupportingCandidate(0, {
-      title: 'Custom policy seven day fallback source A',
-      url: 'https://example.com/custom-policy-fallback-a',
-      source: 'Custom Fallback Source A',
-      published_date: '2026-05-03'
+      title: 'Custom policy coverage fallback source A',
+      url: 'https://example.com/custom-policy-fallback-within',
+      source: 'Custom Fallback Within Source',
+      published_date: '2026-08-08'
     }),
     policySupportingCandidate(1, {
       title: 'Custom policy native debugger fallback source',
-      url: 'https://example.com/custom-policy-fallback-b',
-      source: 'Custom Fallback Source B',
+      url: 'https://example.com/custom-policy-fallback-beyond',
+      source: 'Custom Fallback Beyond Source',
       summary: 'Native debugger workflow improves camera HAL validation triage.',
       api_or_component: 'LLDB camera HAL debugger',
-      published_date: '2026-05-03'
+      published_date: '2026-08-05'
     })
   ], { selectionWindowPolicy: customPolicy, minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
@@ -552,9 +628,16 @@ test('custom selection window policy drives fallback classification and promotio
 
   assert.equal(report.selection_policy.selection_window_policy.primarySelectionDays, 3);
   assert.equal(report.fallback_window_consulted, true);
-  assert.equal(report.fallback_window_used, true);
-  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-a'), true);
-  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-b'), true);
+  // 8일령은 customFallbackDays(10)의 fallback 구간(7~9일) 안이라 그대로 fallback 승격된다.
+  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-within'), true);
+  // 11일령은 기본 정책(21일)이면 fallback이었을 나이지만, customFallbackDays(10)로 좁히면
+  // fallback 구간(7~9일)을 벗어나 reference로 떨어져 main 선정 밖으로 나간다 — 노브가 실제로
+  // 분류를 좁힌다는 것을 보여준다.
+  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-beyond'), false);
+  assert.equal(
+    report.reference_context_candidates.some(item => item.url === 'https://example.com/custom-policy-fallback-beyond'),
+    true
+  );
 });
 
 test('#124 acceptance: primary window official Camera candidate outranks fallback candidate', () => {
@@ -571,7 +654,7 @@ test('#124 acceptance: primary window official Camera candidate outranks fallbac
       api_or_component: component,
       behavior_change: `${component} behavior changed.`,
       reliability: 'official',
-      published_date: '2026-05-09',
+      published_date: '2026-08-14',
       camera_hal_relevance_score: 50 - index
     })
   );
@@ -580,11 +663,11 @@ test('#124 acceptance: primary window official Camera candidate outranks fallbac
     url: 'https://example.com/124-fallback-high-score',
     source: 'Android Camera Official Source',
     reliability: 'official',
-    published_date: '2026-04-26',
+    published_date: '2026-08-05',
     camera_hal_relevance_score: 100
   });
 
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     fallbackCandidate,
     ...primaryCandidates
   ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
@@ -601,24 +684,24 @@ test('#124 acceptance: primary window official Camera candidate outranks fallbac
 });
 
 test('#124 acceptance: fallback window is promoted only when primary is short', () => {
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     policyPrimaryCandidate(0, {
       title: 'Only current Camera source',
       url: 'https://example.com/124-current-only',
       source: 'Primary Camera Source',
-      published_date: '2026-05-09'
+      published_date: '2026-08-14'
     }),
     policyPrimaryCandidate(1, {
       title: 'Older Camera fallback source A',
       url: 'https://example.com/124-fallback-a',
       source: 'Fallback Camera Source A',
-      published_date: '2026-04-26'
+      published_date: '2026-08-05'
     }),
     policyPrimaryCandidate(2, {
       title: 'Older Camera fallback source B',
       url: 'https://example.com/124-fallback-b',
       source: 'Fallback Camera Source B',
-      published_date: '2026-04-26'
+      published_date: '2026-08-05'
     })
   ], { minArticles: FALLBACK_WINDOW_TEST_MIN_ARTICLES });
 
@@ -634,17 +717,17 @@ test('#124 acceptance: fallback window is promoted only when primary is short', 
 });
 
 test('#124 acceptance: reference window remains context-only', () => {
-  const report = buildShortlistReport('2026-05-10', [
+  const report = buildShortlistReport('2026-08-19', [
     policyPrimaryCandidate(0, {
       title: 'Current Camera main source',
       url: 'https://example.com/124-reference-primary',
-      published_date: '2026-05-09',
+      published_date: '2026-08-14',
       camera_hal_relevance_score: 40
     }),
     policyPrimaryCandidate(1, {
       title: 'Reference window high score source',
       url: 'https://example.com/124-reference-context',
-      published_date: '2026-04-12',
+      published_date: '2026-07-20',
       camera_hal_relevance_score: 100
     })
   ], { minArticles: 1, catchUpPolicy: { enabled: false } });
@@ -660,4 +743,47 @@ test('#124 acceptance: reference window remains context-only', () => {
       .find(item => item.url === 'https://example.com/124-reference-context')
       .exclusion_reasons.includes('selection_window=reference_not_main')
   );
+});
+
+// 수집(01)/병합 단계가 후보 payload의 top-level에 실어 온 coverage lineage(대상 주·생성
+// anchor·carry-forward 판정)는 buildShortlistReport를 거쳐 shortlistReport로 그대로
+// 옮겨져야 한다 — generation-status·selection-report.json·PR 본문이 전부 이 값을 인용한다.
+test('shortlist report carries the coverage lineage from the collected-candidates payload', () => {
+  const report = buildShortlistReport('2026-08-19', {
+    candidates: [],
+    coverage: {
+      coverage_week_key: '2026-W33',
+      coverage_start_date: '2026-08-10',
+      coverage_end_date: '2026-08-16'
+    },
+    generation_anchor_date: '2026-08-19',
+    carry_forward_status: 'overflow',
+    carry_source: { path: 'articles/content/newsroom/2026-08-12/merged-candidates.json', sha256: 'abc', run_mode: 'scheduled' },
+    not_yet_eligible_overflow: true
+  }, { minArticles: 1 });
+
+  assert.equal(report.coverage_week_key, '2026-W33');
+  assert.equal(report.coverage_start_date, '2026-08-10');
+  assert.equal(report.coverage_end_date, '2026-08-16');
+  assert.equal(report.generation_anchor_date, '2026-08-19');
+  assert.equal(report.carry_forward_status, 'overflow');
+  assert.deepEqual(report.carry_source, { path: 'articles/content/newsroom/2026-08-12/merged-candidates.json', sha256: 'abc', run_mode: 'scheduled' });
+  assert.equal(report.not_yet_eligible_overflow, true);
+});
+
+// collectedCandidates가 후보 배열 그대로인 레거시/테스트 호출부(top-level 메타데이터가
+// 애초에 없는 경우)에서는 coverage lineage가 조용히 빈 값으로 떨어져야 한다 — 존재하지
+// 않는 payload 필드를 읽다가 throw하면 이 파일의 다른 테스트가 전부 깨진다.
+test('shortlist report defaults coverage lineage to empty values when the payload carries none', () => {
+  const report = buildShortlistReport('2026-08-19', [
+    policyPrimaryCandidate(0)
+  ], { minArticles: 1, catchUpPolicy: { enabled: false } });
+
+  assert.equal(report.coverage_week_key, '');
+  assert.equal(report.coverage_start_date, '');
+  assert.equal(report.coverage_end_date, '');
+  assert.equal(report.generation_anchor_date, '');
+  assert.equal(report.carry_forward_status, '');
+  assert.equal(report.carry_source, null);
+  assert.equal(report.not_yet_eligible_overflow, false);
 });

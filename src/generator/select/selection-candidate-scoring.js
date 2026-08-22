@@ -10,9 +10,14 @@ const {
   selectionDate,
   hasPublishReadyDateEvidence,
   datePrecision,
+  freshnessAnchorDate,
   candidateUrl,
   fieldBoolean
 } = require('./selection-candidate-fields');
+const {
+  coverageForAnchorDate,
+  coverageAgeDays
+} = require('../../shared/common/coverage-week');
 const {
   reliabilityScore
 } = require('./selection-scoring');
@@ -72,18 +77,30 @@ function exclusionReasons(candidate) {
   return [...new Set(reasons)];
 }
 
-function freshnessScore(candidate, newsletterDate) {
+// 신선도 점수는 실행일이 아니라 직전 완결 coverage 주(coverageForAnchorDate)를 기준으로 잰다.
+// coverageAgeDays는 coverage_end_date 당일을 0으로, 그 이전 날짜일수록 큰 양수로 센다.
+// 앞으로(E 이후) 발행된 항목은 음수가 되며 신선도 가산 대상이 아니다(freshness_window에서
+// not_yet_eligible로 이미 걸러지므로 여기서는 0점 처리로 이중 안전망만 둔다).
+// month 정밀도(그 달 1일로 채워진 날짜)는 정확한 날짜를 모르므로 최대점 대신 낮은 고정값만
+// 준다 — 달 범위가 아직 coverage 44일 폭 안에 있으면 1점, 그마저 벗어나면 0점.
+// 계단(6/20/44일)은 freshness_window 판정(classifyCoverageWindow, selectionWindowPolicy로
+// 조정 가능)과는 별개의 점수 배점이다 — 옛 rolling 시절 45일 계단을 그대로 이어받은
+// 스코어링 전용 상수라 정책 설정을 받지 않는다.
+// coverageWeekKeyOverride가 형식에 안 맞으면 coverageForAnchorDate가 throw한다 — override는
+// runtime-config에서 이미 검증되고 freshnessWindowMetadata도 같은 입력에서 throw하므로,
+// 여기서 조용히 0점으로 삼키지 않고 그대로 전파한다(fail-closed, 방어패치 금지).
+function freshnessScore(candidate, newsletterDate, coverageWeekKeyOverride) {
   const rawDate = selectionDate(candidate);
-  const published = rawDate ? new Date(rawDate) : null;
-  const base = newsletterDate ? new Date(`${newsletterDate}T00:00:00Z`) : new Date();
-  if (!published || Number.isNaN(published.getTime()) || Number.isNaN(base.getTime())) return 0;
-  const ageDays = Math.max(0, (base.getTime() - published.getTime()) / (24 * 60 * 60 * 1000));
+  if (!rawDate) return 0;
+  const coverage = coverageForAnchorDate(freshnessAnchorDate(newsletterDate), coverageWeekKeyOverride);
+  const ageDays = coverageAgeDays(rawDate, coverage);
+  if (ageDays === null || ageDays < 0) return 0;
   if (datePrecision(candidate) === 'month') {
-    return ageDays <= 45 ? 1 : 0;
+    return ageDays <= 44 ? 1 : 0;
   }
-  if (ageDays <= 7) return 3;
-  if (ageDays <= 21) return 2;
-  if (ageDays <= 45) return 1;
+  if (ageDays <= 6) return 3;
+  if (ageDays <= 20) return 2;
+  if (ageDays <= 44) return 1;
   return 0;
 }
 
@@ -380,7 +397,7 @@ function linkedEvidenceAdjustment(candidate) {
   };
 }
 
-function scoreCandidate(candidate, newsletterDate) {
+function scoreCandidate(candidate, newsletterDate, coverageWeekKeyOverride) {
   const scope = candidateScope(candidate);
   const cameraHal = cameraHalDirectnessScore(candidate);
   const scopeScore = scopeRelevanceScore(candidate);
@@ -390,7 +407,7 @@ function scoreCandidate(candidate, newsletterDate) {
   const optionalBonus = optionalAiCppBonus(candidate);
   const evidence = evidenceSpecificityScore(candidate);
   const sourceReliability = reliabilityScore(candidate);
-  const freshness = freshnessScore(candidate, newsletterDate);
+  const freshness = freshnessScore(candidate, newsletterDate, coverageWeekKeyOverride);
   const actionability = practicalActionabilityScore(candidate);
   const penalties = {
     generic_ai_penalty: genericAiPenalty(candidate),

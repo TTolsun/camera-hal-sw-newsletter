@@ -65,7 +65,7 @@ function policySocCandidate(index = 0, overrides = {}) {
 }
 
 test('multimedia camera-output candidate is eligible through dedicated scope evidence', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyMultimediaCandidate(0)
   ], { minArticles: 1, maxArticles: 1 });
   const [item] = report.shortlisted_candidates;
@@ -85,7 +85,7 @@ test('multimedia camera-output hard blockers still exclude main selection', () =
     policyMultimediaCandidate(2, { url: 'https://example.com/multimedia-date', published_date: '', hasDatedEvidence: false }),
     policyMultimediaCandidate(3, { url: 'https://example.com/multimedia-watch', finalSelectionEligibility: 'watchlist' })
   ];
-  const report = buildShortlistReport('2026-05-03', items, { minArticles: 1, maxArticles: 3 });
+  const report = buildShortlistReport('2026-05-10', items, { minArticles: 1, maxArticles: 3 });
   const reasonsByUrl = new Map(report.excluded_candidates.map(item => [item.url, item.exclusion_reasons]));
 
   assert.equal(report.shortlisted_candidates.length, 0);
@@ -95,7 +95,7 @@ test('multimedia camera-output hard blockers still exclude main selection', () =
 });
 
 test('multimedia supporting bucket counts separately and can pass publish-ready with enough primary coverage', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(1),
     policyDriverCandidate(2),
     policyMultimediaCandidate(1)
@@ -111,7 +111,7 @@ test('multimedia supporting bucket counts separately and can pass publish-ready 
 });
 
 test('multimedia plus SoC still fails publish-ready when supporting limit is exceeded', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(1),
     policyMultimediaCandidate(1),
     policySocCandidate(1)
@@ -126,7 +126,7 @@ test('multimedia plus SoC still fails publish-ready when supporting limit is exc
 });
 
 test('selection order ranks multimedia supporting ahead of SoC and C++ fallback', () => {
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(1),
     policyDriverCandidate(2),
     policySupportingCandidate(1),
@@ -163,7 +163,7 @@ test('broad platform terms remain fallback hints, not concrete component evidenc
   });
 
   const score = scoreCandidate(broad, '2026-05-03');
-  const report = buildShortlistReport('2026-05-03', [broad]);
+  const report = buildShortlistReport('2026-05-10', [broad]);
 
   assert.equal(hasPlatformSignalTerm(broad), true);
   assert.equal(hasFallbackRelevanceHint(broad), true);
@@ -191,7 +191,7 @@ test('generic native performance items cannot become main articles without concr
   });
 
   const score = scoreCandidate(nativeTips, '2026-05-03');
-  const report = buildShortlistReport('2026-05-03', [nativeTips]);
+  const report = buildShortlistReport('2026-05-10', [nativeTips]);
 
   assert.equal(hasPlatformSignalTerm(nativeTips), true);
   assert.equal(hasFallbackRelevanceHint(nativeTips), true);
@@ -257,7 +257,7 @@ test('generic Tensor tooling names do not satisfy concrete SoC evidence', () => 
   });
 
   const score = scoreCandidate(tensorFlow, '2026-05-03');
-  const report = buildShortlistReport('2026-05-03', [tensorFlow]);
+  const report = buildShortlistReport('2026-05-10', [tensorFlow]);
 
   assert.equal(hasConcreteApiComponent(tensorFlow), false);
   assert.ok(score.no_api_component_penalty > 0);
@@ -302,7 +302,7 @@ test('versioned C++ toolchain evidence is concrete but not counted as direct cam
     counts_as_fallback_topic: true,
     camera_hal_relevance_score: 0
   });
-  const report = buildShortlistReport('2026-05-03', [
+  const report = buildShortlistReport('2026-05-10', [
     candidate({ title: 'CameraX release A improves Android Camera validation', url: 'https://example.com/direct-a' }),
     candidate({ title: 'AOSP Camera provider B updates stream behavior', url: 'https://example.com/direct-b' }),
     candidate({ title: 'Android Camera API C fixes metadata behavior', url: 'https://example.com/direct-c' }),

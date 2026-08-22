@@ -14,13 +14,16 @@ const {
   seedEvidencePackPath
 } = require('../../../common/artifact-paths');
 const {
+  validateCandidateArtifact,
   writeManualCandidateArtifacts,
   writeMergedCandidateArtifacts
 } = require('../../../common/candidate-artifacts');
 const {
   FAILED_LLM_CREDENTIALS,
   SEED_ONLY_LLM_CREDENTIALS_MISSING,
-  run: runSourceDiscoveryBoundary
+  mergeNotYetEligibleByUrl,
+  run: runSourceDiscoveryBoundary,
+  splitMergeStageNotYetEligible
 } = require('../../../../discovery/gemini-source-discovery-boundary');
 const {
   buildProposalPrompt,
@@ -222,6 +225,64 @@ test('enabled boundary writes seed-only artifacts when Gemini credentials are mi
   const report = fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'gemini-source-discovery-report.md'), 'utf8');
   assert.match(report, /\| status_detail \| SEED_ONLY_LLM_CREDENTIALS_MISSING \|/);
   assert.match(report, /Gemini credentials가 없어 Gemini discovery는 건너뛰었습니다/);
+});
+
+test('merge-stage overflow promotes carry_forward_status to overflow even when stage 1 was under the cap', async () => {
+  const root = tempRoot();
+  const date = '2026-04-25';
+  const coverage = {
+    coverage_week_key: '2026-W17',
+    coverage_start_date: '2026-04-20',
+    coverage_end_date: '2026-04-26',
+    coverage_end_exclusive_at: '2026-04-27T00:00:00.000Z'
+  };
+  const payload = candidatePayload(date);
+  payload.coverage = coverage;
+  // Stage 1 finished healthy and under the not-yet-eligible cap (60) -- the merge stage is the
+  // only place this run overflows, so a regression that forgets to re-derive
+  // carry_forward_status after the merge-stage cap would leave this 'loaded' value in place.
+  payload.not_yet_eligible = [];
+  payload.not_yet_eligible_overflow = false;
+  payload.carry_forward_status = 'loaded';
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+
+  // 65 Gemini-discovered URLs dated after the coverage window -- splitMergeStageNotYetEligible
+  // classifies every one of them as not_yet_eligible, which pushes the merge-stage cap (60) into
+  // overflow purely from candidates the merge stage itself introduced.
+  const overflowUrls = Array.from(
+    { length: 65 },
+    (_, index) => `https://developer.android.com/notyet-eligible-${index}`
+  );
+  const proposalPayload = proposalWithUrls('overflow-proposal', overflowUrls);
+
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date,
+    env: {
+      NEWSLETTER_DATE: date,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true',
+      GEMINI_API_KEY: 'test-key'
+    },
+    proposalPayload,
+    lookupImpl: async () => [{ address: '93.184.216.34', family: 4 }],
+    fetchImpl: async (url) => ({
+      ok: true,
+      status: 200,
+      url,
+      headers: { get: () => '' },
+      text: async () => '<html><head><title>Future camera signal</title>' +
+        '<meta name="datePublished" content="2099-01-01"></head>' +
+        '<body>2099-01-01 candidate dated after this week\'s coverage window.</body></html>'
+    })
+  });
+
+  assert.equal(result.status, 'PASS');
+  const merged = readJson(mergedCandidatesPath(root, date));
+  assert.equal(merged.not_yet_eligible_overflow, true);
+  assert.equal(merged.carry_forward_status, 'overflow');
+  const manifest = readJson(mergedCandidateManifestPath(root, date));
+  assert.equal(manifest.not_yet_eligible_overflow, true);
+  assert.equal(manifest.carry_forward_status, 'overflow');
 });
 
 test('enabled boundary without seed keeps missing credential path strictly no-mutation', async () => {
@@ -596,4 +657,83 @@ test('source discovery stats use URL aliases and exclude URL-less Gemini candida
   assert.equal(stats.merged_candidate_count, 2);
   assert.equal(stats.merged_unique_url_count, 2);
   assert.equal(stats.gemini_publishable_candidate_count, 2);
+});
+
+test('merge-stage not-yet-eligible split keeps manual-origin candidates regardless of date', () => {
+  const coverage = {
+    coverage_week_key: '2026-W17',
+    coverage_start_date: '2026-04-20',
+    coverage_end_date: '2026-04-26',
+    coverage_end_exclusive_at: '2026-04-27T00:00:00.000Z'
+  };
+  const manualFutureDated = {
+    url: 'https://example.com/manual-future',
+    title: 'Manual candidate published after coverage end',
+    publishedAt: '2026-05-01'
+    // origin is absent, as stage 1 manual/carry candidates carry no discovery origin tag.
+  };
+  const geminiPastDated = {
+    url: 'https://example.com/gemini-past',
+    title: 'Gemini candidate published inside the coverage window',
+    origin: 'gemini_discovery',
+    publishedAt: '2026-04-22'
+  };
+  const geminiFutureDated = {
+    url: 'https://example.com/gemini-future',
+    title: 'Gemini candidate published after coverage end',
+    origin: 'gemini_discovery',
+    publishedAt: '2026-05-01'
+  };
+  const seedFutureDated = {
+    url: 'https://example.com/seed-future',
+    title: 'Seed evidence candidate published after coverage end',
+    origin: 'seed_url_evidence',
+    publishedAt: '2026-05-02'
+  };
+  const linkedUndated = {
+    url: 'https://example.com/linked-undated',
+    title: 'Linked discovery candidate with no extracted date',
+    origin: 'gemini_linked_discovery'
+    // gemini_linked_discovery 후보는 날짜가 없는 채로 만들어질 수 있다 — classifyCoverageWindow가
+    // 'unknown'을 돌려주므로 not_yet_eligible로 걸러지지 않는다(안전한 기본값).
+  };
+
+  const { eligible, notYetEligible } = splitMergeStageNotYetEligible(
+    [manualFutureDated, geminiPastDated, geminiFutureDated, seedFutureDated, linkedUndated],
+    coverage
+  );
+
+  assert.deepEqual(notYetEligible, [geminiFutureDated, seedFutureDated]);
+  assert.deepEqual(eligible, [manualFutureDated, geminiPastDated, linkedUndated]);
+});
+
+test('merge-stage not-yet-eligible split skips filtering entirely without a coverage object', () => {
+  const candidates = [
+    { url: 'https://example.com/a', origin: 'gemini_discovery', publishedAt: '2099-01-01' }
+  ];
+  assert.deepEqual(splitMergeStageNotYetEligible(candidates, null), {
+    eligible: candidates,
+    notYetEligible: []
+  });
+});
+
+test('not-yet-eligible URL merge dedupes stage 1 and merge-stage lists, preferring the stage 1 entry', () => {
+  const stage1List = [
+    { url: 'https://example.com/shared', title: 'Stage 1 version' },
+    { url: 'https://example.com/only-stage-1', title: 'Only in stage 1' }
+  ];
+  const mergeStageList = [
+    { url: 'https://example.com/shared', title: 'Merge stage version' },
+    { url: 'https://example.com/only-merge-stage', title: 'Only in merge stage' }
+  ];
+
+  const merged = mergeNotYetEligibleByUrl(stage1List, mergeStageList);
+
+  assert.deepEqual(merged.map(item => item.url), [
+    'https://example.com/shared',
+    'https://example.com/only-stage-1',
+    'https://example.com/only-merge-stage'
+  ]);
+  const shared = merged.find(item => item.url === 'https://example.com/shared');
+  assert.equal(shared.title, 'Stage 1 version');
 });
