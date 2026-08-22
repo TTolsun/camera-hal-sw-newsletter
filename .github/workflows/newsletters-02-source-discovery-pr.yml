@@ -22,6 +22,16 @@ on:
         required: false
         default: ""
         type: string
+      coverage_week_key:
+        description: "Coverage 주 override, 형식 YYYY-Www(예: 2026-W34). 비우면 실행일 기준 자동 계산."
+        required: false
+        default: ""
+        type: string
+      carry_source_path:
+        description: "Carry-forward 원천 merged-candidates.json 경로 override(저장소 상대 또는 절대 경로). 비우면 직전 주 scheduled 실행분을 자동으로 찾는다."
+        required: false
+        default: ""
+        type: string
   workflow_call:
     inputs:
       newsletter_date:
@@ -34,6 +44,16 @@ on:
         required: false
         type: boolean
         default: false
+      coverage_week_key:
+        description: "Coverage 주 override, 형식 YYYY-Www. 비우면 실행일 기준 자동 계산."
+        required: false
+        type: string
+        default: ""
+      carry_source_path:
+        description: "Carry-forward 원천 경로 override. 비우면 직전 주 scheduled 실행분을 자동으로 찾는다."
+        required: false
+        type: string
+        default: ""
     outputs:
       date:
         description: "Resolved newsletter date (YYYY-MM-DD)"
@@ -58,6 +78,11 @@ jobs:
       NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
       NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: "true"
       LLM_PROVIDER: ${{ github.event.inputs.llm_provider || 'default' }}
+      # Task 12: 병합 단계(gemini-source-discovery-boundary.js)는 stage 1이 이미 계산해 커밋한
+      # manual-candidates.json의 coverage를 그대로 재사용하지만, readRuntimeConfig(env)를 여기서도
+      # 호출하므로 같은 override 값을 넘겨 형식 검증을 일관되게 통과/실패시킨다.
+      COVERAGE_WEEK_KEY: ${{ inputs.coverage_week_key || github.event.inputs.coverage_week_key || '' }}
+      CARRY_SOURCE_PATH: ${{ inputs.carry_source_path || github.event.inputs.carry_source_path || '' }}
 
     steps:
       - name: Checkout repository
@@ -177,6 +202,7 @@ jobs:
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.json
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.md
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-discovery-report.md
+            .tmp/not-yet-eligible-full.json
           if-no-files-found: warn
           retention-days: 14
 

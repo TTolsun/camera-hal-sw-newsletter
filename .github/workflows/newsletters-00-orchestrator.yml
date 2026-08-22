@@ -10,6 +10,16 @@ on:
         required: false
         default: ""
         type: string
+      coverage_week_key:
+        description: "Coverage 주 override, 형식 YYYY-Www(예: 2026-W34). 비우면 실행일 기준 자동 계산(scheduled 실행의 기본 경로)."
+        required: false
+        default: ""
+        type: string
+      carry_source_path:
+        description: "Carry-forward 원천 merged-candidates.json 경로 override(저장소 상대 또는 절대 경로). 비우면 직전 주 scheduled 실행분을 자동으로 찾는다."
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write
@@ -25,6 +35,8 @@ jobs:
     uses: ./.github/workflows/newsletters-01-source-collect-pr.yml
     with:
       newsletter_date: ${{ github.event.inputs.newsletter_date || '' }}
+      coverage_week_key: ${{ github.event.inputs.coverage_week_key || '' }}
+      carry_source_path: ${{ github.event.inputs.carry_source_path || '' }}
       auto_mode: true
     secrets: inherit
 
@@ -33,6 +45,8 @@ jobs:
     uses: ./.github/workflows/newsletters-02-source-discovery-pr.yml
     with:
       newsletter_date: ${{ needs.collect.outputs.date }}
+      coverage_week_key: ${{ github.event.inputs.coverage_week_key || '' }}
+      carry_source_path: ${{ github.event.inputs.carry_source_path || '' }}
       auto_mode: true
     secrets: inherit
 
@@ -47,6 +61,12 @@ jobs:
     uses: ./.github/workflows/newsletters-03-editor-pr.yml
     with:
       newsletter_date: ${{ needs.collect.outputs.date }}
+      # generate가 select 체인을 다시 돌려 shortlist/최종 후보를 재계산한다(newsroom-selection.js
+      # buildShortlistReport). collect와 같은 coverage 주 override를 못 받으면 같은 주 안에서
+      # 서로 다른 대상 주를 계산해 weekly upsert hard-fail(Task 11)을 오탐시킬 수 있다.
+      # carry_source_path는 여기서 전달하지 않는다 — carry-forward 로딩은 collect(01)
+      # 단계에서만 일어난다(loadCarryForward 호출부가 collect-news-candidates.js뿐).
+      coverage_week_key: ${{ github.event.inputs.coverage_week_key || '' }}
     secrets: inherit
 
   summary:
