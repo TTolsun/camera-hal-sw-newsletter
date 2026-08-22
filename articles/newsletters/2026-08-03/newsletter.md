@@ -15,8 +15,6 @@
 
 ![Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver](https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/)_
-
 
 _Himax HM1092 mono NIR sensor driver v6 patch_
 
@@ -42,8 +40,6 @@ Linux 커널 미디어 서브시스템에 Himax HM1092 흑백 근적외선(NIR) 
 
 
 ![onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출 image](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver](https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/)_
 
 
 _onsemi AR0234 CMOS image sensor driver patch_
@@ -71,8 +67,6 @@ Linux 커널 미디어 서브시스템에 고속 캡처를 지원하는 onsemi A
 
 ![OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver](https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/)_
-
 
 _OmniVision OG0VA1B CMOS VGA image sensor driver patch_
 
@@ -98,8 +92,6 @@ VGA급 저해상도 Y10 RAW 포맷 스트림을 수신할 때, ISP 파이프라�
 
 
 ![Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개 image](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms](https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/)_
 
 
 _Qualcomm CAMSS MIPI C-PHY support patch v9_

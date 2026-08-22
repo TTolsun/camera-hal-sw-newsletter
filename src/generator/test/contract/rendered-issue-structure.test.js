@@ -292,8 +292,9 @@ test('fallback article image carrying a source attribution caption is rejected',
   assert.equal(result.ok, false, 'fabricated fallback caption unexpectedly passed');
   assert.match(result.text, /must not carry a source attribution caption/);
 
-  // 이 규칙이 생기기 전에 발행된 호는 검사 대상이 아니다. 전체에 적용하면 내용과 무관한
-  // PR까지 전부 막힌다. 형제 validator들이 쓰는 정책과 같다.
+  // 이 금지는 발행 대상 호만이 아니라 모든 호에 적용된다(#863). 예전에는 규칙보다 먼저
+  // 발행된 호 53건 때문에 발행 대상 호로 한정했는데, 그 53건을 지웠으므로 예외가 사라졌다.
+  // 여기서 옛 예외 스위치를 그대로 넘겨도 여전히 걸려야 한다 — 통과하면 예외가 되살아난 것이다.
   const historical = validateRenderedIssueStructure({
     root,
     date,
@@ -302,7 +303,8 @@ test('fallback article image carrying a source attribution caption is rejected',
     html: fabricatedCaptionHtml,
     strictArtifactValidation: false
   });
-  assert.equal(historical.ok, true, historical.text);
+  assert.equal(historical.ok, false, '과거 호 예외가 되살아났다');
+  assert.match(historical.text, /must not carry a source attribution caption/);
 });
 
 test('rendered issue structure rejects selectedImage and newsletter index contract failures', () => {

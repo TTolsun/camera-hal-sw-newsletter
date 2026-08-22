@@ -15,8 +15,6 @@
 
 ![V4L2 서브디바이스 패드 작업의 새로운 변화: v4l2_subdev_client_info 포인터 도입 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops](https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/)_
-
 
 _V4L2 subdev pad ops에 const struct v4l2_subdev_client_info 포인터 추가 제안_
 
@@ -42,8 +40,6 @@ Linux 커널의 V4L2(Video for Linux Two) 서브디바이스는 카메라 센서
 
 
 ![V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락 image](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter 'ci' not described in 'cvs_csi_set_fmt'](https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/)_
 
 
 _sailus-media-tree metadata-pre 브랜치에서 cvs_csi_set_fmt 함수 파라미터 'ci' 설명 누락 경고_

@@ -18,8 +18,6 @@
 
 ![ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/)_
-
 
 _Linux media mailing list에서 이미지 처리 파이프라인 개선 제안_
 
@@ -74,8 +72,6 @@ CameraX는 Android Camera2 API를 기반으로 구축된 Jetpack 라이브러리
 
 ![Red Hat graphic on ISO C++ Blog representing GCC 16 compiler updates](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [ISO C++ Blog](https://isocpp.org/blog)_
-
 
 _C++ 개발 워크플로우의 코드 품질 분석 및 디버깅 효율성 향상 기대_
 
@@ -101,8 +97,6 @@ GCC 16의 개선된 오류 메시지와 SARIF 출력 기능은 직접적으로 A
 
 
 ![Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [[PATCH v10 0/2] media: add Himax HM1246 image sensor](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/)_
 
 
 _lore.kernel.org linux-media list (2026-06-19)_
@@ -130,8 +124,6 @@ Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camer
 
 ![Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver](https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/)_
-
 
 _lore.kernel.org linux-media list_
 
@@ -157,8 +149,6 @@ _lore.kernel.org linux-media list_
 
 
 ![Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개 image](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver](https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/)_
 
 
 _lore.kernel.org linux-media list_

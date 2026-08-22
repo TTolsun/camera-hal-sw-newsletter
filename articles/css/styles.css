@@ -1950,10 +1950,7 @@ pre code {
   color: #d2d2d7;
 }
 
-/* 운영 안내 블록(watch-points)도 같은 파치먼트 언어로.
-   issue-quiet-core-note-card 는 이미 발행된 호(2026-06-02, 2026-W26)의 HTML 이 그대로 쓰고
-   있어 남겨 둔다. 새로 렌더되는 호는 이 카드를 만들지 않는다(#856). */
-.newsletter-issue-page .issue-quiet-core-note-card,
+/* 운영 안내 블록(watch-points)도 같은 파치먼트 언어로. */
 .newsletter-issue-page .issue-watch-points-card {
   border: none;
   border-radius: var(--radius-lg);

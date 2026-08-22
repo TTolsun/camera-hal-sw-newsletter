@@ -68,8 +68,7 @@ function indexStructureErrors(root) {
     markdown: '',
     html: '',
     root,
-    validateDataIndex: true,
-    strictArtifactValidation: false
+    validateDataIndex: true
   }).errors;
 }
 

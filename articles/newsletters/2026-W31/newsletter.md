@@ -17,8 +17,6 @@
 
 ![Qualcomm CAMSS, raw Bayer를 YUV로 변환하는 OPE(Offline Processing Engine) 드라이버 추가 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [[PATCH v5 4/5] media: qcom: camss: Add CAMSS Offline Processing Engine driver](https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/)_
-
 
 _Qualcomm CAMSS OPE Driver Patch v5_
 
@@ -44,8 +42,6 @@ Qualcomm CAMSS 드라이버에 raw Bayer 프레임을 YUV로 변환하는 OPE(Of
 
 
 ![Himax HM1092 단색 적외선(IR) 센서 지원을 위한 신규 V4L2 드라이버 패치 공개 image](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support](https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/)_
 
 
 _Himax HM1092 Monochrome IR Sensor Driver Patch_
@@ -73,8 +69,6 @@ Himax HM1092 단색 적외선 이미지 센서 지원을 추가하는 신규 V4L
 
 ![libcamera, 제어 직렬화기(Control Serializer) 크기 및 입력 유효성 검사 강화 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [[v2,2/2] libcamera: Harden control serializer size and input validation](https://patchwork.libcamera.org/patch/27507/)_
-
 
 _libcamera Control Serializer Hardening Patch v2_
 
@@ -101,8 +95,6 @@ libcamera 프로젝트에서 제어 직렬화기(control serializer)의 크기 �
 
 ![libcamera, 불필요한 초기화 방지를 위한 EGLDisplay 캐싱 최적화 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
-_이미지: [libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown](https://patchwork.libcamera.org/patch/27496/)_
-
 
 _libcamera EGLDisplay Caching Patch_
 
@@ -128,8 +120,6 @@ libcamera 프로젝트에서 EGLDisplay 객체를 캐싱하여 불필요한 그�
 
 
 ![Samsung S5KJN5 50MP 이미지 센서 지원을 위한 독립형 V4L2 드라이버 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
-
-_이미지: [[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor](https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/)_
 
 
 _Samsung S5KJN5 Image Sensor Driver Patch v2_
