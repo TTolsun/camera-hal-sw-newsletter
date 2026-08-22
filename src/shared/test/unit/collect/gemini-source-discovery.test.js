@@ -227,6 +227,64 @@ test('enabled boundary writes seed-only artifacts when Gemini credentials are mi
   assert.match(report, /Gemini credentials가 없어 Gemini discovery는 건너뛰었습니다/);
 });
 
+test('merge-stage overflow promotes carry_forward_status to overflow even when stage 1 was under the cap', async () => {
+  const root = tempRoot();
+  const date = '2026-04-25';
+  const coverage = {
+    coverage_week_key: '2026-W17',
+    coverage_start_date: '2026-04-20',
+    coverage_end_date: '2026-04-26',
+    coverage_end_exclusive_at: '2026-04-27T00:00:00.000Z'
+  };
+  const payload = candidatePayload(date);
+  payload.coverage = coverage;
+  // Stage 1 finished healthy and under the not-yet-eligible cap (60) -- the merge stage is the
+  // only place this run overflows, so a regression that forgets to re-derive
+  // carry_forward_status after the merge-stage cap would leave this 'loaded' value in place.
+  payload.not_yet_eligible = [];
+  payload.not_yet_eligible_overflow = false;
+  payload.carry_forward_status = 'loaded';
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
+
+  // 65 Gemini-discovered URLs dated after the coverage window -- splitMergeStageNotYetEligible
+  // classifies every one of them as not_yet_eligible, which pushes the merge-stage cap (60) into
+  // overflow purely from candidates the merge stage itself introduced.
+  const overflowUrls = Array.from(
+    { length: 65 },
+    (_, index) => `https://developer.android.com/notyet-eligible-${index}`
+  );
+  const proposalPayload = proposalWithUrls('overflow-proposal', overflowUrls);
+
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date,
+    env: {
+      NEWSLETTER_DATE: date,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true',
+      GEMINI_API_KEY: 'test-key'
+    },
+    proposalPayload,
+    lookupImpl: async () => [{ address: '93.184.216.34', family: 4 }],
+    fetchImpl: async (url) => ({
+      ok: true,
+      status: 200,
+      url,
+      headers: { get: () => '' },
+      text: async () => '<html><head><title>Future camera signal</title>' +
+        '<meta name="datePublished" content="2099-01-01"></head>' +
+        '<body>2099-01-01 candidate dated after this week\'s coverage window.</body></html>'
+    })
+  });
+
+  assert.equal(result.status, 'PASS');
+  const merged = readJson(mergedCandidatesPath(root, date));
+  assert.equal(merged.not_yet_eligible_overflow, true);
+  assert.equal(merged.carry_forward_status, 'overflow');
+  const manifest = readJson(mergedCandidateManifestPath(root, date));
+  assert.equal(manifest.not_yet_eligible_overflow, true);
+  assert.equal(manifest.carry_forward_status, 'overflow');
+});
+
 test('enabled boundary without seed keeps missing credential path strictly no-mutation', async () => {
   const root = tempRoot();
   const date = '2026-05-16';

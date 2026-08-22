@@ -45,6 +45,18 @@ function carryForwardStatusLine(status) {
   return `${base} — 경고: carry-forward가 이번 주 후보 풀을 완전히 채우지 못했습니다. 편집자 검토가 강제로 켜졌습니다.`;
 }
 
+// weekly_output_status는 관측용 값이라 발행 게이트(finalPublishReady/failureKind)에는 안 들어간다
+// (#873). 그래도 위클리 index/issue upsert가 실패했다면 편집자가 generation-status.json을 따로
+// 열어보지 않고도 이 PR 본문만으로 알 수 있어야 한다 — 'written'/'skipped' 등 정상 값일 때는
+// 노이즈를 늘리지 않도록 실패일 때만 사유를 붙인다.
+function weeklyOutputStatusLine(status) {
+  const weeklyStatus = String(status.weekly_output_status || '');
+  if (!weeklyStatus) return '';
+  const base = `weekly_output_status: ${weeklyStatus}`;
+  if (weeklyStatus !== 'failed') return base;
+  return `${base} — 실패 사유: ${valueOrUnknown(status.weekly_output_failure_reason)}`;
+}
+
 function recommendedEditorAction(status) {
   if (ensureArray(status.consistency_errors).length > 0) {
     return 'status artifact와 현재 산출물 재계산 결과가 다릅니다. PR 생성 전에 status artifact와 review artifact를 함께 확인하세요.';
@@ -93,6 +105,7 @@ function renderStatusSection(status, handoff = null) {
     `failure_kind=${valueOrUnknown(status.failure_kind || 'none')}`,
     coverageWeekLine(status),
     carryForwardStatusLine(status),
+    weeklyOutputStatusLine(status),
     `팩트체크 상태: ${valueOrUnknown(status.fact_check_status)}`,
     `팩트체크 must_fix_count: ${valueOrUnknown(status.must_fix_count ?? 0)}`,
     `팩트체크 source_gap_count: ${valueOrUnknown(status.source_gap_count ?? 0)}`,
@@ -213,6 +226,7 @@ module.exports = {
   mustFixSummaryText,
   coverageWeekLine,
   carryForwardStatusLine,
+  weeklyOutputStatusLine,
   recommendedEditorAction,
   renderStatusSection,
   renderCompositionNotes,

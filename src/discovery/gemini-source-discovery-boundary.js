@@ -104,6 +104,9 @@ const {
   urlDedupeKey,
   writeNotYetEligibleOverflowIfNeeded
 } = require('../shared/cli/collect-news-candidates');
+const {
+  resolveCarryForwardStatus
+} = require('../shared/collect/carry-forward');
 
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
 const SEED_ONLY_LLM_CREDENTIALS_MISSING = 'SEED_ONLY_LLM_CREDENTIALS_MISSING';
@@ -1335,6 +1338,16 @@ async function runEnabled({
   const notYetEligibleCap = capNotYetEligible(notYetEligibleMerged);
   mergedPayload.not_yet_eligible = notYetEligibleCap.committed;
   mergedPayload.not_yet_eligible_overflow = notYetEligibleCap.overflow;
+  // 리뷰 fix: 병합 단계 자체가 상한을 새로 넘겼다면 stage 1과 같은 우선순위 규칙
+  // (carry-forward.js의 resolveCarryForwardStatus -- overflow가 항상 최우선)으로
+  // carry_forward_status를 'overflow'로 승격한다. mergedPayload는 candidatePayload()가
+  // manualPayload(stage 1의 carry_forward_status)를 그대로 스프레드해 넘어온 상태라, 이 줄이
+  // 없으면 orchestrator 게이트(status 필드만 봄)가 병합 단계 overflow를 못 보고 통과시킨다.
+  // overflow가 false면 stage 1이 정한 status를 그대로 둔다.
+  mergedPayload.carry_forward_status = resolveCarryForwardStatus({
+    status: mergedPayload.carry_forward_status,
+    overflow: notYetEligibleCap.overflow
+  });
   // fix round 1: 상한을 넘기면 stage 1과 같은 규칙으로 전체 목록을 .tmp에 남긴다 — 안 그러면
   // stage 2 신규 후보가 합류하며 상한을 넘긴 항목이 committed에도 진단 파일에도 없이 완전히
   // 사라진다(silent truncate 금지 계약 위반). stage 1이 이미 이번 run에서 같은 파일을 썼어도

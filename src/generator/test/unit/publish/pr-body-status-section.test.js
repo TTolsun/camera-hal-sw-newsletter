@@ -6,6 +6,7 @@ const test = require('node:test');
 const {
   coverageWeekLine,
   carryForwardStatusLine,
+  weeklyOutputStatusLine,
   renderStatusSection
 } = require('../../../publish/pr-body-status-section');
 
@@ -50,4 +51,33 @@ test('renderStatusSection includes both coverage lineage lines', () => {
   });
   assert.match(body, /대상 주차: 2026-W33 \(2026-08-10 ~ 2026-08-16\)/);
   assert.match(body, /carry 상태: overflow — 경고:/);
+});
+
+test('weeklyOutputStatusLine is blank when the field is absent (older artifacts)', () => {
+  assert.equal(weeklyOutputStatusLine({}), '');
+});
+
+test('weeklyOutputStatusLine stays plain for non-failed statuses', () => {
+  assert.equal(weeklyOutputStatusLine({ weekly_output_status: 'written' }), 'weekly_output_status: written');
+  assert.equal(weeklyOutputStatusLine({ weekly_output_status: 'skipped' }), 'weekly_output_status: skipped');
+});
+
+test('weeklyOutputStatusLine appends the failure reason when the upsert failed', () => {
+  const line = weeklyOutputStatusLine({
+    weekly_output_status: 'failed',
+    weekly_output_failure_reason: 'coverage_week_key mismatch with existing weekly index entry'
+  });
+  assert.equal(
+    line,
+    'weekly_output_status: failed — 실패 사유: coverage_week_key mismatch with existing weekly index entry'
+  );
+});
+
+test('renderStatusSection surfaces a failed weekly upsert in the PR body', () => {
+  const body = renderStatusSection({
+    status: 'PASS',
+    weekly_output_status: 'failed',
+    weekly_output_failure_reason: 'weekly index write rejected: schema mismatch'
+  });
+  assert.match(body, /weekly_output_status: failed — 실패 사유: weekly index write rejected: schema mismatch/);
 });
