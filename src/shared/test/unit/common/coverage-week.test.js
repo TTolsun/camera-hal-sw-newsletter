@@ -62,3 +62,13 @@ test('구간 수식: primary 0~6일, fallback 7~20일, reference 21~34일, stale
   assert.equal(classifyCoverageWindow('2026-07-12', coverage), 'stale');      // age 35
   assert.equal(classifyCoverageWindow('', coverage), 'unknown');
 });
+
+test('windowDays로 fallback/reference 경계를 좁힐 수 있다(선정 정책 노브가 실제로 반영되도록)', () => {
+  const coverage = coverageForWeekKey('2026-W33');
+  // 기본값(fallbackDays=21)이면 15일령은 fallback이다.
+  assert.equal(classifyCoverageWindow('2026-08-01', coverage), 'fallback');
+  // fallbackDays=14로 좁히면 같은 15일령이 fallback 구간(7~13일)을 벗어나 reference로 떨어진다.
+  // primary 경계(0~6일)는 coverage 주(ISO 7일) 구조 자체라 windowDays로 못 바꾼다.
+  assert.equal(classifyCoverageWindow('2026-08-01', coverage, { fallbackDays: 14 }), 'reference');
+  assert.equal(classifyCoverageWindow('2026-08-10', coverage, { fallbackDays: 14 }), 'primary');
+});

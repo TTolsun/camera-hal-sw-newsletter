@@ -590,12 +590,10 @@ test('fallback reserve is marked when primary reserve is short', () => {
   assert.ok(fallbackReserve.every(item => item.freshness_window === 'fallback'));
 });
 
-// selectionWindowPolicy의 primarySelectionDays/fallbackSelectionDays는 이제 창 분류를 좌우하지
-// 않는다 — 창은 coverage 주(고정 7/14/14일 구조)로만 갈린다. 정책 값은 보고서 메타데이터에는
-// 그대로 echo되지만(하위 호환), 커스텀 fallbackSelectionDays=10을 넘는 나이(11일)의 후보도
-// coverage 기준 fallback 구간(7~20일) 안이라 그대로 fallback 승격 대상이 된다. 이는 게이트
-// 약화가 아니라 anchor를 실행일 rolling에서 coverage 주로 옮긴 데 따른 의도된 변화다.
-test('selection window policy customization no longer narrows coverage-based fallback classification', () => {
+// selectionWindowPolicy.fallbackSelectionDays/referenceContextDays는 fallback/reference 경계로
+// classifyCoverageWindow에 그대로 전달된다(리뷰 fix 1) — primarySelectionDays만 예외다. coverage
+// 주 자체가 ISO 주(7일) 고정이라 primary 경계(0~6일)는 어떤 정책값으로도 못 바꾼다.
+test('custom selection window policy narrows fallback classification via coverage age boundaries', () => {
   const customPolicy = {
     primarySelectionDays: 3,
     fallbackSelectionDays: 10,
@@ -610,14 +608,14 @@ test('selection window policy customization no longer narrows coverage-based fal
     }),
     policySupportingCandidate(0, {
       title: 'Custom policy coverage fallback source A',
-      url: 'https://example.com/custom-policy-fallback-a',
-      source: 'Custom Fallback Source A',
-      published_date: '2026-08-05'
+      url: 'https://example.com/custom-policy-fallback-within',
+      source: 'Custom Fallback Within Source',
+      published_date: '2026-08-08'
     }),
     policySupportingCandidate(1, {
       title: 'Custom policy native debugger fallback source',
-      url: 'https://example.com/custom-policy-fallback-b',
-      source: 'Custom Fallback Source B',
+      url: 'https://example.com/custom-policy-fallback-beyond',
+      source: 'Custom Fallback Beyond Source',
       summary: 'Native debugger workflow improves camera HAL validation triage.',
       api_or_component: 'LLDB camera HAL debugger',
       published_date: '2026-08-05'
@@ -630,9 +628,16 @@ test('selection window policy customization no longer narrows coverage-based fal
 
   assert.equal(report.selection_policy.selection_window_policy.primarySelectionDays, 3);
   assert.equal(report.fallback_window_consulted, true);
-  assert.equal(report.fallback_window_used, true);
-  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-a'), true);
-  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-b'), true);
+  // 8일령은 customFallbackDays(10)의 fallback 구간(7~9일) 안이라 그대로 fallback 승격된다.
+  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-within'), true);
+  // 11일령은 기본 정책(21일)이면 fallback이었을 나이지만, customFallbackDays(10)로 좁히면
+  // fallback 구간(7~9일)을 벗어나 reference로 떨어져 main 선정 밖으로 나간다 — 노브가 실제로
+  // 분류를 좁힌다는 것을 보여준다.
+  assert.equal(fallbackUrls.has('https://example.com/custom-policy-fallback-beyond'), false);
+  assert.equal(
+    report.reference_context_candidates.some(item => item.url === 'https://example.com/custom-policy-fallback-beyond'),
+    true
+  );
 });
 
 test('#124 acceptance: primary window official Camera candidate outranks fallback candidate', () => {

@@ -2,7 +2,11 @@
 
 // 주간호 coverage(대상 주) 계산의 단일 정본.
 // 모든 판정은 UTC ISO 주 + 반개구간 [coverage_start 00:00Z, coverage_end_exclusive_at).
-// primary=[E-7d,E) fallback=[E-21d,E-7d) reference=[E-35d,E-21d), E 이후는 not_yet_eligible.
+// primary=[E-7d,E) — coverage 주 자체가 ISO 주 1개(7일)로 고정이라 이 경계는 설정으로 바꿀 수
+// 없다. fallback=[E-fallbackDays,E-7d) reference=[E-referenceDays,E-fallbackDays), E 이후는
+// not_yet_eligible. fallbackDays/referenceDays 기본값은 21/35(주 단위로 fallback 2주·
+// reference 2주씩)이며 classifyCoverageWindow의 세 번째 인자로 넘겨 바꿀 수 있다 — 정책값을
+// 안 넘기면 이 기본값 그대로 동작한다(하위 호환).
 // generator의 weeklyKeyForDate(발행 identity)와 역할이 다르다 — 여기는 "독자에게 보이는 대상 주"만 담당한다.
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -89,13 +93,19 @@ function coverageAgeDays(publishedAtText, coverage) {
   return Math.floor((endDayStart - publishedDayStart) / DAY_MS);
 }
 
-function classifyCoverageWindow(publishedAtText, coverage) {
+// windowDays.fallbackDays/referenceDays는 선정 정책(selectionWindowPolicy)의
+// fallbackSelectionDays/referenceContextDays를 그대로 받는 자리다. primary 경계(6일, 즉 coverage
+// 주 7일)는 ISO 주 구조 자체라 이 인자로 못 바꾼다 — selectionWindowPolicy.primarySelectionDays는
+// 여기 분류에 쓰이지 않는다(호출측 정책 문서에 명시할 것).
+function classifyCoverageWindow(publishedAtText, coverage, windowDays = {}) {
+  const fallbackDays = Number.isInteger(windowDays.fallbackDays) ? windowDays.fallbackDays : 21;
+  const referenceDays = Number.isInteger(windowDays.referenceDays) ? windowDays.referenceDays : 35;
   const ageDays = coverageAgeDays(publishedAtText, coverage);
   if (ageDays === null) return 'unknown';
   if (ageDays < 0) return 'not_yet_eligible';
   if (ageDays <= 6) return 'primary';
-  if (ageDays <= 20) return 'fallback';
-  if (ageDays <= 34) return 'reference';
+  if (ageDays <= fallbackDays - 1) return 'fallback';
+  if (ageDays <= referenceDays - 1) return 'reference';
   return 'stale';
 }
 

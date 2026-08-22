@@ -158,7 +158,12 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
   const coverage = coverageForAnchorDate(anchorDate, options.coverageWeekKeyOverride);
   const publishedAt = selectionDate(candidate);
   const ageDays = coverageAgeDays(publishedAt, coverage);
-  const classification = classifyCoverageWindow(publishedAt, coverage);
+  // primarySelectionDays는 coverage 주(ISO 7일) 구조 자체라 분류에 쓰지 않는다 — fallback/
+  // reference 경계만 정책값을 그대로 넘겨 노브가 실제로 동작하게 한다(기본 21/35).
+  const classification = classifyCoverageWindow(publishedAt, coverage, {
+    fallbackDays: policy.fallbackSelectionDays,
+    referenceDays: policy.referenceContextDays
+  });
   const precision = datePrecision(candidate);
   const precisionNote = precision === 'month' ? 'month-level date precision; ' : '';
   const dateEvidence = selectionDateEvidence(candidate);
@@ -784,6 +789,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   ];
   const selectionResult = selectFinalArticlesWithDiagnostics(selectionCandidatePool, {
     ...options,
+    date,
     selectionWindowPolicy
   });
   let selected = attachRelatedContextToSelected(selectionResult.selected, [

@@ -83,15 +83,16 @@ function exclusionReasons(candidate) {
 // not_yet_eligible로 이미 걸러지므로 여기서는 0점 처리로 이중 안전망만 둔다).
 // month 정밀도(그 달 1일로 채워진 날짜)는 정확한 날짜를 모르므로 최대점 대신 낮은 고정값만
 // 준다 — 달 범위가 아직 coverage 44일 폭 안에 있으면 1점, 그마저 벗어나면 0점.
+// 계단(6/20/44일)은 freshness_window 판정(classifyCoverageWindow, selectionWindowPolicy로
+// 조정 가능)과는 별개의 점수 배점이다 — 옛 rolling 시절 45일 계단을 그대로 이어받은
+// 스코어링 전용 상수라 정책 설정을 받지 않는다.
+// coverageWeekKeyOverride가 형식에 안 맞으면 coverageForAnchorDate가 throw한다 — override는
+// runtime-config에서 이미 검증되고 freshnessWindowMetadata도 같은 입력에서 throw하므로,
+// 여기서 조용히 0점으로 삼키지 않고 그대로 전파한다(fail-closed, 방어패치 금지).
 function freshnessScore(candidate, newsletterDate, coverageWeekKeyOverride) {
   const rawDate = selectionDate(candidate);
   if (!rawDate) return 0;
-  let coverage;
-  try {
-    coverage = coverageForAnchorDate(freshnessAnchorDate(newsletterDate), coverageWeekKeyOverride);
-  } catch {
-    return 0;
-  }
+  const coverage = coverageForAnchorDate(freshnessAnchorDate(newsletterDate), coverageWeekKeyOverride);
   const ageDays = coverageAgeDays(rawDate, coverage);
   if (ageDays === null || ageDays < 0) return 0;
   if (datePrecision(candidate) === 'month') {

@@ -70,6 +70,12 @@ function validateBucketList(value, field, errors) {
   return buckets;
 }
 
+// 선정 창(freshness_window)의 시간 anchor는 실행일이 아니라 직전 완결 coverage 주(coverage-
+// week.js)다. coverage 주 자체가 ISO 주(7일) 고정이라 primarySelectionDays는 실제 분류에
+// 쓰이지 않는다(하위 호환 위해 스키마·보고서에는 그대로 남아 echo된다) — primary 판정은 항상
+// "coverage 주 안(0~6일)"이다. fallbackSelectionDays/referenceContextDays만
+// classifyCoverageWindow(coverage-week.js)의 fallback/reference 경계로 실제로 전달돼 분류에
+// 반영된다. 이 값들을 바꾸면 fallback/reference 경계가 실제로 좁아지거나 넓어진다.
 function validateSelectionWindowPolicy(value, errors) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     errors.push('selectionWindowPolicy must be an object.');
