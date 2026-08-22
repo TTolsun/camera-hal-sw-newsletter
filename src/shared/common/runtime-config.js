@@ -115,8 +115,15 @@ const DEFAULT_RUNTIME_CONFIG = {
   // #429 linked evidence expansion은 Gemini source discovery가 켜진 run 안에서만 동작하고
   // non-failing이므로 기본 켜되, 문제 시 source discovery 전체를 끄지 않고 이 단계만 끌 수 있게 한다.
   newsroomEnableLinkedEvidenceDiscovery: true,
-  githubEventName: ''
+  githubEventName: '',
+  // Phase 3 producer flip: 주간 coverage 대상 주(YYYY-Www)를 강제 지정하는 override.
+  // 비면 producer가 현재 주를 스스로 계산한다.
+  coverageWeekKeyOverride: '',
+  // carry(이월) 소스 파일 경로 override. 존재 검증은 이 값을 읽는 소비자 몫이다.
+  carrySourcePathOverride: ''
 };
+
+const COVERAGE_WEEK_KEY_PATTERN = /^\d{4}-W\d{2}$/;
 
 function parseCsv(value) {
   if (value === undefined || value === null) return [];
@@ -454,6 +461,12 @@ function readRuntimeConfig(env = process.env, options = {}) {
       { defaultValue: DEFAULT_RUNTIME_CONFIG.newsroomEnableLinkedEvidenceDiscovery }
     ),
     githubEventName: String(envValue(env, 'GITHUB_EVENT_NAME', DEFAULT_RUNTIME_CONFIG.githubEventName) || '').trim(),
+    coverageWeekKeyOverride: String(
+      envValue(env, 'COVERAGE_WEEK_KEY', DEFAULT_RUNTIME_CONFIG.coverageWeekKeyOverride) || ''
+    ).trim(),
+    carrySourcePathOverride: String(
+      envValue(env, 'CARRY_SOURCE_PATH', DEFAULT_RUNTIME_CONFIG.carrySourcePathOverride) || ''
+    ).trim(),
     geminiApiKeyConfigured: Boolean(String(env.GEMINI_API_KEY || '').trim())
   };
 
@@ -476,6 +489,9 @@ function validateRuntimeConfig(config, options = {}) {
 
   if (config.newsletterDate && !isValidIsoDate(config.newsletterDate)) {
     errors.push('NEWSLETTER_DATE must be empty or a valid YYYY-MM-DD date.');
+  }
+  if (config.coverageWeekKeyOverride && !COVERAGE_WEEK_KEY_PATTERN.test(config.coverageWeekKeyOverride)) {
+    errors.push('COVERAGE_WEEK_KEY must be empty or match YYYY-Www (e.g. 2026-W34).');
   }
   if (!Number.isInteger(config.lookbackDays) || config.lookbackDays < 1) {
     errors.push('LOOKBACK_DAYS must be an integer >= 1.');
@@ -710,10 +726,20 @@ function sanitizeRuntimeConfig(config) {
     newsroomEnableLinkedEvidenceDiscovery:
       config.newsroomEnableLinkedEvidenceDiscovery ?? DEFAULT_RUNTIME_CONFIG.newsroomEnableLinkedEvidenceDiscovery,
     githubEventName: config.githubEventName,
+    coverageWeekKeyOverride: config.coverageWeekKeyOverride ?? DEFAULT_RUNTIME_CONFIG.coverageWeekKeyOverride,
+    carrySourcePathOverride: config.carrySourcePathOverride ?? DEFAULT_RUNTIME_CONFIG.carrySourcePathOverride,
     proPolicy: 'disabled',
     proModelConfigured: configuredModelList(config).some(isProModel),
     geminiApiKeyConfigured: Boolean(config.geminiApiKeyConfigured)
   };
+}
+
+// GitHub Actions `schedule` 이벤트로 시작한 실행만 scheduled로 본다. 그 외(workflow_dispatch,
+// push, 로컬 실행 등 GITHUB_EVENT_NAME이 비었거나 다른 값)는 전부 manual로 취급한다.
+// `migration`은 Task 4 마이그레이션 도구 전용 상수이며 여기서는 만들지 않는다.
+function resolveRunMode(env = process.env) {
+  const githubEventName = String(envValue(env, 'GITHUB_EVENT_NAME', '') || '').trim();
+  return githubEventName === 'schedule' ? 'scheduled' : 'manual';
 }
 
 module.exports = {
@@ -728,6 +754,7 @@ module.exports = {
   readRuntimeConfig,
   validateRuntimeConfig,
   sanitizeRuntimeConfig,
+  resolveRunMode,
   parseCsv,
   parseBoolean,
   parseInteger,
