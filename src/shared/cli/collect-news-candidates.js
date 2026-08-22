@@ -18,6 +18,7 @@ const { parseManualSourceUrls } = require('../collect/collection-intent');
 const { readRuntimeConfig, resolveRunMode } = require('../common/runtime-config');
 const { monthRangeOverlapsWindow } = require('../common/date-signals');
 const { coverageForAnchorDate, classifyCoverageWindow } = require('../common/coverage-week');
+const { loadCarryForward, resolveCarryForwardStatus } = require('../collect/carry-forward');
 const {
   extractImageCandidatesFromHtml,
   extractImageCandidatesFromRssBlock,
@@ -1699,6 +1700,18 @@ async function main() {
 
   const coverage = coverageForAnchorDate(date, runtimeConfig.coverageWeekKeyOverride);
   const collectionObservedAt = new Date().toISOString();
+
+  // 직전 주 scheduled coverage run이 [E, U) 밖이라 남겨둔 not_yet_eligible 후보를 이번 풀에
+  // 합류시킨다(Task 9). 이 후보는 원시(raw) 상태이므로 live 후보 뒤에 붙여 dedupe 이하 기존
+  // 필터 체인을 그대로 재통과시킨다 — 파생 판정을 우회하지 않는다. dedupe는 배열 앞쪽을
+  // 우선하므로(first-win) live 후보 뒤에 붙이면 URL/제목이 같을 때 항상 live가 이긴다.
+  const carryForward = loadCarryForward({
+    root,
+    coverage,
+    carrySourcePathOverride: runtimeConfig.carrySourcePathOverride
+  });
+  candidates.push(...carryForward.candidates);
+
   // [E, U) 후보(이번 coverage 주보다 최신인 후보)는 이번 호 대상이 아니다 — cap 이전에 떼어내
   // 다음 실행 carry-forward 원천으로 보존한다(Task 8/9).
   const { notYetEligible, currentCoveragePool } = partitionByCoverageEligibility(
@@ -1751,6 +1764,11 @@ async function main() {
     run_mode: resolveRunMode(process.env),
     not_yet_eligible: notYetEligibleCap.committed,
     not_yet_eligible_overflow: notYetEligibleCap.overflow,
+    carry_forward_status: resolveCarryForwardStatus({
+      status: carryForward.status,
+      overflow: notYetEligibleCap.overflow
+    }),
+    carry_source: carryForward.carrySource,
     candidates,
     failures
   };
