@@ -46,7 +46,9 @@ const CANDIDATE_INPUT_MODES = Object.freeze({
 // 후보 artifact에 기록되는 schema_version 계약값. 생산자(collect CLI, source-monitor,
 // seed-evidence)가 공유한다. 아래 strict 검증 하한(>= 5)은 "5 이상 수용"이라는 의도된
 // 하한이라 이 값과 별개다.
-const CANDIDATE_SCHEMA_VERSION = 6;
+// 7(Task 8): collect(01) payload에 top-level coverage/generation_anchor_date/
+// collection_observed_at/run_mode/not_yet_eligible/not_yet_eligible_overflow가 추가됐다.
+const CANDIDATE_SCHEMA_VERSION = 7;
 
 class CandidateArtifactValidationError extends Error {
   constructor(message, details = {}) {
