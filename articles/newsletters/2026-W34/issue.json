@@ -2,7 +2,7 @@
   "date": "2026-08-17",
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
-  "title": "2026 W34 (08.17 ~ 08.23)",
+  "title": "2026 W33 (08.10 ~ 08.16)",
   "summary": "이번 주에는 ‘CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결’ 소식을 다룹니다.",
   "briefing": [
     "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결"
@@ -431,5 +431,10 @@
   "tags": [
     "Camera HAL",
     "Android"
-  ]
+  ],
+  "coverage_week_key": "2026-W33",
+  "coverage_start_date": "2026-08-10",
+  "coverage_end_date": "2026-08-16",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-08-17"
 }

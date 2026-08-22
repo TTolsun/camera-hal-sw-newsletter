@@ -2,7 +2,7 @@
   "date": "2026-07-20",
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
-  "title": "2026 W30 (07.20 ~ 07.26)",
+  "title": "2026 W29 (07.13 ~ 07.19)",
   "summary": "이번 주에는 ‘libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안’ 소식을 다룹니다.",
   "briefing": [
     "libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안"
@@ -294,5 +294,10 @@
     "Image Processing",
     "Camera HAL",
     "Android"
-  ]
+  ],
+  "coverage_week_key": "2026-W29",
+  "coverage_start_date": "2026-07-13",
+  "coverage_end_date": "2026-07-19",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-07-20"
 }

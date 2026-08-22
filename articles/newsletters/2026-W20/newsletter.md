@@ -1,4 +1,4 @@
-# 2026 W20 (05.11 ~ 05.17)
+# 2026 W19 (05.04 ~ 05.10)
 
 이번 주에는 ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’, ‘CameraX 1.6.1 업데이트: Android Camera 호환성 관찰’ 두 건의 소식을 다룹니다.
 

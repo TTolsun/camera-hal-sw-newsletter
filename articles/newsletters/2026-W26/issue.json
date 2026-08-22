@@ -2,7 +2,7 @@
   "date": "2026-06-22",
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
-  "title": "2026 W26 (06.22 ~ 06.28)",
+  "title": "2026 W25 (06.15 ~ 06.21)",
   "summary": "이번 주에는 ‘Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안’, ‘Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안’ 등 4건의 소식을 다룹니다.",
   "briefing": [
     "Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안",
@@ -1067,5 +1067,10 @@
   "tags": [
     "Camera HAL",
     "Android"
-  ]
+  ],
+  "coverage_week_key": "2026-W25",
+  "coverage_start_date": "2026-06-15",
+  "coverage_end_date": "2026-06-21",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-06-22"
 }

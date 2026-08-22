@@ -15,7 +15,12 @@
     "article_count": 1,
     "article_images": [
       "https://developer.android.com/static/images/social/android-developers.png?hl=ar"
-    ]
+    ],
+    "coverage_week_key": "2026-W33",
+    "coverage_start_date": "2026-08-10",
+    "coverage_end_date": "2026-08-16",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-08-17"
   },
   {
     "weeklyKey": "2026-W33",
@@ -35,7 +40,12 @@
     "article_count": 2,
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
-    ]
+    ],
+    "coverage_week_key": "2026-W32",
+    "coverage_start_date": "2026-08-03",
+    "coverage_end_date": "2026-08-09",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-08-10"
   },
   {
     "weeklyKey": "2026-W32",
@@ -55,7 +65,12 @@
     "article_count": 4,
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
-    ]
+    ],
+    "coverage_week_key": "2026-W31",
+    "coverage_start_date": "2026-07-27",
+    "coverage_end_date": "2026-08-02",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-08-03"
   },
   {
     "weeklyKey": "2026-W31",
@@ -75,7 +90,12 @@
     "article_count": 5,
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
-    ]
+    ],
+    "coverage_week_key": "2026-W30",
+    "coverage_start_date": "2026-07-20",
+    "coverage_end_date": "2026-07-26",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-07-27"
   },
   {
     "weeklyKey": "2026-W30",
@@ -95,7 +115,12 @@
     "article_count": 1,
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
-    ]
+    ],
+    "coverage_week_key": "2026-W29",
+    "coverage_start_date": "2026-07-13",
+    "coverage_end_date": "2026-07-19",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-07-20"
   },
   {
     "weeklyKey": "2026-W29",
@@ -115,7 +140,11 @@
     "article_count": 3,
     "article_images": [
       "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
-    ]
+    ],
+    "coverage_start_date": "2026-07-06",
+    "coverage_end_date": "2026-07-13",
+    "coverage_mode": "legacy_rolling",
+    "generation_anchor_date": "2026-07-13"
   },
   {
     "weeklyKey": "2026-W28",
@@ -136,7 +165,12 @@
     "article_count": 3,
     "article_images": [
       "https://developer.android.com/static/images/social/android-developers.png"
-    ]
+    ],
+    "coverage_week_key": "2026-W27",
+    "coverage_start_date": "2026-06-29",
+    "coverage_end_date": "2026-07-05",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-07-06"
   },
   {
     "weeklyKey": "2026-W27",
@@ -156,7 +190,11 @@
     "article_count": 2,
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
-    ]
+    ],
+    "coverage_start_date": "2026-06-22",
+    "coverage_end_date": "2026-06-29",
+    "coverage_mode": "legacy_rolling",
+    "generation_anchor_date": "2026-06-29"
   },
   {
     "weeklyKey": "2026-W26",
@@ -178,7 +216,12 @@
     "article_images": [
       "assets/images/fallback/newsletter-default.svg",
       "https://developer.android.com/static/images/social/android-developers.png?hl=th"
-    ]
+    ],
+    "coverage_week_key": "2026-W25",
+    "coverage_start_date": "2026-06-15",
+    "coverage_end_date": "2026-06-21",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-06-22"
   },
   {
     "weeklyKey": "2026-W25",
@@ -200,7 +243,8 @@
     "article_images": [
       "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
       "assets/images/fallback/newsletter-default.svg"
-    ]
+    ],
+    "coverage_mode": "unverified"
   },
   {
     "weeklyKey": "2026-W24",
@@ -218,7 +262,8 @@
     "article_count": 1,
     "article_images": [
       "https://developer.android.com/static/images/social/android-developers.png?hl=hi"
-    ]
+    ],
+    "coverage_mode": "unverified"
   },
   {
     "weeklyKey": "2026-W23",
@@ -237,7 +282,8 @@
     "article_images": [
       "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
       "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20609"
-    ]
+    ],
+    "coverage_mode": "unverified"
   },
   {
     "weeklyKey": "2026-W22",
@@ -257,7 +303,12 @@
     "article_images": [
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png"
-    ]
+    ],
+    "coverage_week_key": "2026-W21",
+    "coverage_start_date": "2026-05-18",
+    "coverage_end_date": "2026-05-24",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-05-25"
   },
   {
     "weeklyKey": "2026-W21",
@@ -279,7 +330,8 @@
     "article_images": [
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png"
-    ]
+    ],
+    "coverage_mode": "unverified"
   },
   {
     "weeklyKey": "2026-W20",
@@ -298,7 +350,12 @@
     "article_images": [
       "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
       "https://developer.android.com/static/images/social/android-developers.png"
-    ]
+    ],
+    "coverage_week_key": "2026-W19",
+    "coverage_start_date": "2026-05-04",
+    "coverage_end_date": "2026-05-10",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-05-11"
   },
   {
     "weeklyKey": "2026-W19",
@@ -321,6 +378,7 @@
       "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
       "assets/images/fallback/newsletter-default.svg"
-    ]
+    ],
+    "coverage_mode": "unverified"
   }
 ]

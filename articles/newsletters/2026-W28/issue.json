@@ -2,7 +2,7 @@
   "date": "2026-07-06",
   "public_contract_version": "story-v1",
   "generation_contract_version": 1,
-  "title": "2026 W28 (07.06 ~ 07.12)",
+  "title": "2026 W27 (06.29 ~ 07.05)",
   "summary": "이번 주에는 ‘CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입’, ‘libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안’ 등 3건의 소식을 다룹니다.",
   "briefing": [
     "CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입",
@@ -788,5 +788,10 @@
   "tags": [
     "Camera HAL",
     "Android"
-  ]
+  ],
+  "coverage_week_key": "2026-W27",
+  "coverage_start_date": "2026-06-29",
+  "coverage_end_date": "2026-07-05",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-07-06"
 }

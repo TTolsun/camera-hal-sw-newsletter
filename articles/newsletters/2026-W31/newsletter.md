@@ -1,4 +1,4 @@
-# 2026 W31 (07.27 ~ 08.02)
+# 2026 W30 (07.20 ~ 07.26)
 
 이번 주에는 ‘Qualcomm CAMSS, raw Bayer를 YUV로 변환하는 OPE(Offline Processing Engine) 드라이버 추가 패치 제안’, ‘Himax HM1092 단색 적외선(IR) 센서 지원을 위한 신규 V4L2 드라이버 패치 공개’ 등 5건의 소식을 다룹니다.
 
