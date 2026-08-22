@@ -68,6 +68,8 @@ test('does not send a request once the source budget is exhausted', async () => 
 });
 
 test('charges the bytes a failed attempt already pulled', async () => {
+  const encoder = new TextEncoder();
+  let calls = 0;
   const client = createBoundedFetchClient({
     maxBytesPerSourceRun: 8192,
     retryDelayMs: 0,
@@ -79,23 +81,40 @@ test('charges the bytes a failed attempt already pulled', async () => {
     // 같은 카운터-순서 패턴이다. 이 테스트가 관찰하는 계약(실패한 시도의 수신 바이트를 예산에
     // 가산한다)은 그대로다.
     fetchImpl: async () => {
-      const encoder = new TextEncoder();
-      let pulled = false;
-      return new Response(new ReadableStream({
-        pull(controller) {
-          if (!pulled) {
-            pulled = true;
-            controller.enqueue(encoder.encode('x'.repeat(4096)));
-            return;
+      calls += 1;
+      if (calls === 1) {
+        let pulled = false;
+        return new Response(new ReadableStream({
+          pull(controller) {
+            if (!pulled) {
+              pulled = true;
+              controller.enqueue(encoder.encode('x'.repeat(4096)));
+              return;
+            }
+            controller.error(new Error('socket hang up'));
           }
-          controller.error(new Error('socket hang up'));
-        }
-      }), { status: 200 });
+        }), { status: 200 });
+      }
+      // 두 번째 호출: 소스 누적 상한이 실제로 얼마나 남았는지 직접 드러낸다.
+      // 첫 실패의 4096바이트가 예산에 반영됐다면 남은 예산은 4096이라, 여기서 보내는
+      // 6000바이트 청크는 잘린다. 반영되지 않았다면(버그) 남은 예산이 여전히 8192라
+      // 6000바이트가 안 잘리고 그대로 통과한다 — 이 차이로 "충전됐다"를 직접 검증한다.
+      return countingChunkedResponse(['x'.repeat(6000)], { pulled: 0 });
     }
   });
-  await client.fetchBounded('https://claude.com/blog/flaky', { maxBytes: 4096 });
+
+  const failed = await client.fetchBounded('https://claude.com/blog/flaky', { maxBytes: 4096 });
+  assert.equal(failed.ok, false,
+    '이 시도는 실패해야 한다 — mock이 도중에 에러를 멈추면(예: 정상 종료로 바뀌면) 여기서 걸린다');
+  assert.ok(failed.error, '실패한 시도의 error가 비어 있으면 안 된다');
   assert.ok(client.consumedBytes() >= 4096,
     '실패한 시도가 이미 읽은 바이트를 예산에 안 태우면 실패가 잦은 호스트에서 상한이 무제한이 된다');
+
+  const second = await client.fetchBounded('https://claude.com/blog/next', { maxBytes: 100000 });
+  assert.equal(second.truncated, true,
+    '첫 실패의 4096바이트가 예산에 반영되지 않았다면 남은 예산이 8192로 남아 6000바이트 청크가 안 잘린다');
+  assert.equal(second.limitedBy, 'source-run',
+    '두 번째 호출을 실제로 끊은 것이 소스 누적 상한임을 확인한다(요청 상한 100000은 여유가 크다)');
 });
 
 test('retries a 503 once but never a 404', async () => {
