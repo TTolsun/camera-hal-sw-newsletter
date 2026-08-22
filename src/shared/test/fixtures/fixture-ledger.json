@@ -721,6 +721,54 @@
       "relatedRules": [
         "parser_contract"
       ]
+    },
+    {
+      "path": "source-html/claude-blog-index-cards.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Claude Blog index card block parsing resolves every list card to a slug and a date",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "url": "https://claude.com/blog",
+        "capturedAt": "2026-08-22",
+        "originalCharacters": 812538,
+        "originalBytes": 812820
+      }
+    },
+    {
+      "path": "source-html/anthropic-news-index-cards.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Anthropic News index card block parsing resolves every list card to a slug and a date",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "url": "https://www.anthropic.com/news",
+        "capturedAt": "2026-08-22",
+        "originalCharacters": 415963,
+        "originalBytes": 416098
+      }
+    },
+    {
+      "path": "source-html/claude-blog-broken-cards.html",
+      "source": "synthetic",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "bad",
+      "protectedPolicy": "Claude Blog card parser fail-closed: unresolvable list cards (missing date, duplicate slug, conflicting date, unclosed block, impossible calendar day, commented-out decoy) are dropped rather than guessed",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "note": "synthetic: hand-authored negative cases, not sliced from a real capture"
+      }
     }
   ]
 }
