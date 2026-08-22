@@ -47,7 +47,7 @@ const COVERAGE_DISPLAY_FIELDS = ['coverage_week_key', 'coverage_start_date', 'co
 const COVERAGE_WEEK_KEY_PATTERN = /^\d{4}-W\d{2}$/;
 // coverage_mode·generation_anchor_date는 표시 3필드와 독립적인 optional 필드라, 있을 때만
 // 각자 형식을 본다.
-const COVERAGE_MODE_VALUES = ['iso_week', 'legacy_rolling'];
+const COVERAGE_MODE_VALUES = ['iso_week', 'legacy_rolling', 'unverified'];
 const LEGACY_SOURCE_LABEL = '\u7570\uc496\ucfc2';
 const LEGACY_REFERENCES_LABEL = '\uf9e1\uba78\ud02c\u003f\uba2e\uc9ba';
 const LEGACY_REFERENCES_PREFIX = '\uf9e1\uba78\ud02c';
@@ -176,12 +176,15 @@ function validateNewsletterIndex(root, relativePath, errors) {
       }
     }
 
-    // coverage_mode는 discriminated union이다(리뷰 fix 3). legacy_rolling은 실제 ISO 주가
-    // 아닌 rolling 조회 범위를 담을 뿐이라 coverage_week_key를 붙일 근거가 없다 — 있으면 잘못된
-    // 주 라벨을 보여주는 셈이므로 오류다. 대신 날짜 2개(coverage_start_date/coverage_end_date)는
-    // 표시에 반드시 필요하므로 필수다. 그 외(iso_week 또는 coverage_mode 부재)는 표시 계층
-    // (coverageDisplayBounds 등)이 3필드를 원자적으로 판단하는 것과 같은 단위로, 하나라도 있으면
-    // 셋 다 있어야 한다는 기존 규칙을 그대로 유지한다.
+    // coverage_mode는 discriminated union이다(리뷰 fix 3, 표시 계약 v2에서 unverified 추가).
+    // legacy_rolling은 실제 ISO 주가 아닌 rolling 조회 범위를 담을 뿐이라 coverage_week_key를
+    // 붙일 근거가 없다 — 있으면 잘못된 주 라벨을 보여주는 셈이므로 오류다. 대신 날짜
+    // 2개(coverage_start_date/coverage_end_date)는 표시에 반드시 필요하므로 필수다.
+    // unverified는 "대상 기간을 모른다"는 뜻 자체가 값이므로 coverage_week_key/날짜 3필드를
+    // 하나라도 실으면 모순이다(모른다면서 날짜를 아는 셈이 된다) — 셋 다 금지한다.
+    // 그 외(iso_week 또는 coverage_mode 부재)는 표시 계층(coverageDisplayBounds 등)이 3필드를
+    // 원자적으로 판단하는 것과 같은 단위로, 하나라도 있으면 셋 다 있어야 한다는 기존 규칙을
+    // 그대로 유지한다.
     if (item.coverage_mode === 'legacy_rolling') {
       if (item.coverage_week_key !== undefined) {
         errors.push(
@@ -198,6 +201,12 @@ function validateNewsletterIndex(root, relativePath, errors) {
       }
       if (item.coverage_end_date !== undefined && !DATE_PATTERN.test(item.coverage_end_date)) {
         errors.push(`${relativePath} entry ${index} has invalid coverage_end_date: ${item.coverage_end_date}`);
+      }
+    } else if (item.coverage_mode === 'unverified') {
+      for (const field of COVERAGE_DISPLAY_FIELDS) {
+        if (item[field] !== undefined) {
+          errors.push(`${relativePath} entry ${index} coverage_mode=unverified must not include ${field}`);
+        }
       }
     } else {
       const hasAnyCoverageDisplayField = COVERAGE_DISPLAY_FIELDS.some(field => item[field] !== undefined);

@@ -350,6 +350,54 @@ function issueCoverageDisplay(issue = {}) {
   return (keyValid && datesValid) ? { key, start, end } : null;
 }
 
+// 표시 계약 v2: 이슈 페이지(HTML)도 발행 identity(weekly_key)와 대상 identity(coverage)를 항상
+// 함께 보여준다. 세 variant는 카드(articles/assets/js/newsletter-archive.js entryCoverageVariant)와
+// 같은 판정을 쓴다 — 판정 기준이 갈리면 카드와 이슈 페이지가 서로 다른 표시를 보여준다.
+//
+// - iso_week: coverage 3필드가 모두 유효. 제목/kicker는 issueCoverageDisplay(위)가 이미 대상
+//   주로 바꿔치기하므로 여기서는 "발행 WNN" 보조 배지만 추가한다.
+// - legacy_rolling: 실제 ISO 주가 아닌 rolling 조회 범위라 대상엔 날짜만 있다. kicker에 "대상"
+//   접두를 붙인다(제목은 이미 issueCoverageDisplay가 rolling range로 바꿔치기했으므로 그대로 둔다).
+// - unverified: coverage_mode가 명시적으로 unverified이거나, weekly_key가 있는데 coverage 필드가
+//   통째로 없다. 이 경우 issueCoverageDisplay는 null을 돌려주고 kicker/제목은 발행 주의 실제
+//   달력 날짜로 폴백하는데, 그 날짜를 "대상 기간"인 것처럼 보여주면 모르는 기간을 아는 것처럼
+//   꾸미는 셈이다 — 그래서 이 variant에서만 별도로 "대상 기간 미확인"으로 바꿔 보여준다.
+//
+// coverage 필드가 부분적으로만 있는 경우와 daily-era issue(weekly_key가 아예 없음)는 이
+// discriminated union 밖이다 — 기존 폴백(발행 주 표시 그대로)을 그대로 둔다.
+function issueCoverageVariant(issue = {}) {
+  const mode = issue.coverage_mode;
+  const key = String(issue.coverage_week_key || '').trim();
+  const start = String(issue.coverage_start_date || '').trim();
+  const end = String(issue.coverage_end_date || '').trim();
+  const datesValid = /^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end);
+  const keyValid = /^\d{4}-W\d{2}$/.test(key);
+  const hasAnyCoverageField = Boolean(key || start || end);
+
+  if (mode === 'legacy_rolling') {
+    return datesValid ? { variant: 'legacy_rolling', start, end } : null;
+  }
+  if (mode === 'unverified') {
+    return { variant: 'unverified' };
+  }
+  if (keyValid && datesValid) {
+    return { variant: 'iso_week', key, start, end };
+  }
+  if (!hasAnyCoverageField && String(issue.weekly_key || '').trim()) {
+    return { variant: 'unverified' };
+  }
+  return null;
+}
+
+// iso_week variant에서만 "발행 WNN" 배지를 보여준다 — legacy_rolling/unverified는 제목이나
+// kicker가 이미 발행 주 기준으로 남아 있어서 별도 배지가 발행 identity를 중복 표시할 뿐이다.
+function issuePublishedWeekBadgeText(issue = {}) {
+  const variant = issueCoverageVariant(issue);
+  if (!variant || variant.variant !== 'iso_week') return '';
+  const weeklyKey = String(issue.weekly_key || '').trim();
+  return /^\d{4}-W\d{2}$/.test(weeklyKey) ? `발행 ${weeklyKey.slice(5)}` : '';
+}
+
 // Weekly issues are labeled by ISO week ("2026-W22" -> "2026 W22"); daily issues fall back to date.
 // coverage(대상 주)가 유효하면 그것을 우선 쓴다 — 발행 identity(weekly_key)는 그대로 두고 표시만
 // 대상 주로 바꾼다. 없으면(과거호·전환 전, 또는 legacy_rolling이라 key가 없으면) 기존 weekly_key
@@ -363,29 +411,49 @@ function issueWeekLabel(issue = {}) {
 // Weekly issue hero kicker shows the week's date range in the mockup format ("2026.05.25 – 05.31").
 // 연말처럼 주가 연도를 걸치면 끝 날짜의 연도를 생략하지 않는다.
 // coverage(대상 주)가 유효하면 그것으로 range를 만든다 — issueWeekLabel과 같은 판정을 쓴다.
+//
+// 표시 계약 v2: unverified variant는 발행 주의 실제 날짜를 대상 기간인 것처럼 보여주지 않고
+// "대상 기간 미확인"으로 바꾼다. legacy_rolling은 실제 ISO 주가 아닌 rolling 범위임을 밝히려고
+// "대상 " 접두를 붙인다. iso_week는 기존 표시(접두 없는 range) 그대로다 — 카드와 달리 이슈
+// 페이지는 h1 옆 "발행 WNN" 배지가 따로 발행 identity를 맡는다.
 function issueKickerText(issue = {}) {
   const dot = value => String(value).replace(/-/g, '.');
+  const variant = issueCoverageVariant(issue);
+  if (variant && variant.variant === 'unverified') {
+    return '대상 기간 미확인';
+  }
   const coverage = issueCoverageDisplay(issue);
   const start = coverage ? coverage.start : String(issue.week_start_date || '').trim();
   const end = coverage ? coverage.end : String(issue.week_end_date || '').trim();
   if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
     const sameYear = start.slice(0, 4) === end.slice(0, 4);
-    return `${dot(start)} – ${sameYear ? dot(end).slice(5) : dot(end)}`;
+    const range = `${dot(start)} – ${sameYear ? dot(end).slice(5) : dot(end)}`;
+    const prefix = (variant && variant.variant === 'legacy_rolling') ? '대상 ' : '';
+    return `${prefix}${range}`;
   }
   return `주간 뉴스레터 ${issue.date || ''}`.trim();
 }
 
+// 표시 계약 v2: iso_week variant만 "(발행 WNN)" 접미를 붙인다 — 브라우저 탭 제목/공유 카드에서도
+// 대상 주(제목의 주 라벨)와 발행 주가 다르다는 것을 알 수 있게 한다. 그 외 variant는 기존 그대로다.
 function issuePageTitle(issue = {}) {
   const weekLabel = issueWeekLabel(issue);
-  if (weekLabel) return `${weekLabel} Camera SW Newsletter`;
+  if (weekLabel) {
+    const badge = issuePublishedWeekBadgeText(issue);
+    return `${weekLabel} Camera SW Newsletter${badge ? ` (${badge})` : ''}`;
+  }
   const date = issueDisplayDate(issue);
   return date ? `Camera SW Newsletter - ${date}` : 'Camera SW Newsletter';
 }
 
+// 표시 계약 v2: unverified variant는 h1 자체에 "(대상 기간 미확인)"을 덧붙인다. iso_week/
+// legacy_rolling은 h1 문구를 바꾸지 않는다(둘 다 issueWeekLabel이 이미 옳은 주 라벨을 고른다).
 function issueTitleHtml(issue = {}) {
   const weekLabel = issueWeekLabel(issue);
   if (weekLabel) {
-    return `<span>${escapeHtml(weekLabel)}</span>`;
+    const variant = issueCoverageVariant(issue);
+    const suffix = (variant && variant.variant === 'unverified') ? ' (대상 기간 미확인)' : '';
+    return `<span>${escapeHtml(weekLabel + suffix)}</span>`;
   }
   const date = issueDisplayDate(issue);
   return `<span>Camera SW</span><span>Newsletter${date ? ` - ${escapeHtml(date)}` : ''}</span>`;
@@ -819,13 +887,19 @@ ${articleBodyBlocks}
       </section>`;
 }
 
+// 표시 계약 v2: iso_week variant일 때만 h1 아래 "발행 WNN" 보조 배지를 붙인다(대상 주 제목과
+// 발행 주가 갈릴 때 두 identity를 함께 보여줘 아카이브 카드-이슈 페이지 표시가 어긋나지 않게 한다).
 function issueHeroHtml(issue) {
+  const publishedWeekBadge = issuePublishedWeekBadgeText(issue);
+  const publishedWeekBadgeHtml = publishedWeekBadge
+    ? `\n        <p class="issue-publish-badge">${escapeHtml(publishedWeekBadge)}</p>`
+    : '';
   return `<header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← 뉴스룸</a>
         <div class="article-meta issue-hero-meta">
           <span class="issue-kicker">${escapeHtml(issueKickerText(issue))}</span>
         </div>
-        <h1 class="issue-title">${issueTitleHtml(issue)}</h1>
+        <h1 class="issue-title">${issueTitleHtml(issue)}</h1>${publishedWeekBadgeHtml}
         <p class="subtitle">${escapeHtml(issue.summary)}</p>
         <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
       </header>`;

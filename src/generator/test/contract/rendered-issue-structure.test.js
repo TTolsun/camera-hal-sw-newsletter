@@ -481,6 +481,49 @@ test('newsletter index still enforces the atomic 3-field rule when coverage_mode
   assert.match(result.text, /partial coverage display fields/);
 });
 
+// 표시 계약 v2: coverage_mode는 unverified variant를 추가한다. "대상 기간을 모른다"는 것 자체가
+// 값이므로 coverage_week_key/날짜 3필드를 하나라도 실으면(대상 기간을 안다는 뜻이 되어) 모순이다.
+test('newsletter index accepts a coverage_mode=unverified entry with no coverage display fields', () => {
+  const root = tempRoot('rendered-issue-structure-');
+  const date = '2026-05-09';
+  writeWeeklyIndexWithCoverage(root, {
+    coverage_mode: 'unverified'
+  });
+  const editor = issue({ date });
+  const result = validateRenderedIssueStructure({
+    root,
+    date,
+    editor,
+    markdown: buildMarkdown(editor),
+    html: buildHtml(editor)
+  });
+  assert.equal(result.ok, true, result.text);
+});
+
+test('newsletter index rejects a coverage_mode=unverified entry that also carries any coverage display field', () => {
+  const cases = [
+    { coverage_mode: 'unverified', coverage_week_key: '2026-W33' },
+    { coverage_mode: 'unverified', coverage_start_date: '2026-08-10' },
+    { coverage_mode: 'unverified', coverage_end_date: '2026-08-16' }
+  ];
+
+  for (const coverageOverrides of cases) {
+    const root = tempRoot('rendered-issue-structure-');
+    const date = '2026-05-09';
+    writeWeeklyIndexWithCoverage(root, coverageOverrides);
+    const editor = issue({ date });
+    const result = validateRenderedIssueStructure({
+      root,
+      date,
+      editor,
+      markdown: buildMarkdown(editor),
+      html: buildHtml(editor)
+    });
+    assert.equal(result.ok, false, JSON.stringify(coverageOverrides));
+    assert.match(result.text, /coverage_mode=unverified must not include/, JSON.stringify(coverageOverrides));
+  }
+});
+
 test('rendered issue structure does not enforce non-structural quality gates', () => {
   const { result } = validateFixture({
     sections: validSections(1).map(section => ({

@@ -110,11 +110,29 @@ test('coverage 필드가 있으면 제목·표시가 대상 주 기준이 된다
   assert.equal(page.issue.coverage_week_key, '2026-W33');
   assert.match(page.html, /2026\.08\.10 – 08\.16/);
   assert.doesNotMatch(page.html, /08\.17 ~ 08\.23/);              // 미래 기간 표시 제거
+  // 표시 계약 v2: 대상 주(W33)와 발행 주(W34)가 다르므로 h1 아래 발행 배지와 SEO 접미를 둘 다 붙인다.
+  assert.match(page.html, /<h1 class="issue-title"><span>2026 W33<\/span><\/h1>\s*<p class="issue-publish-badge">발행 W34<\/p>/);
+  assert.match(page.html, /<title>2026 W33 Camera SW Newsletter \(발행 W34\)<\/title>/);
+  assert.match(page.html, /<meta property="og:title" content="2026 W33 Camera SW Newsletter \(발행 W34\)" \/>/);
+  assert.match(page.html, /<meta name="twitter:title" content="2026 W33 Camera SW Newsletter \(발행 W34\)" \/>/);
 });
 
-test('coverage 필드가 없으면 기존 출력과 동일하다', () => {
+test('coverage 필드가 없으면 markdown 제목(issue.title)은 기존 출력과 바이트가 같다', () => {
   const before = buildWeeklyNewsletterPage({ sections: [] }, { date: '2026-08-17' });
   assert.equal(before.issue.title, '2026 W34 (08.17 ~ 08.23)');
+});
+
+// 표시 계약 v2: coverage 필드가 통째로 없는 weekly issue는 발행 주의 실제 달력 날짜를 대상
+// 기간인 것처럼 보여주지 않는다(예전엔 kicker가 발행 주 range를 그대로 보여줬다 — 실제로는 모르는
+// 기간을 아는 것처럼 꾸미는 셈이었다). markdown(issue.title)은 위 테스트대로 바이트 불변이다 —
+// 이 변경은 HTML 페이지(kicker·h1)에만 적용된다.
+test('coverage 필드가 없으면 HTML 페이지는 대상 기간을 미확인으로 보여준다', () => {
+  const page = buildWeeklyNewsletterPage({ sections: [] }, { date: '2026-08-17' });
+  assert.match(page.html, /<span class="issue-kicker">대상 기간 미확인<\/span>/);
+  assert.match(page.html, /<h1 class="issue-title"><span>2026 W34 \(대상 기간 미확인\)<\/span><\/h1>/);
+  assert.doesNotMatch(page.html, /issue-publish-badge/);          // unverified는 별도 배지가 없다
+  assert.doesNotMatch(page.html, /08\.17 – 08\.23/);               // 잘못된 기간 range 제거
+  assert.match(page.html, /<title>2026 W34 Camera SW Newsletter<\/title>/); // SEO 제목은 그대로
 });
 
 test('coverage_week_key만 있고 날짜가 없으면 깨진 문자열 없이 발행 주 표시로 폴백한다', () => {
@@ -146,6 +164,10 @@ test('coverage_mode가 legacy_rolling이면 주 라벨은 발행 주, range만 r
   assert.match(page.html, /2026\.08\.10 – 08\.17/);
   assert.match(page.html, />2026 W34</);
   assert.doesNotMatch(page.html, /08\.17 ~ 08\.23/);
+  // 표시 계약 v2: legacy_rolling은 실제 ISO 주가 아니므로 kicker에 "대상 " 접두를 붙여 밝힌다.
+  // h1은 그대로 발행 주 라벨이라(대상 주가 따로 없음) 별도 배지는 붙지 않는다.
+  assert.match(page.html, /<span class="issue-kicker">대상 2026\.08\.10 – 08\.17<\/span>/);
+  assert.doesNotMatch(page.html, /issue-publish-badge/);
 });
 
 test('coverage_mode가 legacy_rolling인데 날짜가 없으면 완전히 발행 주 표시로 폴백한다(추측하지 않는다)', () => {

@@ -168,6 +168,44 @@
     return (keyValid && datesValid) ? { key, start, end } : null;
   }
 
+  // 표시 계약 v2: 카드는 발행 identity(weeklyKey)와 대상 identity(coverage)를 항상 함께
+  // 보여준다(둘이 다를 때 서로 다른 기사가 같은 카드로 겹쳐 보이던 아카이브 중복 문제의 해법).
+  // 세 variant로 나뉜다:
+  //
+  // - iso_week: coverage 3필드가 모두 유효하면 "대상"(coverage)과 "발행"(weeklyKey)을 둘 다 보여준다.
+  // - legacy_rolling: 실제 ISO 주가 아닌 rolling 조회 범위라 "대상"엔 날짜만 있고 주 라벨이 없다.
+  // - unverified: coverage_mode가 명시적으로 unverified이거나, weekly entry인데 coverage 필드가
+  //   통째로 없을 때다. 후자는 의도된 변경이다 — 발행 주의 실제 달력 날짜를 "대상 기간"인 것처럼
+  //   보여주면(예전 동작) 실제로는 모르는 기간을 아는 것처럼 꾸미는 셈이라, 대신 모른다고 말한다.
+  //
+  // coverage 필드가 부분적으로만 있는 경우(예: week_key만 있고 날짜가 없는 깨진 상태)는 이
+  // discriminated union 밖이다 — 검증기가 이미 발행 전에 막는 상태라 여기서는 기존 폴백(발행 주
+  // 표시 그대로)을 그대로 둔다. daily-era entry(weeklyKey 자체가 없는 옛 발행분)도 이 판정 밖이라
+  // 기존 표시가 바이트 그대로 유지된다.
+  function entryCoverageVariant(entry) {
+    const mode = entry && entry.coverage_mode;
+    const key = String(entry && entry.coverage_week_key || '').trim();
+    const start = String(entry && entry.coverage_start_date || '').trim();
+    const end = String(entry && entry.coverage_end_date || '').trim();
+    const datesValid = DATE_PATTERN.test(start) && DATE_PATTERN.test(end);
+    const keyValid = WEEKLY_KEY_PATTERN.test(key);
+    const hasAnyCoverageField = Boolean(key || start || end);
+
+    if (mode === 'legacy_rolling') {
+      return datesValid ? { variant: 'legacy_rolling', start, end } : null;
+    }
+    if (mode === 'unverified') {
+      return { variant: 'unverified' };
+    }
+    if (keyValid && datesValid) {
+      return { variant: 'iso_week', key, start, end };
+    }
+    if (!hasAnyCoverageField && weeklyKeyOf(entry)) {
+      return { variant: 'unverified' };
+    }
+    return null;
+  }
+
   // Card date label prefers the coverage ISO week, then the published ISO week ("2026-W28" ->
   // "W28"), then a daily date. Falls back to empty (never the title, which the headline already
   // shows) so the meta line never duplicates it.
@@ -224,12 +262,49 @@
     return firstReal || images[0] || FALLBACK_CARD_IMAGE;
   }
 
+  function formatDotRange(start, end) {
+    return `${start.replace(/-/g, '.')} – ${end.slice(5).replace('-', '.')}`;
+  }
+
+  // 표시 계약 v2: 카드 메타 줄은 발행 주(weeklyKey)와 대상 주(coverage)를 discriminated
+  // union variant별로 다르게 조합한다. variant가 없으면(daily-era entry, 또는 부분/깨진
+  // coverage 필드) 기존 단일 라벨 표시를 그대로 쓴다 — 재렌더 바이트 불변을 지킨다.
   function cardMetaHtml(entry) {
-    const range = weekRangeText(entry);
+    const variant = entryCoverageVariant(entry);
     const count = Number(entry && entry.article_count) || 0;
+    const countText = count > 0 ? `총 ${count}건` : '';
+    const weeklyKey = weeklyKeyOf(entry);
+    const publishedLabel = weeklyKey ? weeklyKey.slice(5) : '';
+
+    if (variant && variant.variant === 'iso_week') {
+      const parts = [
+        `<span class="issue-date">대상 ${escapeHtml(variant.key.slice(5))}</span>`,
+        escapeHtml(formatDotRange(variant.start, variant.end))
+      ];
+      if (publishedLabel) parts.push(`<span class="issue-publish-badge">발행 ${escapeHtml(publishedLabel)}</span>`);
+      if (countText) parts.push(countText);
+      return parts.join(' · ');
+    }
+
+    if (variant && variant.variant === 'legacy_rolling') {
+      const parts = [`<span class="issue-date">대상 ${escapeHtml(formatDotRange(variant.start, variant.end))}</span>`];
+      if (publishedLabel) parts.push(`<span class="issue-publish-badge">발행 ${escapeHtml(publishedLabel)}</span>`);
+      if (countText) parts.push(countText);
+      return parts.join(' · ');
+    }
+
+    if (variant && variant.variant === 'unverified') {
+      const parts = [];
+      if (publishedLabel) parts.push(`<span class="issue-date">발행 ${escapeHtml(publishedLabel)}</span>`);
+      parts.push('대상 기간 미확인');
+      if (countText) parts.push(countText);
+      return parts.join(' · ');
+    }
+
+    const range = weekRangeText(entry);
     const extras = [];
     if (range) extras.push(escapeHtml(range));
-    if (count > 0) extras.push(`총 ${count}건`);
+    if (countText) extras.push(countText);
     const suffix = extras.length ? ` · ${extras.join(' · ')}` : '';
     return `<span class="issue-date">${escapeHtml(cardKeyLabel(entry))}</span>${suffix}`;
   }
