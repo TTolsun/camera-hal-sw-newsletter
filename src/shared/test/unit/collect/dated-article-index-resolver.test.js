@@ -14,7 +14,7 @@ const { readTextFixture } = require('../../helpers/fixture-loader');
 const ORIGIN = 'https://claude.com';
 const PATH_PREFIX = '/blog';
 const INDEX_URL = `${ORIGIN}${PATH_PREFIX}`;
-const CONFIG = { pathPrefix: PATH_PREFIX, origin: ORIGIN, componentLabel: 'Claude Code' };
+const CONFIG = { pathPrefix: PATH_PREFIX, origin: ORIGIN };
 
 // normalizeCandidate는 registry entry 수준의 source 필드를 읽는다(aosp-release-camera-changes.test.js와
 // 같은 패턴) — candidate.source는 이 객체를 그대로 들고 있다가 normalizeCandidate가 source.name 등을
@@ -160,6 +160,38 @@ async function resolveWithCanonicalMismatch(over = {}) {
   return runResolver({ html: indexHtml, fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml }), over });
 }
 
+// KNOWN_COMPONENT_PATTERN의 여섯 토큰(Claude Code, GitHub Actions, GitHub, PagerDuty, Grafana,
+// Kubernetes) 중 어느 것도 담지 않은 본문. evidenceMetadata(collect-news-candidates.js)의
+// API_OR_COMPONENT_PATTERN·STRONG_CAMERA_DRIVER_PATTERNS·VERSION_OR_RELEASE_PATTERN 토큰도 함께
+// 피한다 — 그중 하나라도 걸리면 이 resolver가 남긴 빈 api_or_component를 collector가 대신
+// 채워버려서, 이 test가 재려는 "resolver 단계에서 증거 없음" 상태가 다른 경로로 오염된다.
+// workflow anchor(agent/incident/pull request)는 남겨 둔다 — behavior_change 추출 자체는
+// 정상 동작해야 하고, 이 test가 재려는 것은 api_or_component 하나뿐이다.
+function noComponentEvidenceArticleHtml() {
+  const canonical = `${ORIGIN}${PATH_PREFIX}/team-workflow-notes`;
+  const jsonLdTag = `<script type="application/ld+json">${JSON.stringify({ '@type': 'BlogPosting', datePublished: 'Aug 20, 2026' })}</script>`;
+  const bodyHtml = '<p>Our small operations team spent the quarter tightening how we hand off overnight '
+    + 'shifts between teammates. We rewrote the onboarding notes, cleaned up the shared calendar, and '
+    + 'agreed on a lighter rotation schedule so nobody carries a pager two weekends in a row. Feedback '
+    + 'from the last retro was mostly about clarity: who owns what, and when to escalate versus wait '
+    + 'until morning. We also spent time trimming the noisy channels that had grown cluttered over the '
+    + 'past year, moving casual chatter into a separate space so the primary channel stays focused on '
+    + 'actionable items only.</p>'
+    + '<p>When something goes sideways, an agent now walks through the incident timeline first and '
+    + 'drafts a short pull request with the proposed fix for a teammate to review before anything '
+    + 'ships.</p>';
+  return `<link href="${canonical}" rel="canonical"/>${jsonLdTag}<h1>Team workflow notes</h1>`
+    + `<div>Aug 20, 2026</div><h2>Body</h2>${bodyHtml}`;
+}
+
+async function resolveWithoutComponentEvidence(over = {}) {
+  const indexHtml = oneCardHtml({ slug: 'team-workflow-notes', dateText: 'Aug 20, 2026', title: 'Team workflow notes' });
+  const articleHtml = noComponentEvidenceArticleHtml();
+  const items = await runResolver({ html: indexHtml, fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml }), over });
+  assert.equal(items.length, 1, 'expected exactly one resolved item from the no-component-evidence body');
+  return items[0];
+}
+
 async function resolveWithTinyArticleBudget(over = {}) {
   // MAX_BYTES_PER_ARTICLE 자체를 넘는 본문을 준다 — 이 resolver는 매 기사 fetch에 항상
   // MAX_BYTES_PER_ARTICLE을 요청 상한으로 쓰므로(브리프 §"기사 fetch 결과 판정"), 요청 상한을
@@ -268,6 +300,34 @@ test('anchor-extracted workflow evidence reaches the article capsule', async () 
     capsule.evidence.some(line => /^behavior_change: /.test(line) && /requires approval to merge/i.test(line)),
     'version_or_release/api_or_component가 앞 두 칸을 차지해도 앵커 문장이 3칸 안에 남아야 한다'
   );
+});
+
+test('api_or_component carries the measured token, not the source registry constant', async () => {
+  const item = await firstResolvedItem();
+  // 이 픽스처 본문에는 KNOWN_COMPONENT_PATTERN의 여섯 토큰 중 "Claude Code"가 가장 먼저
+  // 나온다(hero detail의 Category 목록 세 번째 항목) — GitHub/PagerDuty/Grafana/Kubernetes는
+  // 본문 훨씬 뒤 Triage 문단에서야 나온다. by-value로 잰다 — truthy만 재면 이 값이 여전히
+  // 레지스트리 상수(과거 componentLabel)로 새는지 구분할 수 없다.
+  assert.equal(item.api_or_component, 'Claude Code',
+    '본문에서 실제로 매치된 첫 토큰이어야 한다');
+});
+
+test('leaves api_or_component empty when the body has no known component token, and the evidence gate reflects it', async () => {
+  const item = await resolveWithoutComponentEvidence();
+  assert.equal(item.api_or_component, '',
+    '본문에 KNOWN_COMPONENT_PATTERN 토큰이 없으면 레지스트리 상수로 메우지 않고 빈 채로 둬야 한다 — ' +
+    '이 assert가 과거 componentLabel 폴백이 무력화하던 바로 그 자리다');
+
+  const normalized = normalizeCandidate(item);
+  assert.equal(normalized.has_api_or_component, false,
+    'componentLabel로 메웠다면 증거가 없어도 has_api_or_component가 참으로 나왔을 것이다');
+  assert.equal(normalized.source_gap_risk, true,
+    'collect-news-candidates.js의 datedItemMissingEvidence가 이미 !hasApiOrComponent를 OR로 물고 있어 ' +
+    'source_gap_risk가 참이 돼야 한다 — 새 코드 없이 기존 배선만으로 따라와야 한다');
+  assert.ok(normalized.evidence_score < 6,
+    `evidence_score(${normalized.evidence_score})가 6점 게이트 미만이어야 한다 — componentLabel 폴백이 ` +
+    '있던 과거엔 이 소스의 모든 후보가 (발행일 2 + api_or_component 2 + behavior_change 2)로 ' +
+    '구조적으로 게이트를 통과했다');
 });
 
 test('emits blog_post_item and lets the collector derive the collection mode', async () => {

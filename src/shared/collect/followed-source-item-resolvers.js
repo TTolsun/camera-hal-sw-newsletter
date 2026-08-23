@@ -55,7 +55,7 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts }) =>
       resolveDatedArticleIndexItems({
         html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts,
-        config: { pathPrefix: '/blog', origin: 'https://claude.com', componentLabel: 'Claude Code / AI coding agent' }
+        config: { pathPrefix: '/blog', origin: 'https://claude.com' }
       })
   },
   {
@@ -64,7 +64,7 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts }) =>
       resolveDatedArticleIndexItems({
         html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts,
-        config: { pathPrefix: '/news', origin: 'https://www.anthropic.com', componentLabel: 'Anthropic product announcement' }
+        config: { pathPrefix: '/news', origin: 'https://www.anthropic.com' }
       })
   }
 ];

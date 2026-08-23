@@ -1,7 +1,7 @@
 'use strict';
 
 // Claude Blog(/blog)와 Anthropic News(/news) 같은 "인덱스 페이지 + 날짜 있는 개별 기사" 소스를
-// 공유하는 흐름 하나로 처리한다. 두 소스의 차이는 config({pathPrefix, origin, componentLabel})로만 받는다.
+// 공유하는 흐름 하나로 처리한다. 두 소스의 차이는 config({pathPrefix, origin})로만 받는다.
 //
 // 목록 → 카드(Task 1) → 창 필터 → 우선순위 → bounded fetch(Task 3) → 개별 페이지 파싱(Task 2) → 후보.
 //
@@ -53,9 +53,13 @@ const WORKFLOW_ANCHORS = [
   /\b(?:agent|agents|subagent|subagents|Claude Code)\b/i
 ];
 
-// api_or_component은 본문에서 실제 도구·서비스 이름을 뽑는다. 못 찾으면 config.componentLabel로
-// 물러선다. 이 목록은 아래 다섯 개로 좁힌다 — 임의로 늘리면 근거 없는 라벨을
-// 만들 위험이 있다.
+// api_or_component은 본문에서 실제 도구·서비스 이름을 뽑아야만 채워진다. 못 찾으면 빈 문자열로
+// 남긴다 — 소스별 상수(예: 'Claude Code / AI coding agent')로 대체하지 않는다. 그런 상수는
+// 실제로 측정한 적 없는 값인데도 이 슬롯을 항상 채워, evidenceMetadata의 6점 게이트(발행일 2 +
+// api_or_component 2 + behavior_change 2)를 이 소스의 모든 후보가 구조적으로 통과하게 만들었다
+// (risk-reviewer 지적, 2026-08). 지금은 relevanceBucketHint가 비어 있어(분류는 후속 PR) 그 효과가
+// 안 보이지만, 후속 PR이 이 lane을 일반 후보 풀로 열면 그 즉시 게이트가 무력화된다. 그래서 이
+// 목록은 아래 여섯 개로 좁힌다 — 임의로 늘리면 근거 없는 라벨을 만들 위험이 있다.
 const KNOWN_COMPONENT_PATTERN = /\b(?:Claude Code|GitHub Actions|GitHub|PagerDuty|Grafana|Kubernetes)\b/;
 
 // 마침표 또는 불릿 뒤 공백을 문장 경계로 본다.
@@ -276,7 +280,6 @@ async function resolveDatedArticleIndexItems({
   const resolvedLookbackDays = Number.isFinite(lookbackDays) && lookbackDays > 0
     ? lookbackDays
     : DEFAULT_LOOKBACK_DAYS;
-  const componentLabel = config.componentLabel || '';
   const parentTitle = source.name || '';
 
   // 목록에서 한 건도 못 뽑았으면 '이번 주 신규 없음'이 아니라 수집 실패다(Task 1 계약).
@@ -471,7 +474,7 @@ async function resolveDatedArticleIndexItems({
       date_confidence: dateSourceConfidence(dateSource),
       date_evidence_url: dateEvidenceUrl,
       summary: evidence.summary,
-      api_or_component: evidence.component || componentLabel,
+      api_or_component: evidence.component,
       behavior_change: evidence.behaviorChange,
       source_extraction: { workflow: { sections: evidence.sections } },
       relevanceBucketHint: '' // 분류는 후속 PR이 한다.
