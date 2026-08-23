@@ -60,7 +60,7 @@ Android 개발자 생산성 향상을 위한 노력의 일환으로, Android ski
 
 **출처**
 
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](https://developer.android.com/tools/agents/android-cli#skills-add)
 
 ---
 
@@ -93,11 +93,11 @@ GCC(GNU Compiler Collection)의 다음 주요 버전인 GCC 16이 개발자들�
 
 - [CameraX Release Notes - CameraX 1.6.1](<https://developer.android.com/jetpack/androidx/releases/camera#1.6.1>) — Android Developers Latest Updates (May 06, 2026) · AOSP Camera 프레임워크 관련 참고
 - [Test camera images using automation](<https://source.android.com/docs/compatibility/cts/camera-its-box>) — AOSP Site Updates (2026-05-01) · AOSP Camera 프레임워크 관련 참고
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](<https://goo.gle/AdaptiveApps_IO26>) — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](<https://goo.gle/AdaptiveApps_IO26>) — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
 - [GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!](<https://isocpp.org//blog/2026/04/gcc-16.1>) — ISO C++ Blog (Thu, 30 Apr 2026 22:36:23 +0000) · C++ / AI 네이티브 툴링 참고
 
 ## 참고자료
 
 - [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t)
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](https://developer.android.com/tools/agents/android-cli#skills-add)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)

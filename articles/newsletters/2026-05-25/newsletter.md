@@ -25,7 +25,7 @@ _Android Developers Blog · Tue, 19 May 2026 13:00:00 +0000_
 
 Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.
 
-Android Developers Blog는 Tue, 19 May 2026 13:00:00 +0000에 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O 내용을 공개했습니다. 원문에서 확인되는 핵심은 Jetpack Compose, Jetpack Navigation, Grid, FlexBox, CameraX 관련 내용입니다.
+Android Developers Blog는 Tue, 19 May 2026 13:00:00 +0000에 8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』) 내용을 공개했습니다. 원문에서 확인되는 핵심은 Jetpack Compose, Jetpack Navigation, Grid, FlexBox, CameraX 관련 내용입니다.
 
 원문은 Jetpack Compose, Jetpack Navigation, Grid, FlexBox, CameraX, non-touch를 주요 구성 요소로 다룹니다. 이는 CameraX / Android camera APIs의 지원 범위, 적용 예시, 개발 흐름을 이해하기 위한 정보입니다.
 
@@ -39,7 +39,7 @@ Android Developers Blog는 Tue, 19 May 2026 13:00:00 +0000에 8: Building seamle
 
 **출처**
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 
 ---
 
@@ -72,5 +72,5 @@ Android Developers Blog는 Tue, 19 May 2026 12:45:00 +0000에 Build native Andro
 
 ## 참고자료
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 - [Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)

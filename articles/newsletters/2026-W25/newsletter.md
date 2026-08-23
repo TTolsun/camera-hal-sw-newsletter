@@ -63,7 +63,7 @@ CameraX는 Android Camera2 API를 기반으로 구축된 Jetpack 라이브러리
 
 **출처**
 
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](https://developer.android.com/tools/agents/android-cli#skills-add)
 
 ---
 
@@ -172,12 +172,12 @@ Sony IMX576 센서의 고해상도(5760 x 4312) 및 수동 제어 기능(노출,
 
 ## 참고 / 더 읽을거리
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](<https://goo.gle/AdaptiveApps_IO26>) — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](<https://goo.gle/AdaptiveApps_IO26>) — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
 
 ## 참고자료
 
 - [[PATCH 1/2] media: arm: mali-c55: Add support for CCM](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/T/#t)
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](https://developer.android.com/tools/agents/android-cli#skills-add)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
 - [[PATCH v10 0/2] media: add Himax HM1246 image sensor](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at/T/#t)
 - [Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver](https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/)

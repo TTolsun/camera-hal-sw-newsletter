@@ -34,7 +34,7 @@ Google I/O 2026에서 Android 생태계가 '기본 적응형(Adaptive by Default
 
 **출처**
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 
 ---
 
@@ -67,5 +67,5 @@ Google AI Studio의 새로운 기능을 활용하면, 개발자는 웹 브라우
 
 ## 참고자료
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 - [Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)

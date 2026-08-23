@@ -34,7 +34,7 @@ Jetpack Compose는 최신 Jetpack Navigation 3 릴리스와 새로운 실험적 
 
 **출처**
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 
 ---
 
@@ -67,5 +67,5 @@ Google AI Studio가 제공하는 프롬프트 기반 빌드 기능을 활용하�
 
 ## 참고자료
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 - [Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)

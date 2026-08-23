@@ -93,7 +93,7 @@ Android Camera HAL에 직접적인 API나 계약 변화를 주지는 않으나, 
 
 ## 참고 / 더 읽을거리
 
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](<https://developer.android.com/tools/agents/android-cli#skills-add>) — Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](<https://developer.android.com/tools/agents/android-cli#skills-add>) — Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
 - [Top 3 updates for Android developer productivity](<https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html>) — Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · C++ / AI 네이티브 툴링 참고
 
 ## 참고자료

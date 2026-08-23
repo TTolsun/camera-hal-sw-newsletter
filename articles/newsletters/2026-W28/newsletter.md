@@ -92,7 +92,7 @@ Android 시스템 및 벤더 커널 빌드 환경이 LLVM/Clang 중심으로 완
 ## 참고 / 더 읽을거리
 
 - [Raspberry Pi libcamera Releases - v0.7.1+rpt20260609](<https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609>) — Raspberry Pi libcamera Releases (2026-06-09) · 카메라 드라이버 / 이미지 파이프라인 참고
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](<https://developer.android.com/tools/agents/android-cli#skills-add>) — Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](<https://developer.android.com/tools/agents/android-cli#skills-add>) — Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
 - [Top 3 updates for Android developer productivity](<https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html>) — Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · C++ / AI 네이티브 툴링 참고
 
 ## 참고자료
