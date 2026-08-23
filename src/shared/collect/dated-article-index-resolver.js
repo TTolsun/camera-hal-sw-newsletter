@@ -74,6 +74,20 @@ const FAIL_CLOSED_REASONS = [
   'month_precision'
 ];
 
+// 진단 kind 어휘의 정본도 여기다. collect-news-candidates.js가 별도로 같은 목록을 들고 있으면
+// (FAIL_CLOSED_REASONS와 같은 이유로) 두 목록이 갈라질 수 있다 — resolver가 새 kind를 내기
+// 시작해도 collector 쪽 목록에 더하는 걸 잊으면 사건은 나는데 요약 집계는 조용히 0으로 남는다.
+// skipped_index_budget은 이 resolver가 아니라 collector(fetchSourceIndexText)가 내지만,
+// "닫힌 어휘"는 kind를 내는 모든 위치가 공유해야 하는 계약이라 여기 정본에 함께 둔다.
+const DATED_ARTICLE_DIAGNOSTIC_KINDS = [
+  'skipped_index_budget',
+  'skipped_article_budget',
+  'article_fetch_failed',
+  'recent_window_budget_exhausted',
+  'fail_closed',
+  'index_collection_failed'
+];
+
 function noop() {}
 
 function globalPattern(pattern) {
@@ -239,16 +253,30 @@ async function resolveDatedArticleIndexItems({
   onArticleCapCounts
 } = {}) {
   const emit = typeof onDiagnostic === 'function' ? onDiagnostic : noop;
-  if (!fetchClient || typeof fetchClient.fetchBounded !== 'function') return [];
+  const pathPrefix = config.pathPrefix || '/blog';
+  const origin = config.origin || '';
+  const parentUrl = `${origin}${pathPrefix}`;
+
+  // 소스가 followed-source 레지스트리(requiresFetchClient: true)에 등록됐는데도 collector가
+  // bounded client를 못 만들어 넘긴 경우다(예: 등록 후 client 배선을 빠뜨린 실수). 조용히 빈
+  // 배열만 돌려주면 이 사건은 어디에도 안 남는다 — index_collection_failed와 같은 kind로 내되
+  // detail로 "마크업이 깨졌다"가 아니라 "애초에 client가 없었다"임을 구분한다.
+  if (!fetchClient || typeof fetchClient.fetchBounded !== 'function') {
+    emit({
+      kind: 'index_collection_failed',
+      url: parentUrl,
+      receivedBytes: 0,
+      limitedBy: '',
+      detail: 'dated article resolver called without a usable fetchClient (source registered but not wired to a bounded fetch client)'
+    });
+    return [];
+  }
 
   const resolvedNow = now instanceof Date ? now : new Date();
   const resolvedLookbackDays = Number.isFinite(lookbackDays) && lookbackDays > 0
     ? lookbackDays
     : DEFAULT_LOOKBACK_DAYS;
-  const pathPrefix = config.pathPrefix || '/blog';
-  const origin = config.origin || '';
   const componentLabel = config.componentLabel || '';
-  const parentUrl = `${origin}${pathPrefix}`;
   const parentTitle = source.name || '';
 
   // 목록에서 한 건도 못 뽑았으면 '이번 주 신규 없음'이 아니라 수집 실패다(Task 1 계약).
@@ -371,11 +399,31 @@ async function resolveDatedArticleIndexItems({
       continue;
     }
 
-    // 날짜 2단계.
-    // 1) 개별 페이지가 날짜를 주면 그것을 쓴다 — 단, 목록 날짜와 다르면 무엇을 믿을지 정할
-    //    근거가 없으므로 fail-closed(date_conflict)다.
+    // 날짜 3단계.
+    // 0) 페이지 자기 내부(헤더 가시 날짜 vs JSON-LD)에서 이미 날짜가 갈렸으면
+    //    (dated-article-page-parsing.js의 date_conflict) 목록 날짜로 보완하면 안 된다 —
+    //    페이지 스스로 "내 날짜를 못 믿는다"고 말한 것이지 "날짜가 없다"가 아니다. pageDate가
+    //    ''라서 아래 else 분기(release_row_date)로 흘러들면, 자기모순을 알린 페이지가 목록
+    //    날짜로 세탁돼 신뢰도 95짜리 publish-ready 후보가 된다 — 이 페이지가 정확히 막으려던
+    //    상황이다. 그래서 여기서 fail-closed하고 다음 카드로 넘어간다.
+    // 1) 페이지 내부는 갈리지 않고 날짜를 주면 그것을 쓴다 — 단, 목록 날짜와 다르면 무엇을
+    //    믿을지 정할 근거가 없으므로 fail-closed(date_conflict)다.
     // 2) 개별 페이지가 날짜를 못 주면(canonical은 이미 확인됐다) 목록 날짜로 보완한다
     //    (release_row_date, 신뢰도 95).
+    if (page.date_conflict) {
+      emit({
+        kind: 'fail_closed',
+        url: articleUrl,
+        receivedBytes: 0,
+        limitedBy: '',
+        reason: 'date_conflict',
+        detail: `article page's own date signals disagree (header ${page.header_visible_date || '(none)'} `
+          + `vs structured ${page.json_ld_date_published || '(none)'}); the page does not trust its own `
+          + 'date, so the list-row date cannot be used to fill it in'
+      });
+      continue;
+    }
+
     const pageDate = page.published_date;
     const listDate = card.publishedAt;
     let publishedAt;
@@ -446,6 +494,7 @@ async function resolveDatedArticleIndexItems({
 }
 
 module.exports = {
+  DATED_ARTICLE_DIAGNOSTIC_KINDS,
   FAIL_CLOSED_REASONS,
   resolveDatedArticleIndexItems
 };

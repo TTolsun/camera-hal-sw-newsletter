@@ -187,6 +187,7 @@ function createBoundedFetchClient(options = {}) {
       return boundedFetchResult({
         url: target,
         sourceBudgetExhausted: true,
+        limitedBy: 'source-run',
         attempts: 0,
         error: 'source_run_budget_exhausted'
       });

@@ -137,6 +137,20 @@ async function resolveWithMismatchedDates(over = {}) {
   return runResolver({ html: indexHtml, fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml }), over });
 }
 
+// 페이지 자기 내부에서 헤더 가시 날짜와 JSON-LD datePublished가 서로 다르다
+// (dated-article-page-parsing.js가 이 경우 published_date를 ''로 접는다: date_conflict: true).
+// 목록 날짜(Aug 18)를 헤더 날짜(Aug 18)와 일부러 같게 둔다 — "페이지가 스스로 못 믿는다고
+// 밝힌 날짜가 목록 날짜로 감쪽같이 세탁된다"는 실제 위험(리뷰 지적)을 그대로 재현하기 위해서다.
+async function resolveWithPageInternalDateConflict(over = {}) {
+  const indexHtml = oneCardHtml({ slug: 'ai-ci-cd-on-call', dateText: 'Aug 18, 2026' });
+  const articleHtml = minimalArticleHtml({
+    canonical: `${ORIGIN}${PATH_PREFIX}/ai-ci-cd-on-call`,
+    headerDateText: 'Aug 18, 2026',
+    jsonLdDateText: 'Aug 19, 2026'
+  });
+  return runResolver({ html: indexHtml, fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml }), over });
+}
+
 async function resolveWithCanonicalMismatch(over = {}) {
   const indexHtml = oneCardHtml({ slug: 'ai-ci-cd-on-call', dateText: 'Aug 18, 2026' });
   const articleHtml = minimalArticleHtml({
@@ -253,6 +267,25 @@ test('never emits the index url as a candidate', async () => {
   }
 });
 
+test('a missing/invalid fetchClient is loud, not a silent empty array', async () => {
+  // 배선 실수(레지스트리에는 등록됐지만 collector가 bounded client를 못 만들어 넘긴 경우)를
+  // 재현한다. 빈 배열만 돌려주면 이 사건은 artifact 어디에도 안 남는다.
+  const seen = [];
+  const items = await resolveDatedArticleIndexItems({
+    html: INDEX_HTML,
+    source: SOURCE,
+    fetchClient: null,
+    now: DEFAULT_NOW,
+    lookbackDays: 21,
+    config: CONFIG,
+    onDiagnostic: event => seen.push(event)
+  });
+  assert.deepEqual(items, []);
+  const failures = seen.filter(event => event.kind === 'index_collection_failed');
+  assert.equal(failures.length, 1,
+    'fetchClient가 없다는 이유로 조용히 빈 배열만 돌려주면 배선 실수가 진단 없이 사라진다');
+});
+
 test('falls back to the list-row date only when the canonical url matches exactly', async () => {
   const item = await resolvedItemFrom('source-html/claude-blog-post-no-date.html');
   assert.equal(item.publishedAt, '');
@@ -269,6 +302,25 @@ test('drops the candidate when the page and the list row disagree', async () => 
   const failClosed = seen.filter(event => event.kind === 'fail_closed');
   assert.equal(failClosed.length, 1, '빈 배열만으로는 fail-closed와 "글이 없음"을 구분할 수 없다');
   assert.equal(failClosed[0].reason, 'date_conflict');
+});
+
+test('does not launder a page-internal date conflict into a release_row_date candidate', async () => {
+  // 페이지가 스스로 "내 날짜를 못 믿는다"(date_conflict)고 밝히면, published_date가 ''라는 이유로
+  // 목록 날짜(release_row_date, 신뢰도 95, publish-ready)로 메우면 안 된다 — 그건 목록-vs-페이지
+  // 불일치(date_conflict)가 아니라 페이지 내부 자기모순인데, 메우는 순간 더 약한 근거가 더 강한
+  // 신뢰도 라벨을 달고 통과한다.
+  const seen = [];
+  const items = await resolveWithPageInternalDateConflict({ onDiagnostic: event => seen.push(event) });
+  assert.deepEqual(items, [], '빈 배열만으로는 fail-closed와 "글이 없음"을 구분할 수 없다 — 아래에서 이벤트로 확인한다');
+
+  const failClosed = seen.filter(event => event.kind === 'fail_closed');
+  assert.equal(failClosed.length, 1,
+    '페이지 내부 충돌도 fail-closed로 기록돼야 한다 — 안 그러면 release_row_date로 조용히 새는 경로가 남는다');
+  assert.equal(failClosed[0].reason, 'date_conflict');
+  assert.doesNotMatch(failClosed[0].detail, /list card date/,
+    '목록-vs-페이지 충돌과 같은 문구를 쓰면 운영자가 두 사유를 구분할 수 없다');
+  assert.match(failClosed[0].detail, /own date/,
+    '페이지 내부 충돌임을 detail에서 알아볼 수 있어야 한다');
 });
 
 test('does not fetch an article that is outside the lookback window', async () => {

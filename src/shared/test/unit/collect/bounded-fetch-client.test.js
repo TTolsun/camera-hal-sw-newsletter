@@ -65,6 +65,9 @@ test('does not send a request once the source budget is exhausted', async () => 
   assert.equal(second.sourceBudgetExhausted, true);
   assert.equal(second.attempts, 0);
   assert.equal(calls, 1, '예산이 다 차면 요청 자체를 보내지 않는다');
+  assert.equal(second.limitedBy, 'source-run',
+    '소스 예산이 원인인 skip은 limitedBy도 source-run이라고 말해야 한다 — 안 그러면 이 결과를 그대로 ' +
+    '베끼는 호출자(예: skipped_article_budget)가 limitedBy 빈 문자열을 보고한다');
 });
 
 test('charges the bytes a failed attempt already pulled', async () => {

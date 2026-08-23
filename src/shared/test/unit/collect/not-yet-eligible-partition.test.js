@@ -58,6 +58,24 @@ function notYetEligibleItem(index, publishedAt = '2026-08-17T06:00:00Z') {
   };
 }
 
+// dated-article-index-resolver.js의 목록 fallback 레인을 흉내낸다: 개별 페이지가 날짜를 못 주면
+// publishedAt은 항상 ''이고 날짜는 effective_date에만 담긴다(date_source: 'release_row_date').
+function notYetEligibleListFallbackItem(index, effectiveDate) {
+  return {
+    source_id: 'claude-blog',
+    source: 'claude-blog',
+    title: `list-fallback-${index}`,
+    url: `https://claude.com/blog/list-fallback-${index}`,
+    publishedAt: '',
+    effective_date: effectiveDate,
+    date_source: 'release_row_date',
+    date_confidence: 95,
+    relevanceScore: 50,
+    source_priority: 'high',
+    source_reliability: 'official'
+  };
+}
+
 // main()의 dedupe → coverage 분리 → cap 체인을 그대로 재현하되 네트워크 없이 순수 함수만으로
 // 구성한다.
 function runCollectChain(rawCandidates, { coverage = COVERAGE, now = NOW, lookbackDays = LOOKBACK_DAYS } = {}) {
@@ -99,6 +117,35 @@ test('E 정각 후보는 선정 제외 + not_yet_eligible 포함', () => {
   assert.equal(candidates.length, 0, 'E 정각 후보는 이번 호 candidates에서 제외된다');
   assert.equal(notYetEligible.length, 1);
   assert.equal(notYetEligible[0].title, 'future-boundary');
+});
+
+test('publishedAt이 비고 effective_date만 있는 목록 fallback 후보도 not_yet_eligible로 분리된다', () => {
+  // dated-article-index-resolver.js가 개별 페이지 날짜를 못 받으면 publishedAt은 ''로 두고
+  // 목록 날짜를 effective_date에만 담는다. partitionByCoverageEligibility가 raw publishedAt만
+  // 보면 classifyCoverageWindow('')가 'unknown'을 돌려줘 이 분기를 절대 못 타므로, coverage 주
+  // 이후에 발행된 신호가 이번 호 대상 풀(currentCoveragePool)로 새어 들어간다.
+  const item = notYetEligibleListFallbackItem('a', COVERAGE.coverage_end_exclusive_at.slice(0, 10));
+
+  const { candidates, notYetEligible } = runCollectChain([item]);
+
+  assert.equal(notYetEligible.length, 1, 'effective_date 기준으로 not_yet_eligible로 분리돼야 한다');
+  assert.equal(notYetEligible[0].title, 'list-fallback-a');
+  assert.equal(candidates.length, 0,
+    'publishedAt이 비어 있다는 이유로 currentCoveragePool(이번 호 대상)로 새면 안 된다');
+});
+
+test('compareNotYetEligible도 raw publishedAt이 아니라 날짜 정본 기준으로 목록 fallback 후보를 정렬한다', () => {
+  // 둘 다 publishedAt이 ''라 raw 필드만 보면 Date.parse('')가 NaN을 주고, NaN 비교는 항상
+  // true라 aTime - bTime이 NaN이 되어 안정 정렬이 입력 순서를 그대로 통과시킨다 — 정렬 계약이
+  // 조용히 깨진다. 입력을 일부러 날짜 역순으로 줘서 실제 정렬이 일어났는지를 관찰한다.
+  const newer = notYetEligibleListFallbackItem('newer', '2026-08-20');
+  const older = notYetEligibleListFallbackItem('older', COVERAGE.coverage_end_exclusive_at.slice(0, 10));
+
+  const capResult = capNotYetEligible([newer, older]);
+
+  assert.deepEqual(capResult.committed.map(item => item.title),
+    ['list-fallback-older', 'list-fallback-newer'],
+    'effective_date 오름차순으로 정렬돼야 한다 — raw publishedAt만 보면 입력 순서(newer, older)가 그대로 남는다');
 });
 
 test('상한 초과 시 committed 목록은 60건, 전체는 .tmp에 보존되고 overflow 플래그가 선다', () => {

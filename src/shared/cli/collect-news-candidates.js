@@ -17,7 +17,6 @@ const {
 const { parseManualSourceUrls } = require('../collect/collection-intent');
 const { readRuntimeConfig, resolveRunMode } = require('../common/runtime-config');
 const {
-  dateSourceConfidence,
   displayDate,
   monthRangeOverlapsWindow,
   resolveCandidateDateEvidence
@@ -41,7 +40,8 @@ const {
 } = require('../collect/linked-release-note-evidence');
 const {
   resolveFollowedSourceItems,
-  shouldSuppressGenericFallback
+  shouldSuppressGenericFallback,
+  sourceIdsRequiringFetchClient
 } = require('../collect/followed-source-item-resolvers');
 const {
   DEFAULT_SECTION_MAP,
@@ -93,24 +93,19 @@ const {
   MAX_BYTES_PER_INDEX_PAGE,
   MAX_BYTES_PER_SOURCE_RUN
 } = require('../collect/bounded-fetch-client');
-// 사유 어휘의 정본은 resolver 모듈이다. 여기서 복제하면 두 목록이 갈라지고,
+// 사유 어휘·kind 어휘의 정본은 resolver 모듈이다. 여기서 복제하면 두 목록이 갈라지고,
 // 갈라진 쪽이 조용히 'unknown'으로 떨어진다.
-const { FAIL_CLOSED_REASONS } = require('../collect/dated-article-index-resolver');
+const {
+  DATED_ARTICLE_DIAGNOSTIC_KINDS,
+  FAIL_CLOSED_REASONS
+} = require('../collect/dated-article-index-resolver');
 
-const DATED_ARTICLE_SOURCE_IDS = ['claude-blog', 'anthropic-news'];
-// 어휘를 닫아 둔다. 요약이 세는 kind와 resolver가 내는 kind가 갈라지면
-// 사건은 났는데 집계는 0으로 남는다.
-const DATED_ARTICLE_DIAGNOSTIC_KINDS = [
-  'skipped_index_budget',
-  'skipped_article_budget',
-  'article_fetch_failed',
-  'recent_window_budget_exhausted',
-  'fail_closed',
-  'index_collection_failed'
-];
-
+// 소스 id 목록을 여기서 또 하드코딩하지 않는다. followed-source-item-resolvers.js 레지스트리의
+// requiresFetchClient 마커가 정본이다 — 새 dated-article 소스를 레지스트리에 등록하면서 이
+// 목록에 추가하는 걸 잊는 사고(등록은 됐는데 client가 안 만들어져 resolver가 guard에서 조용히
+// []를 돌려주는 실패)를 구조로 막는다.
 function usesDatedArticleResolver(source) {
-  return DATED_ARTICLE_SOURCE_IDS.includes(String(source?.id || ''));
+  return sourceIdsRequiringFetchClient().includes(String(source?.id || ''));
 }
 
 const root = process.cwd();
@@ -1361,9 +1356,15 @@ function partitionByCoverageEligibility(candidates, coverage, now, lookbackDays)
   const notYetEligible = [];
   const currentCoveragePool = [];
   for (const item of candidates) {
+    // raw publishedAt이 아니라 날짜 정본이 읽어낸 값을 분류에 넘긴다(위 withinPrimarySelectionWindow
+    // 주석과 같은 이유). 목록 fallback 레인(dated-article-index-resolver.js)은 개별 페이지가 날짜를
+    // 못 주면 publishedAt을 ''로 두고 목록 날짜를 effective_date에만 담는다. raw publishedAt만 보면
+    // classifyCoverageWindow('')가 'unknown'을 돌려줘 절대 'not_yet_eligible'이 될 수 없고, coverage
+    // 주 이후에 발행된 신호가 이번 호 대상 풀로 새어 들어간다.
+    const evidence = resolveCandidateDateEvidence(item);
     const isNotYetEligible = !isSourceChangeEventCandidate(item) &&
       withinLookback(item, now, lookbackDays) &&
-      classifyCoverageWindow(item.publishedAt, coverage) === 'not_yet_eligible';
+      classifyCoverageWindow(evidence.date, coverage) === 'not_yet_eligible';
     if (isNotYetEligible) {
       notYetEligible.push(item);
     } else {
@@ -1373,9 +1374,13 @@ function partitionByCoverageEligibility(candidates, coverage, now, lookbackDays)
   return { notYetEligible, currentCoveragePool };
 }
 
+// 정렬도 같은 이유로 raw publishedAt이 아니라 날짜 정본을 읽는다 — 목록 fallback 후보는
+// publishedAt이 항상 ''라 Date.parse('')가 두 후보 모두 NaN을 주고, NaN 비교는 항상
+// true(NaN !== NaN)라 aTime - bTime이 NaN이 되어 정렬이 입력 순서에 발이 묶인다(안정 정렬이라
+// 우연히 크래시는 안 나지만 날짜순 정렬이라는 계약이 조용히 깨진다).
 function compareNotYetEligible(a, b) {
-  const aTime = Date.parse(a.publishedAt);
-  const bTime = Date.parse(b.publishedAt);
+  const aTime = Date.parse(resolveCandidateDateEvidence(a).date);
+  const bTime = Date.parse(resolveCandidateDateEvidence(b).date);
   if (aTime !== bTime) return aTime - bTime;
   return String(a.url || '').localeCompare(String(b.url || ''));
 }
@@ -1751,7 +1756,7 @@ function createSourceCollectionDiagnostics() {
 //
 // fetchTextImpl을 인자로 받는다. 전역 fetchText를 직접 부르면 호출자가 주입한 stub이
 // 무시돼 dated-article 아닌 소스의 테스트가 실제 네트워크를 탄다.
-async function fetchSourceIndexText(source, target, fetchClient, onDiagnostic, fetchTextImpl = fetchText) {
+async function fetchSourceIndexText(target, fetchClient, onDiagnostic, fetchTextImpl = fetchText) {
   if (!fetchClient) return fetchTextImpl(target);
   const response = await fetchClient.fetchBounded(target, { maxBytes: MAX_BYTES_PER_INDEX_PAGE });
 
@@ -1804,7 +1809,7 @@ async function collectFromSource(source, {
     ? createClient({ maxBytesPerSourceRun: MAX_BYTES_PER_SOURCE_RUN })
     : null;
   try {
-    const text = await fetchSourceIndexText(source, target, fetchClient, onDiagnostic, fetchTextImpl);
+    const text = await fetchSourceIndexText(target, fetchClient, onDiagnostic, fetchTextImpl);
     const indexItems = parseSourceSpecificItems(text, source);
     // 일부 공식 소스는 인덱스 페이지(월별/아카이브 링크)만 연결돼 있어 인덱스 파싱만으로는
     // dated 증거를 못 만든다(source-gap). 최신 상세 페이지를 따라가 dated 후보를 만들고,
@@ -1858,14 +1863,17 @@ function summarizeDatedArticleCollection({
 } = {}) {
   const kindCounts = {};
   for (const kind of DATED_ARTICLE_DIAGNOSTIC_KINDS) kindCounts[kind] = 0;
+  // fail_closed_reasons와 같은 규칙: 어휘 밖 kind를 조용히 버리면(과거 동작) resolver가 새
+  // kind를 내기 시작해도 collector 쪽 어휘를 안 맞추면 사건은 나는데 집계는 0으로 남는다.
+  kindCounts.unknown = 0;
   const failClosedReasons = {};
-  for (const event of events) {
-    if (kindCounts[event.kind] === undefined) continue;
-    kindCounts[event.kind] += 1;
-    if (event.kind !== 'fail_closed') continue;
+  for (const rawEvent of events) {
+    const kind = DATED_ARTICLE_DIAGNOSTIC_KINDS.includes(rawEvent.kind) ? rawEvent.kind : 'unknown';
+    kindCounts[kind] += 1;
+    if (kind !== 'fail_closed') continue;
     // 어휘 밖 사유는 'unknown'으로 정규화한다. 자유 문자열을 그대로 세면 오타 하나가
     // 새 사유로 잡혀 사유별 집계가 조용히 흩어지고, "닫힌 어휘"라는 계약이 이름만 남는다.
-    const reason = String(event.reason || '');
+    const reason = String(rawEvent.reason || '');
     const key = FAIL_CLOSED_REASONS.includes(reason) ? reason : 'unknown';
     failClosedReasons[key] = (failClosedReasons[key] || 0) + 1;
   }

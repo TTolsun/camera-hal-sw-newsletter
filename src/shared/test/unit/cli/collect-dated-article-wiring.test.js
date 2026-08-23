@@ -6,10 +6,12 @@ const path = require('node:path');
 const {
   collectFromSource,
   summarizeDatedArticleCollection,
-  createSourceCollectionDiagnostics
+  createSourceCollectionDiagnostics,
+  usesDatedArticleResolver
 } = require('../../../cli/collect-news-candidates');
 const { createBoundedFetchClient, MAX_BYTES_PER_SOURCE_RUN } =
   require('../../../collect/bounded-fetch-client');
+const { FOLLOWED_SOURCE_RESOLVERS } = require('../../../collect/followed-source-item-resolvers');
 
 const readFixture = name =>
   fs.readFileSync(path.join(__dirname, '..', '..', 'fixtures', name), 'utf8');
@@ -188,6 +190,9 @@ test('진단 요약이 설계서 §4.12의 네 항목을 모두 담는다', () =
   assert.equal(summary.kind_counts.index_collection_failed, 0,
     '이번 이벤트 목록에는 안 났다 — 그래도 어휘 안 kind라 0으로 존재해야 한다');
   assert.equal(summary.kind_counts.fail_closed, 3);
+  assert.equal(summary.kind_counts.unknown, 1,
+    '어휘 밖 kind(not_a_kind)는 조용히 버려지지 않고 unknown으로 집계돼야 한다 — ' +
+    'FAIL_CLOSED_REASONS의 unknown 정규화와 같은 규칙이다');
   assert.deepEqual(summary.fail_closed_reasons,
     { date_conflict: 1, month_precision: 1, unknown: 1 },
     '어휘 밖 사유(오타 date_confclit)는 새 사유가 아니라 unknown으로 모인다');
@@ -288,4 +293,28 @@ test('마크업이 안 맞아 카드가 0건이면 index_collection_failed가 �
   assert.equal(failure.resolved_card_count, 0);
   assert.equal(failure.unresolved_count, 0);
   assert.equal(failure.conflicted_count, 0);
+});
+
+// usesDatedArticleResolver가 별도로 유지하는 소스 id 목록이 아니라
+// followed-source-item-resolvers.js 레지스트리의 requiresFetchClient 마커에서 직접 파생되는지
+// 잰다. 레지스트리에 세 번째 dated-article 소스를 requiresFetchClient: true로 등록하고
+// collector 쪽 어떤 목록도 손대지 않은 채로 즉시 인식되는지 확인한다 — 등록과 client 배선이
+// 항상 같은 자리(레지스트리)에서 일어나야, 등록 후 별도 목록에 추가하는 걸 잊어 fetchClient가
+// null로 들어가는 사고(리뷰가 지적한 "run ends with zero candidates, zero diagnostics")가
+// 구조적으로 불가능해진다.
+test('usesDatedArticleResolver는 레지스트리의 requiresFetchClient 마커에서 파생된다(별도 하드코딩 목록 아님)', () => {
+  const syntheticId = 'synthetic-dated-source-for-test';
+  assert.equal(usesDatedArticleResolver({ id: syntheticId }), false,
+    '레지스트리에 없는 소스는 당연히 false여야 이 테스트의 전제가 성립한다');
+
+  FOLLOWED_SOURCE_RESOLVERS.push({ id: syntheticId, requiresFetchClient: true, resolve: async () => [] });
+  try {
+    assert.equal(usesDatedArticleResolver({ id: syntheticId }), true,
+      '레지스트리에 requiresFetchClient: true로만 등록해도 collector가 즉시 client를 배선해야 한다 — ' +
+      '별도 목록에 id를 또 추가해야 한다면 그 목록에 추가를 빠뜨리는 사고가 재발한다');
+  } finally {
+    FOLLOWED_SOURCE_RESOLVERS.pop();
+  }
+  assert.equal(usesDatedArticleResolver({ id: syntheticId }), false,
+    '테스트 정리 후에는 원래대로 돌아와야 한다(다른 테스트 오염 방지 확인)');
 });

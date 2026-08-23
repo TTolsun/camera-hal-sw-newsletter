@@ -46,6 +46,12 @@ const FOLLOWED_SOURCE_RESOLVERS = [
   },
   {
     id: 'claude-blog',
+    // dated-article 리졸버는 bounded fetch client 없이는 개별 기사를 못 따라가 곧장 빈 배열로
+    // 닫힌다(guard). collector가 이 소스에 client를 만들어 넘기는지는 여기 마커 하나로 정한다 —
+    // 별도 목록(예: 과거의 collect-news-candidates.js DATED_ARTICLE_SOURCE_IDS)에 소스 id를
+    // 또 적어야 했다면, 그 목록에 추가를 빠뜨리는 순간 이 항목은 등록만 되고 client 없이
+    // 조용히 0건을 낸다 — 등록과 배선이 한 act가 되도록 이 마커로만 판단한다.
+    requiresFetchClient: true,
     resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts }) =>
       resolveDatedArticleIndexItems({
         html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts,
@@ -54,6 +60,7 @@ const FOLLOWED_SOURCE_RESOLVERS = [
   },
   {
     id: 'anthropic-news',
+    requiresFetchClient: true,
     resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts }) =>
       resolveDatedArticleIndexItems({
         html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts,
@@ -64,6 +71,16 @@ const FOLLOWED_SOURCE_RESOLVERS = [
 
 function followedSourceResolverIds() {
   return FOLLOWED_SOURCE_RESOLVERS.map(entry => entry.id);
+}
+
+/**
+ * requiresFetchClient: true로 표시된 항목의 id만 돌려준다. collect-news-candidates.js가
+ * 소스별 bounded fetch client를 만들지 정할 때 이 함수 하나만 본다 — 별도로 관리하는 두 번째
+ * 목록이 없으므로 등록(FOLLOWED_SOURCE_RESOLVERS에 항목 추가)과 배선(client 생성)이 항상
+ * 같은 자리에서 일어난다.
+ */
+function sourceIdsRequiringFetchClient() {
+  return FOLLOWED_SOURCE_RESOLVERS.filter(entry => entry.requiresFetchClient === true).map(entry => entry.id);
 }
 
 /**
@@ -89,5 +106,6 @@ module.exports = {
   FOLLOWED_SOURCE_RESOLVERS,
   followedSourceResolverIds,
   resolveFollowedSourceItems,
-  shouldSuppressGenericFallback
+  shouldSuppressGenericFallback,
+  sourceIdsRequiringFetchClient
 };
