@@ -83,12 +83,13 @@ function seedAgreeingSnapshot(snapshotDir) {
 // 산문 대신 이 검사로 잠근다 — 새로 쓰이는 매니페스트는 반드시 저장소 루트 기준이어야 하고,
 // 이미 커밋된 과거 매니페스트는 쓰이던 시점의 규약을 그대로 지켜야 한다(사후 정규화 금지).
 //
-// 경계 날짜는 첫 관측이 아니라 원인에 맞춘다. #262 phase 6 머지가 42fd4ba1 = 2026-06-13 12:29 KST라,
-// 그날 정기 run이 만든 06-13 매니페스트는 머지보다 앞서 돌아 아직 옛 규약이고, 06-14부터는 무엇이
-// 만들든 루트 기준이다. 커밋된 매니페스트는 06-11(옛 규약)에서 06-16(루트 기준)으로 건너뛰어 이
-// 경계로 바뀌는 판정이 없지만, 나중에 backfill이나 replay로 06-14·06-15 매니페스트가 들어와도
-// 거짓 실패하지 않는다.
-const REPOSITORY_ROOT_PATH_CONVENTION_START_DATE = '2026-06-14';
+// 경계 날짜는 첫 관측이 아니라 원인에 맞춘다. #262 phase 6 머지가 42fd4ba1 = 2026-06-13 12:29 KST다.
+// 06-13 당일 run은 세 번 돌았는데(11:14 / 13:21 / 15:32), 머지 뒤의 두 번이 이미 루트 기준으로
+// 기록했고 머지 전 옛 규약 사본은 같은 날 188c10fa가 orphan으로 지웠다. 그래서 트리에 남은 06-13
+// artifact는 전부 루트 기준이고, 06-13을 옛 규약 쪽에 두면 그 날짜를 replay할 때 생산자는 루트
+// 기준으로 쓰는데 검사만 옛 규약을 요구해 거짓 실패한다. 커밋된 매니페스트는 06-11(옛 규약)에서
+// 06-16(루트 기준)으로 건너뛰므로 이 경계로 바뀌는 현재 판정은 없다.
+const REPOSITORY_ROOT_PATH_CONVENTION_START_DATE = '2026-06-13';
 const MANIFEST_PATH_ARRAYS = ['files', 'review_artifacts', 'retained_heavy_artifacts', 'committed_artifacts'];
 const PUBLIC_OUTPUT_ROOT_PREFIXES = ['content/', 'data/', 'newsletters/'];
 
