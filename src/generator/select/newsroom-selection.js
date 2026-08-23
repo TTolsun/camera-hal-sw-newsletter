@@ -300,6 +300,7 @@ function decorateCandidate(rawCandidate, newsletterDate, options = {}) {
     effective_date: text(candidate.effective_date || candidate.effectiveDate),
     date_source: text(candidate.date_source),
     date_confidence: number(candidate.date_confidence),
+    date_evidence_url: text(candidate.date_evidence_url || candidate.dateEvidenceUrl),
     date_quality: dateQualityForCandidate(candidate),
     source: candidateSource(candidate),
     selected: false,

@@ -157,6 +157,8 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.effective_date = stringOrEmpty(collected.effective_date || candidate.effective_date);
     candidate.date_source = stringOrEmpty(collected.date_source || candidate.date_source);
     candidate.date_confidence = numberOrDefault(collected.date_confidence ?? candidate.date_confidence);
+    // collected 우선. LLM 출력에는 이 필드가 없고, 있더라도 수집이 측정한 근거가 정본이다.
+    candidate.date_evidence_url = stringOrEmpty(collected.date_evidence_url || candidate.date_evidence_url);
     candidate.source_event_id = stringOrEmpty(collected.source_event_id || candidate.source_event_id);
     candidate.evidence_id = stringOrEmpty(collected.evidence_id || candidate.evidence_id);
     candidate.event_type = stringOrEmpty(collected.event_type || candidate.event_type);

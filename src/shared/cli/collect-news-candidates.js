@@ -16,7 +16,11 @@ const {
 } = require('../common/candidate-artifacts');
 const { parseManualSourceUrls } = require('../collect/collection-intent');
 const { readRuntimeConfig, resolveRunMode } = require('../common/runtime-config');
-const { monthRangeOverlapsWindow } = require('../common/date-signals');
+const {
+  displayDate,
+  monthRangeOverlapsWindow,
+  resolveCandidateDateEvidence
+} = require('../common/date-signals');
 const { coverageForAnchorDate, classifyCoverageWindow } = require('../common/coverage-week');
 const { loadCarryForward, resolveCarryForwardStatus } = require('../collect/carry-forward');
 const {
@@ -36,7 +40,8 @@ const {
 } = require('../collect/linked-release-note-evidence');
 const {
   resolveFollowedSourceItems,
-  shouldSuppressGenericFallback
+  shouldSuppressGenericFallback,
+  sourceIdsRequiringFetchClient
 } = require('../collect/followed-source-item-resolvers');
 const {
   DEFAULT_SECTION_MAP,
@@ -72,7 +77,8 @@ const {
 } = require('../collect/source-quality-classifier');
 const {
   canonicalContentUrl,
-  fetchUrlForContent
+  fetchUrlForContent,
+  normalizeUrl
 } = require('../collect/source-intelligence-utils');
 const {
   commitSourceSnapshotWrites,
@@ -82,6 +88,25 @@ const {
 const {
   accrueDeepDiveTopicsFromCollect
 } = require('../collect/deep-dive-topic-accrual');
+const {
+  createBoundedFetchClient,
+  MAX_BYTES_PER_INDEX_PAGE,
+  MAX_BYTES_PER_SOURCE_RUN
+} = require('../collect/bounded-fetch-client');
+// 사유 어휘·kind 어휘의 정본은 resolver 모듈이다. 여기서 복제하면 두 목록이 갈라지고,
+// 갈라진 쪽이 조용히 'unknown'으로 떨어진다.
+const {
+  DATED_ARTICLE_DIAGNOSTIC_KINDS,
+  FAIL_CLOSED_REASONS
+} = require('../collect/dated-article-index-resolver');
+
+// 소스 id 목록을 여기서 또 하드코딩하지 않는다. followed-source-item-resolvers.js 레지스트리의
+// requiresFetchClient 마커가 정본이다 — 새 dated-article 소스를 레지스트리에 등록하면서 이
+// 목록에 추가하는 걸 잊는 사고(등록은 됐는데 client가 안 만들어져 resolver가 guard에서 조용히
+// []를 돌려주는 실패)를 구조로 막는다.
+function usesDatedArticleResolver(source) {
+  return sourceIdsRequiringFetchClient().includes(String(source?.id || ''));
+}
 
 const root = process.cwd();
 const runtimeConfig = readRuntimeConfig(process.env);
@@ -782,7 +807,10 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     firstBehavior(summary || title) ||
     (toolingEvidence.eligible ? 'Official Android tooling article describes native Android app workflow behavior.' : '')
   ).trim();
-  const hasPublishedDate = Boolean(String(raw.publishedAt || raw.published_date || '').trim());
+  // 정본이 판정한다. raw.published_date/publishedAt/published_at 중 실제로 파싱되는 값만
+  // "발행일 있음"으로 인정한다(resolveCandidateDateEvidence가 못 읽으면 effective_date로
+  // 넘어가는데, 여기서는 그것도 publish_ready_date_evidence 기준으로 함께 본다).
+  const hasPublishedDate = resolveCandidateDateEvidence(raw).publish_ready_date_evidence;
   const hasVersionOrRelease = Boolean(versionOrRelease);
   const hasApiOrComponent = Boolean(apiOrComponent);
   const hasBehaviorChange = Boolean(behaviorChange && hasBehaviorChangeForRaw(raw, behaviorChange));
@@ -1120,6 +1148,26 @@ function normalizeCandidate(raw) {
     url,
     publishedAt: raw.publishedAt || '',
     published_date: raw.publishedAt || '',
+    // 날짜 정본이 두 번째로 보는 필드들. 화이트리스트에 없으면 정규화 단계에서 사라져
+    // withinLookback/withinPrimarySelectionWindow와 선정 단계가 목록 fallback 후보의
+    // 날짜를 영영 못 본다.
+    //
+    // 여기 실을 수 있는 것은 raw가 실제로 측정해 온 값뿐이다. resolveCandidateDateEvidence가
+    // 돌려주는 date_source는 못 찾았을 때 'visible_date'/'missing'으로 메운 기본값이라,
+    // 그걸 후보 레코드에 굳히면 측정하지 않은 출처를 후보가 주장하게 된다. 실제로
+    // deep-dive-topic-accrual.candidateDateFields는 candidate.date_source가 있으면 그대로
+    // 믿고 신뢰도를 표에서 뽑으므로, 기본값 'visible_date'가 심층 큐 state에 신뢰도 100으로
+    // 굳는다(실측 32일 강등 후보 44건 전부 0→100). 파생값은 읽는 쪽이 정본으로 다시 구한다.
+    //
+    // 날짜 문자열은 displayDate로만 옮긴다. normalizeDate는 'August 14, 2026'을 로컬 자정으로
+    // 해석해 Asia/Seoul에서 하루 앞당기고(실측 -> '2026-08-13'), '2026-08'을 '2026-08-01'로
+    // 조작한다. 아는 형식이 아니면 ''를 돌려 날짜를 지어내지 않는다.
+    effective_date: displayDate(raw.effective_date || raw.effectiveDate),
+    date_source: String(raw.date_source || raw.dateSource || ''),
+    date_confidence: Number(raw.date_confidence || raw.dateConfidence || 0),
+    // normalizeUrl이 http(s)가 아니거나 파싱 불가한 값을 ''로 만든다. canonicalContentUrl만
+    // 쓰면 '/blog'나 'javascript:...'가 그대로 통과해 근거 URL 자리에 실린다(실측).
+    date_evidence_url: canonicalContentUrl(normalizeUrl(raw.date_evidence_url || raw.dateEvidenceUrl || '')),
     summary,
     relevanceScore: score,
     relevance_score: score,
@@ -1206,8 +1254,32 @@ function newsletterDateWindowEnd(value) {
   return parseDate(`${dateText}T23:59:59.999Z`);
 }
 
+// 창 계산에 쓸 시각. 어느 필드를 볼지는 정본이 정하고, 시각은 그 필드의 원문에서 읽는다.
+// 원문을 먼저 읽는 이유는 타임스탬프를 살리기 위해서다(정본이 돌려주는 date는 YYYY-MM-DD로
+// 잘려 있어, publishedAt '2026-08-22T20:00:00-08:00'처럼 실제 UTC가 하루 뒤인 값이 창
+// 경계에서 밀린다).
+//
+// 폴백이 필요한 이유: 정본은 normalizeDate로 문자열 안의 ISO 날짜를 정규식으로 뽑아내지만
+// parseDate는 new Date()라, 'Posted on 2024-01-05 by staff' 같은 값은 정본만 날짜로 읽는다.
+// 폴백이 없으면 withinPrimarySelectionWindow의 가드는 "날짜 있음"으로 통과시키고
+// withinLookback은 "날짜 없음"으로 무조건 통과시켜, 2년 지난 후보가 이번 주 창 가점을 받는다.
+function candidateWindowDate(candidate) {
+  const evidence = resolveCandidateDateEvidence(candidate);
+  if (!evidence.date) return null;
+  if (evidence.date_field === 'published_date') {
+    return parseDate(candidate.published_date || candidate.publishedAt || candidate.published_at) ||
+      parseDate(evidence.date);
+  }
+  return parseDate(evidence.date);
+}
+
 function withinLookback(candidate, now, lookbackDays) {
-  const date = parseDate(candidate.publishedAt);
+  // source_change_event lane의 effective_date는 "발행일"이 아니라 "문서 변경 유효일"이라
+  // 몇 달 전 값이 들어온다(실측 2026-06-18 CameraX: 감지는 이번 주, 릴리스 행 날짜는 3개월 전).
+  // 이 lane을 창으로 자르면 같은 문서 변경이 매주 재발화·재탈락하는 기아 루프가 된다.
+  // 지금까지는 publishedAt이 항상 ''라 우연히 통과하던 것을 명시로 바꾼다.
+  if (isSourceChangeEventCandidate(candidate)) return true;
+  const date = candidateWindowDate(candidate);
   if (!date) return true;
   const windowEndMs = now.getTime();
   const windowStartMs = windowEndMs - lookbackDays * DAY_MS;
@@ -1242,16 +1314,23 @@ function withinLookback(candidate, now, lookbackDays) {
 // 않는다. 다만 전역 캡(MAX_FINAL_CANDIDATES)은 그 뒤에 한 번 더 걸리므로, 순위가 밀린 nodate
 // 후보가 최종 후보 파일에서 빠질 수는 있다.
 //
-// primary 판정은 coverage-week.js의 classifyCoverageWindow로 통일한다(Task 8) — "이번 주
-// 신호"는 이제 now로부터 뒤로 며칠이 아니라, coverage 주(직전 완결 ISO 주) 안(0~6일)인지로
-// 정의된다. source_change_event 후보는 여전히 가드 밖에 둔다: publishedAt이 항상 빈 문자열
-// 이라 classifyCoverageWindow가 이 후보를 절대 'primary'로 분류할 수 없으므로, 위 주석이
-// 설명하는 "이 lane의 순위는 이번 변경으로 달라지지 않는다"를 지키려면 무조건 true를
-// 유지해야 한다.
+// primary 판정은 coverage-week.js의 classifyCoverageWindow로 통일한다 — "이번 주 신호"는
+// now로부터 뒤로 며칠이 아니라, coverage 주(직전 완결 ISO 주) 안(0~6일)인지로 정의된다.
+// source_change_event 후보는 여전히 가드 밖에 둔다: publishedAt이 항상 빈 문자열이라
+// classifyCoverageWindow가 이 후보를 절대 'primary'로 분류할 수 없으므로, 위 주석이 설명하는
+// "이 lane의 순위는 이번 변경으로 달라지지 않는다"를 지키려면 무조건 true를 유지해야 한다.
+//
+// 분류에 넘기는 날짜는 raw publishedAt이 아니라 날짜 정본이 읽어낸 값이다. publishedAt만 보면
+// 목록 fallback 후보(effective_date만 있고 publishedAt은 '')가 이 가드에서 영영 막힌다.
+// 정본은 publishedAt/published_date/effective_date를 정해진 우선순위로 보므로, raw publishedAt
+// 대비 판정이 넓어지는 경우는 (a) publishedAt이 없고 effective_date가 있는 후보와
+// (b) publishedAt이 new Date()로는 못 읽히지만 정본의 정규식은 읽어내는 후보뿐이다.
+// 날짜 문자열(YYYY-MM-DD)을 넘기는 것으로 충분하다 — coverage 분류는 일 단위다.
 function withinPrimarySelectionWindow(candidate, coverage) {
   if (isSourceChangeEventCandidate(candidate)) return true;
-  if (!parseDate(candidate.publishedAt)) return false;
-  return classifyCoverageWindow(candidate.publishedAt, coverage) === 'primary';
+  const evidence = resolveCandidateDateEvidence(candidate);
+  if (!evidence.date) return false;
+  return classifyCoverageWindow(evidence.date, coverage) === 'primary';
 }
 
 // coverage를 생략한 호출부(테스트 포함)를 위해 now의 날짜를 anchor로 삼아 기본 coverage를
@@ -1277,9 +1356,15 @@ function partitionByCoverageEligibility(candidates, coverage, now, lookbackDays)
   const notYetEligible = [];
   const currentCoveragePool = [];
   for (const item of candidates) {
+    // raw publishedAt이 아니라 날짜 정본이 읽어낸 값을 분류에 넘긴다(위 withinPrimarySelectionWindow
+    // 주석과 같은 이유). 목록 fallback 레인(dated-article-index-resolver.js)은 개별 페이지가 날짜를
+    // 못 주면 publishedAt을 ''로 두고 목록 날짜를 effective_date에만 담는다. raw publishedAt만 보면
+    // classifyCoverageWindow('')가 'unknown'을 돌려줘 절대 'not_yet_eligible'이 될 수 없고, coverage
+    // 주 이후에 발행된 신호가 이번 호 대상 풀로 새어 들어간다.
+    const evidence = resolveCandidateDateEvidence(item);
     const isNotYetEligible = !isSourceChangeEventCandidate(item) &&
       withinLookback(item, now, lookbackDays) &&
-      classifyCoverageWindow(item.publishedAt, coverage) === 'not_yet_eligible';
+      classifyCoverageWindow(evidence.date, coverage) === 'not_yet_eligible';
     if (isNotYetEligible) {
       notYetEligible.push(item);
     } else {
@@ -1289,9 +1374,13 @@ function partitionByCoverageEligibility(candidates, coverage, now, lookbackDays)
   return { notYetEligible, currentCoveragePool };
 }
 
+// 정렬도 같은 이유로 raw publishedAt이 아니라 날짜 정본을 읽는다 — 목록 fallback 후보는
+// publishedAt이 항상 ''라 Date.parse('')가 두 후보 모두 NaN을 주고, NaN 비교는 항상
+// true(NaN !== NaN)라 aTime - bTime이 NaN이 되어 정렬이 입력 순서에 발이 묶인다(안정 정렬이라
+// 우연히 크래시는 안 나지만 날짜순 정렬이라는 계약이 조용히 깨진다).
 function compareNotYetEligible(a, b) {
-  const aTime = Date.parse(a.publishedAt);
-  const bTime = Date.parse(b.publishedAt);
+  const aTime = Date.parse(resolveCandidateDateEvidence(a).date);
+  const bTime = Date.parse(resolveCandidateDateEvidence(b).date);
   if (aTime !== bTime) return aTime - bTime;
   return String(a.url || '').localeCompare(String(b.url || ''));
 }
@@ -1638,6 +1727,172 @@ function writeCollectArtifactsThenAccrueDeepDiveTopics({
   return deepDiveAccrual;
 }
 
+// 목록 fetch는 collector가, 기사 fetch와 fail-closed 판정은 resolver가 소유한다.
+// 두 곳이 같은 콜백을 받아야 여섯 kind가 한 배열에 모인다. 각자 만들면
+// skipped_index_budget이 요약에서 통째로 빠진다.
+//
+// 누적 바이트도 여기에 모은다. 소스가 예외로 끝나도 collectFromSource의 finally가
+// recordSourceBytes를 부르므로, 예산 초과로 실패한 소스의 수신량이 요약에 남는다.
+//
+// 기사 상한(article cap) 카운터도 같은 이유로 여기 모은다 — 상한 도달은 사건(kind)이
+// 아니라 소스별 스칼라이므로 recordSourceBytes/receivedBytesBySource와 같은 모양으로 둔다.
+function createSourceCollectionDiagnostics() {
+  const events = [];
+  const bytesBySource = {};
+  const articleCapCountsBySource = {};
+  return {
+    record(event) { events.push({ ...event }); },
+    recordSourceBytes(sourceId, bytes) { bytesBySource[String(sourceId)] = Number(bytes) || 0; },
+    recordArticleCapCounts(sourceId, counts) { articleCapCountsBySource[String(sourceId)] = { ...counts }; },
+    events() { return events.slice(); },
+    receivedBytesBySource() { return { ...bytesBySource }; },
+    articleCapCountsBySource() { return { ...articleCapCountsBySource }; }
+  };
+}
+
+// 목록도 예산 안에서 받아야 maxBytesPerIndexPage가 실제로 강제된다.
+// 다만 전역 fetchText를 바꾸면 다른 기존 소스의 수집 결과가 달라지므로
+// dated-article resolver를 쓰는 두 소스에만 적용한다.
+//
+// fetchTextImpl을 인자로 받는다. 전역 fetchText를 직접 부르면 호출자가 주입한 stub이
+// 무시돼 dated-article 아닌 소스의 테스트가 실제 네트워크를 탄다.
+async function fetchSourceIndexText(target, fetchClient, onDiagnostic, fetchTextImpl = fetchText) {
+  if (!fetchClient) return fetchTextImpl(target);
+  const response = await fetchClient.fetchBounded(target, { maxBytes: MAX_BYTES_PER_INDEX_PAGE });
+
+  // 판정 순서가 곧 진단의 정확도다. 예산 초과를 먼저 본다 —
+  // Task 3은 상한에 걸린 2xx의 ok를 false로 두므로(Step 3 주석 (4)),
+  // ok를 먼저 보면 예산 초과가 http 오류로 둔갑한다. 반대로 이 검사를
+  // "body가 비었는가"로 두면 404·503·timeout까지 예산 초과로 잡힌다.
+  // 예산 진단은 예산을 올려야 고쳐지는 사건에만 붙어야 한다.
+  if (response.truncated || response.sourceBudgetExhausted) {
+    // 목록 fetch는 resolver 호출 전에 끝난다. 이 사건을 볼 수 있는 것은 collector뿐이므로
+    // 여기서 내지 않으면 skipped_index_budget이 어디에도 남지 않는다.
+    if (typeof onDiagnostic === 'function') {
+      onDiagnostic({
+        kind: 'skipped_index_budget',
+        url: target,
+        receivedBytes: response.receivedBytes || 0,
+        limitedBy: response.limitedBy || '',
+        detail: `index exceeded the byte budget (status ${response.status}); truncated index is not parsed`
+      });
+    }
+    throw new Error(`skipped_index_budget: ${target}, status ${response.status}`);
+  }
+  // HTTP/전송 실패는 원래 오류 그대로 올린다.
+  if (!response.ok) {
+    throw new Error(response.error || `http_${response.status}`);
+  }
+  // 예산에도 안 걸리고 2xx인데 body가 비었다. '기사 없음'이 아니라 수집 실패다.
+  // 빈 인덱스를 파싱하면 후보 0건이 진단 없이 지나간다(리졸버 등록 후에는
+  // shouldSuppressGenericFallback이 true라 generic 폴백도 없다).
+  if (!response.body) {
+    throw new Error(`empty_index_body: ${target}, status ${response.status}`);
+  }
+  return response.body;
+}
+
+async function collectFromSource(source, {
+  now,
+  lookbackDays,
+  fetchTextImpl = fetchText,
+  createClient = createBoundedFetchClient,
+  onDiagnostic,
+  onSourceBytes,
+  onArticleCapCounts
+} = {}) {
+  const feed = sourceFeed(source);
+  const target = feed || fetchUrlForContent(source.url);
+  // 소스당 client 하나. 인덱스 fetch와 resolver가 같은 객체를 공유해야 6MiB 누적
+  // 카운터가 하나로 유지된다. 별도 인스턴스를 만들면 실제로는 최대 12MiB가 흐른다.
+  const fetchClient = usesDatedArticleResolver(source)
+    ? createClient({ maxBytesPerSourceRun: MAX_BYTES_PER_SOURCE_RUN })
+    : null;
+  try {
+    const text = await fetchSourceIndexText(target, fetchClient, onDiagnostic, fetchTextImpl);
+    const indexItems = parseSourceSpecificItems(text, source);
+    // 일부 공식 소스는 인덱스 페이지(월별/아카이브 링크)만 연결돼 있어 인덱스 파싱만으로는
+    // dated 증거를 못 만든다(source-gap). 최신 상세 페이지를 따라가 dated 후보를 만들고,
+    // 만들지 못하면 기존 인덱스 동작을 유지한다.
+    // 수집 창(now/lookbackDays)도 함께 넘긴다. 릴리스 드롭처럼 "창 안일 때만 상세를 따라가는"
+    // 리졸버가 창을 따로 하드코딩하면 catch-up run(LOOKBACK_DAYS 조정)이나 과거 날짜 재수집에서
+    // 파이프라인 창과 어긋나 조용히 누락된다.
+    const followedItems = await resolveFollowedSourceItems(source, {
+      indexItems,
+      text,
+      fetchTextImpl,
+      fetchClient,
+      now,
+      lookbackDays,
+      onDiagnostic,
+      // resolver는 소스를 모른다 — source.id를 아는 것은 여기뿐이므로 카운터를
+      // 소스별로 키잉하는 책임은 여기서 진다(recordSourceBytes와 같은 자리).
+      onArticleCapCounts: typeof onArticleCapCounts === 'function'
+        ? counts => onArticleCapCounts(source.id, counts)
+        : undefined
+    });
+    const sourceSpecificItems = followedItems.length > 0 ? followedItems : indexItems;
+    const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
+      ? await resolveLinkedReleaseNoteEvidenceItems(sourceSpecificItems, source, { fetchTextImpl })
+      : [];
+    // followed-resolver 소스는 큐레이션 추출이 비면 신호 없음이므로 제너릭 폴백을 막는다
+    // (pipermail/bulletin 인덱스 나비링크를 후보로 만들던 origin).
+    const candidates = resolvedSourceSpecificItems.length > 0
+      ? resolvedSourceSpecificItems.map(item => normalizeCandidate(item))
+      : shouldSuppressGenericFallback(source) ? []
+      : feed ? parseRss(text, source) : parseHtmlPage(text, source);
+    return { candidates, receivedBytes: fetchClient ? fetchClient.consumedBytes() : 0 };
+  } finally {
+    // finally인 이유: 인덱스가 예산에 걸리면 fetchSourceIndexText가 throw하고 return에
+    // 도달하지 못한다. 그러면 skipped_index_budget이 난 소스가 정작 received_bytes_by_source에서
+    // 빠져, "예산을 넘겼다"는 진단과 "0바이트 받았다"는 요약이 서로 모순된다.
+    if (fetchClient && typeof onSourceBytes === 'function') {
+      onSourceBytes(source.id, fetchClient.consumedBytes());
+    }
+  }
+}
+
+// 설계서 §4.12: 누적 수신 바이트, date_source 분포, 예산 skip 건수, fail-closed 사유별 건수.
+// candidates는 dedupe/cap을 지난 최종 후보라 분포도 "살아남은 후보 기준"이다. 그게
+// 알고 싶은 값이다 — 수집 직후 분포는 뒤에서 잘려나간 것까지 세어 실제와 어긋난다.
+function summarizeDatedArticleCollection({
+  events = [],
+  candidates = [],
+  receivedBytesBySource = {},
+  articleCapCountsBySource = {}
+} = {}) {
+  const kindCounts = {};
+  for (const kind of DATED_ARTICLE_DIAGNOSTIC_KINDS) kindCounts[kind] = 0;
+  // fail_closed_reasons와 같은 규칙: 어휘 밖 kind를 조용히 버리면(과거 동작) resolver가 새
+  // kind를 내기 시작해도 collector 쪽 어휘를 안 맞추면 사건은 나는데 집계는 0으로 남는다.
+  kindCounts.unknown = 0;
+  const failClosedReasons = {};
+  for (const rawEvent of events) {
+    const kind = DATED_ARTICLE_DIAGNOSTIC_KINDS.includes(rawEvent.kind) ? rawEvent.kind : 'unknown';
+    kindCounts[kind] += 1;
+    if (kind !== 'fail_closed') continue;
+    // 어휘 밖 사유는 'unknown'으로 정규화한다. 자유 문자열을 그대로 세면 오타 하나가
+    // 새 사유로 잡혀 사유별 집계가 조용히 흩어지고, "닫힌 어휘"라는 계약이 이름만 남는다.
+    const reason = String(rawEvent.reason || '');
+    const key = FAIL_CLOSED_REASONS.includes(reason) ? reason : 'unknown';
+    failClosedReasons[key] = (failClosedReasons[key] || 0) + 1;
+  }
+  const dateSourceCounts = {};
+  for (const candidate of candidates) {
+    if (!usesDatedArticleResolver({ id: candidate.source_id })) continue;
+    const key = String(candidate.date_source || '') || 'missing';
+    dateSourceCounts[key] = (dateSourceCounts[key] || 0) + 1;
+  }
+  return {
+    events,
+    kind_counts: kindCounts,
+    fail_closed_reasons: failClosedReasons,
+    date_source_counts: dateSourceCounts,
+    received_bytes_by_source: receivedBytesBySource,
+    article_cap_counts_by_source: articleCapCountsBySource
+  };
+}
+
 async function main() {
   // Fail fast on a malformed manual_source_urls input before doing any
   // collection work, so we never leave a manifest-less candidate artifact.
@@ -1649,39 +1904,20 @@ async function main() {
     : new Date();
   const sources = parseSources();
   const failures = [];
+  const collectionDiagnostics = createSourceCollectionDiagnostics();
   let candidates = [];
   let sourceMonitorResult = null;
 
   for (const source of sources) {
     try {
-      const feed = sourceFeed(source);
-      const target = feed || fetchUrlForContent(source.url);
-      const text = await fetchText(target);
-      const indexItems = parseSourceSpecificItems(text, source);
-      // 일부 공식 소스는 인덱스 페이지(월별/아카이브 링크)만 연결돼 있어 인덱스 파싱만으로는
-      // dated 증거를 못 만든다(source-gap). 최신 상세 페이지를 따라가 dated 후보를 만들고,
-      // 만들지 못하면 기존 인덱스 동작을 유지한다.
-      // 수집 창(now/lookbackDays)도 함께 넘긴다. 릴리스 드롭처럼 "창 안일 때만 상세를 따라가는"
-      // 리졸버가 창을 따로 하드코딩하면 catch-up run(LOOKBACK_DAYS 조정)이나 과거 날짜 재수집에서
-      // 파이프라인 창과 어긋나 조용히 누락된다.
-      const followedItems = await resolveFollowedSourceItems(source, {
-        indexItems,
-        text,
-        fetchTextImpl: fetchText,
+      const result = await collectFromSource(source, {
         now,
-        lookbackDays
+        lookbackDays,
+        onDiagnostic: collectionDiagnostics.record,
+        onSourceBytes: collectionDiagnostics.recordSourceBytes,
+        onArticleCapCounts: collectionDiagnostics.recordArticleCapCounts
       });
-      const sourceSpecificItems = followedItems.length > 0 ? followedItems : indexItems;
-      const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
-        ? await resolveLinkedReleaseNoteEvidenceItems(sourceSpecificItems, source, { fetchTextImpl: fetchText })
-        : [];
-      // followed-resolver 소스는 큐레이션 추출이 비면 신호 없음이므로 제너릭 폴백을 막는다
-      // (pipermail/bulletin 인덱스 나비링크를 후보로 만들던 origin).
-      const parsed = resolvedSourceSpecificItems.length > 0
-        ? resolvedSourceSpecificItems.map(item => normalizeCandidate(item))
-        : shouldSuppressGenericFallback(source) ? []
-        : feed ? parseRss(text, source) : parseHtmlPage(text, source);
-      candidates.push(...parsed);
+      candidates.push(...result.candidates);
     } catch (error) {
       failures.push({ source: source.name, message: error.message });
     }
@@ -1770,7 +2006,13 @@ async function main() {
     }),
     carry_source: carryForward.carrySource,
     candidates,
-    failures
+    failures,
+    dated_article_collection: summarizeDatedArticleCollection({
+      events: collectionDiagnostics.events(),
+      candidates,
+      receivedBytesBySource: collectionDiagnostics.receivedBytesBySource(),
+      articleCapCountsBySource: collectionDiagnostics.articleCapCountsBySource()
+    })
   };
   writeCollectArtifactsThenAccrueDeepDiveTopics({
     root,
@@ -1805,7 +2047,9 @@ module.exports = {
   capNotYetEligible,
   capPerSource,
   collapseSeriesRepresentatives,
+  collectFromSource,
   componentFromText,
+  createSourceCollectionDiagnostics,
   decisionFromCandidate,
   dedupe,
   evidenceMetadata,
@@ -1818,7 +2062,9 @@ module.exports = {
   partitionByCoverageEligibility,
   renderCandidateMarkdown: markdown,
   resolveLinkedReleaseNoteEvidenceItems,
+  summarizeDatedArticleCollection,
   urlDedupeKey,
+  usesDatedArticleResolver,
   withinLookback,
   writeNotYetEligibleOverflowIfNeeded,
   writeCollectArtifactsThenAccrueDeepDiveTopics

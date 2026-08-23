@@ -3,6 +3,11 @@ const CAPSULE_TOKEN_TARGET = '700-1200';
 const MAX_TEXT = 420;
 const MAX_EVIDENCE_ITEMS = 3;
 const MAX_IMAGE_CANDIDATES = 3;
+// 블로그 워크플로 서술은 릴리스 노트 불릿과 달리 산문이라 같은 섹션 수여도 훨씬 길다.
+// compactExtractionSections 기본 상한(5섹션)에 맡기면 실측상 capsule이
+// capsule_token_target의 3~4배까지 부푼다. 진짜 방어선은 resolver가 만드는
+// 섹션 수이고 이 상수는 백스톱이다.
+const MAX_WORKFLOW_SECTIONS = 2;
 const {
   buildHalPerspective,
   buildOverclaimGuardrails,
@@ -162,6 +167,12 @@ function compactSourceExtraction(extraction) {
       date: text(minor.date),
       component: text(minor.component),
       sections: compactExtractionSections(minor.sections)
+    } : null,
+    // release branch를 재사용하지 않는 이유는 sourceExtractionBackfill이 release.date를
+    // publishedAt으로, 첫 bullet을 summary/behavior_change로 승격시키기 때문이다.
+    // workflow 근거는 그 승격 경로를 타면 안 된다.
+    workflow: extraction.workflow ? {
+      sections: compactExtractionSections(extraction.workflow.sections).slice(0, MAX_WORKFLOW_SECTIONS)
     } : null,
     extraction_quality: extraction.extraction_quality || null
   };
@@ -402,6 +413,7 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
     effective_date: text(candidate.effective_date || candidate.effectiveDate),
     date_source: text(candidate.date_source),
     date_confidence: number(candidate.date_confidence),
+    date_evidence_url: text(candidate.date_evidence_url),
     source_event_id: text(candidate.source_event_id),
     evidence_id: text(candidate.evidence_id),
     event_type: text(candidate.event_type),
@@ -537,6 +549,7 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
     delete capsule.date_source;
     delete capsule.date_confidence;
   }
+  if (!capsule.date_evidence_url) delete capsule.date_evidence_url;
   if (!capsule.source_event_id) delete capsule.source_event_id;
   if (!capsule.evidence_id) delete capsule.evidence_id;
   if (!capsule.event_type) delete capsule.event_type;

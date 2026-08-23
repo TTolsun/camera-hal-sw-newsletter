@@ -7,6 +7,7 @@ const {
   resolveFollowedSourceItems,
   shouldSuppressGenericFallback
 } = require('../../../collect/followed-source-item-resolvers');
+const { createBoundedFetchClient } = require('../../../collect/bounded-fetch-client');
 const { readTextFixture } = require('../../helpers/fixture-loader');
 
 // 보안 게시판 리졸버는 indexItems(첫 인자)에서 최신 게시판 URL을 골라 fetch하고,
@@ -28,14 +29,16 @@ test('registers exactly the known followed-source resolver ids', () => {
     followedSourceResolverIds().sort(),
     [
       'android-security-bulletin',
+      'anthropic-news',
       'aosp-release-camera-changes',
+      'claude-blog',
       'libcamera-release-announcements',
       'mediatek-security-bulletin',
       'patchwork-libcamera-patches',
       'raspberrypi-libcamera-releases'
     ]
   );
-  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 6);
+  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 8);
 });
 
 test('routes raspberrypi-libcamera-releases to the release resolver with text (atom) as the first arg', async () => {
@@ -121,6 +124,8 @@ test('shouldSuppressGenericFallback is true only for followed-resolver sources',
   assert.equal(shouldSuppressGenericFallback({ id: 'patchwork-libcamera-patches' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'lore-linux-media-list' }), false);
   assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-blog' }), false);
+  assert.equal(shouldSuppressGenericFallback({ id: 'claude-blog' }), true);
+  assert.equal(shouldSuppressGenericFallback({ id: 'anthropic-news' }), true);
 });
 
 test('routes android-security-bulletin to the CVE resolver with indexItems as the first arg', async () => {
@@ -204,6 +209,85 @@ test('routes libcamera-release-announcements to the release resolver with text a
   assert.equal(items.length, 1);
   assert.equal(items[0].version_or_release, 'libcamera v0.8.0');
 });
+
+// 레지스트리는 항목마다 컨텍스트를 손으로 풀어 넘기고 지금 now/lookbackDays를 넘기는 건
+// aosp-release-camera-changes 하나뿐이었다. 새 항목이 이 전달을 빠뜨리면 예외 없이 resolver가
+// new Date()로 떨어져 catch-up run에서 조용히 창이 어긋난다.
+test('forwards now and lookbackDays to the claude-blog resolver', async () => {
+  const claudeBlog = { id: 'claude-blog', name: 'Claude Blog', url: 'https://claude.com/blog', sourceUrl: 'https://claude.com/blog' };
+  // 새 resolver는 fetchTextImpl이 아니라 fetchClient를 받는다(Task 3의 bounded client).
+  // 고정 응답을 주는 fetchImpl로 client를 만들어 넘긴다.
+  function stubClient(html) {
+    return createBoundedFetchClient({
+      fetchImpl: async () => new Response(html, { status: 200 })
+    });
+  }
+  const context = {
+    indexItems: [],
+    text: readTextFixture('source-html/claude-blog-index-cards.html')
+  };
+  const article = readTextFixture('source-html/claude-blog-ai-ci-cd-on-call.html');
+
+  const inWindow = await resolveFollowedSourceItems(claudeBlog, {
+    ...context, fetchClient: stubClient(article), now: new Date('2026-08-22T00:00:00Z'), lookbackDays: 21
+  });
+  const outOfWindow = await resolveFollowedSourceItems(claudeBlog, {
+    ...context, fetchClient: stubClient(article), now: new Date('2027-08-22T00:00:00Z'), lookbackDays: 21
+  });
+
+  assert.ok(inWindow.length > 0, '창 안이면 후보가 나온다');
+  assert.deepEqual(outOfWindow, [], 'now/lookbackDays를 안 넘기면 이 단언이 깨진다 — 레지스트리 항목 배선 누락을 잡는다');
+});
+
+// onArticleCapCounts는 onDiagnostic·now·lookbackDays와 같은 방식으로 레지스트리가 손으로
+// 풀어 넘긴다. 항목 하나가 이 전달을 빠뜨리면 예외 없이 콜백이 그냥 안 불려서, 그 소스의
+// article_cap_counts_by_source가 조용히 통째로 빠진다 — 그래서 claude-blog·anthropic-news
+// 둘 다 직접 잰다.
+function datedArticleCardHtml({ pathPrefix, slug, dateText }) {
+  return `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">${dateText}</div>`
+    + `<a href="${pathPrefix}/${slug}">Title ${slug}</a>`
+    + `</div>`;
+}
+
+for (const registryCase of [
+  { id: 'claude-blog', name: 'Claude Blog', pathPrefix: '/blog', origin: 'https://claude.com' },
+  { id: 'anthropic-news', name: 'Anthropic News', pathPrefix: '/news', origin: 'https://www.anthropic.com' }
+]) {
+  test(`forwards onArticleCapCounts to the ${registryCase.id} resolver`, async () => {
+    const now = new Date('2026-08-22T00:00:00Z');
+    // MAX_ARTICLES_PER_RUN(8)보다 많은 10건을 모두 창 안(최근 2일)에 둔다 — 상한이 실제로
+    // 걸려야 in_window_card_count(10) != scheduled_article_count(8)가 성립한다.
+    const cards = Array.from({ length: 10 }, (_, index) =>
+      datedArticleCardHtml({ pathPrefix: registryCase.pathPrefix, slug: `article-${index}`, dateText: 'Aug 20, 2026' }));
+    const indexHtml = cards.join('');
+    const fetchClient = createBoundedFetchClient({
+      // 개별 기사 fetch 결과는 상관없다 — 카운터는 fetch 루프 이전에 이미 계산·통보된다.
+      fetchImpl: async () => new Response('<h1>Placeholder</h1><p>No workflow anchors here.</p>', { status: 200 })
+    });
+
+    const seenCounts = [];
+    await resolveFollowedSourceItems(
+      { id: registryCase.id, name: registryCase.name, url: `${registryCase.origin}${registryCase.pathPrefix}`, sourceUrl: `${registryCase.origin}${registryCase.pathPrefix}` },
+      {
+        indexItems: [],
+        text: indexHtml,
+        fetchClient,
+        now,
+        lookbackDays: 21,
+        onArticleCapCounts: counts => seenCounts.push(counts)
+      }
+    );
+
+    assert.equal(seenCounts.length, 1,
+      '레지스트리 항목이 onArticleCapCounts를 풀어 넘기지 않으면 콜백이 아예 안 불려 이 단언이 깨진다');
+    assert.deepEqual(seenCounts[0], {
+      in_window_card_count: 10,
+      scheduled_article_count: 8,
+      skipped_article_cap_count: 2
+    });
+  });
+}
 
 test('returns [] for an unknown source.id without fetching', async () => {
   let fetchCount = 0;

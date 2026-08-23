@@ -108,6 +108,7 @@ Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/
 - Google DeepMind Blog: https://deepmind.google/blog/
 - OpenAI News: https://openai.com/news/
 - Anthropic News: https://www.anthropic.com/news
+- Claude Blog: https://claude.com/blog
 - Claude Code Changelog (`release-note-watch`): https://code.claude.com/docs/en/changelog
 - Google Cloud AI & Machine Learning Blog: https://cloud.google.com/blog/products/ai-machine-learning
 
