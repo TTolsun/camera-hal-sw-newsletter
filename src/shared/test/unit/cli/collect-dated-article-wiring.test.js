@@ -7,8 +7,13 @@ const {
   collectFromSource,
   summarizeDatedArticleCollection,
   createSourceCollectionDiagnostics,
-  usesDatedArticleResolver
+  renderCandidateMarkdown,
+  usesDatedArticleResolver,
+  writeCollectArtifactsThenAccrueDeepDiveTopics
 } = require('../../../cli/collect-news-candidates');
+const { CANDIDATE_SCHEMA_VERSION } = require('../../../common/candidate-artifacts');
+const { newsroomDir } = require('../../../common/artifact-paths');
+const { tempRoot } = require('../../helpers/fs');
 const { createBoundedFetchClient, MAX_BYTES_PER_SOURCE_RUN } =
   require('../../../collect/bounded-fetch-client');
 const { FOLLOWED_SOURCE_RESOLVERS } = require('../../../collect/followed-source-item-resolvers');
@@ -360,4 +365,152 @@ test('usesDatedArticleResolver는 레지스트리의 requiresFetchClient 마커�
   }
   assert.equal(usesDatedArticleResolver({ id: syntheticId }), false,
     '테스트 정리 후에는 원래대로 돌아와야 한다(다른 테스트 오염 방지 확인)');
+});
+
+// 위 테스트들은 진단이 artifact(JSON)까지 도달하는지만 잰다. 사람이 실제로 여는 표면은
+// news-candidates.md이고, 거기 안 뜨면 마크업 파손이 '조용한 빈 주'와 구분되지 않는다(#945).
+// 아래 세 건은 그 표면 계약을 잰다.
+const DIAGNOSTIC_SUMMARY_EVENTS = [
+  {
+    kind: 'index_collection_failed',
+    url: 'https://claude.com/blog',
+    receivedBytes: 0,
+    limitedBy: '',
+    detail: 'no dated cards parsed from the index markup'
+  },
+  {
+    kind: 'article_fetch_failed',
+    url: 'https://claude.com/blog/gone',
+    receivedBytes: 0,
+    limitedBy: '',
+    status: 404,
+    attempts: 1,
+    error: 'http_404',
+    detail: 'article fetch failed'
+  },
+  {
+    kind: 'skipped_article_budget',
+    url: 'https://claude.com/blog/huge',
+    receivedBytes: 768000,
+    limitedBy: 'request',
+    detail: 'article exceeded the byte budget'
+  }
+];
+
+test('수집 진단이 news-candidates.md 보고서 표면까지 올라온다', () => {
+  const summary = summarizeDatedArticleCollection({
+    events: DIAGNOSTIC_SUMMARY_EVENTS,
+    candidates: [{ source_id: 'claude-blog', date_source: 'visible_date' }],
+    receivedBytesBySource: { 'claude-blog': 5213692, 'anthropic-news': 1572864 },
+    articleCapCountsBySource: {
+      'claude-blog': {
+        in_window_card_count: 21,
+        scheduled_article_count: 8,
+        skipped_article_cap_count: 13
+      }
+    }
+  });
+
+  const report = renderCandidateMarkdown(
+    '2026-08-24',
+    [{ source_id: 'claude-blog', title: 'A post', url: 'https://claude.com/blog/a', source: 'Claude Blog' }],
+    [],
+    21,
+    { datedArticleCollection: summary }
+  );
+
+  assert.ok(report.includes('| claude-blog | 1 | 21 | 8 | 13 | 5213692 |'),
+    '상한이 매 run마다 13건을 버리는데 보고서에 안 뜨면 운영자는 artifact를 직접 열어야 한다');
+  assert.ok(report.includes('| anthropic-news | 0 | - | - | - | 1572864 |'),
+    '소스별 collected_count가 없으면 "0건"이 어느 소스인지 보고서만 봐서는 알 수 없다');
+  assert.ok(report.includes('- article_fetch_failed: 1'), 'fetch 실패 건수가 보고서에 떠야 한다');
+  assert.ok(report.includes('- skipped_article_budget: 1'), '예산 skip 건수가 보고서에 떠야 한다');
+  assert.ok(!report.includes('recent_window_budget_exhausted'),
+    '0건 kind까지 적으면 여섯 줄 중 다섯이 항상 0이라 실제로 난 사건이 묻힌다');
+  assert.ok(!report.includes('- fail_closed: 0'), '같은 이유로 0건 kind는 생략한다');
+});
+
+test('index_collection_failed는 throw하지 않아도 Collector 실패와 같은 무게로 보고서에 남는다', () => {
+  const summary = summarizeDatedArticleCollection({
+    events: [DIAGNOSTIC_SUMMARY_EVENTS[0]],
+    candidates: [],
+    receivedBytesBySource: { 'claude-blog': 4096 }
+  });
+
+  const report = renderCandidateMarkdown('2026-08-24', [], [], 21, { datedArticleCollection: summary });
+  const failureSection = report.split('## Collector 실패')[1].split('##')[0];
+
+  assert.ok(failureSection.includes('index_collection_failed'),
+    'resolver는 빈 배열만 돌려주고 throw하지 않아 failures에 안 들어온다 — ' +
+    '여기 안 실으면 마크업 파손이 "조용한 빈 주"와 구분되지 않는다');
+  assert.ok(failureSection.includes('https://claude.com/blog'), '어느 목록이 깨졌는지 보여야 한다');
+  assert.ok(failureSection.includes('no dated cards parsed from the index markup'),
+    'detail이 없으면 원인 추적이 다시 artifact 열기로 돌아간다');
+  assert.ok(!failureSection.includes('- 없음'),
+    '진단이 났는데 실패 절이 "없음"이면 보고서가 사실과 반대로 읽힌다');
+});
+
+test('진단이 하나도 없으면 진단 절 자체를 만들지 않는다', () => {
+  const emptySummary = summarizeDatedArticleCollection({ events: [], candidates: [] });
+
+  const withEmptySummary = renderCandidateMarkdown('2026-08-24', [], [], 21, {
+    datedArticleCollection: emptySummary
+  });
+  assert.ok(!withEmptySummary.includes('날짜 결속 수집 진단'),
+    '진단 0건인 주에 빈 표를 남기면 노이즈다');
+  assert.ok(withEmptySummary.includes('- 없음'), '실패도 진단도 없으면 기존 "없음"이 그대로 유지된다');
+
+  // 진단 인자를 아예 안 넘기는 호출(다른 호출자·과거 호출부)이 렌더를 죽이면 그날 수집이
+  // 통째로 실패한다. throw하지 않는 것 자체가 계약이다.
+  const withoutOptions = renderCandidateMarkdown('2026-08-24', [], [], 21);
+  assert.ok(withoutOptions.includes('## Collector 실패'));
+});
+
+// 위 세 건은 markdown 렌더러를 직접 부른다. 렌더러가 진단을 그릴 줄 알아도 실제 기록 경로가
+// 진단을 안 넘기면 보고서는 다시 조용해진다 — #945 이전 상태가 정확히 그 모양이었다
+// (진단은 artifact에 있는데 markdown 호출부가 options를 아예 안 넘겼다). 그래서 파일로
+// 떨어진 news-candidates.md를 읽어 배선까지 고정한다.
+test('실제로 기록된 news-candidates.md에 진단이 들어간다(호출부 배선)', () => {
+  const root = tempRoot('collect-dated-article-report-');
+  const date = '2026-08-24';
+
+  writeCollectArtifactsThenAccrueDeepDiveTopics({
+    root,
+    date,
+    candidatePayload: {
+      schema_version: CANDIDATE_SCHEMA_VERSION,
+      date,
+      newsletter_date: date,
+      audience: 'AOSP Camera / Camera Driver / SoC Platform / C++ engineer',
+      lookback_days: 21,
+      generated_at: `${date}T00:00:00.000Z`,
+      sources_path: 'src/shared/data/news-sources.json',
+      section_map: {},
+      candidates: [],
+      failures: [],
+      dated_article_collection: summarizeDatedArticleCollection({
+        events: DIAGNOSTIC_SUMMARY_EVENTS,
+        candidates: [],
+        receivedBytesBySource: { 'claude-blog': 5213692 },
+        articleCapCountsBySource: {
+          'claude-blog': {
+            in_window_card_count: 21,
+            scheduled_article_count: 8,
+            skipped_article_cap_count: 13
+          }
+        }
+      })
+    },
+    failures: [],
+    lookbackDays: 21,
+    sourceCount: 1,
+    generatedAt: `${date}T00:00:00.000Z`,
+    sourceMonitorResult: null
+  });
+
+  const report = fs.readFileSync(path.join(newsroomDir(root, date), 'news-candidates.md'), 'utf8');
+  assert.ok(report.includes('index_collection_failed'),
+    '호출부가 dated_article_collection을 안 넘기면 렌더러가 아무리 그릴 줄 알아도 보고서는 비어 있다');
+  assert.ok(report.includes('| claude-blog | 0 | 21 | 8 | 13 | 5213692 |'),
+    '상한이 버린 13건이 실제 파일에 남아야 운영자가 artifact를 열지 않고 원인을 본다');
 });

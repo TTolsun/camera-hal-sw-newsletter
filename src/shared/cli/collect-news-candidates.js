@@ -1556,6 +1556,64 @@ function mdEscape(value = '') {
   return String(value).replace(/\|/g, '\\|').replace(/\n/g, ' ').trimEnd();
 }
 
+// 수집 진단(dated_article_collection)을 사람이 여는 표면까지 올린다. 진단은 후보 artifact에만
+// 남아 있어서, 목록 마크업이 바뀌어 카드가 0장 파싱된 주에도 보고서에는 아무 흔적이 없었다.
+// 그러면 마크업 파손과 "이번 주 신규 없음"이 보고서상 완전히 같은 모양이 된다(#945).
+//
+// 값이 없으면 절을 통째로 생략한다. 렌더는 절대 throw하면 안 된다 — 여기서 죽으면 진단을
+// 보여주려던 변경이 그날 수집 자체를 날린다.
+function datedArticleCollectionSectionLines(datedArticleCollection, candidates) {
+  const lines = [];
+  const kindCounts = datedArticleCollection.kind_counts || {};
+  const articleCapCountsBySource = datedArticleCollection.article_cap_counts_by_source || {};
+  const receivedBytesBySource = datedArticleCollection.received_bytes_by_source || {};
+
+  // 0건 kind는 적지 않는다. 여섯 kind 중 다섯이 늘 0이라 전부 적으면 실제로 난 사건이 묻힌다.
+  const nonZeroKindCounts = Object.entries(kindCounts).filter(([, count]) => Number(count) > 0);
+  const diagnosticSourceIds = [...new Set([
+    ...Object.keys(articleCapCountsBySource),
+    ...Object.keys(receivedBytesBySource)
+  ])].sort();
+  if (nonZeroKindCounts.length === 0 && diagnosticSourceIds.length === 0) return lines;
+
+  // collected_count는 최종 후보에서 센다. "이 소스가 0건"이 한눈에 보여야 상한 때문에 줄어든
+  // 것인지 목록 자체를 못 읽은 것인지가 같은 줄에서 갈린다.
+  const collectedCountBySource = {};
+  for (const item of candidates) {
+    const sourceId = String(item.source_id || '');
+    collectedCountBySource[sourceId] = (collectedCountBySource[sourceId] || 0) + 1;
+  }
+
+  function counterCell(value) {
+    return value === undefined || value === null ? '-' : mdEscape(value);
+  }
+
+  lines.push('## 날짜 결속 수집 진단');
+  lines.push('');
+  if (diagnosticSourceIds.length > 0) {
+    lines.push('| Source | collected_count | in_window_card_count | scheduled_article_count | skipped_article_cap_count | received_bytes |');
+    lines.push('|---|---|---|---|---|---|');
+    for (const sourceId of diagnosticSourceIds) {
+      const articleCapCounts = articleCapCountsBySource[sourceId] || {};
+      lines.push(`| ${mdEscape(sourceId)} | ${collectedCountBySource[sourceId] || 0} `
+        + `| ${counterCell(articleCapCounts.in_window_card_count)} `
+        + `| ${counterCell(articleCapCounts.scheduled_article_count)} `
+        + `| ${counterCell(articleCapCounts.skipped_article_cap_count)} `
+        + `| ${counterCell(receivedBytesBySource[sourceId])} |`);
+    }
+    lines.push('');
+  }
+  if (nonZeroKindCounts.length > 0) {
+    lines.push('진단 건수(0건 kind는 생략):');
+    lines.push('');
+    for (const [kind, count] of nonZeroKindCounts) {
+      lines.push(`- ${mdEscape(kind)}: ${mdEscape(count)}`);
+    }
+    lines.push('');
+  }
+  return lines;
+}
+
 function markdown(date, candidates, failures, lookbackDays, options = {}) {
   const lines = [];
   const sourceRegistryPath = options.sourcesPath || path.relative(root, activeSourcesPath);
@@ -1645,16 +1703,26 @@ function markdown(date, candidates, failures, lookbackDays, options = {}) {
     lines.push('');
   }
 
+  // index_collection_failed는 resolver가 throw하지 않고 빈 배열만 돌려주므로 failures에 안 들어온다.
+  // 실패 절에 같이 실어야 "목록을 못 읽었다"가 "후보가 없었다"와 같은 무게로 보인다.
+  const datedArticleCollection = options.datedArticleCollection || {};
+  const datedArticleEvents = Array.isArray(datedArticleCollection.events) ? datedArticleCollection.events : [];
+  const indexCollectionFailures = datedArticleEvents.filter(event => event.kind === 'index_collection_failed');
+
   lines.push('## Collector 실패');
   lines.push('');
-  if (failures.length === 0) {
+  if (failures.length === 0 && indexCollectionFailures.length === 0) {
     lines.push('- 없음');
   } else {
     for (const failure of failures) {
       lines.push(`- ${failure.source}: ${failure.message}`);
     }
+    for (const event of indexCollectionFailures) {
+      lines.push(`- index_collection_failed: ${mdEscape(event.url || '')} - ${mdEscape(event.detail || '')}`);
+    }
   }
   lines.push('');
+  lines.push(...datedArticleCollectionSectionLines(datedArticleCollection, candidates));
   lines.push('## 편집장 체크리스트');
   lines.push('');
   lines.push('- [ ] High-priority official source를 먼저 검토했다.');
@@ -1701,7 +1769,13 @@ function writeCollectArtifactsThenAccrueDeepDiveTopics({
     generatedAt,
     workflow: 'manual-source-collection-pr'
   });
-  fs.writeFileSync(path.join(dateNewsroomDir, 'news-candidates.md'), markdown(date, candidates, failures, lookbackDays), 'utf8');
+  fs.writeFileSync(
+    path.join(dateNewsroomDir, 'news-candidates.md'),
+    markdown(date, candidates, failures, lookbackDays, {
+      datedArticleCollection: candidatePayload.dated_article_collection
+    }),
+    'utf8'
+  );
   fs.writeFileSync(path.join(root, '.tmp', 'news-candidate-date.txt'), date, 'utf8');
   if (sourceMonitorResult) {
     const includedEvidenceIds = new Set(candidates
