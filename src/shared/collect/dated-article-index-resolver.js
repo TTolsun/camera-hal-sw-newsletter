@@ -169,6 +169,12 @@ function trimToSentenceBoundary(text, hitStart, hitEnd) {
   return { start, end };
 }
 
+// 두 문단 구간이 [start, end)로 서로 조금이라도 닿는지. 비율이나 유사도가 아니라 구간 교차
+// 하나만 본다 — 한 글자라도 겹치면 같은 문장을 나눠 가진 것이고, 그게 막으려는 상태다.
+function spansOverlap(left, right) {
+  return left.start < right.end && right.start < left.end;
+}
+
 /**
  * workflow 근거 추출. summary와 behavior_change/sections는 서로 다른 구간에서 나온다 —
  * summary는 도입부 SUMMARY_LIMIT자, 근거는 그 뒤(rest)에서만 찾는다. 겹치지 않게 분리해 둬야
@@ -180,9 +186,28 @@ function trimToSentenceBoundary(text, hitStart, hitEnd) {
  * 문단)가 항상 이겨서, 드물지만 결정적인 카테고리(예: 이 기사에서 3번뿐인 PR/approval)가 항상
  * 밀려난다 — 실측으로 확인).
  *
- * sections는 behavior_change를 포함해 앵커 밀도가 높은 상위 MAX_WORKFLOW_SECTIONS개 문장을
- * 각각 ANCHOR_PAD로 넓힌 문단이다. 동점이면 문서에 먼저 나온 쪽을 남긴다(Array.prototype.sort는
+ * sections는 behavior_change를 포함해 앵커 밀도가 높은 문장을 각각 ANCHOR_PAD로 넓힌 문단
+ * MAX_WORKFLOW_SECTIONS개다. 동점이면 문서에 먼저 나온 쪽을 남긴다(Array.prototype.sort는
  * 안정 정렬이고 원본 문장 배열은 이미 문서 순서다).
+ *
+ * 여기서 중복 두 종류를 서로 다르게 다룬다. 판단 기준은 "캡슐의 같은 슬롯 안에서 같은 문단이
+ * 두 번 세어지는가"다.
+ *
+ * 1) 섹션끼리의 중복은 막는다. 상위 두 문장이 본문에서 이웃하면 각각을 ANCHOR_PAD로 넓힌 두
+ *    문단이 같은 구간을 담는다(합성 본문 실측: 1위 문단 [264,404), 2위 문단 [341,466)에서
+ *    "The logs, trace output and metrics land in an artifact bundle." 한 문장이 양쪽에 그대로
+ *    들어갔다). 둘 다 source_extraction.workflow.sections 한 슬롯으로 가므로 근거 2건처럼
+ *    보이지만 실은 문단 1건이고, 그 중복 텍스트가 WORKFLOW_EVIDENCE_BUDGET을 먹어 다른 구간의
+ *    근거는 예산이 없어 못 들어온다. 그래서 이미 채택한 [start, end) 구간과 겹치는 문장은
+ *    건너뛰고 다음 순위로 넘어간다.
+ *    상위 MAX_WORKFLOW_SECTIONS개만 시도하고 끝내면 건너뛴 만큼 섹션이 그냥 비어 근거가 오히려
+ *    줄어든다. 그래서 순위 목록 전체를 훑되 채택 수가 MAX_WORKFLOW_SECTIONS에 닿으면 멈춘다 —
+ *    "상위 2개를 시도한다"가 아니라 "겹치지 않는 2개를 채운다"가 이 루프의 계약이다.
+ * 2) behavior_change와 섹션의 중복은 그대로 둔다(의도된 중복). behavior_change는 문장 하나짜리
+ *    필드로 캡슐의 evidence 줄("behavior_change: ...", article-capsules.js:123)에 실리고,
+ *    섹션은 그 문장을 둘러싼 문단으로 캡슐의 source_extraction.workflow(같은 파일 :175)에
+ *    실린다 — 서로 다른 슬롯이라 독립 근거 2건으로 세어지지 않는다. 1위 문장을 섹션에서 빼면
+ *    앵커 밀도가 가장 높은 문단이 통째로 사라져 근거가 오히려 약해진다.
  */
 function workflowEvidence(bodyText) {
   const summary = bodyText.slice(0, SUMMARY_LIMIT).trim();
@@ -197,14 +222,20 @@ function workflowEvidence(bodyText) {
 
   let budget = WORKFLOW_EVIDENCE_BUDGET;
   const sections = [];
-  for (const sentence of rankedSentences.slice(0, MAX_WORKFLOW_SECTIONS)) {
+  const takenSpans = [];
+  for (const sentence of rankedSentences) {
+    if (sections.length >= MAX_WORKFLOW_SECTIONS) break;
     if (budget <= 0) break;
-    const { start, end } = trimToSentenceBoundary(rest, sentence.start, sentence.end);
-    let paragraph = rest.slice(start, end).trim();
+    const span = trimToSentenceBoundary(rest, sentence.start, sentence.end);
+    if (takenSpans.some(taken => spansOverlap(taken, span))) continue;
+    let paragraph = rest.slice(span.start, span.end).trim();
     if (!paragraph) continue;
     if (paragraph.length > budget) paragraph = paragraph.slice(0, budget).trim();
     if (!paragraph) continue;
     sections.push({ heading: '', items: [{ text: paragraph }] });
+    // 실제로 섹션을 실은 구간만 기록한다 — 위 continue로 버려진 구간까지 막으면 근거 없이
+    // 뒤 순위를 잘라내게 된다.
+    takenSpans.push(span);
     budget -= paragraph.length;
   }
 
