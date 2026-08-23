@@ -82,12 +82,20 @@ function seedAgreeingSnapshot(snapshotDir) {
 // schema_version은 이 차이를 표시하지 않는다(4가 두 규약에 모두 걸쳐 있다). 그래서 규약을
 // 산문 대신 이 검사로 잠근다 — 새로 쓰이는 매니페스트는 반드시 저장소 루트 기준이어야 하고,
 // 이미 커밋된 과거 매니페스트는 쓰이던 시점의 규약을 그대로 지켜야 한다(사후 정규화 금지).
-const REPOSITORY_ROOT_PATH_CONVENTION_START_DATE = '2026-06-16';
+//
+// 경계 날짜는 첫 관측이 아니라 원인에 맞춘다. #262 phase 6 머지가 42fd4ba1 = 2026-06-13 12:29 KST라,
+// 그날 정기 run이 만든 06-13 매니페스트는 머지보다 앞서 돌아 아직 옛 규약이고, 06-14부터는 무엇이
+// 만들든 루트 기준이다. 커밋된 매니페스트는 06-11(옛 규약)에서 06-16(루트 기준)으로 건너뛰어 이
+// 경계로 바뀌는 판정이 없지만, 나중에 backfill이나 replay로 06-14·06-15 매니페스트가 들어와도
+// 거짓 실패하지 않는다.
+const REPOSITORY_ROOT_PATH_CONVENTION_START_DATE = '2026-06-14';
 const MANIFEST_PATH_ARRAYS = ['files', 'review_artifacts', 'retained_heavy_artifacts', 'committed_artifacts'];
 const PUBLIC_OUTPUT_ROOT_PREFIXES = ['content/', 'data/', 'newsletters/'];
 
-// 규약 판별 대상은 #262에서 articles/ 아래로 옮겨진 공개 출력물 경로뿐이다. .tmp/·cache/·
-// state/는 옮겨지지 않아 두 규약에서 똑같이 쓰이므로 판별에 쓸 수 없다.
+// 규약 판별 대상은 #262에서 articles/ 아래로 옮겨진 공개 출력물 경로뿐이다. .tmp/·cache/·state/는
+// 공개 출력물이 아니라 이동 대상이 아니었으므로 판별에 쓸 수 없다. 특히 state/는 루트 기준
+// 매니페스트에만 나와 비교할 옛 형태가 아예 없다(옛 규약 시절 같은 파일은
+// data/article-exposure-history.json이었다).
 function isPublicOutputManifestPath(relPath) {
   const withoutArticlesPrefix = relPath.startsWith('articles/')
     ? relPath.slice('articles/'.length)
