@@ -239,6 +239,56 @@ test('forwards now and lookbackDays to the claude-blog resolver', async () => {
   assert.deepEqual(outOfWindow, [], 'now/lookbackDays를 안 넘기면 이 단언이 깨진다 — 레지스트리 항목 배선 누락을 잡는다');
 });
 
+// onArticleCapCounts는 onDiagnostic·now·lookbackDays와 같은 방식으로 레지스트리가 손으로
+// 풀어 넘긴다. 항목 하나가 이 전달을 빠뜨리면 예외 없이 콜백이 그냥 안 불려서, 그 소스의
+// article_cap_counts_by_source가 조용히 통째로 빠진다 — 그래서 claude-blog·anthropic-news
+// 둘 다 직접 잰다.
+function datedArticleCardHtml({ pathPrefix, slug, dateText }) {
+  return `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">${dateText}</div>`
+    + `<a href="${pathPrefix}/${slug}">Title ${slug}</a>`
+    + `</div>`;
+}
+
+for (const registryCase of [
+  { id: 'claude-blog', name: 'Claude Blog', pathPrefix: '/blog', origin: 'https://claude.com' },
+  { id: 'anthropic-news', name: 'Anthropic News', pathPrefix: '/news', origin: 'https://www.anthropic.com' }
+]) {
+  test(`forwards onArticleCapCounts to the ${registryCase.id} resolver`, async () => {
+    const now = new Date('2026-08-22T00:00:00Z');
+    // MAX_ARTICLES_PER_RUN(8)보다 많은 10건을 모두 창 안(최근 2일)에 둔다 — 상한이 실제로
+    // 걸려야 in_window_card_count(10) != scheduled_article_count(8)가 성립한다.
+    const cards = Array.from({ length: 10 }, (_, index) =>
+      datedArticleCardHtml({ pathPrefix: registryCase.pathPrefix, slug: `article-${index}`, dateText: 'Aug 20, 2026' }));
+    const indexHtml = cards.join('');
+    const fetchClient = createBoundedFetchClient({
+      // 개별 기사 fetch 결과는 상관없다 — 카운터는 fetch 루프 이전에 이미 계산·통보된다.
+      fetchImpl: async () => new Response('<h1>Placeholder</h1><p>No workflow anchors here.</p>', { status: 200 })
+    });
+
+    const seenCounts = [];
+    await resolveFollowedSourceItems(
+      { id: registryCase.id, name: registryCase.name, url: `${registryCase.origin}${registryCase.pathPrefix}`, sourceUrl: `${registryCase.origin}${registryCase.pathPrefix}` },
+      {
+        indexItems: [],
+        text: indexHtml,
+        fetchClient,
+        now,
+        lookbackDays: 21,
+        onArticleCapCounts: counts => seenCounts.push(counts)
+      }
+    );
+
+    assert.equal(seenCounts.length, 1,
+      '레지스트리 항목이 onArticleCapCounts를 풀어 넘기지 않으면 콜백이 아예 안 불려 이 단언이 깨진다');
+    assert.deepEqual(seenCounts[0], {
+      in_window_card_count: 10,
+      scheduled_article_count: 8,
+      skipped_article_cap_count: 2
+    });
+  });
+}
+
 test('returns [] for an unknown source.id without fetching', async () => {
   let fetchCount = 0;
   const items = await resolveFollowedSourceItems(

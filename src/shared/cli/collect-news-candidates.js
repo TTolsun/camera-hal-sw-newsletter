@@ -105,7 +105,8 @@ const DATED_ARTICLE_DIAGNOSTIC_KINDS = [
   'skipped_article_budget',
   'article_fetch_failed',
   'recent_window_budget_exhausted',
-  'fail_closed'
+  'fail_closed',
+  'index_collection_failed'
 ];
 
 function usesDatedArticleResolver(source) {
@@ -1722,19 +1723,25 @@ function writeCollectArtifactsThenAccrueDeepDiveTopics({
 }
 
 // 목록 fetch는 collector가, 기사 fetch와 fail-closed 판정은 resolver가 소유한다.
-// 두 곳이 같은 콜백을 받아야 다섯 kind가 한 배열에 모인다. 각자 만들면
+// 두 곳이 같은 콜백을 받아야 여섯 kind가 한 배열에 모인다. 각자 만들면
 // skipped_index_budget이 요약에서 통째로 빠진다.
 //
 // 누적 바이트도 여기에 모은다. 소스가 예외로 끝나도 collectFromSource의 finally가
 // recordSourceBytes를 부르므로, 예산 초과로 실패한 소스의 수신량이 요약에 남는다.
+//
+// 기사 상한(article cap) 카운터도 같은 이유로 여기 모은다 — 상한 도달은 사건(kind)이
+// 아니라 소스별 스칼라이므로 recordSourceBytes/receivedBytesBySource와 같은 모양으로 둔다.
 function createSourceCollectionDiagnostics() {
   const events = [];
   const bytesBySource = {};
+  const articleCapCountsBySource = {};
   return {
     record(event) { events.push({ ...event }); },
     recordSourceBytes(sourceId, bytes) { bytesBySource[String(sourceId)] = Number(bytes) || 0; },
+    recordArticleCapCounts(sourceId, counts) { articleCapCountsBySource[String(sourceId)] = { ...counts }; },
     events() { return events.slice(); },
-    receivedBytesBySource() { return { ...bytesBySource }; }
+    receivedBytesBySource() { return { ...bytesBySource }; },
+    articleCapCountsBySource() { return { ...articleCapCountsBySource }; }
   };
 }
 
@@ -1786,7 +1793,8 @@ async function collectFromSource(source, {
   fetchTextImpl = fetchText,
   createClient = createBoundedFetchClient,
   onDiagnostic,
-  onSourceBytes
+  onSourceBytes,
+  onArticleCapCounts
 } = {}) {
   const feed = sourceFeed(source);
   const target = feed || fetchUrlForContent(source.url);
@@ -1811,7 +1819,12 @@ async function collectFromSource(source, {
       fetchClient,
       now,
       lookbackDays,
-      onDiagnostic
+      onDiagnostic,
+      // resolver는 소스를 모른다 — source.id를 아는 것은 여기뿐이므로 카운터를
+      // 소스별로 키잉하는 책임은 여기서 진다(recordSourceBytes와 같은 자리).
+      onArticleCapCounts: typeof onArticleCapCounts === 'function'
+        ? counts => onArticleCapCounts(source.id, counts)
+        : undefined
     });
     const sourceSpecificItems = followedItems.length > 0 ? followedItems : indexItems;
     const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
@@ -1840,7 +1853,8 @@ async function collectFromSource(source, {
 function summarizeDatedArticleCollection({
   events = [],
   candidates = [],
-  receivedBytesBySource = {}
+  receivedBytesBySource = {},
+  articleCapCountsBySource = {}
 } = {}) {
   const kindCounts = {};
   for (const kind of DATED_ARTICLE_DIAGNOSTIC_KINDS) kindCounts[kind] = 0;
@@ -1866,7 +1880,8 @@ function summarizeDatedArticleCollection({
     kind_counts: kindCounts,
     fail_closed_reasons: failClosedReasons,
     date_source_counts: dateSourceCounts,
-    received_bytes_by_source: receivedBytesBySource
+    received_bytes_by_source: receivedBytesBySource,
+    article_cap_counts_by_source: articleCapCountsBySource
   };
 }
 
@@ -1891,7 +1906,8 @@ async function main() {
         now,
         lookbackDays,
         onDiagnostic: collectionDiagnostics.record,
-        onSourceBytes: collectionDiagnostics.recordSourceBytes
+        onSourceBytes: collectionDiagnostics.recordSourceBytes,
+        onArticleCapCounts: collectionDiagnostics.recordArticleCapCounts
       });
       candidates.push(...result.candidates);
     } catch (error) {
@@ -1986,7 +2002,8 @@ async function main() {
     dated_article_collection: summarizeDatedArticleCollection({
       events: collectionDiagnostics.events(),
       candidates,
-      receivedBytesBySource: collectionDiagnostics.receivedBytesBySource()
+      receivedBytesBySource: collectionDiagnostics.receivedBytesBySource(),
+      articleCapCountsBySource: collectionDiagnostics.articleCapCountsBySource()
     })
   };
   writeCollectArtifactsThenAccrueDeepDiveTopics({

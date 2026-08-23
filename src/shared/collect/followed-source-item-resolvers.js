@@ -46,17 +46,17 @@ const FOLLOWED_SOURCE_RESOLVERS = [
   },
   {
     id: 'claude-blog',
-    resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic }) =>
+    resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts }) =>
       resolveDatedArticleIndexItems({
-        html: text, source, fetchClient, now, lookbackDays, onDiagnostic,
+        html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts,
         config: { pathPrefix: '/blog', origin: 'https://claude.com', componentLabel: 'Claude Code / AI coding agent' }
       })
   },
   {
     id: 'anthropic-news',
-    resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic }) =>
+    resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts }) =>
       resolveDatedArticleIndexItems({
-        html: text, source, fetchClient, now, lookbackDays, onDiagnostic,
+        html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts,
         config: { pathPrefix: '/news', origin: 'https://www.anthropic.com', componentLabel: 'Anthropic product announcement' }
       })
   }
@@ -70,10 +70,10 @@ function followedSourceResolverIds() {
  * source.id에 맞는 followed-source 리졸버를 찾아 호출하고 그 결과(후보 배열)를 반환한다.
  * 등록된 리졸버가 없으면 빈 배열을 반환한다(기존 `let followedItems = []` 기본값과 동일).
  */
-async function resolveFollowedSourceItems(source, { indexItems = [], text = '', fetchTextImpl, fetchClient, now, lookbackDays, onDiagnostic } = {}) {
+async function resolveFollowedSourceItems(source, { indexItems = [], text = '', fetchTextImpl, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts } = {}) {
   const entry = FOLLOWED_SOURCE_RESOLVERS.find(candidate => candidate.id === source.id);
   if (!entry) return [];
-  return entry.resolve({ indexItems, text, source, fetchTextImpl, fetchClient, now, lookbackDays, onDiagnostic });
+  return entry.resolve({ indexItems, text, source, fetchTextImpl, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts });
 }
 
 /**

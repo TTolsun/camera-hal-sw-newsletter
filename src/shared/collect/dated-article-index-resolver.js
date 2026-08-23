@@ -11,6 +11,7 @@
 const {
   parseDatedArticleCards,
   datedArticleCardCollectionFailure,
+  datedArticleCardDiagnostics,
   cardText
 } = require('./dated-article-card-parsing');
 const { resolveDatedArticlePage } = require('./dated-article-page-parsing');
@@ -234,7 +235,8 @@ async function resolveDatedArticleIndexItems({
   now,
   lookbackDays,
   config = {},
-  onDiagnostic
+  onDiagnostic,
+  onArticleCapCounts
 } = {}) {
   const emit = typeof onDiagnostic === 'function' ? onDiagnostic : noop;
   if (!fetchClient || typeof fetchClient.fetchBounded !== 'function') return [];
@@ -250,9 +252,25 @@ async function resolveDatedArticleIndexItems({
   const parentTitle = source.name || '';
 
   // 목록에서 한 건도 못 뽑았으면 '이번 주 신규 없음'이 아니라 수집 실패다(Task 1 계약).
-  // 이 resolver의 반환값은 두 경우 모두 빈 배열이라 구분이 안 되므로 운영자용으로 남긴다.
+  // 이 resolver의 반환값은 두 경우 모두 빈 배열이라 구분이 안 된다. console.warn만으로는
+  // 이 사건이 artifact에 남지 않아 다섯 개 덜 중요한 사건은 세면서 가장 시끄러운 실패만
+  // 조용히 사라진다 — 그래서 다른 다섯 kind와 똑같이 onDiagnostic으로 낸다.
   const collectionFailure = datedArticleCardCollectionFailure(html, { pathPrefix });
-  if (collectionFailure) console.warn(`dated-article-index-resolver: ${collectionFailure}`);
+  if (collectionFailure) {
+    const cardDiagnostics = datedArticleCardDiagnostics(html, { pathPrefix });
+    emit({
+      kind: 'index_collection_failed',
+      url: parentUrl,
+      receivedBytes: 0,
+      limitedBy: '',
+      detail: collectionFailure,
+      anchor_count: cardDiagnostics.anchor_count,
+      anchor_slug_count: cardDiagnostics.anchor_slug_count,
+      resolved_card_count: cardDiagnostics.resolved_card_count,
+      unresolved_count: cardDiagnostics.unresolved_slugs.length,
+      conflicted_count: cardDiagnostics.conflicted_slugs.length
+    });
+  }
 
   const cards = parseDatedArticleCards(html, { pathPrefix });
 
@@ -281,8 +299,21 @@ async function resolveDatedArticleIndexItems({
     if (tier === 'recent') recentCards.push(card);
     else if (tier === 'mid') midCards.push(card);
   }
-  const orderedQueue = [...prioritizeByWorkflowSignal(recentCards), ...prioritizeByWorkflowSignal(midCards)]
-    .slice(0, MAX_ARTICLES_PER_RUN);
+  const windowedQueue = [...prioritizeByWorkflowSignal(recentCards), ...prioritizeByWorkflowSignal(midCards)];
+  // 상한 도달은 정상 상태다 — 사건(kind)이 아니라 소스별 카운터로 남긴다. 라이브 Claude Blog
+  // 인덱스는 25건 중 21건이 창 안이고 MAX_ARTICLES_PER_RUN=8이라, 매 실행 약 13건이 카운터 없이는
+  // 조용히 사라진다(artifact의 모든 관련 필드가 0으로 읽힌다).
+  const inWindowCardCount = windowedQueue.length;
+  const orderedQueue = windowedQueue.slice(0, MAX_ARTICLES_PER_RUN);
+  const scheduledArticleCount = orderedQueue.length;
+  const skippedArticleCapCount = inWindowCardCount - scheduledArticleCount;
+  if (typeof onArticleCapCounts === 'function') {
+    onArticleCapCounts({
+      in_window_card_count: inWindowCardCount,
+      scheduled_article_count: scheduledArticleCount,
+      skipped_article_cap_count: skippedArticleCapCount
+    });
+  }
 
   const results = [];
   const recentBudgetSkips = [];

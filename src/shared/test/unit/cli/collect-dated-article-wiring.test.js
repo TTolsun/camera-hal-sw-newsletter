@@ -5,7 +5,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {
   collectFromSource,
-  summarizeDatedArticleCollection
+  summarizeDatedArticleCollection,
+  createSourceCollectionDiagnostics
 } = require('../../../cli/collect-news-candidates');
 const { createBoundedFetchClient, MAX_BYTES_PER_SOURCE_RUN } =
   require('../../../collect/bounded-fetch-client');
@@ -184,6 +185,8 @@ test('진단 요약이 설계서 §4.12의 네 항목을 모두 담는다', () =
     '개별 기사 fetch 실패도 artifact에 저장돼야 "fetch 실패가 진단으로 남는다"가 성립한다');
   assert.equal(summary.kind_counts.recent_window_budget_exhausted, 0,
     '0건도 키가 있어야 "안 났다"와 "안 셌다"가 구분된다');
+  assert.equal(summary.kind_counts.index_collection_failed, 0,
+    '이번 이벤트 목록에는 안 났다 — 그래도 어휘 안 kind라 0으로 존재해야 한다');
   assert.equal(summary.kind_counts.fail_closed, 3);
   assert.deepEqual(summary.fail_closed_reasons,
     { date_conflict: 1, month_precision: 1, unknown: 1 },
@@ -192,4 +195,97 @@ test('진단 요약이 설계서 §4.12의 네 항목을 모두 담는다', () =
     '다른 소스 후보는 이 분포에 섞이지 않는다');
   assert.equal(summary.received_bytes_by_source['claude-blog'], 5213692);
   assert.equal(summary.events.length, 7, '원본 이벤트는 정규화 전 값 그대로 보존한다');
+});
+
+// 목록 카드 하나(3-2-of-21)를 붕어빵으로 복제해 21건 만든다. 전부 같은 날짜(now 기준 2일 전)로
+// 두면 전부 recent tier라 window 필터에서 하나도 빠지지 않는다 — MAX_ARTICLES_PER_RUN=8만이
+// 유일한 컷 지점이 된다.
+function claudeBlogCardHtml(slug, dateText) {
+  return `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">${dateText}</div>`
+    + `<a href="/blog/${slug}">Title ${slug}</a>`
+    + `</div>`;
+}
+
+test('상한이 자른 카드 수가 실제 artifact 요약까지 도달한다(cap이 보인다)', async () => {
+  const indexHtml = Array.from({ length: 21 }, (_, index) => claudeBlogCardHtml(`post-${index}`, 'Aug 20, 2026')).join('');
+  const diagnostics = createSourceCollectionDiagnostics();
+
+  // main()과 같은 배선: collectFromSource에 세 콜백(record/recordSourceBytes/recordArticleCapCounts)을
+  // 그대로 넘긴다 — resolver 반환값이 아니라 이 경로로 실제 artifact에 닿는지를 잰다.
+  const result = await collectFromSource(CLAUDE_BLOG, {
+    now: new Date('2026-08-22T00:00:00Z'),
+    lookbackDays: 21,
+    fetchTextImpl: async () => '',
+    createClient: options => createBoundedFetchClient({
+      ...options,
+      // 인덱스든 개별 기사든 항상 같은 최소 응답을 준다 — 상한 카운터는 fetch 결과와
+      // 무관하게 큐 구성 시점에 이미 계산·통보되므로 기사 fetch 성패는 이 테스트의 관심사가 아니다.
+      fetchImpl: async url => new Response(
+        String(url).endsWith('/blog') ? indexHtml : '<h1>Placeholder</h1><p>No anchors.</p>',
+        { status: 200 }
+      )
+    }),
+    onDiagnostic: diagnostics.record,
+    onSourceBytes: diagnostics.recordSourceBytes,
+    onArticleCapCounts: diagnostics.recordArticleCapCounts
+  });
+
+  const summary = summarizeDatedArticleCollection({
+    events: diagnostics.events(),
+    candidates: result.candidates,
+    receivedBytesBySource: diagnostics.receivedBytesBySource(),
+    articleCapCountsBySource: diagnostics.articleCapCountsBySource()
+  });
+
+  assert.deepEqual(summary.article_cap_counts_by_source['claude-blog'], {
+    in_window_card_count: 21,
+    scheduled_article_count: 8,
+    skipped_article_cap_count: 13
+  }, '카운터가 배선을 안 타면 이 소스 키 자체가 summary에서 빠진다');
+});
+
+test('마크업이 안 맞아 카드가 0건이면 index_collection_failed가 크게(loudly) 남는다', async () => {
+  // href가 pathPrefix 상대경로가 아니라 절대 URL로 바뀐 인덱스 — 카드 파서의 앵커 정규식이
+  // 하나도 매치하지 않는다(dated-article-cards.test.js의 "link markup changed" 케이스와 같은 모양).
+  // "이번 주 신규 없음"이 아니라 마크업이 깨진 수집 실패다.
+  const changedMarkupIndex = '<div role="listitem" class="blog_cms_item w-dyn-item">'
+    + '<div class="u-text-style-caption">Aug 18, 2026</div>'
+    + '<a href="https://claude.com/blog/some-post">Some post</a>'
+    + '</div>';
+  const diagnostics = createSourceCollectionDiagnostics();
+
+  const result = await collectFromSource(CLAUDE_BLOG, {
+    now: new Date('2026-08-22T00:00:00Z'),
+    lookbackDays: 21,
+    fetchTextImpl: async () => '',
+    createClient: options => createBoundedFetchClient({
+      ...options,
+      fetchImpl: async () => new Response(changedMarkupIndex, { status: 200 })
+    }),
+    onDiagnostic: diagnostics.record,
+    onSourceBytes: diagnostics.recordSourceBytes,
+    onArticleCapCounts: diagnostics.recordArticleCapCounts
+  });
+
+  // 빈 배열만으로는 "이번 주 신규 없음"과 "수집 실패"를 구분할 수 없다 — 그래서 candidates가
+  // 비어 있다는 것과 index_collection_failed가 났다는 것을 함께 확인한다.
+  assert.deepEqual(result.candidates, []);
+
+  const summary = summarizeDatedArticleCollection({
+    events: diagnostics.events(),
+    candidates: result.candidates,
+    receivedBytesBySource: diagnostics.receivedBytesBySource(),
+    articleCapCountsBySource: diagnostics.articleCapCountsBySource()
+  });
+
+  assert.equal(summary.kind_counts.index_collection_failed, 1,
+    'console.warn으로만 남으면 이 카운트가 0으로 조용히 지나간다');
+  const failure = summary.events.find(event => event.kind === 'index_collection_failed');
+  assert.ok(failure, 'artifact에 저장된 원본 이벤트에서도 찾을 수 있어야 한다');
+  assert.equal(failure.anchor_count, 0);
+  assert.equal(failure.anchor_slug_count, 0);
+  assert.equal(failure.resolved_card_count, 0);
+  assert.equal(failure.unresolved_count, 0);
+  assert.equal(failure.conflicted_count, 0);
 });
