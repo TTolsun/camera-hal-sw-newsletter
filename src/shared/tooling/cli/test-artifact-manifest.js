@@ -177,6 +177,20 @@ function testManifestCreationAndHashes() {
   );
   assert.ok(committedQualityReport, 'quality-report.json should be in committed_artifacts');
   assert.strictEqual(committedQualityReport.retention_grade, REVIEW_REQUIRED_COMPACT);
+
+  // committed_artifacts 항목은 path와 retention_grade만 담는다. 커밋되는 파일의 바이트는
+  // Git tree가 정본이라 매니페스트에 size·sha256 사본을 두지 않는다(#942).
+  assert.ok(manifest.committed_artifacts.length > 0, 'committed_artifacts should not be empty');
+  assert.ok(
+    manifest.committed_artifacts.every(entry => !('size' in entry) && !('sha256' in entry)),
+    'committed_artifacts entries must not carry size or sha256'
+  );
+  assert.ok(
+    manifest.committed_artifacts.every(entry =>
+      Object.keys(entry).sort().join(',') === 'path,retention_grade'
+    ),
+    'committed_artifacts entries must carry exactly path and retention_grade'
+  );
 }
 
 function testWarningsWhenReportsDisagree() {
@@ -452,6 +466,20 @@ function testBuildDateReviewManifestRetentionFields() {
   );
   assert.ok(committedQuality, 'quality-report.json should appear in committed_artifacts');
   assert.strictEqual(committedQuality.retention_grade, REVIEW_REQUIRED_COMPACT);
+
+  // 날짜 단위 리뷰 매니페스트도 같은 계약을 지킨다: 커밋되는 파일의 바이트 정본은 Git tree라
+  // committed_artifacts에는 size·sha256을 담지 않는다(#942).
+  assert.ok(manifest.committed_artifacts.length > 0, 'committed_artifacts should not be empty');
+  assert.ok(
+    manifest.committed_artifacts.every(entry => !('size' in entry) && !('sha256' in entry)),
+    'committed_artifacts entries must not carry size or sha256'
+  );
+  assert.ok(
+    manifest.committed_artifacts.every(entry =>
+      Object.keys(entry).sort().join(',') === 'path,retention_grade'
+    ),
+    'committed_artifacts entries must carry exactly path and retention_grade'
+  );
 }
 
 testManifestCreationAndHashes();
