@@ -1,9 +1,10 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { normalizeCandidate, withinLookback, newsletterDateWindowEnd } =
+const { normalizeCandidate, withinLookback, newsletterDateWindowEnd, candidateRankOrder } =
   require('../../../cli/collect-news-candidates');
 const { deepDiveAccrualEntries } = require('../../../collect/deep-dive-topic-accrual');
+const { coverageForWeekKey } = require('../../../common/coverage-week');
 
 const source = {
   id: 'androidx-camerax-release-notes', name: 'CameraX release notes',
@@ -124,6 +125,46 @@ test('release-only backfill never reads the workflow branch', () => {
   assert.equal(candidate.publishedAt, '', 'workflow 날짜가 publishedAt으로 승격되면 안 된다');
   assert.equal(candidate.summary, 'Real summary.');
   assert.equal(candidate.behavior_change, 'Real behavior change.');
+});
+
+// withinPrimarySelectionWindow(collect-news-candidates.js)는 목록 fallback 후보의 날짜 provenance를
+// resolveCandidateDateEvidence로 읽는다(published_date가 없으면 effective_date로 물러선다).
+// PR 이전 구현은 raw candidate.publishedAt만 봤다 — 목록 fallback 레인은 publishedAt이 항상 ''라서
+// 그 구현으로 되돌아가면 이 가점이 절대 안 붙는다(예외 없이 조용히 사라진다, 회귀 시 테스트 실패도 없다).
+test('list-fallback effective_date가 coverage 주 안이면 published_date 후보처럼 primary 가점을 받는다', () => {
+  const coverage = coverageForWeekKey('2026-W33'); // 08-10 ~ 08-16
+  const now = new Date('2026-08-22T00:00:00Z');
+  const listFallback = {
+    source_id: 'claude-blog', source: 'claude-blog', title: 'list-fallback-primary',
+    publishedAt: '', effective_date: '2026-08-14', // coverage 주 안(나이 2일)
+    relevanceScore: 10, source_priority: 'medium', source_reliability: 'official'
+  };
+  const outOfWindowButHighScore = {
+    source_id: 'claude-blog', source: 'claude-blog', title: 'out-of-window-high-score',
+    publishedAt: '2026-08-01', // coverage 주 밖(나이 15일) — fallback 등급
+    relevanceScore: 90, source_priority: 'medium', source_reliability: 'official'
+  };
+
+  const sorted = [outOfWindowButHighScore, listFallback].sort(candidateRankOrder(now, coverage));
+
+  assert.deepEqual(sorted.map(c => c.title), ['list-fallback-primary', 'out-of-window-high-score'],
+    'effective_date 2026-08-14는 coverage 주 안이라 relevanceScore가 훨씬 낮아도 앞서야 한다 — ' +
+    'withinPrimarySelectionWindow가 raw publishedAt(늘 \'\')만 보는 옛 구현으로 되돌아가면 이 가점이 사라져 ' +
+    'relevanceScore만으로 정렬되고 순서가 뒤집힌다');
+});
+
+// candidateWindowDate(collect-news-candidates.js)의 published_date 분기는 정본이 돌려주는
+// evidence.date(YYYY-MM-DD로 잘린 값)가 아니라 raw publishedAt을 다시 파싱해 시각까지 살린다.
+// 이 분기를 지우고 parseDate(evidence.date)만 쓰면, 자정으로 잘린 값과 원문 시각이 몇 시간
+// 차이 나는 후보가 창 경계에 걸쳐 있을 때 판정이 뒤집힌다 — 여기서는 UTC-8 오프셋
+// '2026-08-22T20:00:00-08:00'(실제 UTC로는 2026-08-23 04:00Z)를 자정(2026-08-23 00:00Z)과
+// 새벽 2시(윈도 경계) 사이에 걸쳐 둔다.
+test('published_date 후보는 자정이 아니라 원문 시각으로 창 경계를 잰다', () => {
+  const now = new Date('2026-09-13T02:00:00Z'); // windowStart = now - 21일 = 2026-08-23T02:00:00Z
+  const candidate = { publishedAt: '2026-08-22T20:00:00-08:00' }; // UTC로는 2026-08-23T04:00:00Z
+  assert.equal(withinLookback(candidate, now, 21), true,
+    '원문 시각(04:00Z)은 창 시작(02:00Z) 안이다 — evidence.date만 쓰면 자정(00:00Z)으로 잘려 ' +
+    '창 시작보다 앞선 것으로 잘못 밀려난다');
 });
 
 test('근거 URL이 http(s)가 아니면 버린다', () => {

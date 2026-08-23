@@ -20,6 +20,9 @@ test('resolves every Anthropic News list card to a slug and a date', () => {
   const diagnostics = datedArticleCardDiagnostics(html, { pathPrefix: '/news' });
   assert.equal(diagnostics.unresolved_slugs.length, 0);
   assert.equal(diagnostics.resolved_card_count, diagnostics.anchor_slug_count);
+  // 위 두 단언은 파싱이 통째로 죽어도 0 === 0으로 통과한다(양쪽 다 0이 되므로).
+  // 실제로 카드를 읽었다는 양성 대조로 구체적인 0 아닌 개수를 못 박는다(픽스처는 4장).
+  assert.equal(diagnostics.resolved_card_count, 4, '픽스처에 실린 카드 수와 맞아야 한다');
 });
 
 test('drops cards that cannot be read unambiguously', () => {

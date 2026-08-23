@@ -295,6 +295,49 @@ test('마크업이 안 맞아 카드가 0건이면 index_collection_failed가 �
   assert.equal(failure.conflicted_count, 0);
 });
 
+// 위 테스트는 유일한 시나리오가 다섯 카운터 전부 0(anchor_count 자체가 0)이라, 다섯 필드를
+// 전부 그냥 0으로 하드코딩해도 값이 우연히 맞아 통과한다. 앵커는 있지만(슬러그 링크는 있다)
+// 카드는 하나도 못 읽는(날짜가 없는) 인덱스로 다섯 카운터를 서로 다른 값으로 갈라, 하드코딩이면
+// 반드시 틀리게 만든다.
+test('앵커는 있지만 카드를 하나도 못 읽으면 카운터가 서로 다른 값으로 갈린다', async () => {
+  const anchorsWithoutDatesIndex = '<div role="listitem" class="blog_cms_item w-dyn-item">'
+    + '<a href="/blog/no-date-a">No date A</a></div>'
+    + '<div role="listitem" class="blog_cms_item w-dyn-item">'
+    + '<a href="/blog/no-date-b">No date B</a></div>';
+  const diagnostics = createSourceCollectionDiagnostics();
+
+  const result = await collectFromSource(CLAUDE_BLOG, {
+    now: new Date('2026-08-22T00:00:00Z'),
+    lookbackDays: 21,
+    fetchTextImpl: async () => '',
+    createClient: options => createBoundedFetchClient({
+      ...options,
+      fetchImpl: async () => new Response(anchorsWithoutDatesIndex, { status: 200 })
+    }),
+    onDiagnostic: diagnostics.record,
+    onSourceBytes: diagnostics.recordSourceBytes,
+    onArticleCapCounts: diagnostics.recordArticleCapCounts
+  });
+
+  assert.deepEqual(result.candidates, []);
+
+  const summary = summarizeDatedArticleCollection({
+    events: diagnostics.events(),
+    candidates: result.candidates,
+    receivedBytesBySource: diagnostics.receivedBytesBySource(),
+    articleCapCountsBySource: diagnostics.articleCapCountsBySource()
+  });
+
+  assert.equal(summary.kind_counts.index_collection_failed, 1);
+  const failure = summary.events.find(event => event.kind === 'index_collection_failed');
+  assert.ok(failure, 'artifact에 저장된 원본 이벤트에서도 찾을 수 있어야 한다');
+  assert.equal(failure.anchor_count, 2, '슬러그 링크 두 개가 앵커로 잡혀야 한다');
+  assert.equal(failure.anchor_slug_count, 2);
+  assert.equal(failure.resolved_card_count, 0, '날짜가 없어 어떤 카드도 완성되지 않는다');
+  assert.equal(failure.unresolved_count, 2, '앵커는 있는데 카드로 못 읽은 슬러그 둘 다 남는다');
+  assert.equal(failure.conflicted_count, 0);
+});
+
 // usesDatedArticleResolver가 별도로 유지하는 소스 id 목록이 아니라
 // followed-source-item-resolvers.js 레지스트리의 requiresFetchClient 마커에서 직접 파생되는지
 // 잰다. 레지스트리에 세 번째 dated-article 소스를 requiresFetchClient: true로 등록하고

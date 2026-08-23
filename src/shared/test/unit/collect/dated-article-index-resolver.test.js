@@ -241,6 +241,24 @@ test('anchor-extracted workflow evidence reaches the article capsule', async () 
   assert.match(item.behavior_change, /requires approval to merge/i,
     'resolver는 앵커 문장을 behavior_change에 싣는다');
 
+  // resolver 자신의 MAX_WORKFLOW_SECTIONS(:36)는 article-capsules.js의 MAX_WORKFLOW_SECTIONS와
+  // 반드시 같은 값이어야 한다(주석이 그렇게 요구한다) — resolver 쪽만 올리면 여기서 만든
+  // source_extraction.workflow.sections가 먼저 늘어나고, capsule 쪽 slice가 그 초과분을
+  // 조용히 잘라내 capsule.evidence 관찰만으로는 절대 드러나지 않는다. 그래서 capsule 이전,
+  // resolver가 실제로 만든 섹션 개수를 여기서 직접 잰다.
+  assert.equal(item.source_extraction.workflow.sections.length, 2,
+    'resolver의 MAX_WORKFLOW_SECTIONS가 article-capsules.js와 어긋나면(예: 5로 올라가면) ' +
+    'capsule의 자체 slice가 초과분을 조용히 가려 이 어긋남을 아래 capsule 단언만으로는 못 잡는다');
+
+  // 이 케이스는 "페이지가 날짜를 직접 준" 주경로다(list-row 폴백이 아니다) — list-row 폴백은
+  // 아래 'falls back to the list-row date only...' test가 이미 잠갔지만, 주경로의 provenance
+  // 네 필드는 어디서도 재지 않았다. dateSource를 'release_row_date'로, dateEvidenceUrl을
+  // parentUrl로 바꿔치기해도(주경로가 목록-폴백 경로로 조용히 퇴화해도) 이 test는 통과했다.
+  assert.equal(item.publishedAt, '2026-08-18');
+  assert.equal(item.date_source, 'structured_date_published');
+  assert.equal(item.date_confidence, 95);
+  assert.equal(item.date_evidence_url, 'https://claude.com/blog/ai-ci-cd-on-call');
+
   const normalized = normalizeCandidate(item);
   assert.match(normalized.behavior_change, /requires approval to merge/i);
 
@@ -339,6 +357,12 @@ test('records skipped_article_budget instead of using a truncated body', async (
   assert.ok(skipped.length > 0, '빈 배열만으로는 예산 소진과 후보 없음을 구분할 수 없다');
   assert.equal(skipped[0].limitedBy, 'request');
   assert.ok(skipped[0].receivedBytes > 0);
+  // 이 시나리오는 요청 상한(article 자체가 MAX_BYTES_PER_ARTICLE보다 큼)에 걸린 것이지
+  // 소스런 예산(remainingBytes())이 바닥난 게 아니다 — remainingBytes() <= 0 조건을 지우면
+  // 이 발화 방향(skipped_article_budget)은 그대로 통과하면서 recent_window_budget_exhausted가
+  // 거짓으로 함께 찍힌다.
+  assert.ok(seen.every(event => event.kind !== 'recent_window_budget_exhausted'),
+    '소스런 예산은 남아 있다 — 요청 상한에 걸렸다고 소스런 예산 소진까지 찍히면 안 된다');
 });
 
 test('classifies every fail-closed drop with a reason from the closed vocabulary', async () => {
@@ -406,7 +430,12 @@ test('reports when the source budget runs out with recent articles still queued'
   await resolveWithExhaustedSourceBudget({ onDiagnostic: event => seen.push(event) });
   const exhausted = seen.find(event => event.kind === 'recent_window_budget_exhausted');
   assert.ok(exhausted, '최근 7일 기사가 예산 때문에 생략되면 진단이 남아야 한다');
-  assert.match(exhausted.detail, /\d+/, '남은 건수를 적는다');
+  // /\d+/만 재면 건수를 0으로 하드코딩해도(0도 숫자다) 통과한다. 이 시나리오는 최근 7일
+  // 기사 3건 중 1건만 예산 안에서 받고 나머지 2건이 남는다 — 실제 건수(2)를 값으로 잰다.
+  const detailMatch = /^(\d+) recent-window article\(s\) skipped/.exec(exhausted.detail);
+  assert.ok(detailMatch, `detail 형식이 예상과 다르다: ${exhausted.detail}`);
+  assert.equal(Number(detailMatch[1]), 2,
+    '예산 소진으로 남은 recent-window 기사 수는 2건이어야 한다(3건 중 1건만 온전히 받는다)');
 });
 
 test('prioritizes a workflow-signal slug within its window tier even when the article cap would otherwise cut it', async () => {
