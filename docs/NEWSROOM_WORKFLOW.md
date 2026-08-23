@@ -187,7 +187,7 @@ editor는 deterministic final article input과 locked/retry context만 받습니
   6. 필요 시 확인
   7. 디버그 근거
   8. 미분류 산출물
-- `artifact-manifest.json`은 `schema_version=4`입니다. version 4에서 `committed_artifacts[]` 항목은 `path`와 `retention_grade`만 담습니다 — 커밋되는 파일의 바이트 정본은 Git tree이므로 매니페스트가 사본을 두지 않습니다. legacy consumer 호환을 위해 `files[].path`, `files[].size`, `files[].sha256`에는 실제로 존재하는 파일만 넣습니다. review 순서, 빠진 예상 artifact(missing expected artifact), `review_blocking`, `review_attention_required` 같은 안내성(advisory) metadata는 `files[]`가 아니라 `review_artifacts[]`에 둡니다.
+- `artifact-manifest.json`은 `schema_version=4`입니다. version 4에서 `committed_artifacts[]` 항목은 `path`와 `retention_grade`만 담습니다 — 커밋되는 파일의 바이트 정본은 Git tree이므로 `committed_artifacts[]`는 사본을 두지 않습니다. `files[]`와 `review_artifacts[]`는 이 정리 범위 밖이라 그대로 `size`·`sha256`을 담습니다. legacy consumer 호환을 위해 `files[].path`, `files[].size`, `files[].sha256`에는 실제로 존재하는 파일만 넣습니다. review 순서, 빠진 예상 artifact(missing expected artifact), `review_blocking`, `review_attention_required` 같은 안내성(advisory) metadata는 `files[]`가 아니라 `review_artifacts[]`에 둡니다.
 - `review_blocking`과 `review_attention_required`는 리뷰어 안내용 metadata입니다. 이 값은 deterministic publish gate, quality gate, source gate, public artifact readiness 판단을 변경하지 않습니다.
 - `artifact-manifest.json` 파일은 hash churn 방지를 위해 manifest `files[]` hashing 대상에서 제외합니다. `00-review-guide.md`와 `release-qa-report.md`는 존재하면 `files[]`에 포함될 수 있지만 derived artifact라서 `missingRequired` 판단에는 사용하지 않습니다.
 - Manifest surface는 두 가지입니다.
