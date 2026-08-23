@@ -74,6 +74,86 @@ function seedAgreeingSnapshot(snapshotDir) {
   writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'quality-report.md').split('/')), '# Quality\n');
 }
 
+// 매니페스트 경로 규약 잠금(#952).
+//
+// 매니페스트가 기록하는 경로는 #262 phase 6(2026-06-13 머지)을 경계로 두 규약으로 갈린다.
+// 그 전에 쓰인 매니페스트는 공개 출력물을 articles/ 접두 없이 content/·data/·newsletters/·
+// sitemap.xml로 기록했고, 그 뒤에 쓰인 매니페스트는 저장소 루트 기준이라 articles/로 시작한다.
+// schema_version은 이 차이를 표시하지 않는다(4가 두 규약에 모두 걸쳐 있다). 그래서 규약을
+// 산문 대신 이 검사로 잠근다 — 새로 쓰이는 매니페스트는 반드시 저장소 루트 기준이어야 하고,
+// 이미 커밋된 과거 매니페스트는 쓰이던 시점의 규약을 그대로 지켜야 한다(사후 정규화 금지).
+const REPOSITORY_ROOT_PATH_CONVENTION_START_DATE = '2026-06-16';
+const MANIFEST_PATH_ARRAYS = ['files', 'review_artifacts', 'retained_heavy_artifacts', 'committed_artifacts'];
+const PUBLIC_OUTPUT_ROOT_PREFIXES = ['content/', 'data/', 'newsletters/'];
+
+// 규약 판별 대상은 #262에서 articles/ 아래로 옮겨진 공개 출력물 경로뿐이다. .tmp/·cache/·
+// state/는 옮겨지지 않아 두 규약에서 똑같이 쓰이므로 판별에 쓸 수 없다.
+function isPublicOutputManifestPath(relPath) {
+  const withoutArticlesPrefix = relPath.startsWith('articles/')
+    ? relPath.slice('articles/'.length)
+    : relPath;
+  return withoutArticlesPrefix === 'sitemap.xml' ||
+    PUBLIC_OUTPUT_ROOT_PREFIXES.some(prefix => withoutArticlesPrefix.startsWith(prefix));
+}
+
+function manifestPathEntries(manifest) {
+  const entries = [];
+  for (const key of MANIFEST_PATH_ARRAYS) {
+    for (const entry of manifest[key] || []) {
+      if (entry && typeof entry.path === 'string') entries.push({ key, path: entry.path });
+    }
+  }
+  return entries;
+}
+
+function assertManifestPathConvention(manifest, { label, expectArticlesPrefix }) {
+  let publicOutputPathCount = 0;
+  for (const entry of manifestPathEntries(manifest)) {
+    if (!isPublicOutputManifestPath(entry.path)) continue;
+    publicOutputPathCount += 1;
+    const hasArticlesPrefix = entry.path.startsWith('articles/');
+    assert.strictEqual(
+      hasArticlesPrefix,
+      expectArticlesPrefix,
+      expectArticlesPrefix
+        ? `${label}: ${entry.key}[] 경로 "${entry.path}"가 저장소 루트 기준이 아니다. #262 이후 공개 출력물 경로는 articles/로 시작해야 한다.`
+        : `${label}: ${entry.key}[] 경로 "${entry.path}"에 articles/ 접두가 붙었다. #262 이전 매니페스트는 기록된 규약 그대로 두어야 한다(#952).`
+    );
+  }
+  assert.ok(
+    publicOutputPathCount > 0,
+    `${label}: 공개 출력물 경로가 하나도 없어 경로 규약을 검사하지 못했다`
+  );
+}
+
+// 이미 커밋된 매니페스트는 감사 기록이라 사후에 경로를 고쳐 쓰지 않는다. 대신 각 매니페스트가
+// 자기 날짜의 규약을 지키는지 확인해, 새 매니페스트가 옛 규약으로 쓰이거나 과거 매니페스트가
+// 조용히 정규화되면 이 검사가 실패하게 한다.
+function testTrackedManifestPathConvention() {
+  const repositoryRoot = path.resolve(__dirname, '..', '..', '..', '..');
+  const newsroomRoot = path.join(repositoryRoot, 'articles', 'content', 'newsroom');
+  const dateDirectories = fs.readdirSync(newsroomRoot, { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && /^\d{4}-\d{2}-\d{2}$/.test(entry.name))
+    .map(entry => entry.name)
+    .sort();
+
+  let checkedManifestCount = 0;
+  for (const dateDirectory of dateDirectories) {
+    const manifestPath = path.join(newsroomRoot, dateDirectory, 'artifact-manifest.json');
+    if (!fs.existsSync(manifestPath)) continue;
+    assertManifestPathConvention(JSON.parse(fs.readFileSync(manifestPath, 'utf8')), {
+      label: `articles/content/newsroom/${dateDirectory}/artifact-manifest.json`,
+      expectArticlesPrefix: dateDirectory >= REPOSITORY_ROOT_PATH_CONVENTION_START_DATE
+    });
+    checkedManifestCount += 1;
+  }
+
+  assert.ok(
+    checkedManifestCount > 0,
+    '커밋된 artifact-manifest.json을 하나도 읽지 못했다 — 경로 규약 검사가 무력화됐다'
+  );
+}
+
 function testManifestCreationAndHashes() {
   const snapshotDir = makeSnapshot();
   seedAgreeingSnapshot(snapshotDir);
@@ -121,6 +201,10 @@ function testManifestCreationAndHashes() {
   const manifest = runWriter(snapshotDir);
   assert.strictEqual(manifest.schema_version, REVIEW_ARTIFACT_SCHEMA_VERSION);
   assert.strictEqual(manifest.date, date);
+  assertManifestPathConvention(manifest, {
+    label: 'buildManifest',
+    expectArticlesPrefix: true
+  });
   assert.ok(fs.existsSync(path.join(snapshotDir, 'artifact-manifest.json')));
   assert.ok(Array.isArray(manifest.review_artifacts));
   assert.ok(manifest.review_artifacts.some(artifact =>
@@ -447,6 +531,10 @@ function testBuildDateReviewManifestRetentionFields() {
     runContext: { seedUsed: false, publicOutputExpected: false, status: 'UNDERFILLED_NEEDS_FIX' }
   });
 
+  assertManifestPathConvention(manifest, {
+    label: 'buildDateReviewManifest',
+    expectArticlesPrefix: true
+  });
   assert.ok(Array.isArray(manifest.retained_heavy_artifacts), 'retained_heavy_artifacts should be an array');
   assert.ok(Array.isArray(manifest.committed_artifacts), 'committed_artifacts should be an array');
   assert.ok(typeof manifest.retention_summary === 'object', 'retention_summary should be an object');
@@ -491,5 +579,6 @@ testRecoveryPromptAttentionPolicy();
 testDerivedMissingWarningsAndOptionalGateBlocking();
 testRetentionGradeAssignment();
 testBuildDateReviewManifestRetentionFields();
+testTrackedManifestPathConvention();
 
 console.log('Artifact manifest tests passed.');

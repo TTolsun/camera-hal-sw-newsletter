@@ -101,6 +101,34 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `size`·`sha256`은 담지 않습니다(`schema_version` 4부터). 커밋되는 파일의 실제 바이트는 **Git tree가 정본**이므로 `committed_artifacts[]`는 사본을 두지 않습니다. 파일이 그 run에서 어떤 바이트였는지 알아야 하면 해당 커밋의 Git tree를 보세요.
 - 같은 매니페스트의 `files[]`와 `review_artifacts[]`는 여전히 `size`·`sha256`을 담습니다. 이 둘은 `committed_artifacts[]` 정리 범위 밖이라 이번에 손대지 않았습니다.
 
+## 매니페스트 경로 규약
+
+`artifact-manifest.json`의 `files[]`·`review_artifacts[]`·`retained_heavy_artifacts[]`·`committed_artifacts[]`가 기록하는 경로는 **날짜 구간에 따라 두 규약으로 갈립니다.** 경계는 공개 출력물을 `articles/` 아래로 옮긴 #262 phase 6(2026-06-13 머지)입니다.
+
+| 매니페스트 날짜 | 경로 규약 | 예 |
+|------|------|------|
+| 2026-05-28 ~ 2026-06-11 (8개) | `articles/` 접두 **없음** — 그 시점에는 공개 출력물이 저장소 루트에 있었습니다 | `content/newsroom/...`, `data/newsletters.json`, `newsletters/...`, `sitemap.xml` |
+| 2026-06-16 이후 (그 뒤 전부) | 저장소 루트 기준 | `articles/content/newsroom/...`, `articles/data/newsletters.json`, `state/article-exposure-history.json` |
+
+- **`schema_version`은 이 차이를 표시하지 않습니다.** `schema_version=4`가 두 규약에 모두 걸쳐 있습니다(2026-05-30~06-11은 옛 규약, 2026-06-16 이후는 루트 기준). 그러므로 경로 규약을 `schema_version`으로 판별하면 안 됩니다. 판별하려면 매니페스트의 `date` 필드를 쓰세요.
+- 매니페스트를 읽는 도구는 **두 규약을 모두 해소해야 합니다.** 경로를 그대로 해소해 보고, 실패하면 `articles/`를 앞에 붙여 다시 해소하세요.
+- `state/`·`.tmp/`·`cache/`는 #262에서 옮겨지지 않아 두 규약에서 같은 형태입니다. 규약 판별에 쓸 수 있는 것은 공개 출력물 경로(`content/`·`data/`·`newsletters/`·`sitemap.xml`)뿐입니다.
+
+### 왜 경로를 정규화하지 않았나 (#952)
+
+과거 매니페스트 21개의 경로를 루트 기준으로 통일하지 **않기로 했습니다.** 근거는 아래 세 가지입니다.
+
+1. **정규화해도 해소되는 경로가 0건입니다.** `files[]`에서 현재 트리에 없는 경로가 418건인데, `articles/` 접두를 붙이거나 떼도 해소되는 것은 **0건**입니다. 내역은 debug_heavy/transient_attempt 349건(애초에 커밋하지 않는 등급), `schema_version=2` 매니페스트 2개(2026-05-28·05-29)의 등급 미기록 63건, `data/article-exposure-history.json` 6건(#262에서 `state/`로 **옮겨진** 파일이라 접두 문제가 아님)입니다. 즉 미해소의 원인은 경로 규약이 아니라 보존 등급입니다.
+2. **경로를 해석하는 런타임 소비자가 0곳입니다.** 커밋된 매니페스트를 읽어 그 경로를 해소하는 코드가 저장소에 없습니다(`src`·`.github`·`docs` 전수 확인). 매니페스트는 사람이 읽는 감사 기록으로만 쓰입니다. 읽는 쪽이 없으면 정규화의 이득도 없습니다.
+3. **과거 매니페스트는 감사 기록입니다.** 그 run이 그 시점에 무엇을 만들었는지를 그 시점의 경로로 남긴 것이라, 사후에 고쳐 쓰면 아래 보존 규칙(`articles/content/newsroom/**` 대량 수정 금지)과 충돌합니다.
+
+대신 규약을 산문이 아니라 **검사로 잠갔습니다.** `npm run test:artifact`(`src/shared/tooling/cli/test-artifact-manifest.js`)가 두 가지를 확인합니다.
+
+- 커밋된 매니페스트 전수를 읽어, 각 매니페스트가 자기 날짜 구간의 규약을 지키는지 확인합니다.
+- `buildManifest`·`buildDateReviewManifest`가 새로 만드는 매니페스트는 반드시 저장소 루트 기준인지 확인합니다.
+
+그래서 새 매니페스트가 옛 규약으로 쓰이거나 과거 매니페스트가 조용히 정규화되면 테스트가 실패합니다.
+
 ## 실패 run 최소 증거
 
 실패 run이더라도 아래 review_required_compact artifact는 Git에 커밋되어야 합니다.
