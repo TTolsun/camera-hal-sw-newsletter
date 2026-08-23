@@ -192,6 +192,63 @@ async function resolveWithoutComponentEvidence(over = {}) {
   return items[0];
 }
 
+// 1위(앵커 5개)와 2위(앵커 4개) 문장을 본문에서 바로 이웃하게 둔 합성 본문. 각 문장을
+// ANCHOR_PAD(240)로 넓히면 1위 문단이 2위 문장까지 삼키고 2위 문단은 1위 문장 뒤부터를 담아
+// 두 문단이 같은 구간을 공유한다(#946). 3위(앵커 3개) 문장은 그 뒤로 500자 넘는 중립 문단만큼
+// 떨어뜨려 둔다 — ANCHOR_PAD가 양쪽 240자씩이므로 480자보다 멀면 3위 문단은 1위 문단과 절대
+// 겹치지 않는다. 그래서 이 본문 하나로 "겹치는 2위는 건너뛴다"와 "그 자리를 다음 순위가
+// 채운다"를 함께 잴 수 있다.
+//
+// 도입부(첫 500자)는 SUMMARY_LIMIT이 summary로 가져가므로 근거 추출에서 빠진다. 도입부와
+// 중립 채우기 문장에는 WORKFLOW_ANCHORS 토큰(build/test/CI/CD/debug/log/trace/metric/artifact/
+// regression/incident/verification/verify/pull request/approval/agent 등)을 하나도 넣지 않는다 —
+// 하나라도 섞이면 순위가 흔들려 이 본문이 재려는 배치 자체가 깨진다.
+const ADJACENT_ANCHOR_BODY = 'Our small kitchen team spent the spring rewriting the family cookbook that had been '
+  + 'sitting in a drawer since the house was painted. Most of the pages were handwritten, some of '
+  + 'them in pencil, and a few had been copied twice over from older notebooks that nobody could '
+  + 'find anymore. We sorted the recipes by season first, then by the number of people they feed, '
+  + 'because that is how the kitchen actually gets used on a weekday evening. The soup chapter grew '
+  + 'far longer than anyone expected once we added the variations that each grandparent insisted on. '
+  + 'Photographs were the hardest part, since the kitchen window faces north and the light turns grey '
+  + 'by the middle of the afternoon in that season. '
+  // 여기서부터가 근거 구간(rest)이다.
+  + 'The onboarding notes mention a single metric that nobody looks at. '
+  + 'We build and test every change with CI and CD so the debug loop stays short. ' // 1위: 앵커 5개
+  + 'The logs, trace output and metrics land in an artifact bundle. ' // 2위: 앵커 4개, 1위 바로 뒤
+  + 'Dinner was late again that evening because the oven ran cold. '
+  // 1위 문단과 3위 문단을 떼어 놓는 중립 구간(500자 이상).
+  + 'The bread chapter came together on a rainy Saturday when nobody wanted to leave the house. '
+  + 'We measured every flour by weight rather than by cup so the numbers would mean the same thing in '
+  + 'another kitchen. A neighbour lent us a scale that reads to one gram and we kept it on the counter '
+  + 'for a month. Someone suggested we print the whole thing on heavy paper so it would survive the '
+  + 'steam from the stove. The cover took three evenings of arguing about colour before we gave up and '
+  + 'chose plain linen. Nobody has opened the drawer since. '
+  + 'Every incident needs verification before we verify the rollback. ' // 3위: 앵커 3개
+  + 'The last chapter is a list of the pots we still want to buy someday. ';
+
+async function resolveWithAdjacentTopSentences(over = {}) {
+  const slug = 'adjacent-anchor-sentences';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'Adjacent anchors' });
+  const articleHtml = minimalArticleHtml({
+    canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+    headerDateText: 'Aug 18, 2026',
+    title: 'Adjacent anchors',
+    bodyHtml: `<p>${ADJACENT_ANCHOR_BODY}</p>`
+  });
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml }),
+    over
+  });
+  assert.equal(items.length, 1, 'expected exactly one resolved item from the adjacent-top-sentence body');
+  return items[0];
+}
+
+// 섹션 텍스트를 resolver와 같은 문장 경계(마침표·불릿 + 공백)로 자른다.
+function sectionSentences(value) {
+  return String(value || '').split(/(?<=[.•])\s+/).map(part => part.trim()).filter(Boolean);
+}
+
 async function resolveWithTinyArticleBudget(over = {}) {
   // MAX_BYTES_PER_ARTICLE 자체를 넘는 본문을 준다 — 이 resolver는 매 기사 fetch에 항상
   // MAX_BYTES_PER_ARTICLE을 요청 상한으로 쓰므로(브리프 §"기사 fetch 결과 판정"), 요청 상한을
@@ -300,6 +357,35 @@ test('anchor-extracted workflow evidence reaches the article capsule', async () 
     capsule.evidence.some(line => /^behavior_change: /.test(line) && /requires approval to merge/i.test(line)),
     'version_or_release/api_or_component가 앞 두 칸을 차지해도 앵커 문장이 3칸 안에 남아야 한다'
   );
+});
+
+test('does not put the same paragraph into two workflow evidence sections', async () => {
+  const item = await resolveWithAdjacentTopSentences();
+  const sections = item.source_extraction.workflow.sections;
+
+  assert.equal(sections.length, 2,
+    '겹치는 2위 문장을 건너뛴 뒤 그 자리를 다음 순위 문장이 채워야 한다 — 상위 MAX_WORKFLOW_SECTIONS개만 ' +
+    '시도하고 끝내면 건너뛴 만큼 섹션이 그냥 비어 근거가 1건으로 줄어든다');
+
+  const first = sections[0].items[0].text;
+  const second = sections[1].items[0].text;
+
+  assert.ok(!first.includes(second) && !second.includes(first),
+    '한쪽이 다른 쪽을 통째로 담으면 근거 2건이 아니라 문단 1건이다');
+
+  const firstSentences = sectionSentences(first);
+  const shared = sectionSentences(second).filter(sentence => firstSentences.includes(sentence));
+  assert.deepEqual(shared, [],
+    '두 섹션이 같은 문장을 나눠 가지면 캡슐을 읽는 LLM에게 독립 근거가 둘 있는 것처럼 보이고, ' +
+    '중복 텍스트가 WORKFLOW_EVIDENCE_BUDGET을 먹어 다른 구간의 근거가 못 들어온다');
+
+  // behavior_change와 섹션의 중복은 그대로 두기로 한 결정(workflowEvidence 주석)을 여기서 잠근다.
+  // 1위 문장을 섹션에서 빼는 변경은 이 두 단언에서 걸린다.
+  assert.match(item.behavior_change, /debug loop stays short/,
+    '앵커 밀도가 가장 높은 문장이 behavior_change가 돼야 한다');
+  assert.ok(first.includes(item.behavior_change),
+    'behavior_change 문장은 첫 섹션 문단에도 그대로 들어간다 — 두 값은 캡슐의 서로 다른 필드' +
+    '(evidence 줄 vs source_extraction.workflow.sections)로 가므로 독립 근거 2건으로 세어지지 않는다');
 });
 
 test('api_or_component carries the measured token, not the source registry constant', async () => {
