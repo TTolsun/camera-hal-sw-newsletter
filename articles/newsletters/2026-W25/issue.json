@@ -326,7 +326,7 @@
         ],
         "source_links": [
           {
-            "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+            "title": "2. Android skills keep growing (『Top 3 updates for Android developer productivity』)",
             "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
             "publisher": "Android Developers Blog",
             "source_role": "primary",
@@ -483,7 +483,7 @@
       "imageUsageDecisionReason": "OG 이미지로 Android Developers Blog를 대표하며, 기사 내용과 관련성이 높습니다.",
       "sources": [
         {
-          "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+          "title": "2. Android skills keep growing (『Top 3 updates for Android developer productivity』)",
           "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
         }
       ],
@@ -1604,7 +1604,7 @@
       "url": "https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com/"
     },
     {
-      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "title": "2. Android skills keep growing (『Top 3 updates for Android developer productivity』)",
       "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
     },
     {
@@ -1645,7 +1645,7 @@
   "publish_mode": "DEEP",
   "reference_articles": [
     {
-      "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source": "Android Developers Blog",
       "published_date": "Tue, 19 May 2026 13:00:00 +0000",

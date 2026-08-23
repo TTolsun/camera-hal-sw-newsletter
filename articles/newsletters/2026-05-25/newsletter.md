@@ -25,13 +25,11 @@ _Android Developers Blog · Tue, 19 May 2026 13:00:00 +0000_
 
 Google은 여러 화면 크기와 입력 방식에서 Android 앱 경험을 맞추기 위해 Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input 지원, 그리고 CameraX preview 대응을 함께 언급했습니다.
 
-Android Developers Blog는 Tue, 19 May 2026 13:00:00 +0000에 8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O 내용을 공개했습니다. 원문에서 확인되는 핵심은 Jetpack Compose, Jetpack Navigation, Grid, FlexBox, CameraX 관련 내용입니다.
+Android Developers Blog는 Tue, 19 May 2026 13:00:00 +0000에 8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』) 내용을 공개했습니다. 원문에서 확인되는 핵심은 Jetpack Compose, Jetpack Navigation, Grid, FlexBox, CameraX 관련 내용입니다.
 
 원문은 Jetpack Compose, Jetpack Navigation, Grid, FlexBox, CameraX, non-touch를 주요 구성 요소로 다룹니다. 이는 CameraX / Android camera APIs의 지원 범위, 적용 예시, 개발 흐름을 이해하기 위한 정보입니다.
 
 추가로 확인되는 항목은 Building, Adaptive, Default, Googlebook, With, large-screen입니다. 이런 세부 내용은 독자가 원문 발표의 실제 범위를 파악하는 데 도움이 됩니다.
-
-원문 세부 내용으로는 Building, Jetpack Compose, Adaptive, Default, Googlebook 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
@@ -39,7 +37,7 @@ Android Developers Blog는 Tue, 19 May 2026 13:00:00 +0000에 8: Building seamle
 
 **출처**
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 
 ---
 
@@ -59,8 +57,6 @@ Android Developers Blog는 Tue, 19 May 2026 12:45:00 +0000에 Build native Andro
 
 추가로 확인되는 항목은 Tue, May, like the Camera, GPS/Location, Accelerometer, Bluetooth입니다. 이런 세부 내용은 독자가 원문 발표의 실제 범위를 파악하는 데 도움이 됩니다.
 
-원문 세부 내용으로는 Tue, May 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.
-
 ### Camera HAL/Driver 관점에서의 의미
 
 이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.
@@ -72,5 +68,5 @@ Android Developers Blog는 Tue, 19 May 2026 12:45:00 +0000에 Build native Andro
 
 ## 참고자료
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 - [Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)

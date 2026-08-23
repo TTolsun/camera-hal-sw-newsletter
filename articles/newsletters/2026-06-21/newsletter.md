@@ -89,7 +89,7 @@ Android Camera HAL 개발은 Clang/LLVM 툴체인을 기반으로 하므로 GCC 
 
 ## 참고 / 더 읽을거리
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](<https://goo.gle/AdaptiveApps_IO26>) — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](<https://goo.gle/AdaptiveApps_IO26>) — Android Developers Blog (Tue, 19 May 2026 13:00:00 +0000) · Android 플랫폼 · 카메라 인접 주제 참고
 
 ## 참고자료
 

@@ -63,9 +63,9 @@ Google I/O '26에서 Jetpack CameraX와 Media3를 활용하여 폴더블 및 태
 
 **출처**
 
-- [Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26](https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY)
+- [Supercharge your media pipeline with a complete, production-ready toolkit (『Building Premium Android Experiences at Google I/O ‘26』)](https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY)
 
 
 ## 참고자료
 
-- [Supercharge your media pipeline with a complete, production-ready toolkit - Building Premium Android Experiences at Google I/O ‘26](https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY)
+- [Supercharge your media pipeline with a complete, production-ready toolkit (『Building Premium Android Experiences at Google I/O ‘26』)](https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY)

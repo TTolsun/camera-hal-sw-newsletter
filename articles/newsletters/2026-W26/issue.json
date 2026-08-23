@@ -823,7 +823,7 @@
         ],
         "source_links": [
           {
-            "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+            "title": "2. Android skills keep growing (『Top 3 updates for Android developer productivity』)",
             "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
             "publisher": "Android Developers Blog",
             "source_role": "primary"
@@ -962,7 +962,7 @@
       "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
       "sources": [
         {
-          "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+          "title": "2. Android skills keep growing (『Top 3 updates for Android developer productivity』)",
           "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
         }
       ],
@@ -1053,7 +1053,7 @@
       "url": "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
     },
     {
-      "title": "2. Android skills keep growing - Top 3 updates for Android developer productivity",
+      "title": "2. Android skills keep growing (『Top 3 updates for Android developer productivity』)",
       "url": "https://developer.android.com/tools/agents/android-cli#skills-add"
     }
   ],

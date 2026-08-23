@@ -34,7 +34,7 @@ Camera HAL에 직접적인 API나 메타데이터 변경을 가져오지는 않�
 
 **출처**
 
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](https://developer.android.com/tools/agents/android-cli#skills-add)
 
 ---
 
@@ -65,5 +65,5 @@ Android HAL 자체는 Clang/LLVM 기반이지만, 하부 리눅스 커널 및 �
 
 ## 참고자료
 
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](https://developer.android.com/tools/agents/android-cli#skills-add)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)

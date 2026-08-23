@@ -115,7 +115,7 @@ Camera HAL에 직접적인 API나 메타데이터 변경을 가져오지는 않�
 
 **출처**
 
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](https://developer.android.com/tools/agents/android-cli#skills-add)
 
 
 ## 참고자료
@@ -123,4 +123,4 @@ Camera HAL에 직접적인 API나 메타데이터 변경을 가져오지는 않�
 - [Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver](https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/)
 - [Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver](https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/)
 - [New features in GCC 16: Improved error messages and SARIF output -- David Malcolm](https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco)
-- [2. Android skills keep growing - Top 3 updates for Android developer productivity](https://developer.android.com/tools/agents/android-cli#skills-add)
+- [2. Android skills keep growing (『Top 3 updates for Android developer productivity』)](https://developer.android.com/tools/agents/android-cli#skills-add)

@@ -34,7 +34,7 @@ Android 생태계가 스마트폰을 넘어 폴더블, 태블릿, 차량용 디�
 
 **출처**
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 
 ---
 
@@ -67,5 +67,5 @@ Google AI Studio가 프롬프트 입력만으로 몇 분 만에 전체 네이티
 
 ## 참고자료
 
-- [8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O](https://goo.gle/AdaptiveApps_IO26)
+- [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
 - [Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)
