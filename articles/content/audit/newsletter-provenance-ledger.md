@@ -9,6 +9,9 @@
 - Seed evidence workflow 이전 archive entry에는 fake seed evidence provenance를 추가하지 않습니다.
 - `keep` / `minor_edit` 대상은 현재 article structure로 강제 재작성하지 않습니다.
 - Material rewrite는 `articles/content/audit/historical-rewrite-diff/<date>-<slug>.md`를 필요로 합니다.
+- 발행된 archive 산출물(`articles/newsletters/**`)을 사후 편집하면 `minor_edit`이든 material rewrite든 `## Historical Content 정규화`에 항목을 남깁니다. `historical-rewrite-diff` 요구는 material rewrite 여부만 가르며 기록 자체를 면제하지 않습니다.
+- 정규화 항목에는 대상 날짜/호, 무엇을 어떻게 바꿨는지, 근거 이슈, rewrite 판정을 적습니다.
+- 이 기록 규칙은 규칙이 문서에 추가된 뒤의 편집에 적용합니다. 그 이전 편집 중 소급 기록한 것은 `## Historical Content 정규화`에 있는 항목뿐이며, 그 절은 과거 사후 편집의 완전한 목록이 아닙니다(위클리 coverage 정렬·재렌더·죽은 이미지 교체 등은 기록되어 있지 않습니다).
 - `removed` entry는 `data/newsletters.json`에 남기지 않습니다.
 
 ## Ledger
@@ -61,3 +64,5 @@
 ## Historical Content 정규화
 
 - 2026-05-11은 날짜 단위 전역 action item 정규화를 받았습니다. article body 의미가 바뀌지 않아 article 단위 material rewrite diff는 추가하지 않았습니다. 변경은 최종 archive 신뢰 report에 기록됩니다.
+- 2026-05-05 / 06-16 / 06-20 / 06-21 / 06-22 / 06-24 / 06-29 / 07-06 / 07-13 / 07-20 / 07-27 / 08-03 과 2026-W19 / W25 / W26 / W27 / W28 / W29 / W30 / W31 / W32 는 저장소 fallback 이미지에 붙어 있던 가짜 출처 캡션을 삭제했습니다(markdown 53건 + HTML figcaption 53건, 42파일 159줄 삭제·0줄 추가). 그림은 저장소 안의 fallback SVG인데 캡션은 lore.kernel.org 패치 등 외부 기사를 출처로 적고 있었습니다. 판정 기준은 직전 이미지의 src가 `assets/images/fallback/` 로 시작하는지 하나이며, 정상 외부 이미지 캡션 96건(형식 합계)은 전부 보존했습니다. 이 삭제 편집은 URL·본문·구조와 `issue.json` 을 바꾸지 않았고 재렌더도 하지 않았습니다(#863, 전방 수정은 PR #861). 2026-W26 은 아래 항목의 편집도 함께 받았으므로 그 호의 추가된 줄은 이 항목이 아니라 아래 항목의 결과입니다.
+- 2026-06-02 와 2026-W26 은 렌더러가 쓰던 기간-수준 사실 주장 "이번 기간 카메라 코어 직접 변경은 없었습니다. 아래는 실무 레이더 관점의 맥락입니다." 4건(각 md+html)을 현재 렌더러가 내는 관점 라벨 표기(markdown `**실무 레이더 관점**`, HTML `issue-context-lens-label`)로 표적 교체했습니다. LLM이 직접 쓴 브리핑 불릿은 fact-check 관할이라 건드리지 않았습니다(#856 잔여분, 전방 수정은 PR #921). 위 두 편집 모두 현재 article structure로 강제 재작성하지 않은 minor_edit이라 material rewrite diff는 추가하지 않았습니다(커밋 `ec3426aa`, PR #939 / #940).
