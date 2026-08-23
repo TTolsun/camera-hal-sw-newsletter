@@ -1570,6 +1570,10 @@ function datedArticleCollectionSectionLines(datedArticleCollection, candidates) 
 
   // 0건 kind는 적지 않는다. 여섯 kind 중 다섯이 늘 0이라 전부 적으면 실제로 난 사건이 묻힌다.
   const nonZeroKindCounts = Object.entries(kindCounts).filter(([, count]) => Number(count) > 0);
+  // 행은 두 맵의 합집합으로 잡는다. 인덱스 fetch가 예산에 걸리면 fetchSourceIndexText가
+  // throw해 resolver까지 못 가므로 cap 카운터 키가 아예 안 생기고, 수신량만 finally로 남는다
+  // (skipped_index_budget). cap 키만 기준으로 좁히면 정작 예산에 막힌 소스가 표에서 통째로
+  // 사라져, 이 절이 보여주려던 실패가 다시 안 보이게 된다.
   const diagnosticSourceIds = [...new Set([
     ...Object.keys(articleCapCountsBySource),
     ...Object.keys(receivedBytesBySource)
