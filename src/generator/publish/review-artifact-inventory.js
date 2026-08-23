@@ -24,7 +24,8 @@ const {
   weeklyKeyForDate
 } = require('../reporter/weekly-newsletter');
 
-const REVIEW_ARTIFACT_SCHEMA_VERSION = 3;
+// 4: committed_artifacts[] 항목에서 size·sha256을 빼고 path·retention_grade만 남겼다(#942).
+const REVIEW_ARTIFACT_SCHEMA_VERSION = 4;
 
 // Git에 영구 보존되는 공개 진실 공급원 등급
 const PUBLIC_SOURCE_OF_TRUTH = 'public_source_of_truth';
@@ -1060,19 +1061,19 @@ function buildDateReviewManifest({
       };
     });
 
+  // 커밋되는 파일은 실제 바이트의 정본이 Git tree다. 매니페스트에 size·sha256 사본을 두면
+  // 두 번째 정본이 생기는데, 이 매니페스트를 쓴 뒤에도 같은 파일을 이미지 수리·상태 확정·
+  // 공개 상태 reconcile 단계가 계속 고치므로 그 사본은 커밋되는 순간부터 어긋난다. 게다가
+  // 저장소 전역 공유 파일(articles/data/*.json 등)은 다음 발행 때 반드시 바뀌므로 날짜별
+  // 바이트 기록으로는 참일 수 없다. 그래서 경로와 보존 등급만 남긴다(#942).
   const committedArtifacts = inventory.review_artifacts
     .filter(artifact => artifact.present &&
       (artifact.retention_grade === PUBLIC_SOURCE_OF_TRUTH || artifact.retention_grade === REVIEW_REQUIRED_COMPACT) &&
       !isArtifactManifest(artifact.path))
-    .map(artifact => {
-      const { size, sha256 } = statArtifact(root, artifact.path);
-      return {
-        path: artifact.path,
-        size,
-        sha256,
-        retention_grade: artifact.retention_grade
-      };
-    })
+    .map(artifact => ({
+      path: artifact.path,
+      retention_grade: artifact.retention_grade
+    }))
     .sort((a, b) => a.path.localeCompare(b.path));
 
   const retentionSummary = {};

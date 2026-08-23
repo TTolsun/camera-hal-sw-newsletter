@@ -307,6 +307,10 @@ function buildManifest(snapshotDir, date) {
     };
   });
 
+  // 커밋되는 파일의 바이트 정본은 Git tree이므로 경로와 보존 등급만 기록한다. 이 스냅샷
+  // 매니페스트도 파이프라인 도중에 쓰이고 그 뒤로도 같은 파일이 계속 바뀌어서, size·sha256
+  // 사본은 기록되는 순간부터 틀린다(#942). 반면 retained_heavy_artifacts는 Git 밖 Actions
+  // artifact 안의 파일을 식별하는 유일한 수단이라 size·sha256을 그대로 유지한다.
   const committedArtifacts = reviewInventory.review_artifacts
     .filter(artifact => artifact.present &&
       artifact.retention_grade !== DEBUG_HEAVY &&
@@ -314,8 +318,6 @@ function buildManifest(snapshotDir, date) {
       !isArtifactManifestPath(artifact.path))
     .map(artifact => ({
       path: artifact.path,
-      size: artifact.size,
-      sha256: artifact.sha256,
       retention_grade: artifact.retention_grade
     }))
     .sort((a, b) => a.path.localeCompare(b.path));

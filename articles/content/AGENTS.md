@@ -88,7 +88,18 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 }
 ```
 
-`committed_artifacts[]` 항목은 `retention_grade`가 `public_source_of_truth` 또는 `review_required_compact`인 파일 목록입니다.
+`committed_artifacts[]` 항목은 매니페스트를 만든 시점에 존재하면서 `retention_grade`가 `public_source_of_truth` 또는 `review_required_compact`인 파일의 목록입니다. 항목 구조:
+
+```json
+{
+  "path": "articles/content/newsroom/YYYY-MM-DD/quality-report.json",
+  "retention_grade": "review_required_compact"
+}
+```
+
+- `path`는 저장소 기준 상대 경로입니다.
+- `size`·`sha256`은 담지 않습니다(`schema_version` 4부터). 커밋되는 파일의 실제 바이트는 **Git tree가 정본**이므로 `committed_artifacts[]`는 사본을 두지 않습니다. 파일이 그 run에서 어떤 바이트였는지 알아야 하면 해당 커밋의 Git tree를 보세요.
+- 같은 매니페스트의 `files[]`와 `review_artifacts[]`는 여전히 `size`·`sha256`을 담습니다. 이 둘은 `committed_artifacts[]` 정리 범위 밖이라 이번에 손대지 않았습니다.
 
 ## 실패 run 최소 증거
 
