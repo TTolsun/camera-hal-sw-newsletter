@@ -31,8 +31,6 @@ Android Developers Blog는 Tue, 19 May 2026 13:00:00 +0000에 8: Building seamle
 
 추가로 확인되는 항목은 Building, Adaptive, Default, Googlebook, With, large-screen입니다. 이런 세부 내용은 독자가 원문 발표의 실제 범위를 파악하는 데 도움이 됩니다.
 
-원문 세부 내용으로는 Building, Jetpack Compose, Adaptive, Default, Googlebook 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.
-
 ### Camera HAL/Driver 관점에서의 의미
 
 이 소식은 HAL API 변경 고지가 아니라 app/framework 계층의 호환성 점검 신호입니다. Camera HAL / Driver 팀은 CameraX preview의 aspect ratio, rotation, crop 동작이 폴더블, 태블릿, 멀티윈도우 환경에서 기존 앱과 다르게 보이지 않는지 확인하는 참고 항목으로 보면 됩니다.
@@ -58,8 +56,6 @@ Google AI Studio의 native Android 앱 생성 흐름은 Camera, GPS/Location, Ac
 Android Developers Blog는 Tue, 19 May 2026 12:45:00 +0000에 Build native Android apps in Google AI Studio 내용을 공개했습니다. 원문에서 확인되는 핵심은 프롬프트 기반 생성, Emma-Louise Leavey, Group Product Manager, Mike Taylor-Cai, Product Manager Starting 관련 내용입니다.
 
 추가로 확인되는 항목은 Tue, May, like the Camera, GPS/Location, Accelerometer, Bluetooth입니다. 이런 세부 내용은 독자가 원문 발표의 실제 범위를 파악하는 데 도움이 됩니다.
-
-원문 세부 내용으로는 Tue, May 관련 내용도 확인됩니다. 이 내용은 후속 검토에서 출처 범위를 확인할 때 기준점으로 사용할 수 있습니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
