@@ -220,6 +220,11 @@ test('the second pass never promotes a candidate the reporter did not write abou
   // reporter 출력에 없는 후보를 main으로 올리면 editor가 쓸 capsule이 없어 그 그룹이
   // selected에는 있는데 rendered에는 없는 상태가 되고, 커버리지 등식이 깨져 발행 전체가
   // diagnostics-only로 떨어진다.
+  //
+  // 관측은 그 사실을 그대로 적어야 한다. pool은 비어 있지 않았고 후보가 자격을 잃은 것도
+  // 아니다 — reporter가 그 기사를 쓰지 않아 떨어졌을 뿐이다. 여기에 no_eligible_candidate를
+  // 찍으면 "두 pass 사이에 pool이 비었다"는 사실이 아닌 결론을 읽게 된다(#838이 막으려던
+  // 바로 그 사유 혼동).
   const shortlist = report([...maxedWeek(), releaseCandidate()]);
   const keep = shortlist.primary_selected_articles[0].url;
   const { secondPass } = runSecondPass(shortlist, planDemotingAllExcept(shortlist, [keep]), {
@@ -227,7 +232,28 @@ test('the second pass never promotes a candidate the reporter did not write abou
   });
 
   assert.equal(secondPass.admitted.length, 0);
-  assert.deepEqual(secondPass.observation, { pool_size: 0, admitted: 0, blocked_reason: 'no_eligible_candidate' });
+  assert.deepEqual(secondPass.observation, {
+    pool_size: 1, admitted: 0, blocked_reason: 'not_in_reporter_input'
+  });
+});
+
+test('an empty persisted pool and a fully filtered pool are different observations', () => {
+  // 두 사유가 같은 문자열로 접히면 "자격 있는 릴리스가 아예 없었다"와 "있었는데 걸러졌다"를
+  // 사후에 구분할 수 없다. 1차 관측이 이미 pool_size를 남기므로, 2차가 다른 기준으로 세면
+  // 두 pass를 나란히 놓고 읽을 수 없다.
+  const shortlist = report([...maxedWeek(), releaseCandidate()]);
+  const keep = shortlist.primary_selected_articles[0].url;
+  const emptyPool = admitReleaseClassCatchUpAfterReconciliation({
+    selected: [],
+    poolCandidates: [],
+    reportedCandidates: shortlist.shortlisted_candidates,
+    editorialPlanReport: planDemotingAllExcept(shortlist, [keep]),
+    catchUpPolicy: CATCH_UP_POLICY
+  });
+
+  assert.deepEqual(emptyPool.observation, {
+    pool_size: 0, admitted: 0, blocked_reason: 'no_eligible_candidate'
+  });
 });
 
 test('the second pass keeps the release-note dedup guard', () => {
@@ -356,7 +382,11 @@ test('the second pass skips a pool candidate the editorial plan scored as non-ma
 
   assert.equal(reconciled.length, 1, '자리는 비어 있다 — 막는 것은 슬롯이 아니라 계획 판정이다');
   assert.equal(secondPass.admitted.length, 0, '계획이 exclude로 채점한 후보를 되살리면 안 된다');
-  assert.equal(secondPass.observation.admitted, 0);
+  // pool은 비어 있지 않았다. 사유를 no_eligible_candidate로 접으면 게이트가 집행됐다는
+  // 사실이 관측에서 사라진다.
+  assert.deepEqual(secondPass.observation, {
+    pool_size: 1, admitted: 0, blocked_reason: 'editorial_plan_not_main'
+  });
 });
 
 test('every non-main grade is a refusal, including one the schema does not know', () => {

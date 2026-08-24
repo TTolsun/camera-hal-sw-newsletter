@@ -745,11 +745,18 @@ function isReleaseClassCandidate(candidate = {}) {
 // 못 한 주는 중복보다 먼저 보고한다 — 슬롯 기아는 이 진단이 찾으려는 신호 자체라 중복
 // 스킵 1건에 가려지면 안 된다. 마지막 반환은 사실과 어긋나는 사유를 재사용하는 대신
 // 분류 실패임을 그대로 드러낸다(pool_size > 0인데 no_eligible_candidate를 찍지 않는다).
+//
+// planned_non_main_skips / not_in_reporter_input_skips는 2차 pass(#879)만 채운다. 1차
+// observation에는 그 키가 없어 두 검사가 항상 거짓이므로 1차 사유는 그대로다. 게이트 판정
+// (편집 계획)을 배선 사실(reporter가 그 기사를 쓰지 않음)보다 먼저 보고한다 — 게이트가
+// 집행됐다는 사실이 배선 문제 뒤에 가려지면 안 된다.
 function releaseClassBlockedReason(observation) {
   if (observation.admitted > 0) return '';
   if (!observation.lane_enabled) return 'lane_disabled';
   if (observation.pool_size === 0) return 'no_eligible_candidate';
   if (observation.lineup_reached_max) return 'lineup_at_max';
+  if (observation.planned_non_main_skips > 0) return 'editorial_plan_not_main';
+  if (observation.not_in_reporter_input_skips > 0) return 'not_in_reporter_input';
   if (observation.release_page_skips > 0) return 'duplicate_release_page';
   return 'unclassified';
 }
@@ -872,12 +879,28 @@ function admitReleaseClassCatchUpAfterReconciliation({
     .map(candidate => normalizeUrl(candidateUrl(candidate)))
     .filter(Boolean));
   const coverageLookup = buildCoverageLookup(editorialPlanReport);
-  const pool = laneEnabled
-    ? ensureArray(poolCandidates)
-      .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
-      .filter(candidate => !isPlannedNonMain(coverageLookup, candidate))
-      .filter(candidate => reportedUrls.has(normalizeUrl(candidateUrl(candidate))))
+  // 2차 pass가 실제로 들여다본 pool: 1차가 persist한 pool에서 이번 라인업에 이미 들어 있는
+  // 후보만 뺀 것. 관측의 pool_size는 이 길이여야 한다. 아래 필터 뒤 길이를 쓰면 자격 있는
+  // 릴리스가 남아 있던 주에도 pool_size 0 / no_eligible_candidate가 찍혀, 읽는 사람이 "두
+  // pass 사이에 pool이 비었다"는 사실이 아닌 결론을 내린다(#838이 막으려던 사유 혼동).
+  const poolBeforeFilters = laneEnabled
+    ? ensureArray(poolCandidates).filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
     : [];
+  // 필터는 유지한다. 계획이 거절한 후보를 올리면 게이트 우회이고, reporter 입력에 없는 후보를
+  // 올리면 capsule이 없어 커버리지 등식이 깨진다. 다만 왜 떨어졌는지는 각각 세어 남긴다.
+  let plannedNonMainSkips = 0;
+  let notInReporterInputSkips = 0;
+  const pool = poolBeforeFilters.filter(candidate => {
+    if (isPlannedNonMain(coverageLookup, candidate)) {
+      plannedNonMainSkips += 1;
+      return false;
+    }
+    if (!reportedUrls.has(normalizeUrl(candidateUrl(candidate)))) {
+      notInReporterInputSkips += 1;
+      return false;
+    }
+    return true;
+  });
   const admission = admitCatchUpCandidates({
     selected,
     pool,
@@ -889,8 +912,10 @@ function admitReleaseClassCatchUpAfterReconciliation({
   const admitted = admission.admitted;
   const observation = {
     lane_enabled: laneEnabled,
-    pool_size: pool.length,
+    pool_size: poolBeforeFilters.length,
     admitted: admitted.filter(isReleaseClassCandidate).length,
+    planned_non_main_skips: plannedNonMainSkips,
+    not_in_reporter_input_skips: notInReporterInputSkips,
     release_page_skips: admission.release_page_skips,
     lineup_reached_max: admission.lineup_reached_max
   };
