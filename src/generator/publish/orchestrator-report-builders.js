@@ -214,6 +214,12 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
     // #838: 전체 shortlistReport가 담기는 shortlisted-candidates.json은 커밋되지 않는다.
     // release-class 레인 진단은 이 투영을 통과해야만 다음 run에서 판정할 수 있다.
     release_class_catch_up: selectionDiagnostics.release_class_catch_up || report.release_class_catch_up || null,
+    // #879: 커밋되는 관측 계열은 1차와 2차를 나란히 싣는다. 2차만 싣고 1차를 덮으면 지금까지
+    // 쌓인 pool_size/admitted/blocked_reason 계열이 끊긴다.
+    release_class_catch_up_after_reconciliation:
+      selectionDiagnostics.release_class_catch_up_after_reconciliation ||
+      report.release_class_catch_up_after_reconciliation ||
+      null,
     exclusion_reason_summary: selectionDiagnostics.exclusion_reason_summary || [],
     final_exclusion_reason_summary: selectionDiagnostics.final_exclusion_reason_summary || [],
     candidate_selection_note: selectionDiagnostics.candidate_selection_note || ''

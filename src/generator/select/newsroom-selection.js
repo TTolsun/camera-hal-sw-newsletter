@@ -830,6 +830,70 @@ function admitCatchUpCandidates({
   };
 }
 
+// #879: release-class catch-up 2차 pass.
+//
+// 1차 판정은 결정론 선정 직후에 돈다. 그때의 라인업은 대개 mainArticleCount.max라
+// blocked_reason=lineup_at_max로 끝나는데, 라인업은 그 뒤에도 계속 줄어든다 — coverage
+// 재조정이 편집 계획대로 그룹을 강등하기 때문이다. 그래서 자리가 실제로는 비었는데도 자격
+// 있는 릴리스가 pool에 남는다(실측 2026-08-10·08-17·08-24: 판정 시점 5건 → 발행 2/1/1건,
+// pool_size 1, 3주 연속 admitted 0). 문제는 비교식이 아니라 판정 시점이므로, 줄어든 라인업에
+// 1차와 같은 pool·같은 함수·같은 상한을 한 번만 더 적용한다.
+//
+// 일반(thin-week) 레인은 열지 않는다(generalTake 0). 일반 레인은 reference 창 후보로 target을
+// 채우는 레인이라, 재조정이 방금 강등한 자리를 reference 창 후보로 되메우면 편집 계획 판단을
+// 뒤집게 된다. 2차 pass는 #825가 릴리스에만 내준 여유 슬롯 규칙만 재적용한다.
+//
+// reportedCandidates는 이 시점에 이미 기사 본문이 작성된 후보다. 그 밖의 후보를 main으로
+// 올리면 editor가 쓸 capsule이 없어 "selected에는 있는데 rendered에는 없는" 그룹이 생기고,
+// 커버리지 등식이 깨져 발행 전체가 diagnostics-only로 떨어진다. 재조정의 reserve 승급도 같은
+// 제약 아래 동작한다(reserve는 reporter 입력에 포함된다).
+function admitReleaseClassCatchUpAfterReconciliation({
+  selected = [],
+  poolCandidates = [],
+  reportedCandidates = [],
+  catchUpPolicy = getCatchUpPolicy()
+} = {}) {
+  const maxReleaseClassArticles = Number(catchUpPolicy?.maxReleaseClassArticles) || 0;
+  const laneEnabled = catchUpPolicy?.enabled === true && maxReleaseClassArticles > 0;
+  const selectedKeys = new Set(ensureArray(selected).map(item => articleIdentityKey(item)));
+  // syncReporterSelectionToMain과 같은 URL 정규화를 쓴다. 그 함수가 main 플래그를 다시 세우는
+  // 기준이므로, 기준이 다르면 여기서 올린 기사가 그 단계에서 선택되지 않는다.
+  const reportedUrls = new Set(ensureArray(reportedCandidates)
+    .map(candidate => normalizeUrl(candidateUrl(candidate)))
+    .filter(Boolean));
+  const pool = laneEnabled
+    ? ensureArray(poolCandidates)
+      .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
+      .filter(candidate => reportedUrls.has(normalizeUrl(candidateUrl(candidate))))
+    : [];
+  const admission = admitCatchUpCandidates({
+    selected,
+    pool,
+    generalTake: 0,
+    maxReleaseClassArticles,
+    releaseClassAlreadyAdmitted: ensureArray(selected)
+      .filter(item => text(item.catch_up_lane) === 'release_class').length
+  });
+  const admitted = admission.admitted;
+  const observation = {
+    lane_enabled: laneEnabled,
+    pool_size: pool.length,
+    admitted: admitted.filter(isReleaseClassCandidate).length,
+    release_page_skips: admission.release_page_skips,
+    lineup_reached_max: admission.lineup_reached_max
+  };
+  return {
+    admitted,
+    // 1차와 같은 {pool_size, admitted, blocked_reason} 모양을 유지한다. 두 pass를 나란히 놓고
+    // "판정 시점이 달라서 결과가 달라졌다"를 그대로 읽을 수 있어야 한다.
+    observation: {
+      pool_size: observation.pool_size,
+      admitted: observation.admitted,
+      blocked_reason: releaseClassBlockedReason(observation)
+    }
+  };
+}
+
 function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = getCatchUpPolicy()) {
   if (!catchUpPolicy || catchUpPolicy.enabled !== true) return [];
   const eligibleBuckets = new Set(ensureArray(catchUpPolicy.eligibleBuckets));
@@ -933,6 +997,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   // 갇히는 지점이다).
   const maxReleaseClassArticles = Number(catchUpPolicy.maxReleaseClassArticles) || 0;
   const thinWeek = selected.length < catchUpTarget;
+  // #879: 1차 판정이 실제로 본 release-class pool. 2차 pass(coverage 재조정 뒤)가 같은 pool을
+  // 다시 봐야 하는데, 이 pool을 만든 fallback/reference 창 후보 목록은 선정 단계 지역 변수라
+  // 그대로 두면 재조정 시점에 재구성할 수 없다. 재구성 대신 그대로 실어 두 pass가 서로 다른
+  // pool을 보는 일을 구조적으로 없앤다.
+  let releaseClassPool = [];
   const releaseClassObservation = {
     lane_enabled: catchUpPolicy.enabled === true && maxReleaseClassArticles > 0,
     pool_size: 0,
@@ -959,7 +1028,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       // subsumes dated-evidence/source-gap/scope checks, so this single test is enough.
       .filter(candidate => candidate.main_article_score_eligible !== false);
     pool.sort(deterministicCandidateSort);
-    releaseClassObservation.pool_size = pool.filter(isReleaseClassCandidate).length;
+    releaseClassPool = pool.filter(isReleaseClassCandidate);
+    releaseClassObservation.pool_size = releaseClassPool.length;
     const openSlots = thinWeek ? Math.max(0, catchUpTarget - selected.length) : 0;
     const generalTake = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, openSlots));
     const admission = admitCatchUpCandidates({
@@ -985,6 +1055,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     if (catchUpSelected.length > 0) {
       const catchUpKeys = new Set(catchUpSelected.map(item => articleIdentityKey(item)));
       reserve = reserve.filter(candidate => !catchUpKeys.has(articleIdentityKey(candidate)));
+      // #879: 2차 pass가 보는 건 1차가 남긴 후보뿐이다. 1차 승급분을 남겨 두면, 그 기사를
+      // coverage 재조정이 강등한 주에 2차 pass가 같은 기사를 다시 올려 편집 계획 판단을
+      // 뒤집는다. 강등된 기사는 재조정이 이미 판정한 대상이라 catch-up이 되살릴 자리가 아니다.
+      releaseClassPool = releaseClassPool.filter(candidate => !catchUpKeys.has(articleIdentityKey(candidate)));
     }
   }
   const warnings = selectionWarnings(selected, { exposureHistory });
@@ -1140,6 +1214,9 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       admitted: releaseClassObservation.admitted,
       blocked_reason: releaseClassBlockedReason(releaseClassObservation)
     },
+    // #879: 2차 pass 입력. 커밋되는 selection-report.json은 allow-list라 이 후보 목록이 실리지
+    // 않는다(진단 3종만 실린다).
+    release_class_catch_up_pool: releaseClassPool,
     catch_up_used_count: catchUpSelected.length,
     catch_up_articles: catchUpSelected.map(item => ({
       title: item.title, url: item.url, catch_up_age_days: item.catch_up_age_days,
@@ -1231,6 +1308,7 @@ module.exports = {
   LINKED_EVIDENCE_WATCH_PENALTY,
   MIN_CAMERA_HAL_DIRECTNESS,
   admitCatchUpCandidates,
+  admitReleaseClassCatchUpAfterReconciliation,
   buildCatchUpPool,
   buildShortlistReport,
   candidatePoolPreflightSummary,

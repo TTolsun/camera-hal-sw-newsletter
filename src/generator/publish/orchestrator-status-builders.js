@@ -285,6 +285,11 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // #838: selection-diagnostics.md와 generation-status.json은 이 allow-list를 거쳐 렌더된다.
     // 여기서 빠지면 레인 진단이 매 run 'unknown'으로 찍혀 관측이 없는 것과 같아진다.
     release_class_catch_up: report.release_class_catch_up || diagnostics.release_class_catch_up || null,
+    // #879: 2차 pass(coverage 재조정 뒤) 관측도 같은 allow-list를 지나야 남는다.
+    release_class_catch_up_after_reconciliation:
+      report.release_class_catch_up_after_reconciliation ||
+      diagnostics.release_class_catch_up_after_reconciliation ||
+      null,
     exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
     final_exclusion_reason_summary: ensureArray(diagnostics.final_exclusion_reason_summary).slice(0, 10),
     candidate_selection_note: diagnostics.note,

@@ -52,6 +52,18 @@ function uniqueGroupKeys(candidates) {
   return [...new Set(ensureArray(candidates).map(candidateGroupKey).filter(Boolean))];
 }
 
+// main 집합에서 파생되는 shortlistReport 요약 필드(#837). 호출부가 재조정 뒤에도 main 집합을
+// 더 바꾸면(#879 catch-up 2차 pass) 같은 함수로 다시 계산해, 정본(selected_articles)과 파생
+// 카운트가 한 artifact 안에서 어긋나는 일을 막는다.
+function selectionSummaryFromSelected(selectedCandidates) {
+  const groupKeys = uniqueGroupKeys(selectedCandidates);
+  return {
+    selected_article_count: ensureArray(selectedCandidates).length,
+    selected_group_count: groupKeys.length,
+    selected_representative_group_keys: groupKeys
+  };
+}
+
 // 승급 가드: LLM은 결정론이 이미 main 자격을 준 후보만 main으로 올릴 수 있다.
 function isDeterministicallyMainEligible(candidate) {
   if (!candidate) return false;
@@ -235,11 +247,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   return {
     selected: clamped,
     // 재조정된 main 집합에서 파생되는 shortlistReport 요약 필드.
-    selection_summary: {
-      selected_article_count: clamped.length,
-      selected_group_count: reconciledGroupKeys.length,
-      selected_representative_group_keys: reconciledGroupKeys
-    },
+    selection_summary: selectionSummaryFromSelected(clamped),
     diff: {
       deterministic_selected: [...deterministicKeys],
       reconciled_selected: clamped.map(candidateKey),
@@ -258,5 +266,6 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
 module.exports = {
   reconcileCoverage,
   isDeterministicallyMainEligible,
+  selectionSummaryFromSelected,
   candidateKey
 };

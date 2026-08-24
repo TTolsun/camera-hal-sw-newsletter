@@ -21,10 +21,12 @@ function publishHostSource() {
 test('the editor stage receives the background context narrowed to the reconciled main set', () => {
   const source = publishHostSource();
 
+  // #879로 최종 main 집합의 이름이 finalSelected가 됐다(재조정 결과 + release-class catch-up
+  // 2차 pass 승급분). 좁히기 기준은 그대로 "editor가 실제로 쓸 최종 집합"이다.
   assert.match(
     source,
-    /backgroundContextReport: filterBackgroundContextToSelected\(backgroundContextReport, reconciledSelected\)/,
-    'editor 인자에서 background context를 재조정 편성으로 좁힌다'
+    /backgroundContextReport: filterBackgroundContextToSelected\(backgroundContextReport, finalSelected\)/,
+    'editor 인자에서 background context를 최종 편성으로 좁힌다'
   );
 });
 
