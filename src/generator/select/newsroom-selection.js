@@ -750,6 +750,86 @@ function releaseClassBlockedReason(observation) {
   return 'unclassified';
 }
 
+// reference/fallback 창 후보를 catch-up main 기사 모양으로 바꾼다.
+function toCatchUpArticle(candidate, lane) {
+  // Promoting a reference-window candidate to a catch-up main article: clear the
+  // reference-window exclusion markers so the editor group-coverage validation does
+  // not try to demote it as selection_window_reference_not_main (an invalid reason).
+  const cleared = { ...candidate };
+  cleared.exclusion_reasons = ensureArray(candidate.exclusion_reasons)
+    .filter(reason => !/^selection_window=/.test(text(reason)));
+  delete cleared.selection_window_exclusion_reason;
+  delete cleared.fallback_window_promoted;
+  return {
+    ...cleared,
+    freshness_window: 'fallback',
+    coverage_type: 'catch_up',
+    catch_up_lane: lane || 'fill_open_slots',
+    catch_up_age_days: Number(candidate.days_since_published),
+    catch_up_origin_window: text(candidate.freshness_window) || 'reference',
+    selected: true,
+    selected_for_editor: true,
+    final_selected: true,
+    final_selection_eligibility: 'main'
+  };
+}
+
+// catch-up 승급 판정만 담는 순수 함수. 입력을 변형하지 않고 "이 라인업에 무엇을 올릴지"만
+// 돌려준다. 판정을 라인업에서 떼어 놓아야 같은 규칙을 서로 다른 라인업에 다시 적용할 수 있다
+// (#879: 결정론 선정 직후 1차, coverage 재조정 뒤 2차). 필터·중복 가드·레인 상한이 이 한 곳에만
+// 있으므로 두 pass가 서로 다른 기준으로 갈라질 수 없다.
+//
+// releaseClassAlreadyAdmitted는 이미 라인업에 들어 있는 release-class 승급 수다. 2차 pass가
+// 호당 상한(maxReleaseClassArticles)을 1차 승급분과 합산해 지키게 한다.
+function admitCatchUpCandidates({
+  selected = [],
+  pool = [],
+  generalTake = 0,
+  maxReleaseClassArticles = 0,
+  releaseClassAlreadyAdmitted = 0
+} = {}) {
+  // The catch-up lane must enforce the same release-note dedup that pushUnique applies to primary
+  // selection (#500). Otherwise a fresh main article and an older catch-up article from the same
+  // CameraX release-note page are both promoted, sharing one source URL across sections, which
+  // trips the "Duplicate source URL"/"Shared release-note URL" hard fails on thin days. The growing
+  // lineup is checked so two catch-up candidates from the same page cannot slip through together.
+  const accepted = [];
+  const laneByCandidate = new Map();
+  let generalAdmitted = 0;
+  let releaseClassAdmitted = releaseClassAlreadyAdmitted;
+  let releasePageSkips = 0;
+  let lineupReachedMax = false;
+  for (const candidate of ensureArray(pool)) {
+    const lineup = [...ensureArray(selected), ...accepted];
+    if (lineup.length >= articlePolicy.mainArticleCount.max) {
+      lineupReachedMax = true;
+      break;
+    }
+    if (selectedHasSameCameraReleasePage(lineup, candidate)) {
+      if (isReleaseClassCandidate(candidate)) releasePageSkips += 1;
+      continue;
+    }
+    if (lineup.some(existing => candidatesAreDuplicate(existing, candidate))) continue;
+    // 일반 레인은 기존 계약 유지: reference 창 후보만 채운다.
+    if (generalAdmitted < generalTake && text(candidate.freshness_window) === 'reference') {
+      accepted.push(candidate);
+      laneByCandidate.set(candidate, 'fill_open_slots');
+      generalAdmitted += 1;
+      continue;
+    }
+    if (releaseClassAdmitted < maxReleaseClassArticles && isReleaseClassCandidate(candidate)) {
+      accepted.push(candidate);
+      laneByCandidate.set(candidate, 'release_class');
+      releaseClassAdmitted += 1;
+    }
+  }
+  return {
+    admitted: accepted.map(candidate => toCatchUpArticle(candidate, laneByCandidate.get(candidate))),
+    release_page_skips: releasePageSkips,
+    lineup_reached_max: lineupReachedMax
+  };
+}
+
 function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = getCatchUpPolicy()) {
   if (!catchUpPolicy || catchUpPolicy.enabled !== true) return [];
   const eligibleBuckets = new Set(ensureArray(catchUpPolicy.eligibleBuckets));
@@ -882,66 +962,20 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     releaseClassObservation.pool_size = pool.filter(isReleaseClassCandidate).length;
     const openSlots = thinWeek ? Math.max(0, catchUpTarget - selected.length) : 0;
     const generalTake = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, openSlots));
-    // The catch-up lane must enforce the same release-note dedup that pushUnique applies to primary
-    // selection (#500). Otherwise a fresh main article and an older catch-up article from the same
-    // CameraX release-note page are both promoted, sharing one source URL across sections, which
-    // trips the "Duplicate source URL"/"Shared release-note URL" hard fails on thin days. The growing
-    // lineup is checked so two catch-up candidates from the same page cannot slip through together.
-    const catchUpAccepted = [];
-    const laneByCandidate = new Map();
-    let generalAdmitted = 0;
-    let releaseClassAdmitted = 0;
-    for (const candidate of pool) {
-      const lineup = [...selected, ...catchUpAccepted];
-      if (lineup.length >= articlePolicy.mainArticleCount.max) {
-        releaseClassObservation.lineup_reached_max = true;
-        break;
-      }
-      if (selectedHasSameCameraReleasePage(lineup, candidate)) {
-        if (isReleaseClassCandidate(candidate)) releaseClassObservation.release_page_skips += 1;
-        continue;
-      }
-      if (lineup.some(existing => candidatesAreDuplicate(existing, candidate))) continue;
-      // 일반 레인은 기존 계약 유지: reference 창 후보만 채운다.
-      if (generalAdmitted < generalTake && text(candidate.freshness_window) === 'reference') {
-        catchUpAccepted.push(candidate);
-        laneByCandidate.set(candidate, 'fill_open_slots');
-        generalAdmitted += 1;
-        continue;
-      }
-      if (releaseClassAdmitted < maxReleaseClassArticles && isReleaseClassCandidate(candidate)) {
-        catchUpAccepted.push(candidate);
-        laneByCandidate.set(candidate, 'release_class');
-        releaseClassAdmitted += 1;
-      }
-    }
+    const admission = admitCatchUpCandidates({
+      selected,
+      pool,
+      generalTake,
+      maxReleaseClassArticles
+    });
+    releaseClassObservation.release_page_skips = admission.release_page_skips;
+    releaseClassObservation.lineup_reached_max = admission.lineup_reached_max;
     // 승급 수는 레인 라벨이 아니라 후보의 release 채널 여부로 센다. reference 창 릴리스는
     // 일반 레인이 먼저 가져갈 수 있는데, 그걸 미승급으로 세면 진단이 사실과 어긋난다.
     // PR body의 release-class 건수(pr-body-diagnostic-sections.js)는 레인 라벨로 세므로
     // 그 주에는 두 수가 다를 수 있다. 서로 다른 질문에 답하는 값이라 의도된 차이다.
-    releaseClassObservation.admitted = catchUpAccepted.filter(isReleaseClassCandidate).length;
-    catchUpSelected = catchUpAccepted.map(candidate => {
-      // Promoting a reference-window candidate to a catch-up main article: clear the
-      // reference-window exclusion markers so the editor group-coverage validation does
-      // not try to demote it as selection_window_reference_not_main (an invalid reason).
-      const cleared = { ...candidate };
-      cleared.exclusion_reasons = ensureArray(candidate.exclusion_reasons)
-        .filter(reason => !/^selection_window=/.test(text(reason)));
-      delete cleared.selection_window_exclusion_reason;
-      delete cleared.fallback_window_promoted;
-      return {
-        ...cleared,
-        freshness_window: 'fallback',
-        coverage_type: 'catch_up',
-        catch_up_lane: laneByCandidate.get(candidate) || 'fill_open_slots',
-        catch_up_age_days: Number(candidate.days_since_published),
-        catch_up_origin_window: text(candidate.freshness_window) || 'reference',
-        selected: true,
-        selected_for_editor: true,
-        final_selected: true,
-        final_selection_eligibility: 'main'
-      };
-    });
+    releaseClassObservation.admitted = admission.admitted.filter(isReleaseClassCandidate).length;
+    catchUpSelected = admission.admitted;
     selected = [...selected, ...catchUpSelected];
     // 승급된 catch-up 후보는 reserve에서 뺀다. release-class 레인이 fallback 창을 쓰면서
     // reserve의 fallback 좌석과 같은 후보를 잡을 수 있게 됐는데, 그대로 두면 같은 기사가
@@ -1196,6 +1230,7 @@ module.exports = {
   LINKED_EVIDENCE_RUNTIME_BONUS,
   LINKED_EVIDENCE_WATCH_PENALTY,
   MIN_CAMERA_HAL_DIRECTNESS,
+  admitCatchUpCandidates,
   buildCatchUpPool,
   buildShortlistReport,
   candidatePoolPreflightSummary,
