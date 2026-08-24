@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-08-24",
+  "validations": [
+    {
+      "proposal_id": "camera-hal-sw-20260824-001",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-001",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-002",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "raspberrypi-libcamera-releases",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "raspberrypi-libcamera-releases",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-002",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "raspberrypi-libcamera-releases",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "raspberrypi-libcamera-releases",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-003",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-list"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-004",
+      "candidate_url": "https://patchwork.libcamera.org/patch/27964/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/27964/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-005",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-006",
+      "candidate_url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-007",
+      "candidate_url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+      "normalized_url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-security-bulletin"
+    }
+  ],
+  "counts": {
+    "accepted": 7,
+    "discovered_not_extractable": 3
+  }
+}

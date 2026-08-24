@@ -1,0 +1,949 @@
+{
+  "schema_version": 1,
+  "report_type": "source_quality",
+  "newsletter_date": "2026-08-24",
+  "candidates": [
+    {
+      "candidate_id": "2c733fdb24882110",
+      "url": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+      "title": "Tinder cuts app cold starts by 47% with new R8 Configuration Analyzer",
+      "source_quality_score": 0.672,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.9,
+        "android_hal_relevance": 0.9,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f72f65c08a68f755",
+      "url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+      "title": "Preparing your app for broader memory limits",
+      "source_quality_score": 0.625,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.78,
+        "android_hal_relevance": 0.78,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "80d792a6159464a3",
+      "url": "https://android-developers.googleblog.com/2026/08/jetpack-xr-sdk-core-libraries-beta.html",
+      "title": "Jetpack XR SDK core libraries reach beta: The next milestone for Android XR",
+      "source_quality_score": 0.529,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.54,
+        "android_hal_relevance": 0.54,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "16ab7df7ad3c9170",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "source_quality_score": 0.893,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "1b4e90e41ac6bd69",
+      "url": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+      "title": "Optimize your apps for the next generation of Samsung Galaxy devices",
+      "source_quality_score": 0.625,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.78,
+        "android_hal_relevance": 0.78,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "b20dee0fdfc2e125",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "title": "Camera ITS tests",
+      "source_quality_score": 0.746,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.77,
+        "android_hal_relevance": 0.77,
+        "technical_depth": 0.55,
+        "recency_score": 0.15,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9fdf55e2bd248744",
+      "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "title": "Media3 1.11 - What's new?",
+      "source_quality_score": 0.646,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.72,
+        "android_hal_relevance": 0.72,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "951692370ecb7195",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "title": "Camera ITS overview",
+      "source_quality_score": 0.722,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.71,
+        "android_hal_relevance": 0.71,
+        "technical_depth": 0.55,
+        "recency_score": 0.15,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "add8753396415c7f",
+      "url": "https://android-developers.googleblog.com/2026/07/five-years-of-jetpack-compose.html",
+      "title": "Celebrating 5 years of Jetpack Compose",
+      "source_quality_score": 0.622,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.66,
+        "android_hal_relevance": 0.66,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "aa53095c01980db8",
+      "url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+      "title": "Build intelligent Android apps: Introduction to Jetpacker",
+      "source_quality_score": 0.577,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.66,
+        "android_hal_relevance": 0.66,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "2a30fe242da15a49",
+      "url": "https://source.android.com/docs/core/camera",
+      "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.618,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.65,
+        "android_hal_relevance": 0.65,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "322286758a2857a1",
+      "url": "https://android-developers.googleblog.com/2026/08/android-skills-philosophy.html",
+      "title": "Inside Android Skills - Built for deprecation",
+      "source_quality_score": 0.598,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "126b8a669e4375b9",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "title": "1.4.0-alpha07",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f01073bfa5c3aebb",
+      "url": "https://source.android.com/docs/whatsnew",
+      "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.57,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.53,
+        "android_hal_relevance": 0.53,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "df4d682cc51d783d",
+      "url": "https://source.android.com/docs/compatibility/cdd",
+      "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.57,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.53,
+        "android_hal_relevance": 0.53,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "5d2348aa6d709735",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+      "title": "August",
+      "source_quality_score": 0.501,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.25,
+        "recency_score": 0.5,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "41fb5d0b1f4ffe6e",
+      "url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+      "title": "[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "source_quality_score": 0.93,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "e87136573de3de9e",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+      "source_quality_score": 0.854,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.81,
+        "android_hal_relevance": 0.81,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4ddc236c96d138a8",
+      "url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver",
+      "source_quality_score": 0.854,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.81,
+        "android_hal_relevance": 0.81,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "ef5db432e0b4aac9",
+      "url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+      "title": "[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks",
+      "source_quality_score": 0.83,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.75,
+        "android_hal_relevance": 0.75,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "b9823387cb6387ef",
+      "url": "https://lore.kernel.org/linux-media/20260822-dw9714v-v5-0-502bc7f43b8f@ixit.cz/",
+      "title": "[PATCH v5 0/3] Enable DW9714V camera focus coils on SHIFT 6MQ",
+      "source_quality_score": 0.599,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3600335433144ecc",
+      "url": "https://lore.kernel.org/linux-media/20260821-stm32-dcmipp-pixel-pipes-support-v5-9-d140efb61d72@foss.st.com/",
+      "title": "[PATCH v5 09/14] media: stm32: dcmipp: addition of a dcmipp-isp subdev",
+      "source_quality_score": 0.692,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.63,
+        "android_hal_relevance": 0.63,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "2e455e3ef1b592d1",
+      "url": "https://lore.kernel.org/linux-media/20260820111556.232652-1-natalie.klaus@runtimeverification.com/",
+      "title": "[PATCH v3 0/3] media: uvcvideo: harden the frame buffer size computation",
+      "source_quality_score": 0.572,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.33,
+        "android_hal_relevance": 0.33,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "55b7fa1f1c20f2bf",
+      "url": "https://patchwork.libcamera.org/patch/27960/",
+      "title": "[v14,4/6] libcamera: shaders: Add LSC support",
+      "source_quality_score": 0.575,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "93f1a67aabb59d94",
+      "url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+      "title": "[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3c968284f058a6ca",
+      "url": "https://patchwork.libcamera.org/patch/27964/",
+      "title": "[v7,01/47] libcamera: software_isp: init(): Fix documentation typo",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "34ccba1db87ef07e",
+      "url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/",
+      "title": "[REGRESSION?] Intel IPU6/OV2740 camera fails to stream after camera use on ThinkPad X1 Carbon Gen 10",
+      "source_quality_score": 0.644,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "d8acdcb5457608e9",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260807",
+      "source_quality_score": 0.834,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.81,
+        "android_hal_relevance": 0.81,
+        "technical_depth": 0.85,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9e3880800162a17e",
+      "url": "https://claude.com/blog/claude-code-guide-for-startups",
+      "title": "The Claude Code guide for startups",
+      "source_quality_score": 0.675,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.72,
+        "android_hal_relevance": 0.72,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "059f0c2dabc29156",
+      "url": "https://claude.com/blog/ai-ci-cd-on-call",
+      "title": "Claude on call: How Claude Tag serves as Anthropic’s first responder for CI/CD failures",
+      "source_quality_score": 0.604,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.54,
+        "android_hal_relevance": 0.54,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9208685d0b054d51",
+      "url": "https://claude.com/blog/anthropics-approach-to-teaching-and-learning-ai",
+      "title": "Anthropic’s approach to teaching and learning AI",
+      "source_quality_score": 0.429,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.48,
+        "android_hal_relevance": 0.48,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0.15
+      }
+    },
+    {
+      "candidate_id": "5514b3c197d1fac1",
+      "url": "https://claude.com/blog/how-monday-com-transformed-its-platform-into-an-agent-first-product-where-humans-and-agents-collaborate",
+      "title": "How monday.com transformed its platform into an agent-first product where humans and agents collaborate",
+      "source_quality_score": 0.555,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.42,
+        "android_hal_relevance": 0.42,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3af4367c727a66a7",
+      "url": "https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders",
+      "title": "Bringing the cybersecurity capabilities of Claude Mythos 5 to more defenders",
+      "source_quality_score": 0.405,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.42,
+        "android_hal_relevance": 0.42,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0.15
+      }
+    },
+    {
+      "candidate_id": "3b9c64d4ab0c452c",
+      "url": "https://claude.com/blog/the-ai-native-sdlc-playbook",
+      "title": "The AI-Native SDLC playbook",
+      "source_quality_score": 0.555,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.42,
+        "android_hal_relevance": 0.42,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4fd37e7df58d0344",
+      "url": "https://claude.com/blog/computer-use-skills-api-files-api",
+      "title": "Build production agents with computer use, the Skills API, and the Files API",
+      "source_quality_score": 0.555,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.42,
+        "android_hal_relevance": 0.42,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "fd403f4cdc7ee9f2",
+      "url": "https://claude.com/blog/turning-conversation-into-knowledge-how-slack-builds-human-agent-teams",
+      "title": "Turning conversation into knowledge: how Slack builds human-agent teams",
+      "source_quality_score": 0.531,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.36,
+        "android_hal_relevance": 0.36,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6071c6961f467d2c",
+      "url": "https://www.anthropic.com/news/claude-opus-5",
+      "title": "Introducing Claude Opus 5",
+      "source_quality_score": 0.828,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 0.5,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6445985bfba6fd2e",
+      "url": "https://www.anthropic.com/news/economic-futures-research-fund-agenda",
+      "title": "A research agenda for the Economic Futures Research Fund",
+      "source_quality_score": 0.738,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.25,
+        "recency_score": 0.5,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "fbdac34ee18668fc",
+      "url": "https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards",
+      "title": "Improving Fable 5's biology safeguards",
+      "source_quality_score": 0.76,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.98,
+        "android_hal_relevance": 0.98,
+        "technical_depth": 0.25,
+        "recency_score": 0.8,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3079ee826c65042f",
+      "url": "https://www.anthropic.com/news/cognizant-anthropic",
+      "title": "Cognizant and Anthropic expand their partnership to bring Claude to enterprise clients",
+      "source_quality_score": 0.73,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.98,
+        "android_hal_relevance": 0.98,
+        "technical_depth": 0.25,
+        "recency_score": 0.5,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-70ce950f7901eb07",
+      "url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+      "title": "[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-c29be917e238e912",
+      "url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-513511ff85835742",
+      "url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+      "title": "[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-85d6b2b5b9225803",
+      "url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+      "title": "[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic - Natasha Klaus",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-00909c65ec282b86",
+      "url": "https://patchwork.libcamera.org/patch/27964/",
+      "title": "[v7,01/47] libcamera: software_isp: init(): Fix documentation typo - Patchwork",
+      "source_quality_score": 0.545,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-7a9bb39859027801",
+      "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "title": "Android Developers Blog: Media3 1.11 - What's new?",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-e5865d30f7130d3e",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+      "title": "Android Security Bulletin—August 2026 &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.708,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-53131a0a2666e707",
+      "url": "https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com",
+      "title": "https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com/",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-b5a2bf1ca08f5489",
+      "url": "https://github.com/runtimeverification/uvc-frame-size-overflow",
+      "title": "https://github.com/runtimeverification/uvc-frame-size-overflow",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-e3c5dcec6d208a21",
+      "url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/1.1-a.txt",
+      "title": "[-- Attachment #1.1: Type: text/plain, Size: 5201 bytes --]",
+      "source_quality_score": 0.33,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-639004248b8c3718",
+      "url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/2-qcam-cachyos-success.txt",
+      "title": "[-- Attachment #2: qcam-cachyos-success.txt --] [-- Type: text/plain, Size: 1807 bytes --]",
+      "source_quality_score": 0.33,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-289817f4a389810a",
+      "url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/3-dmesg-cachyos-qcam-failure.txt",
+      "title": "[-- Attachment #3: dmesg-cachyos-qcam-failure.txt --] [-- Type: text/plain, Size: 2364 bytes --]",
+      "source_quality_score": 0.33,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    }
+  ],
+  "counts": {
+    "blocked_candidate": 32,
+    "strong_candidate": 10,
+    "review_candidate": 5,
+    "weak_candidate": 5
+  }
+}

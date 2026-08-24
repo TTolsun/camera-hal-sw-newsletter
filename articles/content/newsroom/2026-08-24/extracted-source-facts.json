@@ -1,0 +1,280 @@
+{
+  "sources": [
+    {
+      "id": "41fb5d0b1f4ffe6e",
+      "url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+      "title": "[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "published_at": "2026-08-20T07:55:39Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds a driver for the onsemi AR0234 CMOS image sensor. The AR0234 is a 1/2.6-inch global-shutter sensor with a 1940x1220 pixel array, capable of 1920x1200 resolution at up to 120 fps. It supports MIPI CSI-2 output with 1 to 4 data lanes, raw Bayer (8/10-bit) and monochrome formats, as well as DPCM 10->8 compression. The driver has been tested with 2 and 4 lanes on an ARM64 Rockchip RK3588 platform with a 27 MHz external clock. Both 8-bit and 10-bit raw Bayer modes are functional. Not",
+          "evidence_text": "<html><head><title>[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "16ab7df7ad3c9170",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "published_at": "August 12, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Deprecated legacy Camera2Interop APIs ( Camera2Interop.Extender , Camera2CameraControl , Camera2CameraInfo , and CaptureRequestOptions ) in favor of Camera2Interop configurator factory methods and Kotlin extension functions. ( Ib0845 , b/529609261 )",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"ko-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "4ddc236c96d138a8",
+      "url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver",
+      "published_at": "2026-08-19T12:57:16Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The following features are supported: - Manual exposure an gain control support. - vblank/hblank control support. - Supported resolution: 5760 x 4312 30fps (SRGGB10) This series depends on the SM6350 CAMSS support series https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com/ The driver has been tested on the mainline v7.0-rc6 kernel on the Fairphone 4 running postmarketOS. fairphone-fp4:~$ v4l2-compliance -d /dev/v4l-subdev21 v4l2-compliance 1.32.0, 64 bits,",
+          "evidence_text": "<html><head><title>[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.854,
+      "warnings": []
+    },
+    {
+      "id": "ef5db432e0b4aac9",
+      "url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+      "title": "[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks",
+      "published_at": "2026-08-20T20:25:52Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "v4l2_isp_params_validate_buffer() walks the blocks of a parameters buffer by adding block->size to the current offset. A block whose type_info[] entry is an uninitialised hole passes every check on the way there: a size of 0 is not caught by the block->size > buffer_size test, and the match against the type info size compares 0 with the hole's own 0 and passes as well. The walk then makes no forward progress and loops forever. Drivers build their type_info[] arrays with designated initialisers i",
+          "evidence_text": "<html><head><title>[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\n",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "gemini-513511ff85835742",
+      "url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+      "title": "[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier",
+      "published_at": "2026-08-20",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier",
+          "evidence_text": "<html><head><title>[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\n",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-70ce950f7901eb07",
+      "url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+      "title": "[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan",
+      "published_at": "2026-08-20",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan",
+          "evidence_text": "<html><head><title>[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-c29be917e238e912",
+      "url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+      "title": "[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani",
+      "published_at": "2026-08-19",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani",
+          "evidence_text": "<html><head><title>[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nh",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "gemini-85d6b2b5b9225803",
+      "url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+      "title": "[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic - Natasha Klaus",
+      "published_at": "2026-08-17",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic - Natasha Klaus",
+          "evidence_text": "<html><head><title>[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic - Natasha Klaus</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "3c968284f058a6ca",
+      "url": "https://patchwork.libcamera.org/patch/27964/",
+      "title": "[v7,01/47] libcamera: software_isp: init(): Fix documentation typo",
+      "published_at": "2026-08-21",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Barnabás Pőcze); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v7,01/47] libcamera: software_isp: init(): Fix documentation typo - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac97",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "93f1a67aabb59d94",
+      "url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+      "title": "[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic",
+      "published_at": "2026-08-17T12:40:05Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "uvc_parse_frame() computes the default frame buffer size as frame->dwMaxVideoFrameBufferSize = format->bpp * frame->wWidth * frame->wHeight / 8; format->bpp is u8 and wWidth and wHeight are u16, so all three operands promote to signed int and the product is evaluated in 32 bits. All three come from the frame descriptor and none of them is range checked, so a device can drive the product up to about 1.1e12 against a type that holds 2.1e9. The kernel builds with -fno-strict-overflow, so this is a",
+          "evidence_text": "<html><head><title>[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic - Natasha Klaus</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f21e90 /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-s",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "gemini-e5865d30f7130d3e",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+      "title": "Android Security Bulletin—August 2026 &nbsp;|&nbsp; Android Open Source Project",
+      "published_at": "2026-08-01",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Security Bulletin—August 2026 &nbsp;|&nbsp; Android Open Source Project",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.708,
+      "warnings": []
+    },
+    {
+      "id": "9fdf55e2bd248744",
+      "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "title": "Media3 1.11 - What's new?",
+      "published_at": "Tue, 11 Aug 2026 16:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Toni Heidenreich, Software Engineer, Android Media3 1.11 is out. Powering the vast majority of top Android media apps, this release brings new features, bug fixes, and improvements across playback, editing, and UI components. We're expanding our Jetpack Compose UI modules with customizable Player slots and easy to use defaults, interactive gestures, state observers, and short-form video preloading using PlayerPool . We also modernized the Media3 Cast integration with SystemUI Output Sw",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.72,
+      "android_hal_relevance": 0.72,
+      "ai_relevance": 0,
+      "technical_depth": 0.646,
+      "warnings": []
+    }
+  ]
+}

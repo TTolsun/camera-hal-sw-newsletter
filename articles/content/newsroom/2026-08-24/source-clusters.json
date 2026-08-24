@@ -1,0 +1,811 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-08-24",
+  "clusters": [
+    {
+      "cluster_id": "e6e6c175c1048da5",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+      "canonical_title": "Tinder cuts app cold starts by 47% with new R8 Configuration Analyzer",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+          "title": "Tinder cuts app cold starts by 47% with new R8 Configuration Analyzer",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1d9ca4c588aca6e3",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+      "canonical_title": "Preparing your app for broader memory limits",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+          "title": "Preparing your app for broader memory limits",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5440c5fbf24b2b8f",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/jetpack-xr-sdk-core-libraries-beta.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/jetpack-xr-sdk-core-libraries-beta.html",
+      "canonical_title": "Jetpack XR SDK core libraries reach beta: The next milestone for Android XR",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/jetpack-xr-sdk-core-libraries-beta.html",
+          "title": "Jetpack XR SDK core libraries reach beta: The next milestone for Android XR",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "canonical_title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e0628af8d7c21e1a",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+      "canonical_title": "Optimize your apps for the next generation of Samsung Galaxy devices",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/optimize-galaxy-screen-sizes.html",
+          "title": "Optimize your apps for the next generation of Samsung Galaxy devices",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "73adc517b62b8a5f",
+      "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "canonical_title": "Camera ITS tests",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+          "title": "Camera ITS tests",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7a9bb39859027801",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "canonical_title": "Media3 1.11 - What's new?",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+          "title": "Media3 1.11 - What's new?",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+          "title": "Android Developers Blog: Media3 1.11 - What's new?",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a67cc111aac23254",
+      "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "canonical_title": "Camera ITS overview",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its",
+          "title": "Camera ITS overview",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ea3045b15625013f",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/five-years-of-jetpack-compose.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/five-years-of-jetpack-compose.html",
+      "canonical_title": "Celebrating 5 years of Jetpack Compose",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/five-years-of-jetpack-compose.html",
+          "title": "Celebrating 5 years of Jetpack Compose",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f79eb315d591ba15",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+      "canonical_title": "Build intelligent Android apps: Introduction to Jetpacker",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/build-intelligent-android-apps-introduction-jetpack.html",
+          "title": "Build intelligent Android apps: Introduction to Jetpacker",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2e09be47b7d035b1",
+      "cluster_key": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "55aa372bda01e8d5",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/android-skills-philosophy.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/android-skills-philosophy.html",
+      "canonical_title": "Inside Android Skills - Built for deprecation",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/android-skills-philosophy.html",
+          "title": "Inside Android Skills - Built for deprecation",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9e95b9aeb5650263",
+      "cluster_key": "https://source.android.com/docs/whatsnew",
+      "canonical_url": "https://source.android.com/docs/whatsnew",
+      "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b564c567eef7ae59",
+      "cluster_key": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_url": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e5865d30f7130d3e",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+      "canonical_title": "August",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+          "title": "August",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+          "title": "Android Security Bulletin—August 2026 &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b267cab9cec348cf",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+      "canonical_title": "[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+          "title": "[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+          "title": "[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver - Alexander Shiyan",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f192384906d3541a",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260817",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "29c284c94819836c",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+      "canonical_title": "[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+          "title": "[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+          "title": "[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver - Himanshu Bhavani",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "655b00b9713bf7b7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+      "canonical_title": "[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+          "title": "[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+          "title": "[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks - David Carlier",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cd43173caa3fc754",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260822-dw9714v-v5-0-502bc7f43b8f@ixit.cz",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260822-dw9714v-v5-0-502bc7f43b8f@ixit.cz/",
+      "canonical_title": "[PATCH v5 0/3] Enable DW9714V camera focus coils on SHIFT 6MQ",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260822-dw9714v-v5-0-502bc7f43b8f@ixit.cz/",
+          "title": "[PATCH v5 0/3] Enable DW9714V camera focus coils on SHIFT 6MQ",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e25ebd7e0a9177e3",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260821-stm32-dcmipp-pixel-pipes-support-v5-9-d140efb61d72@foss.st.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260821-stm32-dcmipp-pixel-pipes-support-v5-9-d140efb61d72@foss.st.com/",
+      "canonical_title": "[PATCH v5 09/14] media: stm32: dcmipp: addition of a dcmipp-isp subdev",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260821-stm32-dcmipp-pixel-pipes-support-v5-9-d140efb61d72@foss.st.com/",
+          "title": "[PATCH v5 09/14] media: stm32: dcmipp: addition of a dcmipp-isp subdev",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6d9113a06a2a2592",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260820111556.232652-1-natalie.klaus@runtimeverification.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260820111556.232652-1-natalie.klaus@runtimeverification.com/",
+      "canonical_title": "[PATCH v3 0/3] media: uvcvideo: harden the frame buffer size computation",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260820111556.232652-1-natalie.klaus@runtimeverification.com/",
+          "title": "[PATCH v3 0/3] media: uvcvideo: harden the frame buffer size computation",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "646483f3eb3c07bc",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27960",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27960/",
+      "canonical_title": "[v14,4/6] libcamera: shaders: Add LSC support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27960/",
+          "title": "[v14,4/6] libcamera: shaders: Add LSC support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "826ff192ba1e6066",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+      "canonical_title": "[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+          "title": "[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+          "title": "[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic - Natasha Klaus",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "676196c2c845a5a9",
+      "cluster_key": "https://patchwork.libcamera.org/patch/27964",
+      "canonical_url": "https://patchwork.libcamera.org/patch/27964/",
+      "canonical_title": "[v7,01/47] libcamera: software_isp: init(): Fix documentation typo",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/27964/",
+          "title": "[v7,01/47] libcamera: software_isp: init(): Fix documentation typo",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/27964/",
+          "title": "[v7,01/47] libcamera: software_isp: init(): Fix documentation typo - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cad08feba6d4b32b",
+      "cluster_key": "https://lore.kernel.org/linux-media/caft93pqcefoiurczzavth_qxsztmkyh3b3z3cd0qemssyrhopq@mail.gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/",
+      "canonical_title": "[REGRESSION?] Intel IPU6/OV2740 camera fails to stream after camera use on ThinkPad X1 Carbon Gen 10",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/",
+          "title": "[REGRESSION?] Intel IPU6/OV2740 camera fails to stream after camera use on ThinkPad X1 Carbon Gen 10",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "635a6e61ae048b20",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260807",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260807",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260807",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "90a8a526e6b88226",
+      "cluster_key": "https://claude.com/blog/claude-code-guide-for-startups",
+      "canonical_url": "https://claude.com/blog/claude-code-guide-for-startups",
+      "canonical_title": "The Claude Code guide for startups",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://claude.com/blog/claude-code-guide-for-startups",
+          "title": "The Claude Code guide for startups",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "63138ddf295876bb",
+      "cluster_key": "https://claude.com/blog/ai-ci-cd-on-call",
+      "canonical_url": "https://claude.com/blog/ai-ci-cd-on-call",
+      "canonical_title": "Claude on call: How Claude Tag serves as Anthropic’s first responder for CI/CD failures",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://claude.com/blog/ai-ci-cd-on-call",
+          "title": "Claude on call: How Claude Tag serves as Anthropic’s first responder for CI/CD failures",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "286e067a509a7c4e",
+      "cluster_key": "https://claude.com/blog/anthropics-approach-to-teaching-and-learning-ai",
+      "canonical_url": "https://claude.com/blog/anthropics-approach-to-teaching-and-learning-ai",
+      "canonical_title": "Anthropic’s approach to teaching and learning AI",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://claude.com/blog/anthropics-approach-to-teaching-and-learning-ai",
+          "title": "Anthropic’s approach to teaching and learning AI",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a3b8fd8f66d41e18",
+      "cluster_key": "https://claude.com/blog/how-monday-com-transformed-its-platform-into-an-agent-first-product-where-humans-and-agents-collaborate",
+      "canonical_url": "https://claude.com/blog/how-monday-com-transformed-its-platform-into-an-agent-first-product-where-humans-and-agents-collaborate",
+      "canonical_title": "How monday.com transformed its platform into an agent-first product where humans and agents collaborate",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://claude.com/blog/how-monday-com-transformed-its-platform-into-an-agent-first-product-where-humans-and-agents-collaborate",
+          "title": "How monday.com transformed its platform into an agent-first product where humans and agents collaborate",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f034ee1587ce0876",
+      "cluster_key": "https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders",
+      "canonical_url": "https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders",
+      "canonical_title": "Bringing the cybersecurity capabilities of Claude Mythos 5 to more defenders",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders",
+          "title": "Bringing the cybersecurity capabilities of Claude Mythos 5 to more defenders",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "74ac61e244043f10",
+      "cluster_key": "https://claude.com/blog/the-ai-native-sdlc-playbook",
+      "canonical_url": "https://claude.com/blog/the-ai-native-sdlc-playbook",
+      "canonical_title": "The AI-Native SDLC playbook",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://claude.com/blog/the-ai-native-sdlc-playbook",
+          "title": "The AI-Native SDLC playbook",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f33cdbf656a20b07",
+      "cluster_key": "https://claude.com/blog/computer-use-skills-api-files-api",
+      "canonical_url": "https://claude.com/blog/computer-use-skills-api-files-api",
+      "canonical_title": "Build production agents with computer use, the Skills API, and the Files API",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://claude.com/blog/computer-use-skills-api-files-api",
+          "title": "Build production agents with computer use, the Skills API, and the Files API",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "59ef97c393deed73",
+      "cluster_key": "https://claude.com/blog/turning-conversation-into-knowledge-how-slack-builds-human-agent-teams",
+      "canonical_url": "https://claude.com/blog/turning-conversation-into-knowledge-how-slack-builds-human-agent-teams",
+      "canonical_title": "Turning conversation into knowledge: how Slack builds human-agent teams",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://claude.com/blog/turning-conversation-into-knowledge-how-slack-builds-human-agent-teams",
+          "title": "Turning conversation into knowledge: how Slack builds human-agent teams",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c34a327604b5be4a",
+      "cluster_key": "https://www.anthropic.com/news/claude-opus-5",
+      "canonical_url": "https://www.anthropic.com/news/claude-opus-5",
+      "canonical_title": "Introducing Claude Opus 5",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.anthropic.com/news/claude-opus-5",
+          "title": "Introducing Claude Opus 5",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "26b4e01c469da5de",
+      "cluster_key": "https://www.anthropic.com/news/economic-futures-research-fund-agenda",
+      "canonical_url": "https://www.anthropic.com/news/economic-futures-research-fund-agenda",
+      "canonical_title": "A research agenda for the Economic Futures Research Fund",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.anthropic.com/news/economic-futures-research-fund-agenda",
+          "title": "A research agenda for the Economic Futures Research Fund",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cdd8d819f4855db7",
+      "cluster_key": "https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards",
+      "canonical_url": "https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards",
+      "canonical_title": "Improving Fable 5's biology safeguards",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards",
+          "title": "Improving Fable 5's biology safeguards",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7b68f4f0be7a0fcc",
+      "cluster_key": "https://www.anthropic.com/news/cognizant-anthropic",
+      "canonical_url": "https://www.anthropic.com/news/cognizant-anthropic",
+      "canonical_title": "Cognizant and Anthropic expand their partnership to bring Claude to enterprise clients",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.anthropic.com/news/cognizant-anthropic",
+          "title": "Cognizant and Anthropic expand their partnership to bring Claude to enterprise clients",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "53131a0a2666e707",
+      "cluster_key": "https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com",
+      "canonical_url": "https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com",
+      "canonical_title": "https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com",
+          "title": "https://lore.kernel.org/linux-arm-msm/20260216-sm6350-camss-v4-0-b9df35f87edb@fairphone.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b5a2bf1ca08f5489",
+      "cluster_key": "https://github.com/runtimeverification/uvc-frame-size-overflow",
+      "canonical_url": "https://github.com/runtimeverification/uvc-frame-size-overflow",
+      "canonical_title": "https://github.com/runtimeverification/uvc-frame-size-overflow",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/runtimeverification/uvc-frame-size-overflow",
+          "title": "https://github.com/runtimeverification/uvc-frame-size-overflow",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e3c5dcec6d208a21",
+      "cluster_key": "https://lore.kernel.org/linux-media/caft93pqcefoiurczzavth_qxsztmkyh3b3z3cd0qemssyrhopq@mail.gmail.com/1.1-a.txt",
+      "canonical_url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/1.1-a.txt",
+      "canonical_title": "[-- Attachment #1.1: Type: text/plain, Size: 5201 bytes --]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/1.1-a.txt",
+          "title": "[-- Attachment #1.1: Type: text/plain, Size: 5201 bytes --]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "639004248b8c3718",
+      "cluster_key": "https://lore.kernel.org/linux-media/caft93pqcefoiurczzavth_qxsztmkyh3b3z3cd0qemssyrhopq@mail.gmail.com/2-qcam-cachyos-success.txt",
+      "canonical_url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/2-qcam-cachyos-success.txt",
+      "canonical_title": "[-- Attachment #2: qcam-cachyos-success.txt --] [-- Type: text/plain, Size: 1807 bytes --]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/2-qcam-cachyos-success.txt",
+          "title": "[-- Attachment #2: qcam-cachyos-success.txt --] [-- Type: text/plain, Size: 1807 bytes --]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "289817f4a389810a",
+      "cluster_key": "https://lore.kernel.org/linux-media/caft93pqcefoiurczzavth_qxsztmkyh3b3z3cd0qemssyrhopq@mail.gmail.com/3-dmesg-cachyos-qcam-failure.txt",
+      "canonical_url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/3-dmesg-cachyos-qcam-failure.txt",
+      "canonical_title": "[-- Attachment #3: dmesg-cachyos-qcam-failure.txt --] [-- Type: text/plain, Size: 2364 bytes --]",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/CAFt93pqcefoiURczzaVTH_QxSZtmkyh3B3Z3CD0QemSsyRHopQ@mail.gmail.com/3-dmesg-cachyos-qcam-failure.txt",
+          "title": "[-- Attachment #3: dmesg-cachyos-qcam-failure.txt --] [-- Type: text/plain, Size: 2364 bytes --]",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}

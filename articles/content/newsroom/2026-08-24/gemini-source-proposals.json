@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-08-24",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-sw-20260824-001",
+      "topic_gap": "Camera HAL SW: Specific camera sensor driver updates for onsemi AR0234 and imx576.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux-media",
+        "camera sensor driver",
+        "AR0234",
+        "imx576"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/"
+      ],
+      "expected_evidence": [
+        "New camera sensor driver integration",
+        "Specific sensor model (AR0234, imx576)",
+        "Kernel version/patch level"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-002",
+      "topic_gap": "Camera HAL SW: Updates to libcamera for Raspberry Pi, including release notes and specific version.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "raspberry pi",
+        "release notes"
+      ],
+      "candidate_urls": [
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807"
+      ],
+      "expected_evidence": [
+        "libcamera release notes",
+        "Specific version number",
+        "Raspberry Pi specific changes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-003",
+      "topic_gap": "Camera HAL SW: Refinements in V4L2 and camera pipeline handling, specifically regarding parameter blocks and frame buffer size computation.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux-media",
+        "v4l2",
+        "camera pipeline",
+        "frame buffer"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/"
+      ],
+      "expected_evidence": [
+        "V4L2 driver changes",
+        "Camera pipeline robustness improvements",
+        "Parameter block handling",
+        "Frame buffer size computation"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-004",
+      "topic_gap": "Camera HAL SW: Updates to libcamera's software ISP and documentation.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "software ISP",
+        "documentation"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/27964/"
+      ],
+      "expected_evidence": [
+        "libcamera software ISP changes",
+        "Documentation updates",
+        "Specific component (e.g., init())"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-005",
+      "topic_gap": "Camera HAL SW: CameraX release notes for version 1.7.0-alpha03.",
+      "source_family": "camera-api",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX",
+        "release notes",
+        "1.7.0-alpha03"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+      ],
+      "expected_evidence": [
+        "CameraX release notes",
+        "Specific version (1.7.0-alpha03)",
+        "Changes related to camera HAL interaction"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-006",
+      "topic_gap": "Camera HAL SW: Media3 release notes for version 1.11.",
+      "source_family": "android-media",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3",
+        "release notes",
+        "1.11"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "Specific version (1.11)",
+        "Camera output or A/V sync related changes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260824-007",
+      "topic_gap": "Camera HAL SW: Android Security Bulletin for August 2026.",
+      "source_family": "security",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Security Bulletin",
+        "August 2026",
+        "camera security"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/security/bulletin/2026/2026-08-01"
+      ],
+      "expected_evidence": [
+        "Android Security Bulletin",
+        "Date (August 2026)",
+        "Camera-related security vulnerabilities or patches"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
