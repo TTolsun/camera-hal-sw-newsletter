@@ -1420,3 +1420,125 @@ test('only article_sections.verified_facts requires claim coverage; confirmed_fa
     false
   );
 });
+
+// #944: Claude Blog·Anthropic News 같은 산문 기사는 릴리스 노트가 아니라
+// source_extraction.workflow가 유일한 본문 근거다. capsule(article-capsules.js)은 이 문단을
+// LLM 프롬프트에 실어 보내므로, 바인딩 인덱스에도 같은 근거가 있어야 생성 측과 검증 측이 같은
+// 근거를 본다. 아래 네 test가 "인덱스에 나온다 / 실제로 바인딩된다 / 없으면 여전히 막힌다 /
+// release 메타를 섞지 않는다"를 각각 잠근다.
+const WORKFLOW_ARTICLE_URL = 'https://www.anthropic.com/news/nightly-ci-build-debug-report';
+const WORKFLOW_PARAGRAPH = 'The nightly build uploads its logs, trace output and metrics into one artifact bundle that reviewers attach to the pull request.';
+
+function workflowCandidate(overrides = {}) {
+  return {
+    title: 'Nightly CI build debug report',
+    url: WORKFLOW_ARTICLE_URL,
+    source_candidate_hash: 'workflow-candidate-hash',
+    summary: 'A walkthrough of the nightly build debugging workflow.',
+    source_extraction: {
+      workflow: {
+        sections: [{ heading: '', items: [{ text: WORKFLOW_PARAGRAPH }] }]
+      }
+    },
+    ...overrides
+  };
+}
+
+function workflowSection() {
+  return {
+    headline: 'Nightly CI build debug report',
+    sources: [{ title: 'Anthropic News', url: WORKFLOW_ARTICLE_URL }]
+  };
+}
+
+function workflowClaim(evidenceId) {
+  return {
+    claim_id: 'claim-workflow-1',
+    text: WORKFLOW_PARAGRAPH,
+    claim_type: 'fact',
+    evidence_ids: [evidenceId],
+    source_urls: [WORKFLOW_ARTICLE_URL],
+    impact_level: 'app_api_or_framework_adjacent',
+    overclaim_risk: 'low'
+  };
+}
+
+test('#944: source_extraction.workflow sections surface as allowed claim evidence', () => {
+  const cand = workflowCandidate();
+  const allowed = buildAllowedClaimEvidence(cand, workflowSection());
+  const workflowItems = allowed.filter(item => item.text.includes('artifact bundle'));
+  assert.ok(
+    workflowItems.length > 0,
+    `workflow evidence must reach the capsule, got: ${JSON.stringify(allowed)}`
+  );
+  assert.equal(workflowItems[0].kind, 'source_extraction_item');
+  assert.ok(workflowItems[0].source_urls.includes(WORKFLOW_ARTICLE_URL));
+  // capsule이 보여준 id는 검증 시점에 새로 만든 index가 같은 문자열로 해석할 수 있어야 한다.
+  const index = buildEvidenceIndex(cand, workflowSection());
+  assert.ok(index.byId.has(workflowItems[0].evidence_id));
+});
+
+test('#944: a claim citing workflow evidence binds end-to-end (status=bound)', () => {
+  const cand = workflowCandidate();
+  const workflowEvidenceId = stableSourceExtractionItemId(cand, 'workflow', WORKFLOW_PARAGRAPH);
+  const result = validateArticleClaims({
+    section: { ...workflowSection(), claims: [workflowClaim(workflowEvidenceId)] },
+    candidate: cand,
+    strict: true
+  });
+  assert.equal(
+    result.claim_results[0].status,
+    'bound',
+    `expected bound, got ${result.claim_results[0].status}: ${JSON.stringify(result.claim_results[0].issues)}`
+  );
+  assert.equal(result.claim_results[0].bound, true);
+  assert.deepEqual(result.claim_results[0].resolved_evidence_ids, [workflowEvidenceId]);
+});
+
+test('#944: a candidate WITHOUT workflow evidence still fails binding for the same claim', () => {
+  // 게이트 약화 방지 잠금. workflow 근거를 인덱스에 넣는 변경이 "근거 없이도 통과"로
+  // 번지면 안 된다. 근거가 실제로 없는 후보는 같은 claim에서 여전히 미바인딩이어야 한다.
+  const withWorkflow = workflowCandidate();
+  const workflowEvidenceId = stableSourceExtractionItemId(withWorkflow, 'workflow', WORKFLOW_PARAGRAPH);
+  const withoutWorkflow = workflowCandidate({ source_extraction: {} });
+  const result = validateArticleClaims({
+    section: { ...workflowSection(), claims: [workflowClaim(workflowEvidenceId)] },
+    candidate: withoutWorkflow,
+    strict: true
+  });
+  assert.notEqual(result.claim_results[0].status, 'bound');
+  assert.equal(result.claim_results[0].bound, false);
+  assert.deepEqual(result.claim_results[0].resolved_evidence_ids, []);
+  assert.ok(result.claim_results[0].issues.some(item =>
+    item.reason_code === 'unknown_evidence_id' && item.blocking !== false
+  ));
+});
+
+test('#944: workflow section_key uses its own prefix and carries no release metadata', () => {
+  // workflow 컨테이너에는 version/date/component가 없다. release 접두나 release 메타가
+  // 섞이면 실제로는 존재하지 않는 릴리스 값이 workflow 근거의 키와 texts에 들어간다.
+  const cand = workflowCandidate({
+    source_extraction: {
+      release: {
+        version: '1.6.1',
+        date: '2026-05-06',
+        component: 'CameraX',
+        sections: []
+      },
+      workflow: {
+        sections: [{ heading: '', items: [{ text: WORKFLOW_PARAGRAPH }] }]
+      }
+    }
+  });
+  const workflowEvidenceId = stableSourceExtractionItemId(cand, 'workflow', WORKFLOW_PARAGRAPH);
+  const index = buildEvidenceIndex(cand, workflowSection());
+  assert.ok(
+    index.byId.has(workflowEvidenceId),
+    `workflow section_key must be 'workflow', not a release-prefixed key; index ids: ${[...index.byId.keys()]}`
+  );
+  // release 접두 + release 메타로 만든 키는 다른 id를 낳는다(같은 텍스트여도).
+  const releasePrefixedId = stableSourceExtractionItemId(cand, 'release-1-6-1-2026-05-06-camerax', WORKFLOW_PARAGRAPH);
+  assert.equal(index.byId.has(releasePrefixedId), false);
+  // texts는 release 컨테이너 메타가 아니라 workflow 문단만 담아야 한다.
+  assert.deepEqual(index.byId.get(workflowEvidenceId).texts, [WORKFLOW_PARAGRAPH]);
+});

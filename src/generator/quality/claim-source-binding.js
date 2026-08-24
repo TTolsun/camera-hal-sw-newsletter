@@ -73,9 +73,17 @@ function sourceCandidateHash(candidate = {}) {
   return url ? normalizedUrlHash(url) : hashText(text(candidate.title || candidate.headline || 'unknown-candidate'), 16);
 }
 
+const SOURCE_EXTRACTION_SECTION_KEY_PREFIXES = {
+  minor_line_context: 'minor',
+  workflow: 'workflow'
+};
+
 function sectionKeyFromSourceExtraction(group, section = {}, extraction = {}) {
-  const release = objectValue(extraction.release);
-  const prefix = group === 'minor_line_context' ? 'minor' : 'release';
+  // workflow 컨테이너는 릴리스 노트가 아니라 산문 기사에서 뽑은 문단이라 version/date/component가
+  // 없다. release 메타를 섞으면 실제로는 그 컨테이너에 존재하지 않는 릴리스 값이 workflow 근거의
+  // 키에 들어가고, 같은 페이지의 릴리스 근거와 구분도 사라진다. 그래서 workflow는 섹션 자체 값만 쓴다.
+  const release = group === 'workflow' ? {} : objectValue(extraction.release);
+  const prefix = SOURCE_EXTRACTION_SECTION_KEY_PREFIXES[group] || 'release';
   const parts = [
     prefix,
     release.version,
@@ -156,9 +164,20 @@ function evidencePromptText(texts = []) {
 
 function sourceExtractionItems(candidate = {}) {
   const extraction = objectValue(candidate.source_extraction);
+  // workflow를 별도 그룹으로 두는 이유(#944).
+  // 1) evidence_blocks 계약을 재사용하지 않는다. evidence_blocks는 heading·links·url을 가진 평면
+  //    블록 배열이라 sections[].items[] 구조를 담지 못한다. 재사용하려면 생산자
+  //    (dated-article-index-resolver)가 문단을 평탄화해 다른 모양으로 다시 써야 하고, 그러면 같은
+  //    근거가 소스마다 다른 모양으로 저장된다.
+  // 2) release 컨테이너에 합치지도 않는다. capsule(article-capsules.js compactSourceExtraction)
+  //    주석대로 sourceExtractionBackfill이 release.date를 publishedAt으로, 첫 bullet을
+  //    summary/behavior_change로 승격시키기 때문이다. workflow 근거는 그 승격 경로를 타면 안 된다.
+  // 그래서 이미 sections[].items[] 모양인 workflow를 같은 모양의 그룹으로 그대로 읽는다. capsule과
+  // 바인딩 인덱스가 같은 컨테이너를 보므로 LLM이 본 근거와 검증기가 보는 근거가 일치한다.
   const groups = [
     ['release', objectValue(extraction.release)],
-    ['minor_line_context', objectValue(extraction.minor_line_context)]
+    ['minor_line_context', objectValue(extraction.minor_line_context)],
+    ['workflow', objectValue(extraction.workflow)]
   ];
   const items = [];
   for (const block of ensureArray(extraction.evidence_blocks)) {
