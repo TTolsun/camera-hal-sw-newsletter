@@ -445,6 +445,10 @@ test('a missing/invalid fetchClient is loud, not a silent empty array', async ()
   const failures = seen.filter(event => event.kind === 'index_collection_failed');
   assert.equal(failures.length, 1,
     'fetchClient가 없다는 이유로 조용히 빈 배열만 돌려주면 배선 실수가 진단 없이 사라진다');
+  // 이 kind는 세 갈래(client 없음 / sourceUrl 파생 실패 / 마크업)가 공유한다. 운영자가
+  // `## Collector 실패` 절에서 보는 건 detail 문구뿐이라, 그게 갈래를 가리키는 유일한 신호다.
+  assert.match(failures[0].detail, /fetchClient/,
+    'detail이 갈래를 안 가리키면 세 원인이 같은 진단 한 줄로 뭉개진다');
 });
 
 test('falls back to the list-row date only when the canonical url matches exactly', async () => {
@@ -639,6 +643,14 @@ for (const derivationCase of [
     sourceUrl: 'https://example.test/blog/',
     pathPrefix: '/blog',
     parentUrl: 'https://example.test/blog'
+  },
+  {
+    // 슬래시를 하나만 지우면 오타 하나('/blog//')가 validate:config를 통과한 채 카드 0건으로
+    // 닫히고, 진단은 이 PR이 없애려던 바로 그 오해("markup이 깨졌다")를 다시 가리킨다.
+    label: 'repeated trailing slashes',
+    sourceUrl: 'https://example.test/blog//',
+    pathPrefix: '/blog',
+    parentUrl: 'https://example.test/blog'
   }
 ]) {
   test(`derives the index origin and path from source.sourceUrl with ${derivationCase.label}`, async () => {
@@ -687,4 +699,8 @@ test('closes loudly when the registry sourceUrl is missing instead of silently s
   const failures = seen.filter(event => event.kind === 'index_collection_failed');
   assert.equal(failures.length, 1,
     '기존 진단 어휘(index_collection_failed)로 명시적으로 닫아야 한다');
+  // kind만 맞고 detail이 fetchClient 갈래 문구면, 운영자는 배선을 뒤지느라 진짜 원인
+  // (registry에 절대 sourceUrl이 없다)에 못 닿는다 — 이 커밋의 유일한 정당화가 그것이다.
+  assert.match(failures[0].detail, /sourceUrl/,
+    'detail이 registry sourceUrl을 가리켜야 진단이 실제 원인을 가리킨다');
 });

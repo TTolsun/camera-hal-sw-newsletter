@@ -275,15 +275,17 @@ function prioritizeByWorkflowSignal(tierCards) {
 }
 
 /**
- * registry entry의 sourceUrl에서 목록 origin과 경로 접두사를 파생한다. 후행 슬래시는 지운다 —
- * 기사 URL을 `${origin}${pathPrefix}/${slug}`로 조립하고 카드 링크도 같은 접두사로 찾으므로,
- * `/blog/`를 그대로 두면 링크 패턴이 `href="/blog//slug"`가 돼 카드가 한 건도 안 잡힌다.
+ * registry entry의 sourceUrl에서 목록 origin과 경로 접두사를 파생한다. 후행 슬래시는 몇 개든
+ * 지운다 — 기사 URL을 `${origin}${pathPrefix}/${slug}`로 조립하고 카드 링크도 같은 접두사로
+ * 찾으므로, `/blog/`를 그대로 두면 링크 패턴이 `href="/blog//slug"`가 돼 카드가 한 건도 안
+ * 잡힌다. 하나만 지우면 `/blog//`(오타) 하나가 validate:config를 통과한 채 같은 0건으로
+ * 닫힌다. 같은 collect layer의 canonicalContentUrl도 `/\/+$/`로 지운다.
  * sourceUrl이 없거나 절대 URL이 아니면 null을 돌려준다(기본 경로로 대신 도는 일은 없다).
  */
 function deriveIndexLocation(sourceUrl) {
   try {
     const parsed = new URL(String(sourceUrl));
-    return { origin: parsed.origin, pathPrefix: parsed.pathname.replace(/\/$/, '') };
+    return { origin: parsed.origin, pathPrefix: parsed.pathname.replace(/\/+$/, '') };
   } catch {
     return null;
   }
