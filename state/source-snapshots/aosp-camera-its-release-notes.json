@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "aosp-camera-its-release-notes",
-  "updated_at": "2026-08-17T00:00:00.000Z",
+  "updated_at": "2026-08-24T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "aosp-camera-its-release-notes:a67cc111aac23254e453759a5bae82dc",
@@ -28,8 +28,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-17T00:00:00.000Z",
-      "seen_count": 3,
+      "last_seen_at": "2026-08-24T00:00:00.000Z",
+      "seen_count": 4,
       "status": 200
     },
     {
@@ -106,8 +106,8 @@
         }
       ],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-17T00:00:00.000Z",
-      "seen_count": 3,
+      "last_seen_at": "2026-08-24T00:00:00.000Z",
+      "seen_count": 4,
       "status": 200
     }
   ],
