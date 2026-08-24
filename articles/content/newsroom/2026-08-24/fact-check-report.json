@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [
+    "article_sections.hal_driver_impact: '긍정적인 영향을 미칩니다'와 같은 표현 대신, 어떤 구체적인 동작 변화나 검증 포인트에 긍정적인 영향을 미치는지 명확히 설명하는 것이 좋습니다.",
+    "article_sections.action_items[0]: '로컬 테스트 환경에서 검증하십시오' 대신, 어떤 테스트 도구, 시나리오, 또는 메트릭을 사용하여 검증할지 더 구체적으로 명시하는 것이 좋습니다.",
+    "article_sections.action_items[1]: '적용 가능한 최적화 기법이 있는지 검토하십시오' 대신, 어떤 종류의 최적화 기법(예: 버퍼 큐잉 전략, DMA-BUF 활용, ISP 파라미터 갱신 주기)을 중점적으로 검토할지 명시하는 것이 좋습니다.",
+    "article_sections.action_items[2]: '구체적인 변경 사항이 하위 카메라 파이프라인의 안정성에 미치는 영향을 기록하십시오' 대신, 어떤 메트릭(예: 프레임 드롭률, 레이턴시, 버퍼 사용량)을 기록할지 명시하는 것이 좋습니다.",
+    "hal_signal_capsule.check_within_2_weeks: 'V4L2/libcamera 기반 카메라 파이프라인의 프레임 타이밍 및 포맷 협상 로직 검증'을 좀 더 구체적인 테스트 시나리오나 메트릭으로 보강하는 것이 좋습니다."
+  ],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "Raspberry Pi libcamera 릴리스는 Linux 카메라 드라이버 스택의 안정성 개선 사항을 다루며, 이는 V4L2/libcamera 기반 HAL 통합을 진행하는 Android HAL SW 엔지니어에게 유용한 벤치마킹 및 최적화 참고 자료를 제공합니다."
+    }
+  ],
+  "final_comment": "제공된 Editor draft는 Raspberry Pi libcamera 릴리스에 대한 사실을 정확히 반영하고 있으며, 출처를 명확히 제시하고 있습니다. Camera HAL 엔지니어 관점의 해석과 Action Item도 적절하게 구성되어 있습니다. 전반적으로 편집 정책을 잘 준수하고 있으며, 몇 가지 권장 개선 사항을 통해 기사의 구체성과 실행 가능성을 더욱 높일 수 있습니다."
+}
