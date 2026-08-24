@@ -25,6 +25,12 @@ const {
   selectionSummaryFromSelected,
   candidateKey
 } = require('../../../select/coverage-reconciliation');
+const {
+  renderCandidateSelectionDiagnostics,
+  selectionDiagnosticsFromReports
+} = require('../../../select/selection-diagnostics');
+const { buildSelectionReport } = require('../../../publish/orchestrator-report-builders');
+const { selectionStatusExtra } = require('../../../publish/orchestrator-status-builders');
 
 const EMPTY_HEADLINE_STATE = {
   schemaVersion: 1,
@@ -430,6 +436,73 @@ test('the per-issue release-class cap counts first-pass promotions that survived
   const keepAll = shortlist.primary_selected_articles.map(candidate => candidate.url);
   const { secondPass } = runSecondPass(shortlist, planDemotingAllExcept(shortlist, keepAll));
   assert.equal(secondPass.admitted.length, 0, '호당 release-class 상한을 1차와 합산해 지켜야 한다');
+});
+
+// --- 영속화 계약 -----------------------------------------------------------
+//
+// shortlisted-candidates.json은 .gitignore 대상이라 커밋되지 않는다. 2차 관측은 두 allow-list
+// (orchestrator-report-builders·orchestrator-status-builders)와 selection-diagnostics 렌더를
+// 전부 통과해야만 커밋되는 selection-report.json·selection-diagnostics.md에 남는다. 그 경로가
+// 조용히 끊기면 다음 run에서 판정할 근거가 사라진다 — #838이 1차 관측에 건 잠금과 같은 이유다.
+
+// 발행 host가 재조정 뒤 shortlistReport에 남기는 그대로 두 관측을 실은 리포트.
+function reportWithBothObservations() {
+  const shortlist = report([...maxedWeek(), releaseCandidate()]);
+  const keep = shortlist.primary_selected_articles[0].url;
+  const { secondPass } = runSecondPass(shortlist, planDemotingAllExcept(shortlist, [keep]));
+  shortlist.release_class_catch_up_after_reconciliation = secondPass.observation;
+  return shortlist;
+}
+
+test('both catch-up observations reach the committed selection-report.json', () => {
+  const shortlist = reportWithBothObservations();
+  const selectionReport = buildSelectionReport('2026-07-27', shortlist, selectionStatusExtra(shortlist));
+
+  // 1차 관측은 그대로 살아남는다 — 2차만 싣고 1차를 덮으면 지금까지 쌓인 주간 계열이 끊긴다.
+  assert.deepEqual(selectionReport.release_class_catch_up, {
+    pool_size: 1, admitted: 0, blocked_reason: 'lineup_at_max'
+  });
+  assert.deepEqual(selectionReport.release_class_catch_up_after_reconciliation, {
+    pool_size: 1, admitted: 1, blocked_reason: ''
+  });
+});
+
+test('both catch-up observations are rendered into selection-diagnostics.md', () => {
+  // 렌더는 production writer와 같은 seam(selectionStatusExtra)을 지나야 status allow-list
+  // 누락까지 잡힌다.
+  const markdown = renderCandidateSelectionDiagnostics(selectionStatusExtra(reportWithBothObservations()));
+
+  assert.match(markdown, /- release_class_pool_size: 1/);
+  assert.match(markdown, /- release_class_blocked_reason: lineup_at_max/);
+  assert.match(markdown, /- release_class_after_reconciliation_pool_size: 1/);
+  assert.match(markdown, /- release_class_after_reconciliation_admitted: 1/);
+  assert.match(markdown, /- release_class_after_reconciliation_blocked_reason: none/);
+});
+
+test('the diagnostics projection carries the second-pass observation too', () => {
+  // selectionStatusExtra는 shortlistReport를 먼저 읽으므로 이 투영이 비어도 렌더는 살아 있다.
+  // 두 경로 중 하나만 잠그면 나머지 한 줄은 지워도 아무 테스트가 울지 않는다.
+  const diagnostics = selectionDiagnosticsFromReports(reportWithBothObservations(), null);
+
+  assert.deepEqual(diagnostics.release_class_catch_up_after_reconciliation, {
+    pool_size: 1, admitted: 1, blocked_reason: ''
+  });
+  assert.match(
+    renderCandidateSelectionDiagnostics(diagnostics),
+    /- release_class_after_reconciliation_admitted: 1/
+  );
+});
+
+test('a run that never reached the second pass renders unknown, not a stale value', () => {
+  // 관측 누락(unknown)과 "막히지 않음"(none)은 서로 다른 사실이다. 재조정 전에 죽은 attempt를
+  // 정상 출력처럼 보이게 하면 안 된다.
+  const markdown = renderCandidateSelectionDiagnostics(
+    selectionStatusExtra(report([...maxedWeek(), releaseCandidate()]))
+  );
+
+  assert.match(markdown, /- release_class_after_reconciliation_pool_size: unknown/);
+  assert.match(markdown, /- release_class_after_reconciliation_admitted: unknown/);
+  assert.match(markdown, /- release_class_after_reconciliation_blocked_reason: unknown/);
 });
 
 // --- 배선 계약 -------------------------------------------------------------
