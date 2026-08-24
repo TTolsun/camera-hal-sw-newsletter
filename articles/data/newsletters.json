@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-08-24",
+    "title": "Camera HAL / SW Newsletter - 2026-08-24",
+    "summary": "이번 주 뉴스레터에서는 Linux 카메라 스택의 핵심 프레임워크인 libcamera의 Raspberry Pi 다운스트림 v0.7.2+rpt20260817 릴리스를 심층 분석합니다. 비록 직접적인 AOSP 변경은 아니지만, V4L2를 대체하는 libcamera의 최신 안정화 흐름과 버퍼/스트림 관리 기법은 Android Camera HAL 및 드라이버 스택의 최적화 설계에 중요한 기술적 벤치마크를 제공합니다.",
+    "html": "newsletters/2026-08-24/index.html",
+    "md": "newsletters/2026-08-24/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-08-17",
     "title": "Camera HAL / SW Newsletter - 2026-08-17",
     "summary": "이번 주 뉴스레터에서는 2026년 8월 12일 배포된 CameraX 1.7.0-alpha03 릴릴스 핵심 변경 사항을 다룹니다. 레거시 Camera2Interop API의 Deprecated 조치와 Kotlin DSL 확장 기능 도입, 그리고 멀티 카메라 환경에서 ZSL(Zero-Shutter Lag) 사용 시 발생하는 HAL 충돌 수정 등 실무 개발 및 검증에 직결되는 주요 업데이트를 상세히 분석합니다.",

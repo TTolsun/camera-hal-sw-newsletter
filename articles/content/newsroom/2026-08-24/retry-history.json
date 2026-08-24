@@ -1,0 +1,133 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 97,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 1,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점"
+    ],
+    "locked_article_headlines": [
+      "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+        ],
+        "source_titles": [
+          "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점",
+        "sources": [
+          "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+        ],
+        "source_titles": [
+          "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 1,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

@@ -1,0 +1,317 @@
+{
+  "date": "2026-08-24",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W34 (08.17 ~ 08.23)",
+  "summary": "이번 주에는 ‘Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점’ 소식을 다룹니다.",
+  "briefing": [
+    "Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점"
+  ],
+  "sections": [
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점",
+      "what_changed": "Raspberry Pi의 다운스트림 libcamera 버전인 v0.7.2+rpt20260817이 2026년 8월 17일 공식 출시되었습니다.",
+      "confirmed_facts": [
+        "2026년 8월 17일, Raspberry Pi의 다운스트림 libcamera 버전에 해당하는 v0.7.2+rpt20260817 릴리스가 발표되었습니다.",
+        "이번 릴리스는 libcamera 및 V4L2 카메라 파이프라인 구성 요소를 대상으로 동작 안정성 및 기능 개선을 포함합니다."
+      ],
+      "evidence_summary": "Raspberry Pi libcamera Releases의 공식 릴리스 노트(v0.7.2+rpt20260817, 2026-08-17)에 기반하여, 다운스트림 libcamera 및 V4L2 카메라 파이프라인의 변경 사항이 확인되었습니다.",
+      "specificity_checks": [
+        "릴리스 버전: v0.7.2+rpt20260817",
+        "출시 날짜: 2026-08-17",
+        "대상 컴포넌트: libcamera / V4L2 camera pipeline"
+      ],
+      "source_verification_notes": [
+        "공식 GitHub 릴리스 페이지를 통해 2026년 8월 17일자 배포 사실을 검증하였습니다.",
+        "해당 변경 사항은 Raspberry Pi 전용 다운스트림 스택으로, 메인라인 libcamera와는 구분됩니다."
+      ],
+      "public_article": {
+        "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점",
+        "lead": "2026년 8월 17일, Raspberry Pi의 다운스트림 libcamera 라이브러리가 v0.7.2+rpt20260817 버전으로 공식 업데이트되었습니다. 이번 릴리스는 Linux 기반 카메라 파이프라인의 안정성과 효율성을 강화하는 데 초점을 맞추고 있으며, Android Camera HAL 및 하위 드라이버를 개발하는 엔지니어들에게 기술적 영감을 제공합니다.",
+        "body_paragraphs": [
+          "Raspberry Pi의 libcamera v0.7.2+rpt20260817 릴리스는 Linux 카메라 서브시스템의 핵심 프레임워크인 libcamera의 최신 다운스트림 안정화 버전입니다. libcamera는 기존 V4L2 인터페이스의 복잡성을 해소하고, 현대적인 ISP 및 다중 스트림 구성을 효율적으로 제어하기 위해 개발된 프레임워크로, 임베디드 및 모바일 카메라 스택에서 그 중요성이 날로 커지고 있습니다.",
+          "이번 업데이트는 Raspberry Pi 플랫폼에 특화된 드라이버, ISP 제어 로직, 그리고 애플리케이션 간의 상호작용 안정성을 크게 개선하는 데 중점을 두었습니다. 특히 프레임 타이밍 제어와 포맷 협상(format negotiation) 과정에서의 예외 처리 루틴이 보강되어, 연속적인 프레임 캡처 환경에서의 신뢰성을 한층 더 끌어올렸습니다.",
+          "Android Camera HAL 엔지니어 관점에서 이 변화는 직접적인 AOSP 프레임워크의 변경을 의미하지는 않습니다. 하지만 libcamera가 채택하고 있는 스트림 구성 및 버퍼 수명주기 관리 모델은 Android Camera HAL3 아키텍처와 구조적 철학을 공유합니다. 따라서 하위 드라이버 레이어에서 발생하는 병목 현상을 해결하고, ISP와의 데이터 전송 효율을 극대화하는 이들의 최적화 기법은 커스텀 Android 플랫폼 개발 시 매우 유용한 벤치마크 자료가 됩니다."
+        ],
+        "camera_hal_takeaway": "직접적인 Android Camera HAL API 계약 변경은 없으나, V4L2/libcamera 기반의 하위 드라이버 스택을 사용하는 플랫폼의 경우 프레임 타이밍 제어 및 포맷 협상 로직의 예외 처리 방식을 벤치마킹하여 드라이버-ISP 간 버퍼 수명주기 관리의 안정성을 극대화할 수 있습니다.",
+        "reader_checkpoints": [
+          "V4L2/libcamera 기반 드라이버 레이어에서 프레임 타이밍 및 포맷 협상 예외 처리 로직이 정상 동작하는지 검증하십시오.",
+          "이번 릴리스의 버퍼 관리 최적화 기법을 분석하여 현재 개발 중인 HAL-드라이버 인터페이스에 적용 가능한지 검토하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+            "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "Raspberry Pi libcamera 공식 릴리스",
+        "editorial_story": {
+          "reader_scenario": "임베디드 Android 보드에서 V4L2 기반 카메라 드라이버와 HAL3를 통합하는 과정에서, 연속 캡처 시 간헐적인 프레임 드롭이나 버퍼 동기화 오류로 인해 디버깅에 어려움을 겪고 있는 상황을 가정합니다.",
+          "what_happened": "2026년 8월 17일, Raspberry Pi 다운스트림 libcamera v0.7.2+rpt20260817 버전이 출시되어 카메라 파이프라인의 안정성 및 기능 개선이 이루어졌습니다.",
+          "why_it_matters": "libcamera의 버퍼 및 스트림 제어 아키텍처는 Android Camera HAL3와 유사하므로, 하위 드라이버 레이어의 최적화 및 안정화 기법은 Android 플랫폼 개발자에게 훌륭한 참고서가 됩니다.",
+          "field_scenario": "연속 프레임 캡처 세션 중 드라이버와 ISP 간의 버퍼 수명주기를 추적하고, 포맷 협상 시 발생할 수 있는 예외 상황을 로컬 테스트 도구로 시뮬레이션하여 검증합니다.",
+          "not_to_overclaim": "이 릴리스는 Raspberry Pi 전용 다운스트림 버전이며, AOSP Camera Service나 Android CTS/VTS 요구사항을 직접 변경하지 않습니다.",
+          "editor_take": "하위 드라이버의 안정성이 곧 HAL의 성능으로 이어지므로, libcamera의 최신 안정화 기법을 적극적으로 분석하고 벤치마킹할 가치가 있습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 8월 17일, Raspberry Pi 다운스트림 libcamera v0.7.2+rpt20260817 버전이 릴리스되었습니다.",
+          "해당 업데이트는 libcamera 및 V4L2 카메라 파이프라인의 안정성 개선을 목표로 합니다."
+        ],
+        "background_context": "libcamera는 기존 Linux의 V4L2 서브시스템이 가진 한계를 극복하고, 현대적인 카메라 하드웨어(특히 ISP 제어 및 복잡한 스트림 구성)를 효율적으로 다루기 위해 설계된 오픈소스 프레임워크입니다. Raspberry Pi 플랫폼은 이 libcamera를 적극적으로 도입하여 자체 ISP 및 센서 드라이버 스택을 제어하고 있습니다. Android Camera HAL 개발 관점에서 볼 때, 비록 AOSP의 직접적인 변경은 아니지만, libcamera의 버퍼 관리, 스트림 구성, ISP 파라미터 제어 방식은 Android Camera HAL3 아키텍처와 매우 유사한 철학을 공유하므로 하위 드라이버 통합 및 최적화 설계 시 훌륭한 기술적 참조 모델이 됩니다.",
+        "hal_driver_impact": "이번 릴리스는 직접적인 Android Camera HAL API 계약을 변경하지는 않습니다. 그러나 Linux 커널 미디어 스택 및 V4L2 드라이버 레이어에서 동작하는 카메라 시스템의 경우, 다운스트림 libcamera의 안정화 패치는 프레임 타이밍 제어, 포맷 협상(format negotiation), 그리고 드라이버-ISP 간의 버퍼 수명주기 관리 효율성에 긍정적인 영향을 미칩니다. 특히 임베디드 Android 보드나 커스텀 SoC 환경에서 V4L2/libcamera 기반 HAL을 구현하는 엔지니어는 하위 드라이버의 안정성 확보 관점에서 이 변경 사항을 벤치마킹할 필요가 있습니다.",
+        "action_items": [
+          "V4L2/libcamera 기반 커스텀 HAL을 사용하는 플랫폼의 경우, 2주 이내에 드라이버 레이어의 프레임 타이밍 및 포맷 협상 로직을 로컬 테스트 환경에서 검증하십시오.",
+          "Raspberry Pi 다운스트림 패치 중 버퍼 관리 및 ISP 상호작용 개선 사항을 분석하여, 현재 개발 중인 드라이버 스택에 적용 가능한 최적화 기법이 있는지 검토하십시오.",
+          "팀 내 추적 이슈를 생성하고, 이번 릴리스(v0.7.2+rpt20260817)의 구체적인 변경 사항이 하위 카메라 파이프라인의 안정성에 미치는 영향을 기록하십시오."
+        ],
+        "team_share_points": "Raspberry Pi의 libcamera v0.7.2+rpt20260817 업데이트는 Linux 카메라 드라이버 스택의 안정성을 개선하므로, V4L2/libcamera 기반 HAL 통합을 진행 중인 프로젝트에서 하위 파이프라인 최적화의 참고 자료로 활용하기 좋습니다.",
+        "do_not_claim": [
+          "이 릴리스가 AOSP Camera Framework나 Android Camera HAL3 표준 계약에 직접적인 변경을 가한다고 주장해서는 안 됩니다.",
+          "메인라인 libcamera 프로젝트의 공식 변경 사항으로 오인하지 않도록 주의해야 합니다."
+        ]
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 8월 17일에 출시된 Raspberry Pi 다운스트림 libcamera의 최신 업데이트로, Linux 기반 카메라 드라이버 스택의 최신 안정화 동향을 파악하기에 적절한 시점입니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "hal_developer"
+        ],
+        "check_within_2_weeks": "V4L2/libcamera 기반 카메라 파이프라인의 프레임 타이밍 및 포맷 협상 로직 검증",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "AOSP Camera HAL API 또는 CTS/VTS 요구사항에 직접적인 영향이 있다고 과장하지 마십시오.",
+          "이 변경 사항이 모든 Android 기기의 카메라 드라이버에 즉시 적용된다고 주장하지 마십시오."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:f192384906d3541a:release-announcement",
+          "text": "2026년 8월 17일, Raspberry Pi 다운스트림 libcamera v0.7.2+rpt20260817 버전이 릴리스되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:f192384906d3541a:source-summary"
+          ],
+          "source_urls": [
+            "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:f192384906d3541a:stability-improvement",
+          "text": "이번 업데이트는 libcamera 및 V4L2 카메라 파이프라인의 안정성 개선을 목표로 합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:f192384906d3541a:source-summary"
+          ],
+          "source_urls": [
+            "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:f192384906d3541a:hal-reference",
+          "text": "libcamera의 버퍼 및 스트림 관리 아키텍처는 Android Camera HAL3 설계와 유사하여 하위 드라이버 최적화의 참고 모델이 될 수 있습니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "candidate:f192384906d3541a:source-summary"
+          ],
+          "source_urls": [
+            "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+          ],
+          "impact_level": "no_hal_runtime_impact",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "V4L2/libcamera 기반 드라이버를 사용하는 플랫폼에서 프레임 타이밍 및 포맷 협상 로직 검증",
+        "로컬 테스트 환경에서 드라이버-ISP 간 버퍼 수명주기 관리 효율성 확인"
+      ],
+      "action_hints": [
+        "Raspberry Pi 다운스트림 패치 분석을 통한 버퍼 관리 최적화 검토",
+        "로컬 드라이버 스택에 적용 가능한 최적화 기법 식별"
+      ],
+      "action_items": [
+        "V4L2/libcamera 기반 커스텀 HAL을 사용하는 플랫폼의 경우, 2주 이내에 드라이버 레이어의 프레임 타이밍 및 포맷 협상 로직을 로컬 테스트 환경에서 검증하십시오.",
+        "Raspberry Pi 다운스트림 패치 중 버퍼 관리 및 ISP 상호작용 개선 사항을 분석하여, 현재 개발 중인 드라이버 스택에 적용 가능한 최적화 기법이 있는지 검토하십시오.",
+        "팀 내 추적 이슈를 생성하고, 이번 릴리스(v0.7.2+rpt20260817)의 구체적인 변경 사항이 하위 카메라 파이프라인의 안정성에 미치는 영향을 기록하십시오."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=pt-br",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v8c5e9c8e09d4f0c961905721a95aa2027138cb55ec6e1fa60fd7aaa3726ca05f/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=pt-br",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available in the source metadata.",
+      "sources": [
+        {
+          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+        }
+      ],
+      "source_candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "source_candidate_hash": "f192384906d3541a4118b290dde30438c39610a7527d0e9e6eecdaa5365ab31b",
+      "article_group_key": "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260817",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "Raspberry Pi 다운스트림 libcamera 릴리스 태그(v*+rpt*)에서 날짜, 버전, SoftISP, pipeline handler, sensor 변경을 확인",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "V4L2/libcamera 기반 커스텀 HAL을 사용하는 플랫폼의 경우, 2주 이내에 드라이버 레이어의 프레임 타이밍 및 포맷 협상 로직을 로컬 테스트 환경에서 검증하십시오.",
+    "Raspberry Pi 다운스트림 패치 중 버퍼 관리 및 ISP 상호작용 개선 사항을 분석하여, 현재 개발 중인 드라이버 스택에 적용 가능한 최적화 기법이 있는지 검토하십시오.",
+    "팀 내 추적 이슈를 생성하고, 이번 릴리스(v0.7.2+rpt20260817)의 구체적인 변경 사항이 하위 카메라 파이프라인의 안정성에 미치는 영향을 기록하십시오."
+  ],
+  "references": [
+    {
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
+  "selected_group_count": 1,
+  "rendered_group_count": 1,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260817"
+  ],
+  "rendered_group_keys": [
+    "article:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260817"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "source": "CameraX Release Notes",
+      "published_date": "2026-08-12",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    },
+    {
+      "title": "Camera ITS tests",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "source": "AOSP Site Updates",
+      "published_date": "2026-07",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    },
+    {
+      "title": "Camera ITS overview",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "source": "AOSP Site Updates",
+      "published_date": "2026-07",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    },
+    {
+      "title": "[v7,01/47] libcamera: software_isp: init(): Fix documentation typo",
+      "url": "https://patchwork.libcamera.org/patch/27964/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-08-21",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    }
+  ],
+  "tags": [
+    "Driver",
+    "Image Processing",
+    "Camera HAL",
+    "Android"
+  ],
+  "coverage_week_key": "2026-W34",
+  "coverage_start_date": "2026-08-17",
+  "coverage_end_date": "2026-08-23",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-08-24",
+  "weekly_key": "2026-W35",
+  "week_start_date": "2026-08-24",
+  "week_end_date": "2026-08-30"
+}

@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "report_type": "hal_signal_quality",
+  "date": "2026-08-24",
+  "generated_at": "2026-08-24T01:40:21.237Z",
+  "status": "WARN",
+  "input_completeness": "partial",
+  "input_statuses": {
+    "shortlisted_candidates": "loaded",
+    "editor_draft": "loaded",
+    "quality_report": "loaded",
+    "source_effectiveness_report": "input_unavailable",
+    "source_quality_report": "loaded",
+    "evidence_pack_summary": "input_unavailable",
+    "merged_candidate_manifest": "loaded"
+  },
+  "inputs": {
+    "required": {
+      "shortlisted_candidates": {
+        "path": "articles/content/newsroom/2026-08-24/shortlisted-candidates.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "editor_draft": {
+        "path": "articles/content/newsroom/2026-08-24/editor-draft.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "quality_report": {
+        "path": "articles/content/newsroom/2026-08-24/quality-report.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "optional": {
+      "source_effectiveness_report": {
+        "path": "articles/content/newsroom/2026-08-24/source-effectiveness-report.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "source_quality_report": {
+        "path": "articles/content/newsroom/2026-08-24/source-quality-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "evidence_pack_summary": {
+        "path": "articles/content/newsroom/2026-08-24/evidence-pack-summary.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "merged_candidate_manifest": {
+        "path": "articles/content/collected-news/2026-08-24/merged-candidate-manifest.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "missing_required": [],
+    "unavailable_optional": [
+      "source_effectiveness_report",
+      "evidence_pack_summary"
+    ]
+  },
+  "quality_status": "PASS",
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 1,
+    "strong_signal_count": 0,
+    "usable_signal_count": 1,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 1,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 1,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 1
+    },
+    "actionability_level_counts": {
+      "concrete_check": 1
+    },
+    "effective_actionability_level_counts": {
+      "concrete_check": 1
+    },
+    "signal_quality_status_counts": {
+      "usable_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "hal_developer"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Raspberry Pi libcamera Releases (project-official, high, score 81): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 릴리스가 AOSP Camera Framework나 Android Camera HAL3 표준 계약에 직접적인 변경을 가한다고 주장해서는 안 됩니다.",
+        "메인라인 libcamera 프로젝트의 공식 변경 사항으로 오인하지 않도록 주의해야 합니다.",
+        "AOSP Camera HAL API 또는 CTS/VTS 요구사항에 직접적인 영향이 있다고 과장하지 마십시오.",
+        "이 변경 사항이 모든 Android 기기의 카메라 드라이버에 즉시 적용된다고 주장하지 마십시오."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "selection_shortage_hint_details": [
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "camerax_release_note_parser_missing_version_or_anchor",
+      "affected_sources": [],
+      "recommended_fix": "Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "gate_boundary": {
+    "hal_signal_checks_are_observability_only": true,
+    "hal_signal_capsule_enforced_by_editor_output_contract": true,
+    "review_artifacts_preserved": true,
+    "optional_input_unavailable_is_not_pass": true
+  },
+  "close_criteria": {
+    "report_generated": true,
+    "main_article_capsule_validation": true,
+    "actionability_hard_blocker_reflected": true,
+    "generic_fallback_soc_overpromotion_tests_required": true,
+    "source_expansion_followups": [
+      "#55",
+      "#57"
+    ],
+    "historical_rewrite_followup": "#108"
+  },
+  "warnings": [
+    "Optional input_unavailable: source_effectiveness_report",
+    "Optional input_unavailable: evidence_pack_summary"
+  ]
+}

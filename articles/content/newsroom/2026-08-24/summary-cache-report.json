@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-24",
+  "generated_at": "2026-08-24T01:38:37.416Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 7,
+    "hit_count": 0,
+    "miss_count": 7,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 6
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH v4 0/2] media: i2c: Add imx576 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-19T12:57:16Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260819125647.68910-1-himanshu.bhavani@siliconsignals.io",
+        "url_hash": "29c284c94819836c4fe62bd0da8da0210d005954a8af1208835cd200f7378986",
+        "published_date": "2026-08-19T12:57:16Z",
+        "content_hash": "fce10a6f5ee84944c69d6bcf45305ca2b6a0ddd8075add6c189443c4e30dcef3"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v3 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-20T07:55:39Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com",
+        "url_hash": "b267cab9cec348cf1e1c46842808420fb1e9f58c0082fa7769a3a9ca1561a057",
+        "published_date": "2026-08-20T07:55:39Z",
+        "content_hash": "6e7524e34ef54664dc42386dacb910d10a7dceac4874fee2a1c8bba26374de9c"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v4] media: v4l2-isp: reject zero-sized parameter blocks",
+      "url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-20T20:25:52Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260820202544.1256265-1-devnexen@gmail.com",
+        "url_hash": "655b00b9713bf7b7947678c0bb340bc3b8c0e6270c48757ac1f0aef95111a3d8",
+        "published_date": "2026-08-20T20:25:52Z",
+        "content_hash": "13062995909efc486befc55727488598f7ad4aa9e479a220bd031d62fe13a427"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[RFC PATCH] media: uvcvideo: compute frame buffer size in 64-bit arithmetic",
+      "url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-17T12:40:05Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260817123941.1701962-1-natalie.klaus@runtimeverification.com",
+        "url_hash": "826ff192ba1e6066668d17d968b80d07ff429d928a341d5990b89622e18bc45d",
+        "published_date": "2026-08-17T12:40:05Z",
+        "content_hash": "5d03a95f99110079e1de4d3a81122c4e5641f63076d8791281197245ecb10356"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "source": "Raspberry Pi libcamera Releases",
+      "published_date": "2026-08-17",
+      "cache_key": {
+        "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260817",
+        "url_hash": "f192384906d3541a4118b290dde30438c39610a7527d0e9e6eecdaa5365ab31b",
+        "published_date": "2026-08-17",
+        "content_hash": "7ff12e76739f328da65652012bf0d8ff351a7d04cfbefc969df2293267d7c3b8"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v7,01/47] libcamera: software_isp: init(): Fix documentation typo",
+      "url": "https://patchwork.libcamera.org/patch/27964/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-08-21",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/27964",
+        "url_hash": "676196c2c845a5a97473366a0f848e0efefbca0f4f7f6c627486eb09702e7093",
+        "published_date": "2026-08-21",
+        "content_hash": "70a6272be9ac8bfa8338858c3da447d3816e0274e114442dbeca9543cc965d17"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "source": "CameraX Release Notes",
+      "published_date": "August 12, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+        "url_hash": "69a4ac973b5e163eb095357dd7271ed1d7a44339b828c78660c473d743bd8a82",
+        "published_date": "August 12, 2026",
+        "content_hash": "ce4b09fba6b5baef54f077c0371f839089c4e7abb9ebc1021616847917e8e9b2"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

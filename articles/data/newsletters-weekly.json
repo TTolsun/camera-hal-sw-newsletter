@@ -1,5 +1,30 @@
 [
   {
+    "weeklyKey": "2026-W35",
+    "weekStartDate": "2026-08-24",
+    "weekEndDate": "2026-08-30",
+    "date": "2026-08-24",
+    "title": "2026 W35",
+    "summary": "Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점",
+    "html": "newsletters/2026-W35/index.html",
+    "md": "newsletters/2026-W35/newsletter.md",
+    "tags": [
+      "Driver",
+      "Image Processing",
+      "Camera HAL",
+      "Android"
+    ],
+    "article_count": 1,
+    "article_images": [
+      "assets/images/fallback/android.svg"
+    ],
+    "coverage_week_key": "2026-W34",
+    "coverage_start_date": "2026-08-17",
+    "coverage_end_date": "2026-08-23",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-08-24"
+  },
+  {
     "weeklyKey": "2026-W34",
     "weekStartDate": "2026-08-17",
     "weekEndDate": "2026-08-23",
