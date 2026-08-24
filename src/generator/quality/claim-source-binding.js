@@ -73,16 +73,17 @@ function sourceCandidateHash(candidate = {}) {
   return url ? normalizedUrlHash(url) : hashText(text(candidate.title || candidate.headline || 'unknown-candidate'), 16);
 }
 
+// 그룹마다 다른 접두를 준다. workflow 근거가 'release' 접두로 떨어지면 같은 페이지에서 나온
+// 릴리스 근거와 키를 나눠 쓰게 된다. 접두 자체가 그룹을 가르므로 release 메타를 따로 비울
+// 필요는 없다 — workflow 컨테이너를 내는 생산자(dated-article-index-resolver.js:510)는
+// source_extraction에 release를 아예 넣지 않아서 objectValue(extraction.release)가 이미 {}다.
 const SOURCE_EXTRACTION_SECTION_KEY_PREFIXES = {
   minor_line_context: 'minor',
   workflow: 'workflow'
 };
 
 function sectionKeyFromSourceExtraction(group, section = {}, extraction = {}) {
-  // workflow 컨테이너는 릴리스 노트가 아니라 산문 기사에서 뽑은 문단이라 version/date/component가
-  // 없다. release 메타를 섞으면 실제로는 그 컨테이너에 존재하지 않는 릴리스 값이 workflow 근거의
-  // 키에 들어가고, 같은 페이지의 릴리스 근거와 구분도 사라진다. 그래서 workflow는 섹션 자체 값만 쓴다.
-  const release = group === 'workflow' ? {} : objectValue(extraction.release);
+  const release = objectValue(extraction.release);
   const prefix = SOURCE_EXTRACTION_SECTION_KEY_PREFIXES[group] || 'release';
   const parts = [
     prefix,
