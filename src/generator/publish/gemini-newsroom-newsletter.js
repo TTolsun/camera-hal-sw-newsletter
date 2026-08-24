@@ -531,7 +531,11 @@ async function main() {
     const catchUpAfterReconciliation = admitReleaseClassCatchUpAfterReconciliation({
       selected: reconciledSelected,
       poolCandidates: shortlistReport.release_class_catch_up_pool,
-      reportedCandidates: reporter.candidates
+      reportedCandidates: reporter.candidates,
+      // 재조정이 방금 집행한 그 계획을 그대로 넘긴다. pool 후보도 reporter 입력에 있으면 계획의
+      // 채점 대상이라, 계획이 main에서 뺀 후보를 이 레인이 되살리면 coverage 권한(#724, 항상 ON)을
+      // 우회하게 된다. 두 단계가 같은 계획을 보게 해 그 경로 자체를 없앤다.
+      editorialPlanReport
     });
     const finalSelected = [...reconciledSelected, ...catchUpAfterReconciliation.admitted];
     const finalSelectedKeys = new Set(finalSelected.map(candidateKey));

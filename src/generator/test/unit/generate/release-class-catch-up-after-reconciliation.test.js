@@ -132,6 +132,8 @@ function runSecondPass(shortlistReport, editorialPlanReport, options = {}) {
     poolCandidates: shortlistReport.release_class_catch_up_pool,
     // reporter가 기사 본문을 쓴 후보 = shortlist에 오른 후보.
     reportedCandidates: options.reportedCandidates || shortlistReport.shortlisted_candidates,
+    // 재조정과 같은 편집 계획을 본다. 이걸 빼면 2차 pass가 계획 판정을 모르는 채로 승급한다.
+    editorialPlanReport,
     catchUpPolicy: CATCH_UP_POLICY
   });
   return {
@@ -328,6 +330,61 @@ test('the second pass does not resurrect a first-pass promotion that reconciliat
   assert.equal(secondPass.admitted.length, 0, '강등된 기사를 2차 pass가 되살리면 안 된다');
 });
 
+// --- 편집 계획 권한(#724) --------------------------------------------------
+//
+// pool 후보도 reporter 입력에 있으면 편집 계획의 채점 대상이다. 계획이 main이 아닌 등급을
+// 매긴 후보를 2차 pass가 다시 main으로 올리면, 재조정이 방금 집행한 판정을 catch-up 레인이
+// 되돌리는 게이트 우회가 된다. coverage 권한은 항상 ON이고 끄는 플래그가 없다.
+
+// planDemotingAllExcept에 pool 후보(릴리스) 채점을 얹는다. 결정론 main 후보만 채점하는
+// 기본 계획과 달리, 실제 계획은 shortlist에 오른 reserve 후보까지 채점한다.
+function planWithReleaseDecision(shortlistReport, keepUrls, coverageDecision) {
+  const plan = planDemotingAllExcept(shortlistReport, keepUrls);
+  plan.editorial_plans.push({
+    url: RELEASE_URL, coverage_decision: coverageDecision, impact_level: 'medium'
+  });
+  return plan;
+}
+
+test('the second pass skips a pool candidate the editorial plan scored as non-main', () => {
+  const shortlist = report([...maxedWeek(), releaseCandidate()]);
+  const keep = shortlist.primary_selected_articles[0].url;
+  const { reconciled, secondPass } = runSecondPass(
+    shortlist,
+    planWithReleaseDecision(shortlist, [keep], 'exclude')
+  );
+
+  assert.equal(reconciled.length, 1, '자리는 비어 있다 — 막는 것은 슬롯이 아니라 계획 판정이다');
+  assert.equal(secondPass.admitted.length, 0, '계획이 exclude로 채점한 후보를 되살리면 안 된다');
+  assert.equal(secondPass.observation.admitted, 0);
+});
+
+test('every non-main grade is a refusal, including one the schema does not know', () => {
+  // coverage_decision에는 enum이 없다(#909). 재조정은 main_article이 아닌 값을 전부
+  // "main 아님"으로 접으므로, 2차 pass도 같은 기준을 써야 두 단계가 갈라지지 않는다.
+  const shortlist = report([...maxedWeek(), releaseCandidate()]);
+  const keep = shortlist.primary_selected_articles[0].url;
+  for (const decision of ['short_mention', 'reference_only', 'defer_to_next_issue']) {
+    const { secondPass } = runSecondPass(shortlist, planWithReleaseDecision(shortlist, [keep], decision));
+    assert.equal(secondPass.admitted.length, 0, `${decision}은 main 등급이 아니다`);
+  }
+});
+
+test('a candidate the plan never scored keeps the deterministic lane decision', () => {
+  // 계획에 없는 것과 계획이 거절한 것은 다르다. reference 창 후보는 shortlisted_candidates에
+  // 오르지 않아 계획이 채점할 기회 자체가 없다 — 그 주에는 결정론 레인 판단을 그대로 쓴다.
+  const shortlist = report([...maxedWeek(), releaseCandidate()]);
+  const keep = shortlist.primary_selected_articles[0].url;
+  const plan = planDemotingAllExcept(shortlist, [keep]);
+  assert.ok(
+    !plan.editorial_plans.some(entry => entry.url === RELEASE_URL),
+    '이 계획은 릴리스를 채점하지 않는다'
+  );
+
+  const { secondPass } = runSecondPass(shortlist, plan);
+  assert.equal(secondPass.admitted.length, 1, '미채점 후보는 오늘 동작(승급)을 유지한다');
+});
+
 test('the per-issue release-class cap counts first-pass promotions that survived', () => {
   // 1차가 상한(1건)을 이미 쓴 주에는 2차 pass가 두 번째 릴리스를 올리지 않는다.
   const secondRelease = releaseCandidate({
@@ -368,6 +425,21 @@ test('the publish host runs the second pass after reconciliation resolves the ma
   assert.ok(
     secondPassIndex > reconcileIndex,
     '2차 pass는 재조정 뒤여야 한다 — 앞이면 1차와 같은 라인업을 보고 같은 결론을 낸다'
+  );
+});
+
+test('the publish host hands the second pass the same editorial plan reconciliation used', () => {
+  // 계획을 넘기지 않으면 2차 pass는 채점 결과를 모르는 채로 승급한다. 순수 함수 단위
+  // 테스트는 인자를 직접 넘기므로 전부 초록이고, 배선 누락은 여기서만 잡힌다.
+  const source = publishHostSource();
+  const callIndex = source.indexOf('admitReleaseClassCatchUpAfterReconciliation({');
+  assert.ok(callIndex > 0, '2차 pass 호출이 없다');
+  const callArguments = source.slice(callIndex, source.indexOf('});', callIndex));
+
+  assert.match(
+    callArguments,
+    /editorialPlanReport/,
+    '2차 pass가 편집 계획을 받아야 계획이 거절한 후보를 되살리지 않는다'
   );
 });
 

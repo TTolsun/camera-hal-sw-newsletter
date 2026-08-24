@@ -79,6 +79,10 @@ const {
   selectedHasSameCameraReleasePage
 } = require('./camera-release-notes');
 const {
+  buildCoverageLookup,
+  isPlannedNonMain
+} = require('./coverage-reconciliation');
+const {
   BUCKETS
 } = require('../../shared/domain/aosp-camera-scope');
 const {
@@ -847,10 +851,16 @@ function admitCatchUpCandidates({
 // 올리면 editor가 쓸 capsule이 없어 "selected에는 있는데 rendered에는 없는" 그룹이 생기고,
 // 커버리지 등식이 깨져 발행 전체가 diagnostics-only로 떨어진다. 재조정의 reserve 승급도 같은
 // 제약 아래 동작한다(reserve는 reporter 입력에 포함된다).
+//
+// editorialPlanReport는 재조정이 방금 집행한 그 계획이다. pool 후보도 reporter 입력에 있으면
+// 계획의 채점 대상이므로, 계획이 main이 아닌 등급을 매겨 재조정이 main에서 뺀 후보를 이 레인이
+// 다시 올리면 coverage 권한(#724, 항상 ON)을 우회하게 된다. 계획이 채점하지 않은 후보는 그대로
+// 둔다 — 계획에 없는 것과 계획이 거절한 것은 다른 사실이다.
 function admitReleaseClassCatchUpAfterReconciliation({
   selected = [],
   poolCandidates = [],
   reportedCandidates = [],
+  editorialPlanReport = null,
   catchUpPolicy = getCatchUpPolicy()
 } = {}) {
   const maxReleaseClassArticles = Number(catchUpPolicy?.maxReleaseClassArticles) || 0;
@@ -861,9 +871,11 @@ function admitReleaseClassCatchUpAfterReconciliation({
   const reportedUrls = new Set(ensureArray(reportedCandidates)
     .map(candidate => normalizeUrl(candidateUrl(candidate)))
     .filter(Boolean));
+  const coverageLookup = buildCoverageLookup(editorialPlanReport);
   const pool = laneEnabled
     ? ensureArray(poolCandidates)
       .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
+      .filter(candidate => !isPlannedNonMain(coverageLookup, candidate))
       .filter(candidate => reportedUrls.has(normalizeUrl(candidateUrl(candidate))))
     : [];
   const admission = admitCatchUpCandidates({

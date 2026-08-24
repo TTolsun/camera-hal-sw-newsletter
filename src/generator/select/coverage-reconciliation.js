@@ -102,6 +102,20 @@ function coverageFor(lookup, candidate) {
   return null;
 }
 
+// 편집 계획이 이 후보를 main이 아닌 등급으로 채점했는가.
+//
+// 채점이 없으면 false다 — "계획에 없다"와 "계획이 거절했다"는 다른 사실이고, 결정론 레인은
+// 계획의 침묵을 거절로 읽으면 안 된다(reconcileCoverage도 미채점 후보에는 결정론 tier를 그대로
+// 남긴다). 반대로 채점이 있으면 main_article 외의 값은 전부 "main 아님"이다 — coverage_decision에
+// enum이 없어(#909) 모르는 값도 main은 아니다.
+//
+// 조회는 coverageFor 하나만 쓴다. 재조정이 강등에 쓴 조회와 여기가 갈라지면, 재조정이 뺀 후보를
+// 뒤 단계가 "계획에 없다"고 잘못 읽어 다시 main으로 올릴 수 있다(#879 2차 pass).
+function isPlannedNonMain(lookup, candidate) {
+  const decision = String(coverageFor(lookup, candidate)?.coverage_decision || '').trim();
+  return decision !== '' && decision !== COVERAGE_MAIN;
+}
+
 function impactRank(entry) {
   return IMPACT_RANK[String(entry?.impact_level || '').toLowerCase()] || 0;
 }
@@ -265,7 +279,9 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
 
 module.exports = {
   reconcileCoverage,
+  buildCoverageLookup,
   isDeterministicallyMainEligible,
+  isPlannedNonMain,
   selectionSummaryFromSelected,
   candidateKey
 };
