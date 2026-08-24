@@ -521,9 +521,43 @@ test('both catch-up observations are persisted, not collapsed into one', () => {
     /shortlistReport\.release_class_catch_up_after_reconciliation = catchUpAfterReconciliation\.observation;/,
     '2차 관측을 별도 필드로 남겨야 1차 관측 계열(pool_size/admitted/blocked_reason)이 끊기지 않는다'
   );
-  assert.doesNotMatch(
-    source,
-    /shortlistReport\.release_class_catch_up =/,
-    '1차 관측을 덮어쓰면 지금까지 쌓인 주간 관측과 비교할 수 없다'
-  );
+});
+
+// #909 계약: attempt 단위 사실은 attempt 시작마다 결정론 시점 값으로 되돌려야 한다.
+// shortlistReport는 attempt 사이에 살아 있으므로, attempt 1이 2차 pass까지 돌고 attempt 2가
+// 그 앞에서 죽으면 직전 attempt의 승급 결과가 이번 실행 산출물로 커밋된다.
+test('the publish host resets the attempt-scoped catch-up state at the start of each attempt', () => {
+  const source = publishHostSource();
+  const loopIndex = source.indexOf('for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {');
+  const secondPassIndex = source.indexOf('shortlistReport.release_class_catch_up_after_reconciliation = catchUpAfterReconciliation.observation;');
+
+  assert.ok(loopIndex > 0, 'attempt 루프를 찾지 못했다');
+  assert.ok(secondPassIndex > loopIndex, '2차 pass 대입은 루프 안에 있다');
+
+  // 이 PR이 attempt-scoped로 만든 세 필드. 하나라도 빠지면 직전 attempt 값이 새어 나온다.
+  for (const reset of [
+    'shortlistReport.release_class_catch_up_after_reconciliation = null;',
+    'shortlistReport.catch_up_used_count = deterministicCatchUpUsedCount;',
+    'shortlistReport.catch_up_articles = deterministicCatchUpArticles;'
+  ]) {
+    const resetIndex = source.indexOf(reset);
+    assert.ok(resetIndex > loopIndex, `초기화가 attempt 루프 안에 없다: ${reset}`);
+    assert.ok(resetIndex < secondPassIndex, `초기화가 2차 pass 대입보다 뒤에 있다: ${reset}`);
+  }
+});
+
+test('the deterministic catch-up snapshot is captured before the attempt loop', () => {
+  // 루프 안에서 잡으면 직전 attempt가 덮어쓴 값을 "결정론 시점 값"으로 착각해 되돌리는
+  // 시늉만 하게 된다. pristineReserveCandidates가 루프 밖인 이유와 같다.
+  const source = publishHostSource();
+  const loopIndex = source.indexOf('for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {');
+
+  for (const snapshot of [
+    'const deterministicCatchUpUsedCount =',
+    'const deterministicCatchUpArticles ='
+  ]) {
+    const snapshotIndex = source.indexOf(snapshot);
+    assert.ok(snapshotIndex > 0, `스냅샷을 찾지 못했다: ${snapshot}`);
+    assert.ok(snapshotIndex < loopIndex, `스냅샷은 attempt 루프 밖이어야 한다: ${snapshot}`);
+  }
 });

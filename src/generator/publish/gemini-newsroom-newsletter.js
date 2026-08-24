@@ -446,6 +446,10 @@ async function main() {
   // 스냅샷이 앵커한다. 이 값들을 재조정 입력·publish_ready 기준으로 써서 attempt 간 멱등성을 지킨다.
   const pristineReserveCandidates = ensureArray(shortlistReport.reserve_candidates);
   const deterministicPublishReady = shortlistReport.publish_ready === true;
+  // #879: catch-up 목록은 attempt 안에서 2차 pass 결과로 덮인다. 결정론 시점 값(1차 승급분)을
+  // 루프 밖에서 잡아 둬야 attempt 시작 초기화가 직전 attempt 값이 아닌 결정론 값으로 되돌린다.
+  const deterministicCatchUpUsedCount = shortlistReport.catch_up_used_count;
+  const deterministicCatchUpArticles = shortlistReport.catch_up_articles;
 
   for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
     generationRunState.currentQualityAttempt = attempt;
@@ -454,6 +458,12 @@ async function main() {
     // 그래서 attempt 시작마다 비우고, 재조정이 실제로 돈 뒤에만 다시 채운다.
     shortlistReport.reconciliation_demoted_group_keys = [];
     shortlistReport.reconciliation_demoted_groups = [];
+    // #879: 2차 pass 결과도 같은 attempt 단위 사실이다. 관측은 아직 재판정하지 않았음을 뜻하는
+    // null로, catch-up 목록은 결정론 시점 값으로 되돌린다(1차 승급분은 이 attempt에서도 여전히
+    // 참이다). 빼먹으면 attempt 1의 승급 결과가 attempt 2의 산출물로 커밋된다.
+    shortlistReport.release_class_catch_up_after_reconciliation = null;
+    shortlistReport.catch_up_used_count = deterministicCatchUpUsedCount;
+    shortlistReport.catch_up_articles = deterministicCatchUpArticles;
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
     const reporterStage = `reporter attempt ${attempt}/${totalAttempts}`;
     const editorStage = `editor attempt ${attempt}/${totalAttempts}`;
