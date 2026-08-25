@@ -1,7 +1,8 @@
 'use strict';
 
 // Claude Blog(/blog)와 Anthropic News(/news) 같은 "인덱스 페이지 + 날짜 있는 개별 기사" 소스를
-// 공유하는 흐름 하나로 처리한다. 두 소스의 차이는 config({pathPrefix, origin})로만 받는다.
+// 공유하는 흐름 하나로 처리한다. 두 소스의 차이는 registry(news-sources.json)의 sourceUrl 하나이며,
+// 이 파일이 그 값에서 origin과 경로 접두사를 파생한다 — 같은 사실을 코드에 다시 적지 않는다.
 //
 // 목록 → 카드(Task 1) → 창 필터 → 우선순위 → bounded fetch(Task 3) → 개별 페이지 파싱(Task 2) → 후보.
 //
@@ -274,6 +275,31 @@ function prioritizeByWorkflowSignal(tierCards) {
 }
 
 /**
+ * registry entry의 sourceUrl에서 목록 origin과 경로 접두사를 파생한다. 후행 슬래시는 몇 개든
+ * 지운다 — 기사 URL을 `${origin}${pathPrefix}/${slug}`로 조립하고 카드 링크도 같은 접두사로
+ * 찾으므로, `/blog/`를 그대로 두면 링크 패턴이 `href="/blog//slug"`가 돼 카드가 한 건도 안
+ * 잡힌다. 하나만 지우면 `/blog//`(오타) 하나가 validate:config를 통과한 채 같은 0건으로
+ * 닫힌다. 같은 collect layer의 canonicalDocumentUrl도 `/\/+$/`로 지운다.
+ * sourceUrl이 없거나 절대 URL이 아니면 null을 돌려준다(기본 경로로 대신 도는 일은 없다).
+ *
+ * 슬래시를 지우고 나서 경로가 하나도 안 남는 sourceUrl(`https://claude.com`,
+ * `https://claude.com/`, `https://claude.com//`)도 같은 null이다. 빈 접두사를 돌려주면 파생은
+ * 성공한 것처럼 보여 아래 guard를 그냥 지나가지만, 링크 패턴이 `href="/([a-z0-9][a-z0-9-]*)"`로
+ * 줄어 한 세그먼트짜리 루트 링크만 매치한다 — 진짜 기사 `/blog/post-one`은 버려지고
+ * `/pricing`·`/careers` 같은 비기사 링크가 후보가 되는데 진단은 0건이라 운영자가 알 방법이 없다.
+ * validate:config의 isHttpUrl은 protocol만 보므로 이런 registry 값이 게이트를 통과한다.
+ */
+function deriveIndexLocation(sourceUrl) {
+  try {
+    const parsed = new URL(String(sourceUrl));
+    const pathPrefix = parsed.pathname.replace(/\/+$/, '');
+    return pathPrefix ? { origin: parsed.origin, pathPrefix } : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * 목록 페이지 html에서 날짜가 결속된 개별 기사 후보를 만든다. 인덱스 URL 자체는 절대
  * 후보가 되지 않는다(카드가 0건이어도 그냥 빈 배열).
  */
@@ -283,13 +309,30 @@ async function resolveDatedArticleIndexItems({
   fetchClient,
   now,
   lookbackDays,
-  config = {},
   onDiagnostic,
   onArticleCapCounts
 } = {}) {
   const emit = typeof onDiagnostic === 'function' ? onDiagnostic : noop;
-  const pathPrefix = config.pathPrefix || '/blog';
-  const origin = config.origin || '';
+
+  // 목록 주소의 정본은 registry(news-sources.json)의 sourceUrl 하나다. origin·경로를 호출부
+  // 상수로 또 들고 있으면 registry만 바꿨을 때 인덱스는 새 주소로 받고 카드 매칭과 기사 URL
+  // 조립은 옛 경로로 돈다 — 결과는 카드 0건(index_collection_failed)인데 진단이 가리키는
+  // 원인("마크업이 바뀌었다")이 실제 원인("registry와 코드가 갈라졌다")과 다르다.
+  const indexLocation = deriveIndexLocation(source.sourceUrl);
+  if (!indexLocation) {
+    // 기본 경로로 대신 돌면 엉뚱한 주소를 훑은 실패가 canonical_mismatch 같은 다른 사유로
+    // 기록돼, 여기서도 진단이 실제 원인을 못 가리킨다. 그래서 명시적으로 0건으로 닫는다.
+    emit({
+      kind: 'index_collection_failed',
+      url: String(source.sourceUrl || ''),
+      receivedBytes: 0,
+      limitedBy: '',
+      detail: 'dated article resolver could not derive the index origin and path from source.sourceUrl '
+        + '(registry entry has no absolute sourceUrl, or its sourceUrl has no path to scope the index scan to)'
+    });
+    return [];
+  }
+  const { origin, pathPrefix } = indexLocation;
   const parentUrl = `${origin}${pathPrefix}`;
 
   // 소스가 followed-source 레지스트리(requiresFetchClient: true)에 등록됐는데도 collector가

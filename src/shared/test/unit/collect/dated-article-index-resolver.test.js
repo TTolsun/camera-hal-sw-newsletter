@@ -14,7 +14,6 @@ const { readTextFixture } = require('../../helpers/fixture-loader');
 const ORIGIN = 'https://claude.com';
 const PATH_PREFIX = '/blog';
 const INDEX_URL = `${ORIGIN}${PATH_PREFIX}`;
-const CONFIG = { pathPrefix: PATH_PREFIX, origin: ORIGIN };
 
 // normalizeCandidate는 registry entry 수준의 source 필드를 읽는다(aosp-release-camera-changes.test.js와
 // 같은 패턴) — candidate.source는 이 객체를 그대로 들고 있다가 normalizeCandidate가 source.name 등을
@@ -93,7 +92,6 @@ async function runResolver({ html, fetchClient, over = {} }) {
     fetchClient,
     now: over.now || DEFAULT_NOW,
     lookbackDays: over.lookbackDays ?? 21,
-    config: CONFIG,
     onDiagnostic: over.onDiagnostic
   });
 }
@@ -441,13 +439,16 @@ test('a missing/invalid fetchClient is loud, not a silent empty array', async ()
     fetchClient: null,
     now: DEFAULT_NOW,
     lookbackDays: 21,
-    config: CONFIG,
     onDiagnostic: event => seen.push(event)
   });
   assert.deepEqual(items, []);
   const failures = seen.filter(event => event.kind === 'index_collection_failed');
   assert.equal(failures.length, 1,
     'fetchClient가 없다는 이유로 조용히 빈 배열만 돌려주면 배선 실수가 진단 없이 사라진다');
+  // 이 kind는 세 갈래(client 없음 / sourceUrl 파생 실패 / 마크업)가 공유한다. 운영자가
+  // `## Collector 실패` 절에서 보는 건 detail 문구뿐이라, 그게 갈래를 가리키는 유일한 신호다.
+  assert.match(failures[0].detail, /fetchClient/,
+    'detail이 갈래를 안 가리키면 세 원인이 같은 진단 한 줄로 뭉개진다');
 });
 
 test('falls back to the list-row date only when the canonical url matches exactly', async () => {
@@ -605,4 +606,168 @@ test('prioritizes a workflow-signal slug within its window tier even when the ar
     .filter(slug => fetched.includes(`${ORIGIN}${PATH_PREFIX}/${slug}`)).length;
   assert.ok(fetchedFillerCount < WORKFLOW_SIGNAL_FILLER_SLUGS.length,
     '신호 없는 filler 슬러그 중 최소 1건은 8건 컷 밖으로 밀려야 tie-break가 실제로 순서를 바꿨다고 말할 수 있다');
+});
+
+// ---- registry(news-sources.json)에서 목록 주소를 파생한다 ----
+
+// 목록 origin·경로가 이 resolver 바깥(followed-source 레지스트리)에 상수로 또 적혀 있으면,
+// registry의 sourceUrl만 바꿨을 때 인덱스는 새 주소로 받고 카드 매칭과 기사 URL 조립은 옛
+// 경로로 돈다. 결과는 카드 0건 -> index_collection_failed인데, 진단이 가리키는 원인
+// ("마크업이 바뀌었다")과 실제 원인("registry와 코드가 갈라졌다")이 다르다.
+// 아래 세 케이스는 전부 registry 상수(https://claude.com + /blog)와 겹치지 않는 주소다 —
+// 하드코딩으로 되돌리면 origin·경로가 모두 어긋나 카드 매칭부터 깨진다.
+function derivedIndexHtml(pathPrefix, slug, dateText) {
+  return `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">${dateText}</div>`
+    + `<a href="${pathPrefix}/${slug}">Derived title</a>`
+    + `</div>`;
+}
+
+// 경로 없는 sourceUrl이 무엇을 긁게 되는지 재현하는 목록이다. 카드 두 장 중 하나는 진짜
+// 기사(/blog/post-one), 하나는 사이트 루트의 비기사 링크(/pricing)다. pathPrefix가 빈 문자열로
+// 남으면 링크 패턴이 `href="/([a-z0-9][a-z0-9-]*)"`로 줄어 한 세그먼트짜리 루트 링크만 매치한다 —
+// 진짜 기사는 한 건도 안 잡히고 /pricing이 후보가 된다.
+function rootLinkIndexHtml() {
+  return `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">Aug 20, 2026</div>`
+    + `<a href="/blog/post-one">Real article</a>`
+    + `</div>`
+    + `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">Aug 20, 2026</div>`
+    + `<a href="/pricing">Pricing</a>`
+    + `</div>`;
+}
+
+for (const derivationCase of [
+  {
+    label: 'a two-segment path',
+    sourceUrl: 'https://example.test/x/y',
+    pathPrefix: '/x/y',
+    parentUrl: 'https://example.test/x/y'
+  },
+  {
+    label: 'a subdomain and an explicit port',
+    sourceUrl: 'https://news.example.test:8443/a/b',
+    pathPrefix: '/a/b',
+    parentUrl: 'https://news.example.test:8443/a/b'
+  },
+  {
+    // 후행 슬래시를 그대로 pathPrefix로 쓰면 링크 패턴이 `href="/blog//slug"`가 돼 카드가 0건이
+    // 되고, 기사 URL도 슬래시가 겹친다.
+    label: 'a trailing slash',
+    sourceUrl: 'https://example.test/blog/',
+    pathPrefix: '/blog',
+    parentUrl: 'https://example.test/blog'
+  },
+  {
+    // 슬래시를 하나만 지우면 오타 하나('/blog//')가 validate:config를 통과한 채 카드 0건으로
+    // 닫히고, 진단은 이 PR이 없애려던 바로 그 오해("markup이 깨졌다")를 다시 가리킨다.
+    label: 'repeated trailing slashes',
+    sourceUrl: 'https://example.test/blog//',
+    pathPrefix: '/blog',
+    parentUrl: 'https://example.test/blog'
+  },
+  // 아래 세 케이스는 파생이 "성공"해 보이지만 남는 경로가 없다. URL 파싱은 통과하고
+  // validate:config의 isHttpUrl도 protocol만 보므로 이런 registry 값이 게이트를 통과한다.
+  // 그대로 두면 사이트 루트를 긁어 /pricing 같은 비기사 링크를 후보로 만들면서 진단은 0건이다 —
+  // 이 저장소가 가장 싫어하는 실패(조용히 잘못된 내용을 수집)라 파생 실패와 같은 자리에서 닫는다.
+  {
+    label: 'no path at all',
+    sourceUrl: 'https://example.test',
+    closedByMissingPath: true
+  },
+  {
+    label: 'only a root slash',
+    sourceUrl: 'https://example.test/',
+    closedByMissingPath: true
+  },
+  {
+    label: 'only repeated root slashes',
+    sourceUrl: 'https://example.test//',
+    closedByMissingPath: true
+  }
+]) {
+  if (derivationCase.closedByMissingPath) {
+    test(`closes loudly when source.sourceUrl has ${derivationCase.label}`, async () => {
+      const indexHtml = rootLinkIndexHtml();
+      const fetched = [];
+      const seen = [];
+
+      const items = await resolveDatedArticleIndexItems({
+        html: indexHtml,
+        source: { id: 'claude-blog', name: 'Claude Blog', sourceUrl: derivationCase.sourceUrl },
+        fetchClient: withOnFetch(
+          makeClient({ indexHtml, indexUrl: 'https://example.test' }),
+          url => fetched.push(url)
+        ),
+        now: new Date('2026-08-22T00:00:00Z'),
+        lookbackDays: 21,
+        onDiagnostic: event => seen.push(event)
+      });
+
+      assert.deepEqual(fetched, [],
+        '경로 없는 sourceUrl로 fetch가 나갔다면 사이트 루트의 비기사 링크를 긁었다는 뜻이다');
+      assert.deepEqual(items, [],
+        '/pricing 같은 루트 링크가 후보로 나오면 이 소스는 기사가 아닌 것을 발행 후보로 올린다');
+      const failures = seen.filter(event => event.kind === 'index_collection_failed');
+      assert.equal(failures.length, 1,
+        '진단 0건이면 운영자가 registry 오타를 알 방법이 없다');
+      assert.match(failures[0].detail, /sourceUrl/,
+        'detail이 registry sourceUrl을 가리켜야 진단이 실제 원인을 가리킨다');
+      assert.match(failures[0].detail, /no path/,
+        'detail이 "경로가 없다"를 말해야 파생 실패·fetchClient 갈래와 구분된다');
+    });
+    continue;
+  }
+
+  test(`derives the index origin and path from source.sourceUrl with ${derivationCase.label}`, async () => {
+    const slug = 'derived-index-post';
+    const articleUrl = `${derivationCase.parentUrl}/${slug}`;
+    const indexHtml = derivedIndexHtml(derivationCase.pathPrefix, slug, 'Aug 20, 2026');
+    const articleHtml = minimalArticleHtml({ canonical: articleUrl, headerDateText: 'Aug 20, 2026' });
+    const fetched = [];
+
+    const items = await resolveDatedArticleIndexItems({
+      html: indexHtml,
+      source: { id: 'claude-blog', name: 'Claude Blog', sourceUrl: derivationCase.sourceUrl },
+      fetchClient: withOnFetch(
+        makeClient({ indexHtml, defaultArticleHtml: articleHtml }),
+        url => fetched.push(url)
+      ),
+      now: new Date('2026-08-22T00:00:00Z'),
+      lookbackDays: 21
+    });
+
+    assert.deepEqual(fetched, [articleUrl],
+      'fetch 대상이 registry sourceUrl에서 파생되지 않으면 하드코딩된 origin으로 나간다');
+    assert.equal(items.length, 1, '카드 매칭이 파생 pathPrefix를 따라가야 후보가 나온다');
+    assert.equal(items[0].url, articleUrl);
+    assert.equal(items[0].parentUrl, derivationCase.parentUrl);
+  });
+}
+
+test('closes loudly when the registry sourceUrl is missing instead of silently scanning /blog', async () => {
+  // sourceUrl이 없으면 파생할 근거가 없다. `config.pathPrefix || '/blog'` 같은 기본값이 남아
+  // 있으면 이 호출은 조용히 /blog를 훑어 엉뚱한 상대 URL로 fetch를 시도하고, 그 실패는
+  // canonical_mismatch 같은 다른 사유로 기록돼 진단이 실제 원인을 못 가리킨다.
+  const seen = [];
+  const fetched = [];
+  const items = await resolveDatedArticleIndexItems({
+    html: INDEX_HTML,
+    source: { id: 'claude-blog', name: 'Claude Blog' },
+    fetchClient: withOnFetch(makeClient(), url => fetched.push(url)),
+    now: DEFAULT_NOW,
+    lookbackDays: 21,
+    onDiagnostic: event => seen.push(event)
+  });
+
+  assert.deepEqual(items, []);
+  assert.deepEqual(fetched, [], 'sourceUrl이 없는데도 fetch가 나갔다면 기본 경로로 조용히 돌았다는 뜻이다');
+  const failures = seen.filter(event => event.kind === 'index_collection_failed');
+  assert.equal(failures.length, 1,
+    '기존 진단 어휘(index_collection_failed)로 명시적으로 닫아야 한다');
+  // kind만 맞고 detail이 fetchClient 갈래 문구면, 운영자는 배선을 뒤지느라 진짜 원인
+  // (registry에 절대 sourceUrl이 없다)에 못 닿는다 — 이 커밋의 유일한 정당화가 그것이다.
+  assert.match(failures[0].detail, /sourceUrl/,
+    'detail이 registry sourceUrl을 가리켜야 진단이 실제 원인을 가리킨다');
 });

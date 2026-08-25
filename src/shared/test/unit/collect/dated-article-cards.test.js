@@ -54,6 +54,30 @@ test('returns cards newest first, not in document order', () => {
   );
 });
 
+// pathPrefix는 이제 registry(news-sources.json)의 sourceUrl에서 파생된 값이라 정규식 메타문자가
+// 섞일 수 있다. 이스케이프 없이 정규식에 보간하면 '.'이 와일드카드로 돌아 남의 경로 앵커를 이
+// 소스의 카드로 조용히 오인식하고, 괄호는 캡처 그룹으로 읽혀 진짜 경로가 안 잡힌다.
+test('treats regex metacharacters in pathPrefix as literal path text', () => {
+  const decoy = '<div role="listitem"><div>Aug 18, 2026</div><a href="/blogXnew/post-one">Decoy</a></div>';
+  assert.deepEqual(parseDatedArticleCards(decoy, { pathPrefix: '/blog.new' }), [],
+    "'.'이 와일드카드로 도는 순간 남의 경로 앵커가 이 소스 카드로 둔갑한다");
+  assert.equal(datedArticleCardDiagnostics(decoy, { pathPrefix: '/blog.new' }).anchor_count, 0);
+
+  const dotted = '<div role="listitem"><div>Aug 18, 2026</div><a href="/blog.new/post-one">Real</a></div>';
+  assert.deepEqual(
+    parseDatedArticleCards(dotted, { pathPrefix: '/blog.new' }).map(card => card.slug),
+    ['post-one'],
+    '이스케이프가 진짜 경로 매칭까지 죽이면 안 된다'
+  );
+
+  const grouped = '<div role="listitem"><div>Aug 18, 2026</div><a href="/v1(beta)/news/post-two">Real</a></div>';
+  assert.deepEqual(
+    parseDatedArticleCards(grouped, { pathPrefix: '/v1(beta)/news' }).map(card => card.slug),
+    ['post-two'],
+    '괄호가 캡처 그룹으로 읽히면 이 앵커는 한 건도 안 잡힌다'
+  );
+});
+
 test('an index whose link markup changed reports collection failure, not an empty week', () => {
   const changed = '<div role="listitem"><div>Aug 18, 2026</div><a href="https://claude.com/blog/x">X</a></div>';
   assert.deepEqual(datedArticleCardDiagnostics(changed, { pathPrefix: '/blog' }).unresolved_slugs, []);
