@@ -623,6 +623,21 @@ function derivedIndexHtml(pathPrefix, slug, dateText) {
     + `</div>`;
 }
 
+// 경로 없는 sourceUrl이 무엇을 긁게 되는지 재현하는 목록이다. 카드 두 장 중 하나는 진짜
+// 기사(/blog/post-one), 하나는 사이트 루트의 비기사 링크(/pricing)다. pathPrefix가 빈 문자열로
+// 남으면 링크 패턴이 `href="/([a-z0-9][a-z0-9-]*)"`로 줄어 한 세그먼트짜리 루트 링크만 매치한다 —
+// 진짜 기사는 한 건도 안 잡히고 /pricing이 후보가 된다.
+function rootLinkIndexHtml() {
+  return `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">Aug 20, 2026</div>`
+    + `<a href="/blog/post-one">Real article</a>`
+    + `</div>`
+    + `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">Aug 20, 2026</div>`
+    + `<a href="/pricing">Pricing</a>`
+    + `</div>`;
+}
+
 for (const derivationCase of [
   {
     label: 'a two-segment path',
@@ -651,8 +666,60 @@ for (const derivationCase of [
     sourceUrl: 'https://example.test/blog//',
     pathPrefix: '/blog',
     parentUrl: 'https://example.test/blog'
+  },
+  // 아래 세 케이스는 파생이 "성공"해 보이지만 남는 경로가 없다. URL 파싱은 통과하고
+  // validate:config의 isHttpUrl도 protocol만 보므로 이런 registry 값이 게이트를 통과한다.
+  // 그대로 두면 사이트 루트를 긁어 /pricing 같은 비기사 링크를 후보로 만들면서 진단은 0건이다 —
+  // 이 저장소가 가장 싫어하는 실패(조용히 잘못된 내용을 수집)라 파생 실패와 같은 자리에서 닫는다.
+  {
+    label: 'no path at all',
+    sourceUrl: 'https://example.test',
+    closedByMissingPath: true
+  },
+  {
+    label: 'only a root slash',
+    sourceUrl: 'https://example.test/',
+    closedByMissingPath: true
+  },
+  {
+    label: 'only repeated root slashes',
+    sourceUrl: 'https://example.test//',
+    closedByMissingPath: true
   }
 ]) {
+  if (derivationCase.closedByMissingPath) {
+    test(`closes loudly when source.sourceUrl has ${derivationCase.label}`, async () => {
+      const indexHtml = rootLinkIndexHtml();
+      const fetched = [];
+      const seen = [];
+
+      const items = await resolveDatedArticleIndexItems({
+        html: indexHtml,
+        source: { id: 'claude-blog', name: 'Claude Blog', sourceUrl: derivationCase.sourceUrl },
+        fetchClient: withOnFetch(
+          makeClient({ indexHtml, indexUrl: 'https://example.test' }),
+          url => fetched.push(url)
+        ),
+        now: new Date('2026-08-22T00:00:00Z'),
+        lookbackDays: 21,
+        onDiagnostic: event => seen.push(event)
+      });
+
+      assert.deepEqual(fetched, [],
+        '경로 없는 sourceUrl로 fetch가 나갔다면 사이트 루트의 비기사 링크를 긁었다는 뜻이다');
+      assert.deepEqual(items, [],
+        '/pricing 같은 루트 링크가 후보로 나오면 이 소스는 기사가 아닌 것을 발행 후보로 올린다');
+      const failures = seen.filter(event => event.kind === 'index_collection_failed');
+      assert.equal(failures.length, 1,
+        '진단 0건이면 운영자가 registry 오타를 알 방법이 없다');
+      assert.match(failures[0].detail, /sourceUrl/,
+        'detail이 registry sourceUrl을 가리켜야 진단이 실제 원인을 가리킨다');
+      assert.match(failures[0].detail, /no path/,
+        'detail이 "경로가 없다"를 말해야 파생 실패·fetchClient 갈래와 구분된다');
+    });
+    continue;
+  }
+
   test(`derives the index origin and path from source.sourceUrl with ${derivationCase.label}`, async () => {
     const slug = 'derived-index-post';
     const articleUrl = `${derivationCase.parentUrl}/${slug}`;

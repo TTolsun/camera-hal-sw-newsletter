@@ -279,13 +279,21 @@ function prioritizeByWorkflowSignal(tierCards) {
  * 지운다 — 기사 URL을 `${origin}${pathPrefix}/${slug}`로 조립하고 카드 링크도 같은 접두사로
  * 찾으므로, `/blog/`를 그대로 두면 링크 패턴이 `href="/blog//slug"`가 돼 카드가 한 건도 안
  * 잡힌다. 하나만 지우면 `/blog//`(오타) 하나가 validate:config를 통과한 채 같은 0건으로
- * 닫힌다. 같은 collect layer의 canonicalContentUrl도 `/\/+$/`로 지운다.
+ * 닫힌다. 같은 collect layer의 canonicalDocumentUrl도 `/\/+$/`로 지운다.
  * sourceUrl이 없거나 절대 URL이 아니면 null을 돌려준다(기본 경로로 대신 도는 일은 없다).
+ *
+ * 슬래시를 지우고 나서 경로가 하나도 안 남는 sourceUrl(`https://claude.com`,
+ * `https://claude.com/`, `https://claude.com//`)도 같은 null이다. 빈 접두사를 돌려주면 파생은
+ * 성공한 것처럼 보여 아래 guard를 그냥 지나가지만, 링크 패턴이 `href="/([a-z0-9][a-z0-9-]*)"`로
+ * 줄어 한 세그먼트짜리 루트 링크만 매치한다 — 진짜 기사 `/blog/post-one`은 버려지고
+ * `/pricing`·`/careers` 같은 비기사 링크가 후보가 되는데 진단은 0건이라 운영자가 알 방법이 없다.
+ * validate:config의 isHttpUrl은 protocol만 보므로 이런 registry 값이 게이트를 통과한다.
  */
 function deriveIndexLocation(sourceUrl) {
   try {
     const parsed = new URL(String(sourceUrl));
-    return { origin: parsed.origin, pathPrefix: parsed.pathname.replace(/\/+$/, '') };
+    const pathPrefix = parsed.pathname.replace(/\/+$/, '');
+    return pathPrefix ? { origin: parsed.origin, pathPrefix } : null;
   } catch {
     return null;
   }
@@ -320,7 +328,7 @@ async function resolveDatedArticleIndexItems({
       receivedBytes: 0,
       limitedBy: '',
       detail: 'dated article resolver could not derive the index origin and path from source.sourceUrl '
-        + '(registry entry has no absolute sourceUrl)'
+        + '(registry entry has no absolute sourceUrl, or its sourceUrl has no path to scope the index scan to)'
     });
     return [];
   }
