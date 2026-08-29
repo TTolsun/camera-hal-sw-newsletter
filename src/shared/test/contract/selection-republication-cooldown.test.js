@@ -10,6 +10,8 @@ const {
   buildShortlistReport,
   policyPrimaryCandidate
 } = require('../helpers/selection-builders');
+const { buildSelectionReport } = require('../../../generator/publish/orchestrator-report-builders');
+const { selectionStatusExtra } = require('../../../generator/publish/orchestrator-status-builders');
 
 const ISSUE_DATE = '2026-05-10';
 
@@ -170,6 +172,35 @@ test('the cooldown filter does not narrow the shared main article score gate', (
   // 이력 사유를 그 필드에 섞으면 이 이슈와 무관한 판정까지 함께 좁아진다.
   assert.equal(blocked.main_article_score_eligible, true);
   assert.deepEqual(blocked.score_filter_reasons, []);
+});
+
+test('the republication block reaches the committed selection-report.json', () => {
+  // 선례(#838, release_class_catch_up): 전체 shortlistReport가 담기는
+  // shortlisted-candidates.json은 커밋되지 않는다. 이 투영을 통과해야만 과차단이 시작됐는지를
+  // 다음 run에서 커밋 이력만으로 판정할 수 있다.
+  const blockedUrl = candidateUrlAt(0);
+  const shortlist = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {
+    exposureHistory: historyWith([
+      publishedRecord(blockedUrl, { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' })
+    ])
+  });
+
+  const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
+  assert.deepEqual(selectionReport.republication_cooldown_blocked, {
+    count: 1,
+    urls: [blockedUrl]
+  });
+});
+
+test('a run that blocks nothing reports zero rather than nothing', () => {
+  // 관측 누락(null)과 "아무것도 막지 않음"(count 0)이 같은 값으로 접히면, 게이트가 죽어도
+  // 정상 출력처럼 보인다.
+  const shortlist = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {
+    exposureHistory: historyWith([])
+  });
+
+  const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
+  assert.deepEqual(selectionReport.republication_cooldown_blocked, { count: 0, urls: [] });
 });
 
 function tempRootWithHistory(history) {

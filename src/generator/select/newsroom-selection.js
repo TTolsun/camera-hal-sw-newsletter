@@ -1158,6 +1158,14 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       admitted: releaseClassObservation.admitted,
       blocked_reason: releaseClassBlockedReason(releaseClassObservation)
     },
+    // 재게재 차단은 exclusion_reason_summary에도 실리지만 그쪽은 상위 10개로 잘린다(사유 하나에
+    // 후보 1~2건이면 늘 뒤로 밀린다). 선례(#838의 release_class_catch_up)와 같은 이유로 전용
+    // 자리를 둔다: 전체 shortlistReport가 담기는 shortlisted-candidates.json은 커밋되지 않으므로,
+    // 이 값이 selection-report.json까지 가야 과차단을 커밋 이력만으로 판정할 수 있다.
+    republication_cooldown_blocked: {
+      count: cooldownFiltered.blocked.length,
+      urls: cooldownFiltered.blocked.map(candidate => text(candidate.url)).filter(Boolean)
+    },
     catch_up_used_count: catchUpSelected.length,
     catch_up_articles: catchUpSelected.map(item => ({
       title: item.title, url: item.url, catch_up_age_days: item.catch_up_age_days,
