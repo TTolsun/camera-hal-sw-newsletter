@@ -18,6 +18,7 @@ const {
   NEWSLETTER_ARTICLE_COOLDOWN_DAYS
 } = require('../../../generator/reporter/article-exposure-history');
 const { normalizeArticleUrl } = require('../../common/article-identity');
+const { selectionWarnings } = require('../../../generator/select/selection-composition-gates');
 
 const ISSUE_DATE = '2026-05-10';
 
@@ -486,6 +487,27 @@ test('a bucket that collection never delivered still gets its parser hint', () =
   assert.equal(report.republication_cooldown_blocked.count, 0);
   assert.ok(report.selection_shortage_hints.some(hint => PARSER_REPAIR_HINT.test(hint)));
   assert.ok(report.source_parser_hints.some(hint => hint.code === 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR'));
+});
+
+test('a record without a publish date does not leave the cooldown warning dangling', () => {
+  // recorder는 newsletter_article_date를 항상 채우지만, 그 필드가 생기기 전에 쓰인 레코드는
+  // cooldown_until만 갖고 있다. 그때 문구가 "last published "로 끊기면 읽는 사람이 값이 빈
+  // 것인지 문장이 잘린 것인지 구별할 수 없다. 차단 판정 자체는 cooldown_until만으로 성립하므로
+  // 막는 것은 맞고, 모르는 것은 모른다고 써야 한다.
+  const legacyHistory = historyWith([{
+    article_identity_key: `url:${candidateUrlAt(0)}`,
+    exposure_type: 'newsletter_article',
+    newsletter_date: '2026-05-03',
+    cooldown_until: '2026-05-24'
+  }]);
+
+  const warnings = selectionWarnings(
+    [{ title: 'CameraX release notes update', source_url: candidateUrlAt(0) }],
+    { exposureHistory: legacyHistory, date: ISSUE_DATE }
+  );
+
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /last published date unknown$/);
 });
 
 const POOL_SUFFICIENCY_HINT = /Collect enough eligible candidates/;

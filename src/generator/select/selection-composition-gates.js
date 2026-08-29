@@ -49,8 +49,10 @@ function selectionWarnings(selected, options = {}) {
     // 이슈 date 기준으로 판정해야 리플레이·carry 실행에서 같은 입력이 같은 경고를 낸다.
     const annotated = annotateArticleExposure(article, options.exposureHistory, { date: options.date });
     if (annotated.published_within_cooldown) {
+      // newsletter_article_date가 생기기 전 레코드는 cooldown_until만 갖는다. 차단은 그것만으로
+      // 성립하지만 발행일은 모르므로, 문장이 "last published "로 끊기지 않게 모른다고 쓴다.
       warnings.push(
-        `repeated_event_within_cooldown: "${article.title || article.headline || article.article_identity_key}" — last published ${annotated.last_newsletter_date}`
+        `repeated_event_within_cooldown: "${article.title || article.headline || article.article_identity_key}" — last published ${annotated.last_newsletter_date || 'date unknown'}`
       );
     }
   }
