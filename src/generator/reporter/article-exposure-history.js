@@ -4,11 +4,15 @@ const path = require('path');
 
 const {
   articleIdentityKey,
+  normalizeArticleUrl,
   sourceUrl
 } = require('../../shared/common/article-identity');
 
 const EXPOSURE_HISTORY_REL_PATH = path.join('state', 'article-exposure-history.json');
 const SCHEMA_VERSION = 1;
+// main 기사로 발행된 URL의 재게재 쿨다운(일). 이 모듈이 cooldown_until을 계산하고 판정하므로
+// 값도 여기 한 곳에만 둔다 — 호출부가 각자 21을 적으면 사본이 늘고 조용히 어긋난다.
+const NEWSLETTER_ARTICLE_COOLDOWN_DAYS = 21;
 
 function text(value) {
   return String(value || '').trim();
@@ -132,7 +136,7 @@ function recordArticleExposure(history, article = {}, options = {}) {
     exposed_at: text(options.exposedAt || options.date || article.selected_at || todayDate())
   };
   if (exposureType === 'newsletter_article' && newsletterDate) {
-    record.cooldown_until = addDays(newsletterDate, Number(options.cooldownDays) || 21);
+    record.cooldown_until = addDays(newsletterDate, Number(options.cooldownDays) || NEWSLETTER_ARTICLE_COOLDOWN_DAYS);
   }
   record.first_exposed_at = record.exposed_at;
   record.last_exposed_at = record.exposed_at;
@@ -164,15 +168,33 @@ function recordArticleExposure(history, article = {}, options = {}) {
   return normalized;
 }
 
+// editor section을 그대로 기록하면 identity가 붕괴한다. section의 출처는 sources 배열이라
+// articleIdentityKey의 url: 경로에 걸리지 않고, contentHash가 보는 7개 필드(title/summary/...)도
+// 전부 비어 join 결과가 상수가 된다 — 내용과 무관하게 모든 section이 같은 키를 낸다.
+//
+// 그래서 section을 축으로 두고 identity만 후보에서 가져온다. 후보는 이미 decorateCandidate가 붙인
+// article_identity_key(url: 공간)를 갖고 있으므로, 발행 기록이 다음 주 후보와 같은 공간에 남는다.
+// 후보를 못 찾으면 section의 소스 URL로 같은 url: 키를 직접 만든다.
+//
+// 축을 editor.sections로 두는 것은 의도한 선택이다. weekly merge가 section을 reject하면 발행되지
+// 않은 기사가 기록될 수 있지만, 발행이 주 1회라 과기록의 실질 차이가 거의 없다. 반대로
+// weeklyFinalArticles와 분기하면 기록 축이 둘로 갈라져 어느 쪽이 정본인지 알 수 없게 된다.
+function newsletterArticleExposure(section, selectedArticles) {
+  const url = text(section.source_candidate_url) || text(ensureArray(section.sources)[0]?.url);
+  const key = normalizeArticleUrl(url);
+  return ensureArray(selectedArticles).find(item => normalizeArticleUrl(sourceUrl(item)) === key) ||
+    { canonical_url: url, title: text(section.headline) };
+}
+
 function recordNewsletterArticles(history, sections = [], options = {}) {
   let current = normalizeExposureHistory(history, options.date || todayDate());
   for (const section of ensureArray(sections)) {
     if (!section || typeof section !== 'object') continue;
-    current = recordArticleExposure(current, section, {
+    current = recordArticleExposure(current, newsletterArticleExposure(section, options.selectedArticles), {
       date: options.date,
       type: 'newsletter_article',
       newsletterUrl: options.newsletterUrl,
-      cooldownDays: options.cooldownDays || 21
+      cooldownDays: options.cooldownDays || NEWSLETTER_ARTICLE_COOLDOWN_DAYS
     });
   }
   return current;
@@ -237,6 +259,7 @@ function everCoveredAsNewsletterArticle(identityKey, history = {}) {
 
 module.exports = {
   EXPOSURE_HISTORY_REL_PATH,
+  NEWSLETTER_ARTICLE_COOLDOWN_DAYS,
   annotateArticleExposure,
   dedupeByArticleIdentity,
   everCoveredAsNewsletterArticle,

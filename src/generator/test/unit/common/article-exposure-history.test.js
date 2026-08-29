@@ -191,16 +191,68 @@ test('annotateArticleExposure does not set published_within_cooldown when cooldo
   assert.strictEqual(annotated.last_newsletter_date, null);
 });
 
-test('recordNewsletterArticles records all sections with newsletter_article type', () => {
+// 입력 모양이 곧 계약이다. 실제 호출부(orchestrator-terminal-contracts)가 넘기는 것은 후보가
+// 아니라 editor.sections이므로 fixture도 그 모양이어야 한다. 후보 모양({title, source_url})
+// fixture는 identity 붕괴 버그를 그대로 통과시켰다.
+function editorSection(headline, url) {
+  return {
+    headline,
+    sources: [{ title: headline, url }],
+    source_candidate_url: url,
+    article_sections: { background: '기사 본문' }
+  };
+}
+
+test('recordNewsletterArticles records editor sections in the candidate url identity space', () => {
   let history = { schemaVersion: 1, coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false }, articles: [] };
   const sections = [
-    { title: 'Article A', source_url: 'https://example.com/a' },
-    { title: 'Article B', source_url: 'https://example.com/b' }
+    editorSection('CameraX 1.7.0-alpha03', 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03'),
+    editorSection('libcamera control serializer fix', 'https://patchwork.libcamera.org/patch/27507/')
   ];
+
   history = recordNewsletterArticles(history, sections, { date: '2026-06-03', cooldownDays: 21 });
+
   assert.equal(history.articles.length, 2);
   assert.ok(history.articles.every(a => a.exposure_type === 'newsletter_article'));
   assert.ok(history.articles.every(a => a.cooldown_until === '2026-06-24'));
+  assert.deepEqual(history.articles.map(a => a.article_identity_key).sort(), [
+    'url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03',
+    'url:https://patchwork.libcamera.org/patch/27507'
+  ]);
+  assert.ok(history.articles.every(a => a.title));
+  assert.ok(history.articles.every(a => a.source_url));
+});
+
+test('recordNewsletterArticles falls back to the first section source when source_candidate_url is absent', () => {
+  let history = { schemaVersion: 1, coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false }, articles: [] };
+  const section = editorSection('libcamera EGLDisplay caching', 'https://patchwork.libcamera.org/patch/27496/');
+  delete section.source_candidate_url;
+
+  history = recordNewsletterArticles(history, [section], { date: '2026-06-03', cooldownDays: 21 });
+
+  assert.equal(history.articles.length, 1);
+  assert.equal(history.articles[0].article_identity_key, 'url:https://patchwork.libcamera.org/patch/27496');
+});
+
+test('recordNewsletterArticles takes identity from the matching selected candidate', () => {
+  let history = { schemaVersion: 1, coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false }, articles: [] };
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03';
+  const selectedArticles = [{
+    article_identity_key: 'url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03',
+    title: 'CameraX 1.7.0-alpha03 release notes',
+    canonical_url: url
+  }];
+
+  history = recordNewsletterArticles(history, [editorSection('CameraX 1.7.0-alpha03', url)], {
+    date: '2026-06-03',
+    cooldownDays: 21,
+    selectedArticles
+  });
+
+  assert.equal(history.articles.length, 1);
+  assert.equal(history.articles[0].article_identity_key, selectedArticles[0].article_identity_key);
+  assert.equal(history.articles[0].title, 'CameraX 1.7.0-alpha03 release notes');
+  assert.equal(history.articles[0].source_url, url);
 });
 
 test('everCoveredAsNewsletterArticle is true for any newsletter_article record ignoring cooldown', () => {
