@@ -7,6 +7,9 @@ const {
 const {
   validateCandidateEvidence
 } = require('../../../validate-candidate-evidence');
+const {
+  extractSourceFacts
+} = require('../../../extract-source-facts');
 
 function candidate(index, overrides = {}) {
   return {
@@ -207,4 +210,71 @@ test('source gap risk stays blocked even when source fetch fails', () => {
   assert.equal(item.final_selection_blocked, true);
   assert.equal(item.evidence_validation_status, 'blocked');
   assert.ok(item.reasons.includes('source_gap_risk=true'));
+});
+
+// 같은 기사 URL이 registry 수집본과 gemini 발견본으로 두 번 들어오는 일은 상시로 일어난다.
+// 두 사본은 id가 다르므로(수집본은 id 자체가 없다) 예전에는 서로 다른 후보로 세어졌고,
+// 근거 수집 cap 12를 같은 URL이 두 칸씩 먹어 다른 출처가 밀려났다.
+// cap은 "서로 다른 출처 몇 개를 확인할 것인가"를 세는 값이어야 한다.
+test('evidence fetch cap counts distinct source urls, not duplicate candidate records', () => {
+  const duplicatedUrlCount = 4;
+  const singleUrlCount = 8;
+  const candidates = [];
+  for (let index = 0; index < duplicatedUrlCount; index += 1) {
+    const url = `https://example.com/duplicated-${index}`;
+    candidates.push(candidate(`registry-${index}`, {
+      id: undefined,
+      url,
+      origin: 'source_registry',
+      source_quality_score: 0.9
+    }));
+    candidates.push(candidate(`gemini-${index}`, {
+      id: `gemini-${index}`,
+      url,
+      origin: 'gemini_discovery',
+      source_quality_score: 0.9
+    }));
+  }
+  for (let index = 0; index < singleUrlCount; index += 1) {
+    candidates.push(candidate(`single-${index}`, {
+      id: `single-${index}`,
+      url: `https://example.com/single-${index}`,
+      source_quality_score: 0.8
+    }));
+  }
+
+  const targets = selectEvidenceFetchTargets(candidates, { clusters: [] }, { maxTargets: 12 });
+  const distinctUrls = new Set(targets.map(item => item.url));
+
+  // 서로 다른 URL 12개를 전부 확인할 수 있어야 한다. 중복 사본이 칸을 먹으면 8개에서 멈춘다.
+  assert.equal(distinctUrls.size, duplicatedUrlCount + singleUrlCount);
+
+  // 사본을 버리지는 않는다. 버리면 그 사본의 id로 근거를 조회할 때 fact가 없어
+  // not_checked 로 조용히 통과하는 구멍이 그대로 남는다.
+  assert.equal(targets.length, candidates.length);
+
+});
+
+test('duplicate candidate records share one fetch and still each get their own fact', async () => {
+  const url = 'https://example.com/duplicated';
+  const registryCopy = candidate('registry', { id: undefined, url, origin: 'source_registry' });
+  const geminiCopy = candidate('gemini', { id: 'gemini-duplicated', url, origin: 'gemini_discovery' });
+  const requestedUrls = [];
+  const fetchImpl = async requestedUrl => {
+    requestedUrls.push(requestedUrl);
+    return { ok: true, text: async () => 'source evidence body' };
+  };
+
+  const facts = await extractSourceFacts([registryCopy, geminiCopy], { fetch: true, fetchImpl });
+
+  // 원문은 한 번만 받는다.
+  assert.deepEqual(requestedUrls, [url]);
+  // 그래도 사본마다 fact가 하나씩 나온다.
+  assert.equal(facts.sources.length, 2);
+  assert.ok(facts.sources.every(source => source.source_fetch_status === 'success'));
+
+  const evidence = validateCandidateEvidence([registryCopy, geminiCopy], facts, { newsletterDate: '2026-05-16' });
+  const notChecked = evidence.report.candidates.filter(item => item.evidence_validation_status === 'not_checked');
+
+  assert.deepEqual(notChecked.map(item => item.url), []);
 });

@@ -50,19 +50,26 @@ async function extractSourceFacts(candidates = [], options = {}) {
   const fetchImpl = options.fetchImpl || globalThis.fetch;
   const shouldFetch = options.fetch === true;
   const sources = [];
+  // 같은 기사 URL이 수집본과 발견본으로 두 번 들어온다. 사본마다 fact를 만들어야 하지만
+  // 원문을 두 번 받아올 이유는 없으므로 실행 안에서 URL당 한 번만 받는다.
+  const fetchedByUrl = new Map();
   for (const candidate of candidates) {
     let fetchedText = '';
     let sourceFetchStatus = 'skipped';
     let sourceFetchError = '';
-    if (shouldFetch && fetchImpl && candidateUrl(candidate)) {
-      try {
-        fetchedText = await fetchTextWithLimit(fetchImpl, candidateUrl(candidate), options);
-        sourceFetchStatus = 'success';
-      } catch (error) {
-        fetchedText = '';
-        sourceFetchStatus = 'failed';
-        sourceFetchError = error.message;
+    const url = candidateUrl(candidate);
+    if (shouldFetch && fetchImpl && url) {
+      if (!fetchedByUrl.has(url)) {
+        try {
+          fetchedByUrl.set(url, { text: await fetchTextWithLimit(fetchImpl, url, options), status: 'success', error: '' });
+        } catch (error) {
+          fetchedByUrl.set(url, { text: '', status: 'failed', error: error.message });
+        }
       }
+      const fetched = fetchedByUrl.get(url);
+      fetchedText = fetched.text;
+      sourceFetchStatus = fetched.status;
+      sourceFetchError = fetched.error;
     }
     sources.push(buildFact(candidate, {
       fetchedText,

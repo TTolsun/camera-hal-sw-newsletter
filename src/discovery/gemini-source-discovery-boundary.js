@@ -1036,12 +1036,27 @@ function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options
     return canonicalRefs.has(`url:${candidateUrl(candidate)}`) ||
       canonicalRefs.has(`title:${candidateTitle(candidate)}`);
   }
+  // 같은 기사 URL이 registry 수집본과 gemini 발견본으로 두 번 들어온다. 수집본은 id가 없고
+  // 발견본은 `gemini-…` id를 달고 있어서 candidateKey로 묶으면 서로 다른 후보가 된다.
+  // cap은 "서로 다른 출처를 몇 개 확인할 것인가"를 세는 값이므로 URL로 묶는다.
+  // URL이 없는 후보만 candidateKey로 물러난다.
+  function groupKey(candidate) {
+    return normalizedCandidateUrlForFeedback(candidate) || candidateKey(candidate);
+  }
   function add(candidate, canonical = false) {
-    const key = candidateKey(candidate);
+    const key = groupKey(candidate);
     if (!key) return;
     const existing = targetMap.get(key);
+    // 사본을 버리면 그 사본의 id로 근거를 조회할 때 fact가 없어 not_checked 로 조용히
+    // 통과한다. 그래서 대표 하나만 남기지 않고 같은 URL의 사본을 전부 들고 간다.
+    // 자격 통과 loop와 canonical loop가 같은 후보를 두 번 부르므로 중복 적재는 막는다.
+    const members = existing?.members || [];
+    if (!members.some(member => candidateKey(member) === candidateKey(candidate))) {
+      members.push(candidate);
+    }
     targetMap.set(key, {
-      candidate,
+      candidate: existing?.candidate || candidate,
+      members,
       isCanonical: canonical || existing?.isCanonical === true
     });
   }
@@ -1063,12 +1078,12 @@ function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options
 
   return [...targetMap.values()]
     .map(item => ({
-      candidate: item.candidate,
+      members: item.members,
       priority: evidencePriority(item.candidate, item.isCanonical)
     }))
     .sort(compareEvidenceTargets)
     .slice(0, maxTargets)
-    .map(item => item.candidate);
+    .flatMap(item => item.members);
 }
 
 function writeSeedOnlySourceDiscoveryResult({

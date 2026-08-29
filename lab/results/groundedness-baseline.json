@@ -1,0 +1,478 @@
+{
+  "metric": "FC-2 groundedness",
+  "definition": "main 기사의 출처 중 source_fetch_used=true 이고 supported_claims>0 인 후보가 하나 이상 있는가",
+  "window_since": "2026-06-21",
+  "window_until": "2026-08-24",
+  "totals": {
+    "issues": 12,
+    "articles": 30,
+    "grounded": 16,
+    "ungrounded": 14,
+    "unjoined": 0
+  },
+  "ungrounded_ratio": 0.4667,
+  "issues": [
+    {
+      "date": "2026-06-21",
+      "quality_score": 96,
+      "quality_status": "PASS",
+      "article_count": 3,
+      "grounded_count": 1,
+      "ungrounded_count": 2,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "Linux 커널 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가 패치 v10 제출",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/ajzcts5motmfbmmz@kekkonen.localdomain"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "Sony IMX576 이미지 센서용 V4L2 드라이버 추가 패치 v2 제출",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260620132749.ge3552167@killaraus.ideasonboard.com"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        },
+        {
+          "headline": "GCC 16 신규 기능 공개: 템플릿 오류 메시지 개선 및 SARIF 표준 출력 지원",
+          "source_urls": [
+            "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-06-22",
+      "quality_score": 96,
+      "quality_status": "PASS",
+      "article_count": 3,
+      "grounded_count": 3,
+      "ungrounded_count": 0,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/ajzcts5motmfbmmz@kekkonen.localdomain"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260620132749.ge3552167@killaraus.ideasonboard.com"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "GCC 16 릴리스 예정: 템플릿 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+          "source_urls": [
+            "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-06-24",
+      "quality_score": 97,
+      "quality_status": "PASS",
+      "article_count": 2,
+      "grounded_count": 2,
+      "ungrounded_count": 0,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "Android CLI에 CameraX 마이그레이션 스킬 추가, 앱 호환성 검증 지원",
+          "source_urls": [
+            "https://developer.android.com/tools/agents/android-cli#skills-add"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "GCC 16 컴파일러 릴리스 임박, 개선된 오류 메시지 및 SARIF 정적 분석 도입",
+          "source_urls": [
+            "https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-06-29",
+      "quality_score": 94,
+      "quality_status": "PASS",
+      "article_count": 2,
+      "grounded_count": 2,
+      "ungrounded_count": 0,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "Linux V4L2 서브디바이스 패드 작업에 v4l2_subdev_client_info 포인터 추가 제안",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/aketov7zdedape15@kekkonen.localdomain"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "sailus-media-tree 개발 브랜치에서 cvs_csi_set_fmt 함수 파라미터 설명 누락 경고 발생",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/202606291022.4zxe8dz4-lkp@intel.com"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "quality_score": 94,
+      "quality_status": "PASS",
+      "article_count": 3,
+      "grounded_count": 3,
+      "ungrounded_count": 0,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "CameraX 1.7.0-alpha02 공개: GPU 기반 이미지 분석 및 야간 모드 상태 모니터링 API 도입",
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "libcamera 패치 제안: 센서 시퀀스 제어를 위한 SensorSequence 메타데이터 컨트롤 추가",
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/27198"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "LLVM/Clang 빌드 환경에서 발생하는 dw2102 미디어 드라이버 버퍼 오버플로우 수정 패치",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-07-13",
+      "quality_score": 94,
+      "quality_status": "PASS",
+      "article_count": 3,
+      "grounded_count": 0,
+      "ungrounded_count": 3,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "Qualcomm CAMSS 오프라인 프로세싱 엔진(OPE) 드라이버 추가 제안",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        },
+        {
+          "headline": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가",
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/27346"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "metadata_only fetch=false supported=0"
+          ]
+        },
+        {
+          "headline": "Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 릴리스",
+          "source_urls": [
+            "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1+rpt20260609"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-07-20",
+      "quality_score": 97,
+      "quality_status": "PASS",
+      "article_count": 1,
+      "grounded_count": 0,
+      "ungrounded_count": 1,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "libcamera: IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안",
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/27362"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "metadata_only fetch=false supported=0"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-07-27",
+      "quality_score": 93,
+      "quality_status": "PASS",
+      "article_count": 5,
+      "grounded_count": 0,
+      "ungrounded_count": 5,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "Qualcomm CAMSS, raw Bayer를 YUV로 변환하는 OPE(Offline Processing Engine) 드라이버 추가 패치 제안",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        },
+        {
+          "headline": "Himax HM1092 단색 적외선(IR) 센서 지원을 위한 신규 V4L2 드라이버 패치 공개",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        },
+        {
+          "headline": "libcamera, 제어 직렬화기(Control Serializer) 크기 및 입력 유효성 검사 강화 패치 제안",
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/27507"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "metadata_only fetch=false supported=0"
+          ]
+        },
+        {
+          "headline": "libcamera, 불필요한 초기화 방지를 위한 EGLDisplay 캐싱 최적화 패치 제안",
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/27496"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "metadata_only fetch=false supported=0"
+          ]
+        },
+        {
+          "headline": "Samsung S5KJN5 50MP 이미지 센서 지원을 위한 독립형 V4L2 드라이버 패치 제안",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-03",
+      "quality_score": 94,
+      "quality_status": "PASS",
+      "article_count": 4,
+      "grounded_count": 3,
+      "ungrounded_count": 1,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "Himax HM1092 흑백 근적외선(NIR) 센서용 V4L2 드라이버 패치 v6 공개",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-10",
+      "quality_score": 96,
+      "quality_status": "PASS",
+      "article_count": 2,
+      "grounded_count": 1,
+      "ungrounded_count": 1,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        },
+        {
+          "headline": "Sony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)",
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "quality_score": 94,
+      "quality_status": "PASS",
+      "article_count": 1,
+      "grounded_count": 1,
+      "ungrounded_count": 0,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 대대적 개편 및 멀티 카메라 ZSL HAL 충돌 수정",
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          ],
+          "joined": true,
+          "grounded": true,
+          "evidence": [
+            "source_fetch fetch=true supported=1"
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-08-24",
+      "quality_score": 97,
+      "quality_status": "PASS",
+      "article_count": 1,
+      "grounded_count": 0,
+      "ungrounded_count": 1,
+      "unjoined_count": 0,
+      "articles": [
+        {
+          "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 릴리스: Linux 카메라 파이프라인의 안정성 강화 및 HAL 엔지니어를 위한 시사점",
+          "source_urls": [
+            "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2+rpt20260817"
+          ],
+          "joined": true,
+          "grounded": false,
+          "evidence": [
+            "skipped fetch=false supported=0"
+          ]
+        }
+      ]
+    }
+  ]
+}
