@@ -393,7 +393,11 @@ async function main() {
   fs.mkdirSync(newsletterDir, { recursive: true });
 
   const cacheDir = path.join(root, 'cache', 'news-summary');
+  // root를 넘겨야 선정이 state/article-exposure-history.json을 읽는다. 없으면 exposureHistory가
+  // 항상 null이 되어 재게재 쿨다운 필터와 catch-up의 게재 이력 필터가 둘 다 조용히 죽는다(#963).
+  // exposureHistory를 직접 만들어 넘기지 않고 root를 넘겨 기존 읽기 경로를 그대로 쓴다.
   let shortlistReport = buildShortlistReport(date, candidates, {
+    root,
     selectionWindowPolicy: runtimeConfig.selectionWindowPolicy,
     coverageWeekKeyOverride: runtimeConfig.coverageWeekKeyOverride || undefined
   });

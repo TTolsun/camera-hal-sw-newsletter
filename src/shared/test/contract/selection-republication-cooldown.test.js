@@ -1,6 +1,9 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const test = require('node:test');
 
 const {
@@ -137,4 +140,41 @@ test('the cooldown filter does not narrow the shared main article score gate', (
   // 이력 사유를 그 필드에 섞으면 이 이슈와 무관한 판정까지 함께 좁아진다.
   assert.equal(blocked.main_article_score_eligible, true);
   assert.deepEqual(blocked.score_filter_reasons, []);
+});
+
+function tempRootWithHistory(history) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'selection-republication-cooldown-'));
+  if (history) {
+    fs.mkdirSync(path.join(root, 'state'), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, 'state', 'article-exposure-history.json'),
+      `${JSON.stringify(history, null, 2)}\n`,
+      'utf8'
+    );
+  }
+  return root;
+}
+
+test('the exposure history is read from root when no history object is passed', () => {
+  const blockedUrl = candidateUrlAt(0);
+  const root = tempRootWithHistory(historyWith([
+    publishedRecord(blockedUrl, { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' })
+  ]));
+
+  const report = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), { root });
+
+  assert.ok(!urls(report.selected_articles).includes(blockedUrl));
+  assert.ok(report.excluded_candidates.some(candidate =>
+    candidate.url === blockedUrl &&
+    candidate.exclusion_reasons.some(reason => /republication cooldown/.test(reason))));
+});
+
+test('a root without a history file falls back to the seed path without breaking selection', () => {
+  const root = tempRootWithHistory(null);
+
+  const report = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), { root });
+
+  assert.equal(report.selected_article_count, 3);
+  assert.deepEqual(report.selection_warnings, []);
+  assert.equal(report.publish_ready, true);
 });
