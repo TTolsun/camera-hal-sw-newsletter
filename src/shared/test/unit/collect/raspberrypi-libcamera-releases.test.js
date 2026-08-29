@@ -99,10 +99,17 @@ test('keeps behavior_change on the release sentence so eligibility does not shif
   const body = '&lt;p&gt;Revert &quot;ipa: rpi: imx296: Enable embedded data&quot;&lt;/p&gt;';
   const [item] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody(body), source());
 
+  // 값 자체를 고정한다. 판정 쪽 어휘 패턴을 여기서 복제하면 그 패턴이 바뀔 때 두 곳이 어긋난다 —
+  // 자격 판정의 정본은 collect-news-candidates.js의 BEHAVIOR_CHANGE_PATTERN이다.
   assert.equal(item.behavior_change, 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).');
   assert.notEqual(item.behavior_change, item.summary);
-  // collect-news-candidates.js의 BEHAVIOR_CHANGE_PATTERN이 요구하는 어휘가 남아 있어야 한다.
-  assert.match(item.behavior_change, /\breleased?\b/i);
+});
+
+// 본문의 리터럴 꺾쇠(이메일·include 경로)가 태그로 오인돼 사라지면 근거가 조용히 준다.
+test('keeps literal angle-bracket text in the body', () => {
+  const body = '&lt;p&gt;Signed-off-by: Naushir Patuck &amp;lt;naush@raspberrypi.com&amp;gt;&lt;/p&gt;';
+  const [item] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody(body), source());
+  assert.match(item.summary, /Signed-off-by: Naushir Patuck <naush@raspberrypi\.com>/);
 });
 
 // 태그를 빈 문자열로 지우면 인접 단어가 붙어 근거 텍스트가 망가진다.
@@ -112,13 +119,15 @@ test('replaces tags with a space so adjacent words do not merge', () => {
   assert.match(item.summary, /Right now embedded data/);
 });
 
-
 test('falls back to the tag-name template when the release body is empty or absent', () => {
   const [blank] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody('   '), source());
   assert.equal(blank.summary, 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).');
   assert.equal(blank.behavior_change, blank.summary);
 
   const noContent = atomWithReleaseBody('').replace('<content type="html"></content>', '');
+  // replace가 헬퍼 포맷 변경으로 조용히 no-op이 되면 이 테스트는 빈 본문 경로를 다시 도는 셈이라
+  // <content> 부재 분기를 더 이상 검증하지 못한다. 그래서 입력을 먼저 확인한다.
+  assert.equal(noContent.includes('<content'), false, '<content> 요소가 실제로 빠져야 한다');
   const [missing] = resolveRaspberryPiLibcameraReleaseItems(noContent, source());
   assert.equal(missing.summary, 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).');
 });

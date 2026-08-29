@@ -24,23 +24,25 @@ function pick(pattern, block) {
 // 없는 본문으로 취급해 호출부가 폴백하게 한다.
 const EMPTY_BODY_PLACEHOLDER_PATTERN = /^no content\.?$/i;
 
-// GitHub은 릴리스 본문을 HTML로 escape해 <content type="html">에 싣는다. 그래서 순서가 정해진다:
-// escape를 먼저 풀어야 진짜 마크업이 되고, 그 뒤에 태그를 걷어낼 수 있다. 뒤집으면 걷어낼 태그가
-// 아직 escape 상태라 본문에 <p>가 그대로 남는다.
+// <content type="html">에는 릴리스 본문 HTML이 XML escape를 한 겹 쓰고 들어 있다. 그래서 세
+// 단계다: XML escape를 **한 겹만** 벗겨 HTML을 되찾고 → 태그를 걷어내고 → 남은 HTML entity를 푼다.
 //
-// 기존 헬퍼를 그대로 쓰지 않는 이유는 둘 다 이 순서가 아니기 때문이다 — collect의 stripTags와
-// common의 stripHtml은 태그를 먼저 지우고 entity를 나중에 푼다. 그래서 여기서는 decode를 정확히
-// 한 번만 하고(pick은 이미 decode하므로 raw 캡처를 쓴다) 태그를 **공백**으로 치환한다. 빈 문자열로
-// 치환하면 `now<br />embedded` 같은 인접 태그에서 단어가 붙어 근거 텍스트가 망가진다.
+// 한 겹만 벗기는 것이 핵심이다. decodeHtml은 치환을 순차 적용하므로(&amp; 먼저) 두 겹을 한 번에
+// 내려버리고, 그러면 본문의 리터럴 꺾쇠(`Signed-off-by: … &lt;naush@…&gt;`)가 진짜 태그로 승격된 뒤
+// 태그 제거에 삼켜져 근거에서 사라진다. 태그를 **공백**으로 치환하는 것도 같은 이유다 — 빈
+// 문자열로 지우면 `now<br />embedded`에서 단어가 붙는다.
+const XML_ESCAPE_ONCE = { '&lt;': '<', '&gt;': '>', '&quot;': '"', '&apos;': "'", '&amp;': '&' };
+
+function unescapeXmlOnce(value) {
+  return String(value).replace(/&(?:lt|gt|quot|apos|amp);/g, entity => XML_ESCAPE_ONCE[entity]);
+}
+
 function releaseBodyText(block) {
   const match = block.match(/<content[^>]*>([\s\S]*?)<\/content>/i);
   if (!match) return '';
-  const text = decodeHtml(match[1])
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  const text = decodeHtml(
+    unescapeXmlOnce(match[1]).replace(/<[^>]+>/g, ' ')
+  ).replace(/\s+/g, ' ').trim();
   if (!text || EMPTY_BODY_PLACEHOLDER_PATTERN.test(text)) return '';
   return text.slice(0, SUMMARY_MAX_LENGTH);
 }
@@ -55,11 +57,17 @@ function releaseCandidate(block, source) {
   // 색인한다). 태그 이름만 되뇌는 문장은 근거가 아니라 자기 참조이므로, 본문이 있으면 본문을 쓰고
   // 없을 때만 그 문장으로 되돌아간다.
   //
-  // behavior_change는 다르다. 이 필드는 collect-news-candidates의 자격 판정 입력이고 어휘 패턴으로
-  // 검사된다. 본문을 여기까지 실으면 판정이 조용히 뒤집힌다 — 예를 들어 v0.7.2+rpt20260817의 본문
-  // ("Revert ... cannot be negotiated with the CFE")에는 그 패턴의 어휘가 하나도 없어서, 지금까지
-  // 통과하던 릴리스가 release_note_item 근거 미달로 main 자격을 잃는다. 자격 판정을 바꾸는 것은
-  // 이 변경의 목적이 아니므로 종전 문장을 그대로 둔다.
+  // behavior_change는 역할이 둘이라 본문을 싣지 않는다.
+  //
+  // 첫째, collect-news-candidates의 자격 판정 입력이고 어휘 패턴으로 검사된다. 본문을 실으면 판정이
+  // 조용히 뒤집힌다 — v0.7.2+rpt20260817의 본문("Revert ... cannot be negotiated with the CFE")에는
+  // 그 패턴의 어휘가 하나도 없어서, 지금까지 통과하던 릴리스가 release_note_item 근거 미달로 main
+  // 자격을 잃는다(라이브 실측: 7건 중 2건 탈락). 자격 판정 변경은 이 수정의 목적이 아니다.
+  //
+  // 둘째, article-capsules가 이 필드를 what_changed와 evidence 첫 칸에 그대로 싣는다. 그래서 이
+  // 선택의 대가는 분명하다 — 기사 프롬프트의 그 두 자리는 여전히 자기참조 문장이고, 본문은
+  // allowed_claim_evidence로만 도달한다. 그 층까지 본문을 올리려면 evidence 슬롯 구성을 함께
+  // 바꿔야 하고, 그건 이 수집기 혼자 정할 수 있는 일이 아니다.
   const releaseSentence = `Released ${tag} (Raspberry Pi downstream libcamera).`;
   const summary = releaseBodyText(block) || releaseSentence;
   return {
