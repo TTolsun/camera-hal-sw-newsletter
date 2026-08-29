@@ -100,6 +100,7 @@ const {
   articleIdentityKey
 } = require('../../shared/common/article-identity');
 const {
+  annotateArticleExposure,
   everCoveredAsNewsletterArticle,
   readExposureHistory
 } = require('../reporter/article-exposure-history');
@@ -788,22 +789,75 @@ function collectedCoverageLineage(collectedCandidates) {
   };
 }
 
+const REPUBLICATION_COOLDOWN_EXCLUSION_REASON = 'published as a main article within the republication cooldown';
+
+// 이미 main 기사로 발행된 URL을 쿨다운 안에 다시 올리지 못하게, 선정 상류에서 걷어낸다.
+//
+// 상류인 이유: reconcileCoverage가 reserve를 main으로 승급시키므로(gemini-newsroom-newsletter.js)
+// selected만 걸러서는 구멍이 남는다. selected와 reserve가 함께 읽는 selectionPools에서 빼야 두
+// 통로가 같이 닫힌다.
+//
+// 술어가 쿨다운(21일)인 이유: everCoveredAsNewsletterArticle은 시간 제한이 없어서, 같은 URL로
+// 내용이 갱신되는 페이지(developer.android.com/latest-updates, ASB overview — 둘 다 실제 이력에
+// 있다)를 영원히 못 쓰게 만든다. 그건 쓸 수 있는 기사를 막는 결함이다.
+//
+// main_article_score_eligible에 이력 사유를 섞지 않은 것도 의도다: 그건 점수 게이트이고 catch-up
+// 레인이 재사용하는 공유 길목이라, 좁히면 이 이슈와 무관한 판정까지 함께 좁아진다.
+function withoutRepublicationCooldown(eligible, exposureHistory, date) {
+  const selectionPools = eligible.selectionPools;
+  if (!exposureHistory) return { shortlist: eligible.shortlist, selectionPools, blocked: [] };
+  const blocked = [];
+  const blockedKeys = new Set();
+  const poolCandidates = [
+    ...ensureArray(selectionPools?.primary),
+    ...ensureArray(selectionPools?.fallback)
+  ];
+  for (const candidate of poolCandidates) {
+    const key = articleIdentityKey(candidate);
+    if (blockedKeys.has(key)) continue;
+    if (!annotateArticleExposure(candidate, exposureHistory, { date }).published_within_cooldown) continue;
+    blockedKeys.add(key);
+    blocked.push({
+      ...candidate,
+      exclusion_reasons: [
+        ...ensureArray(candidate.exclusion_reasons),
+        REPUBLICATION_COOLDOWN_EXCLUSION_REASON
+      ]
+    });
+  }
+  if (blocked.length === 0) return { shortlist: eligible.shortlist, selectionPools, blocked };
+  const keep = candidates => ensureArray(candidates)
+    .filter(candidate => !blockedKeys.has(articleIdentityKey(candidate)));
+  return {
+    shortlist: keep(eligible.shortlist),
+    selectionPools: {
+      primary: keep(selectionPools?.primary),
+      fallback: keep(selectionPools?.fallback)
+    },
+    blocked
+  };
+}
+
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
   const coverageLineage = collectedCoverageLineage(collectedCandidates);
   const cap = options.cap ?? SHORTLIST_CAP;
   const selectionWindowPolicy = options.selectionWindowPolicy || getSelectionWindowPolicy();
-  const {
-    shortlist,
-    selectionPools,
-    excluded,
-    referenceContextCandidates,
-    windowCandidateCounts,
-    notYetEligibleCount
-  } = buildEligibleShortlist(rawCandidates, date, cap, {
+  const eligible = buildEligibleShortlist(rawCandidates, date, cap, {
     selectionWindowPolicy,
     coverageWeekKeyOverride: options.coverageWeekKeyOverride
   });
+  const {
+    referenceContextCandidates,
+    windowCandidateCounts,
+    notYetEligibleCount
+  } = eligible;
+  const exposureHistory = options.exposureHistory ||
+    (options.root ? readExposureHistory(options.root, date) : null);
+  const cooldownFiltered = withoutRepublicationCooldown(eligible, exposureHistory, date);
+  const shortlist = cooldownFiltered.shortlist;
+  const selectionPools = cooldownFiltered.selectionPools;
+  const excluded = eligible.excluded.concat(cooldownFiltered.blocked);
   const selectionCandidatePool = [
     ...ensureArray(selectionPools?.primary),
     ...ensureArray(selectionPools?.fallback)
@@ -837,8 +891,6 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   selected = headlineSelection.selected_articles;
   const windowDiagnostics = selectionResult.diagnostics;
   let reserve = reserveCandidates(selectionCandidatePool, selected, options);
-  const exposureHistory = options.exposureHistory ||
-    (options.root ? readExposureHistory(options.root, date) : null);
   const catchUpPolicy = options.catchUpPolicy || getCatchUpPolicy();
   let catchUpSelected = [];
   const catchUpTarget = Number(catchUpPolicy.targetMainArticles) || articlePolicy.mainArticleCount.min;
