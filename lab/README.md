@@ -17,12 +17,21 @@ collection artifacts and calls the shared LLM client directly.
 | `datasets/calibration.json` | yes | The 20 calibration items and their hand labels |
 | `label-definition.md` | yes | What `yes` and `no` mean |
 | `prompts/` | yes | Judge rubrics, one file per version |
+| `check-groundedness-baseline.js` | yes | FC-2 groundedness over committed newsroom artifacts. No LLM calls |
 | `results/` | yes | Run output, one file per run. The measurement record |
+| `results/groundedness-baseline.json` | yes | The one exception to one-file-per-run: a fixed name, rewritten only with `--force` |
 | `tmp/` | no | Scratch, dry runs, raw LLM dumps. Ignored |
 
 `results/` is committed because a gate is answered once. The dev run cannot be repeated
 without spending a split that no longer exists, so its verdicts and per-item reasons are
 the only surviving evidence for the number in the journal.
+
+`groundedness-baseline.json` is committed for the opposite reason. It is fully
+reproducible - the script reads committed newsroom artifacts and calls no model - so it
+carries a fixed name rather than a run timestamp, and re-running the script tells you
+whether the current corpus still matches it. What cannot be reproduced is the *pre-change*
+state: once the pipeline is fixed, no rerun can recover what the numbers were before. So
+`--write` refuses to replace an existing file and `--force` is required to say you mean it.
 
 The cost of committing it is that `check:domain-model-boundary` scans these files. A
 judge's free-text `reason` containing one of the provider-shape markers that check
