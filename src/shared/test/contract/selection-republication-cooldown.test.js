@@ -608,18 +608,21 @@ test('every committed main-article record is dated inside the issue week that pu
   }
 });
 
+// 백필이 실제로 덮은 첫 발행 주(W31). 창 시작을 검사 대상 파일 자신에서 뽑으면(예전:
+// min(newsletter_article_date)) 오래된 레코드를 지울 때 창이 함께 줄어 무증상 통과가 된다 —
+// 실측: W31 5건 삭제도, main 13건 중 12건 삭제도 pass 24 fail 0이었다. 그래서 파일 밖 상수로
+// 고정한다. 이 날짜 이후 발행된 main 기사는 지워도 창이 따라오지 않으므로 반드시 걸린다.
+const BACKFILL_WINDOW_START = '2026-07-27';
+
 test('no published main article inside the backfill window is missing from the history', () => {
   // 날짜 검사만으로는 "레코드가 통째로 빠진" 실패를 못 잡는다. 그건 게이트를 무증상으로 죽이는
-  // 나머지 절반이다(#963 자체가 발행 기록이 남지 않아 생긴 일이다). 백필 창은 이력이 스스로
-  // 말하게 둔다 — 가장 이른 발행 기록 날짜부터가 창이다.
-  const mainArticleRecords = committedMainArticleRecords();
-  const recordedKeys = new Set(mainArticleRecords.map(item => item.article_identity_key));
-  const backfillStart = mainArticleRecords
-    .map(item => item.newsletter_article_date)
-    .sort()[0];
+  // 나머지 절반이다(#963 자체가 발행 기록이 남지 않아 생긴 일이다).
+  const recordedKeys = new Set(committedMainArticleRecords()
+    .map(item => item.article_identity_key));
 
   const missing = [...publishedMainArticleDates()]
-    .filter(([key, date]) => date >= backfillStart && !recordedKeys.has(key))
-    .map(([key, date]) => `${date} ${key}`);
+    .filter(([key, date]) => date >= BACKFILL_WINDOW_START && !recordedKeys.has(key))
+    .map(([key, date]) => `${date} ${key}`)
+    .sort();
   assert.deepEqual(missing, []);
 });
