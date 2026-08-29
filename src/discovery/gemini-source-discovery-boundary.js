@@ -92,8 +92,10 @@ const {
 } = require('./validate-candidate-evidence');
 const {
   candidateDate,
+  candidateFactId,
   candidateTitle,
   candidateUrl,
+  evidenceSourceKey,
   text
 } = require('../shared/collect/source-intelligence-utils');
 const {
@@ -1036,12 +1038,28 @@ function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options
     return canonicalRefs.has(`url:${candidateUrl(candidate)}`) ||
       canonicalRefs.has(`title:${candidateTitle(candidate)}`);
   }
+  // 같은 기사 URL이 registry 수집본과 gemini 발견본으로 두 번 들어온다. 수집본은 id가 없고
+  // 발견본은 `gemini-…` id를 달고 있어서 candidateKey로 묶으면 서로 다른 후보가 된다.
+  // cap은 "서로 다른 출처를 몇 개 확인할 것인가"를 세는 값이므로 출처 키로 묶는다.
+  // 원문을 실제로 받아오는 extract-source-facts도 같은 키로 수신을 합쳐 "한 칸 = 한 번 수신"을
+  // 지킨다. URL이 없는 후보만 candidateKey로 물러난다.
+  function groupKey(candidate) {
+    return evidenceSourceKey(candidate) || candidateKey(candidate);
+  }
   function add(candidate, canonical = false) {
-    const key = candidateKey(candidate);
+    const key = groupKey(candidate);
     if (!key) return;
     const existing = targetMap.get(key);
+    // 사본을 버리면 그 사본의 id로 근거를 조회할 때 fact가 없어 not_checked 로 조용히
+    // 통과한다. 그래서 대표 하나만 남기지 않고 같은 URL의 사본을 전부 들고 간다.
+    // 자격 통과 loop와 canonical loop가 같은 후보를 두 번 부르므로 중복 적재는 막되,
+    // 근거 조회 id가 갈리는 사본(같은 URL·다른 제목)은 서로 다른 사본으로 남겨야 한다.
+    const members = existing?.members || [];
+    if (!members.some(member => candidateFactId(member) === candidateFactId(candidate))) {
+      members.push(candidate);
+    }
     targetMap.set(key, {
-      candidate,
+      members,
       isCanonical: canonical || existing?.isCanonical === true
     });
   }
@@ -1061,14 +1079,20 @@ function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options
     }
   }
 
+  // 그룹의 cap 순위는 사본 중 가장 강한 것으로 정한다. 먼저 들어온 사본으로 정하면
+  // 같은 URL의 strong_candidate 사본이 있어도 약한 사본 등급으로 그룹 전체가 밀려
+  // 이 함수가 막으려는 무검증 통과가 그대로 재현된다.
+  // 반환 길이는 maxTargets를 넘을 수 있다. cap이 세는 것은 사본 수가 아니라 출처 수다.
   return [...targetMap.values()]
     .map(item => ({
-      candidate: item.candidate,
-      priority: evidencePriority(item.candidate, item.isCanonical)
+      members: item.members,
+      priority: item.members
+        .map(member => ({ priority: evidencePriority(member, item.isCanonical) }))
+        .sort(compareEvidenceTargets)[0].priority
     }))
     .sort(compareEvidenceTargets)
     .slice(0, maxTargets)
-    .map(item => item.candidate);
+    .flatMap(item => item.members);
 }
 
 function writeSeedOnlySourceDiscoveryResult({
