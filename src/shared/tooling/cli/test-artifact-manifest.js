@@ -23,6 +23,7 @@ const {
   articlePolicy,
   qualityGatePolicy
 } = require('../../common/newsletter-policy');
+const { findManifestPathConventionViolations } = require('../validate/artifact-path-convention-check');
 
 const date = '2026-05-03';
 
@@ -74,92 +75,17 @@ function seedAgreeingSnapshot(snapshotDir) {
   writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'quality-report.md').split('/')), '# Quality\n');
 }
 
-// 매니페스트 경로 규약 잠금(#952).
+// 매니페스트 경로 규약 잠금(#952)의 판정은 validate/artifact-path-convention-check.js가 갖고,
+// 커밋된 매니페스트 전수 스캔은 `npm run check:artifact-path-convention`이 돌린다(#957). 술어 자체의
+// 케이스는 src/generator/test/workflow/artifact-path-convention-check.test.js가 잠근다.
 //
-// 매니페스트가 기록하는 경로는 #262 phase 6(2026-06-13 머지)을 경계로 두 규약으로 갈린다.
-// 그 전에 쓰인 매니페스트는 공개 출력물을 articles/ 접두 없이 content/·data/·newsletters/·
-// sitemap.xml로 기록했고, 그 뒤에 쓰인 매니페스트는 저장소 루트 기준이라 articles/로 시작한다.
-// schema_version은 이 차이를 표시하지 않는다(4가 두 규약에 모두 걸쳐 있다). 그래서 규약을
-// 산문 대신 이 검사로 잠근다 — 새로 쓰이는 매니페스트는 반드시 저장소 루트 기준이어야 하고,
-// 이미 커밋된 과거 매니페스트는 쓰이던 시점의 규약을 그대로 지켜야 한다(사후 정규화 금지).
-//
-// 경계 날짜는 첫 관측이 아니라 원인에 맞춘다. #262 phase 6 머지가 42fd4ba1 = 2026-06-13 12:29 KST다.
-// 06-13 당일 run은 세 번 돌았는데(11:14 / 13:21 / 15:32), 머지 뒤의 두 번이 이미 루트 기준으로
-// 기록했고 머지 전 옛 규약 사본은 같은 날 188c10fa가 orphan으로 지웠다. 그래서 트리에 남은 06-13
-// artifact는 전부 루트 기준이고, 06-13을 옛 규약 쪽에 두면 그 날짜를 replay할 때 생산자는 루트
-// 기준으로 쓰는데 검사만 옛 규약을 요구해 거짓 실패한다. 커밋된 매니페스트는 06-11(옛 규약)에서
-// 06-16(루트 기준)으로 건너뛰므로 이 경계로 바뀌는 현재 판정은 없다.
-const REPOSITORY_ROOT_PATH_CONVENTION_START_DATE = '2026-06-13';
-const MANIFEST_PATH_ARRAYS = ['files', 'review_artifacts', 'retained_heavy_artifacts', 'committed_artifacts'];
-const PUBLIC_OUTPUT_ROOT_PREFIXES = ['content/', 'data/', 'newsletters/'];
-
-// 규약 판별 대상은 #262에서 articles/ 아래로 옮겨진 공개 출력물 경로뿐이다. .tmp/·cache/·state/는
-// 공개 출력물이 아니라 이동 대상이 아니었으므로 판별에 쓸 수 없다. 특히 state/는 루트 기준
-// 매니페스트에만 나와 비교할 옛 형태가 아예 없다(옛 규약 시절 같은 파일은
-// data/article-exposure-history.json이었다).
-function isPublicOutputManifestPath(relPath) {
-  const withoutArticlesPrefix = relPath.startsWith('articles/')
-    ? relPath.slice('articles/'.length)
-    : relPath;
-  return withoutArticlesPrefix === 'sitemap.xml' ||
-    PUBLIC_OUTPUT_ROOT_PREFIXES.some(prefix => withoutArticlesPrefix.startsWith(prefix));
-}
-
-function manifestPathEntries(manifest) {
-  const entries = [];
-  for (const key of MANIFEST_PATH_ARRAYS) {
-    for (const entry of manifest[key] || []) {
-      if (entry && typeof entry.path === 'string') entries.push({ key, path: entry.path });
-    }
-  }
-  return entries;
-}
-
-function assertManifestPathConvention(manifest, { label, expectArticlesPrefix }) {
-  let publicOutputPathCount = 0;
-  for (const entry of manifestPathEntries(manifest)) {
-    if (!isPublicOutputManifestPath(entry.path)) continue;
-    publicOutputPathCount += 1;
-    const hasArticlesPrefix = entry.path.startsWith('articles/');
-    assert.strictEqual(
-      hasArticlesPrefix,
-      expectArticlesPrefix,
-      expectArticlesPrefix
-        ? `${label}: ${entry.key}[] 경로 "${entry.path}"가 저장소 루트 기준이 아니다. #262 이후 공개 출력물 경로는 articles/로 시작해야 한다.`
-        : `${label}: ${entry.key}[] 경로 "${entry.path}"에 articles/ 접두가 붙었다. #262 이전 매니페스트는 기록된 규약 그대로 두어야 한다(#952).`
-    );
-  }
-  assert.ok(
-    publicOutputPathCount > 0,
-    `${label}: 공개 출력물 경로가 하나도 없어 경로 규약을 검사하지 못했다`
-  );
-}
-
-// 이미 커밋된 매니페스트는 감사 기록이라 사후에 경로를 고쳐 쓰지 않는다. 대신 각 매니페스트가
-// 자기 날짜의 규약을 지키는지 확인해, 새 매니페스트가 옛 규약으로 쓰이거나 과거 매니페스트가
-// 조용히 정규화되면 이 검사가 실패하게 한다.
-function testTrackedManifestPathConvention() {
-  const repositoryRoot = path.resolve(__dirname, '..', '..', '..', '..');
-  const newsroomRoot = path.join(repositoryRoot, 'articles', 'content', 'newsroom');
-  const dateDirectories = fs.readdirSync(newsroomRoot, { withFileTypes: true })
-    .filter(entry => entry.isDirectory() && /^\d{4}-\d{2}-\d{2}$/.test(entry.name))
-    .map(entry => entry.name)
-    .sort();
-
-  let checkedManifestCount = 0;
-  for (const dateDirectory of dateDirectories) {
-    const manifestPath = path.join(newsroomRoot, dateDirectory, 'artifact-manifest.json');
-    if (!fs.existsSync(manifestPath)) continue;
-    assertManifestPathConvention(JSON.parse(fs.readFileSync(manifestPath, 'utf8')), {
-      label: `articles/content/newsroom/${dateDirectory}/artifact-manifest.json`,
-      expectArticlesPrefix: dateDirectory >= REPOSITORY_ROOT_PATH_CONVENTION_START_DATE
-    });
-    checkedManifestCount += 1;
-  }
-
-  assert.ok(
-    checkedManifestCount > 0,
-    '커밋된 artifact-manifest.json을 하나도 읽지 못했다 — 경로 규약 검사가 무력화됐다'
+// 여기 남은 것은 생산자(buildManifest·buildDateReviewManifest)가 쓴 매니페스트를 그 자리에서 보는
+// 단언뿐이다. 그건 실데이터 의존이 아니라 방금 만든 결과물을 보는 것이라 `npm run test`에 남는다.
+function assertManifestPathConvention(manifest, options) {
+  const violations = findManifestPathConventionViolations(manifest, options);
+  assert.deepStrictEqual(
+    violations.map(violation => `${violation.label}: ${violation.key}[] "${violation.path}" — ${violation.reason}`),
+    []
   );
 }
 
@@ -588,6 +514,5 @@ testRecoveryPromptAttentionPolicy();
 testDerivedMissingWarningsAndOptionalGateBlocking();
 testRetentionGradeAssignment();
 testBuildDateReviewManifestRetentionFields();
-testTrackedManifestPathConvention();
 
 console.log('Artifact manifest tests passed.');
