@@ -88,11 +88,30 @@ test('uses the release body as evidence instead of a tag-name template', () => {
 
   assert.match(item.summary, /Revert "ipa: rpi: imx296: Enable embedded data"/);
   assert.match(item.summary, /embedded data with the imx296 cannot be negotiated with the CFE/);
-  assert.equal(item.behavior_change, item.summary);
   // 태그 이름만 되뇌는 템플릿 문장이 남아 있으면 근거가 아니라 자기 참조다.
   assert.doesNotMatch(item.summary, /Raspberry Pi downstream libcamera/);
   assert.equal(item.summary.includes('<'), false, 'HTML 태그가 남으면 안 된다');
 });
+
+// behavior_change는 collect-news-candidates의 자격 판정 입력이라 어휘 패턴으로 검사된다.
+// 본문을 여기까지 실으면 이 릴리스처럼 그 어휘가 없는 본문에서 자격이 조용히 사라진다.
+test('keeps behavior_change on the release sentence so eligibility does not shift', () => {
+  const body = '&lt;p&gt;Revert &quot;ipa: rpi: imx296: Enable embedded data&quot;&lt;/p&gt;';
+  const [item] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody(body), source());
+
+  assert.equal(item.behavior_change, 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).');
+  assert.notEqual(item.behavior_change, item.summary);
+  // collect-news-candidates.js의 BEHAVIOR_CHANGE_PATTERN이 요구하는 어휘가 남아 있어야 한다.
+  assert.match(item.behavior_change, /\breleased?\b/i);
+});
+
+// 태그를 빈 문자열로 지우면 인접 단어가 붙어 근거 텍스트가 망가진다.
+test('replaces tags with a space so adjacent words do not merge', () => {
+  const body = '&lt;p&gt;Right now&lt;br /&gt;embedded data&lt;/p&gt;';
+  const [item] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody(body), source());
+  assert.match(item.summary, /Right now embedded data/);
+});
+
 
 test('falls back to the tag-name template when the release body is empty or absent', () => {
   const [blank] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody('   '), source());
