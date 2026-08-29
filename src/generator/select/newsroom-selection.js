@@ -1021,13 +1021,16 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const errors = selectionErrors(selected);
   const composition = compositionSummary(selected);
   const eligibleComposition = compositionSummary(shortlist);
-  // 부족 힌트는 "수집·파싱이 이 버킷을 만들어 냈는가"에 답하는 값이다(렌더 라벨도 Source/parser
+  // 파서 힌트는 "수집·파싱이 이 버킷을 만들어 냈는가"에 답하는 값이다(렌더 라벨도 Source/parser
   // recovery hint다). 재게재 차단은 후보가 없어서가 아니라 이미 발행해서 빠진 것이므로, 차단분을
-  // 되돌린 구성으로 힌트를 만든다. 안 그러면 한 버킷의 유일한 후보가 막힌 주에
+  // 되돌린 구성으로 만든다. 안 그러면 한 버킷의 유일한 후보가 막힌 주에
   // OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR가 새로 붙어 멀쩡한 파서를 고치라고 지시한다.
-  // 풀이 실제로 얇다는 신호는 preflightSummary(차단 뒤 shortlist로 계산)가 그대로 낸다.
+  //
+  // 풀 충분성 힌트는 다른 질문이라 차단 뒤 구성(eligibleComposition)을 본다. 되돌린 구성으로
+  // 함께 계산하면 그 주 eligible 후보가 전부 쿨다운에 걸려도 "후보를 더 모아라"가 사라진다.
   const shortageHints = selectionShortageHints(
-    compositionSummary([...shortlist, ...cooldownFiltered.blocked]));
+    compositionSummary([...shortlist, ...cooldownFiltered.blocked]),
+    eligibleComposition);
   const groupCoverage = groupCoverageSummary({
     selectedGroupKeys: selected.map(candidateGroupKey),
     renderedGroupKeys: [],

@@ -488,6 +488,47 @@ test('a bucket that collection never delivered still gets its parser hint', () =
   assert.ok(report.source_parser_hints.some(hint => hint.code === 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR'));
 });
 
+const POOL_SUFFICIENCY_HINT = /Collect enough eligible candidates/;
+
+test('a week whose whole eligible pool is cooled down still gets the pool sufficiency hint', () => {
+  // 힌트 입력을 차단분까지 되돌린 것은 파서 오귀인을 막기 위해서다(바로 위 검사). 그런데 그
+  // 되돌림이 풀 충분성 규칙(selected_article_count < mainArticleCount.min)까지 함께 가린다 —
+  // 그 주 eligible 후보가 전부 쿨다운에 걸려도 "Collect enough eligible candidates..." 줄이
+  // 사라진다. "수집·파싱이 이 버킷을 만들어 냈는가"와 "지금 쓸 수 있는 후보가 충분한가"는 서로
+  // 다른 질문이므로 각자 맞는 입력을 봐야 한다.
+  const pool = distinctPrimaryCandidates(2);
+  const baseline = buildShortlistReport(ISSUE_DATE, pool, { exposureHistory: historyWith([]) });
+  assert.ok(!baseline.selection_shortage_hints.some(hint => POOL_SUFFICIENCY_HINT.test(hint)),
+    '후보가 남아 있는 주에는 이 힌트가 붙지 않아야 대조가 성립한다');
+
+  const report = buildShortlistReport(ISSUE_DATE, pool, {
+    exposureHistory: historyWith([
+      publishedRecord(candidateUrlAt(0), { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' }),
+      publishedRecord(candidateUrlAt(1), { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' })
+    ])
+  });
+
+  assert.equal(report.republication_cooldown_blocked.count, 2, '풀 전체가 막힌 주여야 한다');
+  assert.equal(report.eligible_candidate_count, 0);
+  assert.ok(report.selection_shortage_hints.some(hint => POOL_SUFFICIENCY_HINT.test(hint)));
+
+  // 과억제 가드: 분리가 파서 오귀인 방지를 되돌리면 안 된다. 파서 질문은 차단 전 구성을 그대로
+  // 보므로 파서 코드는 baseline과 같고, 늘어난 것은 풀 충분성 코드 하나뿐이어야 한다.
+  assert.ok(!report.selection_shortage_hints.some(hint => PARSER_REPAIR_HINT.test(hint)));
+  const parserCodes = hints => hints
+    .map(hint => hint.code)
+    .filter(code => code !== 'CANDIDATE_POOL_SHORTAGE');
+  assert.deepEqual(parserCodes(report.source_parser_hints),
+    parserCodes(baseline.source_parser_hints));
+  assert.ok(report.source_parser_hints.some(hint => hint.code === 'CANDIDATE_POOL_SHORTAGE'));
+
+  // 이 분리는 진단 문구만 되살린다. 판정 층은 차단 뒤 shortlist를 보는 preflight가 이미 내던
+  // 값 그대로다(풀이 비었으니 review-only인 것이 맞다).
+  assert.deepEqual(report.shortage_reason_codes, ['publishable_candidate_shortage']);
+  assert.equal(report.candidate_shortage_reviewable, true);
+  assert.equal(report.publish_ready, false);
+});
+
 const REPO_ROOT = path.join(__dirname, '..', '..', '..', '..');
 
 function committedExposureHistory() {
