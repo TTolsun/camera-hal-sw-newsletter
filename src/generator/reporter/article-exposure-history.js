@@ -184,11 +184,18 @@ function recordArticleExposure(history, article = {}, options = {}) {
 // 축을 editor.sections로 두는 것은 의도한 선택이다. weekly merge가 section을 reject하면 발행되지
 // 않은 기사가 기록될 수 있지만, 발행이 주 1회라 과기록의 실질 차이가 거의 없다. 반대로
 // weeklyFinalArticles와 분기하면 기록 축이 둘로 갈라져 어느 쪽이 정본인지 알 수 없게 된다.
+//
+// 후보 대조는 articleIdentityKey로 한다. sourceUrl은 normalized_url을 url보다 먼저 보는데 그 값은
+// selection normalizer 산물이라 URL 전체가 소문자이고 쿼리가 없다 — section이 들고 있는 raw 후보
+// URL과 정규화 규칙이 달라, 대문자나 쿼리(예: developer.android.com의 ?hl=)가 있으면 조용히
+// 빗나간다. 후보의 article_identity_key는 raw URL에서 만들어지므로 같은 규칙끼리 맞는다.
 function newsletterArticleExposure(section, selectedArticles) {
   const url = text(section.source_candidate_url) || text(ensureArray(section.sources)[0]?.url);
+  const fallback = { canonical_url: url, title: text(section.headline) };
   const key = normalizeArticleUrl(url);
-  return ensureArray(selectedArticles).find(item => normalizeArticleUrl(sourceUrl(item)) === key) ||
-    { canonical_url: url, title: text(section.headline) };
+  // 키가 비면 대조하지 않는다. 빈 키끼리 맞아떨어지면 발행되지 않은 URL에 쿨다운이 찍힌다.
+  if (!key) return fallback;
+  return ensureArray(selectedArticles).find(item => articleIdentityKey(item) === `url:${key}`) || fallback;
 }
 
 function recordNewsletterArticles(history, sections = [], options = {}) {

@@ -13,6 +13,11 @@ const {
   recordNewsletterArticles,
   writeExposureHistory
 } = require('../../../reporter/article-exposure-history');
+const {
+  articleIdentityKey,
+  normalizeArticleUrl
+} = require('../../../../shared/common/article-identity');
+const { normalizeUrl } = require('../../../../shared/common/selection-normalizers');
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'article-exposure-history-'));
@@ -235,14 +240,26 @@ test('recordNewsletterArticles falls back to the first section source when sourc
   assert.equal(history.articles[0].article_identity_key, 'url:https://patchwork.libcamera.org/patch/27496');
 });
 
-test('recordNewsletterArticles takes identity from the matching selected candidate', () => {
+// production 후보 모양. decorateCandidate가 url·normalized_url·article_identity_key를 모두 붙이고
+// canonical_url은 붙이지 않는다. normalized_url은 selection normalizer 산물이라 URL 전체가
+// 소문자이고 쿼리가 없다 — article-identity의 정규화(호스트만 소문자, 추적 파라미터만 제거)와
+// 다르므로, 이 두 값을 섞어 비교하면 매칭이 조용히 빗나간다.
+function selectedCandidate(title, url) {
+  return {
+    url,
+    normalized_url: normalizeUrl(url),
+    article_identity_key: articleIdentityKey({ url }),
+    title
+  };
+}
+
+test('recordNewsletterArticles takes identity and title from the matching selected candidate', () => {
   let history = { schemaVersion: 1, coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false }, articles: [] };
-  const url = 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03';
-  const selectedArticles = [{
-    article_identity_key: 'url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03',
-    title: 'CameraX 1.7.0-alpha03 release notes',
-    canonical_url: url
-  }];
+  // 로케일 쿼리가 붙은 실제 developer.android.com URL. selection normalizer가 쿼리를 지우므로
+  // normalized_url과 raw URL의 identity 정규화 결과가 서로 다르다.
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera?hl=ko#1.7.0-alpha03';
+  const selectedArticles = [selectedCandidate('CameraX 1.7.0-alpha03 release notes', url)];
+  assert.notEqual(selectedArticles[0].normalized_url, normalizeArticleUrl(url), '두 정규화가 갈리는 입력이어야 한다');
 
   history = recordNewsletterArticles(history, [editorSection('CameraX 1.7.0-alpha03', url)], {
     date: '2026-06-03',
@@ -253,7 +270,29 @@ test('recordNewsletterArticles takes identity from the matching selected candida
   assert.equal(history.articles.length, 1);
   assert.equal(history.articles[0].article_identity_key, selectedArticles[0].article_identity_key);
   assert.equal(history.articles[0].title, 'CameraX 1.7.0-alpha03 release notes');
-  assert.equal(history.articles[0].source_url, url);
+  // 기록의 source_url은 sourceUrl(article)이 고르므로 후보의 normalized_url이 된다(참고용 필드,
+  // 대조에 쓰이는 것은 article_identity_key다). 후보에서 왔다는 것이 여기서 잠그는 내용이다.
+  assert.equal(history.articles[0].source_url, selectedArticles[0].normalized_url);
+});
+
+test('a section without any source url does not borrow an unrelated candidate identity', () => {
+  // 빈 키끼리 맞아떨어지면 발행되지 않은 URL에 21일 쿨다운이 찍힌다.
+  let history = { schemaVersion: 1, coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false }, articles: [] };
+  const section = editorSection('출처가 비어 있는 섹션', '');
+  delete section.source_candidate_url;
+  const strandedCandidate = {
+    article_identity_key: 'url:https://example.com/published-elsewhere',
+    title: '다른 기사'
+  };
+
+  history = recordNewsletterArticles(history, [section], {
+    date: '2026-06-03',
+    cooldownDays: 21,
+    selectedArticles: [strandedCandidate]
+  });
+
+  assert.equal(history.articles.length, 1);
+  assert.notEqual(history.articles[0].article_identity_key, strandedCandidate.article_identity_key);
 });
 
 test('everCoveredAsNewsletterArticle is true for any newsletter_article record ignoring cooldown', () => {
