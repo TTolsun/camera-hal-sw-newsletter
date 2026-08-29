@@ -229,6 +229,13 @@ function isNewsletterArticleRecord(record) {
     ensureArray(record.exposure_types).includes('newsletter_article');
 }
 
+// 이력이 들고 있는 main 기사 발행 기록의 수. 재게재 게이트가 실제로 볼 데이터가 몇 건인지를
+// 산출물에 남기는 값이라, 레코드 술어를 가진 이 모듈이 함께 센다. 호출부가 각자 exposure_type과
+// exposure_types를 다시 보면 술어 사본이 늘고 한쪽만 고쳐진다.
+function newsletterArticleRecordCount(history) {
+  return ensureArray(history?.articles).filter(isNewsletterArticleRecord).length;
+}
+
 // 이 레코드가 지금 생성 중인 호(asOf) 자신의 발행 기록인가.
 // 워크플로 03은 ref: main을 체크아웃하므로 이미 발행된 날짜로 다시 돌리면 state에 그 호 자신의
 // 레코드가 들어 있다. 그걸 남의 이력으로 세면 재실행이 자기 편성을 통째로 갈아치운다.
@@ -294,6 +301,7 @@ module.exports = {
   everCoveredAsNewsletterArticle,
   emptyExposureHistory,
   historyPath,
+  newsletterArticleRecordCount,
   normalizeExposureHistory,
   readExposureHistory,
   recordArticleExposure,

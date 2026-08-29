@@ -273,6 +273,7 @@ test('the republication block reaches the committed selection-report.json', () =
   const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
   assert.deepEqual(selectionReport.republication_cooldown_blocked, {
     history_loaded: true,
+    history_main_article_count: 1,
     count: 1,
     urls: [blockedUrl]
   });
@@ -287,7 +288,7 @@ test('a run that blocks nothing reports zero rather than nothing', () => {
 
   const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
   assert.deepEqual(selectionReport.republication_cooldown_blocked,
-    { history_loaded: true, count: 0, urls: [] });
+    { history_loaded: true, history_main_article_count: 0, count: 0, urls: [] });
 });
 
 test('a run that never loaded the exposure history says so instead of reporting zero blocks', () => {
@@ -298,7 +299,40 @@ test('a run that never loaded the exposure history says so instead of reporting 
 
   const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
   assert.deepEqual(selectionReport.republication_cooldown_blocked,
-    { history_loaded: false, count: 0, urls: [] });
+    { history_loaded: false, history_main_article_count: 0, count: 0, urls: [] });
+});
+
+test('an empty exposure history is distinguishable from one that blocked nothing', () => {
+  // history_loaded는 production에서 항상 참이다: readExposureHistory는 파일이 없으면
+  // seedExposureHistoryFromNewsletters로 시드 객체를 돌려주므로 null이 되지 않는다. 그래서
+  // 그 필드는 "배선이 됐는가"에만 답하고 "게이트가 볼 데이터가 있는가"에는 답하지 못한다.
+  // state가 비거나 stale이 되면 그 주 산출물이 건강한 주와 구별되지 않는다(실측: 세 산출물
+  // selection-report.json·generation-status.json·selection-diagnostics.md 모두 바이트 동일).
+  const emptyHistoryWeek = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {
+    exposureHistory: historyWith([])
+  });
+  // 후보 풀(0~2)에 없는 URL을 기록해 둔다. 이력은 있는데 차단은 0인 주다.
+  const loadedHistoryWeek = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {
+    exposureHistory: historyWith([
+      publishedRecord(candidateUrlAt(9), { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' })
+    ])
+  });
+
+  assert.equal(emptyHistoryWeek.republication_cooldown_blocked.count, 0);
+  assert.equal(loadedHistoryWeek.republication_cooldown_blocked.count, 0,
+    '이 주는 이력이 있어도 차단이 0이어야 두 주가 count로는 구별되지 않는다');
+
+  assert.equal(emptyHistoryWeek.republication_cooldown_blocked.history_main_article_count, 0);
+  assert.equal(loadedHistoryWeek.republication_cooldown_blocked.history_main_article_count, 1);
+
+  // 산출물까지 내려가야 다음 run이 커밋 이력만으로 판정할 수 있다.
+  assert.match(renderCandidateSelectionDiagnostics(selectionStatusExtra(emptyHistoryWeek)),
+    /- republication_history_main_articles: 0/);
+  assert.match(renderCandidateSelectionDiagnostics(selectionStatusExtra(loadedHistoryWeek)),
+    /- republication_history_main_articles: 1/);
+  // 필드가 없는 예전 보고서는 0이 아니라 unknown이다.
+  assert.match(renderCandidateSelectionDiagnostics({}),
+    /- republication_history_main_articles: unknown/);
 });
 
 test('the republication block passes the selection status allow-list', () => {
@@ -313,6 +347,7 @@ test('the republication block passes the selection status allow-list', () => {
 
   assert.deepEqual(selectionStatusExtra(shortlist).republication_cooldown_blocked, {
     history_loaded: true,
+    history_main_article_count: 1,
     count: 1,
     urls: [blockedUrl]
   });

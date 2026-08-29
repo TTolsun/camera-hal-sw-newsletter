@@ -102,6 +102,7 @@ const {
 const {
   annotateArticleExposure,
   everCoveredAsNewsletterArticle,
+  newsletterArticleRecordCount,
   readExposureHistory
 } = require('../reporter/article-exposure-history');
 const {
@@ -1185,6 +1186,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       // 접히면 #963의 실패 유형(배선이 끊겨 게이트가 조용히 죽음)이 건강한 주와 산출물이
       // 바이트 동일이라, 배선이 다시 회귀해도 커밋 이력으로 판정할 수 없다.
       history_loaded: Boolean(exposureHistory),
+      // history_loaded는 production에서 항상 참이다 — readExposureHistory가 파일 부재 시
+      // seedExposureHistoryFromNewsletters로 시드 객체를 돌려주므로 null이 되지 않는다. 그래서
+      // 그 필드는 "배선이 됐는가"에만 답한다. state가 비거나 stale이 된 주를 건강한 주와 구별하려면
+      // 게이트가 볼 데이터가 몇 건인지도 함께 남겨야 한다.
+      history_main_article_count: newsletterArticleRecordCount(exposureHistory),
       count: cooldownFiltered.blocked.length,
       urls: cooldownFiltered.blocked.map(candidate => text(candidate.url)).filter(Boolean)
     },
