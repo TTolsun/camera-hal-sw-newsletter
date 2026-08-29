@@ -12,6 +12,7 @@ const {
 } = require('../helpers/selection-builders');
 const { buildSelectionReport } = require('../../../generator/publish/orchestrator-report-builders');
 const { selectionStatusExtra } = require('../../../generator/publish/orchestrator-status-builders');
+const { renderCandidateSelectionDiagnostics } = require('../../../generator/select/selection-diagnostics');
 
 const ISSUE_DATE = '2026-05-10';
 
@@ -266,6 +267,7 @@ test('the republication block reaches the committed selection-report.json', () =
 
   const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
   assert.deepEqual(selectionReport.republication_cooldown_blocked, {
+    history_loaded: true,
     count: 1,
     urls: [blockedUrl]
   });
@@ -279,7 +281,61 @@ test('a run that blocks nothing reports zero rather than nothing', () => {
   });
 
   const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
-  assert.deepEqual(selectionReport.republication_cooldown_blocked, { count: 0, urls: [] });
+  assert.deepEqual(selectionReport.republication_cooldown_blocked,
+    { history_loaded: true, count: 0, urls: [] });
+});
+
+test('a run that never loaded the exposure history says so instead of reporting zero blocks', () => {
+  // #963의 실패 유형은 게이트가 조용히 죽은 것이다(호출부가 root를 안 넘겨 exposureHistory가
+  // 항상 null). history_loaded가 없으면 그 주의 커밋 산출물이 건강한 주와 바이트 동일이라
+  // 배선이 다시 회귀해도 아무도 모른다.
+  const shortlist = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {});
+
+  const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
+  assert.deepEqual(selectionReport.republication_cooldown_blocked,
+    { history_loaded: false, count: 0, urls: [] });
+});
+
+test('the republication block passes the selection status allow-list', () => {
+  // selectionStatusExtra는 selection-diagnostics.md와 generation-status.json이 함께 거치는
+  // allow-list다. 여기서 빠지면 진단이 매 run 'unknown'으로 찍혀 관측이 없는 것과 같아진다.
+  const blockedUrl = candidateUrlAt(0);
+  const shortlist = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {
+    exposureHistory: historyWith([
+      publishedRecord(blockedUrl, { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' })
+    ])
+  });
+
+  assert.deepEqual(selectionStatusExtra(shortlist).republication_cooldown_blocked, {
+    history_loaded: true,
+    count: 1,
+    urls: [blockedUrl]
+  });
+});
+
+test('the republication block is rendered into selection-diagnostics.md', () => {
+  // 렌더는 production writer와 같은 seam(selectionStatusExtra)을 통과해야 한다.
+  const blockedUrl = candidateUrlAt(0);
+  const blockedWeek = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {
+    exposureHistory: historyWith([
+      publishedRecord(blockedUrl, { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' })
+    ])
+  });
+  const blockedMarkdown = renderCandidateSelectionDiagnostics(selectionStatusExtra(blockedWeek));
+  assert.match(blockedMarkdown, /- republication_history_loaded: true/);
+  assert.match(blockedMarkdown, /- republication_cooldown_blocked: 1/);
+
+  // 이력을 못 읽은 주는 "0건 차단"이 아니라 "관측 없음"으로 읽혀야 한다.
+  const unwiredMarkdown = renderCandidateSelectionDiagnostics(
+    selectionStatusExtra(buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {}))
+  );
+  assert.match(unwiredMarkdown, /- republication_history_loaded: false/);
+  assert.match(unwiredMarkdown, /- republication_cooldown_blocked: 0/);
+
+  // 필드 자체가 없는 보고서(예전 산출물)는 unknown이다. false와 접히면 안 된다.
+  const legacyMarkdown = renderCandidateSelectionDiagnostics({});
+  assert.match(legacyMarkdown, /- republication_history_loaded: unknown/);
+  assert.match(legacyMarkdown, /- republication_cooldown_blocked: unknown/);
 });
 
 function tempRootWithHistory(history) {

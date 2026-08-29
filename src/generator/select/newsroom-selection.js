@@ -1169,6 +1169,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     // 자리를 둔다: 전체 shortlistReport가 담기는 shortlisted-candidates.json은 커밋되지 않으므로,
     // 이 값이 selection-report.json까지 가야 과차단을 커밋 이력만으로 판정할 수 있다.
     republication_cooldown_blocked: {
+      // 게이트가 돌고 아무것도 안 막은 주와 이력이 아예 안 실린 주를 구별한다. 둘 다 count 0으로
+      // 접히면 #963의 실패 유형(배선이 끊겨 게이트가 조용히 죽음)이 건강한 주와 산출물이
+      // 바이트 동일이라, 배선이 다시 회귀해도 커밋 이력으로 판정할 수 없다.
+      history_loaded: Boolean(exposureHistory),
       count: cooldownFiltered.blocked.length,
       urls: cooldownFiltered.blocked.map(candidate => text(candidate.url)).filter(Boolean)
     },
