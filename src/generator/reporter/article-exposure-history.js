@@ -229,6 +229,17 @@ function isNewsletterArticleRecord(record) {
     ensureArray(record.exposure_types).includes('newsletter_article');
 }
 
+// 이 레코드가 지금 생성 중인 호(asOf) 자신의 발행 기록인가.
+// 워크플로 03은 ref: main을 체크아웃하므로 이미 발행된 날짜로 다시 돌리면 state에 그 호 자신의
+// 레코드가 들어 있다. 그걸 남의 이력으로 세면 재실행이 자기 편성을 통째로 갈아치운다.
+// 쿨다운 검사와 catch-up 이력 필터가 같은 한 줄을 쓴다 — 두 곳에 같은 규칙을 따로 적으면 한쪽만
+// 고쳐지는 것이 #963에서 실제로 일어난 일이다. asOf가 비면(호출부가 date를 안 주면) 아무것도
+// 자기 것으로 보지 않아 기존 동작이 그대로 남는다.
+function isSameIssueRecord(record, asOf) {
+  const date = text(asOf);
+  return Boolean(date) && text(record?.newsletter_article_date) === date;
+}
+
 function annotateArticleExposure(article = {}, history = {}, options = {}) {
   const key = articleIdentityKey(article);
   const record = exposureMap(history).get(key) || null;
@@ -236,14 +247,11 @@ function annotateArticleExposure(article = {}, history = {}, options = {}) {
   // carry 실행 시점에 따라 판정이 달라져 선정이 비결정적이 된다. date를 못 받는 호출부는 기존
   // 동작(오늘 기준)을 그대로 유지한다.
   const asOf = text(options.date) || todayDate();
-  // 발행 주가 곧 이번 실행의 date면 재게재가 아니라 그 호 자신의 기사다. 워크플로 03은
-  // ref: main을 체크아웃하므로 이미 발행된 날짜로 다시 돌리면 state에 그 주 자신의 레코드가
-  // 들어 있고, 그대로 두면 재실행이 자기 편성을 통째로 갈아치운다.
   const publishedAt = text(record?.newsletter_article_date);
   const publishedWithinCooldown = isNewsletterArticleRecord(record) &&
     Boolean(record.cooldown_until) &&
     asOf <= record.cooldown_until &&
-    publishedAt !== asOf;
+    !isSameIssueRecord(record, asOf);
   return {
     ...article,
     article_identity_key: key,
@@ -266,11 +274,15 @@ function dedupeByArticleIdentity(articles = []) {
   return out;
 }
 
-function everCoveredAsNewsletterArticle(identityKey, history = {}) {
+// options.date는 쿨다운 검사가 쓰는 것과 같은 as-of date다. 그 호 자신이 발행한 레코드는 이력에서
+// 빠진다 — 안 그러면 같은 date 재실행이 그 호가 catch-up 레인으로 낸 기사를 자기 이력으로 배제한다.
+function everCoveredAsNewsletterArticle(identityKey, history = {}, options = {}) {
   const key = text(identityKey);
   if (!key) return false;
   return ensureArray(history.articles).some(item =>
-    text(item.article_identity_key) === key && isNewsletterArticleRecord(item)
+    text(item.article_identity_key) === key &&
+    isNewsletterArticleRecord(item) &&
+    !isSameIssueRecord(item, options.date)
   );
 }
 

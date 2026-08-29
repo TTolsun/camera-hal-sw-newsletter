@@ -751,7 +751,9 @@ function releaseClassBlockedReason(observation) {
   return 'unclassified';
 }
 
-function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = getCatchUpPolicy()) {
+// date는 이 호의 이슈 날짜다. 게재 이력 필터가 쿨다운 검사와 같은 as-of 기준을 써야 같은 date
+// 재실행이 그 호가 catch-up 레인으로 낸 기사를 자기 이력으로 배제하지 않는다.
+function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = getCatchUpPolicy(), date) {
   if (!catchUpPolicy || catchUpPolicy.enabled !== true) return [];
   const eligibleBuckets = new Set(ensureArray(catchUpPolicy.eligibleBuckets));
   const maxAge = Number(catchUpPolicy.maxAgeDays) || 0;
@@ -764,7 +766,7 @@ function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = 
     if (!eligibleBuckets.has(bucket)) return false;
     const age = Number(candidate.days_since_published);
     if (!Number.isFinite(age) || age > maxAge) return false;
-    if (everCoveredAsNewsletterArticle(articleIdentityKey(candidate), history)) return false;
+    if (everCoveredAsNewsletterArticle(articleIdentityKey(candidate), history, { date })) return false;
     if (!catchUpCandidateHasEvidence(candidate)) return false;
     return true;
   });
@@ -926,7 +928,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     const poolSourceCandidates = maxReleaseClassArticles > 0
       ? [...ensureArray(selectionPools?.fallback), ...ensureArray(referenceContextCandidates)]
       : referenceContextCandidates;
-    const pool = buildCatchUpPool(poolSourceCandidates, exposureHistory, catchUpPolicy)
+    const pool = buildCatchUpPool(poolSourceCandidates, exposureHistory, catchUpPolicy, date)
       .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
       // Thin-week guard: only promote catch-up candidates that clear the same deterministic
       // selection floor as fresh main articles. The normal path (selectFinalArticlesFromPool)

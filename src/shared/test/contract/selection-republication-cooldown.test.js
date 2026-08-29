@@ -128,6 +128,77 @@ test('re-running the same date does not block the articles that issue itself pub
   assert.equal(report.selected_article_count, 3);
 });
 
+// catch-up 레인은 primary 레인과 다른 통로다. 선정 pool이 아니라 reference 창 후보를 보고,
+// 쿨다운 술어가 아니라 게재 이력 술어(everCoveredAsNewsletterArticle)로 거른다. 자기차단 해제가
+// primary 레인에만 적용되면 같은 회귀가 이 통로에 그대로 남는다.
+const CATCH_UP_ISSUE_DATE = '2026-06-10';
+const CATCH_UP_URL = 'https://source.android.com/docs/core/camera/aidl-v3';
+const CATCH_UP_POLICY = {
+  enabled: true,
+  maxCatchUpArticles: 2,
+  maxAgeDays: 90,
+  targetMainArticles: 3,
+  eligibleBuckets: ['direct_aosp_camera'],
+  activationMode: 'fill_open_slots'
+};
+
+function strongRelease(overrides = {}) {
+  return {
+    relevance_bucket: 'direct_aosp_camera',
+    aosp_camera_directness: 4,
+    counts_as_primary_camera_topic: true,
+    has_dated_evidence: true,
+    finalSelectionEligibility: 'main',
+    api_or_component: 'CameraX',
+    ...overrides
+  };
+}
+
+function catchUpWeekReport(exposureHistory) {
+  return buildShortlistReport(CATCH_UP_ISSUE_DATE, {
+    candidates: [
+      strongRelease({
+        title: 'CameraX 1.7.0',
+        url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0',
+        published_date: '2026-06-01',
+        version_or_release: '1.7.0',
+        behavior_change: 'SessionConfig API'
+      }),
+      strongRelease({
+        title: 'Camera HAL AIDL v3 interface update',
+        url: CATCH_UP_URL,
+        published_date: '2026-05-10',
+        version_or_release: 'AIDL v3',
+        behavior_change: 'ICameraDevice interface change'
+      })
+    ]
+  }, { exposureHistory, catchUpPolicy: CATCH_UP_POLICY });
+}
+
+function catchUpRecord(newsletterArticleDate) {
+  return historyWith([publishedRecord(CATCH_UP_URL, {
+    newsletterDate: newsletterArticleDate,
+    cooldownUntil: '2026-07-01'
+  })]);
+}
+
+test('re-running the same date does not block the catch-up article that issue itself published', () => {
+  const baseline = catchUpWeekReport(historyWith([]));
+  assert.equal(baseline.catch_up_used_count, 1, '이 fixture는 catch-up 승급이 일어나는 주여야 한다');
+  assert.ok(urls(baseline.selected_articles).includes(CATCH_UP_URL));
+
+  const rerun = catchUpWeekReport(catchUpRecord(CATCH_UP_ISSUE_DATE));
+  assert.equal(rerun.catch_up_used_count, 1);
+  assert.ok(urls(rerun.selected_articles).includes(CATCH_UP_URL));
+  assert.deepEqual(urls(rerun.selected_articles), urls(baseline.selected_articles));
+});
+
+test('a previous issue still keeps its article out of the catch-up lane', () => {
+  const report = catchUpWeekReport(catchUpRecord('2026-06-03'));
+  assert.equal(report.catch_up_used_count, 0);
+  assert.ok(!urls(report.selected_articles).includes(CATCH_UP_URL));
+});
+
 test('the previous issue still blocks even though the same run date does not', () => {
   // 자기차단 해제가 쿨다운 자체를 무력화하면 안 된다. 발행일이 실행 date와 다르면 그대로 막힌다.
   const previousUrl = candidateUrlAt(0);
