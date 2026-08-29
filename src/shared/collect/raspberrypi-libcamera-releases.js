@@ -29,8 +29,14 @@ const EMPTY_BODY_PLACEHOLDER_PATTERN = /^no content\.?$/i;
 //
 // 한 겹만 벗기는 것이 핵심이다. decodeHtml은 치환을 순차 적용하므로(&amp; 먼저) 두 겹을 한 번에
 // 내려버리고, 그러면 본문의 리터럴 꺾쇠(`Signed-off-by: … &lt;naush@…&gt;`)가 진짜 태그로 승격된 뒤
-// 태그 제거에 삼켜져 근거에서 사라진다. 태그를 **공백**으로 치환하는 것도 같은 이유다 — 빈
-// 문자열로 지우면 `now<br />embedded`에서 단어가 붙는다.
+// 태그 제거에 삼켜진다. 태그를 **공백**으로 치환하는 것도 같은 이유다 — 빈 문자열로 지우면
+// `now<br />embedded`에서 단어가 붙는다.
+//
+// 다만 이건 이 모듈이 지키는 경계 계약이지 최종 산출물의 보장이 아니다. 지금은 하류
+// normalizeCandidate(collect-news-candidates.js:923)가 summary에 decode()를 다시 걸고, 그 decode가
+// `<…>`를 또 지워서 살려낸 꺾쇠가 영속 후보에서는 결국 사라진다(라이브 실측 3건). 여기서 안 지우는
+// 이유는 수집기가 원문을 망가뜨린 채 넘기지 않기 위해서고, 진짜 보존을 원하면 레버는 이 파일이
+// 아니라 그 decode다.
 const XML_ESCAPE_ONCE = { '&lt;': '<', '&gt;': '>', '&quot;': '"', '&apos;': "'", '&amp;': '&' };
 
 function unescapeXmlOnce(value) {
@@ -64,10 +70,10 @@ function releaseCandidate(block, source) {
   // 그 패턴의 어휘가 하나도 없어서, 지금까지 통과하던 릴리스가 release_note_item 근거 미달로 main
   // 자격을 잃는다(라이브 실측: 7건 중 2건 탈락). 자격 판정 변경은 이 수정의 목적이 아니다.
   //
-  // 둘째, article-capsules가 이 필드를 what_changed와 evidence 첫 칸에 그대로 싣는다. 그래서 이
-  // 선택의 대가는 분명하다 — 기사 프롬프트의 그 두 자리는 여전히 자기참조 문장이고, 본문은
-  // allowed_claim_evidence로만 도달한다. 그 층까지 본문을 올리려면 evidence 슬롯 구성을 함께
-  // 바꿔야 하고, 그건 이 수집기 혼자 정할 수 있는 일이 아니다.
+  // 둘째, article-capsules가 이 필드를 what_changed에 싣고 evidence 3칸(MAX_EVIDENCE_ITEMS=3) 중
+  // 한 칸도 차지한다. 그 cap 때문에 summary 칸이 밀려나므로 대가는 분명하다 — 기사 프롬프트의 그
+  // 자리들은 여전히 자기참조 문장이고, 본문은 allowed_claim_evidence로만 도달한다. 그 층까지 본문을
+  // 올리려면 evidence 슬롯 구성을 함께 바꿔야 하고, 그건 이 수집기 혼자 정할 수 있는 일이 아니다.
   const releaseSentence = `Released ${tag} (Raspberry Pi downstream libcamera).`;
   const summary = releaseBodyText(block) || releaseSentence;
   return {

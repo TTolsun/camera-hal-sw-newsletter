@@ -105,8 +105,9 @@ test('keeps behavior_change on the release sentence so eligibility does not shif
   assert.notEqual(item.behavior_change, item.summary);
 });
 
-// 본문의 리터럴 꺾쇠(이메일·include 경로)가 태그로 오인돼 사라지면 근거가 조용히 준다.
-test('keeps literal angle-bracket text in the body', () => {
+// 이 모듈이 지키는 경계 계약이다: 리터럴 꺾쇠(이메일·include 경로)를 태그로 오인해 지운 채 넘기지
+// 않는다. 최종 산출물 보장은 아니다 — 하류 normalizeCandidate의 decode()가 다시 지운다.
+test('keeps literal angle-bracket text when handing the body downstream', () => {
   const body = '&lt;p&gt;Signed-off-by: Naushir Patuck &amp;lt;naush@raspberrypi.com&amp;gt;&lt;/p&gt;';
   const [item] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody(body), source());
   assert.match(item.summary, /Signed-off-by: Naushir Patuck <naush@raspberrypi\.com>/);
