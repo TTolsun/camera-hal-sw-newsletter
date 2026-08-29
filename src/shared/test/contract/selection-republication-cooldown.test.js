@@ -29,6 +29,7 @@ function publishedRecord(url, { newsletterDate, cooldownUntil }) {
     newsletter_date: newsletterDate,
     exposure_type: 'newsletter_article',
     exposed_at: newsletterDate,
+    newsletter_article_date: newsletterDate,
     cooldown_until: cooldownUntil,
     exposure_types: ['newsletter_article']
   };
@@ -99,6 +100,35 @@ test('a candidate published within the cooldown does not reach the reserve lane 
     candidate.url === reserveUrl &&
     candidate.exclusion_reasons.some(reason => /republication cooldown/.test(reason))));
   assert.equal(report.publish_ready, true);
+});
+
+test('re-running the same date does not block the articles that issue itself published', () => {
+  // 워크플로 03은 ref: main을 체크아웃하므로, 이미 발행된 날짜로 generate를 다시 돌리면 state
+  // 파일에 그 주 자신의 레코드가 들어 있다. 그 레코드로 자기 기사를 막으면 재실행이 편성을
+  // 통째로 갈아치운다.
+  const ownUrl = candidateUrlAt(0);
+  const report = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {
+    exposureHistory: historyWith([
+      publishedRecord(ownUrl, { newsletterDate: ISSUE_DATE, cooldownUntil: '2026-05-31' })
+    ])
+  });
+
+  assert.ok(urls(report.selected_articles).includes(ownUrl));
+  assert.deepEqual(report.excluded_candidates.filter(candidate => candidate.url === ownUrl), []);
+  assert.equal(report.selected_article_count, 3);
+});
+
+test('the previous issue still blocks even though the same run date does not', () => {
+  // 자기차단 해제가 쿨다운 자체를 무력화하면 안 된다. 발행일이 실행 date와 다르면 그대로 막힌다.
+  const previousUrl = candidateUrlAt(0);
+  const report = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {
+    exposureHistory: historyWith([
+      publishedRecord(previousUrl, { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' })
+    ])
+  });
+
+  assert.ok(!urls(report.selected_articles).includes(previousUrl));
+  assert.equal(report.selected_article_count, 2);
 });
 
 test('a candidate whose cooldown has passed is not blocked', () => {

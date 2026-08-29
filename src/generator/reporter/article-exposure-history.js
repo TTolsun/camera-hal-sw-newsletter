@@ -136,6 +136,11 @@ function recordArticleExposure(history, article = {}, options = {}) {
     exposed_at: text(options.exposedAt || options.date || article.selected_at || todayDate())
   };
   if (exposureType === 'newsletter_article' && newsletterDate) {
+    // newsletter_date는 "마지막 노출 주"다. 같은 URL이 다음 주에도 헤드라인으로 유지되면 그때의
+    // homepage_headline 기록이 spread로 그 값을 덮는다(cooldown_until은 이 분기에서만 쓰이므로
+    // 살아남는다). 그래서 main 기사로 발행된 주를 따로 남긴다 — 쿨다운의 시작일이자, 재게재
+    // 경고가 "언제 발행됐는지"로 인용해야 하는 값이다.
+    record.newsletter_article_date = newsletterDate;
     record.cooldown_until = addDays(newsletterDate, Number(options.cooldownDays) || NEWSLETTER_ARTICLE_COOLDOWN_DAYS);
   }
   record.first_exposed_at = record.exposed_at;
@@ -224,15 +229,20 @@ function annotateArticleExposure(article = {}, history = {}, options = {}) {
   // carry 실행 시점에 따라 판정이 달라져 선정이 비결정적이 된다. date를 못 받는 호출부는 기존
   // 동작(오늘 기준)을 그대로 유지한다.
   const asOf = text(options.date) || todayDate();
+  // 발행 주가 곧 이번 실행의 date면 재게재가 아니라 그 호 자신의 기사다. 워크플로 03은
+  // ref: main을 체크아웃하므로 이미 발행된 날짜로 다시 돌리면 state에 그 주 자신의 레코드가
+  // 들어 있고, 그대로 두면 재실행이 자기 편성을 통째로 갈아치운다.
+  const publishedAt = text(record?.newsletter_article_date);
   const publishedWithinCooldown = isNewsletterArticleRecord(record) &&
     Boolean(record.cooldown_until) &&
-    asOf <= record.cooldown_until;
+    asOf <= record.cooldown_until &&
+    publishedAt !== asOf;
   return {
     ...article,
     article_identity_key: key,
     already_exposed: Boolean(record),
     published_within_cooldown: publishedWithinCooldown,
-    last_newsletter_date: publishedWithinCooldown ? text(record.newsletter_date) : null,
+    last_newsletter_date: publishedWithinCooldown ? publishedAt : null,
     exposure_history_record: record
   };
 }

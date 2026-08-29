@@ -16,6 +16,7 @@
       "headline_score": null,
       "reuse_reason": "",
       "exposed_at": "2026-08-10",
+      "newsletter_article_date": "2026-08-10",
       "cooldown_until": "2026-08-31",
       "first_exposed_at": "2026-08-10",
       "last_exposed_at": "2026-08-10",
@@ -34,6 +35,7 @@
       "headline_score": null,
       "reuse_reason": "",
       "exposed_at": "2026-08-03",
+      "newsletter_article_date": "2026-08-03",
       "cooldown_until": "2026-08-24",
       "first_exposed_at": "2026-08-03",
       "last_exposed_at": "2026-08-03",
@@ -52,6 +54,7 @@
       "headline_score": null,
       "reuse_reason": "",
       "exposed_at": "2026-08-03",
+      "newsletter_article_date": "2026-08-03",
       "cooldown_until": "2026-08-24",
       "first_exposed_at": "2026-08-03",
       "last_exposed_at": "2026-08-03",
@@ -70,6 +73,7 @@
       "headline_score": null,
       "reuse_reason": "",
       "exposed_at": "2026-08-03",
+      "newsletter_article_date": "2026-08-03",
       "cooldown_until": "2026-08-24",
       "first_exposed_at": "2026-08-03",
       "last_exposed_at": "2026-08-03",
@@ -88,6 +92,7 @@
       "headline_score": null,
       "reuse_reason": "",
       "exposed_at": "2026-07-27",
+      "newsletter_article_date": "2026-07-27",
       "cooldown_until": "2026-08-17",
       "first_exposed_at": "2026-07-27",
       "last_exposed_at": "2026-07-27",
@@ -106,6 +111,7 @@
       "headline_score": null,
       "reuse_reason": "",
       "exposed_at": "2026-07-27",
+      "newsletter_article_date": "2026-07-27",
       "cooldown_until": "2026-08-17",
       "first_exposed_at": "2026-07-27",
       "last_exposed_at": "2026-07-27",
@@ -124,6 +130,7 @@
       "headline_score": null,
       "reuse_reason": "",
       "exposed_at": "2026-07-27",
+      "newsletter_article_date": "2026-07-27",
       "cooldown_until": "2026-08-17",
       "first_exposed_at": "2026-07-27",
       "last_exposed_at": "2026-07-27",
@@ -142,6 +149,7 @@
       "headline_score": null,
       "reuse_reason": "",
       "exposed_at": "2026-07-27",
+      "newsletter_article_date": "2026-07-27",
       "cooldown_until": "2026-08-17",
       "first_exposed_at": "2026-07-27",
       "last_exposed_at": "2026-07-27",
@@ -167,6 +175,7 @@
         "homepage_headline",
         "newsletter_article"
       ],
+      "newsletter_article_date": "2026-08-24",
       "cooldown_until": "2026-09-14"
     },
     {
@@ -186,6 +195,7 @@
         "homepage_headline",
         "newsletter_article"
       ],
+      "newsletter_article_date": "2026-08-17",
       "cooldown_until": "2026-09-07"
     },
     {
@@ -205,6 +215,7 @@
         "homepage_headline",
         "newsletter_article"
       ],
+      "newsletter_article_date": "2026-08-10",
       "cooldown_until": "2026-08-31"
     },
     {
@@ -224,6 +235,7 @@
         "homepage_headline",
         "newsletter_article"
       ],
+      "newsletter_article_date": "2026-08-03",
       "cooldown_until": "2026-08-24"
     },
     {
@@ -243,6 +255,7 @@
         "homepage_headline",
         "newsletter_article"
       ],
+      "newsletter_article_date": "2026-07-27",
       "cooldown_until": "2026-08-17"
     },
     {

@@ -164,6 +164,7 @@ test('annotateArticleExposure marks published_within_cooldown when cooldown_unti
       article_identity_key: 'url:https://example.com/camerax-fix',
       exposure_type: 'newsletter_article',
       newsletter_date: '2026-06-03',
+      newsletter_article_date: '2026-06-03',
       cooldown_until: '2099-01-01'
     }]
   };
@@ -308,10 +309,33 @@ test('annotateArticleExposure keeps published_within_cooldown after a later home
   assert.equal(history.articles.length, 1);
   assert.equal(history.articles[0].exposure_type, 'homepage_headline');
   assert.deepEqual(history.articles[0].exposure_types, ['newsletter_article', 'homepage_headline']);
+  // newsletter_date는 마지막 노출 주로 덮이지만 발행 주는 newsletter_article_date에 남는다.
+  assert.equal(history.articles[0].newsletter_date, '2026-08-24');
+  assert.equal(history.articles[0].newsletter_article_date, '2026-08-17');
 
   const annotated = annotateArticleExposure(article, history, { date: '2026-08-31' });
   assert.strictEqual(annotated.published_within_cooldown, true);
-  assert.strictEqual(annotated.last_newsletter_date, '2026-08-24');
+  // 경고 문구가 인용하는 값이다. 최근 노출일(08-24)이 아니라 main 기사로 발행된 주여야 한다.
+  assert.strictEqual(annotated.last_newsletter_date, '2026-08-17');
+});
+
+test('annotateArticleExposure does not block the issue that published the article on that same date', () => {
+  // 워크플로 03의 재실행(ref: main 체크아웃)은 그 주 자신의 레코드가 이미 들어 있는 state를 본다.
+  let history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-17', backfill_included: false },
+    articles: []
+  };
+  const article = { source_url: 'https://example.com/camerax-1.7.0-alpha03' };
+  history = recordArticleExposure(history, article, {
+    date: '2026-08-17',
+    type: 'newsletter_article',
+    cooldownDays: 21
+  });
+
+  assert.strictEqual(annotateArticleExposure(article, history, { date: '2026-08-17' }).published_within_cooldown, false);
+  assert.strictEqual(annotateArticleExposure(article, history, { date: '2026-08-24' }).published_within_cooldown, true);
+  assert.strictEqual(annotateArticleExposure(article, history, { date: '2026-09-08' }).published_within_cooldown, false);
 });
 
 test('annotateArticleExposure compares the cooldown against the issue date, not the wall clock', () => {
