@@ -507,7 +507,55 @@ test('the committed exposure history carries main-article records and no collaps
   assert.ok(mainArticleRecords.every(item => item.cooldown_until && item.newsletter_article_date));
 });
 
-test('every committed main-article record is dated by the issue that published it', () => {
+// 한 발행 기록이 그 호와 정합한가. 커밋된 state를 훑는 검사와 이 판정 자체를 검사하는 테스트가
+// 같은 한 줄을 쓰도록 술어로 뽑는다. 어긋난 필드 이름을 돌려주고 정합하면 null이다.
+//
+// 두 날짜의 의미가 다르므로 같은지를 묻지 않는다. issue.date는 그 주 월요일이고
+// newsletter_article_date는 실제 실행 date라, 03을 화요일에 재실행하면 정상적으로 갈라진다.
+// 대신 두 술어를 함께 건다.
+//  1) 발행일이 그 호의 주 창([월요일, +6일]) 안에 있는가 — 창이 발행 주기보다 짧으므로 한 주
+//     단위로 밀린 날짜는 짝이 맞아도 여기서 걸린다.
+//  2) 쿨다운 종료일이 issue.date가 아니라 그 레코드 자신의 발행일 + 21일인가 — 창 안에서
+//     쿨다운만 변조한 값을 여기서 잡는다.
+function recordIssueMismatch(record, weekStartDate) {
+  const publishedAt = String(record.newsletter_article_date || '');
+  if (publishedAt < weekStartDate || publishedAt > plusDays(weekStartDate, 6)) {
+    return 'newsletter_article_date';
+  }
+  if (record.cooldown_until !== plusDays(publishedAt, NEWSLETTER_ARTICLE_COOLDOWN_DAYS)) {
+    return 'cooldown_until';
+  }
+  return null;
+}
+
+test('the record-to-issue date rule accepts a mid-week rerun and still rejects shifted dates', () => {
+  // issue.date는 weekBoundsForDate가 만든 그 주 월요일이고(weekly-newsletter.js),
+  // newsletter_article_date는 실제 실행 date다. 03을 화요일에 newsletter_date 없이 재실행하면
+  // 두 값이 정상적으로 갈라진다 — 그 경우를 불일치로 보면 그 뒤 모든 npm test가 영구히 빨개진다.
+  const weekStart = '2026-08-24';
+  const record = (newsletterArticleDate, cooldownUntil) => ({
+    newsletter_article_date: newsletterArticleDate,
+    cooldown_until: cooldownUntil
+  });
+
+  assert.equal(recordIssueMismatch(record('2026-08-24', '2026-09-14'), weekStart), null,
+    '월요일 실행은 정합하다');
+  assert.equal(recordIssueMismatch(record('2026-08-25', '2026-09-15'), weekStart), null,
+    '화요일 재실행은 같은 주 안이고 쿨다운도 자기 발행일 기준으로 맞다');
+
+  // 약화 가드 1: 발행일과 쿨다운을 함께 7일 민다. 자기모순이 없어 짝 검사만으로는 통과하지만
+  // 주 경계를 넘으므로 창 검사가 잡는다. 쿨다운이 7일 일찍 끝나는 그 실패다.
+  assert.equal(recordIssueMismatch(record('2026-08-31', '2026-09-21'), weekStart),
+    'newsletter_article_date');
+  assert.equal(recordIssueMismatch(record('2026-08-17', '2026-09-07'), weekStart),
+    'newsletter_article_date');
+
+  // 약화 가드 2: 쿨다운만 변조한다. 창 안에 있어도 짝 검사가 잡는다.
+  assert.equal(recordIssueMismatch(record('2026-08-24', '2026-09-21'), weekStart), 'cooldown_until');
+  assert.equal(recordIssueMismatch(record('2026-08-25', '2026-09-14'), weekStart), 'cooldown_until');
+});
+
+test('every committed main-article record is dated inside the issue week that published it', () => {
   // 자기모순 없는 틀린 날짜는 스위트를 그대로 통과한다. 손 편집·잘못된 머지·나중의 backfill이
   // 날짜를 일주일 밀면 쿨다운이 7일 일찍 끝나 게이트가 과소 차단하는데 CI는 초록이다 — #963이
   // 눈에 안 띈 것과 같은 무증상 실패다. 그래서 기대 날짜를 발행된 호에서 파생한다.
@@ -516,14 +564,12 @@ test('every committed main-article record is dated by the issue that published i
   assert.ok(mainArticleRecords.length > 0);
 
   for (const record of mainArticleRecords) {
-    const publishedDate = publishedDates.get(record.article_identity_key);
-    assert.ok(publishedDate,
+    const weekStartDate = publishedDates.get(record.article_identity_key);
+    assert.ok(weekStartDate,
       `${record.article_identity_key}는 어떤 발행 호의 section도 아니다`);
-    assert.equal(record.newsletter_article_date, publishedDate,
-      `${record.article_identity_key}의 발행일이 issue.json과 다르다`);
-    assert.equal(record.cooldown_until,
-      plusDays(publishedDate, NEWSLETTER_ARTICLE_COOLDOWN_DAYS),
-      `${record.article_identity_key}의 쿨다운 종료일이 발행일 + ${NEWSLETTER_ARTICLE_COOLDOWN_DAYS}일이 아니다`);
+    assert.equal(recordIssueMismatch(record, weekStartDate), null,
+      `${record.article_identity_key}: 발행일 ${record.newsletter_article_date} / 쿨다운 ` +
+      `${record.cooldown_until}이(가) 발행 호(주 시작 ${weekStartDate})와 어긋난다`);
   }
 });
 
