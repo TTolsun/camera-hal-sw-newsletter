@@ -8,6 +8,7 @@ const test = require('node:test');
 
 const {
   buildShortlistReport,
+  policyDriverCandidate,
   policyPrimaryCandidate
 } = require('../helpers/selection-builders');
 const { buildSelectionReport } = require('../../../generator/publish/orchestrator-report-builders');
@@ -400,6 +401,56 @@ test('the shortlist cap is applied after the cooldown filter, so a blocked seat 
   assert.equal(report.eligible_candidate_count, 12);
   assert.deepEqual(report.selected_articles.map(candidate => candidate.url),
     baseline.selected_articles.map(candidate => candidate.url));
+});
+
+// 재게재 차단은 후보를 eligible 풀에서 빼므로, 차단 뒤 구성으로 힌트를 만들면 그 버킷이 0이 되어
+// "파서를 고쳐라"가 붙는다. 파서는 멀쩡한데 고치라고 지시하는 오귀인이다. 한 버킷에 후보가 하나뿐인
+// 주를 만들어 그 후보만 막는다.
+const PARSER_REPAIR_HINT = /Repair official AOSP Camera \/ CameraX row parsers/;
+
+function mixedBucketCandidates() {
+  return [
+    policyPrimaryCandidate(0, { title: 'CameraX release notes update' }),
+    policyDriverCandidate(1, { title: 'V4L2 sensor driver rework' }),
+    policyDriverCandidate(2, { title: 'libcamera IPA module refresh' })
+  ];
+}
+
+test('a republication block is not reported as a source parser defect', () => {
+  const blockedUrl = 'https://example.com/policy-primary-0';
+  const baseline = buildShortlistReport(ISSUE_DATE, mixedBucketCandidates(), {
+    exposureHistory: historyWith([])
+  });
+  assert.equal(baseline.eligible_composition_summary.direct_aosp_camera_count, 1,
+    '차단 대상 버킷에 후보가 정확히 하나여야 이 검사가 의미를 갖는다');
+  assert.ok(!baseline.selection_shortage_hints.some(hint => PARSER_REPAIR_HINT.test(hint)));
+
+  const report = buildShortlistReport(ISSUE_DATE, mixedBucketCandidates(), {
+    exposureHistory: historyWith([
+      publishedRecord(blockedUrl, { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' })
+    ])
+  });
+
+  assert.equal(report.republication_cooldown_blocked.count, 1, '차단이 실제로 일어난 주여야 한다');
+  assert.deepEqual(report.selection_shortage_hints, baseline.selection_shortage_hints);
+  assert.deepEqual(report.source_parser_hints.map(hint => hint.code),
+    baseline.source_parser_hints.map(hint => hint.code));
+
+  // eligible_composition_summary는 실제로 선정 가능한 후보 수다. 힌트만 차단 전 구성을 보고,
+  // 이 값은 차단 뒤 사실을 그대로 보고해야 한다.
+  assert.equal(report.eligible_composition_summary.direct_aosp_camera_count, 0);
+});
+
+test('a bucket that collection never delivered still gets its parser hint', () => {
+  // 과억제 가드: 차단과 무관하게 비어 있는 버킷의 힌트까지 사라지면 진짜 파서 고장을 놓친다.
+  const report = buildShortlistReport(ISSUE_DATE, [
+    policyDriverCandidate(1, { title: 'V4L2 sensor driver rework' }),
+    policyDriverCandidate(2, { title: 'libcamera IPA module refresh' })
+  ], { exposureHistory: historyWith([]) });
+
+  assert.equal(report.republication_cooldown_blocked.count, 0);
+  assert.ok(report.selection_shortage_hints.some(hint => PARSER_REPAIR_HINT.test(hint)));
+  assert.ok(report.source_parser_hints.some(hint => hint.code === 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR'));
 });
 
 const REPO_ROOT = path.join(__dirname, '..', '..', '..', '..');
