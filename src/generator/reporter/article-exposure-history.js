@@ -184,13 +184,27 @@ function exposureMap(history = {}) {
     .filter(([key]) => key));
 }
 
-function annotateArticleExposure(article = {}, history = {}) {
+// 한 레코드가 newsletter_article로 노출된 적이 있는지 판정하는 단일 술어.
+// exposure_type(단수)은 "마지막" 노출 유형이다. 어떤 URL이 한 주에 main 기사로 나간 뒤 다음 주에
+// 헤드라인으로 유지되면 그 값이 homepage_headline으로 덮인다. 누적 이력인 exposure_types까지 함께
+// 봐야 쿨다운 검사(annotateArticleExposure)와 catch-up 필터(everCoveredAsNewsletterArticle)가
+// 같은 질문에 같은 답을 한다 — 예전에는 앞의 것만 단수형을 봐서 헤드라인 유지 주에 조용히 죽었다.
+function isNewsletterArticleRecord(record) {
+  if (!record || typeof record !== 'object') return false;
+  return text(record.exposure_type) === 'newsletter_article' ||
+    ensureArray(record.exposure_types).includes('newsletter_article');
+}
+
+function annotateArticleExposure(article = {}, history = {}, options = {}) {
   const key = articleIdentityKey(article);
   const record = exposureMap(history).get(key) || null;
-  const today = todayDate();
-  const publishedWithinCooldown = record?.exposure_type === 'newsletter_article' &&
+  // 쿨다운 비교 기준은 이슈 date다. 벽시계(todayDate)를 쓰면 같은 이력·같은 후보라도 리플레이나
+  // carry 실행 시점에 따라 판정이 달라져 선정이 비결정적이 된다. date를 못 받는 호출부는 기존
+  // 동작(오늘 기준)을 그대로 유지한다.
+  const asOf = text(options.date) || todayDate();
+  const publishedWithinCooldown = isNewsletterArticleRecord(record) &&
     Boolean(record.cooldown_until) &&
-    today <= record.cooldown_until;
+    asOf <= record.cooldown_until;
   return {
     ...article,
     article_identity_key: key,
@@ -217,9 +231,7 @@ function everCoveredAsNewsletterArticle(identityKey, history = {}) {
   const key = text(identityKey);
   if (!key) return false;
   return ensureArray(history.articles).some(item =>
-    text(item.article_identity_key) === key &&
-    (text(item.exposure_type) === 'newsletter_article' ||
-      ensureArray(item.exposure_types).includes('newsletter_article'))
+    text(item.article_identity_key) === key && isNewsletterArticleRecord(item)
   );
 }
 

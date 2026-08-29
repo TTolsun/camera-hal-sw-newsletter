@@ -233,3 +233,48 @@ test('everCoveredAsNewsletterArticle is false when only homepage_headline exposu
 test('everCoveredAsNewsletterArticle is false for an unknown key', () => {
   assert.strictEqual(everCoveredAsNewsletterArticle('url:https://example.com/never', { articles: [] }), false);
 });
+
+test('annotateArticleExposure keeps published_within_cooldown after a later homepage_headline exposure', () => {
+  // 회귀 잠금: exposure_type(단수)은 마지막 노출 유형이라 다음 주 헤드라인 유지가
+  // newsletter_article을 homepage_headline으로 덮는다. 그때 쿨다운 검사가 조용히 죽으면 안 된다.
+  let history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-17', backfill_included: false },
+    articles: []
+  };
+  const article = { source_url: 'https://example.com/camerax-1.7.0-alpha03' };
+  history = recordArticleExposure(history, article, {
+    date: '2026-08-17',
+    type: 'newsletter_article',
+    cooldownDays: 21
+  });
+  history = recordArticleExposure(history, article, {
+    date: '2026-08-24',
+    type: 'homepage_headline'
+  });
+
+  assert.equal(history.articles.length, 1);
+  assert.equal(history.articles[0].exposure_type, 'homepage_headline');
+  assert.deepEqual(history.articles[0].exposure_types, ['newsletter_article', 'homepage_headline']);
+
+  const annotated = annotateArticleExposure(article, history, { date: '2026-08-31' });
+  assert.strictEqual(annotated.published_within_cooldown, true);
+  assert.strictEqual(annotated.last_newsletter_date, '2026-08-24');
+});
+
+test('annotateArticleExposure compares the cooldown against the issue date, not the wall clock', () => {
+  const history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-01-01', backfill_included: false },
+    articles: [{
+      article_identity_key: 'url:https://example.com/replayed',
+      exposure_type: 'newsletter_article',
+      newsletter_date: '2026-01-01',
+      cooldown_until: '2026-01-22'
+    }]
+  };
+  const candidate = { source_url: 'https://example.com/replayed' };
+
+  assert.strictEqual(annotateArticleExposure(candidate, history, { date: '2026-01-10' }).published_within_cooldown, true);
+  assert.strictEqual(annotateArticleExposure(candidate, history, { date: '2026-02-10' }).published_within_cooldown, false);
+});

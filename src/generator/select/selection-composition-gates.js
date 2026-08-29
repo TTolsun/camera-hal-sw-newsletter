@@ -46,7 +46,8 @@ function selectionWarnings(selected, options = {}) {
   const items = ensureArray(selected);
   if (!options.exposureHistory) return warnings;
   for (const article of items) {
-    const annotated = annotateArticleExposure(article, options.exposureHistory);
+    // 이슈 date 기준으로 판정해야 리플레이·carry 실행에서 같은 입력이 같은 경고를 낸다.
+    const annotated = annotateArticleExposure(article, options.exposureHistory, { date: options.date });
     if (annotated.published_within_cooldown) {
       warnings.push(
         `repeated_event_within_cooldown: "${article.title || article.headline || article.article_identity_key}" — last published ${annotated.last_newsletter_date}`

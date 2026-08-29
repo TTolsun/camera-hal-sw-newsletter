@@ -953,7 +953,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       reserve = reserve.filter(candidate => !catchUpKeys.has(articleIdentityKey(candidate)));
     }
   }
-  const warnings = selectionWarnings(selected, { exposureHistory });
+  const warnings = selectionWarnings(selected, { exposureHistory, date });
   const errors = selectionErrors(selected);
   const composition = compositionSummary(selected);
   const eligibleComposition = compositionSummary(shortlist);
