@@ -493,6 +493,7 @@ test('site validation workflow keeps structural checks blocking and quality anno
   // 위반이 머지 시점이 아니라 그 주 발행 때 처음 드러나 본문 품질과 무관한 이유로 발행이 강등된다.
   assert.match(structuralStep, /npm run check:repo-hygiene/);
   assert.match(structuralStep, /npm run check:artifact-retention/);
+  assert.match(structuralStep, /npm run check:artifact-path-convention/);
   assert.match(structuralStep, /npm run check:domain-model-boundary/);
   assert.match(structuralStep, /npm run validate:policy/);
   assert.match(structuralStep, /npm run check:policy-docs/);

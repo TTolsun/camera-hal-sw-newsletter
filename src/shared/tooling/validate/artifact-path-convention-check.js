@@ -145,9 +145,6 @@ function checkArtifactPathConvention({ root = process.cwd(), _trackedPaths } = {
 }
 
 module.exports = {
-  REPOSITORY_ROOT_PATH_CONVENTION_START_DATE,
-  PUBLIC_OUTPUT_ROOT_PREFIXES,
-  isPublicOutputManifestPath,
   findManifestPathConventionViolations,
   checkArtifactPathConvention
 };

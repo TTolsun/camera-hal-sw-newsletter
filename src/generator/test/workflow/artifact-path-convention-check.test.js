@@ -95,6 +95,50 @@ test('깨진 매니페스트는 파일을 지목해 보고한다', () => {
   });
 });
 
+// 경계는 첫 관측(06-16)이 아니라 원인(#262 phase 6 머지 = 2026-06-13)에 맞춰져 있다. 커밋된
+// 매니페스트는 06-11 다음이 06-16이라 실데이터에 경계 표본이 없으므로, 합성 매니페스트로 잠근다.
+// 이 테스트가 없으면 상수를 06-12~06-16 사이 아무 값으로 바꿔도 전부 통과한다.
+test('규약 경계는 2026-06-13이다 — 그 전날은 옛 규약, 당일은 루트 기준', () => {
+  withTempRoot(root => {
+    const beforeBoundary = seedManifest(root, '2026-06-12', ['content/newsroom/2026-06-12/quality-report.json']);
+    const onBoundary = seedManifest(root, '2026-06-13', ['articles/content/newsroom/2026-06-13/quality-report.json']);
+    const accepted = checkArtifactPathConvention({ root, _trackedPaths: [beforeBoundary, onBoundary] });
+    assert.equal(accepted.ok, true, '06-12=옛 규약 / 06-13=루트 기준이 모두 통과해야 한다');
+
+    const swapped = checkArtifactPathConvention({
+      root,
+      _trackedPaths: [
+        seedManifest(root, '2026-06-12', ['articles/content/newsroom/2026-06-12/quality-report.json']),
+        seedManifest(root, '2026-06-13', ['content/newsroom/2026-06-13/quality-report.json'])
+      ]
+    });
+    assert.equal(swapped.ok, false, '두 날짜의 규약을 서로 바꾸면 둘 다 잡혀야 한다');
+    assert.equal(swapped.violations.length, 2);
+  });
+});
+
+// 판정 대상 배열이 조용히 좁아지는 것을 막는다 — 키가 빠지면 그 배열의 위반이 통과해 버린다.
+test('files[] 말고도 review_artifacts·retained_heavy_artifacts·committed_artifacts를 본다', () => {
+  withTempRoot(root => {
+    const relPath = `articles/content/newsroom/${ROOT_CONVENTION_DATE}/artifact-manifest.json`;
+    const absPath = path.join(root, relPath);
+    fs.mkdirSync(path.dirname(absPath), { recursive: true });
+    fs.writeFileSync(absPath, JSON.stringify({
+      files: [{ path: `articles/content/newsroom/${ROOT_CONVENTION_DATE}/quality-report.json` }],
+      review_artifacts: [{ path: `content/newsroom/${ROOT_CONVENTION_DATE}/00-review-guide.md` }],
+      retained_heavy_artifacts: [{ path: `content/newsroom/${ROOT_CONVENTION_DATE}/editor-draft.json` }],
+      committed_artifacts: [{ path: `content/newsroom/${ROOT_CONVENTION_DATE}/selection-report.json` }]
+    }), 'utf8');
+
+    const result = checkArtifactPathConvention({ root, _trackedPaths: [relPath] });
+    assert.equal(result.ok, false);
+    assert.deepEqual(
+      result.violations.map(violation => violation.key).sort(),
+      ['committed_artifacts', 'retained_heavy_artifacts', 'review_artifacts']
+    );
+  });
+});
+
 test('날짜 디렉터리가 아닌 경로는 경고로만 남기고 건너뛴다', () => {
   withTempRoot(root => {
     const result = checkArtifactPathConvention({ root, _trackedPaths: ['articles/content/newsroom/artifact-manifest.json'] });

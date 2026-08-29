@@ -76,71 +76,17 @@ function seedAgreeingSnapshot(snapshotDir) {
 }
 
 // 매니페스트 경로 규약 잠금(#952)의 판정은 validate/artifact-path-convention-check.js가 갖고,
-// 커밋된 매니페스트 전수 스캔은 `npm run check:artifact-path-convention`이 돌린다(#957).
+// 커밋된 매니페스트 전수 스캔은 `npm run check:artifact-path-convention`이 돌린다(#957). 술어 자체의
+// 케이스는 src/generator/test/workflow/artifact-path-convention-check.test.js가 잠근다.
 //
-// 여기서는 그 판정을 합성 매니페스트로만 검증한다. 이 파일은 `npm run test`가 부르고, `npm run test`는
-// 워크플로 01·03에서 수집·생성 앞의 blocking 스텝이다. 커밋된 산출물 아카이브를 여기서 통과 기준으로
-// 삼으면 데이터 파일 하나가 그 주 발행을 1단계에서 막는다.
-// 생산자(buildManifest·buildDateReviewManifest)가 쓴 매니페스트를 그 자리에서 검사하는 단언.
-// 이건 실데이터 의존이 아니라 방금 만든 결과물을 보는 것이라 `npm run test`에 그대로 둔다.
+// 여기 남은 것은 생산자(buildManifest·buildDateReviewManifest)가 쓴 매니페스트를 그 자리에서 보는
+// 단언뿐이다. 그건 실데이터 의존이 아니라 방금 만든 결과물을 보는 것이라 `npm run test`에 남는다.
 function assertManifestPathConvention(manifest, options) {
   const violations = findManifestPathConventionViolations(manifest, options);
   assert.deepStrictEqual(
     violations.map(violation => `${violation.label}: ${violation.key}[] "${violation.path}" — ${violation.reason}`),
     []
   );
-}
-
-function testManifestPathConventionPredicate() {
-  const manifestWithPaths = paths => ({ files: paths.map(p => ({ path: p })) });
-
-  // 새 매니페스트가 옛 규약으로 쓰이면 잡는다.
-  const oldConventionInNewManifest = findManifestPathConventionViolations(
-    manifestWithPaths(['content/newsroom/2026-08-24/quality-report.json']),
-    { label: 'new', expectArticlesPrefix: true }
-  );
-  assert.strictEqual(oldConventionInNewManifest.length, 1);
-  assert.match(oldConventionInNewManifest[0].reason, /저장소 루트 기준이 아니다/);
-
-  // 과거 매니페스트가 사후 정규화되면 잡는다.
-  const normalizedOldManifest = findManifestPathConventionViolations(
-    manifestWithPaths(['articles/content/newsroom/2026-06-11/quality-report.json']),
-    { label: 'old', expectArticlesPrefix: false }
-  );
-  assert.strictEqual(normalizedOldManifest.length, 1);
-  assert.match(normalizedOldManifest[0].reason, /접두가 붙었다/);
-
-  // 규약을 지키면 위반이 없다 — 두 규약 모두.
-  assert.deepStrictEqual(
-    findManifestPathConventionViolations(
-      manifestWithPaths(['articles/content/newsroom/2026-08-24/quality-report.json', 'articles/sitemap.xml']),
-      { label: 'new', expectArticlesPrefix: true }
-    ),
-    []
-  );
-  assert.deepStrictEqual(
-    findManifestPathConventionViolations(
-      manifestWithPaths(['content/newsroom/2026-06-11/quality-report.json', 'sitemap.xml']),
-      { label: 'old', expectArticlesPrefix: false }
-    ),
-    []
-  );
-
-  // 공개 출력물 경로가 하나도 없으면 조용히 통과시키지 않는다.
-  const nothingToCheck = findManifestPathConventionViolations(
-    manifestWithPaths(['state/article-exposure-history.json', '.tmp/scratch.json']),
-    { label: 'empty', expectArticlesPrefix: true }
-  );
-  assert.strictEqual(nothingToCheck.length, 1);
-  assert.match(nothingToCheck[0].reason, /검사하지 못했다/);
-
-  // 판정 대상은 files[] 하나가 아니다.
-  const reviewArtifacts = findManifestPathConventionViolations(
-    { review_artifacts: [{ path: 'content/newsroom/2026-08-24/00-review-guide.md' }] },
-    { label: 'review', expectArticlesPrefix: true }
-  );
-  assert.strictEqual(reviewArtifacts.length, 1);
-  assert.strictEqual(reviewArtifacts[0].key, 'review_artifacts');
 }
 
 function testManifestCreationAndHashes() {
@@ -568,6 +514,5 @@ testRecoveryPromptAttentionPolicy();
 testDerivedMissingWarningsAndOptionalGateBlocking();
 testRetentionGradeAssignment();
 testBuildDateReviewManifestRetentionFields();
-testManifestPathConventionPredicate();
 
 console.log('Artifact manifest tests passed.');
