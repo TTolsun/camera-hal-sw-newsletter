@@ -239,3 +239,23 @@ test('a root without a history file falls back to the seed path without breaking
   assert.deepEqual(report.selection_warnings, []);
   assert.equal(report.publish_ready, true);
 });
+
+test('the committed exposure history carries main-article records and no collapsed identity', () => {
+  // 커밋된 state/article-exposure-history.json은 첫 실전 주(W36)에 이 게이트가 검사할 유일한
+  // 근거다. content: 키는 identity 붕괴의 지문이다 — 후보는 url: 공간에 있으므로 content: 키는
+  // 어떤 후보와도 매칭되지 않고, 그 키가 다시 나타나면 발행 기록이 다시 죽은 것이다.
+  const repoRoot = path.join(__dirname, '..', '..', '..', '..');
+  const history = JSON.parse(fs.readFileSync(
+    path.join(repoRoot, 'state', 'article-exposure-history.json'), 'utf8'));
+
+  const collapsed = history.articles
+    .map(item => String(item.article_identity_key || ''))
+    .filter(key => key.startsWith('content:'));
+  assert.deepEqual(collapsed, []);
+
+  const mainArticleRecords = history.articles.filter(item =>
+    item.exposure_type === 'newsletter_article' ||
+    (item.exposure_types || []).includes('newsletter_article'));
+  assert.ok(mainArticleRecords.length > 0, '검사할 발행 기록이 하나도 없으면 게이트는 관측이 없다');
+  assert.ok(mainArticleRecords.every(item => item.cooldown_until && item.newsletter_article_date));
+});
