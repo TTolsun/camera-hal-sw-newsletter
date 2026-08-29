@@ -803,7 +803,7 @@ const REPUBLICATION_COOLDOWN_EXCLUSION_REASON = 'published as a main article wit
 //
 // main_article_score_eligible에 이력 사유를 섞지 않은 것도 의도다: 그건 점수 게이트이고 catch-up
 // 레인이 재사용하는 공유 길목이라, 좁히면 이 이슈와 무관한 판정까지 함께 좁아진다.
-function withoutRepublicationCooldown(eligible, exposureHistory, date) {
+function withoutRepublicationCooldown(eligible, exposureHistory, date, cap) {
   const selectionPools = eligible.selectionPools;
   if (!exposureHistory) return { shortlist: eligible.shortlist, selectionPools, blocked: [] };
   const blocked = [];
@@ -828,12 +828,16 @@ function withoutRepublicationCooldown(eligible, exposureHistory, date) {
   if (blocked.length === 0) return { shortlist: eligible.shortlist, selectionPools, blocked };
   const keep = candidates => ensureArray(candidates)
     .filter(candidate => !blockedKeys.has(articleIdentityKey(candidate)));
+  const primary = keep(selectionPools?.primary);
+  const fallback = keep(selectionPools?.fallback);
   return {
-    shortlist: keep(eligible.shortlist),
-    selectionPools: {
-      primary: keep(selectionPools?.primary),
-      fallback: keep(selectionPools?.fallback)
-    },
+    // shortlist는 cap을 필터 뒤에 적용해 다시 만든다. buildEligibleShortlist가 이미 자른 결과에서
+    // 빼기만 하면 cap에 걸린 주에 빈자리가 cap 밖 후보로 채워지지 않아, eligible_candidate_count와
+    // 거기서 파생되는 eligible_composition_summary·selection_shortage_hints·
+    // candidate_pool_preflight가 실제 후보 풀보다 작게 보고된다(2026-08-03 실측: 12 → 9).
+    // 선정과 reserve는 cap 없는 selectionPools를 읽으므로 편성은 이 순서와 무관하다.
+    shortlist: [...primary, ...fallback].slice(0, cap),
+    selectionPools: { primary, fallback },
     blocked
   };
 }
@@ -854,7 +858,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   } = eligible;
   const exposureHistory = options.exposureHistory ||
     (options.root ? readExposureHistory(options.root, date) : null);
-  const cooldownFiltered = withoutRepublicationCooldown(eligible, exposureHistory, date);
+  const cooldownFiltered = withoutRepublicationCooldown(eligible, exposureHistory, date, cap);
   const shortlist = cooldownFiltered.shortlist;
   const selectionPools = cooldownFiltered.selectionPools;
   const excluded = eligible.excluded.concat(cooldownFiltered.blocked);

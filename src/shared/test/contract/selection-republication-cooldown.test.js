@@ -48,7 +48,15 @@ const DISTINCT_TITLES = [
   'libcamera IPA module refresh',
   'Camera HAL buffer manager change',
   'ISP tuning parameter contract',
-  'Camera provider AIDL revision'
+  'Camera provider AIDL revision',
+  'Depth sensor timestamp alignment',
+  'Flash strobe timing calibration',
+  'Zoom ratio control mapping',
+  'Raw Bayer capture stream setup',
+  'Multi camera physical stream sync',
+  'Autofocus region metadata tag',
+  'Video stabilization buffer path',
+  'Preview surface format negotiation'
 ];
 
 function distinctPrimaryCandidates(count) {
@@ -238,6 +246,29 @@ test('a root without a history file falls back to the seed path without breaking
   assert.equal(report.selected_article_count, 3);
   assert.deepEqual(report.selection_warnings, []);
   assert.equal(report.publish_ready, true);
+});
+
+test('the shortlist cap is applied after the cooldown filter, so a blocked seat is refilled', () => {
+  // cap(12) slice가 필터보다 앞에 있으면, 잘린 자리가 cap 밖 후보로 채워지지 않고 그대로 빈다.
+  // eligible_candidate_count와 거기서 파생되는 구성 요약·부족 힌트·preflight가 실제 후보 풀보다
+  // 작게 보고된다. 선정과 reserve는 cap 없는 pool을 읽으므로 이 순서는 편성을 바꾸지 않는다.
+  // 선정되지 않는 후보를 막는다. 선정된 후보를 막으면 편성이 바뀌는 것이 당연해져(그게 게이트의
+  // 일이다) cap 순서만 따로 볼 수 없다.
+  const blockedUrl = candidateUrlAt(2);
+  const pool = distinctPrimaryCandidates(14);
+  const baseline = buildShortlistReport(ISSUE_DATE, pool, { exposureHistory: historyWith([]) });
+  assert.equal(baseline.eligible_candidate_count, 12, 'cap에 걸린 주여야 이 검사가 의미를 갖는다');
+  assert.ok(!urls(baseline.selected_articles).includes(blockedUrl));
+
+  const report = buildShortlistReport(ISSUE_DATE, pool, {
+    exposureHistory: historyWith([
+      publishedRecord(blockedUrl, { newsletterDate: '2026-05-03', cooldownUntil: '2026-05-24' })
+    ])
+  });
+
+  assert.equal(report.eligible_candidate_count, 12);
+  assert.deepEqual(report.selected_articles.map(candidate => candidate.url),
+    baseline.selected_articles.map(candidate => candidate.url));
 });
 
 test('the committed exposure history carries main-article records and no collapsed identity', () => {
