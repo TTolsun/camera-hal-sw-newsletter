@@ -837,7 +837,12 @@ function withoutRepublicationCooldown(eligible, exposureHistory, date, cap) {
     // 빼기만 하면 cap에 걸린 주에 빈자리가 cap 밖 후보로 채워지지 않아, eligible_candidate_count와
     // 거기서 파생되는 eligible_composition_summary·selection_shortage_hints·
     // candidate_pool_preflight가 실제 후보 풀보다 작게 보고된다(2026-08-03 실측: 12 → 9).
-    // 선정과 reserve는 cap 없는 selectionPools를 읽으므로 편성은 이 순서와 무관하다.
+    //
+    // selected_articles와 reserve_candidates는 cap 없는 selectionPools를 읽으므로 이 순서와
+    // 무관하다. 반면 shortlisted_candidates는 보고 전용이 아니다 — 이 shortlist에서 파생돼
+    // reporter LLM 입력(reporterInputFromShortlist)과 렌더되는 참고 기사(render/reference-
+    // articles.js)로 가고, select/article-capsules.js와 quality/candidate-claim-matching.js도
+    // 같은 값을 읽는다. 그래서 cap 순서가 편성은 안 바꿔도 참고 기사 목록은 바꾼다.
     shortlist: [...primary, ...fallback].slice(0, cap),
     selectionPools: { primary, fallback },
     blocked

@@ -275,8 +275,15 @@ test('recordNewsletterArticles takes identity and title from the matching select
   assert.equal(history.articles[0].source_url, selectedArticles[0].normalized_url);
 });
 
-test('a section without any source url does not borrow an unrelated candidate identity', () => {
-  // 빈 키끼리 맞아떨어지면 발행되지 않은 URL에 21일 쿨다운이 찍힌다.
+test('a url-less section is matched by identity key, so it does not adopt an unrelated candidate', () => {
+  // 이 테스트가 실제로 잠그는 것은 후보 대조 축이다. articleIdentityKey가 아니라 URL을 직접
+  // 비교하는 구현으로 되돌리면 URL 없는 section과 URL 없는 후보가 빈 문자열끼리 맞아떨어져,
+  // 발행되지 않은 URL에 쿨다운이 찍힌다.
+  //
+  // newsletterArticleExposure의 `if (!key) return fallback` 가드는 같은 사고를 한 단계 앞에서도
+  // 막는 두 번째 줄이다. 이 테스트만으로는 그 가드가 잠기지 않는다(가드를 지워도 여기서는
+  // 대조 축이 먼저 막는다). 그렇다고 가드를 지울 근거는 아니다 — 대조 축이 바뀌는 순간 그것이
+  // 마지막 방어선이다.
   let history = { schemaVersion: 1, coverage: { mode: 'forward_only', coverage_starts_at: '2026-06-03', backfill_included: false }, articles: [] };
   const section = editorSection('출처가 비어 있는 섹션', '');
   delete section.source_candidate_url;
