@@ -13,6 +13,10 @@ const {
 const { buildSelectionReport } = require('../../../generator/publish/orchestrator-report-builders');
 const { selectionStatusExtra } = require('../../../generator/publish/orchestrator-status-builders');
 const { renderCandidateSelectionDiagnostics } = require('../../../generator/select/selection-diagnostics');
+const {
+  NEWSLETTER_ARTICLE_COOLDOWN_DAYS
+} = require('../../../generator/reporter/article-exposure-history');
+const { normalizeArticleUrl } = require('../../common/article-identity');
 
 const ISSUE_DATE = '2026-05-10';
 
@@ -398,22 +402,92 @@ test('the shortlist cap is applied after the cooldown filter, so a blocked seat 
     baseline.selected_articles.map(candidate => candidate.url));
 });
 
+const REPO_ROOT = path.join(__dirname, '..', '..', '..', '..');
+
+function committedExposureHistory() {
+  return JSON.parse(fs.readFileSync(
+    path.join(REPO_ROOT, 'state', 'article-exposure-history.json'), 'utf8'));
+}
+
+function committedMainArticleRecords() {
+  return committedExposureHistory().articles.filter(item =>
+    item.exposure_type === 'newsletter_article' ||
+    (item.exposure_types || []).includes('newsletter_article'));
+}
+
+// 발행된 주간 호의 section에서 "이 URL은 언제 main 기사로 나갔는가"를 만든다. backfill을 만들 때
+// 실제로 쓴 검사이고, 이력이 스스로를 증명하지 못하게 하는 유일한 외부 근거다.
+// 날짜형 디렉터리(articles/newsletters/2026-08-24)에는 issue.json이 없으므로 주간 호만 걸린다.
+function publishedMainArticleDates() {
+  const newslettersDir = path.join(REPO_ROOT, 'articles', 'newsletters');
+  const dates = new Map();
+  for (const name of fs.readdirSync(newslettersDir)) {
+    const issuePath = path.join(newslettersDir, name, 'issue.json');
+    if (!/^\d{4}-W\d{2}$/.test(name) || !fs.existsSync(issuePath)) continue;
+    const issue = JSON.parse(fs.readFileSync(issuePath, 'utf8'));
+    for (const section of issue.sections || []) {
+      const url = String(section.source_candidate_url || (section.sources || [])[0]?.url || '').trim();
+      assert.ok(url, `${name}: section without a source url cannot be bound to an identity key`);
+      dates.set(`url:${normalizeArticleUrl(url)}`, String(issue.date));
+    }
+  }
+  return dates;
+}
+
+// addDays(article-exposure-history.js)와 같은 규칙을 UTC로 독립 계산한다. 같은 함수를 불러
+// 대조하면 상수와 규칙이 함께 틀려도 통과한다.
+function plusDays(date, days) {
+  const moved = new Date(`${date}T00:00:00Z`);
+  moved.setUTCDate(moved.getUTCDate() + days);
+  return moved.toISOString().slice(0, 10);
+}
+
 test('the committed exposure history carries main-article records and no collapsed identity', () => {
   // 커밋된 state/article-exposure-history.json은 첫 실전 주(W36)에 이 게이트가 검사할 유일한
   // 근거다. content: 키는 identity 붕괴의 지문이다 — 후보는 url: 공간에 있으므로 content: 키는
   // 어떤 후보와도 매칭되지 않고, 그 키가 다시 나타나면 발행 기록이 다시 죽은 것이다.
-  const repoRoot = path.join(__dirname, '..', '..', '..', '..');
-  const history = JSON.parse(fs.readFileSync(
-    path.join(repoRoot, 'state', 'article-exposure-history.json'), 'utf8'));
-
-  const collapsed = history.articles
+  const collapsed = committedExposureHistory().articles
     .map(item => String(item.article_identity_key || ''))
     .filter(key => key.startsWith('content:'));
   assert.deepEqual(collapsed, []);
 
-  const mainArticleRecords = history.articles.filter(item =>
-    item.exposure_type === 'newsletter_article' ||
-    (item.exposure_types || []).includes('newsletter_article'));
+  const mainArticleRecords = committedMainArticleRecords();
   assert.ok(mainArticleRecords.length > 0, '검사할 발행 기록이 하나도 없으면 게이트는 관측이 없다');
   assert.ok(mainArticleRecords.every(item => item.cooldown_until && item.newsletter_article_date));
+});
+
+test('every committed main-article record is dated by the issue that published it', () => {
+  // 자기모순 없는 틀린 날짜는 스위트를 그대로 통과한다. 손 편집·잘못된 머지·나중의 backfill이
+  // 날짜를 일주일 밀면 쿨다운이 7일 일찍 끝나 게이트가 과소 차단하는데 CI는 초록이다 — #963이
+  // 눈에 안 띈 것과 같은 무증상 실패다. 그래서 기대 날짜를 발행된 호에서 파생한다.
+  const publishedDates = publishedMainArticleDates();
+  const mainArticleRecords = committedMainArticleRecords();
+  assert.ok(mainArticleRecords.length > 0);
+
+  for (const record of mainArticleRecords) {
+    const publishedDate = publishedDates.get(record.article_identity_key);
+    assert.ok(publishedDate,
+      `${record.article_identity_key}는 어떤 발행 호의 section도 아니다`);
+    assert.equal(record.newsletter_article_date, publishedDate,
+      `${record.article_identity_key}의 발행일이 issue.json과 다르다`);
+    assert.equal(record.cooldown_until,
+      plusDays(publishedDate, NEWSLETTER_ARTICLE_COOLDOWN_DAYS),
+      `${record.article_identity_key}의 쿨다운 종료일이 발행일 + ${NEWSLETTER_ARTICLE_COOLDOWN_DAYS}일이 아니다`);
+  }
+});
+
+test('no published main article inside the backfill window is missing from the history', () => {
+  // 날짜 검사만으로는 "레코드가 통째로 빠진" 실패를 못 잡는다. 그건 게이트를 무증상으로 죽이는
+  // 나머지 절반이다(#963 자체가 발행 기록이 남지 않아 생긴 일이다). 백필 창은 이력이 스스로
+  // 말하게 둔다 — 가장 이른 발행 기록 날짜부터가 창이다.
+  const mainArticleRecords = committedMainArticleRecords();
+  const recordedKeys = new Set(mainArticleRecords.map(item => item.article_identity_key));
+  const backfillStart = mainArticleRecords
+    .map(item => item.newsletter_article_date)
+    .sort()[0];
+
+  const missing = [...publishedMainArticleDates()]
+    .filter(([key, date]) => date >= backfillStart && !recordedKeys.has(key))
+    .map(([key, date]) => `${date} ${key}`);
+  assert.deepEqual(missing, []);
 });
