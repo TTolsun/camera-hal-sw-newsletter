@@ -1,11 +1,12 @@
 const {
   candidateDate,
+  candidateFactId,
   candidateTitle,
   candidateUrl,
   clamp,
+  evidenceSourceKey,
   fetchTextWithLimit,
   numeric,
-  stableId,
   text
 } = require('../shared/collect/source-intelligence-utils');
 
@@ -24,7 +25,7 @@ function buildFact(candidate = {}, options = {}) {
   const claim = inferClaim(candidate, fetchedText);
   const sourceQuality = candidate.source_quality_score;
   return {
-    id: candidate.id || candidate.source_candidate_id || stableId([url, candidateTitle(candidate)]),
+    id: candidateFactId(candidate),
     url,
     title: candidateTitle(candidate),
     published_at: candidateDate(candidate),
@@ -51,22 +52,25 @@ async function extractSourceFacts(candidates = [], options = {}) {
   const shouldFetch = options.fetch === true;
   const sources = [];
   // 같은 기사 URL이 수집본과 발견본으로 두 번 들어온다. 사본마다 fact를 만들어야 하지만
-  // 원문을 두 번 받아올 이유는 없으므로 실행 안에서 URL당 한 번만 받는다.
-  const fetchedByUrl = new Map();
+  // 원문을 두 번 받아올 이유는 없으므로 실행 안에서 출처당 한 번만 받는다.
+  // 키는 대상을 고르는 쪽(selectEvidenceFetchTargets)과 같은 evidenceSourceKey다.
+  // 다른 키를 쓰면 cap이 센 칸 수와 실제 수신 횟수가 어긋난다.
+  const fetchedBySource = new Map();
   for (const candidate of candidates) {
     let fetchedText = '';
     let sourceFetchStatus = 'skipped';
     let sourceFetchError = '';
     const url = candidateUrl(candidate);
+    const sourceKey = evidenceSourceKey(candidate) || url;
     if (shouldFetch && fetchImpl && url) {
-      if (!fetchedByUrl.has(url)) {
+      if (!fetchedBySource.has(sourceKey)) {
         try {
-          fetchedByUrl.set(url, { text: await fetchTextWithLimit(fetchImpl, url, options), status: 'success', error: '' });
+          fetchedBySource.set(sourceKey, { text: await fetchTextWithLimit(fetchImpl, url, options), status: 'success', error: '' });
         } catch (error) {
-          fetchedByUrl.set(url, { text: '', status: 'failed', error: error.message });
+          fetchedBySource.set(sourceKey, { text: '', status: 'failed', error: error.message });
         }
       }
-      const fetched = fetchedByUrl.get(url);
+      const fetched = fetchedBySource.get(sourceKey);
       fetchedText = fetched.text;
       sourceFetchStatus = fetched.status;
       sourceFetchError = fetched.error;

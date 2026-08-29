@@ -203,6 +203,34 @@ function candidateDate(candidate = {}) {
   return text(candidate.publishedAt || candidate.published_date || candidate.publishedDate);
 }
 
+// 근거 수집에서 "같은 출처"를 가르는 키. cap이 세는 단위이자 원문을 몇 번 받아올지 정하는
+// 단위라서, 대상을 고르는 쪽과 실제로 받아오는 쪽이 같은 값을 써야 "한 칸 = 한 번 수신"이
+// 성립한다. canonicalContentUrl을 쓰므로 Android 문서의 `hl` 로케일 파라미터만 무시하고
+// 나머지 query와 fragment는 남는다 — `?q=` 목록 페이지나 `#버전` 앵커는 서로 다른 문서다.
+function evidenceSourceKey(candidate = {}) {
+  const canonical = canonicalContentUrl(candidateUrl(candidate));
+  if (!canonical) return '';
+  try {
+    const parsed = new URL(canonical);
+    parsed.hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
+    if (parsed.pathname !== '/') {
+      parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+    }
+    return parsed.toString();
+  } catch (_error) {
+    return canonical;
+  }
+}
+
+// 후보가 근거(fact)를 찾을 때 쓰는 id. 근거를 만드는 쪽(extract-source-facts)과 찾는 쪽
+// (validate-candidate-evidence), 그리고 근거 수집 대상을 묶는 쪽이 반드시 같은 값을 써야 한다.
+// 셋 중 하나라도 다른 산식을 쓰면 후보가 자기 근거를 못 찾아 not_checked 로 조용히 통과한다.
+function candidateFactId(candidate = {}) {
+  return candidate.id ||
+    candidate.source_candidate_id ||
+    stableId([candidateUrl(candidate), candidateTitle(candidate)]);
+}
+
 function fetchTextWithLimit(fetchImpl, url, options = {}) {
   const timeoutMs = options.timeoutMs || 5000;
   const maxBytes = options.maxBytes || 200000;
@@ -227,10 +255,12 @@ module.exports = {
   canonicalContentUrl,
   canonicalDocumentUrl,
   candidateDate,
+  candidateFactId,
   candidateTitle,
   candidateUrl,
   clamp,
   domainMatches,
+  evidenceSourceKey,
   fetchUrlForContent,
   fetchTextWithLimit,
   isObject,

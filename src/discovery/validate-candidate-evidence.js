@@ -1,7 +1,7 @@
 const {
+  candidateFactId,
   candidateTitle,
   candidateUrl,
-  stableId,
   text
 } = require('../shared/collect/source-intelligence-utils');
 
@@ -16,7 +16,7 @@ function shouldDeepCheck(candidate = {}) {
 }
 
 function validateOne(candidate = {}, facts = {}) {
-  const id = candidate.id || candidate.source_candidate_id || stableId([candidateUrl(candidate), candidateTitle(candidate)]);
+  const id = candidateFactId(candidate);
   const fact = facts[id] || {};
   const claims = Array.isArray(fact.claims) ? fact.claims : [];
   const supportedClaims = claims.filter(claim => text(claim.evidence_text));
@@ -81,14 +81,14 @@ function validateOne(candidate = {}, facts = {}) {
 function validateCandidateEvidence(candidates = [], sourceFacts = {}, options = {}) {
   const factMap = {};
   for (const fact of sourceFacts.sources || []) {
-    const id = fact.id || stableId([fact.url, fact.title]);
+    const id = candidateFactId(fact);
     factMap[id] = fact;
   }
   const checked = candidates
     .map(candidate => validateOne(candidate, factMap));
   const byId = new Map(checked.map(item => [item.candidate_id, item]));
   const annotatedCandidates = candidates.map(candidate => {
-    const id = candidate.id || candidate.source_candidate_id || stableId([candidateUrl(candidate), candidateTitle(candidate)]);
+    const id = candidateFactId(candidate);
     const item = byId.get(id);
     if (!item) {
       return {

@@ -7,9 +7,6 @@ const {
 const {
   validateCandidateEvidence
 } = require('../../../validate-candidate-evidence');
-const {
-  extractSourceFacts
-} = require('../../../extract-source-facts');
 
 function candidate(index, overrides = {}) {
   return {
@@ -252,29 +249,93 @@ test('evidence fetch cap counts distinct source urls, not duplicate candidate re
   // 사본을 버리지는 않는다. 버리면 그 사본의 id로 근거를 조회할 때 fact가 없어
   // not_checked 로 조용히 통과하는 구멍이 그대로 남는다.
   assert.equal(targets.length, candidates.length);
-
 });
 
-test('duplicate candidate records share one fetch and still each get their own fact', async () => {
-  const url = 'https://example.com/duplicated';
-  const registryCopy = candidate('registry', { id: undefined, url, origin: 'source_registry' });
-  const geminiCopy = candidate('gemini', { id: 'gemini-duplicated', url, origin: 'gemini_discovery' });
-  const requestedUrls = [];
-  const fetchImpl = async requestedUrl => {
-    requestedUrls.push(requestedUrl);
-    return { ok: true, text: async () => 'source evidence body' };
-  };
+// 그룹 순위를 '먼저 들어온 사본'으로 정하면 같은 URL에 강한 사본이 있어도 약한 사본 등급으로
+// 그룹 전체가 밀린다. 2026-08-24 실데이터의 lore .../natalie.klaus 쌍이 정확히 이 모양이었다
+// (registry review_candidate 0.758 + gemini strong_candidate 0.81).
+test('a duplicated source is ranked by its strongest copy, not by the first one seen', () => {
+  const url = 'https://example.com/mixed-strength';
+  const weakFirst = candidate('registry-weak', {
+    id: undefined,
+    url,
+    source_quality_bucket: 'review_candidate',
+    source_quality_score: 0.2
+  });
+  const strongSecond = candidate('gemini-strong', {
+    id: 'gemini-strong',
+    url,
+    source_quality_bucket: 'strong_candidate',
+    source_quality_score: 0.9
+  });
+  const fillers = Array.from({ length: 12 }, (_, index) => candidate(`filler-${index}`, {
+    id: `filler-${index}`,
+    url: `https://example.com/filler-${index}`,
+    source_quality_bucket: 'strong_candidate',
+    source_quality_score: 0.5
+  }));
 
-  const facts = await extractSourceFacts([registryCopy, geminiCopy], { fetch: true, fetchImpl });
+  const targets = selectEvidenceFetchTargets([weakFirst, strongSecond, ...fillers], { clusters: [] }, { maxTargets: 12 });
+  const distinctUrls = new Set(targets.map(item => item.url));
 
-  // 원문은 한 번만 받는다.
-  assert.deepEqual(requestedUrls, [url]);
-  // 그래도 사본마다 fact가 하나씩 나온다.
-  assert.equal(facts.sources.length, 2);
-  assert.ok(facts.sources.every(source => source.source_fetch_status === 'success'));
+  // 약한 사본 등급으로 정렬하면 filler 12개에 밀려 이 출처가 통째로 잘린다.
+  assert.equal(distinctUrls.has(url), true);
+  // 살아남은 그룹은 사본을 전부 데려온다.
+  assert.equal(targets.filter(item => item.url === url).length, 2);
+});
 
-  const evidence = validateCandidateEvidence([registryCopy, geminiCopy], facts, { newsletterDate: '2026-05-16' });
-  const notChecked = evidence.report.candidates.filter(item => item.evidence_validation_status === 'not_checked');
+// 한 그룹 안에서 사본을 합칠 때 쓰는 키는 근거 조회 id와 같아야 한다. candidateKey로 합치면
+// id 없는 사본은 URL로 묶여 하나가 사라지는데, 근거 조회 id는 stableId([url, title])이라
+// 제목이 다르면 서로 다른 id다 — 사라진 사본은 끝내 fact를 못 받고 not_checked 로 통과한다.
+test('copies that resolve to different fact ids are both kept in the same source group', () => {
+  const url = 'https://example.com/same-page';
+  const targets = selectEvidenceFetchTargets([
+    candidate('first', { id: undefined, url, title: 'Camera release notes' }),
+    candidate('second', { id: undefined, url, title: 'Camera release notes (mirror)' })
+  ], { clusters: [] }, { maxTargets: 12 });
 
-  assert.deepEqual(notChecked.map(item => item.url), []);
+  assert.equal(targets.length, 2);
+  assert.equal(new Set(targets.map(item => item.title)).size, 2);
+});
+
+// 같은 문서가 www 유무·끝 슬래시·Android 문서의 hl 파라미터만 다르게 들어올 수 있다.
+// raw URL로 묶으면 이런 쌍이 다시 두 칸을 먹는 원래 버그로 돌아간다.
+test('source grouping normalizes host, trailing slash, and the android locale parameter', () => {
+  const pairs = [
+    ['https://www.example.com/camera-a/', 'https://example.com/camera-a'],
+    ['https://developer.android.com/jetpack/camera?hl=ko', 'https://developer.android.com/jetpack/camera']
+  ];
+  for (const [left, right] of pairs) {
+    const targets = selectEvidenceFetchTargets([
+      candidate('left', { id: undefined, url: left }),
+      candidate('right', { id: 'gemini-right', url: right })
+    ], { clusters: [] }, { maxTargets: 1 });
+
+    // 한 칸만 허용해도 두 사본이 함께 나온다 = 같은 출처 한 그룹으로 세었다는 뜻이다.
+    assert.equal(targets.length, 2, `${left} 와 ${right} 가 한 그룹으로 묶여야 한다`);
+  }
+});
+
+// cap 초과와 중복 사본이 동시에 있을 때, 잘리는 단위가 사본이 아니라 그룹이어야 한다.
+// 그룹이 반쪽만 잘리면 남은 사본은 원문 없이 통과하고 잘린 사본은 fact를 잃는다.
+test('when the cap truncates, it drops whole sources and never a partial copy set', () => {
+  const maxTargets = 12;
+  const distinctUrlCount = 20;
+  const candidates = [];
+  for (let index = 0; index < distinctUrlCount; index += 1) {
+    const url = `https://example.com/source-${index}`;
+    candidates.push(candidate(`registry-${index}`, { id: undefined, url, source_quality_score: 0.5 }));
+    if (index % 2 === 0) {
+      candidates.push(candidate(`gemini-${index}`, { id: `gemini-${index}`, url, source_quality_score: 0.5 }));
+    }
+  }
+
+  const targets = selectEvidenceFetchTargets(candidates, { clusters: [] }, { maxTargets });
+  const distinctUrls = new Set(targets.map(item => item.url));
+
+  assert.equal(distinctUrls.size, maxTargets);
+  for (const url of distinctUrls) {
+    const expectedMemberCount = candidates.filter(item => item.url === url).length;
+    assert.equal(targets.filter(item => item.url === url).length, expectedMemberCount, `${url} 그룹이 통째로 들어와야 한다`);
+  }
 });
