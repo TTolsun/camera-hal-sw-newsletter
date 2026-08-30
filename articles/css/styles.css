@@ -1352,6 +1352,9 @@ pre code {
 
 .issue-back {
   display: inline-block;
+  /* .issue-publish-badge 와 같은 이유 — .issue-hero grid 의 직접 자식이라 stretch 로 늘어난다.
+     알약처럼 눈에 보이지는 않지만 클릭·hover 영역이 줄 전체로 퍼진다. */
+  justify-self: start;
   margin-bottom: 26px;
   color: var(--muted);
   font-size: 0.875rem;

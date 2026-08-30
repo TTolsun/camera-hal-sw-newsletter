@@ -247,11 +247,15 @@
     // Featured hero panel image: the headline image, or the shared newsletter fallback SVG.
     function renderFeaturedMedia(headline) {
       const imageSrc = safeImageSrc(headline.image_url) || FALLBACK_IMAGE;
-      const alt = escapeHtml(headline.image_alt || headline.title);
       // 실제 기사 이미지는 16:9 풀커버, 이미지 없이 fallback 그래픽이면 mockup 처럼
       // 브랜드 히어로(44% 중앙 + drop-shadow) 로 보여 준다. fallback 판정은 카드와 같은
       // 공유 술어를 쓴다 — resolver 는 newsletter-default 말고도 ai/android/cpp 를 내보낸다.
-      const imgClass = archiveHelpers.isFallbackImage(imageSrc) ? 'featured-img is-brand' : 'featured-img';
+      const isFallback = archiveHelpers.isFallbackImage(imageSrc);
+      // fallback 그래픽은 기사에 대해 아무 정보도 주지 않는 장식이라 alt 를 비운다. image_alt 는
+      // 기사 제목에서 파생되므로, 그대로 두면 스크린리더가 바로 아래 h1 과 같은 문장을 두 번
+      // 읽는다. 아카이브 카드(renderArchiveCard)도 같은 이유로 alt="" 다.
+      const alt = isFallback ? '' : escapeHtml(headline.image_alt || headline.title);
+      const imgClass = isFallback ? 'featured-img is-brand' : 'featured-img';
       return `<div class="featured-thumb nc-thumb">
               <img class="${imgClass}" src="${escapeHtml(imageSrc)}" alt="${alt}" loading="eager" decoding="async" onerror="this.onerror=null;this.classList.add('is-brand');this.src='${FALLBACK_IMAGE}'">
             </div>`;

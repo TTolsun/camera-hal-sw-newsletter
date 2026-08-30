@@ -256,6 +256,10 @@
   // (ai/android/cpp/newsletter-default) 을 내보내므로 특정 파일명이 아니라 폴더로 가른다.
   // 홈 featured 히어로도 이 판정을 그대로 써야 한다 — 판정이 갈리면 같은 그래픽이 카드에서는
   // fallback 으로, 히어로에서는 실제 기사 이미지로 취급돼 브랜드 처리가 빠진다.
+  //
+  // 전제: site root 기준으로 정규화된 경로만 받는다. 이슈 페이지가 쓰는 `../../assets/...` 같은
+  // 페이지 상대 경로는 조용히 false 가 되므로, 그 층에서는 먼저 정규화한다
+  // (weekly-newsletter-output.js 의 normalizedFallbackImagePath 가 그 일을 한다).
   function isFallbackImage(src) {
     return String(src ?? '').trim().startsWith(FALLBACK_IMAGE_PREFIX);
   }
