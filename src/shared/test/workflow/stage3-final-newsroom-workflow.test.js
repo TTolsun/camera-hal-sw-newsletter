@@ -457,6 +457,19 @@ test('generation path passes runtime selection window policy into shortlist repo
   assert.ok(shortlistIndex < coverageWeekKeyOverrideIndex);
 });
 
+test('generation path passes root into shortlist report so selection reads the exposure history', () => {
+  // root가 없으면 newsroom-selection이 exposureHistory를 null로 두고, 재게재 쿨다운 필터와
+  // catch-up의 게재 이력 필터가 둘 다 조용히 죽는다(#963).
+  const generatorPath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'gemini-newsroom-newsletter.js');
+  const generator = fs.readFileSync(generatorPath, 'utf8');
+  const shortlistIndex = generator.indexOf('let shortlistReport = buildShortlistReport(date, candidates, {');
+  const optionsEndIndex = generator.indexOf('});', shortlistIndex);
+
+  assert.notEqual(shortlistIndex, -1);
+  assert.notEqual(optionsEndIndex, -1);
+  assert.match(generator.slice(shortlistIndex, optionsEndIndex), /^\s*root,\s*$/m);
+});
+
 test('validate-site uses shared rendered issue structural validator', () => {
   const validateSitePath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'validate', 'validate-site.js');
   const validateSite = fs.readFileSync(validateSitePath, 'utf8');

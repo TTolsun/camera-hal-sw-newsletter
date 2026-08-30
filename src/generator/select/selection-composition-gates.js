@@ -46,10 +46,13 @@ function selectionWarnings(selected, options = {}) {
   const items = ensureArray(selected);
   if (!options.exposureHistory) return warnings;
   for (const article of items) {
-    const annotated = annotateArticleExposure(article, options.exposureHistory);
+    // 이슈 date 기준으로 판정해야 리플레이·carry 실행에서 같은 입력이 같은 경고를 낸다.
+    const annotated = annotateArticleExposure(article, options.exposureHistory, { date: options.date });
     if (annotated.published_within_cooldown) {
+      // newsletter_article_date가 생기기 전 레코드는 cooldown_until만 갖는다. 차단은 그것만으로
+      // 성립하지만 발행일은 모르므로, 문장이 "last published "로 끊기지 않게 모른다고 쓴다.
       warnings.push(
-        `repeated_event_within_cooldown: "${article.title || article.headline || article.article_identity_key}" — last published ${annotated.last_newsletter_date}`
+        `repeated_event_within_cooldown: "${article.title || article.headline || article.article_identity_key}" — last published ${annotated.last_newsletter_date || 'date unknown'}`
       );
     }
   }
@@ -296,7 +299,11 @@ function sourceParserHintsFromShortage(summary = {}, selectionHints = []) {
   );
 }
 
-function selectionShortageHints(summary = {}) {
+// summary는 "수집·파싱이 각 버킷을 만들어 냈는가"에 답하는 구성이고, poolSummary는 "지금 쓸 수
+// 있는 후보가 충분한가"에 답하는 구성이다. 두 질문은 재게재 쿨다운처럼 후보를 사후에 빼는 필터가
+// 있을 때 갈라진다 — 파서 질문은 차단 전 구성을, 풀 충분성 질문은 차단 뒤 구성을 봐야 한다.
+// 필터가 없는 호출부는 두 값이 같으므로 인자를 하나만 넘긴다.
+function selectionShortageHints(summary = {}, poolSummary = summary) {
   const hints = [];
   if (number(summary.direct_aosp_camera_count) === 0) {
     hints.push('Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.');
@@ -313,7 +320,7 @@ function selectionShortageHints(summary = {}) {
   if (number(summary.primary_camera_stack_topic_count) < articlePolicy.primaryCameraStack.minRequired) {
     hints.push(`Collect at least ${articlePolicy.primaryCameraStack.minRequired} Primary Camera Stack candidate(s): ${articlePolicy.primaryCameraStack.buckets.join(', ')}.`);
   }
-  if (number(summary.selected_article_count) < articlePolicy.mainArticleCount.min) {
+  if (number(poolSummary.selected_article_count) < articlePolicy.mainArticleCount.min) {
     hints.push(`Collect enough eligible candidates to satisfy the Newsletter Policy article count range (${articleCountRangeText()}).`);
   }
   if (number(summary.forbidden_main_article_count) > 0) {
