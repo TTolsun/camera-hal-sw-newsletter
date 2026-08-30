@@ -37,6 +37,8 @@ const { callWithTimeout } = require('../../llm/llm-client');
 const { editorSchema } = require('../../../generator/render/newsletter-schema');
 
 const PROBE_STAGE = 'editor';
+const { LLM_STAGES } = require('../../llm/stage-catalog');
+const PROBE_SAMPLING = LLM_STAGES.EDITOR.sampling;
 const PROBE_SYSTEM_INSTRUCTION = 'Reply with the smallest possible valid JSON object for the given schema.';
 const PROBE_PROMPT = 'Schema acceptance probe. Do not write real newsletter content.';
 
@@ -92,6 +94,7 @@ async function probeSchemaAcceptance({
       const built = resolvedProvider.buildRequest({
         model: modelName,
         stage: PROBE_STAGE,
+        sampling: PROBE_SAMPLING,
         systemInstruction: PROBE_SYSTEM_INSTRUCTION,
         prompt: PROBE_PROMPT,
         responseSchema: schema,

@@ -355,6 +355,26 @@ function stageRunKey(run) {
   return `${run.definition.id}#${run.qualityAttempt}`;
 }
 
+// 판정 계열 파생 종류. 부모 run에서 파생 run을 얻을 때 쓴다.
+const DERIVED_STAGE_KINDS = Object.freeze({
+  SEMANTIC_REPAIR: 'semantic_repair',
+  PUBLIC_ARTICLE_JUDGE: 'public_article_judge',
+  PUBLIC_ARTICLE_JUDGE_REPAIR: 'public_article_judge_repair'
+});
+
+/**
+ * 부모 run에서 파생 run을 만든다. 부모가 editor인지 editor repair인지 editor completion인지에
+ * 따라 서로 다른 definition이 나온다 -- 부모마다 status role과 artifact scope가 다르기 때문이다.
+ */
+function derivedStageRun(parentRun, kind) {
+  assertStageRun(parentRun);
+  const definition = stageDefinitionById(`${parentRun.definition.id}.${kind}`);
+  if (!definition) {
+    throw new Error(`no_derived_stage: ${parentRun.definition.id}.${String(kind)}`);
+  }
+  return stageRun(definition, { parentRun });
+}
+
 function isStageRun(value) {
   return Boolean(value && value.definition && DEFINITIONS_BY_ID.has(value.definition.id));
 }
@@ -371,11 +391,13 @@ function assertStageRun(value) {
 }
 
 module.exports = {
+  DERIVED_STAGE_KINDS,
   LABEL_KINDS,
   LLM_STAGES,
   TEMPERATURE_PROFILES,
   THINKING_PROFILES,
   assertStageRun,
+  derivedStageRun,
   isStageRun,
   stageDefinitionById,
   stageRun,

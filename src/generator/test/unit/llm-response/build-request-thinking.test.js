@@ -97,10 +97,11 @@ test('Gemini 2.5-flash — 상한 24576 초과는 클램프(flash-lite와 일관
   assert.equal(result.applied, 24576);
 });
 
-function thinkingConfigFromRequest(stage, model, config = baseConfig) {
+// buildRequest는 stage label이 아니라 stage catalog의 sampling profile을 받는다(#981).
+function thinkingConfigFromRequest(profile, model, config = baseConfig) {
   return buildRequest({
     model,
-    stage,
+    sampling: { temperatureProfile: profile, thinkingProfile: profile },
     systemInstruction: 'sys',
     prompt: 'p',
     responseSchema: {},
@@ -109,22 +110,22 @@ function thinkingConfigFromRequest(stage, model, config = baseConfig) {
 }
 
 test('buildRequest — 3.x editor는 thinkingLevel만 전송(thinkingBudget 없음)', () => {
-  assert.deepEqual(thinkingConfigFromRequest('editor attempt 1/2', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
+  assert.deepEqual(thinkingConfigFromRequest('editor', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
 });
 
 test('buildRequest — 3.x repair는 thinkingLevel만 전송(thinkingBudget 없음)', () => {
-  assert.deepEqual(thinkingConfigFromRequest('editor repair attempt 1/2', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
+  assert.deepEqual(thinkingConfigFromRequest('repair', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
 });
 
 test('buildRequest — flash-lite judge budget 0이면 thinkingConfig 자체 없음', () => {
   const config = { ...baseConfig, geminiThinkingBudgetJudge: 0 };
-  assert.equal(thinkingConfigFromRequest('public article judge', 'gemini-2.5-flash-lite', config), undefined);
+  assert.equal(thinkingConfigFromRequest('judge', 'gemini-2.5-flash-lite', config), undefined);
 });
 
 test('buildRequest — flash-lite judge 512는 thinkingBudget 전송', () => {
-  assert.deepEqual(thinkingConfigFromRequest('public article judge', 'gemini-2.5-flash-lite'), { thinkingBudget: 512 });
+  assert.deepEqual(thinkingConfigFromRequest('judge', 'gemini-2.5-flash-lite'), { thinkingBudget: 512 });
 });
 
 test('buildRequest — 2.5-flash factcheck는 thinkingBudget 전송', () => {
-  assert.deepEqual(thinkingConfigFromRequest('fact-checker attempt 1/2', 'gemini-2.5-flash'), { thinkingBudget: 2048 });
+  assert.deepEqual(thinkingConfigFromRequest('factcheck', 'gemini-2.5-flash'), { thinkingBudget: 2048 });
 });

@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
+const { LLM_STAGES } = require('../../../llm/stage-catalog');
 
 const {
   classifyProbeError,
@@ -115,7 +116,7 @@ test('the real gemini provider exposes every call the probe makes', () => {
   }
   const built = geminiProvider.buildRequest({
     model: 'gemini-3.5-flash',
-    stage: 'editor',
+    sampling: LLM_STAGES.EDITOR.sampling,
     systemInstruction: 'probe',
     prompt: 'probe',
     responseSchema: editorSchema,

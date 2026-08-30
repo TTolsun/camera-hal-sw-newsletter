@@ -1,6 +1,8 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
+const { LLM_STAGES, stageRun } = require('../../../shared/llm/stage-catalog');
+
 const {
   repairEditorSemanticWithLlm,
   validatePublicArticleJudgeOrRepair
@@ -47,7 +49,7 @@ const baseArgs = {
   date: '2026-05-08',
   reporter: { candidates: [] },
   attempt: 1,
-  editorStage: 'editor attempt 1/3',
+  editorStage: stageRun(LLM_STAGES.EDITOR, { qualityAttempt: 1, totalAttempts: 3 }),
   commonContext: '',
   lockedContext: '',
   newsroomDir: null
@@ -67,7 +69,7 @@ test('judge가 통과하면 editor를 그대로 반환하고 judge 결과를 기
 
   assert.equal(result, editor);
   assert.equal(calls.length, 1);
-  assert.match(calls[0], /public article judge$/);
+  assert.match(calls[0].label, /public article judge$/);
   assert.equal(recorded.length, 1);
   assert.ok(recorded[0].editor_public_article_judge);
 });
@@ -89,8 +91,8 @@ test('judge가 차단되면 repair를 시도하고, repair 검증 실패 시 rep
 
   // 초기 judge + repair LLM 호출 두 번
   assert.equal(calls.length, 2);
-  assert.match(calls[0], /public article judge$/);
-  assert.match(calls[1], /semantic repair$/);
+  assert.match(calls[0].label, /public article judge$/);
+  assert.match(calls[1].label, /semantic repair$/);
   // 마지막 기록은 repair 시도/실패 상태
   const last = recorded[recorded.length - 1];
   assert.equal(last.repairAttempted, true);
@@ -125,7 +127,7 @@ function stagedDeps({ judgeReports, repairOutput, recorded, calls }) {
   return {
     callLlmJson: async (stage) => {
       calls.push(stage);
-      if (/semantic repair$/.test(stage)) return repairOutput;
+      if (/semantic repair$/.test(stage.label)) return repairOutput;
       const report = judgeReports[Math.min(judgeCall, judgeReports.length - 1)];
       judgeCall += 1;
       return report;
@@ -150,9 +152,9 @@ test('desk-only advisory가 repair를 트리거하고, repair가 해소하면 re
 
   assert.deepEqual(result, editorWithOneSection());
   assert.equal(calls.length, 3);
-  assert.match(calls[0], /public article judge$/);
-  assert.match(calls[1], /semantic repair$/);
-  assert.match(calls[2], /public article judge repair$/);
+  assert.match(calls[0].label, /public article judge$/);
+  assert.match(calls[1].label, /semantic repair$/);
+  assert.match(calls[2].label, /public article judge repair$/);
   const last = recorded[recorded.length - 1];
   assert.equal(last.repairAttempted, true);
   assert.equal(last.repairSucceeded, true);
@@ -185,7 +187,7 @@ test('desk-only 트리거에서 repair가 실패해도 발행을 막지 않고 �
   const deps = {
     callLlmJson: async (stage) => {
       calls.push(stage);
-      if (/semantic repair$/.test(stage)) return editorWithOneSection();
+      if (/semantic repair$/.test(stage.label)) return editorWithOneSection();
       return deskAdvisoryReport();
     },
     recordEditorSemanticStatus: (status) => recorded.push(status),
@@ -208,7 +210,7 @@ test('repair 프롬프트에 desk 교정 지침이 포함된다', async () => {
   const deps = {
     callLlmJson: async (stage, prompt) => {
       prompts.push({ stage, prompt });
-      if (/semantic repair$/.test(stage)) return editorWithOneSection();
+      if (/semantic repair$/.test(stage.label)) return editorWithOneSection();
       judgeCall += 1;
       return judgeCall === 1 ? deskAdvisoryReport() : cleanJudgeReport();
     },
@@ -218,7 +220,7 @@ test('repair 프롬프트에 desk 교정 지침이 포함된다', async () => {
 
   await validatePublicArticleJudgeOrRepair({ ...baseArgs, editor }, deps);
 
-  const repairPrompt = prompts.find(entry => /semantic repair$/.test(entry.stage));
+  const repairPrompt = prompts.find(entry => /semantic repair$/.test(entry.stage.label));
   assert.ok(repairPrompt, 'semantic repair가 호출되어야 한다');
   assert.match(repairPrompt.prompt, /desk_target_explanation/);
 });
@@ -234,7 +236,7 @@ test('semantic repair 프롬프트에 sections.hal_signal_capsule 수리 지침�
 
   await repairEditorSemanticWithLlm({
     date: '2026-05-08',
-    editorStage: 'editor attempt 1/3',
+    editorStage: stageRun(LLM_STAGES.EDITOR, { qualityAttempt: 1, totalAttempts: 3 }),
     commonContext: '',
     lockedContext: '',
     reporter: { candidates: [] },

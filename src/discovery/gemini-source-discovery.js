@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { LLM_STAGES, stageRun } = require('../shared/llm/stage-catalog');
 const path = require('path');
 
 const {
@@ -133,7 +134,7 @@ function buildProposalPrompt({ date, manualCandidates = [], sourceRegistry = {} 
 async function buildProposalPayload({ date, manualCandidates, sourceRegistry, budget, callLlmJsonBudgetedImpl }) {
   const callImpl = callLlmJsonBudgetedImpl || callGeminiJsonBudgeted;
   return normalizeProposalPayload(await callImpl(
-    'sourceDiscovery',
+    stageRun(LLM_STAGES.SOURCE_DISCOVERY),
     '당신은 Camera HAL SW newsletter를 위한 신중한 source discovery planner입니다. JSON만 반환하세요.',
     buildProposalPrompt({ date, manualCandidates, sourceRegistry }),
     proposalResponseSchema(),

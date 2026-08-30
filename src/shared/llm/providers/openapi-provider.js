@@ -1,4 +1,4 @@
-const { configuredModelsForStage } = require('../model-policy');
+const { configuredModelsForGroup, configuredModelsForStage } = require('../model-policy');
 
 function providerNotImplemented() {
   const error = new Error('provider_not_implemented: openapi is a reserved LLM provider enum and has no production HTTP client in this issue.');
@@ -20,6 +20,7 @@ module.exports = {
 
   configuredModels: configuredModelsForStage,
   configuredModelsForStage,
+  configuredModelsForGroup,
 
   createModelContext() {
     return {};

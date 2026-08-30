@@ -1,6 +1,7 @@
 const { GoogleGenAI } = require('@google/genai');
 const { TOKENS_PER_MILLION, number, roundUsd } = require('../llm-cost');
 const {
+  configuredModelsForGroup,
   configuredModelsForStage,
   isGeminiProModel
 } = require('../model-policy');
@@ -180,7 +181,55 @@ function budgetToThinkingLevel(budget) {
 }
 
 function thinkingConfigForStage(stage, config, model) {
-  const requested = thinkingBudgetForStage(stage, config);
+  return thinkingConfigForBudget(thinkingBudgetForStage(stage, config), model);
+}
+
+// stage catalog의 sampling profile을 이 provider의 config field로 옮긴다(#981).
+// catalog는 provider의 config 모양을 몰라야 하고, provider에는 stage 예외 분기가 없어야 한다.
+// 이 표 두 개가 그 경계다.
+const TEMPERATURE_FIELD_BY_PROFILE = Object.freeze({
+  default: 'geminiTemperatureDefault',
+  sourceDiscovery: 'geminiTemperatureSourceDiscovery',
+  reporter: 'geminiTemperatureReporter',
+  editor: 'geminiTemperatureEditor',
+  factcheck: 'geminiTemperatureFactcheck',
+  repair: 'geminiTemperatureRepair',
+  judge: 'geminiTemperatureJudge'
+});
+
+const THINKING_FIELD_BY_PROFILE = Object.freeze({
+  reporter: 'geminiThinkingBudgetReporter',
+  editor: 'geminiThinkingBudgetEditor',
+  repair: 'geminiThinkingBudgetRepair',
+  factcheck: 'geminiThinkingBudgetFactcheck',
+  judge: 'geminiThinkingBudgetJudge'
+});
+
+const THINKING_PROFILE_DISABLED = 'disabled';
+
+function temperatureForSampling(sampling, config) {
+  const field = TEMPERATURE_FIELD_BY_PROFILE[sampling && sampling.temperatureProfile];
+  if (!field) {
+    throw new Error(`unknown_temperature_profile: ${String(sampling && sampling.temperatureProfile)}`);
+  }
+  return config[field];
+}
+
+function thinkingBudgetForSampling(sampling, config) {
+  const profile = sampling && sampling.thinkingProfile;
+  if (profile === THINKING_PROFILE_DISABLED) return 0;
+  const field = THINKING_FIELD_BY_PROFILE[profile];
+  if (!field) {
+    throw new Error(`unknown_thinking_profile: ${String(profile)}`);
+  }
+  return config[field];
+}
+
+function thinkingConfigForSampling(sampling, config, model) {
+  return thinkingConfigForBudget(thinkingBudgetForSampling(sampling, config), model);
+}
+
+function thinkingConfigForBudget(requested, model) {
   const family = geminiThinkingFamily(model);
 
   if (family === 'thinking_level') {
@@ -247,11 +296,11 @@ function apiVersionForModel() {
   return undefined;
 }
 
-function buildGeminiRequest({ model, stage, systemInstruction, prompt, responseSchema, config }) {
-  const thinkingBudget = thinkingConfigForStage(stage, config, model);
+function buildGeminiRequest({ model, sampling, systemInstruction, prompt, responseSchema, config }) {
+  const thinkingBudget = thinkingConfigForSampling(sampling, config, model);
   const requestConfig = {
     systemInstruction,
-    ...schemaConfig(responseSchema, temperatureForStage(stage, config))
+    ...schemaConfig(responseSchema, temperatureForSampling(sampling, config))
   };
   if (thinkingBudget.mode === 'thinking_level') {
     requestConfig.thinkingConfig = { thinkingLevel: thinkingBudget.thinkingLevel };
@@ -292,6 +341,7 @@ module.exports = {
 
   configuredModels: configuredModelsForStage,
   configuredModelsForStage,
+  configuredModelsForGroup,
 
   createModelContext,
 
@@ -324,6 +374,9 @@ module.exports = {
   },
 
   temperatureForStage,
+  temperatureForSampling,
+  thinkingBudgetForSampling,
+  thinkingConfigForSampling,
 
   thinkingBudgetForStage,
   thinkingConfigForStage,

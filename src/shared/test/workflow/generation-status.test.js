@@ -54,11 +54,12 @@ test('generation status carries a stage_status_log array (#398)', () => {
   assert.ok(Array.isArray(status.stage_status_log));
 });
 
-test('failure stage is extracted from bracketed Gemini errors', () => {
-  assert.equal(
-    failureStageFromError(new Error('[fact-checker attempt 1/4] Gemini API failed.')),
-    'fact-checker attempt 1/4'
-  );
+// #981: 메시지의 [label] prefix 파싱은 삭제했다. stage 정체성은 에러가 구조화 필드로 싣고 온다.
+test('failure stage comes from the error stage field, not from the message prefix', () => {
+  const error = new Error('[fact-checker attempt 1/4] Gemini API failed.');
+  assert.equal(failureStageFromError(error), 'generation');
+  error.stage = 'fact-checker attempt 1/4';
+  assert.equal(failureStageFromError(error), 'fact-checker attempt 1/4');
 });
 
 test('generation failure classes distinguish provider, adapter, and domain failures', () => {

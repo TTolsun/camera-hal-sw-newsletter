@@ -81,20 +81,28 @@ function modelGroupForStage(stage) {
   return modelGroupInfoForStage(stage).group;
 }
 
-function primaryModelForStage(config, stage) {
-  const group = modelGroupForStage(stage);
+function primaryModelForGroup(config, group) {
+  assertLlmStageGroup(group);
   const stageModels = config?.llmStageModels && typeof config.llmStageModels === 'object'
     ? config.llmStageModels
     : null;
   return stageModels?.[group] || config?.llmModel || config?.geminiModel;
 }
 
-function configuredModelsForStage(config, stage) {
+function configuredModelsForGroup(config, group) {
   const models = [
-    primaryModelForStage(config, stage),
+    primaryModelForGroup(config, group),
     ...fallbackModels(config)
   ].filter(Boolean);
   return dedupeModels(models);
+}
+
+function primaryModelForStage(config, stage) {
+  return primaryModelForGroup(config, modelGroupForStage(stage));
+}
+
+function configuredModelsForStage(config, stage) {
+  return configuredModelsForGroup(config, modelGroupForStage(stage));
 }
 
 function configuredModels(config) {
@@ -105,7 +113,7 @@ function configuredModels(config) {
     ];
     return dedupeModels(models);
   }
-  return configuredModelsForStage(config, LLM_STAGE_GROUPS.REPORTER);
+  return configuredModelsForGroup(config, LLM_STAGE_GROUPS.REPORTER);
 }
 
 module.exports = {
@@ -113,7 +121,9 @@ module.exports = {
   UNKNOWN_STAGE_ROUTING_WARNING,
   assertLlmStageGroup,
   configuredModels,
+  configuredModelsForGroup,
   configuredModelsForStage,
+  primaryModelForGroup,
   isGeminiProModel,
   modelGroupInfoForStage,
   modelGroupForStage,

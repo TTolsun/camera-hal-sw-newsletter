@@ -3,6 +3,12 @@ const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
 
+const { LLM_STAGES, stageRun } = require('../../../llm/stage-catalog');
+
+function run(name) {
+  return stageRun(LLM_STAGES[name], { qualityAttempt: 1, totalAttempts: 3 });
+}
+
 const clientPath = path.resolve(__dirname, '..', '..', '..', '..', '..', 'src', 'shared', 'llm', 'llm-client.js');
 const rawDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '.tmp', 'llm-raw');
 const { readRuntimeConfig } = require('../../../common/runtime-config');
@@ -56,7 +62,7 @@ test('openapi reserved provider fails fast without HTTP request', async () => {
   });
 
   await assert.rejects(
-    () => client.callLlmJson('reserved provider', 'system', 'prompt', {}),
+    () => client.callLlmJson(run('REPORTER'), 'system', 'prompt', {}),
     /provider_not_implemented/
   );
 });
@@ -69,6 +75,7 @@ function fakeProvider(execute) {
     missingCredentialMessage: 'no key',
     getApiKey: () => 'key',
     configuredModels: () => ['hang-model', 'ok-model'],
+    configuredModelsForGroup: () => ['hang-model', 'ok-model'],
     createModelContext: ({ modelName }) => ({ modelName }),
     describeModelContext: () => '',
     buildRequest: ({ model }) => ({ request: { model }, thinkingBudget: null }),
@@ -110,7 +117,7 @@ test('callLlmJson abandons a hanging model and falls through to the next fallbac
   const client = loadLlmClient({ GEMINI_CALL_TIMEOUT_MS: '40' });
   const provider = fakeProvider(({ modelName }) =>
     modelName === 'hang-model' ? new Promise(() => {}) : Promise.resolve(okResponse));
-  const result = await client.callLlmJson('unit stage', 'system', 'prompt', {}, { provider });
+  const result = await client.callLlmJson(run('REPORTER'), 'system', 'prompt', {}, { provider });
   assert.deepEqual(result, { result: 'ok' });
 });
 
@@ -118,7 +125,7 @@ test('callLlmJson throws after every fallback model times out', async () => {
   const client = loadLlmClient({ GEMINI_CALL_TIMEOUT_MS: '40' });
   const provider = fakeProvider(() => new Promise(() => {}));
   await assert.rejects(
-    () => client.callLlmJson('unit stage', 'system', 'prompt', {}, { provider }),
+    () => client.callLlmJson(run('REPORTER'), 'system', 'prompt', {}, { provider }),
     error => /Fake API failed for all configured models/.test(error.message) &&
       // The failure summary distinguishes a timeout from a generic 'unknown' status.
       /status timeout/.test(error.message)
@@ -137,7 +144,7 @@ test('callLlmJson reports a schema-too-complex rejection as a schema-drift error
     ));
   });
   await assert.rejects(
-    () => client.callLlmJson('editor attempt 1/3', 'system', 'prompt', {}, { provider }),
+    () => client.callLlmJson(run('EDITOR'), 'system', 'prompt', {}, { provider }),
     // Distinctive schema-drift diagnosis, not the generic "API failed" message.
     error => /rejected the response schema as too complex/i.test(error.message) &&
       /state limit/i.test(error.message)
