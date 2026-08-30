@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { LABEL_KINDS, stageDefinitionById, stageRun } = require('../../../shared/llm/stage-catalog');
+const { LABEL_KINDS, LLM_STAGES, stageDefinitionById, stageRun } = require('../../../shared/llm/stage-catalog');
 const { temperatureForSampling, thinkingBudgetForSampling } = require('../../../shared/llm/providers/gemini-provider');
 const { createDiagnosticsState } = require('../../../shared/llm/llm-diagnostics');
 const { publicArticleJudgeArtifactScope } = require('../../publish/orchestrator-judge-helpers');
@@ -416,6 +416,22 @@ test('stage id -> public article judge artifact scope 현행 매핑', () => {
       stageCase.artifactScope,
       `artifact scope mismatch: ${stageCase.label}`
     );
+  });
+});
+
+// 판정 stage가 catalog에 새로 생겼는데 artifact scope 표에 등록되지 않으면, 파일명이
+// 조용히 기본 scope('editor')로 떨어져 다른 부모의 산출물을 덮어쓸 수 있다. 런타임에
+// 발행을 막는 대신 여기서 잡는다.
+test('catalog의 모든 판정 stage가 이 표에 있다', () => {
+  const judgeStageIds = Object.values(LLM_STAGES)
+    .map(definition => definition.id)
+    .filter(id => id.endsWith('.public_article_judge') || id.endsWith('.public_article_judge_repair'));
+  assert.equal(judgeStageIds.length, 6);
+
+  judgeStageIds.forEach((stageId) => {
+    const stageCase = PRODUCTION_STAGE_CASES.find(entry => entry.stageId === stageId);
+    assert.ok(stageCase, `판정 stage가 표에 없다: ${stageId}`);
+    assert.notEqual(stageCase.artifactScope, SCOPE_NOT_CONSULTED, `artifact scope가 비어 있다: ${stageId}`);
   });
 });
 

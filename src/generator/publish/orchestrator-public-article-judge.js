@@ -72,10 +72,12 @@ async function repairEditorSemanticWithLlm({
   );
 }
 
-function writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, error = null, stage = null) {
+// stage는 판정 stage run이다(생략 불가). 파일명 scope가 여기서 정해지므로, 값이 없으면
+// 조용히 기본 scope로 쓰지 않고 그 자리에서 드러나야 한다.
+function writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, error, stage) {
   if (!newsroomDir) return;
   // 파일명 scope는 label 철자가 아니라 stage id로 정한다(#981).
-  const scope = publicArticleJudgeArtifactScope(stage && stage.definition ? stage.definition.id : '');
+  const scope = publicArticleJudgeArtifactScope(stage.definition.id);
   const baseSuffix = phase === 'repair' ? `repair-attempt-${attempt}` : `attempt-${attempt}`;
   const suffix = scope === 'editor' ? baseSuffix : `${scope}-${baseSuffix}`;
   writeJson(path.join(newsroomDir, `editor-public-article-judge-${suffix}.json`), report);
