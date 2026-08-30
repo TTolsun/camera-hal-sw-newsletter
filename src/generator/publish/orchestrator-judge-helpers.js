@@ -245,11 +245,19 @@ function judgeRepairError(report, stage, attempt, phase = 'attempt') {
   return buildJudgeError(report, stage, attempt, phase, issues);
 }
 
-function publicArticleJudgeArtifactScope(stage = '') {
-  const normalized = String(stage || '').toLowerCase();
-  if (/completion/.test(normalized)) return 'completion';
-  if (/editor repair|targeted/.test(normalized)) return 'targeted-repair';
-  return 'editor';
+// 판정 artifact 파일명 scope. 아티팩트 파일명 정책은 generator가 소유하므로 이 표는 여기 둔다
+// (shared stage catalog는 정체성만 소유한다). 부모 stage id별로 한 항목씩이다(#981).
+const ARTIFACT_SCOPE_BY_STAGE_ID = Object.freeze({
+  'editor.public_article_judge': 'editor',
+  'editor.public_article_judge_repair': 'editor',
+  'editor.repair.public_article_judge': 'targeted-repair',
+  'editor.repair.public_article_judge_repair': 'targeted-repair',
+  'editor.completion.public_article_judge': 'completion',
+  'editor.completion.public_article_judge_repair': 'completion'
+});
+
+function publicArticleJudgeArtifactScope(stageId = '') {
+  return ARTIFACT_SCOPE_BY_STAGE_ID[stageId] || 'editor';
 }
 
 module.exports = {

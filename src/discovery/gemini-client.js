@@ -40,6 +40,5 @@ module.exports = {
   resetGeminiDiagnostics: llmClient.resetLlmDiagnostics,
   safeFilenamePart: llmClient.safeFilenamePart,
   saveRawGeminiOutput: llmClient.saveRawLlmOutput,
-  thinkingBudgetForStage: llmClient.thinkingBudgetForStage,
   usageMetadataFromResponse: llmClient.usageMetadataFromResponse
 };

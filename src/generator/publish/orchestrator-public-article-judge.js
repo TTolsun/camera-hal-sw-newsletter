@@ -25,6 +25,7 @@ const {
   publicArticleJudgeArtifactScope
 } = require('./orchestrator-judge-helpers');
 const { selectedReporterCapsules } = require('./orchestrator-reporter-normalize');
+const { DERIVED_STAGE_KINDS, derivedStageRun } = require('../../shared/llm/stage-catalog');
 
 async function repairEditorSemanticWithLlm({
   date,
@@ -39,7 +40,7 @@ async function repairEditorSemanticWithLlm({
 }, { callLlmJson }) {
   const beforeSectionCount = ensureArray(invalidEditor?.sections).length;
   return callLlmJson(
-    `${editorStage} semantic repair`,
+    derivedStageRun(editorStage, DERIVED_STAGE_KINDS.SEMANTIC_REPAIR),
     [
       'AOSP Camera / Driver / SoC Platform Newsletter editor JSON draft를 repair하세요.',
       '같은 schema와 일치하는 complete editor JSON object 하나를 반환하세요.',
@@ -71,9 +72,12 @@ async function repairEditorSemanticWithLlm({
   );
 }
 
-function writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, error = null, stage = '') {
+// stage는 판정 stage run이다(생략 불가). 파일명 scope가 여기서 정해지므로, 값이 없으면
+// 조용히 기본 scope로 쓰지 않고 그 자리에서 드러나야 한다.
+function writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, error, stage) {
   if (!newsroomDir) return;
-  const scope = publicArticleJudgeArtifactScope(stage);
+  // 파일명 scope는 label 철자가 아니라 stage id로 정한다(#981).
+  const scope = publicArticleJudgeArtifactScope(stage.definition.id);
   const baseSuffix = phase === 'repair' ? `repair-attempt-${attempt}` : `attempt-${attempt}`;
   const suffix = scope === 'editor' ? baseSuffix : `${scope}-${baseSuffix}`;
   writeJson(path.join(newsroomDir, `editor-public-article-judge-${suffix}.json`), report);
@@ -100,7 +104,7 @@ async function runPublicArticleJudge({ date, editor, reporter, stage, attempt, n
     recordEditorSemanticStatus({ editor_public_article_judge: report });
     return { ok: true, report, deskAdvisory };
   }
-  const error = publicArticleJudgeError(report, stage, attempt, phase);
+  const error = publicArticleJudgeError(report, stage.label, attempt, phase);
   writePublicArticleJudgeArtifact(newsroomDir, attempt, phase, report, error, stage);
   return { ok: false, report, error, deskAdvisory };
 }
@@ -116,7 +120,8 @@ async function validatePublicArticleJudgeOrRepair({
   newsroomDir
 }, deps) {
   const { recordEditorSemanticStatus, validateEditor } = deps;
-  const judgeStage = `${editorStage} public article judge`;
+  const judgeStage = derivedStageRun(editorStage, DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE);
+  const judgeRepairStage = derivedStageRun(editorStage, DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE_REPAIR);
   const initialJudge = await runPublicArticleJudge({
     date,
     editor,
@@ -137,9 +142,9 @@ async function validatePublicArticleJudgeOrRepair({
 
   // repair에는 차단 issue와 desk advisory issue를 함께 넘긴다.
   const initialDetails = serializeEditorValidationError(
-    judgeRepairError(initialJudge.report, judgeStage, attempt),
+    judgeRepairError(initialJudge.report, judgeStage.label, attempt),
     {
-      stage: judgeStage,
+      stage: judgeStage.label,
       attempt,
       repairAttempted: false,
       repairSucceeded: false
@@ -164,7 +169,7 @@ async function validatePublicArticleJudgeOrRepair({
       date,
       editor: repairedEditor,
       reporter,
-      stage: `${editorStage} public article judge repair`,
+      stage: judgeRepairStage,
       attempt,
       newsroomDir,
       phase: 'repair'
@@ -202,7 +207,7 @@ async function validatePublicArticleJudgeOrRepair({
       });
     const repairDetails = {
       ...serializeEditorValidationError(semanticRepairError),
-      stage: `${editorStage} public article judge repair`,
+      stage: judgeRepairStage.label,
       attempt,
       initial: initialDetails
     };

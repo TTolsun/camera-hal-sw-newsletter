@@ -22,8 +22,8 @@ function makeStubs(state) {
       callLlmJson: async (stage) => {
         if (s.llmThrows) { throw new Error('repair LLM failed'); }
         // 특정 단계(repair/completion)에서만 throw시켜 한 패스의 실패 경로만 고립한다.
-        if (s.throwOnStageIncludes && String(stage).includes(s.throwOnStageIncludes)) {
-          throw new Error(`LLM failed at ${stage}`);
+        if (s.throwOnStageIncludes && String(stage.label).includes(s.throwOnStageIncludes)) {
+          throw new Error(`LLM failed at ${stage.label}`);
         }
         return { patches: [] };
       }

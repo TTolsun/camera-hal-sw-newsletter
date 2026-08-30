@@ -5,21 +5,8 @@ const test = require('node:test');
 
 const {
   STAGE_STATUSES,
-  roleFromStageLabel,
   createStageStatusTracker
 } = require('../../../select/stage-status-tracker');
-
-test('roleFromStageLabel maps runtime stage labels to canonical roles', () => {
-  assert.equal(roleFromStageLabel('reporter attempt 1/2'), 'reporter');
-  assert.equal(roleFromStageLabel('editor attempt 1/2'), 'editor');
-  assert.equal(roleFromStageLabel('editor completion attempt 1/2'), 'editor');
-  assert.equal(roleFromStageLabel('editor repair attempt 1/2'), 'repair');
-  assert.equal(roleFromStageLabel('fact-checker attempt 1/2'), 'factcheck');
-  assert.equal(roleFromStageLabel('background-context attempt 1/2'), 'background-context');
-  assert.equal(roleFromStageLabel('editor public article judge'), 'judge');
-  assert.equal(roleFromStageLabel('editor public article judge repair'), 'repair');
-  assert.equal(roleFromStageLabel(''), 'unknown');
-});
 
 test('start then pass records a passed entry for the same role/attempt', () => {
   const tracker = createStageStatusTracker();

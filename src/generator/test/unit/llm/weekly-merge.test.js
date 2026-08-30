@@ -65,7 +65,8 @@ test('buildWeeklyMergeResolver calls the LLM with both articles and the decision
   });
   assert.equal(outcome.decision, 'append');
   assert.equal(calls.length, 1);
-  assert.equal(calls[0].stage, 'weekly-merge');
+  assert.equal(calls[0].stage.definition.id, 'weekly_merge');
+  assert.equal(calls[0].stage.label, 'weekly-merge');
   assert.equal(calls[0].schema, WEEKLY_MERGE_RESPONSE_SCHEMA);
   assert.match(calls[0].prompt, /existing_article/);
   assert.match(calls[0].prompt, /new_article/);

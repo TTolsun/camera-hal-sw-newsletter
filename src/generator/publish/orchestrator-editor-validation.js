@@ -145,7 +145,7 @@ async function validateOrRepairEditor(value, {
     date,
     reporter,
     attempt,
-    stage: editorStage,
+    stage: editorStage.label,
     newsroomDir,
     strictClaims: true,
     requireStoryContract: true,

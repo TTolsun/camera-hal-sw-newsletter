@@ -172,7 +172,8 @@ test('selectNewsworthyLinks returns only links the model marks newsworthy', asyn
 
   const selected = await selectNewsworthyLinks({ date: '2026-06-08', links, callLlmJsonBudgetedImpl, budget: {} });
 
-  assert.equal(calls[0].stage, 'sourceDiscovery');
+  assert.equal(calls[0].stage.definition.id, 'source_discovery');
+  assert.equal(calls[0].stage.label, 'sourceDiscovery');
   assert.equal(selected.length, 1);
   assert.equal(selected[0].url, 'https://developer.android.com/jetpack/androidx/releases/camera');
   assert.equal(selected[0].selection_reason, 'New CameraX behavior relevant to Camera HAL.');

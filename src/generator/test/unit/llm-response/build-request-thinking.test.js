@@ -2,10 +2,15 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  thinkingConfigForStage,
+  thinkingConfigForSampling,
   budgetToThinkingLevel,
   buildRequest
 } = require('../../../../shared/llm/providers/gemini-provider');
+
+// stage catalog의 sampling profile을 그대로 넘긴다(#981). profile 이름이 곧 config field를 고른다.
+function sampling(profile) {
+  return { temperatureProfile: profile, thinkingProfile: profile };
+}
 
 // 단계별 thinking budget(코드 정본 기본값 반영: factcheck 2048, judge 512, repair 1024)
 const baseConfig = {
@@ -34,7 +39,7 @@ test('budgetToThinkingLevel — 경계 매핑 (<=512 LOW / <=2048 MEDIUM / >2048
 });
 
 test('Gemini 3.x editor — thinkingBudget 대신 thinkingLevel(MEDIUM) 사용', () => {
-  const result = thinkingConfigForStage('editor attempt 1/2', baseConfig, 'gemini-3.5-flash');
+  const result = thinkingConfigForSampling(sampling('editor'), baseConfig, 'gemini-3.5-flash');
   assert.equal(result.mode, 'thinking_level');
   assert.equal(result.thinkingLevel, 'MEDIUM');
   // cost-report 연속성: requested/applied는 budget 숫자로 유지
@@ -46,7 +51,7 @@ test('Gemini 3.x repair — editor와 동일하게 thinkingLevel(MEDIUM) 사용(
   // repair stage가 gemini-3.5-flash로 라우팅되면 editor와 같은 model-family
   // thinking 경로를 타야 한다. 숫자 budget(1024)를 3.x에 그대로 보내면 400이므로
   // thinkingLevel로 번역되는지 확인한다.
-  const result = thinkingConfigForStage('editor repair attempt 1/2', baseConfig, 'gemini-3.5-flash');
+  const result = thinkingConfigForSampling(sampling('repair'), baseConfig, 'gemini-3.5-flash');
   assert.equal(result.mode, 'thinking_level');
   assert.equal(result.thinkingLevel, 'MEDIUM');
   assert.equal(result.requested, 1024);
@@ -55,52 +60,53 @@ test('Gemini 3.x repair — editor와 동일하게 thinkingLevel(MEDIUM) 사용(
 
 test('flash-lite judge budget 0 — thinkingConfig 생략(mode omit)', () => {
   const config = { ...baseConfig, geminiThinkingBudgetJudge: 0 };
-  const result = thinkingConfigForStage('public article judge', config, 'gemini-2.5-flash-lite');
+  const result = thinkingConfigForSampling(sampling('judge'), config, 'gemini-2.5-flash-lite');
   assert.equal(result.mode, 'omit');
 });
 
 test('flash-lite judge budget 512 — 유효 최소값 그대로', () => {
-  const result = thinkingConfigForStage('public article judge', baseConfig, 'gemini-2.5-flash-lite');
+  const result = thinkingConfigForSampling(sampling('judge'), baseConfig, 'gemini-2.5-flash-lite');
   assert.equal(result.mode, 'budget');
   assert.equal(result.applied, 512);
 });
 
 test('flash-lite — 0<budget<512는 512로 클램프', () => {
   const config = { ...baseConfig, geminiThinkingBudgetJudge: 300 };
-  const result = thinkingConfigForStage('public article judge', config, 'gemini-2.5-flash-lite');
+  const result = thinkingConfigForSampling(sampling('judge'), config, 'gemini-2.5-flash-lite');
   assert.equal(result.mode, 'budget');
   assert.equal(result.applied, 512);
 });
 
 test('flash-lite — 상한 24576 초과는 클램프', () => {
   const config = { ...baseConfig, geminiThinkingBudgetJudge: 30000 };
-  const result = thinkingConfigForStage('public article judge', config, 'gemini-2.5-flash-lite');
+  const result = thinkingConfigForSampling(sampling('judge'), config, 'gemini-2.5-flash-lite');
   assert.equal(result.applied, 24576);
 });
 
 test('Gemini 2.5-flash factcheck — budget 2048 그대로(level 변환 없음)', () => {
-  const result = thinkingConfigForStage('fact-checker attempt 1/2', baseConfig, 'gemini-2.5-flash');
+  const result = thinkingConfigForSampling(sampling('factcheck'), baseConfig, 'gemini-2.5-flash');
   assert.equal(result.mode, 'budget');
   assert.equal(result.applied, 2048);
 });
 
 test('Gemini 2.5-flash — budget 0은 off로 그대로 전송', () => {
-  const result = thinkingConfigForStage('reporter attempt 1/2', baseConfig, 'gemini-2.5-flash');
+  const result = thinkingConfigForSampling(sampling('reporter'), baseConfig, 'gemini-2.5-flash');
   assert.equal(result.mode, 'budget');
   assert.equal(result.applied, 0);
 });
 
 test('Gemini 2.5-flash — 상한 24576 초과는 클램프(flash-lite와 일관)', () => {
   const config = { ...baseConfig, geminiThinkingBudgetFactcheck: 30000 };
-  const result = thinkingConfigForStage('fact-checker attempt 1/2', config, 'gemini-2.5-flash');
+  const result = thinkingConfigForSampling(sampling('factcheck'), config, 'gemini-2.5-flash');
   assert.equal(result.mode, 'budget');
   assert.equal(result.applied, 24576);
 });
 
-function thinkingConfigFromRequest(stage, model, config = baseConfig) {
+// buildRequest는 stage label이 아니라 stage catalog의 sampling profile을 받는다(#981).
+function thinkingConfigFromRequest(profile, model, config = baseConfig) {
   return buildRequest({
     model,
-    stage,
+    sampling: { temperatureProfile: profile, thinkingProfile: profile },
     systemInstruction: 'sys',
     prompt: 'p',
     responseSchema: {},
@@ -109,22 +115,22 @@ function thinkingConfigFromRequest(stage, model, config = baseConfig) {
 }
 
 test('buildRequest — 3.x editor는 thinkingLevel만 전송(thinkingBudget 없음)', () => {
-  assert.deepEqual(thinkingConfigFromRequest('editor attempt 1/2', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
+  assert.deepEqual(thinkingConfigFromRequest('editor', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
 });
 
 test('buildRequest — 3.x repair는 thinkingLevel만 전송(thinkingBudget 없음)', () => {
-  assert.deepEqual(thinkingConfigFromRequest('editor repair attempt 1/2', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
+  assert.deepEqual(thinkingConfigFromRequest('repair', 'gemini-3.5-flash'), { thinkingLevel: 'MEDIUM' });
 });
 
 test('buildRequest — flash-lite judge budget 0이면 thinkingConfig 자체 없음', () => {
   const config = { ...baseConfig, geminiThinkingBudgetJudge: 0 };
-  assert.equal(thinkingConfigFromRequest('public article judge', 'gemini-2.5-flash-lite', config), undefined);
+  assert.equal(thinkingConfigFromRequest('judge', 'gemini-2.5-flash-lite', config), undefined);
 });
 
 test('buildRequest — flash-lite judge 512는 thinkingBudget 전송', () => {
-  assert.deepEqual(thinkingConfigFromRequest('public article judge', 'gemini-2.5-flash-lite'), { thinkingBudget: 512 });
+  assert.deepEqual(thinkingConfigFromRequest('judge', 'gemini-2.5-flash-lite'), { thinkingBudget: 512 });
 });
 
 test('buildRequest — 2.5-flash factcheck는 thinkingBudget 전송', () => {
-  assert.deepEqual(thinkingConfigFromRequest('fact-checker attempt 1/2', 'gemini-2.5-flash'), { thinkingBudget: 2048 });
+  assert.deepEqual(thinkingConfigFromRequest('factcheck', 'gemini-2.5-flash'), { thinkingBudget: 2048 });
 });

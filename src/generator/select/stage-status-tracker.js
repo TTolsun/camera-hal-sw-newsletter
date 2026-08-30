@@ -18,22 +18,6 @@ const STAGE_STATUSES = Object.freeze({
   SKIPPED: 'skipped'
 });
 
-// Map a runtime stage label to its canonical role. Labels look like
-// "reporter attempt 1/2", "editor repair attempt 1/2", "fact-checker attempt 1/2",
-// "background-context attempt 1/2", "editor public article judge".
-function roleFromStageLabel(label) {
-  const text = String(label || '').toLowerCase();
-  if (text.includes('repair')) return 'repair';
-  if (text.includes('judge')) return 'judge';
-  if (text.includes('fact')) return 'factcheck';
-  if (text.includes('background-context') || text.includes('background context')) {
-    return 'background-context';
-  }
-  if (text.includes('reporter')) return 'reporter';
-  if (text.includes('completion') || text.includes('editor')) return 'editor';
-  return text.trim() || 'unknown';
-}
-
 function createStageStatusTracker() {
   const entries = [];
 
@@ -82,6 +66,5 @@ function createStageStatusTracker() {
 
 module.exports = {
   STAGE_STATUSES,
-  roleFromStageLabel,
   createStageStatusTracker
 };

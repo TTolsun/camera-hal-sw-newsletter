@@ -112,7 +112,7 @@ async function runEditorStage({
         retryHistory,
         shortlistReport,
         attempt,
-        stage: editorStage
+        stage: editorStage.label
       });
       return { reviewableReturn: true };
     }

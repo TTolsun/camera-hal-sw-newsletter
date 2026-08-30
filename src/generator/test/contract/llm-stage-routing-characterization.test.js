@@ -1,25 +1,33 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { modelGroupInfoForStage } = require('../../../shared/llm/model-policy');
-const { temperatureForStage, thinkingBudgetForStage } = require('../../../shared/llm/providers/gemini-provider');
+const { LABEL_KINDS, LLM_STAGES, stageDefinitionById, stageRun } = require('../../../shared/llm/stage-catalog');
+const { temperatureForSampling, thinkingBudgetForSampling } = require('../../../shared/llm/providers/gemini-provider');
 const { createDiagnosticsState } = require('../../../shared/llm/llm-diagnostics');
-const { roleFromStageLabel } = require('../../select/stage-status-tracker');
 const { publicArticleJudgeArtifactScope } = require('../../publish/orchestrator-judge-helpers');
 
-// LLM stage routing characterization (#980).
+// 표의 stage id로 run을 만든다. 파생 stage는 부모 run이 있어야 label이 나온다.
+function runForStageId(stageId) {
+  const definition = stageDefinitionById(stageId);
+  if (!definition) throw new Error(`unknown stage id in table: ${stageId}`);
+  if (definition.label.kind === LABEL_KINDS.DERIVED) {
+    return stageRun(definition, { parentRun: runForStageId(definition.label.parentId) });
+  }
+  return stageRun(definition, { qualityAttempt: 1, totalAttempts: 2 });
+}
+
+// LLM stage routing characterization (#980, #981).
 //
-// stage 정체성은 지금 사람이 읽는 자유 문자열 label 하나로 표현되고, 아래 다섯 resolver가
-// 그 문자열을 각자 정규식으로 해석해 model group, temperature, thinking budget, status role,
-// artifact scope를 유도한다. 분기 순서가 resolver마다 달라 같은 label이 축마다 다른 답을 받는다.
+// production stage 21개의 routing 결과를 표 한 장으로 고정한다. 열은 label, model group,
+// temperature/thinking config field, status role, artifact scope다.
 //
-// 이 파일은 그 현행 결과를 있는 그대로 고정한다. 여기 적힌 값이 곧 "옳은 값"이라는 뜻은
-// 아니다. 이상해 보이는 조합(예: editor completion은 model group이 repair인데 temperature는
-// editor를 쓴다)도 그대로 기록해 두는 것이 목적이다. 그래야 #981(stage descriptor catalog
-// 도입)이 routing을 바꾸지 않았음을 이 표 한 장으로 증명할 수 있다.
+// #980에서 이 표는 자유 문자열 label을 정규식으로 해석하던 resolver 다섯의 답을 고정했다.
+// #981이 그 resolver들을 stage catalog로 대체하면서, 같은 값을 이제 catalog를 통해 확인한다.
+// 표에 적힌 값은 그때와 byte 단위로 같다 -- 바뀐 것은 값이 아니라 그 값이 나오는 경로다.
 //
-// 표에서 드러난 의심 항목의 의도 결정은 #979 umbrella에서 항목별로 다룬다.
-// 이 파일은 프로덕션 코드를 바꾸지 않는다.
+// 여기 적힌 값이 곧 "옳은 값"이라는 뜻은 아니다. 이상해 보이는 조합(예: editor completion은
+// model group이 repair인데 sampling은 editor를 쓴다)도 그대로 기록해 두는 것이 목적이다.
+// 의심 항목의 의도 결정은 #979 umbrella에서 항목별로 다룬다.
 
 // temperature/thinking은 기본 숫자가 아니라 "어느 config field로 해석되는가"가 계약이다.
 // 그래서 field마다 고유한 sentinel 값을 넣고, 돌아온 값이 그 field에서 왔는지 확인한다.
@@ -48,6 +56,10 @@ const SENTINEL_CONFIG = Object.freeze({ ...TEMPERATURE_SENTINELS, ...THINKING_SE
 // thinkingField가 null이면 "매핑되는 분기가 없어 0으로 떨어진다"는 뜻이다.
 // 누락인지 의도인지는 코드에서 구분되지 않는다(#979 2번 항목).
 const NO_THINKING_MAPPING = null;
+
+// artifact scope는 판정(public article judge) stage에서만 조회된다. 나머지 stage에 대한
+// 예전 label 기반 함수의 답은 어떤 호출자도 보지 않던 값이라 고정하지 않는다.
+const SCOPE_NOT_CONSULTED = null;
 
 // 파생 stage는 부모 label 뒤에 문자열을 덧붙여 만든다. 부모가 셋인 이유는
 // orchestrator-repair-completion.js:313이 editorStage로 repair stage를,
@@ -92,144 +104,158 @@ const PRODUCTION_STAGE_CASES = [
   // --- 기본 stage 12개 ---
   {
     label: 'reporter attempt 1/2',
+    stageId: 'reporter',
     modelGroup: 'reporter',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureReporter',
     thinkingField: 'geminiThinkingBudgetReporter',
     statusRole: 'reporter',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     label: 'editor attempt 1/2',
+    stageId: 'editor',
     modelGroup: 'editor',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureEditor',
     thinkingField: 'geminiThinkingBudgetEditor',
     statusRole: 'editor',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     label: 'fact-checker attempt 1/2',
+    stageId: 'fact_checker',
     modelGroup: 'factcheck',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureFactcheck',
     thinkingField: 'geminiThinkingBudgetFactcheck',
     statusRole: 'factcheck',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     // temperature/thinking 어느 쪽에도 background-context 분기가 없다.
     label: 'background-context attempt 1/2',
+    stageId: 'background_context',
     modelGroup: 'reporter',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureDefault',
     thinkingField: NO_THINKING_MAPPING,
     statusRole: 'background-context',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     // model group은 전용 그룹인데 sampling은 judge를 재사용하고 status role은 editor가 된다.
     label: 'editorial-plan attempt 1/2',
+    stageId: 'editorial_plan',
     modelGroup: 'editorialPlan',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureJudge',
     thinkingField: 'geminiThinkingBudgetJudge',
     statusRole: 'editor',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     label: 'editor repair attempt 1/2',
+    stageId: 'editor.repair',
     modelGroup: 'repair',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureRepair',
     thinkingField: 'geminiThinkingBudgetRepair',
     statusRole: 'repair',
-    artifactScope: 'targeted-repair'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     // model group은 factcheck, status role은 repair로 갈린다.
     label: 'fact-checker repair attempt 1/2',
+    stageId: 'fact_checker.repair',
     modelGroup: 'factcheck',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureFactcheck',
     thinkingField: 'geminiThinkingBudgetFactcheck',
     statusRole: 'repair',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     // model group은 repair인데 temperature/thinking은 editor를 쓴다.
     label: 'editor completion attempt 1/2',
+    stageId: 'editor.completion',
     modelGroup: 'repair',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureEditor',
     thinkingField: 'geminiThinkingBudgetEditor',
     statusRole: 'editor',
-    artifactScope: 'completion'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     label: 'fact-checker completion attempt 1/2',
+    stageId: 'fact_checker.completion',
     modelGroup: 'factcheck',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureFactcheck',
     thinkingField: 'geminiThinkingBudgetFactcheck',
     statusRole: 'factcheck',
-    artifactScope: 'completion'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     // 어느 정규식에도 걸리지 않아 reporter로 기본 라우팅되고 경고만 남는다.
     label: 'weekly-merge',
+    stageId: 'weekly_merge',
     modelGroup: 'reporter',
     known: false,
     warning: 'unknown_stage_defaulted_to_reporter',
     temperatureField: 'geminiTemperatureDefault',
     thinkingField: NO_THINKING_MAPPING,
     statusRole: 'weekly-merge',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     label: 'post-generation public quality judge',
+    stageId: 'post_generation_quality_judge',
     modelGroup: 'judge',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureJudge',
     thinkingField: 'geminiThinkingBudgetJudge',
     statusRole: 'judge',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     // status role은 정해진 role이 아니라 label을 소문자로 바꾼 값이 그대로 나온다.
     label: 'sourceDiscovery',
+    stageId: 'source_discovery',
     modelGroup: 'sourceDiscovery',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureSourceDiscovery',
     thinkingField: NO_THINKING_MAPPING,
     statusRole: 'sourcediscovery',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
 
   // --- 파생 stage 9개 (부모 3 x 판정 3) ---
   {
     label: 'editor attempt 1/2 semantic repair',
+    stageId: 'editor.semantic_repair',
     modelGroup: 'repair',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureRepair',
     thinkingField: 'geminiThinkingBudgetRepair',
     statusRole: 'repair',
-    artifactScope: 'editor'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     label: 'editor attempt 1/2 public article judge',
+    stageId: 'editor.public_article_judge',
     modelGroup: 'judge',
     known: true,
     warning: '',
@@ -241,6 +267,7 @@ const PRODUCTION_STAGE_CASES = [
   {
     // model/sampling은 judge인데 status role은 repair로 기록된다.
     label: 'editor attempt 1/2 public article judge repair',
+    stageId: 'editor.public_article_judge_repair',
     modelGroup: 'judge',
     known: true,
     warning: '',
@@ -251,17 +278,19 @@ const PRODUCTION_STAGE_CASES = [
   },
   {
     label: 'editor repair attempt 1/2 semantic repair',
+    stageId: 'editor.repair.semantic_repair',
     modelGroup: 'repair',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureRepair',
     thinkingField: 'geminiThinkingBudgetRepair',
     statusRole: 'repair',
-    artifactScope: 'targeted-repair'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     // 부모가 editor repair면 같은 판정 stage의 status role이 judge가 아니라 repair가 된다.
     label: 'editor repair attempt 1/2 public article judge',
+    stageId: 'editor.repair.public_article_judge',
     modelGroup: 'judge',
     known: true,
     warning: '',
@@ -272,6 +301,7 @@ const PRODUCTION_STAGE_CASES = [
   },
   {
     label: 'editor repair attempt 1/2 public article judge repair',
+    stageId: 'editor.repair.public_article_judge_repair',
     modelGroup: 'judge',
     known: true,
     warning: '',
@@ -282,16 +312,18 @@ const PRODUCTION_STAGE_CASES = [
   },
   {
     label: 'editor completion attempt 1/2 semantic repair',
+    stageId: 'editor.completion.semantic_repair',
     modelGroup: 'repair',
     known: true,
     warning: '',
     temperatureField: 'geminiTemperatureRepair',
     thinkingField: 'geminiThinkingBudgetRepair',
     statusRole: 'repair',
-    artifactScope: 'completion'
+    artifactScope: SCOPE_NOT_CONSULTED
   },
   {
     label: 'editor completion attempt 1/2 public article judge',
+    stageId: 'editor.completion.public_article_judge',
     modelGroup: 'judge',
     known: true,
     warning: '',
@@ -302,6 +334,7 @@ const PRODUCTION_STAGE_CASES = [
   },
   {
     label: 'editor completion attempt 1/2 public article judge repair',
+    stageId: 'editor.completion.public_article_judge_repair',
     modelGroup: 'judge',
     known: true,
     warning: '',
@@ -323,30 +356,37 @@ test('표가 production stage 21개를 정확히 그대로 덮는다', () => {
   assert.deepEqual([...labels].sort(), [...EXPECTED_LABELS].sort());
 });
 
-test('stage label -> model group 현행 매핑', () => {
+test('stage id -> label 현행 매핑', () => {
   PRODUCTION_STAGE_CASES.forEach((stageCase) => {
-    const info = modelGroupInfoForStage(stageCase.label);
-    assert.equal(info.group, stageCase.modelGroup, `model group mismatch: ${stageCase.label}`);
-    assert.equal(info.known, stageCase.known, `known mismatch: ${stageCase.label}`);
-    assert.equal(info.warning, stageCase.warning, `warning mismatch: ${stageCase.label}`);
+    assert.equal(runForStageId(stageCase.stageId).label, stageCase.label);
   });
 });
 
-test('stage label -> temperature config field 현행 매핑', () => {
+test('stage -> model group 현행 매핑', () => {
+  PRODUCTION_STAGE_CASES.forEach((stageCase) => {
+    assert.equal(
+      stageDefinitionById(stageCase.stageId).modelGroup,
+      stageCase.modelGroup,
+      `model group mismatch: ${stageCase.label}`
+    );
+  });
+});
+
+test('stage -> temperature config field 현행 매핑', () => {
   PRODUCTION_STAGE_CASES.forEach((stageCase) => {
     const expected = TEMPERATURE_SENTINELS[stageCase.temperatureField];
     assert.equal(typeof expected, 'number', `unknown temperature field: ${stageCase.temperatureField}`);
     assert.equal(
-      temperatureForStage(stageCase.label, SENTINEL_CONFIG),
+      temperatureForSampling(stageDefinitionById(stageCase.stageId).sampling, SENTINEL_CONFIG),
       expected,
       `temperature mismatch: ${stageCase.label}`
     );
   });
 });
 
-test('stage label -> thinking budget config field 현행 매핑', () => {
+test('stage -> thinking budget config field 현행 매핑', () => {
   PRODUCTION_STAGE_CASES.forEach((stageCase) => {
-    const actual = thinkingBudgetForStage(stageCase.label, SENTINEL_CONFIG);
+    const actual = thinkingBudgetForSampling(stageDefinitionById(stageCase.stageId).sampling, SENTINEL_CONFIG);
     if (stageCase.thinkingField === NO_THINKING_MAPPING) {
       assert.equal(actual, 0, `thinking budget mismatch (매핑 없음 기대): ${stageCase.label}`);
       return;
@@ -357,37 +397,58 @@ test('stage label -> thinking budget config field 현행 매핑', () => {
   });
 });
 
-test('stage label -> status role 현행 매핑', () => {
+test('stage -> status role 현행 매핑', () => {
   PRODUCTION_STAGE_CASES.forEach((stageCase) => {
     assert.equal(
-      roleFromStageLabel(stageCase.label),
+      stageDefinitionById(stageCase.stageId).statusRole,
       stageCase.statusRole,
       `status role mismatch: ${stageCase.label}`
     );
   });
 });
 
-test('stage label -> public article judge artifact scope 현행 매핑', () => {
+// artifact scope는 label이 아니라 stage id로 정해진다(#981). 값 자체는 고정된 그대로다.
+test('stage id -> public article judge artifact scope 현행 매핑', () => {
   PRODUCTION_STAGE_CASES.forEach((stageCase) => {
+    if (stageCase.artifactScope === SCOPE_NOT_CONSULTED) return;
     assert.equal(
-      publicArticleJudgeArtifactScope(stageCase.label),
+      publicArticleJudgeArtifactScope(stageCase.stageId),
       stageCase.artifactScope,
       `artifact scope mismatch: ${stageCase.label}`
     );
   });
 });
 
-// 같은 label이 축마다 다른 답을 받는 조합을 따로 못 박아 둔다. 위 표에서 이미 검증되지만,
-// #981이 이 조합을 "무심코" 바꾸면 어느 축이 움직였는지 실패 메시지로 바로 드러나게 한다.
+// 판정 stage가 catalog에 새로 생겼는데 artifact scope 표에 등록되지 않으면, 파일명이
+// 조용히 기본 scope('editor')로 떨어져 다른 부모의 산출물을 덮어쓸 수 있다. 런타임에
+// 발행을 막는 대신 여기서 잡는다.
+test('catalog의 모든 판정 stage가 이 표에 있다', () => {
+  const judgeStageIds = Object.values(LLM_STAGES)
+    .map(definition => definition.id)
+    .filter(id => id.endsWith('.public_article_judge') || id.endsWith('.public_article_judge_repair'));
+  assert.equal(judgeStageIds.length, 6);
+
+  judgeStageIds.forEach((stageId) => {
+    const stageCase = PRODUCTION_STAGE_CASES.find(entry => entry.stageId === stageId);
+    assert.ok(stageCase, `판정 stage가 표에 없다: ${stageId}`);
+    assert.notEqual(stageCase.artifactScope, SCOPE_NOT_CONSULTED, `artifact scope가 비어 있다: ${stageId}`);
+  });
+});
+
+// 축이 갈리는 조합. 표에서 이미 검증되지만, 무심코 바뀌면 어느 축이 움직였는지
+// 실패 메시지로 바로 드러나게 못 박아 둔다.
 test('축이 갈리는 조합 3개가 현행 그대로다', () => {
-  assert.equal(modelGroupInfoForStage('editor completion attempt 1/2').group, 'repair');
-  assert.equal(temperatureForStage('editor completion attempt 1/2', SENTINEL_CONFIG), TEMPERATURE_SENTINELS.geminiTemperatureEditor);
+  const completion = stageDefinitionById('editor.completion');
+  assert.equal(completion.modelGroup, 'repair');
+  assert.equal(temperatureForSampling(completion.sampling, SENTINEL_CONFIG), TEMPERATURE_SENTINELS.geminiTemperatureEditor);
 
-  assert.equal(modelGroupInfoForStage('fact-checker repair attempt 1/2').group, 'factcheck');
-  assert.equal(roleFromStageLabel('fact-checker repair attempt 1/2'), 'repair');
+  const factCheckRepair = stageDefinitionById('fact_checker.repair');
+  assert.equal(factCheckRepair.modelGroup, 'factcheck');
+  assert.equal(factCheckRepair.statusRole, 'repair');
 
-  assert.equal(modelGroupInfoForStage('editor repair attempt 1/2 public article judge').group, 'judge');
-  assert.equal(roleFromStageLabel('editor repair attempt 1/2 public article judge'), 'repair');
+  const repairJudge = stageDefinitionById('editor.repair.public_article_judge');
+  assert.equal(repairJudge.modelGroup, 'judge');
+  assert.equal(repairJudge.statusRole, 'repair');
 });
 
 // 진단 조회는 label 문자열 exact 일치다. 그래서 orchestrator-artifact-writers.js:25의

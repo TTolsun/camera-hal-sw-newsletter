@@ -18,9 +18,7 @@ const {
   parseRetryDelayMs
 } = require('./llm-errors');
 const { resolveProvider } = require('./providers/provider-registry');
-const {
-  modelGroupInfoForStage
-} = require('./model-policy');
+const { assertStageRun } = require('./stage-catalog');
 
 const geminiProvider = resolveProvider('gemini');
 
@@ -36,6 +34,16 @@ const diagnostics = createDiagnosticsState();
 
 function fail(message) {
   throw new Error(message);
+}
+
+// stage 정체성을 에러에 구조화 필드로 싣는다(#981). 예전에는 호출자가 메시지의
+// `[label]` prefix를 정규식으로 잘라 failure_stage를 만들었는데, 그건 sanitize가 아니라
+// 의미 해석이라 label 철자에 묶여 있었다.
+function failStage(run, message) {
+  const error = new Error(message);
+  error.stage = run.label;
+  error.stage_id = run.definition.id;
+  throw error;
 }
 
 function sleep(ms) {
@@ -89,7 +97,7 @@ function recordUsageMetadata(stage, provider, modelName, attempt, response, requ
   diagnostics.recordCostCall({
     provider: provider.id,
     stage,
-    stage_group: routing.stage_group || modelGroupInfoForStage(stage).group,
+    stage_group: routing.stage_group,
     stage_group_known: routing.stage_group_known !== false,
     routing_warning: routing.routing_warning || '',
     model: modelName,
@@ -211,7 +219,10 @@ function failureSummary(stage, provider, failures) {
   return lines.join('\n');
 }
 
-async function callLlmJson(stage, systemInstruction, prompt, responseSchema, options = {}) {
+async function callLlmJson(stageRunArg, systemInstruction, prompt, responseSchema, options = {}) {
+  // production boundary. catalog 밖의 값(예전 자유 문자열 label)은 여기서 막는다.
+  const run = assertStageRun(stageRunArg);
+  const stage = run.label;
   const provider = options.provider || resolveProvider(runtimeConfig.llmProvider);
   const key = provider.getApiKey({ options, env: process.env, config: runtimeConfig });
   if (!key) {
@@ -219,15 +230,15 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
   }
 
   const failures = [];
-  const modelNames = provider.configuredModels(runtimeConfig, stage);
-  const stageGroupInfo = modelGroupInfoForStage(stage);
-  const stageGroup = stageGroupInfo.group;
+  // stage -> group 변환은 이 지점 하나만 한다. model-policy는 group만 알고 stage를 모른다.
+  const stageGroup = run.definition.modelGroup;
+  const modelNames = provider.configuredModelsForGroup(runtimeConfig, stageGroup);
   const primaryResolvedBy = runtimeConfig.llmStageModelSources?.[stageGroup] || runtimeConfig.llmModelSource || 'unknown';
   const routing = {
     stage,
     stage_group: stageGroup,
-    stage_group_known: stageGroupInfo.known,
-    routing_warning: stageGroupInfo.warning,
+    stage_group_known: true,
+    routing_warning: '',
     primary_model: modelNames[0] || '',
     fallback_models: modelNames.slice(1),
     primary_resolved_by: primaryResolvedBy,
@@ -242,7 +253,7 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
     try {
       context = provider.createModelContext({ modelName, apiKey: key, config: runtimeConfig, options });
     } catch (error) {
-      fail(`[${stage}] ${provider.displayName} provider configuration failed: ${error.message}`);
+      failStage(run, `[${stage}] ${provider.displayName} provider configuration failed: ${error.message}`);
     }
     const contextDescription = provider.describeModelContext(context);
     console.log(`[${stage}] ${provider.displayName} model selected: ${modelName}${contextDescription ? ` ${contextDescription}` : ''}.`);
@@ -254,6 +265,7 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
       const builtRequest = provider.buildRequest({
         model: modelName,
         stage,
+        sampling: run.definition.sampling,
         systemInstruction,
         prompt,
         responseSchema,
@@ -279,7 +291,7 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
         !isRetryableError(error, retryableStatuses)
       ) {
         if (error?.code === 'provider_not_implemented') {
-          fail(`[${stage}] ${provider.displayName} provider_not_implemented: ${error.message}`);
+          failStage(run, `[${stage}] ${provider.displayName} provider_not_implemented: ${error.message}`);
         }
         if (isSchemaComplexityError(error)) {
           // Permanent schema drift, not a capacity issue. Fail fast with a clear
@@ -292,23 +304,24 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
             `accepts it. Underlying error: ${error.message}`
           );
         }
-        fail(`[${stage}] ${provider.displayName} API failed with non-retryable error on model ${modelName}: ${error.message}`);
+        failStage(run, `[${stage}] ${provider.displayName} API failed with non-retryable error on model ${modelName}: ${error.message}`);
       }
 
       console.warn(`[${stage}] ${provider.displayName} model ${modelName} failed after ${maxRetries} retries. Trying fallback model if configured.`);
     }
   }
 
-  fail(failureSummary(stage, provider, failures));
+  failStage(run, failureSummary(stage, provider, failures));
 }
 
-async function callLlmJsonBudgeted(stage, systemInstruction, prompt, responseSchema, options = {}) {
+async function callLlmJsonBudgeted(stageRunArg, systemInstruction, prompt, responseSchema, options = {}) {
+  const run = assertStageRun(stageRunArg);
   const budget = options.budget || null;
   if (budget && typeof budget.assertCanRequest === 'function') {
-    budget.assertCanRequest(stage);
+    budget.assertCanRequest(run.label);
   }
   try {
-    return await callLlmJson(stage, systemInstruction, prompt, responseSchema, options);
+    return await callLlmJson(run, systemInstruction, prompt, responseSchema, options);
   } finally {
     if (budget && typeof budget.mergeDiagnostics === 'function') {
       budget.mergeDiagnostics(getLlmDiagnostics());
@@ -359,8 +372,5 @@ module.exports = {
   resetLlmDiagnostics,
   safeFilenamePart,
   saveRawLlmOutput,
-  thinkingBudgetForStage(stage) {
-    return geminiProvider.thinkingBudgetForStage(stage, runtimeConfig);
-  },
   usageMetadataFromResponse: geminiProvider.usageMetadataFromResponse
 };

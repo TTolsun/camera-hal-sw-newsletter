@@ -22,6 +22,7 @@
 const fs = require('fs');
 const path = require('path');
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { LLM_STAGES, stageRun } = require('../../shared/llm/stage-catalog');
 const { writeJson } = require('../../shared/common/common');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
 const {
@@ -225,7 +226,7 @@ async function runRepairAndCompletionPasses({
   // 바깥, demote 보강 직후(regen/demote 이전 값)에 선언한다.
   const repairAllowsReserve = demotedSections.length > 0;
   if (qualityReport.status !== 'PASS' && repairPlan.length > 0) {
-    const repairStage = `editor repair attempt ${attempt}/${totalAttempts}`;
+    const repairStage = stageRun(LLM_STAGES.EDITOR_REPAIR, { qualityAttempt: attempt, totalAttempts });
     // #628 salvage용 일관 snapshot. repair try 안에서 editor/factCheck/qualityReport는
     // 재할당되지만(특히 structural 경로는 mergeLockedSections로 section 순서/구성이 바뀜),
     // 이 시점의 셋은 직전 runQualityGateAndPersist가 만든 정합 셋이다. salvage는 article_results를
@@ -239,7 +240,7 @@ async function runRepairAndCompletionPasses({
       repairActions = repairPlan.map(item => `${item.action}: ${item.headline}`);
       failedSections = sectionsMatchingRepairPlan(editor.sections, repairPlan);
       const preservedSections = sectionsOutsideRepairPlan(editor.sections, repairPlan);
-      const repairFactCheckStage = `fact-checker repair attempt ${attempt}/${totalAttempts}`;
+      const repairFactCheckStage = stageRun(LLM_STAGES.FACT_CHECKER_REPAIR, { qualityAttempt: attempt, totalAttempts });
       console.warn(`Quality attempt ${attempt}/${totalAttempts} is below threshold; running editor repair pass for ${repairPlan.length} section(s).`);
       // #482: repair-section만 있는 plan은 article-preserving이므로 field-level
       // patch를 결정론적으로 적용해 모델이 어떤 기사가 존재하는지 바꾸지 못하게
@@ -397,7 +398,7 @@ async function runRepairAndCompletionPasses({
           retryHistory,
           shortlistReport,
           attempt,
-          stage: repairStage
+          stage: repairStage.label
         });
         // salvage 불가: repair 실패는 그 자체로 종착점이다. writeReviewableRepairFailureArtifacts가
         // 이미 FAILED_REPAIR_REVIEWABLE 리뷰 패키지(public 노출 없음)를 기록했으므로 여기서 return해
@@ -439,13 +440,13 @@ async function runRepairAndCompletionPasses({
     }
     candidateRejections = candidateRejections.concat(completionCandidateRejections);
     if (missingArticleCount > 0 && completionCandidates.length > 0) {
-      const completionStage = `editor completion attempt ${attempt}/${totalAttempts}`;
+      const completionStage = stageRun(LLM_STAGES.EDITOR_COMPLETION, { qualityAttempt: attempt, totalAttempts });
       // completion(target 채우기) 실패 시 되돌릴, 이미 quality gate를 통과한 pre-completion 스냅샷.
       const preCompletionEditor = cloneJson(editor);
       const preCompletionFactCheck = cloneJson(factCheck);
       const preCompletionQualityReport = cloneJson(qualityReport);
       try {
-        const completionFactCheckStage = `fact-checker completion attempt ${attempt}/${totalAttempts}`;
+        const completionFactCheckStage = stageRun(LLM_STAGES.FACT_CHECKER_COMPLETION, { qualityAttempt: attempt, totalAttempts });
         console.warn(`Quality attempt ${attempt}/${totalAttempts} has only ${editor.sections.length} main article(s); requesting ${missingArticleCount} completion article(s).`);
         const beforeCompletionSections = editor.sections;
         const completionSections = validateCompletionSections(await callLlmJson(
@@ -545,7 +546,7 @@ async function runRepairAndCompletionPasses({
             retryHistory,
             shortlistReport,
             attempt,
-            stage: completionStage
+            stage: completionStage.label
           });
           return { reviewableReturn: true };
         }

@@ -191,6 +191,12 @@ const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 // readSeedEvidencePackForDate process·IO 헬퍼는 orchestrator-validate-runner.js로 분리했다.
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
 const {
+  DERIVED_STAGE_KINDS,
+  LLM_STAGES,
+  derivedStageRun,
+  stageRun
+} = require('../../shared/llm/stage-catalog');
+const {
   readSeedEvidencePackForDate
 } = require('./orchestrator-validate-runner');
 
@@ -457,9 +463,9 @@ async function main() {
     shortlistReport.reconciliation_demoted_group_keys = [];
     shortlistReport.reconciliation_demoted_groups = [];
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
-    const reporterStage = `reporter attempt ${attempt}/${totalAttempts}`;
-    const editorStage = `editor attempt ${attempt}/${totalAttempts}`;
-    const factCheckStage = `fact-checker attempt ${attempt}/${totalAttempts}`;
+    const reporterStage = stageRun(LLM_STAGES.REPORTER, { qualityAttempt: attempt, totalAttempts });
+    const editorStage = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: attempt, totalAttempts });
+    const factCheckStage = stageRun(LLM_STAGES.FACT_CHECKER, { qualityAttempt: attempt, totalAttempts });
     console.log(`Starting LLM newsroom quality attempt ${attempt}/${totalAttempts}. Locked articles: ${lockedSections.length}.`);
 
     reporter = validateReporter(await callLlmJson(
@@ -496,7 +502,7 @@ async function main() {
       date,
       articleCapsuleReport,
       commonContext,
-      stage: `background-context attempt ${attempt}/${totalAttempts}`
+      stage: stageRun(LLM_STAGES.BACKGROUND_CONTEXT, { qualityAttempt: attempt, totalAttempts })
     });
     writeJson(path.join(newsroomDir, 'background-context.json'), backgroundContextReport);
     // #700: editorial plan(전용 LLM 호출, 필수 단계). 실패/빈 결과면 throw해서 editor 등 뒤 단계
@@ -506,7 +512,7 @@ async function main() {
       date,
       articleCapsuleReport,
       commonContext,
-      stage: `editorial-plan attempt ${attempt}/${totalAttempts}`
+      stage: stageRun(LLM_STAGES.EDITORIAL_PLAN, { qualityAttempt: attempt, totalAttempts })
     });
     writeJson(path.join(newsroomDir, 'editorial-plan.json'), editorialPlanReport);
     // #724: LLM coverage 등급을 결정론 재조정으로 main-set에 항상 반영한다(toggle 없음). 재조정
@@ -570,7 +576,7 @@ async function main() {
     });
     writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
     for (const candidate of ensureArray(reporter.candidates)) {
-      writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getLlmModelUsage(reporterStage) || 'unknown' });
+      writeCacheRecord(candidate, cacheDir, { stage: reporterStage.label, model: getLlmModelUsage(reporterStage.label) || 'unknown' });
     }
     const rejectedReporterDuplicates = removeDisallowedSelections(reporter, lockedSections, excludedSections);
     writeReporterArtifactsForAttempt(newsroomDir, reporter, attempt);
@@ -723,10 +729,10 @@ async function main() {
     retryHistory.push({
       attempt,
       model: [
-        `reporter=${getLlmModelUsage(reporterStage) || 'unknown'}`,
-        `editor=${getLlmModelUsage(editorStage) || 'unknown'}`,
-        `public-article-judge=${getLlmModelUsage(`${editorStage} public article judge`) || 'unknown'}`,
-        `fact-checker=${getLlmModelUsage(factCheckStage) || 'unknown'}`
+        `reporter=${getLlmModelUsage(reporterStage.label) || 'unknown'}`,
+        `editor=${getLlmModelUsage(editorStage.label) || 'unknown'}`,
+        `public-article-judge=${getLlmModelUsage(derivedStageRun(editorStage, DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE).label) || 'unknown'}`,
+        `fact-checker=${getLlmModelUsage(factCheckStage.label) || 'unknown'}`
       ].join(', '),
       score: qualityReport.score,
       threshold: qualityReport.threshold,
