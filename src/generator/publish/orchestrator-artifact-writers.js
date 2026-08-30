@@ -20,21 +20,24 @@ const runtimeConfig = readRuntimeConfig(process.env);
 /**
  * editor-draft.json에 실을 model 이름을 고른다.
  *
- * providerModel의 의미는 "base editor stage가 쓴 model"이다(#1002 1번). 이보다 넓게 읽으면
- * 안 된다. draft를 새로 쓰는 stage는 base editor 말고도 넷이 더 있기 때문이다.
+ * providerModel의 의미는 "이 run에서 base editor stage가 마지막으로 쓴 model"이다(#1002 1번).
+ * 이보다 넓게 읽으면 안 된다. draft를 새로 쓰는 stage는 base editor 말고도 셋이 더 있기 때문이다.
  *
  * - editor.repair: orchestrator-repair-completion.js:229
  * - editor.completion: orchestrator-repair-completion.js:443
  * - *.semantic_repair: orchestrator-public-article-judge.js:43
- * - *.public_article_judge_repair: orchestrator-public-article-judge.js:124
- *   (:163-186이 그 결과 repairedEditor를 원본 editor 자리에 넣는다)
+ *   (:163-186이 그 결과 repairedEditor를 원본 editor 자리에 넣는다. 같은 파일 :124의
+ *    public_article_judge_repair는 그 결과를 판정만 하고 draft를 쓰지 않는다 — :168에서
+ *    runPublicArticleJudge의 stage 인자로만 쓰인다.)
  *
  * 이들 중 하나가 draft를 다시 쓴 실행에서도 여기 적히는 이름은 그 stage의 model이 아니라
- * base editor의 model이다.
+ * base editor의 model이다. "마지막으로"인 이유는 llm-diagnostics.js:109가 quality attempt를
+ * 구분하지 않고 stage id별로 덮어쓰기 때문이다. 그래서 fallback model로 넘어간 실행에서는
+ * 더 이른 attempt의 draft에 마지막 attempt의 model 이름이 실릴 수 있다.
  *
  * "마지막에 draft를 쓴 stage"를 따라가도록 stage id 집합을 여기 열거하는 방식은 택하지
- * 않았다. 위 넷은 부모가 editor / editor.repair / editor.completion 셋이라 파생까지 하면
- * catalog의 editor draft 계열 stage가 열 개를 넘고, 계열이 하나 늘 때마다 이 목록이 조용히
+ * 않았다. 위 셋은 부모가 editor / editor.repair / editor.completion 셋이라 파생까지 하면
+ * catalog의 editor draft 계열 stage가 열두 개고, 계열이 하나 늘 때마다 이 목록이 조용히
  * 낡아 같은 종류의 누락이 다시 생긴다.
  *
  * 정확한 귀속의 자리는 draft를 만든 생산자가 자기 model을 직접 넘기는 것이고, 그 seam은

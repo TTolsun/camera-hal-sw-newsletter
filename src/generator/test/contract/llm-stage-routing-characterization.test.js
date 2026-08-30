@@ -393,10 +393,15 @@ test('stage id -> public article judge artifact scope 현행 매핑', () => {
 // 그래서 개수 대신 집합을 양방향으로 대조한다. 표의 키를 직접 보는 이유는
 // publicArticleJudgeArtifactScope가 미등록 stage를 기본값 'editor'로 돌려주기 때문이다.
 // "표에 없음"과 "표에 editor로 있음"이 그 함수의 답만으로는 구분되지 않는다.
+//
+// 판정 stage를 고르는 기준은 endsWith 두 개가 아니라 includes 하나다. DERIVED_STAGE_KINDS에
+// public_article_judge 계열 파생이 새 접미사로 하나 더 생기면 endsWith 목록은 그것을 놓치고,
+// 놓친 stage는 표에도 없어 집합이 여전히 일치해 초록이 된다 -- 개수 고정과 같은 실패 모양이다.
+// 현행 21개 stage에서 두 방식의 결과는 같다(둘 다 6개, 오탐 없음).
 test('catalog의 판정 stage 집합과 artifact scope 표의 키 집합이 일치한다', () => {
   const judgeStageIds = Object.values(LLM_STAGES)
     .map(definition => definition.id)
-    .filter(id => id.endsWith('.public_article_judge') || id.endsWith('.public_article_judge_repair'));
+    .filter(id => id.includes('.public_article_judge'));
 
   // 양방향이다. catalog에만 있으면 조용한 기본 scope로 떨어지고, 표에만 있으면 아무 stage도
   // 가리키지 않는 죽은 키다.

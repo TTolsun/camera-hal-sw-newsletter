@@ -10,6 +10,7 @@ const {
   TEMPERATURE_PROFILES,
   THINKING_PROFILES
 } = require('../../../../shared/llm/stage-catalog');
+const { readRuntimeConfig } = require('../../../../shared/common/runtime-config');
 
 // sampling profile -> provider config field 매핑을 고정한다(#981).
 //
@@ -80,32 +81,50 @@ test('어휘 밖의 profile은 조용히 기본값으로 떨어지지 않고 던
 //
 // catalog 값을 하드코딩하지 않고 순회해야 한다. 하드코딩하면 새 profile이 추가돼도 이
 // 테스트가 그대로 초록이라 존재 이유가 사라진다.
+//
+// 아래 두 테스트만 이 파일 위쪽의 config 리터럴이 아니라 readRuntimeConfig가 만든 실제
+// 런타임 config를 쓴다. 어휘는 사실 세 곳에 있다 -- catalog, provider 표, 그리고 config를
+// 실제로 채우는 runtime-config.js다. 리터럴로 검사하면 앞의 둘만 맞춰도 초록이 되는데,
+// runtime-config에 field가 없으면 런타임에서는 temperatureForSampling이 undefined를 돌려주고
+// gemini-provider의 요청 조립에서 그 키가 통째로 사라져 **던지지 않고 조용히** API 기본
+// sampling으로 발행된다. 막으려던 실패가 한 칸 아래로 옮겨가 더 조용해지는 것이다.
+// 실제 config를 쓰면 catalog profile -> provider field 이름 -> 실제 config field가 한 사슬로
+// 잠긴다. 위쪽 리터럴은 field별 값을 못 박는 sentinel 용도라 그대로 둔다.
 
-test('catalog의 모든 temperature profile이 provider 표에 있다', () => {
+const runtimeConfig = readRuntimeConfig({});
+
+test('catalog의 모든 temperature profile이 provider 표와 런타임 config에 있다', () => {
   const profiles = Object.values(TEMPERATURE_PROFILES);
   assert.ok(profiles.length > 0, 'catalog에 temperature profile이 하나도 없다');
 
   profiles.forEach((profile) => {
-    const temperature = temperatureForSampling(sampling(profile), config);
-    // undefined는 provider 표에는 있는데 config field 이름이 어긋난 경우다. 이 파일의 config는
-    // provider가 읽는 field 전부를 담고 있으므로, 어긋나면 여기서 드러나야 한다.
-    assert.notEqual(temperature, undefined, `temperature profile이 값을 못 얻는다: ${profile}`);
+    // 표에 없으면 던지고, 표에는 있는데 runtime-config에 field가 없으면 undefined다.
+    const temperature = temperatureForSampling(sampling(profile), runtimeConfig);
+    assert.equal(
+      typeof temperature,
+      'number',
+      `temperature profile이 런타임 config에서 값을 못 얻는다: ${profile}`
+    );
   });
 });
 
-test('catalog의 모든 thinking profile이 provider 표에 있고, disabled만 0으로 빠진다', () => {
+test('catalog의 모든 thinking profile이 provider 표와 런타임 config에 있고, disabled만 0으로 빠진다', () => {
   const profiles = Object.values(THINKING_PROFILES);
   assert.ok(profiles.length > 0, 'catalog에 thinking profile이 하나도 없다');
 
   profiles.forEach((profile) => {
-    const budget = thinkingBudgetForSampling(sampling('default', profile), config);
+    const budget = thinkingBudgetForSampling(sampling('default', profile), runtimeConfig);
     if (profile === THINKING_PROFILES.DISABLED) {
       // DISABLED는 provider 표에 없다. thinkingBudgetForSampling이 표를 보기 전에 0으로
       // 처리하는 명시적 예외이므로, 예외의 값 자체도 함께 잠근다.
       assert.equal(budget, 0, 'disabled는 표를 거치지 않고 0이어야 한다');
       return;
     }
-    assert.notEqual(budget, undefined, `thinking profile이 값을 못 얻는다: ${profile}`);
+    assert.equal(
+      typeof budget,
+      'number',
+      `thinking profile이 런타임 config에서 값을 못 얻는다: ${profile}`
+    );
   });
 });
 

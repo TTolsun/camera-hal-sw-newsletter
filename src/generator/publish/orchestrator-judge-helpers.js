@@ -263,10 +263,15 @@ function publicArticleJudgeArtifactScope(stageId = '') {
 module.exports = {
   // 테스트 전용 노출(#1002 3번). production 호출자는 publicArticleJudgeArtifactScope만 쓴다.
   //
-  // 이 표는 catalog의 판정 stage id를 손으로 복제한다. 두 집합이 어긋나는지 확인하려면
-  // 표의 키 자체를 봐야 한다 -- publicArticleJudgeArtifactScope는 미등록 stage를 기본값
-  // 'editor'로 돌려주므로, "표에 없음"과 "표에 editor로 있음"이 행동만으로는 구분되지 않고
-  // 표에만 남은 죽은 키는 아예 관측되지 않는다.
+  // 이 표는 catalog의 판정 stage id를 손으로 복제한다. 표를 그대로 노출해 두 집합을 직접
+  // 대조하는 쪽을 택했다 -- 이슈가 요구한 계약이 "두 집합이 같다"이고, 그 문장을 그대로
+  // 단언하는 것이 가장 덜 에두른 표현이기 때문이다.
+  //
+  // 노출 없이도 해로운 방향(catalog에 있는데 표에 없음)은 잡을 수 있다. 미등록 stage는
+  // 기본값 'editor'로 떨어져 다른 부모와 scope를 공유하게 되므로, 부모 stage id -> scope가
+  // 단사인지 보면 드러난다. 노출이 추가로 잡는 것은 반대 방향, 즉 표에만 남은 죽은 키다.
+  // 죽은 키는 런타임에 무해하지만(조회는 stage id로만 들어온다) 다음 사람이 catalog에
+  // 있다고 오해할 근거가 된다.
   ARTIFACT_SCOPE_BY_STAGE_ID,
   DESK_ADVISORY_FIELDS,
   deskAdvisoryIssues,
