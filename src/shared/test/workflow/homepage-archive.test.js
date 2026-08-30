@@ -611,6 +611,10 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
 
   // A static brand hero keeps a single H1 present before the headline data loads.
   assert.match(html, /<article id="featured-card" class="featured-hero">/);
+  // 이 마스코트가 `.featured-img.is-brand` 의 유일한 소비자다(#1008 이후). DESIGN.md elevation 이
+  // 허용한 단 하나의 product drop-shadow 예외가 이 한 줄에 걸려 있으므로 함께 잠근다 —
+  // 여기서 빠지면 styles.css 의 .featured-img.is-brand 가 조용히 dead 규칙이 된다.
+  assert.match(html, /<img class="featured-img is-brand" src="assets\/images\/brand\/HALley\.png"/);
   assert.match(html, /<h1 id="featured-title" class="featured-title">보이지 않는 카메라의 오늘, 그러나 미래<\/h1>/);
   assert.match(html, /<p class="featured-kicker">Camera SW Newsroom<\/p>/);
   // 최신 소식 grid section with sort + topic filter + grid hooks.

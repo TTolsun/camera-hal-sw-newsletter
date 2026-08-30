@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
   <title id="title">C++ article fallback image</title>
   <desc id="desc">A simple C++ native code fallback illustration.</desc>
-  <rect width="1280" height="720" fill="#f8fafc"/>
+  <rect width="1280" height="720" fill="#f5f5f7"/>
   <rect x="170" y="116" width="940" height="488" rx="34" fill="#e9f0f8"/>
   <g fill="none" stroke="#1f2937" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
     <path d="M430 275l-90 85 90 85M850 275l90 85-90 85"/>
