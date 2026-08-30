@@ -374,6 +374,18 @@
   line-height: 1.55;
 }
 
+/* Tab 으로 초점이 오면 브라우저가 요소를 화면 안으로 굴려 넣는데, 이 페이지는 sticky 가 2단이라
+   (.site-header top:0 위에 .learning-nav top:59px) 그냥 두면 요소 상단과 focus 링 윗변이 그 밑에
+   깔린다. 값은 실측한 가림 높이에서 나왔다 — 넓은 화면 103px(헤더 59 + 그 아래 나브 44),
+   좁은 화면 133px(헤더가 두 줄로 접히고, 나브는 그 헤더의 82% 불투명 배경에 덮인다). 124px 하나로는
+   좁은 화면에서 모자란다. WCAG 2.4.11 Focus Not Obscured. */
+.scoreboard,
+.artifact-tree,
+.code-block-light,
+.week-result table {
+  scroll-margin-top: 124px;
+}
+
 .scoreboard {
   overflow-x: auto;
   margin-top: 22px;
@@ -513,6 +525,14 @@
 
   .learning-final-panel ol {
     columns: 1;
+  }
+
+  /* 좁은 화면에서는 헤더가 두 줄로 접혀 133px 이 된다(실측). */
+  .scoreboard,
+  .artifact-tree,
+  .code-block-light,
+  .week-result table {
+    scroll-margin-top: 185px;
   }
 }
 

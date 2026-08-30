@@ -131,7 +131,7 @@
               <div class="week-content">
                 <h4>Newsletter Anatomy</h4>
                 <p class="week-goal">목표: 지금 시스템을 AI Engineering 관점에서 다시 모델링한다.</p>
-                <div class="artifact-tree">Sources → Collector → Discovery → Candidate / Evidence → Selection
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Newsletter 파이프라인 단계 흐름도">Sources → Collector → Discovery → Candidate / Evidence → Selection
 → Reporter LLM → Editor / Fact Check → Quality Gate → Renderer
 → Validator → PR → Human Review</div>
                 <div class="week-columns">
@@ -164,7 +164,7 @@
 
                 <div class="week-result">
                   <p class="week-result-label">완료 · 2026-08-17</p>
-                  <table>
+                  <table tabindex="0" aria-label="Week 01 prompt v1·v2 비교 표">
                     <thead><tr><th></th><th>prompt v1</th><th>prompt v2</th></tr></thead>
                     <tbody>
                       <tr><td>Cohen's kappa</td><td>0.529</td><td><strong>0.733</strong></td></tr>
@@ -213,7 +213,7 @@
 
                 <div class="week-result">
                   <p class="week-result-label">완료 · 2026-08-17 · 게이트 통과</p>
-                  <table>
+                  <table tabindex="0" aria-label="Week 02 calibration·dev 비교 표">
                     <thead><tr><th></th><th>calibration</th><th>dev (held-out)</th></tr></thead>
                     <tbody>
                       <tr><td>Cohen's kappa</td><td>0.886</td><td><strong>0.625</strong></td></tr>
@@ -272,7 +272,7 @@
               <div class="week-content">
                 <h4>Error Analysis</h4>
                 <p class="week-goal">Prompt를 감으로 고치는 대신 failure data가 다음 변경을 고르게 합니다.</p>
-                <div class="code-block-light">FAIL 27
+                <div class="code-block-light" tabindex="0" role="group" aria-label="Error Analysis 실패 분류 집계">FAIL 27
 Context 부족         9
 Evidence retrieval   6
 Prompt               4
@@ -335,7 +335,7 @@ Model reasoning      2
               <div class="week-content">
                 <h4>Agent란 무엇인가</h4>
                 <p class="week-goal">Newsletter 기능 하나를 작은 tool-calling loop로 직접 모델링합니다.</p>
-                <div class="artifact-tree">LLM → Tool → Observation → LLM → Tool → ...
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Agent 실행 루프 흐름도">LLM → Tool → Observation → LLM → Tool → ...
 
 Tools:
 search_sources()
@@ -367,7 +367,7 @@ run_validator()</div>
               <div class="week-content">
                 <h4>Verification Loop</h4>
                 <p class="week-goal">One-shot Agent를 없애고 bounded retry를 가진 verification loop를 만듭니다.</p>
-                <div class="artifact-tree">Agent → Implementation → test / validate
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Verification Loop 흐름도">Agent → Implementation → test / validate
                     ↓ FAIL
                  Feedback
                     ↓
@@ -400,7 +400,7 @@ attempt_budget = 3</div>
               <div class="week-content">
                 <h4>Observability</h4>
                 <p class="week-goal">“왜 틀렸지?”를 감상이 아니라 trace로 재현할 수 있게 합니다.</p>
-                <div class="code-block-light">run_id
+                <div class="code-block-light" tabindex="0" role="group" aria-label="Observability 추적 레코드 구조">run_id
 model / prompt_version / skill_version
 input / context
 tool_calls
@@ -438,7 +438,7 @@ token / latency</div>
               <div class="week-content">
                 <h4>Spec Engineering</h4>
                 <p class="week-goal">“좋은 newsletter 만들어줘”를 Problem / Goal / Constraints / Non-goals / Success Metrics / Acceptance Criteria로 바꿉니다.</p>
-                <div class="code-block-light">Goal
+                <div class="code-block-light" tabindex="0" role="group" aria-label="Spec Engineering 스펙 골격">Goal
 Camera HAL 엔지니어가 5분 안에 이번 주 중요한 변화를 파악한다.
 
 Constraints
@@ -471,7 +471,7 @@ No hard blocker</div>
               <div class="week-content">
                 <h4>Hill-Climbing</h4>
                 <p class="week-goal">Production trace 50–100개를 모아 가장 큰 반복 failure를 harness 개선으로 줄입니다.</p>
-                <div class="artifact-tree">Production Traces
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Hill-Climbing 개선 루프 흐름도">Production Traces
 → Error Analysis
 → Top Failure
 → Harness 변경
@@ -486,7 +486,7 @@ No hard blocker</div>
               <div class="week-content">
                 <h4>Final Boss · Camera HAL Newsletter AI Engineering v2</h4>
                 <p class="week-goal">지금까지의 구성요소를 하나의 안전하고 관찰 가능한 시스템으로 합칩니다.</p>
-                <div class="artifact-tree">Trigger → Harness → Context Builder → Agent
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Final Boss 시스템 구성도">Trigger → Harness → Context Builder → Agent
                          ↙          ↘
                       Tools         State
                          ↘          ↙
@@ -513,7 +513,7 @@ Runs → Trace → Eval → Failure Analysis
           <h2 id="weekly-format-title">매 주차 자료는 7개 artifact 역할로 생각한다</h2>
           <p>실제 repo에 학습용 폴더를 쌓는다는 뜻은 아닙니다. 각 주차를 공부할 때 아래 일곱 역할이 빠지지 않도록 개인 노트나 작업 세션에 적용하는 형식입니다.</p>
         </div>
-        <div class="artifact-tree">01 concept       10–15분 개념, mental model, 흔한 오해
+        <div class="artifact-tree" tabindex="0" role="group" aria-label="주차 자료 파일 구성">01 concept       10–15분 개념, mental model, 흔한 오해
 02 reading       primary source 2–4개
 03 lab           목표, 가설, 실험, 관찰, 평가, failure injection
 04 starter       최소 실행 입력 / baseline
@@ -573,7 +573,7 @@ Runs → Trace → Eval → Failure Analysis
             <p>그러면 Week 01에 손으로 라벨한 20건이 Week 02에는 다른 20건이 됩니다. 그래서 <code>lab/datasets/split.json</code>이 정본이고, 재실행은 재생성이 아니라 대조입니다. 새 family는 <code>unassigned</code>로 park합니다.</p>
           </article>
         </div>
-        <div class="scoreboard">
+        <div class="scoreboard" tabindex="0" role="region" aria-label="Eval 데이터 분할 표">
           <table>
             <thead><tr><th>덩어리</th><th>크기</th><th>개봉</th><th>쓰임</th></tr></thead>
             <tbody>
@@ -607,7 +607,7 @@ Runs → Trace → Eval → Failure Analysis
             <h3>왜 0.60이고, 왜 두 단인가</h3>
             <p>처음에는 0.40으로 잡았습니다. 그런데 0.40~0.60은 “보통 일치” 구간입니다. 앞으로 15주 동안 모든 before/after 비교를 이 judge로 재기 때문에, 보통 수준으로 일치하는 자를 쓰면 그 노이즈가 이후 모든 숫자에 상속됩니다. 대체 평가자로 쓸 만하다고 보는 통상적 선인 0.60으로 올렸습니다.</p>
             <p>단일 절선으로 자르지 않는 이유는 <strong>계측 해상도</strong>입니다. n=20에서 불일치 1건이 kappa를 <strong>0.133</strong> 움직입니다.</p>
-            <div class="scoreboard">
+            <div class="scoreboard" tabindex="0" role="region" aria-label="불일치 건수별 kappa 표">
               <table>
                 <thead><tr><th>불일치</th><th>2건</th><th>3건</th><th>4건</th></tr></thead>
                 <tbody><tr><td>kappa</td><td>0.733</td><td><strong>0.600</strong></td><td>0.467</td></tr></tbody>
@@ -625,7 +625,7 @@ Runs → Trace → Eval → Failure Analysis
           <h2 id="scoreboard-title">처음에는 7개 지표만 유지</h2>
           <p>지표를 많이 만들면 측정 체계가 좋아지는 게 아니라 대시보드가 화려해집니다. 꽤 자주 벌어지는 착시입니다. 첫 단계에서는 아래 7개만 baseline과 experiment에서 동일하게 재면 충분합니다.</p>
         </div>
-        <div class="scoreboard">
+        <div class="scoreboard" tabindex="0" role="region" aria-label="Scoreboard 지표 표">
           <table>
             <thead><tr><th>#</th><th>Metric</th><th>무엇을 보는가</th></tr></thead>
             <tbody>
@@ -648,7 +648,7 @@ Runs → Trace → Eval → Failure Analysis
           <h2 id="camera-model-title">새 AI 용어를 Camera HAL 사고방식에 연결</h2>
           <p>동일한 개념이라는 뜻은 아니고, 역할을 기억하기 위한 mental anchor입니다. 새로운 용어를 볼 때 “Camera HAL에서는 이 역할을 뭐가 하지?”라고 질문합니다.</p>
         </div>
-        <div class="scoreboard">
+        <div class="scoreboard" tabindex="0" role="region" aria-label="AI Engineering 용어와 Camera HAL 역할 대응 표">
           <table>
             <thead><tr><th>AI Engineering</th><th>Camera HAL에서 떠올릴 역할</th></tr></thead>
             <tbody>
