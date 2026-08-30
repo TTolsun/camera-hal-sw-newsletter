@@ -921,6 +921,55 @@ test('validate-site rejects root homepage without shared helper reference', () =
   assert.match(result.stderr, /root index\.html must load assets\/js\/newsletter-archive\.js/);
 });
 
+// 발행 레인은 위클리인데 htmlFiles 가 newsletters.json(dated)만 돌던 시절에는 위클리 이슈
+// 페이지와 Lab 페이지가 HTML 계약 검사를 한 번도 받지 않았다. 아래 셋이 그 커버리지를 잠근다.
+
+function addWeeklyIssue(root, weeklyKey, html) {
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{
+    weeklyKey,
+    html: `newsletters/${weeklyKey}/index.html`
+  }]);
+  writeText(path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'), html);
+}
+
+test('validate-site scans weekly issue pages, not just dated ones', () => {
+  const root = tempRoot('validate-site-weekly-scan-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  // dated 호는 멀쩡하고 위클리 쪽에만 TODO 를 심는다 — dated 만 돌면 통과해 버리던 자리다.
+  addWeeklyIssue(root, '2026-W21', newsletterHtml('2026-05-23').replace('<main>', '<main><p>TODO</p>'));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Published HTML contains TODO: newsletters\/2026-W21\/index\.html/);
+});
+
+test('validate-site scans the AI Engineering Lab page', () => {
+  const root = tempRoot('validate-site-learning-scan-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  writeText(
+    path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'),
+    '<!doctype html><html><body><a href="#x">unclosed</body></html>'
+  );
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Anchor tag mismatch in learning\/ai-engineering\/index\.html/);
+});
+
+test('validate-site rejects a missing weekly index instead of scanning nothing', () => {
+  const root = tempRoot('validate-site-weekly-index-missing-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  // 파일이 사라지면 위클리 목록이 조용히 비고, 발행 레인 전체가 다시 무검사로 나간다.
+  fs.rmSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json'));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Missing data\/newsletters-weekly\.json/);
+});
+
 test('validate-site rejects archive page without shared helper reference', () => {
   const root = tempRoot('validate-site-archive-helper-');
   writeSiteFixture(root, {

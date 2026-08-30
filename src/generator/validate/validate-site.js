@@ -25,6 +25,9 @@ const {
   validateRenderedIssueStructure
 } = require('../quality/rendered-issue-structure');
 const {
+  AI_ENGINEERING_LEARNING_PATH
+} = require('../render/seo-metadata');
+const {
   buildRemediationMessage,
   latestDiagnosticsOnly,
   validateRetentionMetadata
@@ -37,6 +40,7 @@ const {
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
+const weeklyDataPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
@@ -760,6 +764,25 @@ if (!Array.isArray(newsletters)) {
   newsletters = [];
 }
 
+// newsletters.json 은 dated 호만 담는다. 현재 발행 레인은 위클리이고 그 목록은 이 파일에 있으므로,
+// 여기를 안 읽으면 아래 HTML 계약 검사가 발행 중인 이슈 페이지를 통째로 건너뛴다. 없거나 배열이
+// 아니면 fail 한다 — 조용히 빈 목록이 되면 그 순간부터 위클리가 다시 무검사로 나간다.
+if (!fs.existsSync(weeklyDataPath)) {
+  fail('Missing data/newsletters-weekly.json');
+}
+
+let weeklyNewsletters = [];
+try {
+  weeklyNewsletters = fs.existsSync(weeklyDataPath) ? readJson(weeklyDataPath) : [];
+} catch (error) {
+  fail(`Invalid JSON in data/newsletters-weekly.json: ${error.message}`);
+}
+
+if (!Array.isArray(weeklyNewsletters)) {
+  fail('data/newsletters-weekly.json must contain an array');
+  weeklyNewsletters = [];
+}
+
 const seenDates = new Set();
 const strictDates = strictTargetDates({ root, newsletterDatePath });
 validateRootHomepageContract(newsletters);
@@ -853,10 +876,15 @@ for (const [index, item] of newsletters.entries()) {
   }
 }
 
-const htmlFiles = ['index.html', 'archive.html'];
-for (const item of newsletters) {
-  if (item.html) htmlFiles.push(item.html);
-}
+// 공개 표면 전체를 훑는다. dated 호만 돌던 시절에는 위클리 이슈 페이지와 AI Engineering Lab
+// 페이지가 anchor 균형·TODO·나브 라벨 계약을 한 번도 받지 않았다 — 하필 위클리가 현재 발행 레인이다.
+const htmlFiles = [...new Set([
+  'index.html',
+  'archive.html',
+  ...newsletters.map(item => item.html).filter(Boolean),
+  ...weeklyNewsletters.map(item => item.html).filter(Boolean),
+  `${AI_ENGINEERING_LEARNING_PATH}index.html`
+])];
 
 for (const relPath of htmlFiles) {
   // 서빙 URL(index.html/archive.html/newsletters/<date>/...)을 디스크 위치로 매핑.
