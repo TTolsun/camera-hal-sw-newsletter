@@ -2,8 +2,12 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
-  selectEvidenceFetchTargets
+  selectEvidenceFetchTargetGroups
 } = require('../../../gemini-source-discovery-boundary');
+
+function selectEvidenceFetchTargets(candidates, clusterReport, options) {
+  return selectEvidenceFetchTargetGroups(candidates, clusterReport, options).selected;
+}
 const {
   validateCandidateEvidence
 } = require('../../../validate-candidate-evidence');
@@ -454,4 +458,109 @@ test('a publishable candidate outranks a stronger candidate that cannot be publi
   }, { maxTargets: 1 });
 
   assert.deepEqual(targets.map(item => item.id), ['publishable']);
+});
+
+// not_checked 는 "자격이 없어 안 봤다"와 "cap에 밀려 못 봤다"를 구분하지 못한다. 앞은 정상이고
+// 뒤는 발행될 기사가 근거 없이 나가는 경로라, 리포트만 보고는 어느 쪽인지 알 수 없었다.
+test('candidates dropped by the fetch cap are reported apart from ineligible ones', () => {
+  const maxTargets = 2;
+  const candidates = Array.from({ length: 4 }, (_, index) => candidate(`in-${index}`, {
+    id: `in-${index}`,
+    url: `https://example.com/in-${index}`,
+    source_quality_score: 0.9 - index / 100
+  }));
+  const ineligible = candidate('out', {
+    id: 'out',
+    url: 'https://example.com/out',
+    finalSelectionEligibility: 'watchlist',
+    source_quality_bucket: 'weak_candidate'
+  });
+
+  const groups = selectEvidenceFetchTargetGroups([...candidates, ineligible], { clusters: [] }, { maxTargets });
+
+  assert.deepEqual(groups.selected.map(item => item.id), ['in-0', 'in-1']);
+  assert.deepEqual(groups.capDropped.map(item => item.id), ['in-2', 'in-3']);
+
+  const evidence = validateCandidateEvidence([...candidates, ineligible], {
+    sources: groups.selected.map(item => ({
+      id: item.id,
+      url: item.url,
+      title: item.title,
+      source_fetch_used: true,
+      source_fetch_status: 'success',
+      validation_mode: 'source_fetch',
+      claims: [{ claim: item.title, evidence_text: `${item.title} source evidence.` }]
+    }))
+  }, { newsletterDate: '2026-05-16', capDroppedCandidates: groups.capDropped });
+
+  const byId = new Map(evidence.report.candidates.map(item => [item.candidate_id, item]));
+
+  // cap에 밀린 후보만 표시된다. 자격이 없어 안 본 후보와 원문을 받은 후보는 그대로다.
+  assert.equal(byId.get('in-2').evidence_fetch_cap_dropped, true);
+  assert.equal(byId.get('in-3').evidence_fetch_cap_dropped, true);
+  assert.equal(byId.get('in-0').evidence_fetch_cap_dropped, false);
+  assert.equal(byId.get('out').evidence_fetch_cap_dropped, false);
+
+  // reasons는 게이트 사유 전용으로 남는다. 비차단 진단은 섞이지 않는다.
+  assert.deepEqual(byId.get('in-2').reasons, []);
+
+  // 진단일 뿐이라 발행을 막지 않는다.
+  assert.equal(byId.get('in-2').final_selection_blocked, false);
+  assert.equal(byId.get('in-2').evidence_validation_status, 'not_checked');
+
+  // counts는 status 히스토그램이라 합계가 후보 수와 같아야 한다.
+  const countsTotal = Object.values(evidence.report.counts).reduce((sum, value) => sum + value, 0);
+  assert.equal(countsTotal, 5);
+  assert.deepEqual(evidence.report.evidence_fetch_cap, { dropped: 2, dropped_publishable: 2 });
+});
+
+// dropped에는 자격 없는 클러스터 대표가 섞인다. 그건 정상이라 따로 세어야
+// "발행될 수 있었는데 근거를 못 받았다"를 읽을 수 있다.
+test('the cap report separates publishable drops from ineligible cluster canonicals', () => {
+  const publishable = Array.from({ length: 3 }, (_, index) => candidate(`pub-${index}`, {
+    id: `pub-${index}`,
+    url: `https://example.com/pub-${index}`,
+    source_quality_score: 0.9 - index / 100
+  }));
+  const canonical = candidate('canonical', {
+    id: 'canonical',
+    url: 'https://example.com/canonical',
+    title: 'Canonical camera source',
+    finalSelectionEligibility: 'watchlist',
+    source_quality_bucket: 'weak_candidate'
+  });
+
+  const groups = selectEvidenceFetchTargetGroups([...publishable, canonical], {
+    clusters: [{ duplicate_count: 1, canonical_url: canonical.url, canonical_title: canonical.title }]
+  }, { maxTargets: 2 });
+  const evidence = validateCandidateEvidence([...publishable, canonical], { sources: [] }, {
+    newsletterDate: '2026-05-16',
+    capDroppedCandidates: groups.capDropped
+  });
+
+  // 밀린 것은 발행 가능 1건 + 자격 없는 대표 1건.
+  assert.deepEqual(evidence.report.evidence_fetch_cap, { dropped: 2, dropped_publishable: 1 });
+});
+
+// cap이 자를 때 잘리는 단위는 그룹이다. 그룹의 사본 하나만 capDropped에 담기면 나머지 사본은
+// 표시 없이 not_checked로 남아 이 변경이 없애려던 혼동이 그대로 재현된다.
+test('every copy of a dropped source is reported as cap dropped', () => {
+  const droppedUrl = 'https://example.com/dropped';
+  const keeper = candidate('keeper', { id: 'keeper', url: 'https://example.com/keeper', source_quality_score: 0.9 });
+  const copies = [
+    candidate('registry-dropped', { id: undefined, url: droppedUrl, source_quality_score: 0.1 }),
+    candidate('gemini-dropped', { id: 'gemini-dropped', url: droppedUrl, source_quality_score: 0.1 })
+  ];
+
+  const groups = selectEvidenceFetchTargetGroups([keeper, ...copies], { clusters: [] }, { maxTargets: 1 });
+  const evidence = validateCandidateEvidence([keeper, ...copies], { sources: [] }, {
+    newsletterDate: '2026-05-16',
+    capDroppedCandidates: groups.capDropped
+  });
+
+  assert.equal(groups.capDropped.length, 2);
+  const droppedFlags = evidence.report.candidates
+    .filter(item => item.url === droppedUrl)
+    .map(item => item.evidence_fetch_cap_dropped);
+  assert.deepEqual(droppedFlags, [true, true]);
 });

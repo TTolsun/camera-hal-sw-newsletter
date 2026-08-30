@@ -1045,7 +1045,7 @@ function compareEvidenceTargets(left, right) {
     a.stable_key.localeCompare(b.stable_key);
 }
 
-function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options = {}) {
+function selectEvidenceFetchTargetGroups(candidates = [], clusterReport = {}, options = {}) {
   const maxTargets = options.maxTargets || 12;
   const canonicalRefs = new Set();
   for (const cluster of clusterReport.clusters || []) {
@@ -1102,17 +1102,22 @@ function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options
   // 그룹의 cap 순위는 사본 중 가장 강한 것으로 정한다. 먼저 들어온 사본으로 정하면
   // 같은 URL의 strong_candidate 사본이 있어도 약한 사본 등급으로 그룹 전체가 밀려
   // 이 함수가 막으려는 무검증 통과가 그대로 재현된다.
-  // 반환 길이는 maxTargets를 넘을 수 있다. cap이 세는 것은 사본 수가 아니라 출처 수다.
-  return [...targetMap.values()]
+  // selected 길이는 maxTargets를 넘을 수 있다. cap이 세는 것은 사본 수가 아니라 출처 수다.
+  const ranked = [...targetMap.values()]
     .map(item => ({
       members: item.members,
       priority: item.members
         .map(member => ({ priority: evidencePriority(member, item.isCanonical) }))
         .sort(compareEvidenceTargets)[0].priority
     }))
-    .sort(compareEvidenceTargets)
-    .slice(0, maxTargets)
-    .flatMap(item => item.members);
+    .sort(compareEvidenceTargets);
+
+  return {
+    selected: ranked.slice(0, maxTargets).flatMap(item => item.members),
+    // cap에 밀려 원문을 못 받은 후보다. 자격이 없어 대상이 아니었던 후보와 구분해야
+    // "확인 안 함"과 "확인 못 함"이 리포트에서 갈린다.
+    capDropped: ranked.slice(maxTargets).flatMap(item => item.members)
+  };
 }
 
 function writeSeedOnlySourceDiscoveryResult({
@@ -1334,8 +1339,8 @@ async function runEnabled({
   const clustered = checkSourceDuplicates(scored.annotatedCandidates, { newsletterDate: date });
   writeJson(sourceClustersPath(root, date), clustered.report);
 
-  const evidenceFetchTargets = selectEvidenceFetchTargets(clustered.annotatedCandidates, clustered.report, { maxTargets: 12 });
-  const sourceFacts = await extractSourceFacts(evidenceFetchTargets, {
+  const evidenceFetchGroups = selectEvidenceFetchTargetGroups(clustered.annotatedCandidates, clustered.report, { maxTargets: 12 });
+  const sourceFacts = await extractSourceFacts(evidenceFetchGroups.selected, {
     fetch: true,
     fetchImpl,
     timeoutMs: 5000,
@@ -1344,7 +1349,10 @@ async function runEnabled({
   });
   writeJson(extractedSourceFactsPath(root, date), sourceFacts);
 
-  const evidence = validateCandidateEvidence(clustered.annotatedCandidates, sourceFacts, { newsletterDate: date });
+  const evidence = validateCandidateEvidence(clustered.annotatedCandidates, sourceFacts, {
+    newsletterDate: date,
+    capDroppedCandidates: evidenceFetchGroups.capDropped
+  });
   writeJson(evidenceValidationReportPath(root, date), evidence.report);
 
   const usageReport = budget.writeReport(geminiUsageReportPath(root, date), {
@@ -1660,7 +1668,7 @@ module.exports = {
   renderReport,
   renderSourceDiscoveryFeedbackMarkdown,
   run,
-  selectEvidenceFetchTargets,
+  selectEvidenceFetchTargetGroups,
   sourceDiscoveryHandoff,
   splitMergeStageNotYetEligible
 };
