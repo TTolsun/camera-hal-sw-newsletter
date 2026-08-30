@@ -297,6 +297,10 @@ const ANTHROPIC_PATH_PREFIX = '/news';
 const ANTHROPIC_INDEX_URL = `${ANTHROPIC_ORIGIN}${ANTHROPIC_PATH_PREFIX}`;
 const ANTHROPIC_SLUG = 'cognizant-anthropic';
 const ANTHROPIC_ARTICLE_HTML = readTextFixture('source-html/anthropic-news-cognizant-anthropic.html');
+// 같은 마크업인데 안쪽 </article>과 "Related content" 사이에 각주(Footnotes) 블록이 하나 더 있는
+// 기사. 그 각주에만 실제 수치가 있어서 본문 경계가 무엇을 버리는지 여기서 그대로 드러난다.
+const ANTHROPIC_FOOTNOTES_SLUG = 'improving-fable-5-s-biology-safeguards';
+const ANTHROPIC_FOOTNOTES_ARTICLE_HTML = readTextFixture('source-html/anthropic-news-improving-fable-5-biology-safeguards.html');
 const ANTHROPIC_SOURCE = {
   ...SOURCE,
   id: 'anthropic-news',
@@ -307,30 +311,44 @@ const ANTHROPIC_SOURCE = {
 
 // Anthropic News 목록에서는 <a href="/news/{slug}">가 곧 카드이고 <time>이 그 앵커 안에 있다
 // (dated-article-card-parsing.js의 두 번째 컨테이너 후보).
-function anthropicIndexHtml() {
-  return `<a href="${ANTHROPIC_PATH_PREFIX}/${ANTHROPIC_SLUG}" class="FeaturedGrid-module__sideLink">`
+function anthropicIndexHtml({ slug, dateText, title }) {
+  return `<a href="${ANTHROPIC_PATH_PREFIX}/${slug}" class="FeaturedGrid-module__sideLink">`
     + '<div class="FeaturedGrid-module__meta"><span class="caption bold">Announcements</span>'
-    + '<time class="caption bold">Jul 27, 2026</time></div>'
-    + '<h4 class="headline-6">Cognizant and Anthropic expand their partnership</h4></a>';
+    + `<time class="caption bold">${dateText}</time></div>`
+    + `<h4 class="headline-6">${title}</h4></a>`;
 }
 
 async function resolveAnthropicNewsArticle(over = {}) {
-  const indexHtml = anthropicIndexHtml();
+  // 기본값은 각주가 없는 기사(cognizant-anthropic)다. 카드 날짜 2026-07-27이 recent tier 안에
+  // 들어오는 시점을 now로 쓴다.
+  const slug = over.slug || ANTHROPIC_SLUG;
+  const dateText = over.dateText || 'Jul 27, 2026';
+  const title = over.title || 'Cognizant and Anthropic expand their partnership';
+  const indexHtml = anthropicIndexHtml({ slug, dateText, title });
   const items = await resolveDatedArticleIndexItems({
     html: indexHtml,
     source: ANTHROPIC_SOURCE,
     fetchClient: makeClient({
       indexHtml,
       indexUrl: ANTHROPIC_INDEX_URL,
-      defaultArticleHtml: ANTHROPIC_ARTICLE_HTML
+      defaultArticleHtml: over.articleHtml || ANTHROPIC_ARTICLE_HTML
     }),
-    // 카드 날짜(2026-07-27)가 recent tier 안에 들어오는 시점.
     now: over.now || new Date('2026-08-01T00:00:00Z'),
     lookbackDays: over.lookbackDays ?? 21,
     onDiagnostic: over.onDiagnostic
   });
   assert.equal(items.length, 1, 'expected exactly one resolved Anthropic News item');
   return items[0];
+}
+
+// item에서 근거로 쓰이는 텍스트 슬롯을 한 문자열로 모은다. 캡슐까지 가는 것은 이 셋뿐이라
+// "본문 밖 텍스트가 근거로 샜는가"는 이 문자열 하나만 보면 된다.
+function evidenceHaystack(item) {
+  return [
+    String(item.summary || ''),
+    String(item.behavior_change || ''),
+    JSON.stringify(item.source_extraction || {})
+  ].join(' ');
 }
 
 async function resolveWithExhaustedSourceBudget(over = {}) {
@@ -606,11 +624,7 @@ test('stops reading the body at the related-articles section', async () => {
   // 관련 기사 목록은 인덱스와 같은 카드 마크업을 쓰기 때문에, 자르지 않으면 남의 기사
   // 제목과 날짜가 이 기사의 summary·sections로 들어간다.
   const item = await resolveWithRelatedArticlesTail();
-  const haystack = [
-    String(item.summary || ''),
-    String(item.behavior_change || ''),
-    JSON.stringify(item.source_extraction || {})
-  ].join(' ');
+  const haystack = evidenceHaystack(item);
   assert.doesNotMatch(haystack, /FOREIGN_RELATED_TITLE/,
     '관련 기사 제목이 본문으로 새면 이 단언이 깨진다');
   assert.doesNotMatch(haystack, /Jul 24, 2026/,
@@ -623,11 +637,7 @@ test('stops reading the body at the related-articles section', async () => {
 // 'Read more Products Claude Claude Code Claude Code Enterprise Claude Cowork ... Anthropic PBC'.
 test('stops reading an Anthropic News body at the closing article tag', async () => {
   const item = await resolveAnthropicNewsArticle();
-  const haystack = [
-    String(item.summary || ''),
-    String(item.behavior_change || ''),
-    JSON.stringify(item.source_extraction || {})
-  ].join(' ');
+  const haystack = evidenceHaystack(item);
 
   for (const chrome of [
     'Products',
@@ -646,6 +656,58 @@ test('stops reading an Anthropic News body at the closing article tag', async ()
     '경계를 너무 이르게 잡아 기사 마지막 문단을 잘라내면 안 된다');
   assert.ok(item.summary.endsWith('visit anthropic.com/partners .'),
     `본문은 기사의 마지막 문장에서 끝나야 한다: ${JSON.stringify(item.summary.slice(-60))}`);
+});
+
+// #964 후속. 이 경계가 무엇을 버리는지 그대로 드러내는 테스트다. Anthropic News는 안쪽
+// </article>과 "Related content" 사이에 각주(Footnotes) 블록을 두는데(라이브 11건 중 6건),
+// 경계가 </article>이라 그 각주가 본문에서 함께 잘린다. 이 기사는 각주에만 실제 수치가 있어서
+// 손실이 가장 크다 — 라이브 실측으로 본문 10,832 -> 8,495자, 앵커 6 -> 0.
+//
+// 이것은 알고 받아들인 대가다(ARTICLE_BODY_END_MARKERS 주석에 근거를 적어 뒀다). 각주를
+// 살리려면 "Related content"만 배제하는 경계가 필요한데 그 섹션의 class는 빌드 해시라 마커로
+// 쓸 수 없고 <section> 태그는 본문 안에도 나온다. 그래서 손실을 숨기지 않고 여기서 단언한다 —
+// 경계를 옮기려는 사람은 이 테스트를 먼저 고쳐야 하고, 그때 위 주석의 측정치를 다시 재게 된다.
+test('drops the Anthropic News footnotes together with the Related content section', async () => {
+  // 픽스처에 각주 수치가 실제로 들어 있어야 아래 "근거에 없다" 단언이 의미를 갖는다.
+  assert.match(ANTHROPIC_FOOTNOTES_ARTICLE_HTML,
+    /67% on <a href="http:\/\/Claude\.ai">Claude\.ai<\/a>, 55% on Cowork, 17% on Claude Code, and 7% on the Claude Platform/,
+    '픽스처가 각주 블록을 그대로 담고 있어야 이 손실 측정이 성립한다');
+
+  const item = await resolveAnthropicNewsArticle({
+    slug: ANTHROPIC_FOOTNOTES_SLUG,
+    dateText: 'Aug 7, 2026',
+    title: 'Improving Fable 5’s biology safeguards',
+    articleHtml: ANTHROPIC_FOOTNOTES_ARTICLE_HTML,
+    now: new Date('2026-08-10T00:00:00Z')
+  });
+  const haystack = evidenceHaystack(item);
+
+  // 1) 기사 본문은 남는다. 음성 단언만 두면 본문을 통째로 비워도 통과한다.
+  assert.match(item.summary, /substantially reduces false positives/,
+    '기사 도입부는 근거로 남아야 한다');
+
+  // 2) 관련 기사 카드와 사이트 내비·푸터는 근거가 되지 못한다.
+  for (const outsideBody of [
+    'Related content',
+    'Model Hardware Standard',
+    'Read more',
+    'Products',
+    'Anthropic PBC'
+  ]) {
+    assert.equal(haystack.includes(outsideBody), false,
+      `본문 밖 문구 "${outsideBody}"가 기사 근거로 새면 안 된다`);
+  }
+
+  // 3) 그 대가로 각주도 함께 사라진다. 각주 안에만 있던 수치는 근거 어디에도 없고,
+  //    이 기사에서 앵커를 가진 문장은 각주뿐이라 behavior_change와 sections가 빈 값이 된다.
+  assert.equal(haystack.includes('67%'), false,
+    '각주 수치는 현재 경계에서 버려진다 — 이 단언이 깨지면 경계가 움직인 것이다');
+  assert.equal(haystack.includes('Claude Platform'), false,
+    '각주 본문도 함께 버려진다');
+  assert.equal(item.behavior_change, '',
+    '각주가 유일한 앵커 문장이라 behavior_change는 빈 값으로 남는다');
+  assert.deepEqual(item.source_extraction.workflow.sections, [],
+    '같은 이유로 workflow sections도 비어 있다 — 근거를 지어내지 않는다');
 });
 
 // claude.com/blog 라이브 페이지에도 </main>은 있지만(실측: 마커 343,330자 < </main> 399,958자)
@@ -668,11 +730,7 @@ test('keeps the earliest boundary when a related-articles marker precedes the cl
     fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
   });
   assert.equal(items.length, 1);
-  const haystack = [
-    String(items[0].summary || ''),
-    String(items[0].behavior_change || ''),
-    JSON.stringify(items[0].source_extraction || {})
-  ].join(' ');
+  const haystack = evidenceHaystack(items[0]);
   assert.match(haystack, /BODY_SENTINEL_TEXT/, '기사 본문은 남아야 한다');
   assert.doesNotMatch(haystack, /FOREIGN_RELATED_TITLE/,
     '</main>이 마커보다 뒤에 있어도 마커가 이겨야 한다');

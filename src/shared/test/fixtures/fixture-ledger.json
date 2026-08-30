@@ -837,6 +837,23 @@
         "originalCharacters": 145382,
         "note": "nested article/main skeleton, one body paragraph run, the Related content section and the footer nav kept; a rel=canonical link added so the whole resolver path can run against it"
       }
+    },
+    {
+      "path": "source-html/anthropic-news-improving-fable-5-biology-safeguards.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Anthropic News pages put a Footnotes block after the inner closing article tag, so the body boundary drops those footnotes along with the Related content section and the footer navigation; this fixture keeps that loss measurable instead of hidden",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "url": "https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards",
+        "capturedAt": "2026-08-30",
+        "originalCharacters": 162583,
+        "note": "nested article/main skeleton, the first four body paragraphs, the whole Footnotes block with its verbatim percentages, one Related content card and the footer nav kept; the illustration, the social share icons and the remaining twelve body paragraphs dropped"
+      }
     }
   ]
 }

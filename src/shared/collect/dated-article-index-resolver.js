@@ -48,10 +48,35 @@ const SUMMARY_LIMIT = 500;
 // 뒤의 두 개는 닫는 태그다. Anthropic News(/news) 마크업에는 앞의 두 마커가 한 건도 없어서,
 // 마커만 후보이던 동안에는 본문이 문서 끝까지로 잡혀 사이트 푸터의 제품 목록이 그대로
 // behavior_change와 sections[0]에 실렸다(#964). 그 페이지는 <main> 안에 <article>이 두 겹
-// (hero 하나 + 본문 하나)이라 첫 </article>이 본문의 끝이고, 그 뒤로 "Related content" 섹션과
-// 푸터가 이어진다. </main>만 두면 그 "Related content"가 남고, </article>만 두면 <article>이
-// 아예 없는 Claude Blog 마크업을 받아 줄 후보가 없다 — 둘이 함께 있어야 두 사이트의 경계가
-// 같은 의미(관련 기사 앞에서 자른다)가 된다.
+// (hero 하나 + 본문 하나)이라 첫 </article>이 본문의 끝이고, 그 뒤로 각주 블록과
+// "Related content" 섹션과 푸터가 이어진다.
+//
+// 실측(2026-08-30, 라이브 /news 기사 11건 + 라이브 claude.com/blog 기사 5건):
+// - 첫 </article>이 /news 11건 전부에서 경계가 된다. 그 경계가 없으면 11건 전부
+//   behavior_change나 sections에 푸터 문구("Read more Products Claude Claude Code ...")가
+//   들어간다.
+// - </main>은 두 소스 어디에서도 이기지 못한다. /news는 </article>이 5,008~8,151자 먼저 오고,
+//   claude.com/blog는 </article>이 아예 없는 대신 관련 기사 마커가 46,999~151,455자 먼저 온다.
+//   그래도 남겨 둔다 — <article>도 관련 기사 마커도 없는 페이지에서 푸터를 막아 줄 마지막
+//   후보이기 때문이고, 그 경로는 합성 HTML 테스트가 잠근다.
+//
+// 대가: 첫 </article> 뒤에 오는 각주(Footnotes) 블록이 본문에서 함께 잘린다(11건 중 6건).
+// improving-fable-5-s-biology-safeguards는 각주에만 실제 수치("67% on Claude.ai, 55% on
+// Cowork, 17% on Claude Code, 7% on the Claude Platform")가 있어서, 잘리면 본문이
+// 10,832 -> 8,495자가 되고 앵커가 6 -> 0으로 떨어져 behavior_change와 sections가 빈 값이 된다.
+// 그래도 이 경계를 쓰는 이유는 셋이다.
+// 1) 각주를 살리고 "Related content"만 배제하는 견고한 경계가 없다. 그 섹션의 class는 빌드
+//    해시(LandingPageSection-module-scss-module__ZSMdoa__root의 ZSMdoa)라 재배포 때 바뀌고,
+//    <section> 태그 자체는 본문 안에도 나온다(model-hardware-standard 기사 본문에 6개 —
+//    <section>을 경계로 쓰면 그 기사가 118,000자를 잃는다). "Related content" 문자열 매칭은
+//    문구가 바뀌거나 지역화되면 깨진다.
+// 2) 각주가 잘리는 6건 중 실제로 근거가 달라지는 것은 위 1건뿐이다. 나머지 5건은 각주를
+//    남기든 버리든 behavior_change와 sections가 글자 그대로 같다(실측).
+// 3) 그 1건에서 각주를 살려 얻는 근거는 "Footnotes 1 As a result, ..."로 시작하는 각주
+//    문장이다. 그것을 얻으려고 경계를 넓히면 경계가 깨진 날 푸터가 다시 근거가 된다.
+//    근거가 비는 것이 사이트 내비·푸터를 근거로 쓰는 것보다 낫다.
+// 이 손실은 anthropic-news-improving-fable-5-biology-safeguards.html 픽스처와 그 테스트가
+// 드러낸다 — 경계를 옮기려면 그 테스트를 먼저 고쳐야 한다.
 //
 // 후보가 하나도 안 잡히면 문서 끝까지를 본문으로 본다 — 없다고 실패로 닫지 않는다.
 const ARTICLE_BODY_END_MARKERS = [
