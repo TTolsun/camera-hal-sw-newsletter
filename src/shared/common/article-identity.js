@@ -42,6 +42,9 @@ function firstText(values) {
   return values.map(text).find(Boolean) || '';
 }
 
+// 앵커가 릴리스를 가르는 곳에서만 앵커를 남긴다. 이 판단의 정본은 이 함수 하나고,
+// 근거 수집의 출처 키(collect/source-intelligence-utils.js의 evidenceSourceKey)도 이걸 쓴다.
+// 사본을 만들면 같은 문서를 기사 identity와 근거 수집이 다른 수로 세게 된다.
 function shouldPreserveHash(parsed) {
   const host = parsed.hostname.toLowerCase();
   const pathname = parsed.pathname;
@@ -142,6 +145,7 @@ module.exports = {
   articleIdentityKey,
   contentHash,
   normalizeArticleUrl,
+  shouldPreserveHash,
   sourceEventIdentity,
   sourceUrl
 };
