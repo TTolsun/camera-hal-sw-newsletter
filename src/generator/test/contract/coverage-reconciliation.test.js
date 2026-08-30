@@ -5,7 +5,8 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { reconcileCoverage } = require('../../select/coverage-reconciliation');
+const { reconcileCoverage, KNOWN_COVERAGE_DECISIONS } = require('../../select/coverage-reconciliation');
+const { editorialPlanPrompt } = require('../../reporter/newsletter-prompts');
 
 function mainEligible(overrides = {}) {
   return {
@@ -238,4 +239,70 @@ test('등급 앞뒤 공백 때문에 main 제안이 강등되지 않는다', () 
 
   assert.deepEqual(out.selected.map(item => item.url), ['a', 'b']);
   assert.deepEqual(out.diff.demoted_groups, []);
+});
+// #969: 편집 계획이 고를 수 있는 등급 목록은 프롬프트 문장 하나가 전부이고(coverage_decision은
+// 스키마상 자유 문자열이다), KNOWN_COVERAGE_DECISIONS는 그 목록을 그대로 비추는 사본이다.
+// 두 집합은 양방향으로 같아야 한다. 한쪽만 잠그면 #909가 만든 구분(아는 등급 = 계획이 제시된
+// 것을 골랐다 / 모르는 등급 = 모델 드리프트)이 조용히 무너진다:
+//   - 집합에만 값을 더하면, 프롬프트가 제시하지 않는 값을 모델이 뱉어도 정상 판단으로 기록된다.
+//   - 프롬프트에만 값을 더하면, 계획이 지시대로 고른 값이 드리프트로 접힌다.
+//
+// 등급 이름을 쉼표로 쪼개지 않는다. 문장이 "main_article, reference_only, 또는 exclude"로만
+// 바뀌어도 `또는 exclude`가 등급 이름으로 잡혀 멀쩡한 프롬프트에서 실패가 난다. 대신 문장에서
+// ASCII 식별자 토큰만 뽑는다(등급 이름은 전부 ASCII고 한국어 조사·구분자는 토큰이 되지 않는다).
+// 문장 자신을 가리키는 필드 이름만 빼면 남는 토큰이 곧 제시된 등급이다.
+const COVERAGE_SENTENCE_FIELD_NAMES = new Set(['coverage_decision']);
+
+function gradesOfferedByPrompt() {
+  const line = editorialPlanPrompt().split('\n').find(item => item.includes('coverage_decision'));
+  assert.ok(line, '프롬프트가 등급 목록을 제시하는 문장이 사라졌다');
+  const sentence = line.split('.')[0];
+  const tokens = sentence.match(/[a-z][a-z0-9_]*/g) || [];
+  return new Set(tokens.filter(token => !COVERAGE_SENTENCE_FIELD_NAMES.has(token)));
+}
+
+test('프롬프트가 제시하는 등급과 아는 등급이 양방향으로 같다', () => {
+  const offered = gradesOfferedByPrompt();
+  assert.ok(offered.size > 0, '문장에서 등급을 하나도 못 뽑았다면 추출이 깨진 것이다');
+  assert.deepEqual(
+    [...offered].sort(),
+    [...KNOWN_COVERAGE_DECISIONS].sort(),
+    '프롬프트 목록과 KNOWN_COVERAGE_DECISIONS가 어긋났다'
+  );
+});
+
+test('프롬프트가 제시하는 등급은 전부 아는 등급으로 기록된다', () => {
+  // 집합 비교가 이름만 맞춘다면 이 테스트는 그 이름이 실제로 재조정기를 통과하는지 본다.
+  for (const grade of gradesOfferedByPrompt()) {
+    if (grade === 'main_article') continue;
+    const kept = mainEligible({ url: 'kept', article_group_key: 'group:kept' });
+    const graded = mainEligible({ url: 'graded', article_group_key: 'group:graded' });
+    const out = reconcileCoverage({
+      shortlistReport: { selected_articles: [kept, graded], reserve_candidates: [] },
+      editorialPlanReport: { editorial_plans: [plan(kept, 'main_article'), plan(graded, grade)] }
+    });
+
+    const demotion = out.diff.changes.find(change => change.action === 'demoted');
+    assert.equal(demotion.reason_code, `editorial_plan_${grade}`, `${grade}는 아는 등급이어야 한다`);
+  }
+});
+
+test('프롬프트에서 뺀 short_mention은 모델 드리프트로 기록된다', () => {
+  // 양방향 집합 비교는 두 곳을 함께 되돌리는 변경을 잡지 못한다. 이 등급이 다시 살아나려면
+  // 렌더 경로가 먼저 있어야 하므로, 이름 자체를 여기서 못박는다.
+  assert.ok(!gradesOfferedByPrompt().has('short_mention'), '프롬프트가 아직 short_mention을 제시한다');
+  assert.ok(!KNOWN_COVERAGE_DECISIONS.has('short_mention'), '아는 등급에 short_mention이 남아 있다');
+
+  // 등급을 제거해도 모델은 예전 값을 뱉을 수 있다. 그때 남아야 하는 사실은 두 개다:
+  // 프롬프트가 더는 제시하지 않는 값이라는 것(reason_code)과 모델이 실제로 쓴 원문(coverage_decision).
+  const kept = mainEligible({ url: 'kept', article_group_key: 'group:kept' });
+  const drifted = mainEligible({ url: 'drifted', article_group_key: 'group:drifted' });
+  const out = reconcileCoverage({
+    shortlistReport: { selected_articles: [kept, drifted], reserve_candidates: [] },
+    editorialPlanReport: { editorial_plans: [plan(kept, 'main_article'), plan(drifted, 'short_mention')] }
+  });
+
+  const demotion = out.diff.changes.find(change => change.action === 'demoted');
+  assert.equal(demotion.reason_code, 'editorial_plan_unrecognized');
+  assert.equal(demotion.coverage_decision, 'short_mention', '모델이 쓴 원문은 그대로 남는다');
 });
