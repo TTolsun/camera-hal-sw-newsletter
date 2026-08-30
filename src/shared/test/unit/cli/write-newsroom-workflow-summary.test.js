@@ -224,3 +224,27 @@ test('single-node profile renders inside a panel', () => {
   assert.match(md, /subgraph panel\["Source Collect"\]/);
   assert.match(md, /collect\["Collect"\]:::passed/);
 });
+
+// #979 3·4·8번: stage_status_log가 role당 한 행이 아니라 stage당 한 행이 됐다. 다이어그램은
+// 예전부터 role별 마지막 행을 읽으므로 행이 늘어도 색칠 규칙은 그대로다 -- 이 테스트가 그
+// 계약을 잠근다(역방향으로도: 렌더러가 stage_id를 요구하지 않는다).
+test('role을 공유하는 여러 행이 있어도 role별 마지막 상태로 색칠한다', () => {
+  const md = renderWorkflowSummary({
+    profile: 'newsroom-final',
+    status: {
+      stage_status_log: [
+        // stage_id 없는 옛 형식 행. 렌더러가 새 필드를 요구하게 되면 여기서 깨진다.
+        { role: 'reporter', attempt: 1, status: 'passed' },
+        // 같은 attempt, 같은 role, 다른 stage. 예전에는 이 둘이 한 행으로 뭉개졌다.
+        { stage_id: 'editorial_plan', role: 'editor', attempt: 1, status: 'passed' },
+        { stage_id: 'editor', role: 'editor', attempt: 1, status: 'failed' }
+      ],
+      failure_stage: 'editor attempt 1/2',
+      failure_reason: 'Gemini output was not valid JSON.'
+    },
+    meta: { diagnostics_only: 'true' }
+  });
+  assert.match(md, /reporter\["Reporter"\]:::passed/);
+  assert.match(md, /editor\["Editor"\]:::failed/);
+  assert.match(md, /factcheck\["Fact-check"\]:::skipped/);
+});
