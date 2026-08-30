@@ -1013,14 +1013,18 @@ function evidencePriority(candidate = {}, isCanonical = false) {
   };
 }
 
+// 슬롯 순위는 출처 품질이 정하고, 중복 클러스터 대표 여부는 동점을 가르는 데만 쓴다.
+// canonical_rank가 1순위였을 때는 대표들이 품질과 무관하게 슬롯을 먼저 가져가서,
+// 중복 클러스터가 슬롯 수 이상 나오는 주에는 클러스터 밖 후보가 아무리 강해도 구조적으로
+// 0건이었다. 대표 여부는 "대상 집합에 넣을지"를 정하고(canonical loop), 여기서는 정하지 않는다.
 function compareEvidenceTargets(left, right) {
   const a = left.priority;
   const b = right.priority;
-  return a.canonical_rank - b.canonical_rank ||
-    a.bucket_rank - b.bucket_rank ||
+  return a.bucket_rank - b.bucket_rank ||
     b.score - a.score ||
     a.reliability_rank - b.reliability_rank ||
     b.published_date.localeCompare(a.published_date) ||
+    a.canonical_rank - b.canonical_rank ||
     a.stable_key.localeCompare(b.stable_key);
 }
 

@@ -121,18 +121,25 @@ test('evidence fetch target selection uses deterministic priority instead of inp
     }]
   }, { maxTargets: 12 });
 
+  // bucket -> score -> reliability -> published_date -> canonical -> stable_key 순.
+  // filler 세 건은 앞의 다섯 키가 전부 같아 stable_key 사전순으로 갈린다.
   assert.deepEqual(targets.slice(0, 7).map(item => item.id), [
-    'canonical',
     'strong-high',
     'strong-official-new',
     'strong-official-old',
     'strong-community-new',
     'filler-1',
-    'filler-11'
+    'filler-11',
+    'filler-13'
   ]);
   assert.equal(targets.length, 12);
-  assert.equal(targets.some(item => item.id === 'low-first'), false);
+  // bucket이 score보다 앞선다. score 0.05짜리 strong_candidate가 score 0.99짜리
+  // review_candidate를 이긴다.
+  assert.equal(targets.some(item => item.id === 'low-first'), true);
   assert.equal(targets.some(item => item.id === 'review-high'), false);
+  // 중복 클러스터 대표라는 사실은 대상 집합에 넣을지를 정할 뿐 슬롯 순위를 정하지 않는다.
+  // weak_candidate 대표는 strong_candidate 12건에 밀린다.
+  assert.equal(targets.some(item => item.id === 'canonical'), false);
 });
 
 test('duplicate canonical candidate is fetched even when it is outside the strong final-eligible subset', () => {
@@ -338,4 +345,55 @@ test('when the cap truncates, it drops whole sources and never a partial copy se
     const expectedMemberCount = candidates.filter(item => item.url === url).length;
     assert.equal(targets.filter(item => item.url === url).length, expectedMemberCount, `${url} 그룹이 통째로 들어와야 한다`);
   }
+});
+
+// canonical_rank(중복 클러스터의 대표인가)가 정렬 1순위면 클러스터 대표들이 품질과 무관하게
+// 슬롯을 먼저 가져간다. 중복 클러스터가 슬롯 수 이상 나오는 주에는 클러스터 밖 후보가
+// 아무리 강해도 구조적으로 0건이 된다. 대표 우선은 품질이 같을 때의 동점 처리여야 한다.
+test('a strong candidate outside every duplicate cluster still gets a slot', () => {
+  const maxTargets = 12;
+  const clusterCanonicals = Array.from({ length: maxTargets }, (_, index) => candidate(`cluster-${index}`, {
+    id: `cluster-${index}`,
+    url: `https://example.com/cluster-${index}`,
+    title: `Clustered camera source ${index}`,
+    source_quality_bucket: 'review_candidate',
+    source_quality_score: 0.2
+  }));
+  const outsider = candidate('outsider', {
+    id: 'outsider',
+    url: 'https://example.com/outsider',
+    title: 'Unclustered camera source',
+    source_quality_bucket: 'strong_candidate',
+    source_quality_score: 0.95
+  });
+
+  const targets = selectEvidenceFetchTargets([...clusterCanonicals, outsider], {
+    clusters: clusterCanonicals.map(item => ({
+      duplicate_count: 1,
+      canonical_url: item.url,
+      canonical_title: item.title
+    }))
+  }, { maxTargets });
+
+  assert.equal(targets.some(item => item.id === 'outsider'), true);
+});
+
+// 대표 우선 의도 자체는 남아야 한다. 다른 조건이 같으면 클러스터 대표가 앞선다.
+test('cluster canonical still wins when quality signals tie', () => {
+  const canonical = candidate('canonical', {
+    id: 'canonical',
+    url: 'https://example.com/canonical',
+    title: 'Canonical camera source'
+  });
+  const plain = candidate('plain', {
+    id: 'plain',
+    url: 'https://example.com/plain',
+    title: 'Plain camera source'
+  });
+
+  const targets = selectEvidenceFetchTargets([plain, canonical], {
+    clusters: [{ duplicate_count: 1, canonical_url: canonical.url, canonical_title: canonical.title }]
+  }, { maxTargets: 1 });
+
+  assert.deepEqual(targets.map(item => item.id), ['canonical']);
 });
