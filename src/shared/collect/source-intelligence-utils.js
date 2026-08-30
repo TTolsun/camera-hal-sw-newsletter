@@ -1,5 +1,7 @@
 const crypto = require('crypto');
 
+const { shouldPreserveHash } = require('../common/article-identity');
+
 function isObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
@@ -216,7 +218,14 @@ function finalSelectionEligible(candidate = {}) {
 // 근거 수집에서 "같은 출처"를 가르는 키. cap이 세는 단위이자 원문을 몇 번 받아올지 정하는
 // 단위라서, 대상을 고르는 쪽과 실제로 받아오는 쪽이 같은 값을 써야 "한 칸 = 한 번 수신"이
 // 성립한다. canonicalContentUrl을 쓰므로 Android 문서의 `hl` 로케일 파라미터만 무시하고
-// 나머지 query와 fragment는 남는다 — `?q=` 목록 페이지나 `#버전` 앵커는 서로 다른 문서다.
+// 나머지 query는 남는다 — `?q=` 목록 페이지는 서로 다른 문서다.
+// 앵커는 기사 identity와 같은 판단(shouldPreserveHash)을 쓴다. 릴리스를 가르는 `#버전`은
+// 남기고 roundup 게시글의 섹션 앵커는 지워, 같은 문서가 cap 칸을 두 개 먹지 않게 한다.
+// host 정규화 뒤에 판단해야 google.cn 판본도 allowlist host와 맞아떨어진다.
+// 술어는 같지만 두 호출부가 먹이는 pathname이 다르다는 점은 남는다 — 여기는 후행 슬래시를
+// 먼저 지우고 부르고, normalizeArticleUrl은 판단 뒤에 지운다. 그래서 `.../camera/#1.7.0-alpha03`
+// 같은 형태는 여기가 더 넓게 보존한다. allowlist 경로가 슬래시로 끝나지 않아 이 차이는 매치를
+// 넓히기만 하므로, 서로 다른 릴리스가 한 칸으로 합쳐지는 반대 방향 사고는 생기지 않는다.
 function evidenceSourceKey(candidate = {}) {
   const canonical = canonicalContentUrl(candidateUrl(candidate));
   if (!canonical) return '';
@@ -225,6 +234,9 @@ function evidenceSourceKey(candidate = {}) {
     parsed.hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
     if (parsed.pathname !== '/') {
       parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+    }
+    if (!shouldPreserveHash(parsed)) {
+      parsed.hash = '';
     }
     return parsed.toString();
   } catch (_error) {
