@@ -1,25 +1,33 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { modelGroupInfoForStage } = require('../../../shared/llm/model-policy');
-const { temperatureForStage, thinkingBudgetForStage } = require('../../../shared/llm/providers/gemini-provider');
+const { LABEL_KINDS, stageDefinitionById, stageRun } = require('../../../shared/llm/stage-catalog');
+const { temperatureForSampling, thinkingBudgetForSampling } = require('../../../shared/llm/providers/gemini-provider');
 const { createDiagnosticsState } = require('../../../shared/llm/llm-diagnostics');
-const { roleFromStageLabel } = require('../../select/stage-status-tracker');
 const { publicArticleJudgeArtifactScope } = require('../../publish/orchestrator-judge-helpers');
 
-// LLM stage routing characterization (#980).
+// 표의 stage id로 run을 만든다. 파생 stage는 부모 run이 있어야 label이 나온다.
+function runForStageId(stageId) {
+  const definition = stageDefinitionById(stageId);
+  if (!definition) throw new Error(`unknown stage id in table: ${stageId}`);
+  if (definition.label.kind === LABEL_KINDS.DERIVED) {
+    return stageRun(definition, { parentRun: runForStageId(definition.label.parentId) });
+  }
+  return stageRun(definition, { qualityAttempt: 1, totalAttempts: 2 });
+}
+
+// LLM stage routing characterization (#980, #981).
 //
-// stage 정체성은 지금 사람이 읽는 자유 문자열 label 하나로 표현되고, 아래 다섯 resolver가
-// 그 문자열을 각자 정규식으로 해석해 model group, temperature, thinking budget, status role,
-// artifact scope를 유도한다. 분기 순서가 resolver마다 달라 같은 label이 축마다 다른 답을 받는다.
+// production stage 21개의 routing 결과를 표 한 장으로 고정한다. 열은 label, model group,
+// temperature/thinking config field, status role, artifact scope다.
 //
-// 이 파일은 그 현행 결과를 있는 그대로 고정한다. 여기 적힌 값이 곧 "옳은 값"이라는 뜻은
-// 아니다. 이상해 보이는 조합(예: editor completion은 model group이 repair인데 temperature는
-// editor를 쓴다)도 그대로 기록해 두는 것이 목적이다. 그래야 #981(stage descriptor catalog
-// 도입)이 routing을 바꾸지 않았음을 이 표 한 장으로 증명할 수 있다.
+// #980에서 이 표는 자유 문자열 label을 정규식으로 해석하던 resolver 다섯의 답을 고정했다.
+// #981이 그 resolver들을 stage catalog로 대체하면서, 같은 값을 이제 catalog를 통해 확인한다.
+// 표에 적힌 값은 그때와 byte 단위로 같다 -- 바뀐 것은 값이 아니라 그 값이 나오는 경로다.
 //
-// 표에서 드러난 의심 항목의 의도 결정은 #979 umbrella에서 항목별로 다룬다.
-// 이 파일은 프로덕션 코드를 바꾸지 않는다.
+// 여기 적힌 값이 곧 "옳은 값"이라는 뜻은 아니다. 이상해 보이는 조합(예: editor completion은
+// model group이 repair인데 sampling은 editor를 쓴다)도 그대로 기록해 두는 것이 목적이다.
+// 의심 항목의 의도 결정은 #979 umbrella에서 항목별로 다룬다.
 
 // temperature/thinking은 기본 숫자가 아니라 "어느 config field로 해석되는가"가 계약이다.
 // 그래서 field마다 고유한 sentinel 값을 넣고, 돌아온 값이 그 field에서 왔는지 확인한다.
@@ -348,30 +356,37 @@ test('표가 production stage 21개를 정확히 그대로 덮는다', () => {
   assert.deepEqual([...labels].sort(), [...EXPECTED_LABELS].sort());
 });
 
-test('stage label -> model group 현행 매핑', () => {
+test('stage id -> label 현행 매핑', () => {
   PRODUCTION_STAGE_CASES.forEach((stageCase) => {
-    const info = modelGroupInfoForStage(stageCase.label);
-    assert.equal(info.group, stageCase.modelGroup, `model group mismatch: ${stageCase.label}`);
-    assert.equal(info.known, stageCase.known, `known mismatch: ${stageCase.label}`);
-    assert.equal(info.warning, stageCase.warning, `warning mismatch: ${stageCase.label}`);
+    assert.equal(runForStageId(stageCase.stageId).label, stageCase.label);
   });
 });
 
-test('stage label -> temperature config field 현행 매핑', () => {
+test('stage -> model group 현행 매핑', () => {
+  PRODUCTION_STAGE_CASES.forEach((stageCase) => {
+    assert.equal(
+      stageDefinitionById(stageCase.stageId).modelGroup,
+      stageCase.modelGroup,
+      `model group mismatch: ${stageCase.label}`
+    );
+  });
+});
+
+test('stage -> temperature config field 현행 매핑', () => {
   PRODUCTION_STAGE_CASES.forEach((stageCase) => {
     const expected = TEMPERATURE_SENTINELS[stageCase.temperatureField];
     assert.equal(typeof expected, 'number', `unknown temperature field: ${stageCase.temperatureField}`);
     assert.equal(
-      temperatureForStage(stageCase.label, SENTINEL_CONFIG),
+      temperatureForSampling(stageDefinitionById(stageCase.stageId).sampling, SENTINEL_CONFIG),
       expected,
       `temperature mismatch: ${stageCase.label}`
     );
   });
 });
 
-test('stage label -> thinking budget config field 현행 매핑', () => {
+test('stage -> thinking budget config field 현행 매핑', () => {
   PRODUCTION_STAGE_CASES.forEach((stageCase) => {
-    const actual = thinkingBudgetForStage(stageCase.label, SENTINEL_CONFIG);
+    const actual = thinkingBudgetForSampling(stageDefinitionById(stageCase.stageId).sampling, SENTINEL_CONFIG);
     if (stageCase.thinkingField === NO_THINKING_MAPPING) {
       assert.equal(actual, 0, `thinking budget mismatch (매핑 없음 기대): ${stageCase.label}`);
       return;
@@ -382,10 +397,10 @@ test('stage label -> thinking budget config field 현행 매핑', () => {
   });
 });
 
-test('stage label -> status role 현행 매핑', () => {
+test('stage -> status role 현행 매핑', () => {
   PRODUCTION_STAGE_CASES.forEach((stageCase) => {
     assert.equal(
-      roleFromStageLabel(stageCase.label),
+      stageDefinitionById(stageCase.stageId).statusRole,
       stageCase.statusRole,
       `status role mismatch: ${stageCase.label}`
     );
@@ -404,17 +419,20 @@ test('stage id -> public article judge artifact scope 현행 매핑', () => {
   });
 });
 
-// 같은 label이 축마다 다른 답을 받는 조합을 따로 못 박아 둔다. 위 표에서 이미 검증되지만,
-// #981이 이 조합을 "무심코" 바꾸면 어느 축이 움직였는지 실패 메시지로 바로 드러나게 한다.
+// 축이 갈리는 조합. 표에서 이미 검증되지만, 무심코 바뀌면 어느 축이 움직였는지
+// 실패 메시지로 바로 드러나게 못 박아 둔다.
 test('축이 갈리는 조합 3개가 현행 그대로다', () => {
-  assert.equal(modelGroupInfoForStage('editor completion attempt 1/2').group, 'repair');
-  assert.equal(temperatureForStage('editor completion attempt 1/2', SENTINEL_CONFIG), TEMPERATURE_SENTINELS.geminiTemperatureEditor);
+  const completion = stageDefinitionById('editor.completion');
+  assert.equal(completion.modelGroup, 'repair');
+  assert.equal(temperatureForSampling(completion.sampling, SENTINEL_CONFIG), TEMPERATURE_SENTINELS.geminiTemperatureEditor);
 
-  assert.equal(modelGroupInfoForStage('fact-checker repair attempt 1/2').group, 'factcheck');
-  assert.equal(roleFromStageLabel('fact-checker repair attempt 1/2'), 'repair');
+  const factCheckRepair = stageDefinitionById('fact_checker.repair');
+  assert.equal(factCheckRepair.modelGroup, 'factcheck');
+  assert.equal(factCheckRepair.statusRole, 'repair');
 
-  assert.equal(modelGroupInfoForStage('editor repair attempt 1/2 public article judge').group, 'judge');
-  assert.equal(roleFromStageLabel('editor repair attempt 1/2 public article judge'), 'repair');
+  const repairJudge = stageDefinitionById('editor.repair.public_article_judge');
+  assert.equal(repairJudge.modelGroup, 'judge');
+  assert.equal(repairJudge.statusRole, 'repair');
 });
 
 // 진단 조회는 label 문자열 exact 일치다. 그래서 orchestrator-artifact-writers.js:25의

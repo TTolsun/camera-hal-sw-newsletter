@@ -12,7 +12,7 @@
 //
 // 실제 발행과 같은 조건으로 재야 의미가 있으므로 아래 넷을 프로덕션과 공유합니다.
 //
-// 1. 모델 목록 — `configuredModelsForStage(config, 'editor')`. 하드코딩하면 라우팅이 바뀐 뒤
+// 1. 모델 목록 — editor stage definition의 model group으로 고른다. 하드코딩하면 라우팅이 바뀐 뒤
 //    쓰이지도 않는 모델을 재고 통과를 보고합니다.
 // 2. 설정 — `readRuntimeConfig(env)`. 모듈 네임스페이스를 그대로 넘기면 temperature와
 //    thinking 설정이 undefined가 되어 실제 요청과 다른 요청을 재게 됩니다.
@@ -26,7 +26,7 @@
 // "확인 못 함"으로 따로 셉니다.
 
 const { resolveProvider } = require('../../llm/providers/provider-registry');
-const { configuredModelsForStage } = require('../../llm/model-policy');
+const { configuredModelsForGroup } = require('../../llm/model-policy');
 const { readRuntimeConfig } = require('../../common/runtime-config');
 const {
   errorText,
@@ -49,7 +49,7 @@ const KEYED_SECRET_PATTERN = /((?:api[_-]?key|key|token|authorization|bearer)["'
 const MAX_REASON_LENGTH = 300;
 
 function editorAcceptanceModels(config) {
-  return configuredModelsForStage(config, PROBE_STAGE);
+  return configuredModelsForGroup(config, LLM_STAGES.EDITOR.modelGroup);
 }
 
 function redactReason(value) {

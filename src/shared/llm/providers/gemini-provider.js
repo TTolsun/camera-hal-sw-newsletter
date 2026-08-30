@@ -2,7 +2,6 @@ const { GoogleGenAI } = require('@google/genai');
 const { TOKENS_PER_MILLION, number, roundUsd } = require('../llm-cost');
 const {
   configuredModelsForGroup,
-  configuredModelsForStage,
   isGeminiProModel
 } = require('../model-policy');
 const { isFreeTierQuotaExhausted } = require('../llm-errors');
@@ -129,35 +128,6 @@ function estimateCallCost(model, usage) {
   };
 }
 
-function temperatureForStage(stage, config) {
-  const normalized = String(stage || '').toLowerCase();
-  // #700 editorial-plan은 assessment stage라 judge와 같은 낮은 temperature(일관된 분류, run-to-run
-  // flip-flop 억제)를 쓴다. /editor/ substring 오매칭을 피하려고 editor 분기보다 먼저 둔다.
-  if (/editorial[-\s]?plan/.test(normalized)) return config.geminiTemperatureJudge;
-  if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) return config.geminiTemperatureJudge;
-  if (/fact[-\s]?check|factchecker/.test(normalized)) return config.geminiTemperatureFactcheck;
-  if (/\brepair\b/.test(normalized)) return config.geminiTemperatureRepair;
-  if (/\breporter\b/.test(normalized)) return config.geminiTemperatureReporter;
-  if (/source[-\s]?discovery/.test(normalized)) return config.geminiTemperatureSourceDiscovery;
-  if (/editor|completion/.test(normalized)) return config.geminiTemperatureEditor;
-  // scoring stage는 현재 LLM 호출이 없어 default temperature로 흡수
-  return config.geminiTemperatureDefault;
-}
-
-function thinkingBudgetForStage(stage, config) {
-  const normalized = String(stage || '').toLowerCase();
-  // #700 editorial-plan은 assessment stage라 judge와 같은 thinking budget을 쓴다(분류·HAL 거리감
-  // 판단에 적당한 추론). /editor/ substring 오매칭을 피하려고 editor 분기보다 먼저 둔다.
-  if (/editorial[-\s]?plan/.test(normalized)) return config.geminiThinkingBudgetJudge;
-  if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) return config.geminiThinkingBudgetJudge;
-  if (/fact[-\s]?check|factchecker/.test(normalized)) return config.geminiThinkingBudgetFactcheck;
-  if (/\brepair\b/.test(normalized)) return config.geminiThinkingBudgetRepair;
-  if (/\breporter\b/.test(normalized)) return config.geminiThinkingBudgetReporter;
-  if (/scoring|selection|deterministic/.test(normalized)) return config.geminiThinkingBudgetScoring;
-  if (/editor|completion/.test(normalized)) return config.geminiThinkingBudgetEditor;
-  return 0;
-}
-
 const FLASH_LITE_MIN_THINKING_BUDGET = 512;
 const MAX_THINKING_BUDGET = 24576;
 
@@ -178,10 +148,6 @@ function budgetToThinkingLevel(budget) {
   if (value <= 512) return 'LOW';
   if (value <= 2048) return 'MEDIUM';
   return 'HIGH';
-}
-
-function thinkingConfigForStage(stage, config, model) {
-  return thinkingConfigForBudget(thinkingBudgetForStage(stage, config), model);
 }
 
 // stage catalog의 sampling profile을 이 provider의 config field로 옮긴다(#981).
@@ -339,8 +305,6 @@ module.exports = {
     return buildGeminiRequest(args);
   },
 
-  configuredModels: configuredModelsForStage,
-  configuredModelsForStage,
   configuredModelsForGroup,
 
   createModelContext,
@@ -373,13 +337,10 @@ module.exports = {
     return typeof response?.text === 'function' ? response.text() : response?.text;
   },
 
-  temperatureForStage,
   temperatureForSampling,
   thinkingBudgetForSampling,
   thinkingConfigForSampling,
 
-  thinkingBudgetForStage,
-  thinkingConfigForStage,
   budgetToThinkingLevel,
   geminiThinkingFamily,
 

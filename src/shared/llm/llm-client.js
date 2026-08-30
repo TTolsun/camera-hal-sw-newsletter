@@ -372,8 +372,5 @@ module.exports = {
   resetLlmDiagnostics,
   safeFilenamePart,
   saveRawLlmOutput,
-  thinkingBudgetForStage(stage) {
-    return geminiProvider.thinkingBudgetForStage(stage, runtimeConfig);
-  },
   usageMetadataFromResponse: geminiProvider.usageMetadataFromResponse
 };

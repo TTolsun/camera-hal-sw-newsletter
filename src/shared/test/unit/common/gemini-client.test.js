@@ -299,8 +299,6 @@ test('stage-specific thinking budgets are applied to Gemini request config', asy
       { thinkingBudget: 0 }
     ]
   );
-  assert.equal(client.thinkingBudgetForStage('editor completion attempt 1/1'), 1024);
-  assert.equal(client.thinkingBudgetForStage('unknown stage'), 0);
 });
 
 test('stage-specific model routing selects the configured model for each newsroom stage', async () => {

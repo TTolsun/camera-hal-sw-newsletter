@@ -1,6 +1,5 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { LLM_STAGES } = require('../../../llm/stage-catalog');
 
 const {
   classifyProbeError,
@@ -9,7 +8,8 @@ const {
   redactReason,
   summarizeAcceptance
 } = require('../../../tooling/cli/check-editor-schema-acceptance');
-const { configuredModelsForStage } = require('../../../llm/model-policy');
+const { configuredModelsForGroup } = require('../../../llm/model-policy');
+const { LLM_STAGES } = require('../../../llm/stage-catalog');
 const { readRuntimeConfig } = require('../../../common/runtime-config');
 const geminiProvider = require('../../../llm/providers/gemini-provider');
 const { editorSchema } = require('../../../../generator/render/newsletter-schema');
@@ -35,7 +35,7 @@ function testConfig(env = {}) {
 test('the probe measures whatever models the editor stage is actually routed to', () => {
   const config = testConfig();
 
-  assert.deepEqual(editorAcceptanceModels(config), configuredModelsForStage(config, 'editor'));
+  assert.deepEqual(editorAcceptanceModels(config), configuredModelsForGroup(config, LLM_STAGES.EDITOR.modelGroup));
 
   // 라우팅이 바뀌면 재는 대상도 따라 바뀌어야 한다. 하드코딩이면 쓰이지도 않는 모델을 재고
   // "통과"를 보고하게 된다.
@@ -93,7 +93,7 @@ test('called with only an environment, the probe measures the routed editor mode
 
   await probeSchemaAcceptance({ provider, env: { GEMINI_API_KEY: 'test-key' } });
 
-  assert.deepEqual(seen, configuredModelsForStage(testConfig(), 'editor'));
+  assert.deepEqual(seen, configuredModelsForGroup(testConfig(), LLM_STAGES.EDITOR.modelGroup));
 });
 
 test('the default schema is the editor schema the pipeline actually uses', async () => {
