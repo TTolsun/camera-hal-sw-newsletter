@@ -4,7 +4,10 @@ const test = require('node:test');
 const { LABEL_KINDS, LLM_STAGES, stageDefinitionById, stageRun } = require('../../../shared/llm/stage-catalog');
 const { temperatureForSampling, thinkingBudgetForSampling } = require('../../../shared/llm/providers/gemini-provider');
 const { createDiagnosticsState } = require('../../../shared/llm/llm-diagnostics');
-const { publicArticleJudgeArtifactScope } = require('../../publish/orchestrator-judge-helpers');
+const {
+  ARTIFACT_SCOPE_BY_STAGE_ID,
+  publicArticleJudgeArtifactScope
+} = require('../../publish/orchestrator-judge-helpers');
 
 // 표의 stage id로 run을 만든다. 파생 stage는 부모 run이 있어야 label이 나온다.
 function runForStageId(stageId) {
@@ -381,11 +384,31 @@ test('stage id -> public article judge artifact scope 현행 매핑', () => {
 // 판정 stage가 catalog에 새로 생겼는데 artifact scope 표에 등록되지 않으면, 파일명이
 // 조용히 기본 scope('editor')로 떨어져 다른 부모의 산출물을 덮어쓸 수 있다. 런타임에
 // 발행을 막는 대신 여기서 잡는다.
-test('catalog의 모든 판정 stage가 이 표에 있다', () => {
+//
+// 예전에는 `judgeStageIds.length === 6`으로 개수를 고정했다(#1002 3번). 그 고정은 catalog에
+// 판정 stage가 늘면 깨지긴 하지만, 깨진 뒤 사람이 숫자만 손으로 올리면 표를 갱신하지 않아도
+// 다시 초록이 된다 -- 그 순간이 정확히 위험한 순간이다. 그리고 표에만 남은 죽은 키는 개수로는
+// 아예 관측되지 않았다.
+//
+// 그래서 개수 대신 집합을 양방향으로 대조한다. 표의 키를 직접 보는 이유는
+// publicArticleJudgeArtifactScope가 미등록 stage를 기본값 'editor'로 돌려주기 때문이다.
+// "표에 없음"과 "표에 editor로 있음"이 그 함수의 답만으로는 구분되지 않는다.
+//
+// 판정 stage를 고르는 기준은 endsWith 두 개가 아니라 includes 하나다. DERIVED_STAGE_KINDS에
+// public_article_judge 계열 파생이 새 접미사로 하나 더 생기면 endsWith 목록은 그것을 놓치고,
+// 놓친 stage는 표에도 없어 집합이 여전히 일치해 초록이 된다 -- 개수 고정과 같은 실패 모양이다.
+// 현행 21개 stage에서 두 방식의 결과는 같다(둘 다 6개, 오탐 없음).
+test('catalog의 판정 stage 집합과 artifact scope 표의 키 집합이 일치한다', () => {
   const judgeStageIds = Object.values(LLM_STAGES)
     .map(definition => definition.id)
-    .filter(id => id.endsWith('.public_article_judge') || id.endsWith('.public_article_judge_repair'));
-  assert.equal(judgeStageIds.length, 6);
+    .filter(id => id.includes('.public_article_judge'));
+
+  // 양방향이다. catalog에만 있으면 조용한 기본 scope로 떨어지고, 표에만 있으면 아무 stage도
+  // 가리키지 않는 죽은 키다.
+  assert.deepEqual(
+    [...judgeStageIds].sort(),
+    Object.keys(ARTIFACT_SCOPE_BY_STAGE_ID).sort()
+  );
 
   judgeStageIds.forEach((stageId) => {
     const stageCase = PRODUCTION_STAGE_CASES.find(entry => entry.stageId === stageId);

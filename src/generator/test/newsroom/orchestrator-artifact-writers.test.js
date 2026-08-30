@@ -77,3 +77,45 @@ test('호출자가 준 providerModel이 진단 조회보다 우선한다', async
   const artifact = editorDraftArtifact(emptyEditor, '2026-08-30', { providerModel: 'explicit-model' });
   assert.equal(artifact.model.providerModel, 'explicit-model');
 });
+
+// providerModel의 귀속 범위를 못 박는다(#1002 1번).
+//
+// draft를 새로 쓰는 stage는 base editor 말고도 셋이다 -- editor.repair, editor.completion,
+// *.semantic_repair. (*.public_article_judge_repair는 여기 넣으면 안 된다. 그 stage는
+// orchestrator-public-article-judge.js:168에서 이미 만들어진 repairedEditor를 판정만 하고
+// draft를 쓰지 않는다. model group도 REPAIR가 아니라 JUDGE다.)
+//
+// 그 stage가 draft를 다시 써도 여기 적히는 이름은 base editor의 model이다 -- 즉 이 값은
+// "이 draft를 만든 model"이 아니라 "이 run에서 base editor stage가 마지막으로 쓴 model"로
+// 읽어야 한다. 근거는 orchestrator-artifact-writers.js의 editorDraftArtifact 주석에 있다.
+//
+// 의도한 좁은 의미이므로 현행 동작을 그대로 잠근다. 조회 범위를 넓히면 이 테스트가 드러낸다.
+// 넓히는 것은 #1002가 제시한 정당한 다른 선택지이므로, 의도적으로 그 쪽을 택한다면 이
+// 테스트도 함께 고쳐라. 반면 생산자가 options.providerModel을 넘기게 배선하는 쪽(권장 방향)은
+// 이 테스트를 건드리지 않는다 -- 여기서는 옵션 없이 부르기 때문이다.
+test('repair가 draft를 다시 써도 providerModel은 base editor의 model이다', async () => {
+  llmClient.resetLlmDiagnostics();
+  const editorStage = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: 1, totalAttempts: 2 });
+  const repairStage = stageRun(LLM_STAGES.EDITOR_REPAIR, { qualityAttempt: 1, totalAttempts: 2 });
+
+  await llmClient.callLlmJson(editorStage, 'system', 'prompt', {}, { provider: fakeProvider('base-editor-model') });
+  // repair가 나중에, 그리고 다른 model로 실행된 상태. draft 자체는 이 stage가 다시 썼다.
+  await llmClient.callLlmJson(repairStage, 'system', 'prompt', {}, { provider: fakeProvider('repair-model') });
+
+  const artifact = editorDraftArtifact(emptyEditor, '2026-08-30');
+  assert.equal(artifact.model.providerModel, 'base-editor-model');
+});
+
+// 정확한 귀속이 필요해지면 draft를 만든 생산자가 자기 model을 넘기면 된다. 그 seam이
+// options.providerModel이고, 진단 조회보다 우선한다. 배선만 없을 뿐 자리는 이미 있다.
+test('생산자가 넘긴 providerModel은 repair 기록이 있어도 이긴다', async () => {
+  llmClient.resetLlmDiagnostics();
+  const editorStage = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: 1, totalAttempts: 2 });
+  const repairStage = stageRun(LLM_STAGES.EDITOR_REPAIR, { qualityAttempt: 1, totalAttempts: 2 });
+
+  await llmClient.callLlmJson(editorStage, 'system', 'prompt', {}, { provider: fakeProvider('base-editor-model') });
+  await llmClient.callLlmJson(repairStage, 'system', 'prompt', {}, { provider: fakeProvider('repair-model') });
+
+  const artifact = editorDraftArtifact(emptyEditor, '2026-08-30', { providerModel: 'repair-model' });
+  assert.equal(artifact.model.providerModel, 'repair-model');
+});
