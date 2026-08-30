@@ -146,9 +146,13 @@ test('invalid JSON falls back to the next model after retry budget is exhausted'
 
   assert.deepEqual(result, { ok: true });
   assert.deepEqual(FakeGoogleGenAI.requests.map(request => request.model), ['primary-model', 'fallback-model']);
-  assert.equal(client.getGeminiModelUsage('reporter attempt 1/1'), 'fallback-model');
-  assert.deepEqual(client.getGeminiDiagnostics().model_routing['reporter attempt 1/1'], {
-    stage: 'reporter attempt 1/1',
+  assert.equal(client.getGeminiModelUsage(run('REPORTER')), 'fallback-model');
+  assert.deepEqual(client.getGeminiDiagnostics().model_routing['reporter#1'], {
+    stage_key: 'reporter#1',
+    stage_id: 'reporter',
+    quality_attempt: 1,
+    label: 'reporter attempt 1/1',
+    parent_run_key: null,
     stage_group: 'reporter',
     stage_group_known: true,
     routing_warning: '',
@@ -203,7 +207,7 @@ test('free-tier daily quota exhaustion skips remaining retries for that model', 
   assert.deepEqual(FakeGoogleGenAI.requests.map(request => request.model), ['primary-model', 'fallback-model']);
   const diagnostics = client.getGeminiDiagnostics();
   assert.equal(diagnostics.quota_error_count, 1);
-  assert.equal(diagnostics.model_usage['reporter attempt 1/1']['primary-model'].requests, 1);
+  assert.equal(diagnostics.model_usage['reporter#1'].models['primary-model'].requests, 1);
 });
 
 test('successful Gemini calls record usage metadata and estimated cost', async () => {
@@ -225,7 +229,11 @@ test('successful Gemini calls record usage metadata and estimated cost', async (
 
   assert.deepEqual(result, { ok: true });
   const [call] = client.getGeminiCostCalls();
-  assert.equal(call.stage, 'reporter attempt 1/1');
+  assert.equal(call.stage_key, 'reporter#1');
+  assert.equal(call.stage_id, 'reporter');
+  assert.equal(call.quality_attempt, 1);
+  assert.equal(call.label, 'reporter attempt 1/1');
+  assert.equal(call.parent_run_key, null);
   assert.equal(call.stage_group, 'reporter');
   assert.equal(call.stage_group_known, true);
   assert.equal(call.routing_warning, '');
@@ -346,8 +354,12 @@ test('stage-specific model routing selects the configured model for each newsroo
   );
 
   const diagnostics = client.getGeminiDiagnostics();
-  assert.deepEqual(diagnostics.model_routing['editor attempt 1/1'], {
-    stage: 'editor attempt 1/1',
+  assert.deepEqual(diagnostics.model_routing['editor#1'], {
+    stage_key: 'editor#1',
+    stage_id: 'editor',
+    quality_attempt: 1,
+    label: 'editor attempt 1/1',
+    parent_run_key: null,
     stage_group: 'editor',
     stage_group_known: true,
     routing_warning: '',
@@ -357,8 +369,12 @@ test('stage-specific model routing selects the configured model for each newsroo
     resolved_by: 'NEWSROOM_EDITOR_MODEL',
     global_override_applied: false
   });
-  assert.deepEqual(diagnostics.model_routing['fact-checker repair attempt 1/1'], {
-    stage: 'fact-checker repair attempt 1/1',
+  assert.deepEqual(diagnostics.model_routing['fact_checker.repair#1'], {
+    stage_key: 'fact_checker.repair#1',
+    stage_id: 'fact_checker.repair',
+    quality_attempt: 1,
+    label: 'fact-checker repair attempt 1/1',
+    parent_run_key: null,
     stage_group: 'factcheck',
     stage_group_known: true,
     routing_warning: '',
@@ -368,8 +384,12 @@ test('stage-specific model routing selects the configured model for each newsroo
     resolved_by: 'NEWSROOM_FACTCHECK_MODEL',
     global_override_applied: false
   });
-  assert.deepEqual(diagnostics.model_routing['editor attempt 1/1 public article judge'], {
-    stage: 'editor attempt 1/1 public article judge',
+  assert.deepEqual(diagnostics.model_routing['editor.public_article_judge#1'], {
+    stage_key: 'editor.public_article_judge#1',
+    stage_id: 'editor.public_article_judge',
+    quality_attempt: 1,
+    label: 'editor attempt 1/1 public article judge',
+    parent_run_key: 'editor#1',
     stage_group: 'judge',
     stage_group_known: true,
     routing_warning: '',
@@ -586,7 +606,8 @@ test('cost report keeps call-level Pro audit marker while policy remains disable
     date: '2026-05-04',
     calls: [{
       provider: 'gemini',
-      stage: 'synthetic audit',
+      stage_key: 'synthetic_audit#1',
+      label: 'synthetic audit',
       stage_group: 'reporter',
       model: 'gemini-2.5-pro',
       attempt: 1,

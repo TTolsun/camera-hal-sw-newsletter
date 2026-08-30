@@ -18,7 +18,7 @@ const {
   parseRetryDelayMs
 } = require('./llm-errors');
 const { resolveProvider } = require('./providers/provider-registry');
-const { assertStageRun } = require('./stage-catalog');
+const { assertStageRun, stageRunIdentity } = require('./stage-catalog');
 
 const geminiProvider = resolveProvider('gemini');
 
@@ -89,14 +89,14 @@ function retryDelay(attempt, error) {
   return effectiveRetryDelaysMs[attempt - 1] ?? effectiveRetryDelaysMs[effectiveRetryDelaysMs.length - 1];
 }
 
-function recordUsageMetadata(stage, provider, modelName, attempt, response, requestState = {}, routing = {}) {
+function recordUsageMetadata(run, provider, modelName, attempt, response, requestState = {}, routing = {}) {
   const usage = provider.usageMetadataFromResponse(response);
   const cost = provider.estimateCallCost(modelName, usage);
   const thinkingBudget = requestState.thinkingBudget || {};
   const fallbackIndex = Number.isInteger(routing.fallback_index) ? routing.fallback_index : null;
   diagnostics.recordCostCall({
     provider: provider.id,
-    stage,
+    ...stageRunIdentity(run),
     stage_group: routing.stage_group,
     stage_group_known: routing.stage_group_known !== false,
     routing_warning: routing.routing_warning || '',
@@ -141,11 +141,12 @@ function routingForAttempt(baseRouting, modelName, modelIndex) {
   };
 }
 
-async function generateContentJsonWithRetry(stage, provider, context, requestState, modelName, routing = {}) {
+async function generateContentJsonWithRetry(run, provider, context, requestState, modelName, routing = {}) {
+  const stage = run.label;
   let lastError;
   for (let attempt = 1; attempt <= maxRetries + 1; attempt += 1) {
     try {
-      diagnostics.recordRequest(stage, modelName);
+      diagnostics.recordRequest(run, modelName);
       console.log(`[${stage}] ${provider.displayName} request attempt ${attempt}/${maxRetries + 1} using model ${modelName}.`);
       const response = await callWithTimeout(
         provider.execute({ context, request: requestState.request, modelName, stage }),
@@ -153,10 +154,10 @@ async function generateContentJsonWithRetry(stage, provider, context, requestSta
         stage,
         modelName
       );
-      recordUsageMetadata(stage, provider, modelName, attempt, response, requestState, routing);
+      recordUsageMetadata(run, provider, modelName, attempt, response, requestState, routing);
       const text = provider.textFromResponse(response);
       const json = extractJson(text, stage, provider.displayName);
-      diagnostics.recordSuccess(stage, modelName);
+      diagnostics.recordSuccess(run, modelName);
       return json;
     } catch (error) {
       lastError = error;
@@ -164,13 +165,13 @@ async function generateContentJsonWithRetry(stage, provider, context, requestSta
       if (error instanceof LlmCallTimeoutError) {
         // The model is hanging; retrying the same model would likely hang again.
         // Abandon it and let the outer loop fall through to the next fallback.
-        diagnostics.recordApiError(stage, modelName);
+        diagnostics.recordApiError(run, modelName);
         console.warn(`${error.message} Abandoning model ${modelName} and trying the next fallback if configured.`);
         break;
       }
 
       if (error instanceof LlmJsonParseError) {
-        diagnostics.recordInvalidJson(stage, modelName);
+        diagnostics.recordInvalidJson(run, modelName);
         const rawPath = saveRawLlmOutput(stage, attempt, modelName, error.rawText);
         if (attempt > maxRetries) break;
         const delayMs = retryDelay(attempt, error);
@@ -181,8 +182,8 @@ async function generateContentJsonWithRetry(stage, provider, context, requestSta
         continue;
       }
 
-      if (isQuotaError(error, retryableStatuses)) diagnostics.recordQuotaError(stage, modelName);
-      else diagnostics.recordApiError(stage, modelName);
+      if (isQuotaError(error, retryableStatuses)) diagnostics.recordQuotaError(run, modelName);
+      else diagnostics.recordApiError(run, modelName);
 
       const retryable = isRetryableError(error, retryableStatuses);
       if (!retryable || attempt > maxRetries) break;
@@ -235,7 +236,6 @@ async function callLlmJson(stageRunArg, systemInstruction, prompt, responseSchem
   const modelNames = provider.configuredModelsForGroup(runtimeConfig, stageGroup);
   const primaryResolvedBy = runtimeConfig.llmStageModelSources?.[stageGroup] || runtimeConfig.llmModelSource || 'unknown';
   const routing = {
-    stage,
     stage_group: stageGroup,
     stage_group_known: true,
     routing_warning: '',
@@ -245,7 +245,7 @@ async function callLlmJson(stageRunArg, systemInstruction, prompt, responseSchem
     resolved_by: primaryResolvedBy,
     global_override_applied: runtimeConfig.llmGlobalModelExplicitlyConfigured === true
   };
-  diagnostics.recordModelRouting(stage, routing);
+  diagnostics.recordModelRouting(run, routing);
 
   for (const [modelIndex, modelName] of modelNames.entries()) {
     const attemptRouting = routingForAttempt(routing, modelName, modelIndex);
@@ -275,7 +275,7 @@ async function callLlmJson(stageRunArg, systemInstruction, prompt, responseSchem
         request: builtRequest.request || builtRequest,
         thinkingBudget: builtRequest.thinkingBudget || null
       };
-      const json = await generateContentJsonWithRetry(stage, provider, context, requestState, modelName, attemptRouting);
+      const json = await generateContentJsonWithRetry(run, provider, context, requestState, modelName, attemptRouting);
       console.log(`[${stage}] ${provider.displayName} API succeeded with model ${modelName}.`);
       return json;
     } catch (error) {
@@ -346,8 +346,14 @@ function getLlmCostCalls() {
   return diagnostics.costCalls();
 }
 
-function getLlmModelUsage(stage) {
-  return diagnostics.getModelUsage(stage);
+function getLlmModelUsage(stageRunArg) {
+  return diagnostics.getModelUsage(assertStageRun(stageRunArg));
+}
+
+// quality attempt를 특정할 수 없는 호출자를 위한 조회. 이 stage가 이번 실행에서 마지막으로
+// 성공한 model을 돌려준다.
+function getLastLlmModelForStage(definition) {
+  return diagnostics.getLastModelForStage(definition);
 }
 
 function resetLlmDiagnostics() {
@@ -365,6 +371,7 @@ module.exports = {
   estimateCallCost: geminiProvider.estimateCallCost,
   extractJson,
   findPricing: geminiProvider.findPricing,
+  getLastLlmModelForStage,
   getLlmCostCalls,
   getLlmDiagnostics,
   getLlmModelUsage,

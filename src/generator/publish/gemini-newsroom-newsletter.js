@@ -576,7 +576,7 @@ async function main() {
     });
     writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
     for (const candidate of ensureArray(reporter.candidates)) {
-      writeCacheRecord(candidate, cacheDir, { stage: reporterStage.label, model: getLlmModelUsage(reporterStage.label) || 'unknown' });
+      writeCacheRecord(candidate, cacheDir, { stage: reporterStage.label, model: getLlmModelUsage(reporterStage) || 'unknown' });
     }
     const rejectedReporterDuplicates = removeDisallowedSelections(reporter, lockedSections, excludedSections);
     writeReporterArtifactsForAttempt(newsroomDir, reporter, attempt);
@@ -729,10 +729,10 @@ async function main() {
     retryHistory.push({
       attempt,
       model: [
-        `reporter=${getLlmModelUsage(reporterStage.label) || 'unknown'}`,
-        `editor=${getLlmModelUsage(editorStage.label) || 'unknown'}`,
-        `public-article-judge=${getLlmModelUsage(derivedStageRun(editorStage, DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE).label) || 'unknown'}`,
-        `fact-checker=${getLlmModelUsage(factCheckStage.label) || 'unknown'}`
+        `reporter=${getLlmModelUsage(reporterStage) || 'unknown'}`,
+        `editor=${getLlmModelUsage(editorStage) || 'unknown'}`,
+        `public-article-judge=${getLlmModelUsage(derivedStageRun(editorStage, DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE)) || 'unknown'}`,
+        `fact-checker=${getLlmModelUsage(factCheckStage) || 'unknown'}`
       ].join(', '),
       score: qualityReport.score,
       threshold: qualityReport.threshold,

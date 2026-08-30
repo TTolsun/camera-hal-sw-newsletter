@@ -5,7 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const { writeJson } = require('../../shared/common/common');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
-const { getLlmModelUsage, buildCostReport, buildCostReportMarkdown, getLlmCostCalls } = require('../../shared/llm/llm-client');
+const { getLastLlmModelForStage, buildCostReport, buildCostReportMarkdown, getLlmCostCalls } = require('../../shared/llm/llm-client');
+const { LLM_STAGES } = require('../../shared/llm/stage-catalog');
 const { toEditorDraftArtifact } = require('../../shared/domain/newsletter-domain-normalize');
 const { buildMarkdown, buildFactCheckMarkdown } = require('../render/newsletter-renderer');
 const { buildQualityReportMarkdown } = require('../quality/newsletter-quality');
@@ -22,7 +23,7 @@ function editorDraftArtifact(editor, date, options = {}) {
     provider: runtimeConfig.llmProvider,
     providerModel:
       options.providerModel ||
-      getLlmModelUsage(options.stage || 'editor') ||
+      getLastLlmModelForStage(LLM_STAGES.EDITOR) ||
       runtimeConfig.llmStageModels?.editor ||
       runtimeConfig.llmModel ||
       'unknown',

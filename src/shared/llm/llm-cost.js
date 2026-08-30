@@ -1,4 +1,5 @@
 const { ensureArray } = require('../common/value-coercion');
+const { STAGE_KEY_FORMAT } = require('./stage-catalog');
 const TOKENS_PER_MILLION = 1000000;
 
 function number(value, fallback = 0) {
@@ -86,7 +87,7 @@ function buildCostReport({
     addCostTotals(totals, call);
     if (call.pricing_warning) warnings.push(call.pricing_warning);
     if (call.usage_metadata_present === false) {
-      warnings.push(`No usage metadata for ${call.stage || 'unknown'} using ${call.model || 'unknown'}.`);
+      warnings.push(`No usage metadata for ${call.label || call.stage_key || 'unknown'} using ${call.model || 'unknown'}.`);
     }
   }
   const finalTotals = finalizeCostTotals(totals);
@@ -102,6 +103,8 @@ function buildCostReport({
   }
   return {
     schema_version: 1,
+    // by_stage의 그룹 키와 calls[].stage_key가 어느 형식인지 알리는 표식(#982).
+    stage_key_format: STAGE_KEY_FORMAT,
     date,
     generated_at: generatedAt,
     currency: 'USD',
@@ -112,7 +115,7 @@ function buildCostReport({
     pro_policy: proPolicy,
     totals: finalTotals,
     by_provider: groupedCostTotals(calls, 'provider'),
-    by_stage: groupedCostTotals(calls, 'stage'),
+    by_stage: groupedCostTotals(calls, 'stage_key'),
     by_model: groupedCostTotals(calls, 'model'),
     calls: ensureArray(calls),
     warnings: [...new Set(warnings)]
@@ -124,7 +127,7 @@ function buildCostReportMarkdown(report) {
   const calls = ensureArray(report.calls);
   const callRows = calls.map(call => [
     `| ${call.provider || 'unknown'} `,
-    ` ${call.stage || 'unknown'} `,
+    ` ${call.label || call.stage_key || 'unknown'} `,
     ` ${call.stage_group || 'unknown'} `,
     ` ${call.primary_model || call.model || 'unknown'} `,
     ` ${call.attempt_model || call.model || 'unknown'} `,
