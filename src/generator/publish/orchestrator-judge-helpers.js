@@ -261,6 +261,13 @@ function publicArticleJudgeArtifactScope(stageId = '') {
 }
 
 module.exports = {
+  // 테스트 전용 노출(#1002 3번). production 호출자는 publicArticleJudgeArtifactScope만 쓴다.
+  //
+  // 이 표는 catalog의 판정 stage id를 손으로 복제한다. 두 집합이 어긋나는지 확인하려면
+  // 표의 키 자체를 봐야 한다 -- publicArticleJudgeArtifactScope는 미등록 stage를 기본값
+  // 'editor'로 돌려주므로, "표에 없음"과 "표에 editor로 있음"이 행동만으로는 구분되지 않고
+  // 표에만 남은 죽은 키는 아예 관측되지 않는다.
+  ARTIFACT_SCOPE_BY_STAGE_ID,
   DESK_ADVISORY_FIELDS,
   deskAdvisoryIssues,
   sourceCandidateForJudgeSection,
