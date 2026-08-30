@@ -2,6 +2,8 @@
 
 이 폴더는 generated/review artifact를 둡니다. 일반 리팩토링에서 대량 수정하지 마세요.
 
+이 금지는 **일반 리팩토링**을 향한 것입니다. 소유자가 이슈로 확정한 스키마 마이그레이션은 예외이고, 그때도 재직렬화가 아니라 줄 단위 표적 편집으로 하며 `JSON.parse` 동등성과 삭제 줄 수를 가드로 확인합니다(#942/PR #949와 #951이 그 절차를 따랐습니다). 경로는 그 예외에도 해당하지 않습니다 — 사후 정규화하지 않는 이유는 아래 #952 항목에 있습니다.
+
 ## Artifact 역할 (Artifact Roles)
 
 - `articles/content/collected-news/YYYY-MM-DD/`는 raw candidate evidence입니다.
@@ -101,6 +103,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `size`·`sha256`은 담지 않습니다(`schema_version` 4부터). 커밋되는 파일의 실제 바이트는 **Git tree가 정본**이므로 `committed_artifacts[]`는 사본을 두지 않습니다. 파일이 그 run에서 어떤 바이트였는지 알아야 하면 해당 커밋의 Git tree를 보세요.
 - 같은 매니페스트의 `files[]`와 `review_artifacts[]`도 `size`·`sha256`을 담지 않습니다(`schema_version` 5부터). 두 배열이 담던 값은 같은 항목의 사본이었고 같은 이유로 커밋되는 순간부터 어긋났습니다. `files[]` 항목은 `path`만, `review_artifacts[]` 항목은 리뷰 안내 metadata만 담습니다.
 - `size`·`sha256`이 남아 있는 배열은 `retained_heavy_artifacts[]` 하나뿐입니다. 그 파일들은 Git에 커밋되지 않아 Git tree라는 정본이 없고, 해시가 Actions artifact 안의 파일을 식별하는 유일한 수단입니다.
+- **`schema_version=2` 매니페스트 2개(2026-05-28·05-29)는 예외입니다.** 두 배열에서 `size`·`sha256`을 똑같이 뺐지만 스탬프는 2로 남겼습니다. 그 파일들에는 `committed_artifacts[]`·`retained_heavy_artifacts[]` 자체가 없어서 5로 올리면 없는 필드를 가졌다고 거짓 주장하게 됩니다(PR #949가 2→4 bump을 거부한 것과 같은 이유). 그래서 "스탬프는 2인데 항목 모양은 5"인 상태이고, 감사할 때 그 두 파일에 바이트 필드가 없는 것은 정상입니다.
 
 ## 매니페스트 경로 규약
 

@@ -8,8 +8,8 @@ const { tempRoot } = require('../../../shared/test/helpers/fs');
 
 // generate(orchestrator)가 리뷰 패키지 작성 전에 hal-signal-quality-report를 생성하므로,
 // 워크플로우의 always() 스텝은 generate가 리뷰 패키지 작성 전에 죽은 경우의 진단 백필로만 동작한다.
-// 이미 있는 리포트를 덮어쓰면 generated_at만 바뀐 바이트가 artifact-manifest.json의
-// sha256과 어긋나므로, --skip-if-present가 그 재생성을 막는다.
+// 이미 있는 리포트를 재생성하면 generated_at만 바뀐 사본이 커밋돼 리뷰 패키지가 기록한
+// 리포트와 달라지므로, --skip-if-present가 그 재생성을 막는다.
 
 function reportPaths(root, date) {
   const reportDir = path.join(root, 'articles', 'content', 'newsroom', date);
