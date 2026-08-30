@@ -130,6 +130,8 @@ function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = tru
     '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
     '</section>',
     extra,
+    // 홈 인라인 스크립트가 window.NewsletterArchive 를 쓰므로 실제 index.html 처럼 먼저 로드한다.
+    '<script src="assets/js/newsletter-archive.js"></script>',
     '<script>',
     "async function loadHomepageHeadline() { await fetch('data/homepage-headline.json'); }",
     "async function loadNewsletters() { const latest = {}; const archive = []; await fetch('data/newsletters-weekly.json'); }",
@@ -904,6 +906,19 @@ test('validate-site rejects missing required archive page route', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Missing required public archive route: archive\.html/);
+});
+
+test('validate-site rejects root homepage without shared helper reference', () => {
+  const root = tempRoot('validate-site-homepage-helper-');
+  writeSiteFixture(root, {
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'index.html'), rootIndexHtml().replace('<script src="assets/js/newsletter-archive.js"></script>', ''));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /root index\.html must load assets\/js\/newsletter-archive\.js/);
 });
 
 test('validate-site rejects archive page without shared helper reference', () => {

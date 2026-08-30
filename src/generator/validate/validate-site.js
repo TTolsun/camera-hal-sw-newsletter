@@ -584,6 +584,12 @@ function validateRootHomepageContract(newsletters) {
   if (!/fetch\(\s*['"]data\/homepage-headline\.json['"]/.test(html)) {
     fail('root index.html must fetch data/homepage-headline.json through a separate headline loader.');
   }
+  // 홈의 인라인 스크립트는 이 모듈의 window.NewsletterArchive(토픽·정렬·카드 렌더·fallback 판정)에
+  // 의존한다. 스크립트 태그가 빠지면 히어로와 최신 소식 그리드가 동시에 비는데, data fetch 계약만
+  // 잠겨 있으면 그 상태로도 게이트를 통과한다. archive.html 과 같은 검사를 홈에도 건다.
+  if (!/assets\/js\/newsletter-archive\.js/.test(html)) {
+    fail('root index.html must load assets/js/newsletter-archive.js.');
+  }
   validateRootHomepageSubscriptionContract(html, subscriptionState);
   const exposedDates = [...html.matchAll(/newsletters\/(\d{4}-\d{2}-\d{2})\//g)]
     .map(match => match[1]);

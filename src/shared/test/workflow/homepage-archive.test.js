@@ -295,6 +295,26 @@ test('featured hero renders the current headline with escaped copy, image, kicke
   assert.doesNotMatch(html, /rel="noopener"/);
 });
 
+// DESIGN.md: fallback 그래픽은 16:9 풀커버가 아니라 44% 중앙 + product drop-shadow(.is-brand).
+// article-image-resolver 가 카테고리별로 네 장을 내보내므로 파일명 하나만 fallback 으로 보면
+// 나머지 세 장이 실제 기사 이미지처럼 깔린다. 카드와 같은 공유 술어를 쓰는지 잠근다.
+// alt 가 비는 것도 같이 잠근다 — fallback 은 기사 정보를 담지 않는 장식이고, image_alt 는 기사
+// 제목에서 파생돼 그대로 두면 바로 아래 h1 과 같은 문장이 두 번 읽힌다.
+test('featured hero brands every bundled fallback graphic and leaves its alt empty', async () => {
+  for (const name of ['ai', 'android', 'cpp', 'newsletter-default']) {
+    const imageSrc = `assets/images/fallback/${name}.svg`;
+    const { elements } = await renderHomepage(
+      [newsletter('2026-05-23', 'Weekly issue')],
+      validHeadlineState({ image_url: imageSrc, image_alt: 'Camera HAL headline image' })
+    );
+    assert.match(
+      elements['featured-card'].innerHTML,
+      new RegExp(`<img class="featured-img is-brand" src="${imageSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}" alt=""`),
+      `${imageSrc} must render as the brand hero with an empty alt`
+    );
+  }
+});
+
 test('featured hero leaves the static brand hero in place when the headline is missing', async () => {
   const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], null);
   // The harness starts the featured card empty; a missing headline must not inject article markup.
@@ -794,6 +814,8 @@ test('newsletter issue page CSS follows the newsroom flat article layout', () =>
   const issueBriefingCard = exactSelectorBlock(css, '.issue-briefing-card');
   const issueTakeaway = exactSelectorBlock(css, '.newsletter-issue-page .camera-hal-takeaway');
   const issueArticleSubheading = exactSelectorBlock(css, '.newsletter-issue-page .article-card h3.article-subheading');
+  const issuePublishBadge = exactSelectorBlock(css, '.newsletter-issue-page .issue-hero .issue-publish-badge');
+  const issueBack = exactSelectorBlock(css, '.issue-back');
   const issueSourceList = exactSelectorBlock(css, '.newsletter-issue-page .source-list');
   const issueReferences = exactSelectorBlock(css, '.newsletter-issue-page .issue-references');
   const issueFooterNavigation = exactSelectorBlock(css, '.issue-footer-navigation');
@@ -809,6 +831,10 @@ test('newsletter issue page CSS follows the newsroom flat article layout', () =>
   assertCssDeclaration(issueWrap, 'max-width', 'none');
   assertCssDeclaration(issueWrap, 'padding-bottom', '80px');
   assertCssDeclaration(issueHero, 'grid-template-columns', '1fr');
+  // 히어로가 grid 라서 직접 자식은 inline 계열 display 가 blockify 되고 stretch 로 컬럼을 채운다.
+  // 내용 폭으로 남아야 하는 자식(발행 배지 알약, 뒤로 가기 링크의 클릭 영역)은 명시해 잠근다.
+  assertCssDeclaration(issuePublishBadge, 'justify-self', 'start');
+  assertCssDeclaration(issueBack, 'justify-self', 'start');
   // mockup 히어로는 장식 glow·마스코트 없는 평문 흐름.
   assert.doesNotMatch(css, /\.newsletter-issue-page \.issue-hero::before/);
   assert.doesNotMatch(css, /issue-hero-mascot/);
