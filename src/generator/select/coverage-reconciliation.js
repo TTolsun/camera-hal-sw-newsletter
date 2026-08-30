@@ -260,5 +260,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
 module.exports = {
   reconcileCoverage,
   isDeterministicallyMainEligible,
-  candidateKey
+  candidateKey,
+  // 테스트가 프롬프트 목록과 양방향으로 대조하려고 읽는다. 런타임 소비자는 없다.
+  KNOWN_COVERAGE_DECISIONS
 };
