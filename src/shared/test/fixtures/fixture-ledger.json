@@ -835,7 +835,7 @@
         "url": "https://www.anthropic.com/news/cognizant-anthropic",
         "capturedAt": "2026-08-30",
         "originalCharacters": 145382,
-        "note": "nested article/main skeleton, one body paragraph run, the Related content section and the footer nav kept; a rel=canonical link added so the whole resolver path can run against it"
+        "note": "nested article/main skeleton, one body paragraph run, the Related content section and the footer nav kept; the head was shortened but its rel=canonical link was left byte-identical to the one the live page carries at offset 3,303, so the whole resolver path runs against real markup"
       }
     },
     {

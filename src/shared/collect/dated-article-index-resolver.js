@@ -46,8 +46,7 @@ const SUMMARY_LIMIT = 500;
 // w-dyn-item")을 써서, 남기면 남의 기사 제목과 날짜가 이 기사의 근거가 된다.
 //
 // ARTICLE_BODY_CLOSING_TAG_MARKERS는 닫는 태그다. Anthropic News(/news) 마크업에는 위 마커가
-// 한 건도 없어서,
-// 마커만 후보이던 동안에는 본문이 문서 끝까지로 잡혀 사이트 푸터의 제품 목록이 그대로
+// 한 건도 없어서, 마커만 후보이던 동안에는 본문이 문서 끝까지로 잡혀 사이트 푸터의 제품 목록이
 // behavior_change와 sections[0]에 실렸다(#964). 그 페이지는 <main> 안에 <article>이 두 겹
 // (hero 하나 + 본문 하나)이라 첫 </article>이 본문의 끝이고, 그 뒤로 각주 블록과
 // "Related content" 섹션과 푸터가 이어진다.
@@ -178,8 +177,12 @@ function extractArticleBody(html) {
   const markers = heading
     ? [...ARTICLE_BODY_END_MARKERS, ...ARTICLE_BODY_CLOSING_TAG_MARKERS]
     : ARTICLE_BODY_END_MARKERS;
-  // 본문 시작 뒤에서만 후보를 찾는다 — Anthropic News의 바깥 <article>은 <h1>보다 앞에서
-  // 열리므로, 문서 처음부터 찾으면 본문이 시작하기도 전의 닫는 태그를 경계로 집을 수 있다.
+  // 본문 시작 뒤에서만 후보를 찾는다. 여는 태그가 <h1>보다 앞에서 열린다는 사실은 이유가 되지
+  // 못한다 — 닫는 태그를 찾는 데 여는 태그 위치는 쓰이지 않고, 라이브 /news 11건은 전부
+  // <h1>(13,470~15,614)이 첫 닫는 태그(18,630~145,928)보다 앞이다. 이 slice가 막는 것은 그
+  // 반대 배치다: 닫는 태그가 <h1>보다 앞에 있는 페이지에서 문서 처음부터 찾으면 bodyEnd가
+  // bodyStart보다 앞서고, slice(bodyStart, bodyEnd)가 빈 본문을 돌려준다. 시작점을 수정 전과
+  // 같게 유지해 그 경우에도 본문이 통째로 사라지지 않게 한다.
   const afterBodyStart = value.slice(bodyStart);
   let bodyEnd = value.length;
   for (const marker of markers) {

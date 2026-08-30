@@ -737,6 +737,30 @@ test('keeps the earliest boundary when a related-articles marker precedes the cl
   assert.doesNotMatch(haystack, /FOOTER_SENTINEL_TEXT/, '푸터는 본문이 아니다');
 });
 
+// 경계 후보 검색이 <h1>부터 시작하는 진짜 이유. 닫는 태그가 <h1>보다 앞에 있는 페이지에서
+// 문서 처음부터 찾으면 bodyEnd가 bodyStart보다 앞서고 slice가 빈 본문을 돌려준다.
+// (라이브 /news 11건은 전부 <h1>이 첫 닫는 태그보다 앞이라 이 배치는 합성 HTML로만 잰다.)
+test('keeps the body when a closing tag sits before the heading', async () => {
+  const slug = 'closing-tag-before-heading';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'Closing tag before heading' });
+  const articleHtml = '<article><nav><p>NAVCHROME_TEXT</p></nav></article>'
+    + minimalArticleHtml({
+      canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+      headerDateText: 'Aug 18, 2026',
+      title: 'Closing tag before heading',
+      bodyHtml: '<p>BODY_SENTINEL_TEXT</p>'
+    });
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  const haystack = evidenceHaystack(items[0]);
+  assert.match(haystack, /BODY_SENTINEL_TEXT/,
+    '<h1>보다 앞에 있는 닫는 태그를 경계로 집으면 본문이 통째로 빈다');
+  assert.doesNotMatch(haystack, /NAVCHROME_TEXT/, '본문은 <h1>부터 시작한다');
+});
+
 // </main>이 유일한 경계 후보인 페이지. 알려진 두 소스에서는 이 후보가 한 번도 이기지 못한다
 // (/news는 </article>이 5,008~8,151자 먼저 오고, claude.com/blog는 관련 기사 마커가
 // 46,999~151,455자 먼저 온다). 실제로 이 줄을 지워도 기존 테스트는 한 건도 안 깨졌다 —
