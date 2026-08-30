@@ -96,39 +96,84 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   // allowed_claim_evidence가 결정론 검증기와 같은 텍스트 조각을 전부 싣게 되면서 이 fixture의
   // capsule이 1163 -> 1254 토큰으로 늘었다. fixture는 evidence 필드를 실제 후보보다 많이 채워 둔
   // 편이라 증가폭이 크게 잡히며, 2026-08-03 실제 후보 capsule은 오히려 1545 -> 1516으로 줄었다.
+  //
+  // 이 1300은 **이 fixture의 회귀 잠금**이지 발행 예산 상한이 아니다. 실제 후보는 이 값을 일상적으로
+  // 넘고(커밋된 주간 산출물 52건 중 46건이 1300 초과, 최대 5867) 그것이 발행을 막지 않는다. 실제
+  // 후보 capsule이 커졌다는 이유로 이 숫자를 올리거나 내리지 마라.
   assert.ok(capsule.estimated_tokens <= 1300);
   assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
 });
 
-// 릴리스 후보는 version_or_release/api_or_component/behavior_change가 전부 후보 자신을 되뇌는
-// 문장이다. 이 세 칸이 evidence를 다 채우면 본문에서 온 문장은 구조적으로 한 칸도 들어가지
-// 못한다. 2026-08-24호의 유일한 main 기사가 이 경로로 나가, 실제 변경(imx296 embedded data
-// revert)을 본문에서 한 번도 언급하지 못한 채 발행됐다. 식별 필드는 여전히 유용하니 그대로 두되,
-// 본문에서 온 근거 한 칸은 항상 남아 있어야 한다.
+// 릴리스 후보는 behavior_change/version_or_release/api_or_component가 전부 후보 자신을 되뇌는
+// 문장이다. 이 셋이 evidence를 다 채우면 본문에서 온 문장은 구조적으로 한 칸도 들어가지 못한다.
+// 2026-08-24호의 유일한 main 기사가 이 경로로 나가, 실제 변경(imx296 embedded data revert)을
+// 본문에서 한 번도 언급하지 못한 채 발행됐다.
+//
+// 후보는 evidence_note, seed fact, summary_cache를 함께 들고 오는 것이 정상이다(reporter 프롬프트가
+// evidence_notes를 요구한다). 본문 자리를 그 보조 근거 **뒤에** 두면 노트 하나만 있어도 같은 실패가
+// 그대로 재현되므로, 여기서는 보조 근거를 다 채운 프로덕션 형태로 잠근다. 잠그는 것은 "본문에서 온
+// 문장이 최소 한 칸 들어간다"이지 특정 배치가 아니다 — 순서를 고정하면 이슈가 결함이라고 부른
+// 배치를 계약으로 굳히게 된다.
 test('article capsule keeps one evidence slot for the release body', () => {
-  const capsule = buildArticleCapsule(candidate({
+  const releaseCandidate = {
     title: 'Raspberry Pi libcamera Releases - v0.7.2+rpt20260817',
     url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817',
     source: 'Raspberry Pi libcamera Releases',
     version_or_release: 'v0.7.2+rpt20260817',
     api_or_component: 'libcamera / V4L2 camera pipeline',
     behavior_change: 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).',
-    summary: 'Revert "ipa: rpi: imx296: Enable embedded data" Right now embedded data with the imx296 cannot be negotiated with the CFE.',
-    evidence_notes: []
+    summary_cache: { summary: 'Cached release tag page text.' },
+    compact_evidence: { primary_facts: ['Seed fact about the release tag.'] }
+  };
+
+  const fromSummary = buildArticleCapsule(candidate({
+    ...releaseCandidate,
+    summary: 'Revert "ipa: rpi: imx296: Enable embedded data" Right now embedded data with the imx296 cannot be negotiated with the CFE.'
+  }));
+  assert.ok(
+    fromSummary.evidence.some(line => /imx296/.test(line)),
+    '보조 근거가 있어도 summary 본문이 최소 한 칸 들어가야 한다'
+  );
+
+  const fromReleaseBullet = buildArticleCapsule(candidate({
+    ...releaseCandidate,
+    summary: 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).',
+    source_extraction: {
+      release: {
+        version: 'v0.7.2+rpt20260817',
+        sections: [{
+          category: 'fixes',
+          heading: 'Changes',
+          items: [{ text: 'Revert imx296 embedded data stream enablement.' }]
+        }]
+      }
+    }
+  }));
+  assert.ok(
+    fromReleaseBullet.evidence.some(line => /imx296/.test(line)),
+    '추출된 릴리스 불릿도 같은 본문 칸을 쓴다'
+  );
+});
+
+// 본문 없이 태그만 올린 릴리스는 수집기가 summary와 behavior_change에 같은 문장을 넣는다
+// (raspberrypi-libcamera-releases.js의 `releaseBodyText(block) || releaseSentence`). 라벨만 다른
+// 완전 중복을 프롬프트에 두 줄 실으면 이슈가 지적한 자기참조 되뇌기를 한 줄 더 늘리는 셈이다.
+test('article capsule does not repeat one sentence under two evidence labels', () => {
+  const releaseSentence = 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).';
+  const capsule = buildArticleCapsule(candidate({
+    title: 'Raspberry Pi libcamera Releases - v0.7.2+rpt20260817',
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817',
+    source: 'Raspberry Pi libcamera Releases',
+    version_or_release: 'v0.7.2+rpt20260817',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: releaseSentence,
+    summary: releaseSentence
   }));
 
-  assert.deepEqual(
-    capsule.evidence.slice(0, 3),
-    [
-      'version_or_release: v0.7.2+rpt20260817',
-      'api_or_component: libcamera / V4L2 camera pipeline',
-      'behavior_change: Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).'
-    ],
-    '식별 필드는 계속 evidence에 남는다'
-  );
-  assert.ok(
-    capsule.evidence.some(line => /^summary: /.test(line) && /imx296/.test(line)),
-    '자기참조 식별 필드가 앞 칸을 다 차지해도 본문에서 온 문장이 최소 한 칸 들어가야 한다'
+  assert.equal(
+    capsule.evidence.filter(line => line.endsWith(releaseSentence)).length,
+    1,
+    '같은 문장이 라벨만 바꿔 두 번 들어가면 안 된다'
   );
 });
 

@@ -76,8 +76,8 @@ function releaseCandidate(block, source) {
   //
   // 둘째, article-capsules가 이 필드를 what_changed에 싣고 evidence의 식별 칸도 차지한다. 식별
   // 필드 셋이 evidence를 통째로 채워 본문이 한 칸도 못 들어가던 문제는 capsule 쪽에서 고쳤다 —
-  // MAX_IDENTITY_EVIDENCE_ITEMS가 식별 필드에 한 칸을 남겨 두므로, 여기서 만든 summary는 기사
-  // 프롬프트의 evidence에 들어간다.
+  // evidenceItems가 본문 계열 근거에 한 칸을 먼저 떼어 주므로, 여기서 만든 summary는 기사 프롬프트의
+  // evidence에 들어간다.
   const releaseSentence = `Released ${tag} (Raspberry Pi downstream libcamera).`;
   const summary = releaseBodyText(block) || releaseSentence;
   return {

@@ -1,13 +1,15 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const CAPSULE_TOKEN_TARGET = '700-1200';
 const MAX_TEXT = 420;
-const MAX_EVIDENCE_ITEMS = 4;
-// version_or_release, api_or_component, behavior_change는 후보 자신을 되뇌는 식별 정보다.
+const MAX_EVIDENCE_ITEMS = 3;
+// behavior_change, version_or_release, api_or_component는 후보 자신을 되뇌는 식별 정보다.
 // 릴리스 후보에서는 이 셋이 전부 태그 이름을 반복하는 문장이라, 셋에게 evidence를 다 내주면
-// 본문에서 온 문장이 구조적으로 한 칸도 못 들어간다(2026-08-24호 실측). 식별 정보 자체는 여전히
-// 유용하므로 지우지 않고, 대신 식별 필드가 쓸 수 있는 칸 수를 한 칸 남기도록 묶어 본문 계열 근거의
-// 자리를 보장한다.
-const MAX_IDENTITY_EVIDENCE_ITEMS = MAX_EVIDENCE_ITEMS - 1;
+// 본문에서 온 문장이 구조적으로 한 칸도 못 들어간다(2026-08-24호 실측). 그래서 한 칸은 본문 계열
+// 근거(release bullet, summary)에 **먼저** 떼어 준다. 뒤에 두면 evidence_note나 seed fact가 하나만
+// 있어도 본문이 그 자리를 빼앗긴다 — reporter 프롬프트가 evidence_notes를 요구하므로 노트가 있는
+// 쪽이 오히려 프로덕션 후보의 정상 형태다. 식별 정보 자체는 지우지 않으며, 밀려나는
+// api_or_component는 capsule.component에 그대로 실린다.
+const RESERVED_BODY_EVIDENCE_ITEMS = 1;
 const MAX_IMAGE_CANDIDATES = 3;
 // 블로그 워크플로 서술은 릴리스 노트 불릿과 달리 산문이라 같은 섹션 수여도 훨씬 길다.
 // compactExtractionSections 기본 상한(5섹션)에 맡기면 실측상 capsule이
@@ -118,29 +120,45 @@ function summaryCacheText(candidate) {
   return compactText(cache.summary || cache.text || '');
 }
 
+function evidenceValue(item) {
+  return item.slice(item.indexOf(': ') + 2);
+}
+
 function evidenceItems(candidate) {
   const sourceExtractionBullet = ensureArray(candidate?.source_extraction?.release?.sections)
     .flatMap(section => ensureArray(section?.items))
     .map(item => text(item?.text || item?.source_text))
     .find(Boolean);
   const identityItems = [
+    candidate.behavior_change ? `behavior_change: ${candidate.behavior_change}` : '',
     candidate.version_or_release ? `version_or_release: ${candidate.version_or_release}` : '',
-    candidate.api_or_component ? `api_or_component: ${candidate.api_or_component}` : '',
-    candidate.behavior_change ? `behavior_change: ${candidate.behavior_change}` : ''
+    candidate.api_or_component ? `api_or_component: ${candidate.api_or_component}` : ''
   ].map(item => compactText(item, 160)).filter(Boolean);
-  const sourceTextItems = [
+  const bodyItems = [
     sourceExtractionBullet ? `source_extraction.release_bullet: ${sourceExtractionBullet}` : '',
+    candidate.summary ? `summary: ${candidate.summary}` : ''
+  ].map(item => compactText(item, 160)).filter(Boolean);
+  const supportingItems = [
     ...ensureArray(candidate.compact_evidence?.primary_facts).map(item => `seed_primary_fact: ${item}`),
     ...ensureArray(candidate.compact_evidence?.linked_context).map(item => `seed_linked_context: ${item}`),
     ...ensureArray(candidate.evidence_notes).map(item => `evidence_note: ${item}`),
-    summaryCacheText(candidate) ? `summary_cache: ${summaryCacheText(candidate)}` : '',
-    candidate.summary ? `summary: ${candidate.summary}` : ''
+    summaryCacheText(candidate) ? `summary_cache: ${summaryCacheText(candidate)}` : ''
   ].map(item => compactText(item, 160)).filter(Boolean);
+  // 식별 필드는 예약분을 뺀 칸까지만 앞에서 쓰고, 남는 식별 필드는 본문·보조 근거가 모자랄 때만
+  // 뒤에서 채운다.
   const items = [
-    ...identityItems.slice(0, MAX_IDENTITY_EVIDENCE_ITEMS),
-    ...sourceTextItems
+    ...identityItems.slice(0, MAX_EVIDENCE_ITEMS - RESERVED_BODY_EVIDENCE_ITEMS),
+    ...bodyItems,
+    ...supportingItems,
+    ...identityItems.slice(MAX_EVIDENCE_ITEMS - RESERVED_BODY_EVIDENCE_ITEMS)
   ];
-  return [...new Set(items)].slice(0, MAX_EVIDENCE_ITEMS);
+  // 라벨이 아니라 문장으로 중복을 판정한다. 본문 없는 릴리스는 summary와 behavior_change가 글자까지
+  // 같아서(수집기의 `releaseBodyText(block) || releaseSentence`), 라벨 기준 dedupe로는 같은
+  // 자기참조 문장이 두 줄 들어간다.
+  const values = items.map(evidenceValue);
+  return items
+    .filter((item, index) => values.indexOf(values[index]) === index)
+    .slice(0, MAX_EVIDENCE_ITEMS);
 }
 
 function compactExtractionItems(items) {
