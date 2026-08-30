@@ -224,3 +224,41 @@ test('routing이 같은 이름의 필드를 들고 와도 정체성이 이긴다
   assert.equal(entry.label, 'editor attempt 1/3');
   assert.equal(entry.stage_group, 'editor');
 });
+
+// 아래 둘은 키가 아니라 llm-client가 자기 출력에 붙이는 stage 정체성 계약이다(#993).
+
+// 예전 characterization 표는 stage마다 known/warning 열을 들고 있었다. 그 열은 삭제된
+// resolver가 "모르는 stage를 reporter로 흘려보내고 경고를 남기던" 동작을 기록한 것이라
+// #981 뒤에는 존재하지 않는 값이 됐고, 읽는 단언도 없었다. 그 열이 지키려던 성질 --
+// 등록된 stage는 경고 없이 라우팅된다 -- 만 여기 남긴다.
+test('등록된 stage는 known으로 라우팅되고 경고를 남기지 않는다', async () => {
+  const client = loadClient();
+  client.resetLlmDiagnostics();
+  // weekly-merge는 #981 전에 경고를 남기던 유일한 stage였다.
+  const run = stageRun(LLM_STAGES.WEEKLY_MERGE);
+  await callOnce(client, run, fakeProvider([{ text: '{"ok":true}' }]));
+
+  const routing = client.getLlmDiagnostics().model_routing['weekly_merge#0'];
+  assert.equal(routing.stage_group_known, true);
+  assert.equal(routing.routing_warning, '');
+  assert.equal(routing.stage_group, 'reporter');
+});
+
+// 스키마 복잡도 실패만 stage 정체성 없이 던지고 있었다. #981이 메시지의 [label] prefix
+// 파싱을 지웠으므로, 그 경로의 failure_stage가 'generation'으로 퇴화했다.
+test('스키마 복잡도 실패도 stage 정체성을 싣는다', async () => {
+  const client = loadClient();
+  client.resetLlmDiagnostics();
+  const schemaError = new Error('Response schema is too complex: too many states.');
+  const run = editorRun(1);
+
+  const error = await callOnce(client, run, fakeProvider([schemaError])).then(
+    () => null,
+    caught => caught
+  );
+
+  assert.ok(error, '스키마 복잡도 실패는 던져야 한다');
+  assert.match(error.message, /too complex/);
+  assert.equal(error.stage, 'editor attempt 1/3');
+  assert.equal(error.stage_id, 'editor');
+});
