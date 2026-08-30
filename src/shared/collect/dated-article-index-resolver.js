@@ -41,11 +41,12 @@ const SUMMARY_LIMIT = 500;
 // 본문의 끝 후보. 자르지 않으면 이 기사 뒤에 오는 것들(남의 기사 카드, 사이트 내비·푸터)이
 // 이 기사의 summary·behavior_change·sections로 들어간다.
 //
-// 앞의 두 개는 Claude Blog(Webflow) 관련 기사 목록의 표지다. 그 구간은 인덱스 페이지와 같은
-// 카드 마크업(role="listitem" class="blog_cms_item w-dyn-item")을 써서, 남기면 남의 기사
-// 제목과 날짜가 이 기사의 근거가 된다.
+// 후보는 두 갈래다. 아래 ARTICLE_BODY_END_MARKERS는 Claude Blog(Webflow) 관련 기사 목록의
+// 표지다. 그 구간은 인덱스 페이지와 같은 카드 마크업(role="listitem" class="blog_cms_item
+// w-dyn-item")을 써서, 남기면 남의 기사 제목과 날짜가 이 기사의 근거가 된다.
 //
-// 뒤의 두 개는 닫는 태그다. Anthropic News(/news) 마크업에는 앞의 두 마커가 한 건도 없어서,
+// ARTICLE_BODY_CLOSING_TAG_MARKERS는 닫는 태그다. Anthropic News(/news) 마크업에는 위 마커가
+// 한 건도 없어서,
 // 마커만 후보이던 동안에는 본문이 문서 끝까지로 잡혀 사이트 푸터의 제품 목록이 그대로
 // behavior_change와 sections[0]에 실렸다(#964). 그 페이지는 <main> 안에 <article>이 두 겹
 // (hero 하나 + 본문 하나)이라 첫 </article>이 본문의 끝이고, 그 뒤로 각주 블록과
@@ -78,10 +79,18 @@ const SUMMARY_LIMIT = 500;
 // 이 손실은 anthropic-news-improving-fable-5-biology-safeguards.html 픽스처와 그 테스트가
 // 드러낸다 — 경계를 옮기려면 그 테스트를 먼저 고쳐야 한다.
 //
+// 닫는 태그 후보는 <h1>을 찾은 페이지에서만 쓴다. <h1>이 없으면 본문이 어디서 시작하는지 알
+// 수 없어 bodyStart가 0이 되는데, 그 상태에서는 문서 맨 앞의 내비를 닫는 </article> 하나가
+// 진짜 본문보다 앞서서 본문 전체를 버린다(재현: '<article><nav>내비</nav></article><main><p>
+// 본문</p></main>'이 내비 문구만 남긴다). 관련 기사 마커는 그 위험이 없다 — 문서 어디에 있든
+// 그 자리가 관련 기사 목록의 시작이다.
+//
 // 후보가 하나도 안 잡히면 문서 끝까지를 본문으로 본다 — 없다고 실패로 닫지 않는다.
 const ARTICLE_BODY_END_MARKERS = [
   /blog_related_section_wrap/,
-  /data-cta-position="Related articles"/,
+  /data-cta-position="Related articles"/
+];
+const ARTICLE_BODY_CLOSING_TAG_MARKERS = [
   /<\/article\s*>/i,
   /<\/main\s*>/i
 ];
@@ -156,20 +165,24 @@ function normalizeUrl(value) {
 }
 
 /**
- * 개별 기사 raw HTML에서 제목과 본문 평문을 뽑는다. 본문은 <h1>부터
- * ARTICLE_BODY_END_MARKERS 중 먼저 나오는 자리 앞까지다(후보가 하나도 없으면 문서 끝까지).
- * <h1>이 없으면(비정상 fixture 등) 문서 전체를 본문으로, 제목은 빈 문자열로 둔다.
+ * 개별 기사 raw HTML에서 제목과 본문 평문을 뽑는다. 본문은 <h1>부터 경계 후보 중 먼저 나오는
+ * 자리 앞까지다(후보가 하나도 없으면 문서 끝까지).
+ * <h1>이 없으면(비정상 fixture 등) 문서 전체를 본문으로, 제목은 빈 문자열로 둔다 — 이때는
+ * 닫는 태그 후보를 쓰지 않는다(ARTICLE_BODY_CLOSING_TAG_MARKERS 주석의 이유).
  */
 function extractArticleBody(html) {
   const value = String(html || '');
   const heading = /<h1\b[^>]*>([\s\S]*?)<\/h1\s*>/i.exec(value);
   const title = heading ? cardText(heading[1]) : '';
   const bodyStart = heading ? heading.index : 0;
+  const markers = heading
+    ? [...ARTICLE_BODY_END_MARKERS, ...ARTICLE_BODY_CLOSING_TAG_MARKERS]
+    : ARTICLE_BODY_END_MARKERS;
   // 본문 시작 뒤에서만 후보를 찾는다 — Anthropic News의 바깥 <article>은 <h1>보다 앞에서
   // 열리므로, 문서 처음부터 찾으면 본문이 시작하기도 전의 닫는 태그를 경계로 집을 수 있다.
   const afterBodyStart = value.slice(bodyStart);
   let bodyEnd = value.length;
-  for (const marker of ARTICLE_BODY_END_MARKERS) {
+  for (const marker of markers) {
     const markerIndex = afterBodyStart.search(marker);
     if (markerIndex >= 0 && bodyStart + markerIndex < bodyEnd) bodyEnd = bodyStart + markerIndex;
   }

@@ -757,6 +757,26 @@ test('keeps reading to the end of a page that has no body-end boundary at all', 
     '경계 후보가 하나도 없으면 문서 끝까지가 본문이다(하위 호환)');
 });
 
+// <h1>이 없으면 본문이 어디서 시작하는지 알 수 없어 bodyStart가 0이 된다. 그 상태에서 닫는
+// 태그를 경계로 쓰면 문서 맨 앞의 내비를 닫는 </article> 하나로 진짜 본문 전체를 버린다.
+// 실제 재현: '<article><nav>...</nav></article><main><p>본문</p></main>'에서 본문이 통째로
+// 사라지고 내비 문구만 남았다. 그래서 heading이 없으면 닫는 태그 후보를 아예 쓰지 않는다.
+test('keeps the whole document as the body when the page has no heading to start from', async () => {
+  const slug = 'no-heading-markup';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'No heading' });
+  const articleHtml = `<link href="${ORIGIN}${PATH_PREFIX}/${slug}" rel="canonical"/>`
+    + '<article><nav><p>NAVCHROME_TEXT</p></nav></article>'
+    + '<main><p>REAL_BODY_TEXT</p></main>'
+    + '<footer><p>FOOTER_SENTINEL_TEXT</p></footer>';
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  assert.match(items[0].summary, /REAL_BODY_TEXT/,
+    '<h1>이 없다고 닫는 태그로 잘라 진짜 본문을 버리면 안 된다');
+});
+
 test('reports when the source budget runs out with recent articles still queued', async () => {
   const seen = [];
   await resolveWithExhaustedSourceBudget({ onDiagnostic: event => seen.push(event) });
