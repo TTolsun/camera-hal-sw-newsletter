@@ -121,8 +121,8 @@ test('evidence fetch target selection uses deterministic priority instead of inp
     }]
   }, { maxTargets: 12 });
 
-  // bucket -> score -> reliability -> published_date -> canonical -> stable_key 순.
-  // filler 세 건은 앞의 다섯 키가 전부 같아 stable_key 사전순으로 갈린다.
+  // eligibility -> bucket -> score -> reliability -> published_date -> canonical -> stable_key 순.
+  // filler 세 건은 앞의 여섯 키가 전부 같아 stable_key 사전순으로 갈린다.
   assert.deepEqual(targets.slice(0, 7).map(item => item.id), [
     'strong-high',
     'strong-official-new',
@@ -137,12 +137,11 @@ test('evidence fetch target selection uses deterministic priority instead of inp
   // review_candidate를 이긴다.
   assert.equal(targets.some(item => item.id === 'low-first'), true);
   assert.equal(targets.some(item => item.id === 'review-high'), false);
-  // 중복 클러스터 대표라는 사실은 대상 집합에 넣을지를 정할 뿐 슬롯 순위를 정하지 않는다.
-  // weak_candidate 대표는 strong_candidate 12건에 밀린다.
+  // weak_candidate 대표는 strong_candidate 12건에 밀린다(대표 여부는 순위를 정하지 않는다).
   assert.equal(targets.some(item => item.id === 'canonical'), false);
 });
 
-test('duplicate canonical candidate is fetched even when it is outside the strong final-eligible subset', () => {
+test('duplicate canonical candidate is fetched when the cap has room, even outside the strong final-eligible subset', () => {
   const canonical = candidate('canonical', {
     id: 'canonical',
     title: 'Canonical Camera source',
@@ -347,9 +346,8 @@ test('when the cap truncates, it drops whole sources and never a partial copy se
   }
 });
 
-// canonical_rank(중복 클러스터의 대표인가)가 정렬 1순위면 클러스터 대표들이 품질과 무관하게
-// 슬롯을 먼저 가져간다. 중복 클러스터가 슬롯 수 이상 나오는 주에는 클러스터 밖 후보가
-// 아무리 강해도 구조적으로 0건이 된다. 대표 우선은 품질이 같을 때의 동점 처리여야 한다.
+// 중복 클러스터가 슬롯 수만큼 있어도 클러스터 밖 후보가 슬롯을 받는다.
+// 사유는 compareEvidenceTargets 주석이 정본이다.
 test('a strong candidate outside every duplicate cluster still gets a slot', () => {
   const maxTargets = 12;
   const clusterCanonicals = Array.from({ length: maxTargets }, (_, index) => candidate(`cluster-${index}`, {
@@ -379,14 +377,16 @@ test('a strong candidate outside every duplicate cluster still gets a slot', () 
 });
 
 // 대표 우선 의도 자체는 남아야 한다. 다른 조건이 같으면 클러스터 대표가 앞선다.
+// 대표의 stable_key를 일부러 사전순 뒤에 둔다. 앞에 두면 마지막 키인 stable_key만으로도
+// 같은 결과가 나와서 canonical_rank를 지워도 통과하는 빈 단언이 된다.
 test('cluster canonical still wins when quality signals tie', () => {
   const canonical = candidate('canonical', {
-    id: 'canonical',
+    id: 'zeta-canonical',
     url: 'https://example.com/canonical',
     title: 'Canonical camera source'
   });
   const plain = candidate('plain', {
-    id: 'plain',
+    id: 'alpha-plain',
     url: 'https://example.com/plain',
     title: 'Plain camera source'
   });
@@ -395,5 +395,63 @@ test('cluster canonical still wins when quality signals tie', () => {
     clusters: [{ duplicate_count: 1, canonical_url: canonical.url, canonical_title: canonical.title }]
   }, { maxTargets: 1 });
 
-  assert.deepEqual(targets.map(item => item.id), ['canonical']);
+  assert.deepEqual(targets.map(item => item.id), ['zeta-canonical']);
+});
+
+// canonical_rank의 서열 위치를 잠근다. published_date보다 위로 올리면 오래된 대표가 최신
+// 비대표를 이겨서 이 단언이 실패한다.
+test('a newer non-canonical source outranks an older cluster canonical', () => {
+  const canonical = candidate('canonical', {
+    id: 'canonical',
+    url: 'https://example.com/canonical',
+    title: 'Canonical camera source',
+    source_quality_score: 0.5,
+    reliability: 'community',
+    published_date: '2026-05-01'
+  });
+  const newer = candidate('newer', {
+    id: 'newer',
+    url: 'https://example.com/newer',
+    title: 'Newer camera source',
+    source_quality_score: 0.5,
+    reliability: 'community',
+    published_date: '2026-05-20'
+  });
+
+  const targets = selectEvidenceFetchTargets([canonical, newer], {
+    clusters: [{ duplicate_count: 1, canonical_url: canonical.url, canonical_title: canonical.title }]
+  }, { maxTargets: 1 });
+
+  assert.deepEqual(targets.map(item => item.id), ['newer']);
+});
+
+// 발행할 수 없는 후보가 슬롯을 쓰고 발행할 후보가 밀리면 안 된다.
+// 사유는 compareEvidenceTargets 주석이 정본이다.
+test('a publishable candidate outranks a stronger candidate that cannot be published', () => {
+  const unpublishable = candidate('unpublishable', {
+    id: 'unpublishable',
+    url: 'https://example.com/unpublishable',
+    title: 'Watchlist camera source',
+    finalSelectionEligibility: 'watchlist',
+    source_quality_bucket: 'strong_candidate',
+    source_quality_score: 0.99
+  });
+  const publishable = candidate('publishable', {
+    id: 'publishable',
+    url: 'https://example.com/publishable',
+    title: 'Publishable camera source',
+    finalSelectionEligibility: 'main',
+    source_quality_bucket: 'review_candidate',
+    source_quality_score: 0.1
+  });
+
+  const targets = selectEvidenceFetchTargets([unpublishable, publishable], {
+    clusters: [{
+      duplicate_count: 1,
+      canonical_url: unpublishable.url,
+      canonical_title: unpublishable.title
+    }]
+  }, { maxTargets: 1 });
+
+  assert.deepEqual(targets.map(item => item.id), ['publishable']);
 });
