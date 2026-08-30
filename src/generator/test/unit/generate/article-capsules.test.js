@@ -153,6 +153,16 @@ test('article capsule keeps one evidence slot for the release body', () => {
     fromReleaseBullet.evidence.some(line => /imx296/.test(line)),
     '추출된 릴리스 불릿도 같은 본문 칸을 쓴다'
   );
+
+  // 상한 3에서 behavior_change가 evidence에 남는 유일한 장치는 그것이 식별 목록의 앞쪽,
+  // 즉 예약분을 뺀 두 칸 안에 있다는 것뿐이다. 식별 3필드와 본문을 다 가진 이 릴리스 형태에서만
+  // 그 배치를 잴 수 있다 — dated-article resolver 후보는 version_or_release가 없어 식별이 2개뿐이라
+  // 어떤 순서로도 behavior_change가 앞 두 칸에 들어간다.
+  assert.ok(
+    fromSummary.evidence.some(line => /^behavior_change: /.test(line)),
+    '본문 줄이 들어와도 behavior_change가 함께 남아야 한다 ' +
+    '(식별 목록에서 behavior_change를 뒤로 내리면 조용히 빠진다)'
+  );
 });
 
 // 본문 없이 태그만 올린 릴리스는 수집기가 summary와 behavior_change에 같은 문장을 넣는다
@@ -174,6 +184,28 @@ test('article capsule does not repeat one sentence under two evidence labels', (
     capsule.evidence.filter(line => line.endsWith(releaseSentence)).length,
     1,
     '같은 문장이 라벨만 바꿔 두 번 들어가면 안 된다'
+  );
+
+  // compactText가 라벨과 값을 함께 160자로 자르므로, 같은 문장이라도 라벨이 길수록 값이 더 짧게
+  // 잘린다. 자른 뒤에 중복을 판정하면 이 경로가 그대로 뚫린다 — 2026-08-24 Camera ITS overview
+  // 후보(185자 동일 문장)가 그래서 3칸 중 2칸을 같은 문장에 썼다.
+  const longSentence = 'July 2026 Camera ITS overview Compatibility Updated Camera ITS overview to add '
+    + 'guidance on sub-camera testing, multi-camera API links, and splitting tests to reduce test execution time.';
+  const longCapsule = buildArticleCapsule(candidate({
+    title: 'Camera ITS overview',
+    url: 'https://source.android.com/docs/compatibility/cts/camera-its-overview',
+    source: 'AOSP Site Updates',
+    version_or_release: 'AOSP Site Updates - July 2026',
+    api_or_component: 'Camera ITS',
+    behavior_change: longSentence,
+    summary: longSentence
+  }));
+
+  assert.ok(longSentence.length > 160, '이 케이스는 160자 초과 문장이어야 잘림 경로를 지난다');
+  assert.equal(
+    longCapsule.evidence.filter(line => line.includes('guidance on sub-camera testing')).length,
+    1,
+    '160자를 넘어 라벨별로 다르게 잘리는 문장도 한 줄만 남아야 한다'
   );
 });
 

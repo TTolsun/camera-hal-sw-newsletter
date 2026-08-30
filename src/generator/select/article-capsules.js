@@ -120,8 +120,15 @@ function summaryCacheText(candidate) {
   return compactText(cache.summary || cache.text || '');
 }
 
-function evidenceValue(item) {
-  return item.slice(item.indexOf(': ') + 2);
+// evidence 한 줄은 `라벨: 값`이지만, 중복 판정은 라벨을 붙이기 전 값으로 한다. compactText가 라벨과
+// 값을 **함께** 160자로 자르기 때문에, 라벨이 길수록 값이 더 짧게 잘려 원문이 같아도 잘린 문자열이
+// 서로 달라진다 — 2026-08-24 Camera ITS overview 후보는 185자짜리 같은 문장이 behavior_change에서
+// 143자, summary에서 151자로 갈려 3칸 중 2칸을 같은 문장에 썼다. 그래서 그룹은 [라벨, 값] 쌍으로
+// 만들고, 자르기 전 값으로 중복을 걸러낸 뒤, 살아남은 쌍에만 라벨을 붙여 자른다.
+function evidenceGroup(entries) {
+  return entries
+    .map(([label, value]) => [label, text(value).replace(/\s+/g, ' ')])
+    .filter(([, value]) => value);
 }
 
 function evidenceItems(candidate) {
@@ -129,36 +136,34 @@ function evidenceItems(candidate) {
     .flatMap(section => ensureArray(section?.items))
     .map(item => text(item?.text || item?.source_text))
     .find(Boolean);
-  const identityItems = [
-    candidate.behavior_change ? `behavior_change: ${candidate.behavior_change}` : '',
-    candidate.version_or_release ? `version_or_release: ${candidate.version_or_release}` : '',
-    candidate.api_or_component ? `api_or_component: ${candidate.api_or_component}` : ''
-  ].map(item => compactText(item, 160)).filter(Boolean);
-  const bodyItems = [
-    sourceExtractionBullet ? `source_extraction.release_bullet: ${sourceExtractionBullet}` : '',
-    candidate.summary ? `summary: ${candidate.summary}` : ''
-  ].map(item => compactText(item, 160)).filter(Boolean);
-  const supportingItems = [
-    ...ensureArray(candidate.compact_evidence?.primary_facts).map(item => `seed_primary_fact: ${item}`),
-    ...ensureArray(candidate.compact_evidence?.linked_context).map(item => `seed_linked_context: ${item}`),
-    ...ensureArray(candidate.evidence_notes).map(item => `evidence_note: ${item}`),
-    summaryCacheText(candidate) ? `summary_cache: ${summaryCacheText(candidate)}` : ''
-  ].map(item => compactText(item, 160)).filter(Boolean);
+  const identityPairs = evidenceGroup([
+    ['behavior_change', candidate.behavior_change],
+    ['version_or_release', candidate.version_or_release],
+    ['api_or_component', candidate.api_or_component]
+  ]);
+  const bodyPairs = evidenceGroup([
+    ['source_extraction.release_bullet', sourceExtractionBullet],
+    ['summary', candidate.summary]
+  ]);
+  const supportingPairs = evidenceGroup([
+    ...ensureArray(candidate.compact_evidence?.primary_facts).map(item => ['seed_primary_fact', item]),
+    ...ensureArray(candidate.compact_evidence?.linked_context).map(item => ['seed_linked_context', item]),
+    ...ensureArray(candidate.evidence_notes).map(item => ['evidence_note', item]),
+    ['summary_cache', summaryCacheText(candidate)]
+  ]);
   // 식별 필드는 예약분을 뺀 칸까지만 앞에서 쓰고, 남는 식별 필드는 본문·보조 근거가 모자랄 때만
   // 뒤에서 채운다.
-  const items = [
-    ...identityItems.slice(0, MAX_EVIDENCE_ITEMS - RESERVED_BODY_EVIDENCE_ITEMS),
-    ...bodyItems,
-    ...supportingItems,
-    ...identityItems.slice(MAX_EVIDENCE_ITEMS - RESERVED_BODY_EVIDENCE_ITEMS)
+  const pairs = [
+    ...identityPairs.slice(0, MAX_EVIDENCE_ITEMS - RESERVED_BODY_EVIDENCE_ITEMS),
+    ...bodyPairs,
+    ...supportingPairs,
+    ...identityPairs.slice(MAX_EVIDENCE_ITEMS - RESERVED_BODY_EVIDENCE_ITEMS)
   ];
-  // 라벨이 아니라 문장으로 중복을 판정한다. 본문 없는 릴리스는 summary와 behavior_change가 글자까지
-  // 같아서(수집기의 `releaseBodyText(block) || releaseSentence`), 라벨 기준 dedupe로는 같은
-  // 자기참조 문장이 두 줄 들어간다.
-  const values = items.map(evidenceValue);
-  return items
-    .filter((item, index) => values.indexOf(values[index]) === index)
-    .slice(0, MAX_EVIDENCE_ITEMS);
+  const values = pairs.map(([, value]) => value);
+  return pairs
+    .filter((pair, index) => values.indexOf(values[index]) === index)
+    .slice(0, MAX_EVIDENCE_ITEMS)
+    .map(([label, value]) => compactText(`${label}: ${value}`, 160));
 }
 
 function compactExtractionItems(items) {
