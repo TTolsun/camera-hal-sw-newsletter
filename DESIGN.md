@@ -8,7 +8,9 @@ description: Camera SW Newsletter 공개 사이트의 디자인 시스템. Apple
 
 Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 따른다. 흰색과 파치먼트(#f5f5f7)가 지배하는 캔버스 위에 Pretendard로 조판하고, 상호작용 요소는 전부 하나의 파랑(`#0066cc`)만 쓴다. UI chrome은 물러나고 16:9 이미지와 헤드라인이 전면에 온다. 셰도우는 카드 가독성을 위한 최소한의 저알파 하나와, featured 브랜드 이미지에 얹는 단일 product drop-shadow만 남긴다.
 
-이 문서는 정본(canonical) 디자인 방향이다. 실제 값의 source of truth는 [articles/css/styles.css](articles/css/styles.css)의 `:root` 토큰이며, 홈/아카이브/이슈 페이지의 CSS·HTML 계약은 `src/shared/test/workflow/homepage-archive.test.js`, `.../archive-page.test.js`, `src/generator/test/contract/newsletter-renderer.test.js`, `src/generator/validate/validate-site.js`가 잠근다. 이 문서와 코드가 어긋나면 코드가 우선한다.
+이 문서는 정본(canonical) 디자인 방향이다. 실제 값의 source of truth는 [articles/css/styles.css](articles/css/styles.css)의 `:root` 토큰이며, 홈/아카이브/이슈 페이지의 CSS·HTML 계약은 `src/shared/test/workflow/homepage-archive.test.js`, `.../archive-page.test.js`, `src/generator/test/contract/newsletter-renderer.test.js`, `src/generator/validate/validate-site.js`가 잠근다. AI Engineering Lab 페이지만 공용 stylesheet 위에 [articles/css/learning.css](articles/css/learning.css)를 하나 더 얹고, 그 파일의 계약은 `src/shared/test/workflow/learning-page.test.js`가 따로 잠근다(아래 「AI Engineering Lab」 참고). 이 문서와 코드가 어긋나면 코드가 우선한다.
+
+공개 표면은 넷이다 — 홈(`index.html`), 아카이브(`articles/archive.html`), 이슈 페이지(`articles/newsletters/<key>/index.html`), 그리고 AI Engineering Lab(`articles/learning/ai-engineering/index.html`). 홈·아카이브는 손으로 쓴 셸이 런타임에 `articles/data/newsletters-weekly.json`을 읽어 카드를 그리고, 이슈 페이지는 발행 파이프라인의 renderer가 생성하며, Lab 페이지는 생성 단계 없이 통째로 손으로 쓴 정적 페이지다.
 
 ## 브랜드
 
@@ -61,9 +63,19 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 - **이슈 기사(`.issue-story.issue-section`)**: 카드 프레임 없이 hairline+60px 리듬으로 구분되는 평문 흐름 — 제로패딩 아웃라인 번호(`01`, #d2d2d7 원) + uppercase 카테고리 눈썹 → 헤드라인 → 회색 출처 서브타이틀 → **풀폭 16:9 라운드 이미지 + 평문 캡션**(캡션은 기사 출처에서 가져온 이미지에만 붙는다 — repo fallback 이미지는 어느 출처에서도 오지 않았으므로 캡션 없이 그림만 나온다) → 19px/500 리드 → 17px prose(Story Contract v2 기사는 이 흐름 안에 기사별 소제목 `h3.article-subheading`이 0~4개 섞인다) → "Camera HAL · Driver 관점" 파치먼트 take 박스 → 세로 불릿 출처 목록. 페이지 끝에는 `issue-footer-navigation`("← 뉴스룸으로 · 아카이브 전체 보기 →").
 - **푸터(`.site-footer`)**: 파치먼트 배경 + hairline top, 3컬럼(뉴스레터/주제/리소스) + 법적 표기(tertiary).
 
+## AI Engineering Lab
+
+`articles/learning/ai-engineering/index.html`(서빙 URL `learning/ai-engineering/`)는 뉴스레터가 아니라 학습 과정을 담은 정적 페이지이지만, **정본 공개 표면이다.** 사이트맵의 stable entry이고(`src/generator/render/seo-metadata.js`의 `AI_ENGINEERING_LEARNING_PATH`), 배포 조립 단계에서 `src/generator/publish/assemble-site.js`의 `addLearningFooterLinks`가 `_site/` 안 모든 HTML 푸터 리소스 컬럼에 이 페이지 링크를 넣는다. 저장소 커밋본에 링크가 박혀 있는 것은 홈·아카이브와 최근 발행분뿐이고 과거 발행물은 재작성하지 않으므로, 나머지는 배포 사본에서만 링크를 얻는다.
+
+- **공용 chrome을 그대로 쓴다.** `body.homepage`, `.site-header.homepage-site-header`, `.site-footer`, `.content-wrap`이 홈·아카이브와 같은 마크업이다. `styles.css`를 먼저 읽고 `learning.css`를 그 위에 얹으므로 색·타이포·라운드·weight 램프는 이 문서의 규칙을 그대로 상속한다 — `learning.css`의 `font-weight`는 500·600뿐이고, 액센트는 `--primary` 하나이며, 나머지 색은 `--text`/`--muted`/`--line`/`--bg`/`--surface`/`--chip` 토큰에서 온다.
+- **자체 레이아웃만 `learning.css`에 있다.** 콘텐츠 폭 `.learning-shell`은 홈·아카이브와 같은 `min(100% - 44px, 1036px)`(520px 이하에서 거터 32px). 그 위에 sticky 목차(`.learning-nav`), 카드 그리드(`.learning-grid`·`.source-grid`·`.week-columns`·`.week-card`), 단계 흐름(`.loop-flow` — 6열 → 780px 이하 3열 → 520px 이하 2열), ink 채움 마무리 패널(`.learning-final-panel`)이 얹힌다.
+- **잠금은 `src/shared/test/workflow/learning-page.test.js` 두 개다.** (1) `learning.css`의 모든 유연 grid 트랙은 `minmax(0, …)`로 쓴다 — `1fr`은 `minmax(auto, 1fr)`이라 트랙이 내용의 최소 폭 아래로 못 줄어드는데, 이 카드들 안에는 그 최소 폭이 휴대폰 화면보다 넓은 것(`min-width: 720px`인 `.scoreboard` 표, `white-space: pre`인 `.artifact-tree`)이 있어 페이지 전체가 가로로 스크롤된다. 0이 아닌 하한도 같이 막는다. (2) `@media (max-width: 780px)`에서 카드 그리드 4종(`.learning-grid`·`.source-grid`·`.week-columns`·`.week-card`)이 `minmax(0, 1fr)` 한 열로 접힌다. `.loop-flow`는 의도적으로 빠져 있다 — 단계 흐름이라 그 폭에서 3열을 유지한다.
+- **표면 계약 잠금은 다른 두 곳에 있다.** 푸터 링크는 `homepage-archive.test.js`의 `site assembly makes every deployed public page footer link to the AI Engineering lab` 테스트가, 필수 share/SEO 메타와 sitemap stable entry는 `src/generator/validate/validate-seo-metadata.js`의 `STATIC_PAGES`가 잠근다.
+
 ## Do & Don't
 
-- Do: 모든 상호작용에 `#0066cc` 하나만. 헤드라인은 weight 600 + 음의 트래킹. 카드는 이미지 앞세우고, 없으면 `assets/images/fallback/newsletter-default.svg`로 폴백. 활성 chip은 ink 채움.
+- Do: 모든 상호작용에 `#0066cc` 하나만. 헤드라인은 weight 600 + 음의 트래킹. 카드는 실제 기사 이미지를 앞세우고, 없으면 `assets/images/fallback/`의 동봉 그래픽으로 폴백. 활성 chip은 ink 채움.
+  - 폴백 자산은 단수가 아니다. 기사 이미지는 `src/generator/render/article-image-resolver.js`의 `FALLBACKS`가 카테고리별 4종(`ai`/`android`/`cpp`/`newsletter-default`) 중 하나를 고르고, `newsletter-default.svg` 고정은 카드 썸네일의 마지막 수단과 `onerror` 교체본(`FALLBACK_CARD_IMAGE`·홈의 `FALLBACK_IMAGE`)뿐이다. "동봉 폴백인가"의 판정은 파일명이 아니라 `assets/images/fallback/` 폴더 접두어로 한다(`isFallbackImage`).
 - Don't: 두 번째 액센트 색 도입, chrome에 하드 셰도우, 장식 그라디언트 배경, 카드에 임의 URL 이미지(리졸버·fallback 계약을 따른다). weight 램프는 400(본문)/500(리드·나브·chip)/600(헤드라인·라벨)이며 700 이상은 쓰지 않는다.
 
 ## 반응형
@@ -73,9 +85,10 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 ## 알려진 갭 / 후속
 
 - **미사용(dead) CSS 정리 (완료 — 2라운드)**: 1라운드는 리디자인 직후의 dead 규칙(`.headline-*`, `.latest-newsletter-card`/`.latest-card-*`, `.card-summary`/`.clamp-3`, 홈 tagline 히어로 계열)을 걷어냈다. 2라운드에서 남아 있던 도달 불가 규칙 **358줄(styles.css 2542 → 2192줄)**을 마저 제거했다 — `.diagram-*`(9규칙), `.topbar`/`.navlinks`/`.pill`/`.chiprow`/`.chip`, `.hero-grid`/`.grid-2`/`.grid-3`/`.section-lead`/`.ref-list`/`.brief-card`/`.panel`, `.focus-brief`/`.focus-band`/`.focus-title`, `.archive-heading`/`.archive-controls`, `.section-heading-mark`/`.section-icon-star`/`.section-icon-latest`, `.tag-more`/`.card-actions`/`.hero-actions`/`.actions`, `.site-hero::before`, `.hero-mascot img`, off-palette `.issue-section h3`(#111827). **이미지 placeholder variant 4종만 성격이 다르다** — `.article-placeholder-camera-hal`은 레거시 1페이지(2026-05-21)가 실제로 참조하므로 도달 불가가 아니라 **의도적으로 없앤 라이브 규칙**이다(효과는 아래 레거시 항목 참조). **의도적으로 유지하는 것은 살아있는 규칙 안의 dead 셀렉터뿐**이다: `.newsletter-card`(text-decoration 그룹 — `exactSelectorBlock('.archive-card')`가 image-forward 카드로 해석되도록), `.hero-tags`(`.tag-row`/`.tag` 그룹), `.action-card`(카드 프레임 그룹), `.status-chip`/`.category-label`/`.badge`(`.issue-kicker` 그룹), `#archive`(`#latest` 그룹). 램프 밖 굵기는 이제 0개라 `font-weight` 잠금 기대값도 `[]`다.
-- **레거시 daily 페이지 27개**: 재렌더 소스가 없어 구 마크업(`article-feature-row`·카드 프레임·`section-icon-list`·`issue-hero-mascot`) 그대로 남는다. 공유 CSS와 전역 `img { max-width: 100% }` 리셋 덕에 깨지지는 않지만, 리디자인된 위클리와 룩이 다르다(수용된 예외 — #778 전례). 이후 발행분(2026-07-13 이후 daily 5개 + 위클리 15개)은 전부 새 뉴스룸 흐름이다. 이 페이지들의 stale한 `article-placeholder-*` variant 클래스는 대응 CSS가 사라져 베이스 패턴으로 렌더된다(alpha 0.02 차이, 육안 무변화).
+- **레거시 daily 페이지 27개**(`2026-05-05` ~ `2026-07-06`): 재렌더 소스가 없어 구 마크업(`article-feature-row`·카드 프레임·`section-icon-list`·`issue-hero-mascot`) 그대로 남는다. 공유 CSS와 전역 `img { max-width: 100% }` 리셋 덕에 깨지지는 않지만, 리디자인된 위클리와 룩이 다르다(수용된 예외 — #778 전례). 이 27개는 더 늘지 않고, `2026-07-13` 이후 dated 페이지와 위클리(`2026-W##`)는 전부 새 뉴스룸 흐름이다 — 구분은 `article-feature-row` 유무로 본다. 레거시 페이지들의 stale한 `article-placeholder-*` variant 클래스는 대응 CSS가 사라져 베이스 패턴으로 렌더된다(alpha 0.02 차이, 육안 무변화).
 - **RSS·편집 정책**: 푸터에 "(지원예정)" 노트로만 존재. 실제 피드/페이지가 생기면 링크로 승격.
-- **구형 위클리 분류 데이터**: W19–W22 등 예전 `issue.json`은 section에 relevance bucket이 없어 카드 topic이 baseline(Camera HAL / Android)으로만 파생된다. 최근 주(W23–W28)는 bucket이 있어 Driver·Image Processing·AI 등으로 분류된다. SoC Platform 칩은 현재 발행분에 해당 bucket 기사가 없어 count 0(비활성)이다 — 데이터가 생기면 자동으로 채워진다.
+- **위클리 카드 topic의 편차**: 카드 topic은 그 주 기사의 relevance bucket에서만 나오므로(`weeklyTopicTags`), 어떤 칩이 켜지는지는 발행 시기가 아니라 **그 주에 어떤 bucket 기사가 있었는지**로 갈린다. 기사가 `direct_aosp_camera`·`generic_tech_watchlist`뿐인 주는 baseline(Camera HAL / Android)만 붙고(예: W20·W23·W24·W34), 오래된 주라도 `camera_driver_image_pipeline`이나 `cpp_ai_tooling_fallback` 기사가 있으면 Driver·Image Processing·AI가 켜진다(예: W19·W21). SoC Platform 칩은 발행분 전체에 `soc_platform_signal` 기사가 아직 없어 count 0(비활성)이다 — 데이터가 생기면 자동으로 채워진다.
+- **`validate-site.js`는 AI Engineering Lab 페이지를 보지 않는다.** `htmlFiles`가 `index.html`·`archive.html`뿐이라, 그 게이트가 잠그는 셸·스크립트 로드·링크 계약은 Lab 페이지에 적용되지 않는다. 이 페이지를 덮는 것은 `learning-page.test.js`(CSS 불변식), `homepage-archive.test.js`(푸터 링크), `validate-seo-metadata.js`(메타·sitemap) 셋이다.
 
 > 진행 완료(main, handoff mockup `Camera SW Newsroom.dc.html` 정렬 — PR #779–#783 + 위클리 재렌더): 풀블리드 흰 셸(라운드 프레임·그라디언트 제거)·58px 반투명 헤더·한글 나브(홈/아카이브)·featured 히어로 mockup 리듬·홈/아카이브 46×28px 카드 그리드·아카이브 오픈 스탯 밴드+단일 필터 행·이슈 페이지 평문 흐름(아웃라인 번호+카테고리 눈썹·파치먼트 박스 언어·하단 내비)·W19–W28 재렌더 발행.
 
