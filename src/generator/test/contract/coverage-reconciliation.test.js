@@ -6,6 +6,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const { reconcileCoverage } = require('../../select/coverage-reconciliation');
+const { editorialPlanPrompt } = require('../../reporter/newsletter-prompts');
 
 function mainEligible(overrides = {}) {
   return {
@@ -238,4 +239,49 @@ test('등급 앞뒤 공백 때문에 main 제안이 강등되지 않는다', () 
 
   assert.deepEqual(out.selected.map(item => item.url), ['a', 'b']);
   assert.deepEqual(out.diff.demoted_groups, []);
+});
+
+// #969: 편집 계획이 고를 수 있는 등급 목록은 프롬프트 문장 하나가 전부이고(coverage_decision은
+// 스키마상 자유 문자열이다), KNOWN_COVERAGE_DECISIONS는 그 목록을 그대로 비추는 사본이다. 둘이
+// 어긋나면 #909가 만든 구분(아는 등급 = 계획이 실제로 고른 것 / 모르는 등급 = 모델 드리프트)이
+// 무너진다. 그래서 사본을 직접 읽지 않고 프롬프트에서 목록을 뽑아 왕복시켜 잠근다.
+function gradesOfferedByPrompt() {
+  const matched = editorialPlanPrompt().match(/coverage_decision은 ([^.]+?) 중 하나입니다/);
+  assert.ok(matched, '프롬프트가 등급 목록을 제시하는 문장이 사라졌다');
+  return matched[1].split(',').map(grade => grade.trim());
+}
+
+test('프롬프트가 제시하는 등급은 전부 아는 등급으로 기록된다', () => {
+  const offered = gradesOfferedByPrompt();
+  assert.ok(offered.length > 0);
+
+  for (const grade of offered) {
+    if (grade === 'main_article') continue;
+    const kept = mainEligible({ url: 'kept', article_group_key: 'group:kept' });
+    const graded = mainEligible({ url: 'graded', article_group_key: 'group:graded' });
+    const out = reconcileCoverage({
+      shortlistReport: { selected_articles: [kept, graded], reserve_candidates: [] },
+      editorialPlanReport: { editorial_plans: [plan(kept, 'main_article'), plan(graded, grade)] }
+    });
+
+    const demotion = out.diff.changes.find(change => change.action === 'demoted');
+    assert.equal(demotion.reason_code, `editorial_plan_${grade}`, `${grade}는 아는 등급이어야 한다`);
+  }
+});
+
+test('프롬프트에서 뺀 short_mention은 모델 드리프트로 기록된다', () => {
+  // 등급을 제거해도 모델은 예전 값을 뱉을 수 있다. 그때 남아야 하는 사실은 두 개다:
+  // 프롬프트가 더는 제시하지 않는 값이라는 것(reason_code)과 모델이 실제로 쓴 원문(coverage_decision).
+  assert.ok(!gradesOfferedByPrompt().includes('short_mention'), '프롬프트가 아직 short_mention을 제시한다');
+
+  const kept = mainEligible({ url: 'kept', article_group_key: 'group:kept' });
+  const drifted = mainEligible({ url: 'drifted', article_group_key: 'group:drifted' });
+  const out = reconcileCoverage({
+    shortlistReport: { selected_articles: [kept, drifted], reserve_candidates: [] },
+    editorialPlanReport: { editorial_plans: [plan(kept, 'main_article'), plan(drifted, 'short_mention')] }
+  });
+
+  const demotion = out.diff.changes.find(change => change.action === 'demoted');
+  assert.equal(demotion.reason_code, 'editorial_plan_unrecognized');
+  assert.equal(demotion.coverage_decision, 'short_mention', '모델이 쓴 원문은 그대로 남는다');
 });

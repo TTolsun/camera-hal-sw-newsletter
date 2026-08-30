@@ -149,7 +149,10 @@ test('editorialPlanSchema는 plan 식별자와 핵심 추론 필드를 required�
 
 test('editorialPlanPrompt는 coverage/impact enum과 안전 경계를 담는다', () => {
   const prompt = editorialPlanPrompt();
-  assert.match(prompt, /main_article, short_mention, reference_only, exclude/);
+  assert.match(prompt, /main_article, reference_only, exclude/);
+  // #969: short_mention은 렌더 경로가 없어 exclude와 결과가 같았다. 등급을 제시하면 편집 계획이
+  // 그것을 고르고, 독자에게는 아무것도 도달하지 않는다. 선택지는 실제 결과와 1:1이어야 한다.
+  assert.doesNotMatch(prompt, /short_mention/, '렌더 경로 없는 등급을 다시 제시하면 안 된다');
   assert.match(prompt, /Direct Impact, Design Reference, Trend Watch, Exclude/);
   assert.match(prompt, /public 본문에 라벨로 노출하지 않습니다/);
   assert.match(prompt, /direct_hal_impact는 source가 직접 HAL\/runtime 변경을 뒷받침할 때만 true/);
@@ -265,7 +268,7 @@ test('buildEditorialPlanReport는 항상 LLM을 호출하고 정규화된 plan�
         return {
           editorial_plans: [{
             title: 'T', url: 'https://example.com/a', source_candidate_hash: 'abc123',
-            coverage_decision: 'short_mention', impact_level: 'Design Reference',
+            coverage_decision: 'reference_only', impact_level: 'Design Reference',
             direct_hal_impact: false, target_description: 'TD', editorial_angle: 'EA',
             why_it_matters: 'W', reader_takeaway: 'R',
             misunderstanding_risks: ['m'], source_limitations: ['s']
@@ -287,7 +290,7 @@ test('buildEditorialPlanReport는 항상 LLM을 호출하고 정규화된 plan�
     assert.ok(report);
     assert.equal(report.date, '2026-05-08');
     assert.equal(report.editorial_plans.length, 1);
-    assert.equal(report.editorial_plans[0].coverage_decision, 'short_mention');
+    assert.equal(report.editorial_plans[0].coverage_decision, 'reference_only');
   } finally {
     delete require.cache[stageKey];
     if (savedInstr) require.cache[instrKey] = savedInstr; else delete require.cache[instrKey];

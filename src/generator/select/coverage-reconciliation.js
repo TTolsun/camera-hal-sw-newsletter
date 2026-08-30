@@ -2,17 +2,17 @@
 
 // #724: LLM coverage 권한 wiring — 결정론 재조정.
 //
-// editorial-plan LLM은 후보별 coverage_decision(main_article/short_mention/
-// reference_only/exclude)과 impact_level을 "제안"만 한다. 이 순수 함수가 그 제안을
-// 받아 결정론 불변식을 강제해 최종 main 집합을 만든다:
+// editorial-plan LLM은 후보별 coverage_decision(main_article/reference_only/exclude)과
+// impact_level을 "제안"만 한다. 이 순수 함수가 그 제안을 받아 결정론 불변식을 강제해 최종
+// main 집합을 만든다:
 //   1. 제안 tier 매핑 (미채점 후보는 결정론 tier 유지)
 //   2. 승급 자격 가드 — main은 결정론적으로 main-eligible한 후보만
 //   3. cap clamp — mainArticleCount.max / supportingMainMaxAllowed / forbidden
 //   4. 발행가능 floor backfill — LLM은 뉴스레터를 발행불가로 만들 수 없다
 //
 // hard blocker(source-binding/evidence/freshness/hard-fail)는 이 모듈 밖 결정론
-// validator가 그대로 담당한다. 이 슬라이스는 main 집합만 다루며 short/reference/
-// exclude는 전부 "main 아님"으로 collapse한다(참고자료 섹션은 기존 결정론 로직 유지).
+// validator가 그대로 담당한다. 이 슬라이스는 main 집합만 다루며 reference_only와 exclude는
+// 둘 다 "main 아님"으로 collapse한다(참고자료 섹션은 기존 결정론 로직 유지).
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { candidateGroupKey } = require('../../shared/common/article-groups');
@@ -23,7 +23,9 @@ const IMPACT_RANK = { high: 3, medium: 2, low: 1 };
 // #909: reason_code는 기계가 읽는 값이라 LLM 원문을 그대로 이어붙이면 안 된다.
 // coverage_decision은 스키마상 자유 문자열이고(enum 없음) 프롬프트 문장만이 값을 제한하므로,
 // 모르는 값은 `editorial_plan_unrecognized`로 접고 원문은 coverage_decision에 그대로 남긴다.
-const KNOWN_COVERAGE_DECISIONS = new Set(['main_article', 'short_mention', 'reference_only', 'exclude']);
+// #969: 이 집합은 프롬프트가 제시하는 등급 목록의 사본이다. 프롬프트에 없는 값이 여기 남아
+// 있으면 모델 드리프트가 정상 판단으로 기록된다. short_mention은 렌더 경로가 없어 제거했다.
+const KNOWN_COVERAGE_DECISIONS = new Set(['main_article', 'reference_only', 'exclude']);
 
 function demotionReasonCode({ proposedMain, coverageDecision }) {
   // main 제안까지 갔다가 빠졌으면 원인은 cap이다. 편집 계획 등급이 무엇이었든 마찬가지다.

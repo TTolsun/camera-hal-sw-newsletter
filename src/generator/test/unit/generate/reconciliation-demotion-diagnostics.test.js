@@ -76,7 +76,7 @@ test('재조정 강등은 editor 강등과 다른 줄에, 그룹·후보 사유�
     editorial_plans: [
       plan('a', 'main_article'),
       plan('sony', 'reference_only'),
-      plan('lore', 'short_mention')
+      plan('lore', 'exclude')
     ]
   });
 
@@ -98,7 +98,7 @@ test('재조정 강등은 editor 강등과 다른 줄에, 그룹·후보 사유�
   assert.match(markdown, /^ {2}- group:lore$/m);
   assert.match(
     markdown,
-    /^ {4}- lore: coverage_decision=short_mention, reason_code=editorial_plan_short_mention$/m
+    /^ {4}- lore: coverage_decision=exclude, reason_code=editorial_plan_exclude$/m
   );
 });
 
