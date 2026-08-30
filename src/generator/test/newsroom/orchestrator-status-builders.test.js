@@ -179,3 +179,11 @@ test('editorSemanticStatusExtra는 error 인자에서 값을 우선 추출한다
   assert.equal(extra.repairSucceeded, true);
   resetEditorSemanticState();
 });
+
+// #982: generation-status.json은 model_usage / model_routing을 그대로 복사해 나간다.
+// 두 map의 키가 canonical stage run key라는 사실을 읽는 사람이 알 수 있도록 형식 표식을
+// 함께 싣는다.
+test('buildGenerationStatus는 진단 키 형식 표식을 함께 싣는다', () => {
+  const status = buildGenerationStatus({ date: '2026-08-30', status: 'STARTED' });
+  assert.equal(status.stage_key_format, 'canonical-v1');
+});

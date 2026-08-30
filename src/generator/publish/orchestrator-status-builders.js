@@ -47,6 +47,7 @@ function buildGenerationStatus({
     stage_status_log: generationRunState.stageTracker.toLog(),
     quota_error_count: diagnostics.quota_error_count,
     invalid_json_count: diagnostics.invalid_json_count,
+    stage_key_format: diagnostics.stage_key_format,
     model_usage: diagnostics.model_usage,
     model_routing: diagnostics.model_routing || {},
     candidate_input: restExtra.candidate_input || generationRunState.candidateInput || null,

@@ -1,4 +1,5 @@
 const { ensureArray } = require('../common/value-coercion');
+const { STAGE_KEY_FORMAT } = require('./stage-catalog');
 const TOKENS_PER_MILLION = 1000000;
 
 function number(value, fallback = 0) {
@@ -64,6 +65,12 @@ function groupedCostTotals(calls, field) {
     .sort((a, b) => b.estimated_cost_usd - a.estimated_cost_usd || String(a[field]).localeCompare(String(b[field])));
 }
 
+// 사람이 읽는 자리에 쓸 호출 이름. 집계 키는 canonical stage key지만 리포트 본문과 경고문은
+// label을 쓴다 -- 사람이 이미 그 문자열로 과거호를 읽어 왔다.
+function callDisplayName(call) {
+  return call.label || call.stage_key || 'unknown';
+}
+
 function pricingSourceForCalls(calls, fallback = null) {
   const sources = [...new Set(ensureArray(calls).map(call => call.pricing_source).filter(Boolean))];
   if (sources.length === 1) return sources[0];
@@ -86,7 +93,7 @@ function buildCostReport({
     addCostTotals(totals, call);
     if (call.pricing_warning) warnings.push(call.pricing_warning);
     if (call.usage_metadata_present === false) {
-      warnings.push(`No usage metadata for ${call.stage || 'unknown'} using ${call.model || 'unknown'}.`);
+      warnings.push(`No usage metadata for ${callDisplayName(call)} using ${call.model || 'unknown'}.`);
     }
   }
   const finalTotals = finalizeCostTotals(totals);
@@ -102,6 +109,8 @@ function buildCostReport({
   }
   return {
     schema_version: 1,
+    // by_stage의 그룹 키와 calls[].stage_key가 어느 형식인지 알리는 표식(#982).
+    stage_key_format: STAGE_KEY_FORMAT,
     date,
     generated_at: generatedAt,
     currency: 'USD',
@@ -112,7 +121,7 @@ function buildCostReport({
     pro_policy: proPolicy,
     totals: finalTotals,
     by_provider: groupedCostTotals(calls, 'provider'),
-    by_stage: groupedCostTotals(calls, 'stage'),
+    by_stage: groupedCostTotals(calls, 'stage_key'),
     by_model: groupedCostTotals(calls, 'model'),
     calls: ensureArray(calls),
     warnings: [...new Set(warnings)]
@@ -124,7 +133,7 @@ function buildCostReportMarkdown(report) {
   const calls = ensureArray(report.calls);
   const callRows = calls.map(call => [
     `| ${call.provider || 'unknown'} `,
-    ` ${call.stage || 'unknown'} `,
+    ` ${callDisplayName(call)} `,
     ` ${call.stage_group || 'unknown'} `,
     ` ${call.primary_model || call.model || 'unknown'} `,
     ` ${call.attempt_model || call.model || 'unknown'} `,

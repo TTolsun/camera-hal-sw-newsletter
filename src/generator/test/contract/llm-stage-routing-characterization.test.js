@@ -451,14 +451,28 @@ test('축이 갈리는 조합 3개가 현행 그대로다', () => {
   assert.equal(repairJudge.statusRole, 'repair');
 });
 
-// 진단 조회는 label 문자열 exact 일치다. 그래서 orchestrator-artifact-writers.js:25의
-// getLlmModelUsage(options.stage || 'editor')는 항상 빗나간다 -- 어떤 호출자도 options.stage를
-// 넘기지 않고, 리터럴 'editor'는 기록 키인 'editor attempt 1/2'와 같지 않다.
-// 여기서는 고치지 않고 현행 동작으로 기록만 한다. 실제 수정은 #982에서 기본값을 제거하며 한다.
-test('진단 model usage 조회는 label exact 일치이고, 리터럴 editor는 항상 빗나간다', () => {
+// #980이 기록해 둔 현행 동작: 진단 조회가 label exact 일치였고, 그래서
+// orchestrator-artifact-writers.js의 getLlmModelUsage(options.stage || 'editor')는 항상
+// 빗나갔다(리터럴 'editor' != 기록 키 'editor attempt 1/2').
+//
+// #982가 그 결함을 두 방향으로 없앴다. 조회 키가 canonical run key가 되어 조립할 필요가
+// 없어졌고, quality attempt를 모르는 호출자를 위한 stage 단위 조회가 따로 생겼다.
+test('진단 model usage 조회는 canonical run key와 stage 단위 두 갈래다', () => {
   const diagnostics = createDiagnosticsState();
-  diagnostics.recordSuccess('editor attempt 1/2', 'gemini-3.5-flash');
+  const attempt1 = runForStageId('editor');
+  const attempt2 = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: 2, totalAttempts: 2 });
 
-  assert.equal(diagnostics.getModelUsage('editor attempt 1/2'), 'gemini-3.5-flash');
-  assert.equal(diagnostics.getModelUsage('editor'), '');
+  diagnostics.recordSuccess(attempt1, 'gemini-3.5-flash');
+  diagnostics.recordSuccess(attempt2, 'gemini-3.5-flash-lite');
+
+  // run key 조회는 회차를 구분한다.
+  assert.equal(diagnostics.getModelUsage(attempt1), 'gemini-3.5-flash');
+  assert.equal(diagnostics.getModelUsage(attempt2), 'gemini-3.5-flash-lite');
+
+  // stage 단위 조회는 회차를 모르는 호출자를 위한 것이고, 마지막 성공 model을 준다.
+  assert.equal(diagnostics.getLastModelForStage(LLM_STAGES.EDITOR), 'gemini-3.5-flash-lite');
+
+  // 예전의 자유 문자열 조회는 이제 성립하지 않는다 -- 조용히 빗나가는 대신 던진다.
+  assert.throws(() => diagnostics.getModelUsage('editor attempt 1/2'), /stage run/);
+  assert.throws(() => diagnostics.getLastModelForStage('editor'), /stage definition/);
 });

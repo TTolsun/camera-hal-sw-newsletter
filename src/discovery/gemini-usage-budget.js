@@ -51,22 +51,31 @@ function normalizeBudgetConfig(config = {}) {
   };
 }
 
+// 진단 항목의 키는 canonical stage run key다(#982). 여기서 나온 stage_counts의 키도 같은
+// 형식이 된다. 다만 defaultStageCounts가 미리 깔아 두는 키는 config의 작업 이름
+// (sourceDiscovery, articleExtraction ...)이라 두 어휘가 한 map에 섞인다. 합계
+// (requested/successful/failed)와 한도 판정은 전체 합이라 영향이 없다.
 function diagnosticStageCounts(diagnostics = {}) {
   const modelUsage = diagnostics.model_usage || {};
   const calls = Array.isArray(diagnostics.cost_report?.calls) ? diagnostics.cost_report.calls : [];
   const counts = {};
 
-  for (const [stage, byModel] of Object.entries(modelUsage)) {
-    if (!counts[stage]) {
-      counts[stage] = {
+  function bucket(key) {
+    if (!counts[key]) {
+      counts[key] = {
         requested_attempts: 0,
         successful_responses: 0,
         failed_attempts: 0
       };
     }
-    for (const usage of Object.values(byModel || {})) {
-      counts[stage].requested_attempts += Number(usage.requests || 0);
-      counts[stage].failed_attempts +=
+    return counts[key];
+  }
+
+  for (const [stageKey, entry] of Object.entries(modelUsage)) {
+    const stageBucket = bucket(stageKey);
+    for (const usage of Object.values(entry?.models || {})) {
+      stageBucket.requested_attempts += Number(usage.requests || 0);
+      stageBucket.failed_attempts +=
         Number(usage.invalid_json || 0) +
         Number(usage.quota_errors || 0) +
         Number(usage.api_errors || 0);
@@ -74,15 +83,7 @@ function diagnosticStageCounts(diagnostics = {}) {
   }
 
   for (const call of calls) {
-    const stage = String(call.stage || 'unknown');
-    if (!counts[stage]) {
-      counts[stage] = {
-        requested_attempts: 0,
-        successful_responses: 0,
-        failed_attempts: 0
-      };
-    }
-    counts[stage].successful_responses += 1;
+    bucket(String(call.stage_key || 'unknown')).successful_responses += 1;
   }
 
   return counts;

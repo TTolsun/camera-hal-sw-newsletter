@@ -2,13 +2,18 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  DERIVED_STAGE_KINDS,
   LLM_STAGES,
+  STAGE_KEY_FORMAT,
   TEMPERATURE_PROFILES,
   THINKING_PROFILES,
+  assertStageDefinition,
   assertStageRun,
+  derivedStageRun,
   isStageRun,
   stageDefinitionById,
   stageRun,
+  stageRunIdentity,
   stageRunKey
 } = require('../../../llm/stage-catalog');
 const { LLM_STAGE_GROUPS } = require('../../../llm/model-policy');
@@ -149,4 +154,44 @@ test('assertStageRun은 예전 자유 문자열 label을 거부한다', () => {
 test('id로 definition을 되찾을 수 있다', () => {
   assert.equal(stageDefinitionById('editor.completion'), LLM_STAGES.EDITOR_COMPLETION);
   assert.equal(stageDefinitionById('made.up'), null);
+});
+
+// #982: 진단 아티팩트가 싣는 stage 정체성 블록.
+test('stageRunIdentity는 canonical key와 label을 함께 싣는다', () => {
+  const identity = stageRunIdentity(runFor(LLM_STAGES.EDITOR_COMPLETION));
+
+  assert.deepEqual(identity, {
+    stage_key: 'editor.completion#1',
+    stage_id: 'editor.completion',
+    quality_attempt: 1,
+    label: 'editor completion attempt 1/2',
+    parent_run_key: null
+  });
+});
+
+test('파생 run의 정체성은 parent_run_key로 부모를 가리킨다', () => {
+  const parent = runFor(LLM_STAGES.EDITOR_REPAIR);
+  const identity = stageRunIdentity(derivedStageRun(parent, DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE));
+
+  assert.equal(identity.stage_key, 'editor.repair.public_article_judge#1');
+  assert.equal(identity.parent_run_key, 'editor.repair#1');
+  assert.equal(identity.label, 'editor repair attempt 1/2 public article judge');
+});
+
+test('stageRunIdentity는 예전 자유 문자열 label을 거부한다', () => {
+  assert.throws(() => stageRunIdentity('editor attempt 1/2'), /expected a stage run/);
+});
+
+// key 형식이 바뀌면 과거 아티팩트와 구분이 안 된다. 표식은 형식과 함께 움직여야 한다.
+test('키 형식 표식이 stageRunKey가 만드는 형식과 짝을 이룬다', () => {
+  assert.equal(STAGE_KEY_FORMAT, 'canonical-v1');
+  assert.match(stageRunKey(runFor(LLM_STAGES.EDITOR)), /^[a-z_.]+#\d+$/);
+});
+
+test('assertStageDefinition은 catalog의 정의만 통과시킨다', () => {
+  assert.equal(assertStageDefinition(LLM_STAGES.EDITOR), LLM_STAGES.EDITOR);
+  assert.throws(() => assertStageDefinition('editor'), /expected a stage definition/);
+  // id는 맞지만 catalog의 그 객체가 아닌 값도 막는다.
+  assert.throws(() => assertStageDefinition({ id: 'editor' }), /expected a stage definition/);
+  assert.throws(() => assertStageDefinition(null), /expected a stage definition/);
 });
