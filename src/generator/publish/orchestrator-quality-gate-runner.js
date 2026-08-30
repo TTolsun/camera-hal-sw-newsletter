@@ -51,9 +51,13 @@ function runQualityGateAndPersist(currentEditor, currentFactCheck, attempt, atte
   writeJson(path.join(newsroomDir, `quality-report-${infix}attempt-${attempt}.json`), qualityReport);
   fs.writeFileSync(path.join(newsroomDir, `quality-report-${infix}attempt-${attempt}.md`), buildQualityReportMarkdown(qualityReport), 'utf8');
   if (qualityReport && qualityReport.status === 'PASS') {
-    generationRunState.stageTracker.pass('quality_gate', attempt);
+    generationRunState.stageTracker.pass({ stageId: 'quality_gate', attempt });
   } else {
-    generationRunState.stageTracker.fail('quality_gate', attempt, '', qualityReport && qualityReport.status);
+    generationRunState.stageTracker.fail({
+      stageId: 'quality_gate',
+      attempt,
+      reason: qualityReport && qualityReport.status
+    });
   }
   return { editor: persistedEditor, qualityReport };
 }

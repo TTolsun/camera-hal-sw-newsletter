@@ -11,17 +11,21 @@ const { generationRunState } = require('./orchestrator-run-state');
 
 async function callLlmJson(stageRunArg, ...args) {
   const run = assertStageRun(stageRunArg);
-  // role은 label을 다시 해석해 얻지 않는다. definition이 선언한 값을 그대로 쓴다(#981).
-  const role = run.definition.statusRole;
-  const attempt = generationRunState.currentQualityAttempt;
-  const label = run.label;
-  generationRunState.stageTracker.start(role, attempt, label);
+  // 행의 정체성은 stage id다. role은 label을 다시 해석해 얻지 않고 definition이 선언한 값을
+  // 그대로 쓰며(#981), 다이어그램이 묶어 읽는 표시용 값으로만 남는다(#979 3·4·8번).
+  const call = {
+    stageId: run.definition.id,
+    role: run.definition.statusRole,
+    attempt: generationRunState.currentQualityAttempt,
+    label: run.label
+  };
+  generationRunState.stageTracker.start(call);
   try {
     const result = await callLlmJsonRaw(run, ...args);
-    generationRunState.stageTracker.pass(role, attempt, label);
+    generationRunState.stageTracker.pass(call);
     return result;
   } catch (error) {
-    generationRunState.stageTracker.fail(role, attempt, label, error && error.message);
+    generationRunState.stageTracker.fail({ ...call, reason: error && error.message });
     throw error;
   }
 }

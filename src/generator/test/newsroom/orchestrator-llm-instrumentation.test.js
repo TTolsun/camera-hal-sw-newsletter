@@ -41,10 +41,11 @@ function loadWithStubs({ rawImpl, tracker, attempt = 3 }) {
 }
 
 function recordingTracker(events) {
+  const record = kind => call => events.push([kind, call.stageId, call.role, call.attempt, call.label, call.reason]);
   return {
-    start: (role, attempt, stage) => events.push(['start', role, attempt, stage]),
-    pass: (role, attempt, stage) => events.push(['pass', role, attempt, stage]),
-    fail: (role, attempt, stage, message) => events.push(['fail', role, attempt, stage, message])
+    start: record('start'),
+    pass: record('pass'),
+    fail: record('fail')
   };
 }
 
@@ -64,8 +65,8 @@ test('성공 시 raw 결과를 그대로 반환하고 start→pass를 기록한�
     assert.deepEqual(rawArgs, [editorRun, 'system', 'prompt', { schema: true }]);
     // role은 definition이 선언한 값이고, attempt는 run-state에서 가져온다.
     assert.deepEqual(events, [
-      ['start', 'editor', 3, 'editor attempt 1/2'],
-      ['pass', 'editor', 3, 'editor attempt 1/2']
+      ['start', 'editor', 'editor', 3, 'editor attempt 1/2', undefined],
+      ['pass', 'editor', 'editor', 3, 'editor attempt 1/2', undefined]
     ]);
   } finally {
     restore();
@@ -84,8 +85,8 @@ test('실패 시 fail을 기록하고 에러를 rethrow한다(pass 미기록)', 
     const factCheckRun = stageRun(LLM_STAGES.FACT_CHECKER, { qualityAttempt: 1, totalAttempts: 2 });
     await assert.rejects(() => callLlmJson(factCheckRun), /llm exploded/);
     assert.deepEqual(events, [
-      ['start', 'factcheck', 1, 'fact-checker attempt 1/2'],
-      ['fail', 'factcheck', 1, 'fact-checker attempt 1/2', 'llm exploded']
+      ['start', 'fact_checker', 'factcheck', 1, 'fact-checker attempt 1/2', undefined],
+      ['fail', 'fact_checker', 'factcheck', 1, 'fact-checker attempt 1/2', 'llm exploded']
     ]);
     // 성공 경로가 아니므로 pass는 기록되지 않는다.
     assert.equal(events.some(e => e[0] === 'pass'), false);
@@ -94,7 +95,7 @@ test('실패 시 fail을 기록하고 에러를 rethrow한다(pass 미기록)', 
   }
 });
 
-test('role은 stage definition이 선언한 값을 그대로 쓴다', async () => {
+test('행의 정체성은 stage id이고 role은 definition이 선언한 표시값이다', async () => {
   // 계측 래퍼는 label을 다시 해석하지 않는다(#981).
   const events = [];
   const { callLlmJson, restore } = loadWithStubs({
@@ -105,7 +106,30 @@ test('role은 stage definition이 선언한 값을 그대로 쓴다', async () =
   try {
     const reporterRun = stageRun(LLM_STAGES.REPORTER, { qualityAttempt: 1, totalAttempts: 2 });
     await callLlmJson(reporterRun);
-    assert.equal(events[0][1], LLM_STAGES.REPORTER.statusRole);
+    assert.equal(events[0][1], LLM_STAGES.REPORTER.id);
+    assert.equal(events[0][2], LLM_STAGES.REPORTER.statusRole);
+  } finally {
+    restore();
+  }
+});
+
+// #979 3·4·8번: role이 행의 키였을 때 사라지던 호출. editorial-plan과 editor는 role이 둘 다
+// 'editor'라 같은 attempt에서 한 행으로 뭉개졌고, 나중에 도는 editor가 앞선 호출을 덮었다.
+test('role이 같은 두 stage가 같은 attempt에서 서로 다른 행으로 간다', async () => {
+  const events = [];
+  const { callLlmJson, restore } = loadWithStubs({
+    rawImpl: async () => ({}),
+    tracker: recordingTracker(events),
+    attempt: 1
+  });
+  try {
+    await callLlmJson(stageRun(LLM_STAGES.EDITORIAL_PLAN, { qualityAttempt: 1, totalAttempts: 2 }));
+    await callLlmJson(stageRun(LLM_STAGES.EDITOR, { qualityAttempt: 1, totalAttempts: 2 }));
+
+    const started = events.filter(event => event[0] === 'start');
+    assert.deepEqual(started.map(event => event[1]), ['editorial_plan', 'editor']);
+    // 표시용 role은 여전히 둘 다 editor다 -- 다이어그램은 지금처럼 role로 묶어 읽는다.
+    assert.deepEqual(started.map(event => event[2]), ['editor', 'editor']);
   } finally {
     restore();
   }
