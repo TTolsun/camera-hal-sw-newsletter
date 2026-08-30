@@ -476,10 +476,16 @@
 }
 
 @media (max-width: 780px) {
+  /* minmax(0, 1fr) 이지 1fr 이 아니다. 1fr 은 minmax(auto, 1fr) 이라 트랙이 내용의 최소 폭
+     아래로 못 줄어드는데, 이 카드들 안에는 그 최소 폭이 화면보다 넓은 것들이 있다
+     — .scoreboard 의 min-width:720px 표, white-space:pre 인 .artifact-tree, 래퍼 없는 표.
+     그러면 카드가 트랙째 화면 밖으로 밀려 페이지 전체가 가로로 스크롤된다(실측 375px 화면에서
+     문서 폭 774px). 데스크톱 규칙들은 이미 minmax(0, …) 를 쓰고 있고, 좁은 화면 override 에서만
+     빠져 있었다. */
   .learning-grid,
   .source-grid,
   .week-columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .loop-flow {
@@ -487,7 +493,7 @@
   }
 
   .week-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 14px;
   }
 

@@ -8,6 +8,7 @@ const root = path.join(__dirname, '..', '..', '..', '..');
 const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
 const { withLearningFooterLink } = require('../../../generator/publish/assemble-site');
 const { headlineSnapshotFromCandidate } = require('../../../generator/reporter/homepage-headline');
+const { mediaBlock, exactSelectorBlock, assertCssDeclaration } = require('../helpers/css-blocks');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -207,45 +208,6 @@ function assertNoNestedInteractive(html) {
 
 function readStylesheet() {
   return fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8');
-}
-
-function blockAt(css, startIndex) {
-  const openIndex = css.indexOf('{', startIndex);
-  assert.notEqual(openIndex, -1, 'CSS block should contain an opening brace');
-  let depth = 0;
-  for (let index = openIndex; index < css.length; index += 1) {
-    if (css[index] === '{') {
-      depth += 1;
-    } else if (css[index] === '}') {
-      depth -= 1;
-      if (depth === 0) {
-        return css.slice(openIndex + 1, index);
-      }
-    }
-  }
-  assert.fail('CSS block should contain a matching closing brace');
-}
-
-function mediaBlock(css, query) {
-  const index = css.indexOf(`@media ${query}`);
-  assert.notEqual(index, -1, `@media ${query} block should exist`);
-  return blockAt(css, index);
-}
-
-function exactSelectorBlock(css, selector) {
-  const pattern = new RegExp(`(^|\\n)\\s*${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{`, 'g');
-  for (const match of css.matchAll(pattern)) {
-    const selectorIndex = match.index + match[0].indexOf(selector);
-    const previous = css.slice(0, match.index).trimEnd();
-    if (previous.endsWith(',')) continue;
-    return blockAt(css, selectorIndex);
-  }
-  assert.fail(`${selector} exact block should exist`);
-}
-
-function assertCssDeclaration(block, property, value) {
-  const normalized = String(block).replace(/\s+/g, ' ');
-  assert.match(normalized, new RegExp(`${property}\\s*:\\s*${value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*;`));
 }
 
 function validHeadlineState(overrides = {}) {

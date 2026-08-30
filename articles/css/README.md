@@ -7,6 +7,7 @@
 | 파일 | 역할 |
 | --- | --- |
 | `styles.css` | 정적 사이트와 newsletter page의 기본 style입니다. |
+| `learning.css` | AI Engineering Lab 페이지(`articles/learning/ai-engineering/`) 전용 style입니다. 그 페이지가 `styles.css`와 함께 읽습니다. |
 
 ## 작업 규칙
 
