@@ -765,21 +765,23 @@ if (!Array.isArray(newsletters)) {
 }
 
 // newsletters.json 은 dated 호만 담는다. 현재 발행 레인은 위클리이고 그 목록은 이 파일에 있으므로,
-// 여기를 안 읽으면 아래 HTML 계약 검사가 발행 중인 이슈 페이지를 통째로 건너뛴다. 없거나 배열이
-// 아니면 fail 한다 — 조용히 빈 목록이 되면 그 순간부터 위클리가 다시 무검사로 나간다.
-if (!fs.existsSync(weeklyDataPath)) {
-  fail('Missing data/newsletters-weekly.json');
-}
-
+// 여기를 안 읽으면 아래 HTML 계약 검사가 발행 중인 이슈 페이지를 통째로 건너뛴다. 조용히 빈 목록이
+// 되면 그 순간부터 위클리가 무검사로 나가므로 세 경우 다 fail 한다.
+//
+// rendered-issue-structure.js 도 두 인덱스에 같은 형식 검사를 한다. 다만 그쪽은 dated 호가 하나라도
+// 있을 때만 돌아서(`validateDataIndex: index === 0`) dated 가 비면 위클리 인덱스가 아무 검사도 받지
+// 않는다. 그래서 여기서는 무조건 본다 — 메시지 경로는 그쪽과 같은 `articles/data/...` 로 맞춰,
+// 둘 다 걸리는 경우에도 같은 문장이 나오게 한다.
+// 여기서는 읽기만 한다. 존재·JSON·배열 검사는 rendered-issue-structure.js 의
+// NEWSLETTER_INDEX_PATHS 가 두 인덱스에 대해 이미 같은 문장으로 하고 있어서, 여기에 또 두면
+// 한 번의 실패에 같은 말이 두 번 나온다(실제로 그렇게 짰다가 mutation 으로 확인하고 걷어냈다).
+// 못 읽으면 빈 목록으로 두되 그 상태가 조용히 넘어가지는 않는다 — 인덱스가 깨졌으면 그 구조
+// 검사가 fail 하고, 인덱스는 멀쩡한데 페이지가 없으면 아래 존재 검사가 fail 한다.
 let weeklyNewsletters = [];
 try {
-  weeklyNewsletters = fs.existsSync(weeklyDataPath) ? readJson(weeklyDataPath) : [];
+  const parsed = readJson(weeklyDataPath);
+  if (Array.isArray(parsed)) weeklyNewsletters = parsed;
 } catch (error) {
-  fail(`Invalid JSON in data/newsletters-weekly.json: ${error.message}`);
-}
-
-if (!Array.isArray(weeklyNewsletters)) {
-  fail('data/newsletters-weekly.json must contain an array');
   weeklyNewsletters = [];
 }
 
@@ -877,7 +879,8 @@ for (const [index, item] of newsletters.entries()) {
 }
 
 // 공개 표면 전체를 훑는다. dated 호만 돌던 시절에는 위클리 이슈 페이지와 AI Engineering Lab
-// 페이지가 anchor 균형·TODO·나브 라벨 계약을 한 번도 받지 않았다 — 하필 위클리가 현재 발행 레인이다.
+// 페이지가 anchor 균형·TODO 검사(위클리는 이슈 전용 클래스·source-list 링크까지)를 한 번도 받지
+// 않았다 — 하필 위클리가 현재 발행 레인이다.
 const htmlFiles = [...new Set([
   'index.html',
   'archive.html',
@@ -885,6 +888,18 @@ const htmlFiles = [...new Set([
   ...weeklyNewsletters.map(item => item.html).filter(Boolean),
   `${AI_ENGINEERING_LEARNING_PATH}index.html`
 ])];
+
+// 인덱스에 있는데 파일이 없으면 아래 루프가 조용히 건너뛴다. dated 호는 위에서 파일 존재를 이미
+// 확인하므로(`file does not exist`) 위클리에도 같은 계약을 건다 — 그러지 않으면 렌더가 실패해
+// 페이지가 없는 주에도 홈·아카이브는 그 카드를 링크한 채 게이트가 통과한다.
+for (const item of weeklyNewsletters) {
+  const relPath = item && item.html;
+  if (!relPath) continue;
+  const absPath = publicAssetPath(root, relPath);
+  if (!absPath || !fs.existsSync(absPath)) {
+    fail(`Weekly newsletter ${item.weeklyKey || relPath} html file does not exist: ${relPath}`);
+  }
+}
 
 for (const relPath of htmlFiles) {
   // 서빙 URL(index.html/archive.html/newsletters/<date>/...)을 디스크 위치로 매핑.
