@@ -9,7 +9,7 @@ const { publicArticleJudgeArtifactScope } = require('../../publish/orchestrator-
 
 // LLM stage routing characterization (#980).
 //
-// stage 정체성은 지금 사람이 읽는 자유 문자열 label 하나로 표현되고, 아래 네 resolver가
+// stage 정체성은 지금 사람이 읽는 자유 문자열 label 하나로 표현되고, 아래 다섯 resolver가
 // 그 문자열을 각자 정규식으로 해석해 model group, temperature, thinking budget, status role,
 // artifact scope를 유도한다. 분기 순서가 resolver마다 달라 같은 label이 축마다 다른 답을 받는다.
 //
@@ -53,6 +53,41 @@ const NO_THINKING_MAPPING = null;
 // orchestrator-repair-completion.js:313이 editorStage로 repair stage를,
 // :480이 completion stage를 판정 경로에 넘기기 때문이다. 즉 같은 판정 stage가
 // 한 quality attempt 안에서 서로 다른 부모 셋을 가진다.
+
+// 아래 표가 "어떤 stage를 덮는가"를 표와 독립적으로 한 번 더 적어 둔다. 표에서 case 하나가
+// 빠지고 다른 label로 바뀌어도 개수와 중복만으로는 알 수 없기 때문이다.
+const EXPECTED_BASE_LABELS = [
+  'reporter attempt 1/2',
+  'editor attempt 1/2',
+  'fact-checker attempt 1/2',
+  'background-context attempt 1/2',
+  'editorial-plan attempt 1/2',
+  'editor repair attempt 1/2',
+  'fact-checker repair attempt 1/2',
+  'editor completion attempt 1/2',
+  'fact-checker completion attempt 1/2',
+  'weekly-merge',
+  'post-generation public quality judge',
+  'sourceDiscovery'
+];
+
+const JUDGE_PARENT_LABELS = [
+  'editor attempt 1/2',
+  'editor repair attempt 1/2',
+  'editor completion attempt 1/2'
+];
+
+const JUDGE_SUFFIXES = [
+  'semantic repair',
+  'public article judge',
+  'public article judge repair'
+];
+
+const EXPECTED_LABELS = [
+  ...EXPECTED_BASE_LABELS,
+  ...JUDGE_PARENT_LABELS.flatMap(parent => JUDGE_SUFFIXES.map(suffix => `${parent} ${suffix}`))
+];
+
 const PRODUCTION_STAGE_CASES = [
   // --- 기본 stage 12개 ---
   {
@@ -277,10 +312,15 @@ const PRODUCTION_STAGE_CASES = [
   }
 ];
 
-test('production stage case 21개가 중복 없이 표에 있다', () => {
-  assert.equal(PRODUCTION_STAGE_CASES.length, 21);
+test('표가 production stage 21개를 정확히 그대로 덮는다', () => {
+  assert.equal(EXPECTED_LABELS.length, 21);
+
   const labels = PRODUCTION_STAGE_CASES.map(stageCase => stageCase.label);
-  assert.equal(new Set(labels).size, labels.length);
+  assert.equal(new Set(labels).size, labels.length, '표에 중복 label이 있다');
+
+  // 개수와 중복만 보면 case 하나가 빠지고 다른 label로 바뀌어도 통과한다. 기대 목록과
+  // 집합 비교까지 해야 표가 production stage를 조용히 놓치는 일을 막을 수 있다.
+  assert.deepEqual([...labels].sort(), [...EXPECTED_LABELS].sort());
 });
 
 test('stage label -> model group 현행 매핑', () => {
