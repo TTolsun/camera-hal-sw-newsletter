@@ -1,3 +1,4 @@
+const { ensureArray } = require('./value-coercion');
 const crypto = require('crypto');
 
 const TRACKING_PARAMS = new Set([
