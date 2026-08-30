@@ -1120,10 +1120,6 @@ function selectEvidenceFetchTargetGroups(candidates = [], clusterReport = {}, op
   };
 }
 
-function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options = {}) {
-  return selectEvidenceFetchTargetGroups(candidates, clusterReport, options).selected;
-}
-
 function writeSeedOnlySourceDiscoveryResult({
   root,
   date,
@@ -1673,7 +1669,6 @@ module.exports = {
   renderSourceDiscoveryFeedbackMarkdown,
   run,
   selectEvidenceFetchTargetGroups,
-  selectEvidenceFetchTargets,
   sourceDiscoveryHandoff,
   splitMergeStageNotYetEligible
 };

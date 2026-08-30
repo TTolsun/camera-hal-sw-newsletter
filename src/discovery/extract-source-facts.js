@@ -53,7 +53,7 @@ async function extractSourceFacts(candidates = [], options = {}) {
   const sources = [];
   // 같은 기사 URL이 수집본과 발견본으로 두 번 들어온다. 사본마다 fact를 만들어야 하지만
   // 원문을 두 번 받아올 이유는 없으므로 실행 안에서 출처당 한 번만 받는다.
-  // 키는 대상을 고르는 쪽(selectEvidenceFetchTargets)과 같은 evidenceSourceKey다.
+  // 키는 대상을 고르는 쪽(selectEvidenceFetchTargetGroups)과 같은 evidenceSourceKey다.
   // 다른 키를 쓰면 cap이 센 칸 수와 실제 수신 횟수가 어긋난다.
   const fetchedBySource = new Map();
   for (const candidate of candidates) {
