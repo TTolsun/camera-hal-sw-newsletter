@@ -8,6 +8,7 @@ const {
   derivedStageRun,
   stageRun
 } = require('../../../llm/stage-catalog');
+const { createDiagnosticsState } = require('../../../llm/llm-diagnostics');
 
 // 진단·비용 아티팩트의 키가 canonical stage run key인지 확인한다(#982).
 //
@@ -202,4 +203,24 @@ test('실패한 호출도 같은 키 아래 계수된다', async () => {
   assert.equal(diagnostics.quota_error_count, 1);
   assert.equal(diagnostics.model_usage['editor#1'].models['fake-primary'].quota_errors, 1);
   assert.equal(diagnostics.model_usage['editor#1'].models['fake-primary'].successes, 0);
+});
+
+test('routing이 같은 이름의 필드를 들고 와도 정체성이 이긴다', () => {
+  const diagnostics = createDiagnosticsState();
+  const run = editorRun(1);
+
+  diagnostics.recordModelRouting(run, {
+    stage_group: 'editor',
+    // routing이 정체성 필드 이름을 침범한 경우. 항목이 map 키와 어긋나면 그 항목은
+    // 아무것도 가리키지 못한다.
+    stage_key: 'wrong#9',
+    stage_id: 'wrong',
+    label: 'wrong label'
+  });
+
+  const entry = diagnostics.clone().model_routing['editor#1'];
+  assert.equal(entry.stage_key, 'editor#1');
+  assert.equal(entry.stage_id, 'editor');
+  assert.equal(entry.label, 'editor attempt 1/3');
+  assert.equal(entry.stage_group, 'editor');
 });

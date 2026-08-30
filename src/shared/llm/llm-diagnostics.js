@@ -81,9 +81,11 @@ function createDiagnosticsState() {
     },
 
     recordModelRouting(run, routing) {
+      // 정체성을 나중에 편다. 항목이 map의 키와 어긋나면 그 항목은 아무것도 가리키지 못하므로,
+      // routing이 같은 이름의 필드를 들고 와도 정체성 쪽이 이긴다.
       diagnostics.model_routing[stageRunKey(run)] = {
-        ...stageRunIdentity(run),
-        ...routing
+        ...routing,
+        ...stageRunIdentity(run)
       };
     },
 
