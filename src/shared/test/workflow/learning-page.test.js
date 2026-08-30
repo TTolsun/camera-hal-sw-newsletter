@@ -148,14 +148,21 @@ test('learning page classifies every scroll container as keyboard-reachable or e
   );
 });
 
-test('learning page gives every keyboard-scrollable container a tab stop', () => {
+test('learning page gives every keyboard-scrollable container a named tab stop', () => {
   const html = readLearningPage();
+  const labels = [];
   for (const { selector, tags } of KEYBOARD_SCROLLABLE) {
     const openings = tags(html);
     assert.ok(openings.length > 0, `${selector} should appear in the learning page`);
     const missing = openings.filter(tag => !/\stabindex="0"/.test(tag));
     assert.deepEqual(missing, [], `${selector} 요소는 전부 tabindex="0" 을 가져야 한다`);
+    // 이름 없는 초점 정거장은 스크린리더가 도착을 알리지 못한다. 새 탭 정거장이 이름 잠금을
+    // 건너뛰지 못하도록 selector 별로 따로 두지 않고 같은 목록에서 돈다.
+    const unnamed = openings.filter(tag => !/\saria-label="[^"]+"/.test(tag));
+    assert.deepEqual(unnamed, [], `${selector} 요소는 전부 이름을 가져야 한다`);
+    labels.push(...openings.map(tag => tag.match(/\saria-label="([^"]+)"/)[1]));
   }
+  assert.equal(new Set(labels).size, labels.length, '초점 정거장 이름은 서로 달라야 한다');
 });
 
 // 면제 사유를 실제로 검사한다. 사유가 거짓이 되면(링크가 사라지거나 <pre> 가 생기면) 실패한다.
@@ -192,9 +199,17 @@ test('learning page names code and tree blocks without making them landmarks', (
     assert.ok(tags.length > 0, `${className} should appear in the learning page`);
     for (const tag of tags) {
       assert.match(tag, /role="group"/, `${className} 은 이름을 갖는 group 이다`);
-      assert.match(tag, /aria-label="[^"]+"/, `${className} 에는 이름이 있어야 한다`);
       assert.doesNotMatch(tag, /role="region"/, `${className} 은 landmark 가 아니다`);
     }
+  }
+});
+
+// 반대로 <table> 에는 role 을 주지 않는다. 암묵 role 이 이미 table 이라 무엇으로든 덮어쓰면
+// 행·열 머리글과 셀의 연결이 통째로 사라진다(WCAG 1.3.1). aria-label 은 role 이 있는 요소라
+// 그대로 이름으로 노출되므로 tabindex + aria-label 만으로 충분하다.
+test('learning page keeps the result tables as tables', () => {
+  for (const tag of weekResultTableTags(readLearningPage())) {
+    assert.doesNotMatch(tag, /\srole="/, '<table> 의 암묵 role 을 덮어쓰지 않는다');
   }
 });
 
@@ -202,12 +217,24 @@ test('learning page names code and tree blocks without making them landmarks', (
 // 없으면 요소 상단이 그 밑에 깔린다. 값의 근거는 learning.css 주석에 실측으로 적혀 있다.
 test('learning page keeps focus targets clear of the two-tier sticky header', () => {
   const css = readLearningStylesheet();
-  for (const selector of ['.scoreboard', '.artifact-tree', '.code-block-light']) {
-    assertCssDeclaration(selectorGroupBlock(css, selector), 'scroll-margin-top', '124px');
-    assertCssDeclaration(
-      selectorGroupBlock(mediaBlock(css, '(max-width: 780px)'), selector),
-      'scroll-margin-top',
-      '185px'
-    );
+  // 셀렉터로 규칙을 찾으면 `.week-result table` 처럼 다른 규칙에도 쓰이는 셀렉터가 엉뚱한 블록에
+  // 걸린다. 반대로 선언에서 출발해, scroll-margin-top 을 주는 규칙들이 무엇을 덮는지 모은다.
+  const covered = (scope, value) => {
+    const flat = String(scope).replace(/\/\*[\s\S]*?\*\//g, '').replace(/@media[^{]*\{/g, '');
+    const selectors = new Set();
+    for (const rule of flat.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      if (!new RegExp(`scroll-margin-top:\\s*${value}\\s*;`).test(rule[2])) continue;
+      for (const part of rule[1].split(',')) selectors.add(part.trim());
+    }
+    return selectors;
+  };
+
+  // 목록을 따로 적지 않고 KEYBOARD_SCROLLABLE 에서 돈다 — 탭 정거장을 하나 늘리면서 가림 방지를
+  // 빠뜨리는 일이 없도록. 두 목록이 갈리면 새 항목만 보호 없이 남는다.
+  const wide = covered(css, '124px');
+  const narrow = covered(mediaBlock(css, '(max-width: 780px)'), '185px');
+  for (const { selector } of KEYBOARD_SCROLLABLE) {
+    assert.ok(wide.has(selector), `${selector} 는 넓은 화면 scroll-margin-top 을 받아야 한다`);
+    assert.ok(narrow.has(selector), `${selector} 는 좁은 화면 scroll-margin-top 을 받아야 한다`);
   }
 });
