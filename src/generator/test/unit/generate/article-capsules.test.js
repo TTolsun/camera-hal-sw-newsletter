@@ -96,8 +96,117 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   // allowed_claim_evidence가 결정론 검증기와 같은 텍스트 조각을 전부 싣게 되면서 이 fixture의
   // capsule이 1163 -> 1254 토큰으로 늘었다. fixture는 evidence 필드를 실제 후보보다 많이 채워 둔
   // 편이라 증가폭이 크게 잡히며, 2026-08-03 실제 후보 capsule은 오히려 1545 -> 1516으로 줄었다.
+  //
+  // 이 1300은 **이 fixture의 회귀 잠금**이지 발행 예산 상한이 아니다. 실제 후보는 이 값을 일상적으로
+  // 넘고(커밋된 주간 산출물 52건 중 46건이 1300 초과, 최대 5867) 그것이 발행을 막지 않는다. 실제
+  // 후보 capsule이 커졌다는 이유로 이 숫자를 올리거나 내리지 마라.
   assert.ok(capsule.estimated_tokens <= 1300);
   assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
+});
+
+// 릴리스 후보는 behavior_change/version_or_release/api_or_component가 전부 후보 자신을 되뇌는
+// 문장이다. 이 셋이 evidence를 다 채우면 본문에서 온 문장은 구조적으로 한 칸도 들어가지 못한다.
+// 2026-08-24호의 유일한 main 기사가 이 경로로 나가, 실제 변경(imx296 embedded data revert)을
+// 본문에서 한 번도 언급하지 못한 채 발행됐다.
+//
+// 후보는 evidence_note, seed fact, summary_cache를 함께 들고 오는 것이 정상이다(reporter 프롬프트가
+// evidence_notes를 요구한다). 본문 자리를 그 보조 근거 **뒤에** 두면 노트 하나만 있어도 같은 실패가
+// 그대로 재현되므로, 여기서는 보조 근거를 다 채운 프로덕션 형태로 잠근다. 잠그는 것은 "본문에서 온
+// 문장이 최소 한 칸 들어간다"이지 특정 배치가 아니다 — 순서를 고정하면 이슈가 결함이라고 부른
+// 배치를 계약으로 굳히게 된다.
+test('article capsule keeps one evidence slot for the release body', () => {
+  const releaseCandidate = {
+    title: 'Raspberry Pi libcamera Releases - v0.7.2+rpt20260817',
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817',
+    source: 'Raspberry Pi libcamera Releases',
+    version_or_release: 'v0.7.2+rpt20260817',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).',
+    summary_cache: { summary: 'Cached release tag page text.' },
+    compact_evidence: { primary_facts: ['Seed fact about the release tag.'] }
+  };
+
+  const fromSummary = buildArticleCapsule(candidate({
+    ...releaseCandidate,
+    summary: 'Revert "ipa: rpi: imx296: Enable embedded data" Right now embedded data with the imx296 cannot be negotiated with the CFE.'
+  }));
+  assert.ok(
+    fromSummary.evidence.some(line => /imx296/.test(line)),
+    '보조 근거가 있어도 summary 본문이 최소 한 칸 들어가야 한다'
+  );
+
+  const fromReleaseBullet = buildArticleCapsule(candidate({
+    ...releaseCandidate,
+    summary: 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).',
+    source_extraction: {
+      release: {
+        version: 'v0.7.2+rpt20260817',
+        sections: [{
+          category: 'fixes',
+          heading: 'Changes',
+          items: [{ text: 'Revert imx296 embedded data stream enablement.' }]
+        }]
+      }
+    }
+  }));
+  assert.ok(
+    fromReleaseBullet.evidence.some(line => /imx296/.test(line)),
+    '추출된 릴리스 불릿도 같은 본문 칸을 쓴다'
+  );
+
+  // 상한 3에서 behavior_change가 evidence에 남는 유일한 장치는 그것이 식별 목록의 앞쪽,
+  // 즉 예약분을 뺀 두 칸 안에 있다는 것뿐이다. 식별 3필드와 본문을 다 가진 이 릴리스 형태에서만
+  // 그 배치를 잴 수 있다 — dated-article resolver 후보는 version_or_release가 없어 식별이 2개뿐이라
+  // 어떤 순서로도 behavior_change가 앞 두 칸에 들어간다.
+  assert.ok(
+    fromSummary.evidence.some(line => /^behavior_change: /.test(line)),
+    '본문 줄이 들어와도 behavior_change가 함께 남아야 한다 ' +
+    '(식별 목록에서 behavior_change를 뒤로 내리면 조용히 빠진다)'
+  );
+});
+
+// 본문 없이 태그만 올린 릴리스는 수집기가 summary와 behavior_change에 같은 문장을 넣는다
+// (raspberrypi-libcamera-releases.js의 `releaseBodyText(block) || releaseSentence`). 라벨만 다른
+// 완전 중복을 프롬프트에 두 줄 실으면 이슈가 지적한 자기참조 되뇌기를 한 줄 더 늘리는 셈이다.
+test('article capsule does not repeat one sentence under two evidence labels', () => {
+  const releaseSentence = 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).';
+  const capsule = buildArticleCapsule(candidate({
+    title: 'Raspberry Pi libcamera Releases - v0.7.2+rpt20260817',
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817',
+    source: 'Raspberry Pi libcamera Releases',
+    version_or_release: 'v0.7.2+rpt20260817',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: releaseSentence,
+    summary: releaseSentence
+  }));
+
+  assert.equal(
+    capsule.evidence.filter(line => line.endsWith(releaseSentence)).length,
+    1,
+    '같은 문장이 라벨만 바꿔 두 번 들어가면 안 된다'
+  );
+
+  // compactText가 라벨과 값을 함께 160자로 자르므로, 같은 문장이라도 라벨이 길수록 값이 더 짧게
+  // 잘린다. 자른 뒤에 중복을 판정하면 이 경로가 그대로 뚫린다 — 2026-08-24 Camera ITS overview
+  // 후보(185자 동일 문장)가 그래서 3칸 중 2칸을 같은 문장에 썼다.
+  const longSentence = 'July 2026 Camera ITS overview Compatibility Updated Camera ITS overview to add '
+    + 'guidance on sub-camera testing, multi-camera API links, and splitting tests to reduce test execution time.';
+  const longCapsule = buildArticleCapsule(candidate({
+    title: 'Camera ITS overview',
+    url: 'https://source.android.com/docs/compatibility/cts/camera-its-overview',
+    source: 'AOSP Site Updates',
+    version_or_release: 'AOSP Site Updates - July 2026',
+    api_or_component: 'Camera ITS',
+    behavior_change: longSentence,
+    summary: longSentence
+  }));
+
+  assert.ok(longSentence.length > 160, '이 케이스는 160자 초과 문장이어야 잘림 경로를 지난다');
+  assert.equal(
+    longCapsule.evidence.filter(line => line.includes('guidance on sub-camera testing')).length,
+    1,
+    '160자를 넘어 라벨별로 다르게 잘리는 문장도 한 줄만 남아야 한다'
+  );
 });
 
 test('article capsule preserves image provenance (sourceKind, contentType) for the gate', () => {
