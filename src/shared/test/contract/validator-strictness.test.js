@@ -921,6 +921,119 @@ test('validate-site rejects root homepage without shared helper reference', () =
   assert.match(result.stderr, /root index\.html must load assets\/js\/newsletter-archive\.js/);
 });
 
+// 발행 레인은 위클리인데 htmlFiles 가 newsletters.json(dated)만 돌던 시절에는 위클리 이슈
+// 페이지와 Lab 페이지가 HTML 계약 검사를 한 번도 받지 않았다. 아래 셋이 그 커버리지를 잠근다.
+
+function addWeeklyIssue(root, weeklyKey, html) {
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{
+    weeklyKey,
+    html: `newsletters/${weeklyKey}/index.html`
+  }]);
+  writeText(path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'), html);
+}
+
+test('validate-site scans weekly issue pages, not just dated ones', () => {
+  const root = tempRoot('validate-site-weekly-scan-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  // dated 호는 멀쩡하고 위클리 쪽에만 TODO 를 심는다 — dated 만 돌면 통과해 버리던 자리다.
+  addWeeklyIssue(root, '2026-W21', newsletterHtml('2026-05-23').replace('<main>', '<main><p>TODO</p>'));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Published HTML contains TODO: newsletters\/2026-W21\/index\.html/);
+});
+
+test('validate-site scans the AI Engineering Lab page', () => {
+  const root = tempRoot('validate-site-learning-scan-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  writeText(
+    path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'),
+    '<!doctype html><html><body><a href="#x">unclosed</body></html>'
+  );
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Anchor tag mismatch in learning\/ai-engineering\/index\.html/);
+});
+
+// 위클리 목록이 깨지면 htmlFiles 가 조용히 비어 발행 레인 전체가 무검사로 나간다. 그 방어는
+// validate-site 가 아니라 rendered-issue-structure.js(NEWSLETTER_INDEX_PATHS)가 한다 — validate-site
+// 는 그 결과에 기대어 목록을 읽기만 한다. 의존하는 계약이므로 여기서 통합으로 잠근다.
+test('validate-site fails when the weekly index it reads is missing or malformed', () => {
+  const cases = [
+    ['missing', null, /Missing articles\/data\/newsletters-weekly\.json/],
+    ['not json', 'not json at all', /Invalid JSON in articles\/data\/newsletters-weekly\.json/],
+    ['an object', '{}', /articles\/data\/newsletters-weekly\.json must contain an array/]
+  ];
+  for (const [label, contents, expected] of cases) {
+    const root = tempRoot(`validate-site-weekly-index-${label.replace(/\s+/g, '-')}-`);
+    writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+    const indexPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
+    if (contents === null) fs.rmSync(indexPath);
+    else writeText(indexPath, contents);
+
+    const result = runScript(validateSitePath, root);
+
+    assert.notEqual(result.status, 0, label);
+    assert.match(result.stderr, expected, label);
+  }
+});
+
+test('validate-site rejects a weekly index entry whose page is missing', () => {
+  const root = tempRoot('validate-site-weekly-page-missing-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  // 렌더가 실패해 페이지가 없어도 홈·아카이브는 그 카드를 링크한다. 조용히 건너뛰면 안 된다.
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{
+    weeklyKey: '2026-W21',
+    html: 'newsletters/2026-W21/index.html'
+  }]);
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Weekly newsletter 2026-W21 html file does not exist/);
+});
+
+// 필수 클래스는 class 토큰으로 본다. 부분 문자열로 보면 본문에 이름이 글자로만 나와도 통과해
+// 실제로는 그 블록이 없는 페이지가 발행된다.
+//
+// 위클리 페이지로 검사한다. dated 호는 rendered-issue-structure.js 가 같은 네 클래스를 이미
+// 토큰으로 보므로 그쪽에서 잡혀 이 루프의 판정이 드러나지 않는다 — 그 구조 검사는 dated 루프
+// 안에서만 돌기 때문에, 위클리에서는 여기가 유일한 검사다.
+test('validate-site requires the issue classes as class tokens on weekly pages', () => {
+  const root = tempRoot('validate-site-class-token-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  // reference-list 만 클래스가 아니라 본문 글자로 남긴다(뒤따르는 블록 스캔이 없는 클래스라
+  // 이 검사만 단독으로 갈린다).
+  addWeeklyIssue(root, '2026-W21', newsletterHtml('2026-05-23').replace(
+    '<ul class="reference-list"><li><a href="https://example.com/reference">Reference</a></li></ul>',
+    '<p>이 호에는 reference-list 가 없습니다.</p>'
+  ));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Newsletter HTML missing reference-list: newsletters\/2026-W21\/index\.html/);
+});
+
+// Lab 페이지는 스캔 대상이지만 `newsletters/` 접두어가 아니라 이슈 전용 검사는 받지 않는다.
+// 그 경계가 넓어지면 briefing·source-list 가 없는 이 페이지가 즉시 막힌다.
+test('validate-site scans the Lab page without applying issue-only checks', () => {
+  const root = tempRoot('validate-site-learning-pass-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  writeText(
+    path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'),
+    '<!doctype html><html><body><main><p>학습 과정</p><a href="../../index.html">홈</a></main></body></html>'
+  );
+
+  const result = runScript(validateSitePath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.doesNotMatch(result.stderr, /learning\/ai-engineering/);
+});
+
 test('validate-site rejects archive page without shared helper reference', () => {
   const root = tempRoot('validate-site-archive-helper-');
   writeSiteFixture(root, {
