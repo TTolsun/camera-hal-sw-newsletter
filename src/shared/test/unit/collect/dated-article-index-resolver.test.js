@@ -762,8 +762,8 @@ test('keeps the body when a closing tag sits before the heading', async () => {
 });
 
 // </main>이 유일한 경계 후보인 페이지. 알려진 두 소스에서는 이 후보가 한 번도 이기지 못한다
-// (/news는 </article>이 5,008~8,151자 먼저 오고, claude.com/blog는 관련 기사 마커가
-// 46,999~151,455자 먼저 온다). 실제로 이 줄을 지워도 기존 테스트는 한 건도 안 깨졌다 —
+// (</main>까지의 간격: /news는 </article>이 5,008~8,151자, claude.com/blog는 관련 기사 마커가
+// 56,630~57,896자 먼저 온다). 실제로 이 줄을 지워도 기존 테스트는 한 건도 안 깨졌다 —
 // 즉 지금까지 이 후보를 실제로 지나는 테스트가 없었다. 여기서 그 경로를 잠근다.
 test('cuts at the closing main tag when it is the only boundary candidate', async () => {
   const slug = 'closing-main-only';

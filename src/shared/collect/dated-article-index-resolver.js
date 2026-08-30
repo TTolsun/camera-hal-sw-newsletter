@@ -55,8 +55,9 @@ const SUMMARY_LIMIT = 500;
 // - 첫 </article>이 /news 11건 전부에서 경계가 된다. 그 경계가 없으면 11건 전부
 //   behavior_change나 sections에 푸터 문구("Read more Products Claude Claude Code ...")가
 //   들어간다.
-// - </main>은 두 소스 어디에서도 이기지 못한다. /news는 </article>이 5,008~8,151자 먼저 오고,
-//   claude.com/blog는 </article>이 아예 없는 대신 관련 기사 마커가 46,999~151,455자 먼저 온다.
+// - </main>은 두 소스 어디에서도 이기지 못한다. 두 수치 모두 </main>까지의 간격이다:
+//   /news는 첫 </article>이 5,008~8,151자 먼저 오고, claude.com/blog는 </article>이 아예 없는
+//   대신 관련 기사 마커가 56,630~57,896자 먼저 온다(라이브 blog 23건, 간격이 거의 일정하다).
 //   그래도 남겨 둔다 — <article>도 관련 기사 마커도 없는 페이지에서 푸터를 막아 줄 마지막
 //   후보이기 때문이고, 그 경로는 합성 HTML 테스트가 잠근다.
 //
@@ -65,11 +66,15 @@ const SUMMARY_LIMIT = 500;
 // Cowork, 17% on Claude Code, 7% on the Claude Platform")가 있어서, 잘리면 본문이
 // 10,832 -> 8,495자가 되고 앵커가 6 -> 0으로 떨어져 behavior_change와 sections가 빈 값이 된다.
 // 그래도 이 경계를 쓰는 이유는 셋이다.
-// 1) 각주를 살리고 "Related content"만 배제하는 견고한 경계가 없다. 그 섹션의 class는 빌드
-//    해시(LandingPageSection-module-scss-module__ZSMdoa__root의 ZSMdoa)라 재배포 때 바뀌고,
-//    <section> 태그 자체는 본문 안에도 나온다(model-hardware-standard 기사 본문에 6개 —
-//    <section>을 경계로 쓰면 그 기사가 118,000자를 잃는다). "Related content" 문자열 매칭은
-//    문구가 바뀌거나 지역화되면 깨진다.
+// 1) 각주를 살리고 "Related content"만 배제하려면 그 섹션 전용 마커가 필요한데, 쓸 만한 것이
+//    구조 경계보다 약하다. 해시를 와일드카드로 둔 모듈명 마커
+//    (/<section class="LandingPageSection-module-scss-module__[^"]*__root"/)는 라이브 11건에서
+//    그 섹션만 집는 것으로 확인됐다 — 즉 "대안이 없다"가 아니라 "대안이 더 약하다"가 맞다.
+//    그 마커가 깨져 </main>로 떨어지면 11건 중 5건에 남의 기사 카드가 근거로 들어온다(실측).
+//    class를 해시째 박는 것은 재배포 때 바뀌어 더 나쁘고(ZSMdoa 같은 빌드 해시),
+//    <section> 태그 자체는 본문 안에도 나오며(model-hardware-standard 기사 본문에 6개 —
+//    <section>을 경계로 쓰면 그 기사가 118,000자를 잃는다), "Related content" 문자열 매칭은
+//    문구가 바뀌거나 지역화되면 깨진다. 그래서 구조 경계인 </article>을 택했다.
 // 2) 각주가 잘리는 6건 중 실제로 근거가 달라지는 것은 위 1건뿐이다. 나머지 5건은 각주를
 //    남기든 버리든 behavior_change와 sections가 글자 그대로 같다(실측).
 // 3) 그 1건에서 각주를 살려 얻는 근거는 "Footnotes 1 As a result, ..."로 시작하는 각주
