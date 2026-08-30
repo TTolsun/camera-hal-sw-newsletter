@@ -72,11 +72,11 @@ test('role이 같아도 stage가 다르면 같은 attempt에서 행이 갈린다
   assert.deepEqual([...new Set(log.map(entry => entry.role))], ['editor', 'repair']);
 });
 
-test('결정론 단계는 role을 생략하면 stage id를 그대로 쓴다', () => {
+test('결정론 단계는 role이 곧 사람이 읽는 이름이다', () => {
   const tracker = createStageStatusTracker();
-  tracker.pass({ stageId: 'quality_gate', attempt: 1 });
-  tracker.pass({ stageId: 'render', attempt: 1 });
-  tracker.fail({ stageId: 'publish_gate', attempt: 1, reason: 'gate not passed' });
+  tracker.pass({ stageId: 'quality_gate', role: 'quality_gate', attempt: 1 });
+  tracker.pass({ stageId: 'render', role: 'render', attempt: 1 });
+  tracker.fail({ stageId: 'publish_gate', role: 'publish_gate', attempt: 1, reason: 'gate not passed' });
   const log = tracker.toLog();
   assert.deepEqual(log.map(entry => `${entry.role}:${entry.status}`), [
     'quality_gate:passed',
@@ -84,6 +84,38 @@ test('결정론 단계는 role을 생략하면 stage id를 그대로 쓴다', ()
     'publish_gate:failed'
   ]);
   assert.deepEqual(log.map(entry => entry.stage_id), ['quality_gate', 'render', 'publish_gate']);
+  // label을 안 주면 role이 stage 필드를 채운다.
+  assert.deepEqual(log.map(entry => entry.stage), ['quality_gate', 'render', 'publish_gate']);
+});
+
+// reason은 지금 status를 설명하는 값이다. 실패했다 다시 통과한 행에 옛 reason이 남으면
+// "passed인데 reason=NEEDS_FIX"인 모순 행이 된다 -- 커밋된 06-20·07-27·08-10 로그에 실재했다.
+test('실패 후 통과로 갱신되면 이전 reason이 남지 않는다', () => {
+  const tracker = createStageStatusTracker();
+  const call = { stageId: 'quality_gate', role: 'quality_gate', attempt: 1 };
+  tracker.fail({ ...call, reason: 'NEEDS_FIX' });
+  assert.equal(tracker.toLog()[0].reason, 'NEEDS_FIX');
+  tracker.pass(call);
+  const entry = tracker.toLog()[0];
+  assert.equal(entry.status, STAGE_STATUSES.PASSED);
+  assert.equal('reason' in entry, false);
+});
+
+// 기록 전용 계측이라 잘못 부른 호출이 발행을 죽이면 안 된다. 대신 경고를 남긴다.
+test('잘못 부른 호출도 던지지 않고 경고만 남긴다', () => {
+  const tracker = createStageStatusTracker();
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  try {
+    assert.doesNotThrow(() => tracker.pass(undefined));
+    // 예전 위치 인자 방식으로 부른 경우. 조용히 통과하면 그 단계가 다이어그램에서 사라진다.
+    assert.doesNotThrow(() => tracker.pass('render', 1));
+  } finally {
+    console.warn = originalWarn;
+  }
+  assert.equal(warnings.length, 2);
+  assert.ok(warnings.every(message => message.includes('[stage-status]')));
 });
 
 test('toLog returns copies that cannot mutate internal state', () => {

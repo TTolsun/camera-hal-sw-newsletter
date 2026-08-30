@@ -16,7 +16,10 @@ async function callLlmJson(stageRunArg, ...args) {
   const call = {
     stageId: run.definition.id,
     role: run.definition.statusRole,
-    attempt: generationRunState.currentQualityAttempt,
+    // attempt도 run에서 읽는다. run state 싱글톤에서 읽으면 attempt 루프 밖에서 도는
+    // stage(weekly-merge 등)가 루프에 남은 값을 물려받아, 진단 아티팩트의 canonical key와
+    // 이 로그의 attempt가 같은 호출에서 서로 다른 값이 된다.
+    attempt: run.qualityAttempt,
     label: run.label
   };
   generationRunState.stageTracker.start(call);

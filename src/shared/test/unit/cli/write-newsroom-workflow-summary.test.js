@@ -233,7 +233,8 @@ test('role을 공유하는 여러 행이 있어도 role별 마지막 상태로 �
     profile: 'newsroom-final',
     status: {
       stage_status_log: [
-        { stage_id: 'reporter', role: 'reporter', attempt: 1, status: 'passed' },
+        // stage_id 없는 옛 형식 행. 렌더러가 새 필드를 요구하게 되면 여기서 깨진다.
+        { role: 'reporter', attempt: 1, status: 'passed' },
         // 같은 attempt, 같은 role, 다른 stage. 예전에는 이 둘이 한 행으로 뭉개졌다.
         { stage_id: 'editorial_plan', role: 'editor', attempt: 1, status: 'passed' },
         { stage_id: 'editor', role: 'editor', attempt: 1, status: 'failed' }

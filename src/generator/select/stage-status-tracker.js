@@ -20,6 +20,8 @@
 // role은 지우지 않는다. 행마다 stage_id와 role을 함께 남기고, 다이어그램은 지금처럼 role로
 // 묶어 읽는다.
 
+// SKIPPED는 기록기가 만들지 않는다. 어떤 단계가 건너뛴 것인지는 정식 시퀀스를 아는
+// 렌더러가 "기록에 없음"에서 파생한다.
 const STAGE_STATUSES = Object.freeze({
   STARTED: 'started',
   PASSED: 'passed',
@@ -35,22 +37,31 @@ function createStageStatusTracker() {
     return entries.find(entry => entry.stage_id === stageId && entry.attempt === normalizedAttempt);
   }
 
-  // role을 생략하면 stage_id를 그대로 쓴다. quality_gate·render처럼 다이어그램 노드가 곧
-  // stage인 결정론 단계를 위한 규칙이다 -- LLM stage는 role이 stage id와 다르므로 반드시 준다.
-  function upsert({ stageId, role, attempt, label, reason }, status) {
+  // 기록 전용이라는 계약이 인자 모양보다 우선한다. 잘못 부른 호출이 발행을 죽이면 안 되므로
+  // 던지지 않고, 대신 경고를 남겨 마이그레이션 누락이 조용히 통과하지 않게 한다 -- stage_id나
+  // role이 없는 행은 다이어그램에서 그 단계를 통째로 사라지게 만든다.
+  function upsert(call, status) {
+    const { stageId, role, attempt, label, reason } = call || {};
+    if (!stageId || !role) {
+      console.warn(`[stage-status] stageId와 role 없이 기록을 시도했다: ${JSON.stringify(call)}`);
+    }
     const existing = find(stageId, attempt);
     if (existing) {
       existing.status = status;
       if (label) existing.stage = label;
+      // reason은 지금 status를 설명하는 값이다. 남겨두면 실패했다가 다시 통과한 행이
+      // "passed인데 reason=NEEDS_FIX"로 남는다(커밋된 06-20·07-27·08-10 로그에 실재한다).
       if (reason) existing.reason = reason;
+      else delete existing.reason;
       return existing;
     }
     const entry = {
       stage_id: stageId,
-      role: role || stageId,
+      role,
       attempt: Number(attempt) || 0,
       status,
-      stage: label || role || stageId
+      // 사람이 읽는 이름. LLM stage는 label을 주고, 결정론 단계는 role이 곧 이름이다.
+      stage: label || role
     };
     if (reason) entry.reason = reason;
     entries.push(entry);
@@ -66,9 +77,6 @@ function createStageStatusTracker() {
     },
     fail(call) {
       return upsert(call, STAGE_STATUSES.FAILED);
-    },
-    skip(call) {
-      return upsert(call, STAGE_STATUSES.SKIPPED);
     },
     toLog() {
       return entries.map(entry => ({ ...entry }));

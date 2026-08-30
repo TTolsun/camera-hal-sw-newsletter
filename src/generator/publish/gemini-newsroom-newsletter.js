@@ -821,7 +821,7 @@ async function main() {
   // render는 callLlmJson 초크포인트를 거치지 않으므로 여기서 직접 계측한다(기록 전용).
   // 빌드/터미널 검증이 실패하면 render를 'failed'로 남겨 요약 다이어그램이 실패와 일치하게 한다.
   const renderAttempt = generationRunState.currentQualityAttempt;
-  generationRunState.stageTracker.start({ stageId: 'render', attempt: renderAttempt });
+  generationRunState.stageTracker.start({ stageId: 'render', role: 'render', attempt: renderAttempt });
   let newsletterMarkdown;
   let newsletterHtmlContent;
   try {
@@ -849,10 +849,11 @@ async function main() {
       path.join(newsroomDir, 'fact-check-report.json'),
       path.join(newsroomDir, 'quality-report.json')
     ]);
-    generationRunState.stageTracker.pass({ stageId: 'render', attempt: renderAttempt });
+    generationRunState.stageTracker.pass({ stageId: 'render', role: 'render', attempt: renderAttempt });
   } catch (error) {
     generationRunState.stageTracker.fail({
       stageId: 'render',
+      role: 'render',
       attempt: renderAttempt,
       reason: error && error.message
     });
