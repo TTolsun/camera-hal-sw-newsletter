@@ -10,6 +10,19 @@ const LLM_STAGE_GROUPS = Object.freeze({
 const LLM_STAGE_GROUP_VALUES = Object.freeze(Object.values(LLM_STAGE_GROUPS));
 const UNKNOWN_STAGE_ROUTING_WARNING = 'unknown_stage_defaulted_to_reporter';
 
+/**
+ * group 어휘와 group -> model 선택을 같은 모듈이 소유하므로, 이 검증도 여기 둔다.
+ * stage-catalog는 이 함수를 import해 definition을 만들 때 group을 검증한다. 반대 방향
+ * (model-policy가 catalog를 import)은 만들지 않는다 -- model-policy는 stage를 모른다.
+ * enum이 있어도 JavaScript에서는 잘못된 값이 들어올 수 있으므로 public boundary에서 막는다.
+ */
+function assertLlmStageGroup(group) {
+  if (!LLM_STAGE_GROUP_VALUES.includes(group)) {
+    throw new Error(`unknown_llm_stage_group: ${String(group)}`);
+  }
+  return group;
+}
+
 function normalizeModelName(value) {
   return String(value || '').trim().toLowerCase();
 }
@@ -98,6 +111,7 @@ function configuredModels(config) {
 module.exports = {
   LLM_STAGE_GROUPS,
   UNKNOWN_STAGE_ROUTING_WARNING,
+  assertLlmStageGroup,
   configuredModels,
   configuredModelsForStage,
   isGeminiProModel,
