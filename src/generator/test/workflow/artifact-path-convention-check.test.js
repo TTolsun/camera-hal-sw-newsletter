@@ -62,6 +62,48 @@ test('새 매니페스트가 옛 규약으로 쓰이면 잡는다', () => {
   });
 });
 
+// #958: assets/·css/도 #262 phase 6에서 content/·data/·newsletters/와 함께 articles/ 아래로 옮겨진
+// 공개 출력물이다. 판별 목록에서 빠지면 어느 규약으로 쓰든 "공개 출력물 경로가 하나도 없다"로 새어
+// 나가 규약이 갈린 것을 못 잡는다. 그래서 사유까지 단언한다 — ok:false만 보면 그 구멍이 통과한다.
+test('assets/ 경로가 새 매니페스트에 옛 규약으로 쓰이면 잡는다', () => {
+  withTempRoot(root => {
+    const tracked = [seedManifest(root, ROOT_CONVENTION_DATE, ['assets/images/fallback/x.png'])];
+    const result = checkArtifactPathConvention({ root, _trackedPaths: tracked });
+    assert.equal(result.ok, false);
+    assert.equal(result.violations.length, 1);
+    assert.match(result.violations[0].reason, /저장소 루트 기준이 아니다/);
+  });
+});
+
+test('루트 기준 assets/ 경로는 새 매니페스트에서 통과한다', () => {
+  withTempRoot(root => {
+    const tracked = [seedManifest(root, ROOT_CONVENTION_DATE, ['articles/assets/images/fallback/x.png'])];
+    const result = checkArtifactPathConvention({ root, _trackedPaths: tracked });
+    assert.equal(result.ok, true);
+    assert.deepEqual(result.violations, []);
+  });
+});
+
+test('과거 매니페스트의 assets/ 경로가 사후 정규화되면 잡는다', () => {
+  withTempRoot(root => {
+    const tracked = [seedManifest(root, OLD_CONVENTION_DATE, ['articles/assets/images/fallback/x.png'])];
+    const result = checkArtifactPathConvention({ root, _trackedPaths: tracked });
+    assert.equal(result.ok, false);
+    assert.equal(result.violations.length, 1);
+    assert.match(result.violations[0].reason, /접두가 붙었다/);
+  });
+});
+
+test('css/ 경로가 새 매니페스트에 옛 규약으로 쓰이면 잡는다', () => {
+  withTempRoot(root => {
+    const tracked = [seedManifest(root, ROOT_CONVENTION_DATE, ['css/newsletter.css'])];
+    const result = checkArtifactPathConvention({ root, _trackedPaths: tracked });
+    assert.equal(result.ok, false);
+    assert.equal(result.violations.length, 1);
+    assert.match(result.violations[0].reason, /저장소 루트 기준이 아니다/);
+  });
+});
+
 // 검사가 아무것도 못 읽고 조용히 통과하는 것이 이 검사의 가장 위험한 실패 모드다.
 // sparse checkout·partial clone에서 이 경로로 들어온다.
 test('검사 대상이 하나도 없으면 통과가 아니라 위반이다', () => {

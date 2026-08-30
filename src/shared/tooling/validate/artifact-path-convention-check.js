@@ -19,16 +19,16 @@ const path = require('path');
 // 06-16(루트 기준)으로 건너뛰므로 이 경계로 바뀌는 현재 판정은 없다.
 const REPOSITORY_ROOT_PATH_CONVENTION_START_DATE = '2026-06-13';
 const MANIFEST_PATH_ARRAYS = ['files', 'review_artifacts', 'retained_heavy_artifacts', 'committed_artifacts'];
-// assets/·css/가 빠져 있는 것은 알려진 구멍이며 #958이 따로 다룬다. 여기서는 자리만 옮기고
-// 판정 범위는 그대로 둔다(이 변경으로 판정이 달라지면 안 된다).
-const PUBLIC_OUTPUT_ROOT_PREFIXES = ['content/', 'data/', 'newsletters/'];
+const PUBLIC_OUTPUT_ROOT_PREFIXES = ['assets/', 'content/', 'css/', 'data/', 'newsletters/'];
 const NEWSROOM_ROOT = 'articles/content/newsroom';
 const DATE_DIRECTORY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
-// 규약 판별 대상은 #262에서 articles/ 아래로 옮겨진 공개 출력물 경로뿐이다. .tmp/·cache/·state/는
-// 공개 출력물이 아니라 이동 대상이 아니었으므로 판별에 쓸 수 없다. 특히 state/는 루트 기준
-// 매니페스트에만 나와 비교할 옛 형태가 아예 없다(옛 규약 시절 같은 파일은
-// data/article-exposure-history.json이었다).
+// 규약 판별 대상은 #262에서 articles/ 아래로 옮겨진 공개 출력물 중 이 검사가 실제로 보는 경로다.
+// 이 검사가 보는 것은 content/·data/·newsletters/·sitemap.xml과 정적 사이트 surface인 assets/·css/다
+// (AGENTS.md "디렉터리 구조" 참조). 같은 이동에 포함된 archive.html·robots.txt는 매니페스트에 기록된
+// 적이 없어 아직 목록에 넣지 않았다. .tmp/·cache/·state/는 공개 출력물이 아니라 이동 대상이
+// 아니었으므로 판별에 쓸 수 없다. 특히 state/는 루트 기준 매니페스트에만 나와 비교할 옛 형태가 아예 없다(옛 규약 시절
+// 같은 파일은 data/article-exposure-history.json이었다).
 function isPublicOutputManifestPath(relPath) {
   const withoutArticlesPrefix = relPath.startsWith('articles/')
     ? relPath.slice('articles/'.length)
