@@ -56,9 +56,11 @@ function candidateTitle(candidate = {}) {
   return text(candidate.title || candidate.headline || candidate.name);
 }
 
-// 근거 그룹 목록은 claim-source-binding.js의 sourceExtractionItems와 같아야 한다(#944, #965).
+// 읽는 섹션 그룹 집합은 claim-source-binding.js의 sourceExtractionItems와 같아야 한다(#944, #965).
 // 두 소비자가 같은 컨테이너를 읽어야 LLM이 프롬프트에서 본 근거와 검증기가 바인딩에 쓰는 근거가
-// 일치한다. workflow는 목록 끝에 둔다 — 앞에 두면 release / minor_line_context 후보의 기존 근거가
+// 일치한다. 같은 것은 세 그룹의 집합과 순서까지이고, evidence_blocks의 위치와 item 필드 우선순위는
+// 두 모듈이 예전부터 다르다(여기는 source_text 우선, 저기는 text 우선) — 이 함수의 계약이 아니다.
+// workflow는 목록 끝에 둔다 — 앞에 두면 release / minor_line_context 후보의 기존 근거가
 // MAX_FACTS 12칸 안에서 뒤로 밀려 출력이 바뀐다.
 function extractionSectionItems(extraction = {}) {
   const sections = [
