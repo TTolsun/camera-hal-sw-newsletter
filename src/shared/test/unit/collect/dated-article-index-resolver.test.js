@@ -737,6 +737,37 @@ test('keeps the earliest boundary when a related-articles marker precedes the cl
   assert.doesNotMatch(haystack, /FOOTER_SENTINEL_TEXT/, '푸터는 본문이 아니다');
 });
 
+// </main>이 유일한 경계 후보인 페이지. 알려진 두 소스에서는 이 후보가 한 번도 이기지 못한다
+// (/news는 </article>이 5,008~8,151자 먼저 오고, claude.com/blog는 관련 기사 마커가
+// 46,999~151,455자 먼저 온다). 실제로 이 줄을 지워도 기존 테스트는 한 건도 안 깨졌다 —
+// 즉 지금까지 이 후보를 실제로 지나는 테스트가 없었다. 여기서 그 경로를 잠근다.
+test('cuts at the closing main tag when it is the only boundary candidate', async () => {
+  const slug = 'closing-main-only';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'Closing main only' });
+  const articleHtml = '<main>'
+    + minimalArticleHtml({
+      canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+      headerDateText: 'Aug 18, 2026',
+      title: 'Closing main only',
+      bodyHtml: '<p>BODY_SENTINEL_TEXT</p>'
+    })
+    + '</main><footer><p>FOOTER_SENTINEL_TEXT</p></footer>';
+  assert.doesNotMatch(articleHtml, /<\/article\s*>/i,
+    '이 페이지에 </article>이 있으면 </main> 경로를 재는 것이 아니다');
+  assert.doesNotMatch(articleHtml, /blog_related_section_wrap|data-cta-position="Related articles"/,
+    '관련 기사 마커가 있어도 </main> 경로를 재는 것이 아니다');
+
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  const haystack = evidenceHaystack(items[0]);
+  assert.match(haystack, /BODY_SENTINEL_TEXT/, '기사 본문은 남아야 한다');
+  assert.doesNotMatch(haystack, /FOOTER_SENTINEL_TEXT/,
+    '</main> 후보를 지우면 이 단언이 깨진다 — 푸터가 근거로 들어온다');
+});
+
 // 마커도 </article>도 </main>도 없는 페이지에서는 기존처럼 문서 끝까지가 본문이다 —
 // 경계 후보가 늘었다고 아무 데서나 자르지 않는다.
 test('keeps reading to the end of a page that has no body-end boundary at all', async () => {
