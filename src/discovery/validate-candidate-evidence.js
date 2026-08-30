@@ -4,6 +4,7 @@ const {
   candidateUrl,
   text
 } = require('../shared/collect/source-intelligence-utils');
+const { ensureArray } = require('../shared/common/value-coercion');
 
 function finalEligible(candidate = {}) {
   return ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
@@ -15,7 +16,7 @@ function shouldDeepCheck(candidate = {}) {
   return ['strong_candidate', 'review_candidate'].includes(candidate.source_quality_bucket);
 }
 
-function validateOne(candidate = {}, facts = {}) {
+function validateOne(candidate = {}, facts = {}, capDroppedIds = new Set()) {
   const id = candidateFactId(candidate);
   const fact = facts[id] || {};
   const claims = Array.isArray(fact.claims) ? fact.claims : [];
@@ -59,9 +60,18 @@ function validateOne(candidate = {}, facts = {}) {
     reasons.push('unsupported_claims_excluded');
   }
 
+  // 근거 수집 cap에 밀려 원문을 못 받은 후보에 사유를 남긴다. 자격이 없어 대상이 아니었던
+  // 후보와 status가 똑같이 not_checked라 리포트만으로는 구분되지 않았다.
+  // 진단 전용이다. finalSelectionBlocked도 status도 바꾸지 않는다.
+  const capDropped = capDroppedIds.has(id);
+  if (capDropped) {
+    reasons.push('evidence_fetch_cap_dropped');
+  }
+
   return {
     candidate_id: id,
     url: candidateUrl(candidate),
+    evidence_fetch_cap_dropped: capDropped,
     title: candidateTitle(candidate),
     deep_checked: sourceFetchUsed && sourceFetchStatus === 'success',
     source_fetch_used: sourceFetchUsed,
@@ -84,8 +94,9 @@ function validateCandidateEvidence(candidates = [], sourceFacts = {}, options = 
     const id = candidateFactId(fact);
     factMap[id] = fact;
   }
+  const capDroppedIds = new Set(ensureArray(options.capDroppedCandidates).map(candidateFactId));
   const checked = candidates
-    .map(candidate => validateOne(candidate, factMap));
+    .map(candidate => validateOne(candidate, factMap, capDroppedIds));
   const byId = new Map(checked.map(item => [item.candidate_id, item]));
   const annotatedCandidates = candidates.map(candidate => {
     const id = candidateFactId(candidate);
@@ -116,6 +127,9 @@ function validateCandidateEvidence(candidates = [], sourceFacts = {}, options = 
       candidates: checked,
       counts: checked.reduce((counts, item) => {
         counts[item.evidence_validation_status] = (counts[item.evidence_validation_status] || 0) + 1;
+        if (item.evidence_fetch_cap_dropped) {
+          counts.cap_dropped = (counts.cap_dropped || 0) + 1;
+        }
         return counts;
       }, {})
     },

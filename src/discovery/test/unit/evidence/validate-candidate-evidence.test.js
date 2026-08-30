@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  selectEvidenceFetchTargetGroups,
   selectEvidenceFetchTargets
 } = require('../../../gemini-source-discovery-boundary');
 const {
@@ -454,4 +455,48 @@ test('a publishable candidate outranks a stronger candidate that cannot be publi
   }, { maxTargets: 1 });
 
   assert.deepEqual(targets.map(item => item.id), ['publishable']);
+});
+
+// not_checked 는 "자격이 없어 안 봤다"와 "cap에 밀려 못 봤다"를 구분하지 못한다. 앞은 정상이고
+// 뒤는 발행될 기사가 근거 없이 나가는 경로라, 리포트만 보고는 어느 쪽인지 알 수 없었다.
+test('candidates dropped by the fetch cap are reported apart from ineligible ones', () => {
+  const maxTargets = 2;
+  const candidates = Array.from({ length: 4 }, (_, index) => candidate(`in-${index}`, {
+    id: `in-${index}`,
+    url: `https://example.com/in-${index}`,
+    source_quality_score: 0.9 - index / 100
+  }));
+  const ineligible = candidate('out', {
+    id: 'out',
+    url: 'https://example.com/out',
+    finalSelectionEligibility: 'watchlist',
+    source_quality_bucket: 'weak_candidate'
+  });
+
+  const groups = selectEvidenceFetchTargetGroups([...candidates, ineligible], { clusters: [] }, { maxTargets });
+
+  assert.deepEqual(groups.selected.map(item => item.id), ['in-0', 'in-1']);
+  assert.deepEqual(groups.capDropped.map(item => item.id), ['in-2', 'in-3']);
+
+  const evidence = validateCandidateEvidence([...candidates, ineligible], {
+    sources: groups.selected.map(item => ({
+      id: item.id,
+      url: item.url,
+      title: item.title,
+      source_fetch_used: true,
+      source_fetch_status: 'success',
+      validation_mode: 'source_fetch',
+      claims: [{ claim: item.title, evidence_text: `${item.title} source evidence.` }]
+    }))
+  }, { newsletterDate: '2026-05-16', capDroppedCandidates: groups.capDropped });
+
+  const byId = new Map(evidence.report.candidates.map(item => [item.candidate_id, item]));
+
+  // cap에 밀린 후보만 사유가 붙는다. 자격이 없어 안 본 후보는 그대로다.
+  assert.deepEqual(byId.get('in-2').reasons, ['evidence_fetch_cap_dropped']);
+  assert.deepEqual(byId.get('out').reasons, []);
+  // 진단일 뿐이라 발행을 막지 않는다.
+  assert.equal(byId.get('in-2').final_selection_blocked, false);
+  assert.equal(byId.get('in-2').evidence_validation_status, 'not_checked');
+  assert.equal(evidence.report.counts.cap_dropped, 2);
 });
