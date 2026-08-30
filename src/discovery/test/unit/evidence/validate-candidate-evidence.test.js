@@ -564,3 +564,52 @@ test('every copy of a dropped source is reported as cap dropped', () => {
     .map(item => item.evidence_fetch_cap_dropped);
   assert.deepEqual(droppedFlags, [true, true]);
 });
+
+// 후보 레코드는 발행 자격을 camelCase와 snake_case 두 표기로 들고 온다. 근거 수집이 한쪽만
+// 보면 다른 표기로 온 후보가 전부 자격 없음으로 떨어져, 슬롯 순위 1순위와 dropped_publishable
+// 집계가 동시에 틀린다.
+test('publishability is read from either the camelCase or the snake_case field', () => {
+  const snakeOnly = {
+    id: 'snake-only',
+    title: 'Snake case camera candidate',
+    url: 'https://example.com/snake-only',
+    final_selection_eligibility: 'main',
+    source_quality_bucket: 'review_candidate',
+    duplicate_of_selected_source: false,
+    source_gap_risk: false
+  };
+  const unpublishable = candidate('watchlist', {
+    id: 'watchlist',
+    url: 'https://example.com/watchlist',
+    title: 'Watchlist camera source',
+    finalSelectionEligibility: 'watchlist',
+    source_quality_bucket: 'strong_candidate',
+    source_quality_score: 0.99
+  });
+
+  // 자격이 슬롯 순위 1순위다. snake_case를 못 읽으면 강한 watchlist 후보에게 진다.
+  const groups = selectEvidenceFetchTargetGroups([unpublishable, snakeOnly], {
+    clusters: [{
+      duplicate_count: 1,
+      canonical_url: unpublishable.url,
+      canonical_title: unpublishable.title
+    }]
+  }, { maxTargets: 1 });
+  assert.deepEqual(groups.selected.map(item => item.id), ['snake-only']);
+
+  // 밀린 쪽 집계에서도 같은 표기를 읽어야 한다. snake_case를 못 읽으면 dropped는 1인데
+  // dropped_publishable이 0으로 남아, 발행 가능한 후보를 놓친 사실이 리포트에서 사라진다.
+  const stronger = candidate('stronger', {
+    id: 'stronger',
+    url: 'https://example.com/stronger',
+    source_quality_score: 0.99
+  });
+  const dropped = selectEvidenceFetchTargetGroups([stronger, snakeOnly], { clusters: [] }, { maxTargets: 1 });
+  const evidence = validateCandidateEvidence([stronger, snakeOnly], { sources: [] }, {
+    newsletterDate: '2026-05-16',
+    capDroppedCandidates: dropped.capDropped
+  });
+
+  assert.deepEqual(dropped.capDropped.map(item => item.id), ['snake-only']);
+  assert.deepEqual(evidence.report.evidence_fetch_cap, { dropped: 1, dropped_publishable: 1 });
+});

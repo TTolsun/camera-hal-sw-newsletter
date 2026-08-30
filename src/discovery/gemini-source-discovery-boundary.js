@@ -96,6 +96,7 @@ const {
   candidateTitle,
   candidateUrl,
   evidenceSourceKey,
+  finalSelectionEligible,
   text
 } = require('../shared/collect/source-intelligence-utils');
 const {
@@ -999,10 +1000,6 @@ function candidatePublishedDate(candidate = {}) {
 function evidenceReliabilityRank(candidate = {}) {
   const reliability = String(candidate.reliability || candidate.source_reliability || '').trim().toLowerCase();
   return ['official', 'upstream', 'project-official'].includes(reliability) ? 0 : 1;
-}
-
-function finalSelectionEligible(candidate = {}) {
-  return ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
 }
 
 function evidencePriority(candidate = {}, isCanonical = false) {

@@ -2,19 +2,10 @@ const {
   candidateFactId,
   candidateTitle,
   candidateUrl,
+  finalSelectionEligible,
   text
 } = require('../shared/collect/source-intelligence-utils');
 const { ensureArray } = require('../shared/common/value-coercion');
-
-function finalEligible(candidate = {}) {
-  return ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
-}
-
-function shouldDeepCheck(candidate = {}) {
-  if (!finalEligible(candidate)) return false;
-  if (candidate.duplicate_of_selected_source === true) return false;
-  return ['strong_candidate', 'review_candidate'].includes(candidate.source_quality_bucket);
-}
 
 function validateOne(candidate = {}, facts = {}, capDroppedIds = new Set()) {
   const id = candidateFactId(candidate);
@@ -143,7 +134,7 @@ function validateCandidateEvidence(candidates = [], sourceFacts = {}, options = 
       evidence_fetch_cap: {
         dropped: checked.filter(item => item.evidence_fetch_cap_dropped).length,
         dropped_publishable: candidates
-          .filter(candidate => capDroppedIds.has(candidateFactId(candidate)) && finalEligible(candidate))
+          .filter(candidate => capDroppedIds.has(candidateFactId(candidate)) && finalSelectionEligible(candidate))
           .length
       }
     },
@@ -152,7 +143,6 @@ function validateCandidateEvidence(candidates = [], sourceFacts = {}, options = 
 }
 
 module.exports = {
-  shouldDeepCheck,
   validateCandidateEvidence,
   validateOne
 };
