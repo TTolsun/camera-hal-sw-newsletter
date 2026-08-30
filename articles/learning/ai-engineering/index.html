@@ -131,7 +131,7 @@
               <div class="week-content">
                 <h4>Newsletter Anatomy</h4>
                 <p class="week-goal">목표: 지금 시스템을 AI Engineering 관점에서 다시 모델링한다.</p>
-                <div class="artifact-tree" tabindex="0">Sources → Collector → Discovery → Candidate / Evidence → Selection
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Newsletter 파이프라인 단계 흐름도">Sources → Collector → Discovery → Candidate / Evidence → Selection
 → Reporter LLM → Editor / Fact Check → Quality Gate → Renderer
 → Validator → PR → Human Review</div>
                 <div class="week-columns">
@@ -272,7 +272,7 @@
               <div class="week-content">
                 <h4>Error Analysis</h4>
                 <p class="week-goal">Prompt를 감으로 고치는 대신 failure data가 다음 변경을 고르게 합니다.</p>
-                <div class="code-block-light" tabindex="0">FAIL 27
+                <div class="code-block-light" tabindex="0" role="group" aria-label="Error Analysis 실패 분류 집계">FAIL 27
 Context 부족         9
 Evidence retrieval   6
 Prompt               4
@@ -335,7 +335,7 @@ Model reasoning      2
               <div class="week-content">
                 <h4>Agent란 무엇인가</h4>
                 <p class="week-goal">Newsletter 기능 하나를 작은 tool-calling loop로 직접 모델링합니다.</p>
-                <div class="artifact-tree" tabindex="0">LLM → Tool → Observation → LLM → Tool → ...
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Agent 실행 루프 흐름도">LLM → Tool → Observation → LLM → Tool → ...
 
 Tools:
 search_sources()
@@ -367,7 +367,7 @@ run_validator()</div>
               <div class="week-content">
                 <h4>Verification Loop</h4>
                 <p class="week-goal">One-shot Agent를 없애고 bounded retry를 가진 verification loop를 만듭니다.</p>
-                <div class="artifact-tree" tabindex="0">Agent → Implementation → test / validate
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Verification Loop 흐름도">Agent → Implementation → test / validate
                     ↓ FAIL
                  Feedback
                     ↓
@@ -400,7 +400,7 @@ attempt_budget = 3</div>
               <div class="week-content">
                 <h4>Observability</h4>
                 <p class="week-goal">“왜 틀렸지?”를 감상이 아니라 trace로 재현할 수 있게 합니다.</p>
-                <div class="code-block-light" tabindex="0">run_id
+                <div class="code-block-light" tabindex="0" role="group" aria-label="Observability 추적 레코드 구조">run_id
 model / prompt_version / skill_version
 input / context
 tool_calls
@@ -438,7 +438,7 @@ token / latency</div>
               <div class="week-content">
                 <h4>Spec Engineering</h4>
                 <p class="week-goal">“좋은 newsletter 만들어줘”를 Problem / Goal / Constraints / Non-goals / Success Metrics / Acceptance Criteria로 바꿉니다.</p>
-                <div class="code-block-light" tabindex="0">Goal
+                <div class="code-block-light" tabindex="0" role="group" aria-label="Spec Engineering 스펙 골격">Goal
 Camera HAL 엔지니어가 5분 안에 이번 주 중요한 변화를 파악한다.
 
 Constraints
@@ -471,7 +471,7 @@ No hard blocker</div>
               <div class="week-content">
                 <h4>Hill-Climbing</h4>
                 <p class="week-goal">Production trace 50–100개를 모아 가장 큰 반복 failure를 harness 개선으로 줄입니다.</p>
-                <div class="artifact-tree" tabindex="0">Production Traces
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Hill-Climbing 개선 루프 흐름도">Production Traces
 → Error Analysis
 → Top Failure
 → Harness 변경
@@ -486,7 +486,7 @@ No hard blocker</div>
               <div class="week-content">
                 <h4>Final Boss · Camera HAL Newsletter AI Engineering v2</h4>
                 <p class="week-goal">지금까지의 구성요소를 하나의 안전하고 관찰 가능한 시스템으로 합칩니다.</p>
-                <div class="artifact-tree" tabindex="0">Trigger → Harness → Context Builder → Agent
+                <div class="artifact-tree" tabindex="0" role="group" aria-label="Final Boss 시스템 구성도">Trigger → Harness → Context Builder → Agent
                          ↙          ↘
                       Tools         State
                          ↘          ↙
@@ -513,7 +513,7 @@ Runs → Trace → Eval → Failure Analysis
           <h2 id="weekly-format-title">매 주차 자료는 7개 artifact 역할로 생각한다</h2>
           <p>실제 repo에 학습용 폴더를 쌓는다는 뜻은 아닙니다. 각 주차를 공부할 때 아래 일곱 역할이 빠지지 않도록 개인 노트나 작업 세션에 적용하는 형식입니다.</p>
         </div>
-        <div class="artifact-tree" tabindex="0">01 concept       10–15분 개념, mental model, 흔한 오해
+        <div class="artifact-tree" tabindex="0" role="group" aria-label="주차 자료 파일 구성">01 concept       10–15분 개념, mental model, 흔한 오해
 02 reading       primary source 2–4개
 03 lab           목표, 가설, 실험, 관찰, 평가, failure injection
 04 starter       최소 실행 입력 / baseline

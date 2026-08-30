@@ -8,7 +8,7 @@ const root = path.join(__dirname, '..', '..', '..', '..');
 const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
 const { withLearningFooterLink } = require('../../../generator/publish/assemble-site');
 const { headlineSnapshotFromCandidate } = require('../../../generator/reporter/homepage-headline');
-const { mediaBlock, exactSelectorBlock, assertCssDeclaration } = require('../helpers/css-blocks');
+const { mediaBlock, exactSelectorBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -726,6 +726,20 @@ test('tertiary meta text keeps WCAG AA contrast on the white and parchment canva
   assertCssDeclaration(rootTokens, '--text-tertiary', '#6e6e73');
   // The sort chevron data URI cannot use var(), so it repeats the same value by hand.
   assert.match(css, /stroke='%236e6e73'/);
+});
+
+// focus 신호는 사이트 전체에 하나다(DESIGN.md 「색」). 링 색은 불투명 액센트라야 하고
+// — 35% 틴트는 흰 배경 1.72:1 로 WCAG 2.4.11(3:1) 미달이었다 —, tabindex 로만 초점을 받는
+// 요소도 브라우저 기본 링이 아니라 같은 링을 써야 한다(#1009).
+test('the shared focus ring covers non-native focus targets at an opaque accent', () => {
+  const css = readStylesheet();
+  assertCssDeclaration(exactSelectorBlock(css, ':root'), '--focus-ring', '#0066cc');
+
+  const focusRule = selectorGroupBlock(css, '[tabindex]:focus-visible');
+  assertCssDeclaration(focusRule, 'outline', '3px solid var(--focus-ring)');
+  assertCssDeclaration(focusRule, 'outline-offset', '3px');
+  // 같은 규칙이어야 한다 — 별도 블록으로 갈라지면 두 값이 따로 흘러간다.
+  assert.equal(focusRule, selectorGroupBlock(css, 'a:focus-visible'));
 });
 
 test('font weights stay on the DESIGN.md 400/500/600 ramp', () => {

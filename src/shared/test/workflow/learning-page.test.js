@@ -82,22 +82,23 @@ function readLearningPage() {
   return fs.readFileSync(path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'), 'utf8');
 }
 
-// learning.css 에서 가로 스크롤을 켜는 "단일 class 셀렉터" 를 모은다. 이 목록이 잠금의 입력이라,
-// 새 스크롤 컨테이너를 만들면 아래 두 분류 중 하나에 넣을 때까지 테스트가 막는다.
-// @media 여는 줄만 걷어내면 이 파일은 한 겹이라 규칙 경계가 정확히 잡힌다.
-// (`.week-result table` 같은 복합 셀렉터는 여기 안 잡힌다 — 그 표는 width:100% 라 열이
-//  min-content 로 줄어 375~780px 어디서도 실제로 스크롤되지 않는 것을 실측했다.)
-function scrollContainerClasses(css) {
-  const flat = String(css).replace(/\/\*[\s\S]*?\*\//g, '').replace(/@media[^{]*\{/g, '');
-  const classes = new Set();
-  for (const rule of flat.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-    if (!/overflow-x:\s*(auto|scroll)/.test(rule[2])) continue;
-    for (const part of rule[1].split(',')) {
-      const simple = part.trim().match(/^\.([A-Za-z0-9_-]+)$/);
-      if (simple) classes.add(simple[1]);
+// 이 페이지가 읽는 두 stylesheet 에서 가로 스크롤을 켜는 셀렉터를 **전부** 모은다. class 하나짜리만
+// 모으면 `.week-result table` 같은 복합 셀렉터와 공용 시트의 `pre` 가 조용히 빠져나가, "모든 스크롤
+// 컨테이너를 분류한다"는 잠금이 실제로 지키는 것보다 넓게 주장하게 된다.
+// @media 여는 줄만 걷어내면 두 파일 다 한 겹이라 규칙 경계가 정확히 잡힌다.
+function scrollContainerSelectors(sheets) {
+  const selectors = new Set();
+  for (const css of sheets) {
+    const flat = String(css).replace(/\/\*[\s\S]*?\*\//g, '').replace(/@media[^{]*\{/g, '');
+    for (const rule of flat.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      if (!/overflow-x:\s*(auto|scroll)/.test(rule[2])) continue;
+      for (const part of rule[1].split(',')) {
+        const selector = part.trim();
+        if (selector) selectors.add(selector);
+      }
     }
   }
-  return classes;
+  return selectors;
 }
 
 // class 속성을 낱말 단위로 비교한다. 정규식으로 class 이름을 이어 붙이면 부분 문자열까지
@@ -113,17 +114,30 @@ function openingTagsWithClass(html, className) {
 
 // 초점 가능한 자식이 없는 스크롤 컨테이너는 키보드로 스크롤할 방법이 없다(WCAG 2.1.1).
 const KEYBOARD_SCROLLABLE = ['scoreboard', 'artifact-tree', 'code-block-light'];
-// 목차 nav 는 예외다. 안의 링크가 이미 초점을 받고, 링크로 탭하면 브라우저가 컨테이너를
-// 스크롤해 준다. 여기에 tabindex 를 주면 아무것도 못 하는 탭 정거장만 하나 늘어난다.
-const FOCUSABLE_CHILDREN_EXEMPT = ['learning-nav-inner'];
+
+// 나머지는 왜 tabindex 가 없어도 되는지 근거와 함께 적는다. 근거 없는 면제를 막으려고
+// 셀렉터를 키로 쓴다 — 새 스크롤 컨테이너는 여기 오거나 KEYBOARD_SCROLLABLE 에 들어가야 한다.
+const EXEMPT_SCROLL_SELECTORS = {
+  // 안의 링크가 이미 초점을 받고, 링크로 탭하면 브라우저가 컨테이너를 스크롤해 준다.
+  // tabindex 를 주면 아무것도 못 하는 탭 정거장만 하나 늘어난다.
+  '.learning-nav-inner': 'focusable children',
+  // width:100% 라 열이 min-content 로 줄어 375~780px 어디서도 실제로 넘치지 않는 것을 실측했다.
+  '.week-result table': 'never overflows',
+  // 이 페이지에는 <pre> 가 없다. 생기면 KEYBOARD_SCROLLABLE 처럼 다뤄야 한다.
+  pre: 'not used on this page'
+};
 
 test('learning page classifies every scroll container as keyboard-reachable or exempt', () => {
-  const found = [...scrollContainerClasses(readLearningStylesheet())].sort();
-  const classified = [...KEYBOARD_SCROLLABLE, ...FOCUSABLE_CHILDREN_EXEMPT].sort();
+  const sheets = [readLearningStylesheet(), fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8')];
+  const found = [...scrollContainerSelectors(sheets)].sort();
+  const classified = [
+    ...KEYBOARD_SCROLLABLE.map(name => `.${name}`),
+    ...Object.keys(EXEMPT_SCROLL_SELECTORS)
+  ].sort();
   assert.deepEqual(
     found,
     classified,
-    '새 가로 스크롤 컨테이너는 KEYBOARD_SCROLLABLE 이나 FOCUSABLE_CHILDREN_EXEMPT 중 하나로 분류한다'
+    '새 가로 스크롤 컨테이너는 KEYBOARD_SCROLLABLE 이나 EXEMPT_SCROLL_SELECTORS 중 하나로 분류한다'
   );
 });
 
@@ -150,23 +164,32 @@ test('learning page names each scoreboard region it exposes as a landmark', () =
   assert.equal(new Set(labels).size, labels.length, 'scoreboard 라벨은 서로 달라야 한다');
 });
 
-// 코드·트리 블록에는 이름을 주지 않는다. role 없는 generic div 의 aria-label 은 AT 가
-// 신뢰성 있게 노출하지 않고, 9개를 전부 landmark 로 만들면 landmark 목록이 코드 블록으로
-// 뒤덮인다. 초점을 받으면 스크린리더가 내용을 읽어 주므로 도달성은 확보된다.
-test('learning page does not turn code and tree blocks into landmarks', () => {
+// 코드·트리 블록은 이름은 갖되 landmark 는 아니다. role="group" 은 landmark 가 아니라서
+// 9개를 이름 붙여도 landmark 목록이 코드 블록으로 덮이지 않는다. role 없이 aria-label 만 두면
+// generic div 의 이름은 AT 가 신뢰성 있게 노출하지 않으므로 role 은 있어야 한다.
+test('learning page names code and tree blocks without making them landmarks', () => {
   const html = readLearningPage();
   for (const className of ['artifact-tree', 'code-block-light']) {
-    for (const tag of openingTagsWithClass(html, className)) {
-      assert.doesNotMatch(tag, /role="/, `${className} 은 landmark 가 아니다`);
+    const tags = openingTagsWithClass(html, className);
+    assert.ok(tags.length > 0, `${className} should appear in the learning page`);
+    for (const tag of tags) {
+      assert.match(tag, /role="group"/, `${className} 은 이름을 갖는 group 이다`);
+      assert.match(tag, /aria-label="[^"]+"/, `${className} 에는 이름이 있어야 한다`);
+      assert.doesNotMatch(tag, /role="region"/, `${className} 은 landmark 가 아니다`);
     }
   }
 });
 
-test('site stylesheet gives keyboard-focusable non-native elements the shared focus ring', () => {
-  // tabindex 로만 초점을 받는 요소가 브라우저 기본 링을 쓰면 사이트 focus 신호가 두 종류가 된다.
-  const css = fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8');
-  const focusRule = css.match(/a:focus-visible,[\s\S]*?\{([\s\S]*?)\}/);
-  assert.ok(focusRule, 'styles.css should keep the shared focus-visible rule');
-  assert.match(css, /\[tabindex\]:focus-visible/);
-  assert.match(focusRule[1], /outline:\s*3px solid var\(--focus-ring\)\s*;/);
+// Tab 초점은 브라우저가 요소를 화면 안으로 굴려 넣는데, 이 페이지는 sticky 가 2단이라 여백이
+// 없으면 요소 상단이 그 밑에 깔린다. 값의 근거는 learning.css 주석에 실측으로 적혀 있다.
+test('learning page keeps focus targets clear of the two-tier sticky header', () => {
+  const css = readLearningStylesheet();
+  for (const selector of ['.scoreboard', '.artifact-tree', '.code-block-light']) {
+    assertCssDeclaration(selectorGroupBlock(css, selector), 'scroll-margin-top', '124px');
+    assertCssDeclaration(
+      selectorGroupBlock(mediaBlock(css, '(max-width: 780px)'), selector),
+      'scroll-margin-top',
+      '185px'
+    );
+  }
 });
