@@ -729,7 +729,7 @@ test('tertiary meta text keeps WCAG AA contrast on the white and parchment canva
 });
 
 // focus 신호는 사이트 전체에 하나다(DESIGN.md 「색」). 링 색은 불투명 액센트라야 하고
-// — 35% 틴트는 흰 배경 1.72:1 로 WCAG 2.4.11(3:1) 미달이었다 —, tabindex 로만 초점을 받는
+// — 35% 틴트는 흰 배경 1.72:1 로 WCAG 1.4.11(3:1) 미달이었다 —, tabindex 로만 초점을 받는
 // 요소도 브라우저 기본 링이 아니라 같은 링을 써야 한다(#1009).
 test('the shared focus ring covers non-native focus targets at an opaque accent', () => {
   const css = readStylesheet();

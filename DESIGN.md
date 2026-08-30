@@ -20,7 +20,7 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 
 단일 액센트 원칙: 모든 링크·활성 상태·focus 신호는 `--primary`(#0066cc)만 쓴다. 두 번째 UI 액센트 색은 없다. (예외: 마스코트 HALley 일러스트는 자체 **초록** 팔레트를 쓰는 브랜드 그래픽이다 — UI chrome·상호작용 요소는 여전히 blue 하나만. handoff mockup도 초록 마스코트 + blue UI 구성이다.)
 
-- 액센트: `--primary` #0066cc, `--primary-hover` #0052a3, `--focus-ring` #0066cc(액센트와 같은 불투명 값 — 흰 배경 5.57:1·파치먼트 5.11:1. 이전 35% 틴트는 1.72:1·1.58:1 로 WCAG 2.4.11의 3:1에 미달했다, #1009).
+- 액센트: `--primary` #0066cc, `--primary-hover` #0052a3, `--focus-ring` #0066cc(액센트와 같은 불투명 값 — 흰 배경 5.57:1·파치먼트 5.11:1. 이전 35% 틴트는 1.72:1·1.69:1 로 WCAG 1.4.11의 3:1에 미달했다, #1009).
 - focus 신호는 하나다: `outline: 3px solid var(--focus-ring)` + `outline-offset: 3px`. 네이티브가 아닌 요소도 초점을 받으면(`[tabindex]`) 같은 링을 쓴다 — 브라우저 기본 링과 섞이지 않는다.
 - 텍스트: `--text` #1d1d1f(본문 ink), 보조 텍스트 `--muted` #6e6e73(흰 배경 5.07:1, 파치먼트 4.65:1로 WCAG AA ≥4.5:1), 3차 메타 `--text-tertiary` #6e6e73(날짜·캡션·법적 표기). handoff 원값 #86868b 는 흰 배경 3.62:1·파치먼트 3.33:1 로 AA 미달이라 쓰지 않는다 — 흰/파치먼트 캔버스에서 AA 를 지키면서 `--muted` 보다 밝은 색은 사실상 없으므로(상한 ≈#707075, 4.52:1) **`--muted` 와의 색 단차는 두지 않고 크기(12–14px)·트래킹·배치로 구분**한다. `--text` 와의 구분은 여전히 색으로 낸다(예: 나브의 GitHub 링크). 두 토큰은 값이 같아도 의미 층이 달라 합치지 않는다.
 - 캔버스: `--surface` #ffffff(지배·풀블리드), `--bg` #f5f5f7(파치먼트: 브리핑/take/참고자료 박스·푸터·chip 기본), `--surface-soft` #f5f5f7(썸네일·featured·이미지 placeholder 배경 — handoff 와 동일하게 파치먼트 톤).
