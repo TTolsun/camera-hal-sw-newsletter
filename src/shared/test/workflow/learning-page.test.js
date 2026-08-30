@@ -40,15 +40,20 @@ function gridTracks(value) {
   });
 }
 
-// `1fr` 은 `minmax(auto, 1fr)` 이라 트랙이 내용의 최소 폭 아래로 줄지 않는다. 이 페이지의 카드
-// 안에는 그 최소 폭이 휴대폰 화면보다 넓은 것들이 있어서(.scoreboard 의 min-width:720px 표,
-// white-space:pre 인 .artifact-tree) 트랙이 화면 밖으로 밀리고 페이지 전체가 가로로 스크롤된다.
+// 이 페이지의 유연 트랙은 minmax(0, …) 로만 쓴다. `1fr` 은 `minmax(auto, 1fr)` 이라 트랙이
+// 내용의 최소 폭 아래로 줄지 않는데, 이 카드들 안에는 그 최소 폭이 휴대폰 화면보다 넓은 것들이
+// 있어서(.scoreboard 의 min-width:720px 표, white-space:pre 인 .artifact-tree) 트랙이 화면
+// 밖으로 밀리고 페이지 전체가 가로로 스크롤된다.
+//
+// 0 이 아닌 하한(예: minmax(220px, 1fr))도 막는다. 그런 하한이 안전한지는 그 안에 무엇이
+// 들어가느냐에 달렸고, 여기 카드 내용은 계속 늘어난다 — 폭마다 재보는 대신 바닥을 0 으로
+// 통일한다. 정말 하한이 필요하면 이 규칙을 먼저 고치고 근거를 남긴다.
 function isBlowoutTrack(track) {
   if (/^minmax\(/i.test(track)) return !/^minmax\(\s*0\s*,/i.test(track);
   return /^\d*\.?\d*fr$/i.test(track);
 }
 
-test('learning page flexible grid tracks stay shrinkable below their content', () => {
+test('learning page writes every flexible grid track as minmax(0, ...)', () => {
   const css = readLearningStylesheet();
   const declarations = [...css.matchAll(/grid-template-columns:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.ok(declarations.length > 0, 'learning.css should define grid tracks');
