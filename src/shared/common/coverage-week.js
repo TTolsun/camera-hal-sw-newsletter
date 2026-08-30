@@ -59,9 +59,18 @@ function coverageForWeekKey(weekKey) {
   const firstThursday = thursdayOfWeek(new Date(Date.UTC(Number(match[1]), 0, 4)));
   const monday = new Date(firstThursday);
   monday.setUTCDate(firstThursday.getUTCDate() - 3 + (Number(match[2]) - 1) * 7);
+  const derivedWeekKey = isoWeekKeyOfDate(monday);
+  // 위 산술은 존재하지 않는 주차도 그냥 넘겨버린다(2026-W60 -> 2027-W07, 2021-W53 -> 2022-W01).
+  // 모양만 보는 COVERAGE_WEEK_KEY_PATTERN을 통과한 오타가 조용히 다른 주를 대상으로 만드는 자리라
+  // 왕복 비교 한 번으로 막는다. 53주 해(2026-W53)는 실재하므로 그대로 통과한다.
+  if (derivedWeekKey !== match[0]) {
+    throw new Error(
+      `coverage week key does not exist: ${match[0]} would silently resolve to ${derivedWeekKey} (week starting ${formatUtcDate(monday)})`
+    );
+  }
   const endExclusive = new Date(monday.getTime() + 7 * DAY_MS);
   return {
-    coverage_week_key: isoWeekKeyOfDate(monday),
+    coverage_week_key: derivedWeekKey,
     coverage_start_date: formatUtcDate(monday),
     coverage_end_date: formatUtcDate(new Date(endExclusive.getTime() - DAY_MS)),
     coverage_end_exclusive_at: endExclusive.toISOString()
