@@ -413,10 +413,10 @@ test('anchor-extracted workflow evidence reaches the article capsule', async () 
   assert.match(normalized.behavior_change, /requires approval to merge/i);
 
   const capsule = buildArticleCapsule(normalized, []);
-  assert.ok(capsule.evidence.length <= 3, 'capsule은 evidence를 3개로 자른다(MAX_EVIDENCE_ITEMS=3)');
+  assert.ok(capsule.evidence.length <= 4, 'capsule은 evidence를 4개로 자른다(MAX_EVIDENCE_ITEMS=4)');
   assert.ok(
     capsule.evidence.some(line => /^behavior_change: /.test(line) && /requires approval to merge/i.test(line)),
-    'version_or_release/api_or_component가 앞 두 칸을 차지해도 앵커 문장이 3칸 안에 남아야 한다'
+    'version_or_release/api_or_component가 앞 칸을 차지해도 앵커 문장이 cap 안에 남아야 한다'
   );
 });
 

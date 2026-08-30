@@ -100,6 +100,38 @@ test('article capsule keeps compact PR4 fields and score breakdown', () => {
   assert.equal(Object.hasOwn(capsule, 'impact_claim_level'), false);
 });
 
+// 릴리스 후보는 version_or_release/api_or_component/behavior_change가 전부 후보 자신을 되뇌는
+// 문장이다. 이 세 칸이 evidence를 다 채우면 본문에서 온 문장은 구조적으로 한 칸도 들어가지
+// 못한다. 2026-08-24호의 유일한 main 기사가 이 경로로 나가, 실제 변경(imx296 embedded data
+// revert)을 본문에서 한 번도 언급하지 못한 채 발행됐다. 식별 필드는 여전히 유용하니 그대로 두되,
+// 본문에서 온 근거 한 칸은 항상 남아 있어야 한다.
+test('article capsule keeps one evidence slot for the release body', () => {
+  const capsule = buildArticleCapsule(candidate({
+    title: 'Raspberry Pi libcamera Releases - v0.7.2+rpt20260817',
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817',
+    source: 'Raspberry Pi libcamera Releases',
+    version_or_release: 'v0.7.2+rpt20260817',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).',
+    summary: 'Revert "ipa: rpi: imx296: Enable embedded data" Right now embedded data with the imx296 cannot be negotiated with the CFE.',
+    evidence_notes: []
+  }));
+
+  assert.deepEqual(
+    capsule.evidence.slice(0, 3),
+    [
+      'version_or_release: v0.7.2+rpt20260817',
+      'api_or_component: libcamera / V4L2 camera pipeline',
+      'behavior_change: Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).'
+    ],
+    '식별 필드는 계속 evidence에 남는다'
+  );
+  assert.ok(
+    capsule.evidence.some(line => /^summary: /.test(line) && /imx296/.test(line)),
+    '자기참조 식별 필드가 앞 칸을 다 차지해도 본문에서 온 문장이 최소 한 칸 들어가야 한다'
+  );
+});
+
 test('article capsule preserves image provenance (sourceKind, contentType) for the gate', () => {
   const capsule = buildArticleCapsule(candidate({
     imageCandidates: [

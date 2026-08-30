@@ -1,7 +1,13 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const CAPSULE_TOKEN_TARGET = '700-1200';
 const MAX_TEXT = 420;
-const MAX_EVIDENCE_ITEMS = 3;
+const MAX_EVIDENCE_ITEMS = 4;
+// version_or_release, api_or_component, behavior_change는 후보 자신을 되뇌는 식별 정보다.
+// 릴리스 후보에서는 이 셋이 전부 태그 이름을 반복하는 문장이라, 셋에게 evidence를 다 내주면
+// 본문에서 온 문장이 구조적으로 한 칸도 못 들어간다(2026-08-24호 실측). 식별 정보 자체는 여전히
+// 유용하므로 지우지 않고, 대신 식별 필드가 쓸 수 있는 칸 수를 한 칸 남기도록 묶어 본문 계열 근거의
+// 자리를 보장한다.
+const MAX_IDENTITY_EVIDENCE_ITEMS = MAX_EVIDENCE_ITEMS - 1;
 const MAX_IMAGE_CANDIDATES = 3;
 // 블로그 워크플로 서술은 릴리스 노트 불릿과 달리 산문이라 같은 섹션 수여도 훨씬 길다.
 // compactExtractionSections 기본 상한(5섹션)에 맡기면 실측상 capsule이
@@ -117,10 +123,12 @@ function evidenceItems(candidate) {
     .flatMap(section => ensureArray(section?.items))
     .map(item => text(item?.text || item?.source_text))
     .find(Boolean);
-  const items = [
+  const identityItems = [
     candidate.version_or_release ? `version_or_release: ${candidate.version_or_release}` : '',
     candidate.api_or_component ? `api_or_component: ${candidate.api_or_component}` : '',
-    candidate.behavior_change ? `behavior_change: ${candidate.behavior_change}` : '',
+    candidate.behavior_change ? `behavior_change: ${candidate.behavior_change}` : ''
+  ].map(item => compactText(item, 160)).filter(Boolean);
+  const sourceTextItems = [
     sourceExtractionBullet ? `source_extraction.release_bullet: ${sourceExtractionBullet}` : '',
     ...ensureArray(candidate.compact_evidence?.primary_facts).map(item => `seed_primary_fact: ${item}`),
     ...ensureArray(candidate.compact_evidence?.linked_context).map(item => `seed_linked_context: ${item}`),
@@ -128,6 +136,10 @@ function evidenceItems(candidate) {
     summaryCacheText(candidate) ? `summary_cache: ${summaryCacheText(candidate)}` : '',
     candidate.summary ? `summary: ${candidate.summary}` : ''
   ].map(item => compactText(item, 160)).filter(Boolean);
+  const items = [
+    ...identityItems.slice(0, MAX_IDENTITY_EVIDENCE_ITEMS),
+    ...sourceTextItems
+  ];
   return [...new Set(items)].slice(0, MAX_EVIDENCE_ITEMS);
 }
 
