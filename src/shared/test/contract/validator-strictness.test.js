@@ -996,6 +996,28 @@ test('validate-site rejects a weekly index entry whose page is missing', () => {
   assert.match(result.stderr, /Weekly newsletter 2026-W21 html file does not exist/);
 });
 
+// 필수 클래스는 class 토큰으로 본다. 부분 문자열로 보면 본문에 이름이 글자로만 나와도 통과해
+// 실제로는 그 블록이 없는 페이지가 발행된다.
+//
+// 위클리 페이지로 검사한다. dated 호는 rendered-issue-structure.js 가 같은 네 클래스를 이미
+// 토큰으로 보므로 그쪽에서 잡혀 이 루프의 판정이 드러나지 않는다 — 그 구조 검사는 dated 루프
+// 안에서만 돌기 때문에, 위클리에서는 여기가 유일한 검사다.
+test('validate-site requires the issue classes as class tokens on weekly pages', () => {
+  const root = tempRoot('validate-site-class-token-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  // reference-list 만 클래스가 아니라 본문 글자로 남긴다(뒤따르는 블록 스캔이 없는 클래스라
+  // 이 검사만 단독으로 갈린다).
+  addWeeklyIssue(root, '2026-W21', newsletterHtml('2026-05-23').replace(
+    '<ul class="reference-list"><li><a href="https://example.com/reference">Reference</a></li></ul>',
+    '<p>이 호에는 reference-list 가 없습니다.</p>'
+  ));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Newsletter HTML missing reference-list: newsletters\/2026-W21\/index\.html/);
+});
+
 // Lab 페이지는 스캔 대상이지만 `newsletters/` 접두어가 아니라 이슈 전용 검사는 받지 않는다.
 // 그 경계가 넓어지면 briefing·source-list 가 없는 이 페이지가 즉시 막힌다.
 test('validate-site scans the Lab page without applying issue-only checks', () => {

@@ -22,6 +22,7 @@ const {
   strictTargetDates
 } = require('../reporter/validation-targets');
 const {
+  hasClassToken,
   validateRenderedIssueStructure
 } = require('../quality/rendered-issue-structure');
 const {
@@ -765,18 +766,14 @@ if (!Array.isArray(newsletters)) {
 }
 
 // newsletters.json 은 dated 호만 담는다. 현재 발행 레인은 위클리이고 그 목록은 이 파일에 있으므로,
-// 여기를 안 읽으면 아래 HTML 계약 검사가 발행 중인 이슈 페이지를 통째로 건너뛴다. 조용히 빈 목록이
-// 되면 그 순간부터 위클리가 무검사로 나가므로 세 경우 다 fail 한다.
+// 여기를 안 읽으면 아래 HTML 계약 검사가 발행 중인 이슈 페이지를 통째로 건너뛴다.
 //
-// rendered-issue-structure.js 도 두 인덱스에 같은 형식 검사를 한다. 다만 그쪽은 dated 호가 하나라도
-// 있을 때만 돌아서(`validateDataIndex: index === 0`) dated 가 비면 위클리 인덱스가 아무 검사도 받지
-// 않는다. 그래서 여기서는 무조건 본다 — 메시지 경로는 그쪽과 같은 `articles/data/...` 로 맞춰,
-// 둘 다 걸리는 경우에도 같은 문장이 나오게 한다.
 // 여기서는 읽기만 한다. 존재·JSON·배열 검사는 rendered-issue-structure.js 의
 // NEWSLETTER_INDEX_PATHS 가 두 인덱스에 대해 이미 같은 문장으로 하고 있어서, 여기에 또 두면
 // 한 번의 실패에 같은 말이 두 번 나온다(실제로 그렇게 짰다가 mutation 으로 확인하고 걷어냈다).
-// 못 읽으면 빈 목록으로 두되 그 상태가 조용히 넘어가지는 않는다 — 인덱스가 깨졌으면 그 구조
-// 검사가 fail 하고, 인덱스는 멀쩡한데 페이지가 없으면 아래 존재 검사가 fail 한다.
+// 다만 그 검사는 dated 호가 하나라도 있을 때만 돈다(`validateDataIndex: index === 0`) — dated
+// 인덱스가 비면 위클리 인덱스는 무검사가 된다. 현재 dated 33개가 있어 실제로는 항상 돌지만,
+// 그 상태에 기대고 있다는 것은 적어 둔다. 인덱스가 멀쩡한데 페이지가 없는 경우는 아래에서 잡는다.
 let weeklyNewsletters = [];
 try {
   const parsed = readJson(weeklyDataPath);
@@ -917,8 +914,11 @@ for (const relPath of htmlFiles) {
   validateSiteNavLabels(content, relPath);
 
   if (relPath.startsWith('newsletters/')) {
+    // class 토큰으로 본다. 부분 문자열(`includes`)로 보면 본문에 클래스 이름이 글자로만 나와도
+    // 통과한다 — 같은 네 클래스를 검사하는 rendered-issue-structure.js 는 처음부터 토큰으로
+    // 봤고, 두 사본이 갈려 있었다. 현재 이슈 페이지 50개에서 두 판정은 결과가 같다(실측).
     for (const className of ['issue-briefing', 'issue-section', 'source-list', 'reference-list']) {
-      if (!content.includes(className)) {
+      if (!hasClassToken(content, className)) {
         fail(`Newsletter HTML missing ${className}: ${relPath}`);
       }
     }

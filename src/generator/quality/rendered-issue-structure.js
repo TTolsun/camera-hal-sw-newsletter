@@ -449,6 +449,7 @@ function validateRenderedIssueStructure({
 
 module.exports = {
   hasAny,
+  hasClassToken,
   newsletterIndexContractVersion,
   mainArticleBlocks,
   validateRenderedIssueStructure
