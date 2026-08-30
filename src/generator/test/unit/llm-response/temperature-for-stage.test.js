@@ -65,10 +65,14 @@ test('어휘 밖의 profile은 조용히 기본값으로 떨어지지 않고 던
   assert.throws(() => temperatureForSampling(undefined, config), /unknown_temperature_profile/);
 });
 
-// sampling profile 어휘는 두 곳에 정의돼 있다(#1002 2번).
+// sampling profile 어휘는 세 곳에 흩어져 있다(#1002 2번).
 //
 // - catalog: stage-catalog.js의 TEMPERATURE_PROFILES / THINKING_PROFILES
 // - provider: gemini-provider.js의 TEMPERATURE_FIELD_BY_PROFILE / THINKING_FIELD_BY_PROFILE
+// - config: runtime-config.js가 실제로 채우는 geminiTemperature* / geminiThinkingBudget* field
+//
+// 셋째를 빠뜨리기 쉬워서 아래 두 테스트가 실제 런타임 config까지 걸어 들어간다. 이유는 그
+// 테스트 바로 위 주석에 있다.
 //
 // 경계 자체는 의도한 것이다. shared catalog가 특정 provider의 config 모양에 묶이면 안 되기
 // 때문이다. 문제는 두 표가 어긋나도 아무도 막지 않는다는 점이다. catalog에 profile을 새로

@@ -80,13 +80,19 @@ test('호출자가 준 providerModel이 진단 조회보다 우선한다', async
 
 // providerModel의 귀속 범위를 못 박는다(#1002 1번).
 //
-// draft를 새로 쓰는 stage는 base editor 말고도 editor.repair, editor.completion,
-// *.semantic_repair, *.public_article_judge_repair가 있다. 그 stage가 draft를 다시 써도
-// 여기 적히는 이름은 base editor의 model이다 -- 즉 이 값은 "이 draft를 만든 model"이 아니라
-// "base editor stage가 쓴 model"로 읽어야 한다.
+// draft를 새로 쓰는 stage는 base editor 말고도 셋이다 -- editor.repair, editor.completion,
+// *.semantic_repair. (*.public_article_judge_repair는 여기 넣으면 안 된다. 그 stage는
+// orchestrator-public-article-judge.js:168에서 이미 만들어진 repairedEditor를 판정만 하고
+// draft를 쓰지 않는다. model group도 REPAIR가 아니라 JUDGE다.)
 //
-// 의도한 좁은 의미이므로 현행 동작을 그대로 잠근다. 나중에 누가 조회 범위를 무심코 넓히면
-// (예: 마지막에 draft를 쓴 stage를 따라가게 바꾸면) 이 테스트가 드러낸다.
+// 그 stage가 draft를 다시 써도 여기 적히는 이름은 base editor의 model이다 -- 즉 이 값은
+// "이 draft를 만든 model"이 아니라 "이 run에서 base editor stage가 마지막으로 쓴 model"로
+// 읽어야 한다. 근거는 orchestrator-artifact-writers.js의 editorDraftArtifact 주석에 있다.
+//
+// 의도한 좁은 의미이므로 현행 동작을 그대로 잠근다. 조회 범위를 넓히면 이 테스트가 드러낸다.
+// 넓히는 것은 #1002가 제시한 정당한 다른 선택지이므로, 의도적으로 그 쪽을 택한다면 이
+// 테스트도 함께 고쳐라. 반면 생산자가 options.providerModel을 넘기게 배선하는 쪽(권장 방향)은
+// 이 테스트를 건드리지 않는다 -- 여기서는 옵션 없이 부르기 때문이다.
 test('repair가 draft를 다시 써도 providerModel은 base editor의 model이다', async () => {
   llmClient.resetLlmDiagnostics();
   const editorStage = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: 1, totalAttempts: 2 });
