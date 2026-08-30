@@ -51,10 +51,13 @@ function normalizeBudgetConfig(config = {}) {
   };
 }
 
-// 진단 항목의 키는 canonical stage run key다(#982). 여기서 나온 stage_counts의 키도 같은
-// 형식이 된다. 다만 defaultStageCounts가 미리 깔아 두는 키는 config의 작업 이름
-// (sourceDiscovery, articleExtraction ...)이라 두 어휘가 한 map에 섞인다. 합계
-// (requested/successful/failed)와 한도 판정은 전체 합이라 영향이 없다.
+// stage_counts는 stage id로 묶는다(#993). 예산 config가 같은 어휘를 쓰므로 defaultStageCounts가
+// 까는 키와 정확히 맞는다.
+//
+// 진단 항목의 키 자체는 canonical stage run key(`<id>#<quality attempt>`)지만 여기서는 쓰지
+// 않는다. quality attempt는 발행 파이프라인의 재시도 회차인데 예산은 run 단위 총량 문제라
+// 나눌 이유가 없다. 대신 #982가 모든 항목에 실어 둔 stage_id 필드를 읽는다 -- 키를 파싱하지
+// 않는다.
 function diagnosticStageCounts(diagnostics = {}) {
   const modelUsage = diagnostics.model_usage || {};
   const calls = Array.isArray(diagnostics.cost_report?.calls) ? diagnostics.cost_report.calls : [];
@@ -71,8 +74,8 @@ function diagnosticStageCounts(diagnostics = {}) {
     return counts[key];
   }
 
-  for (const [stageKey, entry] of Object.entries(modelUsage)) {
-    const stageBucket = bucket(stageKey);
+  for (const entry of Object.values(modelUsage)) {
+    const stageBucket = bucket(String(entry?.stage_id || 'unknown'));
     for (const usage of Object.values(entry?.models || {})) {
       stageBucket.requested_attempts += Number(usage.requests || 0);
       stageBucket.failed_attempts +=
@@ -83,7 +86,7 @@ function diagnosticStageCounts(diagnostics = {}) {
   }
 
   for (const call of calls) {
-    bucket(String(call.stage_key || 'unknown')).successful_responses += 1;
+    bucket(String(call.stage_id || 'unknown')).successful_responses += 1;
   }
 
   return counts;
@@ -180,7 +183,8 @@ function createGeminiUsageBudget({
       const successful = sumStageField(stageCounts, 'successful_responses');
       const failed = sumStageField(stageCounts, 'failed_attempts');
       return {
-        schema_version: 1,
+        // 2: stage_counts와 예산 config의 키가 작업 이름에서 stage id로 바뀌었다(#993).
+        schema_version: 2,
         report_type: 'gemini_usage',
         newsletter_date: date,
         target_calls_per_run: budgetConfig.targetCallsPerRun,

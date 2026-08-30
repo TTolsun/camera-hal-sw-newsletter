@@ -262,3 +262,45 @@ test('스키마 복잡도 실패도 stage 정체성을 싣는다', async () => {
   assert.equal(error.stage, 'editor attempt 1/3');
   assert.equal(error.stage_id, 'editor');
 });
+
+// 예산 게이트가 무엇으로 조회하는지(#993). 이 줄이 전체 스위트에서 실행되지 않아, 어휘가
+// 어긋나도 테스트가 초록으로 남았다 -- 리뷰가 커버리지로 잡아냈다.
+test('예산 게이트는 label이 아니라 stage id로 조회한다', async () => {
+  const client = loadClient();
+  client.resetLlmDiagnostics();
+  const asked = [];
+  const budget = {
+    assertCanRequest: stage => asked.push(stage),
+    mergeDiagnostics: () => {}
+  };
+  const run = stageRun(LLM_STAGES.SOURCE_DISCOVERY);
+
+  await client.callLlmJsonBudgeted(run, 'system', 'prompt', {}, {
+    budget,
+    provider: fakeProvider([{ text: '{"ok":true}' }])
+  });
+
+  // config/newsroom-budget.json이 stage id 어휘를 쓰므로 id가 와야 한다.
+  assert.deepEqual(asked, ['source_discovery']);
+  // label('sourceDiscovery')이 오면 config 조회가 빗나가고, 빗나간 조회는 예외 없이
+  // optional 기본값으로 떨어져 아무도 모르게 지나간다.
+  assert.equal(asked.includes(run.label), false);
+});
+
+test('예산이 막으면 호출 자체가 일어나지 않는다', async () => {
+  const client = loadClient();
+  client.resetLlmDiagnostics();
+  const blocked = new Error('budget hard limit');
+  const provider = fakeProvider([{ text: '{"ok":true}' }]);
+  let executed = 0;
+  const countingProvider = { ...provider, execute: async (...args) => { executed += 1; return provider.execute(...args); } };
+
+  await assert.rejects(
+    () => client.callLlmJsonBudgeted(stageRun(LLM_STAGES.SOURCE_DISCOVERY), 'system', 'prompt', {}, {
+      budget: { assertCanRequest: () => { throw blocked; }, mergeDiagnostics: () => {} },
+      provider: countingProvider
+    }),
+    /budget hard limit/
+  );
+  assert.equal(executed, 0);
+});
