@@ -1382,8 +1382,12 @@ pre code {
   text-transform: uppercase;
 }
 
-/* 표시 계약 v2: 대상 주(제목)와 발행 주가 다를 때 h1 아래 보조 배지로 발행 주를 알린다. */
+/* 표시 계약 v2: 대상 주(제목)와 발행 주가 다를 때 h1 아래 보조 배지로 발행 주를 알린다.
+   .issue-hero 는 grid 라 직접 자식인 이 배지의 inline-flex 가 flex 로 blockify 되고,
+   justify-self 기본값 stretch 가 컬럼을 채워 알약이 전폭 막대가 된다. 내용 폭으로 되돌린다
+   (다른 알약들은 .issue-hero-meta·.tag-row 같은 래퍼 안이라 이 영향을 받지 않는다). */
 .newsletter-issue-page .issue-hero .issue-publish-badge {
+  justify-self: start;
   margin-top: 10px;
 }
 
