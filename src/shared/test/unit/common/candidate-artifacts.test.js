@@ -955,6 +955,10 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   assert.equal(usage.requested_attempt_count, 1);
   assert.equal(usage.successful_response_count, 1);
   assert.equal(usage.stage_counts.source_discovery.requested_attempts, 1);
+  // 키 집합을 통째로 고정한다. 한 키만 조회하면 조인이 끊겨 생긴 유령 버킷(unknown,
+  // 옛 어휘 잔재)이 함께 있어도 보이지 않는다 -- #982 회귀가 그렇게 3개월 숨었다.
+  assert.deepEqual(Object.keys(usage.stage_counts), ['source_discovery']);
+  assert.equal(usage.schema_version, 2);
 
   const validated = validateCandidateArtifact({
     root,
