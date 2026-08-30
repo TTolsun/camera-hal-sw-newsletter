@@ -273,8 +273,12 @@ function spansOverlap(left, right) {
  * 2) behavior_change와 섹션의 중복은 그대로 둔다(의도된 중복). behavior_change는 문장 하나짜리
  *    필드로 캡슐의 evidence 줄("behavior_change: ...", article-capsules.js:123)에 실리고,
  *    섹션은 그 문장을 둘러싼 문단으로 캡슐의 source_extraction.workflow(같은 파일 :175)에
- *    실린다 — 서로 다른 슬롯이라 독립 근거 2건으로 세어지지 않는다. 1위 문장을 섹션에서 빼면
- *    앵커 밀도가 가장 높은 문단이 통째로 사라져 근거가 오히려 약해진다.
+ *    실린다. 1위 문장을 섹션에서 빼면 앵커 밀도가 가장 높은 문단이 통째로 사라져 근거가
+ *    오히려 약해지므로, 중복을 지우는 쪽이 더 손해다.
+ *    다만 #965 이후로는 두 값이 source_fact_bundle.facts 한 목록에도 별개 항목으로 실린다.
+ *    거기서 겹침을 지우지 않는 이유는 uniqueFacts가 정확 일치만 보기 때문이고, 포함관계까지
+ *    걸러내면 release 계열 후보의 기존 출력이 함께 바뀐다. 그래서 workflow 후보의 fact_count는
+ *    문장과 문단을 각각 세어, 실제로 구별되는 근거 구간보다 1 크게 나올 수 있다.
  */
 function workflowEvidence(bodyText) {
   const summary = bodyText.slice(0, SUMMARY_LIMIT).trim();
