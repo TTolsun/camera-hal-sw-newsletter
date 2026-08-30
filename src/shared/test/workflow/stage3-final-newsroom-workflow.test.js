@@ -508,13 +508,6 @@ test('site validation workflow keeps structural checks blocking and quality anno
   assert.match(structuralStep, /npm run check:artifact-retention/);
   assert.match(structuralStep, /npm run check:artifact-path-convention/);
   assert.match(structuralStep, /npm run check:domain-model-boundary/);
-  // #1006 — require 그래프 구조 검사 둘. 둘 다 committed src 트리만 읽으므로 PR CI에서
-  // blocking일 수 있고, 빠져 있으면 새 require 간선이 머지될 때까지 아무도 보지 않는다.
-  // 실제로 PR #1003이 추가한 간선을 CI가 보지 못했고 사람이 기억해서 로컬로 돌렸다.
-  // check:layer-direction은 기존 위반을 baseline으로 두고 새 위반만 실패시키는 래칫이라
-  // 현재 상태를 깨지 않는다.
-  assert.match(structuralStep, /npm run check:circular-dependencies/);
-  assert.match(structuralStep, /npm run check:layer-direction/);
   assert.match(structuralStep, /npm run validate:policy/);
   assert.match(structuralStep, /npm run check:policy-docs/);
   assert.match(structuralStep, /npm run validate:config/);

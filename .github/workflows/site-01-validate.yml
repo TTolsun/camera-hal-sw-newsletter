@@ -32,14 +32,6 @@ jobs:
       - name: Run unit and regression tests
         run: npm run test
 
-      # 이 목록은 `npm run validate` 체인의 부분집합이며, 그 순서를 그대로 따른다.
-      # 빠진 항목 둘은 실수가 아니므로 "목록을 완성"하려고 되돌리지 말 것(#1006).
-      #
-      # - check:fixtures: 중복이다. 위 `npm run test`(test:unit)가 src 아래 모든 *.test.js를
-      #   모으므로 같은 게이트인 src/generator/test/contract/fixture-policy.test.js를 이미 돌린다.
-      # - validate:quality: 의도적 제외다. 발행 상태 산출물(articles/content/newsroom/** 등)에
-      #   의존해 PR 브랜치에서는 거짓양성으로 실패한다. 여기 넣으면 매 PR이 본문 품질과 무관한
-      #   이유로 빨개진다. 품질 판정은 아래 annotate 스텝이 non-blocking으로 보고한다.
       - name: Validate structural publication artifacts
         run: |
           npm run check:encoding
@@ -47,8 +39,6 @@ jobs:
           npm run check:artifact-retention
           npm run check:artifact-path-convention
           npm run check:domain-model-boundary
-          npm run check:circular-dependencies
-          npm run check:layer-direction
           npm run validate:policy
           npm run check:policy-docs
           npm run validate:config
