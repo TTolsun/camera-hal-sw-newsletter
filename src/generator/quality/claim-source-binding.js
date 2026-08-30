@@ -75,7 +75,7 @@ function sourceCandidateHash(candidate = {}) {
 
 // 그룹마다 다른 접두를 준다. workflow 근거가 'release' 접두로 떨어지면 같은 페이지에서 나온
 // 릴리스 근거와 키를 나눠 쓰게 된다. 접두 자체가 그룹을 가르므로 release 메타를 따로 비울
-// 필요는 없다 — workflow 컨테이너를 내는 생산자(dated-article-index-resolver.js:510)는
+// 필요는 없다 — workflow 컨테이너를 내는 생산자(dated-article-index-resolver.js:623)는
 // source_extraction에 release를 아예 넣지 않아서 objectValue(extraction.release)가 이미 {}다.
 const SOURCE_EXTRACTION_SECTION_KEY_PREFIXES = {
   minor_line_context: 'minor',
