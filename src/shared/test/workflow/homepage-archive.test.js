@@ -295,6 +295,24 @@ test('featured hero renders the current headline with escaped copy, image, kicke
   assert.doesNotMatch(html, /rel="noopener"/);
 });
 
+// DESIGN.md: fallback 그래픽은 16:9 풀커버가 아니라 44% 중앙 + product drop-shadow(.is-brand).
+// article-image-resolver 가 카테고리별로 네 장을 내보내므로 파일명 하나만 fallback 으로 보면
+// 나머지 세 장이 실제 기사 이미지처럼 깔린다. 카드와 같은 공유 술어를 쓰는지 잠근다.
+test('featured hero brands every bundled fallback graphic, not only newsletter-default', async () => {
+  for (const name of ['ai', 'android', 'cpp', 'newsletter-default']) {
+    const imageSrc = `assets/images/fallback/${name}.svg`;
+    const { elements } = await renderHomepage(
+      [newsletter('2026-05-23', 'Weekly issue')],
+      validHeadlineState({ image_url: imageSrc })
+    );
+    assert.match(
+      elements['featured-card'].innerHTML,
+      new RegExp(`<img class="featured-img is-brand" src="${imageSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`),
+      `${imageSrc} must render as the brand hero`
+    );
+  }
+});
+
 test('featured hero leaves the static brand hero in place when the headline is missing', async () => {
   const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], null);
   // The harness starts the featured card empty; a missing headline must not inject article markup.

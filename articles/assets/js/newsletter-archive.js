@@ -249,7 +249,16 @@
     return first || 'Camera HAL';
   }
 
-  const FALLBACK_CARD_IMAGE = 'assets/images/fallback/newsletter-default.svg';
+  const FALLBACK_IMAGE_PREFIX = 'assets/images/fallback/';
+  const FALLBACK_CARD_IMAGE = `${FALLBACK_IMAGE_PREFIX}newsletter-default.svg`;
+
+  // 저장소에 동봉된 fallback 그래픽인지 판정한다. article-image-resolver 는 카테고리별로 여러 장
+  // (ai/android/cpp/newsletter-default) 을 내보내므로 특정 파일명이 아니라 폴더로 가른다.
+  // 홈 featured 히어로도 이 판정을 그대로 써야 한다 — 판정이 갈리면 같은 그래픽이 카드에서는
+  // fallback 으로, 히어로에서는 실제 기사 이미지로 취급돼 브랜드 처리가 빠진다.
+  function isFallbackImage(src) {
+    return String(src ?? '').trim().startsWith(FALLBACK_IMAGE_PREFIX);
+  }
 
   // First real weekly article image, or the shared newsletter fallback when none is available.
   // Some legacy entries list a bundled fallback placeholder before a real https image, so we
@@ -258,7 +267,7 @@
     const images = ensureArray(entry && entry.article_images)
       .map(src => String(src ?? '').trim())
       .filter(Boolean);
-    const firstReal = images.find(src => !src.startsWith('assets/images/fallback/'));
+    const firstReal = images.find(src => !isFallbackImage(src));
     return firstReal || images[0] || FALLBACK_CARD_IMAGE;
   }
 
@@ -360,6 +369,7 @@
     latestEntry,
     archivePreviewEntries,
     getSafeNewsletterHref,
+    isFallbackImage,
     renderArchiveCard
   };
 

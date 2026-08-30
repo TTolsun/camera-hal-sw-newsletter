@@ -249,8 +249,9 @@
       const imageSrc = safeImageSrc(headline.image_url) || FALLBACK_IMAGE;
       const alt = escapeHtml(headline.image_alt || headline.title);
       // 실제 기사 이미지는 16:9 풀커버, 이미지 없이 fallback 그래픽이면 mockup 처럼
-      // 브랜드 히어로(44% 중앙 + drop-shadow) 로 보여 준다.
-      const imgClass = imageSrc === FALLBACK_IMAGE ? 'featured-img is-brand' : 'featured-img';
+      // 브랜드 히어로(44% 중앙 + drop-shadow) 로 보여 준다. fallback 판정은 카드와 같은
+      // 공유 술어를 쓴다 — resolver 는 newsletter-default 말고도 ai/android/cpp 를 내보낸다.
+      const imgClass = archiveHelpers.isFallbackImage(imageSrc) ? 'featured-img is-brand' : 'featured-img';
       return `<div class="featured-thumb nc-thumb">
               <img class="${imgClass}" src="${escapeHtml(imageSrc)}" alt="${alt}" loading="eager" decoding="async" onerror="this.onerror=null;this.classList.add('is-brand');this.src='${FALLBACK_IMAGE}'">
             </div>`;
