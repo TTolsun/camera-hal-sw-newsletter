@@ -881,7 +881,7 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
           }
         },
         cost_report: {
-          calls: [{ stage_key: 'source_discovery#0', model: 'fake' }]
+          calls: [{ stage_key: 'source_discovery#0', stage_id: 'source_discovery', model: 'fake' }]
         }
       });
       return {
@@ -954,7 +954,7 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   const usage = readJson(geminiUsageReportPath(root, date));
   assert.equal(usage.requested_attempt_count, 1);
   assert.equal(usage.successful_response_count, 1);
-  assert.equal(usage.stage_counts['source_discovery#0'].requested_attempts, 1);
+  assert.equal(usage.stage_counts.source_discovery.requested_attempts, 1);
 
   const validated = validateCandidateArtifact({
     root,
@@ -1082,7 +1082,7 @@ test('Stage 2 enabled merge excludes not-yet-eligible Gemini candidates and carr
             models: { fake: { requests: 1, successes: 1 } }
           }
         },
-        cost_report: { calls: [{ stage_key: 'source_discovery#0', model: 'fake' }] }
+        cost_report: { calls: [{ stage_key: 'source_discovery#0', stage_id: 'source_discovery', model: 'fake' }] }
       });
       return {
         schema_version: 1,
@@ -1229,7 +1229,7 @@ test('Stage 2 enabled merge caps a combined not_yet_eligible over the limit and 
             models: { fake: { requests: 1, successes: 1 } }
           }
         },
-        cost_report: { calls: [{ stage_key: 'source_discovery#0', model: 'fake' }] }
+        cost_report: { calls: [{ stage_key: 'source_discovery#0', stage_id: 'source_discovery', model: 'fake' }] }
       });
       return {
         schema_version: 1,

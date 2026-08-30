@@ -319,7 +319,8 @@ async function callLlmJsonBudgeted(stageRunArg, systemInstruction, prompt, respo
   const run = assertStageRun(stageRunArg);
   const budget = options.budget || null;
   if (budget && typeof budget.assertCanRequest === 'function') {
-    budget.assertCanRequest(run.label);
+    // 예산 config는 stage id 어휘를 쓴다(#993). label로 조회하면 label 철자에 묶인다.
+    budget.assertCanRequest(run.definition.id);
   }
   try {
     return await callLlmJson(run, systemInstruction, prompt, responseSchema, options);
