@@ -1,0 +1,50 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const test = require('node:test');
+
+const root = path.join(__dirname, '..', '..', '..', '..');
+
+function readLearningStylesheet() {
+  return fs.readFileSync(path.join(root, 'articles', 'css', 'learning.css'), 'utf8');
+}
+
+function gridTrackValues(css) {
+  return [...css.matchAll(/grid-template-columns:\s*([^;]+);/g)].map(match => match[1].trim());
+}
+
+// AI Engineering Lab 페이지는 styles.css 밖에 자기 stylesheet 를 하나 더 갖는 유일한 공개
+// 페이지다. 여기 규칙은 다른 페이지의 CSS 잠금이 읽지 않으므로 자기 계약은 스스로 잠근다.
+
+test('learning page flexible grid tracks stay shrinkable below their content', () => {
+  const css = readLearningStylesheet();
+  const tracks = gridTrackValues(css);
+  assert.ok(tracks.length > 0, 'learning.css should define grid tracks');
+
+  // `1fr` 은 `minmax(auto, 1fr)` 이라 트랙이 내용의 최소 폭 아래로 줄지 않는다. 이 페이지의
+  // 카드 안에는 그 최소 폭이 휴대폰 화면보다 넓은 것들이 있어서(.scoreboard 의 min-width:720px
+  // 표, white-space:pre 인 .artifact-tree, 래퍼 없는 표) 트랙이 화면 밖으로 밀리고 페이지
+  // 전체가 가로로 스크롤된다. 유연 트랙은 전부 minmax(0, …) 로 바닥을 열어 둔다.
+  const blowoutTracks = tracks.filter(value => /(?:^|[\s(,])\d*\.?\d*fr\b/.test(value) && !/minmax\(\s*0/.test(value));
+  assert.deepEqual(
+    blowoutTracks,
+    [],
+    'fr 트랙은 minmax(0, …) 로 감싼다 — 그렇지 않으면 좁은 화면에서 카드가 뷰포트를 넘긴다'
+  );
+});
+
+test('learning page narrow-screen overrides collapse every multi-column grid', () => {
+  const css = readLearningStylesheet();
+  const narrow = css.match(/@media \(max-width: 780px\) \{([\s\S]*?)\n\}/);
+  assert.ok(narrow, 'learning.css should keep the 780px narrow-screen block');
+
+  // 데스크톱에서 여러 열인 그리드는 좁은 화면에서 전부 한 열로 접혀야 한다. 하나라도 빠지면
+  // 그 그리드만 화면을 넘긴다.
+  for (const selector of ['.learning-grid', '.source-grid', '.week-columns', '.week-card']) {
+    assert.match(
+      narrow[1],
+      new RegExp(`${selector.replace('.', '\\.')}[^{]*\\{[^}]*grid-template-columns:\\s*minmax\\(0, 1fr\\)`),
+      `${selector} must collapse to a single shrinkable column below 780px`
+    );
+  }
+});
