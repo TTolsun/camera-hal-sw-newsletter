@@ -113,9 +113,13 @@ img {
   height: auto;
 }
 
+/* [tabindex] 는 가로 스크롤 컨테이너처럼 네이티브가 아닌데 키보드 초점을 받는 요소를 위한
+   것이다(#1009). 빼 두면 그런 요소만 브라우저 기본 링을 써서 사이트 focus 신호가 두 종류가
+   된다. :focus-visible 이 이미 판정하므로 tabindex="-1" 의 프로그램 초점에는 붙지 않는다. */
 a:focus-visible,
 button:focus-visible,
-select:focus-visible {
+select:focus-visible,
+[tabindex]:focus-visible {
   outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
