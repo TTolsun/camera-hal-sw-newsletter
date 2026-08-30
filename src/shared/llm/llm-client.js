@@ -297,7 +297,8 @@ async function callLlmJson(stageRunArg, systemInstruction, prompt, responseSchem
           // Permanent schema drift, not a capacity issue. Fail fast with a clear
           // root cause: the weaker fallback models would reject the same schema, so
           // there is nothing to gain by burning calls on them.
-          fail(
+          failStage(
+            run,
             `[${stage}] ${provider.displayName} rejected the response schema as too complex on model ${modelName} ` +
             `(constrained-decoding "too many states"). The response schema for this stage likely drifted past the ` +
             `model's state limit; slim optional/enum fields (see PR #633) or route this stage to a model that ` +
