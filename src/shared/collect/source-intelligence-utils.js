@@ -206,6 +206,9 @@ function candidateDate(candidate = {}) {
 // 후보가 이번 호에 실릴 수 있는가. 근거 수집에서는 슬롯 순위를 정하는 1순위 신호이자
 // 대상 집합에 넣을지를 가르는 조건이라, 고르는 쪽과 판정하는 쪽이 같은 값을 써야 한다.
 // 후보 레코드가 camelCase와 snake_case를 섞어 들고 오므로 둘 다 본다.
+// 이건 근거 수집 경로의 정본이지 저장소 전체의 정본이 아니다. generator와 shared에 같은
+// 판정의 사본이 여럿 있고, 그중 orchestrator-reporter-normalize.js:65 하나만 snake_case를
+// 보지 않아 같은 레코드에 다른 답을 낸다.
 function finalSelectionEligible(candidate = {}) {
   return ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
 }
@@ -268,9 +271,9 @@ module.exports = {
   clamp,
   domainMatches,
   evidenceSourceKey,
-  finalSelectionEligible,
   fetchUrlForContent,
   fetchTextWithLimit,
+  finalSelectionEligible,
   isObject,
   isUrlAllowed,
   numeric,
