@@ -820,6 +820,23 @@
         "originalCharacters": 323122,
         "originalBytes": 323351
       }
+    },
+    {
+      "path": "source-html/anthropic-news-cognizant-anthropic.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Anthropic News article body ends at the inner closing article tag, so the Related content section and the site footer navigation never reach summary, behavior_change or source_extraction.workflow.sections",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "url": "https://www.anthropic.com/news/cognizant-anthropic",
+        "capturedAt": "2026-08-30",
+        "originalCharacters": 145382,
+        "note": "nested article/main skeleton, one body paragraph run, the Related content section and the footer nav kept; a rel=canonical link added so the whole resolver path can run against it"
+      }
     }
   ]
 }

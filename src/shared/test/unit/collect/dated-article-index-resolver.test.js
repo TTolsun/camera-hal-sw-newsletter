@@ -288,6 +288,51 @@ async function resolveWithRelatedArticlesTail(over = {}) {
   return item;
 }
 
+// Anthropic News(/news) 기사 페이지. Claude Blog(Webflow)와 마크업이 달라
+// ARTICLE_BODY_END_MARKERS 문자열이 한 건도 없고, 대신 <main> 안에 <article>이 두 겹으로 들어
+// 있다(hero 하나 + 본문 하나). 안쪽 </article>이 본문의 끝이고 그 뒤로 "Related content" 섹션과
+// 사이트 푸터가 이어진다.
+const ANTHROPIC_ORIGIN = 'https://www.anthropic.com';
+const ANTHROPIC_PATH_PREFIX = '/news';
+const ANTHROPIC_INDEX_URL = `${ANTHROPIC_ORIGIN}${ANTHROPIC_PATH_PREFIX}`;
+const ANTHROPIC_SLUG = 'cognizant-anthropic';
+const ANTHROPIC_ARTICLE_HTML = readTextFixture('source-html/anthropic-news-cognizant-anthropic.html');
+const ANTHROPIC_SOURCE = {
+  ...SOURCE,
+  id: 'anthropic-news',
+  name: 'Anthropic News',
+  sourceUrl: ANTHROPIC_INDEX_URL,
+  url: ANTHROPIC_INDEX_URL
+};
+
+// Anthropic News 목록에서는 <a href="/news/{slug}">가 곧 카드이고 <time>이 그 앵커 안에 있다
+// (dated-article-card-parsing.js의 두 번째 컨테이너 후보).
+function anthropicIndexHtml() {
+  return `<a href="${ANTHROPIC_PATH_PREFIX}/${ANTHROPIC_SLUG}" class="FeaturedGrid-module__sideLink">`
+    + '<div class="FeaturedGrid-module__meta"><span class="caption bold">Announcements</span>'
+    + '<time class="caption bold">Jul 27, 2026</time></div>'
+    + '<h4 class="headline-6">Cognizant and Anthropic expand their partnership</h4></a>';
+}
+
+async function resolveAnthropicNewsArticle(over = {}) {
+  const indexHtml = anthropicIndexHtml();
+  const items = await resolveDatedArticleIndexItems({
+    html: indexHtml,
+    source: ANTHROPIC_SOURCE,
+    fetchClient: makeClient({
+      indexHtml,
+      indexUrl: ANTHROPIC_INDEX_URL,
+      defaultArticleHtml: ANTHROPIC_ARTICLE_HTML
+    }),
+    // 카드 날짜(2026-07-27)가 recent tier 안에 들어오는 시점.
+    now: over.now || new Date('2026-08-01T00:00:00Z'),
+    lookbackDays: over.lookbackDays ?? 21,
+    onDiagnostic: over.onDiagnostic
+  });
+  assert.equal(items.length, 1, 'expected exactly one resolved Anthropic News item');
+  return items[0];
+}
+
 async function resolveWithExhaustedSourceBudget(over = {}) {
   const articleBytes = Buffer.byteLength(ARTICLE_HTML, 'utf8');
   // 최근 7일 기사(기본 목록에는 3건: 08-21 x2, 08-18) 2건분보다 작게 — 1건은 온전히 받고
@@ -570,6 +615,88 @@ test('stops reading the body at the related-articles section', async () => {
     '관련 기사 제목이 본문으로 새면 이 단언이 깨진다');
   assert.doesNotMatch(haystack, /Jul 24, 2026/,
     '관련 기사 카드의 날짜도 본문으로 새면 안 된다');
+});
+
+// #964. Anthropic News 마크업에는 ARTICLE_BODY_END_MARKERS 문자열이 한 건도 없다. 마커만
+// 경계 후보이던 동안에는 본문이 문서 끝까지로 잡혀 사이트 푸터가 그대로 근거가 됐다 — 수정 전
+// 이 픽스처 실측: behavior_change와 sections[0]이 둘 다
+// 'Read more Products Claude Claude Code Claude Code Enterprise Claude Cowork ... Anthropic PBC'.
+test('stops reading an Anthropic News body at the closing article tag', async () => {
+  const item = await resolveAnthropicNewsArticle();
+  const haystack = [
+    String(item.summary || ''),
+    String(item.behavior_change || ''),
+    JSON.stringify(item.source_extraction || {})
+  ].join(' ');
+
+  for (const chrome of [
+    'Products',
+    'Claude Code Enterprise',
+    'Claude Cowork',
+    'Anthropic PBC',
+    'Related content',
+    'Read more'
+  ]) {
+    assert.equal(haystack.includes(chrome), false,
+      `사이트 내비·푸터 문구 "${chrome}"이 기사 본문 근거로 새면 안 된다`);
+  }
+
+  // 음성 단언만 두면 본문을 통째로 비워도 통과한다. 기사 본문이 끝까지 남는지도 함께 잰다.
+  assert.match(item.summary, /Claude Partner Network/,
+    '경계를 너무 이르게 잡아 기사 마지막 문단을 잘라내면 안 된다');
+  assert.ok(item.summary.endsWith('visit anthropic.com/partners .'),
+    `본문은 기사의 마지막 문장에서 끝나야 한다: ${JSON.stringify(item.summary.slice(-60))}`);
+});
+
+// claude.com/blog 라이브 페이지에도 </main>은 있지만(실측: 마커 343,330자 < </main> 399,958자)
+// 마커가 항상 먼저 온다. 픽스처는 그 구간을 이미 잘라 뒀으므로 순서 규칙은 합성 HTML로 잰다 —
+// "bodyStart 이후 가장 이른 후보가 이긴다"가 깨지면 관련 기사 섹션이 다시 본문으로 들어온다.
+test('keeps the earliest boundary when a related-articles marker precedes the closing main tag', async () => {
+  const slug = 'marker-before-main';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'Marker before main' });
+  const articleHtml = '<main>'
+    + minimalArticleHtml({
+      canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+      headerDateText: 'Aug 18, 2026',
+      title: 'Marker before main',
+      bodyHtml: '<p>BODY_SENTINEL_TEXT</p>'
+    })
+    + '<section class="blog_related_section_wrap"><p>FOREIGN_RELATED_TITLE</p></section>'
+    + '</main><footer><p>FOOTER_SENTINEL_TEXT</p></footer>';
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  const haystack = [
+    String(items[0].summary || ''),
+    String(items[0].behavior_change || ''),
+    JSON.stringify(items[0].source_extraction || {})
+  ].join(' ');
+  assert.match(haystack, /BODY_SENTINEL_TEXT/, '기사 본문은 남아야 한다');
+  assert.doesNotMatch(haystack, /FOREIGN_RELATED_TITLE/,
+    '</main>이 마커보다 뒤에 있어도 마커가 이겨야 한다');
+  assert.doesNotMatch(haystack, /FOOTER_SENTINEL_TEXT/, '푸터는 본문이 아니다');
+});
+
+// 마커도 </article>도 </main>도 없는 페이지에서는 기존처럼 문서 끝까지가 본문이다 —
+// 경계 후보가 늘었다고 아무 데서나 자르지 않는다.
+test('keeps reading to the end of a page that has no body-end boundary at all', async () => {
+  const slug = 'no-boundary-markup';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'No boundary' });
+  const articleHtml = minimalArticleHtml({
+    canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+    headerDateText: 'Aug 18, 2026',
+    title: 'No boundary',
+    bodyHtml: '<p>TAIL_SENTINEL_TEXT</p>'
+  });
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  assert.match(items[0].summary, /TAIL_SENTINEL_TEXT/,
+    '경계 후보가 하나도 없으면 문서 끝까지가 본문이다(하위 호환)');
 });
 
 test('reports when the source budget runs out with recent articles still queued', async () => {

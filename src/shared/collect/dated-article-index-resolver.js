@@ -38,11 +38,28 @@ const MAX_WORKFLOW_SECTIONS = 2;
 // 도입부에서 만드는 요약 길이. 앵커 문단을 복사하지 않는다 — summary가 앵커 문구를 담으면
 // evidenceMetadata:781이 필드 존재만으로 점수를 줘 evidenceScore 게이트가 형해화된다.
 const SUMMARY_LIMIT = 500;
-// 본문의 끝. 이 뒤는 관련 기사 목록이고, 인덱스 페이지와 같은 카드 마크업
-// (role="listitem" class="blog_cms_item w-dyn-item")을 쓴다. 자르지 않으면 남의 기사 제목과
-// 날짜가 이 기사의 summary·sections로 들어간다. 마커가 없으면 문서 끝까지를 본문으로 본다
-// (Anthropic News에는 이 구간 자체가 없다) — 없다고 실패로 닫지 않는다.
-const ARTICLE_BODY_END_MARKERS = ['blog_related_section_wrap', 'data-cta-position="Related articles"'];
+// 본문의 끝 후보. 자르지 않으면 이 기사 뒤에 오는 것들(남의 기사 카드, 사이트 내비·푸터)이
+// 이 기사의 summary·behavior_change·sections로 들어간다.
+//
+// 앞의 두 개는 Claude Blog(Webflow) 관련 기사 목록의 표지다. 그 구간은 인덱스 페이지와 같은
+// 카드 마크업(role="listitem" class="blog_cms_item w-dyn-item")을 써서, 남기면 남의 기사
+// 제목과 날짜가 이 기사의 근거가 된다.
+//
+// 뒤의 두 개는 닫는 태그다. Anthropic News(/news) 마크업에는 앞의 두 마커가 한 건도 없어서,
+// 마커만 후보이던 동안에는 본문이 문서 끝까지로 잡혀 사이트 푸터의 제품 목록이 그대로
+// behavior_change와 sections[0]에 실렸다(#964). 그 페이지는 <main> 안에 <article>이 두 겹
+// (hero 하나 + 본문 하나)이라 첫 </article>이 본문의 끝이고, 그 뒤로 "Related content" 섹션과
+// 푸터가 이어진다. </main>만 두면 그 "Related content"가 남고, </article>만 두면 <article>이
+// 아예 없는 Claude Blog 마크업을 받아 줄 후보가 없다 — 둘이 함께 있어야 두 사이트의 경계가
+// 같은 의미(관련 기사 앞에서 자른다)가 된다.
+//
+// 후보가 하나도 안 잡히면 문서 끝까지를 본문으로 본다 — 없다고 실패로 닫지 않는다.
+const ARTICLE_BODY_END_MARKERS = [
+  /blog_related_section_wrap/,
+  /data-cta-position="Related articles"/,
+  /<\/article\s*>/i,
+  /<\/main\s*>/i
+];
 
 // 넓게 잡으면(bucket 패턴 전부의 합집합) 추출이 오탐 토큰을 오히려 농축한다는 것이
 // 별도 조사에서 확인됐다 — 그래서 workflow 신호로만 좁힌다.
@@ -115,7 +132,7 @@ function normalizeUrl(value) {
 
 /**
  * 개별 기사 raw HTML에서 제목과 본문 평문을 뽑는다. 본문은 <h1>부터
- * ARTICLE_BODY_END_MARKERS 중 먼저 나오는 자리 앞까지다(마커가 없으면 문서 끝까지).
+ * ARTICLE_BODY_END_MARKERS 중 먼저 나오는 자리 앞까지다(후보가 하나도 없으면 문서 끝까지).
  * <h1>이 없으면(비정상 fixture 등) 문서 전체를 본문으로, 제목은 빈 문자열로 둔다.
  */
 function extractArticleBody(html) {
@@ -123,10 +140,13 @@ function extractArticleBody(html) {
   const heading = /<h1\b[^>]*>([\s\S]*?)<\/h1\s*>/i.exec(value);
   const title = heading ? cardText(heading[1]) : '';
   const bodyStart = heading ? heading.index : 0;
+  // 본문 시작 뒤에서만 후보를 찾는다 — Anthropic News의 바깥 <article>은 <h1>보다 앞에서
+  // 열리므로, 문서 처음부터 찾으면 본문이 시작하기도 전의 닫는 태그를 경계로 집을 수 있다.
+  const afterBodyStart = value.slice(bodyStart);
   let bodyEnd = value.length;
   for (const marker of ARTICLE_BODY_END_MARKERS) {
-    const markerIndex = value.indexOf(marker, bodyStart);
-    if (markerIndex >= 0 && markerIndex < bodyEnd) bodyEnd = markerIndex;
+    const markerIndex = afterBodyStart.search(marker);
+    if (markerIndex >= 0 && bodyStart + markerIndex < bodyEnd) bodyEnd = bodyStart + markerIndex;
   }
   return { title, bodyText: cardText(value.slice(bodyStart, bodyEnd)) };
 }
