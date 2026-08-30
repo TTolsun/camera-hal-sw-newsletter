@@ -390,16 +390,53 @@ function assertStageRun(value) {
   return value;
 }
 
+// 진단·비용 아티팩트가 쓰는 canonical key 형식의 표식(#982). 호환 목적이 아니라, 사람이
+// 읽는 label을 키로 쓰던 과거 아티팩트와 새 아티팩트를 사람이 즉시 구분하기 위한 것이다.
+const STAGE_KEY_FORMAT = 'canonical-v1';
+
+/**
+ * 진단 아티팩트 항목에 싣는 stage 정체성 블록.
+ *
+ * canonical key만으로는 label을 복원할 수 없다 -- label은 총 재시도 수를 담는데 key는 담지
+ * 않기 때문이다. 그래서 label을 지우지 않고 별도 필드로 함께 남긴다. 키는 기계가 조회에
+ * 쓰고, label은 사람이 읽는다.
+ */
+function stageRunIdentity(run) {
+  assertStageRun(run);
+  return {
+    stage_key: stageRunKey(run),
+    stage_id: run.definition.id,
+    quality_attempt: run.qualityAttempt,
+    label: run.label,
+    parent_run_key: run.parentRunKey
+  };
+}
+
+/**
+ * boundary 방어의 definition 판. run이 아니라 정의 자체를 받는 조회 -- "이 stage가 이번
+ * run에서 마지막으로 쓴 model이 무엇인가" -- 가 쓴다. 그 질문은 quality attempt를 특정하지
+ * 않으므로 run key로는 답할 수 없다.
+ */
+function assertStageDefinition(definition) {
+  if (!definition || stageDefinitionById(definition.id) !== definition) {
+    throw new Error(`expected a stage definition from the catalog, got: ${String(definition && definition.id)}`);
+  }
+  return definition;
+}
+
 module.exports = {
   DERIVED_STAGE_KINDS,
   LABEL_KINDS,
   LLM_STAGES,
+  STAGE_KEY_FORMAT,
   TEMPERATURE_PROFILES,
   THINKING_PROFILES,
+  assertStageDefinition,
   assertStageRun,
   derivedStageRun,
   isStageRun,
   stageDefinitionById,
   stageRun,
+  stageRunIdentity,
   stageRunKey
 };
