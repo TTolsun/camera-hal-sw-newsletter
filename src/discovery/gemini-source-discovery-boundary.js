@@ -1001,9 +1001,14 @@ function evidenceReliabilityRank(candidate = {}) {
   return ['official', 'upstream', 'project-official'].includes(reliability) ? 0 : 1;
 }
 
+function finalSelectionEligible(candidate = {}) {
+  return ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
+}
+
 function evidencePriority(candidate = {}, isCanonical = false) {
   const score = Number(candidate.source_quality_score || 0);
   return {
+    eligibility_rank: finalSelectionEligible(candidate) ? 0 : 1,
     canonical_rank: isCanonical ? 0 : 1,
     bucket_rank: candidate.source_quality_bucket === 'strong_candidate' ? 0 : 1,
     score: Number.isFinite(score) ? score : 0,
@@ -1013,14 +1018,30 @@ function evidencePriority(candidate = {}, isCanonical = false) {
   };
 }
 
+// 슬롯 순위는 "발행 대상인가"가 먼저 정하고, 그다음 출처 품질이, 마지막에 중복 클러스터
+// 대표 여부가 동점을 가른다.
+//
+// 두 신호를 아래로 내린 이유가 다르다.
+//
+// eligibility_rank를 맨 위에 둔 것은 cap이 지켜야 할 것이 발행될 기사의 근거이기 때문이다.
+// canonical loop는 자격과 무관하게 대표를 대상 집합에 넣으므로, 정렬이 자격을 안 보면 발행할
+// 수 없는 후보가 슬롯을 쓰고 발행할 후보가 밀린다.
+//
+// canonical_rank는 "대상 집합에 넣을지"를 정하는 신호지 순위를 정하는 신호가 아니다. 이게
+// 1순위였을 때는 대표들이 품질과 무관하게 슬롯을 선점해서, 중복 클러스터가 슬롯 수 이상 나오는
+// 주에는 클러스터 밖 후보가 아무리 강해도 구조적으로 0건이었다.
+//
+// 그래서 대표 보호는 조건부다. 자격이 같으면 대표도 품질 순위로 밀린다. 2026-07-20의
+// patchwork/27362가 그 예로, 자격 있는 대표인데도 12칸 밖으로 떨어진다.
 function compareEvidenceTargets(left, right) {
   const a = left.priority;
   const b = right.priority;
-  return a.canonical_rank - b.canonical_rank ||
+  return a.eligibility_rank - b.eligibility_rank ||
     a.bucket_rank - b.bucket_rank ||
     b.score - a.score ||
     a.reliability_rank - b.reliability_rank ||
     b.published_date.localeCompare(a.published_date) ||
+    a.canonical_rank - b.canonical_rank ||
     a.stable_key.localeCompare(b.stable_key);
 }
 
@@ -1065,9 +1086,8 @@ function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options
   }
 
   for (const candidate of candidates) {
-    const finalEligible = ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
     const qualityEligible = ['strong_candidate', 'review_candidate'].includes(candidate.source_quality_bucket);
-    if (finalEligible && qualityEligible && candidate.duplicate_of_selected_source !== true) {
+    if (finalSelectionEligible(candidate) && qualityEligible && candidate.duplicate_of_selected_source !== true) {
       add(candidate, isCanonical(candidate));
     }
   }
