@@ -167,8 +167,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(halSignalQualityStep, /if: always\(\) && steps\.resolve-newsletter-date\.outputs\.date != ''/);
   assert.match(halSignalQualityStep, /continue-on-error:\s*true/);
   // generate가 리뷰 패키지 작성 전에 리포트를 이미 생성하므로 이 스텝은 crash-path 백필 전용이다.
-  // --skip-if-present 없이 재생성하면 generated_at만 바뀐 바이트가 artifact-manifest.json의
-  // sha256과 어긋난 채 커밋되므로, 플래그를 계약으로 고정한다.
+  // --skip-if-present 없이 재생성하면 generated_at만 바뀐 사본이 커밋돼 리뷰 패키지가 기록한
+  // 리포트와 달라지므로, 플래그를 계약으로 고정한다.
   assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}" --skip-if-present/);
   assert.match(imageAuditStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   // LOCK FLIPPED (#886). 이전 계약은 이 스텝이 job을 죽이는 하드 블록이어야 한다는 것이었다

@@ -159,6 +159,9 @@ function testManifestCreationAndHashes() {
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'evidence-pack-summary.json')));
   assert.ok(manifest.files.some(file => file.path === '.tmp/gemini-raw/attempt-1.json'));
   assert.ok(manifest.files.some(file => file.path === 'cache/news-summary/summary.json'));
+  // 스냅샷 매니페스트의 files[]는 커밋되지 않는 스냅샷 디렉터리(.tmp/**, cache/** 포함)를 훑어
+  // 직접 해싱한 목록이고, retained_heavy_artifacts가 그 size·sha256을 그대로 쓴다. Git 밖 Actions
+  // artifact 안의 파일을 식별하는 유일한 수단이라 여기서는 유지한다(#951 범위 밖).
   assert.ok(manifest.files.every(file => /^[a-f0-9]{64}$/.test(file.sha256)));
   assert.ok(manifest.files.every(file =>
     Object.keys(file).sort().join(',') === 'path,sha256,size' &&
@@ -166,6 +169,14 @@ function testManifestCreationAndHashes() {
     typeof file.size === 'number' &&
     typeof file.sha256 === 'string'
   ));
+
+  // review_artifacts[] 항목은 size·sha256을 담지 않는다(#951). 이 배열은 리뷰 인벤토리에서
+  // 그대로 나오므로 두 매니페스트 표면이 같은 계약을 공유한다.
+  assert.ok(manifest.review_artifacts.length > 0, 'review_artifacts should not be empty');
+  assert.ok(
+    manifest.review_artifacts.every(entry => !('size' in entry) && !('sha256' in entry)),
+    'review_artifacts entries must not carry size or sha256'
+  );
   assert.ok(manifest.files.every(file => !file.path.endsWith('artifact-manifest.json')));
   assert.ok(manifest.missing_critical_files.includes(`articles/newsletters/${date}/newsletter.md`));
 
@@ -474,6 +485,25 @@ function testBuildDateReviewManifestRetentionFields() {
   assert.ok(Array.isArray(manifest.committed_artifacts), 'committed_artifacts should be an array');
   assert.ok(typeof manifest.retention_summary === 'object', 'retention_summary should be an object');
   assert.ok(typeof manifest.retention_location === 'string', 'retention_location should be a string');
+
+  // files[] 항목은 경로만 담는다. 여기 있던 size·sha256은 review_artifacts[] 항목의 사본이었고,
+  // 커밋되는 파일의 바이트 정본은 Git tree라 두 번째 정본을 두지 않는다(#951).
+  assert.ok(manifest.files.length > 0, 'files should not be empty');
+  assert.ok(
+    manifest.files.every(file => !('size' in file) && !('sha256' in file)),
+    'files entries must not carry size or sha256'
+  );
+  assert.ok(
+    manifest.files.every(file => Object.keys(file).sort().join(',') === 'path'),
+    'files entries must carry exactly path'
+  );
+
+  // review_artifacts[] 항목도 같은 이유로 size·sha256을 담지 않는다(#951).
+  assert.ok(manifest.review_artifacts.length > 0, 'review_artifacts should not be empty');
+  assert.ok(
+    manifest.review_artifacts.every(entry => !('size' in entry) && !('sha256' in entry)),
+    'review_artifacts entries must not carry size or sha256'
+  );
 
   const heavyShortlisted = manifest.retained_heavy_artifacts.find(a =>
     a.path === newsroomRelPath(date, 'shortlisted-candidates.json')
