@@ -257,24 +257,37 @@ test('featured hero renders the current headline with escaped copy, image, kicke
   assert.doesNotMatch(html, /rel="noopener"/);
 });
 
-// DESIGN.md: fallback 그래픽은 16:9 풀커버가 아니라 44% 중앙 + product drop-shadow(.is-brand).
-// article-image-resolver 가 카테고리별로 네 장을 내보내므로 파일명 하나만 fallback 으로 보면
-// 나머지 세 장이 실제 기사 이미지처럼 깔린다. 카드와 같은 공유 술어를 쓰는지 잠근다.
+// DESIGN.md(#1008): 동봉 fallback 그래픽 4종은 실제 기사 이미지와 같이 16:9 풀커버다.
+// .is-brand(44% 중앙 + drop-shadow)는 투명 배경 마스코트 전용이라 여기서는 붙지 않는다 —
+// 붙이면 불투명 SVG 가 패널 위에 얹힌 사각형으로 보인다.
 // alt 가 비는 것도 같이 잠근다 — fallback 은 기사 정보를 담지 않는 장식이고, image_alt 는 기사
 // 제목에서 파생돼 그대로 두면 바로 아래 h1 과 같은 문장이 두 번 읽힌다.
-test('featured hero brands every bundled fallback graphic and leaves its alt empty', async () => {
+test('featured hero renders bundled fallback graphics full-cover with an empty alt', async () => {
   for (const name of ['ai', 'android', 'cpp', 'newsletter-default']) {
     const imageSrc = `assets/images/fallback/${name}.svg`;
     const { elements } = await renderHomepage(
       [newsletter('2026-05-23', 'Weekly issue')],
       validHeadlineState({ image_url: imageSrc, image_alt: 'Camera HAL headline image' })
     );
+    const html = elements['featured-card'].innerHTML;
     assert.match(
-      elements['featured-card'].innerHTML,
-      new RegExp(`<img class="featured-img is-brand" src="${imageSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}" alt=""`),
-      `${imageSrc} must render as the brand hero with an empty alt`
+      html,
+      new RegExp(`<img class="featured-img" src="${imageSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}" alt=""`),
+      `${imageSrc} must render full-cover with an empty alt`
     );
+    assert.doesNotMatch(html, /is-brand/, `${imageSrc} must not get the transparent-mascot treatment`);
   }
+});
+
+// 로드 실패로 fallback 으로 갈아탈 때도 alt 를 비운다: 갈아탄 그림은 기사가 아니라 장식이다.
+test('featured hero clears the alt when a real image falls back at load time', async () => {
+  const { elements } = await renderHomepage(
+    [newsletter('2026-05-23', 'Weekly issue')],
+    validHeadlineState({ image_url: 'https://example.com/headline.png', image_alt: 'Camera HAL headline image' })
+  );
+  const html = elements['featured-card'].innerHTML;
+  assert.match(html, /<img class="featured-img" src="https:\/\/example\.com\/headline\.png" alt="Camera HAL headline image"/);
+  assert.match(html, /onerror="this\.onerror=null;this\.alt='';this\.src='assets\/images\/fallback\/newsletter-default\.svg'"/);
 });
 
 test('featured hero leaves the static brand hero in place when the headline is missing', async () => {
@@ -598,6 +611,10 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
 
   // A static brand hero keeps a single H1 present before the headline data loads.
   assert.match(html, /<article id="featured-card" class="featured-hero">/);
+  // 이 마스코트가 `.featured-img.is-brand` 의 유일한 소비자다(#1008 이후). DESIGN.md elevation 이
+  // 허용한 단 하나의 product drop-shadow 예외가 이 한 줄에 걸려 있으므로 함께 잠근다 —
+  // 여기서 빠지면 styles.css 의 .featured-img.is-brand 가 조용히 dead 규칙이 된다.
+  assert.match(html, /<img class="featured-img is-brand" src="assets\/images\/brand\/HALley\.png"/);
   assert.match(html, /<h1 id="featured-title" class="featured-title">보이지 않는 카메라의 오늘, 그러나 미래<\/h1>/);
   assert.match(html, /<p class="featured-kicker">Camera SW Newsroom<\/p>/);
   // 최신 소식 grid section with sort + topic filter + grid hooks.
