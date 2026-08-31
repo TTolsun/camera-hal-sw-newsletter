@@ -212,9 +212,12 @@ function testManifestCreationAndHashes() {
     manifest.retained_heavy_artifacts.every(entry =>
       Object.keys(entry).sort().join(',') === 'path,retention_grade,retention_location,sha256,size' &&
       typeof entry.size === 'number' &&
-      /^[a-f0-9]{64}$/.test(entry.sha256)
+      /^[a-f0-9]{64}$/.test(entry.sha256) &&
+      // 등급 구성도 함께 잠근다. 커밋되는 파일이 이 배열로 새면 PR diff에 이미 있는 파일의
+      // 바이트 사본이 다시 생기고, 리뷰어는 Actions artifact에 없는 경로를 찾게 된다.
+      (entry.retention_grade === DEBUG_HEAVY || entry.retention_grade === TRANSIENT_ATTEMPT)
     ),
-    'retained_heavy_artifacts entries must keep size and sha256'
+    'retained_heavy_artifacts entries must keep size and sha256 and stay heavy-graded'
   );
 
   const committedSelectionReport = manifest.committed_artifacts.find(a =>
