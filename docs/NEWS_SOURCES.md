@@ -57,7 +57,7 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 
 Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/behavior, camera output path 연결이 모두 있을 때만 `android_multimedia_camera_output` 후보로 봅니다. MediaCodec, MediaRecorder, MediaStore, Photo Picker, supported formats 문서는 reference/background source이며 단독 기사 후보가 아닙니다.
 
-reference source(`sourceRole=official_documentation_reference` 또는 `mainArticlePolicy=reference_only`)는 제너릭 페이지 스크레이프 폴백을 쓰지 않습니다. 이런 페이지는 날짜가 없어 후보가 늘 `finalSelectionEligibility=exclude`로 끝나면서 소스 진단만 상시로 켰습니다. 소스 전용 파서를 따로 두더라도 후보가 살아나지는 않습니다. `sourceRole=official_documentation_reference`인 소스는 collector가 파서 결과와 무관하게 `finalSelectionEligibility=exclude`로 닫습니다. 그 소스를 다시 기사 후보로 쓰려면 registry의 `sourceRole`부터 되돌려야 합니다.
+reference source(`sourceRole=official_documentation_reference` 또는 `mainArticlePolicy=reference_only`)는 제너릭 페이지 스크레이프 폴백을 쓰지 않습니다. 이런 페이지는 날짜가 없어 후보가 늘 `finalSelectionEligibility=exclude`로 끝나면서 소스 진단만 상시로 켰습니다. `sourceRole=official_documentation_reference`인 소스는 소스 전용 파서를 따로 두더라도 후보가 살아나지 않습니다 — collector가 파서 결과와 무관하게 `finalSelectionEligibility=exclude`로 닫습니다. 그 소스를 다시 기사 후보로 쓰려면 registry의 `sourceRole`부터 되돌려야 합니다.
 
 AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트로 가는 랜딩 페이지라 자체 dated 행이 없습니다. 날짜가 붙은 What's New 변경(예: "Published initial release notes on Android 17 release notes")은 AOSP Site Updates 표에서 들어옵니다. Android Developer Newsletter(`https://developer.android.com/newsletter`)도 같은 이유로 reference source입니다.
 

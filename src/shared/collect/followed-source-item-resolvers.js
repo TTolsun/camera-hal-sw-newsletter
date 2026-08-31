@@ -108,11 +108,13 @@ async function resolveFollowedSourceItems(source, { indexItems = [], text = '', 
  *    끝나고, 대신 진단(`parser_extraction_failure`, `KEEP_AND_FIX_PARSER`)을 상시로 켜서 진짜
  *    파서 고장 신호를 묻는다. 그래서 생산자를 소비자 계약에 맞춘다(#880).
  *
- * 여기서 막는 건 폴백뿐이다. 그렇다고 참고 자료 소스의 소스별 파서 결과가 후보로 살아나는 건
- * 아니다 — registry role이 `official_documentation_reference`이면 collect-news-candidates.js의
+ * 여기서 막는 건 폴백뿐이다. 그리고 registry role이 `official_documentation_reference`인 소스는
+ * 소스별 파서를 따로 두더라도 그 결과가 후보로 살아나지 않는다 — collect-news-candidates.js의
  * `classifySelection`(`:577`)이 파서 결과와 무관하게 `finalSelectionEligibility='exclude'`,
  * `isArticleCandidate=false`, `hasDatedEvidence=false`로 즉시 닫는다. 그 소스의 파서를 다시
- * 살리려면 registry role도 함께 되돌려야 한다.
+ * 살리려면 registry role도 함께 되돌려야 한다. 이 술어는 `mainArticlePolicy=reference_only`만
+ * 가진 소스도 막지만, 그쪽은 classifySelection의 role 분기를 타지 않는다 — 지금 registry의 참고
+ * 소스는 전부 두 표시를 다 갖고 있어 해당 소스가 없다.
  */
 function shouldSuppressGenericFallback(source) {
   if (!source) return false;
