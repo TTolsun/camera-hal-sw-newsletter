@@ -76,6 +76,19 @@ test('learning page narrow-screen overrides collapse the card grids to one colum
   }
 });
 
+// 공용 chrome 은 페이지마다 손으로 복제돼 있고, 나브 라벨을 잠그는 곳도 페이지마다 따로다 —
+// 홈은 homepage-archive.test.js, 아카이브는 archive-page.test.js, 렌더된 이슈는
+// newsletter-renderer.test.js. Lab 페이지만 어디에도 없어서 라벨이 영어로 돌아가도 아무도 못
+// 잡았다(레거시 daily 26개가 실제로 그 상태다). 이 표면 몫은 여기서 잠근다.
+test('learning page keeps the shared Korean navigation labels', () => {
+  const html = readLearningPage();
+  const nav = html.match(/<div\b[^>]*class="[^"]*\bnav-links\b[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+  assert.ok(nav, '.nav-links should exist');
+  const labels = [...nav[1].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/g)]
+    .map(match => match[1].replace(/<[^>]*>/g, '').trim());
+  assert.deepEqual(labels, ['홈', '아카이브', 'GitHub']);
+});
+
 // ---- 가로 스크롤 컨테이너의 키보드 도달성 (#1009) ----
 
 function readLearningPage() {

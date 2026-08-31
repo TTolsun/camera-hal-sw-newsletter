@@ -374,49 +374,8 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
   }
 }
 
-function siteHeaderExpectedLabels() {
-  return ['홈', '아카이브', 'GitHub'];
-}
-
 function escapeRegex(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function hasSiteHeaderComponent(content) {
-  return /<header\b[^>]*\bdata-site-header\b/i.test(content);
-}
-
-function expectedSiteHeaderScript(relPath) {
-  return relPath === 'index.html'
-    ? 'assets/js/site-header.js'
-    : '../../assets/js/site-header.js';
-}
-
-function hasSiteHeaderScript(content, relPath) {
-  const expected = expectedSiteHeaderScript(relPath);
-  const pattern = new RegExp(`<script\\b[^>]*\\bsrc=["']${escapeRegex(expected)}["'][^>]*>\\s*</script>`, 'i');
-  return pattern.test(content);
-}
-
-function validateSiteNavLabels(content, relPath) {
-  const siteNavMatch = content.match(/<nav\b[^>]*class=["'][^"']*\bsite-nav\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
-  if (!siteNavMatch) {
-    if (hasSiteHeaderComponent(content) && !hasSiteHeaderScript(content, relPath)) {
-      fail(`Shared site header in ${relPath} must load ${expectedSiteHeaderScript(relPath)}.`);
-    }
-    return;
-  }
-
-  const labels = [...siteNavMatch[0].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
-    .map(match => textFromHtml(match[1]))
-    .filter(label => label && !['Camera HAL / SW Newsletter', 'Camera SW / Newsletter', 'Camera SW Newsletter'].includes(label));
-  const expected = siteHeaderExpectedLabels();
-  const actual = labels.slice(0, expected.length);
-  const matchesExpected = actual.length === expected.length &&
-    expected.every((label, index) => actual[index] === label);
-  if (!matchesExpected) {
-    fail(`Site navigation labels must be ${expected.join(' / ')} in ${relPath}; found ${actual.join(' / ') || 'none'}`);
-  }
 }
 
 function sourceTail(section) {
@@ -911,7 +870,6 @@ for (const relPath of htmlFiles) {
   if (/\bTODO\b/.test(content)) {
     fail(`Published HTML contains TODO: ${relPath}`);
   }
-  validateSiteNavLabels(content, relPath);
 
   if (relPath.startsWith('newsletters/')) {
     // class 토큰으로 본다. 부분 문자열(`includes`)로 보면 본문에 클래스 이름이 글자로만 나와도

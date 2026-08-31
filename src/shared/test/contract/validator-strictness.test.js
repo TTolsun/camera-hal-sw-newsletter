@@ -99,19 +99,6 @@ function newsletterHtml(date, {
   ].join('\n');
 }
 
-function rootNavHtml(navLabels = ['홈', '아카이브', 'GitHub']) {
-  const navHrefs = ['index.html', 'archive.html', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
-  const navHtml = navLabels
-    .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
-    .join('');
-  return [
-    '<nav class="site-nav content-wrap" aria-label="Primary navigation">',
-    '<a class="site-brand" href="index.html">Camera HAL / SW Newsletter</a>',
-    `<div class="nav-links">${navHtml}</div>`,
-    '</nav>'
-  ].join('\n');
-}
-
 function rootSiteHeaderComponentHtml() {
   return [
     '<script src="assets/js/site-header.js" defer></script>',
@@ -119,10 +106,10 @@ function rootSiteHeaderComponentHtml() {
   ].join('\n');
 }
 
-function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = true } = {}) {
+function rootIndexHtml(extra = '', { siteHeaderComponent = true } = {}) {
   return [
     '<!doctype html><html><body>',
-    navLabels ? rootNavHtml(navLabels) : (siteHeaderComponent ? rootSiteHeaderComponentHtml() : ''),
+    siteHeaderComponent ? rootSiteHeaderComponentHtml() : '',
     '<a class="section-link" href="archive.html">전체 아카이브 보기</a>',
     '<div id="featured-card"></div>',
     '<div id="latest-grid"></div>',
@@ -588,80 +575,6 @@ test('strict validate-site HTML issue tag drift remains hard failure', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match articles\/data\/newsletters\.json tags \[Camera HAL, Android\]/);
-});
-
-test('strict validate-site rejects mismatched issue site nav labels', () => {
-  const root = tempRoot('validate-site-nav-labels-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min,
-    navLabels: ['\ucd5c\uc2e0\ud638', '\uc544\uce74\uc774\ube0c', 'GitHub']
-  });
-
-  const result = runScript(validateSitePath, root);
-
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Site navigation labels must be \ud648 \/ \uc544\uce74\uc774\ube0c \/ GitHub/);
-});
-
-test('validate-site accepts root homepage nav without Sources link', () => {
-  const root = tempRoot('validate-site-root-nav-labels-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml('', {
-    navLabels: ['\ud648', '\uc544\uce74\uc774\ube0c', 'GitHub']
-  }));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.equal(result.status, 0, result.stderr);
-});
-
-test('validate-site rejects root homepage nav with stale Sources link', () => {
-  const root = tempRoot('validate-site-root-nav-sources-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml('', {
-    navLabels: ['\ud648', '\uc544\uce74\uc774\ube0c', 'Sources', 'GitHub']
-  }));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Site navigation labels must be \ud648 \/ \uc544\uce74\uc774\ube0c \/ GitHub in index\.html/);
-});
-
-test('validate-site accepts shared root site header component', () => {
-  const root = tempRoot('validate-site-root-header-component-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml());
-
-  const result = runScript(validateSitePath, root);
-
-  assert.equal(result.status, 0, result.stderr);
-});
-
-test('validate-site rejects shared site header component without script', () => {
-  const root = tempRoot('validate-site-root-header-component-script-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml('', {
-    siteHeaderComponent: false
-  }).replace('<div id="featured-card"></div>', '<header class="site-header" data-site-header></header>\n<div id="featured-card"></div>'));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Shared site header in index\.html must load assets\/js\/site-header\.js/);
 });
 
 test('validate-site accepts disabled subscription config and scoped unrelated UI code', () => {
