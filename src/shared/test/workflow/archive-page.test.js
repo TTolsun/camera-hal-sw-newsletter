@@ -5,7 +5,7 @@ const test = require('node:test');
 const vm = require('node:vm');
 
 const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
-const { assertSharedNav } = require('../helpers/site-nav');
+const { assertSharedNav, assertSharedFooterNav } = require('../helpers/site-nav');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
 
@@ -193,7 +193,10 @@ test('archive page uses homepage shell, shared footer, metadata, and stable hook
   assert.doesNotMatch(html, /archive-hero-actions|<a class="button button-primary" href="index\.html">Home<\/a>/);
   // 홈과 같은 이유로 컨테이너 스코프 — 열린 매칭은 푸터 라벨로 만족돼 헤더를 잠그지 못한다.
   assertSharedNav(html);
-  assert.match(html, /<footer class="site-footer">[\s\S]*href="learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
+  // 푸터도 같은 한 벌로 잠근다(#1022). 열린 매칭으로 Lab 링크만 보던 자리라, 푸터의 `홈`·
+  // `아카이브` 가 영어로 돌아가도 아무도 못 잡았다. Lab href 도 헬퍼가 함께 잠근다 — 배포본을
+  // 훑는 순회 테스트는 withLearningFooterLink() 로 href 를 정규화해서 잡지 못한다(실측).
+  assertSharedFooterNav(html);
   for (const hook of [
     'data-page="archive"',
     'data-archive-status',
