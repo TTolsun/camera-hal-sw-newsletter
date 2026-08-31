@@ -126,14 +126,18 @@ const EXPECTED_FOOTER_LINK_LABELS = [
   ['AI Engineering Lab', 'GitHub']
 ];
 
-// `(지원예정)` 노트는 링크가 아니라 <span> 이라 링크 배열과 섞이지 않는다 — 따로 고정 배열로
-// 비교한다. 이 문구는 "아직 없는 기능을 죽은 링크로 만들지 않는다"는 DESIGN.md 결정이 겉으로
-// 드러난 자리이므로, 값이 바뀌면 결정도 함께 바뀐 것이다.
-const EXPECTED_FOOTER_NOTES = [
+// 「뉴스레터」·「리소스」 컬럼의 노트는 아직 링크가 아닌 나브 항목이다. "아직 없는 기능을 죽은
+// 링크로 만들지 않는다"는 DESIGN.md 결정이 겉으로 드러난 자리이고, 기능이 생기면 그대로 링크가
+// 된다 — 나브 축이므로 문구까지 잠근다. 링크가 아니라 <span> 이라 링크 배열과 섞이지 않는다.
+const EXPECTED_FOOTER_PLACEHOLDER_NOTES = [
   ['구독 (지원예정)'],
-  ['Camera HAL · Android', 'Driver · Image Processing', 'AI · SoC Platform'],
   ['RSS (지원예정)', '편집 정책 (지원예정)']
 ];
+
+// 「주제」 컬럼은 나브가 아니라 주제 분류 편집 카피다. 문구까지 잠그면 순수한 콘텐츠 편집(예: 주제
+// 하나의 이름 변경)이 "나브 라벨" 이름을 단 테스트 4개를 깨고, 그건 #1022 가 막으려던 것이 아니다.
+// 개수만 본다 — 항목이 늘거나 줄면 그건 편집이 아니라 푸터 구조 변경이다.
+const EXPECTED_FOOTER_TOPIC_NOTE_COUNT = 3;
 
 // `.site-footer` 안의 `.footer-cols` 를 컬럼 단위로 쪼갠다. 컬럼 경계를 지키는 이유는, 라벨을
 // 평평한 한 배열로 모으면 「홈」이 「리소스」 컬럼으로 옮겨가도 통과하기 때문이다.
@@ -152,14 +156,13 @@ function footerColumns(html) {
 
 // rootPath 는 assertSharedNav 와 같은 뜻이다('' 또는 '../../').
 //
-// **잠그는 범위**: 컬럼 제목 3개, 컬럼별 링크 라벨, 컬럼별 노트 문구, 그리고 네 표면이 모두 같은
-// href(홈·아카이브·GitHub). 「리소스」 컬럼의 AI Engineering Lab href 만 여기서 보지 않는다 —
-// Lab 페이지에서는 그 링크가 자기 자신을 가리켜 `index.html` 이고 다른 세 표면에서는
-// `${rootPath}learning/ai-engineering/index.html` 이라, rootPath 로 유도되지 않는 유일한 값이다.
-// 그 href 는 homepage-archive.test.js 의 "site assembly makes every deployed public page footer
-// link to the AI Engineering lab" 이 배포되는 페이지 전부를 페이지별 기대값으로 이미 잠그고
-// 있고, 렌더러가 만드는 쪽은 newsletter-renderer.test.js 가 따로 잠근다.
-function assertSharedFooterNav(html, rootPath = '') {
+// labHref 는 「리소스」 컬럼의 AI Engineering Lab 링크가 가리키는 곳이다. 네 표면 중 Lab 페이지만
+// 그 링크가 자기 자신이라 `index.html` 이고, 나머지 셋은 rootPath 로 유도된다 — 그래서 기본값을
+// 두되 Lab 페이지가 자기 값을 넘긴다. 이 인자를 두지 않고 헬퍼에서 뺐더니 홈·아카이브 두 표면의
+// Lab href 잠금이 대체 없이 사라졌다: 배포본을 훑는 homepage-archive.test.js 는 단언 전에
+// assemble-site.js 의 withLearningFooterLink() 를 거치는데, 그게 label 로 찾은 링크를 통째로
+// 정규화하므로 커밋본의 href 가 틀려도 잡지 못한다(실측: 홈의 href 를 바꿔도 fail 0).
+function assertSharedFooterNav(html, rootPath = '', labHref = `${rootPath}learning/ai-engineering/index.html`) {
   const columns = footerColumns(html);
   assert.ok(columns, '<footer class="site-footer"> 안에 footer-cols 컨테이너가 있어야 한다');
   assert.deepEqual(columns.map(column => column.title), EXPECTED_FOOTER_COLUMN_TITLES);
@@ -167,19 +170,21 @@ function assertSharedFooterNav(html, rootPath = '') {
     columns.map(column => column.links.map(link => link.label)),
     EXPECTED_FOOTER_LINK_LABELS
   );
-  assert.deepEqual(columns.map(column => column.notes), EXPECTED_FOOTER_NOTES);
+  assert.deepEqual([columns[0].notes, columns[2].notes], EXPECTED_FOOTER_PLACEHOLDER_NOTES);
+  assert.equal(columns[1].notes.length, EXPECTED_FOOTER_TOPIC_NOTE_COUNT);
   assert.deepEqual(columns[0].links.map(link => link.href), [
     `${rootPath}index.html`,
     `${rootPath}archive.html`
   ]);
-  assert.equal(columns[2].links[1].href, GITHUB_URL);
+  assert.deepEqual(columns[2].links.map(link => link.href), [labHref, GITHUB_URL]);
 }
 
 module.exports = {
   EXPECTED_LABELS,
   EXPECTED_FOOTER_COLUMN_TITLES,
   EXPECTED_FOOTER_LINK_LABELS,
-  EXPECTED_FOOTER_NOTES,
+  EXPECTED_FOOTER_PLACEHOLDER_NOTES,
+  EXPECTED_FOOTER_TOPIC_NOTE_COUNT,
   GITHUB_URL,
   navLinks,
   footerColumns,

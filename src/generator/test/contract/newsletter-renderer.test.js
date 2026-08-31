@@ -182,11 +182,8 @@ test('newsletter renderer keeps generated issue nav labels on the newsroom Korea
   // 홈·아카이브·Lab 과 같은 한 벌로, 렌더 **산출물**을 대상으로 잠근다. 이슈 페이지는 두 단계
   // 아래에 놓이므로 사이트 루트 접두어가 '../../' 다.
   assertSharedNav(html, '../../');
+  // AI Engineering Lab href 도 헬퍼가 rootPath 로 유도해 함께 잠근다.
   assertSharedFooterNav(html, '../../');
-  // 「리소스」 컬럼의 AI Engineering Lab href 만 공용 헬퍼 밖이다(페이지마다 다르다). 렌더러가
-  // 만드는 값은 여기서 닫힌 문자열로 잠근다 — 배포본을 훑는 homepage-archive.test.js 는 커밋된
-  // 파일만 보므로, 렌더러가 이 링크를 잃어도 다음 발행 전까지 아무도 못 잡는다.
-  assert.match(html, /<a class="footer-link" href="\.\.\/\.\.\/learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
 
   // 영어 라벨은 헤더뿐 아니라 문서 어디에서도 되살아나면 안 된다.
   const labels = anchorLabels(html);

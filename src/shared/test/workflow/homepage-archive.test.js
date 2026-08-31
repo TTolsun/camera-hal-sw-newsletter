@@ -629,8 +629,9 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
   assertSharedNav(html);
   // 푸터도 같은 이유로 컨테이너 스코프다(#1022). 예전에는 여기 한 줄이 열린 `[\s\S]*` 로
   // AI Engineering Lab 링크 하나만 봤고, 그래서 푸터의 `홈`·`아카이브` 를 영어로 바꿔도 전체
-  // 테스트가 통과했다(실측). Lab href 자체는 바로 아래 "every deployed public page" 테스트가
-  // 페이지별 기대값으로 잠근다.
+  // 테스트가 통과했다(실측). Lab href 도 헬퍼가 rootPath 로 유도해 함께 잠근다 — 아래
+  // "every deployed public page" 테스트는 단언 전에 withLearningFooterLink() 가 href 를
+  // 라벨로 찾아 정규화하므로, 커밋본의 href 드리프트는 그쪽에서 잡히지 않는다(실측: fail 0).
   assertSharedFooterNav(html);
   assert.match(html, /<section id="subscribe"[\s\S]*data-subscription-section hidden>/);
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search/);
