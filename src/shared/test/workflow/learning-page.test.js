@@ -14,6 +14,10 @@ function readLearningStylesheet() {
   return fs.readFileSync(path.join(root, 'articles', 'css', 'learning.css'), 'utf8');
 }
 
+function readLearningPage() {
+  return fs.readFileSync(path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'), 'utf8');
+}
+
 // grid-template-columns 값을 트랙 단위로 쪼갠다. 괄호 깊이를 세므로 minmax(0, 1fr) 은 통째로
 // 한 트랙이고, repeat(N, …) 은 개수를 떼고 안쪽 트랙 목록을 다시 쪼갠다. 값 전체를 한 덩어리로
 // 보면 `minmax(0, 1fr) 1fr` 처럼 맨 fr 이 섞인 선언을 놓친다.
@@ -76,10 +80,8 @@ test('learning page narrow-screen overrides collapse the card grids to one colum
   }
 });
 
-// 공용 chrome 은 페이지마다 손으로 복제돼 있고, 나브 라벨을 잠그는 곳도 페이지마다 따로다 —
-// 홈은 homepage-archive.test.js, 아카이브는 archive-page.test.js, 렌더된 이슈는
-// newsletter-renderer.test.js. Lab 페이지만 어디에도 없어서 라벨이 영어로 돌아가도 아무도 못
-// 잡았다(레거시 daily 26개가 실제로 그 상태다). 이 표면 몫은 여기서 잠근다.
+// 나브 라벨은 페이지마다 다른 파일이 잠근다(어디가 어디를 맡는지는 DESIGN.md 「알려진 갭 / 후속」).
+// Lab 페이지 몫이 비어 있어서 라벨이 영어로 돌아가도 아무도 못 잡았다 — 그 자리를 여기서 채운다.
 test('learning page keeps the shared Korean navigation labels', () => {
   const html = readLearningPage();
   const nav = html.match(/<div\b[^>]*class="[^"]*\bnav-links\b[^"]*"[^>]*>([\s\S]*?)<\/div>/);
@@ -90,10 +92,6 @@ test('learning page keeps the shared Korean navigation labels', () => {
 });
 
 // ---- 가로 스크롤 컨테이너의 키보드 도달성 (#1009) ----
-
-function readLearningPage() {
-  return fs.readFileSync(path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'), 'utf8');
-}
 
 // 이 페이지가 읽는 두 stylesheet 에서 가로 스크롤을 켜는 셀렉터를 **전부** 모은다. class 하나짜리만
 // 모으면 `.week-result table` 같은 복합 셀렉터와 공용 시트의 `pre` 가 조용히 빠져나가, "모든 스크롤

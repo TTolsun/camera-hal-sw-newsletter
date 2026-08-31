@@ -70,22 +70,26 @@ function newsletterMarkdown(date, articleCount, { todo = false } = {}) {
   ].join('\n');
 }
 
-function newsletterHtml(date, {
-  tags = ['camera-hal'],
-  navLabels = ['Latest', 'Archive', 'GitHub']
-} = {}) {
+// 발행 페이지의 실제 shell 을 그대로 흉내낸다. 예전에는 `<nav class="site-nav">` 를 만들었는데
+// 리디자인 이후 그 마크업을 쓰는 페이지는 0개였고, 그 어긋남 때문에 validate-site 의 나브 검사가
+// 픽스처에서만 살아 있었다(라이브 53개에서 no-op). 픽스처가 실제 표면과 갈리면 같은 일이 반복된다.
+function newsletterHtml(date, { tags = ['camera-hal'] } = {}) {
   const tagHtml = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-  const navHrefs = ['#latest', '#archive', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
-  const navHtml = navLabels
-    .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
-    .join('');
   return [
     '<!doctype html>',
-    '<html><body>',
-    '<nav class="site-nav content-wrap" aria-label="Primary navigation">',
-    '<a class="site-brand" href="index.html">Camera HAL / SW Newsletter</a>',
-    `<div class="nav-links">${navHtml}</div>`,
-    '</nav>',
+    '<html><body class="homepage newsletter-issue-page">',
+    '<header class="site-header homepage-site-header">',
+    '<div class="homepage-nav content-wrap">',
+    '<a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsroom">',
+    '<span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>',
+    '</a>',
+    '<div class="nav-links homepage-nav-links" aria-label="Primary navigation">',
+    '<a href="../../index.html">홈</a>',
+    '<a href="../../archive.html">아카이브</a>',
+    '<a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>',
+    '</div>',
+    '</div>',
+    '</header>',
     '<main>',
     `<div class="tag-row issue-tags">${tagHtml}</div>`,
     '<section class="issue-briefing"></section>',
@@ -99,17 +103,28 @@ function newsletterHtml(date, {
   ].join('\n');
 }
 
-function rootSiteHeaderComponentHtml() {
+// 실제 index.html 과 같은 형태: site-header.js 를 로드하면서도 정적 헤더 마크업을 직접 갖는다.
+// (data-site-header 를 쓰는 공개 페이지는 0개다 — 그 컴포넌트는 현재 아무것도 mount 하지 않는다.)
+function rootSiteHeaderHtml() {
   return [
     '<script src="assets/js/site-header.js" defer></script>',
-    '<header class="site-header" data-site-header></header>'
+    '<header class="site-header homepage-site-header">',
+    '<div class="homepage-nav content-wrap">',
+    '<a class="site-brand homepage-brand" href="index.html" aria-label="Camera SW Newsroom">Camera SW Newsroom</a>',
+    '<div class="nav-links homepage-nav-links" aria-label="Primary navigation">',
+    '<a href="index.html">홈</a>',
+    '<a href="archive.html">아카이브</a>',
+    '<a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>',
+    '</div>',
+    '</div>',
+    '</header>'
   ].join('\n');
 }
 
-function rootIndexHtml(extra = '', { siteHeaderComponent = true } = {}) {
+function rootIndexHtml(extra = '') {
   return [
     '<!doctype html><html><body>',
-    siteHeaderComponent ? rootSiteHeaderComponentHtml() : '',
+    rootSiteHeaderHtml(),
     '<a class="section-link" href="archive.html">전체 아카이브 보기</a>',
     '<div id="featured-card"></div>',
     '<div id="latest-grid"></div>',
@@ -177,7 +192,6 @@ function writeSiteFixture(root, {
   editorApprovedException = false,
   dataTags = ['camera-hal'],
   htmlTags = dataTags,
-  navLabels = ['홈', '아카이브', 'GitHub'],
   sourceGapCount = null,
   staleClaimHardFailure = false,
   qualityDeductions = null,
@@ -198,8 +212,7 @@ function writeSiteFixture(root, {
   writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), []);
   writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }));
   writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), newsletterHtml(date, {
-    tags: htmlTags,
-    navLabels
+    tags: htmlTags
   }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
   writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
@@ -844,6 +857,23 @@ function addWeeklyIssue(root, weeklyKey, html) {
   }]);
   writeText(path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'), html);
 }
+
+// 이 파일의 픽스처는 몇 달 동안 리디자인 이전 shell(`<nav class="site-nav">`)을 만들었고, 그래서
+// 그 마크업을 찾던 validate-site 검사가 픽스처에서만 초록인 채 라이브 53개에서는 아무것도 하지
+// 않았다. 실제 페이지에 0개인 마크업을 픽스처가 다시 쓰기 시작하면 같은 일이 반복되므로 막는다.
+test('site fixtures model markup that published pages actually use', () => {
+  const shells = [newsletterHtml('2026-04-01'), rootIndexHtml(), rootArchiveHtml()].join('\n');
+  for (const dead of ['site-nav', 'data-site-header']) {
+    assert.doesNotMatch(
+      shells,
+      new RegExp(dead),
+      `${dead} 는 발행 페이지 53개 중 0개가 쓰는 마크업이다 — 픽스처가 실제 shell 을 모델링해야 한다`
+    );
+  }
+  // 실제 shell 의 표식. 이게 빠지면 픽스처가 다시 갈라진 것이다.
+  assert.match(shells, /<header class="site-header homepage-site-header">/);
+  assert.match(shells, /class="nav-links homepage-nav-links"/);
+});
 
 test('validate-site scans weekly issue pages, not just dated ones', () => {
   const root = tempRoot('validate-site-weekly-scan-');
