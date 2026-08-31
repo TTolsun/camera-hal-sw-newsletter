@@ -274,17 +274,7 @@ function buildManifest(snapshotDir, date) {
   const missingCriticalFiles = criticalFiles(date).filter(relPath => {
     return !fs.existsSync(path.join(resolvedSnapshotDir, ...relPath.split('/')));
   });
-  const files = walkFiles(resolvedSnapshotDir)
-    .sort()
-    .map(relPath => {
-      const filePath = path.join(resolvedSnapshotDir, ...relPath.split('/'));
-      const stat = fs.statSync(filePath);
-      return {
-        path: relPath,
-        size: stat.size,
-        sha256: hashFile(filePath)
-      };
-    });
+  const snapshotRelPaths = walkFiles(resolvedSnapshotDir).sort();
   const reviewInventory = buildReviewArtifactInventory({
     root: resolvedSnapshotDir,
     date,
@@ -293,24 +283,36 @@ function buildManifest(snapshotDir, date) {
 
   const retentionLocation = resolveRetentionLocation();
 
-  const retainedHeavyArtifacts = files.filter(file => {
-    const artifact = reviewInventory.review_artifacts.find(a => a.path === file.path);
-    return artifact && (artifact.retention_grade === DEBUG_HEAVY || artifact.retention_grade === TRANSIENT_ATTEMPT);
-  }).map(file => {
-    const artifact = reviewInventory.review_artifacts.find(a => a.path === file.path);
-    return {
-      path: file.path,
-      size: file.size,
-      sha256: file.sha256,
-      retention_grade: artifact.retention_grade,
-      retention_location: retentionLocation
-    };
-  });
+  // heavy 등급(debug_heavy·transient_attempt) 파일만 해싱한다. size·sha256을 읽는 소비자는
+  // retained_heavy_artifacts[] 하나뿐이고, 그 배열은 Git 밖 Actions artifact 안의 파일을
+  // 식별하는 유일한 수단이라 바이트가 필요하다. 나머지 파일은 해싱할 이유가 없다(#1018).
+  const heavyRetentionGradeByPath = new Map(
+    reviewInventory.review_artifacts
+      .filter(artifact => artifact.retention_grade === DEBUG_HEAVY || artifact.retention_grade === TRANSIENT_ATTEMPT)
+      .map(artifact => [artifact.path, artifact.retention_grade])
+  );
+
+  const retainedHeavyArtifacts = snapshotRelPaths
+    .filter(relPath => heavyRetentionGradeByPath.has(relPath))
+    .map(relPath => {
+      const filePath = path.join(resolvedSnapshotDir, ...relPath.split('/'));
+      return {
+        path: relPath,
+        size: fs.statSync(filePath).size,
+        sha256: hashFile(filePath),
+        retention_grade: heavyRetentionGradeByPath.get(relPath),
+        retention_location: retentionLocation
+      };
+    });
+
+  // files[]는 스냅샷에 실제로 있는 파일의 경로 목록이다. 비-heavy 항목의 바이트 정본은
+  // 커밋되는 Git tree이고 이 배열의 size·sha256을 읽는 소비자도 없어서, date-scoped
+  // 매니페스트가 이미 따르는 계약(#951)에 맞춰 path만 남긴다(#1018).
+  const files = snapshotRelPaths.map(relPath => ({ path: relPath }));
 
   // 커밋되는 파일의 바이트 정본은 Git tree이므로 경로와 보존 등급만 기록한다. 이 스냅샷
   // 매니페스트도 파이프라인 도중에 쓰이고 그 뒤로도 같은 파일이 계속 바뀌어서, size·sha256
-  // 사본은 기록되는 순간부터 틀린다(#942). 반면 retained_heavy_artifacts는 Git 밖 Actions
-  // artifact 안의 파일을 식별하는 유일한 수단이라 size·sha256을 그대로 유지한다.
+  // 사본은 기록되는 순간부터 틀린다(#942).
   const committedArtifacts = reviewInventory.review_artifacts
     .filter(artifact => artifact.present &&
       artifact.retention_grade !== DEBUG_HEAVY &&
