@@ -97,26 +97,29 @@ test('cap clamp는 impact_level 어휘가 무엇이든 deterministic_score 순�
       }
     });
     selectedByVocabulary[name] = out.selected.map(item => item.url);
-    assert.deepEqual(
-      selectedByVocabulary[name],
-      scoreOrder,
-      `${name} 어휘에서 clamp가 deterministic_score 순서를 벗어났다`
-    );
   }
 
+  // 두 단언은 서로 다른 것을 잠근다. 하나는 프로덕션 어휘에서의 정렬 기준을, 다른 하나는 그
+  // 결과가 어휘에 의존하지 않는다는 사실을 못박는다. 루프 안에서 두 어휘를 모두 scoreOrder와
+  // 맞춰 버리면 아래 교차 대조는 정의상 참이 되어 아무것도 잠그지 못한다.
   assert.deepEqual(
     selectedByVocabulary.prompt,
+    scoreOrder,
+    '프롬프트 어휘에서 clamp가 deterministic_score 순서를 벗어났다'
+  );
+  assert.deepEqual(
     selectedByVocabulary.legacy_impact_rank,
+    selectedByVocabulary.prompt,
     'impact_level 어휘를 바꿨더니 살아남는 기사 집합이 달라졌다'
   );
 });
 
-test('cap clamp preserves deterministic (input) emit order, not impact/score order', () => {
+test('cap clamp preserves deterministic (input) emit order, not deterministic_score order', () => {
   // 결정론 입력 순서: c1(editorial_priority 우선) 먼저, c2가 점수는 높지만 뒤. cap 미초과.
   const c1 = mainEligible({ url: 'c1', deterministic_score: 40 });
   const c2 = mainEligible({ url: 'c2', deterministic_score: 99 });
   const shortlistReport = { selected_articles: [c1, c2], reserve_candidates: [] };
-  // LLM이 둘 다 같은 impact로 매김 → 재정렬 유혹이 있는 흔한 경우.
+  // clamp 정렬(점수 desc)을 그대로 emit 순서로 써 버리고 싶은 유혹이 있는 흔한 경우.
   const editorialPlanReport = { editorial_plans: [plan(c1, 'main_article', 'Design Reference'), plan(c2, 'main_article', 'Design Reference')] };
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.deepEqual(out.selected.map(a => a.url), ['c1', 'c2'], 'lead order must not flip to score-desc');
@@ -192,7 +195,7 @@ test('reference_only 제안으로 빠진 그룹은 그 제안을 사유로 남�
 });
 
 test('main_article 제안이 cap clamp로 빠지면 사유는 제안이 아니라 cap_clamp다', () => {
-  // mainArticleCount.max=5. main 제안 6건 중 impact/score 최하위 하나가 밀린다.
+  // mainArticleCount.max=5. main 제안 6건 중 deterministic_score 최하위 하나가 밀린다.
   const candidates = ['a', 'b', 'c', 'd', 'e', 'f'].map((url, index) => mainEligible({
     url,
     article_group_key: `group:${url}`,
