@@ -9,6 +9,7 @@ const NewsletterArchive = require('../../../../articles/assets/js/newsletter-arc
 const { withLearningFooterLink } = require('../../../generator/publish/assemble-site');
 const { headlineSnapshotFromCandidate } = require('../../../generator/reporter/homepage-headline');
 const { mediaBlock, exactSelectorBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
+const { assertSharedNav } = require('../helpers/site-nav');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -623,8 +624,9 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
   assert.match(html, /<div id="latest-topics" class="keyword-row latest-topics"/);
   assert.match(html, /<div id="latest-grid" class="archive-grid latest-grid">/);
   assert.match(html, /<a class="section-link" href="archive\.html">전체 아카이브 보기<\/a>/);
-  // Shared nav and subscription hooks are preserved.
-  assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">홈<\/a>[\s\S]*href="archive\.html">아카이브<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
+  // 헤더 나브는 컨테이너로 스코프해서 본다. 열린 `[\s\S]*` 로 쓰면 푸터의 같은 라벨이 뒤쪽 절을
+  // 만족시켜, 헤더를 통째로 영어로 바꿔도 통과한다(실측).
+  assertSharedNav(html);
   assert.match(html, /<footer class="site-footer">[\s\S]*href="learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
   assert.match(html, /<section id="subscribe"[\s\S]*data-subscription-section hidden>/);
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search/);

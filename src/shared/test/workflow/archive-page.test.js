@@ -5,6 +5,7 @@ const test = require('node:test');
 const vm = require('node:vm');
 
 const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
+const { assertSharedNav } = require('../helpers/site-nav');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
 
@@ -190,7 +191,8 @@ test('archive page uses homepage shell, shared footer, metadata, and stable hook
   // mockup 아카이브 헤더는 카피 블록만 — 마스코트 이미지가 되살아나면 안 된다.
   assert.doesNotMatch(html, /archive-hero-mascot/);
   assert.doesNotMatch(html, /archive-hero-actions|<a class="button button-primary" href="index\.html">Home<\/a>/);
-  assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">홈<\/a>[\s\S]*href="archive\.html">아카이브<\/a>[\s\S]*GitHub/);
+  // 홈과 같은 이유로 컨테이너 스코프 — 열린 매칭은 푸터 라벨로 만족돼 헤더를 잠그지 못한다.
+  assertSharedNav(html);
   assert.match(html, /<footer class="site-footer">[\s\S]*href="learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
   for (const hook of [
     'data-page="archive"',
