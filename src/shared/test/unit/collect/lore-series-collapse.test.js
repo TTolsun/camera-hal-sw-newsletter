@@ -209,7 +209,7 @@ test('a hash-style series and its re-rolls collapse to one candidate (#1030, 202
       updated: '2026-08-27T18:18:00Z',
       link: 'https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/'
     },
-    // 같은 창의 다른 시리즈는 그대로 살아남아야 한다(캡 슬롯이 실제로 풀리는지 확인).
+    // 같은 창의 다른 시리즈는 collapse에서 소실되지 않아야 한다.
     {
       title: '[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor',
       updated: '2026-08-28T06:49:00Z',
@@ -234,9 +234,10 @@ test('a hash-style series and its re-rolls collapse to one candidate (#1030, 202
   ], '6조각이 최신 버전 커버레터 1건으로 접히고 다른 시리즈는 남아야 한다');
 });
 
-test('hash-style fragments without a cover letter keep the first-seen slot', () => {
-  // 커버레터가 창 밖으로 밀린 주: 이 형식은 순번을 인코딩하지 않아 조각끼리 동률이 되므로,
-  // 대표는 rank 최상위(first-seen) 조각이 그대로 맡는다.
+test('hash-style fragments without a cover letter still pick the lowest patch number', () => {
+  // 커버레터가 창 밖으로 밀린 주에도 대표는 결정론적이어야 한다. message-id에 순번이 없으므로
+  // 제목 브래킷의 x/N을 읽는다 — 도착 순서(피드 rank)가 대표를 정하면 재실행마다 기사 source가
+  // 흔들린다. 슬롯 자리는 first-seen을 쓰되 내용은 09/15가 맡는다.
   const xml = atomFeed([
     {
       title: '[PATCH v4 14/15] media: atomisp: allow raw Bayer capture',
@@ -244,6 +245,8 @@ test('hash-style fragments without a cover letter keep the first-seen slot', () 
       link: 'https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/'
     },
     {
+      // 이 조각의 해시만 합성값이다(나머지 message-id·epoch는 2026-W35 실측). 40자 hex +
+      // 10자리 epoch라 LORE_HASH_STYLE의 길이 하한을 실제로 통과해야 매치된다.
       title: '[PATCH v4 09/15] media: intel: ipu-bridge: allow sensor-specific link frequencies',
       updated: '2026-08-28T16:14:30Z',
       link: 'https://lore.kernel.org/linux-media/8ad2f0b1c3e45a6789bcdef0123456789abcdef0.1787933456.git.mauriziocasciano7@gmail.com/'
@@ -251,5 +254,5 @@ test('hash-style fragments without a cover letter keep the first-seen slot', () 
   ]);
   const collapsed = collapseSeriesRepresentatives(parseRss(xml, loreSource()));
   assert.equal(collapsed.length, 1);
-  assert.equal(collapsed[0].title, '[PATCH v4 14/15] media: atomisp: allow raw Bayer capture');
+  assert.equal(collapsed[0].title, '[PATCH v4 09/15] media: intel: ipu-bridge: allow sensor-specific link frequencies');
 });
