@@ -102,6 +102,15 @@ function coverageAgeDays(publishedAtText, coverage) {
   return Math.floor((endDayStart - publishedDayStart) / DAY_MS);
 }
 
+// classifyCoverageWindow가 돌려주는 등급 중 "coverage 주 안"인 값. 소비자가 리터럴을 손으로
+// 다시 적으면 여기서 등급을 추가하거나 이름을 바꿨을 때 그쪽은 조용히 "창 밖"으로 판정한다 —
+// 컴파일 오류도 테스트 실패도 없다. 등급을 소비하는 쪽은 리터럴 대신 이 술어를 쓴다.
+const COVERAGE_WEEK_WINDOW = 'primary';
+
+function isCoverageWeekWindow(value) {
+  return String(value == null ? '' : value).trim() === COVERAGE_WEEK_WINDOW;
+}
+
 // windowDays.fallbackDays/referenceDays는 선정 정책(selectionWindowPolicy)의
 // fallbackSelectionDays/referenceContextDays를 그대로 받는 자리다. primary 경계(6일, 즉 coverage
 // 주 7일)는 ISO 주 구조 자체라 이 인자로 못 바꾼다 — selectionWindowPolicy.primarySelectionDays는
@@ -112,16 +121,18 @@ function classifyCoverageWindow(publishedAtText, coverage, windowDays = {}) {
   const ageDays = coverageAgeDays(publishedAtText, coverage);
   if (ageDays === null) return 'unknown';
   if (ageDays < 0) return 'not_yet_eligible';
-  if (ageDays <= 6) return 'primary';
+  if (ageDays <= 6) return COVERAGE_WEEK_WINDOW;
   if (ageDays <= fallbackDays - 1) return 'fallback';
   if (ageDays <= referenceDays - 1) return 'reference';
   return 'stale';
 }
 
 module.exports = {
+  COVERAGE_WEEK_WINDOW,
   coverageForAnchorDate,
   coverageForWeekKey,
   previousCoverageWeekKey,
   coverageAgeDays,
-  classifyCoverageWindow
+  classifyCoverageWindow,
+  isCoverageWeekWindow
 };

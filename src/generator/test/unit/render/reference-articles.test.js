@@ -211,17 +211,21 @@ test('fills the cap with coverage-week items first', () => {
 });
 
 // (가)안이 무엇을 포기했는지 코드에 남긴다.
-// 2026-08-10호(커버리지 주 08-03~08-09)에서는 창 안 lore/libcamera 패치만으로 상한 4가 차고,
-// 그 주의 유일한 direct_aosp_camera 항목이던 Camera ITS 문서 갱신 2건이 잘려 나간다.
+// 이 입력은 2026-08-10 수집분(articles/content/collected-news/2026-08-10/merged-candidates.json)을
+// 현행 코드로 재생했을 때의 참고 풀 모양이다. 발행된 2026-08-10호가 저랬다는 뜻이 아니다 —
+// 그 호의 참고 섹션은 항목이 1건(libcamera v0.7.2)뿐이었고, 버킷 우선순위 정렬 자체가 그 다음
+// 날 커밋(d5a674ac, 2026-08-11)에 들어왔다.
+// 재생하면 창 밖 direct_aosp_camera 2건은 AOSP Site Updates의 'Camera ITS tests'와
+// 'Compatibility'이고, 창 안 lore/libcamera 패치만으로 상한 4가 차서 그 2건이 잘려 나간다.
 // 바로 이 잘림을 막으려고 2026-08-10에 버킷 우선순위를 최신성 앞에 뒀었다. 이제는 창 안
-// 집합에서만 그 우선순위가 작동하므로, 창 안 후보가 4건 이상인 주에는 ITS 문서류가 다시
+// 집합에서만 그 우선순위가 작동하므로, 창 안 후보가 4건 이상인 주에는 AOSP 문서 갱신이 다시
 // 잘린다. 그 대가로 "이번 호가 다루는 주"의 링크만 참고 4칸에 남는다.
 // 되돌린 것이 아니라 적용 범위를 좁힌 것이다 — 위 'fills the cap with coverage-week items
 // first' 테스트가 창 안 집합 안에서 버킷 우선순위가 살아 있음을 함께 잠근다.
 test('gives up out-of-window AOSP docs when the coverage week alone fills the cap', () => {
   const items = buildReferenceArticles([
     candidate({ title: 'Camera ITS tests', url: 'https://a.example/its-tests', published_date: '2026-07-01', freshness_window: 'reference' }),
-    candidate({ title: 'Camera ITS overview', url: 'https://a.example/its-overview', published_date: '2026-07-01', freshness_window: 'reference' }),
+    candidate({ title: 'Compatibility', url: 'https://a.example/compatibility', published_date: '2026-07-01', freshness_window: 'reference' }),
     candidate({ title: 'atomisp cleanup', url: 'https://a.example/atomisp', published_date: '2026-08-09', relevance_bucket: 'camera_driver_image_pipeline', freshness_window: 'primary' }),
     candidate({ title: 'imx708 bindings', url: 'https://a.example/imx708', published_date: '2026-08-07', relevance_bucket: 'camera_driver_image_pipeline', freshness_window: 'primary' }),
     candidate({ title: 'uvcvideo fix', url: 'https://a.example/uvcvideo', published_date: '2026-08-06', relevance_bucket: 'camera_driver_image_pipeline', freshness_window: 'primary' }),

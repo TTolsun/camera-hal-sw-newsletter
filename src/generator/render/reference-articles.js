@@ -6,6 +6,7 @@
 // 거른다. 다만 상한을 채우는 순서는 창을 먼저 본다(아래 정렬 주석).
 const { BUCKETS, BUCKET_PRIORITY } = require('../../shared/domain/aosp-camera-scope');
 const { excludeParentRoundupContainers } = require('../../shared/common/article-groups');
+const { isCoverageWeekWindow } = require('../../shared/common/coverage-week');
 const { displayDate } = require('../../shared/common/date-signals');
 const { normalizeUrl } = require('../../shared/common/selection-normalizers');
 const { ensureArray } = require('../../shared/common/value-coercion');
@@ -68,12 +69,13 @@ function displayPublishedDate(candidate) {
   return precision === 'month' ? display.slice(0, 7) : display;
 }
 
-// 커버리지 주 안인가. selection이 붙인 freshness_window에서 'primary'만 그 주(coverage week)
-// 안이고 나머지(fallback / reference / stale / not_yet_eligible / unknown)는 전부 밖이다.
-// 판정 정본은 select/newsroom-selection.js의 freshnessWindowMetadata다 — 여기서 나이를 다시
-// 재지 않는다.
+// 커버리지 주 안인가. 후보의 freshness_window는 select/newsroom-selection.js의
+// freshnessWindowMetadata가 붙이고, 그 등급을 만드는 정본은 coverage-week.js의
+// classifyCoverageWindow다. 등급 리터럴을 여기서 다시 적으면 정본이 등급을 추가·개명했을 때
+// render만 조용히 "창 밖"으로 판정하므로, 정본이 export하는 술어를 그대로 쓴다.
+// 여기서 나이를 다시 재지 않는다.
 function isWithinCoverageWeek(candidate) {
-  return pick(candidate, 'freshness_window') === 'primary';
+  return isCoverageWeekWindow(pick(candidate, 'freshness_window'));
 }
 
 // 상한(DEFAULT_LIMIT)까지만 담기 때문에 정렬 순서가 곧 노출 순서다.
@@ -125,8 +127,14 @@ function referenceArticleCandidatePool(shortlistReport = {}) {
 
 /**
  * 참고 섹션에서 빼야 할 URL 목록.
- * 발행된 main 기사뿐 아니라 강등된 후보도 뺀다 — 강등 기록이 render보다 먼저 채워진다는
- * 실행 순서에 기대지 않고, 두 목록을 모두 보고 판단한다.
+ * 현재 main 집합과 강등 기록을 모두 본다 — 강등 기록이 render보다 먼저 채워진다는 실행 순서에
+ * 기대지 않는다.
+ * 다만 demoted_candidates가 모든 강등을 담지는 않는다. 여기에 실리는 것은 attempt 루프에서
+ * 떨어진 섹션뿐이고(orchestrator-finalize.js), LLM coverage 재조정으로 main에서 빠진 후보는
+ * 어디에도 남지 않는다 — gemini-newsroom-newsletter.js는 생존자만 selected_articles에 되쓰고,
+ * coverage-reconciliation.json의 강등 기록은 candidate_key만 담고 커밋되지도 않는다.
+ * 그래서 재조정으로 빠진 후보는 참고 풀에 다시 들어와 상한을 두고 경쟁한다. 이건 선재 동작이고
+ * 이 모듈이 고칠 수 있는 범위 밖이지만, 정렬이 무엇을 줄 세우는지 오해하지 않도록 적어 둔다.
  */
 function referenceArticleExcludeUrls(shortlistReport = {}) {
   return [
