@@ -507,7 +507,8 @@ test('시리즈가 아닌 후보끼리는 서로 차단하지 않는다(빈 시�
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0'
   }, { date: '2026-08-31', type: 'newsletter_article' });
 
-  assert.strictEqual(history.articles[0].series_identity_key, '');
+  // 시리즈가 아니면 필드 자체를 남기지 않는다 — 빈 값을 쓰면 state 파일에 의미 없는 필드만 는다.
+  assert.ok(!Object.prototype.hasOwnProperty.call(history.articles[0], 'series_identity_key'));
 
   const unrelated = {
     title: 'libcamera v0.7.2 released',
@@ -522,17 +523,110 @@ test('시리즈가 아닌 후보끼리는 서로 차단하지 않는다(빈 시�
   assert.strictEqual(everCoveredAsNewsletterArticle(unrelated, history, { date: '2026-09-07' }), false);
 });
 
-test('시리즈가 다르면(재제출로 message-id가 새로 발급되면) 차단하지 않는다', () => {
-  // 시리즈 키는 한 번의 git-send-email 호출을 가른다. v4 재제출은 새 epoch를 받아 시리즈 키가
-  // 달라지므로 이 게이트의 사정거리 밖이다 — 지금 동작을 사실대로 잠가 둔다.
-  const history = historyWithPublishedSeriesPiece();
+// ── 재제출 축(#1036의 대표 증거) ──────────────────────────────────────────────
+// 시리즈 키는 한 번의 git-send-email 호출을 가른다. v4 재제출은 새 epoch를 받아 시리즈 키가
+// 달라지므로 시리즈 축만으로는 안 잡힌다. 수집 단계의 재제출 병합(#824)이 보는 축 — 브래킷
+// 접두부를 뗀 제목 — 을 게이트도 함께 봐야 닫힌다.
+//
+// 아래 레코드는 실제 state/article-exposure-history.json에 남아 있는 2026-08-31호 발행분이고,
+// 후보 URL·제목은 같은 주 수집물(articles/content/collected-news/2026-08-31)의 실제 값이다.
+const YOGA_BOOK_V2_PUBLISHED_URL =
+  'https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com';
+const YOGA_BOOK_V4_COVER_LETTER_URL =
+  'https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/';
+const YOGA_BOOK_SUBJECT = 'media: Add Lenovo Yoga Book YB1-X91 camera support';
+
+function historyWithPublishedV2CoverLetter() {
+  return {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: [{
+      article_identity_key: `url:${YOGA_BOOK_V2_PUBLISHED_URL}`,
+      title: `[PATCH v2 00/11] ${YOGA_BOOK_SUBJECT}`,
+      source_url: YOGA_BOOK_V2_PUBLISHED_URL,
+      newsletter_date: '2026-08-31',
+      exposure_type: 'newsletter_article',
+      exposed_at: '2026-08-31',
+      newsletter_article_date: '2026-08-31',
+      cooldown_until: '2026-09-21',
+      exposure_types: ['newsletter_article']
+    }]
+  };
+}
+
+test('재제출 축: v2를 발행한 뒤 v4 대표가 오면 차단된다 (#1036 대표 증거)', () => {
+  const history = historyWithPublishedV2CoverLetter();
   const v4CoverLetter = {
-    title: '[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support',
-    url: 'https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/'
+    title: `[PATCH v4 00/15] ${YOGA_BOOK_SUBJECT}`,
+    url: YOGA_BOOK_V4_COVER_LETTER_URL
   };
 
   assert.strictEqual(
     annotateArticleExposure(v4CoverLetter, history, { date: '2026-09-07' }).published_within_cooldown,
+    true
+  );
+  assert.strictEqual(
+    everCoveredAsNewsletterArticle(v4CoverLetter, history, { date: '2026-09-07' }),
+    true
+  );
+});
+
+test('재제출 축은 소스 스코프를 넘지 않는다', () => {
+  // collapseSeriesRerolls가 `${source_id}::${subject}`로 한 소스 안에서만 병합한다. 게이트가
+  // 스코프를 빼면 서로 다른 소스의 같은 제목이 맞아떨어져 오차단이 난다.
+  const history = historyWithPublishedV2CoverLetter();
+  const sameSubjectOtherSource = {
+    title: `[v2,1/6] ${YOGA_BOOK_SUBJECT}`,
+    url: 'https://patchwork.libcamera.org/patch/99999/',
+    seriesId: '9999'
+  };
+
+  assert.strictEqual(
+    annotateArticleExposure(sameSubjectOtherSource, history, { date: '2026-09-07' }).published_within_cooldown,
+    false
+  );
+});
+
+test('재제출 축은 제목이 다르면 묶지 않는다', () => {
+  // 제목을 고쳐 재제출한 시리즈는 수집 단계도 의도적으로 병합하지 않는다(퍼지 매칭 금지).
+  // 게이트도 같은 제약을 따라야 오차단 표면이 collapse보다 넓어지지 않는다.
+  const history = historyWithPublishedV2CoverLetter();
+  const differentSubject = {
+    title: '[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 audio support',
+    url: YOGA_BOOK_V4_COVER_LETTER_URL
+  };
+
+  assert.strictEqual(
+    annotateArticleExposure(differentSubject, history, { date: '2026-09-07' }).published_within_cooldown,
+    false
+  );
+});
+
+test('재제출 축은 시리즈가 아닌 기사에는 만들어지지 않는다', () => {
+  // 재제출 키를 시리즈일 때만 만들지 않으면, 같은 호스트에 같은 제목을 가진 서로 다른 기사가
+  // 제목만으로 맞아떨어진다. 릴리스 노트처럼 한 페이지의 앵커만 다른 후보가 실제 이력에 있어
+  // (developer.android.com 계열) 그 전부가 첫 발행 1건에 막히게 된다.
+  const empty = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: []
+  };
+  const history = recordArticleExposure(empty, {
+    title: 'CameraX release notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0'
+  }, { date: '2026-08-31', type: 'newsletter_article' });
+
+  const sameTitleDifferentAnchor = {
+    title: 'CameraX release notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0'
+  };
+
+  assert.strictEqual(
+    annotateArticleExposure(sameTitleDifferentAnchor, history, { date: '2026-09-07' }).published_within_cooldown,
+    false
+  );
+  assert.strictEqual(
+    everCoveredAsNewsletterArticle(sameTitleDifferentAnchor, history, { date: '2026-09-07' }),
     false
   );
 });

@@ -7,9 +7,10 @@ const {
   normalizeArticleUrl,
   sourceUrl
 } = require('../../shared/common/article-identity');
-// 선정단 dedup(candidatesAreDuplicate)·대표 선택·fallbackGroupKey가 이미 쓰는 시리즈 키 정본.
-// 재게재 게이트도 같은 함수를 써야 "같은 패치 시리즈인가"라는 질문에 파이프라인이 한 답을 낸다.
-const { seriesKey } = require('../../shared/common/article-groups');
+// 선정단 dedup(candidatesAreDuplicate)·대표 선택·fallbackGroupKey가 이미 쓰는 시리즈 키 정본과,
+// 수집 단계의 재제출 병합(collapseSeriesRerolls)이 쓰는 제목 축. 재게재 게이트가 같은 함수를 써야
+// "같은 패치 시리즈인가"라는 질문에 파이프라인 전체가 한 답을 낸다.
+const { seriesKey, seriesSubjectKey } = require('../../shared/common/article-groups');
 
 const EXPOSURE_HISTORY_REL_PATH = path.join('state', 'article-exposure-history.json');
 const SCHEMA_VERSION = 1;
@@ -127,11 +128,16 @@ function recordArticleExposure(history, article = {}, options = {}) {
   const existingIndex = normalized.articles.findIndex(item => item.article_identity_key === key);
   const exposureType = text(options.type || 'homepage_headline');
   const newsletterDate = text(options.date || article.newsletter_date);
+  // URL identity 옆에 시리즈 키를 병기한다. identity 자체를 시리즈 인지형으로 바꾸지 않는 이유는
+  // 이미 쌓인 기록의 키가 전부 달라져 조회가 통째로 깨지기 때문이다.
+  //
+  // 시리즈가 아니면 필드를 아예 넣지 않는다. 읽기 시점이 "필드 없음"과 "빈 값"을 똑같이 다루므로
+  // 판정은 같고, 대부분을 차지하는 비시리즈 기록에 의미 없는 빈 필드가 붙는 것만 막는다. 갱신 경로가
+  // {...previous, ...record}라 빈 값을 쓰면 예전에 남긴 시리즈 키를 덮어 지우는 문제도 함께 없앤다.
+  const seriesIdentityKey = seriesKey(article);
   const record = {
     article_identity_key: key,
-    // URL identity 옆에 시리즈 키를 병기한다. identity 자체를 시리즈 인지형으로 바꾸지 않는 이유는
-    // 이미 쌓인 기록의 키가 전부 달라져 조회가 통째로 깨지기 때문이다.
-    series_identity_key: seriesKey(article),
+    ...(seriesIdentityKey ? { series_identity_key: seriesIdentityKey } : {}),
     title: text(article.title),
     source_url: sourceUrl(article),
     newsletter_date: newsletterDate,
@@ -239,15 +245,56 @@ function recordSeriesIdentityKey(record) {
   return text(record?.series_identity_key) || seriesKey({ url: text(record?.source_url) });
 }
 
-// 이 레코드가 후보와 같은 기사인가. URL identity가 같거나, 같은 패치 시리즈면 같은 기사로 본다.
-// 쿨다운 검사와 catch-up 필터가 이 한 술어를 함께 쓴다 — 같은 규칙을 두 곳에 따로 적으면 한쪽만
-// 고쳐지는 것이 #963에서 실제로 일어난 일이다.
-function matchesExposedArticle(record, identityKey, seriesIdentityKey) {
-  if (text(record?.article_identity_key) === identityKey) return true;
-  // 시리즈 키가 없는 후보(대부분의 소스)는 빈 문자열이다. 빈 키끼리 맞아떨어지면 발행된 기사
-  // 1건이 그 주 비시리즈 후보 전부를 막아 편성이 통째로 비게 된다 — 값이 있을 때만 대조한다.
-  if (!seriesIdentityKey) return false;
-  return recordSeriesIdentityKey(record) === seriesIdentityKey;
+// 재제출 축의 소스 스코프. 수집 단계의 재제출 병합은 `${source_id}::${subject}`로 한 소스 안에서만
+// 병합하는데(collapseSeriesRerolls), 노출 기록에는 source_id가 없다. 기록과 후보 양쪽에서 똑같이
+// 얻을 수 있는 URL 호스트로 대신한다 — 실측(35주치 시리즈 후보 257건)에서 source_id와 호스트는
+// 1:1이었다(lore-linux-media-list <-> lore.kernel.org, patchwork-libcamera-patches <->
+// patchwork.libcamera.org). 스코프를 빼면 서로 다른 소스의 같은 제목이 맞아떨어진다.
+function sourceScope(url) {
+  try {
+    return new URL(text(url)).hostname.toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
+// 재제출(v2 -> v3)은 lore message-id도 patchwork series id도 새로 발급받으므로 시리즈 키가 달라진다.
+// 수집 단계는 그래서 브래킷 접두부를 뗀 제목으로 재제출을 병합해 대표를 최신 버전으로 갈아 끼운다
+// (#824). 게이트가 그 축을 모르면 지난주 v3로 발행한 시리즈가 이번 주 v4 대표로 그대로 통과한다 —
+// #1036이 든 실제 사례(Lenovo Yoga Book YB1-X91)가 정확히 이것이다.
+//
+// collapse와 같은 제약을 그대로 건다: 시리즈일 때만, 그리고 소스 스코프 안에서만. 그래야 오차단
+// 표면이 collapse보다 넓어지지 않는다.
+function rerollIdentityKey(seriesIdentityKey, url, title) {
+  if (!seriesIdentityKey) return '';
+  const scope = sourceScope(url);
+  const subject = seriesSubjectKey({ title });
+  if (!scope || !subject) return '';
+  return `${scope}::${subject}`;
+}
+
+// 후보를 게이트가 대조하는 세 축(URL identity · 시리즈 · 재제출)으로 환원한다.
+function articleMatchKeys(article = {}) {
+  const series = seriesKey(article);
+  return {
+    identity: articleIdentityKey(article),
+    series,
+    reroll: rerollIdentityKey(series, sourceUrl(article), article.title)
+  };
+}
+
+// 이 레코드가 후보와 같은 기사인가. URL identity가 같거나, 같은 패치 시리즈거나, 같은 시리즈의
+// 재제출이면 같은 기사로 본다. 쿨다운 검사와 catch-up 필터가 이 한 술어를 함께 쓴다 — 같은 규칙을
+// 두 곳에 따로 적으면 한쪽만 고쳐지는 것이 #963에서 실제로 일어난 일이다.
+//
+// 시리즈·재제출 키가 없는 후보(대부분의 소스)는 빈 문자열이다. 빈 키끼리 맞아떨어지면 발행된 기사
+// 1건이 그 주 비시리즈 후보 전부를 막아 편성이 통째로 비게 된다 — 값이 있을 때만 대조한다.
+function recordMatchesArticle(record, keys) {
+  if (text(record?.article_identity_key) === keys.identity) return true;
+  const series = recordSeriesIdentityKey(record);
+  if (keys.series && series === keys.series) return true;
+  if (!keys.reroll) return false;
+  return rerollIdentityKey(series, record?.source_url, record?.title) === keys.reroll;
 }
 
 // 한 레코드가 newsletter_article로 노출된 적이 있는지 판정하는 단일 술어.
@@ -280,12 +327,12 @@ function isSameIssueRecord(record, asOf) {
 }
 
 function annotateArticleExposure(article = {}, history = {}, options = {}) {
-  const key = articleIdentityKey(article);
-  // URL identity가 먼저다. 같은 URL 기록이 있으면 그것이 이 후보의 기록이고, 없을 때만 같은
-  // 시리즈의 다른 조각 기록으로 떨어진다(레코드는 최신이 앞이라 가장 최근 발행 건을 집는다).
-  const series = seriesKey(article);
-  const record = exposureMap(history).get(key) ||
-    ensureArray(history.articles).find(item => matchesExposedArticle(item, key, series)) ||
+  const keys = articleMatchKeys(article);
+  // URL identity가 먼저다. 같은 URL 기록이 있으면 그것이 이 후보의 기록이고, 없을 때만 같은 시리즈
+  // (또는 그 시리즈의 재제출) 기록으로 떨어진다. 그때 배열 앞쪽을 집는 것은 신규 기록이 unshift로
+  // 앞에 쌓이기 때문이다 — 같은 시리즈가 여러 주에 걸쳐 발행됐으면 가장 최근 건이 먼저 잡힌다.
+  const record = exposureMap(history).get(keys.identity) ||
+    ensureArray(history.articles).find(item => recordMatchesArticle(item, keys)) ||
     null;
   // 쿨다운 비교 기준은 이슈 date다. 벽시계(todayDate)를 쓰면 같은 이력·같은 후보라도 리플레이나
   // carry 실행 시점에 따라 판정이 달라져 선정이 비결정적이 된다. date를 못 받는 호출부는 기존
@@ -298,7 +345,7 @@ function annotateArticleExposure(article = {}, history = {}, options = {}) {
     !isSameIssueRecord(record, asOf);
   return {
     ...article,
-    article_identity_key: key,
+    article_identity_key: keys.identity,
     already_exposed: Boolean(record),
     published_within_cooldown: publishedWithinCooldown,
     last_newsletter_date: publishedWithinCooldown ? publishedAt : null,
@@ -325,10 +372,9 @@ function dedupeByArticleIdentity(articles = []) {
 // 받아 두 술어가 identity와 시리즈 키를 이 모듈 안에서 똑같이 유도하게 하려는 것이다 — 같은 규칙을
 // 호출부마다 따로 적으면 한쪽만 고쳐지는 것이 #963에서 실제로 일어난 일이다.
 function everCoveredAsNewsletterArticle(article = {}, history = {}, options = {}) {
-  const key = articleIdentityKey(article);
-  const series = seriesKey(article);
+  const keys = articleMatchKeys(article);
   return ensureArray(history.articles).some(item =>
-    matchesExposedArticle(item, key, series) &&
+    recordMatchesArticle(item, keys) &&
     isNewsletterArticleRecord(item) &&
     !isSameIssueRecord(item, options.date)
   );
