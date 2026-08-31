@@ -303,6 +303,9 @@ test('widening the patchwork window fills the per-source cap with distinct serie
   assert.equal(before.length, 2, 'a single-day burst only has two series to offer the eight-slot cap');
 
   // 창을 커버리지 주까지 넓힌 상태: 8칸이 다 차고, 47조각 시리즈는 여전히 한 칸만 쓴다.
+  // 아래 단언들이 MAX_CANDIDATES_PER_SOURCE를 읽으므로 상한 값 자체를 여기서 못박는다 —
+  // 그러지 않으면 상한이 4로 줄어도 "8칸이 다 찬다"는 주장이 그대로 통과한다.
+  assert.equal(MAX_CANDIDATES_PER_SOURCE, 8, "per-source cap is eight; this test reads it, so lock the value");
   const after = patchworkCapPipeline([...burstDay, ...coverageWeek], now);
   assert.equal(after.length, MAX_CANDIDATES_PER_SOURCE, 'the widened window fills every per-source slot');
   assert.equal(new Set(after.map(c => c.seriesId)).size, MAX_CANDIDATES_PER_SOURCE,
