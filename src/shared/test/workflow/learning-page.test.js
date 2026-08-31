@@ -4,7 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 
 const { mediaBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
-const { assertSharedNav } = require('../helpers/site-nav');
+const { assertSharedNav, assertSharedFooterNav } = require('../helpers/site-nav');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
 
@@ -86,7 +86,12 @@ test('learning page narrow-screen overrides collapse the card grids to one colum
 test('learning page keeps the shared navigation labels and targets', () => {
   // 홈·아카이브와 같은 헬퍼를 쓴다 — 세 페이지의 나브 잠금이 한 형태여야 한 곳만 약해지지 않는다.
   // Lab 은 두 단계 아래라 사이트 루트 접두어가 '../../' 다.
-  assertSharedNav(readLearningPage(), '../../');
+  const html = readLearningPage();
+  assertSharedNav(html, '../../');
+  // 푸터도 같은 한 벌로 잠근다(#1022). 이 페이지에서만 「리소스」 컬럼의 AI Engineering Lab
+  // 링크가 자기 자신을 가리키므로 세 번째 인자로 그 값을 넘긴다 — rootPath 로 유도되지 않는
+  // 유일한 값이다.
+  assertSharedFooterNav(html, '../../', 'index.html');
 });
 
 // ---- 가로 스크롤 컨테이너의 키보드 도달성 (#1009) ----
