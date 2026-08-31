@@ -863,17 +863,25 @@ function addWeeklyIssue(root, weeklyKey, html) {
 // 그 마크업을 찾던 validate-site 검사가 픽스처에서만 초록인 채 라이브 53개에서는 아무것도 하지
 // 않았다. 실제 페이지에 0개인 마크업을 픽스처가 다시 쓰기 시작하면 같은 일이 반복되므로 막는다.
 test('site fixtures model markup that published pages actually use', () => {
-  const shells = [newsletterHtml('2026-04-01'), rootIndexHtml(), rootArchiveHtml()].join('\n');
-  for (const dead of ['site-nav', 'data-site-header']) {
-    assert.doesNotMatch(
-      shells,
-      new RegExp(dead),
-      `${dead} 는 발행 페이지 53개 중 0개가 쓰는 마크업이다 — 픽스처가 실제 shell 을 모델링해야 한다`
-    );
+  // shell 을 이어 붙여 한 번에 보면 하나가 실제 마크업을 잃어도 나머지가 대신 만족시킨다 — 실제로
+  // 아카이브 픽스처만 헤더를 빼도 통과했다. shell 마다 따로 본다.
+  const shells = {
+    newsletter: newsletterHtml('2026-04-01'),
+    index: rootIndexHtml(),
+    archive: rootArchiveHtml()
+  };
+  for (const [name, shell] of Object.entries(shells)) {
+    for (const dead of ['site-nav', 'data-site-header']) {
+      assert.doesNotMatch(
+        shell,
+        new RegExp(dead),
+        `${name}: ${dead} 는 발행 페이지 53개 중 0개가 쓰는 마크업이다`
+      );
+    }
+    // 실제 shell 의 표식. 이게 빠지면 그 픽스처가 다시 갈라진 것이다.
+    assert.match(shell, /<header class="site-header homepage-site-header">/, `${name}: 헤더 shell`);
+    assert.match(shell, /class="nav-links homepage-nav-links"/, `${name}: 나브 컨테이너`);
   }
-  // 실제 shell 의 표식. 이게 빠지면 픽스처가 다시 갈라진 것이다.
-  assert.match(shells, /<header class="site-header homepage-site-header">/);
-  assert.match(shells, /class="nav-links homepage-nav-links"/);
 });
 
 test('validate-site scans weekly issue pages, not just dated ones', () => {
