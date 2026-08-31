@@ -767,7 +767,9 @@ function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = 
     if (!eligibleBuckets.has(bucket)) return false;
     const age = Number(candidate.days_since_published);
     if (!Number.isFinite(age) || age > maxAge) return false;
-    if (everCoveredAsNewsletterArticle(articleIdentityKey(candidate), history, { date })) return false;
+    // 후보를 그대로 넘긴다 — URL identity와 패치 시리즈 키를 어떻게 유도할지는 노출 이력 모듈이
+    // 정한다. 여기서 identity만 뽑아 넘기면 시리즈 대조가 이 레인에서만 빠진다.
+    if (everCoveredAsNewsletterArticle(candidate, history, { date })) return false;
     if (!catchUpCandidateHasEvidence(candidate)) return false;
     return true;
   });

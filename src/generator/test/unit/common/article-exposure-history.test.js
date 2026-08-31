@@ -313,7 +313,7 @@ test('everCoveredAsNewsletterArticle is true for any newsletter_article record i
       cooldown_until: '2026-01-22'
     }]
   };
-  assert.strictEqual(everCoveredAsNewsletterArticle('url:https://example.com/camerax-1.6.0', history), true);
+  assert.strictEqual(everCoveredAsNewsletterArticle({ article_identity_key: 'url:https://example.com/camerax-1.6.0' }, history), true);
 });
 
 test('everCoveredAsNewsletterArticle is false when only homepage_headline exposure exists', () => {
@@ -326,11 +326,11 @@ test('everCoveredAsNewsletterArticle is false when only homepage_headline exposu
       newsletter_date: '2026-05-27'
     }]
   };
-  assert.strictEqual(everCoveredAsNewsletterArticle('url:https://example.com/headline-only', history), false);
+  assert.strictEqual(everCoveredAsNewsletterArticle({ article_identity_key: 'url:https://example.com/headline-only' }, history), false);
 });
 
 test('everCoveredAsNewsletterArticle is false for an unknown key', () => {
-  assert.strictEqual(everCoveredAsNewsletterArticle('url:https://example.com/never', { articles: [] }), false);
+  assert.strictEqual(everCoveredAsNewsletterArticle({ article_identity_key: 'url:https://example.com/never' }, { articles: [] }), false);
 });
 
 test('annotateArticleExposure keeps published_within_cooldown after a later homepage_headline exposure', () => {
@@ -399,4 +399,140 @@ test('annotateArticleExposure compares the cooldown against the issue date, not 
 
   assert.strictEqual(annotateArticleExposure(candidate, history, { date: '2026-01-10' }).published_within_cooldown, true);
   assert.strictEqual(annotateArticleExposure(candidate, history, { date: '2026-02-10' }).published_within_cooldown, false);
+});
+
+// ── 패치 시리즈 인지형 재게재 게이트(#1036) ────────────────────────────────────
+// 수집 단계는 한 패치 시리즈를 대표 1건으로 줄이는데, 그 대표 URL이 주마다 바뀐다
+// (#799 (source, seriesId) collapse · #822 커버레터 우선). 그래서 지난주 발행한 시리즈가
+// 이번 주에 다른 조각 URL로 들어오면 URL identity만 보는 게이트는 그냥 통과한다.
+// 아래 URL 2건은 실제 데이터다 — 2026-08-31호가 v3 08/12 조각을 발행했고, 같은 주 수집물에
+// 그 시리즈의 커버레터도 후보로 들어와 있었다(articles/content/collected-news/2026-08-31).
+const YOGA_BOOK_V3_PUBLISHED_PIECE_URL =
+  'https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com';
+const YOGA_BOOK_V3_COVER_LETTER_URL =
+  'https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/';
+
+function historyWithPublishedSeriesPiece() {
+  const empty = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: []
+  };
+  return recordArticleExposure(empty, {
+    title: '[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link',
+    url: YOGA_BOOK_V3_PUBLISHED_PIECE_URL
+  }, { date: '2026-08-31', type: 'newsletter_article' });
+}
+
+test('recordArticleExposure stores the patch series key alongside the URL identity', () => {
+  const history = historyWithPublishedSeriesPiece();
+
+  assert.strictEqual(
+    history.articles[0].series_identity_key,
+    'lore-series:git-1787872237-mauriziocasciano7@gmail.com'
+  );
+});
+
+test('쿨다운 레인: 같은 시리즈의 다른 조각 URL이 다음 주에 오면 쿨다운이 걸린다', () => {
+  const history = historyWithPublishedSeriesPiece();
+  const nextWeekRepresentative = {
+    title: '[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support',
+    url: YOGA_BOOK_V3_COVER_LETTER_URL
+  };
+
+  const annotated = annotateArticleExposure(nextWeekRepresentative, history, { date: '2026-09-07' });
+
+  assert.strictEqual(annotated.published_within_cooldown, true);
+  assert.strictEqual(annotated.last_newsletter_date, '2026-08-31');
+});
+
+test('catch-up 레인: 같은 시리즈의 다른 조각 URL은 이미 게재된 것으로 본다', () => {
+  const history = historyWithPublishedSeriesPiece();
+  const nextWeekRepresentative = {
+    title: '[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support',
+    url: YOGA_BOOK_V3_COVER_LETTER_URL
+  };
+
+  assert.strictEqual(
+    everCoveredAsNewsletterArticle(nextWeekRepresentative, history, { date: '2026-09-07' }),
+    true
+  );
+});
+
+test('series_identity_key가 없는 기존 레코드도 source_url에서 유도해 시리즈로 막는다', () => {
+  // state/article-exposure-history.json에 실제로 남아 있는 모양이다(31건 전부 이 필드가 없다).
+  // state 파일을 마이그레이션하지 않으므로 읽기 시점 폴백이 없으면 기존 이력은 전부 URL 비교로
+  // 되돌아간다 — 이 테스트가 폴백의 존재 이유다.
+  const legacyHistory = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: [{
+      article_identity_key: `url:${YOGA_BOOK_V3_PUBLISHED_PIECE_URL}`,
+      title: '[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link',
+      source_url: YOGA_BOOK_V3_PUBLISHED_PIECE_URL,
+      newsletter_date: '2026-08-31',
+      exposure_type: 'newsletter_article',
+      exposed_at: '2026-08-31',
+      newsletter_article_date: '2026-08-31',
+      cooldown_until: '2026-09-21',
+      exposure_types: ['newsletter_article']
+    }]
+  };
+  assert.ok(
+    !Object.prototype.hasOwnProperty.call(legacyHistory.articles[0], 'series_identity_key'),
+    'legacy fixture must not carry the new field'
+  );
+  const nextWeekRepresentative = { url: YOGA_BOOK_V3_COVER_LETTER_URL };
+
+  assert.strictEqual(
+    annotateArticleExposure(nextWeekRepresentative, legacyHistory, { date: '2026-09-07' }).published_within_cooldown,
+    true
+  );
+  assert.strictEqual(
+    everCoveredAsNewsletterArticle(nextWeekRepresentative, legacyHistory, { date: '2026-09-07' }),
+    true
+  );
+});
+
+test('시리즈가 아닌 후보끼리는 서로 차단하지 않는다(빈 시리즈 키 매치 금지)', () => {
+  // 이 PR의 최대 위험: 시리즈 키가 없는 후보는 빈 문자열이라, 빈 키끼리 맞아떨어지면 발행된
+  // 기사 1건이 그 주 비시리즈 후보 전부를 막아 편성이 통째로 비게 된다.
+  const empty = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: []
+  };
+  const history = recordArticleExposure(empty, {
+    title: 'CameraX 1.6.0 release notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0'
+  }, { date: '2026-08-31', type: 'newsletter_article' });
+
+  assert.strictEqual(history.articles[0].series_identity_key, '');
+
+  const unrelated = {
+    title: 'libcamera v0.7.2 released',
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2'
+  };
+
+  assert.strictEqual(
+    annotateArticleExposure(unrelated, history, { date: '2026-09-07' }).published_within_cooldown,
+    false
+  );
+  assert.strictEqual(annotateArticleExposure(unrelated, history, { date: '2026-09-07' }).already_exposed, false);
+  assert.strictEqual(everCoveredAsNewsletterArticle(unrelated, history, { date: '2026-09-07' }), false);
+});
+
+test('시리즈가 다르면(재제출로 message-id가 새로 발급되면) 차단하지 않는다', () => {
+  // 시리즈 키는 한 번의 git-send-email 호출을 가른다. v4 재제출은 새 epoch를 받아 시리즈 키가
+  // 달라지므로 이 게이트의 사정거리 밖이다 — 지금 동작을 사실대로 잠가 둔다.
+  const history = historyWithPublishedSeriesPiece();
+  const v4CoverLetter = {
+    title: '[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support',
+    url: 'https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/'
+  };
+
+  assert.strictEqual(
+    annotateArticleExposure(v4CoverLetter, history, { date: '2026-09-07' }).published_within_cooldown,
+    false
+  );
 });

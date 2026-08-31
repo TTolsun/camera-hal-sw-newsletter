@@ -7,6 +7,9 @@ const {
   normalizeArticleUrl,
   sourceUrl
 } = require('../../shared/common/article-identity');
+// 선정단 dedup(candidatesAreDuplicate)·대표 선택·fallbackGroupKey가 이미 쓰는 시리즈 키 정본.
+// 재게재 게이트도 같은 함수를 써야 "같은 패치 시리즈인가"라는 질문에 파이프라인이 한 답을 낸다.
+const { seriesKey } = require('../../shared/common/article-groups');
 
 const EXPOSURE_HISTORY_REL_PATH = path.join('state', 'article-exposure-history.json');
 const SCHEMA_VERSION = 1;
@@ -126,6 +129,9 @@ function recordArticleExposure(history, article = {}, options = {}) {
   const newsletterDate = text(options.date || article.newsletter_date);
   const record = {
     article_identity_key: key,
+    // URL identity 옆에 시리즈 키를 병기한다. identity 자체를 시리즈 인지형으로 바꾸지 않는 이유는
+    // 이미 쌓인 기록의 키가 전부 달라져 조회가 통째로 깨지기 때문이다.
+    series_identity_key: seriesKey(article),
     title: text(article.title),
     source_url: sourceUrl(article),
     newsletter_date: newsletterDate,
@@ -218,6 +224,32 @@ function exposureMap(history = {}) {
     .filter(([key]) => key));
 }
 
+// 한 레코드의 시리즈 키. 저장된 값이 없으면 source_url에서 유도한다.
+//
+// 시리즈 키가 필요한 이유: 수집 단계는 한 패치 시리즈를 대표 1건으로 줄이는데, 그 대표 URL이
+// 주마다 바뀐다(#799 (source, seriesId) collapse, #822 커버레터 우선). 지난주 08/12 조각으로
+// 발행한 시리즈가 이번 주에 커버레터 URL로 들어오면 URL identity는 다른 값이라, URL만 보는
+// 게이트는 같은 시리즈를 못 알아보고 그대로 통과시킨다.
+//
+// 폴백이 필요한 이유: state 파일을 마이그레이션하지 않으므로 이미 쌓인 기록에는 이 필드가 없다.
+// lore는 message-id가 URL 안에 있어(loreMessageIdFromUrl) URL만으로 소급 적용되지만, patchwork는
+// 시리즈 식별자가 수집기에서 오므로 URL만으로는 만들 수 없다 — 그래서 쓰기 시점 저장과 읽기 시점
+// 폴백 두 갈래가 다 필요하다.
+function recordSeriesIdentityKey(record) {
+  return text(record?.series_identity_key) || seriesKey({ url: text(record?.source_url) });
+}
+
+// 이 레코드가 후보와 같은 기사인가. URL identity가 같거나, 같은 패치 시리즈면 같은 기사로 본다.
+// 쿨다운 검사와 catch-up 필터가 이 한 술어를 함께 쓴다 — 같은 규칙을 두 곳에 따로 적으면 한쪽만
+// 고쳐지는 것이 #963에서 실제로 일어난 일이다.
+function matchesExposedArticle(record, identityKey, seriesIdentityKey) {
+  if (text(record?.article_identity_key) === identityKey) return true;
+  // 시리즈 키가 없는 후보(대부분의 소스)는 빈 문자열이다. 빈 키끼리 맞아떨어지면 발행된 기사
+  // 1건이 그 주 비시리즈 후보 전부를 막아 편성이 통째로 비게 된다 — 값이 있을 때만 대조한다.
+  if (!seriesIdentityKey) return false;
+  return recordSeriesIdentityKey(record) === seriesIdentityKey;
+}
+
 // 한 레코드가 newsletter_article로 노출된 적이 있는지 판정하는 단일 술어.
 // exposure_type(단수)은 "마지막" 노출 유형이다. 어떤 URL이 한 주에 main 기사로 나간 뒤 다음 주에
 // 헤드라인으로 유지되면 그 값이 homepage_headline으로 덮인다. 누적 이력인 exposure_types까지 함께
@@ -249,7 +281,12 @@ function isSameIssueRecord(record, asOf) {
 
 function annotateArticleExposure(article = {}, history = {}, options = {}) {
   const key = articleIdentityKey(article);
-  const record = exposureMap(history).get(key) || null;
+  // URL identity가 먼저다. 같은 URL 기록이 있으면 그것이 이 후보의 기록이고, 없을 때만 같은
+  // 시리즈의 다른 조각 기록으로 떨어진다(레코드는 최신이 앞이라 가장 최근 발행 건을 집는다).
+  const series = seriesKey(article);
+  const record = exposureMap(history).get(key) ||
+    ensureArray(history.articles).find(item => matchesExposedArticle(item, key, series)) ||
+    null;
   // 쿨다운 비교 기준은 이슈 date다. 벽시계(todayDate)를 쓰면 같은 이력·같은 후보라도 리플레이나
   // carry 실행 시점에 따라 판정이 달라져 선정이 비결정적이 된다. date를 못 받는 호출부는 기존
   // 동작(오늘 기준)을 그대로 유지한다.
@@ -283,11 +320,15 @@ function dedupeByArticleIdentity(articles = []) {
 
 // options.date는 쿨다운 검사가 쓰는 것과 같은 as-of date다. 그 호 자신이 발행한 레코드는 이력에서
 // 빠진다 — 안 그러면 같은 date 재실행이 그 호가 catch-up 레인으로 낸 기사를 자기 이력으로 배제한다.
-function everCoveredAsNewsletterArticle(identityKey, history = {}, options = {}) {
-  const key = text(identityKey);
-  if (!key) return false;
+//
+// 첫 인자는 identity 문자열이 아니라 후보다. 쿨다운 검사(annotateArticleExposure)와 같은 입력을
+// 받아 두 술어가 identity와 시리즈 키를 이 모듈 안에서 똑같이 유도하게 하려는 것이다 — 같은 규칙을
+// 호출부마다 따로 적으면 한쪽만 고쳐지는 것이 #963에서 실제로 일어난 일이다.
+function everCoveredAsNewsletterArticle(article = {}, history = {}, options = {}) {
+  const key = articleIdentityKey(article);
+  const series = seriesKey(article);
   return ensureArray(history.articles).some(item =>
-    text(item.article_identity_key) === key &&
+    matchesExposedArticle(item, key, series) &&
     isNewsletterArticleRecord(item) &&
     !isSameIssueRecord(item, options.date)
   );
