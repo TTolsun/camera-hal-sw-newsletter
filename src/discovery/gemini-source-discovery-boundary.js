@@ -540,6 +540,71 @@ function mergeNotYetEligibleByUrl(stage1List, mergeStageList) {
   return merged;
 }
 
+// 병합 단계가 걸러낸 not_yet_eligible을 payload에 확정하는 유일한 지점이다. stage 1이 넘긴
+// 목록과 합쳐 dedupe하고, stage 1과 같은 상한(60건/262144바이트)·carry_forward_status
+// 우선순위(overflow가 항상 최우선)·overflow 진단 파일 규칙을 그대로 재적용한다. 정상 경로와
+// degraded 경로가 각자 사본을 들면 한쪽만 고쳐져 판정이 갈라지므로 한 곳에 모아 둔다.
+function applyNotYetEligibleToPayload({ root, payload, stage1Payload, mergeStageNotYetEligible }) {
+  const notYetEligibleMerged = mergeNotYetEligibleByUrl(
+    Array.isArray(stage1Payload.not_yet_eligible) ? stage1Payload.not_yet_eligible : [],
+    mergeStageNotYetEligible
+  );
+  const notYetEligibleCap = capNotYetEligible(notYetEligibleMerged);
+  payload.not_yet_eligible = notYetEligibleCap.committed;
+  // overflow는 단조 유지한다 — stage1Payload.not_yet_eligible은 이미 상한에 잘린 committed
+  // 목록이라, 병합 단계 합산이 상한 이내면 cap이 false를 돌려주지만 stage 1이 버린 항목이
+  // 되살아난 것은 아니다. 그대로 덮으면 유실 사실이 조용히 지워진다.
+  payload.not_yet_eligible_overflow =
+    notYetEligibleCap.overflow || stage1Payload.not_yet_eligible_overflow === true;
+  // 병합 단계 자체가 상한을 새로 넘겼다면 stage 1과 같은 우선순위 규칙(overflow가 항상 최우선)
+  // 으로 승격한다. 이 줄이 없으면 orchestrator 게이트(status 필드만 봄)가 병합 단계 overflow를
+  // 못 보고 통과시킨다. overflow가 false면 stage 1이 정한 status를 그대로 둔다.
+  payload.carry_forward_status = resolveCarryForwardStatus({
+    status: payload.carry_forward_status,
+    overflow: notYetEligibleCap.overflow
+  });
+  // 상한을 넘기면 전체 목록을 .tmp에 남긴다 — 안 그러면 상한에 밀린 항목이 committed에도
+  // 진단 파일에도 없이 사라진다(silent truncate 금지 계약 위반).
+  writeNotYetEligibleOverflowIfNeeded(root, notYetEligibleCap);
+  return payload;
+}
+
+// seed-only(Gemini credential 실패)·discovery 비활성 경로의 병합 결과를 만든다.
+// 이 경로들은 score·rank·cap 파이프라인을 타지 않고 병합 후보를 그대로 다음 단계로 넘기므로,
+// 여기서 coverage 경계 [E, U)를 적용하지 않으면 이번 coverage 주보다 최신인 stage 2 신규
+// 후보(seed_url_evidence)가 candidates에 섞인 채 남고 not_yet_eligible에는 들어가지 못한다.
+// 선정단이 not_yet_eligible을 걸러주므로 발행 오염은 없지만, 그 후보가 carry-forward 원천에서
+// 빠지면 다음 호로 넘어가지 못하고 degraded 실행에서 그대로 유실된다.
+// 정상 경로와 같은 헬퍼(splitMergeStageNotYetEligible·applyNotYetEligibleToPayload)를 쓰므로
+// 세 경로의 판정이 갈라질 수 없다.
+function buildDegradedMergeResult({ root, date, stage1Payload, seedExpansion }) {
+  // seed 확장이 없으면 병합 단계가 만든 신규 후보 자체가 없다. seed_used는 collection intent의
+  // seed_urls 유무와 같은 값이고(collection-intent.js의 seedUrlCount), 그게 0이면 seed 확장을
+  // 아예 호출하지 않아 seedExpansion도 null이다. 이때 disabled pass-through의 계약은 stage 1
+  // artifact를 손대지 않고 그대로 넘기는 것이므로, 판정할 것이 없는데 필드를 주입하면 안 된다.
+  if (seedExpansion?.stats?.seed_used !== true) {
+    return {
+      seedUsed: false,
+      mergedCandidates: candidateItems(stage1Payload),
+      mergedPayload: stage1Payload
+    };
+  }
+  const mergeStageCoverage = isPlainObject(stage1Payload.coverage) ? stage1Payload.coverage : null;
+  const mergeStageSplit = splitMergeStageNotYetEligible(
+    seedExpansion.mergedCandidates,
+    mergeStageCoverage
+  );
+  const mergedCandidates = mergeStageSplit.eligible;
+  const mergedPayload = candidatePayload(date, mergedCandidates, stage1Payload);
+  applyNotYetEligibleToPayload({
+    root,
+    payload: mergedPayload,
+    stage1Payload,
+    mergeStageNotYetEligible: mergeStageSplit.notYetEligible
+  });
+  return { seedUsed: true, mergedCandidates, mergedPayload };
+}
+
 function boolTrue(value) {
   return value === true || String(value).toLowerCase() === 'true';
 }
@@ -1127,10 +1192,13 @@ function writeSeedOnlySourceDiscoveryResult({
   statusDetail = ''
 }) {
   const manualCandidates = candidateItems(manualPayload);
-  const seedUsed = seedExpansion?.stats?.seed_used === true;
+  const { seedUsed, mergedCandidates, mergedPayload } = buildDegradedMergeResult({
+    root,
+    date,
+    stage1Payload: manualPayload,
+    seedExpansion
+  });
   const mergeMode = seedUsed ? 'seed_evidence_expansion' : 'disabled_pass_through';
-  const mergedCandidates = seedExpansion ? seedExpansion.mergedCandidates : manualCandidates;
-  const mergedPayload = seedUsed ? candidatePayload(date, mergedCandidates, manualPayload) : manualPayload;
   const discoveryStats = sourceDiscoveryCandidateStats({
     manualCandidates,
     seedCandidates: seedExpansion?.seedCandidates || [],
@@ -1378,31 +1446,14 @@ async function runEnabled({
     proposalValidations: discovery.proposalValidationReport.validations
   }));
   const mergedPayload = candidatePayload(date, evidence.annotatedCandidates, manualPayload);
-  // Task 10: stage 1이 넘겨준 not_yet_eligible과 이번 병합 단계에서 새로 걸러낸 후보를
-  // URL 기준으로 dedupe해 합치고, stage 1과 같은 상한(60건/262144바이트) 규칙을 재적용한다.
-  const notYetEligibleMerged = mergeNotYetEligibleByUrl(
-    Array.isArray(manualPayload.not_yet_eligible) ? manualPayload.not_yet_eligible : [],
-    mergeStageSplit.notYetEligible
-  );
-  const notYetEligibleCap = capNotYetEligible(notYetEligibleMerged);
-  mergedPayload.not_yet_eligible = notYetEligibleCap.committed;
-  mergedPayload.not_yet_eligible_overflow = notYetEligibleCap.overflow;
-  // 리뷰 fix: 병합 단계 자체가 상한을 새로 넘겼다면 stage 1과 같은 우선순위 규칙
-  // (carry-forward.js의 resolveCarryForwardStatus -- overflow가 항상 최우선)으로
-  // carry_forward_status를 'overflow'로 승격한다. mergedPayload는 candidatePayload()가
-  // manualPayload(stage 1의 carry_forward_status)를 그대로 스프레드해 넘어온 상태라, 이 줄이
-  // 없으면 orchestrator 게이트(status 필드만 봄)가 병합 단계 overflow를 못 보고 통과시킨다.
-  // overflow가 false면 stage 1이 정한 status를 그대로 둔다.
-  mergedPayload.carry_forward_status = resolveCarryForwardStatus({
-    status: mergedPayload.carry_forward_status,
-    overflow: notYetEligibleCap.overflow
+  // Task 10: stage 1이 넘겨준 not_yet_eligible과 이번 병합 단계에서 새로 걸러낸 후보를 합쳐
+  // 확정한다. 판정 본문은 degraded 경로와 공유하는 applyNotYetEligibleToPayload에 있다.
+  applyNotYetEligibleToPayload({
+    root,
+    payload: mergedPayload,
+    stage1Payload: manualPayload,
+    mergeStageNotYetEligible: mergeStageSplit.notYetEligible
   });
-  // fix round 1: 상한을 넘기면 stage 1과 같은 규칙으로 전체 목록을 .tmp에 남긴다 — 안 그러면
-  // stage 2 신규 후보가 합류하며 상한을 넘긴 항목이 committed에도 진단 파일에도 없이 완전히
-  // 사라진다(silent truncate 금지 계약 위반). stage 1이 이미 이번 run에서 같은 파일을 썼어도
-  // 이 합산 전체 목록(stage 1 목록 ∪ 병합 단계 신규분)이 항상 상위 집합이므로 덮어써도 정보
-  // 유실이 없다.
-  writeNotYetEligibleOverflowIfNeeded(root, notYetEligibleCap);
   const geminiPayload = candidatePayload(date, geminiAnnotatedCandidates, {
     failures: discovery.rejectedProposals
   });
@@ -1548,10 +1599,13 @@ async function run({
         lookupImpl
       })
     : null;
-  const seedUsed = seedExpansion?.stats?.seed_used === true;
+  const { seedUsed, mergedCandidates, mergedPayload } = buildDegradedMergeResult({
+    root,
+    date,
+    stage1Payload: payload,
+    seedExpansion
+  });
   const mergeMode = seedUsed ? 'seed_evidence_expansion' : 'disabled_pass_through';
-  const mergedCandidates = seedExpansion ? seedExpansion.mergedCandidates : manualCandidates;
-  const mergedPayload = seedUsed ? candidatePayload(date, mergedCandidates, payload) : payload;
   const generatedAt = new Date().toISOString();
   const discoveryStats = sourceDiscoveryCandidateStats({
     manualCandidates,

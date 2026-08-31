@@ -737,3 +737,175 @@ test('not-yet-eligible URL merge dedupes stage 1 and merge-stage lists, preferri
   const shared = merged.find(item => item.url === 'https://example.com/shared');
   assert.equal(shared.title, 'Stage 1 version');
 });
+
+// #938: seed-only(credential 실패)·discovery 비활성 경로는 selection 파이프라인을 타지 않고
+// 병합 후보를 그대로 다음 단계로 넘긴다. 두 경로가 coverage 경계 [E, U)를 적용하지 않으면
+// 이번 주보다 최신인 seed_url_evidence 후보가 not_yet_eligible에 못 들어가 carry-forward
+// 원천에서 빠지고, degraded 실행에서 이슈 간 유실된다. 아래 두 테스트는 각 경로를 따로 잠근다.
+const DEGRADED_COVERAGE_DATE = '2026-04-25';
+const DEGRADED_COVERAGE = {
+  coverage_week_key: '2026-W17',
+  coverage_start_date: '2026-04-20',
+  coverage_end_date: '2026-04-26',
+  coverage_end_exclusive_at: '2026-04-27T00:00:00.000Z'
+};
+const DEGRADED_SEED_URL = 'https://developer.android.com/jetpack/androidx/releases/camera';
+const DEGRADED_MANUAL_URL = 'https://developer.android.com/jetpack/androidx/releases/camera#manual';
+
+function degradedCoveragePayload() {
+  return {
+    schema_version: 5,
+    date: DEGRADED_COVERAGE_DATE,
+    newsletter_date: DEGRADED_COVERAGE_DATE,
+    generated_at: '2026-04-25T00:00:00.000Z',
+    coverage: DEGRADED_COVERAGE,
+    not_yet_eligible: [],
+    not_yet_eligible_overflow: false,
+    carry_forward_status: 'loaded',
+    candidates: [{
+      title: 'Manual candidate inside the coverage window',
+      url: DEGRADED_MANUAL_URL,
+      source_id: 'camerax-release-notes',
+      source: 'CameraX Release Notes',
+      reliability: 'official',
+      publishedAt: '2026-04-22',
+      published_date: '2026-04-22',
+      finalSelectionEligibility: 'short',
+      final_selection_eligibility: 'short',
+      main_eligible: true
+    }],
+    failures: []
+  };
+}
+
+// seed URL 원문은 coverage_end_date 이후 날짜라, seed 확장이 만드는 seed_url_evidence 후보는
+// not_yet_eligible이어야 한다.
+async function fetchFutureDatedSeedPage(url) {
+  return {
+    ok: true,
+    status: 200,
+    url,
+    headers: { get: () => '' },
+    text: async () => '<html><head><title>Future CameraX release</title>'
+      + '<meta name="datePublished" content="2099-01-01"></head>'
+      + '<body>2099-01-01 CameraX release dated after this coverage week.</body></html>'
+  };
+}
+
+function prepareDegradedRoot() {
+  const root = tempRoot();
+  writeJson(collectionIntentPath(root, DEGRADED_COVERAGE_DATE), {
+    schema_version: 1,
+    newsletter_date: DEGRADED_COVERAGE_DATE,
+    seed_urls: [{
+      seed_id: 'seed-camerax',
+      url: DEGRADED_SEED_URL,
+      expected_topic: 'CameraX release notes'
+    }],
+    keyword_hints: []
+  });
+  writeManualCandidateArtifacts({
+    root,
+    date: DEGRADED_COVERAGE_DATE,
+    payload: degradedCoveragePayload(),
+    sourceCount: 1
+  });
+  return root;
+}
+
+function assertSeedCandidateCarriedForward(root) {
+  const merged = readJson(mergedCandidatesPath(root, DEGRADED_COVERAGE_DATE));
+  assert.deepEqual(
+    (merged.candidates || []).map(item => item.url),
+    [DEGRADED_MANUAL_URL],
+    'coverage 경계 밖 seed_url_evidence 후보가 candidates에 남아 있으면 안 된다'
+  );
+  assert.deepEqual(
+    (merged.not_yet_eligible || []).map(item => item.url),
+    [DEGRADED_SEED_URL],
+    'coverage 경계 밖 seed_url_evidence 후보는 not_yet_eligible로 넘어가야 한다'
+  );
+}
+
+test('seed-only credential-failure path moves future-dated seed candidates to not_yet_eligible', async () => {
+  const root = prepareDegradedRoot();
+
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date: DEGRADED_COVERAGE_DATE,
+    env: {
+      NEWSLETTER_DATE: DEGRADED_COVERAGE_DATE,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true'
+    },
+    lookupImpl: async () => [{ address: '93.184.216.34', family: 4 }],
+    fetchImpl: fetchFutureDatedSeedPage
+  });
+
+  assert.equal(result.status, 'PASS');
+  assert.equal(result.status_detail, SEED_ONLY_LLM_CREDENTIALS_MISSING);
+  assertSeedCandidateCarriedForward(root);
+});
+
+// stage 1이 이미 상한을 넘겨 항목을 잘라낸 뒤라면, 병합 단계 합산이 상한 이내로 떨어져도
+// 그 유실 사실은 사라지지 않는다. overflow는 단조 유지되어야 한다.
+test('merge stage keeps a stage 1 not_yet_eligible overflow flag even when the combined list fits the cap', async () => {
+  const root = tempRoot();
+  const payload = degradedCoveragePayload();
+  payload.not_yet_eligible = Array.from({ length: 5 }, (unused, index) => ({
+    title: `Stage 1 not-yet-eligible ${index}`,
+    url: `https://developer.android.com/stage1-notyet-${index}`,
+    publishedAt: '2099-02-01',
+    published_date: '2099-02-01'
+  }));
+  payload.not_yet_eligible_overflow = true;
+  payload.carry_forward_status = 'overflow';
+  writeJson(collectionIntentPath(root, DEGRADED_COVERAGE_DATE), {
+    schema_version: 1,
+    newsletter_date: DEGRADED_COVERAGE_DATE,
+    seed_urls: [{
+      seed_id: 'seed-camerax',
+      url: DEGRADED_SEED_URL,
+      expected_topic: 'CameraX release notes'
+    }],
+    keyword_hints: []
+  });
+  writeManualCandidateArtifacts({ root, date: DEGRADED_COVERAGE_DATE, payload, sourceCount: 1 });
+
+  await runSourceDiscoveryBoundary({
+    root,
+    date: DEGRADED_COVERAGE_DATE,
+    env: {
+      NEWSLETTER_DATE: DEGRADED_COVERAGE_DATE,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true'
+    },
+    lookupImpl: async () => [{ address: '93.184.216.34', family: 4 }],
+    fetchImpl: fetchFutureDatedSeedPage
+  });
+
+  const merged = readJson(mergedCandidatesPath(root, DEGRADED_COVERAGE_DATE));
+  // 합산 6건은 상한(60) 안이라 이번 cap 자체는 overflow가 아니다.
+  assert.equal(merged.not_yet_eligible.length, 6);
+  assert.equal(
+    merged.not_yet_eligible_overflow,
+    true,
+    'stage 1이 이미 잘라낸 사실을 병합 단계가 false로 덮으면 안 된다'
+  );
+});
+
+test('disabled pass-through path moves future-dated seed candidates to not_yet_eligible', async () => {
+  const root = prepareDegradedRoot();
+
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date: DEGRADED_COVERAGE_DATE,
+    env: {
+      NEWSLETTER_DATE: DEGRADED_COVERAGE_DATE,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'false'
+    },
+    lookupImpl: async () => [{ address: '93.184.216.34', family: 4 }],
+    fetchImpl: fetchFutureDatedSeedPage
+  });
+
+  assert.equal(result.status, 'PASS');
+  assertSeedCandidateCarriedForward(root);
+});
