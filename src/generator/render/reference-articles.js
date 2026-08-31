@@ -3,9 +3,10 @@
 // 상한까지 만든다. LLM이 아니라 결정론 코드가 만들어, editor claim-binding 실패 경로를 피한다.
 // 입력은 특정 창으로 한정되지 않는다: reference 창 후보와 함께 main 경쟁에서 선정되지 않은
 // shortlist(primary/fallback 창) 후보도 받는다. 어느 창에서 왔는지가 아니라 버킷·증거 조건으로
-// 거른다.
+// 거른다. 다만 상한을 채우는 순서는 창을 먼저 본다(아래 정렬 주석).
 const { BUCKETS, BUCKET_PRIORITY } = require('../../shared/domain/aosp-camera-scope');
 const { excludeParentRoundupContainers } = require('../../shared/common/article-groups');
+const { isCoverageWeekWindow } = require('../../shared/common/coverage-week');
 const { displayDate } = require('../../shared/common/date-signals');
 const { normalizeUrl } = require('../../shared/common/selection-normalizers');
 const { ensureArray } = require('../../shared/common/value-coercion');
@@ -68,18 +69,36 @@ function displayPublishedDate(candidate) {
   return precision === 'month' ? display.slice(0, 7) : display;
 }
 
-// 상한(DEFAULT_LIMIT)까지만 담기 때문에 정렬 순서가 곧 노출 순서다. 받은 순서대로 담으면
-// 카메라 관련도가 가장 높은 direct_aosp_camera 항목이 뒤로 밀려 잘리고(실측 2026-08-10:
-// AOSP Camera ITS 문서 갱신 2건이 lore 센서 패치들에 밀려 잘림), 같은 버킷 안에서는 오래된
-// reference 창 항목이 이번 주 항목보다 먼저 자리를 차지한다.
-// 도메인이 이미 정의한 버킷 우선순위 → 최신 날짜 → 입력 순서로 안정 정렬한다.
-function byBucketPriorityThenRecency(candidates) {
+// 커버리지 주 안인가. 후보의 freshness_window는 select/newsroom-selection.js의
+// freshnessWindowMetadata가 붙이고, 그 등급을 만드는 정본은 coverage-week.js의
+// classifyCoverageWindow다. 등급 리터럴을 여기서 다시 적으면 정본이 등급을 추가·개명했을 때
+// render만 조용히 "창 밖"으로 판정하므로, 정본이 export하는 술어를 그대로 쓴다.
+// 여기서 나이를 다시 재지 않는다.
+function isWithinCoverageWeek(candidate) {
+  return isCoverageWeekWindow(pick(candidate, 'freshness_window'));
+}
+
+// 상한(DEFAULT_LIMIT)까지만 담기 때문에 정렬 순서가 곧 노출 순서다.
+// 창 안(primary) → 버킷 우선순위 → 최신 날짜 → 입력 순서로 안정 정렬한다.
+//
+// 버킷 우선순위를 최신성 앞에 둔 것은 2026-08-10 결정이다. 받은 순서대로 담으면 카메라
+// 관련도가 가장 높은 direct_aosp_camera 항목이 뒤로 밀려 잘렸다(실측 2026-08-10: AOSP
+// Camera ITS 문서 갱신 2건이 lore 센서 패치들에 밀려 잘림). 그 결정은 그대로 살아 있다.
+//
+// 그 위에 "창 안" 항을 얹는 이유는 상위 계약이 "주간호는 그 주를 다룬다"이기 때문이다.
+// 버킷 우선순위만으로 채우면 커버리지 주 밖 항목이 먼저 자리를 차지한다 — 실측 2026-08-24호
+// (커버리지 주 08-17~08-23): 참고 4칸 중 3칸이 창 밖이었다(CameraX 08-12, ITS 문서 2건 2026-07).
+// 창 항을 맨 앞에 둬도 버킷 우선순위는 폐기되지 않고 적용 범위만 좁아진다. 창 안 집합 안에서,
+// 그리고 창 밖 집합 안에서 각각 그대로 작동한다. 대가는 창 안 후보만으로 상한이 차는 주에는
+// 창 밖 ITS 문서류가 다시 잘린다는 것이고, 이 대가는 render 테스트에 잠겨 있다.
+function byCoverageWeekThenBucketPriority(candidates) {
   return candidates
     .map((candidate, index) => ({ candidate, index }))
     .sort((left, right) => {
       const leftPriority = BUCKET_PRIORITY[candidateBucket(left.candidate)] ?? Number.MAX_SAFE_INTEGER;
       const rightPriority = BUCKET_PRIORITY[candidateBucket(right.candidate)] ?? Number.MAX_SAFE_INTEGER;
-      return leftPriority - rightPriority ||
+      return (isWithinCoverageWeek(right.candidate) ? 1 : 0) - (isWithinCoverageWeek(left.candidate) ? 1 : 0) ||
+        leftPriority - rightPriority ||
         publishedTime(right.candidate) - publishedTime(left.candidate) ||
         left.index - right.index;
     })
@@ -108,8 +127,14 @@ function referenceArticleCandidatePool(shortlistReport = {}) {
 
 /**
  * 참고 섹션에서 빼야 할 URL 목록.
- * 발행된 main 기사뿐 아니라 강등된 후보도 뺀다 — 강등 기록이 render보다 먼저 채워진다는
- * 실행 순서에 기대지 않고, 두 목록을 모두 보고 판단한다.
+ * 현재 main 집합과 강등 기록을 모두 본다 — 강등 기록이 render보다 먼저 채워진다는 실행 순서에
+ * 기대지 않는다.
+ * 다만 demoted_candidates가 모든 강등을 담지는 않는다. 여기에 실리는 것은 attempt 루프에서
+ * 떨어진 섹션뿐이고(orchestrator-finalize.js), LLM coverage 재조정으로 main에서 빠진 후보는
+ * 어디에도 남지 않는다 — gemini-newsroom-newsletter.js는 생존자만 selected_articles에 되쓰고,
+ * coverage-reconciliation.json의 강등 기록은 candidate_key만 담고 커밋되지도 않는다.
+ * 그래서 재조정으로 빠진 후보는 참고 풀에 다시 들어와 상한을 두고 경쟁한다. 이건 선재 동작이고
+ * 이 모듈이 고칠 수 있는 범위 밖이지만, 정렬이 무엇을 줄 세우는지 오해하지 않도록 적어 둔다.
  */
 function referenceArticleExcludeUrls(shortlistReport = {}) {
   return [
@@ -128,7 +153,7 @@ function buildReferenceArticles(candidates = [], options = {}) {
   const usable = (Array.isArray(candidates) ? candidates : [])
     .filter(candidate => candidate && typeof candidate === 'object');
 
-  for (const candidate of byBucketPriorityThenRecency(usable)) {
+  for (const candidate of byCoverageWeekThenBucketPriority(usable)) {
     if (items.length >= limit) break;
 
     const bucket = candidateBucket(candidate);
