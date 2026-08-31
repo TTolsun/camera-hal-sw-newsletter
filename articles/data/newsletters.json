@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-08-31",
+    "title": "Camera HAL / SW Newsletter - 2026-08-31",
+    "summary": "이번 주 뉴스레터에서는 Linux 커널 미디어 서브시스템과 libcamera 프레임워크의 주요 카메라 드라이버 및 이미지 파이프라인 업데이트를 다룹니다. AtomISP 드라이버의 OV2740 센서 링크 및 D-PHY 타이밍 파생 지원, libcamera의 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치, 그리고 Sony IMX908 센서의 Device Tree 바인딩 추가 등 하위 스택의 변화가 Android Camera HAL 구현과 이미지 처리 품질 검증에 미치는 영향을 상세히 분석합니다.",
+    "html": "newsletters/2026-08-31/index.html",
+    "md": "newsletters/2026-08-31/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-08-24",
     "title": "Camera HAL / SW Newsletter - 2026-08-24",
     "summary": "이번 주 뉴스레터에서는 Linux 카메라 스택의 핵심 프레임워크인 libcamera의 Raspberry Pi 다운스트림 v0.7.2+rpt20260817 릴리스를 심층 분석합니다. 비록 직접적인 AOSP 변경은 아니지만, V4L2를 대체하는 libcamera의 최신 안정화 흐름과 버퍼/스트림 관리 기법은 Android Camera HAL 및 드라이버 스택의 최적화 설계에 중요한 기술적 벤치마크를 제공합니다.",

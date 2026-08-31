@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-08-24T00:00:00+09:00",
+  "updated_at": "2026-08-31T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
-    "title": "Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점",
-    "summary": "2026년 8월 17일, Raspberry Pi의 다운스트림 libcamera 라이브러리가 v0.7.2+rpt20260817 버전으로 공식 업데이트되었습니다. 이번 릴리스는 Linux 기반 카메라 파이프라인의 안정성과 효율성을 강화하는 데 초점을 맞추고 있으며, Android Camera HAL 및 하위 드라이버를 개발하는 엔지니어들에게 기술적 영감을 제공합니다.",
-    "source_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
-    "newsletter_date": "2026-08-24",
-    "newsletter_url": "newsletters/2026-08-24/index.html",
-    "selected_at": "2026-08-24",
+    "article_identity_key": "url:https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com",
+    "title": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+    "summary": "Sony IMX908 이미지 센서의 Linux 커널 공식 지원을 위한 Device Tree 바인딩 패치(PATCH v3)가 공개되었습니다. 이번 바인딩 정의는 신규 센서를 탑재하는 SoC 플랫폼 개발자들에게 표준 하드웨어 인터페이스 구성 가이드를 제공합니다.",
+    "source_url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+    "newsletter_date": "2026-08-31",
+    "newsletter_url": "newsletters/2026-08-31/index.html",
+    "selected_at": "2026-08-31",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-08-24",
+    "last_scored_at": "2026-08-31",
     "date_evidence": {
-      "date": "2026-08-17",
+      "date": "2026-08-28T06:49:22Z",
       "date_field": "published_date",
-      "evidence_level": "primary",
+      "evidence_level": "watch",
       "publish_ready_date_evidence": true
     },
     "quality_flags": {
@@ -38,13 +38,58 @@
     },
     "snapshot": {
       "category": "camera_driver_image_pipeline",
-      "source_name": "Raspberry Pi libcamera Releases"
+      "source_name": "lore.kernel.org linux-media list"
     },
-    "newsletter_article_url": "newsletters/2026-08-24/index.html#article-raspberry-pi-libcamera-v0-7-2-rpt20260817-linux-hal",
+    "newsletter_article_url": "newsletters/2026-08-31/index.html#article-sony-imx908-linux-device-tree",
     "image_url": "assets/images/fallback/android.svg",
-    "image_alt": "Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점 image"
+    "image_alt": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "title": "Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점",
+      "summary": "2026년 8월 17일, Raspberry Pi의 다운스트림 libcamera 라이브러리가 v0.7.2+rpt20260817 버전으로 공식 업데이트되었습니다. 이번 릴리스는 Linux 기반 카메라 파이프라인의 안정성과 효율성을 강화하는 데 초점을 맞추고 있으며, Android Camera HAL 및 하위 드라이버를 개발하는 엔지니어들에게 기술적 영감을 제공합니다.",
+      "source_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "newsletter_date": "2026-08-24",
+      "newsletter_url": "newsletters/2026-08-24/index.html",
+      "selected_at": "2026-08-24",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-08-24",
+      "date_evidence": {
+        "date": "2026-08-17",
+        "date_field": "published_date",
+        "evidence_level": "primary",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 3,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "camera_driver_image_pipeline",
+        "source_name": "Raspberry Pi libcamera Releases"
+      },
+      "newsletter_article_url": "newsletters/2026-08-24/index.html#article-raspberry-pi-libcamera-v0-7-2-rpt20260817-linux-hal",
+      "image_url": "assets/images/fallback/android.svg",
+      "image_alt": "Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점 image",
+      "replaced_at": "2026-08-31",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
       "title": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결",

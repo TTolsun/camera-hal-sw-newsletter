@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-31",
+  "rollout_stage": "shadow",
+  "status": "shadow_selected",
+  "activated": true,
+  "trigger": {
+    "direct_aosp_camera_weekly_final_count": 0,
+    "activated": true
+  },
+  "selected_topic_key": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+  "skip_reason": null,
+  "error": null,
+  "queue_size": 24,
+  "accrued_this_week": 4,
+  "evidence_used": []
+}

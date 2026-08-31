@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-31",
+  "status": "PASS",
+  "removed_sections": [],
+  "dropped_selected_groups": [],
+  "restored_to_keep_minimum": [],
+  "final_section_sources": [
+    {
+      "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+      "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+    },
+    {
+      "title": "libcamera: Add quad-Bayer CFA layout support",
+      "url": "https://patchwork.libcamera.org/patch/28095/"
+    },
+    {
+      "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+    },
+    {
+      "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+    },
+    {
+      "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "url": "https://patchwork.libcamera.org/patch/28105/"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}
