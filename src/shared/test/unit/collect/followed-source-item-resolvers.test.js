@@ -66,6 +66,17 @@ test('routes raspberrypi-libcamera-releases to the release resolver with text (a
   assert.equal(items[0].relevanceBucketHint, 'camera_driver_image_pipeline');
 });
 
+const PATCHWORK_LIST_API = 'https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json';
+
+function patchworkSource() {
+  return {
+    id: 'patchwork-libcamera-patches',
+    name: 'libcamera Patchwork (patch review)',
+    url: PATCHWORK_LIST_API,
+    sourceUrl: PATCHWORK_LIST_API
+  };
+}
+
 test('routes patchwork-libcamera-patches to the patch resolver with text (JSON) as the first arg', async () => {
   const json = JSON.stringify([
     {
@@ -75,17 +86,50 @@ test('routes patchwork-libcamera-patches to the patch resolver with text (JSON) 
       state: 'new'
     }
   ]);
-  let fetchCount = 0;
+  const fetched = [];
   const items = await resolveFollowedSourceItems(
-    { id: 'patchwork-libcamera-patches', name: 'libcamera Patchwork (patch review)' },
-    { indexItems: [], text: json, fetchTextImpl: async () => { fetchCount += 1; return ''; } }
+    patchworkSource(),
+    {
+      indexItems: [],
+      text: json,
+      fetchTextImpl: async (url) => { fetched.push(url); return '[]'; },
+      now: new Date('2026-07-06T00:00:00Z'),
+      lookbackDays: 35
+    }
   );
 
-  // 리졸버는 text(JSON)만 파싱하고 추가 fetch는 하지 않는다.
-  assert.equal(fetchCount, 0);
+  // text(JSON)가 첫 인자로 전달돼야 patch가 후보로 나온다.
   assert.equal(items.length, 1);
   assert.equal(items[0].sourceKind, 'rss_item');
   assert.equal(items[0].publishedAt, '2026-07-03');
+  // 창 안 페이지 다음은 등록부 sourceUrl에서 파생한 page=2를 조회한다 — fetchTextImpl 배선 확인(#970).
+  assert.deepEqual(fetched, [`${PATCHWORK_LIST_API}&page=2`]);
+});
+
+test('passes the collection window to patchwork so paging stops at the lookback edge (#970)', async () => {
+  // 창(now/lookbackDays)이 리졸버까지 안 오면 첫 페이지가 이미 창 밖인데도 계속 페이지를 판다.
+  const json = JSON.stringify([
+    {
+      web_url: 'https://patchwork.libcamera.org/patch/27198/',
+      date: '2026-07-03T22:48:16',
+      name: '[v2,1/2] libcamera: Add SensorSequence metadata control',
+      state: 'new'
+    }
+  ]);
+  const fetched = [];
+  const items = await resolveFollowedSourceItems(
+    patchworkSource(),
+    {
+      indexItems: [],
+      text: json,
+      fetchTextImpl: async (url) => { fetched.push(url); return '[]'; },
+      now: new Date('2026-09-01T00:00:00Z'),
+      lookbackDays: 35
+    }
+  );
+
+  assert.equal(items.length, 1, 'the first page is still parsed');
+  assert.deepEqual(fetched, [], 'a first page already past the lookback edge ends the walk');
 });
 
 test('routes aosp-release-camera-changes to the release resolver with text (build-numbers HTML) as the first arg', async () => {
