@@ -20,6 +20,10 @@ const {
 const {
   trackedFiles
 } = require('../../../shared/tooling/tracked-files');
+const {
+  assertSharedNav,
+  assertSharedFooterNav
+} = require('../../../shared/test/helpers/site-nav');
 
 // 지원 집합 바로 위 값. 숫자를 박아 두면 계약 버전이 추가될 때 이 테스트가 지원
 // 버전을 검사하게 되어 조용히 공허해진다.
@@ -125,14 +129,14 @@ function textFromHtml(html) {
     .trim();
 }
 
-function siteNavLabels(html) {
-  const siteNavMatch = html.match(/<nav\b[^>]*class=["'][^"']*\bsite-nav\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
-  const homepageHeaderMatch = html.match(/<header\b[^>]*class=["'][^"']*\bhomepage-site-header\b[^"']*["'][^>]*>[\s\S]*?<\/header>/i);
-  const matchedHeader = siteNavMatch || homepageHeaderMatch;
-  const siteHeader = matchedHeader ? matchedHeader[0] : siteHeaderHtml({ rootPath: '../../' });
-  return [...siteHeader.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
+// 주어진 마크업에서 앵커 라벨을 그대로 읽는다. 예전 siteNavLabels() 는 발행 페이지 53개 중
+// 0개가 쓰는 죽은 `<nav class="site-nav">` 를 먼저 찾고, 못 찾으면 **siteHeaderHtml() 을 자기가
+// 불러** 그 결과를 비교 대상으로 삼았다 — 헬퍼의 출력을 헬퍼의 출력과 비교하는 폴백이라, 렌더
+// 산출물에서 헤더가 통째로 사라져도 조용히 통과한다. 폴백을 없애고 받은 마크업만 본다.
+function anchorLabels(markup) {
+  return [...String(markup).matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
     .map(match => textFromHtml(match[1]))
-    .filter(label => label && !label.startsWith('Camera HAL') && !label.startsWith('Camera SW'));
+    .filter(Boolean);
 }
 
 test('newsletter renderer uses public_article for public markdown and HTML', () => {
@@ -166,22 +170,29 @@ test('newsletter renderer uses public_article for public markdown and HTML', () 
 
 test('newsletter renderer keeps generated issue nav labels on the newsroom Korean set', () => {
   const html = buildHtml(issue());
-  const labels = siteNavLabels(html);
 
   assert.match(html, /<body class="homepage newsletter-issue-page">/);
   assert.match(html, /<header class="site-header homepage-site-header">/);
   assert.match(html, /<div class="homepage-nav content-wrap">/);
   assert.match(html, /<footer class="site-footer">/);
-  assert.match(html, /<footer class="site-footer">[\s\S]*?<a class="footer-link" href="\.\.\/\.\.\/learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
   assert.match(html, /<span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom<\/span><\/span>/);
   assert.match(html, /<title>Camera SW Newsletter - 2026-05-03<\/title>/);
   assert.doesNotMatch(html, /data-site-header|site-header\.js/);
-  assert.deepEqual(labels.slice(0, 3), ['\ud648', '\uc544\uce74\uc774\ube0c', 'GitHub']);
-  assert.equal(labels.includes('Sources'), false);
-  assert.equal(labels.includes('\ucd5c\uc2e0\ud638'), false);
-  assert.equal(labels.includes('Home'), false);
-  assert.equal(labels.includes('Archive'), false);
-  assert.equal(labels.includes('\ucd9c\ucc98'), false);
+
+  // 홈·아카이브·Lab 과 같은 한 벌로, 렌더 **산출물**을 대상으로 잠근다. 이슈 페이지는 두 단계
+  // 아래에 놓이므로 사이트 루트 접두어가 '../../' 다.
+  assertSharedNav(html, '../../');
+  assertSharedFooterNav(html, '../../');
+  // 「리소스」 컬럼의 AI Engineering Lab href 만 공용 헬퍼 밖이다(페이지마다 다르다). 렌더러가
+  // 만드는 값은 여기서 닫힌 문자열로 잠근다 — 배포본을 훑는 homepage-archive.test.js 는 커밋된
+  // 파일만 보므로, 렌더러가 이 링크를 잃어도 다음 발행 전까지 아무도 못 잡는다.
+  assert.match(html, /<a class="footer-link" href="\.\.\/\.\.\/learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
+
+  // 영어 라벨은 헤더뿐 아니라 문서 어디에서도 되살아나면 안 된다.
+  const labels = anchorLabels(html);
+  for (const forbidden of ['Sources', '최신호', 'Home', 'Archive', '출처']) {
+    assert.equal(labels.includes(forbidden), false, forbidden);
+  }
 });
 
 test('shared site header renders consistent root-relative links', () => {
@@ -194,11 +205,10 @@ test('shared site header renders consistent root-relative links', () => {
   assert.match(issueHeader, /href="\.\.\/\.\.\/index\.html">홈<\/a>/);
   assert.match(issueHeader, /href="\.\.\/\.\.\/archive\.html">아카이브<\/a>/);
   assert.doesNotMatch(issueHeader, /\.\.\/\.\.\/docs\/NEWS_SOURCES\.md/);
-  assert.deepEqual(siteNavLabels(`<header class="site-header" data-site-header data-site-root="../../"></header><script src="../../assets/js/site-header.js" defer></script>`).slice(0, 3), [
-    '홈',
-    '아카이브',
-    'GitHub'
-  ]);
+  // 이 헬퍼가 실제로 만드는 문자열을 본다. 예전에는 `data-site-header` placeholder 를 넣었는데,
+  // 그 placeholder 에는 나브가 없어서 siteNavLabels() 의 폴백이 다시 siteHeaderHtml() 을 불렀다 —
+  // 헬퍼의 출력을 헬퍼의 출력과 비교하는 항상-통과 단언이었다.
+  assert.deepEqual(anchorLabels(issueHeader), ['Camera SW Newsletter', '홈', '아카이브', 'GitHub']);
 });
 
 test('newsletter renderer renders a single main article without empty sections', () => {
