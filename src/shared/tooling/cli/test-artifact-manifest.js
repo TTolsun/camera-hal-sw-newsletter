@@ -1,4 +1,5 @@
 const assert = require('assert');
+const crypto = require('crypto');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -159,16 +160,18 @@ function testManifestCreationAndHashes() {
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'evidence-pack-summary.json')));
   assert.ok(manifest.files.some(file => file.path === '.tmp/gemini-raw/attempt-1.json'));
   assert.ok(manifest.files.some(file => file.path === 'cache/news-summary/summary.json'));
-  // 스냅샷 매니페스트의 files[]는 커밋되지 않는 스냅샷 디렉터리(.tmp/**, cache/** 포함)를 훑어
-  // 직접 해싱한 목록이고, retained_heavy_artifacts가 그 size·sha256을 그대로 쓴다. Git 밖 Actions
-  // artifact 안의 파일을 식별하는 유일한 수단이라 여기서는 유지한다(#951 범위 밖).
-  assert.ok(manifest.files.every(file => /^[a-f0-9]{64}$/.test(file.sha256)));
-  assert.ok(manifest.files.every(file =>
-    Object.keys(file).sort().join(',') === 'path,sha256,size' &&
-    typeof file.path === 'string' &&
-    typeof file.size === 'number' &&
-    typeof file.sha256 === 'string'
-  ));
+  // 스냅샷 매니페스트의 files[] 항목도 path만 담는다(#1018). 이 배열의 size·sha256을 읽던
+  // 소비자는 heavy 부분집합만 쓰는 retained_heavy_artifacts[] 하나뿐이었고, 나머지 비-heavy
+  // 항목은 커밋되는 파일이라 바이트 정본이 Git tree에 있다. 그래서 date-scoped 매니페스트가
+  // 이미 따르는 계약(#951)에 스냅샷 매니페스트도 맞춘다.
+  assert.ok(manifest.files.length > 0, 'files should not be empty');
+  assert.ok(
+    manifest.files.every(file =>
+      Object.keys(file).sort().join(',') === 'path' &&
+      typeof file.path === 'string'
+    ),
+    'files entries must carry exactly path'
+  );
 
   // review_artifacts[] 항목은 size·sha256을 담지 않는다(#951). 이 배열은 리뷰 인벤토리에서
   // 그대로 나오므로 두 매니페스트 표면이 같은 계약을 공유한다.
@@ -195,6 +198,27 @@ function testManifestCreationAndHashes() {
   assert.ok(typeof heavyShortlisted.retention_location === 'string');
   assert.ok(typeof heavyShortlisted.size === 'number');
   assert.ok(typeof heavyShortlisted.sha256 === 'string');
+
+  // heavy 항목은 Git 밖 Actions artifact 안의 파일을 식별하는 유일한 수단이라 size·sha256을
+  // 그대로 유지한다. files[]에서 바이트 사본이 사라져도 이 값들은 실제 파일과 계속 일치해야 한다.
+  const heavyShortlistedPath = path.join(snapshotDir, ...newsroomRelPath(date, 'shortlisted-candidates.json').split('/'));
+  assert.strictEqual(heavyShortlisted.size, fs.statSync(heavyShortlistedPath).size);
+  assert.strictEqual(
+    heavyShortlisted.sha256,
+    crypto.createHash('sha256').update(fs.readFileSync(heavyShortlistedPath)).digest('hex')
+  );
+  assert.ok(manifest.retained_heavy_artifacts.length > 0, 'retained_heavy_artifacts should not be empty');
+  assert.ok(
+    manifest.retained_heavy_artifacts.every(entry =>
+      Object.keys(entry).sort().join(',') === 'path,retention_grade,retention_location,sha256,size' &&
+      typeof entry.size === 'number' &&
+      /^[a-f0-9]{64}$/.test(entry.sha256) &&
+      // 등급 구성도 함께 잠근다. 커밋되는 파일이 이 배열로 새면 PR diff에 이미 있는 파일의
+      // 바이트 사본이 다시 생기고, 리뷰어는 Actions artifact에 없는 경로를 찾게 된다.
+      (entry.retention_grade === DEBUG_HEAVY || entry.retention_grade === TRANSIENT_ATTEMPT)
+    ),
+    'retained_heavy_artifacts entries must keep size and sha256 and stay heavy-graded'
+  );
 
   const committedSelectionReport = manifest.committed_artifacts.find(a =>
     a.path === newsroomRelPath(date, 'selection-report.json')
