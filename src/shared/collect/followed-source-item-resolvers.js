@@ -36,8 +36,10 @@ const FOLLOWED_SOURCE_RESOLVERS = [
   },
   {
     id: 'patchwork-libcamera-patches',
-    resolve: ({ text, source }) =>
-      resolvePatchworkLibcameraPatchItems(text, source)
+    // 목록 API는 한 응답이 lookback 창을 못 덮는다(#970). 창 경계까지 page를 따라가야 하므로
+    // fetch impl과 수집 창을 함께 넘긴다(aosp-release-camera-changes와 같은 배선).
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
+      resolvePatchworkLibcameraPatchItems(text, source, { fetchTextImpl, now, lookbackDays })
   },
   {
     id: 'aosp-release-camera-changes',

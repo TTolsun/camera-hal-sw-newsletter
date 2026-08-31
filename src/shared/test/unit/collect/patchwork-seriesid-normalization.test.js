@@ -14,8 +14,8 @@ function patchworkSource(overrides = {}) {
   return {
     id: 'patchwork-libcamera-patches',
     name: 'libcamera Patchwork (patch review)',
-    url: 'https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json',
-    sourceUrl: 'https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json',
+    url: 'https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json',
+    sourceUrl: 'https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json',
     category: 'camera-hal',
     section: 'Kernel / Media',
     priority: 'high',
@@ -55,7 +55,7 @@ test('normalizeCandidate tolerates a missing seriesId (non-series / non-patchwor
   assert.ok(item.seriesId === null || item.seriesId === undefined, 'missing seriesId normalizes to null');
 });
 
-test('patchwork collector -> normalizeCandidate -> seriesKey groups a real series end to end (#795)', () => {
+test('patchwork collector -> normalizeCandidate -> seriesKey groups a real series end to end (#795)', async () => {
   const api = JSON.stringify([
     {
       id: 27346,
@@ -74,7 +74,7 @@ test('patchwork collector -> normalizeCandidate -> seriesKey groups a real serie
       series: [{ id: 880, version: 7, name: 'software_isp egl LSC' }]
     }
   ]);
-  const rawItems = resolvePatchworkLibcameraPatchItems(api, patchworkSource());
+  const rawItems = await resolvePatchworkLibcameraPatchItems(api, patchworkSource());
   assert.equal(rawItems.length, 2);
   const normalized = rawItems.map(raw => normalizeCandidate(raw));
 

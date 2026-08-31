@@ -2454,7 +2454,7 @@
     {
       "id": "patchwork-libcamera-patches",
       "name": "libcamera Patchwork (patch review)",
-      "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=50&format=json",
+      "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
       "rssUrl": null,
       "collectionModeHint": "rss-source",
       "category": "linux-camera",
