@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "androidx-camerax-release-notes",
-  "updated_at": "2026-08-24T00:00:00.000Z",
+  "updated_at": "2026-08-31T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "androidx-camerax-release-notes:49d58944bd3ca26fc6929250597a6e3a",
@@ -9,13 +9,13 @@
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera",
       "title": "CameraX | Jetpack | Android Developers",
       "visible_date": "2024-06-12",
-      "visible_last_updated": "2026-08-12",
+      "visible_last_updated": "2026-08-26",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-08-11",
-      "content_hash": "529e39903d38ee94bcfbd44ae46191faf4675f1c59f2540399ee8493781ef013",
-      "normalized_content_hash": "81c8a6baa7c75d9928e5af2f4a4c884cf827bde3dc7eedb6d53ec6f5551c5f94",
+      "http_last_modified": "2026-08-27",
+      "content_hash": "9d42c88ad560491fc0b210dde9e9debdd097d3b063666bda0cefd308b79a8e05",
+      "normalized_content_hash": "afade6f1581b9cb83521aabd5f319281f6fc74eb6a1ce44579fdaf9e2334ae0e",
       "release_note_sections": [],
       "anchors": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0",
@@ -118,6 +118,7 @@
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-beta02",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.0-rc01",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
@@ -236,24 +237,31 @@
         "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha01",
         "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha02"
       ],
-      "release_row_date": "2026-08-12",
-      "release_row_version": "1.7.0-alpha03",
-      "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
-      "release_row_hash": "1c6bda8919b5bffe497a097c966c66f2",
+      "release_row_date": "2026-08-27",
+      "release_row_version": "1.0.0-alpha01",
+      "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
+      "release_row_hash": "773a38c03fba9ea926395817ad2d2b78",
       "release_rows": [
+        {
+          "version": "1.0.0-alpha01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
+          "date": "2026-08-27",
+          "hash": "773a38c03fba9ea926395817ad2d2b78",
+          "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha01"
+        },
+        {
+          "version": "1.6.2",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "date": "2026-08-26",
+          "hash": "a5a0971713e599a4740abe8406a60b7e",
+          "title": "Version 1.6.2"
+        },
         {
           "version": "1.7.0-alpha03",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
           "date": "2026-08-12",
           "hash": "1c6bda8919b5bffe497a097c966c66f2",
           "title": "Version 1.7.0-alpha03"
-        },
-        {
-          "version": "1.0.0-alpha01",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
-          "date": "2026-08-11",
-          "hash": "823a6a0a7211c147f7160437d853ba81",
-          "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha01"
         },
         {
           "version": "1.7.0-alpha02",
@@ -1650,8 +1658,8 @@
         }
       ],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-08-24T00:00:00.000Z",
-      "seen_count": 105,
+      "last_seen_at": "2026-08-31T00:00:00.000Z",
+      "seen_count": 106,
       "status": 200
     }
   ],
@@ -1660,13 +1668,15 @@
     "source-event-3616a9f0c9e81670bcd09140c52b6f04",
     "source-event-aafc952ea6e65f65d2cbacbfa9ee38c8",
     "source-event-da02771cf7d01aa9856b8802b7959b95",
-    "source-event-27abf06628060e55e4157d18384410da"
+    "source-event-27abf06628060e55e4157d18384410da",
+    "source-event-e519d508de58de336ce4a0642094c9de"
   ],
   "processed_evidence_ids": [
     "evidence-d134d45807b498f036b07fa3d599ac42",
     "evidence-ac4c255a57a844d0e96a9da7336ad513",
     "evidence-64bd9749c37789e74a4690ca8c029bfa",
     "evidence-e3847bbdd6a264f2cec103284d7e1ce3",
-    "evidence-341c97370366bc210723f4c4e52a717d"
+    "evidence-341c97370366bc210723f4c4e52a717d",
+    "evidence-257142e38b74dcff522b1abebb6c1ba4"
   ]
 }
