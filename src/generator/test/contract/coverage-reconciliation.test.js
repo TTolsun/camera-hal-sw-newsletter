@@ -21,7 +21,10 @@ function mainEligible(overrides = {}) {
   };
 }
 
-function plan(candidate, coverage_decision, impact_level = 'medium') {
+// #1001: impact_level 기본값은 편집 계획 프롬프트가 실제로 지시하는 어휘여야 한다. 예전
+// fixture는 high/medium/low를 썼는데 프로덕션에는 없는 값이라, 코드와 프롬프트의 어휘 불일치를
+// 테스트가 가려 주고 있었다.
+function plan(candidate, coverage_decision, impact_level = 'Direct Impact') {
   return { url: candidate.url, coverage_decision, impact_level };
 }
 
@@ -30,7 +33,7 @@ test('LLM cannot promote a reserve candidate that is not deterministically main-
     selected_articles: [mainEligible({ url: 'a' })],
     reserve_candidates: [mainEligible({ url: 'b', main_article_source_allowed: false })]
   };
-  const editorialPlanReport = { editorial_plans: [plan({ url: 'b' }, 'main_article', 'high')] };
+  const editorialPlanReport = { editorial_plans: [plan({ url: 'b' }, 'main_article', 'Direct Impact')] };
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.ok(!out.selected.map(a => a.url).includes('b'), 'ineligible reserve must not become main');
   assert.ok(out.diff.changes.some(c => c.action === 'promotion_blocked_ineligible'));
@@ -41,22 +44,71 @@ test('forbidden-bucket reserve candidate cannot be promoted even if LLM asks', (
     selected_articles: [mainEligible({ url: 'a' })],
     reserve_candidates: [mainEligible({ url: 'b', relevance_bucket: 'generic_tech_watchlist' })]
   };
-  const editorialPlanReport = { editorial_plans: [plan({ url: 'b' }, 'main_article', 'high')] };
+  const editorialPlanReport = { editorial_plans: [plan({ url: 'b' }, 'main_article', 'Direct Impact')] };
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.ok(!out.selected.map(a => a.url).includes('b'));
 });
 
-test('cap clamp drops the lowest impact/score candidates when over mainArticleCount.max', () => {
+test('cap clamp drops the lowest deterministic_score candidates when over mainArticleCount.max', () => {
+  // #1001: 예전 이름은 "lowest impact/score"였고 최고 impact를 받은 최저 점수 후보가 살아남는다고
+  // 단언했다. 그건 fixture가 IMPACT_RANK 어휘(high/low)를 쓸 때만 성립했고 프로덕션 어휘로는
+  // 한 번도 성립한 적이 없다. 순서를 정하는 값은 deterministic_score 하나다.
   const many = Array.from({ length: 7 }, (_, i) => mainEligible({ url: `u${i}`, deterministic_score: 50 + i }));
   const shortlistReport = { selected_articles: many, reserve_candidates: [] };
   const editorialPlanReport = {
-    editorial_plans: many.map((c, i) => plan(c, 'main_article', i === 0 ? 'high' : 'low'))
+    editorial_plans: many.map((c, i) => plan(c, 'main_article', i === 0 ? 'Direct Impact' : 'Trend Watch'))
   };
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.equal(out.selected.length, 5);
   const kept = out.selected.map(a => a.url);
-  assert.ok(kept.includes('u0'), 'high-impact survives');
-  assert.ok(!kept.includes('u1') && !kept.includes('u2'), 'lowest-score low-impact dropped');
+  assert.ok(!kept.includes('u0'), 'impact_level이 가장 높아도 점수 최하위는 밀린다');
+  assert.deepEqual(kept, ['u2', 'u3', 'u4', 'u5', 'u6'], '점수 상위 5건이 입력 순서대로 남는다');
+});
+
+// #1001: cap clamp는 impact_level을 정렬 키로 쓰지 않는다. 편집 계획 프롬프트가 지시하는
+// 어휘(Direct Impact / Design Reference / Trend Watch / Exclude)는 예전 IMPACT_RANK 표
+// (high / medium / low)와 겹치는 값이 하나도 없어서, 표가 살아 있던 동안에도 프로덕션에서는
+// 순위가 언제나 0이었다 — 즉 실제 clamp는 처음부터 deterministic_score 단독 정렬이었다.
+// 그래서 어느 한 어휘만 넣어 보는 테스트는 아무것도 잠그지 못한다. 표가 되살아나면 어휘가
+// 겹치는 순간(예: 'high') 순서가 뒤집히므로, 잠글 것은 "어휘가 무엇이든 clamp 순서는
+// deterministic_score를 따른다"이다.
+const IMPACT_LEVEL_VOCABULARIES = {
+  prompt: { strongest: 'Direct Impact', weakest: 'Trend Watch' },
+  legacy_impact_rank: { strongest: 'high', weakest: 'low' }
+};
+
+test('cap clamp는 impact_level 어휘가 무엇이든 deterministic_score 순서를 따른다', () => {
+  // main 제안 6건 > mainArticleCount.max=5. 가장 강한 impact를 받는 후보에게 최하 점수를 준다.
+  const urls = ['a', 'b', 'c', 'd', 'e', 'f'];
+  const candidates = urls.map((url, index) => mainEligible({
+    url,
+    article_group_key: `group:${url}`,
+    deterministic_score: url === 'f' ? 10 : 90 - index
+  }));
+  const scoreOrder = ['a', 'b', 'c', 'd', 'e'];
+
+  const selectedByVocabulary = {};
+  for (const [name, { strongest, weakest }] of Object.entries(IMPACT_LEVEL_VOCABULARIES)) {
+    const out = reconcileCoverage({
+      shortlistReport: { selected_articles: candidates, reserve_candidates: [] },
+      editorialPlanReport: {
+        editorial_plans: candidates.map(candidate =>
+          plan(candidate, 'main_article', candidate.url === 'f' ? strongest : weakest))
+      }
+    });
+    selectedByVocabulary[name] = out.selected.map(item => item.url);
+    assert.deepEqual(
+      selectedByVocabulary[name],
+      scoreOrder,
+      `${name} 어휘에서 clamp가 deterministic_score 순서를 벗어났다`
+    );
+  }
+
+  assert.deepEqual(
+    selectedByVocabulary.prompt,
+    selectedByVocabulary.legacy_impact_rank,
+    'impact_level 어휘를 바꿨더니 살아남는 기사 집합이 달라졌다'
+  );
 });
 
 test('cap clamp preserves deterministic (input) emit order, not impact/score order', () => {
@@ -65,7 +117,7 @@ test('cap clamp preserves deterministic (input) emit order, not impact/score ord
   const c2 = mainEligible({ url: 'c2', deterministic_score: 99 });
   const shortlistReport = { selected_articles: [c1, c2], reserve_candidates: [] };
   // LLM이 둘 다 같은 impact로 매김 → 재정렬 유혹이 있는 흔한 경우.
-  const editorialPlanReport = { editorial_plans: [plan(c1, 'main_article', 'medium'), plan(c2, 'main_article', 'medium')] };
+  const editorialPlanReport = { editorial_plans: [plan(c1, 'main_article', 'Design Reference'), plan(c2, 'main_article', 'Design Reference')] };
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.deepEqual(out.selected.map(a => a.url), ['c1', 'c2'], 'lead order must not flip to score-desc');
 });
@@ -87,7 +139,7 @@ test('floor backfill restores min main count when LLM excludes everything', () =
   const a = mainEligible({ url: 'a', deterministic_score: 70 });
   const b = mainEligible({ url: 'b', deterministic_score: 65 });
   const shortlistReport = { selected_articles: [a, b], reserve_candidates: [] };
-  const editorialPlanReport = { editorial_plans: [plan(a, 'exclude', 'low'), plan(b, 'exclude', 'low')] };
+  const editorialPlanReport = { editorial_plans: [plan(a, 'exclude', 'Trend Watch'), plan(b, 'exclude', 'Trend Watch')] };
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.ok(out.selected.length >= 1);
   assert.equal(out.selected[0].url, 'a');
@@ -98,7 +150,7 @@ test('diff records demotions and promotions vs deterministic', () => {
   const a = mainEligible({ url: 'a', deterministic_score: 70 });
   const r = mainEligible({ url: 'r', deterministic_score: 40 });
   const shortlistReport = { selected_articles: [a], reserve_candidates: [r] };
-  const editorialPlanReport = { editorial_plans: [plan(a, 'reference_only', 'low'), plan(r, 'main_article', 'high')] };
+  const editorialPlanReport = { editorial_plans: [plan(a, 'reference_only', 'Trend Watch'), plan(r, 'main_article', 'Direct Impact')] };
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   assert.ok(out.selected.map(x => x.url).includes('r'));
   assert.ok(out.diff.changes.some(c => c.action === 'promoted'));
