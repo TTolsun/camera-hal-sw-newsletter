@@ -172,3 +172,84 @@ test('collapse keeps the first-seen slot but prefers the cover letter as series 
     '[PATCH v6 0/7] media: qcom: camss: Add SM8750 support'
   ]);
 });
+
+test('a hash-style series and its re-rolls collapse to one candidate (#1030, 2026-W35 shape)', () => {
+  // 2026-08-31호 실측: lore 8슬롯 중 6칸을 Lenovo Yoga Book 한 시리즈의 v2/v3/v4가 먹었다.
+  // v3·v4는 git-send-email이 커밋 해시로 만든 message-id(cover.<epoch>.git.<보낸사람>)라
+  // 시리즈 키가 안 뽑혔고, seriesId가 비면 collapseSeriesRerolls의 subject 비교까지 함께
+  // 꺼져 재제출 병합도 안 걸렸다. 아래는 그 6건을 피드에 도착한 순서(최신순)대로 넣은 것이다.
+  const xml = atomFeed([
+    {
+      title: '[PATCH v4 14/15] media: atomisp: allow raw Bayer capture',
+      updated: '2026-08-28T16:15:00Z',
+      link: 'https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/'
+    },
+    {
+      title: '[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support',
+      updated: '2026-08-28T16:14:00Z',
+      link: 'https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/'
+    },
+    {
+      title: '[PATCH v3 11/12] media: atomisp: allow raw Bayer capture',
+      updated: '2026-08-27T23:18:00Z',
+      link: 'https://lore.kernel.org/linux-media/9535d6ecaa9b12421a6b17de54a954aa336a7819.1787872237.git.mauriziocasciano7@gmail.com/'
+    },
+    {
+      title: '[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link',
+      updated: '2026-08-27T23:17:30Z',
+      link: 'https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/'
+    },
+    {
+      title: '[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support',
+      updated: '2026-08-27T23:17:00Z',
+      link: 'https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/'
+    },
+    {
+      title: '[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support',
+      updated: '2026-08-27T18:18:00Z',
+      link: 'https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/'
+    },
+    // 같은 창의 다른 시리즈는 그대로 살아남아야 한다(캡 슬롯이 실제로 풀리는지 확인).
+    {
+      title: '[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor',
+      updated: '2026-08-28T06:49:00Z',
+      link: 'https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/'
+    }
+  ]);
+
+  const candidates = parseRss(xml, loreSource());
+  assert.equal(candidates.length, 7);
+
+  // v2(old-style)·v3·v4는 서로 다른 시리즈 키를 받는다 — 각 발송이 자기 epoch를 갖기 때문이다.
+  const seriesOf = fragment => candidates.find(candidate => candidate.title.includes(fragment)).seriesId;
+  assert.equal(seriesOf('v3 08/12'), seriesOf('v3 00/12'));
+  assert.equal(seriesOf('v4 14/15'), seriesOf('v4 00/15'));
+  assert.notEqual(seriesOf('v3 00/12'), seriesOf('v4 00/15'));
+  assert.notEqual(seriesOf('v2 00/11'), seriesOf('v3 00/12'));
+
+  const collapsed = collapseSeriesRepresentatives(candidates);
+  assert.deepEqual(collapsed.map(candidate => candidate.title), [
+    '[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support',
+    '[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor'
+  ], '6조각이 최신 버전 커버레터 1건으로 접히고 다른 시리즈는 남아야 한다');
+});
+
+test('hash-style fragments without a cover letter keep the first-seen slot', () => {
+  // 커버레터가 창 밖으로 밀린 주: 이 형식은 순번을 인코딩하지 않아 조각끼리 동률이 되므로,
+  // 대표는 rank 최상위(first-seen) 조각이 그대로 맡는다.
+  const xml = atomFeed([
+    {
+      title: '[PATCH v4 14/15] media: atomisp: allow raw Bayer capture',
+      updated: '2026-08-28T16:15:00Z',
+      link: 'https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/'
+    },
+    {
+      title: '[PATCH v4 09/15] media: intel: ipu-bridge: allow sensor-specific link frequencies',
+      updated: '2026-08-28T16:14:30Z',
+      link: 'https://lore.kernel.org/linux-media/8ad2f0b1c3e45a6789bcdef0123456789abcdef0.1787933456.git.mauriziocasciano7@gmail.com/'
+    }
+  ]);
+  const collapsed = collapseSeriesRepresentatives(parseRss(xml, loreSource()));
+  assert.equal(collapsed.length, 1);
+  assert.equal(collapsed[0].title, '[PATCH v4 14/15] media: atomisp: allow raw Bayer capture');
+});

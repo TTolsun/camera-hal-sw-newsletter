@@ -88,6 +88,70 @@ test('loreSeriesPatchNumber returns the patch number and a large number when unk
   assert.ok(loreSeriesPatchNumber({}) > 1000000);
 });
 
+// #1030: git-send-email이 커밋 해시로 message-id를 만들면 세 번째 형식이 온다.
+// 시리즈를 가르는 것은 한 번의 send-email 호출을 나타내는 <epoch>이고, 앞자리는
+// 커버레터면 'cover', 패치면 그 패치의 커밋 해시다. 아래 값은 2026-W35 실데이터다
+// (Lenovo Yoga Book YB1-X91 카메라 시리즈 v3 = epoch 1787872237, v4 = 1787933456).
+const YOGA_BOOK_V3_EPOCH = '1787872237';
+const YOGA_BOOK_V4_EPOCH = '1787933456';
+const YOGA_BOOK_SENDER = 'mauriziocasciano7@gmail.com';
+
+test('loreSeriesKey collapses hash-style cover and patches sharing one send-email epoch', () => {
+  const cover = loreCandidate(`cover.${YOGA_BOOK_V3_EPOCH}.git.${YOGA_BOOK_SENDER}`, '[PATCH v3 00/12] cover letter');
+  const patch08 = loreCandidate(
+    `34736c93669fcb3e34023137b7785d469a843254.${YOGA_BOOK_V3_EPOCH}.git.${YOGA_BOOK_SENDER}`,
+    '[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link'
+  );
+  const patch11 = loreCandidate(
+    `9535d6ecaa9b12421a6b17de54a954aa336a7819.${YOGA_BOOK_V3_EPOCH}.git.${YOGA_BOOK_SENDER}`,
+    '[PATCH v3 11/12] media: atomisp: allow raw Bayer capture'
+  );
+
+  const coverKey = loreSeriesKey(cover);
+  assert.ok(coverKey, 'hash-style cover key should be non-empty');
+  assert.equal(loreSeriesKey(patch08), coverKey);
+  assert.equal(loreSeriesKey(patch11), coverKey);
+});
+
+test('loreSeriesKey keeps hash-style re-rolls apart because each send-email run gets its own epoch', () => {
+  const v3Cover = loreCandidate(`cover.${YOGA_BOOK_V3_EPOCH}.git.${YOGA_BOOK_SENDER}`);
+  const v4Cover = loreCandidate(`cover.${YOGA_BOOK_V4_EPOCH}.git.${YOGA_BOOK_SENDER}`);
+  const v4Patch14 = loreCandidate(
+    `749f33adb08c4b311aec241c0bdcc455fcdc0a3c.${YOGA_BOOK_V4_EPOCH}.git.${YOGA_BOOK_SENDER}`
+  );
+
+  assert.notEqual(loreSeriesKey(v3Cover), loreSeriesKey(v4Cover));
+  assert.equal(loreSeriesKey(v4Patch14), loreSeriesKey(v4Cover));
+  // 같은 epoch·다른 보낸사람은 다른 시리즈다.
+  const otherSender = loreCandidate(`cover.${YOGA_BOOK_V3_EPOCH}.git.someone.else@example.com`);
+  assert.notEqual(loreSeriesKey(otherSender), loreSeriesKey(v3Cover));
+});
+
+test('hash-style patch numbers are known only for the cover letter', () => {
+  // 이 형식은 순번을 인코딩하지 않는다. 커버레터만 0이고 나머지는 unknown이라,
+  // 대표 선정(가장 낮은 patch 번호)에서 커버레터가 항상 이긴다.
+  const cover = loreCandidate(`cover.${YOGA_BOOK_V4_EPOCH}.git.${YOGA_BOOK_SENDER}`);
+  const patch14 = loreCandidate(
+    `749f33adb08c4b311aec241c0bdcc455fcdc0a3c.${YOGA_BOOK_V4_EPOCH}.git.${YOGA_BOOK_SENDER}`
+  );
+
+  assert.equal(loreSeriesPatchNumber(cover), 0);
+  assert.ok(loreSeriesPatchNumber(patch14) > 1000000);
+});
+
+test('the hash-style rule does not swallow the other two formats or non-series ids', () => {
+  // 기존 두 형식은 그대로 자기 규칙으로 풀려야 한다(키 접두부로 확인).
+  const b4 = loreCandidate('20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com');
+  const oldStyle = loreCandidate('20260827181756.2430054-1-mauriziocasciano7@gmail.com');
+  assert.equal(loreSeriesKey(b4), 'lore-series:20260529-glymur_camss-v1-bee535396d22@oss.qualcomm.com');
+  assert.equal(loreSeriesKey(oldStyle), 'lore-series:20260827181756.2430054-mauriziocasciano7@gmail.com');
+
+  // '.git.' 꼬리가 없거나 epoch 자리가 짧으면 시리즈로 보지 않는다.
+  assert.equal(loreSeriesKey(loreCandidate('cover.1787872237.mauriziocasciano7@gmail.com')), '');
+  assert.equal(loreSeriesKey(loreCandidate(`cover.12345.git.${YOGA_BOOK_SENDER}`)), '');
+  assert.equal(loreSeriesKey(loreCandidate(`zzzz.${YOGA_BOOK_V3_EPOCH}.git.${YOGA_BOOK_SENDER}`)), '');
+});
+
 test('fallbackGroupKey collapses a patch series and keeps non-series lore messages distinct', () => {
   const cover = loreCandidate('20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com', 'cover letter');
   const patch1 = loreCandidate('20260529-glymur_camss-v1-1-bee535396d22@oss.qualcomm.com', 'patch 1');

@@ -95,13 +95,20 @@ function isNativeToolingWorkflow(candidate = {}) {
 
 // lore.kernel.org 패치 시리즈는 cover letter + 각 패치가 서로 다른 message-id URL과 title로
 // 도착한다. 같은 시리즈는 하나의 main 기사로 묶여야 하므로, message-id에서 시리즈 식별자를
-// 뽑아 patch 번호만 떼어낸 공통 키를 만든다. 실제 데이터에서 관찰된 2가지 형식만 다룬다(YAGNI).
+// 뽑아 patch 번호만 떼어낸 공통 키를 만든다. 실제 데이터에서 관찰된 3가지 형식만 다룬다(YAGNI).
 //   NEW-style: 20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com
 //              => base="...-v1", patch="0", tail="bee535396d22@oss.qualcomm.com"
 //              버전 토큰(-v<N>)은 선택적이다. 첫 버전을 b4/git-send-email로 보낼 때
 //              20260529-glymur_camss-0-bee535396d22@oss.qualcomm.com 처럼 버전 없이 오기도 한다.
 //   OLD-style: 20260527170531.383871-1-miguel.vadillo@intel.com
 //              => base="20260527170531.383871", patch="1", from="miguel.vadillo@intel.com"
+//   HASH-style: cover.1787872237.git.mauriziocasciano7@gmail.com          (커버레터)
+//               34736c93669fcb...843254.1787872237.git.mauriziocasciano7@gmail.com  (개별 패치)
+//              => base="1787872237", from="mauriziocasciano7@gmail.com"
+//              git-send-email이 커밋 해시로 message-id를 만들 때 나온다. 시리즈를 가르는 것은
+//              한 번의 send-email 호출을 나타내는 <epoch>이고, 앞자리는 커버레터면 'cover',
+//              패치면 그 패치의 커밋 해시다(2026-W35 실측: v3 6조각이 전부 1787872237,
+//              v4 8조각이 전부 1787933456).
 // 시리즈가 아니면(UUID/랜덤 message-id, 리스트 페이지) '' 를 돌려 기존 키 로직을 쓰게 한다.
 const LORE_HOST = 'lore.kernel.org';
 // b4/git-send-email date-slug 메시지ID: <YYYYMMDD>-<slug...>[-v<버전>]-<패치번호>-<hex해시>@<호스트>
@@ -110,6 +117,11 @@ const LORE_HOST = 'lore.kernel.org';
 const LORE_NEW_STYLE = /^(\d{8}-.+?)-(\d+)-([0-9a-f]{6,}@\S+)$/;
 // (8자리 이상 날짜시각.PID) + '-' + (패치번호) + '-' + (보낸사람)
 const LORE_OLD_STYLE = /^(\d{8,}\.\d+)-(\d+)-(.+)$/;
+// ('cover' 또는 커밋 해시) + '.' + (epoch) + '.git.' + (보낸사람)
+// 앞의 두 형식과 겹치지 않는다: 'cover'는 숫자로 시작하지 않고, 16진수 해시는 뒤에 '-'가 아니라
+// '.'가 오므로 두 정규식이 요구하는 '<숫자>-<패치번호>-' 모양을 만들 수 없다.
+const LORE_HASH_STYLE = /^(?:cover|[0-9a-f]{8,})\.(\d{9,})\.git\.(\S+@\S+)$/;
+const LORE_HASH_COVER_PREFIX = 'cover.';
 const UNKNOWN_PATCH_NUMBER = Number.POSITIVE_INFINITY;
 
 function loreMessageIdFromUrl(raw) {
@@ -140,6 +152,15 @@ function loreSeriesPartsFromMessageId(messageId) {
   const oldStyle = messageId.match(LORE_OLD_STYLE);
   if (oldStyle) {
     return { key: `lore-series:${oldStyle[1]}-${oldStyle[3]}`, patch: Number(oldStyle[2]) };
+  }
+  const hashStyle = messageId.match(LORE_HASH_STYLE);
+  if (hashStyle) {
+    // 이 형식은 순번을 인코딩하지 않는다 — 커버레터만 'cover.' 접두부로 구분되고 나머지는
+    // 커밋 해시라 몇 번째 패치인지 알 수 없다. 그래서 커버레터만 0을 주고 나머지는 unknown으로
+    // 둔다. 대표 선정(가장 낮은 patch 번호)에서 커버레터가 항상 이기고, 커버레터가 창 밖이라
+    // 조각만 남은 주에는 조각끼리 동률이 되어 first-seen(rank 최상위)이 그대로 대표가 된다.
+    const patch = messageId.startsWith(LORE_HASH_COVER_PREFIX) ? 0 : UNKNOWN_PATCH_NUMBER;
+    return { key: `lore-series:git-${hashStyle[1]}-${hashStyle[2]}`, patch };
   }
   return null;
 }
