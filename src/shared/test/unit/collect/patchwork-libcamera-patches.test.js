@@ -2,9 +2,11 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES,
   MAX_PATCH_PAGES,
   resolvePatchworkLibcameraPatchItems
 } = require('../../../collect/patchwork-libcamera-patches');
+const newsSources = require('../../../data/news-sources.json');
 
 const LIST_API = 'https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json';
 
@@ -109,7 +111,7 @@ test('returns [] for empty, non-JSON, error-object, or non-array input (graceful
 });
 
 // #970 회귀: 등록부 URL 한 번으로 최신 한 페이지만 읽으면, 이 소스가 실제로 보는 창은
-// "응답 한 페이지가 덮는 시간"이지 파이프라인 lookback(35일)이 아니다. 2026-08-24 실측으로
+// 파이프라인 lookback(35일)이 아니라 "응답 한 페이지가 덮는 시간"이다. 2026-08-24 실측으로
 // 최신 50건이 09:06:35~09:14:06 = 7.5분만 덮었고, 같은 커버리지 주(08-17~08-23)의 patch
 // 171건은 통째로 창 밖에 있었다. 바쁜 주일수록 창이 좁아지고, 진단에는 "수집 0건"으로만
 // 남아 채널 무신호와 구분되지 않는다.
@@ -127,8 +129,10 @@ function patch(id, date, name, seriesId) {
   };
 }
 
-// 실측 형태 재현: 1페이지는 수집 당일(08-24) 버스트로만 채워지고, 커버리지 주 신호는
-// 2~3페이지에 있으며, 4페이지에서 lookback(35일) 밖으로 넘어간다.
+// 실측 형태 재현: 1페이지는 수집 당일(08-24) 버스트로만 채워지고, 커버리지 주 신호는 2~3페이지에
+// 있다. 3페이지는 경계를 걸친다 — 창 안(08-19, 08-17)과 창 밖(07-01)이 한 페이지에 섞여 있으므로,
+// 순회 종료를 정하는 것은 가장 오래된 patch여야 하고 가장 최신 patch면 안 된다. 4페이지는 그
+// 판단이 틀렸을 때만 요청된다.
 function busyWeekPages() {
   return {
     1: [
@@ -142,10 +146,11 @@ function busyWeekPages() {
     ],
     3: [
       patch(28210, '2026-08-19T22:01:59', '[RFC] ipa: simple: agc: Port to AgcMeanLuminance', 9020),
-      patch(28200, '2026-08-17T13:40:41', 'v4l2: subdev: expose embedded data stream', 9021)
+      patch(28200, '2026-08-17T13:40:41', 'v4l2: subdev: expose embedded data stream', 9021),
+      patch(27000, '2026-07-01T09:00:00', 'build: bump meson version', 8000)
     ],
     4: [
-      patch(27000, '2026-07-01T09:00:00', 'build: bump meson version', 8000)
+      patch(26000, '2026-06-20T09:00:00', 'utils: tidy checkstyle script', 7000)
     ]
   };
 }
@@ -158,14 +163,28 @@ function pagedFetch(pages, fetched = []) {
   };
 }
 
+// 종료 경로가 관측되는지 보려면 console.warn을 읽어야 한다. 상한 도달이 조용하면 산출물에서
+// "이번 주 신호 적음"과 구분되지 않는다(#970이 지목한 그 서명).
+async function captureWarnings(run) {
+  const warnings = [];
+  const original = console.warn;
+  console.warn = (...args) => warnings.push(args.map(String).join(' '));
+  try {
+    const value = await run();
+    return { value, warnings };
+  } finally {
+    console.warn = original;
+  }
+}
+
 test('pages past the newest response so the whole coverage week reaches the candidate pool (#970)', async () => {
   const pages = busyWeekPages();
   const fetched = [];
-  const items = await resolvePatchworkLibcameraPatchItems(
+  const { value: items, warnings } = await captureWarnings(() => resolvePatchworkLibcameraPatchItems(
     JSON.stringify(pages[1]),
     source(),
     { fetchTextImpl: pagedFetch(pages, fetched), now: BUSY_WEEK_NOW, lookbackDays: 35 }
-  );
+  ));
 
   const dates = items.map(item => item.publishedAt);
   // 커버리지 주(08-17~08-23) 후보가 한 건도 없던 것이 이 이슈의 증상이다.
@@ -180,6 +199,7 @@ test('pages past the newest response so the whole coverage week reaches the cand
   // 리졸버는 창 밖 후보를 버리지 않는다. 창의 정본은 수집 풀 필터(withinLookback)이고,
   // 리졸버는 그 창을 "어디까지 읽을지"에만 쓴다(catch-up 레인이 읽는 풀을 좁히지 않는다).
   assert.ok(dates.includes('2026-07-01'), 'out-of-window candidates stay for the pool filter to judge');
+  assert.deepEqual(warnings, [], 'reaching the lookback edge is a normal stop and stays quiet');
 });
 
 test('derives page URLs from source.sourceUrl instead of hardcoding the API path (#970)', async () => {
@@ -198,12 +218,12 @@ test('derives page URLs from source.sourceUrl instead of hardcoding the API path
   }
   assert.deepEqual(
     fetched.map(url => new URL(url).searchParams.get('page')),
-    ['2', '3', '4'],
+    ['2', '3'],
     'pages are requested in order from 2'
   );
 });
 
-test('stops paging at the first page that reaches past the lookback window (#970)', async () => {
+test('stops at the page that straddles the lookback edge, judged by its oldest patch (#970)', async () => {
   const pages = busyWeekPages();
   const fetched = [];
   await resolvePatchworkLibcameraPatchItems(
@@ -212,38 +232,103 @@ test('stops paging at the first page that reaches past the lookback window (#970
     { fetchTextImpl: pagedFetch(pages, fetched), now: BUSY_WEEK_NOW, lookbackDays: 35 }
   );
 
-  // 4페이지의 가장 오래된 patch(2026-07-01)가 lookback(35일 -> 2026-07-20) 밖이므로 여기서 멈춘다.
-  assert.equal(fetched.length, 3, 'paging stops once a page crosses the lookback cutoff');
+  // 3페이지는 창 안(08-19)과 창 밖(07-01)이 섞여 있다. 가장 오래된 patch가 창을 넘었으므로
+  // 여기서 멈춘다 — 가장 최신 patch로 판단하면 4페이지까지 파고 들어간다.
+  assert.equal(fetched.length, 2, 'paging stops at the page whose oldest patch crosses the lookback cutoff');
+  assert.ok(!fetched.some(url => url.endsWith('page=4')), 'the page beyond the lookback edge is never requested');
 });
 
-test('stops at the page ceiling when every page stays inside the lookback window (#970)', async () => {
-  // 모든 페이지가 창 안이면 중단 조건 ①이 영원히 안 걸린다. 상한이 유일한 종료 조건이다.
+test('honours a lookbackDays other than the default (#970)', async () => {
+  // 수집 workflow(newsletters-01-source-collect-pr.yml)가 lookback_days를 입력으로 노출한다.
+  // 옵션을 무시하고 기본값 35만 쓰면 3일 실행에서도 2페이지를 판다.
+  const pages = busyWeekPages();
+  const fetched = [];
+  await resolvePatchworkLibcameraPatchItems(
+    JSON.stringify(pages[1]),
+    source(),
+    { fetchTextImpl: pagedFetch(pages, fetched), now: BUSY_WEEK_NOW, lookbackDays: 3 }
+  );
+
+  // 창은 08-21T12:00까지다. 2페이지의 가장 오래된 patch(08-20)가 이미 그 밖이라 거기서 끝난다.
+  assert.equal(fetched.length, 1, 'a 3-day window stops one page earlier than the 35-day default');
+});
+
+test('stops at the page ceiling and says so when every page stays inside the window (#970)', async () => {
+  // 모든 페이지가 창 안이면 lookback 종료 조건이 영원히 안 걸린다. 상한이 유일한 종료 조건이고,
+  // 그 종료는 관측돼야 한다 — 조용히 끊기면 "이번 주 신호 적음"과 산출물에서 같은 모양이 된다.
   const fetched = [];
   const alwaysInWindow = async (url) => {
     fetched.push(url);
     const page = Number(new URL(url).searchParams.get('page'));
     return JSON.stringify([patch(29000 + page, '2026-08-23T00:00:00', `[${page}/9] libcamera: churn`, 9500 + page)]);
   };
-  await resolvePatchworkLibcameraPatchItems(
+  const { warnings } = await captureWarnings(() => resolvePatchworkLibcameraPatchItems(
     JSON.stringify([patch(28401, '2026-08-24T09:14:06', 'libcamera: burst churn', 9101)]),
     source(),
     { fetchTextImpl: alwaysInWindow, now: BUSY_WEEK_NOW, lookbackDays: 35 }
-  );
+  ));
 
-  assert.equal(fetched.length, MAX_PATCH_PAGES - 1, 'the page ceiling bounds an unbounded in-window stream');
-  assert.ok(MAX_PATCH_PAGES >= 3, 'the ceiling must cover the busiest measured 35-day window');
+  assert.equal(MAX_PATCH_PAGES, 4, 'the page ceiling is the value the counts below assume');
+  assert.equal(fetched.length, 3, 'the ceiling bounds an unbounded in-window stream to 4 pages total');
+  assert.equal(warnings.length, 1, 'hitting the ceiling is reported, not silent');
+  assert.match(warnings[0], /ceiling/, 'the warning names the ceiling as the reason the window was cut short');
+  assert.match(warnings[0], /lower bound/, 'the warning says the collected patches are a lower bound');
 });
 
-test('stops paging when a page comes back empty (#970)', async () => {
+test('the registry page size and the page ceiling together cover the busiest measured window (#970)', () => {
+  // MAX_PATCH_PAGES가 충분한 유일한 이유는 등록부의 per_page다. 등록부만 per_page=50으로 되돌리면
+  // 4페이지 = 200건이 되어 가장 바쁜 35일 창(603건)을 못 덮는다 — 이슈 이전 결함 그대로다.
+  // 코드 상수와 등록부는 한 쌍이므로 그 곱을 여기서 잠근다.
+  const entry = newsSources.sources.find(item => item.id === 'patchwork-libcamera-patches');
+  assert.ok(entry, 'the registry still carries the patchwork source');
+  const perPage = Number(new URL(entry.sourceUrl).searchParams.get('per_page'));
+  assert.ok(Number.isFinite(perPage) && perPage > 0, `the registry sourceUrl must carry a per_page: ${entry.sourceUrl}`);
+  assert.ok(
+    perPage * MAX_PATCH_PAGES >= BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES,
+    `per_page(${perPage}) x MAX_PATCH_PAGES(${MAX_PATCH_PAGES}) = ${perPage * MAX_PATCH_PAGES} must cover the `
+      + `busiest measured lookback window (${BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES} patches)`
+  );
+});
+
+test('stops paging when a page comes back empty, without a warning (#970)', async () => {
   const fetched = [];
-  const items = await resolvePatchworkLibcameraPatchItems(
+  const { value: items, warnings } = await captureWarnings(() => resolvePatchworkLibcameraPatchItems(
     JSON.stringify([patch(28401, '2026-08-24T09:14:06', 'libcamera: burst churn', 9101)]),
     source(),
     { fetchTextImpl: pagedFetch({}, fetched), now: BUSY_WEEK_NOW, lookbackDays: 35 }
-  );
+  ));
 
   assert.equal(fetched.length, 1, 'an empty page ends the walk instead of burning the whole ceiling');
   assert.equal(items.length, 1);
+  assert.deepEqual(warnings, [], 'the end of the list is a normal stop, not a fault');
+});
+
+test('reads dates that already carry a timezone instead of falling back to one page (#970)', async () => {
+  // 오늘 patchwork는 타임존 없는 ISO를 준다. 형식이 바뀌어 Z나 오프셋이 붙는 날, 날짜를 통째로
+  // NaN으로 만들면 순회가 첫 페이지에서 끝나 이슈 이전 동작으로 조용히 되돌아간다.
+  for (const date of ['2026-08-24T09:14:06Z', '2026-08-24T09:14:06+00:00', '2026-08-24T18:14:06+09:00']) {
+    const fetched = [];
+    const { warnings } = await captureWarnings(() => resolvePatchworkLibcameraPatchItems(
+      JSON.stringify([patch(28401, date, 'libcamera: burst churn', 9101)]),
+      source(),
+      { fetchTextImpl: pagedFetch({}, fetched), now: BUSY_WEEK_NOW, lookbackDays: 35 }
+    ));
+    assert.equal(fetched.length, 1, `a ${date} timestamp still drives paging`);
+    assert.deepEqual(warnings, [], `a ${date} timestamp is not a parse failure`);
+  }
+});
+
+test('reports a page whose patches carry no readable date (#970)', async () => {
+  const fetched = [];
+  const { warnings } = await captureWarnings(() => resolvePatchworkLibcameraPatchItems(
+    JSON.stringify([patch(28401, 'not-a-date', 'libcamera: burst churn', 9101)]),
+    source(),
+    { fetchTextImpl: pagedFetch({}, fetched), now: BUSY_WEEK_NOW, lookbackDays: 35 }
+  ));
+
+  assert.equal(fetched.length, 0, 'an unreadable page cannot claim to be inside the window');
+  assert.equal(warnings.length, 1, 'the silent fallback to a single page is reported');
+  assert.match(warnings[0], /no parseable date/);
 });
 
 test('without a fetch impl only the first page is parsed (graceful degrade, #970)', async () => {
@@ -255,7 +340,7 @@ test('without a fetch impl only the first page is parsed (graceful degrade, #970
 });
 
 test('a page fetch failure keeps the pages already collected (#970)', async () => {
-  const items = await resolvePatchworkLibcameraPatchItems(
+  const { value: items, warnings } = await captureWarnings(() => resolvePatchworkLibcameraPatchItems(
     JSON.stringify([patch(28401, '2026-08-24T09:14:06', 'libcamera: burst churn', 9101)]),
     source(),
     {
@@ -263,6 +348,8 @@ test('a page fetch failure keeps the pages already collected (#970)', async () =
       now: BUSY_WEEK_NOW,
       lookbackDays: 35
     }
-  );
+  ));
   assert.equal(items.length, 1, 'the first page survives a failed follow-up page');
+  assert.equal(warnings.length, 1, 'the failed page is reported');
+  assert.match(warnings[0], /fetch failed/);
 });

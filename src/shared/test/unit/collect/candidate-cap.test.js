@@ -243,3 +243,50 @@ test('candidates from before the selection window stay in the pool for the catch
   assert.equal(capPerSource(ranked, MAX_CANDIDATES_PER_SOURCE).length, 2,
     'older candidates are re-ranked, not dropped');
 });
+
+// #970 회귀: patchwork 수집 창이 응답 한 페이지(= 바쁜 주엔 하루치 버스트)에 갇혀 있으면 소스별
+// 상한 8칸 중 2칸만 차고, 나머지 6칸은 다른 시리즈에 가지도 못하고 그냥 빈다. 창을 커버리지 주까지
+// 넓히면 8칸이 서로 다른 시리즈로 찬다. 아래 형태는 2026-08-24 라이브 실측 그대로다: 08-24 버스트가
+// 47조각짜리 software_isp 시리즈(6138)와 3조각 rkisp2 시리즈(6137) 둘뿐이고, 커버리지 주
+// (08-17~08-23)에 서로 다른 시리즈 6개가 더 있었다. 상한은 그대로 8이다.
+function patchworkSeriesItem(title, publishedAt, seriesId) {
+  return {
+    source_id: 'patchwork-libcamera-patches',
+    source: 'patchwork-libcamera-patches',
+    title,
+    publishedAt,
+    seriesId,
+    relevanceScore: 50,
+    source_priority: 'high',
+    source_reliability: 'project-official'
+  };
+}
+
+test('widening the patchwork window fills the per-source cap with distinct series (#970)', () => {
+  const now = new Date('2026-08-24T23:59:59.999Z');
+  const burstDay = [
+    ...Array.from({ length: 47 }, (_, i) =>
+      patchworkSeriesItem(`software_isp fragment ${i}`, '2026-08-24T09:10:00Z', 6138)),
+    ...Array.from({ length: 3 }, (_, i) =>
+      patchworkSeriesItem(`rkisp2 tuning fragment ${i}`, '2026-08-24T09:12:00Z', 6137))
+  ];
+  const coverageWeek = [6128, 6129, 6130, 6133, 6134, 6135].map((seriesId, i) =>
+    patchworkSeriesItem(`coverage week series ${seriesId}`, `2026-08-${18 + i}T10:00:00Z`, seriesId));
+
+  const cap = pool => capPerSource(
+    collapseSeriesRepresentatives([...pool].sort(candidateRankOrder(now))),
+    MAX_CANDIDATES_PER_SOURCE
+  );
+
+  // 창이 한 페이지에 갇힌 상태(이슈 이전): 하루치 버스트 안에 시리즈가 둘뿐이라 8칸 중 2칸만 찬다.
+  const before = cap(burstDay);
+  assert.equal(before.length, 2, 'a single-day burst only has two series to offer the eight-slot cap');
+
+  // 창을 커버리지 주까지 넓힌 상태: 8칸이 다 차고, 47조각 시리즈는 여전히 한 칸만 쓴다.
+  const after = cap([...burstDay, ...coverageWeek]);
+  assert.equal(after.length, MAX_CANDIDATES_PER_SOURCE, 'the widened window fills every per-source slot');
+  assert.equal(new Set(after.map(c => c.seriesId)).size, MAX_CANDIDATES_PER_SOURCE,
+    'every slot goes to a different series');
+  assert.equal(after.filter(c => c.seriesId === 6138).length, 1,
+    'the 47-fragment series still competes as one representative, so widening does not let it eat the cap');
+});

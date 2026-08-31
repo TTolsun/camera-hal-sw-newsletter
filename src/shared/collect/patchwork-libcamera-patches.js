@@ -22,11 +22,19 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 // 수집 창을 못 받았을 때의 기본값(runtime-config의 lookbackDays 기본과 같다).
 const DEFAULT_LOOKBACK_DAYS = 35;
 
+// lookback 창 하나에 들어올 수 있는 patch 수의 실측 상한. 2026-01-20~08-31의 patch 2000건을
+// 받아 보면 가장 바쁜 35일 창이 603건(2026-08-24 종료)이고 가장 바쁜 한 주가 171건이다.
+const BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES = 603;
+
 // 한 실행에서 읽을 최대 페이지 수. 등록부 URL의 per_page=250은 서버 상한이다(2026-08-31 실측:
 // per_page=500/1000/2000이 모두 250건·같은 바이트로 응답). 그래서 per_page만 키워서는 35일을
-// 못 덮고 page를 따라가야 한다. 상한 값은 실측 제출량에서 나온다: 2026-01-20~08-31의 patch
-// 2000건을 받아 보면 가장 바쁜 35일 창이 603건(2026-08-24 종료)이고 가장 바쁜 한 주가 171건이라,
-// 그 최대 주가 5주 내리 이어져도 855건 < 4 x 250 = 1000건이다.
+// 못 덮고 page를 따라가야 한다. 4 x 250 = 1000건이면 위 실측 상한 603건을 덮고, 최대 주(171건)가
+// 5주 내리 이어진 855건도 덮는다.
+//
+// 이 값이 충분한 유일한 이유가 등록부의 per_page이므로 둘은 한 쌍이다. 등록부만 per_page=50으로
+// 되돌리면 4페이지 = 200건 < 603건이 되어 이슈 이전 결함으로 되돌아간다. 그 결합은
+// patchwork-libcamera-patches.test.js가 등록부 per_page x MAX_PATCH_PAGES >=
+// BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES로 잠근다.
 const MAX_PATCH_PAGES = 4;
 
 // 페이지 하나가 350KB 안팎이고 실측 응답이 2.3~4.7초다. 수집 루프의 공용 fetch는 기본 타임아웃이
@@ -83,15 +91,34 @@ function parsePatchPage(text) {
   return Array.isArray(patches) ? patches : null;
 }
 
+// patchwork는 타임존 없는 ISO(2026-08-31T13:23:12)로 준다. 오프셋이나 Z가 붙어 오는 날에도
+// 그대로 읽도록, 이미 타임존이 있으면 Z를 덧붙이지 않는다. 붙여 버리면 모든 날짜가 NaN이 되어
+// 아래 pageCrossesLookback이 첫 페이지에서 멈추고, 이슈 이전 동작으로 조용히 되돌아간다.
+const TIMEZONE_SUFFIX_PATTERN = /(Z|[+-]\d{2}:?\d{2})$/i;
+
 function patchTime(patch) {
-  return Date.parse(`${String((patch && patch.date) || '')}Z`);
+  const raw = String((patch && patch.date) || '').trim();
+  if (!raw) return NaN;
+  return Date.parse(TIMEZONE_SUFFIX_PATTERN.test(raw) ? raw : `${raw}Z`);
 }
 
-// 이 페이지가 lookback 경계를 넘었는가. 날짜를 하나도 못 읽으면 아직 창 안이라고 말할 근거가
-// 없으므로 넘은 것으로 본다.
-function pageCrossesLookback(patches, cutoffMs) {
+/**
+ * 이 페이지가 lookback 경계를 넘었는가. 가장 오래된 patch로 판단한다 — 페이지 안에 창 안 항목과
+ * 창 밖 항목이 섞여 있으면 경계는 이미 이 페이지 안이므로 더 팔 이유가 없다.
+ *
+ * 빈 페이지(목록 끝)는 넘은 것으로 본다. 항목은 있는데 읽히는 날짜가 하나도 없는 경우도 창 안이라고
+ * 말할 근거가 없어 멈추지만, 그건 정상 종료가 아니라 날짜 형식 드리프트다 — 조용히 첫 페이지만 읽는
+ * 상태와 "이번 창은 여기까지"가 산출물에서 같은 모양이 되지 않도록 알린다.
+ */
+function pageCrossesLookback(patches, cutoffMs, pageNumber) {
   const times = patches.map(patchTime).filter(Number.isFinite);
-  if (times.length === 0) return true;
+  if (times.length === 0) {
+    if (patches.length > 0) {
+      console.warn(`patchwork-libcamera-patches: page ${pageNumber} carries ${patches.length} patch(es) but no parseable date; `
+        + 'stopping without reading the lookback window.');
+    }
+    return true;
+  }
   return Math.min(...times) <= cutoffMs;
 }
 
@@ -116,6 +143,12 @@ function patchPageUrl(sourceUrl, page) {
  *  2. MAX_PATCH_PAGES 도달 — 창 안 제출이 끝없이 이어져도 한 실행의 요청 수를 묶는다.
  * 빈 페이지(목록 끝)와 페이지 조회 실패도 순회를 끝내되, 이미 모은 후보는 그대로 돌려준다.
  *
+ * 상한(2)으로 끝났는데 마지막 페이지가 아직 창 안이면 이번 창을 다 읽지 못한 것이다. 그 상태를
+ * 조용히 두면 산출물에서 "이번 주 신호 적음"과 완전히 같은 모양이 되므로(#970이 지목한 바로 그
+ * 서명) 다른 종료 경로와 같은 자리에 알린다. 형제 리졸버(aosp-release-camera-changes)는 집계
+ * 후보 하나에 truncated를 실어 본문에 "at least N"으로 적지만, 여기 후보는 patch 1건마다 하나라
+ * 하한임을 적을 집계 본문이 없다(summary에 문구를 주입하면 위의 "키워드 미주입" 결정을 뒤집는다).
+ *
  * `fetchTextImpl`이 없으면 첫 페이지만 파싱한다(이슈 이전 동작). date나 web_url이 없는 patch는
  * 건너뛴다(graceful). 창 밖 후보를 여기서 버리지는 않는다 — 수집 풀 필터(withinLookback)가
  * 창의 정본이고, 리졸버는 그 창을 "어디까지 읽을지"에만 쓴다.
@@ -134,19 +167,24 @@ async function resolvePatchworkLibcameraPatchItems(text = '', source = {}, optio
     : DEFAULT_LOOKBACK_DAYS;
   const cutoffMs = now.getTime() - lookbackDays * DAY_MS;
 
-  for (let page = 2; page <= MAX_PATCH_PAGES; page += 1) {
-    if (patches.length === 0 || pageCrossesLookback(patches, cutoffMs)) break;
-    const url = patchPageUrl(source.sourceUrl || source.url, page);
-    if (!url) break;
+  for (let page = 1; page <= MAX_PATCH_PAGES; page += 1) {
+    if (pageCrossesLookback(patches, cutoffMs, page)) return candidates;
+    if (page === MAX_PATCH_PAGES) {
+      console.warn(`patchwork-libcamera-patches: stopped at the ${MAX_PATCH_PAGES}-page ceiling with page ${page} still inside `
+        + `the ${lookbackDays}-day window; the ${candidates.length} collected patch(es) are a lower bound, not the whole window.`);
+      return candidates;
+    }
+    const url = patchPageUrl(source.sourceUrl || source.url, page + 1);
+    if (!url) return candidates;
     try {
       patches = parsePatchPage(await fetchTextImpl(url, PATCH_PAGE_FETCH_TIMEOUT_MS));
     } catch (error) {
-      console.warn(`patchwork-libcamera-patches: ${url} fetch failed (${error.message}); stopping at page ${page - 1}.`);
-      break;
+      console.warn(`patchwork-libcamera-patches: ${url} fetch failed (${error.message}); stopping at page ${page}.`);
+      return candidates;
     }
     if (!patches) {
-      console.warn(`patchwork-libcamera-patches: ${url} did not return a patch array; stopping at page ${page - 1}.`);
-      break;
+      console.warn(`patchwork-libcamera-patches: ${url} did not return a patch array; stopping at page ${page}.`);
+      return candidates;
     }
     candidates.push(...patches.map(patch => patchCandidate(patch, source)).filter(Boolean));
   }
@@ -155,6 +193,7 @@ async function resolvePatchworkLibcameraPatchItems(text = '', source = {}, optio
 }
 
 module.exports = {
+  BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES,
   MAX_PATCH_PAGES,
   resolvePatchworkLibcameraPatchItems
 };
