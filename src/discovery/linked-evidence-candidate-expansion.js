@@ -22,6 +22,7 @@ const {
   EVIDENCE_ROLES
 } = require('../shared/evidence/linked-evidence-link-classifier');
 const { callGeminiJsonBudgeted } = require('./gemini-client');
+const { LLM_STAGES, stageRun } = require('../shared/llm/stage-catalog');
 
 // seed-evidence.js의 sourcePolicy와 동일한 공식 evidence 도메인 신뢰 집합.
 const OFFICIAL_EVIDENCE_DOMAINS = Object.freeze([
@@ -176,7 +177,7 @@ async function selectNewsworthyLinks({ date, links = [], callLlmJsonBudgetedImpl
   }
   try {
     const payload = await callLlmJsonBudgetedImpl(
-      'sourceDiscovery',
+      stageRun(LLM_STAGES.SOURCE_DISCOVERY),
       LINKED_DISCOVERY_SYSTEM_PROMPT,
       buildSelectionPrompt({ date, links }),
       selectionResponseSchema(),

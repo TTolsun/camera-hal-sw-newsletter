@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "aosp-camera-its-release-notes",
-  "updated_at": "2026-08-24T00:00:00.000Z",
+  "updated_at": "2026-08-31T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "aosp-camera-its-release-notes:a67cc111aac23254e453759a5bae82dc",
@@ -14,8 +14,8 @@
       "structured_date_modified": "",
       "sitemap_lastmod": "",
       "http_last_modified": "2026-07-23",
-      "content_hash": "ad269ac74082649ae23a9f5a72f9d8b7e42dce096b001a6d666aa015bb215ebf",
-      "normalized_content_hash": "d5726d61fe18159b7374c2a2db47c2b8fe34e000e117f745bdf14636f122c41d",
+      "content_hash": "a42e71ee96080ada75b2b98d758f3adc2edafb015c19b4372c3e3c8f8756ad1e",
+      "normalized_content_hash": "1fb1f5c83d55b7ab7932acc6985ca2d24c3f06013e556b61cb82d6a1c0ef7b4e",
       "release_note_sections": [],
       "anchors": [
         "https://source.android.com/docs/compatibility/cts/camera-its#benefits-marginal-pass",
@@ -28,8 +28,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-24T00:00:00.000Z",
-      "seen_count": 4,
+      "last_seen_at": "2026-08-31T00:00:00.000Z",
+      "seen_count": 5,
       "status": 200
     },
     {
@@ -106,18 +106,20 @@
         }
       ],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-24T00:00:00.000Z",
-      "seen_count": 4,
+      "last_seen_at": "2026-08-31T00:00:00.000Z",
+      "seen_count": 5,
       "status": 200
     }
   ],
   "processed_source_event_ids": [
     "source-event-fb05acebbfa8b6aca58f1ef364425fb2",
     "source-event-723126c7451b2946fb7979853a681019",
-    "source-event-73d88dc5066d889de246f5bdf92aa043"
+    "source-event-73d88dc5066d889de246f5bdf92aa043",
+    "source-event-2de70121de00c902be944bc113470942"
   ],
   "processed_evidence_ids": [
     "evidence-e3e8f17f3e26e490f5c7766bd371bcae",
-    "evidence-58963151a28c98fd472d86330f561c51"
+    "evidence-58963151a28c98fd472d86330f561c51",
+    "evidence-ef0a9f4a7df7d82f0fd078b98765087f"
   ]
 }

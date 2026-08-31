@@ -289,6 +289,62 @@ for (const registryCase of [
   });
 }
 
+// 목록 origin·경로의 정본은 registry(news-sources.json)의 sourceUrl 하나다. 이 표가 그 값을
+// 상수로 또 들고 있으면(항목의 config든 source 재작성이든) registry의 URL만 바꿨을 때 인덱스는
+// 새 주소로 받고 카드 매칭·기사 URL 조립은 옛 경로로 돈다.
+// resolver를 직접 부르는 테스트로는 이 표를 안 지나가서 그 재하드코딩을 못 잡는다. 그래서
+// 여기서는 반드시 표(FOLLOWED_SOURCE_RESOLVERS)를 통과시키고, registry 운영값
+// (claude.com/blog, www.anthropic.com/news)과 한 글자도 안 겹치는 stub sourceUrl로 구동한다 —
+// 표에 상수가 되살아나면 fetch 대상부터 그 stub에서 벗어나 아래 단언이 깨진다.
+function derivedArticleHtml(articleUrl, dateText) {
+  return `<link href="${articleUrl}" rel="canonical"/>`
+    + `<h1>Registry derived article</h1><div>${dateText}</div>`
+    + `<h2>Body</h2><p>Body text without any workflow anchor words.</p>`;
+}
+
+for (const registryCase of [
+  { id: 'claude-blog', name: 'Claude Blog', sourceUrl: 'https://claude.test/blog-v2', pathPrefix: '/blog-v2' },
+  { id: 'anthropic-news', name: 'Anthropic News', sourceUrl: 'https://anthropic.test/newsroom', pathPrefix: '/newsroom' }
+]) {
+  test(`derives the ${registryCase.id} fetch target and article URLs from the registry sourceUrl`, async () => {
+    const slug = 'registry-derived-post';
+    const articleUrl = `${registryCase.sourceUrl}/${slug}`;
+    const indexHtml = datedArticleCardHtml({
+      pathPrefix: registryCase.pathPrefix, slug, dateText: 'Aug 20, 2026'
+    });
+    const fetched = [];
+    const fetchClient = createBoundedFetchClient({
+      fetchImpl: async (url) => {
+        fetched.push(url);
+        return new Response(derivedArticleHtml(articleUrl, 'Aug 20, 2026'), { status: 200 });
+      }
+    });
+
+    const items = await resolveFollowedSourceItems(
+      {
+        id: registryCase.id,
+        name: registryCase.name,
+        url: registryCase.sourceUrl,
+        sourceUrl: registryCase.sourceUrl
+      },
+      {
+        indexItems: [],
+        text: indexHtml,
+        fetchClient,
+        now: new Date('2026-08-22T00:00:00Z'),
+        lookbackDays: 21
+      }
+    );
+
+    assert.deepEqual(fetched, [articleUrl],
+      '표에 origin·경로 상수가 남아 있으면 fetch가 stub sourceUrl이 아니라 그 상수로 나간다');
+    assert.equal(items.length, 1,
+      '카드 매칭이 registry sourceUrl에서 파생한 경로를 따라가야 후보가 나온다');
+    assert.equal(items[0].url, articleUrl);
+    assert.equal(items[0].parentUrl, registryCase.sourceUrl);
+  });
+}
+
 test('returns [] for an unknown source.id without fetching', async () => {
   let fetchCount = 0;
   const items = await resolveFollowedSourceItems(

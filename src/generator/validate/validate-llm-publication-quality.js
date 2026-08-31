@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { LLM_STAGES, stageRun } = require('../../shared/llm/stage-catalog');
 const {
   callLlmJson,
   getLlmDiagnostics
@@ -210,7 +211,7 @@ async function validateLlmPublicationQuality(options = {}) {
     homepage_badge: status.homepage_badge || ''
   };
   const raw = await callLlmJson(
-    'post-generation public quality judge',
+    stageRun(LLM_STAGES.POST_GENERATION_QUALITY_JUDGE),
     systemInstruction(),
     promptFor(date, {
       markdown,

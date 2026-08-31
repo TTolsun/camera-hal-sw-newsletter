@@ -47,6 +47,7 @@ function buildGenerationStatus({
     stage_status_log: generationRunState.stageTracker.toLog(),
     quota_error_count: diagnostics.quota_error_count,
     invalid_json_count: diagnostics.invalid_json_count,
+    stage_key_format: diagnostics.stage_key_format,
     model_usage: diagnostics.model_usage,
     model_routing: diagnostics.model_routing || {},
     candidate_input: restExtra.candidate_input || generationRunState.candidateInput || null,
@@ -290,6 +291,9 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
       report.release_class_catch_up_after_reconciliation ||
       diagnostics.release_class_catch_up_after_reconciliation ||
       null,
+    // #963: 재게재 차단도 같은 이유로 allow-list에 둔다. exclusion_reason_summary는 상위 10개만
+    // 남기므로 건수가 적은 이 사유는 거기서 잘린다.
+    republication_cooldown_blocked: report.republication_cooldown_blocked || null,
     exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
     final_exclusion_reason_summary: ensureArray(diagnostics.final_exclusion_reason_summary).slice(0, 10),
     candidate_selection_note: diagnostics.note,

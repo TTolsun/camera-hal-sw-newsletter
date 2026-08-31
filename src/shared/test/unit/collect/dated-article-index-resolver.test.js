@@ -14,7 +14,6 @@ const { readTextFixture } = require('../../helpers/fixture-loader');
 const ORIGIN = 'https://claude.com';
 const PATH_PREFIX = '/blog';
 const INDEX_URL = `${ORIGIN}${PATH_PREFIX}`;
-const CONFIG = { pathPrefix: PATH_PREFIX, origin: ORIGIN };
 
 // normalizeCandidate는 registry entry 수준의 source 필드를 읽는다(aosp-release-camera-changes.test.js와
 // 같은 패턴) — candidate.source는 이 객체를 그대로 들고 있다가 normalizeCandidate가 source.name 등을
@@ -93,7 +92,6 @@ async function runResolver({ html, fetchClient, over = {} }) {
     fetchClient,
     now: over.now || DEFAULT_NOW,
     lookbackDays: over.lookbackDays ?? 21,
-    config: CONFIG,
     onDiagnostic: over.onDiagnostic
   });
 }
@@ -290,6 +288,69 @@ async function resolveWithRelatedArticlesTail(over = {}) {
   return item;
 }
 
+// Anthropic News(/news) 기사 페이지. Claude Blog(Webflow)와 마크업이 달라
+// ARTICLE_BODY_END_MARKERS 문자열이 한 건도 없고, 대신 <main> 안에 <article>이 두 겹으로 들어
+// 있다(hero 하나 + 본문 하나). 안쪽 </article>이 본문의 끝이고 그 뒤로 "Related content" 섹션과
+// 사이트 푸터가 이어진다.
+const ANTHROPIC_ORIGIN = 'https://www.anthropic.com';
+const ANTHROPIC_PATH_PREFIX = '/news';
+const ANTHROPIC_INDEX_URL = `${ANTHROPIC_ORIGIN}${ANTHROPIC_PATH_PREFIX}`;
+const ANTHROPIC_SLUG = 'cognizant-anthropic';
+const ANTHROPIC_ARTICLE_HTML = readTextFixture('source-html/anthropic-news-cognizant-anthropic.html');
+// 같은 마크업인데 안쪽 </article>과 "Related content" 사이에 각주(Footnotes) 블록이 하나 더 있는
+// 기사. 그 각주에만 실제 수치가 있어서 본문 경계가 무엇을 버리는지 여기서 그대로 드러난다.
+const ANTHROPIC_FOOTNOTES_SLUG = 'improving-fable-5-s-biology-safeguards';
+const ANTHROPIC_FOOTNOTES_ARTICLE_HTML = readTextFixture('source-html/anthropic-news-improving-fable-5-biology-safeguards.html');
+const ANTHROPIC_SOURCE = {
+  ...SOURCE,
+  id: 'anthropic-news',
+  name: 'Anthropic News',
+  sourceUrl: ANTHROPIC_INDEX_URL,
+  url: ANTHROPIC_INDEX_URL
+};
+
+// Anthropic News 목록에서는 <a href="/news/{slug}">가 곧 카드이고 <time>이 그 앵커 안에 있다
+// (dated-article-card-parsing.js의 두 번째 컨테이너 후보).
+function anthropicIndexHtml({ slug, dateText, title }) {
+  return `<a href="${ANTHROPIC_PATH_PREFIX}/${slug}" class="FeaturedGrid-module__sideLink">`
+    + '<div class="FeaturedGrid-module__meta"><span class="caption bold">Announcements</span>'
+    + `<time class="caption bold">${dateText}</time></div>`
+    + `<h4 class="headline-6">${title}</h4></a>`;
+}
+
+async function resolveAnthropicNewsArticle(over = {}) {
+  // 기본값은 각주가 없는 기사(cognizant-anthropic)다. 카드 날짜 2026-07-27이 recent tier 안에
+  // 들어오는 시점을 now로 쓴다.
+  const slug = over.slug || ANTHROPIC_SLUG;
+  const dateText = over.dateText || 'Jul 27, 2026';
+  const title = over.title || 'Cognizant and Anthropic expand their partnership';
+  const indexHtml = anthropicIndexHtml({ slug, dateText, title });
+  const items = await resolveDatedArticleIndexItems({
+    html: indexHtml,
+    source: ANTHROPIC_SOURCE,
+    fetchClient: makeClient({
+      indexHtml,
+      indexUrl: ANTHROPIC_INDEX_URL,
+      defaultArticleHtml: over.articleHtml || ANTHROPIC_ARTICLE_HTML
+    }),
+    now: over.now || new Date('2026-08-01T00:00:00Z'),
+    lookbackDays: over.lookbackDays ?? 21,
+    onDiagnostic: over.onDiagnostic
+  });
+  assert.equal(items.length, 1, 'expected exactly one resolved Anthropic News item');
+  return items[0];
+}
+
+// item에서 근거로 쓰이는 텍스트 슬롯을 한 문자열로 모은다. 캡슐까지 가는 것은 이 셋뿐이라
+// "본문 밖 텍스트가 근거로 샜는가"는 이 문자열 하나만 보면 된다.
+function evidenceHaystack(item) {
+  return [
+    String(item.summary || ''),
+    String(item.behavior_change || ''),
+    JSON.stringify(item.source_extraction || {})
+  ].join(' ');
+}
+
 async function resolveWithExhaustedSourceBudget(over = {}) {
   const articleBytes = Buffer.byteLength(ARTICLE_HTML, 'utf8');
   // 최근 7일 기사(기본 목록에는 3건: 08-21 x2, 08-18) 2건분보다 작게 — 1건은 온전히 받고
@@ -441,13 +502,16 @@ test('a missing/invalid fetchClient is loud, not a silent empty array', async ()
     fetchClient: null,
     now: DEFAULT_NOW,
     lookbackDays: 21,
-    config: CONFIG,
     onDiagnostic: event => seen.push(event)
   });
   assert.deepEqual(items, []);
   const failures = seen.filter(event => event.kind === 'index_collection_failed');
   assert.equal(failures.length, 1,
     'fetchClient가 없다는 이유로 조용히 빈 배열만 돌려주면 배선 실수가 진단 없이 사라진다');
+  // 이 kind는 세 갈래(client 없음 / sourceUrl 파생 실패 / 마크업)가 공유한다. 운영자가
+  // `## Collector 실패` 절에서 보는 건 detail 문구뿐이라, 그게 갈래를 가리키는 유일한 신호다.
+  assert.match(failures[0].detail, /fetchClient/,
+    'detail이 갈래를 안 가리키면 세 원인이 같은 진단 한 줄로 뭉개진다');
 });
 
 test('falls back to the list-row date only when the canonical url matches exactly', async () => {
@@ -560,15 +624,212 @@ test('stops reading the body at the related-articles section', async () => {
   // 관련 기사 목록은 인덱스와 같은 카드 마크업을 쓰기 때문에, 자르지 않으면 남의 기사
   // 제목과 날짜가 이 기사의 summary·sections로 들어간다.
   const item = await resolveWithRelatedArticlesTail();
-  const haystack = [
-    String(item.summary || ''),
-    String(item.behavior_change || ''),
-    JSON.stringify(item.source_extraction || {})
-  ].join(' ');
+  const haystack = evidenceHaystack(item);
   assert.doesNotMatch(haystack, /FOREIGN_RELATED_TITLE/,
     '관련 기사 제목이 본문으로 새면 이 단언이 깨진다');
   assert.doesNotMatch(haystack, /Jul 24, 2026/,
     '관련 기사 카드의 날짜도 본문으로 새면 안 된다');
+});
+
+// #964. Anthropic News 마크업에는 ARTICLE_BODY_END_MARKERS 문자열이 한 건도 없다. 마커만
+// 경계 후보이던 동안에는 본문이 문서 끝까지로 잡혀 사이트 푸터가 그대로 근거가 됐다 — 수정 전
+// 이 픽스처 실측: behavior_change와 sections[0]이 둘 다
+// 'Read more Products Claude Claude Code Claude Code Enterprise Claude Cowork ... Anthropic PBC'.
+test('stops reading an Anthropic News body at the closing article tag', async () => {
+  const item = await resolveAnthropicNewsArticle();
+  const haystack = evidenceHaystack(item);
+
+  for (const chrome of [
+    'Products',
+    'Claude Code Enterprise',
+    'Claude Cowork',
+    'Anthropic PBC',
+    'Related content',
+    'Read more'
+  ]) {
+    assert.equal(haystack.includes(chrome), false,
+      `사이트 내비·푸터 문구 "${chrome}"이 기사 본문 근거로 새면 안 된다`);
+  }
+
+  // 음성 단언만 두면 본문을 통째로 비워도 통과한다. 기사 본문이 끝까지 남는지도 함께 잰다.
+  assert.match(item.summary, /Claude Partner Network/,
+    '경계를 너무 이르게 잡아 기사 마지막 문단을 잘라내면 안 된다');
+  assert.ok(item.summary.endsWith('visit anthropic.com/partners .'),
+    `본문은 기사의 마지막 문장에서 끝나야 한다: ${JSON.stringify(item.summary.slice(-60))}`);
+});
+
+// #964 후속. 이 경계가 무엇을 버리는지 그대로 드러내는 테스트다. Anthropic News는 안쪽
+// </article>과 "Related content" 사이에 각주(Footnotes) 블록을 두는데(라이브 11건 중 6건),
+// 경계가 </article>이라 그 각주가 본문에서 함께 잘린다. 이 기사는 각주에만 실제 수치가 있어서
+// 손실이 가장 크다 — 라이브 실측으로 본문 10,832 -> 8,495자, 앵커 6 -> 0.
+//
+// 이것은 알고 받아들인 대가다(ARTICLE_BODY_END_MARKERS 주석에 근거를 적어 뒀다). 각주를
+// 살리려면 "Related content"만 배제하는 경계가 필요한데 그 섹션의 class는 빌드 해시라 마커로
+// 쓸 수 없고 <section> 태그는 본문 안에도 나온다. 그래서 손실을 숨기지 않고 여기서 단언한다 —
+// 경계를 옮기려는 사람은 이 테스트를 먼저 고쳐야 하고, 그때 위 주석의 측정치를 다시 재게 된다.
+test('drops the Anthropic News footnotes together with the Related content section', async () => {
+  // 픽스처에 각주 수치가 실제로 들어 있어야 아래 "근거에 없다" 단언이 의미를 갖는다.
+  assert.match(ANTHROPIC_FOOTNOTES_ARTICLE_HTML,
+    /67% on <a href="http:\/\/Claude\.ai">Claude\.ai<\/a>, 55% on Cowork, 17% on Claude Code, and 7% on the Claude Platform/,
+    '픽스처가 각주 블록을 그대로 담고 있어야 이 손실 측정이 성립한다');
+
+  const item = await resolveAnthropicNewsArticle({
+    slug: ANTHROPIC_FOOTNOTES_SLUG,
+    dateText: 'Aug 7, 2026',
+    title: 'Improving Fable 5’s biology safeguards',
+    articleHtml: ANTHROPIC_FOOTNOTES_ARTICLE_HTML,
+    now: new Date('2026-08-10T00:00:00Z')
+  });
+  const haystack = evidenceHaystack(item);
+
+  // 1) 기사 본문은 남는다. 음성 단언만 두면 본문을 통째로 비워도 통과한다.
+  assert.match(item.summary, /substantially reduces false positives/,
+    '기사 도입부는 근거로 남아야 한다');
+
+  // 2) 관련 기사 카드와 사이트 내비·푸터는 근거가 되지 못한다.
+  for (const outsideBody of [
+    'Related content',
+    'Model Hardware Standard',
+    'Read more',
+    'Products',
+    'Anthropic PBC'
+  ]) {
+    assert.equal(haystack.includes(outsideBody), false,
+      `본문 밖 문구 "${outsideBody}"가 기사 근거로 새면 안 된다`);
+  }
+
+  // 3) 그 대가로 각주도 함께 사라진다. 각주 안에만 있던 수치는 근거 어디에도 없고,
+  //    이 기사에서 앵커를 가진 문장은 각주뿐이라 behavior_change와 sections가 빈 값이 된다.
+  assert.equal(haystack.includes('67%'), false,
+    '각주 수치는 현재 경계에서 버려진다 — 이 단언이 깨지면 경계가 움직인 것이다');
+  assert.equal(haystack.includes('Claude Platform'), false,
+    '각주 본문도 함께 버려진다');
+  assert.equal(item.behavior_change, '',
+    '각주가 유일한 앵커 문장이라 behavior_change는 빈 값으로 남는다');
+  assert.deepEqual(item.source_extraction.workflow.sections, [],
+    '같은 이유로 workflow sections도 비어 있다 — 근거를 지어내지 않는다');
+});
+
+// claude.com/blog 라이브 페이지에도 </main>은 있지만(실측: 마커 343,330자 < </main> 399,958자)
+// 마커가 항상 먼저 온다. 픽스처는 그 구간을 이미 잘라 뒀으므로 순서 규칙은 합성 HTML로 잰다 —
+// "bodyStart 이후 가장 이른 후보가 이긴다"가 깨지면 관련 기사 섹션이 다시 본문으로 들어온다.
+test('keeps the earliest boundary when a related-articles marker precedes the closing main tag', async () => {
+  const slug = 'marker-before-main';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'Marker before main' });
+  const articleHtml = '<main>'
+    + minimalArticleHtml({
+      canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+      headerDateText: 'Aug 18, 2026',
+      title: 'Marker before main',
+      bodyHtml: '<p>BODY_SENTINEL_TEXT</p>'
+    })
+    + '<section class="blog_related_section_wrap"><p>FOREIGN_RELATED_TITLE</p></section>'
+    + '</main><footer><p>FOOTER_SENTINEL_TEXT</p></footer>';
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  const haystack = evidenceHaystack(items[0]);
+  assert.match(haystack, /BODY_SENTINEL_TEXT/, '기사 본문은 남아야 한다');
+  assert.doesNotMatch(haystack, /FOREIGN_RELATED_TITLE/,
+    '</main>이 마커보다 뒤에 있어도 마커가 이겨야 한다');
+  assert.doesNotMatch(haystack, /FOOTER_SENTINEL_TEXT/, '푸터는 본문이 아니다');
+});
+
+// 경계 후보 검색이 <h1>부터 시작하는 진짜 이유. 닫는 태그가 <h1>보다 앞에 있는 페이지에서
+// 문서 처음부터 찾으면 bodyEnd가 bodyStart보다 앞서고 slice가 빈 본문을 돌려준다.
+// (라이브 /news 11건은 전부 <h1>이 첫 닫는 태그보다 앞이라 이 배치는 합성 HTML로만 잰다.)
+test('keeps the body when a closing tag sits before the heading', async () => {
+  const slug = 'closing-tag-before-heading';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'Closing tag before heading' });
+  const articleHtml = '<article><nav><p>NAVCHROME_TEXT</p></nav></article>'
+    + minimalArticleHtml({
+      canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+      headerDateText: 'Aug 18, 2026',
+      title: 'Closing tag before heading',
+      bodyHtml: '<p>BODY_SENTINEL_TEXT</p>'
+    });
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  const haystack = evidenceHaystack(items[0]);
+  assert.match(haystack, /BODY_SENTINEL_TEXT/,
+    '<h1>보다 앞에 있는 닫는 태그를 경계로 집으면 본문이 통째로 빈다');
+  assert.doesNotMatch(haystack, /NAVCHROME_TEXT/, '본문은 <h1>부터 시작한다');
+});
+
+// </main>이 유일한 경계 후보인 페이지. 알려진 두 소스에서는 이 후보가 한 번도 이기지 못한다
+// (</main>까지의 간격: /news는 </article>이 5,008~8,151자, claude.com/blog는 관련 기사 마커가
+// 56,630~57,896자 먼저 온다). 실제로 이 줄을 지워도 기존 테스트는 한 건도 안 깨졌다 —
+// 즉 지금까지 이 후보를 실제로 지나는 테스트가 없었다. 여기서 그 경로를 잠근다.
+test('cuts at the closing main tag when it is the only boundary candidate', async () => {
+  const slug = 'closing-main-only';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'Closing main only' });
+  const articleHtml = '<main>'
+    + minimalArticleHtml({
+      canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+      headerDateText: 'Aug 18, 2026',
+      title: 'Closing main only',
+      bodyHtml: '<p>BODY_SENTINEL_TEXT</p>'
+    })
+    + '</main><footer><p>FOOTER_SENTINEL_TEXT</p></footer>';
+  assert.doesNotMatch(articleHtml, /<\/article\s*>/i,
+    '이 페이지에 </article>이 있으면 </main> 경로를 재는 것이 아니다');
+  assert.doesNotMatch(articleHtml, /blog_related_section_wrap|data-cta-position="Related articles"/,
+    '관련 기사 마커가 있어도 </main> 경로를 재는 것이 아니다');
+
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  const haystack = evidenceHaystack(items[0]);
+  assert.match(haystack, /BODY_SENTINEL_TEXT/, '기사 본문은 남아야 한다');
+  assert.doesNotMatch(haystack, /FOOTER_SENTINEL_TEXT/,
+    '</main> 후보를 지우면 이 단언이 깨진다 — 푸터가 근거로 들어온다');
+});
+
+// 마커도 </article>도 </main>도 없는 페이지에서는 기존처럼 문서 끝까지가 본문이다 —
+// 경계 후보가 늘었다고 아무 데서나 자르지 않는다.
+test('keeps reading to the end of a page that has no body-end boundary at all', async () => {
+  const slug = 'no-boundary-markup';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'No boundary' });
+  const articleHtml = minimalArticleHtml({
+    canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+    headerDateText: 'Aug 18, 2026',
+    title: 'No boundary',
+    bodyHtml: '<p>TAIL_SENTINEL_TEXT</p>'
+  });
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  assert.match(items[0].summary, /TAIL_SENTINEL_TEXT/,
+    '경계 후보가 하나도 없으면 문서 끝까지가 본문이다(하위 호환)');
+});
+
+// <h1>이 없으면 본문이 어디서 시작하는지 알 수 없어 bodyStart가 0이 된다. 그 상태에서 닫는
+// 태그를 경계로 쓰면 문서 맨 앞의 내비를 닫는 </article> 하나로 진짜 본문 전체를 버린다.
+// 실제 재현: '<article><nav>...</nav></article><main><p>본문</p></main>'에서 본문이 통째로
+// 사라지고 내비 문구만 남았다. 그래서 heading이 없으면 닫는 태그 후보를 아예 쓰지 않는다.
+test('keeps the whole document as the body when the page has no heading to start from', async () => {
+  const slug = 'no-heading-markup';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'No heading' });
+  const articleHtml = `<link href="${ORIGIN}${PATH_PREFIX}/${slug}" rel="canonical"/>`
+    + '<article><nav><p>NAVCHROME_TEXT</p></nav></article>'
+    + '<main><p>REAL_BODY_TEXT</p></main>'
+    + '<footer><p>FOOTER_SENTINEL_TEXT</p></footer>';
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1);
+  assert.match(items[0].summary, /REAL_BODY_TEXT/,
+    '<h1>이 없다고 닫는 태그로 잘라 진짜 본문을 버리면 안 된다');
 });
 
 test('reports when the source budget runs out with recent articles still queued', async () => {
@@ -605,4 +866,168 @@ test('prioritizes a workflow-signal slug within its window tier even when the ar
     .filter(slug => fetched.includes(`${ORIGIN}${PATH_PREFIX}/${slug}`)).length;
   assert.ok(fetchedFillerCount < WORKFLOW_SIGNAL_FILLER_SLUGS.length,
     '신호 없는 filler 슬러그 중 최소 1건은 8건 컷 밖으로 밀려야 tie-break가 실제로 순서를 바꿨다고 말할 수 있다');
+});
+
+// ---- registry(news-sources.json)에서 목록 주소를 파생한다 ----
+
+// 목록 origin·경로가 이 resolver 바깥(followed-source 레지스트리)에 상수로 또 적혀 있으면,
+// registry의 sourceUrl만 바꿨을 때 인덱스는 새 주소로 받고 카드 매칭과 기사 URL 조립은 옛
+// 경로로 돈다. 결과는 카드 0건 -> index_collection_failed인데, 진단이 가리키는 원인
+// ("마크업이 바뀌었다")과 실제 원인("registry와 코드가 갈라졌다")이 다르다.
+// 아래 세 케이스는 전부 registry 상수(https://claude.com + /blog)와 겹치지 않는 주소다 —
+// 하드코딩으로 되돌리면 origin·경로가 모두 어긋나 카드 매칭부터 깨진다.
+function derivedIndexHtml(pathPrefix, slug, dateText) {
+  return `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">${dateText}</div>`
+    + `<a href="${pathPrefix}/${slug}">Derived title</a>`
+    + `</div>`;
+}
+
+// 경로 없는 sourceUrl이 무엇을 긁게 되는지 재현하는 목록이다. 카드 두 장 중 하나는 진짜
+// 기사(/blog/post-one), 하나는 사이트 루트의 비기사 링크(/pricing)다. pathPrefix가 빈 문자열로
+// 남으면 링크 패턴이 `href="/([a-z0-9][a-z0-9-]*)"`로 줄어 한 세그먼트짜리 루트 링크만 매치한다 —
+// 진짜 기사는 한 건도 안 잡히고 /pricing이 후보가 된다.
+function rootLinkIndexHtml() {
+  return `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">Aug 20, 2026</div>`
+    + `<a href="/blog/post-one">Real article</a>`
+    + `</div>`
+    + `<div role="listitem" class="blog_cms_item w-dyn-item">`
+    + `<div class="u-text-style-caption">Aug 20, 2026</div>`
+    + `<a href="/pricing">Pricing</a>`
+    + `</div>`;
+}
+
+for (const derivationCase of [
+  {
+    label: 'a two-segment path',
+    sourceUrl: 'https://example.test/x/y',
+    pathPrefix: '/x/y',
+    parentUrl: 'https://example.test/x/y'
+  },
+  {
+    label: 'a subdomain and an explicit port',
+    sourceUrl: 'https://news.example.test:8443/a/b',
+    pathPrefix: '/a/b',
+    parentUrl: 'https://news.example.test:8443/a/b'
+  },
+  {
+    // 후행 슬래시를 그대로 pathPrefix로 쓰면 링크 패턴이 `href="/blog//slug"`가 돼 카드가 0건이
+    // 되고, 기사 URL도 슬래시가 겹친다.
+    label: 'a trailing slash',
+    sourceUrl: 'https://example.test/blog/',
+    pathPrefix: '/blog',
+    parentUrl: 'https://example.test/blog'
+  },
+  {
+    // 슬래시를 하나만 지우면 오타 하나('/blog//')가 validate:config를 통과한 채 카드 0건으로
+    // 닫히고, 진단은 이 PR이 없애려던 바로 그 오해("markup이 깨졌다")를 다시 가리킨다.
+    label: 'repeated trailing slashes',
+    sourceUrl: 'https://example.test/blog//',
+    pathPrefix: '/blog',
+    parentUrl: 'https://example.test/blog'
+  },
+  // 아래 세 케이스는 파생이 "성공"해 보이지만 남는 경로가 없다. URL 파싱은 통과하고
+  // validate:config의 isHttpUrl도 protocol만 보므로 이런 registry 값이 게이트를 통과한다.
+  // 그대로 두면 사이트 루트를 긁어 /pricing 같은 비기사 링크를 후보로 만들면서 진단은 0건이다 —
+  // 이 저장소가 가장 싫어하는 실패(조용히 잘못된 내용을 수집)라 파생 실패와 같은 자리에서 닫는다.
+  {
+    label: 'no path at all',
+    sourceUrl: 'https://example.test',
+    closedByMissingPath: true
+  },
+  {
+    label: 'only a root slash',
+    sourceUrl: 'https://example.test/',
+    closedByMissingPath: true
+  },
+  {
+    label: 'only repeated root slashes',
+    sourceUrl: 'https://example.test//',
+    closedByMissingPath: true
+  }
+]) {
+  if (derivationCase.closedByMissingPath) {
+    test(`closes loudly when source.sourceUrl has ${derivationCase.label}`, async () => {
+      const indexHtml = rootLinkIndexHtml();
+      const fetched = [];
+      const seen = [];
+
+      const items = await resolveDatedArticleIndexItems({
+        html: indexHtml,
+        source: { id: 'claude-blog', name: 'Claude Blog', sourceUrl: derivationCase.sourceUrl },
+        fetchClient: withOnFetch(
+          makeClient({ indexHtml, indexUrl: 'https://example.test' }),
+          url => fetched.push(url)
+        ),
+        now: new Date('2026-08-22T00:00:00Z'),
+        lookbackDays: 21,
+        onDiagnostic: event => seen.push(event)
+      });
+
+      assert.deepEqual(fetched, [],
+        '경로 없는 sourceUrl로 fetch가 나갔다면 사이트 루트의 비기사 링크를 긁었다는 뜻이다');
+      assert.deepEqual(items, [],
+        '/pricing 같은 루트 링크가 후보로 나오면 이 소스는 기사가 아닌 것을 발행 후보로 올린다');
+      const failures = seen.filter(event => event.kind === 'index_collection_failed');
+      assert.equal(failures.length, 1,
+        '진단 0건이면 운영자가 registry 오타를 알 방법이 없다');
+      assert.match(failures[0].detail, /sourceUrl/,
+        'detail이 registry sourceUrl을 가리켜야 진단이 실제 원인을 가리킨다');
+      assert.match(failures[0].detail, /no path/,
+        'detail이 "경로가 없다"를 말해야 파생 실패·fetchClient 갈래와 구분된다');
+    });
+    continue;
+  }
+
+  test(`derives the index origin and path from source.sourceUrl with ${derivationCase.label}`, async () => {
+    const slug = 'derived-index-post';
+    const articleUrl = `${derivationCase.parentUrl}/${slug}`;
+    const indexHtml = derivedIndexHtml(derivationCase.pathPrefix, slug, 'Aug 20, 2026');
+    const articleHtml = minimalArticleHtml({ canonical: articleUrl, headerDateText: 'Aug 20, 2026' });
+    const fetched = [];
+
+    const items = await resolveDatedArticleIndexItems({
+      html: indexHtml,
+      source: { id: 'claude-blog', name: 'Claude Blog', sourceUrl: derivationCase.sourceUrl },
+      fetchClient: withOnFetch(
+        makeClient({ indexHtml, defaultArticleHtml: articleHtml }),
+        url => fetched.push(url)
+      ),
+      now: new Date('2026-08-22T00:00:00Z'),
+      lookbackDays: 21
+    });
+
+    assert.deepEqual(fetched, [articleUrl],
+      'fetch 대상이 registry sourceUrl에서 파생되지 않으면 하드코딩된 origin으로 나간다');
+    assert.equal(items.length, 1, '카드 매칭이 파생 pathPrefix를 따라가야 후보가 나온다');
+    assert.equal(items[0].url, articleUrl);
+    assert.equal(items[0].parentUrl, derivationCase.parentUrl);
+  });
+}
+
+test('closes loudly when the registry sourceUrl is missing instead of silently scanning /blog', async () => {
+  // sourceUrl이 없으면 파생할 근거가 없다. `config.pathPrefix || '/blog'` 같은 기본값이 남아
+  // 있으면 이 호출은 조용히 /blog를 훑어 엉뚱한 상대 URL로 fetch를 시도하고, 그 실패는
+  // canonical_mismatch 같은 다른 사유로 기록돼 진단이 실제 원인을 못 가리킨다.
+  const seen = [];
+  const fetched = [];
+  const items = await resolveDatedArticleIndexItems({
+    html: INDEX_HTML,
+    source: { id: 'claude-blog', name: 'Claude Blog' },
+    fetchClient: withOnFetch(makeClient(), url => fetched.push(url)),
+    now: DEFAULT_NOW,
+    lookbackDays: 21,
+    onDiagnostic: event => seen.push(event)
+  });
+
+  assert.deepEqual(items, []);
+  assert.deepEqual(fetched, [], 'sourceUrl이 없는데도 fetch가 나갔다면 기본 경로로 조용히 돌았다는 뜻이다');
+  const failures = seen.filter(event => event.kind === 'index_collection_failed');
+  assert.equal(failures.length, 1,
+    '기존 진단 어휘(index_collection_failed)로 명시적으로 닫아야 한다');
+  // kind만 맞고 detail이 fetchClient 갈래 문구면, 운영자는 배선을 뒤지느라 진짜 원인
+  // (registry에 절대 sourceUrl이 없다)에 못 닿는다 — 이 커밋의 유일한 정당화가 그것이다.
+  assert.match(failures[0].detail, /sourceUrl/,
+    'detail이 registry sourceUrl을 가리켜야 진단이 실제 원인을 가리킨다');
 });

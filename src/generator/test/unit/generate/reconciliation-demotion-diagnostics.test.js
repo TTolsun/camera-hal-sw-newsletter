@@ -33,7 +33,7 @@ function candidate(url, overrides = {}) {
 }
 
 function plan(url, coverageDecision) {
-  return { url, coverage_decision: coverageDecision, impact_level: 'medium' };
+  return { url, coverage_decision: coverageDecision, impact_level: 'Direct Impact' };
 }
 
 function deterministicReport(urls) {
@@ -76,7 +76,7 @@ test('재조정 강등은 editor 강등과 다른 줄에, 그룹·후보 사유�
     editorial_plans: [
       plan('a', 'main_article'),
       plan('sony', 'reference_only'),
-      plan('lore', 'short_mention')
+      plan('lore', 'exclude')
     ]
   });
 
@@ -98,7 +98,7 @@ test('재조정 강등은 editor 강등과 다른 줄에, 그룹·후보 사유�
   assert.match(markdown, /^ {2}- group:lore$/m);
   assert.match(
     markdown,
-    /^ {4}- lore: coverage_decision=short_mention, reason_code=editorial_plan_short_mention$/m
+    /^ {4}- lore: coverage_decision=exclude, reason_code=editorial_plan_exclude$/m
   );
 });
 
@@ -220,9 +220,12 @@ test('사유가 빈 문자열이면 none, 필드가 없으면 unknown으로 갈�
   // 이 어휘가 LLM이 실제로 "none"이라고 답한 것과 구분되지 않으면 사후 판독이 불가능하다.
   const planned = ['a1', 'a2', 'a3', 'a4', 'a5'];
   const shortlistReport = deterministicReport([...planned, 'unplanned']);
+  // #1001: clamp 순서는 deterministic_score 단독이다. 계획 미등재 후보에게 최하 점수를 줘서
+  // cap max=5에서 밀리는 대상을 못박는다(예전 주석은 impact_level 순위에 기댔지만, 그 순위는
+  // 프로덕션 어휘와 겹치지 않아 실제로는 동점 후보의 입력 순서가 결과를 정하고 있었다).
+  shortlistReport.selected_articles.find(item => item.url === 'unplanned').deterministic_score = 10;
   applyReconciliation(shortlistReport, {
-    // impact가 없는 후보(계획 미등재)가 clamp 순서에서 마지막이라 cap max=5에 밀린다.
-    editorial_plans: planned.map(url => ({ url, coverage_decision: 'main_article', impact_level: 'high' }))
+    editorial_plans: planned.map(url => ({ url, coverage_decision: 'main_article', impact_level: 'Direct Impact' }))
   });
 
   const markdown = renderCandidateSelectionDiagnostics(selectionStatusExtra(shortlistReport, {

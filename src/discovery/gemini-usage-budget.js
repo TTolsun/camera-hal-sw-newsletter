@@ -51,22 +51,34 @@ function normalizeBudgetConfig(config = {}) {
   };
 }
 
+// stage_counts는 stage id로 묶는다(#993). 예산 config가 같은 어휘를 쓰므로 defaultStageCounts가
+// 까는 키와 정확히 맞는다.
+//
+// 진단 항목의 키 자체는 canonical stage run key(`<id>#<quality attempt>`)지만 여기서는 쓰지
+// 않는다. quality attempt는 발행 파이프라인의 재시도 회차인데 예산은 run 단위 총량 문제라
+// 나눌 이유가 없다. 대신 #982가 모든 항목에 실어 둔 stage_id 필드를 읽는다 -- 키를 파싱하지
+// 않는다.
 function diagnosticStageCounts(diagnostics = {}) {
   const modelUsage = diagnostics.model_usage || {};
   const calls = Array.isArray(diagnostics.cost_report?.calls) ? diagnostics.cost_report.calls : [];
   const counts = {};
 
-  for (const [stage, byModel] of Object.entries(modelUsage)) {
-    if (!counts[stage]) {
-      counts[stage] = {
+  function bucket(key) {
+    if (!counts[key]) {
+      counts[key] = {
         requested_attempts: 0,
         successful_responses: 0,
         failed_attempts: 0
       };
     }
-    for (const usage of Object.values(byModel || {})) {
-      counts[stage].requested_attempts += Number(usage.requests || 0);
-      counts[stage].failed_attempts +=
+    return counts[key];
+  }
+
+  for (const entry of Object.values(modelUsage)) {
+    const stageBucket = bucket(String(entry?.stage_id || 'unknown'));
+    for (const usage of Object.values(entry?.models || {})) {
+      stageBucket.requested_attempts += Number(usage.requests || 0);
+      stageBucket.failed_attempts +=
         Number(usage.invalid_json || 0) +
         Number(usage.quota_errors || 0) +
         Number(usage.api_errors || 0);
@@ -74,15 +86,7 @@ function diagnosticStageCounts(diagnostics = {}) {
   }
 
   for (const call of calls) {
-    const stage = String(call.stage || 'unknown');
-    if (!counts[stage]) {
-      counts[stage] = {
-        requested_attempts: 0,
-        successful_responses: 0,
-        failed_attempts: 0
-      };
-    }
-    counts[stage].successful_responses += 1;
+    bucket(String(call.stage_id || 'unknown')).successful_responses += 1;
   }
 
   return counts;
@@ -179,7 +183,8 @@ function createGeminiUsageBudget({
       const successful = sumStageField(stageCounts, 'successful_responses');
       const failed = sumStageField(stageCounts, 'failed_attempts');
       return {
-        schema_version: 1,
+        // 2: stage_counts와 예산 config의 키가 작업 이름에서 stage id로 바뀌었다(#993).
+        schema_version: 2,
         report_type: 'gemini_usage',
         newsletter_date: date,
         target_calls_per_run: budgetConfig.targetCallsPerRun,

@@ -70,22 +70,26 @@ function newsletterMarkdown(date, articleCount, { todo = false } = {}) {
   ].join('\n');
 }
 
-function newsletterHtml(date, {
-  tags = ['camera-hal'],
-  navLabels = ['Latest', 'Archive', 'GitHub']
-} = {}) {
+// 발행 페이지의 실제 shell 을 그대로 흉내낸다. 예전에는 `<nav class="site-nav">` 를 만들었는데
+// 리디자인 이후 그 마크업을 쓰는 페이지는 0개였고, 그 어긋남 때문에 validate-site 의 나브 검사가
+// 픽스처에서만 살아 있었다(라이브 53개에서 no-op). 픽스처가 실제 표면과 갈리면 같은 일이 반복된다.
+function newsletterHtml(date, { tags = ['camera-hal'] } = {}) {
   const tagHtml = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-  const navHrefs = ['#latest', '#archive', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
-  const navHtml = navLabels
-    .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
-    .join('');
   return [
     '<!doctype html>',
-    '<html><body>',
-    '<nav class="site-nav content-wrap" aria-label="Primary navigation">',
-    '<a class="site-brand" href="index.html">Camera HAL / SW Newsletter</a>',
-    `<div class="nav-links">${navHtml}</div>`,
-    '</nav>',
+    '<html><body class="homepage newsletter-issue-page">',
+    '<header class="site-header homepage-site-header">',
+    '<div class="homepage-nav content-wrap">',
+    '<a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsroom">',
+    '<span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>',
+    '</a>',
+    '<div class="nav-links homepage-nav-links" aria-label="Primary navigation">',
+    '<a href="../../index.html">홈</a>',
+    '<a href="../../archive.html">아카이브</a>',
+    '<a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>',
+    '</div>',
+    '</div>',
+    '</header>',
     '<main>',
     `<div class="tag-row issue-tags">${tagHtml}</div>`,
     '<section class="issue-briefing"></section>',
@@ -99,30 +103,28 @@ function newsletterHtml(date, {
   ].join('\n');
 }
 
-function rootNavHtml(navLabels = ['홈', '아카이브', 'GitHub']) {
-  const navHrefs = ['index.html', 'archive.html', 'https://github.com/TTolsun/camera-hal-sw-newsletter'];
-  const navHtml = navLabels
-    .map((label, index) => `<a href="${navHrefs[index] || '#'}">${label}</a>`)
-    .join('');
-  return [
-    '<nav class="site-nav content-wrap" aria-label="Primary navigation">',
-    '<a class="site-brand" href="index.html">Camera HAL / SW Newsletter</a>',
-    `<div class="nav-links">${navHtml}</div>`,
-    '</nav>'
-  ].join('\n');
-}
-
-function rootSiteHeaderComponentHtml() {
+// 실제 index.html 과 같은 형태: site-header.js 를 로드하면서도 정적 헤더 마크업을 직접 갖는다.
+// (data-site-header 를 쓰는 공개 페이지는 0개다 — 그 컴포넌트는 현재 아무것도 mount 하지 않는다.)
+function rootSiteHeaderHtml() {
   return [
     '<script src="assets/js/site-header.js" defer></script>',
-    '<header class="site-header" data-site-header></header>'
+    '<header class="site-header homepage-site-header">',
+    '<div class="homepage-nav content-wrap">',
+    '<a class="site-brand homepage-brand" href="index.html" aria-label="Camera SW Newsroom">Camera SW Newsroom</a>',
+    '<div class="nav-links homepage-nav-links" aria-label="Primary navigation">',
+    '<a href="index.html">홈</a>',
+    '<a href="archive.html">아카이브</a>',
+    '<a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>',
+    '</div>',
+    '</div>',
+    '</header>'
   ].join('\n');
 }
 
-function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = true } = {}) {
+function rootIndexHtml(extra = '') {
   return [
     '<!doctype html><html><body>',
-    navLabels ? rootNavHtml(navLabels) : (siteHeaderComponent ? rootSiteHeaderComponentHtml() : ''),
+    rootSiteHeaderHtml(),
     '<a class="section-link" href="archive.html">전체 아카이브 보기</a>',
     '<div id="featured-card"></div>',
     '<div id="latest-grid"></div>',
@@ -130,6 +132,8 @@ function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = tru
     '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
     '</section>',
     extra,
+    // 홈 인라인 스크립트가 window.NewsletterArchive 를 쓰므로 실제 index.html 처럼 먼저 로드한다.
+    '<script src="assets/js/newsletter-archive.js"></script>',
     '<script>',
     "async function loadHomepageHeadline() { await fetch('data/homepage-headline.json'); }",
     "async function loadNewsletters() { const latest = {}; const archive = []; await fetch('data/newsletters-weekly.json'); }",
@@ -145,6 +149,7 @@ function rootIndexHtml(extra = '', { navLabels = null, siteHeaderComponent = tru
 function rootArchiveHtml(extra = '') {
   return [
     '<!doctype html><html><body class="homepage">',
+    rootSiteHeaderHtml(),
     '<main id="archive-page" data-page="archive">',
     '<section data-archive-status aria-live="polite"></section>',
     '<form data-archive-controls>',
@@ -188,7 +193,6 @@ function writeSiteFixture(root, {
   editorApprovedException = false,
   dataTags = ['camera-hal'],
   htmlTags = dataTags,
-  navLabels = ['홈', '아카이브', 'GitHub'],
   sourceGapCount = null,
   staleClaimHardFailure = false,
   qualityDeductions = null,
@@ -209,8 +213,7 @@ function writeSiteFixture(root, {
   writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), []);
   writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), newsletterMarkdown(date, count, { todo }));
   writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), newsletterHtml(date, {
-    tags: htmlTags,
-    navLabels
+    tags: htmlTags
   }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
   writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
@@ -588,80 +591,6 @@ test('strict validate-site HTML issue tag drift remains hard failure', () => {
   assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match articles\/data\/newsletters\.json tags \[Camera HAL, Android\]/);
 });
 
-test('strict validate-site rejects mismatched issue site nav labels', () => {
-  const root = tempRoot('validate-site-nav-labels-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min,
-    navLabels: ['\ucd5c\uc2e0\ud638', '\uc544\uce74\uc774\ube0c', 'GitHub']
-  });
-
-  const result = runScript(validateSitePath, root);
-
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Site navigation labels must be \ud648 \/ \uc544\uce74\uc774\ube0c \/ GitHub/);
-});
-
-test('validate-site accepts root homepage nav without Sources link', () => {
-  const root = tempRoot('validate-site-root-nav-labels-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml('', {
-    navLabels: ['\ud648', '\uc544\uce74\uc774\ube0c', 'GitHub']
-  }));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.equal(result.status, 0, result.stderr);
-});
-
-test('validate-site rejects root homepage nav with stale Sources link', () => {
-  const root = tempRoot('validate-site-root-nav-sources-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml('', {
-    navLabels: ['\ud648', '\uc544\uce74\uc774\ube0c', 'Sources', 'GitHub']
-  }));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Site navigation labels must be \ud648 \/ \uc544\uce74\uc774\ube0c \/ GitHub in index\.html/);
-});
-
-test('validate-site accepts shared root site header component', () => {
-  const root = tempRoot('validate-site-root-header-component-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml());
-
-  const result = runScript(validateSitePath, root);
-
-  assert.equal(result.status, 0, result.stderr);
-});
-
-test('validate-site rejects shared site header component without script', () => {
-  const root = tempRoot('validate-site-root-header-component-script-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml('', {
-    siteHeaderComponent: false
-  }).replace('<div id="featured-card"></div>', '<header class="site-header" data-site-header></header>\n<div id="featured-card"></div>'));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Shared site header in index\.html must load assets\/js\/site-header\.js/);
-});
-
 test('validate-site accepts disabled subscription config and scoped unrelated UI code', () => {
   const root = tempRoot('validate-site-subscription-disabled-');
   writeSiteFixture(root, {
@@ -904,6 +833,157 @@ test('validate-site rejects missing required archive page route', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Missing required public archive route: archive\.html/);
+});
+
+test('validate-site rejects root homepage without shared helper reference', () => {
+  const root = tempRoot('validate-site-homepage-helper-');
+  writeSiteFixture(root, {
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  writeText(path.join(root, 'index.html'), rootIndexHtml().replace('<script src="assets/js/newsletter-archive.js"></script>', ''));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /root index\.html must load assets\/js\/newsletter-archive\.js/);
+});
+
+// 발행 레인은 위클리인데 htmlFiles 가 newsletters.json(dated)만 돌던 시절에는 위클리 이슈
+// 페이지와 Lab 페이지가 HTML 계약 검사를 한 번도 받지 않았다. 아래 셋이 그 커버리지를 잠근다.
+
+function addWeeklyIssue(root, weeklyKey, html) {
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{
+    weeklyKey,
+    html: `newsletters/${weeklyKey}/index.html`
+  }]);
+  writeText(path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'), html);
+}
+
+// 이 파일의 픽스처는 몇 달 동안 리디자인 이전 shell(`<nav class="site-nav">`)을 만들었고, 그래서
+// 그 마크업을 찾던 validate-site 검사가 픽스처에서만 초록인 채 라이브 53개에서는 아무것도 하지
+// 않았다. 실제 페이지에 0개인 마크업을 픽스처가 다시 쓰기 시작하면 같은 일이 반복되므로 막는다.
+test('site fixtures model markup that published pages actually use', () => {
+  // shell 을 이어 붙여 한 번에 보면 하나가 실제 마크업을 잃어도 나머지가 대신 만족시킨다 — 실제로
+  // 아카이브 픽스처만 헤더를 빼도 통과했다. shell 마다 따로 본다.
+  const shells = {
+    newsletter: newsletterHtml('2026-04-01'),
+    index: rootIndexHtml(),
+    archive: rootArchiveHtml()
+  };
+  for (const [name, shell] of Object.entries(shells)) {
+    for (const dead of ['site-nav', 'data-site-header']) {
+      assert.doesNotMatch(
+        shell,
+        new RegExp(dead),
+        `${name}: ${dead} 는 발행 페이지 53개 중 0개가 쓰는 마크업이다`
+      );
+    }
+    // 실제 shell 의 표식. 이게 빠지면 그 픽스처가 다시 갈라진 것이다.
+    assert.match(shell, /<header class="site-header homepage-site-header">/, `${name}: 헤더 shell`);
+    assert.match(shell, /class="nav-links homepage-nav-links"/, `${name}: 나브 컨테이너`);
+  }
+});
+
+test('validate-site scans weekly issue pages, not just dated ones', () => {
+  const root = tempRoot('validate-site-weekly-scan-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  // dated 호는 멀쩡하고 위클리 쪽에만 TODO 를 심는다 — dated 만 돌면 통과해 버리던 자리다.
+  addWeeklyIssue(root, '2026-W21', newsletterHtml('2026-05-23').replace('<main>', '<main><p>TODO</p>'));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Published HTML contains TODO: newsletters\/2026-W21\/index\.html/);
+});
+
+test('validate-site scans the AI Engineering Lab page', () => {
+  const root = tempRoot('validate-site-learning-scan-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  writeText(
+    path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'),
+    '<!doctype html><html><body><a href="#x">unclosed</body></html>'
+  );
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Anchor tag mismatch in learning\/ai-engineering\/index\.html/);
+});
+
+// 위클리 목록이 깨지면 htmlFiles 가 조용히 비어 발행 레인 전체가 무검사로 나간다. 그 방어는
+// validate-site 가 아니라 rendered-issue-structure.js(NEWSLETTER_INDEX_PATHS)가 한다 — validate-site
+// 는 그 결과에 기대어 목록을 읽기만 한다. 의존하는 계약이므로 여기서 통합으로 잠근다.
+test('validate-site fails when the weekly index it reads is missing or malformed', () => {
+  const cases = [
+    ['missing', null, /Missing articles\/data\/newsletters-weekly\.json/],
+    ['not json', 'not json at all', /Invalid JSON in articles\/data\/newsletters-weekly\.json/],
+    ['an object', '{}', /articles\/data\/newsletters-weekly\.json must contain an array/]
+  ];
+  for (const [label, contents, expected] of cases) {
+    const root = tempRoot(`validate-site-weekly-index-${label.replace(/\s+/g, '-')}-`);
+    writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+    const indexPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
+    if (contents === null) fs.rmSync(indexPath);
+    else writeText(indexPath, contents);
+
+    const result = runScript(validateSitePath, root);
+
+    assert.notEqual(result.status, 0, label);
+    assert.match(result.stderr, expected, label);
+  }
+});
+
+test('validate-site rejects a weekly index entry whose page is missing', () => {
+  const root = tempRoot('validate-site-weekly-page-missing-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  // 렌더가 실패해 페이지가 없어도 홈·아카이브는 그 카드를 링크한다. 조용히 건너뛰면 안 된다.
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{
+    weeklyKey: '2026-W21',
+    html: 'newsletters/2026-W21/index.html'
+  }]);
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Weekly newsletter 2026-W21 html file does not exist/);
+});
+
+// 필수 클래스는 class 토큰으로 본다. 부분 문자열로 보면 본문에 이름이 글자로만 나와도 통과해
+// 실제로는 그 블록이 없는 페이지가 발행된다.
+//
+// 위클리 페이지로 검사한다. dated 호는 rendered-issue-structure.js 가 같은 네 클래스를 이미
+// 토큰으로 보므로 그쪽에서 잡혀 이 루프의 판정이 드러나지 않는다 — 그 구조 검사는 dated 루프
+// 안에서만 돌기 때문에, 위클리에서는 여기가 유일한 검사다.
+test('validate-site requires the issue classes as class tokens on weekly pages', () => {
+  const root = tempRoot('validate-site-class-token-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  // reference-list 만 클래스가 아니라 본문 글자로 남긴다(뒤따르는 블록 스캔이 없는 클래스라
+  // 이 검사만 단독으로 갈린다).
+  addWeeklyIssue(root, '2026-W21', newsletterHtml('2026-05-23').replace(
+    '<ul class="reference-list"><li><a href="https://example.com/reference">Reference</a></li></ul>',
+    '<p>이 호에는 reference-list 가 없습니다.</p>'
+  ));
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Newsletter HTML missing reference-list: newsletters\/2026-W21\/index\.html/);
+});
+
+// Lab 페이지는 스캔 대상이지만 `newsletters/` 접두어가 아니라 이슈 전용 검사는 받지 않는다.
+// 그 경계가 넓어지면 briefing·source-list 가 없는 이 페이지가 즉시 막힌다.
+test('validate-site scans the Lab page without applying issue-only checks', () => {
+  const root = tempRoot('validate-site-learning-pass-');
+  writeSiteFixture(root, { articleCount: articlePolicy.mainArticleCount.min });
+  writeText(
+    path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'),
+    '<!doctype html><html><body><main><p>학습 과정</p><a href="../../index.html">홈</a></main></body></html>'
+  );
+
+  const result = runScript(validateSitePath, root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.doesNotMatch(result.stderr, /learning\/ai-engineering/);
 });
 
 test('validate-site rejects archive page without shared helper reference', () => {

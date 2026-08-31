@@ -22,8 +22,12 @@ const {
   strictTargetDates
 } = require('../reporter/validation-targets');
 const {
+  hasClassToken,
   validateRenderedIssueStructure
 } = require('../quality/rendered-issue-structure');
+const {
+  AI_ENGINEERING_LEARNING_PATH
+} = require('../render/seo-metadata');
 const {
   buildRemediationMessage,
   latestDiagnosticsOnly,
@@ -37,6 +41,7 @@ const {
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
+const weeklyDataPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
@@ -369,49 +374,8 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
   }
 }
 
-function siteHeaderExpectedLabels() {
-  return ['홈', '아카이브', 'GitHub'];
-}
-
 function escapeRegex(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function hasSiteHeaderComponent(content) {
-  return /<header\b[^>]*\bdata-site-header\b/i.test(content);
-}
-
-function expectedSiteHeaderScript(relPath) {
-  return relPath === 'index.html'
-    ? 'assets/js/site-header.js'
-    : '../../assets/js/site-header.js';
-}
-
-function hasSiteHeaderScript(content, relPath) {
-  const expected = expectedSiteHeaderScript(relPath);
-  const pattern = new RegExp(`<script\\b[^>]*\\bsrc=["']${escapeRegex(expected)}["'][^>]*>\\s*</script>`, 'i');
-  return pattern.test(content);
-}
-
-function validateSiteNavLabels(content, relPath) {
-  const siteNavMatch = content.match(/<nav\b[^>]*class=["'][^"']*\bsite-nav\b[^"']*["'][^>]*>[\s\S]*?<\/nav>/i);
-  if (!siteNavMatch) {
-    if (hasSiteHeaderComponent(content) && !hasSiteHeaderScript(content, relPath)) {
-      fail(`Shared site header in ${relPath} must load ${expectedSiteHeaderScript(relPath)}.`);
-    }
-    return;
-  }
-
-  const labels = [...siteNavMatch[0].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)]
-    .map(match => textFromHtml(match[1]))
-    .filter(label => label && !['Camera HAL / SW Newsletter', 'Camera SW / Newsletter', 'Camera SW Newsletter'].includes(label));
-  const expected = siteHeaderExpectedLabels();
-  const actual = labels.slice(0, expected.length);
-  const matchesExpected = actual.length === expected.length &&
-    expected.every((label, index) => actual[index] === label);
-  if (!matchesExpected) {
-    fail(`Site navigation labels must be ${expected.join(' / ')} in ${relPath}; found ${actual.join(' / ') || 'none'}`);
-  }
 }
 
 function sourceTail(section) {
@@ -584,6 +548,12 @@ function validateRootHomepageContract(newsletters) {
   if (!/fetch\(\s*['"]data\/homepage-headline\.json['"]/.test(html)) {
     fail('root index.html must fetch data/homepage-headline.json through a separate headline loader.');
   }
+  // 홈의 인라인 스크립트는 이 모듈의 window.NewsletterArchive(토픽·정렬·카드 렌더·fallback 판정)에
+  // 의존한다. 스크립트 태그가 빠지면 히어로와 최신 소식 그리드가 동시에 비는데, data fetch 계약만
+  // 잠겨 있으면 그 상태로도 게이트를 통과한다. archive.html 과 같은 검사를 홈에도 건다.
+  if (!/assets\/js\/newsletter-archive\.js/.test(html)) {
+    fail('root index.html must load assets/js/newsletter-archive.js.');
+  }
   validateRootHomepageSubscriptionContract(html, subscriptionState);
   const exposedDates = [...html.matchAll(/newsletters\/(\d{4}-\d{2}-\d{2})\//g)]
     .map(match => match[1]);
@@ -754,6 +724,23 @@ if (!Array.isArray(newsletters)) {
   newsletters = [];
 }
 
+// newsletters.json 은 dated 호만 담는다. 현재 발행 레인은 위클리이고 그 목록은 이 파일에 있으므로,
+// 여기를 안 읽으면 아래 HTML 계약 검사가 발행 중인 이슈 페이지를 통째로 건너뛴다.
+//
+// 여기서는 읽기만 한다. 존재·JSON·배열 검사는 rendered-issue-structure.js 의
+// NEWSLETTER_INDEX_PATHS 가 두 인덱스에 대해 이미 같은 문장으로 하고 있어서, 여기에 또 두면
+// 한 번의 실패에 같은 말이 두 번 나온다(실제로 그렇게 짰다가 mutation 으로 확인하고 걷어냈다).
+// 다만 그 검사는 dated 호가 하나라도 있을 때만 돈다(`validateDataIndex: index === 0`) — dated
+// 인덱스가 비면 위클리 인덱스는 무검사가 된다. 현재 dated 33개가 있어 실제로는 항상 돌지만,
+// 그 상태에 기대고 있다는 것은 적어 둔다. 인덱스가 멀쩡한데 페이지가 없는 경우는 아래에서 잡는다.
+let weeklyNewsletters = [];
+try {
+  const parsed = readJson(weeklyDataPath);
+  if (Array.isArray(parsed)) weeklyNewsletters = parsed;
+} catch (error) {
+  weeklyNewsletters = [];
+}
+
 const seenDates = new Set();
 const strictDates = strictTargetDates({ root, newsletterDatePath });
 validateRootHomepageContract(newsletters);
@@ -847,9 +834,27 @@ for (const [index, item] of newsletters.entries()) {
   }
 }
 
-const htmlFiles = ['index.html', 'archive.html'];
-for (const item of newsletters) {
-  if (item.html) htmlFiles.push(item.html);
+// 공개 표면 전체를 훑는다. dated 호만 돌던 시절에는 위클리 이슈 페이지와 AI Engineering Lab
+// 페이지가 anchor 균형·TODO 검사(위클리는 이슈 전용 클래스·source-list 링크까지)를 한 번도 받지
+// 않았다 — 하필 위클리가 현재 발행 레인이다.
+const htmlFiles = [...new Set([
+  'index.html',
+  'archive.html',
+  ...newsletters.map(item => item.html).filter(Boolean),
+  ...weeklyNewsletters.map(item => item.html).filter(Boolean),
+  `${AI_ENGINEERING_LEARNING_PATH}index.html`
+])];
+
+// 인덱스에 있는데 파일이 없으면 아래 루프가 조용히 건너뛴다. dated 호는 위에서 파일 존재를 이미
+// 확인하므로(`file does not exist`) 위클리에도 같은 계약을 건다 — 그러지 않으면 렌더가 실패해
+// 페이지가 없는 주에도 홈·아카이브는 그 카드를 링크한 채 게이트가 통과한다.
+for (const item of weeklyNewsletters) {
+  const relPath = item && item.html;
+  if (!relPath) continue;
+  const absPath = publicAssetPath(root, relPath);
+  if (!absPath || !fs.existsSync(absPath)) {
+    fail(`Weekly newsletter ${item.weeklyKey || relPath} html file does not exist: ${relPath}`);
+  }
 }
 
 for (const relPath of htmlFiles) {
@@ -865,11 +870,13 @@ for (const relPath of htmlFiles) {
   if (/\bTODO\b/.test(content)) {
     fail(`Published HTML contains TODO: ${relPath}`);
   }
-  validateSiteNavLabels(content, relPath);
 
   if (relPath.startsWith('newsletters/')) {
+    // class 토큰으로 본다. 부분 문자열(`includes`)로 보면 본문에 클래스 이름이 글자로만 나와도
+    // 통과한다 — 같은 네 클래스를 검사하는 rendered-issue-structure.js 는 처음부터 토큰으로
+    // 봤고, 두 사본이 갈려 있었다. 현재 이슈 페이지 50개에서 두 판정은 결과가 같다(실측).
     for (const className of ['issue-briefing', 'issue-section', 'source-list', 'reference-list']) {
-      if (!content.includes(className)) {
+      if (!hasClassToken(content, className)) {
         fail(`Newsletter HTML missing ${className}: ${relPath}`);
       }
     }

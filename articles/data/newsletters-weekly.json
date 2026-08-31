@@ -1,5 +1,30 @@
 [
   {
+    "weeklyKey": "2026-W36",
+    "weekStartDate": "2026-08-31",
+    "weekEndDate": "2026-09-06",
+    "date": "2026-08-31",
+    "title": "2026 W36",
+    "summary": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가\nlibcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토\nLinux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개\nSony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련\nlibcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+    "html": "newsletters/2026-W36/index.html",
+    "md": "newsletters/2026-W36/newsletter.md",
+    "tags": [
+      "Driver",
+      "Image Processing",
+      "Camera HAL",
+      "Android"
+    ],
+    "article_count": 5,
+    "article_images": [
+      "assets/images/fallback/android.svg"
+    ],
+    "coverage_week_key": "2026-W35",
+    "coverage_start_date": "2026-08-24",
+    "coverage_end_date": "2026-08-30",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-08-31"
+  },
+  {
     "weeklyKey": "2026-W35",
     "weekStartDate": "2026-08-24",
     "weekEndDate": "2026-08-30",

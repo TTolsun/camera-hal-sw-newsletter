@@ -220,6 +220,10 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
       selectionDiagnostics.release_class_catch_up_after_reconciliation ||
       report.release_class_catch_up_after_reconciliation ||
       null,
+    // #963: 재게재 차단(건수·URL)도 같은 이유로 이 투영을 통과해야 한다. exclusion_reason_summary는
+    // 상위 10개로 잘리고 이 사유는 건수가 작아 늘 그 밖으로 밀린다.
+    republication_cooldown_blocked: selectionDiagnostics.republication_cooldown_blocked ||
+      report.republication_cooldown_blocked || null,
     exclusion_reason_summary: selectionDiagnostics.exclusion_reason_summary || [],
     final_exclusion_reason_summary: selectionDiagnostics.final_exclusion_reason_summary || [],
     candidate_selection_note: selectionDiagnostics.candidate_selection_note || ''

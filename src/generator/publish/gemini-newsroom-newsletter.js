@@ -192,6 +192,12 @@ const STATUS_FAILED_REPAIR_REVIEWABLE = 'FAILED_REPAIR_REVIEWABLE';
 // readSeedEvidencePackForDate process·IO 헬퍼는 orchestrator-validate-runner.js로 분리했다.
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
 const {
+  DERIVED_STAGE_KINDS,
+  LLM_STAGES,
+  derivedStageRun,
+  stageRun
+} = require('../../shared/llm/stage-catalog');
+const {
   readSeedEvidencePackForDate
 } = require('./orchestrator-validate-runner');
 
@@ -395,7 +401,11 @@ async function main() {
   fs.mkdirSync(newsletterDir, { recursive: true });
 
   const cacheDir = path.join(root, 'cache', 'news-summary');
+  // root를 넘겨야 선정이 state/article-exposure-history.json을 읽는다. 없으면 exposureHistory가
+  // 항상 null이 되어 재게재 쿨다운 필터와 catch-up의 게재 이력 필터가 둘 다 조용히 죽는다(#963).
+  // exposureHistory를 직접 만들어 넘기지 않고 root를 넘겨 기존 읽기 경로를 그대로 쓴다.
   let shortlistReport = buildShortlistReport(date, candidates, {
+    root,
     selectionWindowPolicy: runtimeConfig.selectionWindowPolicy,
     coverageWeekKeyOverride: runtimeConfig.coverageWeekKeyOverride || undefined
   });
@@ -465,9 +475,9 @@ async function main() {
     shortlistReport.catch_up_used_count = deterministicCatchUpUsedCount;
     shortlistReport.catch_up_articles = deterministicCatchUpArticles;
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
-    const reporterStage = `reporter attempt ${attempt}/${totalAttempts}`;
-    const editorStage = `editor attempt ${attempt}/${totalAttempts}`;
-    const factCheckStage = `fact-checker attempt ${attempt}/${totalAttempts}`;
+    const reporterStage = stageRun(LLM_STAGES.REPORTER, { qualityAttempt: attempt, totalAttempts });
+    const editorStage = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: attempt, totalAttempts });
+    const factCheckStage = stageRun(LLM_STAGES.FACT_CHECKER, { qualityAttempt: attempt, totalAttempts });
     console.log(`Starting LLM newsroom quality attempt ${attempt}/${totalAttempts}. Locked articles: ${lockedSections.length}.`);
 
     reporter = validateReporter(await callLlmJson(
@@ -504,7 +514,7 @@ async function main() {
       date,
       articleCapsuleReport,
       commonContext,
-      stage: `background-context attempt ${attempt}/${totalAttempts}`
+      stage: stageRun(LLM_STAGES.BACKGROUND_CONTEXT, { qualityAttempt: attempt, totalAttempts })
     });
     writeJson(path.join(newsroomDir, 'background-context.json'), backgroundContextReport);
     // #700: editorial plan(전용 LLM 호출, 필수 단계). 실패/빈 결과면 throw해서 editor 등 뒤 단계
@@ -514,7 +524,7 @@ async function main() {
       date,
       articleCapsuleReport,
       commonContext,
-      stage: `editorial-plan attempt ${attempt}/${totalAttempts}`
+      stage: stageRun(LLM_STAGES.EDITORIAL_PLAN, { qualityAttempt: attempt, totalAttempts })
     });
     writeJson(path.join(newsroomDir, 'editorial-plan.json'), editorialPlanReport);
     // #724: LLM coverage 등급을 결정론 재조정으로 main-set에 항상 반영한다(toggle 없음). 재조정
@@ -607,7 +617,7 @@ async function main() {
     });
     writeJson(path.join(newsroomDir, 'article-capsules.json'), articleCapsuleReport);
     for (const candidate of ensureArray(reporter.candidates)) {
-      writeCacheRecord(candidate, cacheDir, { stage: reporterStage, model: getLlmModelUsage(reporterStage) || 'unknown' });
+      writeCacheRecord(candidate, cacheDir, { stage: reporterStage.label, model: getLlmModelUsage(reporterStage) || 'unknown' });
     }
     const rejectedReporterDuplicates = removeDisallowedSelections(reporter, lockedSections, excludedSections);
     writeReporterArtifactsForAttempt(newsroomDir, reporter, attempt);
@@ -762,7 +772,7 @@ async function main() {
       model: [
         `reporter=${getLlmModelUsage(reporterStage) || 'unknown'}`,
         `editor=${getLlmModelUsage(editorStage) || 'unknown'}`,
-        `public-article-judge=${getLlmModelUsage(`${editorStage} public article judge`) || 'unknown'}`,
+        `public-article-judge=${getLlmModelUsage(derivedStageRun(editorStage, DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE)) || 'unknown'}`,
         `fact-checker=${getLlmModelUsage(factCheckStage) || 'unknown'}`
       ].join(', '),
       score: qualityReport.score,
@@ -852,7 +862,7 @@ async function main() {
   // render는 callLlmJson 초크포인트를 거치지 않으므로 여기서 직접 계측한다(기록 전용).
   // 빌드/터미널 검증이 실패하면 render를 'failed'로 남겨 요약 다이어그램이 실패와 일치하게 한다.
   const renderAttempt = generationRunState.currentQualityAttempt;
-  generationRunState.stageTracker.start('render', renderAttempt);
+  generationRunState.stageTracker.start({ stageId: 'render', role: 'render', attempt: renderAttempt });
   let newsletterMarkdown;
   let newsletterHtmlContent;
   try {
@@ -880,9 +890,14 @@ async function main() {
       path.join(newsroomDir, 'fact-check-report.json'),
       path.join(newsroomDir, 'quality-report.json')
     ]);
-    generationRunState.stageTracker.pass('render', renderAttempt);
+    generationRunState.stageTracker.pass({ stageId: 'render', role: 'render', attempt: renderAttempt });
   } catch (error) {
-    generationRunState.stageTracker.fail('render', renderAttempt, 'render', error && error.message);
+    generationRunState.stageTracker.fail({
+      stageId: 'render',
+      role: 'render',
+      attempt: renderAttempt,
+      reason: error && error.message
+    });
     throw error;
   }
 

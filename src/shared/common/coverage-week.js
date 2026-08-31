@@ -59,9 +59,18 @@ function coverageForWeekKey(weekKey) {
   const firstThursday = thursdayOfWeek(new Date(Date.UTC(Number(match[1]), 0, 4)));
   const monday = new Date(firstThursday);
   monday.setUTCDate(firstThursday.getUTCDate() - 3 + (Number(match[2]) - 1) * 7);
+  const derivedWeekKey = isoWeekKeyOfDate(monday);
+  // 위 산술은 존재하지 않는 주차도 그냥 넘겨버린다(2026-W60 -> 2027-W07, 2021-W53 -> 2022-W01).
+  // 모양만 보는 COVERAGE_WEEK_KEY_PATTERN을 통과한 오타가 조용히 다른 주를 대상으로 만드는 자리라
+  // 왕복 비교 한 번으로 막는다. 53주 해(2026-W53)는 실재하므로 그대로 통과한다.
+  if (derivedWeekKey !== match[0]) {
+    throw new Error(
+      `coverage week key does not exist: ${match[0]} would silently resolve to ${derivedWeekKey} (week starting ${formatUtcDate(monday)})`
+    );
+  }
   const endExclusive = new Date(monday.getTime() + 7 * DAY_MS);
   return {
-    coverage_week_key: isoWeekKeyOfDate(monday),
+    coverage_week_key: derivedWeekKey,
     coverage_start_date: formatUtcDate(monday),
     coverage_end_date: formatUtcDate(new Date(endExclusive.getTime() - DAY_MS)),
     coverage_end_exclusive_at: endExclusive.toISOString()
@@ -93,6 +102,18 @@ function coverageAgeDays(publishedAtText, coverage) {
   return Math.floor((endDayStart - publishedDayStart) / DAY_MS);
 }
 
+// classifyCoverageWindow가 돌려주는 등급 중 "coverage 주 안"인 값. 참고 섹션 정렬(#971)이 이 값을
+// 읽으므로 render 쪽은 리터럴을 다시 적지 않고 이 술어를 쓴다 — 리터럴로 적으면 여기서 이름을
+// 바꿨을 때 그쪽은 조용히 "창 밖"으로 판정하고 컴파일 오류도 테스트 실패도 없다.
+// 아직 리터럴로 비교하는 곳이 newsroom-selection.js와 collect-news-candidates.js에 남아 있어
+// 이름을 바꾸면 그쪽도 함께 고쳐야 한다. 등급을 새로 추가하는 경우는 이 술어가 단일 값 비교라
+// 막지 못한다.
+const COVERAGE_WEEK_WINDOW = 'primary';
+
+function isCoverageWeekWindow(value) {
+  return String(value == null ? '' : value).trim() === COVERAGE_WEEK_WINDOW;
+}
+
 // windowDays.fallbackDays/referenceDays는 선정 정책(selectionWindowPolicy)의
 // fallbackSelectionDays/referenceContextDays를 그대로 받는 자리다. primary 경계(6일, 즉 coverage
 // 주 7일)는 ISO 주 구조 자체라 이 인자로 못 바꾼다 — selectionWindowPolicy.primarySelectionDays는
@@ -103,16 +124,18 @@ function classifyCoverageWindow(publishedAtText, coverage, windowDays = {}) {
   const ageDays = coverageAgeDays(publishedAtText, coverage);
   if (ageDays === null) return 'unknown';
   if (ageDays < 0) return 'not_yet_eligible';
-  if (ageDays <= 6) return 'primary';
+  if (ageDays <= 6) return COVERAGE_WEEK_WINDOW;
   if (ageDays <= fallbackDays - 1) return 'fallback';
   if (ageDays <= referenceDays - 1) return 'reference';
   return 'stale';
 }
 
 module.exports = {
+  COVERAGE_WEEK_WINDOW,
   coverageForAnchorDate,
   coverageForWeekKey,
   previousCoverageWeekKey,
   coverageAgeDays,
-  classifyCoverageWindow
+  classifyCoverageWindow,
+  isCoverageWeekWindow
 };

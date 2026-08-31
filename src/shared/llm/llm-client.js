@@ -18,9 +18,7 @@ const {
   parseRetryDelayMs
 } = require('./llm-errors');
 const { resolveProvider } = require('./providers/provider-registry');
-const {
-  modelGroupInfoForStage
-} = require('./model-policy');
+const { assertStageRun, stageRunIdentity } = require('./stage-catalog');
 
 const geminiProvider = resolveProvider('gemini');
 
@@ -36,6 +34,16 @@ const diagnostics = createDiagnosticsState();
 
 function fail(message) {
   throw new Error(message);
+}
+
+// stage 정체성을 에러에 구조화 필드로 싣는다(#981). 예전에는 호출자가 메시지의
+// `[label]` prefix를 정규식으로 잘라 failure_stage를 만들었는데, 그건 sanitize가 아니라
+// 의미 해석이라 label 철자에 묶여 있었다.
+function failStage(run, message) {
+  const error = new Error(message);
+  error.stage = run.label;
+  error.stage_id = run.definition.id;
+  throw error;
 }
 
 function sleep(ms) {
@@ -81,15 +89,15 @@ function retryDelay(attempt, error) {
   return effectiveRetryDelaysMs[attempt - 1] ?? effectiveRetryDelaysMs[effectiveRetryDelaysMs.length - 1];
 }
 
-function recordUsageMetadata(stage, provider, modelName, attempt, response, requestState = {}, routing = {}) {
+function recordUsageMetadata(run, provider, modelName, attempt, response, requestState = {}, routing = {}) {
   const usage = provider.usageMetadataFromResponse(response);
   const cost = provider.estimateCallCost(modelName, usage);
   const thinkingBudget = requestState.thinkingBudget || {};
   const fallbackIndex = Number.isInteger(routing.fallback_index) ? routing.fallback_index : null;
   diagnostics.recordCostCall({
     provider: provider.id,
-    stage,
-    stage_group: routing.stage_group || modelGroupInfoForStage(stage).group,
+    ...stageRunIdentity(run),
+    stage_group: routing.stage_group,
     stage_group_known: routing.stage_group_known !== false,
     routing_warning: routing.routing_warning || '',
     model: modelName,
@@ -133,11 +141,12 @@ function routingForAttempt(baseRouting, modelName, modelIndex) {
   };
 }
 
-async function generateContentJsonWithRetry(stage, provider, context, requestState, modelName, routing = {}) {
+async function generateContentJsonWithRetry(run, provider, context, requestState, modelName, routing = {}) {
+  const stage = run.label;
   let lastError;
   for (let attempt = 1; attempt <= maxRetries + 1; attempt += 1) {
     try {
-      diagnostics.recordRequest(stage, modelName);
+      diagnostics.recordRequest(run, modelName);
       console.log(`[${stage}] ${provider.displayName} request attempt ${attempt}/${maxRetries + 1} using model ${modelName}.`);
       const response = await callWithTimeout(
         provider.execute({ context, request: requestState.request, modelName, stage }),
@@ -145,10 +154,10 @@ async function generateContentJsonWithRetry(stage, provider, context, requestSta
         stage,
         modelName
       );
-      recordUsageMetadata(stage, provider, modelName, attempt, response, requestState, routing);
+      recordUsageMetadata(run, provider, modelName, attempt, response, requestState, routing);
       const text = provider.textFromResponse(response);
       const json = extractJson(text, stage, provider.displayName);
-      diagnostics.recordSuccess(stage, modelName);
+      diagnostics.recordSuccess(run, modelName);
       return json;
     } catch (error) {
       lastError = error;
@@ -156,13 +165,13 @@ async function generateContentJsonWithRetry(stage, provider, context, requestSta
       if (error instanceof LlmCallTimeoutError) {
         // The model is hanging; retrying the same model would likely hang again.
         // Abandon it and let the outer loop fall through to the next fallback.
-        diagnostics.recordApiError(stage, modelName);
+        diagnostics.recordApiError(run, modelName);
         console.warn(`${error.message} Abandoning model ${modelName} and trying the next fallback if configured.`);
         break;
       }
 
       if (error instanceof LlmJsonParseError) {
-        diagnostics.recordInvalidJson(stage, modelName);
+        diagnostics.recordInvalidJson(run, modelName);
         const rawPath = saveRawLlmOutput(stage, attempt, modelName, error.rawText);
         if (attempt > maxRetries) break;
         const delayMs = retryDelay(attempt, error);
@@ -173,8 +182,8 @@ async function generateContentJsonWithRetry(stage, provider, context, requestSta
         continue;
       }
 
-      if (isQuotaError(error, retryableStatuses)) diagnostics.recordQuotaError(stage, modelName);
-      else diagnostics.recordApiError(stage, modelName);
+      if (isQuotaError(error, retryableStatuses)) diagnostics.recordQuotaError(run, modelName);
+      else diagnostics.recordApiError(run, modelName);
 
       const retryable = isRetryableError(error, retryableStatuses);
       if (!retryable || attempt > maxRetries) break;
@@ -211,7 +220,10 @@ function failureSummary(stage, provider, failures) {
   return lines.join('\n');
 }
 
-async function callLlmJson(stage, systemInstruction, prompt, responseSchema, options = {}) {
+async function callLlmJson(stageRunArg, systemInstruction, prompt, responseSchema, options = {}) {
+  // production boundary. catalog 밖의 값(예전 자유 문자열 label)은 여기서 막는다.
+  const run = assertStageRun(stageRunArg);
+  const stage = run.label;
   const provider = options.provider || resolveProvider(runtimeConfig.llmProvider);
   const key = provider.getApiKey({ options, env: process.env, config: runtimeConfig });
   if (!key) {
@@ -219,22 +231,21 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
   }
 
   const failures = [];
-  const modelNames = provider.configuredModels(runtimeConfig, stage);
-  const stageGroupInfo = modelGroupInfoForStage(stage);
-  const stageGroup = stageGroupInfo.group;
+  // stage -> group 변환은 이 지점 하나만 한다. model-policy는 group만 알고 stage를 모른다.
+  const stageGroup = run.definition.modelGroup;
+  const modelNames = provider.configuredModelsForGroup(runtimeConfig, stageGroup);
   const primaryResolvedBy = runtimeConfig.llmStageModelSources?.[stageGroup] || runtimeConfig.llmModelSource || 'unknown';
   const routing = {
-    stage,
     stage_group: stageGroup,
-    stage_group_known: stageGroupInfo.known,
-    routing_warning: stageGroupInfo.warning,
+    stage_group_known: true,
+    routing_warning: '',
     primary_model: modelNames[0] || '',
     fallback_models: modelNames.slice(1),
     primary_resolved_by: primaryResolvedBy,
     resolved_by: primaryResolvedBy,
     global_override_applied: runtimeConfig.llmGlobalModelExplicitlyConfigured === true
   };
-  diagnostics.recordModelRouting(stage, routing);
+  diagnostics.recordModelRouting(run, routing);
 
   for (const [modelIndex, modelName] of modelNames.entries()) {
     const attemptRouting = routingForAttempt(routing, modelName, modelIndex);
@@ -242,7 +253,7 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
     try {
       context = provider.createModelContext({ modelName, apiKey: key, config: runtimeConfig, options });
     } catch (error) {
-      fail(`[${stage}] ${provider.displayName} provider configuration failed: ${error.message}`);
+      failStage(run, `[${stage}] ${provider.displayName} provider configuration failed: ${error.message}`);
     }
     const contextDescription = provider.describeModelContext(context);
     console.log(`[${stage}] ${provider.displayName} model selected: ${modelName}${contextDescription ? ` ${contextDescription}` : ''}.`);
@@ -254,6 +265,7 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
       const builtRequest = provider.buildRequest({
         model: modelName,
         stage,
+        sampling: run.definition.sampling,
         systemInstruction,
         prompt,
         responseSchema,
@@ -263,7 +275,7 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
         request: builtRequest.request || builtRequest,
         thinkingBudget: builtRequest.thinkingBudget || null
       };
-      const json = await generateContentJsonWithRetry(stage, provider, context, requestState, modelName, attemptRouting);
+      const json = await generateContentJsonWithRetry(run, provider, context, requestState, modelName, attemptRouting);
       console.log(`[${stage}] ${provider.displayName} API succeeded with model ${modelName}.`);
       return json;
     } catch (error) {
@@ -279,36 +291,39 @@ async function callLlmJson(stage, systemInstruction, prompt, responseSchema, opt
         !isRetryableError(error, retryableStatuses)
       ) {
         if (error?.code === 'provider_not_implemented') {
-          fail(`[${stage}] ${provider.displayName} provider_not_implemented: ${error.message}`);
+          failStage(run, `[${stage}] ${provider.displayName} provider_not_implemented: ${error.message}`);
         }
         if (isSchemaComplexityError(error)) {
           // Permanent schema drift, not a capacity issue. Fail fast with a clear
           // root cause: the weaker fallback models would reject the same schema, so
           // there is nothing to gain by burning calls on them.
-          fail(
+          failStage(
+            run,
             `[${stage}] ${provider.displayName} rejected the response schema as too complex on model ${modelName} ` +
             `(constrained-decoding "too many states"). The response schema for this stage likely drifted past the ` +
             `model's state limit; slim optional/enum fields (see PR #633) or route this stage to a model that ` +
             `accepts it. Underlying error: ${error.message}`
           );
         }
-        fail(`[${stage}] ${provider.displayName} API failed with non-retryable error on model ${modelName}: ${error.message}`);
+        failStage(run, `[${stage}] ${provider.displayName} API failed with non-retryable error on model ${modelName}: ${error.message}`);
       }
 
       console.warn(`[${stage}] ${provider.displayName} model ${modelName} failed after ${maxRetries} retries. Trying fallback model if configured.`);
     }
   }
 
-  fail(failureSummary(stage, provider, failures));
+  failStage(run, failureSummary(stage, provider, failures));
 }
 
-async function callLlmJsonBudgeted(stage, systemInstruction, prompt, responseSchema, options = {}) {
+async function callLlmJsonBudgeted(stageRunArg, systemInstruction, prompt, responseSchema, options = {}) {
+  const run = assertStageRun(stageRunArg);
   const budget = options.budget || null;
   if (budget && typeof budget.assertCanRequest === 'function') {
-    budget.assertCanRequest(stage);
+    // 예산 config는 stage id 어휘를 쓴다(#993). label로 조회하면 label 철자에 묶인다.
+    budget.assertCanRequest(run.definition.id);
   }
   try {
-    return await callLlmJson(stage, systemInstruction, prompt, responseSchema, options);
+    return await callLlmJson(run, systemInstruction, prompt, responseSchema, options);
   } finally {
     if (budget && typeof budget.mergeDiagnostics === 'function') {
       budget.mergeDiagnostics(getLlmDiagnostics());
@@ -333,8 +348,14 @@ function getLlmCostCalls() {
   return diagnostics.costCalls();
 }
 
-function getLlmModelUsage(stage) {
-  return diagnostics.getModelUsage(stage);
+function getLlmModelUsage(stageRunArg) {
+  return diagnostics.getModelUsage(assertStageRun(stageRunArg));
+}
+
+// quality attempt를 특정할 수 없는 호출자를 위한 조회. 이 stage가 이번 실행에서 마지막으로
+// 성공한 model을 돌려준다.
+function getLastLlmModelForStage(definition) {
+  return diagnostics.getLastModelForStage(definition);
 }
 
 function resetLlmDiagnostics() {
@@ -352,6 +373,7 @@ module.exports = {
   estimateCallCost: geminiProvider.estimateCallCost,
   extractJson,
   findPricing: geminiProvider.findPricing,
+  getLastLlmModelForStage,
   getLlmCostCalls,
   getLlmDiagnostics,
   getLlmModelUsage,
@@ -359,8 +381,5 @@ module.exports = {
   resetLlmDiagnostics,
   safeFilenamePart,
   saveRawLlmOutput,
-  thinkingBudgetForStage(stage) {
-    return geminiProvider.thinkingBudgetForStage(stage, runtimeConfig);
-  },
   usageMetadataFromResponse: geminiProvider.usageMetadataFromResponse
 };

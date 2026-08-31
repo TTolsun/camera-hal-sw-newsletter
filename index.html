@@ -247,12 +247,19 @@
     // Featured hero panel image: the headline image, or the shared newsletter fallback SVG.
     function renderFeaturedMedia(headline) {
       const imageSrc = safeImageSrc(headline.image_url) || FALLBACK_IMAGE;
-      const alt = escapeHtml(headline.image_alt || headline.title);
-      // 실제 기사 이미지는 16:9 풀커버, 이미지 없이 fallback 그래픽이면 mockup 처럼
-      // 브랜드 히어로(44% 중앙 + drop-shadow) 로 보여 준다.
-      const imgClass = imageSrc === FALLBACK_IMAGE ? 'featured-img is-brand' : 'featured-img';
+      // 헤드라인 이미지는 실제 기사 이미지든 동봉 fallback 그래픽이든 16:9 풀커버로 둔다(#1008).
+      // 44% 중앙 + product drop-shadow(.is-brand)는 투명 배경 마스코트(HALley) 전용이다 —
+      // fallback SVG 4종은 캔버스를 채우는 불투명 rect 를 가져서, 줄이고 그림자를 두르면
+      // product shot 이 아니라 패널 위에 얹힌 사각형으로 보인다. 아카이브 카드(.card-thumb-img)도
+      // fallback 여부와 무관하게 풀커버라, 히어로와 카드가 같은 모양이 된다.
+      const isFallback = archiveHelpers.isFallbackImage(imageSrc);
+      // fallback 그래픽은 기사에 대해 아무 정보도 주지 않는 장식이라 alt 를 비운다. image_alt 는
+      // 기사 제목에서 파생되므로, 그대로 두면 스크린리더가 바로 아래 h1 과 같은 문장을 두 번
+      // 읽는다. 아카이브 카드(renderArchiveCard)도 같은 이유로 alt="" 다. 실제 이미지가 로드에
+      // 실패해 fallback 으로 갈아탈 때도 같은 이유로 alt 를 비운다.
+      const alt = isFallback ? '' : escapeHtml(headline.image_alt || headline.title);
       return `<div class="featured-thumb nc-thumb">
-              <img class="${imgClass}" src="${escapeHtml(imageSrc)}" alt="${alt}" loading="eager" decoding="async" onerror="this.onerror=null;this.classList.add('is-brand');this.src='${FALLBACK_IMAGE}'">
+              <img class="featured-img" src="${escapeHtml(imageSrc)}" alt="${alt}" loading="eager" decoding="async" onerror="this.onerror=null;this.alt='';this.src='${FALLBACK_IMAGE}'">
             </div>`;
     }
 

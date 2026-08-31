@@ -167,8 +167,8 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(halSignalQualityStep, /if: always\(\) && steps\.resolve-newsletter-date\.outputs\.date != ''/);
   assert.match(halSignalQualityStep, /continue-on-error:\s*true/);
   // generate가 리뷰 패키지 작성 전에 리포트를 이미 생성하므로 이 스텝은 crash-path 백필 전용이다.
-  // --skip-if-present 없이 재생성하면 generated_at만 바뀐 바이트가 artifact-manifest.json의
-  // sha256과 어긋난 채 커밋되므로, 플래그를 계약으로 고정한다.
+  // --skip-if-present 없이 재생성하면 generated_at만 바뀐 사본이 커밋돼 리뷰 패키지가 기록한
+  // 리포트와 달라지므로, 플래그를 계약으로 고정한다.
   assert.match(halSignalQualityStep, /npm run report:hal-signal-quality -- --date "\$\{\{ steps\.resolve-newsletter-date\.outputs\.date \}\}" --skip-if-present/);
   assert.match(imageAuditStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   // LOCK FLIPPED (#886). 이전 계약은 이 스텝이 job을 죽이는 하드 블록이어야 한다는 것이었다
@@ -457,6 +457,19 @@ test('generation path passes runtime selection window policy into shortlist repo
   assert.ok(shortlistIndex < coverageWeekKeyOverrideIndex);
 });
 
+test('generation path passes root into shortlist report so selection reads the exposure history', () => {
+  // root가 없으면 newsroom-selection이 exposureHistory를 null로 두고, 재게재 쿨다운 필터와
+  // catch-up의 게재 이력 필터가 둘 다 조용히 죽는다(#963).
+  const generatorPath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'publish', 'gemini-newsroom-newsletter.js');
+  const generator = fs.readFileSync(generatorPath, 'utf8');
+  const shortlistIndex = generator.indexOf('let shortlistReport = buildShortlistReport(date, candidates, {');
+  const optionsEndIndex = generator.indexOf('});', shortlistIndex);
+
+  assert.notEqual(shortlistIndex, -1);
+  assert.notEqual(optionsEndIndex, -1);
+  assert.match(generator.slice(shortlistIndex, optionsEndIndex), /^\s*root,\s*$/m);
+});
+
 test('validate-site uses shared rendered issue structural validator', () => {
   const validateSitePath = path.join(__dirname, '..', '..', '..', '..', 'src', 'generator', 'validate', 'validate-site.js');
   const validateSite = fs.readFileSync(validateSitePath, 'utf8');
@@ -493,6 +506,7 @@ test('site validation workflow keeps structural checks blocking and quality anno
   // 위반이 머지 시점이 아니라 그 주 발행 때 처음 드러나 본문 품질과 무관한 이유로 발행이 강등된다.
   assert.match(structuralStep, /npm run check:repo-hygiene/);
   assert.match(structuralStep, /npm run check:artifact-retention/);
+  assert.match(structuralStep, /npm run check:artifact-path-convention/);
   assert.match(structuralStep, /npm run check:domain-model-boundary/);
   assert.match(structuralStep, /npm run validate:policy/);
   assert.match(structuralStep, /npm run check:policy-docs/);

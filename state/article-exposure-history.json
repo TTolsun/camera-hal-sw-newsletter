@@ -3,93 +3,356 @@
   "coverage": {
     "mode": "forward_only",
     "coverage_starts_at": "2026-05-23",
-    "backfill_included": false
+    "backfill_included": true
   },
   "articles": [
     {
-      "article_identity_key": "url:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
-      "title": "Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점",
-      "source_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
-      "newsletter_date": "2026-08-24",
-      "newsletter_url": "newsletters/2026-08-24/index.html",
-      "exposure_type": "homepage_headline",
-      "headline_score": 100,
-      "reuse_reason": "latest_camera_hal_article",
-      "exposed_at": "2026-08-24",
-      "first_exposed_at": "2026-08-24",
-      "last_exposed_at": "2026-08-24",
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/28105",
+      "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "source_url": "https://patchwork.libcamera.org/patch/28105",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-31",
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
       "exposure_count": 1,
       "exposure_types": [
-        "homepage_headline"
+        "newsletter_article"
       ]
     },
     {
-      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
-      "title": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결",
-      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
-      "newsletter_date": "2026-08-17",
-      "newsletter_url": "newsletters/2026-08-17/index.html",
-      "exposure_type": "homepage_headline",
-      "headline_score": 100,
-      "reuse_reason": "latest_camera_hal_article",
-      "exposed_at": "2026-08-17",
-      "first_exposed_at": "2026-08-17",
-      "last_exposed_at": "2026-08-17",
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com",
+      "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "source_url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-31",
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
       "exposure_count": 1,
       "exposure_types": [
-        "homepage_headline"
+        "newsletter_article"
       ]
     },
     {
-      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com",
-      "title": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)",
-      "source_url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/28095",
+      "title": "libcamera: Add quad-Bayer CFA layout support",
+      "source_url": "https://patchwork.libcamera.org/patch/28095",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-31",
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+      "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+      "source_url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-31",
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com",
+      "title": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "source_url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-08-31",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21"
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com",
+      "title": "[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "source_url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/",
       "newsletter_date": "2026-08-10",
       "newsletter_url": "newsletters/2026-08-10/index.html",
-      "exposure_type": "homepage_headline",
-      "headline_score": 100,
-      "reuse_reason": "latest_camera_hal_article",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
       "exposed_at": "2026-08-10",
+      "newsletter_article_date": "2026-08-10",
+      "cooldown_until": "2026-08-31",
       "first_exposed_at": "2026-08-10",
       "last_exposed_at": "2026-08-10",
       "exposure_count": 1,
       "exposure_types": [
-        "homepage_headline"
+        "newsletter_article"
       ]
     },
     {
-      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com",
-      "title": "Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개",
-      "source_url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz",
+      "title": "[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms",
+      "source_url": "https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
       "newsletter_date": "2026-08-03",
       "newsletter_url": "newsletters/2026-08-03/index.html",
-      "exposure_type": "homepage_headline",
-      "headline_score": 100,
-      "reuse_reason": "latest_camera_hal_article",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
       "exposed_at": "2026-08-03",
+      "newsletter_article_date": "2026-08-03",
+      "cooldown_until": "2026-08-24",
       "first_exposed_at": "2026-08-03",
       "last_exposed_at": "2026-08-03",
       "exposure_count": 1,
       "exposure_types": [
-        "homepage_headline"
+        "newsletter_article"
       ]
     },
     {
-      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca",
-      "title": "Himax HM1092 단색 적외선(IR) 센서 지원을 위한 신규 V4L2 드라이버 패치 공개",
-      "source_url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com",
+      "title": "[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "source_url": "https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/",
+      "newsletter_date": "2026-08-03",
+      "newsletter_url": "newsletters/2026-08-03/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-03",
+      "newsletter_article_date": "2026-08-03",
+      "cooldown_until": "2026-08-24",
+      "first_exposed_at": "2026-08-03",
+      "last_exposed_at": "2026-08-03",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com",
+      "title": "[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "source_url": "https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/",
+      "newsletter_date": "2026-08-03",
+      "newsletter_url": "newsletters/2026-08-03/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-03",
+      "newsletter_article_date": "2026-08-03",
+      "cooldown_until": "2026-08-24",
+      "first_exposed_at": "2026-08-03",
+      "last_exposed_at": "2026-08-03",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com",
+      "title": "[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "source_url": "https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/",
       "newsletter_date": "2026-07-27",
       "newsletter_url": "newsletters/2026-07-27/index.html",
-      "exposure_type": "homepage_headline",
-      "headline_score": 100,
-      "reuse_reason": "latest_camera_hal_article",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
       "exposed_at": "2026-07-27",
+      "newsletter_article_date": "2026-07-27",
+      "cooldown_until": "2026-08-17",
       "first_exposed_at": "2026-07-27",
       "last_exposed_at": "2026-07-27",
       "exposure_count": 1,
       "exposure_types": [
-        "homepage_headline"
+        "newsletter_article"
       ]
+    },
+    {
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/27496",
+      "title": "libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown",
+      "source_url": "https://patchwork.libcamera.org/patch/27496/",
+      "newsletter_date": "2026-07-27",
+      "newsletter_url": "newsletters/2026-07-27/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-07-27",
+      "newsletter_article_date": "2026-07-27",
+      "cooldown_until": "2026-08-17",
+      "first_exposed_at": "2026-07-27",
+      "last_exposed_at": "2026-07-27",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/27507",
+      "title": "[v2,2/2] libcamera: Harden control serializer size and input validation",
+      "source_url": "https://patchwork.libcamera.org/patch/27507/",
+      "newsletter_date": "2026-07-27",
+      "newsletter_url": "newsletters/2026-07-27/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-07-27",
+      "newsletter_article_date": "2026-07-27",
+      "cooldown_until": "2026-08-17",
+      "first_exposed_at": "2026-07-27",
+      "last_exposed_at": "2026-07-27",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com",
+      "title": "[PATCH v5 4/5] media: qcom: camss: Add CAMSS Offline Processing Engine driver",
+      "source_url": "https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/",
+      "newsletter_date": "2026-07-27",
+      "newsletter_url": "newsletters/2026-07-27/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-07-27",
+      "newsletter_article_date": "2026-07-27",
+      "cooldown_until": "2026-08-17",
+      "first_exposed_at": "2026-07-27",
+      "last_exposed_at": "2026-07-27",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+      "source_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "newsletter_date": "2026-08-24",
+      "newsletter_url": "newsletters/2026-08-24/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-24",
+      "first_exposed_at": "2026-08-24",
+      "last_exposed_at": "2026-08-24",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-08-24",
+      "cooldown_until": "2026-09-14"
+    },
+    {
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "newsletter_date": "2026-08-17",
+      "newsletter_url": "newsletters/2026-08-17/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-17",
+      "first_exposed_at": "2026-08-17",
+      "last_exposed_at": "2026-08-17",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-08-17",
+      "cooldown_until": "2026-09-07"
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com",
+      "title": "[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver",
+      "source_url": "https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/",
+      "newsletter_date": "2026-08-10",
+      "newsletter_url": "newsletters/2026-08-10/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-10",
+      "first_exposed_at": "2026-08-10",
+      "last_exposed_at": "2026-08-10",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-08-10",
+      "cooldown_until": "2026-08-31"
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com",
+      "title": "[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver",
+      "source_url": "https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/",
+      "newsletter_date": "2026-08-03",
+      "newsletter_url": "newsletters/2026-08-03/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-03",
+      "first_exposed_at": "2026-08-03",
+      "last_exposed_at": "2026-08-03",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-08-03",
+      "cooldown_until": "2026-08-24"
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca",
+      "title": "[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support",
+      "source_url": "https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/",
+      "newsletter_date": "2026-07-27",
+      "newsletter_url": "newsletters/2026-07-27/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-07-27",
+      "first_exposed_at": "2026-07-27",
+      "last_exposed_at": "2026-07-27",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-07-27",
+      "cooldown_until": "2026-08-17"
     },
     {
       "article_identity_key": "url:https://patchwork.libcamera.org/patch/27362",
@@ -259,24 +522,6 @@
       "exposure_count": 1,
       "exposure_types": [
         "homepage_headline"
-      ]
-    },
-    {
-      "article_identity_key": "content:2dca6397f6798483d79ea9e0",
-      "title": "",
-      "source_url": "",
-      "newsletter_date": "2026-08-24",
-      "newsletter_url": "newsletters/2026-08-24/index.html",
-      "exposure_type": "newsletter_article",
-      "headline_score": null,
-      "reuse_reason": "",
-      "exposed_at": "2026-08-24",
-      "cooldown_until": "2026-09-14",
-      "first_exposed_at": "2026-06-03",
-      "last_exposed_at": "2026-08-24",
-      "exposure_count": 17,
-      "exposure_types": [
-        "newsletter_article"
       ]
     },
     {

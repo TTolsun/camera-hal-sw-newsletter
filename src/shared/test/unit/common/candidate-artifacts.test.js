@@ -871,15 +871,17 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
     callLlmJsonBudgetedImpl: async (_stage, _system, _prompt, _schema, options = {}) => {
       options.budget.mergeDiagnostics({
         model_usage: {
-          sourceDiscovery: {
-            fake: {
-              requests: 1,
-              successes: 1
-            }
+          'source_discovery#0': {
+            stage_key: 'source_discovery#0',
+            stage_id: 'source_discovery',
+            quality_attempt: 0,
+            label: 'sourceDiscovery',
+            parent_run_key: null,
+            models: { fake: { requests: 1, successes: 1 } }
           }
         },
         cost_report: {
-          calls: [{ stage: 'sourceDiscovery', model: 'fake' }]
+          calls: [{ stage_key: 'source_discovery#0', stage_id: 'source_discovery', model: 'fake' }]
         }
       });
       return {
@@ -952,7 +954,11 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   const usage = readJson(geminiUsageReportPath(root, date));
   assert.equal(usage.requested_attempt_count, 1);
   assert.equal(usage.successful_response_count, 1);
-  assert.equal(usage.stage_counts.sourceDiscovery.requested_attempts, 1);
+  assert.equal(usage.stage_counts.source_discovery.requested_attempts, 1);
+  // 키 집합을 통째로 고정한다. 한 키만 조회하면 조인이 끊겨 생긴 유령 버킷(unknown,
+  // 옛 어휘 잔재)이 함께 있어도 보이지 않는다 -- #982 회귀가 그렇게 3개월 숨었다.
+  assert.deepEqual(Object.keys(usage.stage_counts), ['source_discovery']);
+  assert.equal(usage.schema_version, 2);
 
   const validated = validateCandidateArtifact({
     root,
@@ -1070,8 +1076,17 @@ test('Stage 2 enabled merge excludes not-yet-eligible Gemini candidates and carr
     },
     callLlmJsonBudgetedImpl: async (_stage, _system, _prompt, _schema, options = {}) => {
       options.budget.mergeDiagnostics({
-        model_usage: { sourceDiscovery: { fake: { requests: 1, successes: 1 } } },
-        cost_report: { calls: [{ stage: 'sourceDiscovery', model: 'fake' }] }
+        model_usage: {
+          'source_discovery#0': {
+            stage_key: 'source_discovery#0',
+            stage_id: 'source_discovery',
+            quality_attempt: 0,
+            label: 'sourceDiscovery',
+            parent_run_key: null,
+            models: { fake: { requests: 1, successes: 1 } }
+          }
+        },
+        cost_report: { calls: [{ stage_key: 'source_discovery#0', stage_id: 'source_discovery', model: 'fake' }] }
       });
       return {
         schema_version: 1,
@@ -1208,8 +1223,17 @@ test('Stage 2 enabled merge caps a combined not_yet_eligible over the limit and 
     },
     callLlmJsonBudgetedImpl: async (_stage, _system, _prompt, _schema, options = {}) => {
       options.budget.mergeDiagnostics({
-        model_usage: { sourceDiscovery: { fake: { requests: 1, successes: 1 } } },
-        cost_report: { calls: [{ stage: 'sourceDiscovery', model: 'fake' }] }
+        model_usage: {
+          'source_discovery#0': {
+            stage_key: 'source_discovery#0',
+            stage_id: 'source_discovery',
+            quality_attempt: 0,
+            label: 'sourceDiscovery',
+            parent_run_key: null,
+            models: { fake: { requests: 1, successes: 1 } }
+          }
+        },
+        cost_report: { calls: [{ stage_key: 'source_discovery#0', stage_id: 'source_discovery', model: 'fake' }] }
       });
       return {
         schema_version: 1,

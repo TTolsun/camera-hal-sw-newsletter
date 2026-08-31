@@ -10,8 +10,9 @@ test('failureStageFromError prefers an explicit error.stage', () => {
   assert.equal(failureStageFromError({ stage: 'fact-checker' }), 'fact-checker');
 });
 
-test('failureStageFromError parses a [stage] message prefix', () => {
-  assert.equal(failureStageFromError(new Error('[editor attempt 1/2] boom')), 'editor attempt 1/2');
+// #981: 메시지의 [label] prefix 파싱은 삭제했다. stage 정체성은 에러가 구조화 필드로 싣고 온다.
+test('failureStageFromError ignores a bracketed message prefix without an explicit stage', () => {
+  assert.equal(failureStageFromError(new Error('[editor attempt 1/2] boom')), 'generation');
 });
 
 test('failureStageFromError falls back to generation', () => {

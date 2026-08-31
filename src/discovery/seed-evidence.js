@@ -280,6 +280,31 @@ function sourcePolicy(source = {}, seedUrl = '') {
   };
 }
 
+// workflow 그룹을 여기서 읽지 않는 것이 현재 계약이다(#1006). 형제 리더인
+// claim-source-binding.js와 source-fact-bundle.js는 release / minor_line_context / workflow
+// 세 그룹을 모두 읽지만 이 함수만 목록이 둘이다. 이유 두 가지가 함께 성립한다.
+//
+// 1) 도달 불가. source_extraction.workflow 컨테이너를 만드는 생산자는 저장소 전체에서
+//    src/shared/collect/dated-article-index-resolver.js:623 하나뿐이다. 그 resolver를 부르는
+//    곳은 src/shared/collect/followed-source-item-resolvers.js:58 과 :66 뿐이고, 그 모듈을
+//    require하는 production 진입점은 src/shared/cli/collect-news-candidates.js:45 하나뿐이다.
+//    seed 레인은 runSeedEvidenceExpansion이 parseSourceSpecificItems
+//    (src/shared/collect/source-item-parsers.js)와 parseSourceWithAdapters
+//    (src/shared/sources/registry.js:7)로 후보를 만드는데, seed-evidence.js의 require 폐포
+//    14개 모듈 안에 그 resolver가 없다. 그래서 buildPrimaryEvidence가 받는 candidate는 오늘
+//    workflow 컨테이너를 가질 수 없다.
+//
+// 2) 도달 가능해지더라도 그때 따로 판단해야 한다. 이 함수가 읽은 결과가 buildPrimaryEvidence의
+//    facts가 되고, facts가 비면 runSeedEvidenceExpansion의 primaryEvidence.forEach 가드가
+//    그 후보를 통째로 건너뛴다. 즉 여기서 workflow를 읽게 하면 지금은 만들어지지 않는 seed
+//    후보가 새로 생기고, seedCandidateFromEvidence의 finalSelectionEligibility 삼항식이
+//    그 후보에 'short'를 준다. 선정 결과가 바뀐다는 뜻이다. resolver가 내는 후보는 summary와
+//    behavior_change도 함께 채우므로, 후보가 이미 만들어지는 경우에도 facts 내용이
+//    buildPrimaryEvidence의 fallback(summary, behavior_change)에서 workflow 문단 items로
+//    바뀌어 compact_evidence.primary_facts와 candidate.summary가 달라진다.
+//    형제 리더들은 이미 만들어진 후보의 근거를 색인·바인딩할 뿐 후보의 존재 여부나
+//    finalSelectionEligibility를 정하지 않는다. 이 함수는 정한다. 그래서 목록이 갈라져 있다.
+//    도달성이 생기는 순간 리뷰 없이 선정이 바뀌면 안 되므로, 그때 별도 판단으로 연다.
 function sourceExtractionItems(candidate = {}) {
   return [
     ...ensureArray(candidate.source_extraction?.release?.sections),
@@ -792,8 +817,16 @@ module.exports = {
   DEFAULT_LIMITS,
   SeedEvidenceError,
   assertPublicHttpsUrl,
+  // buildPrimaryEvidence와 seedCandidateFromEvidence는 테스트 전용 노출이다(#1006).
+  // production 호출자는 runSeedEvidenceExpansion만 쓴다.
+  //
+  // 공개 경로로는 sourceExtractionItems의 그룹 목록을 단언할 수 없다. 그 경로는 seed 페이지
+  // HTML을 parseSourceSpecificItems에 넣어 후보를 만드는데, 어떤 parser도 workflow 컨테이너를
+  // 만들지 않기 때문이다(그것이 바로 잠그려는 도달 불가 사실이다). 그래서 두 함수를 직접 부른다.
+  buildPrimaryEvidence,
   fetchPublicText,
   mergeSeedCandidates,
   normalizedUrlKey,
-  runSeedEvidenceExpansion
+  runSeedEvidenceExpansion,
+  seedCandidateFromEvidence
 };

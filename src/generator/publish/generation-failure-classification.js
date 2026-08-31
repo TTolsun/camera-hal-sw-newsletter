@@ -6,10 +6,11 @@
 // orchestrator (gemini-newsroom-newsletter.js) so the orchestrator no longer
 // owns this concern.
 
+// stage 정체성은 에러가 구조화 필드로 싣고 온다(#981). 예전에는 메시지의 `[label]` prefix를
+// 정규식으로 잘랐는데, 그건 sanitize가 아니라 의미 해석이라 label 철자에 묶여 있었다.
 function failureStageFromError(error) {
   if (error?.stage) return error.stage;
-  const match = String(error?.message || '').match(/^\[([^\]]+)]/);
-  return match ? match[1] : 'generation';
+  return 'generation';
 }
 
 function failureClassFromError(error) {

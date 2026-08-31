@@ -1,0 +1,741 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-08-31",
+  "clusters": [
+    {
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_title": "CameraX | Jetpack | Android Developers",
+      "candidate_count": 5,
+      "duplicate_count": 4,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "title": "CameraX | Jetpack | Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "title": "1.6.2",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "title": "1.3.0-beta02",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "63a55fb7e1b1d229",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+      "canonical_title": "Ensuring Safety in the Generative AI Ecosystem: Protecting Users from Non-Consensual Intimate Content",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "title": "Ensuring Safety in the Generative AI Ecosystem: Protecting Users from Non-Consensual Intimate Content",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "901ec6eef9031b94",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/aaos-sdv-secure-by-design.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/aaos-sdv-secure-by-design.html",
+      "canonical_title": "AAOS SDV - Secure by Design",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/aaos-sdv-secure-by-design.html",
+          "title": "AAOS SDV - Secure by Design",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f31510faf852112a",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/whatsapp-passkeys-secure-sign-in.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/whatsapp-passkeys-secure-sign-in.html",
+      "canonical_title": "How WhatsApp Upgraded to Secure, Seamless Sign-In for 1 Billion Users with Passkeys",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/whatsapp-passkeys-secure-sign-in.html",
+          "title": "How WhatsApp Upgraded to Secure, Seamless Sign-In for 1 Billion Users with Passkeys",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "10f38f8c57d56b85",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/app-quality-memory-optimization-secure-onboarding.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/app-quality-memory-optimization-secure-onboarding.html",
+      "canonical_title": "Elevating app quality: Reducing memory usage and improving device migration",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/app-quality-memory-optimization-secure-onboarding.html",
+          "title": "Elevating app quality: Reducing memory usage and improving device migration",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a67cc111aac23254",
+      "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "canonical_title": "Camera ITS overview | Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its",
+          "title": "Camera ITS overview | Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e6e6c175c1048da5",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+      "canonical_title": "Tinder cuts app cold starts by 47% with new R8 Configuration Analyzer",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+          "title": "Tinder cuts app cold starts by 47% with new R8 Configuration Analyzer",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1d9ca4c588aca6e3",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+      "canonical_title": "Preparing your app for broader memory limits",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+          "title": "Preparing your app for broader memory limits",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "73adc517b62b8a5f",
+      "cluster_key": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "canonical_url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "canonical_title": "Camera ITS tests",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+          "title": "Camera ITS tests",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7a9bb39859027801",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "canonical_title": "Media3 1.11 - What's new?",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+          "title": "Media3 1.11 - What's new?",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+          "title": "Android Developers Blog: Media3 1.11 - What's new?",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ea3045b15625013f",
+      "cluster_key": "https://android-developers.googleblog.com/2026/07/five-years-of-jetpack-compose.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/07/five-years-of-jetpack-compose.html",
+      "canonical_title": "Celebrating 5 years of Jetpack Compose",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/07/five-years-of-jetpack-compose.html",
+          "title": "Celebrating 5 years of Jetpack Compose",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2e09be47b7d035b1",
+      "cluster_key": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "canonical_title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9e95b9aeb5650263",
+      "cluster_key": "https://source.android.com/docs/whatsnew",
+      "canonical_url": "https://source.android.com/docs/whatsnew",
+      "canonical_title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/whatsnew",
+          "title": "What&apos;s new &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b564c567eef7ae59",
+      "cluster_key": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_url": "https://source.android.com/docs/compatibility/cdd",
+      "canonical_title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cdd",
+          "title": "Android Compatibility Definition Document &nbsp;|&nbsp; Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e5865d30f7130d3e",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+      "canonical_title": "August",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-08-01",
+          "title": "August",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "75d264a87b072569",
+      "cluster_key": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/",
+      "canonical_title": "[PATCH v4 14/15] media: atomisp: allow raw Bayer capture",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v4 14/15] media: atomisp: allow raw Bayer capture",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v4 14/15] media: atomisp: allow raw Bayer capture - Maurizio Casciano",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1c1f705a3a910f6c",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+      "canonical_title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+          "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+          "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor - Lachlan Michael",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "504990dc142c1eed",
+      "cluster_key": "https://lore.kernel.org/linux-media/9535d6ecaa9b12421a6b17de54a954aa336a7819.1787872237.git.mauriziocasciano7@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/9535d6ecaa9b12421a6b17de54a954aa336a7819.1787872237.git.mauriziocasciano7@gmail.com/",
+      "canonical_title": "[PATCH v3 11/12] media: atomisp: allow raw Bayer capture",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/9535d6ecaa9b12421a6b17de54a954aa336a7819.1787872237.git.mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v3 11/12] media: atomisp: allow raw Bayer capture",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e61e74efc0135043",
+      "cluster_key": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+      "canonical_title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link - Maurizio Casciano",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c3d7190c17af1c4a",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+      "canonical_title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e34db6a141abb98f",
+      "cluster_key": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+      "canonical_title": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c2ff09df251ce362",
+      "cluster_key": "https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/",
+      "canonical_title": "[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/",
+          "title": "[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "68d4c56f1ab28019",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260829115832.8749-1-robertbozik@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260829115832.8749-1-robertbozik@gmail.com/",
+      "canonical_title": "[PATCH v3 0/3] media: Add OmniVision OV32C4 sensor driver",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260829115832.8749-1-robertbozik@gmail.com/",
+          "title": "[PATCH v3 0/3] media: Add OmniVision OV32C4 sensor driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "71634d058f0a8237",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28097",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28097/",
+      "canonical_title": "[1/7] libcamera: camera_sensor_properties: Add OV32C4",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28097/",
+          "title": "[1/7] libcamera: camera_sensor_properties: Add OV32C4",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8c84b0ed47729b93",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28105",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28105/",
+      "canonical_title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28105/",
+          "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/28105/",
+          "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e06d189691a8abeb",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28095",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28095/",
+      "canonical_title": "libcamera: Add quad-Bayer CFA layout support",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28095/",
+          "title": "libcamera: Add quad-Bayer CFA layout support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/28095/",
+          "title": "libcamera: Add quad-Bayer CFA layout support - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f48dcec4d5da3cff",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28150",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28150/",
+      "canonical_title": "[1/2] qcam: viewfinder_gl: Take the stride into account for unpacked Bayer",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28150/",
+          "title": "[1/2] qcam: viewfinder_gl: Take the stride into account for unpacked Bayer",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/28150/",
+          "title": "[1/2] qcam: viewfinder_gl: Take the stride into account for unpacked Bayer - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0b922814ffc57077",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28121",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28121/",
+      "canonical_title": "[v3,01/20] utils: update-kernel-headers: Add rkisp2-config.h",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28121/",
+          "title": "[v3,01/20] utils: update-kernel-headers: Add rkisp2-config.h",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ccbed31f8a68f556",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28115",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28115/",
+      "canonical_title": "[RFC,v1,1/8] ipa: libipa: agc: Keep frame duration limits ordered",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28115/",
+          "title": "[RFC,v1,1/8] ipa: libipa: agc: Keep frame duration limits ordered",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "58ac4bd2e71d4d82",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28146",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28146/",
+      "canonical_title": "debayer: Further demote 'Unsupported input format' log",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28146/",
+          "title": "debayer: Further demote 'Unsupported input format' log",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/28146/",
+          "title": "debayer: Further demote &#39;Unsupported input format&#39; log - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "982e6bffe45a6da8",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28144",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28144/",
+      "canonical_title": "[RFC,v2,1/1] ipa: libipa: awb: Allow tuning files to lower the minimum gain",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28144/",
+          "title": "[RFC,v2,1/1] ipa: libipa: awb: Allow tuning files to lower the minimum gain",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f192384906d3541a",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260817",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "635a6e61ae048b20",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260807",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260807",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260807",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "35305757066a6f71",
+      "cluster_key": "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+      "canonical_url": "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+      "canonical_title": "Previewing the Model Hardware Standard",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+          "title": "Previewing the Model Hardware Standard",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1e032b3767d6bbcd",
+      "cluster_key": "https://www.anthropic.com/news/wellbeing-research-grants",
+      "canonical_url": "https://www.anthropic.com/news/wellbeing-research-grants",
+      "canonical_title": "Funding better evaluations of AI’s impact on wellbeing",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.anthropic.com/news/wellbeing-research-grants",
+          "title": "Funding better evaluations of AI’s impact on wellbeing",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3368e02f484edc23",
+      "cluster_key": "https://www.anthropic.com/news/expanding-support-for-scientists",
+      "canonical_url": "https://www.anthropic.com/news/expanding-support-for-scientists",
+      "canonical_title": "Expanding our support for scientists",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.anthropic.com/news/expanding-support-for-scientists",
+          "title": "Expanding our support for scientists",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b1f1f868a8931cf1",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260828132104.21473-1-robertbozik@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260828132104.21473-1-robertbozik@gmail.com",
+      "canonical_title": "https://lore.kernel.org/linux-media/20260828132104.21473-1-robertbozik@gmail.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260828132104.21473-1-robertbozik@gmail.com",
+          "title": "https://lore.kernel.org/linux-media/20260828132104.21473-1-robertbozik@gmail.com/",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}

@@ -16,7 +16,9 @@
   --primary: #0066cc;
   --primary-hover: #0052a3;
   --chip: #e8f1fb;
-  --focus-ring: rgba(0, 102, 204, 0.35);
+  /* 불투명 액센트다. 35% 틴트는 흰 배경 1.72:1, 파치먼트 1.69:1 로 WCAG 1.4.11(3:1) 미달이라
+     초점이 어디 있는지가 잘 안 보였다. #0066cc 는 각각 5.57:1 · 5.11:1 이다. */
+  --focus-ring: #0066cc;
   --primary-border: rgba(0, 102, 204, 0.22);
   /* Apple은 chrome에 셰도우를 쓰지 않고 hairline border+표면색으로 elevation을 낸다.
      카드 가독성을 위한 최소한의 단일 저알파 셰도우만 남긴다(DESIGN.md Apple flat). */
@@ -113,9 +115,13 @@ img {
   height: auto;
 }
 
+/* [tabindex] 는 가로 스크롤 컨테이너처럼 네이티브가 아닌데 키보드 초점을 받는 요소를 위한
+   것이다(#1009). 빼 두면 그런 요소만 브라우저 기본 링을 써서 사이트 focus 신호가 두 종류가
+   된다. :focus-visible 이 이미 판정하므로 tabindex="-1" 의 프로그램 초점에는 붙지 않는다. */
 a:focus-visible,
 button:focus-visible,
-select:focus-visible {
+select:focus-visible,
+[tabindex]:focus-visible {
   outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
@@ -1352,6 +1358,9 @@ pre code {
 
 .issue-back {
   display: inline-block;
+  /* .issue-publish-badge 와 같은 이유 — .issue-hero grid 의 직접 자식이라 stretch 로 늘어난다.
+     알약처럼 눈에 보이지는 않지만 클릭·hover 영역이 줄 전체로 퍼진다. */
+  justify-self: start;
   margin-bottom: 26px;
   color: var(--muted);
   font-size: 0.875rem;
@@ -1382,8 +1391,12 @@ pre code {
   text-transform: uppercase;
 }
 
-/* 표시 계약 v2: 대상 주(제목)와 발행 주가 다를 때 h1 아래 보조 배지로 발행 주를 알린다. */
+/* 표시 계약 v2: 대상 주(제목)와 발행 주가 다를 때 h1 아래 보조 배지로 발행 주를 알린다.
+   .issue-hero 는 grid 라 직접 자식인 이 배지의 inline-flex 가 flex 로 blockify 되고,
+   justify-self 기본값 stretch 가 컬럼을 채워 알약이 전폭 막대가 된다. 내용 폭으로 되돌린다
+   (다른 알약들은 .issue-hero-meta·.tag-row 같은 래퍼 안이라 이 영향을 받지 않는다). */
 .newsletter-issue-page .issue-hero .issue-publish-badge {
+  justify-self: start;
   margin-top: 10px;
 }
 

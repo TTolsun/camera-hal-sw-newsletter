@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
   <title id="title">AI article fallback image</title>
   <desc id="desc">A simple neural grid and camera frame fallback illustration.</desc>
-  <rect width="1280" height="720" fill="#f7fafc"/>
+  <rect width="1280" height="720" fill="#f5f5f7"/>
   <g stroke="#d6e1f0" stroke-width="2">
     <path d="M160 120h960M160 240h960M160 360h960M160 480h960M160 600h960"/>
     <path d="M200 90v540M380 90v540M560 90v540M740 90v540M920 90v540M1100 90v540"/>

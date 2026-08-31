@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-31",
+  "generated_at": "2026-08-31T04:41:27.265Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 8,
+    "hit_count": 0,
+    "miss_count": 8,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 8
+    }
+  ],
+  "entries": [
+    {
+      "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+      "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-27T23:17:58Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+        "url_hash": "e61e74efc013504330a29ab537621c3c56c691509f9f5a5b901151b7c1429fe4",
+        "published_date": "2026-08-27T23:17:58Z",
+        "content_hash": "c09b6858784872effe2b2984c4db4efe14ece8da322b2debb31d7e12a7f27baa"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "libcamera: Add quad-Bayer CFA layout support",
+      "url": "https://patchwork.libcamera.org/patch/28095/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-08-25",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28095",
+        "url_hash": "e06d189691a8abeb29e2c9ec4fffda87e57eac12f4534de6734e3c61f67c2b3f",
+        "published_date": "2026-08-25",
+        "content_hash": "3c1ade8c952ae8ae1422a569be470d29f74f1cf65d9ffb41290248d9331100eb"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-27T18:18:01Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com",
+        "url_hash": "c3d7190c17af1c4ac1273d47df50d254defd2d2a5894a8a30f0d2ee6aacaf02c",
+        "published_date": "2026-08-27T18:18:01Z",
+        "content_hash": "c106eaf9f207d5aee47a3af60907744fc040271bfb42f211b090658ef1fb3916"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-28T06:49:22Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com",
+        "url_hash": "1c1f705a3a910f6c88da6aef60ab78abeb38ef0b19a8be21dda2e804f7a586ab",
+        "published_date": "2026-08-28T06:49:22Z",
+        "content_hash": "9fbbf5a950bede457ece50b8cbcd0261c2dbdbe90bc77a863fbb718dad2f5976"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "url": "https://patchwork.libcamera.org/patch/28105/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-08-26",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28105",
+        "url_hash": "8c84b0ed47729b930c6dbfd3ad5189806d53b1746b4bfe7db328fa1b94941793",
+        "published_date": "2026-08-26",
+        "content_hash": "630afe3f9e903ad2af0a92bebab50b60b88d11721860c36cee35803fa9a2ba31"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v4 14/15] media: atomisp: allow raw Bayer capture - Maurizio Casciano",
+      "url": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-28",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com",
+        "url_hash": "75d264a87b072569ed3e8222e5d1a6bb1c9f3fce34c77e58e364d2d956273868",
+        "published_date": "2026-08-28",
+        "content_hash": "fe4cd8086a2fed3881fff700fc60ff9a4c7b8f8c75589a0bd118148b65dd8db5"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "CameraX | Jetpack | Android Developers",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "source": "androidx-camerax-release-notes",
+      "published_date": "",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+        "url_hash": "49d58944bd3ca26fc6929250597a6e3ac743d90f600cd01698fcbefbe1b6c83f",
+        "published_date": "",
+        "content_hash": "ea356ab7ffbe1968f8f6e1f9133e3238ea7438272e32c7c7a787ad3649048541"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+      "url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-28",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com",
+        "url_hash": "e34db6a141abb98fe0299749732b5dbd15978a22c062c16e1e876549ad856d80",
+        "published_date": "2026-08-28",
+        "content_hash": "25f1a41ef483f9615769bae3d908d8eb2b2809f882ea74c9ea09f0357af5b6d8"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

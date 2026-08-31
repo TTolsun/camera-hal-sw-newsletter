@@ -2,6 +2,14 @@ const { ensureArray } = require('../../shared/common/value-coercion');
 const CAPSULE_TOKEN_TARGET = '700-1200';
 const MAX_TEXT = 420;
 const MAX_EVIDENCE_ITEMS = 3;
+// behavior_change, version_or_release, api_or_component는 후보 자신을 되뇌는 식별 정보다.
+// 릴리스 후보에서는 이 셋이 전부 태그 이름을 반복하는 문장이라, 셋에게 evidence를 다 내주면
+// 본문에서 온 문장이 구조적으로 한 칸도 못 들어간다(2026-08-24호 실측). 그래서 한 칸은 본문 계열
+// 근거(release bullet, summary)에 **먼저** 떼어 준다. 뒤에 두면 evidence_note나 seed fact가 하나만
+// 있어도 본문이 그 자리를 빼앗긴다 — reporter 프롬프트가 evidence_notes를 요구하므로 노트가 있는
+// 쪽이 오히려 프로덕션 후보의 정상 형태다. 식별 정보 자체는 지우지 않으며, 밀려나는
+// api_or_component는 capsule.component에 그대로 실린다.
+const RESERVED_BODY_EVIDENCE_ITEMS = 1;
 const MAX_IMAGE_CANDIDATES = 3;
 // 블로그 워크플로 서술은 릴리스 노트 불릿과 달리 산문이라 같은 섹션 수여도 훨씬 길다.
 // compactExtractionSections 기본 상한(5섹션)에 맡기면 실측상 capsule이
@@ -112,23 +120,50 @@ function summaryCacheText(candidate) {
   return compactText(cache.summary || cache.text || '');
 }
 
+// evidence 한 줄은 `라벨: 값`이지만, 중복 판정은 라벨을 붙이기 전 값으로 한다. compactText가 라벨과
+// 값을 **함께** 160자로 자르기 때문에, 라벨이 길수록 값이 더 짧게 잘려 원문이 같아도 잘린 문자열이
+// 서로 달라진다 — 2026-08-24 Camera ITS overview 후보는 185자짜리 같은 문장이 behavior_change에서
+// 143자, summary에서 151자로 갈려 3칸 중 2칸을 같은 문장에 썼다. 그래서 그룹은 [라벨, 값] 쌍으로
+// 만들고, 자르기 전 값으로 중복을 걸러낸 뒤, 살아남은 쌍에만 라벨을 붙여 자른다.
+function evidenceGroup(entries) {
+  return entries
+    .map(([label, value]) => [label, text(value).replace(/\s+/g, ' ')])
+    .filter(([, value]) => value);
+}
+
 function evidenceItems(candidate) {
   const sourceExtractionBullet = ensureArray(candidate?.source_extraction?.release?.sections)
     .flatMap(section => ensureArray(section?.items))
     .map(item => text(item?.text || item?.source_text))
     .find(Boolean);
-  const items = [
-    candidate.version_or_release ? `version_or_release: ${candidate.version_or_release}` : '',
-    candidate.api_or_component ? `api_or_component: ${candidate.api_or_component}` : '',
-    candidate.behavior_change ? `behavior_change: ${candidate.behavior_change}` : '',
-    sourceExtractionBullet ? `source_extraction.release_bullet: ${sourceExtractionBullet}` : '',
-    ...ensureArray(candidate.compact_evidence?.primary_facts).map(item => `seed_primary_fact: ${item}`),
-    ...ensureArray(candidate.compact_evidence?.linked_context).map(item => `seed_linked_context: ${item}`),
-    ...ensureArray(candidate.evidence_notes).map(item => `evidence_note: ${item}`),
-    summaryCacheText(candidate) ? `summary_cache: ${summaryCacheText(candidate)}` : '',
-    candidate.summary ? `summary: ${candidate.summary}` : ''
-  ].map(item => compactText(item, 160)).filter(Boolean);
-  return [...new Set(items)].slice(0, MAX_EVIDENCE_ITEMS);
+  const identityPairs = evidenceGroup([
+    ['behavior_change', candidate.behavior_change],
+    ['version_or_release', candidate.version_or_release],
+    ['api_or_component', candidate.api_or_component]
+  ]);
+  const bodyPairs = evidenceGroup([
+    ['source_extraction.release_bullet', sourceExtractionBullet],
+    ['summary', candidate.summary]
+  ]);
+  const supportingPairs = evidenceGroup([
+    ...ensureArray(candidate.compact_evidence?.primary_facts).map(item => ['seed_primary_fact', item]),
+    ...ensureArray(candidate.compact_evidence?.linked_context).map(item => ['seed_linked_context', item]),
+    ...ensureArray(candidate.evidence_notes).map(item => ['evidence_note', item]),
+    ['summary_cache', summaryCacheText(candidate)]
+  ]);
+  // 식별 필드는 예약분을 뺀 칸까지만 앞에서 쓰고, 남는 식별 필드는 본문·보조 근거가 모자랄 때만
+  // 뒤에서 채운다.
+  const pairs = [
+    ...identityPairs.slice(0, MAX_EVIDENCE_ITEMS - RESERVED_BODY_EVIDENCE_ITEMS),
+    ...bodyPairs,
+    ...supportingPairs,
+    ...identityPairs.slice(MAX_EVIDENCE_ITEMS - RESERVED_BODY_EVIDENCE_ITEMS)
+  ];
+  const values = pairs.map(([, value]) => value);
+  return pairs
+    .filter((pair, index) => values.indexOf(values[index]) === index)
+    .slice(0, MAX_EVIDENCE_ITEMS)
+    .map(([label, value]) => compactText(`${label}: ${value}`, 160));
 }
 
 function compactExtractionItems(items) {

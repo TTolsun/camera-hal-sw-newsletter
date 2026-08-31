@@ -24,6 +24,7 @@ const {
   validateRenderedIssueStructure
 } = require('../quality/rendered-issue-structure');
 const {
+  NEWSLETTER_ARTICLE_COOLDOWN_DAYS,
   readExposureHistory,
   recordArticleExposure,
   recordNewsletterArticles,
@@ -111,10 +112,13 @@ function persistHeadlineStateArtifacts({ date, shortlistReport, shouldWritePubli
   }
   const sections = ensureArray(editor?.sections);
   if (sections.length > 0) {
+    // 선정 후보를 함께 넘겨 발행 기록이 후보와 같은 identity 공간(url:)에 남게 한다. editor
+    // section만으로는 키가 상수 content: 해시 하나로 붕괴해 재게재 검사가 영영 매칭되지 않는다.
     history = recordNewsletterArticles(history, sections, {
       date,
       newsletterUrl: `newsletters/${date}/index.html`,
-      cooldownDays: 21
+      cooldownDays: NEWSLETTER_ARTICLE_COOLDOWN_DAYS,
+      selectedArticles: ensureArray(shortlistReport.selected_articles)
     });
   }
   const historyPath = writeExposureHistory(root, history);

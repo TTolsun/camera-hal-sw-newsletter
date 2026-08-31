@@ -1,4 +1,5 @@
 const assert = require('assert');
+const crypto = require('crypto');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -23,6 +24,7 @@ const {
   articlePolicy,
   qualityGatePolicy
 } = require('../../common/newsletter-policy');
+const { findManifestPathConventionViolations } = require('../validate/artifact-path-convention-check');
 
 const date = '2026-05-03';
 
@@ -74,92 +76,17 @@ function seedAgreeingSnapshot(snapshotDir) {
   writeText(path.join(snapshotDir, ...newsroomRelPath(date, 'quality-report.md').split('/')), '# Quality\n');
 }
 
-// 매니페스트 경로 규약 잠금(#952).
+// 매니페스트 경로 규약 잠금(#952)의 판정은 validate/artifact-path-convention-check.js가 갖고,
+// 커밋된 매니페스트 전수 스캔은 `npm run check:artifact-path-convention`이 돌린다(#957). 술어 자체의
+// 케이스는 src/generator/test/workflow/artifact-path-convention-check.test.js가 잠근다.
 //
-// 매니페스트가 기록하는 경로는 #262 phase 6(2026-06-13 머지)을 경계로 두 규약으로 갈린다.
-// 그 전에 쓰인 매니페스트는 공개 출력물을 articles/ 접두 없이 content/·data/·newsletters/·
-// sitemap.xml로 기록했고, 그 뒤에 쓰인 매니페스트는 저장소 루트 기준이라 articles/로 시작한다.
-// schema_version은 이 차이를 표시하지 않는다(4가 두 규약에 모두 걸쳐 있다). 그래서 규약을
-// 산문 대신 이 검사로 잠근다 — 새로 쓰이는 매니페스트는 반드시 저장소 루트 기준이어야 하고,
-// 이미 커밋된 과거 매니페스트는 쓰이던 시점의 규약을 그대로 지켜야 한다(사후 정규화 금지).
-//
-// 경계 날짜는 첫 관측이 아니라 원인에 맞춘다. #262 phase 6 머지가 42fd4ba1 = 2026-06-13 12:29 KST다.
-// 06-13 당일 run은 세 번 돌았는데(11:14 / 13:21 / 15:32), 머지 뒤의 두 번이 이미 루트 기준으로
-// 기록했고 머지 전 옛 규약 사본은 같은 날 188c10fa가 orphan으로 지웠다. 그래서 트리에 남은 06-13
-// artifact는 전부 루트 기준이고, 06-13을 옛 규약 쪽에 두면 그 날짜를 replay할 때 생산자는 루트
-// 기준으로 쓰는데 검사만 옛 규약을 요구해 거짓 실패한다. 커밋된 매니페스트는 06-11(옛 규약)에서
-// 06-16(루트 기준)으로 건너뛰므로 이 경계로 바뀌는 현재 판정은 없다.
-const REPOSITORY_ROOT_PATH_CONVENTION_START_DATE = '2026-06-13';
-const MANIFEST_PATH_ARRAYS = ['files', 'review_artifacts', 'retained_heavy_artifacts', 'committed_artifacts'];
-const PUBLIC_OUTPUT_ROOT_PREFIXES = ['content/', 'data/', 'newsletters/'];
-
-// 규약 판별 대상은 #262에서 articles/ 아래로 옮겨진 공개 출력물 경로뿐이다. .tmp/·cache/·state/는
-// 공개 출력물이 아니라 이동 대상이 아니었으므로 판별에 쓸 수 없다. 특히 state/는 루트 기준
-// 매니페스트에만 나와 비교할 옛 형태가 아예 없다(옛 규약 시절 같은 파일은
-// data/article-exposure-history.json이었다).
-function isPublicOutputManifestPath(relPath) {
-  const withoutArticlesPrefix = relPath.startsWith('articles/')
-    ? relPath.slice('articles/'.length)
-    : relPath;
-  return withoutArticlesPrefix === 'sitemap.xml' ||
-    PUBLIC_OUTPUT_ROOT_PREFIXES.some(prefix => withoutArticlesPrefix.startsWith(prefix));
-}
-
-function manifestPathEntries(manifest) {
-  const entries = [];
-  for (const key of MANIFEST_PATH_ARRAYS) {
-    for (const entry of manifest[key] || []) {
-      if (entry && typeof entry.path === 'string') entries.push({ key, path: entry.path });
-    }
-  }
-  return entries;
-}
-
-function assertManifestPathConvention(manifest, { label, expectArticlesPrefix }) {
-  let publicOutputPathCount = 0;
-  for (const entry of manifestPathEntries(manifest)) {
-    if (!isPublicOutputManifestPath(entry.path)) continue;
-    publicOutputPathCount += 1;
-    const hasArticlesPrefix = entry.path.startsWith('articles/');
-    assert.strictEqual(
-      hasArticlesPrefix,
-      expectArticlesPrefix,
-      expectArticlesPrefix
-        ? `${label}: ${entry.key}[] 경로 "${entry.path}"가 저장소 루트 기준이 아니다. #262 이후 공개 출력물 경로는 articles/로 시작해야 한다.`
-        : `${label}: ${entry.key}[] 경로 "${entry.path}"에 articles/ 접두가 붙었다. #262 이전 매니페스트는 기록된 규약 그대로 두어야 한다(#952).`
-    );
-  }
-  assert.ok(
-    publicOutputPathCount > 0,
-    `${label}: 공개 출력물 경로가 하나도 없어 경로 규약을 검사하지 못했다`
-  );
-}
-
-// 이미 커밋된 매니페스트는 감사 기록이라 사후에 경로를 고쳐 쓰지 않는다. 대신 각 매니페스트가
-// 자기 날짜의 규약을 지키는지 확인해, 새 매니페스트가 옛 규약으로 쓰이거나 과거 매니페스트가
-// 조용히 정규화되면 이 검사가 실패하게 한다.
-function testTrackedManifestPathConvention() {
-  const repositoryRoot = path.resolve(__dirname, '..', '..', '..', '..');
-  const newsroomRoot = path.join(repositoryRoot, 'articles', 'content', 'newsroom');
-  const dateDirectories = fs.readdirSync(newsroomRoot, { withFileTypes: true })
-    .filter(entry => entry.isDirectory() && /^\d{4}-\d{2}-\d{2}$/.test(entry.name))
-    .map(entry => entry.name)
-    .sort();
-
-  let checkedManifestCount = 0;
-  for (const dateDirectory of dateDirectories) {
-    const manifestPath = path.join(newsroomRoot, dateDirectory, 'artifact-manifest.json');
-    if (!fs.existsSync(manifestPath)) continue;
-    assertManifestPathConvention(JSON.parse(fs.readFileSync(manifestPath, 'utf8')), {
-      label: `articles/content/newsroom/${dateDirectory}/artifact-manifest.json`,
-      expectArticlesPrefix: dateDirectory >= REPOSITORY_ROOT_PATH_CONVENTION_START_DATE
-    });
-    checkedManifestCount += 1;
-  }
-
-  assert.ok(
-    checkedManifestCount > 0,
-    '커밋된 artifact-manifest.json을 하나도 읽지 못했다 — 경로 규약 검사가 무력화됐다'
+// 여기 남은 것은 생산자(buildManifest·buildDateReviewManifest)가 쓴 매니페스트를 그 자리에서 보는
+// 단언뿐이다. 그건 실데이터 의존이 아니라 방금 만든 결과물을 보는 것이라 `npm run test`에 남는다.
+function assertManifestPathConvention(manifest, options) {
+  const violations = findManifestPathConventionViolations(manifest, options);
+  assert.deepStrictEqual(
+    violations.map(violation => `${violation.label}: ${violation.key}[] "${violation.path}" — ${violation.reason}`),
+    []
   );
 }
 
@@ -233,13 +160,26 @@ function testManifestCreationAndHashes() {
   assert.ok(manifest.files.some(file => file.path === newsroomRelPath(date, 'evidence-pack-summary.json')));
   assert.ok(manifest.files.some(file => file.path === '.tmp/gemini-raw/attempt-1.json'));
   assert.ok(manifest.files.some(file => file.path === 'cache/news-summary/summary.json'));
-  assert.ok(manifest.files.every(file => /^[a-f0-9]{64}$/.test(file.sha256)));
-  assert.ok(manifest.files.every(file =>
-    Object.keys(file).sort().join(',') === 'path,sha256,size' &&
-    typeof file.path === 'string' &&
-    typeof file.size === 'number' &&
-    typeof file.sha256 === 'string'
-  ));
+  // 스냅샷 매니페스트의 files[] 항목도 path만 담는다(#1018). 이 배열의 size·sha256을 읽던
+  // 소비자는 heavy 부분집합만 쓰는 retained_heavy_artifacts[] 하나뿐이었고, 나머지 비-heavy
+  // 항목은 커밋되는 파일이라 바이트 정본이 Git tree에 있다. 그래서 date-scoped 매니페스트가
+  // 이미 따르는 계약(#951)에 스냅샷 매니페스트도 맞춘다.
+  assert.ok(manifest.files.length > 0, 'files should not be empty');
+  assert.ok(
+    manifest.files.every(file =>
+      Object.keys(file).sort().join(',') === 'path' &&
+      typeof file.path === 'string'
+    ),
+    'files entries must carry exactly path'
+  );
+
+  // review_artifacts[] 항목은 size·sha256을 담지 않는다(#951). 이 배열은 리뷰 인벤토리에서
+  // 그대로 나오므로 두 매니페스트 표면이 같은 계약을 공유한다.
+  assert.ok(manifest.review_artifacts.length > 0, 'review_artifacts should not be empty');
+  assert.ok(
+    manifest.review_artifacts.every(entry => !('size' in entry) && !('sha256' in entry)),
+    'review_artifacts entries must not carry size or sha256'
+  );
   assert.ok(manifest.files.every(file => !file.path.endsWith('artifact-manifest.json')));
   assert.ok(manifest.missing_critical_files.includes(`articles/newsletters/${date}/newsletter.md`));
 
@@ -258,6 +198,27 @@ function testManifestCreationAndHashes() {
   assert.ok(typeof heavyShortlisted.retention_location === 'string');
   assert.ok(typeof heavyShortlisted.size === 'number');
   assert.ok(typeof heavyShortlisted.sha256 === 'string');
+
+  // heavy 항목은 Git 밖 Actions artifact 안의 파일을 식별하는 유일한 수단이라 size·sha256을
+  // 그대로 유지한다. files[]에서 바이트 사본이 사라져도 이 값들은 실제 파일과 계속 일치해야 한다.
+  const heavyShortlistedPath = path.join(snapshotDir, ...newsroomRelPath(date, 'shortlisted-candidates.json').split('/'));
+  assert.strictEqual(heavyShortlisted.size, fs.statSync(heavyShortlistedPath).size);
+  assert.strictEqual(
+    heavyShortlisted.sha256,
+    crypto.createHash('sha256').update(fs.readFileSync(heavyShortlistedPath)).digest('hex')
+  );
+  assert.ok(manifest.retained_heavy_artifacts.length > 0, 'retained_heavy_artifacts should not be empty');
+  assert.ok(
+    manifest.retained_heavy_artifacts.every(entry =>
+      Object.keys(entry).sort().join(',') === 'path,retention_grade,retention_location,sha256,size' &&
+      typeof entry.size === 'number' &&
+      /^[a-f0-9]{64}$/.test(entry.sha256) &&
+      // 등급 구성도 함께 잠근다. 커밋되는 파일이 이 배열로 새면 PR diff에 이미 있는 파일의
+      // 바이트 사본이 다시 생기고, 리뷰어는 Actions artifact에 없는 경로를 찾게 된다.
+      (entry.retention_grade === DEBUG_HEAVY || entry.retention_grade === TRANSIENT_ATTEMPT)
+    ),
+    'retained_heavy_artifacts entries must keep size and sha256 and stay heavy-graded'
+  );
 
   const committedSelectionReport = manifest.committed_artifacts.find(a =>
     a.path === newsroomRelPath(date, 'selection-report.json')
@@ -549,6 +510,25 @@ function testBuildDateReviewManifestRetentionFields() {
   assert.ok(typeof manifest.retention_summary === 'object', 'retention_summary should be an object');
   assert.ok(typeof manifest.retention_location === 'string', 'retention_location should be a string');
 
+  // files[] 항목은 경로만 담는다. 여기 있던 size·sha256은 review_artifacts[] 항목의 사본이었고,
+  // 커밋되는 파일의 바이트 정본은 Git tree라 두 번째 정본을 두지 않는다(#951).
+  assert.ok(manifest.files.length > 0, 'files should not be empty');
+  assert.ok(
+    manifest.files.every(file => !('size' in file) && !('sha256' in file)),
+    'files entries must not carry size or sha256'
+  );
+  assert.ok(
+    manifest.files.every(file => Object.keys(file).sort().join(',') === 'path'),
+    'files entries must carry exactly path'
+  );
+
+  // review_artifacts[] 항목도 같은 이유로 size·sha256을 담지 않는다(#951).
+  assert.ok(manifest.review_artifacts.length > 0, 'review_artifacts should not be empty');
+  assert.ok(
+    manifest.review_artifacts.every(entry => !('size' in entry) && !('sha256' in entry)),
+    'review_artifacts entries must not carry size or sha256'
+  );
+
   const heavyShortlisted = manifest.retained_heavy_artifacts.find(a =>
     a.path === newsroomRelPath(date, 'shortlisted-candidates.json')
   );
@@ -588,6 +568,5 @@ testRecoveryPromptAttentionPolicy();
 testDerivedMissingWarningsAndOptionalGateBlocking();
 testRetentionGradeAssignment();
 testBuildDateReviewManifestRetentionFields();
-testTrackedManifestPathConvention();
 
 console.log('Artifact manifest tests passed.');

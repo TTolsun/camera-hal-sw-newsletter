@@ -1,5 +1,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
+
+const { LLM_STAGES, stageRun } = require('../../../shared/llm/stage-catalog');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -111,7 +113,7 @@ function baseArgs(overrides = {}) {
     date: '2026-05-08',
     reporter: { candidates: [] },
     attempt: 1,
-    editorStage: 'editor attempt 1/1',
+    editorStage: stageRun(LLM_STAGES.EDITOR, { qualityAttempt: 1, totalAttempts: 1 }),
     editorRetryContract: null,
     publishMode: 'normal',
     commonContext: 'common',

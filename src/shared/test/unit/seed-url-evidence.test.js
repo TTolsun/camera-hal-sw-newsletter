@@ -6,9 +6,11 @@ const test = require('node:test');
 
 const {
   assertPublicHttpsUrl,
+  buildPrimaryEvidence,
   fetchPublicText,
   mergeSeedCandidates,
-  runSeedEvidenceExpansion
+  runSeedEvidenceExpansion,
+  seedCandidateFromEvidence
 } = require('../../../discovery/seed-evidence');
 const {
   seedCandidatesPath,
@@ -545,4 +547,115 @@ test('failed linked evidence is excluded from usable compact evidence fields', a
 
   const evidencePack = readJson(seedEvidencePackPath(root, date));
   assert.equal(evidencePack.packs[0].linked_evidence[0].fetch_status, 'failed_or_blocked');
+});
+
+// #1006: seed 레인이 읽는 source_extraction 그룹 목록을 잠근다. release와 minor_line_context는
+// 읽고 workflow는 읽지 않는 것이 현재 계약이며, 그렇게 두는 근거는 src/discovery/seed-evidence.js의
+// sourceExtractionItems 위 주석에 있다. buildPrimaryEvidence와 seedCandidateFromEvidence는 이
+// 계약을 단언하려고 노출한 테스트 전용 진입점이다. 공개 경로(runSeedEvidenceExpansion)로는
+// 단언할 수 없는데, 그 경로는 seed 페이지 HTML을 parseSourceSpecificItems에 넣어 후보를 만들고
+// 어떤 parser도 workflow 컨테이너를 만들지 않기 때문이다.
+const workflowGroupSeed = {
+  seed_id: 'seed-workflow',
+  url: 'https://developer.android.com/jetpack/androidx/releases/camera'
+};
+const workflowGroupSource = {
+  name: 'Android Developers Blog',
+  category: 'android',
+  sourceUrl: 'https://developer.android.com/'
+};
+const workflowItemText = 'Workflow paragraph describing an Android camera pipeline change.';
+const workflowGroup = {
+  sections: [{ title: 'What changed', items: [{ text: workflowItemText }] }]
+};
+
+function seedCandidateFor(candidate, primaryEvidence) {
+  return seedCandidateFromEvidence({
+    date: '2026-08-20',
+    seed: workflowGroupSeed,
+    source: workflowGroupSource,
+    candidate,
+    primaryEvidence,
+    packIndex: 0
+  });
+}
+
+test('seed primary evidence ignores the source_extraction.workflow group', () => {
+  const candidate = {
+    title: 'Dated blog article',
+    url: 'https://developer.android.com/blog/dated-article',
+    publishedAt: '2026-08-20',
+    source_extraction: { workflow: workflowGroup }
+  };
+
+  const evidence = buildPrimaryEvidence(workflowGroupSeed, candidate, 0, workflowGroupSeed.url);
+
+  assert.deepEqual(evidence.source_backed_items, []);
+
+  const seedCandidate = seedCandidateFor(candidate, evidence);
+
+  assert.deepEqual(seedCandidate.source_backed_items, []);
+  assert.equal(seedCandidate.finalSelectionEligibility, 'watchlist');
+  assert.equal(seedCandidate.final_selection_eligibility, 'watchlist');
+  assert.equal(seedCandidate.source_gap_risk, true);
+  assert.equal(seedCandidate.main_eligible, false);
+});
+
+test('workflow-only seed candidates fall back to summary and behavior_change', () => {
+  const candidate = {
+    title: 'Dated blog article',
+    url: 'https://developer.android.com/blog/dated-article',
+    publishedAt: '2026-08-20',
+    summary: 'Page level summary sentence for the dated article.',
+    behavior_change: 'Anchor sentence describing the behavior change.',
+    source_extraction: { workflow: workflowGroup }
+  };
+
+  const evidence = buildPrimaryEvidence(workflowGroupSeed, candidate, 0, workflowGroupSeed.url);
+
+  assert.deepEqual(evidence.source_backed_items, [
+    'Page level summary sentence for the dated article.',
+    'Anchor sentence describing the behavior change.'
+  ]);
+  assert.equal(evidence.source_backed_items.includes(workflowItemText), false);
+});
+
+test('seed primary evidence still reads release and minor_line_context groups', () => {
+  const candidate = {
+    title: 'CameraX 1.6.1 release notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
+    publishedAt: '2026-08-20',
+    summary: 'Fallback summary that must not win over source_extraction items.',
+    source_extraction: {
+      release: {
+        version: 'CameraX 1.6.1',
+        sections: [{ items: [{ text: 'Fixed CameraX stream validation.' }] }]
+      },
+      minor_line_context: {
+        sections: [{ items: [{ source_text: 'Minor line note about buffer handling.' }] }]
+      },
+      workflow: workflowGroup
+    }
+  };
+
+  const evidence = buildPrimaryEvidence(workflowGroupSeed, candidate, 0, workflowGroupSeed.url);
+
+  assert.deepEqual(evidence.source_backed_items, [
+    'Fixed CameraX stream validation.',
+    'Minor line note about buffer handling.'
+  ]);
+  assert.equal(evidence.source_backed_items.includes(workflowItemText), false);
+  assert.equal(evidence.evidence_granularity, 'structured_source_extraction');
+
+  const seedCandidate = seedCandidateFor(candidate, evidence);
+
+  assert.equal(seedCandidate.finalSelectionEligibility, 'short');
+  assert.equal(seedCandidate.final_selection_eligibility, 'short');
+  assert.equal(seedCandidate.source_gap_risk, false);
+  assert.equal(seedCandidate.main_eligible, true);
+  assert.equal(seedCandidate.version_or_release, 'CameraX 1.6.1');
+  assert.deepEqual(seedCandidate.compact_evidence.primary_facts, [
+    'Fixed CameraX stream validation.',
+    'Minor line note about buffer handling.'
+  ]);
 });

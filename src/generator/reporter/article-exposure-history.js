@@ -4,11 +4,15 @@ const path = require('path');
 
 const {
   articleIdentityKey,
+  normalizeArticleUrl,
   sourceUrl
 } = require('../../shared/common/article-identity');
 
 const EXPOSURE_HISTORY_REL_PATH = path.join('state', 'article-exposure-history.json');
 const SCHEMA_VERSION = 1;
+// main 기사로 발행된 URL의 재게재 쿨다운(일). 이 모듈이 cooldown_until을 계산하고 판정하므로
+// 값도 여기 한 곳에만 둔다 — 호출부가 각자 21을 적으면 사본이 늘고 조용히 어긋난다.
+const NEWSLETTER_ARTICLE_COOLDOWN_DAYS = 21;
 
 function text(value) {
   return String(value || '').trim();
@@ -132,7 +136,12 @@ function recordArticleExposure(history, article = {}, options = {}) {
     exposed_at: text(options.exposedAt || options.date || article.selected_at || todayDate())
   };
   if (exposureType === 'newsletter_article' && newsletterDate) {
-    record.cooldown_until = addDays(newsletterDate, Number(options.cooldownDays) || 21);
+    // newsletter_date는 "마지막 노출 주"다. 같은 URL이 다음 주에도 헤드라인으로 유지되면 그때의
+    // homepage_headline 기록이 spread로 그 값을 덮는다(cooldown_until은 이 분기에서만 쓰이므로
+    // 살아남는다). 그래서 main 기사로 발행된 주를 따로 남긴다 — 쿨다운의 시작일이자, 재게재
+    // 경고가 "언제 발행됐는지"로 인용해야 하는 값이다.
+    record.newsletter_article_date = newsletterDate;
+    record.cooldown_until = addDays(newsletterDate, Number(options.cooldownDays) || NEWSLETTER_ARTICLE_COOLDOWN_DAYS);
   }
   record.first_exposed_at = record.exposed_at;
   record.last_exposed_at = record.exposed_at;
@@ -164,15 +173,40 @@ function recordArticleExposure(history, article = {}, options = {}) {
   return normalized;
 }
 
+// editor section을 그대로 기록하면 identity가 붕괴한다. section의 출처는 sources 배열이라
+// articleIdentityKey의 url: 경로에 걸리지 않고, contentHash가 보는 7개 필드(title/summary/...)도
+// 전부 비어 join 결과가 상수가 된다 — 내용과 무관하게 모든 section이 같은 키를 낸다.
+//
+// 그래서 section을 축으로 두고 identity만 후보에서 가져온다. 후보는 이미 decorateCandidate가 붙인
+// article_identity_key(url: 공간)를 갖고 있으므로, 발행 기록이 다음 주 후보와 같은 공간에 남는다.
+// 후보를 못 찾으면 section의 소스 URL로 같은 url: 키를 직접 만든다.
+//
+// 축을 editor.sections로 두는 것은 의도한 선택이다. weekly merge가 section을 reject하면 발행되지
+// 않은 기사가 기록될 수 있지만, 발행이 주 1회라 과기록의 실질 차이가 거의 없다. 반대로
+// weeklyFinalArticles와 분기하면 기록 축이 둘로 갈라져 어느 쪽이 정본인지 알 수 없게 된다.
+//
+// 후보 대조는 articleIdentityKey로 한다. sourceUrl은 normalized_url을 url보다 먼저 보는데 그 값은
+// selection normalizer 산물이라 URL 전체가 소문자이고 쿼리가 없다 — section이 들고 있는 raw 후보
+// URL과 정규화 규칙이 달라, 대문자나 쿼리(예: developer.android.com의 ?hl=)가 있으면 조용히
+// 빗나간다. 후보의 article_identity_key는 raw URL에서 만들어지므로 같은 규칙끼리 맞는다.
+function newsletterArticleExposure(section, selectedArticles) {
+  const url = text(section.source_candidate_url) || text(ensureArray(section.sources)[0]?.url);
+  const fallback = { canonical_url: url, title: text(section.headline) };
+  const key = normalizeArticleUrl(url);
+  // 키가 비면 대조하지 않는다. 빈 키끼리 맞아떨어지면 발행되지 않은 URL에 쿨다운이 찍힌다.
+  if (!key) return fallback;
+  return ensureArray(selectedArticles).find(item => articleIdentityKey(item) === `url:${key}`) || fallback;
+}
+
 function recordNewsletterArticles(history, sections = [], options = {}) {
   let current = normalizeExposureHistory(history, options.date || todayDate());
   for (const section of ensureArray(sections)) {
     if (!section || typeof section !== 'object') continue;
-    current = recordArticleExposure(current, section, {
+    current = recordArticleExposure(current, newsletterArticleExposure(section, options.selectedArticles), {
       date: options.date,
       type: 'newsletter_article',
       newsletterUrl: options.newsletterUrl,
-      cooldownDays: options.cooldownDays || 21
+      cooldownDays: options.cooldownDays || NEWSLETTER_ARTICLE_COOLDOWN_DAYS
     });
   }
   return current;
@@ -184,19 +218,53 @@ function exposureMap(history = {}) {
     .filter(([key]) => key));
 }
 
-function annotateArticleExposure(article = {}, history = {}) {
+// 한 레코드가 newsletter_article로 노출된 적이 있는지 판정하는 단일 술어.
+// exposure_type(단수)은 "마지막" 노출 유형이다. 어떤 URL이 한 주에 main 기사로 나간 뒤 다음 주에
+// 헤드라인으로 유지되면 그 값이 homepage_headline으로 덮인다. 누적 이력인 exposure_types까지 함께
+// 봐야 쿨다운 검사(annotateArticleExposure)와 catch-up 필터(everCoveredAsNewsletterArticle)가
+// 같은 질문에 같은 답을 한다 — 예전에는 앞의 것만 단수형을 봐서 헤드라인 유지 주에 조용히 죽었다.
+function isNewsletterArticleRecord(record) {
+  if (!record || typeof record !== 'object') return false;
+  return text(record.exposure_type) === 'newsletter_article' ||
+    ensureArray(record.exposure_types).includes('newsletter_article');
+}
+
+// 이력이 들고 있는 main 기사 발행 기록의 수. 재게재 게이트가 실제로 볼 데이터가 몇 건인지를
+// 산출물에 남기는 값이라, 레코드 술어를 가진 이 모듈이 함께 센다. 호출부가 각자 exposure_type과
+// exposure_types를 다시 보면 술어 사본이 늘고 한쪽만 고쳐진다.
+function newsletterArticleRecordCount(history) {
+  return ensureArray(history?.articles).filter(isNewsletterArticleRecord).length;
+}
+
+// 이 레코드가 지금 생성 중인 호(asOf) 자신의 발행 기록인가.
+// 워크플로 03은 ref: main을 체크아웃하므로 이미 발행된 날짜로 다시 돌리면 state에 그 호 자신의
+// 레코드가 들어 있다. 그걸 남의 이력으로 세면 재실행이 자기 편성을 통째로 갈아치운다.
+// 쿨다운 검사와 catch-up 이력 필터가 같은 한 줄을 쓴다 — 두 곳에 같은 규칙을 따로 적으면 한쪽만
+// 고쳐지는 것이 #963에서 실제로 일어난 일이다. asOf가 비면(호출부가 date를 안 주면) 아무것도
+// 자기 것으로 보지 않아 기존 동작이 그대로 남는다.
+function isSameIssueRecord(record, asOf) {
+  const date = text(asOf);
+  return Boolean(date) && text(record?.newsletter_article_date) === date;
+}
+
+function annotateArticleExposure(article = {}, history = {}, options = {}) {
   const key = articleIdentityKey(article);
   const record = exposureMap(history).get(key) || null;
-  const today = todayDate();
-  const publishedWithinCooldown = record?.exposure_type === 'newsletter_article' &&
+  // 쿨다운 비교 기준은 이슈 date다. 벽시계(todayDate)를 쓰면 같은 이력·같은 후보라도 리플레이나
+  // carry 실행 시점에 따라 판정이 달라져 선정이 비결정적이 된다. date를 못 받는 호출부는 기존
+  // 동작(오늘 기준)을 그대로 유지한다.
+  const asOf = text(options.date) || todayDate();
+  const publishedAt = text(record?.newsletter_article_date);
+  const publishedWithinCooldown = isNewsletterArticleRecord(record) &&
     Boolean(record.cooldown_until) &&
-    today <= record.cooldown_until;
+    asOf <= record.cooldown_until &&
+    !isSameIssueRecord(record, asOf);
   return {
     ...article,
     article_identity_key: key,
     already_exposed: Boolean(record),
     published_within_cooldown: publishedWithinCooldown,
-    last_newsletter_date: publishedWithinCooldown ? text(record.newsletter_date) : null,
+    last_newsletter_date: publishedWithinCooldown ? publishedAt : null,
     exposure_history_record: record
   };
 }
@@ -213,23 +281,27 @@ function dedupeByArticleIdentity(articles = []) {
   return out;
 }
 
-function everCoveredAsNewsletterArticle(identityKey, history = {}) {
+// options.date는 쿨다운 검사가 쓰는 것과 같은 as-of date다. 그 호 자신이 발행한 레코드는 이력에서
+// 빠진다 — 안 그러면 같은 date 재실행이 그 호가 catch-up 레인으로 낸 기사를 자기 이력으로 배제한다.
+function everCoveredAsNewsletterArticle(identityKey, history = {}, options = {}) {
   const key = text(identityKey);
   if (!key) return false;
   return ensureArray(history.articles).some(item =>
     text(item.article_identity_key) === key &&
-    (text(item.exposure_type) === 'newsletter_article' ||
-      ensureArray(item.exposure_types).includes('newsletter_article'))
+    isNewsletterArticleRecord(item) &&
+    !isSameIssueRecord(item, options.date)
   );
 }
 
 module.exports = {
   EXPOSURE_HISTORY_REL_PATH,
+  NEWSLETTER_ARTICLE_COOLDOWN_DAYS,
   annotateArticleExposure,
   dedupeByArticleIdentity,
   everCoveredAsNewsletterArticle,
   emptyExposureHistory,
   historyPath,
+  newsletterArticleRecordCount,
   normalizeExposureHistory,
   readExposureHistory,
   recordArticleExposure,

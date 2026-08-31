@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "report_type": "source_discovery_feedback",
+  "date": "2026-08-31",
+  "status": "WARNING",
+  "parser_gap_count": 2,
+  "duplicate_discovery_gap_count": 0,
+  "gemini_parser_failure_count": 4,
+  "gemini_parser_failures": [
+    {
+      "severity": "warning",
+      "action": "GEMINI_PARSER_EXTRACTION_REQUIRED",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "source_policy_match": "raspberrypi-libcamera-releases",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "raspberrypi-libcamera-releases",
+      "rejected_reason": "discovered_not_extractable",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL."
+    },
+    {
+      "severity": "warning",
+      "action": "GEMINI_PARSER_EXTRACTION_REQUIRED",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "source_policy_match": "raspberrypi-libcamera-releases",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "raspberrypi-libcamera-releases",
+      "rejected_reason": "discovered_not_extractable",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL."
+    },
+    {
+      "severity": "warning",
+      "action": "GEMINI_PARSER_EXTRACTION_REQUIRED",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "source_policy_match": "camerax-release-notes",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "rejected_reason": "discovered_not_extractable",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL."
+    },
+    {
+      "severity": "warning",
+      "action": "GEMINI_PARSER_EXTRACTION_REQUIRED",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "source_policy_match": "camerax-release-notes",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "rejected_reason": "discovered_not_extractable",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL."
+    }
+  ],
+  "items": [
+    {
+      "severity": "warning",
+      "action": "PARSER_REPAIR_REQUIRED",
+      "reason": "missing_source_extraction",
+      "candidate_title": "1.0.0-alpha01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "source_id": "androidx-camerax-release-notes",
+      "adapter_hint": "android-developers-jetpack-release",
+      "duplicate_discovered_by_gemini": false,
+      "duplicate_match_type": null,
+      "source_gap_risk": false,
+      "evidence_validation_status": "pass",
+      "source_quality_bucket": "review_candidate",
+      "final_selection_eligibility": "main",
+      "confidence": "high",
+      "selector_exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet",
+      "recommendation": "Check AndroidX Camera release-note block parser and source_extraction.release.sections extraction."
+    },
+    {
+      "severity": "warning",
+      "action": "PARSER_REPAIR_REQUIRED",
+      "reason": "missing_source_extraction",
+      "candidate_title": "AOSP Site Updates - July 2026",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "source_id": "aosp-site-updates",
+      "adapter_hint": "aosp-site-updates",
+      "duplicate_discovered_by_gemini": false,
+      "duplicate_match_type": null,
+      "source_gap_risk": false,
+      "evidence_validation_status": "pass",
+      "source_quality_bucket": "review_candidate",
+      "final_selection_eligibility": "short",
+      "confidence": "high",
+      "selector_exclusion_reason": "missing source_extraction for official parser-backed candidate",
+      "recommendation": "Check AOSP camera update row extraction."
+    }
+  ]
+}

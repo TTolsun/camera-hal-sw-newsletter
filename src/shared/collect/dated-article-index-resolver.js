@@ -1,7 +1,8 @@
 'use strict';
 
 // Claude Blog(/blog)와 Anthropic News(/news) 같은 "인덱스 페이지 + 날짜 있는 개별 기사" 소스를
-// 공유하는 흐름 하나로 처리한다. 두 소스의 차이는 config({pathPrefix, origin})로만 받는다.
+// 공유하는 흐름 하나로 처리한다. 두 소스의 차이는 registry(news-sources.json)의 sourceUrl 하나이며,
+// 이 파일이 그 값에서 origin과 경로 접두사를 파생한다 — 같은 사실을 코드에 다시 적지 않는다.
 //
 // 목록 → 카드(Task 1) → 창 필터 → 우선순위 → bounded fetch(Task 3) → 개별 페이지 파싱(Task 2) → 후보.
 //
@@ -37,11 +38,66 @@ const MAX_WORKFLOW_SECTIONS = 2;
 // 도입부에서 만드는 요약 길이. 앵커 문단을 복사하지 않는다 — summary가 앵커 문구를 담으면
 // evidenceMetadata:781이 필드 존재만으로 점수를 줘 evidenceScore 게이트가 형해화된다.
 const SUMMARY_LIMIT = 500;
-// 본문의 끝. 이 뒤는 관련 기사 목록이고, 인덱스 페이지와 같은 카드 마크업
-// (role="listitem" class="blog_cms_item w-dyn-item")을 쓴다. 자르지 않으면 남의 기사 제목과
-// 날짜가 이 기사의 summary·sections로 들어간다. 마커가 없으면 문서 끝까지를 본문으로 본다
-// (Anthropic News에는 이 구간 자체가 없다) — 없다고 실패로 닫지 않는다.
-const ARTICLE_BODY_END_MARKERS = ['blog_related_section_wrap', 'data-cta-position="Related articles"'];
+// 본문의 끝 후보. 자르지 않으면 이 기사 뒤에 오는 것들(남의 기사 카드, 사이트 내비·푸터)이
+// 이 기사의 summary·behavior_change·sections로 들어간다.
+//
+// 후보는 두 갈래다. 아래 ARTICLE_BODY_END_MARKERS는 Claude Blog(Webflow) 관련 기사 목록의
+// 표지다. 그 구간은 인덱스 페이지와 같은 카드 마크업(role="listitem" class="blog_cms_item
+// w-dyn-item")을 써서, 남기면 남의 기사 제목과 날짜가 이 기사의 근거가 된다.
+//
+// ARTICLE_BODY_CLOSING_TAG_MARKERS는 닫는 태그다. Anthropic News(/news) 마크업에는 위 마커가
+// 한 건도 없어서, 마커만 후보이던 동안에는 본문이 문서 끝까지로 잡혀 사이트 푸터의 제품 목록이
+// behavior_change와 sections[0]에 실렸다(#964). 그 페이지는 <main> 안에 <article>이 두 겹
+// (hero 하나 + 본문 하나)이라 첫 </article>이 본문의 끝이고, 그 뒤로 각주 블록과
+// "Related content" 섹션과 푸터가 이어진다.
+//
+// 실측(2026-08-30, 라이브 /news 기사 11건 + 라이브 claude.com/blog 기사 5건):
+// - 첫 </article>이 /news 11건 전부에서 경계가 된다. 그 경계가 없으면 11건 전부
+//   behavior_change나 sections에 푸터 문구("Read more Products Claude Claude Code ...")가
+//   들어간다.
+// - </main>은 두 소스 어디에서도 이기지 못한다. 두 수치 모두 </main>까지의 간격이다:
+//   /news는 첫 </article>이 5,008~8,151자 먼저 오고, claude.com/blog는 </article>이 아예 없는
+//   대신 관련 기사 마커가 56,630~57,896자 먼저 온다(라이브 blog 23건, 간격이 거의 일정하다).
+//   그래도 남겨 둔다 — <article>도 관련 기사 마커도 없는 페이지에서 푸터를 막아 줄 마지막
+//   후보이기 때문이고, 그 경로는 합성 HTML 테스트가 잠근다.
+//
+// 대가: 첫 </article> 뒤에 오는 각주(Footnotes) 블록이 본문에서 함께 잘린다(11건 중 6건).
+// improving-fable-5-s-biology-safeguards는 각주에만 실제 수치("67% on Claude.ai, 55% on
+// Cowork, 17% on Claude Code, 7% on the Claude Platform")가 있어서, 잘리면 본문이
+// 10,832 -> 8,495자가 되고 앵커가 6 -> 0으로 떨어져 behavior_change와 sections가 빈 값이 된다.
+// 그래도 이 경계를 쓰는 이유는 셋이다.
+// 1) 각주를 살리고 "Related content"만 배제하려면 그 섹션 전용 마커가 필요한데, 쓸 만한 것이
+//    구조 경계보다 약하다. 해시를 와일드카드로 둔 모듈명 마커
+//    (/<section class="LandingPageSection-module-scss-module__[^"]*__root"/)는 라이브 11건에서
+//    그 섹션만 집는 것으로 확인됐다 — 즉 "대안이 없다"가 아니라 "대안이 더 약하다"가 맞다.
+//    그 마커가 깨져 </main>로 떨어지면 11건 중 5건에 남의 기사 카드가 근거로 들어온다(실측).
+//    class를 해시째 박는 것은 재배포 때 바뀌어 더 나쁘고(ZSMdoa 같은 빌드 해시),
+//    <section> 태그 자체는 본문 안에도 나오며(model-hardware-standard 기사 본문에 6개 —
+//    <section>을 경계로 쓰면 그 기사가 118,000자를 잃는다), "Related content" 문자열 매칭은
+//    문구가 바뀌거나 지역화되면 깨진다. 그래서 구조 경계인 </article>을 택했다.
+// 2) 각주가 잘리는 6건 중 실제로 근거가 달라지는 것은 위 1건뿐이다. 나머지 5건은 각주를
+//    남기든 버리든 behavior_change와 sections가 글자 그대로 같다(실측).
+// 3) 그 1건에서 각주를 살려 얻는 근거는 "Footnotes 1 As a result, ..."로 시작하는 각주
+//    문장이다. 그것을 얻으려고 경계를 넓히면 경계가 깨진 날 푸터가 다시 근거가 된다.
+//    근거가 비는 것이 사이트 내비·푸터를 근거로 쓰는 것보다 낫다.
+// 이 손실은 anthropic-news-improving-fable-5-biology-safeguards.html 픽스처와 그 테스트가
+// 드러낸다 — 경계를 옮기려면 그 테스트를 먼저 고쳐야 한다.
+//
+// 닫는 태그 후보는 <h1>을 찾은 페이지에서만 쓴다. <h1>이 없으면 본문이 어디서 시작하는지 알
+// 수 없어 bodyStart가 0이 되는데, 그 상태에서는 문서 맨 앞의 내비를 닫는 </article> 하나가
+// 진짜 본문보다 앞서서 본문 전체를 버린다(재현: '<article><nav>내비</nav></article><main><p>
+// 본문</p></main>'이 내비 문구만 남긴다). 관련 기사 마커는 그 위험이 없다 — 문서 어디에 있든
+// 그 자리가 관련 기사 목록의 시작이다.
+//
+// 후보가 하나도 안 잡히면 문서 끝까지를 본문으로 본다 — 없다고 실패로 닫지 않는다.
+const ARTICLE_BODY_END_MARKERS = [
+  /blog_related_section_wrap/,
+  /data-cta-position="Related articles"/
+];
+const ARTICLE_BODY_CLOSING_TAG_MARKERS = [
+  /<\/article\s*>/i,
+  /<\/main\s*>/i
+];
 
 // 넓게 잡으면(bucket 패턴 전부의 합집합) 추출이 오탐 토큰을 오히려 농축한다는 것이
 // 별도 조사에서 확인됐다 — 그래서 workflow 신호로만 좁힌다.
@@ -113,19 +169,30 @@ function normalizeUrl(value) {
 }
 
 /**
- * 개별 기사 raw HTML에서 제목과 본문 평문을 뽑는다. 본문은 <h1>부터
- * ARTICLE_BODY_END_MARKERS 중 먼저 나오는 자리 앞까지다(마커가 없으면 문서 끝까지).
- * <h1>이 없으면(비정상 fixture 등) 문서 전체를 본문으로, 제목은 빈 문자열로 둔다.
+ * 개별 기사 raw HTML에서 제목과 본문 평문을 뽑는다. 본문은 <h1>부터 경계 후보 중 먼저 나오는
+ * 자리 앞까지다(후보가 하나도 없으면 문서 끝까지).
+ * <h1>이 없으면(비정상 fixture 등) 문서 전체를 본문으로, 제목은 빈 문자열로 둔다 — 이때는
+ * 닫는 태그 후보를 쓰지 않는다(ARTICLE_BODY_CLOSING_TAG_MARKERS 주석의 이유).
  */
 function extractArticleBody(html) {
   const value = String(html || '');
   const heading = /<h1\b[^>]*>([\s\S]*?)<\/h1\s*>/i.exec(value);
   const title = heading ? cardText(heading[1]) : '';
   const bodyStart = heading ? heading.index : 0;
+  const markers = heading
+    ? [...ARTICLE_BODY_END_MARKERS, ...ARTICLE_BODY_CLOSING_TAG_MARKERS]
+    : ARTICLE_BODY_END_MARKERS;
+  // 본문 시작 뒤에서만 후보를 찾는다. 여는 태그가 <h1>보다 앞에서 열린다는 사실은 이유가 되지
+  // 못한다 — 닫는 태그를 찾는 데 여는 태그 위치는 쓰이지 않고, 라이브 /news 11건은 전부
+  // <h1>(13,470~15,614)이 첫 닫는 태그(18,630~145,928)보다 앞이다. 이 slice가 막는 것은 그
+  // 반대 배치다: 닫는 태그가 <h1>보다 앞에 있는 페이지에서 문서 처음부터 찾으면 bodyEnd가
+  // bodyStart보다 앞서고, slice(bodyStart, bodyEnd)가 빈 본문을 돌려준다. 시작점을 수정 전과
+  // 같게 유지해 그 경우에도 본문이 통째로 사라지지 않게 한다.
+  const afterBodyStart = value.slice(bodyStart);
   let bodyEnd = value.length;
-  for (const marker of ARTICLE_BODY_END_MARKERS) {
-    const markerIndex = value.indexOf(marker, bodyStart);
-    if (markerIndex >= 0 && markerIndex < bodyEnd) bodyEnd = markerIndex;
+  for (const marker of markers) {
+    const markerIndex = afterBodyStart.search(marker);
+    if (markerIndex >= 0 && bodyStart + markerIndex < bodyEnd) bodyEnd = bodyStart + markerIndex;
   }
   return { title, bodyText: cardText(value.slice(bodyStart, bodyEnd)) };
 }
@@ -206,8 +273,12 @@ function spansOverlap(left, right) {
  * 2) behavior_change와 섹션의 중복은 그대로 둔다(의도된 중복). behavior_change는 문장 하나짜리
  *    필드로 캡슐의 evidence 줄("behavior_change: ...", article-capsules.js:123)에 실리고,
  *    섹션은 그 문장을 둘러싼 문단으로 캡슐의 source_extraction.workflow(같은 파일 :175)에
- *    실린다 — 서로 다른 슬롯이라 독립 근거 2건으로 세어지지 않는다. 1위 문장을 섹션에서 빼면
- *    앵커 밀도가 가장 높은 문단이 통째로 사라져 근거가 오히려 약해진다.
+ *    실린다. 1위 문장을 섹션에서 빼면 앵커 밀도가 가장 높은 문단이 통째로 사라져 근거가
+ *    오히려 약해지므로, 중복을 지우는 쪽이 더 손해다.
+ *    다만 #965 이후로는 두 값이 source_fact_bundle.facts 한 목록에도 별개 항목으로 실린다.
+ *    거기서 겹침을 지우지 않는 이유는 uniqueFacts가 정확 일치만 보기 때문이고, 포함관계까지
+ *    걸러내면 release 계열 후보의 기존 출력이 함께 바뀐다. 그래서 workflow 후보의 fact_count는
+ *    문장과 문단을 각각 세어, 실제로 구별되는 근거 구간보다 1 크게 나올 수 있다.
  */
 function workflowEvidence(bodyText) {
   const summary = bodyText.slice(0, SUMMARY_LIMIT).trim();
@@ -274,6 +345,31 @@ function prioritizeByWorkflowSignal(tierCards) {
 }
 
 /**
+ * registry entry의 sourceUrl에서 목록 origin과 경로 접두사를 파생한다. 후행 슬래시는 몇 개든
+ * 지운다 — 기사 URL을 `${origin}${pathPrefix}/${slug}`로 조립하고 카드 링크도 같은 접두사로
+ * 찾으므로, `/blog/`를 그대로 두면 링크 패턴이 `href="/blog//slug"`가 돼 카드가 한 건도 안
+ * 잡힌다. 하나만 지우면 `/blog//`(오타) 하나가 validate:config를 통과한 채 같은 0건으로
+ * 닫힌다. 같은 collect layer의 canonicalDocumentUrl도 `/\/+$/`로 지운다.
+ * sourceUrl이 없거나 절대 URL이 아니면 null을 돌려준다(기본 경로로 대신 도는 일은 없다).
+ *
+ * 슬래시를 지우고 나서 경로가 하나도 안 남는 sourceUrl(`https://claude.com`,
+ * `https://claude.com/`, `https://claude.com//`)도 같은 null이다. 빈 접두사를 돌려주면 파생은
+ * 성공한 것처럼 보여 아래 guard를 그냥 지나가지만, 링크 패턴이 `href="/([a-z0-9][a-z0-9-]*)"`로
+ * 줄어 한 세그먼트짜리 루트 링크만 매치한다 — 진짜 기사 `/blog/post-one`은 버려지고
+ * `/pricing`·`/careers` 같은 비기사 링크가 후보가 되는데 진단은 0건이라 운영자가 알 방법이 없다.
+ * validate:config의 isHttpUrl은 protocol만 보므로 이런 registry 값이 게이트를 통과한다.
+ */
+function deriveIndexLocation(sourceUrl) {
+  try {
+    const parsed = new URL(String(sourceUrl));
+    const pathPrefix = parsed.pathname.replace(/\/+$/, '');
+    return pathPrefix ? { origin: parsed.origin, pathPrefix } : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * 목록 페이지 html에서 날짜가 결속된 개별 기사 후보를 만든다. 인덱스 URL 자체는 절대
  * 후보가 되지 않는다(카드가 0건이어도 그냥 빈 배열).
  */
@@ -283,13 +379,30 @@ async function resolveDatedArticleIndexItems({
   fetchClient,
   now,
   lookbackDays,
-  config = {},
   onDiagnostic,
   onArticleCapCounts
 } = {}) {
   const emit = typeof onDiagnostic === 'function' ? onDiagnostic : noop;
-  const pathPrefix = config.pathPrefix || '/blog';
-  const origin = config.origin || '';
+
+  // 목록 주소의 정본은 registry(news-sources.json)의 sourceUrl 하나다. origin·경로를 호출부
+  // 상수로 또 들고 있으면 registry만 바꿨을 때 인덱스는 새 주소로 받고 카드 매칭과 기사 URL
+  // 조립은 옛 경로로 돈다 — 결과는 카드 0건(index_collection_failed)인데 진단이 가리키는
+  // 원인("마크업이 바뀌었다")이 실제 원인("registry와 코드가 갈라졌다")과 다르다.
+  const indexLocation = deriveIndexLocation(source.sourceUrl);
+  if (!indexLocation) {
+    // 기본 경로로 대신 돌면 엉뚱한 주소를 훑은 실패가 canonical_mismatch 같은 다른 사유로
+    // 기록돼, 여기서도 진단이 실제 원인을 못 가리킨다. 그래서 명시적으로 0건으로 닫는다.
+    emit({
+      kind: 'index_collection_failed',
+      url: String(source.sourceUrl || ''),
+      receivedBytes: 0,
+      limitedBy: '',
+      detail: 'dated article resolver could not derive the index origin and path from source.sourceUrl '
+        + '(registry entry has no absolute sourceUrl, or its sourceUrl has no path to scope the index scan to)'
+    });
+    return [];
+  }
+  const { origin, pathPrefix } = indexLocation;
   const parentUrl = `${origin}${pathPrefix}`;
 
   // 소스가 followed-source 레지스트리(requiresFetchClient: true)에 등록됐는데도 collector가

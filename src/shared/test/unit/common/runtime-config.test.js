@@ -19,9 +19,8 @@ const {
 } = require('../../../common/runtime-config');
 const {
   configuredModels,
-  configuredModelsForStage,
-  modelGroupInfoForStage,
-  modelGroupForStage
+  configuredModelsForGroup,
+  LLM_STAGE_GROUPS
 } = require('../../../llm/model-policy');
 
 const doctorConfigScript = path.join(__dirname, '..', '..', '..', '..', '..', 'src', 'shared', 'tooling', 'cli', 'doctor-config.js');
@@ -502,11 +501,11 @@ test('stage model env vars independently override code defaults', () => {
     editorialPlan: 'code_default',
     sourceDiscovery: 'code_default'
   });
-  assert.deepEqual(configuredModelsForStage(config, 'reporter attempt 1/2'), ['reporter-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['editor-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'fact-checker attempt 1/2'), ['factcheck-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'editor repair attempt 1/2'), ['repair-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'public article judge attempt 1/2'), ['judge-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.REPORTER), ['reporter-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.EDITOR), ['editor-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.FACTCHECK), ['factcheck-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.REPAIR), ['repair-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.JUDGE), ['judge-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
 });
 
 test('global LLM model overrides stage-specific model env vars', () => {
@@ -533,44 +532,18 @@ test('global LLM model overrides stage-specific model env vars', () => {
     editorialPlan: 'LLM_MODEL',
     sourceDiscovery: 'LLM_MODEL'
   });
-  assert.deepEqual(configuredModelsForStage(config, 'editor attempt 1/2'), ['global-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.EDITOR), ['global-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
 });
 
-test('stage model normalizer maps known generation stages', () => {
-  assert.equal(modelGroupForStage('reporter attempt 1/2'), 'reporter');
-  assert.equal(modelGroupForStage('background-context attempt 1/2'), 'reporter');
-  assert.equal(modelGroupForStage('editor attempt 1/2'), 'editor');
-  assert.equal(modelGroupForStage('fact-checker repair attempt 1/2'), 'factcheck');
-  assert.equal(modelGroupForStage('fact-check completion attempt 1/2'), 'factcheck');
-  assert.equal(modelGroupForStage('editor repair attempt 1/2'), 'repair');
-  assert.equal(modelGroupForStage('editor completion attempt 1/2'), 'repair');
-  assert.equal(modelGroupForStage('public article judge attempt 1/2'), 'judge');
-  assert.equal(modelGroupForStage('unknown stage'), 'reporter');
-  assert.deepEqual(modelGroupInfoForStage('unknown stage'), {
-    group: 'reporter',
-    known: false,
-    warning: 'unknown_stage_defaulted_to_reporter'
-  });
-  assert.deepEqual(modelGroupInfoForStage('fact-checker repair attempt 1/2'), {
-    group: 'factcheck',
-    known: true,
-    warning: ''
-  });
-});
-
+// stage label -> group 정규화 테스트는 여기서 사라졌다(#981). 그 매핑은 이제 stage catalog의
+// definition이 선언하고, llm-stage-routing-characterization 테스트가 21개 stage 전부를 고정한다.
+// 이 파일에 남는 계약은 "group이 정해졌을 때 어떤 모델을 고르는가"다.
 test('source discovery stage routes to its own group on gemini-2.5-flash-lite', () => {
-  assert.equal(modelGroupForStage('sourceDiscovery'), 'sourceDiscovery');
-  assert.equal(modelGroupForStage('source-discovery attempt 1/2'), 'sourceDiscovery');
-  assert.deepEqual(modelGroupInfoForStage('sourceDiscovery'), {
-    group: 'sourceDiscovery',
-    known: true,
-    warning: ''
-  });
 
   const config = readRuntimeConfig({});
   assert.equal(config.llmStageModels.sourceDiscovery, 'gemini-2.5-flash-lite');
   assert.equal(config.llmStageModelSources.sourceDiscovery, 'code_default');
-  assert.deepEqual(configuredModelsForStage(config, 'sourceDiscovery'), ['gemini-2.5-flash-lite', 'gemini-2.5-flash']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.SOURCE_DISCOVERY), ['gemini-2.5-flash-lite', 'gemini-2.5-flash']);
 });
 
 test('linked evidence discovery is enabled by default and can be disabled via env', () => {
@@ -585,7 +558,7 @@ test('source discovery stage honors NEWSROOM_SOURCEDISCOVERY_MODEL override', ()
   const config = readRuntimeConfig({ NEWSROOM_SOURCEDISCOVERY_MODEL: 'gemini-2.5-flash' });
   assert.equal(config.llmStageModels.sourceDiscovery, 'gemini-2.5-flash');
   assert.equal(config.llmStageModelSources.sourceDiscovery, 'NEWSROOM_SOURCEDISCOVERY_MODEL');
-  assert.deepEqual(configuredModelsForStage(config, 'sourceDiscovery'), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.SOURCE_DISCOVERY), ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
 });
 
 test('gemini provider works with GEMINI_API_KEY when credentials required', () => {
@@ -783,8 +756,8 @@ test('non-Pro model routing remains stage-specific without Pro fallback append',
   });
 
   assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-3.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'editor completion attempt 1/2'), ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForStage(config, 'public article judge repair'), ['gemini-2.5-flash-lite', 'gemini-2.5-flash']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.REPAIR), ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.JUDGE), ['gemini-2.5-flash-lite', 'gemini-2.5-flash']);
   assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, false);
 });
 

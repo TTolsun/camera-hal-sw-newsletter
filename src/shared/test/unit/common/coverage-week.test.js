@@ -40,6 +40,19 @@ test('invalid 달력 날짜(2026-02-30)는 throw', () => {
   assert.throws(() => coverageForAnchorDate('2026-02-30'));
 });
 
+test('존재하지 않는 주차는 조용히 다른 주로 보정되지 않고 throw한다', () => {
+  // 오타 하나가 다른 주를 대상으로 만들면 안 된다. 에러 메시지는 입력과
+  // 보정 결과를 모두 담아 어느 주로 밀려날 뻔했는지 진단할 수 있어야 한다.
+  assert.throws(() => coverageForWeekKey('2026-W60'), /2026-W60.*2027-W07/);
+  assert.throws(() => coverageForWeekKey('2021-W53'), /2021-W53.*2022-W01/);
+  assert.throws(() => coverageForWeekKey('2026-W00'), /2026-W00.*2025-W52/);
+});
+
+test('53주 해의 W53은 실재하는 주차이므로 그대로 통과한다', () => {
+  assert.equal(coverageForWeekKey('2026-W53').coverage_week_key, '2026-W53');
+  assert.equal(coverageForWeekKey('2026-W53').coverage_start_date, '2026-12-28');
+});
+
 test('previousCoverageWeekKey는 연도 경계를 넘는다', () => {
   assert.equal(previousCoverageWeekKey('2026-W01'), '2025-W52');
 });

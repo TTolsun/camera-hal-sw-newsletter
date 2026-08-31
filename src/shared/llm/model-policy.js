@@ -8,7 +8,19 @@ const LLM_STAGE_GROUPS = Object.freeze({
   SOURCE_DISCOVERY: 'sourceDiscovery'
 });
 const LLM_STAGE_GROUP_VALUES = Object.freeze(Object.values(LLM_STAGE_GROUPS));
-const UNKNOWN_STAGE_ROUTING_WARNING = 'unknown_stage_defaulted_to_reporter';
+
+/**
+ * group 어휘와 group -> model 선택을 같은 모듈이 소유하므로, 이 검증도 여기 둔다.
+ * stage-catalog는 이 함수를 import해 definition을 만들 때 group을 검증한다. 반대 방향
+ * (model-policy가 catalog를 import)은 만들지 않는다 -- model-policy는 stage를 모른다.
+ * enum이 있어도 JavaScript에서는 잘못된 값이 들어올 수 있으므로 public boundary에서 막는다.
+ */
+function assertLlmStageGroup(group) {
+  if (!LLM_STAGE_GROUP_VALUES.includes(group)) {
+    throw new Error(`unknown_llm_stage_group: ${String(group)}`);
+  }
+  return group;
+}
 
 function normalizeModelName(value) {
   return String(value || '').trim().toLowerCase();
@@ -30,55 +42,17 @@ function fallbackModels(config) {
       : [];
 }
 
-function modelGroupInfoForStage(stage) {
-  const normalized = normalizeModelName(stage);
-  if (/source[-\s]?discovery/.test(normalized)) {
-    return { group: LLM_STAGE_GROUPS.SOURCE_DISCOVERY, known: true, warning: '' };
-  }
-  if (/public[-\s]?article[-\s]?judge|\bjudge\b/.test(normalized)) {
-    return { group: LLM_STAGE_GROUPS.JUDGE, known: true, warning: '' };
-  }
-  // #700 editorial-plan은 prose 생성이 아니라 assessment/classification stage다. 자체 모델 노브
-  // (NEWSROOM_EDITORIALPLAN_MODEL, 기본 gemini-2.5-flash)를 갖는 전용 그룹으로 두어 비용 관측을
-  // 분리한다. 단계명이 "editorial"이라 아래 /editor/ 분기에 substring으로 오매칭되므로 반드시 그
-  // 앞에서 가로챈다. (temperature/thinking budget은 gemini-provider에서 judge 수준을 재사용.)
-  if (/editorial[-\s]?plan/.test(normalized)) {
-    return { group: LLM_STAGE_GROUPS.EDITORIAL_PLAN, known: true, warning: '' };
-  }
-  if (/background-context|reporter/.test(normalized)) {
-    return { group: LLM_STAGE_GROUPS.REPORTER, known: true, warning: '' };
-  }
-  if (/fact[-\s]?checker|fact[-\s]?check/.test(normalized)) {
-    return { group: LLM_STAGE_GROUPS.FACTCHECK, known: true, warning: '' };
-  }
-  if (/semantic repair|editor repair|completion|repair/.test(normalized)) {
-    return { group: LLM_STAGE_GROUPS.REPAIR, known: true, warning: '' };
-  }
-  if (/editor/.test(normalized)) {
-    return { group: LLM_STAGE_GROUPS.EDITOR, known: true, warning: '' };
-  }
-  return {
-    group: LLM_STAGE_GROUPS.REPORTER,
-    known: false,
-    warning: UNKNOWN_STAGE_ROUTING_WARNING
-  };
-}
-
-function modelGroupForStage(stage) {
-  return modelGroupInfoForStage(stage).group;
-}
-
-function primaryModelForStage(config, stage) {
-  const group = modelGroupForStage(stage);
+function primaryModelForGroup(config, group) {
+  assertLlmStageGroup(group);
   const stageModels = config?.llmStageModels && typeof config.llmStageModels === 'object'
     ? config.llmStageModels
     : null;
   return stageModels?.[group] || config?.llmModel || config?.geminiModel;
 }
 
-function configuredModelsForStage(config, stage) {
+function configuredModelsForGroup(config, group) {
   const models = [
-    primaryModelForStage(config, stage),
+    primaryModelForGroup(config, group),
     ...fallbackModels(config)
   ].filter(Boolean);
   return dedupeModels(models);
@@ -92,17 +66,15 @@ function configuredModels(config) {
     ];
     return dedupeModels(models);
   }
-  return configuredModelsForStage(config, LLM_STAGE_GROUPS.REPORTER);
+  return configuredModelsForGroup(config, LLM_STAGE_GROUPS.REPORTER);
 }
 
 module.exports = {
   LLM_STAGE_GROUPS,
-  UNKNOWN_STAGE_ROUTING_WARNING,
+  assertLlmStageGroup,
   configuredModels,
-  configuredModelsForStage,
+  configuredModelsForGroup,
   isGeminiProModel,
-  modelGroupInfoForStage,
-  modelGroupForStage,
   normalizeModelName,
-  primaryModelForStage
+  primaryModelForGroup
 };

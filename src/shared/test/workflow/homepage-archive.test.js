@@ -8,6 +8,8 @@ const root = path.join(__dirname, '..', '..', '..', '..');
 const NewsletterArchive = require('../../../../articles/assets/js/newsletter-archive');
 const { withLearningFooterLink } = require('../../../generator/publish/assemble-site');
 const { headlineSnapshotFromCandidate } = require('../../../generator/reporter/homepage-headline');
+const { mediaBlock, exactSelectorBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
+const { assertSharedNav } = require('../helpers/site-nav');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -209,45 +211,6 @@ function readStylesheet() {
   return fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8');
 }
 
-function blockAt(css, startIndex) {
-  const openIndex = css.indexOf('{', startIndex);
-  assert.notEqual(openIndex, -1, 'CSS block should contain an opening brace');
-  let depth = 0;
-  for (let index = openIndex; index < css.length; index += 1) {
-    if (css[index] === '{') {
-      depth += 1;
-    } else if (css[index] === '}') {
-      depth -= 1;
-      if (depth === 0) {
-        return css.slice(openIndex + 1, index);
-      }
-    }
-  }
-  assert.fail('CSS block should contain a matching closing brace');
-}
-
-function mediaBlock(css, query) {
-  const index = css.indexOf(`@media ${query}`);
-  assert.notEqual(index, -1, `@media ${query} block should exist`);
-  return blockAt(css, index);
-}
-
-function exactSelectorBlock(css, selector) {
-  const pattern = new RegExp(`(^|\\n)\\s*${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{`, 'g');
-  for (const match of css.matchAll(pattern)) {
-    const selectorIndex = match.index + match[0].indexOf(selector);
-    const previous = css.slice(0, match.index).trimEnd();
-    if (previous.endsWith(',')) continue;
-    return blockAt(css, selectorIndex);
-  }
-  assert.fail(`${selector} exact block should exist`);
-}
-
-function assertCssDeclaration(block, property, value) {
-  const normalized = String(block).replace(/\s+/g, ' ');
-  assert.match(normalized, new RegExp(`${property}\\s*:\\s*${value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*;`));
-}
-
 function validHeadlineState(overrides = {}) {
   return {
     schemaVersion: 1,
@@ -293,6 +256,39 @@ test('featured hero renders the current headline with escaped copy, image, kicke
   assert.match(html, /<div class="featured-meta">2026-05-23 · Example Source<\/div>/);
   assert.match(html, /href="newsletters\/2026-W21\/index\.html#article-camerax-preview"[^>]*>기사 읽기 →<\/a>/);
   assert.doesNotMatch(html, /rel="noopener"/);
+});
+
+// DESIGN.md(#1008): 동봉 fallback 그래픽 4종은 실제 기사 이미지와 같이 16:9 풀커버다.
+// .is-brand(44% 중앙 + drop-shadow)는 투명 배경 마스코트 전용이라 여기서는 붙지 않는다 —
+// 붙이면 불투명 SVG 가 패널 위에 얹힌 사각형으로 보인다.
+// alt 가 비는 것도 같이 잠근다 — fallback 은 기사 정보를 담지 않는 장식이고, image_alt 는 기사
+// 제목에서 파생돼 그대로 두면 바로 아래 h1 과 같은 문장이 두 번 읽힌다.
+test('featured hero renders bundled fallback graphics full-cover with an empty alt', async () => {
+  for (const name of ['ai', 'android', 'cpp', 'newsletter-default']) {
+    const imageSrc = `assets/images/fallback/${name}.svg`;
+    const { elements } = await renderHomepage(
+      [newsletter('2026-05-23', 'Weekly issue')],
+      validHeadlineState({ image_url: imageSrc, image_alt: 'Camera HAL headline image' })
+    );
+    const html = elements['featured-card'].innerHTML;
+    assert.match(
+      html,
+      new RegExp(`<img class="featured-img" src="${imageSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}" alt=""`),
+      `${imageSrc} must render full-cover with an empty alt`
+    );
+    assert.doesNotMatch(html, /is-brand/, `${imageSrc} must not get the transparent-mascot treatment`);
+  }
+});
+
+// 로드 실패로 fallback 으로 갈아탈 때도 alt 를 비운다: 갈아탄 그림은 기사가 아니라 장식이다.
+test('featured hero clears the alt when a real image falls back at load time', async () => {
+  const { elements } = await renderHomepage(
+    [newsletter('2026-05-23', 'Weekly issue')],
+    validHeadlineState({ image_url: 'https://example.com/headline.png', image_alt: 'Camera HAL headline image' })
+  );
+  const html = elements['featured-card'].innerHTML;
+  assert.match(html, /<img class="featured-img" src="https:\/\/example\.com\/headline\.png" alt="Camera HAL headline image"/);
+  assert.match(html, /onerror="this\.onerror=null;this\.alt='';this\.src='assets\/images\/fallback\/newsletter-default\.svg'"/);
 });
 
 test('featured hero leaves the static brand hero in place when the headline is missing', async () => {
@@ -616,6 +612,10 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
 
   // A static brand hero keeps a single H1 present before the headline data loads.
   assert.match(html, /<article id="featured-card" class="featured-hero">/);
+  // 이 마스코트가 `.featured-img.is-brand` 의 유일한 소비자다(#1008 이후). DESIGN.md elevation 이
+  // 허용한 단 하나의 product drop-shadow 예외가 이 한 줄에 걸려 있으므로 함께 잠근다 —
+  // 여기서 빠지면 styles.css 의 .featured-img.is-brand 가 조용히 dead 규칙이 된다.
+  assert.match(html, /<img class="featured-img is-brand" src="assets\/images\/brand\/HALley\.png"/);
   assert.match(html, /<h1 id="featured-title" class="featured-title">보이지 않는 카메라의 오늘, 그러나 미래<\/h1>/);
   assert.match(html, /<p class="featured-kicker">Camera SW Newsroom<\/p>/);
   // 최신 소식 grid section with sort + topic filter + grid hooks.
@@ -624,8 +624,9 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
   assert.match(html, /<div id="latest-topics" class="keyword-row latest-topics"/);
   assert.match(html, /<div id="latest-grid" class="archive-grid latest-grid">/);
   assert.match(html, /<a class="section-link" href="archive\.html">전체 아카이브 보기<\/a>/);
-  // Shared nav and subscription hooks are preserved.
-  assert.match(html, /class="nav-links homepage-nav-links"[\s\S]*href="index\.html">홈<\/a>[\s\S]*href="archive\.html">아카이브<\/a>[\s\S]*href="https:\/\/github\.com\/TTolsun\/camera-hal-sw-newsletter">GitHub<\/a>/);
+  // 헤더 나브는 컨테이너로 스코프해서 본다. 열린 `[\s\S]*` 로 쓰면 푸터의 같은 라벨이 뒤쪽 절을
+  // 만족시켜, 헤더를 통째로 영어로 바꿔도 통과한다(실측).
+  assertSharedNav(html);
   assert.match(html, /<footer class="site-footer">[\s\S]*href="learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
   assert.match(html, /<section id="subscribe"[\s\S]*data-subscription-section hidden>/);
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search/);
@@ -729,6 +730,20 @@ test('tertiary meta text keeps WCAG AA contrast on the white and parchment canva
   assert.match(css, /stroke='%236e6e73'/);
 });
 
+// focus 신호는 사이트 전체에 하나다(DESIGN.md 「색」). 링 색은 불투명 액센트라야 하고
+// — 35% 틴트는 흰 배경 1.72:1 로 WCAG 1.4.11(3:1) 미달이었다 —, tabindex 로만 초점을 받는
+// 요소도 브라우저 기본 링이 아니라 같은 링을 써야 한다(#1009).
+test('the shared focus ring covers non-native focus targets at an opaque accent', () => {
+  const css = readStylesheet();
+  assertCssDeclaration(exactSelectorBlock(css, ':root'), '--focus-ring', '#0066cc');
+
+  const focusRule = selectorGroupBlock(css, '[tabindex]:focus-visible');
+  assertCssDeclaration(focusRule, 'outline', '3px solid var(--focus-ring)');
+  assertCssDeclaration(focusRule, 'outline-offset', '3px');
+  // 같은 규칙이어야 한다 — 별도 블록으로 갈라지면 두 값이 따로 흘러간다.
+  assert.equal(focusRule, selectorGroupBlock(css, 'a:focus-visible'));
+});
+
 test('font weights stay on the DESIGN.md 400/500/600 ramp', () => {
   const css = readStylesheet();
 
@@ -794,6 +809,8 @@ test('newsletter issue page CSS follows the newsroom flat article layout', () =>
   const issueBriefingCard = exactSelectorBlock(css, '.issue-briefing-card');
   const issueTakeaway = exactSelectorBlock(css, '.newsletter-issue-page .camera-hal-takeaway');
   const issueArticleSubheading = exactSelectorBlock(css, '.newsletter-issue-page .article-card h3.article-subheading');
+  const issuePublishBadge = exactSelectorBlock(css, '.newsletter-issue-page .issue-hero .issue-publish-badge');
+  const issueBack = exactSelectorBlock(css, '.issue-back');
   const issueSourceList = exactSelectorBlock(css, '.newsletter-issue-page .source-list');
   const issueReferences = exactSelectorBlock(css, '.newsletter-issue-page .issue-references');
   const issueFooterNavigation = exactSelectorBlock(css, '.issue-footer-navigation');
@@ -809,6 +826,10 @@ test('newsletter issue page CSS follows the newsroom flat article layout', () =>
   assertCssDeclaration(issueWrap, 'max-width', 'none');
   assertCssDeclaration(issueWrap, 'padding-bottom', '80px');
   assertCssDeclaration(issueHero, 'grid-template-columns', '1fr');
+  // 히어로가 grid 라서 직접 자식은 inline 계열 display 가 blockify 되고 stretch 로 컬럼을 채운다.
+  // 내용 폭으로 남아야 하는 자식(발행 배지 알약, 뒤로 가기 링크의 클릭 영역)은 명시해 잠근다.
+  assertCssDeclaration(issuePublishBadge, 'justify-self', 'start');
+  assertCssDeclaration(issueBack, 'justify-self', 'start');
   // mockup 히어로는 장식 glow·마스코트 없는 평문 흐름.
   assert.doesNotMatch(css, /\.newsletter-issue-page \.issue-hero::before/);
   assert.doesNotMatch(css, /issue-hero-mascot/);

@@ -1,0 +1,464 @@
+{
+  "sources": [
+    {
+      "id": "1e8e7d4f23c3faac",
+      "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+      "published_at": "2026-08-27T23:17:58Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The YB1-X91L firmware does not describe the complete camera link. Its front OV2740 uses two CSI-2 lanes at a 288 MHz link frequency and sends a 1932x1092 BGGR transport frame with 12 pixels of horizontal and vertical padding around the 1920x1080 image. Allow the AtomISP bridge to provide per-sensor link frequencies and padding, add the matching OV2740 mode, and derive ISP2401 D-PHY timing from the sensor link-frequency control. The register values are hardware configuration facts checked against",
+          "evidence_text": "<html><head><title>[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.99,
+      "android_hal_relevance": 0.99,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.926,
+      "warnings": []
+    },
+    {
+      "id": "gemini-695dd7980d006bd8",
+      "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link - Maurizio Casciano",
+      "published_at": "2026-08-27",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link - Maurizio Casciano",
+          "evidence_text": "<html><head><title>[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "5eff80176514d878",
+      "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+      "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "published_at": "2026-08-28T06:49:22Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Sony IMX908 is an 8.39 megapixel (3856x2176) CMOS image sensor with a MIPI CSI-2 output interface, supporting RAW10 and RAW12 output over 2 or 4 data lanes. Add device tree bindings for the sensor. Signed-off-by: Lachlan Michael --- Changes in v3: - Adjust the binding description to match the actual hardware: the I2C target address is selected by the SLAMODE pins, not fixed to 0x1A. - Add the standard video-interface schema reference so the endpoint and remote-endpoint validation match the m",
+          "evidence_text": "<html><head><title>[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor - Lachlan Michael</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.885,
+      "warnings": []
+    },
+    {
+      "id": "gemini-8eb32df15ab7eaca",
+      "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+      "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor - Lachlan Michael",
+      "published_at": "2026-08-28",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor - Lachlan Michael",
+          "evidence_text": "<html><head><title>[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor - Lachlan Michael</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "48427162eecca31f",
+      "url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "published_at": "2026-08-28T16:15:02Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Lenovo Yoga Book YB1-X91L exposes an OV2740 front sensor and an OV8858 rear sensor through the Cherry Trail AtomISP. Its firmware does not provide enough information for the existing sensor and IPU bridge drivers to construct the complete camera links. Add the ACPI IDs and bridge data, describe both AtomISP camera links, support the Yoga Book sensor clocks and modes, expose raw Bayer capture, add per-channel white-balance controls, and add the WV517S rear-camera lens actuator. Raw capture is",
+          "evidence_text": "<html><head><title>[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.87,
+      "android_hal_relevance": 0.87,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.878,
+      "warnings": []
+    },
+    {
+      "id": "gemini-cde397c416ebb476",
+      "url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+      "published_at": "2026-08-28",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+          "evidence_text": "<html><head><title>[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "15271ebf32ed92af",
+      "url": "https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "published_at": "2026-08-27T23:17:37Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Lenovo Yoga Book YB1-X91L exposes an OV2740 front sensor and an OV8858 rear sensor through the Cherry Trail AtomISP. Its firmware does not provide enough information for the existing sensor and IPU bridge drivers to construct the complete camera links. Add the ACPI IDs and bridge data, describe both AtomISP camera links, support the Yoga Book sensor clocks and modes, expose raw Bayer capture, add per-channel white-balance controls, and add the WV517S rear-camera lens actuator. Raw capture is",
+          "evidence_text": "<html><head><title>[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.87,
+      "android_hal_relevance": 0.87,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.878,
+      "warnings": []
+    },
+    {
+      "id": "gemini-422257bd92fe4574",
+      "url": "https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+      "published_at": "2026-08-27",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+          "evidence_text": "<html><head><title>[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "318487be28e05b6f",
+      "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "published_at": "2026-08-27T18:18:01Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Lenovo Yoga Book YB1-X91L exposes an OV2740 front sensor and an OV8858 rear sensor through the Cherry Trail AtomISP. Its firmware does not provide enough information for the existing sensor and IPU bridge drivers to construct the complete camera links. Add the ACPI IDs and bridge data, describe both AtomISP camera links, support the Yoga Book sensor clocks and modes, expose raw Bayer capture, add per-channel white-balance controls, and add the WV517S rear-camera lens actuator. Raw capture is",
+          "evidence_text": "<html><head><title>[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.87,
+      "android_hal_relevance": 0.87,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.878,
+      "warnings": []
+    },
+    {
+      "id": "gemini-c77171a1fd604a48",
+      "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+      "published_at": "2026-08-27",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+          "evidence_text": "<html><head><title>[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "e87136573de3de9e",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+      "published_at": "2026-08-17",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Revert \"ipa: rpi: imx296: Enable embedded data\" This reverts commit b7fa47f . Right now embedded data with the imx296 cannot be negotiated with the CFE. Signed-off-by: Naushir Patuck",
+          "evidence_text": "<!DOCTYPE html>\n<html\n  lang=\"en\"\n  \n  data-color-mode=\"auto\" data-light-theme=\"light\" data-dark-theme=\"dark\"\n  data-a11y-animated-images=\"system\" data-a11y-link-underlines=\"true\"\n  \n  >\n\n\n\n\n  <head>\n    <meta charset=\"utf-8\">\n  <link rel=\"dns-prefetch\" href=\"https://github.githubassets.com\">\n  <link rel=\"dns-prefetch\" href=\"https://avatars.githubusercontent.com\">\n  <link rel=\"dns-prefetch\" href=\"https://github-cloud.s3.amazonaws.com\">\n  <link rel=\"dns-prefetch\" href=\"https://user-images.githubu",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0,
+      "technical_depth": 0.834,
+      "warnings": []
+    },
+    {
+      "id": "gemini-61c5072c47e8a4e9",
+      "url": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v4 14/15] media: atomisp: allow raw Bayer capture - Maurizio Casciano",
+      "published_at": "2026-08-28",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v4 14/15] media: atomisp: allow raw Bayer capture - Maurizio Casciano",
+          "evidence_text": "<html><head><title>[PATCH v4 14/15] media: atomisp: allow raw Bayer capture - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhr",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "0ed7beba8ca58fef",
+      "url": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v4 14/15] media: atomisp: allow raw Bayer capture",
+      "published_at": "2026-08-28T16:15:34Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "AtomISP currently rejects all raw formats and silently substitutes YUV420. This prevents userspace camera processing stacks from obtaining unprocessed sensor frames. Enumerate only the raw format matching the sensor media-bus code and reconcile raw requests with the code selected by the sensor. Userspace opts in by selecting that raw V4L2 pixel format with VIDIOC_S_FMT. Raw formats expose the full sensor transport frame so ISP2401 can use its copy pipeline. Processed formats retain the existing",
+          "evidence_text": "<html><head><title>[PATCH v4 14/15] media: atomisp: allow raw Bayer capture - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhr",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.84,
+      "warnings": []
+    },
+    {
+      "id": "d8acdcb5457608e9",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807",
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260807",
+      "published_at": "2026-08-07",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Released v0.7.2+rpt20260807 (Raspberry Pi downstream libcamera).",
+          "evidence_text": "<!DOCTYPE html>\n<html\n  lang=\"en\"\n  \n  data-color-mode=\"auto\" data-light-theme=\"light\" data-dark-theme=\"dark\"\n  data-a11y-animated-images=\"system\" data-a11y-link-underlines=\"true\"\n  \n  >\n\n\n\n\n  <head>\n    <meta charset=\"utf-8\">\n  <link rel=\"dns-prefetch\" href=\"https://github.githubassets.com\">\n  <link rel=\"dns-prefetch\" href=\"https://avatars.githubusercontent.com\">\n  <link rel=\"dns-prefetch\" href=\"https://github-cloud.s3.amazonaws.com\">\n  <link rel=\"dns-prefetch\" href=\"https://user-images.githubu",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0,
+      "technical_depth": 0.804,
+      "warnings": []
+    },
+    {
+      "id": "7aa2ce8c19c960be",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "title": "CameraX | Jetpack | Android Developers",
+      "published_at": "",
+      "source_type": "source_change_event",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "release_row_changed: Release row content changed.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"ko-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.6,
+      "android_hal_relevance": 0.6,
+      "ai_relevance": 0,
+      "technical_depth": 0.795,
+      "warnings": []
+    },
+    {
+      "id": "55b573fbbb24ce30",
+      "url": "https://patchwork.libcamera.org/patch/28105/",
+      "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "published_at": "2026-08-26",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Milan Zamazal); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/cs",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "gemini-cc20e6d797d6c825",
+      "url": "https://patchwork.libcamera.org/patch/28105/",
+      "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D() - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/cs",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.545,
+      "warnings": []
+    },
+    {
+      "id": "b20dee0fdfc2e125",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "title": "Camera ITS tests",
+      "published_at": "2026-07-01",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "July 2026 Camera ITS tests Updated Camera ITS tests to add fast-FAIL descriptions to scene0 tests.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"vi-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.77,
+      "android_hal_relevance": 0.77,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.746,
+      "warnings": []
+    },
+    {
+      "id": "8b440aecd6113a6a",
+      "url": "https://patchwork.libcamera.org/patch/28095/",
+      "title": "libcamera: Add quad-Bayer CFA layout support",
+      "published_at": "2026-08-25",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Frederic Laing); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: Add quad-Bayer CFA layout support - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"/>\n  <script",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.689,
+      "warnings": []
+    },
+    {
+      "id": "gemini-2498d17381a9f869",
+      "url": "https://patchwork.libcamera.org/patch/28095/",
+      "title": "libcamera: Add quad-Bayer CFA layout support - Patchwork",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "libcamera: Add quad-Bayer CFA layout support - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: Add quad-Bayer CFA layout support - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"/>\n  <script",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.5,
+      "warnings": []
+    }
+  ]
+}

@@ -1,3 +1,17 @@
+const { stageDefinitionById } = require('../../llm/stage-catalog');
+
+// 예산 config는 LLM stage id 어휘를 쓴다(#993). 예전에는 작업 이름을 썼고, 그중 하나가
+// stage label과 철자가 같아 우연히 조인되다가 #982에서 조용히 끊겼다. 그 침묵이 3개월
+// 갔으므로, 어휘가 어긋나는 순간 config 검증에서 잡는다 -- 런타임에 던지면 수집·발굴
+// 자체를 막으니 발행 전 검증 단계가 맞는 자리다.
+function validateStageKeys(errors, path, keys) {
+  for (const key of keys) {
+    if (!stageDefinitionById(key)) {
+      errors.push(`${path}.${key} is not a stage id in the LLM stage catalog.`);
+    }
+  }
+}
+
 function isPlainObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
@@ -52,6 +66,7 @@ function validateNewsroomBudgetConfig(config) {
     for (const [stage, value] of Object.entries(budget.allocation)) {
       validatePositiveInteger(errors, `geminiUsageBudget.allocation.${stage}`, value);
     }
+    validateStageKeys(errors, 'geminiUsageBudget.allocation', Object.keys(budget.allocation));
   }
 
   if (!isPlainObject(budget.stages)) {
@@ -66,6 +81,7 @@ function validateNewsroomBudgetConfig(config) {
         errors.push(`geminiUsageBudget.stages.${stage}.optional must be a boolean.`);
       }
     }
+    validateStageKeys(errors, 'geminiUsageBudget.stages', Object.keys(budget.stages));
   }
 
   return {

@@ -1,4 +1,5 @@
 'use strict';
+const { LLM_STAGES, stageRun } = require('../../shared/llm/stage-catalog');
 
 // LLM merge contract for weekly duplicate articles (#489). buildWeeklyMergeResolver wires the
 // newsroom LLM client (callLlmJson) and an article validator into the { mergeDuplicate, validateMerged }
@@ -57,7 +58,7 @@ const WEEKLY_MERGE_SYSTEM_INSTRUCTION = [
   '확실하지 않으면 append를 선택하세요. 새로운 사실을 지어내지 마세요.'
 ].join('\n');
 
-function buildWeeklyMergeResolver({ callLlmJson, stage = 'weekly-merge', validateMergedArticle } = {}) {
+function buildWeeklyMergeResolver({ callLlmJson, stage = stageRun(LLM_STAGES.WEEKLY_MERGE), validateMergedArticle } = {}) {
   if (typeof callLlmJson !== 'function') return {};
   const mergeDuplicate = async ({ existing, incoming, reason }) => {
     const prompt = JSON.stringify({

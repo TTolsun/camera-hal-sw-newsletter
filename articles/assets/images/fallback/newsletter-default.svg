@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
   <title id="title">Camera HAL newsletter fallback image</title>
   <desc id="desc">A simple camera pipeline fallback illustration for newsletter articles.</desc>
-  <rect width="1280" height="720" fill="#f6f8fb"/>
+  <rect width="1280" height="720" fill="#f5f5f7"/>
   <path d="M0 520h1280v200H0z" fill="#e8eef6"/>
   <g fill="none" stroke="#1f2937" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" opacity=".82">
     <rect x="250" y="205" width="780" height="330" rx="38"/>

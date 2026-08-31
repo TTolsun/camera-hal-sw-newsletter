@@ -34,7 +34,7 @@ function candidate(url, overrides = {}) {
 }
 
 function plan(url, coverage_decision) {
-  return { url, coverage_decision, impact_level: 'medium' };
+  return { url, coverage_decision, impact_level: 'Direct Impact' };
 }
 
 // 재조정 이후 orchestrator가 하는 일을 그대로 재현한다(gemini-newsroom-newsletter.js:516-535).

@@ -3,6 +3,16 @@ const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
 
+const { DERIVED_STAGE_KINDS, LLM_STAGES, derivedStageRun, stageRun } = require('../../../llm/stage-catalog');
+
+// 예전에는 자유 문자열 label을 넘겼다. 이제 stage run만 받는다(#981).
+function run(name) {
+  return stageRun(LLM_STAGES[name], { qualityAttempt: 1, totalAttempts: 1 });
+}
+function judgeRun() {
+  return derivedStageRun(run('EDITOR'), DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE);
+}
+
 const clientPath = path.resolve(__dirname, '..', '..', '..', '..', '..', 'src', 'discovery', 'gemini-client.js');
 const rawDir = path.resolve(__dirname, '..', '..', '..', '..', '..', '.tmp', 'gemini-raw');
 
@@ -108,7 +118,7 @@ test('invalid JSON retries and writes raw model output', async () => {
   const client = loadClient({ GEMINI_MAX_RETRIES: '1' });
   const FakeGoogleGenAI = fakeGemini(['not json', '{"ok":true}']);
 
-  const result = await client.callGeminiJson('editor stage', 'system', 'prompt', {}, {
+  const result = await client.callGeminiJson(run('EDITOR'), 'system', 'prompt', {}, {
     GoogleGenAI: FakeGoogleGenAI
   });
 
@@ -116,7 +126,7 @@ test('invalid JSON retries and writes raw model output', async () => {
   assert.equal(FakeGoogleGenAI.requests.length, 2);
   const rawFiles = fs.readdirSync(rawDir);
   assert.equal(rawFiles.length, 1);
-  assert.match(rawFiles[0], /^editor-stage-attempt-1-primary-model\.txt$/);
+  assert.match(rawFiles[0], /^editor-attempt-1-1-attempt-1-primary-model\.txt$/);
   assert.equal(fs.readFileSync(path.join(rawDir, rawFiles[0]), 'utf8'), 'not json');
   assert.equal(client.getGeminiDiagnostics().invalid_json_count, 1);
   assert.equal(client.getGeminiCostCalls().length, 2);
@@ -130,15 +140,19 @@ test('invalid JSON falls back to the next model after retry budget is exhausted'
   });
   const FakeGoogleGenAI = fakeGemini(['not json', '{"ok":true}']);
 
-  const result = await client.callGeminiJson('reporter', 'system', 'prompt', {}, {
+  const result = await client.callGeminiJson(run('REPORTER'), 'system', 'prompt', {}, {
     GoogleGenAI: FakeGoogleGenAI
   });
 
   assert.deepEqual(result, { ok: true });
   assert.deepEqual(FakeGoogleGenAI.requests.map(request => request.model), ['primary-model', 'fallback-model']);
-  assert.equal(client.getGeminiModelUsage('reporter'), 'fallback-model');
-  assert.deepEqual(client.getGeminiDiagnostics().model_routing.reporter, {
-    stage: 'reporter',
+  assert.equal(client.getGeminiModelUsage(run('REPORTER')), 'fallback-model');
+  assert.deepEqual(client.getGeminiDiagnostics().model_routing['reporter#1'], {
+    stage_key: 'reporter#1',
+    stage_id: 'reporter',
+    quality_attempt: 1,
+    label: 'reporter attempt 1/1',
+    parent_run_key: null,
     stage_group: 'reporter',
     stage_group_known: true,
     routing_warning: '',
@@ -185,7 +199,7 @@ test('free-tier daily quota exhaustion skips remaining retries for that model', 
   });
   const FakeGoogleGenAI = fakeGemini([quotaError, '{"ok":true}']);
 
-  const result = await client.callGeminiJson('quota stage', 'system', 'prompt', {}, {
+  const result = await client.callGeminiJson(run('REPORTER'), 'system', 'prompt', {}, {
     GoogleGenAI: FakeGoogleGenAI
   });
 
@@ -193,7 +207,7 @@ test('free-tier daily quota exhaustion skips remaining retries for that model', 
   assert.deepEqual(FakeGoogleGenAI.requests.map(request => request.model), ['primary-model', 'fallback-model']);
   const diagnostics = client.getGeminiDiagnostics();
   assert.equal(diagnostics.quota_error_count, 1);
-  assert.equal(diagnostics.model_usage['quota stage']['primary-model'].requests, 1);
+  assert.equal(diagnostics.model_usage['reporter#1'].models['primary-model'].requests, 1);
 });
 
 test('successful Gemini calls record usage metadata and estimated cost', async () => {
@@ -209,16 +223,20 @@ test('successful Gemini calls record usage metadata and estimated cost', async (
     }
   }]);
 
-  const result = await client.callGeminiJson('cost stage', 'system', 'prompt', {}, {
+  const result = await client.callGeminiJson(run('REPORTER'), 'system', 'prompt', {}, {
     GoogleGenAI: FakeGoogleGenAI
   });
 
   assert.deepEqual(result, { ok: true });
   const [call] = client.getGeminiCostCalls();
-  assert.equal(call.stage, 'cost stage');
+  assert.equal(call.stage_key, 'reporter#1');
+  assert.equal(call.stage_id, 'reporter');
+  assert.equal(call.quality_attempt, 1);
+  assert.equal(call.label, 'reporter attempt 1/1');
+  assert.equal(call.parent_run_key, null);
   assert.equal(call.stage_group, 'reporter');
-  assert.equal(call.stage_group_known, false);
-  assert.equal(call.routing_warning, 'unknown_stage_defaulted_to_reporter');
+  assert.equal(call.stage_group_known, true);
+  assert.equal(call.routing_warning, '');
   assert.equal(call.model, 'gemini-2.5-flash');
   assert.equal(call.primary_model, 'gemini-2.5-flash');
   assert.equal(call.attempt_model, 'gemini-2.5-flash');
@@ -232,8 +250,8 @@ test('successful Gemini calls record usage metadata and estimated cost', async (
   assert.equal(call.prompt_tokens, 1000);
   assert.equal(call.output_tokens, 200);
   assert.equal(call.thinking_tokens, 50);
-  assert.equal(call.thinking_budget_requested, 0);
-  assert.equal(call.thinking_budget_applied, 0);
+  assert.equal(call.thinking_budget_requested, 512);
+  assert.equal(call.thinking_budget_applied, 512);
   assert.equal(call.cached_tokens, 100);
   assert.equal(call.total_tokens, 1250);
   assert.equal(call.billable_input_tokens, 900);
@@ -241,29 +259,19 @@ test('successful Gemini calls record usage metadata and estimated cost', async (
   assert.equal(call.estimated_cost_usd, 0.000898);
 });
 
-test('unknown stage defaults to reporter and records routing warning', async () => {
+// #981: catalog 밖의 stage는 존재할 수 없다. 예전에는 모르는 label이 조용히 reporter로
+// 라우팅되고 경고만 남았는데, 그건 "새 stage를 추가하고 정책 등록을 잊는" 사고를
+// 비용 리포트에만 남기고 통과시켰다. 이제 production boundary에서 바로 막는다.
+test('catalog 밖의 stage 값은 production boundary에서 거부된다', async () => {
   const client = loadClient({ GEMINI_MODEL: 'gemini-2.5-flash' });
   const FakeGoogleGenAI = fakeGemini(['{"ok":true}']);
 
-  await client.callGeminiJson('weird-stage', 'system', 'prompt', {}, {
-    GoogleGenAI: FakeGoogleGenAI
-  });
-
-  assert.deepEqual(client.getGeminiDiagnostics().model_routing['weird-stage'], {
-    stage: 'weird-stage',
-    stage_group: 'reporter',
-    stage_group_known: false,
-    routing_warning: 'unknown_stage_defaulted_to_reporter',
-    primary_model: 'gemini-2.5-flash',
-    fallback_models: [],
-    primary_resolved_by: 'GEMINI_MODEL',
-    resolved_by: 'GEMINI_MODEL',
-    global_override_applied: true
-  });
-  const [call] = client.getGeminiCostCalls();
-  assert.equal(call.stage_group, 'reporter');
-  assert.equal(call.stage_group_known, false);
-  assert.equal(call.routing_warning, 'unknown_stage_defaulted_to_reporter');
+  await assert.rejects(
+    () => client.callGeminiJson('weird-stage', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI }),
+    /expected a stage run/
+  );
+  assert.deepEqual(client.getGeminiDiagnostics().model_routing, {});
+  assert.deepEqual(client.getGeminiCostCalls(), []);
 });
 
 test('stage-specific thinking budgets are applied to Gemini request config', async () => {
@@ -279,12 +287,14 @@ test('stage-specific thinking budgets are applied to Gemini request config', asy
     '{"ok":"scoring"}'
   ]);
 
-  await client.callGeminiJson('reporter attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('editor attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('editor repair attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('fact-checker attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('public article judge attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('deterministic scoring', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('REPORTER'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('EDITOR'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('EDITOR_REPAIR'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('FACT_CHECKER'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(judgeRun(), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  // 예전 'deterministic scoring' 자리. scoring profile을 쓰는 production stage가 없어
+  // thinking을 명시적으로 끈 background-context로 0을 검증한다.
+  await client.callGeminiJson(run('BACKGROUND_CONTEXT'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
 
   assert.deepEqual(
     FakeGoogleGenAI.requests.map(request => request.config.thinkingConfig),
@@ -297,8 +307,6 @@ test('stage-specific thinking budgets are applied to Gemini request config', asy
       { thinkingBudget: 0 }
     ]
   );
-  assert.equal(client.thinkingBudgetForStage('editor completion attempt 1/1'), 1024);
-  assert.equal(client.thinkingBudgetForStage('unknown stage'), 0);
 });
 
 test('stage-specific model routing selects the configured model for each newsroom stage', async () => {
@@ -322,14 +330,14 @@ test('stage-specific model routing selects the configured model for each newsroo
     '{"ok":"completion"}'
   ]);
 
-  await client.callGeminiJson('reporter attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('background-context attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('editor attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('public article judge attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('fact-checker attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('fact-checker repair attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('editor repair attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
-  await client.callGeminiJson('editor completion attempt 1/1', 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('REPORTER'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('BACKGROUND_CONTEXT'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('EDITOR'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(judgeRun(), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('FACT_CHECKER'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('FACT_CHECKER_REPAIR'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('EDITOR_REPAIR'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  await client.callGeminiJson(run('EDITOR_COMPLETION'), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
 
   assert.deepEqual(
     FakeGoogleGenAI.requests.map(request => request.model),
@@ -346,8 +354,12 @@ test('stage-specific model routing selects the configured model for each newsroo
   );
 
   const diagnostics = client.getGeminiDiagnostics();
-  assert.deepEqual(diagnostics.model_routing['editor attempt 1/1'], {
-    stage: 'editor attempt 1/1',
+  assert.deepEqual(diagnostics.model_routing['editor#1'], {
+    stage_key: 'editor#1',
+    stage_id: 'editor',
+    quality_attempt: 1,
+    label: 'editor attempt 1/1',
+    parent_run_key: null,
     stage_group: 'editor',
     stage_group_known: true,
     routing_warning: '',
@@ -357,8 +369,12 @@ test('stage-specific model routing selects the configured model for each newsroo
     resolved_by: 'NEWSROOM_EDITOR_MODEL',
     global_override_applied: false
   });
-  assert.deepEqual(diagnostics.model_routing['fact-checker repair attempt 1/1'], {
-    stage: 'fact-checker repair attempt 1/1',
+  assert.deepEqual(diagnostics.model_routing['fact_checker.repair#1'], {
+    stage_key: 'fact_checker.repair#1',
+    stage_id: 'fact_checker.repair',
+    quality_attempt: 1,
+    label: 'fact-checker repair attempt 1/1',
+    parent_run_key: null,
     stage_group: 'factcheck',
     stage_group_known: true,
     routing_warning: '',
@@ -368,8 +384,12 @@ test('stage-specific model routing selects the configured model for each newsroo
     resolved_by: 'NEWSROOM_FACTCHECK_MODEL',
     global_override_applied: false
   });
-  assert.deepEqual(diagnostics.model_routing['public article judge attempt 1/1'], {
-    stage: 'public article judge attempt 1/1',
+  assert.deepEqual(diagnostics.model_routing['editor.public_article_judge#1'], {
+    stage_key: 'editor.public_article_judge#1',
+    stage_id: 'editor.public_article_judge',
+    quality_attempt: 1,
+    label: 'editor attempt 1/1 public article judge',
+    parent_run_key: 'editor#1',
     stage_group: 'judge',
     stage_group_known: true,
     routing_warning: '',
@@ -586,7 +606,8 @@ test('cost report keeps call-level Pro audit marker while policy remains disable
     date: '2026-05-04',
     calls: [{
       provider: 'gemini',
-      stage: 'synthetic audit',
+      stage_key: 'synthetic_audit#1',
+      label: 'synthetic audit',
       stage_group: 'reporter',
       model: 'gemini-2.5-pro',
       attempt: 1,

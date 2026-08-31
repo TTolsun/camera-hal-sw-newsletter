@@ -25,7 +25,8 @@ const {
 } = require('../reporter/weekly-newsletter');
 
 // 4: committed_artifacts[] 항목에서 size·sha256을 빼고 path·retention_grade만 남겼다(#942).
-const REVIEW_ARTIFACT_SCHEMA_VERSION = 4;
+// 5: 같은 이유로 files[]·review_artifacts[] 항목에서도 size·sha256을 뺀다(#951).
+const REVIEW_ARTIFACT_SCHEMA_VERSION = 5;
 
 // Git에 영구 보존되는 공개 진실 공급원 등급
 const PUBLIC_SOURCE_OF_TRUTH = 'public_source_of_truth';
@@ -730,7 +731,6 @@ function materializeEntry(root, date, catalogEntry, context, changedSet) {
   const derivedMissing = catalogEntry.derived && !present;
   const recoveryPromptAttention = shouldRequireRecoveryPromptAttention({ catalogEntry, context, present });
   const recoveryPromptMissing = recoveryPromptAttention && !present;
-  const stat = statArtifact(root, catalogEntry.path);
   const reviewBlocking = catalogEntry.derived
     ? present && catalogEntry.review_blocking
     : catalogEntry.review_blocking &&
@@ -764,8 +764,6 @@ function materializeEntry(root, date, catalogEntry, context, changedSet) {
     changed: changedSet.has(catalogEntry.path),
     derived: catalogEntry.derived,
     retention_grade: catalogEntry.retention_grade || GROUP_RETENTION_DEFAULT[catalogEntry.group] || DEBUG_HEAVY,
-    size: present ? stat.size : null,
-    sha256: present ? stat.sha256 : null,
     ...(warning ? { warning } : {})
   };
 }
@@ -1020,13 +1018,15 @@ function renderReleaseQaInventorySection(inventory) {
   return lines.join('\n').trimEnd();
 }
 
+// files[]는 존재하는 리뷰 대상 파일의 경로 목록이다. size·sha256은 담지 않는다(#951) —
+// 여기 올라오는 값은 review_artifacts[] 항목이 들고 있던 값과 같은 사본이고, 그 값은 매니페스트를
+// 쓴 뒤에도 이미지 수리·상태 확정·공개 상태 reconcile이 같은 파일을 계속 고쳐서 커밋되는
+// 순간부터 틀리다. 커밋되는 파일의 바이트 정본은 Git tree다.
 function presentReviewFiles(inventory) {
   return inventory.review_artifacts
     .filter(artifact => artifact.present && !isArtifactManifest(artifact.path))
     .map(artifact => ({
-      path: artifact.path,
-      size: artifact.size,
-      sha256: artifact.sha256
+      path: artifact.path
     }))
     .sort((left, right) => left.path.localeCompare(right.path));
 }

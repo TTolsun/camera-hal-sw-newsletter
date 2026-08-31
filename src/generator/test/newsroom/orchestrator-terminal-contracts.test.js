@@ -8,6 +8,8 @@ const {
   assertTerminalPublicationContracts
 } = require('../../publish/orchestrator-terminal-contracts');
 const { tempRoot } = require('../../../shared/test/helpers/fs');
+const { articleIdentityKey } = require('../../../shared/common/article-identity');
+const { normalizeUrl } = require('../../../shared/common/selection-normalizers');
 
 // 추출 전 god-file에 인라인으로 있던 terminal publication 헬퍼를 입력→동작으로 고정한다.
 // updateNewsletterData/persistHeadlineStateArtifacts는 module-level root/dataPath(process.cwd())에
@@ -101,5 +103,45 @@ test('persistHeadlineStateArtifacts: 공개 산출물이 아니면 파일을 쓰
     });
     assert.deepEqual(result.files, []);
     assert.deepEqual(result.exposureCoverage, { total: 3 });
+  });
+});
+
+test('persistHeadlineStateArtifacts: 발행 기록의 identity와 제목을 선정 후보에서 가져온다', () => {
+  // 배선(selectedArticles: shortlistReport.selected_articles)이 없으면 editor section만으로
+  // 기록되어 title이 LLM 헤드라인으로 남고, 다음 주 후보와 대조할 근거가 사라진다.
+  // 로케일 쿼리가 붙은 URL을 쓰는 이유: selection normalizer는 쿼리를 지우고 URL 전체를
+  // 소문자로 만들지만 article-identity는 그러지 않아, 두 정규화를 섞으면 매칭이 빗나간다.
+  const rootDir = tempRoot('terminal-contracts-');
+  const url = 'https://developer.android.com/jetpack/androidx/releases/camera?hl=ko#1.7.0-alpha03';
+  withCwd(rootDir, (contracts) => {
+    contracts.persistHeadlineStateArtifacts({
+      date: '2026-05-08',
+      shouldWritePublicArtifacts: true,
+      shortlistReport: {
+        homepage_headline_state: { schemaVersion: 1, current_headline: null, headline_history: [] },
+        selected_articles: [{
+          url,
+          normalized_url: normalizeUrl(url),
+          article_identity_key: articleIdentityKey({ url }),
+          title: 'CameraX 1.7.0-alpha03 release notes'
+        }]
+      },
+      editor: {
+        sections: [{
+          headline: 'CameraX가 Camera2Interop 확장을 넓혔다',
+          source_candidate_url: url,
+          sources: [{ title: 'AndroidX', url }]
+        }]
+      }
+    });
+
+    const history = JSON.parse(fs.readFileSync(
+      path.join(rootDir, 'state', 'article-exposure-history.json'), 'utf8'));
+    const record = history.articles.find(item => item.exposure_type === 'newsletter_article');
+    assert.ok(record, 'main 기사 노출 기록이 남아야 한다');
+    assert.equal(record.article_identity_key, articleIdentityKey({ url }));
+    assert.equal(record.title, 'CameraX 1.7.0-alpha03 release notes');
+    assert.equal(record.source_url, normalizeUrl(url));
+    assert.equal(record.newsletter_article_date, '2026-05-08');
   });
 });

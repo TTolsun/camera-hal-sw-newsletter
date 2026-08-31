@@ -1420,3 +1420,196 @@ test('only article_sections.verified_facts requires claim coverage; confirmed_fa
     false
   );
 });
+
+// #944: Claude Blog·Anthropic News 같은 산문 기사는 릴리스 노트가 아니라
+// source_extraction.workflow가 유일한 본문 근거다. capsule(article-capsules.js)은 이 문단을
+// LLM 프롬프트에 실어 보내므로, 바인딩 인덱스에도 같은 근거가 있어야 생성 측과 검증 측이 같은
+// 근거를 본다.
+//
+// 아래 후보는 실제 생산자(dated-article-index-resolver.js workflowEvidence)가 내는 모양 그대로다.
+// 손으로 만든 깨끗한 한 문장이 아니라 실측 모양을 쓴다.
+//   - sections는 MAX_WORKFLOW_SECTIONS=2개이고 heading은 둘 다 빈 문자열이다(생산자가 heading을
+//     채우지 않는다). 그래서 두 섹션의 section_key가 'workflow' 하나로 같아진다. 그래도 근거
+//     2건이 각각 독립 evidence_id를 받고 각각 바인딩돼야 한다. addEvidence는 id가 겹치면 drop이
+//     아니라 merge라(claim-source-binding.js:298) 두 문단이 조용히 근거 1건으로 합쳐질 수 있는
+//     자리다.
+//   - 문단 길이는 WORKFLOW_EVIDENCE_BUDGET=1500자 예산 안의 산문 길이다(2026-08-24 실측 후보
+//     12건 범위 205~1444자). 둘째 문단은 예산 절단으로 단어 중간에서 끊긴 꼬리를 그대로 담는다.
+//   - behavior_change는 sections[0] 안의 문장이다. 생산자가 앵커 밀도 1위 문장을
+//     behavior_change로, 그 문장을 둘러싼 문단을 sections[0]으로 만들기 때문에 항상 성립한다
+//     (2026-08-24 실측 후보 12/12 확인).
+const WORKFLOW_ARTICLE_URL = 'https://claude.com/blog/ai-ci-cd-on-call';
+const WORKFLOW_PARAGRAPH_FIRST = 'Teams told us the hardest part was not writing the code but proving it still worked. The nightly build now uploads its logs, trace output and metrics into a single artifact bundle, and the reviewer sees that bundle attached to the pull request before the approval gate opens. When a regression shows up, the same bundle is what the on-call engineer opens first, so the debug loop starts from evidence instead of from a guess.';
+const WORKFLOW_PARAGRAPH_SECOND = 'Verification is where most of the time went. We asked the agents to run the full test suite on every change, then to summarise the failures in the language the reviewing engineer already uses, so nobody has to read raw CI output to decide whether a build is safe to ship. That summary is what the approval gate reads, and it is also what the incident r';
+const WORKFLOW_BEHAVIOR_CHANGE = 'The nightly build now uploads its logs, trace output and metrics into a single artifact bundle, and the reviewer sees that bundle attached to the pull request before the approval gate opens.';
+
+function workflowCandidate(overrides = {}) {
+  return {
+    title: 'How we run CI/CD and on-call with agents',
+    url: WORKFLOW_ARTICLE_URL,
+    source_candidate_hash: 'workflow-candidate-hash',
+    summary: 'Teams told us the hardest part was not writing the code but proving it still worked.',
+    behavior_change: WORKFLOW_BEHAVIOR_CHANGE,
+    source_extraction: {
+      workflow: {
+        sections: [
+          { heading: '', items: [{ text: WORKFLOW_PARAGRAPH_FIRST }] },
+          { heading: '', items: [{ text: WORKFLOW_PARAGRAPH_SECOND }] }
+        ]
+      }
+    },
+    ...overrides
+  };
+}
+
+function workflowSection() {
+  return {
+    headline: 'How we run CI/CD and on-call with agents',
+    sources: [{ title: 'Claude Blog', url: WORKFLOW_ARTICLE_URL }]
+  };
+}
+
+function workflowClaim(claimId, claimText, evidenceId) {
+  return {
+    claim_id: claimId,
+    text: claimText,
+    claim_type: 'fact',
+    evidence_ids: [evidenceId],
+    source_urls: [WORKFLOW_ARTICLE_URL],
+    impact_level: 'app_api_or_framework_adjacent',
+    overclaim_risk: 'low'
+  };
+}
+
+test('#944: both workflow sections surface as separate allowed evidence despite one shared section_key', () => {
+  const cand = workflowCandidate();
+  const allowed = buildAllowedClaimEvidence(cand, workflowSection());
+  const workflowItems = allowed.filter(item => item.kind === 'source_extraction_item');
+  assert.equal(
+    workflowItems.length,
+    2,
+    `두 workflow 문단은 각각 근거 1건이어야 한다(section_key가 같아도 merge되면 안 된다): ${JSON.stringify(allowed)}`
+  );
+  assert.equal(
+    new Set(workflowItems.map(item => item.evidence_id)).size,
+    2,
+    'workflow 근거 2건은 서로 다른 evidence_id를 받아야 한다'
+  );
+  assert.ok(workflowItems.some(item => item.text.includes('artifact bundle')));
+  assert.ok(workflowItems.some(item => item.text.includes('full test suite')));
+  for (const item of workflowItems) assert.ok(item.source_urls.includes(WORKFLOW_ARTICLE_URL));
+});
+
+test('#944: capsule call shape and validation call shape resolve the same workflow evidence_id', () => {
+  // 진짜 불변식은 "capsule이 LLM에게 보여준 id를 검증기가 그대로 해석한다"이다. 두 쪽은 section
+  // 인자를 다르게 넘긴다 — capsule은 빈 객체를(article-capsules.js:473
+  // buildAllowedClaimEvidence(candidate, {}, ...)), 검증은 sources[]가 든 실제 article section을
+  // (claim-source-binding.js:1375 buildEvidenceIndex(candidate, section)) 넘긴다. 그래서 같은
+  // 인자로 같은 함수를 두 번 부르는 동어반복이 아니라, 서로 다른 두 호출 형태 사이의 id 일치다.
+  const cand = workflowCandidate();
+  const capsuleEvidence = buildAllowedClaimEvidence(cand, {});
+  const validationIndex = buildEvidenceIndex(cand, workflowSection());
+  const capsuleWorkflowIds = capsuleEvidence
+    .filter(item => item.kind === 'source_extraction_item')
+    .map(item => item.evidence_id);
+  assert.equal(capsuleWorkflowIds.length, 2);
+  for (const id of capsuleWorkflowIds) {
+    assert.ok(
+      validationIndex.byId.has(id),
+      `capsule이 보여준 workflow evidence_id를 검증 index가 해석하지 못했다: ${id} / index ids: ${[...validationIndex.byId.keys()]}`
+    );
+  }
+});
+
+test('#944: two claims citing the two workflow paragraphs each bind independently', () => {
+  const cand = workflowCandidate();
+  const firstId = stableSourceExtractionItemId(cand, 'workflow', WORKFLOW_PARAGRAPH_FIRST);
+  const secondId = stableSourceExtractionItemId(cand, 'workflow', WORKFLOW_PARAGRAPH_SECOND);
+  assert.notEqual(firstId, secondId, '문단이 다르면 evidence_id도 달라야 한다');
+  const result = validateArticleClaims({
+    section: {
+      ...workflowSection(),
+      claims: [
+        workflowClaim('claim-workflow-1', WORKFLOW_PARAGRAPH_FIRST, firstId),
+        workflowClaim('claim-workflow-2', WORKFLOW_PARAGRAPH_SECOND, secondId)
+      ]
+    },
+    candidate: cand,
+    strict: true
+  });
+  assert.equal(result.claim_results.length, 2);
+  assert.deepEqual(
+    result.claim_results.map(item => item.status),
+    ['bound', 'bound'],
+    `두 claim 모두 bound여야 한다: ${JSON.stringify(result.claim_results.map(item => item.issues))}`
+  );
+  assert.deepEqual(result.claim_results[0].resolved_evidence_ids, [firstId]);
+  assert.deepEqual(result.claim_results[1].resolved_evidence_ids, [secondId]);
+});
+
+test('#944: a candidate WITHOUT workflow evidence still fails binding for the same claim', () => {
+  // 게이트 약화 방지 잠금. workflow 근거를 인덱스에 넣는 변경이 "근거 없이도 통과"로
+  // 번지면 안 된다. 근거가 실제로 없는 후보는 같은 claim에서 여전히 미바인딩이어야 한다.
+  const withWorkflow = workflowCandidate();
+  const firstId = stableSourceExtractionItemId(withWorkflow, 'workflow', WORKFLOW_PARAGRAPH_FIRST);
+  const withoutWorkflow = workflowCandidate({ source_extraction: {} });
+  const result = validateArticleClaims({
+    section: {
+      ...workflowSection(),
+      claims: [workflowClaim('claim-workflow-1', WORKFLOW_PARAGRAPH_FIRST, firstId)]
+    },
+    candidate: withoutWorkflow,
+    strict: true
+  });
+  assert.notEqual(result.claim_results[0].status, 'bound');
+  assert.equal(result.claim_results[0].bound, false);
+  assert.deepEqual(result.claim_results[0].resolved_evidence_ids, []);
+  assert.ok(result.claim_results[0].issues.some(item =>
+    item.reason_code === 'unknown_evidence_id' && item.blocking !== false
+  ));
+});
+
+test('#944: workflow evidence does not satisfy the direct_hal_contract evidence gate on its own', () => {
+  // 리뷰 지적("workflow 산문을 인덱스에 넣으면 direct_hal 하드 블로커가 새로 뚫린다")에 대한 잠금.
+  // 이 게이트는 필터가 아니라 grounding 검사다 — DIRECT_HAL_WORDING이 근거 텍스트에 실제로
+  // 있어야 통과한다. workflow 문단은 소스 본문 그대로이고 HAL 문구가 없으므로, 근거로 인정되더라도
+  // direct_hal_contract claim은 여전히 막혀야 한다.
+  const cand = workflowCandidate();
+  const firstId = stableSourceExtractionItemId(cand, 'workflow', WORKFLOW_PARAGRAPH_FIRST);
+  const result = validateArticleClaims({
+    section: {
+      ...workflowSection(),
+      claims: [{
+        ...workflowClaim('claim-workflow-1', WORKFLOW_PARAGRAPH_FIRST, firstId),
+        impact_level: 'direct_hal_contract'
+      }]
+    },
+    candidate: cand,
+    strict: true
+  });
+  assert.ok(
+    result.claim_results[0].issues.some(item =>
+      item.reason_code === 'direct_hal_claim_without_direct_evidence' && item.blocking !== false
+    ),
+    `HAL 문구 없는 workflow 근거로 direct_hal_contract를 주장하면 막혀야 한다: ${JSON.stringify(result.claim_results[0].issues)}`
+  );
+});
+
+test('#944: workflow section_key uses its own prefix, not the release prefix', () => {
+  // workflow 컨테이너에는 version/date/component가 없고 heading도 비어 있다. 접두가 'release'로
+  // 떨어지면 같은 페이지에서 나온 릴리스 근거와 workflow 근거가 한 키를 나눠 쓰게 된다.
+  const cand = workflowCandidate();
+  const index = buildEvidenceIndex(cand, workflowSection());
+  const workflowId = stableSourceExtractionItemId(cand, 'workflow', WORKFLOW_PARAGRAPH_FIRST);
+  assert.ok(
+    index.byId.has(workflowId),
+    `workflow section_key는 'workflow'여야 한다; index ids: ${[...index.byId.keys()]}`
+  );
+  assert.equal(
+    index.byId.has(stableSourceExtractionItemId(cand, 'release', WORKFLOW_PARAGRAPH_FIRST)),
+    false,
+    "workflow 근거가 'release' 접두 키로 들어가면 안 된다"
+  );
+  // texts는 workflow 컨테이너 값만 담는다(이 컨테이너에는 version/date/component가 없다).
+  assert.deepEqual(index.byId.get(workflowId).texts, [WORKFLOW_PARAGRAPH_FIRST]);
+});

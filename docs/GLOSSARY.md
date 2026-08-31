@@ -46,6 +46,18 @@
 | `merged-candidates.json` | Stage 2에서 manual candidate, seed evidence, Gemini discovery 후보를 병합한 최종 generation input 후보 artifact입니다. |
 | `editor-draft.json` | editor stage가 만든 newsletter draft artifact입니다. public output이 아니라 renderer와 validator가 검토하는 중간 산출물입니다. |
 | `quality-report.json` | quality gate 결과를 담는 machine-readable report입니다. score뿐 아니라 hard blocker, source gap, fact-check must_fix 같은 발행 안전 문제를 함께 확인합니다. |
+## LLM stage
+
+| 용어 | 설명 |
+| --- | --- |
+| `stage definition` | LLM 단계의 정적 정의입니다. `src/shared/llm/stage-catalog.js`가 소유하며 id, model group, sampling profile, status role을 담습니다. |
+| `stage run` | 논리적 LLM 호출 하나를 나타내는 실행 인스턴스입니다. quality attempt, 부모 run, 사람이 읽는 label을 담습니다. definition과 달리 실행마다 새로 만듭니다. |
+| `stageRunKey` | 진단과 비용 집계에 쓰는 canonical key입니다. 형식은 `<stage id>#<quality attempt>`이며 이 함수 하나만 형식을 압니다. 총 재시도 수는 키에 넣지 않습니다. |
+| `temperatureProfile` | stage가 어떤 temperature를 쓰는지 의미 기반으로 가리키는 값입니다. provider가 자기 config field로 옮깁니다. catalog는 특정 provider의 config 모양을 알지 않습니다. |
+| `thinkingProfile` | 같은 방식으로 thinking budget을 가리키는 값입니다. `disabled`는 누락이 아니라 "이 stage는 thinking을 쓰지 않는다"는 명시적 선언입니다. |
+| `stageRunIdentity` | 진단·비용 아티팩트의 각 항목에 싣는 stage 정체성 블록입니다. `stage_key`, `stage_id`, `quality_attempt`, `label`, `parent_run_key`를 담습니다. 키는 기계가 조회에 쓰고 label은 사람이 읽습니다. |
+| `stage_key_format` | 진단·비용 아티팩트가 어느 키 형식을 쓰는지 알리는 표식입니다. 값은 `canonical-v1`이며, 사람이 읽는 label을 키로 쓰던 과거 아티팩트와 구분하기 위한 것입니다. 호환 계층이 아닙니다. |
+
 ## Source snapshot / date quality
 
 | 용어 | 설명 |

@@ -104,7 +104,9 @@ const {
   articleIdentityKey
 } = require('../../shared/common/article-identity');
 const {
+  annotateArticleExposure,
   everCoveredAsNewsletterArticle,
+  newsletterArticleRecordCount,
   readExposureHistory
 } = require('../reporter/article-exposure-history');
 const {
@@ -931,7 +933,9 @@ function admitReleaseClassCatchUpAfterReconciliation({
   };
 }
 
-function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = getCatchUpPolicy()) {
+// date는 이 호의 이슈 날짜다. 게재 이력 필터가 쿨다운 검사와 같은 as-of 기준을 써야 같은 date
+// 재실행이 그 호가 catch-up 레인으로 낸 기사를 자기 이력으로 배제하지 않는다.
+function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = getCatchUpPolicy(), date) {
   if (!catchUpPolicy || catchUpPolicy.enabled !== true) return [];
   const eligibleBuckets = new Set(ensureArray(catchUpPolicy.eligibleBuckets));
   const maxAge = Number(catchUpPolicy.maxAgeDays) || 0;
@@ -944,7 +948,7 @@ function buildCatchUpPool(referenceCandidates, exposureHistory, catchUpPolicy = 
     if (!eligibleBuckets.has(bucket)) return false;
     const age = Number(candidate.days_since_published);
     if (!Number.isFinite(age) || age > maxAge) return false;
-    if (everCoveredAsNewsletterArticle(articleIdentityKey(candidate), history)) return false;
+    if (everCoveredAsNewsletterArticle(articleIdentityKey(candidate), history, { date })) return false;
     if (!catchUpCandidateHasEvidence(candidate)) return false;
     return true;
   });
@@ -969,22 +973,84 @@ function collectedCoverageLineage(collectedCandidates) {
   };
 }
 
+const REPUBLICATION_COOLDOWN_EXCLUSION_REASON = 'published as a main article within the republication cooldown';
+
+// 이미 main 기사로 발행된 URL을 쿨다운 안에 다시 올리지 못하게, 선정 상류에서 걷어낸다.
+//
+// 상류인 이유: reconcileCoverage가 reserve를 main으로 승급시키므로(gemini-newsroom-newsletter.js)
+// selected만 걸러서는 구멍이 남는다. selected와 reserve가 함께 읽는 selectionPools에서 빼야 두
+// 통로가 같이 닫힌다.
+//
+// 술어가 쿨다운(21일)인 이유: everCoveredAsNewsletterArticle은 시간 제한이 없어서, 같은 URL로
+// 내용이 갱신되는 페이지(developer.android.com/latest-updates, ASB overview — 둘 다 실제 이력에
+// 있다)를 영원히 못 쓰게 만든다. 그건 쓸 수 있는 기사를 막는 결함이다.
+//
+// main_article_score_eligible에 이력 사유를 섞지 않은 것도 의도다: 그건 점수 게이트이고 catch-up
+// 레인이 재사용하는 공유 길목이라, 좁히면 이 이슈와 무관한 판정까지 함께 좁아진다.
+function withoutRepublicationCooldown(eligible, exposureHistory, date, cap) {
+  const selectionPools = eligible.selectionPools;
+  if (!exposureHistory) return { shortlist: eligible.shortlist, selectionPools, blocked: [] };
+  const blocked = [];
+  const blockedKeys = new Set();
+  const poolCandidates = [
+    ...ensureArray(selectionPools?.primary),
+    ...ensureArray(selectionPools?.fallback)
+  ];
+  for (const candidate of poolCandidates) {
+    const key = articleIdentityKey(candidate);
+    if (blockedKeys.has(key)) continue;
+    if (!annotateArticleExposure(candidate, exposureHistory, { date }).published_within_cooldown) continue;
+    blockedKeys.add(key);
+    blocked.push({
+      ...candidate,
+      exclusion_reasons: [
+        ...ensureArray(candidate.exclusion_reasons),
+        REPUBLICATION_COOLDOWN_EXCLUSION_REASON
+      ]
+    });
+  }
+  if (blocked.length === 0) return { shortlist: eligible.shortlist, selectionPools, blocked };
+  const keep = candidates => ensureArray(candidates)
+    .filter(candidate => !blockedKeys.has(articleIdentityKey(candidate)));
+  const primary = keep(selectionPools?.primary);
+  const fallback = keep(selectionPools?.fallback);
+  return {
+    // shortlist는 cap을 필터 뒤에 적용해 다시 만든다. buildEligibleShortlist가 이미 자른 결과에서
+    // 빼기만 하면 cap에 걸린 주에 빈자리가 cap 밖 후보로 채워지지 않아, eligible_candidate_count와
+    // 거기서 파생되는 eligible_composition_summary·selection_shortage_hints·
+    // candidate_pool_preflight가 실제 후보 풀보다 작게 보고된다(2026-08-03 실측: 12 → 9).
+    //
+    // selected_articles와 reserve_candidates는 cap 없는 selectionPools를 읽으므로 이 순서와
+    // 무관하다. 반면 shortlisted_candidates는 보고 전용이 아니다 — 이 shortlist에서 파생돼
+    // reporter LLM 입력(reporterInputFromShortlist)과 렌더되는 참고 기사(render/reference-
+    // articles.js)로 가고, select/article-capsules.js와 quality/candidate-claim-matching.js도
+    // 같은 값을 읽는다. 그래서 cap 순서가 편성은 안 바꿔도 참고 기사 목록은 바꾼다.
+    shortlist: [...primary, ...fallback].slice(0, cap),
+    selectionPools: { primary, fallback },
+    blocked
+  };
+}
+
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
   const coverageLineage = collectedCoverageLineage(collectedCandidates);
   const cap = options.cap ?? SHORTLIST_CAP;
   const selectionWindowPolicy = options.selectionWindowPolicy || getSelectionWindowPolicy();
-  const {
-    shortlist,
-    selectionPools,
-    excluded,
-    referenceContextCandidates,
-    windowCandidateCounts,
-    notYetEligibleCount
-  } = buildEligibleShortlist(rawCandidates, date, cap, {
+  const eligible = buildEligibleShortlist(rawCandidates, date, cap, {
     selectionWindowPolicy,
     coverageWeekKeyOverride: options.coverageWeekKeyOverride
   });
+  const {
+    referenceContextCandidates,
+    windowCandidateCounts,
+    notYetEligibleCount
+  } = eligible;
+  const exposureHistory = options.exposureHistory ||
+    (options.root ? readExposureHistory(options.root, date) : null);
+  const cooldownFiltered = withoutRepublicationCooldown(eligible, exposureHistory, date, cap);
+  const shortlist = cooldownFiltered.shortlist;
+  const selectionPools = cooldownFiltered.selectionPools;
+  const excluded = eligible.excluded.concat(cooldownFiltered.blocked);
   const selectionCandidatePool = [
     ...ensureArray(selectionPools?.primary),
     ...ensureArray(selectionPools?.fallback)
@@ -1018,8 +1084,6 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   selected = headlineSelection.selected_articles;
   const windowDiagnostics = selectionResult.diagnostics;
   let reserve = reserveCandidates(selectionCandidatePool, selected, options);
-  const exposureHistory = options.exposureHistory ||
-    (options.root ? readExposureHistory(options.root, date) : null);
   const catchUpPolicy = options.catchUpPolicy || getCatchUpPolicy();
   let catchUpSelected = [];
   const catchUpTarget = Number(catchUpPolicy.targetMainArticles) || articlePolicy.mainArticleCount.min;
@@ -1056,7 +1120,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     const poolSourceCandidates = maxReleaseClassArticles > 0
       ? [...ensureArray(selectionPools?.fallback), ...ensureArray(referenceContextCandidates)]
       : referenceContextCandidates;
-    const pool = buildCatchUpPool(poolSourceCandidates, exposureHistory, catchUpPolicy)
+    const pool = buildCatchUpPool(poolSourceCandidates, exposureHistory, catchUpPolicy, date)
       .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
       // Thin-week guard: only promote catch-up candidates that clear the same deterministic
       // selection floor as fresh main articles. The normal path (selectFinalArticlesFromPool)
@@ -1098,10 +1162,20 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       releaseClassPool = releaseClassPool.filter(candidate => !catchUpKeys.has(articleIdentityKey(candidate)));
     }
   }
-  const warnings = selectionWarnings(selected, { exposureHistory });
+  const warnings = selectionWarnings(selected, { exposureHistory, date });
   const errors = selectionErrors(selected);
   const composition = compositionSummary(selected);
   const eligibleComposition = compositionSummary(shortlist);
+  // 파서 힌트는 "수집·파싱이 이 버킷을 만들어 냈는가"에 답하는 값이다(렌더 라벨도 Source/parser
+  // recovery hint다). 재게재 차단은 후보가 없어서가 아니라 이미 발행해서 빠진 것이므로, 차단분을
+  // 되돌린 구성으로 만든다. 안 그러면 한 버킷의 유일한 후보가 막힌 주에
+  // OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR가 새로 붙어 멀쩡한 파서를 고치라고 지시한다.
+  //
+  // 풀 충분성 힌트는 다른 질문이라 차단 뒤 구성(eligibleComposition)을 본다. 되돌린 구성으로
+  // 함께 계산하면 그 주 eligible 후보가 전부 쿨다운에 걸려도 "후보를 더 모아라"가 사라진다.
+  const shortageHints = selectionShortageHints(
+    compositionSummary([...shortlist, ...cooldownFiltered.blocked]),
+    eligibleComposition);
   const groupCoverage = groupCoverageSummary({
     selectedGroupKeys: selected.map(candidateGroupKey),
     renderedGroupKeys: [],
@@ -1162,7 +1236,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     publish_mode_detail: publishModeResult,
     composition_summary: composition,
     eligible_composition_summary: eligibleComposition,
-    selection_shortage_hints: selectionShortageHints(eligibleComposition),
+    selection_shortage_hints: shortageHints,
     primary_window_candidate_count: windowDiagnostics.primary_window_candidate_count,
     primary_window_selected_count: windowDiagnostics.primary_window_selected_count,
     fallback_window_candidate_count: windowDiagnostics.fallback_window_candidate_count,
@@ -1181,7 +1255,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     candidate_shortage_reviewable: shortageReasonCodes.length > 0,
     candidate_shortage_summary: preflightSummary,
     shortage_reason_codes: shortageReasonCodes,
-    source_parser_hints: sourceParserHintsFromShortage(preflightSummary, selectionShortageHints(eligibleComposition)),
+    source_parser_hints: sourceParserHintsFromShortage(preflightSummary, shortageHints),
     editor_review_required: !publishReady && (mode !== COMPOSITION_MODES.NORMAL || shortageReasonCodes.length > 0),
     ai_selected_article_count: selected.filter(candidate => candidate.ai_slot_candidate).length,
     optional_ai_cpp_selected_article_count: selected.filter(candidate => candidate.optional_ai_cpp_candidate).length,
@@ -1254,6 +1328,23 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     // #879: 2차 pass 입력. 커밋되는 selection-report.json은 allow-list라 이 후보 목록이 실리지
     // 않는다(진단 3종만 실린다).
     release_class_catch_up_pool: releaseClassPool,
+    // 재게재 차단은 exclusion_reason_summary에도 실리지만 그쪽은 상위 10개로 잘린다(사유 하나에
+    // 후보 1~2건이면 늘 뒤로 밀린다). 선례(#838의 release_class_catch_up)와 같은 이유로 전용
+    // 자리를 둔다: 전체 shortlistReport가 담기는 shortlisted-candidates.json은 커밋되지 않으므로,
+    // 이 값이 selection-report.json까지 가야 과차단을 커밋 이력만으로 판정할 수 있다.
+    republication_cooldown_blocked: {
+      // 게이트가 돌고 아무것도 안 막은 주와 이력이 아예 안 실린 주를 구별한다. 둘 다 count 0으로
+      // 접히면 #963의 실패 유형(배선이 끊겨 게이트가 조용히 죽음)이 건강한 주와 산출물이
+      // 바이트 동일이라, 배선이 다시 회귀해도 커밋 이력으로 판정할 수 없다.
+      history_loaded: Boolean(exposureHistory),
+      // history_loaded는 production에서 항상 참이다 — readExposureHistory가 파일 부재 시
+      // seedExposureHistoryFromNewsletters로 시드 객체를 돌려주므로 null이 되지 않는다. 그래서
+      // 그 필드는 "배선이 됐는가"에만 답한다. state가 비거나 stale이 된 주를 건강한 주와 구별하려면
+      // 게이트가 볼 데이터가 몇 건인지도 함께 남겨야 한다.
+      history_main_article_count: newsletterArticleRecordCount(exposureHistory),
+      count: cooldownFiltered.blocked.length,
+      urls: cooldownFiltered.blocked.map(candidate => text(candidate.url)).filter(Boolean)
+    },
     catch_up_used_count: catchUpSelected.length,
     catch_up_articles: catchUpSelected.map(item => ({
       title: item.title, url: item.url, catch_up_age_days: item.catch_up_age_days,

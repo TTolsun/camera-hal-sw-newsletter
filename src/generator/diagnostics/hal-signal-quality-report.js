@@ -297,8 +297,9 @@ function writeHalSignalQualityArtifacts(options = {}) {
   const jsonPath = path.join(outDir, 'hal-signal-quality-report.json');
   const markdownPath = path.join(outDir, 'hal-signal-quality-report.md');
   // skipIfPresent: generate(리뷰 패키지 writer)가 이미 온전한 리포트 쌍을 썼으면 재생성하지
-  // 않는다. 재생성하면 generated_at만 바뀐 바이트가 artifact-manifest.json의 sha256과 어긋난다.
-  // 한 쪽만 남은 경우는 온전한 쌍으로 다시 만든다.
+  // 않는다. 재생성하면 리뷰 패키지가 기록한 리포트가 generated_at만 다른 사본으로 덮여서,
+  // 커밋되는 리포트가 그 run의 리뷰 패키지를 만든 리포트와 달라진다. 한 쪽만 남은 경우는
+  // 온전한 쌍으로 다시 만든다.
   if (options.skipIfPresent === true && fs.existsSync(jsonPath) && fs.existsSync(markdownPath)) {
     return { report: null, jsonPath, markdownPath, skipped: true };
   }

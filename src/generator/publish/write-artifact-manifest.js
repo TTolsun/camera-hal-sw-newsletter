@@ -274,17 +274,7 @@ function buildManifest(snapshotDir, date) {
   const missingCriticalFiles = criticalFiles(date).filter(relPath => {
     return !fs.existsSync(path.join(resolvedSnapshotDir, ...relPath.split('/')));
   });
-  const files = walkFiles(resolvedSnapshotDir)
-    .sort()
-    .map(relPath => {
-      const filePath = path.join(resolvedSnapshotDir, ...relPath.split('/'));
-      const stat = fs.statSync(filePath);
-      return {
-        path: relPath,
-        size: stat.size,
-        sha256: hashFile(filePath)
-      };
-    });
+  const snapshotRelPaths = walkFiles(resolvedSnapshotDir).sort();
   const reviewInventory = buildReviewArtifactInventory({
     root: resolvedSnapshotDir,
     date,
@@ -293,24 +283,41 @@ function buildManifest(snapshotDir, date) {
 
   const retentionLocation = resolveRetentionLocation();
 
-  const retainedHeavyArtifacts = files.filter(file => {
-    const artifact = reviewInventory.review_artifacts.find(a => a.path === file.path);
-    return artifact && (artifact.retention_grade === DEBUG_HEAVY || artifact.retention_grade === TRANSIENT_ATTEMPT);
-  }).map(file => {
-    const artifact = reviewInventory.review_artifacts.find(a => a.path === file.path);
-    return {
-      path: file.path,
-      size: file.size,
-      sha256: file.sha256,
-      retention_grade: artifact.retention_grade,
-      retention_location: retentionLocation
-    };
-  });
+  // heavy 등급(debug_heavy·transient_attempt) 파일만 해싱한다. 이 목록은 커밋되는 date-scoped
+  // 매니페스트(buildDateReviewManifest)에도 같은 모양으로 실리는데 정작 그 파일은 PR diff에 없고
+  // Actions artifact 안에만 있다. 리뷰어가 내려받은 파일이 그 실행의 것인지 확인할 수단이
+  // size·sha256뿐이라 heavy만 바이트를 유지한다. 나머지 파일은 해싱할 이유가 없다(#1018).
+  const heavyRetentionGradeByPath = new Map(
+    reviewInventory.review_artifacts
+      .filter(artifact => artifact.retention_grade === DEBUG_HEAVY || artifact.retention_grade === TRANSIENT_ATTEMPT)
+      .map(artifact => [artifact.path, artifact.retention_grade])
+  );
+
+  const retainedHeavyArtifacts = snapshotRelPaths
+    .filter(relPath => heavyRetentionGradeByPath.has(relPath))
+    .map(relPath => {
+      const filePath = path.join(resolvedSnapshotDir, ...relPath.split('/'));
+      return {
+        path: relPath,
+        size: fs.statSync(filePath).size,
+        sha256: hashFile(filePath),
+        retention_grade: heavyRetentionGradeByPath.get(relPath),
+        retention_location: retentionLocation
+      };
+    });
+
+  // files[]는 스냅샷에 실제로 있는 파일의 경로 목록이다. 이 배열의 size·sha256을 읽는 소비자는
+  // 없었고, 여기 섞이는 두 종류 어느 쪽도 사본을 둘 이유가 없다. 커밋되는 항목은 Git tree가
+  // 바이트 정본이라 매니페스트 사본이 곧 어긋나는 두 번째 정본이 된다. 커밋되지 않는 항목은
+  // 파일 자체가 이 매니페스트와 같은 newsroom-final-debug-<run_id> Actions artifact 안에 함께
+  // 들어가므로 해시 사본이 따로 가리킬 정본이 없다. 어느 쪽인지는 경로 접두가 아니라 보존
+  // 등급이 가른다(retentionCommitAllowlist) — heavy 등급은 articles/** 아래에 있어도 커밋되지
+  // 않으므로 두 번째 갈래다. 그래서 date-scoped 매니페스트가 이미 따르는 계약(#951)에 맞춰 path만 남긴다(#1018).
+  const files = snapshotRelPaths.map(relPath => ({ path: relPath }));
 
   // 커밋되는 파일의 바이트 정본은 Git tree이므로 경로와 보존 등급만 기록한다. 이 스냅샷
   // 매니페스트도 파이프라인 도중에 쓰이고 그 뒤로도 같은 파일이 계속 바뀌어서, size·sha256
-  // 사본은 기록되는 순간부터 틀린다(#942). 반면 retained_heavy_artifacts는 Git 밖 Actions
-  // artifact 안의 파일을 식별하는 유일한 수단이라 size·sha256을 그대로 유지한다.
+  // 사본은 기록되는 순간부터 틀린다(#942).
   const committedArtifacts = reviewInventory.review_artifacts
     .filter(artifact => artifact.present &&
       artifact.retention_grade !== DEBUG_HEAVY &&

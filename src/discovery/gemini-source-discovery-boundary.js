@@ -92,8 +92,11 @@ const {
 } = require('./validate-candidate-evidence');
 const {
   candidateDate,
+  candidateFactId,
   candidateTitle,
   candidateUrl,
+  evidenceSourceKey,
+  finalSelectionEligible,
   text
 } = require('../shared/collect/source-intelligence-utils');
 const {
@@ -1002,6 +1005,7 @@ function evidenceReliabilityRank(candidate = {}) {
 function evidencePriority(candidate = {}, isCanonical = false) {
   const score = Number(candidate.source_quality_score || 0);
   return {
+    eligibility_rank: finalSelectionEligible(candidate) ? 0 : 1,
     canonical_rank: isCanonical ? 0 : 1,
     bucket_rank: candidate.source_quality_bucket === 'strong_candidate' ? 0 : 1,
     score: Number.isFinite(score) ? score : 0,
@@ -1011,18 +1015,34 @@ function evidencePriority(candidate = {}, isCanonical = false) {
   };
 }
 
+// 슬롯 순위는 "발행 대상인가"가 먼저 정하고, 그다음 출처 품질이, 마지막에 중복 클러스터
+// 대표 여부가 동점을 가른다.
+//
+// 두 신호를 아래로 내린 이유가 다르다.
+//
+// eligibility_rank를 맨 위에 둔 것은 cap이 지켜야 할 것이 발행될 기사의 근거이기 때문이다.
+// canonical loop는 자격과 무관하게 대표를 대상 집합에 넣으므로, 정렬이 자격을 안 보면 발행할
+// 수 없는 후보가 슬롯을 쓰고 발행할 후보가 밀린다.
+//
+// canonical_rank는 "대상 집합에 넣을지"를 정하는 신호지 순위를 정하는 신호가 아니다. 이게
+// 1순위였을 때는 대표들이 품질과 무관하게 슬롯을 선점해서, 중복 클러스터가 슬롯 수 이상 나오는
+// 주에는 클러스터 밖 후보가 아무리 강해도 구조적으로 0건이었다.
+//
+// 그래서 대표 보호는 조건부다. 자격이 같으면 대표도 품질 순위로 밀린다. 2026-07-20의
+// patchwork/27362가 그 예로, 자격 있는 대표인데도 12칸 밖으로 떨어진다.
 function compareEvidenceTargets(left, right) {
   const a = left.priority;
   const b = right.priority;
-  return a.canonical_rank - b.canonical_rank ||
+  return a.eligibility_rank - b.eligibility_rank ||
     a.bucket_rank - b.bucket_rank ||
     b.score - a.score ||
     a.reliability_rank - b.reliability_rank ||
     b.published_date.localeCompare(a.published_date) ||
+    a.canonical_rank - b.canonical_rank ||
     a.stable_key.localeCompare(b.stable_key);
 }
 
-function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options = {}) {
+function selectEvidenceFetchTargetGroups(candidates = [], clusterReport = {}, options = {}) {
   const maxTargets = options.maxTargets || 12;
   const canonicalRefs = new Set();
   for (const cluster of clusterReport.clusters || []) {
@@ -1036,20 +1056,35 @@ function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options
     return canonicalRefs.has(`url:${candidateUrl(candidate)}`) ||
       canonicalRefs.has(`title:${candidateTitle(candidate)}`);
   }
+  // 같은 기사 URL이 registry 수집본과 gemini 발견본으로 두 번 들어온다. 수집본은 id가 없고
+  // 발견본은 `gemini-…` id를 달고 있어서 candidateKey로 묶으면 서로 다른 후보가 된다.
+  // cap은 "서로 다른 출처를 몇 개 확인할 것인가"를 세는 값이므로 출처 키로 묶는다.
+  // 원문을 실제로 받아오는 extract-source-facts도 같은 키로 수신을 합쳐 "한 칸 = 한 번 수신"을
+  // 지킨다. URL이 없는 후보만 candidateKey로 물러난다.
+  function groupKey(candidate) {
+    return evidenceSourceKey(candidate) || candidateKey(candidate);
+  }
   function add(candidate, canonical = false) {
-    const key = candidateKey(candidate);
+    const key = groupKey(candidate);
     if (!key) return;
     const existing = targetMap.get(key);
+    // 사본을 버리면 그 사본의 id로 근거를 조회할 때 fact가 없어 not_checked 로 조용히
+    // 통과한다. 그래서 대표 하나만 남기지 않고 같은 URL의 사본을 전부 들고 간다.
+    // 자격 통과 loop와 canonical loop가 같은 후보를 두 번 부르므로 중복 적재는 막되,
+    // 근거 조회 id가 갈리는 사본(같은 URL·다른 제목)은 서로 다른 사본으로 남겨야 한다.
+    const members = existing?.members || [];
+    if (!members.some(member => candidateFactId(member) === candidateFactId(candidate))) {
+      members.push(candidate);
+    }
     targetMap.set(key, {
-      candidate,
+      members,
       isCanonical: canonical || existing?.isCanonical === true
     });
   }
 
   for (const candidate of candidates) {
-    const finalEligible = ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
     const qualityEligible = ['strong_candidate', 'review_candidate'].includes(candidate.source_quality_bucket);
-    if (finalEligible && qualityEligible && candidate.duplicate_of_selected_source !== true) {
+    if (finalSelectionEligible(candidate) && qualityEligible && candidate.duplicate_of_selected_source !== true) {
       add(candidate, isCanonical(candidate));
     }
   }
@@ -1061,14 +1096,25 @@ function selectEvidenceFetchTargets(candidates = [], clusterReport = {}, options
     }
   }
 
-  return [...targetMap.values()]
+  // 그룹의 cap 순위는 사본 중 가장 강한 것으로 정한다. 먼저 들어온 사본으로 정하면
+  // 같은 URL의 strong_candidate 사본이 있어도 약한 사본 등급으로 그룹 전체가 밀려
+  // 이 함수가 막으려는 무검증 통과가 그대로 재현된다.
+  // selected 길이는 maxTargets를 넘을 수 있다. cap이 세는 것은 사본 수가 아니라 출처 수다.
+  const ranked = [...targetMap.values()]
     .map(item => ({
-      candidate: item.candidate,
-      priority: evidencePriority(item.candidate, item.isCanonical)
+      members: item.members,
+      priority: item.members
+        .map(member => ({ priority: evidencePriority(member, item.isCanonical) }))
+        .sort(compareEvidenceTargets)[0].priority
     }))
-    .sort(compareEvidenceTargets)
-    .slice(0, maxTargets)
-    .map(item => item.candidate);
+    .sort(compareEvidenceTargets);
+
+  return {
+    selected: ranked.slice(0, maxTargets).flatMap(item => item.members),
+    // cap에 밀려 원문을 못 받은 후보다. 자격이 없어 대상이 아니었던 후보와 구분해야
+    // "확인 안 함"과 "확인 못 함"이 리포트에서 갈린다.
+    capDropped: ranked.slice(maxTargets).flatMap(item => item.members)
+  };
 }
 
 function writeSeedOnlySourceDiscoveryResult({
@@ -1290,8 +1336,8 @@ async function runEnabled({
   const clustered = checkSourceDuplicates(scored.annotatedCandidates, { newsletterDate: date });
   writeJson(sourceClustersPath(root, date), clustered.report);
 
-  const evidenceFetchTargets = selectEvidenceFetchTargets(clustered.annotatedCandidates, clustered.report, { maxTargets: 12 });
-  const sourceFacts = await extractSourceFacts(evidenceFetchTargets, {
+  const evidenceFetchGroups = selectEvidenceFetchTargetGroups(clustered.annotatedCandidates, clustered.report, { maxTargets: 12 });
+  const sourceFacts = await extractSourceFacts(evidenceFetchGroups.selected, {
     fetch: true,
     fetchImpl,
     timeoutMs: 5000,
@@ -1300,7 +1346,10 @@ async function runEnabled({
   });
   writeJson(extractedSourceFactsPath(root, date), sourceFacts);
 
-  const evidence = validateCandidateEvidence(clustered.annotatedCandidates, sourceFacts, { newsletterDate: date });
+  const evidence = validateCandidateEvidence(clustered.annotatedCandidates, sourceFacts, {
+    newsletterDate: date,
+    capDroppedCandidates: evidenceFetchGroups.capDropped
+  });
   writeJson(evidenceValidationReportPath(root, date), evidence.report);
 
   const usageReport = budget.writeReport(geminiUsageReportPath(root, date), {
@@ -1616,7 +1665,7 @@ module.exports = {
   renderReport,
   renderSourceDiscoveryFeedbackMarkdown,
   run,
-  selectEvidenceFetchTargets,
+  selectEvidenceFetchTargetGroups,
   sourceDiscoveryHandoff,
   splitMergeStageNotYetEligible
 };

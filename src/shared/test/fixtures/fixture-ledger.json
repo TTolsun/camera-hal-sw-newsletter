@@ -820,6 +820,40 @@
         "originalCharacters": 323122,
         "originalBytes": 323351
       }
+    },
+    {
+      "path": "source-html/anthropic-news-cognizant-anthropic.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Anthropic News article body ends at the inner closing article tag, so the Related content section and the site footer navigation never reach summary, behavior_change or source_extraction.workflow.sections",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "url": "https://www.anthropic.com/news/cognizant-anthropic",
+        "capturedAt": "2026-08-30",
+        "originalCharacters": 145382,
+        "note": "nested article/main skeleton, one body paragraph run, the Related content section and the footer nav kept; the head was shortened but its rel=canonical link was left byte-identical to the one the live page carries at offset 3,303, so the whole resolver path runs against real markup"
+      }
+    },
+    {
+      "path": "source-html/anthropic-news-improving-fable-5-biology-safeguards.html",
+      "source": "curated",
+      "allowedUse": "parser-source-html",
+      "expectedStatus": "n/a",
+      "protectedPolicy": "Anthropic News pages put a Footnotes block after the inner closing article tag, so the body boundary drops those footnotes along with the Related content section and the footer navigation; this fixture keeps that loss measurable instead of hidden",
+      "generatedArtifact": false,
+      "relatedRules": [
+        "parser_contract"
+      ],
+      "minimizedFrom": {
+        "url": "https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards",
+        "capturedAt": "2026-08-30",
+        "originalCharacters": 162583,
+        "note": "nested article/main skeleton, the first four body paragraphs, the whole Footnotes block with its verbatim percentages, one Related content card and the footer nav kept; the illustration, the social share icons and the remaining twelve body paragraphs dropped"
+      }
     }
   ]
 }

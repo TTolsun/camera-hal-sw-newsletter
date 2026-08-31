@@ -1,5 +1,7 @@
 const crypto = require('crypto');
 
+const { shouldPreserveHash } = require('../common/article-identity');
+
 function isObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
@@ -203,6 +205,54 @@ function candidateDate(candidate = {}) {
   return text(candidate.publishedAt || candidate.published_date || candidate.publishedDate);
 }
 
+// 후보가 이번 호에 실릴 수 있는가. 근거 수집에서는 슬롯 순위를 정하는 1순위 신호이자
+// 대상 집합에 넣을지를 가르는 조건이라, 고르는 쪽과 판정하는 쪽이 같은 값을 써야 한다.
+// 후보 레코드가 camelCase와 snake_case를 섞어 들고 오므로 둘 다 본다.
+// 이건 근거 수집 경로의 정본이지 저장소 전체의 정본이 아니다. generator와 shared에 같은
+// 판정의 사본이 여럿 있고, 그중 orchestrator-reporter-normalize.js:65 하나만 snake_case를
+// 보지 않아 같은 레코드에 다른 답을 낸다.
+function finalSelectionEligible(candidate = {}) {
+  return ['main', 'short'].includes(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
+}
+
+// 근거 수집에서 "같은 출처"를 가르는 키. cap이 세는 단위이자 원문을 몇 번 받아올지 정하는
+// 단위라서, 대상을 고르는 쪽과 실제로 받아오는 쪽이 같은 값을 써야 "한 칸 = 한 번 수신"이
+// 성립한다. canonicalContentUrl을 쓰므로 Android 문서의 `hl` 로케일 파라미터만 무시하고
+// 나머지 query는 남는다 — `?q=` 목록 페이지는 서로 다른 문서다.
+// 앵커는 기사 identity와 같은 판단(shouldPreserveHash)을 쓴다. 릴리스를 가르는 `#버전`은
+// 남기고 roundup 게시글의 섹션 앵커는 지워, 같은 문서가 cap 칸을 두 개 먹지 않게 한다.
+// host 정규화 뒤에 판단해야 google.cn 판본도 allowlist host와 맞아떨어진다.
+// 술어는 같지만 두 호출부가 먹이는 pathname이 다르다는 점은 남는다 — 여기는 후행 슬래시를
+// 먼저 지우고 부르고, normalizeArticleUrl은 판단 뒤에 지운다. 그래서 `.../camera/#1.7.0-alpha03`
+// 같은 형태는 여기가 더 넓게 보존한다. allowlist 경로가 슬래시로 끝나지 않아 이 차이는 매치를
+// 넓히기만 하므로, 서로 다른 릴리스가 한 칸으로 합쳐지는 반대 방향 사고는 생기지 않는다.
+function evidenceSourceKey(candidate = {}) {
+  const canonical = canonicalContentUrl(candidateUrl(candidate));
+  if (!canonical) return '';
+  try {
+    const parsed = new URL(canonical);
+    parsed.hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
+    if (parsed.pathname !== '/') {
+      parsed.pathname = parsed.pathname.replace(/\/+$/, '');
+    }
+    if (!shouldPreserveHash(parsed)) {
+      parsed.hash = '';
+    }
+    return parsed.toString();
+  } catch (_error) {
+    return canonical;
+  }
+}
+
+// 후보가 근거(fact)를 찾을 때 쓰는 id. 근거를 만드는 쪽(extract-source-facts)과 찾는 쪽
+// (validate-candidate-evidence), 그리고 근거 수집 대상을 묶는 쪽이 반드시 같은 값을 써야 한다.
+// 셋 중 하나라도 다른 산식을 쓰면 후보가 자기 근거를 못 찾아 not_checked 로 조용히 통과한다.
+function candidateFactId(candidate = {}) {
+  return candidate.id ||
+    candidate.source_candidate_id ||
+    stableId([candidateUrl(candidate), candidateTitle(candidate)]);
+}
+
 function fetchTextWithLimit(fetchImpl, url, options = {}) {
   const timeoutMs = options.timeoutMs || 5000;
   const maxBytes = options.maxBytes || 200000;
@@ -227,12 +277,15 @@ module.exports = {
   canonicalContentUrl,
   canonicalDocumentUrl,
   candidateDate,
+  candidateFactId,
   candidateTitle,
   candidateUrl,
   clamp,
   domainMatches,
+  evidenceSourceKey,
   fetchUrlForContent,
   fetchTextWithLimit,
+  finalSelectionEligible,
   isObject,
   isUrlAllowed,
   numeric,

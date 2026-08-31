@@ -2,6 +2,8 @@
 
 이 폴더는 generated/review artifact를 둡니다. 일반 리팩토링에서 대량 수정하지 마세요.
 
+이 금지는 **일반 리팩토링**을 향한 것입니다. 소유자가 이슈로 확정한 스키마 마이그레이션은 예외이고, 그때도 재직렬화가 아니라 줄 단위 표적 편집으로 하며 `JSON.parse` 동등성과 삭제 줄 수를 가드로 확인합니다(#942/PR #949와 #951이 그 절차를 따랐습니다). 경로는 그 예외에도 해당하지 않습니다 — 사후 정규화하지 않는 이유는 아래 #952 항목에 있습니다.
+
 ## Artifact 역할 (Artifact Roles)
 
 - `articles/content/collected-news/YYYY-MM-DD/`는 raw candidate evidence입니다.
@@ -99,7 +101,9 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 
 - `path`는 저장소 기준 상대 경로입니다.
 - `size`·`sha256`은 담지 않습니다(`schema_version` 4부터). 커밋되는 파일의 실제 바이트는 **Git tree가 정본**이므로 `committed_artifacts[]`는 사본을 두지 않습니다. 파일이 그 run에서 어떤 바이트였는지 알아야 하면 해당 커밋의 Git tree를 보세요.
-- 같은 매니페스트의 `files[]`와 `review_artifacts[]`는 여전히 `size`·`sha256`을 담습니다. 이 둘은 `committed_artifacts[]` 정리 범위 밖이라 이번에 손대지 않았습니다.
+- 같은 매니페스트의 `files[]`와 `review_artifacts[]`도 `size`·`sha256`을 담지 않습니다(`schema_version` 5부터). 두 배열이 담던 값은 같은 항목의 사본이었고 같은 이유로 커밋되는 순간부터 어긋났습니다. `files[]` 항목은 `path`만, `review_artifacts[]` 항목은 리뷰 안내 metadata만 담습니다.
+- `size`·`sha256`이 남아 있는 배열은 `retained_heavy_artifacts[]` 하나뿐입니다. 그 파일들은 Git에 커밋되지 않아 Git tree라는 정본이 없고, 해시가 Actions artifact 안의 파일을 식별하는 유일한 수단입니다.
+- **`schema_version=2` 매니페스트 2개(2026-05-28·05-29)는 예외입니다.** 두 배열에서 `size`·`sha256`을 똑같이 뺐지만 스탬프는 2로 남겼습니다. 그 파일들에는 `committed_artifacts[]`·`retained_heavy_artifacts[]` 자체가 없어서 5로 올리면 없는 필드를 가졌다고 거짓 주장하게 됩니다(PR #949가 2→4 bump을 거부한 것과 같은 이유). 그래서 "스탬프는 2인데 항목 모양은 5"인 상태이고, 감사할 때 그 두 파일에 바이트 필드가 없는 것은 정상입니다.
 
 ## 매니페스트 경로 규약
 
@@ -112,7 +116,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 
 실제로 커밋된 매니페스트는 옛 규약 8개(2026-05-28~06-11)와 루트 기준 13개(2026-06-16~08-17)이고, 2026-06-12~06-15 날짜의 매니페스트는 없습니다. 그런데도 경계를 첫 관측 날짜인 06-16이 아니라 **06-13으로 잡은 이유는 규약을 바꾼 원인이 관측이 아니라 머지이기 때문입니다.** #262 phase 6은 `42fd4ba1`, 2026-06-13 12:29 KST에 머지됐습니다. 06-13 당일 run은 세 번 돌았고(11:14 / 13:21 / 15:32), 머지 뒤의 두 번이 이미 `articles/` 접두로 기록했습니다. 머지 전에 만들어진 옛 규약 사본은 같은 날 `188c10fa`가 orphan으로 지웠으므로, 트리에 남은 06-13 artifact는 전부 루트 기준입니다. 그러므로 06-13 이후 날짜의 매니페스트는 나중에 backfill이나 replay로 만들어져도 생산자가 루트 기준으로 씁니다 — 06-13을 옛 규약 쪽에 두면 그 날짜를 replay할 때 검사만 옛 규약을 요구해 거짓 실패합니다.
 
-- **`schema_version`은 이 차이를 표시하지 않습니다.** `schema_version=4`가 두 규약에 모두 걸쳐 있습니다(2026-05-30~06-11은 옛 규약, 2026-06-16 이후는 루트 기준). 그러므로 경로 규약을 `schema_version`으로 판별하면 안 됩니다. 판별하려면 매니페스트가 놓인 **날짜 디렉터리**를 쓰세요. 규약을 정한 것은 매니페스트가 기술하는 날짜가 아니라 매니페스트가 *쓰인* 시점이고, replay가 옛 날짜를 오늘 다시 쓰면 생산자는 오늘 규약으로 씁니다. 커밋된 21개는 `date` 필드가 전부 디렉터리 이름과 같아 지금은 두 기준이 일치합니다. `src/shared/tooling/cli/test-artifact-manifest.js`의 잠금 검사도 디렉터리 기준입니다.
+- **`schema_version`은 이 차이를 표시하지 않습니다.** `schema_version=5`가 두 규약에 모두 걸쳐 있습니다(2026-05-30~06-11은 옛 규약, 2026-06-16 이후는 루트 기준). 그러므로 경로 규약을 `schema_version`으로 판별하면 안 됩니다. 판별하려면 매니페스트가 놓인 **날짜 디렉터리**를 쓰세요. 규약을 정한 것은 매니페스트가 기술하는 날짜가 아니라 매니페스트가 *쓰인* 시점이고, replay가 옛 날짜를 오늘 다시 쓰면 생산자는 오늘 규약으로 씁니다. 커밋된 매니페스트는 `date` 필드가 전부 디렉터리 이름과 같아 지금은 두 기준이 일치합니다. `src/shared/tooling/validate/artifact-path-convention-check.js`의 잠금 검사도 디렉터리 기준입니다.
 - 매니페스트를 읽는 도구는 **두 규약을 모두 해소해야 합니다.** 경로를 그대로 해소해 보고, 실패하면 `articles/`를 앞에 붙여 다시 해소하세요. 이 fallback이 실제로 회수하는 양은 아래 표에 있습니다.
 - `.tmp/`·`cache/`·`state/`는 공개 출력물이 아니라 #262의 `articles/` 이동 대상이 아니었으므로 규약 판별에 쓸 수 없습니다. 실측하면 `.tmp/`·`cache/` 경로는 매니페스트에 한 건도 없고, `state/`는 루트 기준 매니페스트에만 39건 나옵니다 — 옛 규약 시절 같은 파일은 `data/article-exposure-history.json`이라 비교할 옛 형태 자체가 없습니다. 규약 판별에 쓸 수 있는 것은 공개 출력물 경로(`content/`·`data/`·`newsletters/`·`sitemap.xml`)뿐입니다.
 
@@ -139,12 +143,14 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 
 **이 판단이 뒤집히는 조건은 하나입니다** — 커밋된 매니페스트의 경로를 실제로 해소하는 소비자가 생기는 것. 그때도 첫 수는 정규화가 아니라 소비자 쪽에 위 `articles/` 접두 fallback을 두는 것입니다. 소비자가 여럿 생겨 같은 fallback이 중복되면 그때 정규화를 다시 검토하세요.
 
-대신 규약을 산문이 아니라 **검사로 잠갔습니다.** `npm run test:artifact`(`src/shared/tooling/cli/test-artifact-manifest.js`)가 두 가지를 확인합니다.
+대신 규약을 산문이 아니라 **검사로 잠갔습니다.** 확인 지점이 둘로 나뉘어 있습니다(#957).
 
-- 커밋된 매니페스트 전수를 읽어, 각 매니페스트가 자기 날짜 구간의 규약을 지키는지 확인합니다.
-- `buildManifest`·`buildDateReviewManifest`가 새로 만드는 매니페스트는 반드시 저장소 루트 기준인지 확인합니다.
+- **커밋된 매니페스트 전수 스캔** — `npm run check:artifact-path-convention`(`src/shared/tooling/validate/artifact-path-convention-check.js`). 각 매니페스트가 자기 날짜 구간의 규약을 지키는지 확인합니다. `validate` 체인과 `site-01-validate.yml`에서 돕니다.
+- **생산자 출력 검사** — `npm run test:artifact`(`src/shared/tooling/cli/test-artifact-manifest.js`). `buildManifest`·`buildDateReviewManifest`가 새로 만드는 매니페스트가 반드시 저장소 루트 기준인지 확인합니다.
 
-그래서 새 매니페스트가 옛 규약으로 쓰이거나 과거 매니페스트가 조용히 정규화되면 테스트가 실패합니다.
+그래서 새 매니페스트가 옛 규약으로 쓰이면 `npm run test`가, 과거 매니페스트가 조용히 정규화되면 `npm run check:artifact-path-convention`이 실패합니다.
+
+**전수 스캔을 `npm run test`에 두지 않는 이유**는 그 스크립트가 워크플로 01·03에서 수집·생성 앞의 blocking 스텝이기 때문입니다. 거기 두면 커밋된 매니페스트 하나가 규약을 어겼을 때 그 주 run이 수집을 시작하기도 전에 멈춥니다 — 코드 결함이 아니라 데이터 파일 하나가 파이프라인을 막는 모양이 됩니다. `check:artifact-retention`이 커밋된 산출물을 훑되 파이프라인을 막지 않는 것과 같은 배치입니다.
 
 ## 실패 run 최소 증거
 

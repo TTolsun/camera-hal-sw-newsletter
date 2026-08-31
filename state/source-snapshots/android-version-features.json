@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "android-version-features",
-  "updated_at": "2026-08-24T00:00:00.000Z",
+  "updated_at": "2026-08-31T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "android-version-features:053d08e47e296aef3b799286d58855ac",
@@ -24,8 +24,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-17T00:00:00.000Z",
-      "last_seen_at": "2026-08-24T00:00:00.000Z",
-      "seen_count": 2,
+      "last_seen_at": "2026-08-31T00:00:00.000Z",
+      "seen_count": 3,
       "status": 200
     },
     {
@@ -76,8 +76,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-17T00:00:00.000Z",
-      "last_seen_at": "2026-08-24T00:00:00.000Z",
-      "seen_count": 2,
+      "last_seen_at": "2026-08-31T00:00:00.000Z",
+      "seen_count": 3,
       "status": 200
     }
   ],

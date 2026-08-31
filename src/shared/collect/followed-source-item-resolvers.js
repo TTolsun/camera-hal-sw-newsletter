@@ -52,10 +52,11 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     // 또 적어야 했다면, 그 목록에 추가를 빠뜨리는 순간 이 항목은 등록만 되고 client 없이
     // 조용히 0건을 낸다 — 등록과 배선이 한 act가 되도록 이 마커로만 판단한다.
     requiresFetchClient: true,
+    // 목록 origin·경로는 여기 적지 않는다. resolver가 source.sourceUrl(registry 정본)에서
+    // 파생하므로, registry의 URL만 바꿔도 fetch 대상·parentUrl·기사 URL이 함께 따라간다.
     resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts }) =>
       resolveDatedArticleIndexItems({
-        html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts,
-        config: { pathPrefix: '/blog', origin: 'https://claude.com' }
+        html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts
       })
   },
   {
@@ -63,8 +64,7 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     requiresFetchClient: true,
     resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts }) =>
       resolveDatedArticleIndexItems({
-        html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts,
-        config: { pathPrefix: '/news', origin: 'https://www.anthropic.com' }
+        html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts
       })
   }
 ];

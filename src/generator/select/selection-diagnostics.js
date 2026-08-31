@@ -440,6 +440,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
   const headlineRemoved = ensureArray(diagnostics.removed_due_to_headline_inclusion);
   const releaseClassCatchUp = diagnostics.release_class_catch_up || {};
   const releaseClassCatchUpAfterReconciliation = diagnostics.release_class_catch_up_after_reconciliation || {};
+  const republicationCooldown = diagnostics.republication_cooldown_blocked || {};
   const hints = ensureArray(diagnostics.selection_shortage_hints)
     .map(item => `- ${item}`)
     .join('\n') || '- none';
@@ -485,6 +486,13 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- release_class_after_reconciliation_pool_size: ${formatCount(releaseClassCatchUpAfterReconciliation.pool_size)}`,
     `- release_class_after_reconciliation_admitted: ${formatCount(releaseClassCatchUpAfterReconciliation.admitted)}`,
     `- release_class_after_reconciliation_blocked_reason: ${releaseClassCatchUpAfterReconciliation.blocked_reason === '' ? 'none' : formatCount(releaseClassCatchUpAfterReconciliation.blocked_reason)}`,
+    // 이력을 못 읽은 주(false)와 읽고 아무것도 안 막은 주(true + 0)는 서로 다른 사실이다.
+    // 두 줄로 나눠야 게이트가 죽었는지 살았는지가 markdown만 보고 구별된다.
+    `- republication_history_loaded: ${formatCount(republicationCooldown.history_loaded)}`,
+    // 배선(loaded)과 데이터(main 기사 기록 수)는 다른 사실이다. loaded는 시드 폴백 때문에
+    // production에서 늘 true라, 이력이 비었거나 stale이 된 주는 이 줄로만 구별된다.
+    `- republication_history_main_articles: ${formatCount(republicationCooldown.history_main_article_count)}`,
+    `- republication_cooldown_blocked: ${formatCount(republicationCooldown.count)}`,
     '',
     'Source/parser recovery hint:',
     hints,

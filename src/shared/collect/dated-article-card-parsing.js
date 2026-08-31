@@ -68,8 +68,13 @@ function elementBlock(html = '', startIndex = 0, tagName = 'div') {
   return '';
 }
 
+// pathPrefix는 registry(news-sources.json)의 sourceUrl에서 파생된 값이라 정규식 메타문자가
+// 섞일 수 있다. 날것으로 보간하면 '/v1.0/news'의 '.'이 와일드카드로 돌아 남의 경로 앵커를 이
+// 소스의 카드로 조용히 오인식한다(괄호는 캡처 그룹이 돼 진짜 경로를 놓친다). 이스케이프 표현은
+// 같은 layer의 collect-news-candidates.js rawTag·source-item-parsers.js가 쓰는 것과 같다.
 function articleLinkPattern(pathPrefix) {
-  return new RegExp(`<a\\b[^>]*\\bhref="${pathPrefix}/([a-z0-9][a-z0-9-]*)"[^>]*>`, 'gi');
+  const literalPathPrefix = String(pathPrefix).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`<a\\b[^>]*\\bhref="${literalPathPrefix}/([a-z0-9][a-z0-9-]*)"[^>]*>`, 'gi');
 }
 
 function candidateBlocks(html, pathPrefix) {
@@ -87,8 +92,9 @@ function candidateBlocks(html, pathPrefix) {
 }
 
 function distinctSlugs(block, pathPrefix) {
+  const literalPathPrefix = String(pathPrefix).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return [...new Set(
-    [...String(block).matchAll(new RegExp(`\\bhref="${pathPrefix}/([a-z0-9][a-z0-9-]*)"`, 'gi'))]
+    [...String(block).matchAll(new RegExp(`\\bhref="${literalPathPrefix}/([a-z0-9][a-z0-9-]*)"`, 'gi'))]
       .map(match => match[1])
   )];
 }
