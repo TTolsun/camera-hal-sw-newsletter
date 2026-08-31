@@ -1,0 +1,397 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 92,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 5,
+    "locked_article_count": 5,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+      "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+      "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+      "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가"
+    ],
+    "locked_article_headlines": [
+      "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+      "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+      "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+      "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28095/"
+        ],
+        "source_titles": [
+          "libcamera: Add quad-Bayer CFA layout support"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+        ],
+        "source_titles": [
+          "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor"
+        ]
+      },
+      {
+        "index": 5,
+        "headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28105/"
+        ],
+        "source_titles": [
+          "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+        "sources": [
+          "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+        "sources": [
+          "https://patchwork.libcamera.org/patch/28095/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+        "sources": [
+          "https://patchwork.libcamera.org/patch/28105/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28095/"
+        ],
+        "source_titles": [
+          "libcamera: Add quad-Bayer CFA layout support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+        ],
+        "source_titles": [
+          "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 5,
+        "headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+        "category": "Camera Driver & Image Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28105/"
+        ],
+        "source_titles": [
+          "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 1,
+      "ai_camera_path_hal_workflow": 3,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "[PATCH v4 14/15] media: atomisp: allow raw Bayer capture - Maurizio Casciano",
+        "url": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      },
+      {
+        "title": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+        "url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

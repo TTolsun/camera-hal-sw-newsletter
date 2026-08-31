@@ -1,0 +1,1212 @@
+{
+  "date": "2026-08-31",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W35 (08.24 ~ 08.30)",
+  "summary": "이번 주에는 ‘AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가’, ‘libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토’ 등 5건의 소식을 다룹니다.",
+  "briefing": [
+    "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+    "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+    "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+    "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+    "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가"
+  ],
+  "sections": [
+    {
+      "category": "Camera Driver & Image Pipeline",
+      "headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+      "what_changed": "AtomISP 브리지가 센서별 링크 주파수 및 패딩을 제공하고, OV2740 모드를 추가하며, 센서 링크 주파수 제어에서 ISP2401 D-PHY 타이밍을 파생하도록 허용합니다.",
+      "confirmed_facts": [
+        "PATCH v3 패치 시리즈가 2026년 8월 27일 lore.kernel.org linux-media 메일링 리스트에 제출되어 검토 중입니다.",
+        "Lenovo Yoga Book YB1-X91L 펌웨어의 불완전한 카메라 링크 정보를 보완하기 위해 전면 OV2740 센서의 CSI-2 2레인 구성 및 288 MHz 링크 주파수를 명시합니다.",
+        "OV2740 센서 전송 프레임을 1932x1092 BGGR 포맷으로 지정하고, 1920x1080 이미지 주변에 가로/세로 12픽셀의 패딩을 추가합니다.",
+        "AtomISP 브리지가 센서별 링크 주파수 및 패딩을 제공하고, 센서 링크 주파수 제어에서 ISP2401 D-PHY 타이밍을 파생하도록 허용합니다."
+      ],
+      "evidence_summary": "PATCH v3 (2026-08-27) 패치 시리즈를 통해 AtomISP 브리지 드라이버가 OV2740 센서의 구체적인 CSI-2 레인 구성, 링크 주파수 및 패딩 정보를 보완하고 ISP2401 D-PHY 타이밍을 파생할 수 있도록 지원합니다.",
+      "specificity_checks": [
+        "Version: PATCH v3",
+        "Release Date: 2026-08-27",
+        "Component: AtomISP, OV2740 sensor",
+        "Source Page: lore.kernel.org linux-media list"
+      ],
+      "source_verification_notes": [
+        "제출된 패치는 현재 검토 중인 단계이며 메인라인 커널에 병합되기 전입니다.",
+        "Lenovo Yoga Book YB1-X91L 하드웨어의 불완전한 ACPI 펌웨어 정보를 드라이버 레벨에서 보완하기 위한 패치입니다."
+      ],
+      "public_article": {
+        "headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+        "lead": "Linux 커널 미디어 서브시스템에 AtomISP 브리지 드라이버와 OV2740 이미지 센서의 통합을 개선하는 PATCH v3 패치 시리즈가 제출되었습니다. 이번 변경은 하드웨어 펌웨어의 불완전한 카메라 링크 정보를 드라이버 레벨에서 보완하고, 센서 링크 주파수로부터 D-PHY 타이밍을 동적으로 파생할 수 있도록 지원합니다.",
+        "body_paragraphs": [
+          "이번에 공개된 PATCH v3 패치 시리즈는 Lenovo Yoga Book YB1-X91L 디바이스의 전면 OV2740 카메라 센서 통합을 목표로 합니다. 기존 펌웨어는 완전한 카메라 링크 정보를 제공하지 않아 드라이버가 이미지 파이프라인을 구성하는 데 어려움이 있었습니다. 이를 해결하기 위해 드라이버 레벨에서 전면 OV2740 센서가 2개의 CSI-2 레인을 사용하고 288 MHz 링크 주파수로 동작함을 명시하도록 변경되었습니다.",
+          "또한, 전송 프레임 규격을 1932x1092 BGGR 포맷으로 정의하고, 실제 1920x1080 이미지 영역 주변에 가로 및 세로 12픽셀의 패딩을 추가하도록 구성했습니다. 이 패딩 정보는 AtomISP 브리지가 센서별 링크 주파수와 함께 관리하며, ISP2401 D-PHY 타이밍을 파생하는 제어 로직의 기초 자료로 활용됩니다.",
+          "이러한 드라이버 레벨의 변경은 하위 이미지 파이프라인의 안정성을 높이고, Android Camera HAL이 V4L2 인터페이스를 통해 센서 모드 및 프레임 타이밍을 쿼리할 때 정확한 데이터를 수신할 수 있도록 돕습니다. 비록 직접적인 HAL API 변경은 아니지만, RAW Bayer 캡처 및 스트림 구성 유효성 검증 시 중요한 참고 자료가 됩니다."
+        ],
+        "camera_hal_takeaway": "드라이버 레벨의 D-PHY 타이밍 파생 및 패딩 처리는 V4L2 서브시스템을 거쳐 Android Camera HAL의 스트림 구성 유효성 검사에 영향을 미칩니다. 특히 RAW Bayer 캡처 시 패딩 픽셀(12픽셀)이 메타데이터(active array size 등)에 정확히 반영되지 않으면 이미지 왜곡이나 CTS 테스트 실패가 발생할 수 있으므로 주의 깊게 점검해야 합니다.",
+        "reader_checkpoints": [
+          "AtomISP 및 OV2740 센서 드라이버의 D-PHY 타이밍 파생 코드가 로컬 커널 트리와 일치하는지 확인하십시오.",
+          "RAW10/RAW12 캡처 시 패딩 픽셀 처리가 HAL의 active array size 메타데이터와 일치하는지 VTS/ITS 테스트로 검증하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+            "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media list - PATCH v3",
+        "editorial_story": {
+          "reader_scenario": "AtomISP 기반 플랫폼에서 OV2740 센서를 사용하여 RAW 캡처를 구현할 때, 이미지 주변부 왜곡이나 active array 크기 불일치로 인해 CTS 검증이 실패하는 상황을 가정합니다.",
+          "what_happened": "AtomISP 브리지 드라이버가 OV2740 센서의 2레인 CSI-2 구성(288 MHz) 및 12픽셀 패딩을 명시하고 D-PHY 타이밍을 파생하도록 개선하는 패치가 제출되었습니다.",
+          "why_it_matters": "드라이버 레벨에서 센서 링크 주파수와 패딩을 정확히 제어해야 HAL 계층에서 왜곡 없는 RAW Bayer 데이터를 수신하고 메타데이터 정렬을 유지할 수 있습니다.",
+          "field_scenario": "V4L2 서브시스템을 통해 노출되는 센서 프레임 크기(1932x1092)와 실제 유효 이미지 크기(1920x1080) 간의 패딩 처리가 HAL 메타데이터에 올바르게 매핑되는지 확인하는 시나리오입니다.",
+          "not_to_overclaim": "이 패치는 Linux 커널 드라이버 레벨의 변경사항이며, Android Camera HAL API나 프레임워크 계약을 직접 변경하지 않습니다.",
+          "editor_take": "특정 디바이스의 펌웨어 한계를 드라이버 레벨에서 보완하는 훌륭한 참조 사례이며, 유사한 센서 통합 시 유용하게 활용될 수 있습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 8월 27일 lore.kernel.org linux-media 리스트에 AtomISP OV2740 링크 지원을 위한 PATCH v3가 제출되었습니다.",
+          "Yoga Book YB1-X91L의 전면 OV2740 센서는 288 MHz 링크 주파수에서 2개의 CSI-2 레인을 사용하며, 1932x1092 BGGR 전송 프레임을 전송합니다."
+        ],
+        "background_context": "Linux 커널의 미디어 서브시스템에 제출된 카메라 드라이버 패치는 V4L2 인터페이스를 통해 하드웨어와 통신하는 Android Camera HAL에 직접적인 영향을 미칠 수 있습니다. 특히 AtomISP와 같은 특정 ISP(Image Signal Processor) 브리지의 변경사항은 센서 데이터 처리 방식, MIPI CSI-2 링크 구성, 프레임 타이밍, 그리고 최종적으로 HAL이 노출하는 스트림 구성 및 메타데이터에 영향을 줄 수 있습니다. OV2740 센서와 같은 새로운 센서 지원 또는 기존 센서의 링크 주파수 및 패딩 정보 업데이트는 HAL 구현에서 센서 모드 선택, 버퍼 할당, 그리고 RAW Bayer 캡처와 같은 특정 기능의 지원 여부를 검증해야 함을 의미합니다. 이는 CTS/VTS/Camera ITS 테스트 시나리오에도 영향을 미칠 수 있습니다.",
+        "hal_driver_impact": "드라이버 레벨의 D-PHY 타이밍 파생 및 패딩 처리는 V4L2 서브시스템을 거쳐 Android Camera HAL의 스트림 구성 유효성 검사에 영향을 미칩니다. 특히 RAW Bayer 캡처 시 패딩 픽셀(12픽셀)이 메타데이터(active array size 등)에 정확히 반영되지 않으면 이미지 왜곡이나 CTS 테스트 실패가 발생할 수 있습니다.",
+        "action_items": [
+          "AtomISP 및 OV2740 센서 드라이버의 D-PHY 타이밍 파생 코드를 로컬 커널 트리와 비교 검토한다.",
+          "RAW10/RAW12 캡처 시 패딩 픽셀 처리가 HAL의 active array size 메타데이터와 일치하는지 VTS/ITS 테스트로 검증한다."
+        ],
+        "team_share_points": "AtomISP 드라이버에서 OV2740 센서의 패딩 및 D-PHY 타이밍 파생 기능이 추가되어, 하위 이미지 파이프라인의 안정성이 향상되었습니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 8월 27일에 제출된 최신 패치 시리즈로, AtomISP 기반 플랫폼의 센서 통합 및 RAW 캡처 안정성에 직접적인 영향을 미칩니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "camera_test_owner"
+        ],
+        "check_within_2_weeks": "V4L2 서브시스템을 통해 노출되는 OV2740 센서의 프레임 크기 및 패딩 설정이 HAL 메타데이터와 일치하는지 확인하십시오.",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "cts_vts_its_cdd"
+        ],
+        "do_not_overstate": [
+          "이 패치는 현재 검토 중인 제안 단계이며, Android Camera HAL API나 프레임워크 계약을 직접 변경하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:e61e74efc0135043:patch-submission",
+          "text": "2026년 8월 27일 lore.kernel.org linux-media 리스트에 AtomISP OV2740 링크 지원을 위한 PATCH v3가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:e61e74efc0135043:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:e61e74efc0135043:sensor-spec",
+          "text": "Yoga Book YB1-X91L의 전면 OV2740 센서는 288 MHz 링크 주파수에서 2개의 CSI-2 레인을 사용하며, 1932x1092 BGGR 전송 프레임을 전송합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:e61e74efc0135043:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:e61e74efc0135043:hal-impact",
+          "text": "D-PHY 타이밍 파생 및 패딩 처리는 V4L2를 거쳐 Camera HAL의 RAW 스트림 구성 및 active array size 메타데이터 매핑에 영향을 줄 수 있습니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "candidate:e61e74efc0135043:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "V4L2_CID_LINK_FREQ 및 D-PHY 타이밍 설정 확인",
+        "RAW10/RAW12 스트림의 active array size 메타데이터 매핑 검증"
+      ],
+      "action_hints": [
+        "로컬 AtomISP 드라이버 소스에 패딩 및 타이밍 파생 패치 적용 검토"
+      ],
+      "action_items": [
+        "AtomISP 및 OV2740 센서 드라이버의 D-PHY 타이밍 파생 코드를 로컬 커널 트리와 비교 검토한다.",
+        "RAW10/RAW12 캡처 시 패딩 픽셀 처리가 HAL의 active array size 메타데이터와 일치하는지 VTS/ITS 테스트로 검증한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vdc800838fb8be04a9a7685606311d18c65800504bccf261551968ac74bffd42e/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates provided in the source capsule.",
+      "sources": [
+        {
+          "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+          "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+      "source_candidate_hash": "e61e74efc013504330a29ab537621c3c56c691509f9f5a5b901151b7c1429fe4",
+      "article_group_key": "article:https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Driver & Image Pipeline",
+      "headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+      "what_changed": "libcamera에 쿼드-베이어(quad-Bayer) CFA 레이아웃 지원을 추가하고, 언팩된 Bayer 데이터의 스트라이드 처리를 개선하는 패치가 제출되었습니다.",
+      "confirmed_facts": [
+        "2026년 8월 25일 Frederic Laing이 libcamera Patchwork에 쿼드-베이어 CFA 레이아웃 지원을 추가하는 패치를 제출하여 검토 중입니다.",
+        "이 패치는 이미지 센서 데이터 처리 방식 및 언팩된 Bayer 데이터의 스트라이드(stride) 처리에 영향을 미칩니다."
+      ],
+      "evidence_summary": "2026년 8월 25일 libcamera Patchwork에 제출된 패치(ID: 28095)를 통해 쿼드-베이어 CFA 레이아웃 지원 및 언팩된 Bayer 데이터의 스트라이드 처리 로직이 제안되었습니다.",
+      "specificity_checks": [
+        "Version: Patch ID 28095",
+        "Release Date: 2026-08-25",
+        "Component: libcamera",
+        "Source Page: libcamera Patchwork"
+      ],
+      "source_verification_notes": [
+        "이 패치는 현재 검토 중인 단계이며 libcamera 메인라인에 아직 병합되지 않았습니다."
+      ],
+      "public_article": {
+        "headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+        "lead": "libcamera 프레임워크에 최신 고해상도 이미지 센서에서 널리 사용되는 쿼드-베이어(Quad-Bayer) CFA(Color Filter Array) 레이아웃 지원을 추가하는 패치가 제안되었습니다. 이번 변경은 하위 이미지 처리 파이프라인에서 RAW 데이터 처리의 정확성을 높이는 데 기여할 것으로 기대됩니다.",
+        "body_paragraphs": [
+          "최신 모바일 기기에 탑재되는 고해상도 이미지 센서들은 감도 향상과 노이즈 감소를 위해 쿼드-베이어 구조를 채택하는 경우가 많습니다. 그러나 기존 libcamera 프레임워크는 이러한 특수한 CFA 레이아웃을 표준 베이어 패턴과 다르게 처리하는 데 한계가 있었습니다. 이번 패치는 libcamera가 쿼드-베이어 레이아웃을 직접 인식하고 처리할 수 있도록 지원을 추가합니다.",
+          "Frederic Laing이 제출한 이번 패치는 쿼드-베이어 CFA 레이아웃 지원과 더불어, 언팩된(unpacked) Bayer 데이터의 스트라이드(stride) 처리 방식을 개선하는 내용을 담고 있습니다. 스트라이드 정렬이 올바르지 않으면 메모리 오버런이나 이미지 왜곡이 발생할 수 있으므로, 이번 변경은 이미지 파이프라인의 안정성 확보에 매우 중요합니다.",
+          "Android Camera HAL은 종종 하위 계층으로 libcamera를 활용하므로, 이러한 변경사항은 HAL이 RAW_SENSOR 또는 RAW10/RAW12 스트림을 처리할 때 버퍼 정렬 및 디베이어링 품질을 높이는 데 직접적인 영향을 미칩니다. 향후 고해상도 센서 도입을 준비하는 팀에게 중요한 기술적 기반이 될 것입니다."
+        ],
+        "camera_hal_takeaway": "libcamera 계층에서 쿼드-베이어 CFA 레이아웃을 직접 인식하고 처리함으로써, Android Camera HAL이 하위 스택에서 수신하는 RAW 데이터의 디베이어링(debayering) 품질과 스트라이드 계산의 정확도가 향상됩니다. 이는 HAL이 RAW_SENSOR 또는 RAW10/RAW12 스트림을 처리할 때 버퍼 오버플로우나 메모리 정렬 오류를 방지하는 데 기여합니다.",
+        "reader_checkpoints": [
+          "libcamera Patchwork의 쿼드-베이어 CFA 지원 패치(ID: 28095)의 변경사항을 로컬 libcamera 포크에 테스트 적용해 보십시오.",
+          "쿼드-베이어 센서 탑재 기기에서 RAW 스트림의 스트라이드 계산 및 디베이어링 결과물의 시각적 왜곡 여부를 검증하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "libcamera: Add quad-Bayer CFA layout support",
+            "url": "https://patchwork.libcamera.org/patch/28095/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "libcamera Patchwork - Patch ID 28095",
+        "editorial_story": {
+          "reader_scenario": "쿼드-베이어 센서를 탑재한 신규 플랫폼에서 RAW 스트림을 활성화했을 때, 프리뷰 화면에 색상 왜곡이나 메모리 정렬 오류로 인한 크래시가 발생하는 상황을 가정합니다.",
+          "what_happened": "libcamera 프레임워크에 쿼드-베이어 CFA 레이아웃 지원 및 언팩된 Bayer 데이터의 스트라이드 처리 개선 패치가 제출되었습니다.",
+          "why_it_matters": "하위 프레임워크에서 쿼드-베이어 레이아웃을 올바르게 지원해야 HAL 계층에서 추가적인 후처리 오버헤드 없이 고품질 RAW 데이터를 획득할 수 있습니다.",
+          "field_scenario": "libcamera 기반 이미지 파이프라인에서 쿼드-베이어 센서의 RAW 출력을 캡처하여 디베이어링 품질과 메모리 스트라이드 정렬을 검증하는 시나리오입니다.",
+          "not_to_overclaim": "이 패치는 libcamera 프로젝트의 변경사항이며, Android Camera HAL API나 프레임워크에 직접적인 변경을 가하는 것이 아닙니다.",
+          "editor_take": "고해상도 센서 트렌드에 발맞춘 필수적인 업데이트이며, libcamera 기반 HAL 구현을 사용하는 팀은 반드시 추적해야 할 신호입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 8월 25일 Frederic Laing이 libcamera Patchwork에 쿼드-베이어 CFA 레이아웃 지원을 추가하는 패치를 제출했습니다."
+        ],
+        "background_context": "libcamera는 Linux 기반 시스템에서 카메라 하드웨어에 접근하고 제어하는 추상화 계층입니다. 쿼드-베이어(quad-Bayer) CFA(Color Filter Array) 레이아웃 지원 추가는 고해상도 센서에서 흔히 사용되는 이종 픽셀 배열을 libcamera가 처리할 수 있게 됨을 의미합니다. 이는 이미지 센서에서 들어오는 RAW 데이터의 디베이어링(debayering) 방식과 이미지 처리 파이프라인에 직접적인 영향을 줍니다. Android Camera HAL은 종종 V4L2 또는 libcamera를 통해 하위 드라이버와 통신하므로, libcamera의 이러한 변경은 HAL이 지원해야 하는 RAW 포맷 처리, 스트라이드(stride) 계산, 그리고 ISP와의 협업 방식에 영향을 줄 수 있습니다. HAL은 새로운 CFA 레이아웃을 올바르게 해석하고 처리하여 상위 프레임워크에 유효한 이미지 데이터를 제공해야 합니다.",
+        "hal_driver_impact": "libcamera 계층에서 쿼드-베이어 CFA 레이아웃을 직접 인식하고 처리함으로써, Android Camera HAL이 하위 스택에서 수신하는 RAW 데이터의 디베이어링(debayering) 품질과 스트라이드 계산의 정확도가 향상됩니다. 이는 HAL이 RAW_SENSOR 또는 RAW10/RAW12 스트림을 처리할 때 버퍼 오버플로우나 메모리 정렬 오류를 방지하는 데 기여합니다.",
+        "action_items": [
+          "libcamera Patchwork의 쿼드-베이어 CFA 지원 패치(ID: 28095)의 변경사항을 로컬 libcamera 포크에 테스트 적용한다.",
+          "쿼드-베이어 센서 탑재 기기에서 RAW 스트림의 스트라이드 계산 및 디베이어링 결과물의 시각적 왜곡 여부를 검증한다."
+        ],
+        "team_share_points": "libcamera에 쿼드-베이어 CFA 레이아웃 지원이 제안되어 고해상도 센서의 RAW 데이터 처리 효율성이 개선될 예정입니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 8월 25일 libcamera Patchwork에 제출된 최신 패치로, 고해상도 센서 도입을 준비하는 팀에게 즉각적인 검토가 필요합니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "로컬 libcamera 빌드 환경에 패치를 적용하고 쿼드-베이어 센서의 RAW 데이터 스트라이드 정렬을 확인하십시오.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치는 libcamera 프로젝트의 변경사항이며, Android Camera HAL API나 프레임워크에 직접적인 변경을 가하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:e06d189691a8abeb:patch-submission",
+          "text": "2026년 8월 25일 Frederic Laing이 libcamera Patchwork에 쿼드-베이어 CFA 레이아웃 지원을 추가하는 패치를 제출했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:e06d189691a8abeb:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28095/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:e06d189691a8abeb:hal-impact",
+          "text": "쿼드-베이어 CFA 지원은 RAW 데이터의 디베이어링 방식과 언팩된 Bayer 데이터의 스트라이드 계산 정확도를 높여 HAL 버퍼 정렬 오류를 방지할 수 있습니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "candidate:e06d189691a8abeb:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28095/"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "RAW 스트림의 스트라이드 계산 로직 검증",
+        "쿼드-베이어 디베이어링 시각 품질 확인"
+      ],
+      "action_hints": [
+        "libcamera 패치 적용 후 RAW 캡처 스트림 테스트 실행"
+      ],
+      "action_items": [
+        "libcamera Patchwork의 쿼드-베이어 CFA 지원 패치(ID: 28095)의 변경사항을 로컬 libcamera 포크에 테스트 적용한다.",
+        "쿼드-베이어 센서 탑재 기기에서 RAW 스트림의 스트라이드 계산 및 디베이어링 결과물의 시각적 왜곡 여부를 검증한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vdc800838fb8be04a9a7685606311d18c65800504bccf261551968ac74bffd42e/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates provided in the source capsule.",
+      "sources": [
+        {
+          "title": "libcamera: Add quad-Bayer CFA layout support",
+          "url": "https://patchwork.libcamera.org/patch/28095/"
+        }
+      ],
+      "source_candidate_url": "https://patchwork.libcamera.org/patch/28095/",
+      "source_candidate_hash": "e06d189691a8abeb29e2c9ec4fffda87e57eac12f4534de6734e3c61f67c2b3f",
+      "article_group_key": "patchwork-series:6145",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Driver & Image Pipeline",
+      "headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+      "what_changed": "Lenovo Yoga Book YB1-X91 카메라 지원을 추가합니다. ACPI ID 및 브리지 데이터 추가, AtomISP 카메라 링크 설명, Yoga Book 센서 클럭 및 모드 지원, raw Bayer 캡처 노출, 채널별 화이트 밸런스 제어 추가, WV517S 후면 카메라 렌즈 액추에이터 추가를 포함합니다.",
+      "confirmed_facts": [
+        "2026년 8월 27일 lore.kernel.org linux-media 리스트에 Lenovo Yoga Book YB1-X91 카메라 지원을 추가하는 PATCH v2 패치 시리즈가 제출되었습니다.",
+        "이 패치 시리즈는 Cherry Trail AtomISP를 통해 OV2740 전면 센서와 OV8858 후면 센서를 지원하며, 부족한 펌웨어 카메라 링크 정보를 보완합니다.",
+        "ACPI ID 및 브리지 데이터 추가, 센서 클럭 및 모드 지원, RAW Bayer 캡처 노출, 채널별 화이트 밸런스 제어, WV517S 후면 카메라 렌즈 액추에이터 지원을 포함합니다."
+      ],
+      "evidence_summary": "2026년 8월 27일 lore.kernel.org linux-media 리스트에 제출된 PATCH v2 패치 시리즈를 통해 Lenovo Yoga Book YB1-X91 카메라 지원을 위한 하위 드라이버 및 센서 통합 작업이 제안되었습니다.",
+      "specificity_checks": [
+        "Version: PATCH v2",
+        "Release Date: 2026-08-27",
+        "Component: AtomISP, OV2740, OV8858, WV517S",
+        "Source Page: lore.kernel.org linux-media list"
+      ],
+      "source_verification_notes": [
+        "제안된 패치 시리즈는 현재 검토 중이며 커널 메인라인에 통합되기 전 단계입니다."
+      ],
+      "public_article": {
+        "headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+        "lead": "Lenovo Yoga Book YB1-X91 디바이스의 카메라 하드웨어를 완벽히 지원하기 위한 Linux 커널 드라이버 패치 시리즈(PATCH v2)가 공개되었습니다. 이번 패치는 부족한 ACPI 펌웨어 정보를 드라이버 수준에서 보완하고, 전/후면 센서 및 렌즈 액추에이터의 제어 기능을 통합하는 데 중점을 둡니다.",
+        "body_paragraphs": [
+          "Lenovo Yoga Book YB1-X91L 디바이스는 Cherry Trail AtomISP를 기반으로 전면 OV2740 센서와 후면 OV8858 센서를 탑재하고 있습니다. 그러나 기존 시스템 펌웨어는 드라이버가 완전한 카메라 링크를 구성하기에 충분한 정보를 제공하지 못했습니다. 이번 패치 시리즈는 ACPI ID 및 브리지 데이터를 추가하여 이러한 한계를 극복합니다.",
+          "패치 시리즈의 주요 변경사항에는 양쪽 카메라 링크에 대한 설명 추가, 센서 클럭 및 모드 지원, RAW Bayer 캡처 노출 기능이 포함되어 있습니다. 또한, 채널별 화이트 밸런스 제어 기능과 후면 카메라용 WV517S 렌즈 액추에이터 드라이버가 추가되어 하드웨어 제어 범위가 크게 넓어졌습니다.",
+          "이러한 하위 드라이버의 기능 확장은 Android Camera HAL이 하드웨어의 물리적 특성을 정확히 인식하고, 3A(자동 노출, 자동 화이트 밸런스, 자동 초점) 제어 기능을 원활하게 구현할 수 있는 기반이 됩니다. 하드웨어 통합을 담당하는 엔지니어들에게 중요한 참조 모델이 될 것입니다."
+        ],
+        "camera_hal_takeaway": "드라이버 레벨에서 RAW Bayer 캡처 노출, 채널별 화이트 밸런스 제어, 렌즈 액추에이터(WV517S)가 추가됨에 따라, Camera HAL은 해당 하드웨어의 3A(Auto Exposure, Auto White Balance, Auto Focus) 제어 기능을 V4L2 컨트롤을 통해 직접 매핑할 수 있게 됩니다. 이는 HAL의 `android.control` 메타데이터 계약을 충족하고 CTS/VTS 검증을 통과하는 데 필수적입니다.",
+        "reader_checkpoints": [
+          "Yoga Book YB1-X91L 하드웨어에서 OV2740 및 OV8858 센서의 RAW Bayer 캡처 기능이 V4L2 서브시스템을 통해 정상 노출되는지 확인하십시오.",
+          "WV517S 렌즈 액추에이터 드라이버를 통해 HAL의 초점 거리 제어(AF) 메타데이터가 하드웨어로 올바르게 전달되는지 검증하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+            "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media list - PATCH v2",
+        "editorial_story": {
+          "reader_scenario": "Yoga Book 플랫폼에서 카메라 초점 제어(AF)나 화이트 밸런스 수동 제어 기능이 동작하지 않아 HAL 메타데이터 연동을 디버깅하는 상황을 가정합니다.",
+          "what_happened": "Lenovo Yoga Book YB1-X91의 카메라 드라이버 지원을 위해 ACPI ID, 센서 클럭, RAW 캡처, 화이트 밸런스 제어 및 WV517S 렌즈 액추에이터를 추가하는 패치 시리즈가 제출되었습니다.",
+          "why_it_matters": "커널 드라이버에서 화이트 밸런스 채널 제어 및 액추에이터 제어가 지원되어야 HAL 계층에서 표준 Android 3A 메타데이터를 구현할 수 있습니다.",
+          "field_scenario": "V4L2 서브시스템을 통해 노출된 WV517S 액추에이터 컨트롤을 활용하여 HAL의 포커스 제어 루프를 테스트하는 시나리오입니다.",
+          "not_to_overclaim": "이 패치 시리즈는 특정 디바이스(Lenovo Yoga Book YB1-X91)에 대한 지원 추가이며, 일반적인 Android HAL 프레임워크 변경사항이 아닙니다.",
+          "editor_take": "특정 디바이스의 카메라 하드웨어 통합 과정을 보여주는 매우 구체적이고 유용한 드라이버 레벨의 참조 자료입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 8월 27일 Lenovo Yoga Book YB1-X91 카메라 지원을 위한 PATCH v2 시리즈가 lore.kernel.org linux-media에 제출되었습니다.",
+          "이 패치는 Cherry Trail AtomISP 기반의 OV2740 전면 센서, OV8858 후면 센서, WV517S 렌즈 액추에이터를 지원하며 채널별 화이트 밸런스 제어를 추가합니다."
+        ],
+        "background_context": "Linux 커널 미디어 서브시스템에 특정 장치(Lenovo Yoga Book YB1-X91)의 카메라 지원을 추가하는 패치 시리즈는 해당 장치의 카메라 하드웨어(OV2740, OV8858 센서)를 Linux 커널 드라이버가 인식하고 제어할 수 있도록 하는 변경사항을 포함합니다. 이는 ACPI ID, 브리지 데이터, 센서 클럭 및 모드 지원, RAW Bayer 캡처 노출, 화이트 밸런스 제어, 렌즈 액추에이터 추가 등 다양한 드라이버 레벨의 조정을 의미합니다. Android Camera HAL은 이러한 하위 드라이버의 기능을 추상화하여 상위 프레임워크에 노출하므로, 드라이버 레벨의 새로운 하드웨어 지원은 HAL이 해당 센서의 기능(예: RAW 캡처, 특정 화이트 밸런스 모드, AF 제어)을 올바르게 선언하고 구현해야 함을 시사합니다. 이는 HAL의 기능 선언(camera characteristics) 및 스트림 구성 유효성 검사에 영향을 미칩니다.",
+        "hal_driver_impact": "드라이버 레벨에서 RAW Bayer 캡처 노출, 채널별 화이트 밸런스 제어, 렌즈 액추에이터(WV517S)가 추가됨에 따라, Camera HAL은 해당 하드웨어의 3A(Auto Exposure, Auto White Balance, Auto Focus) 제어 기능을 V4L2 컨트롤을 통해 직접 매핑할 수 있게 됩니다. 이는 HAL의 `android.control` 메타데이터 계약을 충족하고 CTS/VTS 검증을 통과하는 데 필수적입니다.",
+        "action_items": [
+          "Yoga Book YB1-X91L 하드웨어에서 OV2740 및 OV8858 센서의 RAW Bayer 캡처 기능이 V4L2 서브시스템을 통해 정상 노출되는지 확인한다.",
+          "WV517S 렌즈 액추에이터 드라이버를 통해 HAL의 초점 거리 제어(AF) 메타데이터가 하드웨어로 올바르게 전달되는지 검증한다."
+        ],
+        "team_share_points": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 드라이버 패치 시리즈가 공개되어, 3A 제어 및 렌즈 액추에이터 연동의 하위 기반이 마련되었습니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 8월 27일에 제출된 패치 시리즈로, AtomISP 및 관련 센서/액추에이터 통합을 진행 중인 팀에게 중요한 참고가 됩니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "camera_test_owner"
+        ],
+        "check_within_2_weeks": "V4L2 컨트롤 인터페이스를 통해 WV517S 렌즈 액추에이터 및 화이트 밸런스 제어가 정상 동작하는지 확인하십시오.",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "cts_vts_its_cdd"
+        ],
+        "do_not_overstate": [
+          "이 패치 시리즈는 특정 디바이스에 한정된 드라이버 변경사항이며, Android Camera HAL의 공통 프레임워크를 변경하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:c3d7190c17af1c4a:patch-submission",
+          "text": "2026년 8월 27일 Lenovo Yoga Book YB1-X91 카메라 지원을 위한 PATCH v2 시리즈가 lore.kernel.org linux-media에 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:c3d7190c17af1c4a:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:c3d7190c17af1c4a:sensor-spec",
+          "text": "이 패치는 Cherry Trail AtomISP 기반의 OV2740 전면 센서, OV8858 후면 센서, WV517S 렌즈 액추에이터를 지원하며 채널별 화이트 밸런스 제어를 추가합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:c3d7190c17af1c4a:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:c3d7190c17af1c4a:hal-impact",
+          "text": "렌즈 액추에이터 및 화이트 밸런스 제어 드라이버 추가는 HAL의 3A 메타데이터 제어 및 AF/AWB 기능 구현의 기반이 됩니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "candidate:c3d7190c17af1c4a:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "V4L2 서브디바이스 노드 등록 및 제어 가능 여부 확인",
+        "HAL AF/AWB 메타데이터와 V4L2 컨트롤 매핑 검증"
+      ],
+      "action_hints": [
+        "Yoga Book 드라이버 소스를 활용한 3A 제어 파이프라인 검증"
+      ],
+      "action_items": [
+        "Yoga Book YB1-X91L 하드웨어에서 OV2740 및 OV8858 센서의 RAW Bayer 캡처 기능이 V4L2 서브시스템을 통해 정상 노출되는지 확인한다.",
+        "WV517S 렌즈 액추에이터 드라이버를 통해 HAL의 초점 거리 제어(AF) 메타데이터가 하드웨어로 올바르게 전달되는지 검증한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vdc800838fb8be04a9a7685606311d18c65800504bccf261551968ac74bffd42e/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates provided in the source capsule.",
+      "sources": [
+        {
+          "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+          "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+      "source_candidate_hash": "c3d7190c17af1c4ac1273d47df50d254defd2d2a5894a8a30f0d2ee6aacaf02c",
+      "article_group_key": "lore-series:20260827181756.2430054-mauriziocasciano7@gmail.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Driver & Image Pipeline",
+      "headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "what_changed": "Sony IMX908 센서에 대한 Device Tree 바인딩을 추가합니다.",
+      "confirmed_facts": [
+        "2026년 8월 28일 Sony의 Lachlan Michael이 IMX908 센서에 대한 Device Tree 바인딩을 추가하는 PATCH v3를 lore.kernel.org linux-media 리스트에 제출했습니다.",
+        "Sony IMX908은 MIPI CSI-2 출력 인터페이스를 갖춘 8.39메가픽셀(3856x2176) CMOS 이미지 센서로, 2개 또는 4개의 데이터 레인을 통해 RAW10 및 RAW12 출력을 지원합니다.",
+        "v3 변경사항에서는 실제 하드웨어 사양에 맞춰 I2C 타겟 주소가 SLAVE 핀에 의해 선택되도록 바인딩 설명을 조정했습니다."
+      ],
+      "evidence_summary": "2026년 8월 28일 lore.kernel.org linux-media 리스트에 제출된 PATCH v3를 통해 Sony IMX908 이미지 센서의 Device Tree 바인딩 규격이 정의되었습니다.",
+      "specificity_checks": [
+        "Version: PATCH v3",
+        "Release Date: 2026-08-28",
+        "Component: Sony IMX908 이미지 센서, Device Tree Bindings",
+        "Source Page: lore.kernel.org linux-media list"
+      ],
+      "source_verification_notes": [
+        "이 패치는 Device Tree 바인딩 정의를 다루며, 실제 드라이버 소스 코드는 별도의 패치로 관리됩니다."
+      ],
+      "public_article": {
+        "headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+        "lead": "Sony IMX908 이미지 센서의 Linux 커널 공식 지원을 위한 Device Tree 바인딩 패치(PATCH v3)가 공개되었습니다. 이번 바인딩 정의는 신규 센서를 탑재하는 SoC 플랫폼 개발자들에게 표준 하드웨어 인터페이스 구성 가이드를 제공합니다.",
+        "body_paragraphs": [
+          "Sony IMX908은 8.39메가픽셀(3856x2176) 해상도를 지원하는 고성능 CMOS 이미지 센서입니다. MIPI CSI-2 인터페이스를 통해 RAW10 및 RAW12 출력을 지원하며, 시스템 요구사항에 따라 2개 또는 4개의 데이터 레인을 유연하게 구성할 수 있는 특징을 가지고 있습니다.",
+          "이번 PATCH v3에서는 실제 하드웨어 설계 사양을 반영하여, I2C 슬레이브 타겟 주소가 하드웨어 SLAVE 핀 설정에 의해 동적으로 선택되도록 바인딩 설명을 조정했습니다. 이는 보드 설계에 따른 주소 충돌을 방지하는 데 필수적인 요소입니다.",
+          "Device Tree 바인딩이 커널에 통합되면, Android 기기 개발 시 dts 파일에 센서 노드를 표준 방식으로 선언할 수 있습니다. 이는 Android Camera HAL이 드라이버를 통해 센서의 물리적 해상도와 데이터 포맷을 정확히 인식하고 RAW 스트림을 구성하는 출발점이 됩니다."
+        ],
+        "camera_hal_takeaway": "Device Tree 바인딩을 통해 센서의 MIPI CSI-2 레인 수(2 또는 4레인)와 RAW 포맷(RAW10/RAW12)이 커널에 올바르게 정의되면, Camera HAL은 드라이버로부터 정확한 센서 해상도(3856x2176)와 포맷 정보를 쿼리할 수 있습니다. 이는 HAL의 `SensorCharacteristics` 메타데이터를 구성하고, 고해상도 RAW 스트림 조합의 안정성을 확보하는 데 기여합니다.",
+        "reader_checkpoints": [
+          "Sony IMX908 센서의 Device Tree 바인딩 패치(PATCH v3)를 참조하여, 대상 SoC 플랫폼의 dts 파일에 MIPI 레인 및 I2C 주소 설정을 적용해 보십시오.",
+          "드라이버 로드 시 I2C 슬레이브 주소 선택 핀 설정이 하드웨어 스키매틱과 일치하는지 오실로스코프 또는 I2C 툴로 검증하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+            "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media list - PATCH v3",
+        "editorial_story": {
+          "reader_scenario": "신규 Sony IMX908 센서를 보드에 마운트하고 커널 부팅 시 I2C 통신 실패(No such device) 오류를 겪으며 디바이스 트리 설정을 점검하는 상황을 가정합니다.",
+          "what_happened": "Sony IMX908 센서의 MIPI CSI-2 레인 구성 및 SLAVE 핀 기반 I2C 주소 선택 사양을 정의하는 Device Tree 바인딩 패치가 제출되었습니다.",
+          "why_it_matters": "하드웨어 핀 설정과 일치하는 정확한 I2C 주소 및 MIPI 레인 정의가 dts에 반영되어야 커널 드라이버가 정상 로드되고 HAL이 센서에 접근할 수 있습니다.",
+          "field_scenario": "dts 파일에 IMX908 노드를 추가하고, 4레인 MIPI CSI-2 및 RAW12 포맷 지원 설정을 활성화하여 드라이버 초기화를 테스트하는 시나리오입니다.",
+          "not_to_overclaim": "Device Tree 바인딩 추가는 하드웨어 인터페이스 정의일 뿐이며, 이것만으로 Android HAL에서 센서가 즉시 구동되는 것은 아닙니다. 실제 드라이버 및 ISP 튜닝이 추가로 필요합니다.",
+          "editor_take": "신규 센서 지원의 첫 단추인 바인딩 정의가 명확히 정리되었으므로, 해당 센서 도입을 검토 중인 플랫폼 팀은 dts 템플릿으로 즉시 활용할 수 있습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 8월 28일 Sony IMX908 센서의 Device Tree 바인딩 추가를 위한 PATCH v3가 lore.kernel.org linux-media에 제출되었습니다.",
+          "Sony IMX908은 8.39메가픽셀(3856x2176) CMOS 센서로, MIPI CSI-2 2/4레인을 통해 RAW10 및 RAW12 출력을 지원하며 I2C 주소는 SLAVE 핀으로 선택됩니다."
+        ],
+        "background_context": "Device Tree(DT) 바인딩은 Linux 커널에서 하드웨어 장치의 속성과 구성을 설명하는 데 사용됩니다. Sony IMX908 센서와 같은 새로운 이미지 센서에 대한 DT 바인딩 추가는 해당 센서가 Linux 커널에 의해 공식적으로 지원되기 시작했음을 의미합니다. 이 센서는 MIPI CSI-2 인터페이스를 통해 RAW10 및 RAW12 출력을 지원하는 8.39메가픽셀 CMOS 센서입니다. Android Camera HAL은 하위 드라이버를 통해 센서에 접근하므로, 새로운 센서의 DT 바인딩은 HAL이 해당 센서의 물리적 특성(해상도, 픽셀 포맷, MIPI 레인 구성 등)을 정확하게 파악하고, 이를 기반으로 스트림 구성, 메타데이터 처리, 그리고 RAW 캡처 기능을 구현해야 함을 나타냅니다. 이는 HAL의 초기화 과정과 센서별 튜닝 및 캘리브레이션에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "Device Tree 바인딩을 통해 센서의 MIPI CSI-2 레인 수(2 또는 4레인)와 RAW 포맷(RAW10/RAW12)이 커널에 올바르게 정의되면, Camera HAL은 드라이버로부터 정확한 센서 해상도(3856x2176)와 포맷 정보를 쿼리할 수 있습니다. 이는 HAL의 `SensorCharacteristics` 메타데이터를 구성하고, 고해상도 RAW 스트림 조합의 안정성을 확보하는 데 기여합니다.",
+        "action_items": [
+          "Sony IMX908 센서의 Device Tree 바인딩 패치(PATCH v3)를 참조하여, 대상 SoC 플랫폼의 dts 파일에 MIPI 레인 및 I2C 주소 설정을 적용한다.",
+          "드라이버 로드 시 I2C 슬레이브 주소 선택 핀 설정이 하드웨어 스키매틱과 일치하는지 오실로스코프 또는 I2C 툴로 검증한다."
+        ],
+        "team_share_points": "Sony IMX908 센서의 Device Tree 바인딩이 정의되어, 신규 보드 개발 시 하드웨어 인터페이스 구성의 표준 가이드가 마련되었습니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 8월 28일에 공개된 최신 바인딩 규격으로, 신규 센서 하드웨어 설계 및 dts 구성을 진행하는 팀에게 즉각적인 가이드를 제공합니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "대상 플랫폼 dts 파일에 IMX908 바인딩 규격을 적용하고 커널 컴파일 시 문법 오류가 없는지 확인하십시오.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치는 Device Tree 바인딩 정의이며, Android HAL API나 실제 드라이버 소스 코드를 포함하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:1c1f705a3a910f6c:patch-submission",
+          "text": "2026년 8월 28일 Sony IMX908 센서의 Device Tree 바인딩 추가를 위한 PATCH v3가 lore.kernel.org linux-media에 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:1c1f705a3a910f6c:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:1c1f705a3a910f6c:sensor-spec",
+          "text": "Sony IMX908은 8.39메가픽셀(3856x2176) CMOS 센서로, MIPI CSI-2 2/4레인을 통해 RAW10 및 RAW12 출력을 지원하며 I2C 주소는 SLAVE 핀으로 선택됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:1c1f705a3a910f6c:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:1c1f705a3a910f6c:hal-impact",
+          "text": "정확한 Device Tree 바인딩 정의는 HAL이 센서의 물리적 특성을 정확히 쿼리하고 RAW10/RAW12 스트림을 안정적으로 제어할 수 있는 기반을 제공합니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "candidate:1c1f705a3a910f6c:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "dts 내 MIPI CSI-2 레인 수 및 포맷 선언 정합성 확인",
+        "I2C 슬레이브 주소 선택 로직 검증"
+      ],
+      "action_hints": [
+        "신규 dts 구성 시 IMX908 바인딩 템플릿 적용"
+      ],
+      "action_items": [
+        "Sony IMX908 센서의 Device Tree 바인딩 패치(PATCH v3)를 참조하여, 대상 SoC 플랫폼의 dts 파일에 MIPI 레인 및 I2C 주소 설정을 적용한다.",
+        "드라이버 로드 시 I2C 슬레이브 주소 선택 핀 설정이 하드웨어 스키매틱과 일치하는지 오실로스코프 또는 I2C 툴로 검증한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vdc800838fb8be04a9a7685606311d18c65800504bccf261551968ac74bffd42e/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates provided in the source capsule.",
+      "sources": [
+        {
+          "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+          "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+      "source_candidate_hash": "1c1f705a3a910f6c88da6aef60ab78abeb38ef0b19a8be21dda2e804f7a586ab",
+      "article_group_key": "lore-series:20260828064843.65047-lachlan.michael@sony.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Driver & Image Pipeline",
+      "headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+      "what_changed": "libcamera의 software_isp EGL 모듈에서 createTexture2D() 함수에 필터(filter) 파라미터를 추가하는 패치입니다. Milan Zamazal이 제출했으며 현재 검토 중입니다.",
+      "confirmed_facts": [
+        "2026년 8월 26일 Milan Zamazal이 libcamera Patchwork에 software_isp EGL 모듈의 createTexture2D() 함수에 필터 파라미터를 추가하는 v15 패치를 제출했습니다.",
+        "이 패치는 텍스처 생성 시 필터링 옵션을 제어할 수 있게 하여 소프트웨어 ISP 처리 및 EGL 렌더링 파이프라인에 영향을 줄 수 있습니다."
+      ],
+      "evidence_summary": "2026년 8월 26일 libcamera Patchwork에 제출된 v15 패치(ID: 28105)를 통해 software_isp EGL 모듈의 텍스처 생성 함수에 필터 제어 파라미터가 추가되었습니다.",
+      "specificity_checks": [
+        "Version: v15",
+        "Release Date: 2026-08-26",
+        "Component: libcamera, software_isp, EGL",
+        "Source Page: libcamera Patchwork"
+      ],
+      "source_verification_notes": [
+        "이 패치는 소프트웨어 ISP 및 EGL 렌더링 경로를 사용하는 특정 플랫폼에 적용되는 최적화 패치입니다."
+      ],
+      "public_article": {
+        "headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+        "lead": "libcamera 프레임워크의 소프트웨어 ISP EGL 모듈에서 이미지 처리 품질을 미세 조정할 수 있는 v15 패치가 공개되었습니다. 이번 변경은 텍스처 생성 시 필터링 옵션을 직접 제어할 수 있도록 파라미터를 추가하여 GPU 가속 렌더링 파이프라인의 유연성을 높입니다.",
+        "body_paragraphs": [
+          "하드웨어 ISP가 부족하거나 없는 저가형 SoC 플랫폼에서는 CPU와 GPU를 활용하는 소프트웨어 ISP의 역할이 매우 중요합니다. libcamera는 이러한 환경을 위해 software_isp 모듈을 제공하며, EGL을 통해 GPU 가속을 활용합니다. 이번에 제출된 v15 패치는 EGL 모듈의 핵심 함수 중 하나인 `createTexture2D()`에 필터 파라미터를 추가합니다.",
+          "Milan Zamazal이 제안한 이 패치는 텍스처 생성 시 선형(Linear) 또는 근접(Nearest) 필터링과 같은 옵션을 개발자가 직접 지정할 수 있도록 합니다. 필터링 옵션은 이미지 스케일링이나 디베이어링 후처리 단계에서 결과물의 시각적 선명도와 앨리어싱 품질에 직접적인 영향을 미칩니다.",
+          "Android Camera HAL 구현 시 하위 이미지 처리 파이프라인으로 libcamera의 소프트웨어 ISP를 사용하는 경우, 이번 필터 파라미터 추가를 통해 프리뷰 이미지의 품질을 한층 더 미세하게 조정할 수 있게 됩니다. 성능과 화질 간의 균형을 맞추는 데 유용한 도구가 될 것입니다."
+        ],
+        "camera_hal_takeaway": "소프트웨어 ISP의 EGL 텍스처 생성 시 필터링 옵션을 제어할 수 있게 됨으로써, GPU 가속을 활용한 이미지 스케일링이나 디베이어링 후처리 단계에서 시각적 품질(예: 앨리어싱 감소, 샤프니스 조절)을 미세 조정할 수 있습니다. 이는 하드웨어 ISP가 없는 보급형 SoC 플랫폼에서 libcamera 기반 Android Camera HAL을 구현할 때 프리뷰 이미지의 품질 향상에 직접적인 영향을 미칩니다.",
+        "reader_checkpoints": [
+          "libcamera의 software_isp EGL 패치(v15)를 적용하여 createTexture2D() 호출 시 선형(Linear) 및 근접(Nearest) 필터링 적용 시의 프리뷰 품질 차이를 비교해 보십시오.",
+          "소프트웨어 ISP 활성화 시 GPU 렌더링 파이프라인의 프레임 레이트(fps)와 GPU 사용량 변화를 측정하여 성능 오버헤드를 평가하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+            "url": "https://patchwork.libcamera.org/patch/28105/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "libcamera Patchwork - v15",
+        "editorial_story": {
+          "reader_scenario": "보급형 플랫폼에서 소프트웨어 ISP를 통해 카메라 프리뷰를 구동할 때, 화면이 다소 흐릿하게 보이거나 계단 현상이 발생하여 텍스처 필터링 설정을 변경하려는 상황을 가정합니다.",
+          "what_happened": "libcamera의 software_isp EGL 모듈 내 createTexture2D() 함수에 텍스처 필터링 옵션을 제어할 수 있는 파라미터를 추가하는 v15 패치가 제출되었습니다.",
+          "why_it_matters": "텍스처 생성 단계에서 필터링 옵션을 제어할 수 있어야 GPU 렌더링 파이프라인의 시각적 품질과 성능 간 최적의 균형을 찾을 수 있습니다.",
+          "field_scenario": "EGL 기반 이미지 처리 파이프라인에서 필터 파라미터를 변경해 가며 프리뷰 이미지의 노이즈 및 선명도 변화를 벤치마킹하는 시나리오입니다.",
+          "not_to_overclaim": "이 패치는 libcamera의 소프트웨어 ISP 모듈에 국한된 변경사항이며, 하드웨어 ISP를 사용하는 표준 Android 기기의 HAL 구현에는 영향을 주지 않습니다.",
+          "editor_take": "하드웨어 제약이 있는 환경에서 GPU 가속을 통한 화질 개선을 도모할 수 있는 실용적인 렌더링 최적화 패치입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 8월 26일 Milan Zamazal이 libcamera Patchwork에 software_isp EGL 모듈의 createTexture2D()에 필터 파라미터를 추가하는 v15 패치를 제출했습니다."
+        ],
+        "background_context": "libcamera의 software_isp EGL 모듈에서 createTexture2D() 함수에 필터 파라미터를 추가하는 것은 이미지 처리 파이프라인에서 텍스처 생성 시 필터링 옵션을 더 세밀하게 제어할 수 있게 함을 의미합니다. EGL(Embedded-System Graphics Library)은 그래픽스 렌더링 컨텍스트 및 서피스 관리를 위한 API로, 소프트웨어 ISP에서 이미지 데이터를 처리하고 GPU 가속을 활용하는 데 사용될 수 있습니다. Android Camera HAL은 때때로 자체적인 ISP 또는 GPU 가속을 통해 이미지 처리 작업을 수행하며, libcamera와 같은 하위 계층의 이러한 변경은 HAL이 이미지 처리 품질, 성능, 그리고 전력 효율성을 최적화하는 방식에 영향을 줄 수 있습니다. 특히, 텍스처 필터링 옵션은 이미지 스케일링, 노이즈 감소, 샤프닝 등 다양한 후처리 단계에서 시각적 품질에 직접적인 영향을 미치므로, HAL 구현에서 이러한 파라미터를 적절히 활용하여 최적의 결과물을 생성하는 것이 중요합니다.",
+        "hal_driver_impact": "소프트웨어 ISP의 EGL 텍스처 생성 시 필터링 옵션을 제어할 수 있게 됨으로써, GPU 가속을 활용한 이미지 스케일링이나 디베이어링 후처리 단계에서 시각적 품질(예: 앨리어싱 감소, 샤프니스 조절)을 미세 조정할 수 있습니다. 이는 하드웨어 ISP가 없는 보급형 SoC 플랫폼에서 libcamera 기반 Android Camera HAL을 구현할 때 프리뷰 이미지의 품질 향상에 직접적인 영향을 미칩니다.",
+        "action_items": [
+          "libcamera의 software_isp EGL 패치(v15)를 적용하여 createTexture2D() 호출 시 선형(Linear) 및 근접(Nearest) 필터링 적용 시의 프리뷰 품질 차이를 비교한다.",
+          "소프트웨어 ISP 활성화 시 GPU 렌더링 파이프라인의 프레임 레이트(fps)와 GPU 사용량 변화를 측정하여 성능 오버헤드를 평가한다."
+        ],
+        "team_share_points": "libcamera 소프트웨어 ISP EGL 모듈에 필터 파라미터가 추가되어 GPU 가속 기반 프리뷰 렌더링 품질 제어가 가능해졌습니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 8월 26일에 제출된 v15 패치로, 소프트웨어 ISP 기반 플랫폼의 렌더링 품질 및 성능 튜닝에 즉각 활용 가능합니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "software_isp EGL 모듈 빌드 시 필터 파라미터가 정상적으로 전달되고 GPU 렌더링에 반영되는지 확인하십시오.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치는 하드웨어 ISP를 사용하는 표준 Android 기기 및 공통 Camera HAL 프레임워크와는 무관합니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim:8c84b0ed47729b93:patch-submission",
+          "text": "2026년 8월 26일 Milan Zamazal이 libcamera Patchwork에 software_isp EGL 모듈의 createTexture2D()에 필터 파라미터를 추가하는 v15 패치를 제출했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:8c84b0ed47729b93:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28105/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim:8c84b0ed47729b93:hal-impact",
+          "text": "createTexture2D()에 필터 파라미터를 추가하면 소프트웨어 ISP 및 EGL 렌더링 파이프라인에서 텍스처 필터링 옵션을 제어할 수 있어 이미지 품질 및 스케일링 제어가 가능해집니다.",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "candidate:8c84b0ed47729b93:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28105/"
+          ],
+          "impact_level": "performance_latency_thermal",
+          "overclaim_risk": "medium"
+        }
+      ],
+      "camera_hal_checks": [
+        "createTexture2D() 호출부 파라미터 추가 정합성 확인",
+        "EGL 렌더링 파이프라인 프레임 레이트 및 GPU 부하 측정"
+      ],
+      "action_hints": [
+        "소프트웨어 ISP EGL 필터링 변경에 따른 화질 벤치마크 수행"
+      ],
+      "action_items": [
+        "libcamera의 software_isp EGL 패치(v15)를 적용하여 createTexture2D() 호출 시 선형(Linear) 및 근접(Nearest) 필터링 적용 시의 프리뷰 품질 차이를 비교한다.",
+        "소프트웨어 ISP 활성화 시 GPU 렌더링 파이프라인의 프레임 레이트(fps)와 GPU 사용량 변화를 측정하여 성능 오버헤드를 평가한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vdc800838fb8be04a9a7685606311d18c65800504bccf261551968ac74bffd42e/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates provided in the source capsule.",
+      "sources": [
+        {
+          "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+          "url": "https://patchwork.libcamera.org/patch/28105/"
+        }
+      ],
+      "source_candidate_url": "https://patchwork.libcamera.org/patch/28105/",
+      "source_candidate_hash": "8c84b0ed47729b930c6dbfd3ad5189806d53b1746b4bfe7db328fa1b94941793",
+      "article_group_key": "patchwork-series:6147",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "AtomISP 및 Lenovo Yoga Book YB1-X91 카메라 드라이버 패치를 로컬 커널 트리에 적용하여 OV2740/OV8858 센서의 RAW Bayer 캡처 기능을 검증한다.",
+    "libcamera Patchwork의 쿼드-베이어 CFA 지원 패치(ID: 28095)와 EGL 필터 파라미터 패치(ID: 28105)를 빌드하여 RAW 스트라이드 계산 및 프리뷰 품질을 테스트한다.",
+    "Sony IMX908 센서의 Device Tree 바인딩 규격을 참조하여 대상 SoC 플랫폼의 dts 파일에 MIPI CSI-2 레인 및 I2C 슬레이브 주소 설정을 구성한다."
+  ],
+  "references": [
+    {
+      "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+      "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+    },
+    {
+      "title": "libcamera: Add quad-Bayer CFA layout support",
+      "url": "https://patchwork.libcamera.org/patch/28095/"
+    },
+    {
+      "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+    },
+    {
+      "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+    },
+    {
+      "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "url": "https://patchwork.libcamera.org/patch/28105/"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
+  "selected_group_count": 5,
+  "rendered_group_count": 5,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+    "patchwork-series:6145",
+    "lore-series:20260827181756.2430054-mauriziocasciano7@gmail.com",
+    "lore-series:20260828064843.65047-lachlan.michael@sony.com",
+    "patchwork-series:6147"
+  ],
+  "rendered_group_keys": [
+    "article:https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+    "patchwork-series:6145",
+    "lore-series:20260827181756.2430054-mauriziocasciano7@gmail.com",
+    "lore-series:20260828064843.65047-lachlan.michael@sony.com",
+    "patchwork-series:6147"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "[PATCH v4 14/15] media: atomisp: allow raw Bayer capture - Maurizio Casciano",
+      "url": "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-08-28",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "Camera ITS tests",
+      "url": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "source": "AOSP Site Updates",
+      "published_date": "2026-07",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    }
+  ],
+  "tags": [
+    "Driver",
+    "Image Processing",
+    "Camera HAL",
+    "Android"
+  ],
+  "coverage_week_key": "2026-W35",
+  "coverage_start_date": "2026-08-24",
+  "coverage_end_date": "2026-08-30",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-08-31",
+  "weekly_key": "2026-W36",
+  "week_start_date": "2026-08-31",
+  "week_end_date": "2026-09-06"
+}

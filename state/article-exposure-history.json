@@ -7,6 +7,102 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/28105",
+      "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+      "source_url": "https://patchwork.libcamera.org/patch/28105",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-31",
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com",
+      "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "source_url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-31",
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/28095",
+      "title": "libcamera: Add quad-Bayer CFA layout support",
+      "source_url": "https://patchwork.libcamera.org/patch/28095",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-31",
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+      "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+      "source_url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-08-31",
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com",
+      "title": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "source_url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+      "newsletter_date": "2026-08-31",
+      "newsletter_url": "newsletters/2026-08-31/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-08-31",
+      "first_exposed_at": "2026-08-31",
+      "last_exposed_at": "2026-08-31",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-08-31",
+      "cooldown_until": "2026-09-21"
+    },
+    {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com",
       "title": "[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
       "source_url": "https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/",

@@ -1,0 +1,1531 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-31",
+  "score": 92,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "PASS",
+  "summary": "Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+      "category": "Camera Driver & Image Pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH v3 08/12] media: atomisp: support the Yoga Book OV2740 link",
+          "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+        "source_candidate_hash": "e61e74efc013504330a29ab537621c3c56c691509f9f5a5b901151b7c1429fe4",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "cts_vts_its_cdd"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+      "category": "Camera Driver & Image Pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "libcamera: Add quad-Bayer CFA layout support",
+          "url": "https://patchwork.libcamera.org/patch/28095/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28095/",
+        "source_candidate_hash": "e06d189691a8abeb29e2c9ec4fffda87e57eac12f4534de6734e3c61f67c2b3f",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+      "category": "Camera Driver & Image Pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH v2 00/11] media: Add Lenovo Yoga Book YB1-X91 camera support",
+          "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+        "source_candidate_hash": "c3d7190c17af1c4ac1273d47df50d254defd2d2a5894a8a30f0d2ee6aacaf02c",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "cts_vts_its_cdd"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "category": "Camera Driver & Image Pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH v3 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+          "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 4,
+        "headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+        "source_candidate_hash": "1c1f705a3a910f6c88da6aef60ab78abeb38ef0b19a8be21dda2e804f7a586ab",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+      "category": "Camera Driver & Image Pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+          "url": "https://patchwork.libcamera.org/patch/28105/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 5,
+        "headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28105/",
+        "source_candidate_hash": "8c84b0ed47729b930c6dbfd3ad5189806d53b1746b4bfe7db328fa1b94941793",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 8,
+    "total_claims": 13,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 5,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+      "claim_id": "claim:e61e74efc0135043:patch-submission",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 8월 27일 lore.kernel.org linux-media 리스트에 AtomISP OV2740 링크 지원을 위한 PATCH v3가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:e61e74efc0135043:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:e61e74efc0135043:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:e61e74efc0135043:source-summary",
+          "resolved_evidence_id": "candidate:e61e74efc0135043:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+      "claim_id": "claim:e61e74efc0135043:sensor-spec",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "Yoga Book YB1-X91L의 전면 OV2740 센서는 288 MHz 링크 주파수에서 2개의 CSI-2 레인을 사용하며, 1932x1092 BGGR 전송 프레임을 전송합니다.",
+      "evidence_ids": [
+        "candidate:e61e74efc0135043:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:e61e74efc0135043:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:e61e74efc0135043:source-summary",
+          "resolved_evidence_id": "candidate:e61e74efc0135043:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+      "claim_id": "claim:e61e74efc0135043:hal-impact",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "medium",
+      "text": "D-PHY 타이밍 파생 및 패딩 처리는 V4L2를 거쳐 Camera HAL의 RAW 스트림 구성 및 active array size 메타데이터 매핑에 영향을 줄 수 있습니다.",
+      "evidence_ids": [
+        "candidate:e61e74efc0135043:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:e61e74efc0135043:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:e61e74efc0135043:source-summary",
+          "resolved_evidence_id": "candidate:e61e74efc0135043:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+      "claim_id": "claim:e06d189691a8abeb:patch-submission",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 8월 25일 Frederic Laing이 libcamera Patchwork에 쿼드-베이어 CFA 레이아웃 지원을 추가하는 패치를 제출했습니다.",
+      "evidence_ids": [
+        "candidate:e06d189691a8abeb:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:e06d189691a8abeb:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:e06d189691a8abeb:source-summary",
+          "resolved_evidence_id": "candidate:e06d189691a8abeb:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28095/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+      "claim_id": "claim:e06d189691a8abeb:hal-impact",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "medium",
+      "text": "쿼드-베이어 CFA 지원은 RAW 데이터의 디베이어링 방식과 언팩된 Bayer 데이터의 스트라이드 계산 정확도를 높여 HAL 버퍼 정렬 오류를 방지할 수 있습니다.",
+      "evidence_ids": [
+        "candidate:e06d189691a8abeb:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:e06d189691a8abeb:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:e06d189691a8abeb:source-summary",
+          "resolved_evidence_id": "candidate:e06d189691a8abeb:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28095/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+      "claim_id": "claim:c3d7190c17af1c4a:patch-submission",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 8월 27일 Lenovo Yoga Book YB1-X91 카메라 지원을 위한 PATCH v2 시리즈가 lore.kernel.org linux-media에 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:c3d7190c17af1c4a:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:c3d7190c17af1c4a:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:c3d7190c17af1c4a:source-summary",
+          "resolved_evidence_id": "candidate:c3d7190c17af1c4a:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+      "claim_id": "claim:c3d7190c17af1c4a:sensor-spec",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 패치는 Cherry Trail AtomISP 기반의 OV2740 전면 센서, OV8858 후면 센서, WV517S 렌즈 액추에이터를 지원하며 채널별 화이트 밸런스 제어를 추가합니다.",
+      "evidence_ids": [
+        "candidate:c3d7190c17af1c4a:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:c3d7190c17af1c4a:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:c3d7190c17af1c4a:source-summary",
+          "resolved_evidence_id": "candidate:c3d7190c17af1c4a:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+      "claim_id": "claim:c3d7190c17af1c4a:hal-impact",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "medium",
+      "text": "렌즈 액추에이터 및 화이트 밸런스 제어 드라이버 추가는 HAL의 3A 메타데이터 제어 및 AF/AWB 기능 구현의 기반이 됩니다.",
+      "evidence_ids": [
+        "candidate:c3d7190c17af1c4a:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:c3d7190c17af1c4a:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:c3d7190c17af1c4a:source-summary",
+          "resolved_evidence_id": "candidate:c3d7190c17af1c4a:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "claim_id": "claim:1c1f705a3a910f6c:patch-submission",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 8월 28일 Sony IMX908 센서의 Device Tree 바인딩 추가를 위한 PATCH v3가 lore.kernel.org linux-media에 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:1c1f705a3a910f6c:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:1c1f705a3a910f6c:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:1c1f705a3a910f6c:source-summary",
+          "resolved_evidence_id": "candidate:1c1f705a3a910f6c:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "claim_id": "claim:1c1f705a3a910f6c:sensor-spec",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "Sony IMX908은 8.39메가픽셀(3856x2176) CMOS 센서로, MIPI CSI-2 2/4레인을 통해 RAW10 및 RAW12 출력을 지원하며 I2C 주소는 SLAVE 핀으로 선택됩니다.",
+      "evidence_ids": [
+        "candidate:1c1f705a3a910f6c:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:1c1f705a3a910f6c:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:1c1f705a3a910f6c:source-summary",
+          "resolved_evidence_id": "candidate:1c1f705a3a910f6c:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "claim_id": "claim:1c1f705a3a910f6c:hal-impact",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "medium",
+      "text": "정확한 Device Tree 바인딩 정의는 HAL이 센서의 물리적 특성을 정확히 쿼리하고 RAW10/RAW12 스트림을 안정적으로 제어할 수 있는 기반을 제공합니다.",
+      "evidence_ids": [
+        "candidate:1c1f705a3a910f6c:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:1c1f705a3a910f6c:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:1c1f705a3a910f6c:source-summary",
+          "resolved_evidence_id": "candidate:1c1f705a3a910f6c:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+      "claim_id": "claim:8c84b0ed47729b93:patch-submission",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 8월 26일 Milan Zamazal이 libcamera Patchwork에 software_isp EGL 모듈의 createTexture2D()에 필터 파라미터를 추가하는 v15 패치를 제출했습니다.",
+      "evidence_ids": [
+        "candidate:8c84b0ed47729b93:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:8c84b0ed47729b93:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:8c84b0ed47729b93:source-summary",
+          "resolved_evidence_id": "candidate:8c84b0ed47729b93:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28105/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+      "claim_id": "claim:8c84b0ed47729b93:hal-impact",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "performance_latency_thermal",
+      "overclaim_risk": "medium",
+      "text": "createTexture2D()에 필터 파라미터를 추가하면 소프트웨어 ISP 및 EGL 렌더링 파이프라인에서 텍스처 필터링 옵션을 제어할 수 있어 이미지 품질 및 스케일링 제어가 가능해집니다.",
+      "evidence_ids": [
+        "candidate:8c84b0ed47729b93:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:8c84b0ed47729b93:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:8c84b0ed47729b93:source-summary",
+          "resolved_evidence_id": "candidate:8c84b0ed47729b93:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28105/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 5,
+    "strong_signal_count": 4,
+    "usable_signal_count": 1,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 5,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 5,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 5,
+      "cts_vts_its_cdd": 2
+    },
+    "actionability_level_counts": {
+      "measurable_test": 4,
+      "concrete_check": 1
+    },
+    "effective_actionability_level_counts": {
+      "measurable_test": 4,
+      "concrete_check": 1
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 4,
+      "usable_signal": 1
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+      "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "cts_vts_its_cdd"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "camera_test_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 99): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 현재 검토 중인 제안 단계이며, Android Camera HAL API나 프레임워크 계약을 직접 변경하지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+      "url": "https://patchwork.libcamera.org/patch/28095/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 51): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 libcamera 프로젝트의 변경사항이며, Android Camera HAL API나 프레임워크에 직접적인 변경을 가하지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+      "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "cts_vts_its_cdd"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "camera_test_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 87): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치 시리즈는 특정 디바이스에 한정된 드라이버 변경사항이며, Android Camera HAL의 공통 프레임워크를 변경하지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+      "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 Device Tree 바인딩 정의이며, Android HAL API나 실제 드라이버 소스 코드를 포함하지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 5,
+      "title": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+      "url": "https://patchwork.libcamera.org/patch/28105/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 하드웨어 ISP를 사용하는 표준 Android 기기 및 공통 Camera HAL 프레임워크와는 무관합니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 5,
+    "briefing_count": 3,
+    "camera_article_count": 5,
+    "legacy_regex_camera_article_count": 5,
+    "expanded_scope_article_count": 5,
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 5,
+    "android_platform_camera_adjacent_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 5,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 5,
+    "composition_mode": "NORMAL",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+        "source_candidate_hash": "e61e74efc013504330a29ab537621c3c56c691509f9f5a5b901151b7c1429fe4",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28095/",
+        "source_candidate_hash": "e06d189691a8abeb29e2c9ec4fffda87e57eac12f4534de6734e3c61f67c2b3f",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+        "source_candidate_hash": "c3d7190c17af1c4ac1273d47df50d254defd2d2a5894a8a30f0d2ee6aacaf02c",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 4,
+        "headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+        "source_candidate_hash": "1c1f705a3a910f6c88da6aef60ab78abeb38ef0b19a8be21dda2e804f7a586ab",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 5,
+        "headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28105/",
+        "source_candidate_hash": "8c84b0ed47729b930c6dbfd3ad5189806d53b1746b4bfe7db328fa1b94941793",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 5,
+      "android_platform_camera_adjacent": 0,
+      "android_multimedia_camera_output": 0,
+      "soc_platform_signal": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 5,
+      "multimedia": 0,
+      "platform": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android_platform_camera_adjacent"
+      ],
+      "multimedia": [
+        "android_multimedia_camera_output"
+      ],
+      "platform": [
+        "soc_platform_signal"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 1,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 8,
+    "article_gate_counts": {
+      "PASS": 5,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 5,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 5
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 8,
+      "total_claims": 13,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 5,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 5,
+      "strong_signal_count": 4,
+      "usable_signal_count": 1,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 5,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 0,
+      "main_articles_with_concrete_action": 5,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "driver_image_pipeline": 5,
+        "cts_vts_its_cdd": 2
+      },
+      "actionability_level_counts": {
+        "measurable_test": 4,
+        "concrete_check": 1
+      },
+      "effective_actionability_level_counts": {
+        "measurable_test": 4,
+        "concrete_check": 1
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 4,
+        "usable_signal": 1
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+        "url": "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "cts_vts_its_cdd"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "camera_test_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 99): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치는 현재 검토 중인 제안 단계이며, Android Camera HAL API나 프레임워크 계약을 직접 변경하지 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+        "url": "https://patchwork.libcamera.org/patch/28095/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 51): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치는 libcamera 프로젝트의 변경사항이며, Android Camera HAL API나 프레임워크에 직접적인 변경을 가하지 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+        "url": "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "cts_vts_its_cdd"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "camera_test_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 87): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치 시리즈는 특정 디바이스에 한정된 드라이버 변경사항이며, Android Camera HAL의 공통 프레임워크를 변경하지 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 4,
+        "title": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+        "url": "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치는 Device Tree 바인딩 정의이며, Android HAL API나 실제 드라이버 소스 코드를 포함하지 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 5,
+        "title": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+        "url": "https://patchwork.libcamera.org/patch/28105/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치는 하드웨어 ISP를 사용하는 표준 Android 기기 및 공통 Camera HAL 프레임워크와는 무관합니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "image-fallback",
+        "count": 5
+      },
+      {
+        "category": "editorial-story",
+        "count": 3
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

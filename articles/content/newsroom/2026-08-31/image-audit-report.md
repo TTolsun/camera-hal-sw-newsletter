@@ -1,0 +1,40 @@
+# 이미지 감사 리포트 - 2026-08-31
+
+## 요약
+
+- 상태: 정상 또는 조치 없음
+- 기사 수 (`article_count`): 5
+- 렌더된 이미지 수 (`rendered_image_count`): 5
+- Markdown 이미지 수 (`markdown_image_count`): 5
+- 임시 시각 요소 수 (`fallback_visual_count`): 0
+- 이미지 후보 수 (`image_candidates_count`): 15
+- 검증 통과 이미지 후보 수 (`valid_image_candidate_count`): 0
+- 선택된 대표 이미지 수 (`selected_image_count`): 0
+- 출처 근거 부족 대표 이미지 수 (`selected_image_without_valid_candidate_count`): 0
+- 후보 목록 불일치 대표 이미지 수 (`selected_image_not_in_candidates_count`): 0
+- 복원 가능 기사 수 (`repairable_article_count`): 0
+- 이번 repair 실행 복원 수 (`repaired_in_this_run_count`): 0
+- imageSelection 선택 상태 수 (`selected_by_image_selection_count`): 0
+- publish 차단 이슈 수 (`publish_blocking_issue_count`): 0
+
+## 기사별 상태
+
+| # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |
+| ---: | --- | --- | ---: | ---: | --- |
+| 1 | AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
+| 2 | libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
+| 3 | Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
+| 4 | Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
+| 5 | libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
+
+## 복원 가능 기사
+
+- 없음
+
+## 대표 이미지 출처 근거 재검토
+
+- 없음
+
+## 렌더 일관성
+
+- 불일치 없음
