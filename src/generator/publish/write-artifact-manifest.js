@@ -307,11 +307,12 @@ function buildManifest(snapshotDir, date) {
     });
 
   // files[]는 스냅샷에 실제로 있는 파일의 경로 목록이다. 이 배열의 size·sha256을 읽는 소비자는
-  // 없었고, 여기 섞이는 두 종류 어느 쪽도 사본을 둘 이유가 없다. 커밋되는 항목(articles/**,
-  // state/**)은 Git tree가 바이트 정본이라 매니페스트 사본이 곧 어긋나는 두 번째 정본이 된다.
-  // 커밋되지 않는 항목(.tmp/**, cache/news-summary/**)은 파일 자체가 이 매니페스트와 같은
-  // newsroom-final-debug-<run_id> Actions artifact 안에 함께 들어가므로 해시 사본이 따로 가리킬
-  // 정본이 없다. 그래서 date-scoped 매니페스트가 이미 따르는 계약(#951)에 맞춰 path만 남긴다(#1018).
+  // 없었고, 여기 섞이는 두 종류 어느 쪽도 사본을 둘 이유가 없다. 커밋되는 항목은 Git tree가
+  // 바이트 정본이라 매니페스트 사본이 곧 어긋나는 두 번째 정본이 된다. 커밋되지 않는 항목은
+  // 파일 자체가 이 매니페스트와 같은 newsroom-final-debug-<run_id> Actions artifact 안에 함께
+  // 들어가므로 해시 사본이 따로 가리킬 정본이 없다. 어느 쪽인지는 경로 접두가 아니라 보존
+  // 등급이 가른다(retentionCommitAllowlist) — heavy 등급은 articles/** 아래에 있어도 커밋되지
+  // 않으므로 두 번째 갈래다. 그래서 date-scoped 매니페스트가 이미 따르는 계약(#951)에 맞춰 path만 남긴다(#1018).
   const files = snapshotRelPaths.map(relPath => ({ path: relPath }));
 
   // 커밋되는 파일의 바이트 정본은 Git tree이므로 경로와 보존 등급만 기록한다. 이 스냅샷
