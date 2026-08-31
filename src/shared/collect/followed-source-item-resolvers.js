@@ -94,12 +94,28 @@ async function resolveFollowedSourceItems(source, { indexItems = [], text = '', 
 }
 
 /**
- * followed-resolver가 등록된 소스는 인덱스 페이지에 직접 후보가 없어 리졸버가 상세를 따라간다.
- * 그 큐레이션 추출이 비었다는 건 "이번 window에 신호 없음"이지, 인덱스 나비링크를 제너릭
- * 스크레이프하라는 뜻이 아니다. 그래서 이런 소스는 제너릭 parseRss/parseHtmlPage 폴백을 막는다.
+ * 제너릭 parseRss/parseHtmlPage 폴백을 막아야 하는 소스인지 판정한다. 두 부류가 있다.
+ *
+ * 1. followed-resolver가 등록된 소스. 인덱스 페이지에 직접 후보가 없어 리졸버가 상세를 따라간다.
+ *    그 큐레이션 추출이 비었다는 건 "이번 window에 신호 없음"이지, 인덱스 나비링크를 제너릭
+ *    스크레이프하라는 뜻이 아니다.
+ * 2. 설정상 참고 자료인 소스(`sourceRole=official_documentation_reference` 또는
+ *    `mainArticlePolicy=reference_only`). 소비자 쪽은 이미 이 둘을 main article에서 하드
+ *    제외한다 — collect-news-candidates.js의 `referenceIndex`가 `main_eligible=false`,
+ *    `reference_only=true`로 닫고, source-quality-classifier.js도 `reference_only` blocker를
+ *    붙인다. 그런데 생산자 쪽에서는 제너릭 폴백이 이런 소스의 인덱스 페이지 제목을 매주 후보
+ *    한 건으로 만들어 낸다. 그 후보는 날짜가 없어 늘 `finalSelectionEligibility=exclude`로
+ *    끝나고, 대신 진단(`parser_extraction_failure`, `KEEP_AND_FIX_PARSER`)을 상시로 켜서 진짜
+ *    파서 고장 신호를 묻는다. 그래서 생산자를 소비자 계약에 맞춘다(#880).
+ *
+ * 소스별 파서(parseSourceSpecificItems)는 이 판정보다 앞에서 돌기 때문에, 참고 자료 소스가
+ * 나중에 dated 항목을 뽑게 되면 그 후보는 그대로 살아남는다. 여기서 막는 건 폴백뿐이다.
  */
 function shouldSuppressGenericFallback(source) {
-  return followedSourceResolverIds().includes(source && source.id);
+  if (!source) return false;
+  if (followedSourceResolverIds().includes(source.id)) return true;
+  return source.sourceRole === 'official_documentation_reference' ||
+    source.mainArticlePolicy === 'reference_only';
 }
 
 module.exports = {

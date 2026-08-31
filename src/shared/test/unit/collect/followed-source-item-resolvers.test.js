@@ -117,15 +117,74 @@ test('routes aosp-release-camera-changes to the release resolver with text (buil
   assert.deepEqual(items, [], 'no camera commits in the stubbed delta');
 });
 
-test('shouldSuppressGenericFallback is true only for followed-resolver sources', () => {
+test('shouldSuppressGenericFallback is true for followed-resolver sources and for reference-only sources', () => {
   assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-release-announcements' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'android-security-bulletin' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'raspberrypi-libcamera-releases' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'patchwork-libcamera-patches' }), true);
-  assert.equal(shouldSuppressGenericFallback({ id: 'lore-linux-media-list' }), false);
-  assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-blog' }), false);
   assert.equal(shouldSuppressGenericFallback({ id: 'claude-blog' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'anthropic-news' }), true);
+
+  // 설정상 참고 자료인 소스. 분류기가 이 둘을 main article에서 하드 제외하므로
+  // (collect-news-candidates.js의 referenceIndex, source-quality-classifier.js의
+  // reference_only blocker) 제너릭 폴백이 만드는 날짜 없는 페이지 제목 후보는 쓸 곳이 없다.
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'aosp-camera-documentation',
+    sourceRole: 'official_documentation_reference',
+    mainArticlePolicy: 'reference_only'
+  }), true);
+  // 두 필드는 각각 단독으로도 "참고 자료"라는 뜻이다.
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'documentation-role-only',
+    sourceRole: 'official_documentation_reference',
+    mainArticlePolicy: 'allowed'
+  }), true);
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'reference-policy-only',
+    sourceRole: 'official_release_source',
+    mainArticlePolicy: 'reference_only'
+  }), true);
+
+  // 참고 자료가 아닌 소스는 그대로 제너릭 폴백을 쓴다.
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'lore-linux-media-list',
+    sourceRole: 'project_mailing_list_source',
+    mainArticlePolicy: 'allowed'
+  }), false);
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'libcamera-blog',
+    sourceRole: 'official_release_source',
+    mainArticlePolicy: 'allowed'
+  }), false);
+  assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-blog' }), false);
+  assert.equal(shouldSuppressGenericFallback(null), false);
+});
+
+test('every enabled reference-only registry entry suppresses the generic page-title fallback', () => {
+  const registry = require('../../../data/news-sources.json');
+  const referenceSources = registry.sources.filter(source =>
+    source.enabled !== false &&
+    (source.sourceRole === 'official_documentation_reference' || source.mainArticlePolicy === 'reference_only'));
+
+  assert.ok(referenceSources.length > 0, 'registry has enabled reference-only sources');
+  for (const source of referenceSources) {
+    assert.equal(
+      shouldSuppressGenericFallback(source),
+      true,
+      `${source.id} is a reference source and must not fall back to the generic page scrape`
+    );
+  }
+
+  // 이슈 #880이 "매주 날짜 없는 페이지 제목만 만든다"고 지목한 소스가 실제로 이 집합에 있어야 한다.
+  const ids = referenceSources.map(source => source.id);
+  for (const id of [
+    'aosp-camera-documentation',
+    'android-compatibility-definition-document',
+    'android-developer-newsletter',
+    'aosp-whats-new-release-notes'
+  ]) {
+    assert.ok(ids.includes(id), `${id} must be registered as a reference source`);
+  }
 });
 
 test('routes android-security-bulletin to the CVE resolver with indexItems as the first arg', async () => {

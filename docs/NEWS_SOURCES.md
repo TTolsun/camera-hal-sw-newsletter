@@ -38,14 +38,14 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - MediaCodec Reference (`documentation-watch`, `reference_only`): https://developer.android.com/reference/android/media/MediaCodec
 - AOSP Camera Documentation (`documentation-watch`, `official_documentation_reference`): https://source.android.com/docs/core/camera
 - AOSP Release Source Drop - camera changes (`release-note-watch`): https://source.android.com/docs/setup/reference/build-numbers
-- AOSP What's New / Release Notes (`release-note-watch`): https://source.android.com/docs/whatsnew
+- AOSP What's New / Release Notes (`release-note-watch`, `reference_only`): https://source.android.com/docs/whatsnew
 - AOSP Site Updates (`release-note-watch`): https://source.android.com/docs/whatsnew/site-updates
 - Android Compatibility Definition Document (`documentation-watch`): https://source.android.com/docs/compatibility/cdd
 - Android Security Bulletin (`release-note-watch`): https://source.android.com/docs/security/bulletin
 - Samsung Mobile Security Updates (`release-note-watch`): https://security.samsungmobile.com/securityUpdate.smsb
 - Qualcomm Security Bulletins (`release-note-watch`): https://docs.qualcomm.com/product/publicresources/securitybulletin
 - MediaTek Security Bulletin (`release-note-watch`): https://www.mediatek.com/product-security-bulletin
-- Android Developer Newsletter (`documentation-watch`): https://developer.android.com/newsletter
+- Android Developer Newsletter (`documentation-watch`, `reference_only`): https://developer.android.com/newsletter
 
 공개 AOSP는 2025년 3월 이후 `main` 브랜치로 개발이 흘러들지 않고 릴리스 태그(`android-N.M.P_rK`)로 몇 달에 한 번 통째로 공개됩니다. AOSP Release Source Drop 출처는 build-numbers 표에서 릴리스 쌍을 고르고, 그 차이(`이전태그..새태그`)에서 camera 경로를 건드린 커밋만 모아 저장소별로 후보 1건을 만듭니다. 감시 저장소는 `platform/hardware/interfaces`(Camera HAL AIDL), `platform/frameworks/av`(camera framework/cameraserver), `platform/hardware/google/camera`(Google Camera HAL)입니다.
 
@@ -56,6 +56,10 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 수집 창은 파이프라인이 넘겨준 `now`/`lookbackDays`에서 파생합니다. 릴리스가 창 밖이면 gitiles 조회를 아예 하지 않아, 드롭이 없는 대부분의 주에는 요청 한 번으로 끝납니다. 델타가 페이지 상한(6 × 100 커밋)을 넘어 다 읽지 못하면 후보 제목과 요약이 건수를 `at least N` 하한으로 말합니다.
 
 Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/behavior, camera output path 연결이 모두 있을 때만 `android_multimedia_camera_output` 후보로 봅니다. MediaCodec, MediaRecorder, MediaStore, Photo Picker, supported formats 문서는 reference/background source이며 단독 기사 후보가 아닙니다.
+
+reference source(`sourceRole=official_documentation_reference` 또는 `mainArticlePolicy=reference_only`)는 제너릭 페이지 스크레이프 폴백을 쓰지 않습니다. 이런 페이지는 날짜가 없어 후보가 늘 `finalSelectionEligibility=exclude`로 끝나면서 소스 진단만 상시로 켰습니다. 소스 전용 파서가 dated 항목을 뽑으면 그 후보는 그대로 살아납니다.
+
+AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트로 가는 랜딩 페이지라 자체 dated 행이 없습니다. 날짜가 붙은 What's New 변경(예: "Published initial release notes on Android 17 release notes")은 AOSP Site Updates 표에서 들어옵니다. Android Developer Newsletter(`https://developer.android.com/newsletter`)도 같은 이유로 reference source입니다.
 
 ### 후보 / 교차 확인 출처
 

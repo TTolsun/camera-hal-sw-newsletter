@@ -612,13 +612,15 @@
         "Camera HAL",
         "Camera ITS"
       ],
-      "sourceRole": "official_release_source",
-      "sourceUrlQualityHint": "official_site_update_row",
-      "mainArticlePolicy": "allowed",
+      "sourceRole": "official_documentation_reference",
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
       "requiresCrossCheckDefault": false,
-      "evidenceGranularityHint": "dated_site_update_row",
+      "evidenceGranularityHint": "reference_page",
       "sourceQualityNotes": [
-        "official source"
+        "official source",
+        "reference/background source only",
+        "landing page with no dated rows; dated What's New changes arrive through aosp-site-updates"
       ]
     },
     {
@@ -1418,13 +1420,15 @@
         "newsletter",
         "Google"
       ],
-      "sourceRole": "official_release_source",
-      "sourceUrlQualityHint": "official_dated_release",
-      "mainArticlePolicy": "allowed",
+      "sourceRole": "official_documentation_reference",
+      "sourceUrlQualityHint": "official_documentation_reference",
+      "mainArticlePolicy": "reference_only",
       "requiresCrossCheckDefault": false,
-      "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "evidenceGranularityHint": "reference_page",
       "sourceQualityNotes": [
-        "official source"
+        "official source",
+        "reference/background source only",
+        "landing page with no dated issue rows"
       ]
     },
     {
