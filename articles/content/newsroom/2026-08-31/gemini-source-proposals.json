@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-08-31",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-sw-20260831-001",
+      "topic_gap": "Camera HAL improvements related to RAW Bayer capture and sensor support.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Camera HAL",
+        "RAW Bayer",
+        "sensor driver",
+        "linux-media",
+        "kernel patch"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/749f33adb08c4b311aec241c0bdcc455fcdc0a3c.1787933456.git.mauriziocasciano7@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/",
+        "https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com/",
+        "https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com/",
+        "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+        "https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Camera HAL driver updates",
+        "RAW Bayer capture support",
+        "New sensor support (e.g., IMX908, OV2740, OV32C4)",
+        "Lenovo Yoga Book YB1-X91 camera support"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260831-002",
+      "topic_gap": "Updates and new features in the libcamera framework, particularly related to image processing and sensor handling.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "image processing",
+        "CFA layout",
+        "debayer",
+        "patchwork"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28105/",
+        "https://patchwork.libcamera.org/patch/28095/",
+        "https://patchwork.libcamera.org/patch/28150/",
+        "https://patchwork.libcamera.org/patch/28146/"
+      ],
+      "expected_evidence": [
+        "libcamera framework updates",
+        "Image processing enhancements (e.g., EGL, debayering)",
+        "Quad-Bayer CFA layout support",
+        "Stride handling for unpacked Bayer data"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260831-003",
+      "topic_gap": "Recent releases and updates for the Raspberry Pi libcamera implementation.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Raspberry Pi",
+        "libcamera",
+        "release",
+        "camera module"
+      ],
+      "candidate_urls": [
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260807"
+      ],
+      "expected_evidence": [
+        "Raspberry Pi libcamera release notes",
+        "Specific version updates and bug fixes",
+        "Camera module compatibility"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260831-004",
+      "topic_gap": "CameraX release notes and updates, focusing on new features or significant changes.",
+      "source_family": "camera-api",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX",
+        "release notes",
+        "Jetpack",
+        "androidx.camera"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+        "https://developer.android.com/jetpack/androidx/releases/camera"
+      ],
+      "expected_evidence": [
+        "CameraX release notes",
+        "New API features",
+        "Bug fixes and improvements",
+        "Compatibility updates"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-sw-20260831-005",
+      "topic_gap": "Android media framework updates, specifically Media3, that could impact camera output or playback.",
+      "source_family": "android-media",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Media3",
+        "Android media",
+        "release notes",
+        "playback",
+        "A/V sync"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html"
+      ],
+      "expected_evidence": [
+        "Media3 release notes",
+        "New features in Media3",
+        "Impact on camera-generated media playback",
+        "A/V sync improvements"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
