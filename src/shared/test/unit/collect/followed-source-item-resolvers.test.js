@@ -8,6 +8,7 @@ const {
   shouldSuppressGenericFallback
 } = require('../../../collect/followed-source-item-resolvers');
 const { createBoundedFetchClient } = require('../../../collect/bounded-fetch-client');
+const { normalizeEnabledSources } = require('../../../collect/news-source-section-resolver');
 const { readTextFixture } = require('../../helpers/fixture-loader');
 
 // 보안 게시판 리졸버는 indexItems(첫 인자)에서 최신 게시판 URL을 골라 fetch하고,
@@ -161,18 +162,39 @@ test('shouldSuppressGenericFallback is true for followed-resolver sources and fo
 });
 
 test('every enabled reference-only registry entry suppresses the generic page-title fallback', () => {
+  // collector가 술어에 넘기는 것은 raw JSON 항목이 아니라 normalizeEnabledSources를 지난
+  // 런타임 source 객체다(news-source-section-resolver.js가 sourceRole/mainArticlePolicy를
+  // 여기 싣는다). 그 정규화 홉까지 덮어야 registry-술어 배선이 실제로 검증된다.
   const registry = require('../../../data/news-sources.json');
-  const referenceSources = registry.sources.filter(source =>
-    source.enabled !== false &&
-    (source.sourceRole === 'official_documentation_reference' || source.mainArticlePolicy === 'reference_only'));
+  const { sources } = normalizeEnabledSources(registry);
+  const referenceSources = sources.filter(source =>
+    source.sourceRole === 'official_documentation_reference' || source.mainArticlePolicy === 'reference_only');
 
-  assert.ok(referenceSources.length > 0, 'registry has enabled reference-only sources');
+  assert.ok(referenceSources.length > 0, 'registry has enabled reference sources');
   for (const source of referenceSources) {
     assert.equal(
       shouldSuppressGenericFallback(source),
       true,
       `${source.id} is a reference source and must not fall back to the generic page scrape`
     );
+
+    // 두 표시는 서로의 보험이다. 한쪽이 드리프트해도 억제는 유지돼야 하므로, 각 항목이 실제로
+    // 가진 표시 하나만 남겨서도 확인한다. 술어에서 어느 한 절이 빠지면 여기서 잡힌다 —
+    // 위 한 줄만으로는 모든 registry 항목이 두 필드를 다 갖고 있어 절 삭제를 놓친다.
+    if (source.sourceRole === 'official_documentation_reference') {
+      assert.equal(
+        shouldSuppressGenericFallback({ id: source.id, sourceRole: source.sourceRole }),
+        true,
+        `${source.id} must stay suppressed on sourceRole alone`
+      );
+    }
+    if (source.mainArticlePolicy === 'reference_only') {
+      assert.equal(
+        shouldSuppressGenericFallback({ id: source.id, mainArticlePolicy: source.mainArticlePolicy }),
+        true,
+        `${source.id} must stay suppressed on mainArticlePolicy alone`
+      );
+    }
   }
 
   // 이슈 #880이 "매주 날짜 없는 페이지 제목만 만든다"고 지목한 소스가 실제로 이 집합에 있어야 한다.

@@ -36,11 +36,11 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - Photo Picker Documentation (`documentation-watch`, `reference_only`): https://developer.android.com/training/data-storage/shared/photo-picker
 - MediaStore Reference (`documentation-watch`, `reference_only`): https://developer.android.com/reference/android/provider/MediaStore
 - MediaCodec Reference (`documentation-watch`, `reference_only`): https://developer.android.com/reference/android/media/MediaCodec
-- AOSP Camera Documentation (`documentation-watch`, `official_documentation_reference`): https://source.android.com/docs/core/camera
+- AOSP Camera Documentation (`documentation-watch`, `reference_only`): https://source.android.com/docs/core/camera
 - AOSP Release Source Drop - camera changes (`release-note-watch`): https://source.android.com/docs/setup/reference/build-numbers
 - AOSP What's New / Release Notes (`release-note-watch`, `reference_only`): https://source.android.com/docs/whatsnew
 - AOSP Site Updates (`release-note-watch`): https://source.android.com/docs/whatsnew/site-updates
-- Android Compatibility Definition Document (`documentation-watch`): https://source.android.com/docs/compatibility/cdd
+- Android Compatibility Definition Document (`documentation-watch`, `reference_only`): https://source.android.com/docs/compatibility/cdd
 - Android Security Bulletin (`release-note-watch`): https://source.android.com/docs/security/bulletin
 - Samsung Mobile Security Updates (`release-note-watch`): https://security.samsungmobile.com/securityUpdate.smsb
 - Qualcomm Security Bulletins (`release-note-watch`): https://docs.qualcomm.com/product/publicresources/securitybulletin
@@ -57,7 +57,7 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 
 Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/behavior, camera output path 연결이 모두 있을 때만 `android_multimedia_camera_output` 후보로 봅니다. MediaCodec, MediaRecorder, MediaStore, Photo Picker, supported formats 문서는 reference/background source이며 단독 기사 후보가 아닙니다.
 
-reference source(`sourceRole=official_documentation_reference` 또는 `mainArticlePolicy=reference_only`)는 제너릭 페이지 스크레이프 폴백을 쓰지 않습니다. 이런 페이지는 날짜가 없어 후보가 늘 `finalSelectionEligibility=exclude`로 끝나면서 소스 진단만 상시로 켰습니다. 소스 전용 파서가 dated 항목을 뽑으면 그 후보는 그대로 살아납니다.
+reference source(`sourceRole=official_documentation_reference` 또는 `mainArticlePolicy=reference_only`)는 제너릭 페이지 스크레이프 폴백을 쓰지 않습니다. 이런 페이지는 날짜가 없어 후보가 늘 `finalSelectionEligibility=exclude`로 끝나면서 소스 진단만 상시로 켰습니다. 소스 전용 파서를 따로 두더라도 후보가 살아나지는 않습니다. `sourceRole=official_documentation_reference`인 소스는 collector가 파서 결과와 무관하게 `finalSelectionEligibility=exclude`로 닫습니다. 그 소스를 다시 기사 후보로 쓰려면 registry의 `sourceRole`부터 되돌려야 합니다.
 
 AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트로 가는 랜딩 페이지라 자체 dated 행이 없습니다. 날짜가 붙은 What's New 변경(예: "Published initial release notes on Android 17 release notes")은 AOSP Site Updates 표에서 들어옵니다. Android Developer Newsletter(`https://developer.android.com/newsletter`)도 같은 이유로 reference source입니다.
 
@@ -71,7 +71,7 @@ AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트�
 
 - libcamera Blog: https://libcamera.org/blog/
 - libcamera Release Announcements: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
-- libcamera Documentation (`documentation-watch`): https://libcamera.org/introduction.html
+- libcamera Documentation (`documentation-watch`, `reference_only`): https://libcamera.org/introduction.html
 - Collabora Blog: https://www.collabora.com/news-and-blog/
 
 ### 후보 / 교차 확인 출처
