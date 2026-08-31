@@ -573,24 +573,32 @@ function applyNotYetEligibleToPayload({ root, payload, stage1Payload, mergeStage
 // 빠지면 다음 호로 넘어가지 못하고 degraded 실행에서 그대로 유실된다.
 // 정상 경로와 같은 헬퍼(splitMergeStageNotYetEligible·applyNotYetEligibleToPayload)를 쓰므로
 // 세 경로의 판정이 갈라질 수 없다.
-function buildDegradedMergeResult({ root, date, stage1Payload, manualCandidates, seedExpansion }) {
-  const seedUsed = seedExpansion?.stats?.seed_used === true;
+function buildDegradedMergeResult({ root, date, stage1Payload, seedExpansion }) {
+  // seed 확장이 없으면 병합 단계가 만든 신규 후보 자체가 없다. seed_used는 collection intent의
+  // seed_urls 유무와 같은 값이고(collection-intent.js의 seedUrlCount), 그게 0이면 seed 확장을
+  // 아예 호출하지 않아 seedExpansion도 null이다. 이때 disabled pass-through의 계약은 stage 1
+  // artifact를 손대지 않고 그대로 넘기는 것이므로, 판정할 것이 없는데 필드를 주입하면 안 된다.
+  if (seedExpansion?.stats?.seed_used !== true) {
+    return {
+      seedUsed: false,
+      mergedCandidates: candidateItems(stage1Payload),
+      mergedPayload: stage1Payload
+    };
+  }
   const mergeStageCoverage = isPlainObject(stage1Payload.coverage) ? stage1Payload.coverage : null;
   const mergeStageSplit = splitMergeStageNotYetEligible(
-    seedExpansion ? seedExpansion.mergedCandidates : manualCandidates,
+    seedExpansion.mergedCandidates,
     mergeStageCoverage
   );
   const mergedCandidates = mergeStageSplit.eligible;
-  const mergedPayload = seedUsed
-    ? candidatePayload(date, mergedCandidates, stage1Payload)
-    : stage1Payload;
+  const mergedPayload = candidatePayload(date, mergedCandidates, stage1Payload);
   applyNotYetEligibleToPayload({
     root,
     payload: mergedPayload,
     stage1Payload,
     mergeStageNotYetEligible: mergeStageSplit.notYetEligible
   });
-  return { seedUsed, mergedCandidates, mergedPayload };
+  return { seedUsed: true, mergedCandidates, mergedPayload };
 }
 
 function boolTrue(value) {
@@ -1184,7 +1192,6 @@ function writeSeedOnlySourceDiscoveryResult({
     root,
     date,
     stage1Payload: manualPayload,
-    manualCandidates,
     seedExpansion
   });
   const mergeMode = seedUsed ? 'seed_evidence_expansion' : 'disabled_pass_through';
@@ -1437,8 +1444,6 @@ async function runEnabled({
   const mergedPayload = candidatePayload(date, evidence.annotatedCandidates, manualPayload);
   // Task 10: stage 1이 넘겨준 not_yet_eligible과 이번 병합 단계에서 새로 걸러낸 후보를 합쳐
   // 확정한다. 판정 본문은 degraded 경로와 공유하는 applyNotYetEligibleToPayload에 있다.
-  // stage 1이 이미 이번 run에서 overflow 파일을 썼어도 이 합산 전체 목록(stage 1 목록 ∪ 병합
-  // 단계 신규분)이 항상 상위 집합이므로 덮어써도 정보 유실이 없다.
   applyNotYetEligibleToPayload({
     root,
     payload: mergedPayload,
@@ -1594,7 +1599,6 @@ async function run({
     root,
     date,
     stage1Payload: payload,
-    manualCandidates,
     seedExpansion
   });
   const mergeMode = seedUsed ? 'seed_evidence_expansion' : 'disabled_pass_through';
