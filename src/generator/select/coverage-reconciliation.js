@@ -2,9 +2,9 @@
 
 // #724: LLM coverage 권한 wiring — 결정론 재조정.
 //
-// editorial-plan LLM은 후보별 coverage_decision(main_article/reference_only/exclude)과
-// impact_level을 "제안"만 한다. 이 순수 함수가 그 제안을 받아 결정론 불변식을 강제해 최종
-// main 집합을 만든다:
+// editorial-plan LLM은 후보별 coverage_decision(main_article/reference_only/exclude)을
+// "제안"만 한다. 이 순수 함수가 그 제안을 받아 결정론 불변식을 강제해 최종 main 집합을
+// 만든다:
 //   1. 제안 tier 매핑 (미채점 후보는 결정론 tier 유지)
 //   2. 승급 자격 가드 — main은 결정론적으로 main-eligible한 후보만
 //   3. cap clamp — mainArticleCount.max / supportingMainMaxAllowed / forbidden
@@ -18,7 +18,6 @@ const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { candidateGroupKey } = require('../../shared/common/article-groups');
 
 const COVERAGE_MAIN = 'main_article';
-const IMPACT_RANK = { high: 3, medium: 2, low: 1 };
 
 // #909: reason_code는 기계가 읽는 값이라 LLM 원문을 그대로 이어붙이면 안 된다.
 // coverage_decision은 스키마상 자유 문자열이고(enum 없음) 프롬프트 문장만이 값을 제한하므로,
@@ -71,8 +70,7 @@ function buildCoverageLookup(editorialPlanReport) {
   for (const plan of ensureArray(editorialPlanReport?.editorial_plans)) {
     const entry = {
       // trim 없이 두면 " main_article"이 COVERAGE_MAIN과 안 맞아 main 제안이 조용히 강등된다.
-      coverage_decision: String(plan?.coverage_decision || '').trim(),
-      impact_level: String(plan?.impact_level || '').trim()
+      coverage_decision: String(plan?.coverage_decision || '').trim()
     };
     const url = String(plan?.url || '').trim();
     const hash = String(plan?.source_candidate_hash || '').trim();
@@ -92,23 +90,22 @@ function coverageFor(lookup, candidate) {
   return null;
 }
 
-function impactRank(entry) {
-  return IMPACT_RANK[String(entry?.impact_level || '').toLowerCase()] || 0;
+// cap clamp 순서: deterministic_score desc 단독.
+//
+// #1001: 예전에는 LLM impact_level을 1차 정렬 키로 두고 점수를 tiebreak로 썼지만, 그 순위표는
+// high/medium/low 어휘였고 편집 계획 프롬프트는 Direct Impact / Design Reference / Trend Watch /
+// Exclude를 지시한다. 겹치는 값이 없어 순위는 프로덕션에서 언제나 0이었고, 실제 clamp는 처음부터
+// 점수 단독 정렬이었다. 어휘를 맞추면 그 순간부터 LLM 판단이 cap clamp 결과를 좌우하게 되므로
+// (결정론/LLM 권한 경계를 넓히는 정책 변경이다) 죽은 정렬 키를 지워 현재 동작을 그대로 적는다.
+function orderForClamp(items) {
+  return [...items].sort((a, b) =>
+    Number(b.deterministic_score || 0) - Number(a.deterministic_score || 0));
 }
 
-// cap clamp 순서: LLM impact desc → deterministic_score desc(재현가능 tiebreak).
-function orderForClamp(items, entryFor) {
-  return [...items].sort((a, b) => {
-    const ir = impactRank(entryFor(b)) - impactRank(entryFor(a));
-    if (ir !== 0) return ir;
-    return Number(b.deterministic_score || 0) - Number(a.deterministic_score || 0);
-  });
-}
-
-function applyCaps(proposedMain, entryFor) {
-  // impact→score 순서는 cap 초과 시 "무엇을 떨굴지"만 정한다. emit 순서는 결정론 입력
+function applyCaps(proposedMain) {
+  // deterministic_score 순서는 cap 초과 시 "무엇을 떨굴지"만 정한다. emit 순서는 결정론 입력
   // 순서(proposedMain, editorial_priority 우선)를 보존해야 리드/본문 순서가 뒤집히지 않는다.
-  const ordered = orderForClamp(proposedMain, entryFor);
+  const ordered = orderForClamp(proposedMain);
   const supporting = supportingBuckets();
   const supportingMax = Number(articlePolicy.publishReadyComposition?.supportingMainMaxAllowed ?? 1);
   const mainMax = Number(articlePolicy.mainArticleCount?.max ?? 5);
@@ -154,7 +151,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
 
   // 3. cap clamp.
   const proposedMainKeys = new Set(proposedMain.map(candidateKey));
-  const clamped = applyCaps(proposedMain, entryFor);
+  const clamped = applyCaps(proposedMain);
   const clampedKeys = new Set(clamped.map(candidateKey));
 
   // 4. 발행가능 floor backfill. deterministicSelected는 이미 forbidden-free이고, 현재
