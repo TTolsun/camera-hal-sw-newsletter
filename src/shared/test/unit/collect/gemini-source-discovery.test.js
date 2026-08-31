@@ -846,6 +846,52 @@ test('seed-only credential-failure path moves future-dated seed candidates to no
   assertSeedCandidateCarriedForward(root);
 });
 
+// stage 1이 이미 상한을 넘겨 항목을 잘라낸 뒤라면, 병합 단계 합산이 상한 이내로 떨어져도
+// 그 유실 사실은 사라지지 않는다. overflow는 단조 유지되어야 한다.
+test('merge stage keeps a stage 1 not_yet_eligible overflow flag even when the combined list fits the cap', async () => {
+  const root = tempRoot();
+  const payload = degradedCoveragePayload();
+  payload.not_yet_eligible = Array.from({ length: 5 }, (unused, index) => ({
+    title: `Stage 1 not-yet-eligible ${index}`,
+    url: `https://developer.android.com/stage1-notyet-${index}`,
+    publishedAt: '2099-02-01',
+    published_date: '2099-02-01'
+  }));
+  payload.not_yet_eligible_overflow = true;
+  payload.carry_forward_status = 'overflow';
+  writeJson(collectionIntentPath(root, DEGRADED_COVERAGE_DATE), {
+    schema_version: 1,
+    newsletter_date: DEGRADED_COVERAGE_DATE,
+    seed_urls: [{
+      seed_id: 'seed-camerax',
+      url: DEGRADED_SEED_URL,
+      expected_topic: 'CameraX release notes'
+    }],
+    keyword_hints: []
+  });
+  writeManualCandidateArtifacts({ root, date: DEGRADED_COVERAGE_DATE, payload, sourceCount: 1 });
+
+  await runSourceDiscoveryBoundary({
+    root,
+    date: DEGRADED_COVERAGE_DATE,
+    env: {
+      NEWSLETTER_DATE: DEGRADED_COVERAGE_DATE,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true'
+    },
+    lookupImpl: async () => [{ address: '93.184.216.34', family: 4 }],
+    fetchImpl: fetchFutureDatedSeedPage
+  });
+
+  const merged = readJson(mergedCandidatesPath(root, DEGRADED_COVERAGE_DATE));
+  // 합산 6건은 상한(60) 안이라 이번 cap 자체는 overflow가 아니다.
+  assert.equal(merged.not_yet_eligible.length, 6);
+  assert.equal(
+    merged.not_yet_eligible_overflow,
+    true,
+    'stage 1이 이미 잘라낸 사실을 병합 단계가 false로 덮으면 안 된다'
+  );
+});
+
 test('disabled pass-through path moves future-dated seed candidates to not_yet_eligible', async () => {
   const root = prepareDegradedRoot();
 

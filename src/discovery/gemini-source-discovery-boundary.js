@@ -551,7 +551,11 @@ function applyNotYetEligibleToPayload({ root, payload, stage1Payload, mergeStage
   );
   const notYetEligibleCap = capNotYetEligible(notYetEligibleMerged);
   payload.not_yet_eligible = notYetEligibleCap.committed;
-  payload.not_yet_eligible_overflow = notYetEligibleCap.overflow;
+  // overflow는 단조 유지한다 — stage1Payload.not_yet_eligible은 이미 상한에 잘린 committed
+  // 목록이라, 병합 단계 합산이 상한 이내면 cap이 false를 돌려주지만 stage 1이 버린 항목이
+  // 되살아난 것은 아니다. 그대로 덮으면 유실 사실이 조용히 지워진다.
+  payload.not_yet_eligible_overflow =
+    notYetEligibleCap.overflow || stage1Payload.not_yet_eligible_overflow === true;
   // 병합 단계 자체가 상한을 새로 넘겼다면 stage 1과 같은 우선순위 규칙(overflow가 항상 최우선)
   // 으로 승격한다. 이 줄이 없으면 orchestrator 게이트(status 필드만 봄)가 병합 단계 overflow를
   // 못 보고 통과시킨다. overflow가 false면 stage 1이 정한 status를 그대로 둔다.
