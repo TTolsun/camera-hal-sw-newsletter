@@ -22,8 +22,11 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 // 수집 창을 못 받았을 때의 기본값(runtime-config의 lookbackDays 기본과 같다).
 const DEFAULT_LOOKBACK_DAYS = 35;
 
-// lookback 창 하나에 들어올 수 있는 patch 수의 실측 상한. 2026-01-20~08-31의 patch 2000건을
-// 받아 보면 가장 바쁜 35일 창이 603건(2026-08-24 종료)이고 가장 바쁜 한 주가 171건이다.
+// lookback 창 하나에 들어올 수 있는 patch 수의 실측 상한. 2024-09-24~2026-08-31의 patch
+// 6000건(23.2개월)을 받아 35일 롤링으로 세면 최댓값이 603건(2026-08-24T09:14:06 종료)이고,
+// 가장 바쁜 한 주가 2026-W34의 171건이다. 상위 8개 창이 전부 2026-08에 몰려 있어 지금이 관측
+// 구간의 피크이고, 반기 제출량(2024H2 950, 2025H1 1099, 2025H2 1720, 2026H1 1352)에도 이 값을
+// 곧 넘길 폭증 추세는 없다.
 const BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES = 603;
 
 // 한 실행에서 읽을 최대 페이지 수. 등록부 URL의 per_page=250은 서버 상한이다(2026-08-31 실측:
@@ -145,9 +148,20 @@ function patchPageUrl(sourceUrl, page) {
  *
  * 상한(2)으로 끝났는데 마지막 페이지가 아직 창 안이면 이번 창을 다 읽지 못한 것이다. 그 상태를
  * 조용히 두면 산출물에서 "이번 주 신호 적음"과 완전히 같은 모양이 되므로(#970이 지목한 바로 그
- * 서명) 다른 종료 경로와 같은 자리에 알린다. 형제 리졸버(aosp-release-camera-changes)는 집계
- * 후보 하나에 truncated를 실어 본문에 "at least N"으로 적지만, 여기 후보는 patch 1건마다 하나라
- * 하한임을 적을 집계 본문이 없다(summary에 문구를 주입하면 위의 "키워드 미주입" 결정을 뒤집는다).
+ * 서명) 다른 종료 경로와 같은 자리에 알린다.
+ *
+ * 더 위로 올리지 못하는 이유는 진단 어휘가 닫혀 있어서가 아니다 — dated-article-index-resolver의
+ * DATED_ARTICLE_DIAGNOSTIC_KINDS는 "미등록 kind를 내지 말라"는 계약이지 kind를 더하지 말라는
+ * 뜻이 아니고, skipped_index_budget처럼 resolver 밖에서 내는 kind도 이미 그 목록에 있다. 진짜
+ * 이유는 소스 행이 안 생긴다는 것이다: 수집 리포트의 소스 행(datedArticleCollectionSectionLines)은
+ * article_cap_counts_by_source와 received_bytes_by_source의 합집합으로 만드는데, patchwork는
+ * dated-article 리졸버가 아니라 fetchClient가 null이라 두 맵 어디에도 안 들어간다. 지금 이벤트를
+ * 내면 kind_counts만 오르고 어느 소스가 잘렸는지는 표에 안 남는다. 제대로 올리려면 patchwork
+ * 바이트 계정이 먼저다(후속 이슈). 그동안은 console.warn이 Actions 로그에 남아 관측된다.
+ *
+ * 형제 리졸버(aosp-release-camera-changes)는 저장소당 집계 후보 하나에 truncated를 실어 본문에
+ * "at least N"으로 적지만, 여기 후보는 patch 1건마다 하나라 하한임을 적을 집계 본문이 없다
+ * (summary에 문구를 주입하면 위의 "키워드 미주입" 결정을 뒤집는다).
  *
  * `fetchTextImpl`이 없으면 첫 페이지만 파싱한다(이슈 이전 동작). date나 web_url이 없는 patch는
  * 건너뛴다(graceful). 창 밖 후보를 여기서 버리지는 않는다 — 수집 풀 필터(withinLookback)가
@@ -167,13 +181,8 @@ async function resolvePatchworkLibcameraPatchItems(text = '', source = {}, optio
     : DEFAULT_LOOKBACK_DAYS;
   const cutoffMs = now.getTime() - lookbackDays * DAY_MS;
 
-  for (let page = 1; page <= MAX_PATCH_PAGES; page += 1) {
+  for (let page = 1; page < MAX_PATCH_PAGES; page += 1) {
     if (pageCrossesLookback(patches, cutoffMs, page)) return candidates;
-    if (page === MAX_PATCH_PAGES) {
-      console.warn(`patchwork-libcamera-patches: stopped at the ${MAX_PATCH_PAGES}-page ceiling with page ${page} still inside `
-        + `the ${lookbackDays}-day window; the ${candidates.length} collected patch(es) are a lower bound, not the whole window.`);
-      return candidates;
-    }
     const url = patchPageUrl(source.sourceUrl || source.url, page + 1);
     if (!url) return candidates;
     try {
@@ -189,6 +198,11 @@ async function resolvePatchworkLibcameraPatchItems(text = '', source = {}, optio
     candidates.push(...patches.map(patch => patchCandidate(patch, source)).filter(Boolean));
   }
 
+  // 상한까지 다 읽고 나왔다. 마지막 페이지가 아직 창 안이면 이번 창을 다 읽지 못한 것이다.
+  if (!pageCrossesLookback(patches, cutoffMs, MAX_PATCH_PAGES)) {
+    console.warn(`patchwork-libcamera-patches: stopped at the ${MAX_PATCH_PAGES}-page ceiling with page ${MAX_PATCH_PAGES} still inside `
+      + `the ${lookbackDays}-day window; the ${candidates.length} collected patch(es) are a lower bound, not the whole window.`);
+  }
   return candidates;
 }
 
