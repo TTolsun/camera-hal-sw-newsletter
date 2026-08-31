@@ -102,9 +102,12 @@ function coverageAgeDays(publishedAtText, coverage) {
   return Math.floor((endDayStart - publishedDayStart) / DAY_MS);
 }
 
-// classifyCoverageWindow가 돌려주는 등급 중 "coverage 주 안"인 값. 소비자가 리터럴을 손으로
-// 다시 적으면 여기서 등급을 추가하거나 이름을 바꿨을 때 그쪽은 조용히 "창 밖"으로 판정한다 —
-// 컴파일 오류도 테스트 실패도 없다. 등급을 소비하는 쪽은 리터럴 대신 이 술어를 쓴다.
+// classifyCoverageWindow가 돌려주는 등급 중 "coverage 주 안"인 값. 참고 섹션 정렬(#971)이 이 값을
+// 읽으므로 render 쪽은 리터럴을 다시 적지 않고 이 술어를 쓴다 — 리터럴로 적으면 여기서 이름을
+// 바꿨을 때 그쪽은 조용히 "창 밖"으로 판정하고 컴파일 오류도 테스트 실패도 없다.
+// 아직 리터럴로 비교하는 곳이 newsroom-selection.js와 collect-news-candidates.js에 남아 있어
+// 이름을 바꾸면 그쪽도 함께 고쳐야 한다. 등급을 새로 추가하는 경우는 이 술어가 단일 값 비교라
+// 막지 못한다.
 const COVERAGE_WEEK_WINDOW = 'primary';
 
 function isCoverageWeekWindow(value) {
