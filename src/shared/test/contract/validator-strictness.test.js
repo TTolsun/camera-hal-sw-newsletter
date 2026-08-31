@@ -149,6 +149,7 @@ function rootIndexHtml(extra = '') {
 function rootArchiveHtml(extra = '') {
   return [
     '<!doctype html><html><body class="homepage">',
+    rootSiteHeaderHtml(),
     '<main id="archive-page" data-page="archive">',
     '<section data-archive-status aria-live="polite"></section>',
     '<form data-archive-controls>',

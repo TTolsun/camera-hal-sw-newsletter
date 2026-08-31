@@ -4,6 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 
 const { mediaBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
+const { assertSharedNav } = require('../helpers/site-nav');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
 
@@ -82,13 +83,10 @@ test('learning page narrow-screen overrides collapse the card grids to one colum
 
 // 나브 라벨은 페이지마다 다른 파일이 잠근다(어디가 어디를 맡는지는 DESIGN.md 「알려진 갭 / 후속」).
 // Lab 페이지 몫이 비어 있어서 라벨이 영어로 돌아가도 아무도 못 잡았다 — 그 자리를 여기서 채운다.
-test('learning page keeps the shared Korean navigation labels', () => {
-  const html = readLearningPage();
-  const nav = html.match(/<div\b[^>]*class="[^"]*\bnav-links\b[^"]*"[^>]*>([\s\S]*?)<\/div>/);
-  assert.ok(nav, '.nav-links should exist');
-  const labels = [...nav[1].matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/g)]
-    .map(match => match[1].replace(/<[^>]*>/g, '').trim());
-  assert.deepEqual(labels, ['홈', '아카이브', 'GitHub']);
+test('learning page keeps the shared navigation labels and targets', () => {
+  // 홈·아카이브와 같은 헬퍼를 쓴다 — 세 페이지의 나브 잠금이 한 형태여야 한 곳만 약해지지 않는다.
+  // Lab 은 두 단계 아래라 사이트 루트 접두어가 '../../' 다.
+  assertSharedNav(readLearningPage(), '../../');
 });
 
 // ---- 가로 스크롤 컨테이너의 키보드 도달성 (#1009) ----
