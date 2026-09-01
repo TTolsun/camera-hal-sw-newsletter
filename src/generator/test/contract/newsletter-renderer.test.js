@@ -22,6 +22,7 @@ const {
 } = require('../../../shared/tooling/tracked-files');
 const {
   assertSharedNav,
+  assertSharedBrand,
   assertSharedFooterNav
 } = require('../../../shared/test/helpers/site-nav');
 
@@ -182,6 +183,10 @@ test('newsletter renderer keeps generated issue nav labels on the newsroom Korea
   // 홈·아카이브·Lab 과 같은 한 벌로, 렌더 **산출물**을 대상으로 잠근다. 이슈 페이지는 두 단계
   // 아래에 놓이므로 사이트 루트 접두어가 '../../' 다.
   assertSharedNav(html, '../../');
+  // 브랜드도 같은 헬퍼로 잠근다. 나브만 잠그면 워드마크·로고·aria-label 드리프트가 여기서 안
+  // 걸리고, 커밋된 이슈 페이지 전수 잠금(homepage-archive.test.js)에서 처음 빨개진다 —
+  // 하필 다음 발행 PR을 막는 자리다.
+  assertSharedBrand(html, '../../');
   // AI Engineering Lab href 도 헬퍼가 rootPath 로 유도해 함께 잠근다.
   assertSharedFooterNav(html, '../../');
 
