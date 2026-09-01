@@ -179,15 +179,61 @@ function assertSharedFooterNav(html, rootPath = '', labHref = `${rootPath}learni
   assert.deepEqual(columns[2].links.map(link => link.href), [labHref, GITHUB_URL]);
 }
 
+// ---- 헤더 브랜드 (#1021) ----
+//
+// 나브 라벨만 잠그면 반쯤 마이그레이션된 헤더를 못 잡는다. 레거시 27개는 라벨이 영어인 동시에
+// 워드마크가 "Camera SW Newsletter"였고 로고 이미지가 아예 없었다 — 라벨 두 개만 고치면 나브는
+// 한글인데 브랜드는 옛 세대인 상태가 된다. 그래서 `.site-brand` 를 통째로(링크·aria-label·로고·
+// 워드마크) 본다. 헤더 안으로 먼저 자르는 이유는 나브와 같다: 문서의 다른 곳에 있는 같은 문자열이
+// 대신 만족시키지 못하게 한다.
+const EXPECTED_BRAND_LABEL = 'Camera SW Newsroom';
+const BRAND_LOGO_PATH = 'assets/images/brand/HALley-logo.png';
+
+function siteBrand(html) {
+  const source = String(html);
+  const headerOpen = source.match(/<header\b[^>]*>/i);
+  if (!headerOpen) return null;
+  const header = balancedBody(source, headerOpen.index + headerOpen[0].length, 'header');
+
+  for (const opening of header.matchAll(/<a\b[^>]*>/gi)) {
+    if (!hasClassToken(opening[0], 'site-brand')) continue;
+    const body = balancedBody(header, opening.index + opening[0].length, 'a');
+    // 로고는 class 토큰으로 찾은 뒤 그 태그에서 src 를 뽑는다. `class="..." src="..."` 순서를
+    // 한 정규식에 굳혀 두면 속성 순서만 바뀌어도 잠금이 조용히 풀린다.
+    const logo = [...body.matchAll(/<img\b[^>]*>/gi)].find(tag => hasClassToken(tag[0], 'brand-logo'));
+    return {
+      href: opening[0].match(/\shref="([^"]*)"/i)?.[1] ?? null,
+      ariaLabel: opening[0].match(/\saria-label="([^"]*)"/i)?.[1] ?? null,
+      logoSrc: logo ? (logo[0].match(/\ssrc="([^"]*)"/i)?.[1] ?? null) : null,
+      wordmark: plainText(body)
+    };
+  }
+  return null;
+}
+
+// rootPath 는 assertSharedNav 와 같은 뜻이다('' 또는 '../../').
+function assertSharedBrand(html, rootPath = '') {
+  const brand = siteBrand(html);
+  assert.ok(brand, '<header> 안에 site-brand 링크가 있어야 한다');
+  assert.equal(brand.href, `${rootPath}index.html`);
+  assert.equal(brand.ariaLabel, EXPECTED_BRAND_LABEL);
+  assert.equal(brand.logoSrc, `${rootPath}${BRAND_LOGO_PATH}`);
+  assert.equal(brand.wordmark, EXPECTED_BRAND_LABEL);
+}
+
 module.exports = {
   EXPECTED_LABELS,
+  EXPECTED_BRAND_LABEL,
+  BRAND_LOGO_PATH,
   EXPECTED_FOOTER_COLUMN_TITLES,
   EXPECTED_FOOTER_LINK_LABELS,
   EXPECTED_FOOTER_PLACEHOLDER_NOTES,
   EXPECTED_FOOTER_TOPIC_NOTE_COUNT,
   GITHUB_URL,
   navLinks,
+  siteBrand,
   footerColumns,
   assertSharedNav,
+  assertSharedBrand,
   assertSharedFooterNav
 };
