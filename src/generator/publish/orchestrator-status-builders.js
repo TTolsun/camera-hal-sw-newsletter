@@ -222,13 +222,18 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // #909: 키만으로는 "왜 빠졌나"에 답하지 못한다. 사유가 담긴 coverage-reconciliation.json은
     // 커밋되지 않으므로(보존 등급 debug_heavy), 그룹 단위 사유는 여기서 커밋되는 status로 올린다.
     reconciliation_demoted_groups: ensureArray(report.reconciliation_demoted_groups),
-    // #1034: 강등분만으로는 계획이 채점한 후보의 나머지가 남지 않는다. reserve·shortlisted·
-    // catch-up pool 후보는 강등 대상이 아니라 위 목록에 절대 나타나지 않아, 판단이 담긴
+    // #1034: 강등분만으로는 계획이 채점한 후보의 나머지가 남지 않는다. reserve 후보와
+    // shortlist 전용 후보는 강등 대상이 아니라 위 목록에 절대 나타나지 않아, 판단이 담긴
     // editorial-plan.json(역시 커밋 안 됨)이 만료되면 "그 후보를 계획이 어떻게 봤나"를 영영
     // 알 수 없다. 계획이 채점한 후보 전부(우주 = 계획 입력인 shortlisted capsule)의 판단을
-    // 여기서 커밋되는 status로 올린다. 레코드의 lineup_role(selected/reserve/shortlisted)이
+    // 여기서 커밋되는 status로 올린다. 레코드의 lineup_role(selected/reserve/shortlist_only)이
     // 후보 단위로 실려 있어 "그 주 reserve 후보의 판단"을 이 파일만 읽고 답할 수 있다.
     // 관측이지 판정이 아니다.
+    //
+    // 이 목록이 담지 '않는' 것: release-class catch-up pool 후보 중 reference 창에서만 온
+    // 후보다. shortlist는 primary·fallback 창만 담으므로(newsroom-selection.js) 그 후보는 계획
+    // 입력 우주 밖이고, 따라서 계획이 채점하지 않았다. 부재가 곧 그 답이다. fallback 창에서 온
+    // catch-up 후보와 catch-up이 승급한 후보는 우주 안이라 정상적으로 실린다.
     editorial_plan_scored_candidates: ensureArray(report.editorial_plan_scored_candidates),
     reconciliation_promoted_group_keys: ensureArray(report.reconciliation_promoted_group_keys),
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,

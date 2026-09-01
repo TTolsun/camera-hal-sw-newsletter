@@ -437,7 +437,7 @@ test('선정·reserve 밖 shortlisted 후보의 채점도 diff에 실린다', ()
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
     { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
     { candidate_key: 'r', lineup_role: 'reserve', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null },
-    { candidate_key: 's', lineup_role: 'shortlisted', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
+    { candidate_key: 's', lineup_role: 'shortlist_only', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
   ], '같은 후보를 두 번 싣지 않고 shortlisted 전용 후보까지 담는다. 역할 세 값이 모두 나온다');
 });
 
@@ -549,4 +549,134 @@ test('그룹키가 여러 후보를 접어도 역할 판독은 깨지지 않는�
     [['a', 'selected'], ['r', 'reserve']],
     '역할은 후보마다 그대로 남는다'
   );
+});
+
+test('제안 main이었으나 cap에 밀린 reserve 후보도 cap_clamp를 사유로 남긴다', () => {
+  // 결정론 selected 쪽 같은 상황은 강등 루프가 cap_clamp로 남긴다. reserve 쪽만 어느 push에도
+  // 안 걸려 사유가 비어 있으면 "그냥 reserve로 남았다"와 "main까지 갔다가 cap에 밀렸다"가
+  // 구분되지 않는다. 비대칭을 없앤다.
+  const selected = ['a', 'b', 'c', 'd', 'e'].map((url, index) => mainEligible({
+    url,
+    article_group_key: 'group:' + url,
+    deterministic_score: 90 - index
+  }));
+  const clampedOut = mainEligible({ url: 'r', article_group_key: 'group:r', deterministic_score: 10 });
+  const shortlistReport = { selected_articles: selected, reserve_candidates: [clampedOut] };
+  const editorialPlanReport = {
+    editorial_plans: [...selected, clampedOut].map(candidate => plan(candidate, 'main_article'))
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.ok(!out.selected.map(item => item.url).includes('r'), 'cap이 reserve 승급을 막는다');
+  assert.deepEqual(
+    out.diff.editorial_plan_scored_candidates.find(item => item.candidate_key === 'r'),
+    {
+      candidate_key: 'r',
+      lineup_role: 'reserve',
+      article_group_key: 'group:r',
+      coverage_decision: 'main_article',
+      reason_code: 'cap_clamp'
+    }
+  );
+});
+
+// #1034: 이 목록으로 최종 main 편성을 재구성하는 규칙을 집행한다. 주석이 세 라운드 연속으로
+// 코드보다 강한 주장을 했으므로, 이번에는 규칙을 산문이 아니라 실행되는 식으로 못박는다.
+// 규칙이 약해지거나 코드가 갈라지면 이 테스트가 깨진다.
+function finalMainFromRecord(record) {
+  return (record.lineup_role === 'selected' && (record.reason_code === null || record.reason_code === 'floor_backfill')) ||
+    (record.lineup_role === 'reserve' && record.reason_code === 'promoted');
+}
+
+function assertRecordsRebuildFinalMain(out, label) {
+  const recordKeys = new Set(out.diff.editorial_plan_scored_candidates.map(item => item.candidate_key));
+  // 미채점 후보는 레코드가 없으므로 규칙의 대상이 아니다. 채점된 후보에 한해 정확해야 한다.
+  const scoredFinalMain = out.selected
+    .map(candidate => String(candidate.url_hash || candidate.url || candidate.title))
+    .filter(key => recordKeys.has(key))
+    .sort();
+  const rebuilt = out.diff.editorial_plan_scored_candidates
+    .filter(finalMainFromRecord)
+    .map(item => item.candidate_key)
+    .sort();
+  assert.deepEqual(rebuilt, scoredFinalMain, label);
+}
+
+test('레코드 두 필드로 계산한 최종 main이 실제 편성과 일치한다', () => {
+  const scenario = {
+    'selected만 그대로 발행': () => {
+      const selected = ['a', 'b'].map(url => mainEligible({ url, article_group_key: 'group:' + url }));
+      return reconcileCoverage({
+        shortlistReport: { selected_articles: selected, reserve_candidates: [] },
+        editorialPlanReport: { editorial_plans: selected.map(item => plan(item, 'main_article')) }
+      });
+    },
+    'reserve 승급': () => {
+      const dropped = mainEligible({ url: 'a', article_group_key: 'group:a', deterministic_score: 40 });
+      const promoted = mainEligible({ url: 'r', article_group_key: 'group:r', deterministic_score: 80 });
+      return reconcileCoverage({
+        shortlistReport: { selected_articles: [dropped], reserve_candidates: [promoted] },
+        editorialPlanReport: { editorial_plans: [plan(dropped, 'reference_only'), plan(promoted, 'main_article')] }
+      });
+    },
+    'floor backfill 복귀': () => {
+      const low = mainEligible({ url: 'a', article_group_key: 'group:a', deterministic_score: 40 });
+      const high = mainEligible({ url: 'b', article_group_key: 'group:b', deterministic_score: 80 });
+      return reconcileCoverage({
+        shortlistReport: { selected_articles: [low, high], reserve_candidates: [] },
+        editorialPlanReport: { editorial_plans: [plan(low, 'exclude'), plan(high, 'exclude')] }
+      });
+    },
+    'cap clamp로 reserve 탈락': () => {
+      const selected = ['a', 'b', 'c', 'd', 'e'].map((url, index) => mainEligible({
+        url,
+        article_group_key: 'group:' + url,
+        deterministic_score: 90 - index
+      }));
+      const clampedOut = mainEligible({ url: 'r', article_group_key: 'group:r', deterministic_score: 10 });
+      return reconcileCoverage({
+        shortlistReport: { selected_articles: selected, reserve_candidates: [clampedOut] },
+        editorialPlanReport: {
+          editorial_plans: [...selected, clampedOut].map(item => plan(item, 'main_article'))
+        }
+      });
+    },
+    'shortlist 전용 후보 존재': () => {
+      const selected = mainEligible({ url: 'a', article_group_key: 'group:a' });
+      const reserve = mainEligible({ url: 'r', article_group_key: 'group:r' });
+      const only = mainEligible({ url: 's', article_group_key: 'group:s' });
+      return reconcileCoverage({
+        shortlistReport: {
+          selected_articles: [selected],
+          reserve_candidates: [reserve],
+          shortlisted_candidates: [selected, reserve, only]
+        },
+        editorialPlanReport: {
+          editorial_plans: [plan(selected, 'main_article'), plan(reserve, 'reference_only'), plan(only, 'main_article')]
+        }
+      });
+    },
+    '승급 차단과 강등이 섞인 주': () => {
+      const kept = mainEligible({ url: 'a', article_group_key: 'group:a' });
+      const demoted = mainEligible({ url: 'b', article_group_key: 'group:b' });
+      const blocked = mainEligible({
+        url: 'r',
+        article_group_key: 'group:r',
+        main_article_source_allowed: false
+      });
+      return reconcileCoverage({
+        shortlistReport: { selected_articles: [kept, demoted], reserve_candidates: [blocked] },
+        editorialPlanReport: {
+          editorial_plans: [plan(kept, 'main_article'), plan(demoted, 'exclude'), plan(blocked, 'main_article')]
+        }
+      });
+    }
+  };
+
+  for (const [label, build] of Object.entries(scenario)) {
+    const out = build();
+    assert.ok(out.diff.editorial_plan_scored_candidates.length > 0, label + ': 레코드가 있어야 검사가 의미 있다');
+    assertRecordsRebuildFinalMain(out, label);
+  }
 });

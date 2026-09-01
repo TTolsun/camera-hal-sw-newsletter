@@ -203,6 +203,17 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
       changes.push({ key: candidateKey(candidate), action: 'promoted', reason_code: 'promoted' });
     }
   }
+  // #1034: 제안 main까지 갔다가 cap에 밀린 reserve 후보. 결정론 선정 쪽 같은 상황은 위 강등
+  // 루프가 cap_clamp로 남기는데(demotionReasonCode의 proposedMain 분기) reserve 쪽은 강등
+  // 루프에도 승급 루프에도 안 걸려 사유가 비어 있었다. 그 비대칭이 "그냥 reserve로 남았다"와
+  // "main까지 갔다가 cap에 밀렸다"를 같은 모양(null)으로 만든다. action은 강등과 갈라 둔다 —
+  // demoted로 적으면 결정론 편성에 없던 후보가 그룹 강등 기록(demoted_groups)에 섞인다.
+  for (const candidate of proposedMain) {
+    const key = candidateKey(candidate);
+    if (clampedKeys.has(key)) continue;
+    if (deterministicKeys.has(key)) continue;
+    changes.push({ key, action: 'promotion_clamped', reason_code: 'cap_clamp' });
+  }
 
   // #837: 재조정이 main 집합을 바꾸면 그 집합에서 파생된 요약도 같이 바뀌어야 한다.
   // 정본만 갈아끼우고 파생을 그대로 두면 generation-status의 coverage 등식
@@ -245,15 +256,16 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   // 채점된 후보 전부를 강등 여부와 무관하게 싣는다. 관측이지 판정이 아니라 게이트에 쓰이지
   // 않는다.
   //
-  // reason_code는 "결정론 편성 대비 무슨 일이 있었나"를 담는다. 사유를 갖는 변화는 네 갈래이고,
+  // reason_code는 "결정론 편성 대비 무슨 일이 있었나"를 담는다. 사유를 갖는 변화는 다섯 갈래이고,
   // changes.push가 일어나는 자리와 정확히 일대일이다:
-  //   demoted(cap_clamp | editorial_plan_*) / promotion_blocked_ineligible / floor_backfill / promoted
-  // 실제로 뭔가 일어난 후보가 null로 남으면 "아무 일도 없었다"로 잘못 읽힌다. 승급과 복귀는
-  // 그 후보가 발행되는 경로라 특히 그렇다. 아무 일도 없던 후보만 null이다.
+  //   demoted(cap_clamp | editorial_plan_*) / promotion_blocked_ineligible /
+  //   promotion_clamped(cap_clamp) / floor_backfill / promoted
+  // 실제로 뭔가 일어난 후보가 null로 남으면 "아무 일도 없었다"로 잘못 읽힌다. 아무 일도 없던
+  // 후보만 null이다 — 결정론 편성 그대로 발행된 main과, 제안조차 main이 아니었던 reserve다.
   //
   // 사유는 push 지점이 세우므로 여기서는 유추하지 않는다. 한 후보가 두 갈래에 걸리지는
-  // 않는다 — backfill된 후보는 clampedKeys에 들어가 강등 루프가 건너뛰고, 승급·승급 차단은
-  // 결정론 선정 밖 후보라 강등·복귀와 애초에 집합이 겹치지 않는다.
+  // 않는다 — backfill된 후보는 clampedKeys에 들어가 강등 루프가 건너뛰고, 승급·승급 차단·
+  // 승급 clamp는 결정론 선정 밖 후보라 강등·복귀와 애초에 집합이 겹치지 않는다.
   const reasonCodeByCandidateKey = new Map(
     changes
       .filter(change => change.reason_code)
@@ -263,10 +275,15 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   const scoredCandidateKeys = new Set();
   // 우주는 계획 입력과 같아야 한다. 어느 배열에서 후보를 만났는지가 곧 결정론 편성에서의
   // 역할이므로 배열마다 이름을 달아 돌고, 먼저 만난 역할을 남긴 뒤 키로 중복을 지운다.
+  //
+  // 마지막 라벨이 shortlist_only인 이유: 채점 우주(scoredUniverse)에는 selected·reserve 후보도
+  // 들어 있고 라벨은 먼저 만난 쪽이 이긴다. 그래서 이 라벨이 실제로 뜻하는 것은 "채점 우주에
+  // 있었으나 selected에도 reserve에도 못 든 나머지"다. shortlisted라고 부르면 세 값 전부에
+  // 참인 상위 개념으로 읽혀, 그 주 shortlist 규모를 이 라벨로 세면 selected+reserve만큼 적게 나온다.
   const scoredLineup = [
     ['selected', deterministicSelected],
     ['reserve', reserve],
-    ['shortlisted', scoredUniverse]
+    ['shortlist_only', scoredUniverse]
   ];
   for (const [lineupRole, candidates] of scoredLineup) {
     for (const candidate of candidates) {
@@ -284,7 +301,17 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
         // 그것만으로는 어느 레코드가 reserve였는지 알 수 없고, 이슈의 검증 질문 1이 정확히
         // 그것을 묻는다. 그룹키로는 답할 수 없다 — 한 그룹키가 여러 후보를 접기 때문이다
         // (공유 explicit 키·lore 패치 시리즈·native tooling 상수). 그래서 후보 단위 사실로 싣는다.
-        // 재조정 뒤 최종 main 여부는 이 값이 아니라 reason_code가 답한다(promoted/floor_backfill).
+        //
+        // 재조정 뒤 최종 main 여부는 이 값 하나로도, reason_code 하나로도 답하지 못한다. 두
+        // 필드가 함께 필요하고, 채점된 후보에 한해 다음이 정확히 최종 main이다:
+        //
+        //   (lineup_role === 'selected' && reason_code ∈ {null, 'floor_backfill'}) ||
+        //   (lineup_role === 'reserve'  && reason_code === 'promoted')
+        //
+        // reason_code 단독 규칙은 강등도 승급도 없이 그대로 발행된 main(=null)을 통째로 놓친다.
+        // 미채점 후보는 레코드가 없으므로 이 식의 대상이 아니다. coverage-reconciliation.test.js의
+        // "레코드 두 필드로 계산한 최종 main이 실제 편성과 일치한다"가 이 식을 그대로 집행한다 —
+        // 규칙을 고치려면 그 테스트를 함께 고쳐야 한다.
         lineup_role: lineupRole,
         // 강등 기록(reconciliation_demoted_groups)과 교차 참조하는 용도로 함께 싣는다.
         // #913이 그 기록에 쓴 키와 같은 함수라 두 목록을 그룹 단위로 이을 수 있다.

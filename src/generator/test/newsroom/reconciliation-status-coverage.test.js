@@ -336,7 +336,7 @@ test('#1034: 강등되지 않은 채점 후보의 판단도 status까지 남는�
   assert.deepEqual(status.editorial_plan_scored_candidates, [
     { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
     { candidate_key: 'r', lineup_role: 'reserve', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null },
-    { candidate_key: 's', lineup_role: 'shortlisted', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
+    { candidate_key: 's', lineup_role: 'shortlist_only', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
   ], '채점된 후보 전부가 커밋되는 status로 간다');
   // 이슈 검증 질문 1은 reserve 후보만 묻는다. 역할이 후보 단위로 실려 있어야 reserve와
   // shortlisted 전용 후보가 갈린다 — 그룹키 차집합은 둘을 한 덩어리로 돌려준다.
@@ -349,9 +349,9 @@ test('#1034: 강등되지 않은 채점 후보의 판단도 status까지 남는�
   );
   assert.deepEqual(
     status.editorial_plan_scored_candidates
-      .filter(item => item.lineup_role === 'shortlisted')
+      .filter(item => item.lineup_role === 'shortlist_only')
       .map(item => item.candidate_key),
     ['s'],
-    'shortlisted 전용 후보는 reserve와 섞이지 않는다'
+    'shortlist 전용 후보는 reserve와 섞이지 않는다'
   );
 });
