@@ -261,14 +261,15 @@ test('learning page keeps focus targets clear of the two-tier sticky header', ()
 
 // 이 페이지의 sticky 는 넓은 화면에서만 2단이다 — .site-header(top:0, z-index:20) 아래에
 // .learning-nav(top:59px, z-index:10). 좁은 화면에서는 .homepage-nav 가 column 으로 접히면서
-// 헤더가 59px 에서 133px 로 커지는데, 그때도 나브를 sticky 로 두면 나브(59~101.5px)가 헤더
+// 헤더가 59px 에서 133px 로 커지는데, 그때도 나브를 sticky 로 두면 나브(59~101px)가 헤더
 // (0~133px) 뒤로 통째로 들어가 목차가 보이지 않았다.
 //
 // 고른 해법은 그 폭에서 sticky 를 푸는 것이다. 나브 top 을 헤더 높이(133px)에 맞춰 헤더 아래에
-// 쌓는 방법은 sticky 가 가리는 띠를 133px 에서 175.5px 로 키우는데, 그러면 밑에 깔리는 것이
+// 쌓는 방법은 sticky 가 가리는 띠를 133px 에서 175px 로 키우는데, 그러면 밑에 깔리는 것이
 // 목차만이 아니게 된다 — scroll-margin-top 이 없는 .source-card 가 완전히 가려지고(WCAG 2.4.11),
-// 목차 링크로 착지한 섹션 제목이 띠 아래로 들어가고, 400% 확대에서 본문에 남는 높이가 줄어든다
-// (WCAG 1.4.10). static 은 셋 다 만들지 않는다.
+// 400% 확대에서 본문에 남는 높이가 줄어든다(WCAG 1.4.10). static 은 이 둘을 만들지 않는다.
+// (목차 링크로 착지한 섹션 제목이 띠에 깔리는 것은 static 에서도 남는 기존 결함이다 —
+// .learning-section 에 scroll-margin-top 이 없다. A 안은 그것을 더 나쁘게 할 뿐이었다.)
 //
 // 그래서 잠그는 것은 둘이다.
 // - 폭: sticky 를 푸는 폭과 헤더가 접히는 폭이 같아야 한다. 갈리면 그 사이 구간에서 헤더는 두 줄인데
@@ -298,10 +299,22 @@ test('learning page drops the sticky table of contents where the header folds', 
   // 640px 의 근거는 이 한 줄이다 — 헤더가 한 줄에서 두 줄로 바뀌는 지점.
   assertCssDeclaration(exactSelectorBlock(mediaBlock(styles, HEADER_FOLD_QUERY), '.homepage-nav'), 'flex-direction', 'column');
 
-  // 접히지 않은 헤더 높이. .homepage-nav 의 min-height 가 브랜드(54px)·링크(44px)보다 커서 높이를
-  // 지배하고, 거기에 헤더의 아래 테두리가 붙는다.
+  // 접히지 않은 헤더 높이 = .homepage-nav 의 min-height + 헤더의 아래 테두리.
+  // 그 식은 min-height 가 헤더 높이를 지배한다는 전제 위에 있다. 자식이 그보다 커지면 헤더는
+  // min-height 와 무관하게 자라는데 min-height 는 그대로라, top 만 대조해서는 낡은 값을 못 잡는다
+  // (실측: 브랜드 min-height 만 80px 로 올리면 헤더가 81px 이 되어 641px 이상에서 나브 위 22px 이
+  // 헤더 뒤로 들어가는데 잠금은 초록이었다). 그래서 지배 관계 자체를 잠근다.
+  const navMinHeight = pxDeclaration(exactSelectorBlock(styles, '.homepage-nav'), 'min-height');
+  const tallestChild = Math.max(
+    pxDeclaration(exactSelectorBlock(styles, '.homepage-brand'), 'min-height'),
+    pxDeclaration(exactSelectorBlock(styles, ':root'), '--control-height')
+  );
+  assert.ok(
+    navMinHeight >= tallestChild,
+    `.homepage-nav 의 min-height(${navMinHeight}px)보다 큰 자식(${tallestChild}px)이 있다 — 헤더 높이를 더 이상 min-height 가 정하지 않으므로 아래 계산이 성립하지 않는다`
+  );
   const unfolded =
-    pxDeclaration(exactSelectorBlock(styles, '.homepage-nav'), 'min-height')
+    navMinHeight
     + pxDeclaration(exactSelectorBlock(styles, '.site-header'), 'border-bottom');
 
   const css = readLearningStylesheet();
