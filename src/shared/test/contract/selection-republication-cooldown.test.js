@@ -677,6 +677,15 @@ test('every committed main-article record is dated inside the issue week that pu
 // 고정한다. 이 날짜 이후 발행된 main 기사는 지워도 창이 따라오지 않으므로 반드시 걸린다.
 const BACKFILL_WINDOW_START = '2026-07-27';
 
+test('the committed history declares the backfill window start as its coverage start', () => {
+  // 위 상수가 창의 정본이고, 이력 파일의 coverage 블록은 같은 사실을 선언한다. 둘이 갈라져도
+  // 위 검사는 통과한다 — 창은 상수에서 오기 때문이다. 그래서 선언 자체를 따로 잠근다.
+  // #1037이 정확히 그 상태였다: 선언은 2026-05-23인데 newsletter_article 레코드는 2026-07-27부터
+  // 있었고, 그 선언을 근거로 백필 범위를 판단하면 이미 덮였다고 착각한다.
+  // 상수를 파일에서 읽어오면 안 된다(위 주석 참고). 두 값을 비교만 한다.
+  assert.equal(committedExposureHistory().coverage.coverage_starts_at, BACKFILL_WINDOW_START);
+});
+
 test('no published main article inside the backfill window is missing from the history', () => {
   // 날짜 검사만으로는 "레코드가 통째로 빠진" 실패를 못 잡는다. 그건 게이트를 무증상으로 죽이는
   // 나머지 절반이다(#963 자체가 발행 기록이 남지 않아 생긴 일이다).
