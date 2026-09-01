@@ -689,11 +689,17 @@ test('the committed history declares the backfill window start as its coverage s
   // 레코드가 들어와도 통과한다 — #1037과 같은 어긋남이 반대편으로 재발하는 자리다. 아래 검사는
   // 창을 파일에서 파생시키는 것이 아니라(그건 위 주석이 금지한다) 파일이 상수 밖으로 나갔는지
   // 대조만 하므로 그 금지와 충돌하지 않는다. 되돌리지 말 것.
+  // 정확 일치가 아니라 하한이다. 최솟값이 뒤로 밀리는 것은 계약 위반이 아니다 — 무기한 차단은
+  // catch-up 레인에만 걸리고 일반 레인은 21일 쿨다운뿐이라, 창 시작 주의 URL이 전부 나중 호에
+  // 다시 main으로 나가면 recordArticleExposure가 newsletter_article_date를 덮어써 최솟값이
+  // 늦어진다. 잠그려는 것은 창보다 이른 레코드가 들어오는 한 방향뿐이다.
   const earliestRecordDate = committedMainArticleRecords()
     .map(item => String(item.newsletter_article_date || ''))
     .filter(Boolean)
     .sort()[0];
-  assert.equal(earliestRecordDate, BACKFILL_WINDOW_START);
+  assert.ok(earliestRecordDate >= BACKFILL_WINDOW_START,
+    `가장 이른 newsletter_article 레코드 ${earliestRecordDate}이(가) 창 시작 ` +
+    `${BACKFILL_WINDOW_START}보다 이르다 — 선언이 실제를 덜 덮고 있다`);
 });
 
 test('no published main article inside the backfill window is missing from the history', () => {
