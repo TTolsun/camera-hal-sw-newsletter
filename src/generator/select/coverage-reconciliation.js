@@ -126,6 +126,11 @@ function applyCaps(proposedMain) {
 function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   const deterministicSelected = ensureArray(shortlistReport?.selected_articles);
   const reserve = ensureArray(shortlistReport?.reserve_candidates);
+  // #1034: 채점 투영 전용 우주다. 편집 계획은 selected+reserve가 아니라 shortlisted capsule
+  // 전체를 채점하므로(입력이 capsuleInputFromReport(articleCapsuleReport, 'shortlisted')),
+  // 투영이 이 목록을 못 보면 매주 채점된 후보 1~2건이 조용히 빠진다. 아래 판정 단계는 이
+  // 목록을 절대 읽지 않는다 — main 승급 자격은 결정론 선정과 reserve로 닫혀 있어야 한다.
+  const scoredUniverse = ensureArray(shortlistReport?.shortlisted_candidates);
   const lookup = buildCoverageLookup(editorialPlanReport);
   const entryFor = (candidate) => coverageFor(lookup, candidate);
   const deterministicKeys = new Set(deterministicSelected.map(candidateKey));
@@ -235,16 +240,22 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   // reserve로 남은 후보와 catch-up pool 후보는 애초에 강등 대상이 아니라 위 목록에 절대
   // 나타나지 않고, 판단 원본을 담은 editorial-plan.json은 보존 등급이 debug_heavy라 커밋되지
   // 않는다. 그래서 "그 주 reserve 후보를 계획이 어떻게 채점했나"를 사후에 답할 수 없었다.
-  // 채점된 후보 전부를 강등 여부와 무관하게 싣는다. reason_code는 실제로 main에서 빠진
-  // 후보에만 있으므로 나머지는 null이다 — 관측이지 판정이 아니라서 게이트에는 쓰이지 않는다.
-  const demotionReasonByCandidateKey = new Map(
+  // 채점된 후보 전부를 강등 여부와 무관하게 싣는다. 관측이지 판정이 아니라 게이트에 쓰이지
+  // 않는다.
+  //
+  // reason_code는 main이 되지 못한 원인을 담는다. 원인이 있는 경로는 두 갈래다:
+  // 결정론 선정에서 빠진 강등(cap_clamp | editorial_plan_*)과 main 제안이 자격 가드에 막힌
+  // 승급 차단(promotion_blocked_ineligible). 그냥 reserve로 남은 후보는 원인이 없어 null이다.
+  const reasonCodeByCandidateKey = new Map(
     changes
-      .filter(change => change.action === 'demoted')
-      .map(change => [change.key, change.reason_code])
+      .filter(change => change.action === 'demoted' || change.action === 'promotion_blocked_ineligible')
+      .map(change => [change.key, change.reason_code || change.action])
   );
   const scoredCandidates = [];
   const scoredCandidateKeys = new Set();
-  for (const candidate of [...deterministicSelected, ...reserve]) {
+  // 우주는 계획 입력과 같아야 한다. selected·reserve를 먼저 돌아 main 편성이 목록 앞에 오게
+  // 하고, 나머지 shortlisted 후보를 이어 붙인 뒤 키로 중복을 지운다.
+  for (const candidate of [...deterministicSelected, ...reserve, ...scoredUniverse]) {
     const key = candidateKey(candidate);
     if (scoredCandidateKeys.has(key)) continue;
     const coverageDecision = entryFor(candidate)?.coverage_decision || '';
@@ -256,7 +267,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
     scoredCandidates.push({
       candidate_key: key,
       coverage_decision: coverageDecision,
-      reason_code: demotionReasonByCandidateKey.get(key) || null
+      reason_code: reasonCodeByCandidateKey.get(key) || null
     });
   }
 

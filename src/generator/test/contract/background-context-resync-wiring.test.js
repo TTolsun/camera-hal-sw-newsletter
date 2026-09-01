@@ -95,3 +95,45 @@ test('the publish host clears the scored-candidate projection at the start of ea
   assert.ok(resetIndex > loopIndex, '초기화는 attempt 루프 안에서 일어난다');
   assert.ok(resetIndex < assignIndex, '초기화는 재조정 대입보다 앞이어야 한다');
 });
+
+// #1034 후속: 재조정은 selected+reserve만 받는데 편집 계획은 shortlisted capsule 전체를
+// 채점한다. 호스트가 그 우주를 함께 넘기지 않으면 채점 투영이 계획보다 좁아지고,
+// "목록에 없다 = 계획이 채점하지 않았다"는 읽기 규칙이 거짓이 된다.
+test('the publish host feeds the plan-scored shortlist into the reconciliation', () => {
+  const source = publishHostSource();
+
+  const reconcileIndex = source.indexOf('reconcileCoverage({');
+  assert.ok(reconcileIndex > 0, 'reconcileCoverage 호출을 찾지 못했다');
+  const callBlock = source.slice(reconcileIndex, source.indexOf('});', reconcileIndex));
+
+  assert.ok(
+    callBlock.includes('shortlisted_candidates: reporter.candidates'),
+    '재조정 입력이 계획 채점 우주(shortlisted capsule의 출처)를 함께 받아야 한다'
+  );
+});
+
+// 위 테스트는 호스트가 reporter.candidates를 넘긴다는 사실만 잠근다. 그 배열이 정말로 계획
+// 채점 우주와 같은지는 capsule 조립 쪽 성질이라 여기서 함께 실행해 확인한다. 이 1:1 관계가
+// 깨지면 투영 우주가 다시 조용히 좁아진다.
+test('the editorial plan input is one capsule per reporter candidate', () => {
+  const { buildArticleCapsuleReport, capsuleInputFromReport } = require('../../select/article-capsules');
+
+  const candidates = ['a', 'r', 's'].map(url => ({
+    url: `https://example.test/${url}`,
+    url_hash: url,
+    title: url,
+    summary: url
+  }));
+  const capsuleReport = buildArticleCapsuleReport('2026-09-01', {
+    selected_articles: [candidates[0]],
+    reserve_candidates: [candidates[1]]
+  }, { date: '2026-09-01', candidates });
+
+  const planInput = capsuleInputFromReport(capsuleReport, 'shortlisted');
+
+  assert.deepEqual(
+    planInput.candidates.map(item => item.url),
+    candidates.map(item => item.url),
+    '계획이 채점하는 capsule은 reporter.candidates와 1:1이다'
+  );
+});

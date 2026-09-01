@@ -313,9 +313,15 @@ test('#1034: 강등되지 않은 채점 후보의 판단도 status까지 남는�
   // 않으면 "그 주 reserve 후보를 계획이 어떻게 채점했는가"에 사후로 답할 수 없다.
   const shortlistReport = deterministicReport(['a']);
   shortlistReport.reserve_candidates = [candidate('r')];
+  // 계획이 채점하는 우주는 selected+reserve가 아니라 shortlisted capsule 전체다.
+  shortlistReport.shortlisted_candidates = [
+    shortlistReport.selected_articles[0],
+    shortlistReport.reserve_candidates[0],
+    candidate('s')
+  ];
 
   const editorialPlanReport = {
-    editorial_plans: [plan('a', 'main_article'), plan('r', 'reference_only')]
+    editorial_plans: [plan('a', 'main_article'), plan('r', 'reference_only'), plan('s', 'exclude')]
   };
 
   applyReconciliation(shortlistReport, editorialPlanReport);
@@ -329,6 +335,7 @@ test('#1034: 강등되지 않은 채점 후보의 판단도 status까지 남는�
   assert.deepEqual(status.reconciliation_demoted_groups, [], '강등은 없다');
   assert.deepEqual(status.editorial_plan_scored_candidates, [
     { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'r', coverage_decision: 'reference_only', reason_code: null }
+    { candidate_key: 'r', coverage_decision: 'reference_only', reason_code: null },
+    { candidate_key: 's', coverage_decision: 'exclude', reason_code: null }
   ], '채점된 후보 전부가 커밋되는 status로 간다');
 });

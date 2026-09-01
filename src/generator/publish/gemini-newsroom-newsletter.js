@@ -528,7 +528,12 @@ async function main() {
     const coverageReconciliation = reconcileCoverage({
       shortlistReport: {
         selected_articles: deterministicSelectedBaseline,
-        reserve_candidates: pristineReserveCandidates
+        reserve_candidates: pristineReserveCandidates,
+        // #1034: 판정 입력이 아니라 채점 투영 전용 우주다. 편집 계획은 바로 위에서
+        // capsuleInputFromReport(articleCapsuleReport, 'shortlisted')로 채점하고, 그 capsule은
+        // buildArticleCapsuleReport가 reporter.candidates에서 1:1로 만든다. 같은 배열을 넘겨야
+        // 투영 우주와 채점 우주가 일치한다 — 좁히면 매주 채점된 후보 1~2건이 기록에서 빠진다.
+        shortlisted_candidates: reporter.candidates
       },
       editorialPlanReport
     });
@@ -565,8 +570,9 @@ async function main() {
     // #909: 키 옆에 사유를 함께 남긴다. 원본 판단(coverage_decision)과 실제 전환 원인
     // (reason_code=cap_clamp | editorial_plan_*)이 갈라져 있어야 "왜 빠졌나"에 답할 수 있다.
     shortlistReport.reconciliation_demoted_groups = coverageReconciliation.diff.demoted_groups;
-    // #1034: 강등되지 않은 채점 후보(reserve·catch-up pool)는 위 목록에 나타나지 않는다.
-    // 계획이 채점한 후보 전부를 함께 남겨야 "왜 이 후보는 main이 아니었나"에 답할 수 있다.
+    // #1034: 강등되지 않은 채점 후보(reserve·shortlisted·catch-up pool)는 위 목록에 나타나지
+    // 않는다. 계획이 채점한 후보 전부를 함께 남겨야 "왜 이 후보는 main이 아니었나"에 답할 수
+    // 있다. 사유는 강등과 승급 차단에만 붙고, 그냥 채점만 된 후보는 null로 남는다.
     shortlistReport.editorial_plan_scored_candidates = coverageReconciliation.diff.editorial_plan_scored_candidates;
     shortlistReport.reconciliation_promoted_group_keys = coverageReconciliation.diff.promoted_group_keys;
     shortlistReport.publish_ready = deterministicPublishReady

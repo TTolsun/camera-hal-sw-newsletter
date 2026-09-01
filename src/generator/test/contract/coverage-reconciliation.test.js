@@ -400,3 +400,78 @@ test('채점 목록은 강등 사유를 함께 싣고 미채점 후보는 담지
     { candidate_key: 'b', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' }
   ], '채점된 후보만, 강등된 후보는 사유와 함께');
 });
+
+// #1034 후속: 투영 우주는 계획이 실제로 채점하는 우주와 같아야 한다. 계획 입력은
+// capsuleInputFromReport(articleCapsuleReport, 'shortlisted')이고 그 capsule은 shortlisted
+// 후보에서 1:1로 만들어진다(selected+reserve보다 넓다 — 실측 2026-08-31 8 vs 6).
+// 좁게 두면 "부재 = 미채점"이라는 읽기 규칙 자체가 거짓이 된다.
+
+test('선정·reserve 밖 shortlisted 후보의 채점도 diff에 실린다', () => {
+  const selected = mainEligible({ url: 'a', article_group_key: 'group:a' });
+  const reserve = mainEligible({ url: 'r', article_group_key: 'group:r' });
+  const shortlistedOnly = mainEligible({ url: 's', article_group_key: 'group:s' });
+  const shortlistReport = {
+    selected_articles: [selected],
+    reserve_candidates: [reserve],
+    shortlisted_candidates: [selected, reserve, shortlistedOnly]
+  };
+  const editorialPlanReport = {
+    editorial_plans: [
+      plan(selected, 'main_article'),
+      plan(reserve, 'reference_only'),
+      plan(shortlistedOnly, 'exclude')
+    ]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
+    { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'r', coverage_decision: 'reference_only', reason_code: null },
+    { candidate_key: 's', coverage_decision: 'exclude', reason_code: null }
+  ], '같은 후보를 두 번 싣지 않고 shortlisted 전용 후보까지 담는다');
+});
+
+test('shortlisted 후보는 채점 투영에만 쓰이고 승급 우주를 넓히지 않는다', () => {
+  // 투영이 관측을 넘어 판정에 손대면 안 된다. 승급 자격은 여전히 selected+reserve로 닫혀 있다.
+  const selected = mainEligible({ url: 'a', article_group_key: 'group:a' });
+  const shortlistedOnly = mainEligible({ url: 's', article_group_key: 'group:s' });
+  const shortlistReport = {
+    selected_articles: [selected],
+    reserve_candidates: [],
+    shortlisted_candidates: [selected, shortlistedOnly]
+  };
+  const editorialPlanReport = {
+    editorial_plans: [plan(selected, 'main_article'), plan(shortlistedOnly, 'main_article')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.selected.map(item => item.url), ['a'], 'main 집합은 넓어지지 않는다');
+  assert.ok(
+    out.diff.editorial_plan_scored_candidates.some(item => item.candidate_key === 's'),
+    '판정에는 안 쓰이되 관측에는 남는다'
+  );
+});
+
+test('승급이 막힌 채점 후보는 그 사실을 사유로 남긴다', () => {
+  // main_article로 채점됐는데 결정론 자격 가드에 막힌 reserve 후보다. reason_code가 없으면
+  // "승급 차단"과 "그냥 reserve로 남음"이 같은 모양(null)으로 남는다.
+  const selected = mainEligible({ url: 'a', article_group_key: 'group:a' });
+  const blocked = mainEligible({
+    url: 'b',
+    article_group_key: 'group:b',
+    main_article_source_allowed: false
+  });
+  const shortlistReport = { selected_articles: [selected], reserve_candidates: [blocked] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(selected, 'main_article'), plan(blocked, 'main_article')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
+    { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'b', coverage_decision: 'main_article', reason_code: 'promotion_blocked_ineligible' }
+  ]);
+});
