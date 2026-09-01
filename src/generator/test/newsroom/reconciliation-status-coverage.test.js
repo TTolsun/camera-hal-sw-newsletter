@@ -334,18 +334,24 @@ test('#1034: 강등되지 않은 채점 후보의 판단도 status까지 남는�
 
   assert.deepEqual(status.reconciliation_demoted_groups, [], '강등은 없다');
   assert.deepEqual(status.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'r', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null },
-    { candidate_key: 's', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
+    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'r', lineup_role: 'reserve', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null },
+    { candidate_key: 's', lineup_role: 'shortlisted', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
   ], '채점된 후보 전부가 커밋되는 status로 간다');
-  // status만 읽어 reserve 후보를 지목할 수 있어야 한다. main 편성 그룹키는 같은 파일의
-  // deterministic_selected_representative_group_keys에 있으므로 차집합이 곧 편성 밖 후보다.
-  const mainGroupKeys = new Set(status.deterministic_selected_representative_group_keys);
+  // 이슈 검증 질문 1은 reserve 후보만 묻는다. 역할이 후보 단위로 실려 있어야 reserve와
+  // shortlisted 전용 후보가 갈린다 — 그룹키 차집합은 둘을 한 덩어리로 돌려준다.
   assert.deepEqual(
     status.editorial_plan_scored_candidates
-      .filter(item => !mainGroupKeys.has(item.article_group_key))
+      .filter(item => item.lineup_role === 'reserve')
+      .map(item => [item.candidate_key, item.coverage_decision]),
+    [['r', 'reference_only']],
+    'status만 읽어 그 주 reserve 후보의 판단을 답할 수 있다'
+  );
+  assert.deepEqual(
+    status.editorial_plan_scored_candidates
+      .filter(item => item.lineup_role === 'shortlisted')
       .map(item => item.candidate_key),
-    ['r', 's'],
-    '결정론 편성 밖 채점 후보를 status만으로 가려낼 수 있다'
+    ['s'],
+    'shortlisted 전용 후보는 reserve와 섞이지 않는다'
   );
 });

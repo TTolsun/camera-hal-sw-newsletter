@@ -200,7 +200,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   }
   for (const candidate of clamped) {
     if (!deterministicKeys.has(candidateKey(candidate))) {
-      changes.push({ key: candidateKey(candidate), action: 'promoted' });
+      changes.push({ key: candidateKey(candidate), action: 'promoted', reason_code: 'promoted' });
     }
   }
 
@@ -245,14 +245,15 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   // 채점된 후보 전부를 강등 여부와 무관하게 싣는다. 관측이지 판정이 아니라 게이트에 쓰이지
   // 않는다.
   //
-  // reason_code는 "결정론 편성 대비 무슨 일이 있었나"를 담는다. 사유를 갖는 변화는 세 갈래다:
-  // 결정론 선정에서 빠진 강등(cap_clamp | editorial_plan_*), main 제안이 자격 가드에 막힌
-  // 승급 차단(promotion_blocked_ineligible), 강등됐다가 발행가능 floor로 되돌아온 복귀
-  // (floor_backfill). 마지막 갈래를 빼면 실제로 발행된 main 기사가 null로 남아 "그냥 reserve로
-  // 남았다"로 잘못 읽힌다. 아무 일도 없던 후보만 null이다.
+  // reason_code는 "결정론 편성 대비 무슨 일이 있었나"를 담는다. 사유를 갖는 변화는 네 갈래이고,
+  // changes.push가 일어나는 자리와 정확히 일대일이다:
+  //   demoted(cap_clamp | editorial_plan_*) / promotion_blocked_ineligible / floor_backfill / promoted
+  // 실제로 뭔가 일어난 후보가 null로 남으면 "아무 일도 없었다"로 잘못 읽힌다. 승급과 복귀는
+  // 그 후보가 발행되는 경로라 특히 그렇다. 아무 일도 없던 후보만 null이다.
   //
   // 사유는 push 지점이 세우므로 여기서는 유추하지 않는다. 한 후보가 두 갈래에 걸리지는
-  // 않는다 — backfill된 후보는 clampedKeys에 들어가 강등 루프가 건너뛴다.
+  // 않는다 — backfill된 후보는 clampedKeys에 들어가 강등 루프가 건너뛰고, 승급·승급 차단은
+  // 결정론 선정 밖 후보라 강등·복귀와 애초에 집합이 겹치지 않는다.
   const reasonCodeByCandidateKey = new Map(
     changes
       .filter(change => change.reason_code)
@@ -260,27 +261,38 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   );
   const scoredCandidates = [];
   const scoredCandidateKeys = new Set();
-  // 우주는 계획 입력과 같아야 한다. selected·reserve를 먼저 돌아 main 편성이 목록 앞에 오게
-  // 하고, 나머지 shortlisted 후보를 이어 붙인 뒤 키로 중복을 지운다.
-  for (const candidate of [...deterministicSelected, ...reserve, ...scoredUniverse]) {
-    const key = candidateKey(candidate);
-    if (scoredCandidateKeys.has(key)) continue;
-    const coverageDecision = entryFor(candidate)?.coverage_decision || '';
-    // 채점되지 않은 후보는 담지 않는다. 목록이 "등급을 실제로 받은 후보"만 담아야 부재가
-    // 곧 미채점이라는 답이 된다. 여기서 읽는 판단은 재조정이 실제로 본 값과 같은 조회를
-    // 거치므로, 계획 항목 조회가 빗나간 후보도 재조정이 그랬듯 미채점으로 남는다.
-    if (!coverageDecision) continue;
-    scoredCandidateKeys.add(key);
-    scoredCandidates.push({
-      candidate_key: key,
-      // #1034: candidate_key는 불투명 해시(sha256)라 그것만으로는 어느 레코드가 결정론 편성
-      // 밖 후보였는지 status만 읽어서 알 수 없다. 그룹키는 같은 파일의
-      // deterministic_selected_representative_group_keys와 네임스페이스가 같아 차집합으로
-      // reserve·shortlisted 후보를 가려낼 수 있다. #913이 강등 기록에 쓴 키와 같은 함수다.
-      article_group_key: candidateGroupKey(candidate),
-      coverage_decision: coverageDecision,
-      reason_code: reasonCodeByCandidateKey.get(key) || null
-    });
+  // 우주는 계획 입력과 같아야 한다. 어느 배열에서 후보를 만났는지가 곧 결정론 편성에서의
+  // 역할이므로 배열마다 이름을 달아 돌고, 먼저 만난 역할을 남긴 뒤 키로 중복을 지운다.
+  const scoredLineup = [
+    ['selected', deterministicSelected],
+    ['reserve', reserve],
+    ['shortlisted', scoredUniverse]
+  ];
+  for (const [lineupRole, candidates] of scoredLineup) {
+    for (const candidate of candidates) {
+      const key = candidateKey(candidate);
+      if (scoredCandidateKeys.has(key)) continue;
+      const coverageDecision = entryFor(candidate)?.coverage_decision || '';
+      // 채점되지 않은 후보는 담지 않는다. 목록이 "등급을 실제로 받은 후보"만 담아야 부재가
+      // 곧 미채점이라는 답이 된다. 여기서 읽는 판단은 재조정이 실제로 본 값과 같은 조회를
+      // 거치므로, 계획 항목 조회가 빗나간 후보도 재조정이 그랬듯 미채점으로 남는다.
+      if (!coverageDecision) continue;
+      scoredCandidateKeys.add(key);
+      scoredCandidates.push({
+        candidate_key: key,
+        // #1034: 후보가 결정론 편성에서 어디에 있었나. candidate_key는 불투명 해시(sha256)라
+        // 그것만으로는 어느 레코드가 reserve였는지 알 수 없고, 이슈의 검증 질문 1이 정확히
+        // 그것을 묻는다. 그룹키로는 답할 수 없다 — 한 그룹키가 여러 후보를 접기 때문이다
+        // (공유 explicit 키·lore 패치 시리즈·native tooling 상수). 그래서 후보 단위 사실로 싣는다.
+        // 재조정 뒤 최종 main 여부는 이 값이 아니라 reason_code가 답한다(promoted/floor_backfill).
+        lineup_role: lineupRole,
+        // 강등 기록(reconciliation_demoted_groups)과 교차 참조하는 용도로 함께 싣는다.
+        // #913이 그 기록에 쓴 키와 같은 함수라 두 목록을 그룹 단위로 이을 수 있다.
+        article_group_key: candidateGroupKey(candidate),
+        coverage_decision: coverageDecision,
+        reason_code: reasonCodeByCandidateKey.get(key) || null
+      });
+    }
   }
 
   return {

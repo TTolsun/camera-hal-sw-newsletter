@@ -379,15 +379,18 @@ test('강등되지 않고 reserve로 남은 채점 후보도 diff에 실린다',
 
   assert.deepEqual(out.diff.demoted_groups, [], '강등이 없어도 채점 사실은 남아야 한다');
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'r', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null }
+    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'r', lineup_role: 'reserve', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null }
   ]);
-  // candidate_key는 불투명 해시라 status만 읽어서는 어느 레코드가 reserve였는지 알 수 없다.
-  // 그룹키는 selected 쪽 기록(deterministic_selected_representative_group_keys)과 같은
-  // 네임스페이스라, 그 목록에 없는 그룹키가 곧 main 편성 밖 후보다.
-  const reserveRecord = out.diff.editorial_plan_scored_candidates
-    .find(item => !out.diff.deterministic_selected_group_keys.includes(item.article_group_key));
-  assert.equal(reserveRecord.candidate_key, 'r', '그룹키로 reserve 후보를 지목할 수 있다');
+  // 이슈 #1034 검증 질문 1은 "그 주 reserve 후보의 판단"을 묻는다. 한 필드 조회로 답해져야
+  // 한다 — 그룹키 차집합은 reserve와 shortlisted를 못 가르고, 그룹키 자체도 후보별로 유일하지
+  // 않다(공유 explicit 키·lore 시리즈·native tooling 상수가 여러 후보를 한 키로 접는다).
+  assert.deepEqual(
+    out.diff.editorial_plan_scored_candidates
+      .filter(item => item.lineup_role === 'reserve')
+      .map(item => item.candidate_key),
+    ['r']
+  );
 });
 
 test('채점 목록은 강등 사유를 함께 싣고 미채점 후보는 담지 않는다', () => {
@@ -402,8 +405,8 @@ test('채점 목록은 강등 사유를 함께 싣고 미채점 후보는 담지
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
 
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'b', article_group_key: 'group:b', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' }
+    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'b', lineup_role: 'selected', article_group_key: 'group:b', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' }
   ], '채점된 후보만, 강등된 후보는 사유와 함께');
 });
 
@@ -432,10 +435,10 @@ test('선정·reserve 밖 shortlisted 후보의 채점도 diff에 실린다', ()
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
 
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'r', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null },
-    { candidate_key: 's', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
-  ], '같은 후보를 두 번 싣지 않고 shortlisted 전용 후보까지 담는다');
+    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'r', lineup_role: 'reserve', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null },
+    { candidate_key: 's', lineup_role: 'shortlisted', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
+  ], '같은 후보를 두 번 싣지 않고 shortlisted 전용 후보까지 담는다. 역할 세 값이 모두 나온다');
 });
 
 test('shortlisted 후보는 채점 투영에만 쓰이고 승급 우주를 넓히지 않는다', () => {
@@ -477,8 +480,8 @@ test('승급이 막힌 채점 후보는 그 사실을 사유로 남긴다', () =
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
 
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'b', article_group_key: 'group:b', coverage_decision: 'main_article', reason_code: 'promotion_blocked_ineligible' }
+    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'b', lineup_role: 'reserve', article_group_key: 'group:b', coverage_decision: 'main_article', reason_code: 'promotion_blocked_ineligible' }
   ]);
 });
 
@@ -497,7 +500,53 @@ test('발행가능 floor backfill로 main에 되돌아온 후보는 그 사실�
 
   assert.deepEqual(out.selected.map(item => item.url), ['b'], 'floor backfill이 점수 최고를 되돌린다');
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' },
-    { candidate_key: 'b', article_group_key: 'group:b', coverage_decision: 'exclude', reason_code: 'floor_backfill' }
+    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' },
+    { candidate_key: 'b', lineup_role: 'selected', article_group_key: 'group:b', coverage_decision: 'exclude', reason_code: 'floor_backfill' }
   ], '되돌아온 후보는 null이 아니라 복귀 사실을 남긴다');
+});
+
+test('reserve에서 main으로 승급한 후보는 그 사실을 사유로 남긴다', () => {
+  // 승급된 후보는 실제로 발행되는데 사유가 null이면 "아무 일도 없었다"로 읽힌다.
+  // 강등·승급 차단·floor backfill과 같은 규칙이 승급에도 적용돼야 한다.
+  const dropped = mainEligible({ url: 'a', article_group_key: 'group:a', deterministic_score: 40 });
+  const promoted = mainEligible({ url: 'r', article_group_key: 'group:r', deterministic_score: 80 });
+  const shortlistReport = { selected_articles: [dropped], reserve_candidates: [promoted] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(dropped, 'reference_only'), plan(promoted, 'main_article')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.selected.map(item => item.url), ['r'], 'reserve가 main으로 올라간다');
+  assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
+    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'reference_only', reason_code: 'editorial_plan_reference_only' },
+    { candidate_key: 'r', lineup_role: 'reserve', article_group_key: 'group:r', coverage_decision: 'main_article', reason_code: 'promoted' }
+  ]);
+});
+
+test('그룹키가 여러 후보를 접어도 역할 판독은 깨지지 않는다', () => {
+  // candidateGroupKey는 후보별 식별자가 아니다. 공유 explicit 키를 쓰면 한 키로 접히고
+  // (lore 패치 시리즈·native tooling 상수도 같은 성질), 그러면 그룹키 차집합 판독은 편성 밖
+  // 후보를 통째로 잃는다. lineup_role은 후보 단위 사실이라 그 접힘에 영향받지 않는다.
+  const selected = mainEligible({ url: 'a', article_group_key: 'group:shared' });
+  const reserve = mainEligible({ url: 'r', article_group_key: 'group:shared' });
+  const shortlistReport = { selected_articles: [selected], reserve_candidates: [reserve] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(selected, 'main_article'), plan(reserve, 'reference_only')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.diff.deterministic_selected_group_keys, ['group:shared']);
+  assert.deepEqual(
+    out.diff.editorial_plan_scored_candidates
+      .filter(item => !out.diff.deterministic_selected_group_keys.includes(item.article_group_key)),
+    [],
+    '차집합 판독은 여기서 편성 밖 후보를 통째로 잃는다'
+  );
+  assert.deepEqual(
+    out.diff.editorial_plan_scored_candidates.map(item => [item.candidate_key, item.lineup_role]),
+    [['a', 'selected'], ['r', 'reserve']],
+    '역할은 후보마다 그대로 남는다'
+  );
 });
