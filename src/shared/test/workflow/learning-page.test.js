@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const { mediaBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
+const { mediaBlock, exactSelectorBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
 const { assertSharedNav, assertSharedFooterNav } = require('../helpers/site-nav');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
@@ -13,6 +13,10 @@ const root = path.join(__dirname, '..', '..', '..', '..');
 
 function readLearningStylesheet() {
   return fs.readFileSync(path.join(root, 'articles', 'css', 'learning.css'), 'utf8');
+}
+
+function readSiteStylesheet() {
+  return fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8');
 }
 
 function readLearningPage() {
@@ -152,7 +156,7 @@ const KEYBOARD_SCROLLABLE = [
 const EXEMPT_SCROLL_SELECTORS = ['.learning-nav-inner', 'pre'];
 
 test('learning page classifies every scroll container as keyboard-reachable or exempt', () => {
-  const sheets = [readLearningStylesheet(), fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8')];
+  const sheets = [readLearningStylesheet(), readSiteStylesheet()];
   const found = [...scrollContainerSelectors(sheets)].sort();
   const classified = [...KEYBOARD_SCROLLABLE.map(entry => entry.selector), ...EXEMPT_SCROLL_SELECTORS].sort();
   assert.deepEqual(
@@ -251,4 +255,32 @@ test('learning page keeps focus targets clear of the two-tier sticky header', ()
     assert.ok(wide.has(selector), `${selector} 는 넓은 화면 scroll-margin-top 을 받아야 한다`);
     assert.ok(narrow.has(selector), `${selector} 는 좁은 화면 scroll-margin-top 을 받아야 한다`);
   }
+});
+
+// ---- 좁은 화면에서 목차 나브가 헤더 뒤로 들어가지 않는다 (#1023) ----
+
+// 이 페이지의 sticky 는 2단이다 — .site-header(top:0, z-index:20) 위에 .learning-nav(z-index:10).
+// 헤더는 좁은 화면에서 .homepage-nav 가 column 으로 접히며 59px 에서 133px 로 커지는데, 나브의
+// top 은 59px 고정이라 그 구간에서 목차가 헤더 뒤로 통째로 들어가 보이지 않았다.
+//
+// 잠그는 것은 값 하나가 아니라 두 파일이 같은 폭을 쓴다는 것이다. 나브 override 가 헤더가 접히는
+// 폭보다 좁으면 그 사이에서 다시 가려지고, 넓으면 헤더와 나브 사이에 빈 띠가 생긴다 — 이 파일에
+// 이미 있는 780px 블록을 그대로 재사용했다면 641~780px 에서 74px 이 벌어진다(실측).
+const HEADER_FOLD_QUERY = '(max-width: 640px)';
+
+test('learning page pins the sticky table of contents to the folded header', () => {
+  // 640px 의 근거는 여기다 — 헤더가 한 줄에서 두 줄로 바뀌는 지점. 이 규칙이 다른 폭으로 옮겨가면
+  // learning.css 의 나브 override 도 같이 옮겨야 하고, 옮기지 않으면 이 단언이 먼저 깨진다.
+  const folded = mediaBlock(readSiteStylesheet(), HEADER_FOLD_QUERY);
+  assertCssDeclaration(exactSelectorBlock(folded, '.homepage-nav'), 'flex-direction', 'column');
+
+  const css = readLearningStylesheet();
+  // 넓은 화면: 헤더가 한 줄(59px)이라 나브가 바로 그 아래에 쌓인다.
+  assertCssDeclaration(exactSelectorBlock(css, '.learning-nav'), 'top', '59px');
+  // 좁은 화면: 헤더가 두 줄(133px)이므로 나브도 그만큼 내려간다.
+  assertCssDeclaration(
+    exactSelectorBlock(mediaBlock(css, HEADER_FOLD_QUERY), '.learning-nav'),
+    'top',
+    '133px'
+  );
 });
