@@ -69,12 +69,14 @@ function releaseCandidate(block, source) {
   //
   // behavior_change는 역할이 둘이라 본문을 싣지 않는다.
   //
-  // 첫째, collect-news-candidates의 자격 판정 입력이고 어휘 패턴으로 검사된다. 본문을 실으면 판정이
-  // 조용히 뒤집힌다 — v0.7.2+rpt20260817의 본문("Revert ... cannot be negotiated with the CFE")에는
-  // 그 패턴의 어휘가 하나도 없어서, 지금까지 통과하던 릴리스가 release_note_item 근거 미달로 main
-  // 자격을 잃는다(라이브 실측: 7건 중 2건 탈락). 자격 판정 변경은 이 수정의 목적이 아니다.
+  // 첫째, collect-news-candidates의 자격 판정 입력이고 어휘 패턴으로 검사된다. 한때 revert 본문에는
+  // 그 패턴의 어휘가 하나도 없어서 본문을 실으면 지금까지 통과하던 릴리스가 release_note_item 근거
+  // 미달로 main 자격을 잃었다(라이브 실측: 7건 중 2건 탈락). #976에서 BEHAVIOR_CHANGE_PATTERN에
+  // revert 어휘를 넣어 이 장애물은 없앴다 — 이제 본문을 실어도 이 축으로는 자격이 사라지지 않는다.
+  // 다만 그 확인은 imx296 본문 한 건으로 한 것이다. 함께 탈락했던 v0.7.1+rpt20260429의 본문은
+  // 커밋된 코퍼스에 없어 검증하지 못했으니, 본문 싣기를 실제로 켤 때 릴리스별로 다시 재어야 한다.
   //
-  // 둘째, article-capsules가 이 필드를 what_changed에 싣고 evidence의 식별 칸도 차지한다. 식별
+  // 둘째(이쪽이 아직 남은 이유다), article-capsules가 이 필드를 what_changed에 싣고 evidence의 식별 칸도 차지한다. 식별
   // 필드 셋이 evidence를 통째로 채워 본문이 한 칸도 못 들어가던 문제는 capsule 쪽에서 고쳤다 —
   // evidenceItems가 본문 계열 근거에 한 칸을 먼저 떼어 주므로, 여기서 만든 summary는 기사 프롬프트의
   // evidence에 들어간다.

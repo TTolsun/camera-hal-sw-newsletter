@@ -93,8 +93,9 @@ test('uses the release body as evidence instead of a tag-name template', () => {
   assert.equal(item.summary.includes('<'), false, 'HTML 태그가 남으면 안 된다');
 });
 
-// behavior_change는 collect-news-candidates의 자격 판정 입력이라 어휘 패턴으로 검사된다.
-// 본문을 여기까지 실으면 이 릴리스처럼 그 어휘가 없는 본문에서 자격이 조용히 사라진다.
+// behavior_change는 collect-news-candidates의 자격 판정 입력이면서 article-capsules의 what_changed
+// 이자 evidence 식별 칸이다. #976이 어휘 쪽 장애물(revert 본문이 근거 미달로 판정되던 것)은 없앴지만
+// capsule 쪽 역할은 그대로라, 본문은 summary가 나르고 이 필드는 릴리스 문장에 고정한다.
 test('keeps behavior_change on the release sentence so eligibility does not shift', () => {
   const body = '&lt;p&gt;Revert &quot;ipa: rpi: imx296: Enable embedded data&quot;&lt;/p&gt;';
   const [item] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody(body), source());
