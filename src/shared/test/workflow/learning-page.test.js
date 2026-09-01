@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const { mediaBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
+const { mediaBlock, exactSelectorBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
 const { assertSharedNav, assertSharedFooterNav } = require('../helpers/site-nav');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
@@ -13,6 +13,10 @@ const root = path.join(__dirname, '..', '..', '..', '..');
 
 function readLearningStylesheet() {
   return fs.readFileSync(path.join(root, 'articles', 'css', 'learning.css'), 'utf8');
+}
+
+function readSiteStylesheet() {
+  return fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8');
 }
 
 function readLearningPage() {
@@ -152,7 +156,7 @@ const KEYBOARD_SCROLLABLE = [
 const EXEMPT_SCROLL_SELECTORS = ['.learning-nav-inner', 'pre'];
 
 test('learning page classifies every scroll container as keyboard-reachable or exempt', () => {
-  const sheets = [readLearningStylesheet(), fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8')];
+  const sheets = [readLearningStylesheet(), readSiteStylesheet()];
   const found = [...scrollContainerSelectors(sheets)].sort();
   const classified = [...KEYBOARD_SCROLLABLE.map(entry => entry.selector), ...EXEMPT_SCROLL_SELECTORS].sort();
   assert.deepEqual(
@@ -251,4 +255,78 @@ test('learning page keeps focus targets clear of the two-tier sticky header', ()
     assert.ok(wide.has(selector), `${selector} 는 넓은 화면 scroll-margin-top 을 받아야 한다`);
     assert.ok(narrow.has(selector), `${selector} 는 좁은 화면 scroll-margin-top 을 받아야 한다`);
   }
+});
+
+// ---- 좁은 화면에서 목차 나브가 헤더 뒤로 들어가지 않는다 (#1023) ----
+
+// 이 페이지의 sticky 는 넓은 화면에서만 2단이다 — .site-header(top:0, z-index:20) 아래에
+// .learning-nav(top:59px, z-index:10). 좁은 화면에서는 .homepage-nav 가 column 으로 접히면서
+// 헤더가 59px 에서 133px 로 커지는데, 그때도 나브를 sticky 로 두면 나브(59~101px)가 헤더
+// (0~133px) 뒤로 통째로 들어가 목차가 보이지 않았다.
+//
+// 고른 해법은 그 폭에서 sticky 를 푸는 것이다. 나브 top 을 헤더 높이(133px)에 맞춰 헤더 아래에
+// 쌓는 방법은 sticky 가 가리는 띠를 133px 에서 175px 로 키우는데, 그러면 밑에 깔리는 것이
+// 목차만이 아니게 된다 — scroll-margin-top 이 없는 .source-card 가 완전히 가려지고(WCAG 2.4.11),
+// 400% 확대에서 본문에 남는 높이가 줄어든다(WCAG 1.4.10). static 은 이 둘을 만들지 않는다.
+// (목차 링크로 착지한 섹션 제목이 띠에 깔리는 것은 static 에서도 남는 기존 결함이다 —
+// .learning-section 에 scroll-margin-top 이 없다. A 안은 그것을 더 나쁘게 할 뿐이었다.)
+//
+// 그래서 잠그는 것은 둘이다.
+// - 폭: sticky 를 푸는 폭과 헤더가 접히는 폭이 같아야 한다. 갈리면 그 사이 구간에서 헤더는 두 줄인데
+//   나브는 아직 sticky 라 원래 버그가 되살아난다.
+// - 넓은 화면 top: 접히지 않은 헤더 높이와 같아야 한다. 리터럴로 두면 헤더의 min-height 가 바뀔 때
+//   나브가 헤더에 파고들거나 둘 사이에 빈 띠가 생긴다.
+// 접힌 헤더 높이(133px)는 이제 아무 값도 유도하지 않으므로 재지 않는다 — static 은 헤더가 얼마나
+// 커지든 상관하지 않는다.
+const HEADER_FOLD_QUERY = '(max-width: 640px)';
+
+// 선언에서 px 수치를 뽑는다. 값이 여러 토큰인 숏핸드(`border-bottom: 1px solid …`)는 첫 토큰만
+// 본다. 같은 속성이 여러 번 쓰였으면 뒤에 온 것이 이긴다(CSS 와 같다). px 이 아닌 값(`auto`,
+// `var(…)`)이 들어오면 조용히 0 으로 세는 대신 실패한다.
+function pxDeclaration(block, property) {
+  const normalized = String(block).replace(/\s+/g, ' ');
+  const found = [...normalized.matchAll(new RegExp(`(?:^|[;{ ])${property}\\s*:\\s*([^;]+);`, 'g'))];
+  assert.ok(found.length > 0, `${property} 선언이 있어야 한다`);
+  const value = found[found.length - 1][1].trim();
+  const first = value.split(' ')[0];
+  assert.match(first, /^\d+(?:\.\d+)?px$/, `${property} 의 첫 토큰은 px 값이어야 한다 — ${value}`);
+  return Number.parseFloat(first);
+}
+
+test('learning page drops the sticky table of contents where the header folds', () => {
+  const styles = readSiteStylesheet();
+
+  // 640px 의 근거는 이 한 줄이다 — 헤더가 한 줄에서 두 줄로 바뀌는 지점.
+  assertCssDeclaration(exactSelectorBlock(mediaBlock(styles, HEADER_FOLD_QUERY), '.homepage-nav'), 'flex-direction', 'column');
+
+  // 접히지 않은 헤더 높이 = .homepage-nav 의 min-height + 헤더의 아래 테두리.
+  // 그 식은 min-height 가 헤더 높이를 지배한다는 전제 위에 있다. 자식이 그보다 커지면 헤더는
+  // min-height 와 무관하게 자라는데 min-height 는 그대로라, top 만 대조해서는 낡은 값을 못 잡는다
+  // (실측: 브랜드 min-height 만 80px 로 올리면 헤더가 81px 이 되어 641px 이상에서 나브 위 22px 이
+  // 헤더 뒤로 들어가는데 잠금은 초록이었다). 그래서 지배 관계 자체를 잠근다.
+  const navMinHeight = pxDeclaration(exactSelectorBlock(styles, '.homepage-nav'), 'min-height');
+  const tallestChild = Math.max(
+    pxDeclaration(exactSelectorBlock(styles, '.homepage-brand'), 'min-height'),
+    pxDeclaration(exactSelectorBlock(styles, ':root'), '--control-height')
+  );
+  assert.ok(
+    navMinHeight >= tallestChild,
+    `.homepage-nav 의 min-height(${navMinHeight}px)보다 큰 자식(${tallestChild}px)이 있다 — 헤더 높이를 더 이상 min-height 가 정하지 않으므로 아래 계산이 성립하지 않는다. 이 잠금은 Lab 페이지 밖인 articles/css/styles.css 의 홈 헤더 기하(.homepage-nav·.homepage-brand)와 전역 토큰(:root --control-height)을 읽는다 — Lab 목차의 top 이 거기서 파생되기 때문이다`
+  );
+  const unfolded =
+    navMinHeight
+    + pxDeclaration(exactSelectorBlock(styles, '.site-header'), 'border-bottom');
+
+  const css = readLearningStylesheet();
+  const nav = exactSelectorBlock(css, '.learning-nav');
+  // 넓은 화면: 헤더 바로 아래에 붙는다. top 은 리터럴이 아니라 위에서 계산한 높이와 비교하므로,
+  // 헤더 min-height 가 바뀌면 learning.css 를 따라 고치지 않는 한 여기서 깨진다.
+  assertCssDeclaration(nav, 'position', 'sticky');
+  assertCssDeclaration(nav, 'top', `${unfolded}px`);
+  // 좁은 화면: sticky 를 풀어 문서 흐름에 둔다. 가릴 것이 없으므로 헤더 높이와 무관해진다.
+  assertCssDeclaration(
+    exactSelectorBlock(mediaBlock(css, HEADER_FOLD_QUERY), '.learning-nav'),
+    'position',
+    'static'
+  );
 });
