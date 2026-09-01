@@ -126,6 +126,11 @@ function applyCaps(proposedMain) {
 function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   const deterministicSelected = ensureArray(shortlistReport?.selected_articles);
   const reserve = ensureArray(shortlistReport?.reserve_candidates);
+  // #1034: 채점 투영 전용 우주다. 편집 계획은 selected+reserve가 아니라 shortlisted capsule
+  // 전체를 채점하므로(입력이 capsuleInputFromReport(articleCapsuleReport, 'shortlisted')),
+  // 투영이 이 목록을 못 보면 매주 채점된 후보 1~2건이 조용히 빠진다. 아래 판정 단계는 이
+  // 목록을 절대 읽지 않는다 — main 승급 자격은 결정론 선정과 reserve로 닫혀 있어야 한다.
+  const scoredUniverse = ensureArray(shortlistReport?.shortlisted_candidates);
   const lookup = buildCoverageLookup(editorialPlanReport);
   const entryFor = (candidate) => coverageFor(lookup, candidate);
   const deterministicKeys = new Set(deterministicSelected.map(candidateKey));
@@ -145,7 +150,9 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
     if (isDeterministicallyMainEligible(candidate) || wasMain) {
       proposedMain.push(candidate);
     } else {
-      changes.push({ key, action: 'promotion_blocked_ineligible' });
+      // #1034: 사유는 변화를 만든 자리에서 세운다. 나중에 action으로 유추하면 소비자마다
+      // 어휘가 갈리고, 이미 사유가 있는 강등과 규칙이 둘로 나뉜다.
+      changes.push({ key, action: 'promotion_blocked_ineligible', reason_code: 'promotion_blocked_ineligible' });
     }
   }
 
@@ -167,7 +174,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
       if (clamped.length >= mainMin) break;
       clamped.push(candidate);
       clampedKeys.add(candidateKey(candidate));
-      changes.push({ key: candidateKey(candidate), action: 'floor_backfill' });
+      changes.push({ key: candidateKey(candidate), action: 'floor_backfill', reason_code: 'floor_backfill' });
     }
   }
 
@@ -193,8 +200,19 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   }
   for (const candidate of clamped) {
     if (!deterministicKeys.has(candidateKey(candidate))) {
-      changes.push({ key: candidateKey(candidate), action: 'promoted' });
+      changes.push({ key: candidateKey(candidate), action: 'promoted', reason_code: 'promoted' });
     }
+  }
+  // #1034: 제안 main까지 갔다가 cap에 밀린 reserve 후보. 결정론 선정 쪽 같은 상황은 위 강등
+  // 루프가 cap_clamp로 남기는데(demotionReasonCode의 proposedMain 분기) reserve 쪽은 강등
+  // 루프에도 승급 루프에도 안 걸려 사유가 비어 있었다. 그 비대칭이 "그냥 reserve로 남았다"와
+  // "main까지 갔다가 cap에 밀렸다"를 같은 모양(null)으로 만든다. action은 강등과 갈라 둔다 —
+  // demoted로 적으면 결정론 편성에 없던 후보가 그룹 강등 기록(demoted_groups)에 섞인다.
+  for (const candidate of proposedMain) {
+    const key = candidateKey(candidate);
+    if (clampedKeys.has(key)) continue;
+    if (deterministicKeys.has(key)) continue;
+    changes.push({ key, action: 'promotion_clamped', reason_code: 'cap_clamp' });
   }
 
   // #837: 재조정이 main 집합을 바꾸면 그 집합에서 파생된 요약도 같이 바뀌어야 한다.
@@ -231,6 +249,86 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
     }))
   }));
 
+  // #1034: 강등분만 남기면 계획이 채점한 후보의 나머지가 커밋 산출물 어디에도 남지 않는다.
+  // reserve로 남은 후보와 catch-up pool 후보는 애초에 강등 대상이 아니라 위 목록에 절대
+  // 나타나지 않고, 판단 원본을 담은 editorial-plan.json은 보존 등급이 debug_heavy라 커밋되지
+  // 않는다. 그래서 "그 주 reserve 후보를 계획이 어떻게 채점했나"를 사후에 답할 수 없었다.
+  // 채점된 후보 전부를 강등 여부와 무관하게 싣는다. 관측이지 판정이 아니라 게이트에 쓰이지
+  // 않는다.
+  //
+  // reason_code는 "결정론 편성 대비 무슨 일이 있었나"를 담는다. 사유를 갖는 변화는 다섯 갈래이고,
+  // changes.push가 일어나는 자리와 정확히 일대일이다:
+  //   demoted(cap_clamp | editorial_plan_*) / promotion_blocked_ineligible /
+  //   promotion_clamped(cap_clamp) / floor_backfill / promoted
+  // 실제로 뭔가 일어난 후보가 null로 남으면 "아무 일도 없었다"로 잘못 읽힌다. null이 나오는
+  // 자리는 세 갈래다:
+  //   1. 결정론 편성 그대로 발행된 main (lineup_role='selected')
+  //   2. 제안조차 main이 아니었던 reserve (lineup_role='reserve')
+  //   3. lineup_role='shortlist_only' 후보 전부 — 등급과 무관하게 항상 null이다
+  // 3번을 "아무 일도 없었다"로 읽으면 안 된다. 이 후보들은 승급 대상 집합(selected+reserve)
+  // 밖이라 재조정이 아예 고려하지 않는다. 계획이 main_article로 제안한 후보도 여기 들어오며
+  // (프로덕션에서 흔하다 — 2026-08-31 reporter_candidate_count 8 vs selected 5 + reserve 1),
+  // 그 제안이 무시된 상태가 곧 null로 남는다. 그것이 사유 없음이 아니라 이 필드가 담는 사실이다.
+  //
+  // 사유는 push 지점이 세우므로 여기서는 유추하지 않는다. 한 후보가 두 갈래에 걸리지는
+  // 않는다 — backfill된 후보는 clampedKeys에 들어가 강등 루프가 건너뛰고, 승급·승급 차단·
+  // 승급 clamp는 결정론 선정 밖 후보라 강등·복귀와 애초에 집합이 겹치지 않는다.
+  const reasonCodeByCandidateKey = new Map(
+    changes
+      .filter(change => change.reason_code)
+      .map(change => [change.key, change.reason_code])
+  );
+  const scoredCandidates = [];
+  const scoredCandidateKeys = new Set();
+  // 우주는 계획 입력과 같아야 한다. 어느 배열에서 후보를 만났는지가 곧 결정론 편성에서의
+  // 역할이므로 배열마다 이름을 달아 돌고, 먼저 만난 역할을 남긴 뒤 키로 중복을 지운다.
+  //
+  // 마지막 라벨이 shortlist_only인 이유: 채점 우주(scoredUniverse)에는 selected·reserve 후보도
+  // 들어 있고 라벨은 먼저 만난 쪽이 이긴다. 그래서 이 라벨이 실제로 뜻하는 것은 "채점 우주에
+  // 있었으나 selected에도 reserve에도 못 든 나머지"다. shortlisted라고 부르면 세 값 전부에
+  // 참인 상위 개념으로 읽혀, 그 주 shortlist 규모를 이 라벨로 세면 selected+reserve만큼 적게 나온다.
+  const scoredLineup = [
+    ['selected', deterministicSelected],
+    ['reserve', reserve],
+    ['shortlist_only', scoredUniverse]
+  ];
+  for (const [lineupRole, candidates] of scoredLineup) {
+    for (const candidate of candidates) {
+      const key = candidateKey(candidate);
+      if (scoredCandidateKeys.has(key)) continue;
+      const coverageDecision = entryFor(candidate)?.coverage_decision || '';
+      // 채점되지 않은 후보는 담지 않는다. 목록이 "등급을 실제로 받은 후보"만 담아야 부재가
+      // 곧 미채점이라는 답이 된다. 여기서 읽는 판단은 재조정이 실제로 본 값과 같은 조회를
+      // 거치므로, 계획 항목 조회가 빗나간 후보도 재조정이 그랬듯 미채점으로 남는다.
+      if (!coverageDecision) continue;
+      scoredCandidateKeys.add(key);
+      scoredCandidates.push({
+        candidate_key: key,
+        // #1034: 후보가 결정론 편성에서 어디에 있었나. candidate_key는 불투명 해시(sha256)라
+        // 그것만으로는 어느 레코드가 reserve였는지 알 수 없고, 이슈의 검증 질문 1이 정확히
+        // 그것을 묻는다. 그룹키로는 답할 수 없다 — 한 그룹키가 여러 후보를 접기 때문이다
+        // (공유 explicit 키·lore 패치 시리즈·native tooling 상수). 그래서 후보 단위 사실로 싣는다.
+        //
+        // 재조정 뒤 최종 main 여부는 이 값 하나로도, reason_code 하나로도 답하지 못한다. 두
+        // 필드가 함께 필요하고, 채점된 후보에 한해 다음이 정확히 최종 main이다:
+        //
+        //   (lineup_role === 'selected' && reason_code ∈ {null, 'floor_backfill'}) ||
+        //   (lineup_role === 'reserve'  && reason_code === 'promoted')
+        //
+        // reason_code 단독 규칙은 강등도 승급도 없이 그대로 발행된 main(=null)을 통째로 놓친다.
+        // 미채점 후보는 레코드가 없으므로 이 식의 대상이 아니다. coverage-reconciliation.test.js의
+        // "레코드 두 필드로 계산한 최종 main이 실제 편성과 일치한다"가 이 식을 그대로 집행한다 —
+        // 규칙을 고치려면 그 테스트를 함께 고쳐야 한다.
+        lineup_role: lineupRole,
+        // 강등 기록(reconciliation_demoted_groups)과 교차 참조하는 용도로 함께 싣는다.
+        // #913이 그 기록에 쓴 키와 같은 함수라 두 목록을 그룹 단위로 이을 수 있다.
+        article_group_key: candidateGroupKey(candidate),
+        coverage_decision: coverageDecision,
+        reason_code: reasonCodeByCandidateKey.get(key) || null
+      });
+    }
+  }
+
   return {
     selected: clamped,
     // 재조정된 main 집합에서 파생되는 shortlistReport 요약 필드.
@@ -249,6 +347,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
       deterministic_selected_group_keys: deterministicGroupKeys,
       demoted_group_keys: demotedGroupKeys,
       demoted_groups: demotedGroups,
+      editorial_plan_scored_candidates: scoredCandidates,
       promoted_group_keys: reconciledGroupKeys.filter(key => !deterministicGroupKeySet.has(key))
     }
   };

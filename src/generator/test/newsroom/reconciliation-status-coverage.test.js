@@ -44,6 +44,7 @@ function applyReconciliation(shortlistReport, editorialPlanReport) {
     selected_articles: result.selected,
     reconciliation_demoted_group_keys: result.diff.demoted_group_keys,
     reconciliation_demoted_groups: result.diff.demoted_groups,
+    editorial_plan_scored_candidates: result.diff.editorial_plan_scored_candidates,
     reconciliation_promoted_group_keys: result.diff.promoted_group_keys,
     deterministic_selected_representative_group_keys: result.diff.deterministic_selected_group_keys
   });
@@ -304,4 +305,53 @@ test('#909: 그룹 강등 사유가 status까지 남고 candidate 단위와 섞�
     article_group_key: 'group:sony',
     demoted_candidates: [{ candidate_key: 'sony', coverage_decision: 'reference_only', reason_code: 'editorial_plan_reference_only' }]
   }], '사라진 그룹만, 사유와 함께 남는다');
+});
+
+test('#1034: 강등되지 않은 채점 후보의 판단도 status까지 남는다', () => {
+  // reserve로 남은 후보는 강등 대상이 아니라 reconciliation_demoted_groups에 영원히
+  // 나타나지 않는다. 판단 원본(editorial-plan.json)은 커밋되지 않으므로, 여기서 남기지
+  // 않으면 "그 주 reserve 후보를 계획이 어떻게 채점했는가"에 사후로 답할 수 없다.
+  const shortlistReport = deterministicReport(['a']);
+  shortlistReport.reserve_candidates = [candidate('r')];
+  // 계획이 채점하는 우주는 selected+reserve가 아니라 shortlisted capsule 전체다.
+  shortlistReport.shortlisted_candidates = [
+    shortlistReport.selected_articles[0],
+    shortlistReport.reserve_candidates[0],
+    candidate('s')
+  ];
+
+  const editorialPlanReport = {
+    editorial_plans: [plan('a', 'main_article'), plan('r', 'reference_only'), plan('s', 'exclude')]
+  };
+
+  applyReconciliation(shortlistReport, editorialPlanReport);
+
+  const status = selectionStatusExtra(shortlistReport, {
+    renderedGroupKeys: ['group:a'],
+    explicitlyDemotedGroups: [],
+    hardBlockedGroups: []
+  });
+
+  assert.deepEqual(status.reconciliation_demoted_groups, [], '강등은 없다');
+  assert.deepEqual(status.editorial_plan_scored_candidates, [
+    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'r', lineup_role: 'reserve', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null },
+    { candidate_key: 's', lineup_role: 'shortlist_only', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
+  ], '채점된 후보 전부가 커밋되는 status로 간다');
+  // 이슈 검증 질문 1은 reserve 후보만 묻는다. 역할이 후보 단위로 실려 있어야 reserve와
+  // shortlisted 전용 후보가 갈린다 — 그룹키 차집합은 둘을 한 덩어리로 돌려준다.
+  assert.deepEqual(
+    status.editorial_plan_scored_candidates
+      .filter(item => item.lineup_role === 'reserve')
+      .map(item => [item.candidate_key, item.coverage_decision]),
+    [['r', 'reference_only']],
+    'status만 읽어 그 주 reserve 후보의 판단을 답할 수 있다'
+  );
+  assert.deepEqual(
+    status.editorial_plan_scored_candidates
+      .filter(item => item.lineup_role === 'shortlist_only')
+      .map(item => item.candidate_key),
+    ['s'],
+    'shortlist 전용 후보는 reserve와 섞이지 않는다'
+  );
 });

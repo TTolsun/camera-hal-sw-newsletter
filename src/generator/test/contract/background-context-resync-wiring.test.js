@@ -78,3 +78,36 @@ test('the publish host clears the reconciliation provenance at the start of each
   assert.ok(resetIndex > loopIndex, '초기화는 attempt 루프 안에서 일어난다');
   assert.ok(resetIndex < assignIndex, '초기화는 재조정 대입보다 앞이어야 한다');
 });
+
+// #1034: 채점 투영도 attempt 단위 사실이다. 재조정 전에 죽은 attempt가 직전 attempt의 채점
+// 기록을 그대로 status에 남기면 다른 편성의 판단을 이번 실행 것으로 읽게 된다. #909 강등
+// 투영과 같은 수명이라 같은 자리에서 초기화한다.
+test('the publish host clears the scored-candidate projection at the start of each attempt', () => {
+  const source = publishHostSource();
+
+  const loopIndex = source.indexOf('for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {');
+  const resetIndex = source.indexOf('shortlistReport.editorial_plan_scored_candidates = [];');
+  const assignIndex = source.indexOf(
+    'shortlistReport.editorial_plan_scored_candidates = coverageReconciliation.diff.editorial_plan_scored_candidates;'
+  );
+
+  assert.ok(loopIndex > 0, 'attempt 루프를 찾지 못했다');
+  assert.ok(resetIndex > loopIndex, '초기화는 attempt 루프 안에서 일어난다');
+  assert.ok(resetIndex < assignIndex, '초기화는 재조정 대입보다 앞이어야 한다');
+});
+
+// #1034 후속: 재조정은 selected+reserve만 받는데 편집 계획은 shortlisted capsule 전체를
+// 채점한다. 호스트가 그 우주를 함께 넘기지 않으면 채점 투영이 계획보다 좁아지고,
+// "목록에 없다 = 계획이 채점하지 않았다"는 읽기 규칙이 거짓이 된다.
+test('the publish host feeds the plan-scored shortlist into the reconciliation', () => {
+  const source = publishHostSource();
+
+  const reconcileIndex = source.indexOf('reconcileCoverage({');
+  assert.ok(reconcileIndex > 0, 'reconcileCoverage 호출을 찾지 못했다');
+  const callBlock = source.slice(reconcileIndex, source.indexOf('});', reconcileIndex));
+
+  assert.ok(
+    callBlock.includes('shortlisted_candidates: reporter.candidates'),
+    '재조정 입력이 계획 채점 우주(shortlisted capsule의 출처)를 함께 받아야 한다'
+  );
+});

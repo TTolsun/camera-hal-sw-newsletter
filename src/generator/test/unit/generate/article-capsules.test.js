@@ -639,3 +639,28 @@ test('article capsule prompt input omits linked evidence diagnostics fields', ()
   assert.equal(serialized.includes('raw_excerpt'), false);
   assert.equal(serialized.includes('resolved'), false);
 });
+
+// #1034: 편집 계획의 채점 우주는 이 함수가 만든다. 계획 입력은
+// capsuleInputFromReport(report, 'shortlisted')이고, 재조정의 채점 투영은 그 우주와 같아야
+// "목록에 없다 = 계획이 채점하지 않았다"는 읽기 규칙이 참이 된다. 1:1 관계가 깨지면 투영이
+// 조용히 좁아지므로 여기서 잠근다(호스트가 그 배열을 넘기는지는
+// background-context-resync-wiring.test.js가 본다).
+test('the editorial plan input is one capsule per reporter candidate', () => {
+  const candidates = ['a', 'r', 's'].map(url => ({
+    url: `https://example.test/${url}`,
+    url_hash: url,
+    title: url,
+    summary: url
+  }));
+
+  const capsuleReport = buildArticleCapsuleReport('2026-09-01', {
+    selected_articles: [candidates[0]],
+    reserve_candidates: [candidates[1]]
+  }, { date: '2026-09-01', candidates });
+
+  assert.deepEqual(
+    capsuleInputFromReport(capsuleReport, 'shortlisted').candidates.map(item => item.url),
+    candidates.map(item => item.url),
+    '계획이 채점하는 capsule은 reporter.candidates와 1:1이다'
+  );
+});
