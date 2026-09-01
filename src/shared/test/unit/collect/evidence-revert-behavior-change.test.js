@@ -52,7 +52,7 @@ test('#976 revert 릴리스 본문은 동작 변경 근거로 인정되고 main_
   assert.equal(metadata.main_eligible, true);
 });
 
-test('#976 게이트는 낮아지지 않았다: 날짜·버전·컴포넌트가 빠진 후보는 여전히 탈락한다', () => {
+test('#976 release_note_item의 네 근거 요구는 그대로다: 하나라도 빠지면 탈락한다', () => {
   // revert 어휘 하나만으로는 통과하지 못한다. release_note_item은 네 근거를 모두 요구한다.
   const missingEvidence = [
     {
@@ -78,4 +78,24 @@ test('#976 게이트는 낮아지지 않았다: 날짜·버전·컴포넌트가 
     assert.equal(metadata.source_gap_risk, true, `${label}: source_gap_risk가 유지돼야 한다`);
     assert.equal(metadata.main_eligible, false, `${label}: main_eligible이 false여야 한다`);
   }
+});
+
+test('#976 점수 임계값도 그대로다: 네 근거가 다 있어도 score가 낮으면 탈락한다', () => {
+  // 근거 요구와 점수 임계값은 별개의 레버다. 앞 테스트는 네 근거 요구만 잠그므로, score >= 30이
+  // 느슨해지는 변경은 그쪽에 걸리지 않는다. 어휘를 넓히는 이 PR이 점수 쪽을 건드리지 않았음을
+  // 여기서 따로 잠근다.
+  const raw = {
+    sourceKind: 'release_note_item',
+    publishedAt: '2026-08-17',
+    behavior_change: REVERT_RELEASE_BODY
+  };
+  const title = 'Raspberry Pi libcamera Releases - v0.7.2+rpt20260817';
+
+  const belowThreshold = evidenceMetadata(raw, RELEASE_SOURCE, title, '', 29, false);
+  assert.equal(belowThreshold.evidence_score, 8, '네 근거가 다 있어 evidence_score는 만점이다');
+  assert.equal(belowThreshold.source_gap_risk, false, '근거 쪽 위험은 없다');
+  assert.equal(belowThreshold.main_eligible, false, 'score 29는 임계값 30에 못 미쳐 탈락한다');
+
+  const atThreshold = evidenceMetadata(raw, RELEASE_SOURCE, title, '', 30, false);
+  assert.equal(atThreshold.main_eligible, true, 'score 30은 임계값을 만족한다');
 });
