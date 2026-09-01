@@ -150,7 +150,9 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
     if (isDeterministicallyMainEligible(candidate) || wasMain) {
       proposedMain.push(candidate);
     } else {
-      changes.push({ key, action: 'promotion_blocked_ineligible' });
+      // #1034: 사유는 변화를 만든 자리에서 세운다. 나중에 action으로 유추하면 소비자마다
+      // 어휘가 갈리고, 이미 사유가 있는 강등과 규칙이 둘로 나뉜다.
+      changes.push({ key, action: 'promotion_blocked_ineligible', reason_code: 'promotion_blocked_ineligible' });
     }
   }
 
@@ -172,7 +174,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
       if (clamped.length >= mainMin) break;
       clamped.push(candidate);
       clampedKeys.add(candidateKey(candidate));
-      changes.push({ key: candidateKey(candidate), action: 'floor_backfill' });
+      changes.push({ key: candidateKey(candidate), action: 'floor_backfill', reason_code: 'floor_backfill' });
     }
   }
 
@@ -243,13 +245,18 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   // 채점된 후보 전부를 강등 여부와 무관하게 싣는다. 관측이지 판정이 아니라 게이트에 쓰이지
   // 않는다.
   //
-  // reason_code는 main이 되지 못한 원인을 담는다. 원인이 있는 경로는 두 갈래다:
-  // 결정론 선정에서 빠진 강등(cap_clamp | editorial_plan_*)과 main 제안이 자격 가드에 막힌
-  // 승급 차단(promotion_blocked_ineligible). 그냥 reserve로 남은 후보는 원인이 없어 null이다.
+  // reason_code는 "결정론 편성 대비 무슨 일이 있었나"를 담는다. 사유를 갖는 변화는 세 갈래다:
+  // 결정론 선정에서 빠진 강등(cap_clamp | editorial_plan_*), main 제안이 자격 가드에 막힌
+  // 승급 차단(promotion_blocked_ineligible), 강등됐다가 발행가능 floor로 되돌아온 복귀
+  // (floor_backfill). 마지막 갈래를 빼면 실제로 발행된 main 기사가 null로 남아 "그냥 reserve로
+  // 남았다"로 잘못 읽힌다. 아무 일도 없던 후보만 null이다.
+  //
+  // 사유는 push 지점이 세우므로 여기서는 유추하지 않는다. 한 후보가 두 갈래에 걸리지는
+  // 않는다 — backfill된 후보는 clampedKeys에 들어가 강등 루프가 건너뛴다.
   const reasonCodeByCandidateKey = new Map(
     changes
-      .filter(change => change.action === 'demoted' || change.action === 'promotion_blocked_ineligible')
-      .map(change => [change.key, change.reason_code || change.action])
+      .filter(change => change.reason_code)
+      .map(change => [change.key, change.reason_code])
   );
   const scoredCandidates = [];
   const scoredCandidateKeys = new Set();
@@ -266,6 +273,11 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
     scoredCandidateKeys.add(key);
     scoredCandidates.push({
       candidate_key: key,
+      // #1034: candidate_key는 불투명 해시(sha256)라 그것만으로는 어느 레코드가 결정론 편성
+      // 밖 후보였는지 status만 읽어서 알 수 없다. 그룹키는 같은 파일의
+      // deterministic_selected_representative_group_keys와 네임스페이스가 같아 차집합으로
+      // reserve·shortlisted 후보를 가려낼 수 있다. #913이 강등 기록에 쓴 키와 같은 함수다.
+      article_group_key: candidateGroupKey(candidate),
       coverage_decision: coverageDecision,
       reason_code: reasonCodeByCandidateKey.get(key) || null
     });

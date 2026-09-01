@@ -334,8 +334,18 @@ test('#1034: 강등되지 않은 채점 후보의 판단도 status까지 남는�
 
   assert.deepEqual(status.reconciliation_demoted_groups, [], '강등은 없다');
   assert.deepEqual(status.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'r', coverage_decision: 'reference_only', reason_code: null },
-    { candidate_key: 's', coverage_decision: 'exclude', reason_code: null }
+    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'r', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null },
+    { candidate_key: 's', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
   ], '채점된 후보 전부가 커밋되는 status로 간다');
+  // status만 읽어 reserve 후보를 지목할 수 있어야 한다. main 편성 그룹키는 같은 파일의
+  // deterministic_selected_representative_group_keys에 있으므로 차집합이 곧 편성 밖 후보다.
+  const mainGroupKeys = new Set(status.deterministic_selected_representative_group_keys);
+  assert.deepEqual(
+    status.editorial_plan_scored_candidates
+      .filter(item => !mainGroupKeys.has(item.article_group_key))
+      .map(item => item.candidate_key),
+    ['r', 's'],
+    '결정론 편성 밖 채점 후보를 status만으로 가려낼 수 있다'
+  );
 });

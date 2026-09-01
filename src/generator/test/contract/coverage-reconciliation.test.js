@@ -379,9 +379,15 @@ test('강등되지 않고 reserve로 남은 채점 후보도 diff에 실린다',
 
   assert.deepEqual(out.diff.demoted_groups, [], '강등이 없어도 채점 사실은 남아야 한다');
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'r', coverage_decision: 'reference_only', reason_code: null }
+    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'r', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null }
   ]);
+  // candidate_key는 불투명 해시라 status만 읽어서는 어느 레코드가 reserve였는지 알 수 없다.
+  // 그룹키는 selected 쪽 기록(deterministic_selected_representative_group_keys)과 같은
+  // 네임스페이스라, 그 목록에 없는 그룹키가 곧 main 편성 밖 후보다.
+  const reserveRecord = out.diff.editorial_plan_scored_candidates
+    .find(item => !out.diff.deterministic_selected_group_keys.includes(item.article_group_key));
+  assert.equal(reserveRecord.candidate_key, 'r', '그룹키로 reserve 후보를 지목할 수 있다');
 });
 
 test('채점 목록은 강등 사유를 함께 싣고 미채점 후보는 담지 않는다', () => {
@@ -396,8 +402,8 @@ test('채점 목록은 강등 사유를 함께 싣고 미채점 후보는 담지
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
 
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'b', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' }
+    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'b', article_group_key: 'group:b', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' }
   ], '채점된 후보만, 강등된 후보는 사유와 함께');
 });
 
@@ -426,9 +432,9 @@ test('선정·reserve 밖 shortlisted 후보의 채점도 diff에 실린다', ()
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
 
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'r', coverage_decision: 'reference_only', reason_code: null },
-    { candidate_key: 's', coverage_decision: 'exclude', reason_code: null }
+    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'r', article_group_key: 'group:r', coverage_decision: 'reference_only', reason_code: null },
+    { candidate_key: 's', article_group_key: 'group:s', coverage_decision: 'exclude', reason_code: null }
   ], '같은 후보를 두 번 싣지 않고 shortlisted 전용 후보까지 담는다');
 });
 
@@ -471,7 +477,27 @@ test('승급이 막힌 채점 후보는 그 사실을 사유로 남긴다', () =
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
 
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
-    { candidate_key: 'b', coverage_decision: 'main_article', reason_code: 'promotion_blocked_ineligible' }
+    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'b', article_group_key: 'group:b', coverage_decision: 'main_article', reason_code: 'promotion_blocked_ineligible' }
   ]);
+});
+
+test('발행가능 floor backfill로 main에 되돌아온 후보는 그 사실을 사유로 남긴다', () => {
+  // 결정론 선정 전부가 exclude로 채점되면 제안 main이 비고, floor backfill이 점수 최고
+  // 후보를 main으로 되돌린다. 그 후보의 사유가 null이면 "그냥 reserve로 남았다"로 읽히는데
+  // 실제로는 발행된 main 기사다 — 사후 검증이 정확히 여기서 어긋난다.
+  const low = mainEligible({ url: 'a', article_group_key: 'group:a', deterministic_score: 40 });
+  const high = mainEligible({ url: 'b', article_group_key: 'group:b', deterministic_score: 80 });
+  const shortlistReport = { selected_articles: [low, high], reserve_candidates: [] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(low, 'exclude'), plan(high, 'exclude')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.selected.map(item => item.url), ['b'], 'floor backfill이 점수 최고를 되돌린다');
+  assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
+    { candidate_key: 'a', article_group_key: 'group:a', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' },
+    { candidate_key: 'b', article_group_key: 'group:b', coverage_decision: 'exclude', reason_code: 'floor_backfill' }
+  ], '되돌아온 후보는 null이 아니라 복귀 사실을 남긴다');
 });

@@ -572,7 +572,7 @@ async function main() {
     shortlistReport.reconciliation_demoted_groups = coverageReconciliation.diff.demoted_groups;
     // #1034: 강등되지 않은 채점 후보(reserve·shortlisted·catch-up pool)는 위 목록에 나타나지
     // 않는다. 계획이 채점한 후보 전부를 함께 남겨야 "왜 이 후보는 main이 아니었나"에 답할 수
-    // 있다. 사유는 강등과 승급 차단에만 붙고, 그냥 채점만 된 후보는 null로 남는다.
+    // 있다. 사유는 강등·승급 차단·floor backfill 복귀에만 붙고, 아무 일도 없던 후보는 null이다.
     shortlistReport.editorial_plan_scored_candidates = coverageReconciliation.diff.editorial_plan_scored_candidates;
     shortlistReport.reconciliation_promoted_group_keys = coverageReconciliation.diff.promoted_group_keys;
     shortlistReport.publish_ready = deterministicPublishReady

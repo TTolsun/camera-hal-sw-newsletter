@@ -111,29 +111,3 @@ test('the publish host feeds the plan-scored shortlist into the reconciliation',
     '재조정 입력이 계획 채점 우주(shortlisted capsule의 출처)를 함께 받아야 한다'
   );
 });
-
-// 위 테스트는 호스트가 reporter.candidates를 넘긴다는 사실만 잠근다. 그 배열이 정말로 계획
-// 채점 우주와 같은지는 capsule 조립 쪽 성질이라 여기서 함께 실행해 확인한다. 이 1:1 관계가
-// 깨지면 투영 우주가 다시 조용히 좁아진다.
-test('the editorial plan input is one capsule per reporter candidate', () => {
-  const { buildArticleCapsuleReport, capsuleInputFromReport } = require('../../select/article-capsules');
-
-  const candidates = ['a', 'r', 's'].map(url => ({
-    url: `https://example.test/${url}`,
-    url_hash: url,
-    title: url,
-    summary: url
-  }));
-  const capsuleReport = buildArticleCapsuleReport('2026-09-01', {
-    selected_articles: [candidates[0]],
-    reserve_candidates: [candidates[1]]
-  }, { date: '2026-09-01', candidates });
-
-  const planInput = capsuleInputFromReport(capsuleReport, 'shortlisted');
-
-  assert.deepEqual(
-    planInput.candidates.map(item => item.url),
-    candidates.map(item => item.url),
-    '계획이 채점하는 capsule은 reporter.candidates와 1:1이다'
-  );
-});

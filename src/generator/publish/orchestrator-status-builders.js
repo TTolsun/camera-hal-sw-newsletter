@@ -226,7 +226,9 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // catch-up pool 후보는 강등 대상이 아니라 위 목록에 절대 나타나지 않아, 판단이 담긴
     // editorial-plan.json(역시 커밋 안 됨)이 만료되면 "그 후보를 계획이 어떻게 봤나"를 영영
     // 알 수 없다. 계획이 채점한 후보 전부(우주 = 계획 입력인 shortlisted capsule)의 판단을
-    // 여기서 커밋되는 status로 올린다. 관측이지 판정이 아니다.
+    // 여기서 커밋되는 status로 올린다. 레코드의 article_group_key는 바로 위
+    // deterministic_selected_representative_group_keys와 같은 네임스페이스라, 차집합으로 결정론
+    // 편성 밖 후보를 이 파일만 읽고 가려낼 수 있다. 관측이지 판정이 아니다.
     editorial_plan_scored_candidates: ensureArray(report.editorial_plan_scored_candidates),
     reconciliation_promoted_group_keys: ensureArray(report.reconciliation_promoted_group_keys),
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
