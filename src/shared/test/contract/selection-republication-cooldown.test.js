@@ -684,6 +684,16 @@ test('the committed history declares the backfill window start as its coverage s
   // 있었고, 그 선언을 근거로 백필 범위를 판단하면 이미 덮였다고 착각한다.
   // 상수를 파일에서 읽어오면 안 된다(위 주석 참고). 두 값을 비교만 한다.
   assert.equal(committedExposureHistory().coverage.coverage_starts_at, BACKFILL_WINDOW_START);
+
+  // 반대 방향도 잠근다. 위 단언은 선언과 상수만 보므로, 창 시작보다 이른 newsletter_article
+  // 레코드가 들어와도 통과한다 — #1037과 같은 어긋남이 반대편으로 재발하는 자리다. 아래 검사는
+  // 창을 파일에서 파생시키는 것이 아니라(그건 위 주석이 금지한다) 파일이 상수 밖으로 나갔는지
+  // 대조만 하므로 그 금지와 충돌하지 않는다. 되돌리지 말 것.
+  const earliestRecordDate = committedMainArticleRecords()
+    .map(item => String(item.newsletter_article_date || ''))
+    .filter(Boolean)
+    .sort()[0];
+  assert.equal(earliestRecordDate, BACKFILL_WINDOW_START);
 });
 
 test('no published main article inside the backfill window is missing from the history', () => {
