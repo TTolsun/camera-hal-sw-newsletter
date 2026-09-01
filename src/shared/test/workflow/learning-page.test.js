@@ -275,24 +275,59 @@ const HEADER_FOLD_QUERY = '(max-width: 640px)';
 // 브라우저 실측값(Chrome, 배포된 페이지, 320~1265px). 이 단언이 실제로 지키는 범위는 좁으니
 // 그대로 적어 둔다.
 // - 합산식에 이미 든 항이 바뀌는 것: 잡는다. 다만 아래 learning.css 비교와 중복이다.
-// - 합산식 자체가 깎이는 것: 여기서만 잡는다 — `+ border` 나 gap 항을 지우면 이 단언만 깨진다.
-//   이것이 이 값을 남겨 두는 이유다.
-// - 헤더에 **새 항이 생기는 것**: 못 잡는다. .site-header 에 세로 패딩을 더하면 실제 헤더는
-//   커지지만 합산식은 그 항을 모르므로 양쪽 다 133 으로 남아 통과한다.
+// - 합산식과 learning.css 의 top 이 **함께** 어긋나는 것: 여기서만 잡는다. 합산식에서 항을 하나
+//   지우면 learning.css 비교가 먼저 걸리므로 그것만으로는 이 값이 필요 없지만, learning.css 까지
+//   그 잘못된 값으로 맞추면 두 쪽이 합의해 버린다. 그때 남는 것이 실측값과 대는 이 단언뿐이다.
+// - 헤더에 **새 항이 생기는 것**: 못 잡는다. 두 가지가 다 여기 해당한다 — .site-header 에 세로
+//   패딩을 더하는 경우, 그리고 640px 블록에서 .homepage-nav-links 가 width:100% + flex-wrap:wrap
+//   을 받으므로 링크가 하나 늘면 좁은 화면에서 34px 줄이 하나 더 쌓이는 경우(합산식은 링크줄을
+//   한 줄로만 센다 — 지금 세 링크는 감기지 않지만 구조는 그대로다). 둘 다 실제 헤더만 커진다.
 // 이 단언이 깨지면 숫자만 맞추지 말고 브라우저에서 다시 재서 갱신한다.
 const MEASURED_HEADER_HEIGHT = { unfolded: 59, folded: 133 };
 
-// 선언 값을 토큰 목록으로 돌려준다. 숏핸드의 항이 몇 개인지 봐야 할 때 쓴다.
+// 목차 스트립(.learning-nav)의 높이 42.5px 중 CSS 에서 나오지 않는 항 — 링크 한 줄의 line box.
+// 스트립 높이는 뷰포트 폭에 의존하지 않는다(실측 320~1265px 에서 42.5px 고정). 나머지 27px 은
+// .learning-nav-inner 의 세로 패딩 26px 과 .learning-nav 의 아래 테두리 1px 이라 아래에서 CSS 로
+// 읽는다. 이 항만 폰트가 정하므로 실측으로 남긴다.
+const MEASURED_NAV_LINK_LINE_BOX = 15.5;
+
+// 선언 값을 토큰 목록으로 돌려준다. 같은 속성이 여러 번 쓰였으면 뒤에 온 것이 이긴다(CSS 와 같다).
 function declarationTokens(block, property) {
   const normalized = String(block).replace(/\s+/g, ' ');
-  const match = normalized.match(new RegExp(`(?:^|[;{ ])${property}\\s*:\\s*([^;]+);`));
-  assert.ok(match, `${property} 선언이 있어야 한다`);
-  return match[1].trim().split(' ');
+  const found = [...normalized.matchAll(new RegExp(`(?:^|[;{ ])${property}\\s*:\\s*([^;]+);`, 'g'))];
+  assert.ok(found.length > 0, `${property} 선언이 있어야 한다`);
+  return found[found.length - 1][1].trim().split(' ');
 }
 
-// 선언에서 px 수치를 뽑는다. 값이 여러 토큰인 숏핸드(`padding: 12px 0`, `border-bottom: 1px solid …`)
-// 는 첫 토큰만 본다 — 여기서 더하는 세로 기하는 전부 첫 토큰에서 나온다. px 이 아닌 값(`auto`,
-// `var(…)`)이 들어오면 조용히 0 으로 세는 대신 실패한다.
+// 블록의 세로 패딩(위 + 아래)을 돌려준다. 선언을 쓰인 순서대로 훑으며 상·하를 각각 덮어쓴다 —
+// `padding` 숏핸드는 값이 3개 이상일 때만 아래가 갈리고, `padding-top`/`padding-bottom` 롱핸드는
+// 그 한 변만 바꾼다. 토큰 개수를 세지 않고 펼친 두 값을 비교하므로 `padding: 12px 0 12px 0`(4값
+// 이지만 대칭)은 통과하고, `padding: 12px 0` 뒤의 `padding-bottom: 20px` 은 걸린다.
+// 두 배로 세는 것 자체가 상·하 대칭 가정이라, 갈리면 합산식을 쓸 수 없으므로 실패한다.
+function verticalPadding(block, label) {
+  let top = '0px';
+  let bottom = '0px';
+  const normalized = String(block).replace(/\s+/g, ' ');
+  for (const rule of normalized.matchAll(/(?:^|[;{ ])(padding(?:-top|-bottom)?)\s*:\s*([^;]+);/g)) {
+    const tokens = rule[2].trim().split(' ');
+    if (rule[1] === 'padding-top') top = tokens[0];
+    else if (rule[1] === 'padding-bottom') bottom = tokens[0];
+    else {
+      top = tokens[0];
+      bottom = tokens.length >= 3 ? tokens[2] : tokens[0];
+    }
+  }
+  // px 검사를 대칭 검사보다 먼저 한다 — `padding: var(--x, 4px) 0` 처럼 토큰이 갈라지는 값에
+  // "위아래가 다르다" 고 오진하지 않도록.
+  for (const [edge, value] of [['위', top], ['아래', bottom]]) {
+    assert.match(value, /^\d+(?:\.\d+)?px$/, `${label} 의 ${edge} 패딩은 px 값이어야 한다 — ${value}`);
+  }
+  assert.equal(bottom, top, `${label} 의 위아래 패딩이 다르다 — 세로 패딩을 두 배로 세는 가정이 깨진다`);
+  return Number.parseFloat(top) * 2;
+}
+
+// 선언에서 px 수치를 뽑는다. 값이 여러 토큰인 숏핸드(`border-bottom: 1px solid …`)는 첫 토큰만
+// 본다. px 이 아닌 값(`auto`, `var(…)`)이 들어오면 조용히 0 으로 세는 대신 실패한다.
 function pxDeclaration(block, property) {
   const tokens = declarationTokens(block, property);
   assert.match(tokens[0], /^\d+(?:\.\d+)?px$/, `${property} 의 첫 토큰은 px 값이어야 한다 — ${tokens.join(' ')}`);
@@ -313,15 +348,8 @@ test('learning page pins the sticky table of contents to the folded header', () 
   // 한 줄 헤더: .homepage-nav 의 min-height 가 브랜드(54px)·링크(44px)보다 커서 높이를 지배한다.
   const unfolded = pxDeclaration(nav, 'min-height') + border;
   // 두 줄 헤더: min-height 가 auto 로 풀리고 세로 패딩 + 브랜드 + 간격 + 링크줄이 쌓인다.
-  // 패딩을 두 배로 세는 것은 위아래가 같다는 가정이다. `padding: 12px 0 20px` 처럼 아래쪽을 따로
-  // 주는 3·4값 숏핸드면 그 가정이 깨진다 — 실제 헤더는 141px 인데 합산은 133px 로 남는다.
-  const navFolded = exactSelectorBlock(folded, '.homepage-nav');
-  assert.ok(
-    declarationTokens(navFolded, 'padding').length <= 2,
-    '.homepage-nav 의 padding 은 위아래 대칭이어야 한다 — 아래를 따로 주면 padding * 2 가정이 깨진다'
-  );
   const foldedHeight =
-    pxDeclaration(navFolded, 'padding') * 2
+    verticalPadding(exactSelectorBlock(folded, '.homepage-nav'), '.homepage-nav')
     + pxDeclaration(exactSelectorBlock(styles, '.homepage-brand'), 'min-height')
     + pxDeclaration(nav, 'gap')
     + pxDeclaration(exactSelectorBlock(folded, '.homepage-nav-links a'), 'min-height')
@@ -342,4 +370,26 @@ test('learning page pins the sticky table of contents to the folded header', () 
     'top',
     `${foldedHeight}px`
   );
+
+  // 이 변경은 #1015 의 scroll-margin-top 여유를 깎았다. 나브가 헤더 뒤에 숨어 있던 때는 좁은 화면
+  // 가림 밴드가 헤더 높이 하나(133px)라 185px 까지 52px 이 남았는데, 이제 그 아래로 목차 스트립이
+  // 쌓여 175.5px 이 되어 여유가 9.5px 다. 185px 은 리터럴이라 헤더가 커져도 따라오지 않는다 —
+  // .homepage-nav 의 패딩을 늘리고 위 세 값을 규정대로 갱신하면 밴드는 191.5px 이 되는데 185px 은
+  // 그대로 통과했다. 그래서 밴드도 파생값으로 잰다. 값 일치가 아니라 하한 비교다 — 과다 제공은
+  // 초점 대상을 조금 더 내릴 뿐이라 무해하고, 동등 비교는 과잉 구속이다. 값을 올리는 것 자체는
+  // 위쪽 #1015 테스트가 리터럴로 잠그고 있으므로, 이 하한은 그 잠금을 대신하지 않고 덧댄다.
+  const stripHeight =
+    verticalPadding(exactSelectorBlock(css, '.learning-nav-inner'), '.learning-nav-inner')
+    + pxDeclaration(exactSelectorBlock(css, '.learning-nav'), 'border-bottom')
+    + MEASURED_NAV_LINK_LINE_BOX;
+  const scrollMargin = scope => pxDeclaration(selectorGroupBlock(scope, '.scoreboard'), 'scroll-margin-top');
+  for (const [label, scope, band] of [
+    ['넓은 화면', css, unfolded + stripHeight],
+    ['좁은 화면', mediaBlock(css, '(max-width: 780px)'), foldedHeight + stripHeight]
+  ]) {
+    assert.ok(
+      scrollMargin(scope) >= band,
+      `${label} scroll-margin-top 이 가림 밴드보다 작다 — ${scrollMargin(scope)}px < ${band}px`
+    );
+  }
 });
