@@ -64,7 +64,10 @@ const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,
   loreSeriesKey,
-  seriesPatchNumber
+  seriesPatchNumber,
+  seriesRerollVersion,
+  seriesSubjectKey,
+  titleKey
 } = require('../common/article-groups');
 const {
   analyzeLinkedEvidenceForCandidates,
@@ -1407,14 +1410,6 @@ function writeNotYetEligibleOverflowIfNeeded(rootDir, capResult) {
   writeJson(path.join(rootDir, NOT_YET_ELIGIBLE_OVERFLOW_REL_PATH), capResult.full);
 }
 
-function titleKey(title) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9가-힣]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 function urlDedupeKey(value) {
   const raw = String(value || '').trim();
   if (!raw) return '';
@@ -1471,20 +1466,8 @@ function collapseSeriesRepresentatives(candidates) {
 // first-seen 슬롯을 유지한다(위 collapse와 같은 원칙). 제목을 고쳐 재제출한 시리즈는
 // 의도적으로 병합하지 않는다 — 퍼지 매칭의 오병합 위험이 슬롯 중복보다 나쁘다(실측된
 // 한계 사례: Tegra VI RFC v2가 subject에 "tegra:" prefix를 추가해 미병합).
-const SERIES_TITLE_BRACKET_PREFIX = /^\s*(?:\[[^\]]*\]\s*)+/;
-
-function seriesSubjectKey(item = {}) {
-  return titleKey(String(item.title || '').replace(SERIES_TITLE_BRACKET_PREFIX, ''));
-}
-
-// 버전은 브래킷 접두부 안에서만 읽는다 — 제목 본문의 "IPA format v3" 같은 표기를
-// re-roll 버전으로 오인하면 안 된다. 접두부가 없거나 v 토큰이 없으면 첫 버전(1)이다.
-function seriesRerollVersion(item = {}) {
-  const prefix = String(item.title || '').match(SERIES_TITLE_BRACKET_PREFIX);
-  if (!prefix) return 1;
-  const version = prefix[0].match(/\bv(\d+)\b/i);
-  return version ? Number(version[1]) : 1;
-}
+// 브래킷 접두부 파싱(seriesSubjectKey·seriesRerollVersion)은 article-groups가 정본이다.
+// 재게재 게이트가 같은 재제출 축을 봐야 하므로 사본을 두지 않는다(#1036).
 
 // re-roll 병합의 대표 선택: #822가 세운 커버레터 우선(낮은 patch 번호 = 시리즈 개요를 담아
 // capsule/선정 입력 품질이 가장 좋다)을 버전 경계 너머로도 유지한다 — patch 번호가 더 낮은

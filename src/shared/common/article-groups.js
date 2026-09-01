@@ -278,6 +278,40 @@ function seriesPatchNumber(candidate = {}) {
   return parts ? parts.patch : UNKNOWN_PATCH_NUMBER;
 }
 
+// 제목을 비교 가능한 형태로 줄인다(소문자 + 영숫자/한글 외 구분자는 공백 하나로).
+// section-identity.js의 normalizeTitle과 하는 일이 비슷해 보이지만 규칙이 다르다(그쪽은 NFC
+// 정규화와 발음 부호 제거를 더 한다). 의미가 다른 변형이므로 통합하지 않는다.
+function titleKey(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// 시리즈 re-roll(v1 -> v2 재제출)은 patchwork series id도 lore message-id도 새로 발급받으므로
+// 위 seriesKey로는 묶이지 않는다. 브래킷 접두부([PATCH v2 3/6], [RFC,v2,1/1] 등)를 뗀 제목이
+// 정확히 같으면 같은 논리 시리즈로 본다. 제목을 고쳐 재제출한 시리즈는 의도적으로 병합하지
+// 않는다 — 퍼지 매칭의 오병합 위험이 중복보다 나쁘다(실측된 한계 사례: Tegra VI RFC v2가
+// subject에 "tegra:" prefix를 추가해 미병합).
+//
+// 수집 단계의 재제출 병합(collapseSeriesRerolls)과 재게재 게이트가 같은 축을 봐야 한다.
+// 게이트가 이 축을 모르면 지난주 발행한 시리즈가 이번 주 새 버전 대표로 그대로 통과한다(#1036).
+const SERIES_TITLE_BRACKET_PREFIX = /^\s*(?:\[[^\]]*\]\s*)+/;
+
+function seriesSubjectKey(item = {}) {
+  return titleKey(String(item.title || '').replace(SERIES_TITLE_BRACKET_PREFIX, ''));
+}
+
+// 버전은 브래킷 접두부 안에서만 읽는다 — 제목 본문의 "IPA format v3" 같은 표기를
+// re-roll 버전으로 오인하면 안 된다. 접두부가 없거나 v 토큰이 없으면 첫 버전(1)이다.
+function seriesRerollVersion(item = {}) {
+  const prefix = String(item.title || '').match(SERIES_TITLE_BRACKET_PREFIX);
+  if (!prefix) return 1;
+  const version = prefix[0].match(/\bv(\d+)\b/i);
+  return version ? Number(version[1]) : 1;
+}
+
 function fallbackGroupKey(candidate = {}) {
   const key = seriesKey(candidate);
   if (key) return key;
@@ -601,6 +635,9 @@ module.exports = {
   loreSeriesPatchNumber,
   seriesKey,
   seriesPatchNumber,
+  seriesRerollVersion,
+  seriesSubjectKey,
+  titleKey,
   normalizeCanonicalUrlStripAnchor,
   normalizeSourceUrlPreserveAnchor,
   normalizeUrl,

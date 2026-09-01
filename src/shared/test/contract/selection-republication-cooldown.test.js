@@ -689,3 +689,52 @@ test('no published main article inside the backfill window is missing from the h
     .sort();
   assert.deepEqual(missing, []);
 });
+
+// ── 쿨다운 레인의 시리즈 인지(#1036) ──────────────────────────────────────────
+// 수집 단계가 한 패치 시리즈를 대표 1건으로 줄이면서 그 대표 URL을 주마다 바꾼다
+// (#799 (source, seriesId) collapse · #822 커버레터 우선). 지난주 조각 URL로 발행한 시리즈가
+// 이번 주에 커버레터 URL로 들어오면 URL identity만 보는 쿨다운은 그대로 통과시킨다.
+// 아래 두 URL은 실제 데이터다 — 2026-08-31호가 08/12 조각을 발행했고, 같은 주 수집물에
+// 그 시리즈의 커버레터도 후보로 들어와 있었다.
+const YOGA_BOOK_PUBLISHED_PIECE_URL =
+  'https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com';
+const YOGA_BOOK_COVER_LETTER_URL =
+  'https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/';
+
+test('같은 패치 시리즈의 다른 조각 URL은 쿨다운 안에 선정까지 오지 못한다', () => {
+  const seriesCandidates = [
+    policyPrimaryCandidate(0, {
+      title: '[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support',
+      url: YOGA_BOOK_COVER_LETTER_URL
+    }),
+    policyPrimaryCandidate(1, { title: DISTINCT_TITLES[1] }),
+    policyPrimaryCandidate(2, { title: DISTINCT_TITLES[2] })
+  ];
+
+  const baseline = buildShortlistReport(ISSUE_DATE, seriesCandidates, {});
+  assert.ok(urls(baseline.selected_articles).includes(YOGA_BOOK_COVER_LETTER_URL),
+    'baseline must select the series representative so the block below is meaningful');
+
+  // 기록은 실제 state 파일 모양 그대로 series_identity_key가 없다 — 읽기 시점 source_url 폴백이
+  // 없으면 이 레인은 기존 이력 전체에 대해 URL 비교로 되돌아간다.
+  const publishedPiece = publishedRecord(YOGA_BOOK_PUBLISHED_PIECE_URL, {
+    newsletterDate: '2026-05-03',
+    cooldownUntil: '2026-05-24'
+  });
+  assert.ok(!Object.prototype.hasOwnProperty.call(publishedPiece, 'series_identity_key'));
+
+  const report = buildShortlistReport(ISSUE_DATE, seriesCandidates, {
+    exposureHistory: historyWith([publishedPiece])
+  });
+
+  assert.ok(!urls(report.selected_articles).includes(YOGA_BOOK_COVER_LETTER_URL));
+  assert.ok(!urls(report.reserve_candidates).includes(YOGA_BOOK_COVER_LETTER_URL));
+  assert.ok(!urls(report.shortlisted_candidates).includes(YOGA_BOOK_COVER_LETTER_URL));
+
+  const excludedMatch = report.excluded_candidates.find(candidate => candidate.url === YOGA_BOOK_COVER_LETTER_URL);
+  assert.ok(excludedMatch, 'the same-series representative must be reported as excluded with a reason');
+  assert.ok(excludedMatch.exclusion_reasons.some(reason => /republication cooldown/.test(reason)));
+
+  // 나머지 후보는 그대로 남아야 한다. 시리즈 대조가 비시리즈 후보까지 걷어가면 편성이 비어 버린다.
+  assert.equal(report.selected_article_count, 2);
+});
