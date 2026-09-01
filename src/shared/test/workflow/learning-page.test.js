@@ -311,7 +311,7 @@ test('learning page drops the sticky table of contents where the header folds', 
   );
   assert.ok(
     navMinHeight >= tallestChild,
-    `.homepage-nav 의 min-height(${navMinHeight}px)보다 큰 자식(${tallestChild}px)이 있다 — 헤더 높이를 더 이상 min-height 가 정하지 않으므로 아래 계산이 성립하지 않는다`
+    `.homepage-nav 의 min-height(${navMinHeight}px)보다 큰 자식(${tallestChild}px)이 있다 — 헤더 높이를 더 이상 min-height 가 정하지 않으므로 아래 계산이 성립하지 않는다. 이 잠금은 Lab 페이지 밖인 articles/css/styles.css 의 홈 헤더 기하(.homepage-nav·.homepage-brand)와 전역 토큰(:root --control-height)을 읽는다 — Lab 목차의 top 이 거기서 파생되기 때문이다`
   );
   const unfolded =
     navMinHeight
