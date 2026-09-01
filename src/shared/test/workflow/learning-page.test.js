@@ -272,22 +272,31 @@ test('learning page keeps focus targets clear of the two-tier sticky header', ()
 //   브레이크포인트는 그대로라 아무 검사도 깨지지 않고, 나브만 조용히 어긋난다.
 const HEADER_FOLD_QUERY = '(max-width: 640px)';
 
-// 브라우저 실측값(Chrome, 배포된 페이지, 320~1265px). 아래 합산식이 이 페이지의 레이아웃을
-// 아직 설명하는지 확인하는 기준점이다. 합산식은 모델이라 헤더 구조가 바뀌면 항이 늘거나 줄어
-// 통째로 무효가 될 수 있다(예: 링크줄이 두 줄로 감기면 항이 하나 늘어난다). 그래서 styles.css
-// 를 고쳐 이 단언이 깨지면, 숫자만 맞추지 말고 브라우저에서 다시 재서 갱신한다.
+// 브라우저 실측값(Chrome, 배포된 페이지, 320~1265px). 이 단언이 실제로 지키는 범위는 좁으니
+// 그대로 적어 둔다.
+// - 합산식에 이미 든 항이 바뀌는 것: 잡는다. 다만 아래 learning.css 비교와 중복이다.
+// - 합산식 자체가 깎이는 것: 여기서만 잡는다 — `+ border` 나 gap 항을 지우면 이 단언만 깨진다.
+//   이것이 이 값을 남겨 두는 이유다.
+// - 헤더에 **새 항이 생기는 것**: 못 잡는다. .site-header 에 세로 패딩을 더하면 실제 헤더는
+//   커지지만 합산식은 그 항을 모르므로 양쪽 다 133 으로 남아 통과한다.
+// 이 단언이 깨지면 숫자만 맞추지 말고 브라우저에서 다시 재서 갱신한다.
 const MEASURED_HEADER_HEIGHT = { unfolded: 59, folded: 133 };
+
+// 선언 값을 토큰 목록으로 돌려준다. 숏핸드의 항이 몇 개인지 봐야 할 때 쓴다.
+function declarationTokens(block, property) {
+  const normalized = String(block).replace(/\s+/g, ' ');
+  const match = normalized.match(new RegExp(`(?:^|[;{ ])${property}\\s*:\\s*([^;]+);`));
+  assert.ok(match, `${property} 선언이 있어야 한다`);
+  return match[1].trim().split(' ');
+}
 
 // 선언에서 px 수치를 뽑는다. 값이 여러 토큰인 숏핸드(`padding: 12px 0`, `border-bottom: 1px solid …`)
 // 는 첫 토큰만 본다 — 여기서 더하는 세로 기하는 전부 첫 토큰에서 나온다. px 이 아닌 값(`auto`,
 // `var(…)`)이 들어오면 조용히 0 으로 세는 대신 실패한다.
 function pxDeclaration(block, property) {
-  const normalized = String(block).replace(/\s+/g, ' ');
-  const match = normalized.match(new RegExp(`(?:^|[;{ ])${property}\\s*:\\s*([^;]+);`));
-  assert.ok(match, `${property} 선언이 있어야 한다`);
-  const first = match[1].trim().split(' ')[0];
-  assert.match(first, /^\d+(?:\.\d+)?px$/, `${property} 의 첫 토큰은 px 값이어야 한다 — ${match[1].trim()}`);
-  return Number.parseFloat(first);
+  const tokens = declarationTokens(block, property);
+  assert.match(tokens[0], /^\d+(?:\.\d+)?px$/, `${property} 의 첫 토큰은 px 값이어야 한다 — ${tokens.join(' ')}`);
+  return Number.parseFloat(tokens[0]);
 }
 
 test('learning page pins the sticky table of contents to the folded header', () => {
@@ -304,8 +313,15 @@ test('learning page pins the sticky table of contents to the folded header', () 
   // 한 줄 헤더: .homepage-nav 의 min-height 가 브랜드(54px)·링크(44px)보다 커서 높이를 지배한다.
   const unfolded = pxDeclaration(nav, 'min-height') + border;
   // 두 줄 헤더: min-height 가 auto 로 풀리고 세로 패딩 + 브랜드 + 간격 + 링크줄이 쌓인다.
+  // 패딩을 두 배로 세는 것은 위아래가 같다는 가정이다. `padding: 12px 0 20px` 처럼 아래쪽을 따로
+  // 주는 3·4값 숏핸드면 그 가정이 깨진다 — 실제 헤더는 141px 인데 합산은 133px 로 남는다.
+  const navFolded = exactSelectorBlock(folded, '.homepage-nav');
+  assert.ok(
+    declarationTokens(navFolded, 'padding').length <= 2,
+    '.homepage-nav 의 padding 은 위아래 대칭이어야 한다 — 아래를 따로 주면 padding * 2 가정이 깨진다'
+  );
   const foldedHeight =
-    pxDeclaration(exactSelectorBlock(folded, '.homepage-nav'), 'padding') * 2
+    pxDeclaration(navFolded, 'padding') * 2
     + pxDeclaration(exactSelectorBlock(styles, '.homepage-brand'), 'min-height')
     + pxDeclaration(nav, 'gap')
     + pxDeclaration(exactSelectorBlock(folded, '.homepage-nav-links a'), 'min-height')
