@@ -263,24 +263,67 @@ test('learning page keeps focus targets clear of the two-tier sticky header', ()
 // 헤더는 좁은 화면에서 .homepage-nav 가 column 으로 접히며 59px 에서 133px 로 커지는데, 나브의
 // top 은 59px 고정이라 그 구간에서 목차가 헤더 뒤로 통째로 들어가 보이지 않았다.
 //
-// 잠그는 것은 값 하나가 아니라 두 파일이 같은 폭을 쓴다는 것이다. 나브 override 가 헤더가 접히는
-// 폭보다 좁으면 그 사이에서 다시 가려지고, 넓으면 헤더와 나브 사이에 빈 띠가 생긴다 — 이 파일에
-// 이미 있는 780px 블록을 그대로 재사용했다면 641~780px 에서 74px 이 벌어진다(실측).
+// 잠글 것이 둘이다. 폭이 하나, 높이가 하나다.
+// - 폭: 나브 override 가 헤더가 접히는 폭보다 좁으면 그 사이에서 다시 가려지고, 넓으면 헤더와
+//   나브 사이에 빈 띠가 생긴다 — 이 파일에 이미 있는 780px 블록을 재사용했다면 641~780px 에서
+//   74px 이 벌어진다(실측).
+// - 높이: 133 이라는 값 자체는 styles.css 의 헤더 기하에서 나온 파생값이다. 폭만 잠그면 그 입력이
+//   바뀌어도(예: .homepage-nav 의 padding 을 12px 에서 20px 로 늘리면 헤더는 149px 이 된다)
+//   브레이크포인트는 그대로라 아무 검사도 깨지지 않고, 나브만 조용히 어긋난다.
 const HEADER_FOLD_QUERY = '(max-width: 640px)';
 
+// 브라우저 실측값(Chrome, 배포된 페이지, 320~1265px). 아래 합산식이 이 페이지의 레이아웃을
+// 아직 설명하는지 확인하는 기준점이다. 합산식은 모델이라 헤더 구조가 바뀌면 항이 늘거나 줄어
+// 통째로 무효가 될 수 있다(예: 링크줄이 두 줄로 감기면 항이 하나 늘어난다). 그래서 styles.css
+// 를 고쳐 이 단언이 깨지면, 숫자만 맞추지 말고 브라우저에서 다시 재서 갱신한다.
+const MEASURED_HEADER_HEIGHT = { unfolded: 59, folded: 133 };
+
+// 선언에서 px 수치를 뽑는다. 값이 여러 토큰인 숏핸드(`padding: 12px 0`, `border-bottom: 1px solid …`)
+// 는 첫 토큰만 본다 — 여기서 더하는 세로 기하는 전부 첫 토큰에서 나온다. px 이 아닌 값(`auto`,
+// `var(…)`)이 들어오면 조용히 0 으로 세는 대신 실패한다.
+function pxDeclaration(block, property) {
+  const normalized = String(block).replace(/\s+/g, ' ');
+  const match = normalized.match(new RegExp(`(?:^|[;{ ])${property}\\s*:\\s*([^;]+);`));
+  assert.ok(match, `${property} 선언이 있어야 한다`);
+  const first = match[1].trim().split(' ')[0];
+  assert.match(first, /^\d+(?:\.\d+)?px$/, `${property} 의 첫 토큰은 px 값이어야 한다 — ${match[1].trim()}`);
+  return Number.parseFloat(first);
+}
+
 test('learning page pins the sticky table of contents to the folded header', () => {
-  // 640px 의 근거는 여기다 — 헤더가 한 줄에서 두 줄로 바뀌는 지점. 이 규칙이 다른 폭으로 옮겨가면
-  // learning.css 의 나브 override 도 같이 옮겨야 하고, 옮기지 않으면 이 단언이 먼저 깨진다.
-  const folded = mediaBlock(readSiteStylesheet(), HEADER_FOLD_QUERY);
+  const styles = readSiteStylesheet();
+  const folded = mediaBlock(styles, HEADER_FOLD_QUERY);
+
+  // 640px 의 근거는 이 한 줄이다 — 헤더가 한 줄에서 두 줄로 바뀌는 지점.
   assertCssDeclaration(exactSelectorBlock(folded, '.homepage-nav'), 'flex-direction', 'column');
 
+  // 헤더 높이를 이루는 항을 styles.css 에서 그대로 읽어 더한다. 값을 적어 두기만 하고 합을 세지
+  // 않으면 항이 바뀌어도 아무도 못 잡는다.
+  const border = pxDeclaration(exactSelectorBlock(styles, '.site-header'), 'border-bottom');
+  const nav = exactSelectorBlock(styles, '.homepage-nav');
+  // 한 줄 헤더: .homepage-nav 의 min-height 가 브랜드(54px)·링크(44px)보다 커서 높이를 지배한다.
+  const unfolded = pxDeclaration(nav, 'min-height') + border;
+  // 두 줄 헤더: min-height 가 auto 로 풀리고 세로 패딩 + 브랜드 + 간격 + 링크줄이 쌓인다.
+  const foldedHeight =
+    pxDeclaration(exactSelectorBlock(folded, '.homepage-nav'), 'padding') * 2
+    + pxDeclaration(exactSelectorBlock(styles, '.homepage-brand'), 'min-height')
+    + pxDeclaration(nav, 'gap')
+    + pxDeclaration(exactSelectorBlock(folded, '.homepage-nav-links a'), 'min-height')
+    + border;
+
+  assert.deepEqual(
+    { unfolded, folded: foldedHeight },
+    MEASURED_HEADER_HEIGHT,
+    '합산식이 실측 헤더 높이와 갈렸다 — 헤더 기하를 바꿨다면 브라우저에서 다시 재고 실측값을 갱신한다'
+  );
+
   const css = readLearningStylesheet();
-  // 넓은 화면: 헤더가 한 줄(59px)이라 나브가 바로 그 아래에 쌓인다.
-  assertCssDeclaration(exactSelectorBlock(css, '.learning-nav'), 'top', '59px');
-  // 좁은 화면: 헤더가 두 줄(133px)이므로 나브도 그만큼 내려간다.
+  // 두 top 은 각각 그때의 헤더 높이와 같아야 한다. 리터럴이 아니라 위에서 계산한 값과 비교하므로,
+  // 헤더 기하가 바뀌면 learning.css 를 따라 고치지 않는 한 여기서 깨진다.
+  assertCssDeclaration(exactSelectorBlock(css, '.learning-nav'), 'top', `${unfolded}px`);
   assertCssDeclaration(
     exactSelectorBlock(mediaBlock(css, HEADER_FOLD_QUERY), '.learning-nav'),
     'top',
-    '133px'
+    `${foldedHeight}px`
   );
 });
