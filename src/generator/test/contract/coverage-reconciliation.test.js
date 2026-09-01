@@ -680,3 +680,90 @@ test('레코드 두 필드로 계산한 최종 main이 실제 편성과 일치�
     assertRecordsRebuildFinalMain(out, label);
   }
 });
+
+// #1034: "promotion_clamped의 action을 demoted와 갈라 둔다"는 이 모듈의 판단이었는데 그 판단만
+// 집행되지 않고 있었다. action을 demoted로 되돌리는 변이가 전체 테스트를 통과했다.
+//
+// 실측해 보면 지금 당장 커밋 산출물이 오염되지는 않는다 — promotion_clamped push가
+// article_group_key를 싣지 않아 demotedChangesByGroup이 그 항목을 건너뛰기 때문이다. 하지만 그
+// 방벽은 우연이다. 그 push에 그룹키를 더하는(자연스러워 보이는) 변경 하나면 결정론 편성에 없던
+// 후보가 demoted_groups에 실린다. 그래서 우연한 방벽이 아니라 규칙 자체를 잠근다:
+// action이 demoted인 항목의 key는 전부 결정론 선정 안에 있어야 한다. 이렇게 두면 앞으로 어떤
+// push가 늘어도 같은 누출을 잡는다.
+function assertDemotedChangesStayInsideDeterministicSelection(out, label) {
+  const deterministic = new Set(out.diff.deterministic_selected);
+  const strays = out.diff.changes
+    .filter(change => change.action === 'demoted')
+    .map(change => change.key)
+    .filter(key => !deterministic.has(key));
+  assert.deepEqual(strays, [], `${label}: 결정론 선정 밖 후보가 강등으로 기록됐다`);
+}
+
+test('강등 기록은 결정론 선정 안에서만 나온다', () => {
+  // 누출이 실제로 일어날 수 있는 배치: 결정론 selected 하나와 reserve 하나가 같은 그룹키를
+  // 공유하고 둘 다 cap에 밀린다. 그룹은 사라지므로 demoted_groups가 만들어지는데, 거기에
+  // reserve 후보가 섞이면 안 된다.
+  const shared = mainEligible({ url: 'a', article_group_key: 'group:shared', deterministic_score: 10 });
+  const survivors = ['b', 'c', 'd', 'e', 'f'].map((url, index) => mainEligible({
+    url,
+    article_group_key: `group:${url}`,
+    deterministic_score: 90 - index
+  }));
+  const clampedReserve = mainEligible({ url: 'r', article_group_key: 'group:shared', deterministic_score: 20 });
+  const shortlistReport = {
+    selected_articles: [shared, ...survivors],
+    reserve_candidates: [clampedReserve]
+  };
+  const editorialPlanReport = {
+    editorial_plans: [shared, ...survivors, clampedReserve].map(candidate => plan(candidate, 'main_article'))
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.selected.map(item => item.url), ['b', 'c', 'd', 'e', 'f'], '둘 다 cap에 밀린다');
+  assert.deepEqual(out.diff.demoted_groups, [{
+    article_group_key: 'group:shared',
+    demoted_candidates: [{ candidate_key: 'a', coverage_decision: 'main_article', reason_code: 'cap_clamp' }]
+  }], '사라진 그룹의 강등 기록은 결정론 선정 후보만 담는다');
+  assertDemotedChangesStayInsideDeterministicSelection(out, '그룹키를 공유하며 둘 다 cap에 밀린 주');
+
+  // reserve 쪽은 별도 action으로, 그러나 같은 사유로 남는다.
+  assert.deepEqual(
+    out.diff.changes.filter(change => change.key === 'r'),
+    [{ key: 'r', action: 'promotion_clamped', reason_code: 'cap_clamp' }]
+  );
+});
+
+test('어떤 편성에서도 강등 기록이 결정론 선정 밖으로 넘어가지 않는다', () => {
+  // 위 테스트는 한 배치만 본다. 규칙은 배치와 무관하게 성립해야 하므로 승급·강등·cap clamp·
+  // floor backfill·승급 차단이 섞이는 구성을 훑는다.
+  for (let selectedCount = 1; selectedCount <= 6; selectedCount += 1) {
+    for (let reserveCount = 0; reserveCount <= 3; reserveCount += 1) {
+      for (const sharedGroup of [false, true]) {
+        const groupOf = (url) => (sharedGroup ? 'group:shared' : `group:${url}`);
+        const selected = Array.from({ length: selectedCount }, (_, index) => mainEligible({
+          url: `s${index}`,
+          article_group_key: groupOf(`s${index}`),
+          deterministic_score: 90 - index
+        }));
+        // reserve는 점수를 낮게 준다. 그래야 main으로 제안되고도 cap에 밀려 promotion_clamped가
+        // 실제로 발생한다 — 이 배치가 없으면 아래 단언이 빈 배열만 비교하는 장식이 된다.
+        const reserve = Array.from({ length: reserveCount }, (_, index) => mainEligible({
+          url: `r${index}`,
+          article_group_key: groupOf(`r${index}`),
+          deterministic_score: 20 - index,
+          main_article_source_allowed: index % 3 !== 2
+        }));
+        const label = `selected ${selectedCount} / reserve ${reserveCount} / sharedGroup ${sharedGroup}`;
+        const out = reconcileCoverage({
+          shortlistReport: { selected_articles: selected, reserve_candidates: reserve },
+          editorialPlanReport: {
+            editorial_plans: [...selected, ...reserve].map((candidate, index) =>
+              plan(candidate, index % 4 === 3 ? 'exclude' : 'main_article'))
+          }
+        });
+        assertDemotedChangesStayInsideDeterministicSelection(out, label);
+      }
+    }
+  }
+});

@@ -230,6 +230,11 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // 후보 단위로 실려 있어 "그 주 reserve 후보의 판단"을 이 파일만 읽고 답할 수 있다.
     // 관측이지 판정이 아니다.
     //
+    // reason_code가 null인 자리는 세 갈래다: 결정론 편성 그대로 발행된 main, 제안조차 main이
+    // 아니었던 reserve, 그리고 lineup_role='shortlist_only' 후보 전부. 마지막 갈래는 등급과
+    // 무관하게 항상 null이다 — 승급 대상 집합 밖이라 재조정이 고려하지 않으며, 계획이
+    // main_article로 제안한 후보도 여기 들어온다. "아무 일도 없었다"로 읽지 말 것.
+    //
     // 이 목록이 담지 '않는' 것: release-class catch-up pool 후보 중 reference 창에서만 온
     // 후보다. shortlist는 primary·fallback 창만 담으므로(newsroom-selection.js) 그 후보는 계획
     // 입력 우주 밖이고, 따라서 계획이 채점하지 않았다. 부재가 곧 그 답이다. fallback 창에서 온

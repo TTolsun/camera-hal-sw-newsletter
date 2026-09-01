@@ -260,8 +260,15 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   // changes.push가 일어나는 자리와 정확히 일대일이다:
   //   demoted(cap_clamp | editorial_plan_*) / promotion_blocked_ineligible /
   //   promotion_clamped(cap_clamp) / floor_backfill / promoted
-  // 실제로 뭔가 일어난 후보가 null로 남으면 "아무 일도 없었다"로 잘못 읽힌다. 아무 일도 없던
-  // 후보만 null이다 — 결정론 편성 그대로 발행된 main과, 제안조차 main이 아니었던 reserve다.
+  // 실제로 뭔가 일어난 후보가 null로 남으면 "아무 일도 없었다"로 잘못 읽힌다. null이 나오는
+  // 자리는 세 갈래다:
+  //   1. 결정론 편성 그대로 발행된 main (lineup_role='selected')
+  //   2. 제안조차 main이 아니었던 reserve (lineup_role='reserve')
+  //   3. lineup_role='shortlist_only' 후보 전부 — 등급과 무관하게 항상 null이다
+  // 3번을 "아무 일도 없었다"로 읽으면 안 된다. 이 후보들은 승급 대상 집합(selected+reserve)
+  // 밖이라 재조정이 아예 고려하지 않는다. 계획이 main_article로 제안한 후보도 여기 들어오며
+  // (프로덕션에서 흔하다 — 2026-08-31 reporter_candidate_count 8 vs selected 5 + reserve 1),
+  // 그 제안이 무시된 상태가 곧 null로 남는다. 그것이 사유 없음이 아니라 이 필드가 담는 사실이다.
   //
   // 사유는 push 지점이 세우므로 여기서는 유추하지 않는다. 한 후보가 두 갈래에 걸리지는
   // 않는다 — backfill된 후보는 clampedKeys에 들어가 강등 루프가 건너뛰고, 승급·승급 차단·

@@ -572,9 +572,11 @@ async function main() {
     shortlistReport.reconciliation_demoted_groups = coverageReconciliation.diff.demoted_groups;
     // #1034: 강등되지 않은 채점 후보(reserve·shortlist 전용)는 위 목록에 나타나지 않는다.
     // 계획이 채점한 후보 전부를 함께 남겨야 "왜 이 후보는 main이 아니었나"에 답할 수 있다.
-    // 사유는 강등·승급 차단·승급 clamp·floor backfill 복귀·승급에 붙고, 아무 일도 없던 후보만
-    // null이다. release-class catch-up pool 후보 중 reference 창에서만 온 것은 계획 입력 우주
-    // 밖이라 실리지 않는다 — 그 후보는 채점되지 않았고, 부재가 곧 그 답이다.
+    // 사유는 강등·승급 차단·승급 clamp·floor backfill 복귀·승급에 붙는다. null은 세 갈래다 —
+    // 그대로 발행된 main, 제안조차 main이 아니었던 reserve, 그리고 shortlist_only 후보 전부
+    // (등급과 무관하게 항상 null. 승급 대상 집합 밖이라 main_article 제안도 여기 들어온다).
+    // release-class catch-up pool 후보 중 reference 창에서만 온 것은 계획 입력 우주 밖이라
+    // 실리지 않는다 — 그 후보는 채점되지 않았고, 부재가 곧 그 답이다.
     shortlistReport.editorial_plan_scored_candidates = coverageReconciliation.diff.editorial_plan_scored_candidates;
     shortlistReport.reconciliation_promoted_group_keys = coverageReconciliation.diff.promoted_group_keys;
     shortlistReport.publish_ready = deterministicPublishReady
