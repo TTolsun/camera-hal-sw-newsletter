@@ -122,22 +122,44 @@ function addDays(dateStr, days) {
   return d.toISOString().slice(0, 10);
 }
 
+// 시리즈 키와 subject 키는 수집 시점 후보에서 유도되는 값이고, 기사의 정체성은 나중 노출로 바뀌지
+// 않는다. 반면 갱신 입력은 후보가 아닐 수 있다 — 홈페이지 헤드라인 갱신은 렌더된 한국어 헤드라인을
+// 실어 오므로 거기서 유도한 키는 틀린 값이다. 그래서 갱신 때 이미 남아 있는 값을 지킨다.
+// 두 키가 같은 성질(후보에서 한 번 정해지면 불변)이라 규칙도 하나로 둔다.
+const CANDIDATE_DERIVED_SERIES_FIELDS = ['series_identity_key', 'series_subject_key'];
+
+function preservedSeriesKeys(previous, record) {
+  const kept = {};
+  for (const field of CANDIDATE_DERIVED_SERIES_FIELDS) {
+    const value = text(previous?.[field]) || text(record?.[field]);
+    if (value) kept[field] = value;
+  }
+  return kept;
+}
+
 function recordArticleExposure(history, article = {}, options = {}) {
   const normalized = normalizeExposureHistory(history, options.date || todayDate());
   const key = articleIdentityKey(article);
   const existingIndex = normalized.articles.findIndex(item => item.article_identity_key === key);
   const exposureType = text(options.type || 'homepage_headline');
   const newsletterDate = text(options.date || article.newsletter_date);
-  // URL identity 옆에 시리즈 키를 병기한다. identity 자체를 시리즈 인지형으로 바꾸지 않는 이유는
-  // 이미 쌓인 기록의 키가 전부 달라져 조회가 통째로 깨지기 때문이다.
+  // URL identity 옆에 시리즈 키와 재제출 subject 키를 병기한다. identity 자체를 시리즈 인지형으로
+  // 바꾸지 않는 이유는 이미 쌓인 기록의 키가 전부 달라져 조회가 통째로 깨지기 때문이다.
   //
-  // 시리즈가 아니면 필드를 아예 넣지 않는다. 읽기 시점이 "필드 없음"과 "빈 값"을 똑같이 다루므로
-  // 판정은 같고, 대부분을 차지하는 비시리즈 기록에 의미 없는 빈 필드가 붙는 것만 막는다. 갱신 경로가
-  // {...previous, ...record}라 빈 값을 쓰면 예전에 남긴 시리즈 키를 덮어 지우는 문제도 함께 없앤다.
+  // subject 키를 저장하는 이유: 읽기 시점에 record.title에서 유도하면 안 된다. title은 표시용 값이라
+  // 발행 단계의 홈페이지 헤드라인 갱신(persistHomepageHeadlineArtifacts)이 렌더된 한국어 헤드라인으로
+  // 덮어쓴다 — 그러면 매 호의 헤드라인 기사 1건만 subject 키가 붕괴해 재제출 축이 조용히 죽는다
+  // (실제 state의 IMX908 레코드가 그 상태였다).
+  //
+  // 시리즈가 아니면 두 필드를 아예 넣지 않는다. 읽기 시점이 "필드 없음"과 "빈 값"을 똑같이 다루므로
+  // 판정은 같고, 대부분을 차지하는 비시리즈 기록에 의미 없는 빈 필드가 붙는 것만 막는다.
   const seriesIdentityKey = seriesKey(article);
   const record = {
     article_identity_key: key,
-    ...(seriesIdentityKey ? { series_identity_key: seriesIdentityKey } : {}),
+    ...(seriesIdentityKey ? {
+      series_identity_key: seriesIdentityKey,
+      series_subject_key: seriesSubjectKey(article)
+    } : {}),
     title: text(article.title),
     source_url: sourceUrl(article),
     newsletter_date: newsletterDate,
@@ -172,6 +194,7 @@ function recordArticleExposure(history, article = {}, options = {}) {
     normalized.articles[existingIndex] = {
       ...previous,
       ...record,
+      ...preservedSeriesKeys(previous, record),
       first_exposed_at: text(previous.first_exposed_at || previous.exposed_at || record.exposed_at),
       last_exposed_at: record.exposed_at,
       exposure_count: sameExposureEvent
@@ -265,12 +288,18 @@ function sourceScope(url) {
 //
 // collapse와 같은 제약을 그대로 건다: 시리즈일 때만, 그리고 소스 스코프 안에서만. 그래야 오차단
 // 표면이 collapse보다 넓어지지 않는다.
-function rerollIdentityKey(seriesIdentityKey, url, title) {
+function rerollIdentityKey(seriesIdentityKey, url, subject) {
   if (!seriesIdentityKey) return '';
   const scope = sourceScope(url);
-  const subject = seriesSubjectKey({ title });
   if (!scope || !subject) return '';
   return `${scope}::${subject}`;
+}
+
+// 레코드의 재제출 subject 키. 저장된 값을 먼저 쓰고, 없을 때만 title에서 유도한다.
+// title 폴백은 기존 기록(이 필드가 없는 31건) 하위호환용이다 — 그 기록의 title이 헤드라인 갱신으로
+// 덮인 상태면 이 축이 안 걸리지만, 저장값이 생기는 다음 발행부터는 정확해진다.
+function recordSeriesSubjectKey(record) {
+  return text(record?.series_subject_key) || seriesSubjectKey({ title: record?.title });
 }
 
 // 후보를 게이트가 대조하는 세 축(URL identity · 시리즈 · 재제출)으로 환원한다.
@@ -279,7 +308,7 @@ function articleMatchKeys(article = {}) {
   return {
     identity: articleIdentityKey(article),
     series,
-    reroll: rerollIdentityKey(series, sourceUrl(article), article.title)
+    reroll: rerollIdentityKey(series, sourceUrl(article), seriesSubjectKey(article))
   };
 }
 
@@ -294,7 +323,7 @@ function recordMatchesArticle(record, keys) {
   const series = recordSeriesIdentityKey(record);
   if (keys.series && series === keys.series) return true;
   if (!keys.reroll) return false;
-  return rerollIdentityKey(series, record?.source_url, record?.title) === keys.reroll;
+  return rerollIdentityKey(series, record?.source_url, recordSeriesSubjectKey(record)) === keys.reroll;
 }
 
 // 한 레코드가 newsletter_article로 노출된 적이 있는지 판정하는 단일 술어.
@@ -326,23 +355,30 @@ function isSameIssueRecord(record, asOf) {
   return Boolean(date) && text(record?.newsletter_article_date) === date;
 }
 
+// 이 레코드가 지금(asOf) 재게재를 막고 있는가.
+function blocksRepublication(record, asOf) {
+  return isNewsletterArticleRecord(record) &&
+    Boolean(record.cooldown_until) &&
+    asOf <= record.cooldown_until &&
+    !isSameIssueRecord(record, asOf);
+}
+
 function annotateArticleExposure(article = {}, history = {}, options = {}) {
   const keys = articleMatchKeys(article);
-  // URL identity가 먼저다. 같은 URL 기록이 있으면 그것이 이 후보의 기록이고, 없을 때만 같은 시리즈
-  // (또는 그 시리즈의 재제출) 기록으로 떨어진다. 그때 배열 앞쪽을 집는 것은 신규 기록이 unshift로
-  // 앞에 쌓이기 때문이다 — 같은 시리즈가 여러 주에 걸쳐 발행됐으면 가장 최근 건이 먼저 잡힌다.
-  const record = exposureMap(history).get(keys.identity) ||
-    ensureArray(history.articles).find(item => recordMatchesArticle(item, keys)) ||
-    null;
   // 쿨다운 비교 기준은 이슈 date다. 벽시계(todayDate)를 쓰면 같은 이력·같은 후보라도 리플레이나
   // carry 실행 시점에 따라 판정이 달라져 선정이 비결정적이 된다. date를 못 받는 호출부는 기존
   // 동작(오늘 기준)을 그대로 유지한다.
   const asOf = text(options.date) || todayDate();
+  // 일치 레코드는 여러 건일 수 있다 — 같은 시리즈가 여러 주에 걸쳐 발행되면 조각마다 1건씩 남는다.
+  // 그중 1건을 먼저 고른 뒤 그 레코드만 검사하면, 만료된 레코드가 배열 앞에 있을 때 아직 살아 있는
+  // 쿨다운을 가려 재게재가 통과한다(실제 state의 AR0234가 그 상태였다: 2026-08-03 발행분이
+  // 2026-08-10 발행분보다 앞에 있어 08-25~08-31 판정이 전부 만료본을 집었다).
+  // 그래서 "쿨다운이 살아 있는 레코드가 있는가"를 술어로 묻고, 없을 때만 표시용 레코드를 고른다.
+  const matches = ensureArray(history.articles).filter(item => recordMatchesArticle(item, keys));
+  const blocking = matches.find(item => blocksRepublication(item, asOf)) || null;
+  const record = blocking || exposureMap(history).get(keys.identity) || matches[0] || null;
   const publishedAt = text(record?.newsletter_article_date);
-  const publishedWithinCooldown = isNewsletterArticleRecord(record) &&
-    Boolean(record.cooldown_until) &&
-    asOf <= record.cooldown_until &&
-    !isSameIssueRecord(record, asOf);
+  const publishedWithinCooldown = Boolean(blocking);
   return {
     ...article,
     article_identity_key: keys.identity,

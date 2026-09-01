@@ -630,3 +630,192 @@ test('재제출 축은 시리즈가 아닌 기사에는 만들어지지 않는�
     false
   );
 });
+
+// ── 일치 레코드가 여럿일 때 (독립 리뷰 major 1) ────────────────────────────────
+// 같은 시리즈가 여러 주에 걸쳐 발행되면 조각마다 레코드가 1건씩 남는다. 그중 1건을 먼저 고른 뒤
+// 그 레코드만 검사하면, 만료된 레코드가 앞에 있을 때 아직 살아 있는 쿨다운을 가린다.
+// 아래 두 레코드는 실제 state/article-exposure-history.json의 AR0234 idx 8 / idx 15 모양이다.
+const AR0234_V1_URL = 'https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/';
+const AR0234_V2_URL = 'https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/';
+const AR0234_SUBJECT = 'media: i2c: Add onsemi AR0234 camera sensor driver';
+
+function ar0234Record(url, version, newsletterDate, cooldownUntil) {
+  return {
+    article_identity_key: `url:${url}`,
+    title: `[PATCH ${version} 0/2] ${AR0234_SUBJECT}`,
+    source_url: url,
+    newsletter_date: newsletterDate,
+    exposure_type: 'newsletter_article',
+    exposed_at: newsletterDate,
+    newsletter_article_date: newsletterDate,
+    cooldown_until: cooldownUntil,
+    exposure_types: ['newsletter_article']
+  };
+}
+
+test('만료된 레코드가 앞에 있어도 아직 살아 있는 쿨다운이 이긴다', () => {
+  const history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-01', backfill_included: false },
+    articles: [
+      ar0234Record(AR0234_V1_URL, 'v1', '2026-08-03', '2026-08-24'),
+      ar0234Record(AR0234_V2_URL, 'v2', '2026-08-10', '2026-08-31')
+    ]
+  };
+  const v3Candidate = {
+    title: `[PATCH v3 0/2] ${AR0234_SUBJECT}`,
+    url: 'https://lore.kernel.org/linux-media/20260820075524.2056029-1-eagle.alexander923@gmail.com/'
+  };
+
+  for (const date of ['2026-08-25', '2026-08-28', '2026-08-31']) {
+    const annotated = annotateArticleExposure(v3Candidate, history, { date });
+    assert.strictEqual(annotated.published_within_cooldown, true, `date=${date}`);
+    // 인용하는 날짜도 실제로 막고 있는 레코드의 것이어야 한다.
+    assert.strictEqual(annotated.last_newsletter_date, '2026-08-10', `date=${date}`);
+  }
+
+  // 둘 다 만료된 뒤에는 통과해야 한다 — 술어가 쿨다운을 영구 차단으로 바꾸면 안 된다.
+  assert.strictEqual(
+    annotateArticleExposure(v3Candidate, history, { date: '2026-09-01' }).published_within_cooldown,
+    false
+  );
+});
+
+// ── record.title은 표시용이다 (독립 리뷰 major 2) ─────────────────────────────
+// 발행 단계의 홈페이지 헤드라인 갱신(ensure-public-newsletter-artifacts의
+// persistHomepageHeadlineArtifacts)이 같은 레코드의 title을 렌더된 한국어 헤드라인으로 덮는다.
+// 그래서 subject 키를 title에서 유도하면 매 호의 헤드라인 기사 1건만 재제출 축이 조용히 죽는다.
+const IMX908_V3_URL = 'https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com/';
+const IMX908_SUBJECT = 'media: dt-bindings: imx908: Add Sony IMX908 sensor';
+const IMX908_RENDERED_HEADLINE = 'Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련';
+
+test('발행 기록은 재제출 subject 키를 함께 남긴다', () => {
+  const empty = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: []
+  };
+  const history = recordArticleExposure(empty, {
+    title: `[PATCH v3 1/2] ${IMX908_SUBJECT}`,
+    url: IMX908_V3_URL
+  }, { date: '2026-08-31', type: 'newsletter_article' });
+
+  assert.strictEqual(
+    history.articles[0].series_subject_key,
+    'media dt bindings imx908 add sony imx908 sensor'
+  );
+});
+
+test('헤드라인 갱신이 한국어 제목으로 subject 키를 덮지 않는다', () => {
+  const empty = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: []
+  };
+  // 1) 발행 기록(수집 후보 제목)
+  let history = recordArticleExposure(empty, {
+    title: `[PATCH v3 1/2] ${IMX908_SUBJECT}`,
+    url: IMX908_V3_URL
+  }, { date: '2026-08-31', type: 'newsletter_article' });
+  const storedSubject = history.articles[0].series_subject_key;
+
+  // 2) 홈페이지 헤드라인 갱신이 같은 URL에 렌더된 한국어 제목을 실어 온다.
+  //    persistHomepageHeadlineArtifacts가 하는 호출과 같은 모양이다.
+  history = recordArticleExposure(history, {
+    title: IMX908_RENDERED_HEADLINE,
+    url: IMX908_V3_URL
+  }, { date: '2026-08-31', type: 'homepage_headline' });
+
+  assert.strictEqual(history.articles.length, 1);
+  assert.strictEqual(history.articles[0].title, IMX908_RENDERED_HEADLINE, '표시용 title은 갱신된다');
+  assert.strictEqual(history.articles[0].series_subject_key, storedSubject, 'subject 키는 보존된다');
+  assert.strictEqual(
+    history.articles[0].series_identity_key,
+    'lore-series:20260828064843.65047-lachlan.michael@sony.com'
+  );
+
+  // 3) 그래서 다음 버전 재제출이 여전히 차단된다.
+  const v4Candidate = {
+    title: `[PATCH v4 1/2] ${IMX908_SUBJECT}`,
+    url: 'https://lore.kernel.org/linux-media/20260904111111.22222-2-lachlan.michael@sony.com/'
+  };
+  assert.strictEqual(
+    annotateArticleExposure(v4Candidate, history, { date: '2026-09-07' }).published_within_cooldown,
+    true
+  );
+});
+
+test('재제출 축은 제목이 빈 시리즈 후보끼리 맞아떨어지지 않는다', () => {
+  // scope는 있고 subject만 빈 경우다. 가드가 없으면 `host::` 하나로 서로 다른 시리즈가 전부 묶인다.
+  const history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: [{
+      article_identity_key: `url:${IMX908_V3_URL}`,
+      title: '',
+      source_url: IMX908_V3_URL,
+      newsletter_date: '2026-08-31',
+      exposure_type: 'newsletter_article',
+      newsletter_article_date: '2026-08-31',
+      cooldown_until: '2026-09-21',
+      exposure_types: ['newsletter_article']
+    }]
+  };
+  const untitledOtherSeries = {
+    title: '',
+    url: 'https://lore.kernel.org/linux-media/20260901090909.33333-1-someone.else@example.com/'
+  };
+
+  assert.strictEqual(
+    annotateArticleExposure(untitledOtherSeries, history, { date: '2026-09-07' }).published_within_cooldown,
+    false
+  );
+  assert.strictEqual(
+    everCoveredAsNewsletterArticle(untitledOtherSeries, history, { date: '2026-09-07' }),
+    false
+  );
+});
+
+test('비시리즈 기록을 다시 갱신해도 시리즈 필드가 빈 값으로 생기지 않는다', () => {
+  // 보존 규칙이 빈 값까지 실어 나르면 "시리즈가 아니면 필드를 안 남긴다"는 결정이 무너져
+  // state 파일의 모든 기록에 빈 필드가 붙는다.
+  const empty = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: []
+  };
+  const article = {
+    title: 'CameraX 1.6.0 release notes',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.0'
+  };
+  let history = recordArticleExposure(empty, article, { date: '2026-08-31', type: 'newsletter_article' });
+  history = recordArticleExposure(history, article, { date: '2026-09-07', type: 'homepage_headline' });
+
+  const record = history.articles[0];
+  assert.ok(!Object.prototype.hasOwnProperty.call(record, 'series_identity_key'));
+  assert.ok(!Object.prototype.hasOwnProperty.call(record, 'series_subject_key'));
+});
+
+test('쿨다운은 main 기사 발행 기록만 건다 — 헤드라인 기록의 cooldown_until은 무시한다', () => {
+  // cooldown_until은 newsletter_article 분기에서만 계산된다. 그 불변식이 깨져 헤드라인 기록이
+  // 쿨다운을 걸기 시작하면, main으로 낸 적 없는 URL이 재게재 차단으로 잡힌다.
+  const history = {
+    schemaVersion: 1,
+    coverage: { mode: 'forward_only', coverage_starts_at: '2026-08-31', backfill_included: false },
+    articles: [{
+      article_identity_key: 'url:https://example.com/headline-only',
+      title: 'Headline only',
+      source_url: 'https://example.com/headline-only',
+      newsletter_date: '2026-08-31',
+      exposure_type: 'homepage_headline',
+      exposure_types: ['homepage_headline'],
+      cooldown_until: '2026-09-21'
+    }]
+  };
+
+  assert.strictEqual(
+    annotateArticleExposure({ url: 'https://example.com/headline-only' }, history, { date: '2026-09-07' })
+      .published_within_cooldown,
+    false
+  );
+});
