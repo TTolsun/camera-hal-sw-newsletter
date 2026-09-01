@@ -222,6 +222,11 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // #909: 키만으로는 "왜 빠졌나"에 답하지 못한다. 사유가 담긴 coverage-reconciliation.json은
     // 커밋되지 않으므로(보존 등급 debug_heavy), 그룹 단위 사유는 여기서 커밋되는 status로 올린다.
     reconciliation_demoted_groups: ensureArray(report.reconciliation_demoted_groups),
+    // #1034: 강등분만으로는 계획이 채점한 후보의 나머지가 남지 않는다. reserve·catch-up pool
+    // 후보는 강등 대상이 아니라 위 목록에 절대 나타나지 않아, 판단이 담긴 editorial-plan.json
+    // (역시 커밋 안 됨)이 만료되면 "그 후보를 계획이 어떻게 봤나"를 영영 알 수 없다.
+    // 채점된 후보 전부의 판단을 여기서 커밋되는 status로 올린다. 관측이지 판정이 아니다.
+    editorial_plan_scored_candidates: ensureArray(report.editorial_plan_scored_candidates),
     reconciliation_promoted_group_keys: ensureArray(report.reconciliation_promoted_group_keys),
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
     demoted_article_count: options.demotedArticleCount ?? diagnostics.demoted_candidate_count ?? report.demoted_candidate_count ?? null,

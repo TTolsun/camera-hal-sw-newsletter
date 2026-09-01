@@ -361,3 +361,42 @@ test('프롬프트에서 뺀 short_mention은 모델 드리프트로 기록된�
   assert.equal(demotion.reason_code, 'editorial_plan_unrecognized');
   assert.equal(demotion.coverage_decision, 'short_mention', '모델이 쓴 원문은 그대로 남는다');
 });
+
+// #1034: 강등 기록만으로는 "계획이 무엇을 어떻게 채점했는가"에 답하지 못한다. 강등 대상이
+// 아닌 후보(reserve로 남은 후보, catch-up pool 후보)는 강등 목록에 영원히 나타나지 않고,
+// 판단 원본을 담은 editorial-plan.json은 보존 등급이 debug_heavy라 커밋되지 않는다.
+// 그래서 채점된 후보 전부를 강등 여부와 무관하게 따로 싣는다.
+
+test('강등되지 않고 reserve로 남은 채점 후보도 diff에 실린다', () => {
+  const selected = mainEligible({ url: 'a', article_group_key: 'group:a' });
+  const reserve = mainEligible({ url: 'r', article_group_key: 'group:r' });
+  const shortlistReport = { selected_articles: [selected], reserve_candidates: [reserve] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(selected, 'main_article'), plan(reserve, 'reference_only')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.diff.demoted_groups, [], '강등이 없어도 채점 사실은 남아야 한다');
+  assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
+    { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'r', coverage_decision: 'reference_only', reason_code: null }
+  ]);
+});
+
+test('채점 목록은 강등 사유를 함께 싣고 미채점 후보는 담지 않는다', () => {
+  const kept = mainEligible({ url: 'a', article_group_key: 'group:a' });
+  const dropped = mainEligible({ url: 'b', article_group_key: 'group:b' });
+  const ungraded = mainEligible({ url: 'c', article_group_key: 'group:c' });
+  const shortlistReport = { selected_articles: [kept, dropped, ungraded], reserve_candidates: [] };
+  const editorialPlanReport = {
+    editorial_plans: [plan(kept, 'main_article'), plan(dropped, 'exclude')]
+  };
+
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+
+  assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
+    { candidate_key: 'a', coverage_decision: 'main_article', reason_code: null },
+    { candidate_key: 'b', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' }
+  ], '채점된 후보만, 강등된 후보는 사유와 함께');
+});

@@ -231,6 +231,35 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
     }))
   }));
 
+  // #1034: 강등분만 남기면 계획이 채점한 후보의 나머지가 커밋 산출물 어디에도 남지 않는다.
+  // reserve로 남은 후보와 catch-up pool 후보는 애초에 강등 대상이 아니라 위 목록에 절대
+  // 나타나지 않고, 판단 원본을 담은 editorial-plan.json은 보존 등급이 debug_heavy라 커밋되지
+  // 않는다. 그래서 "그 주 reserve 후보를 계획이 어떻게 채점했나"를 사후에 답할 수 없었다.
+  // 채점된 후보 전부를 강등 여부와 무관하게 싣는다. reason_code는 실제로 main에서 빠진
+  // 후보에만 있으므로 나머지는 null이다 — 관측이지 판정이 아니라서 게이트에는 쓰이지 않는다.
+  const demotionReasonByCandidateKey = new Map(
+    changes
+      .filter(change => change.action === 'demoted')
+      .map(change => [change.key, change.reason_code])
+  );
+  const scoredCandidates = [];
+  const scoredCandidateKeys = new Set();
+  for (const candidate of [...deterministicSelected, ...reserve]) {
+    const key = candidateKey(candidate);
+    if (scoredCandidateKeys.has(key)) continue;
+    const coverageDecision = entryFor(candidate)?.coverage_decision || '';
+    // 채점되지 않은 후보는 담지 않는다. 목록이 "등급을 실제로 받은 후보"만 담아야 부재가
+    // 곧 미채점이라는 답이 된다. 여기서 읽는 판단은 재조정이 실제로 본 값과 같은 조회를
+    // 거치므로, 계획 항목 조회가 빗나간 후보도 재조정이 그랬듯 미채점으로 남는다.
+    if (!coverageDecision) continue;
+    scoredCandidateKeys.add(key);
+    scoredCandidates.push({
+      candidate_key: key,
+      coverage_decision: coverageDecision,
+      reason_code: demotionReasonByCandidateKey.get(key) || null
+    });
+  }
+
   return {
     selected: clamped,
     // 재조정된 main 집합에서 파생되는 shortlistReport 요약 필드.
@@ -249,6 +278,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
       deterministic_selected_group_keys: deterministicGroupKeys,
       demoted_group_keys: demotedGroupKeys,
       demoted_groups: demotedGroups,
+      editorial_plan_scored_candidates: scoredCandidates,
       promoted_group_keys: reconciledGroupKeys.filter(key => !deterministicGroupKeySet.has(key))
     }
   };

@@ -462,6 +462,9 @@ async function main() {
     // 그래서 attempt 시작마다 비우고, 재조정이 실제로 돈 뒤에만 다시 채운다.
     shortlistReport.reconciliation_demoted_group_keys = [];
     shortlistReport.reconciliation_demoted_groups = [];
+    // #1034: 채점 투영도 같은 수명이다. 직전 attempt의 채점 기록이 남으면 다른 편성의 판단을
+    // 이번 실행 것으로 읽게 된다.
+    shortlistReport.editorial_plan_scored_candidates = [];
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
     const reporterStage = stageRun(LLM_STAGES.REPORTER, { qualityAttempt: attempt, totalAttempts });
     const editorStage = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: attempt, totalAttempts });
@@ -562,6 +565,9 @@ async function main() {
     // #909: 키 옆에 사유를 함께 남긴다. 원본 판단(coverage_decision)과 실제 전환 원인
     // (reason_code=cap_clamp | editorial_plan_*)이 갈라져 있어야 "왜 빠졌나"에 답할 수 있다.
     shortlistReport.reconciliation_demoted_groups = coverageReconciliation.diff.demoted_groups;
+    // #1034: 강등되지 않은 채점 후보(reserve·catch-up pool)는 위 목록에 나타나지 않는다.
+    // 계획이 채점한 후보 전부를 함께 남겨야 "왜 이 후보는 main이 아니었나"에 답할 수 있다.
+    shortlistReport.editorial_plan_scored_candidates = coverageReconciliation.diff.editorial_plan_scored_candidates;
     shortlistReport.reconciliation_promoted_group_keys = coverageReconciliation.diff.promoted_group_keys;
     shortlistReport.publish_ready = deterministicPublishReady
       && reviewCompositionGatePasses(reconciledSummary)
