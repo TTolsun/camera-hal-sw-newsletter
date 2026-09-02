@@ -35,9 +35,10 @@
 
   // 헤더의 정본은 이슈 페이지 렌더러(`src/generator/render/newsletter-renderer.js` 의
   // homepageHeaderHtml)다 — 홈·아카이브·Lab 의 정적 헤더도 같은 마크업이고, 공용 헬퍼
-  // `src/shared/test/helpers/site-nav.js` 가 그 네 표면을 한 벌로 잠근다. 이 컴포넌트도 같은
-  // 것을 낸다. 두 출력이 같은지는 `newsletter-renderer.test.js` 가 직접 대조하므로, 정본이
-  // 바뀌면 여기도 함께 바꿔야 초록이 된다.
+  // `src/shared/test/helpers/site-nav.js` 가 그 네 표면의 **나브를** 한 벌로 잠근다(브랜드는
+  // 렌더 산출물과 커밋된 이슈 페이지에서 잠긴다). 이 컴포넌트도 같은 것을 낸다. 두 출력이
+  // 같은지는 `newsletter-renderer.test.js` 가 직접 대조하므로, 정본이 바뀌면 여기도 함께
+  // 바꿔야 초록이 된다.
   function siteHeaderHtml(options = {}) {
     const rootPath = normalizeRootPath(options.rootPath);
     const brandHref = `${rootPath}index.html`;
@@ -58,12 +59,17 @@
   </header>`;
   }
 
+  // placeholder 는 그 자체가 `<header class="site-header" data-site-header>` 다 — `styles.css` 의
+  // `.site-header[data-site-header]:empty { min-height: 61px }` 가 JS 전에 그 자리를 잡아 두고,
+  // #1020 이 걷어낸 로드 검사도 `<header ... data-site-header>` 를 찾았다. siteHeaderHtml() 이
+  // `<header>` 셸을 자기가 만드므로 host 의 **안을 채우면** `<header>` 안에 `<header>` 가 되어
+  // 콘텐츠 모델 위반이고 sticky·border-bottom·backdrop-filter 가 두 겹으로 걸린다. 그래서 host
+  // 를 통째로 대체한다. rootPath 는 대체 전에 읽는다.
   function mountSiteHeaders(root = global.document) {
     if (!root || typeof root.querySelectorAll !== 'function') return;
     for (const target of root.querySelectorAll('[data-site-header]')) {
-      target.innerHTML = siteHeaderHtml({
-        rootPath: target.getAttribute('data-site-root') || ''
-      });
+      const rootPath = target.getAttribute('data-site-root') || '';
+      target.outerHTML = siteHeaderHtml({ rootPath });
     }
   }
 
