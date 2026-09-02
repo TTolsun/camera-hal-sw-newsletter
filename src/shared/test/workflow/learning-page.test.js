@@ -416,8 +416,12 @@ test('learning page gives every table-of-contents landing target a scroll margin
 
 // 리터럴로 두면 규정대로 잠금을 지켜도 빠져나간다. 헤더의 min-height 를 올리면 #1023 잠금이
 // .learning-nav 의 top 을 따라 고치도록 강제하지만, 그렇게 커진 띠가 scroll-margin-top 을 넘어도
-// 잡는 검사가 없었다. 그래서 값을 리터럴로 대조하지 않고 띠를 계산해 하한으로만 본다 —
-// 과다 제공은 요소를 더 아래로 굴릴 뿐이라 무해하므로 등호로 고정하지 않는다.
+// 잡는 검사가 없었다. 그래서 값을 리터럴로 대조하지 않고 띠를 계산해 하한으로만 본다.
+//
+// 하한인 이유는 과다 제공이 무해해서가 아니다 — 과다 제공은 요소를 아래로 굴리는 대신 뷰포트
+// 높이를 쓴다. 320x256 에서 좁은 화면 값 185px 은 착지한 제목을 화면 아래로 통째로 밀어낸다
+// (실측표는 learning.css 의 좁은 화면 블록 주석에 있다. 손익분기 약 140px). 이 테스트가 상한을
+// 정하지 않는 것은 그 정리가 #1047 의 남은 항목이기 때문이지, 여유분이 공짜여서가 아니다.
 test('learning page keeps the wide-screen scroll margin at or above the sticky band', () => {
   const styles = readSiteStylesheet();
   const css = readLearningStylesheet();
