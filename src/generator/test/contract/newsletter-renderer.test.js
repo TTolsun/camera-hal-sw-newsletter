@@ -140,6 +140,14 @@ function anchorLabels(markup) {
     .filter(Boolean);
 }
 
+// 문서의 첫 `<header>` 블록을 공백만 정규화해 돌려준다. 두 생산자가 같은 마크업을 내는지 대조할
+// 때 쓴다 — 들여쓰기는 각자의 삽입 위치에서 오므로 비교 대상이 아니지만, 태그·속성·class 는
+// 그대로 본다. 이슈 페이지의 `<header>` 는 사이트 헤더 하나뿐이라 첫 블록이 곧 그것이다.
+function firstHeaderBlock(html) {
+  const match = String(html).match(/<header\b[\s\S]*?<\/header>/i);
+  return match ? match[0].replace(/\s+/g, ' ') : null;
+}
+
 test('newsletter renderer uses public_article for public markdown and HTML', () => {
   const markdown = buildMarkdown(issue());
   const html = buildHtml(issue());
@@ -210,7 +218,32 @@ test('shared site header renders consistent root-relative links', () => {
   // 이 헬퍼가 실제로 만드는 문자열을 본다. 예전에는 `data-site-header` placeholder 를 넣었는데,
   // 그 placeholder 에는 나브가 없어서 siteNavLabels() 의 폴백이 다시 siteHeaderHtml() 을 불렀다 —
   // 헬퍼의 출력을 헬퍼의 출력과 비교하는 항상-통과 단언이었다.
-  assert.deepEqual(anchorLabels(issueHeader), ['Camera SW Newsletter', '홈', '아카이브', 'GitHub']);
+  assert.deepEqual(anchorLabels(issueHeader), ['Camera SW Newsroom', '홈', '아카이브', 'GitHub']);
+
+  // 렌더 산출물과 **같은 한 벌**로 이 컴포넌트도 잠근다(#1051). 두 헬퍼는 `<header>` 안으로
+  // 스코프하므로, 이 컴포넌트가 `<header>` 없이 `<nav class="site-nav">` 를 만들던 동안에는
+  // 어느 쪽도 통과할 수 없었다 — 이 네 줄이 세대 어긋남을 직접 잡는다.
+  assertSharedNav(homeHeader, '');
+  assertSharedBrand(homeHeader, '');
+  assertSharedNav(issueHeader, '../../');
+  assertSharedBrand(issueHeader, '../../');
+
+  // rootPath 정규화. 사이트 루트를 뜻하는 세 표기가 모두 같은 헤더를 만들고, 빠진 끝 슬래시는
+  // 보태 준다.
+  for (const rootPath of ['.', './']) {
+    assert.equal(siteHeaderHtml({ rootPath }), homeHeader, rootPath);
+  }
+  assert.equal(siteHeaderHtml({ rootPath: '../..' }), issueHeader);
+});
+
+// 이슈 페이지 렌더러가 헤더의 정본이다. 이 컴포넌트는 mount 되는 곳이 없어서(`data-site-header`
+// 를 쓰는 페이지 0개) 어긋나도 라이브에서는 티가 나지 않는다 — 어느 페이지가 채택하는 순간에야
+// 옛 헤더가 주입된다. 그래서 두 생산자의 출력을 직접 대조한다(#1051). 공유 헬퍼가 보는 것은 나브
+// 라벨·링크와 브랜드뿐이라, 셸 class·`content-wrap`·로고 크기는 이 대조에서만 잠긴다.
+test('site header component emits the same markup as the issue renderer', () => {
+  const rendered = firstHeaderBlock(buildHtml(issue()));
+  assert.ok(rendered, '렌더 산출물에 <header> 가 있어야 한다');
+  assert.equal(firstHeaderBlock(siteHeaderHtml({ rootPath: '../../' })), rendered);
 });
 
 test('newsletter renderer renders a single main article without empty sections', () => {
