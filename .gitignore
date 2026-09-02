@@ -20,7 +20,6 @@ npm-debug.log*
 /*-codex-plan.md
 /*-scratch.md
 /.claude/
-/CLAUDE.md
 
 # DBG (debug_heavy) exact basenames — scoped to newsroom and collected-news
 articles/content/newsroom/**/article-capsules.json
