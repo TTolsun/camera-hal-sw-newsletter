@@ -8,6 +8,7 @@ const { resolveLibcameraReleaseAnnouncementItems } = require('./libcamera-releas
 const { resolveRaspberryPiLibcameraReleaseItems } = require('./raspberrypi-libcamera-releases');
 const { resolvePatchworkLibcameraPatchItems } = require('./patchwork-libcamera-patches');
 const { resolveAospReleaseCameraChangeItems } = require('./aosp-release-camera-changes');
+const { resolveGerritCameraChangeItems } = require('./gerrit-camera-changes');
 const { resolveDatedArticleIndexItems } = require('./dated-article-index-resolver');
 
 // 각 리졸버의 첫 인자가 다르다(security-bulletin은 indexItems, libcamera는 text/indexHtml,
@@ -45,6 +46,19 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     id: 'aosp-release-camera-changes',
     resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
       resolveAospReleaseCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays })
+  },
+  {
+    // AOSP와 ChromeOS는 Gerrit 호스트만 다르고 응답 계약이 같다. 감시 대상(프로젝트·경로·상태)은
+    // 등록부의 sourceUrl 질의가 정하고, 리졸버는 호스트를 그 URL의 origin에서 파생한다 - 그래서
+    // 같은 리졸버를 두 항목이 공유한다.
+    id: 'aosp-gerrit-camera-changes',
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
+      resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays })
+  },
+  {
+    id: 'chromeos-gerrit-camera-changes',
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
+      resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays })
   },
   {
     id: 'claude-blog',

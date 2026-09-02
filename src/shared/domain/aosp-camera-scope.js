@@ -59,7 +59,14 @@ const DIRECT_AOSP_PATTERNS = [
   /\bcamera metadata\b/i,
   /\b(?:CTS|VTS|CDD|Camera ITS)\b[^.\n]{0,120}\bcamera\b/i,
   /\bcamera\b[^.\n]{0,120}\b(?:CTS|VTS|CDD|Camera ITS)\b/i,
-  /\bCDD\b[^.\n]{0,120}\bcamera orientation\b/i
+  /\bCDD\b[^.\n]{0,120}\bcamera orientation\b/i,
+  // AOSP 카메라 소스 트리 경로. 변경 단위 후보(Gerrit #1033)는 제목이 "VirtualCamera: prevent integer
+  // underflow in outBufferSize"처럼 도메인 문구를 쓰지 않고 바뀐 파일 경로로 말한다. 그 경로 자체가
+  // 산문보다 강한 카메라 근거다 - 이 규칙이 없으면 cameraserver 변경이 generic_tech_watchlist로 떨어진다.
+  /\bframeworks\/av\/camera\//i,
+  /\bservices\/camera\//i,
+  /\bhardware\/interfaces\/camera\//i,
+  /\bhardware\/google\/camera\//i
 ];
 
 // 카메라 특정 driver evidence — 무조건 카메라 드라이버 근거로 인정한다. 벤더 카메라/ISP 드라이버명과
@@ -85,6 +92,18 @@ const STRONG_CAMERA_DRIVER_PATTERNS = [
   /\bmtk[-_]?cam\b/i,    // MediaTek camera (mtk-cam)
   /\buvcvideo\b/i,       // USB Video Class camera driver (drivers/media/usb/uvc)
   /\blibipa\b/i          // libcamera IPA shared algorithm library (patch prefix "ipa: libipa:")
+];
+
+// AOSP 밖 카메라 스택의 소스 트리 경로. 디렉터리 + 확장자라는 모양은 산문에서 나오지 않으므로
+// 카메라 스택 근거로 그대로 인정한다. AOSP 트리는 DIRECT_AOSP_PATTERNS가 먼저 잡으니 여기 남는 것은
+// ChromeOS platform2의 camera/처럼 Linux 쪽 카메라 스택이다(#1033).
+//
+// STRONG_CAMERA_DRIVER_PATTERNS에 넣지 않는다. 그 목록은 scoring·evidence·collector 세 소비자가
+// 벤더 ISP 토큰 어휘로 재사용하는 단일출처라서, 경로 정규식이 섞이면 api_or_component 추출 같은
+// 무관한 자리에 파일 경로가 튀어나온다.
+const CAMERA_SOURCE_TREE_PATTERNS = [
+  /(?:^|[^\w])camera\/[\w./-]+\.(?:cc|cpp|cxx|c|h|hpp|aidl|mojom|java|kt|py)\b/i,
+  /\bcros[-_]camera\b/i
 ];
 
 // Linux media 프레임워크 공용 API 토큰 — 디코더/인코더/DVB/튜너/HDMI-RX도 공유한다. 카메라 특정
@@ -519,7 +538,7 @@ function bucketReason(bucket, terms, evidenceOrigin) {
 // decoder가 camera_driver로 새지 않으면서(#795), rkisp2/camss 같은 진짜 카메라 드라이버(디코드 언급이
 // 섞여도 카메라 토큰이 있으면)는 유지된다(과도 제외 방지).
 function driverEvidenceTerms(body) {
-  const strong = patternHits(STRONG_CAMERA_DRIVER_PATTERNS, body);
+  const strong = patternHits([...STRONG_CAMERA_DRIVER_PATTERNS, ...CAMERA_SOURCE_TREE_PATTERNS], body);
   const shared = patternHits(SHARED_MEDIA_API_PATTERNS, body);
   if (shared.length === 0) return strong;
   const nonCameraMediaPresent = patternHits(NON_CAMERA_MEDIA_PATTERNS, body).length > 0;

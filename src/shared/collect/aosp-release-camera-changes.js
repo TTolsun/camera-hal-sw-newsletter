@@ -136,6 +136,20 @@ function commitSubject(commit) {
   return String((commit && commit.message) || '').split('\n')[0].replace(/\s+/g, ' ').trim();
 }
 
+// AOSP 커밋 메시지의 Change-Id trailer. Gerrit 후보(#1033)와 같은 변경인지 판단할 유일한 공통
+// 식별자다 - 드롭 후보는 저장소당 집계 1건이라 제목·URL로는 절대 겹치지 않는다.
+//
+// 이 매칭이 항상 성사되지는 않는다. 공개 드롭에는 내부 Gerrit(googleplex-android-review)에서
+// cherry-pick된 merge 커밋이 섞여 있고, 그런 커밋의 Change-Id는 공개 Gerrit 변경의 것과 다르다
+// (2026-09-02 실측: android-16.0.0_r4..android-17.0.0_r1의 최신 커밋이 그런 merge였다). 그래서
+// 이건 "겹치면 반드시 잡는" 보증이 아니라 겹쳤을 때 중복 기사를 막는 안전망이다.
+const CHANGE_ID_PATTERN = /^\s*Change-Id:\s*(I[0-9a-f]{40})\s*$/im;
+
+function commitChangeId(commit) {
+  const match = String((commit && commit.message) || '').match(CHANGE_ID_PATTERN);
+  return match ? match[1] : '';
+}
+
 function rangeLogUrl(repositoryPath, previousTag, tag, pageToken) {
   const base = `${GITILES_ORIGIN}/${repositoryPath}/+log/${previousTag}..${tag}`;
   const query = `format=JSON&n=${LOG_PAGE_SIZE}&name-status=1${pageToken ? `&s=${pageToken}` : ''}`;
@@ -222,7 +236,11 @@ function buildCandidate(repositoryPath, release, cameraCommits, scannedCommits, 
     behavior_change: summary,
     relevanceBucketHint: 'direct_aosp_camera',
     camera_path_commit_count: cameraCommits.length,
-    camera_path_commit_count_is_lower_bound: truncated
+    camera_path_commit_count_is_lower_bound: truncated,
+    // 이 드롭이 실어 온 camera 커밋의 Change-Id와 commit SHA. 같은 변경이 Gerrit 후보로도 잡혔다면
+    // 선정 단계가 이 목록으로 알아채고 하나로 접는다(#1033).
+    covered_gerrit_change_ids: cameraCommits.map(commitChangeId).filter(Boolean),
+    covered_commit_shas: cameraCommits.map(commit => String((commit && commit.commit) || '')).filter(Boolean)
   };
 }
 
