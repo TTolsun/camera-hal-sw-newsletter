@@ -24,7 +24,8 @@ const {
 const {
   assertSharedNav,
   assertSharedBrand,
-  assertSharedFooterNav
+  assertSharedFooterNav,
+  hasClassToken
 } = require('../../../shared/test/helpers/site-nav');
 
 // 지원 집합 바로 위 값. 숫자를 박아 두면 계약 버전이 추가될 때 이 테스트가 지원
@@ -174,7 +175,12 @@ function placeholderPage(rootPath) {
     }
   };
   return {
-    root: { querySelectorAll: () => (host.replacement === null ? [host] : []) },
+    root: {
+      // 셀렉터를 실제로 본다. 인자를 무시하면 mount 가 영영 매치될 수 없는 셀렉터를 봐도 스텁이
+      // host 를 내주어, mount 를 잠근다는 이름을 단 테스트가 mount 가 죽은 상태를 통과시킨다.
+      querySelectorAll: (selector) =>
+        (selector === '[data-site-header]' && host.replacement === null) ? [host] : []
+    },
     html: () => host.outerHTML
   };
 }
@@ -291,7 +297,11 @@ test('mounting the site header replaces the placeholder instead of nesting insid
   const mounted = page.html();
 
   assert.equal((mounted.match(/<header\b/gi) || []).length, 1, '<header> 는 정확히 1개여야 한다');
-  assert.equal((mounted.match(/class="[^"]*\bsite-header\b/g) || []).length, 1);
+  // class 토큰은 공유 헬퍼로 센다. 낱말 경계 정규식으로 세면 하이픈이 경계라
+  // `homepage-site-header` 안에서도 만족되어, `site-header` 토큰만 지워도 통과한다 —
+  // site-nav.js:40-41 이 `nav-links` 로 똑같이 겪고 적어 둔 함정이다.
+  const openingTags = [...mounted.matchAll(/<[a-z][^>]*>/gi)].map(match => match[0]);
+  assert.equal(openingTags.filter(tag => hasClassToken(tag, 'site-header')).length, 1);
   assert.doesNotMatch(mounted, /data-site-header|data-site-root/);
   assert.equal(firstHeaderBlock(mounted), firstHeaderBlock(siteHeaderHtml({ rootPath: '../../' })));
 
