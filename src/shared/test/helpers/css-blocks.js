@@ -12,8 +12,9 @@ function escapeForRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// startIndex 이후 첫 여는 중괄호부터 짝이 맞는 닫는 중괄호까지의 본문을 돌려준다.
-function blockAt(css, startIndex) {
+// startIndex 이후 첫 여는 중괄호와 짝이 맞는 닫는 중괄호의 위치를 돌려준다. 중괄호를 세는 자리는
+// 여기 하나뿐이다 — 블록 본문을 뜨는 쪽과 블록을 걷어내는 쪽이 같은 경계를 보게 한다.
+function blockBounds(css, startIndex) {
   const openIndex = css.indexOf('{', startIndex);
   assert.notEqual(openIndex, -1, 'CSS block should contain an opening brace');
   let depth = 0;
@@ -23,11 +24,35 @@ function blockAt(css, startIndex) {
     } else if (css[index] === '}') {
       depth -= 1;
       if (depth === 0) {
-        return css.slice(openIndex + 1, index);
+        return { openIndex, closeIndex: index };
       }
     }
   }
   assert.fail('CSS block should contain a matching closing brace');
+}
+
+// startIndex 이후 첫 여는 중괄호부터 짝이 맞는 닫는 중괄호까지의 본문을 돌려준다.
+function blockAt(css, startIndex) {
+  const { openIndex, closeIndex } = blockBounds(css, startIndex);
+  return css.slice(openIndex + 1, closeIndex);
+}
+
+// @media 블록을 본문까지 통째로 걷어내 미디어 쿼리 밖 규칙만 남긴다. 여는 줄만 지우면 안쪽 규칙이
+// 그대로 남아, 폭 구간마다 값이 다른 선언을 "넓은 화면 값" 으로 읽을 때 좁은 화면 규칙이 섞인다.
+// 주석을 먼저 걷어내는 이유는 styles.css 주석에 `@media` 라는 낱말이 들어 있어서다 — 그대로 두면
+// 그 주석 뒤의 첫 블록을 미디어 블록으로 착각해 살아있는 규칙을 지운다. 돌려주는 문자열에는
+// 그래서 주석이 없다.
+function stripMediaBlocks(css) {
+  const source = String(css).replace(/\/\*[\s\S]*?\*\//g, '');
+  let kept = '';
+  let index = 0;
+  while (index < source.length) {
+    const start = source.indexOf('@media', index);
+    if (start === -1) return kept + source.slice(index);
+    kept += source.slice(index, start);
+    index = blockBounds(source, start).closeIndex + 1;
+  }
+  return kept;
 }
 
 function mediaBlock(css, query) {
@@ -72,6 +97,7 @@ function assertCssDeclaration(block, property, value) {
 
 module.exports = {
   blockAt,
+  stripMediaBlocks,
   mediaBlock,
   exactSelectorBlock,
   selectorGroupBlock,
