@@ -61,17 +61,13 @@ node --test src/generator/test/contract/fixture-policy.test.js # one file via No
 
 코드나 artifact를 수정한 뒤의 기본 검증은 `npm.cmd run test` + `npm.cmd run validate`입니다.
 
-로컬에서 `npm.cmd run validate:quality`가 실패하면 코드 버그로 단정하기 전에, 미커밋 `articles/content/newsroom/**/editor-draft.json`(gitignored 디버그 잔재)이 남아 있는지 먼저 확인하세요. validate-quality는 이 파일이 있으면 품질을 다시 계산하므로 중간 실행 잔재가 커밋된 발행물과 어긋나는 거짓 양성을 만듭니다. 해당 파일을 치우고 재실행하면 되고, quality-report를 덮어써서 맞추는 방어 패치는 금지입니다.
-
 ## 아키텍처
 
-파이프라인 단계·layer 구성·모듈 위치는 매 세션 주입되는 llm-wiki 색인([[pipeline]]/[[overview]])을 보세요. 코드에서 유도되지 않는 불변식만 여기 둡니다.
+파이프라인 단계·layer 구성·모듈 위치는 매 세션 주입되는 llm-wiki 색인([[pipeline]]/[[overview]])을 보세요. 코드에서 유도되지 않는 불변식은 전부 AGENTS.md에 있습니다.
 
-- **발행가능 main 후보 *자격*(source-binding/evidence/freshness/cap/floor/forbidden bucket)은 LLM이 아니라 deterministic code가 결정합니다.** LLM editorial-plan은 그 봉투 안에서 coverage 등급 재배치만 제안하고 deterministic reconciler가 불변식을 강제합니다 — 이 권한(#724)은 항상 적용됩니다(기존 `NEWSROOM_LLM_COVERAGE_AUTHORITY` 플래그는 PR #769로 제거됨).
-- PR 생성에 성공했다고 해서 발행 준비가 끝난 것은 아닙니다(PR-creation success ≠ publish-ready).
-- 발행 주기는 주간(weekly)이며 weekly issue는 자체 완결(self-contained)이어야 하고 과거 daily 페이지로 링크하지 않습니다. 중간 산출물은 `YYYY-MM-DD`, 공개 뉴스레터는 `YYYY-Wnn` 폴더를 씁니다.
-- **정책은 config 기반입니다.** `src/shared/config/newsletter-policy.json`이 source of truth이고, `README.md`/docs의 정책 텍스트는 생성된 것입니다. JSON 수정 뒤 `npm.cmd run sync:policy-docs`를 실행하세요(`check:policy-docs`가 검증).
-- **LLM provider 운영.** default는 `gemini`. scheduled run은 code default(`DEFAULT_RUNTIME_CONFIG`)를 따르며 `LLM_PROVIDER`/`LLM_MODEL`/`LLM_FALLBACK_MODELS` repo variable을 무시합니다(수동 `workflow_dispatch`에서만 전달). 상세는 [docs/NEWSROOM_WORKFLOW.md](docs/NEWSROOM_WORKFLOW.md).
+- 발행 주기(weekly self-contained), 정책 config source of truth — [AGENTS.md](AGENTS.md) "발행 주기와 정책".
+- coverage 권한 경계(#724) — [src/AGENTS.md](src/AGENTS.md).
+- PR 생성 성공 ≠ `publish-ready`, scheduled run의 LLM provider 결정 — [.github/workflows/AGENTS.md](.github/workflows/AGENTS.md).
 
 ## 컨벤션
 
