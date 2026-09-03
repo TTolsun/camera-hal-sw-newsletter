@@ -493,7 +493,10 @@ function normalizeSourceQuality(value = {}) {
   if (!sourceQuality.main_article_source_allowed_reason) {
     sourceQuality.main_article_source_allowed_reason = reasonFor(
       sourceQuality.main_article_source_blockers,
-      sourceQuality.main_article_source_allowed
+      sourceQuality.main_article_source_allowed,
+      // 정책만으로 막힌 후보(blocker 없음)의 사유가 여기서도 정확해야 한다. 안 넘기면
+      // classifySourceQuality에서 고친 것과 같은 'unknown_source_quality' 오답이 이 경로로 되돌아온다.
+      lower(value.mainArticlePolicy || value.main_article_policy)
     );
   }
   return sourceQuality;

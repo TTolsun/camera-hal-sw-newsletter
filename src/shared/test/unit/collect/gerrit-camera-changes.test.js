@@ -193,6 +193,17 @@ test('review signals read the label shortcuts and ignore the licensing bot', () 
   assert.equal(reviewSignals({ 'Code-Review': {} }).phrase, 'No Code-Review or verification vote has been cast yet.');
 });
 
+test('a failed verification blocks promotion even when a reviewer recommended the change', () => {
+  // 리뷰어 +1만 보고 승격하면 presubmit이 깨진 제안이 main 기사가 된다.
+  const signals = reviewSignals({
+    'Code-Review': { recommended: { _account_id: 1 } },
+    'Presubmit-Verified': { rejected: { _account_id: 2 } }
+  });
+  assert.equal(signals.positive, false);
+  assert.equal(signals.negative, true);
+  assert.match(signals.phrase, /Presubmit-Verified carries a negative vote/);
+});
+
 test('an unreviewed NEW change is collected but blocked from main articles', async () => {
   const { items } = await resolveOne(listChange({ created: '2026-08-13 15:04:14.000000000', updated: '2026-08-13 15:05:36.000000000' }));
   assert.equal(items.length, 1);
@@ -355,4 +366,107 @@ test('both Gerrit registry entries ask for at least the measured list page size'
     assert.equal(source.requiresCrossCheck, false);
     assert.equal(source.requiresCrossCheckDefault, false);
   }
+});
+
+test('the Change-Id and revision survive normalizeCandidate 500-character summary cap', () => {
+  // 요약이 잘리는 것 자체는 막을 수 없다(저장소 경로 + 파일 이름은 길다). 잘려도 정체성 문장이
+  // 남도록 문장 순서를 계약으로 잠근다. 순서를 되돌리면 이 단언이 깨진다.
+  const cameraFiles = [
+    'services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc',
+    'services/camera/virtualcamera/VirtualCameraImageTransformingHandler.cc',
+    'services/camera/libcameraservice/common/CameraProviderManager.cpp',
+    'services/camera/libcameraservice/device3/Camera3OutputUtils.cpp'
+  ];
+  const detail = detailFor(listChange({ created: '2026-08-13 15:04:14.000000000', updated: '2026-08-13 15:05:36.000000000' }), { files: cameraFiles });
+  const scope = cameraFileScope(detail.project, [...cameraFiles, '/COMMIT_MSG']);
+  assert.equal(scope.camera.length, 4);
+
+  return resolveOne(listChange({ created: '2026-08-13 15:04:14.000000000', updated: '2026-08-13 15:05:36.000000000' }), { files: cameraFiles })
+    .then(({ items }) => {
+      const candidate = normalizeCandidate({ ...items[0], source: REGISTRY_SOURCE });
+      assert.ok(candidate.summary.length <= 500);
+      assert.match(candidate.summary, /Change-Id I0f5906b56ddfb8d23d079cd192c42f925b5c02d3/);
+      assert.match(candidate.summary, /current revision [0-9a-f]{12}\./);
+      assert.match(candidate.summary, /No Code-Review or verification vote has been cast yet/);
+    });
+});
+
+test('the component label is a directory, not a joined list of full file paths', async () => {
+  const { items } = await resolveOne(listChange({ created: '2026-08-13 15:04:14.000000000', updated: '2026-08-13 15:05:36.000000000' }));
+  assert.equal(
+    items[0].api_or_component,
+    'platform/frameworks/av/services/camera/virtualcamera'
+  );
+});
+
+test('a change that merges between the list and detail reads is skipped, not dated from created', async () => {
+  // 목록은 스냅숏이라 상세를 읽을 때는 이미 병합돼 있을 수 있다. 목록의 created를 그대로 쓰면
+  // 요약이 그 날짜를 "submitted"라고 말하고 main 승격까지 열린다.
+  const listed = listChange({ created: '2026-08-13 15:04:14.000000000', updated: '2026-08-13 15:05:36.000000000' });
+  const merged = detailFor({ ...listed, status: 'MERGED' });
+  delete merged.submitted;
+  const stub = stubFetch({ '4228183': merged });
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  let items;
+  try {
+    items = await resolveGerritCameraChangeItems(listBody([listed]), SOURCE, {
+      fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+  assert.deepEqual(items, []);
+  assert.ok(warnings.some(message => message.includes('moved from NEW to MERGED between the list and detail reads')));
+});
+
+test('a change merged before the detail read is dated from submitted, not created', async () => {
+  const listed = listChange({ created: '2026-08-13 15:04:14.000000000', updated: '2026-08-13 15:05:36.000000000' });
+  const merged = detailFor({ ...listed, status: 'MERGED', submitted: '2026-08-25 09:00:00.000000000' }, {
+    labels: { 'Code-Review': { approved: { _account_id: 1 } } }
+  });
+  const stub = stubFetch({ '4228183': merged });
+  const items = await resolveGerritCameraChangeItems(listBody([listed]), SOURCE, {
+    fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS
+  });
+  assert.equal(items.length, 1);
+  assert.equal(items[0].publishedAt, '2026-08-25');
+  assert.equal(items[0].gerrit_effective_date_field, 'submitted');
+  assert.equal(items[0].gerrit_change_status, 'MERGED');
+  assert.equal(items[0].mainArticlePolicy, undefined);
+});
+
+test('a change that goes WIP between the list and detail reads is dropped', async () => {
+  const listed = listChange({ created: '2026-08-13 15:04:14.000000000', updated: '2026-08-13 15:05:36.000000000' });
+  const stub = stubFetch({ '4228183': detailFor({ ...listed, work_in_progress: true }) });
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  let items;
+  try {
+    items = await resolveGerritCameraChangeItems(listBody([listed]), SOURCE, {
+      fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+  assert.deepEqual(items, []);
+});
+
+test('a MERGED change with no submitted timestamp is reported, not silently dropped', async () => {
+  const merged = listChange({ status: 'MERGED', updated: '2026-08-25 00:00:00.000000000' });
+  delete merged.created;
+  const stub = stubFetch({});
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = message => warnings.push(String(message));
+  try {
+    await resolveGerritCameraChangeItems(listBody([merged]), SOURCE, {
+      fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS
+    });
+  } finally {
+    console.warn = originalWarn;
+  }
+  assert.deepEqual(stub.requested, []);
+  assert.ok(warnings.some(message => message.includes('carries no usable submitted timestamp')));
 });

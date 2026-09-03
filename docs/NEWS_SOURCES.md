@@ -38,7 +38,7 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - MediaCodec Reference (`documentation-watch`, `reference_only`): https://developer.android.com/reference/android/media/MediaCodec
 - AOSP Camera Documentation (`documentation-watch`, `reference_only`): https://source.android.com/docs/core/camera
 - AOSP Release Source Drop - camera changes (`release-note-watch`): https://source.android.com/docs/setup/reference/build-numbers
-- AOSP Gerrit - camera changes under review (`rss-source`): https://android-review.googlesource.com/q/(project:platform/frameworks/av+OR+project:platform/hardware/interfaces)+directory:camera
+- AOSP Gerrit - camera changes under review (`rss-source`): https://android-review.googlesource.com/q/((project:platform/frameworks/av+OR+project:platform/hardware/interfaces)+AND+directory:camera)+OR+project:platform/hardware/google/camera
 - AOSP What's New / Release Notes (`release-note-watch`, `reference_only`): https://source.android.com/docs/whatsnew
 - AOSP Site Updates (`release-note-watch`): https://source.android.com/docs/whatsnew/site-updates
 - Android Compatibility Definition Document (`documentation-watch`, `reference_only`): https://source.android.com/docs/compatibility/cdd
@@ -63,7 +63,7 @@ AOSP Gerrit과 ChromeOS Gerrit 출처는 릴리스 드롭보다 앞선 단계를
 기사 승격 정책은 상태로 정합니다.
 
 - `MERGED`: `submitted`을 기사 날짜로 쓰고 main article 후보로 둡니다. 병합된 변경은 그 자체가 확정된 1차 사실입니다.
-- `NEW` + 긍정 `Code-Review`/`Verified` 표: `created`를 기사 날짜로 쓰고 main article 후보로 둡니다.
+- `NEW` + 긍정 `Code-Review`/`Verified` 표: `created`를 기사 날짜로 쓰고 main article 후보로 둡니다. 단 같은 label 묶음에 부정 표(`rejected`/`disliked`)가 하나라도 있으면 긍정 근거로 보지 않습니다 — 리뷰어 +1이 있어도 presubmit 검증이 실패한 변경은 승격하지 않습니다.
 - `NEW` + 리뷰 표 없음: 후보로 수집하되 `mainArticlePolicy=watchlist_only`로 내려 briefing 재료로만 씁니다. AOSP Gerrit에는 누구나 변경을 올릴 수 있으므로, 아무도 검토하지 않은 제안은 뉴스가 아닙니다.
 - `WIP`, `ABANDONED`: 수집하지 않습니다.
 
@@ -94,7 +94,6 @@ AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트�
 - libcamera Blog: https://libcamera.org/blog/
 - libcamera Release Announcements: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
 - libcamera Documentation (`documentation-watch`, `reference_only`): https://libcamera.org/introduction.html
-- libcamera Patchwork - patch review (`rss-source`): https://patchwork.libcamera.org/project/libcamera/list/
 - ChromeOS Gerrit - platform2 camera merged changes (`rss-source`): https://chromium-review.googlesource.com/q/project:chromiumos/platform2+status:merged+directory:camera
 - Collabora Blog: https://www.collabora.com/news-and-blog/
 
