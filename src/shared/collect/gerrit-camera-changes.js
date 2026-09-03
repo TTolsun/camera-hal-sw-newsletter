@@ -75,6 +75,8 @@ const NOISE_SUBJECT_PATTERNS = [
 // 라이선스 봇 label이라 리뷰 근거에서 제외한다(실측: 창 안 NEW 3건 전부 이 label만 +1).
 const POSITIVE_REVIEW_LABELS = ['Code-Review', 'Verified', 'Presubmit-Verified'];
 
+function noop() {}
+
 function parseGerritChangeList(text) {
   const parsed = parseGoogleJson(text);
   return Array.isArray(parsed) ? parsed : null;
@@ -334,12 +336,30 @@ async function resolveGerritCameraChangeItems(text = '', source = {}, options = 
     : DEFAULT_LOOKBACK_DAYS;
   const cutoffMs = now.getTime() - lookbackDays * DAY_MS;
 
+  // 절단 사실을 console.warn과 진단 이벤트 두 곳에 낸다(#1059). Actions 로그는 커밋되지 않으므로
+  // warn만으로는 "창을 다 못 읽었다"와 "이번 주 신호 없음"이 커밋된 산출물에서 같은 모양이 된다.
+  // 이 이벤트는 dated_article_collection.events[]에 실려 후보 산출물까지 간다. source_id를 싣는
+  // 이유는 이 소스가 fetchClient를 쓰지 않아 리포트의 소스별 표에 행이 생기지 않기 때문이다.
+  const emit = typeof options.onDiagnostic === 'function' ? options.onDiagnostic : noop;
+  const listUrl = String(source.sourceUrl || source.url || '');
+  const announceTruncation = (detail) => emit({
+    kind: 'collection_window_truncated',
+    url: listUrl,
+    receivedBytes: 0,
+    limitedBy: '',
+    source_id: String(source.id || ''),
+    lookback_days: lookbackDays,
+    detail
+  });
+
   // 목록은 updated 내림차순이다. 페이지의 가장 오래된 updated가 아직 창 안이면 창을 다 읽지 못한
   // 것이다(effective date는 updated보다 이르거나 같으므로 updated로 경계를 판단할 수 있다).
   const listedUpdateTimes = changes.map(change => gerritTimeMs(change && change.updated)).filter(Number.isFinite);
   if (listedUpdateTimes.length > 0 && Math.min(...listedUpdateTimes) > cutoffMs) {
     console.warn(`gerrit-camera-changes: the ${changes.length}-change list page does not reach back to the `
       + `${lookbackDays}-day window; the collected changes are a lower bound, not the whole window.`);
+    announceTruncation(`the ${changes.length}-change list page does not reach back to the ${lookbackDays}-day window; `
+      + 'the collected changes are a lower bound, not the whole window');
   }
 
   const collectable = changes
@@ -364,6 +384,8 @@ async function resolveGerritCameraChangeItems(text = '', source = {}, options = 
   if (inWindow.length > targets.length) {
     console.warn(`gerrit-camera-changes: ${inWindow.length} change(s) are inside the ${lookbackDays}-day window but only `
       + `the newest ${MAX_DETAIL_FETCHES} are read; the remainder is not collected this run.`);
+    announceTruncation(`${inWindow.length} change(s) are inside the ${lookbackDays}-day window but only the newest `
+      + `${MAX_DETAIL_FETCHES} are read; the remainder is not collected this run`);
   }
 
   const candidates = [];

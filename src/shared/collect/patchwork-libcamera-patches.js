@@ -105,24 +105,27 @@ function patchTime(patch) {
   return Date.parse(TIMEZONE_SUFFIX_PATTERN.test(raw) ? raw : `${raw}Z`);
 }
 
+function noop() {}
+
 /**
- * 이 페이지가 lookback 경계를 넘었는가. 가장 오래된 patch로 판단한다 — 페이지 안에 창 안 항목과
- * 창 밖 항목이 섞여 있으면 경계는 이미 이 페이지 안이므로 더 팔 이유가 없다.
+ * 이 페이지가 lookback 경계를 넘었는가, 그리고 날짜를 하나도 못 읽었는가.
+ *
+ * 경계는 가장 오래된 patch로 판단한다 — 페이지 안에 창 안 항목과 창 밖 항목이 섞여 있으면 경계는
+ * 이미 이 페이지 안이므로 더 팔 이유가 없다.
  *
  * 빈 페이지(목록 끝)는 넘은 것으로 본다. 항목은 있는데 읽히는 날짜가 하나도 없는 경우도 창 안이라고
- * 말할 근거가 없어 멈추지만, 그건 정상 종료가 아니라 날짜 형식 드리프트다 — 조용히 첫 페이지만 읽는
- * 상태와 "이번 창은 여기까지"가 산출물에서 같은 모양이 되지 않도록 알린다.
+ * 말할 근거가 없어 멈추지만, 그건 정상 종료가 아니라 날짜 형식 드리프트다 — 그래서 두 상태를 따로
+ * 돌려준다.
+ *
+ * 판정만 하고 알리지는 않는다. 같은 사실을 console.warn과 진단 이벤트 두 곳에 내야 하는데, 술어가
+ * 스스로 알리면 호출부는 "이 페이지에서 무슨 일이 있었나"를 반환값으로 알 수 없다.
  */
-function pageCrossesLookback(patches, cutoffMs, pageNumber) {
+function pageWindowState(patches, cutoffMs) {
   const times = patches.map(patchTime).filter(Number.isFinite);
   if (times.length === 0) {
-    if (patches.length > 0) {
-      console.warn(`patchwork-libcamera-patches: page ${pageNumber} carries ${patches.length} patch(es) but no parseable date; `
-        + 'stopping without reading the lookback window.');
-    }
-    return true;
+    return { crossesLookback: true, datesUnreadable: patches.length > 0 };
   }
-  return Math.min(...times) <= cutoffMs;
+  return { crossesLookback: Math.min(...times) <= cutoffMs, datesUnreadable: false };
 }
 
 // 다음 페이지 URL은 등록부의 sourceUrl에서 파생한다. origin·경로·질의(order, per_page, format)를
@@ -150,14 +153,12 @@ function patchPageUrl(sourceUrl, page) {
  * 조용히 두면 산출물에서 "이번 주 신호 적음"과 완전히 같은 모양이 되므로(#970이 지목한 바로 그
  * 서명) 다른 종료 경로와 같은 자리에 알린다.
  *
- * 더 위로 올리지 못하는 이유는 진단 어휘가 닫혀 있어서가 아니다 — dated-article-index-resolver의
- * DATED_ARTICLE_DIAGNOSTIC_KINDS는 "미등록 kind를 내지 말라"는 계약이지 kind를 더하지 말라는
- * 뜻이 아니고, skipped_index_budget처럼 resolver 밖에서 내는 kind도 이미 그 목록에 있다. 진짜
- * 이유는 소스 행이 안 생긴다는 것이다: 수집 리포트의 소스 행(datedArticleCollectionSectionLines)은
- * article_cap_counts_by_source와 received_bytes_by_source의 합집합으로 만드는데, patchwork는
- * dated-article 리졸버가 아니라 fetchClient가 null이라 두 맵 어디에도 안 들어간다. 지금 이벤트를
- * 내면 kind_counts만 오르고 어느 소스가 잘렸는지는 표에 안 남는다. 제대로 올리려면 patchwork
- * 바이트 계정이 먼저다(후속 이슈). 그동안은 console.warn이 Actions 로그에 남아 관측된다.
+ * 알리는 곳이 둘인 이유(#1059): console.warn은 Actions 로그에만 남고 그 로그는 커밋되지 않는다.
+ * 그래서 절단 사실을 onDiagnostic 이벤트로도 낸다 — 그 이벤트는 dated_article_collection.events[]에
+ * 원문 그대로 실려 커밋되는 후보 산출물까지 간다. 사람이 읽는 소스별 표에는 여전히 행이 안 생긴다
+ * (그 표는 article_cap_counts_by_source와 received_bytes_by_source의 합집합인데 patchwork는
+ * fetchClient가 null이라 두 맵 어디에도 안 들어간다). 표 행을 만들려면 patchwork 바이트 계정이
+ * 선행돼야 하고 그건 별건이다 — 이벤트 공시는 그것을 기다리지 않는다.
  *
  * 형제 리졸버(aosp-release-camera-changes)는 저장소당 집계 후보 하나에 truncated를 실어 본문에
  * "at least N"으로 적지만, 여기 후보는 patch 1건마다 하나라 하한임을 적을 집계 본문이 없다
@@ -175,33 +176,68 @@ async function resolvePatchworkLibcameraPatchItems(text = '', source = {}, optio
 
   const fetchTextImpl = options.fetchTextImpl;
   if (typeof fetchTextImpl !== 'function') return candidates;
+  const emit = typeof options.onDiagnostic === 'function' ? options.onDiagnostic : noop;
   const now = options.now instanceof Date ? options.now : new Date();
   const lookbackDays = Number.isFinite(options.lookbackDays) && options.lookbackDays > 0
     ? options.lookbackDays
     : DEFAULT_LOOKBACK_DAYS;
   const cutoffMs = now.getTime() - lookbackDays * DAY_MS;
 
+  // source_id를 싣는 이유: 이 소스는 사람이 읽는 소스별 표에 행이 없다(위 주석 참고). url만으로도
+  // 사람은 어느 소스인지 읽어내지만, 어느 소스가 몇 번 잘렸는지 기계가 세려면 id가 있어야 한다.
+  const announceTruncation = (url, detail) => emit({
+    kind: 'collection_window_truncated',
+    url,
+    receivedBytes: 0,
+    limitedBy: '',
+    source_id: String(source.id || ''),
+    lookback_days: lookbackDays,
+    collected_count: candidates.length,
+    detail
+  });
+
+  // 페이지 하나의 판정과 신고를 한 자리에 묶는다. 날짜를 못 읽은 페이지는 루프 안에서도 밖에서도
+  // 같은 문구로 알려야 해서, 두 자리에 같은 코드를 두 번 적지 않는다.
+  const crossesLookbackAfterAnnouncing = (page, url) => {
+    const state = pageWindowState(patches, cutoffMs);
+    if (state.datesUnreadable) {
+      console.warn(`patchwork-libcamera-patches: page ${page} carries ${patches.length} patch(es) but no parseable date; `
+        + 'stopping without reading the lookback window.');
+      announceTruncation(url, `page ${page} carries ${patches.length} patch(es) but no parseable date; `
+        + `the ${lookbackDays}-day window was not read to its edge`);
+    }
+    return state.crossesLookback;
+  };
+
+  let pageUrl = String(source.sourceUrl || source.url || '');
   for (let page = 1; page < MAX_PATCH_PAGES; page += 1) {
-    if (pageCrossesLookback(patches, cutoffMs, page)) return candidates;
+    if (crossesLookbackAfterAnnouncing(page, pageUrl)) return candidates;
     const url = patchPageUrl(source.sourceUrl || source.url, page + 1);
     if (!url) return candidates;
     try {
       patches = parsePatchPage(await fetchTextImpl(url, PATCH_PAGE_FETCH_TIMEOUT_MS));
     } catch (error) {
       console.warn(`patchwork-libcamera-patches: ${url} fetch failed (${error.message}); stopping at page ${page}.`);
+      announceTruncation(url, `page ${page + 1} fetch failed (${error.message}); `
+        + `the ${lookbackDays}-day window was not read to its edge`);
       return candidates;
     }
     if (!patches) {
       console.warn(`patchwork-libcamera-patches: ${url} did not return a patch array; stopping at page ${page}.`);
+      announceTruncation(url, `page ${page + 1} did not return a patch array; `
+        + `the ${lookbackDays}-day window was not read to its edge`);
       return candidates;
     }
+    pageUrl = url;
     candidates.push(...patches.map(patch => patchCandidate(patch, source)).filter(Boolean));
   }
 
   // 상한까지 다 읽고 나왔다. 마지막 페이지가 아직 창 안이면 이번 창을 다 읽지 못한 것이다.
-  if (!pageCrossesLookback(patches, cutoffMs, MAX_PATCH_PAGES)) {
+  if (!crossesLookbackAfterAnnouncing(MAX_PATCH_PAGES, pageUrl)) {
     console.warn(`patchwork-libcamera-patches: stopped at the ${MAX_PATCH_PAGES}-page ceiling with page ${MAX_PATCH_PAGES} still inside `
       + `the ${lookbackDays}-day window; the ${candidates.length} collected patch(es) are a lower bound, not the whole window.`);
+    announceTruncation(pageUrl, `stopped at the ${MAX_PATCH_PAGES}-page ceiling with page ${MAX_PATCH_PAGES} still inside `
+      + `the ${lookbackDays}-day window; the ${candidates.length} collected patch(es) are a lower bound, not the whole window`);
   }
   return candidates;
 }

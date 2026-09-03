@@ -494,3 +494,71 @@ test('returns [] when called with no options (preserves the original default)', 
   const items = await resolveFollowedSourceItems({ id: 'some-other-source' });
   assert.deepEqual(items, []);
 });
+
+// #1059: 진짜 갭은 리졸버가 아니라 여기 등록부 entry였다. resolveFollowedSourceItems는 이미
+// onDiagnostic을 entry.resolve에 넘기고 있었는데, 세 entry가 그것을 destructure하지 않아 절단이
+// console.warn 밖으로 못 나갔다. entry가 인자를 흘리면 리졸버 쪽 테스트는 전부 통과하면서도
+// 프로덕션에서는 이벤트가 0건이 된다 — 그래서 배선을 따로 잠근다.
+test('the page-walking resolvers receive onDiagnostic so their truncation is not log-only (#1059)', async () => {
+  const gerritSource = (id) => ({
+    id,
+    name: id,
+    url: 'https://android-review.googlesource.com/changes/?q=x&n=100',
+    sourceUrl: 'https://android-review.googlesource.com/changes/?q=x&n=100'
+  });
+  // 창 안 항목 하나뿐인 목록은 "이 페이지가 창을 못 덮었다"가 참이라 목록 절단이 난다.
+  const gerritListBody = ")]}'\n" + JSON.stringify([{
+    _number: 4228183,
+    project: 'platform/frameworks/av',
+    branch: 'android17-release',
+    status: 'NEW',
+    subject: 'VirtualCamera: validate blobSizeBytes',
+    created: '2026-08-30 00:00:00.000000000',
+    updated: '2026-08-31 00:00:00.000000000'
+  }]);
+
+  const cases = [
+    {
+      source: patchworkSource(),
+      // 첫 페이지가 창 안이고 다음 페이지 조회가 실패하면 창을 다 못 읽은 채 끝난다.
+      text: JSON.stringify([{
+        web_url: 'https://patchwork.libcamera.org/patch/28401/',
+        date: '2026-08-31T09:14:06',
+        name: 'libcamera: burst churn',
+        state: 'new'
+      }]),
+      fetchTextImpl: async () => { throw new Error('network down'); }
+    },
+    {
+      source: gerritSource('aosp-gerrit-camera-changes'),
+      text: gerritListBody,
+      fetchTextImpl: async () => { throw new Error('network down'); }
+    },
+    {
+      source: gerritSource('chromeos-gerrit-camera-changes'),
+      text: gerritListBody,
+      fetchTextImpl: async () => { throw new Error('network down'); }
+    }
+  ];
+
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    for (const { source, text, fetchTextImpl } of cases) {
+      const events = [];
+      await resolveFollowedSourceItems(source, {
+        indexItems: [],
+        text,
+        fetchTextImpl,
+        now: new Date('2026-09-02T00:00:00Z'),
+        lookbackDays: 35,
+        onDiagnostic: event => events.push(event)
+      });
+      const truncations = events.filter(event => event.kind === 'collection_window_truncated');
+      assert.equal(truncations.length, 1, `${source.id} announces its truncation through the registry entry`);
+      assert.equal(truncations[0].source_id, source.id, `${source.id} names itself in the event`);
+    }
+  } finally {
+    console.warn = originalWarn;
+  }
+});
