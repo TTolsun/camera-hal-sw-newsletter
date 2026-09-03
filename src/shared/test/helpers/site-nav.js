@@ -230,6 +230,7 @@ module.exports = {
   EXPECTED_FOOTER_PLACEHOLDER_NOTES,
   EXPECTED_FOOTER_TOPIC_NOTE_COUNT,
   GITHUB_URL,
+  hasClassToken,
   navLinks,
   siteBrand,
   footerColumns,

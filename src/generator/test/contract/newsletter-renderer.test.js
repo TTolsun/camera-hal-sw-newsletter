@@ -11,6 +11,7 @@ const {
   buildMarkdown
 } = require('../../render/newsletter-renderer');
 const {
+  mountSiteHeaders,
   siteHeaderHtml
 } = require('../../../../articles/assets/js/site-header');
 const {
@@ -23,7 +24,8 @@ const {
 const {
   assertSharedNav,
   assertSharedBrand,
-  assertSharedFooterNav
+  assertSharedFooterNav,
+  hasClassToken
 } = require('../../../shared/test/helpers/site-nav');
 
 // 지원 집합 바로 위 값. 숫자를 박아 두면 계약 버전이 추가될 때 이 테스트가 지원
@@ -140,6 +142,49 @@ function anchorLabels(markup) {
     .filter(Boolean);
 }
 
+// 문서의 첫 `<header>` 블록을 공백만 정규화해 돌려준다. 두 생산자가 같은 마크업을 내는지 대조할
+// 때 쓴다 — 들여쓰기는 각자의 삽입 위치에서 오므로 비교 대상이 아니지만, 태그·속성·class 는
+// 그대로 본다. 이슈 페이지의 `<header>` 는 둘이다(사이트 헤더, 그리고 기사 히어로의
+// `.article-header issue-hero`). 사이트 헤더가 문서 순서상 먼저라 첫 블록이 그것이고, 그
+// 순서 자체를 대조 테스트가 단언한다 — 주석이 아니라 코드가 잡게 둔다.
+function firstHeaderBlock(html) {
+  const match = String(html).match(/<header\b[\s\S]*?<\/header>/i);
+  return match ? match[0].replace(/\s+/g, ' ') : null;
+}
+
+// jsdom 이 없으므로(이 저장소의 런타임 의존성은 하나뿐이다) placeholder 하나짜리 최소 DOM 을
+// 흉내 낸다. 모델링하는 것은 딱 두 가지다 — `innerHTML` 은 placeholder 의 여는/닫는 태그 **사이**
+// 에 넣고, `outerHTML` 은 placeholder 를 **통째로** 갈아 끼운다. mount 가 어느 쪽을 쓰는지에
+// 따라 결과 문서가 달라지는 것이 이 스텁이 보는 축이다. 대체된 뒤에는 `data-site-header` 를 단
+// 요소가 트리에서 사라지므로 querySelectorAll 도 더는 내주지 않는다(멱등성 축).
+function placeholderPage(rootPath) {
+  const openTag = `<header class="site-header" data-site-header data-site-root="${rootPath}">`;
+  const host = {
+    inner: '',
+    replacement: null,
+    getAttribute(name) {
+      if (name === 'data-site-root') return rootPath;
+      if (name === 'data-site-header') return '';
+      return null;
+    },
+    set innerHTML(value) { this.inner = value; },
+    get innerHTML() { return this.inner; },
+    set outerHTML(value) { this.replacement = value; },
+    get outerHTML() {
+      return this.replacement === null ? `${openTag}${this.inner}</header>` : this.replacement;
+    }
+  };
+  return {
+    root: {
+      // 셀렉터를 실제로 본다. 인자를 무시하면 mount 가 영영 매치될 수 없는 셀렉터를 봐도 스텁이
+      // host 를 내주어, mount 를 잠근다는 이름을 단 테스트가 mount 가 죽은 상태를 통과시킨다.
+      querySelectorAll: (selector) =>
+        (selector === '[data-site-header]' && host.replacement === null) ? [host] : []
+    },
+    html: () => host.outerHTML
+  };
+}
+
 test('newsletter renderer uses public_article for public markdown and HTML', () => {
   const markdown = buildMarkdown(issue());
   const html = buildHtml(issue());
@@ -210,7 +255,63 @@ test('shared site header renders consistent root-relative links', () => {
   // 이 헬퍼가 실제로 만드는 문자열을 본다. 예전에는 `data-site-header` placeholder 를 넣었는데,
   // 그 placeholder 에는 나브가 없어서 siteNavLabels() 의 폴백이 다시 siteHeaderHtml() 을 불렀다 —
   // 헬퍼의 출력을 헬퍼의 출력과 비교하는 항상-통과 단언이었다.
-  assert.deepEqual(anchorLabels(issueHeader), ['Camera SW Newsletter', '홈', '아카이브', 'GitHub']);
+  assert.deepEqual(anchorLabels(issueHeader), ['Camera SW Newsroom', '홈', '아카이브', 'GitHub']);
+
+  // 렌더 산출물과 **같은 한 벌**로 이 컴포넌트도 잠근다(#1051). 두 헬퍼는 `<header>` 안으로
+  // 스코프하므로, 이 컴포넌트가 `<header>` 없이 `<nav class="site-nav">` 를 만들던 동안에는
+  // 어느 쪽도 통과할 수 없었다 — 이 네 줄이 세대 어긋남을 직접 잡는다.
+  assertSharedNav(homeHeader, '');
+  assertSharedBrand(homeHeader, '');
+  assertSharedNav(issueHeader, '../../');
+  assertSharedBrand(issueHeader, '../../');
+
+  // rootPath 정규화. 사이트 루트를 뜻하는 세 표기가 모두 같은 헤더를 만들고, 빠진 끝 슬래시는
+  // 보태 준다.
+  for (const rootPath of ['.', './']) {
+    assert.equal(siteHeaderHtml({ rootPath }), homeHeader, rootPath);
+  }
+  assert.equal(siteHeaderHtml({ rootPath: '../..' }), issueHeader);
+});
+
+// 이슈 페이지 렌더러가 헤더의 정본이다. 이 컴포넌트는 mount 되는 곳이 없어서(`data-site-header`
+// 를 쓰는 페이지 0개) 어긋나도 라이브에서는 티가 나지 않는다 — 어느 페이지가 채택하는 순간에야
+// 옛 헤더가 주입된다. 그래서 두 생산자의 출력을 직접 대조한다(#1051). 공유 헬퍼가 보는 것은 나브
+// 라벨·링크와 브랜드뿐이라, 셸 class·`content-wrap`·로고 크기는 이 대조에서만 잠긴다.
+test('site header component emits the same markup as the issue renderer', () => {
+  const rendered = firstHeaderBlock(buildHtml(issue()));
+  assert.ok(rendered, '렌더 산출물에 <header> 가 있어야 한다');
+  // 렌더 산출물의 `<header>` 는 둘이고 첫째가 사이트 헤더라는 것이 이 대조의 전제다. 전제를
+  // 주석에만 적어 두면 렌더러가 순서를 바꿨을 때 대조 대상이 조용히 기사 히어로로 옮겨간다.
+  assert.match(rendered, /^<header class="site-header/);
+  assert.equal(firstHeaderBlock(siteHeaderHtml({ rootPath: '../../' })), rendered);
+});
+
+// placeholder 는 그 자체가 `<header class="site-header" data-site-header>` 다 — `styles.css` 의
+// `.site-header[data-site-header]:empty { min-height: 61px }` 와, #1020 이 걷어낸 로드 검사의
+// `/<header\b[^>]*\bdata-site-header\b/i` 가 같은 모양을 가리킨다. 그래서 mount 는 host **안을**
+// 채우는 것이 아니라 host 를 **대체**해야 한다. 안을 채우면 `<header>` 안에 `<header>` 가 생겨
+// 콘텐츠 모델 위반이 되고 sticky·border-bottom·backdrop-filter 가 두 겹으로 걸린다.
+test('mounting the site header replaces the placeholder instead of nesting inside it', () => {
+  const page = placeholderPage('../../');
+  mountSiteHeaders(page.root);
+  const mounted = page.html();
+
+  assert.equal((mounted.match(/<header\b/gi) || []).length, 1, '<header> 는 정확히 1개여야 한다');
+  // class 토큰은 공유 헬퍼로 센다. 낱말 경계 정규식으로 세면 하이픈이 경계라
+  // `homepage-site-header` 안에서도 만족되어, `site-header` 토큰만 지워도 통과한다 —
+  // site-nav.js:40-41 이 `nav-links` 로 똑같이 겪고 적어 둔 함정이다.
+  const openingTags = [...mounted.matchAll(/<[a-z][^>]*>/gi)].map(match => match[0]);
+  assert.equal(openingTags.filter(tag => hasClassToken(tag, 'site-header')).length, 1);
+  assert.doesNotMatch(mounted, /data-site-header|data-site-root/);
+  assert.equal(firstHeaderBlock(mounted), firstHeaderBlock(siteHeaderHtml({ rootPath: '../../' })));
+
+  // host 의 `data-site-root` 를 대체 **전에** 읽어야 rootPath 가 살아남는다.
+  assertSharedNav(mounted, '../../');
+  assertSharedBrand(mounted, '../../');
+
+  // placeholder 가 사라졌으므로 두 번째 mount 는 아무것도 하지 않는다.
+  mountSiteHeaders(page.root);
+  assert.equal(page.html(), mounted);
 });
 
 test('newsletter renderer renders a single main article without empty sections', () => {
