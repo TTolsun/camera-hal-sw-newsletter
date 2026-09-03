@@ -15,6 +15,7 @@ const {
   writeManualCandidateArtifacts
 } = require('../common/candidate-artifacts');
 const { parseManualSourceUrls } = require('../collect/collection-intent');
+const { ensureArray } = require('../common/value-coercion');
 const { readRuntimeConfig, resolveRunMode } = require('../common/runtime-config');
 const {
   displayDate,
@@ -1108,6 +1109,18 @@ function normalizeCandidate(raw) {
     // 사라져 "제목이 아니라 메타데이터로 옮겼다"는 말이 산출물에서 거짓이 된다.
     camera_path_commit_count: raw.camera_path_commit_count ?? null,
     camera_path_commit_count_is_lower_bound: raw.camera_path_commit_count_is_lower_bound ?? null,
+    // Gerrit 변경의 정체성(#1033). Change-Id는 patchset을 갱신해도, 리베이스해도 그대로인 유일한
+    // 식별자이고 commit SHA는 그 시점의 리비전이다. 둘 다 whitelist에 없으면 candidates.json에서
+    // 사라져, 릴리스 드롭이 같은 변경을 실어 왔는지 선정 단계가 판단할 근거를 잃는다.
+    gerrit_change_id: raw.gerrit_change_id || '',
+    gerrit_change_number: raw.gerrit_change_number ?? null,
+    gerrit_change_status: raw.gerrit_change_status || '',
+    gerrit_commit_sha: raw.gerrit_commit_sha || '',
+    gerrit_effective_date_field: raw.gerrit_effective_date_field || '',
+    // 릴리스 드롭 후보가 실어 오는 Change-Id·commit SHA 목록. Gerrit 후보와 같은 변경인지 여기서만
+    // 알 수 있다(드롭 후보는 저장소당 집계 1건이라 제목·URL로는 겹치지 않는다).
+    covered_gerrit_change_ids: ensureArray(raw.covered_gerrit_change_ids),
+    covered_commit_shas: ensureArray(raw.covered_commit_shas),
     parentTitle: raw.parentTitle || raw.parent_title || '',
     parent_title: raw.parentTitle || raw.parent_title || '',
     parentCanonicalUrl: canonicalContentUrl(raw.parentCanonicalUrl || raw.parent_canonical_url || parentUrl || ''),

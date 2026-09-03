@@ -476,3 +476,35 @@ test('the derived camera commit count survives candidate normalization as metada
   assert.equal(normalized.camera_path_commit_count, MAX_LOG_PAGES);
   assert.equal(normalized.camera_path_commit_count_is_lower_bound, true);
 });
+
+test('the drop candidate carries the Change-Id and commit SHA of every camera commit it counted', async () => {
+  // #1033: Gerrit 후보와 이 집계 후보는 제목도 URL도 겹치지 않는다. 같은 변경인지 아는 유일한 길이
+  // 이 목록이라, whitelist에서 빠지면 선정 단계가 같은 변경을 두 기사로 낸다.
+  const withChangeId = {
+    commit: 'e'.repeat(40),
+    message: 'Camera: return error for capture request if camera unplugged\n\nChange-Id: I41b74d543e8b8a7ad46a261d49ee311543e1ed8d\n',
+    committer: { time: 'Fri Mar 27 17:27:40 2026 +0000' },
+    tree_diff: modified('camera/device/aidl/ICameraDevice.aidl')
+  };
+  const withoutChangeId = {
+    commit: 'f'.repeat(40),
+    message: 'Camera: drop stale buffer\n',
+    committer: { time: 'Fri Mar 27 17:27:40 2026 +0000' },
+    tree_diff: modified('camera/device/aidl/ICameraDeviceSession.aidl')
+  };
+  const { fetchTextImpl } = gitilesStub({
+    'platform/hardware/interfaces': [gitilesPayload([withChangeId, withoutChangeId])],
+    'platform/frameworks/av': EMPTY,
+    'platform/hardware/google/camera': EMPTY
+  });
+
+  const [item] = await resolveAospReleaseCameraChangeItems(DEFAULT_HTML, REGISTRY_SOURCE, {
+    fetchTextImpl,
+    now: NOW,
+    lookbackDays: LOOKBACK_DAYS
+  });
+  const normalized = normalizeCandidate(item);
+
+  assert.deepEqual(normalized.covered_gerrit_change_ids, ['I41b74d543e8b8a7ad46a261d49ee311543e1ed8d']);
+  assert.deepEqual(normalized.covered_commit_shas, ['e'.repeat(40), 'f'.repeat(40)]);
+});

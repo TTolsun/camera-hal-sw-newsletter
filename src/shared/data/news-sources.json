@@ -554,6 +554,39 @@
       ]
     },
     {
+      "id": "aosp-gerrit-camera-changes",
+      "name": "AOSP Gerrit (camera changes under review)",
+      "sourceUrl": "https://android-review.googlesource.com/changes/?q=((project%3Aplatform%2Fframeworks%2Fav%20OR%20project%3Aplatform%2Fhardware%2Finterfaces)%20AND%20directory%3Acamera)%20OR%20project%3Aplatform%2Fhardware%2Fgoogle%2Fcamera&n=100",
+      "rssUrl": null,
+      "collectionModeHint": "rss-source",
+      "category": "camera-hal",
+      "priority": "high",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "공개 AOSP Gerrit에서 platform/frameworks/av(camera·services/camera), platform/hardware/interfaces(camera), platform/hardware/google/camera의 변경을 제안·리뷰 단계에서 수집한다. 릴리스 소스 드롭이 확정 변경을 몇 달에 한 번 보여 주는 반면 이쪽은 그 앞 단계라, 둘은 proposal -> landed 관계로 함께 본다. 날짜는 MERGED면 submitted, NEW면 created를 쓰고 updated는 쓰지 않는다",
+      "keywords": [
+        "AOSP",
+        "Gerrit",
+        "Camera HAL",
+        "cameraserver",
+        "camera AIDL",
+        "virtual camera",
+        "code review"
+      ],
+      "sourceRole": "project_mailing_list_source",
+      "sourceUrlQualityHint": "project_mailing_list_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "official source (Google이 운영하는 AOSP 공개 Gerrit의 REST API)",
+        "변경 페이지는 클라이언트 렌더링(PolyGerrit)이라 URL을 받아도 본문이 없다. 후보 요약은 REST 응답에서 읽은 사실만으로 완결돼야 한다",
+        "MERGED가 아닌 NEW 변경은 누구나 올릴 수 있다. 긍정 리뷰·검증 label이 없는 NEW는 후보 수준에서 watchlist_only로 내려 main 승격을 막는다"
+      ]
+    },
+    {
       "id": "aosp-whats-new-release-notes",
       "name": "AOSP What's New / Release Notes",
       "sourceUrl": "https://source.android.com/docs/whatsnew",
@@ -2512,6 +2545,38 @@
       "sourceQualityNotes": [
         "libcamera patch-review lead source (patchwork.libcamera.org REST API, patch별 실제 date 노출)",
         "개별 patch는 제안된 변경이라 main 승격 전 강한 기술 근거 또는 landed 소스 cross-check 필요"
+      ]
+    },
+    {
+      "id": "chromeos-gerrit-camera-changes",
+      "name": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "sourceUrl": "https://chromium-review.googlesource.com/changes/?q=project%3Achromiumos%2Fplatform2%20AND%20directory%3Acamera%20AND%20status%3Amerged&n=100",
+      "rssUrl": null,
+      "collectionModeHint": "rss-source",
+      "category": "linux-camera",
+      "priority": "medium",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "ChromeOS platform2의 camera/ 아래 병합된 변경만 수집한다. ChromeOS camera 서비스는 Android Camera HAL v3 인터페이스를 구현하므로 capture request/result, stream·buffer 수명주기, 3A, ISP, JPEG/RAW/YUV, 외부 카메라 변경이 Camera HAL 독자에게 직접 읽힌다. 미병합 변경과 chromiumos/platform/camera의 vendor HAL은 이 소스 범위 밖이다",
+      "keywords": [
+        "ChromeOS",
+        "Gerrit",
+        "Camera HAL v3",
+        "camera hal_adapter",
+        "capture request",
+        "stream buffer",
+        "ISP"
+      ],
+      "sourceRole": "project_mailing_list_source",
+      "sourceUrlQualityHint": "project_mailing_list_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "official source (ChromeOS 공개 Gerrit의 REST API, status:merged 질의)",
+        "camera/ 경로를 건드려도 트리 전역 리팩터링이면 카메라 뉴스가 아니다. 실질 변경 파일의 절반 이상이 카메라 경로일 때만 후보가 된다"
       ]
     },
     {

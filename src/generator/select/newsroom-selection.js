@@ -227,11 +227,36 @@ function freshnessWindowMetadata(candidate, newsletterDate, policy = getSelectio
   };
 }
 
+// Gerrit 변경 후보(#1033)와 AOSP 릴리스 드롭 후보는 제목도 URL도 절대 겹치지 않는다 - 드롭 후보는
+// 저장소당 집계 1건이고 Gerrit 후보는 변경 1건이다. 같은 변경인지 알 수 있는 건 Change-Id와 commit
+// SHA뿐이라, 그 둘로만 판단한다.
+function coveredChangeKeys(candidate) {
+  return new Set([
+    ...ensureArray(candidate.covered_gerrit_change_ids),
+    ...ensureArray(candidate.covered_commit_shas)
+  ].map(value => text(value).toLowerCase()).filter(Boolean));
+}
+
+function releaseDropCoversGerritChange(dropCandidate, gerritCandidate) {
+  const changeId = text(gerritCandidate.gerrit_change_id).toLowerCase();
+  const commitSha = text(gerritCandidate.gerrit_commit_sha).toLowerCase();
+  if (!changeId && !commitSha) return false;
+  const covered = coveredChangeKeys(dropCandidate);
+  if (covered.size === 0) return false;
+  return (changeId && covered.has(changeId)) || (commitSha && covered.has(commitSha));
+}
+
+// 어느 쪽이 드롭이고 어느 쪽이 Gerrit인지는 호출 순서로 정해지지 않는다. 양방향으로 본다.
+function coverSameGerritChange(left, right) {
+  return releaseDropCoversGerritChange(left, right) || releaseDropCoversGerritChange(right, left);
+}
+
 function candidatesAreDuplicate(left, right) {
   // 같은 패치 시리즈(lore.kernel.org cover letter + 각 패치, patchwork.libcamera.org 시리즈 조각)는
   // URL/title이 모두 달라도 하나의 main 기사로 묶어야 한다. 시리즈 키가 같으면 즉시 중복으로 본다.
   const leftSeries = seriesKey(left);
   if (leftSeries && leftSeries === seriesKey(right)) return true;
+  if (coverSameGerritChange(left, right)) return true;
   const leftUrl = normalizeUrl(candidateUrl(left));
   const rightUrl = normalizeUrl(candidateUrl(right));
   if (leftUrl && rightUrl && leftUrl === rightUrl) return true;
@@ -246,7 +271,23 @@ function candidatesAreDuplicate(left, right) {
     titleSimilarity(left.title, right.title) >= 0.68;
 }
 
+// 중복 두 후보 중 새 후보를 대표로 세울 때 어떤 규칙이 이겼는지 그대로 적는다. 규칙이 셋인데
+// 사유 문구가 하나로 고정돼 있으면, CameraX와 무관한 대체까지 "CameraX release-note"라고 기록된다.
+function duplicatePreferenceReason(candidate, existing) {
+  if (releaseDropCoversGerritChange(candidate, existing)) {
+    return 'landed AOSP release drop covers the same Change-Id as the Gerrit change candidate';
+  }
+  if (seriesKey(candidate) && seriesKey(candidate) === seriesKey(existing)) {
+    return 'lower patch number in the same series supersedes the earlier representative';
+  }
+  return 'duplicate CameraX release-note body candidate supersedes discovery row';
+}
+
 function shouldPreferDuplicateCandidate(candidate, existing) {
+  // 릴리스 드롭이 같은 변경을 이미 실어 왔다면 landed 쪽을 대표로 남긴다. 제안 후보를 남기고 드롭을
+  // 버리면 그 드롭이 함께 세던 나머지 camera 커밋이 통째로 사라진다(드롭은 저장소당 집계 1건이다).
+  if (releaseDropCoversGerritChange(candidate, existing)) return true;
+  if (releaseDropCoversGerritChange(existing, candidate)) return false;
   // 같은 패치 시리즈면 patch 번호가 낮은 쪽(cover letter 0)을 대표로 남긴다.
   const candidateSeries = seriesKey(candidate);
   if (candidateSeries && candidateSeries === seriesKey(existing)) {
@@ -442,7 +483,7 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
       if (shouldPreferDuplicateCandidate(candidate, eligible[duplicateIndex])) {
         excluded.push(appendSelectionWindowExclusion({
           ...eligible[duplicateIndex],
-          exclusion_reasons: ['duplicate CameraX release-note body candidate supersedes discovery row']
+          exclusion_reasons: [duplicatePreferenceReason(candidate, eligible[duplicateIndex])]
         }));
         eligible[duplicateIndex] = candidate;
         continue;

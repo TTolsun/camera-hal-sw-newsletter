@@ -183,3 +183,27 @@ test('decorateCandidate promotes a strong mailing-list patch end to end', () => 
   assert.equal(capsule.source_quality.main_article_source_allowed, true);
   assert.equal(capsule.main_article_readiness.source_ready, true);
 });
+
+// #1033: 리뷰가 붙지 않은 Gerrit 제안은 후보 수준 mainArticlePolicy=watchlist_only로 막힌다. 그 상태의
+// source_quality는 blocker 목록이 비어 있고, 이 승급은 upgradeable blocker가 하나라도 있을 때만 걸린다.
+// 두 사실 중 하나라도 무너지면(예: 소스 등록부가 requiresCrossCheck=true로 돌아가면) 아무도 리뷰하지
+// 않은 제안이 강한 기술 근거만으로 main 기사가 된다.
+test('a policy-blocked candidate with no blockers is never upgraded to main-article eligible', () => {
+  const policyBlocked = blockedMailingListSourceQuality({
+    main_article_source_allowed_reason: 'Source policy keeps this candidate on the watchlist and out of main articles.',
+    main_article_source_blockers: [],
+    cross_check_status: 'not_required',
+    requires_cross_check: false,
+    conditional_evidence_type: ''
+  });
+  const candidate = strongPatchCandidate({
+    title: 'VirtualCamera: prevent integer underflow in outBufferSize - platform/frameworks/av',
+    behavior_change: 'Proposed change would update 2 camera source file(s) in platform/frameworks/av +10/-0.',
+    source_quality: policyBlocked
+  });
+
+  assert.equal(upgradeMailingListPatchEligibility(policyBlocked, candidate, POLICY), policyBlocked);
+  const decorated = decorateCandidate(candidate, '2026-09-02', { mailingListPatchPolicy: POLICY });
+  assert.equal(decorated.source_quality.main_article_source_allowed, false);
+  assert.equal(decorated.source_quality.source_quality_status, 'blocked');
+});
