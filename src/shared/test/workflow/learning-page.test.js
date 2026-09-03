@@ -418,17 +418,17 @@ test('learning page gives every table-of-contents landing target a scroll margin
 // .learning-nav 의 top 을 따라 고치도록 강제하지만, 그렇게 커진 띠가 scroll-margin-top 을 넘어도
 // 잡는 검사가 없었다. 그래서 값을 리터럴로 대조하지 않고 띠를 계산해 하한으로만 본다.
 //
-// 하한인 이유는 과다 제공이 무해해서가 아니다 — 과다 제공은 요소를 아래로 굴리는 대신 뷰포트
-// 높이를 쓴다. 320x256 에서 좁은 화면 값 185px 은 착지한 제목을 화면 아래로 통째로 밀어낸다
-// (실측표는 learning.css 의 좁은 화면 블록 주석에 있다. 손익분기 약 140px). 이 테스트가 상한을
-// 정하지 않는 것은 그 정리가 #1047 의 남은 항목이기 때문이지, 여유분이 공짜여서가 아니다.
+// 하한만으로는 모자란다 — 과다 제공은 요소를 아래로 굴리는 대신 뷰포트 높이를 쓴다. 320x256 에서
+// 좁은 화면 값 185px 은 착지한 제목 여덟 개를 전부 화면 밖으로 내보낸다(실측표는 learning.css 의
+// 좁은 화면 블록 주석에 있다. 손익분기 약 140px). 그래서 하한과 함께 여유 예산 상한도 둔다.
+// 좁은 화면 값 자체는 #1015 가 네 셀렉터에 정한 공유 값이라 여기서 내리지 않는다(#1047 의 남은 항목).
 test('learning page keeps the wide-screen scroll margin at or above the sticky band', () => {
   const styles = readSiteStylesheet();
   const css = readLearningStylesheet();
 
   // 목차 스트립 높이 = 안쪽 세로 패딩 두 번 + 링크 한 줄 높이 + 스트립 아래 테두리.
   // 링크의 line-height 가 px 로 적혀 있어야 이 식이 성립한다. 비워 두면 줄 높이가 폰트 메트릭에서
-  // 나와(실측 15px, Pretendard 가 못 뜨면 다른 값) CSS 만 읽어서는 알 수 없다.
+  // 나와(실측 15.5px, Pretendard 가 못 뜨면 다른 값) CSS 만 읽어서는 알 수 없다.
   const strip =
     verticalPadding(exactSelectorBlock(css, '.learning-nav-inner')) * 2
     + pxDeclaration(exactSelectorBlock(css, '.learning-nav a'), 'line-height')
@@ -439,5 +439,17 @@ test('learning page keeps the wide-screen scroll margin at or above the sticky b
   assert.ok(
     wide >= band,
     `넓은 화면 scroll-margin-top(${wide}px)이 sticky 가 가리는 띠(${band}px)보다 작다 — 초점 대상과 목차 착지 대상의 상단이 그 밑에 깔린다`
+  );
+
+  // 하한만 두면 값이 위로 얼마든 자라도 안 잡힌다. 그리고 그 상한은 원래 있었다 — 옛 추출기가
+  // '124px' 을 조회 키로 써서 값을 사실상 고정했고, 하한 방식으로 바꾸면서 조용히 사라졌다
+  // (실증: scroll-margin-top 을 400px 로 바꾸면 이 커밋 전 main 은 RED, 하한만 있던 상태는 GREEN).
+  // 여유분은 공짜가 아니라 뷰포트 높이를 쓰므로 예산으로 못 박는다. 예산은 파생값이 아니라 고른
+  // 값이다 — 지금 여유는 22px(124 - 102)이고, 헤더 기하가 커져 예산을 넘으면 그때 값을 의식적으로
+  // 다시 정하라는 뜻이다.
+  const SLACK_BUDGET_PX = 24;
+  assert.ok(
+    wide <= band + SLACK_BUDGET_PX,
+    `넓은 화면 scroll-margin-top(${wide}px)이 띠(${band}px) + 여유 예산(${SLACK_BUDGET_PX}px)을 넘는다 — 여유분은 요소를 아래로 굴리는 대신 뷰포트 높이를 쓴다`
   );
 });
