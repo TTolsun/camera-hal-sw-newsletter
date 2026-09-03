@@ -39,8 +39,10 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     id: 'patchwork-libcamera-patches',
     // 목록 API는 한 응답이 lookback 창을 못 덮는다(#970). 창 경계까지 page를 따라가야 하므로
     // fetch impl과 수집 창을 함께 넘긴다(aosp-release-camera-changes와 같은 배선).
-    resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
-      resolvePatchworkLibcameraPatchItems(text, source, { fetchTextImpl, now, lookbackDays })
+    // onDiagnostic까지 넘기는 이유(#1059): #970이 세운 페이지 상한에 걸려 창을 다 못 읽은 실행이
+    // console.warn으로만 남으면 커밋된 산출물에서 "이번 주 신호 없음"과 구분되지 않는다.
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays, onDiagnostic }) =>
+      resolvePatchworkLibcameraPatchItems(text, source, { fetchTextImpl, now, lookbackDays, onDiagnostic })
   },
   {
     id: 'aosp-release-camera-changes',
@@ -52,13 +54,13 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     // 등록부의 sourceUrl 질의가 정하고, 리졸버는 호스트를 그 URL의 origin에서 파생한다 - 그래서
     // 같은 리졸버를 두 항목이 공유한다.
     id: 'aosp-gerrit-camera-changes',
-    resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
-      resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays })
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays, onDiagnostic }) =>
+      resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays, onDiagnostic })
   },
   {
     id: 'chromeos-gerrit-camera-changes',
-    resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
-      resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays })
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays, onDiagnostic }) =>
+      resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays, onDiagnostic })
   },
   {
     id: 'claude-blog',

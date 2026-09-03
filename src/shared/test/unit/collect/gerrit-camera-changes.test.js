@@ -12,6 +12,7 @@ const {
   subjectIsNoise
 } = require('../../../collect/gerrit-camera-changes');
 const { normalizeCandidate } = require('../../../cli/collect-news-candidates');
+const { DATED_ARTICLE_DIAGNOSTIC_KINDS } = require('../../../collect/dated-article-index-resolver');
 const registry = require('../../../data/news-sources.json');
 
 const SOURCE = {
@@ -469,4 +470,72 @@ test('a MERGED change with no submitted timestamp is reported, not silently drop
   }
   assert.deepEqual(stub.requested, []);
   assert.ok(warnings.some(message => message.includes('carries no usable submitted timestamp')));
+});
+
+// #1059: console.warn은 Actions 로그에만 남고 그 로그는 커밋되지 않는다. 두 절단(목록 페이지가
+// 창을 못 덮음 / 상세 조회 상한)이 커밋된 산출물까지 가야 "창을 다 못 읽었다"와 "이번 주 신호
+// 없음"이 갈린다.
+async function collectTruncationEvents(text, options) {
+  const events = [];
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    await resolveGerritCameraChangeItems(text, SOURCE, { ...options, onDiagnostic: event => events.push(event) });
+  } finally {
+    console.warn = originalWarn;
+  }
+  return events;
+}
+
+test('the list page and detail-fetch truncations reach the committed diagnostics (#1059)', async () => {
+  const shortOfWindow = [listChange({ created: '2026-08-30 00:00:00.000000000', updated: '2026-08-31 00:00:00.000000000' })];
+  const listEvents = await collectTruncationEvents(listBody(shortOfWindow), {
+    fetchTextImpl: stubFetch({ '4228183': detailFor(shortOfWindow[0]) }).fetchTextImpl,
+    now: NOW,
+    lookbackDays: LOOKBACK_DAYS
+  });
+  assert.equal(listEvents.length, 1, 'a list page short of the window is announced once');
+  assert.equal(listEvents[0].kind, 'collection_window_truncated');
+  assert.ok(
+    DATED_ARTICLE_DIAGNOSTIC_KINDS.includes(listEvents[0].kind),
+    'an unregistered kind is folded into "unknown", so the count would say nothing'
+  );
+  // 이 소스도 fetchClient를 안 써서 리포트의 소스별 표에 행이 없다.
+  assert.equal(listEvents[0].source_id, 'aosp-gerrit-camera-changes');
+  assert.equal(listEvents[0].lookback_days, LOOKBACK_DAYS);
+  assert.match(listEvents[0].detail, /does not reach back to the/);
+
+  const changes = [];
+  const details = {};
+  for (let index = 0; index < MAX_DETAIL_FETCHES + 3; index += 1) {
+    const change = listChange({
+      _number: 5000 + index,
+      created: '2026-08-20 00:00:00.000000000',
+      updated: '2026-08-20 00:00:00.000000000'
+    });
+    changes.push(change);
+    details[String(change._number)] = detailFor(change);
+  }
+  // 창 밖 항목을 하나 붙여 목록 페이지가 창을 덮었음을 분명히 한다. 그러지 않으면 같은 fixture가
+  // 두 절단을 동시에 참으로 만들어, 이 단언이 어느 쪽을 본 것인지 갈리지 않는다.
+  changes.push(listChange({ _number: 4999, created: '2026-01-02 00:00:00.000000000', updated: '2026-01-03 00:00:00.000000000' }));
+  const capEvents = await collectTruncationEvents(listBody(changes), {
+    fetchTextImpl: stubFetch(details).fetchTextImpl,
+    now: NOW,
+    lookbackDays: LOOKBACK_DAYS
+  });
+  assert.equal(capEvents.length, 1, 'the detail-fetch cap is announced once');
+  assert.match(capEvents[0].detail, /the remainder is not collected this run/);
+});
+
+test('a list page that reaches past the window emits no truncation event (#1059)', async () => {
+  // 거짓 양성이 나면 매주 절단이 났다고 말하게 되어, 진짜 절단을 이 이벤트로 못 찾는다.
+  const change = listChange({ created: '2026-08-20 00:00:00.000000000', updated: '2026-08-20 00:00:00.000000000' });
+  const stale = listChange({ _number: 9, created: '2026-01-02 00:00:00.000000000', updated: '2026-01-03 00:00:00.000000000' });
+  const events = await collectTruncationEvents(listBody([change, stale]), {
+    fetchTextImpl: stubFetch({ '4228183': detailFor(change) }).fetchTextImpl,
+    now: NOW,
+    lookbackDays: LOOKBACK_DAYS
+  });
+  assert.deepEqual(events, [], 'a page whose oldest entry predates the window covered it');
 });

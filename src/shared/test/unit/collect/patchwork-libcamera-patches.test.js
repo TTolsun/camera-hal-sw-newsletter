@@ -6,6 +6,7 @@ const {
   MAX_PATCH_PAGES,
   resolvePatchworkLibcameraPatchItems
 } = require('../../../collect/patchwork-libcamera-patches');
+const { DATED_ARTICLE_DIAGNOSTIC_KINDS } = require('../../../collect/dated-article-index-resolver');
 const newsSources = require('../../../data/news-sources.json');
 
 const LIST_API = 'https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json';
@@ -352,4 +353,96 @@ test('a page fetch failure keeps the pages already collected (#970)', async () =
   assert.equal(items.length, 1, 'the first page survives a failed follow-up page');
   assert.equal(warnings.length, 1, 'the failed page is reported');
   assert.match(warnings[0], /fetch failed/);
+});
+
+// #1059: console.warn은 Actions 로그에만 남고 그 로그는 커밋되지 않는다. 절단이 커밋된 산출물까지
+// 가려면 진단 이벤트로도 나와야 한다 — 그러지 않으면 "창을 다 못 읽었다"와 "이번 주 신호 없음"이
+// 산출물에서 같은 모양이다.
+function captureRun(run) {
+  const events = [];
+  return captureWarnings(() => run(event => events.push(event))).then(result => ({ ...result, events }));
+}
+
+const alwaysInWindowFetch = (fetched) => async (url) => {
+  fetched.push(url);
+  const page = Number(new URL(url).searchParams.get('page'));
+  return JSON.stringify([patch(29000 + page, '2026-08-23T00:00:00', `[${page}/9] libcamera: churn`, 9500 + page)]);
+};
+
+test('the page ceiling reaches the committed diagnostics, not just the log (#1059)', async () => {
+  const fetched = [];
+  const { warnings, events } = await captureRun(onDiagnostic => resolvePatchworkLibcameraPatchItems(
+    JSON.stringify([patch(28401, '2026-08-24T09:14:06', 'libcamera: burst churn', 9101)]),
+    source(),
+    { fetchTextImpl: alwaysInWindowFetch(fetched), now: BUSY_WEEK_NOW, lookbackDays: 35, onDiagnostic }
+  ));
+
+  assert.equal(warnings.length, 1, 'the log line stays — the event is an addition, not a replacement');
+  assert.equal(events.length, 1, 'the ceiling is announced once');
+  const [event] = events;
+  assert.equal(event.kind, 'collection_window_truncated');
+  assert.ok(
+    DATED_ARTICLE_DIAGNOSTIC_KINDS.includes(event.kind),
+    'an unregistered kind is folded into "unknown" by summarizeDatedArticleCollection, so the count would say nothing'
+  );
+  // 이 소스는 fetchClient를 안 써서 리포트의 소스별 표에 행이 없다. id가 없으면 어느 소스가
+  // 잘렸는지 기계가 셀 수 없다.
+  assert.equal(event.source_id, 'patchwork-libcamera-patches');
+  assert.equal(event.lookback_days, 35);
+  assert.equal(event.collected_count, 4, 'the event says how many patches the truncated run did collect');
+  assert.match(event.detail, /ceiling/);
+  assert.match(event.detail, /lower bound/);
+});
+
+test('a window read to its edge emits no truncation event (#1059)', async () => {
+  // 거짓 양성이 나면 매주 절단이 났다고 말하게 되어, 진짜 절단을 이 이벤트로 못 찾는다.
+  const pages = busyWeekPages();
+  const { events: reachedEdge } = await captureRun(onDiagnostic => resolvePatchworkLibcameraPatchItems(
+    JSON.stringify(pages[1]),
+    source(),
+    { fetchTextImpl: pagedFetch(pages, []), now: BUSY_WEEK_NOW, lookbackDays: 35, onDiagnostic }
+  ));
+  assert.deepEqual(reachedEdge, [], 'reaching the lookback edge is a normal stop');
+
+  const { events: listEnded } = await captureRun(onDiagnostic => resolvePatchworkLibcameraPatchItems(
+    JSON.stringify([patch(28401, '2026-08-24T09:14:06', 'libcamera: burst churn', 9101)]),
+    source(),
+    { fetchTextImpl: pagedFetch({}, []), now: BUSY_WEEK_NOW, lookbackDays: 35, onDiagnostic }
+  ));
+  assert.deepEqual(listEnded, [], 'the end of the list is a normal stop');
+});
+
+test('every early stop that cuts the window short is announced (#1059)', async () => {
+  const inWindowPage = JSON.stringify([patch(28401, '2026-08-24T09:14:06', 'libcamera: burst churn', 9101)]);
+  const cases = [
+    {
+      what: 'a failed follow-up page',
+      firstPage: inWindowPage,
+      fetchTextImpl: async () => { throw new Error('network down'); },
+      detail: /fetch failed/
+    },
+    {
+      what: 'a follow-up page that is not a patch array',
+      firstPage: inWindowPage,
+      fetchTextImpl: async () => JSON.stringify({ detail: 'Invalid page.' }),
+      detail: /did not return a patch array/
+    },
+    {
+      what: 'a page whose patches carry no readable date',
+      firstPage: JSON.stringify([patch(28401, 'not-a-date', 'libcamera: burst churn', 9101)]),
+      fetchTextImpl: async () => '[]',
+      detail: /no parseable date/
+    }
+  ];
+
+  for (const { what, firstPage, fetchTextImpl, detail } of cases) {
+    const { events } = await captureRun(onDiagnostic => resolvePatchworkLibcameraPatchItems(
+      firstPage,
+      source(),
+      { fetchTextImpl, now: BUSY_WEEK_NOW, lookbackDays: 35, onDiagnostic }
+    ));
+    assert.equal(events.length, 1, `${what} is announced`);
+    assert.equal(events[0].kind, 'collection_window_truncated', what);
+    assert.match(events[0].detail, detail, what);
+  }
 });
