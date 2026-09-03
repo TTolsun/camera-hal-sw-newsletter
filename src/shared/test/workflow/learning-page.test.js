@@ -445,8 +445,10 @@ test('learning page keeps the wide-screen scroll margin at or above the sticky b
   // '124px' 을 조회 키로 써서 값을 사실상 고정했고, 하한 방식으로 바꾸면서 조용히 사라졌다
   // (실증: scroll-margin-top 을 400px 로 바꾸면 이 커밋 전 main 은 RED, 하한만 있던 상태는 GREEN).
   // 여유분은 공짜가 아니라 뷰포트 높이를 쓰므로 예산으로 못 박는다. 예산은 파생값이 아니라 고른
-  // 값이다 — 지금 여유는 22px(124 - 102)이고, 헤더 기하가 커져 예산을 넘으면 그때 값을 의식적으로
-  // 다시 정하라는 뜻이다.
+  // 값이다 — 기하에서 유도할 원천이 없다. 터지는 조건은 헤더가 커지는 것이 아니다: 헤더가 커지면
+  // band 가 커져 우변도 같이 올라가므로 그때 먼저 터지는 것은 하한이다(실측: min-height 80 까지
+  // GREEN, 81 부터 하한 RED). 이 상한이 터지는 것은 scroll-margin-top 을 band 보다 24px 넘게
+  // 올릴 때다. 지금 위쪽 여유는 2px 이다 — 창은 [102, 126]이고 값은 124다.
   const SLACK_BUDGET_PX = 24;
   assert.ok(
     wide <= band + SLACK_BUDGET_PX,
