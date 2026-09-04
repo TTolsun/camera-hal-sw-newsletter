@@ -164,7 +164,7 @@ test('routes aosp-release-camera-changes to the release resolver with text (buil
   assert.deepEqual(items, [], 'no camera commits in the stubbed delta');
 });
 
-test('shouldSuppressGenericFallback is true for followed-resolver sources and for reference-only sources', () => {
+test('shouldSuppressGenericFallback is true for followed-resolver, reference-only, and explicitly marked sources', () => {
   assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-release-announcements' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'android-security-bulletin' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'raspberrypi-libcamera-releases' }), true);
@@ -192,7 +192,16 @@ test('shouldSuppressGenericFallback is true for followed-resolver sources and fo
     mainArticlePolicy: 'reference_only'
   }), true);
 
-  // 참고 자료가 아닌 소스는 그대로 제너릭 폴백을 쓴다.
+  // 역할 표기는 그대로 두고 등록부 표식으로만 폴백을 끈 소스. dated 릴리스 소스를
+  // 참고자료로 재분류하는 우회는 사실과 다르므로 채택하지 않았다(#880).
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'samsung-mobile-security-updates',
+    sourceRole: 'official_release_source',
+    mainArticlePolicy: 'allowed',
+    suppressGenericCandidateFallback: true
+  }), true);
+
+  // 참고 자료가 아니고 표식도 없는 소스는 그대로 제너릭 폴백을 쓴다.
   assert.equal(shouldSuppressGenericFallback({
     id: 'lore-linux-media-list',
     sourceRole: 'project_mailing_list_source',
@@ -203,30 +212,39 @@ test('shouldSuppressGenericFallback is true for followed-resolver sources and fo
     sourceRole: 'official_release_source',
     mainArticlePolicy: 'allowed'
   }), false);
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'libcamera-blog',
+    sourceRole: 'official_release_source',
+    mainArticlePolicy: 'allowed',
+    suppressGenericCandidateFallback: false
+  }), false);
   assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-blog' }), false);
   assert.equal(shouldSuppressGenericFallback(null), false);
 });
 
-test('every enabled reference-only registry entry suppresses the generic page-title fallback', () => {
+test('every registry entry the collector must not generically scrape suppresses the page-title fallback', () => {
   // collector가 술어에 넘기는 것은 raw JSON 항목이 아니라 normalizeEnabledSources를 지난
-  // 런타임 source 객체다(news-source-section-resolver.js가 sourceRole/mainArticlePolicy를
-  // 여기 싣는다). 그 정규화 홉까지 덮어야 registry-술어 배선이 실제로 검증된다.
+  // 런타임 source 객체다(news-source-section-resolver.js가 sourceRole/mainArticlePolicy/
+  // suppressGenericCandidateFallback을 여기 싣는다). 그 정규화 홉까지 덮어야 registry-술어
+  // 배선이 실제로 검증된다 — normalizeSourceEntry가 새 필드를 안 실으면 아래 id 단언이 깨진다.
   const registry = require('../../../data/news-sources.json');
   const { sources } = normalizeEnabledSources(registry);
-  const referenceSources = sources.filter(source =>
-    source.sourceRole === 'official_documentation_reference' || source.mainArticlePolicy === 'reference_only');
+  const suppressedSources = sources.filter(source =>
+    source.sourceRole === 'official_documentation_reference'
+    || source.mainArticlePolicy === 'reference_only'
+    || source.suppressGenericCandidateFallback === true);
 
-  assert.ok(referenceSources.length > 0, 'registry has enabled reference sources');
-  for (const source of referenceSources) {
+  assert.ok(suppressedSources.length > 0, 'registry has entries that must skip the generic fallback');
+  for (const source of suppressedSources) {
     assert.equal(
       shouldSuppressGenericFallback(source),
       true,
-      `${source.id} is a reference source and must not fall back to the generic page scrape`
+      `${source.id} must not fall back to the generic page scrape`
     );
 
-    // 두 표시는 서로의 보험이다. 한쪽이 드리프트해도 억제는 유지돼야 하므로, 각 항목이 실제로
+    // 표시들은 서로의 보험이다. 하나가 드리프트해도 억제는 유지돼야 하므로, 각 항목이 실제로
     // 가진 표시 하나만 남겨서도 확인한다. 술어에서 어느 한 절이 빠지면 여기서 잡힌다 —
-    // 위 한 줄만으로는 모든 registry 항목이 두 필드를 다 갖고 있어 절 삭제를 놓친다.
+    // 위 한 줄만으로는 참고 소스가 두 필드를 다 갖고 있어 절 삭제를 놓친다.
     if (source.sourceRole === 'official_documentation_reference') {
       assert.equal(
         shouldSuppressGenericFallback({ id: source.id, sourceRole: source.sourceRole }),
@@ -241,10 +259,18 @@ test('every enabled reference-only registry entry suppresses the generic page-ti
         `${source.id} must stay suppressed on mainArticlePolicy alone`
       );
     }
+    if (source.suppressGenericCandidateFallback === true) {
+      assert.equal(
+        shouldSuppressGenericFallback({ id: source.id, suppressGenericCandidateFallback: true }),
+        true,
+        `${source.id} must stay suppressed on the registry marker alone`
+      );
+    }
   }
 
+  const ids = suppressedSources.map(source => source.id);
+
   // 이슈 #880이 "매주 날짜 없는 페이지 제목만 만든다"고 지목한 소스가 실제로 이 집합에 있어야 한다.
-  const ids = referenceSources.map(source => source.id);
   for (const id of [
     'aosp-camera-documentation',
     'android-compatibility-definition-document',
@@ -253,6 +279,20 @@ test('every enabled reference-only registry entry suppresses the generic page-ti
   ]) {
     assert.ok(ids.includes(id), `${id} must be registered as a reference source`);
   }
+
+  // samsung은 위 네 소스와 달리 역할 표기가 official_release_source 그대로다. 등록부 표식이
+  // 지워지거나 normalizeSourceEntry가 그 표식을 안 실으면 이 소스만 집합에서 빠진다.
+  assert.ok(
+    ids.includes('samsung-mobile-security-updates'),
+    'samsung-mobile-security-updates must carry suppressGenericCandidateFallback through normalizeEnabledSources'
+  );
+  const samsung = sources.find(source => source.id === 'samsung-mobile-security-updates');
+  assert.equal(
+    samsung.sourceRole,
+    'official_release_source',
+    '역할 표기를 참고자료로 바꾸는 우회를 쓰지 않았음을 고정한다'
+  );
+  assert.equal(samsung.mainArticlePolicy, 'allowed');
 });
 
 test('routes android-security-bulletin to the CVE resolver with indexItems as the first arg', async () => {

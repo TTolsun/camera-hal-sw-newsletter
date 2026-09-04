@@ -305,6 +305,15 @@ function validateSource(errors, source, index, sectionMap, seenIds) {
     errors.push(`${label}.collectionModeHint must be one of: ${[...VALID_COLLECTION_MODE_HINTS].join(', ')}.`);
   }
 
+  // 선택 필드지만 값 타입은 강제한다. shouldSuppressGenericFallback이 `=== true`로만 보므로
+  // "true" 같은 문자열이 들어오면 오류 없이 억제가 사라진다.
+  if (
+    Object.prototype.hasOwnProperty.call(source, 'suppressGenericCandidateFallback') &&
+    typeof source.suppressGenericCandidateFallback !== 'boolean'
+  ) {
+    errors.push(`${label}.suppressGenericCandidateFallback must be a boolean when present.`);
+  }
+
   if (isRedditCommunitySource(source)) {
     validateRedditCommunitySource(errors, label, source);
   }

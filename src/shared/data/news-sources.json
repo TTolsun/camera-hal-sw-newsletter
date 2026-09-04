@@ -807,8 +807,12 @@
       "mainArticlePolicy": "allowed",
       "requiresCrossCheckDefault": false,
       "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "suppressGenericCandidateFallback": true,
       "sourceQualityNotes": [
-        "official source"
+        "official source",
+        "SMR 항목은 heading이 아니라 아코디언(div.acc_title/div.acc_sub)에 들어 있고 항목별 발행일이 마크업에 없다. 월 라벨(SMR-AUG-2026)뿐이라 dated-evidence 게이트를 통과할 날짜가 없다 (이슈 #880의 2026-09-03 라이브 실측)",
+        "그래서 제너릭 폴백을 끈다. 폴백이 만들던 것은 날짜 없는 페이지 제목 후보 주 1건뿐이고, 그 잡음이 KEEP_AND_FIX_PARSER 진단 목록(상한 10)을 먹어 진짜 파서 결함을 가렸다",
+        "재개 조건: SMR 월 항목에 Camera HAL·ISP·이미지 파이프라인 컴포넌트가 등장하면 그때 아코디언 파서를 만든다. 위 실측의 8개월 439 CVE 표본에서 카메라 관련은 FactoryCamera(앱 권한) 1건뿐이었지만 MediaTek Audio HAL 같은 HAL 층 항목이 실리는 구조라 영구 불가는 아니다"
       ]
     },
     {
