@@ -603,6 +603,48 @@
   .learning-nav {
     position: static;
   }
+
+  /* 이 폭에서 목차는 가로 스크롤 스트립이고, 링크 여덟 개 중 서너 개만 보인다(실측: 320px 에서
+     스트립 288px·3개, 390px 에서 358px·4개, 414px 에서 382px·5개. 링크 여덟 개와 그 사이 gap 을
+     합친 콘텐츠 폭은 652px 이다). 스크롤 막대는 위 .learning-nav-inner 가 감춰 두었으므로
+     오른쪽에 더 있다는 단서가 하나도 없다 — 마우스·터치 사용자는 나머지를 찾을 길이 없다.
+     오른쪽 끝을 mask 로 깎아 잘린 링크를 흐리게 만들어 그 단서를 만든다. #1048
+
+     스트립 높이는 건드리지 않는다. 위 .learning-nav a 주석의 43px 계산(세로 패딩 13px 두 번 +
+     줄 높이 16px + 나브 아래 테두리 1px)이 넓은 화면 scroll-margin-top 을 유도하므로, 여기서
+     줄바꿈(flex-wrap)이나 세로 패딩으로 푸는 방법은 고르지 않았다. 아래 셋은 전부 가로 방향이다.
+
+     640px 을 고른 이유. 스트립이 넘치기를 멈추는 폭은 정확히 696px 이다(실측: 696px 에서
+     clientWidth 652 = scrollWidth 652 로 넘침 0, 695px 에서 1px). 그런데 그 값은 콘텐츠 폭
+     652px 에서 나오고 652px 은 폰트 메트릭에서 나오므로, 696px 을 중단점으로 박으면 대체 폰트가
+     뜨는 환경에서 조용히 어긋난다. 대신 이 시트에 이미 있는 폭을 다시 쓴다 — 이 구간 안에서는
+     넘침이 항상 있다(가장 넓은 640px 에서도 스트립 596px 대 콘텐츠 652px 로 56px 넘침). 즉 여기
+     페이드는 스크롤할 것이 없는데 켜지는 일이 없다. 넓은 화면 규칙으로 올리면 그 보장이 깨져
+     마지막 링크만 이유 없이 흐려진다. 대가는 641~695px 구간이다 — 그 55px 폭에서는 넘치는데도
+     단서가 없다. 그 구간의 목차는 #1044 이전에도 sticky 로 보이고 있었으므로 이 이슈가 새로
+     드러낸 자리가 아니고, 폰트에 딸린 중단점을 새로 만드는 것보다 그대로 두는 편이 낫다.
+
+     접두어 없는 mask-image 는 Chrome 120·Safari 15.4 부터라 그 전 WebKit/Blink 를 위해 접두어
+     붙은 이름을 함께 쓴다. 둘 다 모르는 브라우저는 두 선언을 버리고 지금과 똑같이 그린다 —
+     mask 는 칠하는 방식만 바꾸고 배치는 건드리지 않는다(실측: 390px 에서 mask 를 켜고 끈
+     링크 여덟 개의 left·width 가 전부 같고 스트립 높이도 42px 그대로다). 페이드가 없을 뿐
+     링크가 사라지지 않는다.
+
+     padding-right 와 scroll-padding-right 는 페이드가 링크를 가리는 두 자리를 비킨다.
+     - padding-right 가 없으면 끝까지 스크롤한 뒤에도 마지막 링크가 흐려진 채라 단서가 거짓말을
+       한다. 이 자리는 콘텐츠 뒤에 붙는 스크롤 여분이라 보이는 폭은 그대로다(실측 390px:
+       clientWidth 358 그대로, scrollWidth 652 -> 676, 스크롤 0 에서 완전히 보이는 링크 4개
+       그대로, 끝까지 밀었을 때 마지막 링크 오른쪽 여백 0.3px -> 24.3px).
+     - scroll-padding-right 가 없으면 초점이 뒤쪽 링크로 옮겨갈 때 브라우저가 그 링크를 스크롤
+       영역 오른쪽 끝에 딱 붙여 세워 초점 대상이 페이드 밑에 깔린다(실측 390px: 다섯~일곱째
+       링크의 오른쪽 여백이 0·-0.5·-0.4px -> 24·23.5·23.6px). */
+  .learning-nav-inner {
+    --learning-nav-fade-width: 24px;
+    padding-right: var(--learning-nav-fade-width);
+    scroll-padding-right: var(--learning-nav-fade-width);
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - var(--learning-nav-fade-width)), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - var(--learning-nav-fade-width)), transparent);
+  }
 }
 
 @media (max-width: 520px) {
