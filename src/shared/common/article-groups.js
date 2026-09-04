@@ -95,21 +95,36 @@ function isNativeToolingWorkflow(candidate = {}) {
 
 // lore.kernel.org 패치 시리즈는 cover letter + 각 패치가 서로 다른 message-id URL과 title로
 // 도착한다. 같은 시리즈는 하나의 main 기사로 묶여야 하므로, message-id에서 시리즈 식별자를
-// 뽑아 patch 번호만 떼어낸 공통 키를 만든다. 실제 데이터에서 관찰된 2가지 형식만 다룬다(YAGNI).
+// 뽑아 patch 번호만 떼어낸 공통 키를 만든다. 실제 데이터에서 관찰된 3가지 형식만 다룬다(YAGNI).
 //   NEW-style: 20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com
 //              => base="...-v1", patch="0", tail="bee535396d22@oss.qualcomm.com"
 //              버전 토큰(-v<N>)은 선택적이다. 첫 버전을 b4/git-send-email로 보낼 때
 //              20260529-glymur_camss-0-bee535396d22@oss.qualcomm.com 처럼 버전 없이 오기도 한다.
 //   OLD-style: 20260527170531.383871-1-miguel.vadillo@intel.com
 //              => base="20260527170531.383871", patch="1", from="miguel.vadillo@intel.com"
+//   HASH-style: cover.1787872237.git.mauriziocasciano7@gmail.com          (커버레터)
+//               34736c93669fcb...843254.1787872237.git.mauriziocasciano7@gmail.com  (개별 패치)
+//              => key="lore-series:git-1787872237-mauriziocasciano7@gmail.com"
+//              git-send-email이 커밋 해시로 message-id를 만들 때 나온다. 시리즈를 가르는 것은
+//              한 번의 send-email 호출을 나타내는 <epoch>이고, 앞자리는 커버레터면 'cover',
+//              패치면 그 패치의 커밋 해시다(2026-W35 실측: v3 6조각이 전부 1787872237,
+//              v4 8조각이 전부 1787933456).
 // 시리즈가 아니면(UUID/랜덤 message-id, 리스트 페이지) '' 를 돌려 기존 키 로직을 쓰게 한다.
 const LORE_HOST = 'lore.kernel.org';
+// 제목 브래킷 접두부의 순번: [<flags>,][v<ver>,]<patch>/<total>] — 그룹1 = patch 번호.
+// lore('[PATCH v3 08/12] …')와 patchwork('[RFC,v7,1/6] …') 양쪽 표기를 모두 읽는다.
+const SERIES_SEQUENCE_IN_TITLE = /^\s*\[[^\]]*?(?:v\d+\s*,\s*)?(\d+)\s*\/\s*\d+\s*\]/i;
 // b4/git-send-email date-slug 메시지ID: <YYYYMMDD>-<slug...>[-v<버전>]-<패치번호>-<hex해시>@<호스트>
 // hex 해시@호스트 꼬리로 끝을 고정해, 버전 토큰 유무와 무관하게 시리즈를 묶고
 // old-style(<날짜시각>.<pid>-...)·UUID(8자리 비-숫자 시작) 메시지ID는 매칭하지 않는다.
 const LORE_NEW_STYLE = /^(\d{8}-.+?)-(\d+)-([0-9a-f]{6,}@\S+)$/;
 // (8자리 이상 날짜시각.PID) + '-' + (패치번호) + '-' + (보낸사람)
 const LORE_OLD_STYLE = /^(\d{8,}\.\d+)-(\d+)-(.+)$/;
+// ('cover' 또는 커밋 해시) + '.' + (epoch) + '.git.' + (보낸사람)
+// 앞의 두 형식과 겹치지 않는다: 'cover'는 숫자로 시작하지 않고, 16진수 해시는 뒤에 '-'가 아니라
+// '.'가 오므로 두 정규식이 요구하는 '<숫자>-<패치번호>-' 모양을 만들 수 없다.
+// epoch 하한이 9자리인 것은 초 단위 unix epoch가 10자리라서다 — 짧은 숫자 토큰을 배제한다.
+const LORE_HASH_STYLE = /^(cover|[0-9a-f]{8,})\.(\d{9,})\.git\.(\S+@\S+)$/;
 const UNKNOWN_PATCH_NUMBER = Number.POSITIVE_INFINITY;
 
 function loreMessageIdFromUrl(raw) {
@@ -141,7 +156,28 @@ function loreSeriesPartsFromMessageId(messageId) {
   if (oldStyle) {
     return { key: `lore-series:${oldStyle[1]}-${oldStyle[3]}`, patch: Number(oldStyle[2]) };
   }
+  const hashStyle = messageId.match(LORE_HASH_STYLE);
+  if (hashStyle) {
+    // 이 형식은 message-id에 순번을 담지 않는다 — 커버레터만 'cover'로 구분되고 나머지는
+    // 커밋 해시다. 커버레터는 0, 나머지는 여기서 unknown으로 두고 loreSeriesParts가 제목의
+    // x/N으로 채운다(제목마저 없으면 unknown 유지).
+    const patch = hashStyle[1] === 'cover' ? 0 : UNKNOWN_PATCH_NUMBER;
+    return { key: `lore-series:git-${hashStyle[2]}-${hashStyle[3]}`, patch };
+  }
   return null;
+}
+
+// 앞의 두 형식은 patch 번호가 message-id에 있어 커버레터가 창 밖인 주에도 대표가 결정론적이다.
+// HASH-style만 그 정보가 없으므로, 같은 결정론을 주기 위해 제목 브래킷의 x/N을 읽는다.
+// 주의 1: 형식마다 커버레터의 patch 번호가 다르다(HASH·b4는 0, OLD-style은 message-id가 '-1-'이라 1).
+// 그래서 patch 번호는 같은 시리즈 안에서만 비교 의미가 있고, 형식이 다른 재제출끼리 비교하면
+// 버전이 아니라 형식이 대표를 정할 수 있다(collect-news-candidates의 shouldPreferRerollRepresentative).
+// 주의 2: 재제출 병합은 patch 번호를 버전보다 먼저 본다(#822). 그래서 양쪽 다 커버레터가 창 밖인
+// 주에는 구버전의 낮은 순번(v3 02/12)이 신버전의 높은 순번(v4 09/15)을 이겨 대표가 된다.
+// 이 형식만의 성질이 아니라 앞의 두 형식에서도 같은 결과이므로 규칙을 그대로 따른다.
+function seriesPatchNumberFromTitle(candidate = {}) {
+  const match = candidateTitle(candidate).match(SERIES_SEQUENCE_IN_TITLE);
+  return match ? Number(match[1]) : UNKNOWN_PATCH_NUMBER;
 }
 
 function replyParentUrl(candidate = {}) {
@@ -150,7 +186,10 @@ function replyParentUrl(candidate = {}) {
 
 function loreSeriesParts(candidate = {}) {
   const own = loreSeriesPartsFromMessageId(loreMessageId(candidate));
-  if (own) return own;
+  if (own) {
+    if (own.patch !== UNKNOWN_PATCH_NUMBER) return own;
+    return { key: own.key, patch: seriesPatchNumberFromTitle(candidate) };
+  }
   // 패치 시리즈의 답장(Re:)은 자체 message-id가 시리즈를 인코딩하지 않는다. atom thr:in-reply-to가
   // 가리키는 부모 패치 URL의 message-id에서 시리즈 키를 끌어와 같은 시리즈 그룹에 묶는다.
   const parentParts = loreSeriesPartsFromMessageId(loreMessageIdFromUrl(replyParentUrl(candidate)));
@@ -194,9 +233,8 @@ function loreSeriesPatchNumber(candidate = {}) {
 // 식별자는 수집기(patchwork-libcamera-patches.js)가 REST의 series id를 candidate.seriesId로 실어주고,
 // patch 번호는 제목의 [..,x/N]에서 온다(lore가 message-id 하나에서 둘 다 얻는 것을 두 소스로 나눠 얻음).
 const PATCHWORK_HOST = 'patchwork.libcamera.org';
-// [<flags>,][v<ver>,]<patch>/<total>] — 그룹1 = patch 번호. subject base는 시리즈 조각마다 달라
+// 순번은 위 SERIES_SEQUENCE_IN_TITLE로 읽는다. subject base는 시리즈 조각마다 달라
 // 시리즈 키로 쓰지 않는다(시리즈 키는 seriesId). x/N이 없으면(단일 패치) 매치 실패 → 시리즈 아님.
-const PATCHWORK_SERIES_SEQUENCE = /^\s*\[[^\]]*?(?:v\d+\s*,\s*)?(\d+)\s*\/\s*\d+\s*\]/i;
 
 function isPatchworkUrl(raw) {
   if (!raw) return false;
@@ -216,7 +254,7 @@ function patchworkSeriesParts(candidate = {}) {
   if (!isPatchworkUrl(candidateUrl(candidate))) return null;
   const seriesId = candidateSeriesId(candidate);
   if (!seriesId) return null;
-  const match = candidateTitle(candidate).match(PATCHWORK_SERIES_SEQUENCE);
+  const match = candidateTitle(candidate).match(SERIES_SEQUENCE_IN_TITLE);
   return {
     key: `patchwork-series:${seriesId}`,
     patch: match ? Number(match[1]) : UNKNOWN_PATCH_NUMBER
@@ -238,6 +276,40 @@ function seriesKey(candidate = {}) {
 function seriesPatchNumber(candidate = {}) {
   const parts = seriesParts(candidate);
   return parts ? parts.patch : UNKNOWN_PATCH_NUMBER;
+}
+
+// 제목을 비교 가능한 형태로 줄인다(소문자 + 영숫자/한글 외 구분자는 공백 하나로).
+// section-identity.js의 normalizeTitle과 하는 일이 비슷해 보이지만 규칙이 다르다(그쪽은 NFC
+// 정규화와 발음 부호 제거를 더 한다). 의미가 다른 변형이므로 통합하지 않는다.
+function titleKey(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// 시리즈 re-roll(v1 -> v2 재제출)은 patchwork series id도 lore message-id도 새로 발급받으므로
+// 위 seriesKey로는 묶이지 않는다. 브래킷 접두부([PATCH v2 3/6], [RFC,v2,1/1] 등)를 뗀 제목이
+// 정확히 같으면 같은 논리 시리즈로 본다. 제목을 고쳐 재제출한 시리즈는 의도적으로 병합하지
+// 않는다 — 퍼지 매칭의 오병합 위험이 중복보다 나쁘다(실측된 한계 사례: Tegra VI RFC v2가
+// subject에 "tegra:" prefix를 추가해 미병합).
+//
+// 수집 단계의 재제출 병합(collapseSeriesRerolls)과 재게재 게이트가 같은 축을 봐야 한다.
+// 게이트가 이 축을 모르면 지난주 발행한 시리즈가 이번 주 새 버전 대표로 그대로 통과한다(#1036).
+const SERIES_TITLE_BRACKET_PREFIX = /^\s*(?:\[[^\]]*\]\s*)+/;
+
+function seriesSubjectKey(item = {}) {
+  return titleKey(String(item.title || '').replace(SERIES_TITLE_BRACKET_PREFIX, ''));
+}
+
+// 버전은 브래킷 접두부 안에서만 읽는다 — 제목 본문의 "IPA format v3" 같은 표기를
+// re-roll 버전으로 오인하면 안 된다. 접두부가 없거나 v 토큰이 없으면 첫 버전(1)이다.
+function seriesRerollVersion(item = {}) {
+  const prefix = String(item.title || '').match(SERIES_TITLE_BRACKET_PREFIX);
+  if (!prefix) return 1;
+  const version = prefix[0].match(/\bv(\d+)\b/i);
+  return version ? Number(version[1]) : 1;
 }
 
 function fallbackGroupKey(candidate = {}) {
@@ -563,6 +635,9 @@ module.exports = {
   loreSeriesPatchNumber,
   seriesKey,
   seriesPatchNumber,
+  seriesRerollVersion,
+  seriesSubjectKey,
+  titleKey,
   normalizeCanonicalUrlStripAnchor,
   normalizeSourceUrlPreserveAnchor,
   normalizeUrl,

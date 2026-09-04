@@ -8,6 +8,7 @@ const {
   shouldSuppressGenericFallback
 } = require('../../../collect/followed-source-item-resolvers');
 const { createBoundedFetchClient } = require('../../../collect/bounded-fetch-client');
+const { normalizeEnabledSources } = require('../../../collect/news-source-section-resolver');
 const { readTextFixture } = require('../../helpers/fixture-loader');
 
 // 보안 게시판 리졸버는 indexItems(첫 인자)에서 최신 게시판 URL을 골라 fetch하고,
@@ -30,7 +31,9 @@ test('registers exactly the known followed-source resolver ids', () => {
     [
       'android-security-bulletin',
       'anthropic-news',
+      'aosp-gerrit-camera-changes',
       'aosp-release-camera-changes',
+      'chromeos-gerrit-camera-changes',
       'claude-blog',
       'libcamera-release-announcements',
       'mediatek-security-bulletin',
@@ -38,7 +41,7 @@ test('registers exactly the known followed-source resolver ids', () => {
       'raspberrypi-libcamera-releases'
     ]
   );
-  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 8);
+  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 10);
 });
 
 test('routes raspberrypi-libcamera-releases to the release resolver with text (atom) as the first arg', async () => {
@@ -65,6 +68,17 @@ test('routes raspberrypi-libcamera-releases to the release resolver with text (a
   assert.equal(items[0].relevanceBucketHint, 'camera_driver_image_pipeline');
 });
 
+const PATCHWORK_LIST_API = 'https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json';
+
+function patchworkSource() {
+  return {
+    id: 'patchwork-libcamera-patches',
+    name: 'libcamera Patchwork (patch review)',
+    url: PATCHWORK_LIST_API,
+    sourceUrl: PATCHWORK_LIST_API
+  };
+}
+
 test('routes patchwork-libcamera-patches to the patch resolver with text (JSON) as the first arg', async () => {
   const json = JSON.stringify([
     {
@@ -74,17 +88,50 @@ test('routes patchwork-libcamera-patches to the patch resolver with text (JSON) 
       state: 'new'
     }
   ]);
-  let fetchCount = 0;
+  const fetched = [];
   const items = await resolveFollowedSourceItems(
-    { id: 'patchwork-libcamera-patches', name: 'libcamera Patchwork (patch review)' },
-    { indexItems: [], text: json, fetchTextImpl: async () => { fetchCount += 1; return ''; } }
+    patchworkSource(),
+    {
+      indexItems: [],
+      text: json,
+      fetchTextImpl: async (url) => { fetched.push(url); return '[]'; },
+      now: new Date('2026-07-06T00:00:00Z'),
+      lookbackDays: 35
+    }
   );
 
-  // 리졸버는 text(JSON)만 파싱하고 추가 fetch는 하지 않는다.
-  assert.equal(fetchCount, 0);
+  // text(JSON)가 첫 인자로 전달돼야 patch가 후보로 나온다.
   assert.equal(items.length, 1);
   assert.equal(items[0].sourceKind, 'rss_item');
   assert.equal(items[0].publishedAt, '2026-07-03');
+  // 창 안 페이지 다음은 등록부 sourceUrl에서 파생한 page=2를 조회한다 — fetchTextImpl 배선 확인(#970).
+  assert.deepEqual(fetched, [`${PATCHWORK_LIST_API}&page=2`]);
+});
+
+test('passes the collection window to patchwork so paging stops at the lookback edge (#970)', async () => {
+  // 창(now/lookbackDays)이 리졸버까지 안 오면 첫 페이지가 이미 창 밖인데도 계속 페이지를 판다.
+  const json = JSON.stringify([
+    {
+      web_url: 'https://patchwork.libcamera.org/patch/27198/',
+      date: '2026-07-03T22:48:16',
+      name: '[v2,1/2] libcamera: Add SensorSequence metadata control',
+      state: 'new'
+    }
+  ]);
+  const fetched = [];
+  const items = await resolveFollowedSourceItems(
+    patchworkSource(),
+    {
+      indexItems: [],
+      text: json,
+      fetchTextImpl: async (url) => { fetched.push(url); return '[]'; },
+      now: new Date('2026-09-01T00:00:00Z'),
+      lookbackDays: 35
+    }
+  );
+
+  assert.equal(items.length, 1, 'the first page is still parsed');
+  assert.deepEqual(fetched, [], 'a first page already past the lookback edge ends the walk');
 });
 
 test('routes aosp-release-camera-changes to the release resolver with text (build-numbers HTML) as the first arg', async () => {
@@ -117,15 +164,95 @@ test('routes aosp-release-camera-changes to the release resolver with text (buil
   assert.deepEqual(items, [], 'no camera commits in the stubbed delta');
 });
 
-test('shouldSuppressGenericFallback is true only for followed-resolver sources', () => {
+test('shouldSuppressGenericFallback is true for followed-resolver sources and for reference-only sources', () => {
   assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-release-announcements' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'android-security-bulletin' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'raspberrypi-libcamera-releases' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'patchwork-libcamera-patches' }), true);
-  assert.equal(shouldSuppressGenericFallback({ id: 'lore-linux-media-list' }), false);
-  assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-blog' }), false);
   assert.equal(shouldSuppressGenericFallback({ id: 'claude-blog' }), true);
   assert.equal(shouldSuppressGenericFallback({ id: 'anthropic-news' }), true);
+
+  // 설정상 참고 자료인 소스. 분류기가 이 둘을 main article에서 하드 제외하므로
+  // (collect-news-candidates.js의 referenceIndex, source-quality-classifier.js의
+  // reference_only blocker) 제너릭 폴백이 만드는 날짜 없는 페이지 제목 후보는 쓸 곳이 없다.
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'aosp-camera-documentation',
+    sourceRole: 'official_documentation_reference',
+    mainArticlePolicy: 'reference_only'
+  }), true);
+  // 두 필드는 각각 단독으로도 "참고 자료"라는 뜻이다.
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'documentation-role-only',
+    sourceRole: 'official_documentation_reference',
+    mainArticlePolicy: 'allowed'
+  }), true);
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'reference-policy-only',
+    sourceRole: 'official_release_source',
+    mainArticlePolicy: 'reference_only'
+  }), true);
+
+  // 참고 자료가 아닌 소스는 그대로 제너릭 폴백을 쓴다.
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'lore-linux-media-list',
+    sourceRole: 'project_mailing_list_source',
+    mainArticlePolicy: 'allowed'
+  }), false);
+  assert.equal(shouldSuppressGenericFallback({
+    id: 'libcamera-blog',
+    sourceRole: 'official_release_source',
+    mainArticlePolicy: 'allowed'
+  }), false);
+  assert.equal(shouldSuppressGenericFallback({ id: 'libcamera-blog' }), false);
+  assert.equal(shouldSuppressGenericFallback(null), false);
+});
+
+test('every enabled reference-only registry entry suppresses the generic page-title fallback', () => {
+  // collector가 술어에 넘기는 것은 raw JSON 항목이 아니라 normalizeEnabledSources를 지난
+  // 런타임 source 객체다(news-source-section-resolver.js가 sourceRole/mainArticlePolicy를
+  // 여기 싣는다). 그 정규화 홉까지 덮어야 registry-술어 배선이 실제로 검증된다.
+  const registry = require('../../../data/news-sources.json');
+  const { sources } = normalizeEnabledSources(registry);
+  const referenceSources = sources.filter(source =>
+    source.sourceRole === 'official_documentation_reference' || source.mainArticlePolicy === 'reference_only');
+
+  assert.ok(referenceSources.length > 0, 'registry has enabled reference sources');
+  for (const source of referenceSources) {
+    assert.equal(
+      shouldSuppressGenericFallback(source),
+      true,
+      `${source.id} is a reference source and must not fall back to the generic page scrape`
+    );
+
+    // 두 표시는 서로의 보험이다. 한쪽이 드리프트해도 억제는 유지돼야 하므로, 각 항목이 실제로
+    // 가진 표시 하나만 남겨서도 확인한다. 술어에서 어느 한 절이 빠지면 여기서 잡힌다 —
+    // 위 한 줄만으로는 모든 registry 항목이 두 필드를 다 갖고 있어 절 삭제를 놓친다.
+    if (source.sourceRole === 'official_documentation_reference') {
+      assert.equal(
+        shouldSuppressGenericFallback({ id: source.id, sourceRole: source.sourceRole }),
+        true,
+        `${source.id} must stay suppressed on sourceRole alone`
+      );
+    }
+    if (source.mainArticlePolicy === 'reference_only') {
+      assert.equal(
+        shouldSuppressGenericFallback({ id: source.id, mainArticlePolicy: source.mainArticlePolicy }),
+        true,
+        `${source.id} must stay suppressed on mainArticlePolicy alone`
+      );
+    }
+  }
+
+  // 이슈 #880이 "매주 날짜 없는 페이지 제목만 만든다"고 지목한 소스가 실제로 이 집합에 있어야 한다.
+  const ids = referenceSources.map(source => source.id);
+  for (const id of [
+    'aosp-camera-documentation',
+    'android-compatibility-definition-document',
+    'android-developer-newsletter',
+    'aosp-whats-new-release-notes'
+  ]) {
+    assert.ok(ids.includes(id), `${id} must be registered as a reference source`);
+  }
 });
 
 test('routes android-security-bulletin to the CVE resolver with indexItems as the first arg', async () => {
@@ -366,4 +493,72 @@ test('returns [] for an unknown source.id without fetching', async () => {
 test('returns [] when called with no options (preserves the original default)', async () => {
   const items = await resolveFollowedSourceItems({ id: 'some-other-source' });
   assert.deepEqual(items, []);
+});
+
+// #1059: 진짜 갭은 리졸버가 아니라 여기 등록부 entry였다. resolveFollowedSourceItems는 이미
+// onDiagnostic을 entry.resolve에 넘기고 있었는데, 세 entry가 그것을 destructure하지 않아 절단이
+// console.warn 밖으로 못 나갔다. entry가 인자를 흘리면 리졸버 쪽 테스트는 전부 통과하면서도
+// 프로덕션에서는 이벤트가 0건이 된다 — 그래서 배선을 따로 잠근다.
+test('the page-walking resolvers receive onDiagnostic so their truncation is not log-only (#1059)', async () => {
+  const gerritSource = (id) => ({
+    id,
+    name: id,
+    url: 'https://android-review.googlesource.com/changes/?q=x&n=100',
+    sourceUrl: 'https://android-review.googlesource.com/changes/?q=x&n=100'
+  });
+  // 창 안 항목 하나뿐인 목록은 "이 페이지가 창을 못 덮었다"가 참이라 목록 절단이 난다.
+  const gerritListBody = ")]}'\n" + JSON.stringify([{
+    _number: 4228183,
+    project: 'platform/frameworks/av',
+    branch: 'android17-release',
+    status: 'NEW',
+    subject: 'VirtualCamera: validate blobSizeBytes',
+    created: '2026-08-30 00:00:00.000000000',
+    updated: '2026-08-31 00:00:00.000000000'
+  }]);
+
+  const cases = [
+    {
+      source: patchworkSource(),
+      // 첫 페이지가 창 안이고 다음 페이지 조회가 실패하면 창을 다 못 읽은 채 끝난다.
+      text: JSON.stringify([{
+        web_url: 'https://patchwork.libcamera.org/patch/28401/',
+        date: '2026-08-31T09:14:06',
+        name: 'libcamera: burst churn',
+        state: 'new'
+      }]),
+      fetchTextImpl: async () => { throw new Error('network down'); }
+    },
+    {
+      source: gerritSource('aosp-gerrit-camera-changes'),
+      text: gerritListBody,
+      fetchTextImpl: async () => { throw new Error('network down'); }
+    },
+    {
+      source: gerritSource('chromeos-gerrit-camera-changes'),
+      text: gerritListBody,
+      fetchTextImpl: async () => { throw new Error('network down'); }
+    }
+  ];
+
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    for (const { source, text, fetchTextImpl } of cases) {
+      const events = [];
+      await resolveFollowedSourceItems(source, {
+        indexItems: [],
+        text,
+        fetchTextImpl,
+        now: new Date('2026-09-02T00:00:00Z'),
+        lookbackDays: 35,
+        onDiagnostic: event => events.push(event)
+      });
+      const truncations = events.filter(event => event.kind === 'collection_window_truncated');
+      assert.equal(truncations.length, 1, `${source.id} announces its truncation through the registry entry`);
+      assert.equal(truncations[0].source_id, source.id, `${source.id} names itself in the event`);
+    }
+  } finally {
+    console.warn = originalWarn;
+  }
 });

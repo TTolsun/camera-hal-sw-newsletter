@@ -36,16 +36,17 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - Photo Picker Documentation (`documentation-watch`, `reference_only`): https://developer.android.com/training/data-storage/shared/photo-picker
 - MediaStore Reference (`documentation-watch`, `reference_only`): https://developer.android.com/reference/android/provider/MediaStore
 - MediaCodec Reference (`documentation-watch`, `reference_only`): https://developer.android.com/reference/android/media/MediaCodec
-- AOSP Camera Documentation (`documentation-watch`, `official_documentation_reference`): https://source.android.com/docs/core/camera
+- AOSP Camera Documentation (`documentation-watch`, `reference_only`): https://source.android.com/docs/core/camera
 - AOSP Release Source Drop - camera changes (`release-note-watch`): https://source.android.com/docs/setup/reference/build-numbers
-- AOSP What's New / Release Notes (`release-note-watch`): https://source.android.com/docs/whatsnew
+- AOSP Gerrit - camera changes under review (`rss-source`): https://android-review.googlesource.com/q/((project:platform/frameworks/av+OR+project:platform/hardware/interfaces)+AND+directory:camera)+OR+project:platform/hardware/google/camera
+- AOSP What's New / Release Notes (`release-note-watch`, `reference_only`): https://source.android.com/docs/whatsnew
 - AOSP Site Updates (`release-note-watch`): https://source.android.com/docs/whatsnew/site-updates
-- Android Compatibility Definition Document (`documentation-watch`): https://source.android.com/docs/compatibility/cdd
+- Android Compatibility Definition Document (`documentation-watch`, `reference_only`): https://source.android.com/docs/compatibility/cdd
 - Android Security Bulletin (`release-note-watch`): https://source.android.com/docs/security/bulletin
 - Samsung Mobile Security Updates (`release-note-watch`): https://security.samsungmobile.com/securityUpdate.smsb
 - Qualcomm Security Bulletins (`release-note-watch`): https://docs.qualcomm.com/product/publicresources/securitybulletin
 - MediaTek Security Bulletin (`release-note-watch`): https://www.mediatek.com/product-security-bulletin
-- Android Developer Newsletter (`documentation-watch`): https://developer.android.com/newsletter
+- Android Developer Newsletter (`documentation-watch`, `reference_only`): https://developer.android.com/newsletter
 
 공개 AOSP는 2025년 3월 이후 `main` 브랜치로 개발이 흘러들지 않고 릴리스 태그(`android-N.M.P_rK`)로 몇 달에 한 번 통째로 공개됩니다. AOSP Release Source Drop 출처는 build-numbers 표에서 릴리스 쌍을 고르고, 그 차이(`이전태그..새태그`)에서 camera 경로를 건드린 커밋만 모아 저장소별로 후보 1건을 만듭니다. 감시 저장소는 `platform/hardware/interfaces`(Camera HAL AIDL), `platform/frameworks/av`(camera framework/cameraserver), `platform/hardware/google/camera`(Google Camera HAL)입니다.
 
@@ -55,7 +56,32 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 
 수집 창은 파이프라인이 넘겨준 `now`/`lookbackDays`에서 파생합니다. 릴리스가 창 밖이면 gitiles 조회를 아예 하지 않아, 드롭이 없는 대부분의 주에는 요청 한 번으로 끝납니다. 델타가 페이지 상한(6 × 100 커밋)을 넘어 다 읽지 못하면 후보 제목과 요약이 건수를 `at least N` 하한으로 말합니다.
 
+### Gerrit 변경의 proposal / review / landed lifecycle
+
+AOSP Gerrit과 ChromeOS Gerrit 출처는 릴리스 드롭보다 앞선 단계를 봅니다. 릴리스 드롭이 "공개된 확정 변경"을 몇 달에 한 번 통째로 보여 준다면, Gerrit은 아직 리뷰 중인 제안까지 날짜와 상태가 붙은 채로 보여 줍니다. 둘은 대체 관계가 아니라 proposal → landed 관계이므로 함께 유지합니다.
+
+기사 승격 정책은 상태로 정합니다.
+
+- `MERGED`: `submitted`을 기사 날짜로 쓰고 main article 후보로 둡니다. 병합된 변경은 그 자체가 확정된 1차 사실입니다.
+- `NEW` + 긍정 `Code-Review`/`Verified` 표: `created`를 기사 날짜로 쓰고 main article 후보로 둡니다. 단 같은 label 묶음에 부정 표(`rejected`/`disliked`)가 하나라도 있으면 긍정 근거로 보지 않습니다 — 리뷰어 +1이 있어도 presubmit 검증이 실패한 변경은 승격하지 않습니다.
+- `NEW` + 리뷰 표 없음: 후보로 수집하되 `mainArticlePolicy=watchlist_only`로 내려 briefing 재료로만 씁니다. AOSP Gerrit에는 누구나 변경을 올릴 수 있으므로, 아무도 검토하지 않은 제안은 뉴스가 아닙니다.
+- `WIP`, `ABANDONED`: 수집하지 않습니다.
+
+`updated`는 기사 날짜로 쓰지 않습니다. 댓글 한 줄에도 갱신되기 때문에, 그걸 날짜로 쓰면 오래된 변경이 매주 "이번 주 소식"으로 되살아나고 patchset 갱신마다 같은 변경이 다시 기사가 됩니다. `created`/`submitted`를 쓰면 같은 변경은 수집 창 안에서 한 번만 후보가 되고 그 뒤로는 창 밖으로 빠집니다.
+
+다음은 후보에서 제외합니다. `OWNERS`, `TEST_MAPPING`, 빌드·메타데이터 파일만 바뀐 변경. 제목이 `DO NOT SUBMIT`이거나 `test`/`fake`로 시작하는 시험용 변경. 그리고 실질 변경 파일의 절반 미만이 카메라 경로인 변경 — 트리 전역 리팩터링이 camera 디렉터리를 스쳐 간 경우입니다(실측: ChromeOS 변경 하나가 23개 파일 중 4개만 `camera/` 아래였습니다).
+
+Gerrit 변경 페이지는 클라이언트 렌더링(PolyGerrit)이라 URL을 받아도 본문이 없습니다. 그래서 후보 요약은 REST 응답에서 읽은 사실(상태, 브랜치, 변경 파일 전체 경로, 삽입·삭제 줄 수, 리뷰 표, Change-Id, 리비전 SHA)만으로 스스로 완결됩니다.
+
+같은 변경이 나중에 릴리스 드롭에도 들어오면 새 기사를 만들지 않습니다. 드롭 후보가 자기가 센 camera 커밋의 `Change-Id`와 commit SHA를 함께 싣고, 선정 단계가 그 목록으로 Gerrit 후보와 겹치는지 봅니다. 겹치면 나머지 커밋까지 담은 드롭 쪽을 대표로 남깁니다. 다만 공개 드롭에는 내부 Gerrit에서 cherry-pick된 merge 커밋이 섞여 있어 Change-Id가 달라질 수 있습니다 — 이 연결은 겹쳤을 때 중복을 막는 안전망이지, 항상 성사되는 보증이 아닙니다.
+
+ChromeOS `chromiumos/platform2`는 `camera/` 아래의 `MERGED` 변경만 봅니다. ChromeOS camera 서비스가 Android Camera HAL v3 인터페이스를 구현하므로 capture request/result, stream·buffer 수명주기, 3A, ISP, JPEG/RAW/YUV, 외부 카메라 변경이 Camera HAL 독자에게 직접 읽힙니다. `chromiumos/platform/camera`의 vendor HAL 변경은 초기 범위 밖입니다.
+
 Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/behavior, camera output path 연결이 모두 있을 때만 `android_multimedia_camera_output` 후보로 봅니다. MediaCodec, MediaRecorder, MediaStore, Photo Picker, supported formats 문서는 reference/background source이며 단독 기사 후보가 아닙니다.
+
+reference source(`sourceRole=official_documentation_reference` 또는 `mainArticlePolicy=reference_only`)는 제너릭 페이지 스크레이프 폴백을 쓰지 않습니다. 이런 페이지는 날짜가 없어 후보가 늘 `finalSelectionEligibility=exclude`로 끝나면서 소스 진단만 상시로 켰습니다. `sourceRole=official_documentation_reference`인 소스는 소스 전용 파서를 따로 두더라도 후보가 살아나지 않습니다 — collector가 파서 결과와 무관하게 `finalSelectionEligibility=exclude`로 닫습니다. 그 소스를 다시 기사 후보로 쓰려면 registry의 `sourceRole`부터 되돌려야 합니다.
+
+AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트로 가는 랜딩 페이지라 자체 dated 행이 없습니다. 날짜가 붙은 What's New 변경(예: "Published initial release notes on Android 17 release notes")은 AOSP Site Updates 표에서 들어옵니다. Android Developer Newsletter(`https://developer.android.com/newsletter`)도 같은 이유로 reference source입니다.
 
 ### 후보 / 교차 확인 출처
 
@@ -67,7 +93,8 @@ Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/
 
 - libcamera Blog: https://libcamera.org/blog/
 - libcamera Release Announcements: https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html
-- libcamera Documentation (`documentation-watch`): https://libcamera.org/introduction.html
+- libcamera Documentation (`documentation-watch`, `reference_only`): https://libcamera.org/introduction.html
+- ChromeOS Gerrit - platform2 camera merged changes (`rss-source`): https://chromium-review.googlesource.com/q/project:chromiumos/platform2+status:merged+directory:camera
 - Collabora Blog: https://www.collabora.com/news-and-blog/
 
 ### 후보 / 교차 확인 출처

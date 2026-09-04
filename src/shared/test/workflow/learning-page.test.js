@@ -3,8 +3,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const { mediaBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
-const { assertSharedNav } = require('../helpers/site-nav');
+const {
+  stripMediaBlocks,
+  mediaBlock,
+  exactSelectorBlock,
+  selectorGroupBlock,
+  assertCssDeclaration
+} = require('../helpers/css-blocks');
+const { assertSharedNav, assertSharedFooterNav } = require('../helpers/site-nav');
 
 const root = path.join(__dirname, '..', '..', '..', '..');
 
@@ -13,6 +19,10 @@ const root = path.join(__dirname, '..', '..', '..', '..');
 
 function readLearningStylesheet() {
   return fs.readFileSync(path.join(root, 'articles', 'css', 'learning.css'), 'utf8');
+}
+
+function readSiteStylesheet() {
+  return fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8');
 }
 
 function readLearningPage() {
@@ -86,7 +96,12 @@ test('learning page narrow-screen overrides collapse the card grids to one colum
 test('learning page keeps the shared navigation labels and targets', () => {
   // 홈·아카이브와 같은 헬퍼를 쓴다 — 세 페이지의 나브 잠금이 한 형태여야 한 곳만 약해지지 않는다.
   // Lab 은 두 단계 아래라 사이트 루트 접두어가 '../../' 다.
-  assertSharedNav(readLearningPage(), '../../');
+  const html = readLearningPage();
+  assertSharedNav(html, '../../');
+  // 푸터도 같은 한 벌로 잠근다(#1022). 이 페이지에서만 「리소스」 컬럼의 AI Engineering Lab
+  // 링크가 자기 자신을 가리키므로 세 번째 인자로 그 값을 넘긴다 — rootPath 로 유도되지 않는
+  // 유일한 값이다.
+  assertSharedFooterNav(html, '../../', 'index.html');
 });
 
 // ---- 가로 스크롤 컨테이너의 키보드 도달성 (#1009) ----
@@ -147,7 +162,7 @@ const KEYBOARD_SCROLLABLE = [
 const EXEMPT_SCROLL_SELECTORS = ['.learning-nav-inner', 'pre'];
 
 test('learning page classifies every scroll container as keyboard-reachable or exempt', () => {
-  const sheets = [readLearningStylesheet(), fs.readFileSync(path.join(root, 'articles', 'css', 'styles.css'), 'utf8')];
+  const sheets = [readLearningStylesheet(), readSiteStylesheet()];
   const found = [...scrollContainerSelectors(sheets)].sort();
   const classified = [...KEYBOARD_SCROLLABLE.map(entry => entry.selector), ...EXEMPT_SCROLL_SELECTORS].sort();
   assert.deepEqual(
@@ -222,28 +237,221 @@ test('learning page keeps the result tables as tables', () => {
   }
 });
 
+// 폭 구간 하나에서 scroll-margin-top 을 주는 규칙을 찾아 셀렉터 집합과 px 값으로 돌려준다.
+//
+// 셀렉터로 규칙을 찾으면 `.week-result table` 처럼 다른 규칙에도 쓰이는 셀렉터가 엉뚱한 블록에
+// 걸린다. 반대로 선언에서 출발한다. 이 페이지는 폭 구간마다 그런 규칙이 하나뿐이라, 둘 이상
+// 나오면 실패한다 — 어느 것이 이기는지는 이 파서로 알 수 없어서 조용히 첫 규칙을 고르면 값이
+// 틀린 채로 초록이 된다. 넓은 화면 규칙을 읽을 때는 scope 로 stripMediaBlocks() 결과를 넘긴다.
+function scrollMarginRule(scope) {
+  const flat = String(scope).replace(/\/\*[\s\S]*?\*\//g, '');
+  const rules = [];
+  for (const rule of flat.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const declaration = rule[2].match(/scroll-margin-top:\s*([^;]+);/);
+    if (!declaration) continue;
+    rules.push({
+      selectors: new Set(rule[1].split(',').map(part => part.trim()).filter(Boolean)),
+      value: declaration[1].trim()
+    });
+  }
+  assert.equal(rules.length, 1, '한 폭 구간에서 scroll-margin-top 을 주는 규칙은 하나여야 한다');
+  assert.match(rules[0].value, /^\d+(?:\.\d+)?px$/, `scroll-margin-top 은 px 값이어야 한다 — ${rules[0].value}`);
+  return { selectors: rules[0].selectors, px: Number.parseFloat(rules[0].value) };
+}
+
 // Tab 초점은 브라우저가 요소를 화면 안으로 굴려 넣는데, 이 페이지는 sticky 가 2단이라 여백이
-// 없으면 요소 상단이 그 밑에 깔린다. 값의 근거는 learning.css 주석에 실측으로 적혀 있다.
+// 없으면 요소 상단이 그 밑에 깔린다.
 test('learning page keeps focus targets clear of the two-tier sticky header', () => {
   const css = readLearningStylesheet();
-  // 셀렉터로 규칙을 찾으면 `.week-result table` 처럼 다른 규칙에도 쓰이는 셀렉터가 엉뚱한 블록에
-  // 걸린다. 반대로 선언에서 출발해, scroll-margin-top 을 주는 규칙들이 무엇을 덮는지 모은다.
-  const covered = (scope, value) => {
-    const flat = String(scope).replace(/\/\*[\s\S]*?\*\//g, '').replace(/@media[^{]*\{/g, '');
-    const selectors = new Set();
-    for (const rule of flat.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-      if (!new RegExp(`scroll-margin-top:\\s*${value}\\s*;`).test(rule[2])) continue;
-      for (const part of rule[1].split(',')) selectors.add(part.trim());
-    }
-    return selectors;
-  };
-
   // 목록을 따로 적지 않고 KEYBOARD_SCROLLABLE 에서 돈다 — 탭 정거장을 하나 늘리면서 가림 방지를
   // 빠뜨리는 일이 없도록. 두 목록이 갈리면 새 항목만 보호 없이 남는다.
-  const wide = covered(css, '124px');
-  const narrow = covered(mediaBlock(css, '(max-width: 780px)'), '185px');
+  const wide = scrollMarginRule(stripMediaBlocks(css));
+  const narrow = scrollMarginRule(mediaBlock(css, '(max-width: 780px)'));
   for (const { selector } of KEYBOARD_SCROLLABLE) {
-    assert.ok(wide.has(selector), `${selector} 는 넓은 화면 scroll-margin-top 을 받아야 한다`);
-    assert.ok(narrow.has(selector), `${selector} 는 좁은 화면 scroll-margin-top 을 받아야 한다`);
+    assert.ok(wide.selectors.has(selector), `${selector} 는 넓은 화면 scroll-margin-top 을 받아야 한다`);
+    assert.ok(narrow.selectors.has(selector), `${selector} 는 좁은 화면 scroll-margin-top 을 받아야 한다`);
   }
+  // 좁은 화면 값만 리터럴로 잠근다. 그 값이 덮어야 하는 것은 두 줄로 접힌 헤더 높이인데, 접힌
+  // 높이는 자식이 몇 줄로 흐르느냐로 정해져 CSS 선언에서 나오지 않는다(실측 133px). 넓은 화면
+  // 값은 아래 밴드 테스트가 헤더 합에서 파생시키므로 여기서 리터럴로 잡지 않는다 (#1047).
+  assert.equal(narrow.px, 185, '좁은 화면 scroll-margin-top 은 접힌 헤더(실측 133px)를 덮는 185px 이다');
+});
+
+// ---- 좁은 화면에서 목차 나브가 헤더 뒤로 들어가지 않는다 (#1023) ----
+
+// 이 페이지의 sticky 는 넓은 화면에서만 2단이다 — .site-header(top:0, z-index:20) 아래에
+// .learning-nav(top:59px, z-index:10). 좁은 화면에서는 .homepage-nav 가 column 으로 접히면서
+// 헤더가 59px 에서 133px 로 커지는데, 그때도 나브를 sticky 로 두면 나브(59~101px)가 헤더
+// (0~133px) 뒤로 통째로 들어가 목차가 보이지 않았다.
+//
+// 고른 해법은 그 폭에서 sticky 를 푸는 것이다. 나브 top 을 헤더 높이(133px)에 맞춰 헤더 아래에
+// 쌓는 방법은 sticky 가 가리는 띠를 133px 에서 175px 로 키우는데, 그러면 밑에 깔리는 것이
+// 목차만이 아니게 된다 — scroll-margin-top 이 없는 .source-card 가 완전히 가려지고(WCAG 2.4.11),
+// 400% 확대에서 본문에 남는 높이가 줄어든다(WCAG 1.4.10). static 은 이 둘을 만들지 않는다.
+// (목차 링크로 착지한 섹션 제목이 띠에 깔리는 것은 static 에서도 남는 기존 결함이다 —
+// .learning-section 에 scroll-margin-top 이 없다. A 안은 그것을 더 나쁘게 할 뿐이었다.)
+//
+// 그래서 잠그는 것은 둘이다.
+// - 폭: sticky 를 푸는 폭과 헤더가 접히는 폭이 같아야 한다. 갈리면 그 사이 구간에서 헤더는 두 줄인데
+//   나브는 아직 sticky 라 원래 버그가 되살아난다.
+// - 넓은 화면 top: 접히지 않은 헤더 높이와 같아야 한다. 리터럴로 두면 헤더의 min-height 가 바뀔 때
+//   나브가 헤더에 파고들거나 둘 사이에 빈 띠가 생긴다.
+// 접힌 헤더 높이(133px)는 이제 아무 값도 유도하지 않으므로 재지 않는다 — static 은 헤더가 얼마나
+// 커지든 상관하지 않는다.
+const HEADER_FOLD_QUERY = '(max-width: 640px)';
+
+// 선언에서 px 수치를 뽑는다. 값이 여러 토큰인 숏핸드(`border-bottom: 1px solid …`)는 첫 토큰만
+// 본다. 같은 속성이 여러 번 쓰였으면 뒤에 온 것이 이긴다(CSS 와 같다). px 이 아닌 값(`auto`,
+// `var(…)`)이 들어오면 조용히 0 으로 세는 대신 실패한다.
+function pxDeclaration(block, property) {
+  const normalized = String(block).replace(/\s+/g, ' ');
+  const found = [...normalized.matchAll(new RegExp(`(?:^|[;{ ])${property}\\s*:\\s*([^;]+);`, 'g'))];
+  assert.ok(found.length > 0, `${property} 선언이 있어야 한다`);
+  const value = found[found.length - 1][1].trim();
+  const first = value.split(' ')[0];
+  assert.match(first, /^\d+(?:\.\d+)?px$/, `${property} 의 첫 토큰은 px 값이어야 한다 — ${value}`);
+  return Number.parseFloat(first);
+}
+
+// padding 숏핸드에서 위·아래 값을 읽는다. 토큰이 셋 이상이면 위와 아래가 서로 다를 수 있는데
+// 이 값을 쓰는 계산은 둘이 같다고 전제하므로, 조용히 위쪽만 쓰는 대신 실패한다.
+function verticalPadding(block) {
+  const normalized = String(block).replace(/\s+/g, ' ');
+  const found = [...normalized.matchAll(/(?:^|[;{ ])padding\s*:\s*([^;]+);/g)];
+  assert.ok(found.length > 0, 'padding 선언이 있어야 한다');
+  const tokens = found[found.length - 1][1].trim().split(' ');
+  assert.ok(tokens.length <= 2, `padding 은 위·아래가 같은 형태여야 한다 — ${tokens.join(' ')}`);
+  assert.match(tokens[0], /^\d+(?:\.\d+)?px$/, `padding 의 세로 값은 px 이어야 한다 — ${tokens[0]}`);
+  return Number.parseFloat(tokens[0]);
+}
+
+// 접히지 않은 헤더 높이 = .homepage-nav 의 min-height + 헤더의 아래 테두리.
+// 그 식은 min-height 가 헤더 높이를 지배한다는 전제 위에 있다. 자식이 그보다 커지면 헤더는
+// min-height 와 무관하게 자라는데 min-height 는 그대로라, 파생값만 대조해서는 낡은 값을 못 잡는다
+// (실측: 브랜드 min-height 만 80px 로 올리면 헤더가 81px 이 되어 641px 이상에서 나브 위 22px 이
+// 헤더 뒤로 들어가는데 잠금은 초록이었다). 그래서 지배 관계 자체를 잠근다.
+//
+// 이 함수는 Lab 페이지 밖인 articles/css/styles.css 의 홈 헤더 기하(.homepage-nav·.homepage-brand)와
+// 전역 토큰(:root --control-height)을 읽는다 — Lab 목차의 top 과 넓은 화면 scroll-margin-top 이
+// 거기서 파생되기 때문이다.
+function unfoldedHeaderHeight(styles) {
+  const navMinHeight = pxDeclaration(exactSelectorBlock(styles, '.homepage-nav'), 'min-height');
+  const tallestChild = Math.max(
+    pxDeclaration(exactSelectorBlock(styles, '.homepage-brand'), 'min-height'),
+    pxDeclaration(exactSelectorBlock(styles, ':root'), '--control-height')
+  );
+  assert.ok(
+    navMinHeight >= tallestChild,
+    `.homepage-nav 의 min-height(${navMinHeight}px)보다 큰 자식(${tallestChild}px)이 있다 — 헤더 높이를 더 이상 min-height 가 정하지 않으므로 이 계산이 성립하지 않는다`
+  );
+  return navMinHeight + pxDeclaration(exactSelectorBlock(styles, '.site-header'), 'border-bottom');
+}
+
+test('learning page drops the sticky table of contents where the header folds', () => {
+  const styles = readSiteStylesheet();
+
+  // 640px 의 근거는 이 한 줄이다 — 헤더가 한 줄에서 두 줄로 바뀌는 지점.
+  assertCssDeclaration(exactSelectorBlock(mediaBlock(styles, HEADER_FOLD_QUERY), '.homepage-nav'), 'flex-direction', 'column');
+
+  const unfolded = unfoldedHeaderHeight(styles);
+
+  const css = readLearningStylesheet();
+  const nav = exactSelectorBlock(css, '.learning-nav');
+  // 넓은 화면: 헤더 바로 아래에 붙는다. top 은 리터럴이 아니라 위에서 계산한 높이와 비교하므로,
+  // 헤더 min-height 가 바뀌면 learning.css 를 따라 고치지 않는 한 여기서 깨진다.
+  assertCssDeclaration(nav, 'position', 'sticky');
+  assertCssDeclaration(nav, 'top', `${unfolded}px`);
+  // 좁은 화면: sticky 를 풀어 문서 흐름에 둔다. 가릴 것이 없으므로 헤더 높이와 무관해진다.
+  assertCssDeclaration(
+    exactSelectorBlock(mediaBlock(css, HEADER_FOLD_QUERY), '.learning-nav'),
+    'position',
+    'static'
+  );
+});
+
+// ---- 목차 링크로 착지한 섹션이 sticky 밑에 깔리지 않는다 (#1046) ----
+
+// 목차가 어디로 착지시키는지는 HTML 이 정하므로 id 목록을 여기 적지 않고 읽는다. 링크가 늘거나
+// 가리키는 대상이 바뀌면 이 잠금이 새 대상까지 따라간다.
+function tableOfContentsTargets(html) {
+  const nav = String(html).match(/<div class="learning-shell learning-nav-inner">([\s\S]*?)<\/div>/);
+  assert.ok(nav, '.learning-nav-inner should exist');
+  const ids = [...nav[1].matchAll(/href="#([^"]+)"/g)].map(match => match[1]);
+  assert.ok(ids.length > 0, '목차에는 페이지 안 앵커 링크가 있어야 한다');
+  return ids;
+}
+
+// 그 id 를 가진 여는 태그의 class 목록. class 가 없으면 빈 배열이다.
+function classesOfElementWithId(html, id) {
+  const tag = [...String(html).matchAll(/<[a-z][a-z0-9]*[^>]*>/gi)]
+    .map(match => match[0])
+    .find(candidate => (candidate.match(/\sid="([^"]*)"/) || [])[1] === id);
+  assert.ok(tag, `#${id} 를 가진 요소가 있어야 한다`);
+  const attribute = tag.match(/\sclass="([^"]*)"/);
+  return attribute ? attribute[1].split(/\s+/).filter(Boolean) : [];
+}
+
+// 브라우저는 앵커 대상의 위쪽을 뷰포트 y=0 에 맞추므로, scroll-margin-top 이 없으면 착지한
+// 섹션의 제목이 sticky 띠 밑으로 통째로 들어간다(실측 390px, #curriculum: h2 가 79.8~114.3 으로
+// 133px 띠 안에 들어갔다). 초점 대상과 같은 여백을 착지 대상에도 준다.
+test('learning page gives every table-of-contents landing target a scroll margin', () => {
+  const html = readLearningPage();
+  const css = readLearningStylesheet();
+  const wide = scrollMarginRule(stripMediaBlocks(css));
+  const narrow = scrollMarginRule(mediaBlock(css, '(max-width: 780px)'));
+
+  for (const id of tableOfContentsTargets(html)) {
+    const classes = classesOfElementWithId(html, id);
+    // 착지 요소의 class 중 하나가 scroll-margin-top 규칙의 셀렉터로 적혀 있어야 한다. class 하나
+    // 짜리 셀렉터만 알아본다 — 이 페이지는 그 형태로만 여백을 주고, 그보다 넓게 읽으려면 이 파서가
+    // CSS 셀렉터 엔진이 되어야 한다. 다른 형태로 여백을 주면 이 잠금은 (통과가 아니라) 실패한다.
+    const receives = selectors => classes.some(name => selectors.has(`.${name}`));
+    const seen = classes.join(' ') || '(class 없음)';
+    assert.ok(receives(wide.selectors), `#${id} 착지 요소는 넓은 화면 scroll-margin-top 을 받아야 한다 — ${seen}`);
+    assert.ok(receives(narrow.selectors), `#${id} 착지 요소는 좁은 화면 scroll-margin-top 을 받아야 한다 — ${seen}`);
+  }
+});
+
+// ---- 넓은 화면 scroll-margin-top 을 헤더 합에서 파생시킨다 (#1047) ----
+
+// 리터럴로 두면 규정대로 잠금을 지켜도 빠져나간다. 헤더의 min-height 를 올리면 #1023 잠금이
+// .learning-nav 의 top 을 따라 고치도록 강제하지만, 그렇게 커진 띠가 scroll-margin-top 을 넘어도
+// 잡는 검사가 없었다. 그래서 값을 리터럴로 대조하지 않고 띠를 계산해 하한으로만 본다.
+//
+// 하한만으로는 모자란다 — 과다 제공은 요소를 아래로 굴리는 대신 뷰포트 높이를 쓴다. 320x256 에서
+// 좁은 화면 값 185px 은 착지한 제목 여덟 개를 전부 화면 밖으로 내보낸다(실측표는 learning.css 의
+// 좁은 화면 블록 주석에 있다. 손익분기 약 140px). 그래서 하한과 함께 여유 예산 상한도 둔다.
+// 좁은 화면 값 자체는 #1015 가 네 셀렉터에 정한 공유 값이라 여기서 내리지 않는다(#1047 의 남은 항목).
+test('learning page keeps the wide-screen scroll margin at or above the sticky band', () => {
+  const styles = readSiteStylesheet();
+  const css = readLearningStylesheet();
+
+  // 목차 스트립 높이 = 안쪽 세로 패딩 두 번 + 링크 한 줄 높이 + 스트립 아래 테두리.
+  // 링크의 line-height 가 px 로 적혀 있어야 이 식이 성립한다. 비워 두면 줄 높이가 폰트 메트릭에서
+  // 나와(실측 15.5px, Pretendard 가 못 뜨면 다른 값) CSS 만 읽어서는 알 수 없다.
+  const strip =
+    verticalPadding(exactSelectorBlock(css, '.learning-nav-inner')) * 2
+    + pxDeclaration(exactSelectorBlock(css, '.learning-nav a'), 'line-height')
+    + pxDeclaration(exactSelectorBlock(css, '.learning-nav'), 'border-bottom');
+  const band = unfoldedHeaderHeight(styles) + strip;
+
+  const wide = scrollMarginRule(stripMediaBlocks(css)).px;
+  assert.ok(
+    wide >= band,
+    `넓은 화면 scroll-margin-top(${wide}px)이 sticky 가 가리는 띠(${band}px)보다 작다 — 초점 대상과 목차 착지 대상의 상단이 그 밑에 깔린다`
+  );
+
+  // 하한만 두면 값이 위로 얼마든 자라도 안 잡힌다. 그리고 그 상한은 원래 있었다 — 옛 추출기가
+  // '124px' 을 조회 키로 써서 값을 사실상 고정했고, 하한 방식으로 바꾸면서 조용히 사라졌다
+  // (실증: scroll-margin-top 을 400px 로 바꾸면 이 커밋 전 main 은 RED, 하한만 있던 상태는 GREEN).
+  // 여유분은 공짜가 아니라 뷰포트 높이를 쓰므로 예산으로 못 박는다. 예산은 파생값이 아니라 고른
+  // 값이다 — 기하에서 유도할 원천이 없다. 터지는 조건은 헤더가 커지는 것이 아니다: 헤더가 커지면
+  // band 가 커져 우변도 같이 올라가므로 그때 먼저 터지는 것은 하한이다(실측: min-height 80 까지
+  // GREEN, 81 부터 하한 RED). 이 상한이 터지는 것은 scroll-margin-top 을 band 보다 24px 넘게
+  // 올릴 때다. 지금 위쪽 여유는 2px 이다 — 창은 [102, 126]이고 값은 124다.
+  const SLACK_BUDGET_PX = 24;
+  assert.ok(
+    wide <= band + SLACK_BUDGET_PX,
+    `넓은 화면 scroll-margin-top(${wide}px)이 띠(${band}px) + 여유 예산(${SLACK_BUDGET_PX}px)을 넘는다 — 여유분은 요소를 아래로 굴리는 대신 뷰포트 높이를 쓴다`
+  );
 });

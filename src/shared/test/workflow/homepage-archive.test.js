@@ -9,7 +9,13 @@ const NewsletterArchive = require('../../../../articles/assets/js/newsletter-arc
 const { withLearningFooterLink } = require('../../../generator/publish/assemble-site');
 const { headlineSnapshotFromCandidate } = require('../../../generator/reporter/homepage-headline');
 const { mediaBlock, exactSelectorBlock, selectorGroupBlock, assertCssDeclaration } = require('../helpers/css-blocks');
-const { assertSharedNav } = require('../helpers/site-nav');
+const {
+  assertSharedNav,
+  assertSharedBrand,
+  assertSharedFooterNav,
+  navLinks,
+  siteBrand
+} = require('../helpers/site-nav');
 
 function extractHomepageScript() {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -627,16 +633,57 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
   // 헤더 나브는 컨테이너로 스코프해서 본다. 열린 `[\s\S]*` 로 쓰면 푸터의 같은 라벨이 뒤쪽 절을
   // 만족시켜, 헤더를 통째로 영어로 바꿔도 통과한다(실측).
   assertSharedNav(html);
-  assert.match(html, /<footer class="site-footer">[\s\S]*href="learning\/ai-engineering\/index\.html">AI Engineering Lab<\/a>/);
+  // 푸터도 같은 이유로 컨테이너 스코프다(#1022). 예전에는 여기 한 줄이 열린 `[\s\S]*` 로
+  // AI Engineering Lab 링크 하나만 봤고, 그래서 푸터의 `홈`·`아카이브` 를 영어로 바꿔도 전체
+  // 테스트가 통과했다(실측). Lab href 도 헬퍼가 rootPath 로 유도해 함께 잠근다 — 아래
+  // "every deployed public page" 테스트는 단언 전에 withLearningFooterLink() 가 href 를
+  // 라벨로 찾아 정규화하므로, 커밋본의 href 드리프트는 그쪽에서 잡히지 않는다(실측: fail 0).
+  assertSharedFooterNav(html);
   assert.match(html, /<section id="subscribe"[\s\S]*data-subscription-section hidden>/);
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search/);
 });
 
-test('site assembly makes every deployed public page footer link to the AI Engineering lab', () => {
-  const newsletterPages = fs.readdirSync(path.join(root, 'articles', 'newsletters'), { withFileTypes: true })
+// 발행된 이슈 페이지 전수. 렌더러 출력이 아니라 **커밋된 트리**를 먹인다 — 이 페이지들은 재렌더
+// 소스가 없어 스스로 바뀌지 않으므로, 렌더러 테스트가 초록이어도 여기가 옛 세대일 수 있다(#1021).
+function publishedIssuePages() {
+  return fs.readdirSync(path.join(root, 'articles', 'newsletters'), { withFileTypes: true })
     .filter(entry => entry.isDirectory())
     .map(entry => path.join(root, 'articles', 'newsletters', entry.name, 'index.html'))
     .filter(file => fs.existsSync(file));
+}
+
+test('every published issue page carries the current site header', () => {
+  const pages = publishedIssuePages();
+  assert.ok(pages.length > 0, '발행된 이슈 페이지가 있어야 한다');
+
+  // 첫 실패에서 멈추면 "한 페이지가 옛 세대"로만 보인다. 어느 호들이 남았는지가 이 계약의 핵심
+  // 정보라 전부 모아서 한 번에 보고한다.
+  const stale = [];
+  for (const file of pages) {
+    const html = fs.readFileSync(file, 'utf8');
+    try {
+      // 나브 라벨(홈·아카이브·GitHub)과 브랜드(로고·워드마크·aria-label)를 함께 본다. 레거시
+      // 27개는 둘 다 옛 세대였고, 한쪽만 잠그면 반쯤 마이그레이션된 헤더가 통과한다.
+      assertSharedNav(html, '../../');
+      assertSharedBrand(html, '../../');
+    } catch {
+      // 던져진 메시지 대신 그 페이지에서 실제로 읽힌 값을 적는다 — 27개가 한 줄씩 "deep-equal
+      // 아님"이라고만 하면 어느 축이 옛 세대인지 알 수 없다.
+      const brand = siteBrand(html);
+      stale.push([
+        path.relative(root, file),
+        `나브=${JSON.stringify((navLinks(html) || []).map(link => link.label))}`,
+        `워드마크=${JSON.stringify(brand && brand.wordmark)}`,
+        `로고=${JSON.stringify(brand && brand.logoSrc)}`
+      ].join(' '));
+    }
+  }
+
+  assert.deepEqual(stale, [], `구세대 헤더가 남은 이슈 페이지 ${stale.length}개:\n${stale.join('\n')}`);
+});
+
+test('site assembly makes every deployed public page footer link to the AI Engineering lab', () => {
+  const newsletterPages = publishedIssuePages();
   const publicPages = [
     { file: path.join(root, 'index.html'), href: 'learning/ai-engineering/index.html' },
     { file: path.join(root, 'articles', 'archive.html'), href: 'learning/ai-engineering/index.html' },

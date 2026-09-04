@@ -11,6 +11,11 @@
 - `selectedImage`는 최종 발행 가능한 이미지 경로로 취급합니다.
 - 과거 생성 산출물인 `articles/content/newsroom/**`, `articles/content/collected-news/**`, 기존 `articles/newsletters/**` 파일은 명시 요청 없이 대량 수정하지 않습니다.
 
+## 발행 주기와 정책 (Cadence & Policy)
+
+- 발행 주기는 **주간(weekly)** 입니다. 주간호는 그 자체로 완결(self-contained)이어야 하며, 같은 내용을 과거 daily 페이지로 링크해 대신하지 않습니다.
+- **정책 값의 source of truth는 `src/shared/config/newsletter-policy.json`입니다.** `README.md`와 docs의 정책 텍스트는 이 JSON에서 생성된 것이므로 직접 고치지 마세요. JSON을 수정한 뒤에는 `npm.cmd run sync:policy-docs`를 실행합니다(`check:policy-docs`가 `validate`에서 검증).
+
 ## Encoding / Shell 규칙
 
 - Repository text file은 명시 예외가 없는 한 UTF-8 without BOM으로 저장합니다.
@@ -25,7 +30,7 @@
 - `src/shared/data/news-sources.json`은 machine-readable source of truth이고 `docs/NEWS_SOURCES.md`는 사람이 검토하는 editorial view입니다.
 - `articles/content/collected-news/YYYY-MM-DD/`는 raw candidate output입니다.
 - `articles/content/newsroom/YYYY-MM-DD/`는 reporter, editor, fact-check, quality, retry, QA review artifact입니다.
-- `articles/newsletters/YYYY-MM-DD/`는 public issue output인 `newsletter.md`와 `index.html`입니다.
+- `articles/newsletters/`는 public issue output인 `newsletter.md`와 `index.html`입니다. 주간 전환 후 공개 이슈는 `YYYY-Wnn/`을 쓰고, 전환 이전 daily 이슈는 `YYYY-MM-DD/` 형태로 남아 있습니다. 중간 산출물(위 두 줄)은 계속 `YYYY-MM-DD/`입니다.
 - 실제 구현과 tooling은 모두 `src/`에 있습니다. `src/shared/**`(공통 런타임·도메인·tooling·런타임 config/data), `src/collector/**`, `src/discovery/**`, `src/generator/**`(select/reporter/editor/quality/repair/diagnostics/render/validate/publish)로 나뉩니다. #262 재구성으로 root `scripts/*.js` wrapper와 `scripts/lib/`는 제거되었고 `scripts/`에는 더 이상 실행 코드가 없습니다.
 - `.github/workflows/`는 newsroom PR workflow와 validation workflow입니다.
 
@@ -55,6 +60,8 @@ npm.cmd run validate
 ```
 
 변경 범위가 좁더라도 관련 세부 검증이 있으면 함께 실행합니다. 예를 들어 source registry 변경은 `npm.cmd run validate:config`, 문서/표시값 변경은 `npm.cmd run validate:localization`을 포함합니다.
+
+로컬 `validate:quality`가 실패하면 코드 버그로 단정하기 전에 미커밋 `articles/content/newsroom/**/editor-draft.json`이 남아 있는지 먼저 확인하세요. 이전 `generate` run이 남긴 잔재를 재채점해 생기는 거짓 양성이며(clean clone과 CI에는 재현되지 않음), 해당 파일을 치우고 다시 실행하면 해소됩니다. quality-report를 덮어써서 맞추는 방어 패치는 금지입니다. 자세한 이유는 [articles/content/AGENTS.md](articles/content/AGENTS.md) 참고.
 
 ## Local Agent Scratch (작업용 임시 파일)
 

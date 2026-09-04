@@ -5,10 +5,13 @@ const {
   candidateRankOrder,
   capPerSource,
   collapseSeriesRepresentatives,
+  dedupe,
+  partitionByCoverageEligibility,
   withinLookback,
   MAX_CANDIDATES_PER_SOURCE,
   MAX_FINAL_CANDIDATES
 } = require('../../../cli/collect-news-candidates');
+const { coverageForAnchorDate } = require('../../../common/coverage-week');
 
 function item(sourceId, title) {
   return { source_id: sourceId, source: sourceId, title };
@@ -242,4 +245,71 @@ test('candidates from before the selection window stay in the pool for the catch
   assert.deepEqual(ranked.map(c => c.title), ['in-window', 'older-release']);
   assert.equal(capPerSource(ranked, MAX_CANDIDATES_PER_SOURCE).length, 2,
     'older candidates are re-ranked, not dropped');
+});
+
+// #970 회귀: patchwork 수집 창이 응답 한 페이지(= 바쁜 주엔 하루치 버스트)에 갇혀 있으면 소스별
+// 상한 8칸 중 2칸만 차고, 나머지 6칸은 다른 시리즈에 가지도 못하고 그냥 빈다. 창을 커버리지 주까지
+// 넓히면 8칸이 서로 다른 시리즈로 찬다.
+//
+// 형태는 2026-08-24 라이브 데이터 replay에서 관측한 그대로다: 그날 버스트에는 시리즈가 둘뿐이었고
+// (47조각짜리 software_isp 6138, 3조각 rkisp2 6137), 그 앞 커버리지 주에는 서로 다른 시리즈가
+// 여럿 있었다. 날짜는 이 테스트의 now가 고르는 coverage 주(2026-W35 = 08-24~08-30) 안에 놓는다 —
+// coverage 창 밖 후보는 partitionByCoverageEligibility가 not_yet_eligible로 떼어내므로, 창 밖
+// 날짜를 쓰면 cap 상호작용 자체를 관측할 수 없다(그렇게 두면 before/after가 0/6이 되고, 테스트가
+// 주장하는 2/8은 실제 실행에서 나올 수 없는 숫자가 된다).
+//
+// 체인은 collect-news-candidates.js의 실제 순서를 그대로 쓴다:
+// dedupe -> partitionByCoverageEligibility -> withinLookback -> 관련성 필터 ->
+// candidateRankOrder -> collapseSeriesRepresentatives -> capPerSource.
+// url은 dedupe가 요구한다 — 실제 patchwork 후보는 항상 web_url을 갖고, url이 없으면 dedupe가
+// 빈 url 키 하나로 전부 접어 버려 이 fixture가 후보 1건으로 줄어든다.
+function patchworkSeriesItem(title, publishedAt, seriesId) {
+  return {
+    source_id: 'patchwork-libcamera-patches',
+    source: 'patchwork-libcamera-patches',
+    url: `https://patchwork.libcamera.org/patch/${encodeURIComponent(title)}/`,
+    title,
+    publishedAt,
+    seriesId,
+    relevanceScore: 50,
+    source_priority: 'high',
+    source_reliability: 'project-official'
+  };
+}
+
+function patchworkCapPipeline(pool, now) {
+  const coverage = coverageForAnchorDate(now.toISOString().slice(0, 10));
+  const { currentCoveragePool } = partitionByCoverageEligibility(dedupe(pool), coverage, now, 35);
+  const ranked = currentCoveragePool
+    .filter(item => withinLookback(item, now, 35))
+    .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high')
+    .sort(candidateRankOrder(now, coverage));
+  return capPerSource(collapseSeriesRepresentatives(ranked), MAX_CANDIDATES_PER_SOURCE);
+}
+
+test('widening the patchwork window fills the per-source cap with distinct series (#970)', () => {
+  const now = new Date('2026-08-31T23:59:59.999Z');
+  const burstDay = [
+    ...Array.from({ length: 47 }, (_, i) =>
+      patchworkSeriesItem(`software_isp fragment ${i}`, '2026-08-24T09:10:00Z', 6138)),
+    ...Array.from({ length: 3 }, (_, i) =>
+      patchworkSeriesItem(`rkisp2 tuning fragment ${i}`, '2026-08-24T09:12:00Z', 6137))
+  ];
+  const coverageWeek = [6128, 6129, 6130, 6133, 6134, 6135].map((seriesId, i) =>
+    patchworkSeriesItem(`coverage week series ${seriesId}`, `2026-08-${25 + i}T10:00:00Z`, seriesId));
+
+  // 창이 한 페이지에 갇힌 상태(이슈 이전): 하루치 버스트 안에 시리즈가 둘뿐이라 8칸 중 2칸만 찬다.
+  const before = patchworkCapPipeline(burstDay, now);
+  assert.equal(before.length, 2, 'a single-day burst only has two series to offer the eight-slot cap');
+
+  // 창을 커버리지 주까지 넓힌 상태: 8칸이 다 차고, 47조각 시리즈는 여전히 한 칸만 쓴다.
+  // 아래 단언들이 MAX_CANDIDATES_PER_SOURCE를 읽으므로 상한 값 자체를 여기서 못박는다 —
+  // 그러지 않으면 상한이 4로 줄어도 "8칸이 다 찬다"는 주장이 그대로 통과한다.
+  assert.equal(MAX_CANDIDATES_PER_SOURCE, 8, "per-source cap is eight; this test reads it, so lock the value");
+  const after = patchworkCapPipeline([...burstDay, ...coverageWeek], now);
+  assert.equal(after.length, MAX_CANDIDATES_PER_SOURCE, 'the widened window fills every per-source slot');
+  assert.equal(new Set(after.map(c => c.seriesId)).size, MAX_CANDIDATES_PER_SOURCE,
+    'every slot goes to a different series');
+  assert.equal(after.filter(c => c.seriesId === 6138).length, 1,
+    'the 47-fragment series still competes as one representative, so widening does not let it eat the cap');
 });

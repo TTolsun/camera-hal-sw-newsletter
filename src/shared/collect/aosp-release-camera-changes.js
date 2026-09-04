@@ -1,7 +1,8 @@
 // 공개 AOSP는 2025년 3월 이후 main 브랜치로 개발이 흘러들지 않고, 릴리스 태그(android-N.M.P_rK)로
 // 몇 달에 한 번 통째로 공개된다(2026-08-06 실측: hardware/interfaces·frameworks/av의 공개 main 최신
-// 커밋이 2025-03-26에서 멈춤). 그래서 Gerrit의 진행 중 변경을 좇는 방식으로는 Camera HAL 신호가 잡히지
-// 않고, 드롭에 들어온 camera 변경을 릴리스 단위로 읽어야 한다.
+// 커밋이 2025-03-26에서 멈춤). 그래서 확정된 Camera HAL 변경은 드롭에 들어온 camera 변경을 릴리스
+// 단위로 읽어야 잡힌다. 제안·리뷰 단계는 gerrit-camera-changes.js가 따로 본다(#1033) - 그쪽 층에는
+// 신호가 있고, 여기서 안 잡히는 것은 공개 Gerrit에 merged camera 변경이 없기 때문이다.
 //
 // 날짜는 커밋 시각을 쓰지 않는다. 같은 릴리스라도 저장소별 태그 커밋 시각이 흩어져 있고
 // (android-17.0.0_r1 기준 frameworks/av 2026-05-14, hardware/google/camera 2026-03-28) 어느 쪽도
@@ -9,6 +10,8 @@
 // 쓴다. 저장소와 무관하게 하나이고 출처가 스스로 라벨한 값이다. 표에 ISO 날짜가 없는 행은 날짜를
 // 추정하지 않고 건너뛴다(빌드 ID의 6자리를 날짜로 디코딩하면 773행 중 400행에서 보안 패치 레벨과
 // 어긋난다 — 실측).
+const { parseGoogleJson } = require('./google-json');
+
 const GITILES_ORIGIN = 'https://android.googlesource.com';
 
 // Camera HAL 뉴스레터가 읽을 가치가 있는 AOSP 저장소 경로. 후보 제목에는 이 경로를 그대로 쓴다 —
@@ -40,7 +43,6 @@ const RELEASE_TAG_PATTERN = /android-\d+\.\d+\.\d+_r\d+/;
 const ISO_DATE_PATTERN = /\b(\d{4}-\d{2}-\d{2})\b/;
 
 const CAMERA_PATH_PATTERN = /(^|\/)camera/i;
-const GITILES_JSON_PREFIX_PATTERN = /^\)\]\}'\s*/;
 
 function releaseOrder(tag) {
   const match = String(tag).match(/^android-(\d+)\.(\d+)\.(\d+)_r(\d+)$/);
@@ -116,14 +118,6 @@ function isWithinCollectionWindow(releaseDate, now, lookbackDays) {
   return ageMs >= 0 && ageMs <= lookbackDays * DAY_MS;
 }
 
-function parseGitilesJson(text) {
-  try {
-    return JSON.parse(String(text).replace(GITILES_JSON_PREFIX_PATTERN, ''));
-  } catch {
-    return null;
-  }
-}
-
 // rename/delete 커밋은 new_path와 old_path가 다르다(삭제는 new_path가 실제 경로가 아니다).
 // 둘 중 하나라도 camera를 가리키면 카메라를 건드린 것으로 본다.
 function touchesCamera(commit) {
@@ -134,6 +128,20 @@ function touchesCamera(commit) {
 
 function commitSubject(commit) {
   return String((commit && commit.message) || '').split('\n')[0].replace(/\s+/g, ' ').trim();
+}
+
+// AOSP 커밋 메시지의 Change-Id trailer. Gerrit 후보(#1033)와 같은 변경인지 판단할 유일한 공통
+// 식별자다 - 드롭 후보는 저장소당 집계 1건이라 제목·URL로는 절대 겹치지 않는다.
+//
+// 이 매칭이 항상 성사되지는 않는다. 공개 드롭에는 내부 Gerrit(googleplex-android-review)에서
+// cherry-pick된 merge 커밋이 섞여 있고, 그런 커밋의 Change-Id는 공개 Gerrit 변경의 것과 다르다
+// (2026-09-02 실측: android-16.0.0_r4..android-17.0.0_r1의 최신 커밋이 그런 merge였다). 그래서
+// 이건 "겹치면 반드시 잡는" 보증이 아니라 겹쳤을 때 중복 기사를 막는 안전망이다.
+const CHANGE_ID_PATTERN = /^\s*Change-Id:\s*(I[0-9a-f]{40})\s*$/im;
+
+function commitChangeId(commit) {
+  const match = String((commit && commit.message) || '').match(CHANGE_ID_PATTERN);
+  return match ? match[1] : '';
 }
 
 function rangeLogUrl(repositoryPath, previousTag, tag, pageToken) {
@@ -159,7 +167,7 @@ async function collectCameraCommits(repositoryPath, previousTag, tag, fetchTextI
     const url = rangeLogUrl(repositoryPath, previousTag, tag, pageToken);
     let payload;
     try {
-      payload = parseGitilesJson(await fetchTextImpl(url, GITILES_FETCH_TIMEOUT_MS));
+      payload = parseGoogleJson(await fetchTextImpl(url, GITILES_FETCH_TIMEOUT_MS));
     } catch (error) {
       console.warn(`aosp-release-camera-changes: ${url} fetch failed (${error.message}); skipping ${repositoryPath}.`);
       return { cameraCommits, scannedCommits, truncated: true };
@@ -222,7 +230,11 @@ function buildCandidate(repositoryPath, release, cameraCommits, scannedCommits, 
     behavior_change: summary,
     relevanceBucketHint: 'direct_aosp_camera',
     camera_path_commit_count: cameraCommits.length,
-    camera_path_commit_count_is_lower_bound: truncated
+    camera_path_commit_count_is_lower_bound: truncated,
+    // 이 드롭이 실어 온 camera 커밋의 Change-Id와 commit SHA. 같은 변경이 Gerrit 후보로도 잡혔다면
+    // 선정 단계가 이 목록으로 알아채고 하나로 접는다(#1033).
+    covered_gerrit_change_ids: cameraCommits.map(commitChangeId).filter(Boolean),
+    covered_commit_shas: cameraCommits.map(commit => String((commit && commit.commit) || '')).filter(Boolean)
   };
 }
 

@@ -10,8 +10,39 @@
 // 넣지 않는다 — technicalDepth는 제목+summary를 읽으므로, summary가 키워드를 주입하면 docs/build
 // 같은 churn 패치까지 technicalDepth 하한을 넘어 main 슬롯 승급 대상이 되어버린다. summary는
 // 중립으로 두고 실제 patch 제목만 technicalDepth를 결정하게 한다.
+//
+// 목록은 한 응답으로 끝나지 않는다(#970). 등록부 URL 하나만 읽으면 이 소스가 실제로 보는 창은
+// 파이프라인 lookback(35일)이 아니라 "응답 한 페이지가 덮는 시간"이고, 그 폭은 제출량에 반비례한다.
+// 2026-08-24 실측: 최신 50건이 09:06:35~09:14:06 = 7.5분만 덮었고 같은 커버리지 주(08-17~08-23)의
+// patch 171건이 통째로 창 밖이었다. 조용한 주에는 같은 50건이 5일을 덮어 문제가 드러나지 않고,
+// 바쁜 주에만 신호를 잃는다. 그래서 lookback 경계에 닿을 때까지 page를 따라간다.
 
 const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const DAY_MS = 24 * 60 * 60 * 1000;
+// 수집 창을 못 받았을 때의 기본값(runtime-config의 lookbackDays 기본과 같다).
+const DEFAULT_LOOKBACK_DAYS = 35;
+
+// lookback 창 하나에 들어올 수 있는 patch 수의 실측 상한. 2024-09-24~2026-08-31의 patch
+// 6000건(23.2개월)을 받아 35일 롤링으로 세면 최댓값이 603건(2026-08-24T09:14:06 종료)이고,
+// 가장 바쁜 한 주가 2026-W34의 171건이다. 상위 8개 창이 전부 2026-08에 몰려 있어 지금이 관측
+// 구간의 피크이고, 반기 제출량(2024H2 950, 2025H1 1099, 2025H2 1720, 2026H1 1352)에도 이 값을
+// 곧 넘길 폭증 추세는 없다.
+const BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES = 603;
+
+// 한 실행에서 읽을 최대 페이지 수. 등록부 URL의 per_page=250은 서버 상한이다(2026-08-31 실측:
+// per_page=500/1000/2000이 모두 250건·같은 바이트로 응답). 그래서 per_page만 키워서는 35일을
+// 못 덮고 page를 따라가야 한다. 4 x 250 = 1000건이면 위 실측 상한 603건을 덮고, 최대 주(171건)가
+// 5주 내리 이어진 855건도 덮는다.
+//
+// 이 값이 충분한 유일한 이유가 등록부의 per_page이므로 둘은 한 쌍이다. 등록부만 per_page=50으로
+// 되돌리면 4페이지 = 200건 < 603건이 되어 이슈 이전 결함으로 되돌아간다. 그 결합은
+// patchwork-libcamera-patches.test.js가 등록부 per_page x MAX_PATCH_PAGES >=
+// BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES로 잠근다.
+const MAX_PATCH_PAGES = 4;
+
+// 페이지 하나가 350KB 안팎이고 실측 응답이 2.3~4.7초다. 수집 루프의 공용 fetch는 기본 타임아웃이
+// 없어서, 지연된 페이지 하나가 수집 실행 전체를 멈춰 세울 수 있다(aosp-release-camera-changes와 같은 이유).
+const PATCH_PAGE_FETCH_TIMEOUT_MS = 10000;
 
 // patchwork patch 객체의 series id. 한 시리즈의 조각들이 같은 series id를 공유하므로, 이 id를 후보에
 // 실어 선정 단계 dedup(article-groups seriesKey)이 시리즈를 하나의 대표 기사로 collapse하게 한다(#795).
@@ -51,22 +82,168 @@ function patchCandidate(patch, source) {
   };
 }
 
-/**
- * patchwork REST API의 patch 목록 JSON 텍스트를 받아 dated 후보 배열을 반환한다.
- * 최상위가 JSON 배열이 아니거나 파싱에 실패하면(에러 객체 응답 포함) 빈 배열을 반환하고,
- * date나 web_url이 없는 patch는 건너뛴다(graceful).
- */
-function resolvePatchworkLibcameraPatchItems(text = '', source = {}) {
+// 목록 JSON 한 페이지를 patch 배열로 읽는다. 최상위가 배열이 아니거나 파싱이 실패하면
+// (에러 객체 응답 포함) null을 돌려 "이 페이지는 못 읽었다"와 "빈 페이지"를 구분한다.
+function parsePatchPage(text) {
   let patches;
   try {
     patches = JSON.parse(text);
   } catch {
-    return [];
+    return null;
   }
-  if (!Array.isArray(patches)) return [];
-  return patches.map(patch => patchCandidate(patch, source)).filter(Boolean);
+  return Array.isArray(patches) ? patches : null;
+}
+
+// patchwork는 타임존 없는 ISO(2026-08-31T13:23:12)로 준다. 오프셋이나 Z가 붙어 오는 날에도
+// 그대로 읽도록, 이미 타임존이 있으면 Z를 덧붙이지 않는다. 붙여 버리면 모든 날짜가 NaN이 되어
+// 아래 pageCrossesLookback이 첫 페이지에서 멈추고, 이슈 이전 동작으로 조용히 되돌아간다.
+const TIMEZONE_SUFFIX_PATTERN = /(Z|[+-]\d{2}:?\d{2})$/i;
+
+function patchTime(patch) {
+  const raw = String((patch && patch.date) || '').trim();
+  if (!raw) return NaN;
+  return Date.parse(TIMEZONE_SUFFIX_PATTERN.test(raw) ? raw : `${raw}Z`);
+}
+
+function noop() {}
+
+/**
+ * 이 페이지가 lookback 경계를 넘었는가, 그리고 날짜를 하나도 못 읽었는가.
+ *
+ * 경계는 가장 오래된 patch로 판단한다 — 페이지 안에 창 안 항목과 창 밖 항목이 섞여 있으면 경계는
+ * 이미 이 페이지 안이므로 더 팔 이유가 없다.
+ *
+ * 빈 페이지(목록 끝)는 넘은 것으로 본다. 항목은 있는데 읽히는 날짜가 하나도 없는 경우도 창 안이라고
+ * 말할 근거가 없어 멈추지만, 그건 정상 종료가 아니라 날짜 형식 드리프트다 — 그래서 두 상태를 따로
+ * 돌려준다.
+ *
+ * 판정만 하고 알리지는 않는다. 같은 사실을 console.warn과 진단 이벤트 두 곳에 내야 하는데, 술어가
+ * 스스로 알리면 호출부는 "이 페이지에서 무슨 일이 있었나"를 반환값으로 알 수 없다.
+ */
+function pageWindowState(patches, cutoffMs) {
+  const times = patches.map(patchTime).filter(Number.isFinite);
+  if (times.length === 0) {
+    return { crossesLookback: true, datesUnreadable: patches.length > 0 };
+  }
+  return { crossesLookback: Math.min(...times) <= cutoffMs, datesUnreadable: false };
+}
+
+// 다음 페이지 URL은 등록부의 sourceUrl에서 파생한다. origin·경로·질의(order, per_page, format)를
+// 여기 적어 두면 등록부를 바꿔도 따라오지 않아 두 정본이 생긴다.
+function patchPageUrl(sourceUrl, page) {
+  try {
+    const url = new URL(String(sourceUrl || ''));
+    url.searchParams.set('page', String(page));
+    return url.toString();
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * patchwork REST API의 patch 목록 JSON 텍스트를 받아 dated 후보 배열을 반환한다.
+ * 첫 페이지는 collector가 이미 받아 둔 `text`를 쓰고, 그 뒤 페이지만 `fetchTextImpl`로 가져온다.
+ *
+ * 페이지 순회는 두 조건 중 먼저 걸리는 쪽에서 멈춘다.
+ *  1. 방금 읽은 페이지의 가장 오래된 patch가 lookback 창 밖 — 더 파도 이번 창의 후보는 없다.
+ *  2. MAX_PATCH_PAGES 도달 — 창 안 제출이 끝없이 이어져도 한 실행의 요청 수를 묶는다.
+ * 빈 페이지(목록 끝)와 페이지 조회 실패도 순회를 끝내되, 이미 모은 후보는 그대로 돌려준다.
+ *
+ * 상한(2)으로 끝났는데 마지막 페이지가 아직 창 안이면 이번 창을 다 읽지 못한 것이다. 그 상태를
+ * 조용히 두면 산출물에서 "이번 주 신호 적음"과 완전히 같은 모양이 되므로(#970이 지목한 바로 그
+ * 서명) 다른 종료 경로와 같은 자리에 알린다.
+ *
+ * 알리는 곳이 둘인 이유(#1059): console.warn은 Actions 로그에만 남고 그 로그는 커밋되지 않는다.
+ * 그래서 절단 사실을 onDiagnostic 이벤트로도 낸다 — 그 이벤트는 dated_article_collection.events[]에
+ * 원문 그대로 실려 커밋되는 후보 산출물까지 간다. 사람이 읽는 소스별 표에는 여전히 행이 안 생긴다
+ * (그 표는 article_cap_counts_by_source와 received_bytes_by_source의 합집합인데 patchwork는
+ * fetchClient가 null이라 두 맵 어디에도 안 들어간다). 표 행을 만들려면 patchwork 바이트 계정이
+ * 선행돼야 하고 그건 별건이다 — 이벤트 공시는 그것을 기다리지 않는다.
+ *
+ * 형제 리졸버(aosp-release-camera-changes)는 저장소당 집계 후보 하나에 truncated를 실어 본문에
+ * "at least N"으로 적지만, 여기 후보는 patch 1건마다 하나라 하한임을 적을 집계 본문이 없다
+ * (summary에 문구를 주입하면 위의 "키워드 미주입" 결정을 뒤집는다).
+ *
+ * `fetchTextImpl`이 없으면 첫 페이지만 파싱한다(이슈 이전 동작). date나 web_url이 없는 patch는
+ * 건너뛴다(graceful). 창 밖 후보를 여기서 버리지는 않는다 — 수집 풀 필터(withinLookback)가
+ * 창의 정본이고, 리졸버는 그 창을 "어디까지 읽을지"에만 쓴다.
+ */
+async function resolvePatchworkLibcameraPatchItems(text = '', source = {}, options = {}) {
+  let patches = parsePatchPage(text);
+  if (!patches) return [];
+
+  const candidates = patches.map(patch => patchCandidate(patch, source)).filter(Boolean);
+
+  const fetchTextImpl = options.fetchTextImpl;
+  if (typeof fetchTextImpl !== 'function') return candidates;
+  const emit = typeof options.onDiagnostic === 'function' ? options.onDiagnostic : noop;
+  const now = options.now instanceof Date ? options.now : new Date();
+  const lookbackDays = Number.isFinite(options.lookbackDays) && options.lookbackDays > 0
+    ? options.lookbackDays
+    : DEFAULT_LOOKBACK_DAYS;
+  const cutoffMs = now.getTime() - lookbackDays * DAY_MS;
+
+  // source_id를 싣는 이유: 이 소스는 사람이 읽는 소스별 표에 행이 없다(위 주석 참고). url만으로도
+  // 사람은 어느 소스인지 읽어내지만, 어느 소스가 몇 번 잘렸는지 기계가 세려면 id가 있어야 한다.
+  const announceTruncation = (url, detail) => emit({
+    kind: 'collection_window_truncated',
+    url,
+    receivedBytes: 0,
+    limitedBy: '',
+    source_id: String(source.id || ''),
+    lookback_days: lookbackDays,
+    collected_count: candidates.length,
+    detail
+  });
+
+  // 페이지 하나의 판정과 신고를 한 자리에 묶는다. 날짜를 못 읽은 페이지는 루프 안에서도 밖에서도
+  // 같은 문구로 알려야 해서, 두 자리에 같은 코드를 두 번 적지 않는다.
+  const crossesLookbackAfterAnnouncing = (page, url) => {
+    const state = pageWindowState(patches, cutoffMs);
+    if (state.datesUnreadable) {
+      console.warn(`patchwork-libcamera-patches: page ${page} carries ${patches.length} patch(es) but no parseable date; `
+        + 'stopping without reading the lookback window.');
+      announceTruncation(url, `page ${page} carries ${patches.length} patch(es) but no parseable date; `
+        + `the ${lookbackDays}-day window was not read to its edge`);
+    }
+    return state.crossesLookback;
+  };
+
+  let pageUrl = String(source.sourceUrl || source.url || '');
+  for (let page = 1; page < MAX_PATCH_PAGES; page += 1) {
+    if (crossesLookbackAfterAnnouncing(page, pageUrl)) return candidates;
+    const url = patchPageUrl(source.sourceUrl || source.url, page + 1);
+    if (!url) return candidates;
+    try {
+      patches = parsePatchPage(await fetchTextImpl(url, PATCH_PAGE_FETCH_TIMEOUT_MS));
+    } catch (error) {
+      console.warn(`patchwork-libcamera-patches: ${url} fetch failed (${error.message}); stopping at page ${page}.`);
+      announceTruncation(url, `page ${page + 1} fetch failed (${error.message}); `
+        + `the ${lookbackDays}-day window was not read to its edge`);
+      return candidates;
+    }
+    if (!patches) {
+      console.warn(`patchwork-libcamera-patches: ${url} did not return a patch array; stopping at page ${page}.`);
+      announceTruncation(url, `page ${page + 1} did not return a patch array; `
+        + `the ${lookbackDays}-day window was not read to its edge`);
+      return candidates;
+    }
+    pageUrl = url;
+    candidates.push(...patches.map(patch => patchCandidate(patch, source)).filter(Boolean));
+  }
+
+  // 상한까지 다 읽고 나왔다. 마지막 페이지가 아직 창 안이면 이번 창을 다 읽지 못한 것이다.
+  if (!crossesLookbackAfterAnnouncing(MAX_PATCH_PAGES, pageUrl)) {
+    console.warn(`patchwork-libcamera-patches: stopped at the ${MAX_PATCH_PAGES}-page ceiling with page ${MAX_PATCH_PAGES} still inside `
+      + `the ${lookbackDays}-day window; the ${candidates.length} collected patch(es) are a lower bound, not the whole window.`);
+    announceTruncation(pageUrl, `stopped at the ${MAX_PATCH_PAGES}-page ceiling with page ${MAX_PATCH_PAGES} still inside `
+      + `the ${lookbackDays}-day window; the ${candidates.length} collected patch(es) are a lower bound, not the whole window`);
+  }
+  return candidates;
 }
 
 module.exports = {
+  BUSIEST_MEASURED_LOOKBACK_WINDOW_PATCHES,
+  MAX_PATCH_PAGES,
   resolvePatchworkLibcameraPatchItems
 };

@@ -8,6 +8,7 @@ const { resolveLibcameraReleaseAnnouncementItems } = require('./libcamera-releas
 const { resolveRaspberryPiLibcameraReleaseItems } = require('./raspberrypi-libcamera-releases');
 const { resolvePatchworkLibcameraPatchItems } = require('./patchwork-libcamera-patches');
 const { resolveAospReleaseCameraChangeItems } = require('./aosp-release-camera-changes');
+const { resolveGerritCameraChangeItems } = require('./gerrit-camera-changes');
 const { resolveDatedArticleIndexItems } = require('./dated-article-index-resolver');
 
 // 각 리졸버의 첫 인자가 다르다(security-bulletin은 indexItems, libcamera는 text/indexHtml,
@@ -36,13 +37,30 @@ const FOLLOWED_SOURCE_RESOLVERS = [
   },
   {
     id: 'patchwork-libcamera-patches',
-    resolve: ({ text, source }) =>
-      resolvePatchworkLibcameraPatchItems(text, source)
+    // 목록 API는 한 응답이 lookback 창을 못 덮는다(#970). 창 경계까지 page를 따라가야 하므로
+    // fetch impl과 수집 창을 함께 넘긴다(aosp-release-camera-changes와 같은 배선).
+    // onDiagnostic까지 넘기는 이유(#1059): #970이 세운 페이지 상한에 걸려 창을 다 못 읽은 실행이
+    // console.warn으로만 남으면 커밋된 산출물에서 "이번 주 신호 없음"과 구분되지 않는다.
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays, onDiagnostic }) =>
+      resolvePatchworkLibcameraPatchItems(text, source, { fetchTextImpl, now, lookbackDays, onDiagnostic })
   },
   {
     id: 'aosp-release-camera-changes',
     resolve: ({ text, source, fetchTextImpl, now, lookbackDays }) =>
       resolveAospReleaseCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays })
+  },
+  {
+    // AOSP와 ChromeOS는 Gerrit 호스트만 다르고 응답 계약이 같다. 감시 대상(프로젝트·경로·상태)은
+    // 등록부의 sourceUrl 질의가 정하고, 리졸버는 호스트를 그 URL의 origin에서 파생한다 - 그래서
+    // 같은 리졸버를 두 항목이 공유한다.
+    id: 'aosp-gerrit-camera-changes',
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays, onDiagnostic }) =>
+      resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays, onDiagnostic })
+  },
+  {
+    id: 'chromeos-gerrit-camera-changes',
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays, onDiagnostic }) =>
+      resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays, onDiagnostic })
   },
   {
     id: 'claude-blog',
@@ -94,12 +112,33 @@ async function resolveFollowedSourceItems(source, { indexItems = [], text = '', 
 }
 
 /**
- * followed-resolver가 등록된 소스는 인덱스 페이지에 직접 후보가 없어 리졸버가 상세를 따라간다.
- * 그 큐레이션 추출이 비었다는 건 "이번 window에 신호 없음"이지, 인덱스 나비링크를 제너릭
- * 스크레이프하라는 뜻이 아니다. 그래서 이런 소스는 제너릭 parseRss/parseHtmlPage 폴백을 막는다.
+ * 제너릭 parseRss/parseHtmlPage 폴백을 막아야 하는 소스인지 판정한다. 두 부류가 있다.
+ *
+ * 1. followed-resolver가 등록된 소스. 인덱스 페이지에 직접 후보가 없어 리졸버가 상세를 따라간다.
+ *    그 큐레이션 추출이 비었다는 건 "이번 window에 신호 없음"이지, 인덱스 나비링크를 제너릭
+ *    스크레이프하라는 뜻이 아니다.
+ * 2. 설정상 참고 자료인 소스(`sourceRole=official_documentation_reference` 또는
+ *    `mainArticlePolicy=reference_only`). 소비자 쪽은 이미 이 둘을 main article에서 하드
+ *    제외한다 — collect-news-candidates.js의 `referenceIndex`가 `main_eligible=false`,
+ *    `reference_only=true`로 닫고, source-quality-classifier.js도 `reference_only` blocker를
+ *    붙인다. 그런데 생산자 쪽에서는 제너릭 폴백이 이런 소스의 인덱스 페이지 제목을 매주 후보
+ *    한 건으로 만들어 낸다. 그 후보는 날짜가 없어 늘 `finalSelectionEligibility=exclude`로
+ *    끝나고, 대신 진단(`parser_extraction_failure`, `KEEP_AND_FIX_PARSER`)을 상시로 켜서 진짜
+ *    파서 고장 신호를 묻는다. 그래서 생산자를 소비자 계약에 맞춘다(#880).
+ *
+ * 여기서 막는 건 폴백뿐이다. 그리고 registry role이 `official_documentation_reference`인 소스는
+ * 소스별 파서를 따로 두더라도 그 결과가 후보로 살아나지 않는다 — collect-news-candidates.js의
+ * `classifySelection`(`:577`)이 파서 결과와 무관하게 `finalSelectionEligibility='exclude'`,
+ * `isArticleCandidate=false`, `hasDatedEvidence=false`로 즉시 닫는다. 그 소스의 파서를 다시
+ * 살리려면 registry role도 함께 되돌려야 한다. 이 술어는 `mainArticlePolicy=reference_only`만
+ * 가진 소스도 막지만, 그쪽은 classifySelection의 role 분기를 타지 않는다 — 지금 registry의 참고
+ * 소스는 전부 두 표시를 다 갖고 있어 해당 소스가 없다.
  */
 function shouldSuppressGenericFallback(source) {
-  return followedSourceResolverIds().includes(source && source.id);
+  if (!source) return false;
+  if (followedSourceResolverIds().includes(source.id)) return true;
+  return source.sourceRole === 'official_documentation_reference' ||
+    source.mainArticlePolicy === 'reference_only';
 }
 
 module.exports = {

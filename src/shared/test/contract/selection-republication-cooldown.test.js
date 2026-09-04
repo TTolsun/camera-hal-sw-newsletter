@@ -677,6 +677,31 @@ test('every committed main-article record is dated inside the issue week that pu
 // 고정한다. 이 날짜 이후 발행된 main 기사는 지워도 창이 따라오지 않으므로 반드시 걸린다.
 const BACKFILL_WINDOW_START = '2026-07-27';
 
+test('the committed history declares the backfill window start as its coverage start', () => {
+  // 위 상수가 창의 정본이고, 이력 파일의 coverage 블록은 같은 사실을 선언한다. 둘이 갈라져도
+  // 위 검사는 통과한다 — 창은 상수에서 오기 때문이다. 그래서 선언 자체를 따로 잠근다.
+  // #1037이 정확히 그 상태였다: 선언은 2026-05-23인데 newsletter_article 레코드는 2026-07-27부터
+  // 있었고, 그 선언을 근거로 백필 범위를 판단하면 이미 덮였다고 착각한다.
+  // 상수를 파일에서 읽어오면 안 된다(위 주석 참고). 두 값을 비교만 한다.
+  assert.equal(committedExposureHistory().coverage.coverage_starts_at, BACKFILL_WINDOW_START);
+
+  // 반대 방향도 잠근다. 위 단언은 선언과 상수만 보므로, 창 시작보다 이른 newsletter_article
+  // 레코드가 들어와도 통과한다 — #1037과 같은 어긋남이 반대편으로 재발하는 자리다. 아래 검사는
+  // 창을 파일에서 파생시키는 것이 아니라(그건 위 주석이 금지한다) 파일이 상수 밖으로 나갔는지
+  // 대조만 하므로 그 금지와 충돌하지 않는다. 되돌리지 말 것.
+  // 정확 일치가 아니라 하한이다. 최솟값이 뒤로 밀리는 것은 계약 위반이 아니다 — 무기한 차단은
+  // catch-up 레인에만 걸리고 일반 레인은 21일 쿨다운뿐이라, 창 시작 주의 URL이 전부 나중 호에
+  // 다시 main으로 나가면 recordArticleExposure가 newsletter_article_date를 덮어써 최솟값이
+  // 늦어진다. 잠그려는 것은 창보다 이른 레코드가 들어오는 한 방향뿐이다.
+  const earliestRecordDate = committedMainArticleRecords()
+    .map(item => String(item.newsletter_article_date || ''))
+    .filter(Boolean)
+    .sort()[0];
+  assert.ok(earliestRecordDate >= BACKFILL_WINDOW_START,
+    `가장 이른 newsletter_article 레코드 ${earliestRecordDate}이(가) 창 시작 ` +
+    `${BACKFILL_WINDOW_START}보다 이르다 — 선언이 실제를 덜 덮고 있다`);
+});
+
 test('no published main article inside the backfill window is missing from the history', () => {
   // 날짜 검사만으로는 "레코드가 통째로 빠진" 실패를 못 잡는다. 그건 게이트를 무증상으로 죽이는
   // 나머지 절반이다(#963 자체가 발행 기록이 남지 않아 생긴 일이다).
@@ -688,4 +713,53 @@ test('no published main article inside the backfill window is missing from the h
     .map(([key, date]) => `${date} ${key}`)
     .sort();
   assert.deepEqual(missing, []);
+});
+
+// ── 쿨다운 레인의 시리즈 인지(#1036) ──────────────────────────────────────────
+// 수집 단계가 한 패치 시리즈를 대표 1건으로 줄이면서 그 대표 URL을 주마다 바꾼다
+// (#799 (source, seriesId) collapse · #822 커버레터 우선). 지난주 조각 URL로 발행한 시리즈가
+// 이번 주에 커버레터 URL로 들어오면 URL identity만 보는 쿨다운은 그대로 통과시킨다.
+// 아래 두 URL은 실제 데이터다 — 2026-08-31호가 08/12 조각을 발행했고, 같은 주 수집물에
+// 그 시리즈의 커버레터도 후보로 들어와 있었다.
+const YOGA_BOOK_PUBLISHED_PIECE_URL =
+  'https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com';
+const YOGA_BOOK_COVER_LETTER_URL =
+  'https://lore.kernel.org/linux-media/cover.1787872237.git.mauriziocasciano7@gmail.com/';
+
+test('같은 패치 시리즈의 다른 조각 URL은 쿨다운 안에 선정까지 오지 못한다', () => {
+  const seriesCandidates = [
+    policyPrimaryCandidate(0, {
+      title: '[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support',
+      url: YOGA_BOOK_COVER_LETTER_URL
+    }),
+    policyPrimaryCandidate(1, { title: DISTINCT_TITLES[1] }),
+    policyPrimaryCandidate(2, { title: DISTINCT_TITLES[2] })
+  ];
+
+  const baseline = buildShortlistReport(ISSUE_DATE, seriesCandidates, {});
+  assert.ok(urls(baseline.selected_articles).includes(YOGA_BOOK_COVER_LETTER_URL),
+    'baseline must select the series representative so the block below is meaningful');
+
+  // 기록은 실제 state 파일 모양 그대로 series_identity_key가 없다 — 읽기 시점 source_url 폴백이
+  // 없으면 이 레인은 기존 이력 전체에 대해 URL 비교로 되돌아간다.
+  const publishedPiece = publishedRecord(YOGA_BOOK_PUBLISHED_PIECE_URL, {
+    newsletterDate: '2026-05-03',
+    cooldownUntil: '2026-05-24'
+  });
+  assert.ok(!Object.prototype.hasOwnProperty.call(publishedPiece, 'series_identity_key'));
+
+  const report = buildShortlistReport(ISSUE_DATE, seriesCandidates, {
+    exposureHistory: historyWith([publishedPiece])
+  });
+
+  assert.ok(!urls(report.selected_articles).includes(YOGA_BOOK_COVER_LETTER_URL));
+  assert.ok(!urls(report.reserve_candidates).includes(YOGA_BOOK_COVER_LETTER_URL));
+  assert.ok(!urls(report.shortlisted_candidates).includes(YOGA_BOOK_COVER_LETTER_URL));
+
+  const excludedMatch = report.excluded_candidates.find(candidate => candidate.url === YOGA_BOOK_COVER_LETTER_URL);
+  assert.ok(excludedMatch, 'the same-series representative must be reported as excluded with a reason');
+  assert.ok(excludedMatch.exclusion_reasons.some(reason => /republication cooldown/.test(reason)));
+
+  // 나머지 후보는 그대로 남아야 한다. 시리즈 대조가 비시리즈 후보까지 걷어가면 편성이 비어 버린다.
+  assert.equal(report.selected_article_count, 2);
 });

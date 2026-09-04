@@ -15,6 +15,7 @@ const {
   writeManualCandidateArtifacts
 } = require('../common/candidate-artifacts');
 const { parseManualSourceUrls } = require('../collect/collection-intent');
+const { ensureArray } = require('../common/value-coercion');
 const { readRuntimeConfig, resolveRunMode } = require('../common/runtime-config');
 const {
   displayDate,
@@ -64,7 +65,10 @@ const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,
   loreSeriesKey,
-  seriesPatchNumber
+  seriesPatchNumber,
+  seriesRerollVersion,
+  seriesSubjectKey,
+  titleKey
 } = require('../common/article-groups');
 const {
   analyzeLinkedEvidenceForCandidates,
@@ -180,7 +184,10 @@ const FALLBACK_INELIGIBLE_SOURCE_KINDS = new Set(['documentation_page', 'rolling
 const ITEM_LEVEL_SOURCE_KINDS = new Set(['rss_item', 'release_note_item', 'blog_post_item']);
 const VERSION_OR_RELEASE_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|Android\s+CLI\s+\d+(?:\.\d+){0,2}|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|Media3\s+\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|v?\d+\.\d+\.\d+(?:[-\w.]*)?|release notes?|security bulletin|stable\s+\d+(?:\.\d+)*)\b/i;
 const API_OR_COMPONENT_PATTERN = /\b(?:CameraX|androidx\.camera|Camera2|Camera HAL|AOSP Camera|CDD|CTS|VTS|Camera ITS|Android framework|Android Security Bulletin|MediaCodec|Media3|MediaRecorder|MediaStore|Photo\s+Picker|SurfaceView|TextureView|WebRTC|A\/V\s+Sync|AV\s+sync|Android Studio|Android CLI|Google AI Studio|Gemini in Android Studio|Android Gradle Plugin|AGP|Gradle|libcamera|V4L2|media controller|image sensor|ISP|MIPI\s*CSI-?2|DMA-?BUF|SoC|CPU|GPU|NPU|DSP|DVFS|EAS|LLVM|Clang|GCC|NDK|JNI|SDK|API)\b/i;
-const BEHAVIOR_CHANGE_PATTERN = /\b(?:add(?:ed|s)?|change(?:d|s)?|fix(?:ed|es)?|remove(?:d|s)?|deprecat(?:ed|es)|support(?:ed|s)?|update(?:d|s)?|improve(?:d|s|ment)?|migrat(?:ed|es|ion)|accelerat(?:e|ed|es|ing)|build(?:s|ing)?|test(?:s|ing)?|debug(?:s|ging)?|profil(?:e|ed|es|ing)|stable|security|vulnerability|CVE|bulletin|release(?:d|s)?|compatibility|requirement|API|behavior)\b/i;
+// #976: revert는 커널·libcamera에서 흔한 변경 형태다. 이 어휘가 없으면 실제 동작 변경을 서술한
+// 되돌림 릴리스가 근거 미달로 떨어지고, 아무 사실도 말하지 않는 템플릿 문장이 `release` 한 단어로
+// 대신 통과하는 역전이 생긴다.
+const BEHAVIOR_CHANGE_PATTERN = /\b(?:add(?:ed|s)?|change(?:d|s)?|fix(?:ed|es)?|remove(?:d|s)?|revert(?:ed|s)?|deprecat(?:ed|es)|support(?:ed|s)?|update(?:d|s)?|improve(?:d|s|ment)?|migrat(?:ed|es|ion)|accelerat(?:e|ed|es|ing)|build(?:s|ing)?|test(?:s|ing)?|debug(?:s|ging)?|profil(?:e|ed|es|ing)|stable|security|vulnerability|CVE|bulletin|release(?:d|s)?|compatibility|requirement|API|behavior)\b/i;
 
 let sectionMap = { ...DEFAULT_SECTION_MAP };
 let activeSourcesPath = legacySourcesPath;
@@ -1102,6 +1109,18 @@ function normalizeCandidate(raw) {
     // 사라져 "제목이 아니라 메타데이터로 옮겼다"는 말이 산출물에서 거짓이 된다.
     camera_path_commit_count: raw.camera_path_commit_count ?? null,
     camera_path_commit_count_is_lower_bound: raw.camera_path_commit_count_is_lower_bound ?? null,
+    // Gerrit 변경의 정체성(#1033). Change-Id는 patchset을 갱신해도, 리베이스해도 그대로인 유일한
+    // 식별자이고 commit SHA는 그 시점의 리비전이다. 둘 다 whitelist에 없으면 candidates.json에서
+    // 사라져, 릴리스 드롭이 같은 변경을 실어 왔는지 선정 단계가 판단할 근거를 잃는다.
+    gerrit_change_id: raw.gerrit_change_id || '',
+    gerrit_change_number: raw.gerrit_change_number ?? null,
+    gerrit_change_status: raw.gerrit_change_status || '',
+    gerrit_commit_sha: raw.gerrit_commit_sha || '',
+    gerrit_effective_date_field: raw.gerrit_effective_date_field || '',
+    // 릴리스 드롭 후보가 실어 오는 Change-Id·commit SHA 목록. Gerrit 후보와 같은 변경인지 여기서만
+    // 알 수 있다(드롭 후보는 저장소당 집계 1건이라 제목·URL로는 겹치지 않는다).
+    covered_gerrit_change_ids: ensureArray(raw.covered_gerrit_change_ids),
+    covered_commit_shas: ensureArray(raw.covered_commit_shas),
     parentTitle: raw.parentTitle || raw.parent_title || '',
     parent_title: raw.parentTitle || raw.parent_title || '',
     parentCanonicalUrl: canonicalContentUrl(raw.parentCanonicalUrl || raw.parent_canonical_url || parentUrl || ''),
@@ -1407,14 +1426,6 @@ function writeNotYetEligibleOverflowIfNeeded(rootDir, capResult) {
   writeJson(path.join(rootDir, NOT_YET_ELIGIBLE_OVERFLOW_REL_PATH), capResult.full);
 }
 
-function titleKey(title) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9가-힣]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 function urlDedupeKey(value) {
   const raw = String(value || '').trim();
   if (!raw) return '';
@@ -1471,20 +1482,8 @@ function collapseSeriesRepresentatives(candidates) {
 // first-seen 슬롯을 유지한다(위 collapse와 같은 원칙). 제목을 고쳐 재제출한 시리즈는
 // 의도적으로 병합하지 않는다 — 퍼지 매칭의 오병합 위험이 슬롯 중복보다 나쁘다(실측된
 // 한계 사례: Tegra VI RFC v2가 subject에 "tegra:" prefix를 추가해 미병합).
-const SERIES_TITLE_BRACKET_PREFIX = /^\s*(?:\[[^\]]*\]\s*)+/;
-
-function seriesSubjectKey(item = {}) {
-  return titleKey(String(item.title || '').replace(SERIES_TITLE_BRACKET_PREFIX, ''));
-}
-
-// 버전은 브래킷 접두부 안에서만 읽는다 — 제목 본문의 "IPA format v3" 같은 표기를
-// re-roll 버전으로 오인하면 안 된다. 접두부가 없거나 v 토큰이 없으면 첫 버전(1)이다.
-function seriesRerollVersion(item = {}) {
-  const prefix = String(item.title || '').match(SERIES_TITLE_BRACKET_PREFIX);
-  if (!prefix) return 1;
-  const version = prefix[0].match(/\bv(\d+)\b/i);
-  return version ? Number(version[1]) : 1;
-}
+// 브래킷 접두부 파싱(seriesSubjectKey·seriesRerollVersion)은 article-groups가 정본이다.
+// 재게재 게이트가 같은 재제출 축을 봐야 하므로 사본을 두지 않는다(#1036).
 
 // re-roll 병합의 대표 선택: #822가 세운 커버레터 우선(낮은 patch 번호 = 시리즈 개요를 담아
 // capsule/선정 입력 품질이 가장 좋다)을 버전 경계 너머로도 유지한다 — patch 번호가 더 낮은

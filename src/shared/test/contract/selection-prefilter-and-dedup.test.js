@@ -491,3 +491,81 @@ test('undated watch and reference candidates remain excluded from final selectio
   assert.ok(report.excluded_candidates.some(item => item.title === 'Undated rolling Camera documentation'));
   assert.ok(report.excluded_candidates.some(item => item.title === 'Reference-only Camera background'));
 });
+
+// #1033: Gerrit 변경 후보와 AOSP 릴리스 드롭 후보는 제목도 URL도 절대 겹치지 않는다 — 드롭 후보는
+// 저장소당 집계 1건이기 때문이다. 같은 변경인지 아는 유일한 길이 Change-Id/commit SHA이고, 그 길이
+// 막히면 같은 변경이 제안 기사와 landed 기사로 두 번 나간다.
+function gerritChangeCandidate(overrides = {}) {
+  return candidate({
+    title: 'VirtualCamera: prevent integer underflow in outBufferSize - platform/frameworks/av',
+    url: 'https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184',
+    source: 'AOSP Gerrit (camera changes under review)',
+    published_date: '2026-05-04',
+    summary: 'Gerrit change 4228184 on platform/frameworks/av is merged (submitted 2026-05-04).',
+    api_or_component: 'platform/frameworks/av/services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc',
+    behavior_change: 'Merged change updates 1 camera source file(s) in platform/frameworks/av +10/-0.',
+    relevance_bucket: 'direct_aosp_camera',
+    editorial_priority: 1,
+    aosp_camera_directness: 5,
+    counts_as_primary_camera_topic: true,
+    gerrit_change_id: 'I41b74d543e8b8a7ad46a261d49ee311543e1ed8d',
+    gerrit_commit_sha: 'b'.repeat(40),
+    ...overrides
+  });
+}
+
+function releaseDropCandidate(overrides = {}) {
+  return candidate({
+    title: 'AOSP android-17.0.0_r1 source release - camera path changes in platform/frameworks/av',
+    url: 'https://android.googlesource.com/platform/frameworks/av/+log/android-16.0.0_r4..android-17.0.0_r1',
+    source: 'AOSP Release Source Drop (camera changes)',
+    published_date: '2026-05-05',
+    summary: 'AOSP source release android-17.0.0_r1 carries 51 commit(s) touching camera paths in platform/frameworks/av.',
+    api_or_component: 'AOSP platform/frameworks/av / camera',
+    behavior_change: 'The release drop changes camera paths in platform/frameworks/av.',
+    relevance_bucket: 'direct_aosp_camera',
+    editorial_priority: 1,
+    aosp_camera_directness: 5,
+    counts_as_primary_camera_topic: true,
+    covered_gerrit_change_ids: ['I41b74d543e8b8a7ad46a261d49ee311543e1ed8d'],
+    covered_commit_shas: ['c'.repeat(40)],
+    ...overrides
+  });
+}
+
+test('a release drop that carries the same Change-Id supersedes the Gerrit change candidate', () => {
+  const report = buildShortlistReport('2026-05-12', [gerritChangeCandidate(), releaseDropCandidate()], {
+    minArticles: 1,
+    maxArticles: 2
+  });
+
+  const selectedUrls = report.selected_articles.map(item => item.url);
+  assert.equal(selectedUrls.length, 1, 'landed 집계와 제안 후보가 두 기사로 나가면 안 된다');
+  assert.ok(selectedUrls[0].includes('android.googlesource.com'), '남는 쪽은 나머지 커밋까지 담은 릴리스 드롭이다');
+  assert.ok(report.excluded_candidates.some(item =>
+    item.url.includes('android-review.googlesource.com') &&
+    item.exclusion_reasons.includes('landed AOSP release drop covers the same Change-Id as the Gerrit change candidate')
+  ));
+});
+
+test('the same match works on commit SHA and survives the reverse arrival order', () => {
+  const gerrit = gerritChangeCandidate({ gerrit_change_id: '', gerrit_commit_sha: 'c'.repeat(40) });
+  const report = buildShortlistReport('2026-05-12', [releaseDropCandidate(), gerrit], {
+    minArticles: 1,
+    maxArticles: 2
+  });
+  assert.equal(report.selected_articles.length, 1);
+  assert.ok(report.selected_articles[0].url.includes('android.googlesource.com'));
+});
+
+test('an unrelated Gerrit change is not folded into the release drop', () => {
+  const unrelated = gerritChangeCandidate({
+    gerrit_change_id: 'I0000000000000000000000000000000000000000',
+    gerrit_commit_sha: 'd'.repeat(40)
+  });
+  const report = buildShortlistReport('2026-05-12', [unrelated, releaseDropCandidate()], {
+    minArticles: 1,
+    maxArticles: 2
+  });
+  assert.equal(report.selected_articles.length, 2);
+});

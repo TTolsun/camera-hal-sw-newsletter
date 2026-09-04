@@ -313,8 +313,21 @@ function conditionalEvidenceType(sourceUrlQuality, requiresCrossCheck, mainArtic
   return 'source_policy_review';
 }
 
-function reasonFor(blockers, allowed) {
+// blocker 없이 막히는 경우가 있다. main article 정책 자체가 watchlist_only/blocked/reference_only일
+// 때다 - 후보에 문제가 있어서가 아니라 정책이 그 소스를 main에서 빼 둔 것이다. 이때 blockers[0]로
+// 사유를 고르면 목록이 비어 있어 'unknown_source_quality'로 떨어지고, 리포트가 "출처 품질을 알 수
+// 없다"는 틀린 말을 하게 된다. 정책 이름을 그대로 사유로 돌려준다.
+const POLICY_ONLY_REASONS = Object.freeze({
+  watchlist_only: 'Source policy keeps this candidate on the watchlist and out of main articles.',
+  blocked: 'Source policy blocks this candidate from main articles.',
+  reference_only: 'Source is reference/background only and cannot be promoted as a dated main article.'
+});
+
+function reasonFor(blockers, allowed, mainArticlePolicy = '') {
   if (allowed) return 'Source policy allows this candidate with concrete source evidence.';
+  if (blockers.length === 0 && POLICY_ONLY_REASONS[mainArticlePolicy]) {
+    return POLICY_ONLY_REASONS[mainArticlePolicy];
+  }
   const first = blockers[0] || 'unknown_source_quality';
   const reasons = {
     missing_url: 'Candidate is missing a usable source URL.',
@@ -404,7 +417,7 @@ function classifySourceQuality(input = {}) {
     source_url_quality: sourceUrlQuality,
     source_quality_status: status,
     main_article_source_allowed: allowed,
-    main_article_source_allowed_reason: reasonFor(remainingBlockers, allowed),
+    main_article_source_allowed_reason: reasonFor(remainingBlockers, allowed, mainArticlePolicy),
     main_article_source_blockers: remainingBlockers,
     cross_check_status: crossCheckStatus,
     requires_cross_check: requiresCrossCheck,
@@ -480,7 +493,10 @@ function normalizeSourceQuality(value = {}) {
   if (!sourceQuality.main_article_source_allowed_reason) {
     sourceQuality.main_article_source_allowed_reason = reasonFor(
       sourceQuality.main_article_source_blockers,
-      sourceQuality.main_article_source_allowed
+      sourceQuality.main_article_source_allowed,
+      // 정책만으로 막힌 후보(blocker 없음)의 사유가 여기서도 정확해야 한다. 안 넘기면
+      // classifySourceQuality에서 고친 것과 같은 'unknown_source_quality' 오답이 이 경로로 되돌아온다.
+      lower(value.mainArticlePolicy || value.main_article_policy)
     );
   }
   return sourceQuality;

@@ -139,13 +139,18 @@ const FAIL_CLOSED_REASONS = [
 // 시작해도 collector 쪽 목록에 더하는 걸 잊으면 사건은 나는데 요약 집계는 조용히 0으로 남는다.
 // skipped_index_budget은 이 resolver가 아니라 collector(fetchSourceIndexText)가 내지만,
 // "닫힌 어휘"는 kind를 내는 모든 위치가 공유해야 하는 계약이라 여기 정본에 함께 둔다.
+// collection_window_truncated는 dated-article 리졸버가 아니라 목록을 페이지로 따라가는 수집기
+// (patchwork-libcamera-patches, gerrit-camera-changes)가 낸다. 그 수집기들은 자기 상한에 걸려
+// 수집 창을 끝까지 못 읽고 멈추는데, 그 상태는 산출물에서 "이번 주 신호 없음"과 같은 모양이다.
+// skipped_index_budget과 같은 이유로 여기 정본에 함께 둔다.
 const DATED_ARTICLE_DIAGNOSTIC_KINDS = [
   'skipped_index_budget',
   'skipped_article_budget',
   'article_fetch_failed',
   'recent_window_budget_exhausted',
   'fail_closed',
-  'index_collection_failed'
+  'index_collection_failed',
+  'collection_window_truncated'
 ];
 
 function noop() {}
