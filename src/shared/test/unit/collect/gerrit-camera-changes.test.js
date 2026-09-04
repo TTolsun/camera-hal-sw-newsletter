@@ -188,7 +188,9 @@ test('review signals read the label shortcuts and ignore the licensing bot', () 
   assert.deepEqual(reviewSignals({ 'Open-Source-Licensing': { recommended: { _account_id: 1 } }, 'Code-Review': {} }).positive, false);
   assert.equal(reviewSignals({ 'Code-Review': { approved: { _account_id: 1 } } }).positive, true);
   assert.equal(reviewSignals({ 'Code-Review': { recommended: { _account_id: 1 } } }).positive, true);
-  assert.equal(reviewSignals({ 'Verified': { approved: { _account_id: 1 } } }).positive, true);
+  // 자동 검증 label은 긍정 근거가 아니다 - 통과했다는 뜻이지 사람이 코드를 봤다는 뜻이 아니다(#1061).
+  assert.equal(reviewSignals({ 'Verified': { approved: { _account_id: 1 } } }).positive, false);
+  assert.equal(reviewSignals({ 'Presubmit-Verified': { approved: { _account_id: 1 } } }).positive, false);
   // 부정 표가 있으면 다른 label이 긍정이어도 긍정 근거로 보지 않는다.
   assert.equal(reviewSignals({ 'Code-Review': { rejected: { _account_id: 1 } }, 'Verified': { approved: { _account_id: 2 } } }).positive, false);
   assert.equal(reviewSignals({ 'Code-Review': {} }).phrase, 'No Code-Review or verification vote has been cast yet.');
@@ -203,6 +205,32 @@ test('a failed verification blocks promotion even when a reviewer recommended th
   assert.equal(signals.positive, false);
   assert.equal(signals.negative, true);
   assert.match(signals.phrase, /Presubmit-Verified carries a negative vote/);
+});
+
+test('an automated verification pass without a human review stays watchlist_only', async () => {
+  // presubmit 자동화가 붙이는 자리인 Verified 표 하나로 main 자격을 얻으면, 사람이 아무도 보지 않은
+  // 제안이 main 기사가 된다(#1061). 이 코드는 표를 던진 주체를 확인하지 않으므로, 사람 리뷰라고
+  // 말할 수 있는 것은 사람 리뷰 label인 Code-Review뿐이다.
+  const signals = reviewSignals({ 'Verified': { approved: { _account_id: 1 } } });
+  assert.equal(signals.positive, false);
+  assert.equal(signals.negative, false);
+  // 문구는 "리뷰가 붙었다"가 아니라 자동 검증만 통과했다고 말한다.
+  assert.match(signals.phrase, /Automated verification only: Verified passed/);
+  assert.doesNotMatch(signals.phrase, /^Reviewed:/);
+  // 문구에는 점수를 쓰지 않는다 - approved는 "그 label의 최대값"이라 프로젝트 설정에 달려 있다.
+  assert.doesNotMatch(signals.phrase, /[+-]\d/);
+
+  // 판정이 문구에서 그치지 않고 후보 강등까지 간다.
+  const { items } = await resolveOne(
+    listChange({ created: '2026-08-13 15:04:14.000000000', updated: '2026-08-13 15:05:36.000000000' }),
+    { labels: { 'Verified': { approved: { _account_id: 1 } } } }
+  );
+  assert.equal(items.length, 1);
+  assert.equal(items[0].mainArticlePolicy, 'watchlist_only');
+
+  const candidate = normalizeCandidate({ ...items[0], source: REGISTRY_SOURCE });
+  assert.equal(candidate.main_article_source_allowed, false);
+  assert.equal(candidate.source_quality_status, 'blocked');
 });
 
 test('an unreviewed NEW change is collected but blocked from main articles', async () => {
