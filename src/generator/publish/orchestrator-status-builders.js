@@ -231,9 +231,15 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // 관측이지 판정이 아니다.
     //
     // reason_code가 null인 자리는 세 갈래다: 결정론 편성 그대로 발행된 main, 제안조차 main이
-    // 아니었던 reserve, 그리고 lineup_role='shortlist_only' 후보 전부. 마지막 갈래는 등급과
-    // 무관하게 항상 null이다 — 승급 대상 집합 밖이라 재조정이 고려하지 않으며, 계획이
-    // main_article로 제안한 후보도 여기 들어온다. "아무 일도 없었다"로 읽지 말 것.
+    // 아니었던 reserve, 그리고 lineup_role='shortlist_only' 후보 중 승급되지 않은 것. 마지막
+    // 갈래는 재조정의 승급 대상 집합 밖이라 재조정이 고려하지 않으며, 계획이 main_article로
+    // 제안한 후보도 여기 들어온다. "아무 일도 없었다"로 읽지 말 것.
+    //
+    // #879: shortlist_only가 곧 미발행은 아니다. release-class catch-up 2차 pass는 정확히 이
+    // 집합에서 승급하며, 그 승급분은 lineup_role='shortlist_only'인 채로 reason_code에
+    // release_class_catch_up_promoted를 달고 최종 main으로 발행된다. 이 파일만 읽고 "이 후보가
+    // main으로 나갔나"를 판정할 때는 lineup_role만 보지 말고 coverage-reconciliation.js의
+    // isFinalMainRecord와 같은 규칙(2차 pass 사유 포함)을 쓸 것.
     //
     // 이 목록이 담지 '않는' 것: release-class catch-up pool 후보 중 reference 창에서만 온
     // 후보다. shortlist는 primary·fallback 창만 담으므로(newsroom-selection.js) 그 후보는 계획

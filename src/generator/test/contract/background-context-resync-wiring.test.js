@@ -89,13 +89,34 @@ test('the publish host clears the scored-candidate projection at the start of ea
 
   const loopIndex = source.indexOf('for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {');
   const resetIndex = source.indexOf('shortlistReport.editorial_plan_scored_candidates = [];');
-  const assignIndex = source.indexOf(
-    'shortlistReport.editorial_plan_scored_candidates = coverageReconciliation.diff.editorial_plan_scored_candidates;'
-  );
+  const assignIndex = source.indexOf('shortlistReport.editorial_plan_scored_candidates = coverageReconciliation.diff');
 
   assert.ok(loopIndex > 0, 'attempt 루프를 찾지 못했다');
   assert.ok(resetIndex > loopIndex, '초기화는 attempt 루프 안에서 일어난다');
   assert.ok(resetIndex < assignIndex, '초기화는 재조정 대입보다 앞이어야 한다');
+});
+
+// #879: 재조정은 자기 출력이 최종 main이라고 보고 채점 레코드를 만드는데, 2차 pass가 그 뒤에
+// main 집합을 더 늘린다. 호스트가 승급분에 사유를 찍지 않으면, 방금 발행 집합에 넣은 기사가
+// 레코드에서는 "승급되지 않은 shortlist_only"로 남아 한 artifact가 최종 main을 두 가지로 말한다.
+// 대입이 2차 pass보다 뒤에 오는지, 그리고 승급 키로 사유를 덧씌우는지를 소스에서 잠근다.
+test('the publish host stamps second-pass promotions into the scored-candidate projection', () => {
+  const source = publishHostSource();
+
+  const secondPassIndex = source.indexOf('admitReleaseClassCatchUpAfterReconciliation({');
+  const stampIndex = source.indexOf('const catchUpPromotedKeys = new Set(catchUpAfterReconciliation.admitted.map(candidateKey));');
+  const assignIndex = source.indexOf('shortlistReport.editorial_plan_scored_candidates = coverageReconciliation.diff');
+
+  assert.ok(secondPassIndex > 0, '2차 pass 호출을 찾지 못했다');
+  assert.ok(stampIndex > secondPassIndex, '사유 스탬프는 2차 pass 결과를 받은 뒤에 만들어져야 한다');
+  assert.ok(assignIndex > stampIndex, '채점 투영 대입은 스탬프보다 뒤여야 한다');
+
+  const assignBlock = source.slice(assignIndex, assignIndex + 400);
+  assert.ok(
+    assignBlock.includes('catchUpPromotedKeys.has(record.candidate_key)') &&
+      assignBlock.includes('CATCH_UP_PROMOTED_AFTER_RECONCILIATION'),
+    '2차 pass 승급분에 재조정 모듈이 정한 사유 상수를 찍어야 한다'
+  );
 });
 
 // #1034 후속: 재조정은 selected+reserve만 받는데 편집 계획은 shortlisted capsule 전체를

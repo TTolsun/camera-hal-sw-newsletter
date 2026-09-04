@@ -37,7 +37,10 @@ function plan(url, coverage_decision) {
   return { url, coverage_decision, impact_level: 'Direct Impact' };
 }
 
-// 재조정 이후 orchestrator가 하는 일을 그대로 재현한다(gemini-newsroom-newsletter.js:516-535).
+// 재조정 이후 orchestrator가 status 필드에 하는 대입을 재현한다(gemini-newsroom-newsletter.js의
+// reconcileCoverage 호출 이후 구간). 재현하지 '않는' 것: release-class catch-up 2차 pass(#879).
+// 이 파일이 고정하는 것은 재조정 산출물이 status로 어떻게 투영되는가이지 최종 main 편성이
+// 아니다. 2차 pass까지 반영한 최종 편성 불변식은 coverage-reconciliation.test.js가 집행한다.
 function applyReconciliation(shortlistReport, editorialPlanReport) {
   const result = reconcileCoverage({ shortlistReport, editorialPlanReport });
   Object.assign(shortlistReport, result.selection_summary, {

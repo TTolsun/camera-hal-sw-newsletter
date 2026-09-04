@@ -5,8 +5,14 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { reconcileCoverage, KNOWN_COVERAGE_DECISIONS } = require('../../select/coverage-reconciliation');
+const {
+  reconcileCoverage,
+  isFinalMainRecord,
+  CATCH_UP_PROMOTED_AFTER_RECONCILIATION,
+  KNOWN_COVERAGE_DECISIONS
+} = require('../../select/coverage-reconciliation');
 const { editorialPlanPrompt } = require('../../reporter/newsletter-prompts');
+const { admitReleaseClassCatchUpAfterReconciliation } = require('../../select/newsroom-selection');
 
 function mainEligible(overrides = {}) {
   return {
@@ -582,22 +588,22 @@ test('제안 main이었으나 cap에 밀린 reserve 후보도 cap_clamp를 사�
 });
 
 // #1034: 이 목록으로 최종 main 편성을 재구성하는 규칙을 집행한다. 주석이 세 라운드 연속으로
-// 코드보다 강한 주장을 했으므로, 이번에는 규칙을 산문이 아니라 실행되는 식으로 못박는다.
-// 규칙이 약해지거나 코드가 갈라지면 이 테스트가 깨진다.
-function finalMainFromRecord(record) {
-  return (record.lineup_role === 'selected' && (record.reason_code === null || record.reason_code === 'floor_backfill')) ||
-    (record.lineup_role === 'reserve' && record.reason_code === 'promoted');
-}
-
+// 코드보다 강한 주장을 했으므로, 규칙을 산문이 아니라 실행되는 식으로 못박는다.
+//
+// #879: 규칙 사본을 여기 두지 않는다. 예전에는 이 파일이 식을 다시 적었는데, 최종 main 집합이
+// reconcileCoverage 출력이 아니게 된 뒤에도(2차 pass가 뒤에서 더 올린다) 사본과 주석만 낡고
+// 테스트는 통과했다. 정의는 프로덕션의 isFinalMainRecord 하나이고, 이 파일은 그 술어를 '실제
+// 편성'과 대조해 집행한다 — 술어가 틀리면 대조가 깨지므로 집행력은 그대로다.
 function assertRecordsRebuildFinalMain(out, label) {
-  const recordKeys = new Set(out.diff.editorial_plan_scored_candidates.map(item => item.candidate_key));
+  const records = out.diff.editorial_plan_scored_candidates;
+  const recordKeys = new Set(records.map(item => item.candidate_key));
   // 미채점 후보는 레코드가 없으므로 규칙의 대상이 아니다. 채점된 후보에 한해 정확해야 한다.
   const scoredFinalMain = out.selected
     .map(candidate => String(candidate.url_hash || candidate.url || candidate.title))
     .filter(key => recordKeys.has(key))
     .sort();
-  const rebuilt = out.diff.editorial_plan_scored_candidates
-    .filter(finalMainFromRecord)
+  const rebuilt = records
+    .filter(isFinalMainRecord)
     .map(item => item.candidate_key)
     .sort();
   assert.deepEqual(rebuilt, scoredFinalMain, label);
@@ -679,6 +685,85 @@ test('레코드 두 필드로 계산한 최종 main이 실제 편성과 일치�
     assert.ok(out.diff.editorial_plan_scored_candidates.length > 0, label + ': 레코드가 있어야 검사가 의미 있다');
     assertRecordsRebuildFinalMain(out, label);
   }
+});
+
+// #879: 앞 테스트는 reconcileCoverage의 출력만 먹인다. 그런데 발행되는 main 집합은 그 출력이
+// 아니라 release-class catch-up 2차 pass까지 지난 결과다. 그 간극이 정확히 이 규칙을 조용히
+// 거짓으로 만든 자리이므로, 여기서는 발행 호스트와 같은 순서로 돌려 '최종' 편성에 대조한다.
+test('2차 pass 승급까지 반영한 최종 main도 레코드로 재구성된다', () => {
+  const selected = mainEligible({
+    url: 'https://example.com/a',
+    title: 'HAL3 buffer manager rework',
+    article_group_key: 'group:a',
+    deterministic_score: 90
+  });
+  const demoted = mainEligible({
+    url: 'https://example.com/b',
+    title: 'V4L2 async subdev notifier cleanup',
+    article_group_key: 'group:b',
+    deterministic_score: 80
+  });
+  // 2차 pass가 볼 후보: 결정론 편성에도 reserve에도 없고, 계획은 main_article로 채점했으며,
+  // reporter가 이미 본문을 쓴 release 채널 후보. 세 조건이 다 맞아야 이 레인이 승급한다.
+  const release = mainEligible({
+    url: 'https://example.com/libcamera-v0-7-2',
+    title: 'libcamera v0.7.2 released',
+    article_group_key: 'group:r',
+    deterministic_score: 70,
+    source_collection_mode: 'release-note-watch',
+    freshness_window: 'fallback',
+    days_since_published: 20
+  });
+  const shortlisted = [selected, demoted, release];
+  const editorialPlanReport = {
+    editorial_plans: [
+      plan(selected, 'main_article'),
+      plan(demoted, 'exclude'),
+      plan(release, 'main_article')
+    ]
+  };
+
+  const out = reconcileCoverage({
+    shortlistReport: {
+      selected_articles: [selected, demoted],
+      reserve_candidates: [],
+      shortlisted_candidates: shortlisted
+    },
+    editorialPlanReport
+  });
+  // 재조정만으로는 release가 main이 아니다 — 승급 대상 집합(selected+reserve) 밖이다.
+  assert.deepEqual(out.selected.map(item => item.url), ['https://example.com/a']);
+
+  const secondPass = admitReleaseClassCatchUpAfterReconciliation({
+    selected: out.selected,
+    poolCandidates: [release],
+    reportedCandidates: shortlisted,
+    editorialPlanReport
+  });
+  assert.deepEqual(
+    secondPass.admitted.map(item => item.url),
+    ['https://example.com/libcamera-v0-7-2'],
+    '2차 pass가 승급해야 검사가 의미 있다'
+  );
+
+  // 발행 호스트가 하는 일 그대로: 최종 main 집합을 만들고, 그 승급분에 사유를 찍는다.
+  const finalSelected = [...out.selected, ...secondPass.admitted];
+  const promotedKeys = new Set(secondPass.admitted.map(item => String(item.url_hash || item.url || item.title)));
+  const stamped = out.diff.editorial_plan_scored_candidates.map(record => (promotedKeys.has(record.candidate_key)
+    ? { ...record, reason_code: CATCH_UP_PROMOTED_AFTER_RECONCILIATION }
+    : record));
+
+  // 스탬프 전에는 규칙이 발행된 기사를 놓친다. 그 사실을 함께 잠가 두어야, 스탬프를 지우는
+  // 변경이 "원래 그런 값"으로 통과하지 않는다.
+  assert.deepEqual(
+    out.diff.editorial_plan_scored_candidates.filter(isFinalMainRecord).map(item => item.candidate_key),
+    ['https://example.com/a'],
+    '사유를 찍기 전 레코드는 2차 pass 승급분을 담지 못한다'
+  );
+  assertRecordsRebuildFinalMain(
+    { selected: finalSelected, diff: { editorial_plan_scored_candidates: stamped } },
+    '2차 pass 승급 포함'
+  );
 });
 
 // #1034: "promotion_clamped의 action을 demoted와 갈라 둔다"는 이 모듈의 판단이었는데 그 판단만
