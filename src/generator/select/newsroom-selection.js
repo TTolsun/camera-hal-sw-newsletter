@@ -794,10 +794,15 @@ function isReleaseClassCandidate(candidate = {}) {
 // 상한 소진은 pool/자리 문제보다 뒤, 필터 스킵보다 앞에 온다 — 필터를 통과해 실제로 상한에
 // 부딪힌 후보가 있었다는 사실이 통과조차 못 한 후보 뒤에 가려지면 안 된다.
 //
-// planned_non_main_skips / not_in_reporter_input_skips는 2차 pass(#879)만 채운다. 1차
-// observation에는 그 키가 없어 두 검사가 항상 거짓이므로 1차 사유는 그대로다. 게이트 판정
-// (편집 계획)을 배선 사실(reporter가 그 기사를 쓰지 않음)보다 먼저 보고한다 — 게이트가
-// 집행됐다는 사실이 배선 문제 뒤에 가려지면 안 된다.
+// planned_non_main_skips / not_in_reporter_input_skips / reference_window_skips는 2차
+// pass(#879)만 채운다. 1차 observation에는 그 키가 없어 세 검사가 항상 거짓이므로 1차 사유는
+// 그대로다. 게이트 판정(편집 계획)을 배선 사실(reporter가 그 기사를 쓰지 않음)보다 먼저
+// 보고한다 — 게이트가 집행됐다는 사실이 배선 문제 뒤에 가려지면 안 된다.
+//
+// reference_window_no_capsule은 마지막이다. 2차 pass 시점에 pool에 남은 reference 창 후보는
+// 늘 이 조건에 걸리므로, 이 사유는 "그 주에 무슨 일이 있었는가"에 아무것도 더하지 않는다.
+// 반면 not_in_reporter_input은 결함 신호이고 duplicate_release_page는 그 주에만 성립한
+// 사실이다. 늘 참인 조건을 앞에 두면 두 신호가 영영 보이지 않는다.
 function releaseClassBlockedReason(observation) {
   if (observation.admitted > 0) return '';
   if (!observation.lane_enabled) return 'lane_disabled';
@@ -807,6 +812,7 @@ function releaseClassBlockedReason(observation) {
   if (observation.planned_non_main_skips > 0) return 'editorial_plan_not_main';
   if (observation.not_in_reporter_input_skips > 0) return 'not_in_reporter_input';
   if (observation.release_page_skips > 0) return 'duplicate_release_page';
+  if (observation.reference_window_skips > 0) return 'reference_window_no_capsule';
   return 'unclassified';
 }
 
@@ -836,8 +842,16 @@ function toCatchUpArticle(candidate, lane) {
 
 // catch-up 승급 판정만 담는 순수 함수. 입력을 변형하지 않고 "이 라인업에 무엇을 올릴지"만
 // 돌려준다. 판정을 라인업에서 떼어 놓아야 같은 규칙을 서로 다른 라인업에 다시 적용할 수 있다
-// (#879: 결정론 선정 직후 1차, coverage 재조정 뒤 2차). 필터·중복 가드·레인 상한이 이 한 곳에만
-// 있으므로 두 pass가 서로 다른 기준으로 갈라질 수 없다.
+// (#879: 결정론 선정 직후 1차, coverage 재조정 뒤 2차).
+//
+// 이 함수가 담는 것은 중복 가드(릴리스 페이지·후보 중복)와 레인 상한(일반/release-class,
+// mainArticleCount.max)뿐이다. pool 자격은 여기서 다시 보지 않는다 — 버킷·나이·근거·재게재
+// 가드(everCoveredAsNewsletterArticle)는 buildCatchUpPool이, 점수 하한
+// (main_article_score_eligible)은 1차 pass 호출부가 적용한다. 즉 자격 판정은 1차 pass에서만
+// 일어난다. 두 pass가 갈라지지 않는 이유는 이 함수가 모든 규칙을 갖고 있어서가 아니라, 2차
+// pass가 pool을 다시 만들지 않고 1차가 persist한 pool(release_class_catch_up_pool)을 그대로
+// 입력으로 받기 때문이다. 그래서 2차 pass에 pool을 재구성하는 경로를 만들면 그 순간 두 pass의
+// 자격 기준이 갈라진다.
 //
 // releaseClassAlreadyAdmitted는 이미 라인업에 들어 있는 release 채널 catch-up 승급 수다. 2차
 // pass가 호당 상한(maxReleaseClassArticles)을 1차 승급분과 합산해 지키게 한다. 세는 기준은
@@ -955,11 +969,31 @@ function admitReleaseClassCatchUpAfterReconciliation({
     : [];
   // 필터는 유지한다. 계획이 거절한 후보를 올리면 게이트 우회이고, reporter 입력에 없는 후보를
   // 올리면 capsule이 없어 커버리지 등식이 깨진다. 다만 왜 떨어졌는지는 각각 세어 남긴다.
+  //
+  // 이 시점에 pool에 남은 reference 창 후보가 reporter 입력에 없는 것은 배선 사고가 아니라
+  // 시점의 결과다. reporter는 이미 돌았고, 그 입력은 shortlisted_candidates에서 만들어진다
+  // (reporterInputFromShortlist). shortlist에 reference 창 후보가 들어가는 길은 1차 catch-up
+  // 승급뿐인데(shortlistWithFinalCandidates가 selected·reserve를 무조건 싣는다), 그렇게 실린
+  // 후보는 toCatchUpArticle이 freshness_window를 'fallback'으로 다시 쓰고 1차가 pool에서
+  // 빼 놓는다. 그래서 2차 pass가 지금 보는 reference 창 후보에는 capsule이 없다. capsule 없이
+  // main으로 올리면 selected에는 있는데 rendered에는 없는 그룹이 생겨 커버리지 등식이 깨진다.
+  // 고칠 배선이 아니라 지켜야 할 제약이다. 그래서 두 사유를 갈라 센다 — 하나로 접으면 이
+  // 시점에 늘 참인 조건이 진짜 배선 결함(not_in_reporter_input)을 덮는다.
+  //
+  // pool_size에서 reference 창 후보를 빼지는 않는다. 빼면 그 주 pool에 자격 있는 릴리스가
+  // 있었는데도 pool_size 0 / no_eligible_candidate가 찍혀, "그 주엔 릴리스가 없었다"는 사실과
+  // 다른 결론을 읽게 된다(#838이 없애려던 사유 혼동 그 자체). pool_size는 이 pass가 실제로
+  // 들여다본 후보 수로 두고, 못 올린 이유는 사유 코드가 말한다.
   let plannedNonMainSkips = 0;
   let notInReporterInputSkips = 0;
+  let referenceWindowSkips = 0;
   const pool = poolBeforeFilters.filter(candidate => {
     if (isPlannedNonMain(coverageLookup, candidate)) {
       plannedNonMainSkips += 1;
+      return false;
+    }
+    if (!isMainSelectionWindow(candidate)) {
+      referenceWindowSkips += 1;
       return false;
     }
     if (!reportedUrls.has(normalizeUrl(candidateUrl(candidate)))) {
@@ -988,6 +1022,7 @@ function admitReleaseClassCatchUpAfterReconciliation({
     admitted: admitted.filter(isReleaseClassCandidate).length,
     planned_non_main_skips: plannedNonMainSkips,
     not_in_reporter_input_skips: notInReporterInputSkips,
+    reference_window_skips: referenceWindowSkips,
     release_page_skips: admission.release_page_skips,
     release_class_cap_skips: admission.release_class_cap_skips,
     lineup_reached_max: admission.lineup_reached_max
