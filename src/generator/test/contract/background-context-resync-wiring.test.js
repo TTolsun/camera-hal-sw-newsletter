@@ -86,20 +86,18 @@ test('the publish host clears the reconciliation provenance at the start of each
 test('the reset and the assignment are derived from one provenance field list', () => {
   const source = publishHostSource();
 
+  // 이름을 열거하는 검사는 이미 아는 필드만 막는다. 새 이름으로 추가되는 provenance까지 막으려면
+  // 출처를 봐야 한다 — 재조정 diff에서 온 값은 예외 없이 목록을 거쳐야 한다.
+  // `=(?!=)`로 대입만 본다(비교식 `===`은 개별 대입이 아니라 이 검사 대상이 아니다).
   assert.doesNotMatch(
     source,
-    /shortlistReport\.reconciliation_(demoted|promoted)[A-Za-z_]* =/,
-    '재조정 provenance 필드를 호출부에서 개별 대입하지 않는다 — 목록에서 파생시킨다'
+    /shortlistReport\.[A-Za-z0-9_]+\s*=(?!=)\s*coverageReconciliation\.diff/,
+    '재조정 diff 값을 호출부에서 개별 대입하지 않는다 — 목록에서 파생시킨다'
   );
   assert.doesNotMatch(
     source,
-    /shortlistReport\.editorial_plan_scored_candidates =/,
-    '채점 투영도 개별 대입하지 않는다'
-  );
-  assert.doesNotMatch(
-    source,
-    /shortlistReport\.deterministic_selected_representative_group_keys =/,
-    '결정론 기준선 키도 개별 대입하지 않는다'
+    /shortlistReport\.(reconciliation_[A-Za-z0-9_]*|editorial_plan_scored_candidates|deterministic_selected_representative_group_keys)\s*=(?!=)/,
+    '알려진 provenance 필드도 개별 대입하지 않는다'
   );
 
   const {
@@ -124,7 +122,9 @@ test('the reset and the assignment are derived from one provenance field list', 
 });
 
 // 목록에 없는 필드가 커밋되는 status로 새어 나가면 초기화 밖에 남는다. status allow-list가
-// 싣는 재조정 provenance 필드는 전부 목록 안에 있어야 한다.
+// 싣는 재조정 provenance 필드는 전부 목록 안에 있어야 한다. 이 검사는 이미 아는 이름
+// (reconciliation_* 등)만 훑는다 — 새 이름으로 추가되는 provenance는 위 테스트의 재조정 diff
+// 출처 검사가 막는다.
 test('every reconciliation provenance field the committed status carries is in the reset list', () => {
   const { RECONCILIATION_PROVENANCE_FIELDS } = require('../../publish/orchestrator-reconciliation-provenance');
   const statusSource = fs.readFileSync(
