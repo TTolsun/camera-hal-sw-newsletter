@@ -231,14 +231,23 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // 관측이지 판정이 아니다.
     //
     // reason_code가 null인 자리는 세 갈래다: 결정론 편성 그대로 발행된 main, 제안조차 main이
-    // 아니었던 reserve, 그리고 lineup_role='shortlist_only' 후보 전부. 마지막 갈래는 등급과
-    // 무관하게 항상 null이다 — 승급 대상 집합 밖이라 재조정이 고려하지 않으며, 계획이
-    // main_article로 제안한 후보도 여기 들어온다. "아무 일도 없었다"로 읽지 말 것.
+    // 아니었던 reserve, 그리고 lineup_role='shortlist_only' 후보 중 승급되지 않은 것. 마지막
+    // 갈래는 재조정의 승급 대상 집합 밖이라 재조정이 고려하지 않으며, 계획이 main_article로
+    // 제안한 후보도 여기 들어온다. "아무 일도 없었다"로 읽지 말 것.
+    //
+    // #879: shortlist_only가 곧 "main 집합 밖"은 아니다. release-class catch-up 2차 pass는
+    // 재조정 뒤에 main을 더 올리고, 그 승급분 레코드에는 reason_code로
+    // release_class_catch_up_promoted가 찍힌다. lineup_role은 단정하지 말 것 — 2차 pass의 우주는
+    // catch-up pool이라 reserve 레코드에도 이 사유가 찍힐 수 있다. 그래서 이 파일만 읽고 "이
+    // 후보가 main 집합에 들었나"를 판정할 때는 lineup_role만 보지 말고
+    // coverage-reconciliation.js의 isFinalMainRecord와 같은 규칙(2차 pass 사유 포함)을 쓸 것.
+    // 그것도 편성 여부까지다 — 발행 여부는 이 필드가 아니라 렌더된 기사 목록이 답한다.
     //
     // 이 목록이 담지 '않는' 것: release-class catch-up pool 후보 중 reference 창에서만 온
     // 후보다. shortlist는 primary·fallback 창만 담으므로(newsroom-selection.js) 그 후보는 계획
-    // 입력 우주 밖이고, 따라서 계획이 채점하지 않았다. 부재가 곧 그 답이다. fallback 창에서 온
-    // catch-up 후보와 catch-up이 승급한 후보는 우주 안이라 정상적으로 실린다.
+    // 입력 우주 밖이고, 따라서 계획이 채점하지 않았다. 부재가 곧 그 답이다.
+    // 우주 안이라고 해서 반드시 실리는 것도 아니다: 이 목록은 등급을 실제로 받은 후보만 담으므로,
+    // 계획이 채점을 빠뜨린 후보는 catch-up이 승급했더라도 레코드가 없다.
     editorial_plan_scored_candidates: ensureArray(report.editorial_plan_scored_candidates),
     reconciliation_promoted_group_keys: ensureArray(report.reconciliation_promoted_group_keys),
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
@@ -304,6 +313,11 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // #838: selection-diagnostics.md와 generation-status.json은 이 allow-list를 거쳐 렌더된다.
     // 여기서 빠지면 레인 진단이 매 run 'unknown'으로 찍혀 관측이 없는 것과 같아진다.
     release_class_catch_up: report.release_class_catch_up || diagnostics.release_class_catch_up || null,
+    // #879: 2차 pass(coverage 재조정 뒤) 관측도 같은 allow-list를 지나야 남는다.
+    release_class_catch_up_after_reconciliation:
+      report.release_class_catch_up_after_reconciliation ||
+      diagnostics.release_class_catch_up_after_reconciliation ||
+      null,
     // #963: 재게재 차단도 같은 이유로 allow-list에 둔다. exclusion_reason_summary는 상위 10개만
     // 남기므로 건수가 적은 이 사유는 거기서 잘린다.
     republication_cooldown_blocked: report.republication_cooldown_blocked || null,

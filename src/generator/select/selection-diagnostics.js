@@ -314,6 +314,10 @@ function selectionDiagnosticsFromReports(shortlistReport = null, reporterReport 
     composition_summary: shortlistReport?.composition_summary || {},
     editor_review_required: shortlistReport?.editor_review_required === true,
     release_class_catch_up: shortlistReport?.release_class_catch_up || null,
+    // #879: 1차(선정 직후)와 2차(coverage 재조정 뒤)를 나란히 남긴다. 하나로 접으면 "판정
+    // 시점이 달라서 결과가 달라졌다"는 이 이슈의 관측 자체가 사라진다.
+    release_class_catch_up_after_reconciliation:
+      shortlistReport?.release_class_catch_up_after_reconciliation || null,
     reporter_selected_but_final_excluded_count:
       reporterReport?.reporter_selected_but_final_excluded_count ??
       shortlistReport?.reporter_selected_but_final_excluded_count ??
@@ -435,6 +439,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
   const headlinePublicRender = diagnostics.headline_public_render_reconciliation || {};
   const headlineRemoved = ensureArray(diagnostics.removed_due_to_headline_inclusion);
   const releaseClassCatchUp = diagnostics.release_class_catch_up || {};
+  const releaseClassCatchUpAfterReconciliation = diagnostics.release_class_catch_up_after_reconciliation || {};
   const republicationCooldown = diagnostics.republication_cooldown_blocked || {};
   const hints = ensureArray(diagnostics.selection_shortage_hints)
     .map(item => `- ${item}`)
@@ -476,6 +481,11 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     // 값이 없는 주(unknown)와 레인이 막히지 않은 주(none)는 서로 다른 사실이다.
     // 둘을 같은 문자열로 접으면 관측 누락이 정상 출력처럼 보인다.
     `- release_class_blocked_reason: ${releaseClassCatchUp.blocked_reason === '' ? 'none' : formatCount(releaseClassCatchUp.blocked_reason)}`,
+    // #879: 2차 pass(coverage 재조정 뒤). 1차가 lineup_at_max인데 2차가 승급했다면, 그 주에는
+    // 재조정 강등으로 자리가 실제로 비어 있었다는 뜻이다.
+    `- release_class_after_reconciliation_pool_size: ${formatCount(releaseClassCatchUpAfterReconciliation.pool_size)}`,
+    `- release_class_after_reconciliation_admitted: ${formatCount(releaseClassCatchUpAfterReconciliation.admitted)}`,
+    `- release_class_after_reconciliation_blocked_reason: ${releaseClassCatchUpAfterReconciliation.blocked_reason === '' ? 'none' : formatCount(releaseClassCatchUpAfterReconciliation.blocked_reason)}`,
     // 이력을 못 읽은 주(false)와 읽고 아무것도 안 막은 주(true + 0)는 서로 다른 사실이다.
     // 두 줄로 나눠야 게이트가 죽었는지 살았는지가 markdown만 보고 구별된다.
     `- republication_history_loaded: ${formatCount(republicationCooldown.history_loaded)}`,

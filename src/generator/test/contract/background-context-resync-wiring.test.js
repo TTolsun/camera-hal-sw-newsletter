@@ -21,10 +21,12 @@ function publishHostSource() {
 test('the editor stage receives the background context narrowed to the reconciled main set', () => {
   const source = publishHostSource();
 
+  // #879로 최종 main 집합의 이름이 finalSelected가 됐다(재조정 결과 + release-class catch-up
+  // 2차 pass 승급분). 좁히기 기준은 그대로 "editor가 실제로 쓸 최종 집합"이다.
   assert.match(
     source,
-    /backgroundContextReport: filterBackgroundContextToSelected\(backgroundContextReport, reconciledSelected\)/,
-    'editor 인자에서 background context를 재조정 편성으로 좁힌다'
+    /backgroundContextReport: filterBackgroundContextToSelected\(backgroundContextReport, finalSelected\)/,
+    'editor 인자에서 background context를 최종 편성으로 좁힌다'
   );
 });
 
@@ -78,6 +80,28 @@ test('the publish host clears the reconciliation provenance at the start of each
   assert.ok(resetIndex > loopIndex, '초기화는 attempt 루프 안에서 일어난다');
   assert.ok(assignIndex > 0, '재조정 provenance 대입을 찾지 못했다');
   assert.ok(resetIndex < assignIndex, '초기화는 재조정 대입보다 앞이어야 한다');
+});
+
+// #879 후속: 2차 pass 승급분까지 reserve에서 빼게 되면서, 그 eviction 결과가 attempt를 넘어
+// 살아남으면 안 된다. 승급은 attempt마다 달라진다(편집 계획이 매 attempt 새로 나온다). attempt 1이
+// 승급해 뺀 후보를 attempt 2가 승급하지 않으면, 그 후보는 selected에도 reserve에도 없게 되고
+// editor는 결정론 선정이 만든 reserve capsule 하나를 잃는다. 재조정 입력은 pristine 스냅샷을
+// 쓰므로 판정은 멀쩡하고 산출물만 어긋난다 — 모듈 테스트로는 잡히지 않는 호출부 계약이라
+// 소스로 고정한다.
+test('the publish host restores the pristine reserve pool at the start of each attempt', () => {
+  const source = publishHostSource();
+
+  const loopIndex = source.indexOf('for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {');
+  const restoreIndex = source.indexOf('shortlistReport.reserve_candidates = pristineReserveCandidates;');
+  const reconcileIndex = source.indexOf('const coverageReconciliation = reconcileCoverage({');
+  const evictIndex = source.indexOf('shortlistReport.reserve_candidates = ensureArray(shortlistReport.reserve_candidates)');
+
+  assert.ok(loopIndex > 0, 'attempt 루프를 찾지 못했다');
+  assert.ok(restoreIndex > loopIndex, '결정론 reserve 복원은 attempt 루프 안에서 일어난다');
+  // eviction 직전으로 내려가면 안 된다. 그 자리에서는 재조정 전에 죽은 attempt가 직전 attempt의
+  // eviction 결과를 그대로 커밋해, 다른 provenance 필드를 여기서 비우는 이유와 같은 사고가 난다.
+  assert.ok(restoreIndex < reconcileIndex, '복원은 재조정보다 앞, 즉 attempt 시작 블록에 있어야 한다');
+  assert.ok(evictIndex > restoreIndex, '복원은 승급분 eviction보다 앞이어야 한다');
 });
 
 // 필드마다 초기화 한 줄을 따로 추가하던 방식은 새 필드의 초기화를 세 번 연속 빠뜨렸다
@@ -143,6 +167,30 @@ test('every reconciliation provenance field the committed status carries is in t
       `${field}가 attempt 초기화 목록에 없다 — 직전 attempt 값이 커밋된다`
     );
   }
+});
+
+// #879: 재조정은 자기 출력이 최종 main이라고 보고 채점 레코드를 만드는데, 2차 pass가 그 뒤에
+// main 집합을 더 늘린다. 호스트가 승급분에 사유를 찍지 않으면, 방금 발행 집합에 넣은 기사가
+// 레코드에서는 "승급되지 않은 shortlist_only"로 남아 한 artifact가 최종 main을 두 가지로 말한다.
+// 대입이 2차 pass보다 뒤에 오는지, 그리고 승급 키로 사유를 덧씌우는지를 소스에서 잠근다.
+test('the publish host stamps second-pass promotions into the scored-candidate projection', () => {
+  const source = publishHostSource();
+
+  const secondPassIndex = source.indexOf('admitReleaseClassCatchUpAfterReconciliation({');
+  const assignIndex = source.indexOf('assignReconciliationProvenance(shortlistReport, coverageReconciliation.diff);');
+  const stampIndex = source.indexOf('stampCatchUpPromotions(');
+
+  assert.ok(secondPassIndex > 0, '2차 pass 호출을 찾지 못했다');
+  assert.ok(assignIndex > secondPassIndex, '재조정 provenance 대입은 2차 pass 뒤에 온다');
+  // 순서가 뒤집히면 목록 대입이 스탬프를 덮어써, 발행된 기사가 사유 없는 레코드로 남는다.
+  assert.ok(stampIndex > assignIndex, '스탬프는 provenance 대입보다 뒤여야 한다');
+
+  const stampBlock = source.slice(stampIndex, stampIndex + 300);
+  assert.ok(
+    stampBlock.includes('catchUpAfterReconciliation.admitted.map(candidateKey)') &&
+      stampBlock.includes('CATCH_UP_PROMOTED_AFTER_RECONCILIATION'),
+    '2차 pass 승급 키와 재조정 모듈이 정한 사유 상수를 함께 넘겨야 한다'
+  );
 });
 
 // #1034 후속: 재조정은 selected+reserve만 받는데 편집 계획은 shortlisted capsule 전체를

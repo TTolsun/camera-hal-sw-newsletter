@@ -1,5 +1,7 @@
 'use strict';
 
+const { ensureArray } = require('../../shared/common/value-coercion');
+
 // 재조정 provenance(#837/#909/#1034)는 "이번 attempt에 재조정이 무엇을 했는가"라는 attempt 단위
 // 사실이다. shortlistReport는 품질 재시도 attempt 사이에 살아 있으므로, attempt가 재조정 전에
 // 죽으면 직전 attempt의 값이 그대로 커밋되는 generation-status에 실려 다른 편성의 사유를 이번
@@ -34,8 +36,23 @@ function assignReconciliationProvenance(shortlistReport, reconciliationDiff) {
   }
 }
 
+// #879: 재조정 diff는 catch-up 2차 pass를 모른다. 재조정이 끝난 뒤 main이 된 후보의 사유는 최종
+// main 집합을 아는 호출부만 세울 수 있는데, 이 필드들에 대한 쓰기는 이 모듈이 전부 소유해야
+// 목록과 실제 값이 갈라지지 않는다. 그래서 그 덧씌우기도 호출부가 아니라 여기 둔다.
+//
+// assignReconciliationProvenance 뒤에만 호출한다 — 순서가 뒤집히면 대입이 스탬프를 덮는다.
+function stampCatchUpPromotions(shortlistReport, promotedCandidateKeys, reasonCode) {
+  const promoted = new Set(ensureArray(promotedCandidateKeys));
+  shortlistReport.editorial_plan_scored_candidates =
+    ensureArray(shortlistReport.editorial_plan_scored_candidates)
+      .map(record => (promoted.has(record.candidate_key)
+        ? { ...record, reason_code: reasonCode }
+        : record));
+}
+
 module.exports = {
   RECONCILIATION_PROVENANCE_FIELDS,
   resetReconciliationProvenance,
-  assignReconciliationProvenance
+  assignReconciliationProvenance,
+  stampCatchUpPromotions
 };

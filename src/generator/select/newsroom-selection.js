@@ -79,6 +79,10 @@ const {
   selectedHasSameCameraReleasePage
 } = require('./camera-release-notes');
 const {
+  buildCoverageLookup,
+  isPlannedNonMain
+} = require('./coverage-reconciliation');
+const {
   BUCKETS
 } = require('../../shared/domain/aosp-camera-scope');
 const {
@@ -720,8 +724,21 @@ function shortlistCandidateKey(candidate) {
   return text(candidate?.article_identity_key) || text(candidate?.normalized_url) || normalizeUrl(candidateUrl(candidate)) || candidateUrl(candidate) || text(candidate?.title);
 }
 
-function shortlistWithFinalCandidates(shortlist, selected, reserve, cap = SHORTLIST_CAP) {
-  const requiredCandidates = [...ensureArray(selected), ...ensureArray(reserve)];
+// catchUpPool은 #879 레버 A로 들어온다. 이 후보들은 아직 승급되지 않았지만, 승급 여부가 정해지는
+// 시점(coverage 재조정 뒤 2차 pass)에는 reporter가 이미 돌아 있다. 그때 capsule이 없으면 승급이
+// 불가능하므로 — capsule 없이 올리면 selected에는 있는데 rendered에는 없는 그룹이 생겨 커버리지
+// 등식이 깨진다 — 여기서 미리 reporter 입력에 실어 둔다.
+//
+// 필수 그룹의 맨 뒤에 붙인다. cap을 넘으면 아래 truncate가 뒤에서부터 자르므로 pool이 가장 먼저
+// 밀리고, 결정론 편성(selected)과 재조정 승급 후보(reserve)를 밀어내지 않는다. 밀려서 빠진 주는
+// 2차 pass가 not_in_reporter_input으로 보고한다 — 그 사유가 뜻하는 "있어야 할 기사가 reporter
+// 산출물에 없다"가 그 주에는 정확히 사실이다.
+function shortlistWithFinalCandidates(shortlist, selected, reserve, catchUpPool = [], cap = SHORTLIST_CAP) {
+  const requiredCandidates = [
+    ...ensureArray(selected),
+    ...ensureArray(reserve),
+    ...ensureArray(catchUpPool)
+  ];
   const requiredByKey = new Map();
   for (const candidate of requiredCandidates) {
     const key = shortlistCandidateKey(candidate);
@@ -784,13 +801,290 @@ function isReleaseClassCandidate(candidate = {}) {
 // 못 한 주는 중복보다 먼저 보고한다 — 슬롯 기아는 이 진단이 찾으려는 신호 자체라 중복
 // 스킵 1건에 가려지면 안 된다. 마지막 반환은 사실과 어긋나는 사유를 재사용하는 대신
 // 분류 실패임을 그대로 드러낸다(pool_size > 0인데 no_eligible_candidate를 찍지 않는다).
+//
+// release_class_cap_skips는 자리도 자격도 있었는데 호당 상한을 이미 다 쓴 경우다. 정책이
+// 의도대로 집행된 상태이므로, 후보가 없었다거나 자리가 없었다는 사유로 보이면 안 된다.
+// 상한 소진은 pool/자리 문제보다 뒤, 필터 스킵보다 앞에 온다 — 필터를 통과해 실제로 상한에
+// 부딪힌 후보가 있었다는 사실이 통과조차 못 한 후보 뒤에 가려지면 안 된다.
+//
+// planned_non_main_skips / not_in_reporter_input_skips / reference_window_skips는 2차
+// pass(#879)만 채운다. 1차 observation에는 그 키가 없어 세 검사가 항상 거짓이므로 1차 사유는
+// 그대로다. 게이트 판정(편집 계획)을 배선 사실(reporter가 그 기사를 쓰지 않음)보다 먼저
+// 보고한다 — 게이트가 집행됐다는 사실이 배선 문제 뒤에 가려지면 안 된다.
+//
+// reference_window_no_capsule과 not_in_reporter_input은 같은 사실(capsule이 없다)의 두 원인이라
+// 나란히 둔다. 갈라 두는 이유는 원인이 다르기 때문이다 — 전자는 shortlist cap에 밀린 용량 사실,
+// 후자는 있어야 할 기사가 reporter 산출물에 없다는 결함 신호다.
+//
+// #879 레버 A 이전에는 reference 창 후보가 원리상 capsule을 못 받아 이 조건이 늘 참이었고, 그래서
+// 맨 뒤에 두어 그 주에만 성립한 사실(duplicate_release_page)을 덮지 않게 했다. 레버 A가 pool
+// 후보를 reporter 입력에 실으면서 그 전제가 사라졌다 — 이제 이 사유가 뜨는 주는 실제로 cap이
+// 후보를 밀어낸 주이고, 그건 duplicate_release_page보다 먼저 알아야 할 용량 신호다.
 function releaseClassBlockedReason(observation) {
   if (observation.admitted > 0) return '';
   if (!observation.lane_enabled) return 'lane_disabled';
   if (observation.pool_size === 0) return 'no_eligible_candidate';
   if (observation.lineup_reached_max) return 'lineup_at_max';
+  if (observation.release_class_cap_skips > 0) return 'release_class_cap_reached';
+  if (observation.planned_non_main_skips > 0) return 'editorial_plan_not_main';
+  if (observation.not_in_reporter_input_skips > 0) return 'not_in_reporter_input';
+  if (observation.reference_window_skips > 0) return 'reference_window_no_capsule';
   if (observation.release_page_skips > 0) return 'duplicate_release_page';
   return 'unclassified';
+}
+
+// 선정 창 제외 표식을 지운다. catch-up 레인은 #825가 릴리스에 창 밖 여유 슬롯을 내준 경로라,
+// 이 레인을 타는 후보에게 "창 때문에 main에서 빠졌다"는 표식이 남아 있으면 뒤 단계가 그 표식을
+// 근거로 되돌리려 든다(editor group-coverage가 selection_window_reference_not_main이라는 성립
+// 불가한 사유로 강등을 시도한다).
+//
+// 승급본(toCatchUpArticle)과 reporter 입력용 pool 항목(catchUpPoolShortlistEntry)이 같은 규칙을
+// 써야 한다. 한쪽만 지우면 같은 후보가 단계에 따라 다른 자격을 갖는다.
+function withoutSelectionWindowExclusion(candidate) {
+  const cleared = { ...candidate };
+  cleared.exclusion_reasons = ensureArray(candidate.exclusion_reasons)
+    .filter(reason => !/^selection_window=/.test(text(reason)));
+  delete cleared.selection_window_exclusion_reason;
+  delete cleared.fallback_window_promoted;
+  return cleared;
+}
+
+// #879 레버 A: release-class catch-up pool 후보를 reporter 입력(shortlisted_candidates)에 싣는
+// 모양. 아직 승급된 것이 아니므로 선택 플래그는 전부 false다 — 여기서 하는 일은 "나중에 자리가
+// 비면 쓸 capsule을 미리 만들어 두는 것"뿐이다.
+//
+// freshness_window는 그대로 둔다. 이 후보가 어느 창에서 왔는지는 진단이 답해야 하는 사실이고,
+// reserve 구성은 이 배열이 아니라 selectionCandidatePool(primary+fallback)에서 나오므로 창 값을
+// 남겨도 reserve로 새지 않는다.
+function catchUpPoolShortlistEntry(candidate) {
+  return {
+    ...withoutSelectionWindowExclusion(candidate),
+    catch_up_pool_candidate: true,
+    selected: false,
+    selected_for_editor: false,
+    final_selected: false,
+    reserve_candidate: false
+  };
+}
+
+// reference/fallback 창 후보를 catch-up main 기사 모양으로 바꾼다.
+function toCatchUpArticle(candidate, lane) {
+  const cleared = withoutSelectionWindowExclusion(candidate);
+  return {
+    ...cleared,
+    freshness_window: 'fallback',
+    coverage_type: 'catch_up',
+    catch_up_lane: lane || 'fill_open_slots',
+    catch_up_age_days: Number(candidate.days_since_published),
+    catch_up_origin_window: text(candidate.freshness_window) || 'reference',
+    selected: true,
+    selected_for_editor: true,
+    final_selected: true,
+    final_selection_eligibility: 'main'
+  };
+}
+
+// catch-up 승급 판정만 담는 순수 함수. 입력을 변형하지 않고 "이 라인업에 무엇을 올릴지"만
+// 돌려준다. 판정을 라인업에서 떼어 놓아야 같은 규칙을 서로 다른 라인업에 다시 적용할 수 있다
+// (#879: 결정론 선정 직후 1차, coverage 재조정 뒤 2차).
+//
+// 이 함수가 담는 것은 중복 가드(릴리스 페이지·후보 중복)와 레인 상한(일반/release-class,
+// mainArticleCount.max)뿐이다. pool 자격은 여기서 다시 보지 않는다 — 버킷·나이·근거·재게재
+// 가드(everCoveredAsNewsletterArticle)는 buildCatchUpPool이, 점수 하한
+// (main_article_score_eligible)은 1차 pass 호출부가 적용한다. 즉 자격 판정은 1차 pass에서만
+// 일어난다. 두 pass가 갈라지지 않는 이유는 이 함수가 모든 규칙을 갖고 있어서가 아니라, 2차
+// pass가 pool을 다시 만들지 않고 1차가 persist한 pool(release_class_catch_up_pool)을 그대로
+// 입력으로 받기 때문이다. 그래서 2차 pass에 pool을 재구성하는 경로를 만들면 그 순간 두 pass의
+// 자격 기준이 갈라진다.
+//
+// releaseClassAlreadyAdmitted는 이미 라인업에 들어 있는 release 채널 catch-up 승급 수다. 2차
+// pass가 호당 상한(maxReleaseClassArticles)을 1차 승급분과 합산해 지키게 한다. 세는 기준은
+// 레인 라벨이 아니라 후보의 release 채널 여부다(호출부 참고).
+function admitCatchUpCandidates({
+  selected = [],
+  pool = [],
+  generalTake = 0,
+  maxReleaseClassArticles = 0,
+  releaseClassAlreadyAdmitted = 0
+} = {}) {
+  // The catch-up lane must enforce the same release-note dedup that pushUnique applies to primary
+  // selection (#500). Otherwise a fresh main article and an older catch-up article from the same
+  // CameraX release-note page are both promoted, sharing one source URL across sections, which
+  // trips the "Duplicate source URL"/"Shared release-note URL" hard fails on thin days. The growing
+  // lineup is checked so two catch-up candidates from the same page cannot slip through together.
+  const accepted = [];
+  const laneByCandidate = new Map();
+  let generalAdmitted = 0;
+  let releaseClassAdmitted = releaseClassAlreadyAdmitted;
+  let releasePageSkips = 0;
+  let releaseClassCapSkips = 0;
+  let lineupReachedMax = false;
+  for (const candidate of ensureArray(pool)) {
+    const lineup = [...ensureArray(selected), ...accepted];
+    if (lineup.length >= articlePolicy.mainArticleCount.max) {
+      lineupReachedMax = true;
+      break;
+    }
+    if (selectedHasSameCameraReleasePage(lineup, candidate)) {
+      if (isReleaseClassCandidate(candidate)) releasePageSkips += 1;
+      continue;
+    }
+    if (lineup.some(existing => candidatesAreDuplicate(existing, candidate))) continue;
+    // 일반 레인은 기존 계약 유지: reference 창 후보만 채운다.
+    if (generalAdmitted < generalTake && text(candidate.freshness_window) === 'reference') {
+      accepted.push(candidate);
+      laneByCandidate.set(candidate, 'fill_open_slots');
+      generalAdmitted += 1;
+      // 일반 레인이 가져간 release 채널 후보도 release-class 상한을 소진한다. 상한을 레인
+      // 라벨로 세면, reference 창 릴리스를 일반 레인이 먼저 가져간 주에 release-class 레인이
+      // 상한을 아직 안 쓴 것으로 보고 릴리스를 한 건 더 올린다. 세는 기준은 1차
+      // observation.admitted와 같은 release 채널 여부다 — 진단이 "일반 레인이 가져간 릴리스도
+      // 이 레인의 승급"이라고 보고하는데 집행만 다르게 세면 두 값이 어긋난다.
+      //
+      // 반대로 일반 레인 자체를 상한으로 막지는 않는다. 그 레인은 thin week의 빈 슬롯을
+      // 채우는 레인이고, maxReleaseClassArticles=0(레인 끔)이어도 릴리스를 가져갈 수 있어야
+      // 한다. 그래서 이 상한이 보장하는 것은 "release-class 레인이 내주는 여유 슬롯 수"이지
+      // 호당 릴리스 총량이 아니다.
+      if (isReleaseClassCandidate(candidate)) releaseClassAdmitted += 1;
+      continue;
+    }
+    if (isReleaseClassCandidate(candidate)) {
+      if (releaseClassAdmitted >= maxReleaseClassArticles) {
+        releaseClassCapSkips += 1;
+        continue;
+      }
+      accepted.push(candidate);
+      laneByCandidate.set(candidate, 'release_class');
+      releaseClassAdmitted += 1;
+    }
+  }
+  return {
+    admitted: accepted.map(candidate => toCatchUpArticle(candidate, laneByCandidate.get(candidate))),
+    release_page_skips: releasePageSkips,
+    release_class_cap_skips: releaseClassCapSkips,
+    lineup_reached_max: lineupReachedMax
+  };
+}
+
+// #879: release-class catch-up 2차 pass.
+//
+// 1차 판정은 결정론 선정 직후에 돈다. 그때의 라인업은 대개 mainArticleCount.max라
+// blocked_reason=lineup_at_max로 끝나는데, 라인업은 그 뒤에도 계속 줄어든다 — coverage
+// 재조정이 편집 계획대로 그룹을 강등하기 때문이다. 그래서 자리가 실제로는 비었는데도 자격
+// 있는 릴리스가 pool에 남는다(실측 2026-08-10·08-17·08-24: 판정 시점 5건 → 발행 2/1/1건,
+// pool_size 1, 3주 연속 admitted 0). 문제는 비교식이 아니라 판정 시점이므로, 줄어든 라인업에
+// 1차와 같은 pool·같은 함수·같은 상한을 한 번만 더 적용한다.
+//
+// 일반(thin-week) 레인은 열지 않는다(generalTake 0). 일반 레인은 reference 창 후보로 target을
+// 채우는 레인이라, 재조정이 방금 강등한 자리를 reference 창 후보로 되메우면 편집 계획 판단을
+// 뒤집게 된다. 2차 pass는 #825가 릴리스에만 내준 여유 슬롯 규칙만 재적용한다.
+//
+// reportedCandidates는 이 시점에 이미 기사 본문이 작성된 후보다. 그 밖의 후보를 main으로
+// 올리면 editor가 쓸 capsule이 없어 "selected에는 있는데 rendered에는 없는" 그룹이 생기고,
+// 커버리지 등식이 깨져 발행 전체가 diagnostics-only로 떨어진다. 재조정의 reserve 승급도 같은
+// 제약 아래 동작한다(reserve는 reporter 입력에 포함된다).
+//
+// editorialPlanReport는 재조정이 방금 집행한 그 계획이다. pool 후보도 reporter 입력에 있으면
+// 계획의 채점 대상이므로, 계획이 main이 아닌 등급을 매겨 재조정이 main에서 뺀 후보를 이 레인이
+// 다시 올리면 coverage 권한(#724, 항상 ON)을 우회하게 된다. 계획이 채점하지 않은 후보는 그대로
+// 둔다 — 계획에 없는 것과 계획이 거절한 것은 다른 사실이다.
+function admitReleaseClassCatchUpAfterReconciliation({
+  selected = [],
+  poolCandidates = [],
+  reportedCandidates = [],
+  editorialPlanReport = null,
+  catchUpPolicy = getCatchUpPolicy()
+} = {}) {
+  const maxReleaseClassArticles = Number(catchUpPolicy?.maxReleaseClassArticles) || 0;
+  const laneEnabled = catchUpPolicy?.enabled === true && maxReleaseClassArticles > 0;
+  const selectedKeys = new Set(ensureArray(selected).map(item => articleIdentityKey(item)));
+  // syncReporterSelectionToMain과 같은 URL 정규화를 쓴다. 그 함수가 main 플래그를 다시 세우는
+  // 기준이므로, 기준이 다르면 여기서 올린 기사가 그 단계에서 선택되지 않는다.
+  const reportedUrls = new Set(ensureArray(reportedCandidates)
+    .map(candidate => normalizeUrl(candidateUrl(candidate)))
+    .filter(Boolean));
+  const coverageLookup = buildCoverageLookup(editorialPlanReport);
+  // 2차 pass가 실제로 들여다본 pool: 1차가 persist한 pool에서 이번 라인업에 이미 들어 있는
+  // 후보만 뺀 것. 관측의 pool_size는 이 길이여야 한다. 아래 필터 뒤 길이를 쓰면 자격 있는
+  // 릴리스가 남아 있던 주에도 pool_size 0 / no_eligible_candidate가 찍혀, 읽는 사람이 "두
+  // pass 사이에 pool이 비었다"는 사실이 아닌 결론을 내린다(#838이 막으려던 사유 혼동).
+  const poolBeforeFilters = laneEnabled
+    ? ensureArray(poolCandidates).filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
+    : [];
+  // 필터는 유지한다. 계획이 거절한 후보를 올리면 게이트 우회이고, reporter 입력에 없는 후보를
+  // 올리면 capsule이 없어 커버리지 등식이 깨진다. 다만 왜 떨어졌는지는 각각 세어 남긴다.
+  //
+  // 이 시점에 pool에 남은 reference 창 후보가 reporter 입력에 없는 것은 배선 사고가 아니라
+  // 시점의 결과다. reporter는 이미 돌았고, 그 입력은 shortlisted_candidates에서 만들어진다
+  // (reporterInputFromShortlist). shortlist에 reference 창 후보가 들어가는 길은 1차 catch-up
+  // 승급뿐인데(shortlistWithFinalCandidates가 selected·reserve를 무조건 싣는다), 그렇게 실린
+  // 후보는 toCatchUpArticle이 freshness_window를 'fallback'으로 다시 쓰고 1차가 pool에서
+  // 빼 놓는다. 그래서 2차 pass가 지금 보는 reference 창 후보에는 capsule이 없다. capsule 없이
+  // main으로 올리면 selected에는 있는데 rendered에는 없는 그룹이 생겨 커버리지 등식이 깨진다.
+  // 고칠 배선이 아니라 지켜야 할 제약이다. 그래서 두 사유를 갈라 센다 — 하나로 접으면 이
+  // 시점에 늘 참인 조건이 진짜 배선 결함(not_in_reporter_input)을 덮는다.
+  //
+  // pool_size에서 reference 창 후보를 빼지는 않는다. 빼면 그 주 pool에 자격 있는 릴리스가
+  // 있었는데도 pool_size 0 / no_eligible_candidate가 찍혀, "그 주엔 릴리스가 없었다"는 사실과
+  // 다른 결론을 읽게 된다(#838이 없애려던 사유 혼동 그 자체). pool_size는 이 pass가 실제로
+  // 들여다본 후보 수로 두고, 못 올린 이유는 사유 코드가 말한다.
+  let plannedNonMainSkips = 0;
+  let notInReporterInputSkips = 0;
+  let referenceWindowSkips = 0;
+  const pool = poolBeforeFilters.filter(candidate => {
+    if (isPlannedNonMain(coverageLookup, candidate)) {
+      plannedNonMainSkips += 1;
+      return false;
+    }
+    // 막는 조건은 창이 아니라 capsule 유무다. 창 검사는 #879 레버 A 이전에 "reference 창 후보는
+    // 원리상 reporter 입력에 없다"의 대리 검사였는데, 레버 A가 그 pool 후보를 shortlist에 실어
+    // capsule을 만들어 주면서 전제가 사라졌다. 대리 검사를 남겨 두면 capsule이 있는 후보까지
+    // 창만 보고 막는다.
+    if (!reportedUrls.has(normalizeUrl(candidateUrl(candidate)))) {
+      // capsule이 없는 이유를 가른다. reference 창 후보는 shortlist cap(SHORTLIST_CAP)에 밀려
+      // 빠질 수 있고 그건 용량 사실이다. 그걸 not_in_reporter_input으로 접으면 "reporter 배선이
+      // 깨졌다"는 결함 신호가 용량 때문에 매주 울린다.
+      if (!isMainSelectionWindow(candidate)) referenceWindowSkips += 1;
+      else notInReporterInputSkips += 1;
+      return false;
+    }
+    return true;
+  });
+  const admission = admitCatchUpCandidates({
+    selected,
+    pool,
+    generalTake: 0,
+    maxReleaseClassArticles,
+    // 1차가 이미 릴리스에 내준 슬롯 수. 레인 라벨이 아니라 release 채널 여부로 센다 — reference
+    // 창 릴리스는 일반(fill_open_slots) 레인이 먼저 가져갈 수 있고, 그걸 미승급으로 세면 2차
+    // pass가 상한을 다 쓴 호에 한 건을 더 올린다(1차 observation.admitted와 같은 기준).
+    // catch-up 승급분으로 범위를 좁힌다. 상한은 catch-up이 릴리스에 내주는 여유 슬롯 예산이라
+    // (#825), 신선도 창 안에서 정규 선정된 릴리스까지 세면 예산이 조용히 줄어든다.
+    releaseClassAlreadyAdmitted: ensureArray(selected)
+      .filter(item => text(item.coverage_type) === 'catch_up' && isReleaseClassCandidate(item)).length
+  });
+  const admitted = admission.admitted;
+  const observation = {
+    lane_enabled: laneEnabled,
+    pool_size: poolBeforeFilters.length,
+    admitted: admitted.filter(isReleaseClassCandidate).length,
+    planned_non_main_skips: plannedNonMainSkips,
+    not_in_reporter_input_skips: notInReporterInputSkips,
+    reference_window_skips: referenceWindowSkips,
+    release_page_skips: admission.release_page_skips,
+    release_class_cap_skips: admission.release_class_cap_skips,
+    lineup_reached_max: admission.lineup_reached_max
+  };
+  return {
+    admitted,
+    // 1차와 같은 {pool_size, admitted, blocked_reason} 모양을 유지한다. 두 pass를 나란히 놓고
+    // "판정 시점이 달라서 결과가 달라졌다"를 그대로 읽을 수 있어야 한다.
+    observation: {
+      pool_size: observation.pool_size,
+      admitted: observation.admitted,
+      blocked_reason: releaseClassBlockedReason(observation)
+    }
+  };
 }
 
 // date는 이 호의 이슈 날짜다. 게재 이력 필터가 쿨다운 검사와 같은 as-of 기준을 써야 같은 date
@@ -960,6 +1254,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   // 갇히는 지점이다).
   const maxReleaseClassArticles = Number(catchUpPolicy.maxReleaseClassArticles) || 0;
   const thinWeek = selected.length < catchUpTarget;
+  // #879: 1차 판정이 실제로 본 release-class pool. 2차 pass(coverage 재조정 뒤)가 같은 pool을
+  // 다시 봐야 하는데, 이 pool을 만든 fallback/reference 창 후보 목록은 선정 단계 지역 변수라
+  // 그대로 두면 재조정 시점에 재구성할 수 없다. 재구성 대신 그대로 실어 두 pass가 서로 다른
+  // pool을 보는 일을 구조적으로 없앤다.
+  let releaseClassPool = [];
   const releaseClassObservation = {
     lane_enabled: catchUpPolicy.enabled === true && maxReleaseClassArticles > 0,
     pool_size: 0,
@@ -970,6 +1269,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     // 드물게 도달할 수는 있는데, 그때는 카운터가 오르지 않아 unclassified로 떨어진다 —
     // 틀린 사유를 찍는 대신 분류 실패가 그대로 드러난다.
     release_page_skips: 0,
+    release_class_cap_skips: 0,
     lineup_reached_max: false
   };
   if (catchUpPolicy.enabled === true && (thinWeek || maxReleaseClassArticles > 0)) {
@@ -986,69 +1286,25 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       // subsumes dated-evidence/source-gap/scope checks, so this single test is enough.
       .filter(candidate => candidate.main_article_score_eligible !== false);
     pool.sort(deterministicCandidateSort);
-    releaseClassObservation.pool_size = pool.filter(isReleaseClassCandidate).length;
+    releaseClassPool = pool.filter(isReleaseClassCandidate);
+    releaseClassObservation.pool_size = releaseClassPool.length;
     const openSlots = thinWeek ? Math.max(0, catchUpTarget - selected.length) : 0;
     const generalTake = Math.max(0, Math.min(catchUpPolicy.maxCatchUpArticles, openSlots));
-    // The catch-up lane must enforce the same release-note dedup that pushUnique applies to primary
-    // selection (#500). Otherwise a fresh main article and an older catch-up article from the same
-    // CameraX release-note page are both promoted, sharing one source URL across sections, which
-    // trips the "Duplicate source URL"/"Shared release-note URL" hard fails on thin days. The growing
-    // lineup is checked so two catch-up candidates from the same page cannot slip through together.
-    const catchUpAccepted = [];
-    const laneByCandidate = new Map();
-    let generalAdmitted = 0;
-    let releaseClassAdmitted = 0;
-    for (const candidate of pool) {
-      const lineup = [...selected, ...catchUpAccepted];
-      if (lineup.length >= articlePolicy.mainArticleCount.max) {
-        releaseClassObservation.lineup_reached_max = true;
-        break;
-      }
-      if (selectedHasSameCameraReleasePage(lineup, candidate)) {
-        if (isReleaseClassCandidate(candidate)) releaseClassObservation.release_page_skips += 1;
-        continue;
-      }
-      if (lineup.some(existing => candidatesAreDuplicate(existing, candidate))) continue;
-      // 일반 레인은 기존 계약 유지: reference 창 후보만 채운다.
-      if (generalAdmitted < generalTake && text(candidate.freshness_window) === 'reference') {
-        catchUpAccepted.push(candidate);
-        laneByCandidate.set(candidate, 'fill_open_slots');
-        generalAdmitted += 1;
-        continue;
-      }
-      if (releaseClassAdmitted < maxReleaseClassArticles && isReleaseClassCandidate(candidate)) {
-        catchUpAccepted.push(candidate);
-        laneByCandidate.set(candidate, 'release_class');
-        releaseClassAdmitted += 1;
-      }
-    }
+    const admission = admitCatchUpCandidates({
+      selected,
+      pool,
+      generalTake,
+      maxReleaseClassArticles
+    });
+    releaseClassObservation.release_page_skips = admission.release_page_skips;
+    releaseClassObservation.release_class_cap_skips = admission.release_class_cap_skips;
+    releaseClassObservation.lineup_reached_max = admission.lineup_reached_max;
     // 승급 수는 레인 라벨이 아니라 후보의 release 채널 여부로 센다. reference 창 릴리스는
     // 일반 레인이 먼저 가져갈 수 있는데, 그걸 미승급으로 세면 진단이 사실과 어긋난다.
     // PR body의 release-class 건수(pr-body-diagnostic-sections.js)는 레인 라벨로 세므로
     // 그 주에는 두 수가 다를 수 있다. 서로 다른 질문에 답하는 값이라 의도된 차이다.
-    releaseClassObservation.admitted = catchUpAccepted.filter(isReleaseClassCandidate).length;
-    catchUpSelected = catchUpAccepted.map(candidate => {
-      // Promoting a reference-window candidate to a catch-up main article: clear the
-      // reference-window exclusion markers so the editor group-coverage validation does
-      // not try to demote it as selection_window_reference_not_main (an invalid reason).
-      const cleared = { ...candidate };
-      cleared.exclusion_reasons = ensureArray(candidate.exclusion_reasons)
-        .filter(reason => !/^selection_window=/.test(text(reason)));
-      delete cleared.selection_window_exclusion_reason;
-      delete cleared.fallback_window_promoted;
-      return {
-        ...cleared,
-        freshness_window: 'fallback',
-        coverage_type: 'catch_up',
-        catch_up_lane: laneByCandidate.get(candidate) || 'fill_open_slots',
-        catch_up_age_days: Number(candidate.days_since_published),
-        catch_up_origin_window: text(candidate.freshness_window) || 'reference',
-        selected: true,
-        selected_for_editor: true,
-        final_selected: true,
-        final_selection_eligibility: 'main'
-      };
-    });
+    releaseClassObservation.admitted = admission.admitted.filter(isReleaseClassCandidate).length;
+    catchUpSelected = admission.admitted;
     selected = [...selected, ...catchUpSelected];
     // 승급된 catch-up 후보는 reserve에서 뺀다. release-class 레인이 fallback 창을 쓰면서
     // reserve의 fallback 좌석과 같은 후보를 잡을 수 있게 됐는데, 그대로 두면 같은 기사가
@@ -1058,6 +1314,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     if (catchUpSelected.length > 0) {
       const catchUpKeys = new Set(catchUpSelected.map(item => articleIdentityKey(item)));
       reserve = reserve.filter(candidate => !catchUpKeys.has(articleIdentityKey(candidate)));
+      // #879: 2차 pass가 보는 건 1차가 남긴 후보뿐이다. 1차 승급분을 남겨 두면, 그 기사를
+      // coverage 재조정이 강등한 주에 2차 pass가 같은 기사를 다시 올려 편집 계획 판단을
+      // 뒤집는다. 강등된 기사는 재조정이 이미 판정한 대상이라 catch-up이 되살릴 자리가 아니다.
+      releaseClassPool = releaseClassPool.filter(candidate => !catchUpKeys.has(articleIdentityKey(candidate)));
     }
   }
   const warnings = selectionWarnings(selected, { exposureHistory, date });
@@ -1089,7 +1349,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const publishModeResult = resolvePublishMode(composition, getPublishModePolicy());
   const publishReady = publishGatePassed && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX;
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
-  const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, cap);
+  // #879 레버 A: 2차 pass가 볼 pool 후보에게 capsule을 미리 만들어 준다. 이 pool은 1차 pass가
+  // 남긴 것과 같은 배열이라(release_class_catch_up_pool) 두 단계가 같은 후보 집합을 본다.
+  const catchUpPoolShortlist = releaseClassPool.map(catchUpPoolShortlistEntry);
+  const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, catchUpPoolShortlist, cap);
   const markedShortlist = reportShortlist.map(candidate => {
     const candidateKey = shortlistCandidateKey(candidate);
     const match = selected.find(item => shortlistCandidateKey(item) === candidateKey);
@@ -1223,6 +1486,9 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       admitted: releaseClassObservation.admitted,
       blocked_reason: releaseClassBlockedReason(releaseClassObservation)
     },
+    // #879: 2차 pass 입력. 커밋되는 selection-report.json은 allow-list라 이 후보 목록이 실리지
+    // 않는다(진단 3종만 실린다).
+    release_class_catch_up_pool: releaseClassPool,
     // 재게재 차단은 exclusion_reason_summary에도 실리지만 그쪽은 상위 10개로 잘린다(사유 하나에
     // 후보 1~2건이면 늘 뒤로 밀린다). 선례(#838의 release_class_catch_up)와 같은 이유로 전용
     // 자리를 둔다: 전체 shortlistReport가 담기는 shortlisted-candidates.json은 커밋되지 않으므로,
@@ -1330,6 +1596,8 @@ module.exports = {
   LINKED_EVIDENCE_RUNTIME_BONUS,
   LINKED_EVIDENCE_WATCH_PENALTY,
   MIN_CAMERA_HAL_DIRECTNESS,
+  admitCatchUpCandidates,
+  admitReleaseClassCatchUpAfterReconciliation,
   buildCatchUpPool,
   buildShortlistReport,
   candidatePoolPreflightSummary,

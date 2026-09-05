@@ -48,9 +48,50 @@ function candidateKey(candidate) {
   return String(candidate?.url_hash || candidate?.url || candidate?.title || '').trim();
 }
 
+// #879: 재조정이 끝난 뒤에 main이 된 후보의 사유. reconcileCoverage는 이 변화를 만들지 않는다 —
+// release-class catch-up 2차 pass가 재조정 결과를 받아 main 집합을 더 늘리고, 그 호출부
+// (gemini-newsroom-newsletter.js)가 레코드에 이 값을 찍는다. 상수를 여기 두는 이유는 레코드
+// 모양의 정본이 이 모듈이기 때문이다 — 사유 문자열이 호출부에만 있으면 이 모듈의 규칙과 갈라진다.
+const CATCH_UP_PROMOTED_AFTER_RECONCILIATION = 'release_class_catch_up_promoted';
+
+// 레코드 한 건이 재조정과 2차 pass를 지난 main 집합(shortlistReport.selected_articles)에
+// 들어갔는가. "발행됐는가"가 아니다 — 그 뒤 단계(editor 강등·품질 게이트·발행 차단)가 더 뺄 수
+// 있고, 이 술어는 그 단계들을 보지 않는다.
+//
+// 규칙을 주석·테스트·소비자에 각각 옮겨 적으면 한 곳만 갱신되고 나머지가 조용히 낡는다.
+// #1034가 산문으로 적은 공식이 #879 2차 pass가 들어오면서 정확히 그렇게 됐다 — 공식은 그대로인데
+// 최종 main 집합이 reconcileCoverage 출력이 아니게 됐고, 테스트는 여전히 이 함수의 출력만 먹여서
+// 깨지지 않았다. 그래서 정의를 실행되는 함수 하나로 모은다.
+//
+// 미채점 후보는 레코드가 없으므로 이 술어의 대상이 아니다. 채점된 후보에 한해 정확해야 한다.
+function isFinalMainRecord(record) {
+  const reasonCode = record?.reason_code ?? null;
+  // 2차 pass 승급분은 결정론 편성에서의 역할과 무관하게 최종 main이다. 그 승급이 곧 이 사유다.
+  if (reasonCode === CATCH_UP_PROMOTED_AFTER_RECONCILIATION) return true;
+  // 결정론 main으로 남았다: 강등도 승급도 없었거나(null), floor backfill로 되돌아왔다.
+  if (record?.lineup_role === 'selected') {
+    return reasonCode === null || reasonCode === 'floor_backfill';
+  }
+  // reserve는 승급됐을 때만 main이다.
+  if (record?.lineup_role === 'reserve') return reasonCode === 'promoted';
+  return false;
+}
+
 // 후보 목록의 대표 그룹키를 입력 순서대로, 중복 없이 뽑는다.
 function uniqueGroupKeys(candidates) {
   return [...new Set(ensureArray(candidates).map(candidateGroupKey).filter(Boolean))];
+}
+
+// main 집합에서 파생되는 shortlistReport 요약 필드(#837). 호출부가 재조정 뒤에도 main 집합을
+// 더 바꾸면(#879 catch-up 2차 pass) 같은 함수로 다시 계산해, 정본(selected_articles)과 파생
+// 카운트가 한 artifact 안에서 어긋나는 일을 막는다.
+function selectionSummaryFromSelected(selectedCandidates) {
+  const groupKeys = uniqueGroupKeys(selectedCandidates);
+  return {
+    selected_article_count: ensureArray(selectedCandidates).length,
+    selected_group_count: groupKeys.length,
+    selected_representative_group_keys: groupKeys
+  };
 }
 
 // 승급 가드: LLM은 결정론이 이미 main 자격을 준 후보만 main으로 올릴 수 있다.
@@ -90,6 +131,20 @@ function coverageFor(lookup, candidate) {
   return null;
 }
 
+// 편집 계획이 이 후보를 main이 아닌 등급으로 채점했는가.
+//
+// 채점이 없으면 false다 — "계획에 없다"와 "계획이 거절했다"는 다른 사실이고, 결정론 레인은
+// 계획의 침묵을 거절로 읽으면 안 된다(reconcileCoverage도 미채점 후보에는 결정론 tier를 그대로
+// 남긴다). 반대로 채점이 있으면 main_article 외의 값은 전부 "main 아님"이다 — coverage_decision에
+// enum이 없어(#909) 모르는 값도 main은 아니다.
+//
+// 조회는 coverageFor 하나만 쓴다. 재조정이 강등에 쓴 조회와 여기가 갈라지면, 재조정이 뺀 후보를
+// 뒤 단계가 "계획에 없다"고 잘못 읽어 다시 main으로 올릴 수 있다(#879 2차 pass).
+function isPlannedNonMain(lookup, candidate) {
+  const decision = String(coverageFor(lookup, candidate)?.coverage_decision || '').trim();
+  return decision !== '' && decision !== COVERAGE_MAIN;
+}
+
 // cap clamp 순서: deterministic_score desc 단독.
 //
 // #1001: 예전에는 LLM impact_level을 1차 정렬 키로 두고 점수를 tiebreak로 썼지만, 그 순위표는
@@ -122,14 +177,18 @@ function applyCaps(proposedMain) {
 }
 
 // 결정론 재조정 진입점. 항상 실행된다(toggle 없음) — LLM coverage 제안을 받아 결정론
-// 불변식(승급 자격 가드·cap clamp·발행 floor backfill)을 강제한 최종 main 집합을 돌려준다.
+// 불변식(승급 자격 가드·cap clamp·발행 floor backfill)을 강제한 재조정 main 집합을 돌려준다.
+// 발행되는 최종 main 집합과 같지 않을 수 있다 — 호출부가 이 뒤에 release-class catch-up 2차
+// pass(#879)를 돌려 main을 더 올린다. 이 모듈은 그 레인을 알지 못한다.
 function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   const deterministicSelected = ensureArray(shortlistReport?.selected_articles);
   const reserve = ensureArray(shortlistReport?.reserve_candidates);
   // #1034: 채점 투영 전용 우주다. 편집 계획은 selected+reserve가 아니라 shortlisted capsule
   // 전체를 채점하므로(입력이 capsuleInputFromReport(articleCapsuleReport, 'shortlisted')),
   // 투영이 이 목록을 못 보면 매주 채점된 후보 1~2건이 조용히 빠진다. 아래 판정 단계는 이
-  // 목록을 절대 읽지 않는다 — main 승급 자격은 결정론 선정과 reserve로 닫혀 있어야 한다.
+  // 목록을 절대 읽지 않는다 — 이 함수의 main 승급 우주는 결정론 선정과 reserve로 닫혀 있다.
+  // (파이프라인 전체로는 닫혀 있지 않다: 재조정 뒤 release-class catch-up 2차 pass가 이 우주
+  // 밖에서도 승급한다. 그 레인은 #825가 릴리스에만 내준 여유 슬롯 규칙을 따로 집행한다.)
   const scoredUniverse = ensureArray(shortlistReport?.shortlisted_candidates);
   const lookup = buildCoverageLookup(editorialPlanReport);
   const entryFor = (candidate) => coverageFor(lookup, candidate);
@@ -256,19 +315,30 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   // 채점된 후보 전부를 강등 여부와 무관하게 싣는다. 관측이지 판정이 아니라 게이트에 쓰이지
   // 않는다.
   //
-  // reason_code는 "결정론 편성 대비 무슨 일이 있었나"를 담는다. 사유를 갖는 변화는 다섯 갈래이고,
-  // changes.push가 일어나는 자리와 정확히 일대일이다:
+  // reason_code는 "결정론 편성 대비 무슨 일이 있었나"를 담는다. 이 함수가 세우는 사유는 다섯
+  // 갈래이고, changes.push가 일어나는 자리와 정확히 일대일이다:
   //   demoted(cap_clamp | editorial_plan_*) / promotion_blocked_ineligible /
   //   promotion_clamped(cap_clamp) / floor_backfill / promoted
+  // 여섯 번째 사유 release_class_catch_up_promoted는 이 함수가 세우지 않는다. 재조정이 끝난 뒤
+  // release-class catch-up 2차 pass(#879)가 main 집합을 더 늘리고, 그 호출부가 레코드에 찍는다.
+  // 이 함수는 그 승급을 볼 수 없으므로 여기서 유추하지 않는다.
+  //
   // 실제로 뭔가 일어난 후보가 null로 남으면 "아무 일도 없었다"로 잘못 읽힌다. null이 나오는
   // 자리는 세 갈래다:
   //   1. 결정론 편성 그대로 발행된 main (lineup_role='selected')
   //   2. 제안조차 main이 아니었던 reserve (lineup_role='reserve')
-  //   3. lineup_role='shortlist_only' 후보 전부 — 등급과 무관하게 항상 null이다
-  // 3번을 "아무 일도 없었다"로 읽으면 안 된다. 이 후보들은 승급 대상 집합(selected+reserve)
-  // 밖이라 재조정이 아예 고려하지 않는다. 계획이 main_article로 제안한 후보도 여기 들어오며
-  // (프로덕션에서 흔하다 — 2026-08-31 reporter_candidate_count 8 vs selected 5 + reserve 1),
-  // 그 제안이 무시된 상태가 곧 null로 남는다. 그것이 사유 없음이 아니라 이 필드가 담는 사실이다.
+  //   3. lineup_role='shortlist_only' 후보 중 2차 pass가 승급하지 않은 것
+  // 3번을 "아무 일도 없었다"로 읽으면 안 된다. 이 후보들은 이 함수의 승급 대상 집합
+  // (selected+reserve) 밖이라 재조정이 아예 고려하지 않는다. 계획이 main_article로 제안한 후보도
+  // 여기 들어오며 (프로덕션에서 흔하다 — 2026-08-31 reporter_candidate_count 8 vs selected 5 +
+  // reserve 1), 그 제안이 무시된 상태가 곧 null로 남는다.
+  //
+  // 다만 "shortlist_only는 항상 null"은 아니다. 2차 pass의 승급 우주는 이 집합이 아니라
+  // release-class catch-up pool이고, 둘이 겹치는 후보를 2차 pass가 올리면 그 레코드에
+  // release_class_catch_up_promoted가 찍힌다. 승급분의 lineup_role은 단정하지 않는다 — pool은
+  // reserve와도 겹칠 수 있다. 반대로 계획이 채점하지 않은 pool 후보를 2차 pass가 올리면 레코드
+  // 자체가 없다(부재는 여전히 "미채점"이라는 뜻이고, main 여부를 뜻하지 않는다).
+  // 레코드가 그 main 집합에 들어갔는지는 isFinalMainRecord 하나로만 판정한다.
   //
   // 사유는 push 지점이 세우므로 여기서는 유추하지 않는다. 한 후보가 두 갈래에 걸리지는
   // 않는다 — backfill된 후보는 clampedKeys에 들어가 강등 루프가 건너뛰고, 승급·승급 차단·
@@ -309,16 +379,15 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
         // 그것을 묻는다. 그룹키로는 답할 수 없다 — 한 그룹키가 여러 후보를 접기 때문이다
         // (공유 explicit 키·lore 패치 시리즈·native tooling 상수). 그래서 후보 단위 사실로 싣는다.
         //
-        // 재조정 뒤 최종 main 여부는 이 값 하나로도, reason_code 하나로도 답하지 못한다. 두
-        // 필드가 함께 필요하고, 채점된 후보에 한해 다음이 정확히 최종 main이다:
+        // 최종 main 여부는 이 값 하나로도, reason_code 하나로도 답하지 못한다. 두 필드가 함께
+        // 필요하고, 그 규칙은 이 모듈의 isFinalMainRecord가 정본이다. 식을 주석에 옮겨 적지
+        // 않는다 — #1034가 그렇게 적어 둔 식이 #879 2차 pass가 들어온 뒤 조용히 거짓이 됐다.
         //
-        //   (lineup_role === 'selected' && reason_code ∈ {null, 'floor_backfill'}) ||
-        //   (lineup_role === 'reserve'  && reason_code === 'promoted')
-        //
-        // reason_code 단독 규칙은 강등도 승급도 없이 그대로 발행된 main(=null)을 통째로 놓친다.
-        // 미채점 후보는 레코드가 없으므로 이 식의 대상이 아니다. coverage-reconciliation.test.js의
-        // "레코드 두 필드로 계산한 최종 main이 실제 편성과 일치한다"가 이 식을 그대로 집행한다 —
-        // 규칙을 고치려면 그 테스트를 함께 고쳐야 한다.
+        // reason_code 단독 규칙은 강등도 승급도 없이 그대로 발행된 main(=null)을 통째로 놓치고,
+        // lineup_role 단독 규칙은 2차 pass가 shortlist_only에서 올린 승급분을 놓친다.
+        // 미채점 후보는 레코드가 없으므로 이 술어의 대상이 아니다. coverage-reconciliation.test.js의
+        // "레코드 두 필드로 계산한 최종 main이 실제 편성과 일치한다"가 같은 함수를 실제 편성에
+        // 대조해 집행한다.
         lineup_role: lineupRole,
         // 강등 기록(reconciliation_demoted_groups)과 교차 참조하는 용도로 함께 싣는다.
         // #913이 그 기록에 쓴 키와 같은 함수라 두 목록을 그룹 단위로 이을 수 있다.
@@ -332,11 +401,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   return {
     selected: clamped,
     // 재조정된 main 집합에서 파생되는 shortlistReport 요약 필드.
-    selection_summary: {
-      selected_article_count: clamped.length,
-      selected_group_count: reconciledGroupKeys.length,
-      selected_representative_group_keys: reconciledGroupKeys
-    },
+    selection_summary: selectionSummaryFromSelected(clamped),
     diff: {
       deterministic_selected: [...deterministicKeys],
       reconciled_selected: clamped.map(candidateKey),
@@ -355,7 +420,12 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
 
 module.exports = {
   reconcileCoverage,
+  buildCoverageLookup,
   isDeterministicallyMainEligible,
+  isPlannedNonMain,
+  isFinalMainRecord,
+  CATCH_UP_PROMOTED_AFTER_RECONCILIATION,
+  selectionSummaryFromSelected,
   candidateKey,
   // 테스트가 프롬프트 목록과 양방향으로 대조하려고 읽는다. 런타임 소비자는 없다.
   KNOWN_COVERAGE_DECISIONS

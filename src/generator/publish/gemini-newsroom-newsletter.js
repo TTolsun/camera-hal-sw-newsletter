@@ -25,6 +25,7 @@ const {
 } = require('../render/newsletter-schema');
 const { isSafeExternalImageUrl } = require('../../shared/render/image-candidates');
 const {
+  admitReleaseClassCatchUpAfterReconciliation,
   buildShortlistReport,
   normalizedUrlHash,
   reporterInputFromShortlist
@@ -333,11 +334,14 @@ const {
 } = require('./orchestrator-editorial-plan-stage');
 const {
   reconcileCoverage,
-  candidateKey
+  selectionSummaryFromSelected,
+  candidateKey,
+  CATCH_UP_PROMOTED_AFTER_RECONCILIATION
 } = require('../select/coverage-reconciliation');
 const {
   resetReconciliationProvenance,
-  assignReconciliationProvenance
+  assignReconciliationProvenance,
+  stampCatchUpPromotions
 } = require('./orchestrator-reconciliation-provenance');
 const {
   compositionSummary,
@@ -458,6 +462,10 @@ async function main() {
   // 스냅샷이 앵커한다. 이 값들을 재조정 입력·publish_ready 기준으로 써서 attempt 간 멱등성을 지킨다.
   const pristineReserveCandidates = ensureArray(shortlistReport.reserve_candidates);
   const deterministicPublishReady = shortlistReport.publish_ready === true;
+  // #879: catch-up 목록은 attempt 안에서 2차 pass 결과로 덮인다. 결정론 시점 값(1차 승급분)을
+  // 루프 밖에서 잡아 둬야 attempt 시작 초기화가 직전 attempt 값이 아닌 결정론 값으로 되돌린다.
+  const deterministicCatchUpUsedCount = shortlistReport.catch_up_used_count;
+  const deterministicCatchUpArticles = shortlistReport.catch_up_articles;
 
   for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
     generationRunState.currentQualityAttempt = attempt;
@@ -467,6 +475,22 @@ async function main() {
     // 초기화와 대입은 orchestrator-reconciliation-provenance.js의 한 목록에서 파생되므로,
     // 새 provenance 필드를 추가할 때 초기화를 빠뜨릴 수 없다.
     resetReconciliationProvenance(shortlistReport);
+    // #879: 2차 pass 결과도 같은 attempt 단위 사실이지만 그 목록에는 넣지 않는다 — 목록의 계약은
+    // "값이 배열이고 빈 배열이 이번 attempt 미실행을 뜻한다"인데 아래 세 필드는 그렇지 않다.
+    // 관측은 아직 재판정하지 않았음을 뜻하는 null로, catch-up 목록은 결정론 시점 값으로 되돌린다
+    // (1차 승급분은 이 attempt에서도 여전히 참이다). 빼먹으면 attempt 1의 승급 결과가 attempt 2의
+    // 산출물로 커밋된다.
+    shortlistReport.release_class_catch_up_after_reconciliation = null;
+    shortlistReport.catch_up_used_count = deterministicCatchUpUsedCount;
+    shortlistReport.catch_up_articles = deterministicCatchUpArticles;
+    // reserve 목록도 attempt 단위 사실이다. 아래에서 이번 attempt의 최종 main 집합에 든 후보를
+    // 빼는데, 그 뺀 결과를 그대로 두면 다음 attempt가 직전 attempt의 승급을 물려받는다. 승급이
+    // attempt마다 달라지므로(편집 계획이 매 attempt 새로 나온다) 그때 사라진 후보는 selected에도
+    // reserve에도 없게 되고, editor는 결정론 선정이 만든 reserve capsule 하나를 잃는다.
+    // pristine 스냅샷으로 되돌려 eviction이 언제나 이번 attempt의 승급만 반영하게 한다 — 위
+    // 스냅샷 주석이 말하는 "reserve 풀은 pristine이 앵커한다"를 판정 입력만이 아니라 산출물에도
+    // 성립시킨다. 아래 eviction은 filter로 새 배열을 만들므로 스냅샷은 mutate되지 않는다.
+    shortlistReport.reserve_candidates = pristineReserveCandidates;
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
     const reporterStage = stageRun(LLM_STAGES.REPORTER, { qualityAttempt: attempt, totalAttempts });
     const editorStage = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: attempt, totalAttempts });
@@ -541,17 +565,44 @@ async function main() {
     });
     writeJson(path.join(newsroomDir, 'coverage-reconciliation.json'), coverageReconciliation.diff);
     const reconciledSelected = coverageReconciliation.selected;
-    const reconciledSelectedKeys = new Set(reconciledSelected.map(candidateKey));
-    shortlistReport.selected_articles = reconciledSelected;
+    // #879: 재조정이 라인업을 줄인 뒤 release-class catch-up을 한 번 더 본다. 1차 판정(선정
+    // 단계)은 결정론 편성이 max를 채운 상태를 보고 lineup_at_max로 끝나는데, 그 판정 시점의
+    // 라인업은 최종 라인업이 아니다 — 여기 강등이 뒤따르기 때문이다. 파생 요약 재계산보다
+    // 반드시 먼저 돌아야 한다. 순서가 뒤집히면 composition_summary·selected_group_count가
+    // 승급 前 값으로 굳어 정본과 어긋난다(#837이 고친 사고와 같은 모양).
+    const catchUpAfterReconciliation = admitReleaseClassCatchUpAfterReconciliation({
+      selected: reconciledSelected,
+      poolCandidates: shortlistReport.release_class_catch_up_pool,
+      reportedCandidates: reporter.candidates,
+      // 재조정이 방금 집행한 그 계획을 그대로 넘긴다. pool 후보도 reporter 입력에 있으면 계획의
+      // 채점 대상이라, 계획이 main에서 뺀 후보를 이 레인이 되살리면 coverage 권한(#724, 항상 ON)을
+      // 우회하게 된다. 두 단계가 같은 계획을 보게 해 그 경로 자체를 없앤다.
+      editorialPlanReport
+    });
+    const finalSelected = [...reconciledSelected, ...catchUpAfterReconciliation.admitted];
+    const finalSelectedKeys = new Set(finalSelected.map(candidateKey));
+    shortlistReport.selected_articles = finalSelected;
+    shortlistReport.release_class_catch_up_after_reconciliation = catchUpAfterReconciliation.observation;
+    // catch-up 목록은 최종 main 집합에서 다시 뽑는다. 이어붙이면 attempt를 재시도할 때마다
+    // 같은 기사가 쌓이고, 재조정이 강등한 1차 승급분이 목록에 남는다. 이 목록은 진단만이 아니라
+    // fact-check 후처리(pruneCatchUpFramingFactCheckItems)가 "지난 릴리스 회고" 서술을 가짜
+    // must_fix로 잡지 않게 하는 입력이므로, 발행되는 집합과 정확히 같아야 한다.
+    const catchUpArticles = finalSelected.filter(article => article.coverage_type === 'catch_up');
+    shortlistReport.catch_up_used_count = catchUpArticles.length;
+    shortlistReport.catch_up_articles = catchUpArticles.map(item => ({
+      title: item.title, url: item.url, catch_up_age_days: item.catch_up_age_days,
+      catch_up_lane: item.catch_up_lane
+    }));
     // 승급된 reserve는 reserve_candidates에서 제거해 selected/reserve 캡슐 중복을 막는다.
+    // 재조정 승급분과 2차 pass 승급분 모두 같은 규칙을 지난다.
     shortlistReport.reserve_candidates = ensureArray(shortlistReport.reserve_candidates)
-      .filter(candidate => !reconciledSelectedKeys.has(candidateKey(candidate)));
+      .filter(candidate => !finalSelectedKeys.has(candidateKey(candidate)));
     // 재조정된 편성으로 composition_summary·publish_ready를 재계산한다. publish_ready는 결정론
     // 값(deterministicPublishReady)에서 단조 하향만 한다 — 결정론이 not-ready였으면 그대로 두고,
     // 재조정 편성이 composition/publish 게이트를 못 넘으면 false로 낮춘다(결정론 편성 불변식을
     // 재조정이 우회하지 못하게). 기준을 shortlistReport.publish_ready가 아닌 결정론 스냅샷으로
     // 두어, 이전 attempt의 일시적 false가 다음 attempt를 영구 차단하지 않게 한다.
-    const reconciledSummary = compositionSummary(reconciledSelected);
+    const reconciledSummary = compositionSummary(finalSelected);
     shortlistReport.composition_summary = reconciledSummary;
     // #837: main 집합에서 파생되는 요약도 같이 갱신한다. 정본(selected_articles)만
     // 갈아끼우고 selected_article_count/selected_group_count/
@@ -559,7 +610,9 @@ async function main() {
     // composition_summary(재조정 후)와 top-level 카운트(재조정 전)가 모순되고
     // generation-status의 coverage 등식 좌변만 재조정 前 값이 되어 정상 발행에도
     // group_coverage_ok=false가 찍힌다(실측: 2026-07-20·2026-08-03).
-    Object.assign(shortlistReport, coverageReconciliation.selection_summary);
+    // 2차 pass 승급분까지 반영된 최종 main 집합에서 파생을 계산한다. 재조정 요약을 그대로
+    // 쓰면 승급분이 파생 카운트에서만 빠져 같은 사고가 재발한다.
+    Object.assign(shortlistReport, selectionSummaryFromSelected(finalSelected));
     // 강등/승급 사실은 coverage 등식에 참여하지 않는 별도 필드로 남긴다.
     // explicitly_demoted_group_keys는 editor가 스스로 선언한 강등 전용이고
     // (article-groups.js의 explicitDemotedGroups가 editor 출력만 읽는다), 거기에 합치면
@@ -574,12 +627,22 @@ async function main() {
     // - editorial_plan_scored_candidates: #1034 — 강등되지 않은 채점 후보(reserve·shortlist 전용)는
     //   강등 목록에 나타나지 않는다. 계획이 채점한 후보 전부를 남겨야 "왜 이 후보는 main이
     //   아니었나"에 답할 수 있다. 사유는 강등·승급 차단·승급 clamp·floor backfill 복귀·승급에
-    //   붙는다. null은 세 갈래다 — 그대로 발행된 main, 제안조차 main이 아니었던 reserve, 그리고
-    //   shortlist_only 후보 전부(등급과 무관하게 항상 null. 승급 대상 집합 밖이라 main_article
-    //   제안도 여기 들어온다). release-class catch-up pool 후보 중 reference 창에서만 온 것은
-    //   계획 입력 우주 밖이라 실리지 않는다 — 그 후보는 채점되지 않았고, 부재가 곧 그 답이다.
+    //   붙는다. null은 그대로 발행된 main, 제안조차 main이 아니었던 reserve, 그리고 2차 pass가
+    //   올리지 않은 shortlist_only다. release-class catch-up pool 후보 중 reference 창에서만 온
+    //   것은 계획 입력 우주 밖이라 실리지 않는다 — 채점되지 않았고, 부재가 곧 그 답이다.
     // - reconciliation_promoted_group_keys: 승급 키.
     assignReconciliationProvenance(shortlistReport, coverageReconciliation.diff);
+    // #879: 재조정 diff는 2차 pass를 모르므로, 위 대입이 끝난 뒤 승급분에만 사유를 덧씌운다.
+    // reconcileCoverage는 자기 출력이 최종 main 집합이라고 보고 레코드를 만드는데 그 뒤 위에서
+    // main 집합이 더 늘었다. 그대로 두면 방금 발행 집합에 넣은 기사가 이 목록에서는 "승급되지
+    // 않은 shortlist_only"(reason_code=null)로 남아, 한 artifact가 최종 main을 두 가지로 말한다
+    // (#837과 같은 모양). 어느 후보가 승급됐는지는 최종 main 집합을 아는 여기만 알고, 그 필드에
+    // 쓰는 일은 목록을 소유한 provenance 모듈이 한다 — 그래서 키만 넘긴다.
+    stampCatchUpPromotions(
+      shortlistReport,
+      catchUpAfterReconciliation.admitted.map(candidateKey),
+      CATCH_UP_PROMOTED_AFTER_RECONCILIATION
+    );
     shortlistReport.publish_ready = deterministicPublishReady
       && reviewCompositionGatePasses(reconciledSummary)
       && publishReadyGateReasonSummary(reconciledSummary).length === 0;
@@ -587,7 +650,7 @@ async function main() {
     // 재조정된 main-set에 맞춰 reporter 선택 플래그를 재동기화한다. 이것이 없으면
     // editor/fact-check/repair/completion/judge(전부 selectedReporterCapsules 소비)가 재조정 前
     // 집합을 작성·검증해 발행 콘텐츠가 publish_ready/composition 게이트가 승인한 편성과 어긋난다.
-    reporter = syncReporterSelectionToMain(reporter, reconciledSelected);
+    reporter = syncReporterSelectionToMain(reporter, finalSelected);
     articleCapsuleReport = buildArticleCapsuleReport(date, shortlistReport, { date, candidates: reporter.candidates }, {
       seedEvidencePack
     });
@@ -634,7 +697,7 @@ async function main() {
       // 추가 기사로 승격할 때 그 후보의 배경이 사라진다. artifact도 원본을 그대로 남긴다.
       // editorialPlanReport는 거르지 않는다 — 설계상 shortlisted(후보 풀) 뷰이고(#724) editor용 사본은
       // coverage_decision/impact_level이 제거된다(#700). 거르면 reserve 승급 등급이 사라진다.
-      backgroundContextReport: filterBackgroundContextToSelected(backgroundContextReport, reconciledSelected),
+      backgroundContextReport: filterBackgroundContextToSelected(backgroundContextReport, finalSelected),
       editorialPlanReport,
       shortlistReport,
       seedEvidencePack,
