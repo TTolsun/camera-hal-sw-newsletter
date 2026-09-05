@@ -126,16 +126,16 @@ async function resolveFollowedSourceItems(source, { indexItems = [], text = '', 
  *    끝나고, 대신 진단(`parser_extraction_failure`, `KEEP_AND_FIX_PARSER`)을 상시로 켜서 진짜
  *    파서 고장 신호를 묻는다. 그래서 생산자를 소비자 계약에 맞춘다(#880).
  * 3. registry가 `suppressGenericCandidateFallback: true`로 표식을 붙인 소스. 참고 자료는 아니지만
- *    인덱스 페이지에서 dated 후보를 뽑을 방법이 없다고 확인된 dated 릴리스 소스다. 이때 역할 표기
- *    (`sourceRole`/`mainArticlePolicy`)를 참고 자료로 바꾸면 폴백은 멎지만 소스의 성격을 사실과
+ *    지금 이 인덱스 페이지에서 쓸 만한 후보를 뽑지 못한다고 확인된 dated 릴리스 소스다. 이때 역할
+ *    표기(`sourceRole`/`mainArticlePolicy`)를 참고 자료로 바꾸면 폴백은 멎지만 소스의 성격을 사실과
  *    다르게 적게 되므로, 표기는 그대로 두고 이 표식으로만 폴백을 끈다(#880).
- *    현재 대상은 `samsung-mobile-security-updates` 하나다. 근거는 그 registry 항목의
- *    `sourceQualityNotes`에 있고(구조·발행일 부재·재개 조건), 실측 출처는 이슈 #880의 2026-09-03
- *    코멘트다.
+ *    현재 대상은 `samsung-mobile-security-updates` 하나다. 근거와 재개 조건은 그 registry 항목의
+ *    `sourceQualityNotes`에 있고, 실측 출처는 이슈 #880의 2026-09-03 코멘트다. 표식은 영구 판정이
+ *    아니다 - 그 노트의 재개 조건이 충족되면 파서를 만들고 이 표식을 뗀다.
  *
  * 여기서 막는 건 폴백뿐이다. 그리고 registry role이 `official_documentation_reference`인 소스는
  * 소스별 파서를 따로 두더라도 그 결과가 후보로 살아나지 않는다 — collect-news-candidates.js의
- * `classifySelection`(`:577`)이 파서 결과와 무관하게 `finalSelectionEligibility='exclude'`,
+ * `classifySelection`이 파서 결과와 무관하게 `finalSelectionEligibility='exclude'`,
  * `isArticleCandidate=false`, `hasDatedEvidence=false`로 즉시 닫는다. 그 소스의 파서를 다시
  * 살리려면 registry role도 함께 되돌려야 한다. 이 술어는 `mainArticlePolicy=reference_only`만
  * 가진 소스도 막지만, 그쪽은 classifySelection의 role 분기를 타지 않는다 — 지금 registry의 참고

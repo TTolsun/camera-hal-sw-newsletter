@@ -307,11 +307,8 @@ function validateSource(errors, source, index, sectionMap, seenIds) {
 
   // 선택 필드지만 값 타입은 강제한다. shouldSuppressGenericFallback이 `=== true`로만 보므로
   // "true" 같은 문자열이 들어오면 오류 없이 억제가 사라진다.
-  if (
-    Object.prototype.hasOwnProperty.call(source, 'suppressGenericCandidateFallback') &&
-    typeof source.suppressGenericCandidateFallback !== 'boolean'
-  ) {
-    errors.push(`${label}.suppressGenericCandidateFallback must be a boolean when present.`);
+  if (Object.prototype.hasOwnProperty.call(source, 'suppressGenericCandidateFallback')) {
+    validateBoolean(errors, `${label}.suppressGenericCandidateFallback`, source.suppressGenericCandidateFallback);
   }
 
   if (isRedditCommunitySource(source)) {
