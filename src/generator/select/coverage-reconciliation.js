@@ -54,7 +54,9 @@ function candidateKey(candidate) {
 // 모양의 정본이 이 모듈이기 때문이다 — 사유 문자열이 호출부에만 있으면 이 모듈의 규칙과 갈라진다.
 const CATCH_UP_PROMOTED_AFTER_RECONCILIATION = 'release_class_catch_up_promoted';
 
-// 레코드 한 건이 최종 main 편성에 들어갔는가.
+// 레코드 한 건이 재조정과 2차 pass를 지난 main 집합(shortlistReport.selected_articles)에
+// 들어갔는가. "발행됐는가"가 아니다 — 그 뒤 단계(editor 강등·품질 게이트·발행 차단)가 더 뺄 수
+// 있고, 이 술어는 그 단계들을 보지 않는다.
 //
 // 규칙을 주석·테스트·소비자에 각각 옮겨 적으면 한 곳만 갱신되고 나머지가 조용히 낡는다.
 // #1034가 산문으로 적은 공식이 #879 2차 pass가 들어오면서 정확히 그렇게 됐다 — 공식은 그대로인데
@@ -331,9 +333,12 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
   // 여기 들어오며 (프로덕션에서 흔하다 — 2026-08-31 reporter_candidate_count 8 vs selected 5 +
   // reserve 1), 그 제안이 무시된 상태가 곧 null로 남는다.
   //
-  // 다만 "shortlist_only는 항상 null"은 아니다. 2차 pass는 정확히 이 집합에서 승급하므로,
-  // 그 승급분은 shortlist_only인 채로 release_class_catch_up_promoted를 달고 최종 main이 된다.
-  // 후보 하나가 main으로 발행됐는지는 isFinalMainRecord 하나로만 판정한다.
+  // 다만 "shortlist_only는 항상 null"은 아니다. 2차 pass의 승급 우주는 이 집합이 아니라
+  // release-class catch-up pool이고, 둘이 겹치는 후보를 2차 pass가 올리면 그 레코드에
+  // release_class_catch_up_promoted가 찍힌다. 승급분의 lineup_role은 단정하지 않는다 — pool은
+  // reserve와도 겹칠 수 있다. 반대로 계획이 채점하지 않은 pool 후보를 2차 pass가 올리면 레코드
+  // 자체가 없다(부재는 여전히 "미채점"이라는 뜻이고, main 여부를 뜻하지 않는다).
+  // 레코드가 그 main 집합에 들어갔는지는 isFinalMainRecord 하나로만 판정한다.
   //
   // 사유는 push 지점이 세우므로 여기서는 유추하지 않는다. 한 후보가 두 갈래에 걸리지는
   // 않는다 — backfill된 후보는 clampedKeys에 들어가 강등 루프가 건너뛰고, 승급·승급 차단·

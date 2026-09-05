@@ -235,16 +235,19 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // 갈래는 재조정의 승급 대상 집합 밖이라 재조정이 고려하지 않으며, 계획이 main_article로
     // 제안한 후보도 여기 들어온다. "아무 일도 없었다"로 읽지 말 것.
     //
-    // #879: shortlist_only가 곧 미발행은 아니다. release-class catch-up 2차 pass는 정확히 이
-    // 집합에서 승급하며, 그 승급분은 lineup_role='shortlist_only'인 채로 reason_code에
-    // release_class_catch_up_promoted를 달고 최종 main으로 발행된다. 이 파일만 읽고 "이 후보가
-    // main으로 나갔나"를 판정할 때는 lineup_role만 보지 말고 coverage-reconciliation.js의
-    // isFinalMainRecord와 같은 규칙(2차 pass 사유 포함)을 쓸 것.
+    // #879: shortlist_only가 곧 "main 집합 밖"은 아니다. release-class catch-up 2차 pass는
+    // 재조정 뒤에 main을 더 올리고, 그 승급분 레코드에는 reason_code로
+    // release_class_catch_up_promoted가 찍힌다. lineup_role은 단정하지 말 것 — 2차 pass의 우주는
+    // catch-up pool이라 reserve 레코드에도 이 사유가 찍힐 수 있다. 그래서 이 파일만 읽고 "이
+    // 후보가 main 집합에 들었나"를 판정할 때는 lineup_role만 보지 말고
+    // coverage-reconciliation.js의 isFinalMainRecord와 같은 규칙(2차 pass 사유 포함)을 쓸 것.
+    // 그것도 편성 여부까지다 — 발행 여부는 이 필드가 아니라 렌더된 기사 목록이 답한다.
     //
     // 이 목록이 담지 '않는' 것: release-class catch-up pool 후보 중 reference 창에서만 온
     // 후보다. shortlist는 primary·fallback 창만 담으므로(newsroom-selection.js) 그 후보는 계획
-    // 입력 우주 밖이고, 따라서 계획이 채점하지 않았다. 부재가 곧 그 답이다. fallback 창에서 온
-    // catch-up 후보와 catch-up이 승급한 후보는 우주 안이라 정상적으로 실린다.
+    // 입력 우주 밖이고, 따라서 계획이 채점하지 않았다. 부재가 곧 그 답이다.
+    // 우주 안이라고 해서 반드시 실리는 것도 아니다: 이 목록은 등급을 실제로 받은 후보만 담으므로,
+    // 계획이 채점을 빠뜨린 후보는 catch-up이 승급했더라도 레코드가 없다.
     editorial_plan_scored_candidates: ensureArray(report.editorial_plan_scored_candidates),
     reconciliation_promoted_group_keys: ensureArray(report.reconciliation_promoted_group_keys),
     reserve_candidate_count: diagnostics.reserve_candidate_count ?? report.reserve_candidate_count ?? null,
