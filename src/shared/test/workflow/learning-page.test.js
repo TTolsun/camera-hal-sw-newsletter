@@ -399,6 +399,9 @@ test('learning page fades the cut-off edge of the narrow-screen table of content
   // 0 을 막는다. calc(100% - 0px) 는 100% 라 그라디언트가 완전 불투명해져 페이드가 통째로
   // 사라지는데, 선언 넷은 그대로 남아 있어 아래 단언이 전부 통과한다.
   assert.match(String(width), /^[1-9]\d*px$/, '페이드 폭은 0 이 아닌 px 리터럴이어야 한다 — 아래 선언 셋이 이 값 하나에서 나온다');
+  // 상한도 건다. 값이 커져도 네 선언이 함께 커지므로 일관성 검사만으로는 안 잡히는데, 스트립
+  // clientWidth 가 320px 화면에서 288px 이라 폭이 그쯤 되면 단서가 아니라 가림막이 된다.
+  assert.ok(Number.parseInt(width, 10) <= 48, '페이드 폭이 48px 를 넘으면 스트립을 덮는다');
 
   const gradient = 'linear-gradient(to right, #000 calc(100% - var(--learning-nav-fade-width)), transparent)';
   // 접두어 없는 mask-image 는 Chrome 120·Safari 15.4 부터다. 그 전 WebKit/Blink 는 접두어 붙은
