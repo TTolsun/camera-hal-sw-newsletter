@@ -51,7 +51,8 @@
     "validate:llm-publication-quality": "node src/generator/validate/validate-llm-publication-quality.js",
     "validate:localization": "node src/generator/validate/validate-localization.js",
     "validate:seo": "node src/generator/validate/validate-seo-metadata.js",
-    "validate:url-parity": "node src/generator/validate/validate-url-parity.js"
+    "validate:url-parity": "node src/generator/validate/validate-url-parity.js",
+    "dump:candidate-diagnostics": "node src/generator/publish/dump-candidate-diagnostics.js"
   },
   "dependencies": {
     "@google/genai": "^1.0.0"
