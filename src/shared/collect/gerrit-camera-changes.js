@@ -79,13 +79,13 @@ const NOISE_SUBJECT_PATTERNS = [
 // 봇 label이다(실측: 창 안 NEW 3건 전부 이 label만 +1).
 const HUMAN_REVIEW_LABEL = 'Code-Review';
 
-// presubmit 자동화가 붙이는 자리인 검증 label(Gerrit 관례). 통과했다는 뜻이지 사람이 코드를 봤다는
-// 뜻이 아니므로 긍정 근거로 세지 않는다. 부정 표는 아래에서 함께 본다.
-const AUTOMATED_VERIFICATION_LABELS = ['Verified', 'Presubmit-Verified'];
+// 이름이 사람 리뷰를 뜻하지 않는 검증 label. 검증 통과 여부를 말할 뿐 사람이 코드를 봤다는 뜻은
+// 아니므로 긍정 근거로 세지 않는다. 부정 표는 아래에서 함께 본다.
+const VERIFICATION_LABELS = ['Verified', 'Presubmit-Verified'];
 
-// 부정 표를 보는 label. 자동 검증의 rejected는 "이 변경은 빌드·검증을 통과하지 못했다"는 뜻이라,
+// 부정 표를 보는 label. 검증 label의 rejected는 "이 변경은 빌드·검증을 통과하지 못했다"는 뜻이라,
 // 그걸 무시하면 리뷰어 +1 하나로 빌드가 깨진 제안이 main 기사가 된다.
-const BLOCKING_VOTE_LABELS = [HUMAN_REVIEW_LABEL, ...AUTOMATED_VERIFICATION_LABELS];
+const BLOCKING_VOTE_LABELS = [HUMAN_REVIEW_LABEL, ...VERIFICATION_LABELS];
 
 function noop() {}
 
@@ -190,12 +190,12 @@ function hasPositiveVote(label) {
  * 달려 있어서, +2라고 적으면 코드가 확인하지 않은 값을 후보가 주장하게 된다.
  *
  * positive는 사람 리뷰가 붙었을 때만 참이다. buildCandidate가 이 값으로 NEW 변경의 main 자격을
- * 정하므로, 자동 검증 통과를 여기에 세면 사람이 아무도 보지 않은 제안이 main 기사가 된다(#1061).
+ * 정하므로, 검증 label의 표를 여기에 세면 사람이 아무도 보지 않은 제안이 main 기사가 된다(#1061).
  */
 function reviewSignals(labels = {}) {
   const votes = labels || {};
   const negativeLabels = BLOCKING_VOTE_LABELS.filter(name => hasNegativeVote(votes[name]));
-  const verifiedLabels = AUTOMATED_VERIFICATION_LABELS.filter(name => hasPositiveVote(votes[name]));
+  const verifiedLabels = VERIFICATION_LABELS.filter(name => hasPositiveVote(votes[name]));
   const negative = negativeLabels.length > 0;
   const positive = !negative && hasPositiveVote(votes[HUMAN_REVIEW_LABEL]);
   let phrase;
@@ -204,7 +204,7 @@ function reviewSignals(labels = {}) {
   } else if (positive) {
     phrase = `Reviewed: ${HUMAN_REVIEW_LABEL} carries an approving or recommending vote.`;
   } else if (verifiedLabels.length > 0) {
-    phrase = `Automated verification only: ${verifiedLabels.join(', ')} passed, but no ${HUMAN_REVIEW_LABEL} vote has been cast.`;
+    phrase = `Verification only: ${verifiedLabels.join(', ')} carries an approving or recommending vote, but no ${HUMAN_REVIEW_LABEL} vote has been cast.`;
   } else {
     phrase = 'No Code-Review or verification vote has been cast yet.';
   }
@@ -295,7 +295,7 @@ function buildSummary(detail, scope, review, dateInfo, revisionSha) {
  * 후보 하나를 만든다.
  *
  * MERGED이거나 사람 리뷰(Code-Review)가 붙은 NEW는 등록부의 소스 정책(conditional)을 그대로 따른다.
- * 그 밖의 NEW는 자동 검증만 통과한 것까지 포함해 mainArticlePolicy를 watchlist_only로 내린다. 이 값은
+ * 그 밖의 NEW는 검증 label 표만 있는 것까지 포함해 mainArticlePolicy를 watchlist_only로 내린다. 이 값은
  * source-quality-classifier가 소스 정책보다 우선해 읽으므로, 그 후보는 blocker 없이 blocked가 되고
  * (blocker가 비어 있어 mailing-list 강한-근거 승급도 걸리지 않는다) briefing 재료로만 남는다.
  */

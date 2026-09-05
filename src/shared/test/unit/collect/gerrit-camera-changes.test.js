@@ -188,7 +188,7 @@ test('review signals read the label shortcuts and ignore the licensing bot', () 
   assert.deepEqual(reviewSignals({ 'Open-Source-Licensing': { recommended: { _account_id: 1 } }, 'Code-Review': {} }).positive, false);
   assert.equal(reviewSignals({ 'Code-Review': { approved: { _account_id: 1 } } }).positive, true);
   assert.equal(reviewSignals({ 'Code-Review': { recommended: { _account_id: 1 } } }).positive, true);
-  // 자동 검증 label은 긍정 근거가 아니다 - 통과했다는 뜻이지 사람이 코드를 봤다는 뜻이 아니다(#1061).
+  // 검증 label은 긍정 근거가 아니다 - 검증 통과를 말할 뿐 사람이 코드를 봤다는 뜻이 아니다(#1061).
   assert.equal(reviewSignals({ 'Verified': { approved: { _account_id: 1 } } }).positive, false);
   assert.equal(reviewSignals({ 'Presubmit-Verified': { approved: { _account_id: 1 } } }).positive, false);
   // 부정 표가 있으면 다른 label이 긍정이어도 긍정 근거로 보지 않는다.
@@ -207,16 +207,17 @@ test('a failed verification blocks promotion even when a reviewer recommended th
   assert.match(signals.phrase, /Presubmit-Verified carries a negative vote/);
 });
 
-test('an automated verification pass without a human review stays watchlist_only', async () => {
-  // presubmit 자동화가 붙이는 자리인 Verified 표 하나로 main 자격을 얻으면, 사람이 아무도 보지 않은
-  // 제안이 main 기사가 된다(#1061). 이 코드는 표를 던진 주체를 확인하지 않으므로, 사람 리뷰라고
-  // 말할 수 있는 것은 사람 리뷰 label인 Code-Review뿐이다.
+test('a verification vote without a human review stays watchlist_only', async () => {
+  // 검증 label인 Verified 표 하나로 main 자격을 얻으면, 사람이 아무도 보지 않은 제안이 main 기사가
+  // 된다(#1061). 이 코드는 표를 던진 주체를 확인하지 않으므로, 사람 리뷰라고 말할 수 있는 것은
+  // 사람 리뷰 label인 Code-Review뿐이다.
   const signals = reviewSignals({ 'Verified': { approved: { _account_id: 1 } } });
   assert.equal(signals.positive, false);
   assert.equal(signals.negative, false);
-  // 문구는 "리뷰가 붙었다"가 아니라 자동 검증만 통과했다고 말한다.
-  assert.match(signals.phrase, /Automated verification only: Verified passed/);
+  // 문구는 축약 필드가 말하는 사실만 옮긴다. 표를 던진 주체를 읽지 않으므로 "자동"이라고 쓰지 않는다.
+  assert.match(signals.phrase, /^Verification only: Verified carries an approving or recommending vote, but no Code-Review vote has been cast\.$/);
   assert.doesNotMatch(signals.phrase, /^Reviewed:/);
+  assert.doesNotMatch(signals.phrase, /Automated|automatic|bot/i);
   // 문구에는 점수를 쓰지 않는다 - approved는 "그 label의 최대값"이라 프로젝트 설정에 달려 있다.
   assert.doesNotMatch(signals.phrase, /[+-]\d/);
 
