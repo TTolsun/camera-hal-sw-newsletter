@@ -492,18 +492,19 @@ test('the per-issue release-class cap counts first-pass promotions that survived
   assert.equal(secondPass.admitted.length, 0, '호당 release-class 상한을 1차와 합산해 지켜야 한다');
 });
 
-// --- reference 창 후보의 구조 제약 ------------------------------------------
+// --- reference 창 후보와 capsule (#879 레버 A) -------------------------------
 //
-// reporter 입력은 shortlisted_candidates에서만 만들어지고(reporterInputFromShortlist), 2차 pass
-// 시점에 pool에 남은 reference 창 후보는 그 목록에 없다 — 1차가 승급한 후보만 shortlist에 실리고
-// 그건 fallback 창으로 재작성돼 pool에서 빠지기 때문이다. capsule 없이 main으로 올리면 selected
-// 에는 있는데 rendered에는 없는 그룹이 생겨 커버리지 등식이 깨진다. 고칠 배선이 아니라 지켜야 할
-// 제약이므로, 진짜 배선 결함을 뜻하는 not_in_reporter_input과 같은 사유로 접으면 안 된다.
+// reporter 입력은 shortlisted_candidates에서만 만들어진다(reporterInputFromShortlist). 레버 A
+// 이전에는 2차 pass 시점에 pool에 남은 reference 창 후보가 그 목록에 없어 원리상 승급 불가였다 —
+// 1차가 승급한 후보만 shortlist에 실렸고 그건 fallback 창으로 재작성돼 pool에서 빠졌다. 이 이슈를
+// 연 동기 사례(libcamera v0.7.2, 2026-08-10)가 정확히 그 모양이었다: 1차는 자리가 없었고
+// (lineup_at_max) 2차는 자리가 생겼지만 capsule이 없었다.
+//
+// 레버 A는 pool 후보를 reporter 입력에 미리 실어 그 교착을 끊는다. capsule 없이 올리는 길은
+// 그대로 막혀 있다 — capsule이 없으면 selected에는 있는데 rendered에는 없는 그룹이 생겨 커버리지
+// 등식이 깨진다.
 
-test('a reference-window release is blamed on the missing capsule, not on wiring', () => {
-  // 실측 모양: 31일령 릴리스 → reference 창 → 1차 pool에는 들어가지만 reporter 입력에는
-  // 원리상 없다. 여기에 not_in_reporter_input을 찍으면 "reporter 배선이 깨졌다"로 읽히는데,
-  // 그 사유는 진짜 결함일 때만 울려야 하는 신호다.
+test('a reference-window release gets a capsule and is promoted once reconciliation frees a seat', () => {
   const referenceRelease = releaseCandidate({
     title: 'v0.7.1', url: 'https://gitlab.com/libcamera/libcamera/-/tags/v0.7.1',
     published_date: '2026-06-25', version_or_release: 'v0.7.1'
@@ -512,48 +513,90 @@ test('a reference-window release is blamed on the missing capsule, not on wiring
   const pooled = shortlist.release_class_catch_up_pool;
   assert.equal(pooled.length, 1);
   assert.equal(pooled[0].freshness_window, 'reference', 'reference 창 후보를 만든 상태');
-  assert.ok(
-    !shortlist.shortlisted_candidates.some(candidate => candidate.url === referenceRelease.url),
-    'reference 창 후보는 shortlist에 오르지 않는다 = reporter 입력에도 없다'
+
+  const entry = shortlist.shortlisted_candidates.find(candidate => candidate.url === referenceRelease.url);
+  assert.ok(entry, 'pool 후보가 reporter 입력에 실려야 나중에 쓸 capsule이 생긴다');
+  assert.equal(entry.catch_up_pool_candidate, true, '왜 실렸는지가 산출물에 남아야 한다');
+  assert.equal(entry.final_selected, false, '아직 승급된 것이 아니다');
+  assert.equal(entry.reserve_candidate, false, 'reserve와는 다른 자리다');
+  assert.deepEqual(
+    (entry.exclusion_reasons || []).filter(reason => /^selection_window=/.test(String(reason))),
+    [],
+    '선정 창 제외 표식은 지운다 — 남기면 뒤 단계가 그 표식으로 되돌리려 든다'
   );
 
   const keep = shortlist.primary_selected_articles[0].url;
   const { reconciled, secondPass } = runSecondPass(shortlist, planDemotingAllExcept(shortlist, [keep]));
 
-  assert.equal(reconciled.length, 1, '자리는 비어 있다 — 막는 것은 슬롯이 아니다');
+  assert.equal(reconciled.length, 1, '재조정이 자리를 비운 주');
+  assert.deepEqual(secondPass.admitted.map(item => item.url), [referenceRelease.url]);
+  assert.equal(
+    secondPass.admitted[0].catch_up_origin_window,
+    'reference',
+    '어느 창에서 왔는지는 승급본에 남는다'
+  );
+  assert.deepEqual(secondPass.observation, { pool_size: 1, admitted: 1, blocked_reason: '' });
+});
+
+test('a pool candidate the shortlist cap pushed out is reported as reference_window_no_capsule', () => {
+  // 레버 A 이후 이 사유는 "늘 참인 조건"이 아니라 용량 사실이다. pool 후보는 필수 그룹의 맨 뒤라
+  // cap을 넘기면 가장 먼저 밀리고, 그 주에는 capsule이 없어 승급할 수 없다.
+  const referenceRelease = releaseCandidate({
+    title: 'v0.7.1', url: 'https://gitlab.com/libcamera/libcamera/-/tags/v0.7.1',
+    published_date: '2026-06-25', version_or_release: 'v0.7.1'
+  });
+  const shortlist = report([...maxedWeek(), referenceRelease], { cap: 5 });
+  assert.equal(shortlist.release_class_catch_up_pool.length, 1, 'pool에는 그대로 있다');
+  assert.ok(
+    !shortlist.shortlisted_candidates.some(candidate => candidate.url === referenceRelease.url),
+    'cap이 pool 후보를 밀어낸 상태를 만든다'
+  );
+
+  const keep = shortlist.primary_selected_articles[0].url;
+  const { secondPass } = runSecondPass(shortlist, planDemotingAllExcept(shortlist, [keep]));
+
   assert.equal(secondPass.admitted.length, 0);
-  // pool_size는 이 pass가 실제로 본 후보 수 그대로다. 0으로 줄이면 자격 있는 릴리스가 있던
-  // 주에도 no_eligible_candidate가 찍혀 "그 주엔 릴리스가 없었다"로 읽힌다(#838이 없애려던 혼동).
   assert.deepEqual(secondPass.observation, {
     pool_size: 1, admitted: 0, blocked_reason: 'reference_window_no_capsule'
   });
 });
 
-test('a real dedup skip outranks the reference-window constraint', () => {
-  // 두 사유가 같은 주에 함께 성립하는 상태. reference 창 제약은 이 시점에 늘 참이라 사유로서
-  // 정보량이 낮고, duplicate_release_page는 그 주에만 성립한 사실이다. 순서를 뒤집으면 늘 참인
-  // 조건이 그 주에만 일어난 사실을 덮는다.
+test('the capsule-capacity reason outranks a dedup skip', () => {
+  // 두 사유가 같은 주에 함께 성립하는 상태. cap 6이면 reference 창 릴리스는 밀려 capsule이 없고,
+  // fallback 창 릴리스는 capsule을 받아 릴리스 페이지 dedup까지 도달한다.
+  //
+  // 레버 A 이전 순서는 반대였다. 그때 reference 창 제약은 이 시점에 늘 참이라 정보량이 0이었고,
+  // 그 주에만 성립한 사실(duplicate_release_page)을 덮으면 안 됐다. 이제는 이 사유가 뜨는 주가
+  // 실제로 cap이 후보를 밀어낸 주이고, 그건 dedup보다 먼저 알아야 할 용량 신호다.
   const referenceRelease = releaseCandidate({
     title: 'v0.7.1', url: 'https://gitlab.com/libcamera/libcamera/-/tags/v0.7.1',
     published_date: '2026-06-25', version_or_release: 'v0.7.1'
   });
-  // freshWeek()[0]과 같은 CameraX 릴리스 노트 페이지 — fallback 창이라 shortlist에 오른다.
+  // freshWeek()[0]과 같은 CameraX 릴리스 노트 페이지 — fallback 창이라 capsule을 받는다.
   const sameReleasePage = releaseCandidate({
     title: 'CameraX 1.5.0',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0',
-    published_date: '2026-07-10', version_or_release: '1.5.0', api_or_component: 'CameraX'
+    published_date: '2026-07-11', version_or_release: '1.5.0', api_or_component: 'CameraX'
   });
-  const shortlist = report([...maxedWeek(), referenceRelease, sameReleasePage]);
+  const shortlist = report([...maxedWeek(), referenceRelease, sameReleasePage], { cap: 6 });
   const pooledWindows = shortlist.release_class_catch_up_pool
     .map(candidate => candidate.freshness_window).sort();
   assert.deepEqual(pooledWindows, ['fallback', 'reference'], '두 사유의 후보가 같은 pool에 있다');
+  assert.ok(
+    !shortlist.shortlisted_candidates.some(candidate => candidate.url === referenceRelease.url),
+    'reference 창 후보는 cap에 밀려 capsule이 없다'
+  );
+  assert.ok(
+    shortlist.shortlisted_candidates.some(candidate => candidate.url === sameReleasePage.url),
+    'fallback 창 후보는 capsule을 받아 dedup 검사까지 도달한다'
+  );
 
   const keep = freshWeek()[0].url;
   const { secondPass } = runSecondPass(shortlist, planDemotingAllExcept(shortlist, [keep]));
 
   assert.equal(secondPass.admitted.length, 0);
   assert.deepEqual(secondPass.observation, {
-    pool_size: 2, admitted: 0, blocked_reason: 'duplicate_release_page'
+    pool_size: 2, admitted: 0, blocked_reason: 'reference_window_no_capsule'
   });
 });
 
