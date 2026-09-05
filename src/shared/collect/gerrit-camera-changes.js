@@ -189,6 +189,10 @@ function hasPositiveVote(label) {
  * 문구에는 점수를 쓰지 않는다 - approved는 "그 label의 최대값"이라는 뜻이고 최대값은 프로젝트 설정에
  * 달려 있어서, +2라고 적으면 코드가 확인하지 않은 값을 후보가 주장하게 된다.
  *
+ * 같은 이유로 문구는 "표가 없다"고 쓰지 않고 "긍정 표가 없다"고 쓴다. 0점 투표는 이 네 축약 필드를
+ * 하나도 세우지 않아서(위 all[] 주석의 Lint 봇 실측이 그 경우다), 코드는 "표가 아예 없다"와
+ * "0점 표가 있다"를 구분하지 못한다.
+ *
  * positive는 사람 리뷰가 붙었을 때만 참이다. buildCandidate가 이 값으로 NEW 변경의 main 자격을
  * 정하므로, 검증 label의 표를 여기에 세면 사람이 아무도 보지 않은 제안이 main 기사가 된다(#1061).
  */
@@ -204,9 +208,9 @@ function reviewSignals(labels = {}) {
   } else if (positive) {
     phrase = `Reviewed: ${HUMAN_REVIEW_LABEL} carries an approving or recommending vote.`;
   } else if (verifiedLabels.length > 0) {
-    phrase = `Verification only: ${verifiedLabels.join(', ')} carries an approving or recommending vote, but no ${HUMAN_REVIEW_LABEL} vote has been cast.`;
+    phrase = `Verification only: approving or recommending vote on ${verifiedLabels.join(', ')}, but none on ${HUMAN_REVIEW_LABEL}.`;
   } else {
-    phrase = 'No Code-Review or verification vote has been cast yet.';
+    phrase = 'No approving or recommending Code-Review or verification vote has been cast yet.';
   }
   return { positive, negative, phrase };
 }
