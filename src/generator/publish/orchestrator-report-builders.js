@@ -11,6 +11,7 @@ const {
   validatePublicArticle
 } = require('../reporter/public-article-contract');
 const { renderCandidateSelectionDiagnostics } = require('../select/selection-diagnostics');
+const { buildCandidateDiagnostics } = require('../select/selection-candidate-projection');
 const { explicitDemotedGroups, explicitHardBlockedGroups } = require('../../shared/common/article-groups');
 
 function reviewPackageFactCheck(factCheck) {
@@ -134,6 +135,9 @@ ${attempts.map(item => `## 시도 ${item.attempt}
 
 function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
   const report = shortlistReport || {};
+  // selectionDiagnostics는 정규화된 후보 배열을 갖고 shortlistReport는 원본을 갖는다.
+  // 정규화본이 없으면 원본에서 같은 배열을 읽어 후보 진단이 통째로 비지 않게 한다.
+  const candidateDiagnostics = buildCandidateDiagnostics(selectionDiagnostics || report);
   const selectionErrors = ensureArray(report.selection_errors);
   const selectionWarnings = ensureArray(report.selection_warnings);
   const selectionShortageHints = ensureArray(report.selection_shortage_hints);
@@ -226,6 +230,17 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
       report.republication_cooldown_blocked || null,
     exclusion_reason_summary: selectionDiagnostics.exclusion_reason_summary || [],
     final_exclusion_reason_summary: selectionDiagnostics.final_exclusion_reason_summary || [],
+    // 사유별 합계는 후보 단위를 복원하지 못한다 — 한 후보가 사유를 여러 개 가지므로
+    // 건수를 더해도 후보 수가 되지 않고, 상위 10개로 잘리기까지 한다. 후보별 점수와 사유는
+    // shortlisted-candidates.json에만 있는데 그 파일은 커밋되지 않는다(#838). 이 투영을
+    // 통과해야만 "통과선 바로 아래에서 떨어진 후보가 몇 건인가"를 나중에 셀 수 있다.
+    candidate_diagnostics: candidateDiagnostics.rows,
+    candidate_diagnostics_count: candidateDiagnostics.count,
+    // 자격 심사 이전 단계(시리즈 병합·쿨다운)에서 빠진 후보 수. count와 input의 차이가
+    // 여기 남지 않으면 읽는 쪽이 count를 후보 총수로 오해한다.
+    candidate_diagnostics_not_evaluated: candidateDiagnostics.not_evaluated,
+    candidate_diagnostics_truncated: candidateDiagnostics.truncated,
+    candidate_score_threshold: candidateDiagnostics.score_threshold,
     candidate_selection_note: selectionDiagnostics.candidate_selection_note || ''
   };
 }
