@@ -108,6 +108,7 @@ function normalizeSourceEntry(source, sectionMap, options = {}) {
     mainArticlePolicy: source.mainArticlePolicy || '',
     requiresCrossCheckDefault: source.requiresCrossCheckDefault === true,
     evidenceGranularityHint: source.evidenceGranularityHint || '',
+    suppressGenericCandidateFallback: source.suppressGenericCandidateFallback === true,
     sourceQualityNotes: Array.isArray(source.sourceQualityNotes) ? source.sourceQualityNotes : [],
     sourceKind: source.sourceKind || '',
     keywords: Array.isArray(source.keywords) ? source.keywords : []

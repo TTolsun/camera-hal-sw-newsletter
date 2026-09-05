@@ -112,7 +112,7 @@ async function resolveFollowedSourceItems(source, { indexItems = [], text = '', 
 }
 
 /**
- * 제너릭 parseRss/parseHtmlPage 폴백을 막아야 하는 소스인지 판정한다. 두 부류가 있다.
+ * 제너릭 parseRss/parseHtmlPage 폴백을 막아야 하는 소스인지 판정한다. 세 부류가 있다.
  *
  * 1. followed-resolver가 등록된 소스. 인덱스 페이지에 직접 후보가 없어 리졸버가 상세를 따라간다.
  *    그 큐레이션 추출이 비었다는 건 "이번 window에 신호 없음"이지, 인덱스 나비링크를 제너릭
@@ -125,18 +125,28 @@ async function resolveFollowedSourceItems(source, { indexItems = [], text = '', 
  *    한 건으로 만들어 낸다. 그 후보는 날짜가 없어 늘 `finalSelectionEligibility=exclude`로
  *    끝나고, 대신 진단(`parser_extraction_failure`, `KEEP_AND_FIX_PARSER`)을 상시로 켜서 진짜
  *    파서 고장 신호를 묻는다. 그래서 생산자를 소비자 계약에 맞춘다(#880).
+ * 3. registry가 `suppressGenericCandidateFallback: true`로 표식을 붙인 소스. 참고 자료는 아니지만
+ *    지금 이 인덱스 페이지에서 쓸 만한 후보를 뽑지 못한다고 확인된 dated 릴리스 소스다. 이때 역할
+ *    표기(`sourceRole`/`mainArticlePolicy`)를 참고 자료로 바꾸면 폴백은 멎지만 소스의 성격을 사실과
+ *    다르게 적게 되므로, 표기는 그대로 두고 이 표식으로만 폴백을 끈다(#880).
+ *    현재 대상은 `samsung-mobile-security-updates` 하나다. 근거와 재개 조건은 그 registry 항목의
+ *    `sourceQualityNotes`에 있고, 실측 출처는 이슈 #880의 2026-09-03 코멘트다. 표식은 영구 판정이
+ *    아니다 - 그 노트의 재개 조건이 충족되면 파서를 만들고 이 표식을 뗀다.
  *
  * 여기서 막는 건 폴백뿐이다. 그리고 registry role이 `official_documentation_reference`인 소스는
  * 소스별 파서를 따로 두더라도 그 결과가 후보로 살아나지 않는다 — collect-news-candidates.js의
- * `classifySelection`(`:577`)이 파서 결과와 무관하게 `finalSelectionEligibility='exclude'`,
+ * `classifySelection`이 파서 결과와 무관하게 `finalSelectionEligibility='exclude'`,
  * `isArticleCandidate=false`, `hasDatedEvidence=false`로 즉시 닫는다. 그 소스의 파서를 다시
  * 살리려면 registry role도 함께 되돌려야 한다. 이 술어는 `mainArticlePolicy=reference_only`만
  * 가진 소스도 막지만, 그쪽은 classifySelection의 role 분기를 타지 않는다 — 지금 registry의 참고
- * 소스는 전부 두 표시를 다 갖고 있어 해당 소스가 없다.
+ * 소스는 전부 두 표시를 다 갖고 있어 해당 소스가 없다. 3번 표식은 registry role을 그대로 두므로
+ * classifySelection의 그 role 분기도 타지 않는다 — 나중에 소스별 파서가 생기면 collect 단계에서
+ * 그 결과가 후보로 나오고, 이후 판정은 다른 소스와 같은 규칙을 받는다.
  */
 function shouldSuppressGenericFallback(source) {
   if (!source) return false;
   if (followedSourceResolverIds().includes(source.id)) return true;
+  if (source.suppressGenericCandidateFallback === true) return true;
   return source.sourceRole === 'official_documentation_reference' ||
     source.mainArticlePolicy === 'reference_only';
 }
