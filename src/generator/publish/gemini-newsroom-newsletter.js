@@ -483,6 +483,14 @@ async function main() {
     shortlistReport.release_class_catch_up_after_reconciliation = null;
     shortlistReport.catch_up_used_count = deterministicCatchUpUsedCount;
     shortlistReport.catch_up_articles = deterministicCatchUpArticles;
+    // reserve 목록도 attempt 단위 사실이다. 아래에서 이번 attempt의 최종 main 집합에 든 후보를
+    // 빼는데, 그 뺀 결과를 그대로 두면 다음 attempt가 직전 attempt의 승급을 물려받는다. 승급이
+    // attempt마다 달라지므로(편집 계획이 매 attempt 새로 나온다) 그때 사라진 후보는 selected에도
+    // reserve에도 없게 되고, editor는 결정론 선정이 만든 reserve capsule 하나를 잃는다.
+    // pristine 스냅샷으로 되돌려 eviction이 언제나 이번 attempt의 승급만 반영하게 한다 — 위
+    // 스냅샷 주석이 말하는 "reserve 풀은 pristine이 앵커한다"를 판정 입력만이 아니라 산출물에도
+    // 성립시킨다. 아래 eviction은 filter로 새 배열을 만들므로 스냅샷은 mutate되지 않는다.
+    shortlistReport.reserve_candidates = pristineReserveCandidates;
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
     const reporterStage = stageRun(LLM_STAGES.REPORTER, { qualityAttempt: attempt, totalAttempts });
     const editorStage = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: attempt, totalAttempts });

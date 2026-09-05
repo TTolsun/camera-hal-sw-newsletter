@@ -82,6 +82,28 @@ test('the publish host clears the reconciliation provenance at the start of each
   assert.ok(resetIndex < assignIndex, '초기화는 재조정 대입보다 앞이어야 한다');
 });
 
+// #879 후속: 2차 pass 승급분까지 reserve에서 빼게 되면서, 그 eviction 결과가 attempt를 넘어
+// 살아남으면 안 된다. 승급은 attempt마다 달라진다(편집 계획이 매 attempt 새로 나온다). attempt 1이
+// 승급해 뺀 후보를 attempt 2가 승급하지 않으면, 그 후보는 selected에도 reserve에도 없게 되고
+// editor는 결정론 선정이 만든 reserve capsule 하나를 잃는다. 재조정 입력은 pristine 스냅샷을
+// 쓰므로 판정은 멀쩡하고 산출물만 어긋난다 — 모듈 테스트로는 잡히지 않는 호출부 계약이라
+// 소스로 고정한다.
+test('the publish host restores the pristine reserve pool at the start of each attempt', () => {
+  const source = publishHostSource();
+
+  const loopIndex = source.indexOf('for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {');
+  const restoreIndex = source.indexOf('shortlistReport.reserve_candidates = pristineReserveCandidates;');
+  const reconcileIndex = source.indexOf('const coverageReconciliation = reconcileCoverage({');
+  const evictIndex = source.indexOf('shortlistReport.reserve_candidates = ensureArray(shortlistReport.reserve_candidates)');
+
+  assert.ok(loopIndex > 0, 'attempt 루프를 찾지 못했다');
+  assert.ok(restoreIndex > loopIndex, '결정론 reserve 복원은 attempt 루프 안에서 일어난다');
+  // eviction 직전으로 내려가면 안 된다. 그 자리에서는 재조정 전에 죽은 attempt가 직전 attempt의
+  // eviction 결과를 그대로 커밋해, 다른 provenance 필드를 여기서 비우는 이유와 같은 사고가 난다.
+  assert.ok(restoreIndex < reconcileIndex, '복원은 재조정보다 앞, 즉 attempt 시작 블록에 있어야 한다');
+  assert.ok(evictIndex > restoreIndex, '복원은 승급분 eviction보다 앞이어야 한다');
+});
+
 // 필드마다 초기화 한 줄을 따로 추가하던 방식은 새 필드의 초기화를 세 번 연속 빠뜨렸다
 // (승급 키·결정론 기준선 키는 끝까지 초기화되지 않았다). 초기화와 대입이 같은 목록에서
 // 파생되는 한 다음 필드를 잊을 수 없으므로, 그 파생 관계 자체를 잠근다.
