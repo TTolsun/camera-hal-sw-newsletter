@@ -69,11 +69,23 @@ const NOISE_SUBJECT_PATTERNS = [
   /^\s*(?:test|fake)\b/i
 ];
 
-// 긍정 리뷰 근거로 인정하는 label. Gerrit이 계산해 주는 approved/recommended 축약 필드만 읽는다 -
+// 리뷰 표는 Gerrit이 계산해 주는 approved/recommended/rejected/disliked 축약 필드로만 읽는다 -
 // all[] 원표에는 봇의 0점 투표가 섞여 있어(실측: Code-Review.all에 Lint 봇의 value 0) 직접 세면
-// "리뷰가 붙었다"를 잘못 판정한다. Open-Source-Licensing은 외부 기여마다 자동으로 +1이 붙는
-// 라이선스 봇 label이라 리뷰 근거에서 제외한다(실측: 창 안 NEW 3건 전부 이 label만 +1).
-const POSITIVE_REVIEW_LABELS = ['Code-Review', 'Verified', 'Presubmit-Verified'];
+// "리뷰가 붙었다"를 잘못 판정한다.
+//
+// 긍정 근거로 인정하는 것은 사람 리뷰 label인 Code-Review 하나뿐이다. 이 코드는 표를 던진 주체를
+// 확인하지 않으므로, label 이름이 사람 리뷰를 뜻하는 것만 사람 리뷰라고 말할 수 있다.
+// Open-Source-Licensing을 근거에서 뺀 것과 같은 이유다 - 외부 기여마다 자동으로 +1이 붙는 라이선스
+// 봇 label이다(실측: 창 안 NEW 3건 전부 이 label만 +1).
+const HUMAN_REVIEW_LABEL = 'Code-Review';
+
+// 이름이 사람 리뷰를 뜻하지 않는 검증 label. 검증 통과 여부를 말할 뿐 사람이 코드를 봤다는 뜻은
+// 아니므로 긍정 근거로 세지 않는다. 부정 표는 아래에서 함께 본다.
+const VERIFICATION_LABELS = ['Verified', 'Presubmit-Verified'];
+
+// 부정 표를 보는 label. 검증 label의 rejected는 "이 변경은 빌드·검증을 통과하지 못했다"는 뜻이라,
+// 그걸 무시하면 리뷰어 +1 하나로 빌드가 깨진 제안이 main 기사가 된다.
+const BLOCKING_VOTE_LABELS = [HUMAN_REVIEW_LABEL, ...VERIFICATION_LABELS];
 
 function noop() {}
 
@@ -164,32 +176,41 @@ function cameraFileScope(project, filePaths) {
   return { substantive, camera, isCameraChange: substantive.length > 0 && cameraMajority };
 }
 
+function hasNegativeVote(label) {
+  return Boolean(label) && (label.rejected != null || label.disliked != null);
+}
+
+function hasPositiveVote(label) {
+  return Boolean(label) && (label.approved != null || label.recommended != null);
+}
+
 /**
  * 리뷰 근거를 label의 approved/recommended/rejected/disliked 축약 필드로만 읽는다.
  * 문구에는 점수를 쓰지 않는다 - approved는 "그 label의 최대값"이라는 뜻이고 최대값은 프로젝트 설정에
  * 달려 있어서, +2라고 적으면 코드가 확인하지 않은 값을 후보가 주장하게 된다.
+ *
+ * 같은 이유로 문구는 "표가 없다"고 쓰지 않고 "긍정 표가 없다"고 쓴다. 0점 투표는 이 네 축약 필드를
+ * 하나도 세우지 않아서(위 all[] 주석의 Lint 봇 실측이 그 경우다), 코드는 "표가 아예 없다"와
+ * "0점 표가 있다"를 구분하지 못한다.
+ *
+ * positive는 사람 리뷰가 붙었을 때만 참이다. buildCandidate가 이 값으로 NEW 변경의 main 자격을
+ * 정하므로, 검증 label의 표를 여기에 세면 사람이 아무도 보지 않은 제안이 main 기사가 된다(#1061).
  */
 function reviewSignals(labels = {}) {
-  // 부정 표는 Code-Review만 보지 않는다. Verified/Presubmit-Verified의 rejected는 "이 변경은
-  // 빌드·검증을 통과하지 못했다"는 뜻이라, 그걸 무시하면 리뷰어 +1 하나로 빌드가 깨진 제안이
-  // main 기사가 된다. 긍정 근거를 세는 label과 부정 표를 보는 label을 같은 목록으로 둔다.
-  const negativeLabels = POSITIVE_REVIEW_LABELS.filter(name => {
-    const label = labels && labels[name];
-    return Boolean(label) && (label.rejected != null || label.disliked != null);
-  });
-  const positiveLabels = POSITIVE_REVIEW_LABELS.filter(name => {
-    const label = labels && labels[name];
-    return Boolean(label) && (label.approved != null || label.recommended != null);
-  });
+  const votes = labels || {};
+  const negativeLabels = BLOCKING_VOTE_LABELS.filter(name => hasNegativeVote(votes[name]));
+  const verifiedLabels = VERIFICATION_LABELS.filter(name => hasPositiveVote(votes[name]));
   const negative = negativeLabels.length > 0;
-  const positive = !negative && positiveLabels.length > 0;
+  const positive = !negative && hasPositiveVote(votes[HUMAN_REVIEW_LABEL]);
   let phrase;
   if (negative) {
     phrase = `Not reviewed clean: ${negativeLabels.join(', ')} carries a negative vote.`;
   } else if (positive) {
-    phrase = `Reviewed: ${positiveLabels.join(', ')} carries an approving or recommending vote.`;
+    phrase = `Reviewed: ${HUMAN_REVIEW_LABEL} carries an approving or recommending vote.`;
+  } else if (verifiedLabels.length > 0) {
+    phrase = `Verification only: approving or recommending vote on ${verifiedLabels.join(', ')}, but none on ${HUMAN_REVIEW_LABEL}.`;
   } else {
-    phrase = 'No Code-Review or verification vote has been cast yet.';
+    phrase = 'No approving or recommending Code-Review or verification vote has been cast yet.';
   }
   return { positive, negative, phrase };
 }
@@ -277,8 +298,8 @@ function buildSummary(detail, scope, review, dateInfo, revisionSha) {
 /**
  * 후보 하나를 만든다.
  *
- * MERGED이거나 긍정 리뷰가 붙은 NEW는 등록부의 소스 정책(conditional)을 그대로 따른다.
- * 리뷰 근거가 없는 NEW는 후보 수준에서 mainArticlePolicy를 watchlist_only로 내린다. 이 값은
+ * MERGED이거나 사람 리뷰(Code-Review)가 붙은 NEW는 등록부의 소스 정책(conditional)을 그대로 따른다.
+ * 그 밖의 NEW는 검증 label 표만 있는 것까지 포함해 mainArticlePolicy를 watchlist_only로 내린다. 이 값은
  * source-quality-classifier가 소스 정책보다 우선해 읽으므로, 그 후보는 blocker 없이 blocked가 되고
  * (blocker가 비어 있어 mailing-list 강한-근거 승급도 걸리지 않는다) briefing 재료로만 남는다.
  */

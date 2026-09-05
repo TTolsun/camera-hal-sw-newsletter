@@ -63,8 +63,8 @@ AOSP Gerrit과 ChromeOS Gerrit 출처는 릴리스 드롭보다 앞선 단계를
 기사 승격 정책은 상태로 정합니다.
 
 - `MERGED`: `submitted`을 기사 날짜로 쓰고 main article 후보로 둡니다. 병합된 변경은 그 자체가 확정된 1차 사실입니다.
-- `NEW` + 긍정 `Code-Review`/`Verified` 표: `created`를 기사 날짜로 쓰고 main article 후보로 둡니다. 단 같은 label 묶음에 부정 표(`rejected`/`disliked`)가 하나라도 있으면 긍정 근거로 보지 않습니다 — 리뷰어 +1이 있어도 presubmit 검증이 실패한 변경은 승격하지 않습니다.
-- `NEW` + 리뷰 표 없음: 후보로 수집하되 `mainArticlePolicy=watchlist_only`로 내려 briefing 재료로만 씁니다. AOSP Gerrit에는 누구나 변경을 올릴 수 있으므로, 아무도 검토하지 않은 제안은 뉴스가 아닙니다.
+- `NEW` + 긍정 `Code-Review` 표: `created`를 기사 날짜로 쓰고 main article 후보로 둡니다. 단 `Code-Review`, `Verified`, `Presubmit-Verified` 중 하나라도 부정 표(`rejected`/`disliked`)가 있으면 긍정 근거로 보지 않습니다 — 리뷰어 +1이 있어도 검증이 실패한 변경은 승격하지 않습니다.
+- `NEW` + 긍정 `Code-Review` 표 없음: 후보로 수집하되 `mainArticlePolicy=watchlist_only`로 내려 briefing 재료로만 씁니다. `Verified`/`Presubmit-Verified` 긍정 표만 있는 변경도 여기에 들어갑니다 — 검증 통과는 사람이 코드를 봤다는 뜻이 아닙니다. AOSP Gerrit에는 누구나 변경을 올릴 수 있으므로, 아무도 검토하지 않은 제안은 뉴스가 아닙니다.
 - `WIP`, `ABANDONED`: 수집하지 않습니다.
 
 `updated`는 기사 날짜로 쓰지 않습니다. 댓글 한 줄에도 갱신되기 때문에, 그걸 날짜로 쓰면 오래된 변경이 매주 "이번 주 소식"으로 되살아나고 patchset 갱신마다 같은 변경이 다시 기사가 됩니다. `created`/`submitted`를 쓰면 같은 변경은 수집 창 안에서 한 번만 후보가 되고 그 뒤로는 창 밖으로 빠집니다.
