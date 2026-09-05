@@ -396,7 +396,9 @@ test('learning page fades the cut-off edge of the narrow-screen table of content
   const strip = declarations(exactSelectorBlock(mediaBlock(css, HEADER_FOLD_QUERY), '.learning-nav-inner'));
 
   const width = strip.get('--learning-nav-fade-width');
-  assert.match(String(width), /^\d+px$/, '페이드 폭은 px 리터럴이어야 한다 — 아래 선언 셋이 이 값 하나에서 나온다');
+  // 0 을 막는다. calc(100% - 0px) 는 100% 라 그라디언트가 완전 불투명해져 페이드가 통째로
+  // 사라지는데, 선언 넷은 그대로 남아 있어 아래 단언이 전부 통과한다.
+  assert.match(String(width), /^[1-9]\d*px$/, '페이드 폭은 0 이 아닌 px 리터럴이어야 한다 — 아래 선언 셋이 이 값 하나에서 나온다');
 
   const gradient = 'linear-gradient(to right, #000 calc(100% - var(--learning-nav-fade-width)), transparent)';
   // 접두어 없는 mask-image 는 Chrome 120·Safari 15.4 부터다. 그 전 WebKit/Blink 는 접두어 붙은
@@ -477,8 +479,10 @@ test('learning page keeps the wide-screen scroll margin at or above the sticky b
   // 목차 스트립 높이 = 안쪽 세로 패딩 두 번 + 링크 한 줄 높이 + 스트립 아래 테두리.
   // 링크의 line-height 가 px 로 적혀 있어야 이 식이 성립한다. 비워 두면 줄 높이가 폰트 메트릭에서
   // 나와(실측 15.5px, Pretendard 가 못 뜨면 다른 값) CSS 만 읽어서는 알 수 없다.
+  // 이 띠는 넓은 화면에서만 sticky 이므로 세로 패딩도 미디어 블록 밖에서 읽는다. 좁은 화면
+  // 블록에도 .learning-nav-inner 규칙이 있어서, 안 걷어내면 파일 순서에 따라 값이 갈린다.
   const strip =
-    verticalPadding(exactSelectorBlock(css, '.learning-nav-inner')) * 2
+    verticalPadding(exactSelectorBlock(stripMediaBlocks(css), '.learning-nav-inner')) * 2
     + pxDeclaration(exactSelectorBlock(css, '.learning-nav a'), 'line-height')
     + pxDeclaration(exactSelectorBlock(css, '.learning-nav'), 'border-bottom');
   const band = unfoldedHeaderHeight(styles) + strip;

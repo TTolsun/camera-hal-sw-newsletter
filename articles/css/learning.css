@@ -627,7 +627,7 @@
      접두어 없는 mask-image 는 Chrome 120·Safari 15.4 부터라 그 전 WebKit/Blink 를 위해 접두어
      붙은 이름을 함께 쓴다. 둘 다 모르는 브라우저는 두 선언을 버리고 지금과 똑같이 그린다 —
      mask 는 칠하는 방식만 바꾸고 배치는 건드리지 않는다(실측: 390px 에서 mask 를 켜고 끈
-     링크 여덟 개의 left·width 가 전부 같고 스트립 높이도 42px 그대로다). 페이드가 없을 뿐
+     링크 여덟 개의 left·width 가 전부 같고 스트립 높이도 그대로다). 페이드가 없을 뿐
      링크가 사라지지 않는다.
 
      padding-right 와 scroll-padding-right 는 페이드가 링크를 가리는 두 자리를 비킨다.
