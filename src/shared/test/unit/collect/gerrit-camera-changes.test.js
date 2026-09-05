@@ -219,7 +219,6 @@ test('a verification vote without a human review stays watchlist_only', async ()
   assert.match(signals.phrase, /^Verification only: /);
   assert.match(signals.phrase, /vote on Verified\b/);
   // 표를 던진 주체를 읽지 않으므로 "자동"이라고 쓰지 않는다.
-  assert.doesNotMatch(signals.phrase, /^Reviewed:/);
   assert.doesNotMatch(signals.phrase, /Automated|automatic|bot/i);
   // 0점 투표는 축약 필드를 하나도 세우지 않아 "표가 없다"와 구분되지 않는다. 그래서 문구는
   // "표가 없다"가 아니라 "긍정 표가 없다"라고만 말해야 한다.
@@ -429,8 +428,8 @@ test('the Change-Id and revision survive normalizeCandidate 500-character summar
 });
 
 test('the longest review phrase also survives the 500-character summary cap', () => {
-  // 위 테스트는 가장 짧은 리뷰 문구만 먹인다. 검증 label 두 개를 조인하는 분기가 가장 길므로,
-  // 길이 계약은 그쪽으로 재야 한다. 짧은 분기만 재면 문구가 길어져도 잠금이 통과한다.
+  // 위 테스트가 먹이는 무투표 분기는 네 문구 중 가장 길지 않다. 검증 label 두 개를 조인하는
+  // 분기가 최장이므로 길이 계약은 그쪽으로 잰다. 짧은 분기만 재면 문구가 길어져도 통과한다.
   const cameraFiles = [
     'services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc',
     'services/camera/virtualcamera/VirtualCameraImageTransformingHandler.cc',
