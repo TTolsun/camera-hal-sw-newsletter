@@ -260,6 +260,34 @@ test('a release the general lane admitted is counted as admitted, not as starvat
   assert.equal(result.release_class_catch_up.blocked_reason, '');
 });
 
+test('a release the general lane took spends the release-class cap in the same pass', () => {
+  // 상한을 레인 라벨로 세면, thin week에 일반(fill_open_slots) 레인이 먼저 가져간 릴리스가
+  // 상한 소진으로 잡히지 않아 release-class 레인이 같은 pass에서 릴리스를 한 건 더 올린다.
+  // 상한은 catch-up이 릴리스에 내주는 슬롯 예산이므로 레인 라벨이 아니라 채널로 센다 —
+  // 진단(observation.admitted)이 이미 쓰는 기준과 같다.
+  //
+  // 반대로 일반 레인 자체는 상한으로 막지 않는다. 그 계약은 바로 위 lane_disabled 테스트가
+  // 잠근다(maxReleaseClassArticles=0에서도 일반 레인은 릴리스를 가져간다).
+  const first = releaseCandidate({ published_date: '2026-06-30' }); // 27일령 → reference 창
+  const second = releaseCandidate({
+    title: 'CameraX 1.5.0',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0',
+    published_date: '2026-06-29', version_or_release: '1.5.0', api_or_component: 'CameraX'
+  });
+  // 신규 2건 → thin week(target 3)라 일반 레인이 빈 슬롯 하나를 연다.
+  const result = report([freshWeek()[1], freshWeek()[2], first, second]);
+  const promoted = result.selected_articles.filter(article => article.coverage_type === 'catch_up');
+
+  assert.deepEqual(
+    promoted.map(article => article.catch_up_lane),
+    ['fill_open_slots'],
+    '일반 레인이 가져간 릴리스 1건으로 끝나야 한다'
+  );
+  assert.equal(result.release_class_catch_up.pool_size, 2, '릴리스 2건이 모두 pool에 있었다');
+  assert.equal(result.release_class_catch_up.admitted, 1);
+  assert.equal(result.release_class_catch_up.blocked_reason, '');
+});
+
 test('the lane diagnostics reach the committed selection-report.json', () => {
   // shortlisted-candidates.json은 .gitignore 대상이라 커밋되지 않는다. 진단이
   // buildSelectionReport 투영을 통과하지 못하면 다음 run에서도 판정할 수 없다.
