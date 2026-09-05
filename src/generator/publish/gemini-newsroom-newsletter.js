@@ -336,6 +336,10 @@ const {
   candidateKey
 } = require('../select/coverage-reconciliation');
 const {
+  resetReconciliationProvenance,
+  assignReconciliationProvenance
+} = require('./orchestrator-reconciliation-provenance');
+const {
   compositionSummary,
   reviewCompositionGatePasses,
   publishReadyGateReasonSummary
@@ -457,14 +461,12 @@ async function main() {
 
   for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
     generationRunState.currentQualityAttempt = attempt;
-    // #909: 재조정 provenance는 이번 attempt의 사실이다. attempt가 재조정 전에 죽으면 직전
-    // attempt의 강등 기록이 그대로 status에 실려 다른 편성의 사유를 이번 실행 것으로 읽게 된다.
-    // 그래서 attempt 시작마다 비우고, 재조정이 실제로 돈 뒤에만 다시 채운다.
-    shortlistReport.reconciliation_demoted_group_keys = [];
-    shortlistReport.reconciliation_demoted_groups = [];
-    // #1034: 채점 투영도 같은 수명이다. 직전 attempt의 채점 기록이 남으면 다른 편성의 판단을
-    // 이번 실행 것으로 읽게 된다.
-    shortlistReport.editorial_plan_scored_candidates = [];
+    // #909/#1034: 재조정 provenance는 이번 attempt의 사실이다. attempt가 재조정 전에 죽으면 직전
+    // attempt의 강등·승급·채점 기록이 그대로 status에 실려 다른 편성의 사유를 이번 실행 것으로
+    // 읽게 된다. 그래서 attempt 시작마다 비우고, 재조정이 실제로 돈 뒤에만 다시 채운다.
+    // 초기화와 대입은 orchestrator-reconciliation-provenance.js의 한 목록에서 파생되므로,
+    // 새 provenance 필드를 추가할 때 초기화를 빠뜨릴 수 없다.
+    resetReconciliationProvenance(shortlistReport);
     const lockedContext = buildLockedArticleContext(lockedSections, excludedSections);
     const reporterStage = stageRun(LLM_STAGES.REPORTER, { qualityAttempt: attempt, totalAttempts });
     const editorStage = stageRun(LLM_STAGES.EDITOR, { qualityAttempt: attempt, totalAttempts });
@@ -564,21 +566,20 @@ async function main() {
     // 등식이 selected 4 !== rendered 4 + demoted 1로 새로 깨진다. 유일하게 이 사실을
     // 담고 있던 coverage-reconciliation.json은 커밋되지 않으므로, 여기서 남기지 않으면
     // "결정론 5건이 왜 4건이 됐는지"를 발행 후에 추적할 방법이 사라진다.
-    shortlistReport.deterministic_selected_representative_group_keys =
-      coverageReconciliation.diff.deterministic_selected_group_keys;
-    shortlistReport.reconciliation_demoted_group_keys = coverageReconciliation.diff.demoted_group_keys;
-    // #909: 키 옆에 사유를 함께 남긴다. 원본 판단(coverage_decision)과 실제 전환 원인
-    // (reason_code=cap_clamp | editorial_plan_*)이 갈라져 있어야 "왜 빠졌나"에 답할 수 있다.
-    shortlistReport.reconciliation_demoted_groups = coverageReconciliation.diff.demoted_groups;
-    // #1034: 강등되지 않은 채점 후보(reserve·shortlist 전용)는 위 목록에 나타나지 않는다.
-    // 계획이 채점한 후보 전부를 함께 남겨야 "왜 이 후보는 main이 아니었나"에 답할 수 있다.
-    // 사유는 강등·승급 차단·승급 clamp·floor backfill 복귀·승급에 붙는다. null은 세 갈래다 —
-    // 그대로 발행된 main, 제안조차 main이 아니었던 reserve, 그리고 shortlist_only 후보 전부
-    // (등급과 무관하게 항상 null. 승급 대상 집합 밖이라 main_article 제안도 여기 들어온다).
-    // release-class catch-up pool 후보 중 reference 창에서만 온 것은 계획 입력 우주 밖이라
-    // 실리지 않는다 — 그 후보는 채점되지 않았고, 부재가 곧 그 답이다.
-    shortlistReport.editorial_plan_scored_candidates = coverageReconciliation.diff.editorial_plan_scored_candidates;
-    shortlistReport.reconciliation_promoted_group_keys = coverageReconciliation.diff.promoted_group_keys;
+    // 남기는 필드는 다섯이다(orchestrator-reconciliation-provenance.js의 목록).
+    // - deterministic_selected_representative_group_keys: 재조정 전 결정론 기준선.
+    // - reconciliation_demoted_group_keys / _groups: 강등 키와 그 사유. #909 — 원본 판단
+    //   (coverage_decision)과 실제 전환 원인(reason_code=cap_clamp | editorial_plan_*)이 갈라져
+    //   있어야 "왜 빠졌나"에 답할 수 있다.
+    // - editorial_plan_scored_candidates: #1034 — 강등되지 않은 채점 후보(reserve·shortlist 전용)는
+    //   강등 목록에 나타나지 않는다. 계획이 채점한 후보 전부를 남겨야 "왜 이 후보는 main이
+    //   아니었나"에 답할 수 있다. 사유는 강등·승급 차단·승급 clamp·floor backfill 복귀·승급에
+    //   붙는다. null은 세 갈래다 — 그대로 발행된 main, 제안조차 main이 아니었던 reserve, 그리고
+    //   shortlist_only 후보 전부(등급과 무관하게 항상 null. 승급 대상 집합 밖이라 main_article
+    //   제안도 여기 들어온다). release-class catch-up pool 후보 중 reference 창에서만 온 것은
+    //   계획 입력 우주 밖이라 실리지 않는다 — 그 후보는 채점되지 않았고, 부재가 곧 그 답이다.
+    // - reconciliation_promoted_group_keys: 승급 키.
+    assignReconciliationProvenance(shortlistReport, coverageReconciliation.diff);
     shortlistReport.publish_ready = deterministicPublishReady
       && reviewCompositionGatePasses(reconciledSummary)
       && publishReadyGateReasonSummary(reconciledSummary).length === 0;
