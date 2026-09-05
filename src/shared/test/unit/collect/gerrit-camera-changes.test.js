@@ -188,10 +188,12 @@ test('review signals read the label shortcuts and ignore the licensing bot', () 
   assert.deepEqual(reviewSignals({ 'Open-Source-Licensing': { recommended: { _account_id: 1 } }, 'Code-Review': {} }).positive, false);
   assert.equal(reviewSignals({ 'Code-Review': { approved: { _account_id: 1 } } }).positive, true);
   assert.equal(reviewSignals({ 'Code-Review': { recommended: { _account_id: 1 } } }).positive, true);
-  assert.equal(reviewSignals({ 'Verified': { approved: { _account_id: 1 } } }).positive, true);
+  // 검증 label은 긍정 근거가 아니다 - 검증 통과를 말할 뿐 사람이 코드를 봤다는 뜻이 아니다(#1061).
+  assert.equal(reviewSignals({ 'Verified': { approved: { _account_id: 1 } } }).positive, false);
+  assert.equal(reviewSignals({ 'Presubmit-Verified': { approved: { _account_id: 1 } } }).positive, false);
   // 부정 표가 있으면 다른 label이 긍정이어도 긍정 근거로 보지 않는다.
   assert.equal(reviewSignals({ 'Code-Review': { rejected: { _account_id: 1 } }, 'Verified': { approved: { _account_id: 2 } } }).positive, false);
-  assert.equal(reviewSignals({ 'Code-Review': {} }).phrase, 'No Code-Review or verification vote has been cast yet.');
+  assert.equal(reviewSignals({ 'Code-Review': {} }).phrase, 'No approving or recommending Code-Review or verification vote has been cast yet.');
 });
 
 test('a failed verification blocks promotion even when a reviewer recommended the change', () => {
@@ -203,6 +205,39 @@ test('a failed verification blocks promotion even when a reviewer recommended th
   assert.equal(signals.positive, false);
   assert.equal(signals.negative, true);
   assert.match(signals.phrase, /Presubmit-Verified carries a negative vote/);
+});
+
+test('a verification vote without a human review stays watchlist_only', async () => {
+  // 검증 label인 Verified 표 하나로 main 자격을 얻으면, 사람이 아무도 보지 않은 제안이 main 기사가
+  // 된다(#1061). 이 코드는 표를 던진 주체를 확인하지 않으므로, 사람 리뷰라고 말할 수 있는 것은
+  // 사람 리뷰 label인 Code-Review뿐이다.
+  const signals = reviewSignals({ 'Verified': { approved: { _account_id: 1 } } });
+  assert.equal(signals.positive, false);
+  assert.equal(signals.negative, false);
+  // 아래 단언은 각각 따로 깨져야 한다. 문구 전문을 통째로 잠그면 나머지가 그 안에 흡수돼
+  // 독립적으로는 절대 실패하지 않는 장식이 된다.
+  assert.match(signals.phrase, /^Verification only: /);
+  assert.match(signals.phrase, /vote on Verified\b/);
+  // 표를 던진 주체를 읽지 않으므로 "자동"이라고 쓰지 않는다.
+  assert.doesNotMatch(signals.phrase, /Automated|automatic|bot/i);
+  // 0점 투표는 축약 필드를 하나도 세우지 않아 "표가 없다"와 구분되지 않는다. 그래서 문구는
+  // "표가 없다"가 아니라 "긍정 표가 없다"라고만 말해야 한다.
+  assert.match(signals.phrase, /but none on Code-Review\.$/);
+  assert.doesNotMatch(signals.phrase, /no Code-Review vote has been cast/);
+  // 문구에는 점수를 쓰지 않는다 - approved는 "그 label의 최대값"이라 프로젝트 설정에 달려 있다.
+  assert.doesNotMatch(signals.phrase, /[+-]\d/);
+
+  // 판정이 문구에서 그치지 않고 후보 강등까지 간다.
+  const { items } = await resolveOne(
+    listChange({ created: '2026-08-13 15:04:14.000000000', updated: '2026-08-13 15:05:36.000000000' }),
+    { labels: { 'Verified': { approved: { _account_id: 1 } } } }
+  );
+  assert.equal(items.length, 1);
+  assert.equal(items[0].mainArticlePolicy, 'watchlist_only');
+
+  const candidate = normalizeCandidate({ ...items[0], source: REGISTRY_SOURCE });
+  assert.equal(candidate.main_article_source_allowed, false);
+  assert.equal(candidate.source_quality_status, 'blocked');
 });
 
 test('an unreviewed NEW change is collected but blocked from main articles', async () => {
@@ -255,7 +290,7 @@ test('the summary states the facts the client-rendered change page cannot supply
   assert.match(summary, /proposed and not merged \(status NEW, created 2026-08-13\)/);
   // 파일 경로는 저장소 경로를 붙여 트리 전체 경로로 적는다.
   assert.match(summary, /platform\/frameworks\/av\/services\/camera\/virtualcamera\//);
-  assert.match(summary, /No Code-Review or verification vote has been cast yet/);
+  assert.match(summary, /No approving or recommending Code-Review or verification vote has been cast yet/);
   assert.match(summary, /Change-Id I0f5906b56ddfb8d23d079cd192c42f925b5c02d3/);
 });
 
@@ -388,7 +423,38 @@ test('the Change-Id and revision survive normalizeCandidate 500-character summar
       assert.ok(candidate.summary.length <= 500);
       assert.match(candidate.summary, /Change-Id I0f5906b56ddfb8d23d079cd192c42f925b5c02d3/);
       assert.match(candidate.summary, /current revision [0-9a-f]{12}\./);
-      assert.match(candidate.summary, /No Code-Review or verification vote has been cast yet/);
+      assert.match(candidate.summary, /No approving or recommending Code-Review or verification vote has been cast yet/);
+    });
+});
+
+test('the longest review phrase also survives the 500-character summary cap', () => {
+  // 위 테스트가 먹이는 무투표 분기는 네 문구 중 가장 길지 않다. 검증 label 두 개를 조인하는
+  // 분기가 최장이므로 길이 계약은 그쪽으로 잰다. 짧은 분기만 재면 문구가 길어져도 통과한다.
+  const cameraFiles = [
+    'services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc',
+    'services/camera/virtualcamera/VirtualCameraImageTransformingHandler.cc',
+    'services/camera/libcameraservice/common/CameraProviderManager.cpp',
+    'services/camera/libcameraservice/device3/Camera3OutputUtils.cpp'
+  ];
+  const labels = {
+    'Verified': { approved: { _account_id: 1 } },
+    'Presubmit-Verified': { approved: { _account_id: 2 } }
+  };
+  const change = listChange({
+    project: 'platform/hardware/google/camera',
+    branch: 'android17-mainline-release',
+    created: '2026-08-13 15:04:14.000000000',
+    updated: '2026-08-13 15:05:36.000000000'
+  });
+
+  return resolveOne(change, { files: cameraFiles, labels })
+    .then(({ items }) => {
+      const candidate = normalizeCandidate({ ...items[0], source: REGISTRY_SOURCE });
+      assert.ok(candidate.summary.length <= 500);
+      assert.match(candidate.summary, /Change-Id I0f5906b56ddfb8d23d079cd192c42f925b5c02d3/);
+      assert.match(candidate.summary, /current revision [0-9a-f]{12}\./);
+      // 두 label을 조인한 최장 문구가 통째로 살아남는다.
+      assert.match(candidate.summary, /Verification only: approving or recommending vote on Verified, Presubmit-Verified, but none on Code-Review\./);
     });
 });
 

@@ -583,7 +583,7 @@
       "sourceQualityNotes": [
         "official source (Google이 운영하는 AOSP 공개 Gerrit의 REST API)",
         "변경 페이지는 클라이언트 렌더링(PolyGerrit)이라 URL을 받아도 본문이 없다. 후보 요약은 REST 응답에서 읽은 사실만으로 완결돼야 한다",
-        "MERGED가 아닌 NEW 변경은 누구나 올릴 수 있다. 긍정 리뷰·검증 label이 없는 NEW는 후보 수준에서 watchlist_only로 내려 main 승격을 막는다"
+        "MERGED가 아닌 NEW 변경은 누구나 올릴 수 있다. Code-Review 긍정 표가 없는 NEW는 Verified/Presubmit-Verified 검증 표만 있어도 후보 수준에서 watchlist_only로 내려 main 승격을 막는다"
       ]
     },
     {
