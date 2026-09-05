@@ -369,6 +369,59 @@ test('learning page drops the sticky table of contents where the header folds', 
   );
 });
 
+// ---- 좁은 화면에서 잘린 목차에 「더 있다」 단서를 준다 (#1048) ----
+
+// 블록 본문을 `속성: 값` 맵으로 읽는다. assertCssDeclaration 은 값 쪽만 정규식으로 보므로 접두어가
+// 붙은 속성과 안 붙은 속성을 가르지 못한다 — `mask-image` 를 찾으면 `-webkit-mask-image` 줄에도
+// 걸려서, 접두어 없는 쪽을 지워도 초록이다. 여기서는 속성 이름을 통째로 비교한다.
+function declarations(block) {
+  const map = new Map();
+  for (const part of String(block).split(';')) {
+    const separator = part.indexOf(':');
+    if (separator === -1) continue;
+    map.set(part.slice(0, separator).trim(), part.slice(separator + 1).replace(/\s+/g, ' ').trim());
+  }
+  return map;
+}
+
+// 좁은 화면에서 목차는 가로 스크롤 스트립인데 스크롤 막대는 감춰져 있다(.learning-nav-inner 의
+// scrollbar-width: none 과 ::-webkit-scrollbar). 링크 여덟 개 중 서너 개만 보이면서 나머지가
+// 있다는 시각적 단서가 하나도 없어서, 오른쪽 끝을 mask 로 깎아 잘린 링크를 흐리게 보인다.
+//
+// 몇 개가 보이는가는 폰트 메트릭에 달렸으므로 잠그지 않는다. 잠그는 것은 선언 네 개가 같은 폭
+// 구간에 함께 있다는 것이고, 넷이 한 값(--learning-nav-fade-width)에서 나온다는 것이다. 값이
+// 갈라지면 페이드 폭과 그 폭을 위해 예약한 자리가 어긋나 단서가 거짓말을 한다.
+test('learning page fades the cut-off edge of the narrow-screen table of contents', () => {
+  const css = readLearningStylesheet();
+  const strip = declarations(exactSelectorBlock(mediaBlock(css, HEADER_FOLD_QUERY), '.learning-nav-inner'));
+
+  const width = strip.get('--learning-nav-fade-width');
+  // 0 을 막는다. calc(100% - 0px) 는 100% 라 그라디언트가 완전 불투명해져 페이드가 통째로
+  // 사라지는데, 선언 넷은 그대로 남아 있어 아래 단언이 전부 통과한다.
+  assert.match(String(width), /^[1-9]\d*px$/, '페이드 폭은 0 이 아닌 px 리터럴이어야 한다 — 아래 선언 셋이 이 값 하나에서 나온다');
+  // 상한도 건다. 값이 커져도 네 선언이 함께 커지므로 일관성 검사만으로는 안 잡히는데, 스트립
+  // clientWidth 가 320px 화면에서 288px 이라 폭이 그쯤 되면 단서가 아니라 가림막이 된다.
+  assert.ok(Number.parseInt(width, 10) <= 48, '페이드 폭이 48px 를 넘으면 스트립을 덮는다');
+
+  const gradient = 'linear-gradient(to right, #000 calc(100% - var(--learning-nav-fade-width)), transparent)';
+  // 접두어 없는 mask-image 는 Chrome 120·Safari 15.4 부터다. 그 전 WebKit/Blink 는 접두어 붙은
+  // 이름만 알아들으므로 둘을 함께 쓴다. 둘 다 모르는 브라우저는 선언을 버리고 지금과 똑같이
+  // 그린다 — mask 는 칠하는 방식만 바꾸므로 링크가 사라지지 않는다.
+  assert.equal(strip.get('-webkit-mask-image'), gradient, '옛 WebKit/Blink 용 접두어 선언이 있어야 한다');
+  assert.equal(strip.get('mask-image'), gradient, '접두어 없는 선언이 있어야 한다');
+  // 페이드가 덮을 자리를 콘텐츠 끝에 예약한다. 없으면 끝까지 스크롤한 뒤에도 마지막 링크가
+  // 흐려진 채라 「더 있다」 가 거짓말이 된다.
+  assert.equal(strip.get('padding-right'), 'var(--learning-nav-fade-width)', '스크롤 끝에 페이드가 덮을 자리를 예약해야 한다');
+  // 초점이 링크로 옮겨갈 때 브라우저는 그 링크를 스크롤 영역 오른쪽 끝에 딱 붙여 세운다. 그러면
+  // 초점 대상이 페이드 밑에 깔리므로, 스크롤 여백만큼 덜 밀어 불투명한 쪽에 남긴다.
+  assert.equal(strip.get('scroll-padding-right'), 'var(--learning-nav-fade-width)', '초점 대상이 페이드 밑에 서지 않아야 한다');
+
+  // 넓은 화면에는 걸지 않는다. 스크롤이 필요 없는 폭에서 켜면 마지막 링크만 이유 없이 흐려진다.
+  const wide = declarations(exactSelectorBlock(stripMediaBlocks(css), '.learning-nav-inner'));
+  assert.equal(wide.get('mask-image'), undefined, '스크롤이 필요 없는 폭에서는 페이드를 걸지 않는다');
+  assert.equal(wide.get('-webkit-mask-image'), undefined, '스크롤이 필요 없는 폭에서는 페이드를 걸지 않는다');
+});
+
 // ---- 목차 링크로 착지한 섹션이 sticky 밑에 깔리지 않는다 (#1046) ----
 
 // 목차가 어디로 착지시키는지는 HTML 이 정하므로 id 목록을 여기 적지 않고 읽는다. 링크가 늘거나
@@ -429,8 +482,10 @@ test('learning page keeps the wide-screen scroll margin at or above the sticky b
   // 목차 스트립 높이 = 안쪽 세로 패딩 두 번 + 링크 한 줄 높이 + 스트립 아래 테두리.
   // 링크의 line-height 가 px 로 적혀 있어야 이 식이 성립한다. 비워 두면 줄 높이가 폰트 메트릭에서
   // 나와(실측 15.5px, Pretendard 가 못 뜨면 다른 값) CSS 만 읽어서는 알 수 없다.
+  // 이 띠는 넓은 화면에서만 sticky 이므로 세로 패딩도 미디어 블록 밖에서 읽는다. 좁은 화면
+  // 블록에도 .learning-nav-inner 규칙이 있어서, 안 걷어내면 파일 순서에 따라 값이 갈린다.
   const strip =
-    verticalPadding(exactSelectorBlock(css, '.learning-nav-inner')) * 2
+    verticalPadding(exactSelectorBlock(stripMediaBlocks(css), '.learning-nav-inner')) * 2
     + pxDeclaration(exactSelectorBlock(css, '.learning-nav a'), 'line-height')
     + pxDeclaration(exactSelectorBlock(css, '.learning-nav'), 'border-bottom');
   const band = unfoldedHeaderHeight(styles) + strip;
