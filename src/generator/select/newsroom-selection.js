@@ -789,6 +789,11 @@ function isReleaseClassCandidate(candidate = {}) {
 // 스킵 1건에 가려지면 안 된다. 마지막 반환은 사실과 어긋나는 사유를 재사용하는 대신
 // 분류 실패임을 그대로 드러낸다(pool_size > 0인데 no_eligible_candidate를 찍지 않는다).
 //
+// release_class_cap_skips는 자리도 자격도 있었는데 호당 상한을 이미 다 쓴 경우다. 정책이
+// 의도대로 집행된 상태이므로, 후보가 없었다거나 자리가 없었다는 사유로 보이면 안 된다.
+// 상한 소진은 pool/자리 문제보다 뒤, 필터 스킵보다 앞에 온다 — 필터를 통과해 실제로 상한에
+// 부딪힌 후보가 있었다는 사실이 통과조차 못 한 후보 뒤에 가려지면 안 된다.
+//
 // planned_non_main_skips / not_in_reporter_input_skips는 2차 pass(#879)만 채운다. 1차
 // observation에는 그 키가 없어 두 검사가 항상 거짓이므로 1차 사유는 그대로다. 게이트 판정
 // (편집 계획)을 배선 사실(reporter가 그 기사를 쓰지 않음)보다 먼저 보고한다 — 게이트가
@@ -798,6 +803,7 @@ function releaseClassBlockedReason(observation) {
   if (!observation.lane_enabled) return 'lane_disabled';
   if (observation.pool_size === 0) return 'no_eligible_candidate';
   if (observation.lineup_reached_max) return 'lineup_at_max';
+  if (observation.release_class_cap_skips > 0) return 'release_class_cap_reached';
   if (observation.planned_non_main_skips > 0) return 'editorial_plan_not_main';
   if (observation.not_in_reporter_input_skips > 0) return 'not_in_reporter_input';
   if (observation.release_page_skips > 0) return 'duplicate_release_page';
@@ -833,8 +839,9 @@ function toCatchUpArticle(candidate, lane) {
 // (#879: 결정론 선정 직후 1차, coverage 재조정 뒤 2차). 필터·중복 가드·레인 상한이 이 한 곳에만
 // 있으므로 두 pass가 서로 다른 기준으로 갈라질 수 없다.
 //
-// releaseClassAlreadyAdmitted는 이미 라인업에 들어 있는 release-class 승급 수다. 2차 pass가
-// 호당 상한(maxReleaseClassArticles)을 1차 승급분과 합산해 지키게 한다.
+// releaseClassAlreadyAdmitted는 이미 라인업에 들어 있는 release 채널 catch-up 승급 수다. 2차
+// pass가 호당 상한(maxReleaseClassArticles)을 1차 승급분과 합산해 지키게 한다. 세는 기준은
+// 레인 라벨이 아니라 후보의 release 채널 여부다(호출부 참고).
 function admitCatchUpCandidates({
   selected = [],
   pool = [],
@@ -852,6 +859,7 @@ function admitCatchUpCandidates({
   let generalAdmitted = 0;
   let releaseClassAdmitted = releaseClassAlreadyAdmitted;
   let releasePageSkips = 0;
+  let releaseClassCapSkips = 0;
   let lineupReachedMax = false;
   for (const candidate of ensureArray(pool)) {
     const lineup = [...ensureArray(selected), ...accepted];
@@ -869,9 +877,24 @@ function admitCatchUpCandidates({
       accepted.push(candidate);
       laneByCandidate.set(candidate, 'fill_open_slots');
       generalAdmitted += 1;
+      // 일반 레인이 가져간 release 채널 후보도 release-class 상한을 소진한다. 상한을 레인
+      // 라벨로 세면, reference 창 릴리스를 일반 레인이 먼저 가져간 주에 release-class 레인이
+      // 상한을 아직 안 쓴 것으로 보고 릴리스를 한 건 더 올린다. 세는 기준은 1차
+      // observation.admitted와 같은 release 채널 여부다 — 진단이 "일반 레인이 가져간 릴리스도
+      // 이 레인의 승급"이라고 보고하는데 집행만 다르게 세면 두 값이 어긋난다.
+      //
+      // 반대로 일반 레인 자체를 상한으로 막지는 않는다. 그 레인은 thin week의 빈 슬롯을
+      // 채우는 레인이고, maxReleaseClassArticles=0(레인 끔)이어도 릴리스를 가져갈 수 있어야
+      // 한다. 그래서 이 상한이 보장하는 것은 "release-class 레인이 내주는 여유 슬롯 수"이지
+      // 호당 릴리스 총량이 아니다.
+      if (isReleaseClassCandidate(candidate)) releaseClassAdmitted += 1;
       continue;
     }
-    if (releaseClassAdmitted < maxReleaseClassArticles && isReleaseClassCandidate(candidate)) {
+    if (isReleaseClassCandidate(candidate)) {
+      if (releaseClassAdmitted >= maxReleaseClassArticles) {
+        releaseClassCapSkips += 1;
+        continue;
+      }
       accepted.push(candidate);
       laneByCandidate.set(candidate, 'release_class');
       releaseClassAdmitted += 1;
@@ -880,6 +903,7 @@ function admitCatchUpCandidates({
   return {
     admitted: accepted.map(candidate => toCatchUpArticle(candidate, laneByCandidate.get(candidate))),
     release_page_skips: releasePageSkips,
+    release_class_cap_skips: releaseClassCapSkips,
     lineup_reached_max: lineupReachedMax
   };
 }
@@ -949,8 +973,13 @@ function admitReleaseClassCatchUpAfterReconciliation({
     pool,
     generalTake: 0,
     maxReleaseClassArticles,
+    // 1차가 이미 릴리스에 내준 슬롯 수. 레인 라벨이 아니라 release 채널 여부로 센다 — reference
+    // 창 릴리스는 일반(fill_open_slots) 레인이 먼저 가져갈 수 있고, 그걸 미승급으로 세면 2차
+    // pass가 상한을 다 쓴 호에 한 건을 더 올린다(1차 observation.admitted와 같은 기준).
+    // catch-up 승급분으로 범위를 좁힌다. 상한은 catch-up이 릴리스에 내주는 여유 슬롯 예산이라
+    // (#825), 신선도 창 안에서 정규 선정된 릴리스까지 세면 예산이 조용히 줄어든다.
     releaseClassAlreadyAdmitted: ensureArray(selected)
-      .filter(item => text(item.catch_up_lane) === 'release_class').length
+      .filter(item => text(item.coverage_type) === 'catch_up' && isReleaseClassCandidate(item)).length
   });
   const admitted = admission.admitted;
   const observation = {
@@ -960,6 +989,7 @@ function admitReleaseClassCatchUpAfterReconciliation({
     planned_non_main_skips: plannedNonMainSkips,
     not_in_reporter_input_skips: notInReporterInputSkips,
     release_page_skips: admission.release_page_skips,
+    release_class_cap_skips: admission.release_class_cap_skips,
     lineup_reached_max: admission.lineup_reached_max
   };
   return {
@@ -1156,6 +1186,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     // 드물게 도달할 수는 있는데, 그때는 카운터가 오르지 않아 unclassified로 떨어진다 —
     // 틀린 사유를 찍는 대신 분류 실패가 그대로 드러난다.
     release_page_skips: 0,
+    release_class_cap_skips: 0,
     lineup_reached_max: false
   };
   if (catchUpPolicy.enabled === true && (thinWeek || maxReleaseClassArticles > 0)) {
@@ -1183,6 +1214,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       maxReleaseClassArticles
     });
     releaseClassObservation.release_page_skips = admission.release_page_skips;
+    releaseClassObservation.release_class_cap_skips = admission.release_class_cap_skips;
     releaseClassObservation.lineup_reached_max = admission.lineup_reached_max;
     // 승급 수는 레인 라벨이 아니라 후보의 release 채널 여부로 센다. reference 창 릴리스는
     // 일반 레인이 먼저 가져갈 수 있는데, 그걸 미승급으로 세면 진단이 사실과 어긋난다.

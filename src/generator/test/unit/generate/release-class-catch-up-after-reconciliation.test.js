@@ -283,6 +283,60 @@ test('the second pass keeps the release-note dedup guard', () => {
   });
 });
 
+// 호당 release-class 상한(maxReleaseClassArticles)은 1차 승급분과 합산해 지켜야 한다. 1차
+// 승급 수를 레인 라벨(catch_up_lane === 'release_class')로 세면, thin week에 일반
+// (fill_open_slots) 레인이 먼저 가져간 reference 창 릴리스가 0건으로 잡혀 2차 pass가 상한을
+// 이미 다 쓴 호에 릴리스를 한 건 더 올린다. 세는 기준은 레인 라벨이 아니라 후보의 release
+// 채널 여부다 — 1차 observation.admitted가 세는 기준과 같다.
+test('a release the general lane already admitted spends the per-issue release-class cap', () => {
+  const camerax = freshWeek()[0];
+  const other = freshWeek()[1];
+  // reference 창(27일령) 릴리스 → thin week의 빈 슬롯을 일반 레인이 먼저 가져간다.
+  const generalLaneRelease = releaseCandidate({ published_date: '2026-06-30' });
+  // 같은 CameraX 릴리스 노트 페이지라 1차에서는 release-note dedup에 막혀 pool에 남는다.
+  // 재조정이 그 페이지 기사를 강등하면 2차 pass에서는 dedup이 더는 막지 않는다.
+  const pooledRelease = releaseCandidate({
+    title: 'CameraX 1.5.0',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0',
+    published_date: '2026-07-08', version_or_release: '1.5.0', api_or_component: 'CameraX'
+  });
+
+  const shortlist = report([camerax, other, generalLaneRelease, pooledRelease]);
+  const promoted = shortlist.selected_articles.filter(item => item.coverage_type === 'catch_up');
+  assert.deepEqual(
+    promoted.map(item => item.catch_up_lane),
+    ['fill_open_slots'],
+    '일반 레인이 릴리스를 먼저 가져간 상황을 만든다'
+  );
+  assert.deepEqual(
+    shortlist.release_class_catch_up_pool.map(item => item.url),
+    [pooledRelease.url],
+    '두 번째 릴리스는 2차 pass 입력으로 남아 있어야 검사가 의미 있다'
+  );
+
+  const { reconciled, secondPass, finalSelected } = runSecondPass(
+    shortlist,
+    planDemotingAllExcept(shortlist, [other.url, RELEASE_URL])
+  );
+
+  assert.deepEqual(
+    reconciled.map(item => item.url),
+    [other.url, RELEASE_URL],
+    '재조정이 CameraX 페이지 기사를 강등해 dedup 가드가 풀린 상태를 만든다'
+  );
+  assert.equal(secondPass.admitted.length, 0, '상한을 이미 쓴 호에서는 승급하지 않는다');
+  assert.deepEqual(secondPass.observation, {
+    pool_size: 1, admitted: 0, blocked_reason: 'release_class_cap_reached'
+  });
+  const releaseChannelCatchUp = finalSelected.filter(item => item.coverage_type === 'catch_up' &&
+    item.source_collection_mode === 'release-note-watch');
+  assert.equal(
+    releaseChannelCatchUp.length,
+    CATCH_UP_POLICY.maxReleaseClassArticles,
+    '한 호의 release 채널 catch-up 승급은 정책 상한을 넘지 않는다'
+  );
+});
+
 test('an already-covered release never reaches the second pass', () => {
   // 게재 이력 검사는 1차 pool 구성에서 이미 걸린다. 2차 pass는 그 pool을 그대로 쓰므로
   // 같은 기사를 두 번 발행할 경로가 없다.
