@@ -13,6 +13,9 @@ const {
 } = require('../../select/coverage-reconciliation');
 const { editorialPlanPrompt } = require('../../reporter/newsletter-prompts');
 const { admitReleaseClassCatchUpAfterReconciliation } = require('../../select/newsroom-selection');
+// 스탬프 규칙을 테스트가 다시 적으면, 프로덕션이 스탬프를 멈춰도 이 파일은 통과한다(뮤테이션으로
+// 확인함). 그 필드에 쓰는 프로덕션 함수를 그대로 부른다.
+const { stampCatchUpPromotions } = require('../../publish/orchestrator-reconciliation-provenance');
 
 function mainEligible(overrides = {}) {
   return {
@@ -748,10 +751,13 @@ test('2차 pass 승급까지 반영한 최종 main도 레코드로 재구성된�
 
   // 발행 호스트가 하는 일 그대로: 최종 main 집합을 만들고, 그 승급분에 사유를 찍는다.
   const finalSelected = [...out.selected, ...secondPass.admitted];
-  const promotedKeys = new Set(secondPass.admitted.map(item => String(item.url_hash || item.url || item.title)));
-  const stamped = out.diff.editorial_plan_scored_candidates.map(record => (promotedKeys.has(record.candidate_key)
-    ? { ...record, reason_code: CATCH_UP_PROMOTED_AFTER_RECONCILIATION }
-    : record));
+  const stampedReport = { editorial_plan_scored_candidates: out.diff.editorial_plan_scored_candidates };
+  stampCatchUpPromotions(
+    stampedReport,
+    secondPass.admitted.map(item => String(item.url_hash || item.url || item.title)),
+    CATCH_UP_PROMOTED_AFTER_RECONCILIATION
+  );
+  const stamped = stampedReport.editorial_plan_scored_candidates;
 
   // 스탬프 전에는 규칙이 발행된 기사를 놓친다. 그 사실을 함께 잠가 두어야, 스탬프를 지우는
   // 변경이 "원래 그런 값"으로 통과하지 않는다.
