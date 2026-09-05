@@ -724,8 +724,21 @@ function shortlistCandidateKey(candidate) {
   return text(candidate?.article_identity_key) || text(candidate?.normalized_url) || normalizeUrl(candidateUrl(candidate)) || candidateUrl(candidate) || text(candidate?.title);
 }
 
-function shortlistWithFinalCandidates(shortlist, selected, reserve, cap = SHORTLIST_CAP) {
-  const requiredCandidates = [...ensureArray(selected), ...ensureArray(reserve)];
+// catchUpPool은 #879 레버 A로 들어온다. 이 후보들은 아직 승급되지 않았지만, 승급 여부가 정해지는
+// 시점(coverage 재조정 뒤 2차 pass)에는 reporter가 이미 돌아 있다. 그때 capsule이 없으면 승급이
+// 불가능하므로 — capsule 없이 올리면 selected에는 있는데 rendered에는 없는 그룹이 생겨 커버리지
+// 등식이 깨진다 — 여기서 미리 reporter 입력에 실어 둔다.
+//
+// 필수 그룹의 맨 뒤에 붙인다. cap을 넘으면 아래 truncate가 뒤에서부터 자르므로 pool이 가장 먼저
+// 밀리고, 결정론 편성(selected)과 재조정 승급 후보(reserve)를 밀어내지 않는다. 밀려서 빠진 주는
+// 2차 pass가 not_in_reporter_input으로 보고한다 — 그 사유가 뜻하는 "있어야 할 기사가 reporter
+// 산출물에 없다"가 그 주에는 정확히 사실이다.
+function shortlistWithFinalCandidates(shortlist, selected, reserve, catchUpPool = [], cap = SHORTLIST_CAP) {
+  const requiredCandidates = [
+    ...ensureArray(selected),
+    ...ensureArray(reserve),
+    ...ensureArray(catchUpPool)
+  ];
   const requiredByKey = new Map();
   for (const candidate of requiredCandidates) {
     const key = shortlistCandidateKey(candidate);
@@ -799,10 +812,14 @@ function isReleaseClassCandidate(candidate = {}) {
 // 그대로다. 게이트 판정(편집 계획)을 배선 사실(reporter가 그 기사를 쓰지 않음)보다 먼저
 // 보고한다 — 게이트가 집행됐다는 사실이 배선 문제 뒤에 가려지면 안 된다.
 //
-// reference_window_no_capsule은 마지막이다. 2차 pass 시점에 pool에 남은 reference 창 후보는
-// 늘 이 조건에 걸리므로, 이 사유는 "그 주에 무슨 일이 있었는가"에 아무것도 더하지 않는다.
-// 반면 not_in_reporter_input은 결함 신호이고 duplicate_release_page는 그 주에만 성립한
-// 사실이다. 늘 참인 조건을 앞에 두면 두 신호가 영영 보이지 않는다.
+// reference_window_no_capsule과 not_in_reporter_input은 같은 사실(capsule이 없다)의 두 원인이라
+// 나란히 둔다. 갈라 두는 이유는 원인이 다르기 때문이다 — 전자는 shortlist cap에 밀린 용량 사실,
+// 후자는 있어야 할 기사가 reporter 산출물에 없다는 결함 신호다.
+//
+// #879 레버 A 이전에는 reference 창 후보가 원리상 capsule을 못 받아 이 조건이 늘 참이었고, 그래서
+// 맨 뒤에 두어 그 주에만 성립한 사실(duplicate_release_page)을 덮지 않게 했다. 레버 A가 pool
+// 후보를 reporter 입력에 실으면서 그 전제가 사라졌다 — 이제 이 사유가 뜨는 주는 실제로 cap이
+// 후보를 밀어낸 주이고, 그건 duplicate_release_page보다 먼저 알아야 할 용량 신호다.
 function releaseClassBlockedReason(observation) {
   if (observation.admitted > 0) return '';
   if (!observation.lane_enabled) return 'lane_disabled';
@@ -811,21 +828,48 @@ function releaseClassBlockedReason(observation) {
   if (observation.release_class_cap_skips > 0) return 'release_class_cap_reached';
   if (observation.planned_non_main_skips > 0) return 'editorial_plan_not_main';
   if (observation.not_in_reporter_input_skips > 0) return 'not_in_reporter_input';
-  if (observation.release_page_skips > 0) return 'duplicate_release_page';
   if (observation.reference_window_skips > 0) return 'reference_window_no_capsule';
+  if (observation.release_page_skips > 0) return 'duplicate_release_page';
   return 'unclassified';
 }
 
-// reference/fallback 창 후보를 catch-up main 기사 모양으로 바꾼다.
-function toCatchUpArticle(candidate, lane) {
-  // Promoting a reference-window candidate to a catch-up main article: clear the
-  // reference-window exclusion markers so the editor group-coverage validation does
-  // not try to demote it as selection_window_reference_not_main (an invalid reason).
+// 선정 창 제외 표식을 지운다. catch-up 레인은 #825가 릴리스에 창 밖 여유 슬롯을 내준 경로라,
+// 이 레인을 타는 후보에게 "창 때문에 main에서 빠졌다"는 표식이 남아 있으면 뒤 단계가 그 표식을
+// 근거로 되돌리려 든다(editor group-coverage가 selection_window_reference_not_main이라는 성립
+// 불가한 사유로 강등을 시도한다).
+//
+// 승급본(toCatchUpArticle)과 reporter 입력용 pool 항목(catchUpPoolShortlistEntry)이 같은 규칙을
+// 써야 한다. 한쪽만 지우면 같은 후보가 단계에 따라 다른 자격을 갖는다.
+function withoutSelectionWindowExclusion(candidate) {
   const cleared = { ...candidate };
   cleared.exclusion_reasons = ensureArray(candidate.exclusion_reasons)
     .filter(reason => !/^selection_window=/.test(text(reason)));
   delete cleared.selection_window_exclusion_reason;
   delete cleared.fallback_window_promoted;
+  return cleared;
+}
+
+// #879 레버 A: release-class catch-up pool 후보를 reporter 입력(shortlisted_candidates)에 싣는
+// 모양. 아직 승급된 것이 아니므로 선택 플래그는 전부 false다 — 여기서 하는 일은 "나중에 자리가
+// 비면 쓸 capsule을 미리 만들어 두는 것"뿐이다.
+//
+// freshness_window는 그대로 둔다. 이 후보가 어느 창에서 왔는지는 진단이 답해야 하는 사실이고,
+// reserve 구성은 이 배열이 아니라 selectionCandidatePool(primary+fallback)에서 나오므로 창 값을
+// 남겨도 reserve로 새지 않는다.
+function catchUpPoolShortlistEntry(candidate) {
+  return {
+    ...withoutSelectionWindowExclusion(candidate),
+    catch_up_pool_candidate: true,
+    selected: false,
+    selected_for_editor: false,
+    final_selected: false,
+    reserve_candidate: false
+  };
+}
+
+// reference/fallback 창 후보를 catch-up main 기사 모양으로 바꾼다.
+function toCatchUpArticle(candidate, lane) {
+  const cleared = withoutSelectionWindowExclusion(candidate);
   return {
     ...cleared,
     freshness_window: 'fallback',
@@ -992,12 +1036,16 @@ function admitReleaseClassCatchUpAfterReconciliation({
       plannedNonMainSkips += 1;
       return false;
     }
-    if (!isMainSelectionWindow(candidate)) {
-      referenceWindowSkips += 1;
-      return false;
-    }
+    // 막는 조건은 창이 아니라 capsule 유무다. 창 검사는 #879 레버 A 이전에 "reference 창 후보는
+    // 원리상 reporter 입력에 없다"의 대리 검사였는데, 레버 A가 그 pool 후보를 shortlist에 실어
+    // capsule을 만들어 주면서 전제가 사라졌다. 대리 검사를 남겨 두면 capsule이 있는 후보까지
+    // 창만 보고 막는다.
     if (!reportedUrls.has(normalizeUrl(candidateUrl(candidate)))) {
-      notInReporterInputSkips += 1;
+      // capsule이 없는 이유를 가른다. reference 창 후보는 shortlist cap(SHORTLIST_CAP)에 밀려
+      // 빠질 수 있고 그건 용량 사실이다. 그걸 not_in_reporter_input으로 접으면 "reporter 배선이
+      // 깨졌다"는 결함 신호가 용량 때문에 매주 울린다.
+      if (!isMainSelectionWindow(candidate)) referenceWindowSkips += 1;
+      else notInReporterInputSkips += 1;
       return false;
     }
     return true;
@@ -1301,7 +1349,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   const publishModeResult = resolvePublishMode(composition, getPublishModePolicy());
   const publishReady = publishGatePassed && warnings.length === 0 && mode !== COMPOSITION_MODES.NEEDS_FIX;
   const reserveUrls = new Set(reserve.map(candidate => candidate.normalized_url));
-  const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, cap);
+  // #879 레버 A: 2차 pass가 볼 pool 후보에게 capsule을 미리 만들어 준다. 이 pool은 1차 pass가
+  // 남긴 것과 같은 배열이라(release_class_catch_up_pool) 두 단계가 같은 후보 집합을 본다.
+  const catchUpPoolShortlist = releaseClassPool.map(catchUpPoolShortlistEntry);
+  const reportShortlist = shortlistWithFinalCandidates(shortlist, selected, reserve, catchUpPoolShortlist, cap);
   const markedShortlist = reportShortlist.map(candidate => {
     const candidateKey = shortlistCandidateKey(candidate);
     const match = selected.find(item => shortlistCandidateKey(item) === candidateKey);
