@@ -40,6 +40,7 @@
 | `requiresCrossCheck` | 최종 사용 전 다른 source 확인이 필요한지 표시합니다. | 2차 매체, community source, vendor claim 확인이 필요한 경우 `true`로 둡니다. |
 | `usageHint` | 편집자가 이 source를 어떤 목적으로 볼지 설명합니다. | 기사 본문 복사가 아니라 후보 발굴, 배경 확인, official confirmation 같은 용도를 씁니다. |
 | `keywords` | collector와 relevance 판단에 도움을 주는 keyword 목록입니다. | keyword는 watch/reference page를 main article로 승격시키는 우회로가 아닙니다. |
+| `suppressGenericCandidateFallback` | 소스별 파서가 아무것도 못 뽑았을 때 collector가 인덱스 페이지를 제너릭하게 긁어 후보를 만드는 폴백을 끕니다. 선택 field이고 boolean입니다. | 인덱스에서 쓸 만한 후보를 못 뽑는다고 실측으로 확인된 source에만 씁니다. 역할 표기(`sourceRole`/`mainArticlePolicy`)는 바꾸지 않습니다 — 릴리스 source를 참고 자료라 부르지 않기 위해서입니다. 근거와 재개 조건은 그 source의 `sourceQualityNotes`에 남깁니다. |
 
 ## category와 sectionMap의 관계
 

@@ -152,6 +152,22 @@ test('invalid collectionModeHint fails when present', () => {
   assert.match(result.errors.join('\n'), /collectionModeHint must be one of/);
 });
 
+test('suppressGenericCandidateFallback is optional but must be a boolean when present', () => {
+  // shouldSuppressGenericFallback이 `=== true`로만 보므로 문자열 "true"는 오류 없이 억제를
+  // 없앤다. 그 조용한 드리프트를 등록부 검증에서 막는다(#880).
+  const asString = validate(validRegistry({
+    sources: [validSource({ suppressGenericCandidateFallback: 'true' })]
+  }));
+  assert.equal(asString.ok, false);
+  assert.match(asString.errors.join('\n'), /suppressGenericCandidateFallback must be a boolean/);
+
+  assert.equal(validate(validRegistry({
+    sources: [validSource({ suppressGenericCandidateFallback: true })]
+  })).ok, true);
+  // 표식이 없는 항목이 대다수다. 선택 필드여야 한다.
+  assert.equal(validate(validRegistry()).ok, true);
+});
+
 test('source quality registry contract validates required enum fields', () => {
   const result = validate(validRegistry({
     sources: [

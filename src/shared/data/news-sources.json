@@ -807,8 +807,14 @@
       "mainArticlePolicy": "allowed",
       "requiresCrossCheckDefault": false,
       "evidenceGranularityHint": "article_level_concrete_source_fact",
+      "suppressGenericCandidateFallback": true,
       "sourceQualityNotes": [
-        "official source"
+        "official source",
+        "SMR 항목은 heading이 아니라 아코디언(div.acc_title/div.acc_sub)에 들어 있어, headingBlocks 기반 parseSamsungMobileSecurityUpdates가 이 페이지에서 0건을 뽑는다. 이것이 후보가 안 나오는 원인이다 (이슈 #880의 2026-09-03 라이브 실측)",
+        "항목별 발행일은 마크업에 없다. 날짜는 월 라벨(SMR-AUG-2026)에서 유도한 월 1일 근사치만 나온다 - parseSamsungMobileSecurityUpdates가 부르는 firstSmrDate가 firstDate를 거치고, 그 firstDate에 이 라벨 형식을 위한 분기가 있다. 즉 날짜를 못 구해서 막힌 것이 아니다",
+        "그래서 제너릭 폴백을 끈다. 폴백이 만들던 것은 날짜 없는 페이지 제목 후보 주 1건뿐이고, 그 잡음이 KEEP_AND_FIX_PARSER 진단 목록(상한 10)을 먹어 진짜 파서 결함을 가렸다",
+        "재개 조건: SMR 월 항목에 Camera HAL·ISP·이미지 파이프라인 컴포넌트가 등장하면 그때 아코디언 파서를 만든다. 위 실측의 8개월 439 CVE 표본에서 카메라 관련은 FactoryCamera(앱 권한) 1건뿐이었지만 MediaTek Audio HAL 같은 HAL 층 항목이 실리는 구조라 영구 불가는 아니다",
+        "억제 중에는 이 소스의 collected_count가 0이라 source-effectiveness 권고가 상시 NO_RECENT_SIGNAL이다. fetch 실패는 수집 산출물의 failures 목록에 소스 이름으로 남지만 권고는 collected_count 0 하나로 뭉뚱그리므로, 위 재개 조건은 권고가 아니라 페이지를 수동으로 확인해 판단한다"
       ]
     },
     {
