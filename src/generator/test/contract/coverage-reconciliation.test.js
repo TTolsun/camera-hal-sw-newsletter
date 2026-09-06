@@ -182,12 +182,12 @@ test('ungraded candidate keeps its deterministic tier', () => {
 // "왜 빠졌나"에 답하지 못한다. 단위도 갈라 둔다: changes[]는 candidate 단위이고,
 // 그룹 강등(demoted_groups)은 그룹의 후보가 전부 빠졌을 때만 성립한다.
 
-test('reference_only 제안으로 빠진 그룹은 그 제안을 사유로 남긴다', () => {
+test('exclude 제안으로 빠진 그룹은 그 제안을 사유로 남긴다', () => {
   const a = mainEligible({ url: 'a', article_group_key: 'group:a' });
   const b = mainEligible({ url: 'b', article_group_key: 'group:b' });
   const shortlistReport = { selected_articles: [a, b], reserve_candidates: [] };
   const editorialPlanReport = {
-    editorial_plans: [plan(a, 'main_article'), plan(b, 'reference_only')]
+    editorial_plans: [plan(a, 'main_article'), plan(b, 'exclude')]
   };
 
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
@@ -195,12 +195,12 @@ test('reference_only 제안으로 빠진 그룹은 그 제안을 사유로 남�
   const demotion = out.diff.changes.find(change => change.action === 'demoted');
   assert.equal(demotion.key, 'b');
   assert.equal(demotion.article_group_key, 'group:b');
-  assert.equal(demotion.coverage_decision, 'reference_only');
-  assert.equal(demotion.reason_code, 'editorial_plan_reference_only');
+  assert.equal(demotion.coverage_decision, 'exclude');
+  assert.equal(demotion.reason_code, 'editorial_plan_exclude');
 
   assert.deepEqual(out.diff.demoted_groups, [{
     article_group_key: 'group:b',
-    demoted_candidates: [{ candidate_key: 'b', coverage_decision: 'reference_only', reason_code: 'editorial_plan_reference_only' }]
+    demoted_candidates: [{ candidate_key: 'b', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' }]
   }]);
 });
 
@@ -372,6 +372,21 @@ test('프롬프트에서 뺀 short_mention은 모델 드리프트로 기록된�
   assert.equal(demotion.coverage_decision, 'short_mention', '모델이 쓴 원문은 그대로 남는다');
 });
 
+// #1000: reference_only는 short_mention과 달리 실재하는 렌더 목적지(참고자료 섹션)의 이름을
+// 갖고 있었다. 그래서 "등급을 지운다"가 아니라 "등급을 물린다"도 선택지였다. 실제 코드를 재면
+// 그 섹션을 만드는 render/reference-articles.js는 coverage_decision을 한 번도 읽지 않는다 —
+// 후보 풀도 제외 목록도 등급과 무관하게 정해지므로, 등급이 바꾸는 것은 진단 문자열 하나뿐이었다.
+// 참고 섹션 선별을 이미 결정론 코드가 하는데 LLM 제안까지 받으면 같은 결정을 두 주체가 나눠
+// 갖게 되어 coverage 권한 경계(#724)가 흐려진다. 그래서 어휘에서 뺐다.
+//
+// 위 양방향 집합 비교는 프롬프트와 집합을 함께 되돌리는 변경을 잡지 못하므로, short_mention과
+// 같이 이름 자체를 못박는다. 값이 들어오면 어떻게 기록되는지는 short_mention 테스트가 이미
+// 잠갔다 — 두 등급은 같은 경로를 탄다.
+test('프롬프트에서 뺀 reference_only는 프롬프트에도 아는 등급에도 남아 있지 않다', () => {
+  assert.ok(!gradesOfferedByPrompt().has('reference_only'), '프롬프트가 아직 reference_only를 제시한다');
+  assert.ok(!KNOWN_COVERAGE_DECISIONS.has('reference_only'), '아는 등급에 reference_only가 남아 있다');
+});
+
 // #1034: 강등 기록만으로는 "계획이 무엇을 어떻게 채점했는가"에 답하지 못한다. 강등 대상이
 // 아닌 후보(reserve로 남은 후보, catch-up pool 후보)는 강등 목록에 영원히 나타나지 않고,
 // 판단 원본을 담은 editorial-plan.json은 보존 등급이 debug_heavy라 커밋되지 않는다.
@@ -522,14 +537,14 @@ test('reserve에서 main으로 승급한 후보는 그 사실을 사유로 남�
   const promoted = mainEligible({ url: 'r', article_group_key: 'group:r', deterministic_score: 80 });
   const shortlistReport = { selected_articles: [dropped], reserve_candidates: [promoted] };
   const editorialPlanReport = {
-    editorial_plans: [plan(dropped, 'reference_only'), plan(promoted, 'main_article')]
+    editorial_plans: [plan(dropped, 'exclude'), plan(promoted, 'main_article')]
   };
 
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
 
   assert.deepEqual(out.selected.map(item => item.url), ['r'], 'reserve가 main으로 올라간다');
   assert.deepEqual(out.diff.editorial_plan_scored_candidates, [
-    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'reference_only', reason_code: 'editorial_plan_reference_only' },
+    { candidate_key: 'a', lineup_role: 'selected', article_group_key: 'group:a', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' },
     { candidate_key: 'r', lineup_role: 'reserve', article_group_key: 'group:r', coverage_decision: 'main_article', reason_code: 'promoted' }
   ]);
 });
