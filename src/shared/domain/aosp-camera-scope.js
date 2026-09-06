@@ -602,7 +602,14 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const nativeAndroidToolingTerms = nativeAndroidTooling.detected
     ? [...nativeAndroidTooling.tooling_product_terms, ...nativeAndroidTooling.native_workflow_terms]
     : [];
-  const bucketHint = validBucketHint(candidate.relevance_bucket_hint || candidate.relevanceBucketHint);
+  const rawBucketHint = text(candidate.relevance_bucket_hint || candidate.relevanceBucketHint);
+  const bucketHint = validBucketHint(rawBucketHint);
+  // 힌트가 어느 Android 근거를 가리켰는지는 이름을 접기 전에만 알 수 있다. 접힌 뒤에는
+  // 셋이 모두 'android' 라서, 이것 없이는 멀티미디어 힌트와 플랫폼-인접 힌트가 같은 분기로
+  // 몰려 등급이 뒤집힌다.
+  const hintedAndroidKind = rawBucketHint === 'android_multimedia_camera_output' ? 'multimedia_output'
+    : rawBucketHint === 'soc_platform_signal' ? 'soc_platform'
+      : bucketHint === BUCKETS.ANDROID ? 'platform_adjacent' : '';
   const sourceHintTerms = patternHits([
     ...DIRECT_AOSP_PATTERNS,
     ...DRIVER_PATTERNS,
@@ -655,14 +662,14 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     androidEvidenceKind = 'platform_adjacent';
     evidenceTerms = adaptiveUiAdjacentTerms;
   } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID && androidAdjacentTerms.length > 0 &&
-      multimediaCameraOutputTerms.length === 0) {
+      hintedAndroidKind === 'platform_adjacent') {
     bucket = BUCKETS.ANDROID;
     androidEvidenceKind = 'platform_adjacent';
     evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms, ...articleTerms];
   } else if (directTerms.length > 0) {
     bucket = BUCKETS.DIRECT_AOSP_CAMERA;
     evidenceTerms = directTerms;
-  } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID && multimediaCameraOutputTerms.length > 0) {
+  } else if (canUseBucketHint && hintedAndroidKind === 'multimedia_output' && multimediaCameraOutputTerms.length > 0) {
     bucket = BUCKETS.ANDROID;
     androidEvidenceKind = 'multimedia_output';
     evidenceTerms = multimediaCameraOutputTerms;
@@ -689,7 +696,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     evidenceTerms = nativeTerms;
   } else if (canUseBucketHint) {
     bucket = bucketHint;
-    if (bucket === BUCKETS.ANDROID && androidEvidenceKind === '') androidEvidenceKind = 'platform_adjacent';
+    if (bucket === BUCKETS.ANDROID && androidEvidenceKind === '') androidEvidenceKind = hintedAndroidKind;
     evidenceTerms = articleTerms;
   }
 
@@ -766,6 +773,10 @@ function normalizeAospCameraScope(candidate = {}, scope = {}) {
     counts_as_primary_camera_topic: true,
     counts_as_driver_topic: false,
     counts_as_soc_topic: false,
+    // 주력이라고 단언하는 자리다. 보조 근거를 남겨 두면 compositionBucket 이 같은 scope 를
+    // android_supporting 으로 읽어, 한 후보가 두 등급으로 세어진다.
+    multimedia_camera_output_relevance: 0,
+    soc_platform_relevance: 0,
     counts_as_fallback_topic: false,
     evidence_origin: scope.evidence_origin || 'article_text',
     scope_evidence_terms: evidenceTerms.slice(0, 8),

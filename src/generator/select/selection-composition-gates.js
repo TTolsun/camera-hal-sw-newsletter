@@ -208,8 +208,16 @@ function evidenceCountMap(candidates) {
   const counts = { multimedia: 0, soc: 0 };
   for (const candidate of ensureArray(candidates)) {
     const scope = candidateScope(candidate);
-    if ((candidate.counts_as_soc_topic ?? scope.counts_as_soc_topic) === true) counts.soc += 1;
-    else if (number(candidate.multimedia_camera_output_relevance ?? scope.multimedia_camera_output_relevance) > 0) counts.multimedia += 1;
+    const merged = {
+      relevance_bucket: candidate.relevance_bucket || scope.relevance_bucket,
+      counts_as_soc_topic: candidate.counts_as_soc_topic ?? scope.counts_as_soc_topic,
+      multimedia_camera_output_relevance: candidate.multimedia_camera_output_relevance ?? scope.multimedia_camera_output_relevance
+    };
+    // 실효 버킷과 같은 기준으로 센다. 여기서 갈리면 bucket_counts[android_supporting] 과
+    // 두 근거 카운트의 합이 어긋나 같은 리포트가 보조 기사 수를 두 값으로 말한다.
+    if (compositionBucket(merged) !== ANDROID_SUPPORTING) continue;
+    if (merged.counts_as_soc_topic === true || merged.relevance_bucket === 'soc_platform_signal') counts.soc += 1;
+    else counts.multimedia += 1;
   }
   return counts;
 }
@@ -223,13 +231,13 @@ function compositionSummary(candidates) {
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
   const supporting_main_article_count = articlePolicy.supportingMainBuckets
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
-  // 옛 multimedia + soc 자리를 android_supporting 이 그대로 받는다. 두 항목은 원래
-  // non_fallback_reviewable 에 들어갔고 soc 는 fallback_topic 에도 들어갔다 — 이제
-  // 구분되지 않으므로 합쳐진 값을 두 곳 모두에 쓴다.
+  // 옛 계산을 그대로 재현한다. multimedia 와 soc 는 둘 다 non_fallback_reviewable 에
+  // 들어갔지만 fallback_topic 에는 soc 만 들어갔다 — 근거별 카운트가 살아 있으므로
+  // 합쳐진 버킷 뒤에서도 그 구분을 유지할 수 있다.
   const non_fallback_reviewable_article_count =
     primary_camera_stack_topic_count + bucket_counts[ANDROID_SUPPORTING];
   const fallback_topic_count =
-    bucket_counts[ANDROID_SUPPORTING] + bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK];
+    evidence_counts.soc + bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK];
   const selected_article_count = ensureArray(candidates).length;
   return {
     selected_article_count,
