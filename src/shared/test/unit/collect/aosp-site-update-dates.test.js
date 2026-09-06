@@ -8,6 +8,7 @@ const {
   MAX_DATE_LOOKUPS
 } = require('../../../collect/aosp-site-update-dates');
 const { resolveFollowedSourceItems, followedSourceResolverIds } = require('../../../collect/followed-source-item-resolvers');
+const { dateQualityForCandidate } = require('../../../common/date-signals');
 
 const SOURCE = Object.freeze({
   id: 'aosp-site-updates',
@@ -45,6 +46,25 @@ test('월 정밀도 날짜를 대상 페이지의 일 단위 날짜로 올린다
   assert.equal(item.date_source, 'visible_last_updated');
   // 표가 말한 월은 근거 추적용으로 남긴다.
   assert.equal(item.site_update_month, '2026-07-01');
+});
+
+test('날짜 출처와 함께 신뢰도도 적는다', async () => {
+  // 신뢰도를 안 적으면 후보 레코드가 명시적 0 으로 굳히고, dateQualityForCandidate 의
+  // 폴백은 0 을 유효한 숫자로 받아 그대로 쓴다 — date_source 가 옳아도 자격이 막힌다.
+  const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
+    fetchTextImpl: async () => targetHtml()
+  });
+
+  const item = items.find(entry => entry.url === TARGET);
+  assert.equal(item.date_confidence, 85, 'visible_last_updated 의 신뢰도');
+
+  const quality = dateQualityForCandidate({
+    effective_date: item.publishedAt,
+    date_source: item.date_source,
+    date_confidence: item.date_confidence
+  });
+  assert.equal(quality.main_article_date_eligible, true);
+  assert.equal(quality.needs_editor_date_review, false);
 });
 
 test('Last updated 가 없으면 본문 날짜를 쓰고 출처를 visible_date 로 적는다', async () => {

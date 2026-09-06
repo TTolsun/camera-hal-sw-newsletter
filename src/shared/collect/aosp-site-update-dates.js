@@ -17,6 +17,7 @@
 const { parseSourceSpecificItems } = require('./source-item-parsers');
 const { fetchTextWithLimit, fetchUrlForContent } = require('./source-intelligence-utils');
 const { explicitDayDate, visibleDate, visibleLastUpdated } = require('./source-monitor');
+const { dateSourceConfidence } = require('../common/date-signals');
 
 // parseAospSiteUpdates 가 한 번에 최대 12건을 내보낸다(카메라 관련 행만 남긴 뒤 slice).
 // 그 상한을 그대로 따른다 — 표가 커져도 fetch 가 그보다 늘지 않는다.
@@ -132,6 +133,13 @@ async function resolveAospSiteUpdateItems(html, source, { fetchTextImpl, onDiagn
       // 어휘는 date-signals.js 의 DATE_SOURCES 에 있는 값만 쓴다. 여기서 지어낸 이름을 쓰면
       // quality-deduction-rules 의 validateDateSource 가 후보마다 위반을 붙인다.
       date_source: signal.dateSource,
+      // 신뢰도를 함께 적는다. 후보 레코드는 이 값을 `Number(raw.date_confidence || 0)` 로
+      // **명시적 0** 으로 굳히고, dateQualityForCandidate 의
+      // `number(candidate.date_confidence, dateSourceConfidence(source))` 폴백은 0 도 유효한
+      // 숫자로 받아 그대로 쓴다. 그러면 date_source 가 옳아도 main_article_date_eligible 이
+      // false 가 되어 보강이 무의미해진다. 다른 생산자(source-monitor, dated-article-index-
+      // resolver, deep-dive-topic-accrual)도 전부 이 짝을 같이 적는다.
+      date_confidence: dateSourceConfidence(signal.dateSource),
       // 표가 말한 월은 근거 추적용으로 남긴다. 이 필드가 있다는 것이 곧 대상 페이지에서
       // 날짜를 올렸다는 표시다.
       site_update_month: item.publishedAt
