@@ -382,6 +382,20 @@ test('프롬프트에서 뺀 short_mention은 모델 드리프트로 기록된�
 // 위 양방향 집합 비교는 프롬프트와 집합을 함께 되돌리는 변경을 잡지 못하므로, short_mention과
 // 같이 이름 자체를 못박는다. 값이 들어오면 어떻게 기록되는지는 short_mention 테스트가 이미
 // 잠갔다 — 두 등급은 같은 경로를 탄다.
+// #1000: 참고 섹션 빌더가 coverage_decision을 읽지 않는다는 것이 이 변경의 근거다. 그 사실을
+// 주석에만 두면 나중에 등급을 읽는 줄이 들어와도 아무도 모른다. 소스에서 직접 확인한다.
+test('참고 섹션 빌더는 coverage_decision을 읽지 않는다', () => {
+  const builderPath = require.resolve('../../render/reference-articles.js');
+  const builderSource = require('fs').readFileSync(builderPath, 'utf8');
+  const codeOnly = builderSource
+    .split('\n')
+    .filter(line => !line.trim().startsWith('//'))
+    .join('\n');
+  assert.ok(
+    !codeOnly.includes('coverage_decision'),
+    '참고 섹션 빌더가 coverage_decision을 읽는다 — 등급을 결정론 선별에 들이는 것은 #724 권한 경계 변경이다'
+  );
+});
 test('프롬프트에서 뺀 reference_only는 프롬프트에도 아는 등급에도 남아 있지 않다', () => {
   assert.ok(!gradesOfferedByPrompt().has('reference_only'), '프롬프트가 아직 reference_only를 제시한다');
   assert.ok(!KNOWN_COVERAGE_DECISIONS.has('reference_only'), '아는 등급에 reference_only가 남아 있다');
