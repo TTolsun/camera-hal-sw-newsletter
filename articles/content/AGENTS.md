@@ -65,7 +65,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `shortlisted-candidates.json`, `article-capsules.json`
 - `editor-draft.{json,md}`, `reporter-candidates.json`
 - `linked-evidence-report.json`, `event-bundles.json`, `background-context.json`
-- `seed-fetch-report.json`, `seed-merge-report.json`
+- `seed-fetch-report.json`, `seed-merge-report.json` — workflow 02가 `articles/content/newsroom/`을 통째로 `git add`하므로 커밋 경로 위에 있고, 커밋되지 않는 이유는 `.gitignore` 하나뿐입니다. 목록에서 빠지면 `seed_used=true` 첫 실행에서 커밋되어 `check:artifact-retention`이 hard fail 합니다(#1089).
 - `source-change-events.json`
 - `recovery-prompt.md` — heavy LLM prompt dump (~10 MB 규모). Git에 커밋하지 않음; GitHub Actions artifact `newsroom-final-debug-<run_id>` + `artifact-manifest.json` → `retained_heavy_artifacts`에서 조회.
 - `news-candidates.md` — workflow 01이 `articles/content/newsroom/YYYY-MM-DD/`에 쓰지만, 01의 `git add` 목록에는 그 경로가 없습니다. workflow 02는 별도 러너에서 `main`을 새로 체크아웃하므로 01이 만든 이 파일을 보지 못합니다. 그래서 커밋되지 않고 GitHub Actions artifact `newsroom-raw-debug-<run_id>`(보존 14일)에서만 조회됩니다. 날짜 결속 수집 진단(#945)이 커밋되어 남는 짝은 `articles/content/collected-news/YYYY-MM-DD/candidates.json`의 `dated_article_collection` 필드입니다. 트리에 남은 `2026-06-02` 이전 18건은 데일리 발행 시절 잔재이고, 생성 산출물 보존 규칙에 따라 지우지 않습니다(#1062).

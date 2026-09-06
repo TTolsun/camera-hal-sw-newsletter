@@ -31,6 +31,8 @@ articles/content/newsroom/**/linked-evidence-report.json
 articles/content/newsroom/**/news-candidates.md
 articles/content/newsroom/**/recovery-prompt.md
 articles/content/newsroom/**/reporter-candidates.json
+articles/content/newsroom/**/seed-fetch-report.json
+articles/content/newsroom/**/seed-merge-report.json
 articles/content/newsroom/**/shortlisted-candidates.json
 # collected-news pure-debug files (not pipeline-input handoff state)
 articles/content/collected-news/**/gemini-candidates.json
