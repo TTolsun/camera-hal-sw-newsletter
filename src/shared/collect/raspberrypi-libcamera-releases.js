@@ -32,15 +32,8 @@ const EMPTY_BODY_PLACEHOLDER_PATTERN = /^no content\.?$/i;
 // 태그 제거에 삼켜진다. 태그를 **공백**으로 치환하는 것도 같은 이유다 — 빈 문자열로 지우면
 // `now<br />embedded`에서 단어가 붙는다.
 //
-// 다만 이건 이 모듈이 지키는 경계 계약이지 최종 산출물의 보장이 아니다. 지금은 하류
-// normalizeCandidate(collect-news-candidates.js:923)가 summary에 decode()를 다시 걸고, 그 decode가
-// `<…>`를 또 지워서 살려낸 꺾쇠가 영속 후보에서는 결국 사라진다(라이브 실측 3건). 여기서 안 지우는
-// 이유는 수집기가 원문을 망가뜨린 채 넘기지 않기 위해서다.
-//
-// 그렇다고 그 두 번째 decode를 그냥 뺄 수는 없다. escape된 HTML을 싣는 RSS 피드에서는 tag()의
-// decode 한 번으로 `<p>`가 리터럴 텍스트로 남고(태그 제거가 entity 해제보다 먼저 돌기 때문),
-// 그걸 걷어내는 것이 바로 그 두 번째 decode다(실측). 꺾쇠 보존과 태그 제거를 함께 만족시키려면
-// 그 두 단계를 분리해야 하고, 그건 모든 수집 경로의 경계 계약을 바꾸는 별도 작업이다.
+// 하류 normalizeCandidate는 이제 summary에 entity 해제를 다시 걸지 않고 마크업 제거만 한다(#975).
+// 그래서 여기서 살려낸 꺾쇠는 영속 후보까지 그대로 간다.
 const XML_ESCAPE_ONCE = { '&lt;': '<', '&gt;': '>', '&quot;': '"', '&apos;': "'", '&amp;': '&' };
 
 function unescapeXmlOnce(value) {
@@ -73,10 +66,10 @@ function releaseCandidate(block, source) {
   // 경로를 함께 가리킬 수 없기 때문이다.
   //
   // 표식이 붙은 지금 이 필드는 자격 판정에 기여하지 않는다. collect-news-candidates의
-  // isCollectorTemplateSentence가 이 문장(과 하류 decode·절단을 거친 그 앞 조각)을 근거에서 빼기
-  // 때문에, 본문이 없는 릴리스는 release_note_item 근거 미달로 떨어진다. 다만 그 판정은 "이 칸이
-  // 만들 수 있는 모든 값"이 아니라 하류가 실제로 거치는 변환(decode 1회, 앞에서부터의 절단)을
-  // 되짚는 것이므로, 하류 정규화가 바뀌면 여기 표식도 함께 다시 재야 한다.
+  // isCollectorTemplateSentence가 이 문장(과 하류 마크업 제거·절단을 거친 그 앞 조각)을 근거에서
+  // 빼기 때문에, 본문이 없는 릴리스는 release_note_item 근거 미달로 떨어진다. 다만 그 판정은
+  // "이 칸이 만들 수 있는 모든 값"이 아니라 하류가 실제로 거치는 변환(stripMarkup 1회, 앞에서부터의
+  // 절단)을 되짚는 것이므로, 하류 정규화가 바뀌면 여기 표식도 함께 다시 재야 한다.
   // 자격을 살리는 것은 본문이 있는 릴리스의 summary다.
   //
   // 본문을 이 필드에 싣는 것은 아직 하지 않았다. article-capsules가 이 필드를 what_changed의

@@ -193,12 +193,27 @@ const BEHAVIOR_CHANGE_PATTERN = /\b(?:add(?:ed|s)?|change(?:d|s)?|fix(?:ed|es)?|
 let sectionMap = { ...DEFAULT_SECTION_MAP };
 let activeSourcesPath = legacySourcesPath;
 
-function decode(value = '') {
-  return decodeHtml(value
+// #975: 마크업 제거와 HTML entity 해제는 서로 다른 일이라 따로 부를 수 있어야 한다. 피드 블록을
+// 읽는 파서는 둘 다 필요하지만, 이미 entity가 풀린 텍스트를 받는 normalizeCandidate는 마크업
+// 제거만 필요하다. 둘을 묶어 두면 entity 해제가 두 번 걸리고, 첫 해제로 되살아난 본문의 꺾쇠
+// 표기(`Signed-off-by: … <naush@raspberrypi.com>`)가 두 번째 마크업 제거에 삼켜진다.
+//
+// 태그 판정을 이름 꼴(`[a-zA-Z]`로 시작하고 그 뒤가 공백·`/`·`>`)로 제한하는 것도 같은 이유다.
+// `<naush@raspberrypi.com>`은 이름 뒤에 `@`가 와서 태그가 아니고, `<p>`·`</p>`·`<br />`·
+// `<a href="…">`는 태그다. 태그를 빈 문자열이 아니라 공백으로 치환하는 이유는
+// `now<br />embedded`에서 단어가 붙지 않게 하기 위해서다.
+const MARKUP_PATTERN = /<!--[\s\S]*?-->|<![^>]*>|<\/?[a-zA-Z][a-zA-Z0-9:._-]*(?:\s[^<>]*)?\/?>/g;
+
+function stripMarkup(value = '') {
+  return String(value)
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/<[^>]+>/g, ' ')
+    .replace(MARKUP_PATTERN, ' ')
     .replace(/\s+/g, ' ')
-    .trim());
+    .trim();
+}
+
+function decode(value = '') {
+  return decodeHtml(stripMarkup(value));
 }
 
 function tag(block, name) {
@@ -500,10 +515,9 @@ function nativeAndroidToolingEvidence(raw = {}, source = {}, title = '', summary
 // 때문이다. 표식을 다는 쪽은 그 문장을 만든 수집기다.
 //
 // 비교가 성립하려면 표식과 판정 입력이 같은 변환을 거쳐야 한다. 판정 입력 중 summary 계열은
-// normalizeCandidate가 decode()를 한 번 더 걸어 만든 값이고, decode()는 태그 구간(`<...>`)을 공백으로
-// 지운다. 그래서 표식 원문과 decode()를 한 번 건 형태를 둘 다 본다. 릴리스 이름은 자유 텍스트라
-// 꺾쇠도 합법이고(`v1.0 <experimental>`), atom에서 이중 escape로 들어와 decode 한 겹이 더 벗겨지기도
-// 한다.
+// normalizeCandidate가 stripMarkup()을 한 번 더 걸어 만든 값이고, stripMarkup()은 태그 꼴 구간을
+// 공백으로 지운다. 그래서 표식 원문과 stripMarkup()을 한 번 건 형태를 둘 다 본다. 릴리스 이름은
+// 자유 텍스트라 꺾쇠도 합법이다(`v1.0 <experimental>`).
 //
 // 조각 비교를 접두(startsWith)로 하는 이유는 두 가지 절단이 모두 앞 조각을 남기기 때문이다.
 // normalizeCandidate의 500자 상한이 뒤를 자르고, firstBehavior의 문장 분할은 첫 문장을 돌려준다
@@ -518,7 +532,7 @@ function isCollectorTemplateSentence(raw, value) {
   const candidate = collapseWhitespace(value);
   const template = collapseWhitespace(raw?.collector_template_sentence);
   if (!candidate || !template) return false;
-  return template.startsWith(candidate) || collapseWhitespace(decode(template)).startsWith(candidate);
+  return template.startsWith(candidate) || stripMarkup(template).startsWith(candidate);
 }
 
 // #1076: 일부 수집기는 title을 `${source.name} - ${tag}` 형태로 조립한다. 그 접두부는 출처가 쓴
@@ -982,8 +996,10 @@ function communitySignalMarkers(source = {}) {
 function normalizeCandidate(raw) {
   raw = sourceExtractionBackfill(raw);
   const source = raw.source;
-  const title = decode(raw.title);
-  const summary = decode(raw.summary).slice(0, 500);
+  // 여기 들어오는 값은 파서나 소스별 수집기가 이미 entity를 푼 텍스트다. 남은 일은 그 해제로
+  // 리터럴이 된 마크업을 걷어내는 것뿐이라 stripMarkup만 건다(#975).
+  const title = stripMarkup(raw.title);
+  const summary = stripMarkup(raw.summary).slice(0, 500);
   const rawSourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
   const sourceType = raw.sourceType || raw.source_type || rawSourceKind;
   const url = canonicalContentUrl(raw.url);
