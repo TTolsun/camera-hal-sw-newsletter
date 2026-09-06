@@ -561,8 +561,16 @@ function validateSubscriptionCtaSurface(html, label, subscriptionState, expected
   if (configPath !== expectedConfigPath) {
     fail(`${label} subscription section must declare data-subscription-config="${expectedConfigPath}".`);
   }
-  if (!new RegExp(`assets/js/${escapeRegex(SUBSCRIPTION_CTA_SCRIPT_NAME)}`).test(html)) {
+  // defer 까지 본다. 이 스크립트는 로드되자마자 querySelector 로 섹션을 찾으므로, defer 없이
+  // head 에 놓이면 아직 없는 body 를 보고 조용히 아무것도 하지 않는다 — 꺼진 상태와 구별되지
+  // 않아서 새 표면이 절반만 동작하는 채로 늘어난다.
+  const ctaScriptTag = html.match(
+    new RegExp(`<script\\b[^>]*\\bsrc=["'][^"']*assets/js/${escapeRegex(SUBSCRIPTION_CTA_SCRIPT_NAME)}["'][^>]*>`, 'i')
+  )?.[0] || '';
+  if (!ctaScriptTag) {
     fail(`${label} must load assets/js/${SUBSCRIPTION_CTA_SCRIPT_NAME}.`);
+  } else if (!/\bdefer\b/i.test(ctaScriptTag)) {
+    fail(`${label} must load assets/js/${SUBSCRIPTION_CTA_SCRIPT_NAME} with defer.`);
   }
 
   // 푸터 진입점. 꺼진 상태에서 보이는 것은 "구독 (지원예정)" 노트뿐이고, 링크는 href 없이

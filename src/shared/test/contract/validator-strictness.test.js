@@ -701,6 +701,29 @@ test('validate-site requires repo-relative subscription fetch path', () => {
   assert.match(result.stderr, /must not fetch \/config\/subscription\.json/);
 });
 
+// 공용 스크립트는 실행되자마자 querySelector 로 섹션을 찾는다. defer 없이 head 에서 돌면
+// 아직 없는 body 를 보고 아무것도 하지 않는데, 그 결과가 "구독이 꺼진 상태"와 똑같이 보여서
+// 표면 하나가 조용히 죽는다. 그래서 검증이 defer 를 요구한다.
+test('validate-site requires the shared subscription CTA script to be deferred', () => {
+  const root = tempRoot('validate-site-subscription-defer-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  const archivePath = path.join(root, 'articles', 'archive.html');
+  const withoutDefer = fs.readFileSync(archivePath, 'utf8')
+    .replace('assets/js/subscription-cta.js" defer>', 'assets/js/subscription-cta.js">');
+  // 치환이 실제로 일어났는지부터 확인한다. fixture 문구가 바뀌면 이 테스트는 defer 가 붙은
+  // 그대로를 검사하게 되어 조용히 통과한다.
+  assert.notEqual(withoutDefer, fs.readFileSync(archivePath, 'utf8'));
+  writeText(archivePath, withoutDefer);
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /must load assets\/js\/subscription-cta\.js with defer/);
+});
+
 test('validate-site rejects fake subscription form controls in the subscription section', () => {
   const root = tempRoot('validate-site-subscription-form-');
   writeSiteFixture(root, {
