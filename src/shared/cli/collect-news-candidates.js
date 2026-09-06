@@ -1619,6 +1619,10 @@ function mdEscape(value = '') {
 // 남아 있어서, 목록 마크업이 바뀌어 카드가 0장 파싱된 주에도 보고서에는 아무 흔적이 없었다.
 // 그러면 마크업 파손과 "이번 주 신규 없음"이 보고서상 완전히 같은 모양이 된다(#945).
 //
+// 다만 이 보고서(news-candidates.md)는 커밋되지 않는다. 워크플로 01의 git add 목록에
+// articles/content/newsroom/ 경로가 없어 14일짜리 Actions debug artifact로만 남는다. 영속으로
+// 남는 짝은 커밋되는 candidates.json의 dated_article_collection이다(#1062).
+//
 // 값이 없으면 절을 통째로 생략한다. 렌더는 절대 throw하면 안 된다 — 여기서 죽으면 진단을
 // 보여주려던 변경이 그날 수집 자체를 날린다.
 function datedArticleCollectionSectionLines(datedArticleCollection, candidates) {

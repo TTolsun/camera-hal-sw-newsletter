@@ -7,6 +7,17 @@ const {
 
 const UNKNOWN_GROUP = 'unknown_artifacts';
 
+// 데일리 발행 시절에 커밋된 news-candidates.md 18건은 생성 산출물 보존 규칙에 따라 Git에 남긴다.
+// 지금은 워크플로 01이 이 파일을 커밋하지 않으므로 등급은 debug_heavy이고, 아래 날짜보다 뒤의
+// news-candidates.md가 새로 추적되면 등급과 실제 커밋 동작이 다시 어긋난 것이므로 위반으로 잡는다(#1062).
+// 애초에 새로 추적되지 않도록 .gitignore가 이 경로를 막는다. 이 검사는 그 뒤를 받치는 사후 그물이다.
+const LEGACY_NEWS_CANDIDATES_LAST_COMMITTED_DATE = '2026-06-02';
+
+function isPreservedLegacyArtifact(relPath) {
+  const match = String(relPath).match(/\/(\d{4}-\d{2}-\d{2})\/news-candidates\.md$/);
+  return Boolean(match) && match[1] <= LEGACY_NEWS_CANDIDATES_LAST_COMMITTED_DATE;
+}
+
 // articles/content/newsroom 및 articles/content/collected-news 아래 Git 추적 경로 목록을 반환한다.
 function getTrackedContentPaths(root) {
   const output = execFileSync(
@@ -30,6 +41,7 @@ function checkArtifactRetentionTracked({ root = process.cwd(), _trackedPaths } =
   const warnings = [];
 
   for (const relPath of trackedPaths) {
+    if (isPreservedLegacyArtifact(relPath)) continue;
     const classification = classifyArtifactPath(relPath);
     if (!classification) {
       warnings.push({ path: relPath, reason: '날짜 세그먼트 없음; 분류 건너뜀' });
@@ -47,4 +59,8 @@ function checkArtifactRetentionTracked({ root = process.cwd(), _trackedPaths } =
   return { violations, warnings, ok: violations.length === 0 };
 }
 
-module.exports = { checkArtifactRetentionTracked, mustNotBeTracked, getTrackedContentPaths };
+module.exports = {
+  checkArtifactRetentionTracked,
+  mustNotBeTracked,
+  getTrackedContentPaths
+};
