@@ -278,3 +278,107 @@ for (const [label, titleXml] of NORMALIZATION_BYPASS_TAGS) {
     assert.equal(normalized.main_eligible, false);
   });
 }
+
+// #1076: #976이 막은 것은 수집기 템플릿 "문장"뿐이고, title 폴백 경로는 그대로 열려 있었다.
+// summary가 비면 `firstBehavior(summary || title)`가 title을 근거로 쓰는데, 그 title은 수집기가
+// `${source.name} - ${tag}` 형태로 조립한 값이다. 그래서 소스 이름에 든 낱말이 어휘 패턴에 걸려
+// 아무 사실도 말하지 않는 후보에 근거를 준다. 등록부 73개 소스 중 19개 이름이 그 패턴에 걸린다
+// (`Releases`·`Security`·`Updates`·`Compatibility`·`API`…).
+test('#1076 소스 이름 접두부만 든 title은 동작 변경 근거가 되지 못한다', () => {
+  const raw = {
+    sourceKind: 'release_note_item',
+    publishedAt: '2026-08-17',
+    version_or_release: 'v1.0.0',
+    api_or_component: 'libcamera / V4L2 camera pipeline'
+  };
+  const metadata = evidenceMetadata(
+    raw,
+    RELEASE_SOURCE,
+    // 소스 이름의 `Releases`가 BEHAVIOR_CHANGE_PATTERN의 `release(?:d|s)?`에 걸린다.
+    `${RELEASE_SOURCE.name} - v1.0.0`,
+    '',
+    40,
+    false
+  );
+
+  assert.equal(metadata.has_behavior_change, false, '수집기가 붙인 소스 이름은 근거가 아니다');
+  assert.equal(metadata.has_published_date, true);
+  assert.equal(metadata.has_version_or_release, true);
+  assert.equal(metadata.has_api_or_component, true);
+  assert.equal(metadata.evidence_score, 6);
+  assert.equal(metadata.source_gap_risk, true);
+  assert.equal(metadata.main_eligible, false);
+});
+
+// 이슈 재현: 릴리스 본문이 꺾쇠 리터럴 한 덩어리면 수집기는 본문이 있다고 보고 summary를 만들지만,
+// normalizeCandidate의 decode()가 그것을 태그 구간으로 보고 지워 summary가 빈 문자열이 된다.
+// 그러면 판정이 title로 폴백해 소스 이름이 근거를 대신 댄다.
+test('#1076 decode로 summary가 비어도 소스 이름이 근거를 대신 대지 않는다', () => {
+  const atom = [
+    '<feed xmlns="http://www.w3.org/2005/Atom">',
+    '<entry>',
+    '<updated>2026-08-17T10:00:00Z</updated>',
+    '<link rel="alternate" type="text/html" href="https://github.com/raspberrypi/libcamera/releases/tag/v1.0.0"/>',
+    '<title>v1.0.0</title>',
+    // 본문 전체가 꺾쇠 리터럴 한 덩어리다(라이브에서는 `<naush@raspberrypi.com>` 한 줄인 경우).
+    '<content type="html">&amp;lt;fix&amp;gt;</content>',
+    '</entry>',
+    '</feed>'
+  ].join('');
+  const collectorSource = {
+    ...RELEASE_SOURCE,
+    url: 'https://github.com/raspberrypi/libcamera/releases',
+    sourceUrl: 'https://github.com/raspberrypi/libcamera/releases',
+    section: 'Kernel / Media',
+    keywords: ['libcamera']
+  };
+  const [item] = resolveRaspberryPiLibcameraReleaseItems(atom, collectorSource);
+  const normalized = normalizeCandidate(item);
+
+  assert.equal(normalized.has_behavior_change, false, '아무 사실도 말하지 않는 후보다');
+  assert.equal(normalized.main_eligible, false);
+});
+
+// 떼는 것은 수집기가 붙인 접두부뿐이다. 제목의 나머지가 실제 변경을 서술하면 폴백은 그대로 산다.
+test('#1076 접두부만 떼고 제목의 나머지는 근거로 그대로 남는다', () => {
+  const raw = {
+    sourceKind: 'release_note_item',
+    publishedAt: '2026-08-17',
+    version_or_release: 'v1.0.0',
+    api_or_component: 'libcamera / V4L2 camera pipeline'
+  };
+  const metadata = evidenceMetadata(
+    raw,
+    RELEASE_SOURCE,
+    `${RELEASE_SOURCE.name} - v1.0.0 adds Mali-C55 pipeline handler support`,
+    '',
+    40,
+    false
+  );
+
+  assert.equal(metadata.has_behavior_change, true, '제목 나머지가 서술하는 변경은 근거다');
+  assert.equal(metadata.evidence_score, 8);
+  assert.equal(metadata.main_eligible, true);
+});
+
+// 수집기 접두부가 없는 소스의 title 폴백은 손대지 않았다.
+test('#1076 수집기 접두부가 없는 title의 폴백은 그대로다', () => {
+  const raw = {
+    sourceKind: 'release_note_item',
+    publishedAt: '2026-08-17',
+    version_or_release: 'v1.0.0',
+    api_or_component: 'libcamera / V4L2 camera pipeline'
+  };
+  const metadata = evidenceMetadata(
+    raw,
+    RELEASE_SOURCE,
+    'libcamera v1.0.0 fixes sensor mode configuration',
+    '',
+    40,
+    false
+  );
+
+  assert.equal(metadata.has_behavior_change, true);
+  assert.equal(metadata.evidence_score, 8);
+  assert.equal(metadata.main_eligible, true);
+});
