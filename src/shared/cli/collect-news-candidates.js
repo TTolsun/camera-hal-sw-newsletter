@@ -40,6 +40,7 @@ const {
   resolveLinkedReleaseNoteEvidenceItems
 } = require('../collect/linked-release-note-evidence');
 const {
+  followedSourceResolverIds,
   resolveFollowedSourceItems,
   shouldSuppressGenericFallback,
   sourceIdsRequiringFetchClient
@@ -1924,8 +1925,16 @@ async function collectFromSource(source, {
   const fetchClient = usesDatedArticleResolver(source)
     ? createClient({ maxBytesPerSourceRun: MAX_BYTES_PER_SOURCE_RUN })
     : null;
+  // 아래 followed_resolver_yielded_nothing 은 다른 사건이 하나도 안 났을 때만 내는 backstop이다.
+  // 그래서 이 소스에서 사건이 났는지를 여기서 센다. dated-article resolver처럼 스스로
+  // index_collection_failed를 내는 리졸버까지 backstop을 얹으면 같은 상황이 두 kind로 잡혀,
+  // 어느 쪽이 원인인지 세는 사람이 다시 풀어야 한다.
+  let reportedDiagnostic = false;
+  const recordDiagnostic = typeof onDiagnostic === 'function'
+    ? event => { reportedDiagnostic = true; onDiagnostic(event); }
+    : undefined;
   try {
-    const text = await fetchSourceIndexText(target, fetchClient, onDiagnostic, fetchTextImpl);
+    const text = await fetchSourceIndexText(target, fetchClient, recordDiagnostic, fetchTextImpl);
     const indexItems = parseSourceSpecificItems(text, source);
     // 일부 공식 소스는 인덱스 페이지(월별/아카이브 링크)만 연결돼 있어 인덱스 파싱만으로는
     // dated 증거를 못 만든다(source-gap). 최신 상세 페이지를 따라가 dated 후보를 만들고,
@@ -1940,7 +1949,7 @@ async function collectFromSource(source, {
       fetchClient,
       now,
       lookbackDays,
-      onDiagnostic,
+      onDiagnostic: recordDiagnostic,
       // resolver는 소스를 모른다 — source.id를 아는 것은 여기뿐이므로 카운터를
       // 소스별로 키잉하는 책임은 여기서 진다(recordSourceBytes와 같은 자리).
       onArticleCapCounts: typeof onArticleCapCounts === 'function'
@@ -1957,6 +1966,34 @@ async function collectFromSource(source, {
       ? resolvedSourceSpecificItems.map(item => normalizeCandidate(item))
       : shouldSuppressGenericFallback(source) ? []
       : feed ? parseRss(text, source) : parseHtmlPage(text, source);
+    // 등록된 리졸버가 인덱스를 받고도 0건을 냈다. 폴백이 막혀 있으므로 산출물에서 이 소스는
+    // 조용한 주와 모양이 완전히 같아진다(후보 0건). 둘을 가르는 사실은 여기에만 있다 —
+    // 인덱스는 정상으로 받았는데 추출이 0건이었다는 것.
+    //
+    // 생성 단계는 이 구분을 못 만든다. source-effectiveness-report 는 collected_count 0 을
+    // NO_RECENT_SIGNAL 하나로 적고, 그 값은 parser 수리 권고에 들어가지 않는다. 그래서
+    // 표 마크업이 바뀌어 카메라 행을 하나도 못 읽어도 침묵한 주와 같은 줄로 보고된다.
+    //
+    // 폴백을 되살리지는 않는다. 참고 인덱스 소스에 폴백을 걸면 날짜 없는 후보가 매주 한 건씩
+    // 생겨 parser_extraction_failure 를 상시로 켜 놓는다(#880). 폴백 대신 사건만 남긴다.
+    //
+    // 리졸버가 없는 소스는 제외한다. 그쪽은 제너릭 폴백이 살아 있어 0건이 곧 고장을 뜻하지
+    // 않으므로, 사건을 내면 매주 울려 진짜 고장 신호를 다시 묻는다.
+    // reportedDiagnostic 검사도 같은 이유다 — 이미 사유를 말한 리졸버 위에 덧대지 않는다.
+    if (candidates.length === 0
+      && !reportedDiagnostic
+      && followedSourceResolverIds().includes(source.id)
+      && typeof onDiagnostic === 'function') {
+      onDiagnostic({
+        kind: 'followed_resolver_yielded_nothing',
+        source_id: source.id,
+        url: target,
+        receivedBytes: fetchClient ? fetchClient.consumedBytes() : 0,
+        limitedBy: '',
+        detail: 'followed-source resolver extracted no items from a '
+          + text.length + '-char index; generic fallback is suppressed for this source'
+      });
+    }
     return { candidates, receivedBytes: fetchClient ? fetchClient.consumedBytes() : 0 };
   } finally {
     // finally인 이유: 인덱스가 예산에 걸리면 fetchSourceIndexText가 throw하고 return에

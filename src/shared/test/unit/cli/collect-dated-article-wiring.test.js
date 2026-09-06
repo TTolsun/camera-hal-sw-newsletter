@@ -17,6 +17,7 @@ const { tempRoot } = require('../../helpers/fs');
 const { createBoundedFetchClient, MAX_BYTES_PER_SOURCE_RUN } =
   require('../../../collect/bounded-fetch-client');
 const { FOLLOWED_SOURCE_RESOLVERS } = require('../../../collect/followed-source-item-resolvers');
+const { DATED_ARTICLE_DIAGNOSTIC_KINDS } = require('../../../collect/dated-article-index-resolver');
 
 const readFixture = name =>
   fs.readFileSync(path.join(__dirname, '..', '..', 'fixtures', name), 'utf8');
@@ -513,4 +514,84 @@ test('실제로 기록된 news-candidates.md에 진단이 들어간다(호출부
     '호출부가 dated_article_collection을 안 넘기면 렌더러가 아무리 그릴 줄 알아도 보고서는 비어 있다');
   assert.ok(report.includes('| claude-blog | 0 | 21 | 8 | 13 | 5213692 |'),
     '상한이 버린 13건이 실제 파일에 남아야 운영자가 artifact를 열지 않고 원인을 본다');
+});
+
+const AOSP_SITE_UPDATES = {
+  id: 'aosp-site-updates', name: 'AOSP Site Updates',
+  url: 'https://source.android.com/docs/whatsnew/site-updates',
+  sourceUrl: 'https://source.android.com/docs/whatsnew/site-updates',
+  category: 'aosp', section: 'aosp-camera', priority: 'high',
+  reliability: 'official', usageHint: 'official', keywords: ['Camera']
+};
+
+const UNREGISTERED = {
+  id: 'unregistered-media-source', name: 'Some Media',
+  url: 'https://example.com/news', sourceUrl: 'https://example.com/news',
+  category: 'ai', section: 'ai-tooling', priority: 'low',
+  reliability: 'media', usageHint: '', keywords: []
+};
+
+test('등록된 리졸버가 인덱스를 받고도 0건이면 사건으로 남긴다', async () => {
+  // 이 소스는 제너릭 폴백이 막혀 있다. 그래서 표 마크업이 바뀌어 카메라 행을 하나도 못
+  // 읽어도 산출물은 조용한 주와 모양이 같다(후보 0건). 그 둘을 가르는 사건이 이것이다.
+  const events = [];
+  const { candidates } = await collectFromSource(AOSP_SITE_UPDATES, {
+    now: new Date('2026-08-22T00:00:00Z'),
+    lookbackDays: 21,
+    fetchTextImpl: async () => '',
+    createClient: options => createBoundedFetchClient({
+      ...options,
+      fetchImpl: async () => new Response('<html><body><p>table markup changed</p></body></html>', { status: 200 })
+    }),
+    onDiagnostic: event => events.push(event)
+  });
+
+  assert.equal(candidates.length, 0, '폴백이 막혀 있으므로 후보는 0건이다');
+  const event = events.find(entry => entry.kind === 'followed_resolver_yielded_nothing');
+  assert.ok(event, '사건이 없다: ' + JSON.stringify(events));
+  assert.equal(event.source_id, 'aosp-site-updates', '어느 소스가 0건인지 없으면 쓸모가 없다');
+  assert.ok(DATED_ARTICLE_DIAGNOSTIC_KINDS.includes(event.kind),
+    '어휘 밖 kind 는 요약에서 unknown 으로 접힌다');
+});
+
+test('리졸버가 없는 소스는 이 사건을 내지 않는다', async () => {
+  // 그런 소스는 제너릭 폴백이 살아 있어 0건이 곧 고장을 뜻하지 않는다.
+  // 사건을 내면 매주 울리고, 그 소음이 진짜 고장 신호를 다시 묻는다.
+  const events = [];
+  await collectFromSource(UNREGISTERED, {
+    now: new Date('2026-08-22T00:00:00Z'),
+    lookbackDays: 21,
+    fetchTextImpl: async () => '<html><body></body></html>',
+    onDiagnostic: event => events.push(event)
+  });
+
+  assert.equal(
+    events.filter(entry => entry.kind === 'followed_resolver_yielded_nothing').length,
+    0
+  );
+});
+
+test('리졸버가 스스로 사유를 말했으면 backstop 은 덧붙지 않는다', async () => {
+  // dated-article 리졸버는 카드가 0건이면 index_collection_failed 로 이미 크게 남긴다.
+  // 그 위에 backstop 까지 얹으면 한 상황이 두 kind 로 잡혀, 집계를 보는 사람이 다시 푼다.
+  const events = [];
+  await collectFromSource(CLAUDE_BLOG, {
+    now: new Date('2026-08-22T00:00:00Z'),
+    lookbackDays: 21,
+    fetchTextImpl: async () => '',
+    createClient: options => createBoundedFetchClient({
+      ...options,
+      fetchImpl: async () => new Response('<html><body><p>markup changed</p></body></html>', { status: 200 })
+    }),
+    onDiagnostic: event => events.push(event)
+  });
+
+  assert.ok(
+    events.some(entry => entry.kind === 'index_collection_failed'),
+    '리졸버가 먼저 사유를 남긴다: ' + JSON.stringify(events.map(entry => entry.kind))
+  );
+  assert.equal(
+    events.filter(entry => entry.kind === 'followed_resolver_yielded_nothing').length,
+    0
+  );
 });
