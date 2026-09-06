@@ -1501,17 +1501,41 @@ function capNotYetEligible(notYetEligible) {
 // 공유하는 두 실행(로컬 연속 실행)에서 나중 실행이 앞선 실행의 목록을 덮어썼고, 파일 안에 실행
 // identity가 없어 남은 파일이 어느 실행 것인지 구분할 방법도 없었다(issue #1040).
 // date는 두 호출 지점 모두 같은 실행의 다른 artifact 경로를 만들 때 쓰는 값과 같다.
-// 분리 단위는 날짜뿐이다. 같은 날짜 안에서는 stage 2 재작성이 여전히 stage 1이 남긴 파일을
-// 덮어쓴다 — 그 합집합 쓰기는 #1040의 남은 범위이고 이 변경이 다루지 않는다.
 function notYetEligibleOverflowRelPath(date) {
   return path.join('.tmp', `not-yet-eligible-full-${date}.json`);
+}
+
+// 같은 날짜의 두 단계(stage 1 수집, stage 2 discovery 병합)가 같은 파일에 쓴다. 나중 단계의
+// full은 앞 단계 full의 상위 집합이 아니다 — 앞 단계가 상한에서 잘라낸 항목은 committed에
+// 없고, 병합 단계의 입력은 그 committed이기 때문이다. 그래서 덮어쓰지 않고 이미 있는 목록과
+// 합친다. "silent truncate 금지" 계약이 요구하는 것은 이 파일이 상위 집합이라는 것이다(#1040).
+//
+// 합치는 것은 진단 파일뿐이고 capResult.committed는 건드리지 않는다. committed는 다음 주
+// 수집 풀의 원천이라(carry-forward), 거기에 손대면 다음 호의 후보 구성이 함께 바뀐다.
+//
+// url이 없는 항목은 중복 판정에서 빼고 전부 남긴다. 이 파일의 목적이 "무엇이 잘렸는지"를
+// 남기는 것이라, 식별자가 없다는 이유로 항목을 지우면 고치려던 유실을 그대로 되풀이한다.
+function mergeNotYetEligibleOverflow(existing, next) {
+  const seen = new Set();
+  const merged = [];
+  for (const item of [...ensureArray(existing), ...ensureArray(next)]) {
+    const key = urlDedupeKey(item?.url);
+    if (key) {
+      if (seen.has(key)) continue;
+      seen.add(key);
+    }
+    merged.push(item);
+  }
+  return merged.sort(compareNotYetEligible);
 }
 
 // 상한을 넘겼을 때만 전체 목록을 .tmp에 남긴다(미커밋 — 다음 실행의 참고용 진단 산출물).
 // 정상 경로(상한 안)는 payload.not_yet_eligible 자체가 이미 전체 목록이라 별도 파일이 불필요하다.
 function writeNotYetEligibleOverflowIfNeeded(rootDir, date, capResult) {
   if (!capResult.overflow) return;
-  writeJson(path.join(rootDir, notYetEligibleOverflowRelPath(date)), capResult.full);
+  const filePath = path.join(rootDir, notYetEligibleOverflowRelPath(date));
+  const existing = fs.existsSync(filePath) ? readJson(filePath) : [];
+  writeJson(filePath, mergeNotYetEligibleOverflow(existing, capResult.full));
 }
 
 function urlDedupeKey(value) {
@@ -2252,6 +2276,7 @@ module.exports = {
   evidenceMetadata,
   fetchUrlForContent,
   isSourceChangeEventCandidate,
+  mergeNotYetEligibleOverflow,
   newsletterDateWindowEnd,
   normalizeCandidate,
   notYetEligibleOverflowRelPath,

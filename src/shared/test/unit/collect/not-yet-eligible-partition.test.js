@@ -239,3 +239,38 @@ test('날짜가 다른 두 실행의 overflow 진단 파일은 서로를 덮어�
   assert.ok(currentWritten.every(item => item.title.startsWith('future-curr-')));
   assert.notEqual(previousPath, currentPath, '실행 날짜가 다르면 진단 파일 경로도 달라야 한다');
 });
+
+// 같은 날짜 안에서는 stage 1과 병합 단계가 같은 파일에 쓴다. 병합 단계의 입력은 stage 1이
+// 상한으로 잘라내고 남긴 committed라서, 그 full은 stage 1 full의 상위 집합이 아니다.
+// 덮어쓰면 stage 1이 잘라낸 항목이 어디에도 남지 않는다(issue #1040).
+test('같은 날짜의 두 단계는 overflow 진단 파일을 덮어쓰지 않고 합친다', () => {
+  const root = tempRoot('not-yet-eligible-overflow-union-');
+  const date = '2026-08-17';
+
+  const stage1Cap = capNotYetEligible(
+    Array.from({ length: 70 }, (_, i) => notYetEligibleItem(`s1-${String(i).padStart(3, '0')}`))
+  );
+  assert.equal(stage1Cap.overflow, true);
+  writeNotYetEligibleOverflowIfNeeded(root, date, stage1Cap);
+
+  const stage2Cap = capNotYetEligible([...stage1Cap.committed, notYetEligibleItem('s2-new')]);
+  assert.equal(stage2Cap.overflow, true);
+  const stage1Only = stage1Cap.full.filter(
+    item => !stage2Cap.full.some(other => other.url === item.url)
+  );
+  // 이 테스트가 다루려는 상황이 실제로 만들어졌는지 먼저 확인한다. stage 1이 잘라낸 항목이
+  // 병합 입력에 없어야 덮어쓰기가 유실을 만든다.
+  assert.ok(stage1Only.length > 0, '전제: 병합 단계 입력에 없는 stage 1 항목이 있어야 한다');
+
+  writeNotYetEligibleOverflowIfNeeded(root, date, stage2Cap);
+
+  const written = JSON.parse(
+    fs.readFileSync(path.join(root, notYetEligibleOverflowRelPath(date)), 'utf8')
+  );
+  const writtenUrls = new Set(written.map(item => item.url));
+  for (const item of stage1Cap.full) {
+    assert.ok(writtenUrls.has(item.url), `stage 1의 ${item.title}이 진단 파일에서 사라졌다`);
+  }
+  assert.ok(writtenUrls.has('https://lore.kernel.org/linux-media/future-s2-new/'));
+  assert.equal(written.length, writtenUrls.size, '같은 URL이 두 번 실리면 안 된다');
+});
