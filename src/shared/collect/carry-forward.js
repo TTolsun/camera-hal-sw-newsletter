@@ -24,7 +24,7 @@
 //                      diagnostics로만 남긴다(선택에는 영향 없음).
 //
 // 정상 원천은 committed merged-candidates.json뿐이다 — 상한 초과 시에만 남는 진단용 overflow
-// 파일(.tmp/not-yet-eligible-full.json)은 여기서 절대 읽지 않는다.
+// 파일(.tmp/not-yet-eligible-full-<date>.json)은 여기서 절대 읽지 않는다.
 
 const nodeFs = require('fs');
 const path = require('path');

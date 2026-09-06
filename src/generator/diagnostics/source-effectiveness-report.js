@@ -527,14 +527,16 @@ function recommendationFor(source, metrics) {
     recommendation = 'KEEP';
     reasons.push('Source contributed at least one rendered main article.');
   } else if (
+    // 파서가 항목을 뽑아 냈다는 증거(eligible 후보)가 있으면 파서 수정 권고를 붙이지 않는다.
+    // 여기서 탈락한 source는 아래 조건을 그대로 따라간다. source_gap_rate가 0.5 이상이거나
+    // source_gap_count가 2 이상이면 REVIEW_SOURCE_OR_PARSER가 되고, 둘 다 아니면 기본값
+    // KEEP_AND_MONITOR로 내려간다(#1082).
     officialLike(source) &&
-    (metrics.source_gap_rate >= 0.25 ||
-      metrics.reference_only_count > 0 ||
-      metrics.watchlist_count > 0 ||
-      metrics.main_eligible_false_count > 0)
+    metrics.eligible_count === 0 &&
+    metrics.source_gap_rate >= 0.25
   ) {
     recommendation = 'KEEP_AND_FIX_PARSER';
-    reasons.push('Official or high-priority source has parser/source-evidence issues but should stay enabled.');
+    reasons.push('Official or high-priority source produced no eligible candidate and at least 25% of its collected candidates lack source evidence; keep it enabled and repair the parser.');
   } else if (
     !officialLike(source) &&
     genericSourceLike(source, metrics) &&
