@@ -45,6 +45,11 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     // 예산 밖으로 새고, collector 의 received_bytes_by_source 도 이 소스를 늘 0바이트로 적는다.
     // 인덱스 fetch 와 같은 client 를 공유해야 카운터가 하나로 유지된다.
     requiresFetchClient: true,
+    // 이 인덱스는 사이트 업데이트 누적 기록이라 카메라 행이 늘 남아 있다(실측 5건). 그래서
+    // 0건은 조용한 주가 아니라 표 마크업이 바뀌었다는 뜻이고, collector가 그때 사건을 낸다.
+    // 창(window)으로 거르는 리졸버들은 이 표식을 달지 않는다 - 월간 게시판이나 릴리스 감시는
+    // 아무 일도 없던 주에 0건이 정상이고, 거기에 사건을 붙이면 매주 울려 진짜 신호를 묻는다.
+    expectsItemsEveryRun: true,
     resolve: ({ indexItems, text, source, fetchClient, onDiagnostic }) =>
       resolveAospSiteUpdateItems(text, source, { indexItems, fetchClient, onDiagnostic })
   },
@@ -125,6 +130,20 @@ function sourceIdsRequiringFetchClient() {
 }
 
 /**
+ * expectsItemsEveryRun: true로 표시된 항목의 id만 돌려준다. 그 소스는 인덱스가 누적 기록이라
+ * 매 실행 항목이 나오는 것이 정상이므로, 0건이면 collector가 사건을 낸다
+ * (`followed_resolver_yielded_nothing`). 등록됐다는 사실만으로 판단하면 안 된다 - 월간 게시판이나
+ * 릴리스 감시 리졸버는 조용한 주에 0건이 정상이라 사건이 매주 울리고, 그 소음이 #880이 없앤 것과
+ * 같은 방식으로 진짜 파서 고장을 다시 묻는다.
+ *
+ * requiresFetchClient와 같은 모양으로 둔다 - 표식이 곧 배선이므로 어딘가에 소스 id 목록을 또
+ * 적어야 하는 일이 생기지 않는다.
+ */
+function sourceIdsExpectingItemsEveryRun() {
+  return FOLLOWED_SOURCE_RESOLVERS.filter(entry => entry.expectsItemsEveryRun === true).map(entry => entry.id);
+}
+
+/**
  * source.id에 맞는 followed-source 리졸버를 찾아 호출하고 그 결과(후보 배열)를 반환한다.
  * 등록된 리졸버가 없으면 빈 배열을 반환한다(기존 `let followedItems = []` 기본값과 동일).
  */
@@ -179,5 +198,6 @@ module.exports = {
   followedSourceResolverIds,
   resolveFollowedSourceItems,
   shouldSuppressGenericFallback,
+  sourceIdsExpectingItemsEveryRun,
   sourceIdsRequiringFetchClient
 };

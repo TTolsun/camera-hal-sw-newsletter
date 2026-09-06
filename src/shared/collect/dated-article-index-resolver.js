@@ -156,7 +156,10 @@ const DATED_ARTICLE_DIAGNOSTIC_KINDS = [
   'collection_window_truncated',
   'aosp_site_update_date_lookup_failed',
   'aosp_site_update_date_lookup_skipped',
-  'aosp_site_update_date_outside_row_month'
+  'aosp_site_update_date_outside_row_month',
+  // followed-resolver 가 0건을 낸 사건. 그 소스는 제너릭 폴백이 막혀 있어 산출물에서
+  // "조용한 주"와 모양이 같아진다. collector 만 그 둘을 가를 사실을 쥐고 있다.
+  'followed_resolver_yielded_nothing'
 ];
 
 function noop() {}

@@ -42,6 +42,7 @@ const {
 const {
   resolveFollowedSourceItems,
   shouldSuppressGenericFallback,
+  sourceIdsExpectingItemsEveryRun,
   sourceIdsRequiringFetchClient
 } = require('../collect/followed-source-item-resolvers');
 const {
@@ -1957,6 +1958,34 @@ async function collectFromSource(source, {
       ? resolvedSourceSpecificItems.map(item => normalizeCandidate(item))
       : shouldSuppressGenericFallback(source) ? []
       : feed ? parseRss(text, source) : parseHtmlPage(text, source);
+    // 인덱스가 누적 기록이라 매 실행 항목이 나오는 것이 정상인 소스가 0건을 냈다. 폴백이 막혀
+    // 있으므로 산출물에서 이 소스는 조용한 주와 모양이 완전히 같아진다(후보 0건). 둘을 가르는
+    // 사실은 여기에만 있다 — 인덱스는 정상으로 받았는데 추출이 0건이었다는 것.
+    //
+    // 생성 단계는 이 구분을 못 만든다. source-effectiveness-report 는 collected_count 0 을
+    // NO_RECENT_SIGNAL 하나로 적고, 그 값은 parser 수리 권고에 들어가지 않는다. 그래서
+    // 표 마크업이 바뀌어 카메라 행을 하나도 못 읽어도 침묵한 주와 같은 줄로 보고된다.
+    //
+    // 폴백을 되살리지는 않는다. 참고 인덱스 소스에 폴백을 걸면 날짜 없는 후보가 매주 한 건씩
+    // 생겨 parser_extraction_failure 를 상시로 켜 놓는다(#880). 폴백 대신 사건만 남긴다.
+    //
+    // 판단 기준은 등록 여부가 아니라 expectsItemsEveryRun 표식이다. 등록만 보면 월간 보안
+    // 게시판(3주는 0건이 정상)이나 릴리스 감시(대부분의 주가 0건) 리졸버까지 걸려, 사건이
+    // 매주 4~6건씩 울리고 그 소음이 이 사건으로 잡으려던 고장을 다시 묻는다.
+    if (candidates.length === 0
+      && sourceIdsExpectingItemsEveryRun().includes(source.id)
+      && typeof onDiagnostic === 'function') {
+      onDiagnostic({
+        kind: 'followed_resolver_yielded_nothing',
+        source_id: source.id,
+        url: target,
+        // 바이트가 아니라 문자 수다. 이 사건의 요점은 "인덱스는 받았다"이고, 그 크기를 말해 주는
+        // 값이 여기서는 text 뿐이다 — 이 표식을 단 소스가 늘 fetchClient를 갖는다는 보장은 없다.
+        indexChars: text.length,
+        detail: 'index was fetched but the source-specific parser extracted no items; '
+          + 'generic fallback is suppressed for this source'
+      });
+    }
     return { candidates, receivedBytes: fetchClient ? fetchClient.consumedBytes() : 0 };
   } finally {
     // finally인 이유: 인덱스가 예산에 걸리면 fetchSourceIndexText가 throw하고 return에
