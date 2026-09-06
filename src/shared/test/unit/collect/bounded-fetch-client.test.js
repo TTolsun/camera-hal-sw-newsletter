@@ -147,3 +147,114 @@ test('retries a 503 once but never a 404', async () => {
   assert.equal(notFoundCalls, 1);
   assert.equal(missing.error, 'http_404');
 });
+
+// --- POST 지원 (#880) -------------------------------------------------------
+// Qualcomm 보안 게시판은 목록을 POST 검색 API로만 내주고, 그 API는 content-type이
+// application/json이면 500을 돌려준다. 아래 네 테스트가 그 경로에 필요한 계약을 고정한다.
+
+test('sends the method, body and content-type the caller asked for', async () => {
+  let seenInit = null;
+  let seenBodyText = null;
+  const client = createBoundedFetchClient({
+    fetchImpl: async (target, init) => {
+      seenInit = init;
+      // 실제 Request를 만들어, 이 init이 진짜 fetch에 그대로 통하는 모양인지까지 확인한다.
+      seenBodyText = await new Request(target, init).text();
+      return countingChunkedResponse(['{}'], { pulled: 0 });
+    }
+  });
+
+  await client.fetchBounded('https://docs.qualcomm.com/search', {
+    method: 'POST',
+    body: '{"searchText":"camera"}',
+    contentType: 'text/plain',
+    accept: 'application/json'
+  });
+
+  assert.equal(seenBodyText, '{"searchText":"camera"}', '실제 Request가 이 본문을 그대로 실어야 한다');
+  assert.equal(seenInit.method, 'POST');
+  assert.equal(seenInit.body, '{"searchText":"camera"}');
+  assert.equal(seenInit.headers['content-type'], 'text/plain',
+    '서버가 이 값으로 요청을 거절하므로 호출자가 준 값을 그대로 보내야 한다');
+  assert.equal(seenInit.headers.accept, 'application/json');
+});
+
+test('a plain fetch stays a GET with no body and no content-type', async () => {
+  let seenInit = null;
+  const client = createBoundedFetchClient({
+    fetchImpl: async (_target, init) => {
+      seenInit = init;
+      return countingChunkedResponse(['ok'], { pulled: 0 });
+    }
+  });
+
+  await client.fetchBounded('https://claude.com/blog/a');
+
+  assert.equal(seenInit.method, 'GET');
+  assert.equal('body' in seenInit, false, '본문 없는 요청에 body 키를 붙이지 않는다');
+  assert.equal('content-type' in seenInit.headers, false);
+});
+
+test('folds an unsupported method into GET and drops the body with it', async () => {
+  // 이 클라이언트가 낼 수 있는 메서드를 둘로 닫는다. 열려 있으면 상태를 바꾸는 요청이
+  // 429·5xx 재시도를 타고 두 번 나갈 수 있다.
+  //
+  // stub이 실제 Request를 만든다. init만 들여다보는 stub은 이 계약을 못 지킨다 — GET에 body를
+  // 남겨도 stub은 아무 불평 없이 응답을 돌려주지만 진짜 fetch는 요청을 만들지도 못하고
+  // TypeError를 던진다("Request with GET/HEAD method cannot have body"). 그러면 접기의 결과가
+  // GET 수행이 아니라 실패 결과가 된다.
+  let seenMethod = null;
+  let seenHasBody = null;
+  const client = createBoundedFetchClient({
+    fetchImpl: async (target, init) => {
+      const request = new Request(target, init);
+      seenMethod = request.method;
+      seenHasBody = 'body' in init;
+      return countingChunkedResponse(['ok'], { pulled: 0 });
+    }
+  });
+
+  const result = await client.fetchBounded('https://claude.com/blog/a', { method: 'DELETE', body: 'x' });
+
+  assert.equal(seenMethod, 'GET');
+  assert.equal(seenHasBody, false, 'GET으로 접었으면 body도 함께 떨어져야 한다');
+  assert.equal(result.ok, true, '접기의 결과는 실패가 아니라 정상 GET이어야 한다');
+});
+
+test('does not charge the request body to the receive budget', async () => {
+  // maxBytesPerSourceRun은 파싱 대상(수신 본문) 크기의 상한이다. 보낸 바이트를 여기 섞으면
+  // 큰 질의를 한 번 보내는 것만으로 그 소스의 수집이 멎는다.
+  const client = createBoundedFetchClient({
+    maxBytesPerSourceRun: 4096,
+    fetchImpl: async () => countingChunkedResponse(['ok'], { pulled: 0 })
+  });
+
+  await client.fetchBounded('https://docs.qualcomm.com/search', {
+    method: 'POST',
+    body: 'x'.repeat(8192),
+    contentType: 'text/plain'
+  });
+
+  assert.equal(client.consumedBytes(), 2, '수신한 2바이트만 예산에서 빠진다');
+  assert.equal(client.remainingBytes(), 4094);
+});
+
+test('retries a 503 on a POST too', async () => {
+  let calls = 0;
+  const client = createBoundedFetchClient({
+    retryDelayMs: 0,
+    fetchImpl: async () => {
+      calls += 1;
+      return calls === 1
+        ? new Response('', { status: 503 })
+        : countingChunkedResponse(['ok'], { pulled: 0 });
+    }
+  });
+
+  const result = await client.fetchBounded('https://docs.qualcomm.com/search', {
+    method: 'POST', body: '{}', contentType: 'text/plain'
+  });
+
+  assert.equal(result.attempts, 2, '조회 질의는 GET과 같은 재시도를 받는다');
+  assert.equal(result.ok, true);
+});

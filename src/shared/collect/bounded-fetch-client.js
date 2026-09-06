@@ -143,18 +143,33 @@ function createBoundedFetchClient(options = {}) {
     return Math.max(0, maxBytesPerSourceRun - consumedBytes);
   }
 
-  async function requestOnce(target, { maxBytes, accept }) {
+  // requestBody(보내는 본문)와 아래 readBoundedBody가 돌려주는 body(받은 본문)는 다른 값이다.
+  // 같은 이름을 쓰면 뒤쪽 const가 같은 블록을 TDZ로 만들어 앞선 참조가 그대로 예외가 된다.
+  async function requestOnce(target, { maxBytes, accept, method, body: requestBody, contentType }) {
     requestCount += 1;
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const response = await fetchImpl(target, {
-        signal: controller.signal,
-        headers: {
-          'user-agent': userAgent,
-          accept: accept || DEFAULT_ACCEPT
-        }
-      });
+      const requestHeaders = {
+        'user-agent': userAgent,
+        accept: accept || DEFAULT_ACCEPT
+      };
+      // 본문은 POST일 때만 싣는다. 메서드를 GET으로 접은 요청에 body를 남기면 fetch가
+      // 그 요청을 만들지도 못하고 TypeError를 던진다("Request with GET/HEAD method cannot
+      // have body"). 그러면 접기의 결과가 GET 수행이 아니라 실패 결과가 된다.
+      const sendsBody = method === 'POST' && typeof requestBody === 'string';
+      // content-type도 기본값을 정하지 않고 호출자가 준 값만 싣는다. 서버가 이 값으로 요청을
+      // 거절하기도 하기 때문이다(#880의 Qualcomm 검색 API는 text/plain이면 200,
+      // application/json이면 500). 무엇을 보낼지는 그 API를 아는 호출자가 정한다.
+      if (sendsBody && contentType) requestHeaders['content-type'] = contentType;
+
+      const init = { method, signal: controller.signal, headers: requestHeaders };
+      // 요청 본문 바이트는 예산(consumedBytes)에 태우지 않는다. maxBytesPerSourceRun은
+      // 파싱 대상(수신 본문) 크기의 상한이지 회선 바이트의 상한이 아니다 - 위 readBoundedBody
+      // 주석과 같은 정의다. 보낸 바이트까지 여기 섞으면 그 정의가 두 가지가 된다.
+      if (sendsBody) init.body = requestBody;
+
+      const response = await fetchImpl(target, init);
       const status = response ? response.status : 0;
       const headers = plainHeaders(response);
 
@@ -180,8 +195,14 @@ function createBoundedFetchClient(options = {}) {
     }
   }
 
-  async function fetchBounded(target, { maxBytes, accept } = {}) {
+  async function fetchBounded(target, { maxBytes, accept, method, body, contentType } = {}) {
     const effectiveMaxBytes = positiveNumber(maxBytes, MAX_BYTES_PER_ARTICLE);
+    // 이 클라이언트가 낼 수 있는 메서드는 GET과 POST 둘뿐이다. 목록 검사로 거르는 대신 그 외
+    // 값을 전부 GET으로 접어 구조로 닫는다 - 그래야 위 MAX_ATTEMPTS 재시도가 무엇에 적용되는지
+    // 단정할 수 있다. POST에도 429·5xx 재시도가 그대로 적용되며, 이 클라이언트의 POST는 수집
+    // 단계의 조회 질의(목록 검색)만 태우기 때문에 같은 질의를 두 번 보내도 서버 상태를 바꾸지
+    // 않는다. 상태를 바꾸는 요청을 이 클라이언트로 보내면 안 된다.
+    const httpMethod = String(method || 'GET').toUpperCase() === 'POST' ? 'POST' : 'GET';
 
     if (remainingBytes() <= 0) {
       return boundedFetchResult({
@@ -200,7 +221,9 @@ function createBoundedFetchClient(options = {}) {
       attempts += 1;
       let attempt;
       try {
-        attempt = await requestOnce(target, { maxBytes: effectiveMaxBytes, accept });
+        attempt = await requestOnce(target, {
+          maxBytes: effectiveMaxBytes, accept, method: httpMethod, body, contentType
+        });
       } catch (cause) {
         // 실패한 시도가 이미 읽어 들인 바이트도 예산에 가산한다(누수 차단).
         const partialBytes = Number(cause && cause.partialReceivedBytes) || 0;
