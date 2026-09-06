@@ -214,3 +214,141 @@ test('finalize 재정규화가 재조정된 main 집합을 되감지 않는다 (
     assert.equal(out.shortlistReport.primary_selected_articles.length, 3, '결정론 앵커는 보존된다');
   });
 });
+
+// #869: stale-claim 산출물 기록을 salvage 뒤로 미루면, 그 사이 구간이 예외를 던질 때 스크럽
+// 진단이 하나도 남지 않는다. 기록은 예외를 던질 수 있는 구간보다 앞에 있어야 한다.
+test('스크럽 산출물은 뒤 단계가 예외를 던져도 남는다', () => {
+  const postprocessKey = require.resolve('../../publish/fact-check-postprocess');
+  const actualPostprocess = require('../../publish/fact-check-postprocess');
+  const realPostprocess = require.cache[postprocessKey];
+  require.cache[postprocessKey] = {
+    id: postprocessKey,
+    filename: postprocessKey,
+    loaded: true,
+    exports: {
+      ...actualPostprocess,
+      sanitizeClaimEvidenceIds: () => {
+        throw new Error('sanitize failed');
+      }
+    }
+  };
+  try {
+    withStubbedEditorValidation((finalizeDraftAfterAttempts) => {
+      const newsroomDir = tempRoot('finalize-');
+      assert.throws(() => finalizeDraftAfterAttempts(baseArgs(newsroomDir)), /sanitize failed/);
+      assert.ok(fs.existsSync(path.join(newsroomDir, 'stale-claim-report.json')));
+      assert.ok(fs.existsSync(path.join(newsroomDir, 'stale-claim-report.md')));
+    });
+  } finally {
+    if (realPostprocess) {
+      require.cache[postprocessKey] = realPostprocess;
+    } else {
+      delete require.cache[postprocessKey];
+    }
+  }
+});
+
+// #869: salvage가 적용되면 발행되는 텍스트는 salvage 안쪽 재스크럽이 만든 것이다. 산출물과
+// 반환되는 staleScrub.report가 그 재스크럽 report여야, 발행본을 설명하는 진단이
+// generation-status와 editor-chief brief로 간다. salvage 앞에서 쓴 report가 그대로 남으면
+// 이미 지워진 기사를 가리키는 진단이 발행본을 설명하게 된다.
+const QUALITY_MODULE = '../../quality/newsletter-quality';
+
+function salvagedStaleClaimReport() {
+  return {
+    schema_version: 1,
+    date: '2026-05-08',
+    status: 'PASS',
+    removed_sections: [{ index: 2, headline: 'Dropped by salvage', source_urls: [], source_titles: [] }],
+    dropped_selected_groups: [],
+    restored_to_keep_minimum: [],
+    final_section_sources: [],
+    stale_claim_items_removed: [{
+      field: 'briefing',
+      text: 'salvage 재스크럽이 지운 문장이다.',
+      stale_claims: ['imx576'],
+      unsupported_release_claims: [],
+      action: 'removed-sentence'
+    }],
+    unsupported_release_claims_removed: [],
+    unused_references_removed: [],
+    retained_release_claims: [],
+    hard_failures: []
+  };
+}
+
+// validateEditor를 "표식을 붙여 돌려주는" stub으로 바꾼다. 그래야 반환된 staleScrub.editor가
+// 검증 전 salvage.editor인지 검증을 통과한 값인지 구분된다.
+function withStubbedSalvage(salvageResult, run) {
+  const validationKey = require.resolve(EDITOR_VALIDATION_MODULE);
+  const qualityKey = require.resolve(QUALITY_MODULE);
+  const finalizeKey = require.resolve(FINALIZE_MODULE);
+  const realValidation = require.cache[validationKey];
+  const realQuality = require.cache[qualityKey];
+  const actualQuality = require(QUALITY_MODULE);
+  const salvageCalls = [];
+  require.cache[validationKey] = {
+    id: validationKey,
+    filename: validationKey,
+    loaded: true,
+    exports: { validateEditor: value => ({ ...value, validated: true }) }
+  };
+  require.cache[qualityKey] = {
+    id: qualityKey,
+    filename: qualityKey,
+    loaded: true,
+    exports: {
+      ...actualQuality,
+      buildNewsletterQualityReport: () => ({ status: 'NEEDS_FIX', deductions: [] }),
+      salvagePublishableSubset: (...args) => {
+        salvageCalls.push(args);
+        return salvageResult;
+      }
+    }
+  };
+  delete require.cache[finalizeKey];
+  try {
+    const { finalizeDraftAfterAttempts } = require(FINALIZE_MODULE);
+    return run(finalizeDraftAfterAttempts, salvageCalls);
+  } finally {
+    delete require.cache[finalizeKey];
+    if (realValidation) require.cache[validationKey] = realValidation; else delete require.cache[validationKey];
+    if (realQuality) require.cache[qualityKey] = realQuality; else delete require.cache[qualityKey];
+    delete require.cache[require.resolve(FINALIZE_MODULE)];
+  }
+}
+
+test('#869: salvage가 적용되면 산출물과 staleScrub이 salvage의 재스크럽 report를 쓴다', () => {
+  const staleClaimReport = salvagedStaleClaimReport();
+  const salvage = {
+    editor: { ...baseEditor(), salvaged: true },
+    factCheck: passFactCheck(),
+    qualityReport: { status: 'PASS', deductions: [] },
+    staleClaimReport,
+    dropped_section_count: 1,
+    kept_section_count: 1
+  };
+
+  withStubbedSalvage(salvage, (finalizeDraftAfterAttempts, salvageCalls) => {
+    const newsroomDir = tempRoot('finalize-salvage-');
+    const out = finalizeDraftAfterAttempts(baseArgs(newsroomDir));
+
+    assert.equal(salvageCalls.length, 1, 'salvage 경로를 실제로 탔는지 확인');
+
+    // 산출물이 salvage의 report로 덮어써졌다.
+    const written = JSON.parse(fs.readFileSync(path.join(newsroomDir, 'stale-claim-report.json'), 'utf8'));
+    assert.deepEqual(written, staleClaimReport);
+    assert.match(
+      fs.readFileSync(path.join(newsroomDir, 'stale-claim-report.md'), 'utf8'),
+      /salvage 재스크럽이 지운 문장이다./
+    );
+
+    // main()으로 돌아가는 report도 같은 값이다.
+    assert.deepEqual(out.staleScrub.report, staleClaimReport);
+    // staleScrub.editor는 검증을 통과한 값이다. 검증 전 salvage.editor를 실으면 안 된다.
+    assert.equal(out.staleScrub.editor.validated, true);
+    assert.equal(out.staleScrub.editor.salvaged, true);
+    assert.equal(out.editor.salvaged, true);
+    assert.equal(out.qualityReport.status, 'PASS');
+  });
+});

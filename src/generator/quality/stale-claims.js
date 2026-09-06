@@ -269,16 +269,38 @@ function splitSentences(value) {
     .filter(Boolean);
 }
 
-function replacementBriefing(finalSections) {
-  return ensureArray(finalSections).slice(0, 3).map(section =>
-    `${section.headline || section.category}: 최종 선정된 출처 기준으로 Camera/driver/SoC 영향과 검증 포인트를 확인한다.`
-  );
+// 스크럽이 채워 넣는 대체 문장은 기사에서 값을 가져오지 않는다. briefing과 action_items
+// 두 생성기에 같은 규칙을 적용한다. 이유는 두 가지이고, 둘 다 결정론 스크럽이 스스로 발행을
+// 막는 형태다.
+//
+//  1. `${headline}: ...` 형태는 headline이 후보 title과 같은 주에 newsletter-quality의
+//     briefingRawCopyFindings에 "출처 제목을 그대로 베낀 bullet"으로 걸린다(-6, blocking).
+//     그 검사의 대상은 LLM이 제목을 베끼는 것이므로 검사를 비켜 가게 만들지 않고, 스크럽이
+//     제목을 인용하지 않게 한다. 지금 그 검사는 briefing만 보지만, action_items에 같은 형태를
+//     남겨 두면 검사가 넓어지는 순간 같은 자가 차단이 재현된다.
+//  2. 대체 문장은 스크럽이 끝난 뒤에 붙어 다시 스크럽되지 않는다. 기사에서 가져온 값은
+//     떨어진 기사의 claim과 겹치는 순간(예: 두 기사가 같은 api_or_component를 다룰 때)
+//     removed-section-claim-remains를 깨워 같은 자가 차단을 낸다. 카테고리처럼 짧은 값도
+//     이 위험을 피하지 못하므로 넣지 않는다.
+//
+// 문장 수는 기사 수와 무관하게 최소 개수를 채운다. 기사 수에 묶으면 얇은 주(최종 기사 1~2건)에
+// briefing 3칸을 못 채워 지운 문장을 되돌리게 되고, 그 잔재가 곧바로 발행을 막는다.
+const REPLACEMENT_BRIEFING_SENTENCES = [
+  '이번 호에 실린 기사의 출처와 날짜 근거부터 카메라 관점에서 확인한다.',
+  '각 변경이 Camera framework, HAL, driver 중 어디까지 닿는지 영향 범위를 좁혀 본다.',
+  '2주 내 검증 항목과 담당자를 정해 변경 이후 카메라 파이프라인 회귀를 추적한다.'
+];
+
+const REPLACEMENT_ACTION_SENTENCES = [
+  '이번 호 기사마다 담당자를 지정해 출처, 영향 범위, 2주 내 검증 항목을 재확인한다.'
+];
+
+function replacementBriefing() {
+  return REPLACEMENT_BRIEFING_SENTENCES;
 }
 
-function replacementActions(finalSections) {
-  return ensureArray(finalSections).slice(0, 3).map(section =>
-    `${section.headline || section.category} 담당자를 지정해 출처, 영향 범위, 2주 내 검증 항목을 재확인한다.`
-  );
+function replacementActions() {
+  return REPLACEMENT_ACTION_SENTENCES;
 }
 
 function classifyText(value, context) {
@@ -346,11 +368,12 @@ function scrubList(items, field, context, replacements = [], minCount = 0) {
     if (kept.length >= minCount) break;
     if (!kept.some(item => normalize(item) === normalize(replacement))) kept.push(replacement);
   }
-  // 대체 문구가 모자라 최소 개수를 못 채우면 지운 항목을 되돌린다. 얇은 주(최종 기사
-  // 1~2건)에서는 replacements가 기사 수만큼만 나오므로 이 상황이 실제로 생긴다.
-  // 되돌리면 잔재가 남아 removed-section-claim-remains로 발행이 막히지만, 되돌리지
-  // 않으면 briefing 개수 계약을 어겨 finalize가 예외로 죽고 산출물조차 남지 않는다.
-  // 발행 차단은 진단이 남고 salvage까지 가지만 예외는 아무것도 남기지 않는다.
+  // 대체 문구가 모자라 최소 개수를 못 채우면 지운 항목을 되돌린다. 지금 두 호출자는 항상
+  // 최소 개수만큼의 대체 문장을 넘기므로(briefing 3개, action_items 1개) 이 되돌림은 일어나지
+  // 않는다. 그래도 남겨 둔다 — minCount를 받는 helper가 그 계약을 못 지키는 쪽으로 새면,
+  // 되돌리지 않을 경우 finalize의 validateEditor가 briefing 개수 계약 위반으로 예외를 던져
+  // 산출물조차 남지 않는다. 되돌리면 잔재가 removed-section-claim-remains로 잡혀 진단이 남은
+  // 채 발행만 막힌다.
   const restored = [];
   while (kept.length < minCount && removals.length > 0) {
     const item = removals.shift();
@@ -469,9 +492,9 @@ function scrubStaleClaims(editor, options = {}) {
     ? `${finalSections[0].headline} 등 최종 선정된 기사 기준으로 이번 호를 정리했다.`
     : draft.summary);
 
-  const briefing = scrubList(draft.briefing, 'briefing', context, replacementBriefing(finalSections), 3);
+  const briefing = scrubList(draft.briefing, 'briefing', context, replacementBriefing(), 3);
   draft.briefing = briefing.value.slice(0, 3);
-  const actions = scrubList(draft.action_items, 'action_items', context, replacementActions(finalSections), 1);
+  const actions = scrubList(draft.action_items, 'action_items', context, replacementActions(), 1);
   draft.action_items = actions.value;
   scrubReferences(draft, report);
 
@@ -525,6 +548,40 @@ function scrubStaleClaims(editor, options = {}) {
   }));
   report.status = report.hard_failures.length > 0 ? 'NEEDS_FIX' : 'PASS';
   return { editor: draft, report };
+}
+
+// 같은 실행에서 스크럽이 두 번 돌면 report도 두 개 나온다(#869: thin-week salvage가 기사를
+// 떨어뜨린 뒤의 재스크럽). 나중 report만 쓰면 앞 스크럽이 낸 hard_failure가 사라져 게이트가
+// 느슨해지고, 앞에서 무엇을 지웠는지도 산출물에서 사라진다. 그래서 누적 기록과 hard_failure는
+// 이어 붙이고, 최종 텍스트의 상태를 나타내는 필드(final_section_sources, retained_release_claims
+// 등)는 나중 report 값을 그대로 쓴다.
+// dropped_selected_groups는 상태가 아니라 기록이다. removed_sections와 같은 사건을 그룹 키로
+// 적은 것이라, 한쪽만 이어 붙이면 합쳐진 report에서 앞 스크럽이 지운 문장의 원인 그룹을
+// 역추적할 수 없다. 그래서 removed_sections와 함께 이어 붙인다.
+// restored_to_keep_minimum도 상태 필드다. 이 필드는 "지우지 않고 되돌려 남긴 문장"을 뜻하는데,
+// 이어 붙이면 앞 스크럽이 되돌린 문장을 뒤 스크럽이 실제로 지웠을 때 같은 문장이
+// restored와 removed 양쪽에 실린다. 뒤 스크럽은 앞 스크럽 결과 텍스트를 통째로 다시 보므로
+// 나중 값이 최종 텍스트를 설명한다.
+function mergeStaleClaimReports(previous, next) {
+  if (!previous) return next;
+  const concat = field => [...ensureArray(previous[field]), ...ensureArray(next[field])];
+  const hardFailures = concat('hard_failures');
+  // status를 hard_failures 길이로만 다시 계산하지 않는다. 게이트는 status와 hard_failures를
+  // 둘 다 보므로, hard_failure 없이 NEEDS_FIX인 report를 합치면서 PASS로 낮추면 앞 스크럽이
+  // 세운 판정이 조용히 사라진다. 어느 한쪽이라도 PASS가 아니면 합집합도 PASS가 아니다.
+  const needsFix = hardFailures.length > 0 ||
+    text(previous.status) !== 'PASS' ||
+    text(next.status) !== 'PASS';
+  return {
+    ...next,
+    removed_sections: concat('removed_sections'),
+    dropped_selected_groups: concat('dropped_selected_groups'),
+    stale_claim_items_removed: concat('stale_claim_items_removed'),
+    unsupported_release_claims_removed: concat('unsupported_release_claims_removed'),
+    unused_references_removed: concat('unused_references_removed'),
+    hard_failures: hardFailures,
+    status: needsFix ? 'NEEDS_FIX' : 'PASS'
+  };
 }
 
 function pruneResolvedStaleFactCheckItems(factCheck, staleReport) {
@@ -610,6 +667,7 @@ ${hard}
 module.exports = {
   buildStaleClaimReportMarkdown,
   claimKeysForSection,
+  mergeStaleClaimReports,
   pruneResolvedStaleFactCheckItems,
   releaseClaimsFromText,
   scrubStaleClaims,

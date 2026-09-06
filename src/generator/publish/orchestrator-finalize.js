@@ -38,6 +38,15 @@ const {
 const { generationRunState } = require('./orchestrator-run-state');
 const { writeSelectionDiagnosticsArtifact } = require('./orchestrator-recovery-writers');
 
+function writeStaleClaimArtifacts(newsroomDir, report) {
+  writeJson(path.join(newsroomDir, 'stale-claim-report.json'), report);
+  fs.writeFileSync(
+    path.join(newsroomDir, 'stale-claim-report.md'),
+    buildStaleClaimReportMarkdown(report),
+    'utf8'
+  );
+}
+
 function finalizeDraftAfterAttempts({
   date,
   editor,
@@ -74,7 +83,7 @@ function finalizeDraftAfterAttempts({
     attemptedSections.filter(section => !ensureArray(editor.sections).some(finalSection => sectionsAreDuplicate(section, finalSection))),
     excludedSections
   );
-  const staleScrub = scrubStaleClaims(editor, {
+  let staleScrub = scrubStaleClaims(editor, {
     date,
     removedSections,
     reporter
@@ -83,12 +92,10 @@ function finalizeDraftAfterAttempts({
   factCheck = pruneResolvedStaleFactCheckItems(factCheck, staleScrub.report);
   factCheck = pruneResolvedFallbackImageFalsePositives(factCheck, editor);
   generationRunState.factCheck = factCheck;
-  writeJson(path.join(newsroomDir, 'stale-claim-report.json'), staleScrub.report);
-  fs.writeFileSync(
-    path.join(newsroomDir, 'stale-claim-report.md'),
-    buildStaleClaimReportMarkdown(staleScrub.report),
-    'utf8'
-  );
+  // 스크럽 진단은 여기서 먼저 남긴다. 아래 구간(품질 게이트, salvage 뒤의 validateEditor 등)은
+  // 예외를 던질 수 있어서, 기록을 salvage 뒤로 미루면 그 경우 진단이 하나도 남지 않는다.
+  // salvage가 적용되면 아래에서 발행본 기준 report로 한 번 더 덮어쓴다.
+  writeStaleClaimArtifacts(newsroomDir, staleScrub.report);
   editor = sanitizeClaimEvidenceIds(editor, reporter, seedEvidencePack);
   editor = stampCoverageType(editor, shortlistReport);
   factCheck = pruneCatchUpFramingFactCheckItems(factCheck, editor);
@@ -124,6 +131,14 @@ function finalizeDraftAfterAttempts({
       qualityReport = salvage.qualityReport;
       generationRunState.factCheck = factCheck;
       generationRunState.qualityReport = qualityReport;
+      // salvage 안쪽의 재스크럽(#869)이 낸 report가 발행되는 텍스트를 설명한다. 산출물과
+      // 이후 진단(generation-status, editor-chief brief)이 그 report를 보게 한다.
+      // salvage가 적용되지 않으면 이 분기에 들어오지 않고, 위에서 쓴 기록이 그대로 남는다.
+      // editor 필드에는 검증 전 salvage.editor가 아니라 방금 validateEditor를 통과한 값을
+      // 담는다. 검증 전 draft를 반환 계약에 실어 두면 나중에 그 필드를 읽는 코드가
+      // 미검증 draft를 발행 경로로 되돌린다.
+      staleScrub = { editor, report: salvage.staleClaimReport };
+      writeStaleClaimArtifacts(newsroomDir, staleScrub.report);
     }
   }
 
