@@ -14,6 +14,7 @@ const {
 } = require('../../../collect/followed-source-item-resolvers');
 const { dateQualityForCandidate } = require('../../../common/date-signals');
 const { DATED_ARTICLE_DIAGNOSTIC_KINDS } = require('../../../collect/dated-article-index-resolver');
+const { MAX_BYTES_PER_ARTICLE } = require('../../../collect/bounded-fetch-client');
 
 const SOURCE = Object.freeze({
   id: 'aosp-site-updates',
@@ -40,15 +41,19 @@ function targetHtml(dateLine = 'Last updated 2026-07-13 UTC.') {
 }
 
 /**
- * bounded fetch client 흉내. 실제로 요청한 URL 을 asked 에 남긴다.
+ * bounded fetch client 흉내. 요청한 URL 은 asked 에, 함께 넘긴 옵션은 options 에 남긴다.
+ * 옵션을 버리면 리졸버가 maxBytes 를 빼거나 틀린 값을 줘도 테스트가 그대로 통과한다.
  * body 가 함수면 URL 을 받아 본문을 만들고, overrides 는 fetchBounded 결과를 덮어쓴다.
  */
 function stubClient(body, overrides = {}) {
   const asked = [];
+  const options = [];
   return {
     asked,
-    async fetchBounded(url) {
+    options,
+    async fetchBounded(url, requestOptions = {}) {
       asked.push(String(url));
+      options.push({ ...requestOptions });
       const html = typeof body === 'function' ? await body(String(url)) : body;
       return {
         ok: true,
@@ -220,6 +225,15 @@ test('대상 페이지에 영문판을 강제한다', async () => {
 
   assert.ok(client.asked.length > 0, '대상 페이지를 가져왔다');
   assert.ok(client.asked.every(url => url.includes('hl=en')), client.asked.join(', '));
+});
+
+test('대상 페이지마다 기사 바이트 상한을 함께 넘긴다', async () => {
+  // 상한을 빼면 client 가 같은 기본값으로 메워 주므로 동작은 그대로다. 그래서 이 값을
+  // 검증하지 않으면 잘못된 상한(예: 4KB)으로 바뀌어 본문이 잘려도 아무도 모른다.
+  const client = stubClient(targetHtml());
+  await resolveAospSiteUpdateItems(indexHtml(), SOURCE, { fetchClient: client });
+
+  assert.deepEqual(client.options, [{ maxBytes: MAX_BYTES_PER_ARTICLE }]);
 });
 
 test('collector 가 파싱한 인덱스를 다시 파싱하지 않는다', async () => {
