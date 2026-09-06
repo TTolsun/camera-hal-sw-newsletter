@@ -16,7 +16,10 @@ const { newsroomDir } = require('../../../common/artifact-paths');
 const { tempRoot } = require('../../helpers/fs');
 const { createBoundedFetchClient, MAX_BYTES_PER_SOURCE_RUN } =
   require('../../../collect/bounded-fetch-client');
-const { FOLLOWED_SOURCE_RESOLVERS } = require('../../../collect/followed-source-item-resolvers');
+const {
+  FOLLOWED_SOURCE_RESOLVERS,
+  sourceIdsExpectingItemsEveryRun
+} = require('../../../collect/followed-source-item-resolvers');
 const { DATED_ARTICLE_DIAGNOSTIC_KINDS } = require('../../../collect/dated-article-index-resolver');
 
 const readFixture = name =>
@@ -524,56 +527,64 @@ const AOSP_SITE_UPDATES = {
   reliability: 'official', usageHint: 'official', keywords: ['Camera']
 };
 
-const UNREGISTERED = {
-  id: 'unregistered-media-source', name: 'Some Media',
-  url: 'https://example.com/news', sourceUrl: 'https://example.com/news',
-  category: 'ai', section: 'ai-tooling', priority: 'low',
-  reliability: 'media', usageHint: '', keywords: []
-};
+// 사이트 업데이트 표: 월별 묶음 제목 + 카메라 관련 행 하나.
+const SITE_UPDATE_INDEX = [
+  '<html><body><h2>August 2026</h2><table><tr>',
+  '<td><a href="/docs/compatibility">Compatibility</a></td>',
+  '<td>Updated <a href="/docs/compatibility/cts/camera-its-tests">Camera ITS tests</a>',
+  ' to add fast-FAIL descriptions to scene0 tests.</td>',
+  '</tr></table></body></html>'
+].join('');
 
-test('등록된 리졸버가 인덱스를 받고도 0건이면 사건으로 남긴다', async () => {
-  // 이 소스는 제너릭 폴백이 막혀 있다. 그래서 표 마크업이 바뀌어 카메라 행을 하나도 못
-  // 읽어도 산출물은 조용한 주와 모양이 같다(후보 0건). 그 둘을 가르는 사건이 이것이다.
-  const events = [];
-  const { candidates } = await collectFromSource(AOSP_SITE_UPDATES, {
+const SITE_UPDATE_TARGET_PAGE =
+  '<html><body><main><p>Last updated 2026-08-13 UTC.</p><p>Camera ITS catalogue.</p></main></body></html>';
+
+function collectSiteUpdates(indexHtml, events) {
+  return collectFromSource(AOSP_SITE_UPDATES, {
     now: new Date('2026-08-22T00:00:00Z'),
     lookbackDays: 21,
     fetchTextImpl: async () => '',
     createClient: options => createBoundedFetchClient({
       ...options,
-      fetchImpl: async () => new Response('<html><body><p>table markup changed</p></body></html>', { status: 200 })
+      fetchImpl: async url => new Response(
+        String(url).includes('/whatsnew/') ? indexHtml : SITE_UPDATE_TARGET_PAGE,
+        { status: 200 }
+      )
     }),
     onDiagnostic: event => events.push(event)
   });
+}
+
+test('누적 인덱스를 받고도 0건이면 사건으로 남긴다', async () => {
+  // 이 소스는 제너릭 폴백이 막혀 있다. 그래서 표 마크업이 바뀌어 카메라 행을 하나도 못
+  // 읽어도 산출물은 조용한 주와 모양이 같다(후보 0건). 그 둘을 가르는 사건이 이것이다.
+  const events = [];
+  const { candidates } = await collectSiteUpdates('<html><body><p>markup changed</p></body></html>', events);
 
   assert.equal(candidates.length, 0, '폴백이 막혀 있으므로 후보는 0건이다');
   const event = events.find(entry => entry.kind === 'followed_resolver_yielded_nothing');
   assert.ok(event, '사건이 없다: ' + JSON.stringify(events));
   assert.equal(event.source_id, 'aosp-site-updates', '어느 소스가 0건인지 없으면 쓸모가 없다');
+  assert.ok(event.indexChars > 0, '인덱스는 받았다는 사실이 이 사건의 요점이다');
   assert.ok(DATED_ARTICLE_DIAGNOSTIC_KINDS.includes(event.kind),
     '어휘 밖 kind 는 요약에서 unknown 으로 접힌다');
 });
 
-test('리졸버가 없는 소스는 이 사건을 내지 않는다', async () => {
-  // 그런 소스는 제너릭 폴백이 살아 있어 0건이 곧 고장을 뜻하지 않는다.
-  // 사건을 내면 매주 울리고, 그 소음이 진짜 고장 신호를 다시 묻는다.
+test('같은 소스가 항목을 내면 사건을 내지 않는다', async () => {
+  // 0건 조건이 뒤집히면 성공한 실행마다 사건이 붙는다. 그 오류를 잡는 것은 이 테스트뿐이다.
   const events = [];
-  await collectFromSource(UNREGISTERED, {
-    now: new Date('2026-08-22T00:00:00Z'),
-    lookbackDays: 21,
-    fetchTextImpl: async () => '<html><body></body></html>',
-    onDiagnostic: event => events.push(event)
-  });
+  const { candidates } = await collectSiteUpdates(SITE_UPDATE_INDEX, events);
 
+  assert.ok(candidates.length > 0, '표에서 후보가 나온다: ' + candidates.length);
   assert.equal(
     events.filter(entry => entry.kind === 'followed_resolver_yielded_nothing').length,
     0
   );
 });
 
-test('리졸버가 스스로 사유를 말했으면 backstop 은 덧붙지 않는다', async () => {
-  // dated-article 리졸버는 카드가 0건이면 index_collection_failed 로 이미 크게 남긴다.
-  // 그 위에 backstop 까지 얹으면 한 상황이 두 kind 로 잡혀, 집계를 보는 사람이 다시 푼다.
+test('표식이 없는 리졸버 소스는 0건이어도 사건을 내지 않는다', async () => {
+  // claude-blog 는 등록돼 있지만 expectsItemsEveryRun 이 없다. 월간 게시판이나 릴리스
+  // 감시처럼 조용한 주에 0건이 정상인 소스에 사건을 붙이면 매주 울려 진짜 고장을 묻는다.
   const events = [];
   await collectFromSource(CLAUDE_BLOG, {
     now: new Date('2026-08-22T00:00:00Z'),
@@ -588,10 +599,15 @@ test('리졸버가 스스로 사유를 말했으면 backstop 은 덧붙지 않�
 
   assert.ok(
     events.some(entry => entry.kind === 'index_collection_failed'),
-    '리졸버가 먼저 사유를 남긴다: ' + JSON.stringify(events.map(entry => entry.kind))
+    '이 리졸버는 스스로 사유를 남긴다: ' + JSON.stringify(events.map(entry => entry.kind))
   );
   assert.equal(
     events.filter(entry => entry.kind === 'followed_resolver_yielded_nothing').length,
     0
   );
+});
+
+test('사건 대상은 레지스트리 표식에서 파생된다(별도 하드코딩 목록 아님)', () => {
+  // 목록을 따로 두면 새 소스를 그 목록에 넣는 것을 빠뜨려도 아무것도 안 깨진다.
+  assert.deepEqual(sourceIdsExpectingItemsEveryRun(), ['aosp-site-updates']);
 });
