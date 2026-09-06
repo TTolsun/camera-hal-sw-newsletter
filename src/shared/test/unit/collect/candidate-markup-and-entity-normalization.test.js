@@ -104,6 +104,22 @@ test('#975 normalizeCandidate는 entity를 두 번 풀지 않는다', () => {
   assert.equal(candidate.summary, 'Documents how to escape &amp; and &lt; inside pipeline handler logs.');
 });
 
+test('#975 title이나 summary가 null이어도 리터럴 "null"이 후보에 들어가지 않는다', () => {
+  // JSON을 주는 출처는 값이 없을 때 빈 문자열이 아니라 null을 싣는다. `String(null)`은 'null'이라,
+  // 마크업 제거를 `String(value)`로 받으면 그 문자열이 그대로 영속 후보의 제목·요약이 된다.
+  const candidate = normalizeCandidate({
+    source: feedSource(),
+    title: null,
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.3',
+    publishedAt: '2026-08-24',
+    summary: null,
+    sourceKind: 'release_note_item'
+  });
+
+  assert.notEqual(candidate.title, 'null');
+  assert.notEqual(candidate.summary, 'null');
+});
+
 test('#975 Raspberry Pi 릴리스 수집기의 본문 꺾쇠도 후보까지 보존된다', () => {
   // GitHub releases.atom의 <content type="html">은 릴리스 본문 HTML에 XML escape를 한 겹 더
   // 씌운다. 그래서 본문의 리터럴 꺾쇠는 `&amp;lt;`로, 본문의 진짜 태그는 `&lt;p&gt;`로 들어온다.

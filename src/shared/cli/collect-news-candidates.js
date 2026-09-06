@@ -203,8 +203,11 @@ let activeSourcesPath = legacySourcesPath;
 // `now<br />embedded`에서 단어가 붙지 않게 하기 위해서다.
 const MARKUP_PATTERN = /<!--[\s\S]*?-->|<![^>]*>|<\/?[a-zA-Z][a-zA-Z0-9:._-]*(?:\s[^<>]*)?\/?>/g;
 
+// `String(value || '')`로 받는다. `String(null)`은 `'null'`이라, 이 자리에서 String(value)만
+// 쓰면 title이나 summary가 null인 후보에서 리터럴 "null"이 영속 후보로 들어간다. 옛 decode는
+// null에 `.replace`를 걸어 예외로 죽었으므로, 조용히 문자열을 오염시키는 쪽으로 바뀌지 않게 한다.
 function stripMarkup(value = '') {
-  return String(value)
+  return String(value || '')
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
     .replace(MARKUP_PATTERN, ' ')
     .replace(/\s+/g, ' ')
@@ -524,7 +527,7 @@ function nativeAndroidToolingEvidence(raw = {}, source = {}, title = '', summary
 // 남는 한계: 표식의 중간이나 뒷 조각만 남은 값은 못 잡는다. 지금 판정 경로는 그런 값을 만들지
 // 않지만, 새 후보 칸이 생기면 여기도 함께 봐야 한다.
 function collapseWhitespace(value) {
-  return String(value || '').replace(/\s+/g, ' ').trim();
+  return String(value).replace(/\s+/g, ' ').trim();
 }
 
 function isCollectorTemplateSentence(raw, value) {
