@@ -3,7 +3,8 @@ const test = require('node:test');
 
 const {
   BUCKETS,
-  classifyAospCameraStackCandidate
+  classifyAospCameraStackCandidate,
+  BUCKET_PRIORITY
 } = require('../../../domain/aosp-camera-scope');
 
 test('classifies direct AOSP Camera framework and CameraX evidence', () => {
@@ -144,7 +145,7 @@ test('classifies public SoC platform signals without excluding them', () => {
   });
 
   assert.equal(soc.relevance_bucket, BUCKETS.ANDROID);
-  assert.equal(soc.editorial_priority, 4);
+  assert.equal(soc.editorial_priority, 3);
   assert.equal(soc.counts_as_soc_topic, true);
   assert.ok(soc.soc_platform_relevance > 0);
 });
@@ -169,7 +170,7 @@ test('classifies Android multimedia camera output as supporting, not primary', (
 
   for (const item of [apv, ultraHdr, gallery, videoCall]) {
     assert.equal(item.relevance_bucket, BUCKETS.ANDROID);
-    assert.equal(item.editorial_priority, 4);
+    assert.equal(item.editorial_priority, 3);
     assert.equal(item.counts_as_primary_camera_topic, false);
     assert.equal(item.counts_as_fallback_topic, false);
     assert.ok(item.multimedia_camera_output_relevance >= 2);
@@ -334,7 +335,7 @@ test('classifies C++ AI and tooling as fallback', () => {
   });
 
   assert.equal(fallback.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
-  assert.equal(fallback.editorial_priority, 3);
+  assert.equal(fallback.editorial_priority, 2);
   assert.equal(fallback.counts_as_fallback_topic, true);
 });
 
@@ -488,4 +489,20 @@ test('힌트 폴백은 옛 보조 힌트를 주력으로 승격하지 않는다'
     assert.equal(scope.counts_as_primary_camera_topic, false, hint);
     assert.equal(scope.aosp_camera_directness, 0, hint);
   }
+});
+
+test('편집 우선순위 사다리 — Camera HAL > AI > Android > watchlist > Driver', () => {
+  // 드라이버가 맨 아래인 것은 13주 실측(발행 44건 중 38건이 드라이버 패치) 때문이다.
+  // 다만 그 쏠림은 순위가 아니라 공급 문제라, 이 순서를 바꿔도 드라이버만 자격을 통과한
+  // 주에는 여전히 드라이버가 실린다. 순서 자체를 계약으로 고정해 둔다.
+  assert.deepEqual(
+    Object.entries(BUCKET_PRIORITY).sort((a, b) => a[1] - b[1]).map(([bucket]) => bucket),
+    [
+      BUCKETS.DIRECT_AOSP_CAMERA,
+      BUCKETS.CPP_AI_TOOLING_FALLBACK,
+      BUCKETS.ANDROID,
+      BUCKETS.GENERIC_TECH_WATCHLIST,
+      BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE
+    ]
+  );
 });

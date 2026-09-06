@@ -178,8 +178,8 @@ test('fills the cap in domain bucket priority order, not input order', () => {
   assert.equal(items[0].title, 'Camera ITS tests', 'direct_aosp_camera가 먼저 채워진다');
   assert.deepEqual(
     items.slice(1).map(item => item.title),
-    ['Driver patch A', 'Driver patch B', 'Driver patch C'],
-    '같은 버킷 안에서는 입력 순서를 유지한다'
+    ['Tooling', 'Driver patch A', 'Driver patch B'],
+    'AI(2)가 Driver(5)보다 앞서고, 같은 버킷 안에서는 입력 순서를 유지한다'
   );
 });
 
@@ -200,8 +200,8 @@ test('fills the cap with coverage-week items first', () => {
   assert.equal(items.length, 4);
   assert.deepEqual(
     items.slice(0, 2).map(item => item.title),
-    ['In-window driver patch', 'In-window SoC signal'],
-    '창 안 항목이 먼저 자리를 잡고, 그 안에서는 버킷 우선순위(driver 2 < android 4)가 그대로 산다'
+    ['In-window SoC signal', 'In-window driver patch'],
+    '창 안 항목이 먼저 자리를 잡고, 그 안에서는 버킷 우선순위(android 3 < driver 5)가 그대로 산다'
   );
   assert.deepEqual(
     items.slice(2).map(item => item.title),

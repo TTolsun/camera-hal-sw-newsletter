@@ -1240,6 +1240,9 @@ module.exports = {
   loadRegistry,
   loadSnapshot,
   observationFromHtml,
+  // AOSP Site Updates 날짜 보강이 같은 추출기를 쓴다(aosp-site-update-dates.js).
+  visibleDate,
+  visibleLastUpdated,
   markdownReport,
   runSourceMonitor,
   sourceEventsJsonPath,
