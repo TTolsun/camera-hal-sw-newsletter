@@ -556,6 +556,11 @@ const DEBUG_RRC_PATHS = new Set([
   // 심층(deep-dive) shadow report: selection-report.json과 동일하게 REVIEW_REQUIRED_COMPACT로 커밋한다.
   'deep-dive-report.json',
   'source-change-events.md',
+  // 짝인 .json도 커밋된다. 워크플로 01이 articles/content/source-events/ 를 명시적으로 git add
+  // 하고, 43주치가 이미 트리에 있으며, source-monitor.js 의 파생 값 제외 주석이 "git으로 추적되는
+  // source-change-events.json"을 전제로 쓰여 있다. 파일이 195KB로 큰 것은 사실이지만 등급은
+  // 크기가 아니라 커밋 여부를 말하는 자리이고, 크기는 그 주석이 파생 값을 빼는 방식으로 관리한다.
+  'source-change-events.json',
   // collected-news pipeline-input files (workflow handoff state, not pure debug)
   'candidates.json',
   'manual-candidates.json',

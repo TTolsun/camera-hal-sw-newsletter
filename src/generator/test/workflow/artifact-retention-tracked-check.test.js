@@ -6,6 +6,7 @@ const test = require('node:test');
 
 const {
   checkArtifactRetentionTracked,
+  getTrackedContentPaths,
   mustNotBeTracked
 } = require('../../../shared/tooling/validate/artifact-retention-tracked-check');
 const {
@@ -159,6 +160,29 @@ test('check FLAGS a news-candidates.md tracked after the daily era', () => {
 // 파일이 커밋되지 않는 유일한 이유는 .gitignore 다. 등급표에 debug_heavy 로 적어 두고 목록에서
 // 빠뜨리면 그 파일은 첫 실행에서 커밋되고 곧바로 이 체크가 hard fail 한다(#1089: seed 리포트
 // 두 건이 그 상태였다). 목록을 손으로 맞추는 대신 inventory 가 세는 것과 대조한다.
+// 워크플로 01 이 articles/content/source-events/ 를 명시적으로 git add 하는데 이 검사는 그 경로를
+// 훑지 않았다. 그동안 source-change-events.json 43건이 debug_heavy 등급인 채 추적되고 있었는데도
+// 검사는 통과했다 — 훑지 않는 경로는 등급이 무엇이든 검사되지 않는다(#1101).
+test('#1101: source-events 경로도 추적 검사 범위에 든다', () => {
+  const trackedRoots = getTrackedContentPaths(repoRoot);
+  const sourceEventPaths = trackedRoots.filter(relPath => relPath.startsWith('articles/content/source-events/'));
+  // 전제부터 확인한다. 트리에 source-events 파일이 하나도 없으면 아래 단언은 빈 목록을 보고
+  // 통과해 버려서, 범위가 다시 좁아져도 알아채지 못한다.
+  assert.ok(sourceEventPaths.length > 0, 'tree must already track source-events artifacts');
+});
+
+// 짝인 .md 는 처음부터 review_required_compact 였는데 .json 만 debug_heavy 였다. 두 파일 다
+// 워크플로 01 이 커밋하므로 .json 쪽 등급이 현실과 어긋난 쪽이었다(#1101).
+test('#1101: source-change-events.json은 커밋되는 등급이라 위반이 아니다', () => {
+  const relPath = 'articles/content/source-events/2026-08-31/source-change-events.json';
+  const classification = classifyArtifactPath(relPath);
+  assert.equal(classification.retention_grade, REVIEW_REQUIRED_COMPACT);
+  assert.equal(mustNotBeTracked(classification), false);
+
+  const result = makeCheck([relPath, 'articles/content/source-events/2026-08-31/source-change-events.md']);
+  assert.equal(result.ok, true, JSON.stringify(result.violations));
+});
+
 test('#1089: inventory가 debug_heavy로 세는 newsroom 산출물은 전부 .gitignore가 막는다', () => {
   const inventory = buildReviewArtifactInventory({ date: '2026-09-07' });
   const heavyBasenames = [...new Set(inventory.review_artifacts
