@@ -7,8 +7,14 @@ const {
   describesSameMonth,
   MAX_DATE_LOOKUPS
 } = require('../../../collect/aosp-site-update-dates');
-const { resolveFollowedSourceItems, followedSourceResolverIds } = require('../../../collect/followed-source-item-resolvers');
+const {
+  resolveFollowedSourceItems,
+  followedSourceResolverIds,
+  sourceIdsRequiringFetchClient
+} = require('../../../collect/followed-source-item-resolvers');
 const { dateQualityForCandidate } = require('../../../common/date-signals');
+const { DATED_ARTICLE_DIAGNOSTIC_KINDS } = require('../../../collect/dated-article-index-resolver');
+const { MAX_BYTES_PER_ARTICLE } = require('../../../collect/bounded-fetch-client');
 
 const SOURCE = Object.freeze({
   id: 'aosp-site-updates',
@@ -34,9 +40,39 @@ function targetHtml(dateLine = 'Last updated 2026-07-13 UTC.') {
   return `<html><body><main><p>${dateLine}</p><p>Camera ITS test catalogue.</p></main></body></html>`;
 }
 
+/**
+ * bounded fetch client 흉내. 요청한 URL 은 asked 에, 함께 넘긴 옵션은 options 에 남긴다.
+ * 옵션을 버리면 리졸버가 maxBytes 를 빼거나 틀린 값을 줘도 테스트가 그대로 통과한다.
+ * body 가 함수면 URL 을 받아 본문을 만들고, overrides 는 fetchBounded 결과를 덮어쓴다.
+ */
+function stubClient(body, overrides = {}) {
+  const asked = [];
+  const options = [];
+  return {
+    asked,
+    options,
+    async fetchBounded(url, requestOptions = {}) {
+      asked.push(String(url));
+      options.push({ ...requestOptions });
+      const html = typeof body === 'function' ? await body(String(url)) : body;
+      return {
+        ok: true,
+        status: 200,
+        body: html,
+        receivedBytes: String(html || '').length,
+        truncated: false,
+        sourceBudgetExhausted: false,
+        limitedBy: '',
+        error: '',
+        ...overrides
+      };
+    }
+  };
+}
+
 test('월 정밀도 날짜를 대상 페이지의 일 단위 날짜로 올린다', async () => {
   const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async () => targetHtml()
+    fetchClient: stubClient(targetHtml())
   });
 
   const item = items.find(entry => entry.url === TARGET);
@@ -52,7 +88,7 @@ test('날짜 출처와 함께 신뢰도도 적는다', async () => {
   // 신뢰도를 안 적으면 후보 레코드가 명시적 0 으로 굳히고, dateQualityForCandidate 의
   // 폴백은 0 을 유효한 숫자로 받아 그대로 쓴다 — date_source 가 옳아도 자격이 막힌다.
   const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async () => targetHtml()
+    fetchClient: stubClient(targetHtml())
   });
 
   const item = items.find(entry => entry.url === TARGET);
@@ -69,7 +105,7 @@ test('날짜 출처와 함께 신뢰도도 적는다', async () => {
 
 test('Last updated 가 없으면 본문 날짜를 쓰고 출처를 visible_date 로 적는다', async () => {
   const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async () => targetHtml('Published July 9, 2026.')
+    fetchClient: stubClient(targetHtml('Published July 9, 2026.'))
   });
 
   const item = items.find(entry => entry.url === TARGET);
@@ -83,7 +119,7 @@ test('행이 실린 달을 벗어난 페이지 날짜는 쓰지 않는다', asyn
   // 그 값을 쓰면 몇 달 지난 행이 이번 주 날짜를 얻어 수집 창 안으로 들어온다.
   const diagnostics = [];
   const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async () => targetHtml('Last updated 2026-08-31 UTC.'),
+    fetchClient: stubClient(targetHtml('Last updated 2026-08-31 UTC.')),
     onDiagnostic: event => diagnostics.push(event)
   });
 
@@ -91,7 +127,7 @@ test('행이 실린 달을 벗어난 페이지 날짜는 쓰지 않는다', asyn
   assert.equal(item.datePrecision, 'month');
   assert.equal(item.publishedAt, '2026-07-01');
   assert.equal(item.date_source, undefined);
-  assert.equal(diagnostics[0].type, 'aosp_site_update_date_outside_row_month');
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_outside_row_month');
   assert.match(diagnostics[0].reason, /2026-08-31/);
 });
 
@@ -106,7 +142,7 @@ test('같은 달 판정은 연도까지 함께 본다', () => {
 test('페이지에서 날짜를 못 얻으면 항목을 그대로 둔다', async () => {
   // 못 읽은 날짜를 지어내는 것보다 월 정밀도로 남아 참고 레인에 머무는 편이 낫다.
   const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async () => '<html><body><main><p>No date here.</p></main></body></html>'
+    fetchClient: stubClient('<html><body><main><p>No date here.</p></main></body></html>')
   });
 
   const item = items.find(entry => entry.url === TARGET);
@@ -117,42 +153,161 @@ test('페이지에서 날짜를 못 얻으면 항목을 그대로 둔다', async
 test('한 페이지가 실패해도 나머지 후보는 그대로 나간다', async () => {
   const diagnostics = [];
   const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async () => { throw new Error('boom'); },
+    fetchClient: { fetchBounded: async () => { throw new Error('boom'); } },
     onDiagnostic: event => diagnostics.push(event)
   });
 
   assert.ok(items.length > 0);
   assert.equal(items.find(entry => entry.url === TARGET).datePrecision, 'month');
-  assert.equal(diagnostics[0].type, 'aosp_site_update_date_lookup_failed');
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_lookup_failed');
   assert.match(diagnostics[0].reason, /boom/);
 });
 
 test('Error 가 아닌 값이 던져져도 사유를 남긴다', async () => {
   const diagnostics = [];
   await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async () => { throw 'plain string'; },
+    fetchClient: { fetchBounded: async () => { throw 'plain string'; } },
     onDiagnostic: event => diagnostics.push(event)
   });
   assert.match(diagnostics[0].reason, /plain string/);
 });
 
-test('같은 URL 이 여러 행에 나와도 한 번만 가져온다', async () => {
-  let calls = 0;
-  await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async () => { calls += 1; return targetHtml(); }
+test('HTTP 실패는 사유를 그대로 남기고 항목을 유지한다', async () => {
+  const diagnostics = [];
+  const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
+    fetchClient: stubClient('', { ok: false, status: 404, error: 'http_404' }),
+    onDiagnostic: event => diagnostics.push(event)
   });
-  assert.equal(calls, 1);
+
+  assert.equal(items.find(entry => entry.url === TARGET).datePrecision, 'month');
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_lookup_failed');
+  assert.equal(diagnostics[0].reason, 'http_404');
 });
 
-test('주입된 fetch 에도 영문판을 강제한다', async () => {
-  // 프로덕션은 늘 fetchTextImpl 을 주입한다. hl 을 defaultFetchText 안에만 두면
-  // 그 방어가 프로덕션 경로에서 죽는다.
-  const asked = [];
+test('예산에 걸린 응답은 HTTP 오류가 아니라 예산 사유로 남긴다', async () => {
+  // bounded client 는 상한에 걸린 2xx 의 ok 를 false 로 둔다. 예산을 먼저 보지 않으면
+  // 예산 초과가 HTTP 오류로 둔갑해, 예산을 올려야 고쳐질 사건이 파서 고장으로 읽힌다.
+  const diagnostics = [];
   await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async url => { asked.push(String(url)); return targetHtml(); }
+    fetchClient: stubClient('', { ok: false, truncated: true, limitedBy: 'source-run' }),
+    onDiagnostic: event => diagnostics.push(event)
   });
-  assert.ok(asked.length > 0, '대상 페이지를 가져왔다');
-  assert.ok(asked.every(url => url.includes('hl=en')), asked.join(', '));
+
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_lookup_failed');
+  assert.match(diagnostics[0].reason, /byte budget/);
+  assert.match(diagnostics[0].reason, /source-run/);
+});
+
+test('client 가 안 넘어오면 항목을 살린 채 배선 누락을 진단으로 남긴다', async () => {
+  // requiresFetchClient: true 로 등록했는데 collector 가 client 를 안 만든 경우다.
+  // 표 파서 결과는 살아 있으므로 버리지 않고 날짜 보강만 건너뛴다.
+  const diagnostics = [];
+  const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
+    onDiagnostic: event => diagnostics.push(event)
+  });
+
+  assert.equal(items.find(entry => entry.url === TARGET).datePrecision, 'month');
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_lookup_skipped');
+  assert.match(diagnostics[0].reason, /fetchClient/);
+});
+
+test('같은 URL 이 여러 행에 나와도 한 번만 가져온다', async () => {
+  const client = stubClient(targetHtml());
+  await resolveAospSiteUpdateItems(indexHtml(), SOURCE, { fetchClient: client });
+  assert.equal(client.asked.length, 1);
+});
+
+test('대상 페이지에 영문판을 강제한다', async () => {
+  // bounded client 는 user-agent 와 accept 만 싣고 Accept-Language 를 보내지 않는다.
+  // hl 을 URL 에 적지 않으면 기계 번역본을 받아 "Last updated" 표기를 못 읽는다.
+  const client = stubClient(targetHtml());
+  await resolveAospSiteUpdateItems(indexHtml(), SOURCE, { fetchClient: client });
+
+  assert.ok(client.asked.length > 0, '대상 페이지를 가져왔다');
+  assert.ok(client.asked.every(url => url.includes('hl=en')), client.asked.join(', '));
+});
+
+test('대상 페이지마다 기사 바이트 상한을 함께 넘긴다', async () => {
+  // 상한을 빼면 client 가 같은 기본값으로 메워 주므로 동작은 그대로다. 그래서 이 값을
+  // 검증하지 않으면 잘못된 상한(예: 4KB)으로 바뀌어 본문이 잘려도 아무도 모른다.
+  const client = stubClient(targetHtml());
+  await resolveAospSiteUpdateItems(indexHtml(), SOURCE, { fetchClient: client });
+
+  assert.deepEqual(client.options, [{ maxBytes: MAX_BYTES_PER_ARTICLE }]);
+});
+
+test('collector 가 파싱한 인덱스를 다시 파싱하지 않는다', async () => {
+  // collector 는 이미 indexItems 를 만들어 넘긴다. 여기서 다시 부르면 같은 문서에
+  // 같은 추출을 매 실행마다 두 번 돌린다. 인덱스 HTML 이 비어도 결과가 나와야 한다.
+  const items = await resolveAospSiteUpdateItems('', SOURCE, {
+    indexItems: [{
+      url: TARGET,
+      title: 'Camera ITS tests',
+      publishedAt: '2026-07-01',
+      datePrecision: 'month'
+    }],
+    fetchClient: stubClient(targetHtml())
+  });
+
+  assert.equal(items.length, 1);
+  assert.equal(items[0].publishedAt, '2026-07-13');
+  assert.equal(items[0].datePrecision, 'day');
+});
+
+test('indexItems 가 비면 인덱스 HTML 을 파싱한다', async () => {
+  // 레지스트리를 거치지 않고 직접 부르는 호출자를 위한 폴백이다.
+  const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
+    indexItems: [],
+    fetchClient: stubClient(targetHtml())
+  });
+  assert.equal(items.find(entry => entry.url === TARGET).publishedAt, '2026-07-13');
+});
+
+test('리졸버가 followed-source 레지스트리에 등록돼 있다', async () => {
+  assert.ok(followedSourceResolverIds().includes('aosp-site-updates'));
+
+  const items = await resolveFollowedSourceItems(SOURCE, {
+    text: indexHtml(),
+    fetchClient: stubClient(targetHtml())
+  });
+  assert.equal(items.find(entry => entry.url === TARGET).publishedAt, '2026-07-13');
+});
+
+test('레지스트리가 collector 의 indexItems 를 리졸버까지 넘긴다', async () => {
+  // 인덱스 HTML 을 비워 두면 리졸버가 스스로 파싱해서는 아무것도 못 만든다.
+  // 그래도 결과가 나온다는 것이 곧 레지스트리 항목이 indexItems 를 넘겼다는 증거다.
+  // 리졸버를 직접 부르는 테스트만 두면 이 배선이 빠져도 아무 테스트가 안 깨진다.
+  const items = await resolveFollowedSourceItems(SOURCE, {
+    text: '',
+    indexItems: [{
+      url: TARGET,
+      title: 'Camera ITS tests',
+      publishedAt: '2026-07-01',
+      datePrecision: 'month'
+    }],
+    fetchClient: stubClient(targetHtml())
+  });
+
+  assert.equal(items.length, 1);
+  assert.equal(items[0].publishedAt, '2026-07-13');
+});
+
+test('이 리졸버의 진단 kind 는 닫힌 어휘 안에 있다', () => {
+  // 어휘 밖 이름은 summarizeDatedArticleCollection 이 'unknown' 으로 접는다.
+  // 그러면 사건은 나는데 어느 사건인지가 실행 요약에서 사라진다.
+  for (const kind of [
+    'aosp_site_update_date_lookup_failed',
+    'aosp_site_update_date_lookup_skipped',
+    'aosp_site_update_date_outside_row_month'
+  ]) {
+    assert.ok(DATED_ARTICLE_DIAGNOSTIC_KINDS.includes(kind), kind);
+  }
+});
+
+test('레지스트리가 이 소스에 bounded client 를 요구한다', () => {
+  // 이 표시 하나가 collector 의 client 생성을 정한다. 빠지면 대상 페이지 fetch 가
+  // 소스당 6MiB 예산 밖으로 새고, 실행 요약이 이 소스를 0바이트로 보고한다.
+  assert.ok(sourceIdsRequiringFetchClient().includes('aosp-site-updates'));
 });
 
 test('Last updated 가 없으면 본문의 첫 날짜를 쓴다', () => {
@@ -164,16 +319,6 @@ test('Last updated 가 없으면 본문의 첫 날짜를 쓴다', () => {
   // 월까지만 적힌 페이지는 날짜를 주지 않는다.
   assert.deepEqual(pageDate('<main><p>Last updated July 2026.</p></main>'),
     { date: '', dateSource: '' });
-});
-
-test('리졸버가 followed-source 레지스트리에 등록돼 있다', async () => {
-  assert.ok(followedSourceResolverIds().includes('aosp-site-updates'));
-
-  const items = await resolveFollowedSourceItems(SOURCE, {
-    text: indexHtml(),
-    fetchTextImpl: async () => targetHtml()
-  });
-  assert.equal(items.find(entry => entry.url === TARGET).publishedAt, '2026-07-13');
 });
 
 test('fetch 상한은 표 파서 상한과 같다', () => {

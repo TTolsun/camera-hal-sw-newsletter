@@ -143,6 +143,9 @@ const FAIL_CLOSED_REASONS = [
 // (patchwork-libcamera-patches, gerrit-camera-changes)가 낸다. 그 수집기들은 자기 상한에 걸려
 // 수집 창을 끝까지 못 읽고 멈추는데, 그 상태는 산출물에서 "이번 주 신호 없음"과 같은 모양이다.
 // skipped_index_budget과 같은 이유로 여기 정본에 함께 둔다.
+// aosp_site_update_* 셋은 aosp-site-update-dates 가 낸다. 그 리졸버도 bounded client 를 쓰므로
+// 이벤트가 같은 배열에 모이고 같은 요약(summarizeDatedArticleCollection)이 센다. 어휘 밖 이름은
+// 'unknown' 으로 접히므로, 여기 적지 않으면 사건은 나는데 어느 사건인지가 요약에서 사라진다.
 const DATED_ARTICLE_DIAGNOSTIC_KINDS = [
   'skipped_index_budget',
   'skipped_article_budget',
@@ -150,7 +153,10 @@ const DATED_ARTICLE_DIAGNOSTIC_KINDS = [
   'recent_window_budget_exhausted',
   'fail_closed',
   'index_collection_failed',
-  'collection_window_truncated'
+  'collection_window_truncated',
+  'aosp_site_update_date_lookup_failed',
+  'aosp_site_update_date_lookup_skipped',
+  'aosp_site_update_date_outside_row_month'
 ];
 
 function noop() {}
