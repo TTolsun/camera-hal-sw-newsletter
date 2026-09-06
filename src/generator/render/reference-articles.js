@@ -4,6 +4,12 @@
 // 입력은 특정 창으로 한정되지 않는다: reference 창 후보와 함께 main 경쟁에서 선정되지 않은
 // shortlist(primary/fallback 창) 후보도 받는다. 어느 창에서 왔는지가 아니라 버킷·증거 조건으로
 // 거른다. 다만 상한을 채우는 순서는 창을 먼저 본다(아래 정렬 주석).
+//
+// #1000: 이 모듈은 편집 계획의 coverage_decision을 읽지 않는다 — 자격도 순서도 후보의 버킷·
+// 날짜·증거로만 정한다. 그래서 편집 계획이 참고 섹션을 지목할 방법은 없고, 그 어휘도
+// main_article/exclude 둘로 줄였다(select/coverage-reconciliation.js). 등급을 여기로 들이는
+// 것은 결정론 선별에 LLM 판단을 섞는 정책 변경이므로, coverage 권한 경계(#724)를 먼저 정해야
+// 한다.
 const { BUCKETS, BUCKET_PRIORITY, canonicalBucket } = require('../../shared/domain/aosp-camera-scope');
 const { excludeParentRoundupContainers } = require('../../shared/common/article-groups');
 const { isCoverageWeekWindow } = require('../../shared/common/coverage-week');

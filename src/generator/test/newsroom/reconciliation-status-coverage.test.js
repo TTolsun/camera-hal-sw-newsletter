@@ -280,7 +280,7 @@ test('렌더 관측이 없는 실행에서는 선택 밖 렌더 카운트도 판
 });
 
 test('#909: 그룹 강등 사유가 status까지 남고 candidate 단위와 섞이지 않는다', () => {
-  // 결정론 3그룹 중 sony는 편집 계획이 reference_only로 내리고, twin은 같은 그룹의 sibling만
+  // 결정론 3그룹 중 sony는 편집 계획이 exclude로 내리고, twin은 같은 그룹의 sibling만
   // 빠진다. status에는 실제로 사라진 그룹만, 그 사유와 함께 남아야 한다.
   const shortlistReport = deterministicReport(['a', 'sony']);
   const twin = candidate('a-twin', { article_group_key: 'group:a' });
@@ -290,8 +290,8 @@ test('#909: 그룹 강등 사유가 status까지 남고 candidate 단위와 섞�
   const editorialPlanReport = {
     editorial_plans: [
       plan('a', 'main_article'),
-      plan('a-twin', 'reference_only'),
-      plan('sony', 'reference_only')
+      plan('a-twin', 'exclude'),
+      plan('sony', 'exclude')
     ]
   };
 
@@ -306,7 +306,7 @@ test('#909: 그룹 강등 사유가 status까지 남고 candidate 단위와 섞�
   assert.deepEqual(status.reconciliation_demoted_group_keys, ['group:sony']);
   assert.deepEqual(status.reconciliation_demoted_groups, [{
     article_group_key: 'group:sony',
-    demoted_candidates: [{ candidate_key: 'sony', coverage_decision: 'reference_only', reason_code: 'editorial_plan_reference_only' }]
+    demoted_candidates: [{ candidate_key: 'sony', coverage_decision: 'exclude', reason_code: 'editorial_plan_exclude' }]
   }], '사라진 그룹만, 사유와 함께 남는다');
 });
 

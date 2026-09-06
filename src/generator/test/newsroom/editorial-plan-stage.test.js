@@ -149,10 +149,13 @@ test('editorialPlanSchema는 plan 식별자와 핵심 추론 필드를 required�
 
 test('editorialPlanPrompt는 coverage/impact enum과 안전 경계를 담는다', () => {
   const prompt = editorialPlanPrompt();
-  assert.match(prompt, /main_article, reference_only, exclude/);
+  assert.match(prompt, /main_article, exclude/);
   // #969: short_mention은 렌더 경로가 없어 exclude와 결과가 같았다. 등급을 제시하면 편집 계획이
   // 그것을 고르고, 독자에게는 아무것도 도달하지 않는다. 선택지는 실제 결과와 1:1이어야 한다.
   assert.doesNotMatch(prompt, /short_mention/, '렌더 경로 없는 등급을 다시 제시하면 안 된다');
+  // #1000: reference_only는 렌더 목적지가 실재했지만 그 섹션(render/reference-articles.js)이
+  // coverage_decision을 읽지 않아 결과는 exclude와 같았다. 같은 이유로 어휘에서 뺐다.
+  assert.doesNotMatch(prompt, /reference_only/, '결과가 exclude와 같은 등급을 다시 제시하면 안 된다');
   assert.match(prompt, /Direct Impact, Design Reference, Trend Watch, Exclude/);
   assert.match(prompt, /public 본문에 라벨로 노출하지 않습니다/);
   assert.match(prompt, /direct_hal_impact는 source가 직접 HAL\/runtime 변경을 뒷받침할 때만 true/);
@@ -268,6 +271,9 @@ test('buildEditorialPlanReport는 항상 LLM을 호출하고 정규화된 plan�
         return {
           editorial_plans: [{
             title: 'T', url: 'https://example.com/a', source_candidate_hash: 'abc123',
+            // #1000: 프롬프트가 더는 제시하지 않는 등급이다. 여기 남겨 두는 이유는 정규화가
+            // 등급을 판정하지 않고 원문 그대로 통과시켜야 하기 때문이다 — 판정은 재조정기가
+            // 하고, 그때 모델이 실제로 쓴 문자열이 강등 기록에 남아야 한다.
             coverage_decision: 'reference_only', impact_level: 'Design Reference',
             direct_hal_impact: false, target_description: 'TD', editorial_angle: 'EA',
             why_it_matters: 'W', reader_takeaway: 'R',
