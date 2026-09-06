@@ -544,7 +544,7 @@ function mergeNotYetEligibleByUrl(stage1List, mergeStageList) {
 // 목록과 합쳐 dedupe하고, stage 1과 같은 상한(60건/262144바이트)·carry_forward_status
 // 우선순위(overflow가 항상 최우선)·overflow 진단 파일 규칙을 그대로 재적용한다. 정상 경로와
 // degraded 경로가 각자 사본을 들면 한쪽만 고쳐져 판정이 갈라지므로 한 곳에 모아 둔다.
-function applyNotYetEligibleToPayload({ root, payload, stage1Payload, mergeStageNotYetEligible }) {
+function applyNotYetEligibleToPayload({ root, date, payload, stage1Payload, mergeStageNotYetEligible }) {
   const notYetEligibleMerged = mergeNotYetEligibleByUrl(
     Array.isArray(stage1Payload.not_yet_eligible) ? stage1Payload.not_yet_eligible : [],
     mergeStageNotYetEligible
@@ -565,7 +565,7 @@ function applyNotYetEligibleToPayload({ root, payload, stage1Payload, mergeStage
   });
   // 상한을 넘기면 전체 목록을 .tmp에 남긴다 — 안 그러면 상한에 밀린 항목이 committed에도
   // 진단 파일에도 없이 사라진다(silent truncate 금지 계약 위반).
-  writeNotYetEligibleOverflowIfNeeded(root, notYetEligibleCap);
+  writeNotYetEligibleOverflowIfNeeded(root, date, notYetEligibleCap);
   return payload;
 }
 
@@ -598,6 +598,7 @@ function buildDegradedMergeResult({ root, date, stage1Payload, seedExpansion }) 
   const mergedPayload = candidatePayload(date, mergedCandidates, stage1Payload);
   applyNotYetEligibleToPayload({
     root,
+    date,
     payload: mergedPayload,
     stage1Payload,
     mergeStageNotYetEligible: mergeStageSplit.notYetEligible
@@ -1450,6 +1451,7 @@ async function runEnabled({
   // 확정한다. 판정 본문은 degraded 경로와 공유하는 applyNotYetEligibleToPayload에 있다.
   applyNotYetEligibleToPayload({
     root,
+    date,
     payload: mergedPayload,
     stage1Payload: manualPayload,
     mergeStageNotYetEligible: mergeStageSplit.notYetEligible

@@ -202,7 +202,7 @@ jobs:
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.json
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-discovery-feedback-report.md
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-discovery-report.md
-            .tmp/not-yet-eligible-full.json
+            .tmp/not-yet-eligible-full-*.json
           if-no-files-found: warn
           retention-days: 14
 
