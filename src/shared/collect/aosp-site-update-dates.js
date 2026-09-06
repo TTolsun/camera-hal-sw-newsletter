@@ -16,7 +16,7 @@
 
 const { parseSourceSpecificItems } = require('./source-item-parsers');
 const { fetchTextWithLimit } = require('./source-intelligence-utils');
-const { visibleDate, visibleLastUpdated } = require('./source-monitor');
+const { explicitDayDate, visibleDate, visibleLastUpdated } = require('./source-monitor');
 
 // parseAospSiteUpdates 가 한 번에 최대 12건을 내보낸다(카메라 관련 행만 남긴 뒤 slice).
 // 그 상한을 그대로 따른다 — 표가 커져도 fetch 가 그보다 늘지 않는다.
@@ -30,9 +30,14 @@ function defaultFetchText(url) {
  * 페이지에서 일 단위 날짜를 뽑는다.
  * "Last updated" 표기를 먼저 보고, 없으면 본문의 첫 날짜를 쓴다 — source-monitor 가
  * 스냅샷을 만들 때 쓰는 것과 같은 두 추출기이고 같은 순서다.
+ *
+ * 다만 날짜 해석은 explicitDayDate 로 좁힌다. 기본 해석기(firstDateMatch)는 "July 2026" 을
+ * new Date() 폴백으로 2026-07-01 까지 만들어 주는데, 그 값을 받으면 월 정밀도 항목을 일
+ * 정밀도로 올리면서 아무도 모르는 "1일"을 발행일로 박게 된다. 그것은 이 모듈이 하지
+ * 않겠다고 정한 바로 그 일이다.
  */
 function pageDate(html = '') {
-  return visibleLastUpdated(html) || visibleDate(html);
+  return visibleLastUpdated(html, explicitDayDate) || visibleDate(html, explicitDayDate);
 }
 
 function isMonthPrecision(item = {}) {
