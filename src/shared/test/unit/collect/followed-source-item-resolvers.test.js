@@ -38,10 +38,11 @@ test('registers exactly the known followed-source resolver ids', () => {
       'libcamera-release-announcements',
       'mediatek-security-bulletin',
       'patchwork-libcamera-patches',
+      'qualcomm-security-bulletins',
       'raspberrypi-libcamera-releases'
     ]
   );
-  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 10);
+  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 11);
 });
 
 test('routes raspberrypi-libcamera-releases to the release resolver with text (atom) as the first arg', async () => {
