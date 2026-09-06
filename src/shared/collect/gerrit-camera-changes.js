@@ -300,8 +300,10 @@ function buildSummary(detail, scope, review, dateInfo, revisionSha) {
  *
  * MERGED이거나 사람 리뷰(Code-Review)가 붙은 NEW는 등록부의 소스 정책(conditional)을 그대로 따른다.
  * 그 밖의 NEW는 검증 label 표만 있는 것까지 포함해 mainArticlePolicy를 watchlist_only로 내린다. 이 값은
- * source-quality-classifier가 소스 정책보다 우선해 읽으므로, 그 후보는 blocker 없이 blocked가 되고
- * (blocker가 비어 있어 mailing-list 강한-근거 승급도 걸리지 않는다) briefing 재료로만 남는다.
+ * source-quality-classifier가 소스 정책보다 우선해 읽으므로, 그 후보는 policy_locked_out_of_main
+ * blocker를 달고 blocked가 되고 briefing 재료로만 남는다. mailing-list 강한-근거 승급이 걸리지 않는
+ * 이유는 blocker가 비어 있어서가 아니라 그 값이 승급이 대신할 수 있는 blocker 목록
+ * (UPGRADEABLE_BLOCKERS)에 없기 때문이다. 승급 불가를 우연이 아니라 값으로 읽는다 (#1056).
  */
 function buildCandidate(source, origin, detail, scope, review, dateInfo, revisionSha) {
   const mainEligible = detail.status === 'MERGED' || review.positive;
