@@ -18,11 +18,19 @@ function isPreservedLegacyArtifact(relPath) {
   return Boolean(match) && match[1] <= LEGACY_NEWS_CANDIDATES_LAST_COMMITTED_DATE;
 }
 
-// articles/content/newsroom 및 articles/content/collected-news 아래 Git 추적 경로 목록을 반환한다.
+// 워크플로가 커밋하는 articles/content 하위 세 곳을 전부 훑는다. source-events 가 빠져 있던
+// 동안 그 아래 source-change-events.json 43건이 등급과 어긋난 채 추적되고 있었는데도 이 검사가
+// 통과했다 — 훑지 않는 경로는 등급이 무엇이든 검사되지 않는다(#1101).
+const TRACKED_CONTENT_DIRS = [
+  'articles/content/newsroom',
+  'articles/content/collected-news',
+  'articles/content/source-events'
+];
+
 function getTrackedContentPaths(root) {
   const output = execFileSync(
     'git',
-    ['-C', root, 'ls-files', 'articles/content/newsroom', 'articles/content/collected-news'],
+    ['-C', root, 'ls-files', ...TRACKED_CONTENT_DIRS],
     { encoding: 'utf8' }
   );
   return output.split('\n').map(line => line.trim()).filter(Boolean);
