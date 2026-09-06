@@ -185,6 +185,11 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
   return {
     input_candidate_count: report.input_candidate_count ?? null,
     eligible_candidate_count: report.eligible_candidate_count ?? null,
+    // 관측 누락(null)과 '자격 통과 후보 없음'([])을 접지 않는다. 배선이 끊기면 빈 배열이
+    // 정상 출력처럼 보이는데, 그때 eligible_candidate_count 는 여전히 0 보다 크다.
+    eligible_candidate_urls: Array.isArray(report.eligible_candidate_urls)
+      ? report.eligible_candidate_urls
+      : null,
     selected_article_count: selectedArticleCount,
     deterministic_selected_count: diagnostics.deterministic_selected_count ?? report.deterministic_selected_count ?? report.selected_article_count ?? null,
     rendered_main_article_count: renderedMainArticleCount,

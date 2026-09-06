@@ -228,6 +228,11 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
     // 상위 10개로 잘리고 이 사유는 건수가 작아 늘 그 밖으로 밀린다.
     republication_cooldown_blocked: selectionDiagnostics.republication_cooldown_blocked ||
       report.republication_cooldown_blocked || null,
+    // #838·#963과 같은 이유로 이 투영을 통과해야 한다. counts에는 합계만 남아 '자격은
+    // 통과했는데 선정되지 않은 후보'가 어느 것인지 커밋 이력만으로 짚을 수 없다. 선정 보조
+    // 저장소(camera-hal-sw-newsletter-retrieval)의 재심이 이 목록을 표적으로 쓴다.
+    eligible_candidate_urls: selectionDiagnostics.eligible_candidate_urls ??
+      report.eligible_candidate_urls ?? null,
     exclusion_reason_summary: selectionDiagnostics.exclusion_reason_summary || [],
     final_exclusion_reason_summary: selectionDiagnostics.final_exclusion_reason_summary || [],
     // 사유별 합계는 후보 단위를 복원하지 못한다 — 한 후보가 사유를 여러 개 가지므로

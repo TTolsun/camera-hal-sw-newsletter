@@ -1378,6 +1378,14 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     generated_at: new Date().toISOString(),
     input_candidate_count: rawCandidates.length,
     eligible_candidate_count: shortlist.length,
+    // 자격을 통과한 후보를 후보 단위로 남긴다. 합계만으로는 '자격은 통과했는데 점수·슬롯에서
+    // 밀린 후보'가 어느 것인지 커밋 이력만 보고 짚을 수 없다.
+    //
+    // url 을 쓰는 이유: issue.json 의 source_candidate_url 이 같은 형태라(정규화 전)
+    // 발행 기사와 바로 조인된다. normalized_url 로 내보내면 조인이 어긋난다.
+    eligible_candidate_urls: shortlist
+      .map(candidate => candidate.url || candidate.normalized_url || '')
+      .filter(url => url !== ''),
     deterministic_selected_count: selected.length,
     selected_article_count: selected.length,
     selected_group_count: groupCoverage.selected_group_count,
