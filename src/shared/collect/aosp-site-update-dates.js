@@ -15,17 +15,14 @@
 // 배경과 대안 비교는 retrieval 저장소의 docs/aosp-site-updates-date-precision.md 에 있다.
 
 const { parseSourceSpecificItems } = require('./source-item-parsers');
-const { fetchTextWithLimit, fetchUrlForContent } = require('./source-intelligence-utils');
+const { fetchUrlForContent } = require('./source-intelligence-utils');
+const { MAX_BYTES_PER_ARTICLE } = require('./bounded-fetch-client');
 const { explicitDayDate, visibleDate, visibleLastUpdated } = require('./source-monitor');
 const { dateSourceConfidence } = require('../common/date-signals');
 
 // parseAospSiteUpdates 가 한 번에 최대 12건을 내보낸다(카메라 관련 행만 남긴 뒤 slice).
 // 그 상한을 그대로 따른다 — 표가 커져도 fetch 가 그보다 늘지 않는다.
 const MAX_DATE_LOOKUPS = 12;
-
-function defaultFetchText(url) {
-  return fetchTextWithLimit(globalThis.fetch, url, { timeoutMs: 5000, maxBytes: 400000 });
-}
 
 /**
  * 페이지에서 일 단위 날짜와 그 날짜의 출처를 함께 뽑는다.
@@ -73,6 +70,34 @@ function isMonthPrecision(item = {}) {
 }
 
 /**
+ * 대상 페이지 하나를 bounded client 로 가져온다.
+ *
+ * 던지지 않고 사유를 함께 돌려준다. 여기서 실패하는 것은 부가 기능인 날짜 보강뿐이고,
+ * 표 파서가 이미 만든 후보는 그대로 나가야 하기 때문이다.
+ *
+ * @returns {Promise<{html: string, reason: string}>}
+ */
+async function fetchPageHtml(fetchClient, url) {
+  // hl=en 은 URL 에 적는다. bounded client 는 user-agent 와 accept 만 싣고 Accept-Language 는
+  // 보내지 않으므로(bounded-fetch-client.js 의 requestOnce), URL 에 없으면 Google 문서 사이트가
+  // 기계 번역본을 준다. 번역본은 원문보다 두 달까지 뒤처지고(실측: 영문 August 2026,
+  // 한국어·중국어 June 2026) "Last updated" 표기도 번역돼 날짜를 못 읽는다.
+  const response = await fetchClient.fetchBounded(fetchUrlForContent(url), {
+    maxBytes: MAX_BYTES_PER_ARTICLE
+  });
+
+  // 예산 초과를 먼저 본다. bounded client 는 상한에 걸린 2xx 의 ok 를 false 로 두므로
+  // 순서를 뒤집으면 예산 초과가 HTTP 오류로 둔갑한다(dated-article-index-resolver 와 같은 순서).
+  if (response.truncated || response.sourceBudgetExhausted) {
+    return { html: '', reason: `page exceeded the byte budget (limited by ${response.limitedBy || 'unknown'})` };
+  }
+  if (!response.ok || !response.body) {
+    return { html: '', reason: response.error || `http_${response.status}` };
+  }
+  return { html: response.body, reason: '' };
+}
+
+/**
  * 표 파서 결과를 그대로 쓰되 월 정밀도 항목의 날짜만 올린다.
  *
  * 날짜를 못 얻거나 그 날짜가 행의 달을 벗어나면 항목을 그대로 둔다. 월 정밀도인 채로 남아
@@ -81,12 +106,28 @@ function isMonthPrecision(item = {}) {
  * @param {string} html 사이트 업데이트 인덱스 HTML
  * @param {object} source 소스 정의
  * @param {object} [deps]
- * @param {(url: string) => Promise<string>} [deps.fetchTextImpl] 테스트 주입구
+ * @param {object[]} [deps.indexItems] collector 가 이미 파싱한 인덱스 항목
+ * @param {{fetchBounded: Function}} [deps.fetchClient] 소스별 bounded fetch client
  * @param {(event: object) => void} [deps.onDiagnostic]
  */
-async function resolveAospSiteUpdateItems(html, source, { fetchTextImpl, onDiagnostic } = {}) {
-  const items = parseSourceSpecificItems(html, source);
-  const fetchText = fetchTextImpl || defaultFetchText;
+async function resolveAospSiteUpdateItems(html, source, { indexItems, fetchClient, onDiagnostic } = {}) {
+  // 인덱스는 collector 가 이미 파싱해서 넘겨준다(collect-news-candidates.js 의 indexItems).
+  // 여기서 다시 부르면 같은 210KB 문서에 같은 추출을 매 실행마다 두 번 돌린다.
+  // 폴백을 남기는 이유는 이 함수를 레지스트리 없이 직접 부르는 테스트가 있기 때문이다.
+  const items = Array.isArray(indexItems) && indexItems.length > 0
+    ? indexItems
+    : parseSourceSpecificItems(html, source);
+
+  // requiresFetchClient: true 로 등록했는데도 client 가 안 넘어온 경우다(등록 후 배선 누락).
+  // 표 파서 결과는 살아 있으므로 항목을 버리지 않고 날짜 보강만 건너뛴다. 다만 조용히
+  // 넘어가면 "이번 주에는 올릴 날짜가 없었다"와 구분되지 않으므로 진단을 남긴다.
+  if (!fetchClient || typeof fetchClient.fetchBounded !== 'function') {
+    onDiagnostic?.({
+      type: 'aosp_site_update_date_lookup_skipped',
+      reason: 'resolver called without a usable fetchClient (source registered but not wired to a bounded fetch client)'
+    });
+    return items;
+  }
 
   // 같은 URL 이 여러 행에 나올 수 있다. 페이지는 한 번만 가져온다.
   const targets = [...new Set(items.filter(isMonthPrecision).map(item => item.url))]
@@ -94,21 +135,21 @@ async function resolveAospSiteUpdateItems(html, source, { fetchTextImpl, onDiagn
   const signalByUrl = new Map();
 
   for (const url of targets) {
+    let page;
     try {
-      // hl=en 은 여기서 붙인다. defaultFetchText 안에만 두면 프로덕션이 늘 주입하는
-      // fetchTextImpl 이 그 방어를 지나쳐 기계 번역본을 받는다. 번역본은 원문보다 두 달까지
-      // 뒤처지고(실측: 영문 August 2026, 한국어·중국어 June 2026) "Last updated" 표기도
-      // 번역돼 날짜를 못 읽는다.
-      const signal = pageDate(await fetchText(fetchUrlForContent(url)));
-      if (signal.date) signalByUrl.set(url, signal);
+      page = await fetchPageHtml(fetchClient, url);
     } catch (error) {
-      // 날짜 보강은 부가 기능이다. 한 페이지가 실패해도 나머지 후보는 그대로 나가야 한다.
-      onDiagnostic?.({
-        type: 'aosp_site_update_date_lookup_failed',
-        url,
-        reason: error?.message || String(error)
-      });
+      page = { html: '', reason: error?.message || String(error) };
     }
+
+    if (!page.html) {
+      // 날짜 보강은 부가 기능이다. 한 페이지가 실패해도 나머지 후보는 그대로 나가야 한다.
+      onDiagnostic?.({ type: 'aosp_site_update_date_lookup_failed', url, reason: page.reason });
+      continue;
+    }
+
+    const signal = pageDate(page.html);
+    if (signal.date) signalByUrl.set(url, signal);
   }
 
   if (signalByUrl.size === 0) return items;

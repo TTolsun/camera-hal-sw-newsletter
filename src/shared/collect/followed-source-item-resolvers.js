@@ -41,8 +41,12 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     // 표 파서 결과를 그대로 쓰되 월 정밀도 날짜만 대상 페이지에서 올린다.
     // 표는 "July 2026" 까지만 알고 페이지에는 일 단위 날짜가 있다.
     id: 'aosp-site-updates',
-    resolve: ({ text, source, fetchTextImpl, onDiagnostic }) =>
-      resolveAospSiteUpdateItems(text, source, { fetchTextImpl, onDiagnostic })
+    // 대상 페이지를 최대 12건 따라간다. bounded client 없이 열면 그 12건이 소스당 6MiB 누적
+    // 예산 밖으로 새고, collector 의 received_bytes_by_source 도 이 소스를 늘 0바이트로 적는다.
+    // 인덱스 fetch 와 같은 client 를 공유해야 카운터가 하나로 유지된다.
+    requiresFetchClient: true,
+    resolve: ({ indexItems, text, source, fetchClient, onDiagnostic }) =>
+      resolveAospSiteUpdateItems(text, source, { indexItems, fetchClient, onDiagnostic })
   },
   {
     id: 'libcamera-release-announcements',
