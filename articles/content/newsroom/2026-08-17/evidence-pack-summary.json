@@ -701,7 +701,7 @@
       "source_role": "official_documentation_reference",
       "source_url_quality": "official_documentation_reference",
       "freshness_window": "primary",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "exclusion_reason": "missing dated evidence"
     },
     {

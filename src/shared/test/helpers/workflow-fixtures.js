@@ -85,7 +85,7 @@ function regressionCandidate({ title, url, bucket, fallback = false }) {
     relevance_bucket: bucket,
     source_candidate_hash: `${bucket}-${title}`.replace(/[^a-z0-9]+/gi, '-').toLowerCase(),
     editorial_priority: fallback ? 5 : 2,
-    aosp_camera_directness: bucket === 'android_platform_camera_adjacent' ? 2 : 0,
+    aosp_camera_directness: bucket === 'android' ? 2 : 0,
     driver_stack_relevance: bucket === 'camera_driver_image_pipeline' ? 3 : 0,
     multimedia_camera_output_relevance: bucket === 'android_multimedia_camera_output' ? 3 : 0,
     soc_platform_relevance: 0,
@@ -437,7 +437,7 @@ function writePr39LikeRegressionFixture(root, date = '2026-05-09') {
   const camerax = regressionCandidate({
     title: 'CameraX 1.4.0-alpha07',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07',
-    bucket: 'android_platform_camera_adjacent'
+    bucket: 'android'
   });
   const gcc = regressionCandidate({
     title: 'GCC 16.1',
@@ -539,17 +539,17 @@ function writeRun25590436113LikeFallbackFixture(root, options = {}) {
   const camerax14 = regressionCandidate({
     title: 'CameraX 1.4.0-alpha07',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07',
-    bucket: 'android_platform_camera_adjacent'
+    bucket: 'android'
   });
   const camerax16 = regressionCandidate({
     title: 'CameraX 1.6.1',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
-    bucket: 'android_platform_camera_adjacent'
+    bucket: 'android'
   });
   const camerax13 = regressionCandidate({
     title: 'CameraX 1.3.0-beta02',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02',
-    bucket: 'android_platform_camera_adjacent'
+    bucket: 'android'
   });
   const libcamera = regressionCandidate({
     title: 'libcamera v0.7.1',
@@ -565,7 +565,7 @@ function writeRun25590436113LikeFallbackFixture(root, options = {}) {
   const cameraxAnchorless = regressionCandidate({
     title: 'CameraX release notes overview',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera',
-    bucket: 'android_platform_camera_adjacent'
+    bucket: 'android'
   });
   const safeCandidates = includeSafeAnchors ? [camerax16, camerax13] : [];
   const candidates = [camerax14, libcamera, gcc, cameraxAnchorless, ...safeCandidates];
@@ -1209,7 +1209,7 @@ function writeMinimalEvidencePackSummary(root, date, overrides = {}) {
       source_role: 'primary',
       source_url_quality: 'article_url',
       freshness_window: 'current',
-      relevance_bucket: 'android_platform_camera_adjacent',
+      relevance_bucket: 'android',
       hal_impact_axes: ['camera_pipeline', 'metadata'],
       claim_validation: {
         status: 'available',

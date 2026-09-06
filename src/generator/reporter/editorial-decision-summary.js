@@ -44,7 +44,7 @@ const PIPELINE_STATUS_LABELS = {
 const CAMERA_BUCKETS = new Set([
   'direct_aosp_camera',
   'camera_driver_image_pipeline',
-  'android_platform_camera_adjacent'
+  'android'
 ]);
 
 const SUPPORTING_BUCKETS = new Set([

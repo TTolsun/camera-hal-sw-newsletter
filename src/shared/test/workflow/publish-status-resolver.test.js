@@ -40,7 +40,7 @@ const {
 
 test('publication mode uses final bound candidate bucket over stale section bucket', () => {
   const decision = publicationDecisionForSections([{
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     bound_candidate: {
       relevance_bucket: 'cpp_ai_tooling_fallback'
     },
@@ -92,7 +92,7 @@ test('review-only public issue keeps review publication notice', () => {
   const candidate = regressionCandidate({
     title: 'CameraX validation release',
     url: 'https://developer.android.com/jetpack/androidx/releases/camera#review-only',
-    bucket: 'android_platform_camera_adjacent'
+    bucket: 'android'
   });
   const issue = {
     date,

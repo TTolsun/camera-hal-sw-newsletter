@@ -656,7 +656,7 @@ function latestUpdateItemFromEvidence({
     behavior_change: concreteBehavior,
     source_extraction: extraction,
     extraction_quality: extraction.extraction_quality,
-    relevanceBucketHint: 'android_platform_camera_adjacent',
+    relevanceBucketHint: 'android',
     linked_release_note_target_url: !concreteBehavior && trustedCameraReleaseNoteUrl(releaseUrl) ? releaseUrl : '',
     parser_gap_reason: !concreteBehavior ? 'missing_concrete_release_note_bullet' : '',
     outgoing_links: links

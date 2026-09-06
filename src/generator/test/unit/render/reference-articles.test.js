@@ -193,7 +193,7 @@ test('fills the cap with coverage-week items first', () => {
     candidate({ title: 'AOSP doc oldest', url: 'https://a.example/aosp-1', published_date: '2026-07-03', freshness_window: 'reference' }),
     candidate({ title: 'AOSP doc newest', url: 'https://a.example/aosp-2', published_date: '2026-07-05', freshness_window: 'reference' }),
     candidate({ title: 'AOSP doc middle', url: 'https://a.example/aosp-3', published_date: '2026-07-04', freshness_window: 'reference' }),
-    candidate({ title: 'In-window SoC signal', url: 'https://a.example/soc', published_date: '2026-08-18', relevance_bucket: 'soc_platform_signal', freshness_window: 'primary' }),
+    candidate({ title: 'In-window SoC signal', url: 'https://a.example/soc', published_date: '2026-08-18', relevance_bucket: 'android', freshness_window: 'primary' }),
     candidate({ title: 'In-window driver patch', url: 'https://a.example/driver', published_date: '2026-08-19', relevance_bucket: 'camera_driver_image_pipeline', freshness_window: 'primary' })
   ]);
 
@@ -201,7 +201,7 @@ test('fills the cap with coverage-week items first', () => {
   assert.deepEqual(
     items.slice(0, 2).map(item => item.title),
     ['In-window driver patch', 'In-window SoC signal'],
-    '창 안 항목이 먼저 자리를 잡고, 그 안에서는 버킷 우선순위(driver 2 < soc 5)가 그대로 산다'
+    '창 안 항목이 먼저 자리를 잡고, 그 안에서는 버킷 우선순위(driver 2 < android 4)가 그대로 산다'
   );
   assert.deepEqual(
     items.slice(2).map(item => item.title),

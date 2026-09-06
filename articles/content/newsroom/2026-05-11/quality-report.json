@@ -38,7 +38,7 @@
         "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
         "source_candidate_url": "https://developer.android.com/latest-updates",
         "source_candidate_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": false,
@@ -289,7 +289,7 @@
       "index": 1,
       "title": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
       "url": "https://developer.android.com/latest-updates",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "hal_impact_axes": [
         "camerax_app_compatibility",
         "framework_hal_contract"
@@ -343,7 +343,7 @@
         "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
         "source_candidate_url": "https://developer.android.com/latest-updates",
         "source_candidate_hash": "54d4017dadc0b266d34d2591d029f31209ce910daf44cdb3f05a689b790a93b3",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": false,
@@ -471,7 +471,7 @@
         "index": 1,
         "title": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
         "url": "https://developer.android.com/latest-updates",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "hal_impact_axes": [
           "camerax_app_compatibility",
           "framework_hal_contract"

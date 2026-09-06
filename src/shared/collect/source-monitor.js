@@ -764,7 +764,7 @@ function sourceQualityForEvent(event) {
 function bucketForSource(source = {}) {
   const categories = ensureArray(source.expected_categories);
   if (source.selection_lane === 'supporting_native_tooling') return 'cpp_ai_tooling_fallback';
-  if (categories.includes('camera-api') || source.source_id.includes('camerax')) return 'android_platform_camera_adjacent';
+  if (categories.includes('camera-api') || source.source_id.includes('camerax')) return 'android';
   if (categories.includes('camera-hal') || categories.includes('aosp')) return 'direct_aosp_camera';
   return 'generic_tech_watchlist';
 }

@@ -50,7 +50,7 @@ test('Android Latest Updates parser extracts CameraX table rows without generic 
     assertParsedItemContract(item);
     assert.equal(item.parentUrl, 'https://developer.android.com/latest-updates');
     assert.equal(item.parentTitle, 'Android Developers Latest Updates');
-    assert.equal(item.relevanceBucketHint, 'android_platform_camera_adjacent');
+    assert.equal(item.relevanceBucketHint, 'android');
     assert.match(item.api_or_component, /CameraX|androidx\.camera/);
     assert.match(item.title, /^CameraX 1\.5\.0-beta01 - /);
     assert.match(item.url, /^https:\/\/developer\.android\.com\/jetpack\/androidx\/releases\/camera#/);
@@ -72,7 +72,7 @@ test('Android Latest Updates parser extracts CameraX card links with nearby date
     assert.equal(item.publishedAt, '2026-05-01');
     assert.equal(item.parentUrl, 'https://developer.android.com/latest-updates');
     assert.equal(item.parentTitle, 'Android Developers Latest Updates');
-    assert.equal(item.relevanceBucketHint, 'android_platform_camera_adjacent');
+    assert.equal(item.relevanceBucketHint, 'android');
     assert.match(item.version_or_release, /CameraX 1\.5\.0-beta01/);
     assert.match(item.title, /^CameraX 1\.5\.0-beta01 - androidx\.camera:/);
     assert.match(item.url, /^https:\/\/developer\.android\.com\/jetpack\/androidx\/releases\/camera#/);

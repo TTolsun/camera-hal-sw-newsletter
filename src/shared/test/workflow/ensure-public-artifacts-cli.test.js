@@ -568,7 +568,7 @@ test('ensure CLI persists a rendered public article when selected headline is no
     finalSelectionEligibility: 'main',
     main_article_score_eligible: true,
     score_filter_reasons: [],
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     source: 'Android Developers Blog'
   };
 

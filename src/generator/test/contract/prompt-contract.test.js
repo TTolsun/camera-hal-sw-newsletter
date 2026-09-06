@@ -95,7 +95,7 @@ test('article section contract prompt fixes the five normalized keys and guardra
   assert.match(prompt, /구체적 action/);
   assert.match(prompt, /Action target scope:/);
   assert.match(prompt, /direct_camera_hal\/direct_aosp_camera\/camera_driver_image_pipeline: source가 직접 뒷받침할 때만 request\/result, metadata, stream, buffer, vendor tag, HAL contract/);
-  assert.match(prompt, /android_camera_api\/android_platform_camera_adjacent: CameraX\/Camera2, preview\/capture, permission, app compatibility, Surface 연결/);
+  assert.match(prompt, /android_camera_api\/android: CameraX\/Camera2, preview\/capture, permission, app compatibility, Surface 연결/);
   assert.match(prompt, /android_multimedia_camera_output: Camera HAL 직접 변경으로 쓰지 말고 camera output path, preview, recording, camera-generated playback/);
   assert.match(prompt, /MediaCodec\/Media3\/MediaRecorder\/Photo Picker\/WebRTC\/A\/V sync/);
   assert.match(prompt, /what changed, affected camera output path, why Camera HAL\/Android camera engineers should care, direct\/indirect\/downstream impact/);

@@ -61,7 +61,7 @@
         "index": 1,
         "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
         "category": "android_platform_camera_adjacent",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "urls": [
           "https://goo.gle/AdaptiveApps_IO26"
         ],
@@ -138,7 +138,7 @@
         "index": 1,
         "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합을 통한 적응형 카메라 미리보기 구현",
         "category": "android_platform_camera_adjacent",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "urls": [
           "https://goo.gle/AdaptiveApps_IO26"
         ],

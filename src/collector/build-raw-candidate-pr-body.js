@@ -25,7 +25,7 @@ const {
 const DIRECT_CAMERA_BUCKETS = new Set([
   BUCKETS.DIRECT_AOSP_CAMERA,
   BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
-  BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+  BUCKETS.ANDROID
 ]);
 
 function candidateItems(payload = {}) {
@@ -76,7 +76,7 @@ function summarizeRawCandidates(payload = {}, manifest = null) {
   ).length;
   const cameraXCount = candidates.filter(hasCameraXSignal).length;
   const socPlatformCount = candidates.filter(candidate =>
-    candidateBucket(candidate) === BUCKETS.SOC_PLATFORM_SIGNAL
+    candidate.counts_as_soc_topic === true
   ).length;
   const officialRatio = candidates.length > 0 ? officialCount / candidates.length : 0;
 

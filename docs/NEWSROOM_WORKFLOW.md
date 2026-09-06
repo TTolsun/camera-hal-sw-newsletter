@@ -58,14 +58,14 @@ source registry
 
 파이프라인이 main으로 싣지 못한 Android 카메라 신호를 `state/deep-dive-topic-queue.json`에 적립합니다.
 
-- 적립은 수집(01)이 합니다: 강등된 direct_aosp_camera·android_platform_camera_adjacent 후보,
+- 적립은 수집(01)이 합니다: 강등된 direct_aosp_camera·android 후보,
   primary_camera_stack lane 모니터 이벤트, 감시 문서의 카메라 섹션(ITS 릴리스 노트,
   `developer.android.com/about/versions/<N>/features` — 새 Android 버전이 나오면 registry seed에
   feature 페이지를 수동 추가해야 합니다). 적립은 그날의 수집 산출물(후보 artifact·매니페스트·
   markdown)을 전부 기록한 **뒤에** 실행합니다 — 아래 03과 같은 이유입니다.
 - feature 페이지 소스(`android-version-features`)는 심층 적립 전용입니다(`main_article_allowed: false`).
   변화 감지가 페이지 전체 해시라, 카메라와 무관한 문단만 바뀐 주에도 이벤트가 생기기 때문입니다.
-  버킷도 앱 개발자용 플랫폼 문서에 맞게 `android_platform_camera_adjacent`입니다.
+  버킷도 앱 개발자용 플랫폼 문서에 맞게 `android`입니다.
 - 발행(03)은 최종 기사 중 direct_aosp_camera가 발동 임계값 이하인 주에만 큐에서 주제 1개를
   결정론으로 고르고, 결과를 `articles/content/newsroom/<날짜>/deep-dive-report.json`에 기록합니다.
   임계값의 정본은 `src/shared/config/newsletter-policy.json`의
@@ -135,7 +135,7 @@ LLM prompt에는 후보 전체가 아니라 `articles/content/newsroom/YYYY-MM-D
 
 shortlist는 기본 8-12개 수준이고 hard cap(상한)은 12개입니다. 핵심은 **LLM이 아니라 local selector(결정론적 코드)가 main article 후보를 정한다**는 점입니다. selector는 LLM reporter/editor prompt가 돌기 전에 deterministic scoring으로 후보를 줄이고, `src/shared/config/newsletter-policy.json`이 정한 final main article input을 고릅니다.
 
-scoring은 다음을 함께 봅니다: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`, `soc_platform_signal`, `cpp_ai_tooling_fallback`, `generic_tech_watchlist` bucket 분류와 더불어 구체 evidence, 최신성, 실무 actionability, source reliability.
+scoring은 다음을 함께 봅니다: `direct_aosp_camera`, `camera_driver_image_pipeline`, `cpp_ai_tooling_fallback`, `android`, `generic_tech_watchlist` bucket 분류와 더불어 구체 evidence, 최신성, 실무 actionability, source reliability.
 
 다음은 main article에서 제외되거나 크게 감점됩니다: source gap, 날짜 근거 없음, dated evidence 없는 watch page, 구체 API/component 근거 없음.
 
@@ -503,13 +503,13 @@ PR에서 다음 항목을 확인합니다.
 - 발행 가능(publish-ready) Primary Camera Stack 기사: 단일 기사 정책으로 비활성화됨
 - 발행 가능(publish-ready) direct AOSP Camera 또는 driver/image pipeline 기사: 단일 기사 정책으로 비활성화됨 (`direct_aosp_camera`, `camera_driver_image_pipeline` 버킷 대상)
 - 발행 가능(publish-ready) 보조 주요 기사: 보조 주요 버킷 전체에서 최대 1개
-- Primary Camera Stack 버킷: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent`
-- 보조 주요 버킷: `android_multimedia_camera_output`, `soc_platform_signal`, `cpp_ai_tooling_fallback`
+- Primary Camera Stack 버킷: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android`
+- 보조 주요 버킷: `android_supporting`(android 중 camera output/multimedia 또는 SoC 근거로 분류된 것), `cpp_ai_tooling_fallback`
 - 금지 주요 버킷: `generic_tech_watchlist`; 후보 수만으로 이 버킷을 주요 기사로 승격하지 않습니다
 - 후보 풀 사전점검(candidate pool preflight): 발행 가능 후보 최소 1개; 예비 후보는 진단용으로만 사용; camera stack 후보 최소 0개
 - 선정 기간(selection windows): primary 7일; fallback 21일; reference 35일
 - 선정 기간 적용(selection window enforcement): 주요 선정은 강제 적용되며, fallback 기간 후보는 primary 기간 선정이 부족할 때에만 승격됩니다.
-- 지난 소식(Catch-up) 레인: 신규 선정이 3개 미만이면, 비어 있는 주요 슬롯을 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android_platform_camera_adjacent` 버킷에서 최대 35일 이내의 미게재 릴리스로 채웁니다. 호당 최대 2개이며 각각 한 번씩만 게재하고, 신규 콘텐츠를 밀어내지 않습니다.
+- 지난 소식(Catch-up) 레인: 신규 선정이 3개 미만이면, 비어 있는 주요 슬롯을 `direct_aosp_camera`, `camera_driver_image_pipeline`, `android` 버킷에서 최대 35일 이내의 미게재 릴리스로 채웁니다. 호당 최대 2개이며 각각 한 번씩만 게재하고, 신규 콘텐츠를 밀어내지 않습니다.
 - 릴리스 캐치업(release-class) 레인: 릴리스 채널(collectionModeHint `release-note-watch`) 소스의 미게재 릴리스는, 신규 선정이 목표를 채운 주에도 주요 기사 최대치 아래 여유 슬롯을 호당 최대 1개까지 쓸 수 있습니다. 같은 품질 하한·중복·게재 이력 검사를 그대로 통과해야 하며, 신규 콘텐츠를 밀어내지 않습니다.
 - 심층(deep-dive) 발동 조건(파이프라인 내부 판정 — 편집 지시가 아닙니다): 위클리 발행이 모두 끝난 뒤, 그 주 최종 기사 중 `direct_aosp_camera` 버킷 수가 1 이하이면 심층 주제 큐에서 주제 하나를 고릅니다. 이 숫자는 기사 수 상한도, 버킷 구성 제한도 아닙니다 — 기사 수와 버킷 구성은 위의 주요 기사 수와 발행 가능 구성 규칙만 따릅니다. 1단계는 shadow라 결과는 report로만 남고 뉴스레터에는 실리지 않으므로, 편집 단계에서는 이 항목을 고려하지 마세요.
 - 홈페이지 헤드라인 정책(homepage headline policy): linear decay; 일별 감쇠 2 point(s)/day; 교체 마진(replacement margin) 5; 최소 헤드라인 점수(minimum headline score) 40; 최신호 포함 필수(latest inclusion required) true; 이력 최대(history max) 50

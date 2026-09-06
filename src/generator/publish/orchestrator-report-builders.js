@@ -205,7 +205,7 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
       reserve_candidate_count: selectionDiagnostics.reserve_candidate_count,
       direct_aosp_camera_count: selectionDiagnostics.direct_aosp_camera_count,
       camera_driver_image_pipeline_count: selectionDiagnostics.camera_driver_image_pipeline_count,
-      android_platform_camera_adjacent_count: selectionDiagnostics.android_platform_camera_adjacent_count,
+      android_count: selectionDiagnostics.android_count,
       android_multimedia_camera_output_count: selectionDiagnostics.android_multimedia_camera_output_count,
       soc_platform_signal_count: selectionDiagnostics.soc_platform_signal_count,
       cpp_ai_tooling_fallback_count: selectionDiagnostics.cpp_ai_tooling_fallback_count,

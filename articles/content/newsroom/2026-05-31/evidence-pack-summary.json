@@ -133,7 +133,7 @@
       "index": 1,
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "url": "https://goo.gle/AdaptiveApps_IO26",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "hal_impact_axes": [
         "camerax_app_compatibility"
       ],
@@ -222,7 +222,7 @@
       "source_url_quality": "official_dated_release",
       "source_reliability": "official",
       "freshness_window": "fallback",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "article_group_key": "article:https://goo.gle/adaptiveapps_io26",
       "tooling_workflow_type": "",
       "source_event_id": "",
@@ -246,7 +246,7 @@
           "canonical_url": "https://android-developers.googleblog.com/2026/05/17-things-android-developers-google-io.html",
           "source": "Android Developers Blog",
           "published_date": "",
-          "relevance_bucket": "android_platform_camera_adjacent",
+          "relevance_bucket": "android",
           "finalSelectionEligibility": "exclude",
           "context_role": "parent_roundup_context_only",
           "context_usage_label": "parent_roundup_context_only",
@@ -460,7 +460,7 @@
       "source_role": "official_release_source",
       "source_url_quality": "official_dated_release",
       "freshness_window": "fallback",
-      "relevance_bucket": "android_multimedia_camera_output",
+      "relevance_bucket": "android",
       "exclusion_reason": "duplicate URL or near-duplicate title"
     }
   ],

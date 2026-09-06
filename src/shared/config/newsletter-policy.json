@@ -11,7 +11,7 @@
       "buckets": [
         "direct_aosp_camera",
         "camera_driver_image_pipeline",
-        "android_platform_camera_adjacent"
+        "android"
       ]
     },
     "publishReadyComposition": {
@@ -20,8 +20,7 @@
       "supportingMainMaxAllowed": 1
     },
     "supportingMainBuckets": [
-      "android_multimedia_camera_output",
-      "soc_platform_signal",
+      "android_supporting",
       "cpp_ai_tooling_fallback"
     ],
     "forbiddenMainBuckets": [
@@ -56,7 +55,7 @@
     "eligibleBuckets": [
       "direct_aosp_camera",
       "camera_driver_image_pipeline",
-      "android_platform_camera_adjacent"
+      "android"
     ],
     "activationMode": "fill_open_slots"
   },

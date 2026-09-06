@@ -81,7 +81,7 @@ function storyQualityReport({
     },
     {
       candidates: [
-        scopedCandidate(url, 'android_platform_camera_adjacent', { title: sourceTitle }),
+        scopedCandidate(url, 'android', { title: sourceTitle }),
         ...reporterCandidatesFor(rest)
       ]
     },
@@ -168,7 +168,7 @@ test('quality gate leaves direct HAL prose validity to LLM and editor judgment',
       validation_targets: ['Camera ITS metadata validation']
     }
   });
-  const candidate = scopedCandidate(url, 'android_platform_camera_adjacent', {
+  const candidate = scopedCandidate(url, 'android', {
     title: 'CameraX Release Notes - CameraX 1.6.1',
     published_date: '2026-05-06',
     version_or_release: 'CameraX 1.6.1',
@@ -255,7 +255,7 @@ test('quality gate allows product/version-only source title mentions in story br
     },
     {
       candidates: [
-        scopedCandidate(url, 'android_platform_camera_adjacent', {
+        scopedCandidate(url, 'android', {
           title: 'CameraX 1.4.0-alpha07'
         }),
         ...reporterCandidatesFor(rest)

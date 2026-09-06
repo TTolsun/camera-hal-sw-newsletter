@@ -109,7 +109,7 @@
         "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
         "source_candidate_url": "https://source.android.com/docs/security/bulletin/asb-overview",
         "source_candidate_hash": "827f3a39ff2811801dcadf811725f8ed7f6f974e696a41e8790d5572f6445bdb",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": false,
@@ -170,7 +170,7 @@
         "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
         "source_candidate_url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
         "source_candidate_hash": "e5ce73243a3202939c273575506647d051011fbcb2f2626fc5a16a77d7b3c219",
-        "relevance_bucket": "soc_platform_signal",
+        "relevance_bucket": "android",
         "editorial_priority": 4,
         "counts_as_primary_camera_topic": false,
         "counts_as_driver_topic": false,
@@ -930,7 +930,7 @@
       "index": 2,
       "title": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
       "url": "https://source.android.com/docs/security/bulletin/asb-overview",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "hal_impact_axes": [
         "security_vendor_component",
         "cts_vts_its_cdd"
@@ -964,7 +964,7 @@
       "index": 3,
       "title": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
       "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
-      "relevance_bucket": "soc_platform_signal",
+      "relevance_bucket": "android",
       "hal_impact_axes": [
         "soc_resource_contention",
         "camerax_app_compatibility",
@@ -1080,7 +1080,7 @@
         "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
         "source_candidate_url": "https://source.android.com/docs/security/bulletin/asb-overview",
         "source_candidate_hash": "827f3a39ff2811801dcadf811725f8ed7f6f974e696a41e8790d5572f6445bdb",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": false,
@@ -1106,7 +1106,7 @@
         "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
         "source_candidate_url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
         "source_candidate_hash": "e5ce73243a3202939c273575506647d051011fbcb2f2626fc5a16a77d7b3c219",
-        "relevance_bucket": "soc_platform_signal",
+        "relevance_bucket": "android",
         "editorial_priority": 4,
         "counts_as_primary_camera_topic": false,
         "counts_as_driver_topic": false,
@@ -1341,7 +1341,7 @@
         "index": 2,
         "title": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
         "url": "https://source.android.com/docs/security/bulletin/asb-overview",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "hal_impact_axes": [
           "security_vendor_component",
           "cts_vts_its_cdd"
@@ -1375,7 +1375,7 @@
         "index": 3,
         "title": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
         "url": "https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
-        "relevance_bucket": "soc_platform_signal",
+        "relevance_bucket": "android",
         "hal_impact_axes": [
           "soc_resource_contention",
           "camerax_app_compatibility",

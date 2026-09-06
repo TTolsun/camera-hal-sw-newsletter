@@ -35,7 +35,8 @@ const {
   BUCKETS,
   classifyAospCameraStackCandidate,
   normalizeAospCameraScope,
-  STRONG_CAMERA_DRIVER_PATTERNS
+  STRONG_CAMERA_DRIVER_PATTERNS,
+  compositionBucket
 } = require('../../shared/domain/aosp-camera-scope');
 const {
   isNativeToolingWorkflow
@@ -162,24 +163,27 @@ function candidateBucket(candidate) {
   return candidateScope(candidate).relevance_bucket;
 }
 
+// 정책 판정용 실효 버킷. 후보가 옛 이름을 그대로 들고 있어도 등급을 찾을 수 있어야 한다.
+function candidateTierBucket(candidate) {
+  return compositionBucket(candidateScope(candidate)) || candidateBucket(candidate);
+}
+
 function hasSelectableScope(candidate) {
-  return isMainArticleAllowedBucket(candidateBucket(candidate)) &&
+  return isMainArticleAllowedBucket(candidateTierBucket(candidate)) &&
     scopeRelevanceScore(candidate) >= MIN_SCOPE_RELEVANCE;
 }
 
 function isNonFallbackReviewableScope(candidate) {
-  const bucket = candidateBucket(candidate);
+  const bucket = candidateTierBucket(candidate);
   return [
     BUCKETS.DIRECT_AOSP_CAMERA,
     BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
-    BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
-    BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT,
-    BUCKETS.SOC_PLATFORM_SIGNAL
+    BUCKETS.ANDROID
   ].includes(bucket);
 }
 
 function isPrimaryCameraStackScope(candidate) {
-  return isPrimaryCameraStackBucket(candidateBucket(candidate));
+  return isPrimaryCameraStackBucket(candidateTierBucket(candidate));
 }
 
 
@@ -240,7 +244,7 @@ function hasStorageCameraOutputContext(body = '') {
 function hasConcreteMultimediaCameraOutputComponent(candidate) {
   const scope = candidateScope(candidate);
   if (
-    scope.relevance_bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT &&
+    scope.relevance_bucket === BUCKETS.ANDROID &&
     number(scope.multimedia_camera_output_relevance) >= MIN_SCOPE_RELEVANCE
   ) {
     return true;
@@ -292,7 +296,7 @@ function cameraHalDirectnessScore(candidate) {
   if (/metadata|capture request|capture result|stream|buffer|CTS|VTS|CDD|libcamera|V4L2/i.test(body)) score = Math.max(score, 3);
   if (/\bcamera\b/i.test(body)) score = Math.max(score, 1);
   // 카메라 본질은 키워드보다 분류된 relevance_bucket이 정확하다. 강한 카메라 스택 버킷
-  // (direct_aosp_camera / camera_driver_image_pipeline / android_platform_camera_adjacent)은
+  // (direct_aosp_camera / camera_driver_image_pipeline / android)은
   // 키워드 누락으로 과소평가되지 않게 directness를 보장하고, 비-카메라스택(C++ 도구 등)은 본문의
   // 부수적 'HAL'/'camera' 언급만으로 최고점을 받지 않게 cap한다. 이래야 진짜 카메라 드라이버/ISP
   // 기사가 비-카메라 도구 기사에 밀려 main에서 탈락하지 않는다.

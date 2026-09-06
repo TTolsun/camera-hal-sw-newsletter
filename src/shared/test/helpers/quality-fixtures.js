@@ -352,7 +352,7 @@ const hardFailRegressionCases = new Map([
         ...validSections().slice(1)
       ];
       return reportFor(sections, [
-        scopedCandidate(url, 'android_platform_camera_adjacent', {
+        scopedCandidate(url, 'android', {
           title: 'CameraX Release Notes - CameraX 1.6.1',
           published_date: '2026-05-06',
           version_or_release: 'CameraX 1.6.1',

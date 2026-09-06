@@ -89,7 +89,7 @@
         "headline": "Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화",
         "source_candidate_url": "https://goo.gle/AdaptiveApps_IO26",
         "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": false,
@@ -382,7 +382,7 @@
       "index": 1,
       "title": "Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화",
       "url": "https://goo.gle/AdaptiveApps_IO26",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "hal_impact_axes": [
         "camerax_app_compatibility"
       ],
@@ -467,7 +467,7 @@
         "headline": "Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화",
         "source_candidate_url": "https://goo.gle/AdaptiveApps_IO26",
         "source_candidate_hash": "bdcf8a4c506e5257a7343e41dd383c5b6ac40d8cafce7140a53fb0aa953a5fb3",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": false,
@@ -659,7 +659,7 @@
         "index": 1,
         "title": "Google I/O 2026: Jetpack Compose의 적응형 레이아웃 도입 및 CameraX 지원 강화",
         "url": "https://goo.gle/AdaptiveApps_IO26",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "hal_impact_axes": [
           "camerax_app_compatibility"
         ],

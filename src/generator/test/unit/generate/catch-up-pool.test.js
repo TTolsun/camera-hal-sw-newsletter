@@ -9,7 +9,7 @@ const POLICY = {
   enabled: true,
   maxCatchUpArticles: 2,
   maxAgeDays: 90,
-  eligibleBuckets: ['direct_aosp_camera', 'android_platform_camera_adjacent'],
+  eligibleBuckets: ['direct_aosp_camera', 'android'],
   activationMode: 'thin_week_only'
 };
 

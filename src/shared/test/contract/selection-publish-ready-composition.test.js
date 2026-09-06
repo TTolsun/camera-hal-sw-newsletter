@@ -92,7 +92,7 @@ test('publish-ready composition passes with two primary topics and at most one s
     policyPrimaryCandidate(1, {
       title: 'CameraX adjacent publish-ready source',
       url: 'https://example.com/publish-ready-adjacent',
-      relevance_bucket: 'android_platform_camera_adjacent',
+      relevance_bucket: 'android',
       aosp_camera_directness: 3
     }),
     policySupportingCandidate(0, {
@@ -121,13 +121,13 @@ test('direct AOSP Camera or driver shortage no longer blocks one-article policy'
     policyPrimaryCandidate(0, {
       title: 'Android platform adjacent source A',
       url: 'https://example.com/publish-ready-adjacent-a',
-      relevance_bucket: 'android_platform_camera_adjacent',
+      relevance_bucket: 'android',
       aosp_camera_directness: 3
     }),
     policyPrimaryCandidate(1, {
       title: 'Camera2 metadata platform compatibility update',
       url: 'https://example.com/publish-ready-adjacent-b',
-      relevance_bucket: 'android_platform_camera_adjacent',
+      relevance_bucket: 'android',
       aosp_camera_directness: 3
     }),
     policySupportingCandidate(0, {
@@ -164,10 +164,10 @@ test('raw direct bucket is normalized for Jetpack Compose CameraX-adjacent candi
   ], { minArticles: 1, maxArticles: 1 });
   const [item] = report.selected_articles;
 
-  assert.equal(item.relevance_bucket, 'android_platform_camera_adjacent');
-  assert.equal(item.score_breakdown.relevance_bucket, 'android_platform_camera_adjacent');
+  assert.equal(item.relevance_bucket, 'android');
+  assert.equal(item.score_breakdown.relevance_bucket, 'android');
   assert.equal(report.composition_summary.direct_aosp_camera_count, 0);
-  assert.equal(report.composition_summary.android_platform_camera_adjacent_count, 1);
+  assert.equal(report.composition_summary.android_count, 1);
   assert.equal(item.counts_as_primary_camera_topic, true);
   assert.equal(report.publish_ready, true);
 });
@@ -341,7 +341,7 @@ test('official Android native tooling is selected as one supporting group with r
       sourceKind: 'blog_post_item',
       collectionMode: 'article-item',
       summary: 'Google AI Studio can generate, modify, build, and test native Android apps with Gemini assisted workflows.',
-      relevanceBucketHint: 'android_platform_camera_adjacent'
+      relevanceBucketHint: 'android'
     },
     {
       source,

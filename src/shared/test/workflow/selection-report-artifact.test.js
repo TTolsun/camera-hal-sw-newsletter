@@ -21,7 +21,7 @@ function deterministicFailureShortlist(date) {
     selected_article_count: 1,
     direct_aosp_camera_count: 1,
     camera_driver_image_pipeline_count: 0,
-    android_platform_camera_adjacent_count: 0,
+    android_count: 0,
     soc_platform_signal_count: 0,
     cpp_ai_tooling_fallback_count: 0,
     generic_tech_watchlist_count: 0,

@@ -377,7 +377,7 @@
       "cameraHalRelevanceScore": 100,
       "camera_hal_relevance_score": 100,
       "editorial_priority": 3,
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "aosp_camera_directness": 2,
       "driver_stack_relevance": 0,
       "multimedia_camera_output_relevance": 0,
@@ -396,8 +396,8 @@
         "\\bcamera\\b",
         "\\bCameraX\\b"
       ],
-      "aospCameraStackBucket": "android_platform_camera_adjacent",
-      "aosp_camera_stack_bucket": "android_platform_camera_adjacent",
+      "aospCameraStackBucket": "android",
+      "aosp_camera_stack_bucket": "android",
       "aospCameraDirect": true,
       "aosp_camera_direct": true,
       "aospCameraEvidenceTerms": [
@@ -10019,7 +10019,7 @@
       "cameraHalRelevanceScore": 60,
       "camera_hal_relevance_score": 60,
       "editorial_priority": 4,
-      "relevance_bucket": "android_multimedia_camera_output",
+      "relevance_bucket": "android",
       "aosp_camera_directness": 0,
       "driver_stack_relevance": 0,
       "multimedia_camera_output_relevance": 5,
@@ -10037,8 +10037,8 @@
         "\\bcamera\\s+output\\b",
         "\\bperformance\\b"
       ],
-      "aospCameraStackBucket": "android_multimedia_camera_output",
-      "aosp_camera_stack_bucket": "android_multimedia_camera_output",
+      "aospCameraStackBucket": "android",
+      "aosp_camera_stack_bucket": "android",
       "aospCameraDirect": false,
       "aosp_camera_direct": false,
       "aospCameraEvidenceTerms": [
@@ -16843,7 +16843,7 @@
       "cameraHalRelevanceScore": 69,
       "camera_hal_relevance_score": 69,
       "editorial_priority": 5,
-      "relevance_bucket": "soc_platform_signal",
+      "relevance_bucket": "android",
       "aosp_camera_directness": 0,
       "driver_stack_relevance": 0,
       "multimedia_camera_output_relevance": 0,
@@ -16860,8 +16860,8 @@
         "\\bQualcomm\\b",
         "\\bISP\\b"
       ],
-      "aospCameraStackBucket": "soc_platform_signal",
-      "aosp_camera_stack_bucket": "soc_platform_signal",
+      "aospCameraStackBucket": "android",
+      "aosp_camera_stack_bucket": "android",
       "aospCameraDirect": false,
       "aosp_camera_direct": false,
       "aospCameraEvidenceTerms": [

@@ -40,7 +40,7 @@ test('Issue #238 scope expansion leaves publication count policy unchanged', () 
   assert.deepEqual(articlePolicy.mainArticleCount, { min: 1, max: 5 });
   assert.equal(articlePolicy.primaryCameraStack.minRequired, 0);
   assert.equal(publishReadyCompositionPolicy.supportingMainMaxAllowed, 1);
-  assert.ok(articlePolicy.supportingMainBuckets.includes('android_multimedia_camera_output'));
+  assert.ok(articlePolicy.supportingMainBuckets.includes('android_supporting'));
   assert.equal(
     Object.prototype.hasOwnProperty.call(articlePolicy.primaryCameraStack, 'directCameraMinimum'),
     false
@@ -158,7 +158,7 @@ test('derived editorial do_not_claim text does not increase Camera HAL directnes
     version_or_release: 'CameraX 1.6.1',
     api_or_component: 'CameraX / androidx.camera',
     behavior_change: 'Fixed ListenableFuture compile error in androidx.camera:camera-core.',
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     editorial_priority: 3,
     aosp_camera_directness: 2,
     driver_stack_relevance: 0,
@@ -260,7 +260,7 @@ function cameraXReleaseCandidate(version, overrides = {}) {
     api_or_component: 'CameraX / androidx.camera',
     behavior_change: bullet,
     summary: bullet,
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     editorial_priority: 3,
     aosp_camera_directness: 2,
     driver_stack_relevance: 0,
@@ -293,7 +293,7 @@ test('CameraX release-note body candidate supersedes latest-updates discovery ro
     api_or_component: 'CameraX / androidx.camera',
     behavior_change: 'Fixed Camera2 interop behavior for CameraX apps.',
     summary: 'Fixed Camera2 interop behavior for CameraX apps.',
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     editorial_priority: 3,
     aosp_camera_directness: 2,
     counts_as_primary_camera_topic: true
@@ -372,7 +372,7 @@ test('generic CameraX metadata fallback cannot become a main candidate without s
     api_or_component: 'CameraX / androidx.camera',
     behavior_change: 'CameraX / androidx.camera update.',
     summary: 'CameraX / androidx.camera update.',
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     editorial_priority: 3,
     aosp_camera_directness: 2,
     counts_as_primary_camera_topic: true

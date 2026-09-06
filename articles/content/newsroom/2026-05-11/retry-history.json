@@ -135,7 +135,7 @@
         "category": "Android Platform / CameraX",
         "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
         "source": "Android Developers Latest Updates",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "action": "rebuild-from-bound-candidate",
         "fallback": false,
         "reason": "hard failure replacement"

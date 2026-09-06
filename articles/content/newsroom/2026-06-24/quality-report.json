@@ -70,7 +70,7 @@
         "headline": "Android CLI에 CameraX 마이그레이션 스킬 추가, 앱 호환성 검증 지원",
         "source_candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
         "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": false,
@@ -360,7 +360,7 @@
       "index": 1,
       "title": "Android CLI에 CameraX 마이그레이션 스킬 추가, 앱 호환성 검증 지원",
       "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "hal_impact_axes": [
         "camerax_app_compatibility"
       ],
@@ -449,7 +449,7 @@
         "headline": "Android CLI에 CameraX 마이그레이션 스킬 추가, 앱 호환성 검증 지원",
         "source_candidate_url": "https://developer.android.com/tools/agents/android-cli#skills-add",
         "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "editorial_priority": 3,
         "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": false,
@@ -645,7 +645,7 @@
         "index": 1,
         "title": "Android CLI에 CameraX 마이그레이션 스킬 추가, 앱 호환성 검증 지원",
         "url": "https://developer.android.com/tools/agents/android-cli#skills-add",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "hal_impact_axes": [
           "camerax_app_compatibility"
         ],

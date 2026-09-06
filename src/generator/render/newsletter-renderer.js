@@ -204,7 +204,7 @@ function articlePerspectiveHeadingHtml() {
 const ARTICLE_CATEGORY_LABELS = {
   direct_aosp_camera: 'AOSP Camera',
   camera_driver_image_pipeline: 'Camera Driver · ISP',
-  android_platform_camera_adjacent: 'Android Platform',
+  android: 'Android Platform',
   cpp_ai_tooling_fallback: 'C++ · AI Tooling',
   soc_platform_signal: 'SoC Platform',
   android_multimedia_camera_output: 'Android Multimedia',
@@ -226,7 +226,7 @@ function articleCategoryLabel(section = {}) {
 const BUCKET_TOPIC_TAGS = {
   direct_aosp_camera: ['Camera HAL'],
   camera_driver_image_pipeline: ['Driver', 'Image Processing'],
-  android_platform_camera_adjacent: ['Android'],
+  android: ['Android'],
   android_multimedia_camera_output: ['Android', 'Image Processing'],
   soc_platform_signal: ['SoC Platform'],
   cpp_ai_tooling_fallback: ['AI'],

@@ -9,7 +9,7 @@ function summary(overrides = {}) {
   return {
     direct_aosp_camera_count: 0,
     camera_driver_image_pipeline_count: 0,
-    android_platform_camera_adjacent_count: 0,
+    android_count: 0,
     android_multimedia_camera_output_count: 0,
     soc_platform_signal_count: 0,
     cpp_ai_tooling_fallback_count: 0,
@@ -44,7 +44,7 @@ test('core 0 with adjacent below higher threshold yields QUIET', () => {
 });
 
 test('result records counts for traceability', () => {
-  const r = resolvePublishMode(summary({ android_platform_camera_adjacent_count: 1, cpp_ai_tooling_fallback_count: 1 }), { contextMinSignals: 1 });
+  const r = resolvePublishMode(summary({ android_count: 1, cpp_ai_tooling_fallback_count: 1 }), { contextMinSignals: 1 });
   assert.equal(r.core_count, 0);
   assert.equal(r.adjacent_count, 1);
   assert.equal(r.context_count, 1);

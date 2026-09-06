@@ -85,7 +85,7 @@
         "index": 2,
         "headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
         "category": "android_platform_camera_adjacent",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "urls": [
           "https://developer.android.com/tools/agents/android-cli#skills-add"
         ],
@@ -177,7 +177,7 @@
         "index": 2,
         "headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
         "category": "android_platform_camera_adjacent",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "urls": [
           "https://developer.android.com/tools/agents/android-cli#skills-add"
         ],

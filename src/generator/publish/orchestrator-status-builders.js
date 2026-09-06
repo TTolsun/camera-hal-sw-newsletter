@@ -301,7 +301,7 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     forbidden_main_article_count: forbiddenMainArticleCount,
     direct_aosp_camera_count: compositionSummary.direct_aosp_camera_count ?? null,
     camera_driver_image_pipeline_count: compositionSummary.camera_driver_image_pipeline_count ?? null,
-    android_platform_camera_adjacent_count: compositionSummary.android_platform_camera_adjacent_count ?? null,
+    android_count: compositionSummary.android_count ?? null,
     android_multimedia_camera_output_count: compositionSummary.android_multimedia_camera_output_count ?? null,
     soc_platform_signal_count: compositionSummary.soc_platform_signal_count ?? ensureArray(report.selected_articles).filter(candidate =>
       candidate.relevance_bucket === 'soc_platform_signal'

@@ -49,7 +49,7 @@
       "category": "Android Platform / CameraX",
       "url": "https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html#roundup-child-3-start-building-today",
       "source": "Android Developers Blog",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "action": "rebuild-from-bound-candidate",
       "fallback": false,
       "reason": "hard failure replacement"

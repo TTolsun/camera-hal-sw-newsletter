@@ -2,7 +2,8 @@ const { ensureArray } = require('./value-coercion');
 const fs = require('fs');
 const path = require('path');
 const {
-  BUCKETS
+  BUCKETS,
+  ANDROID_SUPPORTING
 } = require('../domain/aosp-camera-scope');
 
 const POLICY_REL_PATH = path.join('src', 'shared', 'config', 'newsletter-policy.json');
@@ -37,7 +38,10 @@ function readPolicyConfig(filePath = policyPath) {
 }
 
 function knownBuckets() {
-  return Object.values(BUCKETS);
+  // android_supporting 은 relevance_bucket 값이 아니라 구성 판정용 실효 버킷이다.
+  // android 로 합쳐진 뒤에도 멀티미디어 출력·SoC 신호의 보조 등급(호당 1건 제한)을
+  // 정책 파일로 표현하려면 여기서 알려진 값이어야 한다.
+  return [...Object.values(BUCKETS), ANDROID_SUPPORTING];
 }
 
 function validateInteger(value, field, errors, { min = 0 } = {}) {

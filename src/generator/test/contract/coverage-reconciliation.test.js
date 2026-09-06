@@ -3,6 +3,7 @@
 // #724: 결정론 coverage 재조정 불변식을 고정한다. LLM은 coverage 등급을 제안만 하고,
 // 이 순수 함수가 승급 자격 가드·cap clamp·발행 floor backfill을 강제한다.
 const assert = require('node:assert/strict');
+const { compositionBucket } = require('../../../shared/domain/aosp-camera-scope');
 const test = require('node:test');
 
 const {
@@ -142,7 +143,7 @@ test('supporting-main bucket count is clamped to supportingMainMaxAllowed', () =
   const editorialPlanReport = { editorial_plans: [primary, s1, s2].map(c => plan(c, 'main_article')) };
   const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
   const supporting = out.selected.filter(a =>
-    ['android_multimedia_camera_output', 'soc_platform_signal', 'cpp_ai_tooling_fallback'].includes(a.relevance_bucket)
+    ['android_supporting', 'cpp_ai_tooling_fallback'].includes(compositionBucket(a))
   );
   assert.ok(supporting.length <= 1);
 });

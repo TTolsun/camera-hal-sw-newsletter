@@ -686,7 +686,7 @@ test('editor field hygiene leaves semantic direct HAL claim validity to LLM and 
     const draft = editor({
       sections: [
         section(1, {
-          relevance_bucket: 'android_platform_camera_adjacent',
+          relevance_bucket: 'android',
           impact_claim_level: 'direct_hal_change',
           article_sections: {
             ...section(1).article_sections,
@@ -719,7 +719,7 @@ test('editor field hygiene allows direct HAL claims for direct source scope and 
   const guardrailDraft = editor({
     sections: [
       section(1, {
-        relevance_bucket: 'android_platform_camera_adjacent',
+        relevance_bucket: 'android',
         article_sections: {
           ...section(1).article_sections,
           hal_driver_impact: '직접 HAL API 변경으로 단정하지 않습니다. source evidence가 없으면 HAL contract impact를 claim하지 않습니다.'
@@ -740,12 +740,12 @@ test('editor field hygiene rejects internal classification in confirmed facts', 
       section(1, {
         confirmed_facts: [
           'Android Developers가 2026-05-06에 게시 또는 업데이트한 항목입니다.',
-          'Relevance bucket: android_platform_camera_adjacent.',
+          'Relevance bucket: android.',
           'impact_claim_level=android_framework_adjacent.',
           'source_gap_risk=false.'
         ],
         specificity_checks: [
-          'bucket=android_platform_camera_adjacent',
+          'bucket=android',
           'impact_claim_level=android_framework_adjacent'
         ]
       }),

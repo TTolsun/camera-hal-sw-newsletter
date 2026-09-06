@@ -249,7 +249,7 @@ test('quality gate reports missing story briefing structure elements for story v
     },
     {
       candidates: [
-        scopedCandidate(url, 'android_platform_camera_adjacent', { title: 'CameraX 1.5.0 release notes' }),
+        scopedCandidate(url, 'android', { title: 'CameraX 1.5.0 release notes' }),
         ...reporterCandidatesFor(rest)
       ]
     },
@@ -278,7 +278,7 @@ test('quality gate treats short background overlap as non-blocking field hygiene
     ...validSections().slice(1)
   ];
   const report = reportFor(sections, [
-    scopedCandidate(url, 'android_platform_camera_adjacent'),
+    scopedCandidate(url, 'android'),
     ...reporterCandidatesFor(validSections()).slice(1)
   ]);
   const diagnostic = report.deductions.find(item =>

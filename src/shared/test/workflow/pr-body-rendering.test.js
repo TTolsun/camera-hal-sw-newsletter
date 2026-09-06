@@ -566,7 +566,7 @@ test('newsroom PR body renders editor article decision summary with pipeline sta
         source: 'Android Developers Latest Updates',
         source_tier: 'high',
         source_role: 'official',
-        relevance_bucket: 'android_platform_camera_adjacent',
+        relevance_bucket: 'android',
         source_gap_risk: true,
         has_dated_evidence: true,
         selection_reason: 'CameraX release-note candidate has no concrete source_extraction bullet'
@@ -995,7 +995,7 @@ test('newsroom PR body omits detailed Evidence Pack summary sections', () => {
         source_role: 'primary',
         source_url_quality: 'article_url',
         freshness_window: 'current',
-        relevance_bucket: 'android_platform_camera_adjacent',
+        relevance_bucket: 'android',
         hal_impact_axes: ['camera_pipeline', 'metadata'],
         claim_validation: {
           status: 'available',
@@ -1242,7 +1242,7 @@ test('newsroom PR body renders Korean candidate traceability report', () => {
     title: 'Report only HAL evidence',
     url: 'https://example.com/report-only-hal',
     source_name: 'Example Source',
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     deterministic_score: 55
   });
 
@@ -1402,7 +1402,7 @@ test('newsroom PR body separates quality score threshold and result in Korean st
       reserve_candidate_count: 2,
       direct_aosp_camera_count: 0,
       camera_driver_image_pipeline_count: 1,
-      android_platform_camera_adjacent_count: 0,
+      android_count: 0,
       soc_platform_signal_count: 1,
       cpp_ai_tooling_fallback_count: 0,
       generic_tech_watchlist_count: 0,
@@ -1486,7 +1486,7 @@ test('newsroom PR body marks fallback composition explicitly', () => {
       selection_composition_mode: 'FALLBACK_COMPOSITION',
       direct_aosp_camera_count: 0,
       camera_driver_image_pipeline_count: 0,
-      android_platform_camera_adjacent_count: 0,
+      android_count: 0,
       soc_platform_signal_count: configuredSupportingCount,
       cpp_ai_tooling_fallback_count: 0,
       generic_tech_watchlist_count: 0,
@@ -1539,7 +1539,7 @@ test('newsroom PR body explains review-only fallback when publish gate is blocke
       selection_composition_mode: 'FALLBACK_COMPOSITION',
       direct_aosp_camera_count: 0,
       camera_driver_image_pipeline_count: 0,
-      android_platform_camera_adjacent_count: 0,
+      android_count: 0,
       soc_platform_signal_count: 0,
       cpp_ai_tooling_fallback_count: configuredMinimum,
       generic_tech_watchlist_count: 0,

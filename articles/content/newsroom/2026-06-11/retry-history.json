@@ -69,7 +69,7 @@
         "index": 1,
         "headline": "Android CLI 및 GitHub Skills 저장소에 'Migration to CameraX' 신규 스킬 추가",
         "category": "android_platform_camera_adjacent",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "urls": [
           "https://developer.android.com/tools/agents/android-cli#skills-add"
         ],
@@ -112,7 +112,7 @@
         "index": 1,
         "headline": "Android CLI 및 GitHub Skills 저장소에 'Migration to CameraX' 신규 스킬 추가",
         "category": "android_platform_camera_adjacent",
-        "relevance_bucket": "android_platform_camera_adjacent",
+        "relevance_bucket": "android",
         "urls": [
           "https://developer.android.com/tools/agents/android-cli#skills-add"
         ],

@@ -141,7 +141,7 @@ test('editorial decision classifier maps report-only camera candidates with arti
   const classification = assertDecision(
     candidate({
       status: 'report_only',
-      bucket: 'android_platform_camera_adjacent',
+      bucket: 'android',
       url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
       sourceGapRisk: false
     }),
