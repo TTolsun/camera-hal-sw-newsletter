@@ -553,8 +553,11 @@ function scrubStaleClaims(editor, options = {}) {
 // 같은 실행에서 스크럽이 두 번 돌면 report도 두 개 나온다(#869: thin-week salvage가 기사를
 // 떨어뜨린 뒤의 재스크럽). 나중 report만 쓰면 앞 스크럽이 낸 hard_failure가 사라져 게이트가
 // 느슨해지고, 앞에서 무엇을 지웠는지도 산출물에서 사라진다. 그래서 누적 기록과 hard_failure는
-// 이어 붙이고, 최종 텍스트의 상태를 나타내는 필드(final_section_sources, retained_release_claims,
-// dropped_selected_groups 등)는 나중 report 값을 그대로 쓴다.
+// 이어 붙이고, 최종 텍스트의 상태를 나타내는 필드(final_section_sources, retained_release_claims
+// 등)는 나중 report 값을 그대로 쓴다.
+// dropped_selected_groups는 상태가 아니라 기록이다. removed_sections와 같은 사건을 그룹 키로
+// 적은 것이라, 한쪽만 이어 붙이면 합쳐진 report에서 앞 스크럽이 지운 문장의 원인 그룹을
+// 역추적할 수 없다. 그래서 removed_sections와 함께 이어 붙인다.
 // restored_to_keep_minimum도 상태 필드다. 이 필드는 "지우지 않고 되돌려 남긴 문장"을 뜻하는데,
 // 이어 붙이면 앞 스크럽이 되돌린 문장을 뒤 스크럽이 실제로 지웠을 때 같은 문장이
 // restored와 removed 양쪽에 실린다. 뒤 스크럽은 앞 스크럽 결과 텍스트를 통째로 다시 보므로
@@ -572,6 +575,7 @@ function mergeStaleClaimReports(previous, next) {
   return {
     ...next,
     removed_sections: concat('removed_sections'),
+    dropped_selected_groups: concat('dropped_selected_groups'),
     stale_claim_items_removed: concat('stale_claim_items_removed'),
     unsupported_release_claims_removed: concat('unsupported_release_claims_removed'),
     unused_references_removed: concat('unused_references_removed'),

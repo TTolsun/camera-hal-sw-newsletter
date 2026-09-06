@@ -750,3 +750,37 @@ test('merged stale-claim report keeps a NEEDS_FIX status that carried no hard fa
   assert.equal(mergeStaleClaimReports({ ...previous, status: 'PASS' }, next).status, 'PASS');
   assert.equal(mergeStaleClaimReports({ ...previous, status: 'PASS' }, { ...next, status: 'NEEDS_FIX' }).status, 'NEEDS_FIX');
 });
+
+test('#869: 합쳐진 report는 앞 스크럽이 지운 섹션의 원인 그룹도 그대로 담는다', () => {
+  const base = {
+    schema_version: 1,
+    date: '2026-06-03',
+    status: 'PASS',
+    hard_failures: [],
+    removed_sections: [],
+    dropped_selected_groups: [],
+    stale_claim_items_removed: [],
+    unsupported_release_claims_removed: [],
+    unused_references_removed: []
+  };
+  const previous = {
+    ...base,
+    removed_sections: [{ headline: 'attempt에서 탈락한 기사' }],
+    dropped_selected_groups: [{ article_group_key: 'group-attempt', title: 'attempt에서 탈락한 기사', url: 'https://example.com/a' }]
+  };
+  const next = {
+    ...base,
+    removed_sections: [{ headline: 'salvage가 떨어뜨린 기사' }],
+    dropped_selected_groups: [{ article_group_key: 'group-salvage', title: 'salvage가 떨어뜨린 기사', url: 'https://example.com/b' }]
+  };
+
+  const merged = mergeStaleClaimReports(previous, next);
+
+  // removed_sections와 dropped_selected_groups는 같은 사건을 두 형태로 적은 기록이다.
+  // 한쪽만 이어 붙이면 합쳐진 report에서 앞 스크럽이 지운 문장의 원인 그룹을 찾을 수 없다.
+  assert.equal(merged.removed_sections.length, 2);
+  assert.deepEqual(
+    merged.dropped_selected_groups.map(group => group.article_group_key),
+    ['group-attempt', 'group-salvage']
+  );
+});
