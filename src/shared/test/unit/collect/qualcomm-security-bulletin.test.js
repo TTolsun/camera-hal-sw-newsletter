@@ -184,3 +184,66 @@ test('returns nothing without a fetch client instead of throwing', async () => {
   const items = await resolveQualcommSecurityBulletinItems({ source: SOURCE, now: NOW, lookbackDays: 7 });
   assert.deepEqual(items, []);
 });
+
+// --- 빈 결과의 사유 (리뷰 지적, PR #1079) ----------------------------------
+// 이 소스는 리졸버 등록만으로 제너릭 폴백이 꺼지고 PARSERS에도 없어, 빈 결과가 곧 후보 0건이다.
+// 그래서 "조용한 창"과 "못 읽음"이 같은 빈 배열로 끝나면 안 된다.
+
+function captureWarnings(run) {
+  const original = console.warn;
+  const lines = [];
+  console.warn = message => lines.push(String(message));
+  return Promise.resolve()
+    .then(run)
+    .then(value => ({ value, lines }))
+    .finally(() => { console.warn = original; });
+}
+
+test('says the response shape changed when the search returns no resources array', async () => {
+  const client = stubClient([
+    { match: url => url.includes('globalsearch'), body: JSON.stringify({ start: 0, total: 0 }) },
+    bodyHandler(bulletinBody())
+  ]);
+  const { value, lines } = await captureWarnings(() => resolveQualcommSecurityBulletinItems({
+    source: SOURCE, fetchClient: client, now: NOW, lookbackDays: 7
+  }));
+  assert.deepEqual(value, []);
+  assert.ok(lines.some(line => line.includes('response shape may have changed')),
+    'resources 배열이 없는 것은 "게시판이 없다"가 아니라 "응답 모양이 바뀌었다"다');
+  assert.ok(lines.some(line => line.includes('read failure, not a quiet window')),
+    '결과 0건의 이유가 읽기 실패임을 한 줄로 남겨야 한다');
+});
+
+test('stays silent when the window is legitimately quiet', async () => {
+  // 목록은 정상적으로 읽혔고 그 해에 창 안 게시판이 없을 뿐이다. 이건 사실이므로 경고하지 않는다.
+  const client = stubClient([
+    searchHandler(searchResponse([julyResource({ publishedOn: '2026-02-02T00:00:00Z' })])),
+    bodyHandler(bulletinBody())
+  ]);
+  const { value, lines } = await captureWarnings(() => resolveQualcommSecurityBulletinItems({
+    source: SOURCE, fetchClient: client, now: NOW, lookbackDays: 7
+  }));
+  assert.deepEqual(value, []);
+  assert.deepEqual(lines, [], '조용한 창까지 경고하면 진짜 고장이 소음에 묻힌다');
+});
+
+test('names the in-window bulletins the per-run cap left unread', async () => {
+  // 창 안 게시판이 상한(3)을 넘는 상태를 실제로 만든다. 넷째부터는 본문을 안 받으므로,
+  // 그 사실을 남기지 않으면 "이번 창에 카메라 CVE 없음"으로 잘못 읽힌다.
+  const resources = ['07-04', '07-05', '07-06', '07-07'].map((day, index) => julyResource({
+    title: `July 2026 Security Bulletin rev ${index}`,
+    url: `https://docs.qualcomm.com/securitybulletin/july-2026-rev${index}.html`,
+    dcn: `80-73802-9${index}`,
+    publishedOn: `2026-${day.replace('-', '-')}T00:00:00Z`
+  }));
+  const client = stubClient([searchHandler(searchResponse(resources)), bodyHandler(bulletinBody())]);
+  const { lines } = await captureWarnings(() => resolveQualcommSecurityBulletinItems({
+    source: SOURCE, fetchClient: client, now: NOW, lookbackDays: 7
+  }));
+
+  assert.equal(client.calls.filter(call => call.url.includes('/topics/')).length, 3,
+    '본문은 상한만큼만 받는다');
+  const capped = lines.find(line => line.includes('exceeded the per-run body cap'));
+  assert.ok(capped, '상한이 자른 사실을 남겨야 한다');
+  assert.ok(capped.includes('rev 0'), '빠진 게시판의 이름을 적어야 한다');
+});

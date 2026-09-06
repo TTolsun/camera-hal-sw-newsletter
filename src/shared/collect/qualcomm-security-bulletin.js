@@ -184,6 +184,7 @@ async function resolveQualcommSecurityBulletinItems({
 
   const { years, startDay, endDay } = windowYears(now, lookbackDays);
   const listed = [];
+  let searchedYears = 0;
   for (const year of years) {
     let payload;
     try {
@@ -192,7 +193,14 @@ async function resolveQualcommSecurityBulletinItems({
       console.warn(`qualcomm-security-bulletin: ${year} bulletin search failed: ${error && error.message}`);
       continue;
     }
-    for (const resource of payload && Array.isArray(payload.resources) ? payload.resources : []) {
+    // 응답에 resources 배열이 없으면 "그 해에 게시판이 없다"가 아니라 "응답 모양이 바뀌었다"다.
+    // 두 경우가 같은 빈 결과로 끝나므로 여기서 갈라 사유를 남긴다.
+    if (!payload || !Array.isArray(payload.resources)) {
+      console.warn(`qualcomm-security-bulletin: ${year} bulletin search returned no resources array; the response shape may have changed.`);
+      continue;
+    }
+    searchedYears += 1;
+    for (const resource of payload.resources) {
       const day = parseIsoDay(resource && resource.publishedOn);
       if (!day || day < startDay || day > endDay) continue;
       listed.push({
@@ -204,11 +212,22 @@ async function resolveQualcommSecurityBulletinItems({
     }
   }
 
+  // 어느 해도 목록을 못 읽었으면 조용한 창이 아니라 소스가 안 읽힌 것이다. 위에서 해마다
+  // 사유를 남겼지만, 결과가 0건인 이유가 그것임을 한 줄로 못박아 둔다.
+  if (searchedYears === 0) {
+    console.warn(`qualcomm-security-bulletin: no bulletin list could be read for ${years.join(', ')}; the empty result is a read failure, not a quiet window.`);
+    return [];
+  }
   if (listed.length === 0) return [];
 
-  const bodies = listed
-    .sort((left, right) => right.listedDay.localeCompare(left.listedDay))
-    .slice(0, MAX_BULLETIN_BODIES);
+  const ordered = listed.sort((left, right) => right.listedDay.localeCompare(left.listedDay));
+  const bodies = ordered.slice(0, MAX_BULLETIN_BODIES);
+  // 창 안 게시판이 상한을 넘으면 뒤쪽(오래된 쪽)이 빠진다. 그 사실을 남기지 않으면 "이번 창에
+  // 카메라 CVE 없음"으로 읽히므로, 무엇이 빠졌는지 이름까지 적는다.
+  if (ordered.length > bodies.length) {
+    const dropped = ordered.slice(MAX_BULLETIN_BODIES).map(bulletin => bulletin.title || bulletin.url);
+    console.warn(`qualcomm-security-bulletin: ${dropped.length} in-window bulletin(s) exceeded the per-run body cap (${MAX_BULLETIN_BODIES}) and were not read: ${dropped.join(', ')}.`);
+  }
 
   const minRank = minimumSeverityRank(minSeverity);
   const items = [];
