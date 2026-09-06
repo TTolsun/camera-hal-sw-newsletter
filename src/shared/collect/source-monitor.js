@@ -31,6 +31,8 @@ const {
   documentSectionExtract,
   documentSectionFingerprint
 } = require('./document-section-extractors');
+const { firstSentence } = require('./document-section-parsing');
+const { normalizeOutgoingLinks } = require('./outgoing-links');
 
 const SNAPSHOT_SCHEMA_VERSION = 1;
 const PROCESSED_ID_LIMIT = 500;
@@ -257,6 +259,19 @@ function releaseRowDiff(previousRows = [], currentRows = []) {
   return { type: '', row: null, previous: null };
 }
 
+// 릴리스 행 한 줄 요약. 제목과 'Released <날짜>' 같은 메타 문장은 건너뛰고 무엇이 바뀌었는지
+// 말하는 첫 문장을 고른다. 제목을 포함한 채 첫 문장을 뽑으면 'Version 1.7.0-alpha02 Released
+// July 01, 2026.' 처럼 날짜만 남는다.
+const RELEASE_META_SENTENCE = /^(?:released\b|version\b|\d{4}-\d{2}-\d{2}\b)/i;
+
+function releaseRowSummary(bodyText = '') {
+  for (const sentence of String(bodyText).split(/(?<=\.)\s+/)) {
+    const picked = firstSentence(sentence);
+    if (picked && !RELEASE_META_SENTENCE.test(picked)) return picked;
+  }
+  return '';
+}
+
 function extractReleaseRows(html = '', pageUrl = '') {
   const source = String(html || '');
   const headings = [...source.matchAll(/<(h[2-4])\b([^>]*)>([\s\S]*?)<\/\1>/gi)].map(match => {
@@ -276,6 +291,8 @@ function extractReleaseRows(html = '', pageUrl = '') {
     const next = headings[index + 1];
     const sectionHtml = source.slice(heading.index, next ? next.index : source.length);
     const sectionText = visibleText(sectionHtml);
+    // 요약은 제목을 뺀 본문에서 뽑는다.
+    const sectionBodyText = visibleText(source.slice(heading.end, next ? next.index : source.length));
     const releaseText = `${heading.id} ${heading.text} ${sectionText}`;
     const versionMatch = releaseText.match(/\b\d+\.\d+\.\d+(?:[-\w.]*)?\b/i);
     if (!versionMatch) continue;
@@ -287,7 +304,11 @@ function extractReleaseRows(html = '', pageUrl = '') {
       anchor,
       date: firstDateMatch(sectionText),
       hash: hashText(sectionText, 32),
-      title: heading.text || version
+      title: heading.text || version,
+      // 이 문장이 그 릴리스에서 무엇이 바뀌었는지다. 지금까지 sectionText 를 해시로만 쓰고
+      // 버려서, 후보 본문이 "Release row/version added." 자리표시자로 남았다.
+      // firstSentence 정책을 그대로 쓴다 — 상한을 넘으면 자르지 않고 버린다.
+      summary: releaseRowSummary(sectionBodyText)
     });
   }
   // 대표 릴리스 행은 "가장 최근 날짜"여야 한다. anchor 알파벳 순으로 정렬하면 아카이브 행을
@@ -387,7 +408,10 @@ function observationFromHtml({ source, url, html, status = 200, headers = {} }) 
     release_row_version: primaryReleaseRow.version || '',
     release_row_anchor: primaryReleaseRow.anchor || '',
     release_row_hash: primaryReleaseRow.hash || '',
-    release_rows: releaseRows,
+    // 스냅샷에는 지문만 남긴다. 요약 문장은 release_row_extract 로 이벤트까지만 간다 —
+    // release_note_sections / release_note_extract 와 같은 갈래다.
+    release_rows: releaseRows.map(({ summary, ...row }) => row),
+    release_row_extract: releaseRows,
     first_seen_at: '',
     last_seen_at: '',
     seen_count: 0,
@@ -583,7 +607,8 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
     // 증거는 본문이 실제로 바뀐 이벤트에만 싣는다. anchor_added/page_added는 candidate_allowed
     // 이지만 본문 변경이 아니므로, 문서 내용을 그 주의 변화로 보고하면 과다 주장이 된다.
     release_note_evidence: contentChanged
-      ? documentSectionEvidence(current?.release_note_extract, previous?.release_note_sections)
+      ? (documentSectionEvidence(current?.release_note_extract, previous?.release_note_sections)
+        || releaseRowEvidence(current, previous))
       : null,
     release_row_date: releaseRow?.date || current?.release_row_date || '',
     release_row_version: releaseRow?.version || current?.release_row_version || '',
@@ -592,6 +617,58 @@ function buildEvent({ source, previous, current, eventType, dateSource, effectiv
     duplicate_processed: duplicate,
     needs_editor_date_review: date_confidence < 85 || dateSource === 'content_hash_changed_without_date',
     reason
+  };
+}
+
+// 섹션 증거가 없을 때 릴리스 행에서 증거를 만든다.
+//
+// CameraX 릴리스 노트가 이 경우다 — 스냅샷 실측에서 release_note_sections 는 0개인데
+// release_rows 는 202개였다. 섹션 추출기가 잡지 못하는 문서라 changedSectionEvidence 가
+// 늘 null 이었고, 후보 본문이 "Release row/version added." 로 남았다.
+//
+// **이전 관측이 있을 때만** 만든다. 처음 본 페이지는 무엇이 바뀌었는지 알 수 없고 무엇이
+// 적혀 있는지만 안다 — behavior_change 는 전자를 주장하는 필드다. page_added 에 증거를 실지
+// 않는 기존 불변식(camera-its-release-note-evidence.test.js)을 그대로 지킨다.
+const MAX_EVIDENCE_ROWS = 3;
+
+function releaseRowEvidence(current, previous) {
+  const rows = Array.isArray(current?.release_row_extract) ? current.release_row_extract : [];
+  if (rows.length === 0) return null;
+
+  const previousHashes = new Map(
+    (Array.isArray(previous?.release_rows) ? previous.release_rows : [])
+      .filter(row => row && row.anchor)
+      .map(row => [row.anchor, row.hash])
+  );
+
+  if (previousHashes.size === 0) return null;
+  const picked = rows
+    .filter(row => previousHashes.get(row.anchor) !== row.hash)
+    .slice(0, MAX_EVIDENCE_ROWS);
+  if (picked.length === 0) return null;
+
+  const behavior = picked
+    .map(row => (row.summary ? `${row.title}: ${row.summary}` : ''))
+    .filter(Boolean)
+    .join(' ');
+  // 문장을 하나도 못 건졌으면 증거가 아니다. 제목만 실으면 자리표시자와 다를 게 없다.
+  if (!behavior) return null;
+
+  return {
+    version_or_release: picked[0].version || '',
+    api_or_component: '',
+    behavior_change: behavior,
+    changed_section_headings: picked.map(row => row.title),
+    section_links: normalizeOutgoingLinks(
+      picked
+        .filter(row => row.anchor)
+        .map(row => ({
+          url: row.anchor,
+          text: row.title,
+          source_field: 'release_row',
+          extraction_method: 'heading_anchor'
+        }))
+    )
   };
 }
 
@@ -701,7 +778,7 @@ function classifyObservation({ source, previous, current, snapshot, detectedAt }
 // 섹션 지문(release_note_sections)뿐이고 그것만 영속화한다.
 function withoutDerivedEvidence(observation) {
   if (!observation) return null;
-  const { release_note_extract, ...persisted } = observation;
+  const { release_note_extract, release_row_extract, ...persisted } = observation;
   return persisted;
 }
 

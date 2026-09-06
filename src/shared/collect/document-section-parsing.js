@@ -171,6 +171,8 @@ function changedSectionEvidence(extract, previousSections = []) {
 
 module.exports = {
   changedSectionEvidence,
+  // 릴리스 행 요약도 같은 문장 정책을 쓴다 — 상한을 넘으면 자르지 않고 버린다.
+  firstSentence,
   extractHeadingSections,
   headingSectionFingerprint,
   pageTitle,
