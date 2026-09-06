@@ -248,8 +248,9 @@ test('an unreviewed NEW change is collected but blocked from main articles', asy
   const candidate = normalizeCandidate({ ...items[0], source: REGISTRY_SOURCE });
   assert.equal(candidate.main_article_source_allowed, false);
   assert.equal(candidate.source_quality_status, 'blocked');
-  // blocker가 비어야 mailing-list 강한-근거 승급(upgradeable blocker가 하나라도 있어야 발동)이 걸리지 않는다.
-  assert.deepEqual(candidate.main_article_source_blockers, []);
+  // 승급 불가는 blocker가 비어 있다는 우연이 아니라 값으로 읽혀야 한다(#1056). 이 blocker는
+  // mailing-list 강한-근거 승급의 UPGRADEABLE_BLOCKERS에 없어서 승급을 막는다.
+  assert.deepEqual(candidate.main_article_source_blockers, ['policy_locked_out_of_main']);
   assert.match(candidate.main_article_source_allowed_reason, /watchlist/i);
 });
 
@@ -397,8 +398,12 @@ test('both Gerrit registry entries ask for at least the measured list page size'
     const pageSize = Number(new URL(source.sourceUrl).searchParams.get('n'));
     assert.ok(pageSize >= MIN_LIST_PAGE_SIZE, `${source.id} must request at least ${MIN_LIST_PAGE_SIZE} changes per page`);
     assert.equal(source.mainArticlePolicy, 'conditional');
-    // requiresCrossCheck가 true가 되면 watchlist_only 후보에 upgradeable blocker가 생겨
-    // mailing-list 강한-근거 승급이 리뷰 없는 제안을 main으로 올릴 수 있다.
+    // 아래 세 값은 watchlist_only 후보에 upgradeable blocker를 만드는 입력이다. candidateOnly를
+    // true로 두거나 requiresCrossCheck와 requiresCrossCheckDefault를 함께 true로 두면 그렇게 된다
+    // (분류기가 requiresCrossCheckDefault를 먼저 읽으므로 requiresCrossCheck 단독으로는 바뀌지 않는다).
+    // 승급 자체는 #1056의 policy_locked_out_of_main blocker가 막지만, 등록부 값은 그 방어선과
+    // 무관하게 보수적인 상태로 잠가 둔다.
+    assert.equal(source.candidateOnly, false);
     assert.equal(source.requiresCrossCheck, false);
     assert.equal(source.requiresCrossCheckDefault, false);
   }

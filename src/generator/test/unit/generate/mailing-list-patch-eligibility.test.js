@@ -8,7 +8,11 @@ const {
 const { buildArticleCapsule } = require('../../../select/article-capsules');
 const { decorateCandidate } = require('../../../select/newsroom-selection');
 const { candidateSelectionViolation } = require('../../../quality/quality-deduction-rules');
-const { sourceQualityFieldDrift } = require('../../../../shared/collect/source-quality-classifier');
+const {
+  classifySourceQuality,
+  sourceQualityFieldDrift
+} = require('../../../../shared/collect/source-quality-classifier');
+const { evidenceStrength, technicalDepth } = require('../../../../discovery/score-source-candidates');
 
 const POLICY = {
   enabled: true,
@@ -206,4 +210,77 @@ test('a policy-blocked candidate with no blockers is never upgraded to main-arti
   const decorated = decorateCandidate(candidate, '2026-09-02', { mailingListPatchPolicy: POLICY });
   assert.equal(decorated.source_quality.main_article_source_allowed, false);
   assert.equal(decorated.source_quality.source_quality_status, 'blocked');
+});
+
+// #1056: 위 테스트는 손으로 만든 source_quality를 쓴다. 아래 세 개는 분류기가 실제로 만들어 내는
+// 값으로 같은 계약을 잠근다. 후보 수준 mainArticlePolicy=watchlist_only로 내려간 Gerrit 제안이
+// 대상이고, 승급 문턱(evidenceStrengthMin/technicalDepthMin)은 넘도록 근거를 채워 둔다. 문턱 미달
+// 후보로 잠그면 무엇이 막았는지 구분할 수 없어 수정 전에도 통과하는 테스트가 된다.
+const GERRIT_REGISTRY_SOURCE = {
+  id: 'aosp-gerrit-camera-changes',
+  sourceUrl: 'https://android-review.googlesource.com/changes/?q=x&n=100',
+  sourceRole: 'project_mailing_list_source',
+  sourceUrlQualityHint: 'project_mailing_list_release',
+  mainArticlePolicy: 'conditional',
+  candidateOnly: false,
+  requiresCrossCheck: false,
+  requiresCrossCheckDefault: false,
+  evidenceGranularityHint: 'article_with_primary_confirmation'
+};
+
+function gerritProposalCandidate(overrides = {}) {
+  return {
+    title: 'VirtualCamera: prevent integer underflow in outBufferSize - platform/frameworks/av',
+    url: 'https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183',
+    summary: 'Proposed change would update 2 camera source file(s) in platform/frameworks/av +10/-0. VirtualCamera buffer size handling in the camera HAL path.',
+    behavior_change: 'Proposed change would update 2 camera source file(s) in platform/frameworks/av +10/-0.',
+    api_or_component: 'VirtualCamera',
+    published_date: '2026-09-01T00:00:00Z',
+    hasDatedEvidence: true,
+    source_gap_risk: false,
+    mainArticlePolicy: 'watchlist_only',
+    ...overrides
+  };
+}
+
+function classifiedGerritProposal(sourceOverrides = {}, candidateOverrides = {}) {
+  const candidate = gerritProposalCandidate(candidateOverrides);
+  const sourceQuality = classifySourceQuality({
+    candidate,
+    source: { ...GERRIT_REGISTRY_SOURCE, ...sourceOverrides }
+  });
+  return { candidate, sourceQuality };
+}
+
+test('the Gerrit proposal fixture clears the upgrade thresholds, so only policy can block it', () => {
+  const candidate = gerritProposalCandidate();
+  assert.ok(evidenceStrength(candidate) >= POLICY.evidenceStrengthMin);
+  assert.ok(technicalDepth(candidate) >= POLICY.technicalDepthMin);
+});
+
+test('a watchlist_only proposal stays out of main when the source turns candidateOnly on', () => {
+  const { candidate, sourceQuality } = classifiedGerritProposal({ candidateOnly: true });
+  assert.ok(sourceQuality.main_article_source_blockers.includes('candidate_only_without_primary_confirmation'));
+  const upgraded = upgradeMailingListPatchEligibility(sourceQuality, candidate, POLICY);
+  assert.equal(upgraded.main_article_source_allowed, false);
+});
+
+test('a watchlist_only proposal stays out of main when both cross-check flags are turned on', () => {
+  const { candidate, sourceQuality } = classifiedGerritProposal({
+    requiresCrossCheck: true,
+    requiresCrossCheckDefault: true
+  });
+  assert.ok(sourceQuality.main_article_source_blockers.includes('cross_check_required_but_missing'));
+  const upgraded = upgradeMailingListPatchEligibility(sourceQuality, candidate, POLICY);
+  assert.equal(upgraded.main_article_source_allowed, false);
+});
+
+test('the conditional mailing-list upgrade path stays open for a cross-check blocker', () => {
+  const { candidate, sourceQuality } = classifiedGerritProposal(
+    { requiresCrossCheck: true, requiresCrossCheckDefault: true },
+    { mainArticlePolicy: 'conditional' }
+  );
+  assert.deepEqual(sourceQuality.main_article_source_blockers, ['cross_check_required_but_missing']);
+  const upgraded = upgradeMailingListPatchEligibility(sourceQuality, candidate, POLICY);
+  assert.equal(upgraded.main_article_source_allowed, true);
 });
