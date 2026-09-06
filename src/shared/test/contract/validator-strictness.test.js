@@ -146,6 +146,34 @@ function rootIndexHtml(extra = '') {
   ].join('\n');
 }
 
+// 홈 밖의 표면(아카이브·이슈 페이지)이 쓰는 구독 CTA hook 한 벌(#671). 판정은 공용 스크립트가
+// 하므로 페이지는 자기 깊이의 설정 경로만 선언한다. rootPath 는 사이트 루트로 가는 접두어다.
+function subscriptionCtaHtml(rootPath = '') {
+  return [
+    `<script src="${rootPath}assets/js/subscription-cta.js" defer></script>`,
+    `<section class="section subscribe-section" data-subscription-section data-subscription-config="${rootPath}config/subscription.json" hidden>`,
+    '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
+    '</section>'
+  ].join('\n');
+}
+
+// 꺼진 상태의 푸터 진입점은 노트 그대로이고, 링크는 href 없이 hidden 으로 대기한다.
+function subscriptionFooterHtml() {
+  return [
+    '<span class="footer-note" data-subscription-footer-note>구독 (지원예정)</span>',
+    '<a class="footer-link" data-subscription-footer-action hidden>구독</a>'
+  ].join('');
+}
+
+// 아카이브·이슈 페이지가 로드하는 공용 스크립트. validate-site 는 이 파일이 실제로 있는지와
+// 구독 설정을 저장소 상대 경로로만 fetch 하는지를 본다.
+function writeSubscriptionCtaScript(root) {
+  writeText(
+    path.join(root, 'articles', 'assets', 'js', 'subscription-cta.js'),
+    "async function applySubscriptionCta(doc, fetchImpl) { await fetchImpl('config/subscription.json', { cache: 'no-store' }); }\n"
+  );
+}
+
 function rootArchiveHtml(extra = '') {
   return [
     '<!doctype html><html><body class="homepage">',
@@ -161,8 +189,9 @@ function rootArchiveHtml(extra = '') {
     '<nav data-archive-pagination hidden></nav>',
     '<div data-empty-state hidden></div>',
     '<div data-error-state hidden></div>',
+    subscriptionCtaHtml(),
     '</main>',
-    '<footer class="site-footer"><a href="index.html">Home</a><a href="archive.html">Archive</a><a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a></footer>',
+    `<footer class="site-footer"><a href="index.html">Home</a><a href="archive.html">Archive</a>${subscriptionFooterHtml()}<a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a></footer>`,
     '<script src="assets/js/newsletter-archive.js"></script>',
     '<script>',
     "async function loadArchiveNewsletters() { await fetch('data/newsletters-weekly.json'); }",
@@ -217,6 +246,7 @@ function writeSiteFixture(root, {
   }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
   writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
+  writeSubscriptionCtaScript(root);
   if (factCheckMustFix || sourceGapCount !== null) {
     writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), {
       status: factCheckMustFix ? 'NEEDS_FIX' : 'PASS',
@@ -320,6 +350,7 @@ function writeFallbackPublicSiteFixture(root, {
   writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), fallbackNewsletterHtml(date, { tags, notice }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
   writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
+  writeSubscriptionCtaScript(root);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     publication_mode: publicationMode,
@@ -668,6 +699,29 @@ test('validate-site requires repo-relative subscription fetch path', () => {
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /must fetch config\/subscription\.json through a repo-relative path/);
   assert.match(result.stderr, /must not fetch \/config\/subscription\.json/);
+});
+
+// 공용 스크립트는 실행되자마자 querySelector 로 섹션을 찾는다. defer 없이 head 에서 돌면
+// 아직 없는 body 를 보고 아무것도 하지 않는데, 그 결과가 "구독이 꺼진 상태"와 똑같이 보여서
+// 표면 하나가 조용히 죽는다. 그래서 검증이 defer 를 요구한다.
+test('validate-site requires the shared subscription CTA script to be deferred', () => {
+  const root = tempRoot('validate-site-subscription-defer-');
+  writeSiteFixture(root, {
+    strict: true,
+    articleCount: articlePolicy.mainArticleCount.min
+  });
+  const archivePath = path.join(root, 'articles', 'archive.html');
+  const withoutDefer = fs.readFileSync(archivePath, 'utf8')
+    .replace('assets/js/subscription-cta.js" defer>', 'assets/js/subscription-cta.js">');
+  // 치환이 실제로 일어났는지부터 확인한다. fixture 문구가 바뀌면 이 테스트는 defer 가 붙은
+  // 그대로를 검사하게 되어 조용히 통과한다.
+  assert.notEqual(withoutDefer, fs.readFileSync(archivePath, 'utf8'));
+  writeText(archivePath, withoutDefer);
+
+  const result = runScript(validateSitePath, root);
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /must load assets\/js\/subscription-cta\.js with defer/);
 });
 
 test('validate-site rejects fake subscription form controls in the subscription section', () => {

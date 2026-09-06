@@ -27,6 +27,7 @@ const {
   assertSharedFooterNav,
   hasClassToken
 } = require('../../../shared/test/helpers/site-nav');
+const { runSubscriptionCta } = require('../../../shared/test/helpers/subscription-cta-dom');
 
 // 지원 집합 바로 위 값. 숫자를 박아 두면 계약 버전이 추가될 때 이 테스트가 지원
 // 버전을 검사하게 되어 조용히 공허해진다.
@@ -212,6 +213,55 @@ test('newsletter renderer uses public_article for public markdown and HTML', () 
     assert.doesNotMatch(markdown, leaked);
     assert.doesNotMatch(html, leaked);
   }
+});
+
+// 이슈 상세 페이지의 구독 CTA(#671). 아카이브와 같은 hook·같은 판정을 쓰고 설정 경로의 깊이만
+// 다르다. 꺼진 committed 기본값에서 렌더 산출물이 아무것도 더 보여주지 않는 것이 계약이다.
+test('newsletter issue page ships the subscription CTA without baking a dead link', async () => {
+  const html = buildHtml(issue());
+  const repoRoot = path.join(__dirname, '..', '..', '..', '..');
+
+  assert.match(html, /<script src="\.\.\/\.\.\/assets\/js\/subscription-cta\.js" defer><\/script>/);
+
+  const section = html.match(/<section\b(?=[^>]*\bdata-subscription-section\b)[^>]*>[\s\S]*?<\/section>/i)?.[0] || '';
+  assert.ok(section, '렌더 산출물에 구독 섹션이 있어야 한다');
+  assert.match(section, /<section\b[^>]*\bhidden\b/i);
+  assert.match(section, /\bdata-subscription-config="\.\.\/\.\.\/config\/subscription\.json"/);
+  assert.match(section, /<a\b[^>]*\bdata-subscription-action\b[^>]*>/i);
+  // 꺼진 상태에서 href 를 구우면 그것이 곧 죽은 링크다.
+  assert.doesNotMatch(section, /\bhref=/i);
+  assert.doesNotMatch(section, /<form\b/i);
+  assert.doesNotMatch(section, /<input\b/i);
+  assert.doesNotMatch(section, /<button\b/i);
+
+  assert.match(html, /<span class="footer-note" data-subscription-footer-note>구독 \(지원예정\)<\/span>/);
+  assert.match(html, /<a class="footer-link" data-subscription-footer-action hidden>구독<\/a>/);
+
+  const disabled = await runSubscriptionCta(html, {
+    config: JSON.parse(fs.readFileSync(path.join(repoRoot, 'config', 'subscription.json'), 'utf8'))
+  });
+  assert.equal(disabled.applied, false);
+  assert.equal(disabled.section.hidden, true);
+  assert.equal(disabled.action.getAttribute('href'), null);
+  assert.equal(disabled.note.hidden, false);
+  assert.equal(disabled.link.hidden, true);
+
+  const subscribeUrl = 'https://subscribe.camera-sw-newsletter.com/join';
+  const enabled = await runSubscriptionCta(html, {
+    config: {
+      schemaVersion: 1,
+      enabled: true,
+      provider: 'beehiiv',
+      mode: 'hosted_link',
+      subscribeUrl
+    }
+  });
+  assert.equal(enabled.applied, true);
+  assert.equal(enabled.section.hidden, false);
+  assert.equal(enabled.requested[0].url, '../../config/subscription.json');
+  assert.equal(enabled.action.getAttribute('href'), subscribeUrl);
+  assert.equal(enabled.link.getAttribute('href'), subscribeUrl);
+  assert.equal(enabled.note.hidden, true);
 });
 
 test('newsletter renderer keeps generated issue nav labels on the newsroom Korean set', () => {
@@ -611,12 +661,15 @@ test('newsletter renderer keeps v1 output byte-identical', () => {
     // context 2종은 #856 에서 갱신했다. 기간-수준 사실 주장이던 quiet-core 문장을 관점 라벨로
     // 바꾼 결과이므로, CONTEXT 분기 밖 4종이 그대로인 것이 이 변경이 좁다는 증거다.
     // plain/story HTML 2종은 그 전 공통 footer의 AI Engineering Lab 링크 추가로 갱신한 값이다.
+    // HTML 3종은 #671 에서 다시 갱신했다 — 공통 chrome 에 구독 CTA 섹션·스크립트·푸터 항목이
+    // 붙은 결과다(AI Engineering Lab 링크 때와 같은 종류의 변경). **markdown 3종이 그대로인
+    // 것이 이 변경이 HTML 전용이라는 증거다** — markdown 이 함께 움직였다면 그건 결함이다.
     plainMarkdown: 'c48f47e42dc73097',
-    plainHtml: 'e4cdbf8551a78fb0',
+    plainHtml: 'df93dbc17df1f92d',
     storyMarkdown: 'f3602357add8a9ff',
-    storyHtml: '4cf8c3765184dd09',
+    storyHtml: 'd11a3b8c525099a1',
     contextMarkdown: 'e754eef59b3f0cff',
-    contextHtml: 'a5b3984a6bb2893e'
+    contextHtml: '7c4a1f45115cfc2a'
   });
 });
 

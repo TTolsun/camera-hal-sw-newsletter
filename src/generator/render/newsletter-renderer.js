@@ -475,6 +475,26 @@ function homepageHeaderHtml(rootPath = '') {
   </header>`;
 }
 
+// 이슈 페이지의 구독 CTA(#671). 홈·아카이브와 같은 hook 을 쓰고, 켜고 끄는 판정은
+// assets/js/subscription-cta.js 한 곳에 있다. 여기서는 마크업만 낸다 — committed 기본값
+// (config/subscription.json 의 enabled=false)에서는 hidden 인 채 남아 아무것도 보이지 않는다.
+// 앵커에 href 를 굽지 않는 것이 계약이다: 설정이 꺼진 상태에서 죽은 링크가 나가면 안 된다.
+function subscribeSectionHtml(rootPath = '') {
+  const root = escapeHtml(rootPath);
+  return `<section id="subscribe" class="section subscribe-section content-wrap" aria-labelledby="subscribe-title" data-subscription-section data-subscription-config="${root}config/subscription.json" hidden>
+      <div class="subscribe-panel">
+        <div class="subscribe-copy">
+          <p class="eyebrow">Newsletter subscription</p>
+          <h2 id="subscribe-title">Subscribe</h2>
+          <p class="subscribe-description">
+            이번 호가 도움이 됐다면, 다음 호는 메일로 먼저 받아보세요.
+          </p>
+        </div>
+        <a class="button button-secondary subscribe-link" data-subscription-action>Subscribe</a>
+      </div>
+    </section>`;
+}
+
 function siteFooterHtml(rootPath = '') {
   const root = escapeHtml(rootPath);
   return `<footer class="site-footer">
@@ -484,7 +504,8 @@ function siteFooterHtml(rootPath = '') {
           <span class="footer-col-title">뉴스레터</span>
           <a class="footer-link" href="${root}index.html">홈</a>
           <a class="footer-link" href="${root}archive.html">아카이브</a>
-          <span class="footer-note">구독 (지원예정)</span>
+          <span class="footer-note" data-subscription-footer-note>구독 (지원예정)</span>
+          <a class="footer-link" data-subscription-footer-action hidden>구독</a>
         </div>
         <div class="footer-col">
           <span class="footer-col-title">주제</span>
@@ -957,6 +978,7 @@ ${articleSeoHead(issue)}
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <link rel="stylesheet" href="../../css/styles.css" />
+  <script src="../../assets/js/subscription-cta.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
   ${homepageHeaderHtml(rootPath)}
@@ -981,6 +1003,8 @@ ${watchPointsHtml(issue)}${referenceArticlesHtml(issue)}
       </nav>
 
     </article>
+
+    ${subscribeSectionHtml(rootPath)}
   </main>
   ${siteFooterHtml(rootPath)}
 </body>

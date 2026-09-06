@@ -97,3 +97,40 @@ PR diff에서 `debug_heavy`/`transient_attempt` 등급 산출물(artifact)이 �
 ## 🩺 소스 품질 진단
 
 > 💡 후보가 부족한 원인을 source/parser/gate/source discovery 관점으로 보려면 [소스 품질 진단 리포트](./SOURCE_QUALITY_DIAGNOSIS.md)를 확인하세요. 이 리포트는 참고용(advisory) artifact라서 publish/readiness gate를 바꾸지 않습니다.
+
+## 📬 메일 구독 (provider-hosted)
+
+메일 구독은 외부 newsletter provider가 담당합니다. 이 저장소는 구독 진입점과 provider 설정만 관리합니다.
+
+- 구독자 email, unsubscribe, bounce, delivery, analytics는 전부 provider가 관리합니다.
+- 저장소·workflow artifact·generated site data에는 구독자 email을 저장하지 않습니다.
+- 매주 발송은 provider의 발행/예약 기능으로 합니다. GitHub Actions는 구독자에게 메일을 보내지 않습니다.
+
+설정 파일은 `config/subscription.json` 하나이고, 배포할 때 `assemble-site.js`가 site root의 `/config/subscription.json`으로 복사합니다.
+
+| field | 값 | 뜻 |
+| --- | --- | --- |
+| `schemaVersion` | `1` | 현재 스키마 버전입니다. |
+| `enabled` | `true`/`false` | 구독 CTA를 켤지 정합니다. 저장소 기본값은 `false`입니다. |
+| `provider` | `beehiiv` | 지금 지원하는 provider입니다. |
+| `mode` | `hosted_link` | provider가 호스팅하는 구독 페이지로 보내는 방식입니다. |
+| `subscribeUrl` | 절대 https URL | provider의 hosted subscribe page 주소입니다. |
+
+CTA는 `enabled=true`이고 `subscribeUrl`이 실제 https 주소일 때만 켜집니다. 그 전까지는 홈의 구독 섹션이 "지원예정" 상태로만 보이고, 아카이브·뉴스레터 상세 페이지의 구독 섹션은 아예 보이지 않으며, 푸터에는 `구독 (지원예정)` 노트가 그대로 남습니다. 빈 `href`를 가진 죽은 링크는 어느 표면에도 만들지 않습니다.
+
+### 구독을 켜는 절차
+
+1. provider(beehiiv)에서 publication을 만들고 hosted subscribe page 주소를 확인합니다.
+2. `config/subscription.json`에서 `subscribeUrl`을 그 주소로 채우고 `enabled`를 `true`로 바꿉니다.
+3. `npm.cmd run validate:site`를 돌립니다. 이 검증은 `enabled=true`일 때 `subscribeUrl`이 placeholder나 local/dev 주소가 아닌 절대 https URL인지 확인합니다.
+4. PR로 merge합니다. 설정 파일만 바뀌어도 `site-02-deploy` workflow가 배포를 실행합니다.
+5. 배포 뒤 홈·아카이브·뉴스레터 상세 페이지의 Subscribe 버튼과, 아카이브·뉴스레터 상세 페이지 푸터의 `구독` 링크가 provider 주소로 가는지 확인합니다.
+
+> ⚠️ `enabled`를 `true`로 두고 `subscribeUrl`을 비우면 `validate:site`가 실패합니다. 되돌릴 때는 `enabled`를 `false`로 바꾸면 되고, `subscribeUrl`은 비워도 그대로 둬도 됩니다.
+
+판정 로직은 두 곳에 있습니다. 홈은 `index.html`의 인라인 loader가, 아카이브와 뉴스레터 상세 페이지는 공용 스크립트 `articles/assets/js/subscription-cta.js`가 씁니다. 판정 기준은 같고, 두 표면의 차이는 둘뿐입니다.
+
+- 꺼져 있을 때 홈의 구독 섹션은 "지원예정" 상태로 보이지만, 아카이브·뉴스레터 상세 페이지의 구독 섹션은 아예 보이지 않습니다. 홈은 구독을 알리는 자리이고, 나머지 두 표면은 읽는 흐름을 끊지 않는 것이 우선이기 때문입니다.
+- 푸터 `구독` 링크는 공용 스크립트를 로드하는 아카이브·뉴스레터 상세 페이지에만 생깁니다. 홈 푸터는 `구독 (지원예정)` 노트로 남고, 홈에서의 진입점은 그 위의 구독 섹션입니다.
+
+계약은 `validate-site.js`의 subscription 검사, `src/shared/test/workflow/subscription-cta.test.js`, `src/generator/test/contract/newsletter-renderer.test.js`가 잠급니다.

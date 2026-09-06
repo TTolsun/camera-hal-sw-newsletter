@@ -1284,6 +1284,14 @@ pre code {
   color: var(--text);
 }
 
+/* 구독 푸터 항목은 노트(꺼짐)와 링크(켜짐) 두 벌이 함께 있고 `hidden` 으로만 갈린다.
+   `.subscribe-section[hidden]` 과 같은 이유로 명시한다 — 나중에 이 계열에 display 가
+   선언되면 브라우저 기본 `[hidden]` 이 덮여 감춘 쪽이 되살아난다. */
+.footer-link[hidden],
+.footer-note[hidden] {
+  display: none;
+}
+
 .footer-legal {
   padding-top: 18px;
   border-top: 1px solid var(--line);

@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <link rel="stylesheet" href="css/styles.css" />
   <script src="assets/js/site-header.js" defer></script>
+  <script src="assets/js/subscription-cta.js" defer></script>
 </head>
 <body class="homepage">
   <header class="site-header homepage-site-header">
@@ -94,6 +95,19 @@
         <p class="muted">잠시 후 다시 시도하거나 GitHub 저장소에서 data/newsletters.json 상태를 확인하세요.</p>
       </div>
     </section>
+
+    <section id="subscribe" class="section subscribe-section content-wrap" aria-labelledby="subscribe-title" data-subscription-section data-subscription-config="config/subscription.json" hidden>
+      <div class="subscribe-panel">
+        <div class="subscribe-copy">
+          <p class="eyebrow">Newsletter subscription</p>
+          <h2 id="subscribe-title">Subscribe</h2>
+          <p class="subscribe-description">
+            지난 호를 훑다가 마음에 들었다면, 다음 호는 메일로 먼저 받아보세요.
+          </p>
+        </div>
+        <a class="button button-secondary subscribe-link" data-subscription-action>Subscribe</a>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -103,7 +117,8 @@
           <span class="footer-col-title">뉴스레터</span>
           <a class="footer-link" href="index.html">홈</a>
           <a class="footer-link" href="archive.html">아카이브</a>
-          <span class="footer-note">구독 (지원예정)</span>
+          <span class="footer-note" data-subscription-footer-note>구독 (지원예정)</span>
+          <a class="footer-link" data-subscription-footer-action hidden>구독</a>
         </div>
         <div class="footer-col">
           <span class="footer-col-title">주제</span>
