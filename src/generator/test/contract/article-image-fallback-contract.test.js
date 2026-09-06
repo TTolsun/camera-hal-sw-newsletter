@@ -2,9 +2,105 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
+const { spawnSync } = require('node:child_process');
 
 const { resolveArticleImage, resolveIssueArticleImages } = require('../../render/article-image-resolver');
 const { buildHtml, buildMarkdown } = require('../../render/newsletter-renderer');
+const {
+  tempRoot: isolatedTempRoot,
+  writeJson,
+  writeText
+} = require('../../../shared/test/helpers/fs');
+
+const repoRoot = path.join(__dirname, '..', '..', '..', '..');
+const validateSitePath = path.join(repoRoot, 'src', 'generator', 'validate', 'validate-site.js');
+const WEEKLY_KEY = '2026-W35';
+const WEEKLY_HTML_PATH = `newsletters/${WEEKLY_KEY}/index.html`;
+
+// 위클리 이슈 페이지의 최소 껍데기. 이미지 태그만 케이스별로 갈아 끼운다.
+function weeklyIssueHtml(imageBlock) {
+  return [
+    '<!doctype html>',
+    '<html><body class="newsletter-issue-page">',
+    '<main>',
+    '<section class="issue-briefing"></section>',
+    '<section class="issue-section">',
+    imageBlock,
+    '<ul class="source-list"><li><a href="https://example.com/source">Source</a></li></ul>',
+    '<ul class="reference-list"><li><a href="https://example.com/reference">Reference</a></li></ul>',
+    '</section>',
+    '</main>',
+    '</body></html>'
+  ].join('\n');
+}
+
+// validate-site 는 저장소 루트에서 도는 스크립트다. 위클리 인덱스에 엔트리를 하나 두고 그 페이지만
+// 실제로 렌더해 두면, 다른 검사들이 무엇을 더 실패시키든 위클리 레인이 이미지 캡션 계약을 실제로
+// 태우는지 확인할 수 있다.
+function weeklySiteRoot(imageBlock) {
+  const root = isolatedTempRoot('weekly-image-caption-');
+  writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), []);
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{
+    date: '2026-08-31',
+    weeklyKey: WEEKLY_KEY,
+    title: 'Camera HAL / SW Newsletter',
+    summary: 'Weekly image caption contract fixture.',
+    html: WEEKLY_HTML_PATH,
+    md: `newsletters/${WEEKLY_KEY}/newsletter.md`,
+    tags: ['camera-hal']
+  }]);
+  writeText(path.join(root, 'articles', 'newsletters', WEEKLY_KEY, 'index.html'), weeklyIssueHtml(imageBlock));
+  writeText(
+    path.join(root, 'articles', 'assets', 'images', 'fallback', 'ai.svg'),
+    '<svg xmlns="http://www.w3.org/2000/svg"></svg>\n'
+  );
+  return root;
+}
+
+function runValidateSite(root) {
+  return spawnSync(process.execPath, [validateSitePath], {
+    cwd: root,
+    encoding: 'utf8',
+    env: { ...process.env, GITHUB_EVENT_NAME: '', GITHUB_BASE_REF: '' }
+  });
+}
+
+test('weekly lane rejects a fallback article image carrying a source attribution caption', () => {
+  const root = weeklySiteRoot([
+    '<figure>',
+    '<img class="article-image" src="../../assets/images/fallback/ai.svg" alt="Fallback illustration" loading="lazy">',
+    '<figcaption class="article-image-caption">이미지: <a href="https://example.com/post">Example Blog</a></figcaption>',
+    '</figure>'
+  ].join('\n'));
+  try {
+    const result = runValidateSite(root);
+    assert.notEqual(result.status, 0, result.stdout);
+    assert.match(
+      result.stderr,
+      new RegExp(`Newsletter fallback article image must not carry a source attribution caption: ${WEEKLY_HTML_PATH}`)
+    );
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('weekly lane rejects a source article image with no caption attribution link', () => {
+  const root = weeklySiteRoot([
+    '<figure>',
+    '<img class="article-image" src="https://blogger.googleusercontent.com/hero.png" alt="Source illustration" loading="lazy">',
+    '</figure>'
+  ].join('\n'));
+  try {
+    const result = runValidateSite(root);
+    assert.notEqual(result.status, 0, result.stdout);
+    assert.match(
+      result.stderr,
+      new RegExp(`Newsletter article image missing caption attribution link: ${WEEKLY_HTML_PATH}`)
+    );
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
 
 function tempRoot() {
   fs.mkdirSync(path.join(process.cwd(), '.tmp'), { recursive: true });
