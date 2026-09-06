@@ -24,8 +24,11 @@ function strongMailingListPatch(sourceQuality, candidate, policy) {
   const blockers = ensureArray(sourceQuality.main_article_source_blockers);
   // blocker가 하나도 없는데 막혀 있는 후보는 이 승급의 대상이 아니다. conditional 정책이 구체적인
   // 날짜 근거가 없어 막은 경우가 그렇고, 그때 아래 every(...)는 빈 배열이라 무조건 true가 된다.
-  // 정책이 main에서 빼 둔 후보(watchlist_only/blocked)는 policy_locked_out_of_main blocker를 달고
-  // 오므로 이 가드가 아니라 every(...)가 막는다(#1056).
+  // classifySourceQuality가 방금 분류한 값은 정책이 main에서 빼 둔 후보(watchlist_only/blocked)에
+  // policy_locked_out_of_main blocker를 달아 주므로, 그런 후보는 이 가드가 아니라 every(...)가
+  // 막는다(#1056). 다만 이 함수는 임의의 source_quality를 받고, normalizeSourceQuality는 후보에
+  // 이미 실려 있는 source_quality를 그대로 돌려준다 — 이 blocker가 생기기 전에 수집된 후보는
+  // 여전히 빈 배열로 들어오고, 그쪽은 이 가드가 막는다.
   if (blockers.length === 0) return false;
   return blockers.every(blocker => UPGRADEABLE_BLOCKERS.has(blocker));
 }
