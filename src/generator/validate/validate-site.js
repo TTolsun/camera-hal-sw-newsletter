@@ -22,6 +22,7 @@ const {
   strictTargetDates
 } = require('../reporter/validation-targets');
 const {
+  REQUIRED_ISSUE_CLASSES,
   hasClassToken,
   validateArticleImages,
   validateRenderedIssueStructure
@@ -961,10 +962,11 @@ for (const relPath of htmlFiles) {
   }
 
   if (relPath.startsWith('newsletters/')) {
-    // class 토큰으로 본다. 부분 문자열(`includes`)로 보면 본문에 클래스 이름이 글자로만 나와도
-    // 통과한다 — 같은 네 클래스를 검사하는 rendered-issue-structure.js 는 처음부터 토큰으로
-    // 봤고, 두 사본이 갈려 있었다. 현재 이슈 페이지 50개에서 두 판정은 결과가 같다(실측).
-    for (const className of ['issue-briefing', 'issue-section', 'source-list', 'reference-list']) {
+    // 목록도 판정도 rendered-issue-structure 의 것을 그대로 쓴다. 예전에는 클래스 이름을 여기에
+    // 다시 적어 두었고, 그 사본이 부분 문자열로 보는 동안 정본은 토큰으로 봐서 위클리 레인이
+    // 약한 쪽으로 잠겨 있었다(#1019 가 판정만 맞췄다). 목록까지 한 곳으로 모아야 다음에 클래스가
+    // 늘 때 한쪽만 따라가는 일이 없다.
+    for (const className of REQUIRED_ISSUE_CLASSES) {
       if (!hasClassToken(content, className)) {
         fail(`Newsletter HTML missing ${className}: ${relPath}`);
       }

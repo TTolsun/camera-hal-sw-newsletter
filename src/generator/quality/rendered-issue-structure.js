@@ -448,6 +448,7 @@ function validateRenderedIssueStructure({
 }
 
 module.exports = {
+  REQUIRED_ISSUE_CLASSES,
   hasAny,
   hasClassToken,
   validateArticleImages,
