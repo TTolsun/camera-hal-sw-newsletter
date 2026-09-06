@@ -146,6 +146,34 @@ function rootIndexHtml(extra = '') {
   ].join('\n');
 }
 
+// 홈 밖의 표면(아카이브·이슈 페이지)이 쓰는 구독 CTA hook 한 벌(#671). 판정은 공용 스크립트가
+// 하므로 페이지는 자기 깊이의 설정 경로만 선언한다. rootPath 는 사이트 루트로 가는 접두어다.
+function subscriptionCtaHtml(rootPath = '') {
+  return [
+    `<script src="${rootPath}assets/js/subscription-cta.js" defer></script>`,
+    `<section class="section subscribe-section" data-subscription-section data-subscription-config="${rootPath}config/subscription.json" hidden>`,
+    '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
+    '</section>'
+  ].join('\n');
+}
+
+// 꺼진 상태의 푸터 진입점은 노트 그대로이고, 링크는 href 없이 hidden 으로 대기한다.
+function subscriptionFooterHtml() {
+  return [
+    '<span class="footer-note" data-subscription-footer-note>구독 (지원예정)</span>',
+    '<a class="footer-link" data-subscription-footer-action hidden>구독</a>'
+  ].join('');
+}
+
+// 아카이브·이슈 페이지가 로드하는 공용 스크립트. validate-site 는 이 파일이 실제로 있는지와
+// 구독 설정을 저장소 상대 경로로만 fetch 하는지를 본다.
+function writeSubscriptionCtaScript(root) {
+  writeText(
+    path.join(root, 'articles', 'assets', 'js', 'subscription-cta.js'),
+    "async function applySubscriptionCta(doc, fetchImpl) { await fetchImpl('config/subscription.json', { cache: 'no-store' }); }\n"
+  );
+}
+
 function rootArchiveHtml(extra = '') {
   return [
     '<!doctype html><html><body class="homepage">',
@@ -161,8 +189,9 @@ function rootArchiveHtml(extra = '') {
     '<nav data-archive-pagination hidden></nav>',
     '<div data-empty-state hidden></div>',
     '<div data-error-state hidden></div>',
+    subscriptionCtaHtml(),
     '</main>',
-    '<footer class="site-footer"><a href="index.html">Home</a><a href="archive.html">Archive</a><a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a></footer>',
+    `<footer class="site-footer"><a href="index.html">Home</a><a href="archive.html">Archive</a>${subscriptionFooterHtml()}<a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a></footer>`,
     '<script src="assets/js/newsletter-archive.js"></script>',
     '<script>',
     "async function loadArchiveNewsletters() { await fetch('data/newsletters-weekly.json'); }",
@@ -217,6 +246,7 @@ function writeSiteFixture(root, {
   }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
   writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
+  writeSubscriptionCtaScript(root);
   if (factCheckMustFix || sourceGapCount !== null) {
     writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), {
       status: factCheckMustFix ? 'NEEDS_FIX' : 'PASS',
@@ -320,6 +350,7 @@ function writeFallbackPublicSiteFixture(root, {
   writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), fallbackNewsletterHtml(date, { tags, notice }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
   writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
+  writeSubscriptionCtaScript(root);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     publication_mode: publicationMode,
