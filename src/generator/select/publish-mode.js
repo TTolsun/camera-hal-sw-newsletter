@@ -22,7 +22,7 @@ function resolvePublishMode(compositionSummary = {}, publishModePolicy = {}) {
     num(compositionSummary.direct_aosp_camera_count) +
     num(compositionSummary.camera_driver_image_pipeline_count);
   const adjacentCount =
-    num(compositionSummary.android_platform_camera_adjacent_count) +
+    num(compositionSummary.android_count) +
     num(compositionSummary.android_multimedia_camera_output_count);
   const contextCount =
     num(compositionSummary.soc_platform_signal_count) +

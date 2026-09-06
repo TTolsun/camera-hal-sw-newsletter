@@ -85,7 +85,7 @@ test('official source is not marked parser repair from collected count alone', (
           ...candidate,
           title: 'Official camera overview page',
           summary: 'CameraX overview page without a dated release row in this window.',
-          relevance_bucket: 'android_platform_camera_adjacent',
+          relevance_bucket: 'android',
           selection_exclusion_reason: 'No camera-relevant release item was found in the collection window.'
         };
       })

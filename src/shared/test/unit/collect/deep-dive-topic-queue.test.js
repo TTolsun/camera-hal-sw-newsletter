@@ -48,7 +48,7 @@ test('적립 evidence는 detected_at과 effective_date를 구분해 보존한다
 });
 
 test('선정은 direct 버킷 → fingerprint 수 → 최신 effective_date → topic_key 순의 결정론이다', () => {
-  const adjacent = entry({ topic_key: 'k-adjacent', bucket: 'android_platform_camera_adjacent' });
+  const adjacent = entry({ topic_key: 'k-adjacent', bucket: 'android' });
   const twoFingerprints = entry({ topic_key: 'k-two' });
   twoFingerprints.evidence = [
     { ...entry().evidence[0], fingerprint: 'fp-a' },

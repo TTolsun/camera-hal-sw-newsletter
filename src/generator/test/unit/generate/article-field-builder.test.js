@@ -19,7 +19,7 @@ function cameraXCandidate(overrides = {}) {
     published_date: '2026-05-06',
     version_or_release: '1.6.1',
     api_or_component: 'androidx.camera',
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     aosp_camera_directness: 2,
     behavior_change: 'camera-view 1.6.1 - - 1.7.0-alpha01 camera-viewfinder - - 1.3.0-beta02 1.4.0-alpha07 camera-video 1.6.1 - - 1.7.0-alpha01 This library was last updated on: May 06, 2026 View the Camera Library Close Wear Maven Group vers',
     ...overrides
@@ -176,7 +176,7 @@ test('field hygiene rejects internal classification in confirmed facts', () => {
     },
     confirmed_facts: [
       'Android Developers가 2026-05-06에 게시 또는 업데이트한 항목입니다.',
-      'Relevance bucket: android_platform_camera_adjacent.',
+      'Relevance bucket: android.',
       'impact_claim_level=android_framework_adjacent.',
       'source_gap_risk=false.'
     ],

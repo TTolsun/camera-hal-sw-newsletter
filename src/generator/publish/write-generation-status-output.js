@@ -69,7 +69,7 @@ const OUTPUT_FIELDS = [
   'editor_review_required',
   'direct_aosp_camera_count',
   'camera_driver_image_pipeline_count',
-  'android_platform_camera_adjacent_count',
+  'android_count',
   'android_multimedia_camera_output_count',
   'soc_platform_signal_count',
   'cpp_ai_tooling_fallback_count',

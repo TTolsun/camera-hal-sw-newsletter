@@ -78,7 +78,7 @@ function reserveCandidate(overrides = {}) {
     source_role: 'official_release_note',
     source_url_quality: 'article_url',
     freshness_window: 'current',
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     finalSelectionEligibility: 'short',
     hasDatedEvidence: true,
     source_gap_risk: false,
@@ -573,7 +573,7 @@ test('selected article compatibility fields fall back to unknown or not_availabl
         title: 'Sparse CameraX release note',
         url: 'https://example.com/sparse-camerax',
         source_name: 'Sparse Source',
-        relevance_bucket: 'android_platform_camera_adjacent'
+        relevance_bucket: 'android'
       }]
     }
   });

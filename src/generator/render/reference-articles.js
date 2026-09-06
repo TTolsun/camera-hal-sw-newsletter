@@ -4,7 +4,7 @@
 // 입력은 특정 창으로 한정되지 않는다: reference 창 후보와 함께 main 경쟁에서 선정되지 않은
 // shortlist(primary/fallback 창) 후보도 받는다. 어느 창에서 왔는지가 아니라 버킷·증거 조건으로
 // 거른다. 다만 상한을 채우는 순서는 창을 먼저 본다(아래 정렬 주석).
-const { BUCKETS, BUCKET_PRIORITY } = require('../../shared/domain/aosp-camera-scope');
+const { BUCKETS, BUCKET_PRIORITY, canonicalBucket } = require('../../shared/domain/aosp-camera-scope');
 const { excludeParentRoundupContainers } = require('../../shared/common/article-groups');
 const { isCoverageWeekWindow } = require('../../shared/common/coverage-week');
 const { displayDate } = require('../../shared/common/date-signals');
@@ -20,9 +20,7 @@ const REFERENCE_BUCKETS = new Set(
 const BUCKET_NOTE = {
   [BUCKETS.DIRECT_AOSP_CAMERA]: 'AOSP Camera 프레임워크 관련 참고',
   [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: '카메라 드라이버 / 이미지 파이프라인 참고',
-  [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 'Android 플랫폼 · 카메라 인접 주제 참고',
-  [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: '미디어 / 카메라 출력 관련 참고',
-  [BUCKETS.SOC_PLATFORM_SIGNAL]: 'SoC 플랫폼 신호 참고',
+  [BUCKETS.ANDROID]: 'Android 플랫폼 · 미디어 출력 · SoC 신호 참고',
   [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 'C++ / AI 네이티브 툴링 참고'
 };
 
@@ -95,8 +93,8 @@ function byCoverageWeekThenBucketPriority(candidates) {
   return candidates
     .map((candidate, index) => ({ candidate, index }))
     .sort((left, right) => {
-      const leftPriority = BUCKET_PRIORITY[candidateBucket(left.candidate)] ?? Number.MAX_SAFE_INTEGER;
-      const rightPriority = BUCKET_PRIORITY[candidateBucket(right.candidate)] ?? Number.MAX_SAFE_INTEGER;
+      const leftPriority = BUCKET_PRIORITY[canonicalBucket(candidateBucket(left.candidate))] ?? Number.MAX_SAFE_INTEGER;
+      const rightPriority = BUCKET_PRIORITY[canonicalBucket(candidateBucket(right.candidate))] ?? Number.MAX_SAFE_INTEGER;
       return (isWithinCoverageWeek(right.candidate) ? 1 : 0) - (isWithinCoverageWeek(left.candidate) ? 1 : 0) ||
         leftPriority - rightPriority ||
         publishedTime(right.candidate) - publishedTime(left.candidate) ||

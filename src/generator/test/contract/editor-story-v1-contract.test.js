@@ -333,7 +333,7 @@ test('story v1 decision metadata ignores stale direct impact_claim_level', () =>
   const base = section(1, {
     category: 'Android Platform / CameraX',
     headline: 'CameraX app compatibility update',
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     impact_claim_level: 'direct_hal_change',
     hal_impact_axes: [],
     hal_signal_capsule: {
@@ -399,7 +399,7 @@ test('story v1 decision metadata does not promote guardrail enum without source 
   const base = section(1, {
     category: 'Android Platform / CameraX',
     headline: 'CameraX app compatibility update',
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     actionability_level: 'concrete_check',
     effective_actionability_level: 'concrete_check',
     guardrail_impact_class: 'direct_hal_contract',

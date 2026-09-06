@@ -77,7 +77,7 @@ Gerrit 변경 페이지는 클라이언트 렌더링(PolyGerrit)이라 URL을 �
 
 ChromeOS `chromiumos/platform2`는 `camera/` 아래의 `MERGED` 변경만 봅니다. ChromeOS camera 서비스가 Android Camera HAL v3 인터페이스를 구현하므로 capture request/result, stream·buffer 수명주기, 3A, ISP, JPEG/RAW/YUV, 외부 카메라 변경이 Camera HAL 독자에게 직접 읽힙니다. `chromiumos/platform/camera`의 vendor HAL 변경은 초기 범위 밖입니다.
 
-Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/behavior, camera output path 연결이 모두 있을 때만 `android_multimedia_camera_output` 후보로 봅니다. MediaCodec, MediaRecorder, MediaStore, Photo Picker, supported formats 문서는 reference/background source이며 단독 기사 후보가 아닙니다.
+Media3 release note는 날짜가 있는 item-level 변경, 구체 component/API/behavior, camera output path 연결이 모두 있을 때만 `android` 후보(camera output/multimedia 근거)로 봅니다. MediaCodec, MediaRecorder, MediaStore, Photo Picker, supported formats 문서는 reference/background source이며 단독 기사 후보가 아닙니다.
 
 reference source(`sourceRole=official_documentation_reference` 또는 `mainArticlePolicy=reference_only`)는 제너릭 페이지 스크레이프 폴백을 쓰지 않습니다. 이런 페이지는 날짜가 없어 후보가 늘 `finalSelectionEligibility=exclude`로 끝나면서 소스 진단만 상시로 켰습니다. `sourceRole=official_documentation_reference`인 소스는 소스 전용 파서를 따로 두더라도 후보가 살아나지 않습니다 — collector가 파서 결과와 무관하게 `finalSelectionEligibility=exclude`로 닫습니다. 그 소스를 다시 기사 후보로 쓰려면 registry의 `sourceRole`부터 되돌려야 합니다.
 

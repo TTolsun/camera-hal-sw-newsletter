@@ -22,7 +22,7 @@
     {
       "topic_key": "https://developer.android.com/about/versions/17/features",
       "title": "Features and APIs | Android Developers",
-      "bucket": "android_platform_camera_adjacent",
+      "bucket": "android",
       "status": "queued",
       "evidence": [
         {
@@ -40,7 +40,7 @@
     {
       "topic_key": "https://developer.android.com/about/versions/16/features",
       "title": "Features and APIs | Android Developers",
-      "bucket": "android_platform_camera_adjacent",
+      "bucket": "android",
       "status": "queued",
       "evidence": [
         {
@@ -58,7 +58,7 @@
     {
       "topic_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "title": "CameraX | Jetpack | Android Developers",
-      "bucket": "android_platform_camera_adjacent",
+      "bucket": "android",
       "status": "queued",
       "evidence": [
         {
@@ -284,7 +284,7 @@
     {
       "topic_key": "https://developer.android.com/about/versions/16/features#camera",
       "title": "Android 16 features — Camera",
-      "bucket": "android_platform_camera_adjacent",
+      "bucket": "android",
       "status": "queued",
       "evidence": [
         {
@@ -302,7 +302,7 @@
     {
       "topic_key": "https://developer.android.com/about/versions/16/features#hybrid-auto-exposure",
       "title": "Android 16 features — Hybrid auto-exposure",
-      "bucket": "android_platform_camera_adjacent",
+      "bucket": "android",
       "status": "queued",
       "evidence": [
         {
@@ -320,7 +320,7 @@
     {
       "topic_key": "https://developer.android.com/about/versions/16/features#color-temperature-tint",
       "title": "Android 16 features — Precise color temperature and tint adjustments",
-      "bucket": "android_platform_camera_adjacent",
+      "bucket": "android",
       "status": "queued",
       "evidence": [
         {
@@ -338,7 +338,7 @@
     {
       "topic_key": "https://developer.android.com/about/versions/16/features#night-mode-scene-detection",
       "title": "Android 16 features — Camera night mode scene detection",
-      "bucket": "android_platform_camera_adjacent",
+      "bucket": "android",
       "status": "queued",
       "evidence": [
         {
@@ -356,7 +356,7 @@
     {
       "topic_key": "https://developer.android.com/about/versions/16/features#motion-photos",
       "title": "Android 16 features — Motion photo capture intent actions",
-      "bucket": "android_platform_camera_adjacent",
+      "bucket": "android",
       "status": "queued",
       "evidence": [
         {
@@ -374,7 +374,7 @@
     {
       "topic_key": "https://developer.android.com/about/versions/16/features#ultra-hdr",
       "title": "Android 16 features — UltraHDR image enhancements",
-      "bucket": "android_platform_camera_adjacent",
+      "bucket": "android",
       "status": "queued",
       "evidence": [
         {

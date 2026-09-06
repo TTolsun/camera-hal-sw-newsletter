@@ -110,27 +110,36 @@ function scopedCandidate(url, bucket, overrides = {}) {
       driver_stack_relevance: 5,
       counts_as_driver_topic: true
     },
-    android_platform_camera_adjacent: {
-      editorial_priority: 3,
+    android: {
+      editorial_priority: 4,
       aosp_camera_directness: 2,
       counts_as_primary_camera_topic: true
     },
+    // 구성 판정용 실효 버킷. 실제 후보 버킷은 android 이고, 보조 등급으로 떨어지는
+    // 근거(멀티미디어 출력 relevance)를 함께 실어 준다.
+    android_supporting: {
+      relevance_bucket: 'android',
+      editorial_priority: 4,
+      multimedia_camera_output_relevance: 5
+    },
     android_multimedia_camera_output: {
+      relevance_bucket: 'android',
       editorial_priority: 4,
       multimedia_camera_output_relevance: 5
     },
     soc_platform_signal: {
-      editorial_priority: 5,
+      relevance_bucket: 'android',
+      editorial_priority: 4,
       soc_platform_relevance: 5,
       counts_as_soc_topic: true
     },
     cpp_ai_tooling_fallback: {
-      editorial_priority: 6,
+      editorial_priority: 3,
       native_tooling_relevance: 5,
       counts_as_fallback_topic: true
     },
     generic_tech_watchlist: {
-      editorial_priority: 7
+      editorial_priority: 5
     }
   };
   return reporterCandidate(url, {

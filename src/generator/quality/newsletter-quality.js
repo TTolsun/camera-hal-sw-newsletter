@@ -20,6 +20,9 @@ const {
 const {
   BUCKETS,
   BUCKET_PRIORITY,
+  ANDROID_SUPPORTING,
+  canonicalBucket,
+  compositionBucket,
   classifyAospCameraStackCandidate
 } = require('../../shared/domain/aosp-camera-scope');
 const {
@@ -171,7 +174,8 @@ function number(value, fallback = 0) {
 }
 
 function knownBucket(value) {
-  const bucket = text(value);
+  // 옛 이름을 그대로 버리면 scope 가 통째로 null 이 되어 그 섹션이 집계에서 사라진다.
+  const bucket = canonicalBucket(text(value));
   return Object.values(BUCKETS).includes(bucket) ? bucket : '';
 }
 
@@ -331,10 +335,11 @@ function scopeFromStructuredFields(value, origin) {
     ...scores,
     counts_as_primary_camera_topic: bool(
       value.counts_as_primary_camera_topic,
-      bucket === BUCKETS.DIRECT_AOSP_CAMERA || bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+      bucket === BUCKETS.DIRECT_AOSP_CAMERA ||
+        (bucket === BUCKETS.ANDROID && compositionBucket({ ...value, relevance_bucket: bucket, ...scores }) === BUCKETS.ANDROID)
     ),
     counts_as_driver_topic: bool(value.counts_as_driver_topic, bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE),
-    counts_as_soc_topic: bool(value.counts_as_soc_topic, bucket === BUCKETS.SOC_PLATFORM_SIGNAL),
+    counts_as_soc_topic: bool(value.counts_as_soc_topic, false),
     counts_as_fallback_topic: bool(value.counts_as_fallback_topic, bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK),
     guardrail_impact_class: inferGuardrailImpactClass(value),
     evidence_origin: text(value.evidence_origin) || origin,
@@ -435,9 +440,11 @@ function sectionScope(section, binding) {
 function sectionCountDetail(section, scope, index) {
   const bucket = knownBucket(scope?.relevance_bucket) || BUCKETS.GENERIC_TECH_WATCHLIST;
   const publishableScope = scope?.publishable_scope === true;
-  const countsAsPrimaryStack = isPrimaryCameraStackBucket(bucket);
-  const countsAsSupportingMain = isSupportingMainBucket(bucket);
-  const countsAsForbiddenMain = isForbiddenMainBucket(bucket);
+  // 등급 판정은 실효 버킷으로 한다. android 로 합쳐져도 멀티미디어·SoC 근거는 보조다.
+  const tierBucket = compositionBucket(scope || {}) || bucket;
+  const countsAsPrimaryStack = isPrimaryCameraStackBucket(tierBucket);
+  const countsAsSupportingMain = isSupportingMainBucket(tierBucket);
+  const countsAsForbiddenMain = isForbiddenMainBucket(tierBucket);
   let countReason = `${scope?.count_source || scope?.evidence_origin || 'unknown'} classified this section as ${bucket}.`;
   let exclusionReason = '';
   if (!publishableScope) {
@@ -462,7 +469,7 @@ function sectionCountDetail(section, scope, index) {
     editorial_priority: number(scope?.editorial_priority, BUCKET_PRIORITY[bucket] || 6),
     counts_as_primary_camera_topic: countsAsPrimaryStack,
     counts_as_driver_topic: bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
-    counts_as_soc_topic: bucket === BUCKETS.SOC_PLATFORM_SIGNAL,
+    counts_as_soc_topic: false,
     counts_as_fallback_topic: bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK,
     counts_as_supporting_main_article: countsAsSupportingMain,
     counts_as_forbidden_main_article: countsAsForbiddenMain,
@@ -735,23 +742,26 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const sectionCountDetails = sections.map((section, index) => sectionCountDetail(section, sectionScopes[index], index));
   const scopeBucketCounts = sectionScopes.reduce((counts, scope) => {
     if (scope?.publishable_scope !== true) return counts;
-    const bucket = text(scope?.relevance_bucket) || 'unknown';
+    // 실효 버킷으로 센다. android 로 합쳐도 멀티미디어 출력·SoC 신호의 보조 등급은 유지된다.
+    const bucket = (scope?.relevance_bucket ? compositionBucket(scope) : '') || 'unknown';
     counts[bucket] = (counts[bucket] || 0) + 1;
     return counts;
   }, {
     [BUCKETS.DIRECT_AOSP_CAMERA]: 0,
     [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 0,
-    [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 0,
-    [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 0,
-    [BUCKETS.SOC_PLATFORM_SIGNAL]: 0,
+    [BUCKETS.ANDROID]: 0,
+    [ANDROID_SUPPORTING]: 0,
     [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 0,
     [BUCKETS.GENERIC_TECH_WATCHLIST]: 0
   });
   const directAospCameraCount = scopeBucketCounts[BUCKETS.DIRECT_AOSP_CAMERA] || 0;
   const cameraDriverImagePipelineCount = scopeBucketCounts[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE] || 0;
-  const androidPlatformCameraAdjacentCount = scopeBucketCounts[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT] || 0;
-  const androidMultimediaCameraOutputCount = scopeBucketCounts[BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT] || 0;
-  const socPlatformSignalCount = scopeBucketCounts[BUCKETS.SOC_PLATFORM_SIGNAL] || 0;
+  const androidPlatformCameraAdjacentCount = scopeBucketCounts[BUCKETS.ANDROID] || 0;
+  const androidSupportingCount = scopeBucketCounts[ANDROID_SUPPORTING] || 0;
+  // 리포트는 근거별로 나눠 본다. soc 근거가 먼저, 나머지 보조는 멀티미디어로 센다.
+  const socPlatformSignalCount = sectionScopes.filter(scope =>
+    scope?.publishable_scope === true && scope?.counts_as_soc_topic === true).length;
+  const androidMultimediaCameraOutputCount = Math.max(0, androidSupportingCount - socPlatformSignalCount);
   const cppAiToolingFallbackCount = scopeBucketCounts[BUCKETS.CPP_AI_TOOLING_FALLBACK] || 0;
   const genericTechWatchlistCount = scopeBucketCounts[BUCKETS.GENERIC_TECH_WATCHLIST] || 0;
   const topicTierCounts = topicTierDistribution(scopeBucketCounts);
@@ -761,7 +771,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
   const forbiddenMainArticleCount = articlePolicy.forbiddenMainBuckets
     .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
-  const fallbackRelevanceCount = socPlatformSignalCount + cppAiToolingFallbackCount;
+  // 옛 soc_platform_signal + cpp_ai 자리다. soc 는 android_supporting 으로 합쳐졌고
+  // 멀티미디어도 같은 보조 등급이므로 둘을 구분하지 않는다.
+  const fallbackRelevanceCount = androidSupportingCount + cppAiToolingFallbackCount;
   const expandedScopeCoverage = primaryCameraStackCount + supportingMainArticleCount;
   const publishableScopeCount = sectionScopes.filter(scope => scope?.publishable_scope === true).length;
   const compositionMode = publishableScopeCount === 0 && sections.length > 0
@@ -916,7 +928,7 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
       expanded_scope_article_count: expandedScopeCoverage,
       direct_aosp_camera_count: directAospCameraCount,
       camera_driver_image_pipeline_count: cameraDriverImagePipelineCount,
-      android_platform_camera_adjacent_count: androidPlatformCameraAdjacentCount,
+      android_count: androidPlatformCameraAdjacentCount,
       android_multimedia_camera_output_count: androidMultimediaCameraOutputCount,
       soc_platform_signal_count: socPlatformSignalCount,
       cpp_ai_tooling_fallback_count: cppAiToolingFallbackCount,

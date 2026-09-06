@@ -45,7 +45,7 @@ const SECTION_SCOPE_FALLBACK_RULES = [
     pattern: /\bUltra\s+HDR\b|\bHDR\s+video\b|\bAPV\b|\bAdvanced\s+Professional\s+Video\b|\bMediaProvider\b|\bmedia\s+provider\b|\bMediaStore\b|\bmedia\s+store\b|\bgallery\s+output\b|\bmedia\s+output\b|\bvideo\s+call\b|\bcamera\s*\/\s*audio\s+sync\b|\bsocial\s+app\s+camera\s+capture\b|\bcamera\s+capture\s+result\b|\bcaptured\s+image\s*\/\s*video\s+output\b/i,
     scope: {
       editorial_priority: 4,
-      relevance_bucket: BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT,
+      relevance_bucket: BUCKETS.ANDROID,
       aosp_camera_directness: 0,
       driver_stack_relevance: 0,
       multimedia_camera_output_relevance: 3,
@@ -61,8 +61,8 @@ const SECTION_SCOPE_FALLBACK_RULES = [
   {
     pattern: /\bSoC\b|\bCPU\b|\bGPU\b|\bNPU\b|\bDSP\b|\bthermal\b|\bpower\b|\bDVFS\b|\bscheduler\b|\bmemory bandwidth\b|Exynos|Snapdragon|Google Tensor/i,
     scope: {
-      editorial_priority: 5,
-      relevance_bucket: BUCKETS.SOC_PLATFORM_SIGNAL,
+      editorial_priority: 4,
+      relevance_bucket: BUCKETS.ANDROID,
       aosp_camera_directness: 0,
       driver_stack_relevance: 0,
       multimedia_camera_output_relevance: 0,

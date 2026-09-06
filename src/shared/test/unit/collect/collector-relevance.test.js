@@ -238,11 +238,11 @@ test('collector canonicalizes Android docs locale URLs and keeps Latest Updates 
     behavior_change: 'Added CameraX compatibility updates for Android camera apps.',
     sourceKind: 'release_note_item',
     collectionMode: 'release-note-item',
-    relevanceBucketHint: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+    relevanceBucketHint: BUCKETS.ANDROID
   }));
 
   assert.equal(candidate.url, 'https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-beta01');
-  assert.equal(candidate.relevance_bucket, BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT);
+  assert.equal(candidate.relevance_bucket, BUCKETS.ANDROID);
   assert.ok(['main', 'short'].includes(candidate.finalSelectionEligibility));
 });
 
@@ -297,8 +297,8 @@ test('RSS roundup child extraction is additive and uses normal evidence derivati
   assert.equal(child.source_gap_risk, false);
   assert.ok(['main', 'short'].includes(child.finalSelectionEligibility));
   assert.ok([
-    BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT,
-    BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+    BUCKETS.ANDROID,
+    BUCKETS.ANDROID,
     BUCKETS.DIRECT_AOSP_CAMERA
   ].includes(child.relevance_bucket));
   assert.equal(items.some(item => /Compose|audio routing|Screen recording/i.test(item.title) && item.source_extraction?.mode === 'roundup_child_topic'), false);
@@ -437,7 +437,7 @@ test('collector keeps official AOSP and CameraX camera child rows reviewable wit
   )));
   assert.ok([
     BUCKETS.DIRECT_AOSP_CAMERA,
-    BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+    BUCKETS.ANDROID
   ].includes(cameraXRows[0].relevance_bucket));
 
   const nonCameraHal = normalizeCandidate(raw({
@@ -629,12 +629,12 @@ test('Media3 release notes promote only concrete camera-output items', () => {
   assert.equal(items.length, 2);
   assert.equal(items.some(item => item.url.endsWith('#media3')), false);
   assert.ok(cameraOutput);
-  assert.equal(cameraOutput.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.equal(cameraOutput.relevance_bucket, BUCKETS.ANDROID);
   assert.equal(cameraOutput.reference_only, false);
   assert.equal(cameraOutput.source_gap_risk, false);
   assert.ok(['main', 'short'].includes(cameraOutput.finalSelectionEligibility));
   assert.ok(streamingOnly);
-  assert.notEqual(streamingOnly.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.notEqual(streamingOnly.relevance_bucket, BUCKETS.ANDROID);
   assert.equal(streamingOnly.finalSelectionEligibility, 'watchlist');
 });
 
@@ -674,7 +674,7 @@ test('official Android media reference docs remain reference-only without dated 
   assert.equal(candidate.reference_only, true);
   assert.equal(candidate.source_quality.main_article_source_allowed, false);
   assert.ok(candidate.source_quality.main_article_source_blockers.includes('reference_only'));
-  assert.notEqual(candidate.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.notEqual(candidate.relevance_bucket, BUCKETS.ANDROID);
 });
 
 test('collector keeps article-level ICamera and Linux camera pipeline candidates selectable', () => {
@@ -715,7 +715,7 @@ test('collector allows public SoC platform signals only with camera impact evide
     summary: 'The public platform note discusses NPU scheduling, GPU power, thermal limits, and camera latency for video capture workloads.'
   }));
 
-  assert.equal(candidate.relevance_bucket, BUCKETS.SOC_PLATFORM_SIGNAL);
+  assert.equal(candidate.relevance_bucket, BUCKETS.ANDROID);
   assert.equal(candidate.counts_as_soc_topic, true);
 });
 

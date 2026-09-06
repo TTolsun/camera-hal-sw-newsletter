@@ -79,7 +79,7 @@ function candidatePayload(title = 'CameraX release', overrides = {}) {
         reliability: 'official',
         source_id: 'camerax-release-notes',
         source: 'CameraX Release Notes',
-        relevance_bucket: 'android_platform_camera_adjacent',
+        relevance_bucket: 'android',
         finalSelectionEligibility: 'short',
         final_selection_eligibility: 'short',
         main_eligible: true

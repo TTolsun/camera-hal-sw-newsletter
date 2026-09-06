@@ -46,7 +46,7 @@ function policySection(headline, url, bucket = 'direct_aosp_camera', overrides =
   const primaryBuckets = new Set([
     'direct_aosp_camera',
     'camera_driver_image_pipeline',
-    'android_platform_camera_adjacent'
+    'android'
   ]);
   return {
     ...section(headline, url),
@@ -599,7 +599,7 @@ test('targeted repair rejects output that shrinks 3 sections to 2', () => {
   const before = [
     policySection('CameraX release', 'https://example.com/camerax'),
     policySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline'),
-    policySection('Android platform camera update', 'https://example.com/platform', 'android_platform_camera_adjacent')
+    policySection('Android platform camera update', 'https://example.com/platform', 'android')
   ];
   const after = before.slice(0, 2);
 
@@ -631,7 +631,7 @@ test('targeted repair rejects locked section source URL drift', () => {
     source_candidate_hash: 'changed-hash'
   });
   const other = policySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline');
-  const before = [locked, other, policySection('Android platform update', 'https://example.com/platform', 'android_platform_camera_adjacent')];
+  const before = [locked, other, policySection('Android platform update', 'https://example.com/platform', 'android')];
 
   assert.throws(
     () => validateTargetedRepairResult({
@@ -656,7 +656,7 @@ test('targeted repair rejects locked section source URL drift', () => {
 test('targeted repair allows metadata repair when article identity stays fixed', () => {
   const a = policySection('CameraX release', 'https://example.com/a');
   const b = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline');
-  const c = policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent');
+  const c = policySection('Android platform update', 'https://example.com/c', 'android');
   const repairedB = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline', {
     source_candidate_hash: b.source_candidate_hash,
     effective_actionability_level: 'concrete_check',
@@ -736,7 +736,7 @@ test('completion mode keeps issue-level story markers for story-v1 sections', ()
 test('targeted repair rejects same-count article identity drift', () => {
   const a = policySection('CameraX release', 'https://example.com/a');
   const b = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline');
-  const c = policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent');
+  const c = policySection('Android platform update', 'https://example.com/c', 'android');
   const driftedB = policySection('Driver pipeline update', 'https://example.com/b-new', 'camera_driver_image_pipeline', {
     source_candidate_hash: 'new-driver-hash'
   });
@@ -766,7 +766,7 @@ test('editor retry contract uses previous valid draft as the target section coun
   ];
   const previousValidEditor = editorWithSections([
     ...locked,
-    policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent')
+    policySection('Android platform update', 'https://example.com/c', 'android')
   ]);
 
   const contract = buildEditorRetryContract({
@@ -785,7 +785,7 @@ test('editor retry contract rejects locked-only output and section count drift',
     policySection('CameraX release', 'https://example.com/a'),
     policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline')
   ];
-  const replacement = policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent');
+  const replacement = policySection('Android platform update', 'https://example.com/c', 'android');
   const contract = buildEditorRetryContract({
     lastKnownValidEditor: editorWithSections([...locked, replacement]),
     lockedSections: locked
@@ -818,7 +818,7 @@ test('editor retry contract rejects locked-only output and section count drift',
 test('targeted repair rejects reordered locked sections around a middle replacement', () => {
   const a = policySection('CameraX release', 'https://example.com/a');
   const b = policySection('Driver pipeline update', 'https://example.com/b', 'camera_driver_image_pipeline');
-  const c = policySection('Android platform update', 'https://example.com/c', 'android_platform_camera_adjacent');
+  const c = policySection('Android platform update', 'https://example.com/c', 'android');
   const repairedB = policySection('Repaired driver pipeline update', 'https://example.com/b-repaired', 'camera_driver_image_pipeline');
 
   for (const afterSections of [
@@ -850,7 +850,7 @@ test('invalid repair output writes reviewable fallback without replacing last va
   const sections = [
     policySection('CameraX release', 'https://example.com/camerax'),
     policySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline'),
-    policySection('Android platform update', 'https://example.com/platform', 'android_platform_camera_adjacent')
+    policySection('Android platform update', 'https://example.com/platform', 'android')
   ].map((item, index) => ({
     ...item,
     evidence_summary: item.confirmed_facts[0],
@@ -1018,7 +1018,7 @@ test('#632 completionRefillTargetCount clamps the pre-repair count into [min, ma
 test('#632 deterministic demote keeps the complement and records dropped sections as hard-blocked groups', () => {
   const strongA = policySection('CameraX 1.6.1 release', 'https://example.com/camerax', 'direct_aosp_camera');
   const strongB = policySection('atomisp driver fix', 'https://example.com/atomisp', 'soc_platform_signal');
-  const weak = policySection('Weak adjacent note', 'https://example.com/weak', 'android_platform_camera_adjacent');
+  const weak = policySection('Weak adjacent note', 'https://example.com/weak', 'android');
   const sections = [strongA, strongB, weak];
 
   // structural repair plan이 약한 1개 섹션만 가리킨다고 가정.

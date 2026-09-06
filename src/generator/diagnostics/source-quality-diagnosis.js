@@ -69,7 +69,7 @@ const SEVERITY_PRIORITY = Object.freeze({
 const KNOWN_CAMERA_BUCKETS = new Set([
   'direct_aosp_camera',
   'camera_driver_image_pipeline',
-  'android_platform_camera_adjacent',
+  'android',
   'android_multimedia_camera_output',
   'soc_platform_signal',
   'cpp_ai_tooling_fallback',
@@ -194,7 +194,7 @@ function isPrimaryCameraStackCandidate(candidate = {}) {
   return [
     'direct_aosp_camera',
     'camera_driver_image_pipeline',
-    'android_platform_camera_adjacent'
+    'android'
   ].includes(relevanceBucket(candidate));
 }
 
@@ -594,7 +594,8 @@ function buildSourceQualityDiagnosisReport(options = {}) {
     gateSummary.android_multimedia_camera_output_count,
     generationStatus.android_multimedia_camera_output_count,
     statusComposition.android_multimedia_camera_output_count,
-    hasCandidateEvidence ? countOrNull(candidates, candidate => relevanceBucket(candidate) === 'android_multimedia_camera_output') : null
+    // 버킷이 android 로 합쳐졌으므로 이름이 아니라 분류가 남긴 relevance 점수를 센다.
+    hasCandidateEvidence ? countOrNull(candidates, candidate => Number(candidate?.multimedia_camera_output_relevance || 0) > 0) : null
   );
 
   if (!hasCandidateInput || !hasShortlistReport) {

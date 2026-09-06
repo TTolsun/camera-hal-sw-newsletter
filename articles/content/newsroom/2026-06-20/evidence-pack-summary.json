@@ -467,7 +467,7 @@
       "source_url_quality": "official_dated_release",
       "source_reliability": "official",
       "freshness_window": "fallback",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "article_group_key": "article:https://developer.android.com/tools/agents/android-cli#skills-add",
       "tooling_workflow_type": "",
       "source_event_id": "",

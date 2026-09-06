@@ -51,7 +51,7 @@ function writeRecoveryPrompt(newsroomDir, context = {}) {
     `- Selection warning: ${selectionDiagnostics.selection_warnings.join('; ') || '없음'}`,
     `- Selection error: ${selectionDiagnostics.selection_errors.join('; ') || '없음'}`,
     `- direct_aosp_camera: ${selectionDiagnostics.direct_aosp_camera_count ?? 'unknown'}`,
-    `- android_platform_camera_adjacent: ${selectionDiagnostics.android_platform_camera_adjacent_count ?? 'unknown'}`,
+    `- android: ${selectionDiagnostics.android_count ?? 'unknown'}`,
     `- camera_driver_image_pipeline: ${selectionDiagnostics.camera_driver_image_pipeline_count ?? 'unknown'}`,
     `- android_multimedia_camera_output: ${selectionDiagnostics.android_multimedia_camera_output_count ?? 'unknown'}`,
     `- soc_platform_signal: ${selectionDiagnostics.soc_platform_signal_count ?? 'unknown'}`,

@@ -127,7 +127,7 @@ test('CameraX 소스는 adjacent 버킷으로 적립된다(direct로 승격되�
 
   assert.ok(entries.length > 0);
   for (const entry of entries) {
-    assert.equal(entry.bucket, 'android_platform_camera_adjacent');
+    assert.equal(entry.bucket, 'android');
   }
 });
 
@@ -244,7 +244,7 @@ test('후보 적립은 날짜 신뢰도를 지어내지 않는다', () => {
     candidates: [{
       url: 'https://example.com/camera-post',
       title: 'camera post',
-      relevance_bucket: 'android_platform_camera_adjacent',
+      relevance_bucket: 'android',
       finalSelectionEligibility: 'watchlist',
       publishedAt: '2026-08-14'
     }],

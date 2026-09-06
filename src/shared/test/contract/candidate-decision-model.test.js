@@ -36,7 +36,7 @@ function makeMetadata(overrides = {}) {
 
 function makeScopeMetadata(overrides = {}) {
   return {
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     aosp_camera_directness: 4,
     ...overrides
   };
@@ -113,7 +113,7 @@ test('Case 2: CameraX dated release row with concrete change -> primary, main or
   const sourceQuality = makeSourceQuality({
     source_role: 'project_release_source'
   });
-  const scopeMetadata = makeScopeMetadata({ relevance_bucket: 'android_platform_camera_adjacent' });
+  const scopeMetadata = makeScopeMetadata({ relevance_bucket: 'android' });
 
   const decision = decisionFromCandidate({
     classification,
@@ -178,7 +178,7 @@ test('Case 4: Cross-check satisfied candidate -> verified', () => {
     cross_check_status: 'required_satisfied',
     requires_cross_check: true
   });
-  const scopeMetadata = makeScopeMetadata({ relevance_bucket: 'android_platform_camera_adjacent' });
+  const scopeMetadata = makeScopeMetadata({ relevance_bucket: 'android' });
 
   const decision = decisionFromCandidate({
     classification,

@@ -6,7 +6,7 @@ const { hashText } = require('../common/source-identity');
 const { accrueDeepDiveTopics, loadDeepDiveTopicQueue, saveDeepDiveTopicQueue } = require('./deep-dive-topic-queue');
 const { bucketForSource, loadRegistry } = require('./source-monitor');
 
-const CAMERA_HAL_DEEP_DIVE_BUCKETS = new Set(['direct_aosp_camera', 'android_platform_camera_adjacent']);
+const CAMERA_HAL_DEEP_DIVE_BUCKETS = new Set(['direct_aosp_camera', 'android']);
 const MAIN_ELIGIBILITY = new Set(['main', 'short']);
 
 // 모니터 이벤트는 monitorEventEntries가 따로 적립한다. 같은 신호를 여기서도 후보로 받으면

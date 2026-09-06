@@ -224,7 +224,7 @@
       "source_role": "official_release_source",
       "source_url_quality": "official_site_update_row",
       "freshness_window": "fallback",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
     },
     {

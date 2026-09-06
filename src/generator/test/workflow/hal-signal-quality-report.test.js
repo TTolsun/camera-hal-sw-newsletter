@@ -28,7 +28,7 @@ function section(url, overrides = {}) {
       must_not_be_used_as_golden_public_artifact: true
     },
     headline: 'CameraX release gives HAL teams a validation target',
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     source_candidate_url: url,
     article_sections: {
       verified_facts: ['CameraX 1.5.0 was released on 2026-05-01.'],
@@ -68,7 +68,7 @@ function writeRequiredArtifacts(root, date, overrides = {}) {
     selected_articles: [{
       title: editor.sections[0].headline,
       url,
-      relevance_bucket: 'android_platform_camera_adjacent',
+      relevance_bucket: 'android',
       finalSelectionEligibility: 'main',
       selected: true,
       hasDatedEvidence: true,
@@ -87,7 +87,7 @@ function writeRequiredArtifacts(root, date, overrides = {}) {
       headline: editor.sections[0].headline,
       status: 'PASS',
       scope_count: {
-        relevance_bucket: 'android_platform_camera_adjacent',
+        relevance_bucket: 'android',
         publishable_scope: true
       },
       hard_fail_reasons: [],

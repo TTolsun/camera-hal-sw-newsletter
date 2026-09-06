@@ -99,7 +99,7 @@
       "index": 1,
       "title": "8: Building seamless Android experiences across devices with Jetpack Compose - 17 Things to know for Android developers at Google I/O",
       "url": "https://goo.gle/AdaptiveApps_IO26",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "hal_impact_axes": [
         "camerax_app_compatibility",
         "framework_hal_contract",

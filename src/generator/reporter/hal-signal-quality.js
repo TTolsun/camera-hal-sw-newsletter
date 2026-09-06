@@ -65,7 +65,7 @@ const FALLBACK_DO_NOT_OVERSTATE =
 const BUCKET_IMPACT_AXES = Object.freeze({
   direct_aosp_camera: ['framework_hal_contract'],
   camera_driver_image_pipeline: ['driver_image_pipeline'],
-  android_platform_camera_adjacent: ['camerax_app_compatibility'],
+  android: ['camerax_app_compatibility'],
   android_multimedia_camera_output: ['stream_buffer_metadata'],
   soc_platform_signal: ['soc_resource_contention'],
   cpp_ai_tooling_fallback: ['native_tooling_workflow'],
@@ -218,7 +218,7 @@ function inferHalImpactAxes(value = {}) {
 
   if (bucket === 'direct_aosp_camera') axes.push('framework_hal_contract');
   if (bucket === 'camera_driver_image_pipeline') axes.push('driver_image_pipeline');
-  if (bucket === 'android_platform_camera_adjacent') axes.push('camerax_app_compatibility');
+  if (bucket === 'android') axes.push('camerax_app_compatibility');
   if (bucket === 'android_multimedia_camera_output') axes.push('stream_buffer_metadata');
   if (bucket === 'soc_platform_signal') axes.push('soc_resource_contention');
   if (bucket === 'cpp_ai_tooling_fallback') axes.push('native_tooling_workflow');

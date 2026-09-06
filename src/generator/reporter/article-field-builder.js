@@ -1,7 +1,8 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   BUCKETS,
-  classifyAospCameraStackCandidate
+  classifyAospCameraStackCandidate,
+  canonicalBucket
 } = require('../../shared/domain/aosp-camera-scope');
 const { normalizeArticleSections } = require('./article-section-contract');
 
@@ -192,24 +193,39 @@ function cleanBehaviorChange(candidate = {}) {
   };
 }
 
+// android 로 합쳐지기 전 이름이나 relevance 점수만 들고 오는 호출부가 있다.
+// 셋 중 하나라도 있으면 그 근거로 본다.
+function hasSocEvidence(candidate = {}) {
+  return candidate.counts_as_soc_topic === true ||
+    candidate.relevance_bucket === 'soc_platform_signal' ||
+    Number(candidate.soc_platform_relevance || 0) > 0;
+}
+
+function hasMultimediaOutputEvidence(candidate = {}) {
+  return candidate.relevance_bucket === 'android_multimedia_camera_output' ||
+    Number(candidate.multimedia_camera_output_relevance || 0) > 0;
+}
+
 function inferGuardrailImpactClass(candidate = {}) {
   const explicit = text(candidate.guardrail_impact_class || candidate.guardrailImpactClass);
   if (Object.values(GUARDRAIL_IMPACT_CLASSES).includes(explicit)) return explicit;
 
-  const bucket = candidateBucket(candidate);
+  // 옛 버킷 이름이 그대로 들어오는 호출부가 있어 한 번 접는다.
+  const bucket = canonicalBucket(candidateBucket(candidate));
   const directness = Number(candidate.aosp_camera_directness || 0);
   if (bucket === BUCKETS.DIRECT_AOSP_CAMERA) {
     return directness >= 3 ? GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT : GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT;
   }
   if (bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) return GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE;
-  if (bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) return GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT;
-  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) return GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT;
   if (bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) return GUARDRAIL_IMPACT_CLASSES.TOOLING_SUPPORT;
-  if (bucket === BUCKETS.SOC_PLATFORM_SIGNAL) {
+  // SoC 근거로 android 에 들어온 항목은 카메라 파이프라인 근거가 있을 때만 stack source 다.
+  // 버킷이 합쳐졌으므로 버킷 이름이 아니라 분류가 남긴 근거 종류를 본다.
+  if (hasSocEvidence(candidate)) {
     return hasDirectCameraPipelineEvidence(candidate)
       ? GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE
       : GUARDRAIL_IMPACT_CLASSES.WATCH_ONLY;
   }
+  if (bucket === BUCKETS.ANDROID) return GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT;
   return GUARDRAIL_IMPACT_CLASSES.WATCH_ONLY;
 }
 
@@ -238,10 +254,10 @@ function buildStaticBackgroundContext(candidate = {}) {
   if (impact === GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE || bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) {
     return 'Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.';
   }
-  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
+  if (hasMultimediaOutputEvidence(candidate)) {
     return 'Camera output / multimedia supporting items are not direct HAL contract evidence; treat them as capture output, preview/video/gallery/video-call behavior, and downstream validation signals.';
   }
-  if (impact === GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT || bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) {
+  if (impact === GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT || bucket === BUCKETS.ANDROID) {
     return 'CameraX와 Camera2는 HAL 위 계층이므로 release note는 direct HAL contract evidence가 아니라 compatibility, API usage, app-facing validation 신호로 보는 것이 적절합니다.';
   }
   if (impact === GUARDRAIL_IMPACT_CLASSES.TOOLING_SUPPORT || bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) {
@@ -259,7 +275,7 @@ function buildHalPerspective(candidate = {}) {
   if (impact === GUARDRAIL_IMPACT_CLASSES.CAMERA_STACK_SOURCE) {
     return 'driver, sensor, ISP, image pipeline 관점에서 frame timing, format negotiation, integration validation 같은 구체 점검 항목을 먼저 제시하고, source 범위를 벗어난 Android HAL contract 변경으로는 단정하지 않습니다.';
   }
-  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
+  if (hasMultimediaOutputEvidence(candidate)) {
     return 'Do not infer a HAL API change; review preview, video, gallery, video-call, and captured image/video output quality or compatibility regressions.';
   }
   if (impact === GUARDRAIL_IMPACT_CLASSES.FRAMEWORK_ADJACENT) {
@@ -281,7 +297,7 @@ function buildOverclaimGuardrails(candidate = {}) {
   if (impact !== GUARDRAIL_IMPACT_CLASSES.DIRECT_HAL_CONTRACT) {
     guardrails.push('이 항목을 direct HAL API 또는 contract change로 표현하지 않습니다.');
   }
-  if (bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) {
+  if (bucket === BUCKETS.ANDROID) {
     guardrails.push('CameraX 또는 Camera2 항목은 vendor HAL implementation change가 아니라 app/framework compatibility와 validation pattern 중심으로 설명합니다.');
   }
   if (bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) {
@@ -290,7 +306,7 @@ function buildOverclaimGuardrails(candidate = {}) {
   if (bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) {
     guardrails.push('libcamera, V4L2, driver, sensor 항목은 downstream Android evidence가 없으면 Android vendor HAL behavior로 claim하지 않습니다.');
   }
-  if (bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
+  if (hasMultimediaOutputEvidence(candidate)) {
     guardrails.push('Camera output / multimedia supporting items must not be described as direct HAL API, vendor HAL implementation, or HAL contract changes.');
   }
   return unique(guardrails);

@@ -1,5 +1,6 @@
 const {
-  BUCKETS
+  BUCKETS,
+  ANDROID_SUPPORTING
 } = require('../domain/aosp-camera-scope');
 
 const PRODUCT_VERSION_TOKEN_PATTERN = /^(?:android|aosp|camera|camerax|camera2|libcamera|gemini|ndk|sdk|gcc|clang|llvm|v?\d+(?:\.\d+){1,4}.*|c\+\+\d{2})$/i;
@@ -30,13 +31,12 @@ const TOPIC_TIER_BUCKETS = Object.freeze({
   direct_camera: Object.freeze([
     BUCKETS.DIRECT_AOSP_CAMERA,
     BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
-    BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+    BUCKETS.ANDROID
   ]),
-  multimedia: Object.freeze([
-    BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT
-  ]),
-  platform: Object.freeze([
-    BUCKETS.SOC_PLATFORM_SIGNAL
+  // 멀티미디어 출력과 SoC 신호는 android 로 합쳐졌고 서로 구분되지 않는다. 두 티어를
+  // supporting 하나로 합친다 — 구분할 수 없는 값을 두 칸에 나눠 적으면 리포트가 거짓말을 한다.
+  supporting: Object.freeze([
+    ANDROID_SUPPORTING
   ]),
   fallback: Object.freeze([
     BUCKETS.CPP_AI_TOOLING_FALLBACK

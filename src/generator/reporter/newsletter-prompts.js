@@ -40,7 +40,7 @@ function articleSectionContractPrompt() {
     'article_sections.action_items는 test, log, metric, device class, API/component, stream combination, owner, PoC handoff 중 하나 이상을 명명하는 구체적 action 배열이어야 합니다.',
     'Action target scope:',
     '- direct_camera_hal/direct_aosp_camera/camera_driver_image_pipeline: source가 직접 뒷받침할 때만 request/result, metadata, stream, buffer, vendor tag, HAL contract를 사용할 수 있습니다.',
-    '- android_camera_api/android_platform_camera_adjacent: CameraX/Camera2, preview/capture, permission, app compatibility, Surface 연결 수준으로 제한하세요.',
+    '- android_camera_api/android: CameraX/Camera2, preview/capture, permission, app compatibility, Surface 연결 수준으로 제한하세요.',
     '- android_multimedia_camera_output: Camera HAL 직접 변경으로 쓰지 말고 camera output path, preview, recording, camera-generated playback, gallery/media access, sharing, video communication, MediaCodec/Media3/MediaRecorder/Photo Picker/WebRTC/A/V sync 같은 downstream media-pipeline behavior 수준으로 제한하세요.',
     '- android_multimedia_camera_output article은 what changed, affected camera output path, why Camera HAL/Android camera engineers should care, direct/indirect/downstream impact를 모두 설명해야 합니다. public article에서는 direct/indirect/downstream impact를 enum이 아니라 자연스러운 한국어 설명 문장으로 쓰세요.',
     '- Media3/MediaCodec/Photo Picker 같은 official Android media source라도 generic player, streaming-only, music, DRM/player-only, OTT-only, audio-only, gallery UI-only 변경이면 reject/downgrade하고 Camera HAL 직접 조치로 쓰지 마세요.',

@@ -15,7 +15,9 @@ const {
   COMPOSITION_MODES
 } = require('./selection-policy-constants');
 const {
-  BUCKETS
+  BUCKETS,
+  ANDROID_SUPPORTING,
+  compositionBucket
 } = require('../../shared/domain/aosp-camera-scope');
 const {
   candidateGroupKey
@@ -181,14 +183,19 @@ function bucketCountMap(candidates) {
   const counts = {
     [BUCKETS.DIRECT_AOSP_CAMERA]: 0,
     [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 0,
-    [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 0,
-    [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 0,
-    [BUCKETS.SOC_PLATFORM_SIGNAL]: 0,
+    [BUCKETS.ANDROID]: 0,
+    [ANDROID_SUPPORTING]: 0,
     [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 0,
     [BUCKETS.GENERIC_TECH_WATCHLIST]: 0
   };
   for (const candidate of ensureArray(candidates)) {
-    const bucket = text(candidate.relevance_bucket || candidateScope(candidate).relevance_bucket);
+    // 실효 버킷으로 센다. relevance_bucket 은 android 하나지만 보조 등급은 유지해야 한다.
+    const scope = candidateScope(candidate);
+    const bucket = compositionBucket({
+      relevance_bucket: candidate.relevance_bucket || scope.relevance_bucket,
+      counts_as_soc_topic: candidate.counts_as_soc_topic ?? scope.counts_as_soc_topic,
+      multimedia_camera_output_relevance: candidate.multimedia_camera_output_relevance ?? scope.multimedia_camera_output_relevance
+    });
     if (Object.prototype.hasOwnProperty.call(counts, bucket)) {
       counts[bucket] += 1;
     }
@@ -196,30 +203,52 @@ function bucketCountMap(candidates) {
   return counts;
 }
 
+// 버킷은 android 하나지만 리포트는 근거별로 나눈다. 분류가 남긴 신호를 그대로 센다.
+function evidenceCountMap(candidates) {
+  const counts = { multimedia: 0, soc: 0 };
+  for (const candidate of ensureArray(candidates)) {
+    const scope = candidateScope(candidate);
+    const merged = {
+      relevance_bucket: candidate.relevance_bucket || scope.relevance_bucket,
+      counts_as_soc_topic: candidate.counts_as_soc_topic ?? scope.counts_as_soc_topic,
+      multimedia_camera_output_relevance: candidate.multimedia_camera_output_relevance ?? scope.multimedia_camera_output_relevance
+    };
+    // 실효 버킷과 같은 기준으로 센다. 여기서 갈리면 bucket_counts[android_supporting] 과
+    // 두 근거 카운트의 합이 어긋나 같은 리포트가 보조 기사 수를 두 값으로 말한다.
+    if (compositionBucket(merged) !== ANDROID_SUPPORTING) continue;
+    if (merged.counts_as_soc_topic === true || merged.relevance_bucket === 'soc_platform_signal') counts.soc += 1;
+    else counts.multimedia += 1;
+  }
+  return counts;
+}
+
 function compositionSummary(candidates) {
   const bucket_counts = bucketCountMap(candidates);
+  const evidence_counts = evidenceCountMap(candidates);
   const primary_camera_stack_topic_count = articlePolicy.primaryCameraStack.buckets
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
   const forbidden_main_article_count = articlePolicy.forbiddenMainBuckets
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
   const supporting_main_article_count = articlePolicy.supportingMainBuckets
     .reduce((sum, bucket) => sum + number(bucket_counts[bucket]), 0);
+  // 옛 계산을 그대로 재현한다. multimedia 와 soc 는 둘 다 non_fallback_reviewable 에
+  // 들어갔지만 fallback_topic 에는 soc 만 들어갔다 — 근거별 카운트가 살아 있으므로
+  // 합쳐진 버킷 뒤에서도 그 구분을 유지할 수 있다.
   const non_fallback_reviewable_article_count =
-    primary_camera_stack_topic_count +
-    bucket_counts[BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT] +
-    bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL];
+    primary_camera_stack_topic_count + bucket_counts[ANDROID_SUPPORTING];
   const fallback_topic_count =
-    bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL] +
-    bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK];
+    evidence_counts.soc + bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK];
   const selected_article_count = ensureArray(candidates).length;
   return {
     selected_article_count,
     bucket_counts,
     direct_aosp_camera_count: bucket_counts[BUCKETS.DIRECT_AOSP_CAMERA],
     camera_driver_image_pipeline_count: bucket_counts[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE],
-    android_platform_camera_adjacent_count: bucket_counts[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT],
-    android_multimedia_camera_output_count: bucket_counts[BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT],
-    soc_platform_signal_count: bucket_counts[BUCKETS.SOC_PLATFORM_SIGNAL],
+    android_count: bucket_counts[BUCKETS.ANDROID],
+    // 버킷은 android 하나지만 리포트는 근거별로 나눠 본다. 근거가 사라진 것이 아니라
+    // 버킷 이름이 합쳐진 것뿐이다.
+    android_multimedia_camera_output_count: evidence_counts.multimedia,
+    soc_platform_signal_count: evidence_counts.soc,
     cpp_ai_tooling_fallback_count: bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK],
     generic_tech_watchlist_count: bucket_counts[BUCKETS.GENERIC_TECH_WATCHLIST],
     primary_camera_stack_topic_count,
@@ -245,7 +274,7 @@ function candidatePoolPreflightSummary(shortlist, selected, reserve, policy = ca
     direct_camera_or_driver_candidate_count:
       eligibleSummary.direct_aosp_camera_count +
       eligibleSummary.camera_driver_image_pipeline_count,
-    camera_adjacent_candidate_count: eligibleSummary.android_platform_camera_adjacent_count,
+    camera_adjacent_candidate_count: eligibleSummary.android_count,
     supporting_candidate_count: eligibleSummary.supporting_main_article_count,
     selected_article_count: selectedSummary.selected_article_count,
     selected_primary_camera_stack_count: selectedSummary.primary_camera_stack_topic_count
@@ -308,7 +337,7 @@ function selectionShortageHints(summary = {}, poolSummary = summary) {
   if (number(summary.direct_aosp_camera_count) === 0) {
     hints.push('Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.');
   }
-  if (number(summary.android_platform_camera_adjacent_count) === 0) {
+  if (number(summary.android_count) === 0) {
     hints.push('Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows.');
   }
   if (number(summary.camera_driver_image_pipeline_count) === 0) {

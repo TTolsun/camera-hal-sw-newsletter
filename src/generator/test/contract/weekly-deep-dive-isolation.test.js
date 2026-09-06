@@ -109,7 +109,7 @@ function queuedTopicQueue() {
       {
         topic_key: 'android-17-camera-feature-page',
         title: 'Android 17 카메라 기능 페이지',
-        bucket: 'android_platform_camera_adjacent',
+        bucket: 'android',
         status: 'queued',
         evidence: [
           {

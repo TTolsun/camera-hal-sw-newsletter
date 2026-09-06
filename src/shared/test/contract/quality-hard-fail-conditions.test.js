@@ -133,7 +133,7 @@ test('quality gate hard-fails raw background table artifacts', () => {
     ...validSections().slice(1)
   ];
   const report = reportFor(sections, [
-    scopedCandidate(url, 'android_platform_camera_adjacent'),
+    scopedCandidate(url, 'android'),
     ...reporterCandidatesFor(validSections()).slice(1)
   ]);
 
@@ -157,7 +157,7 @@ test('quality gate hard-fails exact duplicate and semantic background overlap', 
     }),
     ...validSections().slice(1)
   ], [
-    scopedCandidate(exactUrl, 'android_platform_camera_adjacent'),
+    scopedCandidate(exactUrl, 'android'),
     ...reporterCandidatesFor(validSections()).slice(1)
   ]);
   const semanticReport = reportFor([
@@ -172,7 +172,7 @@ test('quality gate hard-fails exact duplicate and semantic background overlap', 
     }),
     ...validSections().slice(1)
   ], [
-    scopedCandidate(semanticUrl, 'android_platform_camera_adjacent'),
+    scopedCandidate(semanticUrl, 'android'),
     ...reporterCandidatesFor(validSections()).slice(1)
   ]);
 

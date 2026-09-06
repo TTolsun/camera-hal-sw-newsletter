@@ -163,7 +163,7 @@ function withMinimalEvidencePackSections(body) {
     '',
     '| # | Title | Source | URL | Source tier | Source role | URL quality | Bucket | Freshness | Reason |',
     '| ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
-    '| 1 | CameraX release | Android Developers | https://example.com/source | official | primary | article_url | android_platform_camera_adjacent | current | Camera source evidence |',
+    '| 1 | CameraX release | Android Developers | https://example.com/source | official | primary | article_url | android | current | Camera source evidence |',
     '',
     '## 제외 후보 근거',
     '',

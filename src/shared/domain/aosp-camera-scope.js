@@ -1,30 +1,67 @@
+// 편집 우선순위 사다리. Camera HAL > Driver > AI > Android 순이다.
+//
+// 이전에는 7단계였고 Android 계열이 셋(플랫폼 인접 / 멀티미디어 출력 / SoC 신호)으로 갈려
+// AI(6위)보다 위에 있었다. 백필 13주 실측에서 멀티미디어와 SoC 버킷은 후보가 **0건**이었고
+// 플랫폼 인접만 13건이었다. 셋을 나눠 둘 근거가 데이터에 없어 android 하나로 합치고,
+// AI를 Android 위로 올렸다.
+//
+// 버킷 이름만 합쳤고 **발행 등급은 그대로 두었다.** 어느 근거로 android 에 들어왔는지를
+// androidEvidenceKind 로 남겨, 플랫폼 인접은 주력(directness 2)으로, 멀티미디어 출력과
+// SoC 신호는 보조(호당 1건 제한)로 계속 다룬다. 등급까지 합치면 제한이 풀려 발행 구성이
+// 조용히 바뀐다 — 요청은 분류 단순화였지 구성 정책 변경이 아니었다.
 const BUCKETS = Object.freeze({
   DIRECT_AOSP_CAMERA: 'direct_aosp_camera',
   CAMERA_DRIVER_IMAGE_PIPELINE: 'camera_driver_image_pipeline',
-  ANDROID_PLATFORM_CAMERA_ADJACENT: 'android_platform_camera_adjacent',
-  ANDROID_MULTIMEDIA_CAMERA_OUTPUT: 'android_multimedia_camera_output',
-  SOC_PLATFORM_SIGNAL: 'soc_platform_signal',
   CPP_AI_TOOLING_FALLBACK: 'cpp_ai_tooling_fallback',
+  ANDROID: 'android',
   GENERIC_TECH_WATCHLIST: 'generic_tech_watchlist'
 });
 
 const BUCKET_PRIORITY = Object.freeze({
   [BUCKETS.DIRECT_AOSP_CAMERA]: 1,
   [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 2,
-  [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 3,
-  [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 4,
-  [BUCKETS.SOC_PLATFORM_SIGNAL]: 5,
-  [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 6,
-  [BUCKETS.GENERIC_TECH_WATCHLIST]: 7
+  [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 3,
+  [BUCKETS.ANDROID]: 4,
+  [BUCKETS.GENERIC_TECH_WATCHLIST]: 5
 });
+
+// 발행된 아티팩트와 state 파일에 남은 옛 버킷 이름을 읽기 위한 표다.
+// 마이그레이션으로 저장된 값은 모두 새 이름으로 바꿨지만, 워크트리 사본이나 아직 돌지 않은
+// 실행이 옛 값을 들고 올 수 있어 읽기 경로에서 한 번 더 접는다.
+const LEGACY_BUCKET_ALIASES = Object.freeze({
+  android_platform_camera_adjacent: BUCKETS.ANDROID,
+  android_multimedia_camera_output: BUCKETS.ANDROID,
+  soc_platform_signal: BUCKETS.ANDROID
+});
+
+// 구성 판정에서만 쓰는 실효 버킷. relevance_bucket 은 android 하나지만, 호당 1건 제한이
+// 걸리는 보조 등급은 그대로 유지해야 한다.
+const ANDROID_SUPPORTING = 'android_supporting';
+
+function compositionBucket(scope = {}) {
+  const raw = typeof (scope.relevance_bucket || scope.relevanceBucket) === 'string'
+    ? (scope.relevance_bucket || scope.relevanceBucket).trim()
+    : '';
+  // 옛 이름이 그대로 들어오면 등급까지 그 이름으로 판정한다. android 로만 접으면
+  // 보조였던 항목이 주력으로 올라가 호당 1건 제한이 풀린다.
+  if (raw === 'android_multimedia_camera_output' || raw === 'soc_platform_signal') return ANDROID_SUPPORTING;
+  const bucket = canonicalBucket(raw);
+  if (bucket !== BUCKETS.ANDROID) return bucket;
+  if (scope.counts_as_soc_topic === true) return ANDROID_SUPPORTING;
+  if (Number(scope.multimedia_camera_output_relevance || 0) > 0) return ANDROID_SUPPORTING;
+  return BUCKETS.ANDROID;
+}
+
+function canonicalBucket(value) {
+  const name = typeof value === 'string' ? value.trim() : '';
+  return LEGACY_BUCKET_ALIASES[name] || name;
+}
 
 const BUCKET_DEFINITIONS = Object.freeze({
   [BUCKETS.DIRECT_AOSP_CAMERA]: 'AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence.',
   [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 'Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence.',
-  [BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT]: 'Android platform, compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security evidence with a camera-impact path.',
-  [BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT]: 'Android camera-output or multimedia evidence such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, media output, video call camera path, camera/audio sync, social app camera capture, or captured image/video result behavior.',
-  [BUCKETS.SOC_PLATFORM_SIGNAL]: 'Public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact.',
   [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 'C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence.',
+  [BUCKETS.ANDROID]: 'Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact.',
   [BUCKETS.GENERIC_TECH_WATCHLIST]: 'General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion.'
 });
 
@@ -520,7 +557,9 @@ function hasCameraBehaviorContext(value) {
 }
 
 function validBucketHint(value) {
-  const bucket = text(value);
+  // 소스 레지스트리와 파서가 아직 옛 버킷 이름을 힌트로 줄 수 있다. 여기서 접지 않으면
+  // 유효한 힌트가 빈 문자열이 되어 후보가 generic 으로 떨어진다.
+  const bucket = canonicalBucket(text(value));
   return Object.values(BUCKETS).includes(bucket) && bucket !== BUCKETS.GENERIC_TECH_WATCHLIST
     ? bucket
     : '';
@@ -563,7 +602,14 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   const nativeAndroidToolingTerms = nativeAndroidTooling.detected
     ? [...nativeAndroidTooling.tooling_product_terms, ...nativeAndroidTooling.native_workflow_terms]
     : [];
-  const bucketHint = validBucketHint(candidate.relevance_bucket_hint || candidate.relevanceBucketHint);
+  const rawBucketHint = text(candidate.relevance_bucket_hint || candidate.relevanceBucketHint);
+  const bucketHint = validBucketHint(rawBucketHint);
+  // 힌트가 어느 Android 근거를 가리켰는지는 이름을 접기 전에만 알 수 있다. 접힌 뒤에는
+  // 셋이 모두 'android' 라서, 이것 없이는 멀티미디어 힌트와 플랫폼-인접 힌트가 같은 분기로
+  // 몰려 등급이 뒤집힌다.
+  const hintedAndroidKind = rawBucketHint === 'android_multimedia_camera_output' ? 'multimedia_output'
+    : rawBucketHint === 'soc_platform_signal' ? 'soc_platform'
+      : bucketHint === BUCKETS.ANDROID ? 'platform_adjacent' : '';
   const sourceHintTerms = patternHits([
     ...DIRECT_AOSP_PATTERNS,
     ...DRIVER_PATTERNS,
@@ -592,47 +638,55 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     ...nativeAndroidToolingTerms
   ];
   const hasArticleCameraBehavior = cameraImpactTerms.length > 0 && hasCameraBehaviorContext(body);
+  // 옛 SoC·멀티미디어 힌트도 android 로 접히므로(canonicalBucket), android 힌트를 받아들이는
+  // 조건은 세 근거 중 하나만 있으면 된다. 셋을 따로 걸면 SoC 근거만 있는 후보가 android
+  // 힌트를 못 쓰고 generic 으로 떨어진다.
+  const socEvidence = socTerms.length > 0 && socCameraImpactTerms.length > 0;
   const canUseBucketHint = bucketHint && articleTerms.length > 0 &&
     (
-      bucketHint !== BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT ||
+      bucketHint !== BUCKETS.ANDROID ||
       adaptiveUiAdjacentTerms.length > 0 ||
+      multimediaCameraOutputTerms.length > 0 ||
+      socEvidence ||
       (androidAdjacentTerms.length > 0 && hasArticleCameraBehavior)
-    ) &&
-    (
-      bucketHint !== BUCKETS.SOC_PLATFORM_SIGNAL ||
-      (socTerms.length > 0 && socCameraImpactTerms.length > 0)
-    ) &&
-    (
-      bucketHint !== BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT ||
-      multimediaCameraOutputTerms.length > 0
     );
+
+  // 버킷은 하나로 합쳤지만 어느 근거로 합쳐졌는지는 남긴다. 아래 relevance 점수와
+  // counts_as_soc_topic 이 그 구분을 계속 쓰기 때문이다.
+  let androidEvidenceKind = '';
   if (driverTerms.length > 0 && directTerms.length === 0) {
     bucket = BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE;
     evidenceTerms = driverTerms;
   } else if (adaptiveUiAdjacentTerms.length > 0) {
-    bucket = BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
+    bucket = BUCKETS.ANDROID;
+    androidEvidenceKind = 'platform_adjacent';
     evidenceTerms = adaptiveUiAdjacentTerms;
-  } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT) {
-    bucket = bucketHint;
+  } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID && androidAdjacentTerms.length > 0 &&
+      hintedAndroidKind === 'platform_adjacent') {
+    bucket = BUCKETS.ANDROID;
+    androidEvidenceKind = 'platform_adjacent';
     evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms, ...articleTerms];
   } else if (directTerms.length > 0) {
     bucket = BUCKETS.DIRECT_AOSP_CAMERA;
     evidenceTerms = directTerms;
-  } else if (canUseBucketHint && bucketHint === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT) {
-    bucket = bucketHint;
+  } else if (canUseBucketHint && hintedAndroidKind === 'multimedia_output' && multimediaCameraOutputTerms.length > 0) {
+    bucket = BUCKETS.ANDROID;
+    androidEvidenceKind = 'multimedia_output';
     evidenceTerms = multimediaCameraOutputTerms;
   } else if (multimediaCameraOutputTerms.length > 0) {
-    bucket = BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT;
+    bucket = BUCKETS.ANDROID;
+    androidEvidenceKind = 'multimedia_output';
     evidenceTerms = multimediaCameraOutputTerms;
   } else if (androidAdjacentTerms.length > 0 && hasArticleCameraBehavior) {
-    bucket = BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
+    bucket = BUCKETS.ANDROID;
+    androidEvidenceKind = 'platform_adjacent';
     evidenceTerms = [...androidAdjacentTerms, ...cameraImpactTerms];
   } else if (
-    socTerms.length > 0 &&
-    socCameraImpactTerms.length > 0 &&
+    socEvidence &&
     !(nativeTerms.length > 0 && strongSocTerms.length === 0)
   ) {
-    bucket = BUCKETS.SOC_PLATFORM_SIGNAL;
+    bucket = BUCKETS.ANDROID;
+    androidEvidenceKind = 'soc_platform';
     evidenceTerms = [...strongSocTerms, ...socCameraImpactTerms];
   } else if (nativeAndroidTooling.detected) {
     bucket = BUCKETS.CPP_AI_TOOLING_FALLBACK;
@@ -642,27 +696,33 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     evidenceTerms = nativeTerms;
   } else if (canUseBucketHint) {
     bucket = bucketHint;
+    if (bucket === BUCKETS.ANDROID && androidEvidenceKind === '') androidEvidenceKind = hintedAndroidKind;
     evidenceTerms = articleTerms;
   }
 
   const evidenceOrigin = evidenceTerms.length > 0
     ? 'article_text'
     : sourceHintTerms.length > 0 ? 'source_hint_only' : 'none';
+  // 버킷은 합쳤지만 주력·보조 등급은 분류 근거를 따른다. 옛 플랫폼-인접만 주력이고
+  // 멀티미디어 출력과 SoC 신호는 보조다 — 여기서 버킷 이름에 묶으면 호당 1건 제한이
+  // 풀려 발행 구성이 조용히 바뀐다.
   const countsAsPrimaryCameraTopic = bucket === BUCKETS.DIRECT_AOSP_CAMERA ||
-    bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT;
+    (bucket === BUCKETS.ANDROID && androidEvidenceKind === 'platform_adjacent');
   const countsAsDriverTopic = bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE;
-  const countsAsSocTopic = bucket === BUCKETS.SOC_PLATFORM_SIGNAL;
+  // SoC 버킷은 사라졌지만 SoC 근거로 분류된 사실은 남는다. 이 플래그를 버킷 이름에 묶어 두면
+  // 병합과 함께 신호가 조용히 없어진다.
+  const countsAsSocTopic = androidEvidenceKind === 'soc_platform';
   const countsAsFallbackTopic = bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK;
   const aospCameraDirectness = bucket === BUCKETS.DIRECT_AOSP_CAMERA
     ? Math.max(3, relevanceScoreFromHits(directTerms))
-    : bucket === BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT ? 2 : 0;
+    : androidEvidenceKind === 'platform_adjacent' ? 2 : 0;
   const driverStackRelevance = bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE
     ? Math.max(3, relevanceScoreFromHits(driverTerms))
     : 0;
-  const socPlatformRelevance = bucket === BUCKETS.SOC_PLATFORM_SIGNAL
+  const socPlatformRelevance = androidEvidenceKind === 'soc_platform'
     ? Math.max(3, relevanceScoreFromHits(socTerms))
     : 0;
-  const multimediaCameraOutputRelevance = bucket === BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT
+  const multimediaCameraOutputRelevance = androidEvidenceKind === 'multimedia_output'
     ? Math.max(3, relevanceScoreFromHits(multimediaCameraOutputTerms))
     : 0;
   const nativeToolingRelevance = bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK
@@ -704,20 +764,24 @@ function normalizeAospCameraScope(candidate = {}, scope = {}) {
   if (bucket !== BUCKETS.DIRECT_AOSP_CAMERA) return scope;
   const evidenceTerms = androidAdaptiveUiCameraAdjacentTerms(candidateArticleText(candidate));
   if (evidenceTerms.length === 0) return scope;
-  const reason = bucketReason(BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT, evidenceTerms, 'article_text');
+  const reason = bucketReason(BUCKETS.ANDROID, evidenceTerms, 'article_text');
   return {
     ...scope,
-    editorial_priority: BUCKET_PRIORITY[BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT],
-    relevance_bucket: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+    editorial_priority: BUCKET_PRIORITY[BUCKETS.ANDROID],
+    relevance_bucket: BUCKETS.ANDROID,
     aosp_camera_directness: 2,
     counts_as_primary_camera_topic: true,
     counts_as_driver_topic: false,
     counts_as_soc_topic: false,
+    // 주력이라고 단언하는 자리다. 보조 근거를 남겨 두면 compositionBucket 이 같은 scope 를
+    // android_supporting 으로 읽어, 한 후보가 두 등급으로 세어진다.
+    multimedia_camera_output_relevance: 0,
+    soc_platform_relevance: 0,
     counts_as_fallback_topic: false,
     evidence_origin: scope.evidence_origin || 'article_text',
     scope_evidence_terms: evidenceTerms.slice(0, 8),
-    aospCameraStackBucket: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
-    aosp_camera_stack_bucket: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT,
+    aospCameraStackBucket: BUCKETS.ANDROID,
+    aosp_camera_stack_bucket: BUCKETS.ANDROID,
     aospCameraDirect: true,
     aosp_camera_direct: true,
     aospCameraEvidenceTerms: evidenceTerms.slice(0, 8),
@@ -731,6 +795,10 @@ module.exports = {
   BUCKETS,
   BUCKET_DEFINITIONS,
   BUCKET_PRIORITY,
+  LEGACY_BUCKET_ALIASES,
+  ANDROID_SUPPORTING,
+  canonicalBucket,
+  compositionBucket,
   classifyAospCameraStackCandidate,
   detectNativeAndroidToolingWorkflow,
   normalizeAospCameraScope,

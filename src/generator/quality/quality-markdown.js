@@ -160,7 +160,7 @@ function buildQualityReportMarkdown(report) {
 - Expanded-scope article count: ${metrics.expanded_scope_article_count}
 - direct_aosp_camera count: ${metrics.direct_aosp_camera_count ?? 0}
 - camera_driver_image_pipeline count: ${metrics.camera_driver_image_pipeline_count ?? 0}
-- android_platform_camera_adjacent count: ${metrics.android_platform_camera_adjacent_count ?? 0}
+- android count: ${metrics.android_count ?? 0}
 - android_multimedia_camera_output count: ${metrics.android_multimedia_camera_output_count ?? 0}
 - soc_platform_signal count: ${metrics.soc_platform_signal_count ?? 0}
 - cpp_ai_tooling_fallback count: ${metrics.cpp_ai_tooling_fallback_count ?? 0}

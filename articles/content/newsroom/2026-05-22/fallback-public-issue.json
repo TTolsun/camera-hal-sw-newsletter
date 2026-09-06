@@ -35,7 +35,7 @@
       "category": "Android Platform / CameraX",
       "url": "https://goo.gle/AdaptiveApps_IO26",
       "source": "Android Developers Blog",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "action": "rebuild-from-bound-candidate",
       "fallback": false,
       "reason": "rebuild-from-bound-candidate"

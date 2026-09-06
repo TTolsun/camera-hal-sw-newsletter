@@ -242,7 +242,7 @@
       "source_role": "unknown",
       "source_url_quality": "unknown",
       "freshness_window": "unknown",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
     },
     {
@@ -297,7 +297,7 @@
       "source_role": "unknown",
       "source_url_quality": "unknown",
       "freshness_window": "unknown",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
     },
     {
@@ -308,7 +308,7 @@
       "source_role": "unknown",
       "source_url_quality": "unknown",
       "freshness_window": "unknown",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet"
     },
     {

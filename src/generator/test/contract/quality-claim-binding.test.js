@@ -130,7 +130,7 @@ test('deterministic binding fills missing evidence_ids on otherwise source-suppo
   const report = reportFor(
     [article, ...validSections().slice(1)],
     [
-      scopedCandidate(url, 'android_platform_camera_adjacent', {
+      scopedCandidate(url, 'android', {
         primary_evidence_ids: ['seed-camerax-primary-01'],
         compact_evidence: {
           primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
@@ -168,7 +168,7 @@ test('deterministic binding leaves unsupported fact claims unbound (no false evi
   const report = reportFor(
     [article, ...validSections().slice(1)],
     [
-      scopedCandidate(url, 'android_platform_camera_adjacent', {
+      scopedCandidate(url, 'android', {
         primary_evidence_ids: ['seed-camerax-primary-01'],
         compact_evidence: {
           primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
@@ -207,7 +207,7 @@ test('pack-level evidence fallback is soft and reported as derived mapping', () 
   const report = reportFor(
     [article, ...validSections().slice(1)],
     [
-      scopedCandidate(url, 'android_platform_camera_adjacent', {
+      scopedCandidate(url, 'android', {
         evidence_pack_ids: ['seed-camerax-pack'],
         primary_evidence_ids: ['seed-camerax-primary-01'],
         compact_evidence: {
@@ -249,7 +249,7 @@ test('claim results expose stable status and markdown diagnostics', () => {
   const report = reportFor(
     [article, ...validSections().slice(1)],
     [
-      scopedCandidate(url, 'android_platform_camera_adjacent', {
+      scopedCandidate(url, 'android', {
         primary_evidence_ids: ['seed-camerax-primary-01'],
         compact_evidence: {
           primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
@@ -309,7 +309,7 @@ test('seed evidence pack unmatched and title fallback diagnostics are soft and e
   const report = reportFor(
     [unmatchedArticle, fallbackArticle, ...validSections().slice(2)],
     [
-      scopedCandidate(url, 'android_platform_camera_adjacent', {
+      scopedCandidate(url, 'android', {
         evidence_pack_ids: ['missing-pack'],
         primary_evidence_ids: ['seed-camerax-primary-01'],
         compact_evidence: {
@@ -317,7 +317,7 @@ test('seed evidence pack unmatched and title fallback diagnostics are soft and e
           evidence_urls: [url]
         }
       }),
-      scopedCandidate(fallbackCandidateUrl, 'android_platform_camera_adjacent', {
+      scopedCandidate(fallbackCandidateUrl, 'android', {
         title: 'Title fallback seed article',
         source_id: 'fallback-source',
         evidence_pack_ids: [],
@@ -380,7 +380,7 @@ test('claim results separate source mismatched evidence ids from invalid evidenc
   const report = reportFor(
     [article, ...validSections().slice(1)],
     [
-      scopedCandidate(url, 'android_platform_camera_adjacent', {
+      scopedCandidate(url, 'android', {
         primary_evidence_ids: ['seed-camerax-primary-01'],
         compact_evidence: {
           primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
@@ -426,7 +426,7 @@ test('claim-level direct HAL overclaim is reported once by dedupe key', () => {
   const report = reportFor(
     [article, ...validSections().slice(1)],
     [
-      scopedCandidate(url, 'android_platform_camera_adjacent', {
+      scopedCandidate(url, 'android', {
         primary_evidence_ids: ['seed-camerax-primary-01'],
         compact_evidence: {
           primary_facts: ['CameraX 1.6.1 release date: 2026-05-06.'],
@@ -490,7 +490,7 @@ test('claim validation allows cautious CameraX risk_note without direct HAL over
   const report = reportFor(
     [article, ...validSections().slice(1)],
     [
-      scopedCandidate(url, 'android_platform_camera_adjacent', {
+      scopedCandidate(url, 'android', {
         title: 'CameraX Release Notes - CameraX 1.6.1',
         published_date: '2026-05-06',
         version_or_release: 'CameraX 1.6.1',

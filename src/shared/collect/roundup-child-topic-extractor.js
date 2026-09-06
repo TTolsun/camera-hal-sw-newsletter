@@ -149,7 +149,7 @@ function bucketHintFor(value = '') {
       MEDIA_ENGINEERING_CHANGE_PATTERN.test(value)
     )
   ) return 'android_multimedia_camera_output';
-  return 'android_platform_camera_adjacent';
+  return 'android';
 }
 
 // heading과 부모 문서 제목은 각각 페이지에 실재하는 문자열이지만, 둘을 그대로 이어 붙이면

@@ -467,7 +467,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     `- Editor review required: ${diagnostics.editor_review_required === true ? 'true' : 'false'}`,
     `- Reporter-selected but final-excluded: ${formatCount(diagnostics.reporter_selected_but_final_excluded_count)}`,
     `- direct_aosp_camera: ${formatCount(diagnostics.direct_aosp_camera_count ?? composition.direct_aosp_camera_count)}`,
-    `- android_platform_camera_adjacent: ${formatCount(diagnostics.android_platform_camera_adjacent_count ?? composition.android_platform_camera_adjacent_count)}`,
+    `- android: ${formatCount(diagnostics.android_count ?? composition.android_count)}`,
     `- camera_driver_image_pipeline: ${formatCount(diagnostics.camera_driver_image_pipeline_count ?? composition.camera_driver_image_pipeline_count)}`,
     `- android_multimedia_camera_output: ${formatCount(diagnostics.android_multimedia_camera_output_count ?? composition.android_multimedia_camera_output_count)}`,
     `- soc_platform_signal: ${formatCount(diagnostics.soc_platform_signal_count ?? composition.soc_platform_signal_count)}`,

@@ -24,7 +24,7 @@ function article(overrides = {}) {
       purpose: 'HAL signal quality regression fixture',
       must_not_be_used_as_golden_public_artifact: true
     },
-    relevance_bucket: 'android_platform_camera_adjacent',
+    relevance_bucket: 'android',
     evidence_summary: 'CameraX 1.5.0 was released on 2026-05-01.',
     article_sections: {
       verified_facts: ['CameraX 1.5.0 release date: 2026-05-01.'],

@@ -30,7 +30,7 @@ test('classifies Jetpack Compose adaptive UI with CameraX usage as Android adjac
     behavior_change: 'Compose adaptive UI guidance changes how app teams structure camera preview experiences across device classes.'
   });
 
-  assert.equal(adaptiveUi.relevance_bucket, BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT);
+  assert.equal(adaptiveUi.relevance_bucket, BUCKETS.ANDROID);
   assert.equal(adaptiveUi.counts_as_primary_camera_topic, true);
   assert.equal(adaptiveUi.aosp_camera_directness, 2);
   assert.notEqual(adaptiveUi.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
@@ -143,8 +143,8 @@ test('classifies public SoC platform signals without excluding them', () => {
     summary: 'The public SoC note discusses GPU power, thermal limits, NPU scheduling, and camera latency for video capture workloads.'
   });
 
-  assert.equal(soc.relevance_bucket, BUCKETS.SOC_PLATFORM_SIGNAL);
-  assert.equal(soc.editorial_priority, 5);
+  assert.equal(soc.relevance_bucket, BUCKETS.ANDROID);
+  assert.equal(soc.editorial_priority, 4);
   assert.equal(soc.counts_as_soc_topic, true);
   assert.ok(soc.soc_platform_relevance > 0);
 });
@@ -168,7 +168,7 @@ test('classifies Android multimedia camera output as supporting, not primary', (
   });
 
   for (const item of [apv, ultraHdr, gallery, videoCall]) {
-    assert.equal(item.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+    assert.equal(item.relevance_bucket, BUCKETS.ANDROID);
     assert.equal(item.editorial_priority, 4);
     assert.equal(item.counts_as_primary_camera_topic, false);
     assert.equal(item.counts_as_fallback_topic, false);
@@ -205,7 +205,7 @@ test('accepts multimedia scope only with camera-output anchor and engineering si
   ].map(classifyAospCameraStackCandidate);
 
   for (const item of cases) {
-    assert.equal(item.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+    assert.equal(item.relevance_bucket, BUCKETS.ANDROID);
     assert.equal(item.counts_as_primary_camera_topic, false);
     assert.ok(item.multimedia_camera_output_relevance >= 3);
   }
@@ -255,7 +255,7 @@ test('rejects generic Media3 playback, streaming, OTT, gallery UI, and audio-onl
   ];
 
   for (const item of rejected) {
-    assert.notEqual(item.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+    assert.notEqual(item.relevance_bucket, BUCKETS.ANDROID);
   }
 });
 
@@ -277,10 +277,10 @@ test('requires camera-output context for weak multimedia terms', () => {
     summary: 'Android updates Ultra HDR display settings for viewing and screen controls.'
   });
 
-  assert.notEqual(mediaStore.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
-  assert.notEqual(mediaProvider.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
-  assert.notEqual(videoCallUi.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
-  assert.notEqual(ultraHdrDisplay.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.notEqual(mediaStore.relevance_bucket, BUCKETS.ANDROID);
+  assert.notEqual(mediaProvider.relevance_bucket, BUCKETS.ANDROID);
+  assert.notEqual(videoCallUi.relevance_bucket, BUCKETS.ANDROID);
+  assert.notEqual(ultraHdrDisplay.relevance_bucket, BUCKETS.ANDROID);
 });
 
 test('direct camera candidates keep direct bucket despite multimedia source context', () => {
@@ -314,7 +314,7 @@ test('keeps capture result metadata direct while captured output remains multime
   });
 
   assert.equal(captureResult.relevance_bucket, BUCKETS.DIRECT_AOSP_CAMERA);
-  assert.equal(capturedOutput.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+  assert.equal(capturedOutput.relevance_bucket, BUCKETS.ANDROID);
 });
 
 test('keeps generic SoC, GPU, and NPU benchmark coverage out of non-fallback SoC bucket', () => {
@@ -334,7 +334,7 @@ test('classifies C++ AI and tooling as fallback', () => {
   });
 
   assert.equal(fallback.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
-  assert.equal(fallback.editorial_priority, 6);
+  assert.equal(fallback.editorial_priority, 3);
   assert.equal(fallback.counts_as_fallback_topic, true);
 });
 
@@ -348,7 +348,7 @@ test('classifies official Android tooling workflow as cpp fallback rather than c
     title: 'Start building today - Build native Android apps in Google AI Studio',
     summary: 'Google AI Studio can generate, modify, and test native Android apps with Gemini assisted workflows.',
     source: 'Android Developers Blog',
-    relevance_bucket_hint: BUCKETS.ANDROID_PLATFORM_CAMERA_ADJACENT
+    relevance_bucket_hint: BUCKETS.ANDROID
   });
   const studio = classifyAospCameraStackCandidate({
     title: 'Android Studio I/O Edition: What’s new in Android Developer tools',
@@ -432,7 +432,7 @@ test('classifies security-bulletin camera RAW/DNG and image-codec CVEs as multim
   });
 
   for (const item of [dng, png]) {
-    assert.equal(item.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+    assert.equal(item.relevance_bucket, BUCKETS.ANDROID);
     assert.notEqual(item.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
     assert.equal(item.counts_as_primary_camera_topic, false);
     assert.ok(item.multimedia_camera_output_relevance >= 3);
@@ -452,6 +452,40 @@ test('keeps generic image-codec releases without an AOSP source path out of the 
   });
 
   for (const item of [png, jpeg]) {
-    assert.notEqual(item.relevance_bucket, BUCKETS.ANDROID_MULTIMEDIA_CAMERA_OUTPUT);
+    assert.notEqual(item.relevance_bucket, BUCKETS.ANDROID);
+  }
+});
+
+// --- 버킷 병합 회귀 방지 (코드 리뷰에서 나온 것) ---
+
+test('플랫폼-인접 힌트는 media 단어가 섞여도 주력으로 남는다', () => {
+  // 병합 직후 한 판에서는 multimedia 용어 유무로 분기를 갈랐다. 그러면 플랫폼-인접
+  // 후보가 media 단어 하나 때문에 보조로 강등되고 directness 가 2에서 0으로 떨어져
+  // MIN_CAMERA_HAL_DIRECTNESS 게이트에서 통째로 탈락한다.
+  const scope = classifyAospCameraStackCandidate({
+    title: 'Android 17 compatibility update changes camera buffer handling',
+    summary: 'The platform compatibility update changes graphics buffer and Surface behavior for camera preview, and mentions MediaCodec.',
+    behavior_change: 'Camera preview buffer handling changed for apps targeting Android 17.',
+    relevance_bucket_hint: 'android_platform_camera_adjacent'
+  });
+
+  assert.equal(scope.relevance_bucket, BUCKETS.ANDROID);
+  assert.equal(scope.counts_as_primary_camera_topic, true);
+  assert.equal(scope.aosp_camera_directness, 2);
+});
+
+test('힌트 폴백은 옛 보조 힌트를 주력으로 승격하지 않는다', () => {
+  // 마지막 canUseBucketHint 분기가 무조건 platform_adjacent 로 채우면 옛 멀티미디어·SoC
+  // 힌트가 directness 2 를 받는다. 병합 전에는 둘 다 directness 0 의 보조 버킷이었다.
+  for (const hint of ['android_multimedia_camera_output', 'soc_platform_signal']) {
+    const scope = classifyAospCameraStackCandidate({
+      title: 'Ultra HDR capture output update',
+      summary: 'Ultra HDR camera capture output behavior changed for gallery and media output.',
+      behavior_change: 'Captured image output changed.',
+      relevance_bucket_hint: hint
+    });
+    assert.equal(scope.relevance_bucket, BUCKETS.ANDROID, hint);
+    assert.equal(scope.counts_as_primary_camera_topic, false, hint);
+    assert.equal(scope.aosp_camera_directness, 0, hint);
   }
 });

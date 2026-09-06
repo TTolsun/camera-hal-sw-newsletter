@@ -156,7 +156,7 @@
       "selectedImage": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
       "imageAttribution": "Android Security Bulletin",
       "imageSource": "https://source.android.com/docs/security/bulletin/asb-overview",
-      "relevance_bucket": "android_platform_camera_adjacent"
+      "relevance_bucket": "android"
     },
     {
       "category": "주간 다이제스트",

@@ -984,7 +984,7 @@
       "source_candidate_hash": "ab2b8e420e165e841a8448556c2b636ccb0b611a38490d2f796bdd384b5fa6ee",
       "article_group_key": "article:https://developer.android.com/tools/agents/android-cli#skills-add",
       "tooling_workflow_type": "",
-      "relevance_bucket": "android_platform_camera_adjacent",
+      "relevance_bucket": "android",
       "editorial_priority": 3,
       "aosp_camera_directness": 2,
       "driver_stack_relevance": 0,

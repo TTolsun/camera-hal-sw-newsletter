@@ -70,7 +70,7 @@ test('android-version-features는 adjacent 버킷이고 main 기사 자격이 �
   const source = registry.sources.find(item => item.source_id === 'android-version-features');
 
   assert.ok(source, 'android-version-features 소스가 레지스트리에 있어야 한다');
-  assert.equal(bucketForSource(source), 'android_platform_camera_adjacent');
+  assert.equal(bucketForSource(source), 'android');
   assert.equal(source.main_article_allowed, false);
 });
 

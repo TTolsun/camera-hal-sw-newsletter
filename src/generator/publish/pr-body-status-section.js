@@ -205,7 +205,7 @@ function renderStatusCompositionLines(status = {}) {
   add('selected_article_count', status.selected_article_count);
   addCount('direct_aosp_camera count', 'direct_aosp_camera_count');
   addCount('camera_driver_image_pipeline count', 'camera_driver_image_pipeline_count');
-  addCount('android_platform_camera_adjacent count', 'android_platform_camera_adjacent_count');
+  addCount('android count', 'android_count');
   addCount('soc_platform_signal count', 'soc_platform_signal_count');
   addCount('cpp_ai_tooling_fallback count', 'cpp_ai_tooling_fallback_count');
   addCount('generic_tech_watchlist count', 'generic_tech_watchlist_count');
