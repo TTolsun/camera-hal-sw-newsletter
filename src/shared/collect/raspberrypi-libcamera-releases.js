@@ -72,14 +72,19 @@ function releaseCandidate(block, source) {
   // 문장 텍스트인 이유는, 본문이 없는 릴리스에서는 summary도 같은 문장이라 필드 이름 하나로는 두
   // 경로를 함께 가리킬 수 없기 때문이다.
   //
-  // 표식이 붙은 지금 이 필드는 자격 판정에 기여하지 않는다. collect-news-candidates의 동작 변경
-  // 근거 판정이 표식과 같은 문장(그리고 같은 분할기로 쪼갠 그 문장의 조각)을 근거에서 빼기 때문에,
-  // 본문이 없는 릴리스는 release_note_item 근거 미달로 떨어진다. 자격을 살리는 것은 본문이 있는
-  // 릴리스의 summary다.
+  // 표식이 붙은 지금 이 필드는 자격 판정에 기여하지 않는다. collect-news-candidates의
+  // isCollectorTemplateSentence가 이 문장(과 하류 decode·절단을 거친 그 앞 조각)을 근거에서 빼기
+  // 때문에, 본문이 없는 릴리스는 release_note_item 근거 미달로 떨어진다. 다만 그 판정은 "이 칸이
+  // 만들 수 있는 모든 값"이 아니라 하류가 실제로 거치는 변환(decode 1회, 앞에서부터의 절단)을
+  // 되짚는 것이므로, 하류 정규화가 바뀌면 여기 표식도 함께 다시 재야 한다.
+  // 자격을 살리는 것은 본문이 있는 릴리스의 summary다.
   //
-  // 본문을 이 필드에 싣는 것은 아직 하지 않았다. article-capsules가 이 필드를 what_changed에
-  // 그대로 싣기 때문에(select/article-capsules.js의 what_changed), 본문 싣기는 그 경로까지 함께
-  // 재는 별도 변경이다 — #976의 남은 결정 항목이다.
+  // 본문을 이 필드에 싣는 것은 아직 하지 않았다. article-capsules가 이 필드를 what_changed의
+  // 후보로 읽기 때문이다(select/article-capsules.js의 what_changed). 그대로 싣는 것은 아니다 —
+  // reporter/article-field-builder.js의 cleanBehaviorChange가 sourceExtractionBullet →
+  // what_changed → behavior_change 순으로 먼저 잡히는 값을 쓰고, 그 결과를 420자로 압축한다.
+  // 즉 앞선 후보가 있으면 이 값은 실리지도 않는다. 본문 싣기는 그 경로까지 함께 재는 별도
+  // 변경이다 — #976의 남은 결정 항목이다.
   const releaseSentence = `Released ${tag} (Raspberry Pi downstream libcamera).`;
   const summary = releaseBodyText(block) || releaseSentence;
   return {

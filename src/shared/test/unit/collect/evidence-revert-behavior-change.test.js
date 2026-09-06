@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { evidenceMetadata } = require('../../../cli/collect-news-candidates');
+const { evidenceMetadata, normalizeCandidate } = require('../../../cli/collect-news-candidates');
 const {
   resolveRaspberryPiLibcameraReleaseItems
 } = require('../../../collect/raspberrypi-libcamera-releases');
@@ -232,3 +232,49 @@ test('#976 수집기 출력을 그대로 먹였을 때 본문 유무가 자격�
   assert.equal(withoutBody.has_behavior_change, false, '템플릿 문장뿐이면 근거가 없다');
   assert.equal(withoutBody.main_eligible, false);
 });
+
+// #976 회피 경로: 표식과 게이트가 읽는 값이 서로 다른 정규화를 거치던 문제다. 표식은 수집기 pick()이
+// decodeHtml을 한 번 걸어 만든 문장이고, 게이트가 읽는 summary는 normalizeCandidate가 decode()
+// (decodeHtml + 태그 구간 제거)를 다시 걸고 500자로 자른 값이다. 그래서 릴리스 이름에 꺾쇠가 있거나
+// 이름이 길면 게이트가 읽는 문장이 표식과 달라지고, 잘리거나 변형된 조각이 `Released` 한 낱말로
+// 게이트를 통과했다. 이 회피는 normalizeCandidate를 거쳐야 재현되므로 evidenceMetadata 단독이 아니라
+// 수집기 → normalizeCandidate 전 경로를 먹인다.
+//
+// GitHub 릴리스 이름은 자유 텍스트이고 `<...>`도 합법이다. 지금 라이브가 안전한 것은 Raspberry Pi가
+// 우연히 `v0.x.y+rptYYYYMMDD` 형태만 쓰기 때문이지 구조가 막아서가 아니다.
+const NORMALIZATION_BYPASS_TAGS = [
+  // 게이트의 decode()가 태그 구간으로 보고 지운다.
+  ['꺾쇠', 'v1.0 &lt;experimental&gt;'],
+  // atom에서 이중 escape로 들어와 decode 한 겹이 더 벗겨진다.
+  ['이중 escape', 'v1.0 &amp;lt;beta&amp;gt;'],
+  // normalizeCandidate의 500자 상한이 문장 뒤를 자른다.
+  ['500자 초과', `v1.0 ${'x'.repeat(500)}`]
+];
+
+// 이름이 어떻게 변형되든 본문이 없으면(`No content.`) 근거는 0이다.
+for (const [label, titleXml] of NORMALIZATION_BYPASS_TAGS) {
+  test(`#976 ${label} 릴리스 이름이 표식 정규화를 빠져나가지 못한다`, () => {
+    const atom = [
+      '<feed xmlns="http://www.w3.org/2005/Atom">',
+      '<entry>',
+      '<updated>2026-08-17T10:00:00Z</updated>',
+      '<link rel="alternate" type="text/html" href="https://github.com/raspberrypi/libcamera/releases/tag/x"/>',
+      `<title>${titleXml}</title>`,
+      '<content type="html">No content.</content>',
+      '</entry>',
+      '</feed>'
+    ].join('');
+    const collectorSource = {
+      ...RELEASE_SOURCE,
+      url: 'https://github.com/raspberrypi/libcamera/releases',
+      sourceUrl: 'https://github.com/raspberrypi/libcamera/releases',
+      section: 'Kernel / Media',
+      keywords: ['libcamera']
+    };
+    const [item] = resolveRaspberryPiLibcameraReleaseItems(atom, collectorSource);
+    const normalized = normalizeCandidate(item);
+
+    assert.equal(normalized.has_behavior_change, false, '본문이 없으면 동작 변경 근거가 없다');
+    assert.equal(normalized.main_eligible, false);
+  });
+}
