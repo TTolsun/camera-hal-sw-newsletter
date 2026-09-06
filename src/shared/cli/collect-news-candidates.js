@@ -521,6 +521,23 @@ function isCollectorTemplateSentence(raw, value) {
   return template.startsWith(candidate) || collapseWhitespace(decode(template)).startsWith(candidate);
 }
 
+// #1076: 일부 수집기는 title을 `${source.name} - ${tag}` 형태로 조립한다. 그 접두부는 출처가 쓴
+// 문장이 아니라 수집기 저작물이므로 동작 변경 근거로 세지 않는다. summary가 비어 판정이 title로
+// 폴백할 때 접두부가 남아 있으면, 소스 이름에 든 낱말이 BEHAVIOR_CHANGE_PATTERN에 걸려 아무
+// 사실도 말하지 않는 후보가 근거를 얻는다(이 주석 작성 시점 실측으로 등록부 73개 중 19개).
+// 이 헬퍼가 다루는 것은 위 접두부 형태뿐이다. 다른 구분자로 title을 조립하는 수집기도 있으나,
+// 그쪽은 raw.behavior_change를 직접 채우므로 title 폴백 경로에 닿지 않는다.
+// 떼는 것은 접두부뿐이고, 제목의 나머지는 종전대로 근거 후보로 남는다.
+const COLLECTOR_TITLE_PREFIX_SEPARATOR = ' - ';
+
+function withoutCollectorSourceNamePrefix(title, source) {
+  const value = String(title || '');
+  const sourceName = String(source?.name || '').trim();
+  if (!sourceName) return value;
+  const prefix = `${sourceName}${COLLECTOR_TITLE_PREFIX_SEPARATOR}`;
+  return value.startsWith(prefix) ? value.slice(prefix.length).trim() : value;
+}
+
 function hasBehaviorChangeForRaw(raw, behaviorChange) {
   if (raw?.source_extraction?.mode === 'roundup_child_topic') {
     return ROUNDUP_BEHAVIOR_CHANGE_PATTERN.test(behaviorChange);
@@ -837,18 +854,21 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     (toolingEvidence.eligible ? 'Android native tooling workflow' : '')
   ).trim();
   // 동작 변경 문장의 후보 순서는 종전과 같다(raw 필드 → summary/title에서 뽑은 첫 문장 → tooling 문장).
-  const behaviorChangeTexts = [
+  const behaviorChangeTexts = titleFallback => [
     raw.behavior_change,
-    firstBehavior(summary || title),
+    firstBehavior(summary || titleFallback),
     toolingEvidence.eligible ? 'Official Android tooling article describes native Android app workflow behavior.' : ''
   ].map(value => String(value || ''));
-  const behaviorChange = (behaviorChangeTexts.find(value => value) || '').trim();
+  const behaviorChange = (behaviorChangeTexts(title).find(value => value) || '').trim();
   // #976: 수집기가 만든 템플릿 문장은 출처가 말한 사실이 아니므로 동작 변경 근거로 세지 않는다.
   // 수집기가 collector_template_sentence로 그 문장을 표식해 주면 여기서 건너뛰고 다음 후보 문장을
   // 본다. 본문이 없는 릴리스는 summary도 같은 문장이라, 표식이 raw 필드와 firstBehavior 칸을 함께
   // 걸러 낸다.
   // 표식이 없는 후보의 판정 경로는 그대로다 — 어휘 패턴은 건드리지 않았다.
-  const behaviorChangeEvidence = (behaviorChangeTexts
+  //
+  // #1076: 같은 이유로, title 폴백에서는 수집기가 붙인 `${source.name} - ` 접두부를 뺀 제목을 본다.
+  // 보고되는 behavior_change 값은 종전 그대로다(하류 소비자가 읽는 값이라 판정만 바꾼다).
+  const behaviorChangeEvidence = (behaviorChangeTexts(withoutCollectorSourceNamePrefix(title, source))
     .find(value => value && !isCollectorTemplateSentence(raw, value)) || '').trim();
   // 정본이 판정한다. raw.published_date/publishedAt/published_at 중 실제로 파싱되는 값만
   // "발행일 있음"으로 인정한다(resolveCandidateDateEvidence가 못 읽으면 effective_date로
@@ -1598,6 +1618,10 @@ function mdEscape(value = '') {
 // 수집 진단(dated_article_collection)을 사람이 여는 표면까지 올린다. 진단은 후보 artifact에만
 // 남아 있어서, 목록 마크업이 바뀌어 카드가 0장 파싱된 주에도 보고서에는 아무 흔적이 없었다.
 // 그러면 마크업 파손과 "이번 주 신규 없음"이 보고서상 완전히 같은 모양이 된다(#945).
+//
+// 다만 이 보고서(news-candidates.md)는 커밋되지 않는다. 워크플로 01의 git add 목록에
+// articles/content/newsroom/ 경로가 없어 14일짜리 Actions debug artifact로만 남는다. 영속으로
+// 남는 짝은 커밋되는 candidates.json의 dated_article_collection이다(#1062).
 //
 // 값이 없으면 절을 통째로 생략한다. 렌더는 절대 throw하면 안 된다 — 여기서 죽으면 진단을
 // 보여주려던 변경이 그날 수집 자체를 날린다.

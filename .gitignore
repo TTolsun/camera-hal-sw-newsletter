@@ -28,6 +28,7 @@ articles/content/newsroom/**/editor-draft.json
 articles/content/newsroom/**/editor-draft.md
 articles/content/newsroom/**/event-bundles.json
 articles/content/newsroom/**/linked-evidence-report.json
+articles/content/newsroom/**/news-candidates.md
 articles/content/newsroom/**/recovery-prompt.md
 articles/content/newsroom/**/reporter-candidates.json
 articles/content/newsroom/**/shortlisted-candidates.json

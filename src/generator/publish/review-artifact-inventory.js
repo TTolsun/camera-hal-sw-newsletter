@@ -518,10 +518,14 @@ function exactCatalog(date) {
     }),
     entry({
       relPath: newsroomRelPath(date, 'news-candidates.md'),
-      group: 'check_when_needed',
+      // 워크플로 01이 이 파일을 articles/content/newsroom/<date>/에 쓰지만, 01의 git add 목록에는
+      // 그 경로가 없다. 워크플로 02는 별도 러너에서 main을 새로 체크아웃하므로 01이 만든 파일을
+      // 보지 못한다. 그래서 이 파일은 커밋되지 않고 14일짜리 Actions debug artifact로만 남는다(#1062).
+      group: 'debug_evidence',
       role: 'news_candidates_summary',
       reviewOrder: 69,
-      humanReadable: true
+      humanReadable: true,
+      retentionGrade: DEBUG_HEAVY
     }),
     ...debugExactCatalog(date)
   ];
