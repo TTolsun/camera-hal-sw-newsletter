@@ -1478,10 +1478,12 @@ function capNotYetEligible(notYetEligible) {
   };
 }
 
-// 진단 파일 경로에 실행 날짜를 넣어 실행마다 분리한다. 전역 단일 경로였을 때는 같은 워킹트리를
+// 진단 파일 경로에 실행 날짜를 넣어 날짜마다 분리한다. 전역 단일 경로였을 때는 같은 워킹트리를
 // 공유하는 두 실행(로컬 연속 실행)에서 나중 실행이 앞선 실행의 목록을 덮어썼고, 파일 안에 실행
 // identity가 없어 남은 파일이 어느 실행 것인지 구분할 방법도 없었다(issue #1040).
 // date는 두 호출 지점 모두 같은 실행의 다른 artifact 경로를 만들 때 쓰는 값과 같다.
+// 분리 단위는 날짜뿐이다. 같은 날짜 안에서는 stage 2 재작성이 여전히 stage 1이 남긴 파일을
+// 덮어쓴다 — 그 합집합 쓰기는 #1040의 남은 범위이고 이 변경이 다루지 않는다.
 function notYetEligibleOverflowRelPath(date) {
   return path.join('.tmp', `not-yet-eligible-full-${date}.json`);
 }

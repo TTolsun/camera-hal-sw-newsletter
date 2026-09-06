@@ -75,6 +75,8 @@ test('재조정 강등은 editor 강등과 다른 줄에, 그룹·후보 사유�
   applyReconciliation(shortlistReport, {
     editorial_plans: [
       plan('a', 'main_article'),
+      // reference_only는 #1000에서 어휘에서 빠져 이제 드리프트 값이다. 사유 코드가 후보마다
+      // 따로 읽히는지 보려면 두 후보의 사유가 갈려야 한다.
       plan('sony', 'reference_only'),
       plan('lore', 'exclude')
     ]
@@ -93,7 +95,7 @@ test('재조정 강등은 editor 강등과 다른 줄에, 그룹·후보 사유�
   assert.match(markdown, /^ {2}- group:sony$/m);
   assert.match(
     markdown,
-    /^ {4}- sony: coverage_decision=reference_only, reason_code=editorial_plan_reference_only$/m
+    /^ {4}- sony: coverage_decision=reference_only, reason_code=editorial_plan_unrecognized$/m
   );
   assert.match(markdown, /^ {2}- group:lore$/m);
   assert.match(
