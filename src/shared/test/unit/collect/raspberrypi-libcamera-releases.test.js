@@ -164,3 +164,27 @@ test('skips entries missing a link or date', () => {
   ].join('');
   assert.deepEqual(resolveRaspberryPiLibcameraReleaseItems(broken, source()), []);
 });
+
+// #976: 이 문장은 출처 본문이 아니라 수집기가 만든 문장이라는 표식이다. 판정 쪽이 이 표식을 보고
+// 동작 변경 근거에서 제외한다. behavior_change와 (본문이 없을 때는) summary가 둘 다 이 문장이므로,
+// 표식은 문장 텍스트 자체로 남겨 두 경로를 함께 가리킨다.
+test('marks the tag-name template sentence so the evidence gate can tell it apart', () => {
+  const withBody = resolveRaspberryPiLibcameraReleaseItems(
+    atomWithReleaseBody('&lt;p&gt;Revert &quot;ipa: rpi: imx296: Enable embedded data&quot;&lt;/p&gt;'),
+    source()
+  )[0];
+  assert.equal(
+    withBody.collector_template_sentence,
+    'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).'
+  );
+  assert.equal(withBody.collector_template_sentence, withBody.behavior_change);
+  // 본문이 있으면 summary는 표식과 다른 문장이다. 판정은 그 본문을 근거로 읽는다.
+  assert.notEqual(withBody.summary, withBody.collector_template_sentence);
+
+  const withoutBody = resolveRaspberryPiLibcameraReleaseItems(
+    atomWithReleaseBody('No content.'),
+    source()
+  )[0];
+  // 본문이 없으면 summary까지 같은 템플릿 문장이라, 남는 근거 문장이 없다.
+  assert.equal(withoutBody.summary, withoutBody.collector_template_sentence);
+});

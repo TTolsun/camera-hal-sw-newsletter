@@ -80,6 +80,12 @@ function releaseCandidate(block, source) {
   // 필드 셋이 evidence를 통째로 채워 본문이 한 칸도 못 들어가던 문제는 capsule 쪽에서 고쳤다 —
   // evidenceItems가 본문 계열 근거에 한 칸을 먼저 떼어 주므로, 여기서 만든 summary는 기사 프롬프트의
   // evidence에 들어간다.
+  //
+  // 어느 필드로 나가든 이 문장 자체는 출처가 말한 사실이 아니라 태그 이름을 되뇌는 자기 참조다.
+  // 그래서 collector_template_sentence로 "이 텍스트는 수집기가 만든 것"이라는 표식을 함께 남긴다.
+  // collect-news-candidates의 근거 판정이 그 표식을 보고 이 문장을 동작 변경 근거에서 뺀다(#976).
+  // 표식은 문장 텍스트 자체다 — 본문이 없으면 summary도 같은 문장이라 필드 이름 하나로는 두 경로를
+  // 함께 가리킬 수 없다.
   const releaseSentence = `Released ${tag} (Raspberry Pi downstream libcamera).`;
   const summary = releaseBodyText(block) || releaseSentence;
   return {
@@ -95,6 +101,7 @@ function releaseCandidate(block, source) {
     version_or_release: tag,
     api_or_component: 'libcamera / V4L2 camera pipeline',
     behavior_change: releaseSentence,
+    collector_template_sentence: releaseSentence,
     relevanceBucketHint: 'camera_driver_image_pipeline'
   };
 }
