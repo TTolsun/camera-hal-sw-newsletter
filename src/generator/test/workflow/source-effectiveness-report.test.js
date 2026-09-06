@@ -120,6 +120,82 @@ test('source gap heavy non-generic source is review source or parser', () => {
   assert.ok(gapHeavy.top_exclusion_reasons.some(item => item.reason === 'source_gap_risk=true'));
 });
 
+function workingParserCandidate(index, { gap }) {
+  return {
+    source_id: 'working-parser-official',
+    sourceUrl: 'https://working.example.com/',
+    url: `https://working.example.com/camera-release-${index}`,
+    title: `Camera driver release note ${index}`,
+    summary: 'Camera HAL 릴리스 항목입니다.',
+    published_date: '2026-05-05',
+    finalSelectionEligibility: gap ? 'exclude' : 'main',
+    hasDatedEvidence: true,
+    main_eligible: !gap,
+    source_gap_risk: gap,
+    reference_only: false,
+    briefing_only: false,
+    selection_exclusion_reason: gap ? 'source_gap_risk=true' : ''
+  };
+}
+
+function workingParserReport({ eligible, gap }) {
+  const workingCandidates = [
+    ...Array.from({ length: eligible }, (unused, index) => workingParserCandidate(index, { gap: false })),
+    ...Array.from({ length: gap }, (unused, index) => workingParserCandidate(eligible + index, { gap: true }))
+  ];
+  return buildReport({
+    sourceRegistry: {
+      ...fixture.sourceRegistry,
+      sources: [
+        ...fixture.sourceRegistry.sources,
+        {
+          id: 'working-parser-official',
+          name: 'Working Parser Official Source',
+          sourceUrl: 'https://working.example.com/',
+          rssUrl: 'https://working.example.com/rss.xml',
+          collectionModeHint: 'rss-source',
+          category: 'linux-camera',
+          priority: 'high',
+          reliability: 'project-official',
+          enabled: true,
+          candidateOnly: false,
+          requiresCrossCheck: false,
+          usageHint: '파서가 정상 동작하는 official source',
+          keywords: ['camera']
+        }
+      ]
+    },
+    collectedCandidates: {
+      candidates: [...fixture.collectedCandidates.candidates, ...workingCandidates]
+    }
+  });
+}
+
+test('official source that still yields eligible candidates is not told to fix its parser', () => {
+  const working = source(workingParserReport({ eligible: 5, gap: 3 }), 'working-parser-official');
+
+  assert.equal(working.collected_count, 8);
+  assert.equal(working.eligible_count, 5);
+  assert.equal(working.source_gap_count, 3);
+  assert.equal(working.main_eligible_false_count, 3);
+  assert.equal(working.parser_repair_reason_count, 0);
+  assert.notEqual(working.recommendation, 'KEEP_AND_FIX_PARSER');
+  assert.equal(working.recommendation, 'REVIEW_SOURCE_OR_PARSER');
+});
+
+// source gap이 1건뿐이고 비율도 0.5 미만이면 REVIEW_SOURCE_OR_PARSER 조건도 넘지 못해
+// 기본값 KEEP_AND_MONITOR까지 내려간다. 주석과 운영 문서가 이 경로를 그대로 설명한다.
+test('official source with a single low-rate source gap falls through to keep and monitor', () => {
+  const working = source(workingParserReport({ eligible: 2, gap: 1 }), 'working-parser-official');
+
+  assert.equal(working.collected_count, 3);
+  assert.equal(working.eligible_count, 2);
+  assert.equal(working.source_gap_count, 1);
+  assert.ok(working.source_gap_rate >= 0.25 && working.source_gap_rate < 0.5);
+  assert.equal(working.rendered_main_count, 0);
+  assert.equal(working.recommendation, 'KEEP_AND_MONITOR');
+});
+
 test('snake_case has_dated_evidence false excludes otherwise eligible candidates', () => {
   const report = buildReport({
     collectedCandidates: {
