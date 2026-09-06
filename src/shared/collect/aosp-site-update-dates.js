@@ -15,7 +15,7 @@
 // 배경과 대안 비교는 retrieval 저장소의 docs/aosp-site-updates-date-precision.md 에 있다.
 
 const { parseSourceSpecificItems } = require('./source-item-parsers');
-const { fetchTextWithLimit } = require('./source-intelligence-utils');
+const { fetchTextWithLimit, fetchUrlForContent } = require('./source-intelligence-utils');
 const { explicitDayDate, visibleDate, visibleLastUpdated } = require('./source-monitor');
 
 // parseAospSiteUpdates 가 한 번에 최대 12건을 내보낸다(카메라 관련 행만 남긴 뒤 slice).
@@ -23,7 +23,11 @@ const { explicitDayDate, visibleDate, visibleLastUpdated } = require('./source-m
 const MAX_DATE_LOOKUPS = 12;
 
 function defaultFetchText(url) {
-  return fetchTextWithLimit(globalThis.fetch, url, { timeoutMs: 5000, maxBytes: 400000 });
+  // source.android.com 은 Accept-Language 에 따라 기계 번역본을 준다. 번역본은 원문보다
+  // 두 달까지 뒤처지고(실측: 영문 August 2026, 한국어·중국어 June 2026), "Last updated" 표기도
+  // 번역돼 날짜를 못 읽는다. fetchUrlForContent 가 hl=en 을 붙여 원문을 강제한다 —
+  // security-bulletin-cve.js 가 같은 이유로 이미 쓰고 있는 방어다.
+  return fetchTextWithLimit(globalThis.fetch, fetchUrlForContent(url), { timeoutMs: 5000, maxBytes: 400000 });
 }
 
 /**

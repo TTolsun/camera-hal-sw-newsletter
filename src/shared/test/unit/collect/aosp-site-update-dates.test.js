@@ -107,6 +107,23 @@ test('리졸버가 followed-source 레지스트리에 등록돼 있다', async (
   assert.equal(items.find(entry => entry.url === TARGET).publishedAt, '2026-07-13');
 });
 
+test('기본 fetch 경로는 영문판을 강제한다', async () => {
+  // 번역본은 원문보다 뒤처지고 "Last updated" 표기도 번역돼 날짜를 못 읽는다.
+  const asked = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async url => {
+    asked.push(String(url));
+    return { ok: true, text: async () => targetHtml() };
+  };
+  try {
+    await resolveAospSiteUpdateItems(indexHtml(), SOURCE);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+  assert.ok(asked.length > 0, '대상 페이지를 가져왔다');
+  assert.ok(asked.every(url => url.includes('hl=en')), asked.join(', '));
+});
+
 test('fetch 상한은 표 파서 상한과 같다', () => {
   // 표가 커져도 fetch 가 파서 출력 상한보다 늘지 않아야 한다.
   assert.equal(MAX_DATE_LOOKUPS, 12);
