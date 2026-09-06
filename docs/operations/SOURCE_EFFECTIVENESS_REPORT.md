@@ -52,7 +52,7 @@ node src/generator/publish/build-source-effectiveness-report.js --date YYYY-MM-D
 - `NO_RECENT_SIGNAL`: 해당 날짜 artifact에서 수집된 후보가 없습니다.
 - `OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR`: official 또는 high priority source가 camera 관련 raw signal은 냈지만, eligible 후보가 하나도 없고, rejection reason이 parser/extraction/source_extraction/date/version/anchor 계열인 상태입니다.
 - `KEEP`: rendered main article 기여가 있는 source입니다.
-- `KEEP_AND_FIX_PARSER`: official 또는 high priority source에서 parser/source evidence 보강이 필요한 상태입니다.
+- `KEEP_AND_FIX_PARSER`: official 또는 high priority source가 후보를 수집했지만 eligible 후보가 하나도 없고, source gap 비율이 `0.25` 이상인 상태입니다. eligible 후보가 하나라도 있으면 파서가 항목을 뽑아 낸 것이므로 이 권고를 붙이지 않고, 그 source는 뒤따르는 조건을 그대로 따릅니다. source gap 비율이 `0.5` 이상이거나 source gap 후보가 2건 이상이면 `REVIEW_SOURCE_OR_PARSER`가 되고, 둘 다 아니면 `KEEP_AND_MONITOR`가 됩니다.
 - `DOWNGRADE_TO_CANDIDATE_ONLY`: generic AI/IT source가 많은 후보를 가져오지만 eligible/rendered 기여가 없는 상태입니다.
 - `REVIEW_SOURCE_OR_PARSER`: source gap 비율이 높아 URL, dated evidence, parser를 함께 점검해야 합니다.
 - `DISABLE_OR_REVIEW`: non-official source가 반복적으로 기여하지 못할 때 후속 PR에서 검토할 상태입니다.
