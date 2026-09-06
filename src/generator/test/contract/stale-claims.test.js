@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  mergeStaleClaimReports,
   pruneResolvedStaleFactCheckItems,
   scrubStaleClaims
 } = require('../../quality/stale-claims');
@@ -432,9 +433,10 @@ test('scrub does not treat a dropped identifier as a prefix of a surviving one',
   assert.equal(scrubbed.briefing.length, 3);
 });
 
-// 얇은 주 보호. briefing을 3개로 못 채우면 finalize의 briefing 개수 계약이 예외를 던져
-// 산출물조차 남지 않는다. 잔재를 남겨 발행이 막히는 편이 낫다 — 그쪽은 진단이 남는다.
-test('scrub keeps the briefing count contract when replacements cannot fill it', () => {
+// 얇은 주(최종 기사 1건) 보호. briefing 3칸이 전부 빠진 기사를 가리켜도 대체 문장 3개가
+// 그대로 채워야 한다. 대체 문장을 기사 수에 묶으면 여기서 1칸만 채워지고, 나머지 2칸을
+// 메우려 지운 문장을 되돌리게 되며, 그 잔재가 곧바로 발행을 막는다(#869 회귀).
+test('scrub refills the briefing to three when every bullet named the dropped article', () => {
   const rendered = section({
     headline: 'AR0234 글로벌 셔터 드라이버',
     article_group_key: 'lore-series:ar0234',
@@ -472,12 +474,19 @@ test('scrub keeps the briefing count contract when replacements cannot fill it',
   });
 
   assert.equal(scrubbed.briefing.length, 3);
-  assert.equal(report.restored_to_keep_minimum.length > 0, true);
-  // 되돌린 항목을 "지웠다"고 보고하면 안 된다.
-  assert.equal(
-    report.stale_claim_items_removed.some(item => item.action === 'restored-to-keep-minimum'),
-    false
+  // 지운 문장을 되돌리지 않았다. 되돌렸다면 IMX576이 발행 텍스트에 남는다.
+  assert.deepEqual(report.restored_to_keep_minimum, []);
+  assert.ok(
+    !scrubbed.briefing.join(' ').includes('IMX576'),
+    `빠진 기사 언급이 briefing에 남았다: ${scrubbed.briefing.join(' ')}`
   );
+  // 대체 문장은 기사에서 값을 가져오지 않는다. 살아남은 기사의 headline을 인용하면
+  // briefing raw-copy 검사가 그 문장을 잡아 발행이 막힌다.
+  assert.ok(
+    !scrubbed.briefing.join(' ').includes('AR0234'),
+    `대체 문장이 기사 값을 인용했다: ${scrubbed.briefing.join(' ')}`
+  );
+  assert.equal(report.hard_failures.length, 0);
 });
 
 // 섹션이 article_group_key를 안 들고 있어도 살아남은 기사가 "빠진 것"으로 세어지면 안 된다.
@@ -710,4 +719,34 @@ test('removed-section claim reused by a surviving section source is not a stale 
   // but the surviving section legitimately re-uses it -> must NOT be a hard failure.
   const result = scrubStaleClaims(editor, { date: '2026-06-03', reporter: { candidates: [] }, removedSections: [survivingSection] });
   assert.equal(result.report.hard_failures.length, 0);
+});
+
+// 게이트는 stale-claim report의 status와 hard_failures를 둘 다 본다. 합칠 때 status를
+// hard_failures 길이로만 다시 계산하면, hard_failure 없이 NEEDS_FIX였던 앞 스크럽의 판정이
+// 조용히 PASS로 낮아진다.
+test('merged stale-claim report keeps a NEEDS_FIX status that carried no hard failure', () => {
+  const previous = {
+    schema_version: 1,
+    date: '2026-06-03',
+    status: 'NEEDS_FIX',
+    hard_failures: [],
+    removed_sections: [],
+    stale_claim_items_removed: [],
+    unsupported_release_claims_removed: [],
+    unused_references_removed: []
+  };
+  const next = {
+    schema_version: 1,
+    date: '2026-06-03',
+    status: 'PASS',
+    hard_failures: [],
+    removed_sections: [],
+    stale_claim_items_removed: [],
+    unsupported_release_claims_removed: [],
+    unused_references_removed: []
+  };
+  assert.equal(mergeStaleClaimReports(previous, next).status, 'NEEDS_FIX');
+  // 양쪽 모두 PASS일 때만 합집합이 PASS다.
+  assert.equal(mergeStaleClaimReports({ ...previous, status: 'PASS' }, next).status, 'PASS');
+  assert.equal(mergeStaleClaimReports({ ...previous, status: 'PASS' }, { ...next, status: 'NEEDS_FIX' }).status, 'NEEDS_FIX');
 });

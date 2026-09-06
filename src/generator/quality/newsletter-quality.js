@@ -40,6 +40,10 @@ const {
   RECOMMENDED_ARTICLE_TYPES
 } = require('../../shared/evidence/impact-classifier');
 const {
+  mergeStaleClaimReports,
+  scrubStaleClaims
+} = require('./stale-claims');
+const {
   findFieldHygieneIssues,
   inferGuardrailImpactClass
 } = require('../reporter/article-field-builder');
@@ -1044,11 +1048,23 @@ function salvagePublishableSubset(date, editor, reporter, factCheck, qualityRepo
     'thin-week salvage dropped unpublishable article'
   );
 
-  const subsetEditor = {
+  const keptEditor = {
     ...editor,
     sections: keepIndices.map(index => sections[index]),
     hard_blocked_groups: [...ensureArray(editor.hard_blocked_groups), ...droppedHardBlockedGroups]
   };
+  // #869: 이슈 레벨 텍스트(summary/briefing/action_items/references)는 방금 떨어뜨린 기사를
+  // 계속 가리킨다. 호출자 쪽 스크럽은 salvage보다 앞서 돌아 이 drop을 못 본다. subset 게이트를
+  // 다시 계산하기 전에 여기서 한 번 더 스크럽해, 발행되는 텍스트와 그것을 통과시킨 품질 보고서가
+  // 같은 텍스트를 보게 한다. 재스크럽이 hard_failure를 내면 아래 subset 게이트가 NEEDS_FIX가 되고
+  // salvage는 null을 돌려 fail-closed로 끝난다.
+  const subsetScrub = scrubStaleClaims(keptEditor, {
+    date,
+    removedSections: droppedIndices.map(index => sections[index]),
+    reporter
+  });
+  const subsetEditor = subsetScrub.editor;
+  const subsetStaleClaimReport = mergeStaleClaimReports(options.staleClaimReport || null, subsetScrub.report);
   const subsetFactCheck = {
     ...factCheck,
     must_fix: ensureArray(factCheck?.must_fix).filter(item => refsKept(factCheckProbe(item))),
@@ -1062,7 +1078,10 @@ function salvagePublishableSubset(date, editor, reporter, factCheck, qualityRepo
   subsetFactCheck.source_gap_count = subsetFactCheck.source_gaps.length;
   subsetFactCheck.status = subsetFactCheck.must_fix.length > 0 ? 'NEEDS_FIX' : 'PASS';
 
-  const subsetReport = buildNewsletterQualityReport(date, subsetEditor, reporter, subsetFactCheck, options);
+  const subsetReport = buildNewsletterQualityReport(date, subsetEditor, reporter, subsetFactCheck, {
+    ...options,
+    staleClaimReport: subsetStaleClaimReport
+  });
   if (subsetReport.status !== 'PASS') {
     debug(`subset re-gate NEEDS_FIX; blockers=${blockingDeductions(subsetReport.deductions).map(d => d.reason).join(' | ')}`);
     return null;
@@ -1071,6 +1090,7 @@ function salvagePublishableSubset(date, editor, reporter, factCheck, qualityRepo
     editor: subsetEditor,
     factCheck: subsetFactCheck,
     qualityReport: subsetReport,
+    staleClaimReport: subsetStaleClaimReport,
     dropped_section_count: sections.length - keepIndices.length,
     kept_section_count: keepIndices.length
   };
