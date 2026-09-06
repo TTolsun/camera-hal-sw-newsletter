@@ -1,7 +1,12 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { resolveAospSiteUpdateItems, pageDate, MAX_DATE_LOOKUPS } = require('../../../collect/aosp-site-update-dates');
+const {
+  resolveAospSiteUpdateItems,
+  pageDate,
+  describesSameMonth,
+  MAX_DATE_LOOKUPS
+} = require('../../../collect/aosp-site-update-dates');
 const { resolveFollowedSourceItems, followedSourceResolverIds } = require('../../../collect/followed-source-item-resolvers');
 
 const SOURCE = Object.freeze({
@@ -36,9 +41,46 @@ test('월 정밀도 날짜를 대상 페이지의 일 단위 날짜로 올린다
   const item = items.find(entry => entry.url === TARGET);
   assert.equal(item.publishedAt, '2026-07-13');
   assert.equal(item.datePrecision, 'day');
-  assert.equal(item.date_source, 'aosp_site_update_target_page');
+  // 어휘는 date-signals.js 의 DATE_SOURCES 에 있는 값이어야 한다.
+  assert.equal(item.date_source, 'visible_last_updated');
   // 표가 말한 월은 근거 추적용으로 남긴다.
   assert.equal(item.site_update_month, '2026-07-01');
+});
+
+test('Last updated 가 없으면 본문 날짜를 쓰고 출처를 visible_date 로 적는다', async () => {
+  const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
+    fetchTextImpl: async () => targetHtml('Published July 9, 2026.')
+  });
+
+  const item = items.find(entry => entry.url === TARGET);
+  assert.equal(item.publishedAt, '2026-07-09');
+  assert.equal(item.date_source, 'visible_date');
+});
+
+test('행이 실린 달을 벗어난 페이지 날짜는 쓰지 않는다', async () => {
+  // 페이지의 "Last updated" 는 그 페이지를 아무 이유로든 마지막으로 손댄 날이다.
+  // 실측: 2026-03 행 "Buy and set up a Gen2 box" 의 페이지가 2026-08-31 을 말한다.
+  // 그 값을 쓰면 몇 달 지난 행이 이번 주 날짜를 얻어 수집 창 안으로 들어온다.
+  const diagnostics = [];
+  const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
+    fetchTextImpl: async () => targetHtml('Last updated 2026-08-31 UTC.'),
+    onDiagnostic: event => diagnostics.push(event)
+  });
+
+  const item = items.find(entry => entry.url === TARGET);
+  assert.equal(item.datePrecision, 'month');
+  assert.equal(item.publishedAt, '2026-07-01');
+  assert.equal(item.date_source, undefined);
+  assert.equal(diagnostics[0].type, 'aosp_site_update_date_outside_row_month');
+  assert.match(diagnostics[0].reason, /2026-08-31/);
+});
+
+test('같은 달 판정은 연도까지 함께 본다', () => {
+  assert.equal(describesSameMonth('2026-07-31', '2026-07-01'), true);
+  assert.equal(describesSameMonth('2026-08-01', '2026-07-01'), false);
+  // 1년 차이가 나는 같은 달을 통과시키면 안 된다.
+  assert.equal(describesSameMonth('2025-07-15', '2026-07-01'), false);
+  assert.equal(describesSameMonth('', '2026-07-01'), false);
 });
 
 test('페이지에서 날짜를 못 얻으면 항목을 그대로 둔다', async () => {
@@ -65,6 +107,15 @@ test('한 페이지가 실패해도 나머지 후보는 그대로 나간다', as
   assert.match(diagnostics[0].reason, /boom/);
 });
 
+test('Error 가 아닌 값이 던져져도 사유를 남긴다', async () => {
+  const diagnostics = [];
+  await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
+    fetchTextImpl: async () => { throw 'plain string'; },
+    onDiagnostic: event => diagnostics.push(event)
+  });
+  assert.match(diagnostics[0].reason, /plain string/);
+});
+
 test('같은 URL 이 여러 행에 나와도 한 번만 가져온다', async () => {
   let calls = 0;
   await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
@@ -73,28 +124,26 @@ test('같은 URL 이 여러 행에 나와도 한 번만 가져온다', async () 
   assert.equal(calls, 1);
 });
 
-test('대상 페이지가 월까지만 알려 주면 정밀도를 올리지 않는다', async () => {
-  // firstDateMatch 의 new Date() 폴백은 "July 2026" 을 2026-07-01 로 만들어 준다.
-  // 그 값을 받아 일 정밀도로 올리면 아무도 모르는 "1일"을 발행일로 박게 된다.
-  const items = await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
-    fetchTextImpl: async () => '<html><body><main><p>Last updated July 2026.</p></main></body></html>'
+test('주입된 fetch 에도 영문판을 강제한다', async () => {
+  // 프로덕션은 늘 fetchTextImpl 을 주입한다. hl 을 defaultFetchText 안에만 두면
+  // 그 방어가 프로덕션 경로에서 죽는다.
+  const asked = [];
+  await resolveAospSiteUpdateItems(indexHtml(), SOURCE, {
+    fetchTextImpl: async url => { asked.push(String(url)); return targetHtml(); }
   });
-
-  const item = items.find(entry => entry.url === TARGET);
-  assert.equal(item.datePrecision, 'month');
-  assert.equal(item.publishedAt, '2026-07-01', '표가 준 월 값 그대로다');
-  assert.equal(item.date_source, undefined);
-});
-
-test('연도만 적힌 페이지도 정밀도를 올리지 않는다', () => {
-  assert.equal(pageDate('<main><p>Last updated 2026.</p></main>'), '');
-  assert.equal(pageDate('<main><p>Copyright 2026 Google.</p></main>'), '');
+  assert.ok(asked.length > 0, '대상 페이지를 가져왔다');
+  assert.ok(asked.every(url => url.includes('hl=en')), asked.join(', '));
 });
 
 test('Last updated 가 없으면 본문의 첫 날짜를 쓴다', () => {
   // source-monitor 가 스냅샷을 만들 때와 같은 두 추출기, 같은 순서다.
-  assert.equal(pageDate(targetHtml('Last updated 2026-07-13 UTC.')), '2026-07-13');
-  assert.equal(pageDate('<main><p>Published 2026-06-02.</p></main>'), '2026-06-02');
+  assert.deepEqual(pageDate(targetHtml('Last updated 2026-07-13 UTC.')),
+    { date: '2026-07-13', dateSource: 'visible_last_updated' });
+  assert.deepEqual(pageDate('<main><p>Published June 2, 2026.</p></main>'),
+    { date: '2026-06-02', dateSource: 'visible_date' });
+  // 월까지만 적힌 페이지는 날짜를 주지 않는다.
+  assert.deepEqual(pageDate('<main><p>Last updated July 2026.</p></main>'),
+    { date: '', dateSource: '' });
 });
 
 test('리졸버가 followed-source 레지스트리에 등록돼 있다', async () => {
@@ -105,23 +154,6 @@ test('리졸버가 followed-source 레지스트리에 등록돼 있다', async (
     fetchTextImpl: async () => targetHtml()
   });
   assert.equal(items.find(entry => entry.url === TARGET).publishedAt, '2026-07-13');
-});
-
-test('기본 fetch 경로는 영문판을 강제한다', async () => {
-  // 번역본은 원문보다 뒤처지고 "Last updated" 표기도 번역돼 날짜를 못 읽는다.
-  const asked = [];
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async url => {
-    asked.push(String(url));
-    return { ok: true, text: async () => targetHtml() };
-  };
-  try {
-    await resolveAospSiteUpdateItems(indexHtml(), SOURCE);
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
-  assert.ok(asked.length > 0, '대상 페이지를 가져왔다');
-  assert.ok(asked.every(url => url.includes('hl=en')), asked.join(', '));
 });
 
 test('fetch 상한은 표 파서 상한과 같다', () => {

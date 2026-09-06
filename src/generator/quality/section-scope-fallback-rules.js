@@ -1,7 +1,10 @@
 'use strict';
 
-const { BUCKETS } = require('../../shared/domain/aosp-camera-scope');
+const { BUCKETS, BUCKET_PRIORITY } = require('../../shared/domain/aosp-camera-scope');
 
+// editorial_priority 는 BUCKET_PRIORITY 에서 끌어 쓴다. 손으로 적으면 사다리가 바뀔 때
+// 함께 바뀌지 않는다 — 드라이버가 2 에서 5 로 내려간 뒤에도 이 파일은 2 를 쥐고 있었다.
+//
 // 섹션 본문 텍스트 기반 scope fallback 규칙을 우선순위 순서로 둔다(OCP).
 // 새 버킷/패턴을 추가할 때 거대한 if-else를 고치는 대신 이 배열에 항목을 더한다.
 // 위에서부터 첫 번째로 매칭되는 규칙의 scope를 사용하며, 어디에도 안 맞으면
@@ -10,7 +13,7 @@ const SECTION_SCOPE_FALLBACK_RULES = [
   {
     pattern: /카메라\s*HAL|안드로이드\s*카메라|카메라2|Camera\s*HAL|Android Camera|CameraX|Camera2|Camera ITS|CTS|VTS|AOSP Camera/i,
     scope: {
-      editorial_priority: 1,
+      editorial_priority: BUCKET_PRIORITY[BUCKETS.DIRECT_AOSP_CAMERA],
       relevance_bucket: BUCKETS.DIRECT_AOSP_CAMERA,
       aosp_camera_directness: 3,
       driver_stack_relevance: 0,
@@ -27,7 +30,7 @@ const SECTION_SCOPE_FALLBACK_RULES = [
   {
     pattern: /V4L2|libcamera|ISP|이미지\s*센서|image sensor|camera driver|media controller|MIPI|CSI-2|DMA-BUF/i,
     scope: {
-      editorial_priority: 2,
+      editorial_priority: BUCKET_PRIORITY[BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE],
       relevance_bucket: BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
       aosp_camera_directness: 0,
       driver_stack_relevance: 3,
@@ -44,7 +47,7 @@ const SECTION_SCOPE_FALLBACK_RULES = [
   {
     pattern: /\bUltra\s+HDR\b|\bHDR\s+video\b|\bAPV\b|\bAdvanced\s+Professional\s+Video\b|\bMediaProvider\b|\bmedia\s+provider\b|\bMediaStore\b|\bmedia\s+store\b|\bgallery\s+output\b|\bmedia\s+output\b|\bvideo\s+call\b|\bcamera\s*\/\s*audio\s+sync\b|\bsocial\s+app\s+camera\s+capture\b|\bcamera\s+capture\s+result\b|\bcaptured\s+image\s*\/\s*video\s+output\b/i,
     scope: {
-      editorial_priority: 4,
+      editorial_priority: BUCKET_PRIORITY[BUCKETS.ANDROID],
       relevance_bucket: BUCKETS.ANDROID,
       aosp_camera_directness: 0,
       driver_stack_relevance: 0,
@@ -61,7 +64,7 @@ const SECTION_SCOPE_FALLBACK_RULES = [
   {
     pattern: /\bSoC\b|\bCPU\b|\bGPU\b|\bNPU\b|\bDSP\b|\bthermal\b|\bpower\b|\bDVFS\b|\bscheduler\b|\bmemory bandwidth\b|Exynos|Snapdragon|Google Tensor/i,
     scope: {
-      editorial_priority: 4,
+      editorial_priority: BUCKET_PRIORITY[BUCKETS.ANDROID],
       relevance_bucket: BUCKETS.ANDROID,
       aosp_camera_directness: 0,
       driver_stack_relevance: 0,
@@ -78,7 +81,7 @@ const SECTION_SCOPE_FALLBACK_RULES = [
   {
     pattern: /C\+\+|LLVM|Clang|GCC|sanitizer|native|toolchain|build|test|AI coding|LLM agent/i,
     scope: {
-      editorial_priority: 6,
+      editorial_priority: BUCKET_PRIORITY[BUCKETS.CPP_AI_TOOLING_FALLBACK],
       relevance_bucket: BUCKETS.CPP_AI_TOOLING_FALLBACK,
       aosp_camera_directness: 0,
       driver_stack_relevance: 0,
