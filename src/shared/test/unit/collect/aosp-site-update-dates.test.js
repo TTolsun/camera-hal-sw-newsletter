@@ -13,6 +13,7 @@ const {
   sourceIdsRequiringFetchClient
 } = require('../../../collect/followed-source-item-resolvers');
 const { dateQualityForCandidate } = require('../../../common/date-signals');
+const { DATED_ARTICLE_DIAGNOSTIC_KINDS } = require('../../../collect/dated-article-index-resolver');
 
 const SOURCE = Object.freeze({
   id: 'aosp-site-updates',
@@ -121,7 +122,7 @@ test('행이 실린 달을 벗어난 페이지 날짜는 쓰지 않는다', asyn
   assert.equal(item.datePrecision, 'month');
   assert.equal(item.publishedAt, '2026-07-01');
   assert.equal(item.date_source, undefined);
-  assert.equal(diagnostics[0].type, 'aosp_site_update_date_outside_row_month');
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_outside_row_month');
   assert.match(diagnostics[0].reason, /2026-08-31/);
 });
 
@@ -153,7 +154,7 @@ test('한 페이지가 실패해도 나머지 후보는 그대로 나간다', as
 
   assert.ok(items.length > 0);
   assert.equal(items.find(entry => entry.url === TARGET).datePrecision, 'month');
-  assert.equal(diagnostics[0].type, 'aosp_site_update_date_lookup_failed');
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_lookup_failed');
   assert.match(diagnostics[0].reason, /boom/);
 });
 
@@ -174,7 +175,7 @@ test('HTTP 실패는 사유를 그대로 남기고 항목을 유지한다', asyn
   });
 
   assert.equal(items.find(entry => entry.url === TARGET).datePrecision, 'month');
-  assert.equal(diagnostics[0].type, 'aosp_site_update_date_lookup_failed');
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_lookup_failed');
   assert.equal(diagnostics[0].reason, 'http_404');
 });
 
@@ -187,7 +188,7 @@ test('예산에 걸린 응답은 HTTP 오류가 아니라 예산 사유로 남�
     onDiagnostic: event => diagnostics.push(event)
   });
 
-  assert.equal(diagnostics[0].type, 'aosp_site_update_date_lookup_failed');
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_lookup_failed');
   assert.match(diagnostics[0].reason, /byte budget/);
   assert.match(diagnostics[0].reason, /source-run/);
 });
@@ -201,7 +202,7 @@ test('client 가 안 넘어오면 항목을 살린 채 배선 누락을 진단�
   });
 
   assert.equal(items.find(entry => entry.url === TARGET).datePrecision, 'month');
-  assert.equal(diagnostics[0].type, 'aosp_site_update_date_lookup_skipped');
+  assert.equal(diagnostics[0].kind, 'aosp_site_update_date_lookup_skipped');
   assert.match(diagnostics[0].reason, /fetchClient/);
 });
 
@@ -256,6 +257,37 @@ test('리졸버가 followed-source 레지스트리에 등록돼 있다', async (
     fetchClient: stubClient(targetHtml())
   });
   assert.equal(items.find(entry => entry.url === TARGET).publishedAt, '2026-07-13');
+});
+
+test('레지스트리가 collector 의 indexItems 를 리졸버까지 넘긴다', async () => {
+  // 인덱스 HTML 을 비워 두면 리졸버가 스스로 파싱해서는 아무것도 못 만든다.
+  // 그래도 결과가 나온다는 것이 곧 레지스트리 항목이 indexItems 를 넘겼다는 증거다.
+  // 리졸버를 직접 부르는 테스트만 두면 이 배선이 빠져도 아무 테스트가 안 깨진다.
+  const items = await resolveFollowedSourceItems(SOURCE, {
+    text: '',
+    indexItems: [{
+      url: TARGET,
+      title: 'Camera ITS tests',
+      publishedAt: '2026-07-01',
+      datePrecision: 'month'
+    }],
+    fetchClient: stubClient(targetHtml())
+  });
+
+  assert.equal(items.length, 1);
+  assert.equal(items[0].publishedAt, '2026-07-13');
+});
+
+test('이 리졸버의 진단 kind 는 닫힌 어휘 안에 있다', () => {
+  // 어휘 밖 이름은 summarizeDatedArticleCollection 이 'unknown' 으로 접는다.
+  // 그러면 사건은 나는데 어느 사건인지가 실행 요약에서 사라진다.
+  for (const kind of [
+    'aosp_site_update_date_lookup_failed',
+    'aosp_site_update_date_lookup_skipped',
+    'aosp_site_update_date_outside_row_month'
+  ]) {
+    assert.ok(DATED_ARTICLE_DIAGNOSTIC_KINDS.includes(kind), kind);
+  }
 });
 
 test('레지스트리가 이 소스에 bounded client 를 요구한다', () => {

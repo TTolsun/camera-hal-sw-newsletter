@@ -123,7 +123,7 @@ async function resolveAospSiteUpdateItems(html, source, { indexItems, fetchClien
   // 넘어가면 "이번 주에는 올릴 날짜가 없었다"와 구분되지 않으므로 진단을 남긴다.
   if (!fetchClient || typeof fetchClient.fetchBounded !== 'function') {
     onDiagnostic?.({
-      type: 'aosp_site_update_date_lookup_skipped',
+      kind: 'aosp_site_update_date_lookup_skipped',
       reason: 'resolver called without a usable fetchClient (source registered but not wired to a bounded fetch client)'
     });
     return items;
@@ -144,7 +144,7 @@ async function resolveAospSiteUpdateItems(html, source, { indexItems, fetchClien
 
     if (!page.html) {
       // 날짜 보강은 부가 기능이다. 한 페이지가 실패해도 나머지 후보는 그대로 나가야 한다.
-      onDiagnostic?.({ type: 'aosp_site_update_date_lookup_failed', url, reason: page.reason });
+      onDiagnostic?.({ kind: 'aosp_site_update_date_lookup_failed', url, reason: page.reason });
       continue;
     }
 
@@ -160,7 +160,7 @@ async function resolveAospSiteUpdateItems(html, source, { indexItems, fetchClien
 
     if (!describesSameMonth(signal.date, item.publishedAt)) {
       onDiagnostic?.({
-        type: 'aosp_site_update_date_outside_row_month',
+        kind: 'aosp_site_update_date_outside_row_month',
         url: item.url,
         reason: `page date ${signal.date} is outside site update month ${item.publishedAt}`
       });
