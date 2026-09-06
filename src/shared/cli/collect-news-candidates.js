@@ -6,6 +6,7 @@ const {
   readJson,
   writeJson
 } = require('../common/common');
+const { writeJsonAtomic } = require('../common/json');
 const {
   collectedNewsDir,
   newsroomDir
@@ -1531,11 +1532,15 @@ function mergeNotYetEligibleOverflow(existing, next) {
 
 // 상한을 넘겼을 때만 전체 목록을 .tmp에 남긴다(미커밋 — 다음 실행의 참고용 진단 산출물).
 // 정상 경로(상한 안)는 payload.not_yet_eligible 자체가 이미 전체 목록이라 별도 파일이 불필요하다.
+//
+// 쓰기는 원자적으로 한다. 이 파일은 상한을 넘긴 실행에서 260KB 가까이 나가는데, 이제 다음 단계가
+// 그것을 되읽으므로 쓰기 도중 죽어 남은 반쪽 파일이 다음 단계의 JSON.parse를 깨뜨린다. 임시 파일에
+// 쓰고 rename하면 그 상태 자체가 생기지 않는다.
 function writeNotYetEligibleOverflowIfNeeded(rootDir, date, capResult) {
   if (!capResult.overflow) return;
   const filePath = path.join(rootDir, notYetEligibleOverflowRelPath(date));
   const existing = fs.existsSync(filePath) ? readJson(filePath) : [];
-  writeJson(filePath, mergeNotYetEligibleOverflow(existing, capResult.full));
+  writeJsonAtomic(filePath, mergeNotYetEligibleOverflow(existing, capResult.full));
 }
 
 function urlDedupeKey(value) {
@@ -2276,7 +2281,6 @@ module.exports = {
   evidenceMetadata,
   fetchUrlForContent,
   isSourceChangeEventCandidate,
-  mergeNotYetEligibleOverflow,
   newsletterDateWindowEnd,
   normalizeCandidate,
   notYetEligibleOverflowRelPath,
