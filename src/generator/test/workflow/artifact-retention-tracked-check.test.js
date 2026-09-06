@@ -12,9 +12,12 @@ const {
   DEBUG_HEAVY,
   TRANSIENT_ATTEMPT,
   REVIEW_REQUIRED_COMPACT,
+  buildReviewArtifactInventory,
   classifyArtifactPath,
   retentionCommitAllowlist
 } = require('../../publish/review-artifact-inventory');
+
+const repoRoot = path.join(__dirname, '..', '..', '..', '..');
 
 // Pass a fake tracked-paths list via _trackedPaths to avoid real git invocation in tests.
 function makeCheck(trackedPaths) {
@@ -150,4 +153,24 @@ test('check FLAGS a news-candidates.md tracked after the daily era', () => {
   assert.equal(result.ok, false, 'post-daily news-candidates.md must be flagged');
   assert.equal(result.violations.length, 1);
   assert.equal(result.violations[0].grade, DEBUG_HEAVY);
+});
+
+// 워크플로 02는 articles/content/newsroom/ 을 통째로 git add 한다. 그래서 debug_heavy 등급
+// 파일이 커밋되지 않는 유일한 이유는 .gitignore 다. 등급표에 debug_heavy 로 적어 두고 목록에서
+// 빠뜨리면 그 파일은 첫 실행에서 커밋되고 곧바로 이 체크가 hard fail 한다(#1089: seed 리포트
+// 두 건이 그 상태였다). 목록을 손으로 맞추는 대신 inventory 가 세는 것과 대조한다.
+test('#1089: inventory가 debug_heavy로 세는 newsroom 산출물은 전부 .gitignore가 막는다', () => {
+  const inventory = buildReviewArtifactInventory({ date: '2026-09-07' });
+  const heavyBasenames = [...new Set(inventory.review_artifacts
+    .filter(artifact => artifact.retention_grade === DEBUG_HEAVY && artifact.path.includes('/newsroom/'))
+    .map(artifact => artifact.path.split('/').pop()))];
+  // 전제부터 확인한다. inventory 가 newsroom debug_heavy 를 하나도 안 세면 아래 비교는
+  // 빈 목록끼리의 대조가 되어 무엇을 빠뜨려도 통과한다.
+  assert.ok(heavyBasenames.length > 0, 'inventory must list newsroom debug_heavy artifacts');
+
+  const gitignore = fs.readFileSync(path.join(repoRoot, '.gitignore'), 'utf8');
+  const missing = heavyBasenames.filter(
+    basename => !gitignore.includes(`articles/content/newsroom/**/${basename}`)
+  );
+  assert.deepEqual(missing, [], `.gitignore must cover every newsroom debug_heavy artifact: ${missing.join(', ')}`);
 });
