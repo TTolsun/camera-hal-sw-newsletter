@@ -17,12 +17,21 @@ const BUCKETS = Object.freeze({
   GENERIC_TECH_WATCHLIST: 'generic_tech_watchlist'
 });
 
+// 순위는 정렬에만 쓴다. 임계값으로 읽는 곳이 없어 값의 절대 크기가 아니라 순서만 의미가
+// 있고, 자격을 통과한 후보들 사이에서 deterministicCandidateSort 의 첫 기준이 된다.
+//
+// camera_driver_image_pipeline 이 맨 아래인 이유: 13주 실측에서 발행 44건 중 38건이
+// 드라이버 패치였다. 다만 그것은 순위 문제가 아니라 공급 문제다 — 드라이버는 자격 통과가
+// 54건인데 Camera HAL 은 4건이라(56건 중 52건이 missing dated evidence 로 탈락) 남는
+// 자리를 드라이버가 채운다. 순위를 내려도 그 주에 경쟁자가 없으면 여전히 드라이버가
+// 실린다(W30~W33 은 드라이버만 자격을 통과했다). 다른 버킷이 함께 통과한 주에만 순서가
+// 갈리고, 13주 중 그런 주는 4주였다.
 const BUCKET_PRIORITY = Object.freeze({
   [BUCKETS.DIRECT_AOSP_CAMERA]: 1,
-  [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 2,
-  [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 3,
-  [BUCKETS.ANDROID]: 4,
-  [BUCKETS.GENERIC_TECH_WATCHLIST]: 5
+  [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 2,
+  [BUCKETS.ANDROID]: 3,
+  [BUCKETS.GENERIC_TECH_WATCHLIST]: 4,
+  [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 5
 });
 
 // 발행된 아티팩트와 state 파일에 남은 옛 버킷 이름을 읽기 위한 표다.

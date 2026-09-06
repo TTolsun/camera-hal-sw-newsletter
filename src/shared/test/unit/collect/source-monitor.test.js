@@ -11,6 +11,7 @@ const {
   observationFromHtml,
   runSourceMonitor,
   snapshotPath,
+  explicitDayDate,
   visibleLastUpdated
 } = require('../../../collect/source-monitor');
 const {
@@ -762,6 +763,23 @@ test('visibleLastUpdated extracts the full ISO date from a devsite footer', () =
   const html = '<html><body><p>Camera ITS release notes body.</p>' +
     '<devsite-content-footer><p>Last updated 2026-07-21 UTC.</p></devsite-content-footer></body></html>';
   assert.equal(visibleLastUpdated(html), '2026-07-21');
+});
+
+test('explicitDayDate accepts only day-level dates', () => {
+  assert.equal(explicitDayDate('Last updated 2026-07-13 UTC.'), '2026-07-13');
+  assert.equal(explicitDayDate('Last updated July 13, 2026.'), '2026-07-13');
+  // 월이나 연도까지만 적힌 값은 거절한다.
+  assert.equal(explicitDayDate('Last updated July 2026.'), '');
+  assert.equal(explicitDayDate('2026'), '');
+});
+
+test('the lenient default still fills a day in, which is why the strict reader exists', () => {
+  // visibleLastUpdated 의 기본 해석기는 new Date('July 2026') 폴백으로 날짜를 만들어 낸다.
+  // 실행 시간대에 따라 2026-07-01 이 되기도 하고 2026-06-30 이 되기도 한다. 어느 쪽이든
+  // 원문에 없는 "일"이며, 정밀도를 올리는 자리에서 이 값을 믿으면 안 된다는 근거다.
+  const lenient = visibleLastUpdated('<p>Last updated July 2026.</p>');
+  assert.match(lenient, /^2026-0[67]-\d{2}$/);
+  assert.equal(visibleLastUpdated('<p>Last updated July 2026.</p>', explicitDayDate), '');
 });
 
 test('visibleLastUpdated handles month-name dates and missing footers', () => {

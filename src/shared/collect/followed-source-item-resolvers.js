@@ -5,6 +5,7 @@
 const { resolveSecurityBulletinCveItems } = require('./security-bulletin-cve');
 const { resolveMediatekSecurityBulletinItems } = require('./mediatek-security-bulletin');
 const { resolveQualcommSecurityBulletinItems } = require('./qualcomm-security-bulletin');
+const { resolveAospSiteUpdateItems } = require('./aosp-site-update-dates');
 const { resolveLibcameraReleaseAnnouncementItems } = require('./libcamera-release-announcements');
 const { resolveRaspberryPiLibcameraReleaseItems } = require('./raspberrypi-libcamera-releases');
 const { resolvePatchworkLibcameraPatchItems } = require('./patchwork-libcamera-patches');
@@ -35,6 +36,13 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     requiresFetchClient: true,
     resolve: ({ source, fetchClient, now, lookbackDays }) =>
       resolveQualcommSecurityBulletinItems({ source, fetchClient, now, lookbackDays })
+  },
+  {
+    // 표 파서 결과를 그대로 쓰되 월 정밀도 날짜만 대상 페이지에서 올린다.
+    // 표는 "July 2026" 까지만 알고 페이지에는 일 단위 날짜가 있다.
+    id: 'aosp-site-updates',
+    resolve: ({ text, source, fetchTextImpl, onDiagnostic }) =>
+      resolveAospSiteUpdateItems(text, source, { fetchTextImpl, onDiagnostic })
   },
   {
     id: 'libcamera-release-announcements',

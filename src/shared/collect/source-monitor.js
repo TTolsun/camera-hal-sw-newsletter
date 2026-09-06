@@ -139,7 +139,16 @@ function titleFromHtml(html = '', fallback = '') {
   return title ? visibleText(title[1]).slice(0, 160) : fallback;
 }
 
-function firstDateMatch(value = '') {
+/**
+ * 텍스트에 "일"이 명시된 날짜만 뽑는다. ISO(2026-07-13) 와 월 이름 형식(July 13, 2026)
+ * 두 가지만 인정하고, 못 찾으면 빈 문자열을 준다.
+ *
+ * firstDateMatch 의 new Date() 폴백을 타지 않는 것이 요점이다. 그 폴백은 "July 2026" 을
+ * 2026-07-01 로, "2026" 을 2026-01-01 로 만든다. 스냅샷이 달라졌는지만 보는 자리에서는
+ * 그 값도 쓸모가 있지만, 날짜 정밀도를 올릴지 판정하는 자리에서 쓰면 모르는 날짜를 아는
+ * 날짜로 둔갑시키는 것이 된다.
+ */
+function explicitDayDate(value = '') {
   const raw = text(value);
   const iso = raw.match(/\b(20\d{2}-\d{2}-\d{2})\b/);
   if (iso) return iso[1];
@@ -161,22 +170,29 @@ function firstDateMatch(value = '') {
     }[monthDate[1].slice(0, 3).toLowerCase()];
     return `${monthDate[3]}-${month}-${monthDate[2].padStart(2, '0')}`;
   }
-  const parsed = new Date(raw);
+  return '';
+}
+
+function firstDateMatch(value = '') {
+  const explicit = explicitDayDate(value);
+  if (explicit) return explicit;
+  // 관대한 폴백이다. 여기까지 온 값은 일 단위가 아닐 수 있다 — explicitDayDate 주석 참고.
+  const parsed = new Date(text(value));
   return Number.isNaN(parsed.getTime()) ? '' : parsed.toISOString().slice(0, 10);
 }
 
-function visibleLastUpdated(html = '') {
+function visibleLastUpdated(html = '', extractDate = firstDateMatch) {
   const value = visibleText(html);
   // lazy 캡처는 "Last updated 2026-07-21 UTC."에서 첫 단어 경계("2026")까지만 잡아
   // firstDateMatch의 new Date("2026") 폴백이 연초 날짜(2026-01-01)로 둔갑시켰다(실스냅샷 실증).
   // "Last updated" 뒤 구간을 통째로 넘겨 완전한 날짜 매칭(ISO/월 이름)에 맡긴다.
   const match = value.match(/\bLast updated\b([^.\n]*)/i);
-  return match ? firstDateMatch(match[1]) : '';
+  return match ? extractDate(match[1]) : '';
 }
 
-function visibleDate(html = '') {
+function visibleDate(html = '', extractDate = firstDateMatch) {
   const value = visibleText(html).replace(/\bLast updated\s+[^.\n]+/gi, ' ');
-  return firstDateMatch(value);
+  return extractDate(value);
 }
 
 function structuredDate(html = '', names = []) {
@@ -1240,6 +1256,10 @@ module.exports = {
   loadRegistry,
   loadSnapshot,
   observationFromHtml,
+  // AOSP Site Updates 날짜 보강이 같은 추출기를 쓴다(aosp-site-update-dates.js).
+  explicitDayDate,
+  visibleDate,
+  visibleLastUpdated,
   markdownReport,
   runSourceMonitor,
   sourceEventsJsonPath,
