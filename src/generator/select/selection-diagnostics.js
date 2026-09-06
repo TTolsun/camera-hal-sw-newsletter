@@ -351,7 +351,7 @@ const MARKDOWN_INLINE_SPECIALS = /[\\`*[\]()<>|~&]/g;
 
 // `_`는 단어 안에서는 강조가 되지 않는다(CommonMark는 intraword `_`를 강조로 열지 않는다).
 // 그래서 양옆이 모두 문자/숫자인 `_`만 남기고, 그 밖의 `_`는 escape한다. 이러면
-// `editorial_plan_reference_only`는 그대로 읽히면서 `demoted _because_ of cap` 같은 산문에서
+// `editorial_plan_unrecognized`는 그대로 읽히면서 `demoted _because_ of cap` 같은 산문에서
 // 밑줄이 사라지는 재해석은 막는다.
 const MARKDOWN_FLANKING_UNDERSCORE = /(?<![\p{L}\p{N}])_|_(?![\p{L}\p{N}])/gu;
 
