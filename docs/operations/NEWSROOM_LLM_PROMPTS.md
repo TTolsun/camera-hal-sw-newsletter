@@ -103,6 +103,7 @@ Workflow/Stage: Stage 3 `editorial-plan attempt <n>/<total>`
 - `direct_hal_impact`는 source가 직접 HAL/runtime 변경을 뒷받침할 때만 true입니다. source 근거 없는 Samsung/S.LSI/Exynos/양산/성능·화질 확대 판단을 금지합니다.
 - 이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 않습니다.
 - plan의 `coverage_decision`은 always-on coverage 재조정(deterministic reconciler)이 소비해 main-set 편성을 정합니다 — 단, 결정론 불변식(main-eligibility·cap·발행 floor·`publish_ready` 단조 하향) 안에서만 반영됩니다. editor에게 넘기는 plan에서는 `coverage_decision`/`impact_level`을 제거해 group-coverage 계약과 충돌하지 않게 합니다.
+- `coverage_decision`이 정하는 것은 main-set 하나뿐이라 등급도 `main_article`과 `exclude` 둘입니다(#1000). 참고자료 섹션은 이 값을 읽지 않는 결정론 코드(`src/generator/render/reference-articles.js`)가 따로 만듭니다.
 
 ### Reporter
 

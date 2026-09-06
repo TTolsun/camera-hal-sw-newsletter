@@ -130,7 +130,6 @@ const MAX_CANDIDATES_PER_SOURCE = 8;
 // 폭주해도 collect payload가 무한정 커지지 않게 건수와 바이트 양쪽에 상한을 둔다.
 const NOT_YET_ELIGIBLE_MAX_COUNT = 60;
 const NOT_YET_ELIGIBLE_MAX_BYTES = 262144;
-const NOT_YET_ELIGIBLE_OVERFLOW_REL_PATH = path.join('.tmp', 'not-yet-eligible-full.json');
 
 const PRIORITY_WEIGHT = { high: 3, medium: 2, low: 1 };
 const RELIABILITY_WEIGHT = { official: 3, 'project-official': 2, 'official-community': 2 };
@@ -1495,11 +1494,21 @@ function capNotYetEligible(notYetEligible) {
   };
 }
 
+// 진단 파일 경로에 실행 날짜를 넣어 날짜마다 분리한다. 전역 단일 경로였을 때는 같은 워킹트리를
+// 공유하는 두 실행(로컬 연속 실행)에서 나중 실행이 앞선 실행의 목록을 덮어썼고, 파일 안에 실행
+// identity가 없어 남은 파일이 어느 실행 것인지 구분할 방법도 없었다(issue #1040).
+// date는 두 호출 지점 모두 같은 실행의 다른 artifact 경로를 만들 때 쓰는 값과 같다.
+// 분리 단위는 날짜뿐이다. 같은 날짜 안에서는 stage 2 재작성이 여전히 stage 1이 남긴 파일을
+// 덮어쓴다 — 그 합집합 쓰기는 #1040의 남은 범위이고 이 변경이 다루지 않는다.
+function notYetEligibleOverflowRelPath(date) {
+  return path.join('.tmp', `not-yet-eligible-full-${date}.json`);
+}
+
 // 상한을 넘겼을 때만 전체 목록을 .tmp에 남긴다(미커밋 — 다음 실행의 참고용 진단 산출물).
 // 정상 경로(상한 안)는 payload.not_yet_eligible 자체가 이미 전체 목록이라 별도 파일이 불필요하다.
-function writeNotYetEligibleOverflowIfNeeded(rootDir, capResult) {
+function writeNotYetEligibleOverflowIfNeeded(rootDir, date, capResult) {
   if (!capResult.overflow) return;
-  writeJson(path.join(rootDir, NOT_YET_ELIGIBLE_OVERFLOW_REL_PATH), capResult.full);
+  writeJson(path.join(rootDir, notYetEligibleOverflowRelPath(date)), capResult.full);
 }
 
 function urlDedupeKey(value) {
@@ -2139,7 +2148,7 @@ async function main() {
     dedupe(candidates), coverage, now, lookbackDays
   );
   const notYetEligibleCap = capNotYetEligible(notYetEligible);
-  writeNotYetEligibleOverflowIfNeeded(root, notYetEligibleCap);
+  writeNotYetEligibleOverflowIfNeeded(root, date, notYetEligibleCap);
 
   const rankedCandidates = currentCoveragePool
     .filter(item => withinLookback(item, now, lookbackDays))
@@ -2242,6 +2251,7 @@ module.exports = {
   isSourceChangeEventCandidate,
   newsletterDateWindowEnd,
   normalizeCandidate,
+  notYetEligibleOverflowRelPath,
   parseHtmlPage,
   parseRss,
   partitionByCoverageEligibility,

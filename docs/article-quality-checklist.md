@@ -12,10 +12,12 @@ editorial-plan 단계는 선택된 기사마다 내부 editorial plan(coverage/i
 
 editorial-plan은 두 개의 별개 vocabulary를 씁니다. 혼동하지 마세요.
 
-- `coverage_decision`: `main_article`, `reference_only`, `exclude` — 이 기사를 얼마나 다룰지.
+- `coverage_decision`: `main_article`, `exclude` — 이 기사를 main article로 낼지 말지.
 - `impact_level`: `Direct Impact`, `Design Reference`, `Trend Watch`, `Exclude` — Camera HAL 관점의 영향 강도.
 
 이 두 값은 public 본문에 라벨로 노출되지 않으며 editor에게 넘어가기 전에 제거됩니다. 리뷰어는 `articles/content/newsroom/<date>/editorial-plan.json` artifact에서 읽습니다.
+
+`coverage_decision`에는 예전에 `reference_only`가 있었지만 지금은 프롬프트가 제시하지도, 파이프라인이 아는 등급으로 받지도 않습니다(#1000). 참고자료 섹션을 만드는 코드는 이 값을 읽지 않아 결과가 `exclude`와 똑같았고, 참고 섹션 선별은 결정론 코드가 후보의 버킷·날짜·근거로만 정하기 때문입니다. 모델이 그래도 이 값을 내면 강등 사유는 `editorial_plan_unrecognized`로 기록되고, 모델이 쓴 원문은 강등 기록의 `coverage_decision`에 그대로 남습니다.
 
 ## 계층 지도 (layer map)
 
@@ -28,7 +30,7 @@ editorial-plan은 두 개의 별개 vocabulary를 씁니다. 혼동하지 마세
 | Camera HAL core (`direct_aosp_camera`) | Camera HAL3/AIDL, CameraService, stream/metadata | (정상 직접 영향) | 실제 HAL interface·metadata·buffer 영향이 source로 뒷받침되나? |
 | Android Camera API / framework (`direct_aosp_camera`) | Camera2/CameraX, camera CTS/VTS/ITS | "app/API 동작 변화 = vendor HAL contract 변경"으로 단정 | app·framework 동작 영향과 vendor HAL contract 영향을 구분했나? (Camera2/CameraX·CTS/VTS/ITS도 우선순위 1 `direct_aosp_camera`이며, 위 HAL core 행과 같은 bucket의 app-facing facet이다.) |
 | 컴파일러 / 툴체인 / CI (`cpp_ai_tooling_fallback`) | Clang/LLVM, static analysis, build/test | "툴체인 변경 = 카메라 런타임 성능 향상"으로 단정 | code 품질·빌드 안정성으로 framing했나? 근거 없는 runtime 성능·화질 개선 주장이 없나? Android native는 Clang/LLVM/libc++ 중심으로 봤나? |
-| 제품 / 산업 (`generic_tech_watchlist`) | 제품 출시·산업 트렌드 | 구체 연결 없이 "Camera HAL 관련"으로 승격 | 구체적 HAL 인접 trend를 설명하나? 못 하면 `reference_only`/`exclude`로 강등했나? |
+| 제품 / 산업 (`generic_tech_watchlist`) | 제품 출시·산업 트렌드 | 구체 연결 없이 "Camera HAL 관련"으로 승격 | 구체적 HAL 인접 trend를 설명하나? 못 하면 `exclude`로 강등했나? |
 
 > 계층에 딱 맞지 않는 새 토픽(예: GPU 드라이버, 전력관리)도 같은 원칙으로 봅니다 — "Camera HAL보다 아래/옆/위 계층의 신호는 명시적 HAL 근거가 있을 때만 직접 영향으로 본다." 어느 계층에 가까운지 매핑한 뒤 그 행의 점검 항목을 적용하세요. EDITORIAL_POLICY.md의 과장 금지 기준도 함께 봅니다.
 
