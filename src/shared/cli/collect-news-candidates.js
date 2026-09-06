@@ -446,11 +446,16 @@ function firstMatch(pattern, value) {
   return match ? match[0] : '';
 }
 
-function firstBehavior(value) {
-  const sentences = String(value || '')
+// 동작 변경 문장을 뽑을 때 쓰는 문장 분할기다. 템플릿 표식 비교도 같은 분할기를 쓴다(#976).
+function splitSentences(value) {
+  return String(value || '')
     .split(/(?<=[.!?])\s+|[•\n]/)
     .map(item => item.trim())
     .filter(Boolean);
+}
+
+function firstBehavior(value) {
+  const sentences = splitSentences(value);
   return sentences.find(sentence => BEHAVIOR_CHANGE_PATTERN.test(sentence)) || sentences[0] || '';
 }
 
@@ -497,10 +502,20 @@ function nativeAndroidToolingEvidence(raw = {}, source = {}, title = '', summary
 // #976: 수집기가 출처 본문 대신 채워 넣은 템플릿 문장인지 판정한다. 표식(collector_template_sentence)이
 // 필드 이름이 아니라 문장 텍스트인 이유는, 같은 문장이 behavior_change로도 summary로도 흘러오기
 // 때문이다. 표식을 다는 쪽은 그 문장을 만든 수집기다.
-function isCollectorTemplateSentence(raw, value) {
-  const template = String(raw?.collector_template_sentence || '').replace(/\s+/g, ' ').trim();
-  if (!template) return false;
-  return String(value || '').replace(/\s+/g, ' ').trim() === template;
+//
+// 표식 전체 문장뿐 아니라 splitSentences로 쪼갠 조각과도 비교한다. behavior_change 후보 중 하나는
+// firstBehavior가 돌려주는 값인데, firstBehavior의 반환값은 언제나 입력을 같은 분할기로 쪼갠 조각
+// 하나다. 릴리스 이름은 자유 텍스트라 마침표가 들어가면 템플릿이 두 문장으로 갈리고, 그러면 전체
+// 문장 비교만으로는 조각이 표식을 빠져나간다.
+function collectorTemplateTexts(raw) {
+  const template = String(raw?.collector_template_sentence || '').trim();
+  if (!template) return [];
+  return [template, ...splitSentences(template)].map(text => text.replace(/\s+/g, ' ').trim());
+}
+
+function isCollectorTemplateSentence(templateTexts, value) {
+  if (!templateTexts.length) return false;
+  return templateTexts.includes(String(value || '').replace(/\s+/g, ' ').trim());
 }
 
 function hasBehaviorChangeForRaw(raw, behaviorChange) {
@@ -827,10 +842,12 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
   const behaviorChange = (behaviorChangeTexts.find(value => value) || '').trim();
   // #976: 수집기가 만든 템플릿 문장은 출처가 말한 사실이 아니므로 동작 변경 근거로 세지 않는다.
   // 수집기가 collector_template_sentence로 그 문장을 표식해 주면 여기서 건너뛰고 다음 후보 문장을
-  // 본다. 본문이 없는 릴리스는 summary도 같은 문장이라 두 칸이 함께 걸러진다.
+  // 본다. 본문이 없는 릴리스는 summary도 같은 문장이라, 표식과 그 문장 조각들이 raw 필드와
+  // firstBehavior 칸을 함께 걸러 낸다.
   // 표식이 없는 후보의 판정 경로는 그대로다 — 어휘 패턴은 건드리지 않았다.
+  const templateTexts = collectorTemplateTexts(raw);
   const behaviorChangeEvidence = (behaviorChangeTexts
-    .find(value => value && !isCollectorTemplateSentence(raw, value)) || '').trim();
+    .find(value => value && !isCollectorTemplateSentence(templateTexts, value)) || '').trim();
   // 정본이 판정한다. raw.published_date/publishedAt/published_at 중 실제로 파싱되는 값만
   // "발행일 있음"으로 인정한다(resolveCandidateDateEvidence가 못 읽으면 effective_date로
   // 넘어가는데, 여기서는 그것도 publish_ready_date_evidence 기준으로 함께 본다).
@@ -1171,6 +1188,10 @@ function normalizeCandidate(raw) {
     api_or_component: metadata.api_or_component,
     source_hint_api_or_component: metadata.source_hint_api_or_component,
     behavior_change: metadata.behavior_change,
+    // 수집기가 출처 본문 대신 채워 넣은 문장(#976). 동작 변경 근거 판정이 이 문장과 그 문장 조각을
+    // 근거에서 빼므로, 표식이 후보 JSON에 남지 않으면 왜 has_behavior_change가 false인지 산출물만
+    // 보고는 알 수 없다. 값을 만든 쪽은 수집기이므로 metadata가 아니라 raw에서 읽는다.
+    collector_template_sentence: String(raw.collector_template_sentence || ''),
     selection_exclusion_reason: classification.selectionExclusionReason,
     watchlist_reason: classification.finalSelectionEligibility === 'watchlist'
       ? classification.selectionExclusionReason

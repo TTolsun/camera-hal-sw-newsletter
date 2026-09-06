@@ -4,6 +4,7 @@ const test = require('node:test');
 const {
   resolveRaspberryPiLibcameraReleaseItems
 } = require('../../../collect/raspberrypi-libcamera-releases');
+const { normalizeCandidate } = require('../../../cli/collect-news-candidates');
 
 const RELEASES_URL = 'https://github.com/raspberrypi/libcamera/releases';
 
@@ -187,4 +188,29 @@ test('marks the tag-name template sentence so the evidence gate can tell it apar
   )[0];
   // 본문이 없으면 summary까지 같은 템플릿 문장이라, 남는 근거 문장이 없다.
   assert.equal(withoutBody.summary, withoutBody.collector_template_sentence);
+});
+
+// 표식이 normalizeCandidate의 field whitelist를 통과하지 못하면 candidates.json에 남지 않는다.
+// 그러면 산출물만 보고는 왜 has_behavior_change가 false인지 알 수 없고, 나중에 후보 JSON에서
+// 다시 판정하는 경로가 생기면 표식 없이 판정하게 된다(#976).
+test('normalizeCandidate preserves the collector template marker through the field whitelist', () => {
+  const normalizeSource = source({ category: 'camera-hal', section: 'Kernel / Media', keywords: ['libcamera'] });
+  const raw = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody('No content.'), normalizeSource)[0];
+  const normalized = normalizeCandidate(raw);
+  assert.equal(
+    normalized.collector_template_sentence,
+    'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).'
+  );
+  assert.equal(normalized.has_behavior_change, false, '표식이 붙은 문장은 근거로 세지 않는다');
+
+  // 표식을 안 다는 다른 수집기의 후보는 이 필드가 빈 문자열이다.
+  const other = normalizeCandidate({
+    source: normalizeSource,
+    title: 'Some other candidate',
+    url: 'https://example.com/a',
+    publishedAt: '2026-08-17',
+    summary: 'The driver adds a new control.',
+    sourceKind: 'rss_item'
+  });
+  assert.equal(other.collector_template_sentence, '');
 });

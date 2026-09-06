@@ -137,6 +137,33 @@ test('#976 수집기 템플릿 문장만 가진 후보는 동작 변경 근거�
   assert.equal(metadata.main_eligible, false);
 });
 
+// GitHub 릴리스 이름은 자유 텍스트라 마침표가 들어갈 수 있다. 그러면 템플릿 문장이 두 문장으로
+// 갈리고, summary에서 문장을 뽑는 칸에는 앞 조각만 온다. 표식을 문장 전체로만 비교하면 그 조각이
+// 표식을 빠져나가 `fixes` 같은 어휘로 근거 없이 통과한다.
+test('#976 릴리스 이름의 마침표로 템플릿이 갈려도 표식을 빠져나가지 못한다', () => {
+  const tag = 'v0.8.0 - Big fixes. And more';
+  const templateSentence = `Released ${tag} (Raspberry Pi downstream libcamera).`;
+  const raw = {
+    sourceKind: 'release_note_item',
+    publishedAt: '2026-08-17',
+    version_or_release: tag,
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: templateSentence,
+    collector_template_sentence: templateSentence
+  };
+  const metadata = evidenceMetadata(
+    raw,
+    RELEASE_SOURCE,
+    `Raspberry Pi libcamera Releases - ${tag}`,
+    templateSentence,
+    40,
+    false
+  );
+
+  assert.equal(metadata.has_behavior_change, false, '갈린 조각도 템플릿 문장이다');
+  assert.equal(metadata.main_eligible, false);
+});
+
 test('#976 표식이 있어도 출처 본문이 있으면 그 본문이 근거가 되어 main_eligible을 유지한다', () => {
   const raw = {
     sourceKind: 'release_note_item',

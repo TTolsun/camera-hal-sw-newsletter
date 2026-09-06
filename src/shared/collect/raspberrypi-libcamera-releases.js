@@ -67,25 +67,19 @@ function releaseCandidate(block, source) {
   // 색인한다). 태그 이름만 되뇌는 문장은 근거가 아니라 자기 참조이므로, 본문이 있으면 본문을 쓰고
   // 없을 때만 그 문장으로 되돌아간다.
   //
-  // behavior_change는 역할이 둘이라 본문을 싣지 않는다.
+  // behavior_change에는 본문 대신 그 문장을 싣고, collector_template_sentence로 "이 텍스트는
+  // 출처가 아니라 수집기가 만든 것"이라는 표식을 함께 남긴다(#976). 표식이 필드 이름이 아니라
+  // 문장 텍스트인 이유는, 본문이 없는 릴리스에서는 summary도 같은 문장이라 필드 이름 하나로는 두
+  // 경로를 함께 가리킬 수 없기 때문이다.
   //
-  // 첫째, collect-news-candidates의 자격 판정 입력이고 어휘 패턴으로 검사된다. 한때 revert 본문에는
-  // 그 패턴의 어휘가 하나도 없어서 본문을 실으면 지금까지 통과하던 릴리스가 release_note_item 근거
-  // 미달로 main 자격을 잃었다(라이브 실측: 7건 중 2건 탈락). #976에서 BEHAVIOR_CHANGE_PATTERN에
-  // revert 어휘를 넣어 이 장애물은 없앴다 — 이제 본문을 실어도 이 축으로는 자격이 사라지지 않는다.
-  // 다만 그 확인은 imx296 본문 한 건으로 한 것이다. 함께 탈락했던 v0.7.1+rpt20260429의 본문은
-  // 커밋된 코퍼스에 없어 검증하지 못했으니, 본문 싣기를 실제로 켤 때 릴리스별로 다시 재어야 한다.
+  // 표식이 붙은 지금 이 필드는 자격 판정에 기여하지 않는다. collect-news-candidates의 동작 변경
+  // 근거 판정이 표식과 같은 문장(그리고 같은 분할기로 쪼갠 그 문장의 조각)을 근거에서 빼기 때문에,
+  // 본문이 없는 릴리스는 release_note_item 근거 미달로 떨어진다. 자격을 살리는 것은 본문이 있는
+  // 릴리스의 summary다.
   //
-  // 둘째(이쪽이 아직 남은 이유다), article-capsules가 이 필드를 what_changed에 싣고 evidence의 식별 칸도 차지한다. 식별
-  // 필드 셋이 evidence를 통째로 채워 본문이 한 칸도 못 들어가던 문제는 capsule 쪽에서 고쳤다 —
-  // evidenceItems가 본문 계열 근거에 한 칸을 먼저 떼어 주므로, 여기서 만든 summary는 기사 프롬프트의
-  // evidence에 들어간다.
-  //
-  // 어느 필드로 나가든 이 문장 자체는 출처가 말한 사실이 아니라 태그 이름을 되뇌는 자기 참조다.
-  // 그래서 collector_template_sentence로 "이 텍스트는 수집기가 만든 것"이라는 표식을 함께 남긴다.
-  // collect-news-candidates의 근거 판정이 그 표식을 보고 이 문장을 동작 변경 근거에서 뺀다(#976).
-  // 표식은 문장 텍스트 자체다 — 본문이 없으면 summary도 같은 문장이라 필드 이름 하나로는 두 경로를
-  // 함께 가리킬 수 없다.
+  // 본문을 이 필드에 싣는 것은 아직 하지 않았다. article-capsules가 이 필드를 what_changed에
+  // 그대로 싣기 때문에(select/article-capsules.js의 what_changed), 본문 싣기는 그 경로까지 함께
+  // 재는 별도 변경이다 — #976의 남은 결정 항목이다.
   const releaseSentence = `Released ${tag} (Raspberry Pi downstream libcamera).`;
   const summary = releaseBodyText(block) || releaseSentence;
   return {
