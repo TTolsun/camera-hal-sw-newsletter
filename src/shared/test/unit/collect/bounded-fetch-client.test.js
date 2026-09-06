@@ -154,9 +154,12 @@ test('retries a 503 once but never a 404', async () => {
 
 test('sends the method, body and content-type the caller asked for', async () => {
   let seenInit = null;
+  let seenBodyText = null;
   const client = createBoundedFetchClient({
-    fetchImpl: async (_target, init) => {
+    fetchImpl: async (target, init) => {
       seenInit = init;
+      // 실제 Request를 만들어, 이 init이 진짜 fetch에 그대로 통하는 모양인지까지 확인한다.
+      seenBodyText = await new Request(target, init).text();
       return countingChunkedResponse(['{}'], { pulled: 0 });
     }
   });
@@ -168,6 +171,7 @@ test('sends the method, body and content-type the caller asked for', async () =>
     accept: 'application/json'
   });
 
+  assert.equal(seenBodyText, '{"searchText":"camera"}', '실제 Request가 이 본문을 그대로 실어야 한다');
   assert.equal(seenInit.method, 'POST');
   assert.equal(seenInit.body, '{"searchText":"camera"}');
   assert.equal(seenInit.headers['content-type'], 'text/plain',
@@ -191,20 +195,30 @@ test('a plain fetch stays a GET with no body and no content-type', async () => {
   assert.equal('content-type' in seenInit.headers, false);
 });
 
-test('folds an unsupported method into GET so retry always applies to a read', async () => {
+test('folds an unsupported method into GET and drops the body with it', async () => {
   // 이 클라이언트가 낼 수 있는 메서드를 둘로 닫는다. 열려 있으면 상태를 바꾸는 요청이
   // 429·5xx 재시도를 타고 두 번 나갈 수 있다.
+  //
+  // stub이 실제 Request를 만든다. init만 들여다보는 stub은 이 계약을 못 지킨다 — GET에 body를
+  // 남겨도 stub은 아무 불평 없이 응답을 돌려주지만 진짜 fetch는 요청을 만들지도 못하고
+  // TypeError를 던진다("Request with GET/HEAD method cannot have body"). 그러면 접기의 결과가
+  // GET 수행이 아니라 실패 결과가 된다.
   let seenMethod = null;
+  let seenHasBody = null;
   const client = createBoundedFetchClient({
-    fetchImpl: async (_target, init) => {
-      seenMethod = init.method;
+    fetchImpl: async (target, init) => {
+      const request = new Request(target, init);
+      seenMethod = request.method;
+      seenHasBody = 'body' in init;
       return countingChunkedResponse(['ok'], { pulled: 0 });
     }
   });
 
-  await client.fetchBounded('https://claude.com/blog/a', { method: 'DELETE', body: 'x' });
+  const result = await client.fetchBounded('https://claude.com/blog/a', { method: 'DELETE', body: 'x' });
 
   assert.equal(seenMethod, 'GET');
+  assert.equal(seenHasBody, false, 'GET으로 접었으면 body도 함께 떨어져야 한다');
+  assert.equal(result.ok, true, '접기의 결과는 실패가 아니라 정상 GET이어야 한다');
 });
 
 test('does not charge the request body to the receive budget', async () => {

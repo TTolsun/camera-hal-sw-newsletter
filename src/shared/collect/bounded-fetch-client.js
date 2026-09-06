@@ -154,16 +154,20 @@ function createBoundedFetchClient(options = {}) {
         'user-agent': userAgent,
         accept: accept || DEFAULT_ACCEPT
       };
-      // 본문을 보낼 때만 content-type을 싣는다. 기본값을 정하지 않는 이유는 서버가 이 값으로
-      // 요청을 거절하기도 하기 때문이다(#880의 Qualcomm 검색 API는 text/plain이면 200,
+      // 본문은 POST일 때만 싣는다. 메서드를 GET으로 접은 요청에 body를 남기면 fetch가
+      // 그 요청을 만들지도 못하고 TypeError를 던진다("Request with GET/HEAD method cannot
+      // have body"). 그러면 접기의 결과가 GET 수행이 아니라 실패 결과가 된다.
+      const sendsBody = method === 'POST' && typeof requestBody === 'string';
+      // content-type도 기본값을 정하지 않고 호출자가 준 값만 싣는다. 서버가 이 값으로 요청을
+      // 거절하기도 하기 때문이다(#880의 Qualcomm 검색 API는 text/plain이면 200,
       // application/json이면 500). 무엇을 보낼지는 그 API를 아는 호출자가 정한다.
-      if (typeof requestBody === 'string' && contentType) requestHeaders['content-type'] = contentType;
+      if (sendsBody && contentType) requestHeaders['content-type'] = contentType;
 
       const init = { method, signal: controller.signal, headers: requestHeaders };
       // 요청 본문 바이트는 예산(consumedBytes)에 태우지 않는다. maxBytesPerSourceRun은
       // 파싱 대상(수신 본문) 크기의 상한이지 회선 바이트의 상한이 아니다 - 위 readBoundedBody
       // 주석과 같은 정의다. 보낸 바이트까지 여기 섞으면 그 정의가 두 가지가 된다.
-      if (typeof requestBody === 'string') init.body = requestBody;
+      if (sendsBody) init.body = requestBody;
 
       const response = await fetchImpl(target, init);
       const status = response ? response.status : 0;
