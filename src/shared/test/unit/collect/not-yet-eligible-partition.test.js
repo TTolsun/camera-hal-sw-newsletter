@@ -19,6 +19,7 @@ const {
   MAX_FINAL_CANDIDATES,
   NOT_YET_ELIGIBLE_MAX_BYTES,
   NOT_YET_ELIGIBLE_MAX_COUNT,
+  notYetEligibleOverflowRelPath,
   partitionByCoverageEligibility,
   withinLookback,
   writeNotYetEligibleOverflowIfNeeded
@@ -173,8 +174,8 @@ test('상한 초과 시 committed 목록은 60건, 전체는 .tmp에 보존되�
   );
 
   const root = tempRoot('not-yet-eligible-overflow-');
-  writeNotYetEligibleOverflowIfNeeded(root, capResult);
-  const overflowPath = path.join(root, '.tmp', 'not-yet-eligible-full.json');
+  writeNotYetEligibleOverflowIfNeeded(root, ANCHOR_DATE, capResult);
+  const overflowPath = path.join(root, notYetEligibleOverflowRelPath(ANCHOR_DATE));
   assert.equal(fs.existsSync(overflowPath), true);
   const written = JSON.parse(fs.readFileSync(overflowPath, 'utf8'));
   assert.equal(written.length, 90);
@@ -203,7 +204,38 @@ test('상한 안이면 overflow 파일을 쓰지 않는다', () => {
   assert.equal(capResult.committed.length, 3);
 
   const root = tempRoot('not-yet-eligible-no-overflow-');
-  writeNotYetEligibleOverflowIfNeeded(root, capResult);
-  const overflowPath = path.join(root, '.tmp', 'not-yet-eligible-full.json');
+  writeNotYetEligibleOverflowIfNeeded(root, ANCHOR_DATE, capResult);
+  const overflowPath = path.join(root, notYetEligibleOverflowRelPath(ANCHOR_DATE));
   assert.equal(fs.existsSync(overflowPath), false);
+});
+
+// 진단 파일이 전역 단일 경로면, 같은 워킹트리에서 날짜만 다른 두 실행이 서로의 목록을 덮어쓴다.
+// 파일 안에 실행 identity가 없어서 남은 파일이 어느 실행 것인지도 구분할 수 없다(issue #1040).
+test('날짜가 다른 두 실행의 overflow 진단 파일은 서로를 덮어쓰지 않는다', () => {
+  const root = tempRoot('not-yet-eligible-overflow-per-date-');
+  const previousDate = '2026-08-10';
+  const currentDate = '2026-08-17';
+
+  const previousCap = capNotYetEligible(
+    Array.from({ length: 70 }, (_, i) => notYetEligibleItem(`prev-${String(i).padStart(3, '0')}`))
+  );
+  const currentCap = capNotYetEligible(
+    Array.from({ length: 80 }, (_, i) => notYetEligibleItem(`curr-${String(i).padStart(3, '0')}`))
+  );
+  assert.equal(previousCap.overflow, true);
+  assert.equal(currentCap.overflow, true);
+
+  writeNotYetEligibleOverflowIfNeeded(root, previousDate, previousCap);
+  writeNotYetEligibleOverflowIfNeeded(root, currentDate, currentCap);
+
+  const previousPath = path.join(root, notYetEligibleOverflowRelPath(previousDate));
+  const currentPath = path.join(root, notYetEligibleOverflowRelPath(currentDate));
+
+  const previousWritten = JSON.parse(fs.readFileSync(previousPath, 'utf8'));
+  const currentWritten = JSON.parse(fs.readFileSync(currentPath, 'utf8'));
+  assert.equal(previousWritten.length, 70, '앞선 실행의 목록이 뒤 실행에 덮이면 안 된다');
+  assert.equal(currentWritten.length, 80);
+  assert.ok(previousWritten.every(item => item.title.startsWith('future-prev-')));
+  assert.ok(currentWritten.every(item => item.title.startsWith('future-curr-')));
+  assert.notEqual(previousPath, currentPath, '실행 날짜가 다르면 진단 파일 경로도 달라야 한다');
 });

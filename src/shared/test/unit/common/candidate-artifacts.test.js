@@ -47,6 +47,9 @@ const {
   run: runSourceDiscoveryBoundary
 } = require('../../../../discovery/gemini-source-discovery-boundary');
 const {
+  notYetEligibleOverflowRelPath
+} = require('../../../cli/collect-news-candidates');
+const {
   readTextFixture
 } = require('../../helpers/fixture-loader');
 
@@ -1209,7 +1212,7 @@ test('Stage 2 enabled merge caps a combined not_yet_eligible over the limit and 
   });
   writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
 
-  const overflowPath = path.join(root, '.tmp', 'not-yet-eligible-full.json');
+  const overflowPath = path.join(root, notYetEligibleOverflowRelPath(date));
   assert.equal(fs.existsSync(overflowPath), false);
 
   const result = await runSourceDiscoveryBoundary({

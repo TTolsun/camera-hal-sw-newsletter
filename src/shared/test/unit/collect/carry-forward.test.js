@@ -3,7 +3,7 @@
 // Task 9: 직전 주 scheduled coverage run이 남긴 not_yet_eligible 후보를 이번 수집 풀에
 // 합류시키는 lineage 선택 + status 판정을 고정한다. 정상 원천은 committed
 // merged-candidates.json뿐이다 — 상한 초과 시에만 남는 진단용 overflow 파일
-// (.tmp/not-yet-eligible-full.json)은 여기서 절대 읽지 않는다.
+// (.tmp/not-yet-eligible-full-<date>.json)은 여기서 절대 읽지 않는다.
 
 const assert = require('node:assert/strict');
 const test = require('node:test');

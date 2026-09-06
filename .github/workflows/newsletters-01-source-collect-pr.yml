@@ -220,7 +220,7 @@ jobs:
             articles/content/newsroom/${{ steps.raw-meta.outputs.date }}/news-candidates.md
             state/source-snapshots/**
             state/deep-dive-topic-queue.json
-            .tmp/not-yet-eligible-full.json
+            .tmp/not-yet-eligible-full-*.json
           if-no-files-found: warn
           retention-days: 14
 
