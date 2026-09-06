@@ -293,7 +293,12 @@ function extractReleaseRows(html = '', pageUrl = '') {
     const sectionText = visibleText(sectionHtml);
     // 요약은 제목을 뺀 본문에서 뽑는다.
     const sectionBodyText = visibleText(source.slice(heading.end, next ? next.index : source.length));
-    const releaseText = `${heading.id} ${heading.text} ${sectionText}`;
+    // 버전은 **제목에서만** 찾는다. 본문까지 보면 규격 절 번호를 인용한 문단이 릴리스 행이
+    // 된다 — AOSP 문서의 "as per 7.5.2 Front-Facing Camera in the CDD" 같은 문장이 그렇다.
+    // 실측: camera-its-tests 페이지에서 테스트 설명 5개가 CDD 절 번호를 버전으로 달고
+    // 릴리스 행이 됐다. 그 값은 release_row_version 으로 올라가고 date_extractors 의
+    // release_row_date 자리(신뢰도 95)까지 이어진다.
+    const releaseText = `${heading.id} ${heading.text}`;
     const versionMatch = releaseText.match(/\b\d+\.\d+\.\d+(?:[-\w.]*)?\b/i);
     if (!versionMatch) continue;
     const version = versionMatch[0];
@@ -936,6 +941,11 @@ function candidateFromEvent(event, source) {
     api_or_component: releaseNoteEvidence?.api_or_component ||
       (bucket === 'cpp_ai_tooling_fallback' ? 'Android native tooling workflow' : 'Camera source snapshot change'),
     behavior_change: releaseNoteEvidence?.behavior_change || event.reason,
+    // 페이지에서 뽑은 증거가 없으면 behavior_change 는 모니터가 채운 문장이다
+    // ("New page under monitored source.", "Release row/version added."). 출처가 말한
+    // 사실이 아니므로 동작 변경 근거로 세면 안 된다. 수집기가 쓰는 표식을 그대로 단다 —
+    // collect-news-candidates 의 isCollectorTemplateSentence 가 이 표식을 보고 건너뛴다.
+    ...(releaseNoteEvidence ? {} : { collector_template_sentence: event.reason }),
     ...(releaseNoteEvidence?.section_links?.length
       ? { outgoing_links: releaseNoteEvidence.section_links }
       : {}),
