@@ -3,7 +3,10 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { evidenceMetadata } = require('../../../cli/collect-news-candidates');
+const { evidenceMetadata, normalizeCandidate } = require('../../../cli/collect-news-candidates');
+const {
+  resolveRaspberryPiLibcameraReleaseItems
+} = require('../../../collect/raspberrypi-libcamera-releases');
 
 // #976: 근거 충분성을 판정하는 BEHAVIOR_CHANGE_PATTERN에 revert 어휘가 없어서 판정이 뒤집혀
 // 있었다. revert 릴리스 본문은 실제 동작 변경을 서술하는데도 매치 0건이라 근거 미달로 떨어지고,
@@ -99,3 +102,179 @@ test('#976 점수 임계값도 그대로다: 네 근거가 다 있어도 score�
   const atThreshold = evidenceMetadata(raw, RELEASE_SOURCE, title, '', 30, false);
   assert.equal(atThreshold.main_eligible, true, 'score 30은 임계값을 만족한다');
 });
+
+// #976 남은 절반: 아무 사실도 말하지 않는 수집기 템플릿 문장이 `release` 한 단어로 근거 게이트를
+// 통과하던 문제다. 어휘를 좁히는 대신, 수집기가 `collector_template_sentence`로 "이 문장은 출처
+// 본문이 아니라 수집기가 만든 템플릿"이라고 표식을 남기고 판정이 그 표식을 본다.
+const TEMPLATE_SENTENCE = 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).';
+
+// 본문 없는 릴리스는 summary도 같은 템플릿 문장이라, behavior_change만 비워서는 고쳐지지 않는다.
+// 표식이 두 경로를 함께 막아야 한다.
+test('#976 수집기 템플릿 문장만 가진 후보는 동작 변경 근거로 인정되지 않는다', () => {
+  const raw = {
+    sourceKind: 'release_note_item',
+    publishedAt: '2026-08-17',
+    version_or_release: 'v0.7.2+rpt20260817',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: TEMPLATE_SENTENCE,
+    collector_template_sentence: TEMPLATE_SENTENCE
+  };
+  const metadata = evidenceMetadata(
+    raw,
+    RELEASE_SOURCE,
+    'Raspberry Pi libcamera Releases - v0.7.2+rpt20260817',
+    TEMPLATE_SENTENCE,
+    40,
+    false
+  );
+
+  assert.equal(metadata.has_behavior_change, false);
+  assert.equal(metadata.has_published_date, true);
+  assert.equal(metadata.has_version_or_release, true);
+  assert.equal(metadata.has_api_or_component, true);
+  assert.equal(metadata.evidence_score, 6);
+  assert.equal(metadata.source_gap_risk, true);
+  assert.equal(metadata.main_eligible, false);
+});
+
+// GitHub 릴리스 이름은 자유 텍스트라 마침표가 들어갈 수 있다. 그러면 템플릿 문장이 두 문장으로
+// 갈리고, summary에서 문장을 뽑는 칸에는 앞 조각만 온다. 표식을 문장 전체로만 비교하면 그 조각이
+// 표식을 빠져나가 `fixes` 같은 어휘로 근거 없이 통과한다.
+test('#976 릴리스 이름의 마침표로 템플릿이 갈려도 표식을 빠져나가지 못한다', () => {
+  const tag = 'v0.8.0 - Big fixes. And more';
+  const templateSentence = `Released ${tag} (Raspberry Pi downstream libcamera).`;
+  const raw = {
+    sourceKind: 'release_note_item',
+    publishedAt: '2026-08-17',
+    version_or_release: tag,
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: templateSentence,
+    collector_template_sentence: templateSentence
+  };
+  const metadata = evidenceMetadata(
+    raw,
+    RELEASE_SOURCE,
+    `Raspberry Pi libcamera Releases - ${tag}`,
+    templateSentence,
+    40,
+    false
+  );
+
+  assert.equal(metadata.has_behavior_change, false, '갈린 조각도 템플릿 문장이다');
+  assert.equal(metadata.main_eligible, false);
+});
+
+test('#976 표식이 있어도 출처 본문이 있으면 그 본문이 근거가 되어 main_eligible을 유지한다', () => {
+  const raw = {
+    sourceKind: 'release_note_item',
+    publishedAt: '2026-08-17',
+    version_or_release: 'v0.7.2+rpt20260817',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: TEMPLATE_SENTENCE,
+    collector_template_sentence: TEMPLATE_SENTENCE
+  };
+  const metadata = evidenceMetadata(
+    raw,
+    RELEASE_SOURCE,
+    'Raspberry Pi libcamera Releases - v0.7.2+rpt20260817',
+    REVERT_RELEASE_BODY,
+    40,
+    false
+  );
+
+  assert.equal(metadata.has_behavior_change, true);
+  assert.equal(metadata.evidence_score, 8);
+  assert.equal(metadata.source_gap_risk, false);
+  assert.equal(metadata.main_eligible, true);
+  // 보고되는 behavior_change 값은 그대로다. 이 PR은 판정만 바꾸고 본문을 이 필드에 싣지 않는다.
+  assert.equal(metadata.behavior_change, TEMPLATE_SENTENCE);
+});
+
+test('#976 표식이 없는 후보의 판정은 그대로다: release 어휘를 좁히지 않았다', () => {
+  // release 어휘는 정당하고 다른 소스가 쓴다. 표식 없는 같은 문장은 종전대로 통과한다.
+  const raw = {
+    sourceKind: 'release_note_item',
+    publishedAt: '2026-08-17',
+    version_or_release: 'v0.7.2+rpt20260817',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    behavior_change: TEMPLATE_SENTENCE
+  };
+  const metadata = evidenceMetadata(raw, RELEASE_SOURCE, 'Some release note item', TEMPLATE_SENTENCE, 40, false);
+
+  assert.equal(metadata.has_behavior_change, true);
+  assert.equal(metadata.main_eligible, true);
+});
+
+// 수집기와 판정을 각각 따로 잠그면 표식 필드 이름이 어긋나도 양쪽 테스트가 다 통과한다. 실제 수집기
+// 출력을 그대로 판정에 먹여 두 모듈이 같은 표식을 주고받는지 확인한다.
+test('#976 수집기 출력을 그대로 먹였을 때 본문 유무가 자격을 가른다', () => {
+  const atom = body => [
+    '<feed xmlns="http://www.w3.org/2005/Atom">',
+    '<entry>',
+    '<updated>2026-08-17T10:00:00Z</updated>',
+    '<link rel="alternate" type="text/html" href="https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"/>',
+    '<title>v0.7.2+rpt20260817</title>',
+    `<content type="html">${body}</content>`,
+    '</entry>',
+    '</feed>'
+  ].join('');
+  const collectorSource = { ...RELEASE_SOURCE, url: 'https://github.com/raspberrypi/libcamera/releases' };
+  const evaluate = body => {
+    const [item] = resolveRaspberryPiLibcameraReleaseItems(atom(body), collectorSource);
+    return evidenceMetadata(item, collectorSource, item.title, item.summary, 40, false);
+  };
+
+  const withBody = evaluate('&lt;p&gt;Revert &quot;ipa: rpi: imx296: Enable embedded data&quot; This reverts commit b7fa47f.&lt;/p&gt;');
+  assert.equal(withBody.has_behavior_change, true, '릴리스 본문은 근거로 인정된다');
+  assert.equal(withBody.main_eligible, true);
+
+  const withoutBody = evaluate('No content.');
+  assert.equal(withoutBody.has_behavior_change, false, '템플릿 문장뿐이면 근거가 없다');
+  assert.equal(withoutBody.main_eligible, false);
+});
+
+// #976 회피 경로: 표식과 게이트가 읽는 값이 서로 다른 정규화를 거치던 문제다. 표식은 수집기 pick()이
+// decodeHtml을 한 번 걸어 만든 문장이고, 게이트가 읽는 summary는 normalizeCandidate가 decode()
+// (decodeHtml + 태그 구간 제거)를 다시 걸고 500자로 자른 값이다. 그래서 릴리스 이름에 꺾쇠가 있거나
+// 이름이 길면 게이트가 읽는 문장이 표식과 달라지고, 잘리거나 변형된 조각이 `Released` 한 낱말로
+// 게이트를 통과했다. 이 회피는 normalizeCandidate를 거쳐야 재현되므로 evidenceMetadata 단독이 아니라
+// 수집기 → normalizeCandidate 전 경로를 먹인다.
+//
+// GitHub 릴리스 이름은 자유 텍스트이고 `<...>`도 합법이다. 지금 라이브가 안전한 것은 Raspberry Pi가
+// 우연히 `v0.x.y+rptYYYYMMDD` 형태만 쓰기 때문이지 구조가 막아서가 아니다.
+const NORMALIZATION_BYPASS_TAGS = [
+  // 게이트의 decode()가 태그 구간으로 보고 지운다.
+  ['꺾쇠', 'v1.0 &lt;experimental&gt;'],
+  // atom에서 이중 escape로 들어와 decode 한 겹이 더 벗겨진다.
+  ['이중 escape', 'v1.0 &amp;lt;beta&amp;gt;'],
+  // normalizeCandidate의 500자 상한이 문장 뒤를 자른다.
+  ['500자 초과', `v1.0 ${'x'.repeat(500)}`]
+];
+
+// 이름이 어떻게 변형되든 본문이 없으면(`No content.`) 근거는 0이다.
+for (const [label, titleXml] of NORMALIZATION_BYPASS_TAGS) {
+  test(`#976 ${label} 릴리스 이름이 표식 정규화를 빠져나가지 못한다`, () => {
+    const atom = [
+      '<feed xmlns="http://www.w3.org/2005/Atom">',
+      '<entry>',
+      '<updated>2026-08-17T10:00:00Z</updated>',
+      '<link rel="alternate" type="text/html" href="https://github.com/raspberrypi/libcamera/releases/tag/x"/>',
+      `<title>${titleXml}</title>`,
+      '<content type="html">No content.</content>',
+      '</entry>',
+      '</feed>'
+    ].join('');
+    const collectorSource = {
+      ...RELEASE_SOURCE,
+      url: 'https://github.com/raspberrypi/libcamera/releases',
+      sourceUrl: 'https://github.com/raspberrypi/libcamera/releases',
+      section: 'Kernel / Media',
+      keywords: ['libcamera']
+    };
+    const [item] = resolveRaspberryPiLibcameraReleaseItems(atom, collectorSource);
+    const normalized = normalizeCandidate(item);
+
+    assert.equal(normalized.has_behavior_change, false, '본문이 없으면 동작 변경 근거가 없다');
+    assert.equal(normalized.main_eligible, false);
+  });
+}
