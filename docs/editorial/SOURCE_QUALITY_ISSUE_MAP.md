@@ -43,6 +43,7 @@ main article 승격을 막는 blocker 코드(기계가 읽는 식별자)는 다�
 - `undated_reference_page`
 - `source_gap_risk`
 - `reference_only`
+- `policy_locked_out_of_main` (`mainArticlePolicy`가 `watchlist_only`이거나 `blocked`이면 항상 실립니다)
 - `generic_trend_without_hal_workflow_link`
 - `cross_check_required_but_missing`
 - `candidate_only_without_primary_confirmation`

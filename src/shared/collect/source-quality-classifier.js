@@ -26,6 +26,7 @@ const SOURCE_QUALITY_BLOCKERS = Object.freeze([
   'undated_reference_page',
   'source_gap_risk',
   'reference_only',
+  'policy_locked_out_of_main',
   'generic_trend_without_hal_workflow_link',
   'cross_check_required_but_missing',
   'candidate_only_without_primary_confirmation',
@@ -313,10 +314,13 @@ function conditionalEvidenceType(sourceUrlQuality, requiresCrossCheck, mainArtic
   return 'source_policy_review';
 }
 
-// blocker 없이 막히는 경우가 있다. main article 정책 자체가 watchlist_only/blocked/reference_only일
-// 때다 - 후보에 문제가 있어서가 아니라 정책이 그 소스를 main에서 빼 둔 것이다. 이때 blockers[0]로
-// 사유를 고르면 목록이 비어 있어 'unknown_source_quality'로 떨어지고, 리포트가 "출처 품질을 알 수
-// 없다"는 틀린 말을 하게 된다. 정책 이름을 그대로 사유로 돌려준다.
+// blocker 없이 막힌 source_quality가 밖에서 들어올 수 있다. main article 정책이
+// watchlist_only/blocked/reference_only인데 blocker 목록은 비어 있는 값이다 - 후보에 문제가 있어서가
+// 아니라 정책이 그 소스를 main에서 빼 둔 것이다. 이때 blockers[0]로 사유를 고르면 목록이 비어 있어
+// 'unknown_source_quality'로 떨어지고, 리포트가 "출처 품질을 알 수 없다"는 틀린 말을 하게 된다.
+// 정책 이름을 그대로 사유로 돌려준다. classifySourceQuality가 만드는 값은 이제 세 정책 모두 자기
+// blocker를 싣지만, normalizeSourceQuality는 외부에서 받은 source_quality를 그대로 쓰므로 blocker가
+// 빈 값이 계속 들어올 수 있다. policy_locked_out_of_main을 달고 온 값도 같은 문장을 쓴다.
 const POLICY_ONLY_REASONS = Object.freeze({
   watchlist_only: 'Source policy keeps this candidate on the watchlist and out of main articles.',
   blocked: 'Source policy blocks this candidate from main articles.',
@@ -325,7 +329,8 @@ const POLICY_ONLY_REASONS = Object.freeze({
 
 function reasonFor(blockers, allowed, mainArticlePolicy = '') {
   if (allowed) return 'Source policy allows this candidate with concrete source evidence.';
-  if (blockers.length === 0 && POLICY_ONLY_REASONS[mainArticlePolicy]) {
+  const policyLocked = blockers.length === 0 || blockers[0] === 'policy_locked_out_of_main';
+  if (policyLocked && POLICY_ONLY_REASONS[mainArticlePolicy]) {
     return POLICY_ONLY_REASONS[mainArticlePolicy];
   }
   const first = blockers[0] || 'unknown_source_quality';
@@ -334,6 +339,7 @@ function reasonFor(blockers, allowed, mainArticlePolicy = '') {
     undated_reference_page: 'Reference page does not provide dated article evidence.',
     source_gap_risk: 'Candidate still has source gap risk.',
     reference_only: 'Source is reference/background only and cannot be promoted as a dated main article.',
+    policy_locked_out_of_main: 'Source policy keeps this candidate out of main articles.',
     generic_trend_without_hal_workflow_link: 'Generic AI/IT trend lacks explicit Camera HAL, Android Camera, driver, SoC, or native workflow evidence.',
     cross_check_required_but_missing: 'Source requires primary confirmation before main promotion.',
     candidate_only_without_primary_confirmation: 'Candidate-only source lacks primary confirmation.',
@@ -373,6 +379,12 @@ function classifySourceQuality(input = {}) {
   if (sourceUrlQuality === 'undated_reference_page') blockers.push('undated_reference_page');
   if (candidate.source_gap_risk === true || metadata.source_gap_risk === true) blockers.push('source_gap_risk');
   if (candidate.reference_only === true || metadata.reference_only === true || mainArticlePolicy === 'reference_only') blockers.push('reference_only');
+  // watchlist_only와 blocked는 "이 후보는 main 기사가 될 수 없다"는 정책 선언이다. 그 사실을 blocker
+  // 값으로 실어 두면 승급 판정이 blocker 배열의 길이가 아니라 값을 근거로 막을 수 있다(#1056).
+  // reference_only는 바로 위에서 자기 blocker를 싣기 때문에 여기 대상이 아니다.
+  if (mainArticlePolicy === 'watchlist_only' || mainArticlePolicy === 'blocked') {
+    blockers.push('policy_locked_out_of_main');
+  }
   if (candidate.candidateOnly === true || candidate.candidate_only === true || source.candidateOnly === true) {
     if (crossCheckStatus !== 'required_satisfied') blockers.push('candidate_only_without_primary_confirmation');
   }
