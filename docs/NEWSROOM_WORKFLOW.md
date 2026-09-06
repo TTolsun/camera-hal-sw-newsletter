@@ -504,7 +504,7 @@ PR에서 다음 항목을 확인합니다.
 - 발행 가능(publish-ready) direct AOSP Camera 또는 driver/image pipeline 기사: 단일 기사 정책으로 비활성화됨 (`direct_aosp_camera`, `camera_driver_image_pipeline` 버킷 대상)
 - 발행 가능(publish-ready) 보조 주요 기사: 보조 주요 버킷 전체에서 최대 1개
 - Primary Camera Stack 버킷: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android`
-- 보조 주요 버킷: `android_supporting`(android 중 camera output/multimedia 또는 SoC 근거로 분류된 것), `cpp_ai_tooling_fallback`
+- 보조 주요 버킷: `android_supporting`, `cpp_ai_tooling_fallback`
 - 금지 주요 버킷: `generic_tech_watchlist`; 후보 수만으로 이 버킷을 주요 기사로 승격하지 않습니다
 - 후보 풀 사전점검(candidate pool preflight): 발행 가능 후보 최소 1개; 예비 후보는 진단용으로만 사용; camera stack 후보 최소 0개
 - 선정 기간(selection windows): primary 7일; fallback 21일; reference 35일

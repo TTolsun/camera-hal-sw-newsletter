@@ -60,6 +60,11 @@ CONTEXT/QUIET 모드에서도 근거·출처 규칙은 동일하게 적용됩니
 4. `android`: Android release, compatibility, graphics buffer/Surface, media framework, power/thermal, scheduler, memory pressure, security bulletin 중 camera 영향 설명이 가능한 기사입니다. camera output/multimedia 신호(APV, Ultra HDR, MediaCodec, Media3 등)와 공개 SoC/platform 신호(CPU/GPU/NPU/ISP/DSP, DVFS, Exynos/Snapdragon/Tensor)도 여기에 들어갑니다.
 5. `generic_tech_watchlist`: camera/driver/soc/native 개발 관점 연결이 약한 일반 IT 뉴스입니다. main article보다는 briefing/watchlist로 사용합니다.
 
+`android` 안에서도 발행 등급은 갈립니다. **플랫폼 인접 근거**로 분류된 항목은 주력이고,
+**camera output/multimedia 근거**나 **SoC 근거**로 분류된 항목은 보조입니다. 아래 자동 생성
+블록에 나오는 `android_supporting` 이 그 보조 등급을 가리키는 이름이며, relevance_bucket
+값이 아니라 구성 판정에서만 쓰는 실효 버킷입니다. 호당 1건 제한이 여기에 걸립니다.
+
 ## Camera HAL 해석 기준
 
 각 주요 기사는 다음 중 하나 이상을 명확히 설명해야 합니다.
@@ -139,7 +144,7 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 - 발행 가능(publish-ready) direct AOSP Camera 또는 driver/image pipeline 기사: 단일 기사 정책으로 비활성화됨 (`direct_aosp_camera`, `camera_driver_image_pipeline` 버킷 대상)
 - 발행 가능(publish-ready) 보조 주요 기사: 보조 주요 버킷 전체에서 최대 1개
 - Primary Camera Stack 버킷: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android`
-- 보조 주요 버킷: `android_supporting`(android 중 camera output/multimedia 또는 SoC 근거로 분류된 것), `cpp_ai_tooling_fallback`
+- 보조 주요 버킷: `android_supporting`, `cpp_ai_tooling_fallback`
 - 금지 주요 버킷: `generic_tech_watchlist`; 후보 수만으로 이 버킷을 주요 기사로 승격하지 않습니다
 - 후보 풀 사전점검(candidate pool preflight): 발행 가능 후보 최소 1개; 예비 후보는 진단용으로만 사용; camera stack 후보 최소 0개
 - 선정 기간(selection windows): primary 7일; fallback 21일; reference 35일
