@@ -145,7 +145,7 @@ function createBoundedFetchClient(options = {}) {
 
   // requestBody(보내는 본문)와 아래 readBoundedBody가 돌려주는 body(받은 본문)는 다른 값이다.
   // 같은 이름을 쓰면 뒤쪽 const가 같은 블록을 TDZ로 만들어 앞선 참조가 그대로 예외가 된다.
-  async function requestOnce(target, { maxBytes, accept, method, body: requestBody, contentType }) {
+  async function requestOnce(target, { maxBytes, accept, method, body: requestBody, contentType, referer }) {
     requestCount += 1;
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -162,6 +162,10 @@ function createBoundedFetchClient(options = {}) {
       // 거절하기도 하기 때문이다(#880의 Qualcomm 검색 API는 text/plain이면 200,
       // application/json이면 500). 무엇을 보낼지는 그 API를 아는 호출자가 정한다.
       if (sendsBody && contentType) requestHeaders['content-type'] = contentType;
+      // 일부 문서 사이트는 사이트 안에서 넘어온 요청에만 본문을 준다(#880의 Qualcomm 게시판
+      // 본문은 referer가 없으면 404다). 값은 호출자가 정한다 - 어느 페이지에서 넘어온 것으로
+      // 볼지는 그 사이트의 구조를 아는 쪽이 안다.
+      if (referer) requestHeaders.referer = referer;
 
       const init = { method, signal: controller.signal, headers: requestHeaders };
       // 요청 본문 바이트는 예산(consumedBytes)에 태우지 않는다. maxBytesPerSourceRun은
@@ -195,7 +199,7 @@ function createBoundedFetchClient(options = {}) {
     }
   }
 
-  async function fetchBounded(target, { maxBytes, accept, method, body, contentType } = {}) {
+  async function fetchBounded(target, { maxBytes, accept, method, body, contentType, referer } = {}) {
     const effectiveMaxBytes = positiveNumber(maxBytes, MAX_BYTES_PER_ARTICLE);
     // 이 클라이언트가 낼 수 있는 메서드는 GET과 POST 둘뿐이다. 목록 검사로 거르는 대신 그 외
     // 값을 전부 GET으로 접어 구조로 닫는다 - 그래야 위 MAX_ATTEMPTS 재시도가 무엇에 적용되는지
@@ -222,7 +226,7 @@ function createBoundedFetchClient(options = {}) {
       let attempt;
       try {
         attempt = await requestOnce(target, {
-          maxBytes: effectiveMaxBytes, accept, method: httpMethod, body, contentType
+          maxBytes: effectiveMaxBytes, accept, method: httpMethod, body, contentType, referer
         });
       } catch (cause) {
         // 실패한 시도가 이미 읽어 들인 바이트도 예산에 가산한다(누수 차단).

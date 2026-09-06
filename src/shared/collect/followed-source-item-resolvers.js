@@ -4,6 +4,7 @@
 // collect 디스패치 코드를 고치지 않고 이 테이블에만 항목을 더하면 된다(OCP).
 const { resolveSecurityBulletinCveItems } = require('./security-bulletin-cve');
 const { resolveMediatekSecurityBulletinItems } = require('./mediatek-security-bulletin');
+const { resolveQualcommSecurityBulletinItems } = require('./qualcomm-security-bulletin');
 const { resolveLibcameraReleaseAnnouncementItems } = require('./libcamera-release-announcements');
 const { resolveRaspberryPiLibcameraReleaseItems } = require('./raspberrypi-libcamera-releases');
 const { resolvePatchworkLibcameraPatchItems } = require('./patchwork-libcamera-patches');
@@ -24,6 +25,16 @@ const FOLLOWED_SOURCE_RESOLVERS = [
     id: 'mediatek-security-bulletin',
     resolve: ({ text, source, fetchTextImpl }) =>
       resolveMediatekSecurityBulletinItems(text, source, { fetchTextImpl })
+  },
+  {
+    id: 'qualcomm-security-bulletins',
+    // 인덱스 HTML(text)을 받지 않는 유일한 리졸버다. 등록 URL이 Angular SPA 셸이라 서버 HTML에
+    // 링크가 0개이고, 월별 문서는 이 사이트의 공개 검색 API로만 해결된다. 그 API는 POST에
+    // content-type: text/plain을 요구하고 본문 GET은 referer를 요구하므로 fetchTextImpl이 아니라
+    // bounded fetch client가 필요하다.
+    requiresFetchClient: true,
+    resolve: ({ source, fetchClient, now, lookbackDays }) =>
+      resolveQualcommSecurityBulletinItems({ source, fetchClient, now, lookbackDays })
   },
   {
     id: 'libcamera-release-announcements',
