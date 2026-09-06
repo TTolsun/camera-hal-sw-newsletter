@@ -459,6 +459,32 @@ test('catch-up 레인: 같은 시리즈의 다른 조각 URL은 이미 게재된
   );
 });
 
+test('쿨다운이 만료돼도 catch-up 레인은 같은 시리즈를 계속 배제한다', () => {
+  // 두 레인의 시간 경계가 다른 것은 의도한 차이다(#1043). 쿨다운 레인은 "지금 다시 다뤄도
+  // 되는가"를 묻기 때문에 시간이 지나면 열려야 한다 — 같은 URL로 내용이 갱신되는 페이지가
+  // 실제 이력에 있다. catch-up 레인은 "밀린 이 후보가 아직 안 다뤄졌는가"를 묻는 경로라
+  // 답이 시간으로 바뀌지 않는다. 한 번 다룬 시리즈는 나중에 다시 안 다룬 상태가 되지 않는다.
+  //
+  // 이 테스트는 그 비대칭을 계약으로 고정한다. 이력 대조 축을 늘리거나 줄일 때 어느 한 레인만
+  // 조용히 따라가는 것을 막는 것이 목적이다.
+  const history = historyWithPublishedSeriesPiece();
+  const laterRepresentative = {
+    title: '[PATCH v3 00/12] media: Add Lenovo Yoga Book YB1-X91 camera support',
+    url: YOGA_BOOK_V3_COVER_LETTER_URL
+  };
+  const afterCooldown = '2026-10-05';
+
+  assert.ok(afterCooldown > history.articles[0].cooldown_until, 'fixture must be past the cooldown');
+  assert.strictEqual(
+    annotateArticleExposure(laterRepresentative, history, { date: afterCooldown }).published_within_cooldown,
+    false
+  );
+  assert.strictEqual(
+    everCoveredAsNewsletterArticle(laterRepresentative, history, { date: afterCooldown }),
+    true
+  );
+});
+
 test('series_identity_key가 없는 기존 레코드도 source_url에서 유도해 시리즈로 막는다', () => {
   // state/article-exposure-history.json에 실제로 남아 있는 모양이다(31건 전부 이 필드가 없다).
   // state 파일을 마이그레이션하지 않으므로 읽기 시점 폴백이 없으면 기존 이력은 전부 URL 비교로
