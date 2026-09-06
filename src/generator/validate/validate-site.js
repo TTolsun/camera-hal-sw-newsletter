@@ -846,8 +846,10 @@ const htmlFiles = [...new Set([
   `${AI_ENGINEERING_LEARNING_PATH}index.html`
 ])];
 
-// 이미지 캡션 계약(#855)은 dated 호에만 걸려 있었다 — 위 dated 루프의
-// validateRenderedIssueStructure 로만 도달하기 때문이다. 규칙 자체는 위클리에도 그대로 유효하다.
+// 이미지 캡션 계약(#855)은 dated 호에만 걸려 있었다 — 이 파일에서는 위 dated 루프의
+// validateRenderedIssueStructure 로만 도달하기 때문이다. 저장소의 나머지 두 진입점
+// (public-structure.js, orchestrator-terminal-contracts.js)도 dated 키 전용이라 결론은 같다.
+// 규칙 자체는 위클리에도 그대로 유효하다.
 // dated 호는 이미 그 경로에서 같은 검사를 받으므로, 여기서는 위클리 페이지에만 건다.
 const weeklyHtmlPaths = new Set(weeklyNewsletters.map(item => item.html).filter(Boolean));
 
