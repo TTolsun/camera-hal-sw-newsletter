@@ -137,7 +137,18 @@ const STRONG_CAMERA_DRIVER_PATTERNS = [
   /\bmtk[-_]?isp\b/i,    // MediaTek ISP (drivers/media/platform/mediatek/isp)
   /\bmtk[-_]?cam\b/i,    // MediaTek camera (mtk-cam)
   /\buvcvideo\b/i,       // USB Video Class camera driver (drivers/media/usb/uvc)
-  /\blibipa\b/i          // libcamera IPA shared algorithm library (patch prefix "ipa: libipa:")
+  /\blibipa\b/i,         // libcamera IPA shared algorithm library (patch prefix "ipa: libipa:")
+  // Intel IPU tokens carry a version digit because a bare "IPU" also names Intel's
+  // Infrastructure Processing Unit (network offload). The digit is all this list checks:
+  // like every other vendor token here, a numbered IPU counts as camera evidence with no
+  // context test, so "IPU7 network offload" would still land in the camera bucket.
+  //
+  // Adding a token to this list moves more than the bucket. componentFromText falls back to
+  // these patterns, so a match also fills api_or_component, which raises evidence_score past
+  // the < 6 line and flips source_gap_risk to false and main_eligible to true. That is the
+  // point for a real camera driver patch, and it is also what a false positive would get.
+  /\bipu[367]\b/i,       // Intel IPU camera subsystem (drivers/media/pci/intel/ipu6, ipu7, staging/media/ipu3)
+  /\bipu-bridge\b/i      // Intel IPU ACPI-to-sensor bridge (drivers/media/pci/intel/ipu-bridge.c)
 ];
 
 // AOSP 밖 카메라 스택의 소스 트리 경로. 디렉터리 + 확장자라는 모양은 산문에서 나오지 않으므로

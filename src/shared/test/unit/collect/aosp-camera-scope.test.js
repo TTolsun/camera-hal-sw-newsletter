@@ -506,3 +506,41 @@ test('편집 우선순위 사다리 — Camera HAL > AI > Android > watchlist > 
     ]
   );
 });
+
+test('classifies Intel IPU camera subsystem driver names as camera driver topic (#1107)', () => {
+  // drivers/media/pci/intel/ipu6, ipu7, staging/media/ipu3의 Intel 카메라 서브시스템 드라이버와
+  // ACPI-센서 브리지(ipu-bridge)는 다른 벤더 ISP 토큰과 성격이 같다. 짧은 lore 패치 제목에는
+  // "camera"/"image sensor" 리터럴이 따로 없고 드라이버 이름 자체가 카메라 근거다. 이 토큰들이
+  // 빠져 있어 IPU6 시리즈가 카메라 버킷을 못 받았다 — 커밋된 2026-09-07 산출물의 저장값은
+  // generic_tech_watchlist이고, 같은 후보를 변경 전 모듈로 재분류하면 cpp_ai_tooling_fallback이
+  // 나온다. 어느 쪽이든 카메라 버킷이 아니다.
+  const titles = [
+    'media: ipu6: fix isys buffer handling',
+    'media: ipu7: add isys firmware ABI definitions',
+    'media: ipu3-cio2: fix sensor format negotiation',
+    'media: ipu-bridge: add support for the OV02C10 sensor',
+    '[PATCH v5 0/7] media: Enable the OV5693 front camera on IPU6 Surface devices'
+  ];
+
+  for (const title of titles) {
+    const result = classifyAospCameraStackCandidate({
+      title,
+      summary: 'Kernel patch reworks buffer handling and format negotiation helpers.'
+    });
+    assert.equal(result.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE, title);
+    assert.equal(result.counts_as_driver_topic, true, title);
+    assert.ok(result.driver_stack_relevance > 0, title);
+  }
+});
+
+test('does not leak Intel Infrastructure Processing Unit into the camera driver bucket (#1107)', () => {
+  // 맨몸 "IPU"는 Intel의 Infrastructure Processing Unit(네트워크 오프로드)과 겹친다. 그래서
+  // 카메라 토큰은 숫자를 붙인 ipu3/ipu6/ipu7과 ipu-bridge로 한정한다. 이 단언은 토큰을 \bipu\b로
+  // 넓히면 실패한다.
+  const nonCamera = classifyAospCameraStackCandidate({
+    title: 'net: ipu: add infrastructure processing unit packet offload',
+    summary: 'The network driver adds packet offload descriptors for the infrastructure processing unit.'
+  });
+  assert.notEqual(nonCamera.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
+  assert.equal(nonCamera.counts_as_driver_topic, false);
+});
