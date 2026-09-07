@@ -16,6 +16,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const { newslettersDir } = require('../../shared/common/artifact-paths');
 const { mainArticleBlocks, sourceBlock } = require('../quality/rendered-issue-structure');
 
 const NEWSLETTERS_REL_PATH = path.join('articles', 'newsletters');
@@ -68,18 +69,22 @@ function publishedArticleUrlsFromMarkdown(markdown = '') {
  * @param {object} [options]
  * @param {string} [options.asOf] 이 날짜까지만 센다(YYYY-MM-DD). asOfExposureHistory와 같은
  *   역할이고 같은 이유로 필요하다 - 과거 주를 다시 돌릴 때 그 주가 몰랐던 발행을 알면 안 된다.
- * @returns {{url: string, newsletter_date: string}[]} URL당 가장 이른 발행일 하나
+ * @returns {{issuesScanned: number, articles: {url: string, newsletter_date: string}[]}}
+ *   articles는 URL당 가장 이른 발행일 하나. issuesScanned는 실제로 읽은 호 수다 - 0이면
+ *   날짜 디렉터리를 하나도 못 찾았다는 뜻이라, 발행이 없는 것과 레이아웃이 바뀐 것을 가른다.
  */
 function readPublishedArticles(root, { asOf = '' } = {}) {
   const dir = path.join(root, NEWSLETTERS_REL_PATH);
-  if (!fs.existsSync(dir)) return [];
+  if (!fs.existsSync(dir)) return { issuesScanned: 0, articles: [] };
 
   const firstPublished = new Map();
+  let issuesScanned = 0;
   for (const name of fs.readdirSync(dir)) {
     if (!ISSUE_DATE_DIR.test(name)) continue;
     if (asOf && name > asOf) continue;
-    const file = path.join(dir, name, ISSUE_MARKDOWN_FILE);
+    const file = path.join(newslettersDir(root, name), ISSUE_MARKDOWN_FILE);
     if (!fs.existsSync(file)) continue;
+    issuesScanned += 1;
 
     for (const url of publishedArticleUrlsFromMarkdown(fs.readFileSync(file, 'utf8'))) {
       const previous = firstPublished.get(url);
@@ -89,9 +94,12 @@ function readPublishedArticles(root, { asOf = '' } = {}) {
     }
   }
 
-  return [...firstPublished.entries()]
-    .map(([url, newsletterDate]) => ({ url, newsletter_date: newsletterDate }))
-    .sort((a, b) => a.newsletter_date.localeCompare(b.newsletter_date) || a.url.localeCompare(b.url));
+  return {
+    issuesScanned,
+    articles: [...firstPublished.entries()]
+      .map(([url, newsletterDate]) => ({ url, newsletter_date: newsletterDate }))
+      .sort((a, b) => a.newsletter_date.localeCompare(b.newsletter_date) || a.url.localeCompare(b.url))
+  };
 }
 
 module.exports = {

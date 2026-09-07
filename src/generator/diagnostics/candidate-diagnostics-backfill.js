@@ -109,9 +109,12 @@ function poolPathFor(root, date) {
  * @param {object} params
  * @param {string} params.root 저장소 루트
  * @param {string} params.date YYYY-MM-DD
+ * @param {object} [params.publishedArchive] readPublishedArticles(root) 결과. --all 은 35개
+ *   날짜를 덤프하는데, 날짜마다 다시 읽으면 발행 아카이브 전체를 35번 파싱한다. 호출부가
+ *   한 번 읽어 넘기면 여기서는 asOf 만 다시 적용한다.
  * @returns {object} shadow 재심 입력 계약 형태
  */
-function backfillCandidateDiagnostics({ root, date }) {
+function backfillCandidateDiagnostics({ root, date, publishedArchive }) {
   const poolPath = poolPathFor(root, date);
   if (!poolPath) throw new Error(`후보 풀 아티팩트가 없음: ${date}`);
 
@@ -126,7 +129,8 @@ function backfillCandidateDiagnostics({ root, date }) {
   // 발행 이력을 노출 이력이 아니라 발행된 본문에서 뽑는다. 노출 이력은 coverage가
   // forward_only 라 2026-07-27 이전 발행분에 newsletter_article 레코드가 없다 - 그 값으로
   // "이미 실렸는가"를 물으면 창간 초기 기사를 통째로 놓친다(published-article-urls.js 주석).
-  const publishedArticles = readPublishedArticles(root, { asOf: date });
+  const archive = publishedArchive || readPublishedArticles(root);
+  const publishedArticles = archive.articles.filter(article => article.newsletter_date <= date);
 
   return {
     schema_version: 1,
@@ -138,8 +142,13 @@ function backfillCandidateDiagnostics({ root, date }) {
       pool_artifact: path.relative(root, poolPath).split(path.sep).join('/'),
       exposure_history_as_of: date,
       exposure_records_used: ensureArray(exposureHistory?.articles).length,
-      published_articles_as_of: date,
-      published_articles_count: publishedArticles.length
+      published_articles_count: publishedArticles.length,
+      // 읽은 호 수를 함께 적는다. 0이면 날짜 디렉터리를 하나도 못 찾았다는 뜻이고, 그것은
+      // 아직 발행이 없다는 말이 아니라 발행 레이아웃이 바뀌었다는 신호다 — 그 둘이 산출물에서
+      // 같은 모양(published_articles 빈 배열)으로 보이면 안 된다.
+      // 이 값은 아카이브 전체 기준이라 asOf 로 자르지 않는다. published_articles_count 보다
+      // 큰 것이 정상이다 — 앞의 것은 이 주까지, 뒤의 것은 읽은 파일 수다.
+      published_articles_issues_scanned: archive.issuesScanned
     },
     // 이 주 시점까지 기사로 실린 출처 URL. 소비자는 shadow 재심이다 - 재심 프롬프트가 이
     // 사실을 못 받으면 이미 실린 기사를 "왜 안 실렸지?" 하고 되살리자고 제안한다.

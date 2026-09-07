@@ -101,13 +101,41 @@ test('영문 출처 라벨도 읽는다', () => {
   assert.deepEqual(publishedArticleUrlsFromMarkdown(markdown), [ARTICLE_URL]);
 });
 
+test('출처 블록 뒤의 ### 소제목은 자르지 않는다', () => {
+  // 절 경계 자르기는 `## `만 본다. `#{2,}`로 넓히면 기사 안의 `### ` 소제목에서 잘려
+  // 그 아래 출처 링크를 통째로 잃는다. 지금은 잃을 링크가 없어 다른 테스트가 못 잡는다.
+  const markdown = [
+    '# 제목',
+    '',
+    '## 2. 기사',
+    '',
+    '**출처**',
+    '',
+    `- [첫째](${ARTICLE_URL})`,
+    '',
+    '### 덧붙임',
+    '',
+    '- [둘째](https://example.com/second)',
+    '',
+    '## 참고자료',
+    '',
+    `- [참고](${REFERENCE_URL})`,
+    ''
+  ].join('\n');
+
+  const urls = publishedArticleUrlsFromMarkdown(markdown);
+  assert.deepEqual(urls, [ARTICLE_URL, 'https://example.com/second']);
+  assert.ok(!urls.includes(REFERENCE_URL), '참고자료 절은 여전히 잘린다');
+});
+
 test('여러 호에서 모으고 가장 이른 발행일을 남긴다', () => {
   const root = tempRoot('published-article-urls');
   writeIssue(root, '2026-05-12', issueMarkdown());
   writeIssue(root, '2026-06-03', issueMarkdown());
 
   const published = readPublishedArticles(root);
-  assert.deepEqual(published, [{ url: ARTICLE_URL, newsletter_date: '2026-05-12' }],
+  assert.equal(published.issuesScanned, 2);
+  assert.deepEqual(published.articles, [{ url: ARTICLE_URL, newsletter_date: '2026-05-12' }],
     '재심에 필요한 사실은 언제부터 이미 실린 상태였나이지 마지막 언급일이 아니다');
 });
 
@@ -117,8 +145,8 @@ test('asOf 이후에 발행된 호는 세지 않는다', () => {
   const root = tempRoot('published-article-urls-asof');
   writeIssue(root, '2026-08-17', issueMarkdown());
 
-  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-10' }), []);
-  assert.equal(readPublishedArticles(root, { asOf: '2026-08-17' }).length, 1, '같은 날은 센다');
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-10' }).articles, []);
+  assert.equal(readPublishedArticles(root, { asOf: '2026-08-17' }).articles.length, 1, '같은 날은 센다');
 });
 
 test('주 단위 디렉터리는 읽지 않는다', () => {
@@ -126,9 +154,11 @@ test('주 단위 디렉터리는 읽지 않는다', () => {
   // 있으므로 실제로 잃는 발행분은 없다.
   const root = tempRoot('published-article-urls-weekly');
   writeIssue(root, '2026-W34', issueMarkdown());
-  assert.deepEqual(readPublishedArticles(root), []);
+  const published = readPublishedArticles(root);
+  assert.deepEqual(published.articles, []);
+  assert.equal(published.issuesScanned, 0, '읽은 호가 0이면 레이아웃이 바뀐 것과 발행이 없는 것을 가를 수 있다');
 });
 
 test('뉴스레터 디렉터리가 없으면 빈 배열이다', () => {
-  assert.deepEqual(readPublishedArticles(tempRoot('published-article-urls-empty')), []);
+  assert.deepEqual(readPublishedArticles(tempRoot('published-article-urls-empty')), { issuesScanned: 0, articles: [] });
 });
