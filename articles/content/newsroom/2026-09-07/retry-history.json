@@ -1,0 +1,407 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 90,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 5,
+    "locked_article_count": 5,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+      "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개"
+    ],
+    "locked_article_headlines": [
+      "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+      "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+        ],
+        "source_titles": [
+          "[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/"
+        ],
+        "source_titles": [
+          "[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH v7 00/16] media: Add Yoga Book camera support"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28179/"
+        ],
+        "source_titles": [
+          "[v3,1/5] libcamera: controls: Give name to the union containing storage"
+        ]
+      },
+      {
+        "index": 5,
+        "headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28194/"
+        ],
+        "source_titles": [
+          "libcamera: software_isp: Skip stop before worker start"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/"
+        ],
+        "action": "repair-section",
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "location": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+        "sources": [
+          "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+        "sources": [
+          "https://patchwork.libcamera.org/patch/28179/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+        "sources": [
+          "https://patchwork.libcamera.org/patch/28194/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+        ],
+        "source_titles": [
+          "[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/"
+        ],
+        "source_titles": [
+          "[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH v7 00/16] media: Add Yoga Book camera support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28179/"
+        ],
+        "source_titles": [
+          "[v3,1/5] libcamera: controls: Give name to the union containing storage"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 5,
+        "headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28194/"
+        ],
+        "source_titles": [
+          "libcamera: software_isp: Skip stop before worker start"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 2,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 1
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "[PATCH v5 0/7] media: Enable the OV5693 front camera on IPU6 Surface devices - Fernando Rimoli",
+        "url": "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
+        "source": "lore.kernel.org linux-media list",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-07",
+  "status": "PASS",
+  "removed_sections": [],
+  "dropped_selected_groups": [],
+  "restored_to_keep_minimum": [],
+  "final_section_sources": [
+    {
+      "title": "[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+    },
+    {
+      "title": "[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI",
+      "url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/"
+    },
+    {
+      "title": "[PATCH v7 00/16] media: Add Yoga Book camera support",
+      "url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+    },
+    {
+      "title": "[v3,1/5] libcamera: controls: Give name to the union containing storage",
+      "url": "https://patchwork.libcamera.org/patch/28179/"
+    },
+    {
+      "title": "libcamera: software_isp: Skip stop before worker start",
+      "url": "https://patchwork.libcamera.org/patch/28194/"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

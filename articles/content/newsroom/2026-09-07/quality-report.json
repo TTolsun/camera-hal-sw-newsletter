@@ -1,0 +1,1882 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-07",
+  "score": 90,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "PASS",
+  "summary": "Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/",
+        "source_candidate_hash": "b098c4bc6d9a44b7229d26c31f4fa0b51f4e7250d8f6efa2296dbf864c5494a4",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI",
+          "url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
+        "source_candidate_hash": "9d62a1960304474d33960af941c551db87ab75e7b7ff5a8a83a22f0253160ae7",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH v7 00/16] media: Add Yoga Book camera support",
+          "url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/",
+        "source_candidate_hash": "4a638ad6ba505c4bc7002129a52d7e874f39bdc546873d2bb24fde4671606117",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[v3,1/5] libcamera: controls: Give name to the union containing storage",
+          "url": "https://patchwork.libcamera.org/patch/28179/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 4,
+        "headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28179/",
+        "source_candidate_hash": "de06d6760f071186929c31057960c1950316a9e6d17294bd047aabe90cb70083",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "libcamera: software_isp: Skip stop before worker start",
+          "url": "https://patchwork.libcamera.org/patch/28194/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 5,
+        "headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28194/",
+        "source_candidate_hash": "31de2c508721a1af6487304d438380a606e462f99634c8818c0c2beaddc3290e",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "soc_resource_contention"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 17,
+    "total_claims": 22,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 5,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "claim_id": "claim:og0va1b:v6_patch_submitted",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 9월 1일, OmniVision OG0VA1B 흑백 CMOS VGA 이미지 센서 드라이버를 추가하는 v6 패치 시리즈가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "resolved_evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "claim_id": "claim:og0va1b:sensor_specs",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 센서는 단일 레인 MIPI CSI-2 인터페이스를 통해 최대 640x480 해상도로 10비트 RAW (Y10) 프레임을 출력하며, I2C 호환 SCCB 버스로 제어됩니다.",
+      "evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "resolved_evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "claim_id": "claim:og0va1b:under_review",
+      "claim_type": "limitation",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "이 패치 시리즈는 현재 검토 중인 제안이며, 아직 Linux 커널에 병합된 최종 변경 사항이 아닙니다.",
+      "evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "resolved_evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "claim_id": "article-1-fact-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "제어 인터페이스는 I2C 호환 SCCB 버스를 사용합니다.",
+      "evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "resolved_evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "claim_id": "article-1-fact-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "해당 드라이버는 Purwa EVK에서 테스트 패턴 제너레이터(TPG) 동작을 포함하여 검증되었습니다.",
+      "evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:b098c4bc6d9a44b7:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "resolved_evidence_id": "candidate:b098c4bc6d9a44b7:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "claim_id": "claim:x1e_dts:v6_patch_submitted",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 9월 6일, Qualcomm x1e/Hamoa 플랫폼의 카메라 DTS 지원을 추가하는 v6 패치 시리즈가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:9d62a1960304474d:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9d62a1960304474d:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9d62a1960304474d:source-summary",
+          "resolved_evidence_id": "candidate:9d62a1960304474d:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "claim_id": "claim:x1e_dts:lane_alignment",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "v6 패치에서 CAMSS 노드의 데이터 레인 시작 인덱스가 0 대신 1로 조정되어 PHY 계층과 정렬되었습니다.",
+      "evidence_ids": [
+        "candidate:9d62a1960304474d:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9d62a1960304474d:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9d62a1960304474d:source-summary",
+          "resolved_evidence_id": "candidate:9d62a1960304474d:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "claim_id": "claim:x1e_dts:power_supply_shift",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "전원 공급 노드 정의가 스키마 요구사항에 맞춰 vdda-0p8-supply에서 vdda-0p9-supply로 변경되었습니다.",
+      "evidence_ids": [
+        "candidate:9d62a1960304474d:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9d62a1960304474d:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9d62a1960304474d:source-summary",
+          "resolved_evidence_id": "candidate:9d62a1960304474d:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "claim_id": "claim:x1e_dts:under_review",
+      "claim_type": "limitation",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "이 패치 시리즈는 현재 검토 중인 제안이며, 아직 Linux 커널에 병합된 최종 변경 사항이 아닙니다.",
+      "evidence_ids": [
+        "candidate:9d62a1960304474d:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9d62a1960304474d:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9d62a1960304474d:source-summary",
+          "resolved_evidence_id": "candidate:9d62a1960304474d:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "claim_id": "claim:yoga_book:v7_patch_submitted",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 9월 2일, Lenovo Yoga Book YB1-X91의 카메라 지원을 위한 v7 패치 시리즈가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "resolved_evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "claim_id": "claim:yoga_book:sensor_details",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "패치에는 OV8858(19.2 MHz 클럭, Cherry Trail 게인 프로그래밍) 및 OV2740(288 MHz 링크 주파수, 수동 화이트 밸런스) 센서 드라이버가 포함되어 있습니다.",
+      "evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "resolved_evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "claim_id": "claim:yoga_book:isp_and_lens",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "AtomISP의 RAW 캡처 및 CSI-2 타이밍 제어, WV517S 렌즈 액추에이터 지원이 통합되었습니다.",
+      "evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "resolved_evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "claim_id": "claim:yoga_book:under_review",
+      "claim_type": "limitation",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "이 패치 시리즈는 현재 검토 중인 제안이며, 아직 Linux 커널에 병합된 최종 변경 사항이 아닙니다.",
+      "evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "resolved_evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "claim_id": "article-3-fact-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "IPU 브리지 데이터 및 펌웨어 ID 매핑 변경 사항이 포함되어 있습니다.",
+      "evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:4a638ad6ba505c4b:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "resolved_evidence_id": "candidate:4a638ad6ba505c4b:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+      "claim_id": "claim:libcamera_union:v3_patch_submitted",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 9월 3일, libcamera 컨트롤 스토리지 유니온에 이름을 부여하는 v3 패치 시리즈가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:de06d6760f071186:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:de06d6760f071186:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:de06d6760f071186:source-summary",
+          "resolved_evidence_id": "candidate:de06d6760f071186:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28179/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+      "claim_id": "claim:libcamera_union:accepted_state",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "해당 패치는 Barnabás Pőcze에 의해 제출되었으며, 현재 accepted 상태입니다.",
+      "evidence_ids": [
+        "candidate:de06d6760f071186:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:de06d6760f071186:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:de06d6760f071186:source-summary",
+          "resolved_evidence_id": "candidate:de06d6760f071186:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28179/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+      "claim_id": "claim:libcamera_union:refactoring_only",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 변경 사항은 libcamera 내부 컨트롤 구조체의 가독성과 유지보수성을 높이기 위한 리팩토링입니다.",
+      "evidence_ids": [
+        "candidate:de06d6760f071186:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:de06d6760f071186:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:de06d6760f071186:source-summary",
+          "resolved_evidence_id": "candidate:de06d6760f071186:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28179/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+      "claim_id": "claim:libcamera_union:under_review",
+      "claim_type": "limitation",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "이 변경 사항은 아직 최종 병합되지 않은 제안입니다.",
+      "evidence_ids": [
+        "candidate:de06d6760f071186:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:de06d6760f071186:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:de06d6760f071186:source-summary",
+          "resolved_evidence_id": "candidate:de06d6760f071186:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28179/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+      "claim_id": "claim:libcamera_stop:patch_submitted",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 9월 6일, libcamera의 software_isp 컴포넌트에서 워커 시작 전 불필요한 stop 호출을 건너뛰는 패치가 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:31de2c508721a1af:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:31de2c508721a1af:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:31de2c508721a1af:source-summary",
+          "resolved_evidence_id": "candidate:31de2c508721a1af:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28194/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+      "claim_id": "claim:libcamera_stop:new_state",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "해당 패치는 Birk Skyum에 의해 제출되었으며, 현재 Patchwork 상에서 'new' 상태입니다.",
+      "evidence_ids": [
+        "candidate:31de2c508721a1af:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:31de2c508721a1af:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:31de2c508721a1af:source-summary",
+          "resolved_evidence_id": "candidate:31de2c508721a1af:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28194/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+      "claim_id": "claim:libcamera_stop:optimization_goal",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 변경 사항은 소프트웨어 ISP 파이프라인의 초기화 로직을 최적화하고 중복 작업을 방지하기 위한 것입니다.",
+      "evidence_ids": [
+        "candidate:31de2c508721a1af:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:31de2c508721a1af:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:31de2c508721a1af:source-summary",
+          "resolved_evidence_id": "candidate:31de2c508721a1af:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28194/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+      "claim_id": "claim:libcamera_stop:under_review",
+      "claim_type": "limitation",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "이 변경 사항은 아직 최종 병합되지 않은 제안입니다.",
+      "evidence_ids": [
+        "candidate:31de2c508721a1af:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:31de2c508721a1af:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:31de2c508721a1af:source-summary",
+          "resolved_evidence_id": "candidate:31de2c508721a1af:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28194/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 5,
+    "strong_signal_count": 3,
+    "usable_signal_count": 2,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 5,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 5,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 5,
+      "soc_resource_contention": 1
+    },
+    "actionability_level_counts": {
+      "concrete_check": 2,
+      "measurable_test": 3
+    },
+    "effective_actionability_level_counts": {
+      "concrete_check": 2,
+      "measurable_test": 3
+    },
+    "signal_quality_status_counts": {
+      "usable_signal": 2,
+      "strong_signal": 3
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+      "url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치가 Android Camera HAL3 API 규격을 직접 변경하거나 새로운 메타데이터 키를 추가하는 것은 아닙니다.",
+        "커널 메인라인에 완전히 병합되기 전까지는 프로덕션 코드에 직접 적용하는 것을 지양해야 합니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "soc_platform_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 63): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 변경은 하드웨어 기술(DTS) 변경으로, Android Camera HAL3의 메타데이터나 프레임워크 런타임 자체를 변경하는 것은 아닙니다.",
+        "커널 메인라인에 완전히 병합되기 전까지는 프로덕션 코드에 직접 적용하는 것을 지양해야 합니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+      "url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "security_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 87): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 변경은 특정 구형 인텔 플랫폼(Cherry Trail) 및 AtomISP 드라이버에 특화된 패치이며, 최신 Qualcomm/MediaTek SoC의 Android Camera HAL3 구현에는 직접적인 영향이 없습니다.",
+        "커널 메인라인에 완전히 병합되기 전까지는 프로덕션 코드에 직접 적용하는 것을 지양해야 합니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+      "url": "https://patchwork.libcamera.org/patch/28179/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 51): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 변경은 순수 가독성 개선 리팩토링이며, 카메라 제어 메타데이터의 런타임 동작이나 성능을 변경하지 않습니다.",
+        "Android 공식 Camera HAL3 AIDL/HIDL 인터페이스와는 무관한 libcamera 내부 변경입니다."
+      ],
+      "soc_signal_type": "",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 5,
+      "title": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+      "url": "https://patchwork.libcamera.org/patch/28194/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "soc_resource_contention"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "soc_platform_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 4,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 최적화는 하드웨어 ISP 기반의 메인 카메라 파이프라인 성능에는 영향을 미치지 않으며, 오직 libcamera software_isp 컴포넌트 사용 시에만 유효합니다.",
+        "Android Camera HAL3의 표준 API 규격이나 프레임워크 요구사항을 변경하는 것은 아닙니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 5,
+    "briefing_count": 3,
+    "camera_article_count": 5,
+    "legacy_regex_camera_article_count": 5,
+    "expanded_scope_article_count": 5,
+    "direct_aosp_camera_count": 0,
+    "camera_driver_image_pipeline_count": 5,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 5,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 5,
+    "composition_mode": "NORMAL",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/",
+        "source_candidate_hash": "b098c4bc6d9a44b7229d26c31f4fa0b51f4e7250d8f6efa2296dbf864c5494a4",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
+        "source_candidate_hash": "9d62a1960304474d33960af941c551db87ab75e7b7ff5a8a83a22f0253160ae7",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/",
+        "source_candidate_hash": "4a638ad6ba505c4bc7002129a52d7e874f39bdc546873d2bb24fde4671606117",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 4,
+        "headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28179/",
+        "source_candidate_hash": "de06d6760f071186929c31057960c1950316a9e6d17294bd047aabe90cb70083",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 5,
+        "headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28194/",
+        "source_candidate_hash": "31de2c508721a1af6487304d438380a606e462f99634c8818c0c2beaddc3290e",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_fallback_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 0,
+      "camera_driver_image_pipeline": 5,
+      "android": 0,
+      "android_supporting": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 5,
+      "supporting": 0,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android"
+      ],
+      "supporting": [
+        "android_supporting"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 9,
+    "article_gate_counts": {
+      "PASS": 5,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 5,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {
+        "do_not_claim": 5
+      },
+      "limitation_visibility_counts": {
+        "guardrail-only": 5
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 17,
+      "total_claims": 22,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 5,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 5,
+      "strong_signal_count": 3,
+      "usable_signal_count": 2,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 5,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 0,
+      "main_articles_with_concrete_action": 5,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "driver_image_pipeline": 5,
+        "soc_resource_contention": 1
+      },
+      "actionability_level_counts": {
+        "concrete_check": 2,
+        "measurable_test": 3
+      },
+      "effective_actionability_level_counts": {
+        "concrete_check": 2,
+        "measurable_test": 3
+      },
+      "signal_quality_status_counts": {
+        "usable_signal": 2,
+        "strong_signal": 3
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+        "url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치가 Android Camera HAL3 API 규격을 직접 변경하거나 새로운 메타데이터 키를 추가하는 것은 아닙니다.",
+          "커널 메인라인에 완전히 병합되기 전까지는 프로덕션 코드에 직접 적용하는 것을 지양해야 합니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+        "url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "soc_platform_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 63): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 변경은 하드웨어 기술(DTS) 변경으로, Android Camera HAL3의 메타데이터나 프레임워크 런타임 자체를 변경하는 것은 아닙니다.",
+          "커널 메인라인에 완전히 병합되기 전까지는 프로덕션 코드에 직접 적용하는 것을 지양해야 합니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+        "url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "security_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 87): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 변경은 특정 구형 인텔 플랫폼(Cherry Trail) 및 AtomISP 드라이버에 특화된 패치이며, 최신 Qualcomm/MediaTek SoC의 Android Camera HAL3 구현에는 직접적인 영향이 없습니다.",
+          "커널 메인라인에 완전히 병합되기 전까지는 프로덕션 코드에 직접 적용하는 것을 지양해야 합니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 4,
+        "title": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+        "url": "https://patchwork.libcamera.org/patch/28179/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 51): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 변경은 순수 가독성 개선 리팩토링이며, 카메라 제어 메타데이터의 런타임 동작이나 성능을 변경하지 않습니다.",
+          "Android 공식 Camera HAL3 AIDL/HIDL 인터페이스와는 무관한 libcamera 내부 변경입니다."
+        ],
+        "soc_signal_type": "",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 5,
+        "title": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+        "url": "https://patchwork.libcamera.org/patch/28194/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "soc_resource_contention"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "soc_platform_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 4,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 57): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 최적화는 하드웨어 ISP 기반의 메인 카메라 파이프라인 성능에는 영향을 미치지 않으며, 오직 libcamera software_isp 컴포넌트 사용 시에만 유효합니다.",
+          "Android Camera HAL3의 표준 API 규격이나 프레임워크 요구사항을 변경하는 것은 아닙니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "image-fallback",
+        "count": 5
+      },
+      {
+        "category": "editorial-story",
+        "count": 3
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

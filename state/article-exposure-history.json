@@ -7,6 +7,112 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/28194",
+      "series_identity_key": "patchwork-series:6168",
+      "series_subject_key": "libcamera software isp skip stop before worker start",
+      "title": "libcamera: software_isp: Skip stop before worker start",
+      "source_url": "https://patchwork.libcamera.org/patch/28194",
+      "newsletter_date": "2026-09-07",
+      "newsletter_url": "newsletters/2026-09-07/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-07",
+      "newsletter_article_date": "2026-09-07",
+      "cooldown_until": "2026-09-28",
+      "first_exposed_at": "2026-09-07",
+      "last_exposed_at": "2026-09-07",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/28179",
+      "series_identity_key": "patchwork-series:6164",
+      "series_subject_key": "libcamera controls give name to the union containing storage",
+      "title": "[v3,1/5] libcamera: controls: Give name to the union containing storage",
+      "source_url": "https://patchwork.libcamera.org/patch/28179",
+      "newsletter_date": "2026-09-07",
+      "newsletter_url": "newsletters/2026-09-07/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-07",
+      "newsletter_article_date": "2026-09-07",
+      "cooldown_until": "2026-09-28",
+      "first_exposed_at": "2026-09-07",
+      "last_exposed_at": "2026-09-07",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com",
+      "series_identity_key": "lore-series:git-1788360629-mauriziocasciano7@gmail.com",
+      "series_subject_key": "media add yoga book camera support",
+      "title": "[PATCH v7 00/16] media: Add Yoga Book camera support",
+      "source_url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com",
+      "newsletter_date": "2026-09-07",
+      "newsletter_url": "newsletters/2026-09-07/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-07",
+      "newsletter_article_date": "2026-09-07",
+      "cooldown_until": "2026-09-28",
+      "first_exposed_at": "2026-09-07",
+      "last_exposed_at": "2026-09-07",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com",
+      "series_identity_key": "lore-series:20260901-og0va1b-v6-a05b2d04c892@oss.qualcomm.com",
+      "series_subject_key": "media i2c add omnivision og0va1b camera sensor driver",
+      "title": "[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "source_url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com",
+      "newsletter_date": "2026-09-07",
+      "newsletter_url": "newsletters/2026-09-07/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-07",
+      "newsletter_article_date": "2026-09-07",
+      "cooldown_until": "2026-09-28",
+      "first_exposed_at": "2026-09-07",
+      "last_exposed_at": "2026-09-07",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org",
+      "title": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "source_url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
+      "newsletter_date": "2026-09-07",
+      "newsletter_url": "newsletters/2026-09-07/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-09-07",
+      "first_exposed_at": "2026-09-07",
+      "last_exposed_at": "2026-09-07",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "series_identity_key": "lore-series:20260906-x1e-camss-csi2-phy-dtsi-v6-067f2ecc4630@linaro.org",
+      "series_subject_key": "arm64 dts qcom add x1e hamoa camera dtsi",
+      "newsletter_article_date": "2026-09-07",
+      "cooldown_until": "2026-09-28"
+    },
+    {
       "article_identity_key": "url:https://patchwork.libcamera.org/patch/28105",
       "title": "[v15,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
       "source_url": "https://patchwork.libcamera.org/patch/28105",
