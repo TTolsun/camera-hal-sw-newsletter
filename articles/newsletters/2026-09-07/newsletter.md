@@ -1,4 +1,4 @@
-# AOSP Camera / Driver / SoC Platform Newsletter - 2026-09-07
+# AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-09-07
 
 이번 주 뉴스레터에서는 Linux 미디어 하위 시스템 및 libcamera 프로젝트에서 진행 중인 핵심 카메라 드라이버 및 이미지 파이프라인 패치 소식을 다룹니다. OmniVision OG0VA1B 흑백 센서 드라이버 v6, Qualcomm x1e/Hamoa 플랫폼용 카메라 DTS v6, Lenovo Yoga Book 카메라 지원 v7 패치와 함께 libcamera의 컨트롤 구조체 리팩토링 및 소프트웨어 ISP 초기화 최적화 패치 등 하위 스택 엔지니어들이 주목해야 할 실무 변경 사항들을 상세히 분석합니다.
 
