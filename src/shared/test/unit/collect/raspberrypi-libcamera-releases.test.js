@@ -95,16 +95,25 @@ test('uses the release body as evidence instead of a tag-name template', () => {
 });
 
 // behavior_change는 collect-news-candidates의 자격 판정 입력이면서 article-capsules의 what_changed
-// 이자 evidence 식별 칸이다. #976이 어휘 쪽 장애물(revert 본문이 근거 미달로 판정되던 것)은 없앴지만
-// capsule 쪽 역할은 그대로라, 본문은 summary가 나르고 이 필드는 릴리스 문장에 고정한다.
-test('keeps behavior_change on the release sentence so eligibility does not shift', () => {
+// 이자 evidence 식별 칸이다. 그 두 번째 역할 때문에 본문을 싣는다(#976의 마지막 결정 항목) —
+// 릴리스 문장을 싣던 동안 기사 근거의 첫 칸이 태그 이름을 되뇌는 자기참조 문장이었다.
+// 자격 판정은 이 변경으로 움직이지 않는다(커밋 후보 9건 전수 재판정에서 전후 동일).
+test('carries the release body in behavior_change so the capsule evidence names the change', () => {
   const body = '&lt;p&gt;Revert &quot;ipa: rpi: imx296: Enable embedded data&quot;&lt;/p&gt;';
   const [item] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody(body), source());
 
   // 값 자체를 고정한다. 판정 쪽 어휘 패턴을 여기서 복제하면 그 패턴이 바뀔 때 두 곳이 어긋난다 —
   // 자격 판정의 정본은 collect-news-candidates.js의 BEHAVIOR_CHANGE_PATTERN이다.
+  assert.equal(item.behavior_change, 'Revert "ipa: rpi: imx296: Enable embedded data"');
+  assert.equal(item.behavior_change, item.summary, '본문이 있으면 두 칸이 같은 문장이다');
+});
+
+// 본문이 없으면 이 필드는 종전처럼 템플릿이고, 표식이 그것을 근거에서 걸러 낸다.
+test('falls back to the release sentence in behavior_change when there is no body', () => {
+  const [item] = resolveRaspberryPiLibcameraReleaseItems(atomWithReleaseBody('No content.'), source());
+
   assert.equal(item.behavior_change, 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).');
-  assert.notEqual(item.behavior_change, item.summary);
+  assert.equal(item.behavior_change, item.collector_template_sentence);
 });
 
 // 이 모듈이 지키는 경계 계약이다: 리터럴 꺾쇠(이메일·include 경로)를 태그로 오인해 지운 채 넘기지
@@ -167,19 +176,20 @@ test('skips entries missing a link or date', () => {
 });
 
 // #976: 이 문장은 출처 본문이 아니라 수집기가 만든 문장이라는 표식이다. 판정 쪽이 이 표식을 보고
-// 동작 변경 근거에서 제외한다. behavior_change와 (본문이 없을 때는) summary가 둘 다 이 문장이므로,
+// 동작 변경 근거에서 제외한다. 본문이 없으면 behavior_change와 summary가 둘 다 이 문장이 되므로,
 // 표식은 문장 텍스트 자체로 남겨 두 경로를 함께 가리킨다.
 test('marks the tag-name template sentence so the evidence gate can tell it apart', () => {
   const withBody = resolveRaspberryPiLibcameraReleaseItems(
     atomWithReleaseBody('&lt;p&gt;Revert &quot;ipa: rpi: imx296: Enable embedded data&quot;&lt;/p&gt;'),
     source()
   )[0];
+  // 표식은 본문 유무와 무관하게 언제나 템플릿 문장이다. 본문이 있으면 다른 두 칸이 본문을
+  // 나르므로 표식만 이 문장으로 남는다.
   assert.equal(
     withBody.collector_template_sentence,
     'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).'
   );
-  assert.equal(withBody.collector_template_sentence, withBody.behavior_change);
-  // 본문이 있으면 summary는 표식과 다른 문장이다. 판정은 그 본문을 근거로 읽는다.
+  assert.notEqual(withBody.behavior_change, withBody.collector_template_sentence);
   assert.notEqual(withBody.summary, withBody.collector_template_sentence);
 
   const withoutBody = resolveRaspberryPiLibcameraReleaseItems(
