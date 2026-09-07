@@ -72,12 +72,15 @@ function releaseCandidate(block, source) {
   // 절단)을 되짚는 것이므로, 하류 정규화가 바뀌면 여기 표식도 함께 다시 재야 한다.
   // 자격을 살리는 것은 본문이 있는 릴리스의 summary다.
   //
-  // 본문을 이 필드에 싣는 것은 아직 하지 않았다. article-capsules가 이 필드를 what_changed의
-  // 후보로 읽기 때문이다(select/article-capsules.js의 what_changed). 그대로 싣는 것은 아니다 —
-  // reporter/article-field-builder.js의 cleanBehaviorChange가 sourceExtractionBullet →
-  // what_changed → behavior_change 순으로 먼저 잡히는 값을 쓰고, 그 결과를 420자로 압축한다.
-  // 즉 앞선 후보가 있으면 이 값은 실리지도 않는다. 본문 싣기는 그 경로까지 함께 재는 별도
-  // 변경이다 — #976의 남은 결정 항목이다.
+  // behavior_change 에도 본문을 싣는다(#976 의 마지막 결정 항목). article-capsules 가 이 필드를
+  // what_changed 후보로 읽고, 그 값이 capsule evidence 로 간다. 템플릿을 싣던 동안 릴리스 기사의
+  // 근거 첫 칸은 태그 이름을 되뇌는 자기참조 문장이었다 — 2026-08-24 호가 실제 변경(imx296
+  // embedded data revert)을 한 번도 말하지 못한 채 나간 경로가 이것이다.
+  //
+  // 게이트는 이 변경으로 움직이지 않는다. 커밋된 후보 9건 전수 재판정에서 main_eligible 이
+  // 전후 동일했다(본문 있는 1건 true, 본문 없는 8건 false). 본문이 없으면 이 필드는 여전히
+  // 템플릿 문장이고, collector_template_sentence 표식이 그것을 동작변경 근거에서 걸러 낸다.
+  // 그래서 "표식 먼저, 본문 싣기는 그다음"이라는 #976 의 순서 제약이 지켜진다.
   const releaseSentence = `Released ${tag} (Raspberry Pi downstream libcamera).`;
   const summary = releaseBodyText(block) || releaseSentence;
   return {
@@ -92,7 +95,7 @@ function releaseCandidate(block, source) {
     parentTitle: source.name,
     version_or_release: tag,
     api_or_component: 'libcamera / V4L2 camera pipeline',
-    behavior_change: releaseSentence,
+    behavior_change: summary,
     collector_template_sentence: releaseSentence,
     relevanceBucketHint: 'camera_driver_image_pipeline'
   };

@@ -204,6 +204,10 @@ let activeSourcesPath = legacySourcesPath;
 // `now<br />embedded`에서 단어가 붙지 않게 하기 위해서다.
 const MARKUP_PATTERN = /<!--[\s\S]*?-->|<![^>]*>|<\/?[a-zA-Z][a-zA-Z0-9:._-]*(?:\s[^<>]*)?\/?>/g;
 
+// 후보 본문 계열 필드(summary, behavior_change)에 공통으로 거는 길이 상한이다. 같은 문장이
+// 두 칸으로 흘러오므로 상한이 갈리면 표식·게이트가 서로 다른 조각을 보게 된다(#976).
+const CANDIDATE_TEXT_MAX_LENGTH = 500;
+
 // `String(value || '')`로 받는다. `String(null)`은 `'null'`이라, 이 자리에서 String(value)만
 // 쓰면 title이나 summary가 null인 후보에서 리터럴 "null"이 영속 후보로 들어간다. 옛 decode는
 // null에 `.replace`를 걸어 예외로 죽었으므로, 조용히 문자열을 오염시키는 쪽으로 바뀌지 않게 한다.
@@ -871,8 +875,15 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     (toolingEvidence.eligible ? 'Android native tooling workflow' : '')
   ).trim();
   // 동작 변경 문장의 후보 순서는 종전과 같다(raw 필드 → summary/title에서 뽑은 첫 문장 → tooling 문장).
+  //
+  // raw.behavior_change 도 summary 와 **같은** 변환을 거친다: 마크업 제거 + 같은 길이 상한.
+  // 두 칸에 같은 문장이 흘러오는데 한쪽만 정규화하면 판정이 갈린다 — 본문이 `<fix>` 처럼 마크업
+  // 한 덩어리일 때 summary 는 비어 근거가 되지 못하는데 raw 필드는 그대로 남아 `fix` 한 낱말로
+  // 게이트를 통과했다. 표식 비교(isCollectorTemplateSentence)도 정규화된 값끼리 해야 어긋나지
+  // 않는다. 길이 상한을 함께 맞추는 이유도 같다: 긴 본문에서 두 칸이 서로 다른 지점에서 잘리면
+  // 표식·게이트가 다시 다른 문자열을 보게 된다.
   const behaviorChangeTexts = titleFallback => [
-    raw.behavior_change,
+    stripMarkup(raw.behavior_change).slice(0, CANDIDATE_TEXT_MAX_LENGTH),
     firstBehavior(summary || titleFallback),
     toolingEvidence.eligible ? 'Official Android tooling article describes native Android app workflow behavior.' : ''
   ].map(value => String(value || ''));
@@ -1002,7 +1013,7 @@ function normalizeCandidate(raw) {
   // 여기 들어오는 값은 파서나 소스별 수집기가 이미 entity를 푼 텍스트다. 남은 일은 그 해제로
   // 리터럴이 된 마크업을 걷어내는 것뿐이라 stripMarkup만 건다(#975).
   const title = stripMarkup(raw.title);
-  const summary = stripMarkup(raw.summary).slice(0, 500);
+  const summary = stripMarkup(raw.summary).slice(0, CANDIDATE_TEXT_MAX_LENGTH);
   const rawSourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
   const sourceType = raw.sourceType || raw.source_type || rawSourceKind;
   const url = canonicalContentUrl(raw.url);
