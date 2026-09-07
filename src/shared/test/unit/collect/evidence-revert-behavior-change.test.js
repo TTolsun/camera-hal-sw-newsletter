@@ -186,7 +186,8 @@ test('#976 표식이 있어도 출처 본문이 있으면 그 본문이 근거�
   assert.equal(metadata.evidence_score, 8);
   assert.equal(metadata.source_gap_risk, false);
   assert.equal(metadata.main_eligible, true);
-  // 보고되는 behavior_change 값은 그대로다. 이 PR은 판정만 바꾸고 본문을 이 필드에 싣지 않는다.
+  // 보고 값은 raw 가 준 것 그대로다. 판정이 표식을 보고 summary 로 넘어가더라도 이 칸을
+  // 고쳐 쓰지는 않는다. (수집기가 무엇을 이 칸에 싣는지는 별개 층이고, 아래 수집기 테스트가 잰다.)
   assert.equal(metadata.behavior_change, TEMPLATE_SENTENCE);
 });
 
@@ -444,4 +445,33 @@ test('#976 마크업만 든 behavior_change 는 정규화 뒤 근거가 되지 �
     behavior_change: 'Fixed the imx296 embedded data negotiation with the CFE.'
   });
   assert.equal(realSentence.has_behavior_change, true, '실제 문장은 그대로 근거가 된다');
+});
+
+// 길이 상한도 두 칸이 같아야 한다. 상한이 갈리면 긴 본문에서 표식·게이트가 서로 다른 조각을
+// 보게 되고, 그것이 PR #1075가 두 번 뚫린 그 뿌리다.
+test('#976 긴 본문도 summary 와 behavior_change 가 같은 지점에서 잘린다', () => {
+  const longBody = `Fixed the imx296 embedded data negotiation with the CFE. ${'x'.repeat(600)}`;
+  const normalized = normalizeCandidate({
+    source: {
+      ...RELEASE_SOURCE,
+      url: 'https://github.com/raspberrypi/libcamera/releases',
+      sourceUrl: 'https://github.com/raspberrypi/libcamera/releases',
+      section: 'Camera Driver / V4L2',
+      keywords: ['libcamera', 'camera']
+    },
+    title: 'Raspberry Pi libcamera Releases - v1.0.0',
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v1.0.0',
+    publishedAt: '2026-08-17T10:00:00Z',
+    sourceKind: 'release_note_item',
+    version_or_release: 'v1.0.0',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    summary: longBody,
+    behavior_change: longBody
+  });
+
+  // 전제: 입력이 상한을 실제로 넘어야 이 비교가 상한을 재는 것이 된다.
+  assert.ok(longBody.length > 500, 'fixture must exceed the cut');
+  assert.equal(normalized.summary.length, 500);
+  assert.equal(normalized.behavior_change.length, 500);
+  assert.equal(normalized.behavior_change, normalized.summary, '두 칸은 같은 조각이어야 한다');
 });
