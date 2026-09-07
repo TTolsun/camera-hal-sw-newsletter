@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "aosp-camera-its-release-notes",
-  "updated_at": "2026-08-31T00:00:00.000Z",
+  "updated_at": "2026-09-07T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "aosp-camera-its-release-notes:a67cc111aac23254e453759a5bae82dc",
@@ -14,8 +14,8 @@
       "structured_date_modified": "",
       "sitemap_lastmod": "",
       "http_last_modified": "2026-07-23",
-      "content_hash": "a42e71ee96080ada75b2b98d758f3adc2edafb015c19b4372c3e3c8f8756ad1e",
-      "normalized_content_hash": "1fb1f5c83d55b7ab7932acc6985ca2d24c3f06013e556b61cb82d6a1c0ef7b4e",
+      "content_hash": "ad269ac74082649ae23a9f5a72f9d8b7e42dce096b001a6d666aa015bb215ebf",
+      "normalized_content_hash": "d5726d61fe18159b7374c2a2db47c2b8fe34e000e117f745bdf14636f122c41d",
       "release_note_sections": [],
       "anchors": [
         "https://source.android.com/docs/compatibility/cts/camera-its#benefits-marginal-pass",
@@ -28,8 +28,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-31T00:00:00.000Z",
-      "seen_count": 5,
+      "last_seen_at": "2026-09-07T00:00:00.000Z",
+      "seen_count": 6,
       "status": 200
     },
     {
@@ -38,17 +38,17 @@
       "canonical_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
       "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
       "visible_date": "",
-      "visible_last_updated": "2026-08-06",
+      "visible_last_updated": "2026-08-31",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-08-06",
-      "content_hash": "24bb009cbfffd0818056af4b4db1cc633c580e57ac6e93a45dee6289c28c038f",
-      "normalized_content_hash": "e0fdc28bf02ba5939f744dc82594f30d7d55de3e609d1d378de5a4af990108e0",
+      "http_last_modified": "2026-08-31",
+      "content_hash": "e9b36bb82585991128f6a4b97a83482e0d0f235b0430e5c9edb77409ebd27b0b",
+      "normalized_content_hash": "c9dbff1b6abfdd6130c9e153f30657ca628ff14d2c84aaae35eb1a4275d780e8",
       "release_note_sections": [
         {
           "heading": "Python and package versions",
-          "hash": "eb341c13d07f9fd6"
+          "hash": "a3167d87f3986427"
         },
         {
           "heading": "New or updated scenes",
@@ -93,21 +93,13 @@
       ],
       "anchors": [],
       "release_row_date": "",
-      "release_row_version": "7.0.2",
-      "release_row_anchor": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
-      "release_row_hash": "5099c51b47492b4b99c4b981758f936d",
-      "release_rows": [
-        {
-          "version": "7.0.2",
-          "anchor": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
-          "date": "",
-          "hash": "5099c51b47492b4b99c4b981758f936d",
-          "title": "Python and package versions"
-        }
-      ],
+      "release_row_version": "",
+      "release_row_anchor": "",
+      "release_row_hash": "",
+      "release_rows": [],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-08-31T00:00:00.000Z",
-      "seen_count": 5,
+      "last_seen_at": "2026-09-07T00:00:00.000Z",
+      "seen_count": 6,
       "status": 200
     }
   ],
@@ -115,11 +107,15 @@
     "source-event-fb05acebbfa8b6aca58f1ef364425fb2",
     "source-event-723126c7451b2946fb7979853a681019",
     "source-event-73d88dc5066d889de246f5bdf92aa043",
-    "source-event-2de70121de00c902be944bc113470942"
+    "source-event-2de70121de00c902be944bc113470942",
+    "source-event-ccd0690c57ad3f4db1f1e3509abf02e4",
+    "source-event-668e228b103409e520cb2146e738ec03"
   ],
   "processed_evidence_ids": [
     "evidence-e3e8f17f3e26e490f5c7766bd371bcae",
     "evidence-58963151a28c98fd472d86330f561c51",
-    "evidence-ef0a9f4a7df7d82f0fd078b98765087f"
+    "evidence-ef0a9f4a7df7d82f0fd078b98765087f",
+    "evidence-e879d366803f89f8d90d69c6f7a15ca7",
+    "evidence-50404c40b2189dcfcf44f0360bbd5f67"
   ]
 }

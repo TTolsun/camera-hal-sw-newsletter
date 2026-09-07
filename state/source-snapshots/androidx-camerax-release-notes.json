@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "androidx-camerax-release-notes",
-  "updated_at": "2026-08-31T00:00:00.000Z",
+  "updated_at": "2026-09-07T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "androidx-camerax-release-notes:49d58944bd3ca26fc6929250597a6e3a",
@@ -1641,25 +1641,11 @@
           "date": "",
           "hash": "74ac8fd048ffb4c143f7367dec9eed89",
           "title": "Camera-Extensions and Camera-View Version 1.0.0"
-        },
-        {
-          "version": "1.7.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#groovy",
-          "date": "",
-          "hash": "a0a8fbb786e6694f0309085b921a9123",
-          "title": "Groovy"
-        },
-        {
-          "version": "1.7.0-alpha03",
-          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#kts",
-          "date": "",
-          "hash": "8a705c37713edde89b6efa508df25938",
-          "title": "Kotlin"
         }
       ],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-08-31T00:00:00.000Z",
-      "seen_count": 106,
+      "last_seen_at": "2026-09-07T00:00:00.000Z",
+      "seen_count": 107,
       "status": 200
     }
   ],

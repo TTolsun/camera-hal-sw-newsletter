@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "aosp-camera-docs",
-  "updated_at": "2026-08-31T00:00:00.000Z",
+  "updated_at": "2026-09-07T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "aosp-camera-docs:2e09be47b7d035b1b1509fe59f1caf95",
@@ -9,13 +9,13 @@
       "canonical_url": "https://source.android.com/docs/core/camera",
       "title": "Camera | Android Open Source Project",
       "visible_date": "",
-      "visible_last_updated": "2026-06-17",
+      "visible_last_updated": "2026-09-04",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-06-17",
-      "content_hash": "14132a759093b5715d3dbddd9888958ca8f8f6a4d8420d5687b51aaba97b92f0",
-      "normalized_content_hash": "ae1bebe28d80d60d247efe1ec527268a0e182ecae25c012290bfda745bd55826",
+      "http_last_modified": "2026-09-04",
+      "content_hash": "28ea68e10f95b6fff946883e3ee3d853a928329753364751b721440c1eb9b117",
+      "normalized_content_hash": "b88946e5f4145bf2aa99f2c36850586dc95e94d86bb6c3df9a7b3847056a7577",
       "release_note_sections": [],
       "anchors": [
         "https://source.android.com/docs/core/camera#legacy-hal"
@@ -26,18 +26,20 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-08-31T00:00:00.000Z",
-      "seen_count": 106,
+      "last_seen_at": "2026-09-07T00:00:00.000Z",
+      "seen_count": 107,
       "status": 200
     }
   ],
   "processed_source_event_ids": [
     "source-event-729785aba8003043498e7e1e8a68d275",
     "source-event-431890618aed14a771aafc7d8dbb7d30",
-    "source-event-5ef683a455dfcbff161e6ec0239026dd"
+    "source-event-5ef683a455dfcbff161e6ec0239026dd",
+    "source-event-d49a7eb04dc36cd30d3b11ab44770e7a"
   ],
   "processed_evidence_ids": [
     "evidence-788f9d9f210990dc2288a7a4ecab04bd",
-    "evidence-b7ad7e38e793523f46ec8aabf07672e8"
+    "evidence-b7ad7e38e793523f46ec8aabf07672e8",
+    "evidence-87607bb0707964290a2daf8596bd3d26"
   ]
 }

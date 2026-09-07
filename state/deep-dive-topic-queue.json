@@ -98,6 +98,16 @@
           "date_confidence": 0,
           "origin": "document_section",
           "detected_at": "2026-08-17"
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
+          "excerpt": "For Android 17 and higher, we strongly recommend using package management software to bundle the correct versions of packages to create a virtual environment for Android release development.",
+          "fingerprint": "a3167d87f3986427",
+          "effective_date": "2026-08-31",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "document_section",
+          "detected_at": "2026-09-07"
         }
       ]
     },
@@ -440,6 +450,52 @@
           "date_confidence": 40,
           "origin": "monitor_event",
           "detected_at": "2026-08-31"
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/camera-its",
+          "excerpt": "Normalized content hash changed without date change.",
+          "fingerprint": "evidence-e879d366803f89f8d90d69c6f7a15ca7",
+          "effective_date": "2026-09-07",
+          "date_source": "content_hash_changed_without_date",
+          "date_confidence": 40,
+          "origin": "monitor_event",
+          "detected_at": "2026-09-07"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/core/camera",
+      "title": "Camera | Android Open Source Project",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "excerpt": "Date signal changed with normalized content hash changed.",
+          "fingerprint": "evidence-87607bb0707964290a2daf8596bd3d26",
+          "effective_date": "2026-09-04",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "monitor_event",
+          "detected_at": "2026-09-07"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+      "bucket": "direct_aosp_camera",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+          "excerpt": "Date signal changed with normalized content hash changed.",
+          "fingerprint": "evidence-50404c40b2189dcfcf44f0360bbd5f67",
+          "effective_date": "2026-08-31",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "monitor_event",
+          "detected_at": "2026-09-07"
         }
       ]
     }
