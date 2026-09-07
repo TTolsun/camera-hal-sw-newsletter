@@ -86,7 +86,7 @@
         </figure>
         <p class="article-lead">Qualcomm x1e/Hamoa 플랫폼의 카메라 하드웨어 구성을 정의하는 Device Tree Source (DTS) 지원 v6 패치가 공개되었습니다. 이번 업데이트는 CAMSS 노드의 데이터 레인 정렬을 PHY 계층과 일치시키고 전원 공급 스키마를 정합화하는 등 하드웨어 초기화 안정성을 높이는 데 초점을 맞추었습니다.</p>
         <p>2026년 9월 6일, Linaro 메일링 리스트를 통해 Qualcomm x1e/Hamoa 플랫폼의 카메라 서브시스템(CAMSS) DTS 구성을 개선하는 v6 패치 시리즈가 제출되었습니다. DTS는 하드웨어 리소스를 커널에 설명하는 핵심 명세로, 카메라 센서와 SoC 간의 물리적 연결을 정의합니다.</p>
-        <p>v6 패치의 핵심 변경 사항은 CAMSS 노드 내 데이터 레인 시작 인덱스를 기존 0에서 1로 조정하여 물리 계층(PHY)과 정렬을 맞춘 것입니다. 또한, 전원 공급 노드 정의를 기존 vdda-0p8-supply에서 vdda-0p9-supply로 변경하여 최신 하드웨어 스키마 요구사항과의 호환성을 확보했습니다.</p>
+        <p>v6에서 바뀐 것은 CAMSS 노드 내 데이터 레인 시작 인덱스를 기존 0에서 1로 조정하여 물리 계층(PHY)과 정렬을 맞춘 한 가지입니다. 전원 공급 노드 정의를 vdda-0p8-supply에서 vdda-0p9-supply로 옮겨 스키마 요구사항에 맞춘 변경은 앞선 v5에서 이루어졌습니다.</p>
         <p>이러한 변경은 하위 레벨에서 카메라 하드웨어 초기화 실패나 이미지 손상을 방지하는 데 필수적이며, x1e 플랫폼 기반의 카메라 드라이버 및 SoC 통합 엔지니어들에게 중요한 하드웨어 설정 가이드를 제공합니다.</p>
         <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>직접적인 HAL 변경은 없으나, 데이터 레인 정렬 및 전원 공급 변경은 카메라 서브시스템의 물리적 연결 안정성에 직결됩니다. 드라이버 레벨에서 MIPI CSI-2 수신기 초기화 에러나 전원 인가 실패가 발생하지 않도록 하위 스택 검증을 선행해야 합니다.</p></div>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/">[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI</a> — <a href="https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/T/#t">전체 패치 시리즈</a></li></ul></div>
@@ -138,11 +138,11 @@
         <figure class="article-media">
         <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개 image" loading="lazy" decoding="async">
         </figure>
-        <p class="article-lead">libcamera의 소프트웨어 이미지 신호 처리(software_isp) 컴포넌트에서 초기화 오버헤드를 줄이기 위한 최적화 패치가 공개되었습니다. 워커 스레드가 시작되기 전에 불필요하게 호출되던 stop 동작을 생략함으로써, 스트림 시작 지연 시간을 단축하는 효과가 기대됩니다.</p>
-        <p>2026년 9월 6일, Birk Skyum은 libcamera 패치 트래커를 통해 software_isp의 초기화 시퀀스를 최적화하는 신규 패치를 제출했습니다. software_isp는 하드웨어 ISP가 없는 시스템에서 CPU 리소스를 활용해 이미지 처리를 수행하는 핵심 모듈입니다.</p>
-        <p>이번 패치는 워커(worker) 스레드가 본격적으로 구동되기 전에 불필요하게 수행되던 stop 호출을 건너뛰도록 구현되었습니다. 기존 구조에서는 초기화 과정에서 상태 기계의 불필요한 중복 리셋 작업이 발생했으나, 이를 생략함으로써 초기화 로직이 한층 간결해졌습니다.</p>
-        <p>이 최적화는 소프트웨어 ISP의 구동 속도를 높여 카메라 세션 오픈 시 첫 프레임이 화면에 표시되기까지의 지연 시간(Time to First Frame)을 개선하는 데 기여할 수 있으며, 특히 가상 카메라 환경이나 저사양 임베디드 기기에서 유용하게 활용될 수 있습니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>직접적인 HAL 변경은 없으나, software_isp 초기화 시퀀스 단축은 카메라 스트림 시작 지연 시간 개선으로 이어집니다. 소프트웨어 ISP를 경유하는 가상 카메라나 에뮬레이터 환경에서 첫 프레임 출력 속도 향상 여부를 벤치마크해야 합니다.</p></div>
+        <p class="article-lead">libcamera의 소프트웨어 이미지 신호 처리(software_isp) 컴포넌트에서 카메라 시작이 실패했을 때 호출이 무한정 멈추던 문제를 고치는 패치가 제출되었습니다. 아직 구동되지 않은 워커 스레드를 기다리지 않고 일찍 반환하도록 바꾸어, 원래의 캡처 오류가 호출자에게 그대로 전달되게 합니다.</p>
+        <p>2026년 9월 6일, Birk Skyum은 libcamera 패치 트래커를 통해 software_isp의 정지 경로를 고치는 패치를 제출했습니다. software_isp는 하드웨어 ISP가 없는 시스템에서 CPU 리소스를 활용해 이미지 처리를 수행하는 핵심 모듈입니다.</p>
+        <p>패치 설명에 따르면, simple 파이프라인은 캡처 장치가 스트리밍 시작에 실패할 경우 SoftwareIsp::start()가 실행되기 전에 stop()을 호출합니다. 이때 블로킹 방식으로 불린 Debayer::stop()이 아직 구동되지 않은 워커 스레드를 무한정 기다리면서 호출 자체가 반환되지 않습니다. 이번 패치는 워커가 시작되지 않은 상태라면 조기에 반환하도록 바꾸어 이 대기를 없앱니다.</p>
+        <p>그 덕분에 Camera::start()가 원래의 캡처 오류를 호출자에게 보고할 수 있게 됩니다. 패치에는 freedesktop GitLab의 libcamera 이슈 349번이 근거로 연결되어 있으며, 패치 트래커에서의 현재 상태는 superseded로 후속 리비전이 올라와 있습니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>직접적인 HAL 변경은 없으나, 소프트웨어 ISP를 경유하는 파이프라인에서 카메라 열기가 실패했는데도 호출이 반환되지 않고 멈추는 증상을 겪었다면 이 경로를 의심해 볼 수 있습니다. 캡처 시작 실패를 일부러 주입하는 시나리오로 오류가 상위 계층까지 전달되는지 확인하시기 바랍니다.</p></div>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://patchwork.libcamera.org/patch/28194/">libcamera: software_isp: Skip stop before worker start</a></li></ul></div>
       </section>
 
