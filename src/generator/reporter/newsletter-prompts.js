@@ -8,6 +8,23 @@ function linkedEvidencePromptGuardrails() {
   ].join('\n');
 }
 
+// 패치 시리즈 조각을 시리즈 전체로 오인해 서술하는 것을 막는다(#1109). capsule.title은 시리즈
+// 대표로 뽑힌 조각 하나의 제목이고, 그 조각만 보고 쓴 본문이 시리즈 전체를 잘못 규정한 사례가
+// 2026-W34부터 3주 연속 나왔다. 필드를 payload에 싣는 것만으로는 부족해서 규칙으로 적는다.
+//
+// 반대 방향도 함께 막는다. capsule이 시리즈에 대해 싣는 것은 name과 revision 두 값뿐이고 다른
+// 조각의 제목도 커버레터 본문도 없다. "기사 범위는 시리즈 전체"라고 지시하면 제목 한 줄만 근거로
+// 시리즈 전체를 서술하게 된다. 그래서 확인된 범위는 조각으로 두고, 소속만 밝히게 한다.
+// series_context.name을 확인된 사실로 승격시키지 않는 것은 keyword_hints를 다루는 규칙과 같다.
+function seriesContextPrompt() {
+  return [
+    'capsule에 series_context가 있으면 그 candidate는 patch series의 조각 하나입니다. capsule.title은 그 조각의 제목이므로, 조각 하나를 series 전체인 것처럼 소개하지 말고 어느 series에 속한 조각인지 밝히세요.',
+    'series_context.name은 제출자가 붙인 series 제목 문자열입니다. series가 실제로 무엇을 바꾸는지, 어디까지 진행됐는지, 머지됐는지에 대한 확인된 근거가 아닙니다. keyword hint와 같은 급으로 다루고 source-backed fact로 제시하지 마세요.',
+    '확인된 범위는 capsule에 근거가 있는 그 조각입니다. 조각 하나의 제목으로 series 전체의 성격을 규정하지도, series 제목에서 다른 조각의 변경 내용을 추론하지도 마세요. capsule의 상태 서술(예: 아직 머지되지 않은 제안)은 그 조각에 붙은 것이므로 series 전체의 상태로 옮겨 쓰지 마세요.',
+    'series_context.revision이 있으면 그 값은 이 조각이 속한 series의 리비전입니다. 최신 리비전이라는 뜻이 아니고, 리비전 번호를 추측해서도 안 됩니다.'
+  ].join('\n');
+}
+
 function sourceExtractionPromptGuardrails() {
   return [
     'Source extraction contract: source_extraction은 source가 확인한 structured fact로만 다루고, derived_editorial_hints는 editorial guidance로만 다루세요.',
@@ -274,6 +291,7 @@ function buildPromptContexts({ date, editorialPolicy, newsletterTemplate, golden
 module.exports = {
   buildPromptContexts,
   linkedEvidencePromptGuardrails,
+  seriesContextPrompt,
   sourceExtractionPromptGuardrails,
   articleSectionContractPrompt,
   publicArticleContractPrompt,

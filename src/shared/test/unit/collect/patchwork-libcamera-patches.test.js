@@ -446,3 +446,57 @@ test('every early stop that cuts the window short is announced (#1059)', async (
     assert.match(events[0].detail, detail, what);
   }
 });
+
+test('carries the series name and revision without touching the candidate title (#1109)', async () => {
+  // 조각 제목만으로는 기자 단계가 시리즈 전체를 조각 하나로 오인해 서술한다(2026-W34부터 3주 연속
+  // 관측). 같은 목록 응답의 series[0]이 name과 version을 이미 들고 오므로 추가 요청 없이 싣는다.
+  const items = await resolvePatchworkLibcameraPatchItems(apiJson(), source());
+  assert.equal(items[0].seriesName, 'Add SensorSequence metadata control');
+  assert.equal(items[0].seriesVersion, 2);
+  // title은 조각 제목 그대로다. article-groups의 seriesPatchNumber와 seriesSubjectKey가 제목의
+  // 브래킷 접두부에서 patch 번호와 재제출 subject를 읽고, 재게재 게이트가 그 축을 공유한다(#1036).
+  assert.equal(items[0].title, '[v2,1/2] libcamera: Add SensorSequence metadata control');
+  // series 자체가 없는 patch는 두 필드를 아예 달지 않는다(무회귀).
+  assert.equal(items[1].seriesName, undefined);
+  assert.equal(items[1].seriesVersion, undefined);
+});
+
+test('omits the series name when a cover-letter-less re-submission has none (#1109)', async () => {
+  // 커버레터 없이 올라온 재제출은 series[0].name이 null이다. 그 경우 필드를 싣지 않는다 —
+  // 이 값을 버전 안정 키로 쓰면 안 된다는 것이 PR #826의 결론이다.
+  const json = JSON.stringify([
+    {
+      id: 27400,
+      web_url: 'https://patchwork.libcamera.org/patch/27400/',
+      date: '2026-07-05T09:00:00',
+      name: '[v4,3/6] libcamera: controls: tidy storage',
+      state: 'new',
+      submitter: { name: 'Sam Rev' },
+      series: [{ id: 900, name: null, version: 4 }]
+    }
+  ]);
+  const items = await resolvePatchworkLibcameraPatchItems(json, source());
+  assert.equal(items.length, 1);
+  assert.equal(items[0].seriesId, 900);
+  assert.equal(items[0].seriesName, undefined);
+  assert.equal(items[0].seriesVersion, 4);
+});
+
+test('keeps the series name out of the summary so technicalDepth stays title-driven (#1109)', async () => {
+  // 시리즈명에는 camera/sensor 같은 낱말이 흔하다. summary로 새어 들어가면 문서·빌드 잡음 패치까지
+  // 자격 게이트를 통과한다. 위의 "summary carries no scoring keyword" 계약과 같은 이유다.
+  const json = JSON.stringify([
+    {
+      id: 27401,
+      web_url: 'https://patchwork.libcamera.org/patch/27401/',
+      date: '2026-07-06T09:00:00',
+      name: '[v1,1/3] utils: tidy checkstyle trailers',
+      state: 'new',
+      submitter: { name: 'Sam Rev' },
+      series: [{ id: 901, name: 'Rework the camera sensor helper image pipeline', version: 1 }]
+    }
+  ]);
+  const items = await resolvePatchworkLibcameraPatchItems(json, source());
+  assert.equal(items[0].seriesName, 'Rework the camera sensor helper image pipeline');
+  assert.doesNotMatch(items[0].summary || '', /camera|sensor|image|pipeline/i);
+});

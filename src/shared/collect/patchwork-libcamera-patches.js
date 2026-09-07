@@ -47,10 +47,36 @@ const PATCH_PAGE_FETCH_TIMEOUT_MS = 10000;
 // patchwork patch 객체의 series id. 한 시리즈의 조각들이 같은 series id를 공유하므로, 이 id를 후보에
 // 실어 선정 단계 dedup(article-groups seriesKey)이 시리즈를 하나의 대표 기사로 collapse하게 한다(#795).
 // URL(/patch/<id>/)의 id는 패치별 고유라 시리즈를 못 묶고, patchwork 후보엔 message-id도 없다.
-function patchSeriesId(patch) {
+function patchSeriesEntry(patch) {
   const series = patch && patch.series;
   const first = Array.isArray(series) ? series[0] : series;
+  return first && typeof first === 'object' ? first : null;
+}
+
+function patchSeriesId(patch) {
+  const first = patchSeriesEntry(patch);
   return first && first.id !== undefined && first.id !== null ? first.id : undefined;
+}
+
+// 시리즈명과 리비전. 목록 응답의 series[0]이 id 옆에 name과 version을 이미 들고 오므로 추가 요청도
+// 예산도 필요 없다(#1109). 조각 제목("[v3,1/5] ... Give name to the union")만으로는 기자 단계가
+// 시리즈 전체를 조각 하나로 오인해 서술한다 — 2026-W34부터 3주 연속 관측된 실패다.
+//
+// 후보 title은 그대로 조각 제목으로 둔다. article-groups의 seriesPatchNumber와 seriesSubjectKey가
+// 제목의 브래킷 접두부에서 patch 번호와 재제출 subject를 읽고, 그 재제출 축을 재게재 게이트가
+// 공유한다(#1036). 표시 제목을 시리즈명으로 갈면 그 축들이 함께 흔들린다.
+//
+// 커버레터 없이 올라온 재제출은 name이 null이라 값이 비는데, 그때는 필드를 싣지 않는다. 이 값을
+// 버전 안정 키로 쓰면 안 된다는 것이 PR #826의 결론이다.
+function patchSeriesName(patch) {
+  const first = patchSeriesEntry(patch);
+  return first ? String(first.name || '').replace(/\s+/g, ' ').trim() : '';
+}
+
+function patchSeriesVersion(patch) {
+  const first = patchSeriesEntry(patch);
+  const version = first ? Number(first.version) : NaN;
+  return Number.isInteger(version) && version > 0 ? version : null;
 }
 
 function patchCandidate(patch, source) {
@@ -65,6 +91,11 @@ function patchCandidate(patch, source) {
     : '';
   const submittedBy = submitterName ? ` (submitted by ${submitterName})` : '';
   const state = String(patch.state || 'new').replace(/\s+/g, ' ').trim();
+  const seriesName = patchSeriesName(patch);
+  const seriesVersion = patchSeriesVersion(patch);
+  // 아래 summary에 시리즈명을 넣지 않는다. technicalDepth(메일링 리스트 자격 게이트)가 title +
+  // summary를 읽으므로, 시리즈명이 summary로 들어가면 문서·빌드 잡음 패치까지 카메라 낱말을 얻어
+  // 게이트를 통과한다.
   const summary = `Patch under review on the project patch tracker${submittedBy}; `
     + `state ${state}, a proposed change not yet landed.`;
 
@@ -75,6 +106,8 @@ function patchCandidate(patch, source) {
     publishedAt,
     summary,
     seriesId: patchSeriesId(patch),
+    ...(seriesName ? { seriesName } : {}),
+    ...(seriesVersion ? { seriesVersion } : {}),
     sourceKind: 'rss_item',
     collectionMode: 'rss-item',
     parentUrl: source.sourceUrl || source.url,

@@ -11,6 +11,7 @@ const {
 const {
   dateFramingGuardrail,
   linkedEvidencePromptGuardrails,
+  seriesContextPrompt,
   sourceExtractionPromptGuardrails,
   articleSectionContractPrompt,
   publicArticleContractPrompt,
@@ -30,6 +31,7 @@ function editorialPlanSystemPrompt() {
   return [
     '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editorial assessor입니다.',
     'local deterministic selector가 이미 article inputs를 filtering, ranking, choosing했습니다. selection을 다시 하지 말고, 선택된 capsule마다 작성을 안내할 내부 editorial plan만 생성하세요.',
+    seriesContextPrompt(),
     linkedEvidencePromptGuardrails(),
     sourceExtractionPromptGuardrails(),
     editorialPlanPrompt()
@@ -43,6 +45,7 @@ function reporterSystemPrompt({ hasLockedSections = false } = {}) {
     'candidate_id, title, source, url은 matching을 위한 echo-only field입니다. 입력값과 다르게 만들거나 canonical URL로 바꾸지 마세요.',
     '제공된 shortlisted article capsules에 대해서만 evidence fields를 요약하고 보강하세요.',
     'article capsule fields, risk, score, selection, imageCandidates, evidence는 context로만 사용하세요. score, selection flag, imageCandidates, source_quality는 출력하지 마세요.',
+    seriesContextPrompt(),
     linkedEvidencePromptGuardrails(),
     sourceExtractionPromptGuardrails(),
     'Reporter stage는 evidence-backed candidate facts와 guardrails만 제공해야 합니다. final article-level claims[]를 만들지 마세요. article claims[]는 editor가 담당합니다.',
@@ -74,6 +77,7 @@ function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLocked
     'explicitly_demoted_groups와 hard_blocked_groups의 선언 대상은 primary selected article capsule에 실린 그룹뿐입니다. Internal editorial plan 항목은 작성 안내용 입력이지 커버리지 선언 대상이 아니므로, capsule에 행이 없는 그룹은 두 목록 어디에도 넣지 마세요.',
     'article_group_key는 capsule에 있는 값을 그대로 복사하세요. source_candidate_hash 같은 다른 식별자로 키를 직접 조립하거나 접두어를 붙이지 마세요.',
     'source-ready cpp_ai_tooling_fallback native_tooling_workflow group을 primary Camera runtime stack article이 아니라는 이유만으로 demote하지 마세요.',
+    seriesContextPrompt(),
     linkedEvidencePromptGuardrails(),
     sourceExtractionPromptGuardrails(),
     articleSectionContractPrompt(),
@@ -213,6 +217,7 @@ function editorCompletionSystemPrompt({ missingArticleCount } = {}) {
     `${missingArticleCount}개의 추가 main article section만 반환하세요. full newsletter rewrite는 하지 마세요.`,
     '기존 valid sections는 URLs, titles, source names, source-date-title combinations를 exclusion해서 보존하세요.',
     '이 prompt에 제공된 eligible reporter candidates만 사용하세요. eligible list에서 빠진 candidate는 사용하지 마세요.',
+    seriesContextPrompt(),
     linkedEvidencePromptGuardrails(),
     sourceExtractionPromptGuardrails(),
     articleSectionContractPrompt(),

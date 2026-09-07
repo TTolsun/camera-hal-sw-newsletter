@@ -1190,6 +1190,13 @@ function normalizeCandidate(raw) {
     // 무효가 된다(#795 후속: 필드가 정규화에서 누락돼 프로덕션에서 시리즈가 collapse되지 않던 갭 수정).
     seriesId: raw.seriesId ?? raw.series_id ?? null,
     series_id: raw.seriesId ?? raw.series_id ?? null,
+    // 시리즈명과 리비전(#1109). 같은 목록 응답의 series[0]이 id 옆에 들고 오는 값이며, 조각 제목만
+    // 보고 시리즈 전체를 조각 하나로 오인해 서술하던 것을 막으려고 capsule이 기자에게 넘긴다.
+    // seriesId와 같은 이유로 이 whitelist에 없으면 candidates.json에서 조용히 사라진다.
+    seriesName: raw.seriesName ?? raw.series_name ?? null,
+    series_name: raw.seriesName ?? raw.series_name ?? null,
+    seriesVersion: raw.seriesVersion ?? raw.series_version ?? null,
+    series_version: raw.seriesVersion ?? raw.series_version ?? null,
     // AOSP 릴리스 드롭에서 camera 경로를 건드린 커밋 수. 코드의 경로 정규식과 페이지 상한에서
     // 파생된 값이라 후보 제목에 넣지 않고 여기에 둔다(#857). whitelist에 없으면 candidates.json에서
     // 사라져 "제목이 아니라 메타데이터로 옮겼다"는 말이 산출물에서 거짓이 된다.
