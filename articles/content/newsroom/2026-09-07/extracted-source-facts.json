@@ -1,0 +1,487 @@
+{
+  "sources": [
+    {
+      "id": "0ffbb43f4cf1e0c5",
+      "url": "https://lore.kernel.org/linux-media/20260901-sk5jn5-v3-0-17e728917bd4@oss.qualcomm.com/",
+      "title": "[PATCH RESEND v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "published_at": "2026-09-01T07:55:26Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds support for the Samsung S5KJN5, a 50 MP 10-bit RAW MIPI CSI-2 image sensor. This is implemented as a separate driver rather than extending the existing s5kjn1 driver. Although both sensors belong to the same family, they are different parts with different register maps and power supplies. Combining support for both devices in a single driver would result in very little shared code while introducing separate initialization and control paths, so keeping them as independent drivers",
+          "evidence_text": "<html><head><title>[PATCH RESEND v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "gemini-66076010e353a66c",
+      "url": "https://lore.kernel.org/linux-media/20260901-sk5jn5-v3-0-17e728917bd4@oss.qualcomm.com/",
+      "title": "[PATCH RESEND v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu",
+      "published_at": "2026-09-01",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH RESEND v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu",
+          "evidence_text": "<html><head><title>[PATCH RESEND v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "1ecb0fec42d0624e",
+      "url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/",
+      "title": "[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "published_at": "2026-09-01T07:40:32Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add OmniVision OG0VA1B driver support. The OmniVision OG0VA1B is a 1/10-inch monochrome CMOS VGA image sensor. It outputs 10-bit raw (Y10) frames at up to 640x480 resolution over a single-lane MIPI CSI-2 interface and is controlled via an I2C-compatible SCCB bus. This driver has been verified(include tpg) on the Purwa EVK. Signed-off-by: Wenmeng Liu <wenmeng.liu@oss.qualcomm.com> --- Changes in v6: - Rebased onto v7.3-rc1 and added the Vladimir`s Reviewed-by tag for Patch 2. - Link to v5: https:",
+          "evidence_text": "<html><head><title>[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0,
+      "technical_depth": 0.93,
+      "warnings": []
+    },
+    {
+      "id": "gemini-8a598cf8e5e29e24",
+      "url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/",
+      "title": "[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver - Wenmeng Liu",
+      "published_at": "2026-09-01",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver - Wenmeng Liu",
+          "evidence_text": "<html><head><title>[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "82fc103eae82b9dd",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+      "title": "VirtualCamera: validate blobSizeBytes against buffer size - platform/frameworks/av",
+      "published_at": "2026-08-13",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4228183 on platform/frameworks/av (branch android17-release) is proposed and not merged (status NEW, created 2026-08-13). Change-Id I0f5906b56ddfb8d23d079cd192c42f925b5c02d3; current revision 48a57194f830. No approving or recommending Code-Review or verification vote has been cast yet. It changes 1 file(s) +6/-1, of which 1 are camera paths: platform/frameworks/av/services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"w0yipdD2SmGci6fQQj83Rw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.94,
+      "android_hal_relevance": 0.94,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.894,
+      "warnings": []
+    },
+    {
+      "id": "gemini-99f2c4b65ea5d74c",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+      "title": "Camera HAL improvements and new features in AOSP.",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Camera HAL improvements and new features in AOSP.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"w0yipdD2SmGci6fQQj83Rw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.583,
+      "warnings": []
+    },
+    {
+      "id": "992556c24727d604",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+      "title": "VirtualCamera: prevent integer underflow in outBufferSize - platform/frameworks/av",
+      "published_at": "2026-08-13",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4228184 on platform/frameworks/av (branch android17-release) is proposed and not merged (status NEW, created 2026-08-13). Change-Id I41b74d543e8b8a7ad46a261d49ee311543e1ed8d; current revision f1e9fec0ace5. No approving or recommending Code-Review or verification vote has been cast yet. It changes 2 file(s) +10/-0, of which 2 are camera paths: platform/frameworks/av/services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc, platform/frameworks/av/services/camera/virtualc",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"EEnra_m9XF2rSc_VRAtCXg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.94,
+      "android_hal_relevance": 0.94,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.894,
+      "warnings": []
+    },
+    {
+      "id": "gemini-8f1628f647487916",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+      "title": "Camera HAL improvements and new features in AOSP.",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Camera HAL improvements and new features in AOSP.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"EEnra_m9XF2rSc_VRAtCXg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.583,
+      "warnings": []
+    },
+    {
+      "id": "16ab7df7ad3c9170",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "published_at": "August 12, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Deprecated legacy Camera2Interop APIs ( Camera2Interop.Extender , Camera2CameraControl , Camera2CameraInfo , and CaptureRequestOptions ) in favor of Camera2Interop configurator factory methods and Kotlin extension functions. ( Ib0845 , b/529609261 )",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"pt-BR-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develope",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "79fb38183376e394",
+      "url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v7 00/16] media: Add Yoga Book camera support",
+      "published_at": "2026-09-02T14:53:50Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hi, This series adds the sensor, bridge, AtomISP and lens-actuator support needed by the front and rear cameras of the Lenovo Yoga Book YB1-X91. It covers the OV8858 19.2 MHz clock and Cherry Trail gain programming, OV2740 288 MHz link frequency and manual white balance, firmware IDs and IPU bridge data, AtomISP raw capture and CSI-2 timing, and the WV517S lens actuator. Changes in v7: - In patch 2, keep digital gain independent of the external clock and expose the manual red and blue gains as s",
+          "evidence_text": "<html><head><title>[PATCH v7 00/16] media: Add Yoga Book camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.87,
+      "android_hal_relevance": 0.87,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.878,
+      "warnings": []
+    },
+    {
+      "id": "gemini-5562ef9577f469fc",
+      "url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v7 00/16] media: Add Yoga Book camera support - Maurizio Casciano",
+      "published_at": "2026-09-02",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v7 00/16] media: Add Yoga Book camera support - Maurizio Casciano",
+          "evidence_text": "<html><head><title>[PATCH v7 00/16] media: Add Yoga Book camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "48427162eecca31f",
+      "url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support",
+      "published_at": "2026-08-28T16:15:02Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Lenovo Yoga Book YB1-X91L exposes an OV2740 front sensor and an OV8858 rear sensor through the Cherry Trail AtomISP. Its firmware does not provide enough information for the existing sensor and IPU bridge drivers to construct the complete camera links. Add the ACPI IDs and bridge data, describe both AtomISP camera links, support the Yoga Book sensor clocks and modes, expose raw Bayer capture, add per-channel white-balance controls, and add the WV517S rear-camera lens actuator. Raw capture is",
+          "evidence_text": "<html><head><title>[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.87,
+      "android_hal_relevance": 0.87,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.858,
+      "warnings": []
+    },
+    {
+      "id": "gemini-cde397c416ebb476",
+      "url": "https://lore.kernel.org/linux-media/cover.1787933456.git.mauriziocasciano7@gmail.com/",
+      "title": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+      "published_at": "2026-08-28",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano",
+          "evidence_text": "<html><head><title>[PATCH v4 00/15] media: Add Lenovo Yoga Book YB1-X91 camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-schem",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.745,
+      "warnings": []
+    },
+    {
+      "id": "f6fe9eab43367349",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+      "title": "Fix camera lazy AIDL provider not started and present cameras removed on unplug - platform/frameworks/av",
+      "published_at": "2026-08-20",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4235680 on platform/frameworks/av (branch android17-release) is proposed and not merged (status NEW, created 2026-08-20). Change-Id Ifd1ab957ac24ff008cee64d0c477f5cfb66edd41; current revision 1e63509d49ba. No approving or recommending Code-Review or verification vote has been cast yet. It changes 1 file(s) +8/-2, of which 1 are camera paths: platform/frameworks/av/services/camera/libcameraservice/common/CameraProviderManager.cpp.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"DFpSehmJGaLsbcsHPQeabw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.88,
+      "android_hal_relevance": 0.88,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.854,
+      "warnings": []
+    },
+    {
+      "id": "gemini-eff34e4bb13fca21",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+      "title": "Camera HAL improvements and new features in AOSP.",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Camera HAL improvements and new features in AOSP.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"DFpSehmJGaLsbcsHPQeabw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.583,
+      "warnings": []
+    },
+    {
+      "id": "90b6cdc01cb95494",
+      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+      "published_at": "",
+      "source_type": "source_change_event",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "last_updated_changed: Date signal changed with normalized content hash changed.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open So",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.85,
+      "android_hal_relevance": 0.85,
+      "ai_relevance": 0,
+      "technical_depth": 0.788,
+      "warnings": []
+    },
+    {
+      "id": "5e028e69d65a661a",
+      "url": "https://source.android.com/docs/core/camera",
+      "title": "Camera | Android Open Source Project",
+      "published_at": "",
+      "source_type": "source_change_event",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "last_updated_changed: Date signal changed with normalized content hash changed.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.85,
+      "android_hal_relevance": 0.85,
+      "ai_relevance": 0,
+      "technical_depth": 0.788,
+      "warnings": []
+    },
+    {
+      "id": "1c2225b5cfb00c6e",
+      "url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
+      "title": "[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI",
+      "published_at": "2026-09-06T14:20:56Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Changes in v6: - data-lanes start at 1 instead of 0 in the CAMSS node, aligned with PHY - Nihal - Link to v5: https://patch.msgid.link/20260904-x1e-camss-csi2-phy-dtsi-v5-0-dc81d85b599d@linaro.org Changes in v5: - Adds Konrad's RB as indicated - Konrad - Shifts DT from vdda-0p8-supply to vdda-0p9-supply as per schema - Krzysztof, Bryan - Reworded commit log on the optional supply change to explain standalone CSIPHY nodes carrying their own supplies - Krzysztof - Moves yaml changes from PHY serie",
+          "evidence_text": "<html><head><title>[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI - Bryan O&#39;Donoghue</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "gemini-b4d6a9f0834049c6",
+      "url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
+      "title": "[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI - Bryan O&#39;Donoghue",
+      "published_at": "2026-09-06",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI - Bryan O&#39;Donoghue",
+          "evidence_text": "<html><head><title>[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI - Bryan O&#39;Donoghue</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "gemini-2ae6c8933c75731d",
+      "url": "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
+      "title": "[PATCH v5 0/7] media: Enable the OV5693 front camera on IPU6 Surface devices - Fernando Rimoli",
+      "published_at": "2026-09-02",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v5 0/7] media: Enable the OV5693 front camera on IPU6 Surface devices - Fernando Rimoli",
+          "evidence_text": "<html><head><title>[PATCH v5 0/7] media: Enable the OV5693 front camera on IPU6 Surface devices - Fernando Rimoli</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-colo",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "3bb0cd5e4670130d",
+      "url": "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
+      "title": "[PATCH v5 0/7] media: Enable the OV5693 front camera on IPU6 Surface devices",
+      "published_at": "2026-09-02T14:23:44Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The ov5693 front camera does not stream on IPU6 Surface devices. The sensor needs its MIPI clock lane gated while idle, which needs a driver change and a way for the ipu-bridge to ask for it per IPU. v4 is at [1]. This addresses Sakari's review of patches 3, 4 and 5, adds the DT bindings property he asked for, and adds an Alder Lake-N entry now that a Surface Go 4 has been measured. Changes since v4: - New patch 3 adds \"clock-noncontinuous\" to the ov5693 DT bindings. The series is now seven patc",
+          "evidence_text": "<html><head><title>[PATCH v5 0/7] media: Enable the OV5693 front camera on IPU6 Surface devices - Fernando Rimoli</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-colo",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.81,
+      "android_hal_relevance": 0.81,
+      "ai_relevance": 0,
+      "technical_depth": 0.764,
+      "warnings": []
+    }
+  ]
+}
