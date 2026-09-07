@@ -30,6 +30,10 @@ const {
   publicContractVersionFor
 } = require('../../shared/common/story-contract-version');
 const {
+  canonicalIssueTitle,
+  hasKoreanDisplayValue
+} = require('../../shared/common/issue-title');
+const {
   buildAllowedClaimEvidence,
   buildEvidenceIndex,
   factCoveredByClaim,
@@ -1141,8 +1145,12 @@ function validateEditorOutputContract(value, date, options = {}) {
     value = toLegacyEditorIssue(value, { date });
   }
   if (value.date !== date) value.date = date;
-  value.title = value.title || `Camera HAL / SW Newsletter - ${date}`;
-  if (!value.title.includes(date)) value.title = `Camera HAL / SW Newsletter - ${date}`;
+  // title은 editor(LLM)가 매 실행마다 새로 쓰는 값이라, 날짜 결속과 한국어 표시값은 코드가
+  // 보장한다. 둘 중 하나라도 어긋나면 canonical title로 되돌려 발행 직전 localization 검증이
+  // hard fail로 막는 상태를 만들지 않는다.
+  if (!value.title || !value.title.includes(date) || !hasKoreanDisplayValue(value.title)) {
+    value.title = canonicalIssueTitle(date);
+  }
   if (!value.summary) {
     throw semanticError('Editor output is missing summary.', {
       field: 'summary',

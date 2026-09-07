@@ -6,6 +6,10 @@ const {
   visibleHtmlText,
   visibleMarkdownText
 } = require('../quality/public-newsletter');
+const {
+  hasKoreanDisplayValue,
+  isPublishableIssueTitle
+} = require('../../shared/common/issue-title');
 
 const root = process.cwd();
 const errors = [];
@@ -35,8 +39,6 @@ const generatedPathParts = new Set([
 ]);
 
 const mojibakePattern = /[\uFFFD\uF900-\uFAFF]/;
-const hangulPattern = /[가-힣]/;
-const canonicalNewsletterTitlePattern = /^Camera HAL \/ SW Newsletter - \d{4}-\d{2}-\d{2}$/;
 
 const staleEnglishPhrases = [
   'Project Structure & Module Organization',
@@ -108,12 +110,10 @@ function checkNewsletterData() {
   const items = readJson(path.join('articles', 'data', 'newsletters.json'));
   for (const item of items) {
     const title = String(item.title || '');
-    const expectedCanonicalTitle = item.date ? `Camera HAL / SW Newsletter - ${item.date}` : '';
-    const canonicalNewsletterTitle = canonicalNewsletterTitlePattern.test(title) && title === expectedCanonicalTitle;
-    if (!hangulPattern.test(title) && !canonicalNewsletterTitle) {
+    if (!isPublishableIssueTitle(title, item.date)) {
       errors.push(`data/newsletters.json: ${item.date} title에 한국어 표시값이 없습니다.`);
     }
-    if (!hangulPattern.test(String(item.summary || ''))) {
+    if (!hasKoreanDisplayValue(String(item.summary || ''))) {
       errors.push(`data/newsletters.json: ${item.date} summary에 한국어 표시값이 없습니다.`);
     }
     addLongEnglishProseErrors(`data/newsletters.json: ${item.date} title`, title);
@@ -130,7 +130,7 @@ function checkHomepageHeadlineData() {
   if (!headline) return;
   for (const field of ['title', 'summary']) {
     const value = String(headline[field] || '');
-    if (!hangulPattern.test(value)) {
+    if (!hasKoreanDisplayValue(value)) {
       errors.push(`data/homepage-headline.json: current_headline.${field}에 한국어 표시값이 없습니다.`);
     }
     addLongEnglishProseErrors(`data/homepage-headline.json: current_headline.${field}`, value);
@@ -153,7 +153,7 @@ function checkLatestPublicNewsletterArtifacts() {
 function checkSourceRegistry() {
   const registry = readJson(path.join('src', 'shared', 'data', 'news-sources.json'));
   for (const source of registry.sources || []) {
-    if (!hangulPattern.test(String(source.usageHint || ''))) {
+    if (!hasKoreanDisplayValue(String(source.usageHint || ''))) {
       errors.push(`src/shared/data/news-sources.json: ${source.id}.usageHint는 한국어 설명을 포함해야 합니다.`);
     }
   }
