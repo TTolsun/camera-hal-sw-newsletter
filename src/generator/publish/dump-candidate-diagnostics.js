@@ -6,6 +6,7 @@ const {
   backfillCandidateDiagnostics,
   backfillDates
 } = require('../diagnostics/candidate-diagnostics-backfill');
+const { readPublishedArticles } = require('../reporter/published-article-urls');
 
 const DEFAULT_OUT_DIR = path.join('.tmp', 'candidate-diagnostics');
 
@@ -24,9 +25,9 @@ function outPathFor(root, outDir, date) {
   return path.join(path.isAbsolute(outDir) ? outDir : path.join(root, outDir), `${date}.json`);
 }
 
-function dumpOne(root, outDir, date) {
+function dumpOne(root, outDir, date, publishedArchive) {
   validateDate(date);
-  const payload = backfillCandidateDiagnostics({ root, date });
+  const payload = backfillCandidateDiagnostics({ root, date, publishedArchive });
   const outPath = outPathFor(root, outDir, date);
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
@@ -69,10 +70,14 @@ function main(argv = process.argv.slice(2), env = process.env, root = process.cw
     return 0;
   }
 
+  // 발행 아카이브는 날짜와 무관하므로 한 번만 읽고 날짜별로 asOf 만 다시 적용한다.
+  // 날짜마다 읽으면 --all 이 아카이브 전체를 dates.length 번 파싱한다(지금 35번).
+  const publishedArchive = readPublishedArticles(root);
+
   let failed = 0;
   for (const date of dates) {
     try {
-      const { payload, outPath } = dumpOne(root, outDir, date);
+      const { payload, outPath } = dumpOne(root, outDir, date, publishedArchive);
       console.log(
         `${date} (${payload.weekly_key || 'no issue'}): 진단 ${payload.candidate_diagnostics_count}행`
         + `, 미평가 ${payload.candidate_diagnostics_not_evaluated ?? '?'}건`
