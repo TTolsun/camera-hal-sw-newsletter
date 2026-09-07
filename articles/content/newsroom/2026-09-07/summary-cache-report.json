@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-07",
+  "generated_at": "2026-09-07T03:47:39.727Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 0,
+    "miss_count": 12,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 12
+    }
+  ],
+  "entries": [
+    {
+      "title": "Emulator control for adaptive app development",
+      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "source": "Android Developers Blog",
+      "published_date": "Mon, 31 Aug 2026 16:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+        "url_hash": "6f8916deba211090a0941a7ef5d5d0ff85d76192e43aa6c3edd722f97eb59b57",
+        "published_date": "Mon, 31 Aug 2026 16:00:00 +0000",
+        "content_hash": "fd5b1192cf24ebbb6dfaeda7d8177d32cac638c3270a97ef0eb9a29296565c9e"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "source": "Android Developers Blog",
+      "published_date": "Tue, 01 Sep 2026 15:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+        "url_hash": "a8cd06df28457612e7f6168377d5a824b432bb6d5b007c9a69e95538b3316f1a",
+        "published_date": "Tue, 01 Sep 2026 15:00:00 +0000",
+        "content_hash": "0e33007746d7a4606a1c85d4f22f6cf00fe4a958f23306b7c7b33982205a6243"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v5 0/7] media: Enable the OV5693 front camera on IPU6 Surface devices - Fernando Rimoli",
+      "url": "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-02",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com",
+        "url_hash": "5eaec1877aa84b45748c93f9f4032d9d1040ad6075fcdc49521220d791287c31",
+        "published_date": "2026-09-02",
+        "content_hash": "2ee3bc6c137f261cd33967ccfb17955f6d76c6a78d94188157362624e478af7a"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v6 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-01T07:40:32Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com",
+        "url_hash": "b098c4bc6d9a44b7229d26c31f4fa0b51f4e7250d8f6efa2296dbf864c5494a4",
+        "published_date": "2026-09-01T07:40:32Z",
+        "content_hash": "0b32ebb8a48933904f78c289c02f04854e4df30ae01d20834aedffe95536f140"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v6 00/13] arm64: dts: qcom: Add x1e/Hamoa camera DTSI",
+      "url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-06T14:20:56Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org",
+        "url_hash": "9d62a1960304474d33960af941c551db87ab75e7b7ff5a8a83a22f0253160ae7",
+        "published_date": "2026-09-06T14:20:56Z",
+        "content_hash": "346d34f8db36f2d11e3e579dc41ee493301a9a883fee885207546d7c065c336d"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v7 00/16] media: Add Yoga Book camera support",
+      "url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-02T14:53:50Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com",
+        "url_hash": "4a638ad6ba505c4bc7002129a52d7e874f39bdc546873d2bb24fde4671606117",
+        "published_date": "2026-09-02T14:53:50Z",
+        "content_hash": "a0c60d4ac88f7d83f34522226546f77e6d6aaf47fc61435a3652364a825c8be9"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v3,1/5] libcamera: controls: Give name to the union containing storage",
+      "url": "https://patchwork.libcamera.org/patch/28179/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-03",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28179",
+        "url_hash": "de06d6760f071186929c31057960c1950316a9e6d17294bd047aabe90cb70083",
+        "published_date": "2026-09-03",
+        "content_hash": "e4c90c81a97dcab6e8b6b082d32dd74a49c989ff40ef38481ccec9338dfc43a5"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "libcamera: software_isp: Skip stop before worker start",
+      "url": "https://patchwork.libcamera.org/patch/28194/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-06",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28194",
+        "url_hash": "31de2c508721a1af6487304d438380a606e462f99634c8818c0c2beaddc3290e",
+        "published_date": "2026-09-06",
+        "content_hash": "3609d5692f1db71286d74a1dbc815fff76ab849ec4373f4d2bf16cd6153b7346"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH RESEND v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260901-sk5jn5-v3-0-17e728917bd4@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-01T07:55:26Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260901-sk5jn5-v3-0-17e728917bd4@oss.qualcomm.com",
+        "url_hash": "f24ce0b149648b0c2dbd9f317f3c47e71c0f25e7bd169cb03cd6e9928fdb1b9b",
+        "published_date": "2026-09-01T07:55:26Z",
+        "content_hash": "e89d68627e0cea292360bff0015793767644a5c9b3e3ed158ce16c6d2aecc28e"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v1] libcamera: pipeline: simple: Rework software-isp/converter selection",
+      "url": "https://patchwork.libcamera.org/patch/28156/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-08-31",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28156",
+        "url_hash": "07e7a3ff3e6e28602b22a37f80a999d1c40cd6b94393c20b4cf440cc590eb025",
+        "published_date": "2026-08-31",
+        "content_hash": "bbe6e739c731aa870977e32d033cda1b540fd2e669b75ccd21a4dc64f46d0e5e"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "source": "aosp-camera-its-release-notes",
+      "published_date": "",
+      "cache_key": {
+        "normalized_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+        "url_hash": "d893134af706f7df8f1c0716f00e4d4128532960bd3886f2d05056796785855e",
+        "published_date": "",
+        "content_hash": "27d0cd4dfd410dee542d1069b4111d9ab82dc3b6491d262256fbc7d1e5a3a6f2"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Camera | Android Open Source Project",
+      "url": "https://source.android.com/docs/core/camera",
+      "source": "aosp-camera-docs",
+      "published_date": "",
+      "cache_key": {
+        "normalized_url": "https://source.android.com/docs/core/camera",
+        "url_hash": "2e09be47b7d035b1b1509fe59f1caf95edd44bab9f4919926cd7de56c0bd6f6a",
+        "published_date": "",
+        "content_hash": "bbe08409ddc53bf7a104116a6e34da410bfe9eab1fbe52a87ea91eaf871f77b1"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
