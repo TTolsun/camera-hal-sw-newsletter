@@ -871,8 +871,13 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
     (toolingEvidence.eligible ? 'Android native tooling workflow' : '')
   ).trim();
   // 동작 변경 문장의 후보 순서는 종전과 같다(raw 필드 → summary/title에서 뽑은 첫 문장 → tooling 문장).
+  //
+  // raw.behavior_change 도 summary 와 같은 마크업 제거를 거친다. 두 칸에 같은 문장이 흘러오는데
+  // 한쪽만 정규화하면 판정이 갈린다 — 본문이 `<fix>` 처럼 마크업 한 덩어리일 때 summary 는 비어
+  // 근거가 되지 못하는데 raw 필드는 그대로 남아 `fix` 한 낱말로 게이트를 통과했다. 표식 비교
+  // (isCollectorTemplateSentence)도 정규화된 값끼리 해야 어긋나지 않는다.
   const behaviorChangeTexts = titleFallback => [
-    raw.behavior_change,
+    stripMarkup(raw.behavior_change),
     firstBehavior(summary || titleFallback),
     toolingEvidence.eligible ? 'Official Android tooling article describes native Android app workflow behavior.' : ''
   ].map(value => String(value || ''));

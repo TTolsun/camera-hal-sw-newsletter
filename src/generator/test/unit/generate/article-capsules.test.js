@@ -664,3 +664,39 @@ test('the editorial plan input is one capsule per reporter candidate', () => {
     '계획이 채점하는 capsule은 reporter.candidates와 1:1이다'
   );
 });
+
+// #976: 릴리스 수집기가 behavior_change 에 템플릿 문장을 싣던 동안, capsule 의 what_changed 와
+// evidence 첫 칸이 태그 이름을 되뇌는 자기참조 문장이었다. 2026-08-24 호가 실제 변경(imx296
+// embedded data revert)을 한 번도 말하지 못한 채 나간 경로가 이것이다. 수집기가 본문을 싣게
+// 바뀌었으므로, 그 본문이 capsule 까지 도달하는지를 여기서 잠근다.
+test('#976: 릴리스 본문이 behavior_change 에 실리면 capsule 근거로 도달한다', () => {
+  const releaseBody = 'Revert "ipa: rpi: imx296: Enable embedded data" This reverts commit b7fa47f. ' +
+    'Right now embedded data with the imx296 cannot be negotiated with the CFE.';
+  const templateSentence = 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).';
+  const releaseCandidate = overrides => candidate({
+    title: 'Raspberry Pi libcamera Releases - v0.7.2+rpt20260817',
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2',
+    source: 'Raspberry Pi libcamera Releases',
+    version_or_release: 'v0.7.2+rpt20260817',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    collector_template_sentence: templateSentence,
+    ...overrides
+  });
+
+  const withTemplate = buildArticleCapsule(releaseCandidate({ behavior_change: templateSentence }));
+  const withBody = buildArticleCapsule(releaseCandidate({ behavior_change: releaseBody }));
+
+  // 전제부터 확인한다. 템플릿을 실었을 때 실제로 자기참조 문장이 나와야, 아래 비교가 이 변경이
+  // 무엇을 바꿨는지 말한다.
+  assert.match(withTemplate.what_changed, /Released v0\.7\.2/);
+  assert.ok(
+    withTemplate.evidence.some(item => item.includes('Released v0.7.2')),
+    `템플릿을 실으면 근거가 자기참조다: ${JSON.stringify(withTemplate.evidence)}`
+  );
+
+  assert.match(withBody.what_changed, /imx296/);
+  assert.ok(
+    withBody.evidence.some(item => item.includes('imx296')),
+    `본문을 실으면 근거에 실제 변경이 온다: ${JSON.stringify(withBody.evidence)}`
+  );
+});

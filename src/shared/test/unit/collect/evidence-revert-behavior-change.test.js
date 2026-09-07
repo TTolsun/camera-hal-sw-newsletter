@@ -382,3 +382,66 @@ test('#1076 수집기 접두부가 없는 title의 폴백은 그대로다', () =
   assert.equal(metadata.evidence_score, 8);
   assert.equal(metadata.main_eligible, true);
 });
+
+// #976 마지막 결정 항목: 표식이 생겼으므로 behavior_change 에도 본문을 싣는다. article-capsules 가
+// 이 필드를 what_changed 후보로 읽어 capsule 근거로 넘기기 때문이다. 본문이 없으면 이 필드는
+// 여전히 템플릿 문장이고, 표식이 그것을 동작변경 근거에서 걸러 낸다 — 순서 제약이 그대로다.
+test('#976 수집기는 본문이 있으면 behavior_change 에도 본문을 싣는다', () => {
+  const atom = body => [
+    '<feed xmlns="http://www.w3.org/2005/Atom">',
+    '<entry>',
+    '<updated>2026-08-17T10:00:00Z</updated>',
+    '<link rel="alternate" type="text/html" href="https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"/>',
+    '<title>v0.7.2+rpt20260817</title>',
+    `<content type="html">${body}</content>`,
+    '</entry>',
+    '</feed>'
+  ].join('');
+  const collectorSource = { ...RELEASE_SOURCE, url: 'https://github.com/raspberrypi/libcamera/releases' };
+  const templateSentence = 'Released v0.7.2+rpt20260817 (Raspberry Pi downstream libcamera).';
+
+  const [withBody] = resolveRaspberryPiLibcameraReleaseItems(
+    atom('&lt;p&gt;Revert &quot;ipa: rpi: imx296: Enable embedded data&quot; This reverts commit b7fa47f.&lt;/p&gt;'),
+    collectorSource
+  );
+  assert.match(withBody.behavior_change, /imx296/, '본문이 있으면 behavior_change 는 본문이다');
+  assert.equal(withBody.collector_template_sentence, templateSentence, '표식은 템플릿 문장 그대로다');
+
+  const [withoutBody] = resolveRaspberryPiLibcameraReleaseItems(atom('No content.'), collectorSource);
+  assert.equal(withoutBody.behavior_change, templateSentence, '본문이 없으면 종전처럼 템플릿이다');
+  // 그 템플릿이 자격을 주지 않는다는 것은 바로 위 '본문 유무가 자격을 가른다' 테스트가 잰다.
+});
+
+// #976: behavior_change 와 summary 는 같은 문장이 흘러오는 두 칸이라 같은 정규화를 거쳐야 한다.
+// 수집기가 본문을 behavior_change 에도 싣게 되면서, 마크업 한 덩어리인 본문이 summary 쪽에서는
+// 지워지고 raw 필드 쪽에서는 남는 비대칭이 그대로 회피 경로가 됐다. `<fix>` 는 정규화 후 아무
+// 말도 남지 않는데 `fix` 한 낱말로 게이트를 통과했다.
+test('#976 마크업만 든 behavior_change 는 정규화 뒤 근거가 되지 못한다', () => {
+  const base = {
+    source: {
+      ...RELEASE_SOURCE,
+      url: 'https://github.com/raspberrypi/libcamera/releases',
+      sourceUrl: 'https://github.com/raspberrypi/libcamera/releases',
+      section: 'Camera Driver / V4L2',
+      keywords: ['libcamera', 'camera']
+    },
+    title: 'Raspberry Pi libcamera Releases - v1.0.0',
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v1.0.0',
+    publishedAt: '2026-08-17T10:00:00Z',
+    sourceKind: 'release_note_item',
+    version_or_release: 'v1.0.0',
+    api_or_component: 'libcamera / V4L2 camera pipeline'
+  };
+
+  const markupOnly = normalizeCandidate({ ...base, summary: '<fix>', behavior_change: '<fix>' });
+  assert.equal(markupOnly.has_behavior_change, false, '마크업만 남은 문장은 사실을 말하지 않는다');
+
+  // 대조: 같은 자리에 실제 문장이 오면 근거가 된다. 이 확인이 없으면 위 단언은 정규화가 모든
+  // behavior_change 를 지워도 통과한다.
+  const realSentence = normalizeCandidate({
+    ...base,
+    summary: 'Fixed the imx296 embedded data negotiation with the CFE.',
+    behavior_change: 'Fixed the imx296 embedded data negotiation with the CFE.'
+  });
+  assert.equal(realSentence.has_behavior_change, true, '실제 문장은 그대로 근거가 된다');
+});
