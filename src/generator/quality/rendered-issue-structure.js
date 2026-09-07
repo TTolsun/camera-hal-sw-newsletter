@@ -61,10 +61,26 @@ function escapeRegExp(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function sourceTail(section) {
+function sourceLabelMatch(section) {
   const sourceLabelPattern = ['Sources', '출처', LEGACY_SOURCE_LABEL].map(escapeRegExp).join('|');
-  const match = section.match(new RegExp(`\\*\\*(${sourceLabelPattern})[^\\n]*\\*\\*([\\s\\S]*)`));
+  return String(section || '').match(new RegExp(`\\*\\*(${sourceLabelPattern})[^\\n]*\\*\\*([\\s\\S]*)`));
+}
+
+function sourceTail(section) {
+  const match = sourceLabelMatch(section);
   return match ? match[2] : section;
+}
+
+/**
+ * 출처 라벨 뒤의 본문만 돌려준다. 라벨이 없으면 빈 문자열이다.
+ *
+ * sourceTail 과 다른 점은 폴백뿐이다. sourceTail 은 라벨이 없을 때 절 전체를 돌려주는데,
+ * 그것은 "출처 항목이 하나라도 있나"를 느슨하게 보는 hasSourceEntry 용 동작이다. 그 폴백을
+ * URL 을 걷는 쪽이 받으면 본문에 인용된 이슈 트래커·커밋 링크까지 출처로 세게 된다.
+ */
+function sourceBlock(section) {
+  const match = sourceLabelMatch(section);
+  return match ? match[2] : '';
 }
 
 function hasSourceEntry(section) {
@@ -454,5 +470,6 @@ module.exports = {
   validateArticleImages,
   newsletterIndexContractVersion,
   mainArticleBlocks,
+  sourceBlock,
   validateRenderedIssueStructure
 };

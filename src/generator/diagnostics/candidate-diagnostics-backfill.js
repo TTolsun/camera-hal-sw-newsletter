@@ -8,6 +8,7 @@ const { mergedCandidatesPath, collectedCandidatesPath } = require('../../shared/
 const { buildShortlistReport } = require('../select/newsroom-selection');
 const { buildCandidateDiagnostics } = require('../select/selection-candidate-projection');
 const { readExposureHistory } = require('../reporter/article-exposure-history');
+const { readPublishedArticles } = require('../reporter/published-article-urls');
 
 // 과거 날짜의 후보별 선정 진단을 커밋된 아티팩트에서 다시 만든다.
 //
@@ -122,6 +123,10 @@ function backfillCandidateDiagnostics({ root, date }) {
     coverageWeekKeyOverride: text(pool.coverage?.coverage_week_key)
   });
   const diagnostics = buildCandidateDiagnostics(shortlistReport);
+  // 발행 이력을 노출 이력이 아니라 발행된 본문에서 뽑는다. 노출 이력은 coverage가
+  // forward_only 라 2026-07-27 이전 발행분에 newsletter_article 레코드가 없다 - 그 값으로
+  // "이미 실렸는가"를 물으면 창간 초기 기사를 통째로 놓친다(published-article-urls.js 주석).
+  const publishedArticles = readPublishedArticles(root, { asOf: date });
 
   return {
     schema_version: 1,
@@ -132,8 +137,13 @@ function backfillCandidateDiagnostics({ root, date }) {
       note: BACKFILL_NOTE,
       pool_artifact: path.relative(root, poolPath).split(path.sep).join('/'),
       exposure_history_as_of: date,
-      exposure_records_used: ensureArray(exposureHistory?.articles).length
+      exposure_records_used: ensureArray(exposureHistory?.articles).length,
+      published_articles_as_of: date,
+      published_articles_count: publishedArticles.length
     },
+    // 이 주 시점까지 기사로 실린 출처 URL. 소비자는 shadow 재심이다 - 재심 프롬프트가 이
+    // 사실을 못 받으면 이미 실린 기사를 "왜 안 실렸지?" 하고 되살리자고 제안한다.
+    published_articles: publishedArticles,
     candidate_score_threshold: diagnostics.score_threshold,
     candidate_diagnostics: diagnostics.rows,
     candidate_diagnostics_count: diagnostics.count,
