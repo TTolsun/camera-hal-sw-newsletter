@@ -2495,6 +2495,75 @@
       ]
     },
     {
+      "id": "lore-linux-media-ipu",
+      "name": "lore.kernel.org linux-media list (Intel IPU)",
+      "sourceUrl": "https://lore.kernel.org/linux-media/",
+      "rssUrl": "https://lore.kernel.org/linux-media/?q=s%3Aipu6%20OR%20s%3Aipu7%20OR%20s%3Aipu3%20OR%20s%3Aipu-bridge&x=A",
+      "collectionModeHint": "rss-source",
+      "category": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": true,
+      "usageHint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",
+      "linkedEvidencePolicy": {
+        "enabled": true,
+        "allowedDomains": [
+          "lore.kernel.org",
+          "lists.libcamera.org",
+          "libcamera.org",
+          "git.libcamera.org",
+          "kernel.org",
+          "git.kernel.org",
+          "patchwork.kernel.org",
+          "patchwork.linuxtv.org",
+          "linuxtv.org",
+          "github.com"
+        ],
+        "importantAnchorKeywords": [
+          "patchwork",
+          "patch",
+          "PATCH",
+          "release",
+          "tag",
+          "commit",
+          "changelog",
+          "thread",
+          "review"
+        ],
+        "ignoreAnchorKeywords": [
+          "subscribe",
+          "unsubscribe",
+          "rss",
+          "atom",
+          "raw",
+          "thread overview",
+          "permalink"
+        ]
+      },
+      "keywords": [
+        "V4L2",
+        "libcamera",
+        "media",
+        "ISP",
+        "image sensor",
+        "media controller",
+        "subdev",
+        "kernel"
+      ],
+      "sourceRole": "project_mailing_list_source",
+      "sourceUrlQualityHint": "project_mailing_list_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "mailing list lead source for the Intel IPU camera subsystem (drivers/media/pci/intel)",
+        "kept separate from lore-linux-media-list so the two queries do not share one 200-message feed budget",
+        "individual patch thread requires primary project release confirmation before main promotion"
+      ]
+    },
+    {
       "id": "patchwork-libcamera-patches",
       "name": "libcamera Patchwork (patch review)",
       "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
