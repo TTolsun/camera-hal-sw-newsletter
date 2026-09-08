@@ -450,6 +450,16 @@ function exactCatalog(date) {
       humanReadable: true
     }),
     entry({
+      // #479: 같은 소스에 같은 권고가 10회 연속 실행에서 붙었을 때만 나온다. 제안이고 게이트가
+      // 아니라 reviewBlocking을 켜지 않는다. 아직 이 파일을 만드는 워크플로가 없어 트리에
+      // 커밋된 것은 0건이다.
+      relPath: newsroomRelPath(date, 'source-followup-issues.md'),
+      group: 'selection_diagnostics',
+      role: 'source_followup_issues',
+      reviewOrder: 53,
+      humanReadable: true
+    }),
+    entry({
       relPath: seedFetchReportMarkdownRelPath(date),
       group: 'check_when_needed',
       role: 'check_when_needed',
@@ -548,6 +558,7 @@ const DEBUG_RRC_PATHS = new Set([
   'evidence-pack-summary.json',
   'retry-history.json',
   'source-quality-diagnosis.json',
+  'source-followup-issues.json',
   'source-effectiveness-report.json',
   'source-discovery-feedback-report.json',
   'cost-report.md',
@@ -621,6 +632,7 @@ function debugExactCatalog(date) {
     newsroomRelPath(date, 'image-audit-report.json'),
     newsroomRelPath(date, 'source-quality-report.json'),
     newsroomRelPath(date, 'source-quality-diagnosis.json'),
+    newsroomRelPath(date, 'source-followup-issues.json'),
     newsroomRelPath(date, 'source-effectiveness-report.json'),
     newsroomRelPath(date, 'source-discovery-feedback-report.json'),
     newsroomRelPath(date, 'source-clusters.json'),
