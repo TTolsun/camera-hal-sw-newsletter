@@ -17,8 +17,12 @@ const {
   REQUIRED_PUBLIC_NEWSLETTER_FILES,
   newsletterIndexDateStatus,
   publicNewsletterStructureStatus,
-  requiredPublicFiles
+  requiredPublicFiles,
+  weeklyNewsletterStructureStatus
 } = require('./public-structure');
+const {
+  weeklyKeyForDate
+} = require('../reporter/weekly-newsletter');
 const {
   PUBLICATION_MODES,
   HOMEPAGE_VISIBILITY,
@@ -220,6 +224,50 @@ function relevantChangedArtifacts(changedArtifacts, date) {
     ))].sort();
 }
 
+// 관측 값이라 오류 전문을 status에 싣지 않는다. 어느 규칙이 걸렸는지 알아볼 수 있을 만큼만
+// 남기고, 전체는 검사를 다시 돌리면 나온다.
+const MAX_OBSERVED_WEEKLY_STRUCTURE_ERRORS = 5;
+
+function weeklyStructureObservation(root, date) {
+  // weeklyKeyForDate는 YYYY-MM-DD가 아니면 throw한다. 여기서 새어 나가면 관측 하나 때문에
+  // 진단만 내던 실행이 통째로 죽는다 — 게이트보다 나쁘다. resolveDate가 고르는 값은
+  // .tmp 파일이나 환경 변수에서 올 수 있고 형식 검증을 받지 않는다.
+  // review-artifact-inventory.js가 같은 함수를 같은 이유로 감싸고 있다.
+  //
+  // 날짜를 못 읽은 경우와 "이번 주 페이지가 아직 없는" 경우가 같은 not_written으로 합쳐진다.
+  // 둘을 가르는 것은 weeklyKey가 비어 있는지 여부다.
+  let weeklyKey = '';
+  try {
+    weeklyKey = weeklyKeyForDate(date);
+  } catch {
+    return { weeklyKey: '', status: 'not_written', errors: [] };
+  }
+  // 그 주 첫 publish-ready 실행이 주간 3종을 쓰고 커밋하므로, 같은 주의 뒤 실행은 자기가
+  // 만들지 않은 페이지를 본다. 관측 대상은 "지금 디스크에 있는 그 주 페이지"이고, 페이지가
+  // 아직 없는 것은 결함이 아니라 그 실행의 정상 결과다.
+  if (!fs.existsSync(path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html'))) {
+    return { weeklyKey, status: 'not_written', errors: [] };
+  }
+  // 검사 자체도 감싼다. 지금 이 경로의 파일 읽기는 전부 방어적이라 던지지 않지만, 그것을
+  // 강제하는 것이 없고 검사가 먹는 주간 issue.json은 이미 스키마가 여러 번 바뀐 산출물이다.
+  // 이 호출자는 continue-on-error 없는 워크플로 스텝 세 곳에서 돌기 때문에, 관측 하나가
+  // 던지면 진단만 내던 실행이 통째로 죽는다.
+  try {
+    const result = weeklyNewsletterStructureStatus(root, weeklyKey);
+    return {
+      weeklyKey,
+      status: result.ok ? 'ok' : 'errors',
+      errors: result.errors.slice(0, MAX_OBSERVED_WEEKLY_STRUCTURE_ERRORS)
+    };
+  } catch (error) {
+    return {
+      weeklyKey,
+      status: 'check_failed',
+      errors: [String(error?.message || error)].slice(0, MAX_OBSERVED_WEEKLY_STRUCTURE_ERRORS)
+    };
+  }
+}
+
 function resolveReviewableArtifacts(options = {}) {
   const root = options.root || process.cwd();
   const statusPath = options.statusPath || path.join(root, '.tmp', 'newsletter-generation-status.json');
@@ -233,6 +281,14 @@ function resolveReviewableArtifacts(options = {}) {
   const requiredPublicArtifacts = requiredPublicFiles(date);
   const publicArtifacts = existingArtifacts(root, date, REQUIRED_PUBLIC_NEWSLETTER_FILES);
   const publicStructure = publicNewsletterStructureStatus(root, date);
+  // 독자가 홈과 아카이브에서 실제로 여는 페이지는 주간호인데, 발행 시점에 그것을 검사하는
+  // 경로가 없었다(#905). 이 자리는 repair 이후라 newsroom:repair-images가 이미 주간 3종과
+  // article_images를 다시 쓴 상태다 — 그 전에 판정하면 임시 이미지 상태를 최종으로 오판한다.
+  //
+  // 판정은 관측으로만 남기고 발행 여부에 넣지 않는다. 주간 규칙은 이번에 처음 발행 경로에
+  // 걸리는 것이라, 어떤 실패가 실제로 나오는지 보기 전에 hard fail을 걸면 발행 가능한 호를
+  // 막는다. 그것이 이 저장소가 반복해서 데인 순서다.
+  const weeklyStructure = weeklyStructureObservation(root, date);
   const newsletterIndex = newsletterIndexDateStatus(root, date);
   const changedArtifacts = Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')
     ? relevantChangedArtifacts(options.changedArtifacts, date)
@@ -464,6 +520,7 @@ function resolveReviewableArtifacts(options = {}) {
     publicArtifacts,
     requiredPublicArtifacts,
     publicStructure,
+    weeklyStructure,
     changedArtifacts,
     changedRequiredPublicArtifacts,
     missingRequired,

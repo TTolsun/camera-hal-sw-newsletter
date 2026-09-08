@@ -23,6 +23,9 @@ const {
   resolveReviewableArtifacts
 } = require('../../../generator/publish/resolve-reviewable-artifacts');
 const {
+  ensurePublicNewsletterArtifacts
+} = require('../../../generator/publish/ensure-public-newsletter-artifacts');
+const {
   removeNewsletterIndexEntry
 } = require('../../../generator/publish/public-state-reconciliation');
 const {
@@ -739,4 +742,144 @@ test('un-exposing the newsletters.json entry downgrades a structurally-ready run
   assert.equal(unexposed.public_newsletter_ready, 'false', 'un-exposed newsletter is not publish-ready');
   assert.equal(unexposed.homepage_visible_after_merge, 'false', 'merging an un-exposed run must not publish');
   assert.equal(unexposed.diagnostics_only, 'true');
+});
+
+// #905: 독자가 여는 주간 페이지의 구조 검사가 발행 시점에 돈다. 다만 판정은 관측으로만 남고
+// 발행 여부를 바꾸지 않는다. 주간 규칙이 발행 경로에 걸리는 것은 이번이 처음이라, 어떤 실패가
+// 실제로 나오는지 보기 전에 차단을 걸면 발행 가능한 호를 막는다.
+//
+// 아래 단언들이 그 계약이다. 하나라도 뒤집히면 이 변경의 성격이 관측에서 게이트로 바뀐다.
+const WEEKLY_OBSERVATION_KEY = '2026-W37';
+
+function stageWeeklyIssueForObservation(root, date, { html } = {}) {
+  const repoRoot = path.join(__dirname, '..', '..', '..', '..');
+  const issueDir = path.join(root, 'articles', 'newsletters', WEEKLY_OBSERVATION_KEY);
+  fs.mkdirSync(issueDir, { recursive: true });
+  for (const file of ['newsletter.md', 'issue.json']) {
+    writeText(
+      path.join(issueDir, file),
+      fs.readFileSync(path.join(repoRoot, 'articles', 'newsletters', WEEKLY_OBSERVATION_KEY, file), 'utf8')
+    );
+  }
+  const publishedHtml = fs.readFileSync(
+    path.join(repoRoot, 'articles', 'newsletters', WEEKLY_OBSERVATION_KEY, 'index.html'),
+    'utf8'
+  );
+  writeText(path.join(issueDir, 'index.html'), html ? html(publishedHtml) : publishedHtml);
+
+  // fallback 이미지 계약은 파일 존재까지 본다. 이것을 빠뜨리면 정상 페이지도 errors가 되어,
+  // 아래 "깨진 페이지" 단언이 주입한 결함과 무관하게 통과한다.
+  const fallbackRelative = 'articles/assets/images/fallback/newsletter-default.svg';
+  const fallbackTarget = path.join(root, fallbackRelative);
+  fs.mkdirSync(path.dirname(fallbackTarget), { recursive: true });
+  writeText(fallbackTarget, fs.readFileSync(path.join(repoRoot, fallbackRelative), 'utf8'));
+
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{
+    weeklyKey: WEEKLY_OBSERVATION_KEY,
+    date,
+    title: `Camera HAL / SW Newsletter - ${WEEKLY_OBSERVATION_KEY}`,
+    summary: 'Weekly issue summary',
+    html: `newsletters/${WEEKLY_OBSERVATION_KEY}/index.html`,
+    md: `newsletters/${WEEKLY_OBSERVATION_KEY}/newsletter.md`,
+    tags: ['Camera HAL']
+  }]);
+}
+
+function weeklyObservationChangedArtifacts(date) {
+  return REQUIRED_EDITORIAL_REVIEWABLE_ARTIFACTS
+    .map(file => `articles/content/newsroom/${date}/${file}`)
+    .concat([
+      `articles/newsletters/${date}/newsletter.md`,
+      `articles/newsletters/${date}/index.html`,
+      'articles/data/newsletters.json'
+    ]);
+}
+
+test('a broken weekly page is observed but does not change the publish decision (#905)', () => {
+  const date = '2026-09-07';
+
+  // 먼저 손대지 않은 발행본이 ok인지 본다. 이 단언이 없으면 아래 errors 단언이 주입한 결함이
+  // 아니라 픽스처 자체의 결손으로도 통과한다.
+  const healthyRoot = fsTempRoot('weekly-structure-healthy');
+  writeMinimalPublishArtifacts(healthyRoot, date);
+  writePublicNewsletterArtifacts(healthyRoot, date);
+  writeArchiveSyncSurface(healthyRoot);
+  stageWeeklyIssueForObservation(healthyRoot, date);
+  const healthy = resolveReviewableArtifacts({
+    root: healthyRoot,
+    changedArtifacts: weeklyObservationChangedArtifacts(date)
+  });
+  assert.deepEqual(healthy.weeklyStructure.errors, []);
+  assert.equal(healthy.weeklyStructure.status, 'ok');
+
+  // 같은 픽스처에서 anchor 균형만 무너뜨린다.
+  const brokenRoot = fsTempRoot('weekly-structure-observation');
+  writeMinimalPublishArtifacts(brokenRoot, date);
+  writePublicNewsletterArtifacts(brokenRoot, date);
+  writeArchiveSyncSurface(brokenRoot);
+  stageWeeklyIssueForObservation(brokenRoot, date, { html: published => `${published}<a href="#dangling">` });
+  const broken = resolveReviewableArtifacts({
+    root: brokenRoot,
+    changedArtifacts: weeklyObservationChangedArtifacts(date)
+  });
+
+  assert.equal(broken.weeklyStructure.weeklyKey, WEEKLY_OBSERVATION_KEY);
+  assert.equal(broken.weeklyStructure.status, 'errors', '주입한 anchor 결함이 관측되어야 한다.');
+  assert.ok(
+    broken.weeklyStructure.errors.some(error => /Anchor tag mismatch/.test(error)),
+    `주입한 결함이 잡혀야 한다. 실제 오류: ${JSON.stringify(broken.weeklyStructure.errors)}`
+  );
+  assert.equal(
+    broken.publicNewsletterReady,
+    healthy.publicNewsletterReady,
+    '주간 구조 실패는 발행 판정을 바꾸지 않는다. 이 단언이 깨지면 관측이 게이트로 변한 것이다.'
+  );
+});
+
+// 관측 값이 메모리에만 있으면 이 변경은 아무것도 남기지 않는다. 이 저장소에는 새 필드가
+// 중간 관문에서 조용히 사라진 전례가 있다(seriesId). 그래서 파일까지 확인한다.
+test('the weekly observation reaches the committed generation status (#905)', () => {
+  const date = '2026-09-07';
+  const root = fsTempRoot('weekly-structure-status-file');
+  writeMinimalPublishArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+  writeArchiveSyncSurface(root);
+  stageWeeklyIssueForObservation(root, date, { html: published => `${published}<a href="#dangling">` });
+
+  ensurePublicNewsletterArtifacts({ root, date, changedArtifacts: weeklyObservationChangedArtifacts(date) });
+
+  const status = JSON.parse(fs.readFileSync(
+    path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'),
+    'utf8'
+  ));
+  assert.equal(status.weekly_page_structure_status, 'errors');
+  assert.equal(status.weekly_page_structure_key, WEEKLY_OBSERVATION_KEY);
+  assert.ok(Array.isArray(status.weekly_page_structure_errors));
+  assert.ok(status.weekly_page_structure_errors.length > 0);
+});
+
+// 발행 경로 전체가 관측 하나 때문에 죽으면 안 된다. weeklyKeyForDate는 YYYY-MM-DD가 아니면
+// throw하고, resolveDate가 고르는 값은 형식 검증을 받지 않는다.
+test('an unparseable date does not take the whole resolver down (#905)', () => {
+  const root = fsTempRoot('weekly-structure-bad-date');
+
+  const resolved = resolveReviewableArtifacts({ root, date: 'unknown' });
+
+  assert.equal(resolved.weeklyStructure.status, 'not_written');
+  assert.equal(resolved.weeklyStructure.weeklyKey, '');
+});
+
+test('a run without weekly artifacts reports not_written rather than a failure (#905)', () => {
+  const root = fsTempRoot('weekly-structure-absent');
+  const date = '2026-09-07';
+
+  writeMinimalPublishArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+  writeArchiveSyncSurface(root);
+
+  const resolved = resolveReviewableArtifacts({ root });
+
+  // reviewable 실행은 주간 산출물을 아예 쓰지 않는다. 그것은 그 실행의 정상 결과다.
+  assert.equal(resolved.weeklyStructure.status, 'not_written');
+  assert.deepEqual(resolved.weeklyStructure.errors, []);
 });
