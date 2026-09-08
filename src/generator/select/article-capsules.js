@@ -413,6 +413,18 @@ function compactRelatedContextCandidates(candidate) {
     }));
 }
 
+// 후보가 patch 시리즈의 대표일 때 그 시리즈가 무엇인지. 수집기가 실어 준 값만 쓰고 제목에서
+// 유도하지 않는다 — 제목은 조각 하나의 것이라 시리즈 전체를 말해 주지 못한다(#1109).
+function seriesContext(candidate) {
+  const name = compactText(candidate.seriesName || candidate.series_name, 180);
+  if (!name) return null;
+  const version = Number(candidate.seriesVersion ?? candidate.series_version);
+  return {
+    name,
+    revision: Number.isInteger(version) && version > 0 ? version : null
+  };
+}
+
 function estimatedTokens(value) {
   return Math.ceil(JSON.stringify(value).length / 4);
 }
@@ -469,6 +481,11 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
       roundup_item_index: candidate.roundupItemIndex ?? candidate.roundup_item_index ?? null,
       anchor_text: compactText(candidate.anchorText || candidate.anchor_text, 160)
     } : null,
+    // 패치 시리즈 컨텍스트(#1109). capsule의 title은 시리즈 대표로 뽑힌 조각 하나의 제목이라,
+    // 이 필드가 없으면 기자 단계가 시리즈 전체를 그 조각으로 오인해 서술한다(2026-W34부터 3주
+    // 연속 관측). 시리즈명이 없는 후보(대부분의 소스, 그리고 커버레터 없는 재제출)는 아래에서
+    // 키 자체를 뗀다.
+    series_context: seriesContext(candidate),
     scope_relevance: {
       aosp_camera_directness: number(candidate.aosp_camera_directness),
       driver_stack_relevance: number(candidate.driver_stack_relevance),
@@ -593,6 +610,8 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
   }
   if (ensureArray(capsule.blocked_context_candidates).length === 0) delete capsule.blocked_context_candidates;
   if (!capsule.parent_context) delete capsule.parent_context;
+  // 시리즈가 아닌 후보가 대부분이라, 빈 값을 남기면 payload에 null만 늘어난다(parent_context와 같은 처리).
+  if (!capsule.series_context) delete capsule.series_context;
   return {
     ...capsule,
     estimated_tokens: estimatedTokens(capsule)

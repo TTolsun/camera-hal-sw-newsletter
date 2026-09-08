@@ -700,3 +700,35 @@ test('#976: 릴리스 본문이 behavior_change 에 실리면 capsule 근거로 
     `본문을 실으면 근거에 실제 변경이 온다: ${JSON.stringify(withBody.evidence)}`
   );
 });
+
+test('capsule carries the patch series context so the reporter sees the whole series (#1109)', () => {
+  // capsule의 title은 시리즈 대표로 뽑힌 조각 하나의 제목이다. 그 조각만 보고 쓴 본문이 시리즈
+  // 전체를 오인해 서술한 사례가 2026-W34부터 3주 연속 나왔다(2026-09-07호 4번 기사).
+  const capsule = buildArticleCapsule(candidate({
+    title: '[v3,1/5] libcamera: controls: Give name to the union containing storage',
+    seriesId: 6164,
+    seriesName: 'libcamera: controls: Move constructor/assignment + swap',
+    seriesVersion: 3
+  }));
+  assert.deepEqual(capsule.series_context, {
+    name: 'libcamera: controls: Move constructor/assignment + swap',
+    revision: 3
+  });
+  // 표시 제목은 조각 제목 그대로 남는다.
+  assert.equal(capsule.title, '[v3,1/5] libcamera: controls: Give name to the union containing storage');
+});
+
+test('capsule drops the series context for candidates with no series name (#1109)', () => {
+  // 대부분의 소스와, 커버레터 없이 올라온 재제출이 여기에 해당한다. parent_context와 같이 빈 값이면
+  // 키 자체를 떼어 prompt payload에 null이 쌓이지 않게 한다.
+  assert.ok(!('series_context' in buildArticleCapsule(candidate())));
+  assert.ok(!('series_context' in buildArticleCapsule(candidate({ seriesId: 6164 }))));
+});
+
+test('capsule series revision is null when the series carries no usable version (#1109)', () => {
+  const capsule = buildArticleCapsule(candidate({
+    seriesName: 'softisp: Five fixes found on a camera with no hardware ISP'
+  }));
+  assert.equal(capsule.series_context.name, 'softisp: Five fixes found on a camera with no hardware ISP');
+  assert.equal(capsule.series_context.revision, null);
+});

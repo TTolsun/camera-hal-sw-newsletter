@@ -83,3 +83,40 @@ test('patchwork collector -> normalizeCandidate -> seriesKey groups a real serie
   assert.ok(key0.startsWith('patchwork-series:'));
   assert.equal(seriesKey(normalized[1]), key0, 'both fragments share one series key so dedup collapses them');
 });
+
+test('normalizeCandidate preserves the series name and revision through the whitelist (#1109)', () => {
+  // seriesId와 같은 함정이다. whitelist에 없으면 candidates.json에서 조용히 사라져, capsule이
+  // 기자에게 넘길 시리즈 컨텍스트가 프로덕션에서만 비어 버린다.
+  const item = normalizeCandidate({
+    source: patchworkSource(),
+    title: '[v3,1/5] libcamera: controls: Give name to the union containing storage',
+    url: 'https://patchwork.libcamera.org/patch/28179/',
+    publishedAt: '2026-09-02',
+    summary: 'Patch under review on the project patch tracker; state new, a proposed change not yet landed.',
+    seriesId: 6164,
+    seriesName: 'libcamera: controls: Move constructor/assignment + swap',
+    seriesVersion: 3,
+    sourceKind: 'rss_item',
+    collectionMode: 'rss-item'
+  });
+  assert.equal(item.seriesName, 'libcamera: controls: Move constructor/assignment + swap');
+  assert.equal(item.series_name, 'libcamera: controls: Move constructor/assignment + swap');
+  assert.equal(item.seriesVersion, 3);
+  assert.equal(item.series_version, 3);
+  // 표시 제목은 조각 제목 그대로다.
+  assert.equal(item.title, '[v3,1/5] libcamera: controls: Give name to the union containing storage');
+});
+
+test('normalizeCandidate tolerates a candidate with no series name (#1109)', () => {
+  const item = normalizeCandidate({
+    source: patchworkSource(),
+    title: 'build: bump meson version',
+    url: 'https://patchwork.libcamera.org/patch/27100/',
+    publishedAt: '2026-07-07',
+    summary: 'Patch under review on the project patch tracker; state accepted.',
+    sourceKind: 'rss_item',
+    collectionMode: 'rss-item'
+  });
+  assert.equal(item.seriesName, null);
+  assert.equal(item.seriesVersion, null);
+});

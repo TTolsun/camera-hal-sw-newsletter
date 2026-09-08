@@ -12,11 +12,22 @@ const {
   publicationBoundaryPrompt,
   cameraHalEditorialVoicePrompt,
   cameraHalEditorialVoiceWithPlanPrompt,
+  seriesContextPrompt,
   sourceExtractionPromptGuardrails
 } = require('../../reporter/newsletter-prompts');
 const {
   publicArticleJudgeBlockingIssues
 } = require('../../publish/orchestrator-judge-helpers');
+const {
+  editorialPlanSystemPrompt,
+  reporterSystemPrompt,
+  editorSystemPrompt,
+  factCheckSystemPrompt,
+  editorRepairPatchSystemPrompt,
+  factCheckRepairSystemPrompt,
+  editorCompletionSystemPrompt,
+  factCheckCompletionSystemPrompt
+} = require('../../publish/orchestrator-stage-prompts');
 const {
   reporterSchema,
   publicArticleJudgeSchema
@@ -490,4 +501,60 @@ test('public article prompt does not force internal triage fallback prose', () =
   assert.match(source, /Markdown\/HTML에 직접 렌더링되지 않으므로/);
   assert.match(source, /body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요/);
   assert.match(source, /validator token을 조합한 문장을 쓰지 마세요/);
+});
+
+test('series context rule reaches every stage that writes article text (#1109)', () => {
+  // capsule에 series_context를 실어도 그것을 쓰라는 지시가 없으면 60여 필드 중 하나로 조용히
+  // 얹힐 뿐이다. 조각 제목을 시리즈 전체로 오인해 쓴 본문이 실제 발행됐으므로(2026-09-07호
+  // 4번 기사), 규칙이 작성 단계 프롬프트에 실제로 들어가는지 잠근다.
+  //
+  // 소스 텍스트가 아니라 조립된 문자열을 검사한다. 파일에서 호출 횟수만 세면 조립을 조건부로
+  // 바꿨을 때(예: 플래그가 꺼진 기본 호출) 통과하면서 실제 프롬프트에는 규칙이 빠진다.
+  const rule = seriesContextPrompt();
+  assert.match(rule, /series_context\.name/);
+  assert.match(rule, /series_context\.revision/);
+
+  // 옵션 분기마다 확인한다. 한 조합만 보면 publishMode나 locked 여부로 조립을 갈랐을 때
+  // 검사한 조합만 통과하고 나머지 실행에서는 규칙이 빠진다.
+  const writingStages = [
+    ['editorial plan', editorialPlanSystemPrompt()],
+    ['reporter', reporterSystemPrompt()],
+    ['reporter (locked)', reporterSystemPrompt({ hasLockedSections: true })],
+    ['completion', editorCompletionSystemPrompt({ missingArticleCount: 1 })],
+    ['completion (many)', editorCompletionSystemPrompt({ missingArticleCount: 3 })]
+  ];
+  for (const publishMode of ['NORMAL', 'DEEP', 'CONTEXT', 'QUIET']) {
+    for (const hasLockedSections of [false, true]) {
+      for (const hasCatchUpCoverage of [false, true]) {
+        writingStages.push([
+          `editor (${publishMode}, locked=${hasLockedSections}, catchUp=${hasCatchUpCoverage})`,
+          editorSystemPrompt({ publishMode, hasLockedSections, hasCatchUpCoverage })
+        ]);
+      }
+    }
+  }
+  for (const [stage, prompt] of writingStages) {
+    assert.ok(prompt.includes(rule), `${stage} prompt should carry the series context rule`);
+  }
+
+  // 검증 단계에는 넣지 않는다. fact-checker에 작성 지시를 넣으면 must_fix 판정이 흔들리고,
+  // repair는 patch-only 계약이라 기사 범위를 판단하지 않는다.
+  const verifyingStages = [
+    ['fact check', factCheckSystemPrompt()],
+    ['editor repair', editorRepairPatchSystemPrompt()],
+    ['fact check repair', factCheckRepairSystemPrompt()],
+    ['fact check completion', factCheckCompletionSystemPrompt()]
+  ];
+  for (const [stage, prompt] of verifyingStages) {
+    assert.ok(!prompt.includes(rule), `${stage} prompt should not carry the series context rule`);
+  }
+});
+
+test('series context rule keeps the series title a hint, not a confirmed fact (#1109)', () => {
+  // capsule이 시리즈에 대해 싣는 것은 name과 revision 두 값뿐이다. "기사 범위는 시리즈 전체"라고
+  // 지시하면 제목 한 줄만 근거로 시리즈 전체를 서술하게 되므로, 확인된 범위는 조각으로 둔다.
+  const rule = seriesContextPrompt();
+  assert.match(rule, /source-backed fact로 제시하지 마세요/);
+  assert.match(rule, /확인된 범위는/);
+  assert.doesNotMatch(rule, /기사가 다루는 범위는[^\n]*series 전체입니다/);
 });
