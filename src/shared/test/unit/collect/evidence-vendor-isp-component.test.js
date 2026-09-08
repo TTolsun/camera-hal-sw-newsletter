@@ -27,7 +27,11 @@ const VENDOR_DRIVER_TITLES = [
   { token: 'mtk-cam', title: 'media: mtk-cam: fix seninf DMA buffer handling' },
   { token: 'uvcvideo', title: 'media: uvcvideo: fix control descriptor parsing' },
   // 2026-W31 갭 감사 실증: libcamera libipa AGC 43-patch RFC가 evidence 4로 watchlist 강등됐다.
-  { token: 'libipa', title: '[RFC,v2,42/43] ipa: libipa: agc: Work without `CameraSensorHelper`' }
+  { token: 'libipa', title: '[RFC,v2,42/43] ipa: libipa: agc: Work without `CameraSensorHelper`' },
+  // #1107: Intel IPU 카메라 서브시스템. 버전 숫자를 붙인 형태만 인정한다(맨몸 IPU는
+  // Intel Infrastructure Processing Unit과 겹친다).
+  { token: 'ipu6', title: 'media: ipu6: fix isys buffer handling' },
+  { token: 'ipu-bridge', title: 'media: ipu-bridge: add support for the OV02C10 sensor' }
 ];
 
 test('#805 componentFromText recognizes vendor ISP/V4L2 driver module names as component evidence', () => {

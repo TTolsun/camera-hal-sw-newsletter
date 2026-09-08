@@ -22,7 +22,11 @@ const VENDOR_DRIVER_CANDIDATES = [
   { token: 'camss', title: 'media: camss: add VFE hardware version for glymur' },
   { token: 'mtk-isp', title: 'media: mtk-isp: rework DIP frame job scheduling' },
   { token: 'mtk-cam', title: 'media: mtk-cam: fix seninf DMA buffer handling' },
-  { token: 'uvcvideo', title: 'media: uvcvideo: fix control descriptor parsing' }
+  { token: 'uvcvideo', title: 'media: uvcvideo: fix control descriptor parsing' },
+  // #1107: Intel IPU 카메라 서브시스템. 버전 숫자를 붙인 형태만 인정한다(맨몸 IPU는
+  // Intel Infrastructure Processing Unit과 겹친다).
+  { token: 'ipu6', title: 'media: ipu6: fix isys buffer handling' },
+  { token: 'ipu-bridge', title: 'media: ipu-bridge: add support for the OV02C10 sensor' }
 ];
 
 test('#792 hasConcreteApiComponent recognizes vendor ISP/V4L2 driver module names as camera evidence', () => {
