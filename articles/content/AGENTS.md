@@ -36,6 +36,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `stale-claim-report.{json,md}`, `image-audit-report.{json,md}`, `source-quality-report.{json,md}`
 - `selection-report.{json,md}`, `selection-diagnostics.md`
 - `source-quality-diagnosis.{json,md}`, `evidence-pack-summary.json`
+- `source-followup-issues.{json,md}` — 같은 소스에 같은 권고가 10회 연속 실행에서 붙었을 때만 항목이 생긴다(#479). 제안이고 게이트가 아니다.
 - `retry-history.{json,md}`, `release-qa-report.md`
 - `linked-evidence-diagnostics.md`, `event-bundle-diagnostics.md`
 - `source-effectiveness-report.{json,md}`, `source-discovery-feedback-report.{json,md}`

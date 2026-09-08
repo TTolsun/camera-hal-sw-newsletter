@@ -13,6 +13,7 @@
     "ci": "npm run test && npm run validate",
     "report:source-effectiveness": "node src/generator/publish/build-source-effectiveness-report.js",
     "report:source-quality-diagnosis": "node src/generator/publish/build-source-quality-diagnosis.js",
+    "report:source-followup-issues": "node src/generator/publish/build-source-followup-issues.js",
     "report:evidence-pack": "node src/generator/publish/build-evidence-pack-summary.js",
     "report:hal-signal-quality": "node src/generator/publish/build-hal-signal-quality-report.js",
     "report:hal-signal-scorecard": "node src/shared/tooling/cli/build-hal-signal-quality-scorecard.js",
