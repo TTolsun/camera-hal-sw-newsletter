@@ -254,7 +254,11 @@ function validateNewsletterIndex(root, relativePath, errors) {
   }
 }
 
-function validateMarkdownStructure(date, markdown, errors) {
+// briefingBulletCount는 일간호에서만 정확한 개수를 요구한다. 주간호는 그 주에 실린 기사 수만큼
+// 브리핑 줄을 갖기 때문에(2026-W37은 5줄) 일간 규칙을 그대로 겨누면 정상 호가 오류로 잡힌다.
+// null이면 개수를 세지 않고 "브리핑이 비어 있지 않다"만 확인한다 — 나머지 markdown 규칙
+// (TODO 금지, 참고자료 섹션, 출처 heading, 출처 항목)은 주간호에도 그대로 유효하므로 남긴다.
+function validateMarkdownStructure(date, markdown, errors, { briefingBulletCount = 3 } = {}) {
   const content = String(markdown || '');
   if (/\bTODO\b/.test(content)) {
     errors.push(`Published newsletter contains TODO: newsletters/${date}/newsletter.md`);
@@ -267,8 +271,12 @@ function validateMarkdownStructure(date, markdown, errors) {
     const briefingBullets = briefing
       .split('\n')
       .filter(line => /^- /.test(line.trim()));
-    if (briefingBullets.length !== 3) {
-      errors.push(`Newsletter ${date} must have exactly 3 briefing bullets, found ${briefingBullets.length}`);
+    if (briefingBulletCount === null) {
+      if (briefingBullets.length === 0) {
+        errors.push(`Newsletter ${date} briefing section has no bullets`);
+      }
+    } else if (briefingBullets.length !== briefingBulletCount) {
+      errors.push(`Newsletter ${date} must have exactly ${briefingBulletCount} briefing bullets, found ${briefingBullets.length}`);
     }
   }
 
@@ -441,7 +449,8 @@ function validateRenderedIssueStructure({
   markdown = '',
   html = '',
   root = process.cwd(),
-  validateDataIndex = true
+  validateDataIndex = true,
+  briefingBulletCount = 3
 } = {}) {
   editor = toLegacyEditorIssue(editor, { date });
   const errors = [];
@@ -452,7 +461,7 @@ function validateRenderedIssueStructure({
       validateNewsletterIndex(root, relativePath, errors);
     }
   }
-  validateMarkdownStructure(issueDate, markdown, errors);
+  validateMarkdownStructure(issueDate, markdown, errors, { briefingBulletCount });
   validateHtmlStructure(issueDate, html, root, errors);
   validateSelectedImageContract(issueDate, editor, root, errors);
 
