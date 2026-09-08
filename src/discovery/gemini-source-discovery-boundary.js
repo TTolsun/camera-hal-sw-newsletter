@@ -1108,8 +1108,28 @@ function compareEvidenceTargets(left, right) {
     a.stable_key.localeCompare(b.stable_key);
 }
 
+// 근거 fetch 캡. 세는 단위는 사본 수가 아니라 출처 수다.
+//
+// 12였을 때 2026-09-07 실행은 출처 7개를 잘랐고(후보 사본으로 세면 11건이다. 리포트의
+// evidence_fetch_cap.dropped가 세는 것이 그 사본 수다), 그중 6개가 발행 가능 후보였다. 그 호에
+// 실린 기사 5건 중 2건(patchwork 28179·28194)이 잘린 쪽이라 원문을 한 번도 받지 못한 채
+// main으로 나갔고, 둘 다 원문의 의미를 틀렸다(#1108).
+//
+// 두 후보는 discovery 시점 판정이 short였는데 선정이 main으로 올린 경우라, 캡 순위를 main
+// 우선으로 바꾸는 것으로는 구제되지 않는다. 같은 입력을 main 우선으로 재정렬해도 12칸 중
+// 10칸을 main 자격 그룹이 가져가고 두 후보는 남은 2칸 밖에 그대로 남는다. 캡 자체를 넓히는
+// 것이 이 실패형에 직접 닿는 레버다.
+//
+// 그 주의 출처 그룹은 모두 19개였으므로 19면 그 실행은 전부 덮인다. 24는 주마다 그룹 수가
+// 달라지는 것을 감안한 여유이고, 그 이상의 근거는 없다. 캡이 다시 바인딩되면
+// evidence-validation-report.json의 evidence_fetch_cap이 그 사실을 남긴다.
+//
+// 이 값을 올리는 비용은 HTTP 요청 수와 실행 시간뿐이다. 근거 추출 경로는 LLM을 부르지 않고,
+// 요청은 순차이며 각각 5초 타임아웃이라 최악이라도 1분 남짓 늘어난다.
+const EVIDENCE_FETCH_TARGET_CAP = 24;
+
 function selectEvidenceFetchTargetGroups(candidates = [], clusterReport = {}, options = {}) {
-  const maxTargets = options.maxTargets || 12;
+  const maxTargets = options.maxTargets || EVIDENCE_FETCH_TARGET_CAP;
   const canonicalRefs = new Set();
   for (const cluster of clusterReport.clusters || []) {
     if (Number(cluster.duplicate_count || 0) <= 0) continue;
@@ -1405,7 +1425,9 @@ async function runEnabled({
   const clustered = checkSourceDuplicates(scored.annotatedCandidates, { newsletterDate: date });
   writeJson(sourceClustersPath(root, date), clustered.report);
 
-  const evidenceFetchGroups = selectEvidenceFetchTargetGroups(clustered.annotatedCandidates, clustered.report, { maxTargets: 12 });
+  // 캡 값을 여기서 넘기지 않는다. 두 자리에 같은 숫자를 적어 두면 한쪽만 바뀌어 갈라진다.
+  // 정본은 EVIDENCE_FETCH_TARGET_CAP 하나이고, 회귀 테스트도 기본값 경로를 잠근다.
+  const evidenceFetchGroups = selectEvidenceFetchTargetGroups(clustered.annotatedCandidates, clustered.report);
   const sourceFacts = await extractSourceFacts(evidenceFetchGroups.selected, {
     fetch: true,
     fetchImpl,
