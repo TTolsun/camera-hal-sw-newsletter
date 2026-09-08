@@ -58,6 +58,22 @@ test('evidence fetch target selection is capped and skips weak watchlist candida
   assert.equal(skipped.evidence_validation_status, 'not_checked');
 });
 
+// 위 테스트는 maxTargets를 직접 넘겨 캡이 동작하는지를 본다. 이 테스트가 보는 것은 프로덕션이
+// 실제로 쓰는 기본값이다. discovery 경계가 캡 값을 따로 넘기지 않으므로 기본값 경로가 곧 발행
+// 파이프라인의 경로다.
+//
+// 캡이 12였을 때 2026-09-07 실행은 출처 7개를 잘랐고 그중 6개가 발행 가능 후보였다. 그 호에
+// 실린 기사 5건 중 2건이 잘린 쪽이라 원문을 한 번도 받지 못한 채 main으로 나갔다(#1108).
+test('the default evidence fetch cap reaches beyond the twelve sources that ran short (#1108)', () => {
+  const candidates = Array.from({ length: 30 }, (_, index) => candidate(index));
+
+  const targets = selectEvidenceFetchTargets(candidates, { clusters: [] });
+
+  // 캡이 세는 단위는 사본 수가 아니라 출처 수다(selected 길이는 캡을 넘을 수 있다). 사본 수로
+  // 재면 같은 URL의 사본이 여럿인 입력에서 이 단언이 캡과 무관하게 흔들린다.
+  assert.equal(new Set(targets.map(item => item.url)).size, 24);
+});
+
 test('evidence fetch target selection uses deterministic priority instead of input order', () => {
   const canonical = candidate('canonical', {
     id: 'canonical',
