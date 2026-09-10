@@ -18,7 +18,7 @@ function usage() {
     '',
     'This writes drafts only. It creates no GitHub issue and changes no publish decision.',
     '',
-    '--dry-run: print the same drafts to stdout and write no file.',
+    '--dry-run: print the draft markdown to stdout and write no file.',
     '',
     'Date priority: --date, NEWSLETTER_DATE, .tmp/newsletter-date.txt, today KST.'
   ].join('\n');

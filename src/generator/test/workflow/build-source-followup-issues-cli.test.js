@@ -78,6 +78,7 @@ test('CLI: --dry-run이 없으면 기존대로 draft 두 개를 쓴다 (#479)', 
   const root = tempRoot('followup-cli-write-');
   stageRuns(root);
 
+  const preview = runCapturingStdout(['--dry-run', '--date', TARGET_DATE], root);
   const { exitCode } = runCapturingStdout(['--date', TARGET_DATE], root);
 
   const { json, markdown } = draftPaths(root, TARGET_DATE);
@@ -85,6 +86,9 @@ test('CLI: --dry-run이 없으면 기존대로 draft 두 개를 쓴다 (#479)', 
   assert.equal(fs.existsSync(json), true);
   assert.equal(fs.existsSync(markdown), true);
   assert.match(fs.readFileSync(markdown, 'utf8'), new RegExp(SOURCE_ID));
+  // 미리보기가 쓰이는 파일과 갈라지면 --dry-run이 거짓말이 된다. 같은 draft를 낸다는 것을
+  // 주석이 아니라 이 비교가 잠근다.
+  assert.equal(preview.stdout, fs.readFileSync(markdown, 'utf8'));
 });
 
 // --dry-run만 이 CLI가 직접 걷어내고 나머지는 공유 파서에 넘긴다. 공유 파서가 알 수 없는
