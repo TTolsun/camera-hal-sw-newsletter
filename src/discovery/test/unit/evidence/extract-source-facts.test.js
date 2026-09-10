@@ -100,3 +100,31 @@ test('the fetch cache separates sources by query but ignores the android locale 
   await extractSourceFacts(localeVariants, { fetch: true, fetchImpl: localeFetch.fetchImpl });
   assert.equal(localeFetch.requestedUrls.length, 1);
 });
+
+// HTTP 200인데 본문이 비어 오는 출처가 있다. 이때 근거 본문이 없다는 사실은 같은데,
+// 예전에는 status가 success로 남아 아래 검증에서 "근거 없이 주장만 있는 후보"로 읽혔고
+// 그 후보는 발행 선정에서 하드 제외됐다. 응답을 아예 못 받은 쪽이 오히려 통과하던 비대칭이다.
+test('a 200 response with an empty body is recorded as an empty fetch, not a successful one', async () => {
+  const source = candidate({ url: 'https://example.com/empty-body' });
+  const fetchImpl = async () => ({ ok: true, text: async () => '' });
+
+  const facts = await extractSourceFacts([source], { fetch: true, fetchImpl });
+  const fact = facts.sources[0];
+
+  assert.equal(fact.source_fetch_status, 'empty');
+  assert.ok(fact.source_fetch_error.length > 0);
+});
+
+// 빈 판정은 소비자와 같은 기준으로 재야 한다. 이 fact를 읽는 쪽은 전부 trim한 값을 보므로
+// (text()), 공백만 있는 본문을 trim 없이 재면 근거로 쓸 글자가 하나도 없는데도 success로
+// 남아 바로 위 테스트가 막으려던 하드 제외 경로로 그대로 떨어진다.
+test('a body of only whitespace counts as empty, the same way its consumers measure it', async () => {
+  const source = candidate({ url: 'https://example.com/whitespace-body' });
+  const fetchImpl = async () => ({ ok: true, text: async () => '\n  \t' });
+
+  const facts = await extractSourceFacts([source], { fetch: true, fetchImpl });
+  const fact = facts.sources[0];
+
+  assert.equal(fact.source_fetch_status, 'empty');
+  assert.ok(fact.source_fetch_error.length > 0);
+});

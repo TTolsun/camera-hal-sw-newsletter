@@ -65,7 +65,16 @@ async function extractSourceFacts(candidates = [], options = {}) {
     if (shouldFetch && fetchImpl && url) {
       if (!fetchedBySource.has(sourceKey)) {
         try {
-          fetchedBySource.set(sourceKey, { text: await fetchTextWithLimit(fetchImpl, url, options), status: 'success', error: '' });
+          // 빈 판정은 이 본문을 읽는 쪽과 같은 기준으로 잰다. 소비자는 전부 trim한 값을 보므로
+          // (buildFact의 text(options.fetchedText)) 여기서도 trim한 값으로 재고 그대로 넘긴다.
+          // 기준이 갈리면 공백뿐인 본문이 근거 한 글자 없이 success로 남는다.
+          const body = text(await fetchTextWithLimit(fetchImpl, url, options));
+          // 응답은 받았지만 본문이 비어 있으면 근거로 쓸 본문이 없다는 점에서 수신 실패와 같다.
+          // success로 남기면 아래 검증이 근거 없는 주장으로 읽는다. 프로덕션 호출처럼
+          // metadataFallback이 꺼져 있고 claim이 하나 이상이면 그 후보는 발행 선정에서 하드 제외된다.
+          fetchedBySource.set(sourceKey, body
+            ? { text: body, status: 'success', error: '' }
+            : { text: '', status: 'empty', error: 'fetch returned an empty body' });
         } catch (error) {
           fetchedBySource.set(sourceKey, { text: '', status: 'failed', error: error.message });
         }

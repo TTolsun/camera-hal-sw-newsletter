@@ -629,3 +629,30 @@ test('publishability is read from either the camelCase or the snake_case field',
   assert.deepEqual(dropped.capDropped.map(item => item.id), ['snake-only']);
   assert.deepEqual(evidence.report.evidence_fetch_cap, { dropped: 1, dropped_publishable: 1 });
 });
+
+// 빈 본문은 근거 불충분이 아니라 fetch 문제다. 실패와 같은 층으로 다루지 않으면 원문을
+// 못 받았다는 같은 사실이 한쪽은 선정을 통과하고 다른 쪽은 하드 제외로 갈린다(#1108).
+// 여기서 켜지는 후보 단위 editor_review_required를 읽는 코드는 src/에 없다. 리포트와 후보
+// payload에 값으로 남을 뿐이라, 사람이 검토하는 게이트가 아니라 "차단되지 않았다"는 표시다.
+test('an empty source body is treated like a fetch failure instead of blocking selection', () => {
+  const source = candidate('empty-body');
+  const evidence = validateCandidateEvidence([source], {
+    sources: [{
+      id: source.id,
+      url: source.url,
+      title: source.title,
+      source_fetch_used: true,
+      source_fetch_status: 'empty',
+      source_fetch_error: 'fetch returned an empty body',
+      validation_mode: 'source_fetch',
+      claims: [{ claim: source.title, evidence_text: '' }]
+    }]
+  }, { newsletterDate: '2026-05-16' });
+  const item = evidence.report.candidates[0];
+
+  assert.equal(item.deep_checked, false);
+  assert.equal(item.evidence_validation_status, 'fetch_failed_review_required');
+  assert.equal(item.final_selection_blocked, false);
+  assert.equal(item.editor_review_required, true);
+  assert.ok(item.reasons.includes('source_fetch_failed'));
+});

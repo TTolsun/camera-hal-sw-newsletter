@@ -18,7 +18,9 @@ function validateOne(candidate = {}, facts = {}, capDroppedIds = new Set()) {
   const sourceFetchStatus = fact.source_fetch_status || 'skipped';
   const sourceFetchError = fact.source_fetch_error || '';
   const validationMode = fact.validation_mode || (candidate.source_gap_risk === true ? 'metadata_only' : 'skipped');
-  const fetchFailed = sourceFetchUsed && sourceFetchStatus === 'failed';
+  // 본문이 비어 온 응답(empty)도 원문을 못 받은 것으로 센다. 근거 본문이 없다는 사실은 같은데
+  // 실패와 다르게 다루면 한쪽만 발행이 막힌다.
+  const fetchFailed = sourceFetchUsed && (sourceFetchStatus === 'failed' || sourceFetchStatus === 'empty');
   const metadataCanSupportClaim = validationMode === 'metadata_only';
   const hasSupportedCoreClaim = supportedClaims.length > 0 ||
     (metadataCanSupportClaim && Boolean(text(candidate.summary || candidate.behavior_change)));
