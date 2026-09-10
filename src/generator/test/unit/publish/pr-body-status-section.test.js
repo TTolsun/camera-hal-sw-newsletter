@@ -118,7 +118,7 @@ test('weeklyPageStructureStatusLine tells an empty week key apart from a real on
   });
   assert.equal(
     withoutKey,
-    'weekly_page_structure_status: not_written (주차 키 없음: 검사 대상 주를 정하지 못했습니다)'
+    'weekly_page_structure_status: not_written (주차 키 없음)'
   );
   assert.notEqual(
     withoutKey,
