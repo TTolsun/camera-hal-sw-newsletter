@@ -90,14 +90,47 @@ test('weeklyPageStructureStatusLine is blank when the field is absent (older art
   assert.equal(weeklyPageStructureStatusLine({}), '');
 });
 
-test('weeklyPageStructureStatusLine stays plain for ok/not_written', () => {
+test('weeklyPageStructureStatusLine carries the week key for ok/not_written', () => {
   assert.equal(
-    weeklyPageStructureStatusLine({ weekly_page_structure_status: 'ok' }),
-    'weekly_page_structure_status: ok'
+    weeklyPageStructureStatusLine({
+      weekly_page_structure_status: 'ok',
+      weekly_page_structure_key: '2026-W37'
+    }),
+    'weekly_page_structure_status: ok (주차 키: 2026-W37)'
   );
   assert.equal(
+    weeklyPageStructureStatusLine({
+      weekly_page_structure_status: 'not_written',
+      weekly_page_structure_key: '2026-W37'
+    }),
+    'weekly_page_structure_status: not_written (주차 키: 2026-W37)'
+  );
+});
+
+// 생산자(resolve-reviewable-artifacts.js의 weeklyStructureObservation)는 실행 날짜를 ISO 주로
+// 못 읽은 경우와 그 주 페이지가 아직 없는 경우를 같은 not_written으로 합친다. 둘을 가르는
+// 유일한 필드가 weekly_page_structure_key이므로, 키가 줄에서 빠지면 리뷰어는 검사가 아예 안
+// 돈 실행과 정상 실행을 똑같이 보게 된다.
+test('weeklyPageStructureStatusLine tells an empty week key apart from a real one', () => {
+  const withoutKey = weeklyPageStructureStatusLine({
+    weekly_page_structure_status: 'not_written',
+    weekly_page_structure_key: ''
+  });
+  assert.equal(
+    withoutKey,
+    'weekly_page_structure_status: not_written (주차 키 없음: 검사 대상 주를 정하지 못했습니다)'
+  );
+  assert.notEqual(
+    withoutKey,
+    weeklyPageStructureStatusLine({
+      weekly_page_structure_status: 'not_written',
+      weekly_page_structure_key: '2026-W37'
+    })
+  );
+  // 키가 아예 없는 옛 artifact도 같은 자리에서 읽혀야 한다.
+  assert.equal(
     weeklyPageStructureStatusLine({ weekly_page_structure_status: 'not_written' }),
-    'weekly_page_structure_status: not_written'
+    withoutKey
   );
 });
 
@@ -105,23 +138,18 @@ test('weeklyPageStructureStatusLine appends the observed errors for errors/check
   assert.equal(
     weeklyPageStructureStatusLine({
       weekly_page_structure_status: 'errors',
+      weekly_page_structure_key: '2026-W37',
       weekly_page_structure_errors: ['Anchor tag mismatch', 'Missing issue heading']
     }),
-    'weekly_page_structure_status: errors — 검사 오류: Anchor tag mismatch; Missing issue heading'
+    'weekly_page_structure_status: errors (주차 키: 2026-W37) — 검사 오류: Anchor tag mismatch; Missing issue heading'
   );
   assert.equal(
     weeklyPageStructureStatusLine({
       weekly_page_structure_status: 'check_failed',
+      weekly_page_structure_key: '2026-W37',
       weekly_page_structure_errors: ['Unexpected end of JSON input']
     }),
-    'weekly_page_structure_status: check_failed — 검사 오류: Unexpected end of JSON input'
-  );
-});
-
-test('weeklyPageStructureStatusLine falls back to unknown when the failure carries no errors', () => {
-  assert.equal(
-    weeklyPageStructureStatusLine({ weekly_page_structure_status: 'errors' }),
-    'weekly_page_structure_status: errors — 검사 오류: unknown'
+    'weekly_page_structure_status: check_failed (주차 키: 2026-W37) — 검사 오류: Unexpected end of JSON input'
   );
 });
 
@@ -132,7 +160,10 @@ test('renderStatusSection surfaces a failed weekly page structure check in the P
     weekly_page_structure_key: '2026-W37',
     weekly_page_structure_errors: ['Anchor tag mismatch']
   });
-  assert.match(body, /weekly_page_structure_status: errors — 검사 오류: Anchor tag mismatch/);
+  assert.match(
+    body,
+    /weekly_page_structure_status: errors \(주차 키: 2026-W37\) — 검사 오류: Anchor tag mismatch/
+  );
 });
 
 test('renderStatusSection omits the weekly page structure line for older artifacts', () => {
