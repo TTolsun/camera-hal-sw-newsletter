@@ -57,6 +57,34 @@ function weeklyOutputStatusLine(status) {
   return `${base} — 실패 사유: ${valueOrUnknown(status.weekly_output_failure_reason)}`;
 }
 
+// weekly_page_structure_status가 실패를 뜻하는 값. 생산자(resolve-reviewable-artifacts.js의
+// weeklyStructureObservation)는 'ok'/'not_written'/'errors'/'check_failed' 넷만 만든다.
+// 'not_written'은 뜻이 하나가 아니다 — 그 주 페이지가 아직 없는 정상 결과와, 검사가 아예
+// 돌지 못한 결과가 같은 값으로 합쳐진다(생산자 주석이 그 합쳐짐을 적어 두었다).
+const FAILED_WEEKLY_PAGE_STRUCTURE_STATUSES = ['errors', 'check_failed'];
+
+// weekly_page_structure_status는 독자가 홈과 아카이브에서 실제로 여는 주간호 페이지의 구조
+// 검사 결과다(#905). 관측용 값이라 public_newsletter_ready 계산에는 안 들어간다. 그래서 이
+// 줄이 없으면 리뷰어가 generation-status.json을 직접 열어야만 결과를 볼 수 있다.
+//
+// 상태 문자열만으로는 판독이 안 되므로 weekly_page_structure_key를 항상 함께 싣는다. 합쳐진
+// not_written을 가르는 것은 키가 비어 있는지 여부다. 빈 키의 원인은 이 자리에서 알 수 없으니
+// 키가 없다는 사실만 적고, 원인은 generation-status.json과 실행 로그에서 가린다.
+function weeklyPageStructureStatusLine(status) {
+  const structureStatus = String(status.weekly_page_structure_status || '');
+  if (!structureStatus) return '';
+  const weeklyKey = String(status.weekly_page_structure_key || '');
+  const keyText = weeklyKey
+    ? `주차 키: ${weeklyKey}`
+    : '주차 키 없음';
+  const base = `weekly_page_structure_status: ${structureStatus} (${keyText})`;
+  if (!FAILED_WEEKLY_PAGE_STRUCTURE_STATUSES.includes(structureStatus)) return base;
+  // 실패 상태에는 생산자가 오류를 담는다. public-structure.js는 errors.length === 0일 때만
+  // ok를 주고, check_failed는 잡은 예외를 메시지 1건으로 만든다. 그래서 빈 목록을 대신할
+  // 문구를 두지 않는다. 이 불변식은 reviewable-artifact-resolver.test.js가 잠근다.
+  return `${base} — 검사 오류: ${ensureArray(status.weekly_page_structure_errors).join('; ')}`;
+}
+
 function recommendedEditorAction(status) {
   if (ensureArray(status.consistency_errors).length > 0) {
     return 'status artifact와 현재 산출물 재계산 결과가 다릅니다. PR 생성 전에 status artifact와 review artifact를 함께 확인하세요.';
@@ -106,6 +134,7 @@ function renderStatusSection(status, handoff = null) {
     coverageWeekLine(status),
     carryForwardStatusLine(status),
     weeklyOutputStatusLine(status),
+    weeklyPageStructureStatusLine(status),
     `팩트체크 상태: ${valueOrUnknown(status.fact_check_status)}`,
     `팩트체크 must_fix_count: ${valueOrUnknown(status.must_fix_count ?? 0)}`,
     `팩트체크 source_gap_count: ${valueOrUnknown(status.source_gap_count ?? 0)}`,
@@ -227,6 +256,7 @@ module.exports = {
   coverageWeekLine,
   carryForwardStatusLine,
   weeklyOutputStatusLine,
+  weeklyPageStructureStatusLine,
   recommendedEditorAction,
   renderStatusSection,
   renderCompositionNotes,
