@@ -631,7 +631,9 @@ test('publishability is read from either the camelCase or the snake_case field',
 });
 
 // 빈 본문은 근거 불충분이 아니라 fetch 문제다. 실패와 같은 층으로 다루지 않으면 원문을
-// 못 받았다는 같은 사실이 한쪽은 editor 검토, 다른 쪽은 발행 차단으로 갈린다(#1108).
+// 못 받았다는 같은 사실이 한쪽은 선정을 통과하고 다른 쪽은 하드 제외로 갈린다(#1108).
+// 여기서 켜지는 후보 단위 editor_review_required는 evidence-validation-report.json 밖으로
+// 나가지 않는다. 사람이 검토하는 게이트가 아니라 "차단되지 않았다"는 표시일 뿐이다.
 test('an empty source body is treated like a fetch failure instead of blocking selection', () => {
   const source = candidate('empty-body');
   const evidence = validateCandidateEvidence([source], {

@@ -114,3 +114,17 @@ test('a 200 response with an empty body is recorded as an empty fetch, not a suc
   assert.equal(fact.source_fetch_status, 'empty');
   assert.ok(fact.source_fetch_error.length > 0);
 });
+
+// 빈 판정은 소비자와 같은 기준으로 재야 한다. 이 fact를 읽는 쪽은 전부 trim한 값을 보므로
+// (text()), 공백만 있는 본문을 trim 없이 재면 근거로 쓸 글자가 하나도 없는데도 success로
+// 남아 바로 위 테스트가 막으려던 하드 제외 경로로 그대로 떨어진다.
+test('a body of only whitespace counts as empty, the same way its consumers measure it', async () => {
+  const source = candidate({ url: 'https://example.com/whitespace-body' });
+  const fetchImpl = async () => ({ ok: true, text: async () => '\n  \t' });
+
+  const facts = await extractSourceFacts([source], { fetch: true, fetchImpl });
+  const fact = facts.sources[0];
+
+  assert.equal(fact.source_fetch_status, 'empty');
+  assert.ok(fact.source_fetch_error.length > 0);
+});
