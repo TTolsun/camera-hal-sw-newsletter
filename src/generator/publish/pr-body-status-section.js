@@ -57,6 +57,24 @@ function weeklyOutputStatusLine(status) {
   return `${base} — 실패 사유: ${valueOrUnknown(status.weekly_output_failure_reason)}`;
 }
 
+// weekly_page_structure_status가 실패를 뜻하는 값. 생산자(resolve-reviewable-artifacts.js의
+// weeklyStructureObservation)는 'ok'/'not_written'/'errors'/'check_failed' 넷만 만들고,
+// 'not_written'은 그 주 페이지가 아직 없는 정상 결과다.
+const FAILED_WEEKLY_PAGE_STRUCTURE_STATUSES = ['errors', 'check_failed'];
+
+// weekly_page_structure_status는 독자가 홈과 아카이브에서 실제로 여는 주간호 페이지의 구조
+// 검사 결과다(#905). 관측용 값이라 public_newsletter_ready 계산에는 안 들어간다. 그래서 이
+// 줄이 없으면 리뷰어가 generation-status.json을 직접 열어야만 결과를 볼 수 있다 — 정상 값일
+// 때는 노이즈를 늘리지 않도록 실패일 때만 관측된 오류를 붙인다.
+function weeklyPageStructureStatusLine(status) {
+  const structureStatus = String(status.weekly_page_structure_status || '');
+  if (!structureStatus) return '';
+  const base = `weekly_page_structure_status: ${structureStatus}`;
+  if (!FAILED_WEEKLY_PAGE_STRUCTURE_STATUSES.includes(structureStatus)) return base;
+  const errors = ensureArray(status.weekly_page_structure_errors).join('; ');
+  return `${base} — 검사 오류: ${errors || 'unknown'}`;
+}
+
 function recommendedEditorAction(status) {
   if (ensureArray(status.consistency_errors).length > 0) {
     return 'status artifact와 현재 산출물 재계산 결과가 다릅니다. PR 생성 전에 status artifact와 review artifact를 함께 확인하세요.';
@@ -106,6 +124,7 @@ function renderStatusSection(status, handoff = null) {
     coverageWeekLine(status),
     carryForwardStatusLine(status),
     weeklyOutputStatusLine(status),
+    weeklyPageStructureStatusLine(status),
     `팩트체크 상태: ${valueOrUnknown(status.fact_check_status)}`,
     `팩트체크 must_fix_count: ${valueOrUnknown(status.must_fix_count ?? 0)}`,
     `팩트체크 source_gap_count: ${valueOrUnknown(status.source_gap_count ?? 0)}`,
@@ -227,6 +246,7 @@ module.exports = {
   coverageWeekLine,
   carryForwardStatusLine,
   weeklyOutputStatusLine,
+  weeklyPageStructureStatusLine,
   recommendedEditorAction,
   renderStatusSection,
   renderCompositionNotes,
