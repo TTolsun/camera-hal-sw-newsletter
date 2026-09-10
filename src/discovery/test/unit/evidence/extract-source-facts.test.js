@@ -100,3 +100,17 @@ test('the fetch cache separates sources by query but ignores the android locale 
   await extractSourceFacts(localeVariants, { fetch: true, fetchImpl: localeFetch.fetchImpl });
   assert.equal(localeFetch.requestedUrls.length, 1);
 });
+
+// HTTP 200인데 본문이 비어 오는 출처가 있다. 이때 근거 본문이 없다는 사실은 같은데,
+// 예전에는 status가 success로 남아 아래 검증에서 "근거 없이 주장만 있는 후보"로 읽혔고
+// 그 후보는 발행 선정에서 하드 제외됐다. 응답을 아예 못 받은 쪽이 오히려 통과하던 비대칭이다.
+test('a 200 response with an empty body is recorded as an empty fetch, not a successful one', async () => {
+  const source = candidate({ url: 'https://example.com/empty-body' });
+  const fetchImpl = async () => ({ ok: true, text: async () => '' });
+
+  const facts = await extractSourceFacts([source], { fetch: true, fetchImpl });
+  const fact = facts.sources[0];
+
+  assert.equal(fact.source_fetch_status, 'empty');
+  assert.ok(fact.source_fetch_error.length > 0);
+});

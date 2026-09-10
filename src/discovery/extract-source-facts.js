@@ -65,7 +65,12 @@ async function extractSourceFacts(candidates = [], options = {}) {
     if (shouldFetch && fetchImpl && url) {
       if (!fetchedBySource.has(sourceKey)) {
         try {
-          fetchedBySource.set(sourceKey, { text: await fetchTextWithLimit(fetchImpl, url, options), status: 'success', error: '' });
+          const body = await fetchTextWithLimit(fetchImpl, url, options);
+          // 응답은 받았지만 본문이 비어 있으면 근거로 쓸 본문이 없다는 점에서 수신 실패와 같다.
+          // success로 남기면 아래 검증이 근거 없는 주장으로 읽어 발행 선정에서 하드 제외한다.
+          fetchedBySource.set(sourceKey, body
+            ? { text: body, status: 'success', error: '' }
+            : { text: '', status: 'empty', error: 'fetch returned an empty body' });
         } catch (error) {
           fetchedBySource.set(sourceKey, { text: '', status: 'failed', error: error.message });
         }
