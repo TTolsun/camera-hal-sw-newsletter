@@ -102,6 +102,54 @@ test('weekly lane rejects a source article image with no caption attribution lin
   }
 });
 
+// 아래 두 테스트는 위 두 실패 케이스의 대조군이다(#905 완료 조건 2). 실패 케이스만 잠그면 규칙이
+// 과잉 발화해도(fallback 이미지를 무조건 거부, 캡션을 무조건 거부) 게이트는 초록이므로, 정상 조합이
+// 이미지 오류를 내지 않는다는 방향도 함께 잠가야 한다.
+//
+// status === 0 은 단언하지 않는다. 이 최소 픽스처는 validate-site 가 무조건 도는 다른 검사
+// (구독 CTA 스크립트 파일, archive.html)에서 항상 실패하기 때문이다. 대신 stderr 에 이미지 규칙
+// 문구("... article image ...")가 없음을 단언한다.
+//
+// 그리고 "CLI 가 이미지 검사 전에 죽어서" 통과하는 것을 막기 위해 archive 라우트 오류 줄을 앵커로
+// 함께 단언한다. validate-site.js 의 fail() 은 오류를 errors 배열에 쌓기만 하고, stderr 로 쓰는 곳은
+// 모든 검사(위클리 HTML 루프 안의 validateArticleImages 포함)가 끝난 뒤의 최종 보고 블록
+// (console.error 한 곳) 뿐이다. 따라서 이 줄이 stderr 에 있으면 스크립트가 이미지 검사를 지나
+// 최종 보고까지 도달한 것이고, 중간에 예외로 죽었다면 이 목록 대신 스택 트레이스만 남는다.
+// (archive 검사 자체는 이미지 루프보다 앞에서 호출되지만, 근거는 호출 순서가 아니라 출력이 끝에서만
+// 한 번 일어난다는 점이다.)
+const VALIDATE_SITE_REACHED_FINAL_REPORT = /^- Missing required public archive route: archive\.html$/m;
+
+test('weekly lane accepts a fallback article image with no caption', () => {
+  const root = weeklySiteRoot([
+    '<figure>',
+    '<img class="article-image" src="../../assets/images/fallback/ai.svg" alt="Fallback illustration" loading="lazy">',
+    '</figure>'
+  ].join('\n'));
+  try {
+    const result = runValidateSite(root);
+    assert.match(result.stderr, VALIDATE_SITE_REACHED_FINAL_REPORT, result.stderr);
+    assert.doesNotMatch(result.stderr, /article image/, result.stderr);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('weekly lane accepts a source article image with a caption attribution link', () => {
+  const root = weeklySiteRoot([
+    '<figure>',
+    '<img class="article-image" src="https://blogger.googleusercontent.com/hero.png" alt="Source illustration" loading="lazy">',
+    '<figcaption class="article-image-caption">이미지: <a href="https://example.com/post">Example Blog</a></figcaption>',
+    '</figure>'
+  ].join('\n'));
+  try {
+    const result = runValidateSite(root);
+    assert.match(result.stderr, VALIDATE_SITE_REACHED_FINAL_REPORT, result.stderr);
+    assert.doesNotMatch(result.stderr, /article image/, result.stderr);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
 function tempRoot() {
   fs.mkdirSync(path.join(process.cwd(), '.tmp'), { recursive: true });
   const root = fs.mkdtempSync(path.join(process.cwd(), '.tmp', 'article-image-fallback-'));
