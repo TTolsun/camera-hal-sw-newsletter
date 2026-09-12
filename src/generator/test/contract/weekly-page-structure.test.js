@@ -21,19 +21,20 @@ function readPublished(relativePath) {
 }
 
 function stageWeeklyIssue(root, overrides = {}) {
-  const issueDir = path.join(root, 'articles', 'newsletters', WEEKLY_KEY);
+  const weeklyKey = overrides.weeklyKey ?? WEEKLY_KEY;
+  const issueDir = path.join(root, 'articles', 'newsletters', weeklyKey);
   fs.mkdirSync(issueDir, { recursive: true });
   writeText(
     path.join(issueDir, 'newsletter.md'),
-    overrides.markdown ?? readPublished(`articles/newsletters/${WEEKLY_KEY}/newsletter.md`)
+    overrides.markdown ?? readPublished(`articles/newsletters/${weeklyKey}/newsletter.md`)
   );
   writeText(
     path.join(issueDir, 'index.html'),
-    overrides.html ?? readPublished(`articles/newsletters/${WEEKLY_KEY}/index.html`)
+    overrides.html ?? readPublished(`articles/newsletters/${weeklyKey}/index.html`)
   );
   writeText(
     path.join(issueDir, 'issue.json'),
-    overrides.issue ?? readPublished(`articles/newsletters/${WEEKLY_KEY}/issue.json`)
+    overrides.issue ?? readPublished(`articles/newsletters/${weeklyKey}/issue.json`)
   );
 
   // fallback 이미지 계약은 파일이 실제로 있는지까지 본다.
@@ -43,8 +44,8 @@ function stageWeeklyIssue(root, overrides = {}) {
   writeText(fallbackTarget, readPublished(fallbackRelative));
 
   const weeklyIndex = JSON.parse(readPublished('articles/data/newsletters-weekly.json'))
-    .filter(item => item.weeklyKey === WEEKLY_KEY);
-  assert.equal(weeklyIndex.length, 1, `${WEEKLY_KEY} 항목이 주간 인덱스에 있어야 이 픽스처가 성립한다.`);
+    .filter(item => item.weeklyKey === weeklyKey);
+  assert.equal(weeklyIndex.length, 1, `${weeklyKey} 항목이 주간 인덱스에 있어야 이 픽스처가 성립한다.`);
   writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), weeklyIndex);
   writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), []);
 }
@@ -99,6 +100,52 @@ test('the weekly lane rejects a source caption on a fallback image (#905)', () =
   assert.ok(
     result.errors.some(error => /fallback article image must not carry a source attribution caption/.test(error)),
     `가짜 출처 캡션이 잡혀야 한다. 실제 오류: ${JSON.stringify(result.errors)}`
+  );
+});
+
+// 위 fallback 테스트의 대조군이다. W37은 기사 전부가 fallback 이미지라, 캡션을 무조건 거부하는
+// 검사기도 위 테스트를 통과한다. 출처 이미지에 출처 캡션이 붙은 발행본(W34)이 그대로 통과해야
+// 검사가 "캡션 금지"가 아니라 "출처에 맞는 캡션"을 보고 있다고 말할 수 있다.
+const SOURCE_IMAGE_WEEKLY_KEY = '2026-W34';
+
+function sourceImageFixture() {
+  const issue = JSON.parse(readPublished(`articles/newsletters/${SOURCE_IMAGE_WEEKLY_KEY}/issue.json`));
+  const sourceSection = issue.sections.find(
+    section => /^https:\/\//.test(section.selectedImage) && section.resolvedImage?.usedFallback === false
+  );
+  assert.ok(sourceSection, '이 픽스처는 출처 이미지를 쓰는 기사가 있는 주간호를 전제로 한다.');
+  const html = readPublished(`articles/newsletters/${SOURCE_IMAGE_WEEKLY_KEY}/index.html`);
+  const caption = html.match(
+    /<figcaption class="article-image-caption">[^<]*<a href="https:\/\/[^"]+">[^<]*<\/a>[^<]*<\/figcaption>/
+  );
+  assert.ok(caption, '이 픽스처는 https 출처 링크를 가진 이미지 캡션이 있는 발행본을 전제로 한다.');
+  return { html, caption: caption[0] };
+}
+
+test('the weekly lane accepts a source caption on a source image (#905)', () => {
+  const root = tempRoot('weekly-structure-source-caption-ok');
+  sourceImageFixture();
+  stageWeeklyIssue(root, { weeklyKey: SOURCE_IMAGE_WEEKLY_KEY });
+
+  const result = weeklyNewsletterStructureStatus(root, SOURCE_IMAGE_WEEKLY_KEY);
+
+  assert.deepEqual(result.errors, []);
+  assert.equal(result.ok, true);
+});
+
+// 같은 픽스처에서 캡션만 빼면 실패해야 위 양성 테스트가 "검사가 헛돌아서 통과"한 것이 아님이
+// 증명된다. 출처 이미지 쪽 규칙(캡션의 https 출처 링크 필수)이 주간 레인에서 도는지를 잠근다.
+test('the weekly lane rejects a source image without a caption attribution link (#905)', () => {
+  const root = tempRoot('weekly-structure-source-caption-missing');
+  const { html, caption } = sourceImageFixture();
+  stageWeeklyIssue(root, { weeklyKey: SOURCE_IMAGE_WEEKLY_KEY, html: html.replace(caption, '') });
+
+  const result = weeklyNewsletterStructureStatus(root, SOURCE_IMAGE_WEEKLY_KEY);
+
+  assert.equal(result.ok, false);
+  assert.ok(
+    result.errors.some(error => /missing caption attribution link/.test(error)),
+    `출처 이미지의 캡션 누락이 잡혀야 한다. 실제 오류: ${JSON.stringify(result.errors)}`
   );
 });
 
