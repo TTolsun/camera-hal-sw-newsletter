@@ -451,8 +451,8 @@ function exactCatalog(date) {
     }),
     entry({
       // #479: 같은 소스에 같은 권고가 10회 연속 실행에서 붙었을 때만 나온다. 제안이고 게이트가
-      // 아니라 reviewBlocking을 켜지 않는다. 아직 이 파일을 만드는 워크플로가 없어 트리에
-      // 커밋된 것은 0건이다.
+      // 아니라 reviewBlocking을 켜지 않는다. 워크플로 03이 source-quality-diagnosis 직후에
+      // 쓰며, 초안이 0건이어도 파일은 생긴다.
       relPath: newsroomRelPath(date, 'source-followup-issues.md'),
       group: 'selection_diagnostics',
       role: 'source_followup_issues',

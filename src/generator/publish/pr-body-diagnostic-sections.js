@@ -160,8 +160,41 @@ function renderCandidatePoolPreflight(root, date, status = {}) {
   ].join('\n');
 }
 
+// 소스 후속 이슈 초안(#479)은 워크플로 03이 source-quality-diagnosis 직후에 쓰는 참고용
+// 산출물이다. 초안이 0건인 주가 대부분이므로 그때는 섹션을 만들지 않는다. 그런 주에는 PR 본문
+// 어디에도 이 산출물이 언급되지 않고, 파일만 PR diff에 커밋된다(인벤토리의 selection_diagnostics
+// 그룹은 생성 산출물 목록에 실리지 않는다).
+//
+// 이 섹션은 "## 생성 상태" 밖에 둔다. validate-pr-body.js가 그 섹션 전체에서 FAILED / NEEDS_FIX
+// 토큰을 훑으므로, 소스 이름과 권고 코드가 실리는 줄을 그 안에 넣으면 PR 본문 검증 실패로
+// 그 주 PR 자체가 만들어지지 않을 수 있다.
+const MAX_SOURCE_FOLLOWUP_ROWS = 10;
+
+function renderSourceFollowupIssues(root, date) {
+  if (!date) return '';
+  const report = loadNewsroomReport(root, date, 'source-followup-issues.json');
+  const items = ensureArray(report?.items).filter(item => item && typeof item === 'object');
+  if (items.length === 0) return '';
+  const rows = items.slice(0, MAX_SOURCE_FOLLOWUP_ROWS).map(item => {
+    const sourceIds = ensureArray(item.source_ids).join(', ') || 'unknown';
+    return `- ${valueOrUnknown(item.title)}: 연속 ${valueOrUnknown(item.consecutive_runs)}회, 권고 ${valueOrUnknown(item.recommended_action)}, 소스 ${sourceIds}`;
+  });
+  const omitted = items.length - rows.length;
+  return [
+    '## 소스 후속 이슈 초안',
+    '',
+    `같은 소스에 같은 권고가 ${valueOrUnknown(report.minimum_consecutive_runs)}회 연속 실행에서 붙은 소스입니다. 제안이며 발행 판정을 바꾸지 않고, GitHub 이슈를 자동으로 만들지 않습니다.`,
+    `초안 전문: \`articles/content/newsroom/${date}/source-followup-issues.md\``,
+    '',
+    ...rows,
+    ...(omitted > 0 ? [`- 외 ${omitted}건은 초안 전문에 있습니다.`] : []),
+    ''
+  ].join('\n');
+}
+
 module.exports = {
   renderFailureDiagnostics,
+  renderSourceFollowupIssues,
   candidateShortageStatus,
   formatHintRows,
   sourceEffectivenessHints,

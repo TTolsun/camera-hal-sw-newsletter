@@ -25,7 +25,8 @@ const {
 const {
   renderCatchUpSummary,
   renderCandidatePoolPreflight,
-  renderFailureDiagnostics
+  renderFailureDiagnostics,
+  renderSourceFollowupIssues
 } = require('./pr-body-diagnostic-sections');
 const {
   resolveReviewHandoff,
@@ -96,6 +97,7 @@ function buildNewsroomPrBody(options = {}) {
     renderPublicNewsletterReadiness(root, date, handoff),
     renderCatchUpSummary(root, date),
     renderCandidatePoolPreflight(root, date, status),
+    renderSourceFollowupIssues(root, date),
     renderFailureDiagnostics(root, date, status, handoff),
     renderPublicNewsletterNotice(status, handoff),
     renderHomepageHeadlineDesignReview(status, date),
