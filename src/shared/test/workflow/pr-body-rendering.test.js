@@ -1908,3 +1908,44 @@ test('review handoff keeps the diagnostics-only classification for every FAILED_
     assert.equal(resolvedStatusHandoff.publicNewsletterReady, false, testCase.generationStatus);
   }
 });
+
+// 소스 후속 이슈 초안(#479)은 발행 판정과 무관한 참고 섹션이다. 두 가지를 잠근다.
+// 1) 초안이 있으면 PR 본문에 실리고 validate-pr-body가 그 본문을 받아들인다.
+// 2) 그 줄은 "## 생성 상태" 밖에 있다 — 검증기가 그 섹션 전체에서 FAILED / NEEDS_FIX 토큰을
+//    훑으므로, 소스 이름과 권고 코드가 그 안에 들어가면 그 주 PR 생성 스텝이 죽는다.
+test('newsroom PR body renders source follow-up issue drafts outside the status section (#479)', () => {
+  const root = fsTempRoot('newsroom-pr-body-');
+  const date = '2026-05-11';
+  writeCandidateShortageReviewableArtifacts(root, date);
+  const changedArtifacts = REQUIRED_CANDIDATE_SHORTAGE_REVIEWABLE_ARTIFACTS
+    .map(file => `articles/content/newsroom/${date}/${file}`);
+
+  const withoutDrafts = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', changedArtifacts });
+  assert.doesNotMatch(withoutDrafts, /소스 후속 이슈 초안/);
+
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'source-followup-issues.json'), {
+    schema_version: 1,
+    report_type: 'source-followup-issues',
+    date,
+    minimum_consecutive_runs: 10,
+    runs_examined: 12,
+    actionable_recommendation_count: 3,
+    items: [{
+      title: '[Source] 소스 유지, 파서 수정: Android Developers Latest Updates',
+      consecutive_runs: 12,
+      recommended_action: 'KEEP_AND_FIX_PARSER',
+      source_ids: ['android-developers-latest-updates']
+    }],
+    warnings: []
+  });
+  const body = buildNewsroomPrBody({ root, date, validateOutcome: 'failure', changedArtifacts });
+
+  assert.match(body, /^## 소스 후속 이슈 초안$/m);
+  const section = extractMarkdownSection(body, '소스 후속 이슈 초안');
+  assert.match(section, /Android Developers Latest Updates: 연속 12회, 권고 KEEP_AND_FIX_PARSER, 소스 android-developers-latest-updates/);
+  assert.match(section, /articles\/content\/newsroom\/2026-05-11\/source-followup-issues\.md/);
+  const statusSection = extractMarkdownSection(body, '생성 상태');
+  assert.doesNotMatch(statusSection, /소스 후속 이슈 초안|KEEP_AND_FIX_PARSER/);
+  const validation = validatePrBodyText(body, { date });
+  assert.equal(validation.ok, true, validation.errors.join('\n'));
+});

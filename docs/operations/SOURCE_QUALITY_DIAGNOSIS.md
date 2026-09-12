@@ -62,5 +62,13 @@ JSON field와 enum은 CI/test가 읽는 machine contract(기계 판독 계약)�
 
 - 이 report는 참고용(advisory) artifact입니다. 생성에 실패하거나 warning이 있어도 publish/readiness 판정에는 영향을 주지 않습니다.
 - final PR workflow는 `date`만 있으면 report 생성을 시도합니다. review PR body가 안 만들어지는 실패 run에서도, 가능한 만큼 partial artifact를 남기는 것이 목적입니다.
-- PR body에는 `소스 품질 진단 / Source Quality Diagnosis` 섹션이 표시됩니다.
-- report artifact가 없거나 invalid JSON이면, PR body는 warning을 표시하고 publish/readiness gate에는 영향이 없다는 점을 함께 밝힙니다.
+- PR body에는 이 report가 실리지 않습니다(요약 섹션도, 생성 산출물 목록도 아닙니다). 두 파일은 PR diff에 커밋되므로 내용은 파일을 열어 읽습니다.
+
+## 후속 이슈 초안
+
+`source-quality-diagnosis.json`의 `source_breakdown`을 이번 실행과 이전 실행분까지 읽어, 같은 소스에 같은 조치형 권고가 10회 연속 붙은 소스만 이슈 초안으로 씁니다(#479).
+
+- 생성: final PR workflow가 진단 리포트 스텝 직후에 `npm run report:source-followup-issues -- --date YYYY-MM-DD`를 돌립니다. 실패해도 publish gate를 막지 않습니다.
+- 출력: `articles/content/newsroom/YYYY-MM-DD/source-followup-issues.json`과 `source-followup-issues.md`. 초안이 0건이어도 파일은 생깁니다.
+- PR body: 초안이 1건 이상일 때만 `소스 후속 이슈 초안` 섹션이 표시됩니다.
+- 이 초안은 제안입니다. GitHub 이슈를 자동으로 만들지 않고 발행 판정도 바꾸지 않습니다. 파일을 쓰지 않고 미리 보려면 `--dry-run`을 붙입니다.

@@ -28,6 +28,7 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   const resolveFinalStatusStep = workflowStep(workflow, 'Resolve final publish status');
   const sourceEffectivenessStep = workflowStep(workflow, 'Generate source effectiveness report');
   const sourceQualityDiagnosisStep = workflowStep(workflow, 'Generate source quality diagnosis');
+  const sourceFollowupStep = workflowStep(workflow, 'Draft source follow-up issues');
   const evidencePackStep = workflowStep(workflow, 'Generate evidence pack summary');
   const halSignalQualityStep = workflowStep(workflow, 'Generate HAL signal quality report');
   const imageAuditStep = workflowStep(workflow, 'Audit newsletter image lineage');
@@ -161,6 +162,17 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.match(sourceQualityDiagnosisStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.match(sourceQualityDiagnosisStep, /continue-on-error:\s*true/);
   assert.match(sourceQualityDiagnosisStep, /npm run report:source-quality-diagnosis -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
+  // 소스 후속 이슈 초안(#479)은 이 실행의 source-quality-diagnosis.json을 디스크에서 읽으므로
+  // 진단 스텝 뒤에 와야 한다. 앞으로 옮겨지면 입력 파일이 없어 매주 초안 0건이 되는데, 그 상태는
+  // 오류가 아니라 정상 출력과 같은 모양이라 순서를 계약으로 잠근다.
+  assertTextInOrder(workflow, [
+    '- name: Generate source quality diagnosis',
+    '- name: Draft source follow-up issues',
+    '- name: Snapshot newsroom debug artifacts'
+  ]);
+  assert.match(sourceFollowupStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
+  assert.match(sourceFollowupStep, /continue-on-error:\s*true/);
+  assert.match(sourceFollowupStep, /npm run report:source-followup-issues -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
   assert.match(evidencePackStep, /if: always\(\) && steps\.meta\.outputs\.date != ''/);
   assert.match(evidencePackStep, /continue-on-error:\s*true/);
   assert.match(evidencePackStep, /npm run report:evidence-pack -- --date "\$\{\{ steps\.meta\.outputs\.date \}\}"/);
