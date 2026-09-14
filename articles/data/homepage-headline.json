@@ -4,7 +4,7 @@
   "current_headline": {
     "article_identity_key": "url:https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com",
     "title": "Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개",
-    "summary": "Rockchip RKISP1 ISP 드라이버에서 Bayer demosaicing 바이패스 비트가 반대로 처리되던 심각한 로직 오류를 해결하는 패치가 제안되었습니다.",
+    "summary": "Rockchip RKISP1 ISP 드라이버에서 Bayer demosaicing 바이패스 비트가 반대로 처리되던 로직 오류를 해결하는 패치가 제안되었습니다.",
     "source_url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
     "newsletter_date": "2026-09-14",
     "newsletter_url": "newsletters/2026-09-14/index.html",
