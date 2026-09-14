@@ -58,3 +58,28 @@ test('a run that never wired the list says so instead of reporting an empty pool
   const selectionReport = buildSelectionReport(ISSUE_DATE, { eligible_candidate_count: 3 }, unwired);
   assert.equal(selectionReport.eligible_candidate_urls, null);
 });
+
+test('candidate diagnostics reach the committed selection-report.json through the live call path', () => {
+  // #1128: 라이브 호출부(writeSelectionDiagnosticsArtifact)는 selectionStatusExtra 결과를
+  // 세 번째 인자로 넘긴다. 그 결과에는 count와 group key만 있고 후보 배열·통과선이 없어
+  // 후보 진단이 매 run 0행으로 커밋됐다(09-07: 0/69, 09-14: 0/71). 후보 배열은
+  // shortlistReport 자체에 있으므로 같은 3단 파이프라인으로 행이 실리는지를 고정한다.
+  const shortlist = buildShortlistReport(ISSUE_DATE, distinctPrimaryCandidates(3), {});
+  const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
+
+  const expectedMinimumRows = shortlist.selected_articles.length + shortlist.reserve_candidates.length;
+  assert.ok(expectedMinimumRows > 0, '선정·예비 후보가 하나도 없으면 이 테스트는 아무것도 증명하지 않는다');
+  assert.ok(
+    selectionReport.candidate_diagnostics_count >= expectedMinimumRows,
+    `후보 진단 ${selectionReport.candidate_diagnostics_count}행 < 선정+예비 ${expectedMinimumRows}건`
+  );
+  assert.equal(selectionReport.candidate_diagnostics.length, selectionReport.candidate_diagnostics_count);
+  assert.equal(
+    selectionReport.candidate_diagnostics_not_evaluated,
+    shortlist.input_candidate_count - selectionReport.candidate_diagnostics_count
+  );
+  assert.equal(
+    selectionReport.candidate_score_threshold,
+    shortlist.selection_policy.main_article_score_threshold
+  );
+});
