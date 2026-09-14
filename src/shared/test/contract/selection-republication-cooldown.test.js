@@ -442,7 +442,7 @@ test('the shortlist cap is applied after the cooldown filter, so a blocked seat 
 // 재게재 차단은 후보를 eligible 풀에서 빼므로, 차단 뒤 구성으로 힌트를 만들면 그 버킷이 0이 되어
 // "파서를 고쳐라"가 붙는다. 파서는 멀쩡한데 고치라고 지시하는 오귀인이다. 한 버킷에 후보가 하나뿐인
 // 주를 만들어 그 후보만 막는다.
-const PARSER_REPAIR_HINT = /Repair official AOSP Camera \/ CameraX row parsers/;
+const PARSER_REPAIR_HINT = /No eligible direct_aosp_camera candidate/;
 
 function mixedBucketCandidates() {
   return [
@@ -477,8 +477,8 @@ test('a republication block is not reported as a source parser defect', () => {
   assert.equal(report.eligible_composition_summary.direct_aosp_camera_count, 0);
 });
 
-test('a bucket that collection never delivered still gets its parser hint', () => {
-  // 과억제 가드: 차단과 무관하게 비어 있는 버킷의 힌트까지 사라지면 진짜 파서 고장을 놓친다.
+test('an empty bucket requests coverage review without asserting a parser defect', () => {
+  // 빈 버킷은 점검 대상이지만, 그것만으로 파서 결함을 확정하지 않는다.
   const report = buildShortlistReport(ISSUE_DATE, [
     policyDriverCandidate(1, { title: 'V4L2 sensor driver rework' }),
     policyDriverCandidate(2, { title: 'libcamera IPA module refresh' })
@@ -486,7 +486,8 @@ test('a bucket that collection never delivered still gets its parser hint', () =
 
   assert.equal(report.republication_cooldown_blocked.count, 0);
   assert.ok(report.selection_shortage_hints.some(hint => PARSER_REPAIR_HINT.test(hint)));
-  assert.ok(report.source_parser_hints.some(hint => hint.code === 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR'));
+  assert.ok(report.source_parser_hints.some(hint => hint.code === 'SOURCE_COVERAGE_REVIEW'));
+  assert.ok(!report.source_parser_hints.some(hint => hint.code === 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR'));
 });
 
 test('a record without a publish date does not leave the cooldown warning dangling', () => {

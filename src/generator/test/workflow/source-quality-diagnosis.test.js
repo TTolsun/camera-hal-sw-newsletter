@@ -161,7 +161,7 @@ test('source quality diagnosis separates parser, taxonomy, fallback, and discove
   assert.equal(report.raw_candidate_count, 46);
   assert.equal(report.eligible_candidate_count, 1);
   assert.equal(report.diagnosis.parser_extraction_failure, true);
-  assert.equal(report.diagnosis.taxonomy_missing, true);
+  assert.equal(report.diagnosis.taxonomy_missing, false);
   assert.equal(report.diagnosis.fallback_only_composition, true);
   assert.equal(report.diagnosis.duplicate_or_noop_source_discovery, true);
   assert.equal(report.diagnosis.source_gap_risk, true);
@@ -186,6 +186,81 @@ test('source quality diagnosis normalizes fallback composition mode values', () 
 
   assert.equal(report.diagnosis.fallback_only_composition, true);
   assert.match(report.diagnosis_reasons.fallback_only_composition[0].reason, /fallback-only/);
+});
+
+test('diagnosis distinguishes old unreviewed Gerrit proposals, extraction fallback and failed collection', () => {
+  const proposal = cameraCandidate({
+    source_id: 'aosp-gerrit-camera-changes',
+    url: 'https://android-review.googlesource.com/c/platform/frameworks/av/+/123',
+    published_date: '2026-05-01',
+    gerrit_change_status: 'NEW',
+    source_quality: { main_article_source_blockers: ['policy_locked_out_of_main'] }
+  });
+  const report = buildSourceQualityDiagnosisReport({
+    date: '2026-06-01',
+    candidatePayload: {
+      candidates: [proposal, proposal, cameraCandidate({
+        source_id: 'broken-camera-row',
+        source_extraction: { used_fallback: true }
+      })],
+      failures: [{ source: 'AI News', message: '403 Forbidden' }]
+    },
+    generationStatus: { eligible_candidate_count: 1, deterministic_selected_count: 2, rendered_main_article_count: 1, hard_blocked_group_count: 1 },
+    sourceEffectivenessReport: { summary: { eligible_count: 3 }, sources: [
+      { source_id: 'quiet-source', collected_count: 0, recommendation: 'NO_RECENT_SIGNAL' },
+      { source_id: 'old-source', recommendation: 'REVIEW_SOURCE_OR_PARSER', parser_repair_reason_count: 1,
+        top_exclusion_reasons: [{ reason: 'selection_window=reference_not_main; published date is outside the window' }] }
+    ] }
+  });
+  const old = report.candidate_dispositions.find(item => item.source_id === proposal.source_id);
+  assert.equal(report.candidate_dispositions.length, 2, 'duplicate source URLs are counted once');
+  assert.equal(old.freshness_window, 'reference');
+  assert.deepEqual(old.reason_codes, ['outside_main_window', 'source_policy_blocked']);
+  assert.equal(report.diagnosis_reasons.parser_extraction_failure.length, 1);
+  assert.match(report.diagnosis_reasons.parser_extraction_failure[0].reason, /broken-camera-row/);
+  assert.equal(report.eligible_candidate_count, 1, 'final eligibility takes precedence over raw source counts');
+  assert.equal(report.source_breakdown[0].recommended_action, 'KEEP_AND_MONITOR');
+  assert.equal(report.publication_counts.hard_blocked_groups, 1);
+  const markdown = renderSourceQualityDiagnosisMarkdown(report);
+  assert.match(markdown, /403 Forbidden/);
+  assert.match(markdown, /outside_main_window, source_policy_blocked/);
+  assert.doesNotMatch(markdown, /실제 뉴스 부족보다는/);
+});
+
+test('unclassified derived candidates and an empty topic do not prove missing taxonomy', () => {
+  const options = diagnosisInputs({
+    candidatePayload: { candidates: [cameraCandidate({ relevance_bucket: '' })] },
+    sourceEffectivenessReport: {}, sourceDiscoveryFeedbackReport: {}, mergedCandidateManifest: {}
+  });
+  assert.equal(buildSourceQualityDiagnosisReport(options).diagnosis.taxonomy_missing, false);
+  options.candidatePayload.candidates[0].relevance_bucket = 'unrecognized_camera_bucket';
+  assert.equal(buildSourceQualityDiagnosisReport(options).diagnosis.taxonomy_missing, true);
+});
+
+test('failed collection cannot be diagnosed as actual news shortage', () => {
+  const report = buildSourceQualityDiagnosisReport({
+    date,
+    candidatePayload: { candidates: [], failures: [{ source: 'Official Camera', message: '403 Forbidden' }] },
+    selectionReport: { candidate_shortage_reviewable: true },
+    sourceEffectivenessReport: { sources: [{ source_id: 'quiet', priority: 'high', collected_count: 0, recommendation: 'NO_RECENT_SIGNAL' }] }
+  });
+  assert.equal(report.diagnosis.actual_news_shortage, false);
+  assert.equal(report.recommended_issues.some(issue => issue.action === 'NO_ACTION_THIN_WEEK'), false);
+  assert.match(renderSourceQualityDiagnosisMarkdown(report), /결론: 수집 요청 실패가 기록되어 있습니다/);
+});
+
+test('recommendation text is not treated as parser failure evidence', () => {
+  const report = buildSourceQualityDiagnosisReport({
+    date,
+    sourceEffectivenessReport: { sources: [{
+      source_id: 'source-gap', recommendation: 'REVIEW_SOURCE_OR_PARSER',
+      reasons: ['Source gaps alone do not establish a parser failure.'],
+      top_exclusion_reasons: [{ reason: 'reference_only=true' }]
+    }] }
+  });
+  assert.equal(report.diagnosis.parser_extraction_failure, false);
+  assert.equal(report.candidate_counts.merged_records, null);
+  assert.equal(report.candidate_counts.merged_unique_urls, null);
 });
 
 test('source quality diagnosis does not infer actual news shortage without source effectiveness evidence', () => {

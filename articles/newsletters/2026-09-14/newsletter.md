@@ -96,17 +96,17 @@ libcamera 프로젝트에서 Sony IMX355 센서의 테스트 패턴 모드 매�
 
 _libcamera Patchwork 패치 제안 (2026-09-10)_
 
-libcamera 프로젝트에서 이미지 처리 제어 기능을 한층 더 세밀하게 확장하기 위해, 컨트롤 메타데이터에 LensShadingCorrection 맵과 ToneCurve를 추가하는 패치가 제안되었습니다.
+libcamera에서 렌즈 음영 보정 맵과 톤 곡선을 프레임 결과 메타데이터로 제공하여, DNG 파일의 색 재현을 JPEG에 맞추려는 패치가 제안되었습니다.
 
-2026년 9월 10일, libcamera Patchwork를 통해 카메라 컨트롤 메타데이터에 LensShadingCorrection(렌즈 음영 보정) 맵과 ToneCurve(톤 곡선) 제어 기능을 추가하는 패치가 공개되었습니다. 이 패치는 프로젝트 메인테이너 중 한 명인 Kieran Bingham이 제출하여 현재 검토가 진행 중입니다.
+2026년 9월 10일, libcamera Patchwork에 LensShadingCorrectionMaps와 ToneCurve를 프레임 결과 메타데이터로 제공하는 패치가 제출되었습니다. Michael Kunz가 작성했으며, 메일 서버 문제로 Kieran Bingham이 대신 제출했습니다.
 
-이번 변경 사항은 하위 이미지 처리 파이프라인 제어 기능을 대폭 확장하는 것을 목표로 합니다. 메타데이터를 통해 렌즈 주변부의 광량 저하를 보정하는 쉐이딩 맵과 이미지의 대비 및 밝기 톤을 조절하는 톤 곡선 파라미터를 직접 제어할 수 있게 됨으로써, 이미지 품질 튜닝의 정밀도가 크게 향상될 것으로 기대됩니다.
+패치는 Raspberry Pi 파이프라인의 프레임 메타데이터 보고 경로에서 렌즈 음영 보정 맵과 톤 곡선을 내보내도록 확장합니다. DNG 저장 프로그램이 이 정보를 사용하여 JPEG와 색 재현을 맞추고 색조 차이를 줄이는 것이 목적입니다. 렌즈 음영 보정 맵의 출력 여부를 선택하는 컨트롤도 추가합니다.
 
-현재 이 패치는 'new' 상태로 프로젝트 패치 트래커에서 검토 중인 제안 단계의 변경 사항입니다. libcamera 기반의 카메라 소프트웨어 스택을 구축하고 있는 개발 팀은 이 패치를 통해 향후 HAL 계층과의 고급 이미지 제어 메타데이터 연동을 미리 준비할 수 있습니다.
+이 패치는 제안 단계입니다. Raspberry Pi와 libcamera 기반으로 RAW/DNG를 저장하는 개발 팀은 패치 적용 후 결과 메타데이터에 보정 맵과 톤 곡선이 포함되는지, DNG 저장 프로그램이 이를 실제 파일에 반영하는지 확인할 수 있습니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-하위 libcamera 스택에서 LensShadingCorrection 및 ToneCurve 메타데이터 제어가 가능해짐에 따라, Android Camera HAL의 LENS_SHADING_MAP 및 TONE_MAP_CURVE 제어 요청을 하위 드라이버 및 ISP 파이프라인에 직접적이고 정밀하게 매핑할 수 있는 경로가 마련되었습니다. HAL 계층의 메타데이터 매핑 모듈을 업데이트할 준비가 필요합니다.
+Raspberry Pi 파이프라인의 프레임 결과와 DNG 저장 경로를 함께 확인하는 것이 핵심입니다. 같은 장면의 DNG와 JPEG를 비교하고, 렌즈 음영 보정 맵의 채널 구성과 크기, 톤 곡선 데이터가 파일에 올바르게 반영되는지 검증할 수 있습니다. Android Camera HAL 연동은 별도 구현과 검증이 필요한 영역이며, 이 패치에 HAL 요청을 ISP 제어로 연결하는 변경은 포함되어 있지 않습니다.
 
 **출처**
 

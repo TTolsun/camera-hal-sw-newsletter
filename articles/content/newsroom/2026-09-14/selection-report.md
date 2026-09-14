@@ -12,8 +12,8 @@
 
 ## Shortage Hints
 
-- Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.
-- Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows.
+- No eligible direct_aosp_camera candidate is available in this pool. Check collection failures, candidate dates and source-policy blockers before attributing the gap to a parser defect.
+- No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.
 - Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
 
 ## Candidate Pool Preflight
@@ -46,8 +46,8 @@
 
 ## Source Parser Hints
 
-- OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.
-- OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows.
+- OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: No eligible direct_aosp_camera candidate is available in this pool. Check collection failures, candidate dates and source-policy blockers before attributing the gap to a parser defect.
+- OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR: No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.
 - CAMERA_DRIVER_SOURCE_SHORTAGE: Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
 
 ## Gate Summary

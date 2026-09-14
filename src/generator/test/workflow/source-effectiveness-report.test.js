@@ -98,7 +98,7 @@ test('official source is not marked parser repair from collected count alone', (
   assert.equal(official.camera_relevant_raw_count, 1);
   assert.equal(official.parser_repair_reason_count, 0);
   assert.notEqual(official.recommendation, 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR');
-  assert.equal(official.recommendation, 'KEEP_AND_FIX_PARSER');
+  assert.equal(official.recommendation, 'REVIEW_SOURCE_OR_PARSER');
 });
 
 test('generic source with many collected and zero eligible is downgrade candidate', () => {
@@ -109,6 +109,17 @@ test('generic source with many collected and zero eligible is downgrade candidat
   assert.equal(generic.eligible_count, 0);
   assert.equal(generic.generic_noise_count, 3);
   assert.equal(generic.recommendation, 'DOWNGRADE_TO_CANDIDATE_ONLY');
+});
+
+test('dated reference exclusion does not produce a parser repair recommendation', () => {
+  const report = buildReport({ collectedCandidates: {
+    candidates: fixture.collectedCandidates.candidates.map(candidate => candidate.source_name !== 'Official Broken Parser'
+      ? candidate
+      : { ...candidate, selection_exclusion_reason: 'selection_window=reference_not_main; published date is outside the main window' })
+  } });
+  const official = source(report, 'official-broken');
+  assert.equal(official.parser_repair_reason_count, 0);
+  assert.equal(official.recommendation, 'REVIEW_SOURCE_OR_PARSER');
 });
 
 test('source gap heavy non-generic source is review source or parser', () => {

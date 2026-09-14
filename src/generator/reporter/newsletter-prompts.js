@@ -4,6 +4,7 @@ function linkedEvidencePromptGuardrails() {
     'Editor draft text는 linked evidence가 아닙니다. draft에 나온 Gerrit, IssueTracker, GitHub, mailing-list, CVE, linked-page 언급은 source-backed fact가 아니라 검증해야 할 claim으로 다루세요.',
     'blocked, failed, skipped, unsupported linked evidence를 확인된 세부 사실처럼 쓰지 마세요.',
     'build_dependency_fix, test_only_change, documentation_only signal을 HAL runtime, stream, buffer, metadata, request/result, implementation, product behavior 변경으로 다루지 마세요.',
+    '메타데이터는 request/control 입력과 frame/result 출력을 구분하세요. 프레임 결과에 보정 맵이나 톤 곡선을 노출하는 변경을 ISP 제어 입력 추가로 설명하지 마세요. libcamera의 결과 메타데이터 확장만으로 Android HAL 매핑이나 Camera2 API 지원이 구현됐다고 주장하지 마세요. DNG 저장 등 원문이 명시한 소비 경로와 플랫폼 범위를 보존하세요.',
     '제공된 evidence가 stream, buffer, metadata, request, result, ImageCapture, VideoCapture, Surface, CameraPipe behavior를 명시하지 않으면 높은 HAL/runtime impact를 주장하지 마세요.'
   ].join('\n');
 }
