@@ -7,12 +7,14 @@ const {
   finalSelectionEligibility,
   hasDatedEvidence,
   isEligibleCandidate,
+  parserFailureReason,
   cameraRelevantRawSignal,
   markdownEscape,
   markdownTable
 } = require('./diagnostics-helpers');
 const fs = require('fs');
 const path = require('path');
+const { candidateDispositions } = require('./candidate-dispositions');
 
 const {
   kstDate,
@@ -222,6 +224,7 @@ function candidateBlockers(candidate = {}) {
   if (candidate.reference_only === true) blockers.push('reference_only=true');
   if (candidate.main_eligible === false) blockers.push('main_eligible=false');
   if (candidate.briefing_only === true) blockers.push('briefing_only=true');
+  if (candidate.source_extraction?.used_fallback === true) blockers.push('source_extraction.used_fallback=true');
   if (eligibility && !['main', 'short'].includes(eligibility)) {
     blockers.push(`finalSelectionEligibility=${eligibility}`);
   }
@@ -254,21 +257,27 @@ function normalizeWarning(value = {}) {
 
 function sourceActionForEffectiveness(source = {}) {
   const recommendation = text(source.recommendation);
-  if (PARSER_REPAIR_RECOMMENDATIONS.has(recommendation)) return 'KEEP_AND_FIX_PARSER';
+  if (PARSER_REPAIR_RECOMMENDATIONS.has(recommendation)) {
+    return parserSignalsFromSource(source).length > 0 ? 'KEEP_AND_FIX_PARSER' : 'REVIEW_SOURCE_GAP';
+  }
   if (recommendation === 'DOWNGRADE_TO_CANDIDATE_ONLY' || recommendation === 'DISABLE_OR_REVIEW') {
     return 'DOWNGRADE_GENERIC_SOURCE';
   }
   if (recommendation === 'REVIEW_SOURCE_OR_PARSER') return 'REVIEW_SOURCE_GAP';
-  if (recommendation === 'NO_RECENT_SIGNAL') return 'NO_ACTION_THIN_WEEK';
+  // Zero collected records do not establish that no news existed (fetch failures,
+  // filtering and an unregistered source can all produce the same count).
+  if (recommendation === 'NO_RECENT_SIGNAL') return 'KEEP_AND_MONITOR';
   return 'KEEP_AND_MONITOR';
 }
 
 function parserSignalsFromSource(source = {}) {
+  // Recommendation prose is our own output, not evidence. In particular, a
+  // recommendation saying "do not establish a parser failure" must not diagnose one.
   const values = [
-    ...ensureArray(source.reasons),
-    ...ensureArray(source.top_exclusion_reasons).map(item => item.reason)
-  ].map(text).filter(Boolean);
-  return values.filter(value => /parser|parse|extraction|source_extraction|date|dated|version|anchor|release row|missing URL evidence|missing dated evidence/i.test(value));
+    ...ensureArray(source.parser_failure_reasons),
+    ...ensureArray(source.top_exclusion_reasons)
+  ].map(item => text(item.reason)).filter(Boolean);
+  return [...new Set(values.filter(parserFailureReason))];
 }
 
 function buildSourceBreakdownFromEffectiveness(report = {}) {
@@ -328,7 +337,7 @@ function buildSourceBreakdownFromCandidates(candidates = []) {
     if (blockers.length > 0) state.blocked_count += 1;
     for (const blocker of blockers) {
       state.top_blockers.set(blocker, (state.top_blockers.get(blocker) || 0) + 1);
-      if (/parser|parse|extraction|source_extraction|date|dated|version|anchor|release row/i.test(blocker)) {
+      if (parserFailureReason(blocker)) {
         state.parser_failure_signals.add(blocker);
       }
     }
@@ -576,10 +585,10 @@ function buildSourceQualityDiagnosisReport(options = {}) {
     hasCandidateEvidence ? candidates.length : null
   );
   const eligibleCandidateCount = firstNumber(
-    sourceEffectivenessSummary.eligible_count,
     generationStatus.eligible_candidate_count,
     shortlistReport.final_eligible_candidate_count,
     shortlistReport.eligible_candidate_count,
+    sourceEffectivenessSummary.eligible_count,
     candidateShortageSummary.publishable_candidate_count,
     hasShortlistReport && hasCandidateEvidence ? candidates.filter(isEligibleCandidate).length : null
   );
@@ -623,16 +632,20 @@ function buildSourceQualityDiagnosisReport(options = {}) {
   const manifestRel = inputRefs.merged_candidate_manifest || mergedCandidateManifestRelPath(date);
 
   const parserRepairSources = ensureArray(sourceEffectivenessReport.sources)
-    .filter(source => PARSER_REPAIR_RECOMMENDATIONS.has(text(source.recommendation)) || Number(source.parser_repair_reason_count || 0) > 0);
+    .filter(source => parserSignalsFromSource(source).length > 0);
   for (const source of parserRepairSources.slice(0, 5)) {
     addReason(
       reasons,
       'parser_extraction_failure',
-      `${source.source_id || 'unknown-source'} has ${source.recommendation || 'parser repair'} recommendation.`,
+      `${source.source_id || 'unknown-source'}: ${parserSignalsFromSource(source)[0]}`,
       sourceEffectivenessRel,
       PARSER_REPAIR_RECOMMENDATIONS.has(text(source.recommendation)) ? 'high' : 'medium',
       { source_id: source.source_id || '' }
     );
+  }
+  for (const sourceId of new Set(candidates.filter(candidate => candidate.source_extraction?.used_fallback === true).map(sourceIdForCandidate))) {
+    addReason(reasons, 'parser_extraction_failure', `${sourceId}: source_extraction.used_fallback=true`,
+      inputRefs.candidate_input, 'medium', { source_id: sourceId });
   }
   if (Number(sourceDiscoveryFeedbackReport.parser_gap_count || 0) > 0) {
     addReason(
@@ -659,7 +672,7 @@ function buildSourceQualityDiagnosisReport(options = {}) {
   );
   const unknownBucketCandidates = candidates.filter(candidate => {
     const bucket = relevanceBucket(candidate);
-    return cameraRelevantRawSignal(candidate) && (!bucket || !KNOWN_CAMERA_BUCKETS.has(bucket));
+    return cameraRelevantRawSignal(candidate) && bucket && !KNOWN_CAMERA_BUCKETS.has(bucket);
   });
   if (unknownBucketCandidates.length > 0) {
     addReason(
@@ -667,15 +680,6 @@ function buildSourceQualityDiagnosisReport(options = {}) {
       'taxonomy_missing',
       `${unknownBucketCandidates.length} camera-relevant candidate(s) were not mapped to a known camera bucket.`,
       candidateInput.relPath || collectedCandidatesRelPath(date),
-      'medium'
-    );
-  }
-  if (androidMultimediaCameraOutputCount === 0 && candidateShortage(selectionReport.candidate_shortage_summary || shortlistReport.candidate_shortage_summary || {}, generationStatus, selectionReport)) {
-    addReason(
-      reasons,
-      'taxonomy_missing',
-      'android_multimedia_camera_output bucket signal is missing while the candidate pool is underfilled.',
-      selectionRel,
       'medium'
     );
   }
@@ -792,7 +796,7 @@ function buildSourceQualityDiagnosisReport(options = {}) {
     'source_gap_risk',
     'fallback_only_composition',
     'duplicate_or_noop_source_discovery'
-  ].some(key => boolFromReasons(reasons, key));
+  ].some(key => boolFromReasons(reasons, key)) || ensureArray(candidatePayload.failures).length > 0;
   if (
     shortage &&
     !otherFailureSignals &&
@@ -811,7 +815,7 @@ function buildSourceQualityDiagnosisReport(options = {}) {
     addReason(
       reasons,
       'actual_news_shortage',
-      'Not marked as actual news shortage because parser/taxonomy/source/discovery failure signals are present.',
+      'Not marked as actual news shortage because collection/parser/taxonomy/source/discovery failure signals are present.',
       selectionRel,
       'info'
     );
@@ -853,6 +857,22 @@ function buildSourceQualityDiagnosisReport(options = {}) {
     diagnosis,
     diagnosis_reasons: reasons,
     source_breakdown: sourceBreakdown,
+    candidate_dispositions: candidateDispositions(candidates, date, selectionReport.coverage_week_key),
+    collection_failures: ensureArray(candidatePayload.failures),
+    candidate_counts: {
+      raw: numberOrNull(mergedCandidateManifest.manual_candidate_count) ?? rawCandidateCount,
+      merged_records: hasCandidateInput ? candidates.length : null,
+      merged_unique_urls: hasCandidateInput ? new Set(candidates.map(candidateUrl).filter(Boolean).map(normalizeUrl)).size : null,
+      gemini_new_unique_urls: numberOrNull(mergedCandidateManifest.gemini_new_unique_url_count),
+      derived_new_unique_urls: numberOrNull(mergedCandidateManifest.derived_new_unique_url_count),
+      derived_publishable: numberOrNull(mergedCandidateManifest.derived_publishable_candidate_count)
+    },
+    publication_counts: {
+      deterministic_selected: numberOrNull(generationStatus.deterministic_selected_count),
+      rendered: numberOrNull(generationStatus.rendered_main_article_count),
+      hard_blocked_groups: numberOrNull(generationStatus.hard_blocked_group_count),
+      explicitly_demoted_groups: numberOrNull(generationStatus.explicitly_demoted_group_count)
+    },
     recommended_issues: recommendedIssues,
     warnings
   };
@@ -1007,11 +1027,14 @@ function trueDiagnosisLabels(report) {
 
 function renderSourceQualityDiagnosisMarkdown(report) {
   const labels = trueDiagnosisLabels(report);
+  const dispositions = ensureArray(report.candidate_dispositions);
   const conclusion = report.diagnosis?.actual_news_shortage === true
     ? '실제 뉴스 부족 가능성이 큽니다.'
     : labels.length > 0
-      ? '실제 뉴스 부족보다는 후보 추출/분류/source discovery 단계 손실 가능성이 큽니다.'
-      : '뚜렷한 source quality failure signal은 없습니다.';
+      ? '수집·분류·탐색 단계의 점검 신호가 있습니다. 이 신호만으로 특정 주제의 실제 뉴스 부족 여부를 판단할 수 없습니다.'
+      : ensureArray(report.collection_failures).length > 0
+        ? '수집 요청 실패가 기록되어 있습니다. 후보 부재를 실제 뉴스 부족으로 판단하지 않습니다.'
+        : '뚜렷한 source quality failure signal은 없습니다.';
   const sourceRows = ensureArray(report.source_breakdown)
     .slice()
     .sort((a, b) =>
@@ -1024,7 +1047,10 @@ function renderSourceQualityDiagnosisMarkdown(report) {
       source.source_name || source.source_id,
       displayValue(source.raw_count),
       displayValue(source.eligible_count),
-      ensureArray(source.top_blockers).slice(0, 2).join('; ') || '없음',
+      [...new Set([
+        ...dispositions.filter(item => item.source_id === source.source_id).flatMap(item => item.reason_codes),
+        ...ensureArray(source.top_blockers)
+      ])].slice(0, 3).join('; ') || (source.raw_count === 0 ? '입력 후보 없음; 실제 뉴스 유무 미확인' : '기록 없음'),
       RECOMMENDED_ACTION_LABELS_KO[source.recommended_action] || source.recommended_action || ''
     ]);
   const issueRows = ensureArray(report.recommended_issues).slice(0, 10).map(issue => [
@@ -1049,11 +1075,15 @@ function renderSourceQualityDiagnosisMarkdown(report) {
     '## 요약',
     '',
     `- 원본 후보 수: ${displayValue(report.raw_candidate_count)}`,
-    `- 최종 사용 가능 후보 수: ${displayValue(report.eligible_candidate_count)}`,
+    `- 보고된 사용 가능 후보 수: ${displayValue(report.eligible_candidate_count)} (선정 단계와 출처 정책의 추가 차단은 아래에서 확인)`,
     `- Primary Camera Stack 후보 수: ${displayValue(report.primary_camera_stack_count)}`,
     `- Android multimedia camera output 후보 수: ${displayValue(report.android_multimedia_camera_output_count)}`,
     `- 주요 진단: ${labels.join(', ') || '없음'}`,
     `- 결론: ${conclusion}`,
+    `- 병합 레코드 / 고유 URL: ${displayValue(report.candidate_counts?.merged_records)} / ${displayValue(report.candidate_counts?.merged_unique_urls)}`,
+    `- Gemini 신규 URL: ${displayValue(report.candidate_counts?.gemini_new_unique_urls)}`,
+    `- 링크 파생 신규 URL / 발행 가능 후보: ${displayValue(report.candidate_counts?.derived_new_unique_urls)} / ${displayValue(report.candidate_counts?.derived_publishable)}`,
+    `- 결정론적 선택 / 본문 반영 / hard-blocked group / 명시적 강등: ${displayValue(report.publication_counts?.deterministic_selected)} / ${displayValue(report.publication_counts?.rendered)} / ${displayValue(report.publication_counts?.hard_blocked_groups)} / ${displayValue(report.publication_counts?.explicitly_demoted_groups)}`,
     '',
     '## 진단 플래그',
     '',
@@ -1069,9 +1099,25 @@ function renderSourceQualityDiagnosisMarkdown(report) {
     '## 소스별 진단',
     '',
     markdownTable(
-      ['소스', '원본 후보', '최종 후보', '주요 차단 원인', '권장 조치'],
+      ['소스', '원본 후보', '원시 자격 후보', '입력 단계 진단 사유', '권장 조치'],
       sourceRows
     ),
+    '## 후보별 날짜·정책·추출 근거',
+    '',
+    '수집·병합 입력의 기록을 분석한 표이며 최종 탈락 목록이 아닙니다. 후속 근거 검증으로 일부 입력 차단이 해소될 수 있습니다. 같은 후보에 여러 사유가 함께 적용될 수 있으며 기간 초과와 출처 정책 차단은 파서 실패를 뜻하지 않습니다.',
+    '',
+    markdownTable(
+      ['소스', '후보', '날짜', '선정 기간', 'Gerrit 상태', '입력 진단 사유', '입력 출처 차단'],
+      dispositions.filter(item => item.reason_codes.length > 0).map(item => [
+        item.source_id, item.title, item.published_date, item.freshness_window,
+        item.gerrit_change_status, item.reason_codes.join(', '), item.source_policy_blockers.join(', ')
+      ])
+    ),
+    '## 수집 요청 실패',
+    '',
+    '후보가 0건이라는 사실만으로 새 소식이 없었다고 판단하지 않습니다. 아래는 수집기가 기록한 요청 실패이며, 기록이 없다고 모든 요청의 성공이 보장되는 것은 아닙니다.',
+    '',
+    markdownTable(['소스', '오류'], ensureArray(report.collection_failures).map(item => [item.source, item.message])),
     '## 권장 조치',
     '',
     markdownTable(

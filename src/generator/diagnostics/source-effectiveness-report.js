@@ -7,6 +7,7 @@ const {
   finalSelectionEligibility,
   hasDatedEvidence,
   isEligibleCandidate,
+  parserFailureReason,
   cameraRelevantRawSignal,
   markdownEscape,
   markdownTable
@@ -500,7 +501,7 @@ function genericSourceLike(source = {}, metrics = {}) {
 }
 
 function parserRepairReason(reason = '') {
-  return /\b(?:parser|parse|extraction|source_extraction|date|dated|version|anchor|source url|missing URL evidence|missing dated evidence|release row|fallback)\b/i.test(text(reason));
+  return parserFailureReason(reason);
 }
 
 function recommendationFor(source, metrics) {
@@ -535,8 +536,8 @@ function recommendationFor(source, metrics) {
     metrics.eligible_count === 0 &&
     metrics.source_gap_rate >= 0.25
   ) {
-    recommendation = 'KEEP_AND_FIX_PARSER';
-    reasons.push('Official or high-priority source produced no eligible candidate and at least 25% of its collected candidates lack source evidence; keep it enabled and repair the parser.');
+    recommendation = 'REVIEW_SOURCE_OR_PARSER';
+    reasons.push('Official or high-priority source produced no eligible candidate and at least 25% lack source evidence. Inspect the source and exclusions; source gaps alone do not establish a parser failure.');
   } else if (
     !officialLike(source) &&
     genericSourceLike(source, metrics) &&
@@ -741,6 +742,10 @@ function finalizeState(state) {
     ...metrics,
     recommendation: recommendation.recommendation,
     reasons: recommendation.reasons,
+    // Keep parser evidence independently of the five most frequent exclusions.
+    parser_failure_reasons: sortedReasonRows(new Map(
+      [...state.reasonCounts].filter(([reason]) => parserFailureReason(reason))
+    )),
     top_exclusion_reasons: sortedReasonRows(state.reasonCounts),
     sample_selected_urls: uniqueSorted([...selectedUrls]).slice(0, MAX_SAMPLE_URLS),
     sample_excluded_urls: uniqueSorted([...excludedUrls]).slice(0, MAX_SAMPLE_URLS)

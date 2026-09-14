@@ -12,7 +12,7 @@ Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류
 - RKISP1 기반 플랫폼 개발 팀은 제안된 demosaicing 바이패스 수정 패치(https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/)를 적용하여 RAW 및 YUV 이미지 품질 회귀 테스트를 수행하십시오.
 - OmniVision os02g10 센서 도입 예정인 프로젝트는 v5 패치 시리즈(https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/)를 통합하고 v4l2-compliance 도구를 사용해 규격 준수 여부를 검증하십시오.
 - Sony IMX355 센서 및 libcamera 스택 사용 팀은 제안된 테스트 패턴 모드 매핑 수정 패치(https://patchwork.libcamera.org/patch/28200/)를 적용하여 SENSOR_TEST_PATTERN_MODE 요청 시의 출력 무결성을 검증하십시오.
-- libcamera 기반 카메라 스택 개발 팀은 제안된 LensShadingCorrection 및 ToneCurve 메타데이터 패치(https://patchwork.libcamera.org/patch/28219/)를 검토하고, Camera HAL의 LENS_SHADING_MAP 및 TONE_MAP_CURVE와의 매핑 구조를 설계하십시오.
+- libcamera 기반 RAW/DNG 저장 담당자는 제안된 패치(https://patchwork.libcamera.org/patch/28219/)의 결과 메타데이터와 DNG 저장 프로그램의 연동을 검토하십시오.
 
 ## 검증 결과 요약
 
@@ -82,8 +82,8 @@ Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류
 - republication_cooldown_blocked: 0
 
 Source/parser recovery hint:
-- Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.
-- Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows.
+- No eligible direct_aosp_camera candidate is available in this pool. Check collection failures, candidate dates and source-policy blockers before attributing the gap to a parser defect.
+- No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.
 - Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
 
 주요 final exclusion reason:

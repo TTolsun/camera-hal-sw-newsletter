@@ -300,6 +300,7 @@ function candidatePoolShortageReasonCodes(summary = {}) {
 
 function sourceParserHintCode(reason = '') {
   const textValue = text(reason).toLowerCase();
+  if (/no eligible .*candidate/.test(textValue)) return 'SOURCE_COVERAGE_REVIEW';
   if (/camerax|android developers|androidx\.camera|maven group|parser/.test(textValue)) {
     return 'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR';
   }
@@ -335,13 +336,13 @@ function sourceParserHintsFromShortage(summary = {}, selectionHints = []) {
 function selectionShortageHints(summary = {}, poolSummary = summary) {
   const hints = [];
   if (number(summary.direct_aosp_camera_count) === 0) {
-    hints.push('Repair official AOSP Camera / CameraX row parsers so direct_aosp_camera candidates have dated release/API/behavior evidence.');
+    hints.push('No eligible direct_aosp_camera candidate is available in this pool. Check collection failures, candidate dates and source-policy blockers before attributing the gap to a parser defect.');
   }
   if (number(summary.android_count) === 0) {
-    hints.push('Check Android Developers Latest Updates locale/table parsing for Camera Maven Group versions and androidx.camera rows.');
+    hints.push('No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.');
   }
   if (number(summary.camera_driver_image_pipeline_count) === 0) {
-    hints.push('Add or repair Linux camera driver, V4L2, libcamera, image sensor, or ISP release sources with dated item evidence.');
+    hints.push('No eligible camera driver candidate is available in this pool. Check dated Linux camera, V4L2, libcamera, sensor and ISP signals and their exclusion reasons.');
   }
   if (number(summary.soc_platform_signal_count) === 0) {
     hints.push('Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.');

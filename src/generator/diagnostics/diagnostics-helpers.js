@@ -43,6 +43,11 @@ function isEligibleCandidate(candidate = {}) {
     ['main', 'short'].includes(eligibility);
 }
 
+function parserFailureReason(value) {
+  // Dates, stale windows and generic source gaps are not parser failure evidence.
+  return /(?:parser|parsing|extraction).*(?:fail|error|did not|fallback)|source_extraction\.used_fallback=true/i.test(text(value));
+}
+
 function cameraRelevantRawSignal(candidate = {}) {
   const haystack = [
     candidate.title,
@@ -77,6 +82,7 @@ function markdownTable(headers, rows) {
 }
 
 module.exports = {
+  parserFailureReason,
   text,
   objectValue,
   lower,
