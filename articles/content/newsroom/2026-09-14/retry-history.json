@@ -1,0 +1,314 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 94,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 4,
+    "locked_article_count": 4,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류 수정 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 시리즈 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera, Sony IMX355 센서의 테스트 패턴 모드 매핑 오류 수정 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류 수정 패치 제안",
+      "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 시리즈 제안",
+      "libcamera, Sony IMX355 센서의 테스트 패턴 모드 매핑 오류 수정 패치 제안",
+      "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 패치 제안"
+    ],
+    "locked_article_headlines": [
+      "Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류 수정 패치 제안",
+      "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 시리즈 제안",
+      "libcamera, Sony IMX355 센서의 테스트 패턴 모드 매핑 오류 수정 패치 제안",
+      "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 패치 제안"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류 수정 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+        ],
+        "source_titles": [
+          "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 시리즈 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+        ],
+        "source_titles": [
+          "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "libcamera, Sony IMX355 센서의 테스트 패턴 모드 매핑 오류 수정 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28200/"
+        ],
+        "source_titles": [
+          "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28219/"
+        ],
+        "source_titles": [
+          "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류 수정 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류 수정 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 시리즈 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 시리즈 제안"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "libcamera, Sony IMX355 센서의 테스트 패턴 모드 매핑 오류 수정 패치 제안",
+        "sources": [
+          "https://patchwork.libcamera.org/patch/28200/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera, Sony IMX355 센서의 테스트 패턴 모드 매핑 오류 수정 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 패치 제안",
+        "sources": [
+          "https://patchwork.libcamera.org/patch/28219/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류 수정 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+        ],
+        "source_titles": [
+          "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 시리즈 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+        ],
+        "source_titles": [
+          "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "libcamera, Sony IMX355 센서의 테스트 패턴 모드 매핑 오류 수정 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28200/"
+        ],
+        "source_titles": [
+          "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28219/"
+        ],
+        "source_titles": [
+          "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 2,
+      "ai_camera_path_hal_workflow": 1,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

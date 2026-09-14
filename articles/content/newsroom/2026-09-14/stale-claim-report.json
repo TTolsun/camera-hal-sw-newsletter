@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-14",
+  "status": "PASS",
+  "removed_sections": [],
+  "dropped_selected_groups": [
+    {
+      "article_group_key": "article:https://lore.kernel.org/linux-media/202609071453.wr61aa3p-lkp@intel.com",
+      "title": "[sailus-media-tree:ipu6] BUILD SUCCESS 6f6d9729301fbf8fadff3c1822cdd730ef6cd213",
+      "url": "https://lore.kernel.org/linux-media/202609071453.Wr61Aa3p-lkp@intel.com/"
+    }
+  ],
+  "restored_to_keep_minimum": [],
+  "final_section_sources": [
+    {
+      "title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass",
+      "url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+    },
+    {
+      "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+    },
+    {
+      "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping",
+      "url": "https://patchwork.libcamera.org/patch/28200/"
+    },
+    {
+      "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+      "url": "https://patchwork.libcamera.org/patch/28219/"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

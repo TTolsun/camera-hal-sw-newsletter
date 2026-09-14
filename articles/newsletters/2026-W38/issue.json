@@ -1,0 +1,1060 @@
+{
+  "date": "2026-09-14",
+  "public_contract_version": "story-v1",
+  "generation_contract_version": 1,
+  "title": "2026 W37 (09.07 ~ 09.13)",
+  "summary": "이번 주에는 ‘Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개’, ‘OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 공개’ 등 4건의 소식을 다룹니다.",
+  "briefing": [
+    "Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개",
+    "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 공개",
+    "libcamera, Sony IMX355 센서 테스트 패턴 모드 매핑 수정 패치 제안",
+    "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 제안"
+  ],
+  "sections": [
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류 수정 패치 제안",
+      "what_changed": "Rockchip RKISP1 ISP 드라이버에서 Bayer demosaicing 블록을 비활성화할 때 바이패스 비트(RKISP1_CIF_ISP_DEMOSAIC_BYPASS)를 설정하고, 활성화할 때 해제하도록 로직을 바로잡는 패치가 제안되었습니다. 기존 구현은 이 비트 처리 로직이 반대로 적용되어 있었습니다.",
+      "confirmed_facts": [
+        "RKISP1 ISP의 Bayer demosaicing 바이패스 로직을 수정하는 패치(v1)가 2026년 9월 11일 lore.kernel.org linux-media 메일링 리스트에 제안되었습니다.",
+        "기존 구현은 demosaicing을 우회해야 할 때 바이패스 비트를 해제하고, 활성화해야 할 때 설정하여 로직이 반대로 동작하고 있었습니다.",
+        "이 패치는 demosaicing 블록을 비활성화할 때 바이패스 비트를 설정하고, 활성화할 때 비트를 해제하도록 수정합니다."
+      ],
+      "evidence_summary": "lore.kernel.org linux-media 메일링 리스트에 2026년 9월 11일 제출된 패치로, RKISP1 ISP의 demosaicing 바이패스 비트 처리 오류를 수정하는 내용을 담고 있습니다.",
+      "specificity_checks": [
+        "Patch URL: https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+        "Published Date: 2026-09-11",
+        "Component: RKISP1 ISP Driver"
+      ],
+      "source_verification_notes": [
+        "이 패치는 현재 제안된 상태(v1)이며 아직 리눅스 미디어 메인라인 트리에 머지되지 않았습니다."
+      ],
+      "public_article": {
+        "headline": "Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개",
+        "lead": "Rockchip RKISP1 ISP 드라이버에서 Bayer demosaicing 바이패스 비트가 반대로 처리되던 심각한 로직 오류를 해결하는 패치가 제안되었습니다.",
+        "body_paragraphs": [
+          "2026년 9월 11일, lore.kernel.org linux-media 메일링 리스트를 통해 Rockchip RKISP1 ISP의 Bayer demosaicing 바이패스 제어 로직을 수정하는 패치가 제안되었습니다. 기존 드라이버 구현에서는 demosaicing 블록을 우회(bypass)해야 할 때 오히려 바이패스 비트(RKISP1_CIF_ISP_DEMOSAIC_BYPASS)를 해제하고, demosaicing을 활성화해야 할 때 비트를 설정하는 등 제어 로직이 완전히 반대로 동작하고 있었습니다.",
+          "이번 패치는 demosaicing 블록을 비활성화할 때 바이패스 비트를 정상적으로 설정하고, demosaicing을 수행할 때는 비트를 해제하도록 수정하여 하드웨어 레지스터 제어의 정밀도를 확보했습니다. 이는 이미지 파이프라인의 색상 처리 및 이미지 품질 신뢰성을 높이는 데 기여합니다.",
+          "해당 패치는 현재 제안 단계(v1)로 검토 중이며, 실제 메인라인 커널 머지 여부는 지속적인 모니터링이 필요합니다. Rockchip ISP 기반의 하드웨어를 사용하는 개발 팀은 이 패치를 통해 이미지 파이프라인의 동작 무결성을 선제적으로 검증할 수 있습니다."
+        ],
+        "camera_hal_takeaway": "직접적인 Android Camera HAL 변경은 없으나, 하위 ISP 드라이버의 demosaicing 바이패스 로직이 수정됨에 따라 RAW 스트림 출력 및 ISP 튜닝 파라미터 적용 시 색상 왜곡이나 노이즈 제어 동작이 달라질 수 있습니다. HAL 계층에서 RAW 및 YUV 스트림의 품질 검증을 수행해야 합니다.",
+        "reader_checkpoints": [
+          "RKISP1 기반 플랫폼에서 demosaicing 바이패스 비트가 하드웨어 레지스터에 정상적으로 반영되는지 확인하십시오.",
+          "패치 적용 전후의 RAW 및 YUV 이미지 품질(색상 왜곡, 노이즈 패턴)을 비교 검증하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass",
+            "url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media 메일링 리스트 패치 제안 (2026-09-11)",
+        "editorial_story": {
+          "reader_scenario": "Rockchip RKISP1 기반 디바이스에서 RAW 캡처 시 색상 표현이 비정상적이거나 ISP 튜닝 값이 올바르게 반영되지 않는 현상을 디버깅하고 있는 상황입니다.",
+          "what_happened": "RKISP1 ISP 드라이버에서 Bayer demosaicing 바이패스 비트 제어 로직이 반대로 동작하던 오류를 바로잡는 패치가 제안되었습니다.",
+          "why_it_matters": "하위 ISP 드라이버의 이미지 처리 제어가 정상화되면, Camera HAL이 수신하는 RAW 및 YUV 프레임의 이미지 품질 신뢰성이 근본적으로 향상됩니다.",
+          "field_scenario": "YUV 및 RAW 스트림 동시 캡처 세션을 실행하여 demosaicing 활성화/비활성화 상태에 따른 이미지 왜곡 여부를 분석합니다.",
+          "not_to_overclaim": "이 패치는 RKISP1 ISP 드라이버의 특정 레지스터 제어 수정이며, Android Camera HAL API 규격을 변경하지 않습니다.",
+          "editor_take": "ISP 드라이버 수준의 로직 오류 수정은 상위 Camera HAL의 튜닝 신뢰성을 확보하는 첫걸음이므로 선제적 적용 검토가 필요합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "RKISP1 ISP의 Bayer demosaicing 바이패스 로직을 수정하는 패치(v1)가 2026년 9월 11일 lore.kernel.org linux-media 메일링 리스트에 제안되었습니다.",
+          "기존 구현은 demosaicing을 우회해야 할 때 바이패스 비트를 해제하고, 활성화해야 할 때 설정하여 로직이 반대로 동작하고 있었습니다.",
+          "이 패치는 demosaicing 블록을 비활성화할 때 바이패스 비트를 설정하고, 활성화할 때 비트를 해제하도록 수정합니다."
+        ],
+        "background_context": "ISP(Image Signal Processor) 드라이버의 Bayer demosaicing 로직 수정은 이미지 품질과 색상 처리에 직접적인 영향을 미칩니다. 이는 Android Camera HAL이 RAW 스트림을 처리하거나 ISP를 통해 처리된 YUV/JPEG 스트림을 받을 때 최종 이미지 결과물에 영향을 줄 수 있습니다. 드라이버 수준의 변경은 Camera HAL의 이미지 파이프라인 검증 및 튜닝 작업에 중요합니다.",
+        "hal_driver_impact": "Bayer demosaicing 바이패스 로직이 정상화되면, RAW 스트림 바이패스 모드 동작 시 원치 않는 demosaicing 처리가 수행되거나 반대로 demosaicing이 누락되어 색상 왜곡이 발생하는 문제를 방지할 수 있습니다. 이는 HAL 계층에서 RAW10/RAW12 스트림을 캡처하거나 ISP 튜닝 파라미터를 검증할 때 이미지 파이프라인의 무결성을 보장하는 데 기여합니다.",
+        "action_items": [
+          "RKISP1 기반 플랫폼(예: i.MX8MP)을 사용하는 개발 팀은 해당 패치(https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/)를 로컬 커널 소스에 적용하여 바이패스 모드에서의 이미지 출력을 테스트하십시오.",
+          "demosaicing 활성/비활성 상태 전환 시 YUV 및 RAW 스트림의 색상 왜곡이나 노이즈 패턴 변화를 이미지 품질 분석 툴로 검증하십시오.",
+          "V4L2 subdev 컨트롤을 통해 demosaicing 바이패스 비트가 하드웨어 레지스터에 올바르게 반영되는지 레지스터 덤프를 통해 확인하십시오."
+        ],
+        "team_share_points": "RKISP1 ISP 드라이버의 demosaicing 바이패스 로직 반전 오류를 수정하는 패치가 제안되었으니, Rockchip 기반 플랫폼을 사용하는 팀은 이미지 품질 회귀 테스트를 준비하십시오.",
+        "do_not_claim": [
+          "이 패치가 Android Camera HAL API나 프레임워크 자체를 변경한다고 주장하지 마십시오.",
+          "이 패치가 이미 리눅스 커널 메인라인에 머지되었다고 단정하지 마십시오."
+        ]
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 9월 11일에 제안된 최신 드라이버 패치로, ISP 이미지 처리의 핵심 오류를 해결하기 때문입니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "soc_platform_owner"
+        ],
+        "check_within_2_weeks": "RKISP1 ISP 드라이버의 demosaicing 바이패스 제어 비트 동작 검증",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "soc_resource_contention"
+        ],
+        "do_not_overstate": [
+          "이 패치가 Android CTS/VTS 테스트 요구사항을 직접 변경하지는 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_rkisp1_1",
+          "text": "RKISP1 ISP의 Bayer demosaicing 바이패스 로직을 수정하는 패치(v1)가 2026년 9월 11일 lore.kernel.org linux-media 메일링 리스트에 제안되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:c2a8a42b938dda17:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_rkisp1_2",
+          "text": "기존 구현은 demosaicing을 우회해야 할 때 바이패스 비트를 해제하고, 활성화해야 할 때 설정하여 로직이 반대로 동작하고 있었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:c2a8a42b938dda17:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_rkisp1_3",
+          "text": "이 패치는 demosaicing 블록을 비활성화할 때 바이패스 비트를 설정하고, 활성화할 때 비트를 해제하도록 수정합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:c2a8a42b938dda17:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "RKISP1 ISP demosaicing bypass bit register verification"
+      ],
+      "action_hints": [
+        "Apply patch and verify RAW/YUV image outputs"
+      ],
+      "action_items": [
+        "RKISP1 기반 플랫폼(예: i.MX8MP)을 사용하는 개발 팀은 해당 패치(https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/)를 로컬 커널 소스에 적용하여 바이패스 모드에서의 이미지 출력을 테스트하십시오."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5d1m5V0YkXO3RfG80oR_CKgil42o_kHWX_FkCe57Mg8y_9CRTBiiEAtyNUNkMAcISJ1i2YsNauolZEiwLMbGV8V-9rb4TjPXOKIldpCasNz0_nmSS01SbsYzAgabgOjh0peLNjbTTUwEdurcC7-0okTm5MTxGBbea1dZPdGA9AO13fJSm6nIkE-I1ym4/s2048/Introducing-Fast-and-Reliable-Wireless-Debugging-Metadata.jpg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 428257
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5d1m5V0YkXO3RfG80oR_CKgil42o_kHWX_FkCe57Mg8y_9CRTBiiEAtyNUNkMAcISJ1i2YsNauolZEiwLMbGV8V-9rb4TjPXOKIldpCasNz0_nmSS01SbsYzAgabgOjh0peLNjbTTUwEdurcC7-0okTm5MTxGBbea1dZPdGA9AO13fJSm6nIkE-I1ym4/w1200-h630-p-k-no-nu/Introducing-Fast-and-Reliable-Wireless-Debugging-Metadata.jpg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 84971
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates provided in the source metadata.",
+      "sources": [
+        {
+          "title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass",
+          "url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+      "source_candidate_hash": "c2a8a42b938dda17386cf77c9fccfc725715c5a21b4f056e65f99d7b6ae17128",
+      "article_group_key": "lore-series:20260911-imx8mp-demosaicing-bypass-v1-5568a7a560a6@ideasonboard.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 시리즈 제안",
+      "what_changed": "OmniVision os02g10 카메라 센서를 지원하는 신규 i2c 드라이버 패치 시리즈(v5)가 제안되었습니다. 이 드라이버는 수동 노출 및 게인 제어, vblank/hblank 제어, vflip/hflip 제어, 테스트 패턴 제어, 그리고 1920x1080 @ 30fps SBGGR10 모드를 지원합니다.",
+      "confirmed_facts": [
+        "OmniVision os02g10 카메라 센서 드라이버를 추가하는 패치 시리즈(v5)가 2026년 9월 8일 lore.kernel.org linux-media 메일링 리스트에 제안되었습니다.",
+        "이 드라이버는 수동 노출 및 게인 제어, vblank/hblank 제어, vflip/hflip 제어, 테스트 패턴 제어 기능을 지원합니다.",
+        "드라이버는 1920x1080 @ 30fps 해상도의 SBGGR10(10비트 Bayer) 모드를 지원합니다.",
+        "드라이버는 IMX8MP Debix Model A 보드에서 mainline v7.0-rc2 커널 및 v4l2-compliance 1.31.0-5387 도구를 사용하여 검증되었습니다."
+      ],
+      "evidence_summary": "lore.kernel.org linux-media 메일링 리스트에 2026년 9월 8일 제출된 패치 시리즈로, os02g10 이미지 센서의 신규 지원 및 주요 제어 기능 구현을 포함하고 있습니다.",
+      "specificity_checks": [
+        "Patch URL: https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+        "Published Date: 2026-09-08",
+        "Target Sensor: OmniVision os02g10",
+        "Test Platform: IMX8MP Debix Model A"
+      ],
+      "source_verification_notes": [
+        "이 패치는 v5 리샌드 버전으로 제안되었으며 아직 메인라인 커널에 머지되지 않았습니다."
+      ],
+      "public_article": {
+        "headline": "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 공개",
+        "lead": "OmniVision os02g10 이미지 센서를 공식 지원하기 위한 신규 V4L2 드라이버 패치 시리즈가 제안되어 하드웨어 생태계가 확장되었습니다.",
+        "body_paragraphs": [
+          "2026년 9월 8일, lore.kernel.org linux-media 메일링 리스트를 통해 OmniVision os02g10 카메라 센서용 신규 i2c 드라이버를 추가하는 패치 시리즈(v5)가 공개되었습니다. 이번 패치는 새로운 하드웨어 센서를 리눅스 미디어 서브시스템에 통합하기 위한 기여의 일환입니다.",
+          "제안된 드라이버는 수동 노출 및 게인 제어, vblank/hblank 제어, vflip/hflip 제어, 그리고 테스트 패턴 제어 등 카메라 실무에 필수적인 다양한 제어 기능을 포함하고 있습니다. 또한, 1920x1080 해상도에서 초당 30프레임을 출력하는 SBGGR10(10비트 Bayer) 모드를 공식 지원합니다.",
+          "해당 드라이버는 IMX8MP Debix Model A 개발 보드에서 mainline v7.0-rc2 커널 및 v4l2-compliance 1.31.0-5387 도구를 사용하여 정상 동작 및 규격 준수 여부가 검증되었습니다. 신규 센서를 탑재할 예정인 하드웨어 및 드라이버 개발 팀은 이 패치를 기반으로 조기 검증을 진행할 수 있습니다."
+        ],
+        "camera_hal_takeaway": "새로운 센서 드라이버의 추가로 Android Camera HAL에서 수동 노출 및 게인 제어(SENSOR_EXPOSURE_TIME, SENSOR_SENSITIVITY), 플립 제어 등을 구현할 수 있는 하위 경로가 확보되었습니다. 1080p30 SBGGR10 스트림 구성을 HAL의 스트림 맵에 매핑하고 V4L2 컨트롤과의 연동을 검증해야 합니다.",
+        "reader_checkpoints": [
+          "os02g10 센서 드라이버의 수동 제어 API가 V4L2 subdev 인터페이스를 통해 올바르게 노출되는지 확인하십시오.",
+          "IMX8MP 플랫폼에서 v4l2-compliance 도구를 사용해 드라이버의 표준 규격 준수 상태를 검증하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver",
+            "url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "lore.kernel.org linux-media 메일링 리스트 패치 제안 (2026-09-08)",
+        "editorial_story": {
+          "reader_scenario": "OmniVision os02g10 센서를 신규 탑재하는 프로젝트에서 수동 카메라 제어 기능과 1080p30 RAW 스트림을 구현해야 하는 상황입니다.",
+          "what_happened": "os02g10 센서의 수동 노출/게인 및 1080p30 SBGGR10 모드를 지원하는 신규 리눅스 드라이버 패치 시리즈가 제안되었습니다.",
+          "why_it_matters": "표준 V4L2 컨트롤을 지원하는 공식 드라이버가 확보되면, Camera HAL에서 수동 카메라 제어 API를 구현하는 작업이 훨씬 수월해집니다.",
+          "field_scenario": "v4l2-compliance 도구를 실행하여 신규 드라이버의 컨트롤 규격 준수 여부를 테스트하고, 1080p30 스트림의 프레임 레이트 안정성을 측정합니다.",
+          "not_to_overclaim": "이 패치는 리눅스 커널 드라이버 소스이며, Android Camera HAL이나 프레임워크 자체의 코드를 포함하지 않습니다.",
+          "editor_take": "v5 리샌드 패치인 만큼 드라이버의 완성도가 높을 것으로 기대되며, 신규 하드웨어 도입 시 즉각적인 적용 검토가 가능합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "OmniVision os02g10 카메라 센서 드라이버를 추가하는 패치 시리즈(v5)가 2026년 9월 8일 lore.kernel.org linux-media 메일링 리스트에 제안되었습니다.",
+          "이 드라이버는 수동 노출 및 게인 제어, vblank/hblank 제어, vflip/hflip 제어, 테스트 패턴 제어 기능을 지원합니다.",
+          "드라이버는 1920x1080 @ 30fps 해상도의 SBGGR10(10비트 Bayer) 모드를 지원합니다.",
+          "드라이버는 IMX8MP Debix Model A 보드에서 mainline v7.0-rc2 커널 및 v4l2-compliance 1.31.0-5387 도구를 사용하여 검증되었습니다."
+        ],
+        "background_context": "새로운 카메라 센서 드라이버 추가는 Linux V4L2 서브시스템을 통해 새로운 하드웨어 지원을 가능하게 합니다. 이는 Android Camera HAL이 해당 센서를 지원하기 위한 기반이 되며, 수동 노출/게인 제어, vblank/hblank 제어, vflip/hflip, 테스트 패턴과 같은 기능은 HAL의 CAPTURE_REQUEST 및 CAPTURE_RESULT 메타데이터를 통해 노출될 수 있습니다. 1920x1080 @ 30fps SBGGR10 모드 지원은 스트림 구성 및 성능 검증에 영향을 줍니다.",
+        "hal_driver_impact": "새로운 센서 드라이버의 수동 노출 및 게인 제어 기능은 Android Camera2 API의 SENSOR_EXPOSURE_TIME 및 SENSOR_SENSITIVITY 제어 요청을 Camera HAL을 거쳐 하드웨어 수준까지 전달하는 데 필수적입니다. 또한 hflip/vflip 제어는 전면/후면 카메라 방향성에 따른 이미지 미러링 처리를 드라이버 단에서 효율적으로 수행할 수 있게 합니다.",
+        "action_items": [
+          "os02g10 센서를 도입할 예정인 프로젝트 팀은 제안된 v5 패치 시리즈(https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/)를 기반으로 드라이버를 통합하십시오.",
+          "IMX8MP 등 대상 SoC 플랫폼에서 v4l2-compliance 1.31.0-5387 이상을 사용하여 드라이버 규격 준수 여부를 검증하십시오.",
+          "1920x1080 @ 30fps SBGGR10 모드 설정 시 프레임 드롭 및 vblank/hblank 제어를 통한 프레임 레이트 안정성을 측정하십시오."
+        ],
+        "team_share_points": "OmniVision os02g10 센서용 신규 드라이버 패치(v5)가 제안되었으며, 수동 노출 및 1080p30 SBGGR10 모드를 지원하므로 신규 센서 도입 검토 시 참고하시기 바랍니다.",
+        "do_not_claim": [
+          "이 드라이버 패치가 Android OS의 Camera HAL 소스 코드를 직접 수정하는 것은 아닙니다.",
+          "IMX8MP 이외의 SoC 플랫폼에서 추가 수정 없이 완벽하게 동작한다고 보장할 수 없습니다."
+        ]
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 9월 8일 제안된 최신 v5 패치 시리즈로, 신규 센서 하드웨어 지원을 위한 드라이버 소스이기 때문입니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "performance_thermal_owner"
+        ],
+        "check_within_2_weeks": "os02g10 센서 드라이버의 v4l2-compliance 테스트 및 수동 제어 기능 검증",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "performance_latency_frame_drop"
+        ],
+        "do_not_overstate": [
+          "이 드라이버가 Android CTS의 모든 카메라 요구사항을 즉각적으로 만족한다고 보장하지는 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_os02g10_1",
+          "text": "OmniVision os02g10 카메라 센서 드라이버를 추가하는 패치 시리즈(v5)가 2026년 9월 8일 lore.kernel.org linux-media 메일링 리스트에 제안되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:e917fa25eb344f22:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_os02g10_2",
+          "text": "이 드라이버는 수동 노출 및 게인 제어, vblank/hblank 제어, vflip/hflip 제어, 테스트 패턴 제어 기능을 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:e917fa25eb344f22:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_os02g10_3",
+          "text": "드라이버는 1920x1080 @ 30fps 해상도의 SBGGR10(10비트 Bayer) 모드를 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:e917fa25eb344f22:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_os02g10_4",
+          "text": "드라이버는 IMX8MP Debix Model A 보드에서 mainline v7.0-rc2 커널 및 v4l2-compliance 1.31.0-5387 도구를 사용하여 검증되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:e917fa25eb344f22:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "os02g10 v4l2-compliance check and manual control verification"
+      ],
+      "action_hints": [
+        "Integrate v5 driver patch and verify manual controls"
+      ],
+      "action_items": [
+        "os02g10 센서를 도입할 예정인 프로젝트 팀은 제안된 v5 패치 시리즈(https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/)를 기반으로 드라이버를 통합하십시오."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5d1m5V0YkXO3RfG80oR_CKgil42o_kHWX_FkCe57Mg8y_9CRTBiiEAtyNUNkMAcISJ1i2YsNauolZEiwLMbGV8V-9rb4TjPXOKIldpCasNz0_nmSS01SbsYzAgabgOjh0peLNjbTTUwEdurcC7-0okTm5MTxGBbea1dZPdGA9AO13fJSm6nIkE-I1ym4/s2048/Introducing-Fast-and-Reliable-Wireless-Debugging-Metadata.jpg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 428257
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5d1m5V0YkXO3RfG80oR_CKgil42o_kHWX_FkCe57Mg8y_9CRTBiiEAtyNUNkMAcISJ1i2YsNauolZEiwLMbGV8V-9rb4TjPXOKIldpCasNz0_nmSS01SbsYzAgabgOjh0peLNjbTTUwEdurcC7-0okTm5MTxGBbea1dZPdGA9AO13fJSm6nIkE-I1ym4/w1200-h630-p-k-no-nu/Introducing-Fast-and-Reliable-Wireless-Debugging-Metadata.jpg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 84971
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates provided in the source metadata.",
+      "sources": [
+        {
+          "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+      "source_candidate_hash": "e917fa25eb344f22cef37e603e94476f8de0a8ffc96969b53203e8993bc8d2aa",
+      "article_group_key": "lore-series:20260908114235.86568-elgin.perumbilly@siliconsignals.io",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "libcamera, Sony IMX355 센서의 테스트 패턴 모드 매핑 오류 수정 패치 제안",
+      "what_changed": "libcamera 프로젝트에서 Sony IMX355 카메라 센서 드라이버의 테스트 패턴 모드 매핑 문제를 해결하는 패치 시리즈의 첫 번째 조각([1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping)이 제안되었습니다. 이 패치는 Sam Gnu가 제출했으며 현재 프로젝트 패치 트래커에서 검토 중입니다.",
+      "confirmed_facts": [
+        "libcamera의 IMX355 카메라 센서 드라이버에서 테스트 패턴 모드 매핑 문제를 해결하는 패치가 2026년 9월 8일 libcamera Patchwork에 제안되었습니다.",
+        "이 패치는 Sam Gnu가 제출한 2개짜리 패치 시리즈 중 첫 번째 조각([1/2])입니다.",
+        "이 패치는 현재 'new' 상태로 프로젝트 패치 트래커에서 검토 중인 제안 단계의 변경 사항입니다."
+      ],
+      "evidence_summary": "libcamera Patchwork에 2026년 9월 8일 제출된 패치로, IMX355 센서의 테스트 패턴 모드 매핑 오류를 바로잡는 제안입니다.",
+      "specificity_checks": [
+        "Patch URL: https://patchwork.libcamera.org/patch/28200/",
+        "Published Date: 2026-09-08",
+        "Target Sensor: Sony IMX355",
+        "Author: Sam Gnu"
+      ],
+      "source_verification_notes": [
+        "이 패치는 아직 머지되지 않은 제안 상태입니다."
+      ],
+      "public_article": {
+        "headline": "libcamera, Sony IMX355 센서 테스트 패턴 모드 매핑 수정 패치 제안",
+        "lead": "libcamera 프로젝트에서 Sony IMX355 센서의 테스트 패턴 모드 매핑 오류를 바로잡아 하위 카메라 스택의 검증 신뢰성을 높이는 패치가 제안되었습니다.",
+        "body_paragraphs": [
+          "2026년 9월 8일, libcamera Patchwork를 통해 Sony IMX355 카메라 센서 드라이버의 테스트 패턴 모드 매핑 문제를 해결하기 위한 패치가 제안되었습니다. 이 패치는 개발자 Sam Gnu가 제출한 2개짜리 패치 시리즈 중 첫 번째 조각([1/2])에 해당합니다.",
+          "기존 드라이버 구현에서는 IMX355 센서의 하드웨어 테스트 패턴 모드와 소프트웨어 매핑 간의 불일치로 인해, 특정 테스트 패턴을 요청했을 때 의도하지 않은 이미지가 출력되거나 오동작할 위험이 있었습니다. 이번 패치는 이러한 매핑 테이블을 올바르게 수정하여 테스트 모드의 정확성을 확보하고자 합니다.",
+          "현재 이 패치는 'new' 상태로 프로젝트 패치 트래커에서 검토 중이며, 아직 메인라인에 머지되지 않은 제안 단계입니다. IMX355 센서를 탑재하고 libcamera 기반 하드웨어 추상화 계층을 사용하는 개발 팀은 이 패치를 적용하여 테스트 패턴 출력 신뢰성을 선제적으로 검증할 수 있습니다."
+        ],
+        "camera_hal_takeaway": "직접적인 HAL 변경은 없으나, 하위 libcamera 계층에서 IMX355 센서의 테스트 패턴 매핑이 수정됨에 따라 Camera HAL에서 SENSOR_TEST_PATTERN_MODE를 설정할 때 정확한 하드웨어 테스트 패턴이 출력되도록 보장할 수 있습니다. 이는 CTS 테스트 패턴 검증 및 센서-HAL 간 데이터 경로 디버깅에 유용합니다.",
+        "reader_checkpoints": [
+          "IMX355 센서 탑재 디바이스에서 테스트 패턴 모드 요청 시 올바른 컬러 바 또는 솔리드 패턴이 출력되는지 확인하십시오.",
+          "libcamera Patchwork에서 이 패치 시리즈의 두 번째 조각 및 최종 병합 여부를 추적하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping",
+            "url": "https://patchwork.libcamera.org/patch/28200/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "libcamera Patchwork 패치 제안 (2026-09-08)",
+        "editorial_story": {
+          "reader_scenario": "Sony IMX355 센서를 사용하는 플랫폼에서 Camera HAL의 테스트 패턴 모드를 검증하는 과정에서, 요청한 패턴과 실제 출력되는 센서 패턴이 일치하지 않는 현상을 겪고 있습니다.",
+          "what_happened": "libcamera의 IMX355 센서 드라이버에서 테스트 패턴 모드 매핑 오류를 해결하는 패치 시리즈의 첫 번째 조각이 제안되었습니다.",
+          "why_it_matters": "테스트 패턴 매핑이 정확해지면, 센서 하드웨어부터 HAL 계층까지의 이미지 데이터 경로 무결성을 검증하는 디버깅 작업의 신뢰성이 높아집니다.",
+          "field_scenario": "Camera HAL에서 SENSOR_TEST_PATTERN_MODE를 활성화하고, 출력되는 프레임이 센서 사양서에 명시된 테스트 패턴과 일치하는지 캡처 분석합니다.",
+          "not_to_overclaim": "이 패치는 libcamera 드라이버의 특정 매핑 수정이며, Android Camera HAL API 자체의 규격 변경이 아닙니다.",
+          "editor_take": "테스트 패턴은 양산 전 하드웨어 검증의 필수 요소이므로, IMX355 사용 팀은 이 패치를 조기에 적용해 검증 환경을 개선하는 것이 좋습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "libcamera의 IMX355 카메라 센서 드라이버에서 테스트 패턴 모드 매핑 문제를 해결하는 패치가 2026년 9월 8일 libcamera Patchwork에 제안되었습니다.",
+          "이 패치는 Sam Gnu가 제출한 2개짜리 패치 시리즈 중 첫 번째 조각([1/2])입니다.",
+          "이 패치는 현재 'new' 상태로 프로젝트 패치 트래커에서 검토 중인 제안 단계의 변경 사항입니다."
+        ],
+        "background_context": "libcamera는 Linux 기반 시스템에서 카메라 하드웨어 추상화를 제공하는 프레임워크입니다. IMX355 센서의 테스트 패턴 모드 매핑 수정은 libcamera를 사용하는 시스템에서 센서의 정확한 동작과 테스트 가능성에 영향을 미칩니다. Android Camera HAL은 V4L2 또는 libcamera와 같은 하위 계층 드라이버와 상호작용하므로, 이러한 수정은 HAL의 센서 모드 선택, 테스트 패턴 활성화 및 이미지 파이프라인 검증에 간접적으로 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "테스트 패턴 모드 매핑이 올바르게 수정되면, Camera HAL 계층에서 SENSOR_TEST_PATTERN_MODE 제어 요청을 보낼 때 하드웨어 센서가 의도한 패턴(예: 컬러 바, 솔리드 컬러 등)을 정확하게 출력하도록 보장할 수 있습니다. 이는 카메라 파이프라인의 무결성 검증 및 디버깅 신뢰성을 높여줍니다.",
+        "action_items": [
+          "Sony IMX355 센서와 libcamera 스택을 사용하는 개발 팀은 제안된 패치(https://patchwork.libcamera.org/patch/28200/)를 적용하여 테스트 패턴 출력의 정확성을 검증하십시오.",
+          "Camera HAL에서 SENSOR_TEST_PATTERN_MODE 요청 시 센서가 올바른 패턴 이미지를 생성하는지 CTS 테스트 또는 수동 캡처를 통해 확인하십시오.",
+          "패치 시리즈의 두 번째 조각 및 최종 머지 상태를 libcamera Patchwork에서 추적하십시오."
+        ],
+        "team_share_points": "libcamera의 IMX355 센서 드라이버에서 테스트 패턴 모드 매핑 오류를 수정하는 패치 시리즈가 제안되었으니, 해당 센서를 사용하는 팀은 테스트 패턴 검증 시 참고하십시오.",
+        "do_not_claim": [
+          "이 패치가 Android 프레임워크의 Camera2 API 규격을 직접 변경한다고 주장하지 마십시오.",
+          "이 패치 하나만으로 모든 센서의 테스트 패턴 매핑 문제가 해결된다고 일반화하지 마십시오."
+        ]
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 9월 8일 제안된 최신 패치로, 센서 검증에 필수적인 테스트 패턴 매핑 오류를 해결하기 때문입니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "IMX355 센서의 테스트 패턴 모드 매핑 및 출력 이미지 검증",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치가 Android CTS의 테스트 패턴 관련 검증 항목을 자동으로 통과하게 만드는 것은 아닙니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_imx355_1",
+          "text": "libcamera의 IMX355 카메라 센서 드라이버에서 테스트 패턴 모드 매핑 문제를 해결하는 패치가 2026년 9월 8일 libcamera Patchwork에 제안되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:4eddf3c31724f248:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28200/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_imx355_2",
+          "text": "이 패치는 Sam Gnu가 제출한 2개짜리 패치 시리즈 중 첫 번째 조각([1/2])입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:4eddf3c31724f248:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28200/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_imx355_3",
+          "text": "이 패치는 현재 'new' 상태로 프로젝트 패치 트래커에서 검토 중인 제안 단계의 변경 사항입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:4eddf3c31724f248:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28200/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "IMX355 test pattern mode verification in libcamera"
+      ],
+      "action_hints": [
+        "Apply patch and verify SENSOR_TEST_PATTERN_MODE behavior"
+      ],
+      "action_items": [
+        "Sony IMX355 센서와 libcamera 스택을 사용하는 개발 팀은 제안된 패치(https://patchwork.libcamera.org/patch/28200/)를 적용하여 테스트 패턴 출력의 정확성을 검증하십시오."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5d1m5V0YkXO3RfG80oR_CKgil42o_kHWX_FkCe57Mg8y_9CRTBiiEAtyNUNkMAcISJ1i2YsNauolZEiwLMbGV8V-9rb4TjPXOKIldpCasNz0_nmSS01SbsYzAgabgOjh0peLNjbTTUwEdurcC7-0okTm5MTxGBbea1dZPdGA9AO13fJSm6nIkE-I1ym4/s2048/Introducing-Fast-and-Reliable-Wireless-Debugging-Metadata.jpg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 428257
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5d1m5V0YkXO3RfG80oR_CKgil42o_kHWX_FkCe57Mg8y_9CRTBiiEAtyNUNkMAcISJ1i2YsNauolZEiwLMbGV8V-9rb4TjPXOKIldpCasNz0_nmSS01SbsYzAgabgOjh0peLNjbTTUwEdurcC7-0okTm5MTxGBbea1dZPdGA9AO13fJSm6nIkE-I1ym4/w1200-h630-p-k-no-nu/Introducing-Fast-and-Reliable-Wireless-Debugging-Metadata.jpg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 84971
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates provided in the source metadata.",
+      "sources": [
+        {
+          "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping",
+          "url": "https://patchwork.libcamera.org/patch/28200/"
+        }
+      ],
+      "source_candidate_url": "https://patchwork.libcamera.org/patch/28200/",
+      "source_candidate_hash": "4eddf3c31724f2485bb7faaa1e504473ded27b3dabacc926844e4aa537da69f2",
+      "article_group_key": "patchwork-series:6172",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 패치 제안",
+      "what_changed": "libcamera 프로젝트에서 컨트롤 메타데이터에 LensShadingCorrection(렌즈 음영 보정) 맵과 ToneCurve(톤 곡선) 제어 기능을 추가하는 패치(libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata)가 제안되었습니다. 이 패치는 Kieran Bingham이 제출했으며 현재 프로젝트 패치 트래커에서 검토 중입니다.",
+      "confirmed_facts": [
+        "libcamera의 컨트롤 메타데이터에 LensShadingCorrection 맵과 ToneCurve를 추가하는 패치가 2026년 9월 10일 libcamera Patchwork에 제안되었습니다.",
+        "이 패치는 Kieran Bingham이 제출했으며, 현재 'new' 상태로 프로젝트 패치 트래커에서 검토 중인 제안된 변경 사항입니다.",
+        "이 변경 사항은 하위 이미지 처리 제어 기능을 확장하여 메타데이터를 통해 렌즈 음영 보정 맵과 톤 곡선을 제어할 수 있도록 합니다."
+      ],
+      "evidence_summary": "libcamera Patchwork에 2026년 9월 10일 제출된 패치로, 컨트롤 메타데이터에 LensShadingCorrection 맵과 ToneCurve를 추가하여 이미지 처리 제어 기능을 확장하는 제안입니다.",
+      "specificity_checks": [
+        "Patch URL: https://patchwork.libcamera.org/patch/28219/",
+        "Published Date: 2026-09-10",
+        "Author: Kieran Bingham",
+        "Added Controls: LensShadingCorrection, ToneCurve"
+      ],
+      "source_verification_notes": [
+        "이 패치는 아직 머지되지 않은 제안 상태입니다."
+      ],
+      "public_article": {
+        "headline": "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 제안",
+        "lead": "libcamera 프로젝트에서 이미지 처리 제어 기능을 한층 더 세밀하게 확장하기 위해, 컨트롤 메타데이터에 LensShadingCorrection 맵과 ToneCurve를 추가하는 패치가 제안되었습니다.",
+        "body_paragraphs": [
+          "2026년 9월 10일, libcamera Patchwork를 통해 카메라 컨트롤 메타데이터에 LensShadingCorrection(렌즈 음영 보정) 맵과 ToneCurve(톤 곡선) 제어 기능을 추가하는 패치가 공개되었습니다. 이 패치는 프로젝트 메인테이너 중 한 명인 Kieran Bingham이 제출하여 현재 검토가 진행 중입니다.",
+          "이번 변경 사항은 하위 이미지 처리 파이프라인 제어 기능을 대폭 확장하는 것을 목표로 합니다. 메타데이터를 통해 렌즈 주변부의 광량 저하를 보정하는 쉐이딩 맵과 이미지의 대비 및 밝기 톤을 조절하는 톤 곡선 파라미터를 직접 제어할 수 있게 됨으로써, 이미지 품질 튜닝의 정밀도가 크게 향상될 것으로 기대됩니다.",
+          "현재 이 패치는 'new' 상태로 프로젝트 패치 트래커에서 검토 중인 제안 단계의 변경 사항입니다. libcamera 기반의 카메라 소프트웨어 스택을 구축하고 있는 개발 팀은 이 패치를 통해 향후 HAL 계층과의 고급 이미지 제어 메타데이터 연동을 미리 준비할 수 있습니다."
+        ],
+        "camera_hal_takeaway": "하위 libcamera 스택에서 LensShadingCorrection 및 ToneCurve 메타데이터 제어가 가능해짐에 따라, Android Camera HAL의 LENS_SHADING_MAP 및 TONE_MAP_CURVE 제어 요청을 하위 드라이버 및 ISP 파이프라인에 직접적이고 정밀하게 매핑할 수 있는 경로가 마련되었습니다. HAL 계층의 메타데이터 매핑 모듈을 업데이트할 준비가 필요합니다.",
+        "reader_checkpoints": [
+          "libcamera 메타데이터에 추가된 LensShadingCorrection 및 ToneCurve 컨트롤이 로컬 카메라 스택에 정상적으로 정의되는지 확인하십시오.",
+          "Camera2 API의 LENS_SHADING_MAP 출력 메타데이터와 하위 libcamera에서 전달되는 쉐이딩 맵 데이터의 정렬 상태를 검증하십시오."
+        ],
+        "source_links": [
+          {
+            "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+            "url": "https://patchwork.libcamera.org/patch/28219/"
+          }
+        ],
+        "story_contract_version": 1,
+        "source_subtitle": "libcamera Patchwork 패치 제안 (2026-09-10)",
+        "editorial_story": {
+          "reader_scenario": "Android Camera HAL에서 고급 이미지 품질 튜닝을 위해 렌즈 쉐이딩 보정 맵과 정밀한 톤 커브 제어 파라미터를 하위 ISP 드라이버에 전달해야 하는 상황입니다.",
+          "what_happened": "libcamera 컨트롤 메타데이터에 LensShadingCorrection 맵과 ToneCurve를 추가하여 이미지 처리 제어 기능을 확장하는 패치가 제안되었습니다.",
+          "why_it_matters": "하위 스택에서 이러한 고급 메타데이터 제어를 공식 지원하게 되면, Camera HAL과 ISP 드라이버 간의 3A 및 이미지 품질 제어 파라미터 매핑이 훨씬 단순해지고 정밀해집니다.",
+          "field_scenario": "Camera HAL에서 전달된 TONE_MAP_CURVE 요청이 libcamera의 ToneCurve 메타데이터를 거쳐 ISP 하드웨어 레지스터에 정확하게 반영되는지 튜닝 툴로 모니터링합니다.",
+          "not_to_overclaim": "이 패치는 libcamera 프레임워크의 메타데이터 확장에 대한 제안이며, Android Camera HAL API 자체를 수정하지는 않습니다.",
+          "editor_take": "렌즈 쉐이딩과 톤 커브는 플래그십 카메라 품질 확보에 필수적인 요소이므로, libcamera 기반 플랫폼 팀은 이 패치의 머지 동향을 긴밀히 추적해야 합니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "libcamera의 컨트롤 메타데이터에 LensShadingCorrection 맵과 ToneCurve를 추가하는 패치가 2026년 9월 10일 libcamera Patchwork에 제안되었습니다.",
+          "이 패치는 Kieran Bingham이 제출했으며, 현재 'new' 상태로 프로젝트 패치 트래커에서 검토 중인 제안된 변경 사항입니다.",
+          "이 변경 사항은 하위 이미지 처리 제어 기능을 확장하여 메타데이터를 통해 렌즈 음영 보정 맵과 톤 곡선을 제어할 수 있도록 합니다."
+        ],
+        "background_context": "libcamera 컨트롤 메타데이터에 LensShadingCorrection 맵과 ToneCurve를 추가하는 것은 이미지 처리 파라미터를 하위 드라이버 계층에서 제어하고 노출하는 방식을 개선합니다. Android Camera HAL은 카메라 프레임워크에 Lens Shading Correction(렌즈 음영 보정) 및 Tone Curve(톤 곡선)와 같은 이미지 처리 메타데이터를 노출합니다. libcamera 수준의 이러한 변경은 HAL이 이러한 컨트롤을 더 세밀하게 제어하거나, 하드웨어에서 제공하는 정보를 더 정확하게 매핑하는 데 도움이 될 수 있습니다. 이는 이미지 품질, 색상 정확도, 그리고 Camera HAL의 메타데이터 계약 구현에 영향을 미칩니다.",
+        "hal_driver_impact": "libcamera 수준에서 LensShadingCorrection 및 ToneCurve 메타데이터가 지원되면, Android Camera HAL이 프레임워크로부터 전달받는 LENS_SHADING_MAP 및 TONE_MAP_CURVE와 같은 3A 제어 파라미터를 하위 드라이버 및 ISP 파이프라인에 더 직접적이고 세밀하게 매핑할 수 있습니다. 이는 최종 YUV/JPEG 이미지의 주변부 광량 저하 보정 및 대비(contrast) 표현력을 크게 개선하는 기반이 됩니다.",
+        "action_items": [
+          "libcamera 기반의 카메라 스택을 사용하는 개발 팀은 제안된 패치(https://patchwork.libcamera.org/patch/28219/)를 검토하고, 로컬 메타데이터 정의에 LensShadingCorrection 및 ToneCurve를 통합할 준비를 하십시오.",
+          "ISP 튜닝 툴 및 HAL 메타데이터 매핑 모듈에서 해당 신규 컨트롤을 통해 렌즈 쉐이딩 맵과 톤 커브 파라미터가 하드웨어로 올바르게 전달되는지 검증하십시오.",
+          "Camera2 API의 LENS_SHADING_MAP 출력 메타데이터가 하위 libcamera에서 전달된 LensShadingCorrection 맵과 일관되게 일치하는지 비교 테스트를 수행하십시오."
+        ],
+        "team_share_points": "libcamera 컨트롤 메타데이터에 LensShadingCorrection 맵과 ToneCurve를 추가하는 패치가 제안되어 이미지 처리 제어 기능이 확장될 예정이니, HAL 메타데이터 매핑 담당자는 참고하시기 바랍니다.",
+        "do_not_claim": [
+          "이 패치가 Android Camera2 API 규격 자체를 변경한다고 주장하지 마십시오.",
+          "이 패치가 모든 ISP 하드웨어에서 즉각적으로 하드웨어 가속 렌즈 쉐이딩 보정을 지원하게 만든다고 오해하지 마십시오."
+        ]
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 9월 10일 제안된 최신 패치로, 하위 카메라 스택의 이미지 품질 제어 메타데이터를 확장하기 때문입니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "libcamera 메타데이터에 추가된 LensShadingCorrection 및 ToneCurve 컨트롤의 HAL 매핑 구조 검토",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "이 패치가 Android CTS의 Lens Shading Map 관련 테스트 항목의 통과를 자동으로 보장하지는 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_lsc_tonecurve_1",
+          "text": "libcamera의 컨트롤 메타데이터에 LensShadingCorrection 맵과 ToneCurve를 추가하는 패치가 2026년 9월 10일 libcamera Patchwork에 제안되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:1c3d9ee9c3e53cdb:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28219/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_lsc_tonecurve_2",
+          "text": "이 패치는 Kieran Bingham이 제출했으며, 현재 'new' 상태로 프로젝트 패치 트래커에서 검토 중인 제안된 변경 사항입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:1c3d9ee9c3e53cdb:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28219/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_lsc_tonecurve_3",
+          "text": "이 변경 사항은 하위 이미지 처리 제어 기능을 확장하여 메타데이터를 통해 렌즈 음영 보정 맵과 톤 곡선을 제어할 수 있도록 합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:1c3d9ee9c3e53cdb:source-summary"
+          ],
+          "source_urls": [
+            "https://patchwork.libcamera.org/patch/28219/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "LensShadingCorrection and ToneCurve control mapping in libcamera"
+      ],
+      "action_hints": [
+        "Review control structure and plan HAL-to-driver metadata mapping"
+      ],
+      "action_items": [
+        "libcamera 기반의 카메라 스택을 사용하는 개발 팀은 제안된 패치(https://patchwork.libcamera.org/patch/28219/)를 검토하고, 로컬 메타데이터 정의에 LensShadingCorrection 및 ToneCurve를 통합할 준비를 하십시오."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5d1m5V0YkXO3RfG80oR_CKgil42o_kHWX_FkCe57Mg8y_9CRTBiiEAtyNUNkMAcISJ1i2YsNauolZEiwLMbGV8V-9rb4TjPXOKIldpCasNz0_nmSS01SbsYzAgabgOjh0peLNjbTTUwEdurcC7-0okTm5MTxGBbea1dZPdGA9AO13fJSm6nIkE-I1ym4/s2048/Introducing-Fast-and-Reliable-Wireless-Debugging-Metadata.jpg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 428257
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5d1m5V0YkXO3RfG80oR_CKgil42o_kHWX_FkCe57Mg8y_9CRTBiiEAtyNUNkMAcISJ1i2YsNauolZEiwLMbGV8V-9rb4TjPXOKIldpCasNz0_nmSS01SbsYzAgabgOjh0peLNjbTTUwEdurcC7-0okTm5MTxGBbea1dZPdGA9AO13fJSm6nIkE-I1ym4/w1200-h630-p-k-no-nu/Introducing-Fast-and-Reliable-Wireless-Debugging-Metadata.jpg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 84971
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates provided in the source metadata.",
+      "sources": [
+        {
+          "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+          "url": "https://patchwork.libcamera.org/patch/28219/"
+        }
+      ],
+      "source_candidate_url": "https://patchwork.libcamera.org/patch/28219/",
+      "source_candidate_hash": "1c3d9ee9c3e53cdbbe8680b91bdf3d957cdc1f8cf3c76536eab2cb105784e8c2",
+      "article_group_key": "patchwork-series:6181",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "RKISP1 기반 플랫폼 개발 팀은 제안된 demosaicing 바이패스 수정 패치(https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/)를 적용하여 RAW 및 YUV 이미지 품질 회귀 테스트를 수행하십시오.",
+    "OmniVision os02g10 센서 도입 예정인 프로젝트는 v5 패치 시리즈(https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/)를 통합하고 v4l2-compliance 도구를 사용해 규격 준수 여부를 검증하십시오.",
+    "Sony IMX355 센서 및 libcamera 스택 사용 팀은 제안된 테스트 패턴 모드 매핑 수정 패치(https://patchwork.libcamera.org/patch/28200/)를 적용하여 SENSOR_TEST_PATTERN_MODE 요청 시의 출력 무결성을 검증하십시오.",
+    "libcamera 기반 카메라 스택 개발 팀은 제안된 LensShadingCorrection 및 ToneCurve 메타데이터 패치(https://patchwork.libcamera.org/patch/28219/)를 검토하고, Camera HAL의 LENS_SHADING_MAP 및 TONE_MAP_CURVE와의 매핑 구조를 설계하십시오."
+  ],
+  "references": [
+    {
+      "title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass",
+      "url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+    },
+    {
+      "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+    },
+    {
+      "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping",
+      "url": "https://patchwork.libcamera.org/patch/28200/"
+    },
+    {
+      "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+      "url": "https://patchwork.libcamera.org/patch/28219/"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [
+    {
+      "article_group_key": "article:https://lore.kernel.org/linux-media/202609071453.wr61aa3p-lkp@intel.com",
+      "hard_block_reason": "Source requires primary confirmation before main promotion. Cross-check required but missing.",
+      "reason_code": "blocked_source_quality"
+    }
+  ],
+  "selected_group_count": 5,
+  "rendered_group_count": 4,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 1,
+  "selected_representative_group_keys": [
+    "article:https://lore.kernel.org/linux-media/202609071453.wr61aa3p-lkp@intel.com",
+    "lore-series:20260911-imx8mp-demosaicing-bypass-v1-5568a7a560a6@ideasonboard.com",
+    "lore-series:20260908114235.86568-elgin.perumbilly@siliconsignals.io",
+    "patchwork-series:6172",
+    "patchwork-series:6181"
+  ],
+  "rendered_group_keys": [
+    "lore-series:20260911-imx8mp-demosaicing-bypass-v1-5568a7a560a6@ideasonboard.com",
+    "lore-series:20260908114235.86568-elgin.perumbilly@siliconsignals.io",
+    "patchwork-series:6172",
+    "patchwork-series:6181"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [
+    "article:https://lore.kernel.org/linux-media/202609071453.wr61aa3p-lkp@intel.com"
+  ],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "Introducing Fast and Reliable Wireless Debugging with Android Debug Bridge (ADB) Wi-Fi 2.0",
+      "url": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+      "source": "Android Developers Blog",
+      "published_date": "2026-09-09",
+      "note": "C++ / AI 네이티브 툴링 참고"
+    },
+    {
+      "title": "[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250",
+      "url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "published_date": "2026-09-12",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support",
+      "url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-11",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "Acer Swift SFG14-01 Camera Support not working on Linux",
+      "url": "https://lore.kernel.org/linux-media/CAFJ6yro2PRQAsNwDMRmU8sve6nrXXWVruStgyYVRMcYeksdufQ@mail.gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-09",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    }
+  ],
+  "tags": [
+    "Driver",
+    "Image Processing",
+    "Camera HAL",
+    "Android"
+  ],
+  "coverage_week_key": "2026-W37",
+  "coverage_start_date": "2026-09-07",
+  "coverage_end_date": "2026-09-13",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-09-14",
+  "weekly_key": "2026-W38",
+  "week_start_date": "2026-09-14",
+  "week_end_date": "2026-09-20"
+}

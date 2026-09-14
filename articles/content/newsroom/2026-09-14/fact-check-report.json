@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Rockchip RKISP1 ISP 드라이버의 Bayer Demosaicing 바이패스 로직 오류 수정 패치 제안",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "RKISP1 ISP 드라이버의 핵심 이미지 처리 로직 오류 수정으로, HAL 계층의 이미지 품질 신뢰성 검증에 직접적인 도움이 됩니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 시리즈 제안",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "새로운 카메라 센서 드라이버 추가로 HAL 계층의 수동 제어 및 스트림 구성 구현에 필요한 하위 스택 기반을 제공합니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "libcamera, Sony IMX355 센서의 테스트 패턴 모드 매핑 오류 수정 패치 제안",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "libcamera의 센서 테스트 패턴 매핑 수정은 HAL 계층의 테스트 패턴 검증 및 디버깅 신뢰성을 높이는 데 기여합니다."
+    },
+    {
+      "section_index": 3,
+      "headline": "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 패치 제안",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "libcamera 메타데이터 확장은 HAL 계층의 고급 이미지 품질 제어 파라미터 매핑을 정밀하게 구현하는 데 실질적인 도움을 줍니다."
+    }
+  ],
+  "final_comment": "제공된 모든 기사는 Camera HAL/Driver 엔지니어에게 실질적인 가치를 제공하며, 사실 확인, 출처 명시, 과장 금지, 구체적인 Action Item 제시 등 편집 정책을 잘 준수하고 있습니다. 모든 기사가 '제안된 패치'임을 명확히 밝혀 과장 위험을 낮추고 있습니다. 이미지 후보가 없어 fallback 이미지를 사용한 것은 정책에 부합합니다. 전반적으로 발행 가능한 품질입니다."
+}

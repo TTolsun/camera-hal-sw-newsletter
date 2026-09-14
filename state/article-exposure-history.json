@@ -7,6 +7,91 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/28219",
+      "series_identity_key": "patchwork-series:6181",
+      "series_subject_key": "libcamera adding lensshadingcorrection maps and tonecurve to controls metadata",
+      "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+      "source_url": "https://patchwork.libcamera.org/patch/28219",
+      "newsletter_date": "2026-09-14",
+      "newsletter_url": "newsletters/2026-09-14/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-14",
+      "newsletter_article_date": "2026-09-14",
+      "cooldown_until": "2026-10-05",
+      "first_exposed_at": "2026-09-14",
+      "last_exposed_at": "2026-09-14",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://patchwork.libcamera.org/patch/28200",
+      "series_identity_key": "patchwork-series:6172",
+      "series_subject_key": "libcamera camera sensor fix imx355 test pattern mode mapping",
+      "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping",
+      "source_url": "https://patchwork.libcamera.org/patch/28200",
+      "newsletter_date": "2026-09-14",
+      "newsletter_url": "newsletters/2026-09-14/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-14",
+      "newsletter_article_date": "2026-09-14",
+      "cooldown_until": "2026-10-05",
+      "first_exposed_at": "2026-09-14",
+      "last_exposed_at": "2026-09-14",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io",
+      "series_identity_key": "lore-series:20260908114235.86568-elgin.perumbilly@siliconsignals.io",
+      "series_subject_key": "media i2c add os02g10 camera sensor driver",
+      "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver",
+      "source_url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io",
+      "newsletter_date": "2026-09-14",
+      "newsletter_url": "newsletters/2026-09-14/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-14",
+      "newsletter_article_date": "2026-09-14",
+      "cooldown_until": "2026-10-05",
+      "first_exposed_at": "2026-09-14",
+      "last_exposed_at": "2026-09-14",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com",
+      "title": "Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개",
+      "source_url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+      "newsletter_date": "2026-09-14",
+      "newsletter_url": "newsletters/2026-09-14/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-09-14",
+      "first_exposed_at": "2026-09-14",
+      "last_exposed_at": "2026-09-14",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "series_identity_key": "lore-series:20260911-imx8mp-demosaicing-bypass-v1-5568a7a560a6@ideasonboard.com",
+      "series_subject_key": "media rkisp1 fix bayer demosaicing bypass",
+      "newsletter_article_date": "2026-09-14",
+      "cooldown_until": "2026-10-05"
+    },
+    {
       "article_identity_key": "url:https://patchwork.libcamera.org/patch/28194",
       "series_identity_key": "patchwork-series:6168",
       "series_subject_key": "libcamera software isp skip stop before worker start",

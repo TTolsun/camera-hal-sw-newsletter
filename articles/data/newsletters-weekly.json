@@ -1,5 +1,30 @@
 [
   {
+    "weeklyKey": "2026-W38",
+    "weekStartDate": "2026-09-14",
+    "weekEndDate": "2026-09-20",
+    "date": "2026-09-14",
+    "title": "2026 W38",
+    "summary": "Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개\nOmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 공개\nlibcamera, Sony IMX355 센서 테스트 패턴 모드 매핑 수정 패치 제안\nlibcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 제안",
+    "html": "newsletters/2026-W38/index.html",
+    "md": "newsletters/2026-W38/newsletter.md",
+    "tags": [
+      "Driver",
+      "Image Processing",
+      "Camera HAL",
+      "Android"
+    ],
+    "article_count": 4,
+    "article_images": [
+      "assets/images/fallback/newsletter-default.svg"
+    ],
+    "coverage_week_key": "2026-W37",
+    "coverage_start_date": "2026-09-07",
+    "coverage_end_date": "2026-09-13",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-09-14"
+  },
+  {
     "weeklyKey": "2026-W37",
     "weekStartDate": "2026-09-07",
     "weekEndDate": "2026-09-13",

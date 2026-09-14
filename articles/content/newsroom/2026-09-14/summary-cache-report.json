@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-14",
+  "generated_at": "2026-09-14T04:12:01.374Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 0,
+    "miss_count": 12,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 12
+    }
+  ],
+  "entries": [
+    {
+      "title": "Introducing Fast and Reliable Wireless Debugging with Android Debug Bridge (ADB) Wi-Fi 2.0",
+      "url": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+      "source": "Android Developers Blog",
+      "published_date": "Wed, 09 Sep 2026 16:00:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+        "url_hash": "eedca4dd005239a371e9e232c0fbaf74b7fb4789bfca1b4e05857bb40059a792",
+        "published_date": "Wed, 09 Sep 2026 16:00:00 +0000",
+        "content_hash": "750f3c4507efb943b6059976fead1b6efb1da0148b06119c7aef96cbba29bd48"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[sailus-media-tree:ipu6] BUILD SUCCESS 6f6d9729301fbf8fadff3c1822cdd730ef6cd213",
+      "url": "https://lore.kernel.org/linux-media/202609071453.Wr61Aa3p-lkp@intel.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "published_date": "2026-09-07T07:55:25Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/202609071453.wr61aa3p-lkp@intel.com",
+        "url_hash": "195fd87f5108a4c77ce6bb464a29ceb93317a23149d65b4074f944493807b58d",
+        "published_date": "2026-09-07T07:55:25Z",
+        "content_hash": "98bb27eff79b1e6d98aed27276c866fb4c2c513790dc53cd4f0057d98956c4aa"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass",
+      "url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-11T13:56:36Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com",
+        "url_hash": "c2a8a42b938dda17386cf77c9fccfc725715c5a21b4f056e65f99d7b6ae17128",
+        "published_date": "2026-09-11T13:56:36Z",
+        "content_hash": "4e541ed95406cd7e4b9111e64683eef51b11f57976b17541db757997d0d23de3"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-08T11:43:05Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io",
+        "url_hash": "e917fa25eb344f22cef37e603e94476f8de0a8ffc96969b53203e8993bc8d2aa",
+        "published_date": "2026-09-08T11:43:05Z",
+        "content_hash": "7cad90bf8dfc9401748dc02f33a749114b753df0e09f17bb37da646035790700"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping",
+      "url": "https://patchwork.libcamera.org/patch/28200/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-08",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28200",
+        "url_hash": "4eddf3c31724f2485bb7faaa1e504473ded27b3dabacc926844e4aa537da69f2",
+        "published_date": "2026-09-08",
+        "content_hash": "3f98954dc9e07315742fc6a1d9c00591e7f6da9665bfa6c9b00a7abb5c275414"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+      "url": "https://patchwork.libcamera.org/patch/28219/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-10",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28219",
+        "url_hash": "1c3d9ee9c3e53cdbbe8680b91bdf3d957cdc1f8cf3c76536eab2cb105784e8c2",
+        "published_date": "2026-09-10",
+        "content_hash": "9ef99c7ac7a756fc12eaa5638701e01f63c0c6decaf5c1bc53408b6120c90693"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 0/6] Add CAMSS support for Qualcomm Glymur",
+      "url": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-07T08:13:56Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
+        "url_hash": "628fedbd8a6db3e77b3a68f5fef08ca2607e66afb999c3f9c5a7410aadf50006",
+        "published_date": "2026-09-07T08:13:56Z",
+        "content_hash": "15fe62ca35656177cd5da3ccb24e92725532d7eb7dfc63f56854867b08321e81"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Acer Swift SFG14-01 Camera Support not working on Linux",
+      "url": "https://lore.kernel.org/linux-media/CAFJ6yro2PRQAsNwDMRmU8sve6nrXXWVruStgyYVRMcYeksdufQ@mail.gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-09T07:42:11Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/cafj6yro2prqasnwdmrmu8sve6nrxxwvrustgyyvrmcyeksdufq@mail.gmail.com",
+        "url_hash": "54ea2846d5fb3524c57287c80f55f34ce423a5ebbf395ab403cafad80cc5d801",
+        "published_date": "2026-09-09T07:42:11Z",
+        "content_hash": "edfbd8fbed73d149ebc0b26b01eac7e999c69116391575d27d0a28dbe794d7eb"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "libcamera: sensor: Decrease priority for CameraSensorRaw",
+      "url": "https://patchwork.libcamera.org/patch/28214/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-09",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28214",
+        "url_hash": "69b502252cc91444e1c0ca3aa63b749cabe0c5df9794d5ed256bb3648c4003c3",
+        "published_date": "2026-09-09",
+        "content_hash": "b5c55ad6602689b6237ffc90d98fd00ea013690568a498a4d71960eb87d5feea"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support",
+      "url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-11T06:22:19Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com",
+        "url_hash": "428bf369388a6bb983fd9b9a8b27239a775b3b3c8daa810c956308c72f9c8f91",
+        "published_date": "2026-09-11T06:22:19Z",
+        "content_hash": "f8d2d3ae09fc58169fc7f3e63a6f39b79d131c54ce659aaddc53a97546c1e53c"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250",
+      "url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "published_date": "2026-09-12T10:34:35Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com",
+        "url_hash": "23081e22c76371b6b6ba941d539f4031f4093ba2ce0c04b4de5ac4a45066a912",
+        "published_date": "2026-09-12T10:34:35Z",
+        "content_hash": "40b5f5c4125e81199111e2c8bdaf72d40ae6ddc2f5290faa2f91d0bc55b35435"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Mira016 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-08T07:57:50Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com",
+        "url_hash": "5b0066c77d43b08b584dd6d1a8884150b6866ed7bcf6667d1f622292724715e2",
+        "published_date": "2026-09-08T07:57:50Z",
+        "content_hash": "304ab4a5ffeb1a81a19125456929904c3ba498a9bd75605b0ce2c817a58aecac"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
