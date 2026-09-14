@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-09-07T00:00:00+09:00",
+  "updated_at": "2026-09-14T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org",
-    "title": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
-    "summary": "Qualcomm x1e/Hamoa 플랫폼의 카메라 하드웨어 구성을 정의하는 Device Tree Source (DTS) 지원 v6 패치가 공개되었습니다. 이번 업데이트는 CAMSS 노드의 데이터 레인 정렬을 PHY 계층과 일치시키고 전원 공급 스키마를 정합화하는 등 하드웨어 초기화 안정성을 높이는 데 초점을 맞추었습니다.",
-    "source_url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
-    "newsletter_date": "2026-09-07",
-    "newsletter_url": "newsletters/2026-09-07/index.html",
-    "selected_at": "2026-09-07",
+    "article_identity_key": "url:https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com",
+    "title": "Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개",
+    "summary": "Rockchip RKISP1 ISP 드라이버에서 Bayer demosaicing 바이패스 비트가 반대로 처리되던 심각한 로직 오류를 해결하는 패치가 제안되었습니다.",
+    "source_url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+    "newsletter_date": "2026-09-14",
+    "newsletter_url": "newsletters/2026-09-14/index.html",
+    "selected_at": "2026-09-14",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-09-07",
+    "last_scored_at": "2026-09-14",
     "date_evidence": {
-      "date": "2026-09-06T14:20:56Z",
+      "date": "2026-09-11T13:56:36Z",
       "date_field": "published_date",
       "evidence_level": "watch",
       "publish_ready_date_evidence": true
@@ -40,11 +40,56 @@
       "category": "camera_driver_image_pipeline",
       "source_name": "lore.kernel.org linux-media list"
     },
-    "newsletter_article_url": "newsletters/2026-09-07/index.html#article-qualcomm-x1e-hamoa-dts-v6",
+    "newsletter_article_url": "newsletters/2026-09-14/index.html#article-rockchip-rkisp1-isp-bayer-demosaicing",
     "image_url": "assets/images/fallback/newsletter-default.svg",
-    "image_alt": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개 image"
+    "image_alt": "Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org",
+      "title": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+      "summary": "Qualcomm x1e/Hamoa 플랫폼의 카메라 하드웨어 구성을 정의하는 Device Tree Source (DTS) 지원 v6 패치가 공개되었습니다. 이번 업데이트는 CAMSS 노드의 데이터 레인 정렬을 PHY 계층과 일치시키고 전원 공급 스키마를 정합화하는 등 하드웨어 초기화 안정성을 높이는 데 초점을 맞추었습니다.",
+      "source_url": "https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org/",
+      "newsletter_date": "2026-09-07",
+      "newsletter_url": "newsletters/2026-09-07/index.html",
+      "selected_at": "2026-09-07",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-09-07",
+      "date_evidence": {
+        "date": "2026-09-06T14:20:56Z",
+        "date_field": "published_date",
+        "evidence_level": "watch",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 3,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "camera_driver_image_pipeline",
+        "source_name": "lore.kernel.org linux-media list"
+      },
+      "newsletter_article_url": "newsletters/2026-09-07/index.html#article-qualcomm-x1e-hamoa-dts-v6",
+      "image_url": "assets/images/fallback/newsletter-default.svg",
+      "image_alt": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개 image",
+      "replaced_at": "2026-09-14",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com",
       "title": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
