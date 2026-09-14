@@ -224,6 +224,7 @@ function candidateBlockers(candidate = {}) {
   if (candidate.reference_only === true) blockers.push('reference_only=true');
   if (candidate.main_eligible === false) blockers.push('main_eligible=false');
   if (candidate.briefing_only === true) blockers.push('briefing_only=true');
+  if (candidate.source_extraction?.used_fallback === true) blockers.push('source_extraction.used_fallback=true');
   if (eligibility && !['main', 'short'].includes(eligibility)) {
     blockers.push(`finalSelectionEligibility=${eligibility}`);
   }
@@ -272,9 +273,11 @@ function sourceActionForEffectiveness(source = {}) {
 function parserSignalsFromSource(source = {}) {
   // Recommendation prose is our own output, not evidence. In particular, a
   // recommendation saying "do not establish a parser failure" must not diagnose one.
-  const values = ensureArray(source.top_exclusion_reasons)
-    .map(item => text(item.reason)).filter(Boolean);
-  return values.filter(parserFailureReason);
+  const values = [
+    ...ensureArray(source.parser_failure_reasons),
+    ...ensureArray(source.top_exclusion_reasons)
+  ].map(item => text(item.reason)).filter(Boolean);
+  return [...new Set(values.filter(parserFailureReason))];
 }
 
 function buildSourceBreakdownFromEffectiveness(report = {}) {
@@ -334,7 +337,7 @@ function buildSourceBreakdownFromCandidates(candidates = []) {
     if (blockers.length > 0) state.blocked_count += 1;
     for (const blocker of blockers) {
       state.top_blockers.set(blocker, (state.top_blockers.get(blocker) || 0) + 1);
-      if (/parser|parse|extraction|source_extraction|date|dated|version|anchor|release row/i.test(blocker)) {
+      if (parserFailureReason(blocker)) {
         state.parser_failure_signals.add(blocker);
       }
     }

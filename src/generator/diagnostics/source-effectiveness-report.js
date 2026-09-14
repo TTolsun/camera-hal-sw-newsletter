@@ -742,6 +742,10 @@ function finalizeState(state) {
     ...metrics,
     recommendation: recommendation.recommendation,
     reasons: recommendation.reasons,
+    // Keep parser evidence independently of the five most frequent exclusions.
+    parser_failure_reasons: sortedReasonRows(new Map(
+      [...state.reasonCounts].filter(([reason]) => parserFailureReason(reason))
+    )),
     top_exclusion_reasons: sortedReasonRows(state.reasonCounts),
     sample_selected_urls: uniqueSorted([...selectedUrls]).slice(0, MAX_SAMPLE_URLS),
     sample_excluded_urls: uniqueSorted([...excludedUrls]).slice(0, MAX_SAMPLE_URLS)

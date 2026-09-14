@@ -101,6 +101,32 @@ test('official source is not marked parser repair from collected count alone', (
   assert.equal(official.recommendation, 'REVIEW_SOURCE_OR_PARSER');
 });
 
+test('parser failure evidence survives the top exclusion list limit', () => {
+  const ordinaryReasons = Array.from({ length: 6 }, (_, index) => `a_common_policy_reason_${index}`);
+  const report = buildReport({
+    collectedCandidates: { candidates: fixture.collectedCandidates.candidates.flatMap(candidate =>
+      candidate.source_name !== 'Official Broken Parser' ? [candidate] : [{
+        ...candidate,
+        final_exclusion_reasons: ordinaryReasons,
+        selection_exclusion_reason: 'Parser failed to extract the camera release row.'
+      }, {
+        ...candidate,
+        url: 'https://official.example.com/camera-second',
+        final_exclusion_reasons: ordinaryReasons,
+        selection_exclusion_reason: ''
+      }]) }
+  });
+  const official = source(report, 'official-broken');
+  assert.equal(official.top_exclusion_reasons.length, 5);
+  assert.equal(official.top_exclusion_reasons.some(item => /Parser failed/.test(item.reason)), false);
+  assert.ok(official.parser_failure_reasons.some(item => /Parser failed/.test(item.reason)));
+  const { buildSourceQualityDiagnosisReport } = require('../../diagnostics/source-quality-diagnosis');
+  const diagnosis = buildSourceQualityDiagnosisReport({ date: fixture.date, sourceEffectivenessReport: report });
+  assert.equal(diagnosis.diagnosis.parser_extraction_failure, true);
+  assert.equal(diagnosis.source_breakdown.find(item => item.source_id === official.source_id).recommended_action,
+    'KEEP_AND_FIX_PARSER');
+});
+
 test('generic source with many collected and zero eligible is downgrade candidate', () => {
   const report = buildReport();
   const generic = source(report, 'generic-ai-firehose');

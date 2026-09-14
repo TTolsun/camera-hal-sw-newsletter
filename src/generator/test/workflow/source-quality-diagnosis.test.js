@@ -237,6 +237,32 @@ test('unclassified derived candidates and an empty topic do not prove missing ta
   assert.equal(buildSourceQualityDiagnosisReport(options).diagnosis.taxonomy_missing, true);
 });
 
+test('candidate-only diagnosis does not mistake dates for parser failures', () => {
+  const report = buildSourceQualityDiagnosisReport({
+    date,
+    candidatePayload: { candidates: [cameraCandidate({
+      published_date: '2026-04-01', hasDatedEvidence: false,
+      main_eligible: false, reference_only: true,
+      selection_exclusion_reason: 'published date is outside the main window'
+    })] }
+  });
+  assert.equal(report.diagnosis.parser_extraction_failure, false);
+  assert.deepEqual(report.source_breakdown[0].parser_failure_signals, []);
+  assert.equal(report.recommended_issues.some(issue => issue.action === 'KEEP_AND_FIX_PARSER'), false);
+});
+
+test('candidate-only diagnosis preserves explicit extraction fallback evidence', () => {
+  const report = buildSourceQualityDiagnosisReport({
+    date,
+    candidatePayload: { candidates: [cameraCandidate({
+      main_eligible: false, source_extraction: { used_fallback: true }
+    })] }
+  });
+  assert.equal(report.diagnosis.parser_extraction_failure, true);
+  assert.deepEqual(report.source_breakdown[0].parser_failure_signals, ['source_extraction.used_fallback=true']);
+  assert.equal(report.source_breakdown[0].recommended_action, 'KEEP_AND_FIX_PARSER');
+});
+
 test('failed collection cannot be diagnosed as actual news shortage', () => {
   const report = buildSourceQualityDiagnosisReport({
     date,
