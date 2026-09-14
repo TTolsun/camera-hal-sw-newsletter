@@ -1,0 +1,1034 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-09-14",
+  "clusters": [
+    {
+      "cluster_id": "eedca4dd005239a3",
+      "cluster_key": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+      "canonical_title": "Introducing Fast and Reliable Wireless Debugging with Android Debug Bridge (ADB) Wi-Fi 2.0",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/09/wireless-debugging-adb-wifi-2.html",
+          "title": "Introducing Fast and Reliable Wireless Debugging with Android Debug Bridge (ADB) Wi-Fi 2.0",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "49d58944bd3ca26f",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "canonical_title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "candidate_count": 3,
+      "duplicate_count": 2,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "title": "CameraX Release Notes - CameraX 1.6.2",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "title": "1.4.0-alpha07",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8f1628f647487916",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+      "canonical_title": "VirtualCamera: prevent integer underflow in outBufferSize - platform/frameworks/av",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+          "title": "VirtualCamera: prevent integer underflow in outBufferSize - platform/frameworks/av",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+          "title": "Recent AOSP Gerrit commits related to VirtualCamera and camera HAL changes indicate ongoing development and potential bug fixes impacting camera pipeline stability and performance.",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "99f2c4b65ea5d74c",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+      "canonical_title": "VirtualCamera: validate blobSizeBytes against buffer size - platform/frameworks/av",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+          "title": "VirtualCamera: validate blobSizeBytes against buffer size - platform/frameworks/av",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+          "title": "Recent AOSP Gerrit commits related to VirtualCamera and camera HAL changes indicate ongoing development and potential bug fixes impacting camera pipeline stability and performance.",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e6e6c175c1048da5",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+      "canonical_title": "Tinder cuts app cold starts by 47% with new R8 Configuration Analyzer",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/tinder-app-cold-start-r8-configuration-analyzer.html",
+          "title": "Tinder cuts app cold starts by 47% with new R8 Configuration Analyzer",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "eff34e4bb13fca21",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+      "canonical_title": "Fix camera lazy AIDL provider not started and present cameras removed on unplug - platform/frameworks/av",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+          "title": "Fix camera lazy AIDL provider not started and present cameras removed on unplug - platform/frameworks/av",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+          "title": "A Gerrit commit addressing an issue with the camera lazy AIDL provider and camera removal on unplug suggests improvements in camera service stability and device hot-plugging behavior.",
+          "canonical": false,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1d9ca4c588aca6e3",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+      "canonical_title": "Preparing your app for broader memory limits",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+          "title": "Preparing your app for broader memory limits",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "63a55fb7e1b1d229",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+      "canonical_title": "Ensuring Safety in the Generative AI Ecosystem: Protecting Users from Non-Consensual Intimate Content",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "title": "Ensuring Safety in the Generative AI Ecosystem: Protecting Users from Non-Consensual Intimate Content",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7a9bb39859027801",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+      "canonical_title": "Media3 1.11 - What's new?",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/media3-1-11-whats-new.html",
+          "title": "Media3 1.11 - What's new?",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a8cd06df28457612",
+      "cluster_key": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "canonical_title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6f8916deba211090",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "canonical_title": "Emulator control for adaptive app development",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+          "title": "Emulator control for adaptive app development",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "901ec6eef9031b94",
+      "cluster_key": "https://android-developers.googleblog.com/2026/08/aaos-sdv-secure-by-design.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/08/aaos-sdv-secure-by-design.html",
+      "canonical_title": "AAOS SDV - Secure by Design",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/08/aaos-sdv-secure-by-design.html",
+          "title": "AAOS SDV - Secure by Design",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ae757c86e762923a",
+      "cluster_key": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
+      "canonical_url": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
+      "canonical_title": "September",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
+          "title": "September",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0296530fc4f5f85d",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v6 0/8] media: qcom: camss: CAMSS Offline Processing Engine support",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com/",
+          "title": "[PATCH v6 0/8] media: qcom: camss: CAMSS Offline Processing Engine support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com/",
+          "title": "[PATCH v6 0/8] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "16c321d7f243ad21",
+      "cluster_key": "https://lore.kernel.org/linux-media/202609140614.kmcttn8e-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/202609140614.KMCttn8e-lkp@intel.com/",
+      "canonical_title": "[sailus-media-tree:metadata 163/169] drivers/media/pci/intel/ipu6/ipu7-fw-isys.c:599:3: error: cannot jump from this goto statement to its label",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/202609140614.KMCttn8e-lkp@intel.com/",
+          "title": "[sailus-media-tree:metadata 163/169] drivers/media/pci/intel/ipu6/ipu7-fw-isys.c:599:3: error: cannot jump from this goto statement to its label",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d3a983f29c545120",
+      "cluster_key": "https://lore.kernel.org/linux-media/202609131638.i4ilw29i-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/202609131638.i4iLw29I-lkp@intel.com/",
+      "canonical_title": "[sailus-media-tree:metadata 161/169] drivers/media/pci/intel/ipu6/ipu6-fw-isys.c:664:6: warning: variable 'source' set but not used",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/202609131638.i4iLw29I-lkp@intel.com/",
+          "title": "[sailus-media-tree:metadata 161/169] drivers/media/pci/intel/ipu6/ipu6-fw-isys.c:664:6: warning: variable 'source' set but not used",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c2a8a42b938dda17",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+      "canonical_title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+          "title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+          "title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass - Jacopo Mondi",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "54ea2846d5fb3524",
+      "cluster_key": "https://lore.kernel.org/linux-media/cafj6yro2prqasnwdmrmu8sve6nrxxwvrustgyyvrmcyeksdufq@mail.gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/CAFJ6yro2PRQAsNwDMRmU8sve6nrXXWVruStgyYVRMcYeksdufQ@mail.gmail.com/",
+      "canonical_title": "Acer Swift SFG14-01 Camera Support not working on Linux",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/CAFJ6yro2PRQAsNwDMRmU8sve6nrXXWVruStgyYVRMcYeksdufQ@mail.gmail.com/",
+          "title": "Acer Swift SFG14-01 Camera Support not working on Linux",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e917fa25eb344f22",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+      "canonical_title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+          "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+          "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver - Elgin Perumbilly",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "628fedbd8a6db3e7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v2 0/6] Add CAMSS support for Qualcomm Glymur",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com/",
+          "title": "[PATCH v2 0/6] Add CAMSS support for Qualcomm Glymur",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com/",
+          "title": "[PATCH v2 0/6] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "69b502252cc91444",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28214",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28214/",
+      "canonical_title": "libcamera: sensor: Decrease priority for CameraSensorRaw",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28214/",
+          "title": "libcamera: sensor: Decrease priority for CameraSensorRaw",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/28214/",
+          "title": "libcamera: sensor: Decrease priority for CameraSensorRaw - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "195fd87f5108a4c7",
+      "cluster_key": "https://lore.kernel.org/linux-media/202609071453.wr61aa3p-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/202609071453.Wr61Aa3p-lkp@intel.com/",
+      "canonical_title": "[sailus-media-tree:ipu6] BUILD SUCCESS 6f6d9729301fbf8fadff3c1822cdd730ef6cd213",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/202609071453.Wr61Aa3p-lkp@intel.com/",
+          "title": "[sailus-media-tree:ipu6] BUILD SUCCESS 6f6d9729301fbf8fadff3c1822cdd730ef6cd213",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3dfeb4ba98192f1c",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260911194854.78894-2-nicfio@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260911194854.78894-2-nicfio@gmail.com/",
+      "canonical_title": "[PATCH v2 1/3] media: ipu6: Check the remote pad before dereferencing it",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260911194854.78894-2-nicfio@gmail.com/",
+          "title": "[PATCH v2 1/3] media: ipu6: Check the remote pad before dereferencing it",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ca49f8f2dbf7363d",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260911194854.78894-1-nicfio@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260911194854.78894-1-nicfio@gmail.com/",
+      "canonical_title": "[PATCH v2 0/3] media: Two oopses and a hang when unbinding a streaming sensor",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260911194854.78894-1-nicfio@gmail.com/",
+          "title": "[PATCH v2 0/3] media: Two oopses and a hang when unbinding a streaming sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "428bf369388a6bb9",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+      "canonical_title": "[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+          "title": "[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+          "title": "[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support - Gjorgji.Rosikopulos.gjorgji.rosikopulos",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5b0066c77d43b08b",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com/",
+      "canonical_title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Mira016 image sensor",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com/",
+          "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Mira016 image sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com/",
+          "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Mira016 image sensor - Jacopo Mondi",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "823a4902dd45b9f1",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260909203717.90605-4-lsa.uz@pm.me",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260909203717.90605-4-lsa.uz@pm.me/",
+      "canonical_title": "[PATCH v3 3/3] media: ipu-bridge: Add Sony IMX681",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260909203717.90605-4-lsa.uz@pm.me/",
+          "title": "[PATCH v3 3/3] media: ipu-bridge: Add Sony IMX681",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260909203717.90605-4-lsa.uz@pm.me/",
+          "title": "[PATCH v3 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d969a91a76e4b34a",
+      "cluster_key": "https://lore.kernel.org/linux-media/202609091022.j5nuhj9t-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/202609091022.J5NUHJ9T-lkp@intel.com/",
+      "canonical_title": "[sailus-media-tree:ipu6] BUILD SUCCESS 83345575c7f971891082b76b75e3d67a36ce5283",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/202609091022.J5NUHJ9T-lkp@intel.com/",
+          "title": "[sailus-media-tree:ipu6] BUILD SUCCESS 83345575c7f971891082b76b75e3d67a36ce5283",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d9304974d46aeb05",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28235",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28235/",
+      "canonical_title": "[1/2] libcamera: matrix: Add a transpose() function",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28235/",
+          "title": "[1/2] libcamera: matrix: Add a transpose() function",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a7100e37b6d653ee",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28220",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28220/",
+      "canonical_title": "[v2,1/5] libcamera: v4l2_videodevice: V4L2DeviceFormat: Expand formatting",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28220/",
+          "title": "[v2,1/5] libcamera: v4l2_videodevice: V4L2DeviceFormat: Expand formatting",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/28220/",
+          "title": "[v2,1/5] libcamera: v4l2_videodevice: V4L2DeviceFormat: Expand formatting - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1c3d9ee9c3e53cdb",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28219",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28219/",
+      "canonical_title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28219/",
+          "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/28219/",
+          "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e716cc49478537d9",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28196",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28196/",
+      "canonical_title": "[RESEND] libcamera: software_isp: Skip stop when the worker has not started",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28196/",
+          "title": "[RESEND] libcamera: software_isp: Skip stop when the worker has not started",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/28196/",
+          "title": "[RESEND] libcamera: software_isp: Skip stop when the worker has not started - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "23081e22c76371b6",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/",
+      "canonical_title": "[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/",
+          "title": "[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/",
+          "title": "[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250 - Keith Harvey",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4eddf3c31724f248",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28200",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28200/",
+      "canonical_title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping",
+      "candidate_count": 2,
+      "duplicate_count": 1,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28200/",
+          "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://patchwork.libcamera.org/patch/28200/",
+          "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping - Patchwork",
+          "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9bc1484cc7ae997f",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260907113004.2489993-1-sakari.ailus@linux.intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260907113004.2489993-1-sakari.ailus@linux.intel.com/",
+      "canonical_title": "[PATCH v4 00/45] media: ipu6: Add support for ipu7 hardware",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260907113004.2489993-1-sakari.ailus@linux.intel.com/",
+          "title": "[PATCH v4 00/45] media: ipu6: Add support for ipu7 hardware",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f7ef1e7f544af284",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28204",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28204/",
+      "canonical_title": "[v3,1/3] libcamera: Clarify meaning of PixelArraySize and other rectangles",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28204/",
+          "title": "[v3,1/3] libcamera: Clarify meaning of PixelArraySize and other rectangles",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "64a68df4707f9318",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28232",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28232/",
+      "canonical_title": "[v4,1/2] ipa: libipa: camera_sensor_helper: Add OV5670 black level",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28232/",
+          "title": "[v4,1/2] ipa: libipa: camera_sensor_helper: Add OV5670 black level",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f192384906d3541a",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20260817",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5ab920ca1744f0a7",
+      "cluster_key": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
+      "canonical_url": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
+      "canonical_title": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
+          "title": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b9e7240c96270a82",
+      "cluster_key": "https://github.com/loicpoulain/camss-isp-m2m-test",
+      "canonical_url": "https://github.com/loicpoulain/camss-isp-m2m-test",
+      "canonical_title": "https://github.com/loicpoulain/camss-isp-m2m-test",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/loicpoulain/camss-isp-m2m-test",
+          "title": "https://github.com/loicpoulain/camss-isp-m2m-test",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "989b97da3ca430c4",
+      "cluster_key": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ea376fb03a33d353",
+      "cluster_key": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dea8f2aedd976eec",
+      "cluster_key": "https://lore.kernel.org/all/20260508-camss-isp-ope-v3-0-bb1055274603@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/all/20260508-camss-isp-ope-v3-0-bb1055274603@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/all/20260508-camss-isp-ope-v3-0-bb1055274603@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20260508-camss-isp-ope-v3-0-bb1055274603@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/all/20260508-camss-isp-ope-v3-0-bb1055274603@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cf217aa180c79af5",
+      "cluster_key": "https://lore.kernel.org/r/20260427-camss-isp-ope-v2-0-f430e7485009@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260427-camss-isp-ope-v2-0-f430e7485009@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260427-camss-isp-ope-v2-0-f430e7485009@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260427-camss-isp-ope-v2-0-f430e7485009@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260427-camss-isp-ope-v2-0-f430e7485009@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "34f21aa38a93dd53",
+      "cluster_key": "https://github.com/llvm/llvm-project",
+      "canonical_url": "https://github.com/llvm/llvm-project",
+      "canonical_title": "https://github.com/llvm/llvm-project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/llvm/llvm-project",
+          "title": "https://github.com/llvm/llvm-project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0b0540d2a2004ea7",
+      "cluster_key": "https://lore.kernel.org/oe-kbuild-all/202609140614.kmcttn8e-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/oe-kbuild-all/202609140614.KMCttn8e-lkp@intel.com",
+      "canonical_title": "https://lore.kernel.org/oe-kbuild-all/202609140614.KMCttn8e-lkp@intel.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/oe-kbuild-all/202609140614.KMCttn8e-lkp@intel.com",
+          "title": "https://lore.kernel.org/oe-kbuild-all/202609140614.KMCttn8e-lkp@intel.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a7d527f0adb608f9",
+      "cluster_key": "https://github.com/intel/lkp-tests/wiki",
+      "canonical_url": "https://github.com/intel/lkp-tests/wiki",
+      "canonical_title": "https://github.com/intel/lkp-tests/wiki",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/intel/lkp-tests/wiki",
+          "title": "https://github.com/intel/lkp-tests/wiki",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "857a6cfa154c7460",
+      "cluster_key": "https://lore.kernel.org/oe-kbuild-all/202609131638.i4ilw29i-lkp@intel.com",
+      "canonical_url": "https://lore.kernel.org/oe-kbuild-all/202609131638.i4iLw29I-lkp@intel.com",
+      "canonical_title": "https://lore.kernel.org/oe-kbuild-all/202609131638.i4iLw29I-lkp@intel.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/oe-kbuild-all/202609131638.i4iLw29I-lkp@intel.com",
+          "title": "https://lore.kernel.org/oe-kbuild-all/202609131638.i4iLw29I-lkp@intel.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d2047c19e14cb1be",
+      "cluster_key": "https://lore.kernel.org/all/20260903-x1e-csi2-phy-v17-0-26606fa9a039@linaro.org",
+      "canonical_url": "https://lore.kernel.org/all/20260903-x1e-csi2-phy-v17-0-26606fa9a039@linaro.org",
+      "canonical_title": "https://lore.kernel.org/all/20260903-x1e-csi2-phy-v17-0-26606fa9a039@linaro.org",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20260903-x1e-csi2-phy-v17-0-26606fa9a039@linaro.org",
+          "title": "https://lore.kernel.org/all/20260903-x1e-csi2-phy-v17-0-26606fa9a039@linaro.org",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "bc85f5e954d4b4e3",
+      "cluster_key": "https://lore.kernel.org/all/20260906-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v17-0-e2197a3e2551@linaro.org",
+      "canonical_url": "https://lore.kernel.org/all/20260906-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v17-0-e2197a3e2551@linaro.org",
+      "canonical_title": "https://lore.kernel.org/all/20260906-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v17-0-e2197a3e2551@linaro.org",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20260906-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v17-0-e2197a3e2551@linaro.org",
+          "title": "https://lore.kernel.org/all/20260906-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v17-0-e2197a3e2551@linaro.org",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3bf2d05863a9db8f",
+      "cluster_key": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cac1bd43468be468",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260903202820.8401-1-nicfio@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260903202820.8401-1-nicfio@gmail.com",
+      "canonical_title": "https://lore.kernel.org/linux-media/20260903202820.8401-1-nicfio@gmail.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260903202820.8401-1-nicfio@gmail.com",
+          "title": "https://lore.kernel.org/linux-media/20260903202820.8401-1-nicfio@gmail.com/",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "960a2bffda499173",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com",
+      "canonical_title": "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com",
+          "title": "https://lore.kernel.org/linux-media/20260812105305.32447-1-nicfio@gmail.com/",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}

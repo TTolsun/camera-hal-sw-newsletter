@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-09-14",
+  "validations": [
+    {
+      "proposal_id": "camera-hal-android-developers-blog-20260914-1",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "camera-hal-aosp-gerrit-20260914-1",
+      "candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+      "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-aosp-gerrit-20260914-1",
+      "candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+      "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-aosp-gerrit-20260914-2",
+      "candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+      "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-1",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-2",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-3",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-4",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-1",
+      "candidate_url": "https://patchwork.libcamera.org/patch/28214/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/28214/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-5",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-6",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-7",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260909203717.90605-4-lsa.uz@pm.me/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260909203717.90605-4-lsa.uz@pm.me/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-2",
+      "candidate_url": "https://patchwork.libcamera.org/patch/28220/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/28220/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-3",
+      "candidate_url": "https://patchwork.libcamera.org/patch/28219/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/28219/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-4",
+      "candidate_url": "https://patchwork.libcamera.org/patch/28196/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/28196/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-8",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-5",
+      "candidate_url": "https://patchwork.libcamera.org/patch/28200/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/28200/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "camera-hal-raspberrypi-libcamera-20260914-1",
+      "candidate_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "normalized_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "raspberrypi-libcamera-releases",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "raspberrypi-libcamera-releases",
+      "suggested_fixture_case": "Add a parser regression fixture for the discovered release-note source.",
+      "source_extraction_item_count": 0
+    }
+  ],
+  "counts": {
+    "discovered_not_extractable": 2,
+    "accepted": 16
+  }
+}

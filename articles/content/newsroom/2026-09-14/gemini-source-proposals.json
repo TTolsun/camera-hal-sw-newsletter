@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-09-14",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-android-developers-blog-20260914-1",
+      "topic_gap": "CameraX 1.7.0-alpha03 release notes are available, providing insights into the latest camera API developments and potential impacts on camera HAL implementations.",
+      "source_family": "android-developers-blog-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX 1.7.0-alpha03",
+        "CameraX release notes",
+        "Android camera API"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+      ],
+      "expected_evidence": [
+        "CameraX 1.7.0-alpha03 release notes",
+        "New features or changes in CameraX",
+        "Impact on camera HAL"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-aosp-gerrit-20260914-1",
+      "topic_gap": "Recent AOSP Gerrit commits related to VirtualCamera and camera HAL changes indicate ongoing development and potential bug fixes impacting camera pipeline stability and performance.",
+      "source_family": "aosp-gerrit-camera-changes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "VirtualCamera",
+        "camera HAL",
+        "AOSP Gerrit",
+        "buffer size validation"
+      ],
+      "candidate_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+        "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183"
+      ],
+      "expected_evidence": [
+        "VirtualCamera changes",
+        "Integer underflow fix",
+        "Buffer size validation",
+        "Camera HAL impact"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-aosp-gerrit-20260914-2",
+      "topic_gap": "A Gerrit commit addressing an issue with the camera lazy AIDL provider and camera removal on unplug suggests improvements in camera service stability and device hot-plugging behavior.",
+      "source_family": "aosp-gerrit-camera-changes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "camera lazy AIDL provider",
+        "camera unplug",
+        "AOSP Gerrit",
+        "camera service"
+      ],
+      "candidate_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680"
+      ],
+      "expected_evidence": [
+        "Camera lazy AIDL provider",
+        "Camera removal on unplug",
+        "Camera service stability",
+        "Hot-plugging behavior"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-1",
+      "topic_gap": "A Linux kernel commit introducing CAMSS Offline Processing Engine support for Qualcomm platforms signifies advancements in camera processing capabilities at the driver level.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CAMSS",
+        "Offline Processing Engine",
+        "Qualcomm",
+        "linux-media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "CAMSS Offline Processing Engine",
+        "Qualcomm camera support",
+        "Linux kernel media driver"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-2",
+      "topic_gap": "A patch for the rkisp1 driver to fix Bayer demosaicing bypass indicates improvements in image quality and color processing for Rockchip ISP devices.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "rkisp1",
+        "demosaicing",
+        "ISP",
+        "linux-media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/"
+      ],
+      "expected_evidence": [
+        "rkisp1 driver",
+        "Bayer demosaicing bypass fix",
+        "Image quality",
+        "Color processing"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-3",
+      "topic_gap": "A patch adding support for the os02g10 camera sensor driver to the Linux media subsystem expands hardware compatibility for new camera modules.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "os02g10",
+        "camera sensor driver",
+        "linux-media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/"
+      ],
+      "expected_evidence": [
+        "os02g10 camera sensor driver",
+        "Linux media subsystem",
+        "Hardware support"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-4",
+      "topic_gap": "A patch set introducing CAMSS support for Qualcomm Glymur platforms enhances camera functionality and integration on specific Qualcomm SoCs.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CAMSS",
+        "Qualcomm Glymur",
+        "linux-media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "CAMSS support",
+        "Qualcomm Glymur",
+        "Camera functionality"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-1",
+      "topic_gap": "A libcamera patch to decrease priority for CameraSensorRaw suggests optimizations for sensor data handling within the libcamera framework.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "CameraSensorRaw",
+        "sensor data"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28214/"
+      ],
+      "expected_evidence": [
+        "CameraSensorRaw priority",
+        "libcamera framework",
+        "Sensor data handling"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-5",
+      "topic_gap": "A patch set adding V4L2 subdev streams API support for the qcom camss driver represents a significant update for camera stream management and control.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "V4L2",
+        "camss driver",
+        "linux-media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "V4L2 subdev streams API",
+        "qcom camss driver",
+        "Camera stream management"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-6",
+      "topic_gap": "A dt-bindings patch to add the Mira016 image sensor driver enhances support for new camera hardware within the Linux media framework.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Mira016",
+        "image sensor",
+        "linux-media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com/"
+      ],
+      "expected_evidence": [
+        "Mira016 image sensor driver",
+        "Device tree bindings",
+        "Linux media framework"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-7",
+      "topic_gap": "A patch adding the Sony IMX681 sensor to the ipu-bridge driver expands camera sensor support for Intel IPU platforms.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "IMX681",
+        "ipu-bridge",
+        "Intel IPU"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260909203717.90605-4-lsa.uz@pm.me/"
+      ],
+      "expected_evidence": [
+        "Sony IMX681 sensor",
+        "ipu-bridge driver",
+        "Intel IPU"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-2",
+      "topic_gap": "A libcamera patch for V4L2DeviceFormat to expand formatting options indicates ongoing development in camera format handling and compatibility.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "V4L2DeviceFormat",
+        "camera format"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28220/"
+      ],
+      "expected_evidence": [
+        "V4L2DeviceFormat",
+        "Camera format handling",
+        "libcamera"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-3",
+      "topic_gap": "Libcamera's addition of LensShadingCorrection maps and ToneCurve to controls metadata signifies enhancements in camera image processing controls.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "LensShadingCorrection",
+        "ToneCurve",
+        "camera controls"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28219/"
+      ],
+      "expected_evidence": [
+        "LensShadingCorrection",
+        "ToneCurve",
+        "Camera metadata controls",
+        "libcamera"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-4",
+      "topic_gap": "A libcamera patch to skip stopping the worker when it has not started addresses potential issues in the software ISP pipeline's startup and shutdown logic.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "software ISP",
+        "pipeline"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28196/"
+      ],
+      "expected_evidence": [
+        "software ISP pipeline",
+        "Worker start/stop logic",
+        "libcamera"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-20260914-8",
+      "topic_gap": "A patch for the ipu-bridge driver to add a DMI quirk for Dell 14 Premium DA14250 improves camera compatibility on specific Dell laptop models.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ipu-bridge",
+        "DMI quirk",
+        "Dell",
+        "linux-media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/"
+      ],
+      "expected_evidence": [
+        "ipu-bridge driver",
+        "DMI quirk",
+        "Dell 14 Premium",
+        "Camera compatibility"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-libcamera-patchwork-20260914-5",
+      "topic_gap": "A libcamera patch to fix IMX355 test pattern mode mapping ensures accurate test pattern generation for this specific image sensor.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "IMX355",
+        "test pattern"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28200/"
+      ],
+      "expected_evidence": [
+        "IMX355 sensor",
+        "Test pattern mode mapping",
+        "libcamera"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-raspberrypi-libcamera-20260914-1",
+      "topic_gap": "Raspberry Pi libcamera release v0.7.2+rpt20260817 provides updated camera software for Raspberry Pi devices, potentially including improvements to the camera pipeline and sensor support.",
+      "source_family": "raspberrypi-libcamera-releases",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Raspberry Pi",
+        "libcamera",
+        "release notes"
+      ],
+      "candidate_urls": [
+        "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817"
+      ],
+      "expected_evidence": [
+        "Raspberry Pi libcamera release notes",
+        "Camera software updates",
+        "Pipeline improvements"
+      ],
+      "risk_notes": []
+    }
+  ]
+}

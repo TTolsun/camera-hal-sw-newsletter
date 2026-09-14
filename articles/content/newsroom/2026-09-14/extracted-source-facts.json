@@ -1,0 +1,901 @@
+{
+  "sources": [
+    {
+      "id": "82fc103eae82b9dd",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+      "title": "VirtualCamera: validate blobSizeBytes against buffer size - platform/frameworks/av",
+      "published_at": "2026-08-13",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4228183 on platform/frameworks/av (branch android17-release) is proposed and not merged (status NEW, created 2026-08-13). Change-Id I0f5906b56ddfb8d23d079cd192c42f925b5c02d3; current revision 48a57194f830. No approving or recommending Code-Review or verification vote has been cast yet. It changes 1 file(s) +6/-1, of which 1 are camera paths: platform/frameworks/av/services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"7SdinKOUmzx-G8iF5YokZw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.94,
+      "android_hal_relevance": 0.94,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.894,
+      "warnings": []
+    },
+    {
+      "id": "gemini-99f2c4b65ea5d74c",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183",
+      "title": "Recent AOSP Gerrit commits related to VirtualCamera and camera HAL changes indicate ongoing development and potential bug fixes impacting camera pipeline stability and performance.",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Recent AOSP Gerrit commits related to VirtualCamera and camera HAL changes indicate ongoing development and potential bug fixes impacting camera pipeline stability and performance.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"7SdinKOUmzx-G8iF5YokZw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.583,
+      "warnings": []
+    },
+    {
+      "id": "992556c24727d604",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+      "title": "VirtualCamera: prevent integer underflow in outBufferSize - platform/frameworks/av",
+      "published_at": "2026-08-13",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4228184 on platform/frameworks/av (branch android17-release) is proposed and not merged (status NEW, created 2026-08-13). Change-Id I41b74d543e8b8a7ad46a261d49ee311543e1ed8d; current revision f1e9fec0ace5. No approving or recommending Code-Review or verification vote has been cast yet. It changes 2 file(s) +10/-0, of which 2 are camera paths: platform/frameworks/av/services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc, platform/frameworks/av/services/camera/virtualc",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"ghOsOL8We1rgGKq1Xj7BHw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.94,
+      "android_hal_relevance": 0.94,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.894,
+      "warnings": []
+    },
+    {
+      "id": "gemini-8f1628f647487916",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4228184",
+      "title": "Recent AOSP Gerrit commits related to VirtualCamera and camera HAL changes indicate ongoing development and potential bug fixes impacting camera pipeline stability and performance.",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Recent AOSP Gerrit commits related to VirtualCamera and camera HAL changes indicate ongoing development and potential bug fixes impacting camera pipeline stability and performance.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"ghOsOL8We1rgGKq1Xj7BHw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.583,
+      "warnings": []
+    },
+    {
+      "id": "16ab7df7ad3c9170",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "published_at": "August 12, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Deprecated legacy Camera2Interop APIs ( Camera2Interop.Extender , Camera2CameraControl , Camera2CameraInfo , and CaptureRequestOptions ) in favor of Camera2Interop configurator factory methods and Kotlin extension functions. ( Ib0845 , b/529609261 )",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"fa-x-mtfrom-en\"\n      dir=\"rtl\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 1,
+      "android_hal_relevance": 1,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.893,
+      "warnings": []
+    },
+    {
+      "id": "aa98c7dae6a5cd87",
+      "url": "https://lore.kernel.org/linux-media/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com/",
+      "title": "[PATCH v6 0/8] media: qcom: camss: CAMSS Offline Processing Engine support",
+      "published_at": "2026-09-07T10:51:18Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series introduces support for the Qualcomm CAMSS Offline Processing Engine (OPE), as found on Agatti-based platforms. Boards such as Arduino UNO-Q use this SoC family and will benefit from hardware-assisted image processing enabled by this work. This represents the first step toward enabling image processing beyond raw capture on Qualcomm platforms by using hardware blocks for operations such as debayering, color correction, and scaling. The OPE sits outside the live capture pipeline. It op",
+          "evidence_text": "<html><head><title>[PATCH v6 0/8] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sch",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.93,
+      "android_hal_relevance": 0.93,
+      "ai_relevance": 0,
+      "technical_depth": 0.857,
+      "warnings": []
+    },
+    {
+      "id": "gemini-7d39e1ead720f4e7",
+      "url": "https://lore.kernel.org/linux-media/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com/",
+      "title": "[PATCH v6 0/8] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain",
+      "published_at": "2026-09-07",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v6 0/8] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain",
+          "evidence_text": "<html><head><title>[PATCH v6 0/8] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sch",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "cb78414c7f162569",
+      "url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+      "title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass",
+      "published_at": "2026-09-11T13:56:36Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The RKISP1_CIF_ISP_DEMOSAIC_BYPASS bit, when set, bypasses the demosaicing block on the RkISP1 ISP. The current implementation however clears the bit when demosaicing have to be bypassed and sets it when demosaicing has to be enabled, effectively inverting the bypass bit handling logic. Fix this by setting the bypass bit when disabling the demosaicing block, and by clearing it instead when demosaicing has to be performed. The issue never manifested itself as libcamera hasn't an algorithm to cont",
+          "evidence_text": "<html><head><title>[PATCH] media: rkisp1: Fix Bayer demosaicing bypass - Jacopo Mondi</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "gemini-f8d94225fbc77790",
+      "url": "https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com/",
+      "title": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass - Jacopo Mondi",
+      "published_at": "2026-09-11",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] media: rkisp1: Fix Bayer demosaicing bypass - Jacopo Mondi",
+          "evidence_text": "<html><head><title>[PATCH] media: rkisp1: Fix Bayer demosaicing bypass - Jacopo Mondi</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "aca9db589b138123",
+      "url": "https://lore.kernel.org/linux-media/CAFJ6yro2PRQAsNwDMRmU8sve6nrXXWVruStgyYVRMcYeksdufQ@mail.gmail.com/",
+      "title": "Acer Swift SFG14-01 Camera Support not working on Linux",
+      "published_at": "2026-09-09T07:42:11Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Hello Acer Support and Qualcomm/Linux Camera Maintainers, We are working to enable the built-in RGB camera on an Acer Swift SFG14-01, board Bluetang_SX1, with Qualcomm Snapdragon X Plus (qcom,x1p42100). We need assistance identifying the correct hardware configuration and Linux enablement path. Current environment and findings: Ubuntu 26.04, kernel 7.0.0-30-generic; device-tree boot. No USB camera detected; the internal camera uses the MIPI camera path. CCI1 at ac16000 and CAMSS at acb7000 are d",
+          "evidence_text": "<html><head><title>Acer Swift SFG14-01 Camera Support not working on Linux - AHMAD YASEEN</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "21ded074d48b9fb8",
+      "url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+      "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver",
+      "published_at": "2026-09-08T11:43:05Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The following features are supported: - Manual exposure an gain control support. - vblank/hblank control support. - vflip/hflip control support - Test pattern control support. - mode support 1920 x 1080 @ 30 fps, SBGGR10 The driver is tested on mainline branch v7.0-rc2 on IMX8MP Debix Model a. v4l2-compliance 1.31.0-5387, 64 bits, 64-bit time_t v4l2-compliance SHA: 5508bc4301ac 2025-08-25 08:14:22 Compliance test for device /dev/v4l-subdev3: Driver Info: Driver version : 7.0.0 Capabilities : 0x0",
+          "evidence_text": "<html><head><title>[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver - Elgin Perumbilly</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.83,
+      "warnings": []
+    },
+    {
+      "id": "gemini-8708cd867aca3b03",
+      "url": "https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io/",
+      "title": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver - Elgin Perumbilly",
+      "published_at": "2025-08-25",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver - Elgin Perumbilly",
+          "evidence_text": "<html><head><title>[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver - Elgin Perumbilly</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.725,
+      "warnings": []
+    },
+    {
+      "id": "f6fe9eab43367349",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+      "title": "Fix camera lazy AIDL provider not started and present cameras removed on unplug - platform/frameworks/av",
+      "published_at": "2026-08-20",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4235680 on platform/frameworks/av (branch android17-release) is proposed and not merged (status NEW, created 2026-08-20). Change-Id Ifd1ab957ac24ff008cee64d0c477f5cfb66edd41; current revision 1e63509d49ba. No approving or recommending Code-Review or verification vote has been cast yet. It changes 1 file(s) +8/-2, of which 1 are camera paths: platform/frameworks/av/services/camera/libcameraservice/common/CameraProviderManager.cpp.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"jk_VZMHwpA6yaopurG2R7A\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.88,
+      "android_hal_relevance": 0.88,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.825,
+      "warnings": []
+    },
+    {
+      "id": "gemini-eff34e4bb13fca21",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
+      "title": "A Gerrit commit addressing an issue with the camera lazy AIDL provider and camera removal on unplug suggests improvements in camera service stability and device hot-plugging behavior.",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "A Gerrit commit addressing an issue with the camera lazy AIDL provider and camera removal on unplug suggests improvements in camera service stability and device hot-plugging behavior.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"jk_VZMHwpA6yaopurG2R7A\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.537,
+      "warnings": []
+    },
+    {
+      "id": "f4e5c29c6ccbe39d",
+      "url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+      "title": "[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support",
+      "published_at": "2026-09-11T06:22:19Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "From: Gjorgji Rosikopulos <gjorgji.rosikopulos@oss.qualcomm.com> This series adds V4L2 subdev streams API support to the CAMSS driver. Each subdevice gains streams-aware enable_streams/disable_streams pad ops alongside the existing legacy (non-streams) subdev ops, guarded by a new per-instance streams_enable resource flag. Patches 1-4 add the CSIPHY/CSID mechanism: - CSIPHY: passthrough routing, NO_STREAM_MIX/NO_N_TO_1 validation, and shared D-PHY lane enable/disable gated on stream-count transi",
+          "evidence_text": "<html><head><title>[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support - Gjorgji.Rosikopulos.gjorgji.rosikopulos</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen an",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.782,
+      "warnings": []
+    },
+    {
+      "id": "gemini-6c9f30240a2f0a5a",
+      "url": "https://lore.kernel.org/linux-media/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+      "title": "[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support - Gjorgji.Rosikopulos.gjorgji.rosikopulos",
+      "published_at": "2026-09-11",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support - Gjorgji.Rosikopulos.gjorgji.rosikopulos",
+          "evidence_text": "<html><head><title>[PATCH 0/8] media: qcom: camss: add V4L2 subdev streams API support - Gjorgji.Rosikopulos.gjorgji.rosikopulos</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen an",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "9b5958391e23b616",
+      "url": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com/",
+      "title": "[PATCH v2 0/6] Add CAMSS support for Qualcomm Glymur",
+      "published_at": "2026-09-07T08:13:56Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds Camera Subsystem (CAMSS) support for the Qualcomm Glymur SoC. Glymur's camera hardware topology: - 3x CSIPHY (CSI Physical Layer) - 3x CSID + 2x CSID Lite (CSI Decoder) - 3x TPG (Test Pattern Generator) - 2x VFE + 2x VFE Lite (Video Front End) The CSIPHY block is the same hardware version as x1e80100 (3ph-1-0), differing only in instance count (3 vs 4). TPG, CSID, VFE, CSID wrapper, and ICC resources are fully shared with x1e80100. Used following tools for the sanity check of th",
+          "evidence_text": "<html><head><title>[PATCH v2 0/6] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0,
+      "technical_depth": 0.761,
+      "warnings": []
+    },
+    {
+      "id": "gemini-8f7d1c57980e9dab",
+      "url": "https://lore.kernel.org/linux-media/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com/",
+      "title": "[PATCH v2 0/6] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+      "published_at": "2026-09-07",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v2 0/6] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+          "evidence_text": "<html><head><title>[PATCH v2 0/6] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.81,
+      "warnings": []
+    },
+    {
+      "id": "01bdb98ef74fa01b",
+      "url": "https://patchwork.libcamera.org/patch/28214/",
+      "title": "libcamera: sensor: Decrease priority for CameraSensorRaw",
+      "published_at": "2026-09-09",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Jai Luthra); state accepted, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: sensor: Decrease priority for CameraSensorRaw - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.75,
+      "android_hal_relevance": 0.75,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.785,
+      "warnings": []
+    },
+    {
+      "id": "gemini-91736b47694caf2a",
+      "url": "https://patchwork.libcamera.org/patch/28214/",
+      "title": "libcamera: sensor: Decrease priority for CameraSensorRaw - Patchwork",
+      "published_at": "2026-09-09",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "libcamera: sensor: Decrease priority for CameraSensorRaw - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: sensor: Decrease priority for CameraSensorRaw - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "19ef9d131fa3cbf4",
+      "url": "https://lore.kernel.org/linux-media/20260909203717.90605-4-lsa.uz@pm.me/",
+      "title": "[PATCH v3 3/3] media: ipu-bridge: Add Sony IMX681",
+      "published_at": "2026-09-09T20:38:03Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Microsoft Surface Pro 11 for Business (Intel Lunar Lake, IPU7) carries a Sony IMX681 as its user-facing sensor, enumerated as ACPI device SONY0681. Add it so ipu_bridge_connect_sensors() builds its half of the graph; without the entry the sensor is never connected, whatever driver is present. One link frequency, 969.6 MHz, on two CSI-2 lanes. Signed-off-by: Sergey Lebedev <lsa.uz@pm.me> --- drivers/media/pci/intel/ipu-bridge.c | 2 ++ 1 file changed , 2 insertions(+) diff --git a/drivers/medi",
+          "evidence_text": "<html><head><title>[PATCH v3 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.62,
+      "android_hal_relevance": 0.62,
+      "ai_relevance": 0,
+      "technical_depth": 0.778,
+      "warnings": []
+    },
+    {
+      "id": "gemini-d8e67270da5fd482",
+      "url": "https://lore.kernel.org/linux-media/20260909203717.90605-4-lsa.uz@pm.me/",
+      "title": "[PATCH v3 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev",
+      "published_at": "2026-09-09",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev",
+          "evidence_text": "<html><head><title>[PATCH v3 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"\nhref=../216d",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "f411520df5b54e4e",
+      "url": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com/",
+      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Mira016 image sensor",
+      "published_at": "2026-09-08T07:57:50Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Add bindings for the ams OSRAM Mira016 image sensor. Signed-off-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com> Acked-by: Conor Dooley <conor.dooley@microchip.com> --- .../devicetree/bindings/media/i2c/ams,mira016.yaml | 97 ++++++++++++++++++++++ MAINTAINERS | 7 ++ 2 files changed , 104 insertions(+) diff --git a/Documentation/devicetree/bindings/media/i2c/ams,mira016.yaml b/Documentation/devicetree/bindings/media/i2c/ams,mira016.yaml new file mode 100644 index 000000000000..49a606fca6cb --- /d",
+          "evidence_text": "<html><head><title>[PATCH v4 1/2] dt-bindings: media: i2c: Add Mira016 image sensor - Jacopo Mondi</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.737,
+      "warnings": []
+    },
+    {
+      "id": "gemini-fdbec5df945f7cea",
+      "url": "https://lore.kernel.org/linux-media/20260908-mira016-v4-1-1950504c131c@ideasonboard.com/",
+      "title": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Mira016 image sensor - Jacopo Mondi",
+      "published_at": "2026-09-08",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v4 1/2] dt-bindings: media: i2c: Add Mira016 image sensor - Jacopo Mondi",
+          "evidence_text": "<html><head><title>[PATCH v4 1/2] dt-bindings: media: i2c: Add Mira016 image sensor - Jacopo Mondi</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:dark)\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
+      "id": "c17668832d5e50e2",
+      "url": "https://patchwork.libcamera.org/patch/28219/",
+      "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+      "published_at": "2026-09-10",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Kieran Bingham); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "gemini-f9613de88941988b",
+      "url": "https://patchwork.libcamera.org/patch/28219/",
+      "title": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.545,
+      "warnings": []
+    },
+    {
+      "id": "36f96e4819e65215",
+      "url": "https://patchwork.libcamera.org/patch/28220/",
+      "title": "[v2,1/5] libcamera: v4l2_videodevice: V4L2DeviceFormat: Expand formatting",
+      "published_at": "2026-09-10",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Barnabás Pőcze); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2,1/5] libcamera: v4l2_videodevice: V4L2DeviceFormat: Expand formatting - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "gemini-e548db1d8481de85",
+      "url": "https://patchwork.libcamera.org/patch/28220/",
+      "title": "[v2,1/5] libcamera: v4l2_videodevice: V4L2DeviceFormat: Expand formatting - Patchwork",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[v2,1/5] libcamera: v4l2_videodevice: V4L2DeviceFormat: Expand formatting - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2,1/5] libcamera: v4l2_videodevice: V4L2DeviceFormat: Expand formatting - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.545,
+      "warnings": []
+    },
+    {
+      "id": "8b5b31a2a3015e3f",
+      "url": "https://patchwork.libcamera.org/patch/28196/",
+      "title": "[RESEND] libcamera: software_isp: Skip stop when the worker has not started",
+      "published_at": "2026-09-07",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Birk Skyum); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[RESEND] libcamera: software_isp: Skip stop when the worker has not started - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/styl",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
+      "id": "gemini-9473f6031b5e0512",
+      "url": "https://patchwork.libcamera.org/patch/28196/",
+      "title": "[RESEND] libcamera: software_isp: Skip stop when the worker has not started - Patchwork",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[RESEND] libcamera: software_isp: Skip stop when the worker has not started - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[RESEND] libcamera: software_isp: Skip stop when the worker has not started - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/styl",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.545,
+      "warnings": []
+    },
+    {
+      "id": "5363bff860b67e3a",
+      "url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/",
+      "title": "[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250",
+      "published_at": "2026-09-12T10:34:35Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "The Dell 14 Premium DA14250 has its OV02C10 front sensor mounted upside down, like the Dell 16 Premium DA16250 and the other Dell models already present in upside_down_sensor_dmi_ids[]. The rotation is reported as 0 in both the SSDB and the _PLD, so without a DMI quirk the image is presented upside down. Add a DMI quirk entry for this model so that a rotation of 180 degrees is reported for its OVTI02C1 sensor. Signed-off-by: Keith Harvey <kthhrv@gmail.com> --- drivers/media/pci/intel/ipu-bridge.",
+          "evidence_text": "<html><head><title>[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250 - Keith Harvey</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.56,
+      "android_hal_relevance": 0.56,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.754,
+      "warnings": []
+    },
+    {
+      "id": "gemini-510430a36d672d3f",
+      "url": "https://lore.kernel.org/linux-media/20260912103431.15388-1-kthhrv@gmail.com/",
+      "title": "[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250 - Keith Harvey",
+      "published_at": "2026-09-12",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250 - Keith Harvey",
+          "evidence_text": "<html><head><title>[PATCH] media: ipu-bridge: Add DMI quirk for Dell 14 Premium DA14250 - Keith Harvey</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-scheme:da",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.72,
+      "warnings": []
+    },
+    {
+      "id": "80bd6737d70b5dfe",
+      "url": "https://lore.kernel.org/linux-media/202609071453.Wr61Aa3p-lkp@intel.com/",
+      "title": "[sailus-media-tree:ipu6] BUILD SUCCESS 6f6d9729301fbf8fadff3c1822cdd730ef6cd213",
+      "published_at": "2026-09-07T07:55:25Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "tree/branch: git://linuxtv.org/sailus/media_tree.git ipu6 branch HEAD: 6f6d9729301fbf8fadff3c1822cdd730ef6cd213 media: ipu6: Enable support for IPU 7 and IPU 7.5 elapsed time: 4351m configs tested: 43 configs skipped: 0 The following configs have been built successfully. More configs may be tested in the coming days. tested configs: alpha allnoconfig gcc-16.1.0 alpha allyesconfig gcc-16.1.0 arc allnoconfig gcc-16.1.0 arc allyesconfig clang-24 arm allnoconfig gcc-16.1.0 arm64 allmodconfig clang-2",
+          "evidence_text": "<html><head><title>[sailus-media-tree:ipu6] BUILD SUCCESS 6f6d9729301fbf8fadff3c1822cdd730ef6cd213 - kernel test robot</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.74,
+      "android_hal_relevance": 0.74,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.736,
+      "warnings": []
+    },
+    {
+      "id": "c70c758816ffadd7",
+      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "title": "Emulator control for adaptive app development",
+      "published_at": "Mon, 31 Aug 2026 16:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Rob Orgiu, Developer Relations Engineer, Adaptive Apps, Android Adaptive app development is fundamental on Android, but making sure everything looks good and every feature works the way it should require multiple tests on multiple devices. Or does it? Well, yes… and no! While Android Studio is bundled with the Resizable Emulator to let you test layouts manually, there’s a faster, more streamlined way to control form factors directly from your terminal. By leveraging fire-and-forget con",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.6,
+      "android_hal_relevance": 0.6,
+      "ai_relevance": 0,
+      "technical_depth": 0.732,
+      "warnings": []
+    },
+    {
+      "id": "e87136573de3de9e",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20260817",
+      "published_at": "2026-08-17",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Revert \"ipa: rpi: imx296: Enable embedded data\" This reverts commit b7fa47f . Right now embedded data with the imx296 cannot be negotiated with the CFE. Signed-off-by: Naushir Patuck <naush@raspberrypi.com>",
+          "evidence_text": "<!DOCTYPE html>\n<html\n  lang=\"en\"\n  \n  data-color-mode=\"auto\" data-light-theme=\"light\" data-dark-theme=\"dark\"\n  data-a11y-animated-images=\"system\" data-a11y-link-underlines=\"true\"\n  \n  >\n\n\n\n\n  <head>\n    <meta charset=\"utf-8\">\n  <link rel=\"dns-prefetch\" href=\"https://github.githubassets.com\">\n  <link rel=\"dns-prefetch\" href=\"https://avatars.githubusercontent.com\">\n  <link rel=\"dns-prefetch\" href=\"https://github-cloud.s3.amazonaws.com\">\n  <link rel=\"dns-prefetch\" href=\"https://user-images.githubu",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0,
+      "technical_depth": 0.711,
+      "warnings": []
+    },
+    {
+      "id": "645bfd6801a7ebb9",
+      "url": "https://patchwork.libcamera.org/patch/28200/",
+      "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping",
+      "published_at": "2026-09-08",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Sam Gnu); state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.51,
+      "android_hal_relevance": 0.51,
+      "ai_relevance": 0,
+      "technical_depth": 0.689,
+      "warnings": []
+    },
+    {
+      "id": "gemini-882b99cdae276cc9",
+      "url": "https://patchwork.libcamera.org/patch/28200/",
+      "title": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping - Patchwork",
+      "published_at": "",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping - Patchwork",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[1/2] libcamera: camera_sensor: Fix IMX355 test pattern mode mapping - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.5,
+      "warnings": []
+    },
+    {
+      "id": "43e0e16b6f415ed8",
+      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "published_at": "Tue, 01 Sep 2026 15:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Amman Fasil Asfaw, Product Manager, Android Studio Android Studio Quail 4 is now stable and ready for you to use in production. This is the final stable release for Android Studio Quail. The new features in Android Studio enable you to build premium apps with AI efficiently and effectively. Check out the video below to see the most helpful new features from the last 4 releases that can help improve and speed up your development. Here is a deep dive into what’s new in Android Studio Qua",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.6,
+      "android_hal_relevance": 0.6,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.688,
+      "warnings": []
+    },
+    {
+      "id": "13dcce335cf7411f",
+      "url": "https://lore.kernel.org/linux-media/202609091022.J5NUHJ9T-lkp@intel.com/",
+      "title": "[sailus-media-tree:ipu6] BUILD SUCCESS 83345575c7f971891082b76b75e3d67a36ce5283",
+      "published_at": "2026-09-09T02:13:37Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "tree/branch: git://linuxtv.org/sailus/media_tree.git ipu6 branch HEAD: 83345575c7f971891082b76b75e3d67a36ce5283 staging: media: ipu7: Update TODO file elapsed time: 1488m configs tested: 47 configs skipped: 0 The following configs have been built successfully. More configs may be tested in the coming days. tested configs: alpha allnoconfig gcc-16.1.0 alpha allyesconfig gcc-16.1.0 arc allmodconfig gcc-16.1.0 arc allnoconfig gcc-16.1.0 arc allyesconfig gcc-16.1.0 arm allnoconfig clang-17 arm allye",
+          "evidence_text": "<html><head><title>[sailus-media-tree:ipu6] BUILD SUCCESS 83345575c7f971891082b76b75e3d67a36ce5283 - kernel test robot</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=viewport content=width=device-width, initial-scale=1><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nhref=../216light.css?69f21e90\nmedia=screen,print /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.62,
+      "android_hal_relevance": 0.62,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.688,
+      "warnings": []
+    }
+  ]
+}
