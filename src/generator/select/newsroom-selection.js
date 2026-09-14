@@ -589,6 +589,22 @@ function reserveCandidates(shortlist, selected, options = {}) {
   return reserve;
 }
 
+// 소스 정책이 main을 명시적으로 차단한 후보(#1126). main 슬롯에서만 빼고 reserve·참고 레인에는
+// 남겨야 하므로 main_article_score_eligible(공유 길목)에 섞지 않고 별도 술어로 둔다.
+//
+// 명시적 `=== false`인 이유: 승급 가드(coverage-reconciliation.js isDeterministicallyMainEligible)는
+// LLM이 reserve에서 main으로 올릴 때 "명시적 허용"을 요구해 `!== true`지만, 결정론 선정은
+// "명시적 차단"만 존중한다. 플래그가 없는 후보(discovery 경로, 맨몸 테스트 fixture)를 로컬과
+// 프로덕션이 다르게 다루지 않기 위해서다. editor hard block(editor-output-contract.js)도
+// 신호가 있을 때만 판정하므로 같은 방향이다.
+//
+// flat 필드를 읽는 이유: 수집기와 메일링 리스트 승급이 canonical source_quality와 flat 필드를
+// 함께 쓰고(sourceQualityFlatFields), normalizeSourceQuality는 canonical이 없으면 후보를 새로
+// 분류해 맨몸 후보에도 false를 만들어 내므로 여기서 부르면 안 된다.
+function isBlockedByMainArticleSourcePolicy(candidate) {
+  return candidate.main_article_source_allowed === false;
+}
+
 function selectFinalArticlesFromPool(shortlist, options = {}) {
   const minArticles = options.minArticles ?? MIN_FINAL_ARTICLES;
   const maxArticles = options.maxArticles ?? MAX_FINAL_ARTICLES;
@@ -599,7 +615,12 @@ function selectFinalArticlesFromPool(shortlist, options = {}) {
     })
   );
   const selected = [];
-  const mainEligible = candidates.filter(candidate => candidate.main_article_score_eligible !== false);
+  // 소스 정책 차단을 여기서 거르므로 editor의 hard_blocked_group_count는 이제 정책이 놓친
+  // 후보만 센다(선정이 차단 후보를 main에 넣어 생기던 selected > rendered는 사라진다).
+  const mainEligible = candidates.filter(candidate =>
+    candidate.main_article_score_eligible !== false &&
+    !isBlockedByMainArticleSourcePolicy(candidate)
+  );
   const nativeToolingPool = mainEligible.filter(candidate =>
     isNativeToolingWorkflow(candidate) ||
     candidate.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY ||
@@ -1283,8 +1304,12 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       // selection floor as fresh main articles. The normal path (selectFinalArticlesFromPool)
       // already selects from mainEligible; catch-up otherwise bypasses it and pads the lineup
       // with weak fillers that the fact-checker later drops. main_article_score_eligible already
-      // subsumes dated-evidence/source-gap/scope checks, so this single test is enough.
-      .filter(candidate => candidate.main_article_score_eligible !== false);
+      // subsumes dated-evidence/source-gap/scope checks; the source-policy block is the one
+      // main-slot predicate it does not cover (#1126), so both are tested here.
+      .filter(candidate =>
+        candidate.main_article_score_eligible !== false &&
+        !isBlockedByMainArticleSourcePolicy(candidate)
+      );
     pool.sort(deterministicCandidateSort);
     releaseClassPool = pool.filter(isReleaseClassCandidate);
     releaseClassObservation.pool_size = releaseClassPool.length;

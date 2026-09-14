@@ -117,6 +117,24 @@ test('a non-release fallback-window candidate is NOT admitted on a strong week',
   assert.equal(result.catch_up_used_count, 0);
 });
 
+test('a source-policy-blocked release never enters the catch-up pool (#1126)', () => {
+  // 일반 레인(selectFinalArticlesFromPool)과 같은 술어를 catch-up pool 필터도 본다. 여기서 놓치면
+  // 차단된 릴리스가 release-class 레인으로 main에 올라가 editor hard block에서 걷힌다.
+  const blockedRelease = releaseCandidate({
+    source_quality_status: 'blocked',
+    main_article_source_allowed: false,
+    main_article_source_blockers: ['cross_check_required_but_missing']
+  });
+  const result = report([...freshWeek(), blockedRelease]);
+  assert.equal(result.selected_articles.length, 3);
+  assert.equal(result.catch_up_used_count, 0);
+  assert.deepEqual(result.release_class_catch_up, {
+    pool_size: 0,
+    admitted: 0,
+    blocked_reason: 'no_eligible_candidate'
+  });
+});
+
 test('the release-class lane is capped at maxReleaseClassArticles per issue', () => {
   const second = releaseCandidate({
     title: 'v0.7.2+rpt20260715', url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2-rpt1',
