@@ -599,8 +599,9 @@ function reserveCandidates(shortlist, selected, options = {}) {
 // 신호가 있을 때만 판정하므로 같은 방향이다.
 //
 // flat 필드를 읽는 이유: 수집기와 메일링 리스트 승급이 canonical source_quality와 flat 필드를
-// 함께 쓰고(sourceQualityFlatFields), normalizeSourceQuality는 canonical이 없으면 후보를 새로
-// 분류해 맨몸 후보에도 false를 만들어 내므로 여기서 부르면 안 된다.
+// 함께 쓰고(sourceQualityFlatFields), normalizeSourceQuality는 canonical이 없으면 부분 필드로
+// 재분류해 파이프라인이 persist한 적 없는 판정(true든 false든)을 만들어 내므로 여기서 부르면
+// 안 된다.
 function isBlockedByMainArticleSourcePolicy(candidate) {
   return candidate.main_article_source_allowed === false;
 }
@@ -615,8 +616,8 @@ function selectFinalArticlesFromPool(shortlist, options = {}) {
     })
   );
   const selected = [];
-  // 소스 정책 차단을 여기서 거르므로 editor의 hard_blocked_group_count는 이제 정책이 놓친
-  // 후보만 센다(선정이 차단 후보를 main에 넣어 생기던 selected > rendered는 사라진다).
+  // 소스 정책 차단을 여기서 거르므로 선정이 차단 후보를 main에 넣어 생기던 selected > rendered는
+  // 사라진다. editor hard block에는 capsule 시점에만 계산되는 다른 사유가 남아 있다.
   const mainEligible = candidates.filter(candidate =>
     candidate.main_article_score_eligible !== false &&
     !isBlockedByMainArticleSourcePolicy(candidate)
