@@ -574,6 +574,9 @@ async function main() {
       selected: reconciledSelected,
       poolCandidates: shortlistReport.release_class_catch_up_pool,
       reportedCandidates: reporter.candidates,
+      // reporter 입력 그 자체. capsule 없는 pool 후보가 cap에 밀린 것인지(용량 사실) reporter가
+      // 쓰지 않은 것인지(결함 신호)는 이 목록 포함 여부로만 가를 수 있다.
+      shortlistedCandidates: shortlistReport.shortlisted_candidates,
       // 재조정이 방금 집행한 그 계획을 그대로 넘긴다. pool 후보도 reporter 입력에 있으면 계획의
       // 채점 대상이라, 계획이 main에서 뺀 후보를 이 레인이 되살리면 coverage 권한(#724, 항상 ON)을
       // 우회하게 된다. 두 단계가 같은 계획을 보게 해 그 경로 자체를 없앤다.
