@@ -124,6 +124,20 @@ function planDemotingAllExcept(shortlistReport, keepUrls) {
   };
 }
 
+// 실측 2026-09-14 모양: primary 창 후보만으로 SHORTLIST_CAP(12 = selected 5 + reserve 7)이 차는 주.
+// maxedWeek()에 primary 창 7건을 더해 reserve 좌석(RESERVE_MAX_CANDIDATES 7)까지 전부 primary로
+// 채운다. 이 상태에서 release-class pool 후보는 필수 그룹의 맨 뒤라 창과 무관하게 cap에 밀린다.
+function capFillingWeek() {
+  const extra = ['f', 'g', 'h', 'i', 'j', 'k', 'l'].map((suffix, index) => strongCandidate({
+    title: `Fresh camera ${suffix.toUpperCase()}`,
+    url: `https://source.android.com/docs/core/camera/fresh-${suffix}`,
+    published_date: `2026-07-2${(index % 6) + 1}`,
+    version_or_release: `${suffix}1`,
+    behavior_change: `API change ${suffix.toUpperCase()}`
+  }));
+  return [...maxedWeek(), ...extra];
+}
+
 // 발행 orchestrator가 재조정 직후에 하는 일과 같은 순서로 2차 pass를 돌린다.
 function runSecondPass(shortlistReport, editorialPlanReport, options = {}) {
   const reconciliation = reconcileCoverage({
@@ -138,6 +152,8 @@ function runSecondPass(shortlistReport, editorialPlanReport, options = {}) {
     poolCandidates: shortlistReport.release_class_catch_up_pool,
     // reporter가 기사 본문을 쓴 후보 = shortlist에 오른 후보.
     reportedCandidates: options.reportedCandidates || shortlistReport.shortlisted_candidates,
+    // reporter 입력 그 자체. 2차 pass는 capsule 부재의 원인을 이 목록 포함 여부로 가른다.
+    shortlistedCandidates: shortlistReport.shortlisted_candidates,
     // 재조정과 같은 편집 계획을 본다. 이걸 빼면 2차 pass가 계획 판정을 모르는 채로 승급한다.
     editorialPlanReport,
     catchUpPolicy: CATCH_UP_POLICY
@@ -239,7 +255,7 @@ test('the second pass never promotes a candidate the reporter did not write abou
 
   assert.equal(secondPass.admitted.length, 0);
   assert.deepEqual(secondPass.observation, {
-    pool_size: 1, admitted: 0, blocked_reason: 'not_in_reporter_input'
+    pool_size: 1, admitted: 0, blocked_reason: 'not_in_reporter_output'
   });
 });
 
@@ -492,7 +508,7 @@ test('the per-issue release-class cap counts first-pass promotions that survived
   assert.equal(secondPass.admitted.length, 0, '호당 release-class 상한을 1차와 합산해 지켜야 한다');
 });
 
-// --- reference 창 후보와 capsule (#879 레버 A) -------------------------------
+// --- pool 후보와 capsule (#879 레버 A) ---------------------------------------
 //
 // reporter 입력은 shortlisted_candidates에서만 만들어진다(reporterInputFromShortlist). 레버 A
 // 이전에는 2차 pass 시점에 pool에 남은 reference 창 후보가 그 목록에 없어 원리상 승급 불가였다 —
@@ -503,6 +519,12 @@ test('the per-issue release-class cap counts first-pass promotions that survived
 // 레버 A는 pool 후보를 reporter 입력에 미리 실어 그 교착을 끊는다. capsule 없이 올리는 길은
 // 그대로 막혀 있다 — capsule이 없으면 selected에는 있는데 rendered에는 없는 그룹이 생겨 커버리지
 // 등식이 깨진다.
+//
+// capsule이 없는 원인은 둘이고, 2차 pass는 그걸 창이 아니라 shortlist 포함 여부로 가른다.
+// pool 후보가 shortlist(reporter 입력)에 없으면 cap이 밀어낸 용량 사실(shortlist_cap_no_capsule)
+// 이고, shortlist에는 있는데 reporter 산출물에 없으면 배선 결함 신호(not_in_reporter_output)다.
+// 창으로 가르면 primary 창이 cap을 채운 주의 fallback 창 pool 후보(실측 2026-09-14)가 용량
+// 때문에 밀렸는데도 결함 신호로 찍힌다.
 
 test('a reference-window release gets a capsule and is promoted once reconciliation frees a seat', () => {
   const referenceRelease = releaseCandidate({
@@ -538,9 +560,49 @@ test('a reference-window release gets a capsule and is promoted once reconciliat
   assert.deepEqual(secondPass.observation, { pool_size: 1, admitted: 1, blocked_reason: '' });
 });
 
-test('a pool candidate the shortlist cap pushed out is reported as reference_window_no_capsule', () => {
+test('a fallback-window pool candidate the default cap pushed out is a capacity fact, not a wiring defect', () => {
+  // 실측 2026-09-14: primary 창 12건이 selected 5 + reserve 7로 SHORTLIST_CAP을 정확히 채우고,
+  // 19일령 fallback 창 릴리스(CameraX 1.6.2)가 pool에 남았다. pool 후보는 필수 그룹의 맨 뒤라
+  // cap에 밀려 capsule이 없었는데, 2차 pass가 창으로 원인을 갈라 결함 신호(있어야 할 기사가
+  // reporter 산출물에 없다, 당시 이름 not_in_reporter_input)를 찍었다. 용량 사실은 창과 무관하게
+  // 용량 사유로 보고해야 한다.
+  const fallbackRelease = releaseCandidate();
+  const shortlist = report([...capFillingWeek(), fallbackRelease]);
+  assert.equal(shortlist.selected_articles.length, 5);
+  assert.equal(shortlist.reserve_candidates.length, 7, 'reserve 좌석이 primary 창으로 다 찬 상태');
+  assert.equal(shortlist.shortlisted_candidates.length, 12, '기본 cap이 primary 창만으로 찬 상태');
+  assert.deepEqual(
+    shortlist.release_class_catch_up_pool.map(candidate => candidate.freshness_window),
+    ['fallback'],
+    'pool 후보는 fallback 창이다 — 창 검사로는 용량 사실을 가를 수 없다'
+  );
+  assert.ok(
+    !shortlist.shortlisted_candidates.some(candidate => candidate.url === RELEASE_URL),
+    'cap이 pool 후보를 밀어낸 상태'
+  );
+  assert.deepEqual(shortlist.release_class_catch_up, {
+    pool_size: 1, admitted: 0, blocked_reason: 'lineup_at_max'
+  });
+
+  const keep = shortlist.primary_selected_articles[0].url;
+  const { reconciled, secondPass } = runSecondPass(shortlist, planDemotingAllExcept(shortlist, [keep]));
+
+  assert.equal(reconciled.length, 1, '자리는 비어 있다 — 막는 것은 capsule 부재다');
+  assert.equal(secondPass.admitted.length, 0);
+  assert.notEqual(
+    secondPass.observation.blocked_reason,
+    'not_in_reporter_output',
+    'cap에 밀린 용량 사실을 결함 신호로 보고하면 안 된다'
+  );
+  assert.deepEqual(secondPass.observation, {
+    pool_size: 1, admitted: 0, blocked_reason: 'shortlist_cap_no_capsule'
+  });
+});
+
+test('a pool candidate the shortlist cap pushed out is reported as shortlist_cap_no_capsule', () => {
   // 레버 A 이후 이 사유는 "늘 참인 조건"이 아니라 용량 사실이다. pool 후보는 필수 그룹의 맨 뒤라
-  // cap을 넘기면 가장 먼저 밀리고, 그 주에는 capsule이 없어 승급할 수 없다.
+  // cap을 넘기면 가장 먼저 밀리고, 그 주에는 capsule이 없어 승급할 수 없다. reference 창 후보도
+  // 같은 사유다 — 사유는 창이 아니라 shortlist 포함 여부로 정해진다.
   const referenceRelease = releaseCandidate({
     title: 'v0.7.1', url: 'https://gitlab.com/libcamera/libcamera/-/tags/v0.7.1',
     published_date: '2026-06-25', version_or_release: 'v0.7.1'
@@ -557,7 +619,7 @@ test('a pool candidate the shortlist cap pushed out is reported as reference_win
 
   assert.equal(secondPass.admitted.length, 0);
   assert.deepEqual(secondPass.observation, {
-    pool_size: 1, admitted: 0, blocked_reason: 'reference_window_no_capsule'
+    pool_size: 1, admitted: 0, blocked_reason: 'shortlist_cap_no_capsule'
   });
 });
 
@@ -596,7 +658,7 @@ test('the capsule-capacity reason outranks a dedup skip', () => {
 
   assert.equal(secondPass.admitted.length, 0);
   assert.deepEqual(secondPass.observation, {
-    pool_size: 2, admitted: 0, blocked_reason: 'reference_window_no_capsule'
+    pool_size: 2, admitted: 0, blocked_reason: 'shortlist_cap_no_capsule'
   });
 });
 
@@ -705,6 +767,22 @@ test('the publish host hands the second pass the same editorial plan reconciliat
     callArguments,
     /editorialPlanReport/,
     '2차 pass가 편집 계획을 받아야 계획이 거절한 후보를 되살리지 않는다'
+  );
+});
+
+test('the publish host hands the second pass the reporter input list', () => {
+  // shortlist를 넘기지 않으면 2차 pass는 capsule 부재의 원인을 가를 수 없어, reporter 산출물에
+  // 없는 후보를 전부 cap에 밀린 것으로 센다. 그러면 진짜 배선 결함(not_in_reporter_output)이
+  // 발행 host에서는 도달 불가능한 사유가 된다.
+  const source = publishHostSource();
+  const callIndex = source.indexOf('admitReleaseClassCatchUpAfterReconciliation({');
+  assert.ok(callIndex > 0, '2차 pass 호출이 없다');
+  const callArguments = source.slice(callIndex, source.indexOf('});', callIndex));
+
+  assert.match(
+    callArguments,
+    /shortlistedCandidates: shortlistReport\.shortlisted_candidates/,
+    '2차 pass가 reporter 입력(shortlisted_candidates)을 받아야 용량 사실과 결함 신호를 가른다'
   );
 });
 

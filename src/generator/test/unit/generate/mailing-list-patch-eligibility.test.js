@@ -96,9 +96,11 @@ test('strong-evidence mailing-list patch source quality is upgraded to main-elig
   assert.deepEqual(result.main_article_source_blockers, []);
 });
 
-test('thin mailing-list reply with low technical depth stays blocked', () => {
+// 제목은 패치 제출 술어를 통과하는 형태로 둔다. 답장(`Re:`) 제목이면 술어가 먼저 막아 아래
+// technicalDepth 문턱이 죽어도 이 테스트가 잡지 못한다.
+test('thin mailing-list patch with low technical depth stays blocked', () => {
   const candidate = strongPatchCandidate({
-    title: 'Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry',
+    title: '[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry',
     summary: '',
     behavior_change: ''
   });
@@ -156,11 +158,11 @@ test('applyMailingListPatchEligibilityToCandidate upgrades canonical and flat fi
   assert.deepEqual(sourceQualityFieldDrift(candidate), [], 'canonical and flat source-quality fields must stay in sync');
 });
 
-test('applyMailingListPatchEligibilityToCandidate leaves a thin reply unchanged', () => {
+test('applyMailingListPatchEligibilityToCandidate leaves a thin patch unchanged', () => {
   const candidate = applyMailingListPatchEligibilityToCandidate(
     blockedMailingListCandidate({
-      title: 'Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry',
-      summary: 'A short reply in the patch thread.',
+      title: '[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry',
+      summary: 'A short binding update with nothing else described.',
       behavior_change: ''
     }),
     POLICY
@@ -232,6 +234,9 @@ function gerritProposalCandidate(overrides = {}) {
   return {
     title: 'VirtualCamera: prevent integer underflow in outBufferSize - platform/frameworks/av',
     url: 'https://android-review.googlesource.com/c/platform/frameworks/av/+/4228183',
+    // 실제 Gerrit 후보는 제목에 [PATCH 접두도 seriesId도 없고 Change-Id만 싣는다(gerrit-camera-changes.js가
+    // 채운다). 패치 제출 술어는 이 값을 Gerrit 다리로 쓰므로 fixture도 실제 후보 모양을 따른다(#1129).
+    gerrit_change_id: 'I41b74d543e8b8a7ad46a261d49ee311543e1ed8d',
     summary: 'Proposed change would update 2 camera source file(s) in platform/frameworks/av +10/-0. VirtualCamera buffer size handling in the camera HAL path.',
     behavior_change: 'Proposed change would update 2 camera source file(s) in platform/frameworks/av +10/-0.',
     api_or_component: 'VirtualCamera',
@@ -283,4 +288,83 @@ test('the conditional mailing-list upgrade path stays open for a cross-check blo
   assert.deepEqual(sourceQuality.main_article_source_blockers, ['cross_check_required_but_missing']);
   const upgraded = upgradeMailingListPatchEligibility(sourceQuality, candidate, POLICY);
   assert.equal(upgraded.main_article_source_allowed, true);
+});
+
+// #1129: 승급은 머리말이 선언한 대상(패치 제출)에만 걸려야 한다. 아래 후보들은 승급 문턱
+// (evidenceStrengthMin/technicalDepthMin)을 넘도록 근거를 채워 두어, 막는 것이 문턱이 아니라 패치 제출
+// 술어임을 분리한다. 실제 09-14호의 Acer 문의 스레드가 그랬듯 technicalDepth는 "kernel" 한 낱말로 0.85가
+// 되므로, 문턱 미달 후보로 잠그면 수정 전에도 통과하는 테스트가 된다.
+function questionThreadCandidate(overrides = {}) {
+  return blockedMailingListCandidate({
+    title: 'Acer Swift SFG14-01 Camera Support not working on Linux',
+    url: 'https://lore.kernel.org/linux-media/CAKb+ObqQuestionThread@mail.gmail.com/',
+    summary: 'The kernel driver does not expose the laptop camera; asking which module and firmware are needed.',
+    behavior_change: '',
+    api_or_component: '',
+    version_or_release: '',
+    seriesId: null,
+    series_id: null,
+    gerrit_change_id: '',
+    ...overrides
+  });
+}
+
+test('the question-thread fixture clears the upgrade thresholds, so only the patch-submission predicate can block it', () => {
+  const candidate = questionThreadCandidate();
+  assert.ok(evidenceStrength(candidate) >= POLICY.evidenceStrengthMin);
+  assert.ok(technicalDepth(candidate) >= POLICY.technicalDepthMin);
+});
+
+test('a mailing-list question thread without a patch submission keeps its cross-check blocker', () => {
+  const candidate = applyMailingListPatchEligibilityToCandidate(questionThreadCandidate(), POLICY);
+  assert.equal(candidate.main_article_source_allowed, false);
+  assert.equal(candidate.cross_check_status, 'required_missing');
+  assert.deepEqual(candidate.main_article_source_blockers, ['cross_check_required_but_missing']);
+});
+
+test('a build robot notice without a patch submission keeps its cross-check blocker', () => {
+  const candidate = applyMailingListPatchEligibilityToCandidate(questionThreadCandidate({
+    title: '[sailus-media-tree:ipu6] BUILD SUCCESS 6f6d9729301fbf8fadff3c1822cdd73',
+    url: 'https://lore.kernel.org/linux-media/202609121234.buildrobot@intel.com/',
+    summary: 'Build robot report for the ipu6 kernel driver branch: all configurations built successfully.'
+  }), POLICY);
+  assert.equal(candidate.main_article_source_allowed, false);
+});
+
+// lore 수집기가 seriesId를 못 만드는 message-id 형식(gmail 등)도 있으므로 제목 접두만으로 승급이
+// 열려야 한다. 실데이터에 있는 접두 변형(#1129: 2026-06-16 lore의 `[PATCHv2 6/6]` 포함)을 그대로 잠근다.
+const PATCH_SUBMISSION_TITLES = [
+  '[PATCH] media: rkisp1: Fix Bayer demosaicing bypass',
+  '[PATCH v2 0/6] media: v4l2-ctrls: bound stateless HEVC/AV1 tile counts',
+  '[PATCHv2 6/6] media: i2c: ov5640: fix kernel driver probe ordering',
+  '[RESEND PATCH v5 0/2] media: i2c: Add os02g10 camera sensor driver',
+  '[RFC PATCH] media: ipu-bridge: add a kernel quirk table for laptop sensors'
+];
+for (const title of PATCH_SUBMISSION_TITLES) {
+  test(`a lore patch titled ${title.split(']')[0]}] without a series id is still upgraded`, () => {
+    const candidate = applyMailingListPatchEligibilityToCandidate(questionThreadCandidate({ title }), POLICY);
+    assert.equal(candidate.main_article_source_allowed, true);
+    assert.equal(candidate.cross_check_status, 'required_satisfied');
+  });
+}
+
+test('a patchwork patch without a [PATCH prefix is upgraded by its series id', () => {
+  const candidate = applyMailingListPatchEligibilityToCandidate(questionThreadCandidate({
+    title: 'libcamera: sensor: Decrease priority for CameraSensorRaw',
+    url: 'https://patchwork.libcamera.org/patch/26178/',
+    summary: 'Lowers the CameraSensorRaw priority so a dedicated sensor driver helper wins during camera enumeration.',
+    seriesId: 6178,
+    series_id: 6178
+  }), POLICY);
+  assert.equal(candidate.main_article_source_allowed, true);
+});
+
+test('the Gerrit upgrade path depends on the change id, not on the source role alone', () => {
+  const { candidate, sourceQuality } = classifiedGerritProposal(
+    { requiresCrossCheck: true, requiresCrossCheckDefault: true },
+    { mainArticlePolicy: 'conditional', gerrit_change_id: '' }
+  );
+  assert.deepEqual(sourceQuality.main_article_source_blockers, ['cross_check_required_but_missing']);
+  const upgraded = upgradeMailingListPatchEligibility(sourceQuality, candidate, POLICY);
+  assert.equal(upgraded.main_article_source_allowed, false);
 });

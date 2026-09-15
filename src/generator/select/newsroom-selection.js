@@ -774,8 +774,9 @@ function shortlistCandidateKey(candidate) {
 //
 // 필수 그룹의 맨 뒤에 붙인다. cap을 넘으면 아래 truncate가 뒤에서부터 자르므로 pool이 가장 먼저
 // 밀리고, 결정론 편성(selected)과 재조정 승급 후보(reserve)를 밀어내지 않는다. 밀려서 빠진 주는
-// 2차 pass가 not_in_reporter_input으로 보고한다 — 그 사유가 뜻하는 "있어야 할 기사가 reporter
-// 산출물에 없다"가 그 주에는 정확히 사실이다.
+// 2차 pass가 shortlist_cap_no_capsule로 보고한다 — pool 후보가 이 함수의 반환값(reporter 입력)에
+// 없다는 사실을 그대로 적은 용량 사유다. 실측 2026-09-14가 그 주였다: primary 창만으로
+// selected 5 + reserve 7 = cap 12가 차서 fallback 창 pool 후보 1건이 밀렸다.
 function shortlistWithFinalCandidates(shortlist, selected, reserve, catchUpPool = [], cap = SHORTLIST_CAP) {
   const requiredCandidates = [
     ...ensureArray(selected),
@@ -850,16 +851,19 @@ function isReleaseClassCandidate(candidate = {}) {
 // 상한 소진은 pool/자리 문제보다 뒤, 필터 스킵보다 앞에 온다 — 필터를 통과해 실제로 상한에
 // 부딪힌 후보가 있었다는 사실이 통과조차 못 한 후보 뒤에 가려지면 안 된다.
 //
-// planned_non_main_skips / not_in_reporter_input_skips / reference_window_skips는 2차
+// planned_non_main_skips / not_in_reporter_output_skips / shortlist_cap_skips는 2차
 // pass(#879)만 채운다. 1차 observation에는 그 키가 없어 세 검사가 항상 거짓이므로 1차 사유는
 // 그대로다. 게이트 판정(편집 계획)을 배선 사실(reporter가 그 기사를 쓰지 않음)보다 먼저
 // 보고한다 — 게이트가 집행됐다는 사실이 배선 문제 뒤에 가려지면 안 된다.
 //
-// reference_window_no_capsule과 not_in_reporter_input은 같은 사실(capsule이 없다)의 두 원인이라
-// 나란히 둔다. 갈라 두는 이유는 원인이 다르기 때문이다 — 전자는 shortlist cap에 밀린 용량 사실,
-// 후자는 있어야 할 기사가 reporter 산출물에 없다는 결함 신호다.
+// not_in_reporter_output과 shortlist_cap_no_capsule은 같은 사실(capsule이 없다)의 두 원인이라
+// 나란히 둔다. 2차 pass는 두 원인을 창이 아니라 shortlist(reporter 입력) 포함 여부로 가른다.
+// 전자는 shortlist에 있었는데 reporter 산출물에 없다는 결함 신호이고(당시 이름
+// not_in_reporter_input — 입력에는 있었으므로 이름이 조건과 반대였다), 후자는 shortlist cap에
+// 밀려 reporter 입력에 아예 없었다는 용량 사실이다. 결함 신호를 용량 사실보다 먼저 보고한다.
 //
-// #879 레버 A 이전에는 reference 창 후보가 원리상 capsule을 못 받아 이 조건이 늘 참이었고, 그래서
+// 용량 사실은 duplicate_release_page보다 앞에 둔다. #879 레버 A 이전에는 reference 창 후보가
+// 원리상 capsule을 못 받아 용량 사유(당시 이름 reference_window_no_capsule)가 늘 참이었고, 그래서
 // 맨 뒤에 두어 그 주에만 성립한 사실(duplicate_release_page)을 덮지 않게 했다. 레버 A가 pool
 // 후보를 reporter 입력에 실으면서 그 전제가 사라졌다 — 이제 이 사유가 뜨는 주는 실제로 cap이
 // 후보를 밀어낸 주이고, 그건 duplicate_release_page보다 먼저 알아야 할 용량 신호다.
@@ -870,8 +874,8 @@ function releaseClassBlockedReason(observation) {
   if (observation.lineup_reached_max) return 'lineup_at_max';
   if (observation.release_class_cap_skips > 0) return 'release_class_cap_reached';
   if (observation.planned_non_main_skips > 0) return 'editorial_plan_not_main';
-  if (observation.not_in_reporter_input_skips > 0) return 'not_in_reporter_input';
-  if (observation.reference_window_skips > 0) return 'reference_window_no_capsule';
+  if (observation.not_in_reporter_output_skips > 0) return 'not_in_reporter_output';
+  if (observation.shortlist_cap_skips > 0) return 'shortlist_cap_no_capsule';
   if (observation.release_page_skips > 0) return 'duplicate_release_page';
   return 'unclassified';
 }
@@ -1027,6 +1031,11 @@ function admitCatchUpCandidates({
 // 커버리지 등식이 깨져 발행 전체가 diagnostics-only로 떨어진다. 재조정의 reserve 승급도 같은
 // 제약 아래 동작한다(reserve는 reporter 입력에 포함된다).
 //
+// shortlistedCandidates는 reporter 입력 그 자체(shortlisted_candidates)다. capsule이 없는
+// 후보의 원인을 가르는 데만 쓴다 — 이 목록에 없으면 shortlist cap에 밀린 용량 사실이고, 있는데
+// reportedCandidates에 없으면 reporter가 그 기사를 쓰지 않은 결함 신호다. 승급 판정에는 관여하지
+// 않는다.
+//
 // editorialPlanReport는 재조정이 방금 집행한 그 계획이다. pool 후보도 reporter 입력에 있으면
 // 계획의 채점 대상이므로, 계획이 main이 아닌 등급을 매겨 재조정이 main에서 뺀 후보를 이 레인이
 // 다시 올리면 coverage 권한(#724, 항상 ON)을 우회하게 된다. 계획이 채점하지 않은 후보는 그대로
@@ -1035,6 +1044,7 @@ function admitReleaseClassCatchUpAfterReconciliation({
   selected = [],
   poolCandidates = [],
   reportedCandidates = [],
+  shortlistedCandidates = [],
   editorialPlanReport = null,
   catchUpPolicy = getCatchUpPolicy()
 } = {}) {
@@ -1046,6 +1056,9 @@ function admitReleaseClassCatchUpAfterReconciliation({
   const reportedUrls = new Set(ensureArray(reportedCandidates)
     .map(candidate => normalizeUrl(candidateUrl(candidate)))
     .filter(Boolean));
+  const shortlistedUrls = new Set(ensureArray(shortlistedCandidates)
+    .map(candidate => normalizeUrl(candidateUrl(candidate)))
+    .filter(Boolean));
   const coverageLookup = buildCoverageLookup(editorialPlanReport);
   // 2차 pass가 실제로 들여다본 pool: 1차가 persist한 pool에서 이번 라인업에 이미 들어 있는
   // 후보만 뺀 것. 관측의 pool_size는 이 길이여야 한다. 아래 필터 뒤 길이를 쓰면 자격 있는
@@ -1054,41 +1067,36 @@ function admitReleaseClassCatchUpAfterReconciliation({
   const poolBeforeFilters = laneEnabled
     ? ensureArray(poolCandidates).filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
     : [];
-  // 필터는 유지한다. 계획이 거절한 후보를 올리면 게이트 우회이고, reporter 입력에 없는 후보를
+  // 필터는 유지한다. 계획이 거절한 후보를 올리면 게이트 우회이고, reporter 산출물에 없는 후보를
   // 올리면 capsule이 없어 커버리지 등식이 깨진다. 다만 왜 떨어졌는지는 각각 세어 남긴다.
   //
-  // 이 시점에 pool에 남은 reference 창 후보가 reporter 입력에 없는 것은 배선 사고가 아니라
-  // 시점의 결과다. reporter는 이미 돌았고, 그 입력은 shortlisted_candidates에서 만들어진다
-  // (reporterInputFromShortlist). shortlist에 reference 창 후보가 들어가는 길은 1차 catch-up
-  // 승급뿐인데(shortlistWithFinalCandidates가 selected·reserve를 무조건 싣는다), 그렇게 실린
-  // 후보는 toCatchUpArticle이 freshness_window를 'fallback'으로 다시 쓰고 1차가 pool에서
-  // 빼 놓는다. 그래서 2차 pass가 지금 보는 reference 창 후보에는 capsule이 없다. capsule 없이
-  // main으로 올리면 selected에는 있는데 rendered에는 없는 그룹이 생겨 커버리지 등식이 깨진다.
-  // 고칠 배선이 아니라 지켜야 할 제약이다. 그래서 두 사유를 갈라 센다 — 하나로 접으면 이
-  // 시점에 늘 참인 조건이 진짜 배선 결함(not_in_reporter_input)을 덮는다.
+  // capsule이 없는 후보는 원인이 둘이라 갈라 센다. pool 후보는 shortlistWithFinalCandidates가
+  // 필수 그룹의 맨 뒤에 실으므로 shortlist cap(SHORTLIST_CAP)을 넘기는 주에 가장 먼저 밀린다 —
+  // reporter 입력에 아예 없었던 용량 사실이다. 반면 shortlist에는 있었는데 reporter 산출물에
+  // 없다면 있어야 할 기사가 빠진 결함 신호다. 하나로 접으면 용량 때문에 결함 신호가 울린다.
   //
-  // pool_size에서 reference 창 후보를 빼지는 않는다. 빼면 그 주 pool에 자격 있는 릴리스가
+  // 가르는 기준은 창이 아니라 shortlist 포함 여부다. 창으로 가르면 primary 창만으로 cap이 찬
+  // 주의 fallback 창 pool 후보가 용량 때문에 밀렸는데도 결함 신호로 찍힌다(실측 2026-09-14:
+  // selected 5 + reserve 7 = 12, 19일령 fallback 창 릴리스 1건이 결함 신호로 찍혔다).
+  //
+  // pool_size에서 capsule 없는 후보를 빼지는 않는다. 빼면 그 주 pool에 자격 있는 릴리스가
   // 있었는데도 pool_size 0 / no_eligible_candidate가 찍혀, "그 주엔 릴리스가 없었다"는 사실과
   // 다른 결론을 읽게 된다(#838이 없애려던 사유 혼동 그 자체). pool_size는 이 pass가 실제로
   // 들여다본 후보 수로 두고, 못 올린 이유는 사유 코드가 말한다.
   let plannedNonMainSkips = 0;
-  let notInReporterInputSkips = 0;
-  let referenceWindowSkips = 0;
+  let notInReporterOutputSkips = 0;
+  let shortlistCapSkips = 0;
   const pool = poolBeforeFilters.filter(candidate => {
     if (isPlannedNonMain(coverageLookup, candidate)) {
       plannedNonMainSkips += 1;
       return false;
     }
-    // 막는 조건은 창이 아니라 capsule 유무다. 창 검사는 #879 레버 A 이전에 "reference 창 후보는
-    // 원리상 reporter 입력에 없다"의 대리 검사였는데, 레버 A가 그 pool 후보를 shortlist에 실어
-    // capsule을 만들어 주면서 전제가 사라졌다. 대리 검사를 남겨 두면 capsule이 있는 후보까지
-    // 창만 보고 막는다.
-    if (!reportedUrls.has(normalizeUrl(candidateUrl(candidate)))) {
-      // capsule이 없는 이유를 가른다. reference 창 후보는 shortlist cap(SHORTLIST_CAP)에 밀려
-      // 빠질 수 있고 그건 용량 사실이다. 그걸 not_in_reporter_input으로 접으면 "reporter 배선이
-      // 깨졌다"는 결함 신호가 용량 때문에 매주 울린다.
-      if (!isMainSelectionWindow(candidate)) referenceWindowSkips += 1;
-      else notInReporterInputSkips += 1;
+    // 막는 조건은 capsule 유무다. 창은 보지 않는다 — #879 레버 A가 pool 후보를 창과 무관하게
+    // shortlist에 실으므로, 창은 capsule 유무도 그 부재의 원인도 말해 주지 않는다.
+    const url = normalizeUrl(candidateUrl(candidate));
+    if (!reportedUrls.has(url)) {
+      if (!shortlistedUrls.has(url)) shortlistCapSkips += 1;
+      else notInReporterOutputSkips += 1;
       return false;
     }
     return true;
@@ -1112,8 +1120,8 @@ function admitReleaseClassCatchUpAfterReconciliation({
     pool_size: poolBeforeFilters.length,
     admitted: admitted.filter(isReleaseClassCandidate).length,
     planned_non_main_skips: plannedNonMainSkips,
-    not_in_reporter_input_skips: notInReporterInputSkips,
-    reference_window_skips: referenceWindowSkips,
+    not_in_reporter_output_skips: notInReporterOutputSkips,
+    shortlist_cap_skips: shortlistCapSkips,
     release_page_skips: admission.release_page_skips,
     release_class_cap_skips: admission.release_class_cap_skips,
     lineup_reached_max: admission.lineup_reached_max
