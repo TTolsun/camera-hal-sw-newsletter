@@ -155,7 +155,7 @@ test('the selection stage still reports lineup_at_max with the release left in t
   assert.equal(shortlist.selected_articles.length, 5);
   assert.equal(shortlist.catch_up_used_count, 0);
   assert.deepEqual(shortlist.release_class_catch_up, {
-    pool_size: 1, admitted: 0, blocked_reason: 'lineup_at_max'
+    pool_size: 1, admitted: 0, blocked_reason: 'lineup_at_max', evidence_unchecked_skips: 0
   });
   assert.deepEqual(shortlist.release_class_catch_up_pool.map(item => item.url), [RELEASE_URL]);
 });
@@ -622,7 +622,7 @@ test('both catch-up observations reach the committed selection-report.json', () 
 
   // 1차 관측은 그대로 살아남는다 — 2차만 싣고 1차를 덮으면 지금까지 쌓인 주간 계열이 끊긴다.
   assert.deepEqual(selectionReport.release_class_catch_up, {
-    pool_size: 1, admitted: 0, blocked_reason: 'lineup_at_max'
+    pool_size: 1, admitted: 0, blocked_reason: 'lineup_at_max', evidence_unchecked_skips: 0
   });
   assert.deepEqual(selectionReport.release_class_catch_up_after_reconciliation, {
     pool_size: 1, admitted: 1, blocked_reason: ''

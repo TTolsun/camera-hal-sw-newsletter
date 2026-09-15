@@ -1324,6 +1324,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     // 틀린 사유를 찍는 대신 분류 실패가 그대로 드러난다.
     release_page_skips: 0,
     release_class_cap_skips: 0,
+    // #1108: 게이트 직전 pool에 있던 release-class 후보 중 원문 미수신 하나 때문에 빠진 수.
+    // 사유 코드에는 섞지 않는다(enum·순서 불변) — pool_size 0 옆에 나란히 실려야 "릴리스가
+    // 없던 주"와 "릴리스가 있었는데 원문을 못 받은 주"가 커밋 이력에서 갈린다(실측 2026-09-14
+    // CameraX 1.6.2). 2차 pass는 게이트 뒤 pool을 읽으므로 이 값을 다시 세지 않는다.
+    evidence_unchecked_skips: 0,
     lineup_reached_max: false
   };
   if (catchUpPolicy.enabled === true && (thinWeek || maxReleaseClassArticles > 0)) {
@@ -1335,6 +1340,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)));
     // 관측은 게이트 직전 pool에서 센다. 게이트 뒤에서는 자격을 잃은 후보가 보이지 않는다.
     evidenceUncheckedCatchUpBlocked = evidenceUncheckedMainBlocked(poolBeforeMainSlotGate);
+    releaseClassObservation.evidence_unchecked_skips =
+      evidenceUncheckedCatchUpBlocked.filter(isReleaseClassCandidate).length;
     // Thin-week guard: only promote catch-up candidates that clear the same deterministic
     // selection floor as fresh main articles. The normal path (selectFinalArticlesFromPool)
     // already selects from mainEligible; catch-up otherwise bypasses it and pads the lineup
@@ -1548,7 +1555,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     release_class_catch_up: {
       pool_size: releaseClassObservation.pool_size,
       admitted: releaseClassObservation.admitted,
-      blocked_reason: releaseClassBlockedReason(releaseClassObservation)
+      blocked_reason: releaseClassBlockedReason(releaseClassObservation),
+      evidence_unchecked_skips: releaseClassObservation.evidence_unchecked_skips
     },
     // #879: 2차 pass 입력. 커밋되는 selection-report.json은 allow-list라 이 후보 목록이 실리지
     // 않는다(진단 3종만 실린다).

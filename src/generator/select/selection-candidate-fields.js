@@ -84,6 +84,13 @@ function fieldBoolean(candidate, camel, snake, fallback = false) {
 // fetch_failed_review_required·editor_review_required는 통과하고, blocked는
 // final_selection_blocked로 exclusionReasons()가 이미 하드 제외한다.
 //
+// not_checked는 fetch 캡(maxTargets)만의 결과가 아니다. fetch 대상 선정
+// (gemini-source-discovery-boundary.js)이 source_quality_bucket이 strong/review인 후보와 cluster
+// canonical만 고르고 duplicate_of_selected_source 사본은 빼므로, 그 기준 밖 후보는 캡과 무관하게
+// not_checked로 남는다(실측 2026-09-14: weak_candidate 버킷의 android dev blog, 같은 릴리스
+// 페이지의 다른 anchor가 canonical이던 CameraX 1.6.2). 이 게이트가 들어오면 그 fetch 대상 선정
+// 기준이 사실상 main 자격 조건이 된다.
+//
 // 결정론 main 슬롯 게이트(newsroom-selection.js)와 LLM 승급 가드(coverage-reconciliation.js)가
 // 이 한 정의를 함께 쓴다. 둘이 갈라지면 reserve에 남은 not_checked 후보를 편집 계획이 main으로
 // 올릴 수 있다.
