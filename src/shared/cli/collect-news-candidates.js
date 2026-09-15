@@ -410,10 +410,26 @@ function rssItemHtml(block) {
     rawTag(block, 'summary');
 }
 
+function isLoreUrl(url) {
+  return /^https?:\/\/lore\.kernel\.org\//i.test(String(url || ''));
+}
+
 // lore(public-inbox) 답장(Re:)은 시리즈의 리드가 될 수 없으므로 후보에서 제외한다.
 function isLoreReplyItem({ url, title } = {}) {
-  return /^https?:\/\/lore\.kernel\.org\//i.test(String(url || '')) &&
-    /^\s*re\s*:/i.test(String(title || ''));
+  return isLoreUrl(url) && /^\s*re\s*:/i.test(String(title || ''));
+}
+
+// 커널 테스트 로봇(lkp@intel.com)의 빌드 결과 통지도 답장과 같은 이유로 시리즈의 리드가 될 수
+// 없다. Message-ID가 -lkp@intel.com으로 끝나거나, 제목이 "[tree:branch ...]" 접두 뒤에 빌드
+// 결과(BUILD SUCCESS/REGRESSION, warning:, error:; kernel-doc은 "Warning:"으로 써서 대소문자를
+// 무시한다)를 담으면 로봇 통지다. 패치 제목의 "[PATCH v2 1/3]"은 브래킷 안에 콜론이 없어 이
+// 접두에 걸리지 않는다.
+function isLoreBotReportItem({ url, title } = {}) {
+  const text = String(title || '');
+  return isLoreUrl(url) && (
+    /-lkp@intel\.com\/?$/i.test(String(url || '')) ||
+    (/^\s*\[[^\]]+:[^\]]+\]/.test(text) && /BUILD SUCCESS|BUILD REGRESSION|warning:|error:/i.test(text))
+  );
 }
 
 function parseRss(xml, source) {
@@ -424,6 +440,9 @@ function parseRss(xml, source) {
     // (2026-W31 실측: reserve 3석 중 2석이 Re: 답장). 원본 패치는 같은 제목 토큰으로 검색
     // 피드에 함께 들어오므로 창 안 시리즈의 신호는 유지된다.
     if (isLoreReplyItem(parentRaw)) return [];
+    // 로봇 빌드 통지도 같은 이유로 후보로 만들지 않는다 — 제목 검색 피드(s:ipu6 OR ...)에는
+    // 로봇 통지가 그대로 걸린다(2026-09-14 실측: IPU 피드 첫 주 raw 수집 8건 중 4건).
+    if (isLoreBotReportItem(parentRaw)) return [];
     const parent = normalizeCandidate(parentRaw);
     const childItems = extractRoundupChildTopics({
       source,
