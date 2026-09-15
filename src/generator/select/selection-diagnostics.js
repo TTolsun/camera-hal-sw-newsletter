@@ -441,6 +441,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
   const releaseClassCatchUp = diagnostics.release_class_catch_up || {};
   const releaseClassCatchUpAfterReconciliation = diagnostics.release_class_catch_up_after_reconciliation || {};
   const republicationCooldown = diagnostics.republication_cooldown_blocked || {};
+  const evidenceUncheckedMainBlocked = diagnostics.evidence_unchecked_main_blocked || {};
   const hints = ensureArray(diagnostics.selection_shortage_hints)
     .map(item => `- ${item}`)
     .join('\n') || '- none';
@@ -493,6 +494,9 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     // production에서 늘 true라, 이력이 비었거나 stale이 된 주는 이 줄로만 구별된다.
     `- republication_history_main_articles: ${formatCount(republicationCooldown.history_main_article_count)}`,
     `- republication_cooldown_blocked: ${formatCount(republicationCooldown.count)}`,
+    // #1108: 원문을 받지 않아 main 자격을 잃은 후보 건수. 필드가 없는 예전 보고서는 0이 아니라
+    // unknown으로 찍혀야 게이트가 들어가기 전 주와 아무것도 안 막은 주가 구별된다.
+    `- evidence_unchecked_main_blocked: ${formatCount(evidenceUncheckedMainBlocked.count)}`,
     '',
     'Source/parser recovery hint:',
     hints,

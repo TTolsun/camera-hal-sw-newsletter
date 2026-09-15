@@ -135,6 +135,26 @@ test('a source-policy-blocked release never enters the catch-up pool (#1126)', (
   });
 });
 
+test('a not_checked release never enters the catch-up pool (#1108)', () => {
+  // 일반 레인과 같은 술어 묶음(isMainSlotEligible)을 catch-up pool 필터도 본다. 실측 2026-09-14:
+  // pool 유일 후보 CameraX 1.6.2 릴리스 노트가 not_checked였다(같은 소스의 다른 사본이 이미
+  // 선정돼 fetch를 건너뜀). 게이트 뒤 그 주 1차 판정은 pool_size 0 / no_eligible_candidate다.
+  const uncheckedRelease = releaseCandidate({ evidence_validation_status: 'not_checked' });
+  const result = report([...freshWeek(), uncheckedRelease]);
+  assert.equal(result.selected_articles.length, 3);
+  assert.equal(result.catch_up_used_count, 0);
+  assert.deepEqual(result.release_class_catch_up, {
+    pool_size: 0,
+    admitted: 0,
+    blocked_reason: 'no_eligible_candidate'
+  });
+  // catch-up 레인 몫도 관측에 실린다 — 일반 레인(primary 창)에는 없는 후보라 이 줄이 없으면 0이다.
+  assert.deepEqual(result.evidence_unchecked_main_blocked, {
+    count: 1,
+    candidate_urls: [uncheckedRelease.url]
+  });
+});
+
 test('the release-class lane is capped at maxReleaseClassArticles per issue', () => {
   const second = releaseCandidate({
     title: 'v0.7.2+rpt20260715', url: 'https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2-rpt1',

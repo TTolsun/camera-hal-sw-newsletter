@@ -18,6 +18,7 @@ const { ensureArray } = require('../../shared/common/value-coercion');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { candidateGroupKey } = require('../../shared/common/article-groups');
 const { compositionBucket } = require('../../shared/domain/aosp-camera-scope');
+const { isEvidenceUnchecked } = require('./selection-candidate-fields');
 
 const COVERAGE_MAIN = 'main_article';
 
@@ -109,6 +110,9 @@ function isDeterministicallyMainEligible(candidate) {
   if (candidate.main_article_source_allowed !== true) return false;
   if (candidate.main_article_score_eligible === false) return false;
   if (forbiddenBuckets().has(String(candidate.relevance_bucket || ''))) return false;
+  // #1108: 결정론 선정이 main 슬롯에서 뺀 not_checked 후보는 reserve에 남는다. 여기서도 같은
+  // 검사를 하지 않으면 편집 계획이 그 후보를 main으로 올려 게이트가 무효가 된다.
+  if (isEvidenceUnchecked(candidate)) return false;
   return true;
 }
 
