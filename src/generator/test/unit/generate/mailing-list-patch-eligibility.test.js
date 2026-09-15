@@ -96,9 +96,11 @@ test('strong-evidence mailing-list patch source quality is upgraded to main-elig
   assert.deepEqual(result.main_article_source_blockers, []);
 });
 
-test('thin mailing-list reply with low technical depth stays blocked', () => {
+// 제목은 패치 제출 술어를 통과하는 형태로 둔다. 답장(`Re:`) 제목이면 술어가 먼저 막아 아래
+// technicalDepth 문턱이 죽어도 이 테스트가 잡지 못한다.
+test('thin mailing-list patch with low technical depth stays blocked', () => {
   const candidate = strongPatchCandidate({
-    title: 'Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry',
+    title: '[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry',
     summary: '',
     behavior_change: ''
   });
@@ -156,11 +158,11 @@ test('applyMailingListPatchEligibilityToCandidate upgrades canonical and flat fi
   assert.deepEqual(sourceQualityFieldDrift(candidate), [], 'canonical and flat source-quality fields must stay in sync');
 });
 
-test('applyMailingListPatchEligibilityToCandidate leaves a thin reply unchanged', () => {
+test('applyMailingListPatchEligibilityToCandidate leaves a thin patch unchanged', () => {
   const candidate = applyMailingListPatchEligibilityToCandidate(
     blockedMailingListCandidate({
-      title: 'Re: [PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry',
-      summary: 'A short reply in the patch thread.',
+      title: '[PATCH v10 4/6] dt-bindings: sun6i-a31-mipi-dphy: Add V3s SoC compatible entry',
+      summary: 'A short binding update with nothing else described.',
       behavior_change: ''
     }),
     POLICY
