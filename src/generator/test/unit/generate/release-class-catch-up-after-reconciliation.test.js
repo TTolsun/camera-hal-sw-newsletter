@@ -581,7 +581,7 @@ test('a fallback-window pool candidate the default cap pushed out is a capacity 
     'cap이 pool 후보를 밀어낸 상태'
   );
   assert.deepEqual(shortlist.release_class_catch_up, {
-    pool_size: 1, admitted: 0, blocked_reason: 'lineup_at_max'
+    pool_size: 1, admitted: 0, blocked_reason: 'lineup_at_max', evidence_unchecked_skips: 0
   });
 
   const keep = shortlist.primary_selected_articles[0].url;

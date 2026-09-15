@@ -776,7 +776,9 @@ function shortlistCandidateKey(candidate) {
 // 밀리고, 결정론 편성(selected)과 재조정 승급 후보(reserve)를 밀어내지 않는다. 밀려서 빠진 주는
 // 2차 pass가 shortlist_cap_no_capsule로 보고한다 — pool 후보가 이 함수의 반환값(reporter 입력)에
 // 없다는 사실을 그대로 적은 용량 사유다. 실측 2026-09-14가 그 주였다: primary 창만으로
-// selected 5 + reserve 7 = cap 12가 차서 fallback 창 pool 후보 1건이 밀렸다.
+// selected 5 + reserve 7 = cap 12가 차서 fallback 창 pool 후보 1건이 밀렸다. (그 후보는 원문
+// 미수신이라 #1108 게이트 뒤에는 pool에 들어오지 못하고, 같은 주 재생은 pool_size 0 /
+// evidence_unchecked_skips 1로 찍힌다.)
 function shortlistWithFinalCandidates(shortlist, selected, reserve, catchUpPool = [], cap = SHORTLIST_CAP) {
   const requiredCandidates = [
     ...ensureArray(selected),
