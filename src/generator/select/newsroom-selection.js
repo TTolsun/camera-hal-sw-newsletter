@@ -830,14 +830,15 @@ function isReleaseClassCandidate(candidate = {}) {
 // 상한 소진은 pool/자리 문제보다 뒤, 필터 스킵보다 앞에 온다 — 필터를 통과해 실제로 상한에
 // 부딪힌 후보가 있었다는 사실이 통과조차 못 한 후보 뒤에 가려지면 안 된다.
 //
-// planned_non_main_skips / not_in_reporter_input_skips / shortlist_cap_skips는 2차
+// planned_non_main_skips / not_in_reporter_output_skips / shortlist_cap_skips는 2차
 // pass(#879)만 채운다. 1차 observation에는 그 키가 없어 세 검사가 항상 거짓이므로 1차 사유는
 // 그대로다. 게이트 판정(편집 계획)을 배선 사실(reporter가 그 기사를 쓰지 않음)보다 먼저
 // 보고한다 — 게이트가 집행됐다는 사실이 배선 문제 뒤에 가려지면 안 된다.
 //
-// not_in_reporter_input과 shortlist_cap_no_capsule은 같은 사실(capsule이 없다)의 두 원인이라
+// not_in_reporter_output과 shortlist_cap_no_capsule은 같은 사실(capsule이 없다)의 두 원인이라
 // 나란히 둔다. 2차 pass는 두 원인을 창이 아니라 shortlist(reporter 입력) 포함 여부로 가른다.
-// 전자는 shortlist에 있었는데 reporter 산출물에 없다는 결함 신호이고, 후자는 shortlist cap에
+// 전자는 shortlist에 있었는데 reporter 산출물에 없다는 결함 신호이고(당시 이름
+// not_in_reporter_input — 입력에는 있었으므로 이름이 조건과 반대였다), 후자는 shortlist cap에
 // 밀려 reporter 입력에 아예 없었다는 용량 사실이다. 결함 신호를 용량 사실보다 먼저 보고한다.
 //
 // 용량 사실은 duplicate_release_page보다 앞에 둔다. #879 레버 A 이전에는 reference 창 후보가
@@ -852,7 +853,7 @@ function releaseClassBlockedReason(observation) {
   if (observation.lineup_reached_max) return 'lineup_at_max';
   if (observation.release_class_cap_skips > 0) return 'release_class_cap_reached';
   if (observation.planned_non_main_skips > 0) return 'editorial_plan_not_main';
-  if (observation.not_in_reporter_input_skips > 0) return 'not_in_reporter_input';
+  if (observation.not_in_reporter_output_skips > 0) return 'not_in_reporter_output';
   if (observation.shortlist_cap_skips > 0) return 'shortlist_cap_no_capsule';
   if (observation.release_page_skips > 0) return 'duplicate_release_page';
   return 'unclassified';
@@ -1055,14 +1056,14 @@ function admitReleaseClassCatchUpAfterReconciliation({
   //
   // 가르는 기준은 창이 아니라 shortlist 포함 여부다. 창으로 가르면 primary 창만으로 cap이 찬
   // 주의 fallback 창 pool 후보가 용량 때문에 밀렸는데도 결함 신호로 찍힌다(실측 2026-09-14:
-  // selected 5 + reserve 7 = 12, 19일령 fallback 창 릴리스 1건이 not_in_reporter_input).
+  // selected 5 + reserve 7 = 12, 19일령 fallback 창 릴리스 1건이 결함 신호로 찍혔다).
   //
   // pool_size에서 capsule 없는 후보를 빼지는 않는다. 빼면 그 주 pool에 자격 있는 릴리스가
   // 있었는데도 pool_size 0 / no_eligible_candidate가 찍혀, "그 주엔 릴리스가 없었다"는 사실과
   // 다른 결론을 읽게 된다(#838이 없애려던 사유 혼동 그 자체). pool_size는 이 pass가 실제로
   // 들여다본 후보 수로 두고, 못 올린 이유는 사유 코드가 말한다.
   let plannedNonMainSkips = 0;
-  let notInReporterInputSkips = 0;
+  let notInReporterOutputSkips = 0;
   let shortlistCapSkips = 0;
   const pool = poolBeforeFilters.filter(candidate => {
     if (isPlannedNonMain(coverageLookup, candidate)) {
@@ -1074,7 +1075,7 @@ function admitReleaseClassCatchUpAfterReconciliation({
     const url = normalizeUrl(candidateUrl(candidate));
     if (!reportedUrls.has(url)) {
       if (!shortlistedUrls.has(url)) shortlistCapSkips += 1;
-      else notInReporterInputSkips += 1;
+      else notInReporterOutputSkips += 1;
       return false;
     }
     return true;
@@ -1098,7 +1099,7 @@ function admitReleaseClassCatchUpAfterReconciliation({
     pool_size: poolBeforeFilters.length,
     admitted: admitted.filter(isReleaseClassCandidate).length,
     planned_non_main_skips: plannedNonMainSkips,
-    not_in_reporter_input_skips: notInReporterInputSkips,
+    not_in_reporter_output_skips: notInReporterOutputSkips,
     shortlist_cap_skips: shortlistCapSkips,
     release_page_skips: admission.release_page_skips,
     release_class_cap_skips: admission.release_class_cap_skips,

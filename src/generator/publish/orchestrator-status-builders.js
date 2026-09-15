@@ -248,9 +248,10 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // coverage-reconciliation.js의 isFinalMainRecord와 같은 규칙(2차 pass 사유 포함)을 쓸 것.
     // 그것도 편성 여부까지다 — 발행 여부는 이 필드가 아니라 렌더된 기사 목록이 답한다.
     //
-    // 이 목록이 담지 '않는' 것: release-class catch-up pool 후보 중 reference 창에서만 온
-    // 후보다. shortlist는 primary·fallback 창만 담으므로(newsroom-selection.js) 그 후보는 계획
-    // 입력 우주 밖이고, 따라서 계획이 채점하지 않았다. 부재가 곧 그 답이다.
+    // 이 목록이 담지 '않는' 것: release-class catch-up pool 후보 중 shortlist cap에 밀려
+    // reporter 입력에서 빠진 후보다. pool 후보는 창과 무관하게 shortlist에 실리지만 필수 그룹의
+    // 맨 뒤라 cap을 넘기면 가장 먼저 밀린다(newsroom-selection.js shortlistWithFinalCandidates).
+    // 밀린 후보는 계획 입력 우주 밖이고, 따라서 계획이 채점하지 않았다. 부재가 곧 그 답이다.
     // 우주 안이라고 해서 반드시 실리는 것도 아니다: 이 목록은 등급을 실제로 받은 후보만 담으므로,
     // 계획이 채점을 빠뜨린 후보는 catch-up이 승급했더라도 레코드가 없다.
     editorial_plan_scored_candidates: ensureArray(report.editorial_plan_scored_candidates),

@@ -255,7 +255,7 @@ test('the second pass never promotes a candidate the reporter did not write abou
 
   assert.equal(secondPass.admitted.length, 0);
   assert.deepEqual(secondPass.observation, {
-    pool_size: 1, admitted: 0, blocked_reason: 'not_in_reporter_input'
+    pool_size: 1, admitted: 0, blocked_reason: 'not_in_reporter_output'
   });
 });
 
@@ -522,7 +522,7 @@ test('the per-issue release-class cap counts first-pass promotions that survived
 //
 // capsule이 없는 원인은 둘이고, 2차 pass는 그걸 창이 아니라 shortlist 포함 여부로 가른다.
 // pool 후보가 shortlist(reporter 입력)에 없으면 cap이 밀어낸 용량 사실(shortlist_cap_no_capsule)
-// 이고, shortlist에는 있는데 reporter 산출물에 없으면 배선 결함 신호(not_in_reporter_input)다.
+// 이고, shortlist에는 있는데 reporter 산출물에 없으면 배선 결함 신호(not_in_reporter_output)다.
 // 창으로 가르면 primary 창이 cap을 채운 주의 fallback 창 pool 후보(실측 2026-09-14)가 용량
 // 때문에 밀렸는데도 결함 신호로 찍힌다.
 
@@ -563,9 +563,9 @@ test('a reference-window release gets a capsule and is promoted once reconciliat
 test('a fallback-window pool candidate the default cap pushed out is a capacity fact, not a wiring defect', () => {
   // 실측 2026-09-14: primary 창 12건이 selected 5 + reserve 7로 SHORTLIST_CAP을 정확히 채우고,
   // 19일령 fallback 창 릴리스(CameraX 1.6.2)가 pool에 남았다. pool 후보는 필수 그룹의 맨 뒤라
-  // cap에 밀려 capsule이 없었는데, 2차 pass가 창으로 원인을 갈라 not_in_reporter_input(있어야
-  // 할 기사가 reporter 산출물에 없다는 결함 신호)을 찍었다. 용량 사실은 창과 무관하게 용량
-  // 사유로 보고해야 한다.
+  // cap에 밀려 capsule이 없었는데, 2차 pass가 창으로 원인을 갈라 결함 신호(있어야 할 기사가
+  // reporter 산출물에 없다, 당시 이름 not_in_reporter_input)를 찍었다. 용량 사실은 창과 무관하게
+  // 용량 사유로 보고해야 한다.
   const fallbackRelease = releaseCandidate();
   const shortlist = report([...capFillingWeek(), fallbackRelease]);
   assert.equal(shortlist.selected_articles.length, 5);
@@ -591,7 +591,7 @@ test('a fallback-window pool candidate the default cap pushed out is a capacity 
   assert.equal(secondPass.admitted.length, 0);
   assert.notEqual(
     secondPass.observation.blocked_reason,
-    'not_in_reporter_input',
+    'not_in_reporter_output',
     'cap에 밀린 용량 사실을 결함 신호로 보고하면 안 된다'
   );
   assert.deepEqual(secondPass.observation, {
@@ -772,7 +772,7 @@ test('the publish host hands the second pass the same editorial plan reconciliat
 
 test('the publish host hands the second pass the reporter input list', () => {
   // shortlist를 넘기지 않으면 2차 pass는 capsule 부재의 원인을 가를 수 없어, reporter 산출물에
-  // 없는 후보를 전부 cap에 밀린 것으로 센다. 그러면 진짜 배선 결함(not_in_reporter_input)이
+  // 없는 후보를 전부 cap에 밀린 것으로 센다. 그러면 진짜 배선 결함(not_in_reporter_output)이
   // 발행 host에서는 도달 불가능한 사유가 된다.
   const source = publishHostSource();
   const callIndex = source.indexOf('admitReleaseClassCatchUpAfterReconciliation({');
