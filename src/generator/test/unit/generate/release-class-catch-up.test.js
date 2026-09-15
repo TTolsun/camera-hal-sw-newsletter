@@ -131,8 +131,44 @@ test('a source-policy-blocked release never enters the catch-up pool (#1126)', (
   assert.deepEqual(result.release_class_catch_up, {
     pool_size: 0,
     admitted: 0,
-    blocked_reason: 'no_eligible_candidate'
+    blocked_reason: 'no_eligible_candidate',
+    evidence_unchecked_skips: 0
   });
+});
+
+test('a not_checked release never enters the catch-up pool (#1108)', () => {
+  // 일반 레인과 같은 술어 묶음(isMainSlotEligible)을 catch-up pool 필터도 본다. 실측 2026-09-14:
+  // pool 유일 후보 CameraX 1.6.2 릴리스 노트가 not_checked였다(duplicate_of_selected_source:
+  // 같은 릴리스 페이지의 다른 anchor가 check-source-duplicates.js의 cluster canonical이라 fetch
+  // 대상에서 빠짐). 게이트 뒤 그 주 1차 판정은 pool_size 0 / no_eligible_candidate다.
+  const uncheckedRelease = releaseCandidate({ evidence_validation_status: 'not_checked' });
+  const result = report([...freshWeek(), uncheckedRelease]);
+  assert.equal(result.selected_articles.length, 3);
+  assert.equal(result.catch_up_used_count, 0);
+  assert.deepEqual(result.release_class_catch_up, {
+    pool_size: 0,
+    admitted: 0,
+    blocked_reason: 'no_eligible_candidate',
+    // 사유 코드는 no_eligible_candidate 그대로다(enum·순서 불변). 이 카운터가 pool_size 0 옆에
+    // 나란히 실려야 "릴리스가 없던 주"와 "릴리스가 있었는데 원문 미수신으로 빠진 주"가 갈린다.
+    evidence_unchecked_skips: 1
+  });
+  // catch-up 레인 몫도 관측에 실린다 — 일반 레인(primary 창)에는 없는 후보라 이 줄이 없으면 0이다.
+  assert.deepEqual(result.evidence_unchecked_main_blocked, {
+    count: 1,
+    candidate_urls: [uncheckedRelease.url]
+  });
+  // 관측 객체가 통째로 allow-list를 지나므로 새 키에 추가 배선은 없다 — 그 사실을 여기서 잠근다.
+  assert.equal(selectionStatusExtra(result).release_class_catch_up.evidence_unchecked_skips, 1);
+  assert.equal(
+    buildSelectionReport('2026-07-27', result, selectionStatusExtra(result)).release_class_catch_up.evidence_unchecked_skips,
+    1
+  );
+  const markdown = renderCandidateSelectionDiagnostics(selectionStatusExtra(result));
+  assert.match(markdown, /- release_class_pool_size: 0/);
+  assert.match(markdown, /- release_class_evidence_unchecked_skips: 1/);
+  // 필드가 없는 예전 보고서는 0이 아니라 unknown이다.
+  assert.match(renderCandidateSelectionDiagnostics({}), /- release_class_evidence_unchecked_skips: unknown/);
 });
 
 test('the release-class lane is capped at maxReleaseClassArticles per issue', () => {
@@ -204,7 +240,8 @@ test('the lane records pool size, admissions, and no blocked reason when it admi
   assert.deepEqual(result.release_class_catch_up, {
     pool_size: 1,
     admitted: 1,
-    blocked_reason: ''
+    blocked_reason: '',
+    evidence_unchecked_skips: 0
   });
 });
 
@@ -217,7 +254,8 @@ test('a full lineup is recorded as lineup_at_max, not as a missing candidate', (
   assert.deepEqual(result.release_class_catch_up, {
     pool_size: 1,
     admitted: 0,
-    blocked_reason: 'lineup_at_max'
+    blocked_reason: 'lineup_at_max',
+    evidence_unchecked_skips: 0
   });
 });
 
@@ -226,7 +264,8 @@ test('an empty release pool is recorded as no_eligible_candidate', () => {
   assert.deepEqual(result.release_class_catch_up, {
     pool_size: 0,
     admitted: 0,
-    blocked_reason: 'no_eligible_candidate'
+    blocked_reason: 'no_eligible_candidate',
+    evidence_unchecked_skips: 0
   });
 });
 
@@ -242,7 +281,8 @@ test('a release sharing a selected release page is recorded as duplicate_release
   assert.deepEqual(result.release_class_catch_up, {
     pool_size: 1,
     admitted: 0,
-    blocked_reason: 'duplicate_release_page'
+    blocked_reason: 'duplicate_release_page',
+    evidence_unchecked_skips: 0
   });
 });
 
@@ -314,7 +354,8 @@ test('the lane diagnostics reach the committed selection-report.json', () => {
   assert.deepEqual(selectionReport.release_class_catch_up, {
     pool_size: 1,
     admitted: 0,
-    blocked_reason: 'lineup_at_max'
+    blocked_reason: 'lineup_at_max',
+    evidence_unchecked_skips: 0
   });
 });
 

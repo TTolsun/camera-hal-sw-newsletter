@@ -49,6 +49,29 @@ test('LLM cannot promote a reserve candidate that is not deterministically main-
   assert.ok(out.diff.changes.some(c => c.action === 'promotion_blocked_ineligible'));
 });
 
+test('LLM cannot promote a reserve candidate whose evidence was never fetched (#1108)', () => {
+  // 결정론 선정이 main 슬롯에서 뺀 not_checked 후보는 reserve에 남는다. 승급 가드가 같은 검사를
+  // 하지 않으면 편집 계획이 그 후보를 main으로 올려 선정 게이트가 무효가 된다.
+  const shortlistReport = {
+    selected_articles: [mainEligible({ url: 'a' })],
+    reserve_candidates: [mainEligible({ url: 'b', evidence_validation_status: 'not_checked' })]
+  };
+  const editorialPlanReport = { editorial_plans: [plan({ url: 'b' }, 'main_article', 'Direct Impact')] };
+  const out = reconcileCoverage({ shortlistReport, editorialPlanReport });
+  assert.ok(!out.selected.map(a => a.url).includes('b'), 'unchecked reserve must not become main');
+  assert.ok(out.diff.changes.some(c => c.action === 'promotion_blocked_ineligible'));
+
+  // 원문을 받은 후보(pass)와 필드가 없는 후보는 그대로 승급된다 — 차단은 not_checked 한 값뿐이다.
+  const fetched = reconcileCoverage({
+    shortlistReport: {
+      selected_articles: [mainEligible({ url: 'a' })],
+      reserve_candidates: [mainEligible({ url: 'c', evidence_validation_status: 'pass' })]
+    },
+    editorialPlanReport: { editorial_plans: [plan({ url: 'c' }, 'main_article', 'Direct Impact')] }
+  });
+  assert.ok(fetched.selected.map(a => a.url).includes('c'));
+});
+
 test('forbidden-bucket reserve candidate cannot be promoted even if LLM asks', () => {
   const shortlistReport = {
     selected_articles: [mainEligible({ url: 'a' })],

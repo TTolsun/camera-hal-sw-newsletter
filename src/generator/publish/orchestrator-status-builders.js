@@ -327,6 +327,9 @@ function selectionStatusExtra(shortlistReport = generationRunState.shortlistRepo
     // #963: 재게재 차단도 같은 이유로 allow-list에 둔다. exclusion_reason_summary는 상위 10개만
     // 남기므로 건수가 적은 이 사유는 거기서 잘린다.
     republication_cooldown_blocked: report.republication_cooldown_blocked || null,
+    // #1108: 원문 미수신 main 차단도 이 allow-list를 지나야 generation-status.json과
+    // selection-diagnostics.md에 남는다.
+    evidence_unchecked_main_blocked: report.evidence_unchecked_main_blocked || null,
     exclusion_reason_summary: ensureArray(report.exclusion_reason_summary).slice(0, 10),
     final_exclusion_reason_summary: ensureArray(diagnostics.final_exclusion_reason_summary).slice(0, 10),
     candidate_selection_note: diagnostics.note,

@@ -33,7 +33,8 @@ const {
   datePrecision,
   freshnessAnchorDate,
   candidateUrl,
-  candidateSource
+  candidateSource,
+  isEvidenceUnchecked
 } = require('./selection-candidate-fields');
 const {
   coverageForAnchorDate,
@@ -606,6 +607,29 @@ function isBlockedByMainArticleSourcePolicy(candidate) {
   return candidate.main_article_source_allowed === false;
 }
 
+// main 슬롯 게이트 두 곳(selectFinalArticlesFromPool의 mainEligible, release-class catch-up pool)이
+// 공유하는 술어 묶음. main_article_score_eligible(점수 게이트)이 덮지 않는 main 전용 술어는
+// 소스 정책 차단(#1126)과 원문 미수신(#1108, isEvidenceUnchecked — 정의는
+// selection-candidate-fields.js, 승급 가드와 공유) 둘이다. 둘 다 명시적 신호가 있을 때만 차단해
+// 플래그 없는 후보를 로컬과 프로덕션이 다르게 다루지 않는다. reserve 루프는 이 술어를 보지
+// 않으므로 걸러진 후보는 reserve·참고 레인에 남는다.
+function isMainSlotEligible(candidate) {
+  return candidate.main_article_score_eligible !== false &&
+    !isBlockedByMainArticleSourcePolicy(candidate) &&
+    !isEvidenceUnchecked(candidate);
+}
+
+// 관측(#1108): 주어진 풀에서 원문 미수신 하나 때문에 main 자격을 잃는 후보. 다른 main 술어는
+// 통과한 후보만 센다 — 어차피 main이 못 되던 후보까지 세면 이 게이트의 몫이 아니게 된다.
+// "슬롯을 잃었다"가 아니라 "자격을 잃었다"다: 풀에는 슬롯 경쟁까지 가지 않는 후보도 있다.
+function evidenceUncheckedMainBlocked(candidates) {
+  return ensureArray(candidates).filter(candidate =>
+    candidate.main_article_score_eligible !== false &&
+    !isBlockedByMainArticleSourcePolicy(candidate) &&
+    isEvidenceUnchecked(candidate)
+  );
+}
+
 function selectFinalArticlesFromPool(shortlist, options = {}) {
   const minArticles = options.minArticles ?? MIN_FINAL_ARTICLES;
   const maxArticles = options.maxArticles ?? MAX_FINAL_ARTICLES;
@@ -618,10 +642,7 @@ function selectFinalArticlesFromPool(shortlist, options = {}) {
   const selected = [];
   // 소스 정책 차단을 여기서 거르므로 선정이 차단 후보를 main에 넣어 생기던 selected > rendered는
   // 사라진다. editor hard block에는 capsule 시점에만 계산되는 다른 사유가 남아 있다.
-  const mainEligible = candidates.filter(candidate =>
-    candidate.main_article_score_eligible !== false &&
-    !isBlockedByMainArticleSourcePolicy(candidate)
-  );
+  const mainEligible = candidates.filter(isMainSlotEligible);
   const nativeToolingPool = mainEligible.filter(candidate =>
     isNativeToolingWorkflow(candidate) ||
     candidate.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY ||
@@ -755,7 +776,9 @@ function shortlistCandidateKey(candidate) {
 // 밀리고, 결정론 편성(selected)과 재조정 승급 후보(reserve)를 밀어내지 않는다. 밀려서 빠진 주는
 // 2차 pass가 shortlist_cap_no_capsule로 보고한다 — pool 후보가 이 함수의 반환값(reporter 입력)에
 // 없다는 사실을 그대로 적은 용량 사유다. 실측 2026-09-14가 그 주였다: primary 창만으로
-// selected 5 + reserve 7 = cap 12가 차서 fallback 창 pool 후보 1건이 밀렸다.
+// selected 5 + reserve 7 = cap 12가 차서 fallback 창 pool 후보 1건이 밀렸다. (그 후보는 원문
+// 미수신이라 #1108 게이트 뒤에는 pool에 들어오지 못하고, 같은 주 재생은 pool_size 0 /
+// evidence_unchecked_skips 1로 찍힌다.)
 function shortlistWithFinalCandidates(shortlist, selected, reserve, catchUpPool = [], cap = SHORTLIST_CAP) {
   const requiredCandidates = [
     ...ensureArray(selected),
@@ -1107,8 +1130,9 @@ function admitReleaseClassCatchUpAfterReconciliation({
   };
   return {
     admitted,
-    // 1차와 같은 {pool_size, admitted, blocked_reason} 모양을 유지한다. 두 pass를 나란히 놓고
-    // "판정 시점이 달라서 결과가 달라졌다"를 그대로 읽을 수 있어야 한다.
+    // 1차와 같은 {pool_size, admitted, blocked_reason} 세 키를 유지한다(1차에만 있는
+    // evidence_unchecked_skips는 게이트 직전 pool에서 세는 값이라 여기엔 없다). 두 pass를 나란히
+    // 놓고 "판정 시점이 달라서 결과가 달라졌다"를 그대로 읽을 수 있어야 한다.
     observation: {
       pool_size: observation.pool_size,
       admitted: observation.admitted,
@@ -1217,6 +1241,15 @@ function withoutRepublicationCooldown(eligible, exposureHistory, date, cap) {
   };
 }
 
+// 관측 객체는 건수와 URL만 싣는다. url을 쓰는 이유는 eligible_candidate_urls와 같다 — issue.json의
+// source_candidate_url이 정규화 전 형태라 그대로 조인된다.
+function evidenceUncheckedMainBlockedObservation(blockedCandidates) {
+  const candidateUrls = [...new Set(
+    ensureArray(blockedCandidates).map(candidate => text(candidate.url)).filter(Boolean)
+  )];
+  return { count: candidateUrls.length, candidate_urls: candidateUrls };
+}
+
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
   const coverageLineage = collectedCoverageLineage(collectedCandidates);
@@ -1289,6 +1322,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   // 그대로 두면 재조정 시점에 재구성할 수 없다. 재구성 대신 그대로 실어 두 pass가 서로 다른
   // pool을 보는 일을 구조적으로 없앤다.
   let releaseClassPool = [];
+  // #1108 관측의 catch-up 레인 몫. 레인이 꺼진 주는 빈 배열이다.
+  let evidenceUncheckedCatchUpBlocked = [];
   const releaseClassObservation = {
     lane_enabled: catchUpPolicy.enabled === true && maxReleaseClassArticles > 0,
     pool_size: 0,
@@ -1300,6 +1335,11 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     // 틀린 사유를 찍는 대신 분류 실패가 그대로 드러난다.
     release_page_skips: 0,
     release_class_cap_skips: 0,
+    // #1108: 게이트 직전 pool에 있던 release-class 후보 중 원문 미수신 하나 때문에 빠진 수.
+    // 사유 코드에는 섞지 않는다(enum·순서 불변) — pool_size 0 옆에 나란히 실려야 "릴리스가
+    // 없던 주"와 "릴리스가 있었는데 원문을 못 받은 주"가 커밋 이력에서 갈린다(실측 2026-09-14
+    // CameraX 1.6.2). 2차 pass는 게이트 뒤 pool을 읽으므로 이 값을 다시 세지 않는다.
+    evidence_unchecked_skips: 0,
     lineup_reached_max: false
   };
   if (catchUpPolicy.enabled === true && (thinWeek || maxReleaseClassArticles > 0)) {
@@ -1307,18 +1347,18 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     const poolSourceCandidates = maxReleaseClassArticles > 0
       ? [...ensureArray(selectionPools?.fallback), ...ensureArray(referenceContextCandidates)]
       : referenceContextCandidates;
-    const pool = buildCatchUpPool(poolSourceCandidates, exposureHistory, catchUpPolicy, date)
-      .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)))
-      // Thin-week guard: only promote catch-up candidates that clear the same deterministic
-      // selection floor as fresh main articles. The normal path (selectFinalArticlesFromPool)
-      // already selects from mainEligible; catch-up otherwise bypasses it and pads the lineup
-      // with weak fillers that the fact-checker later drops. main_article_score_eligible already
-      // subsumes dated-evidence/source-gap/scope checks; the source-policy block is the one
-      // main-slot predicate it does not cover (#1126), so both are tested here.
-      .filter(candidate =>
-        candidate.main_article_score_eligible !== false &&
-        !isBlockedByMainArticleSourcePolicy(candidate)
-      );
+    const poolBeforeMainSlotGate = buildCatchUpPool(poolSourceCandidates, exposureHistory, catchUpPolicy, date)
+      .filter(candidate => !selectedKeys.has(articleIdentityKey(candidate)));
+    // 관측은 게이트 직전 pool에서 센다. 게이트 뒤에서는 자격을 잃은 후보가 보이지 않는다.
+    evidenceUncheckedCatchUpBlocked = evidenceUncheckedMainBlocked(poolBeforeMainSlotGate);
+    releaseClassObservation.evidence_unchecked_skips =
+      evidenceUncheckedCatchUpBlocked.filter(isReleaseClassCandidate).length;
+    // Thin-week guard: only promote catch-up candidates that clear the same deterministic
+    // selection floor as fresh main articles. The normal path (selectFinalArticlesFromPool)
+    // already selects from mainEligible; catch-up otherwise bypasses it and pads the lineup
+    // with weak fillers that the fact-checker later drops. isMainSlotEligible is the same
+    // predicate set the normal path applies (#1126 source policy, #1108 unchecked evidence).
+    const pool = poolBeforeMainSlotGate.filter(isMainSlotEligible);
     pool.sort(deterministicCandidateSort);
     releaseClassPool = pool.filter(isReleaseClassCandidate);
     releaseClassObservation.pool_size = releaseClassPool.length;
@@ -1526,7 +1566,8 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     release_class_catch_up: {
       pool_size: releaseClassObservation.pool_size,
       admitted: releaseClassObservation.admitted,
-      blocked_reason: releaseClassBlockedReason(releaseClassObservation)
+      blocked_reason: releaseClassBlockedReason(releaseClassObservation),
+      evidence_unchecked_skips: releaseClassObservation.evidence_unchecked_skips
     },
     // #879: 2차 pass 입력. 커밋되는 selection-report.json은 allow-list라 이 후보 목록이 실리지
     // 않는다(진단 3종만 실린다).
@@ -1548,6 +1589,15 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
       count: cooldownFiltered.blocked.length,
       urls: cooldownFiltered.blocked.map(candidate => text(candidate.url)).filter(Boolean)
     },
+    // #1108: 원문 미수신으로 main 자격을 잃은 후보. 일반 레인 풀(selectionCandidatePool = primary·
+    // fallback 창)과 catch-up 레인(게이트 직전 pool) 몫을 합치고 URL로 중복을 지운다. 선례
+    // (#838·#963)와 같은 이유로 전용 자리를 둔다: shortlisted-candidates.json은 커밋되지 않으므로
+    // 이 값이 selection-report.json·generation-status.json까지 가야 다음 호에서 게이트가 본 규모를
+    // 커밋 이력만으로 잴 수 있다.
+    evidence_unchecked_main_blocked: evidenceUncheckedMainBlockedObservation([
+      ...evidenceUncheckedMainBlocked(selectionCandidatePool),
+      ...evidenceUncheckedCatchUpBlocked
+    ]),
     catch_up_used_count: catchUpSelected.length,
     catch_up_articles: catchUpSelected.map(item => ({
       title: item.title, url: item.url, catch_up_age_days: item.catch_up_age_days,

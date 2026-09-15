@@ -441,6 +441,7 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
   const releaseClassCatchUp = diagnostics.release_class_catch_up || {};
   const releaseClassCatchUpAfterReconciliation = diagnostics.release_class_catch_up_after_reconciliation || {};
   const republicationCooldown = diagnostics.republication_cooldown_blocked || {};
+  const evidenceUncheckedMainBlocked = diagnostics.evidence_unchecked_main_blocked || {};
   const hints = ensureArray(diagnostics.selection_shortage_hints)
     .map(item => `- ${item}`)
     .join('\n') || '- none';
@@ -481,6 +482,9 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     // 값이 없는 주(unknown)와 레인이 막히지 않은 주(none)는 서로 다른 사실이다.
     // 둘을 같은 문자열로 접으면 관측 누락이 정상 출력처럼 보인다.
     `- release_class_blocked_reason: ${releaseClassCatchUp.blocked_reason === '' ? 'none' : formatCount(releaseClassCatchUp.blocked_reason)}`,
+    // #1108: pool_size 0 옆에 나란히 둔다. 사유 코드만으로는 릴리스가 없던 주와 원문 미수신으로
+    // 빠진 주가 같은 no_eligible_candidate로 보인다.
+    `- release_class_evidence_unchecked_skips: ${formatCount(releaseClassCatchUp.evidence_unchecked_skips)}`,
     // #879: 2차 pass(coverage 재조정 뒤). 1차가 lineup_at_max인데 2차가 승급했다면, 그 주에는
     // 재조정 강등으로 자리가 실제로 비어 있었다는 뜻이다.
     `- release_class_after_reconciliation_pool_size: ${formatCount(releaseClassCatchUpAfterReconciliation.pool_size)}`,
@@ -493,6 +497,9 @@ function renderCandidateSelectionDiagnostics(diagnostics = {}) {
     // production에서 늘 true라, 이력이 비었거나 stale이 된 주는 이 줄로만 구별된다.
     `- republication_history_main_articles: ${formatCount(republicationCooldown.history_main_article_count)}`,
     `- republication_cooldown_blocked: ${formatCount(republicationCooldown.count)}`,
+    // #1108: 원문을 받지 않아 main 자격을 잃은 후보 건수. 필드가 없는 예전 보고서는 0이 아니라
+    // unknown으로 찍혀야 게이트가 들어가기 전 주와 아무것도 안 막은 주가 구별된다.
+    `- evidence_unchecked_main_blocked: ${formatCount(evidenceUncheckedMainBlocked.count)}`,
     '',
     'Source/parser recovery hint:',
     hints,
