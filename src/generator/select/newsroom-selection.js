@@ -1120,8 +1120,9 @@ function admitReleaseClassCatchUpAfterReconciliation({
   };
   return {
     admitted,
-    // 1차와 같은 {pool_size, admitted, blocked_reason} 모양을 유지한다. 두 pass를 나란히 놓고
-    // "판정 시점이 달라서 결과가 달라졌다"를 그대로 읽을 수 있어야 한다.
+    // 1차와 같은 {pool_size, admitted, blocked_reason} 세 키를 유지한다(1차에만 있는
+    // evidence_unchecked_skips는 게이트 직전 pool에서 세는 값이라 여기엔 없다). 두 pass를 나란히
+    // 놓고 "판정 시점이 달라서 결과가 달라졌다"를 그대로 읽을 수 있어야 한다.
     observation: {
       pool_size: observation.pool_size,
       admitted: observation.admitted,
