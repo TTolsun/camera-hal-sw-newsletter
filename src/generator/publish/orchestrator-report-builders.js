@@ -135,9 +135,12 @@ ${attempts.map(item => `## 시도 ${item.attempt}
 
 function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
   const report = shortlistReport || {};
-  // selectionDiagnostics는 정규화된 후보 배열을 갖고 shortlistReport는 원본을 갖는다.
-  // 정규화본이 없으면 원본에서 같은 배열을 읽어 후보 진단이 통째로 비지 않게 한다.
-  const candidateDiagnostics = buildCandidateDiagnostics(selectionDiagnostics || report);
+  // 후보 배열(selected_articles·reserve_candidates·demoted_candidates·shortlisted_candidates·
+  // excluded_candidates)과 통과선(selection_policy.main_article_score_threshold),
+  // input_candidate_count는 shortlistReport 자체에 있다. selectionDiagnostics
+  // (selectionStatusExtra 결과)에는 count와 group key만 있고 그 배열이 없어, 거기서 읽으면
+  // 후보 진단이 매 run 0행으로 커밋된다(#1128 — 09-07: 0/69, 09-14: 0/71).
+  const candidateDiagnostics = buildCandidateDiagnostics(report);
   const selectionErrors = ensureArray(report.selection_errors);
   const selectionWarnings = ensureArray(report.selection_warnings);
   const selectionShortageHints = ensureArray(report.selection_shortage_hints);
