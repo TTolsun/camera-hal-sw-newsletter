@@ -80,6 +80,11 @@ test('parseRss recognizes robot reports by the [tree:branch] title prefix alone'
       title: '[sailus-media-tree:ipu7] BUILD REGRESSION 0123456789abcdef0123456789abcdef01234567',
       url: 'https://lore.kernel.org/linux-media/20260914-robot-regression@example.org/'
     }),
+    // kernel-doc 검사는 "Warning:"으로 대문자를 쓴다(2026-06-29 실측 제목 형태).
+    atomEntry({
+      title: '[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter not described',
+      url: 'https://lore.kernel.org/linux-media/20260629-robot-kerneldoc@example.org/'
+    }),
     atomEntry({
       title: '[PATCH v2 1/3] media: ipu6: error: handling cleanup for the CSI-2 warning: path',
       url: 'https://lore.kernel.org/linux-media/20260914-patch-with-words@example.org/'
