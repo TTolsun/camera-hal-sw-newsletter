@@ -2,16 +2,18 @@ const {
   candidateFactId,
   candidateTitle,
   candidateUrl,
+  canonicalDocumentUrl,
   finalSelectionEligible,
   text
 } = require('../shared/collect/source-intelligence-utils');
 const { ensureArray } = require('../shared/common/value-coercion');
 const { buildFact } = require('./extract-source-facts');
 
-// 같은 문서의 키: URL에서 fragment만 뗀 것. fragment는 HTTP 요청에 실리지 않으므로 fragment만
-// 다른 두 URL은 같은 본문을 받는다.
+// 같은 문서의 키. fragment는 HTTP 요청에 실리지 않으므로 fragment만 다른 두 URL은 같은 본문을
+// 받는다. 정의는 근거 출처 매칭이 이미 쓰는 canonicalDocumentUrl(fragment·후행 슬래시·android
+// 문서의 hl 제거)을 재사용한다 — 그 밖의 query string은 남으므로 다른 문서로 본다.
 function sourceDocumentKey(url) {
-  return text(url).replace(/#.*$/, '');
+  return canonicalDocumentUrl(url);
 }
 
 // 클러스터 형제(같은 문서, fragment만 다른 후보)는 fetch 대상에서 빠진다 — 대표 하나만 받으면
@@ -20,7 +22,8 @@ function sourceDocumentKey(url) {
 // (실측 2026-09-14: CameraX 릴리스 페이지의 #1.7.0-alpha03이 대표라 #1.6.2는 not_checked,
 // release-class pool 1 → 0, #1136). 대표가 실제로 받은 본문을 형제의 fact로 삼는다. 검증이
 // 보는 것은 "그 문서를 받았고 본문이 비어 있지 않았는가"라 같은 문서면 결과가 같다.
-// 실패·빈 본문도 그대로 물려받는다(대표가 못 받은 문서는 형제도 못 받은 것이다).
+// 실패·빈 본문도 그대로 물려받는다(대표가 못 받은 문서는 형제도 못 받은 것이다). 그 상태
+// (fetch_failed_review_required)는 not_checked가 아니라 #1108 게이트를 통과한다 — 대표와 같다.
 // 원문 fetch가 실제로 일어난 fact만 물려준다 — metadata_only fact를 물려주면 대표의 summary가
 // 형제의 근거 본문으로 둔갑한다.
 function factsByDocument(sourceFacts = {}) {

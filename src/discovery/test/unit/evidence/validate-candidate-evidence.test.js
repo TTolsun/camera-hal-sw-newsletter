@@ -269,24 +269,43 @@ test('a sibling keeps its own risk flags on top of the inherited fetch', () => {
   assert.deepEqual(siblingRow.reasons, ['stale_claim_risk=high']);
 });
 
-test('inheritance stops at the document: a different query string or a metadata-only fact is not shared', () => {
+test('a metadata-only fact is not inherited — only a real fetch of the document counts', () => {
   const { canonical, sibling } = releasePageSiblings();
-  const otherDocument = candidate('query', {
-    id: 'camerax-list-page',
-    url: 'https://developer.android.com/jetpack/androidx/releases/camera?hl=ko',
-    duplicate_of_selected_source: true
-  });
-  const evidence = validateCandidateEvidence([canonical, sibling, otherDocument], {
+  const evidence = validateCandidateEvidence([canonical, sibling], {
     sources: [fetchedFact(canonical, {
       source_fetch_used: false,
       source_fetch_status: 'skipped',
       validation_mode: 'metadata_only'
     })]
   }, { newsletterDate: '2026-09-14' });
+  const siblingRow = evidence.report.candidates.find(item => item.candidate_id === sibling.id);
+
+  assert.equal(siblingRow.evidence_validation_status, 'not_checked');
+  assert.equal(siblingRow.evidence_inherited_from_candidate_id, '');
+});
+
+test('inheritance stops at the document: a different query string is a different document', () => {
+  const { canonical, sibling } = releasePageSiblings();
+  // android 문서의 hl은 canonicalDocumentUrl이 지우므로 같은 문서다. 다른 query는 남는다.
+  const localizedCopy = candidate('localized', {
+    id: 'camerax-localized-copy',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera?hl=ko',
+    duplicate_of_selected_source: true
+  });
+  const otherDocument = candidate('query', {
+    id: 'camerax-list-page',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera?page=2',
+    duplicate_of_selected_source: true
+  });
+  const evidence = validateCandidateEvidence([canonical, sibling, localizedCopy, otherDocument], {
+    sources: [fetchedFact(canonical)]
+  }, { newsletterDate: '2026-09-14' });
   const byId = new Map(evidence.report.candidates.map(item => [item.candidate_id, item]));
 
-  assert.equal(byId.get(sibling.id).evidence_validation_status, 'not_checked', 'metadata_only fact는 물려주지 않는다');
+  assert.equal(byId.get(sibling.id).evidence_validation_status, 'pass');
+  assert.equal(byId.get(localizedCopy.id).evidence_validation_status, 'pass');
   assert.equal(byId.get(otherDocument.id).evidence_validation_status, 'not_checked', 'query가 다르면 다른 문서다');
+  assert.equal(byId.get(otherDocument.id).evidence_inherited_from_candidate_id, '');
 });
 
 test('fetch failure requires editor review without turning metadata into deep evidence', () => {

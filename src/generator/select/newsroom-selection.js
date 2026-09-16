@@ -778,7 +778,8 @@ function shortlistCandidateKey(candidate) {
 // 없다는 사실을 그대로 적은 용량 사유다. 실측 2026-09-14가 그 주였다: primary 창만으로
 // selected 5 + reserve 7 = cap 12가 차서 fallback 창 pool 후보 1건이 밀렸다. (그 후보는 원문
 // 미수신이라 #1108 게이트 뒤에는 pool에 들어오지 못하고, 같은 주 재생은 pool_size 0 /
-// evidence_unchecked_skips 1로 찍힌다.)
+// evidence_unchecked_skips 1로 찍힌다. 같은 릴리스 페이지의 대표 수신 결과를 물려받는 #1136
+// 뒤에 discovery부터 다시 돌리면 그 후보는 pass다.)
 function shortlistWithFinalCandidates(shortlist, selected, reserve, catchUpPool = [], cap = SHORTLIST_CAP) {
   const requiredCandidates = [
     ...ensureArray(selected),
