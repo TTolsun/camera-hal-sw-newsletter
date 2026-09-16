@@ -8,6 +8,8 @@ const {
   buildShortlistReport,
   policyDriverCandidate
 } = require('../helpers/selection-builders');
+const { buildSelectionReport } = require('../../../generator/publish/orchestrator-report-builders');
+const { selectionStatusExtra } = require('../../../generator/publish/orchestrator-status-builders');
 
 // 소스 정책이 main을 차단한 후보(main_article_source_allowed:false)는 결정론 선정의 main 슬롯을
 // 받으면 안 된다(#1126). 실측 2026-09-14호: lore 빌드봇 보고 "[sailus-media-tree:ipu6] BUILD
@@ -92,6 +94,29 @@ test('a source-policy-blocked candidate never takes a deterministic main slot ev
     report.reserve_candidates.some(candidate => candidate.url === blocked.url),
     'main에서만 빠지고 reserve에는 남아야 한다 — reserve 루프는 이 술어를 보지 않는다'
   );
+});
+
+test('the committed selection report says why the blocked top scorer stayed in reserve', () => {
+  // #1133: candidate_diagnostics 행만 보고 "점수 부족"과 "정책 차단"을 가를 수 있어야 한다.
+  // eligible_candidate_urls는 shortlist 전체라 차단 후보를 그대로 담는다 — 그 목록을 좁히면
+  // eligible_candidate_count와의 길이 계약(selection-eligible-candidate-urls.test.js)이 깨진다.
+  const blocked = sourcePolicyBlockedTopScorer();
+  const shortlist = buildShortlistReport(ISSUE_DATE, [blocked, ...fullWeekOfDriverCandidates()], {});
+  const selectionReport = buildSelectionReport(ISSUE_DATE, shortlist, selectionStatusExtra(shortlist));
+
+  // 진단 행의 url은 normalized_url이다(투영이 정규화 후 값을 우선한다).
+  const blockedInReserve = shortlist.reserve_candidates.find(candidate => candidate.url === blocked.url);
+  const blockedRow = selectionReport.candidate_diagnostics.find(row => row.url === blockedInReserve.normalized_url);
+  assert.ok(blockedRow, '차단 후보 행이 candidate_diagnostics에 없다');
+  assert.equal(blockedRow.stage, 'reserve');
+  assert.deepEqual(blockedRow.source_policy_blockers, ['cross_check_required_but_missing']);
+  assert.ok(
+    selectionReport.candidate_diagnostics
+      .filter(row => row.url !== blockedRow.url)
+      .every(row => !('source_policy_blockers' in row)),
+    '판정이 없는 후보 행에 source_policy_blockers가 생기면 안 된다'
+  );
+  assert.ok(selectionReport.eligible_candidate_urls.includes(blocked.url));
 });
 
 test('a candidate without any source-policy verdict is still main-selectable (explicit false only)', () => {

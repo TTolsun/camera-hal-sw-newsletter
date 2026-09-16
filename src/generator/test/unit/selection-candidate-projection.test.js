@@ -54,6 +54,34 @@ test('탈락 사유를 후보별로 남긴다 — 합계로는 후보 단위를 
   ]);
 });
 
+test('소스 정책이 main을 막은 후보만 source_policy_blockers를 싣는다', () => {
+  // 실측 2026-09-14: 점수 1위(base_total 121)가 main_article_source_allowed:false로 reserve에
+  // 머물렀는데 행에는 점수와 stage뿐이라 "점수에서 밀렸다"로 읽혔다(#1133).
+  const result = buildCandidateDiagnostics({
+    reserve_candidates: [
+      candidate('https://blocked.test', {
+        score_breakdown: { base_total: 121, total: 121 },
+        main_article_source_allowed: false,
+        main_article_source_blockers: ['cross_check_required_but_missing', 'cross_check_required_but_missing', '']
+      }),
+      candidate('https://allowed.test', { main_article_source_allowed: true, main_article_source_blockers: [] }),
+      candidate('https://bare.test')
+    ]
+  });
+  const [blocked, allowed, bare] = result.rows;
+  assert.deepStrictEqual(blocked.source_policy_blockers, ['cross_check_required_but_missing']);
+  assert.ok(!('source_policy_blockers' in allowed));
+  // 판정이 없는 후보(discovery 경로)에 값을 만들어 내지 않는다 — 선정의 `=== false` 원칙과 같다.
+  assert.ok(!('source_policy_blockers' in bare));
+});
+
+test('차단인데 blocker 목록이 비면 sentinel을 남겨 신호가 사라지지 않게 한다', () => {
+  const result = buildCandidateDiagnostics({
+    reserve_candidates: [candidate('https://a.test', { main_article_source_allowed: false, main_article_source_blockers: [] })]
+  });
+  assert.deepStrictEqual(result.rows[0].source_policy_blockers, ['main_article_source_allowed_false']);
+});
+
 test('final_exclusion_reasons가 비면 exclusion_reasons로 떨어진다', () => {
   const result = buildCandidateDiagnostics({
     excluded_candidates: [

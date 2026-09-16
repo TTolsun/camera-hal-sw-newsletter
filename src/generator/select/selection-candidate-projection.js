@@ -13,6 +13,7 @@ const { ensureArray } = require('../../shared/common/value-coercion');
 //   - 통과선(base_total) 바로 아래에서 떨어진 후보가 몇 건인가
 //   - 자격은 통과했는데 슬롯에서 밀린 후보가 무엇인가
 //   - 특정 후보가 왜 떨어졌나 (사유 목록)
+//   - 점수는 통과선을 넘었는데 소스 정책이 main 슬롯을 막은 후보가 무엇인가
 //
 // 판정에 관여하지 않는다. 읽기만 하고 기록만 남긴다.
 
@@ -43,6 +44,18 @@ function candidateUrl(candidate = {}) {
 
 function numberOrNull(value) {
   return typeof value === 'number' && Number.isFinite(value) ? value : null;
+}
+
+// main 슬롯 전용 술어(#1126)의 결과. shortlist에 남아 있으면서 main 슬롯을 받을 수 없는 후보는
+// 점수와 stage만으로는 "점수에서 밀렸다"로 읽힌다(실측 2026-09-14: base_total 121 1위가 reserve).
+// 선정과 같은 `=== false` 원칙이다 — 판정이 없는 후보(discovery 경로)에 값을 만들어 내지 않는다.
+// 차단인데 blocker 목록이 비어 오는 경우(분류기 conditional 정책이 dated evidence 하나로 막을 때)는
+// 빈 배열을 그대로 두면 compactRow가 지워 신호가 사라지므로, 캡슐의 main_article_readiness와
+// 같은 sentinel을 남긴다.
+function sourcePolicyBlockersOf(candidate = {}) {
+  if (candidate.main_article_source_allowed !== false) return null;
+  const blockers = [...new Set(ensureArray(candidate.main_article_source_blockers).map(text).filter(Boolean))];
+  return blockers.length > 0 ? blockers : ['main_article_source_allowed_false'];
 }
 
 function exclusionReasonsOf(candidate = {}) {
@@ -80,6 +93,7 @@ function projectCandidate(candidate, stage) {
     freshness_window: text(candidate.freshness_window),
     relevance_bucket: text(candidate.relevance_bucket) || text(breakdown.relevance_bucket),
     final_selection_eligibility: text(candidate.final_selection_eligibility),
+    source_policy_blockers: sourcePolicyBlockersOf(candidate),
     exclusion_reasons: exclusionReasonsOf(candidate),
   });
 }
