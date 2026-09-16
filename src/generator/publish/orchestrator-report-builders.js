@@ -235,9 +235,8 @@ function buildSelectionReport(date, shortlistReport, selectionDiagnostics) {
     // 게이트가 본 규모를 발행 기사 수와 나란히 커밋 이력만으로 볼 수 있다.
     evidence_unchecked_main_blocked: selectionDiagnostics.evidence_unchecked_main_blocked ||
       report.evidence_unchecked_main_blocked || null,
-    // #838·#963과 같은 이유로 이 투영을 통과해야 한다. counts에는 합계만 남아 '자격은
-    // 통과했는데 선정되지 않은 후보'가 어느 것인지 커밋 이력만으로 짚을 수 없다. 선정 보조
-    // 저장소(camera-hal-sw-newsletter-retrieval)의 재심이 이 목록을 표적으로 쓴다.
+    // #838·#963과 같은 이유로 이 투영을 통과해야 한다. shortlist 후보 전체의 URL이다 — main
+    // 슬롯을 받을 수 있었는지는 candidate_diagnostics 행의 source_policy_blockers로 구분한다(#1133).
     eligible_candidate_urls: selectionDiagnostics.eligible_candidate_urls ??
       report.eligible_candidate_urls ?? null,
     exclusion_reason_summary: selectionDiagnostics.exclusion_reason_summary || [],

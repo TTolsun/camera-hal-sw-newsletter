@@ -75,11 +75,11 @@ test('소스 정책이 main을 막은 후보만 source_policy_blockers를 싣는
   assert.ok(!('source_policy_blockers' in bare));
 });
 
-test('차단인데 blocker 목록이 비면 필드를 남기지 않는다', () => {
+test('차단인데 blocker 목록이 비면 sentinel을 남겨 신호가 사라지지 않게 한다', () => {
   const result = buildCandidateDiagnostics({
     reserve_candidates: [candidate('https://a.test', { main_article_source_allowed: false, main_article_source_blockers: [] })]
   });
-  assert.ok(!('source_policy_blockers' in result.rows[0]));
+  assert.deepStrictEqual(result.rows[0].source_policy_blockers, ['main_article_source_allowed_false']);
 });
 
 test('final_exclusion_reasons가 비면 exclusion_reasons로 떨어진다', () => {
