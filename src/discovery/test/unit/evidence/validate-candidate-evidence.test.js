@@ -187,6 +187,127 @@ test('duplicate canonical candidate is fetched when the cap has room, even outsi
   assert.deepEqual(targets.map(item => item.id), ['canonical']);
 });
 
+// 실측 2026-09-14 모양(#1136): 같은 릴리스 페이지의 두 anchor. 클러스터 키는 fragment를 지워
+// 둘을 한 클러스터로 묶고 대표(#1.7.0-alpha03)만 fetch한다. 형제(#1.6.2)는 fetch 대상이 아니다.
+function releasePageSiblings() {
+  const canonical = candidate('canonical', {
+    id: 'camerax-1.7.0-alpha03',
+    title: 'CameraX Release Notes - CameraX 1.7.0-alpha03',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03'
+  });
+  const sibling = candidate('sibling', {
+    id: 'camerax-1.6.2',
+    title: 'CameraX Release Notes - CameraX 1.6.2',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera#1.6.2',
+    summary: 'CameraX 1.6.2 point release.',
+    duplicate_of_selected_source: true
+  });
+  return { canonical, sibling };
+}
+
+function fetchedFact(source, overrides = {}) {
+  return {
+    id: source.id,
+    url: source.url,
+    title: source.title,
+    source_fetch_used: true,
+    source_fetch_status: 'success',
+    validation_mode: 'source_fetch',
+    claims: [{ claim: source.title, evidence_text: '<!doctype html> CameraX release notes page body.' }],
+    ...overrides
+  };
+}
+
+test('a cluster sibling on the same document inherits the canonical fetch result instead of staying not_checked', () => {
+  const { canonical, sibling } = releasePageSiblings();
+  const targets = selectEvidenceFetchTargets([canonical, sibling], {
+    clusters: [{ duplicate_count: 1, canonical_url: canonical.url, canonical_title: canonical.title }]
+  });
+  assert.deepEqual(targets.map(item => item.id), [canonical.id], '형제는 fetch 대상이 아니어야 이 테스트가 의미 있다');
+
+  const evidence = validateCandidateEvidence([canonical, sibling], {
+    sources: [fetchedFact(canonical)]
+  }, { newsletterDate: '2026-09-14' });
+  const siblingRow = evidence.report.candidates.find(item => item.candidate_id === sibling.id);
+
+  assert.equal(siblingRow.evidence_validation_status, 'pass');
+  assert.equal(siblingRow.deep_checked, true);
+  assert.equal(siblingRow.supported_claims, 1);
+  assert.equal(siblingRow.evidence_inherited_from_candidate_id, canonical.id);
+  assert.deepEqual(evidence.report.counts, { pass: 2 });
+  const annotatedSibling = evidence.annotatedCandidates.find(item => item.id === sibling.id);
+  assert.equal(annotatedSibling.evidence_validation_status, 'pass');
+
+  const canonicalRow = evidence.report.candidates.find(item => item.candidate_id === canonical.id);
+  assert.equal(canonicalRow.evidence_inherited_from_candidate_id, '', '자기 id로 받은 원문은 물려받은 것이 아니다');
+});
+
+test('a sibling inherits the canonical fetch failure as well — the document was not received', () => {
+  const { canonical, sibling } = releasePageSiblings();
+  const evidence = validateCandidateEvidence([canonical, sibling], {
+    sources: [fetchedFact(canonical, {
+      source_fetch_status: 'empty',
+      source_fetch_error: 'fetch returned an empty body',
+      claims: [{ claim: canonical.title, evidence_text: '' }]
+    })]
+  }, { newsletterDate: '2026-09-14' });
+  const siblingRow = evidence.report.candidates.find(item => item.candidate_id === sibling.id);
+
+  assert.equal(siblingRow.evidence_validation_status, 'fetch_failed_review_required');
+  assert.equal(siblingRow.source_fetch_status, 'empty');
+  assert.equal(siblingRow.evidence_inherited_from_candidate_id, canonical.id);
+});
+
+test('a sibling keeps its own risk flags on top of the inherited fetch', () => {
+  const { canonical, sibling } = releasePageSiblings();
+  const evidence = validateCandidateEvidence([canonical, { ...sibling, stale_claim_risk: 'high' }], {
+    sources: [fetchedFact(canonical)]
+  }, { newsletterDate: '2026-09-14' });
+  const siblingRow = evidence.report.candidates.find(item => item.candidate_id === sibling.id);
+
+  assert.equal(siblingRow.evidence_validation_status, 'blocked');
+  assert.deepEqual(siblingRow.reasons, ['stale_claim_risk=high']);
+});
+
+test('a metadata-only fact is not inherited — only a real fetch of the document counts', () => {
+  const { canonical, sibling } = releasePageSiblings();
+  const evidence = validateCandidateEvidence([canonical, sibling], {
+    sources: [fetchedFact(canonical, {
+      source_fetch_used: false,
+      source_fetch_status: 'skipped',
+      validation_mode: 'metadata_only'
+    })]
+  }, { newsletterDate: '2026-09-14' });
+  const siblingRow = evidence.report.candidates.find(item => item.candidate_id === sibling.id);
+
+  assert.equal(siblingRow.evidence_validation_status, 'not_checked');
+  assert.equal(siblingRow.evidence_inherited_from_candidate_id, '');
+});
+
+test('inheritance stops at the document: a different query string is a different document', () => {
+  const { canonical, sibling } = releasePageSiblings();
+  // android 문서의 hl은 canonicalDocumentUrl이 지우므로 같은 문서다. 다른 query는 남는다.
+  const localizedCopy = candidate('localized', {
+    id: 'camerax-localized-copy',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera?hl=ko',
+    duplicate_of_selected_source: true
+  });
+  const otherDocument = candidate('query', {
+    id: 'camerax-list-page',
+    url: 'https://developer.android.com/jetpack/androidx/releases/camera?page=2',
+    duplicate_of_selected_source: true
+  });
+  const evidence = validateCandidateEvidence([canonical, sibling, localizedCopy, otherDocument], {
+    sources: [fetchedFact(canonical)]
+  }, { newsletterDate: '2026-09-14' });
+  const byId = new Map(evidence.report.candidates.map(item => [item.candidate_id, item]));
+
+  assert.equal(byId.get(sibling.id).evidence_validation_status, 'pass');
+  assert.equal(byId.get(localizedCopy.id).evidence_validation_status, 'pass');
+  assert.equal(byId.get(otherDocument.id).evidence_validation_status, 'not_checked', 'query가 다르면 다른 문서다');
+  assert.equal(byId.get(otherDocument.id).evidence_inherited_from_candidate_id, '');
+});
+
 test('fetch failure requires editor review without turning metadata into deep evidence', () => {
   const source = candidate('fetch-failed');
   const evidence = validateCandidateEvidence([source], {
