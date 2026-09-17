@@ -20,9 +20,9 @@ test('report-cli-date: --date 값 자리에 플래그가 오면 거부한다 (#4
   assert.throws(() => parseArgs(['--date', '--skip-if-present']), /Missing value for --date/);
 });
 
-// 워크플로는 `--date "${{ steps.meta.outputs.date }}"`처럼 항상 인용해서 넘기므로, 날짜가 비면
-// 빈 문자열 토큰이 온다. 그 경우는 값이 "있되 비어 있는" 것이라 env·.tmp·오늘 KST 순서의
-// fallback이 그대로 살아 있어야 한다. 값 누락 검사가 이 경로까지 막으면 안 된다.
+// 빈 문자열 토큰(--date "")은 값이 "있되 비어 있는" 것이라 env·.tmp·오늘 KST 순서의 fallback이
+// 예전과 같이 살아 있어야 한다. 워크플로는 날짜를 항상 채워서 넘기므로 이 경로에 기대는 스텝은
+// 없지만, 값 누락 검사가 기존 호출 형태를 바꾸지 않는다는 것을 여기서 잠근다.
 test('report-cli-date: 빈 문자열 토큰은 기존대로 fallback 경로로 간다', () => {
   assert.deepEqual(parseArgs(['--date', '']), { date: '' });
   assert.equal(resolveDate({ date: '' }, { NEWSLETTER_DATE: '2026-09-07' }, 'C:/no-such-root'), '2026-09-07');

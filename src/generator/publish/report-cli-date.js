@@ -19,8 +19,9 @@ function parseArgs(argv = process.argv.slice(2)) {
     if (arg === '--date') {
       // 값이 없거나 값 자리에 다른 플래그가 오면 빈 값으로 넘기지 않고 여기서 멈춥니다.
       // 빈 값은 resolveDate가 env·.tmp·오늘 날짜로 조용히 대체하므로, 잘못된 회차 폴더에
-      // 리포트를 쓰고도 성공으로 끝나기 때문입니다. 워크플로가 넘기는 빈 문자열 토큰
-      // (--date "")은 값이 있는 것으로 보고 기존 fallback 경로를 그대로 탑니다.
+      // 리포트를 쓰고도 성공으로 끝나기 때문입니다. 빈 문자열 토큰(--date "")은 값이 있는
+      // 것으로 보고 예전처럼 usage에 적힌 날짜 우선순위대로 fallback합니다. 호출 형태를
+      // 바꾸지 않는 보수적 선택이지, 어느 워크플로 스텝이 그 경로에 기대는 것은 아닙니다.
       const value = argv[index + 1];
       if (value === undefined || value.startsWith('--')) {
         throw new Error('Missing value for --date');
