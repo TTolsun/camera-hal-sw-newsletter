@@ -101,3 +101,13 @@ test('CLI: 알 수 없는 인자는 --dry-run과 함께 와도 거부한다 (#47
     /Unknown argument: --no-such-flag/
   );
 });
+
+// --date 값 자리에 --dry-run이 오면 이 CLI가 --dry-run을 먼저 걷어내 --date가 마지막 인자가
+// 된다. 예전에는 그때 날짜가 빈 값이 되어 오늘 회차로 조용히 떨어졌다. 공유 파서가 값 누락을
+// 던져야 잘못된 회차의 draft가 만들어지지 않는다(#479 코멘트가 남긴 별건).
+test('CLI: --date 뒤에 값 대신 --dry-run이 오면 거부한다 (#479)', () => {
+  const root = tempRoot('followup-cli-date-missing-');
+  stageRuns(root);
+
+  assert.throws(() => main(['--date', '--dry-run'], {}, root), /Missing value for --date/);
+});
