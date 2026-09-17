@@ -107,7 +107,7 @@ test('weekly lane rejects a source article image with no caption attribution lin
 // 이미지 오류를 내지 않는다는 방향도 함께 잠가야 한다.
 //
 // status === 0 은 단언하지 않는다. 이 최소 픽스처는 validate-site 가 무조건 도는 다른 검사
-// (구독 CTA 스크립트 파일, archive.html)에서 항상 실패하기 때문이다. 대신 stderr 에 이미지 규칙
+// (archive.html 라우트)에서 항상 실패하기 때문이다. 대신 stderr 에 이미지 규칙
 // 문구("... article image ...")가 없음을 단언한다.
 //
 // 그리고 "CLI 가 이미지 검사 전에 죽어서" 통과하는 것을 막기 위해 archive 라우트 오류 줄을 앵커로

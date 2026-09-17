@@ -47,11 +47,6 @@ const weeklyDataPath = path.join(root, 'articles', 'data', 'newsletters-weekly.j
 const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
-const subscriptionConfigPath = path.join(root, 'config', 'subscription.json');
-const subscriptionFetchPath = 'config/subscription.json';
-const subscriptionAllowedKeys = new Set(['schemaVersion', 'enabled', 'provider', 'mode', 'subscribeUrl']);
-// 홈 밖의 표면(아카이브·이슈 페이지)이 공유하는 구독 CTA 스크립트.
-const SUBSCRIPTION_CTA_SCRIPT_NAME = 'subscription-cta.js';
 const briefingHeadings = [
   '## 1. 이번 주 3줄 브리핑'
 ];
@@ -200,100 +195,6 @@ function publicationNoticeText(html) {
   return match ? textFromHtml(match[0]) : '';
 }
 
-function isPlainObject(value) {
-  return value !== null && typeof value === 'object' && !Array.isArray(value);
-}
-
-function isLocalOrDevHost(hostname) {
-  const host = String(hostname || '').toLowerCase().replace(/^\[|\]$/g, '');
-  if (!host) return true;
-  if (host === 'localhost' || host === '::1' || host === '0.0.0.0') return true;
-  if (host.startsWith('127.') || host.startsWith('10.') || host.startsWith('192.168.')) return true;
-  if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(host)) return true;
-  return host.endsWith('.localhost') || host.endsWith('.local') || host.endsWith('.test');
-}
-
-function isPlaceholderSubscribeUrl(raw) {
-  const value = String(raw || '').trim();
-  if (!value || /[<>]/.test(value)) return true;
-  if (/placeholder|todo|actual beehiiv/i.test(value)) return true;
-  try {
-    const url = new URL(value);
-    return /^(example\.com|example\.org|example\.net)$/i.test(url.hostname);
-  } catch (_error) {
-    return false;
-  }
-}
-
-function validHostedSubscribeUrl(raw) {
-  const value = String(raw || '').trim();
-  if (isPlaceholderSubscribeUrl(value)) return false;
-  try {
-    const url = new URL(value);
-    return url.protocol === 'https:' && !isLocalOrDevHost(url.hostname);
-  } catch (_error) {
-    return false;
-  }
-}
-
-function readSubscriptionConfig() {
-  if (!fs.existsSync(subscriptionConfigPath)) {
-    return { exists: false, enabled: false };
-  }
-
-  try {
-    const config = readJson(subscriptionConfigPath);
-    return { exists: true, enabled: config?.enabled === true, config };
-  } catch (error) {
-    fail(`Invalid config/subscription.json: ${error.message}`);
-    return { exists: true, enabled: false };
-  }
-}
-
-function validateSubscriptionConfig() {
-  const state = readSubscriptionConfig();
-  if (!state.exists) return state;
-
-  const { config } = state;
-  if (!isPlainObject(config)) {
-    fail('config/subscription.json must contain an object.');
-    return { exists: true, enabled: false };
-  }
-
-  for (const key of Object.keys(config)) {
-    if (!subscriptionAllowedKeys.has(key)) {
-      fail(`config/subscription.json contains unsupported field: ${key}.`);
-    }
-    if (/(?:api[_-]?key|token|secret)/i.test(key)) {
-      fail(`config/subscription.json must not expose token-like field: ${key}.`);
-    }
-  }
-
-  if (config.schemaVersion !== 1) {
-    fail('config/subscription.json schemaVersion must be 1.');
-  }
-  if (typeof config.enabled !== 'boolean') {
-    fail('config/subscription.json enabled must be a boolean.');
-  }
-  if (config.provider !== 'beehiiv') {
-    fail('config/subscription.json provider must be beehiiv.');
-  }
-  if (config.mode !== 'hosted_link') {
-    fail('config/subscription.json mode must be hosted_link.');
-  }
-
-  const subscribeUrl = String(config.subscribeUrl || '').trim();
-  if (config.enabled === true) {
-    if (!validHostedSubscribeUrl(subscribeUrl)) {
-      fail('config/subscription.json enabled=true requires a valid absolute HTTPS subscribeUrl that is not a placeholder or local/dev URL.');
-    }
-  } else if (subscribeUrl && !validHostedSubscribeUrl(subscribeUrl)) {
-    fail('config/subscription.json subscribeUrl must be empty or a valid absolute HTTPS URL when disabled.');
-  }
-
-  return { exists: true, enabled: config.enabled === true, config };
-}
-
 function sameOrderedValues(left, right) {
   if (left.length !== right.length) return false;
   return left.every((value, index) => value === right[index]);
@@ -376,10 +277,6 @@ function validateFallbackPublicPresentation(item, html, markdown, status = {}) {
   if (!/Tooling Watch Edition/.test(markdown)) {
     fail(`Newsletter ${item.date} fallback_public markdown must disclose Tooling Watch Edition status.`);
   }
-}
-
-function escapeRegex(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function sourceTail(section) {
@@ -479,136 +376,7 @@ function validateSourceGapArtifact(date, strictArtifactValidation) {
   }
 }
 
-function subscriptionSectionHtml(html) {
-  const match = String(html || '').match(/<section\b(?=[^>]*\bdata-subscription-section\b)[^>]*>[\s\S]*?<\/section>/i);
-  return match ? match[0] : '';
-}
-
-function subscriptionScopedScriptHtml(html) {
-  const chunks = [];
-  for (const match of String(html || '').matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
-    const script = match[1];
-    const blockMatch = script.match(/\basync function fetchSubscriptionConfig\b[\s\S]*?\n\s*function findHeadlineNewsletter\b/);
-    if (blockMatch) {
-      chunks.push(blockMatch[0]);
-      continue;
-    }
-    chunks.push(...script
-      .split(/\r?\n/)
-      .filter(line => /subscription/i.test(line)));
-  }
-  return chunks.join('\n');
-}
-
-function hasSubscriptionActionHref(sectionHtml) {
-  return /<a\b(?=[^>]*\bdata-subscription-action\b)(?=[^>]*\bhref=["'][^"']+["'])[^>]*>/i.test(sectionHtml);
-}
-
-// 홈·아카이브·이슈 페이지가 함께 받는 구독 섹션 계약. 표면마다 따로 쓰면 새 표면이 절반만
-// 잠긴 채 늘어난다 — 셋 다 같은 hook 을 쓰므로 검사도 한 벌이다.
-function validateSubscriptionSectionMarkup(sectionHtml, label, subscriptionState) {
-  if (!/<section\b[^>]*\bhidden\b/i.test(sectionHtml)) {
-    fail(`${label} subscription section must be hidden by default.`);
-  }
-  if (!/<a\b(?=[^>]*\bdata-subscription-action\b)[^>]*>/i.test(sectionHtml)) {
-    fail(`${label} subscription section must include a data-subscription-action anchor.`);
-  }
-  for (const tagName of ['form', 'input', 'button']) {
-    if (new RegExp(`<${tagName}\\b`, 'i').test(sectionHtml)) {
-      fail(`${label} subscription section must not include <${tagName}>.`);
-    }
-  }
-  if (/<a\b(?=[^>]*\bdata-subscription-action\b)(?=[^>]*\brole=)[^>]*>/i.test(sectionHtml)) {
-    fail(`${label} subscription CTA must remain a normal anchor without a forced role.`);
-  }
-  if (!subscriptionState.enabled && hasSubscriptionActionHref(sectionHtml)) {
-    fail(`${label} must not render an active subscription CTA when subscription is disabled or missing.`);
-  }
-}
-
-function validateRootHomepageSubscriptionContract(html, subscriptionState) {
-  if (!new RegExp(`fetch\\(\\s*['"]${escapeRegex(subscriptionFetchPath)}['"]`).test(html)) {
-    fail('root index.html must fetch config/subscription.json through a repo-relative path.');
-  }
-  if (/fetch\(\s*['"]\/config\/subscription\.json['"]/.test(html)) {
-    fail('root index.html must not fetch /config/subscription.json with an absolute path.');
-  }
-
-  const sectionHtml = subscriptionSectionHtml(html);
-  if (!sectionHtml) {
-    fail('root index.html must include a data-subscription-section hook.');
-    return;
-  }
-  validateSubscriptionSectionMarkup(sectionHtml, 'root index.html', subscriptionState);
-
-  const scopedHtml = `${sectionHtml}\n${subscriptionScopedScriptHtml(html)}`;
-  if (/\b(localStorage|sessionStorage)\b|document\.cookie|\b(?:api[_-]?key|token|secret)\b/i.test(scopedHtml)) {
-    fail('root index.html subscription path must not persist email/subscription data or expose token-like fields.');
-  }
-}
-
-// 홈 밖의 표면(아카이브·이슈 페이지)은 판정 로직을 공용 스크립트에 두고, 자기 깊이에 맞는 설정
-// 경로만 마크업으로 넘긴다(#671). 그래서 여기서는 섹션 계약에 더해 그 경로가 저장소 상대
-// 경로인지, 푸터 진입점이 노트·링크 두 벌로 있는지를 본다.
-function validateSubscriptionCtaSurface(html, label, subscriptionState, expectedConfigPath) {
-  const sectionHtml = subscriptionSectionHtml(html);
-  if (!sectionHtml) {
-    fail(`${label} must include a data-subscription-section hook.`);
-    return;
-  }
-  validateSubscriptionSectionMarkup(sectionHtml, label, subscriptionState);
-
-  const configPath = sectionHtml.match(/\bdata-subscription-config=["']([^"']*)["']/i)?.[1] || '';
-  if (configPath !== expectedConfigPath) {
-    fail(`${label} subscription section must declare data-subscription-config="${expectedConfigPath}".`);
-  }
-  // defer 까지 본다. 이 스크립트는 로드되자마자 querySelector 로 섹션을 찾으므로, defer 없이
-  // head 에 놓이면 아직 없는 body 를 보고 조용히 아무것도 하지 않는다 — 꺼진 상태와 구별되지
-  // 않아서 새 표면이 절반만 동작하는 채로 늘어난다.
-  const ctaScriptTag = html.match(
-    new RegExp(`<script\\b[^>]*\\bsrc=["'][^"']*assets/js/${escapeRegex(SUBSCRIPTION_CTA_SCRIPT_NAME)}["'][^>]*>`, 'i')
-  )?.[0] || '';
-  if (!ctaScriptTag) {
-    fail(`${label} must load assets/js/${SUBSCRIPTION_CTA_SCRIPT_NAME}.`);
-  } else if (!/\bdefer\b/i.test(ctaScriptTag)) {
-    fail(`${label} must load assets/js/${SUBSCRIPTION_CTA_SCRIPT_NAME} with defer.`);
-  }
-
-  // 푸터 진입점. 꺼진 상태에서 보이는 것은 "구독 (지원예정)" 노트뿐이고, 링크는 href 없이
-  // hidden 으로 대기한다 — 빈 href 앵커를 굽지 않는 것이 계약이다.
-  if (!/<span\b(?=[^>]*\bdata-subscription-footer-note\b)[^>]*>\s*구독 \(지원예정\)\s*<\/span>/i.test(html)) {
-    fail(`${label} footer must keep the 구독 (지원예정) note as the disabled-state entry point.`);
-  }
-  const footerLink = html.match(/<a\b(?=[^>]*\bdata-subscription-footer-action\b)[^>]*>/i)?.[0] || '';
-  if (!footerLink) {
-    fail(`${label} footer must include a data-subscription-footer-action anchor.`);
-  } else {
-    if (!/\bhidden\b/i.test(footerLink)) {
-      fail(`${label} footer subscription link must be hidden by default.`);
-    }
-    if (!subscriptionState.enabled && /\bhref=["'][^"']*["']/i.test(footerLink)) {
-      fail(`${label} footer subscription link must not carry an href when subscription is disabled or missing.`);
-    }
-  }
-}
-
-// 공용 스크립트도 홈의 인라인 경로와 같은 안전 계약을 받는다.
-function validateSubscriptionCtaScript() {
-  const scriptPath = path.join(root, 'articles', 'assets', 'js', SUBSCRIPTION_CTA_SCRIPT_NAME);
-  if (!fs.existsSync(scriptPath)) {
-    fail(`Missing required subscription script: assets/js/${SUBSCRIPTION_CTA_SCRIPT_NAME}`);
-    return;
-  }
-  const source = read(scriptPath);
-  if (/\b(localStorage|sessionStorage)\b|document\.cookie|\b(?:api[_-]?key|token|secret)\b/i.test(source)) {
-    fail(`assets/js/${SUBSCRIPTION_CTA_SCRIPT_NAME} must not persist email/subscription data or expose token-like fields.`);
-  }
-  if (/fetch\(\s*['"]\//.test(source)) {
-    fail(`assets/js/${SUBSCRIPTION_CTA_SCRIPT_NAME} must not fetch subscription config through an absolute path.`);
-  }
-}
-
-function validateRootHomepageContract(newsletters, subscriptionState) {
+function validateRootHomepageContract(newsletters) {
   const indexPath = path.join(root, 'index.html');
   if (!fs.existsSync(indexPath)) return;
   const html = read(indexPath);
@@ -624,7 +392,6 @@ function validateRootHomepageContract(newsletters, subscriptionState) {
   if (!/assets\/js\/newsletter-archive\.js/.test(html)) {
     fail('root index.html must load assets/js/newsletter-archive.js.');
   }
-  validateRootHomepageSubscriptionContract(html, subscriptionState);
   const exposedDates = [...html.matchAll(/newsletters\/(\d{4}-\d{2}-\d{2})\//g)]
     .map(match => match[1]);
   const publicDates = new Set(newsletters.map(item => item?.date).filter(Boolean));
@@ -638,7 +405,7 @@ function validateRootHomepageContract(newsletters, subscriptionState) {
   }
 }
 
-function validateArchivePageContract(newsletters, subscriptionState) {
+function validateArchivePageContract(newsletters) {
   const relPath = 'archive.html';
   const archivePath = publicAssetPath(root, relPath);
   if (!fs.existsSync(archivePath)) {
@@ -671,7 +438,6 @@ function validateArchivePageContract(newsletters, subscriptionState) {
       fail(`archive.html missing required archive hook: ${hook}`);
     }
   }
-  validateSubscriptionCtaSurface(html, 'archive.html', subscriptionState, subscriptionFetchPath);
   const exposedDates = [...html.matchAll(/newsletters\/(\d{4}-\d{2}-\d{2})\//g)]
     .map(match => match[1]);
   const publicDates = new Set(newsletters.map(item => item?.date).filter(Boolean));
@@ -814,10 +580,8 @@ try {
 
 const seenDates = new Set();
 const strictDates = strictTargetDates({ root, newsletterDatePath });
-const subscriptionState = validateSubscriptionConfig();
-validateSubscriptionCtaScript();
-validateRootHomepageContract(newsletters, subscriptionState);
-validateArchivePageContract(newsletters, subscriptionState);
+validateRootHomepageContract(newsletters);
+validateArchivePageContract(newsletters);
 validateHomepageHeadlineData();
 validateAllRetentionFiles();
 for (const [index, item] of newsletters.entries()) {
@@ -949,12 +713,6 @@ for (const relPath of htmlFiles) {
   }
   if (/\bTODO\b/.test(content)) {
     fail(`Published HTML contains TODO: ${relPath}`);
-  }
-
-  // 구독 CTA 를 이미 실은 이슈 페이지에만 계약을 건다. 과거 발행호는 재렌더 소스가 없어 hook
-  // 자체가 없고(생성 산출물 보존 정책), 그 페이지들에 소급해 요구하면 게이트가 다음 발행을 막는다.
-  if (relPath.startsWith('newsletters/') && /\bdata-subscription-section\b/.test(content)) {
-    validateSubscriptionCtaSurface(content, relPath, subscriptionState, `../../${subscriptionFetchPath}`);
   }
 
   if (weeklyHtmlPaths.has(relPath)) {

@@ -24,13 +24,12 @@ function extractHomepageScript() {
   const homepageScript = scripts.find(script =>
     /\basync function loadNewsletters\b/.test(script) &&
     /\basync function loadHomepageHeadline\b/.test(script) &&
-    /\basync function loadSubscription\b/.test(script) &&
-    /\bloadSubscription\(\);\s*$/.test(script)
+    /\bloadNewsletters\(\);\s*$/.test(script)
   );
   assert.ok(homepageScript, 'index.html should include the homepage newsletter script');
   return homepageScript.replace(
-    /\bloadHomepageHeadline\(\);\s*\n\s*loadNewsletters\(\);\s*\n\s*loadSubscription\(\);\s*$/,
-    'globalThis.__headlineReady = loadHomepageHeadline();\n    globalThis.__homepageReady = loadNewsletters();\n    globalThis.__subscriptionReady = loadSubscription();'
+    /\bloadHomepageHeadline\(\);\s*\n\s*loadNewsletters\(\);\s*$/,
+    'globalThis.__headlineReady = loadHomepageHeadline();\n    globalThis.__homepageReady = loadNewsletters();'
   );
 }
 
@@ -83,9 +82,7 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
     'latest-grid': createElement(),
     'latest-topics': createElement(),
     'latest-sort': createElement({ value: 'latest' }),
-    'latest-empty': createElement({ hidden: true }),
-    subscribe: createElement({ hidden: true }),
-    'subscription-action': createElement()
+    'latest-empty': createElement({ hidden: true })
   };
   const window = {
     location: { pathname: '/index.html', search: '', hash: '' },
@@ -99,11 +96,6 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
     document: {
       getElementById(id) {
         return elements[id];
-      },
-      querySelector(selector) {
-        if (selector === '[data-subscription-section]') return elements.subscribe;
-        if (selector === '[data-subscription-action]') return elements['subscription-action'];
-        return null;
       }
     },
     fetch: async (url, fetchOptions) => {
@@ -125,9 +117,6 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
           json: async () => headlineState
         };
       }
-      if (url === 'config/subscription.json') {
-        return { ok: false, status: 404 };
-      }
       assert.equal(url, 'data/newsletters-weekly.json');
       if (options.newsletterFetchError) {
         return { ok: false, status: 500 };
@@ -147,10 +136,8 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
   vm.runInNewContext(script, context, { filename: 'index.html' });
   assert.equal(typeof context.__homepageReady?.then, 'function');
   assert.equal(typeof context.__headlineReady?.then, 'function');
-  assert.equal(typeof context.__subscriptionReady?.then, 'function');
   await context.__headlineReady;
   await context.__homepageReady;
-  await context.__subscriptionReady;
 
   return { elements, errors, context };
 }
@@ -639,7 +626,6 @@ test('homepage renders a static brand featured hero and a 최신 소식 grid wit
   // "every deployed public page" 테스트는 단언 전에 withLearningFooterLink() 가 href 를
   // 라벨로 찾아 정규화하므로, 커밋본의 href 드리프트는 그쪽에서 잡히지 않는다(실측: fail 0).
   assertSharedFooterNav(html);
-  assert.match(html, /<section id="subscribe"[\s\S]*data-subscription-section hidden>/);
   assert.doesNotMatch(html, /homepage-header-actions|icon-menu|icon-search/);
 });
 
@@ -702,12 +688,11 @@ test('site assembly makes every deployed public page footer link to the AI Engin
   }
 });
 
-test('homepage script fetches the weekly source of truth, headline, and subscription config only', () => {
+test('homepage script fetches the weekly source of truth and headline only', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
   assert.match(html, /fetch\('data\/newsletters-weekly\.json'/);
   assert.match(html, /fetch\('data\/homepage-headline\.json'/);
-  assert.match(html, /fetch\('config\/subscription\.json'/);
   assert.doesNotMatch(html, /localStorage|sessionStorage|document\.cookie/);
 });
 
