@@ -688,11 +688,40 @@ test('site assembly makes every deployed public page footer link to the AI Engin
   }
 });
 
+// 배포 페이지 전수의 로컬 <script src> 는 실제 파일이어야 한다. 구독 CTA 스크립트를 지울 때
+// 발행된 이슈 페이지 4개가 그 파일을 참조하고 있었는데, 그 제거를 잠근 테스트가 없어 한 페이지가
+// 빠졌어도 전부 초록인 채 라이브 404 로 나갔을 것이다. 조립본은 articles/ 를 사이트 루트로
+// 평탄화하므로 루트 index.html 만 articles/ 기준으로 푼다.
+test('every deployed public page loads only local scripts that exist', () => {
+  const pages = [
+    { file: path.join(root, 'index.html'), base: path.join(root, 'articles') },
+    { file: path.join(root, 'articles', 'archive.html') },
+    { file: path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html') },
+    ...publishedIssuePages().map(file => ({ file }))
+  ];
+
+  const missing = [];
+  for (const { file, base = path.dirname(file) } of pages) {
+    const html = fs.readFileSync(file, 'utf8');
+    for (const match of html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi)) {
+      const src = match[1];
+      if (/^(?:https?:)?\/\//i.test(src)) continue;
+      if (!fs.existsSync(path.resolve(base, src))) {
+        missing.push(`${path.relative(root, file)} -> ${src}`);
+      }
+    }
+  }
+
+  assert.deepEqual(missing, [], `존재하지 않는 스크립트를 참조하는 페이지:\n${missing.join('\n')}`);
+});
+
 test('homepage script fetches the weekly source of truth and headline only', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
-  assert.match(html, /fetch\('data\/newsletters-weekly\.json'/);
-  assert.match(html, /fetch\('data\/homepage-headline\.json'/);
+  // 존재만 match 하면 이름의 'only' 가 공허하다 — 구독 설정 fetch 를 걷어냈을 때 그 부재를
+  // 잠근 곳이 없었다. fetch 호출을 전부 모아 정확히 이 둘뿐인지 본다.
+  const fetched = [...html.matchAll(/fetch\(\s*['"]([^'"]+)['"]/g)].map(match => match[1]).sort();
+  assert.deepEqual(fetched, ['data/homepage-headline.json', 'data/newsletters-weekly.json']);
   assert.doesNotMatch(html, /localStorage|sessionStorage|document\.cookie/);
 });
 
