@@ -128,51 +128,19 @@ function rootIndexHtml(extra = '') {
     '<a class="section-link" href="archive.html">전체 아카이브 보기</a>',
     '<div id="featured-card"></div>',
     '<div id="latest-grid"></div>',
-    '<section class="section subscribe-section" data-subscription-section hidden>',
-    '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
-    '</section>',
     extra,
     // 홈 인라인 스크립트가 window.NewsletterArchive 를 쓰므로 실제 index.html 처럼 먼저 로드한다.
     '<script src="assets/js/newsletter-archive.js"></script>',
     '<script>',
     "async function loadHomepageHeadline() { await fetch('data/homepage-headline.json'); }",
     "async function loadNewsletters() { const latest = {}; const archive = []; await fetch('data/newsletters-weekly.json'); }",
-    "async function loadSubscription() { await fetch('config/subscription.json'); document.querySelector('[data-subscription-section]'); document.querySelector('[data-subscription-action]'); }",
     'loadHomepageHeadline();',
     'loadNewsletters();',
-    'loadSubscription();',
     '</script>',
     '</body></html>'
   ].join('\n');
 }
 
-// 홈 밖의 표면(아카이브·이슈 페이지)이 쓰는 구독 CTA hook 한 벌(#671). 판정은 공용 스크립트가
-// 하므로 페이지는 자기 깊이의 설정 경로만 선언한다. rootPath 는 사이트 루트로 가는 접두어다.
-function subscriptionCtaHtml(rootPath = '') {
-  return [
-    `<script src="${rootPath}assets/js/subscription-cta.js" defer></script>`,
-    `<section class="section subscribe-section" data-subscription-section data-subscription-config="${rootPath}config/subscription.json" hidden>`,
-    '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
-    '</section>'
-  ].join('\n');
-}
-
-// 꺼진 상태의 푸터 진입점은 노트 그대로이고, 링크는 href 없이 hidden 으로 대기한다.
-function subscriptionFooterHtml() {
-  return [
-    '<span class="footer-note" data-subscription-footer-note>구독 (지원예정)</span>',
-    '<a class="footer-link" data-subscription-footer-action hidden>구독</a>'
-  ].join('');
-}
-
-// 아카이브·이슈 페이지가 로드하는 공용 스크립트. validate-site 는 이 파일이 실제로 있는지와
-// 구독 설정을 저장소 상대 경로로만 fetch 하는지를 본다.
-function writeSubscriptionCtaScript(root) {
-  writeText(
-    path.join(root, 'articles', 'assets', 'js', 'subscription-cta.js'),
-    "async function applySubscriptionCta(doc, fetchImpl) { await fetchImpl('config/subscription.json', { cache: 'no-store' }); }\n"
-  );
-}
 
 function rootArchiveHtml(extra = '') {
   return [
@@ -189,9 +157,8 @@ function rootArchiveHtml(extra = '') {
     '<nav data-archive-pagination hidden></nav>',
     '<div data-empty-state hidden></div>',
     '<div data-error-state hidden></div>',
-    subscriptionCtaHtml(),
     '</main>',
-    `<footer class="site-footer"><a href="index.html">Home</a><a href="archive.html">Archive</a>${subscriptionFooterHtml()}<a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a></footer>`,
+    `<footer class="site-footer"><a href="index.html">Home</a><a href="archive.html">Archive</a><a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a></footer>`,
     '<script src="assets/js/newsletter-archive.js"></script>',
     '<script>',
     "async function loadArchiveNewsletters() { await fetch('data/newsletters-weekly.json'); }",
@@ -200,17 +167,6 @@ function rootArchiveHtml(extra = '') {
     extra,
     '</body></html>'
   ].join('\n');
-}
-
-function subscriptionConfig(overrides = {}) {
-  return {
-    schemaVersion: 1,
-    enabled: false,
-    provider: 'beehiiv',
-    mode: 'hosted_link',
-    subscribeUrl: '',
-    ...overrides
-  };
 }
 
 function writeSiteFixture(root, {
@@ -246,7 +202,6 @@ function writeSiteFixture(root, {
   }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
   writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
-  writeSubscriptionCtaScript(root);
   if (factCheckMustFix || sourceGapCount !== null) {
     writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'fact-check-report.json'), {
       status: factCheckMustFix ? 'NEEDS_FIX' : 'PASS',
@@ -350,7 +305,6 @@ function writeFallbackPublicSiteFixture(root, {
   writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), fallbackNewsletterHtml(date, { tags, notice }));
   writeText(path.join(root, 'index.html'), rootIndexHtml());
   writeText(path.join(root, 'articles', 'archive.html'), rootArchiveHtml());
-  writeSubscriptionCtaScript(root);
   writeText(path.join(root, '.tmp', 'newsletter-date.txt'), date);
   writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
     publication_mode: publicationMode,
@@ -620,127 +574,6 @@ test('strict validate-site HTML issue tag drift remains hard failure', () => {
 
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /HTML issue tags \[Camera HAL, Android, AI\] do not match articles\/data\/newsletters\.json tags \[Camera HAL, Android\]/);
-});
-
-test('validate-site accepts disabled subscription config and scoped unrelated UI code', () => {
-  const root = tempRoot('validate-site-subscription-disabled-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeJson(path.join(root, 'config', 'subscription.json'), subscriptionConfig());
-  writeText(path.join(root, 'index.html'), rootIndexHtml([
-    '<p class="button">Unrelated action copy</p>',
-    '<script>localStorage.setItem("archive-view", "compact");</script>'
-  ].join('\n')));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.equal(result.status, 0, result.stderr);
-});
-
-test('validate-site accepts enabled subscription with custom HTTPS hosted URL', () => {
-  const root = tempRoot('validate-site-subscription-enabled-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeJson(path.join(root, 'config', 'subscription.json'), subscriptionConfig({
-    enabled: true,
-    subscribeUrl: 'https://subscribe.camera-sw-newsletter.com/join'
-  }));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.equal(result.status, 0, result.stderr);
-});
-
-test('validate-site rejects unsafe subscription URLs when enabled', () => {
-  for (const [name, subscribeUrl] of [
-    ['placeholder', '<actual beehiiv hosted subscribe URL>'],
-    ['empty', ''],
-    ['http', 'http://subscribe.camera-sw-newsletter.com/join'],
-    ['javascript', 'javascript:alert(1)'],
-    ['data', 'data:text/plain,subscribe'],
-    ['mailto', 'mailto:news@example.com'],
-    ['localhost', 'https://localhost/subscribe'],
-    ['example', 'https://example.com/subscribe']
-  ]) {
-    const root = tempRoot(`validate-site-subscription-${name}-`);
-    writeSiteFixture(root, {
-      strict: true,
-      articleCount: articlePolicy.mainArticleCount.min
-    });
-    writeJson(path.join(root, 'config', 'subscription.json'), subscriptionConfig({
-      enabled: true,
-      subscribeUrl
-    }));
-
-    const result = runScript(validateSitePath, root);
-
-    assert.notEqual(result.status, 0, `${name} should fail validation`);
-    assert.match(result.stderr, /enabled=true requires a valid absolute HTTPS subscribeUrl/);
-  }
-});
-
-test('validate-site requires repo-relative subscription fetch path', () => {
-  const root = tempRoot('validate-site-subscription-fetch-path-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml().replace(
-    "fetch('config/subscription.json')",
-    "fetch('/config/subscription.json')"
-  ));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /must fetch config\/subscription\.json through a repo-relative path/);
-  assert.match(result.stderr, /must not fetch \/config\/subscription\.json/);
-});
-
-// 공용 스크립트는 실행되자마자 querySelector 로 섹션을 찾는다. defer 없이 head 에서 돌면
-// 아직 없는 body 를 보고 아무것도 하지 않는데, 그 결과가 "구독이 꺼진 상태"와 똑같이 보여서
-// 표면 하나가 조용히 죽는다. 그래서 검증이 defer 를 요구한다.
-test('validate-site requires the shared subscription CTA script to be deferred', () => {
-  const root = tempRoot('validate-site-subscription-defer-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  const archivePath = path.join(root, 'articles', 'archive.html');
-  const withoutDefer = fs.readFileSync(archivePath, 'utf8')
-    .replace('assets/js/subscription-cta.js" defer>', 'assets/js/subscription-cta.js">');
-  // 치환이 실제로 일어났는지부터 확인한다. fixture 문구가 바뀌면 이 테스트는 defer 가 붙은
-  // 그대로를 검사하게 되어 조용히 통과한다.
-  assert.notEqual(withoutDefer, fs.readFileSync(archivePath, 'utf8'));
-  writeText(archivePath, withoutDefer);
-
-  const result = runScript(validateSitePath, root);
-
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /must load assets\/js\/subscription-cta\.js with defer/);
-});
-
-test('validate-site rejects fake subscription form controls in the subscription section', () => {
-  const root = tempRoot('validate-site-subscription-form-');
-  writeSiteFixture(root, {
-    strict: true,
-    articleCount: articlePolicy.mainArticleCount.min
-  });
-  writeText(path.join(root, 'index.html'), rootIndexHtml().replace(
-    '<a class="button subscribe-link" data-subscription-action>Subscribe</a>',
-    '<form><input type="email"><button type="submit">Subscribe</button></form><a class="button subscribe-link" data-subscription-action>Subscribe</a>'
-  ));
-
-  const result = runScript(validateSitePath, root);
-
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /subscription section must not include <form>/);
-  assert.match(result.stderr, /subscription section must not include <input>/);
-  assert.match(result.stderr, /subscription section must not include <button>/);
 });
 
 test('validate-site fails fallback_public without badge or publication notice', () => {

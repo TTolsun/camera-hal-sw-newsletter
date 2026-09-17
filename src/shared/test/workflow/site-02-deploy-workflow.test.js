@@ -5,8 +5,6 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const { EXTRA_SERVED_FILES } = require('../../../generator/publish/assemble-site');
-
 const workflowPath = path.join(
   __dirname, '..', '..', '..', '..', '.github', 'workflows', 'site-02-deploy.yml'
 );
@@ -95,25 +93,16 @@ test('Site 02 deploy preserves the single pages concurrency group, triggers, and
   assert.match(yaml, /url: \$\{\{ steps\.deployment\.outputs\.page_url \}\}/);
 });
 
-// #888 — 조립기가 _site로 복사하는 파일 목록과 배포를 깨우는 push.paths 목록이 따로 관리돼
-// 어긋나 있었다(config/subscription.json만 바꾼 머지는 배포를 못 깨웠다). 두 목록을 여기서 잇는다.
-test('Site 02 deploy triggers on every served file the assembler copies', () => {
+// #888 — 서빙 결과를 정하는 입력이 push.paths에서 빠져 배포를 못 깨우던 회귀를 막는다.
+test('Site 02 deploy triggers on every input that decides what gets served', () => {
   const yaml = fs.readFileSync(workflowPath, 'utf8');
   const filters = pushPathFilters(yaml);
 
   assert.ok(filters.includes('index.html'), 'root index.html must stay in the trigger list');
   assert.ok(filters.includes('articles/**'), 'articles/** must stay in the trigger list');
 
-  assert.ok(EXTRA_SERVED_FILES.length > 0, 'the assembler must declare its extra served files');
-  for (const relPath of EXTRA_SERVED_FILES) {
-    assert.ok(
-      isCoveredByPathFilters(relPath, filters),
-      `assemble-site.js copies "${relPath}" into _site, so push.paths must trigger on it. Current push.paths: ${filters.join(', ')}`
-    );
-  }
-
-  // 조립기 스크립트 자체도 서빙 결과를 결정하는 입력이다. 빠지면 EXTRA_SERVED_FILES를 늘리는
-  // 변경(복사 동작만 바꾸는 변경 포함)이 다시 배포를 깨우지 못한다.
+  // 조립기 스크립트 자체도 서빙 결과를 결정하는 입력이다. 빠지면 복사 동작만 바꾸는 변경이
+  // 배포를 깨우지 못한다.
   assert.ok(
     isCoveredByPathFilters('src/generator/publish/assemble-site.js', filters),
     `the assembler script decides what gets served, so push.paths must trigger on it. Current push.paths: ${filters.join(', ')}`

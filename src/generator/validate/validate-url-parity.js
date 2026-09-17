@@ -24,11 +24,8 @@ const KNOWN_TOP_LEVEL_URLS = [
   '/sitemap.xml',
   '/data/newsletters.json',
   '/data/newsletters-weekly.json',
-  // index.html이 fetch하는 진입점들(이동 후 stranded 회귀 방지).
-  // /data/homepage-headline.json은 articles/data/에서, /config/subscription.json은
-  // 저장소 config/에서 assemble-site.js의 EXTRA_SERVED_FILES로 _site에 복사된다.
-  '/data/homepage-headline.json',
-  '/config/subscription.json'
+  // index.html이 fetch하는 진입점(이동 후 stranded 회귀 방지). articles/data/에서 평탄화된다.
+  '/data/homepage-headline.json'
 ];
 
 function sitemapPath(root) {

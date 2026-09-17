@@ -34,14 +34,6 @@ const EXISTING_LEARNING_LINK = new RegExp(`<a\\b[^>]*>${escapeRegExp(AI_ENGINEER
 const FOOTER_RESOURCE_TITLE = /([ \t]*)<span class="footer-col-title">리소스<\/span>/;
 const FOOTER_OPENING = /^<footer\b[^>]*>/i;
 
-// index.html이 fetch하지만 articles/ 밖(저장소 config/)에 있는 서빙 파일.
-// 이동 전 site root에서 /config/subscription.json으로 서빙되었으므로 parity를 위해 함께 복사한다.
-// 항목을 추가하면 .github/workflows/site-02-deploy.yml의 push.paths에도 같이 넣어야 그 파일만
-// 바뀐 머지가 배포를 깨운다. 두 목록의 정합성은 site-02-deploy-workflow.test.js가 강제한다.
-const EXTRA_SERVED_FILES = [
-  path.join('config', 'subscription.json')
-];
-
 function copyDirContents(srcDir, destDir) {
   fs.mkdirSync(destDir, { recursive: true });
   for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
@@ -146,16 +138,6 @@ function assembleSite({ root = process.cwd(), out } = {}) {
   copyDirContents(articlesDir, outDir);
   copied.push(`${ARTICLES_DIR}/**`);
 
-  for (const relPath of EXTRA_SERVED_FILES) {
-    const srcPath = path.join(root, relPath);
-    if (fs.existsSync(srcPath)) {
-      const destPath = path.join(outDir, relPath);
-      fs.mkdirSync(path.dirname(destPath), { recursive: true });
-      fs.copyFileSync(srcPath, destPath);
-      copied.push(relPath);
-    }
-  }
-
   const footerLinksUpdated = addLearningFooterLinks(outDir);
 
   // GitHub Pages가 _ 로 시작하는 디렉터리/파일을 Jekyll로 처리하지 않도록 한다.
@@ -187,6 +169,5 @@ if (require.main === module) {
 module.exports = {
   assembleSite,
   withLearningFooterLink,
-  addLearningFooterLinks,
-  EXTRA_SERVED_FILES
+  addLearningFooterLinks
 };

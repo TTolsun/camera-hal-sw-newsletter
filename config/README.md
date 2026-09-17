@@ -8,7 +8,6 @@
 | --- | --- |
 | `../src/shared/config/newsletter-policy.json` | main article count, quality threshold, hard fail condition 같은 newsletter publication policy의 source of truth입니다. (이 폴더가 아니라 `src/shared/config/`에 있습니다.) |
 | `newsroom-budget.json` | newsroom 실행 budget과 비용 안전 관련 설정입니다. |
-| `subscription.json` | 구독(subscription) provider와 link 설정입니다. |
 
 ## 작업 규칙
 
