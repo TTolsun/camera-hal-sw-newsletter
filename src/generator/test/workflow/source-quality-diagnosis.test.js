@@ -451,3 +451,13 @@ test('newsroom PR body omits source quality diagnosis detail and keeps artifact-
   assert.doesNotMatch(missingBody, /Status: generation failed or unavailable/);
   assert.doesNotMatch(missingBody, /publish\/readiness gates are unaffected/);
 });
+
+test('a legacy KEEP_AND_FIX_PARSER effectiveness recommendation is outside the effectiveness vocabulary and falls back to KEEP_AND_MONITOR', () => {
+  const report = buildSourceQualityDiagnosisReport({
+    date,
+    sourceEffectivenessReport: {
+      sources: [{ source_id: 'legacy-vocabulary', recommendation: 'KEEP_AND_FIX_PARSER' }]
+    }
+  });
+  assert.equal(report.source_breakdown[0].recommended_action, 'KEEP_AND_MONITOR');
+});

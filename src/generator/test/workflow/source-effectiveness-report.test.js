@@ -4,6 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 
 const {
+  RECOMMENDATION_ORDER,
   buildSourceEffectivenessReport,
   renderSourceEffectivenessMarkdown,
   writeSourceEffectivenessArtifacts
@@ -432,4 +433,16 @@ test('JSON and Markdown report output is deterministic', () => {
   assert.match(firstMarkdown, /source_quality_status/);
   assert.ok(firstMarkdown.indexOf('| effective-camera | KEEP |') < firstMarkdown.indexOf('| official-broken | OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR |'));
   assert.ok(first.warnings.some(warning => warning.includes('synthetic-unknown-camera-blog')));
+});
+
+test('effectiveness recommendation vocabulary no longer contains KEEP_AND_FIX_PARSER', () => {
+  assert.deepEqual(RECOMMENDATION_ORDER, [
+    'NO_RECENT_SIGNAL',
+    'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR',
+    'KEEP',
+    'DOWNGRADE_TO_CANDIDATE_ONLY',
+    'REVIEW_SOURCE_OR_PARSER',
+    'DISABLE_OR_REVIEW',
+    'KEEP_AND_MONITOR'
+  ]);
 });

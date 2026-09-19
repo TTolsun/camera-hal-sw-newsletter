@@ -379,7 +379,7 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
   writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'source-effectiveness-report.json'), {
     sources: [{
       source_id: 'android-developers-jetpack-release',
-      recommendation: 'KEEP_AND_FIX_PARSER',
+      recommendation: 'REVIEW_SOURCE_OR_PARSER',
       reasons: ['rich source effectiveness parser repair recommendation'],
       eligible_count: 0
     }]
@@ -394,7 +394,7 @@ test('newsroom PR body and validator accept candidate shortage review-only hando
 
   assert.match(richCandidatePoolSection, /Source\/parser hints:/);
   assert.doesNotMatch(richCandidatePoolSection, /Source\/parser hints \(preliminary\):/);
-  assert.match(richCandidatePoolSection, /KEEP_AND_FIX_PARSER \/ android-developers-jetpack-release: rich source effectiveness parser repair recommendation/);
+  assert.match(richCandidatePoolSection, /REVIEW_SOURCE_OR_PARSER \/ android-developers-jetpack-release: rich source effectiveness parser repair recommendation/);
   assert.doesNotMatch(richCandidatePoolSection, /collected CameraX rows but no eligible source_extraction item/);
 });
 
