@@ -606,7 +606,7 @@ test('newsroom PR body renders editor article decision summary with pipeline sta
   assert.match(summary, /libcamera v0\.7\.1 release/);
   assert.match(summary, /메인\(Main\)/);
   assert.match(summary, /GCC 16\.1 released/);
-  assert.match(summary, /보조\(Supporting\)/);
+  assert.match(summary, /GCC 16\.1 released[^\n]+메인\(Main\)/);
   assert.match(summary, /Glaze 7\.2 C\+\+ reflection/);
   assert.match(summary, /짧은 소식\(Short\)/);
   assert.match(summary, /CameraX release row missing extraction/);

@@ -2,6 +2,13 @@
   "schemaVersion": 1,
   "name": "Newsletter Policy",
   "articlePolicy": {
+    "editorialPriority": [
+      "direct_aosp_camera",
+      "cpp_ai_tooling_fallback",
+      "android",
+      "generic_tech_watchlist",
+      "camera_driver_image_pipeline"
+    ],
     "mainArticleCount": {
       "min": 1,
       "max": 5
@@ -19,9 +26,11 @@
       "directAospCameraOrDriverMinRequired": 0,
       "supportingMainMaxAllowed": 1
     },
-    "supportingMainBuckets": [
-      "android_supporting",
+    "independentMainBuckets": [
       "cpp_ai_tooling_fallback"
+    ],
+    "supportingMainBuckets": [
+      "android_supporting"
     ],
     "forbiddenMainBuckets": [
       "generic_tech_watchlist"

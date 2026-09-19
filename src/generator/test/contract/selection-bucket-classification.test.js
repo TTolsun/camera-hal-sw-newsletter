@@ -128,7 +128,7 @@ test('multimedia plus SoC still fails publish-ready when supporting limit is exc
   assert.ok(publishReadyGateReasonCodes(summary).includes('publish_ready_supporting_main_over_limit'));
 });
 
-test('selection order ranks multimedia supporting ahead of SoC and C++ fallback', () => {
+test('selection order keeps AOSP then tooling ahead of Android and drivers', () => {
   const report = buildShortlistReport('2026-05-10', [
     policyPrimaryCandidate(1),
     policyDriverCandidate(2),
@@ -138,14 +138,8 @@ test('selection order ranks multimedia supporting ahead of SoC and C++ fallback'
   ]);
   const orderedBuckets = report.shortlisted_candidates.map(item => item.relevance_bucket);
 
-  assert.ok(
-    orderedBuckets.indexOf('android_multimedia_camera_output') <
-      orderedBuckets.indexOf('soc_platform_signal')
-  );
-  assert.ok(
-    orderedBuckets.indexOf('soc_platform_signal') <
-      orderedBuckets.indexOf('cpp_ai_tooling_fallback')
-  );
+  assert.ok(orderedBuckets.indexOf('direct_aosp_camera') < orderedBuckets.indexOf('cpp_ai_tooling_fallback'));
+  assert.ok(orderedBuckets.indexOf('cpp_ai_tooling_fallback') < orderedBuckets.indexOf('camera_driver_image_pipeline'));
 });
 
 test('broad platform terms remain fallback hints, not concrete component evidence', () => {
@@ -318,7 +312,7 @@ test('versioned C++ toolchain evidence is concrete but not counted as direct cam
   assert.equal(report.composition_summary.cpp_ai_tooling_fallback_count, 1);
 });
 
-test('cpp_fallback stays supporting-only and is not promoted to non-fallback', () => {
+test('native tooling is independent main without counting as camera coverage', () => {
   const { compositionSummary } = require('../../select/newsroom-selection');
   const genericFallback = candidate({
     title: 'LLVM 20 general compiler release',
@@ -334,9 +328,9 @@ test('cpp_fallback stays supporting-only and is not promoted to non-fallback', (
 
   const summary = compositionSummary([genericFallback]);
 
-  assert.equal(summary.supporting_main_article_count, 1);
-  assert.equal(summary.non_fallback_reviewable_article_count, 0);
-  assert.equal(summary.fallback_topic_count, 1);
+  assert.equal(summary.supporting_main_article_count, 0);
+  assert.equal(summary.non_fallback_reviewable_article_count, 1);
+  assert.equal(summary.fallback_topic_count, 0);
 });
 
 test('score breakdown exposes HAL-first deterministic fields and penalties', () => {

@@ -86,7 +86,7 @@ function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLocked
     publicationBoundaryPrompt(),
     articleClaimContractPrompt(),
     '초기 editor draft는 primary selected article capsule만 사용해야 합니다. reserve candidate는 repair 또는 completion 중 primary article이 demote/remove된 뒤에만 사용할 수 있습니다.',
-    `우선순위: ${[...articlePolicy.primaryCameraStack.buckets, ...articlePolicy.supportingMainBuckets].join(', ')}. 금지 bucket은 briefing/watchlist로만 남깁니다: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
+    `우선순위: ${articlePolicy.editorialPriority.join(', ')}. 독립 메인 기사: ${articlePolicy.independentMainBuckets.join(', ')}. 금지 bucket은 briefing/watchlist로만 남깁니다: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`,
     'SoC/platform article은 낮은 우선순위 fallback이지만, final-selected 상태이고 Camera framework, HAL, driver, image pipeline 또는 platform performance 관점에서 설명할 수 있으면 공개 CPU/GPU/NPU/ISP/power/thermal/performance 정보를 제외하지 마세요.',
     'AI/C++ articles는 final-selected inputs가 구체적인 native camera, driver, SoC, build/test, debugging, performance, workflow value를 포함할 때만 optional fallback item입니다. generic AI article을 만들거나 억지로 넣지 마세요.',
     editorRetryContract ? `Editor retry output contract: sections가 정확히 ${editorRetryContract.target_section_count}개인 complete editor JSON을 반환하세요.` : '',

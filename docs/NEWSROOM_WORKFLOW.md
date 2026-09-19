@@ -496,6 +496,7 @@ PR에서 다음 항목을 확인합니다.
 
 - 정본 출처(source of truth): `src/shared/config/newsletter-policy.json`
 - 주요 기사 수: 1-5
+- 주요 기사 편집 순서: `direct_aosp_camera` → `cpp_ai_tooling_fallback` → `android` → `camera_driver_image_pipeline`. GCC·C++ 개발 도구와 AI 개발 도구는 같은 우선순위의 메인 기사이며, 보조 기사 상한에 포함하지 않습니다.
 - 단일 기사 정책(one-article policy): 완전히 발행 가능한 주요 기사가 하나뿐이어도 공개 발행할 수 있습니다. 기사 수 상한은 위의 주요 기사 수(1-5)를 그대로 따릅니다.
 - 기사 수만으로 단일 기사 호가 품질 저하 또는 검토 전용으로 분류되지는 않습니다. 단, 하드 품질 게이트는 그대로 적용됩니다.
 - 보조 전용 정책(supporting-only policy): 보조 주요 버킷 기사 하나도 모든 하드 게이트를 통과하면 공개 가능 상태가 될 수 있습니다.
@@ -504,7 +505,8 @@ PR에서 다음 항목을 확인합니다.
 - 발행 가능(publish-ready) direct AOSP Camera 또는 driver/image pipeline 기사: 단일 기사 정책으로 비활성화됨 (`direct_aosp_camera`, `camera_driver_image_pipeline` 버킷 대상)
 - 발행 가능(publish-ready) 보조 주요 기사: 보조 주요 버킷 전체에서 최대 1개
 - Primary Camera Stack 버킷: `direct_aosp_camera`, `camera_driver_image_pipeline`, `android`
-- 보조 주요 버킷: `android_supporting`, `cpp_ai_tooling_fallback`
+- 독립 메인 기사 버킷: `cpp_ai_tooling_fallback`; 카메라 기사 수에는 포함하지 않으며 보조 기사 상한도 적용하지 않습니다.
+- 보조 주요 버킷: `android_supporting`
 - 금지 주요 버킷: `generic_tech_watchlist`; 후보 수만으로 이 버킷을 주요 기사로 승격하지 않습니다
 - 후보 풀 사전점검(candidate pool preflight): 발행 가능 후보 최소 1개; 예비 후보는 진단용으로만 사용; camera stack 후보 최소 0개
 - 선정 기간(selection windows): primary 7일; fallback 21일; reference 35일

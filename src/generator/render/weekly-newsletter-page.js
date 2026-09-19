@@ -8,6 +8,7 @@
 // 발행 페이지와 어긋나고, 다음 실행이 같은 기사를 LLM에 재질의한다.
 
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
 const { buildHtml, buildMarkdown } = require('./newsletter-renderer');
 const {
   weekBoundsForDate,
@@ -72,7 +73,8 @@ function weeklySummaryText(titles = []) {
 
 function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
-  const sections = ensureArray(draft.sections);
+  const sections = [...ensureArray(draft.sections)].sort((a, b) =>
+    Number(a.coverage_type === 'catch_up') - Number(b.coverage_type === 'catch_up') || compareEditorialPriority(a, b));
   const titles = articleTitles(sections);
   const coverageBounds = coverageDisplayBounds(draft);
   const issue = {

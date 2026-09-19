@@ -1,4 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
 const { loreThreadUrl } = require('../../shared/common/article-groups');
 const { isFallbackImagePath } = require('../../shared/render/image-candidates');
 const {
@@ -518,7 +519,7 @@ function normalizedSections(issue) {
     .sort((a, b) => {
       const aCatch = a.section.coverage_type === 'catch_up' ? 1 : 0;
       const bCatch = b.section.coverage_type === 'catch_up' ? 1 : 0;
-      return aCatch - bCatch || a.originalIndex - b.originalIndex;
+      return aCatch - bCatch || compareEditorialPriority(a.section, b.section) || a.originalIndex - b.originalIndex;
     });
   return ordered.map(({ section }, index) => {
     const publicArticle = publicArticleForSection(section, { issue });

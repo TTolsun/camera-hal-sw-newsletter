@@ -17,7 +17,7 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { candidateGroupKey } = require('../../shared/common/article-groups');
-const { compositionBucket } = require('../../shared/domain/aosp-camera-scope');
+const { compositionBucket, compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
 const { isEvidenceUnchecked } = require('./selection-candidate-fields');
 
 const COVERAGE_MAIN = 'main_article';
@@ -158,21 +158,14 @@ function isPlannedNonMain(lookup, candidate) {
   return decision !== '' && decision !== COVERAGE_MAIN;
 }
 
-// cap clamp 순서: deterministic_score desc 단독.
-//
-// #1001: 예전에는 LLM impact_level을 1차 정렬 키로 두고 점수를 tiebreak로 썼지만, 그 순위표는
-// high/medium/low 어휘였고 편집 계획 프롬프트는 Direct Impact / Design Reference / Trend Watch /
-// Exclude를 지시한다. 겹치는 값이 없어 순위는 프로덕션에서 언제나 0이었고, 실제 clamp는 처음부터
-// 점수 단독 정렬이었다. 어휘를 맞추면 그 순간부터 LLM 판단이 cap clamp 결과를 좌우하게 되므로
-// (결정론/LLM 권한 경계를 넓히는 정책 변경이다) 죽은 정렬 키를 지워 현재 동작을 그대로 적는다.
+// cap 초과 시 정책의 주제 우선순위를 먼저 적용하고, 같은 주제는 결정론 점수로 고른다.
 function orderForClamp(items) {
   return [...items].sort((a, b) =>
-    Number(b.deterministic_score || 0) - Number(a.deterministic_score || 0));
+    compareEditorialPriority(a, b) || Number(b.deterministic_score || 0) - Number(a.deterministic_score || 0));
 }
 
 function applyCaps(proposedMain) {
-  // deterministic_score 순서는 cap 초과 시 "무엇을 떨굴지"만 정한다. emit 순서는 결정론 입력
-  // 순서(proposedMain, editorial_priority 우선)를 보존해야 리드/본문 순서가 뒤집히지 않는다.
+  // 선택과 출력 모두 정책 순서를 따른다. 같은 주제의 출력은 입력 순서를 유지한다.
   const ordered = orderForClamp(proposedMain);
   const supporting = supportingBuckets();
   const supportingMax = Number(articlePolicy.publishReadyComposition?.supportingMainMaxAllowed ?? 1);
@@ -187,7 +180,7 @@ function applyCaps(proposedMain) {
     if (isSupporting) supportingCount += 1;
     survivors.add(candidateKey(candidate));
   }
-  return proposedMain.filter(candidate => survivors.has(candidateKey(candidate)));
+  return proposedMain.filter(candidate => survivors.has(candidateKey(candidate))).sort(compareEditorialPriority);
 }
 
 // 결정론 재조정 진입점. 항상 실행된다(toggle 없음) — LLM coverage 제안을 받아 결정론
