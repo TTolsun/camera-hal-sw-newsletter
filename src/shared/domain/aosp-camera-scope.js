@@ -21,6 +21,11 @@ function editorialPriority(value = {}) {
   return BUCKET_PRIORITY[bucket] || 99;
 }
 
+function hasDriverArticleCapacity(selected = [], candidate = {}) {
+  if (compositionBucket(candidate) !== BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE) return true;
+  return selected.filter(item => compositionBucket(item) === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE).length < articlePolicy.driverMainMaxAllowed;
+}
+
 function compareEditorialPriority(a, b) {
   return editorialPriority(a) - editorialPriority(b);
 }
@@ -810,6 +815,7 @@ module.exports = {
   BUCKET_PRIORITY,
   editorialPriority,
   compareEditorialPriority,
+  hasDriverArticleCapacity,
   LEGACY_BUCKET_ALIASES,
   ANDROID_SUPPORTING,
   canonicalBucket,

@@ -3,6 +3,7 @@
 // Weekly article-count limits (#492). Pure, deterministic helpers used by the weekly upsert (#488):
 // a per-run daily intake cap and a weekly total cap with a rank_then_drop overflow policy.
 
+const { hasDriverArticleCapacity } = require('../../shared/domain/aosp-camera-scope');
 const { getWeeklyArticlePolicy } = require('../../shared/common/newsletter-policy');
 
 function articleRankScore(article) {
@@ -30,13 +31,19 @@ function applyWeeklyArticleLimits({ existing = [], incoming = [], policy = getWe
 
   // 2. Weekly total cap (rank_then_drop): keep the top `weeklyLimit` overall, preserving order among kept.
   const combined = [...existing, ...acceptedIncoming];
-  if (combined.length <= weeklyLimit) {
-    return { articles: combined, droppedFromDailyIntake, droppedFromOverflow: [] };
-  }
   const ranked = rankByImportance(combined);
-  const keptIndexes = new Set(ranked.slice(0, weeklyLimit).map(entry => entry.index));
+  const kept = [];
+  const keptIndexes = new Set();
+  const droppedFromOverflow = [];
+  for (const entry of ranked) {
+    if (kept.length >= weeklyLimit || !hasDriverArticleCapacity(kept, entry.article)) {
+      droppedFromOverflow.push(entry.article);
+      continue;
+    }
+    kept.push(entry.article);
+    keptIndexes.add(entry.index);
+  }
   const articles = combined.filter((_, index) => keptIndexes.has(index));
-  const droppedFromOverflow = ranked.slice(weeklyLimit).map(entry => entry.article);
   return { articles, droppedFromDailyIntake, droppedFromOverflow };
 }
 

@@ -93,6 +93,7 @@ function reviewCompositionGatePasses(summary) {
     selectedCount <= articlePolicy.mainArticleCount.max &&
     primaryCount >= articlePolicy.primaryCameraStack.minRequired &&
     forbiddenCount === 0 &&
+    number(summary.camera_driver_image_pipeline_count) <= articlePolicy.driverMainMaxAllowed &&
     primaryCount + supportingCount + number(summary.cpp_ai_tooling_fallback_count) === selectedCount;
 }
 
@@ -121,6 +122,10 @@ function publishReadyGateReasonSummary(summary, policy = getPublishReadyComposit
   }
   if (directOrDriverCount < publishPolicy.directAospCameraOrDriverMinRequired) {
     addReason('publish_ready_direct_camera_or_driver_shortage', directOrDriverCount, publishPolicy.directAospCameraOrDriverMinRequired);
+  }
+  const driverCount = number(summary.camera_driver_image_pipeline_count);
+  if (driverCount > articlePolicy.driverMainMaxAllowed) {
+    addReason('publish_ready_driver_main_over_limit', driverCount, articlePolicy.driverMainMaxAllowed);
   }
   if (supportingCount > publishPolicy.supportingMainMaxAllowed) {
     addReason('publish_ready_supporting_main_over_limit', supportingCount, publishPolicy.supportingMainMaxAllowed);

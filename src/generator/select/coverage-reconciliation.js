@@ -17,7 +17,7 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { candidateGroupKey } = require('../../shared/common/article-groups');
-const { compositionBucket, compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
+const { compositionBucket, compareEditorialPriority, hasDriverArticleCapacity } = require('../../shared/domain/aosp-camera-scope');
 const { isEvidenceUnchecked } = require('./selection-candidate-fields');
 
 const COVERAGE_MAIN = 'main_article';
@@ -172,13 +172,16 @@ function applyCaps(proposedMain) {
   const mainMax = Number(articlePolicy.mainArticleCount?.max ?? 5);
   const survivors = new Set();
   let supportingCount = 0;
+  const kept = [];
   for (const candidate of ordered) {
     if (survivors.size >= mainMax) break;
+    if (!hasDriverArticleCapacity(kept, candidate)) continue;
     // 실효 버킷으로 본다. android 로 합쳐졌어도 보조 등급이면 호당 상한이 걸려야 한다.
     const isSupporting = supporting.has(String(compositionBucket(candidate) || candidate.relevance_bucket || ''));
     if (isSupporting && supportingCount >= supportingMax) continue;
     if (isSupporting) supportingCount += 1;
     survivors.add(candidateKey(candidate));
+    kept.push(candidate);
   }
   return proposedMain.filter(candidate => survivors.has(candidateKey(candidate))).sort(compareEditorialPriority);
 }
@@ -238,6 +241,7 @@ function reconcileCoverage({ shortlistReport, editorialPlanReport } = {}) {
       .sort((a, b) => Number(b.deterministic_score || 0) - Number(a.deterministic_score || 0));
     for (const candidate of backfill) {
       if (clamped.length >= mainMin) break;
+      if (!hasDriverArticleCapacity(clamped, candidate)) continue;
       clamped.push(candidate);
       clampedKeys.add(candidateKey(candidate));
       changes.push({ key: candidateKey(candidate), action: 'floor_backfill', reason_code: 'floor_backfill' });

@@ -70,9 +70,6 @@ function shortlistReportWithBothWindows() {
     ['imx708 image sensor bindings patch', 'driver-imx708', '2026-08-14'],
     ['uvcvideo status buffer overread fix', 'driver-uvcvideo', '2026-08-13'],
     ['v4l2-isp zero-sized parameter block rejection', 'driver-v4l2-isp', '2026-08-12'],
-    ['atomisp redundant assignment cleanup', 'driver-atomisp', '2026-08-11'],
-    ['AR0234 global shutter sensor driver', 'driver-ar0234', '2026-08-10'],
-    ['imx576 camera sensor driver series', 'driver-imx576', '2026-08-15'],
     ['software_isp egl filter parameter buffers', 'driver-egl', '2026-08-16']
   ].map(([title, slug, published_date], index) => policyDriverCandidate(index, {
     title,

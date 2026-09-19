@@ -9,6 +9,7 @@
       "generic_tech_watchlist",
       "camera_driver_image_pipeline"
     ],
+    "driverMainMaxAllowed": 2,
     "mainArticleCount": {
       "min": 1,
       "max": 5

@@ -1,5 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
-const { compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
+const { compareEditorialPriority, hasDriverArticleCapacity } = require('../../shared/domain/aosp-camera-scope');
 const {
   normalizeShortlistReport
 } = require('./selection-diagnostics');
@@ -527,6 +527,7 @@ function buildEligibleShortlist(rawCandidates, newsletterDate, cap = SHORTLIST_C
 
 function pushUnique(selected, candidate, slot) {
   if (!candidate) return false;
+  if (!hasDriverArticleCapacity(selected, candidate)) return false;
   if (selectedHasSameCameraReleasePage(selected, candidate)) return false;
   if (selected.some(existing => candidatesAreDuplicate(existing, candidate))) return false;
   const isFallback = text(candidate.freshness_window) === 'fallback';
@@ -954,6 +955,7 @@ function admitCatchUpCandidates({
       lineupReachedMax = true;
       break;
     }
+    if (!hasDriverArticleCapacity(lineup, candidate)) continue;
     if (selectedHasSameCameraReleasePage(lineup, candidate)) {
       if (isReleaseClassCandidate(candidate)) releasePageSkips += 1;
       continue;

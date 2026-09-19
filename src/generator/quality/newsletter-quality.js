@@ -781,7 +781,8 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   const fallbackRelevanceCount = androidSupportingCount;
   const expandedScopeCoverage = primaryCameraStackCount + supportingMainArticleCount + cppAiToolingFallbackCount;
   const publishableScopeCount = sectionScopes.filter(scope => scope?.publishable_scope === true).length;
-  const compositionMode = publishableScopeCount === 0 && sections.length > 0
+  const driverMainOverLimit = cameraDriverImagePipelineCount > articlePolicy.driverMainMaxAllowed;
+  const compositionMode = driverMainOverLimit ? 'NEEDS_FIX' : publishableScopeCount === 0 && sections.length > 0
     ? 'NEEDS_FIX'
     : forbiddenMainArticleCount > 0
       ? 'NEEDS_FIX'
@@ -797,6 +798,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
   }
   if (forbiddenMainArticleCount > 0) {
     boundedDeduct(state, 'composition', 8, `Forbidden main bucket count ${forbiddenMainArticleCount} violates Newsletter Policy: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`);
+  }
+  if (driverMainOverLimit) {
+    boundedDeduct(state, 'composition', 8, `Driver main article count ${cameraDriverImagePipelineCount} exceeds policy maximum (${articlePolicy.driverMainMaxAllowed}).`);
   }
   if (supportingMainArticleCount > publishReadyCompositionPolicy.supportingMainMaxAllowed) {
     boundedDeduct(state, 'composition', 8, `Supporting main article count ${supportingMainArticleCount} exceeds publish-ready policy maximum (${publishReadyCompositionPolicy.supportingMainMaxAllowed}).`);
