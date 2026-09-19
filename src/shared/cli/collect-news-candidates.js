@@ -582,6 +582,16 @@ function hasBehaviorChangeForRaw(raw, behaviorChange) {
   if (raw?.source_extraction?.mode === 'roundup_child_topic') {
     return ROUNDUP_BEHAVIOR_CHANGE_PATTERN.test(behaviorChange);
   }
+  // 실제 본문에서 추출한 개발 workflow의 변화도 동작 근거다. 'CI jobs increase'처럼
+  // add/fix가 없는 변화 문장을 놓치지 않되, 제목/소스 힌트만으로 이 경로를 열지는 않는다.
+  const workflowSections = raw?.source_extraction?.workflow?.sections;
+  if (raw.sourceKind === 'blog_post_item' && Array.isArray(workflowSections)
+    && workflowSections.some(section => (section.items || []).some(item =>
+      String(item.text || '').includes(behaviorChange)))
+    && /\b(?:CI|tests?|build|code review|pull requests?|PRs?)\b/i.test(behaviorChange)
+    && /\b(?:increas(?:e|es|ed|ing)|reduc(?:e|es|ed|ing)|scal(?:e|es|ed|ing)|automat(?:e|es|ed|ing)|accelerat(?:e|es|ed|ing))\b/i.test(behaviorChange)) {
+    return true;
+  }
   return BEHAVIOR_CHANGE_PATTERN.test(behaviorChange);
 }
 

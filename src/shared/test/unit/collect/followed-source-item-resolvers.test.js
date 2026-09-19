@@ -36,6 +36,8 @@ test('registers exactly the known followed-source resolver ids', () => {
       'aosp-site-updates',
       'chromeos-gerrit-camera-changes',
       'claude-blog',
+      'claude-code-changelog',
+      'codex-releases',
       'libcamera-release-announcements',
       'mediatek-security-bulletin',
       'patchwork-libcamera-patches',
@@ -43,7 +45,7 @@ test('registers exactly the known followed-source resolver ids', () => {
       'raspberrypi-libcamera-releases'
     ]
   );
-  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 12);
+  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 14);
 });
 
 test('routes raspberrypi-libcamera-releases to the release resolver with text (atom) as the first arg', async () => {
