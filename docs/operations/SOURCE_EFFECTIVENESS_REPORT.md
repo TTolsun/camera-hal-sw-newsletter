@@ -52,15 +52,15 @@ node src/generator/publish/build-source-effectiveness-report.js --date YYYY-MM-D
 `recommendation`은 아래 분기를 위에서부터 순서대로 평가해 처음 매칭되는 값 하나로 정합니다. 실제로 나올 수 있는 값은 7개입니다.
 
 1. `NO_RECENT_SIGNAL`: 해당 날짜 artifact에서 수집된 후보가 없습니다(`collected_count`가 `0`).
-2. `OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR`: official 또는 high priority source가 camera 관련 raw signal은 냈지만(`camera_relevant_raw_count > 0`), eligible 후보가 하나도 없고, rejection reason이 parser/extraction/source_extraction/date/version/anchor 계열(`parser_repair_reason_count > 0`)인 상태입니다.
+2. `OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR`: official 또는 high priority source가 camera 관련 raw signal은 냈지만(`camera_relevant_raw_count > 0`), eligible 후보가 하나도 없고, rejection reason이 parser/parsing/extraction의 실패 신호(fail, error, did not, fallback)를 담고 있거나 `source_extraction.used_fallback=true`인 경우(`parser_repair_reason_count > 0`)입니다. 날짜, 수집 기간 창, 일반 source gap 사유는 파서 고장 증거로 세지 않습니다.
 3. `KEEP`: rendered main article 기여가 있고(`rendered_main_count > 0`), effectiveness score가 `60` 이상, source gap 비율이 `0.3` 이하, noise 비율이 `0.5` 이하인 source입니다.
 4. `REVIEW_SOURCE_OR_PARSER`(official 분기): official 또는 high priority source가 eligible 후보를 하나도 내지 못했고 source gap 비율이 `0.25` 이상인 상태입니다. source gap만으로는 파서 고장을 단정할 수 없으므로, source와 exclusion을 함께 점검하라는 권고입니다. eligible 후보가 하나라도 있으면 파서가 항목을 뽑아 낸 것이므로 이 분기를 건너뛰고 아래 분기를 그대로 따라갑니다.
-5. `DOWNGRADE_TO_CANDIDATE_ONLY`: non-official generic AI/IT source가 후보를 3건 이상 가져왔지만 eligible/rendered main 기여가 없고, noise 비율이 `0.5` 이상이거나 source gap 비율이 `0.5` 이상인 상태입니다.
+5. `DOWNGRADE_TO_CANDIDATE_ONLY`: non-official source가 generic source로 판정되고(noise 비율이 `0.5` 이상이거나 category·source name·collection mode hint에 ai/it/tech/software-engineering/ai-trends/ai-engineering/ai-coding 키워드가 있는 경우), 후보를 3건 이상 가져왔지만 eligible/rendered main 기여가 없고, noise 비율이 `0.5` 이상이거나 source gap 비율이 `0.5` 이상인 상태입니다.
 6. `REVIEW_SOURCE_OR_PARSER`(일반 분기): source gap 비율이 `0.5` 이상이거나 source gap 후보가 2건 이상이라, URL, dated evidence, parser를 함께 점검해야 합니다.
 7. `DISABLE_OR_REVIEW`: non-official source가 후보를 3건 이상 가져왔는데 eligible/rendered main 기여가 없는 상태로, 후속 PR에서 검토합니다.
 8. `KEEP_AND_MONITOR`: 위 어느 분기에도 해당하지 않는 기본값입니다. 즉시 조정할 필요는 없지만 추이를 봐야 하는 source입니다.
 
-`official`, `project-official`, `official-community`, `priority=high` source는 곧바로 `DISABLE_OR_REVIEW`로 보내지 않습니다. `DISABLE_OR_REVIEW`와 `DOWNGRADE_TO_CANDIDATE_ONLY`는 non-official source에만 적용되고, official 계열은 먼저 parser repair 계열 분기(2번, 4번)를 거칩니다.
+`official`, `project-official`, `official-community`, `priority=high` source는 곧바로 `DISABLE_OR_REVIEW`로 보내지 않습니다. `DISABLE_OR_REVIEW`와 `DOWNGRADE_TO_CANDIDATE_ONLY`는 non-official source에만 적용되고, official 계열은 먼저 2번(parser repair 권고)과 4번(source/exclusion 점검 권고) 분기를 거칩니다.
 
 ### recommendation과 recommended_action은 다른 어휘입니다
 
