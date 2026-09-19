@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const { changedArtifactDate } = require('../../shared/common/artifact-paths');
+const { weeklyKeyForDate } = require('./weekly-newsletter');
 
 const HISTORICAL_POLICY_WARNING_REASON = 'historical artifact outside current/changed/generated validation target, warning only';
 
@@ -151,6 +152,47 @@ function generatedTargetDates({
   });
 }
 
+// 주간 페이지 디렉터리(articles/newsletters/<YYYY-Wnn>/)는 changedArtifactDate의 날짜 정규식에
+// 잡히지 않아 strictTargetDates에 들어가지 않는다. 그 정규식의 소비자 네 곳은 전부 날짜 의미를
+// 전제하므로 정규식을 넓히지 않고, 주간 strict 대상은 이 전용 술어로 따로 도출한다(#1142).
+const WEEKLY_NEWSLETTER_KEY_PATH = /^articles\/newsletters\/(\d{4}-W\d{2})(?:\/|$)/;
+
+function changedWeeklyKeysFromFiles(files = []) {
+  const keys = new Set();
+  for (const file of files) {
+    const normalized = String(file || '').replace(/\\/g, '/');
+    const match = normalized.match(WEEKLY_NEWSLETTER_KEY_PATH);
+    if (match) keys.add(match[1]);
+  }
+  return keys;
+}
+
+function strictWeeklyKeysFromInputs({ changedFiles = [], newsletterDate = '' } = {}) {
+  const keys = changedWeeklyKeysFromFiles(changedFiles);
+  const trimmedDate = String(newsletterDate || '').trim();
+  if (trimmedDate) {
+    // newsletter-date.txt는 형식 검증 없이 읽히고 weeklyKeyForDate는 YYYY-MM-DD가 아니면
+    // throw한다. 날짜가 형식 밖이면 이번 주 키 도출만 건너뛰고 변경 기반 키는 유지한다.
+    try {
+      keys.add(weeklyKeyForDate(trimmedDate));
+    } catch (_) {
+      // 이번 주 키 없이 진행한다.
+    }
+  }
+  return keys;
+}
+
+function strictWeeklyKeys({
+  root = process.cwd(),
+  env = process.env,
+  newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt')
+} = {}) {
+  return strictWeeklyKeysFromInputs({
+    changedFiles: changedFilesFromGit({ root, env }),
+    newsletterDate: readNewsletterDate(newsletterDatePath)
+  });
+}
+
 function historicalPolicyWarningReason() {
   return HISTORICAL_POLICY_WARNING_REASON;
 }
@@ -166,5 +208,7 @@ module.exports = {
   historicalPolicyWarningReason,
   readNewsletterDate,
   strictTargetDates,
-  strictTargetDatesFromInputs
+  strictTargetDatesFromInputs,
+  strictWeeklyKeys,
+  strictWeeklyKeysFromInputs
 };

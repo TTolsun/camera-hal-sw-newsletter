@@ -6,7 +6,8 @@ const {
 } = require('../../common/artifact-paths');
 const {
   generatedTargetDatesFromInputs,
-  strictTargetDatesFromInputs
+  strictTargetDatesFromInputs,
+  strictWeeklyKeysFromInputs
 } = require('../../../generator/reporter/validation-targets');
 
 test('changed artifact date detection covers newsletter and newsroom artifacts', () => {
@@ -101,4 +102,40 @@ test('an image audit report alone is not a generation target', () => {
   });
 
   assert.deepEqual([...dates], []);
+});
+
+// #1142: 주간 페이지 디렉터리는 날짜 정규식(changedArtifactDate)에 잡히지 않으므로 주간 strict
+// 대상은 전용 술어가 도출한다. 변경된 주간 키와 발행 날짜의 이번 주 키를 합친다.
+test('strict weekly keys combine changed weekly directories and the publish week', () => {
+  const keys = strictWeeklyKeysFromInputs({
+    changedFiles: [
+      'articles/newsletters/2026-W30/index.html',
+      'articles/newsletters/2026-W30/newsletter.md',
+      'articles/newsletters/2026-05-07/index.html',
+      'articles/content/newsroom/2026-05-08/editor-draft.json',
+      'articles/data/newsletters-weekly.json',
+      'README.md'
+    ],
+    newsletterDate: '2026-09-14'
+  });
+
+  assert.deepEqual([...keys].sort(), ['2026-W30', '2026-W38']);
+});
+
+test('strict weekly keys skip an unparseable newsletter date but keep changed keys', () => {
+  const keys = strictWeeklyKeysFromInputs({
+    changedFiles: ['articles/newsletters/2026-W31/issue.json'],
+    newsletterDate: 'unknown'
+  });
+
+  assert.deepEqual([...keys], ['2026-W31']);
+});
+
+test('strict weekly keys stay empty without weekly changes or a valid date', () => {
+  const keys = strictWeeklyKeysFromInputs({
+    changedFiles: ['articles/newsletters/2026-05-07/index.html'],
+    newsletterDate: ''
+  });
+
+  assert.deepEqual([...keys], []);
 });

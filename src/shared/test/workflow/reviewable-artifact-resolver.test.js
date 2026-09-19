@@ -744,11 +744,9 @@ test('un-exposing the newsletters.json entry downgrades a structurally-ready run
   assert.equal(unexposed.diagnostics_only, 'true');
 });
 
-// #905: 독자가 여는 주간 페이지의 구조 검사가 발행 시점에 돈다. 다만 판정은 관측으로만 남고
-// 발행 여부를 바꾸지 않는다. 주간 규칙이 발행 경로에 걸리는 것은 이번이 처음이라, 어떤 실패가
-// 실제로 나오는지 보기 전에 차단을 걸면 발행 가능한 호를 막는다.
-//
-// 아래 단언들이 그 계약이다. 하나라도 뒤집히면 이 변경의 성격이 관측에서 게이트로 바뀐다.
+// #905가 세운 주간 페이지 구조 검사는 관측이었고, #1142가 게이트로 승격했다. 이번 주 키의
+// errors·check_failed는 publicNewsletterReady를 false로 내린다. not_written(같은 주 뒤 실행,
+// 날짜 판독 불가)은 여전히 통과다 — 검사 대상이 없는 것은 결함이 아니다.
 const WEEKLY_OBSERVATION_KEY = '2026-W37';
 
 function stageWeeklyIssueForObservation(root, date, { html } = {}) {
@@ -795,11 +793,11 @@ function weeklyObservationChangedArtifacts(date) {
     ]);
 }
 
-test('a broken weekly page is observed but does not change the publish decision (#905)', () => {
+test('a broken weekly page blocks the publish decision (#1142)', () => {
   const date = '2026-09-07';
 
-  // 먼저 손대지 않은 발행본이 ok인지 본다. 이 단언이 없으면 아래 errors 단언이 주입한 결함이
-  // 아니라 픽스처 자체의 결손으로도 통과한다.
+  // 먼저 손대지 않은 발행본이 ok이고 발행 가능한지 본다. 이 단언이 없으면 아래 차단 단언이
+  // 주입한 결함이 아니라 픽스처 자체의 결손으로도 통과한다.
   const healthyRoot = fsTempRoot('weekly-structure-healthy');
   writeMinimalPublishArtifacts(healthyRoot, date);
   writePublicNewsletterArtifacts(healthyRoot, date);
@@ -811,9 +809,10 @@ test('a broken weekly page is observed but does not change the publish decision 
   });
   assert.deepEqual(healthy.weeklyStructure.errors, []);
   assert.equal(healthy.weeklyStructure.status, 'ok');
+  assert.equal(healthy.publicNewsletterReady, true, 'ok인 주간 페이지는 발행을 막지 않는다.');
 
   // 같은 픽스처에서 anchor 균형만 무너뜨린다.
-  const brokenRoot = fsTempRoot('weekly-structure-observation');
+  const brokenRoot = fsTempRoot('weekly-structure-gate');
   writeMinimalPublishArtifacts(brokenRoot, date);
   writePublicNewsletterArtifacts(brokenRoot, date);
   writeArchiveSyncSurface(brokenRoot);
@@ -831,8 +830,13 @@ test('a broken weekly page is observed but does not change the publish decision 
   );
   assert.equal(
     broken.publicNewsletterReady,
-    healthy.publicNewsletterReady,
-    '주간 구조 실패는 발행 판정을 바꾸지 않는다. 이 단언이 깨지면 관측이 게이트로 변한 것이다.'
+    false,
+    '이번 주 페이지의 구조 실패는 발행을 막는다(#1142). 이 단언이 깨지면 게이트가 관측으로 되돌아간 것이다.'
+  );
+  assert.match(
+    broken.publicNewsletterReason,
+    /weekly page structure errors/,
+    '차단 사유가 주간 구조 실패를 명시해야 한다.'
   );
 });
 
@@ -882,4 +886,7 @@ test('a run without weekly artifacts reports not_written rather than a failure (
   // reviewable 실행은 주간 산출물을 아예 쓰지 않는다. 그것은 그 실행의 정상 결과다.
   assert.equal(resolved.weeklyStructure.status, 'not_written');
   assert.deepEqual(resolved.weeklyStructure.errors, []);
+  // #1142 게이트는 errors·check_failed만 막는다. not_written이 차단 사유에 오르면 같은 주
+  // 두 번째 실행부터 발행이 전부 막힌다.
+  assert.doesNotMatch(resolved.publicNewsletterReason, /weekly page structure/);
 });

@@ -178,9 +178,9 @@ function reconcileResolvedArtifacts({ root, date, resolved }) {
   const weeklyStructure = resolvedWithHeadlineArtifacts.weeklyStructure || {};
   const reconciliationStatus = {
     ...(resolvedWithHeadlineArtifacts.status || {}),
-    // #905: 독자가 홈과 아카이브에서 실제로 여는 주간 페이지의 구조 검사 결과다. 발행 여부를
-    // 바꾸지 않는 관측 값이라 public_newsletter_ready 계산에는 들어가지 않는다. 어떤 실패가
-    // 실제로 나오는지 이 값이 몇 주 쌓인 뒤에 차단 여부를 정한다.
+    // #905: 독자가 홈과 아카이브에서 실제로 여는 주간 페이지의 구조 검사 결과다. #1142부터는
+    // 관측이 아니라 게이트다 — errors·check_failed면 resolver가 publicNewsletterReady 자체를
+    // false로 내리므로, 이 필드는 그 판정의 근거 기록이다.
     weekly_page_structure_status: weeklyStructure.status || 'not_written',
     weekly_page_structure_key: weeklyStructure.weeklyKey || '',
     weekly_page_structure_errors: ensureArray(weeklyStructure.errors),

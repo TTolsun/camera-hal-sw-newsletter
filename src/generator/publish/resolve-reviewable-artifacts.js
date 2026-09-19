@@ -285,10 +285,16 @@ function resolveReviewableArtifacts(options = {}) {
   // 경로가 없었다(#905). 이 자리는 repair 이후라 newsroom:repair-images가 이미 주간 3종과
   // article_images를 다시 쓴 상태다 — 그 전에 판정하면 임시 이미지 상태를 최종으로 오판한다.
   //
-  // 판정은 관측으로만 남기고 발행 여부에 넣지 않는다. 주간 규칙은 이번에 처음 발행 경로에
-  // 걸리는 것이라, 어떤 실패가 실제로 나오는지 보기 전에 hard fail을 걸면 발행 가능한 호를
-  // 막는다. 그것이 이 저장소가 반복해서 데인 순서다.
+  // #905는 관측으로만 남겼고, #1142가 게이트로 승격했다. 발행된 주간호 20개(W19~W38)에 이
+  // 검사를 전수로 돌려 현행 생성기가 만드는 최근 14개 호가 전부 통과함을 확인한 뒤다. 검사가
+  // 이번 주 키 하나만 보므로 옛 스키마인 과거 6개 호(W19~W23, W26)는 대상이 되지 않는다.
+  //
+  // not_written은 같은 주 뒤 실행의 정상 상태라 통과시킨다. errors와 check_failed(검사 불능)는
+  // fail-closed로 막는다 — 측정하지 못한 것을 통과로 다루지 않는다.
   const weeklyStructure = weeklyStructureObservation(root, date);
+  const weeklyStructureBlocked =
+    weeklyStructure.status === 'errors' ||
+    weeklyStructure.status === 'check_failed';
   const newsletterIndex = newsletterIndexDateStatus(root, date);
   const changedArtifacts = Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')
     ? relevantChangedArtifacts(options.changedArtifacts, date)
@@ -394,12 +400,16 @@ function resolveReviewableArtifacts(options = {}) {
     ...publicStructure.errors,
     missingChangedPublicArtifacts.length > 0
       ? `required public files not changed: ${missingChangedPublicArtifacts.join(',')}`
+      : '',
+    weeklyStructureBlocked
+      ? `weekly page structure ${weeklyStructure.status} (${weeklyStructure.weeklyKey}): ${weeklyStructure.errors.join('|') || 'no error detail'}`
       : ''
   ].filter(Boolean);
   const publicNewsletterReady =
     hasRequiredPublicNewsletterFiles &&
     publicStructure.ok &&
-    missingChangedPublicArtifacts.length === 0;
+    missingChangedPublicArtifacts.length === 0 &&
+    !weeklyStructureBlocked;
   if (publicNewsletterReady) {
     hasReviewableArtifacts = true;
   }
