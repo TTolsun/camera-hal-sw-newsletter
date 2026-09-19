@@ -41,7 +41,6 @@ const RECOMMENDATION_ORDER = [
   'NO_RECENT_SIGNAL',
   'OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR',
   'KEEP',
-  'KEEP_AND_FIX_PARSER',
   'DOWNGRADE_TO_CANDIDATE_ONLY',
   'REVIEW_SOURCE_OR_PARSER',
   'DISABLE_OR_REVIEW',
@@ -1015,7 +1014,7 @@ function renderSourceEffectivenessMarkdown(report) {
     markdownTable(
       ['Source', 'Recommendation', 'Collected', 'Eligible', 'Source Gap', 'Top Reason'],
       sources
-        .filter(source => ['OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR', 'KEEP_AND_FIX_PARSER'].includes(source.recommendation))
+        .filter(source => ['OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR'].includes(source.recommendation))
         .sort(recommendationSort)
         .map(source => [
           source.source_id,

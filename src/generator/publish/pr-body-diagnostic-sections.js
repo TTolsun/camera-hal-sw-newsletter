@@ -70,7 +70,7 @@ function sourceEffectivenessHints(root, date) {
   const report = loadNewsroomReport(root, date, 'source-effectiveness-report.json');
   if (!report) return [];
   return ensureArray(report.sources)
-    .filter(source => ['OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR', 'KEEP_AND_FIX_PARSER', 'REVIEW_SOURCE_OR_PARSER'].includes(source.recommendation))
+    .filter(source => ['OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR', 'REVIEW_SOURCE_OR_PARSER'].includes(source.recommendation))
     .slice(0, 8)
     .map(source => ({
       code: source.recommendation,
