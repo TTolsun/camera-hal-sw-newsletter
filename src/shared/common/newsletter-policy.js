@@ -228,6 +228,7 @@ function validateNewsletterPolicyConfig(config) {
   const preflight = config.candidatePoolPreflight || {};
   const quality = config.qualityGatePolicy || {};
   const count = article.mainArticleCount || {};
+  validateInteger(article.driverMainMaxAllowed, 'articlePolicy.driverMainMaxAllowed', errors, { min: 0 });
   validateInteger(count.min, 'articlePolicy.mainArticleCount.min', errors, { min: 1 });
   validateInteger(count.max, 'articlePolicy.mainArticleCount.max', errors, { min: 1 });
   if (Number.isInteger(count.min) && Number.isInteger(count.max) && count.max < count.min) {
@@ -506,6 +507,7 @@ function normalizeNewsletterPolicyConfig(config) {
     publishModePolicy: normalizePublishModePolicy(config.publishModePolicy),
     articlePolicy: {
       editorialPriority: [...article.editorialPriority],
+      driverMainMaxAllowed: article.driverMainMaxAllowed,
       mainArticleCount: {
         min: article.mainArticleCount.min,
         max: article.mainArticleCount.max
@@ -700,6 +702,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     '',
     `- 정본 출처(source of truth): \`${POLICY_REL_PATH.replace(/\\/g, '/')}\``,
     `- 주요 기사 수: ${articleCountRangeText(policy)}`,
+    `- Driver / image pipeline 주요 기사: 주간호당 최대 ${articlePolicy.driverMainMaxAllowed}개. 구체적인 변경과 개발·검증에 도움이 되는 확인 항목이 있는 기사만 발행하며, 상한을 채우기 위한 기사는 추가하지 않습니다.`,
     `- 주요 기사 편집 순서: ${articlePolicy.editorialPriority.filter(bucket => !articlePolicy.forbiddenMainBuckets.includes(bucket)).map(bucket => `\`${bucket}\``).join(' → ')}. GCC·C++ 개발 도구와 AI 개발 도구는 같은 우선순위의 메인 기사이며, 보조 기사 상한에 포함하지 않습니다.`,
     ...(oneArticlePolicyEnabled
       ? [

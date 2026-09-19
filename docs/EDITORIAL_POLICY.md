@@ -136,6 +136,7 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 
 - 정본 출처(source of truth): `src/shared/config/newsletter-policy.json`
 - 주요 기사 수: 1-5
+- Driver / image pipeline 주요 기사: 주간호당 최대 2개. 구체적인 변경과 개발·검증에 도움이 되는 확인 항목이 있는 기사만 발행하며, 상한을 채우기 위한 기사는 추가하지 않습니다.
 - 주요 기사 편집 순서: `direct_aosp_camera` → `cpp_ai_tooling_fallback` → `android` → `camera_driver_image_pipeline`. GCC·C++ 개발 도구와 AI 개발 도구는 같은 우선순위의 메인 기사이며, 보조 기사 상한에 포함하지 않습니다.
 - 단일 기사 정책(one-article policy): 완전히 발행 가능한 주요 기사가 하나뿐이어도 공개 발행할 수 있습니다. 기사 수 상한은 위의 주요 기사 수(1-5)를 그대로 따릅니다.
 - 기사 수만으로 단일 기사 호가 품질 저하 또는 검토 전용으로 분류되지는 않습니다. 단, 하드 품질 게이트는 그대로 적용됩니다.
