@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-09-21",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-aosp-gerrit-20260921",
+      "topic_gap": "Camera HAL AIDL changes and camera server updates for improved camera functionality and stability.",
+      "source_family": "aosp-gerrit-camera-changes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Camera HAL AIDL",
+        "camera server",
+        "camera provider",
+        "device removal"
+      ],
+      "candidate_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680"
+      ],
+      "expected_evidence": [
+        "Camera HAL AIDL implementation details",
+        "Camera server behavior changes",
+        "Bug fixes related to camera provider startup and device removal"
+      ],
+      "risk_notes": [
+        "This is a code review, not a release note. The change might not be merged or might be significantly altered."
+      ]
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-kernel-20260921",
+      "topic_gap": "New camera sensor drivers and improvements to existing camera pipeline processing in the Linux kernel, impacting Android's camera HAL.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux kernel camera driver",
+        "V4L2",
+        "ISP",
+        "media controller",
+        "camera sensor",
+        "Qualcomm CAMSS",
+        "Intel IPU"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260915-og0va1b-v7-0-3a4b6d7360ec@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/",
+        "https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/",
+        "https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca/",
+        "https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/",
+        "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
+        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
+        "https://lore.kernel.org/linux-media/20260904065653.6069-1-pierre@pinon1.fr/",
+        "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
+        "https://lore.kernel.org/linux-media/4ccc1be17658cdf9ff1267d66db6c2b5a65d6e18.1788360629.git.mauriziocasciano7@gmail.com/"
+      ],
+      "expected_evidence": [
+        "New camera sensor drivers (e.g., OmniVision, Samsung)",
+        "Camera pipeline processing enhancements (e.g., CAMSS ISP OPE)",
+        "Support for cameras behind CSI-2 bridges",
+        "Quirks for specific devices (e.g., upside-down sensors)"
+      ],
+      "risk_notes": [
+        "These are kernel patches, not official Android releases. Relevance to Android HAL needs to be inferred.",
+        "Some patches are part of larger series, requiring context from other patches."
+      ]
+    },
+    {
+      "proposal_id": "camera-hal-intel-ipu-kernel-20260921",
+      "topic_gap": "Intel IPU camera driver updates in the Linux kernel, including multi-stream and metadata support, relevant for Android devices using Intel hardware.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Intel IPU",
+        "linux kernel camera",
+        "multi-stream",
+        "camera metadata",
+        "V4L2"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
+      ],
+      "expected_evidence": [
+        "Intel IPU6 multi-stream support",
+        "Metadata handling in camera pipeline",
+        "Driver preparation for advanced camera features"
+      ],
+      "risk_notes": [
+        "These are kernel patches, not official Android releases. Relevance to Android HAL needs to be inferred."
+      ]
+    },
+    {
+      "proposal_id": "camera-hal-androidx-camera-release-20260921",
+      "topic_gap": "Updates to the AndroidX Camera library, potentially including bug fixes or new features impacting camera development.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX release notes",
+        "androidx.camera",
+        "camera library update",
+        "bug fixes"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+      ],
+      "expected_evidence": [
+        "Bug fixes in CameraX library",
+        "New features or API changes",
+        "Performance improvements"
+      ],
+      "risk_notes": [
+        "These are release notes for CameraX, not the core Camera HAL. Relevance to HAL-level changes is indirect.",
+        "Beta and alpha versions indicate ongoing development and potential instability."
+      ]
+    },
+    {
+      "proposal_id": "android-developers-blog-memory-limits-20260921",
+      "topic_gap": "Guidance on managing memory limits in Android apps, which could impact camera-intensive applications and their resource handling.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android memory limits",
+        "app performance",
+        "resource management",
+        "camera app optimization"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html"
+      ],
+      "expected_evidence": [
+        "Best practices for memory management",
+        "Impact of memory limits on app performance",
+        "Strategies for optimizing resource usage"
+      ],
+      "risk_notes": [
+        "This article is not directly about camera HAL but provides general app development guidance that could be relevant for camera apps.",
+        "The article is dated August, not September, but is close to the newsletter date."
+      ]
+    },
+    {
+      "proposal_id": "android-developers-blog-emulator-adaptive-20260921",
+      "topic_gap": "Emulator control for adaptive app development, which may include features relevant to testing camera app behavior across different device configurations.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android emulator",
+        "adaptive app development",
+        "camera app testing",
+        "device configuration"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html"
+      ],
+      "expected_evidence": [
+        "New emulator features for testing",
+        "Adaptive app development strategies",
+        "Impact on camera app testing"
+      ],
+      "risk_notes": [
+        "This article focuses on emulator capabilities and adaptive development, with indirect relevance to camera HAL.",
+        "The article is dated August, not September, but is close to the newsletter date."
+      ]
+    },
+    {
+      "proposal_id": "android-developers-blog-gemma-android-studio-20260921",
+      "topic_gap": "Integration of Gemma 4 in Android Studio, potentially relevant for AI-powered camera features or image processing.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Gemma 4",
+        "Android Studio",
+        "AI development",
+        "camera AI features"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html"
+      ],
+      "expected_evidence": [
+        "New AI models in Android Studio",
+        "Integration of Gemma 4",
+        "Potential use cases in camera applications"
+      ],
+      "risk_notes": [
+        "This article is about AI integration in Android Studio, not directly camera HAL, but could be relevant for future AI-driven camera features."
+      ]
+    }
+  ]
+}
