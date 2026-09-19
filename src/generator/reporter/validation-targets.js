@@ -172,11 +172,12 @@ function strictWeeklyKeysFromInputs({ changedFiles = [], newsletterDate = '' } =
   const trimmedDate = String(newsletterDate || '').trim();
   if (trimmedDate) {
     // newsletter-date.txt는 형식 검증 없이 읽히고 weeklyKeyForDate는 YYYY-MM-DD가 아니면
-    // throw한다. 날짜가 형식 밖이면 이번 주 키 도출만 건너뛰고 변경 기반 키는 유지한다.
+    // throw한다. 날짜가 형식 밖이면 이번 주 키 도출만 건너뛰고 변경 기반 키는 유지하되,
+    // 침묵하면 날짜 파손 자체가 관측되지 않으므로 경고 한 줄은 남긴다.
     try {
       keys.add(weeklyKeyForDate(trimmedDate));
     } catch (_) {
-      // 이번 주 키 없이 진행한다.
+      console.warn(`Warning: newsletter date "${trimmedDate}" is not YYYY-MM-DD; the current publish week is missing from the strict weekly keys.`);
     }
   }
   return keys;

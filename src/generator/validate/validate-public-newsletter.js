@@ -206,7 +206,15 @@ function validateIndexedWeeklyNewsletters({ rootDir = root, strictKeys = null } 
     const weeklyKey = item?.weeklyKey;
     const markdownPath = publicAssetPath(rootDir, item?.md || '');
     const htmlPath = publicAssetPath(rootDir, item?.html || '');
-    if (!markdownPath || !htmlPath || !fs.existsSync(markdownPath) || !fs.existsSync(htmlPath)) continue;
+    if (!markdownPath || !htmlPath || !fs.existsSync(markdownPath) || !fs.existsSync(htmlPath)) {
+      // strict 키는 색인 엔트리가 있는데 실체 파일이 없으면 그 자체가 불일치다(엔트리와 파일은
+      // 같은 발행 커밋에서 함께 생긴다). 과거 호의 부재는 일간 레인과 같은 이유로 여기서는
+      // 넘어간다 — 존재 검사는 validate:site 층이 본다.
+      if (requireAll || strict.has(weeklyKey)) {
+        errors.push(`weekly ${weeklyKey || 'entry'}: public newsletter files are missing for an indexed entry`);
+      }
+      continue;
+    }
     const result = validatePublicNewsletterFiles(markdownPath, htmlPath)
       .map(error => `weekly ${weeklyKey || 'entry'}: ${error}`);
     if (result.length === 0) continue;

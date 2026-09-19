@@ -840,6 +840,31 @@ test('a broken weekly page blocks the publish decision (#1142)', () => {
   );
 });
 
+// check_failed(검사 자체가 던짐)도 fail-closed로 막는다. "측정 못 함"을 "통과"로 다루면
+// 스키마가 어긋난 issue.json이 게이트를 그냥 지나간다. sections에 null이 섞인 issue.json이
+// 실측으로 검사를 던지게 만드는 입력이다.
+test('a weekly structure check failure blocks the publish decision fail-closed (#1142)', () => {
+  const date = '2026-09-07';
+  const root = fsTempRoot('weekly-structure-check-failed');
+  writeMinimalPublishArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+  writeArchiveSyncSurface(root);
+  stageWeeklyIssueForObservation(root, date);
+  writeJson(
+    path.join(root, 'articles', 'newsletters', WEEKLY_OBSERVATION_KEY, 'issue.json'),
+    { sections: [null] }
+  );
+
+  const resolved = resolveReviewableArtifacts({
+    root,
+    changedArtifacts: weeklyObservationChangedArtifacts(date)
+  });
+
+  assert.equal(resolved.weeklyStructure.status, 'check_failed', '주입한 issue.json이 검사를 던지게 해야 한다.');
+  assert.equal(resolved.publicNewsletterReady, false, '검사 불능은 fail-closed로 발행을 막는다.');
+  assert.match(resolved.publicNewsletterReason, /weekly page structure check_failed/);
+});
+
 // 관측 값이 메모리에만 있으면 이 변경은 아무것도 남기지 않는다. 이 저장소에는 새 필드가
 // 중간 관문에서 조용히 사라진 전례가 있다(seriesId). 그래서 파일까지 확인한다.
 test('the weekly observation reaches the committed generation status (#905)', () => {
