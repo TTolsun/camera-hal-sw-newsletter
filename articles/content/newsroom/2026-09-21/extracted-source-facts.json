@@ -381,7 +381,7 @@
       "claims": [
         {
           "claim": "Gerrit change 4235680 on platform/frameworks/av (branch android17-release) is proposed and not merged (status NEW, created 2026-08-20). Change-Id Ifd1ab957ac24ff008cee64d0c477f5cfb66edd41; current revision 1e63509d49ba. No approving or recommending Code-Review or verification vote has been cast yet. It changes 1 file(s) +8/-2, of which 1 are camera paths: platform/frameworks/av/services/camera/libcameraservice/common/CameraProviderManager.cpp.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"oHBmQGCm4IqG_XSArFzoKw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"r6PWvkaL--iUJ5_h7asZCw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -394,7 +394,7 @@
     {
       "id": "gemini-eff34e4bb13fca21",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
-      "title": "Camera HAL AIDL changes and camera server updates for improved camera functionality and stability.",
+      "title": "Camera HAL: Fix camera lazy AIDL provider not started and present cameras removed on unplug.",
       "published_at": "",
       "source_type": "official_blog",
       "source_fetch_used": true,
@@ -403,8 +403,8 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Camera HAL AIDL changes and camera server updates for improved camera functionality and stability.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"oHBmQGCm4IqG_XSArFzoKw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "claim": "Camera HAL: Fix camera lazy AIDL provider not started and present cameras removed on unplug.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"r6PWvkaL--iUJ5_h7asZCw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -599,19 +599,65 @@
       "warnings": []
     },
     {
-      "id": "c70c758816ffadd7",
-      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-      "title": "Emulator control for adaptive app development",
-      "published_at": "Mon, 31 Aug 2026 16:00:00 +0000",
-      "source_type": "rss_item",
+      "id": "6ac026046fb3ce0d",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "title": "CameraX Release Notes - CameraX 1.6.2",
+      "published_at": "August 26, 2026",
+      "source_type": "release_note_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
+          "claim": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.72,
+      "android_hal_relevance": 0.72,
+      "ai_relevance": 0,
+      "technical_depth": 0.78,
+      "warnings": []
+    },
+    {
+      "id": "1db5b77cd37fa30d",
+      "url": "https://claude.com/blog/projects-redesigned",
+      "title": "Projects redesigned: from folder to conversation",
+      "published_at": "2026-09-17",
+      "source_type": "blog_post_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Projects redesigned: from folder to conversation A new experience for Claude projects, now available in beta in Claude Code Category Product announcements Claude Code Product Claude Code Date September 17, 2026 Reading time 5 min Share Copy link https://claude.com/blog/projects-redesigned Managing multiple sessions across a build used to require you to divide the work, juggle handoffs, and stitch the results back together. Now in a Claude Code project, you describe what needs to get done and Cla",
+          "evidence_text": "<!DOCTYPE html><!-- Last Published: Thu Sep 17 2026 13:09:06 GMT+0000 (Coordinated Universal Time) --><html data-wf-domain=\"websitemain.claude.com\" data-wf-page=\"68de89a2fbe1f683b08de180\" data-wf-site=\"6889473510b50328dbb70ae6\" data-wf-intellimize-customer-id=\"117902971\" lang=\"en-US\" data-wf-collection=\"68de89a1fbe1f683b08de151\" data-wf-item-slug=\"projects-redesigned\"><head><meta charset=\"utf-8\"/><link href=\"https://cdn.prod.website-files.com\" rel=\"preconnect\" crossorigin=\"anonymous\"/><title>Pro",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.66,
+      "android_hal_relevance": 0.66,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.741,
+      "warnings": []
+    },
+    {
+      "id": "c70c758816ffadd7",
+      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "title": "Emulator control for adaptive app development",
+      "published_at": "Mon, 31 Aug 2026 16:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
           "claim": "Posted by Rob Orgiu, Developer Relations Engineer, Adaptive Apps, Android Adaptive app development is fundamental on Android, but making sure everything looks good and every feature works the way it should require multiple tests on multiple devices. Or does it? Well, yes… and no! While Android Studio is bundled with the Resizable Emulator to let you test layouts manually, there’s a faster, more streamlined way to control form factors directly from your terminal. By leveraging fire-and-forget con",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "evidence_text": "",
           "confidence": "medium"
         }
       ],
@@ -622,55 +668,9 @@
       "warnings": []
     },
     {
-      "id": "43e0e16b6f415ed8",
-      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-      "published_at": "Tue, 01 Sep 2026 15:00:00 +0000",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Posted by Amman Fasil Asfaw, Product Manager, Android Studio Android Studio Quail 4 is now stable and ready for you to use in production. This is the final stable release for Android Studio Quail. The new features in Android Studio enable you to build premium apps with AI efficiently and effectively. Check out the video below to see the most helpful new features from the last 4 releases that can help improve and speed up your development. Here is a deep dive into what’s new in Android Studio Qua",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.6,
-      "android_hal_relevance": 0.6,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.688,
-      "warnings": []
-    },
-    {
-      "id": "f72f65c08a68f755",
-      "url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
-      "title": "Preparing your app for broader memory limits",
-      "published_at": "Wed, 19 Aug 2026 19:00:00 +0000",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Posted by Blair Harmon, Director of Product Management, Android Platform A great user experience is central to Android's mission, and delivering on that promise requires keeping devices fast, responsive, and reliable. This is why memory optimization is more critical than ever. Across the ecosystem, new devices are maintaining or even decreasing their physical memory capacity in response to memory price increases, yet users continue to expect the same seamless, high-performance app experience. In",
-          "evidence_text": "",
-          "confidence": "low"
-        }
-      ],
-      "camera_relevance": 0.78,
-      "android_hal_relevance": 0.78,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.625,
-      "warnings": []
-    },
-    {
-      "id": "gemini-1d9ca4c588aca6e3",
-      "url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
-      "title": "Android Developers Blog: Preparing your app for broader memory limits",
+      "id": "gemini-6f8916deba211090",
+      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "title": "Android Developers Blog: Emulator control for adaptive app development",
       "published_at": "",
       "source_type": "official_blog",
       "source_fetch_used": true,
@@ -679,7 +679,7 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Android Developers Blog: Preparing your app for broader memory limits",
+          "claim": "Android Developers Blog: Emulator control for adaptive app development",
           "evidence_text": "",
           "confidence": "low"
         }
@@ -691,10 +691,10 @@
       "warnings": []
     },
     {
-      "id": "c7dc6fb35d697d90",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "title": "1.6.2",
-      "published_at": "August 26, 2026",
+      "id": "aca1c18b8fa30e28",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "title": "Claude Code v2.1.271",
+      "published_at": "2026-09-14T22:12:54Z",
       "source_type": "release_note_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -702,15 +702,84 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "1.6.2",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"it-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "claim": "Added fast mode in Claude Code Remote sessions (cloud and self-hosted runners): the host's fast-mode setting or `/fast` typed in the session applies where your organization allows it Added mouse support to the `/config` panel in fullscreen mode: the wheel scrolls the settings list, a click on a setting's value changes it, and the row under the pointer is highlighted Added `claude self-hosted-runner --drain-marker-file `: when that file exists at a SIGTERM drain, the runner reports its exit",
+          "evidence_text": "<!DOCTYPE html>\n<html\n  lang=\"en\"\n  \n  data-color-mode=\"auto\" data-light-theme=\"light\" data-dark-theme=\"dark\"\n  data-a11y-animated-images=\"system\" data-a11y-link-underlines=\"true\"\n  \n  >\n\n\n\n\n  <head>\n    <meta charset=\"utf-8\">\n  <link rel=\"dns-prefetch\" href=\"https://github.githubassets.com\">\n  <link rel=\"dns-prefetch\" href=\"https://avatars.githubusercontent.com\">\n  <link rel=\"dns-prefetch\" href=\"https://github-cloud.s3.amazonaws.com\">\n  <link rel=\"dns-prefetch\" href=\"https://user-images.githubu",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.56,
+      "android_hal_relevance": 0.56,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.702,
+      "warnings": []
+    },
+    {
+      "id": "809d067ec95acd11",
+      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+      "title": "Codex rust-v0.155.1",
+      "published_at": "2026-09-18T20:03:04Z",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "New local TUI sessions now leave reasoning summaries disabled by default, fixing request rejection by providers that do not support them. Explicit reasoning-summary settings remain respected. (#46467)",
+          "evidence_text": "<!DOCTYPE html>\n<html\n  lang=\"en\"\n  \n  data-color-mode=\"auto\" data-light-theme=\"light\" data-dark-theme=\"dark\"\n  data-a11y-animated-images=\"system\" data-a11y-link-underlines=\"true\"\n  \n  >\n\n\n\n\n  <head>\n    <meta charset=\"utf-8\">\n  <link rel=\"dns-prefetch\" href=\"https://github.githubassets.com\">\n  <link rel=\"dns-prefetch\" href=\"https://avatars.githubusercontent.com\">\n  <link rel=\"dns-prefetch\" href=\"https://github-cloud.s3.amazonaws.com\">\n  <link rel=\"dns-prefetch\" href=\"https://user-images.githubu",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.55,
+      "android_hal_relevance": 0.55,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.698,
+      "warnings": []
+    },
+    {
+      "id": "43e0e16b6f415ed8",
+      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "published_at": "Tue, 01 Sep 2026 15:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Amman Fasil Asfaw, Product Manager, Android Studio Android Studio Quail 4 is now stable and ready for you to use in production. This is the final stable release for Android Studio Quail. The new features in Android Studio enable you to build premium apps with AI efficiently and effectively. Check out the video below to see the most helpful new features from the last 4 releases that can help improve and speed up your development. Here is a deep dive into what’s new in Android Studio Qua",
+          "evidence_text": "",
           "confidence": "medium"
         }
       ],
       "camera_relevance": 0.6,
       "android_hal_relevance": 0.6,
-      "ai_relevance": 0,
-      "technical_depth": 0.552,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.688,
+      "warnings": []
+    },
+    {
+      "id": "gemini-a8cd06df28457612",
+      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+          "evidence_text": "",
+          "confidence": "low"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.492,
       "warnings": []
     }
   ]

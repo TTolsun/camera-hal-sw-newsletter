@@ -4,7 +4,7 @@
   "newsletter_date": "2026-09-21",
   "validations": [
     {
-      "proposal_id": "camera-hal-aosp-gerrit-20260921",
+      "proposal_id": "camera-hal-aosp-gerrit-4235680",
       "candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
       "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
       "accepted": true,
@@ -12,7 +12,7 @@
       "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
+      "proposal_id": "camera-hal-kernel-linux-media-og0va1b",
       "candidate_url": "https://lore.kernel.org/linux-media/20260915-og0va1b-v7-0-3a4b6d7360ec@oss.qualcomm.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260915-og0va1b-v7-0-3a4b6d7360ec@oss.qualcomm.com/",
       "accepted": true,
@@ -20,7 +20,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
+      "proposal_id": "camera-hal-kernel-linux-media-s5kjn5",
       "candidate_url": "https://lore.kernel.org/linux-media/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com/",
       "accepted": true,
@@ -28,7 +28,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
+      "proposal_id": "camera-hal-kernel-linux-media-vc-mipi",
       "candidate_url": "https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/",
       "accepted": true,
@@ -36,7 +36,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
+      "proposal_id": "camera-hal-kernel-linux-media-camss-ope",
       "candidate_url": "https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/",
       "accepted": true,
@@ -44,7 +44,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
+      "proposal_id": "camera-hal-kernel-linux-media-st-vd55g1",
       "candidate_url": "https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca/",
       "accepted": true,
@@ -52,7 +52,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
+      "proposal_id": "camera-hal-kernel-linux-media-qcom-camss-csi2",
       "candidate_url": "https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/",
       "accepted": true,
@@ -60,7 +60,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
+      "proposal_id": "camera-hal-kernel-linux-media-qcom-camss-csi2-support",
       "candidate_url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
       "accepted": true,
@@ -68,7 +68,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
+      "proposal_id": "camera-hal-kernel-intel-ipu-surface-pro-quirk",
       "candidate_url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
       "accepted": true,
@@ -76,31 +76,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260904065653.6069-1-pierre@pinon1.fr/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260904065653.6069-1-pierre@pinon1.fr/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
-      "candidate_url": "https://lore.kernel.org/linux-media/4ccc1be17658cdf9ff1267d66db6c2b5a65d6e18.1788360629.git.mauriziocasciano7@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/4ccc1be17658cdf9ff1267d66db6c2b5a65d6e18.1788360629.git.mauriziocasciano7@gmail.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "camera-hal-intel-ipu-kernel-20260921",
+      "proposal_id": "camera-hal-kernel-intel-ipu-multi-stream-prep",
       "candidate_url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
       "accepted": true,
@@ -108,7 +84,31 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "camera-hal-androidx-camera-release-20260921",
+      "proposal_id": "camera-hal-kernel-intel-ipu-dell-quirk",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260904065653.6069-1-pierre@pinon1.fr/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260904065653.6069-1-pierre@pinon1.fr/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-kernel-intel-ipu6-ov5693-enable",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-kernel-intel-ipu6-yoga-book",
+      "candidate_url": "https://lore.kernel.org/linux-media/4ccc1be17658cdf9ff1267d66db6c2b5a65d6e18.1788360629.git.mauriziocasciano7@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/4ccc1be17658cdf9ff1267d66db6c2b5a65d6e18.1788360629.git.mauriziocasciano7@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camerax-release-1.6.2",
       "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
       "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
       "accepted": false,
@@ -122,63 +122,24 @@
       "source_extraction_item_count": 0
     },
     {
-      "proposal_id": "camera-hal-androidx-camera-release-20260921",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "camerax-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "camera-hal-androidx-camera-release-20260921",
-      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-      "accepted": false,
-      "rejected_reason": "discovered_not_extractable",
-      "source_policy_match": "camerax-release-notes",
-      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
-      "discovery_status": "discovered",
-      "extraction_status": "discovered_not_extractable",
-      "adapter_hint": "android-developers-jetpack-release",
-      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
-      "source_extraction_item_count": 0
-    },
-    {
-      "proposal_id": "android-developers-blog-memory-limits-20260921",
-      "candidate_url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
-      "normalized_url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
+      "proposal_id": "android-developers-blog-gemma-4",
+      "candidate_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
       "accepted": true,
       "rejected_reason": "",
       "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "android-developers-blog-emulator-adaptive-20260921",
+      "proposal_id": "android-developers-blog-emulator-adaptive",
       "candidate_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
       "normalized_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-      "accepted": false,
-      "rejected_reason": "fetch_failed",
-      "source_policy_match": "android-developers-blog",
-      "message": "fetch failed: 429"
-    },
-    {
-      "proposal_id": "android-developers-blog-gemma-android-studio-20260921",
-      "candidate_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "normalized_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "accepted": false,
-      "rejected_reason": "fetch_failed",
-      "source_policy_match": "android-developers-blog",
-      "message": "fetch failed: 429"
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
     }
   ],
   "counts": {
-    "accepted": 14,
-    "discovered_not_extractable": 3,
-    "fetch_failed": 2
+    "accepted": 15,
+    "discovered_not_extractable": 1
   }
 }

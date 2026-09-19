@@ -4,186 +4,318 @@
   "newsletter_date": "2026-09-21",
   "proposals": [
     {
-      "proposal_id": "camera-hal-aosp-gerrit-20260921",
-      "topic_gap": "Camera HAL AIDL changes and camera server updates for improved camera functionality and stability.",
+      "proposal_id": "camera-hal-aosp-gerrit-4235680",
+      "topic_gap": "Camera HAL: Fix camera lazy AIDL provider not started and present cameras removed on unplug.",
       "source_family": "aosp-gerrit-camera-changes",
       "allowed_domains": [],
       "search_keywords": [
-        "Camera HAL AIDL",
-        "camera server",
-        "camera provider",
-        "device removal"
+        "camera AIDL provider",
+        "camera unplug",
+        "camera HAL fix"
       ],
       "candidate_urls": [
         "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680"
       ],
       "expected_evidence": [
-        "Camera HAL AIDL implementation details",
-        "Camera server behavior changes",
-        "Bug fixes related to camera provider startup and device removal"
+        "Fix for camera lazy AIDL provider",
+        "Handling of present cameras on unplug"
       ],
-      "risk_notes": [
-        "This is a code review, not a release note. The change might not be merged or might be significantly altered."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-linux-media-kernel-20260921",
-      "topic_gap": "New camera sensor drivers and improvements to existing camera pipeline processing in the Linux kernel, impacting Android's camera HAL.",
+      "proposal_id": "camera-hal-kernel-linux-media-og0va1b",
+      "topic_gap": "Add OmniVision OG0VA1B camera sensor driver to the Linux kernel.",
       "source_family": "lore-linux-media-list",
       "allowed_domains": [],
       "search_keywords": [
-        "linux kernel camera driver",
-        "V4L2",
-        "ISP",
-        "media controller",
-        "camera sensor",
-        "Qualcomm CAMSS",
-        "Intel IPU"
+        "OG0VA1B driver",
+        "linux-media",
+        "camera sensor"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260915-og0va1b-v7-0-3a4b6d7360ec@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/",
-        "https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca/",
-        "https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/",
-        "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
-        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
-        "https://lore.kernel.org/linux-media/20260904065653.6069-1-pierre@pinon1.fr/",
-        "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/",
-        "https://lore.kernel.org/linux-media/4ccc1be17658cdf9ff1267d66db6c2b5a65d6e18.1788360629.git.mauriziocasciano7@gmail.com/"
+        "https://lore.kernel.org/linux-media/20260915-og0va1b-v7-0-3a4b6d7360ec@oss.qualcomm.com/"
       ],
       "expected_evidence": [
-        "New camera sensor drivers (e.g., OmniVision, Samsung)",
-        "Camera pipeline processing enhancements (e.g., CAMSS ISP OPE)",
-        "Support for cameras behind CSI-2 bridges",
-        "Quirks for specific devices (e.g., upside-down sensors)"
+        "OmniVision OG0VA1B sensor driver",
+        "Linux kernel media subsystem"
       ],
-      "risk_notes": [
-        "These are kernel patches, not official Android releases. Relevance to Android HAL needs to be inferred.",
-        "Some patches are part of larger series, requiring context from other patches."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-intel-ipu-kernel-20260921",
-      "topic_gap": "Intel IPU camera driver updates in the Linux kernel, including multi-stream and metadata support, relevant for Android devices using Intel hardware.",
+      "proposal_id": "camera-hal-kernel-linux-media-s5kjn5",
+      "topic_gap": "Add Samsung S5KJN5 image sensor driver to the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "S5KJN5 driver",
+        "linux-media",
+        "camera sensor"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Samsung S5KJN5 sensor driver",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-kernel-linux-media-vc-mipi",
+      "topic_gap": "Add Vision Components MIPI Camera Module support to the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "VC MIPI camera",
+        "linux-media",
+        "camera module"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/"
+      ],
+      "expected_evidence": [
+        "Vision Components MIPI camera module support",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-kernel-linux-media-camss-ope",
+      "topic_gap": "Add CAMSS Offline Processing Engine support to the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CAMSS OPE",
+        "linux-media",
+        "ISP"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "CAMSS Offline Processing Engine",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-kernel-linux-media-st-vd55g1",
+      "topic_gap": "Support STMicroelectronics VD55G0 global-shutter image sensor in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "VD55G0 driver",
+        "linux-media",
+        "global shutter"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca/"
+      ],
+      "expected_evidence": [
+        "ST VD55G0 sensor driver",
+        "Global-shutter support",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-kernel-linux-media-qcom-camss-csi2",
+      "topic_gap": "Fixes for several cameras behind a CSI-2 bridge in the Qualcomm CAMSS driver.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CAMSS CSI-2",
+        "linux-media",
+        "camera fixes"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/"
+      ],
+      "expected_evidence": [
+        "Qualcomm CAMSS driver fixes",
+        "CSI-2 bridge camera support",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-kernel-linux-media-qcom-camss-csi2-support",
+      "topic_gap": "Support for several cameras behind a CSI-2 bridge in the Qualcomm CAMSS driver.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CAMSS CSI-2 support",
+        "linux-media",
+        "camera"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/"
+      ],
+      "expected_evidence": [
+        "Qualcomm CAMSS driver support",
+        "CSI-2 bridge camera support",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-kernel-intel-ipu-surface-pro-quirk",
+      "topic_gap": "Add upside-down quirk for Surface Pro 11 in the Intel IPU bridge driver.",
       "source_family": "lore-linux-media-ipu",
       "allowed_domains": [],
       "search_keywords": [
-        "Intel IPU",
-        "linux kernel camera",
-        "multi-stream",
-        "camera metadata",
-        "V4L2"
+        "ipu-bridge upside-down",
+        "Surface Pro 11 camera",
+        "intel ipu"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
+      ],
+      "expected_evidence": [
+        "Intel IPU bridge driver",
+        "Upside-down camera quirk",
+        "Surface Pro 11 support"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-kernel-intel-ipu-multi-stream-prep",
+      "topic_gap": "Preparation for IPU6 multi-stream and metadata support in the Linux kernel.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
+      "search_keywords": [
+        "IPU6 multi-stream",
+        "IPU6 metadata",
+        "intel ipu"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
       ],
       "expected_evidence": [
-        "Intel IPU6 multi-stream support",
-        "Metadata handling in camera pipeline",
-        "Driver preparation for advanced camera features"
+        "IPU6 multi-stream support",
+        "IPU6 metadata support",
+        "Linux kernel media subsystem"
       ],
-      "risk_notes": [
-        "These are kernel patches, not official Android releases. Relevance to Android HAL needs to be inferred."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-androidx-camera-release-20260921",
-      "topic_gap": "Updates to the AndroidX Camera library, potentially including bug fixes or new features impacting camera development.",
+      "proposal_id": "camera-hal-kernel-intel-ipu-dell-quirk",
+      "topic_gap": "Add upside-down sensor DMI quirk for Dell Pro 14 Premium PA14260 in the Intel IPU bridge driver.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ipu-bridge DMI quirk",
+        "Dell Pro 14 camera",
+        "intel ipu"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260904065653.6069-1-pierre@pinon1.fr/"
+      ],
+      "expected_evidence": [
+        "Intel IPU bridge driver",
+        "Upside-down sensor DMI quirk",
+        "Dell Pro 14 Premium PA14260 support"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-kernel-intel-ipu6-ov5693-enable",
+      "topic_gap": "Enable the OV5693 front camera on IPU6 Surface devices in the Linux kernel.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
+      "search_keywords": [
+        "IPU6 OV5693",
+        "Surface device camera",
+        "intel ipu"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260902142322.73523-1-fernandorimoli11@gmail.com/"
+      ],
+      "expected_evidence": [
+        "OV5693 front camera support",
+        "IPU6 Surface devices",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-kernel-intel-ipu6-yoga-book",
+      "topic_gap": "Add Yoga Book camera sensors support in the Intel IPU6 driver.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
+      "search_keywords": [
+        "IPU6 Yoga Book",
+        "intel ipu",
+        "camera sensor"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/4ccc1be17658cdf9ff1267d66db6c2b5a65d6e18.1788360629.git.mauriziocasciano7@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Yoga Book camera sensor support",
+        "Intel IPU6 driver",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax-release-1.6.2",
+      "topic_gap": "CameraX 1.6.2 release notes with potential camera output improvements.",
       "source_family": "camerax-release-notes",
       "allowed_domains": [],
       "search_keywords": [
-        "CameraX release notes",
-        "androidx.camera",
-        "camera library update",
-        "bug fixes"
+        "CameraX 1.6.2",
+        "camera release notes",
+        "camera output"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
       ],
       "expected_evidence": [
-        "Bug fixes in CameraX library",
-        "New features or API changes",
-        "Performance improvements"
+        "CameraX 1.6.2 release notes",
+        "Camera output related changes"
       ],
-      "risk_notes": [
-        "These are release notes for CameraX, not the core Camera HAL. Relevance to HAL-level changes is indirect.",
-        "Beta and alpha versions indicate ongoing development and potential instability."
-      ]
+      "risk_notes": []
     },
     {
-      "proposal_id": "android-developers-blog-memory-limits-20260921",
-      "topic_gap": "Guidance on managing memory limits in Android apps, which could impact camera-intensive applications and their resource handling.",
-      "source_family": "android-developers-blog",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Android memory limits",
-        "app performance",
-        "resource management",
-        "camera app optimization"
-      ],
-      "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html"
-      ],
-      "expected_evidence": [
-        "Best practices for memory management",
-        "Impact of memory limits on app performance",
-        "Strategies for optimizing resource usage"
-      ],
-      "risk_notes": [
-        "This article is not directly about camera HAL but provides general app development guidance that could be relevant for camera apps.",
-        "The article is dated August, not September, but is close to the newsletter date."
-      ]
-    },
-    {
-      "proposal_id": "android-developers-blog-emulator-adaptive-20260921",
-      "topic_gap": "Emulator control for adaptive app development, which may include features relevant to testing camera app behavior across different device configurations.",
-      "source_family": "android-developers-blog",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Android emulator",
-        "adaptive app development",
-        "camera app testing",
-        "device configuration"
-      ],
-      "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html"
-      ],
-      "expected_evidence": [
-        "New emulator features for testing",
-        "Adaptive app development strategies",
-        "Impact on camera app testing"
-      ],
-      "risk_notes": [
-        "This article focuses on emulator capabilities and adaptive development, with indirect relevance to camera HAL.",
-        "The article is dated August, not September, but is close to the newsletter date."
-      ]
-    },
-    {
-      "proposal_id": "android-developers-blog-gemma-android-studio-20260921",
-      "topic_gap": "Integration of Gemma 4 in Android Studio, potentially relevant for AI-powered camera features or image processing.",
+      "proposal_id": "android-developers-blog-gemma-4",
+      "topic_gap": "Leveraging Android skills and Gemma 4 in Android Studio Quail 4.",
       "source_family": "android-developers-blog",
       "allowed_domains": [],
       "search_keywords": [
         "Gemma 4",
         "Android Studio",
-        "AI development",
-        "camera AI features"
+        "AI development"
       ],
       "candidate_urls": [
         "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html"
       ],
       "expected_evidence": [
-        "New AI models in Android Studio",
-        "Integration of Gemma 4",
-        "Potential use cases in camera applications"
+        "Gemma 4 integration",
+        "Android Studio features",
+        "Developer productivity"
       ],
-      "risk_notes": [
-        "This article is about AI integration in Android Studio, not directly camera HAL, but could be relevant for future AI-driven camera features."
-      ]
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-emulator-adaptive",
+      "topic_gap": "Emulator control for adaptive app development.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "emulator adaptive",
+        "app development tools",
+        "Android emulator"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html"
+      ],
+      "expected_evidence": [
+        "Emulator control features",
+        "Adaptive app development",
+        "Testing tools"
+      ],
+      "risk_notes": []
     }
   ]
 }

@@ -112,6 +112,24 @@
       }
     },
     {
+      "candidate_id": "6ac026046fb3ce0d",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "title": "CameraX Release Notes - CameraX 1.6.2",
+      "source_quality_score": 0.78,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.72,
+        "android_hal_relevance": 0.72,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "43e0e16b6f415ed8",
       "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
       "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
@@ -158,42 +176,6 @@
         "camera_relevance": 0.6,
         "android_hal_relevance": 0.6,
         "technical_depth": 0.55,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "c7dc6fb35d697d90",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "title": "1.6.2",
-      "source_quality_score": 0.552,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.6,
-        "android_hal_relevance": 0.6,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "f2f7a4ce6187ee89",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "title": "1.3.0-beta02",
-      "source_quality_score": 0.552,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.6,
-        "android_hal_relevance": 0.6,
-        "technical_depth": 0.25,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -673,51 +655,69 @@
       "candidate_id": "1db5b77cd37fa30d",
       "url": "https://claude.com/blog/projects-redesigned",
       "title": "Projects redesigned: from folder to conversation",
-      "source_quality_score": 0.651,
-      "source_quality_bucket": "blocked_candidate",
+      "source_quality_score": 0.741,
+      "source_quality_bucket": "review_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0.66,
         "android_hal_relevance": 0.66,
         "technical_depth": 0.25,
         "recency_score": 1,
-        "evidence_strength": 0,
+        "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
     },
     {
-      "candidate_id": "f34d10ced12cae96",
-      "url": "https://claude.com/blog/building-an-ai-native-revenue-organization",
-      "title": "Building an AI-native revenue organization",
-      "source_quality_score": 0.694,
+      "candidate_id": "4d5a1fe87bed5399",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.273",
+      "title": "Claude Code v2.1.273",
+      "source_quality_score": 0.635,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.54,
-        "android_hal_relevance": 0.54,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "5b5a02574e0fae66",
-      "url": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
-      "title": "Agentic coding is straining CI. Here’s how we scaled test impact analysis at Anthropic",
-      "source_quality_score": 0.604,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.54,
-        "android_hal_relevance": 0.54,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
         "technical_depth": 0.25,
         "recency_score": 1,
         "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "aca1c18b8fa30e28",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "title": "Claude Code v2.1.271",
+      "source_quality_score": 0.702,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.56,
+        "android_hal_relevance": 0.56,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "809d067ec95acd11",
+      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+      "title": "Codex rust-v0.155.1",
+      "source_quality_score": 0.698,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.55,
+        "android_hal_relevance": 0.55,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -726,7 +726,7 @@
     {
       "candidate_id": "gemini-eff34e4bb13fca21",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
-      "title": "Camera HAL AIDL changes and camera server updates for improved camera functionality and stability.",
+      "title": "Camera HAL: Fix camera lazy AIDL provider not started and present cameras removed on unplug.",
       "source_quality_score": 0.583,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -886,6 +886,24 @@
       }
     },
     {
+      "candidate_id": "gemini-943c1e2383849e06",
+      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
+      "title": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-e8857f137516ce2c",
       "url": "https://lore.kernel.org/linux-media/20260904065653.6069-1-pierre@pinon1.fr/",
       "title": "[PATCH] media: ipu-bridge: Add upside-down quirk for Dell Pro 14 Premium PA14260 - Pierre Pinon",
@@ -940,27 +958,27 @@
       }
     },
     {
-      "candidate_id": "gemini-943c1e2383849e06",
-      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
-      "title": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
+      "candidate_id": "gemini-a8cd06df28457612",
+      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "source_quality_score": 0.492,
+      "source_quality_bucket": "blocked_candidate",
       "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
     },
     {
-      "candidate_id": "gemini-1d9ca4c588aca6e3",
-      "url": "https://android-developers.googleblog.com/2026/08/app-broader-memory-limits.html",
-      "title": "Android Developers Blog: Preparing your app for broader memory limits",
+      "candidate_id": "gemini-6f8916deba211090",
+      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "title": "Android Developers Blog: Emulator control for adaptive app development",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -1120,6 +1138,24 @@
       }
     },
     {
+      "candidate_id": "gemini-linked-b555928a5cbd43ab",
+      "url": "https://lore.kernel.org/linux-media/20260831181858.325109-1-fernandorimoli11@gmail.com",
+      "title": "https://lore.kernel.org/linux-media/20260831181858.325109-1-fernandorimoli11@gmail.com/",
+      "source_quality_score": 0.42,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-linked-cac1bd43468be468",
       "url": "https://lore.kernel.org/linux-media/20260903202820.8401-1-nicfio@gmail.com",
       "title": "https://lore.kernel.org/linux-media/20260903202820.8401-1-nicfio@gmail.com/",
@@ -1139,9 +1175,9 @@
     }
   ],
   "counts": {
-    "blocked_candidate": 27,
+    "blocked_candidate": 24,
     "strong_candidate": 14,
-    "review_candidate": 13,
-    "weak_candidate": 9
+    "review_candidate": 17,
+    "weak_candidate": 10
   }
 }
