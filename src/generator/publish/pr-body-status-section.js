@@ -64,8 +64,9 @@ function weeklyOutputStatusLine(status) {
 const FAILED_WEEKLY_PAGE_STRUCTURE_STATUSES = ['errors', 'check_failed'];
 
 // weekly_page_structure_status는 독자가 홈과 아카이브에서 실제로 여는 주간호 페이지의 구조
-// 검사 결과다(#905). 관측용 값이라 public_newsletter_ready 계산에는 안 들어간다. 그래서 이
-// 줄이 없으면 리뷰어가 generation-status.json을 직접 열어야만 결과를 볼 수 있다.
+// 검사 결과다(#905). #1142부터는 게이트다 — errors·check_failed면 resolver가
+// public_newsletter_ready를 false로 내린다. 이 줄은 그 판정의 근거를 리뷰어가
+// generation-status.json을 직접 열지 않고도 볼 수 있게 노출한다.
 //
 // 상태 문자열만으로는 판독이 안 되므로 weekly_page_structure_key를 항상 함께 싣는다. 합쳐진
 // not_written을 가르는 것은 키가 비어 있는지 여부다. 빈 키의 원인은 이 자리에서 알 수 없으니
