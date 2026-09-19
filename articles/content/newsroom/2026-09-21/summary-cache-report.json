@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-21",
+  "generated_at": "2026-09-19T11:06:09.724Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 7,
+    "miss_count": 5,
+    "by_url_hit_count": 7,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "url-hit",
+      "count": 7
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 5
+    }
+  ],
+  "entries": [
+    {
+      "title": "Projects redesigned: from folder to conversation",
+      "url": "https://claude.com/blog/projects-redesigned",
+      "source": "Claude Blog",
+      "published_date": "2026-09-17",
+      "cache_key": {
+        "normalized_url": "https://claude.com/blog/projects-redesigned",
+        "url_hash": "9f00da9b39759b4690b445f9d16f1c261aa4450a900916009b82734a27bc8a3a",
+        "published_date": "2026-09-17",
+        "content_hash": "c84536027ee9f82446aea43c9a620d1e94f35be18fc231717a2635e53d7ee81b"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Claude Code v2.1.271",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "source": "Claude Code Changelog",
+      "published_date": "2026-09-14T22:12:54Z",
+      "cache_key": {
+        "normalized_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+        "url_hash": "ba3341f9799b1e8e27294e996daf4b97a09cdf3b6d8c7bc967a7ee1764115a34",
+        "published_date": "2026-09-14T22:12:54Z",
+        "content_hash": "703cde40c0aad60f07f82c86b74587fd2c02a4ce5ee09e75375fe494e2f36b0c"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ba3341f9799b1e8e27294e996daf4b97a09cdf3b6d8c7bc967a7ee1764115a34.json"
+    },
+    {
+      "title": "Codex rust-v0.155.1",
+      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+      "source": "Codex Releases",
+      "published_date": "2026-09-18T20:03:04Z",
+      "cache_key": {
+        "normalized_url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+        "url_hash": "028ae8f2158c4c5c7625bc5a7a36be8fbdd597390a66419c1db06ade36eda2a3",
+        "published_date": "2026-09-18T20:03:04Z",
+        "content_hash": "e243ad4210325c1fa0988f5b11c2bffdc8f43ef4973ed372d53a32281f182473"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/028ae8f2158c4c5c7625bc5a7a36be8fbdd597390a66419c1db06ade36eda2a3.json"
+    },
+    {
+      "title": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation",
+      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "published_date": "2026-09-17T11:39:33Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com",
+        "url_hash": "08849cae9f9a72e4e801bab702f8a4439f7479cef1c4e869cdda1d8ecddf3ff8",
+        "published_date": "2026-09-17T11:39:33Z",
+        "content_hash": "003cf66b8d62a5b547c94984c3553af1eaa92c97cbd6c9fdac57d238661aeb5f"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11",
+      "url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "published_date": "2026-09-17T14:45:51Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me",
+        "url_hash": "0e4087ac6a83e9cb54d538966595b16a257b083484a3dddfe0e2bffcd14eb687",
+        "published_date": "2026-09-17T14:45:51Z",
+        "content_hash": "bac56b9e8692ba24475c6e801f2543a223f28b60049cc3055bb9e6be99f582c4"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/3] Add Vision Components MIPI Camera Module support",
+      "url": "https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-15T20:20:55Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev",
+        "url_hash": "ee8ef121bde226b9c6c39d3a168d566a5889d775b12cdfb903530ec2f1abbe39",
+        "published_date": "2026-09-15T20:20:55Z",
+        "content_hash": "e59a428e6c83e36f2e51b9de514bc1af20d8d9dc324b03835158743865a34831"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/8] media: qcom: camss: support several cameras behind a CSI-2 bridge",
+      "url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-14T13:34:29Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com",
+        "url_hash": "28048c90bf65a59f9407f8173d2416dd38b98a67e7f6e7a9c40ca446c594ce88",
+        "published_date": "2026-09-14T13:34:29Z",
+        "content_hash": "6417905995e77c72e374db259b7e4d693135184181475eca3f29ba35f3ae69f2"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 0/5] media: qcom: camss: fixes for several cameras behind a CSI-2 bridge",
+      "url": "https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-15T12:16:09Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com",
+        "url_hash": "3e999fb6f990b90ed2440cc2883894405454e6994d97a5175228db5508dc0eb7",
+        "published_date": "2026-09-15T12:16:09Z",
+        "content_hash": "a14ba91668194d00d2ac67f56b2b8776adb0be9f7ecabf0c83949bbf67ec5d75"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/3e999fb6f990b90ed2440cc2883894405454e6994d97a5175228db5508dc0eb7.json"
+    },
+    {
+      "title": "[PATCH 11/11] media: i2c: st-vd55g1: Support VD55G0 global-shutter image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-18T22:22:13Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca",
+        "url_hash": "2e5973bcd44d52ce60ed2347ff0d8c0f434c9eca838669622bce2ed0af65da85",
+        "published_date": "2026-09-18T22:22:13Z",
+        "content_hash": "7867667a10809bee40d576d16166340bc4aba3fbe53fc847c7c493fa81794338"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/2e5973bcd44d52ce60ed2347ff0d8c0f434c9eca838669622bce2ed0af65da85.json"
+    },
+    {
+      "title": "[PATCH v4 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-14T11:10:46Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
+        "url_hash": "7b8c8abd2d2d6cc6dbb4aa4720a8cd44f7a03cdea80b3b4dcf91deb66c1835f2",
+        "published_date": "2026-09-14T11:10:46Z",
+        "content_hash": "2a495a1501e24ce00457904ed2adafa33bae259edd490ef661d06b82d5e8613a"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/7b8c8abd2d2d6cc6dbb4aa4720a8cd44f7a03cdea80b3b4dcf91deb66c1835f2.json"
+    },
+    {
+      "title": "[PATCH v7 0/9] media: qcom: camss: CAMSS Offline Processing Engine support",
+      "url": "https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-15T08:11:09Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
+        "url_hash": "54a6dcb1c5efcb27711222141e72352b7b900f89cea6f452d4c8d834ce5d45da",
+        "published_date": "2026-09-15T08:11:09Z",
+        "content_hash": "5bb43fd45718d3e51231dd0802cc19969d4a2a8582ca045665cd468be6da81b1"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/54a6dcb1c5efcb27711222141e72352b7b900f89cea6f452d4c8d834ce5d45da.json"
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.6.2",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "source": "Android Developers Latest Updates",
+      "published_date": "August 26, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+        "url_hash": "897690273f2e33774bc16bb3f4e8541ca488b7218adfdfdfefeb5ef23d8fd28a",
+        "published_date": "August 26, 2026",
+        "content_hash": "f75abac8ae48d4b1cec6a9f59afc9baf552678a878c355decce428f318d28006"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/897690273f2e33774bc16bb3f4e8541ca488b7218adfdfdfefeb5ef23d8fd28a.json"
+    }
+  ]
+}

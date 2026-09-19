@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-09-21",
+    "title": "Camera HAL / SW Newsletter - 2026-09-21",
+    "summary": "이번 주 뉴스레터에서는 Linux 커널 미디어 서브시스템의 Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치와 Surface Pro 11의 후면 센서 방향 오류를 해결하기 위한 퀵 패치를 살펴봅니다. 또한, Claude Code 및 Codex 등 AI 기반 개발 도구의 최신 업데이트가 카메라 스택 개발 워크플로우에 미치는 영향을 분석합니다.",
+    "html": "newsletters/2026-09-21/index.html",
+    "md": "newsletters/2026-09-21/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ]
+  },
+  {
     "date": "2026-09-14",
     "title": "AOSP Camera & Driver Platform 기술 뉴스레터 (2026-09-14)",
     "summary": "이번 주에는 Linux 미디어 서브시스템 및 libcamera 프로젝트에서 카메라 드라이버와 ISP 이미지 파이프라인의 핵심적인 수정 및 기능 확장 제안이 대거 공개되었습니다. Rockchip RKISP1 ISP의 Bayer demosaicing 바이패스 로직 오류 수정, 새로운 os02g10 이미지 센서 드라이버 추가, 그리고 libcamera에서의 IMX355 테스트 패턴 매핑 수정 및 LensShadingCorrection/ToneCurve 메타데이터 제어 기능 확장이 포함됩니다. 이러한 변화는 하위 카메라 스택의 안정성을 높이고 Android Camera HAL 계층에서의 이미지 품질 제어 및 검증 효율성을 크게 향상시킬 것입니다.",
