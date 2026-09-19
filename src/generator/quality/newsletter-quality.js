@@ -344,7 +344,7 @@ function scopeFromStructuredFields(value, origin) {
     ),
     counts_as_driver_topic: bool(value.counts_as_driver_topic, bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE),
     counts_as_soc_topic: bool(value.counts_as_soc_topic, false),
-    counts_as_fallback_topic: bool(value.counts_as_fallback_topic, bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK),
+    counts_as_fallback_topic: articlePolicy.supportingMainBuckets.includes(bucket) && bool(value.counts_as_fallback_topic, false),
     guardrail_impact_class: inferGuardrailImpactClass(value),
     evidence_origin: text(value.evidence_origin) || origin,
     missing_score_fields: missingScoreFields,
@@ -456,6 +456,8 @@ function sectionCountDetail(section, scope, index) {
     exclusionReason = 'Scope is diagnostic-only because no publishable source candidate binding and relevance metadata were available.';
   } else if (countsAsPrimaryStack) {
     countReason = `${bucket} counts toward primary_camera_stack_count.`;
+  } else if (articlePolicy.independentMainBuckets.includes(tierBucket)) {
+    countReason = `${bucket} is an independent main article, not a camera or supporting topic.`;
   } else if (countsAsSupportingMain) {
     countReason = `${bucket} counts toward supporting_main_article_count, not primary_camera_stack_count.`;
     exclusionReason = 'Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic.';
@@ -474,7 +476,7 @@ function sectionCountDetail(section, scope, index) {
     counts_as_primary_camera_topic: countsAsPrimaryStack,
     counts_as_driver_topic: bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
     counts_as_soc_topic: false,
-    counts_as_fallback_topic: bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK,
+    counts_as_fallback_topic: articlePolicy.supportingMainBuckets.includes(bucket),
     counts_as_supporting_main_article: countsAsSupportingMain,
     counts_as_forbidden_main_article: countsAsForbiddenMain,
     guardrail_impact_class: text(scope?.guardrail_impact_class) ||
@@ -775,10 +777,9 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
     .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
   const forbiddenMainArticleCount = articlePolicy.forbiddenMainBuckets
     .reduce((sum, bucket) => sum + number(scopeBucketCounts[bucket]), 0);
-  // 옛 soc_platform_signal + cpp_ai 자리다. soc 는 android_supporting 으로 합쳐졌고
-  // 멀티미디어도 같은 보조 등급이므로 둘을 구분하지 않는다.
-  const fallbackRelevanceCount = androidSupportingCount + cppAiToolingFallbackCount;
-  const expandedScopeCoverage = primaryCameraStackCount + supportingMainArticleCount;
+  // Android 보조 기사만 fallback 구성에 포함한다. GCC·AI는 독립 메인 기사다.
+  const fallbackRelevanceCount = androidSupportingCount;
+  const expandedScopeCoverage = primaryCameraStackCount + supportingMainArticleCount + cppAiToolingFallbackCount;
   const publishableScopeCount = sectionScopes.filter(scope => scope?.publishable_scope === true).length;
   const compositionMode = publishableScopeCount === 0 && sections.length > 0
     ? 'NEEDS_FIX'

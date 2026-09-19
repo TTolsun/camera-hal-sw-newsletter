@@ -60,10 +60,10 @@ test('editorial decision classifier maps selected and reserve supporting candida
     candidate({
       bucket: 'cpp_ai_tooling_fallback',
       status: 'final_selected',
-      selectionReason: 'native C++ tooling fallback for HAL build workflow'
+      selectionReason: 'native C++ tooling for HAL build workflow'
     }),
-    'Supporting',
-    '보조(Supporting)'
+    'Main',
+    '메인(Main)'
   );
 
   assertDecision(

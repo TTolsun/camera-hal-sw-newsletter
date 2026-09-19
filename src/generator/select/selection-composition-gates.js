@@ -93,7 +93,7 @@ function reviewCompositionGatePasses(summary) {
     selectedCount <= articlePolicy.mainArticleCount.max &&
     primaryCount >= articlePolicy.primaryCameraStack.minRequired &&
     forbiddenCount === 0 &&
-    primaryCount + supportingCount === selectedCount;
+    primaryCount + supportingCount + number(summary.cpp_ai_tooling_fallback_count) === selectedCount;
 }
 
 function publishReadyGateReasonSummary(summary, policy = getPublishReadyCompositionPolicy()) {
@@ -128,7 +128,7 @@ function publishReadyGateReasonSummary(summary, policy = getPublishReadyComposit
   if (forbiddenCount > 0) {
     addReason('publish_ready_forbidden_main_bucket', forbiddenCount, 0);
   }
-  const accountedCount = primaryCount + supportingCount;
+  const accountedCount = primaryCount + supportingCount + number(summary.cpp_ai_tooling_fallback_count);
   if (accountedCount !== selectedCount && forbiddenCount === 0) {
     addReason('publish_ready_forbidden_main_bucket', selectedCount - accountedCount, 0);
   }
@@ -235,9 +235,9 @@ function compositionSummary(candidates) {
   // 들어갔지만 fallback_topic 에는 soc 만 들어갔다 — 근거별 카운트가 살아 있으므로
   // 합쳐진 버킷 뒤에서도 그 구분을 유지할 수 있다.
   const non_fallback_reviewable_article_count =
-    primary_camera_stack_topic_count + bucket_counts[ANDROID_SUPPORTING];
+    primary_camera_stack_topic_count + bucket_counts[ANDROID_SUPPORTING] + bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK];
   const fallback_topic_count =
-    evidence_counts.soc + bucket_counts[BUCKETS.CPP_AI_TOOLING_FALLBACK];
+    evidence_counts.soc;
   const selected_article_count = ensureArray(candidates).length;
   return {
     selected_article_count,

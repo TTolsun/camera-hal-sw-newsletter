@@ -1,3 +1,4 @@
+const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const EDITORIAL_DECISION_HEADINGS = {
   summary: '편집자 기사 판단 요약',
   verdict: '편집자 결론',
@@ -49,8 +50,7 @@ const CAMERA_BUCKETS = new Set([
 
 const SUPPORTING_BUCKETS = new Set([
   'android_multimedia_camera_output',
-  'soc_platform_signal',
-  'cpp_ai_tooling_fallback'
+  'soc_platform_signal'
 ]);
 
 function ensureArray(value) {
@@ -150,7 +150,7 @@ function classifyEditorialDecision(candidate = {}) {
   if (!hasArticleUrl || hasGenericOrReferenceExclusion({ ...candidate, bucket })) {
     return { decision: 'Exclude', label: '제외(Exclude)', pipelineStatus: status, pipelineLabel: pipelineStatusLabel(status) };
   }
-  if (['final_selected', 'primary_selected'].includes(status) && CAMERA_BUCKETS.has(bucket)) {
+  if (['final_selected', 'primary_selected'].includes(status) && (CAMERA_BUCKETS.has(bucket) || articlePolicy.independentMainBuckets.includes(bucket))) {
     return { decision: 'Main', label: '메인(Main)', pipelineStatus: status, pipelineLabel: pipelineStatusLabel(status) };
   }
   if (['final_selected', 'primary_selected'].includes(status) && hasSocCameraPipelineEvidence({ ...candidate, bucket })) {
@@ -163,7 +163,7 @@ function classifyEditorialDecision(candidate = {}) {
     return { decision: 'Watch', label: '관찰(Watch)', pipelineStatus: status, pipelineLabel: pipelineStatusLabel(status) };
   }
   if (status === 'reserve') {
-    return SUPPORTING_BUCKETS.has(bucket)
+    return (SUPPORTING_BUCKETS.has(bucket) || articlePolicy.independentMainBuckets.includes(bucket))
       ? { decision: 'Short', label: '짧은 소식(Short)', pipelineStatus: status, pipelineLabel: pipelineStatusLabel(status) }
       : { decision: 'Watch', label: '관찰(Watch)', pipelineStatus: status, pipelineLabel: pipelineStatusLabel(status) };
   }
@@ -177,6 +177,9 @@ function buildDecisionReasonKo(candidate = {}, classification = classifyEditoria
   const bucket = candidate.bucket || candidate.relevance_bucket || 'unknown';
   if (classification.decision === 'Main' && bucket === 'soc_platform_signal') {
     return 'SoC/platform 신호가 camera/image pipeline 영향 근거와 함께 제시되어 메인 검토 가치가 있습니다.';
+  }
+  if (classification.decision === 'Main' && bucket === 'cpp_ai_tooling_fallback') {
+    return 'GCC·C++ 및 AI 개발 도구를 다루는 독립 메인 기사입니다.';
   }
   if (classification.decision === 'Main') {
     return 'Camera, driver, image pipeline 직접성이 있는 후보입니다.';

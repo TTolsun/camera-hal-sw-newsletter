@@ -1,4 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
 const {
   normalizeShortlistReport
 } = require('./selection-diagnostics');
@@ -93,7 +94,6 @@ const {
   excludeParentRoundupContainers,
   candidateGroupKey,
   groupCoverageSummary,
-  isNativeToolingWorkflow,
   seriesKey,
   seriesPatchNumber
 } = require('../../shared/common/article-groups');
@@ -388,7 +388,7 @@ function deterministicCandidateSort(a, b) {
       normalizeUrl(candidateUrl(a)).localeCompare(normalizeUrl(candidateUrl(b))) ||
       normalizeTitle(a.title).localeCompare(normalizeTitle(b.title));
   }
-  return number(a.editorial_priority, 6) - number(b.editorial_priority, 6) ||
+  return compareEditorialPriority(a, b) ||
     cameraReleaseVersionRank(a).kind - cameraReleaseVersionRank(b).kind ||
     cameraReleaseVersionRank(b).weight - cameraReleaseVersionRank(a).weight ||
     b.deterministic_score - a.deterministic_score ||
@@ -631,7 +631,6 @@ function evidenceUncheckedMainBlocked(candidates) {
 }
 
 function selectFinalArticlesFromPool(shortlist, options = {}) {
-  const minArticles = options.minArticles ?? MIN_FINAL_ARTICLES;
   const maxArticles = options.maxArticles ?? MAX_FINAL_ARTICLES;
   const candidates = ensureArray(shortlist).map(candidate =>
     candidate.score_breakdown ? candidate : decorateCandidate(candidate, options.date || '', {
@@ -640,8 +639,7 @@ function selectFinalArticlesFromPool(shortlist, options = {}) {
     })
   );
   const selected = [];
-  // AI 개발 도구 후보가 여러 건이어도 최초 결정론 선정부터 발행 정책의 보조 기사 cap을
-  // 지킨다. 이후 coverage 재조정은 publish_ready를 false에서 true로 복구할 수 없다.
+  // 메인 AI/GCC 기사와 별개로 Android 보조 기사의 기존 상한은 유지한다.
   const pushWithinSupportingCap = (candidate, slot) => {
     if (compositionSummary([...selected, candidate]).supporting_main_article_count
       > publishReadyCompositionPolicy.supportingMainMaxAllowed) return;
@@ -649,41 +647,15 @@ function selectFinalArticlesFromPool(shortlist, options = {}) {
   };
   // 소스 정책 차단을 여기서 거르므로 선정이 차단 후보를 main에 넣어 생기던 selected > rendered는
   // 사라진다. editor hard block에는 capsule 시점에만 계산되는 다른 사유가 남아 있다.
-  const mainEligible = candidates.filter(isMainSlotEligible);
-  const nativeToolingPool = mainEligible.filter(candidate =>
-    isNativeToolingWorkflow(candidate) ||
-    candidate.article_group_key === ANDROID_NATIVE_TOOLING_GROUP_KEY ||
-    text(candidate.tooling_workflow_type) === NATIVE_TOOLING_WORKFLOW_TYPE
-  );
-  const nativeToolingUrls = new Set(nativeToolingPool.map(candidate => candidate.normalized_url).filter(Boolean));
-  const strongCameraPool = mainEligible.filter(candidate => candidate.camera_platform_candidate);
-  const optionalCameraPool = mainEligible.filter(candidate =>
-    candidate.optional_ai_cpp_candidate && candidate.camera_platform_candidate
-  );
-  const adjacentPool = mainEligible.filter(candidate =>
-    !strongCameraPool.includes(candidate) &&
-    !nativeToolingUrls.has(candidate.normalized_url)
-  );
-
-  for (const candidate of strongCameraPool) {
+  const mainEligible = candidates.filter(isMainSlotEligible).sort(deterministicCandidateSort);
+  for (const candidate of mainEligible) {
     if (selected.length >= maxArticles) break;
-    const slot = candidate.optional_ai_cpp_candidate ? 'camera-platform-optional-ai-cpp' : 'camera-platform';
+    // Android native tooling roundup의 관련 항목은 한 메인 기사로 묶는다.
+    if (candidateGroupKey(candidate) === ANDROID_NATIVE_TOOLING_GROUP_KEY &&
+      selected.some(item => candidateGroupKey(item) === ANDROID_NATIVE_TOOLING_GROUP_KEY)) continue;
+    const slot = candidate.cpp_fallback_candidate ? 'native-tooling-main' :
+      candidate.camera_platform_candidate ? 'camera-platform' : 'platform-adjacent';
     pushWithinSupportingCap(candidate, slot);
-  }
-  if (
-    selected.length < maxArticles &&
-    nativeToolingPool.length > 0 &&
-    compositionSummary(selected).supporting_main_article_count < publishReadyCompositionPolicy.supportingMainMaxAllowed
-  ) {
-    pushWithinSupportingCap(nativeToolingPool[0], 'android-native-tooling-supporting');
-  }
-  for (const candidate of optionalCameraPool) {
-    if (selected.length >= Math.min(maxArticles, minArticles)) break;
-    pushWithinSupportingCap(candidate, 'camera-platform-optional-ai-cpp');
-  }
-  for (const candidate of adjacentPool) {
-    if (selected.length >= minArticles) break;
-    pushWithinSupportingCap(candidate, candidate.optional_ai_cpp_candidate ? 'optional-ai-cpp' : 'platform-adjacent');
   }
 
   return selected.slice(0, maxArticles);
@@ -1562,11 +1534,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
         enforcement: 'main_selection_enforced'
       },
       editorial_scope: 'AOSP Camera + Camera Driver + SoC Platform, with configured supporting main buckets allowed by Newsletter Policy.',
-      priority_order: [
-        ...articlePolicy.primaryCameraStack.buckets,
-        ...articlePolicy.supportingMainBuckets,
-        ...articlePolicy.forbiddenMainBuckets
-      ],
+      priority_order: articlePolicy.editorialPriority,
       supporting_main: `Supporting main buckets are allowed when the required Primary Camera Stack count is satisfied: ${articlePolicy.supportingMainBuckets.join(', ')}.`,
       forbidden_main: `Forbidden buckets are not promoted to main article selection: ${articlePolicy.forbiddenMainBuckets.join(', ')}.`
     },

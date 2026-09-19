@@ -1,4 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
 const fs = require('fs');
 const path = require('path');
 
@@ -17,7 +18,7 @@ const HEADLINE_STATE_REL_PATH = path.join('articles', 'data', 'homepage-headline
 const SCHEMA_VERSION = 1;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const DECISION_REASONS = Object.freeze({
-  // 단순 규칙: 소스 날짜가 가장 최신인 Camera HAL 연관 기사를 헤드라인으로.
+  // 정책 주제 우선순위를 적용하고 같은 주제는 소스 날짜로 비교한다.
   LATEST_CAMERA_HAL_ARTICLE: 'latest_camera_hal_article',
   RETAINED_CURRENT_NEWER: 'retained_current_newer',
   RETAINED_NO_ELIGIBLE_CANDIDATE: 'retained_no_eligible_candidate',
@@ -131,14 +132,15 @@ function isGenericTopic(candidate = {}) {
 }
 
 function isFallbackTopic(candidate = {}) {
-  return text(candidate.relevance_bucket || candidate.category) === 'cpp_ai_tooling_fallback' ||
+  return articlePolicy.supportingMainBuckets.includes(text(candidate.relevance_bucket || candidate.category)) ||
     candidate.fallback_only === true ||
     candidate.fallback_topic === true;
 }
 
-// "Camera HAL 연관" = 직접 카메라 스택 버킷 + 카메라 출력(멀티미디어). soc/AI/generic은 제외.
+// 헤드라인 대상은 카메라 스택, GCC·AI 개발 도구, 카메라 출력 기사다.
 const CAMERA_HAL_HEADLINE_BUCKETS = new Set([
   ...ensureArray(articlePolicy.primaryCameraStack?.buckets),
+  'cpp_ai_tooling_fallback',
   'android_multimedia_camera_output'
 ]);
 
@@ -503,10 +505,11 @@ function applyHomepageHeadlineSelection({
   const currentEligible = current && isEligibleHeadlineArticle(current) ? current : null;
   const rankPool = currentEligible ? [...issueCandidates, currentEligible] : issueCandidates;
 
-  // 소스 날짜가 가장 최신인 기사를 선택. 동률이면 먼저 온 것(이슈 후보 우선) 유지.
+  // AOSP Camera → GCC·AI → 기타 주제 순서, 같은 주제 안에서는 소스 날짜 순서다.
   let chosen = null;
   for (const candidate of rankPool) {
-    if (!chosen || headlineSourceTimestamp(candidate) > headlineSourceTimestamp(chosen)) {
+    if (!chosen || compareEditorialPriority(candidate, chosen) < 0 ||
+      (compareEditorialPriority(candidate, chosen) === 0 && headlineSourceTimestamp(candidate) > headlineSourceTimestamp(chosen))) {
       chosen = candidate;
     }
   }
@@ -518,7 +521,7 @@ function applyHomepageHeadlineSelection({
     headline = current || null;
     reason = current ? DECISION_REASONS.RETAINED_NO_ELIGIBLE_CANDIDATE : DECISION_REASONS.NO_ELIGIBLE_CANDIDATE;
   } else if (chosen === currentEligible) {
-    // 현재 헤드라인이 이번 이슈 후보보다 최신(또는 이슈에 후보 없음) → 그대로 유지(주입 없음).
+    // 현재 헤드라인이 정책 순위·날짜 비교에서 우선하거나 이슈에 후보가 없으면 유지한다.
     headline = current;
     reason = issueCandidates.length === 0
       ? DECISION_REASONS.RETAINED_NO_ELIGIBLE_CANDIDATE

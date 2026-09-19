@@ -23,7 +23,7 @@ const {
   policySupportingCandidate
 } = require('../helpers/selection-builders');
 
-test('one supporting main article can be public-ready without primary coverage', () => {
+test('one independent tooling main article can be public-ready without camera coverage', () => {
   const supportingCount = articlePolicy.mainArticleCount.min - articlePolicy.primaryCameraStack.minRequired;
   const report = buildShortlistReport('2026-05-10', [
     ...Array.from({ length: articlePolicy.primaryCameraStack.minRequired }, (_, index) => policyPrimaryCandidate(index)),
@@ -32,10 +32,10 @@ test('one supporting main article can be public-ready without primary coverage',
 
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, articlePolicy.primaryCameraStack.minRequired);
-  assert.equal(report.composition_summary.supporting_main_article_count, supportingCount);
+  assert.equal(report.composition_summary.supporting_main_article_count, 0);
   assert.equal(report.underfilled, false);
   assert.equal(report.review_gate_passed, true);
-  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.composition_mode, 'NORMAL');
   assert.equal(report.publish_gate_passed, true);
   assert.equal(report.publish_ready, true);
   assert.equal(report.editor_review_required, false);
@@ -196,9 +196,9 @@ test('publish-ready supporting max applies across all supporting buckets', () =>
       counts_as_fallback_topic: false
     }),
     policySupportingCandidate(1, {
-      title: 'Supporting limit native workflow source',
+      title: 'Supporting multimedia output source',
       url: 'https://example.com/supporting-limit-native',
-      relevance_bucket: 'cpp_ai_tooling_fallback'
+      relevance_bucket: 'android_multimedia_camera_output'
     })
   ];
   const summary = compositionSummary(candidates);
@@ -222,17 +222,17 @@ test('below configured minimum remains a hard deterministic selection error', ()
   assert.equal(report.editor_review_required, true);
 });
 
-test('supporting-only composition is public-ready with one publishable article', () => {
+test('independent tooling composition is public-ready with one publishable article', () => {
   const report = buildShortlistReport('2026-05-10', [
     ...Array.from({ length: articlePolicy.mainArticleCount.min }, (_, index) => policySupportingCandidate(index))
   ]);
 
   assert.equal(report.selected_article_count, articlePolicy.mainArticleCount.min);
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, 0);
-  assert.equal(report.composition_summary.supporting_main_article_count, articlePolicy.mainArticleCount.min);
+  assert.equal(report.composition_summary.supporting_main_article_count, 0);
   assert.equal(report.publish_gate_passed, true);
   assert.equal(report.publish_ready, true);
-  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.composition_mode, 'NORMAL');
   assert.equal(report.editor_review_required, false);
   assert.equal(report.candidate_pool_preflight_passed, true);
   assert.equal(report.candidate_shortage_reviewable, false);
@@ -273,7 +273,7 @@ test('forbidden bucket in main candidates is not publish-ready', () => {
   assert.ok(errors.some(error => error.includes('forbidden bucket')));
 });
 
-test('supporting fallback-only candidate can satisfy one-article policy', () => {
+test('independent tooling candidate can satisfy one-article policy', () => {
   const fallbackTopics = [
     'LLVM sanitizer diagnostics',
     'Clang analyzer warning model',
@@ -310,12 +310,12 @@ test('supporting fallback-only candidate can satisfy one-article policy', () => 
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, 0);
   assert.equal(report.publish_gate_passed, true);
   assert.equal(report.publish_ready, true);
-  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.composition_mode, 'NORMAL');
   assert.equal(report.editor_review_required, false);
   assert.deepEqual(report.selection_errors, []);
 });
 
-test('official Android native tooling is selected as one supporting group with related context', () => {
+test('official Android native tooling is selected as one main group with related context', () => {
   const source = {
     id: 'android-developers-blog',
     name: 'Android Developers Blog',
@@ -384,7 +384,7 @@ test('official Android native tooling is selected as one supporting group with r
   assert.equal(selectedTooling.finalSelectionEligibility, 'short');
   assert.equal(selectedTooling.tooling_workflow_type, 'native_tooling_workflow');
   assert.equal(selectedTooling.counts_as_primary_camera_topic, false);
-  assert.equal(report.composition_summary.supporting_main_article_count, 1);
+  assert.equal(report.composition_summary.supporting_main_article_count, 0);
   assert.equal(report.composition_summary.primary_camera_stack_topic_count, 1);
   assert.equal(report.selected_group_count, report.selected_articles.length);
   assert.ok(selectedTooling.related_context_candidates.length >= 2);
@@ -665,8 +665,9 @@ test('#124 acceptance: publish-ready rejects more than one supporting main artic
       counts_as_fallback_topic: false
     }),
     policySupportingCandidate(1, {
-      title: 'Supporting native workflow source',
-      url: 'https://example.com/124-supporting-native'
+      title: 'Supporting multimedia output source',
+      url: 'https://example.com/124-supporting-native',
+      relevance_bucket: 'android_multimedia_camera_output'
     })
   ];
   const summary = compositionSummary(candidates);

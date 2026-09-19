@@ -42,6 +42,8 @@ test('newsletter policy validates candidate pool preflight thresholds', () => {
     schemaVersion: 1,
     name: 'Newsletter Policy',
     articlePolicy: {
+      editorialPriority: articlePolicy.editorialPriority,
+      independentMainBuckets: articlePolicy.independentMainBuckets,
       mainArticleCount: { min: 3, max: 5 },
       primaryCameraStack: {
         minRequired: 1,
@@ -77,6 +79,8 @@ test('newsletter policy validates selection window contract without enforcing se
     schemaVersion: 1,
     name: 'Newsletter Policy',
     articlePolicy: {
+      editorialPriority: articlePolicy.editorialPriority,
+      independentMainBuckets: articlePolicy.independentMainBuckets,
       mainArticleCount: { min: 3, max: 5 },
       primaryCameraStack: {
         minRequired: 1,
@@ -156,6 +160,8 @@ test('newsletter policy validates publish-ready composition contract separately 
     schemaVersion: 1,
     name: 'Newsletter Policy',
     articlePolicy: {
+      editorialPriority: articlePolicy.editorialPriority,
+      independentMainBuckets: articlePolicy.independentMainBuckets,
       mainArticleCount: { min: 3, max: 5 },
       primaryCameraStack: {
         minRequired: 1,

@@ -1,14 +1,6 @@
-// 편집 우선순위 사다리. Camera HAL > Driver > AI > Android 순이다.
-//
-// 이전에는 7단계였고 Android 계열이 셋(플랫폼 인접 / 멀티미디어 출력 / SoC 신호)으로 갈려
-// AI(6위)보다 위에 있었다. 백필 13주 실측에서 멀티미디어와 SoC 버킷은 후보가 **0건**이었고
-// 플랫폼 인접만 13건이었다. 셋을 나눠 둘 근거가 데이터에 없어 android 하나로 합치고,
-// AI를 Android 위로 올렸다.
-//
-// 버킷 이름만 합쳤고 **발행 등급은 그대로 두었다.** 어느 근거로 android 에 들어왔는지를
-// androidEvidenceKind 로 남겨, 플랫폼 인접은 주력(directness 2)으로, 멀티미디어 출력과
-// SoC 신호는 보조(호당 1건 제한)로 계속 다룬다. 등급까지 합치면 제한이 풀려 발행 구성이
-// 조용히 바뀐다 — 요청은 분류 단순화였지 구성 정책 변경이 아니었다.
+// 편집 우선순위와 보조 기사 범위의 정본은 newsletter-policy.json이다.
+const { articlePolicy } = require('../config/newsletter-policy.json');
+// Android 분류는 하나로 통합하지만 보조 등급은 androidEvidenceKind로 구분한다.
 const BUCKETS = Object.freeze({
   DIRECT_AOSP_CAMERA: 'direct_aosp_camera',
   CAMERA_DRIVER_IMAGE_PIPELINE: 'camera_driver_image_pipeline',
@@ -19,20 +11,19 @@ const BUCKETS = Object.freeze({
 
 // 순위는 정렬에만 쓴다. 임계값으로 읽는 곳이 없어 값의 절대 크기가 아니라 순서만 의미가
 // 있고, 자격을 통과한 후보들 사이에서 deterministicCandidateSort 의 첫 기준이 된다.
-//
-// camera_driver_image_pipeline 이 맨 아래인 이유: 13주 실측에서 발행 44건 중 38건이
-// 드라이버 패치였다. 다만 그것은 순위 문제가 아니라 공급 문제다 — 드라이버는 자격 통과가
-// 54건인데 Camera HAL 은 4건이라(56건 중 52건이 missing dated evidence 로 탈락) 남는
-// 자리를 드라이버가 채운다. 순위를 내려도 그 주에 경쟁자가 없으면 여전히 드라이버가
-// 실린다(W30~W33 은 드라이버만 자격을 통과했다). 다른 버킷이 함께 통과한 주에만 순서가
-// 갈리고, 13주 중 그런 주는 4주였다.
-const BUCKET_PRIORITY = Object.freeze({
-  [BUCKETS.DIRECT_AOSP_CAMERA]: 1,
-  [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 2,
-  [BUCKETS.ANDROID]: 3,
-  [BUCKETS.GENERIC_TECH_WATCHLIST]: 4,
-  [BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE]: 5
-});
+// AOSP Camera가 최우선이며 GCC·AI 메인 기사는 Driver보다 앞선다.
+const BUCKET_PRIORITY = Object.freeze(Object.fromEntries(
+  articlePolicy.editorialPriority.map((bucket, index) => [bucket, index + 1])
+));
+
+function editorialPriority(value = {}) {
+  const bucket = canonicalBucket(value.relevance_bucket || value.relevanceBucket || value.category || value.snapshot?.category);
+  return BUCKET_PRIORITY[bucket] || 99;
+}
+
+function compareEditorialPriority(a, b) {
+  return editorialPriority(a) - editorialPriority(b);
+}
 
 // 발행된 아티팩트와 state 파일에 남은 옛 버킷 이름을 읽기 위한 표다.
 // 마이그레이션으로 저장된 값은 모두 새 이름으로 바꿨지만, 워크트리 사본이나 아직 돌지 않은
@@ -734,7 +725,7 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   // SoC 버킷은 사라졌지만 SoC 근거로 분류된 사실은 남는다. 이 플래그를 버킷 이름에 묶어 두면
   // 병합과 함께 신호가 조용히 없어진다.
   const countsAsSocTopic = androidEvidenceKind === 'soc_platform';
-  const countsAsFallbackTopic = bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK;
+  const countsAsFallbackTopic = articlePolicy.supportingMainBuckets.includes(bucket);
   const aospCameraDirectness = bucket === BUCKETS.DIRECT_AOSP_CAMERA
     ? Math.max(3, relevanceScoreFromHits(directTerms))
     : androidEvidenceKind === 'platform_adjacent' ? 2 : 0;
@@ -817,6 +808,8 @@ module.exports = {
   BUCKETS,
   BUCKET_DEFINITIONS,
   BUCKET_PRIORITY,
+  editorialPriority,
+  compareEditorialPriority,
   LEGACY_BUCKET_ALIASES,
   ANDROID_SUPPORTING,
   canonicalBucket,

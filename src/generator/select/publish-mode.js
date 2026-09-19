@@ -20,13 +20,13 @@ function resolvePublishMode(compositionSummary = {}, publishModePolicy = {}) {
 
   const coreCount =
     num(compositionSummary.direct_aosp_camera_count) +
-    num(compositionSummary.camera_driver_image_pipeline_count);
+    num(compositionSummary.camera_driver_image_pipeline_count) +
+    num(compositionSummary.cpp_ai_tooling_fallback_count);
   const adjacentCount =
     num(compositionSummary.android_count) +
     num(compositionSummary.android_multimedia_camera_output_count);
   const contextCount =
-    num(compositionSummary.soc_platform_signal_count) +
-    num(compositionSummary.cpp_ai_tooling_fallback_count);
+    num(compositionSummary.soc_platform_signal_count);
 
   let mode;
   if (coreCount >= 1) {

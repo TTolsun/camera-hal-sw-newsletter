@@ -124,7 +124,7 @@ test('collector keeps compiler CPU and GPU benchmarks out of SoC fallback withou
 
   assert.equal(candidate.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
   assert.equal(candidate.counts_as_soc_topic, false);
-  assert.equal(candidate.counts_as_fallback_topic, true);
+  assert.equal(candidate.counts_as_fallback_topic, false);
 });
 
 test('collector keeps generic GPU/NPU/SoC benchmark only coverage out of SoC non-fallback', () => {

@@ -77,15 +77,15 @@ test('quality gate counts article buckets from structured candidate metadata', (
     scopedCandidate('https://example.com/gcc', 'cpp_ai_tooling_fallback')
   ]);
 
-  assert.equal(report.status, 'NEEDS_FIX');
+  assert.equal(report.status, 'PASS');
   assert.equal(report.metrics.direct_aosp_camera_count, 1);
   assert.equal(report.metrics.camera_driver_image_pipeline_count, 1);
   assert.equal(report.metrics.soc_platform_signal_count, 1);
   assert.equal(report.metrics.cpp_ai_tooling_fallback_count, 1);
   assert.equal(report.metrics.primary_camera_stack_count, 2);
-  assert.equal(report.metrics.fallback_relevance_count, 2);
-  assert.equal(report.metrics.composition_mode, 'NEEDS_FIX');
-  assert.ok(report.deductions.some(item => item.reason.includes('Supporting main article count')));
+  assert.equal(report.metrics.fallback_relevance_count, 1);
+  assert.equal(report.metrics.composition_mode, 'FALLBACK_COMPOSITION');
+  assert.equal(report.metrics.supporting_main_article_count, 1);
   assert.equal(report.article_results[1].scope_count.relevance_bucket, 'camera_driver_image_pipeline');
   assert.match(report.article_results[1].scope_count.count_reason, /primary_camera_stack_count/);
 });
@@ -420,7 +420,7 @@ test('quality gate blocks supporting main articles over publish-ready maximum', 
 
   assert.equal(report.status, 'NEEDS_FIX');
   assert.equal(report.metrics.primary_camera_stack_count, 1);
-  assert.equal(report.metrics.fallback_relevance_count, 3);
+  assert.equal(report.metrics.fallback_relevance_count, 2);
   assert.equal(report.metrics.composition_mode, 'NEEDS_FIX');
   assert.ok(report.deductions.some(item => item.reason.includes('Supporting main article count')));
 });

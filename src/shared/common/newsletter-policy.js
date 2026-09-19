@@ -221,6 +221,10 @@ function validateNewsletterPolicyConfig(config) {
   }
   validateInteger(config.schemaVersion, 'schemaVersion', errors, { min: 1 });
   const article = config.articlePolicy || {};
+  const priorityBuckets = validateBucketList(article.editorialPriority, 'articlePolicy.editorialPriority', errors);
+  for (const bucket of Object.values(BUCKETS)) {
+    if (!priorityBuckets.includes(bucket)) errors.push(`articlePolicy.editorialPriority must include ${bucket}.`);
+  }
   const preflight = config.candidatePoolPreflight || {};
   const quality = config.qualityGatePolicy || {};
   const count = article.mainArticleCount || {};
@@ -233,11 +237,17 @@ function validateNewsletterPolicyConfig(config) {
   validateInteger(primary.minRequired, 'articlePolicy.primaryCameraStack.minRequired', errors, { min: 0 });
   validatePublishReadyCompositionPolicy(article.publishReadyComposition, article, errors);
   const primaryBuckets = validateBucketList(primary.buckets, 'articlePolicy.primaryCameraStack.buckets', errors);
+  const independentBuckets = validateBucketList(article.independentMainBuckets, 'articlePolicy.independentMainBuckets', errors);
   const supportingBuckets = validateBucketList(article.supportingMainBuckets, 'articlePolicy.supportingMainBuckets', errors);
   const forbiddenBuckets = validateBucketList(article.forbiddenMainBuckets, 'articlePolicy.forbiddenMainBuckets', errors);
   const primarySet = new Set(primaryBuckets);
   const supportingSet = new Set(supportingBuckets);
   const forbiddenSet = new Set(forbiddenBuckets);
+  for (const bucket of independentBuckets) {
+    if (primarySet.has(bucket) || supportingSet.has(bucket) || forbiddenSet.has(bucket)) {
+      errors.push(`Independent main bucket cannot belong to another composition tier: ${bucket}.`);
+    }
+  }
   for (const bucket of primarySet) {
     if (supportingSet.has(bucket)) errors.push(`Bucket cannot be both primary and supporting: ${bucket}.`);
     if (forbiddenSet.has(bucket)) errors.push(`Bucket cannot be both primary and forbidden: ${bucket}.`);
@@ -495,6 +505,7 @@ function normalizeNewsletterPolicyConfig(config) {
     name: config.name || 'Newsletter Policy',
     publishModePolicy: normalizePublishModePolicy(config.publishModePolicy),
     articlePolicy: {
+      editorialPriority: [...article.editorialPriority],
       mainArticleCount: {
         min: article.mainArticleCount.min,
         max: article.mainArticleCount.max
@@ -508,6 +519,7 @@ function normalizeNewsletterPolicyConfig(config) {
         directAospCameraOrDriverMinRequired: article.publishReadyComposition.directAospCameraOrDriverMinRequired,
         supportingMainMaxAllowed: article.publishReadyComposition.supportingMainMaxAllowed
       },
+      independentMainBuckets: unique(article.independentMainBuckets),
       supportingMainBuckets: unique(article.supportingMainBuckets),
       forbiddenMainBuckets: unique(article.forbiddenMainBuckets)
     },
@@ -630,7 +642,8 @@ function isForbiddenMainBucket(bucket, policy = getDefaultNewsletterPolicy()) {
 }
 
 function isMainArticleAllowedBucket(bucket, policy = getDefaultNewsletterPolicy()) {
-  return isPrimaryCameraStackBucket(bucket, policy) || isSupportingMainBucket(bucket, policy);
+  return isPrimaryCameraStackBucket(bucket, policy) || isSupportingMainBucket(bucket, policy) ||
+    getArticlePolicy(policy).independentMainBuckets.includes(bucketValue(bucket));
 }
 
 function articleCountRangeText(policy = getDefaultNewsletterPolicy()) {
@@ -687,6 +700,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     '',
     `- 정본 출처(source of truth): \`${POLICY_REL_PATH.replace(/\\/g, '/')}\``,
     `- 주요 기사 수: ${articleCountRangeText(policy)}`,
+    `- 주요 기사 편집 순서: ${articlePolicy.editorialPriority.filter(bucket => !articlePolicy.forbiddenMainBuckets.includes(bucket)).map(bucket => `\`${bucket}\``).join(' → ')}. GCC·C++ 개발 도구와 AI 개발 도구는 같은 우선순위의 메인 기사이며, 보조 기사 상한에 포함하지 않습니다.`,
     ...(oneArticlePolicyEnabled
       ? [
           // 이 문장은 최소 기사 수가 1이라는 뜻이지 상한이 1이라는 뜻이 아니다. 예전 표현("주요 기사
@@ -703,6 +717,7 @@ function renderNewsletterPolicyBlock(policy = getDefaultNewsletterPolicy()) {
     `- 발행 가능(publish-ready) direct AOSP Camera 또는 driver/image pipeline 기사: ${publishPolicy.directAospCameraOrDriverMinRequired === 0 ? '단일 기사 정책으로 비활성화됨' : `최소 ${publishPolicy.directAospCameraOrDriverMinRequired}개`} (${DIRECT_AOSP_CAMERA_OR_DRIVER_BUCKETS.map(bucket => `\`${bucket}\``).join(', ')} 버킷 대상)`,
     `- 발행 가능(publish-ready) 보조 주요 기사: 보조 주요 버킷 전체에서 최대 ${publishPolicy.supportingMainMaxAllowed}개`,
     `- Primary Camera Stack 버킷: ${articlePolicy.primaryCameraStack.buckets.map(bucket => `\`${bucket}\``).join(', ')}`,
+    `- 독립 메인 기사 버킷: ${articlePolicy.independentMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}; 카메라 기사 수에는 포함하지 않으며 보조 기사 상한도 적용하지 않습니다.`,
     `- 보조 주요 버킷: ${articlePolicy.supportingMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}`,
     `- 금지 주요 버킷: ${articlePolicy.forbiddenMainBuckets.map(bucket => `\`${bucket}\``).join(', ')}; 후보 수만으로 이 버킷을 주요 기사로 승격하지 않습니다`,
     `- 후보 풀 사전점검(candidate pool preflight): 발행 가능 후보 최소 ${policy.candidatePoolPreflight.publishableCandidateMin}개; ${reserveRequirementText}; camera stack 후보 최소 ${policy.candidatePoolPreflight.cameraStackCandidateMin}개`,

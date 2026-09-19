@@ -45,8 +45,8 @@ test('core 0 with adjacent below higher threshold yields QUIET', () => {
 
 test('result records counts for traceability', () => {
   const r = resolvePublishMode(summary({ android_count: 1, cpp_ai_tooling_fallback_count: 1 }), { contextMinSignals: 1 });
-  assert.equal(r.core_count, 0);
+  assert.equal(r.core_count, 1);
   assert.equal(r.adjacent_count, 1);
-  assert.equal(r.context_count, 1);
-  assert.equal(r.mode, PUBLISH_MODES.CONTEXT);
+  assert.equal(r.context_count, 0);
+  assert.equal(r.mode, PUBLISH_MODES.DEEP);
 });
