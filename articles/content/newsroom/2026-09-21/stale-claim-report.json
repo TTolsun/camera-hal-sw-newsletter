@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-21",
+  "status": "PASS",
+  "removed_sections": [],
+  "dropped_selected_groups": [],
+  "restored_to_keep_minimum": [],
+  "final_section_sources": [
+    {
+      "title": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation",
+      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
+    },
+    {
+      "title": "[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11",
+      "url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
+    },
+    {
+      "title": "Projects redesigned: from folder to conversation",
+      "url": "https://claude.com/blog/projects-redesigned"
+    },
+    {
+      "title": "Claude Code v2.1.271",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
+    },
+    {
+      "title": "Codex rust-v0.155.1",
+      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}
