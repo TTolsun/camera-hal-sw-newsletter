@@ -9,7 +9,7 @@
     "Claude Code v2.1.271 릴리스, 원격 세션 빠른 모드 및 TUI 마우스 지원 개선",
     "Codex rust-v0.155.1 릴리스, 로컬 TUI 세션 추론 요약 기본 비활성화로 API 호환성 개선",
     "Intel IPU6 드라이버, 멀티 스트림 및 메타데이터 지원을 위한 v2 패치 시리즈 제안",
-    "Microsoft Surface Pro 11 후면 카메라 거꾸로 출력되는 현상 해결을 위한 DMI 퀵 패치 제안"
+    "Microsoft Surface Pro 11 후면 카메라 거꾸로 출력되는 현상 해결을 위한 DMI 보정 패치 제안"
   ],
   "sections": [
     {
@@ -39,10 +39,10 @@
           "새로운 프로젝트 환경에서는 Claude에게 특정 엔드포인트의 성능을 프로파일링하도록 요청하거나, 코드 최적화 테스트를 수행하고, 그 결과를 바탕으로 병렬 스레드에서 여러 개의 Pull Request(PR)를 동시에 생성하도록 지시할 수 있습니다. 또한 API, 웹, 모바일 등 여러 저장소를 동시에 연결하여 'v1 엔드포인트 제거'와 같은 대형 리팩토링 목표를 설정하고 자동화하는 것도 가능합니다.",
           "이 업데이트는 현재 Claude Pro 및 Max 구독자 중 Claude Code 클라우드 세션을 사용하고 기존 웹/데스크톱 프로젝트가 없는 사용자를 대상으로 베타 제공되고 있습니다. Anthropic은 향후 더 많은 사용자에게 액세스를 확대할 계획입니다."
         ],
-        "camera_hal_takeaway": "직접적인 Camera HAL 런타임 변경 사항은 없으나, 복잡한 C++ 기반의 Android Camera HAL 및 드라이버 코드베이스에서 성능 프로파일링, 메모리 누수 최적화 테스트, 대규모 리팩토링 작업을 자동화하는 데 유용하게 활용될 수 있습니다. 특히 Clang/LLVM 툴체인 마이그레이션이나 정적 분석 경고 해결 시 병렬 PR 생성 기능을 통해 개발 주기를 단축할 수 있습니다.",
+        "camera_hal_takeaway": "여러 저장소의 변경을 함께 검토하는 팀이라면, 클라우드에서 실행 가능한 작은 작업 하나로 병렬 PR과 테스트 흐름을 시험해 볼 수 있습니다. 각 스레드는 별도 브랜치와 저장소 사본에서 동작하므로 동일 코드 수정 시에는 병합 충돌 검토가 필요합니다. 로컬 장비·사내망에 의존하는 HAL 빌드나 센서 검증이 클라우드에서 그대로 실행된다는 의미는 아닙니다.",
         "reader_checkpoints": [
-          "Claude Code 베타 권한이 있는 계정에서 로컬 C++ 카메라 모듈 저장소를 연결하여 간단한 최적화 테스트 및 프로파일링 시나리오를 실행해 봅니다.",
-          "AI 도구가 제안한 C++ 코드 변경 사항이 Android native 런타임 및 Clang 컴파일러 경고(Warning) 기준에 부합하는지 교차 검증합니다."
+          "베타 접근 권한과 프로젝트의 클라우드 환경에서 실행할 수 있는 빌드·테스트 범위를 확인합니다.",
+          "독립적인 변경을 별도 스레드에 맡기고 PR별 테스트 결과와 병합 순서를 직접 검토합니다."
         ],
         "source_links": [
           {
@@ -81,7 +81,7 @@
         "background_context": "Native 빌드, 테스트, 새니타이저, 컴파일러, 디버그 워크플로우 변경은 Camera HAL 및 드라이버 팀을 지원할 수 있지만, 카메라별 런타임 증거가 없으면 워크플로우 신호로만 표현해야 합니다. AI 코딩 도구의 개선은 개발자의 생산성 향상에 기여할 수 있으며, 이는 HAL 및 드라이버 개발 주기에도 간접적으로 영향을 미칠 수 있습니다.",
         "hal_driver_impact": "직접적인 HAL 영향은 없으나, C++ 기반의 Camera HAL 및 드라이버 개발 팀이 대규모 리팩토링(예: 레거시 HIDL 인터페이스 제거 및 AIDL 전환 준비)을 수행할 때 병렬 PR 생성 및 자동화된 테스트 워크플로우를 활용하여 생산성을 높일 수 있습니다.",
         "action_items": [
-          "도구 도입 담당자는 Claude Code 베타 환경을 활용해 로컬 C++ 카메라 모듈의 정적 분석 경고 수정 및 병렬 PR 생성 워크플로우를 시험 적용해 보십시오.",
+          "도구 도입 담당자는 Claude Code 프로젝트 베타에서 클라우드 실행이 가능한 작은 작업으로 병렬 PR 생성을 시험하고 브랜치 간 충돌과 테스트 결과를 검토하십시오.",
           "AI가 생성한 C++ 코드 변경 사항이 Android native Clang/LLVM 컴파일러 경고 기준 및 ABI 안정성 규정을 준수하는지 검증하는 CI 파이프라인을 점검하십시오."
         ],
         "team_share_points": "Claude Code의 프로젝트 기능이 대화형으로 재설계되어 프로파일링, 최적화 테스트, 병렬 PR 오픈을 지원하므로 개발 생산성 개선 도구로 검토해 볼 가치가 있습니다."
@@ -92,7 +92,7 @@
           "native_tooling_owner",
           "performance_thermal_owner"
         ],
-        "check_within_2_weeks": "Claude Code 프로젝트 기능을 활용한 로컬 C++ 코드 최적화 및 병렬 PR 생성 테스트 실행",
+        "check_within_2_weeks": "클라우드에서 실행 가능한 작은 작업으로 병렬 PR 생성과 브랜치 충돌 검토",
         "impact_axes": [
           "native_tooling_workflow",
           "performance_latency_frame_drop"
@@ -152,7 +152,7 @@
         "Evaluate parallel PR generation efficiency"
       ],
       "action_items": [
-        "도구 도입 담당자는 Claude Code 베타 환경을 활용해 로컬 C++ 카메라 모듈의 정적 분석 경고 수정 및 병렬 PR 생성 워크플로우를 시험 적용해 보십시오.",
+        "도구 도입 담당자는 Claude Code 프로젝트 베타에서 클라우드 실행이 가능한 작은 작업으로 병렬 PR 생성을 시험하고 브랜치 간 충돌과 테스트 결과를 검토하십시오.",
         "AI가 생성한 C++ 코드 변경 사항이 Android native Clang/LLVM 컴파일러 경고 기준 및 ABI 안정성 규정을 준수하는지 검증하는 CI 파이프라인을 점검하십시오."
       ],
       "is_ai_related": true,
@@ -452,16 +452,16 @@
       ],
       "public_article": {
         "headline": "Codex rust-v0.155.1 릴리스, 로컬 TUI 세션 추론 요약 기본 비활성화로 API 호환성 개선",
-        "lead": "AI 코딩 도구인 Codex의 Rust 바인딩 버전인 rust-v0.155.1이 릴리스되었습니다. 이번 업데이트는 로컬 TUI 세션에서 추론 요약 기능을 기본 비활성화하여 특정 API 제공업체와의 요청 거부 문제를 해결했습니다.",
+        "lead": "Codex CLI의 rust-v0.155.1 릴리스는 새 로컬 TUI 세션에서 추론 요약을 기본 비활성화합니다. 추론 요약을 지원하지 않는 API 제공업체의 요청 거부를 해결하며, 명시적으로 지정한 설정은 유지합니다.",
         "body_paragraphs": [
           "2026년 9월 18일 배포된 Codex rust-v0.155.1 버전에서는 로컬 터미널 사용자 인터페이스(TUI) 세션을 시작할 때 추론 요약(Reasoning Summaries) 기능이 기본적으로 비활성화되도록 변경되었습니다. 기존에는 이 기능이 기본 활성화되어 있어, 추론 요약을 지원하지 않는 일부 LLM API 제공업체를 사용할 때 요청이 비정상적으로 거부되는 현상이 발생해 왔습니다.",
           "이번 조치를 통해 개발자는 추가적인 설정 없이도 다양한 API 백엔드와 안정적으로 통신할 수 있게 되었습니다. 다만, 사용자가 명시적으로 추론 요약 기능을 활성화하도록 설정한 경우에는 해당 설정이 계속 존중되어 정상 작동합니다. (PR #46467)",
           "이번 릴리스는 로컬 개발 환경에서 AI 코딩 도구를 활용할 때 발생할 수 있는 호환성 병목을 제거하고, 다양한 모델 제공업체와의 연동 안정성을 극대화하는 데 기여합니다."
         ],
-        "camera_hal_takeaway": "직접적인 HAL 런타임 영향은 없으나, 로컬 개발 환경에서 Codex를 활용해 C++ 카메라 HAL 코드를 분석하거나 자동 완성 기능을 사용하는 엔지니어들에게 유용합니다. API 제공업체와의 호환성 문제로 인한 도구 중단 현상이 해결되어, 오프라인 또는 사내 구축형 API 서버를 연동해 카메라 소스 코드를 디버깅할 때의 안정성이 향상됩니다.",
+        "camera_hal_takeaway": "다른 API 제공업체와 Codex CLI를 연결해 코드 분석을 수행하다 요청 거부를 겪었다면, 새 로컬 TUI 세션의 추론 요약 설정을 확인할 수 있습니다. 업데이트 후 기본 설정과 명시적으로 활성화한 설정을 구분해 재현 여부를 점검하세요. 이번 수정은 추론 요약 지원 여부에 관한 것으로, 모든 API 호환성이나 오프라인 동작을 보장하지는 않습니다.",
         "reader_checkpoints": [
-          "Codex Rust 도구를 사용하는 개발 환경에서 버전을 rust-v0.155.1로 업데이트하고, 로컬 TUI 세션 실행 시 API 요청 거부 현상이 해결되었는지 확인합니다.",
-          "추론 요약 기능이 필요한 경우, 설정 파일에서 명시적으로 활성화하여 정상 작동하는지 테스트합니다."
+          "새 로컬 TUI 세션에서 기존 요청 거부가 재현되는지 확인합니다.",
+          "추론 요약을 명시적으로 활성화했다면 연결한 제공업체의 지원 여부와 함께 점검합니다."
         ],
         "source_links": [
           {
@@ -501,7 +501,7 @@
         "background_context": "Native 빌드, 테스트, 새니타이저, 컴파일러, 디버그 워크플로우 변경은 Camera HAL 및 드라이버 팀을 지원할 수 있지만, 카메라별 런타임 증거가 없으면 워크플로우 신호로만 표현해야 합니다. AI 코딩 도구의 업데이트는 개발자의 디버깅 및 코드 생성 효율성을 개선하여 HAL 및 드라이버 개발 프로세스에 간접적인 영향을 미칠 수 있습니다.",
         "hal_driver_impact": "직접적인 HAL 영향은 없으나, 로컬 개발 환경에서 Codex를 활용해 C++ 카메라 스택 코드를 분석하고 자동 완성 기능을 사용하는 엔지니어들이 겪던 API 호환성 오류를 해결하여 개발 연속성을 보장합니다.",
         "action_items": [
-          "Codex Rust 도구를 사용하는 개발자는 버전을 rust-v0.155.1로 업데이트하여 로컬 TUI 세션에서의 API 요청 안정성을 확보하십시오.",
+          "Codex CLI에서 추론 요약 미지원 API의 요청 거부를 겪었다면 rust-v0.155.1의 새 로컬 TUI 세션에서 기본 설정과 명시적 설정을 나누어 재현 여부를 확인하십시오.",
           "추론 요약 기능이 필요한 특정 API 제공업체를 사용하는 경우, 명시적으로 설정을 활성화하여 정상 작동 여부를 검증하십시오."
         ],
         "team_share_points": "Codex rust-v0.155.1 업데이트로 로컬 TUI 세션의 추론 요약이 기본 비활성화되어 API 제공업체 호환성 문제가 해결되었습니다."
@@ -585,7 +585,7 @@
         "Verify reasoning summaries setting in config"
       ],
       "action_items": [
-        "Codex Rust 도구를 사용하는 개발자는 버전을 rust-v0.155.1로 업데이트하여 로컬 TUI 세션에서의 API 요청 안정성을 확보하십시오.",
+        "Codex CLI에서 추론 요약 미지원 API의 요청 거부를 겪었다면 rust-v0.155.1의 새 로컬 TUI 세션에서 기본 설정과 명시적 설정을 나누어 재현 여부를 확인하십시오.",
         "추론 요약 기능이 필요한 특정 API 제공업체를 사용하는 경우, 명시적으로 설정을 활성화하여 정상 작동 여부를 검증하십시오."
       ],
       "is_ai_related": true,
@@ -668,16 +668,16 @@
       ],
       "public_article": {
         "headline": "Intel IPU6 드라이버, 멀티 스트림 및 메타데이터 지원을 위한 v2 패치 시리즈 제안",
-        "lead": "Intel IPU6 카메라 드라이버가 단일 소스에서 여러 스트림을 동시에 처리하고 메타데이터를 지원할 수 있도록 준비하는 v2 패치 시리즈가 제안되었습니다. 이 변경 사항은 향후 Linux 기반 카메라 시스템 및 Android 하위 스택의 스트림 처리 효율성을 높이는 기반이 될 것입니다.",
+        "lead": "Intel IPU6 드라이버의 멀티 스트림·메타데이터 지원을 준비하는 21개 패치의 v2 시리즈가 제안되었습니다. 후속 패치와 함께 단일 소스의 여러 스트림을 처리하기 위한 준비 작업이며, 이 시리즈만으로 기능이 완성되었다는 발표는 아닙니다.",
         "body_paragraphs": [
           "2026년 9월 17일, Intel의 Sakari Ailus는 IPU6 드라이버가 단일 소스에서 멀티 스트림을 스트리밍하고 메타데이터를 지원할 수 있도록 준비하는 v2 패치 시리즈(총 21개 패치)를 제안했습니다. 이 패치 세트는 기존의 메타데이터 시리즈에서 조기 머지가 가능한 부분을 분리하여 구성한 것입니다.",
-          "해당 패치들은 IPU6 드라이버가 향후 필요한 나머지 패치들과 결합하여 단일 물리 센서 소스로부터 여러 논리 스트림을 독립적으로 캡처할 수 있도록 드라이버 내부 구조를 재정렬합니다. 이는 하위 미디어 파이프라인에서 버퍼 관리와 포맷 협상을 최적화하는 데 기여합니다.",
+          "작성자는 메타데이터 시리즈에서 먼저 병합할 수 있는 부분을 분리했다고 설명합니다. 필요한 나머지 패치가 병합되면 단일 소스에서 여러 스트림을 처리할 수 있도록 준비하는 것이 목적이며, 앞서 제안한 메타데이터 준비 시리즈에 의존할 가능성도 언급했습니다.",
           "다만, 이 패치 시리즈는 현재 메일링 리스트에서 검토 중인 제안 단계이며 아직 커널 메인라인에 머지되지 않았습니다. 실제 멀티 스트림 동작을 완전히 구현하기 위해서는 추가적인 메타데이터 및 스트림 제어 패치들의 병합이 필요하므로, 드라이버 통합 팀은 패치 진행 상황을 지속적으로 모니터링해야 합니다."
         ],
-        "camera_hal_takeaway": "이 패치 시리즈는 아직 메인라인에 머지되지 않은 제안 단계이며 후속 메타데이터 패치 병합이 필요하다는 제약이 있습니다. 직접적인 Android Camera HAL3 계약 변경은 없으나, 하위 드라이버의 멀티 스트림 및 메타데이터 지원은 HAL 레벨에서 다중 스트림 구성(Stream Configuration) 및 버퍼 할당 효율성을 높이는 기초가 됩니다. 특히 YUV/RAW 스트림의 동시 처리 시 드라이버 레벨의 버퍼 큐잉 및 프레임 동기화 안정성을 확보하는 데 기여할 수 있습니다.",
+        "camera_hal_takeaway": "IPU6 변경을 검토하는 팀은 이 시리즈와 후속 메타데이터 패치의 의존 관계를 먼저 확인하고, 백포트 전후의 기존 단일 스트림 캡처가 유지되는지 회귀 검증하는 것이 유용합니다. 여러 스트림의 동작 확인은 필요한 후속 패치까지 포함한 구성에서 진행해야 합니다. 제안문은 Android HAL3 API 변경, YUV/RAW 동시 지원 완성, 버퍼 지연이나 성능 개선 수치를 보장하지 않습니다.",
         "reader_checkpoints": [
-          "IPU6 하드웨어를 사용하는 참조 플랫폼에서 제안된 v2 패치 세트를 적용하여 빌드 및 기본적인 단일 스트림 동작에 영향이 없는지 회귀 테스트를 수행합니다.",
-          "향후 메타데이터 패치 병합 시 ANDROID_CONTROL_AE_ANTIBANDING_MODE 등 HAL 메타데이터 필드가 ISP 및 드라이버를 통해 정확히 전달되는지 검증할 계획을 수립합니다."
+          "메타데이터 준비 시리즈와 후속 패치의 의존 관계를 확인합니다.",
+          "별도 검증 브랜치에서 기존 단일 스트림 캡처를 비교하고, 멀티 스트림 검증에 필요한 패치가 모두 포함됐는지 확인합니다."
         ],
         "source_links": [
           {
@@ -690,8 +690,8 @@
         "editorial_story": {
           "reader_scenario": "Intel IPU6 기반 플랫폼에서 멀티 카메라 또는 다중 스트림 시나리오를 개발하는 중, 하위 드라이버 레벨의 스트림 제어 및 메타데이터 처리 구조가 변경되는 상황을 마주할 수 있습니다.",
           "what_happened": "IPU6 드라이버의 멀티 스트림 및 메타데이터 지원을 준비하기 위한 v2 패치 시리즈가 리눅스 미디어 메일링 리스트에 제안되었습니다.",
-          "why_it_matters": "드라이버 레벨에서 멀티 스트림과 메타데이터가 안정적으로 지원되면, 상위 Camera HAL에서 더 복잡한 스트림 조합을 처리할 때 프레임 드롭이나 지연 시간을 줄일 수 있습니다.",
-          "field_scenario": "IPU6 드라이버 패치를 로컬 커널 소스에 적용하고, v4l2-ctl 또는 libcamera 테스트 도구를 사용해 멀티 스트림 캡처 시 버퍼 할당 및 프레임 동기화 상태를 디버깅합니다.",
+          "why_it_matters": "IPU6 변경을 검토하는 팀은 이 시리즈와 후속 메타데이터 패치의 의존 관계를 먼저 확인하고, 백포트 전후의 기존 단일 스트림 캡처가 유지되는지 회귀 검증하는 것이 유용합니다. 여러 스트림의 동작 확인은 필요한 후속 패치까지 포함한 구성에서 진행해야 합니다. 제안문은 Android HAL3 API 변경, YUV/RAW 동시 지원 완성, 버퍼 지연이나 성능 개선 수치를 보장하지 않습니다.",
+          "field_scenario": "메타데이터 준비 시리즈와 후속 패치의 의존 관계를 확인합니다. 별도 검증 브랜치에서 기존 단일 스트림 캡처를 비교하고, 멀티 스트림 검증에 필요한 패치가 모두 포함됐는지 확인합니다.",
           "not_to_overclaim": "이 패치 시리즈는 아직 머지되지 않은 제안이므로, 현재 Android Camera HAL API나 CTS 테스트 결과에 즉각적인 변화를 준다고 단정해서는 안 됩니다.",
           "editor_take": "하위 드라이버의 구조적 개선은 장기적으로 상위 HAL의 안정성으로 이어지므로, 인텔 플랫폼 개발 팀은 이 패치 시리즈의 머지 여부를 추적해야 합니다."
         },
@@ -715,16 +715,16 @@
           "이 패치 세트는 메타데이터 시리즈에서 분리되었으며, 필요한 나머지 패치들이 머지되면 단일 소스에서 여러 스트림을 스트리밍할 수 있도록 드라이버를 준비합니다.",
           "제안된 패치들은 아직 메인라인 커널에 머지되지 않은 검토 단계의 제안입니다."
         ],
-        "background_context": "Linux 커널의 카메라 드라이버(V4L2, libcamera) 변경은 Android Camera HAL의 하위 계층 동작에 직접적인 영향을 미칩니다. 특히 멀티 스트림 및 메타데이터 지원은 Camera HAL3의 스트림 구성, 버퍼 관리, 그리고 ANDROID_CONTROL_AE_ANTIBANDING_MODE와 같은 메타데이터 필드의 정확한 전달 및 처리에 중요합니다. 이는 ISP(Image Signal Processor)와의 상호작용 및 전체 이미지 파이프라인의 효율성에 영향을 줄 수 있습니다.",
-        "hal_driver_impact": "이 패치는 아직 메인라인에 머지되지 않은 제안 단계이며 추가적인 메타데이터 패치에 의존한다는 제약이 있으나, 드라이버 레벨의 멀티 스트림 및 메타데이터 전달 경로를 정비함으로써 향후 상위 Camera HAL3가 다중 스트림(예: Preview + Video + YUV)을 구성할 때 하위 V4L2 서브디바이스 간의 포맷 협상 및 버퍼 큐잉 지연을 최적화할 수 있는 기반을 제공합니다.",
+        "background_context": "이 소식은 Linux Intel IPU6 드라이버의 멀티 스트림 준비 작업입니다. 제안문은 메타데이터 시리즈와의 관계를 설명하며 특정 Android HAL 메타데이터 키나 성능 향상을 입증하지 않습니다.",
+        "hal_driver_impact": "IPU6 변경을 검토하는 팀은 이 시리즈와 후속 메타데이터 패치의 의존 관계를 먼저 확인하고, 백포트 전후의 기존 단일 스트림 캡처가 유지되는지 회귀 검증하는 것이 유용합니다. 여러 스트림의 동작 확인은 필요한 후속 패치까지 포함한 구성에서 진행해야 합니다. 제안문은 Android HAL3 API 변경, YUV/RAW 동시 지원 완성, 버퍼 지연이나 성능 개선 수치를 보장하지 않습니다.",
         "action_items": [
-          "Intel IPU6 플랫폼 개발 담당자는 제안된 v2 패치 세트를 로컬 검증 브랜치에 적용하여 기존 단일 스트림 캡처 기능에 영향이 없는지 회귀 테스트를 수행하십시오.",
-          "IPU6 멀티 스트림 지원에 필요한 후속 패치들의 메인라인 머지 일정을 추적하고, 로컬 드라이버 백포트 계획을 수립하십시오."
+          "메타데이터 준비 시리즈와 후속 패치의 의존 관계를 확인합니다.",
+          "별도 검증 브랜치에서 기존 단일 스트림 캡처를 비교하고, 멀티 스트림 검증에 필요한 패치가 모두 포함됐는지 확인합니다."
         ],
         "team_share_points": "Intel IPU6 드라이버의 멀티 스트림 및 메타데이터 지원을 위한 v2 패치 시리즈가 제안되었으니, 인텔 플랫폼 기반 프로젝트 팀은 하위 드라이버 변경 사항을 모니터링하십시오."
       },
       "hal_signal_capsule": {
-        "why_now": "Intel IPU6 플랫폼의 멀티 스트림 안정성 확보를 위해 하위 드라이버의 구조적 변경이 제안되었기 때문입니다.",
+        "why_now": "Intel IPU6의 멀티 스트림·메타데이터 지원을 준비하는 패치 시리즈가 제안되었기 때문입니다.",
         "reader_owners": [
           "camera_driver_owner",
           "camera_hal_owner"
@@ -781,16 +781,16 @@
         }
       ],
       "camera_hal_checks": [
-        "IPU6 multi-stream buffer allocation",
-        "V4L2 subdev format negotiation"
+        "IPU6 patch-series dependency review",
+        "Existing single-stream capture regression"
       ],
       "action_hints": [
-        "Monitor lore.kernel.org for IPU6 patch series updates",
-        "Test v2 patches on Intel reference boards"
+        "Check dependencies before backporting the preparation series",
+        "Compare existing single-stream capture before and after the patches"
       ],
       "action_items": [
-        "Intel IPU6 플랫폼 개발 담당자는 제안된 v2 패치 세트를 로컬 검증 브랜치에 적용하여 기존 단일 스트림 캡처 기능에 영향이 없는지 회귀 테스트를 수행하십시오.",
-        "IPU6 멀티 스트림 지원에 필요한 후속 패치들의 메인라인 머지 일정을 추적하고, 로컬 드라이버 백포트 계획을 수립하십시오."
+        "메타데이터 준비 시리즈와 후속 패치의 의존 관계를 확인합니다.",
+        "별도 검증 브랜치에서 기존 단일 스트림 캡처를 비교하고, 멀티 스트림 검증에 필요한 패치가 모두 포함됐는지 확인합니다."
       ],
       "is_ai_related": false,
       "article_type": "camera_driver_image_pipeline",
@@ -924,14 +924,14 @@
     },
     {
       "category": "camera_driver_image_pipeline",
-      "headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "what_changed": "Microsoft Surface Pro for Business 11th Edition (Intel)의 OVTID858 후면 센서가 180도 회전된 상태로 장착되지만 0도로 보고되는 문제를 해결하기 위해 DMI 퀵 엔트리가 추가되었습니다.",
+      "headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 보정 패치 제안",
+      "what_changed": "Microsoft Surface Pro for Business 11th Edition (Intel)의 OVTID858 후면 센서가 180도 회전된 상태로 장착되지만 0도로 보고되는 문제를 해결하기 위해 DMI 보정 엔트리가 추가되었습니다.",
       "confirmed_facts": [
         "Microsoft Surface Pro for Business 11th Edition (Intel) 기기는 OV13858 후면 센서가 180도 회전되어 장착되어 있으나, SSDB에서 회전 각도를 0도로 보고하고 일치하는 _PLD가 없어 이미지가 거꾸로 표시되는 문제가 있습니다.",
-        "이 문제를 해결하기 위해 OVTID858 센서에 대해 180도 회전을 보고하도록 하는 DMI 퀵 엔트리를 추가하는 패치(v2)가 2026년 9월 17일에 제안되었습니다.",
+        "이 문제를 해결하기 위해 OVTID858 센서에 대해 180도 회전을 보고하도록 하는 DMI 보정 엔트리를 추가하는 패치(v2)가 2026년 9월 17일에 제안되었습니다.",
         "해당 변경 사항은 Surface Pro 11 기기에서 직접 테스트되었으며, 아직 커널 메인라인에 머지되지 않은 제안 단계입니다."
       ],
-      "evidence_summary": "Surface Pro 11 (Intel)의 OVTID858 후면 센서가 180도 회전 장착되었으나 0도로 보고되는 문제를 해결하기 위한 DMI 퀵 패치가 제안되었습니다.",
+      "evidence_summary": "Surface Pro 11 (Intel)의 OVTID858 후면 센서가 180도 회전 장착되었으나 0도로 보고되는 문제를 해결하기 위한 DMI 보정 패치가 제안되었습니다.",
       "specificity_checks": [
         "lore.kernel.org linux-media list",
         "v2 (2026-09-17)",
@@ -943,17 +943,17 @@
         "Mailing list patch under review. Tested on Surface Pro 11."
       ],
       "public_article": {
-        "headline": "Microsoft Surface Pro 11 후면 카메라 거꾸로 출력되는 현상 해결을 위한 DMI 퀵 패치 제안",
-        "lead": "Microsoft Surface Pro 11 (Intel) 모델에서 후면 카메라 이미지가 상하가 뒤집혀 출력되는 문제를 해결하기 위해, 카메라 드라이버에 DMI 기반의 180도 회전 퀵(Quirk)을 추가하는 패치가 제안되었습니다.",
+        "headline": "Microsoft Surface Pro 11 후면 카메라 거꾸로 출력되는 현상 해결을 위한 DMI 보정 패치 제안",
+        "lead": "Microsoft Surface Pro 11 (Intel) 모델에서 후면 카메라 이미지가 상하가 뒤집혀 출력되는 문제를 해결하기 위해, 카메라 드라이버에 DMI 기반의 180도 회전 장치별 보정(quirk)을 추가하는 패치가 제안되었습니다.",
         "body_paragraphs": [
           "최근 제안된 Linux 커널 미디어 패치에 따르면, Microsoft Surface Pro for Business 11th Edition (Intel) 모델은 OV13858 후면 카메라 센서가 물리적으로 180도 회전되어 장착되어 있습니다. 그러나 시스템의 SSDB 데이터에는 회전 각도가 0도로 잘못 기록되어 있고, 이를 보완할 ACPI _PLD 정보도 누락되어 있어 드라이버가 센서 방향을 올바르게 인식하지 못하는 결함이 있었습니다.",
-          "이로 인해 별도의 보정이 없으면 카메라 프리뷰 및 캡처 이미지가 거꾸로(upside down) 표시되는 현상이 발생합니다. 이를 해결하기 위해 개발자 lsa.uz@pm.me는 Intel IPU 브리지 드라이버에 해당 모델을 식별하는 DMI 퀵 엔트리를 추가하여, OVTID858 센서의 회전 각도를 180도로 강제 보고하도록 하는 패치를 2026년 9월 17일에 제안했습니다.",
-          "이 패치는 실제 Surface Pro 11 기기에서 테스트를 거쳐 정상 동작이 확인되었습니다. 현재는 메일링 리스트에서 검토 중인 제안 단계이며, 향후 메인라인 커널에 병합되면 해당 기기에서의 카메라 방향성 오류가 공식적으로 해결될 예정입니다."
+          "이로 인해 별도의 보정이 없으면 카메라 프리뷰 및 캡처 이미지가 거꾸로(upside down) 표시되는 현상이 발생합니다. 이를 해결하기 위해 개발자 lsa.uz@pm.me는 Intel IPU 브리지 드라이버에 해당 모델을 식별하는 DMI 보정 엔트리를 추가하여, OVTID858 센서의 회전 각도를 180도로 강제 보고하도록 하는 패치를 2026년 9월 17일에 제안했습니다.",
+          "제안자는 대상 기기에서 camera_sensor_rotation이 180으로 읽히고 libcamera의 Rotation 값도 180으로 보고되는 것을 확인했다고 설명합니다. 이는 Linux 드라이버가 보고하는 회전 정보의 검증 결과입니다. 패치를 적용할 때는 대상 모델·센서 식별자와 사용 중인 커널에 해당 변경이 포함됐는지를 별도로 확인해야 합니다."
         ],
-        "camera_hal_takeaway": "물리적 센서 장착 방향과 드라이버가 보고하는 회전 정보의 불일치는 Android Camera HAL에서 ANDROID_SENSOR_ORIENTATION 메타데이터를 잘못 설정하게 만들어, CameraX/Camera2 API를 사용하는 앱에서 화면이 거꾸로 나오는 호환성 문제를 유발합니다. 드라이버 레벨에서 DMI 퀵을 통해 올바른 회전 각도(180도)를 보고하도록 수정하면, HAL 및 상위 프레임워크가 추가적인 소프트웨어 회전 오버헤드 없이 올바른 방향으로 이미지를 처리하고 CTS/VTS 테스트를 통과할 수 있습니다.",
+        "camera_hal_takeaway": "센서 방향 오류를 조사할 때 펌웨어의 SSDB·_PLD 정보와 실제 장착 방향을 대조하는 사례로 활용할 수 있습니다. 해당 Surface Pro 11 (Intel) 모델에서는 패치 전후의 camera_sensor_rotation과 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 함께 확인하세요. 이 패치만으로 Android SENSOR_ORIENTATION 매핑, GPU/CPU 회전 비용 제거 또는 CTS/VTS 통과가 보장되지는 않습니다.",
         "reader_checkpoints": [
-          "Surface Pro 11 플랫폼을 지원하는 경우, 제안된 DMI 퀵 패치를 적용하여 ANDROID_SENSOR_ORIENTATION 메타데이터가 180도로 올바르게 보고되는지 확인합니다.",
-          "Camera CTS/VTS의 센서 방향 및 이미지 회전 관련 테스트 항목을 실행하여 회귀 오류가 없는지 검증합니다."
+          "대상 모델과 OVTID858 식별자가 DMI 보정 조건에 일치하는지 확인합니다.",
+          "패치 전후 camera_sensor_rotation 및 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 점검합니다."
         ],
         "source_links": [
           {
@@ -965,11 +965,11 @@
         "source_subtitle": "lore.kernel.org linux-media list (Intel IPU)",
         "editorial_story": {
           "reader_scenario": "Surface Pro 11 기기에서 카메라 앱을 실행했을 때 후면 카메라 화면이 거꾸로 나오는 현상을 발견하고, 하위 드라이버의 ACPI 설정 오류를 의심하는 상황입니다.",
-          "what_happened": "Surface Pro 11 (Intel)의 OVTID858 후면 센서가 180도 회전 장착되었으나 0도로 보고되는 문제를 해결하기 위해 DMI 퀵 엔트리를 추가하는 패치가 제안되었습니다.",
-          "why_it_matters": "센서 방향 정보가 잘못되면 상위 HAL 및 애플리케이션에서 이미지 회전 처리가 어긋나며, 이를 드라이버 레벨에서 바로잡아야 불필요한 소프트웨어 회전 연산을 방지할 수 있습니다.",
-          "field_scenario": "제안된 패치를 커널에 적용한 후, HAL 메타데이터 덤프를 통해 ANDROID_SENSOR_ORIENTATION 값이 180도로 정상 출력되는지 확인하고 프리뷰 화면의 방향을 육안 검증합니다.",
-          "not_to_overclaim": "이 패치는 Surface Pro 11 (Intel) 모델의 OVTID858 센서에 한정된 퀵이므로, 다른 하드웨어 플랫폼이나 센서 모델에 동일하게 적용된다고 오해해서는 안 됩니다.",
-          "editor_take": "ACPI 메타데이터 오류를 드라이버 레벨의 DMI 퀵으로 우회하는 전형적인 사례로, 유사한 폼팩터 기기를 개발하는 팀에게 좋은 참고가 됩니다."
+          "what_happened": "Surface Pro 11 (Intel)의 OVTID858 후면 센서가 180도 회전 장착되었으나 0도로 보고되는 문제를 해결하기 위해 DMI 보정 엔트리를 추가하는 패치가 제안되었습니다.",
+          "why_it_matters": "센서 방향 오류를 조사할 때 펌웨어의 SSDB·_PLD 정보와 실제 장착 방향을 대조하는 사례로 활용할 수 있습니다. 해당 Surface Pro 11 (Intel) 모델에서는 패치 전후의 camera_sensor_rotation과 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 함께 확인하세요. 이 패치만으로 Android SENSOR_ORIENTATION 매핑, GPU/CPU 회전 비용 제거 또는 CTS/VTS 통과가 보장되지는 않습니다.",
+          "field_scenario": "대상 모델과 OVTID858 식별자가 DMI 보정 조건에 일치하는지 확인합니다. 패치 전후 camera_sensor_rotation 및 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 점검합니다.",
+          "not_to_overclaim": "이 패치는 Surface Pro 11 (Intel) 모델의 OVTID858 센서에 한정된 장치별 보정이므로, 다른 하드웨어 플랫폼이나 센서 모델에 동일하게 적용된다고 오해해서는 안 됩니다.",
+          "editor_take": "ACPI 메타데이터 오류를 드라이버 레벨의 DMI 보정으로 우회하는 전형적인 사례로, 유사한 폼팩터 기기를 개발하는 팀에게 좋은 참고가 됩니다."
         },
         "decision_metadata": {
           "impact": "High",
@@ -988,16 +988,16 @@
       "article_sections": {
         "verified_facts": [
           "Microsoft Surface Pro for Business 11th Edition (Intel) 기기는 OV13858 후면 센서가 180도 회전되어 장착되어 있으나, SSDB에서 회전 각도를 0도로 보고하고 일치하는 _PLD가 없어 이미지가 거꾸로 표시되는 문제가 있습니다.",
-          "이 문제를 해결하기 위해 OVTID858 센서에 대해 180도 회전을 보고하도록 하는 DMI 퀵 엔트리를 추가하는 패치(v2)가 2026년 9월 17일에 제안되었습니다.",
+          "이 문제를 해결하기 위해 OVTID858 센서에 대해 180도 회전을 보고하도록 하는 DMI 보정 엔트리를 추가하는 패치(v2)가 2026년 9월 17일에 제안되었습니다.",
           "해당 변경 사항은 Surface Pro 11 기기에서 직접 테스트되었으며, 아직 커널 메인라인에 머지되지 않은 제안 단계입니다."
         ],
-        "background_context": "Linux 커널의 카메라 드라이버 변경은 Android Camera HAL의 하위 계층 동작에 직접적인 영향을 미칩니다. 특히 센서 방향 관련 퀵(quirk) 추가는 물리적 센서의 장착 방향과 HAL이 보고하는 ANDROID_SENSOR_ORIENTATION 메타데이터 간의 일관성을 보장하는 데 중요합니다. 이는 CameraX, Camera2 API를 사용하는 애플리케이션에서 올바른 프리뷰 및 캡처 이미지 방향을 제공하고, CTS/VTS와 같은 호환성 테스트를 통과하는 데 필수적입니다. ISP는 이 방향 정보를 기반으로 이미지 처리를 수행할 수 있습니다.",
-        "hal_driver_impact": "드라이버가 DMI 퀵을 통해 올바른 회전 정보(180도)를 보고하게 되면, Android Camera HAL은 ANDROID_SENSOR_ORIENTATION 값을 180으로 채울 수 있게 되며, 이는 상위 프레임워크가 불필요한 GPU/CPU 회전 변환 없이 하드웨어 레벨에서 올바른 방향의 버퍼를 처리하도록 돕습니다.",
+        "background_context": "일부 기기는 센서의 물리적 장착 방향과 펌웨어의 회전 정보가 일치하지 않습니다. 이 사례는 Surface Pro 11 (Intel)의 SSDB·_PLD 정보와 Linux ipu-bridge의 장치별 DMI 보정을 다룹니다.",
+        "hal_driver_impact": "센서 방향 오류를 조사할 때 펌웨어의 SSDB·_PLD 정보와 실제 장착 방향을 대조하는 사례로 활용할 수 있습니다. 해당 Surface Pro 11 (Intel) 모델에서는 패치 전후의 camera_sensor_rotation과 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 함께 확인하세요. 이 패치만으로 Android SENSOR_ORIENTATION 매핑, GPU/CPU 회전 비용 제거 또는 CTS/VTS 통과가 보장되지는 않습니다.",
         "action_items": [
-          "Surface Pro 11 또는 유사 인텔 IPU 기반 기기를 개발하는 드라이버 엔지니어는 해당 DMI 퀵 패치를 적용하여 후면 카메라 방향성이 정상화되는지 확인하십시오.",
-          "HAL 검증 팀은 ANDROID_SENSOR_ORIENTATION 메타데이터가 드라이버의 퀵 반영 후 180도로 올바르게 매핑되는지 CTS CameraDeviceTest를 통해 검증하십시오."
+          "대상 모델과 OVTID858 식별자가 DMI 보정 조건에 일치하는지 확인합니다.",
+          "패치 전후 camera_sensor_rotation 및 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 점검합니다."
         ],
-        "team_share_points": "Surface Pro 11의 후면 카메라 거꾸로 출력 문제를 해결하기 위해 Intel IPU 브리지 드라이버에 180도 회전 DMI 퀵을 추가하는 패치가 제안되었습니다."
+        "team_share_points": "Surface Pro 11의 후면 카메라 거꾸로 출력 문제를 해결하기 위해 Intel IPU 브리지 드라이버에 180도 회전 DMI 보정을 추가하는 패치가 제안되었습니다."
       },
       "hal_signal_capsule": {
         "why_now": "Surface Pro 11 기기에서 발생하는 카메라 이미지 뒤집힘 현상을 드라이버 레벨에서 해결하는 패치가 제안되었기 때문입니다.",
@@ -1006,11 +1006,9 @@
           "camera_hal_owner",
           "camera_test_owner"
         ],
-        "check_within_2_weeks": "Surface Pro 11 플랫폼에서 DMI 퀵 패치 적용 후 ANDROID_SENSOR_ORIENTATION 메타데이터 값 검증",
+        "check_within_2_weeks": "대상 모델·센서 식별자 확인 후 camera_sensor_rotation과 libcamera Rotation 값 비교",
         "impact_axes": [
-          "driver_image_pipeline",
-          "stream_buffer_metadata",
-          "cts_vts_its_cdd"
+          "driver_image_pipeline"
         ],
         "do_not_overstate": [
           "이 패치는 아직 머지되지 않은 제안이므로, 현재 Android HAL 계약이나 동작에 직접적인 변경 사항이 있다고 단정하지 마세요.",
@@ -1020,7 +1018,7 @@
       "claims": [
         {
           "claim_id": "claim:surface:quirk_proposed",
-          "text": "Microsoft Surface Pro for Business 11th Edition (Intel)의 OVTID858 후면 센서가 180도 회전된 상태로 장착되지만 0도로 보고되는 문제를 해결하기 위해 DMI 퀵 엔트리가 추가되는 패치가 2026년 9월 17일에 제안되었습니다.",
+          "text": "Microsoft Surface Pro for Business 11th Edition (Intel)의 OVTID858 후면 센서가 180도 회전된 상태로 장착되지만 0도로 보고되는 문제를 해결하기 위해 DMI 보정 엔트리가 추가되는 패치가 2026년 9월 17일에 제안되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "candidate:0e4087ac6a83e9cb:source-summary"
@@ -1059,7 +1057,7 @@
         },
         {
           "claim_id": "article-2-fact-2",
-          "text": "이 문제를 해결하기 위해 OVTID858 센서에 대해 180도 회전을 보고하도록 하는 DMI 퀵 엔트리를 추가하는 패치(v2)가 2026년 9월 17일에 제안되었습니다.",
+          "text": "이 문제를 해결하기 위해 OVTID858 센서에 대해 180도 회전을 보고하도록 하는 DMI 보정 엔트리를 추가하는 패치(v2)가 2026년 9월 17일에 제안되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "candidate:0e4087ac6a83e9cb:source-summary"
@@ -1085,16 +1083,16 @@
         }
       ],
       "camera_hal_checks": [
-        "ANDROID_SENSOR_ORIENTATION metadata verification",
-        "Surface Pro 11 camera preview orientation"
+        "camera_sensor_rotation and libcamera Rotation comparison",
+        "Surface Pro 11 preview and capture orientation"
       ],
       "action_hints": [
-        "Apply DMI quirk patch to local kernel branch",
-        "Run CTS CameraDeviceTest on Surface Pro 11"
+        "Verify the target model and sensor identifiers before testing the DMI quirk",
+        "Compare rotation metadata and preview/capture orientation"
       ],
       "action_items": [
-        "Surface Pro 11 또는 유사 인텔 IPU 기반 기기를 개발하는 드라이버 엔지니어는 해당 DMI 퀵 패치를 적용하여 후면 카메라 방향성이 정상화되는지 확인하십시오.",
-        "HAL 검증 팀은 ANDROID_SENSOR_ORIENTATION 메타데이터가 드라이버의 퀵 반영 후 180도로 올바르게 매핑되는지 CTS CameraDeviceTest를 통해 검증하십시오."
+        "대상 모델과 OVTID858 식별자가 DMI 보정 조건에 일치하는지 확인합니다.",
+        "패치 전후 camera_sensor_rotation 및 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 점검합니다."
       ],
       "is_ai_related": false,
       "article_type": "camera_driver_image_pipeline",
@@ -1229,10 +1227,10 @@
   ],
   "action_items": [
     "Intel IPU6 플랫폼 개발 담당자는 제안된 v2 패치 세트를 로컬 검증 브랜치에 적용하여 기존 단일 스트림 캡처 기능에 영향이 없는지 회귀 테스트를 수행하십시오.",
-    "Surface Pro 11 또는 유사 인텔 IPU 기반 기기를 개발하는 드라이버 엔지니어는 해당 DMI 퀵 패치를 적용하여 후면 카메라 방향성이 정상화되는지 확인하십시오.",
-    "HAL 검증 팀은 ANDROID_SENSOR_ORIENTATION 메타데이터가 드라이버의 퀵 반영 후 180도로 올바르게 매핑되는지 CTS CameraDeviceTest를 통해 검증하십시오.",
-    "도구 도입 담당자는 Claude Code 베타 환경을 활용해 로컬 C++ 카메라 모듈의 정적 분석 경고 수정 및 병렬 PR 생성 워크플로우를 시험 적용해 보십시오.",
-    "Codex Rust 도구를 사용하는 개발자는 버전을 rust-v0.155.1로 업데이트하여 로컬 TUI 세션에서의 API 요청 안정성을 확보하십시오."
+    "Surface Pro 11 (Intel) 담당자는 대상 모델·센서 식별자가 DMI 보정 조건과 일치하는지 확인한 뒤 검증 브랜치에서 패치를 시험하십시오.",
+    "대상 Surface Pro 11에서는 패치 전후 camera_sensor_rotation과 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 확인하십시오.",
+    "도구 도입 담당자는 Claude Code 프로젝트 베타에서 클라우드 실행이 가능한 작은 작업으로 병렬 PR 생성을 시험하고 브랜치 간 충돌과 테스트 결과를 검토하십시오.",
+    "Codex CLI에서 추론 요약 미지원 API의 요청 거부를 겪었다면 rust-v0.155.1의 새 로컬 TUI 세션에서 기본 설정과 명시적 설정을 나누어 재현 여부를 확인하십시오."
   ],
   "references": [
     {
