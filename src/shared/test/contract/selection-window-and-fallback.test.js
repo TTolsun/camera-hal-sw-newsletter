@@ -15,6 +15,7 @@ const { candidate } = require('../helpers/newsroom-builders');
 const {
   buildShortlistReport,
   policyPrimaryCandidate,
+  policyDriverCandidate,
   policySupportingCandidate,
   FALLBACK_WINDOW_TEST_MIN_ARTICLES
 } = require('../helpers/selection-builders');
@@ -313,16 +314,11 @@ test('selection window enforcement promotes fallback only when primary window is
       source: 'Primary Shortage Source',
       published_date: '2026-08-14'
     }),
-    policySupportingCandidate(0, {
-      title: 'Fallback window SoC support source',
-      url: 'https://example.com/window-fallback-soc',
-      source: 'Fallback SoC Source',
-      published_date: '2026-08-05',
-      relevance_bucket: 'soc_platform_signal',
-      soc_platform_relevance: 5,
-      native_tooling_relevance: 0,
-      counts_as_soc_topic: true,
-      counts_as_fallback_topic: false
+    policyDriverCandidate(0, {
+      title: 'Fallback window driver support source',
+      url: 'https://example.com/window-fallback-driver',
+      source: 'Fallback driver Source',
+      published_date: '2026-08-05'
     }),
     policySupportingCandidate(1, {
       title: 'Fallback window native workflow source',
@@ -345,9 +341,9 @@ test('selection window enforcement promotes fallback only when primary window is
   assert.equal(report.fallback_candidates_promoted.length, 2);
   assert.deepEqual(report.selection_warnings, []);
   assert.equal(report.review_gate_passed, true);
-  assert.equal(report.publish_gate_passed, false);
-  assert.equal(report.publish_ready, false);
-  assert.ok(report.publish_gate_reason_codes.includes('publish_ready_supporting_main_over_limit'));
+  assert.equal(report.publish_gate_passed, true);
+  assert.equal(report.publish_ready, true);
+  assert.deepEqual(report.publish_gate_reason_codes, []);
 });
 
 test('fallback rescue uses uncapped selection pool when primary fills shortlist cap', () => {
@@ -394,16 +390,11 @@ test('fallback rescue uses uncapped selection pool when primary fills shortlist 
       published_date: '2026-08-14'
     }),
     ...primaryFillers,
-    policySupportingCandidate(0, {
-      title: 'Fallback rescue SoC source after cap boundary',
-      url: 'https://example.com/window-fallback-rescue-soc',
-      source: 'Fallback Rescue SoC Source',
-      published_date: '2026-08-05',
-      relevance_bucket: 'soc_platform_signal',
-      soc_platform_relevance: 5,
-      native_tooling_relevance: 0,
-      counts_as_soc_topic: true,
-      counts_as_fallback_topic: false
+    policyDriverCandidate(0, {
+      title: 'Fallback rescue driver source after cap boundary',
+      url: 'https://example.com/window-fallback-rescue-driver',
+      source: 'Fallback Rescue driver Source',
+      published_date: '2026-08-05'
     }),
     policySupportingCandidate(1, {
       title: 'LLVM debugger workflow candidate beyond shortlist',
@@ -422,9 +413,9 @@ test('fallback rescue uses uncapped selection pool when primary fills shortlist 
   assert.equal(report.fallback_window_consulted, true);
   assert.equal(report.fallback_window_used, true);
   assert.equal(report.fallback_candidates_promoted.length, 2);
-  assert.equal(selectedUrls.has('https://example.com/window-fallback-rescue-soc'), true);
+  assert.equal(selectedUrls.has('https://example.com/window-fallback-rescue-driver'), true);
   assert.equal(selectedUrls.has('https://example.com/window-fallback-rescue-native'), true);
-  assert.equal(shortlistedUrls.has('https://example.com/window-fallback-rescue-soc'), true);
+  assert.equal(shortlistedUrls.has('https://example.com/window-fallback-rescue-driver'), true);
   assert.equal(shortlistedUrls.has('https://example.com/window-fallback-rescue-native'), true);
 });
 

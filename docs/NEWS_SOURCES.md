@@ -133,10 +133,13 @@ AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트�
 - Google Open Source Blog: https://opensource.google/
 - Google Research Blog: https://research.google/blog/
 - Google DeepMind Blog: https://deepmind.google/blog/
-- OpenAI News: https://openai.com/news/
+- OpenAI News (`rss-source`, 공식 RSS: https://openai.com/news/rss.xml): https://openai.com/news/
 - Anthropic News: https://www.anthropic.com/news
 - Claude Blog: https://claude.com/blog
-- Claude Code Changelog (`release-note-watch`): https://code.claude.com/docs/en/changelog
+- Claude Code Changelog (`release-note-watch`, 공식 GitHub 정식 릴리스의 발행일·본문): https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1
+- Codex Releases (`release-note-watch`, 공식 GitHub 정식 릴리스의 발행일·본문): https://api.github.com/repos/openai/codex/releases?per_page=3&page=1
+
+Codex·Claude Code 릴리스는 `published_at`을 날짜 근거로 사용하고 draft·prerelease·변경 본문 없는 태그를 제외합니다. 소스별 최대 8페이지(24개 릴리스), 6MiB 범위에서 읽으며, 요청 실패나 스캔 상한 도달은 수집 진단에 남깁니다. AI 개발 도구의 구체적인 코딩·빌드·테스트·검토·실행 권한 변경은 기존 `cpp_ai_tooling_fallback` 보조 기사 범주에서 심사합니다. 날짜·출처 검증과 보조 기사 수 제한은 동일하게 적용합니다.
 - Google Cloud AI & Machine Learning Blog: https://cloud.google.com/blog/products/ai-machine-learning
 
 ### 후보 / 교차 확인 출처

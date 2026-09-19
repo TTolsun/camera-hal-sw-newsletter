@@ -4,6 +4,8 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  compositionSummary,
+  publishGatePasses,
   hasConcreteApiComponent,
   hasFallbackRelevanceHint,
   hasPlatformSignalTerm,
@@ -111,18 +113,19 @@ test('multimedia supporting bucket counts separately and can pass publish-ready 
 });
 
 test('multimedia plus SoC still fails publish-ready when supporting limit is exceeded', () => {
-  const report = buildShortlistReport('2026-05-10', [
+  const candidates = [
     policyPrimaryCandidate(1),
     policyMultimediaCandidate(1),
     policySocCandidate(1)
-  ]);
+  ];
+  const summary = compositionSummary(candidates);
 
-  assert.equal(report.composition_summary.primary_camera_stack_topic_count, 1);
-  assert.equal(report.composition_summary.android_multimedia_camera_output_count, 1);
-  assert.equal(report.composition_summary.soc_platform_signal_count, 1);
-  assert.equal(report.composition_summary.supporting_main_article_count, 2);
-  assert.equal(report.publish_ready, false);
-  assert.ok(publishReadyGateReasonCodes(report.composition_summary).includes('publish_ready_supporting_main_over_limit'));
+  assert.equal(summary.primary_camera_stack_topic_count, 1);
+  assert.equal(summary.android_multimedia_camera_output_count, 1);
+  assert.equal(summary.soc_platform_signal_count, 1);
+  assert.equal(summary.supporting_main_article_count, 2);
+  assert.equal(publishGatePasses(candidates), false);
+  assert.ok(publishReadyGateReasonCodes(summary).includes('publish_ready_supporting_main_over_limit'));
 });
 
 test('selection order ranks multimedia supporting ahead of SoC and C++ fallback', () => {
@@ -133,7 +136,7 @@ test('selection order ranks multimedia supporting ahead of SoC and C++ fallback'
     policySocCandidate(1),
     policyMultimediaCandidate(1)
   ]);
-  const orderedBuckets = report.selected_articles.map(item => item.relevance_bucket);
+  const orderedBuckets = report.shortlisted_candidates.map(item => item.relevance_bucket);
 
   assert.ok(
     orderedBuckets.indexOf('android_multimedia_camera_output') <

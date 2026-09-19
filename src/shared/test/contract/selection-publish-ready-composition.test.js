@@ -173,7 +173,7 @@ test('raw direct bucket is normalized for Jetpack Compose CameraX-adjacent candi
 });
 
 test('publish-ready supporting max applies across all supporting buckets', () => {
-  const report = buildShortlistReport('2026-05-10', [
+  const candidates = [
     policyPrimaryCandidate(0, {
       title: 'AOSP Camera direct with too much support',
       url: 'https://example.com/supporting-limit-direct',
@@ -200,14 +200,12 @@ test('publish-ready supporting max applies across all supporting buckets', () =>
       url: 'https://example.com/supporting-limit-native',
       relevance_bucket: 'cpp_ai_tooling_fallback'
     })
-  ]);
+  ];
+  const summary = compositionSummary(candidates);
+  assert.equal(publishGatePasses(candidates), false);
 
-  assert.equal(report.review_gate_passed, true);
-  assert.equal(report.composition_mode, 'FALLBACK_COMPOSITION');
-  assert.equal(report.publish_gate_passed, false);
-  assert.equal(report.publish_ready, false);
-  assert.equal(report.composition_summary.supporting_main_article_count, 2);
-  assert.deepEqual(report.publish_gate_reason_codes, ['publish_ready_supporting_main_over_limit']);
+  assert.equal(summary.supporting_main_article_count, 2);
+  assert.deepEqual(publishReadyGateReasonCodes(summary), ['publish_ready_supporting_main_over_limit']);
 });
 
 test('below configured minimum remains a hard deterministic selection error', () => {
@@ -640,7 +638,7 @@ test('#124 acceptance: one primary plus one supporting article is publish-ready'
 });
 
 test('#124 acceptance: publish-ready rejects more than one supporting main article', () => {
-  const report = buildShortlistReport('2026-05-10', [
+  const candidates = [
     policyPrimaryCandidate(0, {
       title: 'AOSP Camera HAL API publish-ready source',
       url: 'https://example.com/124-direct-primary',
@@ -670,11 +668,10 @@ test('#124 acceptance: publish-ready rejects more than one supporting main artic
       title: 'Supporting native workflow source',
       url: 'https://example.com/124-supporting-native'
     })
-  ]);
+  ];
+  const summary = compositionSummary(candidates);
+  assert.equal(publishGatePasses(candidates), false);
 
-  assert.equal(report.review_gate_passed, true);
-  assert.equal(report.publish_gate_passed, false);
-  assert.equal(report.publish_ready, false);
-  assert.equal(report.composition_summary.supporting_main_article_count, 2);
-  assert.deepEqual(report.publish_gate_reason_codes, ['publish_ready_supporting_main_over_limit']);
+  assert.equal(summary.supporting_main_article_count, 2);
+  assert.deepEqual(publishReadyGateReasonCodes(summary), ['publish_ready_supporting_main_over_limit']);
 });

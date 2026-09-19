@@ -640,6 +640,13 @@ function selectFinalArticlesFromPool(shortlist, options = {}) {
     })
   );
   const selected = [];
+  // AI 개발 도구 후보가 여러 건이어도 최초 결정론 선정부터 발행 정책의 보조 기사 cap을
+  // 지킨다. 이후 coverage 재조정은 publish_ready를 false에서 true로 복구할 수 없다.
+  const pushWithinSupportingCap = (candidate, slot) => {
+    if (compositionSummary([...selected, candidate]).supporting_main_article_count
+      > publishReadyCompositionPolicy.supportingMainMaxAllowed) return;
+    pushUnique(selected, candidate, slot);
+  };
   // 소스 정책 차단을 여기서 거르므로 선정이 차단 후보를 main에 넣어 생기던 selected > rendered는
   // 사라진다. editor hard block에는 capsule 시점에만 계산되는 다른 사유가 남아 있다.
   const mainEligible = candidates.filter(isMainSlotEligible);
@@ -661,22 +668,22 @@ function selectFinalArticlesFromPool(shortlist, options = {}) {
   for (const candidate of strongCameraPool) {
     if (selected.length >= maxArticles) break;
     const slot = candidate.optional_ai_cpp_candidate ? 'camera-platform-optional-ai-cpp' : 'camera-platform';
-    pushUnique(selected, candidate, slot);
+    pushWithinSupportingCap(candidate, slot);
   }
   if (
     selected.length < maxArticles &&
     nativeToolingPool.length > 0 &&
     compositionSummary(selected).supporting_main_article_count < publishReadyCompositionPolicy.supportingMainMaxAllowed
   ) {
-    pushUnique(selected, nativeToolingPool[0], 'android-native-tooling-supporting');
+    pushWithinSupportingCap(nativeToolingPool[0], 'android-native-tooling-supporting');
   }
   for (const candidate of optionalCameraPool) {
     if (selected.length >= Math.min(maxArticles, minArticles)) break;
-    pushUnique(selected, candidate, 'camera-platform-optional-ai-cpp');
+    pushWithinSupportingCap(candidate, 'camera-platform-optional-ai-cpp');
   }
   for (const candidate of adjacentPool) {
     if (selected.length >= minArticles) break;
-    pushUnique(selected, candidate, candidate.optional_ai_cpp_candidate ? 'optional-ai-cpp' : 'platform-adjacent');
+    pushWithinSupportingCap(candidate, candidate.optional_ai_cpp_candidate ? 'optional-ai-cpp' : 'platform-adjacent');
   }
 
   return selected.slice(0, maxArticles);

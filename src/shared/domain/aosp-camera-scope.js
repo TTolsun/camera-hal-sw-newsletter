@@ -442,6 +442,8 @@ const NATIVE_TOOLING_PATTERNS = [
   /\bnative\b[^.\n]{0,120}\b(?:performance|profiling|debug|build|test|tooling)\b/i,
   /\b(?:build|test|debug|profiling|tooling)\b[^.\n]{0,120}\bnative\b/i,
   /\bAI coding tool\b/i,
+  /\b(?:Codex|Claude Code|agentic coding)\b[^.\n]{0,180}\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\b/i,
+  /\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\b[^.\n]{0,180}\b(?:Codex|Claude Code|agentic coding)\b/i,
   /\bLLM\b[^.\n]{0,120}\b(?:agent|workflow|coding|developer)\b/i,
   /\bagent\b[^.\n]{0,120}\b(?:workflow|coding|developer)\b/i,
   /\bon-device AI\b/i
