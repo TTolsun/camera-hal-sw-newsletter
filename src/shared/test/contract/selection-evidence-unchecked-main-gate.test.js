@@ -60,8 +60,8 @@ test('a not_checked candidate never takes a deterministic main slot even as the 
   );
   assert.equal(
     report.selected_articles.length,
-    articlePolicy.mainArticleCount.max,
-    '차단 후보가 빠져도 정상 후보 5건이 max 슬롯을 그대로 채운다'
+    articlePolicy.driverMainMaxAllowed,
+    '차단 후보가 빠져도 출처를 확인한 Driver 2건을 선택한다'
   );
   assert.ok(
     report.reserve_candidates.some(candidate => candidate.url === unchecked.url),
@@ -85,9 +85,10 @@ test('only the exact not_checked value blocks; other statuses and a missing fiel
   ];
   assert.equal(passing[0].evidence_validation_status, undefined);
 
-  const report = buildShortlistReport(ISSUE_DATE, passing, {});
-
-  assert.deepEqual(selectedUrls(report).sort(), passing.map(candidate => candidate.url).sort());
+  for (const candidate of passing) {
+    const report = buildShortlistReport(ISSUE_DATE, [candidate], {});
+    assert.deepEqual(selectedUrls(report), [candidate.url]);
+  }
 });
 
 // --- 관측 영속화 계약 ---------------------------------------------------------
@@ -206,8 +207,8 @@ test('2026-09-07 replay: the two unchecked patchwork articles leave main and two
 
   const report = buildShortlistReport(ISSUE_DATE, candidates, {});
 
-  assert.deepEqual(selectedUrls(report).sort(), loreUrls.sort(), '원문을 받은 lore 5건만 main이 된다');
-  assert.equal(report.selected_articles.length, articlePolicy.mainArticleCount.max, '기사 수는 줄지 않는다');
+  assert.ok(selectedUrls(report).every(url => loreUrls.includes(url)), '원문을 받은 lore 후보만 main이 된다');
+  assert.equal(report.selected_articles.length, articlePolicy.driverMainMaxAllowed, 'Driver 상한 2건을 지킨다');
   for (const url of patchworkUrls) {
     assert.ok(report.reserve_candidates.some(candidate => candidate.url === url), `${url}는 reserve에 남는다`);
   }

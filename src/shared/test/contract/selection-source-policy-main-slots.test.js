@@ -87,8 +87,8 @@ test('a source-policy-blocked candidate never takes a deterministic main slot ev
   );
   assert.equal(
     report.selected_articles.length,
-    articlePolicy.mainArticleCount.max,
-    '차단 후보가 빠져도 정상 후보 5건이 max 슬롯을 그대로 채운다'
+    articlePolicy.driverMainMaxAllowed,
+    '차단 후보가 빠져도 출처를 확인한 Driver 2건을 선택한다'
   );
   assert.ok(
     report.reserve_candidates.some(candidate => candidate.url === blocked.url),
