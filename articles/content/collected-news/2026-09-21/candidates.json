@@ -4,7 +4,7 @@
   "newsletter_date": "2026-09-21",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 35,
-  "generated_at": "2026-09-19T09:54:35.816Z",
+  "generated_at": "2026-09-19T10:31:28.046Z",
   "sources_path": "src/shared/data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -50,7 +50,7 @@
     "coverage_end_exclusive_at": "2026-09-21T00:00:00.000Z"
   },
   "generation_anchor_date": "2026-09-21",
-  "collection_observed_at": "2026-09-19T09:54:23.800Z",
+  "collection_observed_at": "2026-09-19T10:31:12.137Z",
   "run_mode": "manual",
   "not_yet_eligible": [],
   "not_yet_eligible_overflow": false,
@@ -251,94 +251,8 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/s2049/Bench%202.0%20Metadata-bench.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 85357
-        },
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/w1200-h630-p-k-no-nu/Bench%202.0%20Metadata-bench.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 60409
-        },
-        {
-          "url": "https://developer.android.com/static/images/logos/android.svg",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 12454
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/s2049/Bench%202.0%20Metadata-bench.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 85357
-        },
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/w1200-h630-p-k-no-nu/Bench%202.0%20Metadata-bench.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 60409
-        },
-        {
-          "url": "https://developer.android.com/static/images/logos/android.svg",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 12454
-        }
-      ],
+      "imageCandidates": [],
+      "image_candidates": [],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 84): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 84): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -569,8 +483,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIF-dBH1TU5g6y4jdOLCKBo8KGPlPMUNQAGib3WSE8HPaLHG8iMXhgCiMZ2wyQ4kK93wQGmLiUEWuzlJRKcMVhPak5LantVgo3DEOcRORRJw8lRJk6FytYtUmF6xXyWNTVa2Ki7OD2tEHBS63e4VsDnhW3CkB3YCrWlZzv0DBoaX0v-ZQHBsDMvgmiUXI/s2469/AndroidX%20Security%20State%20Library_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 126974
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIF-dBH1TU5g6y4jdOLCKBo8KGPlPMUNQAGib3WSE8HPaLHG8iMXhgCiMZ2wyQ4kK93wQGmLiUEWuzlJRKcMVhPak5LantVgo3DEOcRORRJw8lRJk6FytYtUmF6xXyWNTVa2Ki7OD2tEHBS63e4VsDnhW3CkB3YCrWlZzv0DBoaX0v-ZQHBsDMvgmiUXI/w1200-h630-p-k-no-nu/AndroidX%20Security%20State%20Library_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 75927
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIF-dBH1TU5g6y4jdOLCKBo8KGPlPMUNQAGib3WSE8HPaLHG8iMXhgCiMZ2wyQ4kK93wQGmLiUEWuzlJRKcMVhPak5LantVgo3DEOcRORRJw8lRJk6FytYtUmF6xXyWNTVa2Ki7OD2tEHBS63e4VsDnhW3CkB3YCrWlZzv0DBoaX0v-ZQHBsDMvgmiUXI/s2469/AndroidX%20Security%20State%20Library_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 126974
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIF-dBH1TU5g6y4jdOLCKBo8KGPlPMUNQAGib3WSE8HPaLHG8iMXhgCiMZ2wyQ4kK93wQGmLiUEWuzlJRKcMVhPak5LantVgo3DEOcRORRJw8lRJk6FytYtUmF6xXyWNTVa2Ki7OD2tEHBS63e4VsDnhW3CkB3YCrWlZzv0DBoaX0v-ZQHBsDMvgmiUXI/w1200-h630-p-k-no-nu/AndroidX%20Security%20State%20Library_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 75927
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 54): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 54): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -1382,7 +1382,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 175224
+          "contentLength": 180965
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhxXjhFI2-zK8JEgBW_5dT7E4Wd_32EifVKThmEesvM8ei4pyt3TZUwR7FXW5VEHQGc6pPxXW8hYjsfHATAKi_wKFTFfXDevcK3wOWs9DIkJ5vhLKhVZnmCQw-IiM92tKPy1zPBZ0ZBei6qxvDbOsQX_j8NnFNEen6HWparIesRo-DPc5TP_318hU89fiU/w1200-h630-p-k-no-nu/%5BABL_116%5D%20Preparing%20your%20app%20for%20expanded%20memory%20limits%20-%20meta.png",
@@ -1426,7 +1426,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 175224
+          "contentLength": 180965
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhxXjhFI2-zK8JEgBW_5dT7E4Wd_32EifVKThmEesvM8ei4pyt3TZUwR7FXW5VEHQGc6pPxXW8hYjsfHATAKi_wKFTFfXDevcK3wOWs9DIkJ5vhLKhVZnmCQw-IiM92tKPy1zPBZ0ZBei6qxvDbOsQX_j8NnFNEen6HWparIesRo-DPc5TP_318hU89fiU/w1200-h630-p-k-no-nu/%5BABL_116%5D%20Preparing%20your%20app%20for%20expanded%20memory%20limits%20-%20meta.png",
@@ -1687,94 +1687,8 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/s2048/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 131087
-        },
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/w1200-h630-p-k-no-nu/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 94458
-        },
-        {
-          "url": "https://developer.android.com/static/images/logos/android.svg",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 12454
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/s2048/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 131087
-        },
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/w1200-h630-p-k-no-nu/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 94458
-        },
-        {
-          "url": "https://developer.android.com/static/images/logos/android.svg",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 12454
-        }
-      ],
+      "imageCandidates": [],
+      "image_candidates": [],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 72): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 72): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -1813,6 +1727,649 @@
         "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
         "warnings": [
           "main_hint_requires_candidate_runtime_evidence"
+        ]
+      }
+    },
+    {
+      "schema_version": 7,
+      "source": "Android Developers Latest Updates",
+      "source_name": "Android Developers Latest Updates",
+      "sourceUrl": "https://developer.android.com/latest-updates",
+      "source_url": "https://developer.android.com/latest-updates",
+      "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "source_id": "android-developers-latest-updates",
+      "category": "android",
+      "section": "Android / AOSP / Camera",
+      "source_category": "android",
+      "source_section": "Android / AOSP / Camera",
+      "priority": "high",
+      "reliability": "official",
+      "source_quality_required": true,
+      "origin": "source_registry",
+      "collectionStage": "raw_collection",
+      "collection_stage": "raw_collection",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "release_note_item",
+      "source_type": "release_note_item",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "source_usage_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_site_update_row",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_site_update_row",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_site_update_row",
+      "source_url_quality": "official_site_update_row",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "dated_site_update_row",
+      "evidence_granularity": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
+      "candidateOnly": false,
+      "candidate_only": false,
+      "community_signal": false,
+      "collectionMode": "release-note-item",
+      "collection_mode": "release-note-item",
+      "sourceCollectionMode": "release-note-watch",
+      "source_collection_mode": "release-note-watch",
+      "isArticleCandidate": true,
+      "is_article_candidate": true,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceSignalKind": "dated-release-evidence",
+      "evidence_signal_kind": "dated-release-evidence",
+      "evidenceLevel": "primary",
+      "evidence_level": "primary",
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_kind": "release_note_item",
+      "source_extraction": {
+        "adapter_id": "android-developers-jetpack-release",
+        "source_type": "release_note",
+        "evidence_granularity": "versioned_release_row",
+        "mode": "versioned_release_row",
+        "heading": "Version 1.6.2",
+        "bullets": [
+          "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )"
+        ],
+        "links": [
+          {
+            "role": "parent_source",
+            "text": "CameraX Release Notes",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+          },
+          {
+            "role": "release_note_anchor",
+            "text": "CameraX 1.6.2",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+          },
+          {
+            "role": "related",
+            "text": "these commits",
+            "url": "https://android.googlesource.com/platform/frameworks/support/+log/987b9ac8585b31424a397206c492196dd163997b..9046f07948c1e7a89aaec581463730f4d666611b/camera"
+          },
+          {
+            "role": "issue_or_bug",
+            "text": "I00bb4",
+            "url": "https://android-review.googlesource.com/#/q/I00bb407877f4e608a23754eaff9a8f9cf572e6d1"
+          },
+          {
+            "role": "issue_or_bug",
+            "text": "b/543937345",
+            "url": "https://issuetracker.google.com/issues/543937345"
+          },
+          {
+            "role": "parent_source",
+            "text": "Android Developers Latest Updates",
+            "url": "https://developer.android.com/latest-updates"
+          }
+        ],
+        "source": {
+          "name": "CameraX Release Notes",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+        },
+        "release": {
+          "version": "CameraX 1.6.2",
+          "date": "August 26, 2026",
+          "component": "CameraX / androidx.camera",
+          "sections": [
+            {
+              "category": "bug_fixes",
+              "heading": "Bug Fixes",
+              "items": [
+                {
+                  "text": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
+                  "source_text": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
+                  "links": [
+                    {
+                      "text": "I00bb4",
+                      "url": "https://android-review.googlesource.com/#/q/I00bb407877f4e608a23754eaff9a8f9cf572e6d1"
+                    },
+                    {
+                      "text": "b/543937345",
+                      "url": "https://issuetracker.google.com/issues/543937345"
+                    }
+                  ],
+                  "issue_ids": [
+                    "b/543937345"
+                  ],
+                  "artifact_names": []
+                }
+              ]
+            }
+          ]
+        },
+        "extraction_quality": {
+          "has_concrete_behavior_change": true,
+          "used_fallback": false,
+          "raw_table_used_as_body": false,
+          "main_article_allowed": true,
+          "used_versioned_release_row_extractor": true,
+          "used_empty_evidence_fallback": false,
+          "warnings": []
+        },
+        "minor_line_context": {
+          "version": "CameraX 1.6.0",
+          "date": "March 25, 2026",
+          "component": "CameraX / androidx.camera",
+          "sections": [
+            {
+              "category": "release_notes",
+              "heading": "1. Migrated to a High-Performance, Unified Camera Stack",
+              "items": [
+                {
+                  "text": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
+                  "source_text": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
+                  "links": [],
+                  "issue_ids": [],
+                  "artifact_names": []
+                }
+              ]
+            },
+            {
+              "category": "bug_fixes",
+              "heading": "Bug Fixes",
+              "items": [
+                {
+                  "text": "Fixed a crash that occurs on certain Android 17 (API 37) devices or higher. When these devices expose new dynamic range profiles (e.g., STANDARD_SMPTE_2094_50(ID 8192) ) that were unknown to CameraX version 1.5.1 and earlier, the library previously failed to handle these IDs appropriately, resulting in a NullPointerException or IllegalArgumentException during ProcessCameraProvider.bindToLifecycle() . This fix allows CameraX to gracefully ignore unrecognized dynamic range profiles, preventing the crash and maintaining forward compatibility. Please update your CameraX dependency to version 1.5.2 or 1.6.0 (or higher) to avoid this issue on devices exposing these new profiles . For more details, see issue 519796838 . ( Ibd7b5 )",
+                  "source_text": "Fixed a crash that occurs on certain Android 17 (API 37) devices or higher. When these devices expose new dynamic range profiles (e.g., STANDARD_SMPTE_2094_50(ID 8192) ) that were unknown to CameraX version 1.5.1 and earlier, the library previously failed to handle these IDs appropriately, resulting in a NullPointerException or IllegalArgumentException during ProcessCameraProvider.bindToLifecycle() . This fix allows CameraX to gracefully ignore unrecognized dynamic range profiles, preventing the crash and maintaining forward compatibility. Please update your CameraX dependency to version 1.5.2 or 1.6.0 (or higher) to avoid this issue on devices exposing these new profiles . For more details, see issue 519796838 . ( Ibd7b5 )",
+                  "links": [
+                    {
+                      "text": "STANDARD_SMPTE_2094_50(ID 8192)",
+                      "url": "https://developer.android.com/reference/android/hardware/camera2/params/DynamicRangeProfiles#STANDARD_SMPTE_2094_50"
+                    },
+                    {
+                      "text": "issue 519796838",
+                      "url": "https://issuetracker.google.com/519796838#comment2"
+                    },
+                    {
+                      "text": "Ibd7b5",
+                      "url": "https://android-review.googlesource.com/#/q/Ibd7b5f532f7af0f43415aaef09cc9ce5f26763f6"
+                    }
+                  ],
+                  "issue_ids": [
+                    "issue 519796838"
+                  ],
+                  "artifact_names": []
+                },
+                {
+                  "text": "The feature group API now provides consistent results when PREVIEW_STABILIZATION is used with VideoCapture . This corrects a bug that caused inconsistent results when a Preview use case was not also active. ( Ifed82 , b/449913903 )",
+                  "source_text": "The feature group API now provides consistent results when PREVIEW_STABILIZATION is used with VideoCapture . This corrects a bug that caused inconsistent results when a Preview use case was not also active. ( Ifed82 , b/449913903 )",
+                  "links": [
+                    {
+                      "text": "Ifed82",
+                      "url": "https://android-review.googlesource.com/#/q/Ifed82d0d9ce2cfdb407523535d9e4c8c4a51f46d"
+                    },
+                    {
+                      "text": "b/449913903",
+                      "url": "https://issuetracker.google.com/issues/449913903"
+                    }
+                  ],
+                  "issue_ids": [
+                    "b/449913903"
+                  ],
+                  "artifact_names": []
+                },
+                {
+                  "text": "Fixed an issue where unsupported preferred features were incorrectly made available. Features are now correctly filtered when their required use cases are not met. ( I38db8 , b/449532342 )",
+                  "source_text": "Fixed an issue where unsupported preferred features were incorrectly made available. Features are now correctly filtered when their required use cases are not met. ( I38db8 , b/449532342 )",
+                  "links": [
+                    {
+                      "text": "I38db8",
+                      "url": "https://android-review.googlesource.com/#/q/I38db88ca0ae9c2cd87b49ceffddd7980b3178576"
+                    },
+                    {
+                      "text": "b/449532342",
+                      "url": "https://issuetracker.google.com/issues/449532342"
+                    }
+                  ],
+                  "issue_ids": [
+                    "b/449532342"
+                  ],
+                  "artifact_names": []
+                },
+                {
+                  "text": "Fixed glitchy video result on Samsung Galaxy S6. ( I612d9 , b/235127608 )",
+                  "source_text": "Fixed glitchy video result on Samsung Galaxy S6. ( I612d9 , b/235127608 )",
+                  "links": [
+                    {
+                      "text": "I612d9",
+                      "url": "https://android-review.googlesource.com/#/q/I612d902c2aa36dfd5b77a53a59a5646cadf96272"
+                    },
+                    {
+                      "text": "b/235127608",
+                      "url": "https://issuetracker.google.com/issues/235127608"
+                    }
+                  ],
+                  "issue_ids": [
+                    "b/235127608"
+                  ],
+                  "artifact_names": []
+                },
+                {
+                  "text": "Fixed an issue where CameraInfo#isFeatureGroupSupported could incorrectly return true for PREVIEW_STABILIZATION if the SessionConfig in the query was already configured with other features. ( I2c355c , b/437816469 )",
+                  "source_text": "Fixed an issue where CameraInfo#isFeatureGroupSupported could incorrectly return true for PREVIEW_STABILIZATION if the SessionConfig in the query was already configured with other features. ( I2c355c , b/437816469 )",
+                  "links": [
+                    {
+                      "text": "I2c355c",
+                      "url": "https://android-review.googlesource.com/#/q/I2c355c533f737d1797a7427d37661781cd1480b2"
+                    },
+                    {
+                      "text": "b/437816469",
+                      "url": "https://issuetracker.google.com/issues/437816469"
+                    }
+                  ],
+                  "issue_ids": [
+                    "b/437816469"
+                  ],
+                  "artifact_names": []
+                },
+                {
+                  "text": "Excluded problematic YUV format output sizes from Samsung Z Fold 4 device. The received images have distortion issue when using those output sizes. ( I776bf , b/460322307 )",
+                  "source_text": "Excluded problematic YUV format output sizes from Samsung Z Fold 4 device. The received images have distortion issue when using those output sizes. ( I776bf , b/460322307 )",
+                  "links": [
+                    {
+                      "text": "I776bf",
+                      "url": "https://android-review.googlesource.com/#/q/I776bf1f9447fba5b6354b597fb8067d25419756a"
+                    },
+                    {
+                      "text": "b/460322307",
+                      "url": "https://issuetracker.google.com/issues/460322307"
+                    }
+                  ],
+                  "issue_ids": [
+                    "b/460322307"
+                  ],
+                  "artifact_names": []
+                },
+                {
+                  "text": "Fixed a device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound. ( I0f183 , b/458197367 )",
+                  "source_text": "Fixed a device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound. ( I0f183 , b/458197367 )",
+                  "links": [
+                    {
+                      "text": "I0f183",
+                      "url": "https://android-review.googlesource.com/#/q/I0f183808184febdcb203e8f5658e7663d8dc44b9"
+                    },
+                    {
+                      "text": "b/458197367",
+                      "url": "https://issuetracker.google.com/issues/458197367"
+                    }
+                  ],
+                  "issue_ids": [
+                    "b/458197367"
+                  ],
+                  "artifact_names": []
+                },
+                {
+                  "text": "Fixes an issue on some devices where using the flash with the ultra-wide camera may result in underexposed images. ( Ib7530 , b/444590340 )",
+                  "source_text": "Fixes an issue on some devices where using the flash with the ultra-wide camera may result in underexposed images. ( Ib7530 , b/444590340 )",
+                  "links": [
+                    {
+                      "text": "Ib7530",
+                      "url": "https://android-review.googlesource.com/#/q/Ib75308343ede2999677ffce021affa013d175668"
+                    },
+                    {
+                      "text": "b/444590340",
+                      "url": "https://issuetracker.google.com/issues/444590340"
+                    }
+                  ],
+                  "issue_ids": [
+                    "b/444590340"
+                  ],
+                  "artifact_names": []
+                },
+                {
+                  "text": "Updated the ExifInterface dependency to include a fix for parsing JPEGs with 0xFF padding, which resolves image capture failures on devices where the JPEG encoder adds fill bytes before markers. ( I0eb49 )",
+                  "source_text": "Updated the ExifInterface dependency to include a fix for parsing JPEGs with 0xFF padding, which resolves image capture failures on devices where the JPEG encoder adds fill bytes before markers. ( I0eb49 )",
+                  "links": [
+                    {
+                      "text": "I0eb49",
+                      "url": "https://android-review.googlesource.com/#/q/I0eb49797f167c36511bc5a2ea5c31a920f598b6d"
+                    }
+                  ],
+                  "issue_ids": [],
+                  "artifact_names": []
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "derived_editorial_hints": {
+        "relevance_bucket_hint": "direct_aosp_camera",
+        "hal_boundary": "framework_adjacent_not_direct_hal_contract",
+        "validation_targets": [
+          "VideoCapture stream and stabilization validation",
+          "SessionConfig feature combination validation",
+          "Camera2 interop regression validation"
+        ],
+        "device_specific_notes": [
+          "Samsung Galaxy S6.",
+          "Samsung Z Fold 4 device.",
+          "device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound."
+        ],
+        "do_not_claim": [
+          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+          "Do not use artifact version tables as behavior-change evidence."
+        ],
+        "main_article_allowed_hint": true,
+        "warnings": [
+          "device_specific_release_note"
+        ]
+      },
+      "extraction_quality": {
+        "has_concrete_behavior_change": true,
+        "used_fallback": false,
+        "raw_table_used_as_body": false,
+        "main_article_allowed": true,
+        "used_versioned_release_row_extractor": true,
+        "used_empty_evidence_fallback": false,
+        "warnings": []
+      },
+      "datePrecision": "day",
+      "date_precision": "day",
+      "parentUrl": "https://developer.android.com/latest-updates",
+      "parent_url": "https://developer.android.com/latest-updates",
+      "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
+      "seriesName": null,
+      "series_name": null,
+      "seriesVersion": null,
+      "series_version": null,
+      "camera_path_commit_count": null,
+      "camera_path_commit_count_is_lower_bound": null,
+      "gerrit_change_id": "",
+      "gerrit_change_number": null,
+      "gerrit_change_status": "",
+      "gerrit_commit_sha": "",
+      "gerrit_effective_date_field": "",
+      "covered_gerrit_change_ids": [],
+      "covered_commit_shas": [],
+      "parentTitle": "Android Developers Latest Updates",
+      "parent_title": "Android Developers Latest Updates",
+      "parentCanonicalUrl": "https://developer.android.com/latest-updates",
+      "parent_canonical_url": "https://developer.android.com/latest-updates",
+      "roundupItemIndex": null,
+      "roundup_item_index": null,
+      "anchorText": "",
+      "anchor_text": "",
+      "article_group_key": "",
+      "tooling_workflow_type": "",
+      "native_workflow_evidence_score": 0,
+      "outgoing_links": [
+        {
+          "url": "https://android.googlesource.com/platform/frameworks/support/+log/987b9ac8585b31424a397206c492196dd163997b..9046f07948c1e7a89aaec581463730f4d666611b/camera",
+          "text": "these commits",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://android-review.googlesource.com/#/q/I00bb407877f4e608a23754eaff9a8f9cf572e6d1",
+          "text": "I00bb4",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://issuetracker.google.com/issues/543937345",
+          "text": "b/543937345",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        }
+      ],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": true,
+      "has_api_or_component": true,
+      "has_behavior_change": true,
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "evidence_score": 8,
+      "version_or_release": "CameraX 1.6.2",
+      "api_or_component": "CameraX / androidx.camera",
+      "source_hint_api_or_component": "android",
+      "behavior_change": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
+      "collector_template_sentence": "",
+      "selection_exclusion_reason": "Eligible for short newsletter use.",
+      "watchlist_reason": "",
+      "verification_hint": "Can be used directly if the collected item supports the claim.",
+      "title": "CameraX Release Notes - CameraX 1.6.2",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "publishedAt": "August 26, 2026",
+      "published_date": "August 26, 2026",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
+      "relevanceScore": 72,
+      "relevance_score": 72,
+      "cameraHalRelevanceScore": 72,
+      "camera_hal_relevance_score": 72,
+      "editorial_priority": 1,
+      "relevance_bucket": "direct_aosp_camera",
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": false,
+      "evidence_origin": "article_text",
+      "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "scope_evidence_terms": [
+        "\\bCameraX\\b"
+      ],
+      "aospCameraStackBucket": "direct_aosp_camera",
+      "aosp_camera_stack_bucket": "direct_aosp_camera",
+      "aospCameraDirect": true,
+      "aosp_camera_direct": true,
+      "aospCameraEvidenceTerms": [
+        "\\bCameraX\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\bCameraX\\b"
+      ],
+      "aospCameraRelevanceReason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        }
+      ],
+      "candidateTier": "short-news",
+      "reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "collection_reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "decision": {
+        "topic": "direct_aosp_camera",
+        "evidenceLevel": "primary",
+        "selection": "short",
+        "reason": "Official dated source with supporting evidence.",
+        "hasDate": true,
+        "hasConcreteChange": true
+      },
+      "selection": "short",
+      "decision_reason": "Official dated source with supporting evidence.",
+      "has_date": true,
+      "has_concrete_change": true,
+      "topic_bucket": "direct_aosp_camera",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 1,
+        "by_type": {
+          "google_issue_tracker": 1
+        },
+        "by_fetch_status": {
+          "unsupported": 1
+        },
+        "impact_type_counts": {
+          "camera_api_change": 1
+        },
+        "warning_count": 2,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "543937345"
+        ]
+      },
+      "impact_classification": {
+        "impact_type": "camera_api_change",
+        "hal_runtime_impact": true,
+        "camera_pipeline_impact": true,
+        "recommended_article_type": "main",
+        "confidence": 0.75,
+        "reason": "camera_api_change classified from candidate text.",
+        "warnings": [
+          "linked_evidence_unsupported"
         ]
       }
     },
@@ -2032,7 +2589,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 341036
+          "contentLength": 2048
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -2076,7 +2633,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 341036
+          "contentLength": 2048
         },
         {
           "url": "https://developer.android.com/static/images/logos/android.svg",
@@ -2323,94 +2880,8 @@
       ],
       "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.",
       "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.",
-      "imageCandidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCQsu918ozPnYGqHeRBhQloNpT7ahw1BtBs97BDcUQWNgJoFv5UE_COINTQ2Ya1u8319UoLFzEl5Wz-10eGwB3Qbi-NmDEkOljLUiBNb1KOeEV83VoGRY7SUex8-aRZuSJNkHkbmt-2rJ_s3QhdxLwSQB0AYDUJo3Tcs5XE89CLHvuR47bPnK04OPTB9Y/s2469/%5BABL_123%5D%20Streamline%20adaptive%20testing%20with%20emulator%20commands_Meta.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 250565
-        },
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCQsu918ozPnYGqHeRBhQloNpT7ahw1BtBs97BDcUQWNgJoFv5UE_COINTQ2Ya1u8319UoLFzEl5Wz-10eGwB3Qbi-NmDEkOljLUiBNb1KOeEV83VoGRY7SUex8-aRZuSJNkHkbmt-2rJ_s3QhdxLwSQB0AYDUJo3Tcs5XE89CLHvuR47bPnK04OPTB9Y/w1200-h630-p-k-no-nu/%5BABL_123%5D%20Streamline%20adaptive%20testing%20with%20emulator%20commands_Meta.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 170062
-        },
-        {
-          "url": "https://developer.android.com/static/images/logos/android.svg",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 12454
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCQsu918ozPnYGqHeRBhQloNpT7ahw1BtBs97BDcUQWNgJoFv5UE_COINTQ2Ya1u8319UoLFzEl5Wz-10eGwB3Qbi-NmDEkOljLUiBNb1KOeEV83VoGRY7SUex8-aRZuSJNkHkbmt-2rJ_s3QhdxLwSQB0AYDUJo3Tcs5XE89CLHvuR47bPnK04OPTB9Y/s2469/%5BABL_123%5D%20Streamline%20adaptive%20testing%20with%20emulator%20commands_Meta.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 250565
-        },
-        {
-          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiCQsu918ozPnYGqHeRBhQloNpT7ahw1BtBs97BDcUQWNgJoFv5UE_COINTQ2Ya1u8319UoLFzEl5Wz-10eGwB3Qbi-NmDEkOljLUiBNb1KOeEV83VoGRY7SUex8-aRZuSJNkHkbmt-2rJ_s3QhdxLwSQB0AYDUJo3Tcs5XE89CLHvuR47bPnK04OPTB9Y/w1200-h630-p-k-no-nu/%5BABL_123%5D%20Streamline%20adaptive%20testing%20with%20emulator%20commands_Meta.png",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 170062
-        },
-        {
-          "url": "https://developer.android.com/static/images/logos/android.svg",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "hero android logo",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentLength": 12454
-        }
-      ],
+      "imageCandidates": [],
+      "image_candidates": [],
       "candidateTier": "short-news",
       "reason": "Android Developers Blog (official, high, score 60): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)",
       "collection_reason": "Android Developers Blog (official, high, score 60): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)",
@@ -2654,7 +3125,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 243881
+          "contentLength": 80938
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh5wMRO7HwquRHIzH0qLwRDKkYVq-nIB4DwG5R2mLK3R3p1lo9nAVblduqSjSFc7rC3xo0bFBXB9iiTv662Bs4y7Ex_35labdsyXi9rM6FNWECqz19Nl7UrI5pO28Un6GBeInO2-yEJeNx0v3thcG5QWWTrCFQvvAIaYB60GEumMmHulA3mmYTtDL68isQ/w1200-h630-p-k-no-nu/Android-1-Meta.jpg",
@@ -2698,7 +3169,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 243881
+          "contentLength": 80938
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh5wMRO7HwquRHIzH0qLwRDKkYVq-nIB4DwG5R2mLK3R3p1lo9nAVblduqSjSFc7rC3xo0bFBXB9iiTv662Bs4y7Ex_35labdsyXi9rM6FNWECqz19Nl7UrI5pO28Un6GBeInO2-yEJeNx0v3thcG5QWWTrCFQvvAIaYB60GEumMmHulA3mmYTtDL68isQ/w1200-h630-p-k-no-nu/Android-1-Meta.jpg",
@@ -2768,823 +3239,6 @@
         "warnings": [
           "main_hint_requires_candidate_runtime_evidence"
         ]
-      }
-    },
-    {
-      "schema_version": 7,
-      "source": "Android Developers Latest Updates",
-      "source_name": "Android Developers Latest Updates",
-      "sourceUrl": "https://developer.android.com/latest-updates",
-      "source_url": "https://developer.android.com/latest-updates",
-      "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "source_id": "android-developers-latest-updates",
-      "category": "android",
-      "section": "Android / AOSP / Camera",
-      "source_category": "android",
-      "source_section": "Android / AOSP / Camera",
-      "priority": "high",
-      "reliability": "official",
-      "source_quality_required": true,
-      "origin": "source_registry",
-      "collectionStage": "raw_collection",
-      "collection_stage": "raw_collection",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "release_note_item",
-      "source_type": "release_note_item",
-      "source_priority": "high",
-      "source_reliability": "official",
-      "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "source_usage_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "source_quality": {
-        "source_role": "official_release_source",
-        "source_url_quality": "official_site_update_row",
-        "source_quality_status": "blocked",
-        "main_article_source_allowed": false,
-        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
-        "main_article_source_blockers": [
-          "source_gap_risk",
-          "reference_only"
-        ],
-        "cross_check_status": "not_required",
-        "requires_cross_check": false,
-        "requires_conditional_evidence": false,
-        "conditional_evidence_type": "",
-        "evidence_granularity": "dated_site_update_row",
-        "source_quality_notes": [
-          "official source"
-        ]
-      },
-      "sourceRole": "official_release_source",
-      "source_role": "official_release_source",
-      "sourceUrlQuality": "official_site_update_row",
-      "source_url_quality": "official_site_update_row",
-      "sourceQualityStatus": "blocked",
-      "source_quality_status": "blocked",
-      "mainArticleSourceAllowed": false,
-      "main_article_source_allowed": false,
-      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
-      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
-      "mainArticleSourceBlockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "main_article_source_blockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "crossCheckStatus": "not_required",
-      "cross_check_status": "not_required",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "requiresConditionalEvidence": false,
-      "requires_conditional_evidence": false,
-      "conditionalEvidenceType": "",
-      "conditional_evidence_type": "",
-      "evidenceGranularity": "dated_site_update_row",
-      "evidence_granularity": "dated_site_update_row",
-      "sourceQualityNotes": [
-        "official source"
-      ],
-      "source_quality_notes": [
-        "official source"
-      ],
-      "candidateOnly": false,
-      "candidate_only": false,
-      "community_signal": false,
-      "collectionMode": "release-note-page",
-      "collection_mode": "release-note-page",
-      "sourceCollectionMode": "release-note-watch",
-      "source_collection_mode": "release-note-watch",
-      "isArticleCandidate": false,
-      "is_article_candidate": false,
-      "isWatchPage": true,
-      "is_watch_page": true,
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "evidenceSignalKind": "undated-watch-page",
-      "evidence_signal_kind": "undated-watch-page",
-      "evidenceLevel": "reference",
-      "evidence_level": "reference",
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_kind": "release_note_item",
-      "source_extraction": {
-        "adapter_id": "android-developers-latest-updates",
-        "source_type": "release_note",
-        "evidence_granularity": "versioned_release_row",
-        "mode": "versioned_release_row",
-        "heading": "1.6.2",
-        "bullets": [],
-        "links": [
-          {
-            "role": "parent_source",
-            "text": "Android Developers Latest Updates",
-            "url": "https://developer.android.com/latest-updates"
-          },
-          {
-            "role": "release_note_anchor",
-            "text": "CameraX 1.6.2",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
-          },
-          {
-            "role": "release_note_anchor",
-            "text": "1.6.2",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
-          },
-          {
-            "role": "release_note_anchor",
-            "text": "1.7.0-alpha03",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
-          },
-          {
-            "role": "release_note_anchor",
-            "text": "1.5.0-alpha06",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06"
-          },
-          {
-            "role": "release_note_anchor",
-            "text": "1.3.0-beta02",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
-          },
-          {
-            "role": "release_note_anchor",
-            "text": "1.4.0-alpha07",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
-          },
-          {
-            "role": "parent_source",
-            "text": "View the Camera Library",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera"
-          }
-        ],
-        "source": {
-          "name": "Android Developers Latest Updates",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
-        },
-        "release": {
-          "version": "CameraX 1.6.2",
-          "date": "August 26, 2026",
-          "component": "CameraX / androidx.camera",
-          "sections": []
-        },
-        "extraction_quality": {
-          "has_concrete_behavior_change": false,
-          "used_fallback": true,
-          "raw_table_used_as_body": false,
-          "main_article_allowed": false,
-          "used_versioned_release_row_extractor": true,
-          "used_empty_evidence_fallback": true,
-          "warnings": [
-            "missing_concrete_release_note_bullet"
-          ]
-        }
-      },
-      "derived_editorial_hints": null,
-      "extraction_quality": {
-        "has_concrete_behavior_change": false,
-        "used_fallback": true,
-        "raw_table_used_as_body": false,
-        "main_article_allowed": false,
-        "used_versioned_release_row_extractor": true,
-        "used_empty_evidence_fallback": true,
-        "warnings": [
-          "missing_concrete_release_note_bullet"
-        ]
-      },
-      "datePrecision": "day",
-      "date_precision": "day",
-      "parentUrl": "https://developer.android.com/latest-updates",
-      "parent_url": "https://developer.android.com/latest-updates",
-      "in_reply_to": "",
-      "seriesId": null,
-      "series_id": null,
-      "seriesName": null,
-      "series_name": null,
-      "seriesVersion": null,
-      "series_version": null,
-      "camera_path_commit_count": null,
-      "camera_path_commit_count_is_lower_bound": null,
-      "gerrit_change_id": "",
-      "gerrit_change_number": null,
-      "gerrit_change_status": "",
-      "gerrit_commit_sha": "",
-      "gerrit_effective_date_field": "",
-      "covered_gerrit_change_ids": [],
-      "covered_commit_shas": [],
-      "parentTitle": "Android Developers Latest Updates",
-      "parent_title": "Android Developers Latest Updates",
-      "parentCanonicalUrl": "https://developer.android.com/latest-updates",
-      "parent_canonical_url": "https://developer.android.com/latest-updates",
-      "roundupItemIndex": null,
-      "roundup_item_index": null,
-      "anchorText": "",
-      "anchor_text": "",
-      "article_group_key": "",
-      "tooling_workflow_type": "",
-      "native_workflow_evidence_score": 0,
-      "outgoing_links": [
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "text": "1.6.2",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
-          "text": "1.7.0-alpha03",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06",
-          "text": "1.5.0-alpha06",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "text": "1.3.0-beta02",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
-          "text": "1.4.0-alpha07",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "text": "View the Camera Library",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        }
-      ],
-      "sourceMonth": "",
-      "source_month": "",
-      "has_published_date": true,
-      "has_version_or_release": true,
-      "has_api_or_component": true,
-      "has_behavior_change": false,
-      "source_gap_risk": true,
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "evidence_score": 6,
-      "version_or_release": "CameraX 1.6.2",
-      "api_or_component": "CameraX / androidx.camera",
-      "source_hint_api_or_component": "android",
-      "behavior_change": "1.6.2",
-      "collector_template_sentence": "",
-      "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "title": "1.6.2",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "publishedAt": "August 26, 2026",
-      "published_date": "August 26, 2026",
-      "effective_date": "",
-      "date_source": "",
-      "date_confidence": 0,
-      "date_evidence_url": "",
-      "summary": "",
-      "relevanceScore": 60,
-      "relevance_score": 60,
-      "cameraHalRelevanceScore": 60,
-      "camera_hal_relevance_score": 60,
-      "editorial_priority": 1,
-      "relevance_bucket": "direct_aosp_camera",
-      "aosp_camera_directness": 3,
-      "driver_stack_relevance": 0,
-      "multimedia_camera_output_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": true,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "scope_evidence_terms": [
-        "\\bCameraX\\b"
-      ],
-      "aospCameraStackBucket": "direct_aosp_camera",
-      "aosp_camera_stack_bucket": "direct_aosp_camera",
-      "aospCameraDirect": true,
-      "aosp_camera_direct": true,
-      "aospCameraEvidenceTerms": [
-        "\\bCameraX\\b"
-      ],
-      "aosp_camera_evidence_terms": [
-        "\\bCameraX\\b"
-      ],
-      "aospCameraRelevanceReason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
-      "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
-      "imageCandidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 31847
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=tr",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 31847
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=tr",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        }
-      ],
-      "candidateTier": "watchlist-reference",
-      "reason": "Android Developers Latest Updates (official, high, score 60): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "collection_reason": "Android Developers Latest Updates (official, high, score 60): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "decision": {
-        "topic": "direct_aosp_camera",
-        "evidenceLevel": "reference",
-        "selection": "reference",
-        "reason": "Background reference page; not an article candidate.",
-        "hasDate": true,
-        "hasConcreteChange": true
-      },
-      "selection": "reference",
-      "decision_reason": "Background reference page; not an article candidate.",
-      "has_date": true,
-      "has_concrete_change": true,
-      "topic_bucket": "direct_aosp_camera",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "camera_api_change": 1
-        },
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "camera_api_change",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
-        "confidence": 0.75,
-        "reason": "camera_api_change classified from candidate text.",
-        "warnings": []
-      }
-    },
-    {
-      "schema_version": 7,
-      "source": "Android Developers Latest Updates",
-      "source_name": "Android Developers Latest Updates",
-      "sourceUrl": "https://developer.android.com/latest-updates",
-      "source_url": "https://developer.android.com/latest-updates",
-      "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "source_id": "android-developers-latest-updates",
-      "category": "android",
-      "section": "Android / AOSP / Camera",
-      "source_category": "android",
-      "source_section": "Android / AOSP / Camera",
-      "priority": "high",
-      "reliability": "official",
-      "source_quality_required": true,
-      "origin": "source_registry",
-      "collectionStage": "raw_collection",
-      "collection_stage": "raw_collection",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "release_note_item",
-      "source_type": "release_note_item",
-      "source_priority": "high",
-      "source_reliability": "official",
-      "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "source_usage_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "source_quality": {
-        "source_role": "official_release_source",
-        "source_url_quality": "official_site_update_row",
-        "source_quality_status": "blocked",
-        "main_article_source_allowed": false,
-        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
-        "main_article_source_blockers": [
-          "source_gap_risk",
-          "reference_only"
-        ],
-        "cross_check_status": "not_required",
-        "requires_cross_check": false,
-        "requires_conditional_evidence": false,
-        "conditional_evidence_type": "",
-        "evidence_granularity": "dated_site_update_row",
-        "source_quality_notes": [
-          "official source"
-        ]
-      },
-      "sourceRole": "official_release_source",
-      "source_role": "official_release_source",
-      "sourceUrlQuality": "official_site_update_row",
-      "source_url_quality": "official_site_update_row",
-      "sourceQualityStatus": "blocked",
-      "source_quality_status": "blocked",
-      "mainArticleSourceAllowed": false,
-      "main_article_source_allowed": false,
-      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
-      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
-      "mainArticleSourceBlockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "main_article_source_blockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "crossCheckStatus": "not_required",
-      "cross_check_status": "not_required",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "requiresConditionalEvidence": false,
-      "requires_conditional_evidence": false,
-      "conditionalEvidenceType": "",
-      "conditional_evidence_type": "",
-      "evidenceGranularity": "dated_site_update_row",
-      "evidence_granularity": "dated_site_update_row",
-      "sourceQualityNotes": [
-        "official source"
-      ],
-      "source_quality_notes": [
-        "official source"
-      ],
-      "candidateOnly": false,
-      "candidate_only": false,
-      "community_signal": false,
-      "collectionMode": "release-note-page",
-      "collection_mode": "release-note-page",
-      "sourceCollectionMode": "release-note-watch",
-      "source_collection_mode": "release-note-watch",
-      "isArticleCandidate": false,
-      "is_article_candidate": false,
-      "isWatchPage": true,
-      "is_watch_page": true,
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "evidenceSignalKind": "undated-watch-page",
-      "evidence_signal_kind": "undated-watch-page",
-      "evidenceLevel": "reference",
-      "evidence_level": "reference",
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_kind": "release_note_item",
-      "source_extraction": {
-        "adapter_id": "android-developers-latest-updates",
-        "source_type": "release_note",
-        "evidence_granularity": "versioned_release_row",
-        "mode": "versioned_release_row",
-        "heading": "1.3.0-beta02",
-        "bullets": [],
-        "links": [
-          {
-            "role": "parent_source",
-            "text": "Android Developers Latest Updates",
-            "url": "https://developer.android.com/latest-updates"
-          },
-          {
-            "role": "release_note_anchor",
-            "text": "1.3.0-beta02",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
-          }
-        ],
-        "source": {
-          "name": "Android Developers Latest Updates",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
-        },
-        "release": {
-          "version": "1.3.0-beta02",
-          "date": "August 26, 2026",
-          "component": "CameraX / androidx.camera",
-          "sections": []
-        },
-        "extraction_quality": {
-          "has_concrete_behavior_change": false,
-          "used_fallback": true,
-          "raw_table_used_as_body": false,
-          "main_article_allowed": false,
-          "used_versioned_release_row_extractor": true,
-          "used_empty_evidence_fallback": true,
-          "warnings": [
-            "missing_concrete_release_note_bullet"
-          ]
-        }
-      },
-      "derived_editorial_hints": null,
-      "extraction_quality": {
-        "has_concrete_behavior_change": false,
-        "used_fallback": true,
-        "raw_table_used_as_body": false,
-        "main_article_allowed": false,
-        "used_versioned_release_row_extractor": true,
-        "used_empty_evidence_fallback": true,
-        "warnings": [
-          "missing_concrete_release_note_bullet"
-        ]
-      },
-      "datePrecision": "day",
-      "date_precision": "day",
-      "parentUrl": "https://developer.android.com/latest-updates",
-      "parent_url": "https://developer.android.com/latest-updates",
-      "in_reply_to": "",
-      "seriesId": null,
-      "series_id": null,
-      "seriesName": null,
-      "series_name": null,
-      "seriesVersion": null,
-      "series_version": null,
-      "camera_path_commit_count": null,
-      "camera_path_commit_count_is_lower_bound": null,
-      "gerrit_change_id": "",
-      "gerrit_change_number": null,
-      "gerrit_change_status": "",
-      "gerrit_commit_sha": "",
-      "gerrit_effective_date_field": "",
-      "covered_gerrit_change_ids": [],
-      "covered_commit_shas": [],
-      "parentTitle": "Android Developers Latest Updates",
-      "parent_title": "Android Developers Latest Updates",
-      "parentCanonicalUrl": "https://developer.android.com/latest-updates",
-      "parent_canonical_url": "https://developer.android.com/latest-updates",
-      "roundupItemIndex": null,
-      "roundup_item_index": null,
-      "anchorText": "",
-      "anchor_text": "",
-      "article_group_key": "",
-      "tooling_workflow_type": "",
-      "native_workflow_evidence_score": 0,
-      "outgoing_links": [],
-      "sourceMonth": "",
-      "source_month": "",
-      "has_published_date": true,
-      "has_version_or_release": true,
-      "has_api_or_component": true,
-      "has_behavior_change": false,
-      "source_gap_risk": true,
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "evidence_score": 6,
-      "version_or_release": "1.3.0-beta02",
-      "api_or_component": "CameraX / androidx.camera",
-      "source_hint_api_or_component": "android",
-      "behavior_change": "1.3.0-beta02",
-      "collector_template_sentence": "",
-      "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-      "title": "1.3.0-beta02",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-      "publishedAt": "August 26, 2026",
-      "published_date": "August 26, 2026",
-      "effective_date": "",
-      "date_source": "",
-      "date_confidence": 0,
-      "date_evidence_url": "",
-      "summary": "",
-      "relevanceScore": 60,
-      "relevance_score": 60,
-      "cameraHalRelevanceScore": 60,
-      "camera_hal_relevance_score": 60,
-      "editorial_priority": 1,
-      "relevance_bucket": "direct_aosp_camera",
-      "aosp_camera_directness": 3,
-      "driver_stack_relevance": 0,
-      "multimedia_camera_output_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": true,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "scope_evidence_terms": [
-        "\\bCameraX\\b"
-      ],
-      "aospCameraStackBucket": "direct_aosp_camera",
-      "aosp_camera_stack_bucket": "direct_aosp_camera",
-      "aospCameraDirect": true,
-      "aosp_camera_direct": true,
-      "aospCameraEvidenceTerms": [
-        "\\bCameraX\\b"
-      ],
-      "aosp_camera_evidence_terms": [
-        "\\bCameraX\\b"
-      ],
-      "aospCameraRelevanceReason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
-      "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
-      "imageCandidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 31847
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 2833
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 31847
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 2833
-        }
-      ],
-      "candidateTier": "watchlist-reference",
-      "reason": "Android Developers Latest Updates (official, high, score 60): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "collection_reason": "Android Developers Latest Updates (official, high, score 60): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "decision": {
-        "topic": "direct_aosp_camera",
-        "evidenceLevel": "reference",
-        "selection": "reference",
-        "reason": "Background reference page; not an article candidate.",
-        "hasDate": true,
-        "hasConcreteChange": true
-      },
-      "selection": "reference",
-      "decision_reason": "Background reference page; not an article candidate.",
-      "has_date": true,
-      "has_concrete_change": true,
-      "topic_bucket": "direct_aosp_camera",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "camera_api_change": 1
-        },
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "camera_api_change",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
-        "confidence": 0.75,
-        "reason": "camera_api_change classified from candidate text.",
-        "warnings": []
       }
     },
     {
@@ -4167,6 +3821,20 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=hi",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -4183,6 +3851,20 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=hi",
+          "sourceUrl": "https://source.android.com/docs/security/bulletin",
+          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Security Bulletin",
+          "validationStatus": "ok",
+          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -10254,13 +9936,10 @@
       "source_quality": {
         "source_role": "generic_trend_source",
         "source_url_quality": "generic_ai_or_it_trend",
-        "source_quality_status": "blocked",
-        "main_article_source_allowed": false,
-        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
-        "main_article_source_blockers": [
-          "source_gap_risk",
-          "reference_only"
-        ],
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
         "cross_check_status": "not_required",
         "requires_cross_check": false,
         "requires_conditional_evidence": true,
@@ -10274,20 +9953,14 @@
       "source_role": "generic_trend_source",
       "sourceUrlQuality": "generic_ai_or_it_trend",
       "source_url_quality": "generic_ai_or_it_trend",
-      "sourceQualityStatus": "blocked",
-      "source_quality_status": "blocked",
-      "mainArticleSourceAllowed": false,
-      "main_article_source_allowed": false,
-      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
-      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
-      "mainArticleSourceBlockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "main_article_source_blockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
       "crossCheckStatus": "not_required",
       "cross_check_status": "not_required",
       "requiresCrossCheck": false,
@@ -10319,10 +9992,10 @@
       "has_dated_evidence": true,
       "evidenceSignalKind": "dated-concrete-evidence",
       "evidence_signal_kind": "dated-concrete-evidence",
-      "evidenceLevel": "reference",
-      "evidence_level": "reference",
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
+      "evidenceLevel": "primary",
+      "evidence_level": "primary",
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
       "source_kind": "blog_post_item",
       "source_extraction": {
         "workflow": {
@@ -10386,19 +10059,19 @@
       "has_version_or_release": false,
       "has_api_or_component": true,
       "has_behavior_change": true,
-      "source_gap_risk": true,
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
       "evidence_score": 6,
       "version_or_release": "",
       "api_or_component": "Claude Code",
       "source_hint_api_or_component": "ai",
       "behavior_change": "Then ask Claude to profile each endpoint, test optimizations, and open PRs in parallel threads.",
       "collector_template_sentence": "",
-      "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "selection_exclusion_reason": "Eligible for short newsletter use.",
+      "watchlist_reason": "",
+      "verification_hint": "Can be used directly if the collected item supports the claim.",
       "title": "Projects redesigned: from folder to conversation",
       "url": "https://claude.com/blog/projects-redesigned",
       "publishedAt": "2026-09-17",
@@ -10412,28 +10085,34 @@
       "relevance_score": 66,
       "cameraHalRelevanceScore": 66,
       "camera_hal_relevance_score": 66,
-      "editorial_priority": 4,
-      "relevance_bucket": "generic_tech_watchlist",
+      "editorial_priority": 2,
+      "relevance_bucket": "cpp_ai_tooling_fallback",
       "aosp_camera_directness": 0,
       "driver_stack_relevance": 0,
       "multimedia_camera_output_relevance": 0,
       "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
+      "native_tooling_relevance": 3,
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "none",
+      "counts_as_fallback_topic": true,
+      "evidence_origin": "article_text",
       "source_hint": "Claude 제품 소식과 개발 workflow 사례 확인",
-      "scope_evidence_terms": [],
-      "aospCameraStackBucket": "generic_tech_watchlist",
-      "aosp_camera_stack_bucket": "generic_tech_watchlist",
+      "scope_evidence_terms": [
+        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
+      ],
+      "aospCameraStackBucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_stack_bucket": "cpp_ai_tooling_fallback",
       "aospCameraDirect": false,
       "aosp_camera_direct": false,
-      "aospCameraEvidenceTerms": [],
-      "aosp_camera_evidence_terms": [],
-      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "aospCameraEvidenceTerms": [
+        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
+      ],
+      "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
           "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aac1eaf2091cb214f764427_og_projects-redesigned.jpg",
@@ -10522,22 +10201,22 @@
           "contentLength": 141430
         }
       ],
-      "candidateTier": "watchlist-reference",
-      "reason": "Claude Blog (official, medium, score 66): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
-      "collection_reason": "Claude Blog (official, medium, score 66): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "candidateTier": "short-news",
+      "reason": "Claude Blog (official, medium, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "collection_reason": "Claude Blog (official, medium, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
       "decision": {
-        "topic": "generic_tech_watchlist",
-        "evidenceLevel": "reference",
-        "selection": "reference",
-        "reason": "Background reference page; not an article candidate.",
+        "topic": "cpp_ai_tooling_fallback",
+        "evidenceLevel": "primary",
+        "selection": "short",
+        "reason": "Official dated source with supporting evidence.",
         "hasDate": true,
         "hasConcreteChange": true
       },
-      "selection": "reference",
-      "decision_reason": "Background reference page; not an article candidate.",
+      "selection": "short",
+      "decision_reason": "Official dated source with supporting evidence.",
       "has_date": true,
       "has_concrete_change": true,
-      "topic_bucket": "generic_tech_watchlist",
+      "topic_bucket": "cpp_ai_tooling_fallback",
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -10565,16 +10244,16 @@
     },
     {
       "schema_version": 7,
-      "source": "Claude Blog",
-      "source_name": "Claude Blog",
-      "sourceUrl": "https://claude.com/blog",
-      "source_url": "https://claude.com/blog",
-      "articleUrl": "https://claude.com/blog/building-an-ai-native-revenue-organization",
-      "article_url": "https://claude.com/blog/building-an-ai-native-revenue-organization",
-      "source_id": "claude-blog",
-      "category": "ai",
+      "source": "Claude Code Changelog",
+      "source_name": "Claude Code Changelog",
+      "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+      "source_url": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+      "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.273",
+      "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.273",
+      "source_id": "claude-code-changelog",
+      "category": "ai-coding",
       "section": "AI / SW Engineering Trends",
-      "source_category": "ai",
+      "source_category": "ai-coding",
       "source_section": "AI / SW Engineering Trends",
       "priority": "medium",
       "reliability": "official",
@@ -10584,15 +10263,15 @@
       "collection_stage": "raw_collection",
       "manualSeed": false,
       "manual_seed": false,
-      "sourceType": "blog_post_item",
-      "source_type": "blog_post_item",
+      "sourceType": "release_note_item",
+      "source_type": "release_note_item",
       "source_priority": "medium",
       "source_reliability": "official",
-      "usageHint": "Claude 제품 소식과 개발 workflow 사례 확인",
-      "source_usage_hint": "Claude 제품 소식과 개발 workflow 사례 확인",
+      "usageHint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
+      "source_usage_hint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
       "source_quality": {
-        "source_role": "generic_trend_source",
-        "source_url_quality": "generic_ai_or_it_trend",
+        "source_role": "project_release_source",
+        "source_url_quality": "project_release",
         "source_quality_status": "blocked",
         "main_article_source_allowed": false,
         "main_article_source_allowed_reason": "Candidate still has source gap risk.",
@@ -10603,16 +10282,17 @@
         "cross_check_status": "not_required",
         "requires_cross_check": false,
         "requires_conditional_evidence": true,
-        "conditional_evidence_type": "native_hal_workflow",
-        "evidence_granularity": "article_level_native_hal_workflow_evidence",
+        "conditional_evidence_type": "project_release_evidence",
+        "evidence_granularity": "dated_release_item",
         "source_quality_notes": [
-          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+          "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
+          "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
         ]
       },
-      "sourceRole": "generic_trend_source",
-      "source_role": "generic_trend_source",
-      "sourceUrlQuality": "generic_ai_or_it_trend",
-      "source_url_quality": "generic_ai_or_it_trend",
+      "sourceRole": "project_release_source",
+      "source_role": "project_release_source",
+      "sourceUrlQuality": "project_release",
+      "source_url_quality": "project_release",
       "sourceQualityStatus": "blocked",
       "source_quality_status": "blocked",
       "mainArticleSourceAllowed": false,
@@ -10633,64 +10313,45 @@
       "requires_cross_check": false,
       "requiresConditionalEvidence": true,
       "requires_conditional_evidence": true,
-      "conditionalEvidenceType": "native_hal_workflow",
-      "conditional_evidence_type": "native_hal_workflow",
-      "evidenceGranularity": "article_level_native_hal_workflow_evidence",
-      "evidence_granularity": "article_level_native_hal_workflow_evidence",
+      "conditionalEvidenceType": "project_release_evidence",
+      "conditional_evidence_type": "project_release_evidence",
+      "evidenceGranularity": "dated_release_item",
+      "evidence_granularity": "dated_release_item",
       "sourceQualityNotes": [
-        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
+        "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
       ],
       "source_quality_notes": [
-        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
+        "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
       ],
       "candidateOnly": false,
       "candidate_only": false,
       "community_signal": false,
-      "collectionMode": "article-item",
-      "collection_mode": "article-item",
-      "sourceCollectionMode": "homepage-watch",
-      "source_collection_mode": "homepage-watch",
+      "collectionMode": "release-note-item",
+      "collection_mode": "release-note-item",
+      "sourceCollectionMode": "release-note-watch",
+      "source_collection_mode": "release-note-watch",
       "isArticleCandidate": true,
       "is_article_candidate": true,
       "isWatchPage": false,
       "is_watch_page": false,
       "hasDatedEvidence": true,
       "has_dated_evidence": true,
-      "evidenceSignalKind": "dated-concrete-evidence",
-      "evidence_signal_kind": "dated-concrete-evidence",
+      "evidenceSignalKind": "dated-release-evidence",
+      "evidence_signal_kind": "dated-release-evidence",
       "evidenceLevel": "reference",
       "evidence_level": "reference",
       "finalSelectionEligibility": "watchlist",
       "final_selection_eligibility": "watchlist",
-      "source_kind": "blog_post_item",
-      "source_extraction": {
-        "workflow": {
-          "sections": [
-            {
-              "heading": "",
-              "items": [
-                {
-                  "text": "the AI it already has, the best sellers build skills and prompts that no one else uses, and leadership has no visibility into usage and spend. Meanwhile, sellers gather account context before every call from multiple systems: the CRM, email, call recordings, Slack."
-                }
-              ]
-            },
-            {
-              "heading": "",
-              "items": [
-                {
-                  "text": "In the guide, we share: A maturity model showing where your organization stands today and what it takes to reach the next level The setup decisions to make before the pilot: owners, connectors, IT and security, success metrics, and spend visibility A three-phase rollout plan (set up, pilot, scale) with the use cases revenue teams run most, mapped by role How to measure ROI in three groups: efficiency, expansion, and new capabilities The pitfalls that stall org-wide rollouts, and checklists for getting started Read the guide here . ‍ No items found."
-                }
-              ]
-            }
-          ]
-        }
-      },
+      "source_kind": "release_note_item",
+      "source_extraction": null,
       "derived_editorial_hints": null,
       "extraction_quality": null,
       "datePrecision": "",
       "date_precision": "",
-      "parentUrl": "https://claude.com/blog",
-      "parent_url": "https://claude.com/blog",
+      "parentUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+      "parent_url": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
       "in_reply_to": "",
       "seriesId": null,
       "series_id": null,
@@ -10707,10 +10368,10 @@
       "gerrit_effective_date_field": "",
       "covered_gerrit_change_ids": [],
       "covered_commit_shas": [],
-      "parentTitle": "Claude Blog",
-      "parent_title": "Claude Blog",
-      "parentCanonicalUrl": "https://claude.com/blog",
-      "parent_canonical_url": "https://claude.com/blog",
+      "parentTitle": "Claude Code Changelog",
+      "parent_title": "Claude Code Changelog",
+      "parentCanonicalUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+      "parent_canonical_url": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
       "roundupItemIndex": null,
       "roundup_item_index": null,
       "anchorText": "",
@@ -10722,35 +10383,35 @@
       "sourceMonth": "",
       "source_month": "",
       "has_published_date": true,
-      "has_version_or_release": false,
-      "has_api_or_component": false,
+      "has_version_or_release": true,
+      "has_api_or_component": true,
       "has_behavior_change": true,
       "source_gap_risk": true,
       "main_eligible": false,
       "briefing_only": true,
       "reference_only": true,
-      "evidence_score": 4,
-      "version_or_release": "",
-      "api_or_component": "",
-      "source_hint_api_or_component": "ai",
-      "behavior_change": "the AI it already has, the best sellers build skills and prompts that no one else uses, and leadership has no visibility into usage and spend.",
+      "evidence_score": 8,
+      "version_or_release": "v2.1.273",
+      "api_or_component": "Claude Code",
+      "source_hint_api_or_component": "ai-coding",
+      "behavior_change": "Added `x-claude-code-request-class`, `x-claude-code-agent-type`, `x-claude-code-prev-tool-durations`, `x-claude-code-compaction` and `x-claude-code-context-compacted` request headers for LLM gateways; opt in with `CLAUDE_CODE_GATEWAY_HINT_HEADERS=1` Added a notification when an MCP server disconnects mid-session and automatic reconnection gives up, pointing at `/mcp` Added forking a session started with `claude --remote-control` or `/remote-control` from the Claude app; the fork runs as a backgr",
       "collector_template_sentence": "",
       "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
       "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "title": "Building an AI-native revenue organization",
-      "url": "https://claude.com/blog/building-an-ai-native-revenue-organization",
-      "publishedAt": "2026-09-15",
-      "published_date": "2026-09-15",
-      "effective_date": "2026-09-15",
-      "date_source": "structured_date_published",
-      "date_confidence": 95,
-      "date_evidence_url": "https://claude.com/blog/building-an-ai-native-revenue-organization",
-      "summary": "Building an AI-native revenue organization In this guide, we share how revenue leaders can roll out Claude across a sales organization, including the setup decisions, a three-phase rollout plan, and an ROI measurement framework. Category Enterprise AI Product Claude Cowork Date September 15, 2026 Reading time 5 min Share Copy link https://claude.com/blog/building-an-ai-native-revenue-organization In our conversations with revenue leaders, we hear the same challenges: half the team barely touches",
-      "relevanceScore": 54,
-      "relevance_score": 54,
-      "cameraHalRelevanceScore": 54,
-      "camera_hal_relevance_score": 54,
+      "title": "Claude Code v2.1.273",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.273",
+      "publishedAt": "2026-09-15T20:23:03Z",
+      "published_date": "2026-09-15T20:23:03Z",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "Added `x-claude-code-request-class`, `x-claude-code-agent-type`, `x-claude-code-prev-tool-durations`, `x-claude-code-compaction` and `x-claude-code-context-compacted` request headers for LLM gateways; opt in with `CLAUDE_CODE_GATEWAY_HINT_HEADERS=1` Added a notification when an MCP server disconnects mid-session and automatic reconnection gives up, pointing at `/mcp` Added forking a session started with `claude --remote-control` or `/remote-control` from the Claude app; the fork runs as a backgr",
+      "relevanceScore": 62,
+      "relevance_score": 62,
+      "cameraHalRelevanceScore": 62,
+      "camera_hal_relevance_score": 62,
       "editorial_priority": 4,
       "relevance_bucket": "generic_tech_watchlist",
       "aosp_camera_directness": 0,
@@ -10762,8 +10423,8 @@
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
       "counts_as_fallback_topic": false,
-      "evidence_origin": "none",
-      "source_hint": "Claude 제품 소식과 개발 workflow 사례 확인",
+      "evidence_origin": "source_hint_only",
+      "source_hint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
       "scope_evidence_terms": [],
       "aospCameraStackBucket": "generic_tech_watchlist",
       "aosp_camera_stack_bucket": "generic_tech_watchlist",
@@ -10775,95 +10436,39 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6a726caede8f24f9fbe90126_og_a-guide-to-cost-visibility-and-control-in-claude%20(1).jpg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/building-an-ai-native-revenue-organization",
+          "url": "https://opengraph.githubassets.com/f4ffea8e38f4de695249814a42c39097fbe74bdb9ff27c32a212adbdb1527a03/anthropics/claude-code/releases/tag/v2.1.273",
+          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.273",
           "sourceKind": "og",
           "width": null,
           "height": null,
           "alt": "",
-          "contentType": "image/jpeg",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
+          "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 58201
-        },
-        {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6903d2279047e82efc257633_6c7219042e95bfef1a126ad5ee8b2c7def8b8b0a-1000x1000.svg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/building-an-ai-native-revenue-organization",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
-          "validationStatus": "ok",
-          "contentLength": 0
-        },
-        {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6903d2287f90c57df4c9dd97_c1ef4c0b6882dfe985555b52999d370ea88a3c50-1000x1000.svg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/building-an-ai-native-revenue-organization",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
-          "validationStatus": "ok",
-          "contentLength": 0
+          "contentLength": 55450
         }
       ],
       "image_candidates": [
         {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6a726caede8f24f9fbe90126_og_a-guide-to-cost-visibility-and-control-in-claude%20(1).jpg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/building-an-ai-native-revenue-organization",
+          "url": "https://opengraph.githubassets.com/f4ffea8e38f4de695249814a42c39097fbe74bdb9ff27c32a212adbdb1527a03/anthropics/claude-code/releases/tag/v2.1.273",
+          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.273",
           "sourceKind": "og",
           "width": null,
           "height": null,
           "alt": "",
-          "contentType": "image/jpeg",
+          "contentType": "image/png",
           "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
+          "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 58201
-        },
-        {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6903d2279047e82efc257633_6c7219042e95bfef1a126ad5ee8b2c7def8b8b0a-1000x1000.svg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/building-an-ai-native-revenue-organization",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
-          "validationStatus": "ok",
-          "contentLength": 0
-        },
-        {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6903d2287f90c57df4c9dd97_c1ef4c0b6882dfe985555b52999d370ea88a3c50-1000x1000.svg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/building-an-ai-native-revenue-organization",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
-          "validationStatus": "ok",
-          "contentLength": 0
+          "contentLength": 55450
         }
       ],
       "candidateTier": "watchlist-reference",
-      "reason": "Claude Blog (official, medium, score 54): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
-      "collection_reason": "Claude Blog (official, medium, score 54): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "reason": "Claude Code Changelog (official, medium, score 62): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "collection_reason": "Claude Code Changelog (official, medium, score 62): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "decision": {
         "topic": "generic_tech_watchlist",
         "evidenceLevel": "reference",
@@ -10883,7 +10488,7 @@
         "by_type": {},
         "by_fetch_status": {},
         "impact_type_counts": {
-          "documentation_only": 1
+          "unknown": 1
         },
         "warning_count": 1,
         "has_resolved_evidence": false,
@@ -10891,12 +10496,12 @@
         "top_identifiers": []
       },
       "impact_classification": {
-        "impact_type": "documentation_only",
+        "impact_type": "unknown",
         "hal_runtime_impact": false,
         "camera_pipeline_impact": false,
-        "recommended_article_type": "watch",
-        "confidence": 0.35,
-        "reason": "documentation_only classified from candidate text.",
+        "recommended_article_type": "unknown",
+        "confidence": 0,
+        "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
         "warnings": [
           "main_hint_requires_candidate_runtime_evidence"
         ]
@@ -10904,16 +10509,16 @@
     },
     {
       "schema_version": 7,
-      "source": "Claude Blog",
-      "source_name": "Claude Blog",
-      "sourceUrl": "https://claude.com/blog",
-      "source_url": "https://claude.com/blog",
-      "articleUrl": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
-      "article_url": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
-      "source_id": "claude-blog",
-      "category": "ai",
+      "source": "Claude Code Changelog",
+      "source_name": "Claude Code Changelog",
+      "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+      "source_url": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+      "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "source_id": "claude-code-changelog",
+      "category": "ai-coding",
       "section": "AI / SW Engineering Trends",
-      "source_category": "ai",
+      "source_category": "ai-coding",
       "source_section": "AI / SW Engineering Trends",
       "priority": "medium",
       "reliability": "official",
@@ -10923,113 +10528,86 @@
       "collection_stage": "raw_collection",
       "manualSeed": false,
       "manual_seed": false,
-      "sourceType": "blog_post_item",
-      "source_type": "blog_post_item",
+      "sourceType": "release_note_item",
+      "source_type": "release_note_item",
       "source_priority": "medium",
       "source_reliability": "official",
-      "usageHint": "Claude 제품 소식과 개발 workflow 사례 확인",
-      "source_usage_hint": "Claude 제품 소식과 개발 workflow 사례 확인",
+      "usageHint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
+      "source_usage_hint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
       "source_quality": {
-        "source_role": "generic_trend_source",
-        "source_url_quality": "generic_ai_or_it_trend",
-        "source_quality_status": "blocked",
-        "main_article_source_allowed": false,
-        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
-        "main_article_source_blockers": [
-          "source_gap_risk",
-          "reference_only"
-        ],
+        "source_role": "project_release_source",
+        "source_url_quality": "project_release",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
         "cross_check_status": "not_required",
         "requires_cross_check": false,
         "requires_conditional_evidence": true,
-        "conditional_evidence_type": "native_hal_workflow",
-        "evidence_granularity": "article_level_native_hal_workflow_evidence",
+        "conditional_evidence_type": "project_release_evidence",
+        "evidence_granularity": "dated_release_item",
         "source_quality_notes": [
-          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+          "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
+          "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
         ]
       },
-      "sourceRole": "generic_trend_source",
-      "source_role": "generic_trend_source",
-      "sourceUrlQuality": "generic_ai_or_it_trend",
-      "source_url_quality": "generic_ai_or_it_trend",
-      "sourceQualityStatus": "blocked",
-      "source_quality_status": "blocked",
-      "mainArticleSourceAllowed": false,
-      "main_article_source_allowed": false,
-      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
-      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
-      "mainArticleSourceBlockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
-      "main_article_source_blockers": [
-        "source_gap_risk",
-        "reference_only"
-      ],
+      "sourceRole": "project_release_source",
+      "source_role": "project_release_source",
+      "sourceUrlQuality": "project_release",
+      "source_url_quality": "project_release",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
       "crossCheckStatus": "not_required",
       "cross_check_status": "not_required",
       "requiresCrossCheck": false,
       "requires_cross_check": false,
       "requiresConditionalEvidence": true,
       "requires_conditional_evidence": true,
-      "conditionalEvidenceType": "native_hal_workflow",
-      "conditional_evidence_type": "native_hal_workflow",
-      "evidenceGranularity": "article_level_native_hal_workflow_evidence",
-      "evidence_granularity": "article_level_native_hal_workflow_evidence",
+      "conditionalEvidenceType": "project_release_evidence",
+      "conditional_evidence_type": "project_release_evidence",
+      "evidenceGranularity": "dated_release_item",
+      "evidence_granularity": "dated_release_item",
       "sourceQualityNotes": [
-        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
+        "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
       ],
       "source_quality_notes": [
-        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+        "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
+        "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
       ],
       "candidateOnly": false,
       "candidate_only": false,
       "community_signal": false,
-      "collectionMode": "article-item",
-      "collection_mode": "article-item",
-      "sourceCollectionMode": "homepage-watch",
-      "source_collection_mode": "homepage-watch",
+      "collectionMode": "release-note-item",
+      "collection_mode": "release-note-item",
+      "sourceCollectionMode": "release-note-watch",
+      "source_collection_mode": "release-note-watch",
       "isArticleCandidate": true,
       "is_article_candidate": true,
       "isWatchPage": false,
       "is_watch_page": false,
       "hasDatedEvidence": true,
       "has_dated_evidence": true,
-      "evidenceSignalKind": "dated-concrete-evidence",
-      "evidence_signal_kind": "dated-concrete-evidence",
-      "evidenceLevel": "reference",
-      "evidence_level": "reference",
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_kind": "blog_post_item",
-      "source_extraction": {
-        "workflow": {
-          "sections": [
-            {
-              "heading": "",
-              "items": [
-                {
-                  "text": "CI jobs increase exponentially as the average number of agents per engineer rises and as accelerated PR approval becomes more sophisticated. This has changed the shape of PRs over time at Anthropic as Claude prefers smaller, more granular PRs (another good reason not to run every test against every PR)."
-                }
-              ]
-            },
-            {
-              "heading": "",
-              "items": [
-                {
-                  "text": "This all led to a 25x increase in CI jobs over a six month period (in case you are trying to do the math, not every test runs on every PR as I will explain). This threatened to overload our test impact analysis service several times."
-                }
-              ]
-            }
-          ]
-        }
-      },
+      "evidenceSignalKind": "dated-release-evidence",
+      "evidence_signal_kind": "dated-release-evidence",
+      "evidenceLevel": "primary",
+      "evidence_level": "primary",
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_kind": "release_note_item",
+      "source_extraction": null,
       "derived_editorial_hints": null,
       "extraction_quality": null,
       "datePrecision": "",
       "date_precision": "",
-      "parentUrl": "https://claude.com/blog",
-      "parent_url": "https://claude.com/blog",
+      "parentUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+      "parent_url": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
       "in_reply_to": "",
       "seriesId": null,
       "series_id": null,
@@ -11046,10 +10624,10 @@
       "gerrit_effective_date_field": "",
       "covered_gerrit_change_ids": [],
       "covered_commit_shas": [],
-      "parentTitle": "Claude Blog",
-      "parent_title": "Claude Blog",
-      "parentCanonicalUrl": "https://claude.com/blog",
-      "parent_canonical_url": "https://claude.com/blog",
+      "parentTitle": "Claude Code Changelog",
+      "parent_title": "Claude Code Changelog",
+      "parentCanonicalUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+      "parent_canonical_url": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
       "roundupItemIndex": null,
       "roundup_item_index": null,
       "anchorText": "",
@@ -11061,168 +10639,118 @@
       "sourceMonth": "",
       "source_month": "",
       "has_published_date": true,
-      "has_version_or_release": false,
+      "has_version_or_release": true,
       "has_api_or_component": true,
       "has_behavior_change": true,
-      "source_gap_risk": true,
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "evidence_score": 6,
-      "version_or_release": "",
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "evidence_score": 8,
+      "version_or_release": "v2.1.271",
       "api_or_component": "Claude Code",
-      "source_hint_api_or_component": "ai",
-      "behavior_change": "CI jobs increase exponentially as the average number of agents per engineer rises and as accelerated PR approval becomes more sophisticated.",
+      "source_hint_api_or_component": "ai-coding",
+      "behavior_change": "Added fast mode in Claude Code Remote sessions (cloud and self-hosted runners): the host's fast-mode setting or `/fast` typed in the session applies where your organization allows it Added mouse support to the `/config` panel in fullscreen mode: the wheel scrolls the settings list, a click on a setting's value changes it, and the row under the pointer is highlighted Added `claude self-hosted-runner --drain-marker-file `: when that file exists at a SIGTERM drain, the runner reports its exit",
       "collector_template_sentence": "",
-      "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
-      "title": "Agentic coding is straining CI. Here’s how we scaled test impact analysis at Anthropic",
-      "url": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
-      "publishedAt": "2026-09-14",
-      "published_date": "2026-09-14",
-      "effective_date": "2026-09-14",
-      "date_source": "structured_date_published",
-      "date_confidence": 95,
-      "date_evidence_url": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
-      "summary": "Agentic coding is straining CI. Here’s how we scaled test impact analysis at Anthropic Our CI job volume increased 25x over 6 months. We patched our test selection service three times before finding a sustainable solution. Category Claude Code Enterprise AI Product Claude Code Claude Enterprise Claude Tag Date September 14, 2026 Reading time 5 min Share Copy link https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic Author(s) Sachin Malhotra",
-      "relevanceScore": 54,
-      "relevance_score": 54,
-      "cameraHalRelevanceScore": 54,
-      "camera_hal_relevance_score": 54,
-      "editorial_priority": 4,
-      "relevance_bucket": "generic_tech_watchlist",
+      "selection_exclusion_reason": "Eligible for short newsletter use.",
+      "watchlist_reason": "",
+      "verification_hint": "Can be used directly if the collected item supports the claim.",
+      "title": "Claude Code v2.1.271",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "publishedAt": "2026-09-14T22:12:54Z",
+      "published_date": "2026-09-14T22:12:54Z",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "Added fast mode in Claude Code Remote sessions (cloud and self-hosted runners): the host's fast-mode setting or `/fast` typed in the session applies where your organization allows it Added mouse support to the `/config` panel in fullscreen mode: the wheel scrolls the settings list, a click on a setting's value changes it, and the row under the pointer is highlighted Added `claude self-hosted-runner --drain-marker-file `: when that file exists at a SIGTERM drain, the runner reports its exit",
+      "relevanceScore": 56,
+      "relevance_score": 56,
+      "cameraHalRelevanceScore": 56,
+      "camera_hal_relevance_score": 56,
+      "editorial_priority": 2,
+      "relevance_bucket": "cpp_ai_tooling_fallback",
       "aosp_camera_directness": 0,
       "driver_stack_relevance": 0,
       "multimedia_camera_output_relevance": 0,
       "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
+      "native_tooling_relevance": 3,
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "none",
-      "source_hint": "Claude 제품 소식과 개발 workflow 사례 확인",
-      "scope_evidence_terms": [],
-      "aospCameraStackBucket": "generic_tech_watchlist",
-      "aosp_camera_stack_bucket": "generic_tech_watchlist",
+      "counts_as_fallback_topic": true,
+      "evidence_origin": "article_text",
+      "source_hint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
+      "scope_evidence_terms": [
+        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
+      ],
+      "aospCameraStackBucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_stack_bucket": "cpp_ai_tooling_fallback",
       "aospCameraDirect": false,
       "aosp_camera_direct": false,
-      "aospCameraEvidenceTerms": [],
-      "aosp_camera_evidence_terms": [],
-      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "aospCameraEvidenceTerms": [
+        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
+      ],
+      "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aa84372cad89b379e956f78_og_agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic.jpg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
+          "url": "https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271",
+          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
           "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/jpeg",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
-          "validationStatus": "ok",
-          "contentLength": 68453
-        },
-        {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6903d228e9c51800dde13958_6507d83d1197bb8630131d363fb8bea838d79ca7-1000x1000.svg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
-          "validationStatus": "ok",
-          "contentLength": 0
-        },
-        {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aa7f3c848204c50ad501861_da466791.png",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
-          "sourceKind": "article-img",
           "width": null,
           "height": null,
           "alt": "",
           "contentType": "image/png",
           "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
+          "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 177409
+          "contentLength": 47928
         }
       ],
       "image_candidates": [
         {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aa84372cad89b379e956f78_og_agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic.jpg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
+          "url": "https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271",
+          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
           "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/jpeg",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
-          "validationStatus": "ok",
-          "contentLength": 68453
-        },
-        {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6903d228e9c51800dde13958_6507d83d1197bb8630131d363fb8bea838d79ca7-1000x1000.svg",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
-          "validationStatus": "ok",
-          "contentLength": 0
-        },
-        {
-          "url": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aa7f3c848204c50ad501861_da466791.png",
-          "sourceUrl": "https://claude.com/blog",
-          "articleUrl": "https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic",
-          "sourceKind": "article-img",
           "width": null,
           "height": null,
           "alt": "",
           "contentType": "image/png",
           "licenseStatus": "unknown",
-          "attribution": "Claude Blog",
+          "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 177409
+          "contentLength": 47928
         }
       ],
-      "candidateTier": "watchlist-reference",
-      "reason": "Claude Blog (official, medium, score 54): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
-      "collection_reason": "Claude Blog (official, medium, score 54): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "candidateTier": "short-news",
+      "reason": "Claude Code Changelog (official, medium, score 56): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "collection_reason": "Claude Code Changelog (official, medium, score 56): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
       "decision": {
-        "topic": "generic_tech_watchlist",
-        "evidenceLevel": "reference",
-        "selection": "reference",
-        "reason": "Background reference page; not an article candidate.",
+        "topic": "cpp_ai_tooling_fallback",
+        "evidenceLevel": "primary",
+        "selection": "short",
+        "reason": "Official dated source with supporting evidence.",
         "hasDate": true,
         "hasConcreteChange": true
       },
-      "selection": "reference",
-      "decision_reason": "Background reference page; not an article candidate.",
+      "selection": "short",
+      "decision_reason": "Official dated source with supporting evidence.",
       "has_date": true,
       "has_concrete_change": true,
-      "topic_bucket": "generic_tech_watchlist",
+      "topic_bucket": "cpp_ai_tooling_fallback",
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
         "by_type": {},
         "by_fetch_status": {},
         "impact_type_counts": {
-          "test_only_change": 1
+          "build_dependency_fix": 1
         },
         "warning_count": 1,
         "has_resolved_evidence": false,
@@ -11230,13 +10758,282 @@
         "top_identifiers": []
       },
       "impact_classification": {
-        "impact_type": "test_only_change",
+        "impact_type": "build_dependency_fix",
         "hal_runtime_impact": false,
         "camera_pipeline_impact": false,
         "recommended_article_type": "watch",
         "confidence": 0.35,
-        "reason": "test_only_change classified from candidate text.",
+        "reason": "build_dependency_fix classified from candidate text.",
         "warnings": [
+          "main_hint_requires_candidate_runtime_evidence"
+        ]
+      }
+    },
+    {
+      "schema_version": 7,
+      "source": "Codex Releases",
+      "source_name": "Codex Releases",
+      "sourceUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
+      "source_url": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
+      "articleUrl": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+      "article_url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+      "source_id": "codex-releases",
+      "category": "ai-coding",
+      "section": "AI / SW Engineering Trends",
+      "source_category": "ai-coding",
+      "source_section": "AI / SW Engineering Trends",
+      "priority": "medium",
+      "reliability": "official",
+      "source_quality_required": true,
+      "origin": "source_registry",
+      "collectionStage": "raw_collection",
+      "collection_stage": "raw_collection",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "release_note_item",
+      "source_type": "release_note_item",
+      "source_priority": "medium",
+      "source_reliability": "official",
+      "usageHint": "Codex CLI 정식 릴리스의 코딩·테스트·검토·권한 처리 변경 확인",
+      "source_usage_hint": "Codex CLI 정식 릴리스의 코딩·테스트·검토·권한 처리 변경 확인",
+      "source_quality": {
+        "source_role": "project_release_source",
+        "source_url_quality": "project_release",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "project_release_evidence",
+        "evidence_granularity": "dated_release_item",
+        "source_quality_notes": [
+          "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
+          "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
+        ]
+      },
+      "sourceRole": "project_release_source",
+      "source_role": "project_release_source",
+      "sourceUrlQuality": "project_release",
+      "source_url_quality": "project_release",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "project_release_evidence",
+      "conditional_evidence_type": "project_release_evidence",
+      "evidenceGranularity": "dated_release_item",
+      "evidence_granularity": "dated_release_item",
+      "sourceQualityNotes": [
+        "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
+        "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
+      ],
+      "source_quality_notes": [
+        "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
+        "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
+      ],
+      "candidateOnly": false,
+      "candidate_only": false,
+      "community_signal": false,
+      "collectionMode": "release-note-item",
+      "collection_mode": "release-note-item",
+      "sourceCollectionMode": "release-note-watch",
+      "source_collection_mode": "release-note-watch",
+      "isArticleCandidate": true,
+      "is_article_candidate": true,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceSignalKind": "dated-release-evidence",
+      "evidence_signal_kind": "dated-release-evidence",
+      "evidenceLevel": "primary",
+      "evidence_level": "primary",
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_kind": "release_note_item",
+      "source_extraction": null,
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "datePrecision": "",
+      "date_precision": "",
+      "parentUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
+      "parent_url": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
+      "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
+      "seriesName": null,
+      "series_name": null,
+      "seriesVersion": null,
+      "series_version": null,
+      "camera_path_commit_count": null,
+      "camera_path_commit_count_is_lower_bound": null,
+      "gerrit_change_id": "",
+      "gerrit_change_number": null,
+      "gerrit_change_status": "",
+      "gerrit_commit_sha": "",
+      "gerrit_effective_date_field": "",
+      "covered_gerrit_change_ids": [],
+      "covered_commit_shas": [],
+      "parentTitle": "Codex Releases",
+      "parent_title": "Codex Releases",
+      "parentCanonicalUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
+      "parent_canonical_url": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
+      "roundupItemIndex": null,
+      "roundup_item_index": null,
+      "anchorText": "",
+      "anchor_text": "",
+      "article_group_key": "",
+      "tooling_workflow_type": "",
+      "native_workflow_evidence_score": 0,
+      "outgoing_links": [],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": true,
+      "has_api_or_component": true,
+      "has_behavior_change": true,
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "evidence_score": 8,
+      "version_or_release": "rust-v0.155.1",
+      "api_or_component": "Codex",
+      "source_hint_api_or_component": "ai-coding",
+      "behavior_change": "New local TUI sessions now leave reasoning summaries disabled by default, fixing request rejection by providers that do not support them. Explicit reasoning-summary settings remain respected. (#46467)",
+      "collector_template_sentence": "",
+      "selection_exclusion_reason": "Eligible for short newsletter use.",
+      "watchlist_reason": "",
+      "verification_hint": "Can be used directly if the collected item supports the claim.",
+      "title": "Codex rust-v0.155.1",
+      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+      "publishedAt": "2026-09-18T20:03:04Z",
+      "published_date": "2026-09-18T20:03:04Z",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "New local TUI sessions now leave reasoning summaries disabled by default, fixing request rejection by providers that do not support them. Explicit reasoning-summary settings remain respected. (#46467)",
+      "relevanceScore": 55,
+      "relevance_score": 55,
+      "cameraHalRelevanceScore": 55,
+      "camera_hal_relevance_score": 55,
+      "editorial_priority": 2,
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 3,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "counts_as_fallback_topic": true,
+      "evidence_origin": "article_text",
+      "source_hint": "Codex CLI 정식 릴리스의 코딩·테스트·검토·권한 처리 변경 확인",
+      "scope_evidence_terms": [
+        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
+      ],
+      "aospCameraStackBucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_stack_bucket": "cpp_ai_tooling_fallback",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [
+        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
+      ],
+      "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.",
+      "imageCandidates": [
+        {
+          "url": "https://opengraph.githubassets.com/60e99469eda788e15e80df021267df18b608398448e68c696b9d49d004c4bd91/openai/codex/releases/tag/rust-v0.155.1",
+          "sourceUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Codex Releases",
+          "validationStatus": "ok",
+          "contentLength": 45215
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://opengraph.githubassets.com/60e99469eda788e15e80df021267df18b608398448e68c696b9d49d004c4bd91/openai/codex/releases/tag/rust-v0.155.1",
+          "sourceUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Codex Releases",
+          "validationStatus": "ok",
+          "contentLength": 45215
+        }
+      ],
+      "candidateTier": "short-news",
+      "reason": "Codex Releases (official, medium, score 55): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "collection_reason": "Codex Releases (official, medium, score 55): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "decision": {
+        "topic": "cpp_ai_tooling_fallback",
+        "evidenceLevel": "primary",
+        "selection": "short",
+        "reason": "Official dated source with supporting evidence.",
+        "hasDate": true,
+        "hasConcreteChange": true
+      },
+      "selection": "short",
+      "decision_reason": "Official dated source with supporting evidence.",
+      "has_date": true,
+      "has_concrete_change": true,
+      "topic_bucket": "cpp_ai_tooling_fallback",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 1,
+        "by_type": {
+          "docs_anchor": 1
+        },
+        "by_fetch_status": {
+          "unsupported": 1
+        },
+        "impact_type_counts": {
+          "build_dependency_fix": 1
+        },
+        "warning_count": 3,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": true,
+        "top_identifiers": [
+          "#46467"
+        ]
+      },
+      "impact_classification": {
+        "impact_type": "build_dependency_fix",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": false,
+        "recommended_article_type": "watch",
+        "confidence": 0.45,
+        "reason": "build_dependency_fix classified from candidate text.",
+        "warnings": [
+          "linked_evidence_unsupported",
           "main_hint_requires_candidate_runtime_evidence"
         ]
       }
@@ -11254,10 +11051,6 @@
     {
       "source": "LLVM Project Blog",
       "message": "404 Not Found"
-    },
-    {
-      "source": "OpenAI News",
-      "message": "403 Forbidden"
     },
     {
       "source": "요즘IT",
@@ -11300,6 +11093,18 @@
         "kind": "aosp_site_update_date_outside_row_month",
         "url": "https://source.android.com/docs/automotive/camera/acs/overview",
         "reason": "page date 2026-06-17 is outside site update month 2026-02-01"
+      },
+      {
+        "kind": "release_scan_page_cap",
+        "source_id": "claude-code-changelog",
+        "url": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=8",
+        "detail": "Scanned 24 releases; older releases may remain outside this bounded scan."
+      },
+      {
+        "kind": "release_page_fetch_failed",
+        "source_id": "codex-releases",
+        "url": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=8",
+        "detail": "truncated_at_byte_limit"
       }
     ],
     "kind_counts": {
@@ -11314,17 +11119,20 @@
       "aosp_site_update_date_lookup_skipped": 0,
       "aosp_site_update_date_outside_row_month": 3,
       "followed_resolver_yielded_nothing": 0,
-      "unknown": 0
+      "unknown": 2
     },
     "fail_closed_reasons": {},
     "date_source_counts": {
-      "structured_date_published": 3
+      "structured_date_published": 1,
+      "missing": 3
     },
     "received_bytes_by_source": {
       "aosp-site-updates": 1534031,
       "qualcomm-security-bulletins": 160830,
       "anthropic-news": 1983645,
-      "claude-blog": 5159167
+      "claude-blog": 5159167,
+      "claude-code-changelog": 589682,
+      "codex-releases": 6297829
     },
     "article_cap_counts_by_source": {
       "anthropic-news": {
