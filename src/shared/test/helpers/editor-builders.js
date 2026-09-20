@@ -289,6 +289,7 @@ module.exports = {
   storyV2Editor,
   reporterForClaimTests,
   reporterForGroupTests,
+  groupCoverageReporterCandidate,
   buildGroupCoverageFixture,
   normalizeSection,
   tempNewsroomDir,

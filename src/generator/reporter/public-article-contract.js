@@ -1110,6 +1110,21 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
         issues.push({ index: index + 1, headline, ...bodyIssue });
       }
     }
+    // headline이 소스 제목과 동일한 경우 v1은 repair 시점에 suffix를 합성해 가렸다
+    // (#850에서 폐지). v2는 issue로 드러내 patch repair(/public_article/headline,
+    // 정책 등록은 T6) → 실패 시 demote로 처리한다. 비교 축은 v1 suffix 판정과 같은
+    // 소문자 완전 일치이되, 공백은 compactText로 접어 비교한다(v1은 트림만 — v2가
+    // 약간 넓고 안전한 방향이다).
+    const headlineKey = normalized.headline.toLowerCase();
+    if (headlineKey) {
+      const sourceTitleKeys = [
+        ...normalized.source_links,
+        ...ensureArray(section.sources)
+      ].map(source => compactText(source && source.title).toLowerCase()).filter(Boolean);
+      if (sourceTitleKeys.includes(headlineKey)) {
+        issues.push({ index: index + 1, headline, type: 'duplicate_headline', key: 'headline' });
+      }
+    }
   } else if (normalized.body_paragraphs.length < 2) {
     issues.push({ index: index + 1, headline, type: 'insufficient_public_body_paragraphs', key: 'body_paragraphs', actualCount: normalized.body_paragraphs.length, expectedMinCount: 2 });
   }

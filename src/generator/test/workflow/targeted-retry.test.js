@@ -720,6 +720,9 @@ function storyV2PolicySection(headline, url, bucket = 'direct_aosp_camera') {
   const { body_paragraphs, ...publicArticle } = built.public_article;
   built.public_article = {
     ...publicArticle,
+    // retrySection 빌더는 headline과 소스 제목이 같다 — v2는 그 동일성을
+    // duplicate_headline issue로 잡으므로(#850) 공개 headline을 구분되는 문장으로 둔다.
+    headline: `${headline}이 남긴 검증 신호`,
     body_markdown: [
       `${headline} 패치가 리뷰에서 걸린 지점은 센서가 아니라 계약이었다.`,
       '',
@@ -753,6 +756,25 @@ test('targeted repair keeps issue-level story markers so story-v2 sections stay 
     lockedSections: [],
     mode: 'targeted-repair',
     allowCountChange: false,
+    date: DATE,
+    baseIssue: { public_contract_version: 'story-v2', generation_contract_version: 2 }
+  }), true);
+});
+
+test('completion mode accepts a v2 top-up section after a demote reduces the draft (#850)', () => {
+  // v2 per-article demote로 줄어든 기사 수는 completion top-up이 보충한다(#850 작업 2).
+  // completion 가드(mode: completion, allowCountChange: true)가 v2 마커 아래에서
+  // 잔여(locked) 섹션 보존 + 신규 v2 섹션 추가를 수용해야 이 보충 경로가 열린다.
+  const kept = storyV2PolicySection('CameraX release', 'https://example.com/camerax');
+  const added = storyV2PolicySection('Driver pipeline update', 'https://example.com/driver', 'camera_driver_image_pipeline');
+
+  assert.equal(validateTargetedRepairResult({
+    beforeSections: [kept],
+    repairSections: [added],
+    afterSections: [kept, added],
+    lockedSections: [kept],
+    mode: 'completion',
+    allowCountChange: true,
     date: DATE,
     baseIssue: { public_contract_version: 'story-v2', generation_contract_version: 2 }
   }), true);

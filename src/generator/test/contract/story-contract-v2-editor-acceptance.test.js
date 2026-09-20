@@ -19,6 +19,7 @@ const {
   section,
   storyPublicArticle,
   storyEditor,
+  storyV2Editor,
   normalizeSection
 } = require('../../../shared/test/helpers/editor-builders');
 
@@ -93,9 +94,12 @@ test('deterministic editor repair does not reject a v2 draft as an unsupported m
 
 // 이슈 레벨 stamp가 draft 선언(v2)을 v1으로 되돌리면 섹션 마커는 2로 남아 혼합
 // 패밀리가 된다. 결정론 수선은 clone에 쓰므로 입력이 아니라 반환된 editor에서 본다.
+// v2 섹션은 유효한 v2 본문을 가져야 한다 — T7(#850) 이후 body_markdown이 없는 v2
+// 섹션은 stamp 대상이 아니라 per-article demote 대상이라, v1 모양 섹션으로는 stamp
+// 결과를 관측할 수 없다.
 test('deterministic editor repair stamps the version the draft declared', () => {
   const repaired = deterministicallyRepairEditorSchema(
-    v2Editor({ generation_contract_version: undefined }),
+    storyV2Editor({ generation_contract_version: undefined }),
     { requireStoryContract: true }
   );
 
