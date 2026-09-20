@@ -15,6 +15,10 @@ const {
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const { applyRepairPatches, REPAIR_PATCH_CONTRACT_VIOLATION } = require('../repair/repair-patch-contract');
 const {
+  bodyMarkdownLintRegressionViolations,
+  resolveBodyMarkdownBlockPatches
+} = require('../repair/body-markdown-block-patch');
+const {
   stableSectionKey,
   sameSectionLabel,
   signaturesMatch,
@@ -234,7 +238,14 @@ function applyRepairPatchesAndValidate({
   if (remapViolations.length > 0) {
     return { ok: false, editor: baseEditor, violations: remapViolations };
   }
-  const applied = applyRepairPatches(baseEditor, normalized);
+  // v2 가상 블록 포인터(`/public_article/body_markdown/blocks/{i}`)를 전체 필드 교체
+  // patch로 해석한다. 해석 실패는 patch fail이며 전체 필드 교체로 자동 폴백하지 않는다
+  // (#849 — 호출부는 base editor를 유지하고 reviewable 실패 → demote 경로로 보고한다).
+  const blockResolution = resolveBodyMarkdownBlockPatches(beforeSections, normalized);
+  if (!blockResolution.ok) {
+    return { ok: false, editor: baseEditor, violations: blockResolution.violations };
+  }
+  const applied = applyRepairPatches(baseEditor, blockResolution.patches);
   if (!applied.ok) {
     return { ok: false, editor: baseEditor, violations: applied.violations };
   }
@@ -246,6 +257,12 @@ function applyRepairPatchesAndValidate({
     seedEvidencePack
   });
   const patchedSections = ensureArray(reverted.sections);
+  // v2 본문 patch(블록 해석 포함, 전체 필드 교체 포함)가 lint 위반을 새로 만들면 전체
+  // 실패다(#849 — 적용 후 lint 재실행). 수리 전부터 있던 위반은 재발이 아니므로 통과한다.
+  const lintRegressions = bodyMarkdownLintRegressionViolations(beforeSections, patchedSections);
+  if (lintRegressions.length > 0) {
+    return { ok: false, editor: baseEditor, violations: lintRegressions };
+  }
   // 최후의 가드: patch-only 편집에서는 identity set, 개수, 보호 필드가 구조적으로
   // 불변이다. 이 검사는 방어선으로 남아, patch가 applyRepairPatches allowlist를
   // 빠져나간 경우에만 throw(-> reviewable 실패)한다.

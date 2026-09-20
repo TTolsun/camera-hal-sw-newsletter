@@ -715,6 +715,49 @@ test('targeted repair keeps issue-level story markers so story-v1 sections stay 
   }), true);
 });
 
+function storyV2PolicySection(headline, url, bucket = 'direct_aosp_camera') {
+  const built = policySection(headline, url, bucket);
+  const { body_paragraphs, ...publicArticle } = built.public_article;
+  built.public_article = {
+    ...publicArticle,
+    body_markdown: [
+      `${headline} 패치가 리뷰에서 걸린 지점은 센서가 아니라 계약이었다.`,
+      '',
+      '### 리뷰어가 되돌린 지점',
+      '',
+      `${headline}의 실무 해석은 스트림과 메타데이터 검증 범위 안에 머문다.`
+    ].join('\n'),
+    story_contract_version: 2,
+    source_subtitle: 'Example Source 발표 분석',
+    editorial_story: {
+      not_to_overclaim: '이 변경은 HAL API 규격의 직접 변경을 의미하지 않습니다.',
+      editor_take: '검증 입력으로만 반영합니다.'
+    }
+  };
+  return built;
+}
+
+test('targeted repair keeps issue-level story markers so story-v2 sections stay valid (#849)', () => {
+  // 합성 wrapper의 marker 상속은 값-불가지 pass-through라 v1 회귀 케이스만으로도 동작은
+  // 같지만, v2 마커 쌍('story-v2', 2)이 상속되어 section marker(2)와 같은 패밀리로
+  // 판정되는 것을 계약으로 잠근다 — 이 상속이 깨지면 T9 flip 이후 모든 v2 patch가
+  // story_contract_version_mismatch로 거부된다.
+  const storySection = storyV2PolicySection('CameraX release', 'https://example.com/camerax');
+  const repaired = JSON.parse(JSON.stringify(storySection));
+  repaired.public_article.editorial_story.editor_take = '검증 입력으로 반영하고 다음 창에서 재확인합니다.';
+
+  assert.equal(validateTargetedRepairResult({
+    beforeSections: [storySection],
+    repairSections: [repaired],
+    afterSections: [repaired],
+    lockedSections: [],
+    mode: 'targeted-repair',
+    allowCountChange: false,
+    date: DATE,
+    baseIssue: { public_contract_version: 'story-v2', generation_contract_version: 2 }
+  }), true);
+});
+
 test('completion mode keeps issue-level story markers for story-v1 sections', () => {
   // completion 경로(mode: completion, allowCountChange: true)도 같은 합성 wrapper를 쓰므로
   // baseIssue marker 상속이 없으면 story-v1 completion 결과가 항상 차단된다.

@@ -130,6 +130,43 @@ function storyEditor(overrides = {}) {
   });
 }
 
+// v2는 본문을 body_paragraphs가 아니라 body_markdown 하나로 담고, editorial_story는
+// 안전 기능 두 칸(not_to_overclaim, editor_take)만 남는다. body_paragraphs를 남겨 두면
+// unexpected_public_article_keys로 죽으므로 반드시 제거한다.
+function storyV2PublicArticle(baseSection = section(1), overrides = {}) {
+  const { body_paragraphs, ...withoutBodyParagraphs } = storyPublicArticle(baseSection, {
+    story_contract_version: 2,
+    editorial_story: {
+      not_to_overclaim: 'source가 직접 말하지 않는 HAL runtime 변경으로 확대하지 않습니다.',
+      editor_take: '검증 대상은 source가 확인한 범위 안에서만 잡습니다.'
+    }
+  });
+  return {
+    ...withoutBodyParagraphs,
+    body_markdown: [
+      `${baseSection.headline} 패치가 리뷰에서 걸린 지점은 센서가 아니라 계약이었다.`,
+      '',
+      '### 리뷰어가 되돌린 지점',
+      '',
+      `${baseSection.headline}의 실무 해석은 스트림과 메타데이터 검증 범위 안에 머문다.`
+    ].join('\n'),
+    ...overrides
+  };
+}
+
+function storyV2Editor(overrides = {}) {
+  const sections = [section(1), section(2), section(3)].map(item => ({
+    ...item,
+    public_article: storyV2PublicArticle(item)
+  }));
+  return editor({
+    public_contract_version: 'story-v2',
+    generation_contract_version: 2,
+    sections,
+    ...overrides
+  });
+}
+
 function reporterForClaimTests(url = 'https://example.com/source-1') {
   return {
     candidates: [{
@@ -248,6 +285,8 @@ module.exports = {
   editor,
   storyPublicArticle,
   storyEditor,
+  storyV2PublicArticle,
+  storyV2Editor,
   reporterForClaimTests,
   reporterForGroupTests,
   buildGroupCoverageFixture,

@@ -1088,13 +1088,27 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
     if (!normalized[key]) issues.push({ index: index + 1, headline, type: 'empty_public_article_field', key });
   }
   if (usesBodyMarkdown(storyState.version)) {
-    // 문단 수 부족(insufficient_public_body_paragraphs)도 lint가 함께 낸다. 본문 판정을
-    // parseBodyBlocks 하나로 모으기 위해 여기서 따로 세지 않는다.
-    // lead·camera_hal_takeaway를 함께 넘기는 이유: v1은 렌더가 겹치는 문단을 조용히
-    // 버렸지만 v2는 정본을 그대로 렌더하므로, 교차 중복을 여기서 잡지 않으면 같은 문단이
-    // 본문과 시그니처 박스에 두 번 발행된다.
-    for (const bodyIssue of lintBodyMarkdown(normalized.body_markdown, normalized)) {
-      issues.push({ index: index + 1, headline, ...bodyIssue });
+    // 본문 부재/비문자열은 lint(텍스트 수리 가능)와 다른 구조 실패다(#849). 정규화가
+    // 비문자열을 ''로 접기 때문에, 여기서 가르지 않으면 부재가 문단 수 부족
+    // (insufficient_public_body_paragraphs — repair 가능)으로 위장돼 repair LLM이
+    // 존재하지 않는 본문을 지어내는 경로가 열린다. 부재는 replace-or-demote 대상이다.
+    if (typeof raw.body_markdown !== 'string' || !normalized.body_markdown) {
+      issues.push({
+        index: index + 1,
+        headline,
+        type: 'missing_body_markdown',
+        key: 'body_markdown',
+        reason: typeof raw.body_markdown !== 'string' ? 'not_a_string' : 'empty'
+      });
+    } else {
+      // 문단 수 부족(insufficient_public_body_paragraphs)도 lint가 함께 낸다. 본문 판정을
+      // parseBodyBlocks 하나로 모으기 위해 여기서 따로 세지 않는다.
+      // lead·camera_hal_takeaway를 함께 넘기는 이유: v1은 렌더가 겹치는 문단을 조용히
+      // 버렸지만 v2는 정본을 그대로 렌더하므로, 교차 중복을 여기서 잡지 않으면 같은 문단이
+      // 본문과 시그니처 박스에 두 번 발행된다.
+      for (const bodyIssue of lintBodyMarkdown(normalized.body_markdown, normalized)) {
+        issues.push({ index: index + 1, headline, ...bodyIssue });
+      }
     }
   } else if (normalized.body_paragraphs.length < 2) {
     issues.push({ index: index + 1, headline, type: 'insufficient_public_body_paragraphs', key: 'body_paragraphs', actualCount: normalized.body_paragraphs.length, expectedMinCount: 2 });

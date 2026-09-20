@@ -12,7 +12,7 @@ const {
   remapRepairPatchSections
 } = require('../../../publish/gemini-newsroom-newsletter');
 const { validateArticleClaims } = require('../../../quality/claim-source-binding');
-const { editor, section, storyEditor } = require('../../../../shared/test/helpers/editor-builders');
+const { editor, section, storyEditor, storyV2Editor } = require('../../../../shared/test/helpers/editor-builders');
 const { stableSectionKey } = require('../../../../shared/common/section-identity');
 
 const DATE = '2026-05-08';
@@ -269,6 +269,88 @@ test('kept verified_fact patches agree with the strict claim gate when both use 
   });
   // (c) pack 없는 게이트는 같은 fact를 uncovered로 본다 — 오라클 입력이 반드시 일치해야 한다.
   assert.ok(gateWithoutPack.uncovered_facts.some(item => item.reason_code === 'missing_matching_fact_claim'));
+});
+
+test('applyRepairPatchesAndValidate replaces one v2 body block through the virtual block pointer (#849)', () => {
+  const draft = storyV2Editor();
+  const patches = [{
+    section_index: 0,
+    section_key: stableSectionKey(draft.sections[0]),
+    op: 'replace',
+    path: '/public_article/body_markdown/blocks/2',
+    value: '고쳐 쓴 마지막 문단이다. 검증 범위는 스트림과 메타데이터 확인에 머문다.'
+  }];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
+
+  assert.equal(result.ok, true);
+  const body = result.editor.sections[0].public_article.body_markdown;
+  assert.match(body, /고쳐 쓴 마지막 문단이다/);
+  // 나머지 블록(첫 문단, 소제목)은 그대로다.
+  assert.match(body, /^### 리뷰어가 되돌린 지점$/m);
+  assert.match(body, /걸린 지점은 센서가 아니라 계약이었다/);
+  // 입력 draft는 불변이다.
+  assert.doesNotMatch(draft.sections[0].public_article.body_markdown, /고쳐 쓴 마지막 문단이다/);
+});
+
+test('applyRepairPatchesAndValidate rejects a v2 block patch with an out-of-range index without mutating (#849)', () => {
+  const draft = storyV2Editor();
+  const patches = [{
+    section_index: 0,
+    section_key: stableSectionKey(draft.sections[0]),
+    op: 'replace',
+    path: '/public_article/body_markdown/blocks/9',
+    value: '범위 밖 블록.'
+  }];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
+
+  assert.equal(result.ok, false);
+  assert.equal(result.violations[0].detail, 'block_index_out_of_range');
+  assert.deepEqual(result.editor, draft);
+});
+
+test('applyRepairPatchesAndValidate accepts a clean full body_markdown replace and re-lints it (#849)', () => {
+  const draft = storyV2Editor();
+  const patches = [{
+    section_index: 0,
+    section_key: stableSectionKey(draft.sections[0]),
+    op: 'replace',
+    path: '/public_article/body_markdown',
+    value: [
+      '전체 교체된 첫 문단이다. 구조가 무너진 본문을 새로 쓴다.',
+      '',
+      '### 새로 잡은 소제목',
+      '',
+      '전체 교체된 두 번째 문단이다. 검증 범위는 소스가 확인한 사실 안에 머문다.'
+    ].join('\n')
+  }];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
+
+  assert.equal(result.ok, true);
+  assert.match(result.editor.sections[0].public_article.body_markdown, /^### 새로 잡은 소제목$/m);
+});
+
+test('applyRepairPatchesAndValidate rejects a full body_markdown replace that introduces a new lint violation (#849)', () => {
+  const draft = storyV2Editor();
+  const patches = [{
+    section_index: 0,
+    section_key: stableSectionKey(draft.sections[0]),
+    op: 'replace',
+    path: '/public_article/body_markdown',
+    value: [
+      '- 리스트 마커로 시작하는 본문',
+      '',
+      '두 번째 문단.'
+    ].join('\n')
+  }];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
+
+  assert.equal(result.ok, false);
+  assert.equal(result.violations[0].detail, 'body_markdown_lint_regression');
+  assert.deepEqual(result.editor, draft);
 });
 
 test('remapRepairPatchSections resolves section_key to the real editor index', () => {
