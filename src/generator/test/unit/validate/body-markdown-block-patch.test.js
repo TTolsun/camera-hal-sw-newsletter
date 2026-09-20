@@ -70,6 +70,58 @@ test('resolves a subheading block patch and keeps the ### prefix form', () => {
   assert.doesNotMatch(result.patches[0].value, /리뷰어가 되돌린 지점/);
 });
 
+test('two block patches on the same section both survive (review H1 regression)', () => {
+  // 각 patch를 원본 기준으로 독립 해석하면 applyRepairPatches의 순차 적용에서
+  // 마지막 전체 교체 patch가 앞의 편집을 덮어 소리 없이 유실된다.
+  const sections = [v2Section()];
+  const result = resolveBodyMarkdownBlockPatches(sections, [
+    {
+      section_index: 0,
+      op: 'replace',
+      path: '/public_article/body_markdown/blocks/0',
+      value: '고쳐 쓴 첫 문단이다.'
+    },
+    {
+      section_index: 0,
+      op: 'replace',
+      path: '/public_article/body_markdown/blocks/2',
+      value: '고쳐 쓴 마지막 문단이다.'
+    }
+  ]);
+
+  assert.equal(result.ok, true);
+  // 순차 적용에서 마지막 patch 값이 최종 본문이므로, 그 값에 두 편집이 모두 있어야 한다.
+  const finalValue = result.patches[result.patches.length - 1].value;
+  assert.match(finalValue, /고쳐 쓴 첫 문단이다/);
+  assert.match(finalValue, /고쳐 쓴 마지막 문단이다/);
+  assert.match(finalValue, /^### 리뷰어가 되돌린 지점$/m);
+});
+
+test('a block patch after a full body replace resolves against the replaced body', () => {
+  const sections = [v2Section()];
+  const result = resolveBodyMarkdownBlockPatches(sections, [
+    {
+      section_index: 0,
+      op: 'replace',
+      path: '/public_article/body_markdown',
+      value: '전체 교체 첫 문단.\n\n전체 교체 둘째 문단.'
+    },
+    {
+      section_index: 0,
+      op: 'replace',
+      path: '/public_article/body_markdown/blocks/1',
+      value: '교체본 위에서 다시 고친 둘째 문단.'
+    }
+  ]);
+
+  assert.equal(result.ok, true);
+  const finalValue = result.patches[result.patches.length - 1].value;
+  assert.match(finalValue, /전체 교체 첫 문단/);
+  assert.match(finalValue, /교체본 위에서 다시 고친 둘째 문단/);
+  // 원본 본문의 블록은 더 이상 기준이 아니다.
+  assert.doesNotMatch(finalValue, /리뷰어가 되돌린 지점/);
+});
+
 test('passes non-block patches through unchanged', () => {
   const sections = [v2Section()];
   const patch = {

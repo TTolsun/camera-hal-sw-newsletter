@@ -293,6 +293,34 @@ test('applyRepairPatchesAndValidate replaces one v2 body block through the virtu
   assert.doesNotMatch(draft.sections[0].public_article.body_markdown, /고쳐 쓴 마지막 문단이다/);
 });
 
+test('applyRepairPatchesAndValidate keeps both edits when two block patches target the same section (review H1)', () => {
+  const draft = storyV2Editor();
+  const patches = [
+    {
+      section_index: 0,
+      section_key: stableSectionKey(draft.sections[0]),
+      op: 'replace',
+      path: '/public_article/body_markdown/blocks/0',
+      value: '고쳐 쓴 첫 문단이다. 계약 협상 경로가 쟁점이었다.'
+    },
+    {
+      section_index: 0,
+      section_key: stableSectionKey(draft.sections[0]),
+      op: 'replace',
+      path: '/public_article/body_markdown/blocks/2',
+      value: '고쳐 쓴 마지막 문단이다. 검증 범위는 소스가 확인한 사실 안에 머문다.'
+    }
+  ];
+
+  const result = applyRepairPatchesAndValidate({ editor: draft, patches, date: DATE });
+
+  assert.equal(result.ok, true);
+  const body = result.editor.sections[0].public_article.body_markdown;
+  assert.match(body, /고쳐 쓴 첫 문단이다/);
+  assert.match(body, /고쳐 쓴 마지막 문단이다/);
+  assert.match(body, /^### 리뷰어가 되돌린 지점$/m);
+});
+
 test('applyRepairPatchesAndValidate rejects a v2 block patch with an out-of-range index without mutating (#849)', () => {
   const draft = storyV2Editor();
   const patches = [{

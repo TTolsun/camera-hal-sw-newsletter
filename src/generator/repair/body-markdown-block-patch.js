@@ -43,7 +43,9 @@ function isBodyMarkdownBlockPointer(segments) {
 }
 
 // parseBodyBlocks의 역방향. subheading은 `### ` prefix를 되살리고 블록 사이는 빈 줄
-// 하나다. normalizeBodyMarkdown(parseBodyBlocks의 입력 정규화)과 왕복 일치한다.
+// 하나다. 왕복 일치는 블록 단위다(parse(serialize(blocks)) == blocks) — 바이트 단위가
+// 아니다. 소제목에 빈 줄 없이 붙어 있던 문단은 재직렬화 후 빈 줄로 갈라지는데, lint·
+// 렌더·문단 수 판정이 전부 같은 parseBodyBlocks를 보므로 판정은 달라지지 않는다.
 function serializeBodyBlocks(blocks) {
   return blocks
     .map(block => (block.type === 'subheading' ? `${SUBHEADING_PREFIX}${block.text}` : block.text))
@@ -54,17 +56,44 @@ function blockPatchViolation(patch, detail, extra = {}) {
   return { reason: REPAIR_PATCH_CONTRACT_VIOLATION, patch, detail, ...extra };
 }
 
+function isFullBodyMarkdownPointer(segments) {
+  return segments.length === 2 &&
+    segments[0] === 'public_article' &&
+    segments[1] === 'body_markdown';
+}
+
 // remapRepairPatchSections를 통과한 patch 목록을 받아(모든 patch의 section_index가
 // 유효 범위) 블록 포인터 patch만 전체 필드 교체 patch로 변환한다. 하나라도 해석에
 // 실패하면 ok:false — 호출부는 base editor를 그대로 유지한다(fail before mutate).
+//
+// 같은 섹션을 겨냥한 본문 patch 여러 개는 배열 순서대로 **진화하는 블록 상태**에
+// 누적 적용한다. 각 patch를 원본 body 기준으로 독립 해석하면 전체 교체 patch들이
+// applyRepairPatches의 순차 적용에서 서로를 덮어, 마지막 patch만 살아남고 앞의 편집이
+// 소리 없이 유실된다(리뷰 H1 실측). 전체 필드 교체 patch가 끼면 그 값이 이후 블록
+// patch의 기준 상태가 된다 — applyRepairPatches도 같은 순서로 적용하므로 결과가 같다.
 function resolveBodyMarkdownBlockPatches(sections, patches = []) {
   const sectionList = ensureArray(sections);
   const resolved = [];
   const violations = [];
+  // section_index → 지금까지의 patch를 반영한 body_markdown 문자열.
+  const evolvingBodies = new Map();
+
+  const currentBody = (sectionIndex) => {
+    if (evolvingBodies.has(sectionIndex)) return evolvingBodies.get(sectionIndex);
+    const section = sectionList[sectionIndex];
+    return section && section.public_article ? section.public_article.body_markdown : undefined;
+  };
 
   for (const patch of ensureArray(patches)) {
     const segments = splitPointer(patch && patch.path);
     if (!isBodyMarkdownBlockPointer(segments)) {
+      // 전체 필드 교체 patch는 그대로 통과시키되, 이후 같은 섹션의 블록 patch가
+      // 이 값을 기준으로 해석되도록 진화 상태를 갱신한다.
+      if (isFullBodyMarkdownPointer(segments) &&
+        Number.isInteger(patch && patch.section_index) &&
+        typeof patch.value === 'string') {
+        evolvingBodies.set(patch.section_index, patch.value);
+      }
       resolved.push(patch);
       continue;
     }
@@ -73,7 +102,7 @@ function resolveBodyMarkdownBlockPatches(sections, patches = []) {
       violations.push(blockPatchViolation(patch, 'section_index_out_of_range'));
       continue;
     }
-    const body = section.public_article ? section.public_article.body_markdown : undefined;
+    const body = currentBody(patch.section_index);
     if (typeof body !== 'string' || body.trim() === '') {
       violations.push(blockPatchViolation(patch, 'body_markdown_missing'));
       continue;
@@ -115,10 +144,12 @@ function resolveBodyMarkdownBlockPatches(sections, patches = []) {
     }
     const nextBlocks = blocks.slice();
     nextBlocks[blockIndex] = valueBlocks[0];
+    const serialized = serializeBodyBlocks(nextBlocks);
+    evolvingBodies.set(patch.section_index, serialized);
     resolved.push({
       ...patch,
       path: `/${BODY_MARKDOWN_POINTER}`,
-      value: serializeBodyBlocks(nextBlocks)
+      value: serialized
     });
   }
 
