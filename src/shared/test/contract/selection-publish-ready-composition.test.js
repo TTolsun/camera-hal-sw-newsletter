@@ -60,8 +60,7 @@ test('one mixed supporting bucket article is public-ready when hard gates pass',
         editorial_priority: 4,
         soc_platform_relevance: 5,
         native_tooling_relevance: 0,
-        counts_as_soc_topic: true,
-        counts_as_fallback_topic: false
+        counts_as_soc_topic: true
       });
     }
     return policySupportingCandidate(index);
@@ -101,8 +100,7 @@ test('publish-ready composition passes with two primary topics and at most one s
       relevance_bucket: 'soc_platform_signal',
       soc_platform_relevance: 5,
       native_tooling_relevance: 0,
-      counts_as_soc_topic: true,
-      counts_as_fallback_topic: false
+      counts_as_soc_topic: true
     })
   ]);
 
@@ -136,8 +134,7 @@ test('direct AOSP Camera or driver shortage no longer blocks one-article policy'
       relevance_bucket: 'soc_platform_signal',
       soc_platform_relevance: 5,
       native_tooling_relevance: 0,
-      counts_as_soc_topic: true,
-      counts_as_fallback_topic: false
+      counts_as_soc_topic: true
     })
   ]);
 
@@ -192,8 +189,7 @@ test('publish-ready supporting max applies across all supporting buckets', () =>
       relevance_bucket: 'soc_platform_signal',
       soc_platform_relevance: 5,
       native_tooling_relevance: 0,
-      counts_as_soc_topic: true,
-      counts_as_fallback_topic: false
+      counts_as_soc_topic: true
     }),
     policySupportingCandidate(1, {
       title: 'Supporting multimedia output source',
@@ -301,7 +297,6 @@ test('independent tooling candidate can satisfy one-article policy', () => {
     counts_as_primary_camera_topic: false,
     counts_as_driver_topic: false,
     counts_as_soc_topic: false,
-    counts_as_fallback_topic: true,
     camera_hal_relevance_score: 0
   })));
 
@@ -516,7 +511,6 @@ test('fallback composition with one supporting article is accepted by one-articl
       driver_stack_relevance: 0,
       soc_platform_relevance: 0,
       native_tooling_relevance: 4,
-      counts_as_fallback_topic: true,
       camera_hal_relevance_score: 0
     });
   });
@@ -661,8 +655,7 @@ test('#124 acceptance: publish-ready rejects more than one supporting main artic
       relevance_bucket: 'soc_platform_signal',
       soc_platform_relevance: 5,
       native_tooling_relevance: 0,
-      counts_as_soc_topic: true,
-      counts_as_fallback_topic: false
+      counts_as_soc_topic: true
     }),
     policySupportingCandidate(1, {
       title: 'Supporting multimedia output source',

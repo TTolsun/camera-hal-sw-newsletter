@@ -23,7 +23,6 @@ const SECTION_SCOPE_FALLBACK_RULES = [
       counts_as_primary_camera_topic: true,
       counts_as_driver_topic: false,
       counts_as_soc_topic: false,
-      counts_as_fallback_topic: false,
       evidence_origin: 'section_text_fallback'
     }
   },
@@ -40,7 +39,6 @@ const SECTION_SCOPE_FALLBACK_RULES = [
       counts_as_primary_camera_topic: false,
       counts_as_driver_topic: true,
       counts_as_soc_topic: false,
-      counts_as_fallback_topic: false,
       evidence_origin: 'section_text_fallback'
     }
   },
@@ -57,7 +55,6 @@ const SECTION_SCOPE_FALLBACK_RULES = [
       counts_as_primary_camera_topic: false,
       counts_as_driver_topic: false,
       counts_as_soc_topic: false,
-      counts_as_fallback_topic: false,
       evidence_origin: 'section_text_fallback'
     }
   },
@@ -74,7 +71,6 @@ const SECTION_SCOPE_FALLBACK_RULES = [
       counts_as_primary_camera_topic: false,
       counts_as_driver_topic: false,
       counts_as_soc_topic: true,
-      counts_as_fallback_topic: false,
       evidence_origin: 'section_text_fallback'
     }
   },
@@ -91,7 +87,6 @@ const SECTION_SCOPE_FALLBACK_RULES = [
       counts_as_primary_camera_topic: false,
       counts_as_driver_topic: false,
       counts_as_soc_topic: false,
-      counts_as_fallback_topic: true,
       evidence_origin: 'section_text_fallback'
     }
   }

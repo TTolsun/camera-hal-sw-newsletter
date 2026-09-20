@@ -344,7 +344,6 @@ function scopeFromStructuredFields(value, origin) {
     ),
     counts_as_driver_topic: bool(value.counts_as_driver_topic, bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE),
     counts_as_soc_topic: bool(value.counts_as_soc_topic, false),
-    counts_as_fallback_topic: articlePolicy.supportingMainBuckets.includes(bucket) && bool(value.counts_as_fallback_topic, false),
     guardrail_impact_class: inferGuardrailImpactClass(value),
     evidence_origin: text(value.evidence_origin) || origin,
     missing_score_fields: missingScoreFields,
@@ -428,8 +427,7 @@ function diagnosticFallbackScope(section, binding = null) {
     publishable_scope: false,
     counts_as_primary_camera_topic: false,
     counts_as_driver_topic: false,
-    counts_as_soc_topic: false,
-    counts_as_fallback_topic: false
+    counts_as_soc_topic: false
   };
 }
 
@@ -476,7 +474,6 @@ function sectionCountDetail(section, scope, index) {
     counts_as_primary_camera_topic: countsAsPrimaryStack,
     counts_as_driver_topic: bucket === BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE,
     counts_as_soc_topic: false,
-    counts_as_fallback_topic: articlePolicy.supportingMainBuckets.includes(bucket),
     counts_as_supporting_main_article: countsAsSupportingMain,
     counts_as_forbidden_main_article: countsAsForbiddenMain,
     guardrail_impact_class: text(scope?.guardrail_impact_class) ||

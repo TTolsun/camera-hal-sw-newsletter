@@ -494,7 +494,6 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
       counts_as_primary_camera_topic: bool(candidate.counts_as_primary_camera_topic),
       counts_as_driver_topic: bool(candidate.counts_as_driver_topic),
       counts_as_soc_topic: bool(candidate.counts_as_soc_topic),
-      counts_as_fallback_topic: bool(candidate.counts_as_fallback_topic),
       evidence_origin: text(candidate.evidence_origin)
     },
     hal_impact_axes: halSignal.hal_impact_axes,

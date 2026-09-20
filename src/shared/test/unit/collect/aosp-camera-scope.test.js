@@ -172,7 +172,7 @@ test('classifies Android multimedia camera output as supporting, not primary', (
     assert.equal(item.relevance_bucket, BUCKETS.ANDROID);
     assert.equal(item.editorial_priority, 3);
     assert.equal(item.counts_as_primary_camera_topic, false);
-    assert.equal(item.counts_as_fallback_topic, false);
+    assert.ok(!('counts_as_fallback_topic' in item));
     assert.ok(item.multimedia_camera_output_relevance >= 2);
   }
 });
@@ -336,7 +336,7 @@ test('classifies C++ AI and tooling as fallback', () => {
 
   assert.equal(fallback.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
   assert.equal(fallback.editorial_priority, 2);
-  assert.equal(fallback.counts_as_fallback_topic, false);
+  assert.ok(!('counts_as_fallback_topic' in fallback));
 });
 
 test('classifies official Android tooling workflow as cpp fallback rather than camera adjacent', () => {
@@ -361,7 +361,7 @@ test('classifies official Android tooling workflow as cpp fallback rather than c
     assert.equal(item.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
     assert.equal(item.tooling_workflow_type, 'native_tooling_workflow');
     assert.equal(item.counts_as_primary_camera_topic, false);
-    assert.equal(item.counts_as_fallback_topic, false);
+    assert.ok(!('counts_as_fallback_topic' in item));
     assert.ok(item.native_workflow_evidence_score > 0);
   }
 });
@@ -414,7 +414,7 @@ test('keeps compiler CPU and GPU benchmark coverage in native tooling fallback w
 
   assert.equal(gcc.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
   assert.equal(gcc.counts_as_soc_topic, false);
-  assert.equal(gcc.counts_as_fallback_topic, false);
+  assert.ok(!('counts_as_fallback_topic' in gcc));
 });
 
 test('classifies security-bulletin camera RAW/DNG and image-codec CVEs as multimedia camera output', () => {

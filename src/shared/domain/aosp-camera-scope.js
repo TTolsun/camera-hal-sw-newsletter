@@ -730,7 +730,6 @@ function classifyAospCameraStackCandidate(candidate = {}) {
   // SoC 버킷은 사라졌지만 SoC 근거로 분류된 사실은 남는다. 이 플래그를 버킷 이름에 묶어 두면
   // 병합과 함께 신호가 조용히 없어진다.
   const countsAsSocTopic = androidEvidenceKind === 'soc_platform';
-  const countsAsFallbackTopic = articlePolicy.supportingMainBuckets.includes(bucket);
   const aospCameraDirectness = bucket === BUCKETS.DIRECT_AOSP_CAMERA
     ? Math.max(3, relevanceScoreFromHits(directTerms))
     : androidEvidenceKind === 'platform_adjacent' ? 2 : 0;
@@ -758,7 +757,6 @@ function classifyAospCameraStackCandidate(candidate = {}) {
     counts_as_primary_camera_topic: countsAsPrimaryCameraTopic,
     counts_as_driver_topic: countsAsDriverTopic,
     counts_as_soc_topic: countsAsSocTopic,
-    counts_as_fallback_topic: countsAsFallbackTopic,
     tooling_workflow_type: bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK && nativeAndroidTooling.detected
       ? nativeAndroidTooling.tooling_workflow_type
       : text(candidate.tooling_workflow_type),
@@ -795,7 +793,6 @@ function normalizeAospCameraScope(candidate = {}, scope = {}) {
     // android_supporting 으로 읽어, 한 후보가 두 등급으로 세어진다.
     multimedia_camera_output_relevance: 0,
     soc_platform_relevance: 0,
-    counts_as_fallback_topic: false,
     evidence_origin: scope.evidence_origin || 'article_text',
     scope_evidence_terms: evidenceTerms.slice(0, 8),
     aospCameraStackBucket: BUCKETS.ANDROID,

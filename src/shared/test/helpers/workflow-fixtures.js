@@ -93,7 +93,6 @@ function regressionCandidate({ title, url, bucket, fallback = false }) {
     counts_as_primary_camera_topic: bucket !== 'cpp_ai_tooling_fallback',
     counts_as_driver_topic: bucket === 'camera_driver_image_pipeline',
     counts_as_soc_topic: false,
-    counts_as_fallback_topic: fallback,
     evidence_origin: 'fixture',
     ...cameraXRegressionExtraction(title, url)
   };
@@ -122,7 +121,6 @@ function regressionSection(item, overrides = {}) {
     counts_as_primary_camera_topic: item.counts_as_primary_camera_topic,
     counts_as_driver_topic: item.counts_as_driver_topic,
     counts_as_soc_topic: item.counts_as_soc_topic,
-    counts_as_fallback_topic: item.counts_as_fallback_topic,
     evidence_origin: item.evidence_origin,
     source_extraction: item.source_extraction || null,
     derived_editorial_hints: item.derived_editorial_hints || null,
@@ -172,7 +170,6 @@ function scopeCountForCandidate(candidate, overrides = {}) {
     counts_as_primary_camera_topic: candidate.counts_as_primary_camera_topic,
     counts_as_driver_topic: candidate.counts_as_driver_topic,
     counts_as_soc_topic: candidate.counts_as_soc_topic,
-    counts_as_fallback_topic: candidate.counts_as_fallback_topic,
     ...overrides
   };
 }
