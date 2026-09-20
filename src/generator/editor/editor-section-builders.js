@@ -7,6 +7,7 @@ const {
   STORY_CONTRACT_VERSION,
   publicArticleForSection
 } = require('../reporter/public-article-contract');
+const { usesBodyMarkdown } = require('../../shared/common/story-contract-version');
 const {
   asObject,
   text,
@@ -126,7 +127,23 @@ function buildStoryFromPublicArticle(section = {}, publicArticle = {}) {
   };
 }
 
-function completeStoryPublicArticle(section = {}) {
+function completeStoryPublicArticle(section = {}, options = {}) {
+  const storyContractVersion = Number(options.storyContractVersion) || STORY_CONTRACT_VERSION;
+  if (usesBodyMarkdown(storyContractVersion)) {
+    // v2는 prose 합성을 하지 않는다(fail/demote over fabricate — 설계 §4.8, #850).
+    // 아래 v1 경로의 headline 기본값·suffix, source_subtitle fallback, editorial_story
+    // 템플릿은 팩트체커가 본 적 없는 문장을 발행 본문에 싣는 코드 fabrication이다.
+    // v2에서는 비산문 마커(story_contract_version)만 채우고, 산문 필드가 결손인 섹션은
+    // deterministicallyRepairEditorSchema의 per-article demote가 처리한다.
+    return {
+      ...publicArticleForSection(section, {
+        issue: options.issue || {},
+        requireStoryContract: true
+      }),
+      story_contract_version: storyContractVersion
+    };
+  }
+  // v1 재검증 경로(W20~ 영구 아티팩트 재검증 포함): 기존 합성을 그대로 유지한다.
   const publicArticle = publicArticleForSection(section);
   const headline = storyHeadlineFromSection(section, publicArticle);
   publicArticle.headline = headline;

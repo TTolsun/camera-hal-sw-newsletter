@@ -27,7 +27,8 @@ const {
   validatePublicArticle
 } = require('../reporter/public-article-contract');
 const {
-  publicContractVersionFor
+  publicContractVersionFor,
+  usesBodyMarkdown
 } = require('../../shared/common/story-contract-version');
 const {
   canonicalIssueTitle,
@@ -218,6 +219,17 @@ function unsupportedStoryMarkerReasonCodes(value = {}) {
   return uniqueText(unsupportedStoryMarkerIssues(value).map(issue => issue.type));
 }
 
+// v2 결정론 수선이 "합성 대신 demote"로 처리하는 결손 issue type(#850, 설계 §4.8).
+// v1 합성(completeStoryPublicArticle)이 지어내던 필드들의 부재 코드만 담는다. 본문 lint
+// 위반이나 빈 lead 같은 텍스트 수리 가능 결함은 여기 넣지 않는다 — 그건 기존 LLM
+// semantic repair 경로가 담당한다.
+const V2_STORY_FIELD_DEMOTE_ISSUE_TYPES = new Set([
+  'missing_public_article',
+  'missing_story_public_article_field',
+  'empty_editorial_story_field',
+  'missing_body_markdown'
+]);
+
 function deterministicallyRepairEditorSchema(value, options = {}) {
   const repaired = cloneJson(value);
   let changed = false;
@@ -230,10 +242,12 @@ function deterministicallyRepairEditorSchema(value, options = {}) {
       repairable: false
     };
   }
+  const draftContractVersion = options.requireStoryContract === true
+    ? issueStoryContractVersion(repaired)
+    : 0;
   if (options.requireStoryContract === true) {
     // draft가 이미 선언한 버전으로 마커를 맞춘다. 버전을 고정해 두면 v2 draft의 이슈
     // 마커만 v1으로 되돌아가 섹션 마커와 어긋난 혼합 패밀리가 만들어진다.
-    const draftContractVersion = issueStoryContractVersion(repaired);
     const publicContractVersion = publicContractVersionFor(draftContractVersion);
     if (repaired.public_contract_version !== publicContractVersion) {
       repaired.public_contract_version = publicContractVersion;
@@ -248,11 +262,35 @@ function deterministicallyRepairEditorSchema(value, options = {}) {
       changed = true;
     }
   }
-  for (const section of ensureArray(repaired?.sections)) {
+  const usesV2StoryContract = options.requireStoryContract === true &&
+    usesBodyMarkdown(draftContractVersion);
+  // v2 per-article demote(#850 계층 갭): 이 단계는 draft 전체 루프라, 한 섹션의 story
+  // 필드 결손이 reason_codes로 남으면 draft 전체가 {editor:null}로 실패해 whole-draft
+  // LLM repair / lastKnownValidEditor revert로 확산된다. v2는 결손 섹션을 draft에서
+  // 제거(hard_blocked_groups 마킹)하고 잔여 섹션으로 draft를 유지한다. 최소 발행 기사
+  // 수 미달일 때만 draft 수준 실패로 승격한다.
+  const demotedSections = [];
+  const demotedReasonCodes = [];
+  const keptSections = [];
+  ensureArray(repaired?.sections).forEach((section, sectionIndex) => {
     if (options.requireStoryContract === true) {
-      section.public_article = completeStoryPublicArticle(section);
+      section.public_article = completeStoryPublicArticle(section, usesV2StoryContract
+        ? { issue: repaired, storyContractVersion: draftContractVersion }
+        : {});
       changed = true;
+      if (usesV2StoryContract) {
+        const demoteIssues = validatePublicArticle(section, sectionIndex, {
+          issue: repaired,
+          requireStoryContract: true
+        }).filter(issue => V2_STORY_FIELD_DEMOTE_ISSUE_TYPES.has(issue.type));
+        if (demoteIssues.length > 0) {
+          demotedSections.push(section);
+          demotedReasonCodes.push(...demoteIssues.map(issue => issue.type));
+          return;
+        }
+      }
     }
+    keptSections.push(section);
     const normalized = normalizeArticleSections(section);
     if (!(normalized.diagnostics.article_sections_present && normalized.diagnostics.complete)) {
       const candidate = buildArticleSectionsFromSectionFields(section);
@@ -277,6 +315,39 @@ function deterministicallyRepairEditorSchema(value, options = {}) {
         changed = true;
       }
     }
+  });
+  if (demotedSections.length > 0) {
+    if (keptSections.length < articlePolicy.mainArticleCount.min) {
+      return {
+        editor: null,
+        reason_codes: uniqueText([...reasonCodes, ...demotedReasonCodes])
+      };
+    }
+    repaired.sections = keptSections;
+    // demote된 그룹을 hard_blocked_groups에 기록해야 "selected group coverage" 계약이
+    // 유지된다(선정 그룹은 렌더·강등·차단 중 하나여야 한다). reason_code는 허용 목록
+    // (HARD_BLOCK_REASON_CODES)의 quality_hard_blocker를 쓴다.
+    repaired.hard_blocked_groups = [
+      ...ensureArray(repaired.hard_blocked_groups),
+      ...demotedSections
+        .map(section => {
+          // 그룹 키가 없는 섹션도 quality의 hardBlockedGroupsForDroppedSections와 같은
+          // 규칙(url·headline 파생 키)으로 기록해, 어떤 demote도 무기록으로 남지 않는다.
+          const key = sectionGroupKey(section) || candidateGroupKey({
+            url: ensureArray(section.sources)[0]?.url,
+            title: section.headline
+          });
+          return key
+            ? {
+              article_group_key: key,
+              hard_block_reason: 'story contract prose fields missing; demoted instead of fabricating (v2)',
+              reason_code: 'quality_hard_blocker'
+            }
+            : null;
+        })
+        .filter(Boolean)
+    ];
+    changed = true;
   }
   const uniqueReasonCodes = uniqueText(reasonCodes);
   if (uniqueReasonCodes.length > 0) {
@@ -287,7 +358,13 @@ function deterministicallyRepairEditorSchema(value, options = {}) {
   }
   return {
     editor: changed ? repaired : null,
-    reason_codes: []
+    reason_codes: [],
+    ...(demotedSections.length > 0
+      ? {
+        demoted_section_signatures: sectionSourceSignature({ sections: demotedSections }),
+        demoted_section_reason_codes: uniqueText(demotedReasonCodes)
+      }
+      : {})
   };
 }
 
@@ -1427,7 +1504,25 @@ async function repairEditorOutputContract({
     if (deterministicRepair?.editor) {
       try {
         const deterministicEditor = validate(cloneJson(deterministicRepair.editor));
-        assertSectionsAndSourcesPreserved(invalidEditor, deterministicRepair.editor);
+        // v2 per-article demote(#850)는 결손 섹션을 정당하게 제거한다. 보존 단언은
+        // demote된 섹션을 뺀 나머지가 무변인지 본다 — demote 외의 어떤 섹션도
+        // 사라지거나 재작성되지 않았음을 여전히 강제한다.
+        const demotedSignatures = ensureArray(deterministicRepair.demoted_section_signatures);
+        let preservedBase = invalidEditor;
+        if (demotedSignatures.length > 0) {
+          const remainingDemoted = demotedSignatures.map(item => JSON.stringify(item));
+          preservedBase = {
+            ...invalidEditor,
+            sections: ensureArray(invalidEditor.sections).filter(section => {
+              const signature = JSON.stringify(sectionSourceSignature({ sections: [section] })[0]);
+              const matchIndex = remainingDemoted.indexOf(signature);
+              if (matchIndex === -1) return true;
+              remainingDemoted.splice(matchIndex, 1);
+              return false;
+            })
+          };
+        }
+        assertSectionsAndSourcesPreserved(preservedBase, deterministicRepair.editor);
         return {
           editor: deterministicEditor,
           editor_semantic_validation: initialDetails,

@@ -95,7 +95,7 @@ function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLocked
     hasLockedSections ? 'Previous attempt에서 quality-passing 상태였던 locked article은 그대로 유지하세요. Complete final sections array 안에는 missing replacement article만 새로 생성하세요.' : '',
     hasLockedSections ? 'locked article URLs, titles/headlines, source names, 또는 같은 source + published date + similar title 조합을 중복하지 마세요.' : '',
     'marketing tone은 피하세요. 모든 article에는 confirmed_facts, sources, 그리고 article_sections(verified_facts, background_context, hal_driver_impact, action_items, team_share_points)를 포함하세요.',
-    'article_sections.background_context는 background-context.json의 background_context를 먼저 사용하세요. 없으면 article capsule의 background_context_static을 사용합니다. raw source UI/table snippet을 background_context에 복사하지 마세요.',
+    'article_sections.background_context는 background-context.json의 background_context와 article capsule의 background_context_static을 참고자료로만 사용하세요. 그 문장을 그대로 복사하지 말고 이 기사에 맞는 자기 문장으로 재작성하세요. raw source UI/table snippet을 background_context에 복사하지 마세요.',
     'Jetpack Compose, Jetpack Navigation 3, CameraX-adjacent, Android adaptive UI article은 바로 결론으로 가지 말고 Compose/Navigation/adaptive UI가 왜 camera preview/capture UX 검증과 연결되는지 한 문단의 배경설명을 먼저 제공하세요.',
     'candidate와 background context의 source facts를 보고 article_sections.hal_driver_impact, public_article.camera_hal_takeaway, claims[].impact_level에서 public-facing impact wording과 claim-level classification을 작성하세요.',
     '모든 article은 evidence_summary, specificity_checks, source_verification_notes를 포함해야 합니다.',
