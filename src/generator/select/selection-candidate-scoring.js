@@ -135,7 +135,6 @@ function candidateScope(candidate) {
       counts_as_primary_camera_topic: bool(candidate.counts_as_primary_camera_topic),
       counts_as_driver_topic: bool(candidate.counts_as_driver_topic),
       counts_as_soc_topic: bool(candidate.counts_as_soc_topic),
-      counts_as_fallback_topic: bool(candidate.counts_as_fallback_topic),
       evidence_origin: text(candidate.evidence_origin),
       source_hint: text(candidate.source_hint),
       scope_evidence_terms: ensureArray(candidate.scope_evidence_terms)
@@ -335,12 +334,11 @@ function practicalActionabilityScore(candidate) {
 function optionalAiCppBonus(candidate) {
   const cameraDirectness = cameraHalDirectnessScore(candidate);
   const scope = candidateScope(candidate);
-  if (cameraDirectness < MIN_CAMERA_HAL_DIRECTNESS && !scope.counts_as_soc_topic && !scope.counts_as_fallback_topic) return 0;
+  if (cameraDirectness < MIN_CAMERA_HAL_DIRECTNESS && !scope.counts_as_soc_topic) return 0;
   let score = 0;
   if (hasAiValue(candidate)) score += 2;
   if (hasCppFallbackValue(candidate)) score += 1;
   if (scope.counts_as_soc_topic) score += 1;
-  if (scope.counts_as_fallback_topic) score += 1;
   return clamp(score, 0, 5);
 }
 

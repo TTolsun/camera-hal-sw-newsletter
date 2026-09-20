@@ -63,7 +63,6 @@ function onePublishableSupportingCandidate(date) {
     counts_as_primary_camera_topic: false,
     counts_as_driver_topic: false,
     counts_as_soc_topic: true,
-    counts_as_fallback_topic: false,
     evidence_origin: 'source_extraction',
     source_hint: 'official-source',
     camera_hal_relevance_score: 2,
@@ -205,7 +204,6 @@ function onePublishableSupportingEditorDraft(date, candidate) {
       relevance_bucket: 'soc_platform_signal',
       counts_as_primary_camera_topic: false,
       counts_as_soc_topic: true,
-      counts_as_fallback_topic: false,
       evidence_origin: 'source_extraction',
       source_hint: 'official-source'
     }],

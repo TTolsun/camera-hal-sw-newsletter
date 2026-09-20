@@ -104,7 +104,6 @@ function buildQualityReportMarkdown(report) {
     ` ${item.scope_count?.counts_as_primary_camera_topic === true} `,
     ` ${item.scope_count?.counts_as_driver_topic === true} `,
     ` ${item.scope_count?.counts_as_soc_topic === true} `,
-    ` ${item.scope_count?.counts_as_fallback_topic === true} `,
     ` ${item.scope_count?.publishable_scope === true} `,
     ` ${item.scope_count?.binding_status || ''} `,
     ` ${item.scope_count?.binding_source || ''} `,
@@ -238,8 +237,8 @@ ${articleStructureRows}
 
 ## Article Gate Results
 
-| # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | fallback | publishable_scope | binding_status | binding_source | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
-| ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| # | Result | Repair action | Headline | relevance_bucket | editorial_priority | primary_camera | driver | soc | publishable_scope | binding_status | binding_source | metadata_source | missing_score_fields | count_reason | exclusion_reason_if_not_counted | Hard fail reasons | Soft deductions |
+| ---: | --- | --- | --- | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 ${articleGateRows}
 
 ## Hard Fails

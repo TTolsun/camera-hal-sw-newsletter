@@ -56,7 +56,6 @@ function policyDriverCandidate(index = 0, overrides = {}) {
     counts_as_primary_camera_topic: false,
     counts_as_driver_topic: true,
     counts_as_soc_topic: false,
-    counts_as_fallback_topic: false,
     ...overrides
   });
 }
@@ -83,7 +82,6 @@ function policySupportingCandidate(index = 0, overrides = {}) {
     multimedia_camera_output_relevance: 0,
     soc_platform_relevance: 0,
     native_tooling_relevance: 5,
-    counts_as_fallback_topic: true,
     camera_hal_relevance_score: 0,
     ...overrides
   });

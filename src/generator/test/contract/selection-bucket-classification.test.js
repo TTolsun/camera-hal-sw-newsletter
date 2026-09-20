@@ -37,7 +37,6 @@ function policyMultimediaCandidate(index = 0, overrides = {}) {
     counts_as_primary_camera_topic: false,
     counts_as_driver_topic: false,
     counts_as_soc_topic: false,
-    counts_as_fallback_topic: false,
     camera_hal_relevance_score: 0,
     ...overrides
   });
@@ -60,7 +59,6 @@ function policySocCandidate(index = 0, overrides = {}) {
     counts_as_primary_camera_topic: false,
     counts_as_driver_topic: false,
     counts_as_soc_topic: true,
-    counts_as_fallback_topic: false,
     camera_hal_relevance_score: 0,
     ...overrides
   });
@@ -183,7 +181,6 @@ test('generic native performance items cannot become main articles without concr
     driver_stack_relevance: 0,
     soc_platform_relevance: 0,
     native_tooling_relevance: 3,
-    counts_as_fallback_topic: true,
     camera_hal_relevance_score: 0
   });
 
@@ -249,7 +246,6 @@ test('generic Tensor tooling names do not satisfy concrete SoC evidence', () => 
     driver_stack_relevance: 0,
     soc_platform_relevance: 0,
     native_tooling_relevance: 3,
-    counts_as_fallback_topic: true,
     camera_hal_relevance_score: 0
   });
 
@@ -296,7 +292,6 @@ test('versioned C++ toolchain evidence is concrete but not counted as direct cam
     driver_stack_relevance: 0,
     soc_platform_relevance: 0,
     native_tooling_relevance: 5,
-    counts_as_fallback_topic: true,
     camera_hal_relevance_score: 0
   });
   const report = buildShortlistReport('2026-05-10', [
@@ -322,8 +317,7 @@ test('native tooling is independent main without counting as camera coverage', (
     behavior_change: 'General compiler optimization improved.',
     relevance_bucket: 'cpp_ai_tooling_fallback',
     editorial_priority: 6,
-    native_tooling_relevance: 3,
-    counts_as_fallback_topic: true
+    native_tooling_relevance: 3
   });
 
   const summary = compositionSummary([genericFallback]);

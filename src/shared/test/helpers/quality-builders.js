@@ -135,8 +135,7 @@ function scopedCandidate(url, bucket, overrides = {}) {
     },
     cpp_ai_tooling_fallback: {
       editorial_priority: 3,
-      native_tooling_relevance: 5,
-      counts_as_fallback_topic: true
+      native_tooling_relevance: 5
     },
     generic_tech_watchlist: {
       editorial_priority: 5
@@ -152,7 +151,6 @@ function scopedCandidate(url, bucket, overrides = {}) {
     counts_as_primary_camera_topic: false,
     counts_as_driver_topic: false,
     counts_as_soc_topic: false,
-    counts_as_fallback_topic: false,
     evidence_origin: 'candidate_metadata',
     ...bucketDefaults[bucket],
     ...overrides

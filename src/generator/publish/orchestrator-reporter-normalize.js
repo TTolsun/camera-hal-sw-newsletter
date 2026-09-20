@@ -203,7 +203,6 @@ function validateReporter(value, date, collectedCandidates = []) {
     candidate.counts_as_primary_camera_topic = booleanFromCandidate(collected, candidate, 'counts_as_primary_camera_topic');
     candidate.counts_as_driver_topic = booleanFromCandidate(collected, candidate, 'counts_as_driver_topic');
     candidate.counts_as_soc_topic = booleanFromCandidate(collected, candidate, 'counts_as_soc_topic');
-    candidate.counts_as_fallback_topic = booleanFromCandidate(collected, candidate, 'counts_as_fallback_topic');
     delete candidate.impact_claim_level;
     delete candidate.impactClaimLevel;
     candidate.evidence_origin = stringOrEmpty(collected.evidence_origin || candidate.evidence_origin || 'unknown');
@@ -464,7 +463,6 @@ function sourceCandidateMetadataForSection(section, reporter) {
     counts_as_primary_camera_topic: candidate.counts_as_primary_camera_topic === true,
     counts_as_driver_topic: candidate.counts_as_driver_topic === true,
     counts_as_soc_topic: candidate.counts_as_soc_topic === true,
-    counts_as_fallback_topic: candidate.counts_as_fallback_topic === true,
     finalSelectionEligibility: candidate.finalSelectionEligibility || candidate.final_selection_eligibility || '',
     source_gap_risk: candidate.source_gap_risk === true,
     main_article_readiness: candidate.main_article_readiness || null,

@@ -268,7 +268,7 @@ function inferSourceUrlQuality(candidate = {}, source = {}, metadata = {}, sourc
   if (['tech-media', 'expert-media'].includes(reliability)) return 'tech_media_lead_requires_cross_check';
   if (reliability.includes('community')) return 'community_lead_requires_cross_check';
   if (category.includes('ai') || category.includes('tech') || category.includes('software')) return 'generic_ai_or_it_trend';
-  if (kind.includes('fallback') || candidate.counts_as_fallback_topic === true) return 'fallback_context';
+  if (kind.includes('fallback')) return 'fallback_context';
   return 'unknown';
 }
 
