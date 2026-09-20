@@ -162,6 +162,29 @@ test('v2 validation reports too few body paragraphs through the markdown lint', 
   assert.equal(shortBody?.actualCount, 1);
 });
 
+test('v2 validation reports an absent body_markdown as a structural failure, not a lint issue (#849)', () => {
+  // 부재를 insufficient_public_body_paragraphs(텍스트 수리 가능)로 위장시키면 repair
+  // LLM이 존재하지 않는 본문을 지어내는 경로가 열린다. 부재는 replace-or-demote 대상인
+  // 별도 코드로 갈라 낸다.
+  const section = v2Section();
+  delete section.public_article.body_markdown;
+  const issues = validatePublicArticle(section, 0, { issue: V2_ISSUE });
+  const missing = issues.find(issue => issue.type === 'missing_body_markdown');
+
+  assert.equal(missing?.key, 'body_markdown');
+  assert.equal(missing?.reason, 'not_a_string');
+  assert.equal(issues.some(issue => issue.type === 'insufficient_public_body_paragraphs'), false);
+});
+
+test('v2 validation reports a whitespace-only body_markdown as empty (#849)', () => {
+  const section = v2Section({ body_markdown: '   \n\n  ' });
+  const issues = validatePublicArticle(section, 0, { issue: V2_ISSUE });
+  const missing = issues.find(issue => issue.type === 'missing_body_markdown');
+
+  assert.equal(missing?.reason, 'empty');
+  assert.equal(issues.some(issue => issue.type === 'insufficient_public_body_paragraphs'), false);
+});
+
 test('v2 validation still fails an empty camera_hal_takeaway', () => {
   const section = v2Section({ camera_hal_takeaway: '' });
   const issues = validatePublicArticle(section, 0, { issue: V2_ISSUE });

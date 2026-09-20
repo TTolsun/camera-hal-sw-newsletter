@@ -86,6 +86,49 @@ function deductionRepairPolicy(deduction = {}) {
     'invalid_impact_level',
     'do_not_claim_violation'
   ]);
+  // Story Contract v2 issue code 전수 등록(#849). 마지막 unknown-code 분기가 기본값으로
+  // repair-section을 주기 때문에, v2 코드를 여기 명시하지 않으면 "등록을 잊어도 우연히
+  // 통과하는" 함정이 남는다 — 텍스트 수리 가능한 코드와 구조 실패 코드를 명시로 가른다.
+  // 본문 lint 위반은 같은 소스 안에서 문구·블록만 고치면 되는 텍스트 수리다.
+  const repairableBodyMarkdownReasons = new Set([
+    'body_markdown_forbidden_construct',
+    'body_markdown_forbidden_heading_level',
+    'body_markdown_reserved_subheading',
+    'body_markdown_duplicate_block',
+    'body_markdown_dangling_subheading',
+    'body_markdown_duplicates_public_field',
+    'insufficient_public_body_paragraphs',
+    'duplicate_headline'
+  ]);
+  // 마커 패밀리 불일치와 본문 부재/비문자열은 텍스트 patch로 고칠 수 없는 구조 실패다.
+  const neverRepairableStoryContractReasons = new Set([
+    'story_contract_version_mismatch',
+    'story_contract_version_family_mismatch',
+    'unsupported_public_contract_version',
+    'unsupported_generation_contract_version',
+    'unsupported_story_contract_version',
+    'missing_public_article',
+    'missing_story_public_article_field',
+    'missing_body_markdown'
+  ]);
+  if (repairableBodyMarkdownReasons.has(reasonCode)) {
+    return {
+      failure_type: reasonCode,
+      action: 'repair-section',
+      allow_rewrite: true,
+      reason: reasonCode === 'insufficient_public_body_paragraphs'
+        ? 'body_markdown paragraph shortage can only be repaired by replacing the whole /public_article/body_markdown field with a longer body; block patches cannot add paragraphs'
+        : 'same-source body_markdown or headline text repair is allowed once (block patch or full body_markdown replace)'
+    };
+  }
+  if (neverRepairableStoryContractReasons.has(reasonCode)) {
+    return {
+      failure_type: reasonCode,
+      action: 'replace-or-demote',
+      allow_rewrite: false,
+      reason: 'story contract marker mismatch or missing body_markdown is a structural failure and must be demoted or replaced'
+    };
+  }
   if (neverRepairableClaimReasons.has(reasonCode)) {
     return {
       failure_type: reasonCode,

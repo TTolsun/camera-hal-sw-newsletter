@@ -48,6 +48,7 @@ const {
 } = require('../quality/newsletter-quality');
 const { reconcileFactClaimEvidence } = require('../editor/editor-output-contract');
 const { REPAIR_PATCH_CONTRACT_VIOLATION } = require('../repair/repair-patch-contract');
+const { parseBodyBlocks } = require('../reporter/public-body-markdown');
 const {
   buildMarkdown,
   buildFactCheckMarkdown
@@ -258,7 +259,16 @@ async function runRepairAndCompletionPasses({
             section_key: stableSectionKey(section),
             summary: sectionSummary(section, index),
             article_sections: section.article_sections,
-            public_article: section.public_article
+            public_article: section.public_article,
+            // v2 본문의 블록 주소 미리보기(#849). repair 모델이 이 정본 인덱스로
+            // `/public_article/body_markdown/blocks/{i}`를 지정해야 인덱스 드리프트가
+            // 없다. 파서는 리졸버와 같은 parseBodyBlocks 하나다.
+            ...(typeof section.public_article?.body_markdown === 'string'
+              ? {
+                body_blocks: parseBodyBlocks(section.public_article.body_markdown)
+                  .map(block => ({ index: block.blockIndex, type: block.type, text: block.text }))
+              }
+              : {})
           }));
         const patchResponse = await callLlmJson(
           repairStage,
