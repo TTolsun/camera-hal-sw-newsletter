@@ -220,9 +220,11 @@ function unsupportedStoryMarkerReasonCodes(value = {}) {
 }
 
 // v2 결정론 수선이 "합성 대신 demote"로 처리하는 결손 issue type(#850, 설계 §4.8).
-// v1 합성(completeStoryPublicArticle)이 지어내던 필드들의 부재 코드만 담는다. 본문 lint
-// 위반이나 빈 lead 같은 텍스트 수리 가능 결함은 여기 넣지 않는다 — 그건 기존 LLM
-// semantic repair 경로가 담당한다.
+// story 필드(source_subtitle·editorial_story)와 본문(body_markdown)의 부재 코드다 —
+// 코드가 대신 지어낼 수 없는 산문이 없는 상태다. 본문 lint 위반이나 빈 lead 같은
+// 텍스트 수리 가능 결함은 여기 넣지 않는다 — 그건 기존 LLM semantic repair 경로가
+// 담당한다. missing_public_article은 completeStoryPublicArticle이 객체를 항상 만들어
+// 두므로 이 필터 시점에는 발화하지 않지만, 판정 의미가 같은 결손이라 함께 둔다.
 const V2_STORY_FIELD_DEMOTE_ISSUE_TYPES = new Set([
   'missing_public_article',
   'missing_story_public_article_field',
@@ -351,9 +353,11 @@ function deterministicallyRepairEditorSchema(value, options = {}) {
   }
   const uniqueReasonCodes = uniqueText(reasonCodes);
   if (uniqueReasonCodes.length > 0) {
+    // demote 후 남은 섹션의 결손으로 draft가 실패해도 demote 사유를 함께 실어
+    // 진단이 유실되지 않게 한다(최소 기사 수 미달 escalation 경로와 대칭).
     return {
       editor: null,
-      reason_codes: uniqueReasonCodes
+      reason_codes: uniqueText([...reasonCodes, ...demotedReasonCodes])
     };
   }
   return {

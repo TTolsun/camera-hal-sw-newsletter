@@ -1112,8 +1112,9 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
     }
     // headline이 소스 제목과 동일한 경우 v1은 repair 시점에 suffix를 합성해 가렸다
     // (#850에서 폐지). v2는 issue로 드러내 patch repair(/public_article/headline,
-    // 정책 등록은 T6) → 실패 시 demote로 처리한다. 비교 기준은 v1 suffix 판정과 같은
-    // 소문자 완전 일치다.
+    // 정책 등록은 T6) → 실패 시 demote로 처리한다. 비교 축은 v1 suffix 판정과 같은
+    // 소문자 완전 일치이되, 공백은 compactText로 접어 비교한다(v1은 트림만 — v2가
+    // 약간 넓고 안전한 방향이다).
     const headlineKey = normalized.headline.toLowerCase();
     if (headlineKey) {
       const sourceTitleKeys = [

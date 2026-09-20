@@ -28,6 +28,7 @@ const {
   section,
   storyEditor,
   storyV2Editor,
+  groupCoverageReporterCandidate,
   normalizeSection
 } = require('../../../shared/test/helpers/editor-builders');
 
@@ -147,6 +148,39 @@ test('repairEditorOutputContract resolves a v2 draft by demoting the deficient s
   assert.equal(result.editor.sections.some(item => item.headline === 'Headline 3'), false);
 });
 
+test('a demoted v2 section keeps selected group coverage satisfied when candidates are selected (#850)', async () => {
+  // demote가 hard_blocked_groups 기록 없이 섹션만 지우면 "selected group coverage"
+  // 계약(선정 그룹은 렌더·강등·차단 중 하나)이 깨져 repair 전체가 무효가 된다.
+  const draft = storyV2Editor();
+  draft.sections.forEach((item, index) => {
+    item.article_group_key = `group-${index + 1}`;
+  });
+  delete draft.sections[1].public_article.editorial_story;
+  const reporter = {
+    candidates: draft.sections.map((item, index) => groupCoverageReporterCandidate({
+      article_group_key: `group-${index + 1}`,
+      source_candidate_hash: item.source_candidate_hash,
+      url: item.sources[0].url,
+      title: item.sources[0].title
+    }))
+  };
+
+  const result = await repairEditorOutputContract({
+    value: draft,
+    date: DATE,
+    reporter,
+    normalizeSection,
+    requireStoryContract: true
+  });
+
+  assert.equal(result.repairSucceeded, true);
+  assert.equal(result.editor.sections.length, 2);
+  const blocked = result.editor.hard_blocked_groups || [];
+  assert.ok(blocked.some(item =>
+    item.article_group_key === 'group-2' && item.reason_code === 'quality_hard_blocker'
+  ));
+});
+
 test('v2 validation reports duplicate_headline when the headline equals a source title (#850)', () => {
   const draft = storyV2Editor();
   const target = draft.sections[0];
@@ -175,9 +209,30 @@ test('deterministic fallback phrase detection stays as a permanent regression gu
   // 본문에 실려도 아무 게이트가 잡지 못한다.
   assert.equal(NO_IMMEDIATE_ACTION_TEXT, '즉시 조치할 항목은 없습니다. 참고 동향으로만 공유합니다.');
   assert.ok(PUBLIC_PROSE_PLACEHOLDER_PATTERNS.length > 0);
-  const producers = require('node:fs')
-    .readFileSync(require.resolve('../../editor/editor-section-builders.js'), 'utf8');
-  assert.doesNotMatch(producers, /즉시 조치할 항목은 없습니다/);
+  // 생성 지점 부재를 src 프로덕션 트리 전체에서 강제한다. 이 문구 리터럴은 탐지
+  // 상수를 정의하는 public-article-contract.js에만 있어야 한다.
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const srcRoot = path.resolve(__dirname, '../../..');
+  const allowed = path.join('generator', 'reporter', 'public-article-contract.js');
+  const offenders = [];
+  const walk = dir => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name === 'test' || entry.name === 'node_modules') continue;
+        walk(fullPath);
+        continue;
+      }
+      if (!entry.name.endsWith('.js') || fullPath.includes(`${path.sep}helpers${path.sep}`)) continue;
+      if (fullPath.endsWith(allowed)) continue;
+      if (fs.readFileSync(fullPath, 'utf8').includes('즉시 조치할 항목은 없습니다')) {
+        offenders.push(fullPath);
+      }
+    }
+  };
+  walk(srcRoot);
+  assert.deepEqual(offenders, []);
 });
 
 test('editor prompt treats background_context_static as reference-only, not copy-first (#850)', () => {

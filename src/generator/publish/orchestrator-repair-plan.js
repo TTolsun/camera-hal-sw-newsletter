@@ -100,7 +100,10 @@ function deductionRepairPolicy(deduction = {}) {
     'insufficient_public_body_paragraphs',
     'duplicate_headline'
   ]);
-  // 마커 패밀리 불일치와 본문 부재/비문자열은 텍스트 patch로 고칠 수 없는 구조 실패다.
+  // 마커 패밀리 불일치와 story 필드 결손(본문·editorial_story 포함)은 텍스트 patch로
+  // 고칠 수 없는 구조 실패다. editor 단계의 v2 per-article demote(#850)와 같은 판정을
+  // 이 레인에서도 유지한다 — 여기서 repair-section을 허용하면 LLM이 결손 필드를
+  // 지어내는 경로가 다시 열린다.
   const neverRepairableStoryContractReasons = new Set([
     'story_contract_version_mismatch',
     'story_contract_version_family_mismatch',
@@ -109,6 +112,7 @@ function deductionRepairPolicy(deduction = {}) {
     'unsupported_story_contract_version',
     'missing_public_article',
     'missing_story_public_article_field',
+    'empty_editorial_story_field',
     'missing_body_markdown'
   ]);
   if (repairableBodyMarkdownReasons.has(reasonCode)) {

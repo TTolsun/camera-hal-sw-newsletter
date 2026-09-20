@@ -30,6 +30,7 @@ const STRUCTURAL_V2_CODES = [
   'unsupported_story_contract_version',
   'missing_public_article',
   'missing_story_public_article_field',
+  'empty_editorial_story_field',
   'missing_body_markdown'
 ];
 
