@@ -25,6 +25,7 @@ const { writeSitemap } = require('./generate-sitemap');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../reporter/weekly-article-limits');
 const { resolveWeeklyArticles, sectionIdentity } = require('../reporter/weekly-duplicate-merge');
+const { resolveIntroLetter } = require('../editor/intro-letter');
 const { indexContractVersionField } = require('../../shared/common/story-contract-version');
 const { coverageForAnchorDate } = require('../../shared/common/coverage-week');
 
@@ -212,6 +213,7 @@ async function writeWeeklyNewsletterArtifacts({
   editor,
   mergeDuplicate,
   validateMerged,
+  generateIntroLetter,
   coverageWeekKeyOverride
 } = {}) {
   const weeklyKey = weeklyKeyForDate(date);
@@ -243,6 +245,20 @@ async function writeWeeklyNewsletterArtifacts({
     validateMerged
   });
   const { articles } = applyWeeklyArticleLimits({ existing: resolved.existingArticles, incoming: resolved.appendedArticles });
+
+  // 주간 에디터 레터(T10, #853): 최종 기사 세트(merge·dedupe·limit 이후)가 확정된 이 지점에서
+  // 결정한다. 저장 레터가 현재 기사 집합의 게이트를 통과하면 바이트 동일 재사용(멱등),
+  // 실패하면 재생성 1회, 그래도 실패하면 intro_letter 없이 발행해 weeklySummaryText로
+  // fallback한다. fallback 사유는 반환값으로 올려 generation-status에 기록되게 한다(#873 교훈:
+  // stderr 한 줄은 사라진다).
+  const introLetterResolution = await resolveIntroLetter({
+    articles,
+    storedIntroLetter: existingIssue && existingIssue.intro_letter,
+    generateIntroLetter
+  });
+  if (introLetterResolution.status === 'fallback' && introLetterResolution.reason !== 'no_generator') {
+    console.warn(`weekly intro letter fallback: ${introLetterResolution.reason}`);
+  }
 
   // 아카이브/홈 카드의 주제 분류·kicker 는 위클리 tags 로 결정된다. 이슈 레벨 editor.tags(대개
   // ['Camera HAL','Android'] 기본값이라 분류가 단조롭고 Driver/Image Processing/AI/SoC Platform
@@ -277,7 +293,11 @@ async function writeWeeklyNewsletterArtifacts({
       ...ensureArray(existingIssue && existingIssue.references),
       ...ensureArray(editor && editor.references)
     ]),
-    ...coverageCarryFields
+    ...coverageCarryFields,
+    // 게이트를 통과한 레터만 싣는다. fallback이면 키 자체를 두지 않아(editor에는 이 필드가
+    // 없다) 이전에 저장된 레터도 드리프트 상태로 남지 않고, 렌더러가 weeklySummaryText로
+    // 떨어진다.
+    ...(introLetterResolution.introLetter ? { intro_letter: introLetterResolution.introLetter } : {})
   };
   const page = buildWeeklyNewsletterPage(mergedDraft, { date });
 
@@ -327,6 +347,9 @@ async function writeWeeklyNewsletterArtifacts({
     addedArticleCount: resolved.appendedArticles.length,
     mergeWarnings: resolved.warnings,
     mergeDecisions: resolved.decisions,
+    // 레터 채택 결과(reused/generated/regenerated/fallback)와 fallback 사유. 관측용 값이다.
+    introLetterStatus: introLetterResolution.status,
+    introLetterReason: introLetterResolution.reason,
     // 이 주의 최종 기사 목록(merge·dedupe·limit 이후). 심층 발동 판정이 "위클리 최종 기사
     // 기준"이려면 호출자가 이 목록을 그대로 받아야 한다 — 여기서 부가 기능을 실행하면
     // 그 실패가 공개 산출물 기록보다 앞서 버린다.
