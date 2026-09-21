@@ -4,7 +4,7 @@
   "newsletter_date": "2026-09-21",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 35,
-  "generated_at": "2026-09-19T10:31:28.046Z",
+  "generated_at": "2026-09-21T04:09:44.529Z",
   "sources_path": "src/shared/data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -50,9 +50,460 @@
     "coverage_end_exclusive_at": "2026-09-21T00:00:00.000Z"
   },
   "generation_anchor_date": "2026-09-21",
-  "collection_observed_at": "2026-09-19T10:31:12.137Z",
-  "run_mode": "manual",
-  "not_yet_eligible": [],
+  "collection_observed_at": "2026-09-21T04:09:25.798Z",
+  "run_mode": "scheduled",
+  "not_yet_eligible": [
+    {
+      "schema_version": 7,
+      "source": "Hacker News",
+      "source_name": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com/",
+      "source_url": "https://news.ycombinator.com/",
+      "articleUrl": "https://gregorygundersen.com/blog/2018/04/15/backprop/",
+      "article_url": "https://gregorygundersen.com/blog/2018/04/15/backprop/",
+      "source_id": "hacker-news",
+      "category": "tech-trends",
+      "section": "AI / SW Engineering Trends",
+      "source_category": "tech-trends",
+      "source_section": "AI / SW Engineering Trends",
+      "priority": "low",
+      "reliability": "community",
+      "source_quality_required": true,
+      "origin": "source_registry",
+      "collectionStage": "raw_collection",
+      "collection_stage": "raw_collection",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "rss_item",
+      "source_type": "rss_item",
+      "source_priority": "low",
+      "source_reliability": "community",
+      "usageHint": "Developer 관심 주제 lead source; final article에는 추가 verification 필요",
+      "source_usage_hint": "Developer 관심 주제 lead source; final article에는 추가 verification 필요",
+      "source_linked_evidence_policy": null,
+      "source_quality": {
+        "source_role": "community_lead_source",
+        "source_url_quality": "community_lead_requires_cross_check",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only",
+          "candidate_only_without_primary_confirmation",
+          "cross_check_required_but_missing"
+        ],
+        "cross_check_status": "required_missing",
+        "requires_cross_check": true,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "primary_confirmation",
+        "evidence_granularity": "article_with_primary_confirmation",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+          "requires primary-source cross-check before main promotion"
+        ]
+      },
+      "sourceRole": "community_lead_source",
+      "source_role": "community_lead_source",
+      "sourceUrlQuality": "community_lead_requires_cross_check",
+      "source_url_quality": "community_lead_requires_cross_check",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "crossCheckStatus": "required_missing",
+      "cross_check_status": "required_missing",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "primary_confirmation",
+      "conditional_evidence_type": "primary_confirmation",
+      "evidenceGranularity": "article_with_primary_confirmation",
+      "evidence_granularity": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
+      ],
+      "candidateOnly": true,
+      "candidate_only": true,
+      "community_signal": false,
+      "collectionMode": "rss-item",
+      "collection_mode": "rss-item",
+      "sourceCollectionMode": "rss-source",
+      "source_collection_mode": "rss-source",
+      "isArticleCandidate": false,
+      "is_article_candidate": false,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceSignalKind": "dated-rss-article",
+      "evidence_signal_kind": "dated-rss-article",
+      "evidenceLevel": "reference",
+      "evidence_level": "reference",
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_kind": "rss_item",
+      "source_extraction": null,
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "datePrecision": "",
+      "date_precision": "",
+      "parentUrl": "",
+      "parent_url": "",
+      "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
+      "seriesName": null,
+      "series_name": null,
+      "seriesVersion": null,
+      "series_version": null,
+      "camera_path_commit_count": null,
+      "camera_path_commit_count_is_lower_bound": null,
+      "gerrit_change_id": "",
+      "gerrit_change_number": null,
+      "gerrit_change_status": "",
+      "gerrit_commit_sha": "",
+      "gerrit_effective_date_field": "",
+      "covered_gerrit_change_ids": [],
+      "covered_commit_shas": [],
+      "parentTitle": "",
+      "parent_title": "",
+      "parentCanonicalUrl": "",
+      "parent_canonical_url": "",
+      "roundupItemIndex": null,
+      "roundup_item_index": null,
+      "anchorText": "",
+      "anchor_text": "",
+      "article_group_key": "",
+      "tooling_workflow_type": "",
+      "native_workflow_evidence_score": 0,
+      "outgoing_links": [
+        {
+          "url": "https://news.ycombinator.com/item?id=49781693",
+          "text": "Comments",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        }
+      ],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": false,
+      "has_api_or_component": false,
+      "has_behavior_change": false,
+      "source_gap_risk": true,
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "evidence_score": 2,
+      "version_or_release": "",
+      "api_or_component": "",
+      "source_hint_api_or_component": "tech-trends",
+      "behavior_change": "Comments",
+      "collector_template_sentence": "",
+      "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "title": "Why back propagation goes backward",
+      "url": "https://gregorygundersen.com/blog/2018/04/15/backprop/",
+      "publishedAt": "Mon, 21 Sep 2026 00:42:14 +0000",
+      "published_date": "Mon, 21 Sep 2026 00:42:14 +0000",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "Comments",
+      "relevanceScore": 5,
+      "relevance_score": 5,
+      "cameraHalRelevanceScore": 5,
+      "camera_hal_relevance_score": 5,
+      "editorial_priority": 4,
+      "relevance_bucket": "generic_tech_watchlist",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "evidence_origin": "none",
+      "source_hint": "Developer 관심 주제 lead source; final article에는 추가 verification 필요",
+      "scope_evidence_terms": [],
+      "aospCameraStackBucket": "generic_tech_watchlist",
+      "aosp_camera_stack_bucket": "generic_tech_watchlist",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [],
+      "aosp_camera_evidence_terms": [],
+      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "imageCandidates": [],
+      "image_candidates": [],
+      "candidateTier": "watchlist-reference",
+      "reason": "Hacker News (community, low, score 5): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "collection_reason": "Hacker News (community, low, score 5): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "decision": {
+        "topic": "generic_tech_watchlist",
+        "evidenceLevel": "reference",
+        "selection": "reference",
+        "reason": "Background reference page; not an article candidate.",
+        "hasDate": true,
+        "hasConcreteChange": false
+      },
+      "selection": "reference",
+      "decision_reason": "Background reference page; not an article candidate.",
+      "has_date": true,
+      "has_concrete_change": false,
+      "topic_bucket": "generic_tech_watchlist"
+    },
+    {
+      "schema_version": 7,
+      "source": "Hacker News",
+      "source_name": "Hacker News",
+      "sourceUrl": "https://news.ycombinator.com/",
+      "source_url": "https://news.ycombinator.com/",
+      "articleUrl": "https://outdata.net/blog/260803",
+      "article_url": "https://outdata.net/blog/260803",
+      "source_id": "hacker-news",
+      "category": "tech-trends",
+      "section": "AI / SW Engineering Trends",
+      "source_category": "tech-trends",
+      "source_section": "AI / SW Engineering Trends",
+      "priority": "low",
+      "reliability": "community",
+      "source_quality_required": true,
+      "origin": "source_registry",
+      "collectionStage": "raw_collection",
+      "collection_stage": "raw_collection",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "rss_item",
+      "source_type": "rss_item",
+      "source_priority": "low",
+      "source_reliability": "community",
+      "usageHint": "Developer 관심 주제 lead source; final article에는 추가 verification 필요",
+      "source_usage_hint": "Developer 관심 주제 lead source; final article에는 추가 verification 필요",
+      "source_linked_evidence_policy": null,
+      "source_quality": {
+        "source_role": "community_lead_source",
+        "source_url_quality": "community_lead_requires_cross_check",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only",
+          "candidate_only_without_primary_confirmation",
+          "cross_check_required_but_missing"
+        ],
+        "cross_check_status": "required_missing",
+        "requires_cross_check": true,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "primary_confirmation",
+        "evidence_granularity": "article_with_primary_confirmation",
+        "source_quality_notes": [
+          "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+          "requires primary-source cross-check before main promotion"
+        ]
+      },
+      "sourceRole": "community_lead_source",
+      "source_role": "community_lead_source",
+      "sourceUrlQuality": "community_lead_requires_cross_check",
+      "source_url_quality": "community_lead_requires_cross_check",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "crossCheckStatus": "required_missing",
+      "cross_check_status": "required_missing",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "primary_confirmation",
+      "conditional_evidence_type": "primary_confirmation",
+      "evidenceGranularity": "article_with_primary_confirmation",
+      "evidence_granularity": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
+      ],
+      "source_quality_notes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
+      ],
+      "candidateOnly": true,
+      "candidate_only": true,
+      "community_signal": false,
+      "collectionMode": "rss-item",
+      "collection_mode": "rss-item",
+      "sourceCollectionMode": "rss-source",
+      "source_collection_mode": "rss-source",
+      "isArticleCandidate": false,
+      "is_article_candidate": false,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceSignalKind": "dated-rss-article",
+      "evidence_signal_kind": "dated-rss-article",
+      "evidenceLevel": "reference",
+      "evidence_level": "reference",
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_kind": "rss_item",
+      "source_extraction": null,
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "datePrecision": "",
+      "date_precision": "",
+      "parentUrl": "",
+      "parent_url": "",
+      "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
+      "seriesName": null,
+      "series_name": null,
+      "seriesVersion": null,
+      "series_version": null,
+      "camera_path_commit_count": null,
+      "camera_path_commit_count_is_lower_bound": null,
+      "gerrit_change_id": "",
+      "gerrit_change_number": null,
+      "gerrit_change_status": "",
+      "gerrit_commit_sha": "",
+      "gerrit_effective_date_field": "",
+      "covered_gerrit_change_ids": [],
+      "covered_commit_shas": [],
+      "parentTitle": "",
+      "parent_title": "",
+      "parentCanonicalUrl": "",
+      "parent_canonical_url": "",
+      "roundupItemIndex": null,
+      "roundup_item_index": null,
+      "anchorText": "",
+      "anchor_text": "",
+      "article_group_key": "",
+      "tooling_workflow_type": "",
+      "native_workflow_evidence_score": 0,
+      "outgoing_links": [
+        {
+          "url": "https://news.ycombinator.com/item?id=49782220",
+          "text": "Comments",
+          "source_field": "rss.description",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        }
+      ],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": false,
+      "has_api_or_component": false,
+      "has_behavior_change": false,
+      "source_gap_risk": true,
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "evidence_score": 2,
+      "version_or_release": "",
+      "api_or_component": "",
+      "source_hint_api_or_component": "tech-trends",
+      "behavior_change": "Comments",
+      "collector_template_sentence": "",
+      "selection_exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "watchlist_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "verification_hint": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.",
+      "title": "Deterministic Core, Non-Deterministic Shell",
+      "url": "https://outdata.net/blog/260803",
+      "publishedAt": "Mon, 21 Sep 2026 02:02:45 +0000",
+      "published_date": "Mon, 21 Sep 2026 02:02:45 +0000",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "Comments",
+      "relevanceScore": 5,
+      "relevance_score": 5,
+      "cameraHalRelevanceScore": 5,
+      "camera_hal_relevance_score": 5,
+      "editorial_priority": 4,
+      "relevance_bucket": "generic_tech_watchlist",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "evidence_origin": "none",
+      "source_hint": "Developer 관심 주제 lead source; final article에는 추가 verification 필요",
+      "scope_evidence_terms": [],
+      "aospCameraStackBucket": "generic_tech_watchlist",
+      "aosp_camera_stack_bucket": "generic_tech_watchlist",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [],
+      "aosp_camera_evidence_terms": [],
+      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "imageCandidates": [],
+      "image_candidates": [],
+      "candidateTier": "watchlist-reference",
+      "reason": "Hacker News (community, low, score 5): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "collection_reason": "Hacker News (community, low, score 5): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
+      "decision": {
+        "topic": "generic_tech_watchlist",
+        "evidenceLevel": "reference",
+        "selection": "reference",
+        "reason": "Background reference page; not an article candidate.",
+        "hasDate": true,
+        "hasConcreteChange": false
+      },
+      "selection": "reference",
+      "decision_reason": "Background reference page; not an article candidate.",
+      "has_date": true,
+      "has_concrete_change": false,
+      "topic_bucket": "generic_tech_watchlist"
+    }
+  ],
   "not_yet_eligible_overflow": false,
   "carry_forward_status": "loaded",
   "carry_source": {
@@ -239,7 +690,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "source_hint_only",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "scope_evidence_terms": [],
@@ -471,7 +921,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "source_hint_only",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "scope_evidence_terms": [],
@@ -789,7 +1238,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "source_hint_only",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "scope_evidence_terms": [],
@@ -814,7 +1262,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 519083
+          "contentLength": 413751
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg82eJ9rS0VwZn7vwxFSpuhpyNOEC3uWOY1VfEzVNvCdrHyhR9VWwf-oVom-WJCkTtMjA-waS9Ayv-6C6hOot3YiUP1uPGF51hgVrrd9UFWaVQDSVKkhOktJ4jBUG8fDdoOYgK_q-HMZvLeCMp-wxPcQR8MPyfRWynacE85SKaU42X4jU_DopOOAL4CqU4/w1200-h630-p-k-no-nu/Copy%20of%20ANDDM_TINDER_Metacard.png",
@@ -858,7 +1306,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 519083
+          "contentLength": 413751
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg82eJ9rS0VwZn7vwxFSpuhpyNOEC3uWOY1VfEzVNvCdrHyhR9VWwf-oVom-WJCkTtMjA-waS9Ayv-6C6hOot3YiUP1uPGF51hgVrrd9UFWaVQDSVKkhOktJ4jBUG8fDdoOYgK_q-HMZvLeCMp-wxPcQR8MPyfRWynacE85SKaU42X4jU_DopOOAL4CqU4/w1200-h630-p-k-no-nu/Copy%20of%20ANDDM_TINDER_Metacard.png",
@@ -1110,7 +1558,6 @@
       "counts_as_primary_camera_topic": true,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "공개 AOSP Gerrit에서 platform/frameworks/av(camera·services/camera), platform/hardware/interfaces(camera), platform/hardware/google/camera의 변경을 제안·리뷰 단계에서 수집한다. 릴리스 소스 드롭이 확정 변경을 몇 달에 한 번 보여 주는 반면 이쪽은 그 앞 단계라, 둘은 proposal -> landed 관계로 함께 본다. 날",
       "scope_evidence_terms": [
@@ -1357,7 +1804,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "source_hint_only",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "scope_evidence_terms": [],
@@ -1382,7 +1828,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 180965
+          "contentLength": 175224
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhxXjhFI2-zK8JEgBW_5dT7E4Wd_32EifVKThmEesvM8ei4pyt3TZUwR7FXW5VEHQGc6pPxXW8hYjsfHATAKi_wKFTFfXDevcK3wOWs9DIkJ5vhLKhVZnmCQw-IiM92tKPy1zPBZ0ZBei6qxvDbOsQX_j8NnFNEen6HWparIesRo-DPc5TP_318hU89fiU/w1200-h630-p-k-no-nu/%5BABL_116%5D%20Preparing%20your%20app%20for%20expanded%20memory%20limits%20-%20meta.png",
@@ -1426,7 +1872,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 180965
+          "contentLength": 175224
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhxXjhFI2-zK8JEgBW_5dT7E4Wd_32EifVKThmEesvM8ei4pyt3TZUwR7FXW5VEHQGc6pPxXW8hYjsfHATAKi_wKFTFfXDevcK3wOWs9DIkJ5vhLKhVZnmCQw-IiM92tKPy1zPBZ0ZBei6qxvDbOsQX_j8NnFNEen6HWparIesRo-DPc5TP_318hU89fiU/w1200-h630-p-k-no-nu/%5BABL_116%5D%20Preparing%20your%20app%20for%20expanded%20memory%20limits%20-%20meta.png",
@@ -1675,7 +2121,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "source_hint_only",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "scope_evidence_terms": [],
@@ -1687,8 +2132,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/s2048/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 131087
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/w1200-h630-p-k-no-nu/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 94458
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/s2048/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 131087
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/w1200-h630-p-k-no-nu/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 94458
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 72): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 72): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -1727,649 +2258,6 @@
         "reason": "No explicit candidate-level HAL/runtime/camera pipeline impact signal was found.",
         "warnings": [
           "main_hint_requires_candidate_runtime_evidence"
-        ]
-      }
-    },
-    {
-      "schema_version": 7,
-      "source": "Android Developers Latest Updates",
-      "source_name": "Android Developers Latest Updates",
-      "sourceUrl": "https://developer.android.com/latest-updates",
-      "source_url": "https://developer.android.com/latest-updates",
-      "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "source_id": "android-developers-latest-updates",
-      "category": "android",
-      "section": "Android / AOSP / Camera",
-      "source_category": "android",
-      "source_section": "Android / AOSP / Camera",
-      "priority": "high",
-      "reliability": "official",
-      "source_quality_required": true,
-      "origin": "source_registry",
-      "collectionStage": "raw_collection",
-      "collection_stage": "raw_collection",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "release_note_item",
-      "source_type": "release_note_item",
-      "source_priority": "high",
-      "source_reliability": "official",
-      "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "source_usage_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "source_quality": {
-        "source_role": "official_release_source",
-        "source_url_quality": "official_site_update_row",
-        "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "main_article_source_blockers": [],
-        "cross_check_status": "not_required",
-        "requires_cross_check": false,
-        "requires_conditional_evidence": false,
-        "conditional_evidence_type": "",
-        "evidence_granularity": "dated_site_update_row",
-        "source_quality_notes": [
-          "official source"
-        ]
-      },
-      "sourceRole": "official_release_source",
-      "source_role": "official_release_source",
-      "sourceUrlQuality": "official_site_update_row",
-      "source_url_quality": "official_site_update_row",
-      "sourceQualityStatus": "allowed",
-      "source_quality_status": "allowed",
-      "mainArticleSourceAllowed": true,
-      "main_article_source_allowed": true,
-      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
-      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-      "mainArticleSourceBlockers": [],
-      "main_article_source_blockers": [],
-      "crossCheckStatus": "not_required",
-      "cross_check_status": "not_required",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "requiresConditionalEvidence": false,
-      "requires_conditional_evidence": false,
-      "conditionalEvidenceType": "",
-      "conditional_evidence_type": "",
-      "evidenceGranularity": "dated_site_update_row",
-      "evidence_granularity": "dated_site_update_row",
-      "sourceQualityNotes": [
-        "official source"
-      ],
-      "source_quality_notes": [
-        "official source"
-      ],
-      "candidateOnly": false,
-      "candidate_only": false,
-      "community_signal": false,
-      "collectionMode": "release-note-item",
-      "collection_mode": "release-note-item",
-      "sourceCollectionMode": "release-note-watch",
-      "source_collection_mode": "release-note-watch",
-      "isArticleCandidate": true,
-      "is_article_candidate": true,
-      "isWatchPage": false,
-      "is_watch_page": false,
-      "hasDatedEvidence": true,
-      "has_dated_evidence": true,
-      "evidenceSignalKind": "dated-release-evidence",
-      "evidence_signal_kind": "dated-release-evidence",
-      "evidenceLevel": "primary",
-      "evidence_level": "primary",
-      "finalSelectionEligibility": "short",
-      "final_selection_eligibility": "short",
-      "source_kind": "release_note_item",
-      "source_extraction": {
-        "adapter_id": "android-developers-jetpack-release",
-        "source_type": "release_note",
-        "evidence_granularity": "versioned_release_row",
-        "mode": "versioned_release_row",
-        "heading": "Version 1.6.2",
-        "bullets": [
-          "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )"
-        ],
-        "links": [
-          {
-            "role": "parent_source",
-            "text": "CameraX Release Notes",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
-          },
-          {
-            "role": "release_note_anchor",
-            "text": "CameraX 1.6.2",
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
-          },
-          {
-            "role": "related",
-            "text": "these commits",
-            "url": "https://android.googlesource.com/platform/frameworks/support/+log/987b9ac8585b31424a397206c492196dd163997b..9046f07948c1e7a89aaec581463730f4d666611b/camera"
-          },
-          {
-            "role": "issue_or_bug",
-            "text": "I00bb4",
-            "url": "https://android-review.googlesource.com/#/q/I00bb407877f4e608a23754eaff9a8f9cf572e6d1"
-          },
-          {
-            "role": "issue_or_bug",
-            "text": "b/543937345",
-            "url": "https://issuetracker.google.com/issues/543937345"
-          },
-          {
-            "role": "parent_source",
-            "text": "Android Developers Latest Updates",
-            "url": "https://developer.android.com/latest-updates"
-          }
-        ],
-        "source": {
-          "name": "CameraX Release Notes",
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
-        },
-        "release": {
-          "version": "CameraX 1.6.2",
-          "date": "August 26, 2026",
-          "component": "CameraX / androidx.camera",
-          "sections": [
-            {
-              "category": "bug_fixes",
-              "heading": "Bug Fixes",
-              "items": [
-                {
-                  "text": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
-                  "source_text": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
-                  "links": [
-                    {
-                      "text": "I00bb4",
-                      "url": "https://android-review.googlesource.com/#/q/I00bb407877f4e608a23754eaff9a8f9cf572e6d1"
-                    },
-                    {
-                      "text": "b/543937345",
-                      "url": "https://issuetracker.google.com/issues/543937345"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/543937345"
-                  ],
-                  "artifact_names": []
-                }
-              ]
-            }
-          ]
-        },
-        "extraction_quality": {
-          "has_concrete_behavior_change": true,
-          "used_fallback": false,
-          "raw_table_used_as_body": false,
-          "main_article_allowed": true,
-          "used_versioned_release_row_extractor": true,
-          "used_empty_evidence_fallback": false,
-          "warnings": []
-        },
-        "minor_line_context": {
-          "version": "CameraX 1.6.0",
-          "date": "March 25, 2026",
-          "component": "CameraX / androidx.camera",
-          "sections": [
-            {
-              "category": "release_notes",
-              "heading": "1. Migrated to a High-Performance, Unified Camera Stack",
-              "items": [
-                {
-                  "text": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-                  "source_text": "CameraX now uses API is introduced, allowing developers to query whether a specific combination of use cases and features (such as HDR, stabilization, specific resolutions, CameraX Extensions or slow motion) is supported by the device before binding to the lifecycle.",
-                  "links": [],
-                  "issue_ids": [],
-                  "artifact_names": []
-                }
-              ]
-            },
-            {
-              "category": "bug_fixes",
-              "heading": "Bug Fixes",
-              "items": [
-                {
-                  "text": "Fixed a crash that occurs on certain Android 17 (API 37) devices or higher. When these devices expose new dynamic range profiles (e.g., STANDARD_SMPTE_2094_50(ID 8192) ) that were unknown to CameraX version 1.5.1 and earlier, the library previously failed to handle these IDs appropriately, resulting in a NullPointerException or IllegalArgumentException during ProcessCameraProvider.bindToLifecycle() . This fix allows CameraX to gracefully ignore unrecognized dynamic range profiles, preventing the crash and maintaining forward compatibility. Please update your CameraX dependency to version 1.5.2 or 1.6.0 (or higher) to avoid this issue on devices exposing these new profiles . For more details, see issue 519796838 . ( Ibd7b5 )",
-                  "source_text": "Fixed a crash that occurs on certain Android 17 (API 37) devices or higher. When these devices expose new dynamic range profiles (e.g., STANDARD_SMPTE_2094_50(ID 8192) ) that were unknown to CameraX version 1.5.1 and earlier, the library previously failed to handle these IDs appropriately, resulting in a NullPointerException or IllegalArgumentException during ProcessCameraProvider.bindToLifecycle() . This fix allows CameraX to gracefully ignore unrecognized dynamic range profiles, preventing the crash and maintaining forward compatibility. Please update your CameraX dependency to version 1.5.2 or 1.6.0 (or higher) to avoid this issue on devices exposing these new profiles . For more details, see issue 519796838 . ( Ibd7b5 )",
-                  "links": [
-                    {
-                      "text": "STANDARD_SMPTE_2094_50(ID 8192)",
-                      "url": "https://developer.android.com/reference/android/hardware/camera2/params/DynamicRangeProfiles#STANDARD_SMPTE_2094_50"
-                    },
-                    {
-                      "text": "issue 519796838",
-                      "url": "https://issuetracker.google.com/519796838#comment2"
-                    },
-                    {
-                      "text": "Ibd7b5",
-                      "url": "https://android-review.googlesource.com/#/q/Ibd7b5f532f7af0f43415aaef09cc9ce5f26763f6"
-                    }
-                  ],
-                  "issue_ids": [
-                    "issue 519796838"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "The feature group API now provides consistent results when PREVIEW_STABILIZATION is used with VideoCapture . This corrects a bug that caused inconsistent results when a Preview use case was not also active. ( Ifed82 , b/449913903 )",
-                  "source_text": "The feature group API now provides consistent results when PREVIEW_STABILIZATION is used with VideoCapture . This corrects a bug that caused inconsistent results when a Preview use case was not also active. ( Ifed82 , b/449913903 )",
-                  "links": [
-                    {
-                      "text": "Ifed82",
-                      "url": "https://android-review.googlesource.com/#/q/Ifed82d0d9ce2cfdb407523535d9e4c8c4a51f46d"
-                    },
-                    {
-                      "text": "b/449913903",
-                      "url": "https://issuetracker.google.com/issues/449913903"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/449913903"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixed an issue where unsupported preferred features were incorrectly made available. Features are now correctly filtered when their required use cases are not met. ( I38db8 , b/449532342 )",
-                  "source_text": "Fixed an issue where unsupported preferred features were incorrectly made available. Features are now correctly filtered when their required use cases are not met. ( I38db8 , b/449532342 )",
-                  "links": [
-                    {
-                      "text": "I38db8",
-                      "url": "https://android-review.googlesource.com/#/q/I38db88ca0ae9c2cd87b49ceffddd7980b3178576"
-                    },
-                    {
-                      "text": "b/449532342",
-                      "url": "https://issuetracker.google.com/issues/449532342"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/449532342"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixed glitchy video result on Samsung Galaxy S6. ( I612d9 , b/235127608 )",
-                  "source_text": "Fixed glitchy video result on Samsung Galaxy S6. ( I612d9 , b/235127608 )",
-                  "links": [
-                    {
-                      "text": "I612d9",
-                      "url": "https://android-review.googlesource.com/#/q/I612d902c2aa36dfd5b77a53a59a5646cadf96272"
-                    },
-                    {
-                      "text": "b/235127608",
-                      "url": "https://issuetracker.google.com/issues/235127608"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/235127608"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixed an issue where CameraInfo#isFeatureGroupSupported could incorrectly return true for PREVIEW_STABILIZATION if the SessionConfig in the query was already configured with other features. ( I2c355c , b/437816469 )",
-                  "source_text": "Fixed an issue where CameraInfo#isFeatureGroupSupported could incorrectly return true for PREVIEW_STABILIZATION if the SessionConfig in the query was already configured with other features. ( I2c355c , b/437816469 )",
-                  "links": [
-                    {
-                      "text": "I2c355c",
-                      "url": "https://android-review.googlesource.com/#/q/I2c355c533f737d1797a7427d37661781cd1480b2"
-                    },
-                    {
-                      "text": "b/437816469",
-                      "url": "https://issuetracker.google.com/issues/437816469"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/437816469"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Excluded problematic YUV format output sizes from Samsung Z Fold 4 device. The received images have distortion issue when using those output sizes. ( I776bf , b/460322307 )",
-                  "source_text": "Excluded problematic YUV format output sizes from Samsung Z Fold 4 device. The received images have distortion issue when using those output sizes. ( I776bf , b/460322307 )",
-                  "links": [
-                    {
-                      "text": "I776bf",
-                      "url": "https://android-review.googlesource.com/#/q/I776bf1f9447fba5b6354b597fb8067d25419756a"
-                    },
-                    {
-                      "text": "b/460322307",
-                      "url": "https://issuetracker.google.com/issues/460322307"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/460322307"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixed a device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound. ( I0f183 , b/458197367 )",
-                  "source_text": "Fixed a device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound. ( I0f183 , b/458197367 )",
-                  "links": [
-                    {
-                      "text": "I0f183",
-                      "url": "https://android-review.googlesource.com/#/q/I0f183808184febdcb203e8f5658e7663d8dc44b9"
-                    },
-                    {
-                      "text": "b/458197367",
-                      "url": "https://issuetracker.google.com/issues/458197367"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/458197367"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Fixes an issue on some devices where using the flash with the ultra-wide camera may result in underexposed images. ( Ib7530 , b/444590340 )",
-                  "source_text": "Fixes an issue on some devices where using the flash with the ultra-wide camera may result in underexposed images. ( Ib7530 , b/444590340 )",
-                  "links": [
-                    {
-                      "text": "Ib7530",
-                      "url": "https://android-review.googlesource.com/#/q/Ib75308343ede2999677ffce021affa013d175668"
-                    },
-                    {
-                      "text": "b/444590340",
-                      "url": "https://issuetracker.google.com/issues/444590340"
-                    }
-                  ],
-                  "issue_ids": [
-                    "b/444590340"
-                  ],
-                  "artifact_names": []
-                },
-                {
-                  "text": "Updated the ExifInterface dependency to include a fix for parsing JPEGs with 0xFF padding, which resolves image capture failures on devices where the JPEG encoder adds fill bytes before markers. ( I0eb49 )",
-                  "source_text": "Updated the ExifInterface dependency to include a fix for parsing JPEGs with 0xFF padding, which resolves image capture failures on devices where the JPEG encoder adds fill bytes before markers. ( I0eb49 )",
-                  "links": [
-                    {
-                      "text": "I0eb49",
-                      "url": "https://android-review.googlesource.com/#/q/I0eb49797f167c36511bc5a2ea5c31a920f598b6d"
-                    }
-                  ],
-                  "issue_ids": [],
-                  "artifact_names": []
-                }
-              ]
-            }
-          ]
-        }
-      },
-      "derived_editorial_hints": {
-        "relevance_bucket_hint": "direct_aosp_camera",
-        "hal_boundary": "framework_adjacent_not_direct_hal_contract",
-        "validation_targets": [
-          "VideoCapture stream and stabilization validation",
-          "SessionConfig feature combination validation",
-          "Camera2 interop regression validation"
-        ],
-        "device_specific_notes": [
-          "Samsung Galaxy S6.",
-          "Samsung Z Fold 4 device.",
-          "device-specific issue on Samsung A53 where image capture with torch enabled would fail sometimes if VideoCapture use case is bound."
-        ],
-        "do_not_claim": [
-          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
-          "Do not use artifact version tables as behavior-change evidence."
-        ],
-        "main_article_allowed_hint": true,
-        "warnings": [
-          "device_specific_release_note"
-        ]
-      },
-      "extraction_quality": {
-        "has_concrete_behavior_change": true,
-        "used_fallback": false,
-        "raw_table_used_as_body": false,
-        "main_article_allowed": true,
-        "used_versioned_release_row_extractor": true,
-        "used_empty_evidence_fallback": false,
-        "warnings": []
-      },
-      "datePrecision": "day",
-      "date_precision": "day",
-      "parentUrl": "https://developer.android.com/latest-updates",
-      "parent_url": "https://developer.android.com/latest-updates",
-      "in_reply_to": "",
-      "seriesId": null,
-      "series_id": null,
-      "seriesName": null,
-      "series_name": null,
-      "seriesVersion": null,
-      "series_version": null,
-      "camera_path_commit_count": null,
-      "camera_path_commit_count_is_lower_bound": null,
-      "gerrit_change_id": "",
-      "gerrit_change_number": null,
-      "gerrit_change_status": "",
-      "gerrit_commit_sha": "",
-      "gerrit_effective_date_field": "",
-      "covered_gerrit_change_ids": [],
-      "covered_commit_shas": [],
-      "parentTitle": "Android Developers Latest Updates",
-      "parent_title": "Android Developers Latest Updates",
-      "parentCanonicalUrl": "https://developer.android.com/latest-updates",
-      "parent_canonical_url": "https://developer.android.com/latest-updates",
-      "roundupItemIndex": null,
-      "roundup_item_index": null,
-      "anchorText": "",
-      "anchor_text": "",
-      "article_group_key": "",
-      "tooling_workflow_type": "",
-      "native_workflow_evidence_score": 0,
-      "outgoing_links": [
-        {
-          "url": "https://android.googlesource.com/platform/frameworks/support/+log/987b9ac8585b31424a397206c492196dd163997b..9046f07948c1e7a89aaec581463730f4d666611b/camera",
-          "text": "these commits",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://android-review.googlesource.com/#/q/I00bb407877f4e608a23754eaff9a8f9cf572e6d1",
-          "text": "I00bb4",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        },
-        {
-          "url": "https://issuetracker.google.com/issues/543937345",
-          "text": "b/543937345",
-          "source_field": "release_note_row",
-          "extraction_method": "html_anchor",
-          "evidence_role": "unclassified"
-        }
-      ],
-      "sourceMonth": "",
-      "source_month": "",
-      "has_published_date": true,
-      "has_version_or_release": true,
-      "has_api_or_component": true,
-      "has_behavior_change": true,
-      "source_gap_risk": false,
-      "main_eligible": true,
-      "briefing_only": false,
-      "reference_only": false,
-      "evidence_score": 8,
-      "version_or_release": "CameraX 1.6.2",
-      "api_or_component": "CameraX / androidx.camera",
-      "source_hint_api_or_component": "android",
-      "behavior_change": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
-      "collector_template_sentence": "",
-      "selection_exclusion_reason": "Eligible for short newsletter use.",
-      "watchlist_reason": "",
-      "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "CameraX Release Notes - CameraX 1.6.2",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "publishedAt": "August 26, 2026",
-      "published_date": "August 26, 2026",
-      "effective_date": "",
-      "date_source": "",
-      "date_confidence": 0,
-      "date_evidence_url": "",
-      "summary": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
-      "relevanceScore": 72,
-      "relevance_score": 72,
-      "cameraHalRelevanceScore": 72,
-      "camera_hal_relevance_score": 72,
-      "editorial_priority": 1,
-      "relevance_bucket": "direct_aosp_camera",
-      "aosp_camera_directness": 3,
-      "driver_stack_relevance": 0,
-      "multimedia_camera_output_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": true,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
-      "scope_evidence_terms": [
-        "\\bCameraX\\b"
-      ],
-      "aospCameraStackBucket": "direct_aosp_camera",
-      "aosp_camera_stack_bucket": "direct_aosp_camera",
-      "aospCameraDirect": true,
-      "aosp_camera_direct": true,
-      "aospCameraEvidenceTerms": [
-        "\\bCameraX\\b"
-      ],
-      "aosp_camera_evidence_terms": [
-        "\\bCameraX\\b"
-      ],
-      "aospCameraRelevanceReason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
-      "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
-      "imageCandidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 31847
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=id",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 31847
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=id",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        }
-      ],
-      "candidateTier": "short-news",
-      "reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "collection_reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
-      "decision": {
-        "topic": "direct_aosp_camera",
-        "evidenceLevel": "primary",
-        "selection": "short",
-        "reason": "Official dated source with supporting evidence.",
-        "hasDate": true,
-        "hasConcreteChange": true
-      },
-      "selection": "short",
-      "decision_reason": "Official dated source with supporting evidence.",
-      "has_date": true,
-      "has_concrete_change": true,
-      "topic_bucket": "direct_aosp_camera",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 1,
-        "by_type": {
-          "google_issue_tracker": 1
-        },
-        "by_fetch_status": {
-          "unsupported": 1
-        },
-        "impact_type_counts": {
-          "camera_api_change": 1
-        },
-        "warning_count": 2,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": true,
-        "top_identifiers": [
-          "543937345"
-        ]
-      },
-      "impact_classification": {
-        "impact_type": "camera_api_change",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
-        "confidence": 0.75,
-        "reason": "camera_api_change classified from candidate text.",
-        "warnings": [
-          "linked_evidence_unsupported"
         ]
       }
     },
@@ -2541,7 +2429,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": true,
       "evidence_origin": "article_text",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "scope_evidence_terms": [
@@ -2575,7 +2462,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 571165
+          "contentLength": 2048
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/w1200-h630-p-k-no-nu/Quail4Blog_Meta.png",
@@ -2619,7 +2506,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 571165
+          "contentLength": 2048
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/w1200-h630-p-k-no-nu/Quail4Blog_Meta.png",
@@ -2859,7 +2746,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": true,
       "evidence_origin": "article_text",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "scope_evidence_terms": [
@@ -3100,7 +2986,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "source_hint_only",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "scope_evidence_terms": [],
@@ -3125,7 +3010,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 80938
+          "contentLength": 243881
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh5wMRO7HwquRHIzH0qLwRDKkYVq-nIB4DwG5R2mLK3R3p1lo9nAVblduqSjSFc7rC3xo0bFBXB9iiTv662Bs4y7Ex_35labdsyXi9rM6FNWECqz19Nl7UrI5pO28Un6GBeInO2-yEJeNx0v3thcG5QWWTrCFQvvAIaYB60GEumMmHulA3mmYTtDL68isQ/w1200-h630-p-k-no-nu/Android-1-Meta.jpg",
@@ -3169,7 +3054,7 @@
           "licenseStatus": "unknown",
           "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 80938
+          "contentLength": 243881
         },
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh5wMRO7HwquRHIzH0qLwRDKkYVq-nIB4DwG5R2mLK3R3p1lo9nAVblduqSjSFc7rC3xo0bFBXB9iiTv662Bs4y7Ex_35labdsyXi9rM6FNWECqz19Nl7UrI5pO28Un6GBeInO2-yEJeNx0v3thcG5QWWTrCFQvvAIaYB60GEumMmHulA3mmYTtDL68isQ/w1200-h630-p-k-no-nu/Android-1-Meta.jpg",
@@ -3239,6 +3124,821 @@
         "warnings": [
           "main_hint_requires_candidate_runtime_evidence"
         ]
+      }
+    },
+    {
+      "schema_version": 7,
+      "source": "Android Developers Latest Updates",
+      "source_name": "Android Developers Latest Updates",
+      "sourceUrl": "https://developer.android.com/latest-updates",
+      "source_url": "https://developer.android.com/latest-updates",
+      "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "source_id": "android-developers-latest-updates",
+      "category": "android",
+      "section": "Android / AOSP / Camera",
+      "source_category": "android",
+      "source_section": "Android / AOSP / Camera",
+      "priority": "high",
+      "reliability": "official",
+      "source_quality_required": true,
+      "origin": "source_registry",
+      "collectionStage": "raw_collection",
+      "collection_stage": "raw_collection",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "release_note_item",
+      "source_type": "release_note_item",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "source_usage_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_site_update_row",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_site_update_row",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_site_update_row",
+      "source_url_quality": "official_site_update_row",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "dated_site_update_row",
+      "evidence_granularity": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
+      "candidateOnly": false,
+      "candidate_only": false,
+      "community_signal": false,
+      "collectionMode": "release-note-page",
+      "collection_mode": "release-note-page",
+      "sourceCollectionMode": "release-note-watch",
+      "source_collection_mode": "release-note-watch",
+      "isArticleCandidate": false,
+      "is_article_candidate": false,
+      "isWatchPage": true,
+      "is_watch_page": true,
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "evidenceSignalKind": "undated-watch-page",
+      "evidence_signal_kind": "undated-watch-page",
+      "evidenceLevel": "reference",
+      "evidence_level": "reference",
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_kind": "release_note_item",
+      "source_extraction": {
+        "adapter_id": "android-developers-latest-updates",
+        "source_type": "release_note",
+        "evidence_granularity": "versioned_release_row",
+        "mode": "versioned_release_row",
+        "heading": "1.6.2",
+        "bullets": [],
+        "links": [
+          {
+            "role": "parent_source",
+            "text": "Android Developers Latest Updates",
+            "url": "https://developer.android.com/latest-updates"
+          },
+          {
+            "role": "release_note_anchor",
+            "text": "CameraX 1.6.2",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+          },
+          {
+            "role": "release_note_anchor",
+            "text": "1.6.2",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+          },
+          {
+            "role": "release_note_anchor",
+            "text": "1.7.0-alpha03",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03"
+          },
+          {
+            "role": "release_note_anchor",
+            "text": "1.5.0-alpha06",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06"
+          },
+          {
+            "role": "release_note_anchor",
+            "text": "1.3.0-beta02",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
+          },
+          {
+            "role": "release_note_anchor",
+            "text": "1.4.0-alpha07",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+          },
+          {
+            "role": "parent_source",
+            "text": "View the Camera Library",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera"
+          }
+        ],
+        "source": {
+          "name": "Android Developers Latest Updates",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+        },
+        "release": {
+          "version": "CameraX 1.6.2",
+          "date": "August 26, 2026",
+          "component": "CameraX / androidx.camera",
+          "sections": []
+        },
+        "extraction_quality": {
+          "has_concrete_behavior_change": false,
+          "used_fallback": true,
+          "raw_table_used_as_body": false,
+          "main_article_allowed": false,
+          "used_versioned_release_row_extractor": true,
+          "used_empty_evidence_fallback": true,
+          "warnings": [
+            "missing_concrete_release_note_bullet"
+          ]
+        }
+      },
+      "derived_editorial_hints": null,
+      "extraction_quality": {
+        "has_concrete_behavior_change": false,
+        "used_fallback": true,
+        "raw_table_used_as_body": false,
+        "main_article_allowed": false,
+        "used_versioned_release_row_extractor": true,
+        "used_empty_evidence_fallback": true,
+        "warnings": [
+          "missing_concrete_release_note_bullet"
+        ]
+      },
+      "datePrecision": "day",
+      "date_precision": "day",
+      "parentUrl": "https://developer.android.com/latest-updates",
+      "parent_url": "https://developer.android.com/latest-updates",
+      "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
+      "seriesName": null,
+      "series_name": null,
+      "seriesVersion": null,
+      "series_version": null,
+      "camera_path_commit_count": null,
+      "camera_path_commit_count_is_lower_bound": null,
+      "gerrit_change_id": "",
+      "gerrit_change_number": null,
+      "gerrit_change_status": "",
+      "gerrit_commit_sha": "",
+      "gerrit_effective_date_field": "",
+      "covered_gerrit_change_ids": [],
+      "covered_commit_shas": [],
+      "parentTitle": "Android Developers Latest Updates",
+      "parent_title": "Android Developers Latest Updates",
+      "parentCanonicalUrl": "https://developer.android.com/latest-updates",
+      "parent_canonical_url": "https://developer.android.com/latest-updates",
+      "roundupItemIndex": null,
+      "roundup_item_index": null,
+      "anchorText": "",
+      "anchor_text": "",
+      "article_group_key": "",
+      "tooling_workflow_type": "",
+      "native_workflow_evidence_score": 0,
+      "outgoing_links": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "text": "1.6.2",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "text": "1.7.0-alpha03",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.5.0-alpha06",
+          "text": "1.5.0-alpha06",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "text": "1.3.0-beta02",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+          "text": "1.4.0-alpha07",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        },
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "text": "View the Camera Library",
+          "source_field": "release_note_row",
+          "extraction_method": "html_anchor",
+          "evidence_role": "unclassified"
+        }
+      ],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": true,
+      "has_api_or_component": true,
+      "has_behavior_change": false,
+      "source_gap_risk": true,
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "evidence_score": 6,
+      "version_or_release": "CameraX 1.6.2",
+      "api_or_component": "CameraX / androidx.camera",
+      "source_hint_api_or_component": "android",
+      "behavior_change": "1.6.2",
+      "collector_template_sentence": "",
+      "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "title": "1.6.2",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "publishedAt": "August 26, 2026",
+      "published_date": "August 26, 2026",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "",
+      "relevanceScore": 60,
+      "relevance_score": 60,
+      "cameraHalRelevanceScore": 60,
+      "camera_hal_relevance_score": 60,
+      "editorial_priority": 1,
+      "relevance_bucket": "direct_aosp_camera",
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "evidence_origin": "article_text",
+      "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "scope_evidence_terms": [
+        "\\bCameraX\\b"
+      ],
+      "aospCameraStackBucket": "direct_aosp_camera",
+      "aosp_camera_stack_bucket": "direct_aosp_camera",
+      "aospCameraDirect": true,
+      "aosp_camera_direct": true,
+      "aospCameraEvidenceTerms": [
+        "\\bCameraX\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\bCameraX\\b"
+      ],
+      "aospCameraRelevanceReason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        }
+      ],
+      "candidateTier": "watchlist-reference",
+      "reason": "Android Developers Latest Updates (official, high, score 60): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "collection_reason": "Android Developers Latest Updates (official, high, score 60): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "decision": {
+        "topic": "direct_aosp_camera",
+        "evidenceLevel": "reference",
+        "selection": "reference",
+        "reason": "Background reference page; not an article candidate.",
+        "hasDate": true,
+        "hasConcreteChange": true
+      },
+      "selection": "reference",
+      "decision_reason": "Background reference page; not an article candidate.",
+      "has_date": true,
+      "has_concrete_change": true,
+      "topic_bucket": "direct_aosp_camera",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "camera_api_change": 1
+        },
+        "warning_count": 0,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "camera_api_change",
+        "hal_runtime_impact": true,
+        "camera_pipeline_impact": true,
+        "recommended_article_type": "main",
+        "confidence": 0.75,
+        "reason": "camera_api_change classified from candidate text.",
+        "warnings": []
+      }
+    },
+    {
+      "schema_version": 7,
+      "source": "Android Developers Latest Updates",
+      "source_name": "Android Developers Latest Updates",
+      "sourceUrl": "https://developer.android.com/latest-updates",
+      "source_url": "https://developer.android.com/latest-updates",
+      "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "source_id": "android-developers-latest-updates",
+      "category": "android",
+      "section": "Android / AOSP / Camera",
+      "source_category": "android",
+      "source_section": "Android / AOSP / Camera",
+      "priority": "high",
+      "reliability": "official",
+      "source_quality_required": true,
+      "origin": "source_registry",
+      "collectionStage": "raw_collection",
+      "collection_stage": "raw_collection",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "release_note_item",
+      "source_type": "release_note_item",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "usageHint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "source_usage_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_site_update_row",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+        "main_article_source_blockers": [
+          "source_gap_risk",
+          "reference_only"
+        ],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "dated_site_update_row",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_site_update_row",
+      "source_url_quality": "official_site_update_row",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Candidate still has source gap risk.",
+      "main_article_source_allowed_reason": "Candidate still has source gap risk.",
+      "mainArticleSourceBlockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "main_article_source_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "dated_site_update_row",
+      "evidence_granularity": "dated_site_update_row",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
+      "candidateOnly": false,
+      "candidate_only": false,
+      "community_signal": false,
+      "collectionMode": "release-note-page",
+      "collection_mode": "release-note-page",
+      "sourceCollectionMode": "release-note-watch",
+      "source_collection_mode": "release-note-watch",
+      "isArticleCandidate": false,
+      "is_article_candidate": false,
+      "isWatchPage": true,
+      "is_watch_page": true,
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "evidenceSignalKind": "undated-watch-page",
+      "evidence_signal_kind": "undated-watch-page",
+      "evidenceLevel": "reference",
+      "evidence_level": "reference",
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_kind": "release_note_item",
+      "source_extraction": {
+        "adapter_id": "android-developers-latest-updates",
+        "source_type": "release_note",
+        "evidence_granularity": "versioned_release_row",
+        "mode": "versioned_release_row",
+        "heading": "1.3.0-beta02",
+        "bullets": [],
+        "links": [
+          {
+            "role": "parent_source",
+            "text": "Android Developers Latest Updates",
+            "url": "https://developer.android.com/latest-updates"
+          },
+          {
+            "role": "release_note_anchor",
+            "text": "1.3.0-beta02",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
+          }
+        ],
+        "source": {
+          "name": "Android Developers Latest Updates",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
+        },
+        "release": {
+          "version": "1.3.0-beta02",
+          "date": "August 26, 2026",
+          "component": "CameraX / androidx.camera",
+          "sections": []
+        },
+        "extraction_quality": {
+          "has_concrete_behavior_change": false,
+          "used_fallback": true,
+          "raw_table_used_as_body": false,
+          "main_article_allowed": false,
+          "used_versioned_release_row_extractor": true,
+          "used_empty_evidence_fallback": true,
+          "warnings": [
+            "missing_concrete_release_note_bullet"
+          ]
+        }
+      },
+      "derived_editorial_hints": null,
+      "extraction_quality": {
+        "has_concrete_behavior_change": false,
+        "used_fallback": true,
+        "raw_table_used_as_body": false,
+        "main_article_allowed": false,
+        "used_versioned_release_row_extractor": true,
+        "used_empty_evidence_fallback": true,
+        "warnings": [
+          "missing_concrete_release_note_bullet"
+        ]
+      },
+      "datePrecision": "day",
+      "date_precision": "day",
+      "parentUrl": "https://developer.android.com/latest-updates",
+      "parent_url": "https://developer.android.com/latest-updates",
+      "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
+      "seriesName": null,
+      "series_name": null,
+      "seriesVersion": null,
+      "series_version": null,
+      "camera_path_commit_count": null,
+      "camera_path_commit_count_is_lower_bound": null,
+      "gerrit_change_id": "",
+      "gerrit_change_number": null,
+      "gerrit_change_status": "",
+      "gerrit_commit_sha": "",
+      "gerrit_effective_date_field": "",
+      "covered_gerrit_change_ids": [],
+      "covered_commit_shas": [],
+      "parentTitle": "Android Developers Latest Updates",
+      "parent_title": "Android Developers Latest Updates",
+      "parentCanonicalUrl": "https://developer.android.com/latest-updates",
+      "parent_canonical_url": "https://developer.android.com/latest-updates",
+      "roundupItemIndex": null,
+      "roundup_item_index": null,
+      "anchorText": "",
+      "anchor_text": "",
+      "article_group_key": "",
+      "tooling_workflow_type": "",
+      "native_workflow_evidence_score": 0,
+      "outgoing_links": [],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": true,
+      "has_api_or_component": true,
+      "has_behavior_change": false,
+      "source_gap_risk": true,
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "evidence_score": 6,
+      "version_or_release": "1.3.0-beta02",
+      "api_or_component": "CameraX / androidx.camera",
+      "source_hint_api_or_component": "android",
+      "behavior_change": "1.3.0-beta02",
+      "collector_template_sentence": "",
+      "selection_exclusion_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "watchlist_reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "verification_hint": "No RSS item, no published date, no concrete release/API/behavior change detected.",
+      "title": "1.3.0-beta02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "publishedAt": "August 26, 2026",
+      "published_date": "August 26, 2026",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "",
+      "relevanceScore": 60,
+      "relevance_score": 60,
+      "cameraHalRelevanceScore": 60,
+      "camera_hal_relevance_score": 60,
+      "editorial_priority": 1,
+      "relevance_bucket": "direct_aosp_camera",
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "evidence_origin": "article_text",
+      "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
+      "scope_evidence_terms": [
+        "\\bCameraX\\b"
+      ],
+      "aospCameraStackBucket": "direct_aosp_camera",
+      "aosp_camera_stack_bucket": "direct_aosp_camera",
+      "aospCameraDirect": true,
+      "aosp_camera_direct": true,
+      "aospCameraEvidenceTerms": [
+        "\\bCameraX\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\bCameraX\\b"
+      ],
+      "aospCameraRelevanceReason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v826fb839c0b38141980abf47020a61dc3ff340cbde624f57178f4c01d184ef87/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        }
+      ],
+      "candidateTier": "watchlist-reference",
+      "reason": "Android Developers Latest Updates (official, high, score 60): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "collection_reason": "Android Developers Latest Updates (official, high, score 60): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "decision": {
+        "topic": "direct_aosp_camera",
+        "evidenceLevel": "reference",
+        "selection": "reference",
+        "reason": "Background reference page; not an article candidate.",
+        "hasDate": true,
+        "hasConcreteChange": true
+      },
+      "selection": "reference",
+      "decision_reason": "Background reference page; not an article candidate.",
+      "has_date": true,
+      "has_concrete_change": true,
+      "topic_bucket": "direct_aosp_camera",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "camera_api_change": 1
+        },
+        "warning_count": 0,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "camera_api_change",
+        "hal_runtime_impact": true,
+        "camera_pipeline_impact": true,
+        "recommended_article_type": "main",
+        "confidence": 0.75,
+        "reason": "camera_api_change classified from candidate text.",
+        "warnings": []
       }
     },
     {
@@ -3468,7 +4168,6 @@
       "counts_as_primary_camera_topic": true,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "CameraX/AndroidX latest updates row에서 날짜, 버전, 컴포넌트, 동작 변경을 확인",
       "scope_evidence_terms": [
@@ -3795,7 +4494,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "source_hint_only",
       "source_hint": "Android framework/system/vendor security fix와 camera/media/vendor component 관련 security lead 확인",
       "scope_evidence_terms": [],
@@ -3821,20 +4519,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=hi",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "image_candidates": [
@@ -3851,20 +4535,6 @@
           "attribution": "Android Security Bulletin",
           "validationStatus": "ok",
           "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=hi",
-          "sourceUrl": "https://source.android.com/docs/security/bulletin",
-          "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "Android Security Bulletin",
-          "validationStatus": "ok",
-          "contentLength": 1760
         }
       ],
       "candidateTier": "exclude",
@@ -3906,6 +4576,247 @@
         "warnings": [
           "main_hint_requires_candidate_runtime_evidence"
         ]
+      }
+    },
+    {
+      "schema_version": 7,
+      "source": "lore.kernel.org linux-media list",
+      "source_name": "lore.kernel.org linux-media list",
+      "sourceUrl": "https://lore.kernel.org/linux-media/",
+      "source_url": "https://lore.kernel.org/linux-media/",
+      "articleUrl": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+      "article_url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+      "source_id": "lore-linux-media-list",
+      "category": "linux-camera",
+      "section": "Linux Camera / Driver",
+      "source_category": "linux-camera",
+      "source_section": "Linux Camera / Driver",
+      "priority": "high",
+      "reliability": "project-official",
+      "source_quality_required": true,
+      "origin": "source_registry",
+      "collectionStage": "raw_collection",
+      "collection_stage": "raw_collection",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "rss_item",
+      "source_type": "rss_item",
+      "source_priority": "high",
+      "source_reliability": "project-official",
+      "usageHint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "source_usage_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "source_quality": {
+        "source_role": "project_mailing_list_source",
+        "source_url_quality": "project_mailing_list_release",
+        "source_quality_status": "blocked",
+        "main_article_source_allowed": false,
+        "main_article_source_allowed_reason": "Source requires primary confirmation before main promotion.",
+        "main_article_source_blockers": [
+          "cross_check_required_but_missing"
+        ],
+        "cross_check_status": "required_missing",
+        "requires_cross_check": true,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "primary_confirmation",
+        "evidence_granularity": "article_with_primary_confirmation",
+        "source_quality_notes": [
+          "mailing list lead source for V4L2/libcamera/media subsystem",
+          "individual patch thread requires primary project release confirmation before main promotion"
+        ]
+      },
+      "sourceRole": "project_mailing_list_source",
+      "source_role": "project_mailing_list_source",
+      "sourceUrlQuality": "project_mailing_list_release",
+      "source_url_quality": "project_mailing_list_release",
+      "sourceQualityStatus": "blocked",
+      "source_quality_status": "blocked",
+      "mainArticleSourceAllowed": false,
+      "main_article_source_allowed": false,
+      "mainArticleSourceAllowedReason": "Source requires primary confirmation before main promotion.",
+      "main_article_source_allowed_reason": "Source requires primary confirmation before main promotion.",
+      "mainArticleSourceBlockers": [
+        "cross_check_required_but_missing"
+      ],
+      "main_article_source_blockers": [
+        "cross_check_required_but_missing"
+      ],
+      "crossCheckStatus": "required_missing",
+      "cross_check_status": "required_missing",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "primary_confirmation",
+      "conditional_evidence_type": "primary_confirmation",
+      "evidenceGranularity": "article_with_primary_confirmation",
+      "evidence_granularity": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "mailing list lead source for V4L2/libcamera/media subsystem",
+        "individual patch thread requires primary project release confirmation before main promotion"
+      ],
+      "source_quality_notes": [
+        "mailing list lead source for V4L2/libcamera/media subsystem",
+        "individual patch thread requires primary project release confirmation before main promotion"
+      ],
+      "candidateOnly": false,
+      "candidate_only": false,
+      "community_signal": false,
+      "collectionMode": "rss-item",
+      "collection_mode": "rss-item",
+      "sourceCollectionMode": "rss-source",
+      "source_collection_mode": "rss-source",
+      "isArticleCandidate": true,
+      "is_article_candidate": true,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceSignalKind": "dated-rss-article",
+      "evidence_signal_kind": "dated-rss-article",
+      "evidenceLevel": "watch",
+      "evidence_level": "watch",
+      "finalSelectionEligibility": "main",
+      "final_selection_eligibility": "main",
+      "source_kind": "rss_item",
+      "source_extraction": null,
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "datePrecision": "",
+      "date_precision": "",
+      "parentUrl": "",
+      "parent_url": "",
+      "in_reply_to": "",
+      "seriesId": "lore-series:20260920-upstream-s5k3t2-v1-d640740f4013@proton.me",
+      "series_id": "lore-series:20260920-upstream-s5k3t2-v1-d640740f4013@proton.me",
+      "seriesName": null,
+      "series_name": null,
+      "seriesVersion": null,
+      "series_version": null,
+      "camera_path_commit_count": null,
+      "camera_path_commit_count_is_lower_bound": null,
+      "gerrit_change_id": "",
+      "gerrit_change_number": null,
+      "gerrit_change_status": "",
+      "gerrit_commit_sha": "",
+      "gerrit_effective_date_field": "",
+      "covered_gerrit_change_ids": [],
+      "covered_commit_shas": [],
+      "parentTitle": "",
+      "parent_title": "",
+      "parentCanonicalUrl": "",
+      "parent_canonical_url": "",
+      "roundupItemIndex": null,
+      "roundup_item_index": null,
+      "anchorText": "",
+      "anchor_text": "",
+      "article_group_key": "",
+      "tooling_workflow_type": "",
+      "native_workflow_evidence_score": 0,
+      "outgoing_links": [],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": false,
+      "has_api_or_component": true,
+      "has_behavior_change": true,
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "evidence_score": 6,
+      "version_or_release": "",
+      "api_or_component": "image sensor",
+      "source_hint_api_or_component": "linux-camera",
+      "behavior_change": "This series adds a binding and a driver for the Samsung S5K3T2, a 20 Mpixel CMOS image sensor with four MIPI D-PHY lanes.",
+      "collector_template_sentence": "",
+      "selection_exclusion_reason": "Eligible for main article selection.",
+      "watchlist_reason": "",
+      "verification_hint": "Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.",
+      "title": "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+      "publishedAt": "2026-09-20T14:58:26Z",
+      "published_date": "2026-09-20T14:58:26Z",
+      "effective_date": "",
+      "date_source": "",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "This series adds a binding and a driver for the Samsung S5K3T2, a 20 Mpixel CMOS image sensor with four MIPI D-PHY lanes. The sensor is the front camera of the Xiaomi POCO F3. That phone has no device tree in mainline, so this series adds no user for the binding. The driver was written and tested on the phone with the Qualcomm CAMSS driver. Tested: v4l2-compliance on the sensor sub-device, 46 tests, 46 passed capture in all three modes, eleven runs, no kernel error the sensor returns to runtime ",
+      "relevanceScore": 100,
+      "relevance_score": 100,
+      "cameraHalRelevanceScore": 100,
+      "camera_hal_relevance_score": 100,
+      "editorial_priority": 5,
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 4,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "scope_evidence_terms": [
+        "\\bimage sensor\\b",
+        "\\bcamss\\b",
+        "\\bV4L2\\b"
+      ],
+      "aospCameraStackBucket": "camera_driver_image_pipeline",
+      "aosp_camera_stack_bucket": "camera_driver_image_pipeline",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [
+        "\\bimage sensor\\b",
+        "\\bcamss\\b",
+        "\\bV4L2\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\bimage sensor\\b",
+        "\\bcamss\\b",
+        "\\bV4L2\\b"
+      ],
+      "aospCameraRelevanceReason": "Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.",
+      "imageCandidates": [],
+      "image_candidates": [],
+      "candidateTier": "main-article",
+      "reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "collection_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "decision": {
+        "topic": "camera_driver_image_pipeline",
+        "evidenceLevel": "watch",
+        "selection": "watch",
+        "reason": "Mailing-list/community lead requires primary confirmation.",
+        "hasDate": true,
+        "hasConcreteChange": true
+      },
+      "selection": "watch",
+      "decision_reason": "Mailing-list/community lead requires primary confirmation.",
+      "has_date": true,
+      "has_concrete_change": true,
+      "topic_bucket": "camera_driver_image_pipeline",
+      "linked_evidence_summary": {
+        "schema_version": 1,
+        "total_count": 0,
+        "by_type": {},
+        "by_fetch_status": {},
+        "impact_type_counts": {
+          "test_only_change": 1
+        },
+        "warning_count": 0,
+        "has_resolved_evidence": false,
+        "has_unresolved_evidence": false,
+        "top_identifiers": []
+      },
+      "impact_classification": {
+        "impact_type": "test_only_change",
+        "hal_runtime_impact": false,
+        "camera_pipeline_impact": true,
+        "recommended_article_type": "watch",
+        "confidence": 0.75,
+        "reason": "test_only_change classified from candidate text.",
+        "warnings": []
       }
     },
     {
@@ -4128,7 +5039,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
       "scope_evidence_terms": [
@@ -4392,7 +5302,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
       "scope_evidence_terms": [
@@ -4646,7 +5555,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
       "scope_evidence_terms": [
@@ -4932,7 +5840,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
       "scope_evidence_terms": [
@@ -5183,7 +6090,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
       "scope_evidence_terms": [
@@ -5437,7 +6343,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
       "scope_evidence_terms": [
@@ -5684,7 +6589,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
       "scope_evidence_terms": [
@@ -5707,242 +6611,6 @@
       "candidateTier": "exclude",
       "reason": "lore.kernel.org linux-media list (project-official, high, score 81): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
       "collection_reason": "lore.kernel.org linux-media list (project-official, high, score 81): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
-      "decision": {
-        "topic": "camera_driver_image_pipeline",
-        "evidenceLevel": "watch",
-        "selection": "watch",
-        "reason": "Mailing-list/community lead requires primary confirmation.",
-        "hasDate": true,
-        "hasConcreteChange": true
-      },
-      "selection": "watch",
-      "decision_reason": "Mailing-list/community lead requires primary confirmation.",
-      "has_date": true,
-      "has_concrete_change": true,
-      "topic_bucket": "camera_driver_image_pipeline",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 0,
-        "by_type": {},
-        "by_fetch_status": {},
-        "impact_type_counts": {
-          "video_capture_fix": 1
-        },
-        "warning_count": 0,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": false,
-        "top_identifiers": []
-      },
-      "impact_classification": {
-        "impact_type": "video_capture_fix",
-        "hal_runtime_impact": true,
-        "camera_pipeline_impact": true,
-        "recommended_article_type": "main",
-        "confidence": 0.75,
-        "reason": "video_capture_fix classified from candidate text.",
-        "warnings": []
-      }
-    },
-    {
-      "schema_version": 7,
-      "source": "lore.kernel.org linux-media list",
-      "source_name": "lore.kernel.org linux-media list",
-      "sourceUrl": "https://lore.kernel.org/linux-media/",
-      "source_url": "https://lore.kernel.org/linux-media/",
-      "articleUrl": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
-      "article_url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
-      "source_id": "lore-linux-media-list",
-      "category": "linux-camera",
-      "section": "Linux Camera / Driver",
-      "source_category": "linux-camera",
-      "source_section": "Linux Camera / Driver",
-      "priority": "high",
-      "reliability": "project-official",
-      "source_quality_required": true,
-      "origin": "source_registry",
-      "collectionStage": "raw_collection",
-      "collection_stage": "raw_collection",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "rss_item",
-      "source_type": "rss_item",
-      "source_priority": "high",
-      "source_reliability": "project-official",
-      "usageHint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
-      "source_usage_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
-      "source_quality": {
-        "source_role": "project_mailing_list_source",
-        "source_url_quality": "project_mailing_list_release",
-        "source_quality_status": "blocked",
-        "main_article_source_allowed": false,
-        "main_article_source_allowed_reason": "Source requires primary confirmation before main promotion.",
-        "main_article_source_blockers": [
-          "cross_check_required_but_missing"
-        ],
-        "cross_check_status": "required_missing",
-        "requires_cross_check": true,
-        "requires_conditional_evidence": true,
-        "conditional_evidence_type": "primary_confirmation",
-        "evidence_granularity": "article_with_primary_confirmation",
-        "source_quality_notes": [
-          "mailing list lead source for V4L2/libcamera/media subsystem",
-          "individual patch thread requires primary project release confirmation before main promotion"
-        ]
-      },
-      "sourceRole": "project_mailing_list_source",
-      "source_role": "project_mailing_list_source",
-      "sourceUrlQuality": "project_mailing_list_release",
-      "source_url_quality": "project_mailing_list_release",
-      "sourceQualityStatus": "blocked",
-      "source_quality_status": "blocked",
-      "mainArticleSourceAllowed": false,
-      "main_article_source_allowed": false,
-      "mainArticleSourceAllowedReason": "Source requires primary confirmation before main promotion.",
-      "main_article_source_allowed_reason": "Source requires primary confirmation before main promotion.",
-      "mainArticleSourceBlockers": [
-        "cross_check_required_but_missing"
-      ],
-      "main_article_source_blockers": [
-        "cross_check_required_but_missing"
-      ],
-      "crossCheckStatus": "required_missing",
-      "cross_check_status": "required_missing",
-      "requiresCrossCheck": true,
-      "requires_cross_check": true,
-      "requiresConditionalEvidence": true,
-      "requires_conditional_evidence": true,
-      "conditionalEvidenceType": "primary_confirmation",
-      "conditional_evidence_type": "primary_confirmation",
-      "evidenceGranularity": "article_with_primary_confirmation",
-      "evidence_granularity": "article_with_primary_confirmation",
-      "sourceQualityNotes": [
-        "mailing list lead source for V4L2/libcamera/media subsystem",
-        "individual patch thread requires primary project release confirmation before main promotion"
-      ],
-      "source_quality_notes": [
-        "mailing list lead source for V4L2/libcamera/media subsystem",
-        "individual patch thread requires primary project release confirmation before main promotion"
-      ],
-      "candidateOnly": false,
-      "candidate_only": false,
-      "community_signal": false,
-      "collectionMode": "rss-item",
-      "collection_mode": "rss-item",
-      "sourceCollectionMode": "rss-source",
-      "source_collection_mode": "rss-source",
-      "isArticleCandidate": true,
-      "is_article_candidate": true,
-      "isWatchPage": false,
-      "is_watch_page": false,
-      "hasDatedEvidence": true,
-      "has_dated_evidence": true,
-      "evidenceSignalKind": "dated-rss-article",
-      "evidence_signal_kind": "dated-rss-article",
-      "evidenceLevel": "watch",
-      "evidence_level": "watch",
-      "finalSelectionEligibility": "short",
-      "final_selection_eligibility": "short",
-      "source_kind": "rss_item",
-      "source_extraction": null,
-      "derived_editorial_hints": null,
-      "extraction_quality": null,
-      "datePrecision": "",
-      "date_precision": "",
-      "parentUrl": "",
-      "parent_url": "",
-      "in_reply_to": "",
-      "seriesId": "lore-series:20260914133416.1030231-hitesh@ebytelogic.com",
-      "series_id": "lore-series:20260914133416.1030231-hitesh@ebytelogic.com",
-      "seriesName": null,
-      "series_name": null,
-      "seriesVersion": null,
-      "series_version": null,
-      "camera_path_commit_count": null,
-      "camera_path_commit_count_is_lower_bound": null,
-      "gerrit_change_id": "",
-      "gerrit_change_number": null,
-      "gerrit_change_status": "",
-      "gerrit_commit_sha": "",
-      "gerrit_effective_date_field": "",
-      "covered_gerrit_change_ids": [],
-      "covered_commit_shas": [],
-      "parentTitle": "",
-      "parent_title": "",
-      "parentCanonicalUrl": "",
-      "parent_canonical_url": "",
-      "roundupItemIndex": null,
-      "roundup_item_index": null,
-      "anchorText": "",
-      "anchor_text": "",
-      "article_group_key": "",
-      "tooling_workflow_type": "",
-      "native_workflow_evidence_score": 0,
-      "outgoing_links": [],
-      "sourceMonth": "",
-      "source_month": "",
-      "has_published_date": true,
-      "has_version_or_release": false,
-      "has_api_or_component": true,
-      "has_behavior_change": true,
-      "source_gap_risk": false,
-      "main_eligible": true,
-      "briefing_only": false,
-      "reference_only": false,
-      "evidence_score": 6,
-      "version_or_release": "",
-      "api_or_component": "SoC",
-      "source_hint_api_or_component": "linux-camera",
-      "behavior_change": "This series contains the CAMSS changes needed to run two GMSL cameras on the RB3 Gen2 (QCS6490 / SC7280) vision mezzanine, where a MAX9296A deserializer sits between the sensors and the SoC.",
-      "collector_template_sentence": "",
-      "selection_exclusion_reason": "Eligible for short newsletter use.",
-      "watchlist_reason": "",
-      "verification_hint": "Requires cross-check before final selection. Prefer official documentation, official blogs, release notes, or direct vendor/project sources.",
-      "title": "[PATCH 0/8] media: qcom: camss: support several cameras behind a CSI-2 bridge",
-      "url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
-      "publishedAt": "2026-09-14T13:34:29Z",
-      "published_date": "2026-09-14T13:34:29Z",
-      "effective_date": "",
-      "date_source": "",
-      "date_confidence": 0,
-      "date_evidence_url": "",
-      "summary": "This series contains the CAMSS changes needed to run two GMSL cameras on the RB3 Gen2 (QCS6490 / SC7280) vision mezzanine, where a MAX9296A deserializer sits between the sensors and the SoC. The deserializer and serializer drivers (the out-of-tree maxim-serdes work for MAX9296A and MAX96717) and the AR0234/IMX900 sensor drivers are out of tree and not part of this submission; only the SoC side is here. Everything CAMSS has seen so far is one sensor wired straight to one CSIPHY. A CSI-2 to CSI-2 ",
-      "relevanceScore": 75,
-      "relevance_score": 75,
-      "cameraHalRelevanceScore": 75,
-      "camera_hal_relevance_score": 75,
-      "editorial_priority": 5,
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 3,
-      "multimedia_camera_output_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_driver_topic": true,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
-      "evidence_origin": "article_text",
-      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
-      "scope_evidence_terms": [
-        "\\bcamss\\b"
-      ],
-      "aospCameraStackBucket": "camera_driver_image_pipeline",
-      "aosp_camera_stack_bucket": "camera_driver_image_pipeline",
-      "aospCameraDirect": false,
-      "aosp_camera_direct": false,
-      "aospCameraEvidenceTerms": [
-        "\\bcamss\\b"
-      ],
-      "aosp_camera_evidence_terms": [
-        "\\bcamss\\b"
-      ],
-      "aospCameraRelevanceReason": "Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.",
-      "aosp_camera_relevance_reason": "Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.",
-      "imageCandidates": [],
-      "image_candidates": [],
-      "candidateTier": "short-news",
-      "reason": "lore.kernel.org linux-media list (project-official, high, score 75): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
-      "collection_reason": "lore.kernel.org linux-media list (project-official, high, score 75): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
       "decision": {
         "topic": "camera_driver_image_pipeline",
         "evidenceLevel": "watch",
@@ -6181,7 +6849,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",
       "scope_evidence_terms": [
@@ -6423,7 +7090,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
       "scope_evidence_terms": [
@@ -6670,7 +7336,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",
       "scope_evidence_terms": [
@@ -6917,7 +7582,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
       "scope_evidence_terms": [
@@ -7156,7 +7820,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
       "scope_evidence_terms": [
@@ -7395,7 +8058,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
       "scope_evidence_terms": [
@@ -7637,7 +8299,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "source_hint_only",
       "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
       "scope_evidence_terms": [],
@@ -7870,7 +8531,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
       "scope_evidence_terms": [
@@ -8109,7 +8769,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
       "scope_evidence_terms": [
@@ -8348,7 +9007,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "libcamera 프로젝트에 리뷰 중인 patch(IPA, ISP, pipeline handler, pixel-format uAPI 등)를 dated 리드로 수집. 개별 patch는 제안 단계이므로 main 승격은 mailing-list cross-check(강한 기술 근거 또는 landed 확인) 통과 필요",
       "scope_evidence_terms": [
@@ -8590,7 +9248,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",
       "scope_evidence_terms": [
@@ -8837,7 +9494,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",
       "scope_evidence_terms": [
@@ -9087,7 +9743,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",
       "scope_evidence_terms": [
@@ -9337,7 +9992,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",
       "scope_evidence_terms": [
@@ -9594,7 +10248,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",
       "scope_evidence_terms": [
@@ -9844,7 +10497,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": true,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "article_text",
       "source_hint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",
       "scope_evidence_terms": [
@@ -10095,7 +10747,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": true,
       "evidence_origin": "article_text",
       "source_hint": "Claude 제품 소식과 개발 workflow 사례 확인",
       "scope_evidence_terms": [
@@ -10422,7 +11073,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": false,
       "evidence_origin": "source_hint_only",
       "source_hint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
       "scope_evidence_terms": [],
@@ -10447,7 +11097,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 55450
+          "contentLength": 55452
         }
       ],
       "image_candidates": [
@@ -10463,7 +11113,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 55450
+          "contentLength": 55452
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -10678,7 +11328,6 @@
       "counts_as_primary_camera_topic": false,
       "counts_as_driver_topic": false,
       "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": true,
       "evidence_origin": "article_text",
       "source_hint": "Claude Code release note, feature change, bug fix, agentic coding workflow change 확인",
       "scope_evidence_terms": [
@@ -10709,7 +11358,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 47928
+          "contentLength": 47932
         }
       ],
       "image_candidates": [
@@ -10725,7 +11374,7 @@
           "licenseStatus": "unknown",
           "attribution": "Claude Code Changelog",
           "validationStatus": "ok",
-          "contentLength": 47928
+          "contentLength": 47932
         }
       ],
       "candidateTier": "short-news",
@@ -10765,275 +11414,6 @@
         "confidence": 0.35,
         "reason": "build_dependency_fix classified from candidate text.",
         "warnings": [
-          "main_hint_requires_candidate_runtime_evidence"
-        ]
-      }
-    },
-    {
-      "schema_version": 7,
-      "source": "Codex Releases",
-      "source_name": "Codex Releases",
-      "sourceUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
-      "source_url": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
-      "articleUrl": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-      "article_url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-      "source_id": "codex-releases",
-      "category": "ai-coding",
-      "section": "AI / SW Engineering Trends",
-      "source_category": "ai-coding",
-      "source_section": "AI / SW Engineering Trends",
-      "priority": "medium",
-      "reliability": "official",
-      "source_quality_required": true,
-      "origin": "source_registry",
-      "collectionStage": "raw_collection",
-      "collection_stage": "raw_collection",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "release_note_item",
-      "source_type": "release_note_item",
-      "source_priority": "medium",
-      "source_reliability": "official",
-      "usageHint": "Codex CLI 정식 릴리스의 코딩·테스트·검토·권한 처리 변경 확인",
-      "source_usage_hint": "Codex CLI 정식 릴리스의 코딩·테스트·검토·권한 처리 변경 확인",
-      "source_quality": {
-        "source_role": "project_release_source",
-        "source_url_quality": "project_release",
-        "source_quality_status": "allowed",
-        "main_article_source_allowed": true,
-        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-        "main_article_source_blockers": [],
-        "cross_check_status": "not_required",
-        "requires_cross_check": false,
-        "requires_conditional_evidence": true,
-        "conditional_evidence_type": "project_release_evidence",
-        "evidence_granularity": "dated_release_item",
-        "source_quality_notes": [
-          "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
-          "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
-        ]
-      },
-      "sourceRole": "project_release_source",
-      "source_role": "project_release_source",
-      "sourceUrlQuality": "project_release",
-      "source_url_quality": "project_release",
-      "sourceQualityStatus": "allowed",
-      "source_quality_status": "allowed",
-      "mainArticleSourceAllowed": true,
-      "main_article_source_allowed": true,
-      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
-      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
-      "mainArticleSourceBlockers": [],
-      "main_article_source_blockers": [],
-      "crossCheckStatus": "not_required",
-      "cross_check_status": "not_required",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "requiresConditionalEvidence": true,
-      "requires_conditional_evidence": true,
-      "conditionalEvidenceType": "project_release_evidence",
-      "conditional_evidence_type": "project_release_evidence",
-      "evidenceGranularity": "dated_release_item",
-      "evidence_granularity": "dated_release_item",
-      "sourceQualityNotes": [
-        "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
-        "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
-      ],
-      "source_quality_notes": [
-        "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. 문서 Changelog의 날짜 없는 버전은 발행 근거로 사용하지 않는다.",
-        "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
-      ],
-      "candidateOnly": false,
-      "candidate_only": false,
-      "community_signal": false,
-      "collectionMode": "release-note-item",
-      "collection_mode": "release-note-item",
-      "sourceCollectionMode": "release-note-watch",
-      "source_collection_mode": "release-note-watch",
-      "isArticleCandidate": true,
-      "is_article_candidate": true,
-      "isWatchPage": false,
-      "is_watch_page": false,
-      "hasDatedEvidence": true,
-      "has_dated_evidence": true,
-      "evidenceSignalKind": "dated-release-evidence",
-      "evidence_signal_kind": "dated-release-evidence",
-      "evidenceLevel": "primary",
-      "evidence_level": "primary",
-      "finalSelectionEligibility": "short",
-      "final_selection_eligibility": "short",
-      "source_kind": "release_note_item",
-      "source_extraction": null,
-      "derived_editorial_hints": null,
-      "extraction_quality": null,
-      "datePrecision": "",
-      "date_precision": "",
-      "parentUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
-      "parent_url": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
-      "in_reply_to": "",
-      "seriesId": null,
-      "series_id": null,
-      "seriesName": null,
-      "series_name": null,
-      "seriesVersion": null,
-      "series_version": null,
-      "camera_path_commit_count": null,
-      "camera_path_commit_count_is_lower_bound": null,
-      "gerrit_change_id": "",
-      "gerrit_change_number": null,
-      "gerrit_change_status": "",
-      "gerrit_commit_sha": "",
-      "gerrit_effective_date_field": "",
-      "covered_gerrit_change_ids": [],
-      "covered_commit_shas": [],
-      "parentTitle": "Codex Releases",
-      "parent_title": "Codex Releases",
-      "parentCanonicalUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
-      "parent_canonical_url": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
-      "roundupItemIndex": null,
-      "roundup_item_index": null,
-      "anchorText": "",
-      "anchor_text": "",
-      "article_group_key": "",
-      "tooling_workflow_type": "",
-      "native_workflow_evidence_score": 0,
-      "outgoing_links": [],
-      "sourceMonth": "",
-      "source_month": "",
-      "has_published_date": true,
-      "has_version_or_release": true,
-      "has_api_or_component": true,
-      "has_behavior_change": true,
-      "source_gap_risk": false,
-      "main_eligible": true,
-      "briefing_only": false,
-      "reference_only": false,
-      "evidence_score": 8,
-      "version_or_release": "rust-v0.155.1",
-      "api_or_component": "Codex",
-      "source_hint_api_or_component": "ai-coding",
-      "behavior_change": "New local TUI sessions now leave reasoning summaries disabled by default, fixing request rejection by providers that do not support them. Explicit reasoning-summary settings remain respected. (#46467)",
-      "collector_template_sentence": "",
-      "selection_exclusion_reason": "Eligible for short newsletter use.",
-      "watchlist_reason": "",
-      "verification_hint": "Can be used directly if the collected item supports the claim.",
-      "title": "Codex rust-v0.155.1",
-      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-      "publishedAt": "2026-09-18T20:03:04Z",
-      "published_date": "2026-09-18T20:03:04Z",
-      "effective_date": "",
-      "date_source": "",
-      "date_confidence": 0,
-      "date_evidence_url": "",
-      "summary": "New local TUI sessions now leave reasoning summaries disabled by default, fixing request rejection by providers that do not support them. Explicit reasoning-summary settings remain respected. (#46467)",
-      "relevanceScore": 55,
-      "relevance_score": 55,
-      "cameraHalRelevanceScore": 55,
-      "camera_hal_relevance_score": 55,
-      "editorial_priority": 2,
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 0,
-      "multimedia_camera_output_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 3,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "counts_as_fallback_topic": true,
-      "evidence_origin": "article_text",
-      "source_hint": "Codex CLI 정식 릴리스의 코딩·테스트·검토·권한 처리 변경 확인",
-      "scope_evidence_terms": [
-        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
-      ],
-      "aospCameraStackBucket": "cpp_ai_tooling_fallback",
-      "aosp_camera_stack_bucket": "cpp_ai_tooling_fallback",
-      "aospCameraDirect": false,
-      "aosp_camera_direct": false,
-      "aospCameraEvidenceTerms": [
-        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
-      ],
-      "aosp_camera_evidence_terms": [
-        "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
-      ],
-      "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.",
-      "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.",
-      "imageCandidates": [
-        {
-          "url": "https://opengraph.githubassets.com/60e99469eda788e15e80df021267df18b608398448e68c696b9d49d004c4bd91/openai/codex/releases/tag/rust-v0.155.1",
-          "sourceUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Codex Releases",
-          "validationStatus": "ok",
-          "contentLength": 45215
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://opengraph.githubassets.com/60e99469eda788e15e80df021267df18b608398448e68c696b9d49d004c4bd91/openai/codex/releases/tag/rust-v0.155.1",
-          "sourceUrl": "https://api.github.com/repos/openai/codex/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Codex Releases",
-          "validationStatus": "ok",
-          "contentLength": 45215
-        }
-      ],
-      "candidateTier": "short-news",
-      "reason": "Codex Releases (official, medium, score 55): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
-      "collection_reason": "Codex Releases (official, medium, score 55): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
-      "decision": {
-        "topic": "cpp_ai_tooling_fallback",
-        "evidenceLevel": "primary",
-        "selection": "short",
-        "reason": "Official dated source with supporting evidence.",
-        "hasDate": true,
-        "hasConcreteChange": true
-      },
-      "selection": "short",
-      "decision_reason": "Official dated source with supporting evidence.",
-      "has_date": true,
-      "has_concrete_change": true,
-      "topic_bucket": "cpp_ai_tooling_fallback",
-      "linked_evidence_summary": {
-        "schema_version": 1,
-        "total_count": 1,
-        "by_type": {
-          "docs_anchor": 1
-        },
-        "by_fetch_status": {
-          "unsupported": 1
-        },
-        "impact_type_counts": {
-          "build_dependency_fix": 1
-        },
-        "warning_count": 3,
-        "has_resolved_evidence": false,
-        "has_unresolved_evidence": true,
-        "top_identifiers": [
-          "#46467"
-        ]
-      },
-      "impact_classification": {
-        "impact_type": "build_dependency_fix",
-        "hal_runtime_impact": false,
-        "camera_pipeline_impact": false,
-        "recommended_article_type": "watch",
-        "confidence": 0.45,
-        "reason": "build_dependency_fix classified from candidate text.",
-        "warnings": [
-          "linked_evidence_unsupported",
           "main_hint_requires_candidate_runtime_evidence"
         ]
       }
@@ -11124,15 +11504,15 @@
     "fail_closed_reasons": {},
     "date_source_counts": {
       "structured_date_published": 1,
-      "missing": 3
+      "missing": 2
     },
     "received_bytes_by_source": {
       "aosp-site-updates": 1534031,
-      "qualcomm-security-bulletins": 160830,
+      "qualcomm-security-bulletins": 161007,
       "anthropic-news": 1983645,
       "claude-blog": 5159167,
-      "claude-code-changelog": 589682,
-      "codex-releases": 6297829
+      "claude-code-changelog": 589691,
+      "codex-releases": 6300512
     },
     "article_cap_counts_by_source": {
       "anthropic-news": {
