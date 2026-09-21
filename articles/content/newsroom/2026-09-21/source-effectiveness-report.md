@@ -7,16 +7,16 @@ Date: 2026-09-21
 - Sources: 75 (registry=75, synthetic=0)
 - Collected candidates: 40
 - Unregistered candidates: 0
-- Eligible candidates: 19
-- Selected candidates: 5
-- Rendered main articles: 5
-- Source gap candidates: 21
+- Eligible candidates: 17
+- Selected candidates: 4
+- Rendered main articles: 4
+- Source gap candidates: 23
 - Generic noise candidates: 9
 - Duplicate candidates: 0
-- Recommendations: NO_RECENT_SIGNAL: 65, KEEP: 2, REVIEW_SOURCE_OR_PARSER: 6, KEEP_AND_MONITOR: 2
-- Selected main source quality coverage: 5/5
-- Main-eligible source quality coverage: 10/10
-- Conditional source promoted/blocked: 3/25
+- Recommendations: NO_RECENT_SIGNAL: 66, KEEP: 2, REVIEW_SOURCE_OR_PARSER: 6, KEEP_AND_MONITOR: 1
+- Selected main source quality coverage: 4/4
+- Main-eligible source quality coverage: 11/11
+- Conditional source promoted/blocked: 2/25
 - Unknown source quality: 0
 - Source quality field drift: 0
 - Legacy source quality warnings: 0
@@ -27,14 +27,14 @@ Date: 2026-09-21
 | --- | --- | --- |
 | source_url_quality | project_mailing_list_release | 25 |
 | source_url_quality | official_dated_release | 9 |
-| source_url_quality | project_release | 3 |
-| source_url_quality | official_site_update_row | 2 |
+| source_url_quality | official_site_update_row | 3 |
+| source_url_quality | project_release | 2 |
 | source_url_quality | generic_ai_or_it_trend | 1 |
-| source_quality_status | blocked | 34 |
-| source_quality_status | allowed | 6 |
+| source_quality_status | blocked | 36 |
+| source_quality_status | allowed | 4 |
 | blocker | cross_check_required_but_missing | 24 |
-| blocker | source_gap_risk | 21 |
-| blocker | reference_only | 9 |
+| blocker | source_gap_risk | 23 |
+| blocker | reference_only | 11 |
 | blocker | policy_locked_out_of_main | 1 |
 
 
@@ -53,9 +53,9 @@ _없음_
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
 | claude-blog | KEEP | 100 | 1 | 1 | 1 | 1 |
-| codex-releases | KEEP | 100 | 1 | 1 | 1 | 1 |
-| lore-linux-media-ipu | REVIEW_SOURCE_OR_PARSER | 62.5 | 8 | 5 | 2 | 2 |
+| lore-linux-media-list | KEEP | 71.07 | 8 | 7 | 1 | 1 |
 | claude-code-changelog | REVIEW_SOURCE_OR_PARSER | 60 | 2 | 1 | 1 | 1 |
+| lore-linux-media-ipu | REVIEW_SOURCE_OR_PARSER | 57.5 | 8 | 5 | 1 | 1 |
 
 ## Sources Needing Parser Repair
 
@@ -86,6 +86,7 @@ _없음_
 | aosp-whats-new-release-notes | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | camerax-release-notes | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chromeos-gerrit-camera-changes | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| codex-releases | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | collabora-blog | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cppcon-news | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ee-times-embedded | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -135,15 +136,14 @@ _없음_
 | yozm-it | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zdnet-korea | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | claude-blog | KEEP | 100 | 1 | 1 | 1 | 1 | 0 | 0 | 0 |
-| codex-releases | KEEP | 100 | 1 | 1 | 1 | 1 | 0 | 0 | 0 |
-| lore-linux-media-ipu | REVIEW_SOURCE_OR_PARSER | 62.5 | 8 | 0.625 | 0.4 | 1 | 0.375 | 0 | 0 |
+| lore-linux-media-list | KEEP | 71.07 | 8 | 0.875 | 0.1429 | 1 | 0.125 | 0 | 0 |
 | claude-code-changelog | REVIEW_SOURCE_OR_PARSER | 60 | 2 | 0.5 | 1 | 1 | 0.5 | 0.5 | 0 |
-| android-developers-latest-updates | REVIEW_SOURCE_OR_PARSER | 5 | 2 | 0.5 | 0 | 0 | 0.5 | 0 | 0 |
+| lore-linux-media-ipu | REVIEW_SOURCE_OR_PARSER | 57.5 | 8 | 0.625 | 0.2 | 1 | 0.375 | 0 | 0 |
 | android-developers-blog | REVIEW_SOURCE_OR_PARSER | 0 | 8 | 0.25 | 0 | 0 | 0.75 | 0.75 | 0 |
+| android-developers-latest-updates | REVIEW_SOURCE_OR_PARSER | 0 | 3 | 0 | 0 | 0 | 1 | 0 | 0 |
 | android-security-bulletin | REVIEW_SOURCE_OR_PARSER | 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 |
 | patchwork-libcamera-patches | REVIEW_SOURCE_OR_PARSER | 0 | 8 | 0 | 0 | 0 | 1 | 0.125 | 0 |
 | aosp-gerrit-camera-changes | KEEP_AND_MONITOR | 35 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
-| lore-linux-media-list | KEEP_AND_MONITOR | 27.5 | 8 | 0.875 | 0 | 0 | 0.125 | 0 | 0 |
 
 ## Warnings
 

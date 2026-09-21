@@ -18,38 +18,38 @@
     "synthetic_source_count": 0,
     "unregistered_candidate_count": 0,
     "collected_count": 40,
-    "eligible_count": 19,
-    "selected_count": 5,
-    "rendered_main_count": 5,
-    "source_gap_count": 21,
+    "eligible_count": 17,
+    "selected_count": 4,
+    "rendered_main_count": 4,
+    "source_gap_count": 23,
     "generic_noise_count": 9,
     "duplicate_count": 0,
     "source_url_quality_distribution": {
       "official_dated_release": 9,
-      "official_site_update_row": 2,
+      "official_site_update_row": 3,
       "project_mailing_list_release": 25,
       "generic_ai_or_it_trend": 1,
-      "project_release": 3
+      "project_release": 2
     },
     "source_quality_status_summary": {
-      "blocked": 34,
-      "allowed": 6
+      "blocked": 36,
+      "allowed": 4
     },
     "source_quality_blocker_summary": {
-      "source_gap_risk": 21,
-      "reference_only": 9,
+      "source_gap_risk": 23,
+      "reference_only": 11,
       "policy_locked_out_of_main": 1,
       "cross_check_required_but_missing": 24
     },
     "selected_main_source_quality_coverage": {
-      "selected_main_count": 5,
-      "with_source_quality_count": 5
+      "selected_main_count": 4,
+      "with_source_quality_count": 4
     },
     "main_eligible_source_quality_coverage": {
-      "main_eligible_candidate_count": 10,
-      "with_source_quality_count": 10
+      "main_eligible_candidate_count": 11,
+      "with_source_quality_count": 11
     },
-    "conditional_source_promoted_count": 3,
+    "conditional_source_promoted_count": 2,
     "conditional_source_blocked_count": 25,
     "unknown_source_quality_count": 0,
     "source_quality_field_drift_count": 0,
@@ -61,7 +61,7 @@
     "recommendation_counts": [
       {
         "recommendation": "NO_RECENT_SIGNAL",
-        "count": 65
+        "count": 66
       },
       {
         "recommendation": "KEEP",
@@ -73,7 +73,7 @@
       },
       {
         "recommendation": "KEEP_AND_MONITOR",
-        "count": 2
+        "count": 1
       }
     ]
   },
@@ -375,31 +375,30 @@
       "candidate_only": false,
       "collection_mode_hint": "release-note-watch",
       "synthetic": false,
-      "collected_count": 2,
-      "eligible_count": 1,
+      "collected_count": 3,
+      "eligible_count": 0,
       "selected_count": 0,
       "rendered_main_count": 0,
-      "source_gap_count": 1,
-      "camera_relevant_raw_count": 2,
+      "source_gap_count": 3,
+      "camera_relevant_raw_count": 3,
       "parser_repair_reason_count": 0,
-      "reference_only_count": 1,
-      "watchlist_count": 1,
-      "main_eligible_false_count": 1,
-      "briefing_only_count": 1,
+      "reference_only_count": 3,
+      "watchlist_count": 3,
+      "main_eligible_false_count": 3,
+      "briefing_only_count": 3,
       "duplicate_count": 0,
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
       "source_url_quality_distribution": {
-        "official_site_update_row": 2
+        "official_site_update_row": 3
       },
       "source_quality_status_summary": {
-        "allowed": 1,
-        "blocked": 1
+        "blocked": 3
       },
       "source_quality_blocker_summary": {
-        "source_gap_risk": 1,
-        "reference_only": 1
+        "source_gap_risk": 3,
+        "reference_only": 3
       },
       "selected_main_source_quality_coverage": {
         "selected_main_count": 0,
@@ -418,43 +417,45 @@
       "reddit_candidate_count": 0,
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
-      "eligible_rate": 0.5,
+      "eligible_rate": 0,
       "selection_rate": 0,
       "rendered_rate": 0,
-      "source_gap_rate": 0.5,
+      "source_gap_rate": 1,
       "noise_rate": 0,
-      "effectiveness_score": 5,
+      "effectiveness_score": 0,
       "recommendation": "REVIEW_SOURCE_OR_PARSER",
       "reasons": [
-        "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
-        "Source gap rate is high; inspect source URLs and parser extraction before changing source policy."
+        "Official or high-priority source produced no eligible candidate and at least 25% lack source evidence. Inspect the source and exclusions; source gaps alone do not establish a parser failure.",
+        "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
       "parser_failure_reasons": [],
       "top_exclusion_reasons": [
         {
           "reason": "No RSS item, no published date, no concrete release/API/behavior change detected.",
-          "count": 1
+          "count": 3
         },
         {
           "reason": "briefing_only=true",
-          "count": 1
+          "count": 3
         },
         {
           "reason": "finalSelectionEligibility=watchlist",
-          "count": 1
+          "count": 3
         },
         {
           "reason": "hasDatedEvidence=false",
-          "count": 1
+          "count": 3
         },
         {
           "reason": "main_eligible=false",
-          "count": 1
+          "count": 3
         }
       ],
       "sample_selected_urls": [],
       "sample_excluded_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
       ]
     },
     {
@@ -1661,10 +1662,10 @@
       "candidate_only": false,
       "collection_mode_hint": "release-note-watch",
       "synthetic": false,
-      "collected_count": 1,
-      "eligible_count": 1,
-      "selected_count": 1,
-      "rendered_main_count": 1,
+      "collected_count": 0,
+      "eligible_count": 0,
+      "selected_count": 0,
+      "rendered_main_count": 0,
       "source_gap_count": 0,
       "camera_relevant_raw_count": 0,
       "parser_repair_reason_count": 0,
@@ -1676,22 +1677,18 @@
       "duplicate_within_source_count": 0,
       "duplicate_across_sources_count": 0,
       "generic_noise_count": 0,
-      "source_url_quality_distribution": {
-        "project_release": 1
-      },
-      "source_quality_status_summary": {
-        "allowed": 1
-      },
+      "source_url_quality_distribution": {},
+      "source_quality_status_summary": {},
       "source_quality_blocker_summary": {},
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 1,
-        "with_source_quality_count": 1
+        "selected_main_count": 0,
+        "with_source_quality_count": 0
       },
       "main_eligible_source_quality_coverage": {
         "main_eligible_candidate_count": 0,
         "with_source_quality_count": 0
       },
-      "conditional_source_promoted_count": 1,
+      "conditional_source_promoted_count": 0,
       "conditional_source_blocked_count": 0,
       "unknown_source_quality_count": 0,
       "source_quality_field_drift_count": 0,
@@ -1700,21 +1697,19 @@
       "reddit_candidate_count": 0,
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
-      "eligible_rate": 1,
-      "selection_rate": 1,
-      "rendered_rate": 1,
+      "eligible_rate": 0,
+      "selection_rate": 0,
+      "rendered_rate": 0,
       "source_gap_rate": 0,
       "noise_rate": 0,
-      "effectiveness_score": 100,
-      "recommendation": "KEEP",
+      "effectiveness_score": 0,
+      "recommendation": "NO_RECENT_SIGNAL",
       "reasons": [
-        "Source contributed at least one rendered main article."
+        "No recent candidates were collected for this source."
       ],
       "parser_failure_reasons": [],
       "top_exclusion_reasons": [],
-      "sample_selected_urls": [
-        "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
-      ],
+      "sample_selected_urls": [],
       "sample_excluded_urls": []
     },
     {
@@ -3095,8 +3090,8 @@
       "synthetic": false,
       "collected_count": 8,
       "eligible_count": 5,
-      "selected_count": 2,
-      "rendered_main_count": 2,
+      "selected_count": 1,
+      "rendered_main_count": 1,
       "source_gap_count": 3,
       "camera_relevant_raw_count": 8,
       "parser_repair_reason_count": 0,
@@ -3119,8 +3114,8 @@
         "source_gap_risk": 3
       },
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 2,
-        "with_source_quality_count": 2
+        "selected_main_count": 1,
+        "with_source_quality_count": 1
       },
       "main_eligible_source_quality_coverage": {
         "main_eligible_candidate_count": 3,
@@ -3136,11 +3131,11 @@
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
       "eligible_rate": 0.625,
-      "selection_rate": 0.4,
+      "selection_rate": 0.2,
       "rendered_rate": 1,
       "source_gap_rate": 0.375,
       "noise_rate": 0,
-      "effectiveness_score": 62.5,
+      "effectiveness_score": 57.5,
       "recommendation": "REVIEW_SOURCE_OR_PARSER",
       "reasons": [
         "Source gap candidates may indicate source URL, dated evidence, or parser repair work.",
@@ -3166,8 +3161,7 @@
         }
       ],
       "sample_selected_urls": [
-        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
-        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
+        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
       ],
       "sample_excluded_urls": [
         "https://lore.kernel.org/linux-media/20260905030435.38105-1-calliarifelipe@gmail.com/",
@@ -3189,8 +3183,8 @@
       "synthetic": false,
       "collected_count": 8,
       "eligible_count": 7,
-      "selected_count": 0,
-      "rendered_main_count": 0,
+      "selected_count": 1,
+      "rendered_main_count": 1,
       "source_gap_count": 1,
       "camera_relevant_raw_count": 8,
       "parser_repair_reason_count": 0,
@@ -3213,12 +3207,12 @@
         "source_gap_risk": 1
       },
       "selected_main_source_quality_coverage": {
-        "selected_main_count": 0,
-        "with_source_quality_count": 0
+        "selected_main_count": 1,
+        "with_source_quality_count": 1
       },
       "main_eligible_source_quality_coverage": {
-        "main_eligible_candidate_count": 6,
-        "with_source_quality_count": 6
+        "main_eligible_candidate_count": 7,
+        "with_source_quality_count": 7
       },
       "conditional_source_promoted_count": 0,
       "conditional_source_blocked_count": 8,
@@ -3230,13 +3224,14 @@
       "reddit_cross_checked_count": 0,
       "reddit_only_blocked_count": 0,
       "eligible_rate": 0.875,
-      "selection_rate": 0,
-      "rendered_rate": 0,
+      "selection_rate": 0.1429,
+      "rendered_rate": 1,
       "source_gap_rate": 0.125,
       "noise_rate": 0,
-      "effectiveness_score": 27.5,
-      "recommendation": "KEEP_AND_MONITOR",
+      "effectiveness_score": 71.07,
+      "recommendation": "KEEP",
       "reasons": [
+        "Source contributed at least one rendered main article.",
         "Source gap candidates may indicate source URL, dated evidence, or parser repair work."
       ],
       "parser_failure_reasons": [],
@@ -3258,7 +3253,9 @@
           "count": 1
         }
       ],
-      "sample_selected_urls": [],
+      "sample_selected_urls": [
+        "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
+      ],
       "sample_excluded_urls": [
         "https://lore.kernel.org/linux-media/20260917212951.558283-1-henry.paradiz@gmail.com/"
       ]

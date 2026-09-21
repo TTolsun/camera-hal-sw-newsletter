@@ -7,9 +7,11 @@
   },
   "articles": [
     {
-      "article_identity_key": "url:https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
-      "title": "Claude Code v2.1.271",
-      "source_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me",
+      "series_identity_key": "lore-series:20260920-upstream-s5k3t2-v1-d640740f4013@proton.me",
+      "series_subject_key": "media i2c samsung s5k3t2 image sensor",
+      "title": "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "source_url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me",
       "newsletter_date": "2026-09-21",
       "newsletter_url": "newsletters/2026-09-21/index.html",
       "exposure_type": "newsletter_article",
@@ -23,6 +25,26 @@
       "exposure_count": 1,
       "exposure_types": [
         "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "title": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드 및 설정 패널 마우스 지원으로 개발 속도 향상",
+      "source_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "newsletter_date": "2026-09-21",
+      "newsletter_url": "newsletters/2026-09-21/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "retained_current_newer",
+      "exposed_at": "2026-09-21",
+      "newsletter_article_date": "2026-09-21",
+      "cooldown_until": "2026-10-12",
+      "first_exposed_at": "2026-09-21",
+      "last_exposed_at": "2026-09-21",
+      "exposure_count": 2,
+      "exposure_types": [
+        "newsletter_article",
+        "homepage_headline"
       ]
     },
     {

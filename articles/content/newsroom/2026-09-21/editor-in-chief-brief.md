@@ -1,46 +1,40 @@
 # 편집장 브리핑 - 2026-09-21
 
-## 발행 전 편집 검토
-
-생성 workflow의 품질 91점·fact-check PASS는 자동 생성 시점의 기록입니다. 발행 전 원문과 공개 본문을 대조하여 Codex의 Rust 바인딩 오기, IPU6 성능 효과 추정, Surface Pro의 Android 메타데이터·회전 비용·CTS/VTS 통과 단정을 수정했습니다. Driver 본문은 IPU6의 패치 의존 관계·기존 캡처 회귀 검증과 Surface Pro의 회전 정보 대조라는 실무 확인 항목을 제공하는 2건입니다. AI 메인 기사 3건이 먼저 배치됩니다. 아래 자동 생성 분석은 수정 전 실행 기록입니다.
-
 ## 이번 주 핵심 메시지
 
-이번 주 뉴스레터에서는 Linux 커널 미디어 서브시스템의 Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치와 Surface Pro 11의 후면 센서 방향 오류를 해결하기 위한 퀵 패치를 살펴봅니다. 또한, Claude Code 및 Codex 등 AI 기반 개발 도구의 최신 업데이트가 카메라 스택 개발 워크플로우에 미치는 영향을 분석합니다.
+이번 주 뉴스레터는 Linux 커널 미디어 서브시스템에 제안된 새로운 이미지 센서 드라이버 및 멀티 스트림 지원 패치와 더불어, 네이티브 C++ 개발 워크플로우를 혁신할 수 있는 AI 기반 코딩 어시스턴트의 최신 업데이트를 다룹니다. 특히 Samsung S5K3T2 센서 드라이버 추가와 Intel IPU6의 멀티 스트림 및 메타데이터 지원 준비 패치는 하드웨어 레벨의 통합 및 검증에 직접적인 영향을 미치며, Claude Code의 새로운 프로젝트 기능과 빠른 모드는 네이티브 HAL 개발팀의 생산성을 한 단계 끌어올릴 수 있는 기회를 제공합니다.
 
 ## 메인으로 봐야 할 기사
 
-Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안
+Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원
 
 ## Camera HAL 업무 연결 포인트
-- Intel IPU6 플랫폼 개발 담당자는 제안된 v2 패치 세트를 로컬 검증 브랜치에 적용하여 기존 단일 스트림 캡처 기능에 영향이 없는지 회귀 테스트를 수행하십시오.
-- Surface Pro 11 또는 유사 인텔 IPU 기반 기기를 개발하는 드라이버 엔지니어는 해당 DMI 퀵 패치를 적용하여 후면 카메라 방향성이 정상화되는지 확인하십시오.
-- HAL 검증 팀은 ANDROID_SENSOR_ORIENTATION 메타데이터가 드라이버의 퀵 반영 후 180도로 올바르게 매핑되는지 CTS CameraDeviceTest를 통해 검증하십시오.
-- 도구 도입 담당자는 Claude Code 베타 환경을 활용해 로컬 C++ 카메라 모듈의 정적 분석 경고 수정 및 병렬 PR 생성 워크플로우를 시험 적용해 보십시오.
-- Codex Rust 도구를 사용하는 개발자는 버전을 rust-v0.155.1로 업데이트하여 로컬 TUI 세션에서의 API 요청 안정성을 확보하십시오.
+- Samsung S5K3T2 신규 드라이버 패치(v1)를 검토하여 MIPI D-PHY 레인 설정 및 지원 해상도 테이블이 당사 사양과 일치하는지 분석한다.
+- Intel IPU6 플랫폼 담당자는 제안된 v2 패치 시리즈를 적용하여 멀티 스트림 구동 시 버퍼 큐잉 지연 및 프레임 드롭 여부를 검증한다.
+- Claude Code v2.1.271 업데이트를 적용하고, 원격 세션에서 `/fast` 명령을 사용해 C++ 네이티브 코드 분석 속도 향상 효과를 측정한다.
+- Claude Code 프로젝트 기능을 활용해 로컬 C++ HAL 코드베이스의 특정 성능 병목 구간 프로파일링 및 최적화 테스트를 시범 수행한다.
 
 ## 검증 결과 요약
 
 - 상태: PASS
 - must_fix 개수: 0
 - source gap 개수: 0
-- 의견: 모든 기사가 사실에 기반하고 출처가 명확하며, Camera HAL/Driver 엔지니어에게 실질적인 가치를 제공하는 것으로 판단됩니다. 과장된 표현 없이 구체적인 기술적 영향과 실행 항목을 잘 제시하고 있습니다.
+- 의견: 제공된 모든 기사는 사실 확인, 출처 명시, 과장되지 않은 언어 사용, 날짜 근거 측면에서 편집 정책을 준수합니다. 각 기사의 HAL/드라이버 관점 해석과 실행 항목도 구체적이고 실용적입니다. 모든 기사는 Camera HAL SW 엔지니어에게 유용하다고 판단되어 발행 가능합니다.
 
 ## 품질 게이트
-- 품질 점수: 91/100
+- 품질 점수: 92/100
 - 품질 기준: 60
 - 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2); 1pt editorial-story (briefing 3); 2pt linked-evidence-limitation (Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안); 1pt image-fallback (Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안)
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2); 1pt editorial-story (briefing 3); 1pt image-fallback (Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가); 1pt image-fallback (Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안)
 
 ## Article Structure Contract
 
 | # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |
 | ---: | --- | --- | --- | --- | --- | --- |
-| 1 | Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안 | pass | present | driver_image_pipeline, stream_buffer_metadata | present | none |
-| 2 | Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안 | pass | present | driver_image_pipeline, stream_buffer_metadata, cts_vts_its_cdd | present | none |
-| 3 | Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원 | pass | present | native_tooling_workflow, performance_latency_frame_drop | present | none |
-| 4 | Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가 | pass | present | native_tooling_workflow, cts_vts_its_cdd | present | none |
-| 5 | Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결 | pass | present | native_tooling_workflow, stream_buffer_metadata | present | none |
+| 1 | Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원 | pass | present+guarded | native_tooling_workflow | present | guardrail-only |
+| 2 | Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가 | pass | present+guarded | native_tooling_workflow | present | guardrail-only |
+| 3 | Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안 | pass | present+guarded | driver_image_pipeline | present | guardrail-only |
+| 4 | Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개 | pass | present+guarded | driver_image_pipeline, stream_buffer_metadata | present | guardrail-only |
 
 ## Stale Claim Gate
 
@@ -53,39 +47,39 @@ Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 �
 ## 후보 선택 진단
 
 - Reporter candidates: 12
-- Reporter-selected candidates: 12
-- Final input candidates: 65
+- Reporter-selected candidates: 10
+- Final input candidates: 78
 - Final eligible candidates: 12
-- Final selected articles: 5
-- Deterministic primary articles: 5
-- Selected representative groups: 5
+- Final selected articles: 4
+- Deterministic primary articles: 4
+- Selected representative groups: 4
 - Rendered groups: unknown
 - Explicitly demoted groups (editor): 0
 - Reconciliation-demoted groups: 0
-- Reserve candidates: 6
+- Reserve candidates: 7
 - Demoted candidates: unknown
 - Composition mode: NORMAL
 - Editor review required: false
-- Reporter-selected but final-excluded: 7
+- Reporter-selected but final-excluded: 6
 - direct_aosp_camera: 0
 - android: 0
 - camera_driver_image_pipeline: 2
 - android_multimedia_camera_output: 0
 - soc_platform_signal: 0
-- cpp_ai_tooling_fallback: 3
+- cpp_ai_tooling_fallback: 2
 - Primary Camera Stack: 2
 - Supporting main articles: 0
 - Forbidden main articles: 0
-- Non-fallback reviewable: 5
-- release_class_pool_size: 1
+- Non-fallback reviewable: 4
+- release_class_pool_size: 0
 - release_class_admitted: 0
-- release_class_blocked_reason: lineup_at_max
+- release_class_blocked_reason: no_eligible_candidate
 - release_class_evidence_unchecked_skips: 0
-- release_class_after_reconciliation_pool_size: 1
+- release_class_after_reconciliation_pool_size: 0
 - release_class_after_reconciliation_admitted: 0
-- release_class_after_reconciliation_blocked_reason: lineup_at_max
+- release_class_after_reconciliation_blocked_reason: no_eligible_candidate
 - republication_history_loaded: true
-- republication_history_main_articles: 27
+- republication_history_main_articles: 32
 - republication_cooldown_blocked: 2
 - evidence_unchecked_main_blocked: 0
 
@@ -95,15 +89,15 @@ Source/parser recovery hint:
 - Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
 
 주요 final exclusion reason:
-- final_selection_blocked=true (24)
-- main_eligible=false (24)
-- source_gap_risk=true (24)
-- missing dated evidence (15)
-- selection_window=unknown_not_main (13)
+- final_selection_blocked=true (34)
+- main_eligible=false (33)
+- source_gap_risk=true (33)
+- missing dated evidence (25)
+- briefing_only=true (21)
 
 Homepage Headline:
-- decision: latest_camera_hal_article
-- current_headline_key: url:https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com
+- decision: retained_current_newer
+- current_headline_key: url:https://github.com/openai/codex/releases/tag/rust-v0.155.1
 - replacement_headline_key: url:https://github.com/openai/codex/releases/tag/rust-v0.155.1
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown

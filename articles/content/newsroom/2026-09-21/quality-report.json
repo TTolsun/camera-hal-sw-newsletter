@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-09-21",
-  "score": 91,
+  "score": 92,
   "max_score": 100,
   "threshold": 60,
   "status": "PASS",
@@ -20,7 +20,7 @@
     {
       "category": "editorial-story",
       "points": 1,
-      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+      "reason": "Briefing bullet misses story structure elements: reader_perspective.",
       "location": "briefing 2",
       "blocking": false,
       "severity": "soft",
@@ -38,10 +38,10 @@
       "dedupe_key": ""
     },
     {
-      "category": "linked-evidence-limitation",
-      "points": 2,
-      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-      "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
       "blocking": false,
       "severity": "soft",
       "reason_code": "",
@@ -51,17 +51,7 @@
       "category": "image-fallback",
       "points": 1,
       "reason": "Article image uses a local fallback visual.",
-      "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
-    {
-      "category": "image-fallback",
-      "points": 1,
-      "reason": "Article image uses a local fallback visual.",
-      "location": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
+      "location": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
       "blocking": false,
       "severity": "soft",
       "reason_code": "",
@@ -71,7 +61,17 @@
       "category": "linked-evidence-limitation",
       "points": 2,
       "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-      "location": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
+      "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
       "blocking": false,
       "severity": "soft",
       "reason_code": "",
@@ -82,7 +82,190 @@
   "article_results": [
     {
       "index": 1,
-      "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
+      "headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+      "category": "cpp_ai_tooling_fallback",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Projects redesigned: from folder to conversation",
+          "url": "https://claude.com/blog/projects-redesigned"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+        "source_candidate_url": "https://claude.com/blog/projects-redesigned",
+        "source_candidate_hash": "9f00da9b39759b4690b445f9d16f1c261aa4450a900916009b82734a27bc8a3a",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "tooling_support",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": []
+    },
+    {
+      "index": 2,
+      "headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+      "category": "cpp_ai_tooling_fallback",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Claude Code v2.1.271",
+          "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+        "source_candidate_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+        "source_candidate_hash": "ba3341f9799b1e8e27294e996daf4b97a09cdf3b6d8c7bc967a7ee1764115a34",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "tooling_support",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor",
+          "url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+        "source_candidate_hash": "04d50de7e0f0b3d08bba790017bbfe98db22f3959894cc8bd5179627886d5857",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
       "category": "camera_driver_image_pipeline",
       "status": "PASS",
       "repair_action": "preserve",
@@ -96,16 +279,18 @@
         "complete": true,
         "missing_keys": [],
         "missing_required_keys": [],
-        "present_optional_keys": [],
+        "present_optional_keys": [
+          "do_not_claim"
+        ],
         "unexpected_keys": [],
         "has_limitations": false,
         "has_watch_items": false,
-        "has_do_not_claim": false,
-        "limitation_visibility": "none"
+        "has_do_not_claim": true,
+        "limitation_visibility": "guardrail-only"
       },
       "scope_count": {
-        "index": 1,
-        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
+        "index": 4,
+        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
         "source_candidate_url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
         "source_candidate_hash": "08849cae9f9a72e4e801bab702f8a4439f7479cef1c4e869cdda1d8ecddf3ff8",
         "relevance_bucket": "camera_driver_image_pipeline",
@@ -113,7 +298,6 @@
         "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": true,
         "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
         "counts_as_supporting_main_article": false,
         "counts_as_forbidden_main_article": false,
         "guardrail_impact_class": "camera_stack_source",
@@ -147,540 +331,27 @@
           "reason": "Article image uses a local fallback visual."
         }
       ]
-    },
-    {
-      "index": 2,
-      "headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "category": "camera_driver_image_pipeline",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11",
-          "url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": [],
-        "missing_required_keys": [],
-        "present_optional_keys": [],
-        "unexpected_keys": [],
-        "has_limitations": false,
-        "has_watch_items": false,
-        "has_do_not_claim": false,
-        "limitation_visibility": "none"
-      },
-      "scope_count": {
-        "index": 2,
-        "headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-        "source_candidate_url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
-        "source_candidate_hash": "0e4087ac6a83e9cb54d538966595b16a257b083484a3dddfe0e2bffcd14eb687",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      "guardrail_impact_class": "camera_stack_source",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "stream_buffer_metadata",
-        "cts_vts_its_cdd"
-      ],
-      "actionability_level": "",
-      "effective_actionability_level": "",
-      "hard_fail_reasons": [],
-      "soft_deductions": [
-        {
-          "category": "image-fallback",
-          "points": 1,
-          "reason": "Article image uses a local fallback visual."
-        }
-      ]
-    },
-    {
-      "index": 3,
-      "headline": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
-      "category": "cpp_ai_tooling_fallback",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "Projects redesigned: from folder to conversation",
-          "url": "https://claude.com/blog/projects-redesigned"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": [],
-        "missing_required_keys": [],
-        "present_optional_keys": [],
-        "unexpected_keys": [],
-        "has_limitations": false,
-        "has_watch_items": false,
-        "has_do_not_claim": false,
-        "limitation_visibility": "none"
-      },
-      "scope_count": {
-        "index": 3,
-        "headline": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
-        "source_candidate_url": "https://claude.com/blog/projects-redesigned",
-        "source_candidate_hash": "9f00da9b39759b4690b445f9d16f1c261aa4450a900916009b82734a27bc8a3a",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "tooling_support",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      "guardrail_impact_class": "tooling_support",
-      "hal_impact_axes": [
-        "native_tooling_workflow",
-        "performance_latency_frame_drop"
-      ],
-      "actionability_level": "",
-      "effective_actionability_level": "",
-      "hard_fail_reasons": [],
-      "soft_deductions": []
-    },
-    {
-      "index": 4,
-      "headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
-      "category": "cpp_ai_tooling_fallback",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "Claude Code v2.1.271",
-          "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": [],
-        "missing_required_keys": [],
-        "present_optional_keys": [],
-        "unexpected_keys": [],
-        "has_limitations": false,
-        "has_watch_items": false,
-        "has_do_not_claim": false,
-        "limitation_visibility": "none"
-      },
-      "scope_count": {
-        "index": 4,
-        "headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
-        "source_candidate_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
-        "source_candidate_hash": "ba3341f9799b1e8e27294e996daf4b97a09cdf3b6d8c7bc967a7ee1764115a34",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "tooling_support",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      "guardrail_impact_class": "tooling_support",
-      "hal_impact_axes": [
-        "native_tooling_workflow",
-        "cts_vts_its_cdd"
-      ],
-      "actionability_level": "",
-      "effective_actionability_level": "",
-      "hard_fail_reasons": [],
-      "soft_deductions": []
-    },
-    {
-      "index": 5,
-      "headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-      "category": "cpp_ai_tooling_fallback",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "Codex rust-v0.155.1",
-          "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": [],
-        "missing_required_keys": [],
-        "present_optional_keys": [],
-        "unexpected_keys": [],
-        "has_limitations": false,
-        "has_watch_items": false,
-        "has_do_not_claim": false,
-        "limitation_visibility": "none"
-      },
-      "scope_count": {
-        "index": 5,
-        "headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-        "source_candidate_url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-        "source_candidate_hash": "028ae8f2158c4c5c7625bc5a7a36be8fbdd597390a66419c1db06ade36eda2a3",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "tooling_support",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      "guardrail_impact_class": "tooling_support",
-      "hal_impact_axes": [
-        "native_tooling_workflow",
-        "stream_buffer_metadata"
-      ],
-      "actionability_level": "",
-      "effective_actionability_level": "",
-      "hard_fail_reasons": [],
-      "soft_deductions": [
-        {
-          "category": "linked-evidence-limitation",
-          "points": 2,
-          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
-        }
-      ]
     }
   ],
   "claim_validation_summary": {
     "status": "available",
     "bound_claims": 19,
-    "total_claims": 19,
+    "total_claims": 23,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
-    "available_article_count": 5,
+    "available_article_count": 4,
     "not_available_article_count": 0
   },
   "claim_results": [
     {
       "article_index": 1,
-      "article_headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-      "claim_id": "claim:ipu6:patch_proposed",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "Intel IPU6 드라이버의 멀티 스트림 및 메타데이터 지원을 준비하기 위한 v2 패치 시리즈(21개 패치)가 2026년 9월 17일에 제안되었습니다.",
-      "evidence_ids": [
-        "candidate:08849cae9f9a72e4:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:08849cae9f9a72e4:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:08849cae9f9a72e4:source-summary",
-          "resolved_evidence_id": "candidate:08849cae9f9a72e4:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 1,
-      "article_headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-      "claim_id": "claim:ipu6:patch_not_merged",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "제안된 패치들은 아직 메인라인 커널에 머지되지 않은 검토 단계의 제안입니다.",
-      "evidence_ids": [
-        "candidate:08849cae9f9a72e4:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:08849cae9f9a72e4:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:08849cae9f9a72e4:source-summary",
-          "resolved_evidence_id": "candidate:08849cae9f9a72e4:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 1,
-      "article_headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-      "claim_id": "article-1-fact-1",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "이 패치 세트는 메타데이터 시리즈에서 분리되었으며, 필요한 나머지 패치들이 머지되면 단일 소스에서 여러 스트림을 스트리밍할 수 있도록 드라이버를 준비합니다.",
-      "evidence_ids": [
-        "candidate:08849cae9f9a72e4:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:08849cae9f9a72e4:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:08849cae9f9a72e4:source-summary",
-          "resolved_evidence_id": "candidate:08849cae9f9a72e4:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "claim_id": "claim:surface:quirk_proposed",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "Microsoft Surface Pro for Business 11th Edition (Intel)의 OVTID858 후면 센서가 180도 회전된 상태로 장착되지만 0도로 보고되는 문제를 해결하기 위해 DMI 퀵 엔트리가 추가되는 패치가 2026년 9월 17일에 제안되었습니다.",
-      "evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "resolved_evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "claim_id": "claim:surface:tested",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "이 변경은 Surface Pro 11에서 테스트되었습니다.",
-      "evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "resolved_evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "claim_id": "article-2-fact-1",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "Microsoft Surface Pro for Business 11th Edition (Intel) 기기는 OV13858 후면 센서가 180도 회전되어 장착되어 있으나, SSDB에서 회전 각도를 0도로 보고하고 일치하는 _PLD가 없어 이미지가 거꾸로 표시되는 문제가 있습니다.",
-      "evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "resolved_evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "claim_id": "article-2-fact-2",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "이 문제를 해결하기 위해 OVTID858 센서에 대해 180도 회전을 보고하도록 하는 DMI 퀵 엔트리를 추가하는 패치(v2)가 2026년 9월 17일에 제안되었습니다.",
-      "evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "resolved_evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "claim_id": "article-2-fact-3",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "해당 변경 사항은 Surface Pro 11 기기에서 직접 테스트되었으며, 아직 커널 메인라인에 머지되지 않은 제안 단계입니다.",
-      "evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:0e4087ac6a83e9cb:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "resolved_evidence_id": "candidate:0e4087ac6a83e9cb:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 3,
-      "article_headline": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
-      "claim_id": "claim:claude:projects_redesigned",
+      "article_headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+      "claim_id": "cl_proj_1",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "native_tooling_workflow",
       "overclaim_risk": "low",
-      "text": "Claude Code에서 프로젝트가 재설계되어, 엔드포인트 프로파일링, 최적화 테스트, 병렬 PR 오픈 등의 작업을 대화형으로 수행할 수 있게 되었습니다.",
+      "text": "2026년 9월 17일 Claude Code의 업데이트된 프로젝트 기능이 베타로 출시되었습니다.",
       "evidence_ids": [
         "candidate:9f00da9b39759b46:source-summary"
       ],
@@ -707,14 +378,48 @@
       "issues": []
     },
     {
-      "article_index": 3,
-      "article_headline": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
-      "claim_id": "claim:claude:beta_release",
+      "article_index": 1,
+      "article_headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+      "claim_id": "cl_proj_2",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "native_tooling_workflow",
       "overclaim_risk": "low",
-      "text": "이 기능은 2026년 9월 17일부터 Claude Pro 및 Max 구독자 중 클라우드 세션을 사용하는 일부 사용자에게 베타로 제공됩니다.",
+      "text": "Claude Code 프로젝트 기능을 통해 엔드포인트 프로파일링, 최적화 테스트, 병렬 PR 생성이 가능합니다.",
+      "evidence_ids": [
+        "sx:9f00da9b39759b46:da7f739f6271:60519046e1e3e52d"
+      ],
+      "resolved_evidence_ids": [
+        "sx:9f00da9b39759b46:da7f739f6271:60519046e1e3e52d"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:9f00da9b39759b46:da7f739f6271:60519046e1e3e52d",
+          "resolved_evidence_id": "sx:9f00da9b39759b46:da7f739f6271:60519046e1e3e52d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://claude.com/blog/projects-redesigned"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+      "claim_id": "cl_proj_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "이 기능은 클라우드 세션을 사용하는 Claude Pro 및 Max 구독자에게 베타로 제공됩니다.",
       "evidence_ids": [
         "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af"
       ],
@@ -741,68 +446,510 @@
       "issues": []
     },
     {
+      "article_index": 1,
+      "article_headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+      "claim_id": "cl_proj_4",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "medium",
+      "text": "AI 코딩 도구의 최적화 기능을 활용하면 복잡한 C++ 네이티브 HAL 코드의 병목 지점 분석 시간을 단축할 수 있습니다.",
+      "evidence_ids": [
+        "candidate:9f00da9b39759b46:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:9f00da9b39759b46:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:9f00da9b39759b46:source-summary",
+          "resolved_evidence_id": "candidate:9f00da9b39759b46:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://claude.com/blog/projects-redesigned"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+      "claim_id": "article-1-fact-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "사용자는 Claude에게 각 엔드포인트를 프로파일링하고, 최적화를 테스트하며, 병렬 스레드에서 PR을 열도록 요청할 수 있습니다.",
+      "evidence_ids": [
+        "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af"
+      ],
+      "resolved_evidence_ids": [
+        "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af",
+          "resolved_evidence_id": "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://claude.com/blog/projects-redesigned"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+      "claim_id": "article-1-fact-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "API, 웹, 모바일 저장소를 연결하여 deprecated v1 엔드포인트를 제거하는 목표를 설정할 수 있습니다.",
+      "evidence_ids": [
+        "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af"
+      ],
+      "resolved_evidence_ids": [
+        "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af",
+          "resolved_evidence_id": "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://claude.com/blog/projects-redesigned"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+      "claim_id": "cl_code_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "2026년 9월 14일 Claude Code v2.1.271 버전이 릴리스되었습니다.",
+      "evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+      "claim_id": "cl_code_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "원격 세션(클라우드 및 자체 호스팅 러너)에 빠른 모드가 추가되었으며, 호스트 설정 또는 `/fast` 명령으로 활성화할 수 있습니다.",
+      "evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+      "claim_id": "cl_code_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "전체 화면 모드의 `/config` 패널에 마우스 스크롤, 클릭, 하이라이트 지원이 추가되었습니다.",
+      "evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+      "claim_id": "cl_code_4",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "빠른 모드와 마우스 지원은 원격 서버 환경에서 C++ 네이티브 코드를 개발하는 엔지니어의 도구 조작 지연 시간을 줄여줍니다.",
+      "evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+      "claim_id": "article-2-fact-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "원격 세션(클라우드 및 자체 호스팅 러너)에 빠른 모드 기능이 추가되었습니다.",
+      "evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+      "claim_id": "article-2-fact-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "no_hal_runtime_impact",
+      "overclaim_risk": "low",
+      "text": "호스트의 빠른 모드 설정 또는 세션에서 입력한 `/fast` 명령이 조직 정책에 의해 허용되는 경우 적용됩니다.",
+      "evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:ba3341f9799b1e8e:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
       "article_index": 3,
-      "article_headline": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
+      "article_headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+      "claim_id": "s5k3t2_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 9월 20일 Samsung S5K3T2 20MP 이미지 센서용 드라이버 및 바인딩 패치(v1)가 제안되었습니다.",
+      "evidence_ids": [
+        "candidate:04d50de7e0f0b3d0:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:04d50de7e0f0b3d0:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "resolved_evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+      "claim_id": "s5k3t2_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "Samsung S5K3T2 센서는 4개의 MIPI D-PHY 레인을 사용하는 20 메가픽셀 CMOS 센서입니다.",
+      "evidence_ids": [
+        "candidate:04d50de7e0f0b3d0:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:04d50de7e0f0b3d0:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "resolved_evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+      "claim_id": "s5k3t2_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 드라이버는 Xiaomi POCO F3 스마트폰에서 Qualcomm CAMSS 드라이버와 함께 작성 및 테스트되었습니다.",
+      "evidence_ids": [
+        "candidate:04d50de7e0f0b3d0:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:04d50de7e0f0b3d0:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "resolved_evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+      "claim_id": "s5k3t2_4",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "medium",
+      "text": "새로운 센서 드라이버의 등장은 향후 해당 센서를 탑재할 신규 Android 단말의 HAL 및 ISP 튜닝 작업을 위한 드라이버 기초가 됩니다.",
+      "evidence_ids": [
+        "candidate:04d50de7e0f0b3d0:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:04d50de7e0f0b3d0:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "resolved_evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
       "claim_id": "article-3-fact-1",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "no_hal_runtime_impact",
       "overclaim_risk": "low",
-      "text": "여러 저장소(API, 웹, 모바일)를 연결하여 특정 목표를 설정하고 작업을 자동화할 수 있습니다.",
+      "text": "2026년 9월 20일, Linux 미디어 메일링 리스트에 Samsung S5K3T2 이미지 센서 드라이버 및 디바이스 트리 바인딩을 추가하는 2개의 패치 시리즈(v1)가 제출되었습니다.",
       "evidence_ids": [
-        "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af"
+        "candidate:04d50de7e0f0b3d0:source-summary"
       ],
       "resolved_evidence_ids": [
-        "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af"
+        "candidate:04d50de7e0f0b3d0:source-summary"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af",
-          "resolved_evidence_id": "sx:9f00da9b39759b46:da7f739f6271:2b27e5cf173080af",
+          "evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "resolved_evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://claude.com/blog/projects-redesigned"
+        "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
       "issues": []
     },
     {
-      "article_index": 4,
-      "article_headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
-      "claim_id": "claim:claude:v2_1_271_released",
+      "article_index": 3,
+      "article_headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+      "claim_id": "article-3-fact-2",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "native_tooling_workflow",
+      "impact_level": "no_hal_runtime_impact",
       "overclaim_risk": "low",
-      "text": "Claude Code 원격 세션(클라우드 및 자체 호스팅 러너)에 빠른 모드가 추가되었으며, 전체 화면 모드의 `/config` 패널에 마우스 지원이 추가되었습니다.",
+      "text": "현재 리눅스 커널 메인라인에는 해당 스마트폰의 디바이스 트리(Device Tree)가 포함되어 있지 않아, 이번 패치 시리즈는 바인딩에 대한 실제 사용자를 추가하지는 않습니다.",
       "evidence_ids": [
-        "candidate:ba3341f9799b1e8e:source-summary"
+        "candidate:04d50de7e0f0b3d0:source-summary"
       ],
       "resolved_evidence_ids": [
-        "candidate:ba3341f9799b1e8e:source-summary"
+        "candidate:04d50de7e0f0b3d0:source-summary"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
-          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
+          "resolved_evidence_id": "candidate:04d50de7e0f0b3d0:source-summary",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
+        "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -810,237 +957,169 @@
     },
     {
       "article_index": 4,
-      "article_headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
+      "article_headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+      "claim_id": "ipu6_1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "2026년 9월 17일 Intel IPU6 드라이버의 멀티 스트림 및 메타데이터 지원 준비를 위한 21개 패치 시리즈(v2)가 제안되었습니다.",
+      "evidence_ids": [
+        "candidate:08849cae9f9a72e4:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:08849cae9f9a72e4:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:08849cae9f9a72e4:source-summary",
+          "resolved_evidence_id": "candidate:08849cae9f9a72e4:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+      "claim_id": "ipu6_2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 패치 시리즈는 나머지 필수 패치가 병합되면 단일 소스에서 여러 스트림을 스트리밍할 수 있도록 IPU6 드라이버를 준비합니다.",
+      "evidence_ids": [
+        "candidate:08849cae9f9a72e4:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:08849cae9f9a72e4:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:08849cae9f9a72e4:source-summary",
+          "resolved_evidence_id": "candidate:08849cae9f9a72e4:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+      "claim_id": "ipu6_3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 패치는 메타데이터 시리즈에서 분리되어 조기 병합이 가능하도록 구성되었으며, v1 이후 내부 수정 사항이 포함되어 있습니다.",
+      "evidence_ids": [
+        "candidate:08849cae9f9a72e4:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:08849cae9f9a72e4:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:08849cae9f9a72e4:source-summary",
+          "resolved_evidence_id": "candidate:08849cae9f9a72e4:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+      "claim_id": "ipu6_4",
+      "claim_type": "inference",
+      "status": "bound",
+      "impact_level": "stream_buffer_metadata",
+      "overclaim_risk": "medium",
+      "text": "하위 드라이버에서 멀티 스트림 및 메타데이터 지원이 강화되면 Android Camera HAL은 더 안정적인 스트림 구성과 풍부한 프레임 메타데이터를 활용할 수 있습니다.",
+      "evidence_ids": [
+        "candidate:08849cae9f9a72e4:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:08849cae9f9a72e4:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:08849cae9f9a72e4:source-summary",
+          "resolved_evidence_id": "candidate:08849cae9f9a72e4:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
+      ],
+      "bound": false,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
       "claim_id": "article-4-fact-1",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "no_hal_runtime_impact",
       "overclaim_risk": "low",
-      "text": "Claude Code v2.1.271 릴리스에서 원격 세션(클라우드 및 자체 호스팅 러너)에 빠른 모드(Fast Mode) 지원이 추가되었습니다.",
+      "text": "v1 패치 시리즈 이후 피드백을 반영한 내부 수정 사항이 포함되어 있습니다.",
       "evidence_ids": [
-        "candidate:ba3341f9799b1e8e:source-summary"
+        "candidate:08849cae9f9a72e4:source-summary"
       ],
       "resolved_evidence_ids": [
-        "candidate:ba3341f9799b1e8e:source-summary"
+        "candidate:08849cae9f9a72e4:source-summary"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
-          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
+          "evidence_id": "candidate:08849cae9f9a72e4:source-summary",
+          "resolved_evidence_id": "candidate:08849cae9f9a72e4:source-summary",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 4,
-      "article_headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
-      "claim_id": "article-4-fact-2",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "호스트의 빠른 모드 설정 또는 세션 내 `/fast` 입력이 조직 정책에서 허용하는 경우 적용됩니다.",
-      "evidence_ids": [
-        "candidate:ba3341f9799b1e8e:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:ba3341f9799b1e8e:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
-          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 4,
-      "article_headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
-      "claim_id": "article-4-fact-3",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "전체 화면 모드의 `/config` 패널에 마우스 지원이 추가되어 휠 스크롤, 클릭 값 변경, 포인터 하이라이트가 가능합니다.",
-      "evidence_ids": [
-        "candidate:ba3341f9799b1e8e:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:ba3341f9799b1e8e:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
-          "resolved_evidence_id": "candidate:ba3341f9799b1e8e:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 5,
-      "article_headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-      "claim_id": "claim:codex:rust_v0_155_1_released",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "native_tooling_workflow",
-      "overclaim_risk": "low",
-      "text": "새로운 로컬 TUI 세션에서 추론 요약 기능이 기본적으로 비활성화되어, 이를 지원하지 않는 제공업체에 의한 요청 거부 문제가 해결되었습니다.",
-      "evidence_ids": [
-        "candidate:028ae8f2158c4c5c:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:028ae8f2158c4c5c:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:028ae8f2158c4c5c:source-summary",
-          "resolved_evidence_id": "candidate:028ae8f2158c4c5c:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 5,
-      "article_headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-      "claim_id": "article-5-fact-1",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "Codex rust-v0.155.1 릴리스에서 새로운 로컬 TUI 세션의 추론 요약(Reasoning Summaries) 기능이 기본적으로 비활성화되었습니다.",
-      "evidence_ids": [
-        "candidate:028ae8f2158c4c5c:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:028ae8f2158c4c5c:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:028ae8f2158c4c5c:source-summary",
-          "resolved_evidence_id": "candidate:028ae8f2158c4c5c:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 5,
-      "article_headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-      "claim_id": "article-5-fact-2",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "이를 통해 추론 요약을 지원하지 않는 API 제공업체에 의해 요청이 거부되던 문제가 해결되었습니다.",
-      "evidence_ids": [
-        "candidate:028ae8f2158c4c5c:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:028ae8f2158c4c5c:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:028ae8f2158c4c5c:source-summary",
-          "resolved_evidence_id": "candidate:028ae8f2158c4c5c:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 5,
-      "article_headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-      "claim_id": "article-5-fact-3",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "명시적으로 설정된 추론 요약 옵션은 계속 존중됩니다. (#46467)",
-      "evidence_ids": [
-        "candidate:028ae8f2158c4c5c:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:028ae8f2158c4c5c:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:028ae8f2158c4c5c:source-summary",
-          "resolved_evidence_id": "candidate:028ae8f2158c4c5c:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
+        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -1050,119 +1129,48 @@
   "uncovered_facts": [],
   "hal_signal_quality_summary": {
     "schema_version": 1,
-    "main_article_count": 5,
-    "strong_signal_count": 3,
+    "main_article_count": 4,
+    "strong_signal_count": 2,
     "usable_signal_count": 2,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
-    "article_count_with_hal_signal_capsule": 5,
+    "article_count_with_hal_signal_capsule": 4,
     "article_count_without_hal_signal_capsule": 0,
     "main_articles_with_owner_metric_log": 0,
-    "main_articles_with_concrete_action": 5,
-    "fallback_main_article_count": 3,
+    "main_articles_with_concrete_action": 4,
+    "fallback_main_article_count": 2,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "generic_signal_hard_blocker_count": 0,
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
+      "native_tooling_workflow": 2,
       "driver_image_pipeline": 2,
-      "stream_buffer_metadata": 3,
-      "cts_vts_its_cdd": 2,
-      "native_tooling_workflow": 3,
-      "performance_latency_frame_drop": 1
+      "stream_buffer_metadata": 1
     },
     "actionability_level_counts": {
-      "measurable_test": 3,
+      "measurable_test": 2,
       "concrete_check": 2
     },
     "effective_actionability_level_counts": {
-      "measurable_test": 3,
+      "measurable_test": 2,
       "concrete_check": 2
     },
     "signal_quality_status_counts": {
-      "strong_signal": 3,
+      "strong_signal": 2,
       "usable_signal": 2
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "stream_buffer_metadata"
-      ],
-      "reader_owners": [
-        "camera_driver_owner",
-        "camera_hal_owner"
-      ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 3,
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "lore.kernel.org linux-media list (Intel IPU) (project-official, high, score 50): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "이 패치 시리즈는 아직 머지되지 않은 제안이므로, 현재 Android HAL 계약이나 동작에 직접적인 변경 사항이 있다고 단정하지 마세요.",
-        "제공된 출처 근거가 명시하지 않는 한, HAL API, CTS/VTS, Camera ITS, CDD 또는 vendor test에 대한 구체적인 영향을 주장하지 마세요."
-      ],
-      "soc_signal_type": "isp_image_pipeline",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 2,
-      "title": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "stream_buffer_metadata",
-        "cts_vts_its_cdd"
-      ],
-      "reader_owners": [
-        "camera_driver_owner",
-        "camera_hal_owner",
-        "camera_test_owner"
-      ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 4,
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "lore.kernel.org linux-media list (Intel IPU) (project-official, high, score 80): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "이 패치는 아직 머지되지 않은 제안이므로, 현재 Android HAL 계약이나 동작에 직접적인 변경 사항이 있다고 단정하지 마세요.",
-        "이 변경이 Surface Pro 11 이외의 다른 기기나 센서에 미치는 영향을 주장하지 마세요."
-      ],
-      "soc_signal_type": "isp_image_pipeline",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 3,
-      "title": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
+      "title": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
       "url": "https://claude.com/blog/projects-redesigned",
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "hal_impact_axes": [
-        "native_tooling_workflow",
-        "performance_latency_frame_drop"
+        "native_tooling_workflow"
       ],
       "reader_owners": [
         "native_tooling_owner",
@@ -1176,8 +1184,7 @@
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Claude Blog (official, medium, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "제공된 출처 근거가 명시하지 않는 한, 이 변경이 Camera HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 직접적인 영향을 미친다고 주장하지 마세요.",
-        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마세요."
+        "Claude Code의 프로젝트 기능이 Android 빌드 시스템(Soong/m)이나 CTS/VTS 검증 환경을 자동으로 대체한다고 주장해서는 안 됩니다."
       ],
       "soc_signal_type": "accelerator_camera_workload",
       "soc_signal_source_allowed": true,
@@ -1189,13 +1196,12 @@
       "hard_blocker_reason_codes": []
     },
     {
-      "index": 4,
-      "title": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
+      "index": 2,
+      "title": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
       "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
       "relevance_bucket": "cpp_ai_tooling_fallback",
       "hal_impact_axes": [
-        "native_tooling_workflow",
-        "cts_vts_its_cdd"
+        "native_tooling_workflow"
       ],
       "reader_owners": [
         "native_tooling_owner",
@@ -1209,8 +1215,7 @@
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "Claude Code Changelog (official, medium, score 56): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "제공된 출처 근거가 명시하지 않는 한, 이 변경이 Camera HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 직접적인 영향을 미친다고 주장하지 마세요.",
-        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마세요."
+        "빠른 모드가 AI 모델의 추론 정확도나 복잡한 C++ 코드 분석의 깊이를 무조건 향상시킨다고 오해해서는 안 됩니다."
       ],
       "soc_signal_type": "accelerator_camera_workload",
       "soc_signal_source_allowed": true,
@@ -1222,17 +1227,15 @@
       "hard_blocker_reason_codes": []
     },
     {
-      "index": 5,
-      "title": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "index": 3,
+      "title": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+      "url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+      "relevance_bucket": "camera_driver_image_pipeline",
       "hal_impact_axes": [
-        "native_tooling_workflow",
-        "stream_buffer_metadata"
+        "driver_image_pipeline"
       ],
       "reader_owners": [
-        "camera_hal_owner",
-        "native_tooling_owner"
+        "camera_driver_owner"
       ],
       "actionability_level": "concrete_check",
       "effective_actionability_level": "concrete_check",
@@ -1240,12 +1243,43 @@
       "signal_quality_status": "usable_signal",
       "concrete_action_signal_count": 2,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Codex Releases (official, medium, score 55): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "제공된 출처 근거가 명시하지 않는 한, 이 변경이 Camera HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 직접적인 영향을 미친다고 주장하지 마세요.",
-        "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마세요."
+        "이 패치가 아직 메인라인에 머지되지 않았으며, 디바이스 트리 바인딩의 실제 적용 예시가 메인라인에 없음을 인지해야 합니다."
       ],
-      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_driver_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (Intel IPU) (project-official, high, score 50): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치 시리즈가 Android Camera2 API나 HAL3 인터페이스 자체를 변경하는 것은 아니며, IPU6 드라이버 내부의 구조 개선 패치임을 명확히 해야 합니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -1256,76 +1290,28 @@
     }
   ],
   "metrics": {
-    "article_count": 5,
+    "article_count": 4,
     "briefing_count": 3,
     "camera_article_count": 2,
-    "legacy_regex_camera_article_count": 5,
-    "expanded_scope_article_count": 5,
+    "legacy_regex_camera_article_count": 4,
+    "expanded_scope_article_count": 4,
     "direct_aosp_camera_count": 0,
     "camera_driver_image_pipeline_count": 2,
     "android_count": 0,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 3,
+    "cpp_ai_tooling_fallback_count": 2,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_count": 2,
     "supporting_main_article_count": 0,
     "forbidden_main_article_count": 0,
     "fallback_relevance_count": 0,
-    "publishable_scope_count": 5,
+    "publishable_scope_count": 4,
     "composition_mode": "NORMAL",
     "section_count_details": [
       {
         "index": 1,
-        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-        "source_candidate_url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
-        "source_candidate_hash": "08849cae9f9a72e4e801bab702f8a4439f7479cef1c4e869cdda1d8ecddf3ff8",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      {
-        "index": 2,
-        "headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-        "source_candidate_url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
-        "source_candidate_hash": "0e4087ac6a83e9cb54d538966595b16a257b083484a3dddfe0e2bffcd14eb687",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      {
-        "index": 3,
-        "headline": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
+        "headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
         "source_candidate_url": "https://claude.com/blog/projects-redesigned",
         "source_candidate_hash": "9f00da9b39759b4690b445f9d16f1c261aa4450a900916009b82734a27bc8a3a",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -1333,7 +1319,6 @@
         "counts_as_primary_camera_topic": false,
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
         "counts_as_supporting_main_article": false,
         "counts_as_forbidden_main_article": false,
         "guardrail_impact_class": "tooling_support",
@@ -1348,8 +1333,8 @@
         "exclusion_reason_if_not_counted": ""
       },
       {
-        "index": 4,
-        "headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
+        "index": 2,
+        "headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
         "source_candidate_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
         "source_candidate_hash": "ba3341f9799b1e8e27294e996daf4b97a09cdf3b6d8c7bc967a7ee1764115a34",
         "relevance_bucket": "cpp_ai_tooling_fallback",
@@ -1357,7 +1342,6 @@
         "counts_as_primary_camera_topic": false,
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
         "counts_as_supporting_main_article": false,
         "counts_as_forbidden_main_article": false,
         "guardrail_impact_class": "tooling_support",
@@ -1372,19 +1356,18 @@
         "exclusion_reason_if_not_counted": ""
       },
       {
-        "index": 5,
-        "headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-        "source_candidate_url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-        "source_candidate_hash": "028ae8f2158c4c5c7625bc5a7a36be8fbdd597390a66419c1db06ade36eda2a3",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": false,
+        "index": 3,
+        "headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+        "source_candidate_hash": "04d50de7e0f0b3d08bba790017bbfe98db22f3959894cc8bd5179627886d5857",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
         "counts_as_soc_topic": false,
-        "counts_as_fallback_topic": false,
         "counts_as_supporting_main_article": false,
         "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "tooling_support",
+        "guardrail_impact_class": "camera_stack_source",
         "evidence_origin": "article_text",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -1392,7 +1375,30 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 4,
+        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
+        "source_candidate_hash": "08849cae9f9a72e4e801bab702f8a4439f7479cef1c4e869cdda1d8ecddf3ff8",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
       }
     ],
@@ -1401,13 +1407,13 @@
       "camera_driver_image_pipeline": 2,
       "android": 0,
       "android_supporting": 0,
-      "cpp_ai_tooling_fallback": 3,
+      "cpp_ai_tooling_fallback": 2,
       "generic_tech_watchlist": 0
     },
     "topic_tier_distribution": {
       "direct_camera": 2,
       "supporting": 0,
-      "fallback": 3,
+      "fallback": 2,
       "watchlist": 0
     },
     "topic_tier_distribution_source": "relevance_bucket",
@@ -1427,7 +1433,7 @@
         "generic_tech_watchlist"
       ]
     },
-    "ai_article_count": 4,
+    "ai_article_count": 2,
     "fact_check_status": "PASS",
     "must_fix_count": 0,
     "source_gap_count": 0,
@@ -1440,12 +1446,12 @@
     "hard_fail_count": 0,
     "soft_deduction_count": 7,
     "article_gate_counts": {
-      "PASS": 5,
+      "PASS": 4,
       "DEMOTE": 0,
       "FAIL": 0
     },
     "article_section_contract": {
-      "complete_count": 5,
+      "complete_count": 4,
       "incomplete_count": 0,
       "missing_key_counts": {
         "verified_facts": 0,
@@ -1454,194 +1460,122 @@
         "action_items": 0,
         "team_share_points": 0
       },
-      "optional_key_counts": {},
+      "optional_key_counts": {
+        "do_not_claim": 4
+      },
       "limitation_visibility_counts": {
-        "none": 5
+        "guardrail-only": 4
       },
       "summaries": [
         {
           "complete": true,
           "missing_keys": [],
           "missing_required_keys": [],
-          "present_optional_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
           "unexpected_keys": [],
           "has_limitations": false,
           "has_watch_items": false,
-          "has_do_not_claim": false,
-          "limitation_visibility": "none"
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
         },
         {
           "complete": true,
           "missing_keys": [],
           "missing_required_keys": [],
-          "present_optional_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
           "unexpected_keys": [],
           "has_limitations": false,
           "has_watch_items": false,
-          "has_do_not_claim": false,
-          "limitation_visibility": "none"
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
         },
         {
           "complete": true,
           "missing_keys": [],
           "missing_required_keys": [],
-          "present_optional_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
           "unexpected_keys": [],
           "has_limitations": false,
           "has_watch_items": false,
-          "has_do_not_claim": false,
-          "limitation_visibility": "none"
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
         },
         {
           "complete": true,
           "missing_keys": [],
           "missing_required_keys": [],
-          "present_optional_keys": [],
+          "present_optional_keys": [
+            "do_not_claim"
+          ],
           "unexpected_keys": [],
           "has_limitations": false,
           "has_watch_items": false,
-          "has_do_not_claim": false,
-          "limitation_visibility": "none"
-        },
-        {
-          "complete": true,
-          "missing_keys": [],
-          "missing_required_keys": [],
-          "present_optional_keys": [],
-          "unexpected_keys": [],
-          "has_limitations": false,
-          "has_watch_items": false,
-          "has_do_not_claim": false,
-          "limitation_visibility": "none"
+          "has_do_not_claim": true,
+          "limitation_visibility": "guardrail-only"
         }
       ]
     },
     "claim_validation_summary": {
       "status": "available",
       "bound_claims": 19,
-      "total_claims": 19,
+      "total_claims": 23,
       "derived_evidence_mapping_count": 0,
       "overclaim_risk": "low",
-      "available_article_count": 5,
+      "available_article_count": 4,
       "not_available_article_count": 0
     },
     "derived_evidence_mapping_count": 0,
     "uncovered_fact_count": 0,
     "hal_signal_quality_summary": {
       "schema_version": 1,
-      "main_article_count": 5,
-      "strong_signal_count": 3,
+      "main_article_count": 4,
+      "strong_signal_count": 2,
       "usable_signal_count": 2,
       "weak_signal_count": 0,
       "watchlist_only_count": 0,
       "blocked_source_gap_count": 0,
-      "article_count_with_hal_signal_capsule": 5,
+      "article_count_with_hal_signal_capsule": 4,
       "article_count_without_hal_signal_capsule": 0,
       "main_articles_with_owner_metric_log": 0,
-      "main_articles_with_concrete_action": 5,
-      "fallback_main_article_count": 3,
+      "main_articles_with_concrete_action": 4,
+      "fallback_main_article_count": 2,
       "android_multimedia_camera_output_count": 0,
       "soc_platform_signal_count": 0,
       "generic_signal_hard_blocker_count": 0,
       "hal_signal_hard_blocker_count": 0,
       "hard_blocker_reason_code_counts": {},
       "hal_impact_axis_counts": {
+        "native_tooling_workflow": 2,
         "driver_image_pipeline": 2,
-        "stream_buffer_metadata": 3,
-        "cts_vts_its_cdd": 2,
-        "native_tooling_workflow": 3,
-        "performance_latency_frame_drop": 1
+        "stream_buffer_metadata": 1
       },
       "actionability_level_counts": {
-        "measurable_test": 3,
+        "measurable_test": 2,
         "concrete_check": 2
       },
       "effective_actionability_level_counts": {
-        "measurable_test": 3,
+        "measurable_test": 2,
         "concrete_check": 2
       },
       "signal_quality_status_counts": {
-        "strong_signal": 3,
+        "strong_signal": 2,
         "usable_signal": 2
       }
     },
     "main_article_signal_checks": [
       {
         "index": 1,
-        "title": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-        "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "hal_impact_axes": [
-          "driver_image_pipeline",
-          "stream_buffer_metadata"
-        ],
-        "reader_owners": [
-          "camera_driver_owner",
-          "camera_hal_owner"
-        ],
-        "actionability_level": "measurable_test",
-        "effective_actionability_level": "measurable_test",
-        "actionability_upgrade_reason": "",
-        "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 3,
-        "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "lore.kernel.org linux-media list (Intel IPU) (project-official, high, score 50): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
-        "fallback_guard_notes": [
-          "이 패치 시리즈는 아직 머지되지 않은 제안이므로, 현재 Android HAL 계약이나 동작에 직접적인 변경 사항이 있다고 단정하지 마세요.",
-          "제공된 출처 근거가 명시하지 않는 한, HAL API, CTS/VTS, Camera ITS, CDD 또는 vendor test에 대한 구체적인 영향을 주장하지 마세요."
-        ],
-        "soc_signal_type": "isp_image_pipeline",
-        "soc_signal_source_allowed": true,
-        "camera_pipeline_link": "",
-        "has_hal_signal_capsule": true,
-        "hal_signal_capsule_complete": true,
-        "hal_signal_capsule_missing_keys": [],
-        "hard_blockers": [],
-        "hard_blocker_reason_codes": []
-      },
-      {
-        "index": 2,
-        "title": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-        "url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "hal_impact_axes": [
-          "driver_image_pipeline",
-          "stream_buffer_metadata",
-          "cts_vts_its_cdd"
-        ],
-        "reader_owners": [
-          "camera_driver_owner",
-          "camera_hal_owner",
-          "camera_test_owner"
-        ],
-        "actionability_level": "measurable_test",
-        "effective_actionability_level": "measurable_test",
-        "actionability_upgrade_reason": "",
-        "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 4,
-        "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "lore.kernel.org linux-media list (Intel IPU) (project-official, high, score 80): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
-        "fallback_guard_notes": [
-          "이 패치는 아직 머지되지 않은 제안이므로, 현재 Android HAL 계약이나 동작에 직접적인 변경 사항이 있다고 단정하지 마세요.",
-          "이 변경이 Surface Pro 11 이외의 다른 기기나 센서에 미치는 영향을 주장하지 마세요."
-        ],
-        "soc_signal_type": "isp_image_pipeline",
-        "soc_signal_source_allowed": true,
-        "camera_pipeline_link": "",
-        "has_hal_signal_capsule": true,
-        "hal_signal_capsule_complete": true,
-        "hal_signal_capsule_missing_keys": [],
-        "hard_blockers": [],
-        "hard_blocker_reason_codes": []
-      },
-      {
-        "index": 3,
-        "title": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
+        "title": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
         "url": "https://claude.com/blog/projects-redesigned",
         "relevance_bucket": "cpp_ai_tooling_fallback",
         "hal_impact_axes": [
-          "native_tooling_workflow",
-          "performance_latency_frame_drop"
+          "native_tooling_workflow"
         ],
         "reader_owners": [
           "native_tooling_owner",
@@ -1655,8 +1589,7 @@
         "fallback_promotion_allowed": true,
         "fallback_promotion_reason": "Claude Blog (official, medium, score 66): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
         "fallback_guard_notes": [
-          "제공된 출처 근거가 명시하지 않는 한, 이 변경이 Camera HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 직접적인 영향을 미친다고 주장하지 마세요.",
-          "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마세요."
+          "Claude Code의 프로젝트 기능이 Android 빌드 시스템(Soong/m)이나 CTS/VTS 검증 환경을 자동으로 대체한다고 주장해서는 안 됩니다."
         ],
         "soc_signal_type": "accelerator_camera_workload",
         "soc_signal_source_allowed": true,
@@ -1668,13 +1601,12 @@
         "hard_blocker_reason_codes": []
       },
       {
-        "index": 4,
-        "title": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
+        "index": 2,
+        "title": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
         "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
         "relevance_bucket": "cpp_ai_tooling_fallback",
         "hal_impact_axes": [
-          "native_tooling_workflow",
-          "cts_vts_its_cdd"
+          "native_tooling_workflow"
         ],
         "reader_owners": [
           "native_tooling_owner",
@@ -1688,8 +1620,7 @@
         "fallback_promotion_allowed": true,
         "fallback_promotion_reason": "Claude Code Changelog (official, medium, score 56): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
         "fallback_guard_notes": [
-          "제공된 출처 근거가 명시하지 않는 한, 이 변경이 Camera HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 직접적인 영향을 미친다고 주장하지 마세요.",
-          "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마세요."
+          "빠른 모드가 AI 모델의 추론 정확도나 복잡한 C++ 코드 분석의 깊이를 무조건 향상시킨다고 오해해서는 안 됩니다."
         ],
         "soc_signal_type": "accelerator_camera_workload",
         "soc_signal_source_allowed": true,
@@ -1701,17 +1632,15 @@
         "hard_blocker_reason_codes": []
       },
       {
-        "index": 5,
-        "title": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-        "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "index": 3,
+        "title": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+        "url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+        "relevance_bucket": "camera_driver_image_pipeline",
         "hal_impact_axes": [
-          "native_tooling_workflow",
-          "stream_buffer_metadata"
+          "driver_image_pipeline"
         ],
         "reader_owners": [
-          "camera_hal_owner",
-          "native_tooling_owner"
+          "camera_driver_owner"
         ],
         "actionability_level": "concrete_check",
         "effective_actionability_level": "concrete_check",
@@ -1719,12 +1648,43 @@
         "signal_quality_status": "usable_signal",
         "concrete_action_signal_count": 2,
         "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "Codex Releases (official, medium, score 55): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
         "fallback_guard_notes": [
-          "제공된 출처 근거가 명시하지 않는 한, 이 변경이 Camera HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과 또는 CTS에 직접적인 영향을 미친다고 주장하지 마세요.",
-          "릴리스 테이블 텍스트나 UI 스니펫을 배경 지식으로 대체하지 마세요."
+          "이 패치가 아직 메인라인에 머지되지 않았으며, 디바이스 트리 바인딩의 실제 적용 예시가 메인라인에 없음을 인지해야 합니다."
         ],
-        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 4,
+        "title": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+        "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_driver_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (Intel IPU) (project-official, high, score 50): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치 시리즈가 Android Camera2 API나 HAL3 인터페이스 자체를 변경하는 것은 아니며, IPU6 드라이버 내부의 구조 개선 패치임을 명확히 해야 합니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
         "soc_signal_source_allowed": true,
         "camera_pipeline_link": "",
         "has_hal_signal_capsule": true,
@@ -1741,11 +1701,11 @@
       },
       {
         "category": "image-fallback",
-        "count": 2
+        "count": 3
       },
       {
         "category": "linked-evidence-limitation",
-        "count": 2
+        "count": 1
       }
     ],
     "candidate_exclusion_summary": []

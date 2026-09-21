@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "updated_at": "2026-09-21T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-    "title": "Codex rust-v0.155.1 릴리스, 로컬 TUI 세션 추론 요약 기본 비활성화로 API 호환성 개선",
-    "summary": "AI 코딩 도구인 Codex의 Rust 바인딩 버전인 rust-v0.155.1이 릴리스되었습니다. 이번 업데이트는 로컬 TUI 세션에서 추론 요약 기능을 기본 비활성화하여 특정 API 제공업체와의 요청 거부 문제를 해결했습니다.",
-    "source_url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+    "article_identity_key": "url:https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+    "title": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드 및 설정 패널 마우스 지원으로 개발 속도 향상",
+    "summary": "2026년 9월 14일 출시된 Claude Code v2.1.271 릴리스에서는 원격 개발 환경의 성능을 극대화하는 빠른 모드와 전체 화면 설정 패널의 마우스 지원이 새롭게 추가되었습니다. 이번 업데이트는 원격 세션을 자주 사용하는 엔지니어들의 개발 마찰을 줄이는 데 초점을 맞추었습니다.",
+    "source_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
     "newsletter_date": "2026-09-21",
     "newsletter_url": "newsletters/2026-09-21/index.html",
     "selected_at": "2026-09-21",
@@ -13,7 +13,7 @@
     "current_score": 100,
     "last_scored_at": "2026-09-21",
     "date_evidence": {
-      "date": "2026-09-18T20:03:04Z",
+      "date": "2026-09-14T22:12:54Z",
       "date_field": "published_date",
       "evidence_level": "primary",
       "publish_ready_date_evidence": true
@@ -38,11 +38,11 @@
     },
     "snapshot": {
       "category": "cpp_ai_tooling_fallback",
-      "source_name": "Codex Releases"
+      "source_name": "Claude Code Changelog"
     },
-    "newsletter_article_url": "newsletters/2026-09-21/index.html#article-codex-rust-v0-155-1-tui-api",
-    "image_url": "https://opengraph.githubassets.com/60e99469eda788e15e80df021267df18b608398448e68c696b9d49d004c4bd91/openai/codex/releases/tag/rust-v0.155.1",
-    "image_alt": "Codex rust-v0.155.1 release open graph image"
+    "newsletter_article_url": "newsletters/2026-09-21/index.html#article-claude-code-v2-1-271",
+    "image_url": "https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271",
+    "image_alt": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드 및 설정 패널 마우스 지원으로 개발 속도 향상"
   },
   "headline_history": [
     {

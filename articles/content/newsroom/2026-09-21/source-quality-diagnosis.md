@@ -6,25 +6,25 @@ Date: 2026-09-21
 
 - 원본 후보 수: 40
 - 보고된 사용 가능 후보 수: 12 (선정 단계와 출처 정책의 추가 차단은 아래에서 확인)
-- Primary Camera Stack 후보 수: 8
+- Primary Camera Stack 후보 수: 10
 - Android multimedia camera output 후보 수: 0
-- 주요 진단: 파서 추출 실패, 소스 풀 부족 위험, Source discovery 중복 또는 무효
+- 주요 진단: 소스 풀 부족 위험, Source discovery 중복 또는 무효
 - 결론: 수집·분류·탐색 단계의 점검 신호가 있습니다. 이 신호만으로 특정 주제의 실제 뉴스 부족 여부를 판단할 수 없습니다.
-- 병합 레코드 / 고유 URL: 65 / 50
+- 병합 레코드 / 고유 URL: 78 / 51
 - Gemini 신규 URL: 0
-- 링크 파생 신규 URL / 발행 가능 후보: 10 / 0
-- 결정론적 선택 / 본문 반영 / hard-blocked group / 명시적 강등: 5 / 5 / 0 / 0
+- 링크 파생 신규 URL / 발행 가능 후보: 11 / 0
+- 결정론적 선택 / 본문 반영 / hard-blocked group / 명시적 강등: 4 / 4 / 0 / 0
 
 ## 진단 플래그
 
 | 진단 항목 | 내부 키 | 상태 | 근거 |
 | --- | --- | --- | --- |
 | 실제 뉴스 부족 | `actual_news_shortage` | false | 진단 신호 없음 |
-| 파서 추출 실패 | `parser_extraction_failure` | true | Gemini discovery parser extraction failures=1. |
+| 파서 추출 실패 | `parser_extraction_failure` | false | 진단 신호 없음 |
 | 소스 풀 부족 위험 | `source_gap_risk` | true | android-developers-blog has source coverage risk: source_gap_count=6. |
 | 분류 체계 누락 | `taxonomy_missing` | false | 진단 신호 없음 |
 | Fallback 기사만 남음 | `fallback_only_composition` | false | 진단 신호 없음 |
-| Source discovery 중복 또는 무효 | `duplicate_or_noop_source_discovery` | true | Gemini discovery produced 15 candidate(s) but gemini_new_unique_url_count=0. |
+| Source discovery 중복 또는 무효 | `duplicate_or_noop_source_discovery` | true | Gemini discovery produced 27 candidate(s) but gemini_new_unique_url_count=0. |
 
 ## 소스별 진단
 
@@ -33,13 +33,12 @@ Date: 2026-09-21
 | Android Developers Blog | 8 | 2 | reference_only; outside_main_window; missing_date_evidence | 소스 풀 보강 검토 |
 | lore.kernel.org linux-media list (Intel IPU) | 8 | 5 | primary_confirmation_missing; missing_date_evidence; Excluded from main/short selection because source evidence is incomplete or source-gap risk is present. | 소스 풀 보강 검토 |
 | libcamera Patchwork (patch review) | 8 | 0 | primary_confirmation_missing; reference_only; main_eligible=false | 소스 풀 보강 검토 |
-| Android Developers Latest Updates | 2 | 1 | outside_main_window; reference_only; No RSS item, no published date, no concrete release/API/behavior change detected. | 소스 풀 보강 검토 |
+| Android Developers Latest Updates | 3 | 0 | outside_main_window; reference_only; No RSS item, no published date, no concrete release/API/behavior change detected. | 소스 풀 보강 검토 |
 | Claude Code Changelog | 2 | 1 | reference_only; Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.; briefing_only=true | 소스 풀 보강 검토 |
 | Android Security Bulletin | 1 | 0 | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material.; finalSelectionEligibility=exclude; hasDatedEvidence=false | 소스 풀 보강 검토 |
 | lore.kernel.org linux-media list | 8 | 7 | primary_confirmation_missing; Excluded from main/short selection because source evidence is incomplete or source-gap risk is present.; finalSelectionEligibility=exclude | 유지하고 추적 |
 | AOSP Gerrit (camera changes under review) | 1 | 1 | outside_main_window; source_policy_blocked | 유지하고 추적 |
 | Claude Blog | 1 | 1 | 기록 없음 | 유지하고 추적 |
-| Codex Releases | 1 | 1 | 기록 없음 | 유지하고 추적 |
 | Android Compatibility Definition Document | 0 | 0 | 입력 후보 없음; 실제 뉴스 유무 미확인 | 유지하고 추적 |
 | Android Developer Newsletter | 0 | 0 | 입력 후보 없음; 실제 뉴스 유무 미확인 | 유지하고 추적 |
 | Android Developers Blog - Camera | 0 | 0 | 입력 후보 없음; 실제 뉴스 유무 미확인 | 유지하고 추적 |
@@ -50,6 +49,7 @@ Date: 2026-09-21
 | Android Supported Media Formats | 0 | 0 | 입력 후보 없음; 실제 뉴스 유무 미확인 | 유지하고 추적 |
 | Android Weekly | 0 | 0 | 입력 후보 없음; 실제 뉴스 유무 미확인 | 유지하고 추적 |
 | Media3 Release Notes | 0 | 0 | 입력 후보 없음; 실제 뉴스 유무 미확인 | 유지하고 추적 |
+| Anthropic News | 0 | 0 | 입력 후보 없음; 실제 뉴스 유무 미확인 | 유지하고 추적 |
 
 ## 후보별 날짜·정책·추출 근거
 
@@ -63,9 +63,11 @@ Date: 2026-09-21
 | aosp-gerrit-camera-changes | Fix camera lazy AIDL provider not started and present cameras removed on unplug - platform/frameworks/av | 2026-08-20 | reference | NEW | outside_main_window, source_policy_blocked | policy_locked_out_of_main |
 | android-developers-blog | Preparing your app for broader memory limits | Wed, 19 Aug 2026 19:00:00 +0000 | reference |  | outside_main_window, reference_only | source_gap_risk, reference_only |
 | android-developers-blog | Ensuring Safety in the Generative AI Ecosystem: Protecting Users from Non-Consensual Intimate Content | Tue, 25 Aug 2026 17:00:00 +0000 | reference |  | outside_main_window, reference_only | source_gap_risk, reference_only |
-| android-developers-latest-updates | CameraX Release Notes - CameraX 1.6.2 | August 26, 2026 | reference |  | outside_main_window |  |
 | android-developers-blog | AAOS SDV - Secure by Design | Mon, 24 Aug 2026 16:00:31 +0000 | reference |  | outside_main_window, reference_only | source_gap_risk, reference_only |
+| android-developers-latest-updates | 1.6.2 | August 26, 2026 | reference |  | outside_main_window, reference_only | source_gap_risk, reference_only |
+| android-developers-latest-updates | 1.3.0-beta02 | August 26, 2026 | reference |  | outside_main_window, reference_only | source_gap_risk, reference_only |
 | android-developers-latest-updates | 1.4.0-alpha07 | August 26, 2026 | reference |  | outside_main_window, reference_only | source_gap_risk, reference_only |
+| lore-linux-media-list | [PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor | 2026-09-20T14:58:26Z | primary |  | primary_confirmation_missing | cross_check_required_but_missing |
 | lore-linux-media-list | [PATCH v7 0/3] media: i2c: Add OmniVision OG0VA1B camera sensor driver | 2026-09-15T06:54:24Z | primary |  | primary_confirmation_missing | cross_check_required_but_missing |
 | lore-linux-media-list | [PATCH v4 0/2] media: i2c: Add Samsung S5KJN5 image sensor | 2026-09-14T11:10:46Z | primary |  | primary_confirmation_missing | cross_check_required_but_missing |
 | lore-linux-media-list | [PATCH 0/3] Add Vision Components MIPI Camera Module support | 2026-09-15T20:20:55Z | primary |  | primary_confirmation_missing | cross_check_required_but_missing |
@@ -73,7 +75,6 @@ Date: 2026-09-21
 | lore-linux-media-list | [PATCH 11/11] media: i2c: st-vd55g1: Support VD55G0 global-shutter image sensor | 2026-09-18T22:22:13Z | primary |  | primary_confirmation_missing | cross_check_required_but_missing |
 | lore-linux-media-list | [PATCH v2 0/5] media: qcom: camss: fixes for several cameras behind a CSI-2 bridge | 2026-09-15T12:16:09Z | primary |  | primary_confirmation_missing | cross_check_required_but_missing |
 | lore-linux-media-list | [PATCH] media: uvcvideo: add capture quirks for 1e4e:7102 | 2026-09-17T21:29:53Z | primary |  | primary_confirmation_missing | source_gap_risk, cross_check_required_but_missing |
-| lore-linux-media-list | [PATCH 0/8] media: qcom: camss: support several cameras behind a CSI-2 bridge | 2026-09-14T13:34:29Z | primary |  | primary_confirmation_missing | cross_check_required_but_missing |
 | lore-linux-media-ipu | [PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11 | 2026-09-17T14:45:51Z | primary |  | primary_confirmation_missing | cross_check_required_but_missing |
 | patchwork-libcamera-patches | [RFC,v1,01/20] libcamera: sysfs: Add devicePath() helpers | 2026-09-18 | primary |  | primary_confirmation_missing | source_gap_risk, cross_check_required_but_missing |
 | lore-linux-media-ipu | [PATCH v2 00/21] IPU6 multi-stream and metadata support preparation | 2026-09-17T11:39:33Z | primary |  | primary_confirmation_missing | cross_check_required_but_missing |
@@ -91,11 +92,14 @@ Date: 2026-09-21
 | lore-linux-media-ipu | [PATCH v2 1/3] media: ipu6: Check the remote pad before dereferencing it | 2026-09-11T19:49:24Z | fallback |  | primary_confirmation_missing | source_gap_risk, cross_check_required_but_missing |
 | lore-linux-media-ipu | [PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Ultra | 2026-09-05T03:04:57Z | fallback |  | primary_confirmation_missing | source_gap_risk, cross_check_required_but_missing |
 | claude-code-changelog | Claude Code v2.1.273 | 2026-09-15T20:23:03Z | primary |  | reference_only | source_gap_risk, reference_only |
-| android-developers-blog | Camera HAL: Fix camera lazy AIDL provider not started and present cameras removed on unplug. |  | unknown |  | missing_date_evidence, reference_only |  |
+| android-developers-blog | Camera HAL changes and updates. |  | unknown |  | missing_date_evidence, reference_only |  |
+| android-developers-blog | Release v2.1.273 · anthropics/claude-code · GitHub |  | unknown |  | missing_date_evidence, reference_only |  |
+| android-developers-blog | Release v2.1.271 · anthropics/claude-code · GitHub |  | unknown |  | missing_date_evidence, reference_only |  |
 | kernel-org-releases | https://lore.kernel.org/r/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com |  | unknown |  | missing_date_evidence |  |
 | kernel-org-releases | https://lore.kernel.org/r/20260806-sk5jn5-v3-0-0b3ac1eadf8a@oss.qualcomm.com |  | unknown |  | missing_date_evidence |  |
 | kernel-org-releases | https://lore.kernel.org/all/20260728092856.GB1494774@killaraus.ideasonboard.com/ |  | unknown |  | missing_date_evidence |  |
 | android-developers-blog | https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1 |  | unknown |  | missing_date_evidence |  |
+| kernel-org-releases | https://lore.kernel.org/r/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com |  | unknown |  | missing_date_evidence |  |
 | android-developers-blog | https://github.com/STMicroelectronics/vd55g0-linux-driver/blob/a05627b0f6d8775aa54b6fa306e91f425f2cbf9e/vd55g0_patches.h |  | unknown |  | missing_date_evidence |  |
 | kernel-org-releases | https://lore.kernel.org/all/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com/ |  | unknown |  | missing_date_evidence |  |
 | lore-linux-media-ipu | https://lore.kernel.org/linux-media/20260913153526.80287-1-lsa.uz@pm.me/ |  | unknown |  | missing_date_evidence |  |
@@ -129,11 +133,9 @@ Date: 2026-09-21
 | 소스 풀 보강 검토 | `REVIEW_SOURCE_GAP` | Android Developers Latest Updates | No RSS item, no published date, no concrete release/API/behavior change detected. | medium |
 | 소스 풀 보강 검토 | `REVIEW_SOURCE_GAP` | Claude Code Changelog | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | medium |
 | 소스 풀 보강 검토 | `REVIEW_SOURCE_GAP` | Android Security Bulletin | Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material. | medium |
-| Source discovery 중복 제거/수리 | `REPAIR_SOURCE_DISCOVERY_DUPLICATES` | 전체 | Gemini discovery produced 15 candidate(s) but gemini_new_unique_url_count=0.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=15, duplicate_discovery_gap_count=0. | medium |
+| Source discovery 중복 제거/수리 | `REPAIR_SOURCE_DISCOVERY_DUPLICATES` | 전체 | Gemini discovery produced 27 candidate(s) but gemini_new_unique_url_count=0.; Duplicate discovery signal detected: gemini_manual_duplicate_url_count=27, duplicate_discovery_gap_count=0. | medium |
 
 ## 경고
 
-| 유형 | 메시지 | Source artifact | 심각도 |
-| --- | --- | --- | --- |
-| missing_optional_artifact | articles/content/newsroom/2026-09-21/evidence-pack-summary.json not found; partial diagnosis will continue. | articles/content/newsroom/2026-09-21/evidence-pack-summary.json |  |
+_없음_
 

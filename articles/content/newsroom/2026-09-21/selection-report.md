@@ -23,18 +23,18 @@
 - shortage_reason_codes: none
 - publishable_candidate_count: 12
 - required_publishable_candidate_count: 1
-- reserve_candidate_count: 6
+- reserve_candidate_count: 7
 - required_reserve_candidate_count: 0
 - Reserve requirement: diagnostics only
 
 ## Homepage Headline
 
-- decision: latest_camera_hal_article
-- current_headline_key: url:https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com
+- decision: retained_current_newer
+- current_headline_key: url:https://github.com/openai/codex/releases/tag/rust-v0.155.1
 - replacement_headline_key: url:https://github.com/openai/codex/releases/tag/rust-v0.155.1
-- public_render_reconciled: false
-- public_rendered_headline_key: unknown
-- public_render_reconciliation_reason: unknown
+- public_render_reconciled: true
+- public_rendered_headline_key: url:https://github.com/anthropics/claude-code/releases/tag/v2.1.271
+- public_render_reconciliation_reason: selected_headline_not_rendered_in_public_issue
 - previous_stored_current_score: unknown
 - runtime_decayed_score: unknown
 - last_scored_at: unknown
@@ -52,7 +52,7 @@
 
 ## Gate Summary
 
-- non_fallback_reviewable_article_count: 5
+- non_fallback_reviewable_article_count: 4
 - primary_camera_stack_topic_count: 2
 - supporting_main_article_count: 0
 - forbidden_main_article_count: 0

@@ -173,11 +173,11 @@
         }
       ],
       "selectedImage": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aac1eaf2091cb214f764427_og_projects-redesigned.jpg",
-      "imageSource": "https://claude.com/blog/projects-redesigned",
+      "imageSource": "https://claude.com/blog",
       "imageAttribution": "Claude Blog",
-      "imageAlt": "Claude projects redesigned interface showing conversation-based workflow",
+      "imageAlt": "Claude Projects Redesigned OG Image",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "Official open graph image representing the redesigned projects feature.",
+      "imageUsageDecisionReason": "Official blog post open graph image representing the redesign.",
       "sources": [
         {
           "title": "Projects redesigned: from folder to conversation",
@@ -391,9 +391,9 @@
       "selectedImage": "https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271",
       "imageSource": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
       "imageAttribution": "Claude Code Changelog",
-      "imageAlt": "Claude Code v2.1.271 release open graph image",
+      "imageAlt": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드 및 설정 패널 마우스 지원으로 개발 속도 향상",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "Official open graph image for the release.",
+      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
       "sources": [
         {
           "title": "Claude Code v2.1.271",
@@ -426,9 +426,20 @@
         "originalUrl": "",
         "originalSrc": "",
         "usedFallback": false,
-        "reason": ""
+        "reason": "selected image candidate"
       },
-      "coverage_type": "fresh"
+      "coverage_type": "fresh",
+      "imageSelection": {
+        "reasonCode": "selected",
+        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+        "sourceUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+        "attribution": "Claude Code Changelog",
+        "licenseStatus": "unknown",
+        "validationStatus": "ok",
+        "validationSource": "candidate_metadata",
+        "candidateUrl": "https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271",
+        "exclusionEvidence": []
+      }
     },
     {
       "category": "cpp_ai_tooling_fallback",
@@ -1226,11 +1237,10 @@
     }
   ],
   "action_items": [
-    "Intel IPU6 플랫폼 개발 담당자는 제안된 v2 패치 세트를 로컬 검증 브랜치에 적용하여 기존 단일 스트림 캡처 기능에 영향이 없는지 회귀 테스트를 수행하십시오.",
-    "Surface Pro 11 (Intel) 담당자는 대상 모델·센서 식별자가 DMI 보정 조건과 일치하는지 확인한 뒤 검증 브랜치에서 패치를 시험하십시오.",
-    "대상 Surface Pro 11에서는 패치 전후 camera_sensor_rotation과 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 확인하십시오.",
-    "도구 도입 담당자는 Claude Code 프로젝트 베타에서 클라우드 실행이 가능한 작은 작업으로 병렬 PR 생성을 시험하고 브랜치 간 충돌과 테스트 결과를 검토하십시오.",
-    "Codex CLI에서 추론 요약 미지원 API의 요청 거부를 겪었다면 rust-v0.155.1의 새 로컬 TUI 세션에서 기본 설정과 명시적 설정을 나누어 재현 여부를 확인하십시오."
+    "Samsung S5K3T2 신규 드라이버 패치(v1)를 검토하여 MIPI D-PHY 레인 설정 및 지원 해상도 테이블이 당사 사양과 일치하는지 분석한다.",
+    "Intel IPU6 플랫폼 담당자는 제안된 v2 패치 시리즈를 적용하여 멀티 스트림 구동 시 버퍼 큐잉 지연 및 프레임 드롭 여부를 검증한다.",
+    "Claude Code v2.1.271 업데이트를 적용하고, 원격 세션에서 `/fast` 명령을 사용해 C++ 네이티브 코드 분석 속도 향상 효과를 측정한다.",
+    "Claude Code 프로젝트 기능을 활용해 로컬 C++ HAL 코드베이스의 특정 성능 병목 구간 프로파일링 및 최적화 테스트를 시범 수행한다."
   ],
   "references": [
     {
@@ -1252,27 +1262,29 @@
     {
       "title": "Codex rust-v0.155.1",
       "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
+    },
+    {
+      "title": "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
     }
   ],
   "explicitly_demoted_groups": [],
   "hard_blocked_groups": [],
-  "selected_group_count": 5,
-  "rendered_group_count": 5,
+  "selected_group_count": 4,
+  "rendered_group_count": 4,
   "explicitly_demoted_group_count": 0,
   "hard_blocked_group_count": 0,
   "selected_representative_group_keys": [
     "article:https://claude.com/blog/projects-redesigned",
     "article:https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
-    "article:https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-    "lore-series:20260917113923.59004-sakari.ailus@linux.intel.com",
-    "lore-series:20260917144527.24804-lsa.uz@pm.me"
+    "lore-series:20260920-upstream-s5k3t2-v1-d640740f4013@proton.me",
+    "lore-series:20260917113923.59004-sakari.ailus@linux.intel.com"
   ],
   "rendered_group_keys": [
-    "lore-series:20260917113923.59004-sakari.ailus@linux.intel.com",
-    "lore-series:20260917144527.24804-lsa.uz@pm.me",
     "article:https://claude.com/blog/projects-redesigned",
     "article:https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
-    "article:https://github.com/openai/codex/releases/tag/rust-v0.155.1"
+    "lore-series:20260920-upstream-s5k3t2-v1-d640740f4013@proton.me",
+    "lore-series:20260917113923.59004-sakari.ailus@linux.intel.com"
   ],
   "explicitly_demoted_group_keys": [],
   "hard_blocked_group_keys": [],
@@ -1286,31 +1298,31 @@
       "note": "카메라 드라이버 / 이미지 파이프라인 참고"
     },
     {
-      "title": "[PATCH 0/3] Add Vision Components MIPI Camera Module support",
-      "url": "https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-09-15",
+      "title": "[v3,01/21] ipa: libipa: fixedpoint: Shift unsigned type for scaling - Patchwork",
+      "url": "https://patchwork.libcamera.org/patch/28339/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-18",
       "note": "카메라 드라이버 / 이미지 파이프라인 참고"
     },
     {
-      "title": "[PATCH v2 0/5] media: qcom: camss: fixes for several cameras behind a CSI-2 bridge",
-      "url": "https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-09-15",
+      "title": "[v4,1/4] libcamera: property_ids_core: Drop PixelArrayOpticalBlackRectangles - Patchwork",
+      "url": "https://patchwork.libcamera.org/patch/28334/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-18",
       "note": "카메라 드라이버 / 이미지 파이프라인 참고"
     },
     {
-      "title": "[PATCH v7 0/9] media: qcom: camss: CAMSS Offline Processing Engine support",
-      "url": "https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-09-15",
+      "title": "[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11",
+      "url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "published_date": "2026-09-17",
       "note": "카메라 드라이버 / 이미지 파이프라인 참고"
     }
   ],
   "tags": [
+    "AI",
     "Driver",
     "Image Processing",
-    "AI",
     "Camera HAL",
     "Android"
   ],

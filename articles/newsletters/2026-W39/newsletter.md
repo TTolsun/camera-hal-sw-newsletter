@@ -15,9 +15,9 @@
 ## 2. Claude Code 프로젝트 기능 재설계, 대화형 프로파일링 및 병렬 PR 오픈 지원
 
 
-![Claude projects redesigned interface showing conversation-based workflow](https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aac1eaf2091cb214f764427_og_projects-redesigned.jpg)
+![Claude Projects Redesigned OG Image](https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aac1eaf2091cb214f764427_og_projects-redesigned.jpg)
 
-_이미지: [Claude Blog](https://claude.com/blog/projects-redesigned)_
+_이미지: [Claude Blog](https://claude.com/blog)_
 
 
 _Claude Blog_
@@ -43,7 +43,7 @@ AI 코딩 도구인 Claude Code의 프로젝트 관리 기능이 전면 재설�
 ## 3. Claude Code v2.1.271 릴리스, 원격 세션 빠른 모드 및 TUI 마우스 지원 개선
 
 
-![Claude Code v2.1.271 release open graph image](https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271)
+![Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드 및 설정 패널 마우스 지원으로 개발 속도 향상](https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271)
 
 _이미지: [Claude Code Changelog](https://github.com/anthropics/claude-code/releases/tag/v2.1.271)_
 
@@ -150,9 +150,9 @@ Microsoft Surface Pro 11 (Intel) 모델에서 후면 카메라 이미지가 상�
 ## 참고 / 더 읽을거리
 
 - [\[PATCH 11/11\] media: i2c: st-vd55g1: Support VD55G0 global-shutter image sensor](<https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca/>) — lore.kernel.org linux-media list (2026-09-18) · 카메라 드라이버 / 이미지 파이프라인 참고
-- [\[PATCH 0/3\] Add Vision Components MIPI Camera Module support](<https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/>) — lore.kernel.org linux-media list (2026-09-15) · 카메라 드라이버 / 이미지 파이프라인 참고
-- [\[PATCH v2 0/5\] media: qcom: camss: fixes for several cameras behind a CSI-2 bridge](<https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/>) — lore.kernel.org linux-media list (2026-09-15) · 카메라 드라이버 / 이미지 파이프라인 참고
-- [\[PATCH v7 0/9\] media: qcom: camss: CAMSS Offline Processing Engine support](<https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/>) — lore.kernel.org linux-media list (2026-09-15) · 카메라 드라이버 / 이미지 파이프라인 참고
+- [\[v3,01/21\] ipa: libipa: fixedpoint: Shift unsigned type for scaling - Patchwork](<https://patchwork.libcamera.org/patch/28339/>) — libcamera Patchwork (patch review) (2026-09-18) · 카메라 드라이버 / 이미지 파이프라인 참고
+- [\[v4,1/4\] libcamera: property_ids_core: Drop PixelArrayOpticalBlackRectangles - Patchwork](<https://patchwork.libcamera.org/patch/28334/>) — libcamera Patchwork (patch review) (2026-09-18) · 카메라 드라이버 / 이미지 파이프라인 참고
+- [\[PATCH v2\] media: ipu-bridge: Add upside-down quirk for Surface Pro 11](<https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/>) — lore.kernel.org linux-media list (Intel IPU) (2026-09-17) · 카메라 드라이버 / 이미지 파이프라인 참고
 
 ## 참고자료
 
@@ -161,3 +161,4 @@ Microsoft Surface Pro 11 (Intel) 모델에서 후면 카메라 이미지가 상�
 - [Projects redesigned: from folder to conversation](https://claude.com/blog/projects-redesigned)
 - [Claude Code v2.1.271](https://github.com/anthropics/claude-code/releases/tag/v2.1.271)
 - [Codex rust-v0.155.1](https://github.com/openai/codex/releases/tag/rust-v0.155.1)
+- [[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor](https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/T/#t)

@@ -1,24 +1,32 @@
 {
   "schema_version": 1,
   "date": "2026-09-21",
-  "generated_at": "2026-09-19T11:06:09.724Z",
+  "generated_at": "2026-09-21T14:22:06.074Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 12,
-    "hit_count": 7,
-    "miss_count": 5,
-    "by_url_hit_count": 7,
-    "by_content_hit_count": 0,
+    "hit_count": 6,
+    "miss_count": 6,
+    "by_url_hit_count": 5,
+    "by_content_hit_count": 1,
     "legacy_hit_count": 0
   },
   "reasons": [
     {
       "reason": "url-hit",
-      "count": 7
+      "count": 5
     },
     {
       "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
-      "count": 5
+      "count": 3
+    },
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 3
+    },
+    {
+      "reason": "content-hash-hit",
+      "count": 1
     }
   ],
   "entries": [
@@ -50,25 +58,25 @@
         "content_hash": "703cde40c0aad60f07f82c86b74587fd2c02a4ce5ee09e75375fe494e2f36b0c"
       },
       "hit": true,
-      "reason": "url-hit",
-      "lookup_source": "by-url",
-      "cache_record_path": "cache/news-summary/by-url/ba3341f9799b1e8e27294e996daf4b97a09cdf3b6d8c7bc967a7ee1764115a34.json"
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/703cde40c0aad60f07f82c86b74587fd2c02a4ce5ee09e75375fe494e2f36b0c.json"
     },
     {
-      "title": "Codex rust-v0.155.1",
-      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-      "source": "Codex Releases",
-      "published_date": "2026-09-18T20:03:04Z",
+      "title": "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-20T14:58:26Z",
       "cache_key": {
-        "normalized_url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-        "url_hash": "028ae8f2158c4c5c7625bc5a7a36be8fbdd597390a66419c1db06ade36eda2a3",
-        "published_date": "2026-09-18T20:03:04Z",
-        "content_hash": "e243ad4210325c1fa0988f5b11c2bffdc8f43ef4973ed372d53a32281f182473"
+        "normalized_url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me",
+        "url_hash": "04d50de7e0f0b3d08bba790017bbfe98db22f3959894cc8bd5179627886d5857",
+        "published_date": "2026-09-20T14:58:26Z",
+        "content_hash": "ac148944f7e84d7e2ebdeee0d7eb1ae36a7efc9672bd991c8d6d9e77da24dad3"
       },
-      "hit": true,
-      "reason": "url-hit",
-      "lookup_source": "by-url",
-      "cache_record_path": "cache/news-summary/by-url/028ae8f2158c4c5c7625bc5a7a36be8fbdd597390a66419c1db06ade36eda2a3.json"
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
     },
     {
       "title": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation",
@@ -113,26 +121,10 @@
         "published_date": "2026-09-15T20:20:55Z",
         "content_hash": "e59a428e6c83e36f2e51b9de514bc1af20d8d9dc324b03835158743865a34831"
       },
-      "hit": false,
-      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "[PATCH 0/8] media: qcom: camss: support several cameras behind a CSI-2 bridge",
-      "url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-09-14T13:34:29Z",
-      "cache_key": {
-        "normalized_url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com",
-        "url_hash": "28048c90bf65a59f9407f8173d2416dd38b98a67e7f6e7a9c40ca446c594ce88",
-        "published_date": "2026-09-14T13:34:29Z",
-        "content_hash": "6417905995e77c72e374db259b7e4d693135184181475eca3f29ba35f3ae69f2"
-      },
-      "hit": false,
-      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/ee8ef121bde226b9c6c39d3a168d566a5889d775b12cdfb903530ec2f1abbe39.json"
     },
     {
       "title": "[PATCH v2 0/5] media: qcom: camss: fixes for several cameras behind a CSI-2 bridge",
@@ -199,20 +191,36 @@
       "cache_record_path": "cache/news-summary/by-url/54a6dcb1c5efcb27711222141e72352b7b900f89cea6f452d4c8d834ce5d45da.json"
     },
     {
-      "title": "CameraX Release Notes - CameraX 1.6.2",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "source": "Android Developers Latest Updates",
-      "published_date": "August 26, 2026",
+      "title": "[v3,01/21] ipa: libipa: fixedpoint: Shift unsigned type for scaling - Patchwork",
+      "url": "https://patchwork.libcamera.org/patch/28339/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-18",
       "cache_key": {
-        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-        "url_hash": "897690273f2e33774bc16bb3f4e8541ca488b7218adfdfdfefeb5ef23d8fd28a",
-        "published_date": "August 26, 2026",
-        "content_hash": "f75abac8ae48d4b1cec6a9f59afc9baf552678a878c355decce428f318d28006"
+        "normalized_url": "https://patchwork.libcamera.org/patch/28339",
+        "url_hash": "32c24cdcc06fd6bf8c18dcd416b6688b65c5e431ada1e5bbfbed37ad9fdd48aa",
+        "published_date": "2026-09-18",
+        "content_hash": "01a61edd1b7382995ca257ddccebf0b022f9188e0cb8c585d56293156434bc9e"
       },
-      "hit": true,
-      "reason": "url-hit",
-      "lookup_source": "by-url",
-      "cache_record_path": "cache/news-summary/by-url/897690273f2e33774bc16bb3f4e8541ca488b7218adfdfdfefeb5ef23d8fd28a.json"
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v4,1/4] libcamera: property_ids_core: Drop PixelArrayOpticalBlackRectangles - Patchwork",
+      "url": "https://patchwork.libcamera.org/patch/28334/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-18",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28334",
+        "url_hash": "0d87c68b443dff6bc3c475b7ed0177c246048f4ae4ba43c6119b5a98bc6b46d9",
+        "published_date": "2026-09-18",
+        "content_hash": "a7198b1008a46ffbf4bdd28edca38bdd070ee02528ecd709009e41d12a42b998"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
     }
   ]
 }

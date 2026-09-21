@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Camera SW Newsletter - 2026-09-21</title>
-  <meta name="description" content="이번 주 뉴스레터에서는 Linux 커널 미디어 서브시스템의 Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치와 Surface Pro 11의 후면 센서 방향 오류를 해결하기 위한 보정 패치를 살펴봅니다. 또한, Claude Code 및 Codex 등 AI 기반 개발 도구의 최신 업데이트가 카메라 스택 개발 워크플로우에 미치는 영향을 분석합니다." />
+  <meta name="description" content="이번 주 뉴스레터는 Linux 커널 미디어 서브시스템에 제안된 새로운 이미지 센서 드라이버 및 멀티 스트림 지원 패치와 더불어, 네이티브 C++ 개발 워크플로우를 혁신할 수 있는 AI 기반 코딩 어시스턴트의 최신 업데이트를 다룹니다. 특히 Samsung S5K3T2 센서 드라이버 추가와 Intel IPU6의 멀티 스트림 및 메타데이터 지원 준비 패치는 하드웨어 레벨의 통합 및 검증에 직접적인 영향을 미치며, Claude Code의 새로운 프로젝트 기능과 빠른 모드는 네이티브 HAL 개발팀의 생산성을 한 단계 끌어올릴 수 있는 기회를 제공합니다." />
   <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-09-21/index.html" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Camera SW Newsletter" />
   <meta property="og:title" content="Camera SW Newsletter - 2026-09-21" />
-  <meta property="og:description" content="이번 주 뉴스레터에서는 Linux 커널 미디어 서브시스템의 Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치와 Surface Pro 11의 후면 센서 방향 오류를 해결하기 위한 보정 패치를 살펴봅니다. 또한, Claude Code 및 Codex 등 AI 기반 개발 도구의 최신 업데이트가 카메라 스택 개발 워크플로우에 미치는 영향을 분석합니다." />
+  <meta property="og:description" content="이번 주 뉴스레터는 Linux 커널 미디어 서브시스템에 제안된 새로운 이미지 센서 드라이버 및 멀티 스트림 지원 패치와 더불어, 네이티브 C++ 개발 워크플로우를 혁신할 수 있는 AI 기반 코딩 어시스턴트의 최신 업데이트를 다룹니다. 특히 Samsung S5K3T2 센서 드라이버 추가와 Intel IPU6의 멀티 스트림 및 메타데이터 지원 준비 패치는 하드웨어 레벨의 통합 및 검증에 직접적인 영향을 미치며, Claude Code의 새로운 프로젝트 기능과 빠른 모드는 네이티브 HAL 개발팀의 생산성을 한 단계 끌어올릴 수 있는 기회를 제공합니다." />
   <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-09-21/index.html" />
   <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Camera SW Newsletter - 2026-09-21" />
-  <meta name="twitter:description" content="이번 주 뉴스레터에서는 Linux 커널 미디어 서브시스템의 Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치와 Surface Pro 11의 후면 센서 방향 오류를 해결하기 위한 보정 패치를 살펴봅니다. 또한, Claude Code 및 Codex 등 AI 기반 개발 도구의 최신 업데이트가 카메라 스택 개발 워크플로우에 미치는 영향을 분석합니다." />
+  <meta name="twitter:description" content="이번 주 뉴스레터는 Linux 커널 미디어 서브시스템에 제안된 새로운 이미지 센서 드라이버 및 멀티 스트림 지원 패치와 더불어, 네이티브 C++ 개발 워크플로우를 혁신할 수 있는 AI 기반 코딩 어시스턴트의 최신 업데이트를 다룹니다. 특히 Samsung S5K3T2 센서 드라이버 추가와 Intel IPU6의 멀티 스트림 및 메타데이터 지원 준비 패치는 하드웨어 레벨의 통합 및 검증에 직접적인 영향을 미치며, Claude Code의 새로운 프로젝트 기능과 빠른 모드는 네이티브 HAL 개발팀의 생산성을 한 단계 끌어올릴 수 있는 기회를 제공합니다." />
   <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -43,72 +43,71 @@
           <span class="issue-kicker">주간 뉴스레터 2026-09-21</span>
         </div>
         <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-09-21</span></h1>
-        <p class="subtitle">이번 주 뉴스레터에서는 Linux 커널 미디어 서브시스템의 Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치와 Surface Pro 11의 후면 센서 방향 오류를 해결하기 위한 보정 패치를 살펴봅니다. 또한, Claude Code 및 Codex 등 AI 기반 개발 도구의 최신 업데이트가 카메라 스택 개발 워크플로우에 미치는 영향을 분석합니다.</p>
+        <p class="subtitle">이번 주 뉴스레터는 Linux 커널 미디어 서브시스템에 제안된 새로운 이미지 센서 드라이버 및 멀티 스트림 지원 패치와 더불어, 네이티브 C++ 개발 워크플로우를 혁신할 수 있는 AI 기반 코딩 어시스턴트의 최신 업데이트를 다룹니다. 특히 Samsung S5K3T2 센서 드라이버 추가와 Intel IPU6의 멀티 스트림 및 메타데이터 지원 준비 패치는 하드웨어 레벨의 통합 및 검증에 직접적인 영향을 미치며, Claude Code의 새로운 프로젝트 기능과 빠른 모드는 네이티브 HAL 개발팀의 생산성을 한 단계 끌어올릴 수 있는 기회를 제공합니다.</p>
         <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
       </header>
 
       <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
           <h2 id="issue-briefing-title">이번 주 3줄 브리핑</h2>
-          <ul><li>Intel IPU6 드라이버의 멀티 스트림 및 메타데이터 지원을 위한 v2 패치 시리즈가 제안되어, 하위 드라이버 레벨에서의 스트림 구성 및 메타데이터 전달 경로의 구조적 변화가 예상됩니다.</li><li>Microsoft Surface Pro 11 (Intel)의 후면 센서(OVTID858)가 180도 회전 장착되었으나 0도로 보고되는 문제를 해결하기 위한 IPU 브리지 드라이버 보정 패치가 제안되었습니다.</li><li>Claude Code 및 Codex 등 AI 코딩 도구의 프로젝트 관리 재설계 및 원격 세션 빠른 모드 추가로, 카메라 스택 개발 팀의 빌드, 테스트, 디버깅 워크플로우 효율성이 개선될 수 있습니다.</li></ul>
+          <ul><li>Linux 커널 미디어 서브시스템에 Samsung S5K3T2 20MP 이미지 센서 드라이버와 Intel IPU6 멀티 스트림 및 메타데이터 지원 준비 패치가 제안되어 하위 드라이버 스택의 기능 확장이 기대됩니다.</li><li>AI 코딩 도구인 Claude Code가 대규모 프로젝트 재설계 및 v2.1.271 릴리스를 통해 프로파일링, 최적화 테스트, 빠른 모드(/fast) 등을 지원하며 네이티브 C++ 개발 워크플로우의 효율성을 극대화합니다.</li><li>개발팀은 신규 센서의 HAL 스트림 구성 영향도를 평가하고, AI 도구를 활용한 네이티브 코드 최적화 및 병렬 PR 처리 워크플로우 도입을 2주 내에 검토해야 합니다.</li></ul>
         </div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-claude-code-pr" aria-labelledby="article-claude-code-pr-title">
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-claude-code-ai-c" aria-labelledby="article-claude-code-ai-c-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
           <span class="issue-story-category">C++ · AI Tooling</span>
         </div>
-        <h2 id="article-claude-code-pr-title" class="article-title">Claude Code 프로젝트 기능 재설계, 대화형 프로파일링 및 병렬 PR 오픈 지원</h2>
-        <p class="article-source-subtitle">Claude Blog</p>
+        <h2 id="article-claude-code-ai-c-title" class="article-title">Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 도입</h2>
+        <p class="article-source-subtitle">Claude Blog - Projects redesigned: from folder to conversation</p>
         <figure class="article-media">
-        <img class="article-image" src="https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aac1eaf2091cb214f764427_og_projects-redesigned.jpg" alt="Claude projects redesigned interface showing conversation-based workflow" loading="lazy" decoding="async">
-        <figcaption class="article-image-caption">이미지: <a href="https://claude.com/blog/projects-redesigned">Claude Blog</a></figcaption>
+        <img class="article-image" src="https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aac1eaf2091cb214f764427_og_projects-redesigned.jpg" alt="Claude Projects Redesigned OG Image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://claude.com/blog">Claude Blog</a></figcaption>
         </figure>
-        <p class="article-lead">AI 코딩 도구인 Claude Code의 프로젝트 관리 기능이 전면 재설계되었습니다. 이제 개발자는 대화형 세션을 통해 코드 프로파일링, 최적화 테스트, 병렬 PR 생성 등의 작업을 자동화할 수 있습니다.</p>
-        <p>2026년 9월 17일, Anthropic은 Claude Code의 프로젝트 관리 기능을 대화형 대화 세션 중심으로 재설계했다고 발표했습니다. 기존의 단순 폴더 매핑 방식에서 벗어나, AI가 프로젝트 전체 맥락을 이해하고 복잡한 개발 워크플로우를 주도할 수 있도록 개선되었습니다.</p>
-        <p>새로운 프로젝트 환경에서는 Claude에게 특정 엔드포인트의 성능을 프로파일링하도록 요청하거나, 코드 최적화 테스트를 수행하고, 그 결과를 바탕으로 병렬 스레드에서 여러 개의 Pull Request(PR)를 동시에 생성하도록 지시할 수 있습니다. 또한 API, 웹, 모바일 등 여러 저장소를 동시에 연결하여 &#39;v1 엔드포인트 제거&#39;와 같은 대형 리팩토링 목표를 설정하고 자동화하는 것도 가능합니다.</p>
-        <p>이 업데이트는 현재 Claude Pro 및 Max 구독자 중 Claude Code 클라우드 세션을 사용하고 기존 웹/데스크톱 프로젝트가 없는 사용자를 대상으로 베타 제공되고 있습니다. Anthropic은 향후 더 많은 사용자에게 액세스를 확대할 계획입니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>여러 저장소의 변경을 함께 검토하는 팀이라면, 클라우드에서 실행 가능한 작은 작업 하나로 병렬 PR과 테스트 흐름을 시험해 볼 수 있습니다. 각 스레드는 별도 브랜치와 저장소 사본에서 동작하므로 동일 코드 수정 시에는 병합 충돌 검토가 필요합니다. 로컬 장비·사내망에 의존하는 HAL 빌드나 센서 검증이 클라우드에서 그대로 실행된다는 의미는 아닙니다.</p></div>
+        <p class="article-lead">2026년 9월 17일, Claude Code의 프로젝트 기능이 대대적으로 재설계되어 베타 버전으로 출시되었습니다. 이번 업데이트는 단순한 폴더 관리를 넘어 엔드포인트 프로파일링, 최적화 테스트, 병렬 PR 생성 등 복잡한 개발 워크플로우를 AI가 주도적으로 해결할 수 있도록 지원합니다.</p>
+        <p>이번에 새롭게 개편된 Claude Code의 프로젝트 기능은 개발자가 여러 코드 세션을 효율적으로 관리할 수 있도록 돕습니다. 사용자는 Claude에게 각 엔드포인트를 프로파일링하고, 최적화 방안을 테스트하며, 병렬 스레드에서 여러 개의 풀 리퀘스트(PR)를 동시에 열도록 지시할 수 있습니다.</p>
+        <p>또한 API, 웹, 모바일 저장소를 유기적으로 연결하여 레거시 v1 엔드포인트를 안전하게 제거하는 것과 같은 구조적이고 장기적인 개발 목표를 설정하고 수행하는 것도 가능해졌습니다. 이는 대규모 코드베이스를 다루는 엔지니어들에게 유용한 기능입니다.</p>
+        <p>현재 이 업데이트된 프로젝트 기능은 클라우드 세션을 사용하는 Claude Pro 및 Max 구독자 중 기존 프로젝트가 없는 사용자들을 대상으로 베타 제공되고 있으며, 향후 일주일 동안 더 많은 사용자에게 순차적으로 확대 적용될 예정입니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>직접적인 Camera HAL API나 프레임워크 변경은 없으나, 복잡한 C++ 네이티브 HAL 코드의 성능 병목을 프로파일링하고 최적화 패치를 병렬로 검증하는 워크플로우에 Claude Code를 도입하여 개발 생산성을 크게 개선할 수 있습니다.</p></div>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://claude.com/blog/projects-redesigned">Projects redesigned: from folder to conversation</a></li></ul></div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-claude-code-v2-1-271-tui" aria-labelledby="article-claude-code-v2-1-271-tui-title">
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-claude-code-v2-1-271" aria-labelledby="article-claude-code-v2-1-271-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 2">02</span>
           <span class="issue-story-category">C++ · AI Tooling</span>
         </div>
-        <h2 id="article-claude-code-v2-1-271-tui-title" class="article-title">Claude Code v2.1.271 릴리스, 원격 세션 빠른 모드 및 TUI 마우스 지원 개선</h2>
-        <p class="article-source-subtitle">Claude Code Changelog</p>
+        <h2 id="article-claude-code-v2-1-271-title" class="article-title">Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드 및 설정 패널 마우스 지원으로 개발 속도 향상</h2>
+        <p class="article-source-subtitle">Claude Code Changelog - Claude Code v2.1.271</p>
         <figure class="article-media">
-        <img class="article-image" src="https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271" alt="Claude Code v2.1.271 release open graph image" loading="lazy" decoding="async">
+        <img class="article-image" src="https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271" alt="Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드 및 설정 패널 마우스 지원으로 개발 속도 향상" loading="lazy" decoding="async">
         <figcaption class="article-image-caption">이미지: <a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.271">Claude Code Changelog</a></figcaption>
         </figure>
-        <p class="article-lead">AI 터미널 코딩 도구인 Claude Code가 v2.1.271 버전으로 업데이트되었습니다. 이번 업데이트는 원격 개발 세션에서의 처리 속도를 높이는 빠른 모드와 터미널 사용자 인터페이스(TUI)의 마우스 편의성 개선을 골자로 합니다.</p>
-        <p>2026년 9월 14일 배포된 Claude Code v2.1.271 버전에서는 클라우드 및 자체 호스팅 러너를 포함한 원격 세션(Remote sessions)에서 작동하는 &#39;빠른 모드(Fast Mode)&#39;가 새롭게 도입되었습니다. 호스트의 빠른 모드 설정이 활성화되어 있거나 세션 내에서 `/fast` 명령을 입력하면, 조직의 보안 및 사용 정책이 허용하는 범위 내에서 더 신속한 AI 응답을 받아볼 수 있습니다.</p>
-        <p>또한, 터미널 환경에서 설정을 편리하게 변경할 수 있도록 전체 화면 모드의 `/config` 패널에 마우스 지원이 추가되었습니다. 이제 개발자는 마우스 휠을 사용해 설정 목록을 스크롤하고, 원하는 설정 값을 클릭하여 즉시 변경할 수 있으며, 마우스 포인터가 위치한 행이 시각적으로 강조 표시되어 직관적인 조작이 가능합니다.</p>
-        <p>이번 마이너 업데이트는 터미널 기반의 AI 개발 환경에서 원격 컴퓨팅 자원을 활용하는 개발자들의 작업 효율성을 극대화하고, 인터랙티브한 설정 변경 과정에서의 사용자 경험을 개선하는 데 초점을 맞추었습니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>직접적인 HAL 동작 변화는 없으나, 대규모 빌드 서버나 원격 자체 호스팅 러너 환경에서 C++ 카메라 스택 코드를 분석하고 디버깅하는 엔지니어들에게 유용합니다. 원격 세션의 빠른 모드를 활용하면 복잡한 빌드 오류 로그 분석이나 정적 분석 결과 요약 시 대기 시간을 줄일 수 있어, 디버깅 워크플로우의 연속성을 유지하는 데 도움이 됩니다.</p></div>
+        <p class="article-lead">2026년 9월 14일 출시된 Claude Code v2.1.271 릴리스에서는 원격 개발 환경의 성능을 극대화하는 빠른 모드와 전체 화면 설정 패널의 마우스 지원이 새롭게 추가되었습니다. 이번 업데이트는 원격 세션을 자주 사용하는 엔지니어들의 개발 마찰을 줄이는 데 초점을 맞추었습니다.</p>
+        <p>이번 릴리스의 핵심은 클라우드 및 자체 호스팅 러너를 포함한 원격 세션에 도입된 &#39;빠른 모드(Fast Mode)&#39;입니다. 호스트의 빠른 모드 설정이 활성화되어 있거나, 세션 내에서 직접 `/fast` 명령을 입력하면 빠른 모드가 적용됩니다. 단, 이는 조직의 보안 및 사용 정책에서 허용하는 경우에만 작동합니다.</p>
+        <p>또한 전체 화면 모드에서 제공되는 `/config` 패널의 사용성이 크게 개선되었습니다. 기존 키보드 중심 조작에 더해 마우스 지원이 추가되어, 마우스 휠을 통한 설정 목록 스크롤, 클릭을 통한 설정 값 변경, 포인터가 위치한 행의 하이라이트 표시 등이 가능해졌습니다.</p>
+        <p>이러한 변화는 원격 서버 환경에서 대규모 C++ 코드베이스를 분석하고 디버깅하는 엔지니어들이 도구 설정 변경이나 코드 생성 요청 시 겪는 지연 시간을 줄이고 작업 흐름을 매끄럽게 유지하는 데 기여합니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>원격 빌드 서버나 자체 호스팅 러너 환경에서 C++ 네이티브 HAL 코드를 개발하는 엔지니어들은 v2.1.271의 빠른 모드(/fast)와 마우스 기반 설정 제어를 활용해 도구 조작 및 코드 분석 대기 시간을 단축할 수 있습니다.</p></div>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.271">Claude Code v2.1.271</a></li></ul></div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-codex-rust-v0-155-1-tui-api" aria-labelledby="article-codex-rust-v0-155-1-tui-api-title">
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-samsung-s5k3t2-20mp-linux" aria-labelledby="article-samsung-s5k3t2-20mp-linux-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 3">03</span>
-          <span class="issue-story-category">C++ · AI Tooling</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
         </div>
-        <h2 id="article-codex-rust-v0-155-1-tui-api-title" class="article-title">Codex rust-v0.155.1 릴리스, 로컬 TUI 세션 추론 요약 기본 비활성화로 API 호환성 개선</h2>
-        <p class="article-source-subtitle">Codex Releases</p>
+        <h2 id="article-samsung-s5k3t2-20mp-linux-title" class="article-title">Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 패치 제안</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list - [PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor</p>
         <figure class="article-media">
-        <img class="article-image" src="https://opengraph.githubassets.com/60e99469eda788e15e80df021267df18b608398448e68c696b9d49d004c4bd91/openai/codex/releases/tag/rust-v0.155.1" alt="Codex rust-v0.155.1 release open graph image" loading="lazy" decoding="async">
-        <figcaption class="article-image-caption">이미지: <a href="https://github.com/openai/codex/releases/tag/rust-v0.155.1">Codex Releases</a></figcaption>
+        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 패치 제안 image" loading="lazy" decoding="async">
         </figure>
-        <p class="article-lead">Codex CLI의 rust-v0.155.1 릴리스는 새 로컬 TUI 세션에서 추론 요약을 기본 비활성화합니다. 추론 요약을 지원하지 않는 API 제공업체의 요청 거부를 해결하며, 명시적으로 지정한 설정은 유지합니다.</p>
-        <p>2026년 9월 18일 배포된 Codex rust-v0.155.1 버전에서는 로컬 터미널 사용자 인터페이스(TUI) 세션을 시작할 때 추론 요약(Reasoning Summaries) 기능이 기본적으로 비활성화되도록 변경되었습니다. 기존에는 이 기능이 기본 활성화되어 있어, 추론 요약을 지원하지 않는 일부 LLM API 제공업체를 사용할 때 요청이 비정상적으로 거부되는 현상이 발생해 왔습니다.</p>
-        <p>이번 조치를 통해 개발자는 추가적인 설정 없이도 다양한 API 백엔드와 안정적으로 통신할 수 있게 되었습니다. 다만, 사용자가 명시적으로 추론 요약 기능을 활성화하도록 설정한 경우에는 해당 설정이 계속 존중되어 정상 작동합니다. (PR #46467)</p>
-        <p>이번 릴리스는 로컬 개발 환경에서 AI 코딩 도구를 활용할 때 발생할 수 있는 호환성 병목을 제거하고, 다양한 모델 제공업체와의 연동 안정성을 극대화하는 데 기여합니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>다른 API 제공업체와 Codex CLI를 연결해 코드 분석을 수행하다 요청 거부를 겪었다면, 새 로컬 TUI 세션의 추론 요약 설정을 확인할 수 있습니다. 업데이트 후 기본 설정과 명시적으로 활성화한 설정을 구분해 재현 여부를 점검하세요. 이번 수정은 추론 요약 지원 여부에 관한 것으로, 모든 API 호환성이나 오프라인 동작을 보장하지는 않습니다.</p></div>
-        <div class="source-list"><strong>출처</strong><ul><li><a href="https://github.com/openai/codex/releases/tag/rust-v0.155.1">Codex rust-v0.155.1</a></li></ul></div>
+        <p class="article-lead">2026년 9월 20일, Linux 미디어 서브시스템 메일링 리스트에 Samsung S5K3T2 20 메가픽셀 CMOS 이미지 센서를 지원하기 위한 신규 드라이버 및 디바이스 트리 바인딩 패치 시리즈가 제안되었습니다. 이번 패치는 해당 센서를 탑재한 모바일 기기의 업스트림 지원을 위한 중요한 첫걸음입니다.</p>
+        <p>제안된 패치 시리즈는 Samsung S5K3T2 이미지 센서의 하드웨어 특성을 제어하기 위한 드라이버 코드를 담고 있습니다. 이 센서는 20 메가픽셀의 고해상도를 지원하며, 데이터 전송을 위해 4개의 MIPI D-PHY 레인을 사용하도록 설계되었습니다.</p>
+        <p>드라이버 개발 및 검증은 Xiaomi POCO F3 스마트폰의 전면 카메라 하드웨어를 대상으로 진행되었으며, Qualcomm의 CAMSS 드라이버와 연동하여 정상 작동하는지 테스트를 마쳤습니다. 다만, 현재 리눅스 커널 메인라인에는 해당 스마트폰의 디바이스 트리(Device Tree)가 병합되어 있지 않아, 이번 패치 시리즈 자체에는 바인딩을 직접 사용하는 장치 노드가 포함되지 않았습니다.</p>
+        <p>이번 드라이버 제안은 향후 동일한 센서를 채택하는 신규 Android 단말 개발 시, 커널 레이어에서의 센서 초기화, 레지스터 제어, 해상도 및 프레임 레이트 설정 등의 공수를 크게 줄여줄 것으로 기대됩니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>직접적인 HAL 변경은 없으나, 20MP 고해상도 센서 통합 시 필요한 4레인 MIPI D-PHY 대역폭 설정 및 V4L2 서브디바이스 포맷 협상 방식을 커널 드라이버 수준에서 사전 검증할 수 있는 참고 자료가 확보되었습니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/">[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/T/#t">전체 패치 시리즈</a></li></ul></div>
       </section>
 
       <section class="section issue-story issue-section article-card story-article has-image" id="article-intel-ipu6-v2" aria-labelledby="article-intel-ipu6-v2-title">
@@ -116,45 +115,22 @@
           <span class="issue-story-number" aria-label="Article 4">04</span>
           <span class="issue-story-category">Camera Driver · ISP</span>
         </div>
-        <h2 id="article-intel-ipu6-v2-title" class="article-title">Intel IPU6 드라이버, 멀티 스트림 및 메타데이터 지원을 위한 v2 패치 시리즈 제안</h2>
-        <p class="article-source-subtitle">lore.kernel.org linux-media list (Intel IPU)</p>
+        <h2 id="article-intel-ipu6-v2-title" class="article-title">Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 공개</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list (Intel IPU) - [PATCH v2 00/21] IPU6 multi-stream and metadata support preparation</p>
         <figure class="article-media">
-        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Intel IPU6 드라이버, 멀티 스트림 및 메타데이터 지원을 위한 v2 패치 시리즈 제안 image" loading="lazy" decoding="async">
+        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 공개 image" loading="lazy" decoding="async">
         </figure>
-        <p class="article-lead">Intel IPU6 드라이버의 멀티 스트림·메타데이터 지원을 준비하는 21개 패치의 v2 시리즈가 제안되었습니다. 후속 패치와 함께 단일 소스의 여러 스트림을 처리하기 위한 준비 작업이며, 이 시리즈만으로 기능이 완성되었다는 발표는 아닙니다.</p>
-        <p>2026년 9월 17일, Intel의 Sakari Ailus는 IPU6 드라이버가 단일 소스에서 멀티 스트림을 스트리밍하고 메타데이터를 지원할 수 있도록 준비하는 v2 패치 시리즈(총 21개 패치)를 제안했습니다. 이 패치 세트는 기존의 메타데이터 시리즈에서 조기 머지가 가능한 부분을 분리하여 구성한 것입니다.</p>
-        <p>작성자는 메타데이터 시리즈에서 먼저 병합할 수 있는 부분을 분리했다고 설명합니다. 필요한 나머지 패치가 병합되면 단일 소스에서 여러 스트림을 처리할 수 있도록 준비하는 것이 목적이며, 앞서 제안한 메타데이터 준비 시리즈에 의존할 가능성도 언급했습니다.</p>
-        <p>다만, 이 패치 시리즈는 현재 메일링 리스트에서 검토 중인 제안 단계이며 아직 커널 메인라인에 머지되지 않았습니다. 실제 멀티 스트림 동작을 완전히 구현하기 위해서는 추가적인 메타데이터 및 스트림 제어 패치들의 병합이 필요하므로, 드라이버 통합 팀은 패치 진행 상황을 지속적으로 모니터링해야 합니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>IPU6 변경을 검토하는 팀은 이 시리즈와 후속 메타데이터 패치의 의존 관계를 먼저 확인하고, 백포트 전후의 기존 단일 스트림 캡처가 유지되는지 회귀 검증하는 것이 유용합니다. 여러 스트림의 동작 확인은 필요한 후속 패치까지 포함한 구성에서 진행해야 합니다. 제안문은 Android HAL3 API 변경, YUV/RAW 동시 지원 완성, 버퍼 지연이나 성능 개선 수치를 보장하지 않습니다.</p></div>
+        <p class="article-lead">2026년 9월 17일, Intel IPU6 드라이버가 단일 카메라 소스에서 여러 스트림을 동시에 처리하고 프레임 메타데이터를 지원할 수 있도록 준비하는 21개의 패치 시리즈(v2)가 제안되었습니다. 이번 변경은 향후 고성능 카메라 파이프라인 구현을 위한 핵심 디딤돌이 될 것입니다.</p>
+        <p>이번에 공개된 패치 시리즈는 기존의 메타데이터 지원 시리즈에서 조기 병합이 가능한 부분들을 분리하여 재구성한 것입니다. 주요 목적은 향후 추가 패치들이 병합되었을 때, IPU6 드라이버가 단일 물리 센서 소스로부터 멀티 스트림을 안정적으로 캡처할 수 있도록 드라이버 내부 구조를 선제적으로 개선하는 것입니다.</p>
+        <p>v1 패치 시리즈 제안 이후 커뮤니티 피드백을 반영하여 내부적인 수정 사항들이 적용되었으며, 메타데이터 지원을 위한 버퍼 및 스트림 관리 로직의 정비가 포함되었습니다. 이는 드라이버의 안정성을 높이고 향후 기능 확장 시 발생할 수 있는 병목을 예방하는 데 초점을 맞추고 있습니다.</p>
+        <p>Intel IPU6 하드웨어를 사용하는 플랫폼 개발팀에게 이번 패치는 동시 프리뷰, 비디오 녹화, 이미지 분석 등 복잡한 멀티 스트림 시나리오를 구현하고, 각 프레임에 정확한 메타데이터를 매핑하여 Android Camera HAL 레이어로 전달하는 성능을 개선하는 데 중요한 기반이 될 것입니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>IPU6 기반 플랫폼에서 단일 소스 멀티 스트림 구성 시 발생할 수 있는 버퍼 관리 및 메타데이터 전달 지연을 하위 드라이버 레이어에서 선제적으로 최적화할 수 있는 구조적 개선이 이루어지고 있습니다.</p></div>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/">[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation</a> — <a href="https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/T/#t">전체 패치 시리즈</a></li></ul></div>
-      </section>
-
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-microsoft-surface-pro-11-dmi" aria-labelledby="article-microsoft-surface-pro-11-dmi-title">
-        <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 5">05</span>
-          <span class="issue-story-category">Camera Driver · ISP</span>
-        </div>
-        <h2 id="article-microsoft-surface-pro-11-dmi-title" class="article-title">Microsoft Surface Pro 11 후면 카메라 거꾸로 출력되는 현상 해결을 위한 DMI 보정 패치 제안</h2>
-        <p class="article-source-subtitle">lore.kernel.org linux-media list (Intel IPU)</p>
-        <figure class="article-media">
-        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="Microsoft Surface Pro 11 후면 카메라 거꾸로 출력되는 현상 해결을 위한 DMI 보정 패치 제안 image" loading="lazy" decoding="async">
-        </figure>
-        <p class="article-lead">Microsoft Surface Pro 11 (Intel) 모델에서 후면 카메라 이미지가 상하가 뒤집혀 출력되는 문제를 해결하기 위해, 카메라 드라이버에 DMI 기반의 180도 회전 장치별 보정(quirk)을 추가하는 패치가 제안되었습니다.</p>
-        <p>최근 제안된 Linux 커널 미디어 패치에 따르면, Microsoft Surface Pro for Business 11th Edition (Intel) 모델은 OV13858 후면 카메라 센서가 물리적으로 180도 회전되어 장착되어 있습니다. 그러나 시스템의 SSDB 데이터에는 회전 각도가 0도로 잘못 기록되어 있고, 이를 보완할 ACPI _PLD 정보도 누락되어 있어 드라이버가 센서 방향을 올바르게 인식하지 못하는 결함이 있었습니다.</p>
-        <p>이로 인해 별도의 보정이 없으면 카메라 프리뷰 및 캡처 이미지가 거꾸로(upside down) 표시되는 현상이 발생합니다. 이를 해결하기 위해 개발자 lsa.uz@pm.me는 Intel IPU 브리지 드라이버에 해당 모델을 식별하는 DMI 보정 엔트리를 추가하여, OVTID858 센서의 회전 각도를 180도로 강제 보고하도록 하는 패치를 2026년 9월 17일에 제안했습니다.</p>
-        <p>제안자는 대상 기기에서 camera_sensor_rotation이 180으로 읽히고 libcamera의 Rotation 값도 180으로 보고되는 것을 확인했다고 설명합니다. 이는 Linux 드라이버가 보고하는 회전 정보의 검증 결과입니다. 패치를 적용할 때는 대상 모델·센서 식별자와 사용 중인 커널에 해당 변경이 포함됐는지를 별도로 확인해야 합니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>센서 방향 오류를 조사할 때 펌웨어의 SSDB·_PLD 정보와 실제 장착 방향을 대조하는 사례로 활용할 수 있습니다. 해당 Surface Pro 11 (Intel) 모델에서는 패치 전후의 camera_sensor_rotation과 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 함께 확인하세요. 이 패치만으로 Android SENSOR_ORIENTATION 매핑, GPU/CPU 회전 비용 제거 또는 CTS/VTS 통과가 보장되지는 않습니다.</p></div>
-        <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/">[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11</a> — <a href="https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/T/#t">전체 패치 시리즈</a></li></ul></div>
-      </section>
-
-      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
-        <h2 id="issue-reference-articles-title">참고 · 더 읽을거리</h2>
-        <ul class="reference-articles-list"><li><a href="https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca/">[PATCH 11/11] media: i2c: st-vd55g1: Support VD55G0 global-shutter image sensor</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-18) · 카메라 드라이버 / 이미지 파이프라인 참고</span></li><li><a href="https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/">[PATCH 0/3] Add Vision Components MIPI Camera Module support</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-15) · 카메라 드라이버 / 이미지 파이프라인 참고</span></li><li><a href="https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/">[PATCH v2 0/5] media: qcom: camss: fixes for several cameras behind a CSI-2 bridge</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-15) · 카메라 드라이버 / 이미지 파이프라인 참고</span></li><li><a href="https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/">[PATCH v7 0/9] media: qcom: camss: CAMSS Offline Processing Engine support</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-15) · 카메라 드라이버 / 이미지 파이프라인 참고</span></li></ul>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">참고자료</h2>
-        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/">[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation</a> — <a href="https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/T/#t">전체 패치 시리즈</a></li><li><a href="https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/">[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11</a> — <a href="https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/T/#t">전체 패치 시리즈</a></li><li><a href="https://claude.com/blog/projects-redesigned">Projects redesigned: from folder to conversation</a></li><li><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.271">Claude Code v2.1.271</a></li><li><a href="https://github.com/openai/codex/releases/tag/rust-v0.155.1">Codex rust-v0.155.1</a></li></ul></div>
+        <div class="reference-list"><ul><li><a href="https://claude.com/blog/projects-redesigned">Projects redesigned: from folder to conversation</a></li><li><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.271">Claude Code v2.1.271</a></li><li><a href="https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/">[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/T/#t">전체 패치 시리즈</a></li><li><a href="https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/">[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation</a> — <a href="https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/T/#t">전체 패치 시리즈</a></li></ul></div>
       </section>
 
       <nav class="issue-footer-navigation" aria-label="이슈 하단 이동">

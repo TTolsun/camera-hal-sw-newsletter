@@ -2,11 +2,11 @@
   {
     "attempt": 1,
     "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
-    "score": 91,
+    "score": 92,
     "threshold": 60,
     "status": "PASS",
-    "rendered_main_article_count": 5,
-    "locked_article_count": 5,
+    "rendered_main_article_count": 4,
+    "locked_article_count": 4,
     "demoted_article_count": 0,
     "reserve_pool_opened": false,
     "reserve_open_reason": "",
@@ -28,7 +28,7 @@
       {
         "category": "editorial-story",
         "points": 1,
-        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "reason": "Briefing bullet misses story structure elements: reader_perspective.",
         "location": "briefing 2",
         "blocking": false,
         "severity": "soft",
@@ -46,10 +46,10 @@
         "dedupe_key": ""
       },
       {
-        "category": "linked-evidence-limitation",
-        "points": 2,
-        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-        "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -59,17 +59,7 @@
         "category": "image-fallback",
         "points": 1,
         "reason": "Article image uses a local fallback visual.",
-        "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-        "blocking": false,
-        "severity": "soft",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "image-fallback",
-        "points": 1,
-        "reason": "Article image uses a local fallback visual.",
-        "location": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
+        "location": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -79,7 +69,17 @@
         "category": "linked-evidence-limitation",
         "points": 2,
         "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-        "location": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
+        "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -87,18 +87,16 @@
       }
     ],
     "selected_article_headlines": [
-      "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-      "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
-      "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
-      "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결"
+      "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+      "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+      "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+      "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개"
     ],
     "locked_article_headlines": [
-      "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-      "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-      "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
-      "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
-      "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결"
+      "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
+      "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
+      "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+      "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개"
     ],
     "source_gap_sections": [],
     "demoted_sections": [],
@@ -106,31 +104,7 @@
     "locked_sections": [
       {
         "index": 1,
-        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "urls": [
-          "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
-        ],
-        "source_titles": [
-          "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation"
-        ]
-      },
-      {
-        "index": 2,
-        "headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "urls": [
-          "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
-        ],
-        "source_titles": [
-          "[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11"
-        ]
-      },
-      {
-        "index": 3,
-        "headline": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
+        "headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
         "category": "cpp_ai_tooling_fallback",
         "relevance_bucket": "cpp_ai_tooling_fallback",
         "urls": [
@@ -141,8 +115,8 @@
         ]
       },
       {
-        "index": 4,
-        "headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
+        "index": 2,
+        "headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
         "category": "cpp_ai_tooling_fallback",
         "relevance_bucket": "cpp_ai_tooling_fallback",
         "urls": [
@@ -153,22 +127,20 @@
         ]
       },
       {
-        "index": 5,
-        "headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "index": 3,
+        "headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
         "urls": [
-          "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
+          "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
         ],
         "source_titles": [
-          "Codex rust-v0.155.1"
+          "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor"
         ]
-      }
-    ],
-    "failed_sections": [
+      },
       {
-        "index": 1,
-        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
+        "index": 4,
+        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
         "category": "camera_driver_image_pipeline",
         "relevance_bucket": "camera_driver_image_pipeline",
         "urls": [
@@ -179,46 +151,16 @@
         ]
       }
     ],
+    "failed_sections": [],
     "regenerated_sections": [],
     "rejected_retry_outputs": [],
-    "repair_actions": [
-      "repair-section(patch): Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안"
-    ],
+    "repair_actions": [],
     "max_section_repairs": 1,
     "repair_plan": [
       {
-        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
+        "headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
         "sources": [
-          "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
-        ],
-        "action": "repair-section",
-        "failure_type": "linked-evidence-limitation",
-        "allow_rewrite": true,
-        "policy_reason": "section-scoped repair is allowed",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [
-          {
-            "category": "linked-evidence-limitation",
-            "points": 2,
-            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-            "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안"
-          },
-          {
-            "category": "image-fallback",
-            "points": 1,
-            "reason": "Article image uses a local fallback visual.",
-            "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안"
-          }
-        ],
-        "recommended_fixes": []
-      }
-    ],
-    "skipped_repair_sections": [
-      {
-        "headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-        "sources": [
-          "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
+          "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
         ],
         "action": "repair-section",
         "failure_type": "image-fallback",
@@ -231,43 +173,38 @@
             "category": "image-fallback",
             "points": 1,
             "reason": "Article image uses a local fallback visual.",
-            "location": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안"
+            "location": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안"
           }
         ],
         "recommended_fixes": []
       },
       {
-        "headline": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
+        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
         "sources": [
-          "https://claude.com/blog/projects-redesigned"
-        ],
-        "action": "repair-section",
-        "failure_type": "article-gate-fail-repairable",
-        "allow_rewrite": true,
-        "policy_reason": "article gate marked this FAIL repairable in place (repair-section); patch the flagged fields without demoting the article",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [],
-        "recommended_fixes": []
-      },
-      {
-        "headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
-        "sources": [
-          "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
-        ],
-        "action": "repair-section",
-        "failure_type": "article-gate-fail-repairable",
-        "allow_rewrite": true,
-        "policy_reason": "article gate marked this FAIL repairable in place (repair-section); patch the flagged fields without demoting the article",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [],
-        "recommended_fixes": []
-      },
-      {
-        "headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-        "sources": [
-          "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
+          "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
         ],
         "action": "repair-section",
         "failure_type": "linked-evidence-limitation",
@@ -280,7 +217,13 @@
             "category": "linked-evidence-limitation",
             "points": 2,
             "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-            "location": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결"
+            "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "location": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개"
           }
         ],
         "recommended_fixes": []
@@ -289,37 +232,7 @@
     "article_locks": [
       {
         "index": 1,
-        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비를 위한 v2 패치 시리즈 제안",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "urls": [
-          "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
-        ],
-        "source_titles": [
-          "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation"
-        ],
-        "status": "PASS",
-        "reason": "",
-        "locked": true
-      },
-      {
-        "index": 2,
-        "headline": "Microsoft Surface Pro 11 (Intel) 카메라 거꾸로 출력되는 문제 해결을 위한 퀵 패치 제안",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "urls": [
-          "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
-        ],
-        "source_titles": [
-          "[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11"
-        ],
-        "status": "PASS",
-        "reason": "",
-        "locked": true
-      },
-      {
-        "index": 3,
-        "headline": "Claude Code 프로젝트 기능 재설계: 대화형 프로파일링 및 병렬 PR 지원",
+        "headline": "Claude Code 프로젝트 기능 재설계: AI 기반 C++ 네이티브 최적화 및 병렬 개발 워크플로우 지원",
         "category": "cpp_ai_tooling_fallback",
         "relevance_bucket": "cpp_ai_tooling_fallback",
         "urls": [
@@ -333,8 +246,8 @@
         "locked": true
       },
       {
-        "index": 4,
-        "headline": "Claude Code v2.1.271 출시: 원격 세션 빠른 모드 및 설정 패널 마우스 지원 추가",
+        "index": 2,
+        "headline": "Claude Code v2.1.271 릴리스: 원격 세션 빠른 모드(/fast) 및 설정 패널 마우스 지원 추가",
         "category": "cpp_ai_tooling_fallback",
         "relevance_bucket": "cpp_ai_tooling_fallback",
         "urls": [
@@ -348,15 +261,30 @@
         "locked": true
       },
       {
-        "index": 5,
-        "headline": "Codex rust-v0.155.1 출시: 로컬 TUI 세션 추론 요약 기본 비활성화로 요청 거부 해결",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "index": 3,
+        "headline": "Samsung S5K3T2 20MP 이미지 센서용 신규 Linux 커널 드라이버 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
         "urls": [
-          "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
+          "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
         ],
         "source_titles": [
-          "Codex rust-v0.155.1"
+          "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치 시리즈(v2) 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
+        ],
+        "source_titles": [
+          "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation"
         ],
         "status": "PASS",
         "reason": "",
@@ -366,13 +294,26 @@
     "final_article_slot_distribution": {
       "android_camera_platform_api": 0,
       "camerax_aosp_camera_compatibility": 0,
-      "linux_camera_libcamera_v4l2": 0,
-      "ai_camera_path_hal_workflow": 5,
+      "linux_camera_libcamera_v4l2": 1,
+      "ai_camera_path_hal_workflow": 3,
       "cpp_toolchain_fallback": 0,
       "other": 0
     },
     "reporter_eligibility_blocked_sections": [],
-    "rejected_main_ineligible_candidates": [],
+    "rejected_main_ineligible_candidates": [
+      {
+        "title": "[v3,01/21] ipa: libipa: fixedpoint: Shift unsigned type for scaling - Patchwork",
+        "url": "https://patchwork.libcamera.org/patch/28339/",
+        "source": "libcamera Patchwork (patch review)",
+        "reason": "evidence_score=0 < 6"
+      },
+      {
+        "title": "[v4,1/4] libcamera: property_ids_core: Drop PixelArrayOpticalBlackRectangles - Patchwork",
+        "url": "https://patchwork.libcamera.org/patch/28334/",
+        "source": "libcamera Patchwork (patch review)",
+        "reason": "evidence_score=0 < 6"
+      }
+    ],
     "lock_blockers": [],
     "rejected_duplicate_headlines": [],
     "source_gap_count": 0,

@@ -7,14 +7,6 @@
   "restored_to_keep_minimum": [],
   "final_section_sources": [
     {
-      "title": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation",
-      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
-    },
-    {
-      "title": "[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11",
-      "url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/"
-    },
-    {
       "title": "Projects redesigned: from folder to conversation",
       "url": "https://claude.com/blog/projects-redesigned"
     },
@@ -23,8 +15,12 @@
       "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271"
     },
     {
-      "title": "Codex rust-v0.155.1",
-      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1"
+      "title": "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/"
+    },
+    {
+      "title": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation",
+      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/"
     }
   ],
   "stale_claim_items_removed": [],
