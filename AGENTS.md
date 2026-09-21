@@ -50,6 +50,35 @@ scoped `AGENTS.md`는 이 root 지침을 상속합니다. 즉 폴더별 제약�
 
 보기 좋은 대칭을 맞추려는 목적만으로 scoped `AGENTS.md`를 추가하지 마세요. 그 폴더에 위험이나 모호함을 실질적으로 줄이는 규칙이 있을 때만 추가합니다.
 
+## 저장소 파악은 llm-wiki부터
+
+저장소 구조, 정책 값, 모듈 위치가 궁금하면 코드 grep 전에 `llm-wiki/index.md`(로컬 전용, gitignored — 없는 환경에서는 건너뜁니다)를 먼저 확인하세요. 코드에서 파생된 문서이므로 정확한 수치와 경로는 코드로 재확인합니다. 스키마와 운영 규칙은 `llm-wiki/AGENTS.md` 참고.
+
+## 명령어 (Commands)
+
+Windows PowerShell에서는 `npm`보다 `npm.cmd`를 사용하세요.
+
+```powershell
+npm.cmd run test        # test:unit (run-node-tests.js over src) + test:script
+npm.cmd run validate    # full safety gate (encoding, hygiene, fixtures, policy, config, site, quality, localization, ...)
+npm.cmd run ci          # test + validate
+npm.cmd run collect     # collect candidates from src/shared/data/news-sources.json -> articles/content/collected-news/
+npm.cmd run generate    # run the LLM newsroom pipeline (needs GEMINI_API_KEY for default provider)
+```
+
+`validate`는 여러 `validate:*`와 `check:*` 하위 스크립트를 길게 이어 붙인 체인입니다([package.json](package.json) 참고). 변경 범위가 좁으면 해당 부분만 골라 실행하세요.
+
+단일 테스트 파일을 직접 실행:
+
+```powershell
+node src/shared/tooling/cli/run-node-tests.js src       # all unit tests (the runner)
+node --test src/generator/test/contract/fixture-policy.test.js # one file via Node's built-in runner
+```
+
+## 구현 컨벤션 (Conventions)
+
+- CommonJS `require`, 2칸 들여쓰기, 세미콜론, Node 20 compatibility.
+
 ## 검증 (Validation)
 
 코드나 산출물을 수정한 뒤에는 기본적으로 아래 명령을 실행하세요.
