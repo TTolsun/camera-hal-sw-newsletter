@@ -293,12 +293,16 @@ async function writeWeeklyNewsletterArtifacts({
       ...ensureArray(existingIssue && existingIssue.references),
       ...ensureArray(editor && editor.references)
     ]),
-    ...coverageCarryFields,
-    // 게이트를 통과한 레터만 싣는다. fallback이면 키 자체를 두지 않아(editor에는 이 필드가
-    // 없다) 이전에 저장된 레터도 드리프트 상태로 남지 않고, 렌더러가 weeklySummaryText로
-    // 떨어진다.
-    ...(introLetterResolution.introLetter ? { intro_letter: introLetterResolution.introLetter } : {})
+    ...coverageCarryFields
   };
+  // intro_letter는 게이트를 통과한 resolveIntroLetter 결과만 싣는다. editor draft가
+  // intro_letter 키를 들고 와도 스프레드로 살아남지 못하도록 스프레드 뒤에서 항상 덮는다 —
+  // fallback이면 키를 제거해 렌더러가 weeklySummaryText로 떨어진다.
+  if (introLetterResolution.introLetter) {
+    mergedDraft.intro_letter = introLetterResolution.introLetter;
+  } else {
+    delete mergedDraft.intro_letter;
+  }
   const page = buildWeeklyNewsletterPage(mergedDraft, { date });
 
   // 홈·아카이브가 fetch하는 정본은 이 weekly 인덱스다. daily 인덱스와 같은 판정을 써서

@@ -167,8 +167,10 @@ function buildIntroLetterGenerator({ callLlmJson, stage = stageRun(LLM_STAGES.IN
     const prompt = JSON.stringify({
       articles: articles.map(article => ({ headline: articleHeadline(article), lead: articleLead(article) }))
     });
+    // sampling은 stage catalog의 intro_letter 정의(default temperature)가 정한다 —
+    // callLlmJson의 options는 temperature를 소비하지 않는다.
     const response = await callLlmJson(
-      stage, INTRO_LETTER_SYSTEM_INSTRUCTION, prompt, INTRO_LETTER_RESPONSE_SCHEMA, { temperature: 0 }
+      stage, INTRO_LETTER_SYSTEM_INSTRUCTION, prompt, INTRO_LETTER_RESPONSE_SCHEMA
     );
     return response && response.intro_letter;
   };

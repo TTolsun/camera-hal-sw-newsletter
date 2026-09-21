@@ -538,3 +538,22 @@ test('레터 생성이 게이트에 계속 실패하면 intro_letter 없이 기�
   assert.equal(issue.summary, '이번 주에는 ‘CameraX 1.7.0’ 소식을 다룹니다.');
   assert.deepEqual(issue.briefing, ['CameraX 1.7.0']);
 });
+
+// H1 회귀: editor draft가 intro_letter 키를 들고 와도(스프레드 유래) 게이트 없이 채택되면
+// 안 된다. fallback이면 그 값은 issue.json에서 제거되고 결정론 요약으로 발행된다.
+test('editor draft에 실려 온 intro_letter는 fallback 시 게이트 없이 살아남지 못한다', async () => {
+  const root = tempRoot();
+  const editor = draft([section('1.7.0', 'https://example.com/a')]);
+  editor.intro_letter = '게이트를 거치지 않은 editor 유래 레터입니다. 두 번째 문장입니다.';
+  const result = await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor,
+    generateIntroLetter: async () => '아무 기사도 가리키지 않는 레터입니다. 두 번째 문장입니다.'
+  });
+
+  assert.equal(result.introLetterStatus, 'fallback');
+  const issue = readIssue(root, '2026-W23');
+  assert.equal(issue.intro_letter, undefined);
+  assert.equal(issue.summary, '이번 주에는 ‘CameraX 1.7.0’ 소식을 다룹니다.');
+});
