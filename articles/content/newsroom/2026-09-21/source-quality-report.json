@@ -112,24 +112,6 @@
       }
     },
     {
-      "candidate_id": "6ac026046fb3ce0d",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "title": "CameraX Release Notes - CameraX 1.6.2",
-      "source_quality_score": 0.78,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.72,
-        "android_hal_relevance": 0.72,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "43e0e16b6f415ed8",
       "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
       "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
@@ -184,6 +166,42 @@
       }
     },
     {
+      "candidate_id": "c7dc6fb35d697d90",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "title": "1.6.2",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f2f7a4ce6187ee89",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "title": "1.3.0-beta02",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "126b8a669e4375b9",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
       "title": "1.4.0-alpha07",
@@ -214,6 +232,24 @@
         "technical_depth": 0.25,
         "recency_score": 0.8,
         "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f0dc0bd9ba0d8b83",
+      "url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+      "title": "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "source_quality_score": 0.93,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -340,24 +376,6 @@
         "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "1ecd5bc93fcacd72",
-      "url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
-      "title": "[PATCH 0/8] media: qcom: camss: support several cameras behind a CSI-2 bridge",
-      "source_quality_score": 0.83,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.75,
-        "android_hal_relevance": 0.75,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -706,27 +724,9 @@
       }
     },
     {
-      "candidate_id": "809d067ec95acd11",
-      "url": "https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-      "title": "Codex rust-v0.155.1",
-      "source_quality_score": 0.698,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.55,
-        "android_hal_relevance": 0.55,
-        "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-eff34e4bb13fca21",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4235680",
-      "title": "Camera HAL: Fix camera lazy AIDL provider not started and present cameras removed on unplug.",
+      "title": "Camera HAL changes and updates.",
       "source_quality_score": 0.583,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -736,6 +736,24 @@
         "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-ef577ebc95b15efc",
+      "url": "https://lore.kernel.org/linux-media/20260920-upstream-s5k3t2-v1-0-d640740f4013@proton.me/",
+      "title": "[PATCH 0/2] media: i2c: Samsung S5K3T2 image sensor - Armandas Kvietkus via B4 Relay",
+      "source_quality_score": 0.765,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -850,24 +868,6 @@
       }
     },
     {
-      "candidate_id": "gemini-9c0e033b215810b5",
-      "url": "https://lore.kernel.org/linux-media/20260914133416.1030231-1-hitesh@ebytelogic.com/",
-      "title": "[PATCH 0/8] media: qcom: camss: support several cameras behind a CSI-2 bridge - Hitesh Patel",
-      "source_quality_score": 0.765,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.55,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-4d8abbc543dfe6a2",
       "url": "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/",
       "title": "[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11 - Sergey Lebedev",
@@ -878,24 +878,6 @@
         "camera_relevance": 0.7,
         "android_hal_relevance": 0.7,
         "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-943c1e2383849e06",
-      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
-      "title": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -940,6 +922,60 @@
       }
     },
     {
+      "candidate_id": "gemini-943c1e2383849e06",
+      "url": "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/",
+      "title": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-02ab9800ae89420c",
+      "url": "https://lore.kernel.org/linux-media/20260911194854.78894-2-nicfio@gmail.com/",
+      "title": "[PATCH v2 1/3] media: ipu6: Check the remote pad before dereferencing it - Nicola Fiorillo",
+      "source_quality_score": 0.7,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-35ebf808937409f7",
+      "url": "https://lore.kernel.org/linux-media/20260905030435.38105-1-calliarifelipe@gmail.com/",
+      "title": "[PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Ultra - Felipe Calliari",
+      "source_quality_score": 0.745,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-7eb1e1e0f5e7fa26",
       "url": "https://lore.kernel.org/linux-media/4ccc1be17658cdf9ff1267d66db6c2b5a65d6e18.1788360629.git.mauriziocasciano7@gmail.com/",
       "title": "[PATCH v7 06/16] media: intel: ipu-bridge: Add Yoga Book camera sensors - Maurizio Casciano",
@@ -952,6 +988,168 @@
         "technical_depth": 0.55,
         "recency_score": 0.8,
         "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-c7f45197db43b04b",
+      "url": "https://patchwork.libcamera.org/patch/28313/",
+      "title": "[RFC,v1,01/20] libcamera: sysfs: Add devicePath() helpers - Patchwork",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-6b3263a25e4b2da9",
+      "url": "https://patchwork.libcamera.org/patch/28339/",
+      "title": "[v3,01/21] ipa: libipa: fixedpoint: Shift unsigned type for scaling - Patchwork",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-c06bc98b8db18e64",
+      "url": "https://patchwork.libcamera.org/patch/28245/",
+      "title": "[v3,01/41] libcamera: delayed_controls: Add push() function that accepts a sequence number - Patchwork",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-877c759c158755a1",
+      "url": "https://patchwork.libcamera.org/patch/28242/",
+      "title": "[v3,1/2] libcamera: matrix: Add a transpose() function - Patchwork",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-e31ef070c58a094c",
+      "url": "https://patchwork.libcamera.org/patch/28301/",
+      "title": "[v3,1/8] ipa: rpi: Drop unused params argument from platformPrepareIsp() - Patchwork",
+      "source_quality_score": 0.545,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-80db5c237de33e8f",
+      "url": "https://patchwork.libcamera.org/patch/28334/",
+      "title": "[v4,1/4] libcamera: property_ids_core: Drop PixelArrayOpticalBlackRectangles - Patchwork",
+      "source_quality_score": 0.765,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-81b016ffa3416ede",
+      "url": "https://patchwork.libcamera.org/patch/28311/",
+      "title": "[v2] libcamera: dma_buf_allocator: Make provider priority configurable - Patchwork",
+      "source_quality_score": 0.5,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-6e18cbcb64cb615c",
+      "url": "https://patchwork.libcamera.org/patch/28309/",
+      "title": "[v2] libcamera: camera_sensor_properties: Add OmniVision OV08X40 properties - Patchwork",
+      "source_quality_score": 0.68,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 0.15,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-c6e0349fc991205d",
+      "url": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+      "title": "Android Developers Blog: Android Bench 2.0: Pushing the frontier with challenging long-horizon tasks",
+      "source_quality_score": 0.583,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -976,16 +1174,34 @@
       }
     },
     {
-      "candidate_id": "gemini-6f8916deba211090",
-      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-      "title": "Android Developers Blog: Emulator control for adaptive app development",
-      "source_quality_score": 0.492,
+      "candidate_id": "gemini-6726c9df5fadbf36",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.273",
+      "title": "Release v2.1.273 · anthropics/claude-code · GitHub",
+      "source_quality_score": 0.537,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0.45,
         "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-ba3341f9799b1e8e",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+      "title": "Release v2.1.271 · anthropics/claude-code · GitHub",
+      "source_quality_score": 0.537,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
         "recency_score": 0.25,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -1058,6 +1274,24 @@
         "camera_relevance": 0,
         "android_hal_relevance": 0,
         "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-1e6435b55f3314e5",
+      "url": "https://lore.kernel.org/r/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/r/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
         "recency_score": 0.25,
         "evidence_strength": 0.55,
         "duplicate_penalty": 0,
@@ -1175,9 +1409,9 @@
     }
   ],
   "counts": {
-    "blocked_candidate": 24,
+    "blocked_candidate": 33,
     "strong_candidate": 14,
-    "review_candidate": 17,
-    "weak_candidate": 10
+    "review_candidate": 20,
+    "weak_candidate": 11
   }
 }
