@@ -438,3 +438,122 @@ test('syncWeeklyArticleImages is idempotent', async () => {
     assert.equal(fs.readFileSync(filePath, 'utf8'), before);
   }
 });
+
+// --- T10(#853): 주간 에디터 레터(issue.intro_letter) upsert ---
+
+// section()의 headline은 전부 "CameraX ..."라 변별 토큰이 겹친다. 드리프트 테스트에는
+// 다른 계열 headline로 바꾼 기사가 필요하다.
+function headlineOverriddenSection(base, headline, lead) {
+  const clone = JSON.parse(JSON.stringify(base));
+  clone.headline = headline;
+  clone.public_article.headline = headline;
+  clone.public_article.lead = lead;
+  return clone;
+}
+
+const SINGLE_ARTICLE_LETTER =
+  '이번 주에는 CameraX 1.7.0 소식을 정리했습니다. 실무에서 확인할 포인트를 함께 담았습니다.';
+
+test('게이트를 통과한 intro_letter가 issue.summary로 채택되고 briefing은 제목 목록 그대로다', async () => {
+  const root = tempRoot();
+  const result = await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: draft([section('1.7.0', 'https://example.com/a')]),
+    generateIntroLetter: async () => SINGLE_ARTICLE_LETTER
+  });
+
+  assert.equal(result.introLetterStatus, 'generated');
+  const issue = readIssue(root, '2026-W23');
+  assert.equal(issue.intro_letter, SINGLE_ARTICLE_LETTER);
+  assert.equal(issue.summary, SINGLE_ARTICLE_LETTER);
+  assert.deepEqual(issue.briefing, ['CameraX 1.7.0']);
+});
+
+test('같은 주 재-upsert에서 저장된 레터가 게이트를 통과하면 생성 없이 바이트 동일하게 재사용한다', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/a';
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-01',
+    editor: draft([section('1.7.0', url)]),
+    generateIntroLetter: async () => SINGLE_ARTICLE_LETTER
+  });
+
+  let generatorCalls = 0;
+  const rerun = await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: draft([section('1.7.0', url)]),
+    generateIntroLetter: async () => { generatorCalls += 1; return '다른 레터입니다. 두 번째 문장입니다.'; }
+  });
+
+  assert.equal(generatorCalls, 0);
+  assert.equal(rerun.introLetterStatus, 'reused');
+  assert.equal(readIssue(root, '2026-W23').intro_letter, SINGLE_ARTICLE_LETTER);
+});
+
+test('기사 추가 드리프트로 저장 레터가 게이트에 실패하면 재생성해 채택한다', async () => {
+  const root = tempRoot();
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-01',
+    editor: draft([section('1.7.0', 'https://example.com/a')]),
+    generateIntroLetter: async () => SINGLE_ARTICLE_LETTER
+  });
+
+  const driverArticle = headlineOverriddenSection(
+    section('driver', 'https://example.com/driver'),
+    'SM8750 ISP 드라이버 패치',
+    'SM8750 ISP 드라이버 패치 시리즈가 리뷰에 올라왔습니다.'
+  );
+  const regeneratedLetter =
+    'CameraX 1.7.0 소식과 함께 SM8750 ISP 드라이버 패치 소식을 정리했습니다. 실무에서 확인할 포인트도 담았습니다.';
+  const rerun = await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: draft([driverArticle]),
+    generateIntroLetter: async () => regeneratedLetter
+  });
+
+  assert.equal(rerun.introLetterStatus, 'generated');
+  assert.equal(readIssue(root, '2026-W23').intro_letter, regeneratedLetter);
+});
+
+test('레터 생성이 게이트에 계속 실패하면 intro_letter 없이 기존 결정론 요약으로 발행한다', async () => {
+  const root = tempRoot();
+  let generatorCalls = 0;
+  const result = await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: draft([section('1.7.0', 'https://example.com/a')]),
+    generateIntroLetter: async () => { generatorCalls += 1; return '아무 기사도 가리키지 않는 레터입니다. 두 번째 문장입니다.'; }
+  });
+
+  assert.equal(generatorCalls, 2);
+  assert.equal(result.introLetterStatus, 'fallback');
+  assert.ok(result.introLetterReason.length > 0);
+  const issue = readIssue(root, '2026-W23');
+  assert.equal(issue.intro_letter, undefined);
+  assert.equal(issue.summary, '이번 주에는 ‘CameraX 1.7.0’ 소식을 다룹니다.');
+  assert.deepEqual(issue.briefing, ['CameraX 1.7.0']);
+});
+
+// H1 회귀: editor draft가 intro_letter 키를 들고 와도(스프레드 유래) 게이트 없이 채택되면
+// 안 된다. fallback이면 그 값은 issue.json에서 제거되고 결정론 요약으로 발행된다.
+test('editor draft에 실려 온 intro_letter는 fallback 시 게이트 없이 살아남지 못한다', async () => {
+  const root = tempRoot();
+  const editor = draft([section('1.7.0', 'https://example.com/a')]);
+  editor.intro_letter = '게이트를 거치지 않은 editor 유래 레터입니다. 두 번째 문장입니다.';
+  const result = await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor,
+    generateIntroLetter: async () => '아무 기사도 가리키지 않는 레터입니다. 두 번째 문장입니다.'
+  });
+
+  assert.equal(result.introLetterStatus, 'fallback');
+  const issue = readIssue(root, '2026-W23');
+  assert.equal(issue.intro_letter, undefined);
+  assert.equal(issue.summary, '이번 주에는 ‘CameraX 1.7.0’ 소식을 다룹니다.');
+});

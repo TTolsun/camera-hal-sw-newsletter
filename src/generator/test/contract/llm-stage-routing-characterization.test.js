@@ -21,7 +21,7 @@ function runForStageId(stageId) {
 
 // LLM stage routing characterization (#980, #981).
 //
-// production stage 21개의 routing 결과를 표 한 장으로 고정한다. 열은 label, model group,
+// production stage 22개의 routing 결과를 표 한 장으로 고정한다. 열은 label, model group,
 // temperature/thinking config field, status role, artifact scope다.
 //
 // #980에서 이 표는 자유 문자열 label을 정규식으로 해석하던 resolver 다섯의 답을 고정했다.
@@ -82,6 +82,7 @@ const EXPECTED_BASE_LABELS = [
   'editor completion attempt 1/2',
   'fact-checker completion attempt 1/2',
   'weekly-merge',
+  'intro-letter',
   'post-generation public quality judge',
   'sourceDiscovery'
 ];
@@ -104,7 +105,7 @@ const EXPECTED_LABELS = [
 ];
 
 const PRODUCTION_STAGE_CASES = [
-  // --- 기본 stage 12개 ---
+  // --- 기본 stage 13개 ---
   {
     label: 'reporter attempt 1/2',
     stageId: 'reporter',
@@ -199,6 +200,17 @@ const PRODUCTION_STAGE_CASES = [
     temperatureField: 'geminiTemperatureDefault',
     thinkingField: NO_THINKING_MAPPING,
     statusRole: 'weekly-merge',
+    artifactScope: SCOPE_NOT_CONSULTED
+  },
+  {
+    // weekly-merge와 같은 finalize 부속 stage(T10, #853): reporter group, default temperature,
+    // thinking 없음.
+    label: 'intro-letter',
+    stageId: 'intro_letter',
+    modelGroup: 'reporter',
+    temperatureField: 'geminiTemperatureDefault',
+    thinkingField: NO_THINKING_MAPPING,
+    statusRole: 'intro-letter',
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
@@ -307,8 +319,8 @@ const PRODUCTION_STAGE_CASES = [
   }
 ];
 
-test('표가 production stage 21개를 정확히 그대로 덮는다', () => {
-  assert.equal(EXPECTED_LABELS.length, 21);
+test('표가 production stage 22개를 정확히 그대로 덮는다', () => {
+  assert.equal(EXPECTED_LABELS.length, 22);
 
   const labels = PRODUCTION_STAGE_CASES.map(stageCase => stageCase.label);
   assert.equal(new Set(labels).size, labels.length, '표에 중복 label이 있다');
@@ -397,7 +409,7 @@ test('stage id -> public article judge artifact scope 현행 매핑', () => {
 // 판정 stage를 고르는 기준은 endsWith 두 개가 아니라 includes 하나다. DERIVED_STAGE_KINDS에
 // public_article_judge 계열 파생이 새 접미사로 하나 더 생기면 endsWith 목록은 그것을 놓치고,
 // 놓친 stage는 표에도 없어 집합이 여전히 일치해 초록이 된다 -- 개수 고정과 같은 실패 모양이다.
-// 현행 21개 stage에서 두 방식의 결과는 같다(둘 다 6개, 오탐 없음).
+// 현행 22개 stage에서 두 방식의 결과는 같다(둘 다 6개, 오탐 없음).
 test('catalog의 판정 stage 집합과 artifact scope 표의 키 집합이 일치한다', () => {
   const judgeStageIds = Object.values(LLM_STAGES)
     .map(definition => definition.id)

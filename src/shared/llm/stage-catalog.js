@@ -224,6 +224,18 @@ const BASE_STAGES = {
     statusRole: 'weekly-merge',
     label: { kind: LABEL_KINDS.STATIC, text: 'weekly-merge' }
   }),
+  INTRO_LETTER: defineStage({
+    // 주간 에디터 레터 생성(T10, #853). weekly_merge처럼 finalize 부속의 소형 stage라
+    // reporter model group + default temperature + thinking 없음으로 둔다.
+    id: 'intro_letter',
+    modelGroup: LLM_STAGE_GROUPS.REPORTER,
+    sampling: {
+      temperatureProfile: TEMPERATURE_PROFILES.DEFAULT,
+      thinkingProfile: THINKING_PROFILES.DISABLED
+    },
+    statusRole: 'intro-letter',
+    label: { kind: LABEL_KINDS.STATIC, text: 'intro-letter' }
+  }),
   POST_GENERATION_QUALITY_JUDGE: defineStage({
     id: 'post_generation_quality_judge',
     modelGroup: LLM_STAGE_GROUPS.JUDGE,

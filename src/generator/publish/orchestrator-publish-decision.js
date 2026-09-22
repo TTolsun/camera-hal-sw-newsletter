@@ -36,6 +36,7 @@ const {
   persistHeadlineStateArtifacts
 } = require('./orchestrator-terminal-contracts');
 const { buildWeeklyMergeResolver } = require('../editor/weekly-merge');
+const { buildIntroLetterGenerator } = require('../editor/intro-letter');
 const {
   editorRenderedGroupKeys,
   editorExplicitlyDemotedGroups,
@@ -97,6 +98,10 @@ async function decidePublishReadinessAndWriteStatus({
   // 'failed'(쓰려다 거부됨)를 구분해야 "이번 주는 원래 없다"와 "빠졌다"가 갈린다.
   let weeklyOutputStatus = 'not_attempted';
   let weeklyOutputFailureReason = '';
+  // 주간 에디터 레터 채택 결과(T10, #853). weekly_output_status와 같은 이유로 값으로 들고
+  // 나가 generation-status에 기록한다 — fallback이 stderr 한 줄로 사라지지 않게(#873).
+  let introLetterStatus = 'not_attempted';
+  let introLetterReason = '';
   if (shouldWritePublicArtifacts) {
     fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');
     fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
@@ -120,10 +125,15 @@ async function decidePublishReadinessAndWriteStatus({
         date,
         editor,
         coverageWeekKeyOverride: runtimeConfig.coverageWeekKeyOverride || undefined,
+        // 주간 에디터 레터(T10, #853): 최종 기사 세트 확정 후 소형 LLM 호출 1건. 결정론 게이트
+        // (lintIntroLetter)와 fallback은 writeWeeklyNewsletterArtifacts 안에 있다.
+        generateIntroLetter: buildIntroLetterGenerator({ callLlmJson }),
         ...weeklyMerge
       });
       weeklyArtifactFiles = weeklyResult.files;
       weeklyFinalArticles = ensureArray(weeklyResult.articles);
+      introLetterStatus = weeklyResult.introLetterStatus;
+      introLetterReason = weeklyResult.introLetterReason;
       if (ensureArray(weeklyResult.mergeWarnings).length > 0 ||
         ensureArray(weeklyResult.mergeDecisions).some(decision => /merge/.test(decision.decision))) {
         writeJson(path.join(newsroomDir, 'weekly-merge-report.json'), {
@@ -231,6 +241,9 @@ async function decidePublishReadinessAndWriteStatus({
       // 실패 판정은 항상 weekly_output_status로 한다.
       weekly_output_status: weeklyOutputStatus,
       weekly_output_failure_reason: weeklyOutputFailureReason,
+      // 주간 에디터 레터 채택 결과(T10, #853). 관측용 값이라 발행 게이트 판정에는 안 들어간다.
+      intro_letter_status: introLetterStatus,
+      intro_letter_reason: introLetterReason,
       todo_found: todoFound,
       empty_source_sections: emptySourceSections,
       source_gap_count: factCheck.source_gap_count,

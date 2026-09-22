@@ -72,6 +72,24 @@ test('buildWeeklyNewsletterPage keys a single publish-ready draft by its ISO wee
   assert.ok(typeof page.markdown === 'string' && page.markdown.length > 0);
 });
 
+// T10(#853): 채택된 에디터 레터(intro_letter)는 issue.summary(markdown 2행·hero subtitle·
+// og/meta description)만 교체한다. briefing(제목 목록)은 무변이다.
+test('draft.intro_letter가 있으면 issue.summary만 레터로 바뀌고 briefing은 제목 목록 그대로다', () => {
+  const draft = publishReadyDraft();
+  draft.intro_letter = '이번 주에는 CameraX SessionConfig 소식을 정리했습니다. 실무 확인 포인트를 함께 담았습니다.';
+  const page = buildWeeklyNewsletterPage(draft, { date: '2026-06-04' });
+  assert.equal(page.issue.summary, draft.intro_letter);
+  assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API']);
+  assert.ok(page.html.includes('이번 주에는 CameraX SessionConfig 소식을 정리했습니다.'));
+});
+
+// 게이트 재실패로 intro_letter가 없으면 기존 결정론 요약 문장으로 복귀한다(승인된 명시적 fallback).
+test('draft.intro_letter가 없으면 issue.summary는 기존 weeklySummaryText 문장이다', () => {
+  const page = buildWeeklyNewsletterPage(publishReadyDraft(), { date: '2026-06-04' });
+  assert.equal(page.issue.summary, '이번 주에는 ‘CameraX SessionConfig stable API’ 소식을 다룹니다.');
+  assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API']);
+});
+
 test('weekly issue site footer always links to the AI Engineering learning page exactly once', () => {
   const page = buildWeeklyNewsletterPage(publishReadyDraft(), { date: '2026-06-04' });
   const hrefMatches = page.html.match(/\.\.\/\.\.\/learning\/ai-engineering\/index\.html/g) || [];

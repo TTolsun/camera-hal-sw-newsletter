@@ -85,9 +85,10 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
     week_start_date: bounds.weekStartDate,
     week_end_date: bounds.weekEndDate,
     title: weeklyDisplayTitle(titleDisplayBounds(coverageBounds, bounds)),
-    // The hero subtitle describes this week's coverage from the real article headlines so it
-    // matches the content; fall back to the per-run draft summary when there are no titles.
-    summary: weeklySummaryText(titles) || draft.summary,
+    // The hero subtitle (and markdown line 2, og/meta description) is the gate-passing weekly
+    // editor letter when one was adopted (T10, #853); otherwise the deterministic headline-derived
+    // summary, then the per-run draft summary when there are no titles.
+    summary: draft.intro_letter || weeklySummaryText(titles) || draft.summary,
     // Under the title we list this week's article titles instead of a 3-line briefing.
     briefing: titles.length ? titles : draft.briefing
   };

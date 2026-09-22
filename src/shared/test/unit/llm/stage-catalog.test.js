@@ -18,7 +18,7 @@ const {
 } = require('../../../llm/stage-catalog');
 const { LLM_STAGE_GROUPS } = require('../../../llm/model-policy');
 
-// #980이 고정한 21개 label을 catalog가 byte 단위로 그대로 만들어내는지 확인한다.
+// #980이 고정한 label(+이후 추가된 stage의 label)을 catalog가 byte 단위로 그대로 만들어내는지 확인한다.
 // 이 목록이 catalog와 예전 자유 문자열 label 사이의 다리다. 여기가 어긋나면 #981의
 // 전제("routing과 label을 보존한다")가 깨진 것이다.
 const EXPECTED_LABELS = [
@@ -32,6 +32,7 @@ const EXPECTED_LABELS = [
   [LLM_STAGES.EDITOR_COMPLETION, 'editor completion attempt 1/2'],
   [LLM_STAGES.FACT_CHECKER_COMPLETION, 'fact-checker completion attempt 1/2'],
   [LLM_STAGES.WEEKLY_MERGE, 'weekly-merge'],
+  [LLM_STAGES.INTRO_LETTER, 'intro-letter'],
   [LLM_STAGES.POST_GENERATION_QUALITY_JUDGE, 'post-generation public quality judge'],
   [LLM_STAGES.SOURCE_DISCOVERY, 'sourceDiscovery']
 ];
@@ -52,8 +53,8 @@ function runFor(definition) {
   return stageRun(definition, { qualityAttempt: 1, totalAttempts: 2 });
 }
 
-test('catalog가 production stage 21개를 정의한다', () => {
-  assert.equal(Object.keys(LLM_STAGES).length, 21);
+test('catalog가 production stage 22개를 정의한다', () => {
+  assert.equal(Object.keys(LLM_STAGES).length, 22);
   const ids = Object.values(LLM_STAGES).map(definition => definition.id);
   assert.equal(new Set(ids).size, ids.length, 'definition id가 중복이다');
 });
@@ -71,7 +72,7 @@ test('definition의 group과 sampling profile이 모두 유효한 어휘다', ()
   });
 });
 
-test('기본 stage 12개의 label이 현행과 byte 단위로 같다', () => {
+test('기본 stage 13개의 label이 현행과 byte 단위로 같다', () => {
   EXPECTED_LABELS.forEach(([definition, expected]) => {
     assert.equal(runFor(definition).label, expected);
   });
