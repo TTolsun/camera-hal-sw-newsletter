@@ -106,3 +106,102 @@ test('src does not require legacy scripts/lib shim modules', () => {
   }
   assert.deepEqual(issues, [], issues.join('\n'));
 });
+
+// #1090 T11 사후 정리로 비운 모듈입니다. 정리한 상태를 유지하기 위해 이 목록에만 단언합니다.
+// src 전체로 넓히면 T11 범위를 벗어납니다(다른 모듈에는 아직 정리하지 않은 잔재가 남아 있습니다).
+const CLEANUP_WATCHED_MODULES = [
+  'src/generator/quality/newsletter-quality.js',
+  'src/generator/reporter/public-article-contract.js'
+];
+
+// 아래 검출기들은 정규식이며 AST가 아닙니다. 이름이 주석이나 문자열 안에 나와도 사용으로 셉니다.
+// 그래서 실제로 죽은 것을 놓칠 수는 있습니다. 반대 방향(살아 있는 이름을 위반으로 올리는 것)은
+// rename·default·rest 형태의 destructuring까지 아래 단위 테스트로 집행해 막습니다.
+function nameOccurrenceCount(text, name) {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return (text.match(new RegExp('\\b' + escaped + '\\b', 'g')) || []).length;
+}
+
+// `a`, `a: b`, `a = 1`, `a: b = 1` 중 실제 지역 바인딩 이름을 집습니다.
+// 기본값을 먼저 떼야 기본값 안의 `:`가 rename으로 오인되지 않습니다.
+// rest(`...rest`)는 개별 import 이름이 아니므로 빈 문자열을 돌려 검사에서 제외합니다.
+function localBindingName(entry) {
+  if (entry.startsWith('...')) return '';
+  return entry.split('=')[0].split(':').pop().trim();
+}
+
+function unusedDestructuredImports(text, label) {
+  const issues = [];
+  const requireRe = /const\s*\{([^}]*)\}\s*=\s*require\(([^)]*)\);/g;
+  let match;
+  while ((match = requireRe.exec(text)) !== null) {
+    const moduleRef = match[2].trim();
+    const entries = match[1]
+      .split(',')
+      .map(part => part.trim())
+      .filter(Boolean);
+    for (const entry of entries) {
+      const name = localBindingName(entry);
+      if (!name) continue;
+      if (nameOccurrenceCount(text, name) <= 1) {
+        issues.push(`${label} imports unused name ${name} from ${moduleRef}`);
+      }
+    }
+  }
+  return issues;
+}
+
+function unreferencedTopLevelFunctions(text, label) {
+  const issues = [];
+  const declRe = /^function\s+([A-Za-z_$][\w$]*)\s*\(/gm;
+  let match;
+  while ((match = declRe.exec(text)) !== null) {
+    const name = match[1];
+    if (nameOccurrenceCount(text, name) <= 1) {
+      issues.push(`${label} declares unreferenced function ${name}`);
+    }
+  }
+  return issues;
+}
+
+test('the unused-import detector keeps renamed, defaulted and rest bindings', () => {
+  const renamed = [
+    "const { sourceKey: localName } = require('./m');",
+    "console.log(localName);"
+  ].join('\n');
+  assert.deepEqual(unusedDestructuredImports(renamed, 'renamed.js'), []);
+
+  const defaulted = [
+    "const { other = 1 } = require('./n');",
+    "console.log(other);"
+  ].join('\n');
+  assert.deepEqual(unusedDestructuredImports(defaulted, 'defaulted.js'), []);
+
+  const renamedButUnused = "const { sourceKey: neverUsed } = require('./o');";
+  assert.deepEqual(
+    unusedDestructuredImports(renamedButUnused, 'unused.js'),
+    ["unused.js imports unused name neverUsed from './o'"]
+  );
+
+  const withRest = [
+    "const { keptName, ...remaining } = require('./p');",
+    "console.log(keptName, remaining);"
+  ].join('\n');
+  assert.deepEqual(unusedDestructuredImports(withRest, 'rest.js'), []);
+});
+
+test('watched cleanup modules have no unused destructured imports', () => {
+  const issues = [];
+  for (const relPath of CLEANUP_WATCHED_MODULES) {
+    issues.push(...unusedDestructuredImports(readRepoText(relPath), relPath));
+  }
+  assert.deepEqual(issues, [], issues.join('\n'));
+});
+
+test('watched cleanup modules have no unreferenced top-level functions', () => {
+  const issues = [];
+  for (const relPath of CLEANUP_WATCHED_MODULES) {
+    issues.push(...unreferencedTopLevelFunctions(readRepoText(relPath), relPath));
+  }
+  assert.deepEqual(issues, [], issues.join('\n'));
+});

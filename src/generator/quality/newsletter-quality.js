@@ -8,14 +8,9 @@ const {
 const {
   normalizeForMatch,
   urlKeys,
-  normalizedUrlKey,
-  candidateUrls,
   candidateCanonicalUrl,
   candidateHash,
-  candidateIdentity,
-  pushCandidateEntries,
-  candidateBindingIndex,
-  sourceEvidence
+  candidateBindingIndex
 } = require('./candidate-claim-matching');
 const {
   BUCKETS,
@@ -32,19 +27,13 @@ const {
   articleCountRangeText,
   isForbiddenMainBucket,
   isPrimaryCameraStackBucket,
-  isSupportingMainBucket,
-  publishGateCriteriaText
+  isSupportingMainBucket
 } = require('../../shared/common/newsletter-policy');
-const {
-  IMPACT_TYPES,
-  RECOMMENDED_ARTICLE_TYPES
-} = require('../../shared/evidence/impact-classifier');
 const {
   mergeStaleClaimReports,
   scrubStaleClaims
 } = require('./stale-claims');
 const {
-  findFieldHygieneIssues,
   inferGuardrailImpactClass
 } = require('../reporter/article-field-builder');
 const {
@@ -54,28 +43,13 @@ const {
   normalizeArticleSections
 } = require('../reporter/article-section-contract');
 const {
-  articleSectionContractRows,
-  articleSectionContractRowValues
-} = require('../reporter/article-structure-summary');
-const {
   buildHalSignalQualitySummary,
   buildMainArticleSignalChecks,
-  normalizeHalSignalCapsule,
-  normalizeHalSignalFields
+  normalizeHalSignalCapsule
 } = require('../reporter/hal-signal-quality');
-const {
-  dateQualityForCandidate,
-  validateDateSource,
-  validateEventType
-} = require('../../shared/common/date-signals');
 const {
   candidateGroupKey
 } = require('../../shared/common/article-groups');
-const {
-  SOURCE_QUALITY_FIELD_DRIFT,
-  normalizeSourceQuality,
-  sourceQualityFieldDrift
-} = require('../../shared/collect/source-quality-classifier');
 const {
   summarizeClaimValidation,
   validateArticleClaims
@@ -86,22 +60,8 @@ const {
 const {
   toLegacyEditorIssue
 } = require('../../shared/domain/newsletter-domain-normalize');
-const {
-  EDITORIAL_STORY_KEYS,
-  STORY_CONTRACT_VERSION,
-  STORY_PUBLIC_CONTRACT_VERSION,
-  validatePublicArticle
-} = require('../reporter/public-article-contract');
 const { PUBLIC_CONTRACT_VERSIONS } = require('../../shared/common/story-contract-version');
 const {
-  PRODUCT_VERSION_TOKEN_PATTERN,
-  RELEASE_BOILERPLATE_TOKEN_PATTERN,
-  LINKED_EVIDENCE_UNRESOLVED_STATUSES,
-  LINKED_EVIDENCE_RUNTIME_TERMS,
-  LINKED_EVIDENCE_RUNTIME_CLAIM,
-  LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM,
-  LINKED_EVIDENCE_HIGH_IMPACT_CLAIM,
-  LINKED_EVIDENCE_LIMITATION_NOTE,
   SCOPE_SCORE_FIELDS,
   TOPIC_TIER_BUCKETS,
   BRIEFING_WHAT_PATTERN,
