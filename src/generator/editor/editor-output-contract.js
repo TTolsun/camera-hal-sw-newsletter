@@ -21,6 +21,7 @@ const {
   normalizeHalSignalCapsule
 } = require('../reporter/hal-signal-quality');
 const {
+  isRepairableStoryBodyIssue,
   issueStoryContractVersion,
   publicArticleExpectedKeys,
   storyContractMarkers,
@@ -822,15 +823,25 @@ function validatePublicArticleContract(value, options = {}) {
       requireStoryContract: options.requireStoryContract === true
     }));
   });
-  if (issues.length > 0) {
+  // v2 본문 lint 위반과 headline 중복은 여기서 throw하지 않는다(#849, 설계 4.6절).
+  // throw하면 draft 한 건의 문구 결함이 draft 전체의 semantic 실패가 되어, 호출부가
+  // whole-draft LLM 재작성과 lastKnownValidEditor revert로 확산시킨다. 설계가 정한
+  // 경로는 그 반대다: 품질 리포트가 같은 issue를 reason_code 감점으로 방출하고,
+  // repair가 블록 patch로 고치며, patch가 실패하면 그 기사만 강등된다.
+  //
+  // 게이트가 느슨해지는 것이 아니다. 이 issue가 남은 기사는 품질 게이트에서 blocking
+  // 감점을 받아 발행되지 못하고, 발행 직전 validate-public-newsletter가 같은 검증기로
+  // 한 번 더 hard fail을 낸다.
+  const blockingIssues = issues.filter(issue => !isRepairableStoryBodyIssue(issue));
+  if (blockingIssues.length > 0) {
     throw semanticError('Editor output failed public article contract validation.', {
       field: 'sections.public_article',
       expectedKeys: publicArticleExpectedKeys(value, {
         requireStoryContract: options.requireStoryContract === true
       }),
-      actualCount: issues.length,
+      actualCount: blockingIssues.length,
       sectionCount: ensureArray(value.sections).length,
-      issues
+      issues: blockingIssues
     });
   }
 }

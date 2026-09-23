@@ -95,6 +95,37 @@ function editorialStoryKeysFor(storyContractVersion) {
   return storyContractVersion >= 2 ? EDITORIAL_STORY_V2_KEYS : EDITORIAL_STORY_KEYS;
 }
 
+// Story Contract v2에서 같은 소스 안의 문구·블록만 고치면 해소되는 issue type의 정본
+// 목록이다(#849, 설계 4.6절). 본문 lint 위반과 headline 중복이 여기 속한다. 본문 부재나
+// story 필드 결손 같은 구조 실패는 여기 없다 — 그쪽은 강등이나 교체로만 해소된다.
+//
+// 이 목록은 세 곳이 같이 본다. editor 계약 검증은 여기 있는 issue로 draft 전체를 죽이지
+// 않고, 품질 리포트는 같은 issue를 reason_code를 단 감점으로 방출하며, repair 정책은 그
+// reason_code를 repair-section으로 분류한다. 각자 목록을 따로 들고 있으면 한쪽만 늘어났을
+// 때 세 판정이 갈라지므로 정본을 하나로 둔다.
+const REPAIRABLE_STORY_BODY_ISSUE_TYPES = Object.freeze([
+  'body_markdown_forbidden_construct',
+  'body_markdown_forbidden_heading_level',
+  'body_markdown_reserved_subheading',
+  'body_markdown_duplicate_block',
+  'body_markdown_dangling_subheading',
+  'body_markdown_duplicates_public_field',
+  'insufficient_public_body_paragraphs',
+  'duplicate_headline'
+]);
+
+const REPAIRABLE_STORY_BODY_ISSUE_TYPE_SET = new Set(REPAIRABLE_STORY_BODY_ISSUE_TYPES);
+
+// issue type만으로는 가를 수 없는 자리가 하나 있다. insufficient_public_body_paragraphs는
+// v1 경로에서도 나오는데(그때 key는 body_paragraphs다), v1 본문에는 블록 patch 주소가
+// 없어서 이 레인에 태울 수 없다. 그래서 본문 lint가 붙이는 key까지 함께 본다.
+function isRepairableStoryBodyIssue(issue = {}) {
+  const type = text(issue && issue.type);
+  if (!REPAIRABLE_STORY_BODY_ISSUE_TYPE_SET.has(type)) return false;
+  const key = text(issue && issue.key);
+  return type === 'duplicate_headline' ? key === 'headline' : key === 'body_markdown';
+}
+
 const PUBLIC_SOURCE_LINK_ALLOWED_KEYS = Object.freeze([
   'title',
   'url',
@@ -1168,6 +1199,7 @@ module.exports = {
   DECISION_SCOPE_VALUES,
   EDITORIAL_STORY_KEYS,
   EDITORIAL_STORY_V2_KEYS,
+  REPAIRABLE_STORY_BODY_ISSUE_TYPES,
   GENERATION_CONTRACT_VERSION,
   NO_IMMEDIATE_ACTION_TEXT,
   PUBLIC_ARTICLE_ALLOWED_KEYS,
@@ -1185,6 +1217,7 @@ module.exports = {
   deriveDecisionMetadata,
   detectStoryContractMismatch,
   isConcreteCheckpoint,
+  isRepairableStoryBodyIssue,
   issueStoryContractVersion,
   normalizedSourceUrlKey,
   sourceEntryUrlKey,

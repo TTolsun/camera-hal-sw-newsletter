@@ -16,6 +16,10 @@ const {
   normalizeArticleSections
 } = require('../reporter/article-section-contract');
 const {
+  isRepairableStoryBodyIssue,
+  validatePublicArticle
+} = require('../reporter/public-article-contract');
+const {
   validateDateSource,
   validateEventType,
   dateQualityForCandidate
@@ -496,6 +500,43 @@ function cameraXDeductions(section, binding, location) {
   return [{ category: 'source-integrity', points: 8, reason: `CameraX source extraction failure: ${violations.join('; ')}.`, location }];
 }
 
+// 위반 위치를 사람이 읽을 수 있게 덧붙인다. 블록 주소가 있으면 그것이 곧 repair
+// 모델이 쓸 가상 포인터의 인덱스다.
+function storyBodyIssueAddress(issue) {
+  if (Number.isInteger(issue.blockIndex)) return ` at body block ${issue.blockIndex}`;
+  if (Number.isInteger(issue.line)) return ` at body line ${issue.line}`;
+  return '';
+}
+
+// Story Contract v2 본문 검사 감점(#849, 설계 4.6절).
+//
+// 판정 오라클은 validatePublicArticle 하나다. 여기서 lint를 다시 구현하면 발행 직전
+// validate-public-newsletter와 판정이 두 벌이 되어 한쪽만 통과하는 기사가 생긴다.
+// 그중 텍스트 수리가 가능한 issue만 감점으로 옮기고 구조 실패는 그대로 둔다. 구조
+// 실패는 editor 계약 검증이 이미 draft 단계에서 막는다.
+//
+// reason_code를 반드시 싣는다. deductionRepairPolicy는 reason_code로 먼저 분류하고,
+// 그것이 비어 있으면 category와 reason 텍스트를 정규식으로 훑는다. 그 폴백 경로에서는
+// body_markdown_duplicate_block이 중복 출처 분기에 걸려 replace-section으로 오분류된다.
+//
+// 섹션은 얕은 복사본으로 넘긴다. validatePublicArticle은 정규화 결과를 인자 섹션에
+// 다시 써 넣는데, 품질 리포트는 과거 아티팩트를 재계산할 때도 도는 경로라 여기서
+// 원본을 건드리면 발행된 본문이 조용히 바뀐다.
+function storyBodyDeductions(section, articleIndex, issue, location) {
+  return validatePublicArticle({ ...section }, articleIndex, { issue })
+    .filter(isRepairableStoryBodyIssue)
+    .map(item => ({
+      category: 'story-body',
+      points: 8,
+      reason: `Story Contract v2 body check failed: ${item.type}${storyBodyIssueAddress(item)}.`,
+      location,
+      options: {
+        reason_code: item.type,
+        dedupe_key: [articleIndex, item.type, item.blockIndex ?? item.line ?? item.key].join(':')
+      }
+    }));
+}
+
 function imageFallbackDeductions(section, location) {
   if (section.resolvedImage?.usedFallback !== true) return [];
   return [{ category: 'image-fallback', points: 1, reason: 'Article image uses a local fallback visual.', location, options: { blocking: false } }];
@@ -539,5 +580,6 @@ module.exports = {
   sourceBindingDeductions,
   cameraXDeductions,
   imageFallbackDeductions,
+  storyBodyDeductions,
   applyDeductionDescriptors
 };

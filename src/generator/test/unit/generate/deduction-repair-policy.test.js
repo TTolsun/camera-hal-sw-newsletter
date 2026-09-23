@@ -10,6 +10,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const { deductionRepairPolicy } = require('../../../publish/orchestrator-repair-plan');
+const {
+  REPAIRABLE_STORY_BODY_ISSUE_TYPES
+} = require('../../../reporter/public-article-contract');
 
 const REPAIRABLE_V2_CODES = [
   'body_markdown_forbidden_construct',
@@ -33,6 +36,13 @@ const STRUCTURAL_V2_CODES = [
   'empty_editorial_story_field',
   'missing_body_markdown'
 ];
+
+test('the repairable code table is the one the quality report emits from', () => {
+  // 정본은 public-article-contract의 목록 하나다. 품질 리포트는 그 목록으로 감점을
+  // 방출하고 이 정책은 같은 목록으로 분류한다. 둘이 갈라지면 방출된 코드가 미등록으로
+  // 떨어져 기본값 분기에 얹힌다.
+  assert.deepEqual([...REPAIRABLE_STORY_BODY_ISSUE_TYPES].sort(), [...REPAIRABLE_V2_CODES].sort());
+});
 
 test('v2 body_markdown lint codes map to repair-section', () => {
   for (const reasonCode of REPAIRABLE_V2_CODES) {
