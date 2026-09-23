@@ -125,6 +125,7 @@ function publicArticleContractPrompt() {
     bodyMarkdownSubheadingRule(),
     bodyMarkdownDenyListRule(),
     bodyMarkdownParagraphCountRule(),
+    'lead와 camera_hal_takeaway에 쓴 문장을 body_markdown 문단으로 그대로 다시 쓰지 마세요. 같은 문장이 반복되면 결정론 lint가 거부합니다. 같은 내용을 본문에서 다시 다룰 때는 표현과 초점을 바꿔 쓰세요.',
     '공개 기사에는 "현업 장면", "확인된 변화", "왜 봐야 하나", "디버깅/리뷰 시나리오", "편집자 판단", "과장 금지" 같은 라벨 문구를 쓰지 마세요. 공개 렌더링은 "Camera HAL/Driver 관점에서의 의미" 섹션만 따로 둡니다.',
     '본문에서 source-confirmed fact와 HAL 해석·권고를 한 문장에 섞어 단정하지 마세요. 확인된 사실은 사실로 쓰고, 해석과 권고는 해석임이 드러나는 문장으로 쓰세요.',
     'not_to_overclaim과 editor_take는 내부 구조화 필드입니다. public article prose에는 "편집자 판단", "과장 금지", "overclaim", "validation report" 같은 편집/검증 용어를 노출하지 말고 필요한 제한은 자연스러운 설명으로만 표현하세요.',

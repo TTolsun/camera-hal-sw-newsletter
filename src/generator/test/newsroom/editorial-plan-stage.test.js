@@ -303,3 +303,36 @@ test('buildEditorialPlanReport는 항상 LLM을 호출하고 정규화된 plan�
     delete require.cache[stageKey];
   }
 });
+
+// T9(#852): v2 작성 안내 필드는 스키마와 프롬프트에만 있으면 소용이 없다.
+// normalizeEditorialPlanReport가 고정 키 목록으로 item을 새로 만들기 때문에, 여기 없는
+// 필드는 editor까지 가지 못하고 조용히 사라진다(리뷰 실측).
+test('normalizeEditorialPlanReport는 v2 작성 안내 필드를 editor까지 실어 나른다', () => {
+  const normalized = normalizeEditorialPlanReport({
+    editorial_plans: [{
+      title: 'T',
+      url: 'https://example.com/a',
+      source_candidate_hash: 'h',
+      narrative_arc: '확인 항목으로 열고 제한으로 닫는다',
+      subheading_candidates: ['센서 드라이버가 받는 영향', '']
+    }]
+  }, '2026-09-28');
+
+  const [plan] = normalized.editorial_plans;
+  assert.equal(plan.narrative_arc, '확인 항목으로 열고 제한으로 닫는다');
+  assert.deepEqual(plan.subheading_candidates, ['센서 드라이버가 받는 영향']);
+
+  // editor로 가는 사본에서도 살아남아야 한다(여기서 strip되는 것은 coverage 권한 신호뿐).
+  const editorFacing = editorFacingEditorialPlan(normalized);
+  assert.equal(editorFacing.editorial_plans[0].narrative_arc, '확인 항목으로 열고 제한으로 닫는다');
+});
+
+test('editorialPlanSchema는 v2 작성 안내 필드를 optional로 둔다', () => {
+  const item = editorialPlanSchema.properties.editorial_plans.items;
+
+  assert.ok(item.properties.narrative_arc);
+  assert.ok(item.properties.subheading_candidates);
+  // required로 올리면 "모든 기사에 소제목"이라는 새 고정 템플릿이 된다(설계 4.3).
+  assert.equal(item.required.includes('narrative_arc'), false);
+  assert.equal(item.required.includes('subheading_candidates'), false);
+});

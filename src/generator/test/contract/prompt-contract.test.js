@@ -171,6 +171,10 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /허용 문법은 두 가지뿐입니다/);
   assert.match(prompt, /소제목은 0~4개이며 선택입니다/);
   assert.match(prompt, /강조는 볼드나 따옴표가 아니라 문장 구조로 하세요/);
+  // lint가 lead·camera_hal_takeaway와의 교차 중복을 hard fail로 막는다. 프롬프트가 그걸
+  // 말하지 않으면 훅 lead를 본문 첫 문단으로 그대로 옮겨 쓴 draft가 발행 직전에 막힌다
+  // (v1은 렌더가 조용히 버렸으므로 모델이 알 방법이 없다).
+  assert.match(prompt, /lead와 camera_hal_takeaway에 쓴 문장을 body_markdown 문단으로 그대로 다시 쓰지 마세요/);
   for (const term of RESERVED_SUBHEADING_TERMS) {
     assert.ok(prompt.includes(term), `subheading deny-list term missing from prompt: ${term}`);
   }
