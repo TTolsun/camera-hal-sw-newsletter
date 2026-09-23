@@ -17,6 +17,9 @@ const {
 } = require('../quality/newsletter-quality');
 const { articlePolicy } = require('../../shared/common/newsletter-policy');
 const {
+  REPAIRABLE_STORY_BODY_ISSUE_TYPES
+} = require('../reporter/public-article-contract');
+const {
   stringOrEmpty,
   sectionLabel
 } = require('./orchestrator-shared-helpers');
@@ -87,19 +90,13 @@ function deductionRepairPolicy(deduction = {}) {
     'do_not_claim_violation'
   ]);
   // Story Contract v2 issue code 전수 등록(#849). 마지막 unknown-code 분기가 기본값으로
-  // repair-section을 주기 때문에, v2 코드를 여기 명시하지 않으면 "등록을 잊어도 우연히
-  // 통과하는" 함정이 남는다 — 텍스트 수리 가능한 코드와 구조 실패 코드를 명시로 가른다.
-  // 본문 lint 위반은 같은 소스 안에서 문구·블록만 고치면 되는 텍스트 수리다.
-  const repairableBodyMarkdownReasons = new Set([
-    'body_markdown_forbidden_construct',
-    'body_markdown_forbidden_heading_level',
-    'body_markdown_reserved_subheading',
-    'body_markdown_duplicate_block',
-    'body_markdown_dangling_subheading',
-    'body_markdown_duplicates_public_field',
-    'insufficient_public_body_paragraphs',
-    'duplicate_headline'
-  ]);
+  // repair-section을 주기 때문에, v2 코드를 여기서 명시로 가르지 않으면 "등록을 잊어도
+  // 우연히 통과하는" 함정이 남는다. 본문 lint 위반은 같은 소스 안에서 문구·블록만 고치면
+  // 되는 텍스트 수리다.
+  //
+  // 목록 자체는 품질 리포트가 감점을 방출할 때 쓰는 것과 같은 정본을 가져온다. 여기에
+  // 사본을 두면 한쪽만 늘어났을 때 방출된 코드가 미등록으로 떨어져 기본값에 얹힌다.
+  const repairableBodyMarkdownReasons = new Set(REPAIRABLE_STORY_BODY_ISSUE_TYPES);
   // 마커 패밀리 불일치와 story 필드 결손(본문·editorial_story 포함)은 텍스트 patch로
   // 고칠 수 없는 구조 실패다. editor 단계의 v2 per-article demote(#850)와 같은 판정을
   // 이 레인에서도 유지한다 — 여기서 repair-section을 허용하면 LLM이 결손 필드를
@@ -317,10 +314,14 @@ function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFin
         candidate_title: finding.candidate_title,
         reason: finding.reason
       })),
+      // reason_code를 함께 넘긴다. repair 모델은 이 plan JSON만 보고 어느 필드를 patch할지
+      // 정하는데, 코드가 빠지면 v2 본문 위반이 "본문 어딘가의 문제"로만 전달되어 블록
+      // 포인터를 지목할 근거가 사라진다.
       deductions: deductions.map(deduction => ({
         category: deduction.category,
         points: deduction.points,
         reason: deduction.reason,
+        reason_code: deduction.reason_code || '',
         location: deduction.location || ''
       })),
       recommended_fixes: recommendedFixes

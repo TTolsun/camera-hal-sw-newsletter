@@ -91,6 +91,7 @@ const {
   softDeductions,
   requiredFieldDeductions,
   fieldHygieneDeductions,
+  storyBodyDeductions,
   sourceBindingDeductions,
   cameraXDeductions,
   imageFallbackDeductions,
@@ -775,6 +776,10 @@ function buildNewsletterQualityReport(date, editor, reporter = {}, factCheck = {
 
     applyDeductionDescriptors(state, requiredFieldDeductions(section, sectionContract, location));
     applyDeductionDescriptors(state, fieldHygieneDeductions(section, articleSections, guardrailImpactClass, location));
+    // v2 본문 lint는 여기서 reason_code를 단 감점이 된다. editor 계약 검증이 같은 issue로
+    // throw하지 않고 통과시켜 주기 때문에(설계 4.6절), 이 자리가 블록 patch repair와
+    // 강등으로 가는 유일한 입구다.
+    applyDeductionDescriptors(state, storyBodyDeductions(section, index, editor, location));
     sourceIntegrityViolationCount += applyDeductionDescriptors(state, sourceBindingDeductions(section, binding, scope, location));
     if (binding.status === 'bound') {
       addLinkedEvidenceQualityDeductions(state, section, binding.candidate, location);
