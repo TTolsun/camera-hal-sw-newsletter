@@ -1,3 +1,36 @@
+const {
+  BODY_MARKDOWN_MIN_PARAGRAPHS,
+  RESERVED_SUBHEADING_TERMS,
+  SUBHEADING_PREFIX
+} = require('./public-body-markdown');
+
+// v2 본문 규약은 lint와 **같은 상수**에서 공급한다. 여기에 같은 목록을 리터럴로 적으면
+// lint가 막는 것과 프롬프트가 금지하는 것이 갈라져, 모델이 프롬프트를 그대로 지켜도
+// 발행이 막히거나(거짓 차단) 반대로 lint가 막을 것을 프롬프트가 허락하게 된다.
+function bodyMarkdownSyntaxRule() {
+  return `body_markdown의 허용 문법은 두 가지뿐입니다: 빈 줄로 구분한 평문 문단과, "${SUBHEADING_PREFIX}"로 시작하는 소제목 줄. ` +
+    '그 밖의 markdown 구문은 결정론 lint가 거부해 발행이 막힙니다 — 다른 단계의 헤딩, 리스트 마커, 인용, 수평선, 링크, 이미지, 코드 블록과 백틱, HTML 태그, 볼드 표기가 모두 여기에 해당합니다.';
+}
+
+function bodyMarkdownSubheadingRule() {
+  return '소제목은 0~4개이며 선택입니다. 모든 기사에 소제목을 달 필요는 없습니다. 소제목을 쓴다면 그 기사에서만 말이 되는 구체적인 표현으로 쓰고, 소제목 뒤에는 반드시 문단이 이어져야 합니다.';
+}
+
+function bodyMarkdownDenyListRule() {
+  return `다음 라벨과 그 변형은 소제목으로 쓸 수 없습니다: ${RESERVED_SUBHEADING_TERMS.join(', ')}.`;
+}
+
+function bodyMarkdownParagraphCountRule() {
+  return `소제목을 제외한 본문 문단은 최소 ${BODY_MARKDOWN_MIN_PARAGRAPHS}개여야 합니다.`;
+}
+
+// 검증 단계(judge·fact-check)에 v2 스타일 면제를 준다. 이 조항이 없으면 서사형 훅과
+// 기사별 소제목이 "과장"으로 잡혀 must_fix가 쏟아진다 — 톤 지시는 여전히 작성 단계에만
+// 넣고(#693 원칙), 검증 단계에는 "이 형태는 의도된 것"이라는 경계만 알린다.
+function storyV2StyleExemptionPrompt() {
+  return 'Story v2 기사에서 서사형 훅 lead, 가정형 장면 묘사, 기사마다 다른 문단 리듬, 기사별 구체 소제목은 의도된 편집 스타일입니다. 그 자체를 과장이나 편집 오류로 보고 must_fix 또는 issues[]에 올리지 마세요. source가 뒷받침하지 않는 사실 주장을 할 때만 문제로 판정하세요.';
+}
+
 function linkedEvidencePromptGuardrails() {
   return [
     'Linked evidence diagnostics는 prompt payload에 포함되어 있지 않습니다. 제공된 article capsule 또는 source field에 명시되지 않은 Gerrit, IssueTracker, GitHub, mailing-list, CVE, linked-page 세부 내용은 추론하지 마세요.',
@@ -78,15 +111,22 @@ function articleSectionContractPrompt() {
 function publicArticleContractPrompt() {
   return [
     'Public article contract: 모든 main article은 public_article을 포함해야 합니다.',
-    'Story v1 output은 top-level public_contract_version="story-v1", generation_contract_version=1을 포함해야 하며 각 public_article은 story_contract_version=1을 포함해야 합니다.',
-    'public_article fields: story_contract_version, headline, source_subtitle, lead, body_paragraphs, camera_hal_takeaway, reader_checkpoints, editorial_story, source_links.',
+    'Story v2 output은 top-level public_contract_version="story-v2", generation_contract_version=2를 포함해야 하며 각 public_article은 story_contract_version=2를 포함해야 합니다.',
+    'public_article fields: story_contract_version, headline, source_subtitle, lead, body_markdown, camera_hal_takeaway, reader_checkpoints, editorial_story, source_links.',
     'public_article.headline은 source title을 그대로 복사하지 말고, source_extraction/behavior_change/source_fact_bundle과 기사 본문을 바탕으로 Gemini가 새로 작성하세요. 단, headline과 lead/body는 source-confirmed 핵심 변경점을 누락하거나 generic CameraX/Android framing으로 대체하면 안 됩니다.',
-    'editorial_story fields: reader_scenario, what_happened, why_it_matters, field_scenario, not_to_overclaim, editor_take.',
-    'body_paragraphs는 기사 본문입니다. 모든 기사에 같은 작성 기준을 적용하고, fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장이나 Camera HAL 관련성 설명으로 축약하지 마세요.',
-    'body_paragraphs는 원문이 말한 발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획을 3-5개 자연스러운 문단으로 충실하게 설명하세요. source_fact_bundle.facts, source_extraction evidence_blocks, behavior_change, summary에 있는 구체 명사와 source-confirmed detail을 보존하세요.',
+    'editorial_story fields: not_to_overclaim, editor_take. 두 필드는 독자에게 렌더링되지 않는 내부 안전 필드입니다.',
+    'lead는 본문으로 들어가는 문을 여는 한두 문장입니다. 독자가 마주칠 법한 장면이나 질문으로 열되 가정형으로 쓰고, source가 확인하지 않은 사건을 실제로 일어난 일처럼 단정하지 마세요.',
+    'body_markdown은 기사 본문 전체를 담은 markdown 문자열 하나입니다. 모든 기사에 같은 작성 기준을 적용하고, fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장이나 Camera HAL 관련성 설명으로 축약하지 마세요.',
+    'body_markdown은 원문이 말한 발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획을 충실하게 설명하세요. source_fact_bundle.facts, source_extraction evidence_blocks, behavior_change, summary에 있는 구체 명사와 source-confirmed detail을 보존하세요.',
+    '문단 수와 문단 길이는 기사마다 다르게 가져가세요. 짧은 훅 문단과 길게 전개하는 문단을 섞고, 모든 기사를 같은 문단 수와 같은 리듬으로 찍어내지 마세요.',
+    'Camera HAL / lower camera stack과 이 변경 사이의 거리(직접 변경인지, 참고할 하위 스택 흐름인지)는 본문 어딘가에서 반드시 설명하세요. 어느 위치에 쓸지는 자유지만 내용을 빠뜨리면 안 됩니다.',
+    bodyMarkdownSyntaxRule(),
+    '강조는 볼드나 따옴표가 아니라 문장 구조로 하세요. 중요한 사실은 문장의 주어 자리에 놓거나 짧은 단독 문단으로 분리하세요.',
+    bodyMarkdownSubheadingRule(),
+    bodyMarkdownDenyListRule(),
+    bodyMarkdownParagraphCountRule(),
     '공개 기사에는 "현업 장면", "확인된 변화", "왜 봐야 하나", "디버깅/리뷰 시나리오", "편집자 판단", "과장 금지" 같은 라벨 문구를 쓰지 마세요. 공개 렌더링은 "Camera HAL/Driver 관점에서의 의미" 섹션만 따로 둡니다.',
-    'reader_scenario는 source-confirmed incident가 아니라 독자가 마주칠 수 있는 가정형 현업 장면을 자연스러운 문장으로 쓰세요. "상황을 가정합니다"처럼 편집 메모처럼 쓰지 말고, 실제 발생 사실처럼 단정하지도 마세요.',
-    'what_happened에는 source-confirmed fact만 쓰고, HAL 해석이나 권고는 why_it_matters, field_scenario, editor_take로 분리하세요. 다만 body_paragraphs에는 이 내용을 독자-facing 기사 문장으로 자연스럽게 합쳐 쓰세요.',
+    '본문에서 source-confirmed fact와 HAL 해석·권고를 한 문장에 섞어 단정하지 마세요. 확인된 사실은 사실로 쓰고, 해석과 권고는 해석임이 드러나는 문장으로 쓰세요.',
     'not_to_overclaim과 editor_take는 내부 구조화 필드입니다. public article prose에는 "편집자 판단", "과장 금지", "overclaim", "validation report" 같은 편집/검증 용어를 노출하지 말고 필요한 제한은 자연스러운 설명으로만 표현하세요.',
     'Gemini는 public article writer입니다. selected article capsule과 source facts를 바탕으로 public-facing impact wording과 source-bound engineering inference를 자연스러운 한국어 기사 문장으로 작성하세요.',
     'Public-facing impact wording과 claim-level classification은 public_article.camera_hal_takeaway, article_sections.hal_driver_impact, claims[].impact_level에 원문 근거 기반으로 작성하세요. source가 뒷받침하는 범위 안에서만 HAL/driver/runtime 영향을 서술하고, source가 말하지 않는 영향을 지어내거나 확대하지 마세요.',
@@ -95,7 +135,7 @@ function publicArticleContractPrompt() {
     'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
     'camera_hal_takeaway는 별도 섹션에 들어갈 "Camera HAL/Driver 관점에서의 의미"입니다. "직접적인 HAL 변경은 없으나" 같은 디스클레이머로 문장을 시작하지 말고, 직접 HAL/Driver 변경이면 실제 확인 포인트를, 직접 변경이 아니어도 이 변경이 닿는 하위 스택에서 개발자가 점검할 구체 항목(관련 metadata key, request/result 필드, CTS/VTS/ITS 항목, V4L2/uAPI 구조체, 버퍼/포맷, 라이브러리 버전·재빌드 영향 중 source가 뒷받침하는 것)을 한두 가지 먼저 제시하세요. 단, source_extraction/behavior_change가 뒷받침하지 않는 HAL/driver/runtime 영향은 지어내지 말고, 그 범위를 벗어나는 부분만 참고 맥락으로 쓰세요.',
     'android_multimedia_camera_output article의 camera_hal_takeaway는 Camera HAL 직접 변경이 아니라 camera-generated output, preview/recording, gallery/media access, sharing, video communication, A/V sync 같은 downstream validation 의미로 제한해 쓰세요.',
-    'reader_checkpoints는 최소 2개이며 내부 QA/checklist용 필드입니다. Markdown/HTML에 직접 렌더링되지 않으므로, public body나 "Camera HAL/Driver 관점에서의 의미" 섹션을 대체하지 마세요. 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하되 body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요.',
+    'reader_checkpoints는 최소 2개이며 내부 QA/checklist용 필드입니다. Markdown/HTML에 직접 렌더링되지 않으므로, public body나 "Camera HAL/Driver 관점에서의 의미" 섹션을 대체하지 마세요. 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하되 body_markdown과 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요.',
     'API/component/date, stream/metadata, compatibility test scenario처럼 validator token을 조합한 문장을 쓰지 마세요.',
     'source가 HAL/driver 변경을 직접 말하지 않으면 vendor pipeline, stream, metadata, buffer 변경으로 확대하지 마세요.'
   ].join('\n');
@@ -121,7 +161,10 @@ function publicationBoundaryPrompt() {
 // 서사 아크와 내부 라벨 비노출은 두 단계 공통 작성 형식이라 baseLines로 공유한다.
 function cameraHalEditorialVoiceBaseLines() {
   const voice = '에디토리얼 보이스: 원문을 일반 IT 뉴스처럼 요약하지 말고, 원문에서 확인되는 변경을 Camera HAL / lower camera stack(Android native, Linux media, V4L2, driver, ISP/sensor, build/test/debug) 개발자 관점으로 재해석하세요. 이 재해석은 코드가 주입하는 것이 아니라 source evidence에 근거해 작성합니다.';
-  const narrativeArc = 'body_paragraphs는 (1) 원문에서 실제로 일어난 일을 먼저 설명하고, (2) 그 기술의 정체·적용 대상·현재 상태와 Camera HAL과의 거리감(직접 변경인지, lower-stack 참고 흐름인지)을 자연스러운 문장으로 풀고, (3) 직접 변경 / 참고할 흐름 / 추적할 리스크 중 무엇인지 현실적인 takeaway로 정리하는 흐름으로 쓰세요. Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고 중요도 판단 기준으로만 쓰세요.';
+  // v2는 고정 3-beat 아크를 지시하지 않는다. 순서를 고정하면 모든 기사가 같은 틀로
+  // 나오는데, 그것이 v1에서 서사가 사라진 원인이었다. 다뤄야 할 내용은 그대로 요구하고
+  // 배치 순서만 기사에 맡긴다.
+  const narrativeArc = 'body_markdown은 고정된 순서 틀을 따르지 말고 기사마다 흐름을 새로 정하세요. 다만 원문에서 실제로 일어난 일, 그 기술의 정체·적용 대상·현재 상태와 Camera HAL과의 거리감(직접 변경인지, lower-stack 참고 흐름인지), 그리고 직접 변경 / 참고할 흐름 / 추적할 리스크 중 무엇인지에 대한 현실적인 takeaway는 어떤 순서로 쓰든 본문에 모두 담아야 합니다. Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고 중요도 판단 기준으로만 쓰세요.';
   return [voice, narrativeArc];
 }
 
@@ -153,6 +196,8 @@ function editorialPlanPrompt() {
     'direct_hal_impact는 source가 직접 HAL/runtime 변경을 뒷받침할 때만 true이고 기본은 false입니다. source 근거가 없으면 Samsung, S.LSI, Exynos, 상용 제품, 양산, 성능·화질 개선으로 확대 판단하지 마세요.',
     'target_description은 이 소식의 실제 대상 기술(driver, sensor, ISP, API, framework, tool)을 한 문장으로, editorial_angle은 Camera HAL / lower camera stack 독자 관점의 편집 각도를, why_it_matters와 reader_takeaway는 왜 중요하고 무엇을 해야 하는지를 한국어로 채우세요.',
     '이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 마세요. misunderstanding_risks에 독자가 오해할 수 있는 지점을, source_limitations에 원문이 밝힌 제한(review NACK, RAW-only/limited mode, 특정 board/kernel/version 한정, ISP bypass, release 전 상태 등)을 적으세요.',
+    'narrative_arc에는 그 기사 본문을 어떤 흐름으로 풀지 한 문장으로 적으세요. 모든 기사에 같은 흐름을 쓰지 말고 소재에 맞는 전개를 고르세요. 이 값은 작성 안내이며 본문에 라벨로 노출하지 않습니다.',
+    'subheading_candidates에는 그 기사에서만 말이 되는 구체적인 소제목 후보를 0~4개 적으세요. 소제목 없이 쓰는 편이 나은 기사는 빈 배열로 두세요. Impact, Layer, Scope, 요약, 배경, 결론 같은 일반 라벨과 내부 필드 이름은 후보가 될 수 없습니다.',
     'main/supporting 승격, source eligibility, source link 같은 발행 안전 판단의 최종 강제는 deterministic validation layer가 담당합니다. plan은 그 범위 안에서 편집 판단만 제공하세요. schema와 일치하는 JSON만 반환하세요.'
   ].join('\n');
 }
@@ -168,6 +213,7 @@ function publicArticleJudgePrompt() {
     'source_boundary_pass는 raw source 재검증이 아니라, 제공된 reporter_evidence, article_sections, hal_signal_capsule, claims, do_not_overstate 범위 안에서 과장 없이 해석했는지 판정하는 항목입니다.',
     '제공된 evidence boundary 안에서만 해석하면 PASS입니다. 직접 근거 없는 HAL/driver/vendor pipeline 영향을 주장하면 FAIL입니다.',
     'public_prose_pass는 public_article에 workflow/debug/schema/validator/publish gate 같은 내부 운영 언어가 없고 독자-facing 한국어 technical prose이면 PASS입니다.',
+    storyV2StyleExemptionPrompt(),
     '문제가 있으면 issues[]에 field, severity(P1/P2/P3), reason, suggested_fix를 짧게 작성하세요. 문제가 없으면 issues는 빈 배열입니다.',
     '추가로 아래 4개 desk-review 축을 점검하세요. 위반이 있을 때만 issues[]에 severity를 반드시 "P3"으로, field를 지정된 이름으로 적으세요(P3는 advisory라 발행을 막지 않습니다). 제공된 근거(reporter_evidence, do_not_overstate, do_not_claim, claims, relevance_bucket, prose)로만 판정하고, 근거가 부족하면 위반으로 단정하지 말고 보수적으로 통과시키세요. 없는 설명을 지어내도록 유도하지 마세요.',
     'desk_target_explanation: prose가 대상 기술(driver/sensor/ISP/API/tool 등)이 무엇인지 reporter_evidence(api_or_component, behavior_change) 범위에서 설명했는가. 설명 없이 사건만 나열하면 위반입니다.',
@@ -212,8 +258,12 @@ function editorRepairPatchPrompt() {
     '각 patch는 section_index, op, path, value를 가집니다. section_key는 제공되면 section_index와 같은 section을 가리키도록 echo하세요.',
     'op는 "replace"만 허용됩니다. path는 반드시 "/article_sections/" 또는 "/public_article/"로 시작해야 합니다.',
     'section_index는 이 prompt가 제공한 failed-section 목록의 index와 정확히 일치해야 하며, 목록에 없는 section은 patch하지 마세요.',
-    '수정 가능한 경로(독자-facing 문구)만 patch하세요: /article_sections/verified_facts/{i}, /article_sections/background_context, /article_sections/hal_driver_impact, /article_sections/action_items/{i}, /article_sections/team_share_points, /article_sections/known_limitations/{i}, /article_sections/do_not_claim/{i}, /public_article/headline, /public_article/source_subtitle, /public_article/lead, /public_article/body_paragraphs/{i}, /public_article/camera_hal_takeaway, /public_article/reader_checkpoints/{i}, /public_article/editorial_story/{field}.',
-    'verified_facts/action_items/known_limitations/do_not_claim/body_paragraphs/reader_checkpoints는 string 배열이므로, path는 element index까지 지정하고(/.../0) value는 교체할 string 하나입니다. /text 같은 하위 경로를 붙이지 마세요.',
+    '수정 가능한 경로(독자-facing 문구)만 patch하세요: /article_sections/verified_facts/{i}, /article_sections/background_context, /article_sections/hal_driver_impact, /article_sections/action_items/{i}, /article_sections/team_share_points, /article_sections/known_limitations/{i}, /article_sections/do_not_claim/{i}, /public_article/headline, /public_article/source_subtitle, /public_article/lead, /public_article/body_markdown, /public_article/body_markdown/blocks/{i}, /public_article/camera_hal_takeaway, /public_article/reader_checkpoints/{i}, /public_article/editorial_story/not_to_overclaim, /public_article/editorial_story/editor_take.',
+    'verified_facts/action_items/known_limitations/do_not_claim/reader_checkpoints는 string 배열이므로, path는 element index까지 지정하고(/.../0) value는 교체할 string 하나입니다. /text 같은 하위 경로를 붙이지 마세요.',
+    '본문은 블록 단위로 고치세요. /public_article/body_markdown/blocks/{i}는 그 섹션의 body_blocks 미리보기에 실린 index를 그대로 쓰고, value에는 그 블록 하나를 markdown 형태 그대로 담습니다 — 소제목 블록이면 value도 "### "로 시작해야 합니다.',
+    '블록 patch 하나는 블록 하나만, 같은 종류로 교체합니다. 한 value에 문단 여러 개를 넣거나 문단을 소제목으로(또는 그 반대로) 바꾸면 그 patch는 거부되고 배치 전체가 실패합니다. 블록을 추가·삭제하려면 전체 교체 경로를 쓰세요.',
+    '/public_article/body_markdown 전체 교체는 블록 단위로 고칠 수 없을 때만 쓰세요 — 문단 수가 모자라 문단을 더해야 하거나, 본문 구조 자체가 무너진 경우입니다. 이때 value는 본문 전체 markdown이며 소제목 줄은 "### "로 시작합니다.',
+    '본문 patch에는 허용 문법만 쓰세요: 빈 줄로 구분한 평문 문단과 "### " 소제목 줄. 리스트, 인용, 링크, 이미지, 코드/백틱, HTML 태그, 볼드 표기를 넣으면 적용 후 lint가 다시 실패해 repair 전체가 거부됩니다.',
     'editorial_story의 하위 string field는 /public_article/editorial_story/editor_take 처럼 지정하세요. top-level editorial_story로 지정하지 마세요.',
     '수정 금지(이런 path는 거부되어 repair가 diagnostics-only로 실패합니다): /sources, /public_article/source_links, source URL, source_candidate_hash, candidate_id, article_identity_key, coverage_type, published_date, evidence id, section 개수/순서.',
     '새 evidence id 또는 source URL을 만들지 말고, source가 직접 뒷받침하지 않는 release/HAL/runtime 사실을 patch value에 새로 쓰지 마세요. 보강할 source evidence가 없으면 해당 patch를 생략하세요.'
@@ -309,5 +359,6 @@ module.exports = {
   factCheckSeverityPrompt,
   cameraDeveloperToolingFactCheckPrompt,
   articleQualityVerdictPrompt,
-  dateFramingGuardrail
+  dateFramingGuardrail,
+  storyV2StyleExemptionPrompt
 };

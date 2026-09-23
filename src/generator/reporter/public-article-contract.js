@@ -13,6 +13,7 @@ const {
   publicUrlError
 } = require('./public-prose-leakage');
 const {
+  DEFAULT_STORY_CONTRACT_VERSION,
   PUBLIC_CONTRACT_VERSIONS,
   STORY_CONTRACT_VERSIONS,
   publicContractVersionFor,
@@ -32,11 +33,12 @@ const PUBLIC_ARTICLE_BASE_REQUIRED_KEYS = Object.freeze([
   'source_links'
 ]);
 
-// 생산자가 찍는 기본 버전은 v1 그대로다. v2는 "수용"만 한다 — 어떤 producer도 아직
-// v2를 만들지 않는다(T9에서 뒤집는다).
-const STORY_CONTRACT_VERSION = 1;
+// 생산자가 새 출력에 찍는 버전이다(T9 producer flip). 이 값만 "무엇을 만드는가"를 답하고,
+// "마커 없는 입력을 무엇으로 읽는가"는 DEFAULT_STORY_CONTRACT_VERSION이 따로 답한다. 둘을
+// 한 상수로 묶으면 생산자 flip이 과거 아티팩트의 본문 키 해석까지 함께 뒤집는다.
+const STORY_CONTRACT_VERSION = 2;
 const STORY_PUBLIC_CONTRACT_VERSION = publicContractVersionFor(STORY_CONTRACT_VERSION);
-const GENERATION_CONTRACT_VERSION = 1;
+const GENERATION_CONTRACT_VERSION = 2;
 // v1은 영구 존치한다. quality recompute와 validate-public-newsletter가 W20~W32 영속
 // 아티팩트를 계속 재검증하기 때문이다.
 const SUPPORTED_STORY_CONTRACT_VERSIONS = new Set(STORY_CONTRACT_VERSIONS);
@@ -254,7 +256,8 @@ function storyContractMarkers(issue = {}, section = {}, options = {}) {
   const complete = markerCount === 3 && unsupported.length === 0;
   const requiredByCaller = options.requireStoryContract === true;
   // 존재하는 지원 마커가 한 버전을 가리킬 때만 그 버전을 쓴다. 마커가 없거나 섞여 있으면
-  // 생산자 기본값(v1)으로 둔다 — 어느 계약인지 모르는 입력에 v2 처리를 걸면 안 된다.
+  // 폴백 버전(v1)으로 둔다 — 어느 계약인지 모르는 입력에 v2 처리를 걸면 안 된다. 생산자가
+  // 찍는 버전을 쓰면 마커를 잃은 과거 아티팩트가 v2로 읽혀 body_paragraphs가 사라진다.
   const presentFamilyVersions = new Set([
     hasIssueStoryMarker ? declaredFamilyVersions.public_contract_version : 0,
     hasGenerationMarker ? declaredFamilyVersions.generation_contract_version : 0,
@@ -262,7 +265,7 @@ function storyContractMarkers(issue = {}, section = {}, options = {}) {
   ].filter(Boolean));
   const version = presentFamilyVersions.size === 1
     ? [...presentFamilyVersions][0]
-    : STORY_CONTRACT_VERSION;
+    : DEFAULT_STORY_CONTRACT_VERSION;
   return {
     version,
     hasIssueStoryMarker,
@@ -633,7 +636,7 @@ function normalizeDecisionMetadata(value = {}, section = {}, issue = {}) {
   return deriveDecisionMetadata(section, issue);
 }
 
-function normalizeEditorialStory(value = {}, storyContractVersion = STORY_CONTRACT_VERSION) {
+function normalizeEditorialStory(value = {}, storyContractVersion = DEFAULT_STORY_CONTRACT_VERSION) {
   const story = isPlainObject(value) ? value : {};
   return editorialStoryKeysFor(storyContractVersion).reduce((output, key) => {
     output[key] = compactText(story[key]);
@@ -1105,7 +1108,7 @@ function validatePublicArticle(section = {}, index = 0, options = {}) {
     issues.push({ index: index + 1, headline, type: 'empty_public_article_field', key: 'source_links' });
   }
   if (storyState.required || storyState.hasStoryField) {
-    if (contractVersion(raw.story_contract_version) < STORY_CONTRACT_VERSION) {
+    if (!isSupportedStoryVersion(raw.story_contract_version)) {
       issues.push({ index: index + 1, headline, type: 'missing_story_public_article_field', key: 'story_contract_version' });
     }
     if (!compactText(raw.source_subtitle)) {

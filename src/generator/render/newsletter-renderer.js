@@ -15,7 +15,6 @@ const {
   articleSectionContractRowValues
 } = require('../reporter/article-structure-summary');
 const {
-  STORY_CONTRACT_VERSION,
   publicArticleForSection,
   storyContractMarkers
 } = require('../reporter/public-article-contract');
@@ -23,6 +22,7 @@ const {
   parseBodyBlocks
 } = require('../reporter/public-body-markdown');
 const {
+  DEFAULT_STORY_CONTRACT_VERSION,
   usesBodyMarkdown
 } = require('../../shared/common/story-contract-version');
 const {
@@ -623,8 +623,11 @@ function storyBodyParagraphsForRender(publicArticle) {
   );
 }
 
+// v1 story 기사 판정이다. 생산자가 찍는 버전이 아니라 v1 상수로 비교한다 — 생산자 버전을
+// 쓰면 producer flip 한 번에 이 술어가 v2를 가리키게 되고, body_paragraphs를 들고 있는
+// 과거 기사가 story 기사가 아닌 것으로 읽혀 v1 렌더가 통째로 바뀐다.
 function isStoryArticle(publicArticle = {}) {
-  return Number(publicArticle.story_contract_version) === STORY_CONTRACT_VERSION &&
+  return Number(publicArticle.story_contract_version) === DEFAULT_STORY_CONTRACT_VERSION &&
     publicArticle.editorial_story &&
     typeof publicArticle.editorial_story === 'object';
 }
@@ -639,7 +642,7 @@ function isStoryArticle(publicArticle = {}) {
 //
 // **이 방어선의 범위**: 마커가 한 버전을 가리키거나(정상) 지원 밖 값일 때(throw)를 덮는다.
 // 마커 2개가 서로 다른 버전을 가리키는 조합은 계약 모듈이 unsupported가 아니라 mismatch로
-// 분류하고, 여기서는 생산자 기본값(v1)으로 폴백한다 — 그 상태는 상류 validateEditor가
+// 분류하고, 여기서는 폴백 버전(v1)으로 내려간다 — 그 상태는 상류 validateEditor가
 // story_contract_version_mismatch로 이미 차단한다. mismatch까지 render에서 throw로 올리면
 // 마커가 부분적인 **과거 발행분 재렌더**(syncWeeklyArticleImages)가 깨지므로 넓히지 않는다.
 function unsupportedContractDetail(item) {

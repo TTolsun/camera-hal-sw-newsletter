@@ -396,9 +396,12 @@ test('a weekly rerun without the marker keeps the recorded contract version', as
 // generation-status의 weekly_output_status/weekly_output_failure_reason에 값으로 남긴다.
 // 그 기록은 orchestrator-publish-decision.test.js가 잠근다.
 
-// 같은 주에 v2 이슈 마커가 이전 실행에서 넘어온 v1 section 위에 씌워지는 혼합 stamp는
-// T5(#889)가 render 진입에서 hard-fail로 막는다. 그 판정 자체는 #889의 것이고, 여기서
-// 잠그는 것은 weekly writer가 그 거부를 삼키지 않고 발행 상태를 그대로 둔다는 합성 동작이다.
+// 이슈 마커와 section 마커가 어긋난 draft는 T5(#889)가 render 진입에서 hard-fail로 막는다.
+// 그 판정 자체는 #889의 것이고, 여기서 잠그는 것은 weekly writer가 그 거부를 삼키지 않고
+// 발행 상태를 그대로 둔다는 합성 동작이다.
+//
+// 이슈 마커까지 다른 조합(기존 v1 이슈 + v2 draft)은 그 앞의 혼합 주 가드가 먼저 막으므로,
+// 여기서는 이슈 마커는 같고 section 마커만 어긋난 draft로 render 검사에 도달시킨다.
 test('a weekly run rejected by the render contract check leaves the published state untouched', async () => {
   const root = tempRoot('weekly-index-version-mixed-');
 
@@ -413,9 +416,9 @@ test('a weekly run rejected by the render contract check leaves the published st
     () => writeWeeklyNewsletterArtifacts({
       root,
       date: '2026-06-04',
-      editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/b', 2)], STORY_V2_MARKERS)
+      editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/b', 2)], STORY_V1_MARKERS)
     }),
-    /story_contract_version_family_mismatch\(public_contract_version=2 generation_contract_version=2 story_contract_version=1\)/
+    /story_contract_version_family_mismatch/
   );
 
   assert.deepEqual(
@@ -464,4 +467,49 @@ test('a weekly run rejected by the index contract check writes no page files', a
     '거부된 weekly 실행이 index.html을 덮어썼다 — 인덱스는 옛 값이라 공개 정본이 어긋난다'
   );
   assert.equal(fs.existsSync(path.join(pageDir, 'issue.json')), false);
+});
+
+// ---- 혼합 주 가드(T9, 설계 §5) ----
+//
+// 컷오버는 ISO 주 경계에서 한다. 주 중간에 producer가 v2로 넘어가면 이미 v1로 발행된
+// 위클리 이슈에 v2 섹션이 append되는데, 이슈 레벨 마커는 하나뿐이라 어느 쪽을 stamp해도
+// 나머지 절반이 계약 불일치가 된다. 무음 오염 대신 그 자리에서 중단해야 한다.
+test('a v2 draft into a v1 weekly issue stops with an explicit contract mismatch', async () => {
+  const root = tempRoot('weekly-contract-mixed-week-');
+
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-01',
+    editor: weeklyDraft([weeklySection('1.6.0', 'https://example.com/a', 1)], STORY_V1_MARKERS)
+  });
+  const before = readWeeklyIndex(root);
+
+  await assert.rejects(
+    () => writeWeeklyNewsletterArtifacts({
+      root,
+      date: '2026-06-04',
+      editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/b', 2)], STORY_V2_MARKERS)
+    }),
+    /weekly story contract mismatch: existing=v1 incoming=v2/
+  );
+
+  assert.deepEqual(
+    readWeeklyIndex(root),
+    before,
+    '혼합 주 거부가 인덱스 엔트리를 바꿨다 — 절반만 갱신된 상태가 남는다'
+  );
+});
+
+test('the mixed-week guard does not fire on a fresh week', async () => {
+  // 가드는 "이미 다른 계약으로 발행된 주"에만 걸려야 한다. 새 주의 첫 v2 실행까지 막으면
+  // 컷오버 자체가 불가능해진다.
+  const root = tempRoot('weekly-contract-fresh-week-');
+
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: weeklyDraft([weeklySection('1.7.0', 'https://example.com/a', 2)], STORY_V2_MARKERS)
+  });
+
+  assert.equal(readWeeklyIndex(root)[0].public_contract_version, 'story-v2');
 });

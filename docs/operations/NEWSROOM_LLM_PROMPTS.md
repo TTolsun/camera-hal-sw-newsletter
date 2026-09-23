@@ -283,10 +283,11 @@ Workflow/Stage: editor, repair, completion, fact-check 계열 prompt
 
 주요 guardrail:
 
-- story v1 output은 top-level에 `public_contract_version="story-v1"`, `generation_contract_version=1`을, article 단위에 `public_article.story_contract_version=1`을 포함합니다.
-- `public_article`에는 `headline`, `source_subtitle`, `lead`, `body_paragraphs`, `camera_hal_takeaway`, `reader_checkpoints`, `editorial_story`, `source_links`를 포함합니다.
+- story v2 output은 top-level에 `public_contract_version="story-v2"`, `generation_contract_version=2`를, article 단위에 `public_article.story_contract_version=2`를 포함합니다.
+- `public_article`에는 `headline`, `source_subtitle`, `lead`, `body_markdown`, `camera_hal_takeaway`, `reader_checkpoints`, `editorial_story`, `source_links`를 포함합니다.
 - `decision_metadata`는 LLM이 쓰지 않습니다. deterministic builder가 만들거나 덮어씁니다(overwrite).
-- `editorial_story.reader_scenario`는 가정형 현업 장면으로 쓰고, `what_happened`에는 source로 확인된 fact만 둡니다.
+- `editorial_story`는 `not_to_overclaim`, `editor_take` 두 칸뿐입니다. 장면·확인된 사실·관점은 별도 슬롯이 아니라 `lead`와 `body_markdown` 본문에 녹여 씁니다.
+- `body_markdown`의 허용 문법은 빈 줄로 구분한 평문 문단과 `### ` 소제목 줄뿐입니다. 소제목 deny-list와 최소 문단 수는 `public-body-markdown.js` 상수에서 프롬프트로 공급합니다.
 - `article_sections`와 `hal_signal_capsule`은 독자에게 보이는 prose(reader-facing prose)로 render하지 않습니다.
 - public source link로는 local path, `.tmp` path, GitHub Actions artifact URL, editorial 전용(editorial-only) source role을 쓰지 않습니다.
 
@@ -302,11 +303,11 @@ Workflow/Stage: editor draft와 completion editor prompt에만 조립합니다(f
 
 주요 입력: 별도 입력을 추가하지 않습니다. 기존 작성 단계 prompt에 톤·서사 가이드 문자열만 결합합니다.
 
-출력/schema: 별도 schema 없음. `editorSchema`/`editorCompletionSchema`의 `public_article.body_paragraphs` 등 reader-facing prose 작성 방식을 안내합니다.
+출력/schema: 별도 schema 없음. `editorSchema`/`editorCompletionSchema`의 `public_article.body_markdown` 등 reader-facing prose 작성 방식을 안내합니다.
 
 주요 guardrail:
 
-- `body_paragraphs`는 (1) 원문에서 확인된 사실 → (2) 기술 정체·적용 대상·상태·Camera HAL과의 거리감 → (3) 직접 변경 / 참고 흐름 / 추적 리스크 takeaway 흐름으로 씁니다.
+- `body_markdown`은 고정된 순서 틀을 따르지 않습니다. 다만 원문에서 확인된 사실, 기술 정체·적용 대상·상태와 Camera HAL과의 거리감, 직접 변경 / 참고 흐름 / 추적 리스크 takeaway는 순서와 무관하게 본문에 모두 담습니다.
 - `Impact`, `Layer`, `Scope`, `HAL Relevance` 같은 라벨 제목은 본문에 노출하지 않고 내부 판단 기준으로만 씁니다.
 - 이미지 센서 제조사, SoC/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 않습니다.
 - source 근거가 없으면 Samsung, S.LSI, Exynos, 양산, 성능/화질 개선으로 확대 해석하지 않습니다.

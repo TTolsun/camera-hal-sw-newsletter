@@ -34,21 +34,17 @@ const publicSourceLink = {
   required: ['title', 'url']
 };
 
+// Story Contract v2: 안전 기능인 두 칸만 남긴다. reader_scenario/what_happened/
+// why_it_matters/field_scenario 4칸은 필드명 자체가 v1 템플릿 어휘라, 남겨 두면 모델이
+// 서사 대신 슬롯 채우기로 되돌아간다. 훅 지시는 lead와 body_markdown 프롬프트로 옮겼다.
+// 키 목록의 정본은 public-article-contract.js의 EDITORIAL_STORY_V2_KEYS다.
 const editorialStory = {
   type: 'OBJECT',
   properties: {
-    reader_scenario: string,
-    what_happened: string,
-    why_it_matters: string,
-    field_scenario: string,
     not_to_overclaim: string,
     editor_take: string
   },
   required: [
-    'reader_scenario',
-    'what_happened',
-    'why_it_matters',
-    'field_scenario',
     'not_to_overclaim',
     'editor_take'
   ]
@@ -61,7 +57,9 @@ const publicArticle = {
     source_subtitle: string,
     headline: string,
     lead: string,
-    body_paragraphs: stringArray,
+    // v2 본문은 문단 배열이 아니라 markdown 문자열 하나다. 허용 문법(### 소제목 줄과
+    // 평문 문단)과 lint는 public-body-markdown.js가 정본이다.
+    body_markdown: string,
     camera_hal_takeaway: string,
     reader_checkpoints: stringArray,
     editorial_story: editorialStory,
@@ -74,7 +72,7 @@ const publicArticle = {
     'headline',
     'source_subtitle',
     'lead',
-    'body_paragraphs',
+    'body_markdown',
     'camera_hal_takeaway',
     'reader_checkpoints',
     'story_contract_version',
@@ -541,7 +539,11 @@ const editorialPlanItem = {
     why_it_matters: string,
     reader_takeaway: string,
     misunderstanding_risks: stringArray,
-    source_limitations: stringArray
+    source_limitations: stringArray,
+    // v2 작성 안내(설계 4.3). required가 아니다 — plan 단계가 소제목을 강제하면
+    // "모든 기사에 소제목"이라는 새 고정 템플릿이 되고, 그것이 v2가 없애려는 형태다.
+    narrative_arc: string,
+    subheading_candidates: stringArray
   },
   required: [
     'title',

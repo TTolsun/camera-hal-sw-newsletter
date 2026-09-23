@@ -276,9 +276,13 @@ function deterministicallyRepairEditorSchema(value, options = {}) {
   const keptSections = [];
   ensureArray(repaired?.sections).forEach((section, sectionIndex) => {
     if (options.requireStoryContract === true) {
-      section.public_article = completeStoryPublicArticle(section, usesV2StoryContract
-        ? { issue: repaired, storyContractVersion: draftContractVersion }
-        : {});
+      // draft가 선언한 버전을 두 경로 모두에 넘긴다. v1 경로에서 인자를 비우면
+      // completeStoryPublicArticle이 생산자 기본값(v2)으로 떨어져, v1 draft가 v2 경로로
+      // 흘러 본문(body_paragraphs)을 잃는다.
+      section.public_article = completeStoryPublicArticle(section, {
+        issue: repaired,
+        storyContractVersion: draftContractVersion
+      });
       changed = true;
       if (usesV2StoryContract) {
         const demoteIssues = validatePublicArticle(section, sectionIndex, {

@@ -76,7 +76,9 @@ test('v1 completeStoryPublicArticle keeps the synthesis path unchanged behind th
   const bare = section(1);
   bare.public_article.headline = bare.sources[0].title;
 
-  const completed = completeStoryPublicArticle(bare);
+  // 생산자 기본값이 v2가 된 뒤로 v1 합성 경로는 호출자가 버전을 명시할 때만 열린다
+  // (영구 아티팩트 재검증). 인자를 비우면 v2 경로다.
+  const completed = completeStoryPublicArticle(bare, { storyContractVersion: 1 });
 
   assert.equal(completed.story_contract_version, 1);
   // v1은 여전히 suffix·editorial_story 합성을 한다(영구 아티팩트 재검증 경로).

@@ -1212,7 +1212,7 @@ test('editor schema requires public_article with reader-facing fields', () => {
     'headline',
     'source_subtitle',
     'lead',
-    'body_paragraphs',
+    'body_markdown',
     'camera_hal_takeaway',
     'reader_checkpoints',
     'story_contract_version',
@@ -1220,11 +1220,9 @@ test('editor schema requires public_article with reader-facing fields', () => {
     'source_links'
   ]);
   assert.ok(publicArticle.properties.editorial_story);
+  // v2는 안전 기능인 두 칸만 남긴다. 나머지 4칸은 필드명이 v1 템플릿 어휘라, 남겨 두면
+  // 모델이 서사 대신 슬롯 채우기로 되돌아간다(설계 §4.2).
   assert.deepEqual(publicArticle.properties.editorial_story.required, [
-    'reader_scenario',
-    'what_happened',
-    'why_it_matters',
-    'field_scenario',
     'not_to_overclaim',
     'editor_take'
   ]);

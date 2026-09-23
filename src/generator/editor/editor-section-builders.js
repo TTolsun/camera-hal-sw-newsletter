@@ -144,13 +144,15 @@ function completeStoryPublicArticle(section = {}, options = {}) {
     };
   }
   // v1 재검증 경로(W20~ 영구 아티팩트 재검증 포함): 기존 합성을 그대로 유지한다.
+  // stamp는 생산자 상수가 아니라 호출자가 넘긴 버전으로 찍는다 — 생산자가 v2인데 이
+  // 경로가 v1 산문을 합성하고 마커만 2로 찍으면 계약 패밀리가 어긋난 기사가 나온다.
   const publicArticle = publicArticleForSection(section);
   const headline = storyHeadlineFromSection(section, publicArticle);
   publicArticle.headline = headline;
   return {
     ...publicArticle,
     headline,
-    story_contract_version: STORY_CONTRACT_VERSION,
+    story_contract_version: storyContractVersion,
     source_subtitle: text(publicArticle.source_subtitle) || sourceSubtitleFromSection(section, publicArticle),
     editorial_story: {
       ...buildStoryFromPublicArticle(section, publicArticle),

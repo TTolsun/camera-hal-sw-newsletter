@@ -9,15 +9,17 @@ const {
   WEEKLY_MERGE_SYSTEM_INSTRUCTION
 } = require('../../../editor/weekly-merge');
 const { resolveWeeklyArticles } = require('../../../reporter/weekly-duplicate-merge');
-const { PUBLIC_ARTICLE_STORY_REQUIRED_KEYS } = require('../../../reporter/public-article-contract');
+const { PUBLIC_ARTICLE_V2_ALLOWED_KEYS } = require('../../../reporter/public-article-contract');
 const { publicArticleSchema } = require('../../../render/newsletter-schema');
 
 // 채택 게이트(validatePublicArticle)가 요구하지만 모델은 쓰지 않는 필드. 코드가 section에서
 // 파생하므로 스키마에도 프롬프트에도 넣지 않는다.
 const DERIVED_PUBLIC_ARTICLE_KEYS = ['decision_metadata'];
 
+// 생산자가 v2를 만들므로 병합 응답 스키마도 v2 계약을 요구해야 한다. v1 키 집합으로
+// 잠그면 스키마가 v2인데 테스트만 v1을 요구해 계약이 갈라진다.
 function gateRequiredPublicArticleKeys() {
-  return PUBLIC_ARTICLE_STORY_REQUIRED_KEYS.filter(key => !DERIVED_PUBLIC_ARTICLE_KEYS.includes(key));
+  return PUBLIC_ARTICLE_V2_ALLOWED_KEYS.filter(key => !DERIVED_PUBLIC_ARTICLE_KEYS.includes(key));
 }
 
 function article(headline, url) {
