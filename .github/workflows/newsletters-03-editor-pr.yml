@@ -452,14 +452,19 @@ jobs:
           # 기존 동작(GITHUB_TOKEN)으로 안전하게 폴백한다.
           token: ${{ secrets.NEWSROOM_PR_TOKEN || github.token }}
           commit-message: "Generate Camera HAL newsletter ${{ steps.meta.outputs.date }}"
-          # 의도적 재발행(allow_republish)일 때만 브랜치와 제목을 구분한다(#1160). 같은 이름을
-          # 그대로 쓰면 발행본을 만든 PR과 재발행 PR을 목록에서 가릴 수 없다. 재발행이 아닌
-          # 경우에는 종전 이름을 그대로 유지한다 — 이미 발행된 날짜인데 allow_republish가
-          # 꺼져 있으면 이 스텝 자체가 돌지 않는다(review_pr_ready=false).
-          branch: newsroom-final/${{ steps.meta.outputs.date }}${{ steps.meta.outputs.already_published_issue == 'published' && format('-republish-{0}', github.run_number) || '' }}
+          # 발행본을 대체할 수 있는 실행이면 브랜치와 제목을 구분한다(#1160). 같은 이름을 그대로
+          # 쓰면 발행본을 만든 PR과 재발행 PR을 목록에서 가릴 수 없다.
+          #
+          # 조건이 `== 'published'`가 아니라 `!= 'not_published'`인 이유: check_failed는 기발행
+          # 여부를 측정하지 못한 상태다. 그때 allow_republish로 차단을 풀면 무엇을 덮는지 모르는
+          # 채로 평소 브랜치에 얹히므로, 가장 구분이 필요한 자리에서 구분을 놓친다.
+          #
+          # 새 날짜(not_published)는 스위치가 켜져 있어도 종전 이름을 그대로 쓴다. 그리고 이미
+          # 발행된 날짜인데 스위치가 꺼져 있으면 이 스텝 자체가 돌지 않는다(review_pr_ready=false).
+          branch: newsroom-final/${{ steps.meta.outputs.date }}${{ steps.meta.outputs.already_published_issue != 'not_published' && format('-republish-{0}', github.run_number) || '' }}
           base: main
           delete-branch: true
-          title: "${{ steps.meta.outputs.already_published_issue == 'published' && '[Newsletter][republish]' || '[Newsletter]' }} Camera HAL / SW Newsletter - ${{ steps.meta.outputs.date }}"
+          title: "${{ steps.meta.outputs.already_published_issue != 'not_published' && '[Newsletter][republish]' || '[Newsletter]' }} Camera HAL / SW Newsletter - ${{ steps.meta.outputs.date }}"
           body: ${{ steps.pr-body.outputs.body }}
           add-paths: ${{ steps.allowlist.outputs.paths }}
 
