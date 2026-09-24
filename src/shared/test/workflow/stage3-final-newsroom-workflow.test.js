@@ -557,6 +557,11 @@ test('the republish switch reaches the resolver and renames the pull request (#1
   assert.doesNotMatch(editorWorkflow, /NEWSLETTER_ALLOW_REPUBLISH:[^\n]*github\.event\.inputs/);
 
   const prStep = workflowStep(editorWorkflow, 'Create final newsletter pull request');
+  // 차단은 여기서만 한다. resolver가 review_pr_ready를 내리면 진단 전용 판정과 발행 상태 화해가
+  // 함께 바뀌어, PR 하나만 막겠다는 의도보다 넓게 작용한다.
+  assert.match(prStep, /if: steps\.meta\.outputs\.review_pr_ready == 'true' && steps\.meta\.outputs\.republish_blocked != 'true'/);
+  const failStep = workflowStep(editorWorkflow, 'Fail if no reviewable PR can be created');
+  assert.match(failStep, /steps\.meta\.outputs\.republish_blocked == 'true'/);
   // 조건은 published가 아니라 not_published의 부정이다. check_failed로 기발행 여부를 측정하지
   // 못한 실행이 스위치로 차단을 풀고 들어올 때, 평소 브랜치에 얹혀 발행본을 덮지 않게 한다.
   assert.match(prStep, /already_published_issue != 'not_published' && format\('-republish-\{0\}', github\.run_number\)/);

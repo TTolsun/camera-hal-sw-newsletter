@@ -26,6 +26,9 @@ const {
   ensurePublicNewsletterArtifacts
 } = require('../../../generator/publish/ensure-public-newsletter-artifacts');
 const {
+  weeklyKeyForDate
+} = require('../../../generator/reporter/weekly-newsletter');
+const {
   removeNewsletterIndexEntry
 } = require('../../../generator/publish/public-state-reconciliation');
 const {
@@ -919,20 +922,33 @@ test('a run without weekly artifacts reports not_written rather than a failure (
 // #1160: 이미 발행된 호를 다시 만든 실행은 PR을 열지 않는다. 판정 기준은 작업 트리가 아니라
 // 직전 커밋이다 — 재생성물은 LLM 출력이라 매번 달라서, 작업 트리 변경만 보면 정상 실행과
 // 중복 실행을 구분할 수 없다.
-function publishReadyGitRoot(prefix, date, { committed = false } = {}) {
+function commitAll(root, message) {
+  execFileSync('git', ['add', '--all'], { cwd: root, stdio: 'ignore' });
+  execFileSync(
+    'git',
+    ['-c', 'user.email=test@example.com', '-c', 'user.name=test', 'commit', '-m', message],
+    { cwd: root, stdio: 'ignore' }
+  );
+}
+
+function publishReadyGitRoot(prefix, date, { committed = false, publishedDate = null } = {}) {
   const root = fsTempRoot(prefix);
   execFileSync('git', ['init'], { cwd: root, stdio: 'ignore' });
+  // 이전 발행분을 먼저 커밋해 두는 경우. 커밋 이력은 있고 이번 날짜만 없는 상태를 만든다.
+  // 발행된 주간 페이지도 함께 만든다 — PR이 실제로 커밋하는 대상이고, 주간 경로 가드가 보는 것도
+  // 그 파일이다.
+  if (publishedDate) {
+    writePublicNewsletterArtifacts(root, publishedDate);
+    writeText(
+      path.join(root, 'articles', 'newsletters', weeklyKeyForDate(publishedDate), 'index.html'),
+      '<!doctype html><html><body>published weekly issue</body></html>'
+    );
+    commitAll(root, `publish ${publishedDate}`);
+  }
   writeMinimalPublishArtifacts(root, date);
   writePublicNewsletterArtifacts(root, date);
   writeArchiveSyncSurface(root);
-  if (committed) {
-    execFileSync('git', ['add', '--all'], { cwd: root, stdio: 'ignore' });
-    execFileSync(
-      'git',
-      ['-c', 'user.email=test@example.com', '-c', 'user.name=test', 'commit', '-m', `publish ${date}`],
-      { cwd: root, stdio: 'ignore' }
-    );
-  }
+  if (committed) commitAll(root, `publish ${date}`);
   return root;
 }
 
@@ -951,6 +967,24 @@ test('a first publication of a date is not treated as a republish (#1160)', () =
   assert.equal(outputs.review_pr_ready, 'true');
 });
 
+// 위 테스트의 fixture는 커밋이 하나도 없어서 HEAD 부재 분기만 탄다. 실제 예약 실행은 커밋 이력이
+// 있는 main 위에서 돌고 ls-tree가 빈 출력을 돌려주는 경로를 탄다. 그 경로가 잠기지 않으면
+// ls-tree 쪽이 깨져도 이 테스트들은 통과하면서 매주 발행이 전부 막힌다.
+test('a new date on a repository with history stays publishable (#1160)', () => {
+  const date = '2026-09-28';
+  const root = publishReadyGitRoot('republish-guard-history-', date, { publishedDate: '2026-09-21' });
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  }));
+
+  assert.equal(outputs.already_published_issue, 'not_published');
+  assert.equal(outputs.already_published_paths, 'none');
+  assert.equal(outputs.republish_blocked, 'false');
+});
+
 test('a date already published on the base commit blocks the pull request (#1160)', () => {
   const date = '2026-09-21';
   const root = publishReadyGitRoot('republish-guard-blocked-', date, { committed: true });
@@ -964,9 +998,48 @@ test('a date already published on the base commit blocks the pull request (#1160
   assert.equal(outputs.already_published_issue, 'published');
   assert.equal(outputs.allow_republish, 'false');
   assert.equal(outputs.republish_blocked, 'true');
-  assert.equal(outputs.review_pr_ready, 'false');
-  // 발행 준비 자체는 그대로 관측된다. 막는 것은 PR 생성 하나뿐이라, 왜 막혔는지가 진단에 남는다.
+  // 차단은 워크플로의 PR 생성 조건에서 한다. resolver가 review_pr_ready를 내리면 진단 전용
+  // 판정과 발행 상태 화해까지 함께 바뀐다.
+  assert.equal(outputs.review_pr_ready, 'true');
   assert.equal(outputs.public_newsletter_ready, 'true');
+});
+
+// 발행 단위는 주간호다. 예약 발행 다음 날 재실행하면 날짜가 바뀌므로, 날짜 경로만 보는 가드는
+// 실제 복구 절차에서 바로 새어 나간다. PR이 커밋하는 대상에 주간 3종이 들어 있다.
+test('a different date inside an already published week is blocked too (#1160)', () => {
+  const publishedDate = '2026-09-21';
+  const rerunDate = '2026-09-23';
+  const root = publishReadyGitRoot('republish-guard-weekly-', rerunDate, { publishedDate });
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date: rerunDate,
+    changedArtifacts: requiredPublicFiles(rerunDate)
+  }));
+
+  assert.equal(outputs.already_published_issue, 'published');
+  assert.equal(outputs.republish_blocked, 'true');
+  assert.match(outputs.already_published_paths, /articles\/newsletters\/2026-W39\/index\.html/);
+  // 날짜 경로는 아직 없다. 주간 경로 하나로 잡아낸 것이어야 한다.
+  assert.doesNotMatch(outputs.already_published_paths, new RegExp(`newsletters/${rerunDate}/`));
+});
+
+test('an unusable git checkout is treated as unmeasured, not as unpublished (#1160)', () => {
+  const date = '2026-09-21';
+  // git init을 하지 않은 루트. 측정 불가를 not_published로 흡수하면 가드가 조용히 열린다.
+  const root = fsTempRoot('republish-guard-nogit-');
+  writeMinimalPublishArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+  writeArchiveSyncSurface(root);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  }));
+
+  assert.equal(outputs.already_published_issue, 'check_failed');
+  assert.equal(outputs.republish_blocked, 'true');
 });
 
 test('an explicit republish switch reopens the pull request path (#1160)', () => {
@@ -984,7 +1057,6 @@ test('an explicit republish switch reopens the pull request path (#1160)', () =>
     assert.equal(outputs.already_published_issue, 'published');
     assert.equal(outputs.allow_republish, 'true');
     assert.equal(outputs.republish_blocked, 'false');
-    assert.equal(outputs.review_pr_ready, 'true');
   } finally {
     if (previous === undefined) delete process.env.NEWSLETTER_ALLOW_REPUBLISH;
     else process.env.NEWSLETTER_ALLOW_REPUBLISH = previous;

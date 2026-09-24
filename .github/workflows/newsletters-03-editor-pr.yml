@@ -441,7 +441,9 @@ jobs:
 
       - name: Create final newsletter pull request
         id: cpr
-        if: steps.meta.outputs.review_pr_ready == 'true'
+        # republish_blocked는 PR 생성 하나만 막는다(#1160). resolver 안에서 review_pr_ready를
+        # 내리면 진단 전용 판정과 발행 상태 화해까지 함께 바뀌므로, 차단은 이 조건에서만 한다.
+        if: steps.meta.outputs.review_pr_ready == 'true' && steps.meta.outputs.republish_blocked != 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           # 기본 GITHUB_TOKEN으로 만든 PR에는 GitHub이 validate-site 같은
@@ -563,13 +565,13 @@ jobs:
         run: node src/shared/tooling/cli/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
 
       - name: Fail if no reviewable PR can be created
-        if: steps.meta.outputs.review_pr_ready != 'true'
+        if: steps.meta.outputs.review_pr_ready != 'true' || steps.meta.outputs.republish_blocked == 'true'
         run: |
           echo "Newsletter artifacts are not reviewable: ${{ steps.meta.outputs.reviewable_artifact_reason }}"
           echo "Public newsletter readiness: ${{ steps.meta.outputs.public_newsletter_ready }}"
           echo "Public newsletter reason: ${{ steps.meta.outputs.public_newsletter_reason }}"
           if [ "${{ steps.meta.outputs.republish_blocked }}" = "true" ]; then
-            echo "Blocked as a republish (#1160): ${{ steps.meta.outputs.date }} is already published on main (check=${{ steps.meta.outputs.already_published_issue }})."
+            echo "Blocked as a republish (#1160): ${{ steps.meta.outputs.date }} is already published on main (check=${{ steps.meta.outputs.already_published_issue }}, paths=${{ steps.meta.outputs.already_published_paths }})."
             echo "Nothing was written to a pull request. Re-run with allow_republish=true only if you intend to replace the published issue."
           fi
           exit 1

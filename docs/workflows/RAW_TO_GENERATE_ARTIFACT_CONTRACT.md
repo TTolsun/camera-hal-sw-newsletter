@@ -166,3 +166,8 @@ workflow branch는 날짜 기반 이름을 써서 같은 날짜에 PR이 중복 
 
 - Stage 1: `newsroom-raw/<YYYY-MM-DD>`
 - Stage 3: `newsroom-final/<YYYY-MM-DD>`
+
+Stage 3에는 예외가 하나 있습니다. 그 날짜나 그 주가 이미 main에 발행되어 있으면 기본 경로는 PR을
+아예 만들지 않습니다(#1160). `allow_republish` 입력으로 의도적으로 다시 발행할 때만 PR이 열리고,
+그때는 발행본 PR과 구분되도록 브랜치가 `newsroom-final/<YYYY-MM-DD>-republish-<run_number>`,
+제목이 `[Newsletter][republish] …`가 됩니다.
