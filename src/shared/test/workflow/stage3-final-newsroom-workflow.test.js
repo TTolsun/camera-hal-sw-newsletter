@@ -543,3 +543,24 @@ test('site validation workflow keeps structural checks blocking and quality anno
     assert.match(command, /\bnode\s+src\/generator\/publish\/annotate-publication-quality\.js\b[^\n]*\s--latest\b/);
   }
 });
+
+test('the republish switch reaches the resolver and renames the pull request (#1160)', () => {
+  const workflowsDir = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows');
+  const editorWorkflow = fs.readFileSync(path.join(workflowsDir, 'newsletters-03-editor-pr.yml'), 'utf8');
+  const orchestratorWorkflow = fs.readFileSync(path.join(workflowsDir, 'newsletters-00-orchestrator.yml'), 'utf8');
+
+  // 가드는 resolve-reviewable-artifacts.js가 읽는 환경 변수 하나에 달려 있다. 워크플로가 그것을
+  // 넘기지 않으면 스위치가 영영 꺼진 채로 남는다.
+  assert.match(editorWorkflow, /NEWSLETTER_ALLOW_REPUBLISH: \$\{\{ inputs\.allow_republish && 'true' \|\| 'false' \}\}/);
+  // github.event.inputs는 항상 문자열이라 "false"도 참으로 읽힌다. 그 경로로 읽으면 재발행이
+  // 기본값으로 켜진다.
+  assert.doesNotMatch(editorWorkflow, /NEWSLETTER_ALLOW_REPUBLISH:[^\n]*github\.event\.inputs/);
+
+  const prStep = workflowStep(editorWorkflow, 'Create final newsletter pull request');
+  assert.match(prStep, /already_published_issue == 'published' && format\('-republish-\{0\}', github\.run_number\)/);
+  assert.match(prStep, /already_published_issue == 'published' && '\[Newsletter\]\[republish\]'/);
+
+  // 주간 오케스트레이터에서도 스위치를 열 수 있어야 한다. 예약 실행에서는 입력이 없으므로 false다.
+  assert.match(orchestratorWorkflow, /allow_republish:\s*\n\s+description:/);
+  assert.match(orchestratorWorkflow, /allow_republish: \$\{\{ github\.event\.inputs\.allow_republish == 'true' \}\}/);
+});

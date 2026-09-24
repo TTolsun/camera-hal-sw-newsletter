@@ -170,6 +170,35 @@ function getChangedRepoVisibleArtifacts({ root = process.cwd(), date } = {}) {
   }
 }
 
+// 이번 실행이 만든 산출물이 아니라 **직전 커밋에 이미 들어 있는** 발행물을 본다(#1160).
+// 두 판정을 가르는 것이 이 함수의 전부다 — getChangedRepoVisibleArtifacts는 작업 트리의 변경을
+// 보므로, 이미 발행된 주를 다시 생성해도 "바뀐 산출물이 있다"로 읽힌다. 재생성물은 LLM 출력이라
+// 매번 달라서 그 경로로는 중복 발행을 절대 구분하지 못한다.
+function alreadyPublishedIssueAtHead(root, date) {
+  const issuePagePath = `articles/newsletters/${date}/index.html`;
+  if (!date) return { status: 'not_published', path: issuePagePath };
+  try {
+    // 커밋이 하나도 없는 저장소(테스트 fixture의 git init 직후)에서는 HEAD가 없다. 그때는
+    // 발행된 것도 없으므로 not_published다.
+    execFileSync('git', ['rev-parse', '--verify', '--quiet', 'HEAD'], {
+      cwd: root,
+      stdio: ['ignore', 'ignore', 'ignore']
+    });
+  } catch (_) {
+    return { status: 'not_published', path: issuePagePath };
+  }
+  try {
+    const output = execFileSync('git', ['ls-tree', '--name-only', 'HEAD', '--', issuePagePath], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore']
+    });
+    return { status: String(output).trim() ? 'published' : 'not_published', path: issuePagePath };
+  } catch (_) {
+    return { status: 'check_failed', path: issuePagePath };
+  }
+}
+
 function resolveDate({ root, status, explicitDate } = {}) {
   if (explicitDate) return explicitDate;
   if (status?.date) return status.date;
@@ -414,11 +443,22 @@ function resolveReviewableArtifacts(options = {}) {
     hasReviewableArtifacts = true;
   }
   const changedArtifactCount = changedArtifacts.length;
-  const reviewPrReady = publicNewsletterReady || (
+  // 이미 발행된 호를 다시 만든 실행은 PR을 열지 않는다(#1160). 그대로 두면 발행본을 덮는 PR이
+  // 열리고, 실제로 2026-09-21에 예약 실행의 재시도가 그 PR을 열었다(#1154). 막은 것은 사람이었다.
+  //
+  // check_failed도 막는다. 측정하지 못한 것을 통과로 다루지 않는다는 점에서 주간 구조 관측과
+  // 같은 방향이고, 비용도 없다 — git을 쓸 수 없으면 changedArtifacts가 이미 비어서 발행 경로가
+  // 어차피 서지 않는다.
+  const alreadyPublishedIssue = alreadyPublishedIssueAtHead(root, date);
+  const allowRepublish = isTrue(process.env.NEWSLETTER_ALLOW_REPUBLISH);
+  const republishBlocked =
+    !allowRepublish &&
+    (alreadyPublishedIssue.status === 'published' || alreadyPublishedIssue.status === 'check_failed');
+  const reviewPrReady = !republishBlocked && (publicNewsletterReady || (
     hasReviewableArtifacts &&
     changedArtifactCount > 0 &&
     statusReviewable
-  );
+  ));
   const diagnosticsOnly = reviewPrReady && !publicNewsletterReady;
   const reviewOnly = diagnosticsOnly;
   const publishCandidateReady = publicNewsletterReady;
@@ -507,6 +547,9 @@ function resolveReviewableArtifacts(options = {}) {
     `required_public=${hasRequiredPublicNewsletterFiles ? 'present' : 'missing_or_invalid'}`,
     `changed_public=${changedRequiredPublicArtifacts.length > 0 ? changedRequiredPublicArtifacts.join(',') : 'none'}`,
     `public_newsletter_ready=${publicNewsletterReady ? 'true' : 'false'}`,
+    `already_published_issue=${alreadyPublishedIssue.status}`,
+    `allow_republish=${allowRepublish ? 'true' : 'false'}`,
+    `republish_blocked=${republishBlocked ? 'true' : 'false'}`,
     `review_pr_ready=${reviewPrReady ? 'true' : 'false'}`,
     `review_only=${reviewOnly ? 'true' : 'false'}`,
     `diagnostics_only=${diagnosticsOnly ? 'true' : 'false'}`,
@@ -539,6 +582,9 @@ function resolveReviewableArtifacts(options = {}) {
     hasPublicArtifacts,
     hasRequiredPublicNewsletterFiles,
     publicNewsletterReady,
+    alreadyPublishedIssue,
+    allowRepublish,
+    republishBlocked,
     reviewPrReady,
     reviewOnly,
     diagnosticsOnly,
@@ -572,6 +618,9 @@ function buildReviewableArtifactOutputs(resolved) {
     has_public_artifacts: resolved.hasPublicArtifacts ? 'true' : 'false',
     has_required_public_newsletter_files: resolved.hasRequiredPublicNewsletterFiles ? 'true' : 'false',
     public_newsletter_ready: resolved.publicNewsletterReady ? 'true' : 'false',
+    already_published_issue: resolved.alreadyPublishedIssue?.status || 'not_published',
+    allow_republish: resolved.allowRepublish ? 'true' : 'false',
+    republish_blocked: resolved.republishBlocked ? 'true' : 'false',
     review_pr_ready: resolved.reviewPrReady ? 'true' : 'false',
     review_only: resolved.reviewOnly ? 'true' : 'false',
     diagnostics_only: resolved.diagnosticsOnly ? 'true' : 'false',

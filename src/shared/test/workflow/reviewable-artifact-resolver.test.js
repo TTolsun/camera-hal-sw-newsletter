@@ -915,3 +915,78 @@ test('a run without weekly artifacts reports not_written rather than a failure (
   // 두 번째 실행부터 발행이 전부 막힌다.
   assert.doesNotMatch(resolved.publicNewsletterReason, /weekly page structure/);
 });
+
+// #1160: 이미 발행된 호를 다시 만든 실행은 PR을 열지 않는다. 판정 기준은 작업 트리가 아니라
+// 직전 커밋이다 — 재생성물은 LLM 출력이라 매번 달라서, 작업 트리 변경만 보면 정상 실행과
+// 중복 실행을 구분할 수 없다.
+function publishReadyGitRoot(prefix, date, { committed = false } = {}) {
+  const root = fsTempRoot(prefix);
+  execFileSync('git', ['init'], { cwd: root, stdio: 'ignore' });
+  writeMinimalPublishArtifacts(root, date);
+  writePublicNewsletterArtifacts(root, date);
+  writeArchiveSyncSurface(root);
+  if (committed) {
+    execFileSync('git', ['add', '--all'], { cwd: root, stdio: 'ignore' });
+    execFileSync(
+      'git',
+      ['-c', 'user.email=test@example.com', '-c', 'user.name=test', 'commit', '-m', `publish ${date}`],
+      { cwd: root, stdio: 'ignore' }
+    );
+  }
+  return root;
+}
+
+test('a first publication of a date is not treated as a republish (#1160)', () => {
+  const date = '2026-09-21';
+  const root = publishReadyGitRoot('republish-guard-first-', date);
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  }));
+
+  assert.equal(outputs.already_published_issue, 'not_published');
+  assert.equal(outputs.republish_blocked, 'false');
+  assert.equal(outputs.review_pr_ready, 'true');
+});
+
+test('a date already published on the base commit blocks the pull request (#1160)', () => {
+  const date = '2026-09-21';
+  const root = publishReadyGitRoot('republish-guard-blocked-', date, { committed: true });
+
+  const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+    root,
+    date,
+    changedArtifacts: requiredPublicFiles(date)
+  }));
+
+  assert.equal(outputs.already_published_issue, 'published');
+  assert.equal(outputs.allow_republish, 'false');
+  assert.equal(outputs.republish_blocked, 'true');
+  assert.equal(outputs.review_pr_ready, 'false');
+  // 발행 준비 자체는 그대로 관측된다. 막는 것은 PR 생성 하나뿐이라, 왜 막혔는지가 진단에 남는다.
+  assert.equal(outputs.public_newsletter_ready, 'true');
+});
+
+test('an explicit republish switch reopens the pull request path (#1160)', () => {
+  const date = '2026-09-21';
+  const root = publishReadyGitRoot('republish-guard-allowed-', date, { committed: true });
+  const previous = process.env.NEWSLETTER_ALLOW_REPUBLISH;
+  process.env.NEWSLETTER_ALLOW_REPUBLISH = 'true';
+  try {
+    const outputs = buildReviewableArtifactOutputs(resolveReviewableArtifacts({
+      root,
+      date,
+      changedArtifacts: requiredPublicFiles(date)
+    }));
+
+    assert.equal(outputs.already_published_issue, 'published');
+    assert.equal(outputs.allow_republish, 'true');
+    assert.equal(outputs.republish_blocked, 'false');
+    assert.equal(outputs.review_pr_ready, 'true');
+  } finally {
+    if (previous === undefined) delete process.env.NEWSLETTER_ALLOW_REPUBLISH;
+    else process.env.NEWSLETTER_ALLOW_REPUBLISH = previous;
+  }
+});
