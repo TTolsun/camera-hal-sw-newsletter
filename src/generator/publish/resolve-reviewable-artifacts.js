@@ -170,6 +170,62 @@ function getChangedRepoVisibleArtifacts({ root = process.cwd(), date } = {}) {
   }
 }
 
+// 이번 실행이 만든 산출물이 아니라 **직전 커밋에 이미 들어 있는** 발행물을 본다(#1160).
+// getChangedRepoVisibleArtifacts는 작업 트리의 변경을 보므로, 이미 발행된 주를 다시 생성해도
+// "바뀐 산출물이 있다"로 읽힌다. 재생성물은 LLM 출력이라 매번 달라서 그 경로로는 중복 발행을
+// 절대 구분하지 못한다.
+//
+// 발행 단위는 주간호다. 날짜 경로만 보면 같은 주를 다른 날짜로 다시 만드는 실행을 놓친다 —
+// 예약 발행 다음 날 재실행하면 날짜가 바뀌므로 그 경로가 실제 복구 절차에서 바로 열린다.
+// 그래서 날짜 페이지와 주간 페이지를 함께 본다. 둘 다 PR이 커밋하는 대상이다
+// (review-artifact-inventory.js의 retention allowlist).
+function publishedIssuePathsFor(date) {
+  const paths = [`articles/newsletters/${date}/index.html`];
+  try {
+    paths.push(`articles/newsletters/${weeklyKeyForDate(date)}/index.html`);
+  } catch (_) {
+    // weeklyKeyForDate는 YYYY-MM-DD가 아니면 throw한다. 주간 경로를 못 만든 것뿐이라
+    // 날짜 경로 검사는 그대로 진행한다.
+  }
+  return paths;
+}
+
+function alreadyPublishedIssueAtHead(root, date) {
+  if (!date) return { status: 'not_published', paths: [], matched: [] };
+  const paths = publishedIssuePathsFor(date);
+  try {
+    // git을 쓸 수 없거나 저장소가 아니면 측정 자체가 불가능하다. 커밋이 없는 경우와 구분해야
+    // 한다 — 전자를 not_published로 흡수하면 가드가 조용히 열린다.
+    execFileSync('git', ['rev-parse', '--git-dir'], {
+      cwd: root,
+      stdio: ['ignore', 'ignore', 'ignore']
+    });
+  } catch (_) {
+    return { status: 'check_failed', paths, matched: [] };
+  }
+  try {
+    // 커밋이 하나도 없는 저장소(테스트 fixture의 git init 직후)에는 HEAD가 없다. 저장소는
+    // 멀쩡하므로 발행된 것이 없다는 뜻이다.
+    execFileSync('git', ['rev-parse', '--verify', '--quiet', 'HEAD'], {
+      cwd: root,
+      stdio: ['ignore', 'ignore', 'ignore']
+    });
+  } catch (_) {
+    return { status: 'not_published', paths, matched: [] };
+  }
+  try {
+    const output = execFileSync('git', ['ls-tree', '--name-only', 'HEAD', '--', ...paths], {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore']
+    });
+    const matched = String(output).split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+    return { status: matched.length > 0 ? 'published' : 'not_published', paths, matched };
+  } catch (_) {
+    return { status: 'check_failed', paths, matched: [] };
+  }
+}
+
 function resolveDate({ root, status, explicitDate } = {}) {
   if (explicitDate) return explicitDate;
   if (status?.date) return status.date;
@@ -414,6 +470,20 @@ function resolveReviewableArtifacts(options = {}) {
     hasReviewableArtifacts = true;
   }
   const changedArtifactCount = changedArtifacts.length;
+  // 이미 발행된 호를 다시 만든 실행은 PR을 열지 않는다(#1160). 그대로 두면 발행본을 덮는 PR이
+  // 열리고, 실제로 2026-09-21에 예약 실행의 재시도가 그 PR을 열었다(#1154). 막은 것은 사람이었다.
+  //
+  // check_failed도 막는다. 측정하지 못한 것을 통과로 다루지 않는다 — 주간 구조 관측과 같은 방향이다.
+  //
+  // 이 판정을 reviewPrReady에 곱하지 않는다. 그 값은 PR 생성 말고도 진단 전용 여부(diagnosticsOnly)와
+  // 발행 상태 화해(ensure-public-newsletter-artifacts.js)가 함께 읽어서, 곱하면 상태 기록까지 사실과
+  // 다르게 바뀐다. 막아야 하는 것은 PR 하나뿐이므로 판정만 내보내고 차단은 워크플로의 PR 생성
+  // 조건에서 한다.
+  const alreadyPublishedIssue = alreadyPublishedIssueAtHead(root, date);
+  const allowRepublish = isTrue(process.env.NEWSLETTER_ALLOW_REPUBLISH);
+  const republishBlocked =
+    !allowRepublish &&
+    (alreadyPublishedIssue.status === 'published' || alreadyPublishedIssue.status === 'check_failed');
   const reviewPrReady = publicNewsletterReady || (
     hasReviewableArtifacts &&
     changedArtifactCount > 0 &&
@@ -507,6 +577,10 @@ function resolveReviewableArtifacts(options = {}) {
     `required_public=${hasRequiredPublicNewsletterFiles ? 'present' : 'missing_or_invalid'}`,
     `changed_public=${changedRequiredPublicArtifacts.length > 0 ? changedRequiredPublicArtifacts.join(',') : 'none'}`,
     `public_newsletter_ready=${publicNewsletterReady ? 'true' : 'false'}`,
+    `already_published_issue=${alreadyPublishedIssue.status}`,
+    `already_published_paths=${alreadyPublishedIssue.matched.length > 0 ? alreadyPublishedIssue.matched.join(",") : "none"}`,
+    `allow_republish=${allowRepublish ? 'true' : 'false'}`,
+    `republish_blocked=${republishBlocked ? 'true' : 'false'}`,
     `review_pr_ready=${reviewPrReady ? 'true' : 'false'}`,
     `review_only=${reviewOnly ? 'true' : 'false'}`,
     `diagnostics_only=${diagnosticsOnly ? 'true' : 'false'}`,
@@ -539,6 +613,9 @@ function resolveReviewableArtifacts(options = {}) {
     hasPublicArtifacts,
     hasRequiredPublicNewsletterFiles,
     publicNewsletterReady,
+    alreadyPublishedIssue,
+    allowRepublish,
+    republishBlocked,
     reviewPrReady,
     reviewOnly,
     diagnosticsOnly,
@@ -572,6 +649,12 @@ function buildReviewableArtifactOutputs(resolved) {
     has_public_artifacts: resolved.hasPublicArtifacts ? 'true' : 'false',
     has_required_public_newsletter_files: resolved.hasRequiredPublicNewsletterFiles ? 'true' : 'false',
     public_newsletter_ready: resolved.publicNewsletterReady ? 'true' : 'false',
+    already_published_issue: resolved.alreadyPublishedIssue?.status || 'not_published',
+    already_published_paths: resolved.alreadyPublishedIssue?.matched?.length > 0
+      ? resolved.alreadyPublishedIssue.matched.join(',')
+      : 'none',
+    allow_republish: resolved.allowRepublish ? 'true' : 'false',
+    republish_blocked: resolved.republishBlocked ? 'true' : 'false',
     review_pr_ready: resolved.reviewPrReady ? 'true' : 'false',
     review_only: resolved.reviewOnly ? 'true' : 'false',
     diagnostics_only: resolved.diagnosticsOnly ? 'true' : 'false',

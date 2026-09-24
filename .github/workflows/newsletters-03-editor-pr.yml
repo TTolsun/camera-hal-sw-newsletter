@@ -32,6 +32,11 @@ on:
         required: false
         default: ""
         type: string
+      allow_republish:
+        description: "이미 발행된 호를 의도적으로 다시 만들 때만 켠다. 기본값 false에서는 그 날짜가 main에 이미 발행되어 있으면 PR을 만들지 않고 진단만 남긴다(#1160)."
+        required: false
+        default: false
+        type: boolean
   workflow_call:
     inputs:
       newsletter_date:
@@ -44,6 +49,11 @@ on:
         required: false
         type: string
         default: ""
+      allow_republish:
+        description: "이미 발행된 호를 의도적으로 다시 만들 때만 켠다(#1160)."
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -60,6 +70,11 @@ jobs:
 
     env:
       NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
+      # resolve-reviewable-artifacts.js가 읽는 재발행 허용 스위치(#1160). 켜지 않으면 그 날짜가
+      # main에 이미 발행되어 있을 때 review_pr_ready가 false가 되어 PR을 만들지 않는다.
+      # github.event.inputs를 함께 보지 않는다 — 그쪽은 항상 문자열이라 "false"도 참으로 읽힌다.
+      # boolean 입력은 workflow_dispatch와 workflow_call 양쪽에서 inputs 컨텍스트에 실린다.
+      NEWSLETTER_ALLOW_REPUBLISH: ${{ inputs.allow_republish && 'true' || 'false' }}
       NEWSROOM_CANDIDATE_INPUT_MODE: artifact
       NEWSROOM_CANDIDATE_INPUT_PATH: ""
       # Task 12: generate(npm run generate → gemini-newsroom-newsletter.js)가 shortlist/최종
@@ -426,7 +441,9 @@ jobs:
 
       - name: Create final newsletter pull request
         id: cpr
-        if: steps.meta.outputs.review_pr_ready == 'true'
+        # republish_blocked는 PR 생성 하나만 막는다(#1160). resolver 안에서 review_pr_ready를
+        # 내리면 진단 전용 판정과 발행 상태 화해까지 함께 바뀌므로, 차단은 이 조건에서만 한다.
+        if: steps.meta.outputs.review_pr_ready == 'true' && steps.meta.outputs.republish_blocked != 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           # 기본 GITHUB_TOKEN으로 만든 PR에는 GitHub이 validate-site 같은
@@ -437,10 +454,19 @@ jobs:
           # 기존 동작(GITHUB_TOKEN)으로 안전하게 폴백한다.
           token: ${{ secrets.NEWSROOM_PR_TOKEN || github.token }}
           commit-message: "Generate Camera HAL newsletter ${{ steps.meta.outputs.date }}"
-          branch: newsroom-final/${{ steps.meta.outputs.date }}
+          # 발행본을 대체할 수 있는 실행이면 브랜치와 제목을 구분한다(#1160). 같은 이름을 그대로
+          # 쓰면 발행본을 만든 PR과 재발행 PR을 목록에서 가릴 수 없다.
+          #
+          # 조건이 `== 'published'`가 아니라 `!= 'not_published'`인 이유: check_failed는 기발행
+          # 여부를 측정하지 못한 상태다. 그때 allow_republish로 차단을 풀면 무엇을 덮는지 모르는
+          # 채로 평소 브랜치에 얹히므로, 가장 구분이 필요한 자리에서 구분을 놓친다.
+          #
+          # 새 날짜(not_published)는 스위치가 켜져 있어도 종전 이름을 그대로 쓴다. 그리고 이미
+          # 발행된 날짜인데 스위치가 꺼져 있으면 이 스텝 자체가 돌지 않는다(review_pr_ready=false).
+          branch: newsroom-final/${{ steps.meta.outputs.date }}${{ steps.meta.outputs.already_published_issue != 'not_published' && format('-republish-{0}', github.run_number) || '' }}
           base: main
           delete-branch: true
-          title: "[Newsletter] Camera HAL / SW Newsletter - ${{ steps.meta.outputs.date }}"
+          title: "${{ steps.meta.outputs.already_published_issue != 'not_published' && '[Newsletter][republish]' || '[Newsletter]' }} Camera HAL / SW Newsletter - ${{ steps.meta.outputs.date }}"
           body: ${{ steps.pr-body.outputs.body }}
           add-paths: ${{ steps.allowlist.outputs.paths }}
 
@@ -539,9 +565,13 @@ jobs:
         run: node src/shared/tooling/cli/write-newsroom-workflow-summary.js --profile "$SUMMARY_PROFILE"
 
       - name: Fail if no reviewable PR can be created
-        if: steps.meta.outputs.review_pr_ready != 'true'
+        if: steps.meta.outputs.review_pr_ready != 'true' || steps.meta.outputs.republish_blocked == 'true'
         run: |
           echo "Newsletter artifacts are not reviewable: ${{ steps.meta.outputs.reviewable_artifact_reason }}"
           echo "Public newsletter readiness: ${{ steps.meta.outputs.public_newsletter_ready }}"
           echo "Public newsletter reason: ${{ steps.meta.outputs.public_newsletter_reason }}"
+          if [ "${{ steps.meta.outputs.republish_blocked }}" = "true" ]; then
+            echo "Blocked as a republish (#1160): ${{ steps.meta.outputs.date }} is already published on main (check=${{ steps.meta.outputs.already_published_issue }}, paths=${{ steps.meta.outputs.already_published_paths }})."
+            echo "Nothing was written to a pull request. Re-run with allow_republish=true only if you intend to replace the published issue."
+          fi
           exit 1

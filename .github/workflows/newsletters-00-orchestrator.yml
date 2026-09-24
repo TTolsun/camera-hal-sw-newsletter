@@ -20,6 +20,11 @@ on:
         required: false
         default: ""
         type: string
+      allow_republish:
+        description: "이미 발행된 호를 의도적으로 다시 만들 때만 켠다. 기본값 false에서는 그 날짜가 main에 이미 발행되어 있으면 PR을 만들지 않고 진단만 남긴다(#1160)."
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -67,6 +72,7 @@ jobs:
       # carry_source_path는 여기서 전달하지 않는다 — carry-forward 로딩은 collect(01)
       # 단계에서만 일어난다(loadCarryForward 호출부가 collect-news-candidates.js뿐).
       coverage_week_key: ${{ github.event.inputs.coverage_week_key || '' }}
+      allow_republish: ${{ github.event.inputs.allow_republish == 'true' }}
     secrets: inherit
 
   summary:
