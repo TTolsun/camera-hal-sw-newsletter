@@ -6,7 +6,8 @@ const test = require('node:test');
 const {
   renderWorkflowSummary,
   classifyPublication,
-  statusFromOutcome
+  statusFromOutcome,
+  buildInputFromEnv
 } = require('../../../tooling/cli/write-newsroom-workflow-summary');
 
 function passLog() {
@@ -247,4 +248,57 @@ test('role을 공유하는 여러 행이 있어도 role별 마지막 상태로 �
   assert.match(md, /reporter\["Reporter"\]:::passed/);
   assert.match(md, /editor\["Editor"\]:::failed/);
   assert.match(md, /factcheck\["Fact-check"\]:::skipped/);
+});
+
+// PR이 안 만들어진 원인 중 둘은 사람이 할 다음 행동이 다르다. 자격증명은 교체해야 하고,
+// 재발행 차단은 애초에 다시 만들면 안 되는 호다. 요약이 둘을 "검토할 만한 산출물이 없다"와
+// 섞으면 대응이 재실행으로 흐른다(#1161, #1160).
+test('an unusable pull request credential is reported as its own skip reason (#1161)', () => {
+  const md = renderWorkflowSummary({
+    profile: 'newsroom-final',
+    meta: { pr_credential_status: 'unusable' }
+  });
+
+  assert.match(md, /Skip 사유/);
+  assert.match(md, /NEWSROOM_PR_TOKEN/);
+  assert.match(md, /재실행으로는 풀리지 않는다/);
+});
+
+test('a usable or absent credential adds no skip line (#1161)', () => {
+  for (const status of ['ok', 'fallback', 'unverified', 'unknown', '']) {
+    const md = renderWorkflowSummary({
+      profile: 'newsroom-final',
+      meta: { pr_credential_status: status }
+    });
+    assert.doesNotMatch(md, /NEWSROOM_PR_TOKEN/, `credential=${status}`);
+  }
+});
+
+test('a republish block is reported as its own skip reason (#1160)', () => {
+  const md = renderWorkflowSummary({
+    profile: 'newsroom-final',
+    meta: { republish_blocked: 'true', already_published_issue: 'published' }
+  });
+
+  assert.match(md, /이미 발행돼 있어 재발행으로 차단됐다\(check=published\)/);
+  assert.match(md, /allow_republish/);
+});
+
+// 워크플로 env와 렌더러를 잇는 자리는 buildInputFromEnv 하나뿐이다. 렌더러만 직접 부르는
+// 테스트로는 그 매핑을 지워도 아무것도 실패하지 않아서, 기능이 조용히 죽는다.
+test('workflow env reaches the skip reasons through buildInputFromEnv (#1161)', () => {
+  const input = buildInputFromEnv({ profile: 'source-collect' }, {
+    SUMMARY_PROFILE: 'source-collect',
+    PR_CREDENTIAL_STATUS: 'unusable',
+    REPUBLISH_BLOCKED: 'true',
+    ALREADY_PUBLISHED_ISSUE: 'published'
+  });
+
+  assert.equal(input.meta.pr_credential_status, 'unusable');
+  assert.equal(input.meta.republish_blocked, 'true');
+  assert.equal(input.meta.already_published_issue, 'published');
+
+  const md = renderWorkflowSummary({ ...input, profile: 'newsroom-final' });
+  assert.match(md, /NEWSROOM_PR_TOKEN/);
+  assert.match(md, /재발행으로 차단됐다\(check=published\)/);
 });

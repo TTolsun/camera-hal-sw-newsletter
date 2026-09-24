@@ -207,6 +207,16 @@ function renderSkips(input) {
   if (text(meta.review_pr_ready) && text(meta.review_pr_ready) !== 'true') {
     lines.push(`- PR creation: ${truncate(meta.reviewable_artifact_reason) || 'no reviewable artifact'}`);
   }
+  // PR이 안 만들어진 원인 중 둘은 "산출물이 검토할 만하지 않다"와 성격이 다르고, 사람이 할
+  // 다음 행동도 다르다. 자격증명은 교체해야 하고(재실행은 같은 결과), 재발행 차단은 애초에
+  // 다시 만들면 안 되는 호다. 그래서 따로 적는다.
+  if (text(meta.pr_credential_status) === 'unusable') {
+    lines.push('- PR creation: NEWSROOM_PR_TOKEN이 설정돼 있으나 쓸 수 없다. secret을 교체해야 하고, 재실행으로는 풀리지 않는다. (#1161)');
+  }
+  if (text(meta.republish_blocked) === 'true') {
+    const check = text(meta.already_published_issue) || 'published';
+    lines.push(`- PR creation: 이 호는 이미 발행돼 있어 재발행으로 차단됐다(check=${check}). 의도적 재발행은 allow_republish 입력으로만 연다. (#1160)`);
+  }
   if (!lines.length) return '';
   return ['**Skip 사유:**', ...lines].join('\n');
 }
@@ -298,7 +308,10 @@ function buildInputFromEnv(args, env) {
       generation_status: env.GENERATION_STATUS || status.status,
       has_ai_publish_ready: env.HAS_AI_PUBLISH_READY,
       image_audit_outcome: env.IMAGE_AUDIT_OUTCOME,
-      composition_mode: env.COMPOSITION_MODE
+      composition_mode: env.COMPOSITION_MODE,
+      pr_credential_status: env.PR_CREDENTIAL_STATUS,
+      republish_blocked: env.REPUBLISH_BLOCKED,
+      already_published_issue: env.ALREADY_PUBLISHED_ISSUE
     },
     artifact: {
       debug_name: env.DEBUG_ARTIFACT_NAME || '',

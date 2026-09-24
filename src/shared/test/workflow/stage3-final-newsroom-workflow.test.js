@@ -569,6 +569,48 @@ test('the republish switch reaches the resolver and renames the pull request (#1
   assert.doesNotMatch(prStep, /already_published_issue == 'published'/);
 
   // 주간 오케스트레이터에서도 스위치를 열 수 있어야 한다. 예약 실행에서는 입력이 없으므로 false다.
+  // (아래 재발행 입력 확인은 #1160 범위다.)
   assert.match(orchestratorWorkflow, /allow_republish:\s*\n\s+description:/);
   assert.match(orchestratorWorkflow, /allow_republish: \$\{\{ github\.event\.inputs\.allow_republish == 'true' \}\}/);
+});
+
+test('the pull request credential is measured before the expensive work (#1161)', () => {
+  const workflowPath = path.join(__dirname, '..', '..', '..', '..', '.github', 'workflows', 'newsletters-03-editor-pr.yml');
+  const workflow = fs.readFileSync(workflowPath, 'utf8');
+
+  const credentialStep = workflowStep(workflow, 'Verify newsletter pull request credential');
+  // secret이 비어 있을 때는 검사할 것이 없다. 그 경우 github.token이 쓰이고 그것은 항상 유효하다.
+  assert.match(credentialStep, /if \[ -z "\$\{NEWSROOM_PR_TOKEN:-\}" \]/);
+  // 401만 실패다. 403은 rate limit·SSO·IP allowlist로도 나오므로 무효로 단정하면 멀쩡한
+  // 토큰으로도 그 주 뉴스레터가 아예 생성되지 않는다.
+  assert.match(credentialStep, /if \[ "\$HTTP_CODE" = "401" \]; then/);
+  assert.doesNotMatch(credentialStep, /"\$HTTP_CODE" = "403"/);
+  assert.match(credentialStep, /credential=unverified/);
+  assert.doesNotMatch(credentialStep, /continue-on-error/);
+  // curl은 연결 실패에도 000을 먼저 찍으므로, 거기에 대체값을 이어 붙이면 000000이 되어 진단이
+  // 깨진다. 종료 코드만 삼키고 값은 그대로 쓴다.
+  assert.match(credentialStep, /\|\| true\)"/);
+  assert.match(credentialStep, /HTTP_CODE="\$\{HTTP_CODE:-000\}"/);
+  // 토큰을 curl 인자로 넘기지 않는다. 인자는 러너의 프로세스 목록에 보인다.
+  assert.match(credentialStep, /curl -sS --config -/);
+  assert.doesNotMatch(credentialStep, /-H "Authorization: Bearer/);
+  // 셸 추적을 켜면 토큰이 들어간 printf가 그대로 로그에 찍힌다.
+  assert.doesNotMatch(credentialStep, /set -x/);
+
+  // 비싼 단계보다 먼저 재야 의미가 있다. 맨 끝 PR 생성 단계에서 드러나면 이미 LLM 비용을 썼다.
+  const credentialIndex = workflow.indexOf('- name: Verify newsletter pull request credential');
+  const generateIndex = workflow.indexOf('- name: Generate newsletter with approved candidate artifact');
+  assert.ok(credentialIndex > 0 && generateIndex > 0);
+  assert.ok(credentialIndex < generateIndex, 'credential check must run before generation');
+
+  // 주석이 설명하는 대상인 표현식 자체를 함께 잠근다. 주석만 잠그면 표현식이 어떻게 바뀌어도
+  // 통과해서, 정작 어긋남을 막지 못한다.
+  const prStep = workflowStep(workflow, 'Create final newsletter pull request');
+  assert.match(prStep, /token: \$\{\{ secrets\.NEWSROOM_PR_TOKEN \|\| github\.token \}\}/);
+  assert.match(prStep, /폴백은 secret이 \*\*비어 있을 때만\*\* 일어난다/);
+
+  // 요약이 자격증명·재발행 사유를 구분해 받는다.
+  const summaryStep = workflowStep(workflow, 'Write workflow run summary');
+  assert.match(summaryStep, /PR_CREDENTIAL_STATUS: \$\{\{ steps\.pr-credential\.outputs\.credential \|\| 'unknown' \}\}/);
+  assert.match(summaryStep, /REPUBLISH_BLOCKED: \$\{\{ steps\.meta\.outputs\.republish_blocked \}\}/);
 });

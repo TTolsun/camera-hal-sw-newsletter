@@ -122,6 +122,59 @@ jobs:
           fetch-depth: 0
           ref: main
 
+      # 발행 PR을 만들 자격증명이 쓸 수 있는 상태인지 job 초반에 한 번 잰다(#1161). 만료된
+      # NEWSROOM_PR_TOKEN은 맨 끝 PR 생성 단계에서 git exit 128로만 드러나서, 원인을 자격증명으로
+      # 읽기 어렵고 대응이 재실행으로 흐른다. 만료 토큰은 재실행해도 같은 결과이고, 반복 재실행이
+      # 이미 발행된 호를 다시 만드는 경로를 연다(#1160).
+      #
+      # 401만 실패로 본다. 401은 토큰이 만료·폐기됐다는 뜻이라 재실행이 소용없다.
+      #
+      # 403은 실패로 보지 않는다. GitHub은 rate limit 초과, SAML SSO 미인가, IP allowlist
+      # 차단에도 403을 주는데 앞의 둘은 자격증명이 멀쩡한 상태이고 rate limit은 잠시 뒤
+      # 재실행하면 풀린다. 그것을 무효로 단정하면 멀쩡한 토큰으로도 그 주 뉴스레터가 아예
+      # 생성되지 않는다. 응답을 못 받은 경우(네트워크·5xx)도 같은 이유로 통과시킨다.
+      #
+      # 그래서 이 검사가 잡는 것은 만료·폐기 토큰 하나다. 권한이 모자란 토큰은 잡지 못한다 —
+      # GET /repos는 metadata 읽기 권한만 있어도 200이다. 그 경우는 종전대로 PR 생성 단계에서
+      # 드러난다.
+      - name: Verify newsletter pull request credential
+        id: pr-credential
+        env:
+          NEWSROOM_PR_TOKEN: ${{ secrets.NEWSROOM_PR_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${NEWSROOM_PR_TOKEN:-}" ]; then
+            echo "NEWSROOM_PR_TOKEN is not set; the pull request will use the default GITHUB_TOKEN."
+            echo "credential=fallback" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # 토큰을 curl 인자로 넘기지 않는다. 인자는 러너의 프로세스 목록에 보이고, Actions의
+          # 로그 마스킹은 거기까지 덮지 않는다. --config -로 stdin에서 읽힌다.
+          # curl은 연결 실패에도 -w의 %{http_code}를 000으로 먼저 찍고 비정상 종료한다.
+          # 여기에 `|| echo "000"`을 붙이면 두 값이 이어져 000000이 되어, 진단하라고 만든 출력이
+          # 존재하지 않는 코드를 보여준다. 종료 코드만 삼키고 값은 그대로 쓴다.
+          HTTP_CODE="$(printf 'header = "Authorization: Bearer %s"\n' "${NEWSROOM_PR_TOKEN}" \
+            | curl -sS --config - -o /dev/null -w '%{http_code}' \
+              -H "Accept: application/vnd.github+json" \
+              "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}" || true)"
+          HTTP_CODE="${HTTP_CODE:-000}"
+
+          if [ "$HTTP_CODE" = "401" ]; then
+            echo "credential=unusable" >> "$GITHUB_OUTPUT"
+            echo "::error title=NEWSROOM_PR_TOKEN is expired or revoked::HTTP 401 from ${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}. The secret is set but no longer authenticates. The workflow expression only falls back to GITHUB_TOKEN when the secret is empty, so a non-empty dead token is used as-is and the pull request step dies with git exit 128. Replace the secret; re-running will not help."
+            exit 1
+          fi
+
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "credential=ok" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "credential=unverified" >> "$GITHUB_OUTPUT"
+          echo "::warning title=NEWSROOM_PR_TOKEN check inconclusive::HTTP ${HTTP_CODE}. This is not proof of an invalid credential (403 can be a rate limit, SSO authorization or an IP allowlist; 000 and 5xx are transient), so the run continues. If the pull request step later dies with git exit 128, start from the credential."
+
       - name: Resolve newsletter date
         id: resolve-newsletter-date
         env:
@@ -450,8 +503,12 @@ jobs:
           # on: pull_request 워크플로를 자동 실행하지 않는다(재귀 방지). 그래서
           # 검증 게이트가 매주 action_required 상태로 멈춘다. 별도 자격증명
           # NEWSROOM_PR_TOKEN(fine-grained PAT 또는 GitHub App token)이 있으면
-          # 그것으로 PR을 만들어 검증이 자동 실행되게 한다. secret이 없으면
-          # 기존 동작(GITHUB_TOKEN)으로 안전하게 폴백한다.
+          # 그것으로 PR을 만들어 검증이 자동 실행되게 한다.
+          #
+          # 폴백은 secret이 **비어 있을 때만** 일어난다. 값이 있는데 만료됐거나 권한이
+          # 모자라면 그 값이 그대로 쓰이고 이 스텝이 git exit 128로 죽는다(#1161). 만료·폐기는
+          # job 초반의 pr-credential 스텝이 401로 미리 잡는다. 권한 부족은 거기서 잡히지
+          # 않으므로 여전히 이 자리에서 드러난다.
           token: ${{ secrets.NEWSROOM_PR_TOKEN || github.token }}
           commit-message: "Generate Camera HAL newsletter ${{ steps.meta.outputs.date }}"
           # 발행본을 대체할 수 있는 실행이면 브랜치와 제목을 구분한다(#1160). 같은 이름을 그대로
@@ -551,6 +608,12 @@ jobs:
           PUBLIC_NEWSLETTER_REASON: ${{ steps.meta.outputs.public_newsletter_reason }}
           REVIEW_PR_READY: ${{ steps.meta.outputs.review_pr_ready }}
           REVIEWABLE_ARTIFACT_REASON: ${{ steps.meta.outputs.reviewable_artifact_reason }}
+          # PR이 안 만들어진 이유 두 가지를 요약에서 가른다. 자격증명 문제는 재실행이 소용없고
+          # (#1161), 재발행 차단은 애초에 다시 만들면 안 되는 호다(#1160). 둘 다 "산출물이
+          # 검토할 만하지 않다"와는 다른 원인이다.
+          PR_CREDENTIAL_STATUS: ${{ steps.pr-credential.outputs.credential || 'unknown' }}
+          REPUBLISH_BLOCKED: ${{ steps.meta.outputs.republish_blocked }}
+          ALREADY_PUBLISHED_ISSUE: ${{ steps.meta.outputs.already_published_issue }}
           DIAGNOSTICS_ONLY: ${{ steps.meta.outputs.diagnostics_only }}
           GENERATION_STATUS: ${{ steps.generation-status.outputs.status }}
           HAS_AI_PUBLISH_READY: ${{ steps.final-publish-status.outputs.has_ai_publish_ready }}
