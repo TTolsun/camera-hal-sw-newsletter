@@ -296,6 +296,18 @@ test('a republish block from a failed check is not reported as already published
   assert.doesNotMatch(md, /이 호는 이미 발행돼 있어/);
 });
 
+// 기발행 문구는 check가 published라고 말할 때만 나간다. 값이 비어 있으면 summary는 판정을 받지
+// 못한 것이므로, 기본값으로 published를 채우면 모르는 상태를 기발행으로 단정하게 된다.
+test('a republish block without a check value is not reported as already published (#1160)', () => {
+  const md = renderWorkflowSummary({
+    profile: 'newsroom-final',
+    meta: { republish_blocked: 'true' }
+  });
+
+  assert.match(md, /이미 발행돼 있는지 확인하지 못해 재발행으로 차단됐다\(check=missing\)/);
+  assert.doesNotMatch(md, /이 호는 이미 발행돼 있어/);
+});
+
 // 워크플로 env와 렌더러를 잇는 자리는 buildInputFromEnv 하나뿐이다. 렌더러만 직접 부르는
 // 테스트로는 그 매핑을 지워도 아무것도 실패하지 않아서, 기능이 조용히 죽는다.
 test('workflow env reaches the skip reasons through buildInputFromEnv (#1161)', () => {
