@@ -46,8 +46,9 @@ function extractOwnArgs(argv) {
       all = true;
     } else if (arg === '--out-dir') {
       // 값이 없거나 값 자리에 다른 플래그가 오면 여기서 멈춘다. 그대로 두면 `--out-dir --all`이
-      // `--all` 폴더에 오늘 날짜 한 건만 쓰고 성공으로 끝난다. 빈 문자열 토큰은 값이 있는 것으로
-      // 보고 기본 경로로 대체한다 — report-cli-date.js의 --date와 같은 규칙이다.
+      // `--all`을 출력 폴더 이름으로 삼고 전체 대신 해석된 날짜 하나만 처리한 뒤 성공으로 끝난다.
+      // 빈 문자열 토큰은 값이 있는 것으로 보고 기본 경로로 대체한다 — report-cli-date.js의
+      // --date와 같은 규칙이다.
       const value = argv[index + 1];
       if (value === undefined || value.startsWith('--')) {
         throw new Error('Missing value for --out-dir');
