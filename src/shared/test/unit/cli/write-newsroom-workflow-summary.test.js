@@ -284,6 +284,18 @@ test('a republish block is reported as its own skip reason (#1160)', () => {
   assert.match(md, /allow_republish/);
 });
 
+// check_failed는 재지 못한 상태라 기발행 문구와 갈라서 적는다. 한 문구로 합치면 확인 실패가
+// 기발행으로 읽힌다.
+test('a republish block from a failed check is not reported as already published (#1160)', () => {
+  const md = renderWorkflowSummary({
+    profile: 'newsroom-final',
+    meta: { republish_blocked: 'true', already_published_issue: 'check_failed' }
+  });
+
+  assert.match(md, /이미 발행돼 있는지 확인하지 못해 재발행으로 차단됐다\(check=check_failed\)/);
+  assert.doesNotMatch(md, /이 호는 이미 발행돼 있어/);
+});
+
 // 워크플로 env와 렌더러를 잇는 자리는 buildInputFromEnv 하나뿐이다. 렌더러만 직접 부르는
 // 테스트로는 그 매핑을 지워도 아무것도 실패하지 않아서, 기능이 조용히 죽는다.
 test('workflow env reaches the skip reasons through buildInputFromEnv (#1161)', () => {
