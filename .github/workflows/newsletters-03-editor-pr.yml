@@ -71,7 +71,8 @@ jobs:
     env:
       NEWSLETTER_DATE: ${{ inputs.newsletter_date || github.event.inputs.newsletter_date || '' }}
       # resolve-reviewable-artifacts.js가 읽는 재발행 허용 스위치(#1160). 켜지 않으면 그 날짜가
-      # main에 이미 발행되어 있을 때 review_pr_ready가 false가 되어 PR을 만들지 않는다.
+      # main에 이미 발행되어 있거나 발행 여부를 확인하지 못했을 때 republish_blocked가 true가 되어
+      # PR 생성 스텝이 건너뛰어진다. review_pr_ready는 이 스위치의 영향을 받지 않는다.
       # github.event.inputs를 함께 보지 않는다 — 그쪽은 항상 문자열이라 "false"도 참으로 읽힌다.
       # boolean 입력은 workflow_dispatch와 workflow_call 양쪽에서 inputs 컨텍스트에 실린다.
       NEWSLETTER_ALLOW_REPUBLISH: ${{ inputs.allow_republish && 'true' || 'false' }}
@@ -519,7 +520,8 @@ jobs:
           # 채로 평소 브랜치에 얹히므로, 가장 구분이 필요한 자리에서 구분을 놓친다.
           #
           # 새 날짜(not_published)는 스위치가 켜져 있어도 종전 이름을 그대로 쓴다. 그리고 이미
-          # 발행된 날짜인데 스위치가 꺼져 있으면 이 스텝 자체가 돌지 않는다(review_pr_ready=false).
+          # 발행됐거나(published) 확인하지 못한(check_failed) 날짜인데 스위치가 꺼져 있으면
+          # republish_blocked가 true라서 이 스텝 자체가 돌지 않는다.
           branch: newsroom-final/${{ steps.meta.outputs.date }}${{ steps.meta.outputs.already_published_issue != 'not_published' && format('-republish-{0}', github.run_number) || '' }}
           base: main
           delete-branch: true
