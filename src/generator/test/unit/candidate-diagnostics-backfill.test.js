@@ -79,3 +79,20 @@ test('전용 인자가 없으면 기본 출력 경로를 쓴다', () => {
   assert.strictEqual(parsed.all, false);
   assert.strictEqual(parsed.outDir, DEFAULT_OUT_DIR);
 });
+
+test('--out-dir 값이 없으면 기본 경로로 대체하지 않고 멈춘다', () => {
+  assert.throws(() => extractOwnArgs(['--out-dir']), /Missing value for --out-dir/);
+});
+
+test('--out-dir 값 자리에 다른 플래그가 오면 그 플래그를 경로로 삼지 않고 멈춘다', () => {
+  assert.throws(() => extractOwnArgs(['--out-dir', '--all']), /Missing value for --out-dir/);
+  assert.throws(
+    () => extractOwnArgs(['--out-dir', '--date', '2026-07-27']),
+    /Missing value for --out-dir/
+  );
+});
+
+test('빈 문자열 값은 값이 있는 것으로 보고 기본 경로로 대체한다', () => {
+  assert.strictEqual(extractOwnArgs(['--out-dir', '']).outDir, DEFAULT_OUT_DIR);
+  assert.strictEqual(extractOwnArgs(['--out-dir=']).outDir, DEFAULT_OUT_DIR);
+});
