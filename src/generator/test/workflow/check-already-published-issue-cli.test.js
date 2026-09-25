@@ -126,6 +126,7 @@ test('an unmeasured check with the republish switch says so instead of "not publ
 // 오케스트레이터의 가드 job은 npm ci 없이 돈다. 이 CLI가 부르는 모듈 트리 어딘가에서 외부 패키지를
 // require하게 되면 가드가 MODULE_NOT_FOUND로 실패해 모든 주간 실행이 막힌다. 로컬 테스트는
 // node_modules가 있는 곳에서 돌아 그 실패를 못 보므로, 로드된 모듈 경로로 직접 확인한다.
+// 잡는 것은 모듈을 불러올 때의 require뿐이다. 함수 안에서만 부르는 require는 이 검사를 통과한다.
 test('the guard CLI loads nothing from node_modules (#1167)', () => {
   const probe = spawnSync(process.execPath, ['-e', [
     `require(${JSON.stringify(CLI_PATH)});`,
