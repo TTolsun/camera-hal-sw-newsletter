@@ -171,3 +171,15 @@ Stage 3에는 예외가 하나 있습니다. 그 날짜나 그 주가 이미 mai
 아예 만들지 않습니다(#1160). `allow_republish` 입력으로 의도적으로 다시 발행할 때만 PR이 열리고,
 그때는 발행본 PR과 구분되도록 브랜치가 `newsroom-final/<YYYY-MM-DD>-republish-<run_number>`,
 제목이 `[Newsletter][republish] …`가 됩니다.
+
+주간 오케스트레이터(`newsletters-00-orchestrator.yml`)는 같은 판정을 Stage 1보다 먼저 한 번 더 합니다
+(#1167). 오케스트레이터가 부르는 Stage 1·2는 auto mode라 입력 산출물을 PR 없이 main에 직접 push하므로,
+Stage 3의 PR 차단만으로는 이미 발행된 호의 입력이 덮이기 때문입니다. 그 날짜나 그 주가 이미 발행되어
+있으면 `published-guard` job이 실패하고 Stage 1·2·3이 모두 돌지 않습니다. 발행 여부를 확인하지 못한
+경우도 같이 막습니다.
+
+`allow_republish`를 켜면 가드도 통과합니다. 이때 Stage 1·2는 평소처럼 산출물을 main에 곧바로 push합니다.
+그 날짜 폴더의 입력(`collected-news/<날짜>/`, `newsroom/<날짜>/`, `source-events/<날짜>/`. 발행본과 같은
+날짜로 다시 돌리면 발행본의 입력)과 날짜와 무관한 공용 상태(`state/source-snapshots/`,
+`state/deep-dive-topic-queue.json`)가 함께 바뀝니다. Stage 3의 재발행 PR을 리뷰하거나 닫기 전에 일어나는 일이라, 재발행 PR을 닫아도 이 변경은
+main에 남습니다.

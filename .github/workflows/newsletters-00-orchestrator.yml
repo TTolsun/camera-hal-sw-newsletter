@@ -36,7 +36,35 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # 대상 호가 main에 이미 발행돼 있으면 여기서 멈춘다(#1167). collect(01)·discover(02)는 auto mode에서
+  # 입력 산출물을 main에 직접 push하므로, 03 단계의 PR 차단(#1160)만으로는 발행된 호의 입력이 덮인다.
+  # 이 job이 실패하면 collect가 기본 조건 success()에 걸려 돌지 않고, discover·generate도 함께 멈춘다.
+  # 판정 코드는 #1160과 같고, 외부 패키지를 쓰지 않아 npm ci 없이 돈다(check-already-published-issue-cli.test.js가
+  # 모듈을 불러올 때의 require를 확인한다). 읽기만 하므로 쓰기 권한을 물려받지 않는다.
+  published-guard:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Stop if the target issue is already published
+        env:
+          # collect가 받는 newsletter_date와 같은 식이어야 같은 호를 본다.
+          NEWSLETTER_DATE: ${{ github.event.inputs.newsletter_date || '' }}
+          NEWSLETTER_ALLOW_REPUBLISH: ${{ github.event.inputs.allow_republish == 'true' && 'true' || 'false' }}
+        run: |
+          set -euo pipefail
+          node src/generator/publish/check-already-published-issue.js | tee -a "$GITHUB_STEP_SUMMARY"
+
   collect:
+    needs: published-guard
     uses: ./.github/workflows/newsletters-01-source-collect-pr.yml
     with:
       newsletter_date: ${{ github.event.inputs.newsletter_date || '' }}
