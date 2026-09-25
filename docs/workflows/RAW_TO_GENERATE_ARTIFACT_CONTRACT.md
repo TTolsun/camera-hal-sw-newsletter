@@ -179,7 +179,7 @@ Stage 3의 PR 차단만으로는 이미 발행된 호의 입력이 덮이기 때
 경우도 같이 막습니다.
 
 `allow_republish`를 켜면 가드도 통과합니다. 이때 Stage 1·2는 평소처럼 산출물을 main에 곧바로 push합니다.
-그 날짜 폴더의 입력(발행본과 같은 날짜로 다시 돌리면 발행본의 입력)과 날짜와 무관한 공용 상태
-(`articles/content/source-events/`, `state/source-snapshots/`, `state/deep-dive-topic-queue.json`)가 함께
-바뀝니다. Stage 3의 재발행 PR을 리뷰하거나 닫기 전에 일어나는 일이라, 재발행 PR을 닫아도 이 변경은
+그 날짜 폴더의 입력(`collected-news/<날짜>/`, `newsroom/<날짜>/`, `source-events/<날짜>/`. 발행본과 같은
+날짜로 다시 돌리면 발행본의 입력)과 날짜와 무관한 공용 상태(`state/source-snapshots/`,
+`state/deep-dive-topic-queue.json`)가 함께 바뀝니다. Stage 3의 재발행 PR을 리뷰하거나 닫기 전에 일어나는 일이라, 재발행 PR을 닫아도 이 변경은
 main에 남습니다.
