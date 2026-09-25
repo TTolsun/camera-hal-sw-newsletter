@@ -563,8 +563,15 @@ test('the republish switch reaches the resolver and renames the pull request (#1
   const failStep = workflowStep(editorWorkflow, 'Fail if no reviewable PR can be created');
   assert.match(failStep, /steps\.meta\.outputs\.republish_blocked == 'true'/);
   // check_failed는 재지 못한 상태라 "이미 발행됐다"는 메시지와 갈라서 출력한다. 한 문구로 합치면
-  // 확인 실패가 기발행으로 읽힌다.
+  // 확인 실패가 기발행으로 읽힌다. check_failed 분기가 먼저 와야 한다 — 일반 분기가 앞서면 bash가
+  // 거기서 멈춰 check_failed에도 기발행 문구가 나간다.
   assert.match(failStep, /already_published_issue \}\}" = "check_failed" \]; then\n\s+echo "Blocked as a republish \(#1160\): could not check whether/);
+  assertTextInOrder(failStep, [
+    '= "check_failed" ]; then',
+    'could not check whether',
+    'elif [ "${{ steps.meta.outputs.republish_blocked }}" = "true" ]; then',
+    'Blocked as a republish (#1160): ${{ steps.meta.outputs.date }} is already published on main'
+  ]);
   // 조건은 published가 아니라 not_published의 부정이다. check_failed로 기발행 여부를 측정하지
   // 못한 실행이 스위치로 차단을 풀고 들어올 때, 평소 브랜치에 얹혀 발행본을 덮지 않게 한다.
   assert.match(prStep, /already_published_issue != 'not_published' && format\('-republish-\{0\}', github\.run_number\)/);
