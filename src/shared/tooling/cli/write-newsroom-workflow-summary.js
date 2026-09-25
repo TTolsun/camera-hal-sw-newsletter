@@ -213,14 +213,15 @@ function renderSkips(input) {
   if (text(meta.pr_credential_status) === 'unusable') {
     lines.push('- PR creation: NEWSROOM_PR_TOKEN이 설정돼 있으나 쓸 수 없다. secret을 교체해야 하고, 재실행으로는 풀리지 않는다. (#1161)');
   }
-  // check_failed는 기발행 여부를 재지 못한 상태다. "이미 발행돼 있다"로 적으면 확인 실패가
-  // 기발행으로 읽히고, allow_republish 안내가 무엇을 덮는지 모르는 채 차단을 풀게 만든다.
+  // "이미 발행돼 있다"는 check가 published라고 말할 때만 적는다. check_failed는 기발행 여부를
+  // 재지 못한 상태이고, 값이 비어 있으면 summary가 판정을 받지 못한 것이다. 어느 쪽이든
+  // 기발행으로 적으면 allow_republish 안내가 무엇을 덮는지 모르는 채 차단을 풀게 만든다.
   if (text(meta.republish_blocked) === 'true') {
-    const check = text(meta.already_published_issue) || 'published';
-    if (check === 'check_failed') {
-      lines.push('- PR creation: 이 호가 이미 발행돼 있는지 확인하지 못해 재발행으로 차단됐다(check=check_failed). 확인하지 못한 상태는 발행된 것으로 다룬다. 확인이 성공할 때 재실행하고, 여기서 allow_republish로 차단을 풀면 무엇을 대체하는지 모르는 채 진행하게 된다. (#1160)');
+    const check = text(meta.already_published_issue);
+    if (check === 'published') {
+      lines.push('- PR creation: 이 호는 이미 발행돼 있어 재발행으로 차단됐다(check=published). 의도적 재발행은 allow_republish 입력으로만 연다. (#1160)');
     } else {
-      lines.push(`- PR creation: 이 호는 이미 발행돼 있어 재발행으로 차단됐다(check=${check}). 의도적 재발행은 allow_republish 입력으로만 연다. (#1160)`);
+      lines.push(`- PR creation: 이 호가 이미 발행돼 있는지 확인하지 못해 재발행으로 차단됐다(check=${check || 'missing'}). 확인하지 못한 상태는 발행된 것으로 다룬다. 확인이 성공할 때 재실행하고, 여기서 allow_republish로 차단을 풀면 무엇을 대체하는지 모르는 채 진행하게 된다. (#1160)`);
     }
   }
   if (!lines.length) return '';
