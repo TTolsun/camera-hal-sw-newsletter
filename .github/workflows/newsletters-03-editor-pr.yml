@@ -633,13 +633,15 @@ jobs:
           echo "Newsletter artifacts are not reviewable: ${{ steps.meta.outputs.reviewable_artifact_reason }}"
           echo "Public newsletter readiness: ${{ steps.meta.outputs.public_newsletter_ready }}"
           echo "Public newsletter reason: ${{ steps.meta.outputs.public_newsletter_reason }}"
-          # check_failed는 기발행 여부를 재지 못한 상태다. 발행됐다고 단정하면 운영자가 확인 실패를
-          # 기발행으로 읽고, allow_republish로 무엇을 덮는지 모르는 채 차단을 풀게 된다.
-          if [ "${{ steps.meta.outputs.republish_blocked }}" = "true" ] && [ "${{ steps.meta.outputs.already_published_issue }}" = "check_failed" ]; then
-            echo "Blocked as a republish (#1160): could not check whether ${{ steps.meta.outputs.date }} is already published on main (check=check_failed). An unmeasured state is treated as published."
-            echo "Nothing was written to a pull request. Re-run once the check succeeds; allow_republish=true here would bypass the guard without knowing what it replaces."
-          elif [ "${{ steps.meta.outputs.republish_blocked }}" = "true" ]; then
-            echo "Blocked as a republish (#1160): ${{ steps.meta.outputs.date }} is already published on main (check=${{ steps.meta.outputs.already_published_issue }}, paths=${{ steps.meta.outputs.already_published_paths }})."
+          # "이미 발행됐다"는 check가 published라고 말할 때만 출력한다. check_failed는 기발행 여부를
+          # 재지 못한 상태이고, 값이 비어 있으면 이 스텝이 판정을 받지 못한 것이다. 어느 쪽이든
+          # 발행됐다고 단정하면 운영자가 allow_republish로 무엇을 덮는지 모르는 채 차단을 풀게 된다.
+          # run summary(write-newsroom-workflow-summary.js)도 같은 규칙을 따른다.
+          if [ "${{ steps.meta.outputs.republish_blocked }}" = "true" ] && [ "${{ steps.meta.outputs.already_published_issue }}" = "published" ]; then
+            echo "Blocked as a republish (#1160): ${{ steps.meta.outputs.date }} is already published on main (check=published, paths=${{ steps.meta.outputs.already_published_paths }})."
             echo "Nothing was written to a pull request. Re-run with allow_republish=true only if you intend to replace the published issue."
+          elif [ "${{ steps.meta.outputs.republish_blocked }}" = "true" ]; then
+            echo "Blocked as a republish (#1160): could not check whether ${{ steps.meta.outputs.date }} is already published on main (check=${{ steps.meta.outputs.already_published_issue || 'missing' }}). An unmeasured state is treated as published."
+            echo "Nothing was written to a pull request. Re-run once the check succeeds; allow_republish=true here would bypass the guard without knowing what it replaces."
           fi
           exit 1
