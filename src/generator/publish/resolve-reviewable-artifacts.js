@@ -226,6 +226,12 @@ function alreadyPublishedIssueAtHead(root, date) {
   }
 }
 
+// 재발행 차단 규칙. 03 단계의 PR 생성(#1160)과 오케스트레이터 맨 앞의 가드(#1167)가 같은 규칙을
+// 쓰도록 한곳에 둔다. check_failed도 막는다 — 측정하지 못한 것을 통과로 다루지 않는다.
+function isRepublishBlocked(publishedStatus, allowRepublish) {
+  return !allowRepublish && (publishedStatus === 'published' || publishedStatus === 'check_failed');
+}
+
 function resolveDate({ root, status, explicitDate } = {}) {
   if (explicitDate) return explicitDate;
   if (status?.date) return status.date;
@@ -481,9 +487,7 @@ function resolveReviewableArtifacts(options = {}) {
   // 조건에서 한다.
   const alreadyPublishedIssue = alreadyPublishedIssueAtHead(root, date);
   const allowRepublish = isTrue(process.env.NEWSLETTER_ALLOW_REPUBLISH);
-  const republishBlocked =
-    !allowRepublish &&
-    (alreadyPublishedIssue.status === 'published' || alreadyPublishedIssue.status === 'check_failed');
+  const republishBlocked = isRepublishBlocked(alreadyPublishedIssue.status, allowRepublish);
   const reviewPrReady = publicNewsletterReady || (
     hasReviewableArtifacts &&
     changedArtifactCount > 0 &&
@@ -721,7 +725,9 @@ module.exports = {
   REQUIRED_FAILED_RAW_ARTIFACT_VALIDATION_REVIEWABLE_ARTIFACTS,
   REQUIRED_PUBLIC_NEWSLETTER_FILES,
   REVIEWABLE_STATUSES,
+  alreadyPublishedIssueAtHead,
   buildReviewableArtifactOutputs,
+  isRepublishBlocked,
   getChangedRepoVisibleArtifacts,
   parseGitStatusPorcelain,
   publicNewsletterStructureStatus,
