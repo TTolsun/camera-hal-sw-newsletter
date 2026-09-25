@@ -41,6 +41,9 @@ function describe(result) {
       + 'Collect, discovery and generate are skipped, so nothing overwrites the published inputs. '
       + 'Re-run with allow_republish=true only if you intend to replace the published issue.';
   }
+  if (result.status === 'check_failed') {
+    return `Republish allowed: could not check whether ${result.date} is already published on main, but allow_republish is on.`;
+  }
   if (result.status === 'published') {
     return `Republish allowed: ${result.date} is already published on main, but allow_republish is on.`;
   }

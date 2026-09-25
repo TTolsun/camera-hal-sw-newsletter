@@ -175,5 +175,9 @@ Stage 3에는 예외가 하나 있습니다. 그 날짜나 그 주가 이미 mai
 주간 오케스트레이터(`newsletters-00-orchestrator.yml`)는 같은 판정을 Stage 1보다 먼저 한 번 더 합니다
 (#1167). 오케스트레이터가 부르는 Stage 1·2는 auto mode라 입력 산출물을 PR 없이 main에 직접 push하므로,
 Stage 3의 PR 차단만으로는 이미 발행된 호의 입력이 덮이기 때문입니다. 그 날짜나 그 주가 이미 발행되어
-있으면 `published-guard` job이 실패하고 Stage 1·2·3이 모두 돌지 않습니다. `allow_republish`를 켜면
-가드도 통과합니다.
+있으면 `published-guard` job이 실패하고 Stage 1·2·3이 모두 돌지 않습니다. 발행 여부를 확인하지 못한
+경우도 같이 막습니다.
+
+`allow_republish`를 켜면 가드도 통과합니다. 이때 Stage 1·2는 평소처럼 그 날짜의 입력 산출물을 main에
+곧바로 덮어씁니다. Stage 3의 재발행 PR을 리뷰하거나 닫기 전에 일어나는 일이라, 재발행 PR을 닫아도
+발행본과 입력의 짝은 이미 깨진 상태로 남습니다.

@@ -5,7 +5,7 @@ const { execFileSync, spawnSync } = require('node:child_process');
 const path = require('node:path');
 const test = require('node:test');
 
-const { checkAlreadyPublishedIssue } = require('../../publish/check-already-published-issue');
+const { checkAlreadyPublishedIssue, describe } = require('../../publish/check-already-published-issue');
 const { tempRoot, writeText } = require('../../../shared/test/helpers/fs');
 
 const CLI_PATH = path.join(__dirname, '..', '..', 'publish', 'check-already-published-issue.js');
@@ -109,4 +109,30 @@ test('the CLI exits 1 when blocked and 0 when the run may continue (#1167)', () 
   const allowed = run({ NEWSLETTER_DATE: '2026-09-21', NEWSLETTER_ALLOW_REPUBLISH: 'true' });
   assert.equal(allowed.status, 0);
   assert.match(allowed.stdout, /Republish allowed/);
+});
+
+test('an unmeasured check with the republish switch says so instead of "not published" (#1167)', () => {
+  const root = tempRoot('published-guard-nogit-allowed-');
+
+  const result = checkAlreadyPublishedIssue({
+    root,
+    env: { NEWSLETTER_DATE: '2026-09-21', NEWSLETTER_ALLOW_REPUBLISH: 'true' }
+  });
+
+  assert.equal(result.blocked, false);
+  assert.match(describe(result), /Republish allowed: could not check whether 2026-09-21/);
+});
+
+// 오케스트레이터의 가드 job은 npm ci 없이 돈다. 이 CLI가 부르는 모듈 트리 어딘가에서 외부 패키지를
+// require하게 되면 가드가 MODULE_NOT_FOUND로 실패해 모든 주간 실행이 막힌다. 로컬 테스트는
+// node_modules가 있는 곳에서 돌아 그 실패를 못 보므로, 로드된 모듈 경로로 직접 확인한다.
+test('the guard CLI loads nothing from node_modules (#1167)', () => {
+  const probe = spawnSync(process.execPath, ['-e', [
+    `require(${JSON.stringify(CLI_PATH)});`,
+    "const external = Object.keys(require.cache).filter(key => key.split(/[\\\\/]/).includes('node_modules'));",
+    'console.log(JSON.stringify(external));'
+  ].join('\n')], { encoding: 'utf8' });
+
+  assert.equal(probe.status, 0, probe.stderr);
+  assert.deepEqual(JSON.parse(probe.stdout), []);
 });
