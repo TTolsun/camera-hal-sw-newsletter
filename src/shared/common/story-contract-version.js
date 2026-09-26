@@ -51,6 +51,14 @@ function usesBodyMarkdown(storyContractVersion) {
   return Number(storyContractVersion) >= BODY_MARKDOWN_MIN_CONTRACT_VERSION;
 }
 
+// 계약 마커가 없거나 서로 다른 버전을 가리키는 입력을 읽을 때 쓰는 폴백 버전이다.
+//
+// 생산자가 새 출력에 찍는 버전(generator/reporter의 STORY_CONTRACT_VERSION)과는 다른
+// 질문이다. 생산자가 v2로 넘어가도 마커 없는 과거 아티팩트는 여전히 v1로 읽어야 한다 —
+// 한 상수로 두 질문에 답하면 생산자 flip 한 번이 W20~ 영속 아티팩트의 본문 키 해석까지
+// 뒤집어, body_paragraphs를 들고 있는 기사가 v2로 읽히며 본문이 무음 drop된다.
+const DEFAULT_STORY_CONTRACT_VERSION = STORY_CONTRACT_VERSIONS[0];
+
 // v1은 인덱스에 적지 않는 기본값이다.
 const DEFAULT_PUBLIC_CONTRACT_VERSION = PUBLIC_CONTRACT_VERSIONS[0];
 
@@ -111,6 +119,7 @@ function indexContractVersionField(newsletterKey, issue, previousEntry) {
 }
 
 module.exports = {
+  DEFAULT_STORY_CONTRACT_VERSION,
   PUBLIC_CONTRACT_VERSIONS,
   STORY_CONTRACT_VERSIONS,
   indexContractVersionField,

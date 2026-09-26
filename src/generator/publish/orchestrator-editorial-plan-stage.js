@@ -33,7 +33,11 @@ function normalizeEditorialPlanReport(value, date) {
       why_it_matters: stringOrEmpty(item?.why_it_matters),
       reader_takeaway: stringOrEmpty(item?.reader_takeaway),
       misunderstanding_risks: ensureArray(item?.misunderstanding_risks).map(stringOrEmpty).filter(Boolean),
-      source_limitations: ensureArray(item?.source_limitations).map(stringOrEmpty).filter(Boolean)
+      source_limitations: ensureArray(item?.source_limitations).map(stringOrEmpty).filter(Boolean),
+      // v2 작성 안내(설계 4.3). 이 정규화는 고정 키 목록으로 item을 새로 만들기 때문에,
+      // 여기 적지 않은 필드는 스키마와 프롬프트에 있어도 editor까지 가지 못한다.
+      narrative_arc: stringOrEmpty(item?.narrative_arc),
+      subheading_candidates: ensureArray(item?.subheading_candidates).map(stringOrEmpty).filter(Boolean)
     })).filter(item => item.source_candidate_hash || item.url || item.title)
   };
 }

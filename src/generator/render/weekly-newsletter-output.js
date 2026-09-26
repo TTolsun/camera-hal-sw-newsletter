@@ -26,7 +26,10 @@ const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../reporter/weekly-article-limits');
 const { resolveWeeklyArticles, sectionIdentity } = require('../reporter/weekly-duplicate-merge');
 const { resolveIntroLetter } = require('../editor/intro-letter');
-const { indexContractVersionField } = require('../../shared/common/story-contract-version');
+const {
+  indexContractVersionField,
+  storyContractVersionFromPublicContractVersion
+} = require('../../shared/common/story-contract-version');
 const { coverageForAnchorDate } = require('../../shared/common/coverage-week');
 
 // Browser-safe (https) image for a weekly article section, used to show one article image on the
@@ -78,6 +81,13 @@ function loadExistingWeeklyIssue(root, weeklyKey) {
   } catch (_) {
     return null;
   }
+}
+
+// 이슈가 **선언한** story 계약 버전이고, 선언이 없으면 0이다. 부재를 v1로 단정하지
+// 않는다 — 마커 없는 재실행은 정상 경로이고(기록 보존), 부재를 v1로 읽으면 그 재실행이
+// 기록된 v2와 어긋난 것으로 보여 발행이 막힌다.
+function declaredStoryContractVersion(issue) {
+  return storyContractVersionFromPublicContractVersion(issue && issue.public_contract_version);
 }
 
 function dedupeReferences(references) {
@@ -235,6 +245,22 @@ async function writeWeeklyNewsletterArtifacts({
     }
     if (existingCoverageWeekKey !== coverage.coverage_week_key) {
       throw new Error(`weekly coverage mismatch: existing=${existingCoverageWeekKey} incoming=${coverage.coverage_week_key}`);
+    }
+    // 혼합 주 가드(설계 §5). 컷오버가 주 중간에 일어나면 v1 이슈에 v2 섹션이 append되어
+    // 한 이슈 안에 본문 키가 다른 기사가 섞인다. 이슈 레벨 마커는 하나뿐이므로 그 상태는
+    // 어느 쪽을 stamp해도 나머지 절반이 계약 불일치가 된다. 페이지 파일을 쓰기 **전에**
+    // throw해 절반만 갱신된 상태 대신 명시적 중단으로 만든다(coverage mismatch와 같은 자리).
+    // 양쪽이 모두 버전을 선언했을 때만 비교한다. 한쪽이 선언하지 않은 조합(마커 없는
+    // 재실행, 마커 이전의 과거 이슈)은 여기서 판정하지 않고, 섹션 마커가 섞인 상태는
+    // render 진입의 계약 패밀리 검사가 그대로 막는다.
+    const existingContractVersion = declaredStoryContractVersion(existingIssue);
+    const incomingContractVersion = declaredStoryContractVersion(editor);
+    if (existingContractVersion && incomingContractVersion &&
+      existingContractVersion !== incomingContractVersion) {
+      throw new Error(
+        `weekly story contract mismatch: existing=v${existingContractVersion} incoming=v${incomingContractVersion} ` +
+        `(week ${weeklyKey}; merge the contract flip at an ISO week boundary)`
+      );
     }
   }
 

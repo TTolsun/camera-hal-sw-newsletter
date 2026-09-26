@@ -14,21 +14,20 @@ const {
   sectionSummary
 } = require('../../shared/common/section-identity');
 const {
-  GENERATION_CONTRACT_VERSION,
-  STORY_CONTRACT_VERSION
-} = require('../reporter/public-article-contract');
-const {
-  PUBLIC_CONTRACT_VERSIONS
+  PUBLIC_CONTRACT_VERSIONS,
+  isSupportedStoryContractVersion
 } = require('../../shared/common/story-contract-version');
 const { normalizeEditorSection } = require('./orchestrator-reporter-normalize');
 const { EditorSemanticValidationError } = require('../editor/editor-output-contract');
 
-// 지원 버전 하나만 문자열로 비교하면 v2 draft가 story 계약을 요청하지 않은 것으로 읽힌다.
+// 묻는 것은 "이 draft가 story 계약을 요청했는가"이지 "생산자가 지금 찍는 버전인가"가
+// 아니다. 생산자 버전과 비교하면 flip 이후 v1 draft가 story 계약을 요청하지 않은 것으로
+// 읽히고, 지원 버전 하나만 비교하면 반대로 v2 draft가 빠진다. 지원 목록 전체로 본다.
 function editorRequestsStoryContract(editor = {}) {
   return PUBLIC_CONTRACT_VERSIONS.includes(editor?.public_contract_version) ||
-    Number(editor?.generation_contract_version) >= GENERATION_CONTRACT_VERSION ||
+    isSupportedStoryContractVersion(editor?.generation_contract_version) ||
     ensureArray(editor?.sections).some(section =>
-      Number(section?.public_article?.story_contract_version) >= STORY_CONTRACT_VERSION
+      isSupportedStoryContractVersion(section?.public_article?.story_contract_version)
     );
 }
 

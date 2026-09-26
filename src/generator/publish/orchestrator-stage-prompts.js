@@ -24,7 +24,8 @@ const {
   cameraDeveloperToolingFactCheckPrompt,
   articleQualityVerdictPrompt,
   editorRepairPatchPrompt,
-  claimRepairEvidencePrompt
+  claimRepairEvidencePrompt,
+  storyV2StyleExemptionPrompt
 } = require('../reporter/newsletter-prompts');
 
 function editorialPlanSystemPrompt() {
@@ -129,7 +130,8 @@ function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLocked
     ].join('\n') : '',
     '각 기사의 article_sections.verified_facts 모든 항목은 대응하는 claim_type=fact claim으로 binding되어야 합니다. verified_facts 개수보다 적은 수의 fact claim을 만들지 마세요.',
     '각 claim의 evidence_ids는 해당 기사 candidate의 source_extraction.evidence_ids에 실제로 존재하는 ID만 사용하세요. candidate에 evidence_ids가 없거나 source_extraction이 없으면 evidence_ids를 빈 배열([])로 두세요. 존재하지 않는 ID를 만들어 쓰지 마세요.',
-    '각 기사의 public_article.editorial_story를 반드시 채우세요: reader_scenario(현업 HAL 엔지니어가 실제로 겪을 법한 디버깅/CI/리뷰 상황 — 가정법, 1~2문장), what_happened(source에서 확인되는 사실 요약, 1~2문장), why_it_matters(Camera HAL / Driver / native tooling 관점의 의미, 1~2문장), field_scenario(실제 capture session/HAL 설정/CI 시나리오 연결, 1~2문장), not_to_overclaim(source가 명시하지 않은 수치/API/계층 주장 한 줄 경고), editor_take(편집자 한 줄 판단). 모든 필드는 빈 문자열이 아니어야 합니다.',
+    '각 기사의 public_article.editorial_story를 반드시 채우세요: not_to_overclaim(source가 명시하지 않은 수치/API/계층 주장 한 줄 경고), editor_take(편집자 한 줄 판단). 두 필드 모두 빈 문자열이 아니어야 하며, 독자에게 렌더링되지 않는 내부 안전 필드입니다.',
+    '독자가 마주칠 법한 장면, 확인된 사실, Camera HAL 관점의 의미, 현장 시나리오는 별도 슬롯이 아니라 lead와 body_markdown 본문 안에 자연스러운 기사 문장으로 녹여 쓰세요.',
     hasCatchUpCoverage
       ? '입력 capsule에 coverage_type=catch_up으로 표시된 기사는 "지난 소식"입니다. 이 기사는 수 주 전 릴리스를 다시 정리하는 회고이므로 속보처럼 쓰지 말고 "N주 전 릴리스된 ~를 아직 확인하지 않았다면" 같은 회고 톤으로 작성하세요. 릴리스 날짜를 숨기지 말고 본문에 명시하세요.'
       : '',
@@ -154,6 +156,7 @@ function factCheckSystemPrompt() {
     factCheckSeverityPrompt(),
     cameraDeveloperToolingFactCheckPrompt(),
     articleQualityVerdictPrompt(),
+    storyV2StyleExemptionPrompt(),
     'AOSP Camera, camera driver, SoC platform, native development 또는 Camera developer workflow 해석이 전혀 없는 일반 AI/C++/SoC news는 must_fix[]에 넣으세요.',
     'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
     'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
@@ -201,6 +204,7 @@ function factCheckRepairSystemPrompt() {
     factCheckSeverityPrompt(),
     cameraDeveloperToolingFactCheckPrompt(),
     articleQualityVerdictPrompt(),
+    storyV2StyleExemptionPrompt(),
     'main article에서 release date, version/release, API/component 또는 library/artifact, concrete behavior change, expanded editorial-scope relevance가 누락되면 must_fix로 다루세요.',
     '남아 있는 source gap 또는 main article로 사용된 watchlist/reference page는 must_fix로 다루세요.',
     'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
@@ -249,6 +253,7 @@ function factCheckCompletionSystemPrompt() {
     factCheckSeverityPrompt(),
     cameraDeveloperToolingFactCheckPrompt(),
     articleQualityVerdictPrompt(),
+    storyV2StyleExemptionPrompt(),
     'Added section이 eligible reporter candidates만 사용하는지, full draft가 Newsletter Policy article composition contract를 만족하는지에 집중하세요.',
     'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
     'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',

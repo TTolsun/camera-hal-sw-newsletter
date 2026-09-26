@@ -7,6 +7,7 @@ const {
   articleClaimContractPrompt,
   articleSectionContractPrompt,
   claimRepairEvidencePrompt,
+  editorRepairPatchPrompt,
   publicArticleJudgePrompt,
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
@@ -18,6 +19,11 @@ const {
 const {
   publicArticleJudgeBlockingIssues
 } = require('../../publish/orchestrator-judge-helpers');
+const {
+  BODY_MARKDOWN_ACTIVE_CHARACTERS,
+  BODY_MARKDOWN_MIN_PARAGRAPHS,
+  RESERVED_SUBHEADING_TERMS
+} = require('../../reporter/public-body-markdown');
 const {
   editorialPlanSystemPrompt,
   reporterSystemPrompt,
@@ -129,19 +135,16 @@ test('public article contract prompt keeps public output separate from diagnosti
   for (const marker of [
     'public_article',
     'source_fact_bundle',
-    'public_contract_version="story-v1"',
-    'generation_contract_version=1',
-    'story_contract_version=1',
+    'public_contract_version="story-v2"',
+    'generation_contract_version=2',
+    'story_contract_version=2',
     'headline',
     'source_subtitle',
     'lead',
-    'body_paragraphs',
+    'body_markdown',
     'camera_hal_takeaway',
     'reader_checkpoints',
     'editorial_story',
-    'reader_scenario',
-    'what_happened',
-    'field_scenario',
     'not_to_overclaim',
     'editor_take',
     'source_links',
@@ -157,12 +160,34 @@ test('public article contract prompt keeps public output separate from diagnosti
     assert.match(prompt, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
   assert.match(prompt, /독자-facing/);
-  assert.match(prompt, /가정형 현업 장면/);
+  // v1의 reader_scenario 슬롯 지시는 사라졌지만 "가정형" 요구는 lead로 이식됐다.
+  assert.match(prompt, /장면이나 질문으로 열되 가정형으로 쓰고/);
   assert.match(prompt, /source-confirmed fact/);
   assert.match(prompt, /모든 기사에 같은 작성 기준/);
   assert.match(prompt, /fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장/);
-  assert.match(prompt, /3-5개 자연스러운 문단/);
+  // v2는 고정 문단 수를 지시하지 않는다. 대신 기사마다 리듬을 달리하라고 요구한다.
+  assert.doesNotMatch(prompt, /3-5개 자연스러운 문단/);
+  assert.match(prompt, /문단 수와 문단 길이는 기사마다 다르게 가져가세요/);
   assert.match(prompt, /발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획/);
+  // 허용 문법(allow-list)·소제목 규약·최소 문단 수는 lint와 같은 상수에서 나와야 한다.
+  assert.match(prompt, /허용 문법은 두 가지뿐입니다/);
+  assert.match(prompt, /소제목은 0~4개이며 선택입니다/);
+  assert.match(prompt, /강조는 볼드나 따옴표가 아니라 문장 구조로 하세요/);
+  // lint가 lead·camera_hal_takeaway와의 교차 중복을 hard fail로 막는다. 프롬프트가 그걸
+  // 말하지 않으면 훅 lead를 본문 첫 문단으로 그대로 옮겨 쓴 draft가 발행 직전에 막힌다
+  // (v1은 렌더가 조용히 버렸으므로 모델이 알 방법이 없다).
+  assert.match(prompt, /lead와 camera_hal_takeaway에 쓴 문장을 body_markdown 문단으로 그대로 다시 쓰지 마세요/);
+  for (const term of RESERVED_SUBHEADING_TERMS) {
+    assert.ok(prompt.includes(term), `subheading deny-list term missing from prompt: ${term}`);
+  }
+  assert.ok(prompt.includes(`최소 ${BODY_MARKDOWN_MIN_PARAGRAPHS}개`));
+  // lint의 allow-list 마감(markdown_active_character)은 이름 붙은 구문이 아니라 문자 단위로
+  // 거부한다. 프롬프트가 그 문자 집합을 그대로 말하지 않으면 "~30%"나 "<1ms"처럼 프롬프트를
+  // 지킨 산문이 lint에서 거짓 차단되고, repair 프롬프트도 같은 표기로 다시 써서 강등된다.
+  for (const character of BODY_MARKDOWN_ACTIVE_CHARACTERS) {
+    assert.ok(prompt.includes(character), `markdown active character missing from prompt: ${character}`);
+  }
+  assert.match(prompt, /약 30%/);
   assert.match(prompt, /Public-facing impact wording과 claim-level classification은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
   assert.match(prompt, /source가 뒷받침하는 범위 안에서만 HAL\/driver\/runtime 영향을 서술하고, source가 말하지 않는 영향을 지어내거나 확대하지 마세요/);
   assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
@@ -179,6 +204,7 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /내부 QA\/checklist용 필드/);
   assert.match(prompt, /Markdown\/HTML에 직접 렌더링되지 않으므로/);
   assert.match(prompt, /public body나 "Camera HAL\/Driver 관점에서의 의미" 섹션을 대체하지 마세요/);
+  assert.match(prompt, /body_markdown과 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요/);
   assert.match(prompt, /독자가 실제로 확인할 행동/);
   assert.match(prompt, /source 범위 제한/);
   assert.match(prompt, /API\/component\/date/);
@@ -194,7 +220,10 @@ test('camera HAL editorial voice prompt carries the #693 narrative arc and overc
   assert.match(prompt, /에디토리얼 보이스/);
   assert.match(prompt, /일반 IT 뉴스처럼 요약하지 말고/);
   assert.match(prompt, /lower camera stack/);
-  assert.match(prompt, /원문에서 실제로 일어난 일을 먼저 설명/);
+  // v2는 순서를 고정하지 않는다. 다뤄야 할 내용은 그대로 요구한다.
+  assert.doesNotMatch(prompt, /원문에서 실제로 일어난 일을 먼저 설명/);
+  assert.match(prompt, /고정된 순서 틀을 따르지 말고 기사마다 흐름을 새로 정하세요/);
+  assert.match(prompt, /원문에서 실제로 일어난 일/);
   assert.match(prompt, /Camera HAL과의 거리감/);
   assert.match(prompt, /직접 변경 \/ 참고할 흐름 \/ 추적할 리스크/);
   assert.match(prompt, /Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고/);
@@ -239,9 +268,10 @@ test('editorial voice prompt slims generic guardrails when an editorial plan is 
   const full = cameraHalEditorialVoicePrompt();
   const slim = cameraHalEditorialVoiceWithPlanPrompt();
 
-  // 서사 아크와 내부 라벨 비노출은 두 버전 모두 항상 유지된다.
+  // 서사 요구(순서는 자유, 내용은 필수)와 내부 라벨 비노출은 두 버전 모두 항상 유지된다.
   for (const prompt of [full, slim]) {
-    assert.match(prompt, /원문에서 실제로 일어난 일을 먼저 설명/);
+    assert.match(prompt, /고정된 순서 틀을 따르지 말고 기사마다 흐름을 새로 정하세요/);
+    assert.match(prompt, /원문에서 실제로 일어난 일/);
     assert.match(prompt, /Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고/);
   }
   // plan이 있으면 generic 가드레일 verbose 줄을 빼고 "plan을 따르라"로 대체한다(중복 축소).
@@ -264,6 +294,13 @@ test('publication boundary prompt isolates deterministic publication judgment', 
   assert.match(prompt, /source link/);
   assert.match(prompt, /do_not_claim/);
   assert.match(prompt, /Gemini는 decision_metadata를 생성하지 마세요/);
+});
+
+test('editor repair patch prompt names every markdown active character the lint rejects', () => {
+  const prompt = editorRepairPatchPrompt();
+  for (const character of BODY_MARKDOWN_ACTIVE_CHARACTERS) {
+    assert.ok(prompt.includes(character), `markdown active character missing from repair prompt: ${character}`);
+  }
 });
 
 test('claim repair evidence prompt carries repair-only guidance', () => {
@@ -499,7 +536,7 @@ test('public article prompt does not force internal triage fallback prose', () =
   assert.match(source, /reader_checkpoints는 최소 2개/);
   assert.match(source, /reader_checkpoints는 최소 2개이며 내부 QA\/checklist용 필드입니다/);
   assert.match(source, /Markdown\/HTML에 직접 렌더링되지 않으므로/);
-  assert.match(source, /body_paragraphs와 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요/);
+  assert.match(source, /body_markdown과 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요/);
   assert.match(source, /validator token을 조합한 문장을 쓰지 마세요/);
 });
 
