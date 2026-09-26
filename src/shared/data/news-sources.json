@@ -783,6 +783,38 @@
       ]
     },
     {
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "CVE-level facts must be cross-checked against the Android Security Bulletin"
+      ],
+      "id": "google-security-blog",
+      "name": "Google Security Blog",
+      "sourceUrl": "https://security.googleblog.com/",
+      "rssUrl": "https://security.googleblog.com/feeds/posts/default?alt=rss",
+      "collectionModeHint": "rss-source",
+      "category": "security",
+      "priority": "low",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "Android 플랫폼 보안 설계, 메모리 안전(Rust/MTE), 취약점 대응 정책 글 확인; CVE 자체는 Security Bulletin이 정본",
+      "keywords": [
+        "Android",
+        "security",
+        "memory safety",
+        "Rust",
+        "MTE",
+        "vulnerability",
+        "platform hardening"
+      ]
+    },
+    {
       "id": "samsung-mobile-security-updates",
       "name": "Samsung Mobile Security Updates",
       "sourceUrl": "https://security.samsungmobile.com/securityUpdate.smsb",
@@ -1386,6 +1418,39 @@
       "sourceQualityNotes": []
     },
     {
+      "id": "android-ndk-releases",
+      "name": "Android NDK Releases",
+      "sourceUrl": "https://api.github.com/repos/android/ndk/releases?per_page=3&page=1",
+      "rssUrl": null,
+      "collectionModeHint": "release-note-watch",
+      "category": "toolchain",
+      "priority": "medium",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "Android NDK 정식 릴리스의 Clang/LLVM 업데이트, sysroot API 상승, 컴파일러·LLDB·simpleperf 수정 확인",
+      "keywords": [
+        "Android NDK",
+        "NDK",
+        "Clang",
+        "LLVM",
+        "LLDB",
+        "sysroot",
+        "native",
+        "C++"
+      ],
+      "sourceRole": "project_release_source",
+      "sourceUrlQualityHint": "project_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "dated_release_item",
+      "sourceQualityNotes": [
+        "공식 GitHub 정식 릴리스의 published_at과 변경 본문을 사용한다. rc/beta prerelease는 발행 근거로 사용하지 않는다.",
+        "최대 8페이지(24개 릴리스), 소스당 6MiB까지 스캔하며 상한 또는 요청 실패를 진단에 기록한다."
+      ]
+    },
+    {
       "id": "microsoft-cpp-team-blog",
       "name": "Microsoft C++ Team Blog",
       "sourceUrl": "https://devblogs.microsoft.com/cppblog/",
@@ -1701,6 +1766,38 @@
       ]
     },
     {
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
+      ],
+      "id": "edge-ai-vision-alliance",
+      "name": "Edge AI and Vision Alliance",
+      "sourceUrl": "https://www.edge-ai-vision.com/",
+      "rssUrl": "https://www.edge-ai-vision.com/feed/",
+      "collectionModeHint": "rss-source",
+      "category": "embedded-ai",
+      "priority": "low",
+      "reliability": "tech-media",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "임베디드 비전, 카메라 모듈, ISP, 이미지 센서, edge AI 가속기 업계 소식의 media lead 확인; official source 교차 확인 필요",
+      "keywords": [
+        "embedded vision",
+        "camera module",
+        "ISP",
+        "image sensor",
+        "edge AI",
+        "computer vision",
+        "NPU"
+      ]
+    },
+    {
       "id": "ee-times-embedded",
       "name": "EE Times - Embedded",
       "sourceUrl": "https://www.eetimes.com/tag/embedded/",
@@ -1759,6 +1856,39 @@
       "sourceQualityNotes": [
         "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
         "requires primary-source cross-check before main promotion"
+      ]
+    },
+    {
+      "sourceRole": "engineering_blog_source",
+      "sourceUrlQualityHint": "engineering_blog_with_camera_evidence",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "engineering blog with frequent non-camera posts; filter by ISP, NPU, on-device AI keywords",
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence"
+      ],
+      "id": "arm-community-blogs",
+      "name": "Arm Community Blogs",
+      "sourceUrl": "https://community.arm.com/arm-community-blogs/",
+      "rssUrl": "https://community.arm.com/arm-community-blogs/rss",
+      "collectionModeHint": "rss-source",
+      "category": "soc",
+      "priority": "medium",
+      "reliability": "vendor-blog",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "Arm CPU/GPU/NPU, ISP, on-device AI 런타임(ExecuTorch 등), 그래픽·컴퓨트 툴링 동향 확인; 제품 홍보 글은 제외",
+      "keywords": [
+        "Arm",
+        "ISP",
+        "NPU",
+        "Mali",
+        "on-device AI",
+        "ExecuTorch",
+        "Streamline",
+        "SoC"
       ]
     },
     {
@@ -2027,6 +2157,38 @@
       ]
     },
     {
+      "sourceRole": "generic_trend_source",
+      "sourceUrlQualityHint": "generic_ai_or_it_trend",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_level_native_hal_workflow_evidence",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "high-volume feed (hundreds of posts); keep priority low and rely on date window filtering"
+      ],
+      "id": "huggingface-blog",
+      "name": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog",
+      "rssUrl": "https://huggingface.co/blog/feed.xml",
+      "collectionModeHint": "rss-source",
+      "category": "ai-engineering",
+      "priority": "low",
+      "reliability": "engineering-blog",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "온디바이스 추론, 양자화, 비전 모델, 모델 배포 툴링 글 확인; 모델 홍보·행사 글은 제외",
+      "keywords": [
+        "on-device",
+        "quantization",
+        "inference",
+        "vision model",
+        "transformers",
+        "deployment",
+        "edge"
+      ]
+    },
+    {
       "id": "venturebeat-ai",
       "name": "VentureBeat AI",
       "sourceUrl": "https://venturebeat.com/",
@@ -2055,6 +2217,39 @@
         "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
         "requires primary-source cross-check before main promotion"
       ]
+    },
+    {
+      "id": "tomshardware-ai",
+      "name": "Tom's Hardware - AI",
+      "sourceUrl": "https://www.tomshardware.com/tech-industry/artificial-intelligence",
+      "rssUrl": "https://www.tomshardware.com/feeds/tag/artificial-intelligence",
+      "category": "ai-trends",
+      "priority": "low",
+      "reliability": "tech-media",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "AI 모델, 추론 하드웨어, NPU, 반도체 산업 동향의 media lead 확인; official source 교차 확인 필요",
+      "keywords": [
+        "AI",
+        "inference",
+        "NPU",
+        "GPU",
+        "semiconductor",
+        "model",
+        "decision model"
+      ],
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion",
+        "consumer PC hardware and deal posts share the feed; keep priority low"
+      ],
+      "collectionModeHint": "rss-source"
     },
     {
       "id": "software-engineering-daily",
@@ -2144,6 +2339,37 @@
       "sourceQualityNotes": [
         "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
         "requires primary-source cross-check before main promotion"
+      ]
+    },
+    {
+      "sourceRole": "tech_media_lead_source",
+      "sourceUrlQualityHint": "tech_media_lead_requires_cross_check",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": true,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "main promotion requires source-specific confirmation or explicit HAL/native workflow evidence",
+        "requires primary-source cross-check before main promotion"
+      ],
+      "id": "samsung-newsroom-korea",
+      "name": "Samsung Newsroom Korea",
+      "sourceUrl": "https://news.samsung.com/kr/",
+      "rssUrl": "https://news.samsung.com/kr/feed",
+      "collectionModeHint": "rss-source",
+      "category": "korea-tech",
+      "priority": "low",
+      "reliability": "vendor-blog",
+      "enabled": true,
+      "candidateOnly": true,
+      "requiresCrossCheck": true,
+      "usageHint": "ISOCELL 이미지 센서, Exynos, 갤럭시 카메라 기능 발표의 국내 1차 lead 확인; 마케팅 글은 제외",
+      "keywords": [
+        "ISOCELL",
+        "이미지 센서",
+        "Exynos",
+        "갤럭시",
+        "카메라",
+        "반도체"
       ]
     },
     {

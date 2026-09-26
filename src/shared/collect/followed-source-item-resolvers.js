@@ -18,7 +18,7 @@ const { resolveAiCodingReleaseItems } = require('./ai-coding-releases');
 // raspberrypi는 text/atom, patchwork는 text/JSON). 그래서 레지스트리 항목이 공통 컨텍스트
 // ({ indexItems, text, source, fetchTextImpl })를 받아 각자에게 맞는 위치 인자로 풀어 넘긴다.
 const FOLLOWED_SOURCE_RESOLVERS = [
-  ...['codex-releases', 'claude-code-changelog'].map(id => ({
+  ...['codex-releases', 'claude-code-changelog', 'android-ndk-releases'].map(id => ({
     id,
     requiresFetchClient: true,
     resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic }) =>
