@@ -108,6 +108,16 @@
           "date_confidence": 85,
           "origin": "document_section",
           "detected_at": "2026-09-07"
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
+          "excerpt": "For Android 17 and higher, we strongly recommend using package management software to bundle the correct versions of packages to create a virtual environment for Android release development.",
+          "fingerprint": "5d49367941066b4f",
+          "effective_date": "2026-09-22",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "document_section",
+          "detected_at": "2026-09-28"
         }
       ]
     },
@@ -496,6 +506,16 @@
           "date_confidence": 85,
           "origin": "monitor_event",
           "detected_at": "2026-09-07"
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+          "excerpt": "Date signal changed with normalized content hash changed.",
+          "fingerprint": "evidence-a1d50c4f6c8bffeff92b8ffafae16e4c",
+          "effective_date": "2026-09-22",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "monitor_event",
+          "detected_at": "2026-09-28"
         }
       ]
     }
