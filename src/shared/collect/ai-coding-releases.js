@@ -2,9 +2,13 @@
 
 const { MAX_BYTES_PER_INDEX_PAGE } = require('./bounded-fetch-client');
 
+const SEMVER_TAG = /^(?:rust-)?v?\d+\.\d+\.\d+$/;
+// NDK 정식 릴리스 태그는 r30처럼 semver가 아니다. rc/beta 태그는 prerelease 플래그로 걸러진다.
+const NDK_TAG = /^r\d+[a-z]?$/;
 const SOURCES = {
-  'codex-releases': { repo: 'openai/codex', product: 'Codex' },
-  'claude-code-changelog': { repo: 'anthropics/claude-code', product: 'Claude Code' }
+  'codex-releases': { repo: 'openai/codex', product: 'Codex', tagPattern: SEMVER_TAG },
+  'claude-code-changelog': { repo: 'anthropics/claude-code', product: 'Claude Code', tagPattern: SEMVER_TAG },
+  'android-ndk-releases': { repo: 'android/ndk', product: 'Android NDK', tagPattern: NDK_TAG }
 };
 const MAX_PAGES = 8;
 const PAGE_SIZE = 3;
@@ -14,7 +18,7 @@ const PAGE_SIZE = 3;
 function releaseItem(release, source, config) {
   if (!release || release.draft !== false || release.prerelease !== false) return null;
   const version = String(release.tag_name || '');
-  if (!/^(?:rust-)?v?\d+\.\d+\.\d+$/.test(version)) return null;
+  if (!config.tagPattern.test(version)) return null;
   const publishedAt = String(release.published_at || '');
   if (!/^\d{4}-\d{2}-\d{2}T/.test(publishedAt) || !Number.isFinite(Date.parse(publishedAt))) return null;
   const url = String(release.html_url || '');

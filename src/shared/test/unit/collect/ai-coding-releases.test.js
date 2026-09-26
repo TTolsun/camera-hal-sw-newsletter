@@ -50,6 +50,33 @@ test('drafts, prereleases, undated, stale, future and empty releases cannot beco
   }
 });
 
+test('Android NDK r-tags become dated release items while rc/beta prereleases and semver-shaped tags do not', async () => {
+  const ndkSource = sources.find(row => row.id === 'android-ndk-releases');
+  const ndkRelease = (overrides = {}) => release({
+    tag_name: 'r30',
+    html_url: 'https://github.com/android/ndk/releases/tag/r30',
+    published_at: '2026-09-08T19:19:21Z',
+    body: '# Changelog\n- [Issue 2215]: Fixed a compiler hang when compiling with `-O3` for ARM.\n- Upgraded the max API to 37 for NDK sysroots.',
+    ...overrides
+  });
+  const rows = await resolveAiCodingReleaseItems(JSON.stringify([ndkRelease()]), ndkSource, { now, fetchClient: client() });
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].title, 'Android NDK r30');
+  assert.equal(rows[0].version_or_release, 'r30');
+  assert.match(rows[0].behavior_change, /compiler hang/);
+  const candidate = normalizeCandidate(rows[0]);
+  assert.equal(candidate.publishedAt, '2026-09-08T19:19:21Z');
+  assert.equal(candidate.relevance_bucket, 'cpp_ai_tooling_fallback');
+  for (const override of [
+    { tag_name: 'r30-rc1', html_url: 'https://github.com/android/ndk/releases/tag/r30-rc1', prerelease: true },
+    { tag_name: 'r30-rc1', html_url: 'https://github.com/android/ndk/releases/tag/r30-rc1' },
+    { tag_name: 'v30.0.1', html_url: 'https://github.com/android/ndk/releases/tag/v30.0.1' }
+  ]) {
+    const rejected = await resolveAiCodingReleaseItems(JSON.stringify([ndkRelease(override)]), ndkSource, { now, fetchClient: client() });
+    assert.deepEqual(rejected, [], JSON.stringify(override));
+  }
+});
+
 test('collector dispatches release JSON through bounded resolver instead of generic HTML fallback', async () => {
   const urls = [];
   const result = await collectFromSource(source, {

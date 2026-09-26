@@ -43,6 +43,7 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 - AOSP Site Updates (`release-note-watch`): https://source.android.com/docs/whatsnew/site-updates
 - Android Compatibility Definition Document (`documentation-watch`, `reference_only`): https://source.android.com/docs/compatibility/cdd
 - Android Security Bulletin (`release-note-watch`): https://source.android.com/docs/security/bulletin
+- Google Security Blog (`rss-source`, 공식 RSS: https://security.googleblog.com/feeds/posts/default?alt=rss, CVE는 Security Bulletin으로 교차 확인): https://security.googleblog.com/
 - Samsung Mobile Security Updates (`release-note-watch`): https://security.samsungmobile.com/securityUpdate.smsb
 - Qualcomm Security Bulletins (`release-note-watch`): https://docs.qualcomm.com/product/publicresources/securitybulletin
 - MediaTek Security Bulletin (`release-note-watch`): https://www.mediatek.com/product-security-bulletin
@@ -111,6 +112,7 @@ AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트�
 - CppCon News: https://cppcon.org/category/news/
 - LLVM Project Blog: https://blog.llvm.org/
 - LLVM Release Notes (`release-note-watch`): https://releases.llvm.org/
+- Android NDK Releases (`release-note-watch`, 공식 GitHub 정식 릴리스의 발행일·본문): https://api.github.com/repos/android/ndk/releases?per_page=3&page=1
 - Microsoft C++ Team Blog: https://devblogs.microsoft.com/cppblog/
 
 ## Embedded / Semiconductor
@@ -119,12 +121,14 @@ AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트�
 
 - IEEE Spectrum - Embedded Systems: https://spectrum.ieee.org/tag/embedded-systems
 - IEEE Spectrum - Embedded AI: https://spectrum.ieee.org/tag/embedded-ai
+- Arm Community Blogs (`rss-source`, `soc`, RSS: https://community.arm.com/arm-community-blogs/rss, candidate-only): https://community.arm.com/arm-community-blogs/
 
 ### 후보 / 교차 확인 출처
 
 - EE Times - Embedded: https://www.eetimes.com/tag/embedded/
 - EE Times - Semiconductors: https://www.eetimes.com/tag/semiconductors/
 - Embedded.com: https://www.embedded.com/
+- Edge AI and Vision Alliance (`rss-source`, RSS: https://www.edge-ai-vision.com/feed/, candidate-only): https://www.edge-ai-vision.com/
 
 ## AI / SW Engineering Trends
 
@@ -141,6 +145,7 @@ AOSP What's New(`https://source.android.com/docs/whatsnew`)는 릴리스 노트�
 
 Codex·Claude Code 릴리스는 `published_at`을 날짜 근거로 사용하고 draft·prerelease·변경 본문 없는 태그를 제외합니다. 소스별 최대 8페이지(24개 릴리스), 6MiB 범위에서 읽으며, 요청 실패나 스캔 상한 도달은 수집 진단에 남깁니다. AI 개발 도구의 구체적인 코딩·빌드·테스트·검토·실행 권한 변경은 기존 `cpp_ai_tooling_fallback` 보조 기사 범주에서 심사합니다. 날짜·출처 검증과 보조 기사 수 제한은 동일하게 적용합니다.
 - Google Cloud AI & Machine Learning Blog: https://cloud.google.com/blog/products/ai-machine-learning
+- Hugging Face Blog (`rss-source`, RSS: https://huggingface.co/blog/feed.xml, candidate-only, 대용량 피드라 priority low): https://huggingface.co/blog
 
 ### 후보 / 교차 확인 출처
 
@@ -148,6 +153,7 @@ Codex·Claude Code 릴리스는 `published_at`을 날짜 근거로 사용하고 
 - InfoQ: https://www.infoq.com/
 - Hacker News: https://news.ycombinator.com/
 - The Register: https://www.theregister.com/
+- Tom's Hardware - AI (`rss-source`, 태그 RSS: https://www.tomshardware.com/feeds/tag/artificial-intelligence, candidate-only): https://www.tomshardware.com/tech-industry/artificial-intelligence
 - The New Stack: https://thenewstack.io/
 - VentureBeat AI: https://venturebeat.com/ (registry에서 비활성)
 - Software Engineering Daily: https://softwareengineeringdaily.com/ (registry에서 비활성)
@@ -158,6 +164,7 @@ Codex·Claude Code 릴리스는 `published_at`을 날짜 근거로 사용하고 
 
 - ZDNet Korea: https://zdnet.co.kr/
 - 요즘IT: https://yozm.wishket.com/
+- Samsung Newsroom Korea (`rss-source`, RSS: https://news.samsung.com/kr/feed, candidate-only): https://news.samsung.com/kr/
 - NAVER DEVIEW: https://developers.naver.com/d2/deview/ (registry에서 비활성)
 
 ## Reddit 커뮤니티 신호 (community signal)
