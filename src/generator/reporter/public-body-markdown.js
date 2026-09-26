@@ -93,9 +93,16 @@ const RESERVED_SUBHEADING_KEYS = new Map(
   RESERVED_SUBHEADING_TERMS.map(term => [comparisonKey(term), term])
 );
 
+// JSON 모드의 editor 모델이 문자열 안의 줄바꿈을 역슬래시와 n 두 글자로 이중 이스케이프해
+// 돌려준다(2026-09-26 run 36238083997: 기사 10편 전부 실제 개행 0개, 이 표기 8개). 허용 문법은
+// 평문 문단과 소제목 줄뿐이라 본문에 역슬래시 n이 글자로 있을 정당한 경우가 없으므로, 이 표기는
+// 줄바꿈으로 읽는다. 이것을 안 하면 본문 전체가 문단 하나로 세어져 발행이 막힌다.
+const ESCAPED_LINE_BREAK_PATTERN = /\\r\\n|\\n/g;
+
 function normalizeBodyMarkdown(value) {
   if (typeof value !== 'string') return '';
   const lines = value
+    .replace(ESCAPED_LINE_BREAK_PATTERN, '\n')
     .replace(/\r\n?/g, '\n')
     .split('\n')
     .map(line => line.replace(/\s+/g, ' ').trim());
@@ -178,6 +185,11 @@ const BODY_MARKDOWN_ACTIVE_CHARACTER_PATTERN = new RegExp(
 const BODY_MARKDOWN_ACTIVE_CHARACTER_RULE =
   `다음 문자는 소제목과 문단 어디에도 쓸 수 없습니다(결정론 lint가 markdown 활성 문자로 거부합니다): ${BODY_MARKDOWN_ACTIVE_CHARACTERS.join(' ')}. ` +
   '근사치는 "약 30%"처럼, 부등호·대괄호·세로줄 표기는 말로 풀어 쓰세요.';
+
+// 문단 사이의 빈 줄은 JSON 문자열 안의 실제 줄바꿈 문자여야 한다. 모델이 역슬래시 n을 글자로
+// 쓰면 normalizeBodyMarkdown이 줄바꿈으로 되돌리지만, 프롬프트도 같은 요구를 말해야 한다.
+const BODY_MARKDOWN_LINE_BREAK_RULE =
+  '문단 사이의 빈 줄은 JSON 문자열 안의 실제 줄바꿈 문자로 넣으세요. 역슬래시와 n을 글자 두 개로 이어 쓴 표기는 줄바꿈이 아닙니다.';
 
 // 줄바꿈으로 쪼개도 markdown이 다시 이어 붙이는 구문. 줄이 아니라 블록 텍스트에서 본다.
 const INLINE_CONSTRUCTS = Object.freeze([
@@ -341,6 +353,7 @@ function lintBodyMarkdown(value, surroundings = {}) {
 module.exports = {
   BODY_MARKDOWN_ACTIVE_CHARACTERS,
   BODY_MARKDOWN_ACTIVE_CHARACTER_RULE,
+  BODY_MARKDOWN_LINE_BREAK_RULE,
   BODY_MARKDOWN_MIN_PARAGRAPHS,
   RESERVED_SUBHEADING_PATTERNS,
   RESERVED_SUBHEADING_TERMS,
