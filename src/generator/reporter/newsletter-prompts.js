@@ -5,6 +5,7 @@ const {
   RESERVED_SUBHEADING_TERMS,
   SUBHEADING_PREFIX
 } = require('./public-body-markdown');
+const { HAL_IMPACT_AXES } = require('./hal-signal-quality');
 
 // v2 본문 규약은 lint와 **같은 상수**에서 공급한다. 여기에 같은 목록을 리터럴로 적으면
 // lint가 막는 것과 프롬프트가 금지하는 것이 갈라져, 모델이 프롬프트를 그대로 지켜도
@@ -104,6 +105,9 @@ function articleSectionContractPrompt() {
     'do_not_claim은 source-backed fact나 public article content로 render하지 말고 claim guardrail로만 사용하세요.',
     'HAL Signal contract: 모든 article(section)은 why_now, reader_owners, check_within_2_weeks, impact_axes, do_not_overstate key만 가진 hal_signal_capsule을 포함해야 합니다.',
     'hal_signal_capsule.reader_owners와 hal_signal_capsule.impact_axes는 arrays여야 합니다. 제공된 capsule metadata와 article evidence만 사용하고 누락된 source claim을 만들지 마세요.',
+    // 어휘의 정본은 hal-signal-quality.js의 HAL_IMPACT_AXES다. 스키마 enum과 결정론 validator가
+    // 같은 목록을 쓰므로, 여기서 다른 말을 하면 모델이 프롬프트를 지켜도 발행이 막힌다.
+    `hal_signal_capsule.impact_axes의 값은 다음 중에서만 고릅니다: ${HAL_IMPACT_AXES.join(', ')}. 이 목록에 없는 축 이름을 새로 만들지 마세요.`,
     'hal_signal_capsule.check_within_2_weeks는 generic review가 아니라 bucket scope에 맞는 구체 follow-up을 명명해야 합니다. direct HAL/driver evidence가 있는 경우에만 stream, buffer, metadata, request/result, vendor tag를 사용하세요. app/API/tooling article에서는 permission, CameraX/Camera2 usage, preview/capture behavior, build/test/debug workflow 수준으로 제한하세요.',
     'hal_signal_capsule.do_not_overstate는 generic guardrail 문구나 prompt boilerplate를 그대로 복사하지 말고, 해당 article의 source가 직접 뒷받침하지 않는 구체적 HAL/driver claim, API name, metadata key, stream/buffer behavior, vendor tag, CTS/VTS test 항목을 명명해 article-specific warning 배열로 작성하세요. 과장 위험이 없으면 빈 배열을 두세요.',
     'Input article capsule에 _overclaim_guardrail_hints 배열이 있으면 그것은 deterministic builder가 제공한 internal guardrail hint입니다. 출력 hal_signal_capsule.do_not_overstate에 그대로 paraphrase하거나 복사하지 말고, 해당 hint가 가리키는 위험 영역을 참고해 이 article 본문에 맞는 구체 경고를 새로 작성하세요.',

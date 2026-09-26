@@ -7,12 +7,17 @@ const {
   CLAIM_IMPACT_LEVELS,
   OVERCLAIM_RISKS
 } = require('../quality/claim-source-binding');
+const { HAL_IMPACT_AXES } = require('../reporter/hal-signal-quality');
 
 const string = { type: 'STRING' };
 const number = { type: 'NUMBER' };
 const stringArray = { type: 'ARRAY', items: string };
 const briefingArray = { type: 'ARRAY', items: string, minItems: 3, maxItems: 3 };
 const enumString = values => ({ type: 'STRING', enum: [...values] });
+// impact 축은 자유 문자열이 아니라 validator(hal-signal-quality.js)의 어휘로 잠근다.
+// 2026-09-26 첫 v2 실전 실행에서 모델이 camera_framework_behavior를 넣었고, 결정론 repair는
+// 허용 목록 밖의 축을 가까운 축으로 옮기지 않아 기사 하나 때문에 editor 시도가 실패했다(#1175).
+const impactAxisArray = { type: 'ARRAY', items: enumString(HAL_IMPACT_AXES) };
 const source = {
   type: 'OBJECT',
   properties: {
@@ -127,7 +132,7 @@ const halSignalCapsule = {
     why_now: string,
     reader_owners: stringArray,
     check_within_2_weeks: string,
-    impact_axes: stringArray,
+    impact_axes: impactAxisArray,
     do_not_overstate: stringArray
   },
   required: [
@@ -231,7 +236,7 @@ const section = {
       type: 'ARRAY',
       items: claimBinding
     },
-    hal_impact_axes: stringArray,
+    hal_impact_axes: impactAxisArray,
     reader_owners: stringArray,
     actionability_level: string,
     effective_actionability_level: string,
