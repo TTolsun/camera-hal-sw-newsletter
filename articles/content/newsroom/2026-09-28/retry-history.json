@@ -1,0 +1,662 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 58,
+    "threshold": 60,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 5,
+    "locked_article_count": 2,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "story-body",
+        "points": 8,
+        "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+        "location": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "insufficient_public_body_paragraphs",
+        "dedupe_key": "1:insufficient_public_body_paragraphs:body_markdown"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "story-body",
+        "points": 8,
+        "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+        "location": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "insufficient_public_body_paragraphs",
+        "dedupe_key": "2:insufficient_public_body_paragraphs:body_markdown"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "story-body",
+        "points": 8,
+        "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+        "location": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "insufficient_public_body_paragraphs",
+        "dedupe_key": "3:insufficient_public_body_paragraphs:body_markdown"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "story-body",
+        "points": 8,
+        "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+        "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "insufficient_public_body_paragraphs",
+        "dedupe_key": "4:insufficient_public_body_paragraphs:body_markdown"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+      "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+      "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+      "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표"
+    ],
+    "locked_article_headlines": [
+      "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.6.2"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "category": "android",
+        "relevance_bucket": "android",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+        ],
+        "source_titles": [
+          "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK"
+        ]
+      }
+    ],
+    "failed_sections": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.6.2"
+        ]
+      }
+    ],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "repair-section(patch): CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "sources": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+        ],
+        "action": "repair-section",
+        "failure_type": "insufficient_public_body_paragraphs",
+        "allow_rewrite": true,
+        "policy_reason": "body_markdown paragraph shortage can only be repaired by replacing the whole /public_article/body_markdown field with a longer body; block patches cannot add paragraphs",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "story-body",
+            "points": 8,
+            "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+            "reason_code": "insufficient_public_body_paragraphs",
+            "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결"
+          },
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+        ],
+        "action": "repair-section",
+        "failure_type": "insufficient_public_body_paragraphs",
+        "allow_rewrite": true,
+        "policy_reason": "body_markdown paragraph shortage can only be repaired by replacing the whole /public_article/body_markdown field with a longer body; block patches cannot add paragraphs",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "story-body",
+            "points": 8,
+            "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+            "reason_code": "insufficient_public_body_paragraphs",
+            "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결"
+          },
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결"
+          },
+          {
+            "category": "story-body",
+            "points": 8,
+            "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+            "reason_code": "insufficient_public_body_paragraphs",
+            "location": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안"
+          },
+          {
+            "category": "story-body",
+            "points": 8,
+            "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+            "reason_code": "insufficient_public_body_paragraphs",
+            "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+        ],
+        "action": "repair-section",
+        "failure_type": "insufficient_public_body_paragraphs",
+        "allow_rewrite": true,
+        "policy_reason": "body_markdown paragraph shortage can only be repaired by replacing the whole /public_article/body_markdown field with a longer body; block patches cannot add paragraphs",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "story-body",
+            "points": 8,
+            "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+            "reason_code": "insufficient_public_body_paragraphs",
+            "location": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "insufficient_public_body_paragraphs",
+        "allow_rewrite": true,
+        "policy_reason": "body_markdown paragraph shortage can only be repaired by replacing the whole /public_article/body_markdown field with a longer body; block patches cannot add paragraphs",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "story-body",
+            "points": 8,
+            "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+            "reason_code": "insufficient_public_body_paragraphs",
+            "location": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+        "sources": [
+          "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+        ],
+        "action": "repair-section",
+        "failure_type": "insufficient_public_body_paragraphs",
+        "allow_rewrite": true,
+        "policy_reason": "body_markdown paragraph shortage can only be repaired by replacing the whole /public_article/body_markdown field with a longer body; block patches cannot add paragraphs",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "story-body",
+            "points": 8,
+            "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+            "reason_code": "insufficient_public_body_paragraphs",
+            "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+        ],
+        "source_titles": [
+          "CameraX Release Notes - CameraX 1.6.2"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "category": "android",
+        "relevance_bucket": "android",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+        ],
+        "source_titles": [
+          "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 1,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  },
+  {
+    "attempt": 2,
+    "model": "repair-fallback",
+    "score": 58,
+    "threshold": 60,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "rendered_main_article_count": 5,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "story-body",
+        "points": 8,
+        "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+        "location": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "insufficient_public_body_paragraphs",
+        "dedupe_key": "1:insufficient_public_body_paragraphs:body_markdown"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "story-body",
+        "points": 8,
+        "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+        "location": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "insufficient_public_body_paragraphs",
+        "dedupe_key": "2:insufficient_public_body_paragraphs:body_markdown"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "story-body",
+        "points": 8,
+        "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+        "location": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "insufficient_public_body_paragraphs",
+        "dedupe_key": "3:insufficient_public_body_paragraphs:body_markdown"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "story-body",
+        "points": 8,
+        "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+        "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "insufficient_public_body_paragraphs",
+        "dedupe_key": "4:insufficient_public_body_paragraphs:body_markdown"
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+      "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+      "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+      "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "editor attempt 2/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 1,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output failed HAL Signal Capsule validation.",
+      "details": {
+        "field": "sections.hal_signal_capsule",
+        "expectedKeys": [
+          "why_now",
+          "reader_owners",
+          "check_within_2_weeks",
+          "impact_axes",
+          "do_not_overstate"
+        ],
+        "actualCount": 1,
+        "sectionCount": 5,
+        "issues": [
+          {
+            "index": 1,
+            "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+            "type": "incomplete_hal_signal_capsule",
+            "keys": [
+              "impact_axes"
+            ]
+          }
+        ]
+      },
+      "field": "sections.hal_signal_capsule",
+      "stage": "editor attempt 2/2",
+      "attempt": 2,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 5
+    }
+  }
+]

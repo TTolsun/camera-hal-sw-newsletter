@@ -1,0 +1,1842 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-28",
+  "score": 58,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "NEEDS_FIX",
+  "summary": "Resolve source gaps, fact-check must-fix items, composition blockers, and any article the fact-checker marked not useful to a Camera HAL SW engineer before publishing.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "linked-evidence-limitation",
+      "points": 2,
+      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+      "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "story-body",
+      "points": 8,
+      "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+      "location": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "insufficient_public_body_paragraphs",
+      "dedupe_key": "1:insufficient_public_body_paragraphs:body_markdown"
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "story-body",
+      "points": 8,
+      "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+      "location": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "insufficient_public_body_paragraphs",
+      "dedupe_key": "2:insufficient_public_body_paragraphs:body_markdown"
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "story-body",
+      "points": 8,
+      "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+      "location": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "insufficient_public_body_paragraphs",
+      "dedupe_key": "3:insufficient_public_body_paragraphs:body_markdown"
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "story-body",
+      "points": 8,
+      "reason": "Story Contract v2 body check failed: insufficient_public_body_paragraphs.",
+      "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+      "blocking": true,
+      "severity": "hard",
+      "reason_code": "insufficient_public_body_paragraphs",
+      "dedupe_key": "4:insufficient_public_body_paragraphs:body_markdown"
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "category": "direct_aosp_camera",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.6.2",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+        "source_candidate_hash": "897690273f2e33774bc16bb3f4e8541ca488b7218adfdfdfefeb5ef23d8fd28a",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+      "category": "android",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
+          "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+        "source_candidate_hash": "be13d926bdd03ea3cda7b1f3e330804274d52751cb61b302b56cc91fb051af4b",
+        "relevance_bucket": "android",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "soc_resource_contention"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [
+        "Story Contract v2 body check failed: insufficient_public_body_paragraphs."
+      ],
+      "soft_deductions": [
+        {
+          "category": "linked-evidence-limitation",
+          "points": 2,
+          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        },
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+      "category": "camera_driver_image_pipeline",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+          "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+        "source_candidate_hash": "20128ac1ca49ba04a02616e7e37eb579cff963b981190c104b348b4bb880e5cd",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [
+        "Story Contract v2 body check failed: insufficient_public_body_paragraphs."
+      ],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+      "category": "camera_driver_image_pipeline",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove",
+          "url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 4,
+        "headline": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
+        "source_candidate_hash": "94566926c240c4f562c69cb7f9d8d720aca687df78801bb79e866024481013ae",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "security_vendor_component"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [
+        "Story Contract v2 body check failed: insufficient_public_body_paragraphs."
+      ],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "headline": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+      "category": "cpp_ai_tooling_fallback",
+      "status": "FAIL",
+      "repair_action": "repair-section",
+      "sources": [
+        {
+          "title": "Build your way: Use any AI agent of your choice in Android Studio",
+          "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 5,
+        "headline": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+        "source_candidate_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+        "source_candidate_hash": "348919c03d8311712757e8d6bdeb01d833a118b812dc94824360e1955e2ab11b",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "tooling_support",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [
+        "Story Contract v2 body check failed: insufficient_public_body_paragraphs."
+      ],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 19,
+    "total_claims": 19,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 5,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "claim_id": "claim_camerax_release_date",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "CameraX 1.6.2 릴리스가 2026년 8월 26일에 게시되었습니다.",
+      "evidence_ids": [
+        "sx:897690273f2e3377:81514ea41baa:a595d0222b0b8f55"
+      ],
+      "resolved_evidence_ids": [
+        "sx:897690273f2e3377:81514ea41baa:a595d0222b0b8f55"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:897690273f2e3377:81514ea41baa:a595d0222b0b8f55",
+          "resolved_evidence_id": "sx:897690273f2e3377:81514ea41baa:a595d0222b0b8f55",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "claim_id": "claim_camerax_jspecify",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "새로운 JDK 버전에서 CameraX 내부 필드의 전이적으로 가져온 JSpecify 타입 어노테이션을 해결할 때 발생하는 컴파일 충돌이 수정되었습니다.",
+      "evidence_ids": [
+        "sx:897690273f2e3377:81514ea41baa:a595d0222b0b8f55"
+      ],
+      "resolved_evidence_ids": [
+        "sx:897690273f2e3377:81514ea41baa:a595d0222b0b8f55"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:897690273f2e3377:81514ea41baa:a595d0222b0b8f55",
+          "resolved_evidence_id": "sx:897690273f2e3377:81514ea41baa:a595d0222b0b8f55",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "claim_id": "claim_camerax_android17_crash",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Android 17 (API 37) 이상 기기에서 새로운 동적 범위 프로필(STANDARD_SMPTE_2094_50)을 노출할 때 발생하던 NullPointerException 또는 IllegalArgumentException 충돌이 수정되었습니다.",
+      "evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:09290de1817b0b4a"
+      ],
+      "resolved_evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:09290de1817b0b4a"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:897690273f2e3377:942b4d9edb61:09290de1817b0b4a",
+          "resolved_evidence_id": "sx:897690273f2e3377:942b4d9edb61:09290de1817b0b4a",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "claim_id": "claim_camerax_preview_stabilization",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "PREVIEW_STABILIZATION이 VideoCapture와 함께 사용될 때 Preview use case가 활성화되지 않아도 일관된 결과를 제공하도록 수정되었습니다.",
+      "evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:643c0e023f82c237"
+      ],
+      "resolved_evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:643c0e023f82c237"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:897690273f2e3377:942b4d9edb61:643c0e023f82c237",
+          "resolved_evidence_id": "sx:897690273f2e3377:942b4d9edb61:643c0e023f82c237",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "claim_id": "claim_camerax_zfold4_yuv",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Samsung Z Fold 4 기기에서 이미지 왜곡을 유발하는 특정 YUV 포맷 출력 크기를 제외했습니다.",
+      "evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:4a5794f87519d870"
+      ],
+      "resolved_evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:4a5794f87519d870"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:897690273f2e3377:942b4d9edb61:4a5794f87519d870",
+          "resolved_evidence_id": "sx:897690273f2e3377:942b4d9edb61:4a5794f87519d870",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "claim_id": "claim_camerax_a53_torch",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Samsung A53 기기에서 VideoCapture가 바인딩된 상태로 토치를 켜고 이미지 캡처를 시도할 때 간헐적으로 실패하던 문제를 수정했습니다.",
+      "evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:1973794d82e9b63d"
+      ],
+      "resolved_evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:1973794d82e9b63d"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:897690273f2e3377:942b4d9edb61:1973794d82e9b63d",
+          "resolved_evidence_id": "sx:897690273f2e3377:942b4d9edb61:1973794d82e9b63d",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "claim_id": "claim_camerax_ultrawide_flash",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "초광각 카메라에서 플래시를 사용할 때 일부 기기에서 이미지가 어둡게 나오던 노출 부족 문제를 수정했습니다.",
+      "evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:a680216575517cb8"
+      ],
+      "resolved_evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:a680216575517cb8"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:897690273f2e3377:942b4d9edb61:a680216575517cb8",
+          "resolved_evidence_id": "sx:897690273f2e3377:942b4d9edb61:a680216575517cb8",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "claim_id": "claim_camerax_exif_padding",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "ExifInterface 종속성을 업데이트하여 JPEG 인코더가 마커 앞에 채움 바이트를 추가하는 기기에서의 이미지 캡처 실패 문제를 해결했습니다.",
+      "evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:e54c63883abf623f"
+      ],
+      "resolved_evidence_ids": [
+        "sx:897690273f2e3377:942b4d9edb61:e54c63883abf623f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "sx:897690273f2e3377:942b4d9edb61:e54c63883abf623f",
+          "resolved_evidence_id": "sx:897690273f2e3377:942b4d9edb61:e54c63883abf623f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+      "claim_id": "claim_renesas_patch_date",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "Renesas RZ/V2H(P) IVC 및 Arm Mali-C55 ISP 노드를 추가하고, 비디오 엔드포인트를 연결하며, RZ/V2H EVK에서 두 블록을 모두 활성화하는 디바이스 트리 패치 시리즈 v2가 2026년 9월 25일에 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:be13d926bdd03ea3:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:be13d926bdd03ea3:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:be13d926bdd03ea3:source-summary",
+          "resolved_evidence_id": "candidate:be13d926bdd03ea3:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+      "claim_id": "claim_renesas_interrupts",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 패치 시리즈는 선택적 ISP DMA 라인 틱 및 IVC 프레임 시작/정지 인터럽트를 설명합니다.",
+      "evidence_ids": [
+        "candidate:be13d926bdd03ea3:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:be13d926bdd03ea3:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:be13d926bdd03ea3:source-summary",
+          "resolved_evidence_id": "candidate:be13d926bdd03ea3:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+      "claim_id": "claim_renesas_isp_detect",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "올바른 Linux 드라이버를 활성화하면 콘솔에서 Mali-C55 ISP 9000043.31032022.0이 감지됩니다.",
+      "evidence_ids": [
+        "candidate:be13d926bdd03ea3:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:be13d926bdd03ea3:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:be13d926bdd03ea3:source-summary",
+          "resolved_evidence_id": "candidate:be13d926bdd03ea3:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+      "claim_id": "claim_s5k3t2_patch_date",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "Samsung S5K3T2 이미지 센서에 대한 바인딩 및 드라이버를 추가하는 패치 시리즈 v3가 2026년 9월 24일에 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:20128ac1ca49ba04:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:20128ac1ca49ba04:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:20128ac1ca49ba04:source-summary",
+          "resolved_evidence_id": "candidate:20128ac1ca49ba04:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+      "claim_id": "claim_s5k3t2_specs",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "Samsung S5K3T2는 4개의 MIPI D-PHY 레인을 가진 20메가픽셀 CMOS 이미지 센서입니다.",
+      "evidence_ids": [
+        "candidate:20128ac1ca49ba04:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:20128ac1ca49ba04:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:20128ac1ca49ba04:source-summary",
+          "resolved_evidence_id": "candidate:20128ac1ca49ba04:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+      "claim_id": "claim_s5k3t2_test_device",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 드라이버는 Qualcomm CAMSS 드라이버와 함께 Xiaomi POCO F3에서 작성 및 테스트되었습니다.",
+      "evidence_ids": [
+        "candidate:20128ac1ca49ba04:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:20128ac1ca49ba04:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:20128ac1ca49ba04:source-summary",
+          "resolved_evidence_id": "candidate:20128ac1ca49ba04:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+      "claim_id": "claim_ipu7_patch_date",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "isys_remove() 함수가 등록된 ISYS 장치를 해체할 때 ipu7_fw_isys_release()를 호출하도록 변경하는 패치가 2026년 9월 24일에 제출되었습니다.",
+      "evidence_ids": [
+        "candidate:94566926c240c4f5:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:94566926c240c4f5:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:94566926c240c4f5:source-summary",
+          "resolved_evidence_id": "candidate:94566926c240c4f5:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+      "claim_id": "claim_ipu7_leak_issue",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "기존 코드에서는 성공적인 프로브 이후 장치 제거 시 ipu7_fw_isys_release()를 호출하지 않아 ipu7_fw_isys_init()에 의해 초기화된 리소스가 할당된 상태로 유지되는 문제가 있었습니다.",
+      "evidence_ids": [
+        "candidate:94566926c240c4f5:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:94566926c240c4f5:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:94566926c240c4f5:source-summary",
+          "resolved_evidence_id": "candidate:94566926c240c4f5:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+      "claim_id": "claim_ipu7_probe_error_path",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "프로브 에러 경로에서는 이미 ipu7_fw_isys_init() 성공 후 이 릴리스 헬퍼를 정상적으로 사용하고 있었습니다.",
+      "evidence_ids": [
+        "candidate:94566926c240c4f5:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:94566926c240c4f5:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:94566926c240c4f5:source-summary",
+          "resolved_evidence_id": "candidate:94566926c240c4f5:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+      "claim_id": "claim_studio_ai_announcement",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "Android Studio에서 개발자가 선택한 임의의 AI 에이전트를 사용할 수 있는 기능이 2026년 9월 24일에 발표되었습니다.",
+      "evidence_ids": [
+        "candidate:348919c03d831171:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:348919c03d831171:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:348919c03d831171:source-summary",
+          "resolved_evidence_id": "candidate:348919c03d831171:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+      "claim_id": "claim_studio_ai_integration",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "native_tooling_workflow",
+      "overclaim_risk": "low",
+      "text": "이 기능은 개발자가 선호하는 AI 코딩 에이전트, 맞춤형 엔터프라이즈 하네스, 자율 도구를 Android Studio 내에 통합할 수 있도록 지원합니다.",
+      "evidence_ids": [
+        "candidate:348919c03d831171:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:348919c03d831171:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:348919c03d831171:source-summary",
+          "resolved_evidence_id": "candidate:348919c03d831171:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 5,
+    "strong_signal_count": 1,
+    "usable_signal_count": 4,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 5,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 1,
+    "main_articles_with_concrete_action": 5,
+    "fallback_main_article_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "framework_hal_contract": 1,
+      "stream_buffer_metadata": 1,
+      "camerax_app_compatibility": 1,
+      "driver_image_pipeline": 3,
+      "soc_resource_contention": 1,
+      "security_vendor_component": 1,
+      "native_tooling_workflow": 1
+    },
+    "actionability_level_counts": {
+      "owner_metric_log": 1,
+      "concrete_check": 4
+    },
+    "effective_actionability_level_counts": {
+      "owner_metric_log": 1,
+      "concrete_check": 4
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 1,
+      "usable_signal": 4
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_hal_owner",
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+        "Do not use artifact version tables as behavior-change evidence.",
+        "이 릴리스가 Android Camera HAL3 사양 자체를 변경하거나 새로운 하드웨어 요구사항을 강제하는 것은 아닙니다.",
+        "JSpecify 어노테이션 수정은 빌드 타임의 문제이며 런타임 성능 향상과는 무관합니다."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+      "relevance_bucket": "android",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "soc_resource_contention"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "soc_platform_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 51): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 제안 상태의 v2 리비전이며 최종 머지 여부는 확인되지 않았습니다.",
+        "Mali-C55 ISP 감지가 Android Camera HAL에서 즉시 사용 가능함을 의미하지는 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 제안 상태의 v3 리비전이며 최종 머지 여부는 확인되지 않았습니다.",
+        "Xiaomi POCO F3에서 테스트되었다는 점이 모든 Android 기기에서의 호환성을 보장하는 것은 아닙니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "security_vendor_component"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "security_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (Intel IPU) (project-official, high, score 50): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 제안 상태의 패치이며 최종 머지 여부는 확인되지 않았습니다.",
+        "이 패치가 카메라 이미지 품질이나 프레임 레이트 성능에 직접적인 영향을 미치는 것은 아닙니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 5,
+      "title": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 변경이 Android Camera HAL의 런타임 동작이나 API 계약에 직접적인 영향을 미치는 것은 아닙니다.",
+        "AI 에이전트가 카메라 HAL 코드 자체를 자동으로 완벽하게 생성하거나 수정할 수 있다고 과장해서는 안 됩니다."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 5,
+    "briefing_count": 3,
+    "camera_article_count": 3,
+    "legacy_regex_camera_article_count": 3,
+    "expanded_scope_article_count": 5,
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 2,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 1,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 3,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 1,
+    "publishable_scope_count": 5,
+    "composition_mode": "FALLBACK_COMPOSITION",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+        "source_candidate_hash": "897690273f2e33774bc16bb3f4e8541ca488b7218adfdfdfefeb5ef23d8fd28a",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+        "source_candidate_hash": "be13d926bdd03ea3cda7b1f3e330804274d52751cb61b302b56cc91fb051af4b",
+        "relevance_bucket": "android",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      {
+        "index": 3,
+        "headline": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+        "source_candidate_hash": "20128ac1ca49ba04a02616e7e37eb579cff963b981190c104b348b4bb880e5cd",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 4,
+        "headline": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
+        "source_candidate_hash": "94566926c240c4f562c69cb7f9d8d720aca687df78801bb79e866024481013ae",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 5,
+        "headline": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+        "source_candidate_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+        "source_candidate_hash": "348919c03d8311712757e8d6bdeb01d833a118b812dc94824360e1955e2ab11b",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "tooling_support",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
+        "exclusion_reason_if_not_counted": ""
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 2,
+      "android": 0,
+      "android_supporting": 1,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 3,
+      "supporting": 1,
+      "fallback": 1,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android"
+      ],
+      "supporting": [
+        "android_supporting"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 1,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "UNKNOWN",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 4,
+    "blocking_deduction_categories": [
+      "story-body"
+    ],
+    "hard_fail_count": 4,
+    "soft_deduction_count": 9,
+    "article_gate_counts": {
+      "PASS": 1,
+      "DEMOTE": 0,
+      "FAIL": 4
+    },
+    "article_section_contract": {
+      "complete_count": 5,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 5
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 19,
+      "total_claims": 19,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 5,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 5,
+      "strong_signal_count": 1,
+      "usable_signal_count": 4,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 5,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 1,
+      "main_articles_with_concrete_action": 5,
+      "fallback_main_article_count": 1,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "framework_hal_contract": 1,
+        "stream_buffer_metadata": 1,
+        "camerax_app_compatibility": 1,
+        "driver_image_pipeline": 3,
+        "soc_resource_contention": 1,
+        "security_vendor_component": 1,
+        "native_tooling_workflow": 1
+      },
+      "actionability_level_counts": {
+        "owner_metric_log": 1,
+        "concrete_check": 4
+      },
+      "effective_actionability_level_counts": {
+        "owner_metric_log": 1,
+        "concrete_check": 4
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 1,
+        "usable_signal": 4
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Latest Updates (official, high, score 72): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Do not claim direct Camera HAL API or vendor HAL contract changes unless the release note explicitly says so.",
+          "Do not use artifact version tables as behavior-change evidence.",
+          "이 릴리스가 Android Camera HAL3 사양 자체를 변경하거나 새로운 하드웨어 요구사항을 강제하는 것은 아닙니다.",
+          "JSpecify 어노테이션 수정은 빌드 타임의 문제이며 런타임 성능 향상과는 무관합니다."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+        "relevance_bucket": "android",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "soc_resource_contention"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "soc_platform_owner"
+        ],
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 51): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 3 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치는 제안 상태의 v2 리비전이며 최종 머지 여부는 확인되지 않았습니다.",
+          "Mali-C55 ISP 감지가 Android Camera HAL에서 즉시 사용 가능함을 의미하지는 않습니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+        "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치는 제안 상태의 v3 리비전이며 최종 머지 여부는 확인되지 않았습니다.",
+          "Xiaomi POCO F3에서 테스트되었다는 점이 모든 Android 기기에서의 호환성을 보장하는 것은 아닙니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 4,
+        "title": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+        "url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "security_vendor_component"
+        ],
+        "reader_owners": [
+          "camera_driver_owner",
+          "security_owner"
+        ],
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (Intel IPU) (project-official, high, score 50): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 패치는 제안 상태의 패치이며 최종 머지 여부는 확인되지 않았습니다.",
+          "이 패치가 카메라 이미지 품질이나 프레임 레이트 성능에 직접적인 영향을 미치는 것은 아닙니다."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 5,
+        "title": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+        "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "hal_impact_axes": [
+          "native_tooling_workflow"
+        ],
+        "reader_owners": [
+          "native_tooling_owner"
+        ],
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "이 변경이 Android Camera HAL의 런타임 동작이나 API 계약에 직접적인 영향을 미치는 것은 아닙니다.",
+          "AI 에이전트가 카메라 HAL 코드 자체를 자동으로 완벽하게 생성하거나 수정할 수 있다고 과장해서는 안 됩니다."
+        ],
+        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "image-fallback",
+        "count": 5
+      },
+      {
+        "category": "story-body",
+        "count": 4
+      },
+      {
+        "category": "editorial-story",
+        "count": 3
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "count": 1
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

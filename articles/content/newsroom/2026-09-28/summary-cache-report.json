@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-28",
+  "generated_at": "2026-09-26T11:15:50.989Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 1,
+    "miss_count": 11,
+    "by_url_hit_count": 1,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 11
+    },
+    {
+      "reason": "url-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "Build your way: Use any AI agent of your choice in Android Studio",
+      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "source": "Android Developers Blog",
+      "published_date": "Thu, 24 Sep 2026 15:59:00 +0000",
+      "cache_key": {
+        "normalized_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+        "url_hash": "348919c03d8311712757e8d6bdeb01d833a118b812dc94824360e1955e2ab11b",
+        "published_date": "Thu, 24 Sep 2026 15:59:00 +0000",
+        "content_hash": "958a171c540fbe5d7bbf2d89b187bb57b427afaf16792fb465acdedfa4db9e08"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
+      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-25T12:56:37Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org",
+        "url_hash": "be13d926bdd03ea3cda7b1f3e330804274d52751cb61b302b56cc91fb051af4b",
+        "published_date": "2026-09-25T12:56:37Z",
+        "content_hash": "285586adaab8049fc7eef2a27d5bfb2c713bb1fbff8c63025cb731aeb89484ad"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-24T05:46:52Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me",
+        "url_hash": "20128ac1ca49ba04a02616e7e37eb579cff963b981190c104b348b4bb880e5cd",
+        "published_date": "2026-09-24T05:46:52Z",
+        "content_hash": "ff74f7184006e53497555173c0c9b5f580cd2bdaa3cea48deeeb68bbe3c89f96"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove",
+      "url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "published_date": "2026-09-24T11:03:17Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com",
+        "url_hash": "94566926c240c4f562c69cb7f9d8d720aca687df78801bb79e866024481013ae",
+        "published_date": "2026-09-24T11:03:17Z",
+        "content_hash": "589e59879916a379d8408ab0bb114f6a6e6add9f0e83067b80ae6d5bd686ce1d"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili",
+      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-23T11:02:51Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
+        "url_hash": "b66895f3d03a8d2395ed8471274bd39210fc8163931084db235532e078e7ea5c",
+        "published_date": "2026-09-23T11:02:51Z",
+        "content_hash": "ae7a8b16dce2bc5e905bf873ac7e44a50c6ec796b98804742cb4c76366285bb1"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
+      "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-26T09:28:31Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com",
+        "url_hash": "03838f3645546028b6e6cfeb5163b4b45b0776757a3db5301a78f2ec56ee1be7",
+        "published_date": "2026-09-26T09:28:31Z",
+        "content_hash": "e656463e0170e6436571679990216703091d8f745a345b3220d530c7b4085c54"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-25T05:49:01Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com",
+        "url_hash": "4d0e2921abc450eb70457a06d910318b810389145337ff57bc0635506fb0b1a2",
+        "published_date": "2026-09-25T05:49:01Z",
+        "content_hash": "81363e57b7192c4abfc6a65d22ba25e9a995e2e5bd7fb7ea059b26dee49d3472"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v3 4/5] media: ipu-bridge: Add the OV02C10 26 MHz link frequency",
+      "url": "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "published_date": "2026-09-23T23:42:08Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com",
+        "url_hash": "f357dfa88c5f921d58a3f6049651abe9980bba5b3121fa9261c8dbca0b94e773",
+        "published_date": "2026-09-23T23:42:08Z",
+        "content_hash": "4c1a66dafba861684add808c4affab46213a5688f89e9cf49c4ad4fc59ae7196"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[1/4] libcamera: v4l2_event: Add V4L2Event class and functionality",
+      "url": "https://patchwork.libcamera.org/patch/28380/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-25",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28380",
+        "url_hash": "000846ff6c7a5b86c477f4a039d957d40b1acc2406eef6992e4d9d059079d1fe",
+        "published_date": "2026-09-25",
+        "content_hash": "32384a78c0635043441f91942941b4d0bf3013842c6d611575430a664491a92d"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 2/4] media: ipu-bridge: Add the ST VD55G1 (TBE20A1)",
+      "url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "published_date": "2026-09-24T17:19:25Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com",
+        "url_hash": "27f89b6e7fe420d88261f7a47b23a8e723cc739138c039a12660a14cd2513ceb",
+        "published_date": "2026-09-24T17:19:25Z",
+        "content_hash": "06b4b5afe6265fa38d3cee860a378c38375b4eab482f65e7f0f984cb3b05249d"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "CameraX Release Notes - CameraX 1.6.2",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "source": "Android Developers Latest Updates",
+      "published_date": "August 26, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+        "url_hash": "897690273f2e33774bc16bb3f4e8541ca488b7218adfdfdfefeb5ef23d8fd28a",
+        "published_date": "August 26, 2026",
+        "content_hash": "f75abac8ae48d4b1cec6a9f59afc9baf552678a878c355decce428f318d28006"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/897690273f2e33774bc16bb3f4e8541ca488b7218adfdfdfefeb5ef23d8fd28a.json"
+    },
+    {
+      "title": "[PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro",
+      "url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-09-23T14:52:50Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com",
+        "url_hash": "164304051f8576f4cd7ab0b1fcbc0161828203c1c7a7ac950594d8c8fc98b23c",
+        "published_date": "2026-09-23T14:52:50Z",
+        "content_hash": "4cddb66ca0175d4549e54200947952c02d8b77dc5795f37b5182f7ac4fe79066"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

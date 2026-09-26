@@ -1,0 +1,1143 @@
+{
+  "status": "FAILED_REPAIR_REVIEWABLE",
+  "fact_check_status": "PASS",
+  "must_fix_count": 0,
+  "failure_kind": "",
+  "failure_class": "",
+  "quality_status": "NEEDS_FIX",
+  "quality_score": 58,
+  "quality_threshold": 60,
+  "publish_ready": false,
+  "selection_publish_ready": false,
+  "final_publish_ready": false,
+  "editor_review_required": true,
+  "date": "2026-09-28",
+  "failure_stage": "editor attempt 2/2",
+  "failure_reason": "Editor output failed HAL Signal Capsule validation.",
+  "quality_attempt_count": 2,
+  "quality_deduction_count": 13,
+  "stage_status_log": [
+    {
+      "stage_id": "reporter",
+      "role": "reporter",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "reporter attempt 1/2"
+    },
+    {
+      "stage_id": "background_context",
+      "role": "background-context",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "background-context attempt 1/2"
+    },
+    {
+      "stage_id": "editorial_plan",
+      "role": "editor",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editorial-plan attempt 1/2"
+    },
+    {
+      "stage_id": "editor",
+      "role": "editor",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2"
+    },
+    {
+      "stage_id": "editor.public_article_judge",
+      "role": "judge",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2 public article judge"
+    },
+    {
+      "stage_id": "fact_checker",
+      "role": "factcheck",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "fact-checker attempt 1/2"
+    },
+    {
+      "stage_id": "quality_gate",
+      "role": "quality_gate",
+      "attempt": 1,
+      "status": "failed",
+      "stage": "quality_gate",
+      "reason": "NEEDS_FIX"
+    },
+    {
+      "stage_id": "editor.repair",
+      "role": "repair",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor repair attempt 1/2"
+    },
+    {
+      "stage_id": "editor.repair.public_article_judge",
+      "role": "repair",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor repair attempt 1/2 public article judge"
+    },
+    {
+      "stage_id": "fact_checker.repair",
+      "role": "repair",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "fact-checker repair attempt 1/2"
+    },
+    {
+      "stage_id": "quality_gate.repair",
+      "role": "quality_gate",
+      "attempt": 1,
+      "status": "failed",
+      "stage": "quality_gate",
+      "reason": "NEEDS_FIX"
+    },
+    {
+      "stage_id": "reporter",
+      "role": "reporter",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "reporter attempt 2/2"
+    },
+    {
+      "stage_id": "background_context",
+      "role": "background-context",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "background-context attempt 2/2"
+    },
+    {
+      "stage_id": "editorial_plan",
+      "role": "editor",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "editorial-plan attempt 2/2"
+    },
+    {
+      "stage_id": "editor",
+      "role": "editor",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "editor attempt 2/2"
+    },
+    {
+      "stage_id": "editor.semantic_repair",
+      "role": "repair",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "editor attempt 2/2 semantic repair"
+    }
+  ],
+  "quota_error_count": 0,
+  "invalid_json_count": 0,
+  "stage_key_format": "canonical-v1",
+  "model_usage": {
+    "reporter#1": {
+      "stage_key": "reporter#1",
+      "stage_id": "reporter",
+      "quality_attempt": 1,
+      "label": "reporter attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "background_context#1": {
+      "stage_key": "background_context#1",
+      "stage_id": "background_context",
+      "quality_attempt": 1,
+      "label": "background-context attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editorial_plan#1": {
+      "stage_key": "editorial_plan#1",
+      "stage_id": "editorial_plan",
+      "quality_attempt": 1,
+      "label": "editorial-plan attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor#1": {
+      "stage_key": "editor#1",
+      "stage_id": "editor",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor.public_article_judge#1": {
+      "stage_key": "editor.public_article_judge#1",
+      "stage_id": "editor.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 public article judge",
+      "parent_run_key": "editor#1",
+      "models": {
+        "gemini-2.5-flash-lite": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "fact_checker#1": {
+      "stage_key": "fact_checker#1",
+      "stage_id": "fact_checker",
+      "quality_attempt": 1,
+      "label": "fact-checker attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor.repair#1": {
+      "stage_key": "editor.repair#1",
+      "stage_id": "editor.repair",
+      "quality_attempt": 1,
+      "label": "editor repair attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor.repair.public_article_judge#1": {
+      "stage_key": "editor.repair.public_article_judge#1",
+      "stage_id": "editor.repair.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor repair attempt 1/2 public article judge",
+      "parent_run_key": "editor.repair#1",
+      "models": {
+        "gemini-2.5-flash-lite": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "fact_checker.repair#1": {
+      "stage_key": "fact_checker.repair#1",
+      "stage_id": "fact_checker.repair",
+      "quality_attempt": 1,
+      "label": "fact-checker repair attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "reporter#2": {
+      "stage_key": "reporter#2",
+      "stage_id": "reporter",
+      "quality_attempt": 2,
+      "label": "reporter attempt 2/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "background_context#2": {
+      "stage_key": "background_context#2",
+      "stage_id": "background_context",
+      "quality_attempt": 2,
+      "label": "background-context attempt 2/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editorial_plan#2": {
+      "stage_key": "editorial_plan#2",
+      "stage_id": "editorial_plan",
+      "quality_attempt": 2,
+      "label": "editorial-plan attempt 2/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor#2": {
+      "stage_key": "editor#2",
+      "stage_id": "editor",
+      "quality_attempt": 2,
+      "label": "editor attempt 2/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor.semantic_repair#2": {
+      "stage_key": "editor.semantic_repair#2",
+      "stage_id": "editor.semantic_repair",
+      "quality_attempt": 2,
+      "label": "editor attempt 2/2 semantic repair",
+      "parent_run_key": "editor#2",
+      "models": {
+        "gemini-3.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    }
+  },
+  "model_routing": {
+    "reporter#1": {
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "reporter#1",
+      "stage_id": "reporter",
+      "quality_attempt": 1,
+      "label": "reporter attempt 1/2",
+      "parent_run_key": null
+    },
+    "background_context#1": {
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "background_context#1",
+      "stage_id": "background_context",
+      "quality_attempt": 1,
+      "label": "background-context attempt 1/2",
+      "parent_run_key": null
+    },
+    "editorial_plan#1": {
+      "stage_group": "editorialPlan",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editorial_plan#1",
+      "stage_id": "editorial_plan",
+      "quality_attempt": 1,
+      "label": "editorial-plan attempt 1/2",
+      "parent_run_key": null
+    },
+    "editor#1": {
+      "stage_group": "editor",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor#1",
+      "stage_id": "editor",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2",
+      "parent_run_key": null
+    },
+    "editor.public_article_judge#1": {
+      "stage_group": "judge",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash-lite",
+      "fallback_models": [
+        "gemini-2.5-flash"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.public_article_judge#1",
+      "stage_id": "editor.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 public article judge",
+      "parent_run_key": "editor#1"
+    },
+    "fact_checker#1": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "fact_checker#1",
+      "stage_id": "fact_checker",
+      "quality_attempt": 1,
+      "label": "fact-checker attempt 1/2",
+      "parent_run_key": null
+    },
+    "editor.repair#1": {
+      "stage_group": "repair",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.repair#1",
+      "stage_id": "editor.repair",
+      "quality_attempt": 1,
+      "label": "editor repair attempt 1/2",
+      "parent_run_key": null
+    },
+    "editor.repair.public_article_judge#1": {
+      "stage_group": "judge",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash-lite",
+      "fallback_models": [
+        "gemini-2.5-flash"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.repair.public_article_judge#1",
+      "stage_id": "editor.repair.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor repair attempt 1/2 public article judge",
+      "parent_run_key": "editor.repair#1"
+    },
+    "fact_checker.repair#1": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "fact_checker.repair#1",
+      "stage_id": "fact_checker.repair",
+      "quality_attempt": 1,
+      "label": "fact-checker repair attempt 1/2",
+      "parent_run_key": null
+    },
+    "reporter#2": {
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "reporter#2",
+      "stage_id": "reporter",
+      "quality_attempt": 2,
+      "label": "reporter attempt 2/2",
+      "parent_run_key": null
+    },
+    "background_context#2": {
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "background_context#2",
+      "stage_id": "background_context",
+      "quality_attempt": 2,
+      "label": "background-context attempt 2/2",
+      "parent_run_key": null
+    },
+    "editorial_plan#2": {
+      "stage_group": "editorialPlan",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editorial_plan#2",
+      "stage_id": "editorial_plan",
+      "quality_attempt": 2,
+      "label": "editorial-plan attempt 2/2",
+      "parent_run_key": null
+    },
+    "editor#2": {
+      "stage_group": "editor",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor#2",
+      "stage_id": "editor",
+      "quality_attempt": 2,
+      "label": "editor attempt 2/2",
+      "parent_run_key": null
+    },
+    "editor.semantic_repair#2": {
+      "stage_group": "repair",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.semantic_repair#2",
+      "stage_id": "editor.semantic_repair",
+      "quality_attempt": 2,
+      "label": "editor attempt 2/2 semantic repair",
+      "parent_run_key": "editor#2"
+    }
+  },
+  "candidate_input": {
+    "mode": "artifact",
+    "candidate_artifact": "articles/content/collected-news/2026-09-28/merged-candidates.json",
+    "candidate_artifact_hash": "5db2387a91aa9ff2dd6fd1b445908feeb230a0fee57284838683b35b725e2f18",
+    "manifest": "articles/content/collected-news/2026-09-28/merged-candidate-manifest.json",
+    "manifest_type": "merged_candidate",
+    "manifest_status": "validated",
+    "llm_used": true,
+    "merge_mode": "gemini_source_discovery",
+    "candidate_count": 81
+  },
+  "run_context": {
+    "github_run_id": "36238083997",
+    "github_sha": "cffc29f53d1c6af1ef1ae263bec83f7126a63db2",
+    "github_ref": "refs/heads/main"
+  },
+  "validate_ok": false,
+  "public_output_expected": false,
+  "todo_found": false,
+  "empty_source_sections": [],
+  "source_gap_count": 0,
+  "editor_semantic_validation": {
+    "name": "EditorSemanticValidationError",
+    "message": "Editor output failed HAL Signal Capsule validation.",
+    "details": {
+      "field": "sections.hal_signal_capsule",
+      "expectedKeys": [
+        "why_now",
+        "reader_owners",
+        "check_within_2_weeks",
+        "impact_axes",
+        "do_not_overstate"
+      ],
+      "actualCount": 1,
+      "sectionCount": 5,
+      "issues": [
+        {
+          "index": 1,
+          "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+          "type": "incomplete_hal_signal_capsule",
+          "keys": [
+            "impact_axes"
+          ]
+        }
+      ]
+    },
+    "field": "sections.hal_signal_capsule",
+    "stage": "editor attempt 2/2",
+    "attempt": 2,
+    "initial": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output failed HAL Signal Capsule validation.",
+      "details": {
+        "field": "sections.hal_signal_capsule",
+        "expectedKeys": [
+          "why_now",
+          "reader_owners",
+          "check_within_2_weeks",
+          "impact_axes",
+          "do_not_overstate"
+        ],
+        "actualCount": 1,
+        "sectionCount": 5,
+        "issues": [
+          {
+            "index": 1,
+            "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+            "type": "incomplete_hal_signal_capsule",
+            "keys": [
+              "impact_axes"
+            ]
+          }
+        ]
+      },
+      "field": "sections.hal_signal_capsule",
+      "deterministic_repair_failure_reason_codes": [
+        "unknown_impact_axis",
+        "missing_impact_axes"
+      ],
+      "stage": "editor attempt 2/2",
+      "attempt": 2
+    }
+  },
+  "editor_public_article_judge": {
+    "date": "2026-09-28",
+    "overall_pass": true,
+    "section_count_expected": 5,
+    "section_count_actual": 5,
+    "sections": [
+      {
+        "section_index": 1,
+        "headline": "CameraX 1.6.2 릴리스, Android 17 동적 범위 충돌 및 주요 기기별 호환성 버그 해결",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 2,
+        "headline": "Renesas RZ/V2H EVK 보드, Arm Mali-C55 ISP 및 IVC 하드웨어 활성화 패치 제안",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 3,
+        "headline": "Samsung S5K3T2 20메가픽셀 이미지 센서, 리눅스 커널 드라이버 추가 패치 제안",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 4,
+        "headline": "Intel IPU7 드라이버, 디바이스 제거 시 ISYS 펌웨어 리소스 누수 수정 패치 제안",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 5,
+        "headline": "Android Studio, 개발자 선택에 따른 다양한 AI 코딩 에이전트 통합 기능 발표",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      }
+    ]
+  },
+  "editor_desk_advisory": [],
+  "repairAttempted": true,
+  "repairSucceeded": false,
+  "input_candidate_count": 81,
+  "eligible_candidate_count": 12,
+  "eligible_candidate_urls": [
+    "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+    "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+    "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+    "https://patchwork.libcamera.org/patch/28365/",
+    "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+    "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
+    "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
+    "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
+    "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+    "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/",
+    "https://patchwork.libcamera.org/patch/28380/",
+    "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/"
+  ],
+  "selected_article_count": 5,
+  "deterministic_selected_count": 5,
+  "rendered_main_article_count": 5,
+  "selected_group_count": 5,
+  "rendered_group_count": 5,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "rendered_outside_selection_count": 0,
+  "explicitly_demoted_outside_selection_count": 0,
+  "hard_blocked_outside_selection_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+    "android_native_tooling_workflow",
+    "lore-series:20260925-mali-c55-renesas-dts-v2-69f728a474a2@kernel.org",
+    "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
+    "lore-series:20260924110310.1555150-lgs201920130244@gmail.com"
+  ],
+  "rendered_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+    "lore-series:20260925-mali-c55-renesas-dts-v2-69f728a474a2@kernel.org",
+    "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
+    "lore-series:20260924110310.1555150-lgs201920130244@gmail.com",
+    "android_native_tooling_workflow"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "rendered_outside_selection_group_keys": [],
+  "explicitly_demoted_outside_selection_group_keys": [],
+  "hard_blocked_outside_selection_group_keys": [],
+  "group_coverage_ok": true,
+  "deterministic_selected_representative_group_keys": [
+    "android_native_tooling_workflow",
+    "lore-series:20260925-mali-c55-renesas-dts-v2-69f728a474a2@kernel.org",
+    "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
+    "lore-series:20260924110310.1555150-lgs201920130244@gmail.com",
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+  ],
+  "reconciliation_demoted_group_keys": [],
+  "reconciliation_demoted_groups": [],
+  "editorial_plan_scored_candidates": [
+    {
+      "candidate_key": "348919c03d8311712757e8d6bdeb01d833a118b812dc94824360e1955e2ab11b",
+      "lineup_role": "selected",
+      "article_group_key": "android_native_tooling_workflow",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "be13d926bdd03ea3cda7b1f3e330804274d52751cb61b302b56cc91fb051af4b",
+      "lineup_role": "selected",
+      "article_group_key": "lore-series:20260925-mali-c55-renesas-dts-v2-69f728a474a2@kernel.org",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "20128ac1ca49ba04a02616e7e37eb579cff963b981190c104b348b4bb880e5cd",
+      "lineup_role": "selected",
+      "article_group_key": "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "94566926c240c4f562c69cb7f9d8d720aca687df78801bb79e866024481013ae",
+      "lineup_role": "selected",
+      "article_group_key": "lore-series:20260924110310.1555150-lgs201920130244@gmail.com",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "897690273f2e33774bc16bb3f4e8541ca488b7218adfdfdfefeb5ef23d8fd28a",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    }
+  ],
+  "reconciliation_promoted_group_keys": [],
+  "reserve_candidate_count": 7,
+  "demoted_article_count": 0,
+  "locked_article_count": 0,
+  "fallback_topic_count": 1,
+  "reporter_candidate_count": 12,
+  "reporter_selected_count": 12,
+  "final_input_candidate_count": 81,
+  "final_eligible_candidate_count": 12,
+  "final_selected_article_count": 5,
+  "reporter_selected_but_final_excluded_count": 7,
+  "ai_selected_article_count": 4,
+  "underfilled": false,
+  "review_gate_passed": true,
+  "publish_gate_passed": false,
+  "min_final_articles": 1,
+  "max_final_articles": 5,
+  "absolute_min_reviewable_articles": 0,
+  "min_non_fallback_publish_ready_articles": 0,
+  "composition_mode": "NEEDS_FIX",
+  "publish_mode": "DEEP",
+  "publish_mode_detail": {
+    "mode": "DEEP",
+    "core_count": 4,
+    "adjacent_count": 0,
+    "context_count": 1,
+    "context_min_signals": 1
+  },
+  "selection_composition_mode": "FALLBACK_COMPOSITION",
+  "composition_reason": "Article Composition Policy passed with 3 Primary Camera Stack article(s) and 1 supporting main article(s).",
+  "composition_summary": {
+    "selected_article_count": 5,
+    "bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 2,
+      "android": 0,
+      "android_supporting": 1,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 2,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 1,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 3,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 5,
+    "fallback_topic_count": 1
+  },
+  "eligible_composition_summary": {
+    "selected_article_count": 12,
+    "bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 8,
+      "android": 0,
+      "android_supporting": 1,
+      "cpp_ai_tooling_fallback": 1,
+      "generic_tech_watchlist": 1
+    },
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 8,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 1,
+    "cpp_ai_tooling_fallback_count": 1,
+    "generic_tech_watchlist_count": 1,
+    "primary_camera_stack_topic_count": 9,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 1,
+    "non_fallback_reviewable_article_count": 11,
+    "fallback_topic_count": 1
+  },
+  "candidate_pool_preflight_passed": true,
+  "candidate_shortage_reviewable": false,
+  "candidate_shortage_summary": {
+    "publishable_candidate_count": 12,
+    "required_publishable_candidate_count": 1,
+    "reserve_candidate_count": 7,
+    "required_reserve_candidate_count": 0,
+    "primary_camera_stack_candidate_count": 9,
+    "required_primary_camera_stack_candidate_count": 0,
+    "camera_stack_candidate_count": 9,
+    "required_camera_stack_candidate_count": 0,
+    "direct_camera_or_driver_candidate_count": 9,
+    "camera_adjacent_candidate_count": 0,
+    "supporting_candidate_count": 1,
+    "selected_article_count": 5,
+    "selected_primary_camera_stack_count": 3
+  },
+  "shortage_reason_codes": [],
+  "publish_gate_reason_codes": [],
+  "publish_gate_reason_summary": [],
+  "publish_ready_composition_policy": {
+    "primaryCameraStackMinRequired": 0,
+    "directAospCameraOrDriverMinRequired": 0,
+    "supportingMainMaxAllowed": 1,
+    "directAospCameraOrDriverBuckets": [
+      "direct_aosp_camera",
+      "camera_driver_image_pipeline"
+    ]
+  },
+  "source_parser_hints": [
+    {
+      "code": "SOURCE_COVERAGE_REVIEW",
+      "source_id": "unknown",
+      "reason": "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect."
+    },
+    {
+      "code": "CANDIDATE_POOL_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Keep forbidden buckets out of main article selection: generic_tech_watchlist."
+    }
+  ],
+  "non_fallback_reviewable_article_count": 5,
+  "eligible_non_fallback_reviewable_article_count": 11,
+  "primary_camera_stack_topic_count": 3,
+  "supporting_main_article_count": 1,
+  "forbidden_main_article_count": 0,
+  "direct_aosp_camera_count": 1,
+  "camera_driver_image_pipeline_count": 2,
+  "android_count": 0,
+  "android_multimedia_camera_output_count": 0,
+  "soc_platform_signal_count": 1,
+  "cpp_ai_tooling_fallback_count": 1,
+  "generic_tech_watchlist_count": 0,
+  "selection_warnings": [],
+  "selection_errors": [],
+  "selection_shortage_hints": [
+    "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.",
+    "Keep forbidden buckets out of main article selection: generic_tech_watchlist."
+  ],
+  "headline_decision": {
+    "decision": "latest_camera_hal_article",
+    "reason": "latest_camera_hal_article",
+    "current_headline_key": "url:https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+    "replacement_headline_key": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+    "previous_stored_current_score": null,
+    "runtime_decayed_score": null,
+    "last_scored_at": null,
+    "scored_at": "2026-09-28",
+    "retained": false,
+    "replaced": true,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": false,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "headline_latest_inclusion": {
+    "included": false,
+    "mode": "none",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": null,
+  "release_class_catch_up": {
+    "pool_size": 1,
+    "admitted": 1,
+    "blocked_reason": "",
+    "evidence_unchecked_skips": 0
+  },
+  "release_class_catch_up_after_reconciliation": {
+    "pool_size": 0,
+    "admitted": 0,
+    "blocked_reason": "no_eligible_candidate"
+  },
+  "republication_cooldown_blocked": {
+    "history_loaded": true,
+    "history_main_article_count": 32,
+    "count": 2,
+    "urls": [
+      "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/",
+      "https://patchwork.libcamera.org/patch/28366/"
+    ]
+  },
+  "evidence_unchecked_main_blocked": {
+    "count": 0,
+    "candidate_urls": []
+  },
+  "exclusion_reason_summary": [
+    {
+      "reason": "missing dated evidence",
+      "count": 30
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 28
+    },
+    {
+      "reason": "finalSelectionEligibility=unknown",
+      "count": 25
+    },
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 23
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 23
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 23
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 14
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 14
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 14
+    },
+    {
+      "reason": "duplicate URL or near-duplicate title",
+      "count": 12
+    }
+  ],
+  "final_exclusion_reason_summary": [
+    {
+      "reason": "missing dated evidence",
+      "count": 30
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 28
+    },
+    {
+      "reason": "finalSelectionEligibility=unknown",
+      "count": 25
+    },
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 23
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 23
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 23
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 14
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 14
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 14
+    },
+    {
+      "reason": "duplicate URL or near-duplicate title",
+      "count": 12
+    }
+  ],
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.",
+  "coverage_week_key": "2026-W39",
+  "coverage_start_date": "2026-09-21",
+  "coverage_end_date": "2026-09-27",
+  "generation_anchor_date": "2026-09-28",
+  "carry_forward_status": "loaded",
+  "carry_source": {
+    "path": "articles/content/collected-news/2026-09-21/merged-candidates.json",
+    "sha256": "d8aad32ebe96708c58964bdcf4c1da5e0f2a867a90e933ca080757e8f273410f",
+    "run_mode": "scheduled",
+    "scan_parse_failures": []
+  },
+  "not_yet_eligible_count": 0,
+  "not_yet_eligible_overflow": false,
+  "weekly_page_structure_status": "not_written",
+  "weekly_page_structure_key": "2026-W40",
+  "weekly_page_structure_errors": [],
+  "public_newsletter_ready": false,
+  "review_publication_ready": false,
+  "diagnostics_only": true,
+  "homepage_visible_after_merge": false,
+  "public_state": "DIAGNOSTICS_ONLY",
+  "run_mode": "diagnostics_only",
+  "effective_homepage_visible": false,
+  "existing_public_artifact_detected": true,
+  "retention_valid": false,
+  "retention_error": "",
+  "public_artifact_policy": "hide_existing_public_artifact_after_latest_diagnostics_only",
+  "public_artifact_source": "none",
+  "reconciliation_required": false,
+  "reconciliation_action": "removed_newsletters_index_entry",
+  "reconciliation_reason": "latest diagnostics-only run is not public-ready and no valid retention metadata exists"
+}
