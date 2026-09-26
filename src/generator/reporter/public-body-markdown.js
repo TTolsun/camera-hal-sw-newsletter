@@ -167,6 +167,18 @@ const BLOCK_CONSTRUCTS = Object.freeze([
   { construct: 'table', pattern: /^\|/ }
 ]);
 
+// allow-list 마감에 쓰는 markdown 활성 문자. 프롬프트(작성·repair·주간 병합)는 이 목록을 그대로
+// 말해야 한다 — 구문 이름("링크", "볼드")만 말하면 "~30%"나 "<1ms"처럼 프롬프트를 지킨 산문이
+// 여기서 거짓 차단되고, repair 프롬프트도 같은 표기로 다시 써서 강등으로 끝난다.
+const BODY_MARKDOWN_ACTIVE_CHARACTERS = Object.freeze(['`', '*', '[', ']', '<', '~', '|']);
+// 문자 클래스 안에서 특별한 뜻을 갖는 문자는 ] 하나뿐이라 그것만 escape한다.
+const BODY_MARKDOWN_ACTIVE_CHARACTER_PATTERN = new RegExp(
+  `[${BODY_MARKDOWN_ACTIVE_CHARACTERS.map(character => (character === ']' ? '\\]' : character)).join('')}]`
+);
+const BODY_MARKDOWN_ACTIVE_CHARACTER_RULE =
+  `다음 문자는 소제목과 문단 어디에도 쓸 수 없습니다(결정론 lint가 markdown 활성 문자로 거부합니다): ${BODY_MARKDOWN_ACTIVE_CHARACTERS.join(' ')}. ` +
+  '근사치는 "약 30%"처럼, 부등호·대괄호·세로줄 표기는 말로 풀어 쓰세요.';
+
 // 줄바꿈으로 쪼개도 markdown이 다시 이어 붙이는 구문. 줄이 아니라 블록 텍스트에서 본다.
 const INLINE_CONSTRUCTS = Object.freeze([
   { construct: 'image', pattern: /!\[/ },
@@ -180,7 +192,7 @@ const INLINE_CONSTRUCTS = Object.freeze([
   // `>`는 줄 중간에서는 아무 구조도 만들지 못하고(줄 시작 `>`는 blockquote 규칙이 잡는다),
   // raw HTML·autolink는 어차피 `<`가 있어야 성립하므로 제외한다. `10->8` 같은 실제
   // 카메라 산문 표기를 막지 않기 위해서다.
-  { construct: 'markdown_active_character', pattern: /[`*[\]<~|]/ }
+  { construct: 'markdown_active_character', pattern: BODY_MARKDOWN_ACTIVE_CHARACTER_PATTERN }
 ]);
 
 function firstMatchingConstruct(text, constructs) {
@@ -327,6 +339,8 @@ function lintBodyMarkdown(value, surroundings = {}) {
 }
 
 module.exports = {
+  BODY_MARKDOWN_ACTIVE_CHARACTERS,
+  BODY_MARKDOWN_ACTIVE_CHARACTER_RULE,
   BODY_MARKDOWN_MIN_PARAGRAPHS,
   RESERVED_SUBHEADING_PATTERNS,
   RESERVED_SUBHEADING_TERMS,

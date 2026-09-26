@@ -7,6 +7,7 @@ const {
   repairEditorSemanticWithLlm,
   validatePublicArticleJudgeOrRepair
 } = require('../../publish/orchestrator-public-article-judge');
+const { BODY_MARKDOWN_ACTIVE_CHARACTERS } = require('../../reporter/public-body-markdown');
 
 // 추출 전 main()의 editor public-article judge / semantic repair 흐름을 입력→출력으로 고정한다.
 // 모듈의 책임은 orchestration(judge → 차단 시 repair → 재judge → status 기록)이며,
@@ -223,6 +224,30 @@ test('repair 프롬프트에 desk 교정 지침이 포함된다', async () => {
   const repairPrompt = prompts.find(entry => /semantic repair$/.test(entry.stage.label));
   assert.ok(repairPrompt, 'semantic repair가 호출되어야 한다');
   assert.match(repairPrompt.prompt, /desk_target_explanation/);
+});
+
+test('semantic repair 프롬프트가 본문 lint가 거부하는 markdown 활성 문자를 모두 이름 붙인다', async () => {
+  const editor = editorWithOneSection();
+  const prompts = [];
+  let judgeCall = 0;
+  const deps = {
+    callLlmJson: async (stage, prompt) => {
+      prompts.push({ stage, prompt });
+      if (/semantic repair$/.test(stage.label)) return editorWithOneSection();
+      judgeCall += 1;
+      return judgeCall === 1 ? deskAdvisoryReport() : cleanJudgeReport();
+    },
+    recordEditorSemanticStatus: () => {},
+    validateEditor: (value) => value
+  };
+
+  await validatePublicArticleJudgeOrRepair({ ...baseArgs, editor }, deps);
+
+  const repairPrompt = prompts.find(entry => /semantic repair$/.test(entry.stage.label));
+  assert.ok(repairPrompt, 'semantic repair가 호출되어야 한다');
+  for (const character of BODY_MARKDOWN_ACTIVE_CHARACTERS) {
+    assert.ok(repairPrompt.prompt.includes(character), `markdown active character missing: ${character}`);
+  }
 });
 
 test('semantic repair 프롬프트에 sections.hal_signal_capsule 수리 지침이 포함된다', async () => {

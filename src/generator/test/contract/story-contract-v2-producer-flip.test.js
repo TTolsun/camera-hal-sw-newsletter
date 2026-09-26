@@ -9,7 +9,8 @@
 //
 // 둘을 한 상수로 두면 flip 한 번이 W20~ 영속 아티팩트의 본문 키 해석까지 뒤집어,
 // body_paragraphs를 들고 있는 과거 기사가 v2로 읽히며 본문이 무음 drop된다. 아래 테스트는
-// 그 분리가 유지되는지를 잠근다 — 상수를 다시 합치면 전부 실패한다.
+// 그 분리가 유지되는지를 잠근다 — 상수를 다시 합치면 아래 폴백 테스트 2건이 실패하고, 실질
+// 방어선인 renderer 계약 테스트(newsletter-renderer·rendered-issue-structure 등)가 함께 실패한다.
 
 const assert = require('node:assert/strict');
 const test = require('node:test');

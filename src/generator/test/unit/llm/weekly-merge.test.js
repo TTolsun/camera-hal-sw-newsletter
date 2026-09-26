@@ -11,6 +11,7 @@ const {
 const { resolveWeeklyArticles } = require('../../../reporter/weekly-duplicate-merge');
 const { PUBLIC_ARTICLE_V2_ALLOWED_KEYS } = require('../../../reporter/public-article-contract');
 const { publicArticleSchema } = require('../../../render/newsletter-schema');
+const { BODY_MARKDOWN_ACTIVE_CHARACTERS } = require('../../../reporter/public-body-markdown');
 
 // 채택 게이트(validatePublicArticle)가 요구하지만 모델은 쓰지 않는 필드. 코드가 section에서
 // 파생하므로 스키마에도 프롬프트에도 넣지 않는다.
@@ -51,6 +52,12 @@ test('the merge instruction names every public_article field the adoption gate r
     assert.match(WEEKLY_MERGE_SYSTEM_INSTRUCTION, new RegExp(key));
   }
   assert.match(WEEKLY_MERGE_SYSTEM_INSTRUCTION, /public_article 하나만 담습니다/);
+});
+
+test('the merge instruction names every markdown active character the body lint rejects', () => {
+  for (const character of BODY_MARKDOWN_ACTIVE_CHARACTERS) {
+    assert.ok(WEEKLY_MERGE_SYSTEM_INSTRUCTION.includes(character), `markdown active character missing: ${character}`);
+  }
 });
 
 test('buildWeeklyMergeResolver calls the LLM with both articles and the decision schema', async () => {

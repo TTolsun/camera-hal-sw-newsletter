@@ -1,4 +1,5 @@
 const {
+  BODY_MARKDOWN_ACTIVE_CHARACTER_RULE,
   BODY_MARKDOWN_MIN_PARAGRAPHS,
   RESERVED_SUBHEADING_TERMS,
   SUBHEADING_PREFIX
@@ -9,7 +10,8 @@ const {
 // 발행이 막히거나(거짓 차단) 반대로 lint가 막을 것을 프롬프트가 허락하게 된다.
 function bodyMarkdownSyntaxRule() {
   return `body_markdown의 허용 문법은 두 가지뿐입니다: 빈 줄로 구분한 평문 문단과, "${SUBHEADING_PREFIX}"로 시작하는 소제목 줄. ` +
-    '그 밖의 markdown 구문은 결정론 lint가 거부해 발행이 막힙니다 — 다른 단계의 헤딩, 리스트 마커, 인용, 수평선, 링크, 이미지, 코드 블록과 백틱, HTML 태그, 볼드 표기가 모두 여기에 해당합니다.';
+    '그 밖의 markdown 구문은 결정론 lint가 거부해 발행이 막힙니다 — 다른 단계의 헤딩, 리스트 마커, 인용, 수평선, 링크, 이미지, 코드 블록과 백틱, HTML 태그, 볼드 표기가 모두 여기에 해당합니다. ' +
+    BODY_MARKDOWN_ACTIVE_CHARACTER_RULE;
 }
 
 function bodyMarkdownSubheadingRule() {
@@ -28,7 +30,7 @@ function bodyMarkdownParagraphCountRule() {
 // 기사별 소제목이 "과장"으로 잡혀 must_fix가 쏟아진다 — 톤 지시는 여전히 작성 단계에만
 // 넣고(#693 원칙), 검증 단계에는 "이 형태는 의도된 것"이라는 경계만 알린다.
 function storyV2StyleExemptionPrompt() {
-  return 'Story v2 기사에서 서사형 훅 lead, 가정형 장면 묘사, 기사마다 다른 문단 리듬, 기사별 구체 소제목은 의도된 편집 스타일입니다. 그 자체를 과장이나 편집 오류로 보고 must_fix 또는 issues[]에 올리지 마세요. source가 뒷받침하지 않는 사실 주장을 할 때만 문제로 판정하세요.';
+  return 'Story v2 기사에서 서사형 훅 lead, 가정형 장면 묘사, 기사마다 다른 문단 리듬, 기사별 구체 소제목은 의도된 편집 스타일입니다. 그 자체를 과장이나 편집 오류로 보고 must_fix 또는 issues[]에 올리지 마세요. 이 스타일 요소는 그 안에 source가 뒷받침하지 않는 사실 주장이 들어 있을 때만 문제로 판정하세요. 그 밖의 판정 기준은 그대로 적용합니다.';
 }
 
 function linkedEvidencePromptGuardrails() {
@@ -264,7 +266,7 @@ function editorRepairPatchPrompt() {
     '본문은 블록 단위로 고치세요. /public_article/body_markdown/blocks/{i}는 그 섹션의 body_blocks 미리보기에 실린 index를 그대로 쓰고, value에는 그 블록 하나를 markdown 형태 그대로 담습니다 — 소제목 블록이면 value도 "### "로 시작해야 합니다.',
     '블록 patch 하나는 블록 하나만, 같은 종류로 교체합니다. 한 value에 문단 여러 개를 넣거나 문단을 소제목으로(또는 그 반대로) 바꾸면 그 patch는 거부되고 배치 전체가 실패합니다. 블록을 추가·삭제하려면 전체 교체 경로를 쓰세요.',
     '/public_article/body_markdown 전체 교체는 블록 단위로 고칠 수 없을 때만 쓰세요 — 문단 수가 모자라 문단을 더해야 하거나, 본문 구조 자체가 무너진 경우입니다. 이때 value는 본문 전체 markdown이며 소제목 줄은 "### "로 시작합니다.',
-    '본문 patch에는 허용 문법만 쓰세요: 빈 줄로 구분한 평문 문단과 "### " 소제목 줄. 리스트, 인용, 링크, 이미지, 코드/백틱, HTML 태그, 볼드 표기를 넣으면 적용 후 lint가 다시 실패해 repair 전체가 거부됩니다.',
+    '본문 patch에는 허용 문법만 쓰세요: 빈 줄로 구분한 평문 문단과 "### " 소제목 줄. 리스트, 인용, 링크, 이미지, 코드/백틱, HTML 태그, 볼드 표기를 넣으면 적용 후 lint가 다시 실패해 repair 전체가 거부됩니다. ' + BODY_MARKDOWN_ACTIVE_CHARACTER_RULE,
     'editorial_story의 하위 string field는 /public_article/editorial_story/editor_take 처럼 지정하세요. top-level editorial_story로 지정하지 마세요.',
     '수정 금지(이런 path는 거부되어 repair가 diagnostics-only로 실패합니다): /sources, /public_article/source_links, source URL, source_candidate_hash, candidate_id, article_identity_key, coverage_type, published_date, evidence id, section 개수/순서.',
     '새 evidence id 또는 source URL을 만들지 말고, source가 직접 뒷받침하지 않는 release/HAL/runtime 사실을 patch value에 새로 쓰지 마세요. 보강할 source evidence가 없으면 해당 patch를 생략하세요.'

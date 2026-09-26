@@ -7,6 +7,7 @@ const {
   articleClaimContractPrompt,
   articleSectionContractPrompt,
   claimRepairEvidencePrompt,
+  editorRepairPatchPrompt,
   publicArticleJudgePrompt,
   publicArticleContractPrompt,
   publicationBoundaryPrompt,
@@ -19,6 +20,7 @@ const {
   publicArticleJudgeBlockingIssues
 } = require('../../publish/orchestrator-judge-helpers');
 const {
+  BODY_MARKDOWN_ACTIVE_CHARACTERS,
   BODY_MARKDOWN_MIN_PARAGRAPHS,
   RESERVED_SUBHEADING_TERMS
 } = require('../../reporter/public-body-markdown');
@@ -179,6 +181,13 @@ test('public article contract prompt keeps public output separate from diagnosti
     assert.ok(prompt.includes(term), `subheading deny-list term missing from prompt: ${term}`);
   }
   assert.ok(prompt.includes(`최소 ${BODY_MARKDOWN_MIN_PARAGRAPHS}개`));
+  // lint의 allow-list 마감(markdown_active_character)은 이름 붙은 구문이 아니라 문자 단위로
+  // 거부한다. 프롬프트가 그 문자 집합을 그대로 말하지 않으면 "~30%"나 "<1ms"처럼 프롬프트를
+  // 지킨 산문이 lint에서 거짓 차단되고, repair 프롬프트도 같은 표기로 다시 써서 강등된다.
+  for (const character of BODY_MARKDOWN_ACTIVE_CHARACTERS) {
+    assert.ok(prompt.includes(character), `markdown active character missing from prompt: ${character}`);
+  }
+  assert.match(prompt, /약 30%/);
   assert.match(prompt, /Public-facing impact wording과 claim-level classification은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
   assert.match(prompt, /source가 뒷받침하는 범위 안에서만 HAL\/driver\/runtime 영향을 서술하고, source가 말하지 않는 영향을 지어내거나 확대하지 마세요/);
   assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
@@ -285,6 +294,13 @@ test('publication boundary prompt isolates deterministic publication judgment', 
   assert.match(prompt, /source link/);
   assert.match(prompt, /do_not_claim/);
   assert.match(prompt, /Gemini는 decision_metadata를 생성하지 마세요/);
+});
+
+test('editor repair patch prompt names every markdown active character the lint rejects', () => {
+  const prompt = editorRepairPatchPrompt();
+  for (const character of BODY_MARKDOWN_ACTIVE_CHARACTERS) {
+    assert.ok(prompt.includes(character), `markdown active character missing from repair prompt: ${character}`);
+  }
 });
 
 test('claim repair evidence prompt carries repair-only guidance', () => {

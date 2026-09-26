@@ -13,6 +13,7 @@ const {
   serializeEditorValidationError
 } = require('../editor/editor-output-contract');
 const { claimRepairEvidencePrompt, publicArticleJudgePrompt } = require('../reporter/newsletter-prompts');
+const { BODY_MARKDOWN_ACTIVE_CHARACTER_RULE } = require('../reporter/public-body-markdown');
 const { writeJson } = require('../../shared/common/common');
 const { cloneJson } = require('./orchestrator-shared-helpers');
 const {
@@ -48,7 +49,7 @@ async function repairEditorSemanticWithLlm({
       'Validation repair에 필요한 local edit가 아니면 한국어 reader-facing prose를 보존하세요. 새로 쓰는 reader-facing text는 반드시 한국어여야 합니다.',
       `현재 editor draft는 정확히 ${beforeSectionCount}개의 main sections를 가집니다. Repaired output도 동일한 sections 수를 같은 순서로 유지하세요.`,
       'Section을 추가, 제거, 합치기, 분할, 재정렬, 교체하지 마세요. Validation error가 명시한 field만 in-place로 수정하세요.',
-      'public_article.body_markdown을 고칠 때도 허용 문법을 지키세요: 빈 줄로 구분한 평문 문단과 "### "로 시작하는 소제목 줄만 쓸 수 있습니다. 리스트, 인용, 링크, 이미지, 코드/백틱, HTML 태그, 볼드 표기를 넣으면 결정론 lint가 다시 실패합니다.',
+      'public_article.body_markdown을 고칠 때도 허용 문법을 지키세요: 빈 줄로 구분한 평문 문단과 "### "로 시작하는 소제목 줄만 쓸 수 있습니다. 리스트, 인용, 링크, 이미지, 코드/백틱, HTML 태그, 볼드 표기를 넣으면 결정론 lint가 다시 실패합니다. ' + BODY_MARKDOWN_ACTIVE_CHARACTER_RULE,
       'Validation error가 명시적으로 해당 field를 가리키지 않으면 article headline, category, source URL, image field, action_items, references를 변경하지 마세요.',
       claimRepairEvidencePrompt(),
       'sections.group_coverage failure는 missing selected representative group을 selected capsule만 사용해 article로 복구하세요. 해당 group을 render할 수 없으면 article_group_key, reason_code, reason text를 포함해 explicitly_demoted_groups[] 또는 hard_blocked_groups[]에 기록하세요.',
