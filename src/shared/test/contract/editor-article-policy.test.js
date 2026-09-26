@@ -1139,6 +1139,17 @@ test('run-level editor semantic status preserves details and OR accumulates repa
   assert.equal(status.repairSucceeded, true);
 });
 
+test('editor schema locks impact axes to the validator vocabulary', () => {
+  // 2026-09-26 첫 v2 실전 실행에서 모델이 impact_axes에 camera_framework_behavior를 넣었다.
+  // 스키마가 자유 문자열이면 모델은 축 어휘를 살짝 바꿔 쓸 수 있고, 결정론 repair는 허용 목록
+  // 밖의 축을 가까운 축으로 옮기지 않아 기사 하나 때문에 editor 시도 전체가 실패한다.
+  // 어휘의 정본은 hal-signal-quality.js의 HAL_IMPACT_AXES 하나다.
+  const { HAL_IMPACT_AXES } = require('../../../generator/reporter/hal-signal-quality');
+  const sectionProperties = editorSchema.properties.sections.items.properties;
+  assert.deepEqual(sectionProperties.hal_signal_capsule.properties.impact_axes.items.enum, [...HAL_IMPACT_AXES]);
+  assert.deepEqual(sectionProperties.hal_impact_axes.items.enum, [...HAL_IMPACT_AXES]);
+});
+
 test('editor schema does not ask the model for values the code always overwrites or nobody reads', () => {
   // Gemini constrained decoding은 스키마의 상태 수가 많을수록 거부 위험이 커진다.
   // 그래서 "모델이 채워도 코드가 버리는 값"과 "채운 뒤 아무도 읽지 않는 값"은 스키마에서 뺀다.

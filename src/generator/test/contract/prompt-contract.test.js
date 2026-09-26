@@ -94,6 +94,10 @@ test('article section contract prompt fixes the five normalized keys and guardra
     assert.match(prompt, new RegExp(key));
   }
   assert.match(prompt, /article_sections를 포함해야 합니다/);
+  // impact_axes 어휘는 스키마 enum·결정론 validator와 같은 상수에서 나와야 한다. 프롬프트가
+  // 어휘를 말하지 않으면 모델은 camera_framework_behavior처럼 비슷한 말을 지어낸다(#1175).
+  const { HAL_IMPACT_AXES } = require('../../reporter/hal-signal-quality');
+  assert.match(prompt, new RegExp(`impact_axes.*${HAL_IMPACT_AXES.join(', ')}`));
   assert.match(prompt, /required keys/);
   assert.match(prompt, /known_limitations/);
   assert.match(prompt, /watch_items/);
