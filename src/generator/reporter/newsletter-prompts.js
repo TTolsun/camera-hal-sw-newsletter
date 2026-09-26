@@ -1,5 +1,6 @@
 const {
   BODY_MARKDOWN_ACTIVE_CHARACTER_RULE,
+  BODY_MARKDOWN_LINE_BREAK_RULE,
   BODY_MARKDOWN_MIN_PARAGRAPHS,
   RESERVED_SUBHEADING_TERMS,
   SUBHEADING_PREFIX
@@ -11,7 +12,7 @@ const {
 function bodyMarkdownSyntaxRule() {
   return `body_markdown의 허용 문법은 두 가지뿐입니다: 빈 줄로 구분한 평문 문단과, "${SUBHEADING_PREFIX}"로 시작하는 소제목 줄. ` +
     '그 밖의 markdown 구문은 결정론 lint가 거부해 발행이 막힙니다 — 다른 단계의 헤딩, 리스트 마커, 인용, 수평선, 링크, 이미지, 코드 블록과 백틱, HTML 태그, 볼드 표기가 모두 여기에 해당합니다. ' +
-    BODY_MARKDOWN_ACTIVE_CHARACTER_RULE;
+    BODY_MARKDOWN_ACTIVE_CHARACTER_RULE + ' ' + BODY_MARKDOWN_LINE_BREAK_RULE;
 }
 
 function bodyMarkdownSubheadingRule() {

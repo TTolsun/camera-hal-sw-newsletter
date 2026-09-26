@@ -43,6 +43,37 @@ test('normalizeBodyMarkdown trims leading and trailing blank lines', () => {
   assert.equal(normalizeBodyMarkdown('\n\n  본문.  \n\n'), '본문.');
 });
 
+// 2026-09-26 첫 v2 실전 실행(run 36238083997)에서 editor 모델이 JSON 문자열 안의 줄바꿈을
+// 역슬래시와 n 두 글자로 이중 이스케이프해 돌려줬다. 기사 10편 전부가 실제 개행 0개,
+// 이 두 글자 표기 8개였다. 정규화가 이것을 개행으로 되돌리지 않으면 본문 전체가 문단 하나로
+// 세어져 insufficient_public_body_paragraphs로 발행이 막힌다.
+const BACKSLASH = String.fromCharCode(92);
+const ESCAPED_NEWLINE = `${BACKSLASH}n`;
+const ESCAPED_CRLF = `${BACKSLASH}r${BACKSLASH}n`;
+
+test('normalizeBodyMarkdown decodes backslash-n written as two characters into a line break', () => {
+  const body = ['첫 문단이다.', '', '### 기사별 소제목', '', '둘째 문단이다.'].join(ESCAPED_NEWLINE);
+  assert.equal(normalizeBodyMarkdown(body), '첫 문단이다.\n\n### 기사별 소제목\n\n둘째 문단이다.');
+});
+
+test('normalizeBodyMarkdown decodes the escaped CRLF spelling the same way', () => {
+  const body = `첫 문단이다.${ESCAPED_CRLF}${ESCAPED_CRLF}둘째 문단이다.`;
+  assert.equal(normalizeBodyMarkdown(body), '첫 문단이다.\n\n둘째 문단이다.');
+});
+
+test('normalizeBodyMarkdown leaves backslash-n alone once the body has a real line break', () => {
+  // 실제 개행이 있는 정상 본문에서 역슬래시 n은 산문일 수 있다(Windows 경로 등). 관측된 실패는
+  // 개행이 전혀 없는 본문뿐이었으므로 디코딩은 그 경우로 좁힌다.
+  const body = `로그 경로는 C:${BACKSLASH}newsroom 아래에 남는다.\n\n둘째 문단이다.`;
+  assert.equal(normalizeBodyMarkdown(body), body);
+});
+
+test('lintBodyMarkdown counts paragraphs and subheadings across decoded line breaks', () => {
+  const body = ['첫 문단이다.', '', '둘째 문단이다.', '', '### 기사별 소제목', '', '셋째 문단이다.'].join(ESCAPED_NEWLINE);
+  assert.deepEqual(lintBodyMarkdown(body), []);
+  assert.deepEqual(bodyMarkdownMetrics(body), { paragraphCount: 3, subheadingCount: 1, hasSubheading: true });
+});
+
 test('normalizeBodyMarkdown is idempotent', () => {
   const once = normalizeBodyMarkdown(VALID_BODY);
   assert.equal(normalizeBodyMarkdown(once), once);

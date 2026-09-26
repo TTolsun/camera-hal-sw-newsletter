@@ -9,7 +9,11 @@ const { LLM_STAGES, stageRun } = require('../../shared/llm/stage-catalog');
 // from resolveWeeklyArticles so the orchestration logic stays pure and unit-testable without a real model.
 
 const { publicArticleSchema } = require('../render/newsletter-schema');
-const { BODY_MARKDOWN_ACTIVE_CHARACTER_RULE, BODY_MARKDOWN_MIN_PARAGRAPHS } = require('../reporter/public-body-markdown');
+const {
+  BODY_MARKDOWN_ACTIVE_CHARACTER_RULE,
+  BODY_MARKDOWN_LINE_BREAK_RULE,
+  BODY_MARKDOWN_MIN_PARAGRAPHS
+} = require('../reporter/public-body-markdown');
 
 // 타입 표기는 저장소의 다른 response schema(newsletter-schema.js)와 같은 Gemini Type 이름을 쓴다.
 // 여기만 소문자였는데, 그 모양으로 실제 API를 호출해 본 적이 없다.
@@ -59,6 +63,7 @@ const WEEKLY_MERGE_SYSTEM_INSTRUCTION = [
   'body_markdown은 markdown 문자열 하나이며 허용 문법은 두 가지뿐입니다: 빈 줄로 구분한 평문 문단과 "### "로 시작하는 소제목 줄.',
   `소제목을 제외한 문단은 ${BODY_MARKDOWN_MIN_PARAGRAPHS}개 이상이어야 하고, 리스트·인용·링크·이미지·코드/백틱·HTML 태그·볼드 표기는 쓸 수 없습니다.`,
   BODY_MARKDOWN_ACTIVE_CHARACTER_RULE,
+  BODY_MARKDOWN_LINE_BREAK_RULE,
   'story_contract_version은 existing_article의 public_article.story_contract_version과 같은 값을 씁니다.',
   '확실하지 않으면 append를 선택하세요. 새로운 사실을 지어내지 마세요.'
 ].join('\n');
