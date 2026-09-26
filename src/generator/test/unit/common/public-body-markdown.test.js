@@ -61,6 +61,13 @@ test('normalizeBodyMarkdown decodes the escaped CRLF spelling the same way', () 
   assert.equal(normalizeBodyMarkdown(body), '첫 문단이다.\n\n둘째 문단이다.');
 });
 
+test('normalizeBodyMarkdown leaves backslash-n alone once the body has a real line break', () => {
+  // 실제 개행이 있는 정상 본문에서 역슬래시 n은 산문일 수 있다(Windows 경로 등). 관측된 실패는
+  // 개행이 전혀 없는 본문뿐이었으므로 디코딩은 그 경우로 좁힌다.
+  const body = `로그 경로는 C:${BACKSLASH}newsroom 아래에 남는다.\n\n둘째 문단이다.`;
+  assert.equal(normalizeBodyMarkdown(body), body);
+});
+
 test('lintBodyMarkdown counts paragraphs and subheadings across decoded line breaks', () => {
   const body = ['첫 문단이다.', '', '둘째 문단이다.', '', '### 기사별 소제목', '', '셋째 문단이다.'].join(ESCAPED_NEWLINE);
   assert.deepEqual(lintBodyMarkdown(body), []);
