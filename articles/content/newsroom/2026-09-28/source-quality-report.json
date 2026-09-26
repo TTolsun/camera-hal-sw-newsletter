@@ -1,0 +1,1471 @@
+{
+  "schema_version": 1,
+  "report_type": "source_quality",
+  "newsletter_date": "2026-09-28",
+  "candidates": [
+    {
+      "candidate_id": "0031c77075a2b86e",
+      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "title": "Build your way: Use any AI agent of your choice in Android Studio",
+      "source_quality_score": 0.786,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.96,
+        "android_hal_relevance": 0.96,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "90b6cdc01cb95494",
+      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+      "source_quality_score": 0.788,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.85,
+        "android_hal_relevance": 0.85,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9bf211c2ecec3d36",
+      "url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "title": "Bring your Android game to the car screen today",
+      "source_quality_score": 0.577,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.66,
+        "android_hal_relevance": 0.66,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4c2cb76fa38210b1",
+      "url": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+      "title": "Land your apps on Googlebook with adaptive development",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "495a4431da1e7ff3",
+      "url": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+      "title": "Android Bench 2.0: Pushing the frontier with challenging long-horizon tasks",
+      "source_quality_score": 0.589,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.84,
+        "android_hal_relevance": 0.84,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0.15
+      }
+    },
+    {
+      "candidate_id": "69da15295fbcb790",
+      "url": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+      "title": "Ensuring Safety in the Generative AI Ecosystem: Protecting Users from Non-Consensual Intimate Content",
+      "source_quality_score": 0.691,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.72,
+        "android_hal_relevance": 0.72,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6ac026046fb3ce0d",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "title": "CameraX Release Notes - CameraX 1.6.2",
+      "source_quality_score": 0.78,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.72,
+        "android_hal_relevance": 0.72,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "43e0e16b6f415ed8",
+      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "source_quality_score": 0.688,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c70c758816ffadd7",
+      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "title": "Emulator control for adaptive app development",
+      "source_quality_score": 0.732,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "126b8a669e4375b9",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "title": "1.4.0-alpha07",
+      "source_quality_score": 0.552,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "eff05b8438968671",
+      "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+      "title": "Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
+      "source_quality_score": 0.574,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.54,
+        "android_hal_relevance": 0.54,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "83c1181197fc68d8",
+      "url": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
+      "title": "September",
+      "source_quality_score": 0.501,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.25,
+        "recency_score": 0.5,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "03621633767199d7",
+      "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
+      "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
+      "source_quality_score": 0.93,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "eef48eb3c8b28445",
+      "url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com/",
+      "title": "[RFC PATCH 0/8] Add OmniVision OV2312 RGB-IR sensor driver",
+      "source_quality_score": 0.84,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "cc5ea597a244fd63",
+      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "source_quality_score": 0.93,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "bd74537ab6d5beb1",
+      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
+      "title": "[PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili",
+      "source_quality_score": 0.885,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "7bc66cbac7c9117a",
+      "url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
+      "title": "[PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support",
+      "source_quality_score": 0.857,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.93,
+        "android_hal_relevance": 0.93,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c5e56e4dc3a1f9f1",
+      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
+      "source_quality_score": 0.734,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c3ec0c8832c0ce38",
+      "url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+      "title": "[PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro",
+      "source_quality_score": 0.809,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.81,
+        "android_hal_relevance": 0.81,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "b0a4ea83fd0911fa",
+      "url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/",
+      "title": "[PATCH 2/4] media: ipu-bridge: Add the ST VD55G1 (TBE20A1)",
+      "source_quality_score": 0.85,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.8,
+        "android_hal_relevance": 0.8,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4cd09ea37ab474d8",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur",
+      "source_quality_score": 0.761,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.69,
+        "android_hal_relevance": 0.69,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "49e11beff1e52751",
+      "url": "https://patchwork.libcamera.org/patch/28382/",
+      "title": "[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP",
+      "source_quality_score": 0.806,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.69,
+        "android_hal_relevance": 0.69,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "215862005c40e900",
+      "url": "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/",
+      "title": "[PATCH v7 3/3] media: ipu-bridge: Add Sony IMX681",
+      "source_quality_score": 0.778,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "e48cec75a50d6af4",
+      "url": "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/",
+      "title": "[PATCH v3 00/21] IPU6 multi-stream and metadata support preparation",
+      "source_quality_score": 0.73,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.5,
+        "android_hal_relevance": 0.5,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "60c50ec34762d9ca",
+      "url": "https://patchwork.libcamera.org/patch/28380/",
+      "title": "[1/4] libcamera: v4l2_event: Add V4L2Event class and functionality",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "2a808741ee5bb27c",
+      "url": "https://patchwork.libcamera.org/patch/28366/",
+      "title": "[v2] libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "532247ef9981b9ad",
+      "url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
+      "title": "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove",
+      "source_quality_score": 0.685,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.5,
+        "android_hal_relevance": 0.5,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "5e3d1c181d2f7a37",
+      "url": "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/",
+      "title": "[PATCH v3 4/5] media: ipu-bridge: Add the OV02C10 26 MHz link frequency",
+      "source_quality_score": 0.73,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.5,
+        "android_hal_relevance": 0.5,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "d26e64943571f4ae",
+      "url": "https://patchwork.libcamera.org/patch/28368/",
+      "title": "[v2,1/9] ipa: libipa: agc: Keep frame duration limits ordered",
+      "source_quality_score": 0.482,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.33,
+        "android_hal_relevance": 0.33,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c9a9c2f37fa06afa",
+      "url": "https://patchwork.libcamera.org/patch/28360/",
+      "title": "[v4] libcamera: controls: Remove common enum prefix",
+      "source_quality_score": 0.575,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "bc732f8a0a2ba65c",
+      "url": "https://lore.kernel.org/linux-media/20260924120634.1420687-1-antti.laakso@linux.intel.com/",
+      "title": "[PATCH] media: ipu6: Fix bus device use-after-free",
+      "source_quality_score": 0.592,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.38,
+        "android_hal_relevance": 0.38,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "db551c9b7709cca3",
+      "url": "https://patchwork.libcamera.org/patch/28174/",
+      "title": "[1/5] ipa: libipa: camera_sensor_helper: Add OV02C10",
+      "source_quality_score": 0.477,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.33,
+        "android_hal_relevance": 0.33,
+        "technical_depth": 0.55,
+        "recency_score": 0.5,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "625d016423340ae9",
+      "url": "https://patchwork.libcamera.org/patch/28361/",
+      "title": "[v1] ipa: Move camera sensor helper types into anon namespace",
+      "source_quality_score": 0.527,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.33,
+        "android_hal_relevance": 0.33,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9a56c7ceef26189e",
+      "url": "https://lore.kernel.org/linux-media/20260924215857.48545-1-lsa.uz@pm.me/",
+      "title": "[RFC] ipu-bridge: supplying a vendor-prefixed property",
+      "source_quality_score": 0.568,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.32,
+        "android_hal_relevance": 0.32,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "37326daeba9e86ea",
+      "url": "https://lore.kernel.org/linux-media/20260924173315.87556-1-artem@trailofbits.com/",
+      "title": "[PATCH 6.1.y] media: ipu-bridge: Fix null pointer deref on SSDB/PLD parsing warnings",
+      "source_quality_score": 0.568,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.32,
+        "android_hal_relevance": 0.32,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "d358f6fec93ac192",
+      "url": "https://patchwork.libcamera.org/patch/28365/",
+      "title": "pipeline: rpi: Fix crashes due to scoring unknown formats",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.27,
+        "android_hal_relevance": 0.27,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "0119a165e80716e1",
+      "url": "https://claude.com/blog/how-to-prepare-for-ai-driven-code-modernization-projects",
+      "title": "How to prepare for AI-driven code modernization projects",
+      "source_quality_score": 0.7,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.78,
+        "android_hal_relevance": 0.78,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "a5e74fc99583edf6",
+      "url": "https://claude.com/blog/build-plugins-for-claude",
+      "title": "Build plugins for Claude",
+      "source_quality_score": 0.651,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.66,
+        "android_hal_relevance": 0.66,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3ebc32988504fb7e",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.281",
+      "title": "Claude Code v2.1.281",
+      "source_quality_score": 0.725,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "968dc44d232f92f7",
+      "url": "https://claude.com/blog/claude-opus-5-5-built-for-coding-sessions-that-use-more-context",
+      "title": "Coding sessions are longer and use more context. Claude Opus 5.5 is built with that in mind.",
+      "source_quality_score": 0.627,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-d893134af706f7df",
+      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "title": "Android 17 Camera Image Test Suite release notes &nbsp;|&nbsp; Android Open Source Project",
+      "source_quality_score": 0.802,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-3e299f0c00c90d60",
+      "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
+      "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor - German Pablo Lindo",
+      "source_quality_score": 0.765,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-a5b4d734241ead8d",
+      "url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
+      "title": "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove - Guangshuo Li",
+      "source_quality_score": 0.765,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-ce75d275dbd30e6b",
+      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
+      "title": "[PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili - Nihal Kumar Gupta",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-2cb030cac48a1221",
+      "url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
+      "title": "[PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-ecbdddd00636b5e9",
+      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK - Linus Walleij",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-19b6398e6b0d5427",
+      "url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+      "title": "[PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro - Felipe Calliari",
+      "source_quality_score": 0.765,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-8317255190bffdd5",
+      "url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/",
+      "title": "[PATCH 2/4] media: ipu-bridge: Add the ST VD55G1 (TBE20A1) - Ruslan Koreev",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-f84d1e30b1dc03da",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-3c9f683ad7d46e11",
+      "url": "https://patchwork.libcamera.org/patch/28382/",
+      "title": "[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP - Patchwork",
+      "source_quality_score": 0.545,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-b86272fac15703a2",
+      "url": "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/",
+      "title": "[PATCH v7 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-b78eebd68bc66a8f",
+      "url": "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/",
+      "title": "[PATCH v3 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-935628717af7ac19",
+      "url": "https://patchwork.libcamera.org/patch/28380/",
+      "title": "[1/4] libcamera: v4l2_event: Add V4L2Event class and functionality - Patchwork",
+      "source_quality_score": 0.545,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-ee6be76db729d498",
+      "url": "https://patchwork.libcamera.org/patch/28366/",
+      "title": "[v2] libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork",
+      "source_quality_score": 0.545,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-f7ead5308ffd2974",
+      "url": "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/",
+      "title": "[PATCH v3 4/5] media: ipu-bridge: Add the OV02C10 26 MHz link frequency - Felipe Calliari",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-1abe5953d9011baf",
+      "url": "https://patchwork.libcamera.org/patch/28365/",
+      "title": "pipeline: rpi: Fix crashes due to scoring unknown formats - Patchwork",
+      "source_quality_score": 0.72,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-6bb3f66fb8357436",
+      "url": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
+      "title": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-646ad3166eb4d20f",
+      "url": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com",
+      "title": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com/",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-26528ba3b600cc3a",
+      "url": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312",
+      "title": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312/",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-5adb9b40a4f815fd",
+      "url": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
+      "title": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-fd42217ad7ad955c",
+      "url": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org",
+      "title": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org/",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-e94ff3386adfcc34",
+      "url": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-e998fecb0370b203",
+      "url": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-571f6f36c46da5bc",
+      "url": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-a5282b5315f79eae",
+      "url": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-919adf6caa65379e",
+      "url": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-ec8f804ddab09478",
+      "url": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-38cfb10505bee871",
+      "url": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org",
+      "title": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org/",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-5ab920ca1744f0a7",
+      "url": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
+      "title": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
+      "source_quality_score": 0.413,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-b9e7240c96270a82",
+      "url": "https://github.com/loicpoulain/camss-isp-m2m-test",
+      "title": "https://github.com/loicpoulain/camss-isp-m2m-test",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-8e5fa5576d64985a",
+      "url": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-92c237d59a3a9ff5",
+      "url": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-0ac2025076574f1d",
+      "url": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-1e6435b55f3314e5",
+      "url": "https://lore.kernel.org/r/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/r/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-989b97da3ca430c4",
+      "url": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-ea376fb03a33d353",
+      "url": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-2c9bae9822cfa6d8",
+      "url": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com",
+      "title": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com/",
+      "source_quality_score": 0.42,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-964a788352f2a905",
+      "url": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-38269a239de217ef",
+      "url": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-3bf2d05863a9db8f",
+      "url": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com",
+      "title": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
+      "source_quality_score": 0.458,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-b71a0d2073b46ba4",
+      "url": "https://lore.kernel.org/linux-media/20260914114145.574791-1-sakari.ailus@linux.intel.com/T",
+      "title": "https://lore.kernel.org/linux-media/20260914114145.574791-1-sakari.ailus@linux.intel.com/T/#t",
+      "source_quality_score": 0.42,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    }
+  ],
+  "counts": {
+    "review_candidate": 21,
+    "blocked_candidate": 23,
+    "strong_candidate": 12,
+    "weak_candidate": 25
+  }
+}

@@ -1,0 +1,367 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-09-28",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-android-17-its-release-notes",
+      "topic_gap": "Android 17 Camera ITS release notes are available and might contain relevant updates for camera HAL.",
+      "source_family": "aosp-camera-its-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android 17 Camera ITS",
+        "Camera ITS release notes"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
+      ],
+      "expected_evidence": [
+        "Camera ITS release notes for Android 17",
+        "Updates or changes related to camera HAL or testing"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-sony-imx681-driver",
+      "topic_gap": "New Sony IMX681 camera sensor driver support in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media sony imx681 driver",
+        "kernel camera sensor support"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Patch for Sony IMX681 camera sensor driver",
+        "Details on sensor capabilities or integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-samsung-s5k3t2-sensor-driver",
+      "topic_gap": "Samsung S5K3T2 image sensor driver added to the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media samsung s5k3t2 driver",
+        "kernel camera sensor samsung"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Patch for Samsung S5K3T2 image sensor driver",
+        "Details on sensor integration and features"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-qualcomm-hawi-maili-camss-support",
+      "topic_gap": "Support for CAMSS on Qualcomm Hawi and Maili platforms, including S5KJN5 sensor.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media qualcomm hawi maili camss",
+        "qualcomm S5KJN5 driver"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Patches for CAMSS support on Qualcomm platforms",
+        "Details on S5KJN5 sensor integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-qualcomm-camss-offline-processing",
+      "topic_gap": "Introduction of CAMSS Offline Processing Engine support in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media qualcomm camss offline processing",
+        "CAMSS ISP engine"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Patches for CAMSS Offline Processing Engine",
+        "Details on ISP capabilities and integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-renesas-rz-v2h-isp-ivc-enablement",
+      "topic_gap": "ISP and IVC enablement on Renesas RZ/V2H EVK in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media renesas rz-v2h isp ivc",
+        "Renesas RZ/V2H camera driver"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+      ],
+      "expected_evidence": [
+        "Device Tree (DTS) patches for Renesas RZ/V2H",
+        "Details on ISP and IVC hardware enablement"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-ipu-bridge-samsung-galaxy-book3-pro-quirk",
+      "topic_gap": "Upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro in the IPU bridge driver.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media ipu bridge samsung galaxy book3 pro",
+        "Intel IPU sensor quirk"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Patch for IPU bridge driver with DMI quirk",
+        "Details on sensor orientation issues and fixes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-ipu-bridge-st-vd55g1-driver",
+      "topic_gap": "Addition of the ST VD55G1 (TBE20A1) sensor driver to the IPU bridge.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media ipu bridge st vd55g1",
+        "Intel IPU ST VD55G1 driver"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Patch for ST VD55G1 sensor driver",
+        "Details on sensor integration with Intel IPU"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-qualcomm-glymur-camss-support",
+      "topic_gap": "CAMSS support for Qualcomm Glymur platform in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media qualcomm glymur camss",
+        "Qualcomm Glymur camera driver"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Patches for CAMSS support on Qualcomm Glymur",
+        "Details on platform integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-pipeline-reject-multiple-processed-streams",
+      "topic_gap": "Libcamera pipeline improvement to reject multiple processed streams with software ISP.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera pipeline reject multiple streams",
+        "libcamera software ISP"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28382/"
+      ],
+      "expected_evidence": [
+        "Patch description for libcamera pipeline",
+        "Explanation of stream handling with software ISP"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-ipu-bridge-sony-imx681-driver",
+      "topic_gap": "Sony IMX681 sensor driver added to the IPU bridge in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media ipu bridge sony imx681",
+        "Intel IPU sony imx681 driver"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/"
+      ],
+      "expected_evidence": [
+        "Patch for Sony IMX681 driver in IPU bridge",
+        "Details on sensor integration with Intel IPU"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-ipu6-multistream-metadata-preparation",
+      "topic_gap": "Preparation for IPU6 multi-stream and metadata support in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media ipu6 multistream metadata",
+        "Intel IPU6 camera support"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/"
+      ],
+      "expected_evidence": [
+        "Patches for IPU6 multi-stream and metadata support",
+        "Details on camera pipeline enhancements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-v4l2-event-class",
+      "topic_gap": "Introduction of V4L2Event class and functionality in libcamera.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera v4l2 event class",
+        "libcamera event handling"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28380/"
+      ],
+      "expected_evidence": [
+        "Patch for V4L2Event class in libcamera",
+        "Explanation of event handling in libcamera"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-lens-shading-correction-tone-curve-controls",
+      "topic_gap": "Addition of LensShadingCorrection maps and ToneCurve to controls metadata in libcamera.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera lens shading correction tone curve",
+        "libcamera metadata controls"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28366/"
+      ],
+      "expected_evidence": [
+        "Patch for libcamera controls metadata",
+        "Details on LensShadingCorrection and ToneCurve"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-ipu7-firmware-resource-release",
+      "topic_gap": "Fix to release ISYS firmware resources on remove for the IPU7 driver in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media ipu7 firmware release",
+        "Intel IPU7 driver fix"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Patch for IPU7 driver resource management",
+        "Details on firmware resource handling"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "linux-media-ipu-bridge-ov02c10-link-frequency",
+      "topic_gap": "Addition of the OV02C10 sensor with 26 MHz link frequency to the IPU bridge.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "linux media ipu bridge ov02c10 link frequency",
+        "Intel IPU OV02C10 driver"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/"
+      ],
+      "expected_evidence": [
+        "Patch for OV02C10 sensor in IPU bridge",
+        "Details on link frequency and sensor integration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-pipeline-rpi-crash-fix",
+      "topic_gap": "Fix for crashes in the Raspberry Pi libcamera pipeline due to scoring unknown formats.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera raspberry pi pipeline crash fix",
+        "libcamera format scoring"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28365/"
+      ],
+      "expected_evidence": [
+        "Patch description for Raspberry Pi libcamera pipeline",
+        "Explanation of format scoring and crash resolution"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-ai-agent-android-studio",
+      "topic_gap": "Android Studio's support for integrating any AI agent, potentially impacting development workflows.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Studio AI agent integration",
+        "AI development tools Android"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+      ],
+      "expected_evidence": [
+        "Details on integrating AI agents in Android Studio",
+        "Impact on developer workflows and tools"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-gemma-4-android-studio-quail",
+      "topic_gap": "Leveraging Android skills and Gemma 4 in Android Studio Quail.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Gemma 4 Android Studio Quail",
+        "Android development Gemma"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html"
+      ],
+      "expected_evidence": [
+        "Information on Gemma 4 integration with Android Studio",
+        "How Android skills can be applied with Gemma 4"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-emulator-adaptive-development",
+      "topic_gap": "Emulator control for adaptive app development on Android.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android emulator adaptive development",
+        "emulator control adaptive apps"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html"
+      ],
+      "expected_evidence": [
+        "Details on emulator controls for adaptive development",
+        "Impact on testing and development of adaptive apps"
+      ],
+      "risk_notes": []
+    }
+  ]
+}
