@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Weekly coverage of Camera HAL, Android Camera, drivers, image processing and AI" />
-  <title>Camera SW Newsroom</title>
+  <meta name="description" content="Camera SW Newsletter covers Android Camera, Camera HAL, C++ and AI developer productivity from a practitioner’s perspective." />
+  <title>Camera SW Newsletter</title>
   <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/index.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Camera SW Newsletter" />
-  <meta property="og:title" content="Camera SW Newsroom" />
-  <meta property="og:description" content="Weekly coverage of Camera HAL, Android Camera, drivers, image processing and AI" />
+  <meta property="og:title" content="Camera SW Newsletter" />
+  <meta property="og:description" content="Camera SW Newsletter covers Android Camera, Camera HAL, C++ and AI developer productivity from a practitioner’s perspective." />
   <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/index.html" />
   <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Camera SW Newsroom" />
-  <meta name="twitter:description" content="Weekly coverage of Camera HAL, Android Camera, drivers, image processing and AI" />
+  <meta name="twitter:title" content="Camera SW Newsletter" />
+  <meta name="twitter:description" content="Camera SW Newsletter covers Android Camera, Camera HAL, C++ and AI developer productivity from a practitioner’s perspective." />
   <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -40,19 +40,46 @@
     </div>
   </header>
 
-  <main class="site-main content-wrap">
-    <section class="archive-hero" aria-labelledby="home-title">
-      <p class="eyebrow">Camera SW Newsroom</p>
-      <h1 id="home-title">Camera software, week by week.</h1>
-      <p class="archive-hero-description">Source-backed coverage of Camera HAL, Android, drivers and image processing.</p>
+  <main class="site-main">
+    <section id="featured" class="featured-section content-wrap" aria-labelledby="featured-title">
+      <article id="featured-card" class="featured-hero">
+        <div class="featured-thumb nc-thumb">
+          <img class="featured-img is-brand" src="../assets/images/brand/HALley.png" alt="HALley, the newsletter mascot" width="1254" height="1254" decoding="async" fetchpriority="high">
+        </div>
+        <div class="featured-copy">
+          <p class="featured-kicker">Camera SW Newsroom</p>
+          <h1 id="featured-title" class="featured-title">The camera you don’t see: today, and what comes next</h1>
+          <p class="featured-lead">Tracking how mobile camera technology changes across Camera HAL, Android, Linux drivers and AI.</p>
+        </div>
+      </article>
     </section>
-    <section class="section" aria-labelledby="latest-title">
-      <h2 id="latest-title">Latest English issues</h2>
-      <p data-english-status role="status">Loading English editions.</p>
-      <div class="archive-grid" data-english-issues></div>
-      <p><a href="archive.html">Browse all issues →</a></p>
+
+    <section id="latest" class="section latest-section content-wrap" aria-labelledby="latest-title">
+      <div class="section-heading latest-heading">
+        <div class="section-heading-row">
+          <h2 id="latest-title">Latest</h2>
+        </div>
+        <div class="latest-controls">
+          <a class="section-link" href="archive.html">View full archive</a>
+          <label class="latest-sort">
+            <span class="latest-sort-label">Sort</span>
+            <select id="latest-sort" class="nc-sort" aria-label="Sort order">
+              <option value="latest">Latest first</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div id="latest-topics" class="keyword-row latest-topics" role="group" aria-label="Topic filter"></div>
+      <div id="latest-grid" class="archive-grid latest-grid">
+        <p class="muted">Loading newsletters.</p>
+      </div>
+      <div id="latest-empty" class="archive-empty-state" hidden>
+        <p class="muted">No newsletters match this topic.</p>
+      </div>
     </section>
   </main>
+
   <footer class="site-footer">
     <div class="content-wrap footer-inner">
       <div class="footer-cols">
@@ -81,21 +108,232 @@
 
   <script src="../assets/js/newsletter-archive.js"></script>
   <script>
-    async function loadEnglishIssues() {
-      const status = document.querySelector('[data-english-status]');
+    const escapeHtml = (value) => String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+
+    const visibleTags = tags => (Array.isArray(tags) ? tags : [])
+      .map(tag => String(tag ?? '').trim())
+      .filter(Boolean);
+
+    const isExternalUrl = value => /^https?:\/\//i.test(String(value || ''));
+    const isHttpsUrl = value => /^https:\/\//i.test(String(value || ''));
+
+    const safeInternalPath = value => {
+      const raw = String(value || '').trim();
+      if (!raw || raw.startsWith('/') || raw.includes('..') || /^[a-z][a-z0-9+.-]*:/i.test(raw)) return '';
+      return raw;
+    };
+
+    const safeImageSrc = value => {
+      const raw = String(value || '').trim();
+      if (isHttpsUrl(raw)) return raw;
+      const internal = safeInternalPath(raw);
+      return internal ? `${ROOT}${internal}` : '';
+    };
+
+    const ROOT = '../';
+    const FALLBACK_IMAGE = '../assets/images/fallback/newsletter-default.svg';
+    const archiveHelpers = window.NewsletterArchive;
+
+    async function fetchHomepageNewsletters() {
+      const response = await fetch(`${ROOT}data/newsletters-weekly.json`, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch newsletters.json: ${response.status}`);
+      }
+      const newsletters = await response.json();
+      if (!Array.isArray(newsletters)) {
+        throw new Error('newsletters.json must contain an array');
+      }
+      return newsletters;
+    }
+
+    // Match the headline's date to the WEEKLY newsletter whose ISO week contains it, so the
+    // featured CTA links to the weekly issue (not a single-day page). Falls back to an exact date.
+    function findHeadlineNewsletter(headline, newsletters = []) {
+      const date = String(headline && headline.newsletter_date || '').trim();
+      if (!date) return null;
+      const within = newsletters.find(item => {
+        const start = String((item && (item.weekStartDate || item.week_start_date)) || '').trim();
+        const end = String((item && (item.weekEndDate || item.week_end_date)) || '').trim();
+        return start && end && date >= start && date <= end;
+      });
+      return within || newsletters.find(item => item && item.date === date) || null;
+    }
+
+    // Featured hero panel image: the headline image, or the shared newsletter fallback SVG.
+    function renderFeaturedMedia(headline) {
+      const imageSrc = safeImageSrc(headline.image_url) || FALLBACK_IMAGE;
+      // 헤드라인 이미지는 실제 기사 이미지든 동봉 fallback 그래픽이든 16:9 풀커버로 둔다(#1008).
+      // 44% 중앙 + product drop-shadow(.is-brand)는 투명 배경 마스코트(HALley) 전용이다 —
+      // fallback SVG 4종은 캔버스를 채우는 불투명 rect 를 가져서, 줄이고 그림자를 두르면
+      // product shot 이 아니라 패널 위에 얹힌 사각형으로 보인다. 아카이브 카드(.card-thumb-img)도
+      // fallback 여부와 무관하게 풀커버라, 히어로와 카드가 같은 모양이 된다.
+      // isFallbackImage는 사이트 루트 기준 경로(assets/...)로 판정하므로 /en/의 ../ 를 떼고 묻는다.
+      const isFallback = archiveHelpers.isFallbackImage(imageSrc.replace(/^\.\.\//, ''));
+      // fallback 그래픽은 기사에 대해 아무 정보도 주지 않는 장식이라 alt 를 비운다. image_alt 는
+      // 기사 제목에서 파생되므로, 그대로 두면 스크린리더가 바로 아래 h1 과 같은 문장을 두 번
+      // 읽는다. 아카이브 카드(renderArchiveCard)도 같은 이유로 alt="" 다. 실제 이미지가 로드에
+      // 실패해 fallback 으로 갈아탈 때도 같은 이유로 alt 를 비운다.
+      const alt = isFallback ? '' : escapeHtml(headline.image_alt || headline.title);
+      return `<div class="featured-thumb nc-thumb">
+              <img class="featured-img" src="${escapeHtml(imageSrc)}" alt="${alt}" loading="eager" decoding="async" onerror="this.onerror=null;this.alt='';this.src='${FALLBACK_IMAGE}'">
+            </div>`;
+    }
+
+    // Kicker above the featured headline: the matched issue's primary topic, else the source name.
+    function featuredKicker(matchedNewsletter, headline) {
+      const [tag] = visibleTags(matchedNewsletter && matchedNewsletter.tags);
+      if (tag) return tag;
+      const source = headline.snapshot && headline.snapshot.source_name;
+      return source || 'Camera SW Newsroom';
+    }
+
+    // The English headline reuses the translated article of the matched weekly issue: its
+    // translation overlay (served next to issue.json) holds the headline and lead under the
+    // article identity. Without an English edition the static brand hero stays.
+    async function fetchEnglishHeadlineCopy(headline, matchedNewsletter) {
+      const issuePath = safeInternalPath(matchedNewsletter && matchedNewsletter.en && matchedNewsletter.html);
+      if (!issuePath) return null;
+      const response = await fetch(`${ROOT}${issuePath.replace(/index\.html$/, '')}translation.en.json`, { cache: 'no-store' });
+      if (!response.ok) return null;
+      return archiveHelpers.englishHeadlineCopy(headline, await response.json());
+    }
+
+    // "Read article →" opens the English issue page. Its article anchors come from English titles,
+    // so the Korean anchor is not reused.
+    function renderFeaturedLink(matchedNewsletter) {
+      const href = safeInternalPath(matchedNewsletter.en.html);
+      if (!href) return '';
+      return `<a class="featured-link" href="${escapeHtml(ROOT + href)}">Read article →</a>`;
+    }
+
+    // The featured hero shows the current headline (the latest issue's top article). When the
+    // headline data is missing or malformed the static brand hero already in the markup stays.
+    async function loadHomepageHeadline() {
+      const featuredCard = document.getElementById('featured-card');
+      if (!featuredCard) return;
+
       try {
-        const response = await fetch('../data/newsletters-weekly.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Could not load issues');
-        const data = await response.json();
-        if (!Array.isArray(data)) throw new Error('Invalid issue list');
-        const issues = NewsletterArchive.sortEntries(data.filter(issue => issue.en), 'latest').slice(0, 6);
-        document.querySelector('[data-english-issues]').innerHTML = issues.map(issue => NewsletterArchive.renderArchiveCard(issue, { locale: 'en', rootPath: '../' })).join('');
-        status.textContent = issues.length ? '' : 'English editions are on their way. All Korean editions are available in the archive.';
+        const response = await fetch(`${ROOT}data/homepage-headline.json`, { cache: 'no-store' });
+        if (!response.ok) return;
+        const state = await response.json();
+        const headline = state && state.current_headline;
+        if (!headline || typeof headline !== 'object') return;
+        if (!headline.title || !headline.summary || !headline.source_url || !headline.article_identity_key) return;
+
+        const sourceName = headline.snapshot && headline.snapshot.source_name
+          ? headline.snapshot.source_name
+          : 'Source';
+        let newsletters = [];
+        try {
+          newsletters = await fetchHomepageNewsletters();
+        } catch (newsletterError) {
+          console.error(newsletterError);
+        }
+        const matchedNewsletter = findHeadlineNewsletter(headline, newsletters);
+        const copy = await fetchEnglishHeadlineCopy(headline, matchedNewsletter);
+        if (!copy) return;
+        const date = headline.newsletter_date || headline.selected_at || '';
+        const metaText = [date, sourceName].filter(Boolean).join(' · ');
+        featuredCard.classList.add('is-article');
+        featuredCard.innerHTML = `
+          ${renderFeaturedMedia({ ...headline, title: copy.title, image_alt: copy.imageAlt || (/[가-힣]/.test(headline.image_alt || '') ? '' : headline.image_alt) })}
+          <div class="featured-copy">
+            <p class="featured-kicker">${escapeHtml(featuredKicker(matchedNewsletter, headline))}</p>
+            <h1 id="featured-title" class="featured-title">${escapeHtml(copy.title)}</h1>
+            <p class="featured-lead">${escapeHtml(copy.summary)}</p>
+            <div class="featured-meta">${escapeHtml(metaText)}</div>
+            ${renderFeaturedLink(matchedNewsletter)}
+          </div>
+        `;
       } catch (error) {
-        status.textContent = 'Could not load English editions. Please try again later.';
+        console.error(error);
       }
     }
-    loadEnglishIssues();
+
+    const LATEST_TOPICS = archiveHelpers.TOPICS;
+    let latestEntries = [];
+    let latestState = { topic: 'all', sort: 'latest' };
+
+    function topicCountOf(topic) {
+      if (topic.key === 'all') return latestEntries.length;
+      return latestEntries.filter(entry => visibleTags(entry.tags).includes(topic.tag)).length;
+    }
+
+    function renderLatestTopics(activeTopic) {
+      const topicsEl = document.getElementById('latest-topics');
+      if (!topicsEl) return;
+      topicsEl.innerHTML = LATEST_TOPICS.map(topic => {
+        const isActive = topic.key === activeTopic;
+        const disabled = topic.key !== 'all' && topicCountOf(topic) === 0;
+        const classes = ['keyword', 'latest-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
+        return `<button type="button" class="${classes}" data-latest-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}>${escapeHtml(topic.key === 'all' ? 'All' : topic.label)}</button>`;
+      }).join('');
+    }
+
+    function renderLatestGrid() {
+      const gridEl = document.getElementById('latest-grid');
+      const emptyEl = document.getElementById('latest-empty');
+      if (!gridEl) return;
+      const filtered = archiveHelpers.sortEntries(
+        archiveHelpers.filterEntries(latestEntries, latestState),
+        latestState.sort
+      );
+      gridEl.innerHTML = filtered.map(entry => archiveHelpers.renderArchiveCard(entry, { locale: 'en', rootPath: ROOT })).join('');
+      if (emptyEl) emptyEl.hidden = filtered.length > 0;
+    }
+
+    function applyLatestState(nextState) {
+      const normalized = archiveHelpers.normalizeArchiveState(nextState);
+      latestState = { topic: normalized.topic, sort: normalized.sort };
+      const sortEl = document.getElementById('latest-sort');
+      if (sortEl) sortEl.value = latestState.sort;
+      renderLatestTopics(latestState.topic);
+      renderLatestGrid();
+    }
+
+    async function loadNewsletters() {
+      const gridEl = document.getElementById('latest-grid');
+      try {
+        const newsletters = await fetchHomepageNewsletters();
+        latestEntries = archiveHelpers.sortEntries(newsletters, 'latest');
+        if (latestEntries.length === 0) {
+          if (gridEl) gridEl.innerHTML = '<p class="muted">No newsletters yet.</p>';
+          renderLatestTopics(latestState.topic);
+          return;
+        }
+        applyLatestState(latestState);
+      } catch (error) {
+        if (gridEl) gridEl.innerHTML = '<p class="muted">Could not load newsletters.</p>';
+        console.error(error);
+      }
+    }
+
+    const latestTopicsEl = document.getElementById('latest-topics');
+    if (latestTopicsEl && typeof latestTopicsEl.addEventListener === 'function') {
+      latestTopicsEl.addEventListener('click', event => {
+        const button = event.target && typeof event.target.closest === 'function'
+          ? event.target.closest('[data-latest-topic]')
+          : null;
+        if (!button) return;
+        if (typeof button.hasAttribute === 'function' && button.hasAttribute('disabled')) return;
+        applyLatestState({ topic: button.getAttribute('data-latest-topic'), sort: latestState.sort });
+      });
+    }
+
+    const latestSortEl = document.getElementById('latest-sort');
+    if (latestSortEl && typeof latestSortEl.addEventListener === 'function') {
+      latestSortEl.addEventListener('change', () => {
+        applyLatestState({ topic: latestState.topic, sort: latestSortEl.value });
+      });
+    }
+
+    loadHomepageHeadline();
+    loadNewsletters();
   </script>
 </body>
 </html>
