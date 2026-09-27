@@ -708,84 +708,6 @@ function publicArticleForSection(section = {}, { issue = {}, requireStoryContrac
   return normalized;
 }
 
-const GENERIC_CHECKPOINT_PHRASES = Object.freeze([
-  NO_IMMEDIATE_ACTION_TEXT,
-  '참고 동향으로만 공유합니다',
-  '즉시 조치할 항목은 없습니다',
-  '관련 내용을 모니터링합니다',
-  '필요 시 검토합니다',
-  '팀 내 공유합니다'
-]);
-
-const CHECKPOINT_GENERIC_TOKENS = new Set([
-  'android',
-  'camera',
-  'hal',
-  'update',
-  'release',
-  'change',
-  'issue',
-  '관련',
-  '확인',
-  '검토',
-  '공유'
-]);
-
-const HAL_VALIDATION_TARGET_PATTERN = /request\/result|request|result|metadata|stream configuration|stream metadata checks|stream|buffer lifecycle|buffer|vendor tag|capture session|Camera ITS|CameraX interop|Camera2 compatibility|CameraX|Camera2|Camera API|camera permission|권한 선언|preview\/capture|aspect ratio|rotation|crop|CTS|VTS|device matrix|app compatibility|dependency version|release note|branch|owner|test scenario|log|metric|preview latency|frame|format negotiation|HAL\/driver|driver|vendor|pipeline|codec|ISP|SoC/i;
-const SOURCE_BOUND_LIMITATION_PATTERN = /HAL\/driver 변경 근거는 없음|HAL API 변경 소식은 아니므로|직접 언급하지 않으므로|변경 신호가 아니라|앱\/API 영향 범위로 제한|release note 범위 내 확인|직접 HAL|확대 해석하지|해석하지|주장하지|과장하지|source 범위|공개 출처|근거는 없음|범위로 제한/i;
-const ACTION_VERB_PATTERN = /확인|비교|점검|추적|분리|테스트|추가|검증|review|compare|check|track|test|measure|profile|inspect|assign/i;
-const ACTION_TARGET_PATTERN = /log|CTS|VTS|Camera ITS|device matrix|compatibility|release note|branch|owner|test scenario|metric|latency|frame|stream|buffer|metadata|vendor tag|capture session|CameraX|Camera2|Camera API|권한|사용 방식|preview\/capture|aspect ratio|rotation|crop|HAL|driver|API|build flag|dependency|performance|preview|format|pipeline/i;
-const NON_GENERIC_ACTION_TARGET_PATTERN = /Camera ITS|Camera API|권한 선언|사용 방식|preview\/capture|aspect ratio|rotation|crop|request\/result|stream metadata checks|stream configuration|buffer lifecycle|vendor tag|capture session|preview regression|preview latency|format negotiation|dependency version|build flag|performance|pipeline|codec|ISP|SoC|log|metric|latency|frame/i;
-
-function wordTokens(value) {
-  return String(value || '')
-    .toLowerCase()
-    .match(/[a-z0-9][a-z0-9+.#_-]*|[가-힣]{2,}/g) || [];
-}
-
-function sourceSpecificTokens(section = {}) {
-  const values = [
-    section.headline,
-    section.category,
-    ...ensureArray(section.sources).flatMap(source => [source?.title, source?.publisher, source?.url]),
-    section.source_candidate_url,
-    section.published_date,
-    section.version_or_release
-  ];
-  return new Set(wordTokens(values.join(' ')).filter(token => !CHECKPOINT_GENERIC_TOKENS.has(token) && token.length > 2));
-}
-
-function normalizedCheckpointText(value) {
-  return compactText(value).toLowerCase();
-}
-
-function isGenericCheckpoint(value) {
-  const normalized = normalizedCheckpointText(value);
-  if (!normalized) return true;
-  if (GENERIC_CHECKPOINT_PHRASES.some(phrase => normalized.includes(String(phrase).toLowerCase()))) return true;
-  const tokens = wordTokens(value);
-  return tokens.length > 0 && tokens.every(token => CHECKPOINT_GENERIC_TOKENS.has(token));
-}
-
-function isConcreteCheckpoint(value, section = {}) {
-  if (isGenericCheckpoint(value)) return false;
-  if (publicProseLeakageIssues(value).length > 0) return false;
-  const normalized = compactText(value);
-  const tokens = wordTokens(value);
-  const specific = sourceSpecificTokens(section);
-  const sourceTokenCount = tokens.filter(token => specific.has(token)).length;
-  const hasAction = ACTION_VERB_PATTERN.test(normalized);
-  const hasTarget = ACTION_TARGET_PATTERN.test(normalized);
-  const hasValidationTarget = HAL_VALIDATION_TARGET_PATTERN.test(normalized);
-  const hasNonGenericTarget = NON_GENERIC_ACTION_TARGET_PATTERN.test(normalized);
-  const hasSourceBoundLimitation = SOURCE_BOUND_LIMITATION_PATTERN.test(normalized);
-  return (
-    (sourceTokenCount >= 2 && hasAction && hasNonGenericTarget) ||
-    (hasSourceBoundLimitation && hasValidationTarget) ||
-    (hasValidationTarget && hasAction && hasTarget && hasNonGenericTarget)
-  );
-}
-
 const DETERMINISTIC_ARTICLE_FIELDS = Object.freeze([
   'relevance_bucket',
   'impact_claim_level',
@@ -1219,7 +1141,6 @@ module.exports = {
   allowedPublicSourceUrlRoleMap,
   deriveDecisionMetadata,
   detectStoryContractMismatch,
-  isConcreteCheckpoint,
   isRepairableStoryBodyIssue,
   issueStoryContractVersion,
   normalizedSourceUrlKey,

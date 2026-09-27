@@ -8,7 +8,6 @@ const {
   validateEditorOutputContract
 } = require('../../editor/editor-output-contract');
 const {
-  isConcreteCheckpoint,
   mergePublicArticleFromLlm,
   mergePublicArticlesFromLlmSections,
   validatePublicArticle
@@ -451,16 +450,6 @@ test('editor output contract rejects hallucinated public source links', () => {
       assert.ok(error.details.issues.some(issue => issue.reason === 'url_not_in_allowed_source_set'));
       return true;
     }
-  );
-});
-
-test('reader checkpoint concrete contract requires actionable source or validation target combinations', () => {
-  assert.equal(isConcreteCheckpoint('CameraX 관련 내용을 확인합니다.', section(1)), false);
-  assert.equal(isConcreteCheckpoint('CameraX preview의 aspect ratio와 rotation 동작이 기존 앱과 달라지지 않는지 확인합니다.', section(1)), true);
-  assert.equal(isConcreteCheckpoint('CameraX / Android camera APIs 관련 API/component/date를 확인합니다.', section(1)), false);
-  assert.equal(
-    isConcreteCheckpoint('HAL/driver 변경 근거는 없음으로 제한하고 Camera2 compatibility 범위만 확인합니다.', section(1)),
-    true
   );
 });
 
