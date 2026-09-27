@@ -28,7 +28,7 @@
     "generation_anchor_date": "2026-09-21",
     "en": {
       "title": "2026 W39",
-      "summary": "Claude Code projects feature redesigned, with conversational profiling and parallel PR opening\nClaude Code v2.1.271 released, with fast mode for remote sessions and improved TUI mouse support\nCodex rust-v0.155.1 released, improving API compatibility by disabling reasoning summaries by default in local TUI sessions\nIntel IPU6 driver: v2 patch series proposed to prepare for multi-stream and metadata support\nDMI quirk patch proposed to fix upside-down rear camera output on Microsoft Surface Pro 11",
+      "summary": "Claude Code Project Features Redesigned, Supporting Conversational Profiling and Parallel PR Opening\nClaude Code v2.1.271 Release, Improving Remote Session Fast Mode and TUI Mouse Support\nCodex rust-v0.155.1 Release, Improving API Compatibility by Default Disabling Reasoning Summaries in Local TUI Sessions\nIntel IPU6 Driver: Proposed v2 Patch Series for Multi-stream and Metadata Support\nProposed DMI Quirk Patch to Fix Upside-Down Rear Camera Output on Microsoft Surface Pro 11",
       "html": "en/newsletters/2026-W39/index.html",
       "md": "en/newsletters/2026-W39/newsletter.md"
     }

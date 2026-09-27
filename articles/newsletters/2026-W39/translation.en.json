@@ -3,47 +3,65 @@
   "weekly_key": "2026-W39",
   "source_hash": "sha256:ae8dd76674c1f1244db3b6bfb762a1e8ba22ea6202a2db150442e070d70b35e2",
   "title": "2026 W38 (09.14 ~ 09.20)",
-  "summary": "This week covers 5 stories, including ‘Claude Code projects feature redesigned, with conversational profiling and parallel PR opening’ and ‘Claude Code v2.1.271 released, with fast mode for remote sessions and improved TUI mouse support’.",
+  "summary": "This week, we cover 5 news items, including 'Claude Code Project Features Redesigned, Supporting Conversational Profiling and Parallel PR Opening', and 'Claude Code v2.1.271 Release, Improving Remote Session Fast Mode and TUI Mouse Support'.",
   "sections": [
     {
       "id": "url:https://claude.com/blog/projects-redesigned",
-      "headline": "Claude Code projects feature redesigned, with conversational profiling and parallel PR opening",
-      "lead": "The project management feature of the AI coding tool Claude Code has been fully redesigned. Developers can now automate tasks such as code profiling, optimization testing, and parallel PR creation through conversational sessions.",
-      "body_markdown": "On September 17, 2026, Anthropic announced that it had redesigned the project management feature of Claude Code around conversational sessions. Moving away from the previous simple folder-mapping approach, it was improved so that the AI can understand the full context of a project and drive complex development workflows.\n\nIn the new project environment, you can ask Claude to profile the performance of a specific endpoint, run code optimization tests, and, based on the results, instruct it to create multiple Pull Requests (PRs) simultaneously in parallel threads. It is also possible to connect multiple repositories such as API, web, and mobile at the same time to set and automate large refactoring goals such as 'remove the v1 endpoints'.\n\nThis update is currently offered as a beta to Claude Pro and Max subscribers who use Claude Code cloud sessions and do not have existing web/desktop projects. Anthropic plans to expand access to more users in the future.",
-      "why_it_matters": "Teams that review changes across multiple repositories can try out parallel PRs and the test flow with a single small task that can run in the cloud. Because each thread works on a separate branch and repository copy, merge conflicts need to be reviewed when the same code is modified. This does not mean that HAL builds or sensor validation that depend on local equipment or the internal network will run as-is in the cloud.",
-      "source_subtitle": "Claude Blog"
+      "headline": "Claude Code Project Features Redesigned, Supporting Conversational Profiling and Parallel PR Opening",
+      "body_markdown": "On September 17, 2026, Anthropic announced that Claude Code's project management features have been redesigned around conversational sessions. Moving beyond simple folder mapping, the improvements enable AI to understand the full project context and drive complex development workflows.\n\nThe new project environment allows users to ask Claude to profile the performance of a specific endpoint, conduct code optimization tests, and based on the results, instruct it to create multiple Pull Requests (PRs) simultaneously in parallel threads. It's also possible to connect multiple repositories—such as API, web, and mobile—at once to set and automate large refactoring goals like 'remove v1 endpoint'.\n\nThis update is currently in beta for Claude Pro and Max subscribers who use Claude Code cloud sessions and do not have existing web/desktop projects. Anthropic plans to expand access to more users in the future.",
+      "why_it_matters": "Teams reviewing changes across multiple repositories can test parallel PRs and test flows with a small, cloud-executable task. Each thread operates on a separate branch and repository copy, so merge conflict review is needed for identical code modifications. This does not mean HAL builds or sensor validations that rely on local equipment or internal networks will run directly in the cloud.",
+      "lead": "Claude Code, an AI coding tool, has undergone a complete redesign of its project management features. Developers can now automate tasks such as code profiling, optimization testing, and parallel PR creation through conversational sessions.",
+      "source_subtitle": "Claude Blog",
+      "image_alt": "Claude projects redesigned interface showing conversation-based workflow",
+      "source_titles": {
+        "https://claude.com/blog/projects-redesigned": "Projects redesigned: from folder to conversation"
+      }
     },
     {
       "id": "url:https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
-      "headline": "Claude Code v2.1.271 released, with fast mode for remote sessions and improved TUI mouse support",
-      "lead": "Claude Code, an AI terminal coding tool, has been updated to v2.1.271. The main points of this update are a fast mode that speeds up processing in remote development sessions and improved mouse usability in the terminal user interface (TUI).",
-      "body_markdown": "Claude Code v2.1.271, released on September 14, 2026, newly introduces a 'Fast Mode' that works in remote sessions, including cloud and self-hosted runners. If the host's fast mode setting is enabled or you enter the `/fast` command within a session, you can get faster AI responses within the scope allowed by your organization's security and usage policies.\n\nIn addition, mouse support has been added to the `/config` panel in full-screen mode so that settings can be changed conveniently in the terminal. Developers can now scroll the settings list with the mouse wheel and click a setting value to change it immediately, and the row under the mouse pointer is visually highlighted, allowing intuitive operation.\n\nThis minor update focuses on maximizing the productivity of developers who use remote computing resources in terminal-based AI development environments, and on improving the user experience when changing settings interactively.",
-      "why_it_matters": "There is no direct change to HAL behavior, but it is useful for engineers who analyze and debug C++ camera stack code on large build servers or remote self-hosted runners. Using fast mode in remote sessions can reduce waiting time when analyzing complex build error logs or summarizing static analysis results, which helps maintain the continuity of the debugging workflow.",
-      "source_subtitle": "Claude Code Changelog"
+      "headline": "Claude Code v2.1.271 Release, Improving Remote Session Fast Mode and TUI Mouse Support",
+      "body_markdown": "Claude Code v2.1.271, distributed on September 14, 2026, introduces a new 'Fast Mode' that operates in remote sessions, including cloud and self-hosted runners. If the host's Fast Mode setting is enabled or the `/fast` command is entered within a session, users can receive faster AI responses, within the limits permitted by the organization's security and usage policies.\n\nAdditionally, mouse support has been added to the `/config` panel in full-screen mode to facilitate convenient setting changes in the terminal environment. Developers can now scroll through the settings list using the mouse wheel, click desired settings to change them instantly, and visually highlight the row where the mouse pointer is located for intuitive operation.\n\nThis minor update focuses on maximizing the work efficiency of developers utilizing remote computing resources in a terminal-based AI development environment and improving the user experience during interactive setting changes.",
+      "why_it_matters": "While there are no direct HAL behavior changes, this is useful for engineers analyzing and debugging C++ camera stack code in large-scale build servers or remote self-hosted runner environments. Utilizing Fast Mode in remote sessions can reduce waiting times during complex build error log analysis or static analysis result summarization, helping maintain continuity in the debugging workflow.",
+      "lead": "Claude Code, an AI terminal coding tool, has been updated to version v2.1.271. This update focuses on Fast Mode, which speeds up processing in remote development sessions, and improved mouse usability in the Terminal User Interface (TUI).",
+      "source_subtitle": "Claude Code Changelog",
+      "image_alt": "Claude Code v2.1.271 release open graph image",
+      "source_titles": {
+        "https://github.com/anthropics/claude-code/releases/tag/v2.1.271": "Claude Code v2.1.271"
+      }
     },
     {
       "id": "url:https://github.com/openai/codex/releases/tag/rust-v0.155.1",
-      "headline": "Codex rust-v0.155.1 released, improving API compatibility by disabling reasoning summaries by default in local TUI sessions",
-      "lead": "The rust-v0.155.1 release of the Codex CLI disables reasoning summaries by default in new local TUI sessions. It fixes request rejections by API providers that do not support reasoning summaries, while preserving explicitly specified settings.",
-      "body_markdown": "In Codex rust-v0.155.1, released on September 18, 2026, the Reasoning Summaries feature was changed to be disabled by default when starting a local terminal user interface (TUI) session. Previously, this feature was enabled by default, which caused requests to be abnormally rejected when using some LLM API providers that do not support reasoning summaries.\n\nWith this change, developers can communicate reliably with various API backends without additional configuration. However, if a user has explicitly configured the reasoning summaries feature to be enabled, that setting continues to be respected and works normally. (PR #46467)\n\nThis release contributes to removing a compatibility bottleneck that can occur when using AI coding tools in local development environments, and to maximizing the stability of integration with various model providers.",
-      "why_it_matters": "If you have run into request rejections while performing code analysis with the Codex CLI connected to a different API provider, you can check the reasoning summaries setting of new local TUI sessions. After updating, check whether the issue reproduces by distinguishing between the default setting and an explicitly enabled setting. This fix concerns whether reasoning summaries are supported; it does not guarantee full API compatibility or offline operation.",
-      "source_subtitle": "Codex Releases"
+      "headline": "Codex rust-v0.155.1 Release, Improving API Compatibility by Default Disabling Reasoning Summaries in Local TUI Sessions",
+      "body_markdown": "In Codex rust-v0.155.1, released on September 18, 2026, the Reasoning Summaries feature is now disabled by default when starting new local Terminal User Interface (TUI) sessions. Previously, this feature was enabled by default, leading to abnormal request rejections when using some LLM API providers that do not support reasoning summaries.\n\nThis change allows developers to communicate stably with various API backends without additional configuration. However, if a user has explicitly configured reasoning summaries to be enabled, that setting will continue to be respected and function normally. (PR #46467)\n\nThis release contributes to eliminating compatibility bottlenecks that can occur when using AI coding tools in local development environments and maximizing the stability of integration with various model providers.",
+      "why_it_matters": "If you've experienced request rejections while connecting the Codex CLI with other API providers for code analysis, you can check the reasoning summary settings for new local TUI sessions. After the update, differentiate between default settings and explicitly enabled settings to verify reproducibility. This fix addresses reasoning summary support and does not guarantee all API compatibility or offline behavior.",
+      "lead": "The Codex CLI's rust-v0.155.1 release disables reasoning summaries by default in new local TUI sessions. This resolves request rejections from API providers that do not support reasoning summaries, while preserving explicitly specified settings.",
+      "source_subtitle": "Codex Releases",
+      "image_alt": "Codex rust-v0.155.1 release open graph image",
+      "source_titles": {
+        "https://github.com/openai/codex/releases/tag/rust-v0.155.1": "Codex rust-v0.155.1"
+      }
     },
     {
       "id": "url:https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com",
-      "headline": "Intel IPU6 driver: v2 patch series proposed to prepare for multi-stream and metadata support",
-      "lead": "A v2 series of 21 patches preparing multi-stream and metadata support for the Intel IPU6 driver has been proposed. Together with follow-up patches, it is preparatory work for handling multiple streams from a single source; it is not an announcement that the feature is complete with this series alone.",
-      "body_markdown": "On September 17, 2026, Intel's Sakari Ailus proposed a v2 patch series (21 patches in total) that prepares the IPU6 driver to stream multiple streams from a single source and to support metadata. This patch set was formed by splitting off the parts of the existing metadata series that can be merged early.\n\nThe author explains that they split off the parts of the metadata series that can be merged first. The goal is to prepare for handling multiple streams from a single source once the remaining required patches are merged, and also mentioned that it may depend on the previously proposed metadata preparation series.\n\nHowever, this patch series is a proposal currently under review on the mailing list and has not yet been merged into the kernel mainline. Because fully implementing actual multi-stream operation requires additional metadata and stream control patches to be merged, driver integration teams should keep monitoring the progress of the patches.",
-      "why_it_matters": "Teams reviewing IPU6 changes will find it useful to first check the dependency relationship between this series and the follow-up metadata patches, and to run regression checks that existing single-stream capture still works before and after a backport. Verification of multi-stream behavior should be done on a configuration that includes the required follow-up patches. The proposal does not guarantee Android HAL3 API changes, complete simultaneous YUV/RAW support, or any buffer latency or performance improvement figures.",
-      "source_subtitle": "lore.kernel.org linux-media list (Intel IPU)"
+      "headline": "Intel IPU6 Driver: Proposed v2 Patch Series for Multi-stream and Metadata Support",
+      "body_markdown": "On September 17, 2026, Sakari Ailus of Intel proposed a v2 patch series (21 patches in total) to prepare the IPU6 driver to stream multiple streams from a single source and support metadata. This patch set was created by separating parts of the existing metadata series that could be merged early.\n\nThe author explains that parts of the metadata series that could be merged first were separated. The goal is to prepare for handling multiple streams from a single source once the remaining necessary patches are merged, and the author also mentioned the possibility of dependency on the previously proposed metadata preparation series.\n\nHowever, this patch series is currently in the proposal stage, under review on the mailing list, and has not yet been merged into the kernel mainline. Full implementation of multi-stream operation will require the merging of additional metadata and stream control patches, so the driver integration team should continuously monitor the patch progress.",
+      "why_it_matters": "Teams reviewing IPU6 changes can first check the dependencies between this series and subsequent metadata patches, and it's useful to perform regression testing to ensure existing single-stream capture is maintained before and after backporting. Verification of multi-stream operation should be done with a configuration that includes all necessary subsequent patches. The proposal does not guarantee Android HAL3 API changes, completion of YUV/RAW simultaneous support, or improvements in buffer latency or performance metrics.",
+      "lead": "A v2 series of 21 patches has been proposed to prepare the Intel IPU6 driver for multi-stream and metadata support. This is preparatory work for handling multiple streams from a single source, along with subsequent patches, and is not an announcement that the functionality is complete with this series alone.",
+      "source_subtitle": "lore.kernel.org linux-media list (Intel IPU)",
+      "source_titles": {
+        "https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com/": "[PATCH v2 00/21] IPU6 multi-stream and metadata support preparation"
+      }
     },
     {
       "id": "url:https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me",
-      "headline": "DMI quirk patch proposed to fix upside-down rear camera output on Microsoft Surface Pro 11",
-      "lead": "A patch has been proposed that adds a DMI-based 180-degree rotation per-device quirk to the camera driver, to fix the rear camera image being output upside down on the Microsoft Surface Pro 11 (Intel) model.",
-      "body_markdown": "According to a recently proposed Linux kernel media patch, the Microsoft Surface Pro for Business 11th Edition (Intel) model has its OV13858 rear camera sensor physically mounted rotated by 180 degrees. However, the system's SSDB data incorrectly records the rotation angle as 0 degrees, and the ACPI _PLD information that could compensate for this is also missing, so the driver had a defect where it could not correctly recognize the sensor orientation.\n\nAs a result, without a separate correction the camera preview and captured images are displayed upside down. To fix this, developer lsa.uz@pm.me proposed a patch on September 17, 2026 that adds a DMI quirk entry identifying this model to the Intel IPU bridge driver, forcing the rotation angle of the OVTID858 sensor to be reported as 180 degrees.\n\nThe submitter explains that on the target device they confirmed camera_sensor_rotation reads as 180 and that libcamera's Rotation value is also reported as 180. This is a verification result of the rotation information reported by the Linux driver. When applying the patch, you must separately check the target model and sensor identifiers and whether the change is included in the kernel you are using.",
-      "why_it_matters": "It can serve as an example when investigating sensor orientation errors, comparing the firmware's SSDB and _PLD information against the actual mounting orientation. On the affected Surface Pro 11 (Intel) model, compare the camera_sensor_rotation and libcamera Rotation values before and after the patch, and also check the preview and capture orientation. This patch alone does not guarantee Android SENSOR_ORIENTATION mapping, removal of GPU/CPU rotation cost, or passing CTS/VTS.",
-      "source_subtitle": "lore.kernel.org linux-media list (Intel IPU)"
+      "headline": "Proposed DMI Quirk Patch to Fix Upside-Down Rear Camera Output on Microsoft Surface Pro 11",
+      "body_markdown": "According to a recently proposed Linux kernel media patch, the Microsoft Surface Pro for Business 11th Edition (Intel) model has its OV13858 rear camera sensor physically mounted rotated by 180 degrees. However, the system's SSDB data incorrectly records the rotation angle as 0 degrees, and ACPI _PLD information to compensate for this is missing, leading to a defect where the driver fails to correctly recognize the sensor orientation.\n\nAs a result, without separate compensation, camera preview and captured images appear upside down. To resolve this, developer lsa.uz@pm.me proposed a patch on September 17, 2026, to add a DMI quirk entry to the Intel IPU bridge driver that identifies this model and forces the OVTID858 sensor to report a 180-degree rotation angle.\n\nThe proposer confirmed that `camera_sensor_rotation` reads 180 and `libcamera`'s Rotation value also reports 180 on the target device. This is a verification result of the rotation information reported by the Linux driver. When applying the patch, it is necessary to separately confirm the target model/sensor identifier and whether the change is included in the kernel being used.",
+      "why_it_matters": "This can be used as an example when investigating sensor orientation errors by comparing firmware's SSDB/_PLD information with the actual mounting direction. For the Surface Pro 11 (Intel) model, compare `camera_sensor_rotation` and `libcamera` Rotation values before and after the patch, and check the preview and capture orientation. This patch alone does not guarantee Android SENSOR_ORIENTATION mapping, elimination of GPU/CPU rotation costs, or CTS/VTS pass.",
+      "lead": "A patch has been proposed to add a DMI-based 180-degree device-specific quirk to the camera driver to fix the issue of the rear camera image appearing upside down on the Microsoft Surface Pro 11 (Intel) model.",
+      "source_subtitle": "lore.kernel.org linux-media list (Intel IPU)",
+      "source_titles": {
+        "https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me/": "[PATCH v2] media: ipu-bridge: Add upside-down quirk for Surface Pro 11"
+      }
     }
   ],
   "watch_points": [],
@@ -51,22 +69,22 @@
     {
       "id": "https://lore.kernel.org/linux-media/20260918221832.323751-2-pm@petermarshall.ca/",
       "title": "[PATCH 11/11] media: i2c: st-vd55g1: Support VD55G0 global-shutter image sensor",
-      "note": "Reference for camera drivers / image pipeline"
+      "note": "Camera Driver / Image Pipeline Reference"
     },
     {
       "id": "https://lore.kernel.org/linux-media/20260915-vc-mipi-ctrl-v1-0-8a42b693d889@linux.dev/",
       "title": "[PATCH 0/3] Add Vision Components MIPI Camera Module support",
-      "note": "Reference for camera drivers / image pipeline"
+      "note": "Camera Driver / Image Pipeline Reference"
     },
     {
       "id": "https://lore.kernel.org/linux-media/20260915121557.20910-1-hitesh@ebytelogic.com/",
       "title": "[PATCH v2 0/5] media: qcom: camss: fixes for several cameras behind a CSI-2 bridge",
-      "note": "Reference for camera drivers / image pipeline"
+      "note": "Camera Driver / Image Pipeline Reference"
     },
     {
       "id": "https://lore.kernel.org/linux-media/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com/",
       "title": "[PATCH v7 0/9] media: qcom: camss: CAMSS Offline Processing Engine support",
-      "note": "Reference for camera drivers / image pipeline"
+      "note": "Camera Driver / Image Pipeline Reference"
     }
   ]
 }
