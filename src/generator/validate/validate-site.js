@@ -25,6 +25,7 @@ const {
 const {
   REQUIRED_ISSUE_CLASSES,
   hasClassToken,
+  mainArticleBlocks,
   validateArticleImages,
   validateRenderedIssueStructure
 } = require('../quality/rendered-issue-structure');
@@ -291,24 +292,6 @@ function hasSourceEntry(section) {
 
 function getBriefingHeading(md) {
   return briefingHeadings.find(heading => md.includes(heading)) || '';
-}
-
-function mainArticleBlocks(md) {
-  const matches = [...md.matchAll(/^##\s+(\d+)\.\s+(.+)$/gm)];
-  const blocks = [];
-  for (let i = 0; i < matches.length; i += 1) {
-    const index = Number(matches[i][1]);
-    const title = matches[i][2].trim();
-    if (index <= 1) continue;
-    if (/Action Items/i.test(title) || title.includes('Action') || title.includes('실행 항목')) continue;
-    if (/^References$/i.test(title) || title === '참고자료') continue;
-
-    const start = matches[i].index + matches[i][0].length;
-    const nextMatch = matches[i + 1];
-    const end = nextMatch ? nextMatch.index : md.length;
-    blocks.push({ heading: matches[i][0], title, text: md.slice(start, end) });
-  }
-  return blocks;
 }
 
 function hasEngineeringPerspective(text) {
