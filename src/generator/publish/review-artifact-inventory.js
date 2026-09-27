@@ -1154,7 +1154,9 @@ function classifyArtifactPath(relPath) {
 }
 
 // #1189: 진단 전용 PR에는 공개 페이지가 실리면 안 된다(.github/workflows/AGENTS.md). 공개 페이지를 쓰는
-// 생산자 쪽 장치(#1183)와 별도로, PR에 무엇이 실리는지 정하는 이 지점에서도 계약을 확인한다.
+// 생산자 쪽 장치(#1183)와 별도로, PR에 무엇이 실리는지 정하는 이 지점에서도 계약을 확인한다. 확인하는
+// 것은 generation status가 public_output_expected: false를 명시한 실행뿐이다 — 공개 페이지를 쓴 뒤 검증
+// 실패로 진단 전용으로 강등된 실행은 status가 true로 남으므로 여기서 걸러지지 않는다.
 // newsletters.json·archive 상태는 빼지 않는다 — 진단 전용 실행에서도 reconciliation이 날짜 항목을
 // 지우고 archive 상태를 기록하는 정당한 변경이다(public-state-reconciliation.js).
 const PUBLIC_PAGE_ROLES = new Set([
