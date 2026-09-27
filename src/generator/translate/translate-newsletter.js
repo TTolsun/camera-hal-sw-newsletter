@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { translationSourceHash } = require('../render/apply-translation');
 const { writeEnglishEditions } = require('../render/english-edition');
-const { translationInput, translationSchema } = require('./translation-schema');
+const { translationInput, translationSchema, normalizeTranslationResponse } = require('./translation-schema');
 const { translationChecks } = require('./translation-checks');
 const { LLM_STAGES, stageRun } = require('../../shared/llm/stage-catalog');
 
@@ -12,7 +12,8 @@ const SYSTEM = 'Translate the supplied newsletter display text into precise Engl
   'Return only the requested JSON overlay. Keep every field, ID, URL, source name, code identifier, version, and array order. ' +
   'Do not add claims or infer completion: a proposed or unmerged patch must remain proposed/unmerged, never shipped or released. ' +
   'Use original source titles as a terminology glossary. Translate Korean image descriptions and source titles. ' +
-  'Preserve markdown links and code verbatim. No Korean prose may remain. Omit optional fields absent from the input.';
+  'Preserve markdown links and code verbatim. No Korean prose may remain. ' +
+  'Include every required field, especially image_alt. For optional text absent from an individual input item, use null; for absent source_titles use {}.';
 
 function assertWeeklyKey(key) {
   if (!/^\d{4}-W(?:0[1-9]|[1-4]\d|5[0-3])$/.test(key || '')) throw new Error(`Invalid weekly key: ${key}`);
@@ -67,8 +68,9 @@ async function translateIssue(target, { call, debugDir } = {}) {
     const response = await invoke(stageRun(LLM_STAGES.TRANSLATE, { qualityAttempt: attempt, totalAttempts: 2 }), SYSTEM, prompt, translationSchema(input));
     if (debugDir) fs.writeFileSync(path.join(debugDir, `response-${attempt}.json`), `${JSON.stringify(response, null, 2)}\n`, 'utf8');
     try {
-      const { checks } = translationChecks(target.issue, response, target.sourceText);
-      return { overlay: response, checks };
+      const overlay = normalizeTranslationResponse(response, input);
+      const { checks } = translationChecks(target.issue, overlay, target.sourceText);
+      return { overlay, checks };
     } catch (error) {
       failure = error.message;
     }

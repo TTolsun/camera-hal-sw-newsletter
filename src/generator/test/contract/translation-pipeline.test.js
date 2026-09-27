@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { tempRoot, writeJson, writeText, readJson } = require('../../../shared/test/helpers/fs');
-const { translationInput, translationSchema } = require('../../translate/translation-schema');
+const { translationInput, translationSchema, normalizeTranslationResponse } = require('../../translate/translation-schema');
 const { translationChecks } = require('../../translate/translation-checks');
 const { parseArgs, readTarget, selectTarget, translateIssue, translateNewsletter } = require('../../translate/translate-newsletter');
 const { invalidateTranslation, translationArtifactPaths } = require('../../render/translation-state');
@@ -100,6 +100,25 @@ test('checks reject reordered section IDs even though overlay application restor
   assert.throws(() => translationChecks(issue, translation, sourceText), /ID order/);
 });
 
+test('mixed optional prose is schema-required and only source-absent nulls can be omitted', t => {
+  const { target, overlay } = sample(t);
+  const input = translationInput(target.issue, target.sourceText);
+  input.sections.push({ ...input.sections[0], id: 'second' });
+  delete input.sections[1].image_alt;
+  const schema = translationSchema(input);
+  assert.ok(schema.properties.sections.items.required.includes('image_alt'));
+  assert.equal(schema.properties.sections.items.properties.image_alt.nullable, true);
+  assert.ok(schema.properties.sections.items.required.includes('source_titles'));
+  assert.ok(schema.properties.reference_articles.items.required.includes('note'));
+  const response = structuredClone(overlay);
+  response.sections[0].image_alt = null;
+  response.sections.push({ ...response.sections[0], id: 'second', image_alt: null });
+  const normalized = normalizeTranslationResponse(response, input);
+  assert.equal(normalized.sections[0].image_alt, null, 'a missing required translation is not silently repaired');
+  assert.equal(Object.hasOwn(normalized.sections[1], 'image_alt'), false);
+  assert.throws(() => translationChecks(target.issue, { ...normalized, sections: normalized.sections.slice(0, 1) }, target.sourceText), /Missing translation/);
+});
+
 test('one failed response is retried once with check feedback and stage telemetry identity', async t => {
   const { target, overlay } = sample(t);
   let calls = 0;
@@ -113,7 +132,7 @@ test('one failed response is retried once with check feedback and stage telemetr
     return overlay;
   } });
   assert.equal(calls, 2);
-  assert.equal(result.overlay, overlay);
+  assert.deepEqual(result.overlay, overlay);
 });
 
 test('two invalid responses write no public artifacts or index changes', async t => {

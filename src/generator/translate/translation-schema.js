@@ -37,18 +37,39 @@ function translationSchema(input) {
   const string = { type: 'STRING' };
   const object = properties => ({ type: 'OBJECT', properties, required: Object.keys(properties) });
   const section = {
-    id: string, headline: string, body_markdown: string, why_it_matters: string,
-    lead: string, source_subtitle: string, image_alt: string
+    id: string, headline: string, body_markdown: string, why_it_matters: string
   };
+  // A shared array schema cannot require a field only on selected items. Require the union of
+  // source prose keys; null represents absence on an individual item, never omitted translation.
+  for (const field of ['lead', 'source_subtitle', 'image_alt']) {
+    if (input.sections.some(item => Object.hasOwn(item, field))) section[field] = { ...string, nullable: true };
+  }
   const urls = [...new Set(input.sections.flatMap(item => Object.keys(item.source_titles || {})))];
   if (urls.length) section.source_titles = { type: 'OBJECT', properties: Object.fromEntries(urls.map(url => [url, string])) };
+  const reference = { id: string, title: string };
+  if (input.reference_articles.some(item => Object.hasOwn(item, 'note'))) reference.note = { ...string, nullable: true };
   return object({
     schemaVersion: { type: 'INTEGER' }, weekly_key: string, source_hash: string,
     title: string, summary: string,
-    sections: { type: 'ARRAY', items: { type: 'OBJECT', properties: section, required: ['id', 'headline', 'body_markdown', 'why_it_matters'] } },
+    sections: { type: 'ARRAY', items: object(section) },
     watch_points: { type: 'ARRAY', items: string },
-    reference_articles: { type: 'ARRAY', items: { type: 'OBJECT', properties: { id: string, title: string, note: string }, required: ['id', 'title'] } }
+    reference_articles: { type: 'ARRAY', items: object(reference) }
   });
 }
 
-module.exports = { translationInput, translationSchema };
+function normalizeTranslationResponse(response, input) {
+  const result = structuredClone(response);
+  for (const [group, fields] of [['sections', ['lead', 'source_subtitle', 'image_alt']], ['reference_articles', ['note']]]) {
+    if (!Array.isArray(result?.[group])) continue;
+    for (const item of result[group]) {
+      const original = input[group].find(source => source.id === item?.id);
+      if (!original) continue;
+      for (const field of fields) {
+        if (!Object.hasOwn(original, field) && item[field] === null) delete item[field];
+      }
+    }
+  }
+  return result;
+}
+
+module.exports = { translationInput, translationSchema, normalizeTranslationResponse };
