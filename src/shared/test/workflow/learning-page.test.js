@@ -511,12 +511,16 @@ test('learning page keeps the wide-screen scroll margin at or above the sticky b
   );
 });
 
-test('learning page master-rule callout uses the parchment box, not the accent tint', () => {
-  const masterRule = exactSelectorBlock(readLearningStylesheet(), '.master-rule');
+test('learning page callout boxes use the parchment box, not the accent tint', () => {
+  const css = readLearningStylesheet();
 
-  // 파랑은 상호작용 요소 전용이다(DESIGN.md 단일 액센트). 강조 박스는 이슈 페이지 take 박스와 같은
-  // 파치먼트 박스 언어로 두고, 파란 틴트 배경이나 장식용 왼쪽 막대를 되살리지 않는다.
-  assertCssDeclaration(masterRule, 'background', 'var(--bg)');
-  assert.doesNotMatch(masterRule, /border-left\s*:/);
-  assert.doesNotMatch(masterRule, /--chip|--primary/);
+  // 파랑은 상호작용 요소 전용이다(DESIGN.md 단일 액센트). 강조 박스(.master-rule)와 결과 블록
+  // (.week-result)은 이슈 페이지 take 박스와 같은 파치먼트 박스 언어로 두고, 파란 틴트 배경이나
+  // 장식용 왼쪽 막대를 되살리지 않는다. 한쪽만 고치면 같은 페이지에서 박스 표현이 갈라진다.
+  for (const selector of ['.master-rule', '.week-result']) {
+    const block = exactSelectorBlock(css, selector);
+    assertCssDeclaration(block, 'background', 'var(--bg)');
+    assert.doesNotMatch(block, /border-left\s*:/, `${selector} must not draw a decorative left bar`);
+    assert.doesNotMatch(block, /--chip|--primary/, `${selector} must not use the accent colour`);
+  }
 });
