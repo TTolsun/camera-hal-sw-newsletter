@@ -9,7 +9,13 @@
       "Camera HAL",
       "Android"
     ],
-    "public_contract_version": "story-v2"
+    "public_contract_version": "story-v2",
+    "en": {
+      "title": "2026 W40",
+      "summary": "Android Studio Announces Support for Integrating Various AI Agents Based on Developer Choice\nProposed Patch to Enable Arm Mali-C55 ISP and IVC Hardware Acceleration for Renesas RZ/V2H EVK Board\nProposed Linux Kernel Driver Patch for Samsung S5K3T2 20-Megapixel Image Sensor\nProposed Patch to Prevent ISYS Firmware Resource Leaks on Intel IPU7 Driver Device Removal",
+      "html": "en/newsletters/2026-W40/index.html",
+      "md": "en/newsletters/2026-W40/newsletter.md"
+    }
   },
   {
     "date": "2026-09-21",
