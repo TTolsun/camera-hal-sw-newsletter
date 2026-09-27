@@ -166,7 +166,10 @@ function articleMediaHtml(section, publicArticle = null) {
 
   // placeholder 는 패턴 하나다(DESIGN.md). 기사 종류별 variant 클래스는 붙이지 않는다 —
   // article_type·category 는 LLM 자유 텍스트라 클래스 어휘가 닫히지 않고, 스타일 차이도 없었다.
-  return `<div class="article-media article-placeholder-visual" role="img" aria-label="${escapeHtml(publicVisualLabel(section.category))}">
+  // 과거 호의 category는 한국어 자유 텍스트("주간 다이제스트")일 수 있어, 한국어가 아닌 페이지는
+  // 눈썹 라벨과 같은 locale 표로 읽는다.
+  const visualLabel = locale === 'ko' ? publicVisualLabel(section.category) : articleCategoryLabel(section);
+  return `<div class="article-media article-placeholder-visual" role="img" aria-label="${escapeHtml(visualLabel)}">
             <span></span>
           </div>`;
 }

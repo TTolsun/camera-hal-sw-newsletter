@@ -1,4 +1,5 @@
 const { createHash } = require('node:crypto');
+const { sectionIdentity } = require('../reporter/weekly-duplicate-merge');
 
 function translationSourceHash(source) {
   return `sha256:${createHash('sha256').update(typeof source === 'string' ? source : JSON.stringify(source)).digest('hex')}`;
@@ -16,9 +17,19 @@ function allowedKeys(value, keys, label) {
   }
 }
 
-function matchById(original, translated, label) {
+// Published issues carry no section or reference id, so the key falls back to the article
+// identity (section) or the URL (reference). An id that is present must still be valid.
+function sectionKey(section) {
+  return section.id !== undefined ? section.id : sectionIdentity(section);
+}
+
+function referenceKey(article) {
+  return article.id !== undefined ? article.id : article.url;
+}
+
+function matchById(original, translated, label, key) {
   if (!Array.isArray(translated) || translated.length !== original.length) throw new Error(`Translation count mismatch: ${label}`);
-  const ids = new Set(original.map(item => item.id));
+  const ids = new Set(original.map(key));
   if ([...ids].some(id => typeof id !== 'string' || !id.trim()) || ids.size !== original.length) throw new Error(`Invalid source IDs: ${label}`);
   const byId = new Map();
   for (const item of translated) {
@@ -37,19 +48,28 @@ function applyTranslation(issue, translation, { sourceText } = {}) {
   const result = structuredClone(issue);
   result.title = text(translation.title, 'title');
   result.summary = text(translation.summary, 'summary');
-  const sections = matchById(issue.sections || [], translation.sections, 'sections');
+  const sections = matchById(issue.sections || [], translation.sections, 'sections', sectionKey);
   result.sections = (issue.sections || []).map(section => {
-    const overlay = sections.get(section.id);
-    allowedKeys(overlay, ['id', 'headline', 'lead', 'body_markdown', 'why_it_matters', 'source_subtitle'], 'section');
+    const overlay = sections.get(sectionKey(section));
+    allowedKeys(overlay, ['id', 'headline', 'lead', 'body_markdown', 'why_it_matters', 'source_subtitle', 'image_alt', 'source_titles'], 'section');
     const original = section.public_article || {};
     const headline = text(overlay.headline, 'headline');
     const body = text(overlay.body_markdown, 'body_markdown');
     const takeaway = text(overlay.why_it_matters, 'why_it_matters');
+    // Source titles are display text; the URL stays the identity, so each key must name a source URL.
+    const sourceTitles = overlay.source_titles === undefined ? {} : overlay.source_titles;
+    allowedKeys(sourceTitles, (section.sources || []).map(source => source.url), 'section.source_titles');
+    const retitle = sources => sources && sources.map(source => Object.hasOwn(sourceTitles, source.url)
+      ? { ...structuredClone(source), title: text(sourceTitles[source.url], 'source_titles') }
+      : structuredClone(source));
     return {
       ...structuredClone(section),
       headline,
+      ...(overlay.image_alt !== undefined ? { imageAlt: text(overlay.image_alt, 'image_alt') } : {}),
+      ...(section.sources ? { sources: retitle(section.sources) } : {}),
       public_article: {
         ...structuredClone(original),
+        ...(original.source_links ? { source_links: retitle(original.source_links) } : {}),
         headline,
         lead: original.lead || overlay.lead !== undefined ? text(overlay.lead, 'lead') : '',
         source_subtitle: original.source_subtitle || overlay.source_subtitle !== undefined ? text(overlay.source_subtitle, 'source_subtitle') : '',
@@ -63,9 +83,9 @@ function applyTranslation(issue, translation, { sourceText } = {}) {
   const watch = issue.watch_points || [];
   if (!Array.isArray(translation.watch_points) || translation.watch_points.length !== watch.length) throw new Error('Translation count mismatch: watch_points');
   result.watch_points = translation.watch_points.map((value, index) => text(value, `watch_points[${index}]`));
-  const references = matchById(issue.reference_articles || [], translation.reference_articles, 'reference_articles');
+  const references = matchById(issue.reference_articles || [], translation.reference_articles, 'reference_articles', referenceKey);
   result.reference_articles = (issue.reference_articles || []).map(article => {
-    const overlay = references.get(article.id);
+    const overlay = references.get(referenceKey(article));
     allowedKeys(overlay, ['id', 'title', 'note'], 'reference');
     return { ...structuredClone(article), title: text(overlay.title, 'reference.title'), note: article.note || overlay.note !== undefined ? text(overlay.note, 'reference.note') : '' };
   });

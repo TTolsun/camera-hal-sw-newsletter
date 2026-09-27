@@ -28,6 +28,8 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `articles/data/newsletters.json`
 - `articles/data/homepage-headline.json`
 - `state/article-exposure-history.json`
+- `articles/newsletters/YYYY-Wnn/translation.en.json` — 주간호 영문판의 번역 overlay. 같은 폴더 `issue.json` 바이트에 `source_hash`로 묶인다(docs/NEWSROOM_WORKFLOW.md "주간호 영문판의 관리 계약").
+- `articles/en/newsletters/YYYY-Wnn/{index.html,newsletter.md}` — 위 overlay로 렌더한 영문판
 
 ### review_required_compact (커밋)
 

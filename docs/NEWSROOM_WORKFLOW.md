@@ -576,12 +576,22 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 기본 언어는 한국어이며 헤더의 언어 선택 버튼에서 한국어와 English를 선택합니다. 영문 홈과 아카이브는 `articles/en/index.html`, `articles/en/archive.html`이며 배포 URL은 `/en/` 접두사를 사용합니다. 번역이 없는 호는 영문 아카이브에서 한국어 제목과 `Korean only` 배지를 표시하고 한국어 원문으로 연결합니다. 영문 홈은 최신 영문 호만 표시하며 홈페이지 헤드라인은 번역하지 않습니다.
 
-`buildHtml(issue, { locale: 'en' })`과 `buildMarkdown(issue, { locale: 'en' })`은 영문 UI를 렌더합니다. 생략하면 `ko`입니다. 공개 문구는 `src/generator/render/locale/ko.js`와 `en.js`에서 관리합니다. 내부 검토 보고서는 한국어를 유지합니다. 과거 발행 HTML은 다시 쓰지 않으며, 조립기는 배포용 사본에 공통 헤더 스크립트만 보강합니다. `data-alternate-href`가 없는 과거 호의 영어 선택은 영문 아카이브로 연결합니다.
+`buildHtml(issue, { locale: 'en' })`과 `buildMarkdown(issue, { locale: 'en' })`은 영문 UI를 렌더합니다. 생략하면 `ko`입니다. 공개 문구는 `src/generator/render/locale/ko.js`와 `en.js`에서 관리합니다. 내부 검토 보고서는 한국어를 유지합니다. 과거 발행 HTML은 다시 쓰지 않으며, 조립기는 배포용 사본에 공통 헤더 스크립트만 보강합니다. `data-alternate-href`가 없는 과거 호에서 영어를 선택하면, 주간호(`newsletters/YYYY-Wnn/`)는 같은 주의 영문 페이지로, 날짜 호는 영문 아카이브로 연결합니다. 주간호는 모두 영문판이 있기 때문입니다(아래 수동 번역 참고).
 
 번역 입력은 `applyTranslation(issue, translation, { sourceText })`으로 적용합니다. `translation.en.json`은 `schemaVersion: 1`, `weekly_key`, `source_hash`, `title`, `summary`, `sections`, `watch_points`, `reference_articles`를 갖습니다. `source_hash`는 `sha256:` 접두사와 원본 UTF-8 파일 바이트 해시입니다. 실제 파일을 사용하는 호출부는 그 파일 내용을 `sourceText`로 전달해야 하며, 객체만 사용하는 테스트는 `translationSourceHash(issue)`를 사용합니다. 해시 불일치, ID 중복·누락, 개수 불일치, 허용되지 않은 필드는 오류입니다.
 
-각 section overlay는 `id`, `headline`, `body_markdown`, `why_it_matters`를 제공하며, 원본에 리드나 출처 부제목이 있으면 `lead`와 `source_subtitle`도 번역해야 합니다. 참고 기사 overlay는 `id`, `title`을 제공하며 원본에 `note`가 있으면 함께 번역합니다. 브리핑은 번역된 기사 제목에서 만듭니다. URL·출처 이름·이미지·태그·날짜·기사 순서는 원본에서 복사하며 overlay가 변경할 수 없습니다.
+각 section overlay는 `id`, `headline`, `body_markdown`, `why_it_matters`를 제공하며, 원본에 리드나 출처 부제목이 있으면 `lead`와 `source_subtitle`도 번역해야 합니다. 원본 이미지 설명(`imageAlt`)이 한국어이면 `image_alt`로, 출처 제목이 한국어이면 `source_titles`(출처 URL → 제목)로 번역할 수 있습니다. `source_titles`의 키는 그 기사의 출처 URL이어야 합니다. 발행된 `issue.json`의 기사와 참고 기사에는 `id`가 없으므로, overlay의 `id`는 기사면 `sectionIdentity`가 만드는 식별자(`url:<정규화 URL>`), 참고 기사면 URL입니다. 원본에 `id`가 있으면 그 값을 씁니다. 참고 기사 overlay는 `id`, `title`을 제공하며 원본에 `note`가 있으면 함께 번역합니다. 브리핑은 번역된 기사 제목에서 만듭니다. URL·출처 이름·이미지·태그·날짜·기사 순서는 원본에서 복사하며 overlay가 변경할 수 없습니다.
 
 두 발행 인덱스의 항목에는 선택 필드 `en: { title, summary, html, md }`를 둡니다. 경로는 `en/newsletters/<key>/index.html`과 `en/newsletters/<key>/newsletter.md`입니다. 필드가 없으면 미번역 상태이며 검증 오류가 아닙니다. 필드가 있으면 영문 파일의 존재, 구조, 표시값을 검증하고 sitemap에 영문 URL을 포함합니다. 새 호는 한국어·영어·기본 한국어의 hreflang을 제공하므로, 번역 PR 머지 전 영문 호 링크가 잠시 404가 되는 것은 허용합니다.
 
 실제 번역 호출과 번역 PR 워크플로는 #1191에서 다루며, 이 렌더링 계약 자체는 번역을 자동 생성하지 않습니다.
+
+### 주간호 영문판의 관리 계약
+
+주간호 영문판은 커밋된 렌더 입력 `articles/newsletters/YYYY-Wnn/issue.json`과 그 옆의 `translation.en.json` 쌍으로 관리합니다. `issue.json`은 한국어 페이지를 만들 때 `buildHtml`에 들어간 객체이므로, 별도의 최종 입력을 복원할 필요가 없습니다. overlay의 `source_hash`는 `issue.json` 파일 바이트에 묶입니다. 영문 HTML만 따로 만들어 등록하는 방식은 허용하지 않습니다.
+
+`node src/generator/render/english-edition.js [YYYY-Wnn ...]`가 이 쌍으로 `articles/en/newsletters/YYYY-Wnn/`의 `index.html`·`newsletter.md`를 렌더하고, `newsletters-weekly.json` 항목과 같은 날짜의 `newsletters.json` 항목에 같은 `en` 값을 넣은 뒤 sitemap을 다시 만듭니다. 인자가 없으면 overlay가 있는 모든 주간호를 처리합니다. 한국어 산출물은 읽기만 합니다.
+
+`validate:site`와 `validate:localization`은 `en`이 있는 주간호마다 overlay가 있고 현재 `issue.json`에 적용되는지 검사합니다. 한국어 호가 정정되어 `issue.json`이 바뀌면 이 검사가 실패하므로, 같은 PR에서 overlay를 다시 번역하고 영문판을 다시 써야 합니다.
+
+2026-W19부터 2026-W39까지의 주간호는 이 계약으로 수동 번역했습니다. 날짜 호(`newsletters/YYYY-MM-DD/`)는 번역하지 않습니다.
