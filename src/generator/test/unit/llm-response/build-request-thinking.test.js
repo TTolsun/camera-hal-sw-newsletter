@@ -42,9 +42,10 @@ test('Gemini 3.x editor — thinkingBudget 대신 thinkingLevel(MEDIUM) 사용',
   const result = thinkingConfigForSampling(sampling('editor'), baseConfig, 'gemini-3.5-flash');
   assert.equal(result.mode, 'thinking_level');
   assert.equal(result.thinkingLevel, 'MEDIUM');
-  // cost-report 연속성: requested/applied는 budget 숫자로 유지
+  // requested는 stage가 의도한 budget 숫자로 남긴다. 3.x 요청에는 budget 숫자가 들어가지
+  // 않으므로 applied는 null이다. 비용 리포트는 applied 대신 thinkingLevel을 표기한다(#1204).
   assert.equal(result.requested, 1024);
-  assert.equal(result.applied, 1024);
+  assert.equal(result.applied, null);
 });
 
 test('Gemini 3.x repair — editor와 동일하게 thinkingLevel(MEDIUM) 사용(raw budget 미전송)', () => {
@@ -55,7 +56,7 @@ test('Gemini 3.x repair — editor와 동일하게 thinkingLevel(MEDIUM) 사용(
   assert.equal(result.mode, 'thinking_level');
   assert.equal(result.thinkingLevel, 'MEDIUM');
   assert.equal(result.requested, 1024);
-  assert.equal(result.applied, 1024);
+  assert.equal(result.applied, null);
 });
 
 test('flash-lite judge budget 0 — thinkingConfig 생략(mode omit)', () => {

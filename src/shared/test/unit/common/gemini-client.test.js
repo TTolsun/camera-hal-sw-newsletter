@@ -252,11 +252,76 @@ test('successful Gemini calls record usage metadata and estimated cost', async (
   assert.equal(call.thinking_tokens, 50);
   assert.equal(call.thinking_budget_requested, 512);
   assert.equal(call.thinking_budget_applied, 512);
+  assert.equal(call.thinking_level, null);
   assert.equal(call.cached_tokens, 100);
   assert.equal(call.total_tokens, 1250);
   assert.equal(call.billable_input_tokens, 900);
   assert.equal(call.billable_output_tokens, 250);
   assert.equal(call.estimated_cost_usd, 0.000898);
+});
+
+// 비용 리포트 Calls 표에서 한 행을 골라 헤더 이름으로 칸을 읽는다.
+function costReportRow(markdown, stageLabel) {
+  const lines = markdown.split('\n');
+  const splitCells = line => line.split('|').slice(1, -1).map(cell => cell.trim());
+  const header = splitCells(lines.find(line => line.startsWith('| Provider | Stage |')));
+  const row = lines.find(line => splitCells(line)[1] === stageLabel);
+  assert.ok(row, `cost report row for ${stageLabel} must exist`);
+  return Object.fromEntries(splitCells(row).map((cell, index) => [header[index], cell]));
+}
+
+async function recordedCall(env, stage) {
+  const client = loadClient(env);
+  const FakeGoogleGenAI = fakeGemini(['{"ok":true}']);
+  await client.callGeminiJson(run(stage), 'system', 'prompt', {}, { GoogleGenAI: FakeGoogleGenAI });
+  const [call] = client.getGeminiCostCalls();
+  return { client, call, request: FakeGoogleGenAI.requests[0] };
+}
+
+// #1204: 3.x 요청에는 thinkingLevel만 들어가고 budget 숫자는 들어가지 않는다.
+// 리포트가 requested budget을 Applied Budget으로 다시 찍으면 "상한을 걸었는데 넘었다"로 읽힌다.
+test('cost report shows the applied thinkingLevel for Gemini 3.x instead of an unsent budget', async () => {
+  const { client, call, request } = await recordedCall({
+    GEMINI_MODEL: 'gemini-3.5-flash',
+    GEMINI_THINKING_BUDGET_EDITOR: '1024'
+  }, 'EDITOR');
+
+  assert.deepEqual(request.config.thinkingConfig, { thinkingLevel: 'MEDIUM' });
+  assert.equal(call.thinking_budget_requested, 1024);
+  assert.equal(call.thinking_budget_applied, null);
+  assert.equal(call.thinking_level, 'MEDIUM');
+
+  const row = costReportRow(client.buildCostReportMarkdown(client.buildCostReport({ calls: [call] })), call.label);
+  assert.equal(row['Requested Budget'], '1024');
+  assert.equal(row['Applied Budget'], 'MEDIUM');
+});
+
+test('cost report keeps numeric budgets for Gemini 2.5 calls, including the flash-lite clamp', async () => {
+  const flash = await recordedCall({
+    GEMINI_MODEL: 'gemini-2.5-flash',
+    GEMINI_THINKING_BUDGET_REPORTER: '512'
+  }, 'REPORTER');
+  assert.deepEqual(flash.request.config.thinkingConfig, { thinkingBudget: 512 });
+  assert.equal(flash.call.thinking_level, null);
+  const flashRow = costReportRow(
+    flash.client.buildCostReportMarkdown(flash.client.buildCostReport({ calls: [flash.call] })),
+    flash.call.label
+  );
+  assert.equal(flashRow['Requested Budget'], '512');
+  assert.equal(flashRow['Applied Budget'], '512');
+
+  const lite = await recordedCall({
+    GEMINI_MODEL: 'gemini-2.5-flash-lite',
+    GEMINI_THINKING_BUDGET_REPORTER: '300'
+  }, 'REPORTER');
+  assert.deepEqual(lite.request.config.thinkingConfig, { thinkingBudget: 512 });
+  assert.equal(lite.call.thinking_level, null);
+  const liteRow = costReportRow(
+    lite.client.buildCostReportMarkdown(lite.client.buildCostReport({ calls: [lite.call] })),
+    lite.call.label
+  );
+  assert.equal(liteRow['Requested Budget'], '300');
+  assert.equal(liteRow['Applied Budget'], '512');
 });
 
 // #981: catalog 밖의 stage는 존재할 수 없다. 예전에는 모르는 label이 조용히 reporter로

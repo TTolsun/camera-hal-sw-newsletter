@@ -118,6 +118,7 @@ function recordUsageMetadata(run, provider, modelName, attempt, response, reques
     thinking_budget_requested: thinkingBudget.requested ?? null,
     thinking_budget_applied: thinkingBudget.applied ?? null,
     thinking_budget_note: thinkingBudget.note || '',
+    thinking_level: thinkingBudget.thinkingLevel || null,
     cached_tokens: cost.cached_tokens,
     total_tokens: cost.total_tokens,
     billable_input_tokens: cost.billable_input_tokens,

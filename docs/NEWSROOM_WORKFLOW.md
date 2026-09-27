@@ -261,7 +261,7 @@ Gemini request에는 stage별 thinking budget(추론 예산)과 temperature를 �
 
 temperature 기본값도 stage별로 다릅니다: reporter `0.30`, editor `0.40`, fact-check `0.20`, repair `0.25`, judge `0.20`, source discovery `0.45`, 기타(default) `0.35`. `GEMINI_TEMPERATURE_*` 환경변수로 각 stage를 따로 조정할 수 있습니다(범위 0 이상 2 이하).
 
-thinking budget과 temperature는 `GEMINI_THINKING_BUDGET_*`, `GEMINI_TEMPERATURE_*` 환경변수로 조정합니다. cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`가 남습니다.
+thinking budget과 temperature는 `GEMINI_THINKING_BUDGET_*`, `GEMINI_TEMPERATURE_*` 환경변수로 조정합니다. cost report의 call row에는 실제 response의 `thinking_tokens`와 함께 `thinking_budget_requested`, `thinking_budget_applied`, `thinking_level`이 남습니다. Gemini 3.x 호출은 budget 숫자를 보내지 않으므로 `thinking_budget_applied`가 `null`이고, `cost-report.md`의 Applied Budget 칸에는 실제로 보낸 `thinkingLevel`(예: `MEDIUM`)이 찍힙니다.
 
 thinking 설정은 호출하는 모델의 패밀리(family)에 맞춰 다르게 전달됩니다.
 
