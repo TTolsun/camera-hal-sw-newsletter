@@ -660,7 +660,13 @@ async function buildNewsletterImageAuditReport(options = {}) {
     }
   }
 
-  const mismatches = issue ? renderConsistency(issue, markdown, html, {
+  const isPublishTarget = publishTarget(issue || {}, status);
+  // #1188: 공개 출력이 없는 실행(진단 전용)에는 비교할 공개 페이지가 없다. 부재를 render_mismatch로 세면
+  // 보고서가 이미지 문제로 발행이 막힌 것처럼 읽힌다. 건너뛰는 것은 공개 페이지가 실제로 없을 때뿐이다 —
+  // 진단 전용 PR을 손으로 발행 PR로 바꾼 경우처럼 페이지가 있으면 status와 무관하게 지금처럼 센다.
+  // 발행 대상이면 상태와 모순이므로 역시 센다.
+  const renderConsistencyApplicable = isPublishTarget || publicOutputExpected(status) || Boolean(markdown || html);
+  const mismatches = issue && renderConsistencyApplicable ? renderConsistency(issue, markdown, html, {
     publicArtifactsOnly: publicArtifactScope
   }) : [];
   for (const mismatch of mismatches) {
@@ -681,7 +687,6 @@ async function buildNewsletterImageAuditReport(options = {}) {
   const excludedAttributionMissingCount = articles.reduce((sum, article) =>
     sum + article.candidateEvidence.filter(item => item.reasonCode === 'missing_attribution').length, 0);
   const selectedImageRenderMismatchCount = mismatches.length;
-  const isPublishTarget = publishTarget(issue || {}, status);
   const selectedMissingWithValidCandidates = articles.filter(article =>
     article.valid_image_candidate_count > 0 && !article.selectedImage
   ).length;
@@ -727,7 +732,9 @@ async function buildNewsletterImageAuditReport(options = {}) {
       html: `newsletters/${date}/index.html`
     },
     mode: isPublishTarget ? 'publish-target' : 'review-or-draft',
-    render_consistency_scope: publicArtifactScope ? 'rendered_public_issue' : 'editor_draft',
+    render_consistency_scope: !renderConsistencyApplicable
+      ? 'not_applicable_no_public_output'
+      : publicArtifactScope ? 'rendered_public_issue' : 'editor_draft',
     summary: {
       article_count: articleCount,
       rendered_image_count: countRenderedImages(html),
@@ -860,7 +867,9 @@ function renderNewsletterImageAuditMarkdown(report) {
     }
   }
   lines.push('', '## 렌더 일관성', '');
-  if (report.consistency.selected_image_render_mismatches.length === 0) {
+  if (report.render_consistency_scope === 'not_applicable_no_public_output') {
+    lines.push('- 검사하지 않음: 공개 출력이 없는 실행(`public_output_expected: false`)이라 비교할 공개 페이지가 없습니다.');
+  } else if (report.consistency.selected_image_render_mismatches.length === 0) {
     lines.push('- 불일치 없음');
   } else {
     for (const item of report.consistency.selected_image_render_mismatches) {
@@ -1045,8 +1054,8 @@ function applySelectedCandidate(section, article) {
 // #1183: 공개 출력이 기대되지 않는 실행(진단 전용)의 수리는 검토용 초안에만 반영한다. 여기서
 // 공개 경로를 쓰면 그 파일이 진단 전용 PR에 실리고, 병합되면 그 날짜가 발행된 것으로 판정된다.
 // status가 없거나 true면 지금처럼 공개 페이지를 다시 쓴다(발행 경로와 과거 호 일괄 수리).
-function publicOutputExpected(paths) {
-  const status = readJsonIfExists(paths.generationStatusPath) || {};
+// 감사 보고서의 렌더 일치 검사(#1188)도 같은 판정을 쓴다.
+function publicOutputExpected(status = {}) {
   return status.public_output_expected !== false;
 }
 
@@ -1074,7 +1083,7 @@ async function repairNewsletterImagesForDate(options = {}) {
     useEditorDraftForAudit: true
   });
   const paths = reportPaths(root, date);
-  const writePublic = publicOutputExpected(paths);
+  const writePublic = publicOutputExpected(readJsonIfExists(paths.generationStatusPath) || {});
   if (before.summary.repairable_article_count === 0) {
     await writeNewsletterImageAuditArtifacts({ ...options, root, date, failOnPublishBlocking: false });
     // 수리할 기사가 없어도 weekly는 이전 실행에서 stale 상태로 남아 있을 수 있으므로
