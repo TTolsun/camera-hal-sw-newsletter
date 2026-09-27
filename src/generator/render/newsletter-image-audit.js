@@ -18,6 +18,7 @@ const {
 const {
   syncWeeklyArticleImages
 } = require('./weekly-newsletter-output');
+const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const {
   PUBLICATION_MODES
 } = require('../../shared/common/publication-mode');
@@ -1041,6 +1042,28 @@ function applySelectedCandidate(section, article) {
   return true;
 }
 
+// #1183: 공개 출력이 기대되지 않는 실행(진단 전용)의 수리는 검토용 초안에만 반영한다. 여기서
+// 공개 경로를 쓰면 그 파일이 진단 전용 PR에 실리고, 병합되면 그 날짜가 발행된 것으로 판정된다.
+// status가 없거나 true면 지금처럼 공개 페이지를 다시 쓴다(발행 경로와 과거 호 일괄 수리).
+function publicOutputExpected(paths) {
+  const status = readJsonIfExists(paths.generationStatusPath) || {};
+  return status.public_output_expected !== false;
+}
+
+function syncPublicWeeklyArticleImages({ root, date, sections, writePublic }) {
+  if (!writePublic) {
+    return {
+      weeklyKey: weeklyKeyForDate(date),
+      synced: false,
+      patchedSectionCount: 0,
+      articleImagesUpdated: false,
+      files: [],
+      reason: 'public_output_not_expected'
+    };
+  }
+  return syncWeeklyArticleImages({ root, date, sections });
+}
+
 async function repairNewsletterImagesForDate(options = {}) {
   const root = options.root || process.cwd();
   const date = options.date;
@@ -1050,16 +1073,17 @@ async function repairNewsletterImagesForDate(options = {}) {
     date,
     useEditorDraftForAudit: true
   });
+  const paths = reportPaths(root, date);
+  const writePublic = publicOutputExpected(paths);
   if (before.summary.repairable_article_count === 0) {
     await writeNewsletterImageAuditArtifacts({ ...options, root, date, failOnPublishBlocking: false });
     // 수리할 기사가 없어도 weekly는 이전 실행에서 stale 상태로 남아 있을 수 있으므로
     // 항상 daily editor-draft 기준으로 동기화한다(재실행 수렴 경로).
-    const draft = readJsonIfExists(reportPaths(root, date).editorPath);
-    const weeklySync = syncWeeklyArticleImages({ root, date, sections: draft && draft.sections });
+    const draft = readJsonIfExists(paths.editorPath);
+    const weeklySync = syncPublicWeeklyArticleImages({ root, date, sections: draft && draft.sections, writePublic });
     return { date, repairedArticleCount: 0, weeklySync, report: before };
   }
 
-  const paths = reportPaths(root, date);
   const issue = readJsonIfExists(paths.editorPath);
   if (!issue) throw new Error(`Missing source of truth: content/newsroom/${date}/editor-draft.json`);
   const analyses = [];
@@ -1077,12 +1101,14 @@ async function repairNewsletterImagesForDate(options = {}) {
   const html = buildHtml(issue);
   writeJson(paths.editorPath, issue);
   writeText(paths.editorMarkdownPath, markdown);
-  writeText(paths.newsletterMarkdownPath, markdown);
-  writeText(paths.newsletterHtmlPath, html);
+  if (writePublic) {
+    writeText(paths.newsletterMarkdownPath, markdown);
+    writeText(paths.newsletterHtmlPath, html);
+  }
 
   // weekly 산출물은 생성 중에 이미 작성되었고 같은 identity 기사는 exact-duplicate로 거부되므로,
   // 수리된 이미지 상태를 weekly issue/index(article_images)로 직접 동기화한다.
-  const weeklySync = syncWeeklyArticleImages({ root, date, sections: issue.sections });
+  const weeklySync = syncPublicWeeklyArticleImages({ root, date, sections: issue.sections, writePublic });
 
   const result = await writeNewsletterImageAuditArtifacts({
     ...options,

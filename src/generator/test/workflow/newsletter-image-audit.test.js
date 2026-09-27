@@ -23,6 +23,9 @@ const {
 const {
   retrySection
 } = require('../../../shared/test/helpers/newsroom-builders');
+const {
+  retentionCommitAllowlist
+} = require('../../publish/review-artifact-inventory');
 
 function tempRoot(prefix) {
   return fs.mkdtempSync(path.join(os.tmpdir(), prefix));
@@ -196,6 +199,107 @@ test('repair with zero repairable articles still converges a stale weekly issue'
   assert.equal(weeklyIssue.sections[0].selectedImage, selectedImage);
   const weeklyIndex = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), 'utf8'));
   assert.deepEqual(weeklyIndex.find(entry => entry.weeklyKey === weeklyKey).article_images, [selectedImage]);
+});
+
+function writeReviewDraft(root, value) {
+  const dir = path.join(root, 'articles', 'content', 'newsroom', value.date);
+  writeJson(path.join(dir, 'editor-draft.json'), value);
+  writeText(path.join(dir, 'editor-draft.md'), buildMarkdown(value));
+}
+
+function snapshotFiles(root, relPaths) {
+  return relPaths.map(relPath => [relPath, fs.readFileSync(path.join(root, relPath), 'utf8')]);
+}
+
+// #1183: FAILED_REPAIR_REVIEWABLE처럼 공개 출력이 없는 실행에서 이미지 수리가 공개 경로를 새로 만들면
+// 그 파일이 진단 전용 PR에 실린다. 수리 결과는 검토용 초안에만 반영되어야 한다.
+test('repair does not write public daily or weekly pages when the run expects no public output', async () => {
+  const root = tempRoot('newsletter-image-repair-diagnostics-');
+  const date = '2026-05-30';
+  const fixture = issue(date, { imageCandidates: [validImage()] });
+  // 같은 주의 주간 페이지는 앞선 발행으로 이미 디스크에 있다.
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: fixture });
+  writeReviewDraft(root, fixture);
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
+    date,
+    status: 'FAILED_REPAIR_REVIEWABLE',
+    public_output_expected: false
+  });
+  const weeklyKey = fs.readdirSync(path.join(root, 'articles', 'newsletters')).find(name => /^\d{4}-W\d{2}$/.test(name));
+  const publishedWeekly = snapshotFiles(root, [
+    `articles/newsletters/${weeklyKey}/index.html`,
+    `articles/newsletters/${weeklyKey}/newsletter.md`,
+    `articles/newsletters/${weeklyKey}/issue.json`,
+    'articles/data/newsletters-weekly.json'
+  ]);
+
+  const repairs = await repairNewsletterImages({ root, date });
+
+  assert.equal(repairs[0].repairedArticleCount, 1);
+  const editor = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.json'), 'utf8'));
+  assert.equal(editor.sections[0].selectedImage, 'https://publisher.example.com/images/camera-card.png');
+  assert.match(
+    fs.readFileSync(path.join(root, 'articles', 'content', 'newsroom', date, 'editor-draft.md'), 'utf8'),
+    /camera-card\.png/
+  );
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'newsletters', date)), false);
+  for (const [relPath, before] of publishedWeekly) {
+    assert.equal(fs.readFileSync(path.join(root, relPath), 'utf8'), before, relPath);
+  }
+  const allowlist = retentionCommitAllowlist({ root, date });
+  assert.deepEqual(allowlist.filter(relPath => relPath.startsWith(`articles/newsletters/${date}/`)), []);
+});
+
+test('repair with zero repairable articles leaves the published weekly page alone when the run expects no public output', async () => {
+  const root = tempRoot('newsletter-image-repair-diagnostics-stale-');
+  const date = '2026-05-30';
+  const selectedImage = 'https://publisher.example.com/images/camera-card.png';
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: issue(date, { imageCandidates: [validImage()] }) });
+  writeReviewDraft(root, issue(date, {
+    imageCandidates: [validImage()],
+    selectedImage,
+    imageSource: 'https://publisher.example.com',
+    imageAttribution: 'Example Publisher',
+    imageAlt: 'Camera update card',
+    imageLicenseStatus: 'unknown',
+    resolvedImage: { url: selectedImage, src: selectedImage, originalUrl: '', originalSrc: '', usedFallback: false, reason: 'selected image candidate' }
+  }));
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
+    date,
+    status: 'FAILED_REPAIR_REVIEWABLE',
+    public_output_expected: false
+  });
+  const weeklyKey = fs.readdirSync(path.join(root, 'articles', 'newsletters')).find(name => /^\d{4}-W\d{2}$/.test(name));
+  const publishedWeekly = snapshotFiles(root, [
+    `articles/newsletters/${weeklyKey}/issue.json`,
+    'articles/data/newsletters-weekly.json'
+  ]);
+
+  const repairs = await repairNewsletterImages({ root, date });
+
+  assert.equal(repairs[0].repairedArticleCount, 0);
+  assert.equal(repairs[0].weeklySync.synced, false);
+  assert.equal(repairs[0].weeklySync.reason, 'public_output_not_expected');
+  for (const [relPath, before] of publishedWeekly) {
+    assert.equal(fs.readFileSync(path.join(root, relPath), 'utf8'), before, relPath);
+  }
+});
+
+test('repair still rewrites public pages when the run expects public output', async () => {
+  const root = tempRoot('newsletter-image-repair-public-');
+  const date = '2026-05-30';
+  writeIssue(root, issue(date, { imageCandidates: [validImage()] }));
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
+    date,
+    status: 'PASS',
+    public_output_expected: true
+  });
+
+  const repairs = await repairNewsletterImages({ root, date });
+
+  assert.equal(repairs[0].repairedArticleCount, 1);
+  assert.match(fs.readFileSync(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), 'utf8'), /camera-card\.png/);
+  assert.match(fs.readFileSync(path.join(root, 'articles', 'newsletters', date, 'index.html'), 'utf8'), /class="article-image"/);
 });
 
 test('audit flags selectedImage without a valid provenance candidate for publish target', async () => {
