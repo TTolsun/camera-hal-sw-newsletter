@@ -827,6 +827,15 @@ test('font weights stay on the DESIGN.md 400/500/600 ramp', () => {
   assert.deepEqual(offRamp, []);
 });
 
+test('review-only publication notice uses the parchment box, not the accent tint', () => {
+  const notice = exactSelectorBlock(readStylesheet(), '.publication-notice');
+
+  // 파란 틴트(--chip) 위에서는 muted 본문이 4.44:1로 WCAG AA에 못 미쳤고, 파랑은 상호작용 요소
+  // 전용이라 장식 테두리로 쓰지 않는다. 이슈 페이지 take 박스와 같은 파치먼트 박스 언어로 둔다.
+  assertCssDeclaration(notice, 'background', 'var(--bg)');
+  assertCssDeclaration(notice, 'border', 'none');
+});
+
 test('homepage featured hero and latest grid CSS cover the rebuilt layout', () => {
   const css = readStylesheet();
   const featuredHero = exactSelectorBlock(css, '.featured-hero');
