@@ -28,7 +28,7 @@ The driver performs the core operations of the image pipeline: white balance, de
 
 This patch is still at the review stage and has not yet been merged into the mainline kernel, but it is an important indicator of changes in the image processing pipeline architecture of Qualcomm SoC-based platforms. Such changes in the lower driver layer may affect future image processing optimization paths in the Android Camera HAL and framework.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This change is a proposal to add an ISP block in the kernel driver layer and does not bring direct changes to the Android Camera HAL API or metadata contract. However, when using offline YUV conversion and ISP hardware acceleration on Qualcomm SoC-based devices, it can become a lower-level foundation for optimizing buffer lifecycle and processing latency in memory-to-memory (M2M) pipelines.
 
@@ -54,7 +54,7 @@ According to the published patch, the driver supports a 10-bit raw (MEDIA_BUS_FM
 
 The driver is currently under review, and there may be further changes before it is merged into the mainline kernel. Because a monochrome infrared sensor by nature requires stream processing and metadata definitions different from a typical RGB sensor, advance review by the relevant platform engineers is needed.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This patch is a change in the lower driver layer and does not directly affect the Android Camera HAL API or metadata contract. However, devices equipped with this sensor need to configure RAW10 format support and the related stream combination validation at the Camera HAL level to handle the monochrome infrared stream correctly.
 
@@ -80,7 +80,7 @@ The control serializer is a core component of camera frame control and metadata 
 
 The patch is currently at the review stage and has not yet been merged into an official release. However, it is regarded as an important improvement for system security and stability for teams developing platforms or embedded systems that adopt libcamera as their lower camera stack.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This patch is a stability improvement inside libcamera and does not bring direct changes to the Android Camera HAL API or metadata contract. However, for systems that build their lower driver stack on libcamera, it can help reduce the risk of crashes in the layers below the HAL by strengthening the exception-handling routines in control data deserialization.
 
@@ -106,7 +106,7 @@ In the existing implementation, overhead could arise from repeatedly initializin
 
 The patch is currently at the review stage and has not yet been officially merged. However, it is expected to help reduce initialization latency and improve power efficiency in systems that render camera frames directly to the screen or use GPU-based image processing pipelines.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This patch is a graphics resource optimization inside libcamera and does not bring direct changes to the Android Camera HAL API or metadata contract. However, when running buffer processing and rendering pipelines in a libcamera-based lower stack, removing redundant EGL initialization overhead can indirectly help reduce camera stream startup latency and the risk of frame drops.
 
@@ -132,7 +132,7 @@ Notably, instead of extending the existing s5kjn1 driver, this implementation is
 
 The patch is currently at the review stage, with a mainline kernel merge still ahead. It will provide an official lower-level driver support foundation when adopting the S5KJN5 sensor on mobile and embedded platforms that require high-resolution RAW stream processing.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This patch is a change in the lower driver layer and does not directly affect the Android Camera HAL API or metadata contract. However, devices equipped with this high-resolution sensor need to define 50MP high-resolution RAW stream and pixel remosaicing processing paths at the Camera HAL level, and should closely verify the resulting impact on memory bandwidth and power consumption.
 

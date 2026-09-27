@@ -24,7 +24,7 @@ libcamera is the core abstraction layer of the Linux camera stack and controls t
 
 However, the patch is still at the proposal and review stage (RFC/Patch review), so whether it will eventually be merged into mainline and when it would apply remain uncertain. Also, since this change does not directly modify the behavior of the Android Camera HAL API or framework, upper-layer developers should watch this trend from the perspective of preparing for compatibility of the lower drivers and media stack.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This patch does not directly change the Android Camera HAL, but it provides a basis for using test pattern properties when validating the IMX335 sensor in the lower driver and libcamera stack. When integrating this sensor in the future, developers should check the validation path to confirm that driver-level test pattern metadata is correctly propagated through V4L2 and libcamera up to the HAL layer.
 

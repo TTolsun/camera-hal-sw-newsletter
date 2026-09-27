@@ -59,7 +59,7 @@
         </div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-google-ai-studio-supports-prompt-based-native-android-app-generation-and-camera-" aria-labelledby="article-google-ai-studio-supports-prompt-based-native-android-app-generation-and-camera--title">
+      <section class="section issue-story issue-section article-card has-image" id="article-google-ai-studio-supports-prompt-based-native-android-app-generation-and-camera-" aria-labelledby="article-google-ai-studio-supports-prompt-based-native-android-app-generation-and-camera--title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
           <span class="issue-story-category">C++ · AI Tooling</span>
@@ -77,7 +77,7 @@
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Build native Android apps in Google AI Studio</a></li></ul></div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-jetpack-compose-and-camerax-checkpoints-for-camera-preview-across-screen-sizes" aria-labelledby="article-jetpack-compose-and-camerax-checkpoints-for-camera-preview-across-screen-sizes-title">
+      <section class="section issue-story issue-section article-card has-image" id="article-jetpack-compose-and-camerax-checkpoints-for-camera-preview-across-screen-sizes" aria-labelledby="article-jetpack-compose-and-camerax-checkpoints-for-camera-preview-across-screen-sizes-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 2">02</span>
           <span class="issue-story-category">Android Platform</span>
@@ -100,9 +100,32 @@
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)</a></li></ul></div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-placeholder-image" id="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20-" aria-labelledby="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20--title">
+      <section class="section issue-story issue-section article-card has-placeholder-image" id="article-libcamera-release-announcements-libcamera-v0-7-1" aria-labelledby="article-libcamera-release-announcements-libcamera-v0-7-1-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-release-announcements-libcamera-v0-7-1-title" class="article-title">libcamera Release Announcements - libcamera v0.7.1</h2>
+        <div class="article-media article-placeholder-visual" role="img" aria-label="Camera Driver · ISP">
+        <span></span>
+        </div>
+        <p class="article-lead">libcamera Release Announcements - libcamera v0.7.1</p>
+        <p>The libcamera v0.7.1 release announcement is an upstream camera stack update that includes Raspberry Pi Atomic control lists and Simple pipeline AGC/AWB statistics improvements. For the Android HAL team, it is a reference signal for narrowing the scope of driver, sensor, ISP, and frame timing verification.</p>
+        <p>This release covers the pipeline control and image statistics paths of the Linux camera stack. For products whose vendor kernel or BSP actually pulls in a libcamera fork, there is reason to check AE/AWB stability, captureResult metadata consistency, and frame timing logs within the existing regression scope.</p>
+        <p>However, the libcamera release announcement alone must not be used to claim a change to the Android Camera HAL contract. Raspberry Pi reference board results should be kept separate as upstream comparison logs, and only platforms confirmed to have it applied on the product branch should be regression targets.</p>
+        <p>**Camera HAL / Driver Perspective**</p>
+        <p>libcamera v0.7.1 is an upstream driver/image-pipeline signal. Connect it to AE/AWB, metadata consistency, and frame timing verification only when there is evidence of product adoption, and do not conclude that it is an Android HAL API change.</p>
+        <p>### What to Check</p>
+        <p>- Check whether the v0.7.1 changes are actually included in the vendor kernel, BSP, or libcamera fork.</p>
+        <p>- On devices where it is applied, compare the Preview + ImageCapture AE/AWB smoke test and captureResult metadata consistency.</p>
+        <p>- Keep Raspberry Pi reference results only as upstream comparison logs, not as evidence about the product camera stack.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>libcamera Release Announcements - libcamera v0.7.1</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html">libcamera Release Announcements - libcamera v0.7.1</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card has-placeholder-image" id="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20-" aria-labelledby="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20--title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
           <span class="issue-story-category">Tooling Watch</span>
         </div>
         <h2 id="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20--title" class="article-title">Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</h2>
@@ -123,9 +146,9 @@
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li></ul></div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-placeholder-image" id="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more" aria-labelledby="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more-title">
+      <section class="section issue-story issue-section article-card has-placeholder-image" id="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more" aria-labelledby="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more-title">
         <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-number" aria-label="Article 5">05</span>
           <span class="issue-story-category">Tooling Watch</span>
         </div>
         <h2 id="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more-title" class="article-title">Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</h2>
@@ -144,29 +167,6 @@
         <p>- To use it as a production HAL code dependency, split ABI, license, platform policy, and test coverage into separate review items.</p>
         <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</p></div>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more">Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</a></li></ul></div>
-      </section>
-
-      <section class="section issue-story issue-section article-card story-article has-placeholder-image" id="article-libcamera-release-announcements-libcamera-v0-7-1" aria-labelledby="article-libcamera-release-announcements-libcamera-v0-7-1-title">
-        <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 5">05</span>
-          <span class="issue-story-category">Camera Driver · ISP</span>
-        </div>
-        <h2 id="article-libcamera-release-announcements-libcamera-v0-7-1-title" class="article-title">libcamera Release Announcements - libcamera v0.7.1</h2>
-        <div class="article-media article-placeholder-visual" role="img" aria-label="Camera Driver · ISP">
-        <span></span>
-        </div>
-        <p class="article-lead">libcamera Release Announcements - libcamera v0.7.1</p>
-        <p>The libcamera v0.7.1 release announcement is an upstream camera stack update that includes Raspberry Pi Atomic control lists and Simple pipeline AGC/AWB statistics improvements. For the Android HAL team, it is a reference signal for narrowing the scope of driver, sensor, ISP, and frame timing verification.</p>
-        <p>This release covers the pipeline control and image statistics paths of the Linux camera stack. For products whose vendor kernel or BSP actually pulls in a libcamera fork, there is reason to check AE/AWB stability, captureResult metadata consistency, and frame timing logs within the existing regression scope.</p>
-        <p>However, the libcamera release announcement alone must not be used to claim a change to the Android Camera HAL contract. Raspberry Pi reference board results should be kept separate as upstream comparison logs, and only platforms confirmed to have it applied on the product branch should be regression targets.</p>
-        <p>**Camera HAL / Driver Perspective**</p>
-        <p>libcamera v0.7.1 is an upstream driver/image-pipeline signal. Connect it to AE/AWB, metadata consistency, and frame timing verification only when there is evidence of product adoption, and do not conclude that it is an Android HAL API change.</p>
-        <p>### What to Check</p>
-        <p>- Check whether the v0.7.1 changes are actually included in the vendor kernel, BSP, or libcamera fork.</p>
-        <p>- On devices where it is applied, compare the Preview + ImageCapture AE/AWB smoke test and captureResult metadata consistency.</p>
-        <p>- Keep Raspberry Pi reference results only as upstream comparison logs, not as evidence about the product camera stack.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>libcamera Release Announcements - libcamera v0.7.1</p></div>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html">libcamera Release Announcements - libcamera v0.7.1</a></li></ul></div>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">

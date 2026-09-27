@@ -30,7 +30,7 @@ In the new project environment, you can ask Claude to profile the performance of
 
 This update is currently offered as a beta to Claude Pro and Max subscribers who use Claude Code cloud sessions and do not have existing web/desktop projects. Anthropic plans to expand access to more users in the future.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 Teams that review changes across multiple repositories can try out parallel PRs and the test flow with a single small task that can run in the cloud. Because each thread works on a separate branch and repository copy, merge conflicts need to be reviewed when the same code is modified. This does not mean that HAL builds or sensor validation that depend on local equipment or the internal network will run as-is in the cloud.
 
@@ -58,7 +58,7 @@ In addition, mouse support has been added to the `/config` panel in full-screen 
 
 This minor update focuses on maximizing the productivity of developers who use remote computing resources in terminal-based AI development environments, and on improving the user experience when changing settings interactively.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct change to HAL behavior, but it is useful for engineers who analyze and debug C++ camera stack code on large build servers or remote self-hosted runners. Using fast mode in remote sessions can reduce waiting time when analyzing complex build error logs or summarizing static analysis results, which helps maintain the continuity of the debugging workflow.
 
@@ -86,7 +86,7 @@ With this change, developers can communicate reliably with various API backends 
 
 This release contributes to removing a compatibility bottleneck that can occur when using AI coding tools in local development environments, and to maximizing the stability of integration with various model providers.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 If you have run into request rejections while performing code analysis with the Codex CLI connected to a different API provider, you can check the reasoning summaries setting of new local TUI sessions. After updating, check whether the issue reproduces by distinguishing between the default setting and an explicitly enabled setting. This fix concerns whether reasoning summaries are supported; it does not guarantee full API compatibility or offline operation.
 
@@ -112,7 +112,7 @@ The author explains that they split off the parts of the metadata series that ca
 
 However, this patch series is a proposal currently under review on the mailing list and has not yet been merged into the kernel mainline. Because fully implementing actual multi-stream operation requires additional metadata and stream control patches to be merged, driver integration teams should keep monitoring the progress of the patches.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 Teams reviewing IPU6 changes will find it useful to first check the dependency relationship between this series and the follow-up metadata patches, and to run regression checks that existing single-stream capture still works before and after a backport. Verification of multi-stream behavior should be done on a configuration that includes the required follow-up patches. The proposal does not guarantee Android HAL3 API changes, complete simultaneous YUV/RAW support, or any buffer latency or performance improvement figures.
 
@@ -138,7 +138,7 @@ As a result, without a separate correction the camera preview and captured image
 
 The submitter explains that on the target device they confirmed camera_sensor_rotation reads as 180 and that libcamera's Rotation value is also reported as 180. This is a verification result of the rotation information reported by the Linux driver. When applying the patch, you must separately check the target model and sensor identifiers and whether the change is included in the kernel you are using.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 It can serve as an example when investigating sensor orientation errors, comparing the firmware's SSDB and _PLD information against the actual mounting orientation. On the affected Surface Pro 11 (Intel) model, compare the camera_sensor_rotation and libcamera Rotation values before and after the patch, and also check the preview and capture orientation. This patch alone does not guarantee Android SENSOR_ORIENTATION mapping, removal of GPU/CPU rotation cost, or passing CTS/VTS.
 

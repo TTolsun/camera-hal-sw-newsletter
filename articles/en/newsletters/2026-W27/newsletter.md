@@ -25,7 +25,7 @@ This change mainly affects the set_fmt, get_selection, and set_selection functio
 
 However, because this change is currently at the proposal and review stage on the mailing list (a v5 patch), it has no immediate effect on actual production environments until it is finally merged into the mainline kernel. It does not cause direct changes to the Android Camera HAL or upper framework contracts, but engineers who manage dependencies of the lower driver stack should keep an eye on it in preparation for future kernel updates.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This patch proposal does not directly affect Android Camera HAL APIs or framework contracts. However, since it may change format negotiation and driver integration in the lower image pipeline, it should be referenced as a driver compatibility validation item when SoC vendors update their kernels in the future.
 
@@ -51,7 +51,7 @@ The warning occurred at line 203 of drivers/media/i2c/cvs/v4l2.c, and states tha
 
 Because this warning occurred on a specific development branch, it has no immediate adverse effect on production kernels or the behavior of actual devices. However, it is an example showing that static analysis and quality control standards for driver code are being tightened, and engineers managing vendor kernels should check whether similar warnings occur in their own driver build environments.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This warning is a simple missing-documentation warning that does not affect the runtime behavior or performance of the Android Camera HAL. However, to keep builds warning-free in driver code quality control and static analysis build environments, it is advisable to check whether similar warnings occur when building vendor drivers.
 

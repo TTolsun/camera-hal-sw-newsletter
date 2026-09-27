@@ -27,7 +27,7 @@ The sensor communicates over a single MIPI CSI-2 data lane and supports 10-bit R
 
 The patch is currently at the kernel mainline review stage, and applying it to actual Android devices or embedded platforms requires kernel integration by SoC vendors and OEMs. Because it is a driver-level change, it does not cause direct changes to the Android Camera HAL API or framework.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct HAL API change, but in face recognition (Face Unlock) scenarios using IR cameras, you should confirm that the lower V4L2 subdev exposure and gain controls are correctly mapped to the Android Camera HAL's biometric metadata requirements.
 
@@ -53,7 +53,7 @@ As its physical interface, it supports MIPI CSI-2 output with 1 to 4 data lanes,
 
 Global shutter sensors play an important role in special-purpose devices such as high-speed motion capture, machine vision, and SLAM cameras in AR/VR headsets. The addition of this driver lays the lower-level groundwork for implementing high-performance global shutter camera solutions on Android embedded platforms.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 When adopting a global shutter sensor, you should verify at the driver and HAL layers whether YUV/RAW frames are dropped in high frame rate (120fps) stream configurations and whether bandwidth bottlenecks arise depending on the MIPI CSI-2 lane configuration.
 
@@ -79,7 +79,7 @@ It uses an I2C-compatible SCCB bus as its control interface, and this driver pat
 
 Low-resolution mono sensors such as the OG0VA1B are mainly used in low-power embedded devices, security cameras, and as auxiliary sensors for gesture recognition or depth sensing. This driver addition is expected to broaden hardware choices when developing embedded Android systems.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 When receiving a VGA-class low-resolution Y10 RAW format stream, you should confirm that the ISP pipeline and Camera HAL correctly handle the 10-bit monochrome format (Y10) and allocate frame buffers properly.
 
@@ -105,7 +105,7 @@ However, because this patch does not fully address all the feedback raised in pr
 
 Changes at the physical layer and driver level do not require direct modifications to the Android Camera HAL API. However, once the lower driver supports C-PHY mode stably, the HAL layer can gain the performance benefit of reliably handling higher-bandwidth stream configurations (for example, high-resolution RAW capture or high-frame-rate video).
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 As the physical layer switches to C-PHY, you should closely verify through driver and ISP integration tests that no frame drops or transfer delays caused by signal integrity occur when configuring high-bandwidth streams.
 

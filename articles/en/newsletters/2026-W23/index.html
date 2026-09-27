@@ -59,28 +59,9 @@
         </div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-google-i-o-26-cameraxviewfinder-composable-announced-built-on-jetpack-camerax-an" aria-labelledby="article-google-i-o-26-cameraxviewfinder-composable-announced-built-on-jetpack-camerax-an-title">
+      <section class="section issue-story issue-section article-card has-image" id="article-camerax-1-6-0-stable-release-use-case-pre-query-api-introduced-and-numerous-devi" aria-labelledby="article-camerax-1-6-0-stable-release-use-case-pre-query-api-introduced-and-numerous-devi-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
-          <span class="issue-story-category">AOSP Camera</span>
-        </div>
-        <h2 id="article-google-i-o-26-cameraxviewfinder-composable-announced-built-on-jetpack-camerax-an-title" class="article-title">Google I/O &#39;26: CameraXViewfinder Composable Announced, Built on Jetpack CameraX and Media3</h2>
-        <p class="article-source-subtitle">Building High-Quality Android Media Experiences with Jetpack CameraX and Media3</p>
-        <figure class="article-media">
-        <img class="article-image" src="https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&amp;days_since_epoch=20609" alt="Google I/O &#39;26 Android Developers session thumbnail" loading="lazy" decoding="async">
-        <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/">Android Developers Blog</a></figcaption>
-        </figure>
-        <p class="article-lead">At Google I/O &#39;26, the CameraXViewfinder Composable was announced, using Jetpack CameraX and Media3 to provide a camera preview that responds flexibly across diverse form factors such as foldables and tablets.</p>
-        <p>As the Android ecosystem evolves into a platform that supports a high-quality media lifecycle, Google presented a toolkit to simplify the development journey from first capture to final playback. The core of this Google I/O &#39;26 announcement is the tight integration of Jetpack CameraX and Media3.</p>
-        <p>The newly introduced CameraXViewfinder Composable helps implement camera preview easily in Jetpack Compose, a declarative UI framework. In particular, it provides a viewfinder that scales and responds seamlessly to layout changes on foldable devices whose screen size changes dynamically and on large-screen tablets.</p>
-        <p>This toolkit is designed so that application developers can build native-level, high-quality camera and playback experiences without complex Surface lifecycle management or aspect ratio calculations. This is expected to significantly shorten the app development process.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This change does not involve a direct interface change to the Camera HAL, but it shows how the framework and app layers consume and render the streams (Preview, ImageCapture) that the HAL provides. It suggests that the HAL must supply buffers reliably, without frame drops, in response to Surface reconfiguration and stream reconfiguration requests that may occur when a foldable device&#39;s screen changes.</p></div>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&amp;si=H6-8-AbtEyTqSxeY">Supercharge your media pipeline with a complete, production-ready toolkit (『Building Premium Android Experiences at Google I/O ‘26』)</a></li></ul></div>
-      </section>
-
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-1-6-0-stable-release-use-case-pre-query-api-introduced-and-numerous-devi" aria-labelledby="article-camerax-1-6-0-stable-release-use-case-pre-query-api-introduced-and-numerous-devi-title">
-        <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 2">02</span>
           <span class="issue-story-category">Camera</span>
         </div>
         <h2 id="article-camerax-1-6-0-stable-release-use-case-pre-query-api-introduced-and-numerous-devi-title" class="article-title">CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied</h2>
@@ -96,6 +77,25 @@
         <p>In addition, numerous detailed fixes were made to improve the stability of the downstream image processing pipeline, such as fixing images coming out dark due to underexposure when using the flash on the ultra-wide camera, and updating the ExifInterface library dependency to fix image parsing failures caused by some devices&#39; JPEG encoders adding 0xFF padding bytes before markers.</p>
         <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This release carries significant implications for Camera HAL development teams. With an API now introduced at the upper framework layer to query use-case combination support in advance, the accuracy of the CameraCharacteristics and isStreamCombinationSupported interfaces declared at the HAL level is held to a stricter standard. Also, since instability at the HAL/driver layer, such as the Z Fold 4 YUV distortion and the A53 torch-linked capture failure, is being forcibly worked around (Exclude/Filter) in upper libraries, vendors should re-verify the stream combination reliability and buffer handling logic of their own devices.</p></div>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.0">CameraX Release Notes - CameraX 1.6.0</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-google-i-o-26-cameraxviewfinder-composable-announced-built-on-jetpack-camerax-an" aria-labelledby="article-google-i-o-26-cameraxviewfinder-composable-announced-built-on-jetpack-camerax-an-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-google-i-o-26-cameraxviewfinder-composable-announced-built-on-jetpack-camerax-an-title" class="article-title">Google I/O &#39;26: CameraXViewfinder Composable Announced, Built on Jetpack CameraX and Media3</h2>
+        <p class="article-source-subtitle">Building High-Quality Android Media Experiences with Jetpack CameraX and Media3</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&amp;days_since_epoch=20609" alt="Google I/O &#39;26 Android Developers session thumbnail" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/">Android Developers Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">At Google I/O &#39;26, the CameraXViewfinder Composable was announced, using Jetpack CameraX and Media3 to provide a camera preview that responds flexibly across diverse form factors such as foldables and tablets.</p>
+        <p>As the Android ecosystem evolves into a platform that supports a high-quality media lifecycle, Google presented a toolkit to simplify the development journey from first capture to final playback. The core of this Google I/O &#39;26 announcement is the tight integration of Jetpack CameraX and Media3.</p>
+        <p>The newly introduced CameraXViewfinder Composable helps implement camera preview easily in Jetpack Compose, a declarative UI framework. In particular, it provides a viewfinder that scales and responds seamlessly to layout changes on foldable devices whose screen size changes dynamically and on large-screen tablets.</p>
+        <p>This toolkit is designed so that application developers can build native-level, high-quality camera and playback experiences without complex Surface lifecycle management or aspect ratio calculations. This is expected to significantly shorten the app development process.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This change does not involve a direct interface change to the Camera HAL, but it shows how the framework and app layers consume and render the streams (Preview, ImageCapture) that the HAL provides. It suggests that the HAL must supply buffers reliably, without frame drops, in response to Surface reconfiguration and stream reconfiguration requests that may occur when a foldable device&#39;s screen changes.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&amp;si=H6-8-AbtEyTqSxeY">Supercharge your media pipeline with a complete, production-ready toolkit (『Building Premium Android Experiences at Google I/O ‘26』)</a></li></ul></div>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
