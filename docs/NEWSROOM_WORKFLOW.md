@@ -571,3 +571,17 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 `newsletters-01-source-collect-pr.yml`과 `newsletters-02-source-discovery-pr.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
 
 `articles/content/collected-news/YYYY-MM-DD/`에 있는 파이프라인 입력 파일들(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03 사이를 넘겨주는 핸드오프 상태이므로 `review_required_compact` 등급입니다. 이 중 `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 만들며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋해야 합니다. 순수 디버그 파일인 `gemini-candidates.json`은 `debug_heavy` 등급이라 `.gitignore`로 제외합니다.
+
+## 공개 사이트의 영문 로케일
+
+기본 언어는 한국어이며 헤더의 언어 선택 버튼에서 한국어와 English를 선택합니다. 영문 홈과 아카이브는 `articles/en/index.html`, `articles/en/archive.html`이며 배포 URL은 `/en/` 접두사를 사용합니다. 번역이 없는 호는 영문 아카이브에서 한국어 제목과 `Korean only` 배지를 표시하고 한국어 원문으로 연결합니다. 영문 홈은 최신 영문 호만 표시하며 홈페이지 헤드라인은 번역하지 않습니다.
+
+`buildHtml(issue, { locale: 'en' })`과 `buildMarkdown(issue, { locale: 'en' })`은 영문 UI를 렌더합니다. 생략하면 `ko`입니다. 공개 문구는 `src/generator/render/locale/ko.js`와 `en.js`에서 관리합니다. 내부 검토 보고서는 한국어를 유지합니다. 과거 발행 HTML은 다시 쓰지 않으며, 조립기는 배포용 사본에 공통 헤더 스크립트만 보강합니다. `data-alternate-href`가 없는 과거 호의 영어 선택은 영문 아카이브로 연결합니다.
+
+번역 입력은 `applyTranslation(issue, translation, { sourceText })`으로 적용합니다. `translation.en.json`은 `schemaVersion: 1`, `weekly_key`, `source_hash`, `title`, `summary`, `sections`, `watch_points`, `reference_articles`를 갖습니다. `source_hash`는 `sha256:` 접두사와 원본 UTF-8 파일 바이트 해시입니다. 실제 파일을 사용하는 호출부는 그 파일 내용을 `sourceText`로 전달해야 하며, 객체만 사용하는 테스트는 `translationSourceHash(issue)`를 사용합니다. 해시 불일치, ID 중복·누락, 개수 불일치, 허용되지 않은 필드는 오류입니다.
+
+각 section overlay는 `id`, `headline`, `body_markdown`, `why_it_matters`를 제공하며, 원본에 리드나 출처 부제목이 있으면 `lead`와 `source_subtitle`도 번역해야 합니다. 참고 기사 overlay는 `id`, `title`을 제공하며 원본에 `note`가 있으면 함께 번역합니다. 브리핑은 번역된 기사 제목에서 만듭니다. URL·출처 이름·이미지·태그·날짜·기사 순서는 원본에서 복사하며 overlay가 변경할 수 없습니다.
+
+두 발행 인덱스의 항목에는 선택 필드 `en: { title, summary, html, md }`를 둡니다. 경로는 `en/newsletters/<key>/index.html`과 `en/newsletters/<key>/newsletter.md`입니다. 필드가 없으면 미번역 상태이며 검증 오류가 아닙니다. 필드가 있으면 영문 파일의 존재, 구조, 표시값을 검증하고 sitemap에 영문 URL을 포함합니다. 새 호는 한국어·영어·기본 한국어의 hreflang을 제공하므로, 번역 PR 머지 전 영문 호 링크가 잠시 404가 되는 것은 허용합니다.
+
+실제 번역 호출과 번역 PR 워크플로는 #1191에서 다루며, 이 렌더링 계약 자체는 번역을 자동 생성하지 않습니다.

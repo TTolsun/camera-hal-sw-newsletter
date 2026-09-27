@@ -283,34 +283,37 @@
   // 표시 계약 v2: 카드 메타 줄은 발행 주(weeklyKey)와 대상 주(coverage)를 discriminated
   // union variant별로 다르게 조합한다. variant가 없으면(daily-era entry, 또는 부분/깨진
   // coverage 필드) 기존 단일 라벨 표시를 그대로 쓴다 — 재렌더 바이트 불변을 지킨다.
-  function cardMetaHtml(entry) {
+  function cardMetaHtml(entry, locale = 'ko') {
+    const en = locale === 'en';
+    const coverage = en ? 'Coverage' : '대상';
+    const published = en ? 'Published' : '발행';
     const variant = entryCoverageVariant(entry);
     const count = Number(entry && entry.article_count) || 0;
-    const countText = count > 0 ? `총 ${count}건` : '';
+    const countText = count > 0 ? (en ? `${count} articles` : `총 ${count}건`) : '';
     const weeklyKey = weeklyKeyOf(entry);
     const publishedLabel = weeklyKey ? weeklyKey.slice(5) : '';
 
     if (variant && variant.variant === 'iso_week') {
       const parts = [
-        `<span class="issue-date">대상 ${escapeHtml(variant.key.slice(5))}</span>`,
+        `<span class="issue-date">${coverage} ${escapeHtml(variant.key.slice(5))}</span>`,
         escapeHtml(formatDotRange(variant.start, variant.end))
       ];
-      if (publishedLabel) parts.push(`<span class="issue-publish-badge">발행 ${escapeHtml(publishedLabel)}</span>`);
+      if (publishedLabel) parts.push(`<span class="issue-publish-badge">${published} ${escapeHtml(publishedLabel)}</span>`);
       if (countText) parts.push(countText);
       return parts.join(' · ');
     }
 
     if (variant && variant.variant === 'legacy_rolling') {
-      const parts = [`<span class="issue-date">대상 ${escapeHtml(formatDotRange(variant.start, variant.end))}</span>`];
-      if (publishedLabel) parts.push(`<span class="issue-publish-badge">발행 ${escapeHtml(publishedLabel)}</span>`);
+      const parts = [`<span class="issue-date">${coverage} ${escapeHtml(formatDotRange(variant.start, variant.end))}</span>`];
+      if (publishedLabel) parts.push(`<span class="issue-publish-badge">${published} ${escapeHtml(publishedLabel)}</span>`);
       if (countText) parts.push(countText);
       return parts.join(' · ');
     }
 
     if (variant && variant.variant === 'unverified') {
       const parts = [];
-      if (publishedLabel) parts.push(`<span class="issue-date">발행 ${escapeHtml(publishedLabel)}</span>`);
-      parts.push('대상 기간 미확인');
+      if (publishedLabel) parts.push(`<span class="issue-date">${published} ${escapeHtml(publishedLabel)}</span>`);
+      parts.push(en ? 'Coverage period unverified' : '대상 기간 미확인');
       if (countText) parts.push(countText);
       return parts.join(' · ');
     }
@@ -347,17 +350,27 @@
 
   // Image-forward card: 16:9 thumbnail, topic kicker, top-article headline, week meta line.
   function renderArchiveCard(entry, options = {}) {
-    const href = getSafeNewsletterHref(entry);
-    const accessibleName = `${entry && entry.date || ''} ${entry && entry.title || ''} ${options.ariaSuffix || '뉴스레터 열기'}`.trim();
+    const locale = options.locale || 'ko';
+    const rootPath = options.rootPath || '';
+    const englishPath = entry && entry.en && entry.en.html;
+    const translated = locale === 'en' && englishPath === `en/${getSafeNewsletterHref(entry)}`;
+    const koreanOnly = locale === 'en' && !translated;
+    const href = rootPath + (translated ? englishPath : getSafeNewsletterHref(entry));
+    if (translated) entry = { ...entry, title: entry.en.title, summary: entry.en.summary };
+    else if (koreanOnly) entry = { ...entry, summary: '' };
+    const image = cardImage(entry);
+    const imageSrc = /^(?:https?:|\/)/.test(image) ? image : rootPath + image;
+    const accessibleName = `${entry && entry.date || ''} ${entry && entry.title || ''} ${options.ariaSuffix || (locale === 'en' ? 'Open newsletter' : '뉴스레터 열기')}${koreanOnly ? ' · Korean only' : ''}`.trim();
     return `
       <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
         <div class="card-thumb nc-thumb">
-          <img class="card-thumb-img" src="${escapeHtml(cardImage(entry))}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${FALLBACK_CARD_IMAGE}'">
+          <img class="card-thumb-img" src="${escapeHtml(imageSrc)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${escapeHtml(rootPath + FALLBACK_CARD_IMAGE)}'">
         </div>
         <div class="card-body">
           <div class="card-kicker">${escapeHtml(cardKicker(entry))}</div>
-          <h3 class="card-title clamp-2 nc-h">${escapeHtml(cardHeadline(entry))}</h3>
-          <div class="card-meta archive-card-meta">${cardMetaHtml(entry)}</div>
+          ${koreanOnly ? '<span class="tag" lang="en">Korean only</span>' : ''}
+          <h3 class="card-title clamp-2 nc-h"${koreanOnly ? ' lang="ko"' : ''}>${escapeHtml(cardHeadline(entry))}</h3>
+          <div class="card-meta archive-card-meta">${cardMetaHtml(entry, locale)}</div>
         </div>
       </a>
     `;

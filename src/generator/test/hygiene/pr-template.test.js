@@ -94,6 +94,7 @@ test('localization validator scans prompt and latest public newsletter surfaces'
 
 test('localization validator reports homepage headline display errors in readable Korean', () => {
   const root = tempRoot();
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), []);
   writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date: '2026-05-23',
     title: '카메라 뉴스레터',
@@ -126,6 +127,7 @@ test('localization validator reports homepage headline display errors in readabl
 
 test('localization validator allows canonical English newsletter brand titles', () => {
   const root = tempRoot();
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), []);
   writeJson(path.join(root, 'articles', 'data', 'newsletters.json'), [{
     date: '2026-05-24',
     title: 'Camera HAL / SW Newsletter - 2026-05-24',

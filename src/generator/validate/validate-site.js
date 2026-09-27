@@ -1,5 +1,6 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
+const { validateEnglishEntry } = require('./english-locale');
 const path = require('path');
 const {
   readJson,
@@ -674,9 +675,16 @@ for (const [index, item] of newsletters.entries()) {
 // 공개 표면 전체를 훑는다. dated 호만 돌던 시절에는 위클리 이슈 페이지와 AI Engineering Lab
 // 페이지가 anchor 균형·TODO 검사(위클리는 이슈 전용 클래스·source-list 링크까지)를 한 번도 받지
 // 않았다 — 하필 위클리가 현재 발행 레인이다.
+for (const item of [...newsletters, ...weeklyNewsletters]) {
+  errors.push(...validateEnglishEntry(item, root));
+}
+
 const htmlFiles = [...new Set([
   'index.html',
   'archive.html',
+  'en/index.html',
+  'en/archive.html',
+  ...[...newsletters, ...weeklyNewsletters].map(item => item.en?.html).filter(Boolean),
   ...newsletters.map(item => item.html).filter(Boolean),
   ...weeklyNewsletters.map(item => item.html).filter(Boolean),
   `${AI_ENGINEERING_LEARNING_PATH}index.html`
@@ -719,7 +727,7 @@ for (const relPath of htmlFiles) {
     validateArticleImages(relPath, content, root, errors);
   }
 
-  if (relPath.startsWith('newsletters/')) {
+  if (/^(?:en\/)?newsletters\//.test(relPath)) {
     // 목록도 판정도 rendered-issue-structure 의 것을 그대로 쓴다. 예전에는 클래스 이름을 여기에
     // 다시 적어 두었고, 그 사본이 부분 문자열로 보는 동안 정본은 토큰으로 봐서 위클리 레인이
     // 약한 쪽으로 잠겨 있었다(#1019 가 판정만 맞췄다). 목록까지 한 곳으로 모아야 다음에 클래스가

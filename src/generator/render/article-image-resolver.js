@@ -81,7 +81,7 @@ function fallbackAssetForSection(section = {}) {
 // 서빙 URL 기준의 assets/ 경로는 디스크상으로 articles/assets/ 아래에 있다(#262 phase 6).
 function repoLocalPath(root, src) {
   const normalized = normalizePath(src);
-  const withoutIssuePrefix = normalized.replace(/^(\.\.\/){2}/, '');
+  const withoutIssuePrefix = normalized.replace(/^(\.\.\/){2,3}/, '');
   if (!withoutIssuePrefix.startsWith('assets/')) return '';
   const absPath = path.resolve(root, 'articles', withoutIssuePrefix);
   const rootPath = path.resolve(root);
