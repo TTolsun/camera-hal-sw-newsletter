@@ -26,7 +26,7 @@ In addition, the setMirrorMode and getMirrorMode APIs for controlling mirror mod
 
 The part that the lower HAL and driver layers should note most is the improved ZSL (Zero-Shutter Lag) stability on multi-camera devices. Previously, in multi-camera environments, changing zoom across boundaries between physical cameras with ZSL enabled caused a HAL crash due to a stream control mismatch between the framework and the HAL. This release fixes that crash, ensuring stable frame capture even during zoom operations. In addition, HDR video recording failures on Samsung Galaxy S25, S26, and Fold 7 devices, and a bug where one of multiple Preview streams was not delivered when using OverlayEffect, were also fixed.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This change is not a direct HAL3 specification change, but it is closely tied to how the upper framework passes requests to the HAL. In particular, the fix for the HAL crash when switching zoom between physical cameras with ZSL enabled (b/527782712) suggests that multi-camera stream configuration and buffer lifecycle control logic should be reviewed. Also, as in the fix for HDR video recording failures on specific vendor devices such as the Samsung Galaxy S25/S26/Fold 7 (b/529618629), you should verify through VTS and your own scenario tests that no exceptions occur in vendor-specific HDR metadata handling and codec integration.
 

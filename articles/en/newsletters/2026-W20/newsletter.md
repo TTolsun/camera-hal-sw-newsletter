@@ -9,46 +9,7 @@ This week covers ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, 
 - Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
 - CameraX 1.6.1 Update: Observing Android Camera Compatibility
 
-## 2. CameraX 1.6.1 Update: Observing Android Camera Compatibility
-
-
-![CameraX 1.6.1 Update: Observing Android Camera Compatibility image](https://developer.android.com/static/images/social/android-developers.png)
-
-_Image: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)_
-
-
-CameraX 1.6.1 Update: Observing Android Camera Compatibility
-
-The CameraX 1.6.1 release note is an AndroidX Camera layer update that includes viewfinder- and video-related artifact versions. For the Camera HAL team, it is not a direct contract change but an occasion to check app-facing camera behavior with a smoke test.
-
-Since CameraX and Camera2 are layers above the HAL, the release note must not be used directly as grounds for HAL API, stream, or metadata changes. Instead, the safe approach is to check in a reference app that Preview, ImageCapture, and VideoCapture combinations do not break on the existing device matrix.
-
-In particular, if Camera2 interop, extensions, or session configuration failures are reported, the app/framework logs and the HAL/device logs should be examined separately. Open a HAL follow-up only when there is device log or stream/buffer evidence.
-
-**Camera HAL / Driver Perspective**
-
-CameraX 1.6.1 is an app-facing compatibility check item. HAL owners should distinguish library issues from device HAL regressions through reference app smoke tests and log separation.
-
-### What to Check
-
-- Decide the combinations for running a Preview + ImageCapture + VideoCapture smoke test with the CameraX 1.6.1 dependency.
-
-- Check session configuration failures separately in `dumpsys media.camera`, app logcat, and framework camera logs.
-
-- Interpret Camera2 interop or extensions-related changes only within the scope of the release note.
-
-### Camera HAL/Driver perspective implications
-
-CameraX 1.6.1 Update: Observing Android Camera Compatibility
-
-**Sources**
-
-- [1.6.1](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
-- [CameraX 1.4.0-alpha07 release table row](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
-
----
-
-## 3. Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
+## 2. Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
 
 
 ![Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 image](https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1)
@@ -76,13 +37,52 @@ This item is a native tooling watch, not a Camera HAL runtime change. The HAL te
 
 - Run a separate comparison only when a host-side tool or standalone benchmark uses GCC.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22
 
 **Sources**
 
 - [GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22](https://www.phoronix.com/review/gcc-16-vs-clang-22)
+
+---
+
+## 3. CameraX 1.6.1 Update: Observing Android Camera Compatibility
+
+
+![CameraX 1.6.1 Update: Observing Android Camera Compatibility image](https://developer.android.com/static/images/social/android-developers.png)
+
+_Image: [Android Developers Latest Updates](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)_
+
+
+CameraX 1.6.1 Update: Observing Android Camera Compatibility
+
+The CameraX 1.6.1 release note is an AndroidX Camera layer update that includes viewfinder- and video-related artifact versions. For the Camera HAL team, it is not a direct contract change but an occasion to check app-facing camera behavior with a smoke test.
+
+Since CameraX and Camera2 are layers above the HAL, the release note must not be used directly as grounds for HAL API, stream, or metadata changes. Instead, the safe approach is to check in a reference app that Preview, ImageCapture, and VideoCapture combinations do not break on the existing device matrix.
+
+In particular, if Camera2 interop, extensions, or session configuration failures are reported, the app/framework logs and the HAL/device logs should be examined separately. Open a HAL follow-up only when there is device log or stream/buffer evidence.
+
+**Camera HAL / Driver Perspective**
+
+CameraX 1.6.1 is an app-facing compatibility check item. HAL owners should distinguish library issues from device HAL regressions through reference app smoke tests and log separation.
+
+### What to Check
+
+- Decide the combinations for running a Preview + ImageCapture + VideoCapture smoke test with the CameraX 1.6.1 dependency.
+
+- Check session configuration failures separately in `dumpsys media.camera`, app logcat, and framework camera logs.
+
+- Interpret Camera2 interop or extensions-related changes only within the scope of the release note.
+
+### Camera HAL/Driver perspective: what it means
+
+CameraX 1.6.1 Update: Observing Android Camera Compatibility
+
+**Sources**
+
+- [1.6.1](https://developer.android.com/jetpack/androidx/releases/camera#1.6.1)
+- [CameraX 1.4.0-alpha07 release table row](https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07)
 
 
 ## References

@@ -60,33 +60,9 @@
         </div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-1-6-1-update-observing-android-camera-compatibility" aria-labelledby="article-camerax-1-6-1-update-observing-android-camera-compatibility-title">
+      <section class="section issue-story issue-section article-card has-image" id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" aria-labelledby="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
-          <span class="issue-story-category">AOSP Camera</span>
-        </div>
-        <h2 id="article-camerax-1-6-1-update-observing-android-camera-compatibility-title" class="article-title">CameraX 1.6.1 Update: Observing Android Camera Compatibility</h2>
-        <figure class="article-media">
-        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="CameraX 1.6.1 Update: Observing Android Camera Compatibility image" loading="lazy" decoding="async">
-        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">Android Developers Latest Updates</a></figcaption>
-        </figure>
-        <p class="article-lead">CameraX 1.6.1 Update: Observing Android Camera Compatibility</p>
-        <p>The CameraX 1.6.1 release note is an AndroidX Camera layer update that includes viewfinder- and video-related artifact versions. For the Camera HAL team, it is not a direct contract change but an occasion to check app-facing camera behavior with a smoke test.</p>
-        <p>Since CameraX and Camera2 are layers above the HAL, the release note must not be used directly as grounds for HAL API, stream, or metadata changes. Instead, the safe approach is to check in a reference app that Preview, ImageCapture, and VideoCapture combinations do not break on the existing device matrix.</p>
-        <p>In particular, if Camera2 interop, extensions, or session configuration failures are reported, the app/framework logs and the HAL/device logs should be examined separately. Open a HAL follow-up only when there is device log or stream/buffer evidence.</p>
-        <p>**Camera HAL / Driver Perspective**</p>
-        <p>CameraX 1.6.1 is an app-facing compatibility check item. HAL owners should distinguish library issues from device HAL regressions through reference app smoke tests and log separation.</p>
-        <p>### What to Check</p>
-        <p>- Decide the combinations for running a Preview + ImageCapture + VideoCapture smoke test with the CameraX 1.6.1 dependency.</p>
-        <p>- Check session configuration failures separately in `dumpsys media.camera`, app logcat, and framework camera logs.</p>
-        <p>- Interpret Camera2 interop or extensions-related changes only within the scope of the release note.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>CameraX 1.6.1 Update: Observing Android Camera Compatibility</p></div>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">1.6.1</a></li><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07">CameraX 1.4.0-alpha07 release table row</a></li></ul></div>
-      </section>
-
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" aria-labelledby="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title">
-        <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 2">02</span>
           <span class="issue-story-category">Tooling Watch</span>
         </div>
         <h2 id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title" class="article-title">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h2>
@@ -106,6 +82,30 @@
         <p>- Run a separate comparison only when a host-side tool or standalone benchmark uses GCC.</p>
         <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</p></div>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card has-image" id="article-camerax-1-6-1-update-observing-android-camera-compatibility" aria-labelledby="article-camerax-1-6-1-update-observing-android-camera-compatibility-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-1-6-1-update-observing-android-camera-compatibility-title" class="article-title">CameraX 1.6.1 Update: Observing Android Camera Compatibility</h2>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="CameraX 1.6.1 Update: Observing Android Camera Compatibility image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">Android Developers Latest Updates</a></figcaption>
+        </figure>
+        <p class="article-lead">CameraX 1.6.1 Update: Observing Android Camera Compatibility</p>
+        <p>The CameraX 1.6.1 release note is an AndroidX Camera layer update that includes viewfinder- and video-related artifact versions. For the Camera HAL team, it is not a direct contract change but an occasion to check app-facing camera behavior with a smoke test.</p>
+        <p>Since CameraX and Camera2 are layers above the HAL, the release note must not be used directly as grounds for HAL API, stream, or metadata changes. Instead, the safe approach is to check in a reference app that Preview, ImageCapture, and VideoCapture combinations do not break on the existing device matrix.</p>
+        <p>In particular, if Camera2 interop, extensions, or session configuration failures are reported, the app/framework logs and the HAL/device logs should be examined separately. Open a HAL follow-up only when there is device log or stream/buffer evidence.</p>
+        <p>**Camera HAL / Driver Perspective**</p>
+        <p>CameraX 1.6.1 is an app-facing compatibility check item. HAL owners should distinguish library issues from device HAL regressions through reference app smoke tests and log separation.</p>
+        <p>### What to Check</p>
+        <p>- Decide the combinations for running a Preview + ImageCapture + VideoCapture smoke test with the CameraX 1.6.1 dependency.</p>
+        <p>- Check session configuration failures separately in `dumpsys media.camera`, app logcat, and framework camera logs.</p>
+        <p>- Interpret Camera2 interop or extensions-related changes only within the scope of the release note.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>CameraX 1.6.1 Update: Observing Android Camera Compatibility</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">1.6.1</a></li><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07">CameraX 1.4.0-alpha07 release table row</a></li></ul></div>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">

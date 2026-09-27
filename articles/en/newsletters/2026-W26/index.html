@@ -64,46 +64,9 @@
         <p class="issue-context-lens-label-text">Engineering radar perspective</p>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys" aria-labelledby="article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys-title">
-        <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 1">01</span>
-          <span class="issue-story-category">C++ · AI Tooling</span>
-        </div>
-        <h2 id="article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys-title" class="article-title">GCC 16 release upcoming: improved template error messages and SARIF static analysis output</h2>
-        <p class="article-source-subtitle">ISO C++ Blog Release Preview</p>
-        <figure class="article-media">
-        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="redhatgraphic.png" loading="lazy" decoding="async">
-        </figure>
-        <p class="article-lead">With GCC 16 scheduled for release, debugging and static analysis workflows in the C++ native development environment are expected to improve. The key points are more readable template error messages and support for the SARIF standard format.</p>
-        <p>On June 15, 2026, the major new features of the upcoming GCC 16 were published on the ISO C++ blog. This release focuses on greatly improving the readability of template-related compile error messages, one of the areas C++ developers find most difficult. Visual readability has been improved so that errors arising during complex template instantiation can be understood more clearly.</p>
-        <p>Support for SARIF output, which allows static analysis results to be exchanged between tools in a standardized way, has also been added. This lets developers easily connect compiler-generated static analysis data to external analysis tools or CI/CD pipelines and detect code vulnerabilities or potential bugs early.</p>
-        <p>The official toolchain for the Android platform and Camera HAL mainly uses Clang/LLVM, but these GCC advances lead the standard for C++ compiler technology as a whole and have a positive effect on the developer tools ecosystem. They will be a particularly useful update for engineers who build and validate Linux kernel drivers or some native libraries in a GCC environment.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Because Android Camera HAL native code is built with Clang/LLVM, GCC 16 has no direct runtime impact. However, it is useful for improving debugging productivity and introducing SARIF-based static analysis in Linux kernel driver build environments or standalone C++ test toolchains.</p></div>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li></ul></div>
-      </section>
-
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid" aria-labelledby="article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid-title">
-        <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 2">02</span>
-          <span class="issue-story-category">Android Platform</span>
-        </div>
-        <h2 id="article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid-title" class="article-title">Android CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem</h2>
-        <p class="article-source-subtitle">Android Developers Blog (2026-06-09)</p>
-        <figure class="article-media">
-        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=th" alt="Android CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem" loading="lazy" decoding="async">
-        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/tools/agents/android-cli#skills-add">Android Developers Blog</a></figcaption>
-        </figure>
-        <p class="article-lead">Google recently expanded the Android skills repository provided through the Android CLI and GitHub and added a new skill for CameraX migration. This is not a direct Camera HAL change, but it accelerates the camera API transition in the upper app layer, raising the importance of HAL compatibility validation.</p>
-        <p>Google has significantly expanded the Android skills repository provided through the Android CLI and GitHub to improve developer productivity. This update adds at least 17 new skills in total, including a CameraX migration skill. These skills help large language models (LLMs) learn specific development patterns and specialized workflows that follow Google&#39;s best practices.</p>
-        <p>CameraX is a Jetpack library built on the Android Camera2 API that simplifies camera app development and improves compatibility across devices. With many legacy apps migrating from Camera2 or older APIs to CameraX, this tooling support is expected to further accelerate app developers&#39; transition to CameraX.</p>
-        <p>From a Camera HAL engineer&#39;s perspective, this means a change in camera usage patterns in the upper framework and app layers. When CameraX use cases such as Preview, ImageCapture, and VideoCapture run on a device, it becomes important to proactively validate how they interact with the HAL layer&#39;s stream configuration and buffer lifecycle.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>It does not bring direct API or metadata changes to the Camera HAL, but as CameraX migration in upper-layer apps becomes more active, CameraX compatibility testing (CTS/VTS and real-scenario validation) should be strengthened to prevent potential stream configuration and buffer management errors.</p></div>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing (『Top 3 updates for Android developer productivity』)</a></li></ul></div>
-      </section>
-
       <section class="section issue-story issue-section article-card story-article has-image" id="article-v4l2-sub-device-driver-patch-v10-proposed-for-the-himax-hm1246-image-sensor" aria-labelledby="article-v4l2-sub-device-driver-patch-v10-proposed-for-the-himax-hm1246-image-sensor-title">
         <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-number" aria-label="Article 1">01</span>
           <span class="issue-story-category">Camera Driver · ISP</span>
         </div>
         <h2 id="article-v4l2-sub-device-driver-patch-v10-proposed-for-the-himax-hm1246-image-sensor-title" class="article-title">V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor</h2>
@@ -121,7 +84,7 @@
 
       <section class="section issue-story issue-section article-card story-article has-image" id="article-v4l2-sub-device-driver-patch-v2-proposed-for-the-sony-imx576-image-sensor" aria-labelledby="article-v4l2-sub-device-driver-patch-v2-proposed-for-the-sony-imx576-image-sensor-title">
         <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-number" aria-label="Article 2">02</span>
           <span class="issue-story-category">Camera Driver · ISP</span>
         </div>
         <h2 id="article-v4l2-sub-device-driver-patch-v2-proposed-for-the-sony-imx576-image-sensor-title" class="article-title">V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor</h2>
@@ -135,6 +98,43 @@
         <p>Standardizing high-resolution sensor drivers on V4L2 helps secure the stability of manual camera control features and high-resolution stream configurations when implementing Android Camera HAL3. Accurate blanking and gain control at the driver level is important for preventing frame drops and improving the precision of AE algorithms.</p>
         <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch is a driver-layer proposal and does not directly affect the Android Camera HAL, but because it provides driver interfaces for manual control and high-resolution stream configuration, it can serve as a reference when integrating HAL3 manual control features.</p></div>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/">Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys" aria-labelledby="article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys-title" class="article-title">GCC 16 release upcoming: improved template error messages and SARIF static analysis output</h2>
+        <p class="article-source-subtitle">ISO C++ Blog Release Preview</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="redhatgraphic.png" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">With GCC 16 scheduled for release, debugging and static analysis workflows in the C++ native development environment are expected to improve. The key points are more readable template error messages and support for the SARIF standard format.</p>
+        <p>On June 15, 2026, the major new features of the upcoming GCC 16 were published on the ISO C++ blog. This release focuses on greatly improving the readability of template-related compile error messages, one of the areas C++ developers find most difficult. Visual readability has been improved so that errors arising during complex template instantiation can be understood more clearly.</p>
+        <p>Support for SARIF output, which allows static analysis results to be exchanged between tools in a standardized way, has also been added. This lets developers easily connect compiler-generated static analysis data to external analysis tools or CI/CD pipelines and detect code vulnerabilities or potential bugs early.</p>
+        <p>The official toolchain for the Android platform and Camera HAL mainly uses Clang/LLVM, but these GCC advances lead the standard for C++ compiler technology as a whole and have a positive effect on the developer tools ecosystem. They will be a particularly useful update for engineers who build and validate Linux kernel drivers or some native libraries in a GCC environment.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Because Android Camera HAL native code is built with Clang/LLVM, GCC 16 has no direct runtime impact. However, it is useful for improving debugging productivity and introducing SARIF-based static analysis in Linux kernel driver build environments or standalone C++ test toolchains.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid" aria-labelledby="article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid-title" class="article-title">Android CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem</h2>
+        <p class="article-source-subtitle">Android Developers Blog (2026-06-09)</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=th" alt="Android CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/tools/agents/android-cli#skills-add">Android Developers Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">Google recently expanded the Android skills repository provided through the Android CLI and GitHub and added a new skill for CameraX migration. This is not a direct Camera HAL change, but it accelerates the camera API transition in the upper app layer, raising the importance of HAL compatibility validation.</p>
+        <p>Google has significantly expanded the Android skills repository provided through the Android CLI and GitHub to improve developer productivity. This update adds at least 17 new skills in total, including a CameraX migration skill. These skills help large language models (LLMs) learn specific development patterns and specialized workflows that follow Google&#39;s best practices.</p>
+        <p>CameraX is a Jetpack library built on the Android Camera2 API that simplifies camera app development and improves compatibility across devices. With many legacy apps migrating from Camera2 or older APIs to CameraX, this tooling support is expected to further accelerate app developers&#39; transition to CameraX.</p>
+        <p>From a Camera HAL engineer&#39;s perspective, this means a change in camera usage patterns in the upper framework and app layers. When CameraX use cases such as Preview, ImageCapture, and VideoCapture run on a device, it becomes important to proactively validate how they interact with the HAL layer&#39;s stream configuration and buffer lifecycle.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>It does not bring direct API or metadata changes to the Camera HAL, but as CameraX migration in upper-layer apps becomes more active, CameraX compatibility testing (CTS/VTS and real-scenario validation) should be strengthened to prevent potential stream configuration and buffer management errors.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing (『Top 3 updates for Android developer productivity』)</a></li></ul></div>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
