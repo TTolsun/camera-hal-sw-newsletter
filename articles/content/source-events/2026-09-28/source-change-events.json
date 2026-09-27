@@ -6,21 +6,20 @@
     "monitored_source_count": 4,
     "snapshot_page_count": 6,
     "new_page_count": 0,
-    "updated_page_count": 1,
+    "updated_page_count": 0,
     "release_row_added_count": 0,
     "release_row_changed_count": 0,
     "anchor_added_count": 0,
     "material_content_change_count": 0,
-    "no_meaningful_change_count": 5,
-    "generated_candidate_count": 1,
-    "candidate_allowed_count": 1,
-    "main_article_allowed_count": 1,
+    "no_meaningful_change_count": 6,
+    "generated_candidate_count": 0,
+    "candidate_allowed_count": 0,
+    "main_article_allowed_count": 0,
     "watchlist_only_count": 0,
     "duplicate_event_evidence_count": 0,
     "monitor_diagnostic_count": 0,
     "event_type_counts": {
-      "no_meaningful_change": 5,
-      "last_updated_changed": 1
+      "no_meaningful_change": 6
     }
   },
   "events": [
@@ -55,8 +54,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-09-21T00:00:00.000Z",
-        "seen_count": 111,
+        "last_seen_at": "2026-09-28T00:00:00.000Z",
+        "seen_count": 112,
         "status": 200
       },
       "current_values": {
@@ -135,8 +134,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-03T00:00:00.000Z",
-        "last_seen_at": "2026-09-21T00:00:00.000Z",
-        "seen_count": 10,
+        "last_seen_at": "2026-09-28T00:00:00.000Z",
+        "seen_count": 11,
         "status": 200
       },
       "current_values": {
@@ -185,10 +184,10 @@
       "reason": "No meaningful source change."
     },
     {
-      "source_event_id": "source-event-d49655b8b45bba0c8786d7958540bc18",
-      "evidence_id": "evidence-a1d50c4f6c8bffeff92b8ffafae16e4c",
+      "source_event_id": "source-event-35be59c6e9ad946bf91d95e1018c55e7",
+      "evidence_id": "evidence-5ce6b26eb48cd571b6d7475215267668",
       "source_id": "aosp-camera-its-release-notes",
-      "event_type": "last_updated_changed",
+      "event_type": "no_meaningful_change",
       "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
       "canonical_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
       "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
@@ -198,17 +197,17 @@
         "canonical_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
         "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
         "visible_date": "",
-        "visible_last_updated": "2026-08-31",
+        "visible_last_updated": "2026-09-22",
         "structured_date_published": "",
         "structured_date_modified": "",
         "sitemap_lastmod": "",
-        "http_last_modified": "2026-08-31",
-        "content_hash": "e9b36bb82585991128f6a4b97a83482e0d0f235b0430e5c9edb77409ebd27b0b",
-        "normalized_content_hash": "c9dbff1b6abfdd6130c9e153f30657ca628ff14d2c84aaae35eb1a4275d780e8",
+        "http_last_modified": "2026-09-22",
+        "content_hash": "a3a4238272a2133fbb1a9b16c4518f6b43197c1f7bb0f2e3341586d3ca2a1fa9",
+        "normalized_content_hash": "c9e7c745912629068a83a0332558d5556b862a363f57bb3e71f500bc9b0fe425",
         "release_note_sections": [
           {
             "heading": "Python and package versions",
-            "hash": "a3167d87f3986427"
+            "hash": "5d49367941066b4f"
           },
           {
             "heading": "New or updated scenes",
@@ -258,8 +257,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-03T00:00:00.000Z",
-        "last_seen_at": "2026-09-21T00:00:00.000Z",
-        "seen_count": 10,
+        "last_seen_at": "2026-09-28T00:00:00.000Z",
+        "seen_count": 11,
         "status": 200
       },
       "current_values": {
@@ -332,37 +331,21 @@
         "seen_count": 0,
         "status": 200
       },
-      "content_changed": true,
+      "content_changed": false,
       "detected_at": "2026-09-28T00:00:00.000Z",
-      "effective_date": "2026-09-22",
-      "date_source": "visible_last_updated",
-      "date_confidence": 85,
-      "candidate_allowed": true,
-      "main_article_allowed": true,
-      "release_note_evidence": {
-        "version_or_release": "Android 17 Camera Image Test Suite release notes",
-        "api_or_component": "Camera ITS / CTS Verifier",
-        "behavior_change": "Python and package versions: For Android 17 and higher, we strongly recommend using package management software to bundle the correct versions of packages to create a virtual environment for Android release development.",
-        "changed_section_headings": [
-          "Python and package versions"
-        ],
-        "section_links": [
-          {
-            "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
-            "text": "Python and package versions",
-            "source_field": "release_note_section",
-            "extraction_method": "heading_anchor",
-            "evidence_role": "unclassified"
-          }
-        ]
-      },
+      "effective_date": "",
+      "date_source": "missing",
+      "date_confidence": 0,
+      "candidate_allowed": false,
+      "main_article_allowed": false,
+      "release_note_evidence": null,
       "release_row_date": "",
       "release_row_version": "",
       "release_row_anchor": "",
       "release_row_hash": "",
       "duplicate_processed": false,
-      "needs_editor_date_review": false,
-      "reason": "Date signal changed with normalized content hash changed."
+      "needs_editor_date_review": true,
+      "reason": "No meaningful source change."
     },
     {
       "source_event_id": "source-event-906b9545906d636ff0ba9c9b0e51b13e",
@@ -393,8 +376,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-17T00:00:00.000Z",
-        "last_seen_at": "2026-09-21T00:00:00.000Z",
-        "seen_count": 8,
+        "last_seen_at": "2026-09-28T00:00:00.000Z",
+        "seen_count": 9,
         "status": 200
       },
       "current_values": {
@@ -494,8 +477,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-17T00:00:00.000Z",
-        "last_seen_at": "2026-09-21T00:00:00.000Z",
-        "seen_count": 8,
+        "last_seen_at": "2026-09-28T00:00:00.000Z",
+        "seen_count": 9,
         "status": 200
       },
       "current_values": {
@@ -2215,8 +2198,8 @@
           }
         ],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-09-21T00:00:00.000Z",
-        "seen_count": 111,
+        "last_seen_at": "2026-09-28T00:00:00.000Z",
+        "seen_count": 112,
         "status": 200
       },
       "current_values": {
