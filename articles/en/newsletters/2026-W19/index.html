@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W19/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W19 Camera SW Newsletter</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W19/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W19/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W19/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers 6 stories, including ‘libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates’ and ‘libcamera v0.7.1: SoftISP Debayering and Throughput Improvements’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W19/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W19 Camera SW Newsletter" />
+  <meta property="og:description" content="This week covers 6 stories, including ‘libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates’ and ‘libcamera v0.7.1: SoftISP Debayering and Throughput Improvements’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W19/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W19 Camera SW Newsletter" />
+  <meta name="twitter:description" content="This week covers 6 stories, including ‘libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates’ and ‘libcamera v0.7.1: SoftISP Debayering and Throughput Improvements’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">Coverage period unverified</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W19 (Coverage period unverified)</span></h1>
+        <p class="subtitle">This week covers 6 stories, including ‘libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates’ and ‘libcamera v0.7.1: SoftISP Debayering and Throughput Improvements’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates</li><li>libcamera v0.7.1: SoftISP Debayering and Throughput Improvements</li><li>Claude Code 2.1.128: Scope of Camera HAL Workflow Review</li><li>May 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs</li><li>Firebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration</li><li>C++26 assert(): Camera HAL Debug-Build Review Scope</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-placeholder-image" id="article-claude-code-2-1-128-scope-of-camera-hal-workflow-review" aria-labelledby="article-claude-code-2-1-128-scope-of-camera-hal-workflow-review-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-claude-code-2-1-128-scope-of-camera-hal-workflow-review-title" class="article-title">Claude Code 2.1.128: Scope of Camera HAL Workflow Review</h2>
+        <div class="article-media article-placeholder-visual" role="img" aria-label="C++ · AI Tooling">
+        <span></span>
+        </div>
+        <p class="article-lead">Claude Code 2.1.128: Scope of Camera HAL Workflow Review</p>
+        <p>Claude Code 2.1.128 is a development tool update that improves plugin archives and command usability. For the Camera HAL team, it is not a change in product behavior but a workflow signal that can be used for code review assistance, log summarization, and organizing repetitive tasks.</p>
+        <p>A Camera HAL codebase has many repetitive review points that people easily miss, such as vendor branches, board-specific settings, and CTS/VTS/Camera ITS logs. The Claude Code update is worth evaluating for such review work not as an automatic change authority but as an assistant tool for review checklists, diff summaries, and log organization.</p>
+        <p>If adopted, fixes proposed by an AI agent should not be applied directly to the HAL branch but kept only as candidates for human review. Plugin archives should be limited to bundling internal templates or review commands, and stream/buffer/metadata behavior changes should be handled only when there are separate product requirements and verification evidence.</p>
+        <p>**Android Native / Tooling Perspective**</p>
+        <p>Claude Code 2.1.128 is not news that changes the Camera HAL runtime but an update to a development workflow assistant tool. HAL owners should check whether it actually saves time in code review and log triage, but should not promote AI suggestions to grounds for product behavior.</p>
+        <p>### What to Check</p>
+        <p>- From the Claude Code 2.1.128 changelog, list only the features usable for review checklists, diff summaries, and test log organization.</p>
+        <p>- Do not apply patches created by an AI agent directly to the HAL branch; manage them only as diffs for human review.</p>
+        <p>- If using an internal plugin archive, check in a PoC only whether it connects to HAL coding guidelines, review templates, and log triage commands.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Claude Code 2.1.128: Scope of Camera HAL Workflow Review</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://code.claude.com/docs/en/changelog">Claude Code Changelog - 2.1.128</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-firebase-ai-logic-hybrid-inference-npu-gpu-review-scope-for-camera-hal-integrati" aria-labelledby="article-firebase-ai-logic-hybrid-inference-npu-gpu-review-scope-for-camera-hal-integrati-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-firebase-ai-logic-hybrid-inference-npu-gpu-review-scope-for-camera-hal-integrati-title" class="article-title">Firebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration</h2>
+        <figure class="article-media">
+        <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png" alt="Firebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html">Android Developers Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">Firebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration</p>
+        <p>Firebase AI Logic&#39;s hybrid inference is an Android app-layer feature that lets apps consider on-device and cloud execution paths together. It leads to the HAL team reviewing NPU/GPU load, stream format, and frame rate only when there is a product feature that uses camera frames as input.</p>
+        <p>Hybrid inference itself does not imply changes to Camera HAL scheduling, the metadata contract, or stream buffer behavior. However, if the app/framework team is planning a feature that uses camera frames as AI analysis input, the HAL team needs to check whether the resolution, format, frame rate, and buffer usage requirements fit the existing pipeline.</p>
+        <p>The review order starts with confirming the product requirement. If there is no product path, share Firebase AI Logic only as an Android app/API trend; if there is a product path, split the scope of NPU/GPU resource contention, thermal budget, and preview/capture latency impact into a separate validation plan.</p>
+        <p>**Camera HAL / Driver Perspective**</p>
+        <p>Firebase AI Logic is not grounds for a HAL change but an app/framework signal to check when a camera-frame AI feature enters the product. It leads to stream, buffer, metadata, and accelerator resource review only when a product requirement is confirmed.</p>
+        <p>### What to Check</p>
+        <p>- First confirm with the app/framework owners whether a Firebase AI Logic-based camera-frame analysis path is in the product plan.</p>
+        <p>- If it is in the product plan, compile the requirements for camera input resolution, format, frame rate, buffer usage, and NPU/GPU budget.</p>
+        <p>- If it is not in the product plan, do not record it as a HAL scheduling or metadata change requirement.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Firebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html">Experimental Hybrid Inference and New Gemini Models for Android</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-may-2026-android-security-bulletin-scope-for-checking-camera-related-cves" aria-labelledby="article-may-2026-android-security-bulletin-scope-for-checking-camera-related-cves-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-may-2026-android-security-bulletin-scope-for-checking-camera-related-cves-title" class="article-title">May 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs</h2>
+        <figure class="article-media">
+        <img class="article-image" src="https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png" alt="May 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://source.android.com/docs/security/bulletin/asb-overview">Android Security Bulletin</a></figcaption>
+        </figure>
+        <p class="article-lead">May 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs</p>
+        <p>The May 2026 Android Security Bulletin is reference material for checking platform, kernel, and vendor component security patches. A Camera HAL impact arises only when a bulletin entry maps to a CVE or patch connected to an actual product camera path.</p>
+        <p>When reading this bulletin from a Camera HAL perspective, the key is not the total number of vulnerabilities but whether any entries touch the product camera stack. The security owner and the HAL owner should check together whether the kernel media path, vendor drivers, framework camera service, and multimedia components are connected to the product branch.</p>
+        <p>Turning entries whose mapping has not been confirmed into Camera HAL regression work would be incorrect triage. Conversely, if a CVE connected to the camera path is confirmed, the affected device branch, vendor component, and CTS/VTS/Camera ITS smoke scope should be bundled concisely.</p>
+        <p>**Camera HAL / Driver Perspective**</p>
+        <p>The security bulletin is not evidence that a camera impact already exists but a starting point for checking. The Camera HAL team should promote to follow-up only the entries whose connection between the CVE/patch and the product camera path is confirmed.</p>
+        <p>### What to Check</p>
+        <p>- Check whether there is a camera-related CVE or patch mapping in the product kernel, media, framework, and vendor component entries.</p>
+        <p>- If there are mapped entries, record the affected branch, vendor module, camera stack owner, and smoke test scope in one line.</p>
+        <p>- If there is no connection to the camera path, record it as no HAL follow-up and handle it only as general security patch tracking.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>May 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://source.android.com/docs/security/bulletin/asb-overview">Overview</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-c-26-assert-camera-hal-debug-build-review-scope" aria-labelledby="article-c-26-assert-camera-hal-debug-build-review-scope-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Tooling Watch</span>
+        </div>
+        <h2 id="article-c-26-assert-camera-hal-debug-build-review-scope-title" class="article-title">C++26 assert(): Camera HAL Debug-Build Review Scope</h2>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="C++26 assert(): Camera HAL Debug-Build Review Scope image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">C++26 assert(): Camera HAL Debug-Build Review Scope</p>
+        <p>The C++26 assert improvement is a language/toolchain trend that leaves richer context on failure. It does not change Camera HAL product behavior, but it is a candidate for improving the diagnostic quality of debug builds and host utilities.</p>
+        <p>In HAL code, there are places where finding the cause takes a long time if failure context is lacking, such as request/result conversion, metadata tables, and buffer state transitions. The assert improvement offers an opportunity to check which values and conditions, if recorded at such places, would make debugging easier.</p>
+        <p>However, production runtime policy and Android platform toolchain support come first. Review related to C++26 assert should be limited to host-side tools, debug builds, and unit test helpers, and shipping HAL behavior changes should be handled only after a separate requirement and compiler support are confirmed.</p>
+        <p>**Android Native / Tooling Perspective**</p>
+        <p>C++26 assert is not a Camera HAL feature change but a candidate for improving debug diagnostics. HAL owners should inventory where assert is used and experiment starting with debug/host utilities, not the production path.</p>
+        <p>### What to Check</p>
+        <p>- List the metadata, request/result, and buffer state helper locations in the current HAL code where assert failure context is lacking.</p>
+        <p>- Do not register it as a production requirement before compiler/toolchain support is confirmed.</p>
+        <p>- Run PoCs only in host utilities or debug builds, and do not change release build behavior.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>C++26 assert(): Camera HAL Debug-Build Review Scope</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo">C++26: A User-Friendly assert() macro -- Sandor Dargo</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-placeholder-image" id="article-libcamera-v0-7-1-pipeline-handler-and-sensor-configuration-updates" aria-labelledby="article-libcamera-v0-7-1-pipeline-handler-and-sensor-configuration-updates-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 5">05</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-v0-7-1-pipeline-handler-and-sensor-configuration-updates-title" class="article-title">libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates</h2>
+        <div class="article-media article-placeholder-visual" role="img" aria-label="Camera Driver · ISP">
+        <span></span>
+        </div>
+        <p class="article-lead">libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates</p>
+        <p>The pipeline handler and sensor configuration updates in libcamera v0.7.1 are a signal for checking changes to sensor mode settings and pipeline setup in the upstream Linux camera stack. The Android HAL impact should be reviewed only when a vendor stack actually uses that libcamera path.</p>
+        <p>The pipeline handler is the layer that ties together the sensor, ISP, and buffer flow to configure a camera device. Since sensor configuration changes can be linked to resolution, frame rate, and pixel format selection, if a downstream fork consumes libcamera, stream combination and sensor mode regressions need to be checked.</p>
+        <p>This source alone does not prove a change to the Android Camera HAL API or metadata contract. After confirming whether the related libcamera changes have landed in the product branch, CTS/VTS/Camera ITS and device logs should be correlated only on the platforms where it is applied.</p>
+        <p>**Camera HAL / Driver Perspective**</p>
+        <p>libcamera v0.7.1 is an upstream camera pipeline signal. The HAL team should first check whether it has been applied to the vendor kernel/libcamera fork, and review stream configuration and sensor mode regressions only on devices where it is applied.</p>
+        <p>### What to Check</p>
+        <p>- Check whether the v0.7.1 pipeline/sensor changes are included in the vendor kernel or libcamera fork.</p>
+        <p>- On platforms where it is applied, compare the Preview + ImageCapture stream combination, sensor mode selection, and frame drop logs.</p>
+        <p>- If there is no downstream integration evidence, keep it only as an upstream note and do not open a HAL issue.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://gitlab.freedesktop.org/camera/libcamera/-/issues/300">libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-placeholder-image" id="article-libcamera-v0-7-1-softisp-debayering-and-throughput-improvements" aria-labelledby="article-libcamera-v0-7-1-softisp-debayering-and-throughput-improvements-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 6">06</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-v0-7-1-softisp-debayering-and-throughput-improvements-title" class="article-title">libcamera v0.7.1: SoftISP Debayering and Throughput Improvements</h2>
+        <div class="article-media article-placeholder-visual" role="img" aria-label="Camera Driver · ISP">
+        <span></span>
+        </div>
+        <p class="article-lead">libcamera v0.7.1: SoftISP Debayering and Throughput Improvements</p>
+        <p>The SoftISP debayering and throughput improvements in libcamera v0.7.1 are a signal of upstream changes in the RAW image processing path. The impact on Android products leads to image quality and latency verification only when that SoftISP path is integrated into the vendor stack.</p>
+        <p>SoftISP is a software ISP path that reconstructs Bayer RAW data into RGB/YUV, and the throughput improvements can be an observation point for the frame processing budget and latency. However, if an Android product uses a hardware ISP or a separate vendor path, this change has no direct impact.</p>
+        <p>Where product integration is confirmed, RAW/YUV output, debayering quality, frame drops, and end-to-end latency should be compared within the existing regression scope. Without evidence of integration, it is appropriate to record it only as an upstream image pipeline trend.</p>
+        <p>**Camera HAL / Driver Perspective**</p>
+        <p>The SoftISP change is a camera image pipeline observation signal, not an Android HAL contract change. Only devices that actually use libcamera SoftISP in the product should be regression targets.</p>
+        <p>### What to Check</p>
+        <p>- Check whether the vendor ISP or libcamera fork references the v0.7.1 SoftISP changes.</p>
+        <p>- On integrated devices, compare the RAW/YUV image quality smoke test and frame latency logs.</p>
+        <p>- Open a throughput follow-up only when there is a downstream performance regression or a product requirement.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>libcamera v0.7.1: SoftISP Debayering and Throughput Improvements</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://gitlab.freedesktop.org/camera/libcamera/-/issues/311">libcamera v0.7.1: SoftISP Debayering and Throughput Improvements</a></li></ul></div>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

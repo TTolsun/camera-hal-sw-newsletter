@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W37",
+  "source_hash": "sha256:14c30cba3900e01cfbedb1c2a6724e8249138eb5d8974f862c11eee541b509f7",
+  "title": "2026 W36 (08.31 ~ 09.06)",
+  "summary": "This week covers 5 stories, including ‘Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver’ and ‘Qualcomm x1e/Hamoa platform camera DTS support patch v6 posted’.",
+  "sections": [
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com",
+      "headline": "Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver",
+      "lead": "A v6 patch series has been posted to add a driver to the Linux media subsystem for the OG0VA1B, OmniVision's 1/10-inch low-power monochrome VGA sensor. With support for a single-lane MIPI CSI-2 interface and Y10 RAW format output, it appears set to lay the groundwork for building embedded and mobile monochrome camera pipelines.",
+      "body_markdown": "On September 1, 2026, Qualcomm's Wenmeng Liu submitted a v6 patch set adding the OmniVision OG0VA1B image sensor driver via the Linux media mailing list. The OG0VA1B is an ultra-small 1/10-inch monochrome CMOS VGA sensor, designed to be suitable mainly for low-power sensing or auxiliary camera systems.\n\nAccording to this driver patch, the sensor can output 10-bit RAW (Y10) frames at up to 640x480 resolution over a single-lane MIPI CSI-2 interface. Sensor control is performed over a standard I2C-compatible SCCB bus, and the driver implementation was verified on the Purwa EVK board, including test pattern generator (TPG) operation.\n\nThe patch is currently in review for merging into the kernel mainline, and because it includes handling of the Y10 pixel format specific to monochrome sensors and single-lane MIPI CSI-2 timing configuration, it will be an important reference for lower-level driver developers.",
+      "why_it_matters": "There is no direct Android Camera HAL change, but because a 10-bit monochrome RAW (Y10) format is added at the lower V4L2 driver level, when implementing HAL3 you should check that the Y10 format is correctly defined in the RAW stream configuration and the ISP pixel format mapping table.",
+      "source_subtitle": "lore.kernel.org linux-media list patch analysis"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org",
+      "headline": "Qualcomm x1e/Hamoa platform camera DTS support patch v6 posted",
+      "lead": "A v6 patch adding Device Tree Source (DTS) support that defines the camera hardware configuration of the Qualcomm x1e/Hamoa platform has been posted. This update focuses on improving hardware initialization stability, for example by aligning the data lane ordering of the CAMSS node with the PHY layer and making the power supply schema consistent.",
+      "body_markdown": "On September 6, 2026, a v6 patch series improving the camera subsystem (CAMSS) DTS configuration of the Qualcomm x1e/Hamoa platform was submitted via the Linaro mailing list. DTS is the core specification that describes hardware resources to the kernel, and it defines the physical connections between camera sensors and the SoC.\n\nThe one change in v6 is adjusting the data lane start index in the CAMSS node from the previous 0 to 1 to align it with the physical layer (PHY). The change that moved the power supply node definition from vdda-0p8-supply to vdda-0p9-supply to meet the schema requirements was made earlier, in v5.\n\nThese changes are essential for preventing camera hardware initialization failures or image corruption at the lower level, and they provide an important hardware configuration guide for camera driver and SoC integration engineers working on the x1e platform.",
+      "why_it_matters": "There is no direct HAL change, but the data lane alignment and power supply changes directly affect the physical connection stability of the camera subsystem. Lower-stack verification should be done first so that MIPI CSI-2 receiver initialization errors or power-on failures do not occur at the driver level.",
+      "source_subtitle": "lore.kernel.org linux-media list patch analysis"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com",
+      "headline": "Linux kernel patch v7 posted for Lenovo Yoga Book YB1-X91 camera support",
+      "lead": "A v7 patch series has been posted to fully support the front and rear camera system of the Lenovo Yoga Book YB1-X91. This patch contains comprehensive hardware control logic covering not only the OV8858 and OV2740 image sensor drivers but also AtomISP, the IPU bridge, and the WV517S lens actuator.",
+      "body_markdown": "On September 2, 2026, Maurizio Casciano submitted a v7 patch series to enable the camera hardware stack of the Lenovo Yoga Book YB1-X91 tablet. This patch fleshes out driver support for the front and rear camera modules that work with AtomISP on the Intel Cherry Trail platform.\n\nAccording to the patch details, the rear OV8858 sensor gets a 19.2 MHz clock setting and Cherry Trail-specific gain programming, while the front OV2740 sensor implements a 288 MHz link frequency setting and manual white balance control. In addition, a WV517S lens actuator driver was added, enabling hardware control for autofocus (AF).\n\nIt also includes optimization of AtomISP's RAW frame capture logic and CSI-2 timing adjustments, as well as IPU bridge data and firmware ID mapping, and is expected to greatly improve the stability of the lower-level image pipeline.",
+      "why_it_matters": "There is no direct HAL change, but because the OV2740's manual white balance and the OV8858's gain control are exposed as V4L2 controls, you should verify that Camera HAL3 3A metadata control requests are accurately mapped to the kernel driver's V4L2 controls and work correctly.",
+      "source_subtitle": "lore.kernel.org linux-media list patch analysis"
+    },
+    {
+      "id": "url:https://patchwork.libcamera.org/patch/28179",
+      "headline": "libcamera control storage union naming patch v3 accepted",
+      "lead": "A v3 patch giving a clear name to the control storage union structure inside libcamera was submitted and moved to accepted state. The stated purpose in the commit message is to make it possible to copy the storage as a single unit regardless of which member is active, and this patch is the first of a 5-patch series that introduces a move constructor and a swap() operation.",
+      "body_markdown": "On September 3, 2026, the v3 libcamera control storage union naming patch submitted by Barnabás Pőcze was confirmed as accepted in the project patch tracker. The main point of this patch is to give a clear name to the control storage structure that was previously declared as an anonymous union.\n\nThe reason for naming the union members is to copy the storage as a single block regardless of the active member. The same patch renames the members to internal and external to distinguish in-place storage from dynamically allocated storage, and also removes some reinterpret_cast uses that became unnecessary. This patch is the first part of the Move constructor/assignment + swap series (v3, 5 patches); the remaining four patches remove a bit field, implement the move constructor and assignment operator, implement swap(), and add an rvalue overload of ControlList::set().\n\nEngineers who build and use libcamera directly, or who develop driver stacks by adding custom controls, should take note of this change to prevent minor compile compatibility issues that may arise when updating sources in the future.",
+      "why_it_matters": "This part by itself is a step that tidies up the storage representation, so it does not change HAL runtime behavior. However, projects that customize the libcamera source and integrate it into the lower layers of an Android HAL should check build compatibility to make sure the union naming change does not cause compile errors in existing custom control code.",
+      "source_subtitle": "libcamera Patchwork analysis"
+    },
+    {
+      "id": "url:https://patchwork.libcamera.org/patch/28194",
+      "headline": "libcamera patch posted to skip unnecessary stop call before the software ISP worker starts",
+      "lead": "A patch has been submitted that fixes a problem in libcamera's software image signal processing (software_isp) component where a call would hang indefinitely when starting the camera failed. It changes the code to return early instead of waiting for a worker thread that has not yet started, so that the original capture error is passed on to the caller as-is.",
+      "body_markdown": "On September 6, 2026, Birk Skyum submitted a patch via the libcamera patch tracker that fixes the stop path of software_isp. software_isp is a core module that performs image processing using CPU resources on systems without a hardware ISP.\n\nAccording to the patch description, the simple pipeline calls stop() before SoftwareIsp::start() runs if the capture device fails to start streaming. At that point, Debayer::stop(), called in a blocking manner, waits indefinitely for a worker thread that has not yet started, so the call itself never returns. This patch removes this wait by changing it to return early if the worker has not been started.\n\nThanks to this, Camera::start() can report the original capture error to the caller. The patch links libcamera issue 349 on freedesktop GitLab as its basis, and its current state in the patch tracker is superseded, with a follow-up revision posted.",
+      "why_it_matters": "There is no direct HAL change, but if you have seen a symptom where opening the camera fails and the call hangs without returning in a pipeline that goes through the software ISP, you can suspect this path. Please check, with a scenario that deliberately injects a capture start failure, that the error is propagated up to the upper layers.",
+      "source_subtitle": "libcamera Patchwork analysis"
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": [
+    {
+      "id": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "note": "Reference for C++ / AI-native tooling"
+    },
+    {
+      "id": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "title": "Emulator control for adaptive app development",
+      "note": "Reference for C++ / AI-native tooling"
+    },
+    {
+      "id": "https://lore.kernel.org/linux-media/20260901-sk5jn5-v3-0-17e728917bd4@oss.qualcomm.com/",
+      "title": "[PATCH RESEND v3 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
+      "note": "Reference for camera drivers / image pipeline"
+    },
+    {
+      "id": "https://patchwork.libcamera.org/patch/28156/",
+      "title": "[v1] libcamera: pipeline: simple: Rework software-isp/converter selection",
+      "note": "Reference for camera drivers / image pipeline"
+    }
+  ]
+}

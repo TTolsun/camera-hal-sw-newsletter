@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W22",
+  "source_hash": "sha256:4e89d544afddee023a19225198369e5f0e0a680464df800c34b79cb4ee1a8ae3",
+  "title": "2026 W21 (05.18 ~ 05.24)",
+  "summary": "This week covers ‘Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens’ and ‘Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow’.",
+  "sections": [
+    {
+      "id": "url:https://goo.gle/AdaptiveApps_IO26",
+      "headline": "Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens",
+      "lead": "Building seamless Android camera experiences in multi-device environments with Jetpack Compose",
+      "body_markdown": "At Google I/O 2026, as the Android ecosystem evolves to be 'Adaptive by Default', the integration of Jetpack Compose and CameraX was highlighted as a key tool for delivering correct camera previews across diverse screen sizes such as foldables, tablets, and XR.\n\nAs the Android ecosystem rapidly expands beyond smartphones to foldables, tablets, in-vehicle displays, XR devices, and more, building adaptive UIs that respond flexibly to diverse screen sizes has emerged as an essential task. To respond to this shift, Google is strengthening its multi-device development engine centered on Jetpack Compose.\n\nIn this announcement, Jetpack Compose presented CameraX as a key tool, together with the latest Jetpack Navigation 3 release, new experimental Grid and FlexBox layouts, and improved non-touch input support. This enables developers to implement correct, distortion-free camera previews even during complex screen transitions or window size changes.\n\nCamera preview is highly sensitive to the screen's aspect ratio, rotation state, and the available resolution stream combinations. Especially in dynamic layout-change scenarios that occur when a foldable device is folded or unfolded, the tight integration of CameraX and Compose helps the app render the Surface buffers it receives from the camera framework at the correct aspect ratio.",
+      "why_it_matters": "This change does not alter the Camera HAL's direct APIs or metadata contracts, but it increases the likelihood that the upper app layer will dynamically request streams of various resolutions and aspect ratios. HAL developers should verify stream reconfiguration (Stream Reconfiguration) latency and whether frame drops occur in large-screen and split-screen scenarios when configuring the Preview stream."
+    },
+    {
+      "id": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+      "headline": "Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow",
+      "lead": "A cloud-based native Android development environment with no installation or configuration",
+      "body_markdown": "Google AI Studio announced a new feature that can build a complete native Android app in minutes from just a prompt. Because ideas can be turned directly into code without complex development environment setup, native development productivity is expected to improve significantly.\n\nNative Android app development has traditionally had initial barriers to entry, such as installing Android Studio, configuring the SDK, and setting up the Gradle build environment. Even when building simple feature checks or prototype apps, this environment setup often took a lot of time.\n\nThe newly updated Google AI Studio consolidates this process into a cloud environment. Developers can build a complete native Android app without software installation or complex library configuration, simply by describing the desired app's features and structure in the prompt window.\n\nThis tool can also be useful for engineers developing camera HALs or drivers. For example, they can quickly generate a test app to test the behavior of a specific camera API or to verify a simple image processing pipeline, and run it immediately in a local environment.",
+      "why_it_matters": "This tool itself does not directly affect the Camera HAL's runtime behavior. However, it can serve as a useful auxiliary tool from a native development workflow perspective, for quickly building and deploying test client apps (Sample/Prototype App) that reproduce specific behaviors of the camera framework or HAL APIs."
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": []
+}

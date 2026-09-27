@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W29/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W29 Camera SW Newsletter</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W29/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W29/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W29/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers 3 stories, including ‘Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing’ and ‘libcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W29/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W29 Camera SW Newsletter" />
+  <meta property="og:description" content="This week covers 3 stories, including ‘Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing’ and ‘libcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W29/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W29 Camera SW Newsletter" />
+  <meta name="twitter:description" content="This week covers 3 stories, including ‘Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing’ and ‘libcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">Coverage 2026.07.06 – 07.13</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W29</span></h1>
+        <p class="subtitle">This week covers 3 stories, including ‘Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing’ and ‘libcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing</li><li>libcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)</li><li>Raspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-qualcomm-camss-ope-driver-v4-patch-proposed-to-accelerate-offline-image-processi" aria-labelledby="article-qualcomm-camss-ope-driver-v4-patch-proposed-to-accelerate-offline-image-processi-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-qualcomm-camss-ope-driver-v4-patch-proposed-to-accelerate-offline-image-processi-title" class="article-title">Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing</h2>
+        <p class="article-source-subtitle">Analysis of a patch on the lore.kernel.org linux-media mailing list</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A v4 patch was proposed to add an OPE (Offline Processing Engine) driver dedicated to offline image processing to Qualcomm CAMSS (Camera Subsystem).</p>
+        <p>This week, the fourth patch series adding Offline Processing Engine (OPE) support to the Qualcomm CAMSS driver stack was published on the Linux media mailing list. The OPE is a memory-to-memory (M2M) ISP hardware block that takes raw Bayer frames as input and converts them to YUV frames.</p>
+        <p>The driver performs core ISP pipeline processing in hardware, such as white balance, demosaicing, chroma enhancement, color correction, and downscaling. By taking an offline acceleration approach, unlike conventional real-time streaming processing, it enables flexible buffer handling and efficient resource allocation in the camera system.</p>
+        <p>However, this patch is at the proposal stage (PATCH v4) and has not been merged into the Linux kernel mainline, so additional vendor integration and validation processes are required before it reaches actual commercial chipsets and Android devices. HAL developers should observe over the long term the changes in buffer lifecycle that come with the lower driver&#39;s adoption of an M2M architecture.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>It does not make direct API changes to the Android Camera HAL, but as the RAW-to-YUV offline conversion path is optimized at the lower driver level, the efficiency and power consumption of concurrent YUV_420_888 and RAW stream processing may improve.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/">Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-libcamera-software-isp-introducing-an-egl-texture-filter-parameter-to-strengthen" aria-labelledby="article-libcamera-software-isp-introducing-an-egl-texture-filter-parameter-to-strengthen-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-software-isp-introducing-an-egl-texture-filter-parameter-to-strengthen-title" class="article-title">libcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)</h2>
+        <p class="article-source-subtitle">Review of an RFC v7 patch on libcamera Patchwork</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="libcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC) image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A patch was recently proposed that adds a filter parameter to the createTexture2D() function in libcamera&#39;s software ISP EGL module to improve lens shading correction (LSC) performance.</p>
+        <p>According to the RFC v7 patch series proposed on July 8, an important interface change was included in the EGL module of libcamera&#39;s software ISP (software_isp). Specifically, a filter parameter was newly added to the createTexture2D() function.</p>
+        <p>This change is preparatory work for precisely supporting, on the software ISP, the lens shading correction (LSC) feature that corrects light falloff and color distortion at the lens periphery. Directly controlling the filtering method when creating textures makes it possible to improve the interpolation quality of the correction data.</p>
+        <p>The patch is still at the review stage (RFC v7) and has not been fully integrated into mainline. Android HAL developers working on embedded systems that use libcamera as their underlying stack, or in certain virtualized environments, should track whether image quality improves when running the software ISP.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>There is no direct impact on the Android Camera HAL, but a foundation has been laid for simultaneously improving LSC correction quality and GPU texture processing efficiency on platforms that use the libcamera software ISP.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://patchwork.libcamera.org/patch/27346/">[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()</a></li></ul></div>
+      </section>
+
+      <h2 class="catch-up-divider">Catch-up</h2>
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-raspberry-pi-ships-libcamera-v0-7-1-rpt20260609-downstream-version" aria-labelledby="article-raspberry-pi-ships-libcamera-v0-7-1-rpt20260609-downstream-version-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-raspberry-pi-ships-libcamera-v0-7-1-rpt20260609-downstream-version-title" class="article-title">Raspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version</h2>
+        <p class="article-source-subtitle">Analysis of the official Raspberry Pi GitHub release</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609" alt="Raspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609">Raspberry Pi libcamera Releases</a></figcaption>
+        </figure>
+        <p class="article-lead">On June 9, 2026, Raspberry Pi officially released libcamera v0.7.1+rpt20260609, a downstream version optimized for its platform.</p>
+        <p>This item is a retrospective on Raspberry Pi&#39;s downstream release of the libcamera project, published on June 9. The released v0.7.1+rpt20260609 version contains camera driver and image pipeline optimizations specific to Raspberry Pi hardware.</p>
+        <p>libcamera is the core framework that abstracts camera devices in Linux environments, and Raspberry Pi&#39;s downstream version has served as the channel that reflects the latest changes in embedded Linux and the V4L2 subsystem the fastest. This release likewise focuses on improving camera operating stability on that platform.</p>
+        <p>However, since this release focuses on Raspberry Pi-specific hardware and software stacks, it has no direct impact on Camera HAL3 implementations on typical Android devices or on AOSP framework contracts. It is suitable as reference material for engineers working with embedded Android environments or responsible for V4L2 driver integration to follow upstream technical trends.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>It does not bring direct API or contract changes to the Android Camera HAL, but it can be used as a reference for benchmarking V4L2-based driver integration and optimization techniques for embedded Linux camera stacks.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609">Raspberry Pi libcamera Releases - v0.7.1+rpt20260609</a></li></ul></div>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing (『Top 3 updates for Android developer productivity』)</a><span class="reference-meta">Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · Reference on Android platform and camera-adjacent topics</span></li><li><a href="https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html">Top 3 updates for Android developer productivity</a><span class="reference-meta">Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · Reference on C++ / AI-native tooling</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org/">Re: [PATCH v4 6/7] media: qcom: camss: Add CAMSS Offline Processing Engine driver</a></li><li><a href="https://patchwork.libcamera.org/patch/27346/">[RFC,v7,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()</a></li><li><a href="https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609">Raspberry Pi libcamera Releases - v0.7.1+rpt20260609</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

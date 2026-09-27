@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W27/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W27 Camera SW Newsletter</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W27/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W27/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W27/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers ‘A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer’ and ‘V4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W27/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W27 Camera SW Newsletter" />
+  <meta property="og:description" content="This week covers ‘A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer’ and ‘V4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W27/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W27 Camera SW Newsletter" />
+  <meta name="twitter:description" content="This week covers ‘A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer’ and ‘V4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">Coverage 2026.06.22 – 06.29</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W27</span></h1>
+        <p class="subtitle">This week covers ‘A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer’ and ‘V4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer</li><li>V4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-a-new-change-to-v4l2-sub-device-pad-ops-proposal-to-introduce-a-v4l2-subdev-clie" aria-labelledby="article-a-new-change-to-v4l2-sub-device-pad-ops-proposal-to-introduce-a-v4l2-subdev-clie-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-a-new-change-to-v4l2-sub-device-pad-ops-proposal-to-introduce-a-v4l2-subdev-clie-title" class="article-title">A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer</h2>
+        <p class="article-source-subtitle">Proposal to add a const struct v4l2_subdev_client_info pointer to V4L2 subdev pad ops</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A patch proposal has been published that adds a v4l2_subdev_client_info pointer to improve how pad operations (pad ops) exchange information in the Linux kernel&#39;s V4L2 sub-device framework.</p>
+        <p>The V4L2 (Video for Linux Two) sub-device in the Linux kernel is a core framework that abstracts individual components of the media pipeline, such as camera sensors and ISPs (Image Signal Processors). The proposed v5 10/10 patch series centers on introducing a const struct v4l2_subdev_client_info pointer into the pad operations (pad ops) that define data flow and property negotiation between sub-devices.</p>
+        <p>This change mainly affects the set_fmt, get_selection, and set_selection functions, and helps control more precisely how information is exchanged between sub-devices at the driver level. This may contribute to greater flexibility and stability of the lower stack when integrating camera drivers and ISPs.</p>
+        <p>However, because this change is currently at the proposal and review stage on the mailing list (a v5 patch), it has no immediate effect on actual production environments until it is finally merged into the mainline kernel. It does not cause direct changes to the Android Camera HAL or upper framework contracts, but engineers who manage dependencies of the lower driver stack should keep an eye on it in preparation for future kernel updates.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch proposal does not directly affect Android Camera HAL APIs or framework contracts. However, since it may change format negotiation and driver integration in the lower image pipeline, it should be referenced as a driver compatibility validation item when SoC vendors update their kernels in the future.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/">Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-v4l2-driver-build-warning-missing-parameter-description-in-the-cvs-csi-set-fmt-f" aria-labelledby="article-v4l2-driver-build-warning-missing-parameter-description-in-the-cvs-csi-set-fmt-f-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-v4l2-driver-build-warning-missing-parameter-description-in-the-cvs-csi-set-fmt-f-title" class="article-title">V4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function</h2>
+        <p class="article-source-subtitle">Warning in the sailus-media-tree metadata-pre branch: description of parameter &#39;ci&#39; missing in the cvs_csi_set_fmt function</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="V4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">It has been confirmed that a compiler warning was raised during a build of sailus-media-tree, a V4L2 driver development branch of the Linux kernel, because a parameter description was missing for the cvs_csi_set_fmt function.</p>
+        <p>The Linux kernel&#39;s V4L2 (Video for Linux Two) sub-device framework abstracts individual components of the media pipeline, such as camera sensors and ISPs. Recently, a compiler warning in driver code was reported while building the metadata-pre development branch of sailus-media-tree (head: 66c090febbc3c412ced4e71cb69f47b05eea0331) in a Clang 22.1.3 environment.</p>
+        <p>The warning occurred at line 203 of drivers/media/i2c/cvs/v4l2.c, and states that the description of ci, one of the parameters of the cvs_csi_set_fmt function, is missing from the kernel documentation comment (kernel-doc). This is not a critical bug that causes functional misbehavior, but it is an area that needs improvement from a code quality and maintainability perspective.</p>
+        <p>Because this warning occurred on a specific development branch, it has no immediate adverse effect on production kernels or the behavior of actual devices. However, it is an example showing that static analysis and quality control standards for driver code are being tightened, and engineers managing vendor kernels should check whether similar warnings occur in their own driver build environments.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This warning is a simple missing-documentation warning that does not affect the runtime behavior or performance of the Android Camera HAL. However, to keep builds warning-free in driver code quality control and static analysis build environments, it is advisable to check whether similar warnings occur when building vendor drivers.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/">[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter &#39;ci&#39; not described in &#39;cvs_csi_set_fmt&#39;</a></li></ul></div>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain/">Re: [PATCH v5 10/10] media: v4l2-subdev: Add struct v4l2_subdev_client_info pointer to pad ops</a></li><li><a href="https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com/">[sailus-media-tree:metadata-pre 17/17] Warning: drivers/media/i2c/cvs/v4l2.c:203 function parameter &#39;ci&#39; not described in &#39;cvs_csi_set_fmt&#39;</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

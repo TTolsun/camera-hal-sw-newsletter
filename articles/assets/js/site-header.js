@@ -86,7 +86,8 @@
     const relative = pathname.startsWith(base) ? pathname.slice(base.length) : '';
     const english = relative.startsWith('en/');
     const page = english ? relative.slice(3) : relative;
-    const supported = ['', 'index.html', 'archive.html'].includes(page);
+    // 주간호는 모두 영문판이 있다(과거 호는 수동 번역, 이후 호는 data-alternate-href). 날짜 호는 없다.
+    const supported = ['', 'index.html', 'archive.html'].includes(page) || /^newsletters\/\d{4}-W\d{2}\/index\.html$/.test(page);
     const alternate = alternateHref.startsWith(base) && !alternateHref.startsWith('//') ? alternateHref : '';
     return {
       ko: english ? (alternate || `${base}${page}`) : pathname,

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W26/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W25 Camera SW Newsletter (Published W26)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W26/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W26/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W26/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers 4 stories, including ‘V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor’ and ‘V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W26/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W25 Camera SW Newsletter (Published W26)" />
+  <meta property="og:description" content="This week covers 4 stories, including ‘V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor’ and ‘V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W26/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W25 Camera SW Newsletter (Published W26)" />
+  <meta name="twitter:description" content="This week covers 4 stories, including ‘V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor’ and ‘V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.06.15 – 06.21</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W25</span></h1>
+        <p class="issue-publish-badge">Published W26</p>
+        <p class="subtitle">This week covers 4 stories, including ‘V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor’ and ‘V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor</li><li>V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor</li><li>GCC 16 release upcoming: improved template error messages and SARIF static analysis output</li><li>Android CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-context-lens-label" role="note">
+        <p class="issue-context-lens-label-text">Engineering radar perspective</p>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys" aria-labelledby="article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys-title" class="article-title">GCC 16 release upcoming: improved template error messages and SARIF static analysis output</h2>
+        <p class="article-source-subtitle">ISO C++ Blog Release Preview</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="redhatgraphic.png" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">With GCC 16 scheduled for release, debugging and static analysis workflows in the C++ native development environment are expected to improve. The key points are more readable template error messages and support for the SARIF standard format.</p>
+        <p>On June 15, 2026, the major new features of the upcoming GCC 16 were published on the ISO C++ blog. This release focuses on greatly improving the readability of template-related compile error messages, one of the areas C++ developers find most difficult. Visual readability has been improved so that errors arising during complex template instantiation can be understood more clearly.</p>
+        <p>Support for SARIF output, which allows static analysis results to be exchanged between tools in a standardized way, has also been added. This lets developers easily connect compiler-generated static analysis data to external analysis tools or CI/CD pipelines and detect code vulnerabilities or potential bugs early.</p>
+        <p>The official toolchain for the Android platform and Camera HAL mainly uses Clang/LLVM, but these GCC advances lead the standard for C++ compiler technology as a whole and have a positive effect on the developer tools ecosystem. They will be a particularly useful update for engineers who build and validate Linux kernel drivers or some native libraries in a GCC environment.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Because Android Camera HAL native code is built with Clang/LLVM, GCC 16 has no direct runtime impact. However, it is useful for improving debugging productivity and introducing SARIF-based static analysis in Linux kernel driver build environments or standalone C++ test toolchains.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid" aria-labelledby="article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid-title" class="article-title">Android CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem</h2>
+        <p class="article-source-subtitle">Android Developers Blog (2026-06-09)</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=th" alt="Android CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/tools/agents/android-cli#skills-add">Android Developers Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">Google recently expanded the Android skills repository provided through the Android CLI and GitHub and added a new skill for CameraX migration. This is not a direct Camera HAL change, but it accelerates the camera API transition in the upper app layer, raising the importance of HAL compatibility validation.</p>
+        <p>Google has significantly expanded the Android skills repository provided through the Android CLI and GitHub to improve developer productivity. This update adds at least 17 new skills in total, including a CameraX migration skill. These skills help large language models (LLMs) learn specific development patterns and specialized workflows that follow Google&#39;s best practices.</p>
+        <p>CameraX is a Jetpack library built on the Android Camera2 API that simplifies camera app development and improves compatibility across devices. With many legacy apps migrating from Camera2 or older APIs to CameraX, this tooling support is expected to further accelerate app developers&#39; transition to CameraX.</p>
+        <p>From a Camera HAL engineer&#39;s perspective, this means a change in camera usage patterns in the upper framework and app layers. When CameraX use cases such as Preview, ImageCapture, and VideoCapture run on a device, it becomes important to proactively validate how they interact with the HAL layer&#39;s stream configuration and buffer lifecycle.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>It does not bring direct API or metadata changes to the Camera HAL, but as CameraX migration in upper-layer apps becomes more active, CameraX compatibility testing (CTS/VTS and real-scenario validation) should be strengthened to prevent potential stream configuration and buffer management errors.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing (『Top 3 updates for Android developer productivity』)</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-v4l2-sub-device-driver-patch-v10-proposed-for-the-himax-hm1246-image-sensor" aria-labelledby="article-v4l2-sub-device-driver-patch-v10-proposed-for-the-himax-hm1246-image-sensor-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-v4l2-sub-device-driver-patch-v10-proposed-for-the-himax-hm1246-image-sensor-title" class="article-title">V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor</h2>
+        <p class="article-source-subtitle">Linux Media Mailing List Patch v10</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A V4L2 sub-device driver patch v10 to support the Himax HM1246 image sensor has been proposed to the Linux kernel media subsystem. Adding a driver for this sensor, which includes an internal ISP, will offer a new option for validating low-power/entry-level camera pipelines.</p>
+        <p>On June 20, 2026, a v10 patch series adding a V4L2 sub-device driver for the Himax HM1246 image sensor was published on the Linux media mailing list. The sensor is a 1/3.7-inch CMOS image sensor SoC supporting a 1296x976 active array size, targeting embedded and mobile environments.</p>
+        <p>The Himax HM1246 is controlled and programmed through an I2C interface and connects to the host processor through a parallel bus. In particular, it has its own built-in ISP inside the sensor, which lets it output frames on which basic image processing has already been completed at the sensor.</p>
+        <p>This driver proposal is written on the V4L2 sub-device framework, helping perform sensor exposure, format negotiation, and streaming control in a standard way within the Linux media controller architecture. It will be a foundation for ensuring a stable frame supply from the lower driver layer when integrating with the Android Camera HAL stack in the future.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch is a driver-level proposal and does not cause direct API changes to the Android Camera HAL, but because it provides a standard V4L2 sub-device control approach for a parallel-bus sensor with an internal ISP, it can serve as a reference when validating the lower image pipeline.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/">Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-v4l2-sub-device-driver-patch-v2-proposed-for-the-sony-imx576-image-sensor" aria-labelledby="article-v4l2-sub-device-driver-patch-v2-proposed-for-the-sony-imx576-image-sensor-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-v4l2-sub-device-driver-patch-v2-proposed-for-the-sony-imx576-image-sensor-title" class="article-title">V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor</h2>
+        <p class="article-source-subtitle">Linux Media Mailing List Patch v2</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A V4L2 sub-device driver patch v2 to support the Sony IMX576 high-resolution image sensor has been proposed. It supports 2880x2156 30fps output along with manual exposure and gain control, laying the groundwork for building high-quality camera pipelines.</p>
+        <p>On June 20, 2026, a v2 patch series adding a V4L2 sub-device driver for the Sony IMX576 image sensor was proposed on the Linux media mailing list. The IMX576 is a high-resolution CMOS image sensor supporting an active array size of up to 5760x4312, suitable for high-quality capture scenarios.</p>
+        <p>The proposed driver supports manual exposure and gain control, the sensor&#39;s core functions, and exposes vblank and hblank control interfaces, which are essential for adjusting frame rate and exposure timing, as standard V4L2 controls. It is also designed to support 30fps output at 2880x2156, which can be used for real-time preview and video recording.</p>
+        <p>Standardizing high-resolution sensor drivers on V4L2 helps secure the stability of manual camera control features and high-resolution stream configurations when implementing Android Camera HAL3. Accurate blanking and gain control at the driver level is important for preventing frame drops and improving the precision of AE algorithms.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch is a driver-layer proposal and does not directly affect the Android Camera HAL, but because it provides driver interfaces for manual control and high-resolution stream configuration, it can serve as a reference when integrating HAL3 manual control features.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/">Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver</a></li></ul></div>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain/">Re: [PATCH v10 2/2] media: i2c: add Himax HM1246 image sensor driver</a></li><li><a href="https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com/">Re: [PATCH v2 2/3] media: i2c: add imx576 image sensor driver</a></li><li><a href="https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco">New features in GCC 16: Improved error messages and SARIF output -- David Malcolm</a></li><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing (『Top 3 updates for Android developer productivity』)</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

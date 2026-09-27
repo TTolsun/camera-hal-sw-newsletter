@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W30/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W29 Camera SW Newsletter (Published W30)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W30/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W30/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W30/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers ‘libcamera: patch proposed to add IMX335 image sensor test pattern properties’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W30/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W29 Camera SW Newsletter (Published W30)" />
+  <meta property="og:description" content="This week covers ‘libcamera: patch proposed to add IMX335 image sensor test pattern properties’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W30/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W29 Camera SW Newsletter (Published W30)" />
+  <meta name="twitter:description" content="This week covers ‘libcamera: patch proposed to add IMX335 image sensor test pattern properties’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.07.13 – 07.19</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W29</span></h1>
+        <p class="issue-publish-badge">Published W30</p>
+        <p class="subtitle">This week covers ‘libcamera: patch proposed to add IMX335 image sensor test pattern properties’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>libcamera: patch proposed to add IMX335 image sensor test pattern properties</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-libcamera-patch-proposed-to-add-imx335-image-sensor-test-pattern-properties" aria-labelledby="article-libcamera-patch-proposed-to-add-imx335-image-sensor-test-pattern-properties-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-patch-proposed-to-add-imx335-image-sensor-test-pattern-properties-title" class="article-title">libcamera: patch proposed to add IMX335 image sensor test pattern properties</h2>
+        <p class="article-source-subtitle">IMX335 sensor properties under review on the libcamera patchwork</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="libcamera: patch proposed to add IMX335 image sensor test pattern properties image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A patch adding test pattern properties for the Sony IMX335 image sensor was recently proposed on the libcamera patchwork and is under review. The patch aims to define standardized test patterns at the driver level to make image pipeline validation and debugging easier.</p>
+        <p>On July 14, 2026, a new patch to add test pattern sensor properties for the Sony IMX335 image sensor was published through the libcamera project&#39;s patchwork. The patch is currently under community review, and its core is to let the libcamera framework correctly recognize and use the test pattern metadata provided by the sensor driver.</p>
+        <p>libcamera is the core abstraction layer of the Linux camera stack and controls the complex interaction between the sensor and the ISP on top of the V4L2 API. The proposed addition of IMX335 test pattern properties can be very useful for hardware validation and image pipeline debugging, because enabling standardized test patterns makes it possible to validate the sensor&#39;s own data output separately from the subsequent ISP processing stages.</p>
+        <p>However, the patch is still at the proposal and review stage (RFC/Patch review), so whether it will eventually be merged into mainline and when it would apply remain uncertain. Also, since this change does not directly modify the behavior of the Android Camera HAL API or framework, upper-layer developers should watch this trend from the perspective of preparing for compatibility of the lower drivers and media stack.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch does not directly change the Android Camera HAL, but it provides a basis for using test pattern properties when validating the IMX335 sensor in the lower driver and libcamera stack. When integrating this sensor in the future, developers should check the validation path to confirm that driver-level test pattern metadata is correctly propagated through V4L2 and libcamera up to the HAL layer.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://patchwork.libcamera.org/patch/27362/">libcamera: camera_sensor: Add IMX335 test pattern sensor properties</a></li></ul></div>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://patchwork.libcamera.org/patch/27362/">libcamera: camera_sensor: Add IMX335 test pattern sensor properties</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

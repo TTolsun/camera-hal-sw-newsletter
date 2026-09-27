@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W31/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W30 Camera SW Newsletter (Published W31)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W31/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W31/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W31/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers 5 stories, including ‘Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV’ and ‘New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W31/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W30 Camera SW Newsletter (Published W31)" />
+  <meta property="og:description" content="This week covers 5 stories, including ‘Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV’ and ‘New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W31/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W30 Camera SW Newsletter (Published W31)" />
+  <meta name="twitter:description" content="This week covers 5 stories, including ‘Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV’ and ‘New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.07.20 – 07.26</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W30</span></h1>
+        <p class="issue-publish-badge">Published W31</p>
+        <p class="subtitle">This week covers 5 stories, including ‘Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV’ and ‘New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV</li><li>New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor</li><li>libcamera: patch proposed to harden control serializer size and input validation</li><li>libcamera: EGLDisplay caching optimization patch proposed to avoid redundant initialization</li><li>Standalone V4L2 driver patch proposed to support the Samsung S5KJN5 50MP image sensor</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-qualcomm-camss-patch-proposed-to-add-an-ope-offline-processing-engine-driver-tha" aria-labelledby="article-qualcomm-camss-patch-proposed-to-add-an-ope-offline-processing-engine-driver-tha-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-qualcomm-camss-patch-proposed-to-add-an-ope-offline-processing-engine-driver-tha-title" class="article-title">Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV</h2>
+        <p class="article-source-subtitle">Qualcomm CAMSS OPE Driver Patch v5</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">Patch v5 was proposed to add an OPE (Offline Processing Engine) image processing driver, which converts raw Bayer frames to YUV, to the Qualcomm CAMSS driver.</p>
+        <p>This week, Qualcomm submitted new driver patch v5, which extends the CAMSS (Camera Subsystem) driver in the Linux kernel media subsystem to support the OPE (Offline Processing Engine). The OPE is a memory-to-memory (M2M) ISP block that converts raw Bayer frames to YUV format in hardware.</p>
+        <p>The driver performs the core operations of the image pipeline: white balance, demosaicing, chroma enhancement, color correction, and downscaling. Unlike conventional real-time streaming processing, it can process raw data stored in memory offline, maximizing flexibility in the use of system resources.</p>
+        <p>This patch is still at the review stage and has not yet been merged into the mainline kernel, but it is an important indicator of changes in the image processing pipeline architecture of Qualcomm SoC-based platforms. Such changes in the lower driver layer may affect future image processing optimization paths in the Android Camera HAL and framework.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This change is a proposal to add an ISP block in the kernel driver layer and does not bring direct changes to the Android Camera HAL API or metadata contract. However, when using offline YUV conversion and ISP hardware acceleration on Qualcomm SoC-based devices, it can become a lower-level foundation for optimizing buffer lifecycle and processing latency in memory-to-memory (M2M) pipelines.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/">[PATCH v5 4/5] media: qcom: camss: Add CAMSS Offline Processing Engine driver</a> — <a href="https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-new-v4l2-driver-patch-published-to-support-the-himax-hm1092-monochrome-infrared-" aria-labelledby="article-new-v4l2-driver-patch-published-to-support-the-himax-hm1092-monochrome-infrared--title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-new-v4l2-driver-patch-published-to-support-the-himax-hm1092-monochrome-infrared--title" class="article-title">New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor</h2>
+        <p class="article-source-subtitle">Himax HM1092 Monochrome IR Sensor Driver Patch</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A new V4L2 driver patch series adding support for the Himax HM1092 monochrome infrared image sensor was published.</p>
+        <p>A driver patch series to support the Himax HM1092 monochrome infrared (IR) image sensor was recently submitted to the Linux kernel media subsystem. The sensor has a 1280x720 pixel array and is designed for special-purpose camera applications such as biometrics and night surveillance.</p>
+        <p>According to the published patch, the driver supports a 10-bit raw (MEDIA_BUS_FMT_SGRBG10_1X10) mode at 648x368 @ 30fps over MIPI CSI-2 data lanes. As the format and timing of this special-purpose sensor are defined at the lower driver level, integration work in the upper stack becomes possible.</p>
+        <p>The driver is currently under review, and there may be further changes before it is merged into the mainline kernel. Because a monochrome infrared sensor by nature requires stream processing and metadata definitions different from a typical RGB sensor, advance review by the relevant platform engineers is needed.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch is a change in the lower driver layer and does not directly affect the Android Camera HAL API or metadata contract. However, devices equipped with this sensor need to configure RAW10 format support and the related stream combination validation at the Camera HAL level to handle the monochrome infrared stream correctly.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/">[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support</a> — <a href="https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-libcamera-patch-proposed-to-harden-control-serializer-size-and-input-validation" aria-labelledby="article-libcamera-patch-proposed-to-harden-control-serializer-size-and-input-validation-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-patch-proposed-to-harden-control-serializer-size-and-input-validation-title" class="article-title">libcamera: patch proposed to harden control serializer size and input validation</h2>
+        <p class="article-source-subtitle">libcamera Control Serializer Hardening Patch v2</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="libcamera: patch proposed to harden control serializer size and input validation image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">The libcamera project has a proposed patch v2 that improves stability by hardening size checks and input validation in the control serializer.</p>
+        <p>Patch v2, which hardens size and input validation in the control serializer, was recently submitted to the open-source camera stack project libcamera and is under review. Proposed by Magdum, the patch focuses on preventing potential buffer overflows or invalid data input that can occur while serializing and deserializing camera control commands and metadata.</p>
+        <p>The control serializer is a core component of camera frame control and metadata transfer, and hardening the security and stability of this part greatly improves the reliability of the entire camera stack. In particular, strictly limiting the size of input data and validating it can prevent unexpected crashes or malfunctions.</p>
+        <p>The patch is currently at the review stage and has not yet been merged into an official release. However, it is regarded as an important improvement for system security and stability for teams developing platforms or embedded systems that adopt libcamera as their lower camera stack.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch is a stability improvement inside libcamera and does not bring direct changes to the Android Camera HAL API or metadata contract. However, for systems that build their lower driver stack on libcamera, it can help reduce the risk of crashes in the layers below the HAL by strengthening the exception-handling routines in control data deserialization.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://patchwork.libcamera.org/patch/27507/">[v2,2/2] libcamera: Harden control serializer size and input validation</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-libcamera-egldisplay-caching-optimization-patch-proposed-to-avoid-redundant-init" aria-labelledby="article-libcamera-egldisplay-caching-optimization-patch-proposed-to-avoid-redundant-init-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-egldisplay-caching-optimization-patch-proposed-to-avoid-redundant-init-title" class="article-title">libcamera: EGLDisplay caching optimization patch proposed to avoid redundant initialization</h2>
+        <p class="article-source-subtitle">libcamera EGLDisplay Caching Patch</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="libcamera: EGLDisplay caching optimization patch proposed to avoid redundant initialization image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">The libcamera project has a proposed performance optimization patch that caches the EGLDisplay object to avoid redundant graphics resource initialization and teardown overhead.</p>
+        <p>An optimization patch that caches the EGLDisplay object to avoid redundant initialization and teardown (init/teardown) was recently submitted to the libcamera project. EGL (Embedded-System Graphics Library) is an important interface that connects rendering APIs such as OpenGL ES to the underlying platform window system.</p>
+        <p>In the existing implementation, overhead could arise from repeatedly initializing and tearing down EGLDisplay during camera stream processing. This patch aims to improve graphics resource management efficiency and overall system performance by caching and reusing an EGLDisplay once it has been probed.</p>
+        <p>The patch is currently at the review stage and has not yet been officially merged. However, it is expected to help reduce initialization latency and improve power efficiency in systems that render camera frames directly to the screen or use GPU-based image processing pipelines.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch is a graphics resource optimization inside libcamera and does not bring direct changes to the Android Camera HAL API or metadata contract. However, when running buffer processing and rendering pipelines in a libcamera-based lower stack, removing redundant EGL initialization overhead can indirectly help reduce camera stream startup latency and the risk of frame drops.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://patchwork.libcamera.org/patch/27496/">libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-standalone-v4l2-driver-patch-proposed-to-support-the-samsung-s5kjn5-50mp-image-s" aria-labelledby="article-standalone-v4l2-driver-patch-proposed-to-support-the-samsung-s5kjn5-50mp-image-s-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 5">05</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-standalone-v4l2-driver-patch-proposed-to-support-the-samsung-s5kjn5-50mp-image-s-title" class="article-title">Standalone V4L2 driver patch proposed to support the Samsung S5KJN5 50MP image sensor</h2>
+        <p class="article-source-subtitle">Samsung S5KJN5 Image Sensor Driver Patch v2</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Standalone V4L2 driver patch proposed to support the Samsung S5KJN5 50MP image sensor image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">Patch v2 was proposed to support the Samsung S5KJN5 50MP high-resolution image sensor by adding a separate standalone V4L2 driver instead of extending an existing driver.</p>
+        <p>Driver patch v2 to support the Samsung S5KJN5 50MP image sensor was recently submitted to the Linux kernel media subsystem. The sensor supports a 10-bit RAW format with a GBRG pattern and transfers high-resolution image data over a MIPI CSI-2 interface.</p>
+        <p>Notably, instead of extending the existing s5kjn1 driver, this implementation is a separate driver dedicated to the S5KJN5. This is analyzed as an architectural decision to manage the sensor&#39;s specific register configuration and control flow more clearly and to improve driver maintainability.</p>
+        <p>The patch is currently at the review stage, with a mainline kernel merge still ahead. It will provide an official lower-level driver support foundation when adopting the S5KJN5 sensor on mobile and embedded platforms that require high-resolution RAW stream processing.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch is a change in the lower driver layer and does not directly affect the Android Camera HAL API or metadata contract. However, devices equipped with this high-resolution sensor need to define 50MP high-resolution RAW stream and pixel remosaicing processing paths at the Camera HAL level, and should closely verify the resulting impact on memory bandwidth and power consumption.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/">[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02">CameraX Release Notes - CameraX 1.7.0-alpha02</a><span class="reference-meta">CameraX Release Notes (July 01, 2026) · Reference on the AOSP Camera framework</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/">[PATCH v5 4/5] media: qcom: camss: Add CAMSS Offline Processing Engine driver</a> — <a href="https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com/T/#t">Full patch series</a></li><li><a href="https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/">[PATCH 0/2] media: add Himax HM1092 monochrome IR sensor support</a> — <a href="https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca/T/#t">Full patch series</a></li><li><a href="https://patchwork.libcamera.org/patch/27507/">[v2,2/2] libcamera: Harden control serializer size and input validation</a></li><li><a href="https://patchwork.libcamera.org/patch/27496/">libcamera: egl: Cache probed EGLDisplay to avoid redundant init/teardown</a></li><li><a href="https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/">[PATCH v2 0/2] media: i2c: Add Samsung S5KJN5 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -8,7 +8,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W39",
+      "summary": "Claude Code projects feature redesigned, with conversational profiling and parallel PR opening\nClaude Code v2.1.271 released, with fast mode for remote sessions and improved TUI mouse support\nCodex rust-v0.155.1 released, improving API compatibility by disabling reasoning summaries by default in local TUI sessions\nIntel IPU6 driver: v2 patch series proposed to prepare for multi-stream and metadata support\nDMI quirk patch proposed to fix upside-down rear camera output on Microsoft Surface Pro 11",
+      "html": "en/newsletters/2026-W39/index.html",
+      "md": "en/newsletters/2026-W39/newsletter.md"
+    }
   },
   {
     "date": "2026-09-14",
@@ -19,7 +25,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W38",
+      "summary": "Rockchip RKISP1 ISP driver: patch posted to fix Bayer demosaicing bypass logic error\nNew Linux driver patch posted for the OmniVision os02g10 image sensor\nlibcamera: patch proposed to fix Sony IMX355 sensor test pattern mode mapping\nlibcamera: proposal to add LensShadingCorrection and ToneCurve to controls metadata",
+      "html": "en/newsletters/2026-W38/index.html",
+      "md": "en/newsletters/2026-W38/newsletter.md"
+    }
   },
   {
     "date": "2026-09-07",
@@ -30,7 +42,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W37",
+      "summary": "Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver\nQualcomm x1e/Hamoa platform camera DTS support patch v6 posted\nLinux kernel patch v7 posted for Lenovo Yoga Book YB1-X91 camera support\nlibcamera control storage union naming patch v3 accepted\nlibcamera patch posted to skip unnecessary stop call before the software ISP worker starts",
+      "html": "en/newsletters/2026-W37/index.html",
+      "md": "en/newsletters/2026-W37/newsletter.md"
+    }
   },
   {
     "date": "2026-08-31",
@@ -41,7 +59,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W36",
+      "summary": "AtomISP driver adds Lenovo Yoga Book OV2740 sensor link and D-PHY timing derivation support\nlibcamera reviews patch adding Quad-Bayer CFA layout support for high-resolution sensor handling\nLinux kernel: Lenovo Yoga Book YB1-X91 camera driver and sensor integration patch series posted\nSony IMX908 image sensor: Linux Device Tree binding added, laying the groundwork for official support\nlibcamera adds filter parameter to createTexture2D() in the software ISP EGL module",
+      "html": "en/newsletters/2026-W36/index.html",
+      "md": "en/newsletters/2026-W36/newsletter.md"
+    }
   },
   {
     "date": "2026-08-24",
@@ -52,7 +76,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W35",
+      "summary": "Raspberry Pi libcamera v0.7.2+rpt20260817 released: stability improvements to the Linux camera driver stack and what HAL engineers should note",
+      "html": "en/newsletters/2026-W35/index.html",
+      "md": "en/newsletters/2026-W35/newsletter.md"
+    }
   },
   {
     "date": "2026-08-17",
@@ -63,7 +93,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W34",
+      "summary": "CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix",
+      "html": "en/newsletters/2026-W34/index.html",
+      "md": "en/newsletters/2026-W34/newsletter.md"
+    }
   },
   {
     "date": "2026-08-10",
@@ -74,7 +110,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W33",
+      "summary": "Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)\nAdding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)",
+      "html": "en/newsletters/2026-W33/index.html",
+      "md": "en/newsletters/2026-W33/newsletter.md"
+    }
   },
   {
     "date": "2026-08-03",
@@ -85,7 +127,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W32",
+      "summary": "V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor\nNew V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor\nV4L2 driver patch v5 submitted for the OmniVision OG0VA1B mono VGA sensor\nPatch v9 published to support MIPI C-PHY configuration in the Qualcomm CAMSS camera subsystem",
+      "html": "en/newsletters/2026-W32/index.html",
+      "md": "en/newsletters/2026-W32/newsletter.md"
+    }
   },
   {
     "date": "2026-07-27",
@@ -96,7 +144,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W31",
+      "summary": "Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV\nNew V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor\nlibcamera: patch proposed to harden control serializer size and input validation\nlibcamera: EGLDisplay caching optimization patch proposed to avoid redundant initialization\nStandalone V4L2 driver patch proposed to support the Samsung S5KJN5 50MP image sensor",
+      "html": "en/newsletters/2026-W31/index.html",
+      "md": "en/newsletters/2026-W31/newsletter.md"
+    }
   },
   {
     "date": "2026-07-20",
@@ -107,7 +161,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W30",
+      "summary": "libcamera: patch proposed to add IMX335 image sensor test pattern properties",
+      "html": "en/newsletters/2026-W30/index.html",
+      "md": "en/newsletters/2026-W30/newsletter.md"
+    }
   },
   {
     "date": "2026-07-13",
@@ -118,7 +178,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W29",
+      "summary": "Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing\nlibcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)\nRaspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version",
+      "html": "en/newsletters/2026-W29/index.html",
+      "md": "en/newsletters/2026-W29/newsletter.md"
+    }
   },
   {
     "date": "2026-07-06",
@@ -129,7 +195,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W28",
+      "summary": "CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced\nlibcamera: SensorSequence metadata control patch proposed for sensor frame tracking\nAnalysis of a patch fixing a media driver buffer overflow in LLVM/Clang build environments",
+      "html": "en/newsletters/2026-W28/index.html",
+      "md": "en/newsletters/2026-W28/newsletter.md"
+    }
   },
   {
     "date": "2026-06-29",
@@ -140,7 +212,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W27",
+      "summary": "A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer\nV4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function",
+      "html": "en/newsletters/2026-W27/index.html",
+      "md": "en/newsletters/2026-W27/newsletter.md"
+    }
   },
   {
     "date": "2026-06-24",
@@ -162,7 +240,13 @@
     "tags": [
       "Camera HAL",
       "Android"
-    ]
+    ],
+    "en": {
+      "title": "2026 W26",
+      "summary": "V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor\nV4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor\nGCC 16 release upcoming: improved template error messages and SARIF static analysis output\nAndroid CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem",
+      "html": "en/newsletters/2026-W26/index.html",
+      "md": "en/newsletters/2026-W26/newsletter.md"
+    }
   },
   {
     "date": "2026-06-21",
@@ -307,7 +391,13 @@
     "publication_mode": "review_only",
     "homepage_visibility": "normal",
     "fallback_only": false,
-    "camera_anchor_count": 1
+    "camera_anchor_count": 1,
+    "en": {
+      "title": "2026 W22",
+      "summary": "Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens\nGoogle AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow",
+      "html": "en/newsletters/2026-W22/index.html",
+      "md": "en/newsletters/2026-W22/newsletter.md"
+    }
   },
   {
     "date": "2026-05-24",
@@ -432,7 +522,13 @@
     "publication_mode": "review_only",
     "homepage_visibility": "normal",
     "fallback_only": false,
-    "camera_anchor_count": 1
+    "camera_anchor_count": 1,
+    "en": {
+      "title": "2026 W20",
+      "summary": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22\nCameraX 1.6.1 Update: Observing Android Camera Compatibility",
+      "html": "en/newsletters/2026-W20/index.html",
+      "md": "en/newsletters/2026-W20/newsletter.md"
+    }
   },
   {
     "date": "2026-05-07",

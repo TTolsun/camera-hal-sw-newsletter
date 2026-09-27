@@ -9,7 +9,8 @@ const { validateEnglishEntry, hasLongKoreanProse } = require('../../validate/eng
 const { buildSitemap } = require('../../render/seo-metadata');
 const { languagePaths } = require('../../../../articles/assets/js/site-header');
 const { renderArchiveCard } = require('../../../../articles/assets/js/newsletter-archive');
-const { tempRoot, writeText, writeJson } = require('../../../shared/test/helpers/fs');
+const { writeEnglishEditions } = require('../../render/english-edition');
+const { tempRoot, writeText, writeJson, readJson } = require('../../../shared/test/helpers/fs');
 
 // Synthetic display/overlay inputs, not publication-quality golden artifacts.
 function sample() {
@@ -170,7 +171,8 @@ test('language navigation respects project deployment paths and historical fallb
   const basePath = '/camera-hal-sw-newsletter/';
   assert.equal(languagePaths({ basePath, pathname: `${basePath}archive.html` }).en, `${basePath}en/archive.html`);
   assert.equal(languagePaths({ basePath, pathname: `${basePath}en/index.html` }).ko, `${basePath}index.html`);
-  assert.equal(languagePaths({ basePath, pathname: `${basePath}newsletters/2026-W39/index.html` }).en, `${basePath}en/archive.html`);
+  assert.equal(languagePaths({ basePath, pathname: `${basePath}newsletters/2026-W39/index.html` }).en, `${basePath}en/newsletters/2026-W39/index.html`);
+  assert.equal(languagePaths({ basePath, pathname: `${basePath}newsletters/2026-05-05/index.html` }).en, `${basePath}en/archive.html`);
   assert.equal(languagePaths({ basePath, pathname: `${basePath}newsletters/2026-W39/index.html`, alternateHref: `${basePath}en/newsletters/2026-W39/index.html` }).en, `${basePath}en/newsletters/2026-W39/index.html`);
 });
 
@@ -184,7 +186,14 @@ test('optional en data is validated only when present and sitemap includes trans
   const english = applyTranslation(issue, translation);
   writeText(path.join(root, 'articles', item.en.html), buildHtml({ ...english, sections: english.sections.map(section => ({ ...section, selectedImage: null, resolvedImage: null })) }, { locale: 'en' }));
   writeText(path.join(root, 'articles', item.en.md), buildMarkdown(english, { locale: 'en' }));
+  assert.ok(validateEnglishEntry(item, root).some(error => error.includes('Missing translation overlay')));
+  const sourceText = `${JSON.stringify(issue, null, 2)}\n`;
+  writeText(path.join(root, 'articles', 'newsletters', '2026-W39', 'issue.json'), sourceText);
+  writeJson(path.join(root, 'articles', 'newsletters', '2026-W39', 'translation.en.json'), { ...translation, source_hash: translationSourceHash(sourceText) });
   assert.deepEqual(validateEnglishEntry(item, root), []);
+  writeText(path.join(root, 'articles', 'newsletters', '2026-W39', 'issue.json'), sourceText.replace('카메라 변경', '다른 변경'));
+  assert.ok(validateEnglishEntry(item, root).some(error => error.includes('does not apply to issue.json')));
+  writeText(path.join(root, 'articles', 'newsletters', '2026-W39', 'issue.json'), sourceText);
   assert.ok(buildSitemap([item]).includes(item.en.html));
   writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{ ...item, date: issue.date }]);
   const dated = { date: issue.date, html: `newsletters/${issue.date}/index.html`, en: item.en };
@@ -194,4 +203,61 @@ test('optional en data is validated only when present and sitemap includes trans
   assert.equal(hasLongKoreanProse('번역되지 않은 긴 한국어 문장이 영문 페이지에 남아 있으면 검증에서 거부합니다.'), true);
   item.en.html = '../../outside.html';
   assert.ok(validateEnglishEntry(item, root).some(error => error.includes('expected en/')));
+});
+
+// 발행된 issue.json의 기사·참고 기사에는 id가 없다. 그 형태를 그대로 쓴다.
+function publishedShapeSample() {
+  const { issue, translation } = sample();
+  delete issue.sections[0].id;
+  delete issue.reference_articles[0].id;
+  issue.sections[0].category = '주간 다이제스트';
+  issue.sections[0].imageAlt = '카메라 변경 이미지';
+  issue.sections[0].sources = [{ title: '한국어로 적힌 출처 제목', url: 'https://developer.android.com/media/camera' }];
+  issue.sections[0].public_article.source_links = structuredClone(issue.sections[0].sources);
+  translation.sections[0].id = 'url:https://developer.android.com/media/camera';
+  translation.reference_articles[0].id = issue.reference_articles[0].url;
+  translation.sections[0].image_alt = 'Camera change image';
+  translation.sections[0].source_titles = { 'https://developer.android.com/media/camera': 'Source title in English' };
+  translation.source_hash = translationSourceHash(issue);
+  return { issue, translation };
+}
+
+test('overlay keys id-less published sections by article identity and references by URL', () => {
+  const { issue, translation } = publishedShapeSample();
+  const english = applyTranslation(issue, translation);
+  assert.equal(english.sections[0].imageAlt, 'Camera change image');
+  assert.equal(english.sections[0].sources[0].title, 'Source title in English');
+  assert.equal(english.sections[0].public_article.source_links[0].title, 'Source title in English');
+  assert.equal(english.sections[0].sources[0].url, issue.sections[0].sources[0].url);
+  assert.equal(english.reference_articles[0].title, 'Further documentation');
+  const html = buildHtml({ ...english, sections: english.sections.map(section => ({ ...section, selectedImage: null, resolvedImage: null })) }, { locale: 'en' });
+  assert.doesNotMatch(html, /[가-힣]/);
+  for (const mutate of [
+    t => { t.sections[0].source_titles = { 'https://example.com/unknown': 'Unknown' }; },
+    t => { t.sections[0].image_alt = ''; },
+    t => { t.sections[0].id = 'camera'; }
+  ]) {
+    const invalid = structuredClone(translation);
+    mutate(invalid);
+    assert.throws(() => applyTranslation(issue, invalid));
+  }
+});
+
+test('English edition writer renders from committed issue.json and records the en index entry', () => {
+  const root = tempRoot();
+  const { issue, translation } = publishedShapeSample();
+  const sourceText = `${JSON.stringify(issue, null, 2)}
+`;
+  translation.source_hash = translationSourceHash(sourceText);
+  writeText(path.join(root, 'articles', 'newsletters', '2026-W39', 'issue.json'), sourceText);
+  writeJson(path.join(root, 'articles', 'newsletters', '2026-W39', 'translation.en.json'), translation);
+  writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{ weeklyKey: '2026-W39', date: issue.date, title: '2026 W39', html: 'newsletters/2026-W39/index.html' }]);
+  writeEnglishEditions(root, ['2026-W39']);
+  const [entry] = readJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'));
+  assert.deepEqual(entry.en, { title: '2026 W39', summary: 'Camera changes', html: 'en/newsletters/2026-W39/index.html', md: 'en/newsletters/2026-W39/newsletter.md' });
+  assert.equal(entry.title, '2026 W39');
+  assert.match(fs.readFileSync(path.join(root, 'articles', 'en', 'newsletters', '2026-W39', 'index.html'), 'utf8'), /<html lang="en"/);
+  assert.ok(fs.readFileSync(path.join(root, 'articles', 'sitemap.xml'), 'utf8').includes('en/newsletters/2026-W39/index.html'));
+  fs.writeFileSync(path.join(root, 'articles', 'newsletters', '2026-W39', 'issue.json'), sourceText.replace('카메라 변경', '다른 변경'));
+  assert.throws(() => writeEnglishEditions(root, ['2026-W39']), /source_hash/);
 });

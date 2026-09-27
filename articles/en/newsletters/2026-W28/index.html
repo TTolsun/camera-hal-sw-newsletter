@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W28/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W27 Camera SW Newsletter (Published W28)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W28/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W28/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W28/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers 3 stories, including ‘CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced’ and ‘libcamera: SensorSequence metadata control patch proposed for sensor frame tracking’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W28/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W27 Camera SW Newsletter (Published W28)" />
+  <meta property="og:description" content="This week covers 3 stories, including ‘CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced’ and ‘libcamera: SensorSequence metadata control patch proposed for sensor frame tracking’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W28/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W27 Camera SW Newsletter (Published W28)" />
+  <meta name="twitter:description" content="This week covers 3 stories, including ‘CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced’ and ‘libcamera: SensorSequence metadata control patch proposed for sensor frame tracking’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.06.29 – 07.05</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W27</span></h1>
+        <p class="issue-publish-badge">Published W28</p>
+        <p class="subtitle">This week covers 3 stories, including ‘CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced’ and ‘libcamera: SensorSequence metadata control patch proposed for sensor frame tracking’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced</li><li>libcamera: SensorSequence metadata control patch proposed for sensor frame tracking</li><li>Analysis of a patch fixing a media driver buffer overflow in LLVM/Clang build environments</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-1-7-0-alpha02-released-gpu-based-image-analysis-and-night-mode-indicator" aria-labelledby="article-camerax-1-7-0-alpha02-released-gpu-based-image-analysis-and-night-mode-indicator-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-1-7-0-alpha02-released-gpu-based-image-analysis-and-night-mode-indicator-title" class="article-title">CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced</h2>
+        <p class="article-source-subtitle">AndroidX CameraX 1.7.0-alpha02 Release Notes</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02">CameraX Release Notes</a></figcaption>
+        </figure>
+        <p class="article-lead">The CameraX 1.7.0-alpha02 release, published on July 1, 2026, adds a large set of new APIs, including hardware buffer exposure to support GPU-based image analysis and APIs for detecting night mode status.</p>
+        <p>1.7.0-alpha02, the latest alpha version of the AndroidX CameraX library, was officially released on July 1, 2026. The most important change in this update is that the ImageAnalysis.OUTPUT_IMAGE_FORMAT_PRIVATE format and ImageProxy.getHardwareBuffer() are exposed as public APIs to support high-performance GPU-based image analysis. This lets app developers access camera frames directly in the GPU pipeline without going through CPU memory copies, maximizing image processing efficiency.</p>
+        <p>A new night mode indicator API has also been introduced that can analyze lighting and environmental conditions to determine whether the criteria for entering night mode are met. Through the isNightModeIndicatorSupported() and getNightModeIndicator() methods added to the CameraInfo and CameraExtensionsInfo classes, applications can monitor in real time whether the current environment is suitable for night mode and reflect it in the UI.</p>
+        <p>In addition, built-in gesture support for pinch-to-zoom and tap-to-focus has been added to the CameraXViewfinder component, and screen flash and stream state control features have been reinforced. An isAutoRotationEnabled property, which automatically sets an appropriate rotation value based on device sensor data, has been added to SessionConfig.Builder, improving compatibility across devices of various form factors.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>There is no direct HAL change, but because apps perform GPU analysis through PRIVATE streams, buffer allocation and acquisition latency need to be validated. In addition, since the night mode indicator API is tied to the HAL&#39;s AE mode and vendor extension metadata state, it should be verified that metadata is delivered accurately.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02">CameraX Release Notes - CameraX 1.7.0-alpha02</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-analysis-of-a-patch-fixing-a-media-driver-buffer-overflow-in-llvm-clang-build-en" aria-labelledby="article-analysis-of-a-patch-fixing-a-media-driver-buffer-overflow-in-llvm-clang-build-en-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-analysis-of-a-patch-fixing-a-media-driver-buffer-overflow-in-llvm-clang-build-en-title" class="article-title">Analysis of a patch fixing a media driver buffer overflow in LLVM/Clang build environments</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/cpp.svg" alt="Analysis of a patch fixing a media driver buffer overflow in LLVM/Clang build environments image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A kernel patch v2 submitted on July 5, 2026 proposes a fix for a buffer overflow and kernel oops in the dw2102 media driver that occurs only when building with the LLVM+Clang compiler.</p>
+        <p>A patch v2 to fix a buffer overflow vulnerability in the dw2102 media driver has been submitted to the Linux media subsystem mailing list. The bug occurs in the dw2102_load_firmware() function while reading firmware data in 64-byte chunks. Because it unconditionally tries to read a chunk larger than the number of remaining data bytes, it exceeds the memory boundary.</p>
+        <p>Notably, this bug clearly surfaces and causes a kernel oops only when the kernel is built with the LLVM+Clang compiler toolchain. This shows that, due to differences in compiler optimization or memory layout, latent buffer handling errors that did not show up in existing GCC builds can lead to fatal errors in a Clang environment.</p>
+        <p>With Android system and vendor kernel build environments having fully transitioned to LLVM/Clang, such toolchain-specific bugs may also occur in camera drivers or firmware loader modules. Lower media driver development teams should therefore re-examine their memory bounds-checking logic and actively use compiler warnings and static analysis tools.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This case shows the driver stability risk that comes with build toolchain changes, and bounds checking in camera driver firmware loaders needs to be strengthened. There is no direct Android Camera HAL impact, but it is an important reference for ensuring the stability of driver modules that use an LLVM/Clang build environment.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/">[PATCH v2] media: dw2102: Fix a buffer overflow</a> — <a href="https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-libcamera-sensorsequence-metadata-control-patch-proposed-for-sensor-frame-tracki" aria-labelledby="article-libcamera-sensorsequence-metadata-control-patch-proposed-for-sensor-frame-tracki-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-sensorsequence-metadata-control-patch-proposed-for-sensor-frame-tracki-title" class="article-title">libcamera: SensorSequence metadata control patch proposed for sensor frame tracking</h2>
+        <p class="article-source-subtitle">libcamera Patchwork (patch review)</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="libcamera: SensorSequence metadata control patch proposed for sensor frame tracking image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A libcamera patch v2 proposed on July 3, 2026 discusses adding a SensorSequence metadata control to precisely control and track sensor frame sequences.</p>
+        <p>A patch v2 adding a &#39;SensorSequence&#39; metadata control, which allows sensor frame sequences to be precisely tracked and controlled, has been submitted to the mailing list of libcamera, the Linux-based camera framework. The proposal aims to improve frame synchronization between the camera sensor hardware and the image pipeline.</p>
+        <p>If sensor sequence metadata is introduced, it will become possible to track the exact order and timing in which each frame was output from the sensor. This could be a very useful tool, especially for precisely aligning the frame synchronization state of both sensors in multi-camera systems, or for detecting and debugging subtle frame drops that occur inside the pipeline.</p>
+        <p>However, this patch is currently under review in the community and has not yet been officially merged into the libcamera mainline source code. Further review and a vendor integration process therefore appear to be needed before it is applied directly to actual commercial devices or the Android Camera HAL stack.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This is a driver-level change that may help improve the precision of frame synchronization and sequence tracking in the lower driver stack. There is no direct Android Camera HAL API change, but the sequence information provided by lower drivers can be used to enhance frame synchronization debugging at the HAL level.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://patchwork.libcamera.org/patch/27198/">[v2,1/2] libcamera: Add SensorSequence metadata control</a></li></ul></div>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609">Raspberry Pi libcamera Releases - v0.7.1+rpt20260609</a><span class="reference-meta">Raspberry Pi libcamera Releases (2026-06-09) · Reference on camera drivers / image pipelines</span></li><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">2. Android skills keep growing (『Top 3 updates for Android developer productivity』)</a><span class="reference-meta">Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · Reference on Android platform and camera-adjacent topics</span></li><li><a href="https://android-developers.googleblog.com/2026/06/android-developer-productivity-updates.html">Top 3 updates for Android developer productivity</a><span class="reference-meta">Android Developers Blog (Tue, 09 Jun 2026 13:00:00 +0000) · Reference on C++ / AI-native tooling</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02">CameraX Release Notes - CameraX 1.7.0-alpha02</a></li><li><a href="https://patchwork.libcamera.org/patch/27198/">[v2,1/2] libcamera: Add SensorSequence metadata control</a></li><li><a href="https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/">[PATCH v2] media: dw2102: Fix a buffer overflow</a> — <a href="https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

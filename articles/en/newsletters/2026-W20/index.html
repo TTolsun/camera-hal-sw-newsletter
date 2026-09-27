@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W20/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W19 Camera SW Newsletter (Published W20)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W20/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W20/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W20/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’ and ‘CameraX 1.6.1 Update: Observing Android Camera Compatibility’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W20/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W19 Camera SW Newsletter (Published W20)" />
+  <meta property="og:description" content="This week covers ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’ and ‘CameraX 1.6.1 Update: Observing Android Camera Compatibility’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W20/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W19 Camera SW Newsletter (Published W20)" />
+  <meta name="twitter:description" content="This week covers ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’ and ‘CameraX 1.6.1 Update: Observing Android Camera Compatibility’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.05.04 – 05.10</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W19</span></h1>
+        <p class="issue-publish-badge">Published W20</p>
+        <p class="subtitle">This week covers ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’ and ‘CameraX 1.6.1 Update: Observing Android Camera Compatibility’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Tooling Watch Edition</span><span class="tag">Tooling Watch</span><span class="tag">Android</span><span class="tag">Camera HAL</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</li><li>CameraX 1.6.1 Update: Observing Android Camera Compatibility</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-1-6-1-update-observing-android-camera-compatibility" aria-labelledby="article-camerax-1-6-1-update-observing-android-camera-compatibility-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-1-6-1-update-observing-android-camera-compatibility-title" class="article-title">CameraX 1.6.1 Update: Observing Android Camera Compatibility</h2>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="CameraX 1.6.1 Update: Observing Android Camera Compatibility image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">Android Developers Latest Updates</a></figcaption>
+        </figure>
+        <p class="article-lead">CameraX 1.6.1 Update: Observing Android Camera Compatibility</p>
+        <p>The CameraX 1.6.1 release note is an AndroidX Camera layer update that includes viewfinder- and video-related artifact versions. For the Camera HAL team, it is not a direct contract change but an occasion to check app-facing camera behavior with a smoke test.</p>
+        <p>Since CameraX and Camera2 are layers above the HAL, the release note must not be used directly as grounds for HAL API, stream, or metadata changes. Instead, the safe approach is to check in a reference app that Preview, ImageCapture, and VideoCapture combinations do not break on the existing device matrix.</p>
+        <p>In particular, if Camera2 interop, extensions, or session configuration failures are reported, the app/framework logs and the HAL/device logs should be examined separately. Open a HAL follow-up only when there is device log or stream/buffer evidence.</p>
+        <p>**Camera HAL / Driver Perspective**</p>
+        <p>CameraX 1.6.1 is an app-facing compatibility check item. HAL owners should distinguish library issues from device HAL regressions through reference app smoke tests and log separation.</p>
+        <p>### What to Check</p>
+        <p>- Decide the combinations for running a Preview + ImageCapture + VideoCapture smoke test with the CameraX 1.6.1 dependency.</p>
+        <p>- Check session configuration failures separately in `dumpsys media.camera`, app logcat, and framework camera logs.</p>
+        <p>- Interpret Camera2 interop or extensions-related changes only within the scope of the release note.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>CameraX 1.6.1 Update: Observing Android Camera Compatibility</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">1.6.1</a></li><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07">CameraX 1.4.0-alpha07 release table row</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" aria-labelledby="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Tooling Watch</span>
+        </div>
+        <h2 id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title" class="article-title">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h2>
+        <figure class="article-media">
+        <img class="article-image" src="https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&amp;image=thelio_gcc16_1" alt="Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">Phoronix Linux Camera / Media</a></figcaption>
+        </figure>
+        <p class="article-lead">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</p>
+        <p>The GCC 16 performance comparison is a tooling signal for watching C++ compiler optimization and binary performance. Since the Android Camera HAL is mainly Clang/LLVM-based, this item should be read as long-term toolchain comparison material, not as a change to apply immediately.</p>
+        <p>Camera HAL native code is sensitive to toolchain settings such as build flags, sanitizers, LTO/PGO, and warning policy. The GCC 16 benchmark shows compiler optimization trends, but it is not grounds for applying GCC directly to an Android product branch or for claiming HAL runtime performance improvements.</p>
+        <p>In practice, comparing equivalent features on the Clang/LLVM side together with the Android platform toolchain policy is about the right level. A separate benchmark can be opened only when a host-side utility or offline analysis tool uses GCC.</p>
+        <p>**Android Native / Tooling Perspective**</p>
+        <p>This item is a native tooling watch, not a Camera HAL runtime change. The HAL team should use the Android branch&#39;s Clang/LLVM policy as the baseline and compare only in a limited way, in host utility or benchmark environments.</p>
+        <p>### What to Check</p>
+        <p>- Check the Clang/LLVM version, C++ standard flag, and sanitizer settings of the current Android branch.</p>
+        <p>- Do not use the GCC 16 performance results as grounds for product HAL performance improvements.</p>
+        <p>- Run a separate comparison only when a host-side tool or standalone benchmark uses GCC.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

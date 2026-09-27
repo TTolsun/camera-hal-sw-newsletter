@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W21/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W21 Camera SW Newsletter</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W21/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W21/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W21/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers 5 stories, including ‘Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration’ and ‘Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W21/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W21 Camera SW Newsletter" />
+  <meta property="og:description" content="This week covers 5 stories, including ‘Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration’ and ‘Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W21/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W21 Camera SW Newsletter" />
+  <meta name="twitter:description" content="This week covers 5 stories, including ‘Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration’ and ‘Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">Coverage period unverified</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W21 (Coverage period unverified)</span></h1>
+        <p class="subtitle">This week covers 5 stories, including ‘Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration’ and ‘Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Tooling Watch Edition</span><span class="tag">Tooling Watch</span><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration</li><li>Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes</li><li>libcamera Release Announcements - libcamera v0.7.1</li><li>Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</li><li>Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-google-ai-studio-supports-prompt-based-native-android-app-generation-and-camera-" aria-labelledby="article-google-ai-studio-supports-prompt-based-native-android-app-generation-and-camera--title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-google-ai-studio-supports-prompt-based-native-android-app-generation-and-camera--title" class="article-title">Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration</h2>
+        <figure class="article-media">
+        <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png" alt="Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Android Developers Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000</p>
+        <p>Google AI Studio&#39;s native Android app generation flow described hardware-enabled app composition, citing access to native Android APIs such as Camera, GPS/Location, Accelerometer, and Bluetooth as examples.</p>
+        <p>The Android Developers Blog published Build native Android apps in Google AI Studio on Tue, 19 May 2026 12:45:00 +0000. The key points confirmed in the original post concern prompt-based generation, Emma-Louise Leavey, Group Product Manager, Mike Taylor-Cai, Product Manager Starting.</p>
+        <p>Additional items confirmed are Tue, May, Andr, like the Camera, GPS/Location, Accelerometer. These details help readers understand the actual scope of the original announcement.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This news is a tooling trend showing that Google AI Studio can use Android APIs such as Camera in native Android app prototypes. It is not grounds for a Camera HAL runtime change, and its use should be limited to referencing how sample apps set up Camera permissions and CameraX/Camera2 calls.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html">Build native Android apps in Google AI Studio</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-jetpack-compose-and-camerax-checkpoints-for-camera-preview-across-screen-sizes" aria-labelledby="article-jetpack-compose-and-camerax-checkpoints-for-camera-preview-across-screen-sizes-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-jetpack-compose-and-camerax-checkpoints-for-camera-preview-across-screen-sizes-title" class="article-title">Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes</h2>
+        <figure class="article-media">
+        <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png" alt="Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes image" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://goo.gle/AdaptiveApps_IO26">Android Developers Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes</p>
+        <p>To align the Android app experience across multiple screen sizes and input methods, Google mentioned Jetpack Compose, Navigation 3, Grid/FlexBox layout, non-touch input support, and CameraX preview handling together.</p>
+        <p>The Google Android Developers Blog described the approach of aligning Android UX across multiple devices and screen sizes centered on Jetpack Compose, and mentioned CameraX alongside it for camera preview that fits the window size.</p>
+        <p>This is not a HAL API change notice but an app/framework layer validation signal. Camera HAL / Driver teams can use it as a reference for scoping regression tests on preview aspect ratio, rotation, stream configuration, and Surface connection.</p>
+        <p>**Camera HAL / Driver Perspective**</p>
+        <p>This news is not a HAL API change but a reference signal at the app/framework layer to check how CameraX preview looks across various screen sizes. Do not interpret it as a HAL/driver change; only check app compatibility of preview aspect ratio, rotation, and crop behavior.</p>
+        <p>### What to Check</p>
+        <p>- At the app/framework level, check whether CameraX preview maintains aspect ratio and rotation across various screen sizes.</p>
+        <p>- Since this source does not directly mention HAL API changes, interpret it only as a possible preview layout regression, not as a HAL/driver change signal.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://goo.gle/AdaptiveApps_IO26">8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-placeholder-image" id="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20-" aria-labelledby="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20--title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Tooling Watch</span>
+        </div>
+        <h2 id="article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20--title" class="article-title">Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</h2>
+        <div class="article-media article-placeholder-visual" role="img" aria-label="Tooling Watch">
+        <span></span>
+        </div>
+        <p class="article-lead">Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</p>
+        <p>The GCC 16.1 release bundles C++ toolchain changes such as C++26 reflection, contracts, safety hardening, and C++20 as the default. For the Android Camera HAL, it is not a change to apply immediately but material for comparing Clang/LLVM support status and long-term native tooling direction.</p>
+        <p>Since Camera HAL native code is tied to the Android platform toolchain policy, GCC 16.1 features cannot be brought directly in as production branch requirements. However, trends such as reflection/contracts can be a reference when discussing how to simplify metadata table generation, request/result validation helpers, and debug-only invariant checks in the long term.</p>
+        <p>The actual action is checking whether the Android branch&#39;s Clang/LLVM, libc++, and C++ standard flag support them. Even if a feature is attractive, if it conflicts with CTS/VTS/Camera ITS or production build policy, it should remain only in the host utility or PoC backlog.</p>
+        <p>**Android Native / Tooling Perspective**</p>
+        <p>GCC 16.1 is a C++ toolchain watch item, not a HAL runtime change. The HAL team should review only features supported by the Android platform toolchain, and limit metadata/helper PoCs to host-side or debug-only scope.</p>
+        <p>### What to Check</p>
+        <p>- Check how the Android branch&#39;s Clang/LLVM, libc++, and C++ standard flag differ from the GCC 16.1 features of interest.</p>
+        <p>- Record reflection/contracts-related ideas only as candidates for a metadata table generation or request/result validation helper PoC.</p>
+        <p>- Do not register production HAL build changes without reviewing platform toolchain policy and CTS/VTS impact.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/04/gcc-16.1">GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-placeholder-image" id="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more" aria-labelledby="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Tooling Watch</span>
+        </div>
+        <h2 id="article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more-title" class="article-title">Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</h2>
+        <div class="article-media article-placeholder-visual" role="img" aria-label="Tooling Watch">
+        <span></span>
+        </div>
+        <p class="article-lead">Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</p>
+        <p>Glaze 7.2 is a C++ library release that expands C++26 Reflection support and YAML, CBOR, MessagePack, and TOML serialization support. For the Camera HAL, it is not a production dependency but a serialization tooling signal that can be reviewed for host-side analysis tools or standalone native utilities.</p>
+        <p>Camera HAL development often needs auxiliary tools that read and write structured data, such as metadata dumps, test configurations, and device capability snapshots. A library like Glaze may reduce the boilerplate of such host-side tools, but putting it directly into the product HAL path requires dependency, ABI, and platform policy review.</p>
+        <p>Therefore, this item should not be read as a production HAL code change, and should be used only when comparing serialization format options for debug utilities or offline analysis tools. C++26 Reflection support becomes a realistic PoC only after Android toolchain support is confirmed.</p>
+        <p>**Android Native / Tooling Perspective**</p>
+        <p>Glaze 7.2 is a native tooling library trend, not Camera HAL product behavior. The HAL team should review it only as a candidate for host-side metadata/config tooling, and promoting it to a production code dependency requires a separate policy review.</p>
+        <p>### What to Check</p>
+        <p>- Check whether serialization problems actually exist in host-side tools such as metadata dumps, test configs, and capability snapshots.</p>
+        <p>- First check the C++26 Reflection support status in Clang/LLVM and the Android build policy.</p>
+        <p>- To use it as a production HAL code dependency, split ABI, license, platform policy, and test coverage into separate review items.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more">Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-placeholder-image" id="article-libcamera-release-announcements-libcamera-v0-7-1" aria-labelledby="article-libcamera-release-announcements-libcamera-v0-7-1-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 5">05</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-libcamera-release-announcements-libcamera-v0-7-1-title" class="article-title">libcamera Release Announcements - libcamera v0.7.1</h2>
+        <div class="article-media article-placeholder-visual" role="img" aria-label="Camera Driver · ISP">
+        <span></span>
+        </div>
+        <p class="article-lead">libcamera Release Announcements - libcamera v0.7.1</p>
+        <p>The libcamera v0.7.1 release announcement is an upstream camera stack update that includes Raspberry Pi Atomic control lists and Simple pipeline AGC/AWB statistics improvements. For the Android HAL team, it is a reference signal for narrowing the scope of driver, sensor, ISP, and frame timing verification.</p>
+        <p>This release covers the pipeline control and image statistics paths of the Linux camera stack. For products whose vendor kernel or BSP actually pulls in a libcamera fork, there is reason to check AE/AWB stability, captureResult metadata consistency, and frame timing logs within the existing regression scope.</p>
+        <p>However, the libcamera release announcement alone must not be used to claim a change to the Android Camera HAL contract. Raspberry Pi reference board results should be kept separate as upstream comparison logs, and only platforms confirmed to have it applied on the product branch should be regression targets.</p>
+        <p>**Camera HAL / Driver Perspective**</p>
+        <p>libcamera v0.7.1 is an upstream driver/image-pipeline signal. Connect it to AE/AWB, metadata consistency, and frame timing verification only when there is evidence of product adoption, and do not conclude that it is an Android HAL API change.</p>
+        <p>### What to Check</p>
+        <p>- Check whether the v0.7.1 changes are actually included in the vendor kernel, BSP, or libcamera fork.</p>
+        <p>- On devices where it is applied, compare the Preview + ImageCapture AE/AWB smoke test and captureResult metadata consistency.</p>
+        <p>- Keep Raspberry Pi reference results only as upstream comparison logs, not as evidence about the product camera stack.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>libcamera Release Announcements - libcamera v0.7.1</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html">libcamera Release Announcements - libcamera v0.7.1</a></li></ul></div>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
