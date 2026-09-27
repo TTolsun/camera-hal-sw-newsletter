@@ -2175,3 +2175,13 @@ pre code {
     transform: none;
   }
 }
+
+/* Language selection shares the navigation palette and type scale. */
+.language-selector { position: relative; }
+.language-button { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.language-options { position: absolute; right: 0; top: calc(100% + 8px); z-index: 50; min-width: 144px; margin: 0; padding: 6px; list-style: none; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+.language-options[hidden] { display: none; }
+.language-options a { display: block; padding: 10px 12px; border-radius: 4px; }
+.language-options a[aria-current] { font-weight: 600; }
+.language-button:focus-visible, .language-options a:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.language-button:hover, .language-options a:hover { color: var(--primary); }

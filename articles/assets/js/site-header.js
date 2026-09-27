@@ -41,10 +41,12 @@
   // 바꿔야 초록이 된다.
   function siteHeaderHtml(options = {}) {
     const rootPath = normalizeRootPath(options.rootPath);
-    const brandHref = `${rootPath}index.html`;
+    const locale = options.locale || 'ko';
+    const navPath = `${rootPath}${locale === 'en' ? 'en/' : ''}`;
+    const brandHref = `${navPath}index.html`;
     const brandLogoSrc = `${rootPath}${BRAND_LOGO_PATH}`;
     const links = NAV_ITEMS
-      .map(item => `<a href="${escapeHtml(siteHref(item, rootPath))}">${escapeHtml(item.label)}</a>`)
+      .map((item, index) => `<a href="${escapeHtml(siteHref(item, navPath))}">${escapeHtml(locale === 'en' ? ['Home', 'Archive', 'GitHub'][index] : item.label)}</a>`)
       .join('\n        ');
     return `<header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
@@ -69,7 +71,7 @@
     if (!root || typeof root.querySelectorAll !== 'function') return;
     for (const target of root.querySelectorAll('[data-site-header]')) {
       const rootPath = target.getAttribute('data-site-root') || '';
-      target.outerHTML = siteHeaderHtml({ rootPath });
+      target.outerHTML = siteHeaderHtml({ rootPath, locale: root.documentElement?.lang || 'ko' });
     }
   }
 
@@ -77,6 +79,54 @@
     const withoutIndex = String(path || '').replace(/\/index\.html$/i, '/');
     const trimmed = withoutIndex.replace(/\/+$/, '');
     return trimmed || '/';
+  }
+
+  function languagePaths({ pathname, basePath = '/', alternateHref = '' }) {
+    const base = basePath.endsWith('/') ? basePath : `${basePath}/`;
+    const relative = pathname.startsWith(base) ? pathname.slice(base.length) : '';
+    const english = relative.startsWith('en/');
+    const page = english ? relative.slice(3) : relative;
+    const supported = ['', 'index.html', 'archive.html'].includes(page);
+    const alternate = alternateHref.startsWith(base) && !alternateHref.startsWith('//') ? alternateHref : '';
+    return {
+      ko: english ? (alternate || `${base}${page}`) : pathname,
+      en: english ? pathname : (alternate || `${base}en/${supported ? page : 'archive.html'}`)
+    };
+  }
+
+  function mountLanguageSelectors(doc = global.document) {
+    if (!doc || !doc.documentElement || typeof doc.querySelector !== 'function') return;
+    const script = doc.querySelector('script[src$="assets/js/site-header.js"]');
+    if (!script) return;
+    const basePath = new URL('../../', script.src).pathname;
+    const locale = doc.documentElement.lang === 'en' ? 'en' : 'ko';
+    const paths = languagePaths({ pathname: global.location.pathname, basePath, alternateHref: doc.documentElement.getAttribute('data-alternate-href') || '' });
+    for (const nav of doc.querySelectorAll('.homepage-nav-links')) {
+      if (nav.querySelector('.language-selector')) continue;
+      const container = doc.createElement('div');
+      container.className = 'language-selector';
+      container.innerHTML = `<button type="button" class="language-button" aria-expanded="false" aria-label="${locale === 'en' ? 'Choose language' : '언어 선택'}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><span>${locale === 'en' ? 'English' : '한국어'}</span><span aria-hidden="true">▾</span></button><ul class="language-options" hidden><li><a lang="ko" hreflang="ko" href="${escapeHtml(paths.ko)}"${locale === 'ko' ? ' aria-current="true"' : ''}>한국어</a></li><li><a lang="en" hreflang="en" href="${escapeHtml(paths.en)}"${locale === 'en' ? ' aria-current="true"' : ''}>English</a></li></ul>`;
+      nav.appendChild(container);
+      const button = container.querySelector('button');
+      const list = container.querySelector('ul');
+      const close = () => { list.hidden = true; button.setAttribute('aria-expanded', 'false'); };
+      button.addEventListener('click', () => {
+        list.hidden = !list.hidden;
+        button.setAttribute('aria-expanded', String(!list.hidden));
+      });
+      button.addEventListener('keydown', event => {
+        if (event.key !== 'ArrowDown') return;
+        event.preventDefault();
+        list.hidden = false;
+        button.setAttribute('aria-expanded', 'true');
+        list.querySelector('a').focus();
+      });
+      container.addEventListener('keydown', event => {
+        if (event.key === 'Escape') { close(); button.focus(); }
+      });
+      container.addEventListener('focusout', event => { if (!container.contains(event.relatedTarget)) close(); });
+      doc.addEventListener('click', event => { if (!container.contains(event.target)) close(); });
+    }
   }
 
   // 이미 보고 있는 페이지를 가리키는 내부 링크(홈에서 "홈"/로고, 아카이브에서 "아카이브")를 누르면
@@ -111,6 +161,8 @@
     NAV_ITEMS,
     siteHeaderHtml,
     mountSiteHeaders,
+    languagePaths,
+    mountLanguageSelectors,
     initSamePageScrollToTop
   };
 
@@ -122,9 +174,10 @@
 
   if (global.document) {
     if (global.document.readyState === 'loading') {
-      global.document.addEventListener('DOMContentLoaded', () => mountSiteHeaders());
+      global.document.addEventListener('DOMContentLoaded', () => { mountSiteHeaders(); mountLanguageSelectors(); });
     } else {
       mountSiteHeaders();
+      mountLanguageSelectors();
     }
     initSamePageScrollToTop();
   }

@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Camera HAL, Android Camera, Driver, Image Processing, AI 뉴스레터 아카이브" />
+  <meta name="description" content="Newsletter archive covering Camera HAL, Android Camera, drivers, image processing and AI" />
   <title>Archive | Camera SW Newsletter</title>
-  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/archive.html" />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/archive.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Camera SW Newsletter" />
   <meta property="og:title" content="Newsletter Archive | Camera SW Newsletter" />
-  <meta property="og:description" content="Camera HAL, Android Camera, Driver, Image Processing, AI 뉴스레터 아카이브" />
-  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/archive.html" />
+  <meta property="og:description" content="Newsletter archive covering Camera HAL, Android Camera, drivers, image processing and AI" />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/archive.html" />
   <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Newsletter Archive | Camera SW Newsletter" />
-  <meta name="twitter:description" content="Camera HAL, Android Camera, Driver, Image Processing, AI 뉴스레터 아카이브" />
+  <meta name="twitter:description" content="Newsletter archive covering Camera HAL, Android Camera, drivers, image processing and AI" />
   <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <script src="assets/js/site-header.js" defer></script>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <script src="../assets/js/site-header.js" defer></script>
+  <meta property="og:locale" content="en_US" />
   <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/archive.html" />
   <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/archive.html" />
   <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/archive.html" />
@@ -28,12 +29,12 @@
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="index.html" aria-label="Camera SW Newsroom">
-        <img class="brand-logo" src="assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <img class="brand-logo" src="../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
         <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
       </a>
       <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
-        <a href="index.html">홈</a>
-        <a href="archive.html">아카이브</a>
+        <a href="index.html">Home</a>
+        <a href="archive.html">Archive</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </div>
@@ -43,31 +44,31 @@
     <section class="archive-hero content-wrap" aria-labelledby="archive-page-title">
       <div class="archive-hero-copy">
         <p class="eyebrow">Newsletter Archive</p>
-        <h1 id="archive-page-title">아카이브</h1>
+        <h1 id="archive-page-title">Archive</h1>
         <p class="archive-hero-description">
-          모든 뉴스레터를 날짜 흐름과 주제별로 모아봅니다.
+          Browse every issue by date and topic. Issues without an English translation link to the Korean edition.
         </p>
       </div>
     </section>
 
-    <section class="section archive-page-section content-wrap" aria-label="아카이브 목록">
+    <section class="section archive-page-section content-wrap" aria-label="Archive list">
       <section class="archive-status sr-only" data-archive-status role="status" aria-live="polite">
-        아카이브를 불러오는 중입니다.
+        Loading the archive.
       </section>
 
       <section class="archive-page-panel" data-archive-controls aria-label="Archive controls" hidden>
         <div class="archive-stat-grid" aria-label="Archive summary">
           <div class="archive-stat">
-            <span class="archive-stat-label">발행 호수</span>
+            <span class="archive-stat-label">Published issues</span>
             <strong data-archive-count>-</strong>
           </div>
           <div class="archive-stat">
-            <span class="archive-stat-label">주제</span>
-            <strong data-archive-topic-label>전체</strong>
+            <span class="archive-stat-label">Topic</span>
+            <strong data-archive-topic-label>All</strong>
           </div>
           <div class="archive-stat">
-            <span class="archive-stat-label">정렬</span>
-            <strong data-archive-sort-label>최신순</strong>
+            <span class="archive-stat-label">Order</span>
+            <strong data-archive-sort-label>Latest first</strong>
           </div>
         </div>
 
@@ -75,8 +76,8 @@
           <div class="keyword-row archive-topic-list" data-topic-filter role="group" aria-label="Archive topic filter"></div>
           <label class="archive-sort-control archive-page-sort">
             <select class="nc-sort" data-sort-control aria-label="Archive sort order">
-              <option value="latest">최신순</option>
-              <option value="oldest">오래된순</option>
+              <option value="latest">Latest first</option>
+              <option value="oldest">Oldest first</option>
             </select>
           </label>
         </form>
@@ -88,13 +89,13 @@
       <nav class="archive-pagination" data-archive-pagination aria-label="Archive pages" hidden></nav>
 
       <div class="archive-empty-state" data-empty-state hidden>
-        <p class="muted">선택한 주제에 해당하는 뉴스레터가 없습니다.</p>
-        <p class="muted">다른 주제를 선택하거나 전체 아카이브를 확인해보세요.</p>
+        <p class="muted">No newsletters match this topic.</p>
+        <p class="muted">Choose another topic or browse all issues.</p>
       </div>
 
       <div class="archive-empty-state archive-error-state" data-error-state role="status" aria-live="polite" hidden>
-        <p class="muted">아카이브를 불러오지 못했습니다.</p>
-        <p class="muted">잠시 후 다시 시도하거나 GitHub 저장소에서 data/newsletters.json 상태를 확인하세요.</p>
+        <p class="muted">Could not load the archive.</p>
+        <p class="muted">Please try again later.</p>
       </div>
     </section>
   </main>
@@ -103,29 +104,29 @@
     <div class="content-wrap footer-inner">
       <div class="footer-cols">
         <div class="footer-col">
-          <span class="footer-col-title">뉴스레터</span>
-          <a class="footer-link" href="index.html">홈</a>
-          <a class="footer-link" href="archive.html">아카이브</a>
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="index.html">Home</a>
+          <a class="footer-link" href="archive.html">Archive</a>
         </div>
         <div class="footer-col">
-          <span class="footer-col-title">주제</span>
+          <span class="footer-col-title">Topic</span>
           <span class="footer-note">Camera HAL · Android</span>
           <span class="footer-note">Driver · Image Processing</span>
           <span class="footer-note">AI · SoC Platform</span>
         </div>
         <div class="footer-col">
-          <span class="footer-col-title">리소스</span>
-          <a class="footer-link" href="learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../learning/ai-engineering/index.html">AI Engineering Lab</a>
           <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
-          <span class="footer-note">RSS (지원예정)</span>
-          <span class="footer-note">편집 정책 (지원예정)</span>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
         </div>
       </div>
-      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Gemini 뉴스룸이 모아 사람이 검토·발행합니다.</small></div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
     </div>
   </footer>
 
-  <script src="assets/js/newsletter-archive.js"></script>
+  <script src="../assets/js/newsletter-archive.js"></script>
   <script>
     const ARCHIVE_PAGE_SIZE = 12;
     const archiveHelpers = window.NewsletterArchive;
@@ -165,11 +166,11 @@
 
     function topicLabel(topicKey) {
       const topic = archiveHelpers.TOPICS.find(item => item.key === topicKey) || archiveHelpers.TOPICS[0];
-      return topic.label;
+      return topic.key === 'all' ? 'All' : topic.label;
     }
 
     function sortLabel(sortKey) {
-      return sortKey === 'oldest' ? '오래된순' : '최신순';
+      return sortKey === 'oldest' ? 'Oldest first' : 'Latest first';
     }
 
     function sortedVisibleEntries(state) {
@@ -218,7 +219,7 @@
         const isActive = topic.key === activeTopic;
         const disabled = count === 0 && topic.key !== 'all';
         const classes = ['keyword', 'archive-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
-        return `<button type="button" class="${classes}" data-archive-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}><span>${escapeHtml(topic.label)}</span><span class="archive-topic-count">${count}</span></button>`;
+        return `<button type="button" class="${classes}" data-archive-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}><span>${escapeHtml(topic.key === 'all' ? 'All' : topic.label)}</span><span class="archive-topic-count">${count}</span></button>`;
       }).join('');
     }
 
@@ -237,9 +238,9 @@
       }).join('');
 
       paginationEl.innerHTML = `
-        <button type="button" class="archive-page-button archive-page-button-prev" data-archive-page="${Math.max(1, page - 1)}"${page === 1 ? ' disabled aria-disabled="true"' : ''}>이전</button>
+        <button type="button" class="archive-page-button archive-page-button-prev" data-archive-page="${Math.max(1, page - 1)}"${page === 1 ? ' disabled aria-disabled="true"' : ''}>Previous</button>
         <div class="archive-page-list" aria-label="Archive page list">${pageButtons}</div>
-        <button type="button" class="archive-page-button archive-page-button-next" data-archive-page="${Math.min(pageCount, page + 1)}"${page === pageCount ? ' disabled aria-disabled="true"' : ''}>다음</button>
+        <button type="button" class="archive-page-button archive-page-button-next" data-archive-page="${Math.min(pageCount, page + 1)}"${page === pageCount ? ' disabled aria-disabled="true"' : ''}>Next</button>
       `;
       setHidden(paginationEl, false);
     }
@@ -265,13 +266,13 @@
       const endIndex = startIndex + pageEntries.length;
       const summary = count > 0
         ? pageCount > 1
-          ? `${topic} ${count}개 아카이브 중 ${startIndex + 1}-${endIndex}개를 ${sortLabel(currentState.sort)}으로 표시 중입니다.`
-          : `${topic} ${count}개 아카이브를 ${sortLabel(currentState.sort)}으로 표시 중입니다.`
-        : `${topic} 결과가 없습니다.`;
-      const countLabel = currentState.topic === 'all' ? `${count}호` : `${count}/${total}호`;
+          ? `${topic}: ${startIndex + 1}–${endIndex} of ${count} issues, ${sortLabel(currentState.sort)}.`
+          : `${topic}: ${count} issues, ${sortLabel(currentState.sort)}.`
+        : `No results for ${topic}.`;
+      const countLabel = currentState.topic === 'all' ? `${count} issues` : `${count}/${total} issues`;
 
       if (archiveGridEl) {
-        archiveGridEl.innerHTML = pageEntries.map(entry => archiveHelpers.renderArchiveCard(entry)).join('');
+        archiveGridEl.innerHTML = pageEntries.map(entry => archiveHelpers.renderArchiveCard(entry, { locale: 'en', rootPath: '../' })).join('');
       }
       renderPagination(page, pageCount);
       setText(archiveCountEl, countLabel);
@@ -333,7 +334,7 @@
 
     async function loadArchiveNewsletters() {
       try {
-        const response = await fetch('data/newsletters-weekly.json', { cache: 'no-store' });
+        const response = await fetch('../data/newsletters-weekly.json', { cache: 'no-store' });
         if (!response.ok) {
           throw new Error(`Failed to fetch newsletters.json: ${response.status}`);
         }
@@ -353,7 +354,7 @@
         setHidden(paginationEl, true);
         setHidden(emptyStateEl, true);
         setHidden(errorStateEl, false);
-        setStatus('아카이브를 불러오지 못했습니다.');
+        setStatus('Could not load the archive.');
         console.error(error);
       }
     }

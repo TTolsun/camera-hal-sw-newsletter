@@ -19,7 +19,7 @@ const {
 const root = process.cwd();
 const errors = [];
 
-const STATIC_PAGES = ['index.html', 'archive.html', `${AI_ENGINEERING_LEARNING_PATH}index.html`];
+const STATIC_PAGES = ['en/index.html', 'en/archive.html', 'index.html', 'archive.html', `${AI_ENGINEERING_LEARNING_PATH}index.html`];
 const ABSOLUTE_URL_TAGS = ['canonical', 'og:image', 'og:url'];
 
 function checkStaticPageMeta() {
@@ -60,6 +60,8 @@ function checkSitemap() {
   }
   const requiredEntries = [
     SITE_BASE_URL,
+    `${SITE_BASE_URL}en/index.html`,
+    `${SITE_BASE_URL}en/archive.html`,
     `${SITE_BASE_URL}archive.html`,
     `${SITE_BASE_URL}${AI_ENGINEERING_LEARNING_PATH}`
   ];

@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { hasLongKoreanProse, validateEnglishEntry } = require('./english-locale');
 const path = require('path');
 
 const {
@@ -167,6 +168,22 @@ function checkPromptHosts() {
   }
 }
 
+function checkEnglishSurface() {
+  for (const name of ['newsletters.json', 'newsletters-weekly.json']) {
+    for (const item of readJson(path.join('articles', 'data', name))) errors.push(...validateEnglishEntry(item, root, { structure: false }));
+  }
+  function visit(dir) {
+    if (!fs.existsSync(dir)) return;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const file = path.join(dir, entry.name);
+      if (entry.isDirectory()) visit(file);
+      else if (entry.name.endsWith('.html') && hasLongKoreanProse(visibleHtmlText(fs.readFileSync(file, 'utf8')))) errors.push(`Korean prose remains in ${relPath(file)}`);
+    }
+  }
+  visit(repoPath('articles/en'));
+}
+
+checkEnglishSurface();
 checkMarkdown();
 checkNewsletterData();
 checkHomepageHeadlineData();

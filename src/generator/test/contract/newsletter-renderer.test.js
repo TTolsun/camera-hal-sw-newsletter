@@ -223,7 +223,8 @@ test('newsletter renderer keeps generated issue nav labels on the newsroom Korea
   assert.match(html, /<footer class="site-footer">/);
   assert.match(html, /<span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom<\/span><\/span>/);
   assert.match(html, /<title>Camera SW Newsletter - 2026-05-03<\/title>/);
-  assert.doesNotMatch(html, /data-site-header|site-header\.js/);
+  assert.doesNotMatch(html, /data-site-header/);
+  assert.match(html, /site-header\.js/);
 
   // 홈·아카이브·Lab 과 같은 한 벌로, 렌더 **산출물**을 대상으로 잠근다. 이슈 페이지는 두 단계
   // 아래에 놓이므로 사이트 루트 접두어가 '../../' 다.
@@ -614,12 +615,13 @@ test('newsletter renderer keeps v1 output byte-identical', () => {
     // HTML 3종은 #671 에서 구독 CTA 를 붙이며 갱신했고, 구독 기능을 걷어내며 다시 갱신했다
     // (AI Engineering Lab 링크 때와 같은 종류의 변경). **markdown 3종이 그대로인
     // 것이 이 변경이 HTML 전용이라는 증거다** — markdown 이 함께 움직였다면 그건 결함이다.
+    // #1190: HTML adds locale metadata and the language-selector script; Markdown stays unchanged.
     plainMarkdown: 'c48f47e42dc73097',
-    plainHtml: 'f4e28bede7c48fca',
+    plainHtml: 'c036af7eba3ff24a',
     storyMarkdown: 'f3602357add8a9ff',
-    storyHtml: '92607482d188a405',
+    storyHtml: 'f51963705d3c57c1',
     contextMarkdown: 'e754eef59b3f0cff',
-    contextHtml: '7e4527f8b24b7c7c'
+    contextHtml: '92ce1da626fafa08'
   });
 });
 

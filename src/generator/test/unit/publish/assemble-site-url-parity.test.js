@@ -35,6 +35,8 @@ function writePublicLayout(root, { weeklyKey = '2026-W23' } = {}) {
     path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html'),
     `<!doctype html><html><body>learning${fullFooter('index.html')}</body></html>`
   );
+  writeText(path.join(root, 'articles', 'en', 'index.html'), `<html><body>${fullFooter()}</body></html>`);
+  writeText(path.join(root, 'articles', 'en', 'archive.html'), `<html><body>${fullFooter()}</body></html>`);
   writeText(path.join(root, 'articles', 'robots.txt'), `Sitemap: ${SITE_BASE_URL}sitemap.xml\n`);
   writeText(path.join(root, 'articles', 'css', 'styles.css'), 'body{}');
   writeText(path.join(root, 'articles', 'assets', 'js', 'site-header.js'), '// header');
@@ -129,7 +131,7 @@ test('assembleSite copies root index.html and articles/ contents to _site root a
   assert.equal(fs.existsSync(path.join(result.outDir, 'data', 'newsletters.json')), true);
   assert.equal(fs.existsSync(path.join(result.outDir, 'newsletters', '2026-W23', 'index.html')), true);
   assert.equal(fs.existsSync(path.join(result.outDir, '.nojekyll')), true);
-  assert.equal(result.footerLinksUpdated, 3);
+  assert.equal(result.footerLinksUpdated, 5);
   // articles/ 디렉터리 자체는 _site 안에 평탄화되어 남지 않는다.
   assert.equal(fs.existsSync(path.join(result.outDir, 'articles')), false);
 
@@ -155,6 +157,22 @@ test('assembleSite throws when root index.html is missing', () => {
   const root = tempRoot('assemble-site-missing-');
   writeText(path.join(root, 'articles', 'archive.html'), '<html></html>');
   assert.throws(() => assembleSite({ root, out: path.join(root, '_site_out') }), /index\.html is required/);
+});
+
+test('assembly adds language navigation to historical copies without rewriting their source or duplicating scripts', () => {
+  const root = tempRoot('assemble-locale-');
+  writePublicLayout(root);
+  const issuePath = path.join(root, 'articles', 'newsletters', '2026-W23', 'index.html');
+  const original = `<html><body><header><div class="homepage-nav-links"></div></header>${legacyFooter()}</body></html>`;
+  writeText(issuePath, original);
+  const out = path.join(root, '_site_out');
+  assembleSite({ root, out });
+  assert.equal(fs.readFileSync(issuePath, 'utf8'), original);
+  const deployed = fs.readFileSync(path.join(out, 'newsletters', '2026-W23', 'index.html'), 'utf8');
+  assert.match(deployed, /src="\.\.\/\.\.\/assets\/js\/site-header\.js" defer/);
+  writeText(issuePath, deployed);
+  assembleSite({ root, out });
+  assert.equal((fs.readFileSync(path.join(out, 'newsletters', '2026-W23', 'index.html'), 'utf8').match(/site-header\.js/g) || []).length, 1);
 });
 
 test('validateUrlParity passes when every sitemap and top-level URL has a backing file', () => {

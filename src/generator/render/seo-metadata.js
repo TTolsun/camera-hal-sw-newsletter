@@ -58,6 +58,8 @@ function renderSitemapXml(entries) {
 function staticSitemapEntries() {
   return [
     { loc: SITE_BASE_URL },
+    { loc: absoluteUrl('en/index.html') },
+    { loc: absoluteUrl('en/archive.html') },
     { loc: `${SITE_BASE_URL}archive.html` },
     { loc: absoluteUrl(AI_ENGINEERING_LEARNING_PATH) }
   ];
@@ -80,6 +82,9 @@ function buildSitemap(weeklyIssues = []) {
       loc: absoluteUrl(html),
       lastmod: String(issue.weekEndDate || issue.date || '').trim()
     });
+  }
+  for (const issue of issues) {
+    if (issue?.en?.html) entries.push({ loc: absoluteUrl(issue.en.html), lastmod: String(issue.weekEndDate || issue.date || '').trim() });
   }
   return renderSitemapXml(entries);
 }

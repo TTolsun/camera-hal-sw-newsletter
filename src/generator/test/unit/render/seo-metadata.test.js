@@ -49,7 +49,7 @@ test('buildStaticSitemap lists stable entry points and is data-independent', () 
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}</loc>`));
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}archive.html</loc>`));
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}${AI_ENGINEERING_LEARNING_PATH}</loc>`));
-  assert.equal((xml.match(/<url>/g) || []).length, 3);
+  assert.equal((xml.match(/<url>/g) || []).length, 5);
   assert.ok(xml.endsWith('\n'));
 });
 
@@ -65,13 +65,13 @@ test('buildSitemap enumerates stable pages and each weekly issue with lastmod', 
   assert.ok(xml.includes(`<loc>${SITE_BASE_URL}newsletters/2026-W22/index.html</loc>`));
   assert.ok(xml.includes('<lastmod>2026-06-07</lastmod>')); // weekEndDate preferred
   assert.ok(xml.includes('<lastmod>2026-05-25</lastmod>')); // falls back to date
-  assert.equal((xml.match(/<url>/g) || []).length, 5); // 3 stable pages + 2 issues
+  assert.equal((xml.match(/<url>/g) || []).length, 7); // 5 stable pages + 2 issues
   assert.ok(xml.endsWith('\n'));
 });
 
 test('buildSitemap skips entries with no html and equals static sitemap when empty', () => {
   const xml = buildSitemap([{ weeklyKey: '2026-W23' }]);
-  assert.equal((xml.match(/<url>/g) || []).length, 3); // stable pages only
+  assert.equal((xml.match(/<url>/g) || []).length, 5); // stable pages only
   assert.equal(buildSitemap([]), buildStaticSitemap());
 });
 

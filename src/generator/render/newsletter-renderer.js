@@ -8,9 +8,6 @@ const {
   fallbackEditionNoticeLines
 } = require('../../shared/common/publication-mode');
 const {
-  renderCandidateSelectionDiagnostics
-} = require('../select/selection-diagnostics');
-const {
   articleSectionContractRows: buildArticleSectionContractRows,
   articleSectionContractRowValues
 } = require('../reporter/article-structure-summary');
@@ -29,12 +26,15 @@ const {
   uniqueArticleAnchorId
 } = require('../reporter/article-anchor');
 const {
-  renderReleaseQaInventorySection
-} = require('../publish/review-artifact-inventory');
-const {
   SITE_BASE_URL,
   DEFAULT_OG_IMAGE
 } = require('./seo-metadata');
+
+const locales = { ko: require('./locale/ko'), en: require('./locale/en') };
+
+function createRenderer(locale = 'ko') {
+  const t = Object.hasOwn(locales, locale) ? locales[locale] : null;
+  if (!t) throw new Error(`Unsupported locale: ${locale}`);
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -46,9 +46,9 @@ function escapeHtml(value) {
 }
 
 function markdownLink(source) {
-  const title = source.title || source.url || '출처';
+  const title = source.title || source.url || t.source;
   const thread = loreThreadUrl(source.url);
-  const suffix = thread ? ` — [전체 패치 시리즈](${thread})` : '';
+  const suffix = thread ? ` — [${t.patchSeries}](${thread})` : '';
   return `- [${title}](${source.url})${suffix}`;
 }
 
@@ -61,7 +61,7 @@ function sourceListHtml(sources) {
     .filter(source => source && source.url)
     .map(source => {
       const thread = loreThreadUrl(source.url);
-      const suffix = thread ? ` — <a href="${escapeHtml(thread)}">전체 패치 시리즈</a>` : '';
+      const suffix = thread ? ` — <a href="${escapeHtml(thread)}">${t.patchSeries}</a>` : '';
       return `<li><a href="${escapeHtml(source.url)}">${escapeHtml(source.title || source.url)}</a>${suffix}</li>`;
     })
     .join('');
@@ -91,17 +91,21 @@ function httpsUrlOrFallback(value, fallback) {
   return /^https:\/\//i.test(String(value || '').trim()) ? String(value).trim() : fallback;
 }
 
+function localizedImagePath(value) {
+  return locale === 'en' && /^\.\.\/\.\.\//.test(value) ? `../${value}` : value;
+}
+
 function resolvedArticleImage(section) {
   const resolved = section.resolvedImage && (section.resolvedImage.url || section.resolvedImage.src) ? section.resolvedImage : null;
   if (resolved) {
     return {
       ...resolved,
-      src: resolved.url || resolved.src
+      src: localizedImagePath(resolved.url || resolved.src)
     };
   }
   if (!section.selectedImage) return null;
   return {
-    src: section.selectedImage,
+    src: localizedImagePath(section.selectedImage),
     usedFallback: false
   };
 }
@@ -137,9 +141,9 @@ function articleImageMarkdown(section, publicArticle = null) {
   if (isFallbackImagePath(image.src)) {
     return `\n![${alt}](${image.src})\n`;
   }
-  const attribution = section.imageAttribution || section.sources?.[0]?.title || '출처 기사';
+  const attribution = section.imageAttribution || section.sources?.[0]?.title || t.sourceArticle;
   const source = articleImageSource(section);
-  return `\n![${alt}](${image.src})\n\n_이미지: [${attribution}](${source})_\n`;
+  return `\n![${alt}](${image.src})\n\n_${t.image} [${attribution}](${source})_\n`;
 }
 
 function articleMediaHtml(section, publicArticle = null) {
@@ -153,10 +157,10 @@ function articleMediaHtml(section, publicArticle = null) {
           </figure>`;
     }
     const imageSource = articleImageSource(section);
-    const attribution = section.imageAttribution || section.sources?.[0]?.title || '출처 기사';
+    const attribution = section.imageAttribution || section.sources?.[0]?.title || t.sourceArticle;
     return `<figure class="article-media">
             ${imageHtml}
-            <figcaption class="article-image-caption">이미지: <a href="${escapeHtml(imageSource)}">${escapeHtml(attribution)}</a></figcaption>
+            <figcaption class="article-image-caption">${t.image} <a href="${escapeHtml(imageSource)}">${escapeHtml(attribution)}</a></figcaption>
           </figure>`;
   }
 
@@ -188,29 +192,21 @@ function sectionRelevanceBucket(section = {}) {
 }
 
 function articlePerspectiveLabel(issue, section) {
-  return 'Camera HAL/Driver 관점';
+  return t.perspective;
 }
 
 function articlePerspectiveHeading(issue, section) {
-  return `${articlePerspectiveLabel(issue, section)}에서의 의미`;
+  return `${articlePerspectiveLabel(issue, section)}${t.perspectiveSuffix}`;
 }
 
 // HTML 페이지 전용 관점 박스 라벨(mockup). markdown 산출물은 articlePerspectiveHeading 을 유지해
 // 재렌더 시 newsletter.md 가 변하지 않는다.
 function articlePerspectiveHeadingHtml() {
-  return 'Camera HAL · Driver 관점';
+  return t.perspectiveHtml;
 }
 
 // mockup 카테고리 눈썹 라벨: relevance bucket -> 표시 라벨.
-const ARTICLE_CATEGORY_LABELS = {
-  direct_aosp_camera: 'AOSP Camera',
-  camera_driver_image_pipeline: 'Camera Driver · ISP',
-  android: 'Android Platform',
-  cpp_ai_tooling_fallback: 'C++ · AI Tooling',
-  soc_platform_signal: 'SoC Platform',
-  android_multimedia_camera_output: 'Android Multimedia',
-  generic_tech_watchlist: 'Tooling Watch'
-};
+const ARTICLE_CATEGORY_LABELS = t.categories;
 
 // bucket 은 sectionRelevanceBucket 이 8개 필드 변형에서 해석한다. article_type 은
 // 예전 아티팩트가 bucket 값을 article_type 에 실었던 경우를 위한 보조 키다.
@@ -264,18 +260,18 @@ function issueTags(issue) {
 
 function reviewPublicationNoticeLines() {
   return [
-    '검토 발행본입니다.',
-    '각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다.'
+    t.reviewNotice,
+    t.reviewBoundary
   ];
 }
 
 function publicationNoticeLines(issue) {
   const fallbackNotice = issue?.publication_mode === PUBLICATION_MODES.FALLBACK_PUBLIC || issue?.fallback_only === true;
   if (fallbackNotice) {
-    if (Array.isArray(issue.publication_notice) && issue.publication_notice.length > 0) {
+    if (locale === 'ko' && Array.isArray(issue.publication_notice) && issue.publication_notice.length > 0) {
       return issue.publication_notice.map(String).filter(Boolean);
     }
-    return fallbackEditionNoticeLines();
+    return locale === 'ko' ? fallbackEditionNoticeLines() : t.fallbackNotice;
   }
   if (issue?.review_publication_ready === true || issue?.publication_mode === PUBLICATION_MODES.REVIEW_ONLY) {
     return reviewPublicationNoticeLines();
@@ -321,12 +317,12 @@ function issueDisplayDate(issue = {}) {
 
 // Weekly pages list the week's article titles under the issue title, so the section is "이번 주 기사".
 function briefingHeading(issue = {}) {
-  return issue.weekly_key ? '이번 주 기사' : '이번 주 3줄 브리핑';
+  return issue.weekly_key ? t.weeklyBriefing : t.briefing;
 }
 
 // HTML 페이지 전용 브리핑 박스 타이틀(mockup "이번 호 기사"). markdown 은 briefingHeading 유지.
 function briefingHeadingHtml(issue = {}) {
-  return issue.weekly_key ? '이번 호 기사' : briefingHeading(issue);
+  return issue.weekly_key ? t.issueBriefing : briefingHeading(issue);
 }
 
 // coverage 필드 3개(coverage_week_key/coverage_start_date/coverage_end_date, optional)가 모두
@@ -396,7 +392,7 @@ function issuePublishedWeekBadgeText(issue = {}) {
   const variant = issueCoverageVariant(issue);
   if (!variant || variant.variant !== 'iso_week') return '';
   const weeklyKey = String(issue.weekly_key || '').trim();
-  return /^\d{4}-W\d{2}$/.test(weeklyKey) ? `발행 ${weeklyKey.slice(5)}` : '';
+  return /^\d{4}-W\d{2}$/.test(weeklyKey) ? `${t.published}${weeklyKey.slice(5)}` : '';
 }
 
 // Weekly issues are labeled by ISO week ("2026-W22" -> "2026 W22"); daily issues fall back to date.
@@ -421,7 +417,7 @@ function issueKickerText(issue = {}) {
   const dot = value => String(value).replace(/-/g, '.');
   const variant = issueCoverageVariant(issue);
   if (variant && variant.variant === 'unverified') {
-    return '대상 기간 미확인';
+    return t.unknownCoverage;
   }
   const coverage = issueCoverageDisplay(issue);
   const start = coverage ? coverage.start : String(issue.week_start_date || '').trim();
@@ -429,10 +425,10 @@ function issueKickerText(issue = {}) {
   if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
     const sameYear = start.slice(0, 4) === end.slice(0, 4);
     const range = `${dot(start)} – ${sameYear ? dot(end).slice(5) : dot(end)}`;
-    const prefix = (variant && variant.variant === 'legacy_rolling') ? '대상 ' : '';
+    const prefix = (variant && variant.variant === 'legacy_rolling') ? t.coverage : '';
     return `${prefix}${range}`;
   }
-  return `주간 뉴스레터 ${issue.date || ''}`.trim();
+  return `${t.weeklyNewsletter}${issue.date || ''}`.trim();
 }
 
 // 표시 계약 v2: iso_week variant만 "(발행 WNN)" 접미를 붙인다 — 브라우저 탭 제목/공유 카드에서도
@@ -453,7 +449,7 @@ function issueTitleHtml(issue = {}) {
   const weekLabel = issueWeekLabel(issue);
   if (weekLabel) {
     const variant = issueCoverageVariant(issue);
-    const suffix = (variant && variant.variant === 'unverified') ? ' (대상 기간 미확인)' : '';
+    const suffix = (variant && variant.variant === 'unverified') ? ` (${t.unknownCoverage})` : '';
     return `<span>${escapeHtml(weekLabel + suffix)}</span>`;
   }
   const date = issueDisplayDate(issue);
@@ -461,15 +457,16 @@ function issueTitleHtml(issue = {}) {
 }
 
 function homepageHeaderHtml(rootPath = '') {
+  const navPath = `${rootPath}${locale === 'ko' ? '' : `${locale}/`}`;
   return `<header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
-      <a class="site-brand homepage-brand" href="${escapeHtml(rootPath)}index.html" aria-label="Camera SW Newsroom">
+      <a class="site-brand homepage-brand" href="${escapeHtml(navPath)}index.html" aria-label="Camera SW Newsroom">
         <img class="brand-logo" src="${escapeHtml(rootPath)}assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
         <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
       </a>
       <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
-        <a href="${escapeHtml(rootPath)}index.html">홈</a>
-        <a href="${escapeHtml(rootPath)}archive.html">아카이브</a>
+        <a href="${escapeHtml(navPath)}index.html">${t.home}</a>
+        <a href="${escapeHtml(navPath)}archive.html">${t.archive}</a>
         <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
       </div>
     </div>
@@ -478,29 +475,30 @@ function homepageHeaderHtml(rootPath = '') {
 
 function siteFooterHtml(rootPath = '') {
   const root = escapeHtml(rootPath);
+  const nav = `${root}${locale === 'ko' ? '' : `${locale}/`}`;
   return `<footer class="site-footer">
     <div class="content-wrap footer-inner">
       <div class="footer-cols">
         <div class="footer-col">
-          <span class="footer-col-title">뉴스레터</span>
-          <a class="footer-link" href="${root}index.html">홈</a>
-          <a class="footer-link" href="${root}archive.html">아카이브</a>
+          <span class="footer-col-title">${t.newsletter}</span>
+          <a class="footer-link" href="${nav}index.html">${t.home}</a>
+          <a class="footer-link" href="${nav}archive.html">${t.archive}</a>
         </div>
         <div class="footer-col">
-          <span class="footer-col-title">주제</span>
+          <span class="footer-col-title">${t.topics}</span>
           <span class="footer-note">Camera HAL · Android</span>
           <span class="footer-note">Driver · Image Processing</span>
           <span class="footer-note">AI · SoC Platform</span>
         </div>
         <div class="footer-col">
-          <span class="footer-col-title">리소스</span>
+          <span class="footer-col-title">${t.resources}</span>
           <a class="footer-link" href="${root}learning/ai-engineering/index.html">AI Engineering Lab</a>
           <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
-          <span class="footer-note">RSS (지원예정)</span>
-          <span class="footer-note">편집 정책 (지원예정)</span>
+          <span class="footer-note">${t.rss}</span>
+          <span class="footer-note">${t.policy}</span>
         </div>
       </div>
-      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Gemini 뉴스룸이 모아 사람이 검토·발행합니다.</small></div>
+      <div class="footer-legal"><small>${t.legal}</small></div>
     </div>
   </footer>`;
 }
@@ -509,7 +507,7 @@ function catchUpWeeksLabel(section) {
   const days = Number(section.catch_up_age_days);
   if (!Number.isFinite(days)) return '';
   const weeks = Math.max(1, Math.round(days / 7));
-  return ` (${weeks}주 전 릴리스)`;
+  return ` (${weeks}${t.weeksAgo})`;
 }
 
 function normalizedSections(issue) {
@@ -538,7 +536,7 @@ function normalizedSections(issue) {
   });
 }
 
-const CATCH_UP_DIVIDER_HEADING = '지난 소식 (Catch-up)';
+const CATCH_UP_DIVIDER_HEADING = t.catchUp;
 
 function sectionsMarkdownWithCatchUpDivider(issue) {
   let dividerEmitted = false;
@@ -731,7 +729,7 @@ ${articleBodyMarkdown(publicArticle, storyContractVersion)}
 
 ${publicArticle.camera_hal_takeaway}
 
-**출처**
+**${t.source}**
 
 ${sourceListMarkdown(publicArticle.source_links)}
 `;
@@ -747,8 +745,8 @@ ${sourceListMarkdown(publicArticle.source_links)}
 //
 // 그래서 코드가 직접 쓰는 문자열은 참/거짓을 가릴 수 있는 명제가 아니라, 그 호를 어떤 관점으로
 // 읽는지만 알리는 관점 라벨로 제한한다. 사실 주장은 LLM 이 쓰고 팩트체커가 검증하는 본문 몫이다.
-const CONTEXT_LENS_LABEL = '실무 레이더 관점';
-const WATCH_POINTS_HEADING = '다음 관전 포인트';
+const CONTEXT_LENS_LABEL = t.context;
+const WATCH_POINTS_HEADING = t.watch;
 
 function hasWatchPoints(issue) {
   return Array.isArray(issue?.watch_points) && issue.watch_points.length > 0;
@@ -791,7 +789,7 @@ function watchPointsHtml(issue) {
       </section>\n`;
 }
 
-const REFERENCE_ARTICLES_HEADING = '참고 / 더 읽을거리';
+const REFERENCE_ARTICLES_HEADING = t.reading;
 
 function escapeMarkdownLinkText(value) {
   return String(value).replace(/[[\]]/g, '\\$&');
@@ -811,7 +809,7 @@ ${bullets}
 }
 
 // HTML 페이지 전용 헤딩(mockup 중점 표기). markdown 은 REFERENCE_ARTICLES_HEADING 유지.
-const REFERENCE_ARTICLES_HEADING_HTML = '참고 · 더 읽을거리';
+const REFERENCE_ARTICLES_HEADING_HTML = t.readingHtml;
 
 function referenceArticlesHtml(issue) {
   const articles = Array.isArray(issue?.reference_articles) ? issue.reference_articles : [];
@@ -838,7 +836,7 @@ ${bulletsMarkdown(issue.briefing)}
 ${contextLensLabelMarkdown(issue)}
 ${sectionsMarkdownWithCatchUpDivider(issue)}
 
-${watchPointsMarkdown(issue)}${referenceArticlesMarkdown(issue)}## 참고자료
+${watchPointsMarkdown(issue)}${referenceArticlesMarkdown(issue)}## ${t.references}
 
 ${sourceListMarkdown(issue.references)}
 `;
@@ -886,7 +884,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
         <h2 id="${escapeHtml(anchorId)}-title" class="article-title">${escapeHtml(publicArticle.headline || htmlHeading)}</h2>${articleTagsBlock}
 ${articleBodyBlocks}
         <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
-        <div class="source-list"><strong>출처</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
+        <div class="source-list"><strong>${t.source}</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
       </section>`;
 }
 
@@ -898,7 +896,7 @@ function issueHeroHtml(issue) {
     ? `\n        <p class="issue-publish-badge">${escapeHtml(publishedWeekBadge)}</p>`
     : '';
   return `<header class="article-header issue-hero">
-        <a class="issue-back" href="../../index.html">← 뉴스룸</a>
+        <a class="issue-back" href="../../index.html">← ${t.newsroom}</a>
         <div class="article-meta issue-hero-meta">
           <span class="issue-kicker">${escapeHtml(issueKickerText(issue))}</span>
         </div>
@@ -919,18 +917,25 @@ function issueBriefingHtml(issue) {
 
 function issueCanonicalUrl(issue = {}) {
   const slug = String(issue.weekly_key || issue.date || '').trim();
-  return `${SITE_BASE_URL}newsletters/${slug}/index.html`;
+  return `${SITE_BASE_URL}${locale === 'ko' ? '' : `${locale}/`}newsletters/${slug}/index.html`;
 }
 
 // #51 후속: 기사 페이지(newsletters/<slug>/index.html)의 share/SEO 메타.
 // og:type=article, canonical/og:url은 발행물의 공개 경로(주간이면 weekly_key, 아니면 date),
 // description은 issue summary, 대표 이미지는 기본 preview(HALley)를 쓴다.
+function alternateIssuePath(issue) {
+  const slug = String(issue.weekly_key || issue.date || '').trim();
+  return new URL(`${locale === 'ko' ? 'en/' : ''}newsletters/${slug}/index.html`, SITE_BASE_URL).pathname;
+}
+
 function articleSeoHead(issue = {}) {
   const title = issuePageTitle(issue);
   const description = String(issue.summary || '').trim();
   const url = issueCanonicalUrl(issue);
   const image = DEFAULT_OG_IMAGE;
   return [
+    ...['ko', 'en', 'x-default'].map(language => `  <link rel="alternate" hreflang="${language}" href="${SITE_BASE_URL}${language === 'en' ? 'en/' : ''}newsletters/${escapeHtml(issue.weekly_key || issue.date)}/index.html" />`),
+    `  <meta property="og:locale" content="${locale === 'ko' ? 'ko_KR' : 'en_US'}" />`,
     `  <meta name="description" content="${escapeHtml(description)}" />`,
     `  <link rel="canonical" href="${escapeHtml(url)}" />`,
     '  <meta property="og:type" content="article" />',
@@ -949,9 +954,9 @@ function articleSeoHead(issue = {}) {
 function buildPublicHtml(issue) {
   const publicationNotice = publicationNoticeHtml(issue);
   const publicationNoticeBlock = publicationNotice ? `      ${publicationNotice}\n\n` : '';
-  const rootPath = '../../';
+  const rootPath = locale === 'ko' ? '../../' : '../../../';
   return `<!DOCTYPE html>
-<html lang="ko">
+<html lang="${locale}" data-alternate-href="${escapeHtml(alternateIssuePath(issue))}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -959,7 +964,8 @@ function buildPublicHtml(issue) {
 ${articleSeoHead(issue)}
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-  <link rel="stylesheet" href="../../css/styles.css" />
+  <link rel="stylesheet" href="${rootPath}css/styles.css" />
+  <script src="${rootPath}assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
   ${homepageHeaderHtml(rootPath)}
@@ -973,14 +979,14 @@ ${contextLensLabelHtml(issue)}
 ${sectionsHtmlWithCatchUpDivider(issue)}
 ${watchPointsHtml(issue)}${referenceArticlesHtml(issue)}
       <section class="section issue-references" aria-labelledby="issue-references-title">
-        <h2 id="issue-references-title">참고자료</h2>
+        <h2 id="issue-references-title">${t.references}</h2>
         <div class="reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
       </section>
 
-      <nav class="issue-footer-navigation" aria-label="이슈 하단 이동">
-        <a href="../../index.html">← 뉴스룸으로</a>
+      <nav class="issue-footer-navigation" aria-label="${t.footerNavigation}">
+        <a href="../../index.html">← ${t.back}</a>
         <span aria-hidden="true">·</span>
-        <a href="../../archive.html">아카이브 전체 보기 →</a>
+        <a href="../../archive.html">${t.allArchive} →</a>
       </nav>
 
     </article>
@@ -999,154 +1005,21 @@ function buildHtml(issue) {
   return buildPublicHtml(issue);
 }
 
-function buildFactCheckMarkdown(date, report) {
-  const mustFix = ensureArray(report.must_fix);
-  return `# 사실 검증 보고서 - ${date}
-
-## 상태
-
-${report.status}
-
-## 반드시 수정할 항목
-
-${mustFix.length === 0 ? '- 없음' : mustFix.map(item => `- 위치: ${item.location}
-  - 문제: ${item.problem}
-  - 제안: ${item.suggestion}
-  - 출처: ${item.source_url}`).join('\n')}
-
-## 권장 수정
-
-${ensureArray(report.recommended_fixes).length === 0 ? '- 없음' : bulletsMarkdown(report.recommended_fixes)}
-
-## 출처 공백
-
-${ensureArray(report.source_gaps).length === 0 ? '- 없음' : bulletsMarkdown(report.source_gaps)}
-
-## 최종 의견
-
-${report.final_comment}
-`;
-}
-
-function qualitySummaryMarkdown(qualityReport) {
-  if (!qualityReport) return '- 품질 점수: 생성되지 않음';
-  return [
-    `- 품질 점수: ${qualityReport.score}/100`,
-    `- 품질 기준: ${qualityReport.threshold}`,
-    `- 품질 상태: ${qualityReport.status}`,
-    `- 주요 감점: ${ensureArray(qualityReport.deductions).slice(0, 5).map(item => `${item.points}pt ${item.category}${item.location ? ` (${item.location})` : ''}`).join('; ') || '없음'}`
-  ].join('\n');
-}
-
-function staleClaimSummaryMarkdown(staleClaimReport) {
-  if (!staleClaimReport) return '- Stale claim report: not generated';
-  return [
-    `- Stale claim status: ${staleClaimReport.status || 'UNKNOWN'}`,
-    `- Removed global stale items: ${ensureArray(staleClaimReport.stale_claim_items_removed).length}`,
-    `- Removed unsupported release claims: ${ensureArray(staleClaimReport.unsupported_release_claims_removed).length}`,
-    `- Unused references removed: ${ensureArray(staleClaimReport.unused_references_removed).length}`,
-    `- Hard failures: ${ensureArray(staleClaimReport.hard_failures).length}`
-  ].join('\n');
-}
-
-function articleSectionContractSummaryMarkdown(issue, qualityReport = null) {
-  return `## Article Structure Contract
-
-${articleSectionContractMarkdown(issue, qualityReport)}`;
-}
-
-function buildEditorChiefBrief(date, issue, factCheck, qualityReport = null, selectionDiagnostics = null, staleClaimReport = null) {
-  const firstSection = ensureArray(issue.sections)[0] || {};
-  const decision = factCheck.status === 'PASS' && (!qualityReport || qualityReport.status === 'PASS')
-    ? 'APPROVE'
-    : 'REQUEST_CHANGES';
-  return `# 편집장 브리핑 - ${date}
-
-## 이번 주 핵심 메시지
-
-${issue.summary}
-
-## 메인으로 봐야 할 기사
-
-${firstSection.headline || '첫 번째 메인 기사 확인 필요'}
-
-## Camera HAL 업무 연결 포인트
-${bulletsMarkdown(ensureArray(issue.action_items).slice(0, 5))}
-
-## 검증 결과 요약
-
-- 상태: ${factCheck.status}
-- must_fix 개수: ${ensureArray(factCheck.must_fix).length}
-- source gap 개수: ${ensureArray(factCheck.source_gaps).length}
-- 의견: ${factCheck.final_comment}
-
-## 품질 게이트
-${qualitySummaryMarkdown(qualityReport)}
-
-${articleSectionContractSummaryMarkdown(issue, qualityReport)}
-
-## Stale Claim Gate
-
-${staleClaimSummaryMarkdown(staleClaimReport)}
-
-${selectionDiagnostics ? `${renderCandidateSelectionDiagnostics(selectionDiagnostics)}
-` : ''}
-
-## 편집장 확인 checklist
-
-- [ ] 이번 주 핵심 메시지가 Camera HAL 업무와 직접 연결되는가?
-- [ ] 주요 항목의 출처가 충분하고 과장 표현이 없는가?
-- [ ] 검증 결과의 must_fix가 모두 해소되었는가?
-- [ ] 팀 공유용으로도 충분한 action item이 정리되었는가?
-
-## 권장 판단
-
-${decision}
-`;
-}
-
-function buildReleaseQaReport(date, files, validateResult, factCheck, todoFound, emptySourceSections, qualityReport = null, reviewInventory = null) {
-  return `# 릴리스 QA 보고서 - ${date}
-
-## 생성 파일 목록
-
-${files.map(file => `- ${file}`).join('\n')}
-
-${reviewInventory ? `${renderReleaseQaInventorySection(reviewInventory)}
-` : ''}
-
-## npm run validate 실행 결과
-
-${validateResult}
-
-## 잔여 TODO 여부
-
-${todoFound ? 'TODO 문자가 남아 있습니다.' : '없음'}
-
-## 출처 누락 여부
-
-${emptySourceSections.length === 0 ? '없음' : emptySourceSections.map(section => `- ${section}`).join('\n')}
-
-## Gemini 검증 결과
-
-- 상태: ${factCheck.status}
-- must_fix 개수: ${ensureArray(factCheck.must_fix).length}
-- source gap 개수: ${ensureArray(factCheck.source_gaps).length}
-
-## 품질 게이트
-${qualitySummaryMarkdown(qualityReport)}
-`;
-}
-
-module.exports = {
+return {
+  ...require('./review-report-renderer')({ bulletsMarkdown, articleSectionContractMarkdown }),
   articleSectionContractMarkdown,
   articleSectionContractRows,
   buildMarkdown,
   buildHtml,
-  buildFactCheckMarkdown,
-  buildEditorChiefBrief,
-  buildReleaseQaReport,
   issueTags,
   sectionRelevanceBucket,
   weeklyTopicTags
+};
+
+}
+
+module.exports = {
+  ...createRenderer(),
+  buildHtml: (issue, { locale = 'ko' } = {}) => createRenderer(locale).buildHtml(issue),
+  buildMarkdown: (issue, { locale = 'ko' } = {}) => createRenderer(locale).buildMarkdown(issue)
 };

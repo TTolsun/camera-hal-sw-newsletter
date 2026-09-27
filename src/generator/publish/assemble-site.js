@@ -103,7 +103,12 @@ function addLearningFooterLinks(outDir) {
 
       const before = fs.readFileSync(file, 'utf8');
       const href = posixPath(path.relative(path.dirname(file), learningPage)) || 'index.html';
-      const after = withLearningFooterLink(before, href, posixPath(path.relative(outDir, file)));
+      let after = withLearningFooterLink(before, href, posixPath(path.relative(outDir, file)));
+      // 과거 발행 파일은 보존하고 배포용 사본에만 언어 선택 스크립트를 보강한다.
+      if (/class="[^"]*\bhomepage-nav-links\b/.test(after) && !/<script\b[^>]*src=["'][^"']*assets\/js\/site-header\.js["']/i.test(after)) {
+        const script = posixPath(path.relative(path.dirname(file), path.join(outDir, 'assets', 'js', 'site-header.js')));
+        after = after.replace(/<\/body>/i, `  <script src="${script}" defer></script>\n</body>`);
+      }
       if (after === before) continue;
       fs.writeFileSync(file, after, 'utf8');
       updated += 1;
