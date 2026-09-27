@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W34/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W33 Camera SW Newsletter (Published W34)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W34/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W34/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W34/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers ‘CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W34/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W33 Camera SW Newsletter (Published W34)" />
+  <meta property="og:description" content="This week covers ‘CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W34/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W33 Camera SW Newsletter (Published W34)" />
+  <meta name="twitter:description" content="This week covers ‘CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.08.10 – 08.16</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W33</span></h1>
+        <p class="issue-publish-badge">Published W34</p>
+        <p class="subtitle">This week covers ‘CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-1-7-0-alpha03-released-camera2interop-api-overhaul-and-multi-camera-zsl-" aria-labelledby="article-camerax-1-7-0-alpha03-released-camera2interop-api-overhaul-and-multi-camera-zsl--title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-1-7-0-alpha03-released-camera2interop-api-overhaul-and-multi-camera-zsl--title" class="article-title">CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix</h2>
+        <p class="article-source-subtitle">Analysis of the official Android Jetpack CameraX release notes</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=ar" alt="CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03">CameraX Release Notes</a></figcaption>
+        </figure>
+        <p class="article-lead">The recently published Android Jetpack CameraX 1.7.0-alpha03 release extensively overhauls the Camera2Interop API, the key path through which app developers interact with the underlying Camera2 and HAL layers. Along with this, a critical HAL crash bug that occurred when zooming across physical camera boundaries with ZSL (Zero-Shutter Lag) enabled on multi-camera devices was fixed, significantly improving system stability.</p>
+        <p>The biggest change in this CameraX 1.7.0-alpha03 update is the modernization of the Camera2Interop API. The legacy APIs Camera2Interop.Extender, Camera2CameraControl, Camera2CameraInfo, and CaptureRequestOptions have all been deprecated. In their place, Camera2Interop configurator factory methods (forUseCase, forImageCapture, forSessionConfig, forCameraControl) and Kotlin DSL extension functions that support more intuitive and safer configuration were introduced. With these, developers can easily inject underlying Camera2 parameters at the use case builder stage using the setInterop or applyInteropAsync methods.</p>
+        <p>In addition, the setMirrorMode and getMirrorMode APIs for controlling mirror mode were formally added to Preview and VideoCapture, and the previous ExperimentalMirrorMode annotation was removed. From an image processing pipeline perspective, the return type of ImagePlane.buffer was changed to a non-nullable ByteBuffer, fundamentally eliminating the risk of a NullPointerException during frame analysis (ImageAnalysis). Property getters such as those of SessionConfig.Builder are also restricted to write-only in the Kotlin DSL to prevent configuration misuse.</p>
+        <p>The part that the lower HAL and driver layers should note most is the improved ZSL (Zero-Shutter Lag) stability on multi-camera devices. Previously, in multi-camera environments, changing zoom across boundaries between physical cameras with ZSL enabled caused a HAL crash due to a stream control mismatch between the framework and the HAL. This release fixes that crash, ensuring stable frame capture even during zoom operations. In addition, HDR video recording failures on Samsung Galaxy S25, S26, and Fold 7 devices, and a bug where one of multiple Preview streams was not delivered when using OverlayEffect, were also fixed.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This change is not a direct HAL3 specification change, but it is closely tied to how the upper framework passes requests to the HAL. In particular, the fix for the HAL crash when switching zoom between physical cameras with ZSL enabled (b/527782712) suggests that multi-camera stream configuration and buffer lifecycle control logic should be reviewed. Also, as in the fix for HDR video recording failures on specific vendor devices such as the Samsung Galaxy S25/S26/Fold 7 (b/529618629), you should verify through VTS and your own scenario tests that no exceptions occur in vendor-specific HDR metadata handling and codec integration.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03">CameraX Release Notes - CameraX 1.7.0-alpha03</a></li></ul></div>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://source.android.com/docs/compatibility/cts/camera-its-tests">Camera ITS tests</a><span class="reference-meta">AOSP Site Updates (2026-07) · Reference on the AOSP Camera framework</span></li><li><a href="https://source.android.com/docs/compatibility/cts/camera-its">Camera ITS overview</a><span class="reference-meta">AOSP Site Updates (2026-07) · Reference on the AOSP Camera framework</span></li><li><a href="https://lore.kernel.org/linux-media/20260815193839.141406-1-devnexen@gmail.com/">[PATCH] media: v4l2-isp: reject zero-sized parameter blocks</a><span class="reference-meta">lore.kernel.org linux-media list (2026-08-15) · Reference on camera drivers / image pipelines</span></li><li><a href="https://lore.kernel.org/linux-media/20260813-uvc-status-11-v1-1-2cf43e9590b0@chromium.org/">[PATCH] media: uvcvideo: Do not read beyond the uvc_status_control memory</a><span class="reference-meta">lore.kernel.org linux-media list (2026-08-13) · Reference on camera drivers / image pipelines</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03">CameraX Release Notes - CameraX 1.7.0-alpha03</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

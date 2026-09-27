@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W33",
+  "source_hash": "sha256:1d5ef22c36879d98e98587a0448d98b8553bc089ea1d268876edef911228835d",
+  "title": "2026 W32 (08.03 ~ 08.09)",
+  "summary": "This week covers ‘Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)’ and ‘Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)’.",
+  "sections": [
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com",
+      "headline": "Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)",
+      "lead": "This week, a v2 patch series adding a driver for the onsemi AR0234 CMOS image sensor with a global shutter was submitted to the Linux media subsystem. It can be useful in machine vision and AR/VR scenarios that require high-speed capture and precise frame synchronization.",
+      "body_markdown": "Adding the onsemi AR0234 CMOS image sensor driver to the Linux kernel has important implications for Android Camera HAL and driver development. The sensor supports a global shutter and delivers up to 120fps at 1920x1200 resolution. This can be useful for high-speed image capture and certain machine vision applications.\n\nSupport for MIPI CSI-2 output, RAW Bayer formats (8/10-bit), and DPCM 10->8 compression directly affects how the HAL efficiently receives and processes data from the sensor. The HAL can pass this RAW data to the ISP (Image Signal Processor) for final image processing, or provide RAW output to apps through the Camera2 API.\n\nA global shutter can improve image quality by preventing rolling shutter distortion when capturing moving objects, which becomes an important validation point for certain use cases. Development teams should closely review transfer stability when running at high frame rates and the decoding performance of the compressed format.",
+      "why_it_matters": "The characteristics of a global shutter can be used for high-speed capture and machine vision scenarios in the Android Camera HAL. When configuring a 120fps high-speed stream, the HAL's buffer cycling period and the ISP's processing latency must be minimized, and you should verify that DPCM 10->8 decompression or the RAW Bayer 8/10-bit formats are correctly decoded in the ISP pipeline.",
+      "source_subtitle": "lore.kernel.org linux-media list"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com",
+      "headline": "Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)",
+      "lead": "This week, a v2 patch series adding Linux device tree bindings for the Sony IMX908 8.39MP CMOS image sensor was submitted. A hardware interface definition was added for a sensor that supports high-resolution RAW output, laying the groundwork for platform integration.",
+      "body_markdown": "Adding device tree bindings for the Sony IMX908 sensor means providing the hardware information the Linux kernel needs to recognize and initialize the sensor. The device tree is the mechanism for passing hardware configuration information to the kernel on Linux systems; for camera sensors, it defines important parameters such as MIPI CSI-2 lane configuration, clocks, power management, and I2C addresses.\n\nThe fact that the IMX908 is an 8.39-megapixel (3856x2176) CMOS image sensor supporting RAW10 and RAW12 output suggests that the Android Camera HAL must be able to handle high-resolution RAW data from this sensor. The HAL passes this RAW data to the ISP or exposes it directly to apps through the Camera2 API, enabling advanced image processing features.\n\nBecause the correctness of the device tree bindings directly affects the correct operation of the sensor and the stability of the camera pipeline, HAL and driver developers should review this change closely. In particular, it is important to confirm whether sufficient bandwidth is secured for the configured number of MIPI CSI-2 lanes.",
+      "why_it_matters": "The correctness of the device tree bindings determines whether sensor probing and initialization succeed. A high-resolution RAW12 (3856x2176) stream requires more buffer memory and bandwidth than RAW10, so DMA-BUF allocation and ISP input buffer size settings must be matched exactly in the HAL and driver layers.",
+      "source_subtitle": "lore.kernel.org linux-media list"
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": [
+    {
+      "id": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "title": "v0.7.2",
+      "note": "Reference on camera drivers / image pipelines"
+    }
+  ]
+}

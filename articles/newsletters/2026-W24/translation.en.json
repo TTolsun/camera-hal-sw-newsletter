@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W24",
+  "source_hash": "sha256:a1256115ce68e724635efb4c9d427351a7e6a1d2041210caff17864e076d1ecc",
+  "title": "2026 W24 (06.08 ~ 06.14)",
+  "summary": "This week covers ‘Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption’.",
+  "sections": [
+    {
+      "id": "url:https://developer.android.com/tools/agents/android-cli",
+      "headline": "Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption",
+      "lead": "A 'Migration to CameraX' skill has been newly introduced to the official tools for improving Android developer productivity. By supporting developers, through an LLM-based workflow, in migrating from existing complex camera implementations to the Jetpack CameraX library, this update is expected to further accelerate CameraX adoption in the upper application layer.",
+      "body_markdown": "Google is expanding the Android skills repository, provided through the Android CLI and GitHub, to help developers more easily apply specific development patterns based on best practices. The newly added skills include 'Migration to CameraX', which guides complex camera API transition work through a structured workflow.\n\nCameraX is a Jetpack library that abstracts the Android Camera2 API and simplifies lifecycle management and use cases such as preview, image capture, and video capture. If this tooling support leads more app developers to switch to CameraX, the stream configuration and metadata request patterns coming into the Camera HAL layer are also likely to follow CameraX's standard behavior.\n\nCamera HAL and driver engineers therefore need to understand the standardized stream combination requirements that this tooling change in the upper framework will bring, and proactively prepare compatibility and stability validation at the HAL layer.",
+      "why_it_matters": "This change is not a direct API contract change to the Camera HAL itself, but by encouraging upper-layer apps to switch to CameraX, it steers the stream configurations and metadata requests delivered to the HAL to converge on CameraX's standard usage patterns. HAL teams should strengthen their CameraX compatibility validation scenarios.",
+      "source_subtitle": "Android Developers Blog - Top 3 updates for Android developer productivity",
+      "image_alt": "Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption"
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": [
+    {
+      "id": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "title": "CameraX Release Notes - CameraX 1.6.1",
+      "note": "Reference on the AOSP Camera framework"
+    },
+    {
+      "id": "https://source.android.com/docs/compatibility/cts/camera-its-box",
+      "title": "Test camera images using automation",
+      "note": "Reference on the AOSP Camera framework"
+    },
+    {
+      "id": "https://goo.gle/AdaptiveApps_IO26",
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)",
+      "note": "Reference on Android platform and camera-adjacent topics"
+    },
+    {
+      "id": "https://isocpp.org//blog/2026/04/gcc-16.1",
+      "title": "GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+      "note": "Reference on C++ / AI-native tooling"
+    }
+  ]
+}

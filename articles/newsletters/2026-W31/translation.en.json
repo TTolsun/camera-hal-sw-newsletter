@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W31",
+  "source_hash": "sha256:a1b077c0f568f88e1aa80728d717efbce00c07f373cfd22b5b678c0bb236999b",
+  "title": "2026 W30 (07.20 ~ 07.26)",
+  "summary": "This week covers 5 stories, including ‘Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV’ and ‘New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor’.",
+  "sections": [
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com",
+      "headline": "Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV",
+      "lead": "Patch v5 was proposed to add an OPE (Offline Processing Engine) image processing driver, which converts raw Bayer frames to YUV, to the Qualcomm CAMSS driver.",
+      "body_markdown": "This week, Qualcomm submitted new driver patch v5, which extends the CAMSS (Camera Subsystem) driver in the Linux kernel media subsystem to support the OPE (Offline Processing Engine). The OPE is a memory-to-memory (M2M) ISP block that converts raw Bayer frames to YUV format in hardware.\n\nThe driver performs the core operations of the image pipeline: white balance, demosaicing, chroma enhancement, color correction, and downscaling. Unlike conventional real-time streaming processing, it can process raw data stored in memory offline, maximizing flexibility in the use of system resources.\n\nThis patch is still at the review stage and has not yet been merged into the mainline kernel, but it is an important indicator of changes in the image processing pipeline architecture of Qualcomm SoC-based platforms. Such changes in the lower driver layer may affect future image processing optimization paths in the Android Camera HAL and framework.",
+      "why_it_matters": "This change is a proposal to add an ISP block in the kernel driver layer and does not bring direct changes to the Android Camera HAL API or metadata contract. However, when using offline YUV conversion and ISP hardware acceleration on Qualcomm SoC-based devices, it can become a lower-level foundation for optimizing buffer lifecycle and processing latency in memory-to-memory (M2M) pipelines.",
+      "source_subtitle": "Qualcomm CAMSS OPE Driver Patch v5"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca",
+      "headline": "New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor",
+      "lead": "A new V4L2 driver patch series adding support for the Himax HM1092 monochrome infrared image sensor was published.",
+      "body_markdown": "A driver patch series to support the Himax HM1092 monochrome infrared (IR) image sensor was recently submitted to the Linux kernel media subsystem. The sensor has a 1280x720 pixel array and is designed for special-purpose camera applications such as biometrics and night surveillance.\n\nAccording to the published patch, the driver supports a 10-bit raw (MEDIA_BUS_FMT_SGRBG10_1X10) mode at 648x368 @ 30fps over MIPI CSI-2 data lanes. As the format and timing of this special-purpose sensor are defined at the lower driver level, integration work in the upper stack becomes possible.\n\nThe driver is currently under review, and there may be further changes before it is merged into the mainline kernel. Because a monochrome infrared sensor by nature requires stream processing and metadata definitions different from a typical RGB sensor, advance review by the relevant platform engineers is needed.",
+      "why_it_matters": "This patch is a change in the lower driver layer and does not directly affect the Android Camera HAL API or metadata contract. However, devices equipped with this sensor need to configure RAW10 format support and the related stream combination validation at the Camera HAL level to handle the monochrome infrared stream correctly.",
+      "source_subtitle": "Himax HM1092 Monochrome IR Sensor Driver Patch"
+    },
+    {
+      "id": "url:https://patchwork.libcamera.org/patch/27507",
+      "headline": "libcamera: patch proposed to harden control serializer size and input validation",
+      "lead": "The libcamera project has a proposed patch v2 that improves stability by hardening size checks and input validation in the control serializer.",
+      "body_markdown": "Patch v2, which hardens size and input validation in the control serializer, was recently submitted to the open-source camera stack project libcamera and is under review. Proposed by Magdum, the patch focuses on preventing potential buffer overflows or invalid data input that can occur while serializing and deserializing camera control commands and metadata.\n\nThe control serializer is a core component of camera frame control and metadata transfer, and hardening the security and stability of this part greatly improves the reliability of the entire camera stack. In particular, strictly limiting the size of input data and validating it can prevent unexpected crashes or malfunctions.\n\nThe patch is currently at the review stage and has not yet been merged into an official release. However, it is regarded as an important improvement for system security and stability for teams developing platforms or embedded systems that adopt libcamera as their lower camera stack.",
+      "why_it_matters": "This patch is a stability improvement inside libcamera and does not bring direct changes to the Android Camera HAL API or metadata contract. However, for systems that build their lower driver stack on libcamera, it can help reduce the risk of crashes in the layers below the HAL by strengthening the exception-handling routines in control data deserialization.",
+      "source_subtitle": "libcamera Control Serializer Hardening Patch v2"
+    },
+    {
+      "id": "url:https://patchwork.libcamera.org/patch/27496",
+      "headline": "libcamera: EGLDisplay caching optimization patch proposed to avoid redundant initialization",
+      "lead": "The libcamera project has a proposed performance optimization patch that caches the EGLDisplay object to avoid redundant graphics resource initialization and teardown overhead.",
+      "body_markdown": "An optimization patch that caches the EGLDisplay object to avoid redundant initialization and teardown (init/teardown) was recently submitted to the libcamera project. EGL (Embedded-System Graphics Library) is an important interface that connects rendering APIs such as OpenGL ES to the underlying platform window system.\n\nIn the existing implementation, overhead could arise from repeatedly initializing and tearing down EGLDisplay during camera stream processing. This patch aims to improve graphics resource management efficiency and overall system performance by caching and reusing an EGLDisplay once it has been probed.\n\nThe patch is currently at the review stage and has not yet been officially merged. However, it is expected to help reduce initialization latency and improve power efficiency in systems that render camera frames directly to the screen or use GPU-based image processing pipelines.",
+      "why_it_matters": "This patch is a graphics resource optimization inside libcamera and does not bring direct changes to the Android Camera HAL API or metadata contract. However, when running buffer processing and rendering pipelines in a libcamera-based lower stack, removing redundant EGL initialization overhead can indirectly help reduce camera stream startup latency and the risk of frame drops.",
+      "source_subtitle": "libcamera EGLDisplay Caching Patch"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com",
+      "headline": "Standalone V4L2 driver patch proposed to support the Samsung S5KJN5 50MP image sensor",
+      "lead": "Patch v2 was proposed to support the Samsung S5KJN5 50MP high-resolution image sensor by adding a separate standalone V4L2 driver instead of extending an existing driver.",
+      "body_markdown": "Driver patch v2 to support the Samsung S5KJN5 50MP image sensor was recently submitted to the Linux kernel media subsystem. The sensor supports a 10-bit RAW format with a GBRG pattern and transfers high-resolution image data over a MIPI CSI-2 interface.\n\nNotably, instead of extending the existing s5kjn1 driver, this implementation is a separate driver dedicated to the S5KJN5. This is analyzed as an architectural decision to manage the sensor's specific register configuration and control flow more clearly and to improve driver maintainability.\n\nThe patch is currently at the review stage, with a mainline kernel merge still ahead. It will provide an official lower-level driver support foundation when adopting the S5KJN5 sensor on mobile and embedded platforms that require high-resolution RAW stream processing.",
+      "why_it_matters": "This patch is a change in the lower driver layer and does not directly affect the Android Camera HAL API or metadata contract. However, devices equipped with this high-resolution sensor need to define 50MP high-resolution RAW stream and pixel remosaicing processing paths at the Camera HAL level, and should closely verify the resulting impact on memory bandwidth and power consumption.",
+      "source_subtitle": "Samsung S5KJN5 Image Sensor Driver Patch v2"
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": [
+    {
+      "id": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "note": "Reference on the AOSP Camera framework"
+    }
+  ]
+}

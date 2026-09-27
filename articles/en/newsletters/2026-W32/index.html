@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W32/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W31 Camera SW Newsletter (Published W32)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W32/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W32/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W32/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week covers 4 stories, including ‘V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor’ and ‘New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor’." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W32/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W31 Camera SW Newsletter (Published W32)" />
+  <meta property="og:description" content="This week covers 4 stories, including ‘V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor’ and ‘New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor’." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W32/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W31 Camera SW Newsletter (Published W32)" />
+  <meta name="twitter:description" content="This week covers 4 stories, including ‘V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor’ and ‘New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor’." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.07.27 – 08.02</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W31</span></h1>
+        <p class="issue-publish-badge">Published W32</p>
+        <p class="subtitle">This week covers 4 stories, including ‘V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor’ and ‘New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor’.</p>
+        <div class="tag-row issue-tags"><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor</li><li>New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor</li><li>V4L2 driver patch v5 submitted for the OmniVision OG0VA1B mono VGA sensor</li><li>Patch v9 published to support MIPI C-PHY configuration in the Qualcomm CAMSS camera subsystem</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-v4l2-driver-patch-v6-published-for-the-himax-hm1092-mono-near-infrared-sensor" aria-labelledby="article-v4l2-driver-patch-v6-published-for-the-himax-hm1092-mono-near-infrared-sensor-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-v4l2-driver-patch-v6-published-for-the-himax-hm1092-mono-near-infrared-sensor-title" class="article-title">V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor</h2>
+        <p class="article-source-subtitle">Himax HM1092 mono NIR sensor driver v6 patch</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">V4L2 subdev driver patch v6 supporting the Himax HM1092 mono near-infrared (NIR) image sensor was submitted to the Linux kernel media subsystem.</p>
+        <p>The proposed patch v6 centers on adding a V4L2 subdev driver and Device Tree bindings for the Himax HM1092, a 1-megapixel mono near-infrared sensor commonly found in IR cameras used for face unlock on laptops and similar devices.</p>
+        <p>The sensor communicates over a single MIPI CSI-2 data lane and supports 10-bit RAW format output at 560x360 resolution. Along with this fixed mode, the driver exposes test pattern control, exposure control, and analog and digital gain controls through the V4L2 subdevice interface.</p>
+        <p>The patch is currently at the kernel mainline review stage, and applying it to actual Android devices or embedded platforms requires kernel integration by SoC vendors and OEMs. Because it is a driver-level change, it does not cause direct changes to the Android Camera HAL API or framework.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>There is no direct HAL API change, but in face recognition (Face Unlock) scenarios using IR cameras, you should confirm that the lower V4L2 subdev exposure and gain controls are correctly mapped to the Android Camera HAL&#39;s biometric metadata requirements.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/">[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver</a> — <a href="https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-new-v4l2-driver-patch-submitted-for-the-onsemi-ar0234-global-shutter-cmos-sensor" aria-labelledby="article-new-v4l2-driver-patch-submitted-for-the-onsemi-ar0234-global-shutter-cmos-sensor-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-new-v4l2-driver-patch-submitted-for-the-onsemi-ar0234-global-shutter-cmos-sensor-title" class="article-title">New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor</h2>
+        <p class="article-source-subtitle">onsemi AR0234 CMOS image sensor driver patch</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A new V4L2 driver patch for the onsemi AR0234 global shutter CMOS image sensor, which supports high-speed capture, was submitted to the Linux kernel media subsystem.</p>
+        <p>Submitted on July 31, 2026, this patch adds a driver for the onsemi AR0234, a 1/2.6-inch global shutter sensor. The sensor has a 1940x1220 pixel array and supports 1920x1200 resolution output at high frame rates of up to 120fps, preventing rolling shutter distortion of moving subjects.</p>
+        <p>As its physical interface, it supports MIPI CSI-2 output with 1 to 4 data lanes, and it is notable for supporting raw Bayer (8/10-bit) and monochrome formats as well as a DPCM 10-&gt;8 compression mode. The driver was tested and validated on the Purwa EVK board.</p>
+        <p>Global shutter sensors play an important role in special-purpose devices such as high-speed motion capture, machine vision, and SLAM cameras in AR/VR headsets. The addition of this driver lays the lower-level groundwork for implementing high-performance global shutter camera solutions on Android embedded platforms.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>When adopting a global shutter sensor, you should verify at the driver and HAL layers whether YUV/RAW frames are dropped in high frame rate (120fps) stream configurations and whether bandwidth bottlenecks arise depending on the MIPI CSI-2 lane configuration.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/">[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver</a> — <a href="https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-v4l2-driver-patch-v5-submitted-for-the-omnivision-og0va1b-mono-vga-sensor" aria-labelledby="article-v4l2-driver-patch-v5-submitted-for-the-omnivision-og0va1b-mono-vga-sensor-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-v4l2-driver-patch-v5-submitted-for-the-omnivision-og0va1b-mono-vga-sensor-title" class="article-title">V4L2 driver patch v5 submitted for the OmniVision OG0VA1B mono VGA sensor</h2>
+        <p class="article-source-subtitle">OmniVision OG0VA1B CMOS VGA image sensor driver patch</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="V4L2 driver patch v5 submitted for the OmniVision OG0VA1B mono VGA sensor image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">V4L2 driver patch v5 for the OmniVision OG0VA1B mono VGA image sensor, suited for low-power auxiliary cameras and sensing, was submitted to the Linux kernel media subsystem.</p>
+        <p>Submitted on July 31, 2026, patch v5 adds driver support for the OmniVision OG0VA1B, an ultra-compact 1/10-inch mono CMOS VGA image sensor. The sensor outputs 10-bit RAW (Y10) frames at up to 640x480 resolution over a single-lane MIPI CSI-2 interface.</p>
+        <p>It uses an I2C-compatible SCCB bus as its control interface, and this driver patch has completed functional validation on the Purwa EVK board, including test pattern generator (TPG) operation.</p>
+        <p>Low-resolution mono sensors such as the OG0VA1B are mainly used in low-power embedded devices, security cameras, and as auxiliary sensors for gesture recognition or depth sensing. This driver addition is expected to broaden hardware choices when developing embedded Android systems.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>When receiving a VGA-class low-resolution Y10 RAW format stream, you should confirm that the ISP pipeline and Camera HAL correctly handle the 10-bit monochrome format (Y10) and allocate frame buffers properly.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/">[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver</a> — <a href="https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-patch-v9-published-to-support-mipi-c-phy-configuration-in-the-qualcomm-camss-cam" aria-labelledby="article-patch-v9-published-to-support-mipi-c-phy-configuration-in-the-qualcomm-camss-cam-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-patch-v9-published-to-support-mipi-c-phy-configuration-in-the-qualcomm-camss-cam-title" class="article-title">Patch v9 published to support MIPI C-PHY configuration in the Qualcomm CAMSS camera subsystem</h2>
+        <p class="article-source-subtitle">Qualcomm CAMSS MIPI C-PHY support patch v9</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Patch v9 published to support MIPI C-PHY configuration in the Qualcomm CAMSS camera subsystem image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">Patch series v9 was proposed to support high-bandwidth MIPI C-PHY physical layer configuration in the open-source camera subsystem (CAMSS) driver for Qualcomm platforms.</p>
+        <p>Submitted on July 29, 2026, patch series v9 extends the CSID (CSI Decoder) and CSIPHY (CSI PHY) components of Qualcomm CAMSS to support MIPI C-PHY mode configuration. MIPI C-PHY offers higher data throughput and better signal efficiency than the existing D-PHY, making it an essential technology for integrating the latest high-resolution, high-frame-rate smartphone camera sensors.</p>
+        <p>However, because this patch does not fully address all the feedback raised in previous review rounds, it was submitted with a &#39;WIP&#39; (Work In Progress) tag added. Additional revisions and review are therefore expected before it is merged into mainline.</p>
+        <p>Changes at the physical layer and driver level do not require direct modifications to the Android Camera HAL API. However, once the lower driver supports C-PHY mode stably, the HAL layer can gain the performance benefit of reliably handling higher-bandwidth stream configurations (for example, high-resolution RAW capture or high-frame-rate video).</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>As the physical layer switches to C-PHY, you should closely verify through driver and ISP integration tests that no frame drops or transfer delays caused by signal integrity occur when configuring high-bandwidth streams.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/">[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms</a> — <a href="https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02">CameraX Release Notes - CameraX 1.7.0-alpha02</a><span class="reference-meta">CameraX Release Notes (July 01, 2026) · Reference on the AOSP Camera framework</span></li><li><a href="https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2">v0.7.2</a><span class="reference-meta">libcamera Upstream Releases (2026-07-10T11:12:38+01:00) · Reference on camera drivers / image pipelines</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/">[PATCH v6 0/2] media: Add Himax HM1092 mono NIR sensor driver</a> — <a href="https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com/T/#t">Full patch series</a></li><li><a href="https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/">[PATCH 0/2] media: i2c: Add onsemi AR0234 camera sensor driver</a> — <a href="https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com/T/#t">Full patch series</a></li><li><a href="https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/">[PATCH v5 0/4] media: i2c: Add OmniVision OG0VA1B camera sensor driver</a> — <a href="https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com/T/#t">Full patch series</a></li><li><a href="https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/">[PATCH RESEND v9 0/9] media: camss: Add support for C-PHY configuration on Qualcomm platforms</a> — <a href="https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>

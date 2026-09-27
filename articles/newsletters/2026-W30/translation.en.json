@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W30",
+  "source_hash": "sha256:54bbf6a27f344379244a21392d7c8b97f8e75583d6c4fdd71b2d75052462f2ca",
+  "title": "2026 W29 (07.13 ~ 07.19)",
+  "summary": "This week covers ‘libcamera: patch proposed to add IMX335 image sensor test pattern properties’.",
+  "sections": [
+    {
+      "id": "url:https://patchwork.libcamera.org/patch/27362",
+      "headline": "libcamera: patch proposed to add IMX335 image sensor test pattern properties",
+      "lead": "A patch adding test pattern properties for the Sony IMX335 image sensor was recently proposed on the libcamera patchwork and is under review. The patch aims to define standardized test patterns at the driver level to make image pipeline validation and debugging easier.",
+      "body_markdown": "On July 14, 2026, a new patch to add test pattern sensor properties for the Sony IMX335 image sensor was published through the libcamera project's patchwork. The patch is currently under community review, and its core is to let the libcamera framework correctly recognize and use the test pattern metadata provided by the sensor driver.\n\nlibcamera is the core abstraction layer of the Linux camera stack and controls the complex interaction between the sensor and the ISP on top of the V4L2 API. The proposed addition of IMX335 test pattern properties can be very useful for hardware validation and image pipeline debugging, because enabling standardized test patterns makes it possible to validate the sensor's own data output separately from the subsequent ISP processing stages.\n\nHowever, the patch is still at the proposal and review stage (RFC/Patch review), so whether it will eventually be merged into mainline and when it would apply remain uncertain. Also, since this change does not directly modify the behavior of the Android Camera HAL API or framework, upper-layer developers should watch this trend from the perspective of preparing for compatibility of the lower drivers and media stack.",
+      "why_it_matters": "This patch does not directly change the Android Camera HAL, but it provides a basis for using test pattern properties when validating the IMX335 sensor in the lower driver and libcamera stack. When integrating this sensor in the future, developers should check the validation path to confirm that driver-level test pattern metadata is correctly propagated through V4L2 and libcamera up to the HAL layer.",
+      "source_subtitle": "IMX335 sensor properties under review on the libcamera patchwork"
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": []
+}

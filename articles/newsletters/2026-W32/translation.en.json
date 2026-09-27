@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W32",
+  "source_hash": "sha256:2e669d4956ec4a2890c1f6dbb48b6defbcef80f8e7798586aebf8039eb4a975e",
+  "title": "2026 W31 (07.27 ~ 08.02)",
+  "summary": "This week covers 4 stories, including ‘V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor’ and ‘New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor’.",
+  "sections": [
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com",
+      "headline": "V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor",
+      "lead": "V4L2 subdev driver patch v6 supporting the Himax HM1092 mono near-infrared (NIR) image sensor was submitted to the Linux kernel media subsystem.",
+      "body_markdown": "The proposed patch v6 centers on adding a V4L2 subdev driver and Device Tree bindings for the Himax HM1092, a 1-megapixel mono near-infrared sensor commonly found in IR cameras used for face unlock on laptops and similar devices.\n\nThe sensor communicates over a single MIPI CSI-2 data lane and supports 10-bit RAW format output at 560x360 resolution. Along with this fixed mode, the driver exposes test pattern control, exposure control, and analog and digital gain controls through the V4L2 subdevice interface.\n\nThe patch is currently at the kernel mainline review stage, and applying it to actual Android devices or embedded platforms requires kernel integration by SoC vendors and OEMs. Because it is a driver-level change, it does not cause direct changes to the Android Camera HAL API or framework.",
+      "why_it_matters": "There is no direct HAL API change, but in face recognition (Face Unlock) scenarios using IR cameras, you should confirm that the lower V4L2 subdev exposure and gain controls are correctly mapped to the Android Camera HAL's biometric metadata requirements.",
+      "source_subtitle": "Himax HM1092 mono NIR sensor driver v6 patch"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com",
+      "headline": "New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor",
+      "lead": "A new V4L2 driver patch for the onsemi AR0234 global shutter CMOS image sensor, which supports high-speed capture, was submitted to the Linux kernel media subsystem.",
+      "body_markdown": "Submitted on July 31, 2026, this patch adds a driver for the onsemi AR0234, a 1/2.6-inch global shutter sensor. The sensor has a 1940x1220 pixel array and supports 1920x1200 resolution output at high frame rates of up to 120fps, preventing rolling shutter distortion of moving subjects.\n\nAs its physical interface, it supports MIPI CSI-2 output with 1 to 4 data lanes, and it is notable for supporting raw Bayer (8/10-bit) and monochrome formats as well as a DPCM 10->8 compression mode. The driver was tested and validated on the Purwa EVK board.\n\nGlobal shutter sensors play an important role in special-purpose devices such as high-speed motion capture, machine vision, and SLAM cameras in AR/VR headsets. The addition of this driver lays the lower-level groundwork for implementing high-performance global shutter camera solutions on Android embedded platforms.",
+      "why_it_matters": "When adopting a global shutter sensor, you should verify at the driver and HAL layers whether YUV/RAW frames are dropped in high frame rate (120fps) stream configurations and whether bandwidth bottlenecks arise depending on the MIPI CSI-2 lane configuration.",
+      "source_subtitle": "onsemi AR0234 CMOS image sensor driver patch"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com",
+      "headline": "V4L2 driver patch v5 submitted for the OmniVision OG0VA1B mono VGA sensor",
+      "lead": "V4L2 driver patch v5 for the OmniVision OG0VA1B mono VGA image sensor, suited for low-power auxiliary cameras and sensing, was submitted to the Linux kernel media subsystem.",
+      "body_markdown": "Submitted on July 31, 2026, patch v5 adds driver support for the OmniVision OG0VA1B, an ultra-compact 1/10-inch mono CMOS VGA image sensor. The sensor outputs 10-bit RAW (Y10) frames at up to 640x480 resolution over a single-lane MIPI CSI-2 interface.\n\nIt uses an I2C-compatible SCCB bus as its control interface, and this driver patch has completed functional validation on the Purwa EVK board, including test pattern generator (TPG) operation.\n\nLow-resolution mono sensors such as the OG0VA1B are mainly used in low-power embedded devices, security cameras, and as auxiliary sensors for gesture recognition or depth sensing. This driver addition is expected to broaden hardware choices when developing embedded Android systems.",
+      "why_it_matters": "When receiving a VGA-class low-resolution Y10 RAW format stream, you should confirm that the ISP pipeline and Camera HAL correctly handle the 10-bit monochrome format (Y10) and allocate frame buffers properly.",
+      "source_subtitle": "OmniVision OG0VA1B CMOS VGA image sensor driver patch"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz",
+      "headline": "Patch v9 published to support MIPI C-PHY configuration in the Qualcomm CAMSS camera subsystem",
+      "lead": "Patch series v9 was proposed to support high-bandwidth MIPI C-PHY physical layer configuration in the open-source camera subsystem (CAMSS) driver for Qualcomm platforms.",
+      "body_markdown": "Submitted on July 29, 2026, patch series v9 extends the CSID (CSI Decoder) and CSIPHY (CSI PHY) components of Qualcomm CAMSS to support MIPI C-PHY mode configuration. MIPI C-PHY offers higher data throughput and better signal efficiency than the existing D-PHY, making it an essential technology for integrating the latest high-resolution, high-frame-rate smartphone camera sensors.\n\nHowever, because this patch does not fully address all the feedback raised in previous review rounds, it was submitted with a 'WIP' (Work In Progress) tag added. Additional revisions and review are therefore expected before it is merged into mainline.\n\nChanges at the physical layer and driver level do not require direct modifications to the Android Camera HAL API. However, once the lower driver supports C-PHY mode stably, the HAL layer can gain the performance benefit of reliably handling higher-bandwidth stream configurations (for example, high-resolution RAW capture or high-frame-rate video).",
+      "why_it_matters": "As the physical layer switches to C-PHY, you should closely verify through driver and ISP integration tests that no frame drops or transfer delays caused by signal integrity occur when configuring high-bandwidth streams.",
+      "source_subtitle": "Qualcomm CAMSS MIPI C-PHY support patch v9"
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": [
+    {
+      "id": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha02",
+      "note": "Reference on the AOSP Camera framework"
+    },
+    {
+      "id": "https://gitlab.com/libcamera/libcamera/-/tags/v0.7.2",
+      "title": "v0.7.2",
+      "note": "Reference on camera drivers / image pipelines"
+    }
+  ]
+}

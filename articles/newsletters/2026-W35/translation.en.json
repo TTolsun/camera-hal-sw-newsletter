@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W35",
+  "source_hash": "sha256:dd16e405b19b74ded6089de4daa094f0ac412ce307fbdcae11c4ae3ced76340e",
+  "title": "2026 W34 (08.17 ~ 08.23)",
+  "summary": "This week covers ‘Raspberry Pi libcamera v0.7.2+rpt20260817 released: stability improvements to the Linux camera driver stack and what HAL engineers should note’.",
+  "sections": [
+    {
+      "id": "url:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+      "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 released: stability improvements to the Linux camera driver stack and what HAL engineers should note",
+      "lead": "On August 17, 2026, Raspberry Pi's downstream libcamera library was officially updated to version v0.7.2+rpt20260817. This release focuses on strengthening the stability and efficiency of Linux-based camera pipelines, and offers technical inspiration to engineers developing Android Camera HALs and lower-level drivers.",
+      "body_markdown": "Raspberry Pi's libcamera v0.7.2+rpt20260817 release is the latest downstream stabilization version of libcamera, the core framework of the Linux camera subsystem. libcamera is a framework developed to resolve the complexity of the legacy V4L2 interface and to efficiently control modern ISPs and multi-stream configurations, and its importance in embedded and mobile camera stacks keeps growing.\n\nThis update focuses on substantially improving the stability of the interaction between Raspberry Pi platform-specific drivers, ISP control logic, and applications. In particular, the exception-handling routines in frame timing control and format negotiation were reinforced, further raising reliability in continuous frame capture environments.\n\nFrom an Android Camera HAL engineer's perspective, this change does not mean a direct change to the AOSP framework. However, the stream configuration and buffer lifecycle management model adopted by libcamera shares a structural philosophy with the Android Camera HAL3 architecture. Their optimization techniques for resolving bottlenecks in the lower driver layer and maximizing data transfer efficiency with the ISP therefore serve as very useful benchmark material when developing custom Android platforms.",
+      "why_it_matters": "There is no direct Android Camera HAL API contract change, but platforms that use a V4L2/libcamera-based lower driver stack can benchmark the exception handling in frame timing control and format negotiation logic to maximize the stability of buffer lifecycle management between the driver and the ISP.",
+      "source_subtitle": "Official Raspberry Pi libcamera release"
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": [
+    {
+      "id": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+      "title": "CameraX Release Notes - CameraX 1.7.0-alpha03",
+      "note": "Reference on the AOSP Camera framework"
+    },
+    {
+      "id": "https://source.android.com/docs/compatibility/cts/camera-its-tests",
+      "title": "Camera ITS tests",
+      "note": "Reference on the AOSP Camera framework"
+    },
+    {
+      "id": "https://source.android.com/docs/compatibility/cts/camera-its",
+      "title": "Camera ITS overview",
+      "note": "Reference on the AOSP Camera framework"
+    },
+    {
+      "id": "https://patchwork.libcamera.org/patch/27964/",
+      "title": "[v7,01/47] libcamera: software_isp: init(): Fix documentation typo",
+      "note": "Reference on camera drivers / image pipelines"
+    }
+  ]
+}

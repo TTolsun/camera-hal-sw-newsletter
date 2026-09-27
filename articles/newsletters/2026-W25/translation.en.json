@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W25",
+  "source_hash": "sha256:297e5c6e97bc2fcc7f101971cc9329f55c97346a25eee1cf104e56cd15365f5e",
+  "title": "2026 W25 (06.15 ~ 06.21)",
+  "summary": "This week covers 6 stories, including ‘ARM Mali C55 ISP: patches for CCM and RGB Gamma support published’ and ‘Android developer productivity: CameraX migration skill added’.",
+  "sections": [
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com",
+      "headline": "ARM Mali C55 ISP: patches for CCM and RGB Gamma support published",
+      "lead": "Patches adding CCM (Color Correction Matrix) and RGB Gamma support to the ARM Mali C55 ISP driver were recently published on the Linux media mailing list. The patches appear set to strengthen core functions of the image processing pipeline and enable more accurate color reproduction.",
+      "body_markdown": "On June 16, 2026, two important patches for the ARM Mali C55 ISP driver were posted to the Linux media mailing list. The first patch adds CCM (Color Correction Matrix) support, and the second includes RGB Gamma support. These two functions are essential for optimizing color accuracy and tone mapping as raw data coming from the image sensor is converted into the image shown to the end user.\n\nCCM is used to correct the color response characteristics of the camera sensor so that colors are reproduced close to the actual colors, while RGB Gamma adjusts the brightness distribution of the image to produce a visually natural result. These functions are among the core roles of an ISP (Image Signal Processor) and are important for high-quality image output.\n\nOnce these patches are merged into the Linux kernel, SoC platforms using the Mali C55 ISP will be able to support more sophisticated image processing at the hardware level. This may directly affect driver interaction and image processing pipeline optimization in Android Camera HAL implementations.",
+      "why_it_matters": "These patches strengthen the low-level image processing capabilities of the Mali C55 ISP, giving Camera HAL implementations an opportunity to optimize color correction and gamma processing logic through integration with the driver. The HAL should review whether it can use these ISP functions to improve final image quality and get better results in specific color profile or HDR scenarios.",
+      "source_subtitle": "Image processing pipeline improvements proposed on the Linux media mailing list"
+    },
+    {
+      "id": "url:https://developer.android.com/tools/agents/android-cli",
+      "headline": "Android developer productivity: CameraX migration skill added",
+      "lead": "On June 9, 2026, a new batch of Android skills for improving Android developer productivity included a skill related to CameraX migration. This update uses LLMs (Large Language Models) to help developers handle CameraX-related work more efficiently.",
+      "body_markdown": "The Android developer tools team continues to expand the Android skills repository to improve developer productivity, and a recent update added a skill related to CameraX migration. The skill is provided through the Android CLI and GitHub, and helps LLMs gain expertise in specific development patterns and best practices.\n\nCameraX is a Jetpack library built on the Android Camera2 API that aims to simplify camera app development. The CameraX migration skill should therefore be useful for moving apps that use the existing Camera1 or Camera2 API to CameraX, or for supporting maintenance and optimization work on CameraX apps.\n\nThis tooling improvement directly affects the development workflow for apps that use CameraX, helping developers adopt and use the CameraX API more easily. This may in turn contribute to better quality and shorter development time for CameraX-based apps.",
+      "why_it_matters": "This update is not a change to the Camera HAL itself, but because it affects the CameraX app development workflow, it may indirectly affect compatibility and performance validation of CameraX-based apps. When debugging specific camera behavior issues in CameraX apps (e.g., preview, capture, video recording), HAL teams should be aware of new patterns or potential issues arising from the use of these developer tools.",
+      "source_subtitle": "Expanding LLM-based development support through the Android CLI and GitHub",
+      "image_alt": "Android Developers Blog logo"
+    },
+    {
+      "id": "url:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+      "headline": "GCC 16 released: major improvements to error messages and SARIF output",
+      "lead": "On June 15, 2026, GCC 16 was released, bringing welcome news for developers. This version adds improved error messages and SARIF (Static Analysis Results Interchange Format) output, which are expected to greatly improve code quality analysis and debugging efficiency in C++ development workflows.",
+      "body_markdown": "One of the most notable changes in GCC 16 is clearer, easier-to-understand error messages. Compiler errors are a problem commonly encountered during development, and more readable error messages directly help shorten troubleshooting time and raise development productivity. This can be especially helpful in HAL and driver code that uses complex C++ template metaprogramming or complex inheritance structures.\n\nIn addition, SARIF output provides static analysis tool results in a standardized format, making it possible to integrate with various analysis tools and easily visualize and manage the results. Because SARIF is widely used in CI/CD pipelines such as GitHub Code Scanning, this GCC 16 feature will make automated code quality checks and security analysis workflows for C++-based projects more efficient.\n\nAndroid HAL and driver development mainly uses the Clang/LLVM toolchain, but these GCC improvements signal progress in code quality tools across the C++ ecosystem. In the long run, this may also have a positive effect on the Android native development environment, and in particular offers considerations for cross-compiler compatibility and the choice of static analysis tools.",
+      "why_it_matters": "GCC 16's improved error messages and SARIF output do not directly change the Android HAL toolchain (Clang/LLVM), but they offer insight into build, debug, and static analysis workflows for C++-based HAL and driver code. HAL engineers can consider using similar features in a Clang/LLVM environment, or managing code quality analysis results in an integrated way through standardized output formats such as SARIF.",
+      "source_subtitle": "Expected improvements to code quality analysis and debugging efficiency in C++ development workflows"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at",
+      "headline": "Himax HM1246 image sensor driver v10 patches proposed for the Linux kernel",
+      "lead": "A v10 patch series to support the Himax HM1246 image sensor was recently proposed to the Linux kernel media subsystem. The driver initially supports only Native RAW mode and is under review with the sensor's internal ISP pipeline not enabled.",
+      "body_markdown": "On June 19, 2026, the tenth patch series for adding a Himax HM1246 image sensor driver was published on the Linux kernel media mailing list. The driver provides hardware control and a V4L2 frame capture interface.\n\nThe key limitation of the currently proposed driver is that it supports only Native RAW mode. The sensor's internal ISP pipeline and other processed output modes are excluded from support, so the pure RAW data output by the sensor must be processed at the level of an external ISP or the AP.\n\nWith review having progressed to v10, the driver's structural maturity is expected to be high, but it is still a patch under review. Actual product development should therefore take the Native RAW mode-only limitation into account when designing the pipeline.",
+      "why_it_matters": "Because the Himax HM1246 driver supports only Native RAW mode, generating YUV or JPEG streams at the Android Camera HAL level requires integration with the AP's hardware ISP or a software image processing pipeline. Architecture design must reflect the fact that simple YUV output using the sensor's internal ISP is not possible.",
+      "source_subtitle": "lore.kernel.org linux-media list (2026-06-19)"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain",
+      "headline": "V4L2 sub-device driver patch v10 for the Himax HM1246 image sensor published",
+      "lead": "A v10 patch series for adding a Himax HM1246 image sensor driver was recently submitted to the Linux media mailing list. The sensor supports an I2C interface and a parallel bus and has a built-in internal ISP, and is expected to contribute to future integration into the lower image pipeline of embedded and Android devices.",
+      "body_markdown": "The v10 patch series published this time aims to add a V4L2 sub-device driver for controlling the Himax HM1246 image sensor to the Linux kernel. The sensor allows register configuration and control through an I2C interface, and is physically connected to the host processor through a parallel bus interface.\n\nIn particular, the sensor contains its own internal ISP (Image Signal Processor), which lets it perform basic image processing and format conversion at the sensor. The driver is written to V4L2 framework standards and provides compatibility with the Linux media controller architecture.\n\nHowever, the patch is currently a proposal under review on the mailing list, and whether it is finally merged into the kernel mainline, as well as its detailed specifications, may change depending on further feedback. If it is shipped in Android devices, it will follow a path of being integrated with the Camera HAL's image input pipeline through the V4L2 driver layer.",
+      "why_it_matters": "Because this patch is still at the proposal stage, it has no direct impact on Android Camera HAL APIs or metadata contracts. However, since it is a parallel-bus sensor with a built-in internal ISP, future HAL integration may require compatibility validation in frame timing and V4L2 sub-device format negotiation.",
+      "source_subtitle": "lore.kernel.org linux-media list"
+    },
+    {
+      "id": "url:https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com",
+      "headline": "V4L2 driver patch v2 for the Sony IMX576 image sensor published",
+      "lead": "A v2 patch series for supporting the Sony IMX576 image sensor was recently submitted to the Linux media mailing list. The driver includes support for a high-resolution active array along with manual exposure, gain, and blanking controls, and will serve as a foundation for future integration into high-performance camera pipelines.",
+      "body_markdown": "The v2 patch series submitted this time adds a new V4L2 sub-device driver for the Sony IMX576 image sensor. The IMX576 sensor features a large 5760 x 4312 active pixel array and is hardware suited to high-resolution image capture.\n\nTo make use of the sensor's capabilities, the proposed driver implements manual exposure control, analog/digital gain control, and vertical/horizontal blanking (vblank/hblank) control. It is also designed to support 2880 x 2156 output in addition to full resolution, so that it can handle various stream combinations.\n\nThis driver is also currently in upstream review, and before it can be applied to actual commercial devices, control reliability must be validated through the standard V4L2 framework interfaces and precise timing tuning with the host ISP pipeline must be done first.",
+      "why_it_matters": "The Sony IMX576 sensor's high resolution (5760 x 4312) and manual controls (exposure, gain, blanking) map directly to the manual control features (Manual Camera capabilities) of Android Camera HAL3. Once the driver stabilizes, it will help secure the reliability of the 3A engine and manual metadata control at the HAL level.",
+      "source_subtitle": "lore.kernel.org linux-media list"
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": [
+    {
+      "id": "https://goo.gle/AdaptiveApps_IO26",
+      "title": "8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)",
+      "note": "Reference on Android platform and camera-adjacent topics"
+    }
+  ]
+}

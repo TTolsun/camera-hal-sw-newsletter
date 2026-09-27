@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W20",
+  "source_hash": "sha256:dc992b09c59593b33b4141392d0a976ee8d241422f46917e7eecb93d748bf2db",
+  "title": "2026 W19 (05.04 ~ 05.10)",
+  "summary": "This week covers ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’ and ‘CameraX 1.6.1 Update: Observing Android Camera Compatibility’.",
+  "sections": [
+    {
+      "id": "url:https://www.phoronix.com/review/gcc-16-vs-clang-22",
+      "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "lead": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "body_markdown": "The GCC 16 performance comparison is a tooling signal for watching C++ compiler optimization and binary performance. Since the Android Camera HAL is mainly Clang/LLVM-based, this item should be read as long-term toolchain comparison material, not as a change to apply immediately.\n\nCamera HAL native code is sensitive to toolchain settings such as build flags, sanitizers, LTO/PGO, and warning policy. The GCC 16 benchmark shows compiler optimization trends, but it is not grounds for applying GCC directly to an Android product branch or for claiming HAL runtime performance improvements.\n\nIn practice, comparing equivalent features on the Clang/LLVM side together with the Android platform toolchain policy is about the right level. A separate benchmark can be opened only when a host-side utility or offline analysis tool uses GCC.\n\n**Android Native / Tooling Perspective**\n\nThis item is a native tooling watch, not a Camera HAL runtime change. The HAL team should use the Android branch's Clang/LLVM policy as the baseline and compare only in a limited way, in host utility or benchmark environments.\n\n### What to Check\n\n- Check the Clang/LLVM version, C++ standard flag, and sanitizer settings of the current Android branch.\n\n- Do not use the GCC 16 performance results as grounds for product HAL performance improvements.\n\n- Run a separate comparison only when a host-side tool or standalone benchmark uses GCC.",
+      "why_it_matters": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22"
+    },
+    {
+      "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+      "headline": "CameraX 1.6.1 Update: Observing Android Camera Compatibility",
+      "lead": "CameraX 1.6.1 Update: Observing Android Camera Compatibility",
+      "body_markdown": "The CameraX 1.6.1 release note is an AndroidX Camera layer update that includes viewfinder- and video-related artifact versions. For the Camera HAL team, it is not a direct contract change but an occasion to check app-facing camera behavior with a smoke test.\n\nSince CameraX and Camera2 are layers above the HAL, the release note must not be used directly as grounds for HAL API, stream, or metadata changes. Instead, the safe approach is to check in a reference app that Preview, ImageCapture, and VideoCapture combinations do not break on the existing device matrix.\n\nIn particular, if Camera2 interop, extensions, or session configuration failures are reported, the app/framework logs and the HAL/device logs should be examined separately. Open a HAL follow-up only when there is device log or stream/buffer evidence.\n\n**Camera HAL / Driver Perspective**\n\nCameraX 1.6.1 is an app-facing compatibility check item. HAL owners should distinguish library issues from device HAL regressions through reference app smoke tests and log separation.\n\n### What to Check\n\n- Decide the combinations for running a Preview + ImageCapture + VideoCapture smoke test with the CameraX 1.6.1 dependency.\n\n- Check session configuration failures separately in `dumpsys media.camera`, app logcat, and framework camera logs.\n\n- Interpret Camera2 interop or extensions-related changes only within the scope of the release note.",
+      "why_it_matters": "CameraX 1.6.1 Update: Observing Android Camera Compatibility"
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": []
+}
