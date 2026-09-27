@@ -210,6 +210,24 @@ test('a lingering taxonomy gap reports how many runs it has lasted (#479)', () =
   assert.match(report.items[0].reason, /3회 연속/);
 });
 
+// 읽을 수 없는 회차는 결손이 분명하므로 소스 연속과 마찬가지로 taxonomy 연속도 끊는다.
+// 깨진 파일을 "참"으로 이어 붙이면 연속 횟수가 실제보다 길게 보고된다.
+test('an unreadable diagnosis breaks the taxonomy streak (#479)', () => {
+  const root = tempRoot('followup-taxonomy-unreadable');
+  stageRuns(root, { taxonomyMissingLastRuns: 3 });
+  fs.writeFileSync(
+    path.join(root, 'articles', 'content', 'newsroom', '2026-08-31', 'source-quality-diagnosis.json'),
+    '{ this is not json',
+    'utf8'
+  );
+
+  const report = buildSourceFollowupIssues({ root, date: TARGET_DATE });
+
+  assert.equal(report.items.length, 1);
+  assert.equal(report.items[0].consecutive_runs, 1);
+  assert.ok(report.warnings.some(warning => /2026-08-31/.test(warning)));
+});
+
 // PR 본문은 초안을 10건까지만 싣는다. 실행 전체 진단은 한 건뿐이고 소스 draft와 성격이 달라서,
 // 소스 draft가 많은 주에 목록 밖으로 밀려나지 않게 맨 앞에 둔다.
 test('the run-scoped draft is listed before source drafts (#479)', () => {
