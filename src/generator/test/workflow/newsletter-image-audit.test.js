@@ -7,6 +7,7 @@ const test = require('node:test');
 const {
   analyzeSectionImages,
   buildNewsletterImageAuditReport,
+  renderNewsletterImageAuditMarkdown,
   repairNewsletterImages,
   writeNewsletterImageAuditAggregate
 } = require('../../render/newsletter-image-audit');
@@ -333,6 +334,30 @@ test('audit skips render consistency when the run expects no public output', asy
   assert.equal(report.summary.selected_image_render_mismatch_count, 0);
   assert.equal(report.summary.publish_blocking_issue_count, 0);
   assert.equal(report.errors.some(item => item.type === 'selected_image_render_mismatch'), false);
+  const markdown = renderNewsletterImageAuditMarkdown(report);
+  assert.match(markdown, /## 렌더 일관성\n\n- 검사하지 않음: 공개 출력이 없는 실행/);
+  assert.doesNotMatch(markdown, /불일치 없음/);
+});
+
+// 진단 전용 PR을 손으로 발행 PR로 바꾸면 status는 false로 남은 채 공개 페이지가 생긴다. 그 페이지가
+// 선택 이미지를 빠뜨렸으면 지금처럼 차단되어야 한다(validate:images가 이 카운트로 병합을 막는다).
+test('audit still counts render mismatches when public pages exist despite a no-public-output status', async () => {
+  const root = tempRoot('newsletter-image-audit-no-public-output-with-pages-');
+  const date = '2026-05-30';
+  writeReviewDraft(root, selectedImageDraft(date));
+  writeText(path.join(root, 'articles', 'newsletters', date, 'newsletter.md'), '# Missing image\n');
+  writeText(path.join(root, 'articles', 'newsletters', date, 'index.html'), '<html><body>Missing image</body></html>');
+  writeJson(path.join(root, 'articles', 'content', 'newsroom', date, 'generation-status.json'), {
+    date,
+    status: 'FAILED_REPAIR_REVIEWABLE',
+    public_output_expected: false
+  });
+
+  const report = await buildNewsletterImageAuditReport({ root, date });
+
+  assert.equal(report.render_consistency_scope, 'editor_draft');
+  assert.equal(report.summary.selected_image_render_mismatch_count, 1);
+  assert.equal(report.summary.publish_blocking_issue_count, 1);
 });
 
 test('audit still counts missing public pages when public output is expected or unrecorded', async () => {

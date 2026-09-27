@@ -662,8 +662,10 @@ async function buildNewsletterImageAuditReport(options = {}) {
 
   const isPublishTarget = publishTarget(issue || {}, status);
   // #1188: 공개 출력이 없는 실행(진단 전용)에는 비교할 공개 페이지가 없다. 부재를 render_mismatch로 세면
-  // 보고서가 이미지 문제로 발행이 막힌 것처럼 읽힌다. 발행 대상이면 상태와 모순이므로 지금처럼 센다.
-  const renderConsistencyApplicable = isPublishTarget || publicOutputExpected(status);
+  // 보고서가 이미지 문제로 발행이 막힌 것처럼 읽힌다. 건너뛰는 것은 공개 페이지가 실제로 없을 때뿐이다 —
+  // 진단 전용 PR을 손으로 발행 PR로 바꾼 경우처럼 페이지가 있으면 status와 무관하게 지금처럼 센다.
+  // 발행 대상이면 상태와 모순이므로 역시 센다.
+  const renderConsistencyApplicable = isPublishTarget || publicOutputExpected(status) || Boolean(markdown || html);
   const mismatches = issue && renderConsistencyApplicable ? renderConsistency(issue, markdown, html, {
     publicArtifactsOnly: publicArtifactScope
   }) : [];
@@ -865,7 +867,9 @@ function renderNewsletterImageAuditMarkdown(report) {
     }
   }
   lines.push('', '## 렌더 일관성', '');
-  if (report.consistency.selected_image_render_mismatches.length === 0) {
+  if (report.render_consistency_scope === 'not_applicable_no_public_output') {
+    lines.push('- 검사하지 않음: 공개 출력이 없는 실행(`public_output_expected: false`)이라 비교할 공개 페이지가 없습니다.');
+  } else if (report.consistency.selected_image_render_mismatches.length === 0) {
     lines.push('- 불일치 없음');
   } else {
     for (const item of report.consistency.selected_image_render_mismatches) {
