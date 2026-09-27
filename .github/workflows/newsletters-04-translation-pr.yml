@@ -1,0 +1,148 @@
+name: Newsletter English translation PR
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'articles/newsletters/**/index.html'
+      - 'articles/newsletters/**/issue.json'
+  workflow_dispatch:
+    inputs:
+      weekly_key:
+        description: '번역할 주간호(예: 2026-W39). 비우면 최신 호만 확인합니다.'
+        type: string
+        default: ''
+      force_retranslate:
+        description: '기존 번역과 열린 PR이 있어도 다시 번역합니다.'
+        type: boolean
+        default: false
+      translate_model:
+        description: '수동 실행에서만 적용할 모델입니다. 비우면 코드 기본값을 사용합니다.'
+        type: string
+        default: ''
+
+concurrency:
+  group: translation
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.NEWSROOM_PR_TOKEN || github.token }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Select one translation target
+        id: target
+        env:
+          WEEKLY_KEY: ${{ inputs.weekly_key }}
+          FORCE: ${{ inputs.force_retranslate }}
+        shell: bash
+        run: |
+          args=(--auto)
+          if [ -n "$WEEKLY_KEY" ]; then args=(--weekly-key "$WEEKLY_KEY"); fi
+          if [ "$FORCE" = true ]; then args+=(--force); fi
+          node src/generator/translate/translate-newsletter.js "${args[@]}" --plan
+      - name: Reuse an open translation PR for the same source
+        if: steps.target.outputs.weekly_key != ''
+        id: pending
+        uses: actions/github-script@v7
+        env:
+          WEEKLY_KEY: ${{ steps.target.outputs.weekly_key }}
+          SOURCE_HASH: ${{ steps.target.outputs.source_hash }}
+          FORCE: ${{ inputs.force_retranslate }}
+        with:
+          github-token: ${{ secrets.NEWSROOM_PR_TOKEN || github.token }}
+          script: |
+            core.setOutput('skip', 'false');
+            if (process.env.FORCE === 'true') return;
+            const key = process.env.WEEKLY_KEY;
+            const branch = `newsroom-translation/${key}`;
+            const { data: prs } = await github.rest.pulls.list({ ...context.repo, state: 'open', base: 'main', head: `${context.repo.owner}:${branch}` });
+            if (!prs.length) return;
+            try {
+              const { data } = await github.rest.repos.getContent({ ...context.repo, ref: prs[0].head.sha, path: `articles/newsletters/${key}/translation.en.json` });
+              const overlay = JSON.parse(Buffer.from(data.content, 'base64').toString('utf8'));
+              if (overlay.source_hash === process.env.SOURCE_HASH) {
+                core.setOutput('skip', 'true');
+                core.info(`nothing to translate: existing PR ${prs[0].html_url}`);
+              }
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+      - name: Translate and render English edition
+        if: steps.target.outputs.weekly_key != '' && steps.pending.outputs.skip != 'true'
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NEWSROOM_TRANSLATE_MODEL: ${{ github.event_name == 'workflow_dispatch' && inputs.translate_model || '' }}
+          LLM_RAW_OUTPUT_DIR: .tmp/translation/raw
+          WEEKLY_KEY: ${{ steps.target.outputs.weekly_key }}
+        run: node src/generator/translate/translate-newsletter.js --weekly-key "$WEEKLY_KEY" --force
+      - name: Test and validate translation
+        if: steps.target.outputs.weekly_key != '' && steps.pending.outputs.skip != 'true'
+        run: npm run test && npm run validate
+      - name: Verify main has not advanced and ensure translation label
+        if: steps.target.outputs.weekly_key != '' && steps.pending.outputs.skip != 'true'
+        uses: actions/github-script@v7
+        env:
+          WEEKLY_KEY: ${{ steps.target.outputs.weekly_key }}
+          SOURCE_HASH: ${{ steps.target.outputs.source_hash }}
+        with:
+          github-token: ${{ secrets.NEWSROOM_PR_TOKEN || github.token }}
+          script: |
+            const { execFileSync } = require('node:child_process');
+            const { createHash } = require('node:crypto');
+            const { data: ref } = await github.rest.git.getRef({ ...context.repo, ref: 'heads/main' });
+            const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+            if (head !== ref.object.sha) throw new Error('main advanced during translation; rerun before creating a PR');
+            const { data: source } = await github.rest.repos.getContent({ ...context.repo, ref: ref.object.sha, path: `articles/newsletters/${process.env.WEEKLY_KEY}/issue.json` });
+            const hash = 'sha256:' + createHash('sha256').update(Buffer.from(source.content, 'base64')).digest('hex');
+            if (hash !== process.env.SOURCE_HASH) throw new Error('Translation source changed on main');
+            try {
+              await github.rest.issues.getLabel({ ...context.repo, name: 'translation' });
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              await github.rest.issues.createLabel({ ...context.repo, name: 'translation', color: '0e8a16', description: 'English newsletter translation for human review' });
+            }
+      - name: Create translation PR
+        if: steps.target.outputs.weekly_key != '' && steps.pending.outputs.skip != 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.NEWSROOM_PR_TOKEN || github.token }}
+          base: main
+          branch: newsroom-translation/${{ steps.target.outputs.weekly_key }}
+          title: '[Translation] Camera HAL / SW Newsletter - ${{ steps.target.outputs.weekly_key }} (en)'
+          commit-message: 'Translate weekly newsletter into English'
+          body-path: .tmp/translation/pr-body.md
+          labels: |
+            newsletter
+            translation
+          add-paths: |
+            articles/en/newsletters/${{ steps.target.outputs.weekly_key }}/index.html
+            articles/en/newsletters/${{ steps.target.outputs.weekly_key }}/newsletter.md
+            articles/data/newsletters.json
+            articles/data/newsletters-weekly.json
+            articles/sitemap.xml
+            articles/newsletters/${{ steps.target.outputs.weekly_key }}/translation.en.json
+            articles/newsletters/${{ steps.target.outputs.weekly_key }}/translation-cost-report.md
+      - name: Preserve translation diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: translation-debug-${{ github.run_id }}
+          path: .tmp/translation
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14

@@ -22,6 +22,7 @@ const { LLM_STAGE_GROUPS } = require('../../../llm/model-policy');
 // 이 목록이 catalog와 예전 자유 문자열 label 사이의 다리다. 여기가 어긋나면 #981의
 // 전제("routing과 label을 보존한다")가 깨진 것이다.
 const EXPECTED_LABELS = [
+  [LLM_STAGES.TRANSLATE, 'translate attempt 1/2'],
   [LLM_STAGES.REPORTER, 'reporter attempt 1/2'],
   [LLM_STAGES.EDITOR, 'editor attempt 1/2'],
   [LLM_STAGES.FACT_CHECKER, 'fact-checker attempt 1/2'],
@@ -53,8 +54,8 @@ function runFor(definition) {
   return stageRun(definition, { qualityAttempt: 1, totalAttempts: 2 });
 }
 
-test('catalog가 production stage 22개를 정의한다', () => {
-  assert.equal(Object.keys(LLM_STAGES).length, 22);
+test('catalog가 production stage 23개를 정의한다', () => {
+  assert.equal(Object.keys(LLM_STAGES).length, 23);
   const ids = Object.values(LLM_STAGES).map(definition => definition.id);
   assert.equal(new Set(ids).size, ids.length, 'definition id가 중복이다');
 });
@@ -72,7 +73,7 @@ test('definition의 group과 sampling profile이 모두 유효한 어휘다', ()
   });
 });
 
-test('기본 stage 13개의 label이 현행과 byte 단위로 같다', () => {
+test('기본 stage 14개의 label이 현행과 byte 단위로 같다', () => {
   EXPECTED_LABELS.forEach(([definition, expected]) => {
     assert.equal(runFor(definition).label, expected);
   });

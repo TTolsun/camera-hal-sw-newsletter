@@ -112,7 +112,8 @@ test('defaults match workflow runtime defaults', () => {
     repair: 'code_default',
     judge: 'code_default',
     editorialPlan: 'code_default',
-    sourceDiscovery: 'code_default'
+    sourceDiscovery: 'code_default',
+    translate: 'code_default'
   });
   assert.equal(config.geminiModel, 'gemini-2.5-flash');
   assert.deepEqual(config.geminiFallbackModels, ['gemini-2.5-flash', 'gemini-2.5-flash-lite']);
@@ -251,7 +252,8 @@ test('runtime env overrides are parsed into typed config', () => {
     repair: 'primary-model',
     judge: 'primary-model',
     editorialPlan: 'primary-model',
-    sourceDiscovery: 'primary-model'
+    sourceDiscovery: 'primary-model',
+    translate: 'primary-model'
   });
   assert.deepEqual(config.llmStageModelSources, {
     reporter: 'GEMINI_MODEL',
@@ -260,7 +262,8 @@ test('runtime env overrides are parsed into typed config', () => {
     repair: 'GEMINI_MODEL',
     judge: 'GEMINI_MODEL',
     editorialPlan: 'GEMINI_MODEL',
-    sourceDiscovery: 'GEMINI_MODEL'
+    sourceDiscovery: 'GEMINI_MODEL',
+    translate: 'GEMINI_MODEL'
   });
   assert.equal(config.geminiModel, 'primary-model');
   assert.deepEqual(config.geminiFallbackModels, []);
@@ -468,7 +471,8 @@ test('LLM_MODEL and LLM_FALLBACK_MODELS override Gemini compatibility aliases', 
     repair: 'llm-primary',
     judge: 'llm-primary',
     editorialPlan: 'llm-primary',
-    sourceDiscovery: 'llm-primary'
+    sourceDiscovery: 'llm-primary',
+    translate: 'llm-primary'
   });
   assert.equal(config.geminiModel, 'llm-primary');
   assert.deepEqual(config.geminiFallbackModels, ['llm-fallback']);
@@ -490,7 +494,8 @@ test('stage model env vars independently override code defaults', () => {
     repair: 'repair-model',
     judge: 'judge-model',
     editorialPlan: 'gemini-2.5-flash',
-    sourceDiscovery: 'gemini-2.5-flash-lite'
+    sourceDiscovery: 'gemini-2.5-flash-lite',
+    translate: 'gemini-2.5-flash'
   });
   assert.deepEqual(config.llmStageModelSources, {
     reporter: 'NEWSROOM_REPORTER_MODEL',
@@ -499,7 +504,8 @@ test('stage model env vars independently override code defaults', () => {
     repair: 'NEWSROOM_REPAIR_MODEL',
     judge: 'NEWSROOM_JUDGE_MODEL',
     editorialPlan: 'code_default',
-    sourceDiscovery: 'code_default'
+    sourceDiscovery: 'code_default',
+    translate: 'code_default'
   });
   assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.REPORTER), ['reporter-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
   assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.EDITOR), ['editor-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
@@ -521,7 +527,8 @@ test('global LLM model overrides stage-specific model env vars', () => {
     repair: 'global-model',
     judge: 'global-model',
     editorialPlan: 'global-model',
-    sourceDiscovery: 'global-model'
+    sourceDiscovery: 'global-model',
+    translate: 'global-model'
   });
   assert.deepEqual(config.llmStageModelSources, {
     reporter: 'LLM_MODEL',
@@ -530,7 +537,8 @@ test('global LLM model overrides stage-specific model env vars', () => {
     repair: 'LLM_MODEL',
     judge: 'LLM_MODEL',
     editorialPlan: 'LLM_MODEL',
-    sourceDiscovery: 'LLM_MODEL'
+    sourceDiscovery: 'LLM_MODEL',
+    translate: 'LLM_MODEL'
   });
   assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.EDITOR), ['global-model', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
 });
@@ -673,7 +681,8 @@ test('sanitized diagnostics never include the raw API key', () => {
     repair: 'code_default',
     judge: 'code_default',
     editorialPlan: 'code_default',
-    sourceDiscovery: 'code_default'
+    sourceDiscovery: 'code_default',
+    translate: 'code_default'
   });
   assert.deepEqual(sanitized.selectionWindowPolicy, {
     primarySelectionDays: 7,

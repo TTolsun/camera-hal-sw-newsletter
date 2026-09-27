@@ -22,6 +22,7 @@ const path = require('path');
 const { buildWeeklyNewsletterPage } = require('./weekly-newsletter-page');
 const { weeklyTopicTags } = require('./newsletter-renderer');
 const { writeSitemap } = require('./generate-sitemap');
+const { invalidateTranslation } = require('./translation-state');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../reporter/weekly-article-limits');
 const { resolveWeeklyArticles, sectionIdentity } = require('../reporter/weekly-duplicate-merge');
@@ -189,6 +190,7 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
   let currentSections = ensureArray(issue.sections);
   if (result.patchedSectionCount > 0) {
     const page = buildWeeklyNewsletterPage(issue, { weeklyKey });
+    result.files.push(...invalidateTranslation(root, weeklyKey, `${JSON.stringify(page.issue, null, 2)}\n`));
     const dir = path.join(root, 'articles', 'newsletters', weeklyKey);
     fs.writeFileSync(path.join(dir, 'index.html'), page.html, 'utf8');
     fs.writeFileSync(path.join(dir, 'newsletter.md'), page.markdown, 'utf8');
@@ -338,6 +340,8 @@ async function writeWeeklyNewsletterArtifacts({
   // 부르면 거부된 실행이 index.html·newsletter.md·issue.json 은 새로 덮어쓴 채 인덱스
   // 엔트리만 옛 값으로 남겨, 공개 정본과 아티팩트가 어긋난 상태로 끝난다.
   const contractVersionField = indexContractVersionField(page.weeklyKey, page.issue, weeklyIndexEntry(root, page.weeklyKey));
+  const invalidatedFiles = invalidateTranslation(root, weeklyKey, `${JSON.stringify(page.issue, null, 2)}\n`);
+  const existingTranslation = weeklyIndexEntry(root, weeklyKey)?.en;
 
   const dir = path.join(root, 'articles', 'newsletters', weeklyKey);
   fs.mkdirSync(dir, { recursive: true });
@@ -346,6 +350,7 @@ async function writeWeeklyNewsletterArtifacts({
   fs.writeFileSync(path.join(dir, 'issue.json'), `${JSON.stringify(page.issue, null, 2)}\n`, 'utf8');
 
   const indexFile = upsertWeeklyIndex(root, {
+    ...(existingTranslation ? { en: existingTranslation } : {}),
     weeklyKey: page.weeklyKey,
     weekStartDate: page.weekStartDate,
     weekEndDate: page.weekEndDate,
@@ -385,6 +390,7 @@ async function writeWeeklyNewsletterArtifacts({
     // 그 실패가 공개 산출물 기록보다 앞서 버린다.
     articles,
     files: [
+      ...invalidatedFiles,
       // changedArtifacts에 쓰이는 디스크-상대 경로(articles/ 아래).
       `articles/newsletters/${weeklyKey}/index.html`,
       `articles/newsletters/${weeklyKey}/newsletter.md`,

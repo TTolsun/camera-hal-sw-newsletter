@@ -16,6 +16,7 @@
 - PR 기반 발행 모델을 유지합니다.
 - generated newsletter를 `main`에 직접 push하지 마세요.
 - failed/reviewable run의 artifact upload를 보존합니다.
+- `newsletters-04-translation-pr.yml`은 한국어 호가 `main`에 반영된 뒤 별도 번역 PR만 만듭니다. 자동 실행은 모델 repo variable을 읽지 않으며, 같은 원본 해시의 열린 PR은 재사용합니다. 번역 전후 원본 해시 검사와 전체 test·validate gate를 유지합니다.
 - workflow가 사용하는 path를 바꾸면 scripts, docs, tests를 함께 갱신합니다.
 
 ## 발행 상태 label (Publication State Labels)

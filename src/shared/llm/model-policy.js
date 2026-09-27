@@ -5,7 +5,8 @@ const LLM_STAGE_GROUPS = Object.freeze({
   REPAIR: 'repair',
   JUDGE: 'judge',
   EDITORIAL_PLAN: 'editorialPlan',
-  SOURCE_DISCOVERY: 'sourceDiscovery'
+  SOURCE_DISCOVERY: 'sourceDiscovery',
+  TRANSLATE: 'translate'
 });
 const LLM_STAGE_GROUP_VALUES = Object.freeze(Object.values(LLM_STAGE_GROUPS));
 
