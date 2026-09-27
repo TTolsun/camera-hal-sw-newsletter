@@ -1,0 +1,286 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 95,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 4,
+    "locked_article_count": 4,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Renesas RZ/V2H EVK 보드를 위한 Arm Mali-C55 ISP 및 IVC 하드웨어 가속 활성화 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Samsung S5K3T2 20메가픽셀 이미지 센서용 리눅스 커널 드라이버 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Intel IPU7 드라이버의 장치 제거 시 ISYS 펌웨어 리소스 누수 방지 패치 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Renesas RZ/V2H EVK 보드를 위한 Arm Mali-C55 ISP 및 IVC 하드웨어 가속 활성화 패치 제안",
+      "Samsung S5K3T2 20메가픽셀 이미지 센서용 리눅스 커널 드라이버 패치 제안",
+      "Intel IPU7 드라이버의 장치 제거 시 ISYS 펌웨어 리소스 누수 방지 패치 제안",
+      "Android Studio에서 개발자 선택에 따른 다양한 AI 에이전트 통합 지원 발표"
+    ],
+    "locked_article_headlines": [
+      "Renesas RZ/V2H EVK 보드를 위한 Arm Mali-C55 ISP 및 IVC 하드웨어 가속 활성화 패치 제안",
+      "Samsung S5K3T2 20메가픽셀 이미지 센서용 리눅스 커널 드라이버 패치 제안",
+      "Intel IPU7 드라이버의 장치 제거 시 ISYS 펌웨어 리소스 누수 방지 패치 제안",
+      "Android Studio에서 개발자 선택에 따른 다양한 AI 에이전트 통합 지원 발표"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Renesas RZ/V2H EVK 보드를 위한 Arm Mali-C55 ISP 및 IVC 하드웨어 가속 활성화 패치 제안",
+        "category": "android",
+        "relevance_bucket": "android",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+        ],
+        "source_titles": [
+          "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Samsung S5K3T2 20메가픽셀 이미지 센서용 리눅스 커널 드라이버 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+        ],
+        "source_titles": [
+          "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "Intel IPU7 드라이버의 장치 제거 시 ISYS 펌웨어 리소스 누수 방지 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "Android Studio에서 개발자 선택에 따른 다양한 AI 에이전트 통합 지원 발표",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+        ],
+        "source_titles": [
+          "Build your way: Use any AI agent of your choice in Android Studio"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Renesas RZ/V2H EVK 보드를 위한 Arm Mali-C55 ISP 및 IVC 하드웨어 가속 활성화 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Renesas RZ/V2H EVK 보드를 위한 Arm Mali-C55 ISP 및 IVC 하드웨어 가속 활성화 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Samsung S5K3T2 20메가픽셀 이미지 센서용 리눅스 커널 드라이버 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Samsung S5K3T2 20메가픽셀 이미지 센서용 리눅스 커널 드라이버 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Intel IPU7 드라이버의 장치 제거 시 ISYS 펌웨어 리소스 누수 방지 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Intel IPU7 드라이버의 장치 제거 시 ISYS 펌웨어 리소스 누수 방지 패치 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Renesas RZ/V2H EVK 보드를 위한 Arm Mali-C55 ISP 및 IVC 하드웨어 가속 활성화 패치 제안",
+        "category": "android",
+        "relevance_bucket": "android",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+        ],
+        "source_titles": [
+          "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Samsung S5K3T2 20메가픽셀 이미지 센서용 리눅스 커널 드라이버 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+        ],
+        "source_titles": [
+          "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "Intel IPU7 드라이버의 장치 제거 시 ISYS 펌웨어 리소스 누수 방지 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "Android Studio에서 개발자 선택에 따른 다양한 AI 에이전트 통합 지원 발표",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+        ],
+        "source_titles": [
+          "Build your way: Use any AI agent of your choice in Android Studio"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 1,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 1
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

@@ -7,6 +7,89 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com",
+      "series_identity_key": "lore-series:20260924110310.1555150-lgs201920130244@gmail.com",
+      "series_subject_key": "media staging ipu7 release isys firmware resources on remove",
+      "title": "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove",
+      "source_url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com",
+      "newsletter_date": "2026-09-28",
+      "newsletter_url": "newsletters/2026-09-28/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-28",
+      "newsletter_article_date": "2026-09-28",
+      "cooldown_until": "2026-10-19",
+      "first_exposed_at": "2026-09-28",
+      "last_exposed_at": "2026-09-28",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me",
+      "series_identity_key": "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
+      "series_subject_key": "media i2c samsung s5k3t2 image sensor",
+      "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "source_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me",
+      "newsletter_date": "2026-09-28",
+      "newsletter_url": "newsletters/2026-09-28/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-28",
+      "newsletter_article_date": "2026-09-28",
+      "cooldown_until": "2026-10-19",
+      "first_exposed_at": "2026-09-28",
+      "last_exposed_at": "2026-09-28",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org",
+      "series_identity_key": "lore-series:20260925-mali-c55-renesas-dts-v2-69f728a474a2@kernel.org",
+      "series_subject_key": "arm64 dts renesas enable isp and ivc on rz v2h evk",
+      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
+      "source_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org",
+      "newsletter_date": "2026-09-28",
+      "newsletter_url": "newsletters/2026-09-28/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-28",
+      "newsletter_article_date": "2026-09-28",
+      "cooldown_until": "2026-10-19",
+      "first_exposed_at": "2026-09-28",
+      "last_exposed_at": "2026-09-28",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "title": "Android Studio에서 개발자 선택에 따른 다양한 AI 에이전트 통합 지원 발표",
+      "source_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "newsletter_date": "2026-09-28",
+      "newsletter_url": "newsletters/2026-09-28/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-09-28",
+      "first_exposed_at": "2026-09-28",
+      "last_exposed_at": "2026-09-28",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-09-28",
+      "cooldown_until": "2026-10-19"
+    },
+    {
       "article_identity_key": "url:https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
       "title": "Claude Code v2.1.271",
       "source_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
