@@ -1153,14 +1153,47 @@ function classifyArtifactPath(relPath) {
   return { group: unknown.group, retention_grade: unknown.retention_grade, role: unknown.role };
 }
 
-function retentionCommitAllowlist({ root = process.cwd(), date, runContext = {} } = {}) {
+// #1189: 진단 전용 PR에는 공개 페이지가 실리면 안 된다(.github/workflows/AGENTS.md). 공개 페이지를 쓰는
+// 생산자 쪽 장치(#1183)와 별도로, PR에 무엇이 실리는지 정하는 이 지점에서도 계약을 확인한다.
+// newsletters.json·archive 상태는 빼지 않는다 — 진단 전용 실행에서도 reconciliation이 날짜 항목을
+// 지우고 archive 상태를 기록하는 정당한 변경이다(public-state-reconciliation.js).
+const PUBLIC_PAGE_ROLES = new Set([
+  'public_markdown',
+  'public_html',
+  'weekly_public_html',
+  'weekly_public_markdown',
+  'weekly_public_issue',
+  'weekly_public_index',
+  'sitemap'
+]);
+
+// runContext의 publicOutputExpected는 쓰지 않는다. CLI는 runContext를 넘기지 않아 그 기본값(false)이면
+// 정상 발행 PR에서도 공개 파일이 빠진다. status 파일이 false를 명시할 때만 빼고, 없으면 지금처럼 싣는다.
+function statusExpectsNoPublicOutput(root, date) {
+  const status = readJsonIfExists(root, newsroomRelPath(date, 'generation-status.json')) || {};
+  return status.public_output_expected === false;
+}
+
+function retentionCommitPlan({ root = process.cwd(), date, runContext = {} } = {}) {
   if (!date) throw new Error('retentionCommitAllowlist requires date');
   const inventory = buildReviewArtifactInventory({ root, date, runContext });
   const committed = committedRetentionGrades();
-  return inventory.review_artifacts
-    .filter(artifact => artifact.present && committed.includes(artifact.retention_grade))
-    .map(artifact => artifact.path)
-    .sort();
+  const dropPublicPages = statusExpectsNoPublicOutput(root, date);
+  const paths = [];
+  const excludedPublicPaths = [];
+  for (const artifact of inventory.review_artifacts) {
+    if (!artifact.present || !committed.includes(artifact.retention_grade)) continue;
+    if (dropPublicPages && PUBLIC_PAGE_ROLES.has(artifact.role)) {
+      excludedPublicPaths.push(artifact.path);
+    } else {
+      paths.push(artifact.path);
+    }
+  }
+  return { paths: paths.sort(), excludedPublicPaths: excludedPublicPaths.sort() };
+}
+
+function retentionCommitAllowlist(options = {}) {
+  return retentionCommitPlan(options).paths;
 }
 
 module.exports = {
@@ -1179,5 +1212,6 @@ module.exports = {
   renderReleaseQaInventorySection,
   renderReviewGuideMarkdown,
   resolveRetentionLocation,
-  retentionCommitAllowlist
+  retentionCommitAllowlist,
+  retentionCommitPlan
 };
