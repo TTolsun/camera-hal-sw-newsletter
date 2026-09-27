@@ -325,3 +325,18 @@ test('English home keeps the static hero when the headline issue has no English 
   other.translation.sections[0].id = 'url:https://example.com/other';
   assert.equal((await renderEnglishHome(other)).elements['featured-card'].innerHTML, '');
 });
+
+test('English home hero alt never leaks the Korean title and stays empty for fallback art', async () => {
+  const noAlt = englishHomeFixture();
+  delete noAlt.headline.current_headline.image_alt;
+  const hero = (await renderEnglishHome(noAlt)).elements['featured-card'].innerHTML;
+  assert.match(hero, /alt="Codex released"/);
+  assert.doesNotMatch(hero, /[가-힣]/);
+  const koreanAlt = englishHomeFixture();
+  koreanAlt.headline.current_headline.image_alt = '한국어 이미지 설명';
+  assert.match((await renderEnglishHome(koreanAlt)).elements['featured-card'].innerHTML, /alt="Codex released"/);
+  const fallback = englishHomeFixture();
+  fallback.headline.current_headline.image_url = 'assets/images/fallback/newsletter-default.svg';
+  const fallbackHero = (await renderEnglishHome(fallback)).elements['featured-card'].innerHTML;
+  assert.match(fallbackHero, /src="\.\.\/assets\/images\/fallback\/newsletter-default\.svg" alt=""/);
+});
