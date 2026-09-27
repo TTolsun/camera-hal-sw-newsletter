@@ -44,6 +44,7 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `source-effectiveness-report.{json,md}`, `source-discovery-feedback-report.{json,md}`
 - `gemini-source-discovery-report.md`, `cost-report.md`
 - `summary-cache-report.{json,md}`, `artifact-manifest.json`
+- 주간 번역의 `translation.en.json`과 `translation-cost-report.md`는 `articles/newsletters/YYYY-Wnn/issue.json` 옆에 커밋합니다. 별도의 `newsletter-final.json`을 만들지 않습니다. 원본 변경으로 번역을 무효화하는 경우 두 인덱스의 `en`, 해당 영문 backing file, overlay·비용 보고서를 함께 제거하고 sitemap을 갱신합니다.
 - `source-change-events.{json,md}` — workflow 01이 `articles/content/source-events/`를 명시적으로 `git add`합니다. `.json`은 195KB 규모지만 등급은 크기가 아니라 커밋 여부를 말하는 자리이고, 크기는 `source-monitor.js`가 파생 값(`release_note_extract` 등)을 빼는 방식으로 관리합니다(#1101).
 - seed 마크다운 `seed-evidence-pack.md`, `seed-merge-report.md`, `seed-fetch-report.md` — workflow 02가 `articles/content/newsroom/`을 통째로 `git add`하므로 커밋 경로 위에 있습니다. 다만 `seed_used=true` 런에서만 만들어지고 아직 그런 런이 없어 트리에 커밋된 파일은 0건입니다.
 - **collected-news 파이프라인 입력 파일** (워크플로 핸드오프 상태 — workflow 01 → main → workflow 02 → main → workflow 03 순서로 전달되므로 반드시 Git에 커밋해야 합니다):

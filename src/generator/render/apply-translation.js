@@ -91,4 +91,4 @@ function applyTranslation(issue, translation, { sourceText } = {}) {
   return result;
 }
 
-module.exports = { applyTranslation, translationSourceHash };
+module.exports = { applyTranslation, translationSourceHash, sectionKey, referenceKey };

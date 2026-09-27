@@ -4,6 +4,7 @@ const { publicAssetPath } = require('../../shared/common/artifact-paths');
 const { visibleHtmlText } = require('../quality/public-newsletter');
 const { validateRenderedIssueStructure } = require('../quality/rendered-issue-structure');
 const { applyTranslation } = require('../render/apply-translation');
+const { hasKoreanText } = require('../../shared/common/korean-text');
 
 function hasLongKoreanProse(value) {
   return String(value || '').split(/[.!?\n]/).some(sentence => (sentence.match(/[가-힣]/g) || []).length >= 20);
@@ -57,4 +58,4 @@ function validateEnglishEntry(item, root, { structure = true } = {}) {
   return errors;
 }
 
-module.exports = { hasLongKoreanProse, validateEnglishEntry };
+module.exports = { hasKoreanText, hasLongKoreanProse, validateEnglishEntry };

@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { execFileSync } = require('child_process');
+const { translationArtifactPaths } = require('../render/translation-state');
 
 const {
   collectionIntentRelPath,
@@ -1191,7 +1193,16 @@ function retentionCommitPlan({ root = process.cwd(), date, runContext = {} } = {
       paths.push(artifact.path);
     }
   }
-  return { paths: paths.sort(), excludedPublicPaths: excludedPublicPaths.sort() };
+  // Invalidating an English edition deletes tracked files. They are absent from the disk-based
+  // inventory but must be staged with the Korean correction, never on a diagnostics-only run.
+  if (!dropPublicPages && fs.existsSync(path.join(root, '.git'))) {
+    const translationPaths = translationArtifactPaths(weeklyKeyForDate(date));
+    const deleted = execFileSync('git', ['ls-files', '--deleted', '--', ...translationPaths], {
+      cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore']
+    }).trim().split(/\r?\n/).filter(Boolean);
+    paths.push(...deleted);
+  }
+  return { paths: [...new Set(paths)].sort(), excludedPublicPaths: excludedPublicPaths.sort() };
 }
 
 function retentionCommitAllowlist(options = {}) {

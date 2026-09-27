@@ -11,6 +11,8 @@ const {
   writeWeeklyNewsletterArtifacts
 } = require('../../../render/weekly-newsletter-output');
 const { buildWeeklyNewsletterPage } = require('../../../render/weekly-newsletter-page');
+const { buildHtml } = require('../../../render/newsletter-renderer');
+const { translationSourceHash } = require('../../../render/apply-translation');
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'weekly-output-'));
@@ -101,6 +103,24 @@ test('written index.html carries the merged weekly tags and re-renders byte-iden
   // issue.json 은 발행 페이지의 정본이다: 재렌더가 커밋된 html 을 바이트 동일하게 재현해야 한다.
   const rerendered = buildWeeklyNewsletterPage(issue, { weeklyKey: '2026-W23' });
   assert.equal(rerendered.html, html);
+  assert.equal(buildHtml(issue), html);
+});
+
+test('weekly regeneration invalidates a translation bound to the previous issue bytes', async () => {
+  const root = tempRoot();
+  const date = '2026-06-04';
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: draft([section('1.7.0', 'https://example.com/first')]) });
+  const dir = path.join(root, 'articles/newsletters/2026-W23');
+  const sourceText = fs.readFileSync(path.join(dir, 'issue.json'), 'utf8');
+  fs.writeFileSync(path.join(dir, 'translation.en.json'), JSON.stringify({ source_hash: translationSourceHash(sourceText) }));
+  const indexPath = path.join(root, 'articles/data/newsletters-weekly.json');
+  const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+  index[0].en = { html: 'en/newsletters/2026-W23/index.html', md: 'en/newsletters/2026-W23/newsletter.md' };
+  fs.writeFileSync(indexPath, JSON.stringify(index));
+  const result = await writeWeeklyNewsletterArtifacts({ root, date, editor: draft([section('1.8.0', 'https://example.com/second')]) });
+  assert.ok(result.files.includes('articles/newsletters/2026-W23/translation.en.json'));
+  assert.equal(fs.existsSync(path.join(dir, 'translation.en.json')), false);
+  assert.equal(JSON.parse(fs.readFileSync(indexPath, 'utf8'))[0].en, undefined);
 });
 
 test('publishing a weekly issue regenerates sitemap.xml with the issue URL', async () => {

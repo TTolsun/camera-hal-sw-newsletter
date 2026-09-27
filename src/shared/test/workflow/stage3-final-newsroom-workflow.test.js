@@ -531,6 +531,7 @@ test('site validation workflow keeps structural checks blocking and quality anno
   assert.match(structuralStep, /npm run validate:archive/);
   assert.match(structuralStep, /npm run validate:public/);
   assert.match(structuralStep, /npm run validate:url-parity/);
+  assert.match(structuralStep, /npm run validate:translation-parity/);
   assert.doesNotMatch(structuralStep, /npm run validate:quality/);
   assert.doesNotMatch(structuralStep, /^\s*npm run validate$/m);
   assert.doesNotMatch(structuralStep, /continue-on-error:\s*true/);

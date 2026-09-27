@@ -118,6 +118,16 @@ const JUDGE_FAMILY = [
 ];
 
 const BASE_STAGES = {
+  TRANSLATE: defineStage({
+    id: 'translate',
+    modelGroup: LLM_STAGE_GROUPS.TRANSLATE,
+    sampling: {
+      temperatureProfile: TEMPERATURE_PROFILES.FACTCHECK,
+      thinkingProfile: THINKING_PROFILES.DISABLED
+    },
+    statusRole: 'translate',
+    label: { kind: LABEL_KINDS.ATTEMPT, prefix: 'translate' }
+  }),
   REPORTER: defineStage({
     id: 'reporter',
     modelGroup: LLM_STAGE_GROUPS.REPORTER,
