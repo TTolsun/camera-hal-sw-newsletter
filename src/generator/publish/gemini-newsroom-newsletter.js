@@ -167,7 +167,6 @@ const {
   writeReporterArtifactsForAttempt,
   writeNewsletterDate,
   writeGenerationStatus,
-  writeCostReport,
   writeSummaryCacheReport
 } = require('./orchestrator-artifact-writers');
 const { generationRunState } = require('./orchestrator-run-state');
@@ -899,7 +898,7 @@ async function main() {
     buildRetryHistoryMarkdown(date, retryHistory, selectionStatusExtra(shortlistReport)),
     'utf8'
   );
-  writeCostReport(date);
+  // 성공 경로의 비용 리포트는 발행 판정 단계가 weekly LLM 호출 뒤에 쓴다(#1203).
 
   editor.publish_mode = currentPublishMode(shortlistReport);
   // render는 callLlmJson 초크포인트를 거치지 않으므로 여기서 직접 계측한다(기록 전용).

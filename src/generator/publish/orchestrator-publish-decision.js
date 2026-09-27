@@ -48,7 +48,7 @@ const {
 } = require('../render/weekly-newsletter-output');
 const { runWeeklyDeepDive } = require('../render/weekly-deep-dive');
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
-const { writeGenerationStatus } = require('./orchestrator-artifact-writers');
+const { writeCostReport, writeGenerationStatus } = require('./orchestrator-artifact-writers');
 const {
   writeSelectionDiagnosticsArtifact
 } = require('./orchestrator-recovery-writers');
@@ -154,6 +154,10 @@ async function decidePublishReadinessAndWriteStatus({
     // 모순이 생긴다. 파생시키면 "files에 weekly가 있다 == written"이 불변식이 된다.
     weeklyOutputStatus = weeklyArtifactFiles.length > 0 ? 'written' : 'failed';
   }
+  // 성공 경로의 비용 리포트는 여기서 한 번만 쓴다(#1203). 위 weekly writer가 이번 실행의 마지막
+  // LLM 호출(weekly-merge·intro-letter)을 내므로 그 뒤여야 하고, 아래 validate가 커밋될 파일과
+  // 같은 내용을 보도록 그 앞이어야 한다. 실패 경로는 terminal/repair failure writer가 따로 쓴다.
+  writeCostReport(date);
   const headlineArtifactResult = persistHeadlineStateArtifacts({
     date,
     shortlistReport,

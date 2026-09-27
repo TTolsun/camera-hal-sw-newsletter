@@ -1443,10 +1443,8 @@ async function runEnabled({
   });
   writeJson(evidenceValidationReportPath(root, date), evidence.report);
 
-  const usageReport = budget.writeReport(geminiUsageReportPath(root, date), {
-    date,
-    calls: discovery.calls
-  });
+  // calls는 budget이 stage_counts와 같은 누적 진단에서 채운다(#1203). 위 linked evidence 호출도 포함된다.
+  const usageReport = budget.writeReport(geminiUsageReportPath(root, date), { date });
 
   const geminiAnnotatedCandidates = evidence.annotatedCandidates.filter(item => item.origin === 'gemini_discovery');
   const derivedAnnotatedCandidates = evidence.annotatedCandidates.filter(item => item.origin === 'gemini_linked_discovery');

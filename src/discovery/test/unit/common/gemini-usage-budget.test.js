@@ -176,3 +176,42 @@ test('리포트가 스키마 버전을 싣는다', () => {
   const budget = createGeminiUsageBudget({ config: config() });
   assert.equal(budget.report({ date: '2026-08-30' }).schema_version, 2);
 });
+
+// #1203: 리포트의 calls가 제안 단계 끝의 스냅샷이었을 때, 그 뒤에 같은 budget으로 나간 linked
+// evidence 호출은 stage_counts에는 잡히고 calls에서는 빠졌다(2026-09-28: 성공 2, calls 1).
+// calls는 stage_counts와 같은 누적 진단에서 나와야 하고, 호출자가 넘긴 옛 스냅샷이 이를
+// 덮으면 안 된다. 불변식: stage_counts 성공 응답 합계 == calls 길이.
+test('calls는 stage_counts와 같은 누적 진단에서 나와 성공 응답 합계와 길이가 같다', () => {
+  const budget = createGeminiUsageBudget({
+    config: config({ softLimitCallsPerRun: 100, hardLimitCallsPerRun: 100 })
+  });
+  const proposalCall = { stage_id: 'source_discovery', model: 'm', note: 'proposal' };
+  const linkedCall = { stage_id: 'source_discovery', model: 'm', note: 'linked' };
+
+  // 제안 단계 호출 1건 뒤의 누적 진단
+  budget.mergeDiagnostics({
+    model_usage: { 'source_discovery#0': usageEntry('source_discovery', { m: { requests: 1 } }) },
+    cost_report: { calls: [proposalCall] }
+  });
+  const staleSnapshot = [proposalCall];
+  // linked evidence 호출 1건이 더해진 누적 진단
+  budget.mergeDiagnostics({
+    model_usage: { 'source_discovery#0': usageEntry('source_discovery', { m: { requests: 2 } }) },
+    cost_report: { calls: [proposalCall, linkedCall] }
+  });
+
+  const report = budget.report({ date: '2026-09-28', calls: staleSnapshot });
+  const successful = Object.values(report.stage_counts)
+    .reduce((sum, item) => sum + item.successful_responses, 0);
+  assert.equal(successful, 2);
+  assert.equal(report.successful_response_count, 2);
+  assert.equal(report.calls.length, successful);
+  assert.deepEqual(report.calls, [proposalCall, linkedCall]);
+});
+
+test('LLM 호출이 없으면 calls는 비어 있고 성공 응답 합계도 0이다', () => {
+  const budget = createGeminiUsageBudget({ config: config() });
+  const report = budget.report({ date: '2026-09-28' });
+  assert.equal(report.successful_response_count, 0);
+  assert.deepEqual(report.calls, []);
+});

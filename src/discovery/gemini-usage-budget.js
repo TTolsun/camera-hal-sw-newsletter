@@ -123,6 +123,9 @@ function createGeminiUsageBudget({
     : {});
   const budgetConfig = normalizeBudgetConfig(rawConfig);
   let stageCounts = defaultStageCounts(rawConfig);
+  // 리포트의 calls는 stage_counts와 같은 누적 진단에서 가져온다(#1203). 호출자가 넘기는 스냅샷은
+  // 찍은 뒤에 같은 budget으로 나간 호출(linked evidence)을 빠뜨려 성공 응답 수와 어긋났다.
+  let costCalls = [];
   const optionalStagesSkipped = [];
   let budgetOverHardLimitRequiredStage = false;
 
@@ -176,9 +179,10 @@ function createGeminiUsageBudget({
 
     mergeDiagnostics(diagnostics) {
       stageCounts = mergeStageCounts(stageCounts, diagnosticStageCounts(diagnostics));
+      costCalls = Array.isArray(diagnostics?.cost_report?.calls) ? diagnostics.cost_report.calls.slice() : [];
     },
 
-    report({ date = '', calls = [] } = {}) {
+    report({ date = '' } = {}) {
       const requested = requestedAttemptCount();
       const successful = sumStageField(stageCounts, 'successful_responses');
       const failed = sumStageField(stageCounts, 'failed_attempts');
@@ -199,7 +203,7 @@ function createGeminiUsageBudget({
         budget_status: budgetStatus(),
         optional_stages_skipped: optionalStagesSkipped,
         budget_over_hard_limit_required_stage: budgetOverHardLimitRequiredStage,
-        calls
+        calls: costCalls
       };
     },
 

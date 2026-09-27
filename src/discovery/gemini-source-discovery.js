@@ -14,7 +14,6 @@ const {
 } = require('../shared/common/common');
 const {
   callGeminiJsonBudgeted,
-  getGeminiCostCalls,
   getGeminiDiagnostics
 } = require('./gemini-client');
 const {
@@ -634,8 +633,7 @@ async function runGeminiSourceDiscovery({
     proposalValidationReportRelPath: geminiSourceProposalValidationReportRelPath(date),
     promotedCandidates: validation.promoted,
     rejectedProposals: validation.rejected,
-    diagnostics: getGeminiDiagnostics(),
-    calls: getGeminiCostCalls()
+    diagnostics: getGeminiDiagnostics()
   };
 }
 
