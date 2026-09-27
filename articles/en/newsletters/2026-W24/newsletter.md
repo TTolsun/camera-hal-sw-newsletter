@@ -26,7 +26,7 @@ CameraX is a Jetpack library that abstracts the Android Camera2 API and simplifi
 
 Camera HAL and driver engineers therefore need to understand the standardized stream combination requirements that this tooling change in the upper framework will bring, and proactively prepare compatibility and stability validation at the HAL layer.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This change is not a direct API contract change to the Camera HAL itself, but by encouraging upper-layer apps to switch to CameraX, it steers the stream configurations and metadata requests delivered to the HAL to converge on CameraX's standard usage patterns. HAL teams should strengthen their CameraX compatibility validation scenarios.
 

@@ -25,7 +25,7 @@ Support for MIPI CSI-2 output, RAW Bayer formats (8/10-bit), and DPCM 10->8 comp
 
 A global shutter can improve image quality by preventing rolling shutter distortion when capturing moving objects, which becomes an important validation point for certain use cases. Development teams should closely review transfer stability when running at high frame rates and the decoding performance of the compressed format.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 The characteristics of a global shutter can be used for high-speed capture and machine vision scenarios in the Android Camera HAL. When configuring a 120fps high-speed stream, the HAL's buffer cycling period and the ISP's processing latency must be minimized, and you should verify that DPCM 10->8 decompression or the RAW Bayer 8/10-bit formats are correctly decoded in the ISP pipeline.
 
@@ -51,7 +51,7 @@ The fact that the IMX908 is an 8.39-megapixel (3856x2176) CMOS image sensor supp
 
 Because the correctness of the device tree bindings directly affects the correct operation of the sensor and the stability of the camera pipeline, HAL and driver developers should review this change closely. In particular, it is important to confirm whether sufficient bandwidth is secured for the configured number of MIPI CSI-2 lanes.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 The correctness of the device tree bindings determines whether sensor probing and initialization succeed. A high-resolution RAW12 (3856x2176) stream requires more buffer memory and bandwidth than RAW10, so DMA-BUF allocation and ISP input buffer size settings must be matched exactly in the HAL and driver layers.
 

@@ -24,7 +24,7 @@ This update focuses on substantially improving the stability of the interaction 
 
 From an Android Camera HAL engineer's perspective, this change does not mean a direct change to the AOSP framework. However, the stream configuration and buffer lifecycle management model adopted by libcamera shares a structural philosophy with the Android Camera HAL3 architecture. Their optimization techniques for resolving bottlenecks in the lower driver layer and maximizing data transfer efficiency with the ISP therefore serve as very useful benchmark material when developing custom Android platforms.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct Android Camera HAL API contract change, but platforms that use a V4L2/libcamera-based lower driver stack can benchmark the exception handling in frame timing control and format negotiation logic to maximize the stability of buffer lifecycle management between the driver and the ISP.
 

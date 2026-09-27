@@ -26,7 +26,7 @@ The driver performs core ISP pipeline processing in hardware, such as white bala
 
 However, this patch is at the proposal stage (PATCH v4) and has not been merged into the Linux kernel mainline, so additional vendor integration and validation processes are required before it reaches actual commercial chipsets and Android devices. HAL developers should observe over the long term the changes in buffer lifecycle that come with the lower driver's adoption of an M2M architecture.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 It does not make direct API changes to the Android Camera HAL, but as the RAW-to-YUV offline conversion path is optimized at the lower driver level, the efficiency and power consumption of concurrent YUV_420_888 and RAW stream processing may improve.
 
@@ -52,7 +52,7 @@ This change is preparatory work for precisely supporting, on the software ISP, t
 
 The patch is still at the review stage (RFC v7) and has not been fully integrated into mainline. Android HAL developers working on embedded systems that use libcamera as their underlying stack, or in certain virtualized environments, should track whether image quality improves when running the software ISP.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct impact on the Android Camera HAL, but a foundation has been laid for simultaneously improving LSC correction quality and GPU texture processing efficiency on platforms that use the libcamera software ISP.
 
@@ -64,7 +64,7 @@ There is no direct impact on the Android Camera HAL, but a foundation has been l
 
 ## Catch-up
 
-## 4. Raspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version (5 weeks ago)
+## 4. Raspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version (released 5 weeks ago)
 
 
 ![Raspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version](https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609)
@@ -82,7 +82,7 @@ libcamera is the core framework that abstracts camera devices in Linux environme
 
 However, since this release focuses on Raspberry Pi-specific hardware and software stacks, it has no direct impact on Camera HAL3 implementations on typical Android devices or on AOSP framework contracts. It is suitable as reference material for engineers working with embedded Android environments or responsible for V4L2 driver integration to follow upstream technical trends.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 It does not bring direct API or contract changes to the Android Camera HAL, but it can be used as a reference for benchmarking V4L2-based driver integration and optimization techniques for embedded Linux camera stacks.
 

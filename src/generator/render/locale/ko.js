@@ -19,7 +19,7 @@ module.exports = {
   "footerNavigation": "이슈 하단 이동",
   "weeklyBriefing": "이번 주 기사",
   "issueBriefing": "이번 호 기사",
-  "weeksAgo": "주 전 릴리스",
+  "weeksAgo": "{n}주 전 릴리스",
   "perspectiveSuffix": "에서의 의미",
   "sourceArticle": "출처 기사",
   "back": "뉴스룸으로",

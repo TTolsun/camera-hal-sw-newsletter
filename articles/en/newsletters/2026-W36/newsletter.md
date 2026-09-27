@@ -28,7 +28,7 @@ In addition, the transmitted frame format is defined as 1932x1092 BGGR, configur
 
 These driver-level changes improve the stability of the lower image pipeline and help the Android Camera HAL receive accurate data when it queries sensor modes and frame timing through the V4L2 interface. Although it is not a direct HAL API change, it is an important reference when validating RAW Bayer capture and stream configurations.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 Driver-level D-PHY timing derivation and padding handling pass through the V4L2 subsystem and affect stream configuration validation in the Android Camera HAL. In particular, during RAW Bayer capture, if the padding pixels (12 pixels) are not correctly reflected in metadata (such as the active array size), image distortion or CTS test failures can occur, so this should be checked carefully.
 
@@ -54,7 +54,7 @@ This patch, submitted by Frederic Laing, includes Quad-Bayer CFA layout support 
 
 Because the Android Camera HAL often uses libcamera as a lower layer, these changes directly affect improving buffer alignment and debayering quality when the HAL processes RAW_SENSOR or RAW10/RAW12 streams. It will be an important technical foundation for teams preparing to adopt high-resolution sensors in the future.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 With the libcamera layer directly recognizing and handling the Quad-Bayer CFA layout, the debayering quality and the accuracy of stride calculation for the RAW data that the Android Camera HAL receives from the lower stack are improved. This helps prevent buffer overflows or memory alignment errors when the HAL processes RAW_SENSOR or RAW10/RAW12 streams.
 
@@ -80,7 +80,7 @@ The main changes in the patch series include adding descriptions for both camera
 
 This functional expansion of the lower-level drivers becomes the foundation for the Android Camera HAL to accurately recognize the physical characteristics of the hardware and smoothly implement 3A (auto exposure, auto white balance, auto focus) control. It will be an important reference model for engineers responsible for hardware integration.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 With RAW Bayer capture exposure, per-channel white balance control, and a lens actuator (WV517S) added at the driver level, the Camera HAL can directly map the 3A (Auto Exposure, Auto White Balance, Auto Focus) controls of this hardware through V4L2 controls. This is essential for meeting the HAL's `android.control` metadata contract and passing CTS/VTS verification.
 
@@ -106,7 +106,7 @@ In this PATCH v3, reflecting the actual hardware design specification, the bindi
 
 Once the Device Tree binding is integrated into the kernel, the sensor node can be declared in the standard way in dts files when developing Android devices. This becomes the starting point for the Android Camera HAL to accurately recognize the sensor's physical resolution and data formats through the driver and to configure RAW streams.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 When the sensor's MIPI CSI-2 lane count (2 or 4 lanes) and RAW formats (RAW10/RAW12) are correctly defined in the kernel through the Device Tree binding, the Camera HAL can query accurate sensor resolution (3856x2176) and format information from the driver. This contributes to building the HAL's `SensorCharacteristics` metadata and securing the stability of high-resolution RAW stream combinations.
 
@@ -132,7 +132,7 @@ This patch, proposed by Milan Zamazal, lets developers directly specify options 
 
 When implementing an Android Camera HAL that uses libcamera's software ISP as the lower image processing pipeline, this added filter parameter makes it possible to fine-tune preview image quality even further. It will be a useful tool for balancing performance and image quality.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 Because filtering options can now be controlled when the software ISP creates EGL textures, visual quality (e.g., reduced aliasing, sharpness adjustment) can be fine-tuned in GPU-accelerated image scaling or debayering post-processing stages. This directly affects improving preview image quality when implementing a libcamera-based Android Camera HAL on entry-level SoC platforms without a hardware ISP.
 

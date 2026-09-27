@@ -9,35 +9,7 @@ This week covers ‘Google I/O 2026: Jetpack Compose and CameraX Integration Sup
 - Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens
 - Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow
 
-## 2. Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow
-
-
-![Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow image](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png)
-
-_Image: [Android Developers Blog](https://android-developers.googleblog.com/)_
-
-
-A cloud-based native Android development environment with no installation or configuration
-
-Google AI Studio announced a new feature that can build a complete native Android app in minutes from just a prompt. Because ideas can be turned directly into code without complex development environment setup, native development productivity is expected to improve significantly.
-
-Native Android app development has traditionally had initial barriers to entry, such as installing Android Studio, configuring the SDK, and setting up the Gradle build environment. Even when building simple feature checks or prototype apps, this environment setup often took a lot of time.
-
-The newly updated Google AI Studio consolidates this process into a cloud environment. Developers can build a complete native Android app without software installation or complex library configuration, simply by describing the desired app's features and structure in the prompt window.
-
-This tool can also be useful for engineers developing camera HALs or drivers. For example, they can quickly generate a test app to test the behavior of a specific camera API or to verify a simple image processing pipeline, and run it immediately in a local environment.
-
-### Camera HAL/Driver perspective implications
-
-This tool itself does not directly affect the Camera HAL's runtime behavior. However, it can serve as a useful auxiliary tool from a native development workflow perspective, for quickly building and deploying test client apps (Sample/Prototype App) that reproduce specific behaviors of the camera framework or HAL APIs.
-
-**Sources**
-
-- [Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)
-
----
-
-## 3. Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens
+## 2. Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens
 
 
 ![Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens image](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png)
@@ -55,13 +27,41 @@ In this announcement, Jetpack Compose presented CameraX as a key tool, together 
 
 Camera preview is highly sensitive to the screen's aspect ratio, rotation state, and the available resolution stream combinations. Especially in dynamic layout-change scenarios that occur when a foldable device is folded or unfolded, the tight integration of CameraX and Compose helps the app render the Surface buffers it receives from the camera framework at the correct aspect ratio.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This change does not alter the Camera HAL's direct APIs or metadata contracts, but it increases the likelihood that the upper app layer will dynamically request streams of various resolutions and aspect ratios. HAL developers should verify stream reconfiguration (Stream Reconfiguration) latency and whether frame drops occur in large-screen and split-screen scenarios when configuring the Preview stream.
 
 **Sources**
 
 - [8: Building seamless Android experiences across devices with Jetpack Compose (『17 Things to know for Android developers at Google I/O』)](https://goo.gle/AdaptiveApps_IO26)
+
+---
+
+## 3. Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow
+
+
+![Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow image](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png)
+
+_Image: [Android Developers Blog](https://android-developers.googleblog.com/)_
+
+
+A cloud-based native Android development environment with no installation or configuration
+
+Google AI Studio announced a new feature that can build a complete native Android app in minutes from just a prompt. Because ideas can be turned directly into code without complex development environment setup, native development productivity is expected to improve significantly.
+
+Native Android app development has traditionally had initial barriers to entry, such as installing Android Studio, configuring the SDK, and setting up the Gradle build environment. Even when building simple feature checks or prototype apps, this environment setup often took a lot of time.
+
+The newly updated Google AI Studio consolidates this process into a cloud environment. Developers can build a complete native Android app without software installation or complex library configuration, simply by describing the desired app's features and structure in the prompt window.
+
+This tool can also be useful for engineers developing camera HALs or drivers. For example, they can quickly generate a test app to test the behavior of a specific camera API or to verify a simple image processing pipeline, and run it immediately in a local environment.
+
+### Camera HAL/Driver perspective: what it means
+
+This tool itself does not directly affect the Camera HAL's runtime behavior. However, it can serve as a useful auxiliary tool from a native development workflow perspective, for quickly building and deploying test client apps (Sample/Prototype App) that reproduce specific behaviors of the camera framework or HAL APIs.
+
+**Sources**
+
+- [Build native Android apps in Google AI Studio](https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html)
 
 
 ## References

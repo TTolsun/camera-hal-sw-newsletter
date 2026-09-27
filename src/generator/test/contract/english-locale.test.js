@@ -340,3 +340,52 @@ test('English home hero alt never leaks the Korean title and stays empty for fal
   const fallbackHero = (await renderEnglishHome(fallback)).elements['featured-card'].innerHTML;
   assert.match(fallbackHero, /src="\.\.\/assets\/images\/fallback\/newsletter-default\.svg" alt=""/);
 });
+
+test('overlay keeps the source article field shape so a legacy article renders the same way', () => {
+  const { issue, translation } = sample();
+  const english = applyTranslation(issue, translation);
+  const article = english.sections[0].public_article;
+  for (const key of ['source_subtitle', 'body_markdown']) assert.equal(Object.hasOwn(article, key), false, key);
+  const classes = html => [...html.matchAll(/<section class="([^"]*issue-story[^"]*)"/g)].map(match => match[1]);
+  assert.deepEqual(classes(buildHtml(english, { locale: 'en' })), classes(buildHtml(issue)));
+});
+
+test('weekly issues render articles in their published order; dated issues are still sorted', () => {
+  const { issue } = sample();
+  const article = (id, bucket, headline) => ({ ...structuredClone(issue.sections[0]), id, relevance_bucket: bucket, headline, public_article: { ...structuredClone(issue.sections[0].public_article), headline } });
+  issue.sections = [article('a', 'camera_driver_image_pipeline', 'Driver first'), article('b', 'direct_aosp_camera', 'AOSP second')];
+  // The editorial priority puts AOSP camera ahead of drivers, so a sort would swap these two.
+  assert.ok(require('../../../shared/domain/aosp-camera-scope').compareEditorialPriority(issue.sections[0], issue.sections[1]) > 0);
+  const titles = html => [...html.matchAll(/class="article-title">([^<]*)</g)].map(match => match[1]);
+  assert.deepEqual(titles(buildHtml(issue)), ['Driver first', 'AOSP second']);
+  const dated = { ...structuredClone(issue), weekly_key: undefined };
+  assert.deepEqual(titles(buildHtml(dated)), ['AOSP second', 'Driver first']);
+});
+
+test('catch-up age label reads naturally in both locales', () => {
+  const { issue } = sample();
+  issue.sections[0].coverage_type = 'catch_up';
+  for (const [days, ko, en] of [[7, '(1주 전 릴리스)', '(released 1 week ago)'], [35, '(5주 전 릴리스)', '(released 5 weeks ago)']]) {
+    issue.sections[0].catch_up_age_days = days;
+    assert.ok(buildMarkdown(issue).includes(ko), ko);
+    assert.ok(buildMarkdown(issue, { locale: 'en' }).includes(en), en);
+  }
+  assert.match(buildMarkdown(issue, { locale: 'en' }), /### Camera HAL\/Driver perspective: what it means/);
+});
+
+// 커밋된 영문판 전부: 같은 issue.json을 렌더한 한국어와 태그·클래스 구조, 기사 순서가 같아야 한다.
+test('every committed English edition renders with the same structure and order as its Korean source', () => {
+  const { buildEnglishEdition, translatedWeeklyKeys } = require('../../render/english-edition');
+  const repoRoot = path.join(__dirname, '../../../..');
+  const skeleton = html => [...html.replace(/<script[\s\S]*?<\/script>/g, '').matchAll(/<(\/?[a-z0-9]+)((?:\s+class="[^"]*")?)/g)].map(match => match[1] + match[2]);
+  const keys = translatedWeeklyKeys(repoRoot);
+  assert.ok(keys.length >= 21);
+  for (const key of keys) {
+    const issue = JSON.parse(fs.readFileSync(path.join(repoRoot, 'articles', 'newsletters', key, 'issue.json'), 'utf8'));
+    const edition = buildEnglishEdition(repoRoot, key);
+    assert.deepEqual(skeleton(edition.html), skeleton(buildHtml(issue)), key);
+    const decode = value => value.replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    const titles = html => [...html.matchAll(/class="article-title">([^<]*)</g)].map(match => decode(match[1]));
+    assert.deepEqual(titles(edition.html), edition.issue.sections.map(section => section.public_article.headline), key);
+  }
+});

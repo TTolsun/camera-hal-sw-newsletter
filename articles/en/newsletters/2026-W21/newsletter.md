@@ -28,7 +28,7 @@ The Android Developers Blog published Build native Android apps in Google AI Stu
 
 Additional items confirmed are Tue, May, Andr, like the Camera, GPS/Location, Accelerometer. These details help readers understand the actual scope of the original announcement.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This news is a tooling trend showing that Google AI Studio can use Android APIs such as Camera in native Android app prototypes. It is not grounds for a Camera HAL runtime change, and its use should be limited to referencing how sample apps set up Camera permissions and CameraX/Camera2 calls.
 
@@ -64,7 +64,7 @@ This news is not a HAL API change but a reference signal at the app/framework la
 
 - Since this source does not directly mention HAL API changes, interpret it only as a possible preview layout regression, not as a HAL/driver change signal.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes
 
@@ -74,75 +74,7 @@ Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes
 
 ---
 
-## 4. Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
-
-
-
-Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
-
-The GCC 16.1 release bundles C++ toolchain changes such as C++26 reflection, contracts, safety hardening, and C++20 as the default. For the Android Camera HAL, it is not a change to apply immediately but material for comparing Clang/LLVM support status and long-term native tooling direction.
-
-Since Camera HAL native code is tied to the Android platform toolchain policy, GCC 16.1 features cannot be brought directly in as production branch requirements. However, trends such as reflection/contracts can be a reference when discussing how to simplify metadata table generation, request/result validation helpers, and debug-only invariant checks in the long term.
-
-The actual action is checking whether the Android branch's Clang/LLVM, libc++, and C++ standard flag support them. Even if a feature is attractive, if it conflicts with CTS/VTS/Camera ITS or production build policy, it should remain only in the host utility or PoC backlog.
-
-**Android Native / Tooling Perspective**
-
-GCC 16.1 is a C++ toolchain watch item, not a HAL runtime change. The HAL team should review only features supported by the Android platform toolchain, and limit metadata/helper PoCs to host-side or debug-only scope.
-
-### What to Check
-
-- Check how the Android branch's Clang/LLVM, libc++, and C++ standard flag differ from the GCC 16.1 features of interest.
-
-- Record reflection/contracts-related ideas only as candidates for a metadata table generation or request/result validation helper PoC.
-
-- Do not register production HAL build changes without reviewing platform toolchain policy and CTS/VTS impact.
-
-### Camera HAL/Driver perspective implications
-
-Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
-
-**Sources**
-
-- [GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!](https://isocpp.org//blog/2026/04/gcc-16.1)
-
----
-
-## 5. Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
-
-
-
-Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
-
-Glaze 7.2 is a C++ library release that expands C++26 Reflection support and YAML, CBOR, MessagePack, and TOML serialization support. For the Camera HAL, it is not a production dependency but a serialization tooling signal that can be reviewed for host-side analysis tools or standalone native utilities.
-
-Camera HAL development often needs auxiliary tools that read and write structured data, such as metadata dumps, test configurations, and device capability snapshots. A library like Glaze may reduce the boilerplate of such host-side tools, but putting it directly into the product HAL path requires dependency, ABI, and platform policy review.
-
-Therefore, this item should not be read as a production HAL code change, and should be used only when comparing serialization format options for debug utilities or offline analysis tools. C++26 Reflection support becomes a realistic PoC only after Android toolchain support is confirmed.
-
-**Android Native / Tooling Perspective**
-
-Glaze 7.2 is a native tooling library trend, not Camera HAL product behavior. The HAL team should review it only as a candidate for host-side metadata/config tooling, and promoting it to a production code dependency requires a separate policy review.
-
-### What to Check
-
-- Check whether serialization problems actually exist in host-side tools such as metadata dumps, test configs, and capability snapshots.
-
-- First check the C++26 Reflection support status in Clang/LLVM and the Android build policy.
-
-- To use it as a production HAL code dependency, split ABI, license, platform policy, and test coverage into separate review items.
-
-### Camera HAL/Driver perspective implications
-
-Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
-
-**Sources**
-
-- [Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more](https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more)
-
----
-
-## 6. libcamera Release Announcements - libcamera v0.7.1
+## 4. libcamera Release Announcements - libcamera v0.7.1
 
 
 
@@ -166,13 +98,81 @@ libcamera v0.7.1 is an upstream driver/image-pipeline signal. Connect it to AE/A
 
 - Keep Raspberry Pi reference results only as upstream comparison logs, not as evidence about the product camera stack.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 libcamera Release Announcements - libcamera v0.7.1
 
 **Sources**
 
 - [libcamera Release Announcements - libcamera v0.7.1](https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html)
+
+---
+
+## 5. Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
+
+
+
+Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
+
+The GCC 16.1 release bundles C++ toolchain changes such as C++26 reflection, contracts, safety hardening, and C++20 as the default. For the Android Camera HAL, it is not a change to apply immediately but material for comparing Clang/LLVM support status and long-term native tooling direction.
+
+Since Camera HAL native code is tied to the Android platform toolchain policy, GCC 16.1 features cannot be brought directly in as production branch requirements. However, trends such as reflection/contracts can be a reference when discussing how to simplify metadata table generation, request/result validation helpers, and debug-only invariant checks in the long term.
+
+The actual action is checking whether the Android branch's Clang/LLVM, libc++, and C++ standard flag support them. Even if a feature is attractive, if it conflicts with CTS/VTS/Camera ITS or production build policy, it should remain only in the host utility or PoC backlog.
+
+**Android Native / Tooling Perspective**
+
+GCC 16.1 is a C++ toolchain watch item, not a HAL runtime change. The HAL team should review only features supported by the Android platform toolchain, and limit metadata/helper PoCs to host-side or debug-only scope.
+
+### What to Check
+
+- Check how the Android branch's Clang/LLVM, libc++, and C++ standard flag differ from the GCC 16.1 features of interest.
+
+- Record reflection/contracts-related ideas only as candidates for a metadata table generation or request/result validation helper PoC.
+
+- Do not register production HAL build changes without reviewing platform toolchain policy and CTS/VTS impact.
+
+### Camera HAL/Driver perspective: what it means
+
+Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!
+
+**Sources**
+
+- [GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!](https://isocpp.org//blog/2026/04/gcc-16.1)
+
+---
+
+## 6. Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
+
+
+
+Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
+
+Glaze 7.2 is a C++ library release that expands C++26 Reflection support and YAML, CBOR, MessagePack, and TOML serialization support. For the Camera HAL, it is not a production dependency but a serialization tooling signal that can be reviewed for host-side analysis tools or standalone native utilities.
+
+Camera HAL development often needs auxiliary tools that read and write structured data, such as metadata dumps, test configurations, and device capability snapshots. A library like Glaze may reduce the boilerplate of such host-side tools, but putting it directly into the product HAL path requires dependency, ABI, and platform policy review.
+
+Therefore, this item should not be read as a production HAL code change, and should be used only when comparing serialization format options for debug utilities or offline analysis tools. C++26 Reflection support becomes a realistic PoC only after Android toolchain support is confirmed.
+
+**Android Native / Tooling Perspective**
+
+Glaze 7.2 is a native tooling library trend, not Camera HAL product behavior. The HAL team should review it only as a candidate for host-side metadata/config tooling, and promoting it to a production code dependency requires a separate policy review.
+
+### What to Check
+
+- Check whether serialization problems actually exist in host-side tools such as metadata dumps, test configs, and capability snapshots.
+
+- First check the C++26 Reflection support status in Clang/LLVM and the Android build policy.
+
+- To use it as a production HAL code dependency, split ABI, license, platform policy, and test coverage into separate review items.
+
+### Camera HAL/Driver perspective: what it means
+
+Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more
+
+**Sources**
+
+- [Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more](https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more)
 
 
 ## References

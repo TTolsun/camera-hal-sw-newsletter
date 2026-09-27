@@ -27,7 +27,7 @@ This patch changes it so that the bypass bit is set when the demosaicing block i
 
 The patch is currently under review at the proposal stage (v1), and whether it is actually merged into the mainline kernel needs continued monitoring. Development teams on platforms that use the rkisp1 driver, such as Rockchip ISP and NXP i.MX8MP, can use this patch to proactively verify the behavioral integrity of the image pipeline.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct Android Camera HAL change, but because the demosaicing bypass logic of the underlying ISP driver is being fixed, color distortion or noise control behavior may change when outputting RAW streams and applying ISP tuning parameters. Quality verification of RAW and YUV streams should be performed at the HAL layer.
 
@@ -53,7 +53,7 @@ The proposed driver includes a variety of controls essential for practical camer
 
 The driver was verified for correct operation and compliance on the IMX8MP Debix Model A development board using the mainline v7.0-rc2 kernel and the v4l2-compliance 1.31.0-5387 tool. Hardware and driver development teams planning to ship the new sensor can carry out early validation based on this patch.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 With the addition of the new sensor driver, a lower-level path has been secured for implementing manual exposure and gain control (SENSOR_EXPOSURE_TIME, SENSOR_SENSITIVITY), flip control, and more in the Android Camera HAL. The 1080p30 SBGGR10 stream configuration should be mapped into the HAL's stream map, and its integration with the V4L2 controls should be verified.
 
@@ -79,7 +79,7 @@ The existing libcamera IMX355 sensor properties mapped color bars (TestPatternMo
 
 The patch is currently in 'new' state and under review in the project patch tracker, and it is a proposal that has not yet been merged into mainline. Development teams that ship the IMX355 sensor and use a libcamera-based hardware abstraction layer can apply this patch to proactively verify the reliability of test pattern output.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct HAL change, but because the IMX355 sensor's test pattern mapping is fixed in the lower libcamera layer, it can ensure that the correct hardware test pattern is output when the Camera HAL sets SENSOR_TEST_PATTERN_MODE. This is useful for CTS test pattern verification and for debugging the data path between the sensor and the HAL.
 
@@ -105,7 +105,7 @@ The patch extends the frame metadata reporting path of the Raspberry Pi pipeline
 
 This patch is at the proposal stage. Development teams that save RAW/DNG based on Raspberry Pi and libcamera can check, after applying the patch, whether the correction maps and tone curves are included in the result metadata and whether the DNG saving program actually reflects them in the file.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 The key is to check the frame results of the Raspberry Pi pipeline together with the DNG saving path. You can compare DNG and JPEG of the same scene and verify that the channel layout and size of the lens shading correction maps, and the tone curve data, are correctly reflected in the file. Android Camera HAL integration is an area that requires separate implementation and verification, and this patch does not include changes that connect HAL requests to ISP control.
 

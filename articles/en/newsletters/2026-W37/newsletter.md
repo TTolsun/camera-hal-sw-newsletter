@@ -28,7 +28,7 @@ According to this driver patch, the sensor can output 10-bit RAW (Y10) frames at
 
 The patch is currently in review for merging into the kernel mainline, and because it includes handling of the Y10 pixel format specific to monochrome sensors and single-lane MIPI CSI-2 timing configuration, it will be an important reference for lower-level driver developers.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct Android Camera HAL change, but because a 10-bit monochrome RAW (Y10) format is added at the lower V4L2 driver level, when implementing HAL3 you should check that the Y10 format is correctly defined in the RAW stream configuration and the ISP pixel format mapping table.
 
@@ -54,7 +54,7 @@ The one change in v6 is adjusting the data lane start index in the CAMSS node fr
 
 These changes are essential for preventing camera hardware initialization failures or image corruption at the lower level, and they provide an important hardware configuration guide for camera driver and SoC integration engineers working on the x1e platform.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct HAL change, but the data lane alignment and power supply changes directly affect the physical connection stability of the camera subsystem. Lower-stack verification should be done first so that MIPI CSI-2 receiver initialization errors or power-on failures do not occur at the driver level.
 
@@ -80,7 +80,7 @@ According to the patch details, the rear OV8858 sensor gets a 19.2 MHz clock set
 
 It also includes optimization of AtomISP's RAW frame capture logic and CSI-2 timing adjustments, as well as IPU bridge data and firmware ID mapping, and is expected to greatly improve the stability of the lower-level image pipeline.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct HAL change, but because the OV2740's manual white balance and the OV8858's gain control are exposed as V4L2 controls, you should verify that Camera HAL3 3A metadata control requests are accurately mapped to the kernel driver's V4L2 controls and work correctly.
 
@@ -106,7 +106,7 @@ The reason for naming the union members is to copy the storage as a single block
 
 Engineers who build and use libcamera directly, or who develop driver stacks by adding custom controls, should take note of this change to prevent minor compile compatibility issues that may arise when updating sources in the future.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 This part by itself is a step that tidies up the storage representation, so it does not change HAL runtime behavior. However, projects that customize the libcamera source and integrate it into the lower layers of an Android HAL should check build compatibility to make sure the union naming change does not cause compile errors in existing custom control code.
 
@@ -132,7 +132,7 @@ According to the patch description, the simple pipeline calls stop() before Soft
 
 Thanks to this, Camera::start() can report the original capture error to the caller. The patch links libcamera issue 349 on freedesktop GitLab as its basis, and its current state in the patch tracker is superseded, with a follow-up revision posted.
 
-### Camera HAL/Driver perspective implications
+### Camera HAL/Driver perspective: what it means
 
 There is no direct HAL change, but if you have seen a symptom where opening the camera fails and the call hangs without returning in a pipeline that goes through the software ISP, you can suspect this path. Please check, with a scenario that deliberately injects a capture start failure, that the error is propagated up to the upper layers.
 
