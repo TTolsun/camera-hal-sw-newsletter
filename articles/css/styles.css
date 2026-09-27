@@ -1223,9 +1223,11 @@ pre code {
   font-weight: 600;
 }
 
+/* 푸터 링크·노트는 보조 텍스트 층이다. 팔레트 밖 리터럴(#515154) 대신 --muted 를 쓴다 —
+   파치먼트 푸터 위 4.65:1 로 WCAG AA 를 지키고, hover/focus 때 --text 로 올라가는 단차도 남는다. */
 .footer-link,
 .footer-note {
-  color: #515154;
+  color: var(--muted);
   font-size: 0.8125rem;
   text-decoration: none;
 }

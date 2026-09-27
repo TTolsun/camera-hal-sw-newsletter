@@ -836,6 +836,11 @@ test('review-only publication notice uses the parchment box, not the accent tint
   assertCssDeclaration(notice, 'border', 'none');
 });
 
+test('footer links and notes use the muted text token, not an off-palette literal', () => {
+  // 팔레트 밖 리터럴(#515154)이 있던 자리다. 보조 텍스트 층은 --muted 하나로 낸다.
+  assertCssDeclaration(selectorGroupBlock(readStylesheet(), '.footer-link'), 'color', 'var(--muted)');
+});
+
 test('homepage featured hero and latest grid CSS cover the rebuilt layout', () => {
   const css = readStylesheet();
   const featuredHero = exactSelectorBlock(css, '.featured-hero');
