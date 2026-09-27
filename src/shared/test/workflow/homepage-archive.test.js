@@ -813,6 +813,11 @@ test('font weights stay on the DESIGN.md 400/500/600 ramp', () => {
   for (const heading of ['h1', 'h2', 'h3']) {
     assertCssDeclaration(exactSelectorBlock(css, heading), 'font-weight', '600');
   }
+  // 선언을 세는 아래 검사는 선언이 없어 새는 기본 bold를 못 본다. AI Engineering Lab 본문의
+  // strong·h4·th 98개가 그렇게 700으로 렌더됐으므로, 기본값이 bold인 나머지 요소도 base에서 잠근다.
+  for (const element of ['h4', 'strong', 'b', 'th']) {
+    assertCssDeclaration(selectorGroupBlock(css, element), 'font-weight', '600');
+  }
 
   // 램프 밖 값은 이제 하나도 없다. 유일한 예외였던 .section-icon-star(900)는 도달 불가 규칙이라
   // dead CSS 정리에서 제거했다. 새 예외를 만들려면 DESIGN.md 램프를 먼저 고쳐야 한다.

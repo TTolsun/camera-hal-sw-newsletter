@@ -160,6 +160,16 @@ h3 {
   font-weight: 600;
 }
 
+/* 굵게 그리는 나머지 요소(strong·b·표 머리칸·h4)도 브라우저 기본값이 bold(700)다. 개별 규칙이
+   굵기를 정하지 않는 자리(예: AI Engineering Lab 본문의 strong·h4·th)가 램프를 벗어나지 않게
+   같은 600으로 못박는다. */
+h4,
+strong,
+b,
+th {
+  font-weight: 600;
+}
+
 p {
   color: var(--muted);
 }
@@ -408,14 +418,15 @@ pre code {
   overflow-wrap: anywhere;
 }
 
+/* 검토 발행본 안내도 이슈 페이지의 파치먼트 박스 언어를 쓴다. 파란 틴트(--chip) 위에서는 muted
+   본문이 4.44:1로 WCAG AA에 못 미쳤고, 파랑은 상호작용 요소 전용이라 장식 테두리로 쓰지 않는다. */
 .publication-notice {
   max-width: 820px;
   margin: 0 0 24px;
   padding: 18px 20px;
-  border: 1px solid rgba(0, 102, 204, 0.24);
-  border-left: 4px solid var(--primary);
+  border: none;
   border-radius: var(--radius-md);
-  background: var(--chip);
+  background: var(--bg);
   color: var(--text);
 }
 
