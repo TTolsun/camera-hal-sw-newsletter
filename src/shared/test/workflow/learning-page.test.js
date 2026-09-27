@@ -510,3 +510,17 @@ test('learning page keeps the wide-screen scroll margin at or above the sticky b
     `넓은 화면 scroll-margin-top(${wide}px)이 띠(${band}px) + 여유 예산(${SLACK_BUDGET_PX}px)을 넘는다 — 여유분은 요소를 아래로 굴리는 대신 뷰포트 높이를 쓴다`
   );
 });
+
+test('learning page callout boxes use the parchment box, not the accent tint', () => {
+  const css = readLearningStylesheet();
+
+  // 파랑은 상호작용 요소 전용이다(DESIGN.md 단일 액센트). 강조 박스(.master-rule)와 결과 블록
+  // (.week-result)은 이슈 페이지 take 박스와 같은 파치먼트 박스 언어로 두고, 파란 틴트 배경이나
+  // 장식용 왼쪽 막대를 되살리지 않는다. 한쪽만 고치면 같은 페이지에서 박스 표현이 갈라진다.
+  for (const selector of ['.master-rule', '.week-result']) {
+    const block = exactSelectorBlock(css, selector);
+    assertCssDeclaration(block, 'background', 'var(--bg)');
+    assert.doesNotMatch(block, /border-left\s*:/, `${selector} must not draw a decorative left bar`);
+    assert.doesNotMatch(block, /--chip|--primary/, `${selector} must not use the accent colour`);
+  }
+});

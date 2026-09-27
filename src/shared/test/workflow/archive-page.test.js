@@ -182,7 +182,7 @@ function archiveCards(html) {
 test('archive page uses homepage shell, shared footer, metadata, and stable hooks', () => {
   const html = fs.readFileSync(path.join(root, 'articles', 'archive.html'), 'utf8');
 
-  assert.match(html, /<title>Archive \| Camera HAL SW Newsletter<\/title>/);
+  assert.match(html, /<title>Archive \| Camera SW Newsletter<\/title>/);
   assert.match(html, /<meta name="description" content="Camera HAL, Android Camera, Driver, Image Processing, AI 뉴스레터 아카이브"/);
   assert.match(html, /<body class="homepage">/);
   assert.match(html, /<header class="site-header homepage-site-header">/);
