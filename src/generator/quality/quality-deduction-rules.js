@@ -508,6 +508,12 @@ function storyBodyIssueAddress(issue) {
   return '';
 }
 
+// forbidden_construct는 하위 구문마다 고치는 법이 다르다(#1172). repair 모델은 이 사유
+// 문자열만 받으므로 구문 이름을 함께 싣는다. reason_code와 dedupe_key는 집계 축이라 그대로 둔다.
+function storyBodyIssueConstruct(issue) {
+  return issue.construct ? ` (${issue.construct})` : '';
+}
+
 // Story Contract v2 본문 검사 감점(#849, 설계 4.6절).
 //
 // 판정 오라클은 validatePublicArticle 하나다. 여기서 lint를 다시 구현하면 발행 직전
@@ -528,7 +534,7 @@ function storyBodyDeductions(section, articleIndex, issue, location) {
     .map(item => ({
       category: 'story-body',
       points: 8,
-      reason: `Story Contract v2 body check failed: ${item.type}${storyBodyIssueAddress(item)}.`,
+      reason: `Story Contract v2 body check failed: ${item.type}${storyBodyIssueConstruct(item)}${storyBodyIssueAddress(item)}.`,
       location,
       options: {
         reason_code: item.type,

@@ -261,6 +261,71 @@ test('a failed block patch keeps the base draft and demotes only the flagged art
   assert.deepEqual(salvage.editor.sections.map(item => item.headline), [CLEAN_HEADLINE]);
 });
 
+// forbidden_construct는 하위 구문이 15종이 넘고 고치는 법이 구문마다 다르다(#1172).
+// repair 모델은 감점 사유 문자열을 그대로 받으므로, 사유에 구문 이름이 없으면 원인을
+// 추측해 같은 표기로 다시 쓰고 강등으로 끝난다.
+const ACTIVE_CHARACTER_BODY = [
+  '패치가 v10까지 온 이유는 센서 하나가 아니라 서브디바이스 계약이었다.',
+  '',
+  '리뷰어가 되돌린 비율은 ~30%였고 쟁점은 프레임 간격을 누가 정하느냐였다.'
+].join('\n');
+
+const BLOCKQUOTE_BODY = [
+  '패치가 v10까지 온 이유는 센서 하나가 아니라 서브디바이스 계약이었다.',
+  '',
+  '> 리뷰어가 매번 되돌린 자리는 프레임 간격을 누가 정하느냐였다.',
+  '',
+  '다음 버전은 그 간격을 드라이버가 아니라 HAL이 정하도록 옮겼다.'
+].join('\n');
+
+function draftWithLintBody(bodyMarkdown) {
+  const draft = v2Draft();
+  draft.sections[1] = v2Section(LINT_HEADLINE, LINT_URL, bodyMarkdown);
+  return draft;
+}
+
+test('an inline construct deduction names the construct in the reason and keeps the code and key', () => {
+  const deductions = storyBodyDeductionsOf(reportFor(draftWithLintBody(ACTIVE_CHARACTER_BODY)));
+
+  assert.equal(deductions.length, 1);
+  assert.equal(
+    deductions[0].reason,
+    'Story Contract v2 body check failed: body_markdown_forbidden_construct (markdown_active_character) at body block 1.'
+  );
+  // 집계 축은 바꾸지 않는다. 구문 이름은 사람과 모델이 읽는 사유에만 싣는다.
+  assert.equal(deductions[0].reason_code, 'body_markdown_forbidden_construct');
+  assert.equal(deductions[0].dedupe_key, '1:body_markdown_forbidden_construct:1');
+});
+
+test('a line construct deduction names the construct next to its line address', () => {
+  const deductions = storyBodyDeductionsOf(reportFor(draftWithLintBody(BLOCKQUOTE_BODY)));
+
+  assert.equal(deductions.length, 1);
+  assert.equal(
+    deductions[0].reason,
+    'Story Contract v2 body check failed: body_markdown_forbidden_construct (blockquote) at body line 3.'
+  );
+  assert.equal(deductions[0].reason_code, 'body_markdown_forbidden_construct');
+});
+
+test('an issue without a construct keeps its reason unchanged', () => {
+  const deductions = storyBodyDeductionsOf(reportFor(v2Draft()));
+
+  assert.equal(
+    deductions[0].reason,
+    'Story Contract v2 body check failed: body_markdown_duplicate_block at body block 2.'
+  );
+});
+
+test('the construct in the reason reaches the repair plan the model reads', () => {
+  const draft = draftWithLintBody(ACTIVE_CHARACTER_BODY);
+  const plan = buildFullSectionRepairPlan(draft, reportFor(draft), passingFactCheck(), []);
+
+  assert.equal(plan.length, 1);
+  assert.equal(plan[0].action, 'repair-section');
+  assert.match(plan[0].deductions[0].reason, /\(markdown_active_character\) at body block 1/);
+});
+
 test('routing the lint issue away from the editor contract does not weaken the publish-time gate', () => {
   // validate-public-newsletter가 쓰는 같은 검증기다. 감점 레인으로 보냈다고 해서 발행
   // 직전 판정이 통과로 바뀌면, 수리도 강등도 실패한 본문이 그대로 실려 나간다.
