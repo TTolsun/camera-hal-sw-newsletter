@@ -44,16 +44,33 @@ const ACTIONABLE_SOURCE_ACTIONS = new Set([
   'DOWNGRADE_GENERIC_SOURCE'
 ]);
 
-// 이슈가 트리거 후보로 적은 것 중 duplicate/no-op discovery와 taxonomy gap은 여기 없다.
-// 그 둘은 소스가 아니라 실행 전체를 가리키는 진단이고, 연속 조건으로는 다룰 수 없다.
+// 이슈가 트리거 후보로 적은 것 중 실행 전체를 가리키는 진단 두 갈래(duplicate/no-op discovery,
+// taxonomy gap)는 소스별 연속으로 셀 수 없다. 커밋된 진단 31회분(2026-05-22 ~ 2026-09-21)을
+// 현재 코드로 다시 계산해서 둘을 따로 정했다.
 //
-// 커밋된 29회분에서 `duplicate_or_noop_source_discovery`는 29회 모두 참이다. 도달 가능하게
-// 만들면 매 실행 draft가 나온다 — 이 이슈가 쓸 수 없다고 판정한 `parser_extraction_failure`와
-// 정확히 같은 모양이다. `taxonomy_missing`도 21/29회 참이라 사정이 크게 다르지 않다.
+// 초기 8회(2026-05-22 ~ 05-29)는 입력 산출물이 커밋되지 않아 재계산하지 못했다.
 //
-// 그래서 이 두 갈래는 연속이 아닌 다른 조건이 필요하고, 그 조건을 정하는 것은 별건이다.
-// 이슈 수용 기준 5번은 그만큼 남는다.
+// `taxonomy_missing`: 재계산 가능한 23회 중 0회 참이다. 예전 기록의 21/29회는 bucket이 빈
+// 후보까지 누락으로 세던 판정의 값이고, PR #1125가 그 판정을 고쳤다. 지금은 분류기가 진단이 모르는 bucket 이름을 낼
+// 때만 켜지는 드문 신호라, 연속을 기다리지 않고 이번 실행에서 참이면 draft를 낸다.
+//
+// `duplicate_or_noop_source_discovery`: 재계산 가능한 23회 모두 참이다. 이 진단이 켜지는 조건
+// 하나(수동 후보와 겹치는 URL이 1건 이상)는 31회 모두 참이라, 연결하면 매 실행 같은 draft가
+// 나온다. owner 결정으로 초안 대상에서 빼고 #1180에서 원인 쪽을 다룬다.
 const DIAGNOSIS_FILE = 'source-quality-diagnosis.json';
+
+const TAXONOMY_DRAFT = {
+  title: '[Taxonomy] 알려진 카메라 bucket에 매핑되지 않은 카메라 후보',
+  // 진단 자신이 이 상태에 붙이는 권고 코드(source-quality-diagnosis.js의 recommended_issues)를
+  // 그대로 쓴다. 이 모듈이 새 권고 이름을 만들지 않는다.
+  recommended_action: 'ADD_MULTIMEDIA_BUCKET',
+  suggested_labels: ['area:newsroom', 'area:domain-model'],
+  suggested_workflow: [
+    '이 실행의 후보 산출물에서 relevance_bucket이 source-quality-diagnosis.js의 KNOWN_CAMERA_BUCKETS에 없는 카메라 후보를 찾는다',
+    '분류기가 새로 낸 정상 bucket이면 KNOWN_CAMERA_BUCKETS에 추가하고, 잘못된 값이면 분류기를 고친다',
+    'npm.cmd run test 로 진단 단위 테스트를 돌린다'
+  ]
+};
 
 const SUGGESTED_WORKFLOW = {
   KEEP_AND_FIX_PARSER: [
@@ -103,13 +120,19 @@ function diagnosisDates(root) {
     .sort();
 }
 
+function taxonomyMissingState(diagnosisValue) {
+  if (diagnosisValue?.diagnosis?.taxonomy_missing !== true) return null;
+  const reasons = diagnosisValue?.diagnosis_reasons?.taxonomy_missing;
+  return { reason: String((Array.isArray(reasons) ? reasons[0]?.reason : '') || '').trim() };
+}
+
 // 소스별 권고는 source_breakdown에서 읽는다. recommended_issues는 상위 10건으로 잘려서
 // (source-quality-diagnosis.js의 slice), 순위가 밀린 소스가 그 회차에 없는 것처럼 보이고
 // 연속이 실제 문제와 무관하게 끊긴다. 조치 대상 소스가 22개였던 회차도 있다.
 function actionableRecommendations(root, date) {
   const diagnosis = readDiagnosis(root, date);
   const map = new Map();
-  if (!diagnosis.value) return { map, unreadable: diagnosis.unreadable, exists: diagnosis.exists };
+  if (!diagnosis.value) return { map, taxonomyMissing: null, unreadable: diagnosis.unreadable, exists: diagnosis.exists };
 
   for (const row of (Array.isArray(diagnosis.value.source_breakdown) ? diagnosis.value.source_breakdown : [])) {
     const action = String(row?.recommended_action || '');
@@ -117,7 +140,7 @@ function actionableRecommendations(root, date) {
     if (!sourceId || !ACTIONABLE_SOURCE_ACTIONS.has(action)) continue;
     map.set(`${sourceId}|${action}`, { row, action });
   }
-  return { map, unreadable: diagnosis.unreadable, exists: diagnosis.exists };
+  return { map, taxonomyMissing: taxonomyMissingState(diagnosis.value), unreadable: diagnosis.unreadable, exists: diagnosis.exists };
 }
 
 function draftTitle({ row, action }) {
@@ -139,14 +162,30 @@ function draftReason({ row, action }, consecutiveRuns) {
   return head;
 }
 
-// 연속 횟수는 최신 회차부터 거꾸로 세어, 권고가 끊긴 회차에서 멈춘다.
-function consecutiveRunCount(runs, index, key) {
+// 연속 횟수는 최신 회차부터 거꾸로 세어, 조건이 끊긴 회차에서 멈춘다.
+function consecutiveRunCount(runs, index, holds) {
   let count = 0;
   for (let position = index; position >= 0; position -= 1) {
-    if (!runs[position].recommendations.has(key)) break;
+    if (!holds(runs[position])) break;
     count += 1;
   }
   return count;
+}
+
+function taxonomyDraft(latest, consecutiveRuns) {
+  const head = `실행 전체 진단 taxonomy_missing이 이번 실행에서 참입니다(${consecutiveRuns}회 연속).`;
+  const reason = latest.taxonomyMissing.reason;
+  return {
+    scope: 'run',
+    title: TAXONOMY_DRAFT.title,
+    reason: reason ? `${head} 진단이 적은 사유: ${reason}` : head,
+    consecutive_runs: consecutiveRuns,
+    recommended_action: TAXONOMY_DRAFT.recommended_action,
+    source_ids: [],
+    diagnosis_refs: [DIAGNOSIS_FILE],
+    suggested_labels: TAXONOMY_DRAFT.suggested_labels,
+    suggested_workflow: TAXONOMY_DRAFT.suggested_workflow
+  };
 }
 
 function buildSourceFollowupIssues({ root, date, minimumConsecutiveRuns = FOLLOWUP_CONSECUTIVE_RUNS }) {
@@ -171,16 +210,17 @@ function buildSourceFollowupIssues({ root, date, minimumConsecutiveRuns = FOLLOW
     if (result.unreadable) {
       warnings.push(`${DIAGNOSIS_FILE} for ${item} could not be parsed; its recommendations were skipped.`);
     }
-    return { date: item, recommendations: result.map };
+    return { date: item, recommendations: result.map, taxonomyMissing: result.taxonomyMissing };
   });
 
   const items = [];
   const latest = runs[runs.length - 1];
   for (const [key, entry] of latest.recommendations) {
-    const consecutiveRuns = consecutiveRunCount(runs, runs.length - 1, key);
+    const consecutiveRuns = consecutiveRunCount(runs, runs.length - 1, run => run.recommendations.has(key));
     if (consecutiveRuns < minimumConsecutiveRuns) continue;
     const { row, action } = entry;
     items.push({
+      scope: 'source',
       title: draftTitle(entry),
       reason: draftReason(entry, consecutiveRuns),
       consecutive_runs: consecutiveRuns,
@@ -201,6 +241,12 @@ function buildSourceFollowupIssues({ root, date, minimumConsecutiveRuns = FOLLOW
   items.sort((left, right) => right.consecutive_runs - left.consecutive_runs ||
     String(left.source_ids[0]).localeCompare(String(right.source_ids[0])));
 
+  // 실행 전체 진단은 한 건뿐이다. PR 본문이 draft를 10건까지만 실으므로, 소스 draft가 많은
+  // 주에 밀려나지 않게 맨 앞에 둔다.
+  if (latest.taxonomyMissing) {
+    items.unshift(taxonomyDraft(latest, consecutiveRunCount(runs, runs.length - 1, run => Boolean(run.taxonomyMissing))));
+  }
+
   return {
     schema_version: 1,
     report_type: 'source-followup-issues',
@@ -219,7 +265,7 @@ function renderSourceFollowupIssuesMarkdown(report) {
     '',
     '이 문서는 제안이며 발행 판정에 영향을 주지 않습니다. GitHub 이슈를 자동으로 만들지도 않습니다.',
     '',
-    `- 기준: 같은 대상에 같은 권고가 ${report.minimum_consecutive_runs}회 연속`,
+    `- 기준: 같은 대상에 같은 권고가 ${report.minimum_consecutive_runs}회 연속, 또는 실행 전체 진단 taxonomy_missing이 이번 실행에서 참`,
     `- 살펴본 실행: ${report.runs_examined}`,
     `- 이번 실행의 조치 대상 권고: ${report.actionable_recommendation_count ?? 0}건`,
     `- draft: ${report.items.length}건`,
@@ -244,7 +290,7 @@ function renderSourceFollowupIssuesMarkdown(report) {
       `## ${item.title}`,
       '',
       `- 연속 ${item.consecutive_runs}회`,
-      `- 소스: ${item.source_ids.join(', ')}`,
+      item.scope === 'run' ? '- 범위: 실행 전체' : `- 소스: ${item.source_ids.join(', ')}`,
       `- 권고: ${item.recommended_action}`,
       `- 제안 라벨: ${item.suggested_labels.join(', ')}`,
       '',
