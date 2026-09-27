@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W40/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W39 Camera SW Newsletter (Published W40)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W40/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W40/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W40/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week&#39;s newsletter brings news of new hardware support and driver stability improvements. The proposed patch to enable Arm Mali-C55 ISP and IVC hardware acceleration for the Renesas RZ/V2H EVK board promises performance enhancements for the new platform. Additionally, a proposed Linux kernel driver patch for the Samsung S5K3T2 20-megapixel image sensor lays the groundwork for integrating new sensors. The proposed patch to prevent ISYS firmware resource leaks when removing Intel IPU7 drivers will further enhance driver stability. Finally, don&#39;t miss the announcement of support for integrating various AI agents based on developer choice in Android Studio." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W40/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W39 Camera SW Newsletter (Published W40)" />
+  <meta property="og:description" content="This week&#39;s newsletter brings news of new hardware support and driver stability improvements. The proposed patch to enable Arm Mali-C55 ISP and IVC hardware acceleration for the Renesas RZ/V2H EVK board promises performance enhancements for the new platform. Additionally, a proposed Linux kernel driver patch for the Samsung S5K3T2 20-megapixel image sensor lays the groundwork for integrating new sensors. The proposed patch to prevent ISYS firmware resource leaks when removing Intel IPU7 drivers will further enhance driver stability. Finally, don&#39;t miss the announcement of support for integrating various AI agents based on developer choice in Android Studio." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W40/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W39 Camera SW Newsletter (Published W40)" />
+  <meta name="twitter:description" content="This week&#39;s newsletter brings news of new hardware support and driver stability improvements. The proposed patch to enable Arm Mali-C55 ISP and IVC hardware acceleration for the Renesas RZ/V2H EVK board promises performance enhancements for the new platform. Additionally, a proposed Linux kernel driver patch for the Samsung S5K3T2 20-megapixel image sensor lays the groundwork for integrating new sensors. The proposed patch to prevent ISYS firmware resource leaks when removing Intel IPU7 drivers will further enhance driver stability. Finally, don&#39;t miss the announcement of support for integrating various AI agents based on developer choice in Android Studio." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.09.21 – 09.27</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W39</span></h1>
+        <p class="issue-publish-badge">Published W40</p>
+        <p class="subtitle">This week&#39;s newsletter brings news of new hardware support and driver stability improvements. The proposed patch to enable Arm Mali-C55 ISP and IVC hardware acceleration for the Renesas RZ/V2H EVK board promises performance enhancements for the new platform. Additionally, a proposed Linux kernel driver patch for the Samsung S5K3T2 20-megapixel image sensor lays the groundwork for integrating new sensors. The proposed patch to prevent ISYS firmware resource leaks when removing Intel IPU7 drivers will further enhance driver stability. Finally, don&#39;t miss the announcement of support for integrating various AI agents based on developer choice in Android Studio.</p>
+        <div class="tag-row issue-tags"><span class="tag">Android</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">AI</span><span class="tag">Camera HAL</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>Android Studio Announces Support for Integrating Various AI Agents Based on Developer Choice</li><li>Proposed Patch to Enable Arm Mali-C55 ISP and IVC Hardware Acceleration for Renesas RZ/V2H EVK Board</li><li>Proposed Linux Kernel Driver Patch for Samsung S5K3T2 20-Megapixel Image Sensor</li><li>Proposed Patch to Prevent ISYS Firmware Resource Leaks on Intel IPU7 Driver Device Removal</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-android-studio-announces-support-for-integrating-various-ai-agents-based-on-deve" aria-labelledby="article-android-studio-announces-support-for-integrating-various-ai-agents-based-on-deve-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-android-studio-announces-support-for-integrating-various-ai-agents-based-on-deve-title" class="article-title">Android Studio Announces Support for Integrating Various AI Agents Based on Developer Choice</h2>
+        <p class="article-source-subtitle">Android Developers Blog</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png" alt="Android Studio AI agent integration interface" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html">Android Developers Blog</a></figcaption>
+        </figure>
+        <p class="article-lead">The trend of integrating AI agents into development tools to maximize productivity is rapidly expanding into native development environments.</p>
+        <p>Android Studio recently announced open and flexible features that allow developers to integrate various AI coding agents, custom enterprise harnesses, and autonomous tools of their choice. This change focuses on helping developers build Android apps using the AI tools that best suit them.</p>
+        <p>According to Matthew Warner, Product Manager for Android Developer Experience, AI-powered development tools have become an essential component for increasing engineering productivity. Accordingly, Android Studio now provides an environment that allows development teams to utilize various AI agents tailored to their needs, rather than being limited to specific tools.</p>
+        <h3 class="article-subheading">Utilization in Native Development Workflows</h3>
+        <p>This feature does not directly change the runtime behavior of the Android Camera HAL or drivers. However, it can indirectly contribute to the build, test, and debugging workflows of camera development teams working with native C++ code. For example, AI agents can be used to draft complex camera metadata processing logic or V4L2 control code, and to generate unit test scripts, thereby reducing the time spent on repetitive tasks.</p>
+        <p>However, general AI product news should not be misinterpreted as direct data path changes or runtime contract changes in the Camera HAL. This feature should be treated purely as a signal for workflow improvement that enhances the flexibility of development tools, and it is safer to review security policies and code leakage prevention guidelines before adopting it within a team.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>While there is no direct impact on Camera HAL runtime, AI agents can be utilized to enhance development productivity when developing native C++ camera modules and writing test scripts. This is particularly useful for generating complex HAL3 metadata mapping code or unit test boilerplate code.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html">Build your way: Use any AI agent of your choice in Android Studio</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-proposed-patch-to-enable-arm-mali-c55-isp-and-ivc-hardware-acceleration-for-rene" aria-labelledby="article-proposed-patch-to-enable-arm-mali-c55-isp-and-ivc-hardware-acceleration-for-rene-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-proposed-patch-to-enable-arm-mali-c55-isp-and-ivc-hardware-acceleration-for-rene-title" class="article-title">Proposed Patch to Enable Arm Mali-C55 ISP and IVC Hardware Acceleration for Renesas RZ/V2H EVK Board</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Proposed Patch to Enable Arm Mali-C55 ISP and IVC Hardware Acceleration for Renesas RZ/V2H EVK Board image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">Enabling camera hardware acceleration on a new SoC platform is the first step in determining the performance and power efficiency of the lower image pipeline.</p>
+        <p>A v2 series of Linux kernel device tree patches was recently proposed to add and enable Arm Mali-C55 ISP and IVC hardware acceleration nodes for the Renesas RZ/V2H EVK board. This change involves declaring hardware resources for the Mali-C55 ISP and the IVC (Input Video Control) block, which feeds frames from memory to the ISP, at the sub-driver level, and connecting video endpoints.</p>
+        <p>According to the patch details, this proposal includes descriptions for optional ISP DMA line tick interrupts and IVC frame start and end interrupts. When the hardware acceleration block is properly enabled and the appropriate Linux driver is loaded, a message indicating that Mali-C55 ISP version 9000043.31032022.0 has been detected can be seen in the system console.</p>
+        <h3 class="article-subheading">Technical Significance of Lower Stack Activation</h3>
+        <p>While this patch series is still in the proposed stage and has not yet been merged into the Linux kernel mainline, it represents an essential lower-layer change for the Android Camera HAL to utilize hardware features on new SoC platforms. For the higher-level media framework and camera services to access physical sensor data, the ISP and IVC nodes must be correctly defined at the device tree level.</p>
+        <p>However, since this change focuses on the RZ/V2H EVK board, it cannot be assumed to apply immediately to other RZ/V2H variant platforms. Furthermore, it does not bring direct changes to the Android HAL or Camera2 API, and it should be noted that this is foundational work at the Linux kernel driver level.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>While not a direct Android HAL change, with Arm Mali-C55 ISP and IVC hardware acceleration enabled on new SoC platforms, the frame timing and format negotiation behavior of the lower image pipeline must be verified. In particular, it is necessary to monitor at the driver level whether ISP DMA line tick interrupts and IVC frame start and end interrupts operate correctly to avoid causing frame drops or delays.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/">[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK</a> — <a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-proposed-linux-kernel-driver-patch-for-samsung-s5k3t2-20-megapixel-image-sensor" aria-labelledby="article-proposed-linux-kernel-driver-patch-for-samsung-s5k3t2-20-megapixel-image-sensor-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-proposed-linux-kernel-driver-patch-for-samsung-s5k3t2-20-megapixel-image-sensor-title" class="article-title">Proposed Linux Kernel Driver Patch for Samsung S5K3T2 20-Megapixel Image Sensor</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Proposed Linux Kernel Driver Patch for Samsung S5K3T2 20-Megapixel Image Sensor image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">Integrating a new image sensor into a mobile platform requires accurately defining its hardware characteristics at the lower driver level as a prerequisite.</p>
+        <p>A v3 series of patches was recently proposed to add device tree binding and a driver for the Samsung S5K3T2 20-megapixel CMOS image sensor to the Linux kernel. This sensor is characterized by its use of four MIPI D-PHY lanes to transmit high-resolution image data.</p>
+        <p>The proposed driver was written based on the front camera hardware of the Xiaomi POCO F3 device and has been verified to work correctly with the Qualcomm CAMSS driver. However, since a mainline device tree for this device does not yet exist, the binding user was not directly included in this patch series.</p>
+        <h3 class="article-subheading">Significance of Adding an Image Sensor Driver</h3>
+        <p>Adding a new image sensor driver to the kernel media subsystem is the first step towards utilizing the unique features of that sensor in Android devices. Only when sensor register settings, clock control, and MIPI lane configuration are completed at the driver level can the higher-level Camera HAL control sensor modes and ensure optimal image quality.</p>
+        <p>This patch is currently in the proposed stage, undergoing review as v3 revision, and has not yet been merged into the mainline kernel. Furthermore, since it was tested in a specific Qualcomm CAMSS environment, additional verification of driver compatibility and MIPI timing settings will be required when integrating it into other SoC platforms or media controller pipelines.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>While not a direct Android HAL change, when developing devices equipped with the Samsung S5K3T2 sensor, the initialization sequence of the lower V4L2 subdevice driver and MIPI D-PHY lane settings must be verified. In particular, it is necessary to confirm that data transmission stability in the 4-lane configuration and sensor exposure/gain register control are correctly mapped to the Camera HAL via V4L2 controls.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/">[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-proposed-patch-to-prevent-isys-firmware-resource-leaks-on-intel-ipu7-driver-devi" aria-labelledby="article-proposed-patch-to-prevent-isys-firmware-resource-leaks-on-intel-ipu7-driver-devi-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-proposed-patch-to-prevent-isys-firmware-resource-leaks-on-intel-ipu7-driver-devi-title" class="article-title">Proposed Patch to Prevent ISYS Firmware Resource Leaks on Intel IPU7 Driver Device Removal</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list (Intel IPU)</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Proposed Patch to Prevent ISYS Firmware Resource Leaks on Intel IPU7 Driver Device Removal image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">The stability of a camera driver depends not only on its ability to capture frames well but also on how perfectly it manages resources throughout the device&#39;s lifecycle.</p>
+        <p>A patch was recently proposed to address a resource leak issue in the Intel IPU7 image processing unit driver, where ISYS firmware resources were not being released upon device removal. In the existing driver implementation, the resource release helper function was only called when an error occurred during the probe stage, and was omitted during normal device unload.</p>
+        <p>This patch fixes the issue by adding a call to ipu7_fw_isys_release() within the isys_remove() function, which is the normal device removal path, ensuring that initialized ISYS firmware resources are properly returned to the kernel. This prevents potential memory leaks and resource exhaustion that can occur during repeated loading and unloading of the device driver.</p>
+        <h3 class="article-subheading">Improved Resource Management and System Stability</h3>
+        <p>Preventing resource leaks at the camera driver level is crucial for the long-term operational stability of mobile and embedded systems. Accumulated resource loss, especially when drivers are repeatedly initialized and released during camera module power management or hot-plug scenarios, can lead to system downtime.</p>
+        <p>The proposed patch is currently under review and has not yet been merged into the mainline kernel. Platform development teams using Intel IPU7 hardware should verify that the driver&#39;s resource release logic functions correctly and monitor for memory leaks through long-term camera operation and repeated device re-initialization tests.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>While not a direct Android HAL change, this is an essential driver patch for ensuring camera service lifecycle management and system stability on platforms using the Intel IPU7 driver. It is necessary to confirm that ISYS firmware resources are fully released during driver unload and reload, and to monitor the trend of memory usage in the camera subsystem.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/">[PATCH] media: staging/ipu7: release ISYS firmware resources on remove</a> — <a href="https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/">Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-26) · Camera Driver / Image Pipeline Reference</span></li><li><a href="https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/">[PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-25) · Camera Driver / Image Pipeline Reference</span></li><li><a href="https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/">[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-25) · Camera Driver / Image Pipeline Reference</span></li><li><a href="https://patchwork.libcamera.org/patch/28380/">[1/4] libcamera: v4l2_event: Add V4L2Event class and functionality</a><span class="reference-meta">libcamera Patchwork (patch review) (2026-09-25) · Camera Driver / Image Pipeline Reference</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/">[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK</a> — <a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/T/#t">Full patch series</a></li><li><a href="https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/">[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/T/#t">Full patch series</a></li><li><a href="https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/">[PATCH] media: staging/ipu7: release ISYS firmware resources on remove</a> — <a href="https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/T/#t">Full patch series</a></li><li><a href="https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html">Build your way: Use any AI agent of your choice in Android Studio</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
