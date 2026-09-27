@@ -564,7 +564,7 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 `newsletters-03-editor-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록을 써서 `public_source_of_truth`와 `review_required_compact` artifact만 커밋합니다. `debug_heavy`와 `transient_attempt` artifact는 커밋하지 않는 대신, full set을 `newsroom-final-debug-<run_id>` Actions artifact에 보존하고 `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location을 기록합니다.
 
-허용목록은 `src/generator/publish/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 만듭니다. 그래서 PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 보세요.
+허용목록은 `src/generator/publish/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 만듭니다. 그 날짜의 `generation-status.json`이 `public_output_expected: false`를 명시하는 진단 전용 실행이면 일간·주간 공개 페이지, `newsletters-weekly.json`, `sitemap.xml`을 목록에서 빼고, 뺀 경로를 로그와 run summary에 남깁니다(#1189). `newsletters.json`과 archive 상태 파일은 진단 전용 실행에서도 정당하게 바뀌므로 그대로 싣습니다. 그래서 PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 보세요.
 
 이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 **먼저** in-run working tree에서 돌기 때문에, add-paths 허용목록의 영향을 받지 않습니다.
 
