@@ -594,11 +594,13 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 `validate:site`와 `validate:localization`은 `en`이 있는 주간호마다 overlay가 있고 현재 `issue.json`에 적용되는지 검사합니다. `validate:translation-parity`는 영문 backing file, 해시, 한글 문장 잔존 여부, 출처 링크 집합도 검사하며 `validate`에 포함됩니다. 출처 링크는 현재 렌더러로 `issue.json`을 렌더한 결과와 비교하므로 과거 한국어 HTML에 없는 렌더러 기능 때문에 실패하지 않습니다. `en`이 없는 호는 미번역 목록으로만 표시합니다.
 
-한국어 호를 정정하면 오래된 번역을 먼저 무효화합니다. 주간 생성·이미지 수리 경로는 변경된 원본에 대해 두 인덱스의 `en`, 영문 HTML·Markdown, overlay·비용 보고서를 제거하고 sitemap을 갱신합니다. 수동으로 `issue.json`을 고쳤다면 같은 PR에서 `node src/generator/render/translation-state.js YYYY-Wnn`을 실행하고 삭제 파일도 포함합니다. 이렇게 한국어 정정 PR을 머지한 뒤 다시 번역할 수 있습니다. 오래된 해시를 검증에서 허용하지 않습니다.
+한국어 호를 정정하면 오래된 번역을 무효화합니다. 주간 생성·이미지 수리 경로는 변경된 원본에 대해 두 인덱스의 `en`, 영문 HTML·Markdown, overlay·비용 보고서를 제거하고 sitemap을 갱신합니다. 수동으로 `issue.json`을 고치면 무효화가 자동 실행되지 않으므로, 수정 후 같은 PR에서 `node src/generator/render/translation-state.js YYYY-Wnn`을 실행하고 삭제 파일도 포함한 뒤 `npm run validate`를 실행합니다. 이 단계를 생략하면 번역의 원본 해시가 어긋나 검증이 실패합니다. 한국어 정정 PR을 머지한 뒤 다시 번역할 수 있으며, 오래된 해시를 검증에서 허용하지 않습니다.
 
 ### 번역 실행과 검토
 
 `npm run translate -- --auto`는 인덱스에서 최신 주간호 한 개만 확인하고, 번역이 없거나 원본 해시가 바뀐 경우에 처리합니다. 최신 호가 이미 번역되어 있으면 `nothing to translate`로 종료하며 과거 미번역 호를 자동으로 백필하지 않습니다. 수동 지정은 `npm run translate -- --weekly-key YYYY-Wnn`이며, `--force`는 기존 번역도 다시 생성합니다. `issue.json`이 없으면 명시적으로 실패하며 HTML이나 중간 초안을 대신 사용하지 않습니다.
+
+과거 호의 번역을 무효화하면 자동 재번역되지 않고 "Korean only"로 남습니다. 정정 PR을 머지한 뒤 번역 workflow의 `workflow_dispatch`에서 `weekly_key`에 해당 주차를 지정하고 `force_retranslate`는 `false`로 두어 수동 실행합니다.
 
 `translate` stage는 공통 `callLlmJson`을 사용합니다. 기본 모델은 `gemini-2.5-flash`, 기본 폴백은 `gemini-2.5-flash-lite`이며 `NEWSROOM_TRANSLATE_MODEL`로 설정합니다. Actions의 자동 실행은 코드 기본값을 사용하고, 수동 실행의 `translate_model` 입력만 모델을 바꿀 수 있습니다. API 키는 `GEMINI_API_KEY` Secret으로만 전달합니다.
 
@@ -608,4 +610,4 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 번역 브랜치는 `newsroom-translation/<weekly_key>`입니다. 동일 원본 해시의 열린 번역 PR이 있으면 API를 다시 호출하지 않습니다. `force_retranslate`는 이 생략을 해제합니다. 번역 후 PR을 만들기 전에 현재 `main`의 커밋과 원본 해시를 다시 확인하며, 변경되었으면 재실행을 요구합니다. PR 생성은 `NEWSROOM_PR_TOKEN`을 우선 사용하고 없으면 `github.token`을 사용합니다. 기본 토큰으로 만든 PR은 후속 PR 검증이 자동 실행되지 않을 수 있으므로 번역 workflow 자체에서 `npm run test && npm run validate`를 반드시 실행합니다.
 
-2026-W19부터 2026-W39까지의 주간호는 이 계약으로 수동 번역했습니다. 날짜 호(`newsletters/YYYY-MM-DD/`)는 번역하지 않습니다.
+2026-W19부터 2026-W39까지의 주간호는 원문과 대조하여 사람이 검토한 수동 번역입니다. 이 과거 호에는 `force_retranslate` 또는 CLI의 `--force`를 사용하지 않습니다. 사용하면 검토된 수동 번역을 아직 검토하지 않은 Gemini 번역으로 덮어씁니다. 날짜 호(`newsletters/YYYY-MM-DD/`)는 번역하지 않습니다.
