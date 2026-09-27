@@ -289,7 +289,7 @@
     const published = en ? 'Published' : '발행';
     const variant = entryCoverageVariant(entry);
     const count = Number(entry && entry.article_count) || 0;
-    const countText = count > 0 ? (en ? `${count} articles` : `총 ${count}건`) : '';
+    const countText = count > 0 ? (en ? `${count} ${count === 1 ? 'article' : 'articles'}` : `총 ${count}건`) : '';
     const weeklyKey = weeklyKeyOf(entry);
     const publishedLabel = weeklyKey ? weeklyKey.slice(5) : '';
 
@@ -376,6 +376,20 @@
     `;
   }
 
+  // 영문 홈 헤드라인은 같은 기사의 번역을 쓴다. 번역 overlay(translation.en.json)에서 id가
+  // 헤드라인의 article_identity_key인 기사를 찾아 제목과 리드를 돌려준다. 한국어 헤드라인 요약은
+  // 발행 전 후보 요약이라 overlay에 없고, 발행된 리드가 그 기사의 공개 요약이다.
+  function englishHeadlineCopy(headline, translation) {
+    const key = headline && headline.article_identity_key;
+    const sections = translation && Array.isArray(translation.sections) ? translation.sections : [];
+    const section = key ? sections.find(item => item && item.id === key) : null;
+    if (!section) return null;
+    const title = String(section.headline || '').trim();
+    const summary = String(section.lead || String(section.body_markdown || '').split(/\n\s*\n/)[0] || '').trim();
+    if (!title || !summary) return null;
+    return { title, summary, imageAlt: String(section.image_alt || '').trim() };
+  }
+
   const api = {
     TOPICS,
     DEFAULT_STATE,
@@ -388,7 +402,8 @@
     archivePreviewEntries,
     getSafeNewsletterHref,
     isFallbackImage,
-    renderArchiveCard
+    renderArchiveCard,
+    englishHeadlineCopy
   };
 
   if (typeof module !== 'undefined' && module.exports) {

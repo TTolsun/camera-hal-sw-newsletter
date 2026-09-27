@@ -261,3 +261,82 @@ test('English edition writer renders from committed issue.json and records the e
   fs.writeFileSync(path.join(root, 'articles', 'newsletters', '2026-W39', 'issue.json'), sourceText.replace('카메라 변경', '다른 변경'));
   assert.throws(() => writeEnglishEditions(root, ['2026-W39']), /source_hash/);
 });
+
+// 영문 홈은 한국어 홈(index.html)과 같은 구조다: 헤드라인 블록, 전체 목록, 정렬·주제 필터.
+// 인라인 스크립트를 최소 DOM에서 실행해 실제 동작을 확인한다.
+async function renderEnglishHome({ headline, newsletters, translation }) {
+  const html = fs.readFileSync(path.join(__dirname, '../../../../articles/en/index.html'), 'utf8');
+  const script = [...html.matchAll(/<script\b[^>]*>\s*([\s\S]*?)\s*<\/script>/gi)].map(match => match[1]).find(body => /async function loadHomepageHeadline\b/.test(body));
+  assert.ok(script, 'en/index.html should include the homepage script');
+  const element = () => ({ innerHTML: '', hidden: false, value: 'latest', classList: { add() {} }, addEventListener() {} });
+  const elements = { 'featured-card': element(), 'latest-grid': element(), 'latest-topics': element(), 'latest-sort': element(), 'latest-empty': element() };
+  const fetched = [];
+  const context = {
+    window: { NewsletterArchive: require('../../../../articles/assets/js/newsletter-archive') },
+    document: { getElementById: id => elements[id] },
+    console: { error() {} },
+    fetch: async url => {
+      fetched.push(url);
+      const body = { '../data/homepage-headline.json': headline, '../data/newsletters-weekly.json': newsletters, '../newsletters/2026-W39/translation.en.json': translation }[url];
+      return body ? { ok: true, json: async () => body } : { ok: false, status: 404 };
+    }
+  };
+  require('node:vm').runInNewContext(script.replace(/loadHomepageHeadline\(\);\s*\n\s*loadNewsletters\(\);\s*$/, 'globalThis.__ready = Promise.all([loadHomepageHeadline(), loadNewsletters()]);'), context);
+  await context.__ready;
+  return { elements, fetched };
+}
+
+function englishHomeFixture() {
+  const key = 'url:https://github.com/openai/codex/releases/tag/rust-v0.155.1';
+  const headline = { current_headline: { article_identity_key: key, title: '한국어 헤드라인', summary: '한국어 요약입니다.', source_url: 'https://github.com/openai/codex/releases/tag/rust-v0.155.1', newsletter_date: '2026-09-21', image_url: 'https://example.com/codex.png', image_alt: 'Codex image', snapshot: { source_name: 'Codex Releases' } } };
+  const newsletters = [
+    { weeklyKey: '2026-W39', date: '2026-09-21', weekStartDate: '2026-09-21', weekEndDate: '2026-09-27', title: '2026 W39', summary: '한국어 기사 제목', html: 'newsletters/2026-W39/index.html', tags: ['AI'], article_count: 1, en: { title: '2026 W39', summary: 'Codex released', html: 'en/newsletters/2026-W39/index.html', md: 'en/newsletters/2026-W39/newsletter.md' } },
+    { weeklyKey: '2026-W38', date: '2026-09-14', title: '2026 W38', summary: '번역 없는 호', html: 'newsletters/2026-W38/index.html', tags: ['Driver'], article_count: 4 }
+  ];
+  const translation = { sections: [{ id: key, headline: 'Codex released', lead: 'The Codex CLI release changes defaults.', body_markdown: 'Body.', why_it_matters: 'Check.' }] };
+  return { headline, newsletters, translation };
+}
+
+test('English home mirrors the Korean home with the translated headline and every issue', async () => {
+  const { elements, fetched } = await renderEnglishHome(englishHomeFixture());
+  const hero = elements['featured-card'].innerHTML;
+  assert.match(hero, /<h1 id="featured-title" class="featured-title">Codex released<\/h1>/);
+  assert.match(hero, /The Codex CLI release changes defaults\./);
+  assert.match(hero, /href="\.\.\/en\/newsletters\/2026-W39\/index\.html">Read article →/);
+  assert.match(hero, /alt="Codex image"/);
+  assert.doesNotMatch(hero, /[가-힣]/);
+  assert.ok(fetched.includes('../newsletters/2026-W39/translation.en.json'));
+  const grid = elements['latest-grid'].innerHTML;
+  assert.match(grid, /href="\.\.\/en\/newsletters\/2026-W39\/index\.html"/);
+  assert.match(grid, /1 article</);
+  assert.match(grid, /Korean only/);
+  assert.match(grid, /href="\.\.\/newsletters\/2026-W38\/index\.html"/);
+  assert.match(elements['latest-topics'].innerHTML, />All</);
+});
+
+test('English home keeps the static hero when the headline issue has no English edition', async () => {
+  const fixture = englishHomeFixture();
+  delete fixture.newsletters[0].en;
+  assert.equal((await renderEnglishHome(fixture)).elements['featured-card'].innerHTML, '');
+  const missing = englishHomeFixture();
+  missing.translation = null;
+  assert.equal((await renderEnglishHome(missing)).elements['featured-card'].innerHTML, '');
+  const other = englishHomeFixture();
+  other.translation.sections[0].id = 'url:https://example.com/other';
+  assert.equal((await renderEnglishHome(other)).elements['featured-card'].innerHTML, '');
+});
+
+test('English home hero alt never leaks the Korean title and stays empty for fallback art', async () => {
+  const noAlt = englishHomeFixture();
+  delete noAlt.headline.current_headline.image_alt;
+  const hero = (await renderEnglishHome(noAlt)).elements['featured-card'].innerHTML;
+  assert.match(hero, /alt="Codex released"/);
+  assert.doesNotMatch(hero, /[가-힣]/);
+  const koreanAlt = englishHomeFixture();
+  koreanAlt.headline.current_headline.image_alt = '한국어 이미지 설명';
+  assert.match((await renderEnglishHome(koreanAlt)).elements['featured-card'].innerHTML, /alt="Codex released"/);
+  const fallback = englishHomeFixture();
+  fallback.headline.current_headline.image_url = 'assets/images/fallback/newsletter-default.svg';
+  const fallbackHero = (await renderEnglishHome(fallback)).elements['featured-card'].innerHTML;
+  assert.match(fallbackHero, /src="\.\.\/assets\/images\/fallback\/newsletter-default\.svg" alt=""/);
+});

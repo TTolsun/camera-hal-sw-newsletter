@@ -574,7 +574,7 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 ## 공개 사이트의 영문 로케일
 
-기본 언어는 한국어이며 헤더의 언어 선택 버튼에서 한국어와 English를 선택합니다. 영문 홈과 아카이브는 `articles/en/index.html`, `articles/en/archive.html`이며 배포 URL은 `/en/` 접두사를 사용합니다. 번역이 없는 호는 영문 아카이브에서 한국어 제목과 `Korean only` 배지를 표시하고 한국어 원문으로 연결합니다. 영문 홈은 최신 영문 호만 표시하며 홈페이지 헤드라인은 번역하지 않습니다.
+기본 언어는 한국어이며 헤더의 언어 선택 버튼에서 한국어와 English를 선택합니다. 영문 홈과 아카이브는 `articles/en/index.html`, `articles/en/archive.html`이며 배포 URL은 `/en/` 접두사를 사용합니다. 번역이 없는 호는 영문 아카이브에서 한국어 제목과 `Korean only` 배지를 표시하고 한국어 원문으로 연결합니다. 영문 홈은 한국어 홈과 같은 구조(헤드라인 블록, 전체 호 목록, 정렬·주제 필터)입니다. 헤드라인 블록은 헤드라인 기사가 실린 주간호의 `translation.en.json`에서 같은 기사(`id` = `article_identity_key`)의 번역 제목과 리드를 가져옵니다. 한국어 헤드라인 요약은 발행 전 후보 요약이라 번역 대상이 아니며, 영문판은 발행된 리드를 씁니다. 그 주간호에 영문판이 없으면 정적 브랜드 블록을 그대로 둡니다. "Read article →"는 영문 호 페이지로 연결하며, 영문 페이지의 기사 앵커는 영어 제목에서 만들어지므로 한국어 앵커를 붙이지 않습니다.
 
 `buildHtml(issue, { locale: 'en' })`과 `buildMarkdown(issue, { locale: 'en' })`은 영문 UI를 렌더합니다. 생략하면 `ko`입니다. 공개 문구는 `src/generator/render/locale/ko.js`와 `en.js`에서 관리합니다. 내부 검토 보고서는 한국어를 유지합니다. 과거 발행 HTML은 다시 쓰지 않으며, 조립기는 배포용 사본에 공통 헤더 스크립트만 보강합니다. `data-alternate-href`가 없는 과거 호에서 영어를 선택하면, 주간호(`newsletters/YYYY-Wnn/`)는 같은 주의 영문 페이지로, 날짜 호는 영문 아카이브로 연결합니다. 주간호는 모두 영문판이 있기 때문입니다(아래 수동 번역 참고).
 
