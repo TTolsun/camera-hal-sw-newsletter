@@ -292,7 +292,7 @@ test('an inline construct deduction names the construct in the reason and keeps 
     deductions[0].reason,
     'Story Contract v2 body check failed: body_markdown_forbidden_construct (markdown_active_character) at body block 1.'
   );
-  // 집계 축은 바꾸지 않는다. 구문 이름은 사람과 모델이 읽는 사유에만 싣는다.
+  // repair 정책의 분류 키(reason_code)와 dedupe_key는 바꾸지 않는다. 구문 이름은 사유에만 싣는다.
   assert.equal(deductions[0].reason_code, 'body_markdown_forbidden_construct');
   assert.equal(deductions[0].dedupe_key, '1:body_markdown_forbidden_construct:1');
 });

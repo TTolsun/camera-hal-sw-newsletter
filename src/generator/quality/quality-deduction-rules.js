@@ -508,8 +508,9 @@ function storyBodyIssueAddress(issue) {
   return '';
 }
 
-// forbidden_construct는 하위 구문마다 고치는 법이 다르다(#1172). repair 모델은 이 사유
-// 문자열만 받으므로 구문 이름을 함께 싣는다. reason_code와 dedupe_key는 집계 축이라 그대로 둔다.
+// forbidden_construct는 하위 구문마다 고치는 법이 다르다(#1172). repair 모델에게 구문 이름이
+// 전달되는 통로는 이 사유 문자열뿐이라 여기에 싣는다. reason_code는 repair 정책의 분류 키라
+// 그대로 두고, dedupe_key도 바꾸지 않는다.
 function storyBodyIssueConstruct(issue) {
   return issue.construct ? ` (${issue.construct})` : '';
 }
