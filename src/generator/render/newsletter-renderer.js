@@ -510,14 +510,19 @@ function catchUpWeeksLabel(section) {
   const days = Number(section.catch_up_age_days);
   if (!Number.isFinite(days)) return '';
   const weeks = Math.max(1, Math.round(days / 7));
-  return ` (${weeks}${t.weeksAgo})`;
+  const label = (weeks === 1 && t.weekAgo) || t.weeksAgo;
+  return ` (${label.replace('{n}', weeks)})`;
 }
 
+// 주간호의 기사 순서는 buildWeeklyNewsletterPage가 발행 시점에 정해 issue.json에 남긴다. 여기서
+// 다시 정렬하면 그 뒤 바뀐 우선순위 규칙으로 과거 호의 순서가 바뀐다(2026-W19~W28 중 8개 호에서
+// 실측). 발행 시점에는 같은 규칙으로 이미 정렬된 입력이라 새 호의 출력은 달라지지 않는다.
 function normalizedSections(issue) {
   const usedAnchors = new Set();
   const ordered = ensureArray(issue.sections)
     .map((section, originalIndex) => ({ section, originalIndex }))
     .sort((a, b) => {
+      if (issue.weekly_key) return a.originalIndex - b.originalIndex;
       const aCatch = a.section.coverage_type === 'catch_up' ? 1 : 0;
       const bCatch = b.section.coverage_type === 'catch_up' ? 1 : 0;
       return aCatch - bCatch || compareEditorialPriority(a.section, b.section) || a.originalIndex - b.originalIndex;

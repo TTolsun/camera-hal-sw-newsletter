@@ -62,21 +62,20 @@ function applyTranslation(issue, translation, { sourceText } = {}) {
     const retitle = sources => sources && sources.map(source => Object.hasOwn(sourceTitles, source.url)
       ? { ...structuredClone(source), title: text(sourceTitles[source.url], 'source_titles') }
       : structuredClone(source));
+    // The translated article keeps the source's field shape. Adding a key the source lacks changes
+    // how it renders: an empty source_subtitle alone turns a legacy article into a story article.
+    const article = { ...structuredClone(original), headline, camera_hal_takeaway: takeaway };
+    if (original.source_links) article.source_links = retitle(original.source_links);
+    if (original.lead || overlay.lead !== undefined) article.lead = text(overlay.lead, 'lead');
+    if (original.source_subtitle || overlay.source_subtitle !== undefined) article.source_subtitle = text(overlay.source_subtitle, 'source_subtitle');
+    if (Object.hasOwn(original, 'body_markdown')) article.body_markdown = body;
+    if (Object.hasOwn(original, 'body_paragraphs') || !Object.hasOwn(original, 'body_markdown')) article.body_paragraphs = body.split(/\n\s*\n/);
     return {
       ...structuredClone(section),
       headline,
       ...(overlay.image_alt !== undefined ? { imageAlt: text(overlay.image_alt, 'image_alt') } : {}),
       ...(section.sources ? { sources: retitle(section.sources) } : {}),
-      public_article: {
-        ...structuredClone(original),
-        ...(original.source_links ? { source_links: retitle(original.source_links) } : {}),
-        headline,
-        lead: original.lead || overlay.lead !== undefined ? text(overlay.lead, 'lead') : '',
-        source_subtitle: original.source_subtitle || overlay.source_subtitle !== undefined ? text(overlay.source_subtitle, 'source_subtitle') : '',
-        body_markdown: body,
-        body_paragraphs: body.split(/\n\s*\n/),
-        camera_hal_takeaway: takeaway
-      }
+      public_article: article
     };
   });
   result.briefing = result.sections.map(section => section.public_article.headline);
