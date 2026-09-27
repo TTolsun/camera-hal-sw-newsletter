@@ -4,15 +4,7 @@
   "newsletter_date": "2026-09-28",
   "validations": [
     {
-      "proposal_id": "camera-hal-android-17-its-release-notes",
-      "candidate_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-      "normalized_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "android-compatibility-definition-document"
-    },
-    {
-      "proposal_id": "linux-media-sony-imx681-driver",
+      "proposal_id": "android-camera-sensor-sony-imx681-support",
       "candidate_url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
       "accepted": true,
@@ -20,71 +12,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "linux-media-samsung-s5k3t2-sensor-driver",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "linux-media-qualcomm-hawi-maili-camss-support",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "linux-media-qualcomm-camss-offline-processing",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "linux-media-renesas-rz-v2h-isp-ivc-enablement",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "linux-media-ipu-bridge-samsung-galaxy-book3-pro-quirk",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "linux-media-ipu-bridge-st-vd55g1-driver",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "linux-media-qualcomm-glymur-camss-support",
-      "candidate_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "normalized_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "lore-linux-media-ipu"
-    },
-    {
-      "proposal_id": "libcamera-pipeline-reject-multiple-processed-streams",
-      "candidate_url": "https://patchwork.libcamera.org/patch/28382/",
-      "normalized_url": "https://patchwork.libcamera.org/patch/28382/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "patchwork-libcamera-patches"
-    },
-    {
-      "proposal_id": "linux-media-ipu-bridge-sony-imx681-driver",
+      "proposal_id": "android-camera-sensor-sony-imx681-support",
       "candidate_url": "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/",
       "accepted": true,
@@ -92,7 +20,79 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "linux-media-ipu6-multistream-metadata-preparation",
+      "proposal_id": "android-camera-sensor-samsung-s5k3t2-support",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "android-camera-qualcomm-sensor-support",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "android-camera-qualcomm-sensor-support",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "android-camera-qualcomm-camss-offline-processing",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "android-camera-renesas-rzv2h-isp-ivc-enablement",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "android-camera-ipu-bridge-samsung-galaxy-book3-pro-quirk",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "android-camera-ipu-bridge-st-vd55g1-support",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "android-camera-libcamera-pipeline-stream-rejection",
+      "candidate_url": "https://patchwork.libcamera.org/patch/28382/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/28382/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "android-camera-ipu-bridge-sony-imx681-driver",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/",
+      "accepted": false,
+      "rejected_reason": "duplicate_proposal_url",
+      "source_policy_match": ""
+    },
+    {
+      "proposal_id": "android-camera-ipu6-multistream-metadata-preparation",
       "candidate_url": "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/",
       "accepted": true,
@@ -100,7 +100,7 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "libcamera-v4l2-event-class",
+      "proposal_id": "android-camera-libcamera-v4l2-event-functionality",
       "candidate_url": "https://patchwork.libcamera.org/patch/28380/",
       "normalized_url": "https://patchwork.libcamera.org/patch/28380/",
       "accepted": true,
@@ -108,7 +108,7 @@
       "source_policy_match": "patchwork-libcamera-patches"
     },
     {
-      "proposal_id": "libcamera-lens-shading-correction-tone-curve-controls",
+      "proposal_id": "android-camera-libcamera-lens-shading-tone-curve-controls",
       "candidate_url": "https://patchwork.libcamera.org/patch/28366/",
       "normalized_url": "https://patchwork.libcamera.org/patch/28366/",
       "accepted": true,
@@ -116,15 +116,15 @@
       "source_policy_match": "patchwork-libcamera-patches"
     },
     {
-      "proposal_id": "linux-media-ipu7-firmware-resource-release",
+      "proposal_id": "android-camera-ipu-staging-firmware-release",
       "candidate_url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
-      "accepted": false,
-      "rejected_reason": "duplicate_proposal_url",
-      "source_policy_match": ""
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "linux-media-ipu-bridge-ov02c10-link-frequency",
+      "proposal_id": "android-camera-ipu-bridge-ov02c10-link-frequency",
       "candidate_url": "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/",
       "normalized_url": "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/",
       "accepted": true,
@@ -132,44 +132,83 @@
       "source_policy_match": "lore-linux-media-ipu"
     },
     {
-      "proposal_id": "libcamera-pipeline-rpi-crash-fix",
-      "candidate_url": "https://patchwork.libcamera.org/patch/28365/",
-      "normalized_url": "https://patchwork.libcamera.org/patch/28365/",
-      "accepted": true,
-      "rejected_reason": "",
-      "source_policy_match": "patchwork-libcamera-patches"
-    },
-    {
-      "proposal_id": "android-developers-blog-ai-agent-android-studio",
+      "proposal_id": "android-developers-blog-ai-agent-integration",
       "candidate_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
       "normalized_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-      "accepted": false,
-      "rejected_reason": "fetch_failed",
-      "source_policy_match": "android-developers-blog",
-      "message": "fetch failed: 429"
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
     },
     {
-      "proposal_id": "android-developers-blog-gemma-4-android-studio-quail",
+      "proposal_id": "android-developers-blog-ai-agent-integration",
       "candidate_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
       "normalized_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "accepted": false,
-      "rejected_reason": "fetch_failed",
-      "source_policy_match": "android-developers-blog",
-      "message": "fetch failed: 429"
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
     },
     {
       "proposal_id": "android-developers-blog-emulator-adaptive-development",
       "candidate_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
       "normalized_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
+    },
+    {
+      "proposal_id": "android-androidx-camera-releases",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
       "accepted": false,
-      "rejected_reason": "fetch_failed",
-      "source_policy_match": "android-developers-blog",
-      "message": "fetch failed: 429"
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "android-androidx-camera-releases",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "android-androidx-camera-releases",
+      "candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+      "accepted": false,
+      "rejected_reason": "discovered_not_extractable",
+      "source_policy_match": "camerax-release-notes",
+      "message": "Deterministic parser did not extract release-note evidence for this discovered URL.",
+      "discovery_status": "discovered",
+      "extraction_status": "discovered_not_extractable",
+      "adapter_hint": "android-developers-jetpack-release",
+      "suggested_fixture_case": "Add or update a CameraX release-note fixture with version/date/component/behavior evidence.",
+      "source_extraction_item_count": 0
+    },
+    {
+      "proposal_id": "android-developers-blog-androidx-security-state-libraries",
+      "candidate_url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-developers-blog"
     }
   ],
   "counts": {
-    "accepted": 16,
+    "accepted": 19,
     "duplicate_proposal_url": 1,
-    "fetch_failed": 3
+    "discovered_not_extractable": 3
   }
 }

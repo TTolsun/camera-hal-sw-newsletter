@@ -70,6 +70,29 @@
       "warnings": []
     },
     {
+      "id": "gemini-6e314daa1ecca1e7",
+      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor - Armandas Kvietkus via B4 Relay",
+      "published_at": "2026-09-24",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor - Armandas Kvietkus via B4 Relay",
+          "evidence_text": "<html><head><title>[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor - Armandas Kvietkus via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0,
+      "technical_depth": 0.765,
+      "warnings": []
+    },
+    {
       "id": "bd74537ab6d5beb1",
       "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
       "title": "[PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili",
@@ -438,65 +461,19 @@
       "warnings": []
     },
     {
-      "id": "90b6cdc01cb95494",
-      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-      "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
-      "published_at": "",
-      "source_type": "source_change_event",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "last_updated_changed: Date signal changed with normalized content hash changed.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.85,
-      "android_hal_relevance": 0.85,
-      "ai_relevance": 0,
-      "technical_depth": 0.788,
-      "warnings": []
-    },
-    {
-      "id": "gemini-d893134af706f7df",
-      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-      "title": "Android 17 Camera Image Test Suite release notes &nbsp;|&nbsp; Android Open Source Project",
-      "published_at": "2026-09-22",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Android 17 Camera Image Test Suite release notes &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.802,
-      "warnings": []
-    },
-    {
       "id": "0031c77075a2b86e",
       "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
       "title": "Build your way: Use any AI agent of your choice in Android Studio",
       "published_at": "Thu, 24 Sep 2026 15:59:00 +0000",
       "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
           "claim": "Posted by Matthew Warner, Product Manager, Android Developer Experience AI-powered developer tools have become an essential multiplier for engineering productivity, with teams adopting specialized AI coding agents, custom enterprise harnesses, and autonomous tools. It’s important for you to be able to build Android apps in the way that works best for you and your team, and agentic Android development is more open and flexible than ever before. Last year, Android Studio opened up to any AI model",
-          "evidence_text": "",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
@@ -507,26 +484,26 @@
       "warnings": []
     },
     {
-      "id": "6ac026046fb3ce0d",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "title": "CameraX Release Notes - CameraX 1.6.2",
-      "published_at": "August 26, 2026",
-      "source_type": "release_note_item",
+      "id": "gemini-348919c03d831171",
+      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "title": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
+      "published_at": "",
+      "source_type": "official_blog",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
+          "claim": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.72,
-      "android_hal_relevance": 0.72,
-      "ai_relevance": 0,
-      "technical_depth": 0.78,
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.492,
       "warnings": []
     },
     {
@@ -720,13 +697,13 @@
       "published_at": "Mon, 31 Aug 2026 16:00:00 +0000",
       "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
           "claim": "Posted by Rob Orgiu, Developer Relations Engineer, Adaptive Apps, Android Adaptive app development is fundamental on Android, but making sure everything looks good and every feature works the way it should require multiple tests on multiple devices. Or does it? Well, yes… and no! While Android Studio is bundled with the Resizable Emulator to let you test layouts manually, there’s a faster, more streamlined way to control form factors directly from your terminal. By leveraging fire-and-forget con",
-          "evidence_text": "",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
@@ -734,6 +711,29 @@
       "android_hal_relevance": 0.6,
       "ai_relevance": 0,
       "technical_depth": 0.732,
+      "warnings": []
+    },
+    {
+      "id": "gemini-6f8916deba211090",
+      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "title": "Android Developers Blog: Emulator control for adaptive app development",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Developers Blog: Emulator control for adaptive app development",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.492,
       "warnings": []
     },
     {
@@ -783,52 +783,6 @@
       "warnings": []
     },
     {
-      "id": "gemini-1abe5953d9011baf",
-      "url": "https://patchwork.libcamera.org/patch/28365/",
-      "title": "pipeline: rpi: Fix crashes due to scoring unknown formats - Patchwork",
-      "published_at": "2026-09-23",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "pipeline: rpi: Fix crashes due to scoring unknown formats - Patchwork",
-          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>pipeline: rpi: Fix crashes due to scoring unknown formats - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "d358f6fec93ac192",
-      "url": "https://patchwork.libcamera.org/patch/28365/",
-      "title": "pipeline: rpi: Fix crashes due to scoring unknown formats",
-      "published_at": "2026-09-23",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Patch under review on the project patch tracker (submitted by Jai Luthra); state new, a proposed change not yet landed.",
-          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>pipeline: rpi: Fix crashes due to scoring unknown formats - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.27,
-      "android_hal_relevance": 0.27,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.458,
-      "warnings": []
-    },
-    {
       "id": "43e0e16b6f415ed8",
       "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
       "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
@@ -849,6 +803,98 @@
       "android_hal_relevance": 0.6,
       "ai_relevance": 0.5,
       "technical_depth": 0.688,
+      "warnings": []
+    },
+    {
+      "id": "gemini-a8cd06df28457612",
+      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.492,
+      "warnings": []
+    },
+    {
+      "id": "eff05b8438968671",
+      "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+      "title": "Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
+      "published_at": "Thu, 17 Sep 2026 19:00:00 +0000",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Posted by Maunik Shah, Staff Software Engineer, Alec Garcia, Software Engineer, and Joseph Yong, Technical Program Manager At Android, we are constantly working to provide developers and enterprise partners with the data they need to keep devices protected. Today, we're thrilled to announce the stable release of the AndroidX Security State version 1.1.0 and Security State Provider version 1.0.0 libraries which provides a centralized mechanism designed to bring further transparency to the compreh",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.54,
+      "android_hal_relevance": 0.54,
+      "ai_relevance": 0,
+      "technical_depth": 0.574,
+      "warnings": []
+    },
+    {
+      "id": "gemini-c23c1f248651df56",
+      "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+      "title": "Android Developers Blog: Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Developers Blog: Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.492,
+      "warnings": []
+    },
+    {
+      "id": "c7dc6fb35d697d90",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "title": "1.6.2",
+      "published_at": "August 26, 2026",
+      "source_type": "release_note_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "1.6.2",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"it-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.6,
+      "android_hal_relevance": 0.6,
+      "ai_relevance": 0,
+      "technical_depth": 0.552,
       "warnings": []
     }
   ]

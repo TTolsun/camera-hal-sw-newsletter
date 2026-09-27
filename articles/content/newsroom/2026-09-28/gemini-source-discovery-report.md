@@ -2,9 +2,9 @@
 
 ## 최종 판단
 
-- 상태: 검토 가능
-- 편집장 액션: merged 후보를 확인한 뒤 03 final newsletter generation으로 진행할 수 있습니다.
-- 가장 먼저 볼 항목: 13개 publishable 후보가 있습니다.
+- 상태: 검토 필요
+- 편집장 액션: parser/source feedback을 확인하고 후보 보강 여부를 판단하세요.
+- 가장 먼저 볼 항목: parser/source feedback warning이 있습니다. parser_gap_count=0
 
 ## 이번 PR 요약
 
@@ -34,19 +34,19 @@
 | 항목 | 값 | 판단 |
 | --- | --- | --- |
 | manual 후보 | 40 | 입력 |
-| Gemini 후보 | 16 | 실행됨 |
+| Gemini 후보 | 19 | 실행됨 |
 | Gemini 신규 unique 후보 | 0 | 없음 |
-| Gemini publishable 후보 | 13 | 있음 |
-| linked evidence 파생 후보 | 25 | 있음 |
+| Gemini publishable 후보 | 12 | 있음 |
+| linked evidence 파생 후보 | 26 | 있음 |
 | linked 파생 publishable 후보 | 0 | 없음 |
 | seed 후보 | 0 | 없음 |
 | seed 신규 unique 후보 | 0 | 없음 |
 | seed publishable 후보 | 0 | 없음 |
-| 중복 후보 | 16 | 확인 필요 |
+| 중복 후보 | 19 | 확인 필요 |
 | parser gap | 0 | 없음 |
-| Gemini parser failure | 0 | 없음 |
+| Gemini parser failure | 3 | 보강 필요 |
 | rejected: duplicate_source | 1 | 이미 수집된 후보와 중복 |
-| rejected: other | 3 | 기타 확인 필요 |
+| rejected: parser_gap | 3 | source extraction 보강 필요 |
 
 ## 상세 report
 
