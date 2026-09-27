@@ -69,7 +69,7 @@ test('renders each draft with its run count, action, and source id', () => {
   const section = renderSourceFollowupIssues(root, date);
 
   assert.match(section, /^## 소스 후속 이슈 초안$/m);
-  assert.match(section, /10회 연속 실행에서 붙은 소스입니다/);
+  assert.match(section, /같은 소스에 같은 권고가 10회 연속 실행에서 붙었거나/);
   assert.match(section, /articles\/content\/newsroom\/2026-09-14\/source-followup-issues\.md/);
   assert.match(section, /^- \[Source\] 소스 유지, 파서 수정: Android Developers Latest Updates: 연속 12회, 권고 KEEP_AND_FIX_PARSER, 소스 android-developers-latest-updates$/m);
   assert.match(section, /^- \[Source\] 일반 소스 강등: Example Blog: 연속 10회, 권고 DOWNGRADE_GENERIC_SOURCE, 소스 example-blog$/m);
@@ -111,4 +111,31 @@ test('skips items that are not objects instead of throwing', () => {
 
   writeReport(root, date, { minimum_consecutive_runs: 10, items: [null], warnings: [] });
   assert.equal(renderSourceFollowupIssues(root, date), '');
+});
+
+// 실행 전체 진단(taxonomy_missing) draft는 소스가 없다. 빈 소스 목록을 "unknown"으로 찍으면
+// 리뷰어가 소스 id가 빠진 결함으로 읽는다. 범위를 그대로 적는다.
+test('renders a run-scoped draft with its scope instead of an unknown source', () => {
+  const { root, date } = newsroomRoot();
+  writeReport(root, date, {
+    minimum_consecutive_runs: 10,
+    items: [
+      {
+        scope: 'run',
+        title: '[Taxonomy] 알려진 카메라 bucket에 매핑되지 않은 카메라 후보',
+        consecutive_runs: 1,
+        recommended_action: 'ADD_MULTIMEDIA_BUCKET',
+        source_ids: []
+      },
+      item(1)
+    ],
+    warnings: []
+  });
+
+  const section = renderSourceFollowupIssues(root, date);
+
+  assert.match(section, /^- \[Taxonomy\] 알려진 카메라 bucket에 매핑되지 않은 카메라 후보: 연속 1회, 권고 ADD_MULTIMEDIA_BUCKET, 범위 실행 전체$/m);
+  assert.match(section, /실행 전체 진단 `taxonomy_missing`이 이번 실행에서 참/);
+  assert.doesNotMatch(section, /소스 unknown/);
+  assert.match(section, /^- \[Source\] 소스 유지, 파서 수정: Source 1: 연속 11회, 권고 KEEP_AND_FIX_PARSER, 소스 source-1$/m);
 });

@@ -176,14 +176,16 @@ function renderSourceFollowupIssues(root, date) {
   const items = ensureArray(report?.items).filter(item => item && typeof item === 'object');
   if (items.length === 0) return '';
   const rows = items.slice(0, MAX_SOURCE_FOLLOWUP_ROWS).map(item => {
-    const sourceIds = ensureArray(item.source_ids).join(', ') || 'unknown';
-    return `- ${valueOrUnknown(item.title)}: 연속 ${valueOrUnknown(item.consecutive_runs)}회, 권고 ${valueOrUnknown(item.recommended_action)}, 소스 ${sourceIds}`;
+    const target = item.scope === 'run'
+      ? '범위 실행 전체'
+      : `소스 ${ensureArray(item.source_ids).join(', ') || 'unknown'}`;
+    return `- ${valueOrUnknown(item.title)}: 연속 ${valueOrUnknown(item.consecutive_runs)}회, 권고 ${valueOrUnknown(item.recommended_action)}, ${target}`;
   });
   const omitted = items.length - rows.length;
   return [
     '## 소스 후속 이슈 초안',
     '',
-    `같은 소스에 같은 권고가 ${valueOrUnknown(report.minimum_consecutive_runs)}회 연속 실행에서 붙은 소스입니다. 제안이며 발행 판정을 바꾸지 않고, GitHub 이슈를 자동으로 만들지 않습니다.`,
+    `같은 소스에 같은 권고가 ${valueOrUnknown(report.minimum_consecutive_runs)}회 연속 실행에서 붙었거나, 실행 전체 진단 \`taxonomy_missing\`이 이번 실행에서 참인 항목입니다. 제안이며 발행 판정을 바꾸지 않고, GitHub 이슈를 자동으로 만들지 않습니다.`,
     `초안 전문: \`articles/content/newsroom/${date}/source-followup-issues.md\``,
     '',
     ...rows,
