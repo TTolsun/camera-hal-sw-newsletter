@@ -510,3 +510,13 @@ test('learning page keeps the wide-screen scroll margin at or above the sticky b
     `넓은 화면 scroll-margin-top(${wide}px)이 띠(${band}px) + 여유 예산(${SLACK_BUDGET_PX}px)을 넘는다 — 여유분은 요소를 아래로 굴리는 대신 뷰포트 높이를 쓴다`
   );
 });
+
+test('learning page master-rule callout uses the parchment box, not the accent tint', () => {
+  const masterRule = exactSelectorBlock(readLearningStylesheet(), '.master-rule');
+
+  // 파랑은 상호작용 요소 전용이다(DESIGN.md 단일 액센트). 강조 박스는 이슈 페이지 take 박스와 같은
+  // 파치먼트 박스 언어로 두고, 파란 틴트 배경이나 장식용 왼쪽 막대를 되살리지 않는다.
+  assertCssDeclaration(masterRule, 'background', 'var(--bg)');
+  assert.doesNotMatch(masterRule, /border-left\s*:/);
+  assert.doesNotMatch(masterRule, /--chip|--primary/);
+});

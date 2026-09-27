@@ -376,12 +376,13 @@
   font-size: 0.88rem;
 }
 
+/* 강조 박스는 이슈 페이지 take 박스와 같은 파치먼트 박스 언어를 쓴다. 파랑은 상호작용 요소 전용이라
+   파란 틴트(--chip) 배경이나 장식용 왼쪽 막대로 쓰지 않는다(DESIGN.md 단일 액센트). */
 .master-rule {
   margin-top: 18px;
   padding: 18px 20px;
-  border-left: 4px solid var(--primary);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  background: var(--chip);
+  border-radius: var(--radius-md);
+  background: var(--bg);
   color: var(--text);
   line-height: 1.55;
 }
