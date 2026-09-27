@@ -49,6 +49,7 @@ jobs:
           npm run validate:archive
           npm run validate:public
           npm run validate:url-parity
+          npm run validate:translation-parity
 
       - name: Annotate publication quality and fact-check status
         if: always()
