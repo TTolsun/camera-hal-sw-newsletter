@@ -1,5 +1,17 @@
 [
   {
+    "date": "2026-09-28",
+    "title": "Camera HAL / SW Newsletter - 2026-09-28",
+    "summary": "이번 주 뉴스레터에서는 Renesas RZ/V2H EVK 보드를 위한 Arm Mali-C55 ISP 및 IVC 하드웨어 가속 활성화 패치 제안과 Samsung S5K3T2 이미지 센서용 신규 드라이버 패치, 그리고 Intel IPU7 드라이버의 리소스 누수 방지 패치를 다룹니다. 또한 Android Studio의 개방형 AI 에이전트 통합 기능이 네이티브 개발 워크플로우에 미치는 영향을 분석합니다.",
+    "html": "newsletters/2026-09-28/index.html",
+    "md": "newsletters/2026-09-28/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ],
+    "public_contract_version": "story-v2"
+  },
+  {
     "date": "2026-09-21",
     "title": "Camera HAL / SW Newsletter - 2026-09-21",
     "summary": "이번 주 뉴스레터에서는 Linux 커널 미디어 서브시스템의 Intel IPU6 드라이버 멀티 스트림 및 메타데이터 지원 준비 패치와 Surface Pro 11의 후면 센서 방향 오류를 해결하기 위한 퀵 패치를 살펴봅니다. 또한, Claude Code 및 Codex 등 AI 기반 개발 도구의 최신 업데이트가 카메라 스택 개발 워크플로우에 미치는 영향을 분석합니다.",

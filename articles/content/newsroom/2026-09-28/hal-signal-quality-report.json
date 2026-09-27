@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "report_type": "hal_signal_quality",
+  "date": "2026-09-28",
+  "generated_at": "2026-09-27T16:01:22.793Z",
+  "status": "WARN",
+  "input_completeness": "partial",
+  "input_statuses": {
+    "shortlisted_candidates": "loaded",
+    "editor_draft": "loaded",
+    "quality_report": "loaded",
+    "source_effectiveness_report": "input_unavailable",
+    "source_quality_report": "loaded",
+    "evidence_pack_summary": "input_unavailable",
+    "merged_candidate_manifest": "loaded"
+  },
+  "inputs": {
+    "required": {
+      "shortlisted_candidates": {
+        "path": "articles/content/newsroom/2026-09-28/shortlisted-candidates.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "editor_draft": {
+        "path": "articles/content/newsroom/2026-09-28/editor-draft.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "quality_report": {
+        "path": "articles/content/newsroom/2026-09-28/quality-report.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "optional": {
+      "source_effectiveness_report": {
+        "path": "articles/content/newsroom/2026-09-28/source-effectiveness-report.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "source_quality_report": {
+        "path": "articles/content/newsroom/2026-09-28/source-quality-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "evidence_pack_summary": {
+        "path": "articles/content/newsroom/2026-09-28/evidence-pack-summary.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "merged_candidate_manifest": {
+        "path": "articles/content/collected-news/2026-09-28/merged-candidate-manifest.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "missing_required": [],
+    "unavailable_optional": [
+      "source_effectiveness_report",
+      "evidence_pack_summary"
+    ]
+  },
+  "quality_status": "PASS",
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 4,
+    "strong_signal_count": 2,
+    "usable_signal_count": 2,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 4,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 4,
+    "fallback_main_article_count": 1,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "driver_image_pipeline": 3,
+      "soc_resource_contention": 1,
+      "security_vendor_component": 1,
+      "native_tooling_workflow": 1
+    },
+    "actionability_level_counts": {
+      "measurable_test": 2,
+      "concrete_check": 2
+    },
+    "effective_actionability_level_counts": {
+      "measurable_test": 2,
+      "concrete_check": 2
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 2,
+      "usable_signal": 2
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "Renesas RZ/V2H EVK 보드를 위한 Arm Mali-C55 ISP 및 IVC 하드웨어 가속 활성화 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+      "relevance_bucket": "android",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "soc_resource_contention"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "soc_platform_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 51): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 리눅스 커널 장치 트리 변경 제안이며, Android Camera HAL API나 CTS 테스트 항목에 직접적인 영향을 주지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "Samsung S5K3T2 20메가픽셀 이미지 센서용 리눅스 커널 드라이버 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 리눅스 커널 드라이버 제안 단계이며, Android Camera HAL이나 Camera2 API 수준의 직접적인 변경 사항은 포함되어 있지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "Intel IPU7 드라이버의 장치 제거 시 ISYS 펌웨어 리소스 누수 방지 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "security_vendor_component"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "security_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (Intel IPU) (project-official, high, score 50): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 Intel IPU7 드라이버의 특정 리소스 해제 로직을 수정하는 패치 제안이며, Android Camera HAL의 공통 API나 프레임워크 동작에는 영향을 주지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "Android Studio에서 개발자 선택에 따른 다양한 AI 에이전트 통합 지원 발표",
+      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 발표는 Android Studio의 개발 도구 기능에 관한 것이며, Camera HAL API나 카메라 런타임 동작과는 직접적인 관련이 없습니다."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "selection_shortage_hint_details": [
+    {
+      "bucket": "direct_aosp_camera",
+      "severity": "high",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "No eligible direct_aosp_camera candidate is available in this pool. Check collection failures, candidate dates and source-policy blockers before attributing the gap to a parser defect."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect."
+    }
+  ],
+  "gate_boundary": {
+    "hal_signal_checks_are_observability_only": true,
+    "hal_signal_capsule_enforced_by_editor_output_contract": true,
+    "review_artifacts_preserved": true,
+    "optional_input_unavailable_is_not_pass": true
+  },
+  "close_criteria": {
+    "report_generated": true,
+    "main_article_capsule_validation": true,
+    "actionability_hard_blocker_reflected": true,
+    "generic_fallback_soc_overpromotion_tests_required": true,
+    "source_expansion_followups": [
+      "#55",
+      "#57"
+    ],
+    "historical_rewrite_followup": "#108"
+  },
+  "warnings": [
+    "Optional input_unavailable: source_effectiveness_report",
+    "Optional input_unavailable: evidence_pack_summary"
+  ]
+}
