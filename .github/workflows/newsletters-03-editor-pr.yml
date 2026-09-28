@@ -118,7 +118,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: main
@@ -199,9 +199,10 @@ jobs:
           echo "date=$DATE" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version-file: .nvmrc
+          package-manager-cache: false
           cache: npm
 
       - name: Install dependencies
@@ -247,7 +248,7 @@ jobs:
         run: npm run test
 
       - name: Restore URL summary cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: cache/news-summary
           key: news-summary-${{ runner.os }}-
@@ -421,7 +422,7 @@ jobs:
 
       - name: Save URL summary cache
         if: always() && steps.summary-cache.outputs.exists == 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: cache/news-summary
           key: news-summary-${{ runner.os }}-${{ steps.meta.outputs.date }}-${{ github.run_id }}
@@ -450,7 +451,7 @@ jobs:
 
       - name: Ensure labels
         if: steps.meta.outputs.review_pr_ready == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         continue-on-error: true
         with:
           script: |
@@ -499,7 +500,7 @@ jobs:
         # republish_blocked는 PR 생성 하나만 막는다(#1160). resolver 안에서 review_pr_ready를
         # 내리면 진단 전용 판정과 발행 상태 화해까지 함께 바뀌므로, 차단은 이 조건에서만 한다.
         if: steps.meta.outputs.review_pr_ready == 'true' && steps.meta.outputs.republish_blocked != 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           # 기본 GITHUB_TOKEN으로 만든 PR에는 GitHub이 validate-site 같은
           # on: pull_request 워크플로를 자동 실행하지 않는다(재귀 방지). 그래서
@@ -532,7 +533,7 @@ jobs:
 
       - name: Add pull request labels
         if: steps.cpr.outputs.pull-request-number != ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         continue-on-error: true
         with:
           script: |
@@ -591,7 +592,7 @@ jobs:
 
       - name: Upload newsroom debug artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: newsroom-final-debug-${{ github.run_id }}
           path: .tmp/artifact-snapshot

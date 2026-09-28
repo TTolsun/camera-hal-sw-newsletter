@@ -4,7 +4,7 @@
   "private": true,
   "description": "Gemini newsroom 자동화로 운영하는 정적 Camera HAL SW 뉴스레터 사이트.",
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "scripts": {
     "collect": "node src/shared/cli/collect-news-candidates.js",
