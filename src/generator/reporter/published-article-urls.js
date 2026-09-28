@@ -41,7 +41,7 @@ function withinSection(text) {
 /**
  * 뉴스레터 markdown 한 편에서 기사 출처 URL을 뽑는다.
  *
- * mainArticleBlocks가 브리핑(`## 1.`)·Action Items·참고자료 절을 이미 걸러 준다. 참고 절을
+ * mainArticleBlocks가 브리핑·Action Items·참고자료 절을 제목 정확 일치로 이미 걸러 준다. 참고 절을
  * 세면 안 되는 이유는 그 자리가 "이번 주에 기사로 쓰지 않은 자료"를 모아 두는 곳이라,
  * 거기 있는 URL을 발행으로 세면 실제 오탈락을 이미 실렸다고 잘못 막기 때문이다.
  *

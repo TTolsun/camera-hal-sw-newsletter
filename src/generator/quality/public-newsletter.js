@@ -5,6 +5,7 @@ const {
   publicProseLeakageIssues,
   publicUrlError
 } = require('../reporter/public-article-contract');
+const { mainArticleBlocks } = require('./rendered-issue-structure');
 
 const GENERIC_CHECKPOINT_PATTERNS = Object.freeze([
   /source URL/i,
@@ -135,23 +136,6 @@ function validatePublicSourceLinks(markdown, label) {
     }
   }
   return errors;
-}
-
-function mainArticleBlocks(markdown) {
-  const matches = [...String(markdown || '').matchAll(/^##\s+(\d+)\.\s+(.+)$/gm)];
-  const blocks = [];
-  for (let index = 0; index < matches.length; index += 1) {
-    const number = Number(matches[index][1]);
-    const title = matches[index][2].trim();
-    if (/^(?:참고자료|References)$/i.test(title)) continue;
-    if (/Action|실행/.test(title)) continue;
-    if (/이번 주|브리핑|요약/.test(title)) continue;
-    const start = matches[index].index + matches[index][0].length;
-    const end = matches[index + 1] ? matches[index + 1].index : markdown.length;
-    const text = markdown.slice(start, end);
-    blocks.push({ number, title, text });
-  }
-  return blocks;
 }
 
 function checkpointItems(articleText) {

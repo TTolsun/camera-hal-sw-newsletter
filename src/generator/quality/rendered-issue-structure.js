@@ -9,6 +9,8 @@ const {
 } = require('../../shared/common/common');
 const { isSafeExternalImageUrl, isFallbackImagePath, REJECT_PATH_PATTERN } = require('../../shared/render/image-candidates');
 const { repoLocalPath } = require('../render/article-image-resolver');
+const koLocale = require('../render/locale/ko');
+const enLocale = require('../render/locale/en');
 const {
   toLegacyEditorIssue
 } = require('../../shared/domain/newsletter-domain-normalize');
@@ -50,7 +52,6 @@ const COVERAGE_WEEK_KEY_PATTERN = /^\d{4}-W\d{2}$/;
 const COVERAGE_MODE_VALUES = ['iso_week', 'legacy_rolling', 'unverified'];
 const LEGACY_SOURCE_LABEL = '\u7570\uc496\ucfc2';
 const LEGACY_REFERENCES_LABEL = '\uf9e1\uba78\ud02c\u003f\uba2e\uc9ba';
-const LEGACY_REFERENCES_PREFIX = '\uf9e1\uba78\ud02c';
 const LEGACY_ACTION_LABEL = '\u003f\u317d\ubefe';
 
 function hasAny(content, values) {
@@ -104,20 +105,46 @@ function hasReferencesSection(markdown) {
   return new RegExp(`^##\\s+(${referencesLabelPattern})\\s*$`, 'm').test(markdown);
 }
 
+// 번호(`## N.`)가 붙었지만 기사가 아닌 절의 제목. 부분 문자열이 아니라 정확히 일치로만 거른다.
+// 부분 문자열로 거르면 제목에 "GitHub Actions"·"실행"·"요약"이 든 기사가 검사를 건너뛴다(#1185,
+// 실측: 2026-09-21호 4번 기사). 렌더러가 찍는 제목은 locale 상수에서 그대로 가져와 어긋나지 않게 한다.
+// 번호로 거르지는 않는다: 브리핑을 번호 없이 찍던 형식에서는 `## 1.`이 첫 기사다
+// (public-newsletter-validator.test.js의 "checks rendered markdown article 1").
+const NON_ARTICLE_NUMBERED_TITLES = new Set([
+  // 렌더러가 `## 1.`로 찍는 브리핑(newsletter-renderer.js briefingHeading).
+  koLocale.briefing,
+  koLocale.weeklyBriefing,
+  enLocale.briefing,
+  enLocale.weeklyBriefing,
+  // 옛 판정기(validate-site·public-newsletter의 로컬 정의)가 거르던 비기사 제목.
+  koLocale.references,
+  enLocale.references,
+  LEGACY_REFERENCES_LABEL,
+  'Action Items',
+  '실행 항목',
+  LEGACY_ACTION_LABEL
+]);
+
+/**
+ * 렌더된 뉴스레터 markdown에서 본문 기사 블록을 뽑는 정본 판정이다. 발행 검증(validate-site),
+ * 생성 시점 terminal contract, 공개 본문 검사(public-newsletter), 게재 이력(published-article-urls)이
+ * 모두 이 함수를 쓴다 — 검사마다 다른 기사 집합을 보지 않게 하려는 것이다.
+ *
+ * @param {string} markdown newsletter.md 전문
+ * @returns {{heading: string, number: number, title: string, text: string}[]}
+ */
 function mainArticleBlocks(markdown) {
-  const matches = [...markdown.matchAll(/^##\s+(\d+)\.\s+(.+)$/gm)];
+  const content = String(markdown || '');
+  const matches = [...content.matchAll(/^##\s+(\d+)\.\s+(.+)$/gm)];
   const blocks = [];
   for (let i = 0; i < matches.length; i += 1) {
-    const index = Number(matches[i][1]);
     const title = matches[i][2].trim();
-    if (index <= 1) continue;
-    if (/Action Items/i.test(title) || title.includes('Action') || title.includes('실행') || title.includes(LEGACY_ACTION_LABEL)) continue;
-    if (/^References$/i.test(title) || title.includes('참고자료') || title.includes(LEGACY_REFERENCES_PREFIX)) continue;
+    if (NON_ARTICLE_NUMBERED_TITLES.has(title)) continue;
 
     const start = matches[i].index + matches[i][0].length;
     const nextMatch = matches[i + 1];
-    const end = nextMatch ? nextMatch.index : markdown.length;
-    blocks.push({ heading: matches[i][0], title, text: markdown.slice(start, end) });
+    const end = nextMatch ? nextMatch.index : content.length;
+    blocks.push({ heading: matches[i][0], number: Number(matches[i][1]), title, text: content.slice(start, end) });
   }
   return blocks;
 }
