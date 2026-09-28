@@ -3,8 +3,10 @@ const path = require('path');
 const { LLM_STAGES, stageRun } = require('../../shared/llm/stage-catalog');
 const {
   callLlmJson,
+  getLlmCostCalls,
   getLlmDiagnostics
 } = require('../../shared/llm/llm-client');
+const { mergeStageCallsIntoCostReport } = require('../publish/cost-report-writer');
 const {
   newsroomDir,
   newsroomRelPath
@@ -183,6 +185,23 @@ function renderMarkdown(report) {
   return `${lines.join('\n')}\n`;
 }
 
+// judge는 generate와 다른 프로세스라 generate의 cost report에 호출이 실리지 않는다(#1203).
+// 비용 기록은 warning-only 회계이므로, 기록 실패가 judge 판정(통과·실패)을 바꾸지 않게 경고로만 남긴다.
+function recordJudgeCost(date) {
+  const calls = getLlmCostCalls();
+  if (calls.length === 0) return;
+  try {
+    mergeStageCallsIntoCostReport({
+      date,
+      stageId: LLM_STAGES.POST_GENERATION_QUALITY_JUDGE.id,
+      calls,
+      rootDir: root
+    });
+  } catch (error) {
+    console.warn(`[cost] Failed to add post-generation judge calls to the cost report: ${error.message}`);
+  }
+}
+
 async function validateLlmPublicationQuality(options = {}) {
   const date = options.date || targetDate();
   if (!date) {
@@ -210,17 +229,24 @@ async function validateLlmPublicationQuality(options = {}) {
     fallback_public_ready: status.fallback_public_ready ?? null,
     homepage_badge: status.homepage_badge || ''
   };
-  const raw = await callLlmJson(
-    stageRun(LLM_STAGES.POST_GENERATION_QUALITY_JUDGE),
-    systemInstruction(),
-    promptFor(date, {
-      markdown,
-      html,
-      entry: newsletterEntry(date),
-      statusSummary
-    }),
-    publicationQualitySchema
-  );
+  let raw;
+  try {
+    raw = await callLlmJson(
+      stageRun(LLM_STAGES.POST_GENERATION_QUALITY_JUDGE),
+      systemInstruction(),
+      promptFor(date, {
+        markdown,
+        html,
+        entry: newsletterEntry(date),
+        statusSummary
+      }),
+      publicationQualitySchema,
+      options.provider ? { provider: options.provider } : {}
+    );
+  } finally {
+    // 판정 결과와 무관하게, 나간 judge 호출을 generate cost report에 합친다(#1203).
+    recordJudgeCost(date);
+  }
   const report = normalizeReport(raw, date);
   const reportPath = path.join(newsroomDir(root, date), 'llm-publication-quality-report.json');
   const markdownReportPath = path.join(newsroomDir(root, date), 'llm-publication-quality-report.md');
