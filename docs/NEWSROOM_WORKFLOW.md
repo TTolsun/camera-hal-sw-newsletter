@@ -255,7 +255,9 @@ generator는 `articles/content/newsroom/YYYY-MM-DD/summary-cache-report.json`, `
 
 비용 artifact는 provider-neutral한 LLM 비용 리포트입니다. Gemini provider에서는 Gemini usage metadata와 local pricing table로 estimated cost를 계산하고, internal provider는 pricing table이 없으면 `estimated_cost_usd=null`과 pricing warning을 남깁니다.
 
-Gemini 호출이 성공적으로 응답을 반환하면 generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `articles/content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
+Gemini 호출이 응답을 반환하면(JSON 파싱에 실패한 응답 포함) generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `articles/content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
+
+post-generation judge(`npm run validate:post-generation`)는 generate와 다른 프로세스에서 돌기 때문에, judge 호출 뒤 판정 통과·실패와 관계없이 generate가 남긴 `.tmp/newsroom-cost-report.json`에 자기 호출을 더해 두 파일을 다시 씁니다. 같은 stage의 이전 judge 호출은 빼고 더하므로 다시 돌려도 쌓이지 않습니다. `.tmp` 리포트가 없거나 날짜가 다르면 judge 호출만으로 불완전한 리포트를 쓰지 않도록 건너뛰고 경고만 남깁니다.
 
 Gemini request에는 stage별 thinking budget(추론 예산)과 temperature를 적용합니다. thinking budget 기본값은 stage별로 reporter `512`, editor/completion `1024`, repair `1024`, fact-check `2048`, judge `1024`, scoring `0`입니다. editor/fact-check/judge에서 thinking budget을 켜면 하루 약 12K thinking 토큰이 추가되는데, Gemini 2.5 가격 기준으로 수 센트 수준입니다. 이는 fact-check 정확도와 publication-ready 판정의 신뢰도가 올라가는 것으로 정당화됩니다. 비용이 예상을 넘으면 `GEMINI_THINKING_BUDGET_JUDGE=0` 같은 env override로 코드 변경 없이 바로 조정할 수 있습니다.
 

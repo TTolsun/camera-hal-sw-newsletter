@@ -5,7 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const { writeJson } = require('../../shared/common/common');
 const { readRuntimeConfig } = require('../../shared/common/runtime-config');
-const { getLastLlmModelForStage, buildCostReport, buildCostReportMarkdown, getLlmCostCalls } = require('../../shared/llm/llm-client');
+const { getLastLlmModelForStage, buildCostReport, getLlmCostCalls } = require('../../shared/llm/llm-client');
+const { writeCostReportFiles } = require('./cost-report-writer');
 const { LLM_STAGES } = require('../../shared/llm/stage-catalog');
 const { toEditorDraftArtifact } = require('../../shared/domain/newsletter-domain-normalize');
 const { buildMarkdown, buildFactCheckMarkdown } = require('../render/newsletter-renderer');
@@ -128,22 +129,7 @@ function writeCostReport(date, rootDir = root) {
     warnCostUsd: runtimeConfig.newsroomWarnCostUsd,
     maxCostUsd: runtimeConfig.newsroomMaxCostUsd
   });
-  const tmpDir = path.join(rootDir, '.tmp');
-  fs.mkdirSync(tmpDir, { recursive: true });
-  fs.writeFileSync(
-    path.join(tmpDir, 'newsroom-cost-report.json'),
-    `${JSON.stringify(report, null, 2)}\n`,
-    'utf8'
-  );
-
-  const targetNewsroomDir = artifactNewsroomDir(rootDir, date);
-  if (fs.existsSync(targetNewsroomDir)) {
-    fs.writeFileSync(
-      path.join(targetNewsroomDir, 'cost-report.md'),
-      buildCostReportMarkdown(report),
-      'utf8'
-    );
-  }
+  writeCostReportFiles(report, date, rootDir);
 
   for (const warning of ensureArray(report.warnings)) {
     console.warn(`[cost] ${warning}`);
