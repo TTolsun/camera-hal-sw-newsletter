@@ -796,6 +796,50 @@ function weeklyObservationChangedArtifacts(date) {
     ]);
 }
 
+// 정상인 이전 주간 파일과 오래된 ready 값이 이번 실행의 쓰기 실패를 가릴 수 없다.
+for (const previousWeeklyExists of [false, true]) {
+  test('weekly output failure stays diagnostics-only (previous weekly=' + previousWeeklyExists + ')', () => {
+    const root = fsTempRoot('weekly-output-failed');
+    const date = '2026-09-07';
+    writeMinimalPublishArtifacts(root, date, { status: {
+      weekly_output_status: 'failed',
+      weekly_output_failure_reason: 'mixed story contract',
+      final_publish_ready: true,
+      normal_public_ready: true,
+      automatic_publish_ready: true,
+      public_artifact_ready: true,
+      fallback_public_ready: true,
+      review_publication_ready: true,
+      publication_mode: 'normal_public',
+      homepage_visibility: 'normal'
+    } });
+    writePublicNewsletterArtifacts(root, date);
+    writeArchiveSyncSurface(root);
+    if (previousWeeklyExists) stageWeeklyIssueForObservation(root, date);
+    const changedArtifacts = weeklyObservationChangedArtifacts(date);
+    const resolved = resolveReviewableArtifacts({ root, changedArtifacts });
+    assert.equal(resolved.publicStructure.ok, true);
+    assert.equal(resolved.weeklyStructure.status, previousWeeklyExists ? 'ok' : 'not_written');
+    for (const key of ['publicNewsletterReady', 'reviewPublicationReady', 'homepageVisibleAfterMerge',
+      'normalPublicReady', 'automaticPublishReady', 'publicArtifactReady', 'fallbackPublicReady']) {
+      assert.equal(resolved[key], false, key);
+    }
+    assert.equal(resolved.reviewPrReady, true);
+    assert.equal(resolved.diagnosticsOnly, true);
+    assert.match(resolved.publicNewsletterReason, /weekly output failed: mixed story contract/);
+    const ensured = ensurePublicNewsletterArtifacts({ root, date, changedArtifacts });
+    assert.equal(ensured.outputs.public_newsletter_ready, 'false');
+    assert.equal(ensured.outputs.diagnostics_only, 'true');
+    assert.equal(ensured.outputs.homepage_visible_after_merge, 'false');
+    const status = JSON.parse(fs.readFileSync(path.join(root, 'articles/content/newsroom', date, 'generation-status.json'), 'utf8'));
+    assert.equal(status.weekly_output_status, 'failed');
+    assert.equal(status.weekly_output_failure_reason, 'mixed story contract');
+    assert.equal(status.public_state, 'DIAGNOSTICS_ONLY');
+    const entries = JSON.parse(fs.readFileSync(path.join(root, 'articles/data/newsletters.json'), 'utf8'));
+    assert.equal(entries.some(entry => entry.date === date), false);
+  });
+}
+
 test('a broken weekly page blocks the publish decision (#1142)', () => {
   const date = '2026-09-07';
 

@@ -357,6 +357,8 @@ function resolveReviewableArtifacts(options = {}) {
   const weeklyStructureBlocked =
     weeklyStructure.status === 'errors' ||
     weeklyStructure.status === 'check_failed';
+  // 기존 주간 페이지가 정상이어도 이번 실행의 쓰기 실패를 가릴 수 없다.
+  const weeklyOutputFailed = status.weekly_output_status === 'failed';
   const newsletterIndex = newsletterIndexDateStatus(root, date);
   const changedArtifacts = Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')
     ? relevantChangedArtifacts(options.changedArtifacts, date)
@@ -459,6 +461,7 @@ function resolveReviewableArtifacts(options = {}) {
     newsletterIndex.pathsMatch === true;
   const missingChangedPublicArtifacts = requiredPublicArtifacts.filter(filePath => !changedArtifacts.includes(filePath));
   const publicNewsletterReasons = [
+    weeklyOutputFailed ? `weekly output failed: ${status.weekly_output_failure_reason || 'unknown'}` : '',
     ...publicStructure.errors,
     missingChangedPublicArtifacts.length > 0
       ? `required public files not changed: ${missingChangedPublicArtifacts.join(',')}`
@@ -471,7 +474,8 @@ function resolveReviewableArtifacts(options = {}) {
     hasRequiredPublicNewsletterFiles &&
     publicStructure.ok &&
     missingChangedPublicArtifacts.length === 0 &&
-    !weeklyStructureBlocked;
+    !weeklyStructureBlocked &&
+    !weeklyOutputFailed;
   if (publicNewsletterReady) {
     hasReviewableArtifacts = true;
   }
@@ -496,7 +500,7 @@ function resolveReviewableArtifacts(options = {}) {
   const diagnosticsOnly = reviewPrReady && !publicNewsletterReady;
   const reviewOnly = diagnosticsOnly;
   const publishCandidateReady = publicNewsletterReady;
-  const hasAiPublishReady = isTrue(status.final_publish_ready);
+  const hasAiPublishReady = !weeklyOutputFailed && isTrue(status.final_publish_ready);
   const hasPublishCandidate = publicNewsletterReady;
   const reviewPublicationReady =
     publicNewsletterReady &&
@@ -507,10 +511,10 @@ function resolveReviewableArtifacts(options = {}) {
     publicNewsletterReady &&
     newsletterIndex.hasDate === true &&
     newsletterIndex.pathsMatch === true;
-  const fallbackPublicReady = isTrue(status.fallback_public_ready);
+  const fallbackPublicReady = !weeklyOutputFailed && isTrue(status.fallback_public_ready);
   const fallbackOnly = isTrue(status.fallback_only);
   const cameraAnchorCount = numberOrNull(status.camera_anchor_count);
-  const publicationMode = status.publication_mode ||
+  const publicationMode = (weeklyOutputFailed ? PUBLICATION_MODES.DIAGNOSTICS_ONLY : status.publication_mode) ||
     (diagnosticsOnly
       ? PUBLICATION_MODES.DIAGNOSTICS_ONLY
       : fallbackPublicReady
@@ -518,7 +522,7 @@ function resolveReviewableArtifacts(options = {}) {
         : hasAiPublishReady
           ? PUBLICATION_MODES.NORMAL_PUBLIC
           : PUBLICATION_MODES.REVIEW_ONLY);
-  const homepageVisibility = status.homepage_visibility ||
+  const homepageVisibility = (weeklyOutputFailed ? HOMEPAGE_VISIBILITY.HIDDEN : status.homepage_visibility) ||
     (diagnosticsOnly
       ? HOMEPAGE_VISIBILITY.HIDDEN
       : publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC
@@ -526,9 +530,9 @@ function resolveReviewableArtifacts(options = {}) {
         : homepageVisibleAfterMerge
           ? HOMEPAGE_VISIBILITY.NORMAL
           : HOMEPAGE_VISIBILITY.HIDDEN);
-  const normalPublicReady = isTrue(status.normal_public_ready) || (hasAiPublishReady && publicNewsletterReady);
-  const automaticPublishReady = isTrue(status.automatic_publish_ready) || normalPublicReady;
-  const publicArtifactReady = isTrue(status.public_artifact_ready) || publicNewsletterReady;
+  const normalPublicReady = !weeklyOutputFailed && (isTrue(status.normal_public_ready) || (hasAiPublishReady && publicNewsletterReady));
+  const automaticPublishReady = !weeklyOutputFailed && (isTrue(status.automatic_publish_ready) || normalPublicReady);
+  const publicArtifactReady = !weeklyOutputFailed && (isTrue(status.public_artifact_ready) || publicNewsletterReady);
   const homepageBadge = status.homepage_badge || (publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC ? FALLBACK_HOMEPAGE_BADGE : '');
   const publicationContractErrors = [];
   if (publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC) {

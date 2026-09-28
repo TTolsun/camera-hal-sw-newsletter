@@ -255,9 +255,8 @@ test('심층 구현 오류는 공개 산출물을 기록한 뒤 그대로 전파
   }, { deepDiveThrows: new Error('deep-dive-topic-queue 파일이 손상됐습니다(state/deep-dive-topic-queue.json)') });
 });
 
-// weekly 기록 자체가 실패한 주에는 등록할 위클리 파일이 없다. 그 상태에서 심층까지 돌리면
-// 부가 기능이 실패한 주를 한 번 더 흔든다 — 기존 weekly 실패 처리(데일리 계속)는 그대로 둔다.
-test('weekly 기록이 실패하면 심층을 돌리지 않고 데일리 산출물로 계속 간다', async () => {
+// 주간 출력 실패 시 심층을 실행하지 않고 진단에 필요한 산출물을 보존한다.
+test('weekly 기록이 실패하면 심층을 돌리지 않고 진단용 산출물을 보존한다', async () => {
   await withStubbedCollaborators(async (decide, calls) => {
     const newsroomDir = tempRoot('publish-decision-newsroom-');
     const newsletterDir = tempRoot('publish-decision-newsletter-');
@@ -265,6 +264,8 @@ test('weekly 기록이 실패하면 심층을 돌리지 않고 데일리 산출�
 
     assert.equal(calls.weekly, 1);
     assert.equal(calls.deepDive.length, 0);
+    assert.equal(out.validateResult.ok, false);
+    assert.equal(calls.selectionStatusExtraOptions[0].finalPublishReady, false);
     assert.ok(fs.existsSync(path.join(newsletterDir, 'newsletter.md')));
     assert.ok(out.files.includes('articles/newsletters/2026-05-08/newsletter.md'));
     assert.equal(out.files.some(file => /newsletters\/weekly/.test(file)), false);
@@ -275,7 +276,7 @@ test('weekly 기록이 실패하면 심층을 돌리지 않고 데일리 산출�
 // 정책은 "거부"다. 그 거부는 render 진입의 계약 패밀리 검사(T5/#889)가 내리고 weekly writer가
 // 그대로 전파한다. 문제는 아래 catch가 실행을 계속시키느라 사유를 stderr 한 줄로만 남겨,
 // 커밋되는 산출물에는 "weekly가 왜 빠졌는지"가 전혀 남지 않았다는 것이다.
-// 발행 실패 의미론은 그대로 둔 채(계속 진행, 게이트 판정 불변) 사유만 값으로 남긴다.
+// 거부 사유를 남기고 발행 검증 실패 경로로 보낸다.
 test('혼합 stamp로 거부된 weekly 기록의 사유가 generation-status에 값으로 남는다', async () => {
   const mixedStampRejection = 'newsletter-renderer: refusing to render an unsupported story contract — '
     + 'story_contract_version_family_mismatch(public_contract_version=2 generation_contract_version=2 story_contract_version=1)';
@@ -291,16 +292,19 @@ test('혼합 stamp로 거부된 weekly 기록의 사유가 generation-status에 
     assert.equal(recorded.weekly_output_status, 'failed');
     assert.equal(recorded.weekly_output_failure_reason, mixedStampRejection);
 
-    // 이 PR의 핵심 주장을 직접 잠근다: weekly 거부가 발행 게이트 판정에 새지 않는다.
+    // 주간 출력 거부는 발행을 차단한다.
     // finalPublishReady는 selectionStatusExtra 스텁이 {}를 돌려주는 탓에 artifact에는
     // 실리지 않아, 그 협력자에 넘어간 입력으로만 관측할 수 있다.
-    assert.equal(calls.selectionStatusExtraOptions[0].finalPublishReady, true);
+    assert.equal(calls.selectionStatusExtraOptions[0].finalPublishReady, false);
+    assert.equal(calls.selectionStatusExtraOptions[0].publishGatePassed, false);
+    assert.equal(calls.runValidate, 0);
 
-    // 게이트 판정은 불변이다 — 무관한 이유로 실패한 weekly 출력이 실행 전체를 죽이면 안 된다.
+    // 품질 결과는 보존하고 기존 validation 실패 경로로 진단 PR을 만든다.
     assert.equal(out.generationStatus, 'PASS');
     assert.equal(out.failureKind, '');
-    assert.equal(out.validateResult.ok, true);
-    assert.equal(recorded.validate_ok, true);
+    assert.equal(out.validateResult.ok, false);
+    assert.ok(out.validateResult.text.includes(mixedStampRejection));
+    assert.equal(recorded.validate_ok, false);
     assert.equal(recorded.public_output_expected, true);
     assert.deepEqual(out.files, [
       'articles/content/newsroom/2026-05-08/shortlisted-candidates.json',
@@ -312,11 +316,7 @@ test('혼합 stamp로 거부된 weekly 기록의 사유가 generation-status에 
   }, { weeklyThrows: new Error(mixedStampRejection) });
 });
 
-// M1(#934 리뷰): weekly upsert가 coverage mismatch로 거부돼 weeklyOutputStatus가 'failed'로
-// 남으면, 나머지 조건이 전부 강한 PASS(finalPublishReady=true)라도 편집자 검토를 강제로 켠다.
-// 위 '혼합 stamp' 테스트가 보여주듯 이 실패는 기존 try/catch에 잡혀 데일리 발행을 막지
-// 않는데, 그 상태를 finalEditorReviewRequired가 놓치면 mismatch가 조용히 finalPublishReady=true
-// 뒤에 숨어 사람 검토 없이 나갈 수 있었다(carryForwardNeedsReview와 같은 방식으로 OR).
+// 대상 주 불일치도 다른 검사가 통과했는지와 관계없이 발행 차단과 검토를 요구한다.
 test('weekly 기록이 coverage mismatch로 실패하면 강한 PASS 입력에서도 editor_review_required를 강제로 켠다', async () => {
   await withStubbedCollaborators(async (decide, calls) => {
     const newsroomDir = tempRoot('publish-decision-newsroom-');
@@ -325,8 +325,9 @@ test('weekly 기록이 coverage mismatch로 실패하면 강한 PASS 입력에�
 
     assert.equal(calls.selectionStatusExtraOptions.length, 1);
     const options = calls.selectionStatusExtraOptions[0];
-    // finalPublishReady·공개 산출물 기록은 이 게이트가 손대지 않는다(carry-forward 게이트와 동일 원칙).
-    assert.equal(options.finalPublishReady, true);
+    // coverage mismatch는 편집자 검토와 함께 발행 차단을 요구한다.
+    assert.equal(options.finalPublishReady, false);
+    assert.equal(out.validateResult.ok, false);
     assert.equal(options.editorReviewRequired, true);
     assert.equal(out.generationStatusArtifact.weekly_output_status, 'failed');
   }, { weeklyThrows: new Error('weekly upsert coverage mismatch: article_count=3 weekly_theme_ids=2') });
@@ -349,6 +350,9 @@ test('weekly가 기록된 주는 부가 산출물이 실패해도 written으로 
     const recorded = calls.writeGenerationStatus[0];
     assert.equal(recorded.weekly_output_status, 'written');
     assert.notEqual(recorded.weekly_output_failure_reason, '');
+    // 주간 파일은 성공했고 부가 리포트만 실패했다. failed 상태와 구분한다.
+    assert.equal(out.validateResult.ok, true);
+    assert.equal(calls.selectionStatusExtraOptions[0].finalPublishReady, true);
 
     // weekly가 실제로 기록됐다는 증거 — 상태는 바로 이 값에서 파생돼야 한다.
     assert.ok(out.files.includes('articles/newsletters/weekly/x/index.html'));

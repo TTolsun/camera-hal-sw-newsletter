@@ -45,10 +45,8 @@ function carryForwardStatusLine(status) {
   return `${base} — 경고: carry-forward가 이번 주 후보 풀을 완전히 채우지 못했습니다. 편집자 검토가 강제로 켜졌습니다.`;
 }
 
-// weekly_output_status는 관측용 값이라 발행 게이트(finalPublishReady/failureKind)에는 안 들어간다
-// (#873). 그래도 위클리 index/issue upsert가 실패했다면 편집자가 generation-status.json을 따로
-// 열어보지 않고도 이 PR 본문만으로 알 수 있어야 한다 — 'written'/'skipped' 등 정상 값일 때는
-// 노이즈를 늘리지 않도록 실패일 때만 사유를 붙인다.
+// 주간 출력 실패는 발행을 차단한다. PR 본문에도 원인을 표시한다.
+// 부가 리포트만 실패한 written 상태와 구분하도록 상태값으로 판정한다.
 function weeklyOutputStatusLine(status) {
   const weeklyStatus = String(status.weekly_output_status || '');
   if (!weeklyStatus) return '';
