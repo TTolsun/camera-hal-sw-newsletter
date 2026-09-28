@@ -91,11 +91,8 @@ async function decidePublishReadinessAndWriteStatus({
   const shouldWritePublicArtifacts = !editorialReviewable;
   let weeklyArtifactFiles = [];
   let weeklyFinalArticles = [];
-  // #873: 아래 catch는 데일리 발행을 지키려고 실행을 계속시킨다. 그래서 weekly 계약 거부
-  // (혼합 stamp를 막는 render 패밀리 검사, 인덱스 계약 버전 판정)가 stderr 한 줄로 사라지고,
-  // 커밋되는 산출물에는 weekly가 왜 빠졌는지가 남지 않았다. 결과를 값으로 들고 나가
-  // generation-status에 기록한다. 'not_attempted'(reviewable이라 weekly를 아예 안 씀)와
-  // 'failed'(쓰려다 거부됨)를 구분해야 "이번 주는 원래 없다"와 "빠졌다"가 갈린다.
+  // 주간 출력 실패는 사유를 기록한 뒤 발행 검증 실패로 처리한다.
+  // not_attempted는 편집 검토 경로, failed는 실제 주간 쓰기 실패다.
   let weeklyOutputStatus = 'not_attempted';
   let weeklyOutputFailureReason = '';
   // 주간 에디터 레터 채택 결과(T10, #853). weekly_output_status와 같은 이유로 값으로 들고
@@ -108,7 +105,7 @@ async function decidePublishReadinessAndWriteStatus({
     updateNewsletterData(date, editor);
     // 추가 weekly 출력(#486~#490): publish-ready일 때만 weekly 디렉터리 페이지/별도 인덱스를 생성하고,
     // 같은 주 안의 중복 기사는 LLM이 append/merge/reject로 결정하며 merge는 검증 통과 시에만 교체한다.
-    // 데일리 산출물은 위에서 이미 기록했으므로, weekly 실패가 데일리 실행을 깨지 않도록 try/catch로 감싼다.
+    // 실패 사유를 보존하고 아래 발행 검증에서 진단 전용 경로로 보낸다.
     try {
       const weeklyMerge = buildWeeklyMergeResolver({
         callLlmJson,
@@ -174,9 +171,12 @@ async function decidePublishReadinessAndWriteStatus({
         ok: false,
         text: `${FAILURE_KIND_EDITORIAL_REVIEWABLE}: skipped public validation because this review PR is not publishable.`
       }
-    : runValidate();
+    : weeklyOutputStatus === 'failed'
+      ? { ok: false, text: `Weekly newsletter output failed: ${weeklyOutputFailureReason || 'No weekly artifacts were written.'}` }
+      : runValidate();
   const finalPublishReady =
     !editorialReviewable &&
+    weeklyOutputStatus === 'written' &&
     shortlistReport.publish_ready === true &&
     ensureArray(editor.sections).length >= articlePolicy.mainArticleCount.min &&
     ensureArray(editor.sections).length <= articlePolicy.mainArticleCount.max &&
@@ -197,9 +197,7 @@ async function decidePublishReadinessAndWriteStatus({
   // 나온 결과가 아닐 수 있다는 신호를 조용히 finalPublishReady=true 뒤에 숨기지 않는다.
   const carryForwardNeedsReview =
     ['missing_expected', 'invalid', 'overflow'].includes(shortlistReport.carry_forward_status);
-  // weekly upsert가 계약 4(coverage mismatch)로 거부되면 weeklyOutputStatus가 'failed'로
-  // 남는다(147행). carryForwardNeedsReview와 같은 방식으로 무조건 OR해 finalPublishReady=true
-  // 뒤에 조용히 숨지 않게 하고 사람 검토를 강제한다.
+  // 주간 쓰기 실패는 발행 차단과 편집자 검토를 함께 요구한다.
   const finalEditorReviewRequired =
     carryForwardNeedsReview ||
     weeklyOutputStatus === 'failed' ||
@@ -239,10 +237,8 @@ async function decidePublishReadinessAndWriteStatus({
       validate_ok: validateResult.ok,
       failure_kind: failureKind,
       public_output_expected: shouldWritePublicArtifacts,
-      // #873: weekly 기록 결과와 거부 사유. 관측용 값이라 발행 게이트 판정
-      // (finalPublishReady/failureKind/files)에는 들어가지 않는다.
-      // 사유는 status와 독립이다: 'written'이어도 부가 산출물 실패가 실릴 수 있으므로,
-      // 실패 판정은 항상 weekly_output_status로 한다.
+      // 주간 기록 실패는 발행 차단 사유다. written 상태의 부가 리포트 실패는
+      // 사유만 남기므로 failure_reason만으로 실패를 판정하지 않는다.
       weekly_output_status: weeklyOutputStatus,
       weekly_output_failure_reason: weeklyOutputFailureReason,
       // 주간 에디터 레터 채택 결과(T10, #853). 관측용 값이라 발행 게이트 판정에는 안 들어간다.
