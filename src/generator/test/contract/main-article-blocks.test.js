@@ -179,7 +179,11 @@ test('validate-site catches a missing source on articles whose titles contain Ac
       env: { ...process.env, GITHUB_EVENT_NAME: '', GITHUB_BASE_REF: '' }
     });
 
-    assert.match(result.stderr, new RegExp(`article has no source entries: ## 3\\. ${title}`), title);
+    // validate-site는 같은 오류를 두 경로에서 낸다: 구조 검사(validateRenderedIssueStructure)와
+    // 자체 기사 품질 검사(validateArticleQuality). 한 번만 보면 validate-site 고유 경로가 기사를
+    // 빠뜨려도 통과하므로 두 번 모두 나오는지 센다.
+    const occurrences = result.stderr.match(new RegExp(`article has no source entries: ## 3\\. ${title}`, 'g')) || [];
+    assert.equal(occurrences.length, 2, `${title}\n${result.stderr}`);
   }
 });
 

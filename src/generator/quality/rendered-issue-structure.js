@@ -116,7 +116,7 @@ const NON_ARTICLE_NUMBERED_TITLES = new Set([
   koLocale.weeklyBriefing,
   enLocale.briefing,
   enLocale.weeklyBriefing,
-  // 과거 호가 번호를 붙여 찍던 비기사 절.
+  // 옛 판정기(validate-site·public-newsletter의 로컬 정의)가 거르던 비기사 제목.
   koLocale.references,
   enLocale.references,
   LEGACY_REFERENCES_LABEL,
