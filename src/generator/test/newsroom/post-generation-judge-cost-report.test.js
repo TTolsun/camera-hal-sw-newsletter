@@ -4,6 +4,12 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
+// llm-client는 로드 시점에 재시도 설정과 raw output 경로를 읽는다. invalid JSON 재시도 테스트가
+// 기다리지 않고, raw output이 저장소 .tmp에 남지 않도록 먼저 정한다.
+process.env.GEMINI_MAX_RETRIES = '1';
+process.env.GEMINI_RETRY_DELAYS_MS = '0';
+process.env.LLM_RAW_OUTPUT_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'judge-cost-raw-'));
+
 const llmClient = require('../../../shared/llm/llm-client');
 const { buildCostReport } = require('../../../shared/llm/llm-cost');
 const { LLM_STAGES } = require('../../../shared/llm/stage-catalog');
@@ -18,18 +24,18 @@ const JUDGE_STAGE_ID = LLM_STAGES.POST_GENERATION_QUALITY_JUDGE.id;
 // cost-report.md의 Stage 칸은 사람이 읽는 label을 쓴다.
 const JUDGE_LABEL_PATTERN = /\| post-generation public quality judge \|/;
 
-function fakeProvider({ verdict, costUsd = 0.01 }) {
+function fakeProvider({ verdict, costUsd = 0.01, models = ['fake-judge-model'], rawText = null }) {
   return {
     id: 'fake',
     displayName: 'Fake',
     pricingSource: 'fake://pricing',
     getApiKey() { return 'fake-key'; },
     missingCredentialMessage: 'missing fake credential',
-    configuredModelsForGroup() { return ['fake-judge-model']; },
+    configuredModelsForGroup() { return models; },
     createModelContext() { return {}; },
     describeModelContext() { return ''; },
     buildRequest({ model }) { return { request: { model }, thinkingBudget: null }; },
-    async execute() { return { text: JSON.stringify(verdict) }; },
+    async execute() { return { text: rawText ?? JSON.stringify(verdict) }; },
     textFromResponse(response) { return response.text; },
     usageMetadataFromResponse() { return { usage_metadata_present: true }; },
     estimateCallCost() {
@@ -82,7 +88,7 @@ function generateCall(stageKey, stageId, costUsd) {
   };
 }
 
-function setupRoot({ reportDate = DATE, writeReport = true } = {}) {
+function setupRoot({ reportDate = DATE, writeReport = true, warnCostUsd = 0.15 } = {}) {
   const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), 'judge-cost-'));
   const newsletterDir = path.join(rootDir, 'articles', 'newsletters', DATE);
   fs.mkdirSync(newsletterDir, { recursive: true });
@@ -93,6 +99,7 @@ function setupRoot({ reportDate = DATE, writeReport = true } = {}) {
   if (writeReport) {
     const report = buildCostReport({
       date: reportDate,
+      warnCostUsd,
       calls: [
         generateCall('editor#1', 'editor', 0.02),
         generateCall('fact_checker#1', 'fact_checker', 0.03)
@@ -116,18 +123,24 @@ function readTmpReport(rootDir) {
 }
 
 // validator는 모듈 로드 시점의 cwd를 root로 쓴다. 테스트마다 cwd를 임시 root로 바꾸고 새로 읽는다.
-async function runJudge(rootDir, verdict) {
+async function runJudge(rootDir, verdict, providerOptions = {}) {
   const previousCwd = process.cwd();
   process.chdir(rootDir);
   delete require.cache[VALIDATOR_PATH];
   llmClient.resetLlmDiagnostics();
   try {
     const { validateLlmPublicationQuality } = require(VALIDATOR_PATH);
-    return await validateLlmPublicationQuality({ date: DATE, provider: fakeProvider({ verdict }) });
+    return await validateLlmPublicationQuality({ date: DATE, provider: fakeProvider({ verdict, ...providerOptions }) });
   } finally {
     process.chdir(previousCwd);
     delete require.cache[VALIDATOR_PATH];
   }
+}
+
+// console.warn을 잡아 [cost] 경고 문구를 확인한다.
+function captureWarnings(t) {
+  const warn = t.mock.method(console, 'warn', () => {});
+  return () => warn.mock.calls.map(call => String(call.arguments[0]));
 }
 
 function judgeCalls(report) {
@@ -180,10 +193,54 @@ test('generate 리포트의 날짜가 다르면 합치지도 덮어쓰지도 않
   assert.equal(fs.existsSync(markdownReportPath(rootDir)), false);
 });
 
-test('generate 리포트가 없으면 judge 호출만으로 리포트를 만들지 않는다', async () => {
+test('generate 리포트가 없으면 judge 호출만으로 리포트를 만들지 않는다', async t => {
+  const warnings = captureWarnings(t);
   const rootDir = setupRoot({ writeReport: false });
   await runJudge(rootDir, passVerdict);
 
   assert.equal(fs.existsSync(tmpReportPath(rootDir)), false);
   assert.equal(fs.existsSync(markdownReportPath(rootDir)), false);
+  // 존재 검사로 건너뛴 것이지, 읽기 예외가 catch로 삼켜진 것이 아니어야 한다.
+  assert.ok(warnings().some(line => /newsroom-cost-report\.json not found/.test(line)), warnings().join('\n'));
+  assert.ok(!warnings().some(line => /Failed to add post-generation judge calls/.test(line)));
+});
+
+// callLlmJson 자체가 throw해도(모든 모델이 invalid JSON) 응답을 받은 judge 호출은 리포트에 남는다.
+// llm-client는 JSON 파싱 전에 cost call을 기록하므로 모델 2개 x 시도 2번(GEMINI_MAX_RETRIES=1) = 4건이다.
+test('judge 호출이 throw해도 원래 에러가 그대로 나오고 응답받은 호출은 기록된다', async () => {
+  const rootDir = setupRoot();
+  await assert.rejects(
+    () => runJudge(rootDir, passVerdict, { rawText: 'not json', models: ['fake-judge-a', 'fake-judge-b'] }),
+    /API failed for all configured models/
+  );
+
+  const report = readTmpReport(rootDir);
+  assert.equal(judgeCalls(report).length, 4);
+  assert.equal(report.calls.length, 6);
+  assert.equal(report.totals.request_count, 6);
+});
+
+// 비용 기록은 warning-only 회계라 판정 결과를 바꾸면 안 된다.
+test('cost report가 깨진 JSON이어도 judge 판정은 그대로 통과한다', async t => {
+  const warnings = captureWarnings(t);
+  const rootDir = setupRoot({ writeReport: false });
+  fs.writeFileSync(tmpReportPath(rootDir), '{ broken', 'utf8');
+
+  const result = await runJudge(rootDir, passVerdict);
+  assert.equal(result.overall_pass, true);
+  assert.equal(fs.readFileSync(tmpReportPath(rootDir), 'utf8'), '{ broken');
+  assert.ok(warnings().some(line => /Failed to add post-generation judge calls/.test(line)), warnings().join('\n'));
+});
+
+test('병합한 리포트는 generate의 threshold로 경고를 다시 계산해 찍는다', async t => {
+  const warnings = captureWarnings(t);
+  // generate 리포트의 경고 기준은 0.05다. 합계 0.06은 기본값(0.15)으로는 경고가 아니다.
+  const rootDir = setupRoot({ warnCostUsd: 0.05 });
+  await runJudge(rootDir, passVerdict);
+
+  const report = readTmpReport(rootDir);
+  assert.equal(report.warning_threshold_usd, 0.05);
+  const expected = 'Estimated LLM cost 0.06 USD reached NEWSROOM_WARN_COST_USD 0.05 USD.';
+  assert.ok(report.warnings.includes(expected), report.warnings.join('\n'));
+  assert.ok(warnings().includes(`[cost] ${expected}`), warnings().join('\n'));
 });

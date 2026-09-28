@@ -51,6 +51,9 @@ function mergeStageCallsIntoCostReport({ date, stageId, calls, rootDir }) {
     maxCostUsd: existing.max_threshold_usd
   });
   writeCostReportFiles(report, date, rootDir);
+  for (const warning of ensureArray(report.warnings)) {
+    console.warn(`[cost] ${warning}`);
+  }
   console.log(`[cost] Added ${ensureArray(calls).length} ${stageId} call(s); estimated LLM API cost is now $${Number(report.totals.estimated_cost_usd || 0).toFixed(6)} USD across ${report.totals.request_count || 0} request(s).`);
   return report;
 }

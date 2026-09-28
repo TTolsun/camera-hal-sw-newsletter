@@ -255,7 +255,7 @@ generator는 `articles/content/newsroom/YYYY-MM-DD/summary-cache-report.json`, `
 
 비용 artifact는 provider-neutral한 LLM 비용 리포트입니다. Gemini provider에서는 Gemini usage metadata와 local pricing table로 estimated cost를 계산하고, internal provider는 pricing table이 없으면 `estimated_cost_usd=null`과 pricing warning을 남깁니다.
 
-Gemini 호출이 성공적으로 응답을 반환하면 generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `articles/content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
+Gemini 호출이 응답을 반환하면(JSON 파싱에 실패한 응답 포함) generator는 response usage metadata를 stage/model/attempt 단위로 기록합니다. 비용 리포트는 `.tmp/newsroom-cost-report.json`과 `articles/content/newsroom/YYYY-MM-DD/cost-report.md`에 남으며, prompt tokens, output tokens, thinking tokens, cached tokens, total tokens, estimated cost를 포함합니다.
 
 post-generation judge(`npm run validate:post-generation`)는 generate와 다른 프로세스에서 돌기 때문에, judge 호출 뒤 판정 통과·실패와 관계없이 generate가 남긴 `.tmp/newsroom-cost-report.json`에 자기 호출을 더해 두 파일을 다시 씁니다. 같은 stage의 이전 judge 호출은 빼고 더하므로 다시 돌려도 쌓이지 않습니다. `.tmp` 리포트가 없거나 날짜가 다르면 judge 호출만으로 불완전한 리포트를 쓰지 않도록 건너뛰고 경고만 남깁니다.
 
