@@ -116,9 +116,9 @@ test('final newsroom workflow separates review PR success from publish-ready gat
   assert.doesNotMatch(checkPolicyDocsStep, /continue-on-error:\s*true/);
   assert.match(preflightStep, /^\s*run: npm run test$/m);
   assert.doesNotMatch(preflightStep, /continue-on-error:\s*true/);
-  assert.match(workflow, /uses: actions\/cache\/restore@v4/);
+  assert.match(workflow, /uses: actions\/cache\/restore@v6/);
   assert.match(workflow, /key: news-summary-\$\{\{ runner\.os \}\}-/);
-  assert.match(workflow, /uses: actions\/cache\/save@v4/);
+  assert.match(workflow, /uses: actions\/cache\/save@v6/);
   assert.match(workflow, /if: always\(\) && steps\.summary-cache\.outputs\.exists == 'true'/);
   const workflowDocs = fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', 'docs', 'NEWSROOM_WORKFLOW.md'), 'utf8');
   assert.doesNotMatch(workflowDocs, /^LLM_MODEL=$/m);
@@ -350,7 +350,7 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.doesNotMatch(stage2CreatePrStep, /if:\s*always\(\)/);
   assert.match(stage2PrepareBodyStep, /gemini-source-discovery-report\.md/);
   assert.match(stage2UploadStep, /if:\s*always\(\)/);
-  assert.match(stage2UploadStep, /uses:\s*actions\/upload-artifact@v4/);
+  assert.match(stage2UploadStep, /uses:\s*actions\/upload-artifact@v7/);
   assert.match(stage2UploadStep, /if-no-files-found:\s*warn/);
   assert.match(stage2UploadStep, /merged-candidate-manifest\.json/);
   assert.match(stage2UploadStep, /gemini-source-discovery-report\.md/);

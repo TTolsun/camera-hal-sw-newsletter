@@ -15,19 +15,19 @@ test('translation runs after Korean main publication and cannot trigger itself',
   ]);
   assert.match(workflow, /group: translation\s+cancel-in-progress: false/);
   assert.match(workflow, /ref: main/);
-  assert.match(workflow, /node-version: 20/);
+  assert.match(workflow, /node-version-file: \.nvmrc/);
 });
 
 test('translation retains full gates and PR-only publishing with scoped paths and secret fallback', () => {
   assert.match(workflow, /npm run test && npm run validate/);
-  assert.match(workflow, /peter-evans\/create-pull-request@v6/);
+  assert.match(workflow, /peter-evans\/create-pull-request@v8/);
   assert.match(workflow, /base: main/);
   assert.match(workflow, /secrets\.NEWSROOM_PR_TOKEN \|\| github\.token/);
   assert.match(workflow, /GEMINI_API_KEY: \$\{\{ secrets\.GEMINI_API_KEY \}\}/);
   assert.doesNotMatch(workflow, /vars\.|git push|auto.merge|pull_request_target/);
   assert.match(workflow, /github.event_name == 'workflow_dispatch' && inputs.translate_model/);
   assert.match(workflow, /add-paths:[\s\S]*translation-cost-report.md/);
-  assert.match(workflow, /if: always\(\)[\s\S]*actions\/upload-artifact@v4/);
+  assert.match(workflow, /if: always\(\)[\s\S]*actions\/upload-artifact@v7/);
 });
 
 test('open PR hash dedup happens before translation and main is rechecked before PR creation', () => {
