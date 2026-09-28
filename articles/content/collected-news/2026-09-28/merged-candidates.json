@@ -4,7 +4,7 @@
   "newsletter_date": "2026-09-28",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 35,
-  "generated_at": "2026-09-27T15:57:39.095Z",
+  "generated_at": "2026-09-28T14:38:09.589Z",
   "sources_path": "src/shared/data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -387,9 +387,9 @@
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": false,
-      "editor_review_required": false,
+      "editor_review_required": true,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass"
+      "evidence_validation_status": "fetch_failed_review_required"
     },
     {
       "schema_version": 7,
@@ -2017,9 +2017,9 @@
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": false,
-      "editor_review_required": false,
+      "editor_review_required": true,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass"
+      "evidence_validation_status": "fetch_failed_review_required"
     },
     {
       "schema_version": 7,
@@ -2343,9 +2343,9 @@
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": false,
-      "editor_review_required": false,
+      "editor_review_required": true,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass"
+      "evidence_validation_status": "fetch_failed_review_required"
     },
     {
       "schema_version": 7,
@@ -11737,18 +11737,18 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New camera sensor support in the Linux kernel, specifically Sony IMX681, impacting Android camera HAL."
+        "Add support for the Sony IMX681 camera sensor in the Linux kernel."
       ],
       "keywords": [
         "Sony IMX681",
         "linux-media",
         "camera sensor driver",
-        "Android camera HAL"
+        "kernel patch"
       ],
       "evidence": [
         "Sony IMX681 sensor driver",
         "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Camera HAL integration"
       ],
       "warnings": [],
       "publishedAt": "2026-09-26",
@@ -11766,10 +11766,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-sensor-sony-imx681-support",
-      "proposal_trace_id": "android-camera-sensor-sony-imx681-support",
-      "discovery_topic_gap": "New camera sensor support in the Linux kernel, specifically Sony IMX681, impacting Android camera HAL.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-sensor-sony-imx681-support",
+      "proposal_trace_id": "camera-hal-sensor-sony-imx681-support",
+      "discovery_topic_gap": "Add support for the Sony IMX681 camera sensor in the Linux kernel.",
+      "discovery_source_family": "lore-linux-media-list",
       "source_quality_score": 0.765,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-3e299f0c00c90d60",
@@ -11813,18 +11813,18 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New camera sensor support in the Linux kernel, specifically Sony IMX681, impacting Android camera HAL."
+        "Add support for the Sony IMX681 camera sensor in the Linux kernel."
       ],
       "keywords": [
         "Sony IMX681",
         "linux-media",
         "camera sensor driver",
-        "Android camera HAL"
+        "kernel patch"
       ],
       "evidence": [
         "Sony IMX681 sensor driver",
         "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Camera HAL integration"
       ],
       "warnings": [],
       "publishedAt": "2026-09-23",
@@ -11842,10 +11842,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-sensor-sony-imx681-support",
-      "proposal_trace_id": "android-camera-sensor-sony-imx681-support",
-      "discovery_topic_gap": "New camera sensor support in the Linux kernel, specifically Sony IMX681, impacting Android camera HAL.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-sensor-sony-imx681-support",
+      "proposal_trace_id": "camera-hal-sensor-sony-imx681-support",
+      "discovery_topic_gap": "Add support for the Sony IMX681 camera sensor in the Linux kernel.",
+      "discovery_source_family": "lore-linux-media-list",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-b86272fac15703a2",
@@ -11889,18 +11889,18 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New camera sensor support in the Linux kernel, specifically Samsung S5K3T2, impacting Android camera HAL."
+        "Add Samsung S5K3T2 image sensor support to the Linux kernel."
       ],
       "keywords": [
         "Samsung S5K3T2",
         "linux-media",
-        "camera sensor driver",
-        "Android camera HAL"
+        "i2c sensor driver",
+        "kernel patch"
       ],
       "evidence": [
         "Samsung S5K3T2 sensor driver",
-        "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Linux kernel i2c subsystem",
+        "Camera HAL integration"
       ],
       "warnings": [],
       "publishedAt": "2026-09-24",
@@ -11918,10 +11918,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-sensor-samsung-s5k3t2-support",
-      "proposal_trace_id": "android-camera-sensor-samsung-s5k3t2-support",
-      "discovery_topic_gap": "New camera sensor support in the Linux kernel, specifically Samsung S5K3T2, impacting Android camera HAL.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-sensor-samsung-s5k3t2-support",
+      "proposal_trace_id": "camera-hal-sensor-samsung-s5k3t2-support",
+      "discovery_topic_gap": "Add Samsung S5K3T2 image sensor support to the Linux kernel.",
+      "discovery_source_family": "lore-linux-media-list",
       "source_quality_score": 0.765,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-6e314daa1ecca1e7",
@@ -11965,20 +11965,20 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New camera sensor support for Qualcomm platforms (Hawi, Maili, Glymur) in the Linux kernel, impacting Android camera HAL."
+        "Add CAMSS and S5KJN5 sensor support for Qualcomm platforms (Hawi and Maili)."
       ],
       "keywords": [
-        "Qualcomm Hawi Maili Glymur",
-        "linux-media",
+        "Qualcomm Hawi Maili",
         "CAMSS",
-        "camera sensor driver",
-        "Android camera HAL"
+        "S5KJN5",
+        "linux-media",
+        "camera driver"
       ],
       "evidence": [
-        "Qualcomm Hawi, Maili, Glymur sensor support",
-        "CAMSS driver",
+        "Qualcomm CAMSS driver",
+        "Samsung S5KJN5 sensor driver",
         "Linux kernel media subsystem",
-        "Android camera HAL implications"
+        "Qualcomm platform support"
       ],
       "warnings": [],
       "publishedAt": "2026-09-23",
@@ -11996,91 +11996,13 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-qualcomm-sensor-support",
-      "proposal_trace_id": "android-camera-qualcomm-sensor-support",
-      "discovery_topic_gap": "New camera sensor support for Qualcomm platforms (Hawi, Maili, Glymur) in the Linux kernel, impacting Android camera HAL.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-qualcomm-sensor-support",
+      "proposal_trace_id": "camera-hal-qualcomm-sensor-support",
+      "discovery_topic_gap": "Add CAMSS and S5KJN5 sensor support for Qualcomm platforms (Hawi and Maili).",
+      "discovery_source_family": "lore-linux-media-list",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "source_quality_report_ref": "gemini-ce75d275dbd30e6b",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "low",
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-f84d1e30b1dc03da",
-      "source_candidate_id": "gemini-f84d1e30b1dc03da",
-      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
-      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "articleUrl": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "article_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "source": "lore.kernel.org linux-media list (Intel IPU)",
-      "source_name": "lore.kernel.org linux-media list (Intel IPU)",
-      "sourceName": "lore.kernel.org linux-media list (Intel IPU)",
-      "sourceUrl": "https://lore.kernel.org/linux-media/",
-      "source_url": "https://lore.kernel.org/linux-media/",
-      "source_id": "lore-linux-media-ipu",
-      "category": "linux-camera",
-      "source_category": "linux-camera",
-      "section": "linux-camera",
-      "source_section": "linux-camera",
-      "priority": "high",
-      "reliability": "project-official",
-      "source_reliability": "project-official",
-      "origin": "gemini_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "unknown",
-      "source_type": "unknown",
-      "requiresCrossCheck": true,
-      "requires_cross_check": true,
-      "candidateOnly": false,
-      "candidate_only": false,
-      "topics": [
-        "New camera sensor support for Qualcomm platforms (Hawi, Maili, Glymur) in the Linux kernel, impacting Android camera HAL."
-      ],
-      "keywords": [
-        "Qualcomm Hawi Maili Glymur",
-        "linux-media",
-        "CAMSS",
-        "camera sensor driver",
-        "Android camera HAL"
-      ],
-      "evidence": [
-        "Qualcomm Hawi, Maili, Glymur sensor support",
-        "CAMSS driver",
-        "Linux kernel media subsystem",
-        "Android camera HAL implications"
-      ],
-      "warnings": [],
-      "publishedAt": "2026-09-25",
-      "published_date": "2026-09-25",
-      "hasDatedEvidence": true,
-      "has_dated_evidence": true,
-      "finalSelectionEligibility": "short",
-      "final_selection_eligibility": "short",
-      "source_gap_risk": false,
-      "source_gap_risk_level": "low",
-      "main_eligible": true,
-      "briefing_only": false,
-      "reference_only": false,
-      "relevanceScore": 70,
-      "relevance_score": 70,
-      "cameraHalRelevanceScore": 70,
-      "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-qualcomm-sensor-support",
-      "proposal_trace_id": "android-camera-qualcomm-sensor-support",
-      "discovery_topic_gap": "New camera sensor support for Qualcomm platforms (Hawi, Maili, Glymur) in the Linux kernel, impacting Android camera HAL.",
-      "discovery_source_family": "linux-camera",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "source_quality_report_ref": "gemini-f84d1e30b1dc03da",
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "low",
       "final_selection_blocked": false,
@@ -12121,20 +12043,20 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "New feature for Qualcomm CAMSS: Offline Processing Engine support in the Linux kernel, relevant to Android camera HAL."
+        "Enable CAMSS Offline Processing Engine support in the Linux kernel."
       ],
       "keywords": [
-        "CAMSS OPE",
-        "Qualcomm camera",
-        "linux-media",
+        "Qualcomm CAMSS",
+        "Offline Processing Engine",
         "ISP",
-        "Android camera HAL"
+        "linux-media",
+        "camera pipeline"
       ],
       "evidence": [
-        "CAMSS Offline Processing Engine",
-        "Linux kernel media subsystem",
-        "Qualcomm camera HAL",
-        "ISP features"
+        "Qualcomm CAMSS driver",
+        "Offline Processing Engine (OPE)",
+        "ISP support",
+        "Linux kernel media subsystem"
       ],
       "warnings": [],
       "publishedAt": "2026-09-25",
@@ -12152,10 +12074,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-qualcomm-camss-offline-processing",
-      "proposal_trace_id": "android-camera-qualcomm-camss-offline-processing",
-      "discovery_topic_gap": "New feature for Qualcomm CAMSS: Offline Processing Engine support in the Linux kernel, relevant to Android camera HAL.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-qualcomm-offline-processing",
+      "proposal_trace_id": "camera-hal-qualcomm-offline-processing",
+      "discovery_topic_gap": "Enable CAMSS Offline Processing Engine support in the Linux kernel.",
+      "discovery_source_family": "lore-linux-media-list",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-2cb030cac48a1221",
@@ -12199,7 +12121,7 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Enabling ISP and IVC on Renesas RZ/V2H EVK in the Linux kernel, relevant to embedded camera processing on Android."
+        "Enable ISP and IVC on Renesas RZ/V2H EVK in the Linux kernel."
       ],
       "keywords": [
         "Renesas RZ/V2H",
@@ -12209,11 +12131,10 @@
         "device tree"
       ],
       "evidence": [
-        "Renesas RZ/V2H EVK",
-        "ISP enablement",
-        "IVC enablement",
+        "Renesas RZ/V2H EVK support",
+        "ISP and IVC enablement",
         "Linux kernel device tree",
-        "Embedded camera processing"
+        "Media subsystem"
       ],
       "warnings": [],
       "publishedAt": "2026-09-25",
@@ -12231,10 +12152,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-renesas-rzv2h-isp-ivc-enablement",
-      "proposal_trace_id": "android-camera-renesas-rzv2h-isp-ivc-enablement",
-      "discovery_topic_gap": "Enabling ISP and IVC on Renesas RZ/V2H EVK in the Linux kernel, relevant to embedded camera processing on Android.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-renesas-rzv2h-isp-ivc-enablement",
+      "proposal_trace_id": "camera-hal-renesas-rzv2h-isp-ivc-enablement",
+      "discovery_topic_gap": "Enable ISP and IVC on Renesas RZ/V2H EVK in the Linux kernel.",
+      "discovery_source_family": "lore-linux-media-list",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "source_quality_report_ref": "gemini-ecbdddd00636b5e9",
@@ -12278,19 +12199,20 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "A specific quirk for upside-down sensor handling on Samsung Galaxy Book3 Pro via the IPU bridge in the Linux kernel, relevant to camera HAL."
+        "Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro in the Intel IPU bridge driver."
       ],
       "keywords": [
-        "Intel IPU",
+        "ipu-bridge",
         "Samsung Galaxy Book3 Pro",
-        "upside-down sensor",
-        "linux-media"
+        "sensor quirk",
+        "linux-media",
+        "Intel IPU"
       ],
       "evidence": [
-        "Intel IPU bridge",
+        "Intel IPU bridge driver",
         "Samsung Galaxy Book3 Pro",
-        "Upside-down sensor quirk",
-        "Linux kernel media subsystem"
+        "DMI quirk",
+        "Sensor orientation"
       ],
       "warnings": [],
       "publishedAt": "2026-09-23",
@@ -12308,10 +12230,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-ipu-bridge-samsung-galaxy-book3-pro-quirk",
-      "proposal_trace_id": "android-camera-ipu-bridge-samsung-galaxy-book3-pro-quirk",
-      "discovery_topic_gap": "A specific quirk for upside-down sensor handling on Samsung Galaxy Book3 Pro via the IPU bridge in the Linux kernel, relevant to camera HAL.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-ipu-bridge-sensor-quirk",
+      "proposal_trace_id": "camera-hal-ipu-bridge-sensor-quirk",
+      "discovery_topic_gap": "Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro in the Intel IPU bridge driver.",
+      "discovery_source_family": "lore-linux-media-ipu",
       "source_quality_score": 0.765,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-19b6398e6b0d5427",
@@ -12355,19 +12277,20 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Support for ST VD55G1 sensor via the Intel IPU bridge in the Linux kernel, relevant to Android camera HAL."
+        "Add support for the ST VD55G1 (TBE20A1) sensor in the Intel IPU bridge driver."
       ],
       "keywords": [
+        "ipu-bridge",
         "ST VD55G1",
-        "Intel IPU",
+        "TBE20A1",
         "linux-media",
-        "camera sensor driver"
+        "Intel IPU"
       ],
       "evidence": [
+        "Intel IPU bridge driver",
         "ST VD55G1 sensor",
-        "Intel IPU bridge",
-        "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "TBE20A1",
+        "Linux kernel media subsystem"
       ],
       "warnings": [],
       "publishedAt": "2026-09-24",
@@ -12385,13 +12308,89 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-ipu-bridge-st-vd55g1-support",
-      "proposal_trace_id": "android-camera-ipu-bridge-st-vd55g1-support",
-      "discovery_topic_gap": "Support for ST VD55G1 sensor via the Intel IPU bridge in the Linux kernel, relevant to Android camera HAL.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-ipu-bridge-st-vd55g1-support",
+      "proposal_trace_id": "camera-hal-ipu-bridge-st-vd55g1-support",
+      "discovery_topic_gap": "Add support for the ST VD55G1 (TBE20A1) sensor in the Intel IPU bridge driver.",
+      "discovery_source_family": "lore-linux-media-ipu",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-8317255190bffdd5",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "low",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-f84d1e30b1dc03da",
+      "source_candidate_id": "gemini-f84d1e30b1dc03da",
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "articleUrl": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "article_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "source_name": "lore.kernel.org linux-media list (Intel IPU)",
+      "sourceName": "lore.kernel.org linux-media list (Intel IPU)",
+      "sourceUrl": "https://lore.kernel.org/linux-media/",
+      "source_url": "https://lore.kernel.org/linux-media/",
+      "source_id": "lore-linux-media-ipu",
+      "category": "linux-camera",
+      "source_category": "linux-camera",
+      "section": "linux-camera",
+      "source_section": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "source_reliability": "project-official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "unknown",
+      "source_type": "unknown",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Add CAMSS support for Qualcomm Glymur platform."
+      ],
+      "keywords": [
+        "Qualcomm Glymur",
+        "CAMSS",
+        "linux-media",
+        "camera driver"
+      ],
+      "evidence": [
+        "Qualcomm CAMSS driver",
+        "Qualcomm Glymur platform",
+        "Linux kernel media subsystem"
+      ],
+      "warnings": [],
+      "publishedAt": "2026-09-25",
+      "published_date": "2026-09-25",
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_gap_risk": false,
+      "source_gap_risk_level": "low",
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "relevanceScore": 70,
+      "relevance_score": 70,
+      "cameraHalRelevanceScore": 70,
+      "camera_hal_relevance_score": 70,
+      "proposal_id": "camera-hal-qualcomm-glymur-camss-support",
+      "proposal_trace_id": "camera-hal-qualcomm-glymur-camss-support",
+      "discovery_topic_gap": "Add CAMSS support for Qualcomm Glymur platform.",
+      "discovery_source_family": "lore-linux-media-list",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "source_quality_report_ref": "gemini-f84d1e30b1dc03da",
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "low",
       "final_selection_blocked": false,
@@ -12432,19 +12431,20 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "A change in libcamera to reject multiple processed streams with software ISP, impacting camera pipeline handling on Android."
+        "Reject multiple processed streams with software ISP in libcamera pipeline."
       ],
       "keywords": [
         "libcamera",
-        "software ISP",
         "pipeline",
-        "stream rejection"
+        "software ISP",
+        "stream rejection",
+        "patch"
       ],
       "evidence": [
-        "libcamera pipeline",
-        "software ISP",
-        "processed streams",
-        "camera pipeline handling"
+        "libcamera pipeline handler",
+        "Software ISP",
+        "Stream handling",
+        "Patch review"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -12464,10 +12464,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "android-camera-libcamera-pipeline-stream-rejection",
-      "proposal_trace_id": "android-camera-libcamera-pipeline-stream-rejection",
-      "discovery_topic_gap": "A change in libcamera to reject multiple processed streams with software ISP, impacting camera pipeline handling on Android.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "libcamera-pipeline-software-isp-rejection",
+      "proposal_trace_id": "libcamera-pipeline-software-isp-rejection",
+      "discovery_topic_gap": "Reject multiple processed streams with software ISP in libcamera pipeline.",
+      "discovery_source_family": "patchwork-libcamera-patches",
       "source_quality_score": 0.545,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-3c9f683ad7d46e11",
@@ -12511,20 +12511,20 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Preparation for IPU6 multi-stream and metadata support in the Linux kernel, relevant to Android camera HAL."
+        "Prepare IPU6 for multi-stream and metadata support in the Linux kernel."
       ],
       "keywords": [
-        "Intel IPU6",
+        "IPU6",
         "multi-stream",
         "metadata",
-        "linux-media"
+        "linux-media",
+        "Intel IPU"
       ],
       "evidence": [
-        "Intel IPU6",
-        "multi-stream support",
-        "metadata support",
-        "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Intel IPU6 driver",
+        "Multi-stream support",
+        "Metadata handling",
+        "Linux kernel media subsystem"
       ],
       "warnings": [],
       "publishedAt": "2026-09-22",
@@ -12542,10 +12542,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-ipu6-multistream-metadata-preparation",
-      "proposal_trace_id": "android-camera-ipu6-multistream-metadata-preparation",
-      "discovery_topic_gap": "Preparation for IPU6 multi-stream and metadata support in the Linux kernel, relevant to Android camera HAL.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-ipu6-multistream-metadata-prep",
+      "proposal_trace_id": "camera-hal-ipu6-multistream-metadata-prep",
+      "discovery_topic_gap": "Prepare IPU6 for multi-stream and metadata support in the Linux kernel.",
+      "discovery_source_family": "lore-linux-media-ipu",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
       "source_quality_report_ref": "gemini-b78eebd68bc66a8f",
@@ -12589,19 +12589,19 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Addition of V4L2Event class and functionality in libcamera, relevant to camera event handling on Android."
+        "Add V4L2Event class and functionality to libcamera."
       ],
       "keywords": [
         "libcamera",
         "V4L2Event",
-        "camera events",
-        "linux-media"
+        "event handling",
+        "patch"
       ],
       "evidence": [
         "libcamera",
         "V4L2Event",
-        "camera event handling",
-        "Linux kernel V4L2"
+        "Event handling",
+        "Patch review"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -12621,10 +12621,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "android-camera-libcamera-v4l2-event-functionality",
-      "proposal_trace_id": "android-camera-libcamera-v4l2-event-functionality",
-      "discovery_topic_gap": "Addition of V4L2Event class and functionality in libcamera, relevant to camera event handling on Android.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "libcamera-v4l2-event-class",
+      "proposal_trace_id": "libcamera-v4l2-event-class",
+      "discovery_topic_gap": "Add V4L2Event class and functionality to libcamera.",
+      "discovery_source_family": "patchwork-libcamera-patches",
       "source_quality_score": 0.545,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-935628717af7ac19",
@@ -12668,21 +12668,22 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Addition of LensShadingCorrection maps and ToneCurve to controls metadata in libcamera, relevant to camera tuning on Android."
+        "Add LensShadingCorrection and ToneCurve to controls metadata in libcamera."
       ],
       "keywords": [
         "libcamera",
+        "controls",
         "LensShadingCorrection",
         "ToneCurve",
-        "camera metadata",
-        "camera tuning"
+        "metadata",
+        "patch"
       ],
       "evidence": [
         "libcamera controls",
         "LensShadingCorrection",
         "ToneCurve",
-        "camera metadata",
-        "camera tuning"
+        "Metadata",
+        "Patch review"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -12702,10 +12703,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "android-camera-libcamera-lens-shading-tone-curve-controls",
-      "proposal_trace_id": "android-camera-libcamera-lens-shading-tone-curve-controls",
-      "discovery_topic_gap": "Addition of LensShadingCorrection maps and ToneCurve to controls metadata in libcamera, relevant to camera tuning on Android.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "libcamera-controls-lensshading-tonecurve",
+      "proposal_trace_id": "libcamera-controls-lensshading-tonecurve",
+      "discovery_topic_gap": "Add LensShadingCorrection and ToneCurve to controls metadata in libcamera.",
+      "discovery_source_family": "patchwork-libcamera-patches",
       "source_quality_score": 0.545,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-ee6be76db729d498",
@@ -12749,18 +12750,19 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Release of ISYS firmware resources on remove for the Intel IPU7 driver in the Linux kernel, relevant to embedded camera systems on Android."
+        "Release ISYS firmware resources on remove in the Intel IPU7 driver."
       ],
       "keywords": [
-        "Intel IPU7",
-        "ISYS firmware",
+        "ipu7",
+        "firmware release",
         "linux-media",
-        "embedded camera"
+        "Intel IPU",
+        "staging"
       ],
       "evidence": [
         "Intel IPU7 driver",
         "ISYS firmware",
-        "resource release",
+        "Resource release",
         "Linux kernel media subsystem"
       ],
       "warnings": [],
@@ -12779,10 +12781,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-ipu-staging-firmware-release",
-      "proposal_trace_id": "android-camera-ipu-staging-firmware-release",
-      "discovery_topic_gap": "Release of ISYS firmware resources on remove for the Intel IPU7 driver in the Linux kernel, relevant to embedded camera systems on Android.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-ipu-staging-firmware-release",
+      "proposal_trace_id": "camera-hal-ipu-staging-firmware-release",
+      "discovery_topic_gap": "Release ISYS firmware resources on remove in the Intel IPU7 driver.",
+      "discovery_source_family": "lore-linux-media-ipu",
       "source_quality_score": 0.765,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-a5b4d734241ead8d",
@@ -12826,20 +12828,20 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Addition of OV02C10 sensor support with a specific link frequency via the Intel IPU bridge in the Linux kernel, relevant to Android camera HAL."
+        "Add 26 MHz link frequency for OV02C10 sensor in the Intel IPU bridge driver."
       ],
       "keywords": [
+        "ipu-bridge",
         "OV02C10",
-        "Intel IPU",
         "link frequency",
-        "linux-media"
+        "linux-media",
+        "Intel IPU"
       ],
       "evidence": [
+        "Intel IPU bridge driver",
         "OV02C10 sensor",
-        "Intel IPU bridge",
-        "26 MHz link frequency",
-        "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Link frequency",
+        "Linux kernel media subsystem"
       ],
       "warnings": [],
       "publishedAt": "2026-09-23",
@@ -12857,10 +12859,10 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "android-camera-ipu-bridge-ov02c10-link-frequency",
-      "proposal_trace_id": "android-camera-ipu-bridge-ov02c10-link-frequency",
-      "discovery_topic_gap": "Addition of OV02C10 sensor support with a specific link frequency via the Intel IPU bridge in the Linux kernel, relevant to Android camera HAL.",
-      "discovery_source_family": "linux-camera",
+      "proposal_id": "camera-hal-ipu-bridge-ov02c10-link-frequency",
+      "proposal_trace_id": "camera-hal-ipu-bridge-ov02c10-link-frequency",
+      "discovery_topic_gap": "Add 26 MHz link frequency for OV02C10 sensor in the Intel IPU bridge driver.",
+      "discovery_source_family": "lore-linux-media-ipu",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
       "source_quality_report_ref": "gemini-f7ead5308ffd2974",
@@ -12873,12 +12875,12 @@
     },
     {
       "schema_version": 5,
-      "id": "gemini-348919c03d831171",
-      "source_candidate_id": "gemini-348919c03d831171",
-      "title": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
-      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-      "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-      "article_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "id": "gemini-09096535ee7708a2",
+      "source_candidate_id": "gemini-09096535ee7708a2",
+      "title": "Android Developers Blog: Bring your Android game to the car screen today",
+      "url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "article_url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
       "source": "Android Developers Blog",
       "source_name": "Android Developers Blog",
       "sourceName": "Android Developers Blog",
@@ -12904,20 +12906,19 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Integration of AI agents into Android Studio, potentially impacting developer workflows for camera applications."
+        "Bringing Android games to the car screen."
       ],
       "keywords": [
-        "Android Studio",
-        "AI agent",
-        "developer tools",
-        "camera development"
+        "Android games",
+        "automotive",
+        "car screen",
+        "infotainment"
       ],
       "evidence": [
-        "AI agent integration",
-        "Android Studio",
-        "developer tools",
-        "code generation",
-        "camera development workflow"
+        "Android games",
+        "Car screen",
+        "Automotive",
+        "User experience"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -12937,13 +12938,13 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "android-developers-blog-ai-agent-integration",
-      "proposal_trace_id": "android-developers-blog-ai-agent-integration",
-      "discovery_topic_gap": "Integration of AI agents into Android Studio, potentially impacting developer workflows for camera applications.",
+      "proposal_id": "android-developers-blog-games-car-screen",
+      "proposal_trace_id": "android-developers-blog-games-car-screen",
+      "discovery_topic_gap": "Bringing Android games to the car screen.",
       "discovery_source_family": "android-developers-blog",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
-      "source_quality_report_ref": "gemini-348919c03d831171",
+      "source_quality_report_ref": "gemini-09096535ee7708a2",
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": true,
@@ -12953,12 +12954,12 @@
     },
     {
       "schema_version": 5,
-      "id": "gemini-a8cd06df28457612",
-      "source_candidate_id": "gemini-a8cd06df28457612",
-      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "article_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "id": "gemini-20aa3dc2a3b765ed",
+      "source_candidate_id": "gemini-20aa3dc2a3b765ed",
+      "title": "Android Developers Blog: Land your apps on Googlebook with adaptive development",
+      "url": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+      "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+      "article_url": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
       "source": "Android Developers Blog",
       "source_name": "Android Developers Blog",
       "sourceName": "Android Developers Blog",
@@ -12984,98 +12985,19 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Integration of AI agents into Android Studio, potentially impacting developer workflows for camera applications."
+        "Land apps on Googlebook with adaptive development."
       ],
       "keywords": [
-        "Android Studio",
-        "AI agent",
-        "developer tools",
-        "camera development"
-      ],
-      "evidence": [
-        "AI agent integration",
-        "Android Studio",
-        "developer tools",
-        "code generation",
-        "camera development workflow"
-      ],
-      "warnings": [
-        "missing dated evidence from deterministic fetch"
-      ],
-      "publishedAt": "",
-      "published_date": "",
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_gap_risk": true,
-      "source_gap_risk_level": "high",
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "relevanceScore": 45,
-      "relevance_score": 45,
-      "cameraHalRelevanceScore": 45,
-      "camera_hal_relevance_score": 45,
-      "proposal_id": "android-developers-blog-ai-agent-integration",
-      "proposal_trace_id": "android-developers-blog-ai-agent-integration",
-      "discovery_topic_gap": "Integration of AI agents into Android Studio, potentially impacting developer workflows for camera applications.",
-      "discovery_source_family": "android-developers-blog",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "source_quality_report_ref": "gemini-a8cd06df28457612",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "",
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-6f8916deba211090",
-      "source_candidate_id": "gemini-6f8916deba211090",
-      "title": "Android Developers Blog: Emulator control for adaptive app development",
-      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-      "articleUrl": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-      "article_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-      "source": "Android Developers Blog",
-      "source_name": "Android Developers Blog",
-      "sourceName": "Android Developers Blog",
-      "sourceUrl": "https://android-developers.googleblog.com/",
-      "source_url": "https://android-developers.googleblog.com/",
-      "source_id": "android-developers-blog",
-      "category": "android",
-      "source_category": "android",
-      "section": "android",
-      "source_section": "android",
-      "priority": "high",
-      "reliability": "official",
-      "source_reliability": "official",
-      "origin": "gemini_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "official_blog",
-      "source_type": "official_blog",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "candidateOnly": false,
-      "candidate_only": false,
-      "topics": [
-        "Emulator control for adaptive app development, potentially relevant for testing camera features and UIs on different screen sizes/configurations."
-      ],
-      "keywords": [
-        "Android emulator",
         "adaptive development",
-        "camera testing"
+        "Googlebook",
+        "cross-device",
+        "app scaling"
       ],
       "evidence": [
-        "Emulator control",
-        "adaptive app development",
-        "Android Studio",
-        "testing camera features"
+        "Adaptive development",
+        "Googlebook",
+        "App scaling",
+        "Cross-device"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -13095,91 +13017,13 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "android-developers-blog-emulator-adaptive-development",
-      "proposal_trace_id": "android-developers-blog-emulator-adaptive-development",
-      "discovery_topic_gap": "Emulator control for adaptive app development, potentially relevant for testing camera features and UIs on different screen sizes/configurations.",
+      "proposal_id": "android-developers-blog-adaptive-dev-googlebook",
+      "proposal_trace_id": "android-developers-blog-adaptive-dev-googlebook",
+      "discovery_topic_gap": "Land apps on Googlebook with adaptive development.",
       "discovery_source_family": "android-developers-blog",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
-      "source_quality_report_ref": "gemini-6f8916deba211090",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "",
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-c23c1f248651df56",
-      "source_candidate_id": "gemini-c23c1f248651df56",
-      "title": "Android Developers Blog: Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
-      "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
-      "articleUrl": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
-      "article_url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
-      "source": "Android Developers Blog",
-      "source_name": "Android Developers Blog",
-      "sourceName": "Android Developers Blog",
-      "sourceUrl": "https://android-developers.googleblog.com/",
-      "source_url": "https://android-developers.googleblog.com/",
-      "source_id": "android-developers-blog",
-      "category": "android",
-      "source_category": "android",
-      "section": "android",
-      "source_section": "android",
-      "priority": "high",
-      "reliability": "official",
-      "source_reliability": "official",
-      "origin": "gemini_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "official_blog",
-      "source_type": "official_blog",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "candidateOnly": false,
-      "candidate_only": false,
-      "topics": [
-        "Introduction of AndroidX Security State Libraries, potentially impacting how camera apps handle device security states."
-      ],
-      "keywords": [
-        "AndroidX Security",
-        "device security",
-        "camera app privacy"
-      ],
-      "evidence": [
-        "AndroidX Security State Libraries",
-        "device security",
-        "camera app security",
-        "privacy"
-      ],
-      "warnings": [
-        "missing dated evidence from deterministic fetch"
-      ],
-      "publishedAt": "",
-      "published_date": "",
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_gap_risk": true,
-      "source_gap_risk_level": "high",
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "relevanceScore": 45,
-      "relevance_score": 45,
-      "cameraHalRelevanceScore": 45,
-      "camera_hal_relevance_score": 45,
-      "proposal_id": "android-developers-blog-androidx-security-state-libraries",
-      "proposal_trace_id": "android-developers-blog-androidx-security-state-libraries",
-      "discovery_topic_gap": "Introduction of AndroidX Security State Libraries, potentially impacting how camera apps handle device security states.",
-      "discovery_source_family": "android-developers-blog",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "source_quality_report_ref": "gemini-c23c1f248651df56",
+      "source_quality_report_ref": "gemini-20aa3dc2a3b765ed",
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": true,
@@ -13223,7 +13067,7 @@
       "anchor_text": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
       "link_context": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "New Driver Support",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13231,7 +13075,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com",
         "anchor_text": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
         "evidence_role": "secondary_context",
-        "selection_reason": "This is an RFC patch series for adding an OmniVision OV2312 RGB-IR sensor driver. This is relevant to Camera HAL/Driver and V4L2/libcamera.",
+        "selection_reason": "This is an RFC patch series introducing a driver for the OmniVision OV2312 RGB-IR sensor, which is relevant to Camera HAL/Driver development.",
         "links": [
           {
             "url": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
@@ -13286,7 +13130,7 @@
       "anchor_text": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com/",
       "link_context": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "New Driver Support",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13294,7 +13138,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com",
         "anchor_text": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com/",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch series is about adding an OmniVision OV2312 RGB-IR sensor driver, which is directly related to Camera HAL and driver development.",
+        "selection_reason": "This RFC patch series is related to adding a driver for the OmniVision OV2312 RGB-IR sensor, indicating ongoing work in sensor driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com",
@@ -13349,7 +13193,7 @@
       "anchor_text": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312/",
       "link_context": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Development Update",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13357,7 +13201,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com",
         "anchor_text": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312/",
         "evidence_role": "secondary_context",
-        "selection_reason": "This commit history shows the development progress for the OmniVision OV2312 sensor driver, relevant for Camera HAL and driver updates.",
+        "selection_reason": "This commit history shows development related to the OV2312 sensor, likely for driver integration, which is relevant for Camera HAL/Driver news.",
         "links": [
           {
             "url": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312",
@@ -13412,7 +13256,7 @@
       "anchor_text": "https://gist.github.com/RISHI27-dot/87dc7dec1fdec5f20ead02ca7defb4a8",
       "link_context": "https://gist.github.com/RISHI27-dot/87dc7dec1fdec5f20ead02ca7defb4a8",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Technical Details",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13420,7 +13264,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com",
         "anchor_text": "https://gist.github.com/RISHI27-dot/87dc7dec1fdec5f20ead02ca7defb4a8",
         "evidence_role": "secondary_context",
-        "selection_reason": "This gist appears to be related to the OmniVision OV2312 sensor driver development, fitting within the scope of Camera HAL and V4L2/libcamera.",
+        "selection_reason": "This gist appears to contain code or data related to the OV2312 sensor driver development, making it relevant for Camera HAL/Driver news.",
         "links": [
           {
             "url": "https://gist.github.com/RISHI27-dot/87dc7dec1fdec5f20ead02ca7defb4a8",
@@ -13475,7 +13319,7 @@
       "anchor_text": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
       "link_context": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Integration Example",
+      "suggested_article_type": "Integration",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13483,7 +13327,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com",
         "anchor_text": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
         "evidence_role": "secondary_context",
-        "selection_reason": "This file relates to GStreamer plugins and TI's vision components, likely involving camera image processing, relevant to ISP and libcamera.",
+        "selection_reason": "This code snippet relates to GStreamer plugins and OV2312 sensor integration, which is relevant for Camera HAL and image processing pipelines.",
         "links": [
           {
             "url": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
@@ -13538,7 +13382,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org/",
       "link_context": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "New Hardware Support",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13546,7 +13390,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org/",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch series introduces support for CAMSS and S5KJN5 sensor on Qualcomm platforms, which is highly relevant to Camera HAL, Driver, and V4L2/libcamera.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS and S5KJN5 sensor support for Qualcomm platforms, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org",
@@ -13601,7 +13445,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "New Hardware Support",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13609,7 +13453,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "Part of a series adding CAMSS support for Qualcomm Hawi and Maili, directly relevant to Camera HAL and Driver development.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS and S5KJN5 sensor support for Qualcomm platforms, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
@@ -13664,7 +13508,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "New Sensor Support",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13672,7 +13516,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch is for the S5KJN5 sensor, a key component in camera systems, relevant to Camera HAL and Driver updates.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS and S5KJN5 sensor support for Qualcomm platforms, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
@@ -13727,7 +13571,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Platform Driver Update",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13735,7 +13579,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This patch relates to the Maili platform's camera control (CAMCC), relevant for Camera HAL and driver integration.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS and S5KJN5 sensor support for Qualcomm platforms, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
@@ -13790,7 +13634,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Platform Driver Update",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13798,7 +13642,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This patch concerns the Hawi platform's camera control (CAMCC), relevant for Camera HAL and driver development.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS and S5KJN5 sensor support for Qualcomm platforms, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
@@ -13853,7 +13697,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Device Tree Update",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13861,7 +13705,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This patch updates device tree for the Hawi platform's camera, crucial for driver initialization and Camera HAL.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS and S5KJN5 sensor support for Qualcomm platforms, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
@@ -13916,7 +13760,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Device Tree Update",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13924,7 +13768,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This patch updates device tree for the Maili platform's camera, essential for Camera HAL and driver functionality.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS and S5KJN5 sensor support for Qualcomm platforms, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
@@ -13979,7 +13823,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org/",
       "link_context": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Driver Update",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -13987,7 +13831,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org/",
         "evidence_role": "secondary_context",
-        "selection_reason": "This patch series update related to CAMSS on Qualcomm platforms, relevant for Camera HAL and V4L2/libcamera.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS and S5KJN5 sensor support for Qualcomm platforms, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org",
@@ -14042,7 +13886,7 @@
       "anchor_text": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
       "link_context": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "libcamera Development",
+      "suggested_article_type": "Integration",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14050,7 +13894,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
         "evidence_role": "secondary_context",
-        "selection_reason": "This commit history shows development on libcamera for CAMSS pipeline, directly relevant to libcamera and Camera HAL.",
+        "selection_reason": "This commit history relates to CAMSS ISP pipeline development in libcamera, relevant to Camera HAL and V4L2/libcamera integration.",
         "links": [
           {
             "url": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
@@ -14105,7 +13949,7 @@
       "anchor_text": "https://github.com/loicpoulain/camss-isp-m2m-test",
       "link_context": "https://github.com/loicpoulain/camss-isp-m2m-test",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Testing Framework",
+      "suggested_article_type": "Testing/Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14113,7 +13957,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://github.com/loicpoulain/camss-isp-m2m-test",
         "evidence_role": "secondary_context",
-        "selection_reason": "This repository contains tests for CAMSS ISP m2m, relevant for understanding and testing camera ISP functionality.",
+        "selection_reason": "This repository contains tests for CAMSS ISP m2m, which is relevant for understanding and developing Camera HAL and ISP functionalities.",
         "links": [
           {
             "url": "https://github.com/loicpoulain/camss-isp-m2m-test",
@@ -14168,7 +14012,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "ISP Feature Development",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14176,7 +14020,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch is part of a series introducing CAMSS Offline Processing Engine support, crucial for ISP and Camera HAL.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS Offline Processing Engine support, crucial for advanced Camera HAL features.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
@@ -14231,7 +14075,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "ISP Feature Development",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14239,7 +14083,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch is part of a series for CAMSS Offline Processing Engine, relevant for ISP and Camera HAL.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS Offline Processing Engine support, crucial for advanced Camera HAL features.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
@@ -14294,7 +14138,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "ISP Feature Development",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14302,7 +14146,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch is part of a series for CAMSS Offline Processing Engine, relevant for ISP and Camera HAL.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS Offline Processing Engine support, crucial for advanced Camera HAL features.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
@@ -14357,7 +14201,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "ISP Feature Development",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14365,7 +14209,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch is part of a series for CAMSS Offline Processing Engine, relevant for ISP and Camera HAL.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS Offline Processing Engine support, crucial for advanced Camera HAL features.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260907-camss-isp-ope-v6-0-6b915b9c5131@oss.qualcomm.com",
@@ -14420,7 +14264,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "ISP Feature Development",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14428,7 +14272,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch is part of a series for CAMSS Offline Processing Engine, relevant for ISP and Camera HAL.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS Offline Processing Engine support, crucial for advanced Camera HAL features.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
@@ -14483,7 +14327,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "ISP Feature Development",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14491,7 +14335,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch is part of a series for CAMSS Offline Processing Engine, relevant for ISP and Camera HAL.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS Offline Processing Engine support, crucial for advanced Camera HAL features.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
@@ -14546,7 +14390,7 @@
       "anchor_text": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com/",
       "link_context": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Hardware Quirks",
+      "suggested_article_type": "Bug Fix/Quirk",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14554,7 +14398,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com",
         "anchor_text": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com/",
         "evidence_role": "secondary_context",
-        "selection_reason": "This patch adds an upside-down sensor DMI quirk for a specific Samsung laptop model, relevant for Camera HAL and driver compatibility.",
+        "selection_reason": "This patch addresses an upside-down sensor DMI quirk for a specific Samsung device, relevant to Camera HAL and driver bug fixes.",
         "links": [
           {
             "url": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com",
@@ -14609,7 +14453,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "New Platform Support",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14617,7 +14461,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch series adds CAMSS support for the Qualcomm Glymur platform, relevant for Camera HAL and driver development.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS support for Qualcomm Glymur, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
@@ -14672,7 +14516,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "New Platform Support",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14680,7 +14524,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch is part of adding CAMSS support for the Qualcomm Glymur platform, relevant for Camera HAL and driver development.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS support for Qualcomm Glymur, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
@@ -14735,7 +14579,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
       "link_context": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "New Platform Support",
+      "suggested_article_type": "Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14743,7 +14587,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
         "evidence_role": "secondary_context",
-        "selection_reason": "This RFC patch is an early version for adding CAMSS support to the Qualcomm Glymur platform, relevant for Camera HAL and driver development.",
+        "selection_reason": "This RFC patch is part of a series adding CAMSS support for Qualcomm Glymur, relevant to Camera HAL and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com",
@@ -14798,7 +14642,7 @@
       "anchor_text": "https://lore.kernel.org/linux-media/20260914114145.574791-1-sakari.ailus@linux.intel.com/T/#t",
       "link_context": "https://lore.kernel.org/linux-media/20260914114145.574791-1-sakari.ailus@linux.intel.com/T/#t",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "ISP Feature Development",
+      "suggested_article_type": "Feature Development/ISP",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -14806,7 +14650,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com",
         "anchor_text": "https://lore.kernel.org/linux-media/20260914114145.574791-1-sakari.ailus@linux.intel.com/T/#t",
         "evidence_role": "secondary_context",
-        "selection_reason": "This patch series prepares IPU6 for multi-stream and metadata support, highly relevant to ISP, Camera HAL, and libcamera.",
+        "selection_reason": "This patch series prepares for IPU6 multi-stream and metadata support, which is highly relevant to Camera HAL and ISP development.",
         "links": [
           {
             "url": "https://lore.kernel.org/linux-media/20260914114145.574791-1-sakari.ailus@linux.intel.com/T",

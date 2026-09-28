@@ -796,24 +796,6 @@
       }
     },
     {
-      "candidate_id": "gemini-f84d1e30b1dc03da",
-      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-2cb030cac48a1221",
       "url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
       "title": "[PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain",
@@ -878,6 +860,24 @@
         "camera_relevance": 0.7,
         "android_hal_relevance": 0.7,
         "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-f84d1e30b1dc03da",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -994,9 +994,9 @@
       }
     },
     {
-      "candidate_id": "gemini-348919c03d831171",
-      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-      "title": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
+      "candidate_id": "gemini-09096535ee7708a2",
+      "url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "title": "Android Developers Blog: Bring your Android game to the car screen today",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -1012,45 +1012,9 @@
       }
     },
     {
-      "candidate_id": "gemini-a8cd06df28457612",
-      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-6f8916deba211090",
-      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-      "title": "Android Developers Blog: Emulator control for adaptive app development",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-c23c1f248651df56",
-      "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
-      "title": "Android Developers Blog: Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
+      "candidate_id": "gemini-20aa3dc2a3b765ed",
+      "url": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+      "title": "Android Developers Blog: Land your apps on Googlebook with adaptive development",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -1536,7 +1500,7 @@
   ],
   "counts": {
     "review_candidate": 19,
-    "blocked_candidate": 29,
+    "blocked_candidate": 27,
     "strong_candidate": 11,
     "weak_candidate": 26
   }

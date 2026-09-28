@@ -4,17 +4,15 @@
   "newsletter_date": "2026-09-28",
   "proposals": [
     {
-      "proposal_id": "android-camera-sensor-sony-imx681-support",
-      "topic_gap": "New camera sensor support in the Linux kernel, specifically Sony IMX681, impacting Android camera HAL.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-sensor-sony-imx681-support",
+      "topic_gap": "Add support for the Sony IMX681 camera sensor in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
       "search_keywords": [
         "Sony IMX681",
         "linux-media",
         "camera sensor driver",
-        "Android camera HAL"
+        "kernel patch"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
@@ -23,91 +21,82 @@
       "expected_evidence": [
         "Sony IMX681 sensor driver",
         "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Camera HAL integration"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-sensor-samsung-s5k3t2-support",
-      "topic_gap": "New camera sensor support in the Linux kernel, specifically Samsung S5K3T2, impacting Android camera HAL.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-sensor-samsung-s5k3t2-support",
+      "topic_gap": "Add Samsung S5K3T2 image sensor support to the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
       "search_keywords": [
         "Samsung S5K3T2",
         "linux-media",
-        "camera sensor driver",
-        "Android camera HAL"
+        "i2c sensor driver",
+        "kernel patch"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
       ],
       "expected_evidence": [
         "Samsung S5K3T2 sensor driver",
-        "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Linux kernel i2c subsystem",
+        "Camera HAL integration"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-qualcomm-sensor-support",
-      "topic_gap": "New camera sensor support for Qualcomm platforms (Hawi, Maili, Glymur) in the Linux kernel, impacting Android camera HAL.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-qualcomm-sensor-support",
+      "topic_gap": "Add CAMSS and S5KJN5 sensor support for Qualcomm platforms (Hawi and Maili).",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
       "search_keywords": [
-        "Qualcomm Hawi Maili Glymur",
-        "linux-media",
+        "Qualcomm Hawi Maili",
         "CAMSS",
-        "camera sensor driver",
-        "Android camera HAL"
+        "S5KJN5",
+        "linux-media",
+        "camera driver"
       ],
       "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
-        "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/"
+        "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/"
       ],
       "expected_evidence": [
-        "Qualcomm Hawi, Maili, Glymur sensor support",
-        "CAMSS driver",
+        "Qualcomm CAMSS driver",
+        "Samsung S5KJN5 sensor driver",
         "Linux kernel media subsystem",
-        "Android camera HAL implications"
+        "Qualcomm platform support"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-qualcomm-camss-offline-processing",
-      "topic_gap": "New feature for Qualcomm CAMSS: Offline Processing Engine support in the Linux kernel, relevant to Android camera HAL.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-qualcomm-offline-processing",
+      "topic_gap": "Enable CAMSS Offline Processing Engine support in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
       "search_keywords": [
-        "CAMSS OPE",
-        "Qualcomm camera",
-        "linux-media",
+        "Qualcomm CAMSS",
+        "Offline Processing Engine",
         "ISP",
-        "Android camera HAL"
+        "linux-media",
+        "camera pipeline"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/"
       ],
       "expected_evidence": [
-        "CAMSS Offline Processing Engine",
-        "Linux kernel media subsystem",
-        "Qualcomm camera HAL",
-        "ISP features"
+        "Qualcomm CAMSS driver",
+        "Offline Processing Engine (OPE)",
+        "ISP support",
+        "Linux kernel media subsystem"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-renesas-rzv2h-isp-ivc-enablement",
-      "topic_gap": "Enabling ISP and IVC on Renesas RZ/V2H EVK in the Linux kernel, relevant to embedded camera processing on Android.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-renesas-rzv2h-isp-ivc-enablement",
+      "topic_gap": "Enable ISP and IVC on Renesas RZ/V2H EVK in the Linux kernel.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
       "search_keywords": [
         "Renesas RZ/V2H",
         "ISP",
@@ -119,147 +108,158 @@
         "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
       ],
       "expected_evidence": [
-        "Renesas RZ/V2H EVK",
-        "ISP enablement",
-        "IVC enablement",
+        "Renesas RZ/V2H EVK support",
+        "ISP and IVC enablement",
         "Linux kernel device tree",
-        "Embedded camera processing"
+        "Media subsystem"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-ipu-bridge-samsung-galaxy-book3-pro-quirk",
-      "topic_gap": "A specific quirk for upside-down sensor handling on Samsung Galaxy Book3 Pro via the IPU bridge in the Linux kernel, relevant to camera HAL.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-ipu-bridge-sensor-quirk",
+      "topic_gap": "Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro in the Intel IPU bridge driver.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
       "search_keywords": [
-        "Intel IPU",
+        "ipu-bridge",
         "Samsung Galaxy Book3 Pro",
-        "upside-down sensor",
-        "linux-media"
+        "sensor quirk",
+        "linux-media",
+        "Intel IPU"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/"
       ],
       "expected_evidence": [
-        "Intel IPU bridge",
+        "Intel IPU bridge driver",
         "Samsung Galaxy Book3 Pro",
-        "Upside-down sensor quirk",
-        "Linux kernel media subsystem"
+        "DMI quirk",
+        "Sensor orientation"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-ipu-bridge-st-vd55g1-support",
-      "topic_gap": "Support for ST VD55G1 sensor via the Intel IPU bridge in the Linux kernel, relevant to Android camera HAL.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-ipu-bridge-st-vd55g1-support",
+      "topic_gap": "Add support for the ST VD55G1 (TBE20A1) sensor in the Intel IPU bridge driver.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
       "search_keywords": [
+        "ipu-bridge",
         "ST VD55G1",
-        "Intel IPU",
+        "TBE20A1",
         "linux-media",
-        "camera sensor driver"
+        "Intel IPU"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/"
       ],
       "expected_evidence": [
+        "Intel IPU bridge driver",
         "ST VD55G1 sensor",
-        "Intel IPU bridge",
-        "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "TBE20A1",
+        "Linux kernel media subsystem"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-libcamera-pipeline-stream-rejection",
-      "topic_gap": "A change in libcamera to reject multiple processed streams with software ISP, impacting camera pipeline handling on Android.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "patchwork.libcamera.org"
+      "proposal_id": "camera-hal-qualcomm-glymur-camss-support",
+      "topic_gap": "Add CAMSS support for Qualcomm Glymur platform.",
+      "source_family": "lore-linux-media-list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Qualcomm Glymur",
+        "CAMSS",
+        "linux-media",
+        "camera driver"
       ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Qualcomm CAMSS driver",
+        "Qualcomm Glymur platform",
+        "Linux kernel media subsystem"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-pipeline-software-isp-rejection",
+      "topic_gap": "Reject multiple processed streams with software ISP in libcamera pipeline.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
       "search_keywords": [
         "libcamera",
-        "software ISP",
         "pipeline",
-        "stream rejection"
+        "software ISP",
+        "stream rejection",
+        "patch"
       ],
       "candidate_urls": [
         "https://patchwork.libcamera.org/patch/28382/"
       ],
       "expected_evidence": [
-        "libcamera pipeline",
-        "software ISP",
-        "processed streams",
-        "camera pipeline handling"
+        "libcamera pipeline handler",
+        "Software ISP",
+        "Stream handling",
+        "Patch review"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-ipu-bridge-sony-imx681-driver",
-      "topic_gap": "Driver for Sony IMX681 sensor via the Intel IPU bridge in the Linux kernel, relevant to Android camera HAL.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-ipu-bridge-sony-imx681-support",
+      "topic_gap": "Add support for Sony IMX681 sensor in the Intel IPU bridge driver.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
       "search_keywords": [
+        "ipu-bridge",
         "Sony IMX681",
-        "Intel IPU",
         "linux-media",
-        "camera sensor driver"
+        "Intel IPU",
+        "camera sensor"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/"
       ],
       "expected_evidence": [
-        "Sony IMX681 sensor driver",
-        "Intel IPU bridge",
-        "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Intel IPU bridge driver",
+        "Sony IMX681 sensor",
+        "Linux kernel media subsystem"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-ipu6-multistream-metadata-preparation",
-      "topic_gap": "Preparation for IPU6 multi-stream and metadata support in the Linux kernel, relevant to Android camera HAL.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-ipu6-multistream-metadata-prep",
+      "topic_gap": "Prepare IPU6 for multi-stream and metadata support in the Linux kernel.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
       "search_keywords": [
-        "Intel IPU6",
+        "IPU6",
         "multi-stream",
         "metadata",
-        "linux-media"
+        "linux-media",
+        "Intel IPU"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/"
       ],
       "expected_evidence": [
-        "Intel IPU6",
-        "multi-stream support",
-        "metadata support",
-        "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Intel IPU6 driver",
+        "Multi-stream support",
+        "Metadata handling",
+        "Linux kernel media subsystem"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-libcamera-v4l2-event-functionality",
-      "topic_gap": "Addition of V4L2Event class and functionality in libcamera, relevant to camera event handling on Android.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "patchwork.libcamera.org"
-      ],
+      "proposal_id": "libcamera-v4l2-event-class",
+      "topic_gap": "Add V4L2Event class and functionality to libcamera.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
       "search_keywords": [
         "libcamera",
         "V4L2Event",
-        "camera events",
-        "linux-media"
+        "event handling",
+        "patch"
       ],
       "candidate_urls": [
         "https://patchwork.libcamera.org/patch/28380/"
@@ -267,24 +267,23 @@
       "expected_evidence": [
         "libcamera",
         "V4L2Event",
-        "camera event handling",
-        "Linux kernel V4L2"
+        "Event handling",
+        "Patch review"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-libcamera-lens-shading-tone-curve-controls",
-      "topic_gap": "Addition of LensShadingCorrection maps and ToneCurve to controls metadata in libcamera, relevant to camera tuning on Android.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "patchwork.libcamera.org"
-      ],
+      "proposal_id": "libcamera-controls-lensshading-tonecurve",
+      "topic_gap": "Add LensShadingCorrection and ToneCurve to controls metadata in libcamera.",
+      "source_family": "patchwork-libcamera-patches",
+      "allowed_domains": [],
       "search_keywords": [
         "libcamera",
+        "controls",
         "LensShadingCorrection",
         "ToneCurve",
-        "camera metadata",
-        "camera tuning"
+        "metadata",
+        "patch"
       ],
       "candidate_urls": [
         "https://patchwork.libcamera.org/patch/28366/"
@@ -293,23 +292,22 @@
         "libcamera controls",
         "LensShadingCorrection",
         "ToneCurve",
-        "camera metadata",
-        "camera tuning"
+        "Metadata",
+        "Patch review"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-ipu-staging-firmware-release",
-      "topic_gap": "Release of ISYS firmware resources on remove for the Intel IPU7 driver in the Linux kernel, relevant to embedded camera systems on Android.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-ipu-staging-firmware-release",
+      "topic_gap": "Release ISYS firmware resources on remove in the Intel IPU7 driver.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
       "search_keywords": [
-        "Intel IPU7",
-        "ISYS firmware",
+        "ipu7",
+        "firmware release",
         "linux-media",
-        "embedded camera"
+        "Intel IPU",
+        "staging"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/"
@@ -317,131 +315,273 @@
       "expected_evidence": [
         "Intel IPU7 driver",
         "ISYS firmware",
-        "resource release",
+        "Resource release",
         "Linux kernel media subsystem"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-camera-ipu-bridge-ov02c10-link-frequency",
-      "topic_gap": "Addition of OV02C10 sensor support with a specific link frequency via the Intel IPU bridge in the Linux kernel, relevant to Android camera HAL.",
-      "source_family": "linux-camera",
-      "allowed_domains": [
-        "lore.kernel.org"
-      ],
+      "proposal_id": "camera-hal-ipu-bridge-ov02c10-link-frequency",
+      "topic_gap": "Add 26 MHz link frequency for OV02C10 sensor in the Intel IPU bridge driver.",
+      "source_family": "lore-linux-media-ipu",
+      "allowed_domains": [],
       "search_keywords": [
+        "ipu-bridge",
         "OV02C10",
-        "Intel IPU",
         "link frequency",
-        "linux-media"
+        "linux-media",
+        "Intel IPU"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/"
       ],
       "expected_evidence": [
+        "Intel IPU bridge driver",
         "OV02C10 sensor",
-        "Intel IPU bridge",
-        "26 MHz link frequency",
-        "Linux kernel media subsystem",
-        "Camera HAL implications"
+        "Link frequency",
+        "Linux kernel media subsystem"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-developers-blog-ai-agent-integration",
-      "topic_gap": "Integration of AI agents into Android Studio, potentially impacting developer workflows for camera applications.",
+      "proposal_id": "android-developers-blog-ai-agent-studio",
+      "topic_gap": "Using AI agents of choice within Android Studio for development.",
       "source_family": "android-developers-blog",
-      "allowed_domains": [
-        "android-developers.googleblog.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
         "Android Studio",
         "AI agent",
         "developer tools",
-        "camera development"
+        "code generation"
       ],
       "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-        "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html"
+        "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
       ],
       "expected_evidence": [
-        "AI agent integration",
         "Android Studio",
-        "developer tools",
-        "code generation",
-        "camera development workflow"
+        "AI agents",
+        "Developer workflow",
+        "Integration"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-developers-blog-emulator-adaptive-development",
-      "topic_gap": "Emulator control for adaptive app development, potentially relevant for testing camera features and UIs on different screen sizes/configurations.",
+      "proposal_id": "android-developers-blog-gemma-android-studio",
+      "topic_gap": "Leveraging Android skills and Gemma 4 in Android Studio Quail 4.",
       "source_family": "android-developers-blog",
-      "allowed_domains": [
-        "android-developers.googleblog.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
-        "Android emulator",
+        "Android Studio",
+        "Gemma 4",
+        "AI model",
+        "developer productivity"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html"
+      ],
+      "expected_evidence": [
+        "Android Studio",
+        "Gemma 4",
+        "AI models",
+        "Android development"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-emulator-adaptive-dev",
+      "topic_gap": "Emulator control for adaptive app development in Android.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Emulator",
         "adaptive development",
-        "camera testing"
+        "testing",
+        "device configurations"
       ],
       "candidate_urls": [
         "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html"
       ],
       "expected_evidence": [
-        "Emulator control",
-        "adaptive app development",
-        "Android Studio",
-        "testing camera features"
+        "Android Emulator",
+        "Adaptive app development",
+        "Device testing",
+        "Layouts"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-androidx-camera-releases",
-      "topic_gap": "Recent releases of the AndroidX Camera library, which could include bug fixes or new features relevant to camera HAL interaction.",
+      "proposal_id": "android-androidx-camera-release-1.6.2",
+      "topic_gap": "CameraX 1.6.2 release notes and changes.",
       "source_family": "camerax-release-notes",
-      "allowed_domains": [
-        "developer.android.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
-        "androidx.camera",
+        "CameraX",
         "release notes",
-        "camera library"
+        "1.6.2",
+        "androidx.camera"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
+      ],
+      "expected_evidence": [
+        "CameraX 1.6.2",
+        "Release notes",
+        "Bug fixes",
+        "New features"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-androidx-camera-release-1.3.0-beta02",
+      "topic_gap": "CameraX 1.3.0-beta02 release notes and changes.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX",
+        "beta release",
+        "1.3.0-beta02",
+        "androidx.camera"
+      ],
+      "candidate_urls": [
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.3.0-beta02"
+      ],
+      "expected_evidence": [
+        "CameraX 1.3.0-beta02",
+        "Beta release notes",
+        "New features",
+        "API changes"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-androidx-camera-release-1.4.0-alpha07",
+      "topic_gap": "CameraX 1.4.0-alpha07 release notes and changes.",
+      "source_family": "camerax-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX",
+        "alpha release",
+        "1.4.0-alpha07",
+        "androidx.camera"
+      ],
+      "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07"
       ],
       "expected_evidence": [
-        "AndroidX Camera library",
-        "release notes",
-        "bug fixes",
-        "new features",
-        "camera HAL interaction"
+        "CameraX 1.4.0-alpha07",
+        "Alpha release notes",
+        "Experimental features",
+        "API changes"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-developers-blog-androidx-security-state-libraries",
-      "topic_gap": "Introduction of AndroidX Security State Libraries, potentially impacting how camera apps handle device security states.",
+      "proposal_id": "android-developers-blog-androidx-security-state",
+      "topic_gap": "Introduction to AndroidX Security State Libraries for a unified view of device security.",
       "source_family": "android-developers-blog",
-      "allowed_domains": [
-        "android-developers.googleblog.com"
-      ],
+      "allowed_domains": [],
       "search_keywords": [
         "AndroidX Security",
-        "device security",
-        "camera app privacy"
+        "security libraries",
+        "device state",
+        "privacy"
       ],
       "candidate_urls": [
         "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html"
       ],
       "expected_evidence": [
         "AndroidX Security State Libraries",
-        "device security",
-        "camera app security",
-        "privacy"
+        "Device security",
+        "Unified view",
+        "Privacy"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-genai-safety",
+      "topic_gap": "Ensuring safety in the Generative AI ecosystem by protecting users from non-consensual intimate content.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Generative AI",
+        "safety",
+        "content moderation",
+        "user privacy"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html"
+      ],
+      "expected_evidence": [
+        "Generative AI safety",
+        "Non-consensual intimate content",
+        "User protection",
+        "Android platform"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-games-car-screen",
+      "topic_gap": "Bringing Android games to the car screen.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android games",
+        "automotive",
+        "car screen",
+        "infotainment"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html"
+      ],
+      "expected_evidence": [
+        "Android games",
+        "Car screen",
+        "Automotive",
+        "User experience"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-adaptive-dev-googlebook",
+      "topic_gap": "Land apps on Googlebook with adaptive development.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "adaptive development",
+        "Googlebook",
+        "cross-device",
+        "app scaling"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html"
+      ],
+      "expected_evidence": [
+        "Adaptive development",
+        "Googlebook",
+        "App scaling",
+        "Cross-device"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-android-bench-2.0",
+      "topic_gap": "Android Bench 2.0: Pushing the frontier with challenging long-horizon tasks.",
+      "source_family": "android-developers-blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Bench",
+        "performance testing",
+        "benchmarking",
+        "long-horizon tasks"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html"
+      ],
+      "expected_evidence": [
+        "Android Bench 2.0",
+        "Long-horizon tasks",
+        "Performance testing",
+        "Benchmarking"
       ],
       "risk_notes": []
     }

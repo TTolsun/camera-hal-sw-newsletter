@@ -46,21 +46,19 @@
 | review_candidate | 0.72 | [PATCH v7 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev | https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/ |
 | review_candidate | 0.765 | [PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor - Armandas Kvietkus via B4 Relay | https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/ |
 | strong_candidate | 0.81 | [PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili - Nihal Kumar Gupta | https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/ |
-| strong_candidate | 0.81 | [PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta | https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/ |
 | review_candidate | 0.72 | [PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain | https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/ |
 | strong_candidate | 0.81 | [PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK - Linus Walleij | https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/ |
 | review_candidate | 0.765 | [PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro - Felipe Calliari | https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/ |
 | review_candidate | 0.72 | [PATCH 2/4] media: ipu-bridge: Add the ST VD55G1 (TBE20A1) - Ruslan Koreev | https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/ |
+| strong_candidate | 0.81 | [PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta | https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/ |
 | blocked_candidate | 0.545 | [v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP - Patchwork | https://patchwork.libcamera.org/patch/28382/ |
 | strong_candidate | 0.81 | [PATCH v3 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus | https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/ |
 | blocked_candidate | 0.545 | [1/4] libcamera: v4l2_event: Add V4L2Event class and functionality - Patchwork | https://patchwork.libcamera.org/patch/28380/ |
 | blocked_candidate | 0.545 | [v2] libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork | https://patchwork.libcamera.org/patch/28366/ |
 | review_candidate | 0.765 | [PATCH] media: staging/ipu7: release ISYS firmware resources on remove - Guangshuo Li | https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/ |
 | review_candidate | 0.72 | [PATCH v3 4/5] media: ipu-bridge: Add the OV02C10 26 MHz link frequency - Felipe Calliari | https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/ |
-| blocked_candidate | 0.492 | Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio | https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html |
-| blocked_candidate | 0.492 | Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4 | https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html |
-| blocked_candidate | 0.492 | Android Developers Blog: Emulator control for adaptive app development | https://android-developers.googleblog.com/2026/08/emulator-adaptive.html |
-| blocked_candidate | 0.492 | Android Developers Blog: Introducing the AndroidX Security State Libraries: A Unified View of Device Security | https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html |
+| blocked_candidate | 0.492 | Android Developers Blog: Bring your Android game to the car screen today | https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html |
+| blocked_candidate | 0.492 | Android Developers Blog: Land your apps on Googlebook with adaptive development | https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html |
 | weak_candidate | 0.367 | https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899 | https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899 |
 | weak_candidate | 0.458 | https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com/ | https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com |
 | weak_candidate | 0.367 | https://github.com/RISHI27-dot/linux/commits/lpc/ov2312/ | https://github.com/RISHI27-dot/linux/commits/lpc/ov2312 |

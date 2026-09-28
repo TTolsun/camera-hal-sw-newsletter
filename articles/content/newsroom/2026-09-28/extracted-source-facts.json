@@ -467,13 +467,13 @@
       "published_at": "Thu, 24 Sep 2026 15:59:00 +0000",
       "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
       "validation_mode": "source_fetch",
       "claims": [
         {
           "claim": "Posted by Matthew Warner, Product Manager, Android Developer Experience AI-powered developer tools have become an essential multiplier for engineering productivity, with teams adopting specialized AI coding agents, custom enterprise harnesses, and autonomous tools. It’s important for you to be able to build Android apps in the way that works best for you and your team, and agentic Android development is more open and flexible than ever before. Last year, Android Studio opened up to any AI model",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "evidence_text": "",
           "confidence": "medium"
         }
       ],
@@ -481,29 +481,6 @@
       "android_hal_relevance": 0.96,
       "ai_relevance": 0.5,
       "technical_depth": 0.786,
-      "warnings": []
-    },
-    {
-      "id": "gemini-348919c03d831171",
-      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-      "title": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.492,
       "warnings": []
     },
     {
@@ -697,13 +674,13 @@
       "published_at": "Mon, 31 Aug 2026 16:00:00 +0000",
       "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
       "validation_mode": "source_fetch",
       "claims": [
         {
           "claim": "Posted by Rob Orgiu, Developer Relations Engineer, Adaptive Apps, Android Adaptive app development is fundamental on Android, but making sure everything looks good and every feature works the way it should require multiple tests on multiple devices. Or does it? Well, yes… and no! While Android Studio is bundled with the Resizable Emulator to let you test layouts manually, there’s a faster, more streamlined way to control form factors directly from your terminal. By leveraging fire-and-forget con",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "evidence_text": "",
           "confidence": "medium"
         }
       ],
@@ -711,29 +688,6 @@
       "android_hal_relevance": 0.6,
       "ai_relevance": 0,
       "technical_depth": 0.732,
-      "warnings": []
-    },
-    {
-      "id": "gemini-6f8916deba211090",
-      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-      "title": "Android Developers Blog: Emulator control for adaptive app development",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Android Developers Blog: Emulator control for adaptive app development",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.492,
       "warnings": []
     },
     {
@@ -789,13 +743,13 @@
       "published_at": "Tue, 01 Sep 2026 15:00:00 +0000",
       "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
       "validation_mode": "source_fetch",
       "claims": [
         {
           "claim": "Posted by Amman Fasil Asfaw, Product Manager, Android Studio Android Studio Quail 4 is now stable and ready for you to use in production. This is the final stable release for Android Studio Quail. The new features in Android Studio enable you to build premium apps with AI efficiently and effectively. Check out the video below to see the most helpful new features from the last 4 releases that can help improve and speed up your development. Here is a deep dive into what’s new in Android Studio Qua",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
+          "evidence_text": "",
           "confidence": "medium"
         }
       ],
@@ -806,66 +760,89 @@
       "warnings": []
     },
     {
-      "id": "gemini-a8cd06df28457612",
-      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-      "published_at": "",
-      "source_type": "official_blog",
+      "id": "9bf211c2ecec3d36",
+      "url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "title": "Bring your Android game to the car screen today",
+      "published_at": "Mon, 21 Sep 2026 16:00:48 +0000",
+      "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
-          "confidence": "medium"
+          "claim": "Posted by Jan Kleinert, Developer Relations Engineer, Android for Cars Today, the games category for Android Auto and cars powered by Android Automotive OS with Google built-in is officially graduating from beta to general availability. Our early access partners have already been bringing games to the parked-only experience for cars, and you can browse these in our latest collections of games for Android Auto and games for Android Automotive OS . Bringing your game to cars lets you reach users i",
+          "evidence_text": "",
+          "confidence": "low"
+        }
+      ],
+      "camera_relevance": 0.66,
+      "android_hal_relevance": 0.66,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.577,
+      "warnings": []
+    },
+    {
+      "id": "gemini-09096535ee7708a2",
+      "url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "title": "Android Developers Blog: Bring your Android game to the car screen today",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Android Developers Blog: Bring your Android game to the car screen today",
+          "evidence_text": "",
+          "confidence": "low"
         }
       ],
       "camera_relevance": 0.45,
       "android_hal_relevance": 0.45,
-      "ai_relevance": 0.5,
+      "ai_relevance": 0,
       "technical_depth": 0.492,
       "warnings": []
     },
     {
-      "id": "eff05b8438968671",
-      "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
-      "title": "Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
-      "published_at": "Thu, 17 Sep 2026 19:00:00 +0000",
+      "id": "4c2cb76fa38210b1",
+      "url": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+      "title": "Land your apps on Googlebook with adaptive development",
+      "published_at": "Tue, 22 Sep 2026 17:00:00 +0000",
       "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Posted by Maunik Shah, Staff Software Engineer, Alec Garcia, Software Engineer, and Joseph Yong, Technical Program Manager At Android, we are constantly working to provide developers and enterprise partners with the data they need to keep devices protected. Today, we're thrilled to announce the stable release of the AndroidX Security State version 1.1.0 and Security State Provider version 1.0.0 libraries which provides a centralized mechanism designed to bring further transparency to the compreh",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
-          "confidence": "medium"
+          "claim": "Posted by Fahd Imtiaz, Senior Product Manager, and Loryn Hairston, Product Marketing Manager, Android Developer Googlebook introduces a new category of laptops built on a shared Android foundation. High-performance hardware from partners such as HP, Dell, Lenovo, Acer, and Asus, combines mobile convenience with desktop power. Googlebook offers high-resolution OLED touchscreens, dedicated keyboards, and precision trackpads with all-day battery life and OS-level Gemini Intelligence. With Googleboo",
+          "evidence_text": "",
+          "confidence": "low"
         }
       ],
-      "camera_relevance": 0.54,
-      "android_hal_relevance": 0.54,
-      "ai_relevance": 0,
-      "technical_depth": 0.574,
+      "camera_relevance": 0.6,
+      "android_hal_relevance": 0.6,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.552,
       "warnings": []
     },
     {
-      "id": "gemini-c23c1f248651df56",
-      "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
-      "title": "Android Developers Blog: Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
+      "id": "gemini-20aa3dc2a3b765ed",
+      "url": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+      "title": "Android Developers Blog: Land your apps on Googlebook with adaptive development",
       "published_at": "",
       "source_type": "official_blog",
       "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
+      "source_fetch_status": "failed",
+      "source_fetch_error": "fetch failed: 429",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Android Developers Blog: Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
-          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
-          "confidence": "medium"
+          "claim": "Android Developers Blog: Land your apps on Googlebook with adaptive development",
+          "evidence_text": "",
+          "confidence": "low"
         }
       ],
       "camera_relevance": 0.45,
@@ -887,7 +864,7 @@
       "claims": [
         {
           "claim": "1.6.2",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"it-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
           "confidence": "medium"
         }
       ],
