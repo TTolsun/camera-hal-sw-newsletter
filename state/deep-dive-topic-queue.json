@@ -518,6 +518,24 @@
           "detected_at": "2026-09-28"
         }
       ]
+    },
+    {
+      "topic_key": "https://source.android.com/docs/security/bulletin/2026/2026-09-01#cve-2026-33636",
+      "title": "September 2026 Android Security Bulletin: CVE-2026-33636 — external/libpng",
+      "bucket": "android",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://source.android.com/docs/security/bulletin/2026/2026-09-01#cve-2026-33636",
+          "excerpt": "September 2026 Android Security Bulletin: CVE-2026-33636 — external/libpng",
+          "fingerprint": "edfd62d783469d9e049056a2",
+          "effective_date": "2026-09-01",
+          "date_source": "candidate_published_at",
+          "date_confidence": 0,
+          "origin": "demoted_candidate",
+          "detected_at": "2026-09-28"
+        }
+      ]
     }
   ]
 }
