@@ -962,6 +962,8 @@ test('Stage 2 enabled promotes only validated proposal URLs and writes manifest 
   // 옛 어휘 잔재)이 함께 있어도 보이지 않는다 -- #982 회귀가 그렇게 3개월 숨었다.
   assert.deepEqual(Object.keys(usage.stage_counts), ['source_discovery']);
   assert.equal(usage.schema_version, 2);
+  // #1203: calls는 stage_counts와 같은 진단에서 나온다. 성공 응답 합계 == calls 길이.
+  assert.equal(usage.calls.length, usage.successful_response_count);
 
   const validated = validateCandidateArtifact({
     root,

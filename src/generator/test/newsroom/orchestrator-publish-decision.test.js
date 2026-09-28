@@ -39,6 +39,7 @@ async function withStubbedCollaborators(run, options = {}) {
     updateNewsletterData: [],
     persistHeadlineStateArtifacts: [],
     writeGenerationStatus: [],
+    writeCostReport: [],
     writeSelectionDiagnosticsArtifact: 0,
     weekly: 0,
     // #870: weekly writer에 넘어간 병합 검증 클로저. 이 배선은 writer를 stub으로 갈아끼우면
@@ -78,7 +79,12 @@ async function withStubbedCollaborators(run, options = {}) {
       }
     }),
     stubModule(ARTIFACT_WRITERS, {
-      writeGenerationStatus: (artifact) => { calls.writeGenerationStatus.push(artifact); }
+      writeGenerationStatus: (artifact) => { calls.writeGenerationStatus.push(artifact); },
+      // #1203: 비용 리포트가 weekly writer(늦은 LLM 호출)와 validate 사이 어디에서 기록되는지
+      // 호출 시점의 두 카운터로 남긴다.
+      writeCostReport: (date) => {
+        calls.writeCostReport.push({ date, weeklyCallsBefore: calls.weekly, validateCallsBefore: calls.runValidate });
+      }
     }),
     stubModule(RECOVERY_WRITERS, {
       writeSelectionDiagnosticsArtifact: () => { calls.writeSelectionDiagnosticsArtifact += 1; }
@@ -387,6 +393,50 @@ test('reviewable(NEEDS_FIX) 입력: 공개 산출물을 쓰지 않고 validate�
     assert.equal(out.generationStatusArtifact.weekly_output_status, 'not_attempted');
     assert.equal(out.generationStatusArtifact.weekly_output_failure_reason, '');
   });
+});
+
+// #1203: weekly writer 안에서 weekly-merge·intro-letter LLM 호출이 나간다. 비용 리포트를 그보다
+// 먼저 쓰면 두 호출이 커밋되는 cost-report.md에서 빠진다(2026-09-28 intro-letter 누락).
+// 리포트는 weekly writer가 끝난 뒤, validate가 그 파일을 보기 전에 정확히 한 번 기록돼야 한다.
+test('비용 리포트는 늦은 LLM 호출을 내는 weekly writer 뒤, validate 앞에서 한 번 기록된다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    await decide(baseArgs(newsroomDir, newsletterDir));
+
+    assert.deepEqual(calls.writeCostReport, [
+      { date: '2026-05-08', weeklyCallsBefore: 1, validateCallsBefore: 0 }
+    ]);
+  });
+});
+
+// main()은 이 함수 앞에서 비용 리포트를 쓰지 않는다. 그래서 공개 산출물을 쓰지 않는 경로와
+// weekly가 실패한 경로에서도 리포트가 빠짐없이 한 번 기록돼야 한다.
+test('reviewable 경로에서도 비용 리포트를 한 번 기록한다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    await decide(baseArgs(newsroomDir, newsletterDir, {
+      factCheck: { status: 'NEEDS_FIX', must_fix: [{ id: 'x' }], source_gap_count: 0 },
+      mustFixCount: 1
+    }));
+
+    assert.deepEqual(calls.writeCostReport, [
+      { date: '2026-05-08', weeklyCallsBefore: 0, validateCallsBefore: 0 }
+    ]);
+  });
+});
+
+test('weekly 기록이 실패해도 비용 리포트는 weekly 시도 뒤에 한 번 기록된다', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    await decide(baseArgs(newsroomDir, newsletterDir));
+
+    assert.deepEqual(calls.writeCostReport, [
+      { date: '2026-05-08', weeklyCallsBefore: 1, validateCallsBefore: 0 }
+    ]);
+  }, { weeklyThrows: new Error('weekly boom') });
 });
 
 // #837: editor가 기록한 hard block이 status coverage 입력으로 실제 전달되는지 잠근다.
