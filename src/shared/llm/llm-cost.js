@@ -145,7 +145,8 @@ function buildCostReportMarkdown(report) {
     ` ${call.output_tokens || 0} `,
     ` ${call.thinking_tokens || 0} `,
     ` ${call.thinking_budget_requested ?? 'n/a'} `,
-    ` ${call.thinking_budget_applied ?? 'n/a'} `,
+    // 3.x는 budget 숫자 대신 thinkingLevel을 적용하므로 그 값을 Applied Budget 칸에 찍는다(#1204).
+    ` ${call.thinking_level ?? call.thinking_budget_applied ?? 'n/a'} `,
     ` ${call.cached_tokens || 0} `,
     ` ${call.pro_model === true ? 'yes' : 'no'} `,
     ` ${Number.isFinite(Number(call.estimated_cost_usd)) ? Number(call.estimated_cost_usd).toFixed(6) : 'n/a'} |`

@@ -200,9 +200,10 @@ function thinkingConfigForBudget(requested, model) {
 
   if (family === 'thinking_level') {
     const thinkingLevel = budgetToThinkingLevel(requested);
+    // 3.x 요청에는 budget 숫자가 들어가지 않으므로 applied budget은 없다(#1204).
     return {
       requested,
-      applied: requested,
+      applied: null,
       note: `gemini 3.x: thinkingBudget ${requested} -> thinkingLevel=${thinkingLevel}`,
       mode: 'thinking_level',
       thinkingLevel
