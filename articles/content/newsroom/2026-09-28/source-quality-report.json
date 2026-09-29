@@ -274,24 +274,6 @@
       }
     },
     {
-      "candidate_id": "bd74537ab6d5beb1",
-      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
-      "title": "[PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili",
-      "source_quality_score": 0.885,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 1,
-        "android_hal_relevance": 1,
-        "technical_depth": 0.55,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "7bc66cbac7c9117a",
       "url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
       "title": "[PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support",
@@ -304,6 +286,24 @@
         "technical_depth": 0.55,
         "recency_score": 1,
         "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4ec7c87b47aa4b81",
+      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-5-cbbb42e534ef@oss.qualcomm.com/",
+      "title": "[PATCH RFC 05/15] media: qcom: camss: Add Hawi compatible camss driver",
+      "source_quality_score": 0.62,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.45,
+        "android_hal_relevance": 0.45,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -580,6 +580,24 @@
       }
     },
     {
+      "candidate_id": "05ec0bba59ca594e",
+      "url": "https://lore.kernel.org/linux-media/20260927201631.153126-1-devnexen@gmail.com/",
+      "title": "[PATCH 1/2] media: ipu6: Fix ipu7 firmware context leak on stream start",
+      "source_quality_score": 0.592,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.38,
+        "android_hal_relevance": 0.38,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "bc732f8a0a2ba65c",
       "url": "https://lore.kernel.org/linux-media/20260924120634.1420687-1-antti.laakso@linux.intel.com/",
       "title": "[PATCH] media: ipu6: Fix bus device use-after-free",
@@ -626,24 +644,6 @@
         "camera_relevance": 0.33,
         "android_hal_relevance": 0.33,
         "technical_depth": 0.25,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "9a56c7ceef26189e",
-      "url": "https://lore.kernel.org/linux-media/20260924215857.48545-1-lsa.uz@pm.me/",
-      "title": "[RFC] ipu-bridge: supplying a vendor-prefixed property",
-      "source_quality_score": 0.568,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.32,
-        "android_hal_relevance": 0.32,
-        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0,
         "duplicate_penalty": 0,
@@ -778,42 +778,6 @@
       }
     },
     {
-      "candidate_id": "gemini-ce75d275dbd30e6b",
-      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
-      "title": "[PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili - Nihal Kumar Gupta",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-f84d1e30b1dc03da",
-      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-2cb030cac48a1221",
       "url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
       "title": "[PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain",
@@ -878,6 +842,24 @@
         "camera_relevance": 0.7,
         "android_hal_relevance": 0.7,
         "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-f84d1e30b1dc03da",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -994,78 +976,6 @@
       }
     },
     {
-      "candidate_id": "gemini-348919c03d831171",
-      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-      "title": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-a8cd06df28457612",
-      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-6f8916deba211090",
-      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-      "title": "Android Developers Blog: Emulator control for adaptive app development",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-c23c1f248651df56",
-      "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
-      "title": "Android Developers Blog: Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-linked-6bb3f66fb8357436",
       "url": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
       "title": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
@@ -1141,150 +1051,6 @@
       "candidate_id": "gemini-linked-5adb9b40a4f815fd",
       "url": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
       "title": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
-      "source_quality_score": 0.458,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-fd42217ad7ad955c",
-      "url": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org",
-      "title": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org/",
-      "source_quality_score": 0.458,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-e94ff3386adfcc34",
-      "url": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
-      "title": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
-      "source_quality_score": 0.458,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-e998fecb0370b203",
-      "url": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
-      "title": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
-      "source_quality_score": 0.458,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-571f6f36c46da5bc",
-      "url": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
-      "title": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
-      "source_quality_score": 0.458,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-a5282b5315f79eae",
-      "url": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
-      "title": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
-      "source_quality_score": 0.458,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-919adf6caa65379e",
-      "url": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
-      "title": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
-      "source_quality_score": 0.458,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-ec8f804ddab09478",
-      "url": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
-      "title": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
-      "source_quality_score": 0.458,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-38cfb10505bee871",
-      "url": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org",
-      "title": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org/",
       "source_quality_score": 0.458,
       "source_quality_bucket": "weak_candidate",
       "breakdown": {
@@ -1536,8 +1302,8 @@
   ],
   "counts": {
     "review_candidate": 19,
-    "blocked_candidate": 29,
-    "strong_candidate": 11,
-    "weak_candidate": 26
+    "blocked_candidate": 26,
+    "strong_candidate": 9,
+    "weak_candidate": 18
   }
 }

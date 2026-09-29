@@ -8,20 +8,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
       "canonical_title": "Build your way: Use any AI agent of your choice in Android Studio",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
           "title": "Build your way: Use any AI agent of your choice in Android Studio",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-          "title": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -100,20 +93,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
       "canonical_title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
           "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-          "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -124,20 +110,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
       "canonical_title": "Emulator control for adaptive app development",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
           "title": "Emulator control for adaptive app development",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
-          "title": "Android Developers Blog: Emulator control for adaptive app development",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -179,20 +158,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
       "canonical_title": "Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
           "title": "Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
-          "title": "Android Developers Blog: Introducing the AndroidX Security State Libraries: A Unified View of Device Security",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -281,30 +253,6 @@
       ]
     },
     {
-      "cluster_id": "b66895f3d03a8d23",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
-      "canonical_title": "[PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili",
-      "candidate_count": 2,
-      "duplicate_count": 1,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
-          "title": "[PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-0-cbbb42e534ef@oss.qualcomm.com/",
-          "title": "[PATCH RFC 00/15] Add CAMSS and S5KJN5 sensor support for Qualcomm Hawi and Maili - Nihal Kumar Gupta",
-          "canonical": false,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "c3cdf0f3875b4f6e",
       "cluster_key": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
@@ -323,6 +271,23 @@
           "url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
           "title": "[PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain",
           "canonical": false,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0159abb65f57bdf8",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-5-cbbb42e534ef@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-5-cbbb42e534ef@oss.qualcomm.com/",
+      "canonical_title": "[PATCH RFC 05/15] media: qcom: camss: Add Hawi compatible camss driver",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-5-cbbb42e534ef@oss.qualcomm.com/",
+          "title": "[PATCH RFC 05/15] media: qcom: camss: Add Hawi compatible camss driver",
+          "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -661,6 +626,23 @@
       ]
     },
     {
+      "cluster_id": "75a81753b2741e75",
+      "cluster_key": "https://lore.kernel.org/linux-media/20260927201631.153126-1-devnexen@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20260927201631.153126-1-devnexen@gmail.com/",
+      "canonical_title": "[PATCH 1/2] media: ipu6: Fix ipu7 firmware context leak on stream start",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20260927201631.153126-1-devnexen@gmail.com/",
+          "title": "[PATCH 1/2] media: ipu6: Fix ipu7 firmware context leak on stream start",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "ff8db71de773bbc5",
       "cluster_key": "https://lore.kernel.org/linux-media/20260924120634.1420687-1-antti.laakso@linux.intel.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260924120634.1420687-1-antti.laakso@linux.intel.com/",
@@ -705,23 +687,6 @@
         {
           "url": "https://patchwork.libcamera.org/patch/28383/",
           "title": "[v2] debayer: Further demote 'Unsupported input format' log",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "be34f1963eab33de",
-      "cluster_key": "https://lore.kernel.org/linux-media/20260924215857.48545-1-lsa.uz@pm.me",
-      "canonical_url": "https://lore.kernel.org/linux-media/20260924215857.48545-1-lsa.uz@pm.me/",
-      "canonical_title": "[RFC] ipu-bridge: supplying a vendor-prefixed property",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20260924215857.48545-1-lsa.uz@pm.me/",
-          "title": "[RFC] ipu-bridge: supplying a vendor-prefixed property",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -875,142 +840,6 @@
         {
           "url": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
           "title": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "fd42217ad7ad955c",
-      "cluster_key": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org",
-      "canonical_url": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org",
-      "canonical_title": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org/",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org",
-          "title": "https://lore.kernel.org/all/20260917-x1e-csi2-phy-v18-0-6515b5255fa9@linaro.org/",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "e94ff3386adfcc34",
-      "cluster_key": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
-      "canonical_title": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
-          "title": "https://lore.kernel.org/all/20260915-kaanapali-camss-v16-0-c9f3f6f4180c@oss.qualcomm.com",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "e998fecb0370b203",
-      "cluster_key": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
-      "canonical_title": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
-          "title": "https://lore.kernel.org/all/20260914-sk5jn5-v4-0-386e84cfb2b3@oss.qualcomm.com",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "571f6f36c46da5bc",
-      "cluster_key": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
-      "canonical_title": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
-          "title": "https://lore.kernel.org/all/20260916-maili_camcc-v2-0-f30b394bfd50@oss.qualcomm.com",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "a5282b5315f79eae",
-      "cluster_key": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
-      "canonical_title": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
-          "title": "https://lore.kernel.org/all/20260915-camcc-hawi-v3-0-5b57f45477f1@oss.qualcomm.com",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "919adf6caa65379e",
-      "cluster_key": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
-      "canonical_title": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
-          "title": "https://lore.kernel.org/all/20260923-hawi-dt-post-v1-0-e41473b6298b@oss.qualcomm.com",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "ec8f804ddab09478",
-      "cluster_key": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
-      "canonical_title": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
-          "title": "https://lore.kernel.org/all/20260922-maili-dts-v1-0-ac2b1b76bfd9@oss.qualcomm.com",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "38cfb10505bee871",
-      "cluster_key": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org",
-      "canonical_url": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org",
-      "canonical_title": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org/",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org",
-          "title": "https://lore.kernel.org/all/20260917-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v18-0-f85c9103177e@linaro.org/",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
