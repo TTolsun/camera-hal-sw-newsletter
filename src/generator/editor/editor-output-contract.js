@@ -88,6 +88,7 @@ const REPAIRABLE_SEMANTIC_FIELDS = new Set([
   'summary',
   'sections.article_sections',
   'sections.public_article',
+  'sections.public_article.source_links',
   'sections.hal_signal_capsule',
   'sections.field_hygiene',
   'sections.group_coverage',
@@ -1259,7 +1260,22 @@ function validateEditorOutputContract(value, date, options = {}) {
   }
   validateSectionCount(value);
 
-  value.sections = value.sections.map((section, index) => normalizeSection(section, index, reporter));
+  value.sections = value.sections.map((section, index) => {
+    try {
+      return normalizeSection(section, index, reporter);
+    } catch (error) {
+      // 출처 검증은 그대로 유지하되 알려진 LLM 출력 오류를 기존 bounded repair로 전달한다.
+      // 그 외 normalize 버그/인프라 오류는 의미 검증 오류로 숨기지 않는다.
+      if (error.code !== 'invalid_public_source_links') throw error;
+      throw semanticError(error.message, {
+        ...error.details,
+        field: 'sections.public_article.source_links',
+        article_index: index,
+        headline: section.headline || section.public_article?.headline || '',
+        sectionCount: value.sections.length
+      });
+    }
+  });
   validatePublicArticleContract(value, {
     requireStoryContract: options.requireStoryContract === true
   });
