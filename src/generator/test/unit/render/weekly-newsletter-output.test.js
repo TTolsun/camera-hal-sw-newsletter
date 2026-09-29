@@ -445,6 +445,30 @@ test('syncWeeklyArticleImages does not downgrade a bound weekly image to a daily
   }
 });
 
+test('image repair synchronizes only the matching current homepage headline without replacing its editorial state', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  const image = 'https://publisher.example.com/images/camera-card.png';
+  const repaired = repairedImageSection('1.7.0', url, image);
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([repaired]) });
+  const file = path.join(root, 'articles', 'data', 'homepage-headline.json');
+  for (const [date, source, shouldSync] of [
+    ['2026-06-04', url, true],
+    ['2026-06-03', url, false],
+    ['2026-06-04', 'https://example.com/another-article', false]
+  ]) {
+    const state = { current_headline: { newsletter_date: date, source_url: source, title: 'Retained title', current_score: 81, image_url: 'assets/images/fallback/android.svg' }, headline_history: [{ title: 'History' }] };
+    fs.writeFileSync(file, JSON.stringify(state));
+    const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
+    const after = JSON.parse(fs.readFileSync(file, 'utf8'));
+    assert.equal(after.current_headline.image_url, shouldSync ? image : state.current_headline.image_url);
+    assert.equal(after.current_headline.title, state.current_headline.title);
+    assert.equal(after.current_headline.current_score, 81);
+    assert.deepEqual(after.headline_history, state.headline_history);
+    assert.equal(result.files.includes('articles/data/homepage-headline.json'), shouldSync);
+  }
+});
+
 test('syncWeeklyArticleImages is idempotent', async () => {
   const root = tempRoot();
   const url = 'https://example.com/camerax-release';

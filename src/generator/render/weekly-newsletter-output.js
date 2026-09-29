@@ -217,6 +217,24 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
     result.files.push('articles/data/newsletters-weekly.json');
   }
 
+  // 홈 헤드라인은 주간 카드와 별도 스냅샷이다. 이미지 수리 후에도 같은 기사의
+  // 오래된 fallback이 남지 않도록 현재 헤드라인의 이미지 필드만 동기화한다.
+  const headlinePath = path.join(root, 'articles', 'data', 'homepage-headline.json');
+  if (fs.existsSync(headlinePath)) {
+    const state = JSON.parse(fs.readFileSync(headlinePath, 'utf8'));
+    const headline = state.current_headline;
+    const matched = headline?.newsletter_date === date
+      ? currentSections.find(section => sectionIdentity(section) === sectionIdentity(headline))
+      : null;
+    const image = matched && sectionBrowserImage(matched);
+    if (image && headline.image_url !== image) {
+      headline.image_url = image;
+      headline.image_alt = matched.imageAlt || headline.image_alt || headline.title;
+      fs.writeFileSync(headlinePath, `${JSON.stringify(state, null, 2)}\n`, 'utf8');
+      result.files.push('articles/data/homepage-headline.json');
+    }
+  }
+
   result.synced = true;
   return result;
 }
