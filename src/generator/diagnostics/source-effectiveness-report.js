@@ -512,6 +512,10 @@ function recommendationFor(source, metrics) {
   if (metrics.collected_count === 0 && metrics.collection_status === 'COLLECTION_INCOMPLETE') {
     recommendation = 'REVIEW_SOURCE_OR_PARSER';
     reasons.push('Collection is incomplete; inspect collection reasons before interpreting candidate counts.');
+  } else if (metrics.collected_count === 0 && metrics.raw_collected_count > 0) {
+    // RSS 등 카드 계수가 없는 소스도 실제 수집 근거가 있으면 조용한 주가 아니다.
+    // 완결성 상태는 그대로 두고, 실패 판정 다음·무소식 판정 전에 필터 탈락을 구분한다.
+    reasons.push('Articles were collected but none remain in the candidate pool; inspect filter counts.');
   } else if (metrics.collected_count === 0 && metrics.collection_status === 'NO_RECENT_SIGNAL') {
     recommendation = 'NO_RECENT_SIGNAL';
     reasons.push('The parsed listing contains no articles in the collection window.');

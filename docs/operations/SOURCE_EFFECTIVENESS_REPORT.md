@@ -71,6 +71,7 @@ schema version 3부터 source마다 수집 단계 수와 `collection_status`를 
 
 1. 유지 후보가 없는 경우(`collected_count`가 `0`)는 아래 `collection_status`로 먼저 갈립니다. 후보가 1건 이상이면 `collection_status`는 권고를 바꾸지 않고 2번부터 평가합니다.
    - `COLLECTION_INCOMPLETE` → `REVIEW_SOURCE_OR_PARSER`: 수집 손실이 기록돼 0건을 새 소식 없음으로 볼 수 없습니다.
+   - 위 실패 조건에 해당하지 않고 `raw_collected_count > 0` → `KEEP_AND_MONITOR`: 실제로 수집한 후보가 모두 필터·상한에서 제외됐습니다. 카드 계수 유무와 무관하게 무소식 판정보다 먼저 적용하며, `collection_status`는 그대로 유지합니다.
    - `NO_RECENT_SIGNAL` → `NO_RECENT_SIGNAL`: 정상 해석된 목록에 수집 기간 안 기사가 없음을 확인했습니다.
    - `COLLECTION_UNKNOWN`이고 목록 카드 계수(`discovered_count`)가 있는 소스 → `REVIEW_SOURCE_OR_PARSER`.
    - `COLLECTION_UNKNOWN`이고 목록 카드 계수가 없는 소스(RSS 등) → `NO_RECENT_SIGNAL`: 실패 기록이 없는 조용한 주로 보되, 완결성은 검증되지 않았다고 reason에 남깁니다.

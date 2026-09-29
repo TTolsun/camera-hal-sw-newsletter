@@ -491,6 +491,24 @@ test('filtered articles remain distinguishable from no news', () => {
   assert.notEqual(result.recommendation, 'NO_RECENT_SIGNAL');
 });
 
+test('collected articles without listing counts are not reported as a quiet week after filtering', () => {
+  for (const reason of ['relevance', 'outside_window', 'duplicate', 'deferred_coverage']) {
+    const counts = { raw_collected_count: 3, filtered_out_count: 3, candidate_count: 0, filter_counts: { [reason]: 3 } };
+    const result = collectionReport({ counts });
+    assert.equal(result.discovered_count, null);
+    assert.equal(result.collection_status, 'COLLECTION_UNKNOWN');
+    assert.equal(result.raw_collected_count, 3);
+    assert.equal(result.filtered_out_count, 3);
+    assert.equal(result.collected_count, 0);
+    assert.equal(result.recommendation, 'KEEP_AND_MONITOR');
+    assert.match(result.reasons.join(' '), /Articles were collected.*filter counts/);
+
+    const failed = collectionReport({ counts, failures: [{ source_id: 'effective-camera', message: 'timeout' }] });
+    assert.equal(failed.collection_status, 'COLLECTION_INCOMPLETE');
+    assert.equal(failed.recommendation, 'REVIEW_SOURCE_OR_PARSER');
+  }
+});
+
 test('partial parsing, article caps and fetch failures never claim no news', () => {
   for (const input of [
     { caps: { discovered_card_count: 2, unresolved_card_count: 1, in_window_card_count: 0 } },
