@@ -5,7 +5,7 @@
     "weekEndDate": "2026-10-04",
     "date": "2026-09-28",
     "title": "2026 W40",
-    "summary": "안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원\n앤트로픽, 코드 생성 및 테스트 역량이 강화된 Claude Opus 5.5 공개\n르네사스 RZ V2H EVK 디바이스 트리 패치로 Arm Mali C55 ISP 및 IVC 활성화 제안\n삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안\n소니 IMX681 카메라 센서 지원 패치 v7에 대한 최신 커널 및 libcamera 테스트 결과 공유",
+    "summary": "안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원\n앤트로픽 Claude Opus 5.5 공개: Fable 5.1급 성능에 Opus 5 대비 비용 40% 절감\n르네사스 RZ/V2H EVK 디바이스 트리 패치로 Arm Mali-C55 ISP 및 IVC 활성화 제안\n삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안\n소니 IMX681 카메라 센서 지원 패치 v7에 대한 최신 커널 및 libcamera 테스트 결과 공유",
     "html": "newsletters/2026-W40/index.html",
     "md": "newsletters/2026-W40/newsletter.md",
     "tags": [
