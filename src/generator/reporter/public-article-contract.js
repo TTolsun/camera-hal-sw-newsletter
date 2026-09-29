@@ -881,7 +881,8 @@ function mergePublicArticleFromLlm(baseSection = {}, llmSection = {}, capsule = 
   const sourceIssues = publicSourceLinkMergeIssues(merged);
   if (sourceIssues.length > 0) {
     throw publicArticleMergeError('invalid_public_source_links', 'LLM public_article source_links failed provenance validation.', {
-      issues: sourceIssues
+      issues: sourceIssues,
+      allowed_source_url_roles: [...allowedPublicSourceUrlRoleMap(merged)].map(([url, roles]) => ({ url, roles: [...roles] }))
     });
   }
   return merged;

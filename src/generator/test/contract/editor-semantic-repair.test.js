@@ -21,6 +21,51 @@ const {
 
 const DATE = '2026-05-08';
 
+const { mergePublicArticleFromLlm } = require('../../reporter/public-article-contract');
+
+function normalizeWithSourceGate(value, index, reporter) {
+  return normalizeSection(mergePublicArticleFromLlm(value, value), index, reporter);
+}
+
+test('normalization source-link errors save diagnostics and enter bounded semantic repair', async () => {
+  const draft = editor();
+  draft.sections[0].public_article.source_links[0].url = 'https://example.com/unapproved';
+  const newsroomDir = tempNewsroomDir();
+  let calls = 0;
+  const result = await repairEditorOutputContract({
+    value: draft, date: DATE, newsroomDir, normalizeSection: normalizeWithSourceGate,
+    repairFn: async ({ invalidEditor, validationError }) => {
+      calls += 1;
+      assert.equal(validationError.field, 'sections.public_article.source_links');
+      assert.equal(validationError.details.article_index, 0);
+      assert.ok(validationError.details.issues.some(issue => issue.value === 'https://example.com/unapproved'));
+      assert.deepEqual(validationError.details.allowed_source_url_roles, [{ url: 'https://example.com/source-1', roles: ['primary'] }]);
+      invalidEditor.sections[0].public_article.source_links[0].url = invalidEditor.sections[0].sources[0].url;
+      return invalidEditor;
+    }
+  });
+  assert.equal(calls, 1);
+  assert.equal(result.repairSucceeded, true);
+  assert.equal(result.editor.sections[0].public_article.source_links[0].url, 'https://example.com/source-1');
+  assert.equal(readJson(path.join(newsroomDir, 'editor-validation-error-attempt-1.json')).field, 'sections.public_article.source_links');
+});
+
+test('unrepaired source-link errors remain blocked and unrelated normalization failures are not repaired', async () => {
+  const draft = editor();
+  draft.sections[0].public_article.source_links[0].url = 'https://example.com/unapproved';
+  let calls = 0;
+  await assert.rejects(repairEditorOutputContract({
+    value: draft, date: DATE, normalizeSection: normalizeWithSourceGate,
+    repairFn: async ({ invalidEditor }) => { calls += 1; return invalidEditor; }
+  }), error => error instanceof EditorSemanticValidationError && error.repairAttempted && !error.repairSucceeded);
+  assert.equal(calls, 1);
+  const unexpected = new Error('normalizer programming failure');
+  await assert.rejects(repairEditorOutputContract({
+    value: editor(), date: DATE, normalizeSection: () => { throw unexpected; },
+    repairFn: async () => { throw new Error('must not call repair'); }
+  }), error => error === unexpected);
+});
+
 test('semantic repair deterministically restores missing article_sections from section fields', async () => {
   const newsroomDir = tempNewsroomDir();
   const draft = editor({
