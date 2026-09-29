@@ -2761,7 +2761,7 @@
       "category": "linux-camera",
       "priority": "high",
       "reliability": "project-official",
-      "enabled": true,
+      "enabled": false,
       "candidateOnly": false,
       "requiresCrossCheck": true,
       "usageHint": "Intel IPU 카메라 서브시스템(ipu3/ipu6/ipu7, ipu-bridge) 패치 스레드 전용 피드. 제목에 camera나 sensor가 따로 없는 IPU 패치를 잡는다. 일반 카메라 질의와 같은 소스에 두면 lore 검색 200건 예산을 나눠 써서 수집 창이 선정 창보다 짧아지므로 분리했다. main 승격 조건은 lore-linux-media-list와 같다.",

@@ -42,7 +42,7 @@ Workflow/Stage: Stage 1 RAW collection
 
 Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
-주요 입력: newsletter date, 최대 40개 manual candidate 요약, enabled source registry 요약
+주요 입력: newsletter date, 최대 50개 manual candidate 요약, enabled source registry 요약
 
 출력/schema: `proposalResponseSchema()`, `articles/content/newsroom/<date>/gemini-source-proposals.json`
 

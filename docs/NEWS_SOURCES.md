@@ -214,3 +214,9 @@ Reddit 출처는 candidate discovery용 **커뮤니티 신호(sensor)**입니다
 - `source_url_quality=unknown` 상태의 source는 main 기사 자격이 없습니다. classifier가 Stage 3 전에 해소하지 못하면 해당 main 기사는 실패합니다.
 - `generic_ai_or_it_trend`, `tech_media_lead_requires_cross_check`, `community_lead_requires_cross_check`는 조건부 정책이며 무조건적인 승인이 아닙니다.
 - Stage 3은 canonical `source_quality`를 소비하며 `main_article_source_blockers[]`를 추론, 수정, 재정의해서는 안 됩니다.
+
+## 수집 후보 제한
+
+수집 후보는 소스별 최대 8건, 전체 최대 50건을 보존합니다. Gemini 추가 탐색에도 최대 50건의 후보 요약을 전달합니다. 최종 기사 수와 선정 기준은 별도 편집 정책을 따릅니다.
+
+Intel IPU 전용 피드(`lore-linux-media-ipu`)는 비활성화되어 수집하지 않습니다. 과거 산출물의 출처 추적을 위해 소스 등록 정보는 보존합니다. 일반 Linux media 카메라 피드(`lore-linux-media-list`)에서 발견한 IPU 관련 후보는 기존 기준으로 처리합니다.
