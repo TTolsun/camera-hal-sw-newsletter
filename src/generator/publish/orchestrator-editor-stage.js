@@ -124,7 +124,7 @@ async function runEditorStage({
   let rejectedGeneratedSections = [...merged.rejected];
   editor.sections = merged.sections;
   attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
-  await resolveIssueArticleImages(editor, { root });
+  await resolveIssueArticleImages(editor, { root, recoverMissingImages: true });
   warnResolvedImageFallbacks(editor);
   // #502: editor draft 확정 직후, fact-check/quality/render 이전에 미해결 evidence_id를 한 번
   // 결정론적으로 재바인딩한다(strict 오라클 통과 시에만; 미지원이면 unbound 유지). 이렇게 해야

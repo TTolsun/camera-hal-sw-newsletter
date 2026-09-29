@@ -370,7 +370,10 @@ test('syncWeeklyArticleImages patches the matching weekly section, rewrites week
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]) });
   const sitemapBefore = fs.readFileSync(path.join(root, 'articles', 'sitemap.xml'), 'utf8');
 
-  const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repairedImageSection('1.7.0', url, imageUrl)] });
+  const repaired = repairedImageSection('1.7.0', url, imageUrl);
+  repaired.imageCandidates = [{ url: imageUrl, sourceUrl: url, validation: { ok: true } }];
+  repaired.image_recovery = { article_url: url, outcome: 'available' };
+  const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
 
   assert.equal(result.synced, true);
   assert.equal(result.weeklyKey, '2026-W23');
@@ -380,6 +383,8 @@ test('syncWeeklyArticleImages patches the matching weekly section, rewrites week
   assert.equal(issue.sections[0].selectedImage, imageUrl);
   assert.equal(issue.sections[0].resolvedImage.usedFallback, false);
   assert.equal(issue.sections[0].imageSelection.reasonCode, 'selected');
+  assert.deepEqual(issue.sections[0].imageCandidates, repaired.imageCandidates);
+  assert.deepEqual(issue.sections[0].image_recovery, repaired.image_recovery);
   assert.match(fs.readFileSync(path.join(root, 'articles', 'newsletters', '2026-W23', 'index.html'), 'utf8'), new RegExp(imageUrl.replace(/[.\/]/g, '\\$&')));
   assert.match(fs.readFileSync(path.join(root, 'articles', 'newsletters', '2026-W23', 'newsletter.md'), 'utf8'), new RegExp(imageUrl.replace(/[.\/]/g, '\\$&')));
   assert.deepEqual(readWeeklyIndexFile(root)[0].article_images, [imageUrl]);

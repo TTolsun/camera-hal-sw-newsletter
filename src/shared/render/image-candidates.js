@@ -313,9 +313,11 @@ async function validateImageUrl(url, options = {}) {
     reason: 'not checked'
   };
 
+  const remainingMs = () => Math.max(0, Math.min(timeoutMs, (options.deadline || Infinity) - Date.now()));
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    if (!remainingMs()) return { ...lastResult, ok: false, reason: 'image_validation_budget_exhausted' };
     try {
-      const headResponse = await fetchWithTimeout(url, { method: 'HEAD', headers }, timeoutMs);
+      const headResponse = await fetchWithTimeout(url, { method: 'HEAD', headers }, remainingMs());
       lastResult = validateImageResponse(headResponse);
       if (lastResult.ok) return lastResult;
     } catch (error) {
@@ -328,11 +330,12 @@ async function validateImageUrl(url, options = {}) {
       };
     }
 
+    if (!remainingMs()) return { ...lastResult, ok: false, reason: 'image_validation_budget_exhausted' };
     try {
       const getResponse = await fetchWithTimeout(
         url,
         { method: 'GET', headers: { ...headers, range: 'bytes=0-2047' } },
-        timeoutMs
+        remainingMs()
       );
       lastResult = validateImageResponse(getResponse);
       if (lastResult.ok) return lastResult;
@@ -346,15 +349,20 @@ async function validateImageUrl(url, options = {}) {
       };
     }
 
+    // 404/권한 거부/비이미지 응답은 반복 요청으로 해결되지 않는다.
+    if (lastResult.status && lastResult.status !== 408 && lastResult.status !== 429 && lastResult.status < 500) break;
     if (attempt < attempts) await sleep(backoffMs * attempt);
   }
 
   return lastResult;
 }
 
-async function validateImageCandidate(candidate) {
-  const result = await validateImageUrl(candidate.url);
-  if (!result.ok) return null;
+async function validateImageCandidate(candidate, options = {}) {
+  const result = await (options.validateImageUrl || validateImageUrl)(candidate.url, options);
+  if (!result.ok) {
+    options.onDiagnostic?.({ url: candidate.url, stage: 'image_validation', status: result.status || 0, reason: result.reason || 'validation_failed' });
+    return null;
+  }
   return {
     ...candidate,
     contentType: result.contentType,
@@ -363,10 +371,10 @@ async function validateImageCandidate(candidate) {
   };
 }
 
-async function validateImageCandidates(candidates) {
+async function validateImageCandidates(candidates, options = {}) {
   const valid = [];
   for (const candidate of dedupeCandidates(candidates).slice(0, MAX_VALIDATION_CANDIDATES)) {
-    const checked = await validateImageCandidate(candidate);
+    const checked = await validateImageCandidate(candidate, options);
     if (checked) valid.push(checked);
     if (valid.length >= 3) break;
   }

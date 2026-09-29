@@ -130,6 +130,48 @@
       "article_type": "tooling",
       "imageCandidates": [
         {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Build your way: Use any AI agent of your choice in Android Studio",
+          "validationStatus": "ok",
+          "contentLength": 243318
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Build your way: Use any AI agent of your choice in Android Studio",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Build your way: Use any AI agent of your choice in Android Studio",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        },
+        {
           "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
           "sourceUrl": "https://www.anthropic.com/news",
           "articleUrl": "https://www.anthropic.com/claude-opus-5-5",
@@ -186,11 +228,11 @@
           "contentLength": 2833
         }
       ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
+      "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+      "imageSource": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "imageAttribution": "Build your way: Use any AI agent of your choice in Android Studio",
+      "imageAlt": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
+      "imageLicenseStatus": "unknown",
       "imageUsageDecisionReason": "No suitable image available.",
       "sources": [
         {
@@ -218,14 +260,29 @@
       "evidence_origin": "article_text",
       "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
       "resolvedImage": {
-        "url": "../../assets/images/fallback/ai.svg",
-        "src": "../../assets/images/fallback/ai.svg",
+        "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+        "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
         "originalUrl": "",
         "originalSrc": "",
-        "usedFallback": true,
-        "reason": "no selected image; local fallback visual used"
+        "usedFallback": false,
+        "reason": ""
       },
-      "coverage_type": "fresh"
+      "coverage_type": "fresh",
+      "image_recovery": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      }
     },
     {
       "category": "cpp_ai_tooling_fallback",
@@ -415,7 +472,7 @@
         "originalUrl": "",
         "originalSrc": "",
         "usedFallback": false,
-        "reason": "selected image candidate"
+        "reason": ""
       },
       "coverage_type": "fresh",
       "imageSelection": {

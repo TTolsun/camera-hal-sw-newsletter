@@ -140,6 +140,8 @@ function upsertWeeklyIndex(root, entry) {
 // repair(applySelectedCandidate)가 daily editor-draft 섹션에 기록하는 이미지 필드 집합.
 // weekly 동기화는 정확히 이 projection만 복사해 콘텐츠 병합 없이 이미지 상태만 수렴시킨다.
 const SECTION_IMAGE_FIELDS = [
+  'imageCandidates',
+  'image_recovery',
   'selectedImage',
   'imageSource',
   'imageAttribution',

@@ -327,7 +327,7 @@ async function runRepairAndCompletionPasses({
         newsroomDir
       }, publicArticleJudgeDeps);
       attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
-      await resolveIssueArticleImages(editor, { root });
+      await resolveIssueArticleImages(editor, { root, recoverMissingImages: true });
       warnResolvedImageFallbacks(editor);
       // #502: 영속화·fact-check 이전에 미해결 evidence_id를 결정론적으로 재바인딩(fail-closed).
       editor = reconcileFactClaimEvidence(editor, { reporter, seedEvidencePack });
@@ -494,7 +494,7 @@ async function runRepairAndCompletionPasses({
           newsroomDir
         }, publicArticleJudgeDeps);
         attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
-        await resolveIssueArticleImages(editor, { root });
+        await resolveIssueArticleImages(editor, { root, recoverMissingImages: true });
         warnResolvedImageFallbacks(editor);
         // #502: 영속화·fact-check 이전에 미해결 evidence_id를 결정론적으로 재바인딩(fail-closed).
         editor = reconcileFactClaimEvidence(editor, { reporter, seedEvidencePack });
