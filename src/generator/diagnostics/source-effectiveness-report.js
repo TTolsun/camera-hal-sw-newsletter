@@ -503,6 +503,11 @@ function parserRepairReason(reason = '') {
   return parserFailureReason(reason);
 }
 
+function onlyOutsideWindowLosses(filterCounts = {}) {
+  const lossKeys = Object.entries(filterCounts).filter(([, count]) => count > 0).map(([key]) => key);
+  return lossKeys.length === 1 && lossKeys[0] === 'outside_window';
+}
+
 function recommendationFor(source, metrics) {
   const reasons = [];
   let recommendation = 'KEEP_AND_MONITOR';
@@ -512,6 +517,11 @@ function recommendationFor(source, metrics) {
   if (metrics.collected_count === 0 && metrics.collection_status === 'COLLECTION_INCOMPLETE') {
     recommendation = 'REVIEW_SOURCE_OR_PARSER';
     reasons.push('Collection is incomplete; inspect collection reasons before interpreting candidate counts.');
+  } else if (metrics.collected_count === 0 && metrics.raw_collected_count > 0 && onlyOutsideWindowLosses(metrics.filter_counts)) {
+    // RSS는 새 글이 없어도 최근 N건을 늘 돌려준다. 수집한 항목이 전부 기간 밖에서만 빠졌다면
+    // 피드는 정상으로 읽혔고 기간 안 글이 없었다는 뜻이다 — 필터 점검이 아니라 조용한 주다.
+    recommendation = 'NO_RECENT_SIGNAL';
+    reasons.push('Collected items were all outside the collection window.');
   } else if (metrics.collected_count === 0 && metrics.raw_collected_count > 0) {
     // RSS 등 카드 계수가 없는 소스도 실제 수집 근거가 있으면 조용한 주가 아니다.
     // 완결성 상태는 그대로 두고, 실패 판정 다음·무소식 판정 전에 필터 탈락을 구분한다.

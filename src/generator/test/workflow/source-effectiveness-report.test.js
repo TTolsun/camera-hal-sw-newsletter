@@ -492,7 +492,7 @@ test('filtered articles remain distinguishable from no news', () => {
 });
 
 test('collected articles without listing counts are not reported as a quiet week after filtering', () => {
-  for (const reason of ['relevance', 'outside_window', 'duplicate', 'deferred_coverage']) {
+  for (const reason of ['relevance', 'duplicate', 'deferred_coverage']) {
     const counts = { raw_collected_count: 3, filtered_out_count: 3, candidate_count: 0, filter_counts: { [reason]: 3 } };
     const result = collectionReport({ counts });
     assert.equal(result.discovered_count, null);
@@ -507,6 +507,27 @@ test('collected articles without listing counts are not reported as a quiet week
     assert.equal(failed.collection_status, 'COLLECTION_INCOMPLETE');
     assert.equal(failed.recommendation, 'REVIEW_SOURCE_OR_PARSER');
   }
+});
+
+test('collected items removed only as outside the window are a quiet week', () => {
+  const quiet = collectionReport({
+    counts: { raw_collected_count: 10, filtered_out_count: 10, filter_counts: { outside_window: 10, relevance: 0 } }
+  });
+  assert.equal(quiet.collection_status, 'COLLECTION_UNKNOWN');
+  assert.equal(quiet.recommendation, 'NO_RECENT_SIGNAL');
+  assert.match(quiet.reasons.join(' '), /outside the collection window/);
+
+  const mixed = collectionReport({
+    counts: { raw_collected_count: 10, filtered_out_count: 10, filter_counts: { outside_window: 9, relevance: 1 } }
+  });
+  assert.equal(mixed.recommendation, 'KEEP_AND_MONITOR');
+  assert.match(mixed.reasons.join(' '), /Articles were collected.*filter counts/);
+
+  const failed = collectionReport({
+    counts: { raw_collected_count: 10, filtered_out_count: 10, filter_counts: { outside_window: 10 } },
+    failures: [{ source_id: 'effective-camera', message: 'timeout' }]
+  });
+  assert.equal(failed.recommendation, 'REVIEW_SOURCE_OR_PARSER');
 });
 
 test('partial parsing, article caps and fetch failures never claim no news', () => {
