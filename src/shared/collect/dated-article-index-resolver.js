@@ -395,7 +395,8 @@ async function resolveDatedArticleIndexItems({
   now,
   lookbackDays,
   onDiagnostic,
-  onArticleCapCounts
+  onArticleCapCounts,
+  offPrefixArticleLinks = false
 } = {}) {
   const emit = typeof onDiagnostic === 'function' ? onDiagnostic : noop;
 
@@ -445,7 +446,9 @@ async function resolveDatedArticleIndexItems({
   // 이 resolver의 반환값은 두 경우 모두 빈 배열이라 구분이 안 된다. console.warn만으로는
   // 이 사건이 artifact에 남지 않아 다섯 개 덜 중요한 사건은 세면서 가장 시끄러운 실패만
   // 조용히 사라진다 — 그래서 다른 다섯 kind와 똑같이 onDiagnostic으로 낸다.
-  const cardOptions = { pathPrefix, ...(source.id === 'anthropic-news' ? { articleOrigin: origin } : {}) };
+  // 목록 밖 경로(/claude-opus-5-5, /features/...)로 가는 카드를 받을지는 레지스트리 항목이
+  // 정한다(offPrefixArticleLinks). 소스 id를 여기 적으면 등록과 동작이 두 곳으로 갈라진다.
+  const cardOptions = { pathPrefix, ...(offPrefixArticleLinks === true ? { articleOrigin: origin } : {}) };
   const cardDiagnostics = datedArticleCardDiagnostics(html, cardOptions);
   const collectionFailure = datedArticleCardCollectionFailure(html, cardOptions);
   if (collectionFailure) {

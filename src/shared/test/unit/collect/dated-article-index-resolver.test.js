@@ -25,7 +25,7 @@ test('fetches off-prefix news articles while retaining canonical/date checks and
   let counts;
   const result = await resolveDatedArticleIndexItems({
     html, source: { id: 'anthropic-news', sourceUrl: `${origin}/news` },
-    now: new Date('2026-09-28T00:00:00Z'), lookbackDays: 35,
+    now: new Date('2026-09-28T00:00:00Z'), lookbackDays: 35, offPrefixArticleLinks: true,
     onDiagnostic: event => events.push(event), onArticleCapCounts: value => { counts = value; },
     fetchClient: {
       async fetchBounded(url) {
@@ -42,7 +42,7 @@ test('fetches off-prefix news articles while retaining canonical/date checks and
   const rejected = await resolveDatedArticleIndexItems({
     html: '<a href="/claude-opus-5-5"><time>Sep 22, 2026</time>Article</a>',
     source: { id: 'anthropic-news', sourceUrl: `${origin}/news` },
-    now: new Date('2026-09-28T00:00:00Z'),
+    now: new Date('2026-09-28T00:00:00Z'), offPrefixArticleLinks: true,
     fetchClient: { async fetchBounded() { return { ok: true, body: minimalArticleHtml({
       canonical: `${origin}/another-page`, headerDateText: 'Sep 22, 2026'
     }) }; } }
