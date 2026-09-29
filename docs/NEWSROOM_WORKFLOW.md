@@ -682,3 +682,11 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 번역 브랜치는 `newsroom-translation/<weekly_key>`입니다. 동일 원본 해시의 열린 번역 PR이 있으면 API를 다시 호출하지 않습니다. `force_retranslate`는 이 생략을 해제합니다. 번역 후 PR을 만들기 전에 현재 `main`의 커밋과 원본 해시를 다시 확인하며, 변경되었으면 재실행을 요구합니다. PR 생성은 `NEWSROOM_PR_TOKEN`을 우선 사용하고 없으면 `github.token`을 사용합니다. 기본 토큰으로 만든 PR은 후속 PR 검증이 자동 실행되지 않을 수 있으므로 번역 workflow 자체에서 `npm run test && npm run validate`를 반드시 실행합니다.
 
 2026-W19부터 2026-W39까지의 주간호는 원문과 대조하여 사람이 검토한 수동 번역입니다. 이 과거 호에는 `force_retranslate` 또는 CLI의 `--force`를 사용하지 않습니다. 사용하면 검토된 수동 번역을 아직 검토하지 않은 Gemini 번역으로 덮어씁니다. 날짜 호(`newsletters/YYYY-MM-DD/`)는 번역하지 않습니다.
+
+### 원문 이미지 재확인
+
+이미지 원문 요청은 회당 최대 12초, 이미지 응답 검증은 회당 최대 8초이며 기사별 수집 예산은 40초입니다. 네트워크 오류·타임아웃·408·429·5xx는 최대 두 번 시도하고, 404·비HTML·크기 제한 등 영구 실패는 원문 재요청하지 않습니다. 원문은 2 MiB까지만 읽습니다. 후보의 `image_collection`에 요청 결과, 추출 수, 이미지 검증 실패 이유와 최종 후보 수를 남깁니다.
+
+최종 선정 기사가 대체 그림으로 처리되면 해당 원문에서 한 번 더 이미지 수집을 시도하고 `image_recovery`를 남깁니다. 이전 발행본 이미지는 사용하지 않습니다. 기존 이미지 출처 검증과 fallback은 유지하며, 이미지가 없거나 검증되지 않으면 기존 대체 그림으로 처리합니다.
+
+Story v2의 기존 public article judge는 형식뿐 아니라 lead와 본문의 연결, 근거에 따른 전개, 기사 사이의 추상적 반복을 평가합니다. 서사 품질 실패는 `public_prose_pass=false`와 구체적인 수정 사유를 통해 기존 semantic repair로 처리합니다. 동일한 문단 개수 자체를 실패로 보거나 허구의 장면을 요구하지 않습니다.
