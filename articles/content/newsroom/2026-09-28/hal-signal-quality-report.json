@@ -2,16 +2,16 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-09-28",
-  "generated_at": "2026-09-29T10:01:14.615Z",
-  "status": "WARN",
-  "input_completeness": "partial",
+  "generated_at": "2026-09-29T10:53:17.689Z",
+  "status": "PASS",
+  "input_completeness": "complete",
   "input_statuses": {
     "shortlisted_candidates": "loaded",
     "editor_draft": "loaded",
     "quality_report": "loaded",
-    "source_effectiveness_report": "input_unavailable",
+    "source_effectiveness_report": "loaded",
     "source_quality_report": "loaded",
-    "evidence_pack_summary": "input_unavailable",
+    "evidence_pack_summary": "loaded",
     "merged_candidate_manifest": "loaded"
   },
   "inputs": {
@@ -35,7 +35,7 @@
     "optional": {
       "source_effectiveness_report": {
         "path": "articles/content/newsroom/2026-09-28/source-effectiveness-report.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "source_quality_report": {
@@ -45,7 +45,7 @@
       },
       "evidence_pack_summary": {
         "path": "articles/content/newsroom/2026-09-28/evidence-pack-summary.json",
-        "status": "input_unavailable",
+        "status": "loaded",
         "error": ""
       },
       "merged_candidate_manifest": {
@@ -55,24 +55,21 @@
       }
     },
     "missing_required": [],
-    "unavailable_optional": [
-      "source_effectiveness_report",
-      "evidence_pack_summary"
-    ]
+    "unavailable_optional": []
   },
   "quality_status": "PASS",
   "hal_signal_quality_summary": {
     "schema_version": 1,
-    "main_article_count": 4,
-    "strong_signal_count": 2,
-    "usable_signal_count": 2,
+    "main_article_count": 5,
+    "strong_signal_count": 1,
+    "usable_signal_count": 4,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
-    "article_count_with_hal_signal_capsule": 4,
+    "article_count_with_hal_signal_capsule": 5,
     "article_count_without_hal_signal_capsule": 0,
     "main_articles_with_owner_metric_log": 0,
-    "main_articles_with_concrete_action": 4,
+    "main_articles_with_concrete_action": 5,
     "fallback_main_article_count": 2,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
@@ -80,89 +77,28 @@
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
-      "native_tooling_workflow": 2,
-      "driver_image_pipeline": 2,
+      "driver_image_pipeline": 3,
       "soc_resource_contention": 1,
-      "cts_vts_its_cdd": 1
+      "cts_vts_its_cdd": 2,
+      "native_tooling_workflow": 2
     },
     "actionability_level_counts": {
-      "measurable_test": 2,
-      "concrete_check": 2
+      "concrete_check": 4,
+      "measurable_test": 1
     },
     "effective_actionability_level_counts": {
-      "measurable_test": 2,
-      "concrete_check": 2
+      "concrete_check": 4,
+      "measurable_test": 1
     },
     "signal_quality_status_counts": {
-      "strong_signal": 2,
-      "usable_signal": 2
+      "usable_signal": 4,
+      "strong_signal": 1
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "hal_impact_axes": [
-        "native_tooling_workflow"
-      ],
-      "reader_owners": [
-        "native_tooling_owner"
-      ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 3,
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "이 기능은 개발 도구의 변화일 뿐이며 Camera HAL API나 프레임워크 런타임 동작을 직접 수정하지 않습니다."
-      ],
-      "soc_signal_type": "accelerator_camera_workload",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 2,
-      "title": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
-      "url": "https://www.anthropic.com/claude-opus-5-5",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "hal_impact_axes": [
-        "native_tooling_workflow"
-      ],
-      "reader_owners": [
-        "native_tooling_owner",
-        "camera_test_owner"
-      ],
-      "actionability_level": "concrete_check",
-      "effective_actionability_level": "concrete_check",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "usable_signal",
-      "concrete_action_signal_count": 2,
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Anthropic News (official, medium, score 56): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "Claude Opus 5.5는 개발 보조 도구일 뿐이며 안드로이드 카메라 런타임이나 ISP 하드웨어 파이프라인에 직접 통합되지 않습니다."
-      ],
-      "soc_signal_type": "accelerator_camera_workload",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 3,
-      "title": "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
+      "title": "르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안",
       "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
       "relevance_bucket": "android",
       "hal_impact_axes": [
@@ -181,7 +117,7 @@
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 51): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 3 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 패치는 RZ/V2H EVK 보드용 DTS 변경 제안이며 아직 메인라인에 머지되지 않았고 안드로이드 HAL 계약을 직접 변경하지 않습니다."
+        "이 패치는 아직 머지되지 않은 제안이며 Android Camera HAL API를 직접 변경하지 않습니다."
       ],
       "soc_signal_type": "isp_image_pipeline",
       "soc_signal_source_allowed": true,
@@ -193,8 +129,38 @@
       "hard_blocker_reason_codes": []
     },
     {
-      "index": 4,
-      "title": "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
+      "index": 2,
+      "title": "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 패치는 아직 머지되지 않은 제안이며 Android Camera HAL의 동작을 직접 변경하지 않습니다."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "소니 IMX681 카메라 센서 지원 패치에 대한 테스트 보고서 공개",
       "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
       "relevance_bucket": "camera_driver_image_pipeline",
       "hal_impact_axes": [
@@ -213,9 +179,71 @@
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 테스트 보고서는 특정 커널 및 라이브러리 버전에서 수행되었으며, 패치 시리즈는 아직 메인라인 커널에 머지되지 않았습니다."
+        "이 테스트 보고서는 제안된 패치에 대한 것이며 최종 확정된 메인라인 변경 사항이 아닙니다."
       ],
       "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표",
+      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 업데이트는 개발자 도구에 국한되며 Android Camera HAL API나 런타임 동작을 변경하지 않습니다."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 5,
+      "title": "앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표",
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "hal_impact_axes": [
+        "native_tooling_workflow",
+        "cts_vts_its_cdd"
+      ],
+      "reader_owners": [
+        "native_tooling_owner",
+        "camera_test_owner"
+      ],
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "Anthropic News (official, medium, score 56): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "이 소식은 일반 LLM 모델에 대한 것이며 Android Camera HAL이나 드라이버 스택을 직접 변경하지 않습니다."
+      ],
+      "soc_signal_type": "accelerator_camera_workload",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -258,8 +286,5 @@
     ],
     "historical_rewrite_followup": "#108"
   },
-  "warnings": [
-    "Optional input_unavailable: source_effectiveness_report",
-    "Optional input_unavailable: evidence_pack_summary"
-  ]
+  "warnings": []
 }

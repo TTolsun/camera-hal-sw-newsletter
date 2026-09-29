@@ -3,39 +3,43 @@
   "public_contract_version": "story-v2",
   "generation_contract_version": 2,
   "title": "2026 W39 (09.21 ~ 09.27)",
-  "summary": "이번 주 뉴스레터에서는 Android Studio가 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성을 확장하며 새로운 가능성을 열었습니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 AI 기술의 발전을 이끌었습니다. 또한, 르네사스 RZ/V2H EVK는 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화를 추진하고 있으며, 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 주목할 만합니다. 독자 여러분의 많은 관심 부탁드립니다.",
+  "summary": "이번 주에는 ‘안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원’, ‘앤트로픽, 코드 생성 및 테스트 역량이 강화된 Claude Opus 5.5 공개’ 등 5건의 소식을 다룹니다.",
   "briefing": [
-    "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-    "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
-    "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
-    "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고"
+    "안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원",
+    "앤트로픽, 코드 생성 및 테스트 역량이 강화된 Claude Opus 5.5 공개",
+    "르네사스 RZ V2H EVK 디바이스 트리 패치로 Arm Mali C55 ISP 및 IVC 활성화 제안",
+    "삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안",
+    "소니 IMX681 카메라 센서 지원 패치 v7에 대한 최신 커널 및 libcamera 테스트 결과 공유"
   ],
   "sections": [
     {
       "category": "cpp_ai_tooling_fallback",
-      "headline": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-      "what_changed": "Android Studio에서 AI 기반 개발 도구를 활용하여 에이전트 기반 Android 앱 개발의 유연성을 높입니다.",
+      "headline": "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표",
+      "what_changed": "Android Studio에서 개발자가 원하는 AI 코딩 에이전트, 맞춤형 엔터프라이즈 하네스, 자율 도구를 선택하여 사용할 수 있도록 지원이 확장되었습니다.",
       "confirmed_facts": [
-        "Android Studio에서 개발자가 선택한 임의의 AI 에이전트를 통합하여 사용할 수 있는 기능이 추가되었습니다.",
-        "이 기능은 개발자가 자신과 팀에 가장 적합한 방식으로 앱을 빌드할 수 있도록 에이전트 기반 개발의 유연성을 높입니다."
+        "2026년 9월 24일 Android Studio에서 AI 에이전트를 활용한 개발이 더욱 개방적이고 유연해졌다는 내용이 발표되었습니다.",
+        "개발팀이 최적의 방식으로 Android 앱을 빌드할 수 있도록 다양한 AI 코딩 에이전트, 맞춤형 엔터프라이즈 하네스, 자율 도구를 채택할 수 있게 되었습니다.",
+        "이 발표는 Android 개발자 경험 제품 관리자인 Matthew Warner에 의해 게시되었습니다.",
+        "이 업데이트는 Android Studio 개발자 도구에 관한 것이며, AI 기반 개발자 도구를 통한 생산성 향상에 초점을 맞추고 있습니다."
       ],
-      "evidence_summary": "Android Studio AI integration 및 camera development tools 관련 AI 에이전트 연동 기능이 추가되었습니다.",
+      "evidence_summary": "Android Studio에서 서드파티 AI 코딩 에이전트 및 맞춤형 엔터프라이즈 하네스를 통합하여 사용할 수 있도록 개방형 에이전트 지원이 발표되었습니다.",
       "specificity_checks": [
-        "Android Studio AI integration",
-        "AI agents support",
-        "Release date: 2026-09-24"
+        "Version: Android Studio update",
+        "Date: 2026-09-24",
+        "Component: Android Studio AI agent integration",
+        "Publisher: Matthew Warner"
       ],
       "source_verification_notes": [
-        "Android Developers Blog 공식 발표 자료를 통해 확인된 사실입니다."
+        "이 업데이트가 개발자 도구에 국한되며 Android Camera HAL 런타임에 직접적인 영향을 미치지 않음을 명시합니다."
       ],
       "public_article": {
-        "headline": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-        "lead": "Android Studio가 개발자가 선택한 임의의 AI 에이전트를 통합할 수 있는 개방형 환경을 제공하며 네이티브 개발 워크플로우의 변화를 예고했습니다.",
-        "body_markdown": "### AI 에이전트 연동을 통한 개발 환경의 개방성 확보\n\n구글은 최근 안드로이드 스튜디오에서 개발자가 원하는 AI 에이전트를 자유롭게 선택하고 통합하여 사용할 수 있는 새로운 기능을 발표했습니다. 이는 개발팀이 자체적으로 구축한 맞춤형 엔터프라이즈 하네스나 특화된 AI 코딩 에이전트, 그리고 자율 도구들을 안드로이드 스튜디오 내에 유연하게 결합할 수 있도록 돕습니다.\n\n카메라 및 드라이버 개발 분야에서 이 기능은 복잡한 네이티브 코드 베이스의 탐색과 디버깅 속도를 높이는 도구로 활용될 수 있습니다. 특히 빌드 시스템이나 정적 분석 도구와의 연동을 통해 개발 생산성을 높이는 승수 역할을 할 것으로 기대됩니다.\n\n### 네이티브 개발 워크플로우의 최적화\n\n이 변화는 안드로이드 카메라 런타임이나 HAL의 직접적인 동작 변경을 의미하지는 않습니다. 대신 Clang 및 LLVM 기반의 안드로이드 네이티브 툴체인을 다루는 엔터프라이즈 환경에서 빌드 스크립트 작성이나 테스트 케이스 생성 같은 반복 작업을 자동화하는 데 초점이 맞춰져 있습니다.\n\n따라서 개발팀은 이 도구를 활용해 카메라 서비스나 드라이버 코드의 아키텍처를 분석하고, 복잡한 바인더 통신이나 메모리 관리 로직의 테스트 시나리오를 설계할 때 도움을 받을 수 있습니다.",
-        "camera_hal_takeaway": "직접적인 HAL 계약 변경은 없으나, LLVM Clang 툴체인 기반의 네이티브 카메라 서비스 및 드라이버 코드 분석 시 맞춤형 AI 에이전트를 연동하여 정적 분석 및 단위 테스트 케이스 생성을 자동화할 수 있습니다.",
+        "headline": "안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원",
+        "lead": "안드로이드 스튜디오에서 다양한 AI 에이전트를 자유롭게 선택하고 통합할 수 있는 환경이 마련되어 개발팀의 맞춤형 워크플로우 구축이 가능해졌습니다.",
+        "body_markdown": "구글은 안드로이드 스튜디오에서 개발팀이 최적의 방식으로 안드로이드 앱을 빌드할 수 있도록 개방적이고 유연한 AI 에이전트 통합을 지원한다고 발표했습니다. 개발팀은 이제 특수한 AI 코딩 에이전트, 맞춤형 엔터프라이즈 하네스, 자율 도구를 자유롭게 채택할 수 있습니다.\n\n이 업데이트는 개발자 도구의 생산성 향상에 초점을 맞추고 있으며 개발자가 선호하는 AI 도구를 안드로이드 스튜디오 내에 직접 통합하여 활용할 수 있도록 돕습니다.\n\n### 네이티브 개발 워크플로우의 변화\n\n이 업데이트는 안드로이드 스튜디오 개발 도구에 관한 것이며 안드로이드 카메라 HAL API나 런타임 동작에 직접적인 변경을 가하는 것이 아닙니다. 네이티브 C++ 및 HAL 개발팀은 이 통합 기능을 활용하여 코드 생성, 디버깅, 테스트 케이스 작성 등의 워크플로우 생산성을 개선할 수 있는지 평가하고 팀의 개발 환경에 맞는 AI 도구 도입을 검토할 수 있습니다.",
+        "camera_hal_takeaway": "직접적인 HAL 변경은 없으나 C++ 네이티브 개발팀의 코드 작성 및 디버깅 생산성 향상을 위해 안드로이드 스튜디오 내 AI 에이전트 통합 환경을 검토할 수 있습니다.",
         "reader_checkpoints": [
-          "Android Studio에서 지원하는 임의의 AI 에이전트 통합 인터페이스 설정을 확인합니다.",
-          "네이티브 C++ 카메라 스택 코드 분석을 위한 맞춤형 프롬프트 및 에이전트 워크플로우를 구성합니다."
+          "안드로이드 스튜디오 내에서 선호하는 AI 코딩 에이전트의 통합 및 동작 여부를 확인합니다.",
+          "네이티브 C++ 코드 생성 및 리팩토링 과정에서 AI 에이전트의 유용성을 평가합니다."
         ],
         "source_links": [
           {
@@ -46,8 +50,8 @@
         "story_contract_version": 2,
         "source_subtitle": "Android Developers Blog (2026-09-24)",
         "editorial_story": {
-          "not_to_overclaim": "이 기능은 개발 도구의 변화일 뿐이며 Camera HAL API나 프레임워크 런타임 동작을 직접 수정하지 않습니다.",
-          "editor_take": "네이티브 카메라 개발팀의 빌드 및 테스트 워크플로우 생산성을 극대화할 수 있는 유용한 도구적 변화입니다."
+          "not_to_overclaim": "이 업데이트는 안드로이드 스튜디오 도구 기능이며 카메라 HAL 런타임이나 API 사양을 변경하지 않습니다.",
+          "editor_take": "네이티브 개발팀의 작업 효율성을 높일 수 있는 도구적 옵션이 확장되었으므로 워크플로우 개선 관점에서 검토할 만합니다."
         },
         "decision_metadata": {
           "impact": "Medium",
@@ -64,34 +68,36 @@
       },
       "article_sections": {
         "verified_facts": [
-          "Android Studio에서 개발자가 선택한 임의의 AI 에이전트를 통합하여 사용할 수 있는 기능이 추가되었습니다.",
-          "이 기능은 개발자가 자신과 팀에 가장 적합한 방식으로 앱을 빌드할 수 있도록 에이전트 기반 개발의 유연성을 높입니다."
+          "2026년 9월 24일 Android Studio에서 AI 에이전트를 활용한 개발이 더욱 개방적이고 유연해졌다는 내용이 발표되었습니다.",
+          "개발팀이 최적의 방식으로 Android 앱을 빌드할 수 있도록 다양한 AI 코딩 에이전트, 맞춤형 엔터프라이즈 하네스, 자율 도구를 채택할 수 있게 되었습니다.",
+          "이 발표는 Android 개발자 경험 제품 관리자인 Matthew Warner에 의해 게시되었습니다.",
+          "이 업데이트는 Android Studio 개발자 도구에 관한 것이며, AI 기반 개발자 도구를 통한 생산성 향상에 초점을 맞추고 있습니다."
         ],
-        "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
-        "hal_driver_impact": "이 변경은 Android Camera HAL의 런타임 동작이나 API 계약에 직접적인 영향을 주지 않으며, 네이티브 빌드, 테스트, 디버깅 워크플로우의 생산성을 개선하는 툴링 레이어의 변화입니다.",
+        "background_context": "네이티브 빌드, 테스트, 새니타이저, 컴파일러, 디버그 워크플로우 변경은 Camera HAL 및 드라이버 팀을 지원할 수 있지만, 카메라 관련 런타임 증거가 없는 경우 워크플로우 신호로만 해석해야 합니다.",
+        "hal_driver_impact": "안드로이드 스튜디오의 AI 에이전트 지원 확장은 C++ 및 네이티브 개발 워크플로우에 영향을 미쳐, HAL 및 드라이버 개발팀의 생산성 향상 및 도구 통합 가능성을 제시합니다.",
         "action_items": [
-          "안드로이드 스튜디오의 AI 에이전트 연동 기능을 활용하여 네이티브 카메라 드라이버 및 HAL 코드의 단위 테스트 케이스 자동 생성 워크플로우를 시범 구축합니다.",
-          "LLVM Clang 빌드 스크립트 최적화를 위한 에이전트 프롬프트를 설계하고 빌드 시간 단축 여부를 기록합니다."
+          "안드로이드 스튜디오에서 AI 에이전트 통합 설정을 확인하고 팀의 C++ 코드 스타일 가이드를 적용해 본다.",
+          "네이티브 HAL 코드의 단위 테스트 케이스 생성 시 AI 에이전트의 효율성을 측정한다."
         ],
-        "team_share_points": "안드로이드 스튜디오의 개방형 AI 에이전트 통합을 통해 네이티브 카메라 스택 개발 시 반복적인 테스트 코드 작성 및 정적 분석 작업을 효율화할 수 있는 기회가 열렸습니다."
+        "team_share_points": "안드로이드 스튜디오에서 서드파티 AI 에이전트 통합이 지원되므로 네이티브 개발팀은 개발 생산성 향상 도구로 활용할 수 있는지 검토해 보시기 바랍니다."
       },
       "hal_signal_capsule": {
-        "why_now": "Android Studio에서 임의의 AI 에이전트 통합을 공식 지원함에 따라 네이티브 개발 워크플로우 최적화가 가능해졌습니다.",
+        "why_now": "안드로이드 스튜디오의 AI 에이전트 통합 지원이 2026년 9월 24일에 발표되어 개발 환경 최적화 검토가 가능합니다.",
         "reader_owners": [
           "native_tooling_owner"
         ],
-        "check_within_2_weeks": "Android Studio 내 AI 에이전트 연동 설정 및 C++ 코드 분석 템플릿 구성",
+        "check_within_2_weeks": "안드로이드 스튜디오 내 AI 에이전트 구성 및 C++ 개발 워크플로우 적용 가능성을 검토합니다.",
         "impact_axes": [
           "native_tooling_workflow"
         ],
         "do_not_overstate": [
-          "이 기능은 개발 도구의 변화일 뿐이며 Camera HAL API나 프레임워크 런타임 동작을 직접 수정하지 않습니다."
+          "이 업데이트는 개발자 도구에 국한되며 Android Camera HAL API나 런타임 동작을 변경하지 않습니다."
         ]
       },
       "claims": [
         {
-          "claim_id": "cl:348919c03d831171:1",
-          "text": "Android Studio에서 개발자가 선택한 임의의 AI 에이전트를 통합하여 사용할 수 있는 기능이 추가되었습니다.",
+          "claim_id": "claim_studio_1",
+          "text": "2026년 9월 24일 Android Studio에서 AI 에이전트를 활용한 개발이 더욱 개방적이고 유연해졌다는 내용이 발표되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "candidate:348919c03d831171:source-summary"
@@ -103,8 +109,34 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "cl:348919c03d831171:2",
-          "text": "이 기능은 개발자가 자신과 팀에 가장 적합한 방식으로 앱을 빌드할 수 있도록 에이전트 기반 개발의 유연성을 높입니다.",
+          "claim_id": "claim_studio_2",
+          "text": "개발팀이 최적의 방식으로 Android 앱을 빌드할 수 있도록 다양한 AI 코딩 에이전트, 맞춤형 엔터프라이즈 하네스, 자율 도구를 채택할 수 있게 되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:348919c03d831171:source-summary"
+          ],
+          "source_urls": [
+            "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_studio_3",
+          "text": "이 발표는 Android 개발자 경험 제품 관리자인 Matthew Warner에 의해 게시되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:348919c03d831171:source-summary"
+          ],
+          "source_urls": [
+            "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_studio_4",
+          "text": "이 업데이트는 Android Studio 개발자 도구에 관한 것이며, AI 기반 개발자 도구를 통한 생산성 향상에 초점을 맞추고 있습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "candidate:348919c03d831171:source-summary"
@@ -117,17 +149,17 @@
         }
       ],
       "camera_hal_checks": [
-        "Android Studio AI agent integration settings"
+        "안드로이드 스튜디오에서 AI 에이전트 통합 설정을 확인하고 팀의 C++ 코드 스타일 가이드를 적용해 본다."
       ],
       "action_hints": [
-        "Set up custom AI agent in Android Studio for native C++ code analysis"
+        "네이티브 HAL 코드의 단위 테스트 케이스 생성 시 AI 에이전트의 효율성을 측정한다."
       ],
       "action_items": [
-        "안드로이드 스튜디오의 AI 에이전트 연동 기능을 활용하여 네이티브 카메라 드라이버 및 HAL 코드의 단위 테스트 케이스 자동 생성 워크플로우를 시범 구축합니다.",
-        "LLVM Clang 빌드 스크립트 최적화를 위한 에이전트 프롬프트를 설계하고 빌드 시간 단축 여부를 기록합니다."
+        "안드로이드 스튜디오에서 AI 에이전트 통합 설정을 확인하고 팀의 C++ 코드 스타일 가이드를 적용해 본다.",
+        "네이티브 HAL 코드의 단위 테스트 케이스 생성 시 AI 에이전트의 효율성을 측정한다."
       ],
       "is_ai_related": true,
-      "article_type": "tooling",
+      "article_type": "cpp_ai_tooling_fallback",
       "imageCandidates": [
         {
           "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
@@ -172,68 +204,54 @@
           "contentLength": 12454
         },
         {
-          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
-          "sourceUrl": "https://www.anthropic.com/news",
-          "articleUrl": "https://www.anthropic.com/claude-opus-5-5",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/jpeg",
-          "licenseStatus": "unknown",
-          "attribution": "Anthropic News",
-          "validationStatus": "ok",
-          "contentLength": 88082
-        },
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
           "sourceKind": "og",
           "width": null,
           "height": null,
           "alt": "",
           "contentType": "image/png",
           "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
+          "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 31847
+          "contentLength": 162392
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
+          "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 12454
         }
       ],
       "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
       "imageSource": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
       "imageAttribution": "Build your way: Use any AI agent of your choice in Android Studio",
-      "imageAlt": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
+      "imageAlt": "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "No suitable image available.",
+      "imageUsageDecisionReason": "No image candidates selected to avoid rights risks.",
       "sources": [
         {
           "title": "Build your way: Use any AI agent of your choice in Android Studio",
@@ -267,7 +285,6 @@
         "usedFallback": false,
         "reason": ""
       },
-      "coverage_type": "fresh",
       "image_recovery": {
         "article_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
         "page_attempts": [
@@ -282,34 +299,40 @@
         "extracted_count": 7,
         "valid_count": 3,
         "outcome": "available"
-      }
+      },
+      "coverage_type": "fresh",
+      "do_not_overstate": [
+        "이 업데이트는 개발자 도구에 국한되며 Android Camera HAL API나 런타임 동작을 변경하지 않습니다."
+      ]
     },
     {
       "category": "cpp_ai_tooling_fallback",
-      "headline": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
-      "what_changed": "Claude Opus 5.5는 Anthropic이 테스트한 모델 중 가장 강력한 성능을 보이며, 포괄적인 정렬 테스트를 통과했습니다.",
+      "headline": "앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표",
+      "what_changed": "앤트로픽이 최신 대규모 언어 모델인 Claude Opus 5.5를 발표하여 코드 생성 및 정렬 테스트 성능을 대폭 향상시켰습니다.",
       "confirmed_facts": [
-        "Anthropic이 새로운 Claude 5.5 제품군의 첫 번째 모델인 Claude Opus 5.5를 출시했습니다.",
-        "이 모델은 포괄적인 정렬 테스트를 통과한 가장 강력한 성능의 모델이며, Opus 5 대비 실행 비용이 약 40% 저렴합니다.",
-        "단일 프롬프트 게임 빌드 테스트에서 그래픽과 완성도 면에서 가장 높은 점수를 받았습니다."
+        "2026년 9월 22일 Claude 5.5 제품군의 첫 번째 모델인 Claude Opus 5.5가 발표되었습니다.",
+        "Claude Opus 5.5는 Anthropic이 테스트한 모델 중 가장 강력한 성능을 보이며, 가장 포괄적인 정렬 테스트를 통과했습니다.",
+        "이 모델은 Claude Fable 5.1 수준의 작업 성능을 제공하면서 실행 비용은 Opus 5 대비 40% 저렴합니다.",
+        "이 모델은 그래픽 및 완성도 면에서 다른 어떤 모델보다 높은 점수를 받았으며, 안전 장치도 함께 제공됩니다."
       ],
-      "evidence_summary": "Anthropic이 최신 AI 모델인 Claude Opus 5.5를 발표하였으며, 정렬 테스트 통과 및 비용 절감 사실이 확인되었습니다.",
+      "evidence_summary": "앤트로픽이 성능과 안전성을 강화하고 실행 비용을 40% 절감한 최신 LLM Claude Opus 5.5를 발표했습니다.",
       "specificity_checks": [
-        "Claude Opus 5.5",
-        "Release date: 2026-09-22",
-        "40% cost reduction compared to Opus 5"
+        "Version: Claude Opus 5.5",
+        "Date: 2026-09-22",
+        "Publisher: Anthropic",
+        "Cost reduction: 40% less than Opus 5"
       ],
       "source_verification_notes": [
-        "Anthropic 공식 발표 자료를 통해 확인된 사실입니다."
+        "일반 LLM 성능 향상 소식이며 Android 카메라 런타임과의 직접적인 연결은 없음을 명시합니다."
       ],
       "public_article": {
-        "headline": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
-        "lead": "앤트로픽이 자사 모델 중 가장 강력한 성능을 자랑하며 강화된 안전 장치를 탑재한 Claude Opus 5.5를 선보였습니다.",
-        "body_markdown": "### 고성능 모델의 등장과 개발 생산성 변화\n\n앤트로픽은 최근 새로운 Claude 5.5 제품군의 첫 번째 모델인 Claude Opus 5.5를 발표했습니다. 이 모델은 포괄적인 정렬 테스트를 통과하며 높은 안전성을 입증했으며, 이전 세대인 Opus 5 대비 실행 비용을 약 40% 절감한 것이 특징입니다.\n\n테스트 과정에서 단일 프롬프트로 게임을 제작하는 과제를 수행했을 때, 다른 모델 대비 그래픽 완성도와 세부 묘사에서 가장 높은 점수를 기록했습니다. 이러한 고성능 코드 생성 및 분석 능력은 네이티브 시스템 소프트웨어를 다루는 엔터프라이즈 환경에서도 유용하게 활용될 수 있습니다.\n\n### 네이티브 시스템 개발에서의 간접적 활용\n\n이 모델의 출시는 안드로이드 카메라 프레임워크나 HAL 런타임에 직접적인 기능 변화를 가져오지 않습니다. 대신 복잡한 C++ 코드의 리팩토링, 메모리 누수 분석, 그리고 드라이버 스택의 문서화 작업 등에서 개발자들을 지원하는 간접적인 도구로 기능합니다.\n\n특히 카메라 드라이버나 ISP 파이프라인처럼 하드웨어 제어와 실시간 성능이 중요한 영역에서, 복잡한 V4L2 인터페이스나 미디어 컨트롤러 구조를 분석하고 테스트 시나리오를 도출하는 데 유용하게 쓰일 수 있습니다.",
-        "camera_hal_takeaway": "직접적인 HAL 런타임 영향은 없으나, C++ 기반의 Camera HAL 및 드라이버 소스 코드 분석, 메모리 세니타이저 로그 해석, V4L2 subdev 제어 로직의 정적 검증 시 고성능 AI 모델을 보조 도구로 활용할 수 있습니다.",
+        "headline": "앤트로픽, 코드 생성 및 테스트 역량이 강화된 Claude Opus 5.5 공개",
+        "lead": "앤트로픽이 성능과 안전 장치를 대폭 강화한 최신 대규모 언어 모델 Claude Opus 5.5를 발표하여 개발자들의 코드 작성 및 검증 효율을 높일 수 있는 옵션을 제공합니다.",
+        "body_markdown": "앤트로픽은 새로운 Claude 5.5 제품군의 첫 번째 모델인 Claude Opus 5.5를 공개했습니다. 이 모델은 앤트로픽이 지금까지 테스트한 모델 중 가장 강력한 성능을 보여주며 가장 포괄적인 정렬 테스트를 통과한 것으로 확인되었습니다.\n\nClaude Opus 5.5는 대부분의 작업에서 Claude Fable 5.1 수준의 성능을 발휘하면서도 실행 비용은 이전 Opus 5 모델에 비해 약 40% 저렴하게 설계되었습니다. 또한 가장 유능한 모델들을 위해 개발된 고도화된 안전 장치가 함께 제공됩니다.\n\n### 코드 생성 및 테스트 역량의 진화\n\n이 소식은 일반적인 대규모 언어 모델의 성능 향상에 관한 것이며 안드로이드 카메라 HAL이나 드라이버 스택에 직접적인 변경을 가하는 것이 아닙니다. 하지만 네이티브 C++ 및 카메라 드라이버 개발팀은 Claude Opus 5.5의 향상된 코드 생성 및 테스트 역량을 활용하여 복잡한 알고리즘 구현, 테스트 스크립트 작성, 디버깅 과정에서 개발 생산성을 높이는 도구로 검토할 수 있습니다.",
+        "camera_hal_takeaway": "직접적인 HAL 변경은 없으나 네이티브 C++ 코드 스니펫 생성 및 단위 테스트 스크립트 작성 시 Claude Opus 5.5 모델을 활용한 생산성 향상을 도모할 수 있습니다.",
         "reader_checkpoints": [
-          "Claude Opus 5.5 모델의 API 비용 및 성능 지표를 검토합니다.",
-          "C++ 네이티브 코드 분석 및 드라이버 문서화 작업에 해당 모델의 도입 가능성을 평가합니다."
+          "Claude Opus 5.5 모델을 활용하여 C++ 네이티브 코드 생성 품질을 평가합니다.",
+          "카메라 드라이버 테스트 스크립트 작성 시 모델의 정확성과 유용성을 검증합니다."
         ],
         "source_links": [
           {
@@ -320,54 +343,55 @@
         "story_contract_version": 2,
         "source_subtitle": "Anthropic News (2026-09-22)",
         "editorial_story": {
-          "not_to_overclaim": "Claude Opus 5.5는 개발 보조 도구일 뿐이며 안드로이드 카메라 런타임이나 ISP 하드웨어 파이프라인에 직접 통합되지 않습니다.",
-          "editor_take": "비용 효율성이 크게 개선된 최신 고성능 모델로, 복잡한 네이티브 코드 분석 및 리팩토링 작업의 효율을 높여줄 수 있습니다."
+          "not_to_overclaim": "이 발표는 일반 LLM 모델에 대한 것이며 Android Camera HAL API나 하드웨어 드라이버 사양을 직접 변경하지 않습니다.",
+          "editor_take": "비용 절감과 성능 향상이 동시에 이루어진 최신 모델이므로 개발팀의 AI 보조 도구로 도입을 검토할 가치가 충분합니다."
         },
         "decision_metadata": {
           "impact": "Medium",
           "scope": [
-            "Tooling",
-            "AI"
+            "Tooling"
           ],
           "action": [
             "Watch",
             "Test"
           ],
-          "overclaim_risk": "Medium"
+          "overclaim_risk": "High"
         }
       },
       "article_sections": {
         "verified_facts": [
-          "Anthropic이 새로운 Claude 5.5 제품군의 첫 번째 모델인 Claude Opus 5.5를 출시했습니다.",
-          "이 모델은 포괄적인 정렬 테스트를 통과한 가장 강력한 성능의 모델이며, Opus 5 대비 실행 비용이 약 40% 저렴합니다.",
-          "단일 프롬프트 게임 빌드 테스트에서 그래픽과 완성도 면에서 가장 높은 점수를 받았습니다."
+          "2026년 9월 22일 Claude 5.5 제품군의 첫 번째 모델인 Claude Opus 5.5가 발표되었습니다.",
+          "Claude Opus 5.5는 Anthropic이 테스트한 모델 중 가장 강력한 성능을 보이며, 가장 포괄적인 정렬 테스트를 통과했습니다.",
+          "이 모델은 Claude Fable 5.1 수준의 작업 성능을 제공하면서 실행 비용은 Opus 5 대비 40% 저렴합니다.",
+          "이 모델은 그래픽 및 완성도 면에서 다른 어떤 모델보다 높은 점수를 받았으며, 안전 장치도 함께 제공됩니다."
         ],
-        "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
-        "hal_driver_impact": "이 변경은 카메라 런타임이나 하드웨어 파이프라인에 직접적인 영향을 주지 않으며, 네이티브 코드 품질 분석 및 테스트 케이스 설계를 지원하는 툴링 관점의 간접적 영향만 가집니다.",
+        "background_context": "네이티브 빌드, 테스트, 새니타이저, 컴파일러, 디버그 워크플로우 변경은 Camera HAL 및 드라이버 팀을 지원할 수 있지만, 카메라 관련 런타임 증거가 없는 경우 워크플로우 신호로만 해석해야 합니다.",
+        "hal_driver_impact": "AI 모델의 코드 생성 및 테스트 성능 향상은 카메라 HAL 및 드라이버 개발팀의 코드 작성, 테스트 케이스 생성, 디버깅 워크플로우에 잠재적으로 영향을 미칠 수 있습니다.",
         "action_items": [
-          "Claude Opus 5.5를 활용하여 기존 C++ Camera HAL 코드의 메모리 관리 및 바인더 통신 예외 처리 로직에 대한 정적 분석 검토를 수행합니다.",
-          "V4L2 드라이버 인터페이스 분석 및 드라이버 레벨 테스트 시나리오 작성을 위한 프롬프트 템플릿을 개발합니다."
+          "Claude Opus 5.5 API를 활용하여 기존 C++ 카메라 드라이버 코드의 리팩토링 및 주석 생성 작업을 테스트한다.",
+          "카메라 HAL 테스트 시나리오에 맞는 단위 테스트 코드를 생성하여 정확성을 검증한다."
         ],
-        "team_share_points": "실행 비용이 낮아지고 성능이 강화된 Claude Opus 5.5를 네이티브 C++ 코드 품질 관리 및 복잡한 카메라 드라이버 인터페이스 분석의 보조 도구로 검토할 가치가 있습니다."
+        "team_share_points": "앤트로픽의 Claude Opus 5.5 모델이 발표되었으며 비용 절감과 성능 향상이 동시에 이루어졌으니 개발 보조 도구로의 활용을 검토해 보시기 바랍니다."
       },
       "hal_signal_capsule": {
-        "why_now": "앤트로픽의 최신 고성능 모델 Claude Opus 5.5가 출시되어 개발 생산성 도구로서의 활용 가치가 높아졌습니다.",
+        "why_now": "Claude Opus 5.5 모델이 2026년 9월 22일에 발표되어 최신 LLM을 활용한 개발 생산성 향상 검토가 가능합니다.",
         "reader_owners": [
           "native_tooling_owner",
           "camera_test_owner"
         ],
-        "check_within_2_weeks": "Claude Opus 5.5를 활용한 C++ 코드 정적 분석 및 테스트 시나리오 생성 검토",
+        "check_within_2_weeks": "Claude Opus 5.5 모델을 활용한 C++ 코드 생성 및 테스트 스크립트 작성 효율을 검토합니다.",
         "impact_axes": [
-          "native_tooling_workflow"
+          "native_tooling_workflow",
+          "cts_vts_its_cdd"
         ],
         "do_not_overstate": [
-          "Claude Opus 5.5는 개발 보조 도구일 뿐이며 안드로이드 카메라 런타임이나 ISP 하드웨어 파이프라인에 직접 통합되지 않습니다."
+          "이 소식은 일반 LLM 모델에 대한 것이며 Android Camera HAL이나 드라이버 스택을 직접 변경하지 않습니다."
         ]
       },
       "claims": [
         {
-          "claim_id": "cl:0dd3bed5c7dd1c27:1",
-          "text": "Anthropic이 새로운 Claude 5.5 제품군의 첫 번째 모델인 Claude Opus 5.5를 출시했습니다.",
+          "claim_id": "claim_claude_1",
+          "text": "2026년 9월 22일 Claude 5.5 제품군의 첫 번째 모델인 Claude Opus 5.5가 발표되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "candidate:0dd3bed5c7dd1c27:source-summary"
@@ -379,11 +403,10 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "cl:0dd3bed5c7dd1c27:2",
-          "text": "이 모델은 포괄적인 정렬 테스트를 통과한 가장 강력한 성능의 모델이며, Opus 5 대비 실행 비용이 약 40% 저렴합니다.",
+          "claim_id": "claim_claude_2",
+          "text": "Claude Opus 5.5는 Anthropic이 테스트한 모델 중 가장 강력한 성능을 보이며, 가장 포괄적인 정렬 테스트를 통과했습니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "sx:0dd3bed5c7dd1c27:da7f739f6271:023a6c893c9dd354",
             "candidate:0dd3bed5c7dd1c27:source-summary"
           ],
           "source_urls": [
@@ -393,11 +416,23 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "cl:0dd3bed5c7dd1c27:3",
-          "text": "단일 프롬프트 게임 빌드 테스트에서 그래픽과 완성도 면에서 가장 높은 점수를 받았습니다.",
+          "claim_id": "claim_claude_3",
+          "text": "이 모델은 Claude Fable 5.1 수준의 작업 성능을 제공하면서 실행 비용은 Opus 5 대비 40% 저렴합니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "sx:0dd3bed5c7dd1c27:da7f739f6271:52ade12ff5f7ef01",
+            "candidate:0dd3bed5c7dd1c27:source-summary"
+          ],
+          "source_urls": [
+            "https://www.anthropic.com/claude-opus-5-5"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_claude_4",
+          "text": "이 모델은 그래픽 및 완성도 면에서 다른 어떤 모델보다 높은 점수를 받았으며, 안전 장치도 함께 제공됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
             "candidate:0dd3bed5c7dd1c27:source-summary"
           ],
           "source_urls": [
@@ -408,18 +443,32 @@
         }
       ],
       "camera_hal_checks": [
-        "Claude Opus 5.5 API integration"
+        "Claude Opus 5.5 API를 활용하여 기존 C++ 카메라 드라이버 코드의 리팩토링 및 주석 생성 작업을 테스트한다."
       ],
       "action_hints": [
-        "Evaluate Claude Opus 5.5 for C++ static analysis and code refactoring tasks"
+        "카메라 HAL 테스트 시나리오에 맞는 단위 테스트 코드를 생성하여 정확성을 검증한다."
       ],
       "action_items": [
-        "Claude Opus 5.5를 활용하여 기존 C++ Camera HAL 코드의 메모리 관리 및 바인더 통신 예외 처리 로직에 대한 정적 분석 검토를 수행합니다.",
-        "V4L2 드라이버 인터페이스 분석 및 드라이버 레벨 테스트 시나리오 작성을 위한 프롬프트 템플릿을 개발합니다."
+        "Claude Opus 5.5 API를 활용하여 기존 C++ 카메라 드라이버 코드의 리팩토링 및 주석 생성 작업을 테스트한다.",
+        "카메라 HAL 테스트 시나리오에 맞는 단위 테스트 코드를 생성하여 정확성을 검증한다."
       ],
       "is_ai_related": true,
-      "article_type": "tooling",
+      "article_type": "cpp_ai_tooling_fallback",
       "imageCandidates": [
+        {
+          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
+          "sourceUrl": "https://www.anthropic.com/claude-opus-5-5",
+          "articleUrl": "https://www.anthropic.com/claude-opus-5-5",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Opus 5.5",
+          "validationStatus": "ok",
+          "contentLength": 88082
+        },
         {
           "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
           "sourceUrl": "https://www.anthropic.com/news",
@@ -437,10 +486,10 @@
       ],
       "selectedImage": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
       "imageSource": "https://www.anthropic.com/claude-opus-5-5",
-      "imageAttribution": "Anthropic News",
-      "imageAlt": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
+      "imageAttribution": "Claude Opus 5.5",
+      "imageAlt": "앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "imageUsageDecisionReason": "No image candidates selected to avoid rights risks.",
       "sources": [
         {
           "title": "Claude Opus 5.5",
@@ -474,48 +523,54 @@
         "usedFallback": false,
         "reason": ""
       },
+      "image_recovery": {
+        "article_url": "https://www.anthropic.com/claude-opus-5-5",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
+      },
       "coverage_type": "fresh",
-      "imageSelection": {
-        "reasonCode": "selected",
-        "reasonText": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
-        "sourceUrl": "https://www.anthropic.com/claude-opus-5-5",
-        "attribution": "Anthropic News",
-        "licenseStatus": "unknown",
-        "validationStatus": "ok",
-        "validationSource": "candidate_metadata",
-        "candidateUrl": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
-        "exclusionEvidence": []
-      }
+      "do_not_overstate": [
+        "이 소식은 일반 LLM 모델에 대한 것이며 Android Camera HAL이나 드라이버 스택을 직접 변경하지 않습니다."
+      ]
     },
     {
       "category": "android",
-      "headline": "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
-      "what_changed": "이 패치 시리즈는 RZ/V2H(P) IVC 및 Arm Mali-C55 ISP 노드를 추가하고, 비디오 엔드포인트를 연결하며, RZ/V2H EVK에서 두 블록을 활성화합니다. 이는 아직 머지되지 않은 제안입니다.",
+      "headline": "르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안",
+      "what_changed": "르네사스 RZ/V2H(P) IVC 및 Arm Mali-C55 ISP 노드를 추가하고 비디오 엔드포인트를 연결하는 디바이스 트리 패치 시리즈가 제안되었습니다.",
       "confirmed_facts": [
-        "RZ/V2H EVK에서 Arm Mali-C55 ISP 및 IVC 노드를 활성화하고 비디오 엔드포인트를 연결하는 커널 DTS 패치 시리즈 v2가 제안되었습니다.",
-        "이 패치는 선택적인 ISP DMA 라인 틱 및 IVC 프레임 시작/정지 인터럽트를 정의합니다.",
-        "패치 적용 및 드라이버 활성화 시 콘솔에서 Mali-C55 ISP 감지 메시지를 확인할 수 있습니다.",
-        "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 상태입니다."
+        "2026년 9월 25일 lore.kernel.org linux-media 메일링 리스트에 RZ/V2H EVK에서 ISP 및 IVC를 활성화하는 패치 v2가 제출되었습니다.",
+        "이 패치는 Arm Mali-C55 ISP 노드와 RZ/V2H(P) IVC 노드를 추가하고 비디오 엔드포인트를 연결합니다.",
+        "패치 적용 후 콘솔에서 Mali-C55 ISP 9000043.31032022.0 감지 메시지가 확인됩니다.",
+        "이 변경 사항은 아직 커널 메인라인에 머지되지 않은 제안 단계입니다."
       ],
-      "evidence_summary": "르네사스 RZ/V2H EVK 보드에서 Mali-C55 ISP 및 IVC 하드웨어를 활성화하기 위한 DTS 패치 시리즈 v2가 리눅스 미디어 메일링 리스트에 제안되었습니다.",
+      "evidence_summary": "lore.kernel.org linux-media 메일링 리스트에 제출된 패치 시리즈 v2를 통해 RZ/V2H EVK에서 Mali-C55 ISP 및 IVC 활성화가 제안되었습니다.",
       "specificity_checks": [
-        "Renesas RZ/V2H EVK",
-        "Arm Mali-C55 ISP",
-        "Image Video Codec (IVC)",
-        "DTS patch v2",
-        "Console message: mali-c55 16080000.isp: Detected Mali-C55 ISP 9000043.31032022.0"
+        "Version: Mali-C55 ISP 9000043.31032022.0",
+        "Date: 2026-09-25",
+        "Component: ISP and IVC",
+        "Platform: Renesas RZ/V2H EVK"
       ],
       "source_verification_notes": [
-        "lore.kernel.org linux-media 메일링 리스트의 패치 제안 내용을 바탕으로 작성되었습니다."
+        "패치 시리즈가 아직 제안 단계(v2)이며 메인라인에 머지되지 않았음을 명시합니다."
       ],
       "public_article": {
-        "headline": "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
-        "lead": "르네사스 RZ/V2H EVK 플랫폼에서 이미지 신호 프로세서와 비디오 코덱 노드를 활성화하기 위한 디바이스 트리 패치가 제안되었습니다.",
-        "body_markdown": "### 디바이스 트리를 통한 하드웨어 노드 추가\n\n리눅스 미디어 메일링 리스트에 르네사스 RZ/V2H EVK 평가 보드에서 Arm Mali-C55 ISP 및 IVC 하드웨어 블록을 활성화하는 디바이스 트리 소스 패치 시리즈가 제출되었습니다. 이 패치는 아직 메인라인 커널에 머지되지 않은 제안 상태의 변경 사항입니다.\n\n제안된 패치는 선택적인 ISP DMA 라인 틱 인터럽트와 IVC 프레임 시작 및 정지 인터럽트를 정의하고 있습니다. 또한 RZ/V2H IVC 및 Arm Mali-C55 ISP 노드를 추가하여 비디오 엔드포인트를 상호 연결하는 작업을 포함합니다.\n\n### 드라이버 활성화 및 콘솔 확인\n\n이 패치를 적용하고 적절한 리눅스 드라이버를 활성화하면, 시스템 부팅 시 콘솔에서 Mali-C55 ISP 하드웨어가 정상적으로 감지되었다는 메시지를 확인할 수 있게 됩니다. 이는 하위 커널 레벨에서 이미지 파이프라인의 물리적 제어 기반이 마련됨을 뜻합니다.\n\n카메라 드라이버 및 HAL 개발자 관점에서 이 변경은 하드웨어 파이프라인의 전력 소비와 이미지 처리 성능에 영향을 미치는 시작점입니다. 다만 이 패치는 특정 평가 보드용 DTS 변경에 국한되므로, 안드로이드 카메라 프레임워크나 HAL API 자체의 계약을 직접 변경하지는 않습니다.",
-        "camera_hal_takeaway": "RZ/V2H EVK 플랫폼 기반 개발 시, Mali-C55 ISP 및 IVC 노드가 활성화됨에 따라 V4L2 subdev 인터페이스를 통한 이미지 포맷 협상, 프레임 타이밍 검증, DMA 버퍼 라이프사이클을 하위 스택에서 점검해야 합니다.",
+        "headline": "르네사스 RZ V2H EVK 디바이스 트리 패치로 Arm Mali C55 ISP 및 IVC 활성화 제안",
+        "lead": "르네사스 RZ V2H EVK 플랫폼에서 하드웨어 가속 이미지 처리를 지원하기 위한 디바이스 트리 패치가 제안되어 하위 이미지 파이프라인의 변화가 예상됩니다.",
+        "body_markdown": "이번에 제안된 패치 시리즈는 RZ V2H 및 RZ V2HP IVC 노드와 Arm Mali C55 ISP 노드를 추가하고 이들의 비디오 엔드포인트를 연결하여 하드웨어 블록을 활성화하는 것을 목표로 합니다. 이 변경 사항은 선택적인 ISP DMA 라인 틱 및 IVC 프레임 시작과 프레임 정지 인터럽트를 정의하여 프레임 타이밍 제어를 개선합니다.\n\n패치 적용 후 드라이버가 활성화되면 시스템 콘솔에서 Mali C55 ISP 버전 9000043.31032022.0 감지 메시지를 확인할 수 있습니다. 이는 하드웨어 레벨에서 이미지 신호 프로세서가 올바르게 인식되고 동작할 준비가 되었음을 나타냅니다.\n\n### 하드웨어 가속 이미지 처리의 기반 마련\n\n이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 단계의 변경 사항입니다. 실제 상위 Android 카메라 HAL이나 프레임워크 계약에 직접적인 변화를 주는 것은 아니지만 하위 드라이버 계층에서 하드웨어 가속 기능을 활용할 수 있는 필수적인 기반을 제공합니다. 개발팀은 이 패치의 머지 여부와 V4L2 인터페이스를 통해 노출되는 컨트롤 변화를 지속적으로 추적해야 합니다.",
+        "camera_hal_takeaway": "직접적인 Android HAL 변경은 없으나 하위 드라이버 계층에서 V4L2 uAPI를 통해 노출되는 ISP 및 IVC 제어 인터페이스와 프레임 시작 및 정지 인터럽트 타이밍을 점검해야 합니다.",
         "reader_checkpoints": [
-          "RZ/V2H EVK 보드에서 제안된 DTS 패치를 빌드하고 적용합니다.",
-          "부팅 콘솔 로그에서 Mali-C55 ISP 감지 메시지를 확인하고 드라이버 초기화 상태를 점검합니다."
+          "RZ V2H EVK 플랫폼에서 패치 적용 후 콘솔 로그의 ISP 감지 메시지를 확인합니다.",
+          "V4L2 인터페이스를 통해 노출되는 ISP 및 IVC 컨트롤의 정상 동작 여부를 검증합니다."
         ],
         "source_links": [
           {
@@ -526,8 +581,8 @@
         "story_contract_version": 2,
         "source_subtitle": "lore.kernel.org linux-media list (2026-09-25)",
         "editorial_story": {
-          "not_to_overclaim": "이 패치는 RZ/V2H EVK 보드용 DTS 변경 제안이며 아직 메인라인에 머지되지 않았고 안드로이드 HAL 계약을 직접 변경하지 않습니다.",
-          "editor_take": "르네사스 플랫폼에서 Mali-C55 ISP 하드웨어 파이프라인을 활성화하기 위한 중요한 하위 스택 변경 사항입니다."
+          "not_to_overclaim": "이 패치는 아직 머지되지 않은 제안 단계이며 Android Camera2 API의 특정 기능 지원을 보장하지 않습니다.",
+          "editor_take": "르네사스 플랫폼의 하위 이미지 파이프라인 하드웨어 가속을 위한 중요한 첫 단계로 지속적인 추적이 필요합니다."
         },
         "decision_metadata": {
           "impact": "High",
@@ -538,45 +593,46 @@
           ],
           "action": [
             "Watch",
-            "Test"
+            "Test",
+            "Adopt"
           ],
-          "overclaim_risk": "High"
+          "overclaim_risk": "Medium"
         }
       },
       "article_sections": {
         "verified_facts": [
-          "RZ/V2H EVK에서 Arm Mali-C55 ISP 및 IVC 노드를 활성화하고 비디오 엔드포인트를 연결하는 커널 DTS 패치 시리즈 v2가 제안되었습니다.",
-          "이 패치는 선택적인 ISP DMA 라인 틱 및 IVC 프레임 시작/정지 인터럽트를 정의합니다.",
-          "패치 적용 및 드라이버 활성화 시 콘솔에서 Mali-C55 ISP 감지 메시지를 확인할 수 있습니다.",
-          "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 상태입니다."
+          "2026년 9월 25일 lore.kernel.org linux-media 메일링 리스트에 RZ/V2H EVK에서 ISP 및 IVC를 활성화하는 패치 v2가 제출되었습니다.",
+          "이 패치는 Arm Mali-C55 ISP 노드와 RZ/V2H(P) IVC 노드를 추가하고 비디오 엔드포인트를 연결합니다.",
+          "패치 적용 후 콘솔에서 Mali-C55 ISP 9000043.31032022.0 감지 메시지가 확인됩니다.",
+          "이 변경 사항은 아직 커널 메인라인에 머지되지 않은 제안 단계입니다."
         ],
-        "background_context": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
-        "hal_driver_impact": "이 변경은 하드웨어 레벨의 ISP 및 코덱 노드를 활성화하여 V4L2 미디어 컨트롤러 파이프라인을 구성할 수 있게 하며, 프레임 타이밍 및 전력 관리 검증의 기초가 됩니다. Android HAL API 계약 변경은 없습니다.",
+        "background_context": "드라이버, 센서, ISP, libcamera, V4L2 변경은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "하위 드라이버 계층에서 ISP 및 IVC 하드웨어가 활성화됨에 따라 V4L2 uAPI를 통한 프레임 제어와 타이밍 인터럽트가 제공되어 이미지 파이프라인의 안정성이 향상될 수 있습니다.",
         "action_items": [
-          "RZ/V2H EVK 개발 환경에서 제안된 DTS 패치를 적용하고 커널 빌드 후 콘솔에서 Mali-C55 ISP 감지 로그를 확인합니다.",
-          "ISP DMA 인터럽트 및 IVC 프레임 인터럽트 발생 시의 프레임 드롭 여부와 레이턴시 변화를 측정합니다."
+          "RZ V2H EVK 플랫폼에서 패치 적용 후 dmesg 콘솔 로그를 통해 Mali C55 ISP 감지 메시지를 검증한다.",
+          "V4L2 서브디바이스 컨트롤을 통해 ISP DMA 라인 틱 인터럽트 동작을 테스트한다."
         ],
-        "team_share_points": "RZ/V2H EVK 플랫폼의 ISP 및 IVC 활성화 패치가 제안됨에 따라, 해당 SoC를 사용하는 카메라 시스템의 하위 이미지 파이프라인 통합 및 검증 작업을 준비할 필요가 있습니다."
+        "team_share_points": "르네사스 RZ V2H EVK 플랫폼의 ISP 및 IVC 활성화를 위한 디바이스 트리 패치가 제안되었으므로 하위 이미지 파이프라인 개발팀은 이를 참고하여 드라이버 검증을 준비해야 합니다."
       },
       "hal_signal_capsule": {
-        "why_now": "르네사스 RZ/V2H EVK에서 ISP 및 코덱 하드웨어를 활성화하는 DTS 패치 v2가 제안되어 하위 이미지 파이프라인 통합 검증이 가능해졌습니다.",
+        "why_now": "르네사스 RZ V2H EVK 플랫폼의 ISP 및 IVC 활성화 패치가 2026년 9월 25일에 제안되어 하위 드라이버 개발팀의 검토가 필요합니다.",
         "reader_owners": [
           "camera_driver_owner",
           "soc_platform_owner"
         ],
-        "check_within_2_weeks": "RZ/V2H EVK DTS 패치 적용 및 Mali-C55 ISP 초기화 로그 확인",
+        "check_within_2_weeks": "RZ V2H EVK 플랫폼에서 패치 v2 적용 후 커널 빌드 및 ISP 감지 로그를 확인합니다.",
         "impact_axes": [
           "driver_image_pipeline",
           "soc_resource_contention"
         ],
         "do_not_overstate": [
-          "이 패치는 RZ/V2H EVK 보드용 DTS 변경 제안이며 아직 메인라인에 머지되지 않았고 안드로이드 HAL 계약을 직접 변경하지 않습니다."
+          "이 패치는 아직 머지되지 않은 제안이며 Android Camera HAL API를 직접 변경하지 않습니다."
         ]
       },
       "claims": [
         {
-          "claim_id": "cl:be13d926bdd03ea3:1",
-          "text": "RZ/V2H EVK에서 Arm Mali-C55 ISP 및 IVC 노드를 활성화하고 비디오 엔드포인트를 연결하는 커널 DTS 패치 시리즈 v2가 제안되었습니다.",
+          "claim_id": "claim_renesas_1",
+          "text": "2026년 9월 25일 lore.kernel.org linux-media 메일링 리스트에 RZ/V2H EVK에서 ISP 및 IVC를 활성화하는 패치 v2가 제출되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "candidate:be13d926bdd03ea3:source-summary"
@@ -588,8 +644,8 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "cl:be13d926bdd03ea3:2",
-          "text": "이 패치는 선택적인 ISP DMA 라인 틱 및 IVC 프레임 시작/정지 인터럽트를 정의합니다.",
+          "claim_id": "claim_renesas_2",
+          "text": "이 패치는 Arm Mali-C55 ISP 노드와 RZ/V2H(P) IVC 노드를 추가하고 비디오 엔드포인트를 연결합니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "candidate:be13d926bdd03ea3:source-summary"
@@ -601,8 +657,8 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "cl:be13d926bdd03ea3:3",
-          "text": "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 상태입니다.",
+          "claim_id": "claim_renesas_3",
+          "text": "패치 적용 후 콘솔에서 Mali-C55 ISP 9000043.31032022.0 감지 메시지가 확인됩니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "candidate:be13d926bdd03ea3:source-summary"
@@ -614,8 +670,8 @@
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "article-3-fact-1",
-          "text": "패치 적용 및 드라이버 활성화 시 콘솔에서 Mali-C55 ISP 감지 메시지를 확인할 수 있습니다.",
+          "claim_id": "claim_renesas_4",
+          "text": "이 변경 사항은 아직 커널 메인라인에 머지되지 않은 제안 단계입니다.",
           "claim_type": "fact",
           "evidence_ids": [
             "candidate:be13d926bdd03ea3:source-summary"
@@ -623,23 +679,65 @@
           "source_urls": [
             "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
           ],
-          "impact_level": "no_hal_runtime_impact",
+          "impact_level": "driver_image_pipeline",
           "overclaim_risk": "low"
         }
       ],
       "camera_hal_checks": [
-        "Mali-C55 ISP DTS node configuration"
+        "RZ V2H EVK 플랫폼에서 패치 적용 후 dmesg 콘솔 로그를 통해 Mali C55 ISP 감지 메시지를 검증한다."
       ],
       "action_hints": [
-        "Apply DTS patch on RZ/V2H EVK and verify ISP driver initialization"
+        "V4L2 서브디바이스 컨트롤을 통해 ISP DMA 라인 틱 인터럽트 동작을 테스트한다."
       ],
       "action_items": [
-        "RZ/V2H EVK 개발 환경에서 제안된 DTS 패치를 적용하고 커널 빌드 후 콘솔에서 Mali-C55 ISP 감지 로그를 확인합니다.",
-        "ISP DMA 인터럽트 및 IVC 프레임 인터럽트 발생 시의 프레임 드롭 여부와 레이턴시 변화를 측정합니다."
+        "RZ V2H EVK 플랫폼에서 패치 적용 후 dmesg 콘솔 로그를 통해 Mali C55 ISP 감지 메시지를 검증한다.",
+        "V4L2 서브디바이스 컨트롤을 통해 ISP DMA 라인 틱 인터럽트 동작을 테스트한다."
       ],
       "is_ai_related": false,
-      "article_type": "driver",
+      "article_type": "android",
       "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 162392
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        },
         {
           "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
           "sourceUrl": "https://www.anthropic.com/news",
@@ -655,7 +753,7 @@
           "contentLength": 88082
         },
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "og",
@@ -681,20 +779,6 @@
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
           "contentLength": 5562
-        },
-        {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 2833
         }
       ],
       "selectedImage": "",
@@ -702,7 +786,7 @@
       "imageAttribution": "",
       "imageAlt": "",
       "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "No suitable image available.",
+      "imageUsageDecisionReason": "No image candidates available for this section.",
       "sources": [
         {
           "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
@@ -736,49 +820,66 @@
         "usedFallback": true,
         "reason": "no selected image; local fallback visual used"
       },
-      "coverage_type": "fresh"
+      "image_recovery": {
+        "article_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh",
+      "do_not_overstate": [
+        "이 패치는 아직 머지되지 않은 제안이며 Android Camera HAL API를 직접 변경하지 않습니다."
+      ]
     },
     {
       "category": "camera_driver_image_pipeline",
-      "headline": "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
-      "what_changed": "이 테스트는 Sony IMX681 카메라 센서 지원을 추가하는 패치 시리즈에 대한 것으로, 최신 버전의 mesa (3:26.2.3-1) 및 libcamera (0.7.2-4.1)를 사용하여 수행되었습니다. 이는 아직 머지되지 않은 제안입니다.",
+      "headline": "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안",
+      "what_changed": "Samsung S5K3T2 20메가픽셀 CMOS 이미지 센서에 대한 바인딩 및 드라이버를 추가하는 패치 시리즈 v3가 제안되었습니다.",
       "confirmed_facts": [
-        "Sony IMX681 카메라 센서 지원을 추가하는 패치 시리즈 v7에 대한 테스트 보고서가 제출되었습니다.",
-        "테스트는 커널 7.3-rc4, mesa 3:26.2.3-1, libcamera 0.7.2-4.1 버전을 사용하여 수행되었습니다.",
-        "특정 코드를 삭제하는 패치 적용 후 커널이 정상적으로 컴파일되었으며 센서 검증이 완료되었습니다.",
-        "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 상태입니다."
+        "2026년 9월 24일 Samsung S5K3T2 이미지 센서에 대한 드라이버 및 바인딩을 추가하는 패치 v3가 lore.kernel.org linux-media 리스트에 제출되었습니다.",
+        "이 센서는 20메가픽셀 CMOS 이미지 센서로 4개의 MIPI D-PHY 레인을 지원합니다.",
+        "이 드라이버는 Xiaomi POCO F3의 전면 카메라를 대상으로 Qualcomm CAMSS 드라이버 환경에서 작성 및 테스트되었습니다.",
+        "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 단계입니다."
       ],
-      "evidence_summary": "소니 IMX681 카메라 센서 지원 패치 v7에 대해 최신 mesa 및 libcamera 환경에서 수행된 빌드 및 검증 테스트 보고서가 제출되었습니다.",
+      "evidence_summary": "Samsung S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 및 바인딩 패치 v3가 제안되었습니다.",
       "specificity_checks": [
-        "Sony IMX681",
-        "Kernel 7.3-rc4",
-        "mesa 3:26.2.3-1",
-        "libcamera 0.7.2-4.1",
-        "Patch v7"
+        "Version: Patch v3",
+        "Date: 2026-09-24",
+        "Component: Samsung S5K3T2 image sensor driver",
+        "Platform: Xiaomi POCO F3 (Qualcomm CAMSS)"
       ],
       "source_verification_notes": [
-        "lore.kernel.org linux-media 메일링 리스트의 테스트 보고 내용을 바탕으로 작성되었습니다."
+        "Xiaomi POCO F3의 메인라인 디바이스 트리가 아직 없으므로 바인딩 사용자가 추가되지 않았음을 명시합니다."
       ],
       "public_article": {
-        "headline": "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
-        "lead": "소니 IMX681 카메라 센서 지원을 추가하는 패치 시리즈와 함께, 최신 libcamera 및 mesa 환경에서의 컴파일 및 검증 결과가 공유되었습니다.",
-        "body_markdown": "### 최신 사용자 공간 라이브러리와의 연동 검증\n\n리눅스 미디어 메일링 리스트에 소니 IMX681 카메라 센서 지원 패치 시리즈 v7에 대한 테스트 보고서가 제출되었습니다. 이 테스트는 커널 7.3-rc4 버전을 제외하고 안정 채널에서 사용 가능한 최신 버전의 구성 요소들을 사용하여 수행되었습니다.\n\n검증 환경에는 mesa 3:26.2.3-1 및 libcamera 0.7.2-4.1 버전이 사용되었습니다. 특정 클라이언트 정보 구조체 관련 코드를 삭제하는 필수 패치를 적용한 후, 커널이 정상적으로 컴파일되었으며 카메라 센서에 대한 철저한 조사가 완료되었습니다.\n\n### 이미지 파이프라인 안정성 확보\n\n새로운 센서 지원과 libcamera 및 mesa 환경에서의 통합 테스트는 카메라 드라이버 스택의 안정성을 확보하는 데 중요한 이정표입니다. 이는 하위 드라이버의 변경이 상위 사용자 공간 라이브러리 및 이미지 파이프라인 검증 도구들과 조화롭게 동작함을 입증합니다.\n\n카메라 개발자들은 이러한 검증 결과를 바탕으로, 향후 안드로이드 환경에서 libcamera 기반의 파이프라인 핸들러나 V4L2 호환 레이어를 통해 IMX681 센서를 통합할 때 발생할 수 있는 빌드 오류나 런타임 호환성 문제를 사전에 예방할 수 있습니다. 이 패치 역시 아직 머지되지 않은 제안 상태입니다.",
-        "camera_hal_takeaway": "IMX681 센서 통합 시, libcamera 0.7.2-4.1 및 mesa 최신 버전 환경에서의 컴파일 성공 사례를 참고하여, HAL3 구현체와의 프레임 버퍼 큐잉 및 포맷 협상 시 발생할 수 있는 호환성 이슈를 점검해야 합니다.",
+        "headline": "삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안",
+        "lead": "삼성의 20메가픽셀 CMOS 이미지 센서인 S5K3T2를 지원하기 위한 Linux 커널 드라이버 패치가 제안되어 향후 신규 디바이스 통합에 기여할 것으로 기대됩니다.",
+        "body_markdown": "이번에 제안된 패치 시리즈는 4개의 MIPI D PHY 레인을 지원하는 20메가픽셀 CMOS 이미지 센서인 Samsung S5K3T2의 드라이버와 디바이스 트리 바인딩을 추가합니다. 이 센서는 Xiaomi POCO F3 기기의 전면 카메라에 탑재되어 있는 모델입니다.\n\n해당 드라이버는 Qualcomm CAMSS 드라이버가 활성화된 환경에서 작성되고 테스트되었습니다. 다만 현재 메인라인 커널에는 Xiaomi POCO F3의 디바이스 트리가 포함되어 있지 않아 이번 패치 시리즈 자체에는 바인딩을 직접 사용하는 디바이스 트리 노드가 추가되지 않았습니다.\n\n### Android HAL 통합을 위한 고려사항\n\n이 변경 사항은 아직 메인라인 커널에 머지되지 않은 제안 단계. 새로운 센서 드라이버의 추가는 하위 드라이버 계층의 지원 범위를 넓히는 작업이며 실제 Android HAL에 직접적인 영향을 미치지는 않습니다. 개발팀은 향후 S5K3T2 센서를 사용하는 프로젝트가 있을 경우 이 드라이버의 V4L2 서브디바이스 컨트롤과 센서 모드 설정을 검토하여 통합 계획을 수립할 수 있습니다.",
+        "camera_hal_takeaway": "직접적인 HAL 변경은 없으나 S5K3T2 센서 도입 시 V4L2 서브디바이스를 통한 센서 모드 설정 및 MIPI D-PHY 레인 구성을 사전에 검토해야 합니다.",
         "reader_checkpoints": [
-          "libcamera 0.7.2-4.1 환경에서 IMX681 센서 드라이버의 빌드 호환성을 확인합니다.",
-          "커널 7.3-rc4 환경에서 센서 드라이버의 프레임 타이밍 및 V4L2 subdev 제어 인터페이스 동작을 검증합니다."
+          "S5K3T2 센서 드라이버의 V4L2 서브디바이스 컨트롤 등록 여부를 확인합니다.",
+          "MIPI D-PHY 4레인 구성에서의 프레임 레이트 및 해상도 설정을 검증합니다."
         ],
         "source_links": [
           {
-            "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
-            "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+            "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+            "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
           }
         ],
         "story_contract_version": 2,
-        "source_subtitle": "lore.kernel.org linux-media list (2026-09-26)",
+        "source_subtitle": "lore.kernel.org linux-media list (2026-09-24)",
         "editorial_story": {
-          "not_to_overclaim": "이 테스트 보고서는 특정 커널 및 라이브러리 버전에서 수행되었으며, 패치 시리즈는 아직 메인라인 커널에 머지되지 않았습니다.",
-          "editor_take": "최신 libcamera 및 커널 환경에서의 성공적인 검증 결과를 통해 IMX681 센서 드라이버의 안정성을 간접적으로 확인할 수 있습니다."
+          "not_to_overclaim": "이 패치는 아직 제안 단계이며 Xiaomi POCO F3의 메인라인 디바이스 트리가 없어 바인딩 사용자가 포함되지 않았습니다.",
+          "editor_take": "삼성 S5K3T2 센서 지원을 위한 하위 드라이버 기반이 마련되었으므로 관련 센서를 검토 중인 팀은 참고할 가치가 있습니다."
         },
         "decision_metadata": {
           "impact": "High",
@@ -796,101 +897,141 @@
       },
       "article_sections": {
         "verified_facts": [
-          "Sony IMX681 카메라 센서 지원을 추가하는 패치 시리즈 v7에 대한 테스트 보고서가 제출되었습니다.",
-          "테스트는 커널 7.3-rc4, mesa 3:26.2.3-1, libcamera 0.7.2-4.1 버전을 사용하여 수행되었습니다.",
-          "특정 코드를 삭제하는 패치 적용 후 커널이 정상적으로 컴파일되었으며 센서 검증이 완료되었습니다.",
-          "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 상태입니다."
+          "2026년 9월 24일 Samsung S5K3T2 이미지 센서에 대한 드라이버 및 바인딩을 추가하는 패치 v3가 lore.kernel.org linux-media 리스트에 제출되었습니다.",
+          "이 센서는 20메가픽셀 CMOS 이미지 센서로 4개의 MIPI D-PHY 레인을 지원합니다.",
+          "이 드라이버는 Xiaomi POCO F3의 전면 카메라를 대상으로 Qualcomm CAMSS 드라이버 환경에서 작성 및 테스트되었습니다.",
+          "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 단계입니다."
         ],
-        "background_context": "Driver, sensor, ISP, libcamera, V4L2 변경은 image pipeline 검증, frame timing, format negotiation, downstream camera integration 작업에 영향을 줄 수 있습니다.",
-        "hal_driver_impact": "최신 libcamera 및 커널 환경에서의 검증 결과는 하위 드라이버와 상위 미디어 프레임워크 간의 인터페이스 안정성을 보장하며, Android HAL 통합 시 빌드 및 런타임 호환성 위험을 낮춥니다.",
+        "background_context": "드라이버, 센서, ISP, libcamera, V4L2 변경은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "새로운 이미지 센서 드라이버의 추가는 Linux 미디어 스택의 하드웨어 지원을 확장하며, 향후 Android 기기에서 해당 센서를 활용할 수 있는 드라이버 레벨의 기반을 제공합니다.",
         "action_items": [
-          "검증 환경과 동일한 libcamera 0.7.2-4.1 및 mesa 버전을 사용하여 IMX681 센서 드라이버의 빌드 호환성을 테스트합니다.",
-          "커널 7.3-rc4 환경에서 센서 드라이버의 프레임 타이밍 및 V4L2 subdev 제어 인터페이스 동작을 검증합니다."
+          "S5K3T2 센서 드라이버 패치를 적용하여 V4L2 서브디바이스 등록 상태를 테스트한다.",
+          "Qualcomm CAMSS 환경에서 v4l2-compliance 테스트를 수행하여 드라이버 표준 준수 여부를 확인한다."
         ],
-        "team_share_points": "소니 IMX681 센서 지원 패치와 최신 libcamera 환경에서의 성공적인 테스트 결과가 공유됨에 따라, 해당 센서를 사용하는 플랫폼의 드라이버 안정성 검증이 한층 수월해질 것입니다."
+        "team_share_points": "Samsung S5K3T2 센서 지원을 위한 Linux 드라이버 패치 v3가 제안되었으므로 관련 센서 도입을 검토 중인 하위 스택 개발팀은 드라이버 구성을 참고하시기 바랍니다."
       },
       "hal_signal_capsule": {
-        "why_now": "소니 IMX681 센서 지원 패치 v7에 대한 최신 libcamera 및 커널 환경에서의 통합 테스트 결과가 공유되었습니다.",
+        "why_now": "Samsung S5K3T2 센서 드라이버 패치 v3가 2026년 9월 24일에 제안되어 신규 센서 지원을 위한 드라이버 검토가 가능합니다.",
         "reader_owners": [
-          "camera_driver_owner",
-          "camera_test_owner"
+          "camera_driver_owner"
         ],
-        "check_within_2_weeks": "IMX681 센서 드라이버와 libcamera 0.7.2-4.1 간의 빌드 및 프레임 획득 테스트 검증",
+        "check_within_2_weeks": "S5K3T2 센서 드라이버의 V4L2 서브디바이스 컨트롤 및 MIPI 레인 구성을 검토합니다.",
         "impact_axes": [
-          "driver_image_pipeline",
-          "cts_vts_its_cdd"
+          "driver_image_pipeline"
         ],
         "do_not_overstate": [
-          "이 테스트 보고서는 특정 커널 및 라이브러리 버전에서 수행되었으며, 패치 시리즈는 아직 메인라인 커널에 머지되지 않았습니다."
+          "이 패치는 아직 머지되지 않은 제안이며 Android Camera HAL의 동작을 직접 변경하지 않습니다."
         ]
       },
       "claims": [
         {
-          "claim_id": "cl:03838f3645546028:1",
-          "text": "Sony IMX681 카메라 센서 지원을 추가하는 패치 시리즈 v7에 대한 테스트 보고서가 제출되었습니다.",
+          "claim_id": "claim_samsung_1",
+          "text": "2026년 9월 24일 Samsung S5K3T2 이미지 센서에 대한 드라이버 및 바인딩을 추가하는 패치 v3가 lore.kernel.org linux-media 리스트에 제출되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "candidate:03838f3645546028:source-summary"
+            "candidate:20128ac1ca49ba04:source-summary"
           ],
           "source_urls": [
-            "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+            "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
           ],
           "impact_level": "driver_image_pipeline",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "cl:03838f3645546028:2",
-          "text": "테스트는 커널 7.3-rc4, mesa 3:26.2.3-1, libcamera 0.7.2-4.1 버전을 사용하여 수행되었습니다.",
+          "claim_id": "claim_samsung_2",
+          "text": "이 센서는 20메가픽셀 CMOS 이미지 센서로 4개의 MIPI D-PHY 레인을 지원합니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "candidate:03838f3645546028:source-summary"
+            "candidate:20128ac1ca49ba04:source-summary"
           ],
           "source_urls": [
-            "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+            "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
           ],
           "impact_level": "driver_image_pipeline",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "cl:03838f3645546028:3",
-          "text": "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 상태입니다.",
+          "claim_id": "claim_samsung_3",
+          "text": "이 드라이버는 Xiaomi POCO F3의 전면 카메라를 대상으로 Qualcomm CAMSS 드라이버 환경에서 작성 및 테스트되었습니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "candidate:03838f3645546028:source-summary"
+            "candidate:20128ac1ca49ba04:source-summary"
           ],
           "source_urls": [
-            "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+            "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
           ],
           "impact_level": "driver_image_pipeline",
           "overclaim_risk": "low"
         },
         {
-          "claim_id": "article-5-fact-1",
-          "text": "특정 코드를 삭제하는 패치 적용 후 커널이 정상적으로 컴파일되었으며 센서 검증이 완료되었습니다.",
+          "claim_id": "claim_samsung_4",
+          "text": "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 단계입니다.",
           "claim_type": "fact",
           "evidence_ids": [
-            "candidate:03838f3645546028:source-summary"
+            "candidate:20128ac1ca49ba04:source-summary"
           ],
           "source_urls": [
-            "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+            "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
           ],
-          "impact_level": "no_hal_runtime_impact",
+          "impact_level": "driver_image_pipeline",
           "overclaim_risk": "low"
         }
       ],
       "camera_hal_checks": [
-        "IMX681 libcamera integration status"
+        "S5K3T2 센서 드라이버 패치를 적용하여 V4L2 서브디바이스 등록 상태를 테스트한다."
       ],
       "action_hints": [
-        "Verify IMX681 driver with libcamera 0.7.2-4.1 and mesa 3:26.2.3-1"
+        "Qualcomm CAMSS 환경에서 v4l2-compliance 테스트를 수행하여 드라이버 표준 준수 여부를 확인한다."
       ],
       "action_items": [
-        "검증 환경과 동일한 libcamera 0.7.2-4.1 및 mesa 버전을 사용하여 IMX681 센서 드라이버의 빌드 호환성을 테스트합니다.",
-        "커널 7.3-rc4 환경에서 센서 드라이버의 프레임 타이밍 및 V4L2 subdev 제어 인터페이스 동작을 검증합니다."
+        "S5K3T2 센서 드라이버 패치를 적용하여 V4L2 서브디바이스 등록 상태를 테스트한다.",
+        "Qualcomm CAMSS 환경에서 v4l2-compliance 테스트를 수행하여 드라이버 표준 준수 여부를 확인한다."
       ],
       "is_ai_related": false,
-      "article_type": "driver",
+      "article_type": "camera_driver_image_pipeline",
       "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 162392
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        },
         {
           "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
           "sourceUrl": "https://www.anthropic.com/news",
@@ -906,7 +1047,7 @@
           "contentLength": 88082
         },
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "og",
@@ -932,20 +1073,6 @@
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
           "contentLength": 5562
-        },
-        {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 2833
         }
       ],
       "selectedImage": "",
@@ -953,7 +1080,302 @@
       "imageAttribution": "",
       "imageAlt": "",
       "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "No suitable image available.",
+      "imageUsageDecisionReason": "No image candidates available for this section.",
+      "sources": [
+        {
+          "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+          "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "source_candidate_hash": "20128ac1ca49ba04a02616e7e37eb579cff963b981190c104b348b4bb880e5cd",
+      "article_group_key": "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 4,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh",
+      "do_not_overstate": [
+        "이 패치는 아직 머지되지 않은 제안이며 Android Camera HAL의 동작을 직접 변경하지 않습니다."
+      ]
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "소니 IMX681 카메라 센서 지원 패치에 대한 테스트 보고서 공개",
+      "what_changed": "Sony IMX681 카메라 센서 지원을 추가하는 패치 시리즈 v7에 대한 테스트 결과가 공유되었습니다.",
+      "confirmed_facts": [
+        "2026년 9월 26일 lore.kernel.org linux-media 리스트에 Sony IMX681 카메라 센서 지원 패치 v7에 대한 테스트 보고서가 제출되었습니다.",
+        "이 테스트는 최신 안정 채널 버전의 Mesa (3:26.2.3-1) 및 libcamera (0.7.2-4.1)와 Linux 커널 7.3-rc4 버전을 사용했습니다.",
+        "특정 코드 라인을 삭제하는 필요한 패치를 적용한 후 커널이 올바르게 컴파일되었음을 확인했습니다.",
+        "이 테스트 보고서는 아직 머지되지 않은 제안된 패치 시리즈에 대한 검증 결과입니다."
+      ],
+      "evidence_summary": "Sony IMX681 카메라 센서 지원 패치 v7에 대해 Mesa, libcamera, 커널 최신 버전을 사용한 테스트 결과가 공유되었습니다.",
+      "specificity_checks": [
+        "Version: Mesa 3:26.2.3-1, libcamera 0.7.2-4.1, kernel 7.3-rc4",
+        "Date: 2026-09-26",
+        "Component: Sony IMX681 camera sensor driver test"
+      ],
+      "source_verification_notes": [
+        "테스트가 특정 안정 채널 버전 조합에서 수행되었으며 커널 컴파일 성공을 확인했음을 명시합니다."
+      ],
+      "public_article": {
+        "headline": "소니 IMX681 카메라 센서 지원 패치 v7에 대한 최신 커널 및 libcamera 테스트 결과 공유",
+        "lead": "소니 IMX681 카메라 센서 지원을 위한 패치 시리즈 v7의 테스트 결과가 공개되어 최신 리눅스 미디어 스택과의 호환성이 확인되었습니다.",
+        "body_markdown": "이번에 공개된 테스트 보고서는 Sony IMX681 카메라 센서 지원을 추가하는 패치 시리즈 v7을 대상으로 진행되었습니다. 테스트 환경은 최신 안정 채널 버전의 Mesa 버전 3:26.2.3 1 및 libcamera 버전 0.7.2 4.1을 사용하였으며 커널은 7.3 rc4 버전을 적용했습니다.\n\n테스트 과정에서 특정 코드 라인을 삭제하는 필수 패치를 적용한 후 커널이 정상적으로 컴파일되는 것을 확인했습니다. 이는 하위 드라이버 계층에서 최신 커널 프레임워크와의 빌드 호환성이 확보되었음을 의미합니다.\n\n### libcamera 및 V4L2 스택의 변화\n\n이 테스트는 아직 머지되지 않은 제안된 변경 사항에 대한 검증 결과입니다. 새로운 카메라 센서에 대한 libcamera 및 V4L2 드라이버 지원은 Linux 이미지 파이프라인에 직접적인 영향을 미치며 향후 Android HAL이 해당 센서를 통해 이미지 데이터를 처리하고 노출하는 데 필요한 하위 계층 지원을 제공합니다. 개발팀은 최신 libcamera 및 커널 버전 조합에서 센서 드라이버의 안정성을 지속적으로 모니터링해야 합니다.",
+        "camera_hal_takeaway": "직접적인 HAL 변경은 없으나 IMX681 센서 도입 시 최신 libcamera 0.7.2 및 커널 7.3 환경에서의 빌드 호환성 및 드라이버 로딩 상태를 점검해야 합니다.",
+        "reader_checkpoints": [
+          "IMX681 패치 적용 후 커널 7.3 rc4 환경에서 정상 컴파일 여부를 확인합니다.",
+          "libcamera 0.7.2 환경에서 IMX681 센서의 정상 인식 여부를 테스트합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
+            "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "lore.kernel.org linux-media list (2026-09-26)",
+        "editorial_story": {
+          "not_to_overclaim": "이 보고서는 제안된 패치에 대한 개별 테스트 결과이며 최종 확정된 메인라인 변경 사항이 아닙니다.",
+          "editor_take": "소니 IMX681 센서 지원 패치의 호환성 검증이 진행 중이므로 관련 플랫폼 개발팀은 빌드 구성을 참고할 수 있습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 9월 26일 lore.kernel.org linux-media 리스트에 Sony IMX681 카메라 센서 지원 패치 v7에 대한 테스트 보고서가 제출되었습니다.",
+          "이 테스트는 최신 안정 채널 버전의 Mesa (3:26.2.3-1) 및 libcamera (0.7.2-4.1)와 Linux 커널 7.3-rc4 버전을 사용했습니다.",
+          "특정 코드 라인을 삭제하는 필요한 패치를 적용한 후 커널이 올바르게 컴파일되었음을 확인했습니다.",
+          "이 테스트 보고서는 아직 머지되지 않은 제안된 패치 시리즈에 대한 검증 결과입니다."
+        ],
+        "background_context": "드라이버, 센서, ISP, libcamera, V4L2 변경은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "새로운 카메라 센서에 대한 libcamera 및 V4L2 드라이버 지원은 Linux 이미지 파이프라인에 직접적인 영향을 미치며, Android HAL이 해당 센서를 통해 이미지 데이터를 처리하는 하위 계층 지원을 제공합니다.",
+        "action_items": [
+          "Sony IMX681 패치를 커널 7.3 rc4에 적용하고 빌드 호환성을 검증한다.",
+          "libcamera 0.7.2 환경에서 IMX681 센서의 드라이버 바인딩 상태를 테스트한다."
+        ],
+        "team_share_points": "Sony IMX681 센서 지원 패치 v7에 대한 테스트 보고서가 공유되었으며 최신 libcamera 및 커널 환경에서의 호환성이 확인되었으니 참고하시기 바랍니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "Sony IMX681 센서 지원 패치 v7에 대한 테스트 보고서가 2026년 9월 26일에 공유되어 최신 미디어 스택과의 호환성 검토가 가능합니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "camera_test_owner"
+        ],
+        "check_within_2_weeks": "IMX681 패치 적용 후 커널 7.3 및 libcamera 0.7.2 환경에서의 빌드 상태를 확인합니다.",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "cts_vts_its_cdd"
+        ],
+        "do_not_overstate": [
+          "이 테스트 보고서는 제안된 패치에 대한 것이며 최종 확정된 메인라인 변경 사항이 아닙니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_sony_1",
+          "text": "2026년 9월 26일 lore.kernel.org linux-media 리스트에 Sony IMX681 카메라 센서 지원 패치 v7에 대한 테스트 보고서가 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:03838f3645546028:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_sony_2",
+          "text": "이 테스트는 최신 안정 채널 버전의 Mesa (3:26.2.3-1) 및 libcamera (0.7.2-4.1)와 Linux 커널 7.3-rc4 버전을 사용했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:03838f3645546028:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_sony_3",
+          "text": "특정 코드 라인을 삭제하는 필요한 패치를 적용한 후 커널이 올바르게 컴파일되었음을 확인했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:03838f3645546028:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_sony_4",
+          "text": "이 테스트 보고서는 아직 머지되지 않은 제안된 패치 시리즈에 대한 검증 결과입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:03838f3645546028:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "Sony IMX681 패치를 커널 7.3 rc4에 적용하고 빌드 호환성을 검증한다."
+      ],
+      "action_hints": [
+        "libcamera 0.7.2 환경에서 IMX681 센서의 드라이버 바인딩 상태를 테스트한다."
+      ],
+      "action_items": [
+        "Sony IMX681 패치를 커널 7.3 rc4에 적용하고 빌드 호환성을 검증한다.",
+        "libcamera 0.7.2 환경에서 IMX681 센서의 드라이버 바인딩 상태를 테스트한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 162392
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        },
+        {
+          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
+          "sourceUrl": "https://www.anthropic.com/news",
+          "articleUrl": "https://www.anthropic.com/claude-opus-5-5",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Anthropic News",
+          "validationStatus": "ok",
+          "contentLength": 88082
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available for this section.",
       "sources": [
         {
           "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
@@ -987,15 +1409,47 @@
         "usedFallback": true,
         "reason": "no selected image; local fallback visual used"
       },
-      "coverage_type": "fresh"
+      "image_recovery": {
+        "article_url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh",
+      "do_not_overstate": [
+        "이 테스트 보고서는 제안된 패치에 대한 것이며 최종 확정된 메인라인 변경 사항이 아닙니다."
+      ]
     }
   ],
   "action_items": [
-    "안드로이드 스튜디오의 AI 에이전트 기능을 시범 도입하여 C++ Camera HAL 코드의 단위 테스트 케이스 생성을 자동화하고 생산성을 측정합니다.",
-    "르네사스 RZ/V2H EVK 플랫폼 환경에서 제안된 DTS 패치를 적용하여 Mali-C55 ISP 및 IVC 노드의 활성화 여부와 인터럽트 동작을 검증합니다.",
-    "삼성 S5K3T2 및 소니 IMX681 센서 드라이버 패치를 대상 커널에 적용하고 v4l2-compliance 및 libcamera 연동 테스트를 통해 표준 준수 여부를 확인합니다."
+    "RZ V2H EVK 플랫폼에서 패치 적용 후 dmesg 콘솔 로그를 통해 Mali C55 ISP 감지 메시지를 검증한다.",
+    "S5K3T2 센서 드라이버 패치를 적용하여 V4L2 서브디바이스 등록 상태를 테스트한다.",
+    "Sony IMX681 패치를 커널 7.3 rc4에 적용하고 빌드 호환성을 검증한다.",
+    "안드로이드 스튜디오에서 AI 에이전트 통합 설정을 확인하고 팀의 C++ 코드 스타일 가이드를 적용해 본다.",
+    "Claude Opus 5.5 API를 활용하여 기존 C++ 카메라 드라이버 코드의 리팩토링 및 주석 생성 작업을 테스트한다."
   ],
   "references": [
+    {
+      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
+      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+    },
+    {
+      "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+    },
+    {
+      "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
+      "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+    },
     {
       "title": "Build your way: Use any AI agent of your choice in Android Studio",
       "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
@@ -1003,81 +1457,13 @@
     {
       "title": "Claude Opus 5.5",
       "url": "https://www.anthropic.com/claude-opus-5-5"
-    },
-    {
-      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
-      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
-    },
-    {
-      "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
-      "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
-    }
-  ],
-  "explicitly_demoted_groups": [],
-  "hard_blocked_groups": [
-    {
-      "article_group_key": "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
-      "hard_block_reason": "deterministic demote dropped an unpublishable article",
-      "reason_code": "quality_hard_blocker"
-    }
-  ],
-  "selected_group_count": 5,
-  "rendered_group_count": 4,
-  "explicitly_demoted_group_count": 0,
-  "hard_blocked_group_count": 1,
-  "selected_representative_group_keys": [
-    "android_native_tooling_workflow",
-    "article:https://www.anthropic.com/claude-opus-5-5",
-    "lore-series:20260925-mali-c55-renesas-dts-v2-69f728a474a2@kernel.org",
-    "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
-    "lore-series:20260926092828.11675-germanpapulindez@gmail.com"
-  ],
-  "rendered_group_keys": [
-    "android_native_tooling_workflow",
-    "article:https://www.anthropic.com/claude-opus-5-5",
-    "lore-series:20260925-mali-c55-renesas-dts-v2-69f728a474a2@kernel.org",
-    "lore-series:20260926092828.11675-germanpapulindez@gmail.com"
-  ],
-  "explicitly_demoted_group_keys": [],
-  "hard_blocked_group_keys": [
-    "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me"
-  ],
-  "publish_mode": "DEEP",
-  "reference_articles": [
-    {
-      "title": "[PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support",
-      "url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-09-25",
-      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
-    },
-    {
-      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur",
-      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-09-25",
-      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
-    },
-    {
-      "title": "[1/4] libcamera: v4l2_event: Add V4L2Event class and functionality",
-      "url": "https://patchwork.libcamera.org/patch/28380/",
-      "source": "libcamera Patchwork (patch review)",
-      "published_date": "2026-09-25",
-      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
-    },
-    {
-      "title": "[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP",
-      "url": "https://patchwork.libcamera.org/patch/28382/",
-      "source": "libcamera Patchwork (patch review)",
-      "published_date": "2026-09-25",
-      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
     }
   ],
   "tags": [
-    "AI",
     "Android",
     "Driver",
     "Image Processing",
+    "AI",
     "Camera HAL"
   ],
   "coverage_week_key": "2026-W39",
@@ -1085,7 +1471,6 @@
   "coverage_end_date": "2026-09-27",
   "coverage_mode": "iso_week",
   "generation_anchor_date": "2026-09-28",
-  "intro_letter": "이번 주 뉴스레터에서는 Android Studio가 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성을 확장하며 새로운 가능성을 열었습니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 AI 기술의 발전을 이끌었습니다. 또한, 르네사스 RZ/V2H EVK는 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화를 추진하고 있으며, 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 주목할 만합니다. 독자 여러분의 많은 관심 부탁드립니다.",
   "weekly_key": "2026-W40",
   "week_start_date": "2026-09-28",
   "week_end_date": "2026-10-04"

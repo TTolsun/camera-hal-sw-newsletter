@@ -3,8 +3,8 @@
   "updated_at": "2026-09-28T00:00:00+09:00",
   "current_headline": {
     "article_identity_key": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-    "title": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-    "summary": "Android Studio가 개발자가 선택한 임의의 AI 에이전트를 통합할 수 있는 개방형 환경을 제공하며 네이티브 개발 워크플로우의 변화를 예고했습니다.",
+    "title": "안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원",
+    "summary": "안드로이드 스튜디오에서 다양한 AI 에이전트를 자유롭게 선택하고 통합할 수 있는 환경이 마련되어 개발팀의 맞춤형 워크플로우 구축이 가능해졌습니다.",
     "source_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
     "newsletter_date": "2026-09-28",
     "newsletter_url": "newsletters/2026-09-28/index.html",
@@ -40,9 +40,9 @@
       "category": "cpp_ai_tooling_fallback",
       "source_name": "Android Developers Blog"
     },
-    "newsletter_article_url": "newsletters/2026-09-28/index.html#article-android-studio-ai",
+    "newsletter_article_url": "newsletters/2026-09-28/index.html#article-ai",
     "image_url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
-    "image_alt": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장"
+    "image_alt": "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표"
   },
   "headline_history": [
     {
