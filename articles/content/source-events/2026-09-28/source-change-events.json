@@ -55,7 +55,7 @@
         "release_rows": [],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
         "last_seen_at": "2026-09-28T00:00:00.000Z",
-        "seen_count": 114,
+        "seen_count": 115,
         "status": 200
       },
       "current_values": {
@@ -135,7 +135,7 @@
         "release_rows": [],
         "first_seen_at": "2026-08-03T00:00:00.000Z",
         "last_seen_at": "2026-09-28T00:00:00.000Z",
-        "seen_count": 13,
+        "seen_count": 14,
         "status": 200
       },
       "current_values": {
@@ -258,7 +258,7 @@
         "release_rows": [],
         "first_seen_at": "2026-08-03T00:00:00.000Z",
         "last_seen_at": "2026-09-28T00:00:00.000Z",
-        "seen_count": 13,
+        "seen_count": 14,
         "status": 200
       },
       "current_values": {
@@ -377,7 +377,7 @@
         "release_rows": [],
         "first_seen_at": "2026-08-17T00:00:00.000Z",
         "last_seen_at": "2026-09-28T00:00:00.000Z",
-        "seen_count": 11,
+        "seen_count": 12,
         "status": 200
       },
       "current_values": {
@@ -478,7 +478,7 @@
         "release_rows": [],
         "first_seen_at": "2026-08-17T00:00:00.000Z",
         "last_seen_at": "2026-09-28T00:00:00.000Z",
-        "seen_count": 11,
+        "seen_count": 12,
         "status": 200
       },
       "current_values": {
@@ -2199,7 +2199,7 @@
         ],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
         "last_seen_at": "2026-09-28T00:00:00.000Z",
-        "seen_count": 114,
+        "seen_count": 115,
         "status": 200
       },
       "current_values": {

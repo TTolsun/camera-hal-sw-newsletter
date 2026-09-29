@@ -4,7 +4,7 @@
   "newsletter_date": "2026-09-28",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 35,
-  "generated_at": "2026-09-29T09:55:52.329Z",
+  "generated_at": "2026-09-29T10:32:49.919Z",
   "sources_path": "src/shared/data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -50,7 +50,7 @@
     "coverage_end_exclusive_at": "2026-09-28T00:00:00.000Z"
   },
   "generation_anchor_date": "2026-09-28",
-  "collection_observed_at": "2026-09-29T09:55:37.153Z",
+  "collection_observed_at": "2026-09-29T10:32:26.016Z",
   "run_mode": "manual",
   "not_yet_eligible": [
     {
@@ -6871,8 +6871,94 @@
       ],
       "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.",
       "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 162392
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 162392
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "short-news",
       "reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
       "collection_reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
@@ -6889,6 +6975,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "cpp_ai_tooling_fallback",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -7102,8 +7203,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWrJTrzZ9lP8s5cDts7_rZ6pN8hKeKGX0TBS-yKLf7gmghzv8jYm-jTpuEit_zDds2v2PsS2-F4aT7K7mULWOWeR-THg3oGwLal0kjVxxwlrD_RFgx24qUq3-YSKlJHU0GBbWJh4XVzCXvV3jjiH8bska_0wd_ysjNOHkuMtFQwOX28mnnibqkOTe0oFk/s2469/Games_for_car__Meta%20.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 169551
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWrJTrzZ9lP8s5cDts7_rZ6pN8hKeKGX0TBS-yKLf7gmghzv8jYm-jTpuEit_zDds2v2PsS2-F4aT7K7mULWOWeR-THg3oGwLal0kjVxxwlrD_RFgx24qUq3-YSKlJHU0GBbWJh4XVzCXvV3jjiH8bska_0wd_ysjNOHkuMtFQwOX28mnnibqkOTe0oFk/w1200-h630-p-k-no-nu/Games_for_car__Meta%20.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 112858
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWrJTrzZ9lP8s5cDts7_rZ6pN8hKeKGX0TBS-yKLf7gmghzv8jYm-jTpuEit_zDds2v2PsS2-F4aT7K7mULWOWeR-THg3oGwLal0kjVxxwlrD_RFgx24qUq3-YSKlJHU0GBbWJh4XVzCXvV3jjiH8bska_0wd_ysjNOHkuMtFQwOX28mnnibqkOTe0oFk/s2469/Games_for_car__Meta%20.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 169551
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWrJTrzZ9lP8s5cDts7_rZ6pN8hKeKGX0TBS-yKLf7gmghzv8jYm-jTpuEit_zDds2v2PsS2-F4aT7K7mULWOWeR-THg3oGwLal0kjVxxwlrD_RFgx24qUq3-YSKlJHU0GBbWJh4XVzCXvV3jjiH8bska_0wd_ysjNOHkuMtFQwOX28mnnibqkOTe0oFk/w1200-h630-p-k-no-nu/Games_for_car__Meta%20.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 112858
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 66): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 66): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -7120,6 +7307,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -7333,8 +7535,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZ23jouRlBYpndeQfXUDihEq7NUP1buhHRy3jQVXEGXVpu2msSEIn_ZeAAkQKGz9paMkDxqCj7Dawksp37nHL8-qZKct_EXy_e85FiC6Nxb8GK0aK3ft5fhn42jPeV_zFD9Vcc9LFer6KgG8O93v2K9ls7cnrzbMQgtHp0piPBY5W12zGff_q-A4UYxQg/s2048/Googlebook-Blog-Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1206746
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZ23jouRlBYpndeQfXUDihEq7NUP1buhHRy3jQVXEGXVpu2msSEIn_ZeAAkQKGz9paMkDxqCj7Dawksp37nHL8-qZKct_EXy_e85FiC6Nxb8GK0aK3ft5fhn42jPeV_zFD9Vcc9LFer6KgG8O93v2K9ls7cnrzbMQgtHp0piPBY5W12zGff_q-A4UYxQg/w1200-h630-p-k-no-nu/Googlebook-Blog-Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 471357
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZ23jouRlBYpndeQfXUDihEq7NUP1buhHRy3jQVXEGXVpu2msSEIn_ZeAAkQKGz9paMkDxqCj7Dawksp37nHL8-qZKct_EXy_e85FiC6Nxb8GK0aK3ft5fhn42jPeV_zFD9Vcc9LFer6KgG8O93v2K9ls7cnrzbMQgtHp0piPBY5W12zGff_q-A4UYxQg/s2048/Googlebook-Blog-Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1206746
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZ23jouRlBYpndeQfXUDihEq7NUP1buhHRy3jQVXEGXVpu2msSEIn_ZeAAkQKGz9paMkDxqCj7Dawksp37nHL8-qZKct_EXy_e85FiC6Nxb8GK0aK3ft5fhn42jPeV_zFD9Vcc9LFer6KgG8O93v2K9ls7cnrzbMQgtHp0piPBY5W12zGff_q-A4UYxQg/w1200-h630-p-k-no-nu/Googlebook-Blog-Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 471357
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -7351,6 +7639,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -7564,8 +7867,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/s2049/Bench%202.0%20Metadata-bench.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 62567
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/w1200-h630-p-k-no-nu/Bench%202.0%20Metadata-bench.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 60409
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/s2049/Bench%202.0%20Metadata-bench.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 62567
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/w1200-h630-p-k-no-nu/Bench%202.0%20Metadata-bench.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 60409
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 84): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 84): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -7582,6 +7971,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -7795,8 +8199,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/s2048/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 131087
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/w1200-h630-p-k-no-nu/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 94458
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/s2048/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 131087
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/w1200-h630-p-k-no-nu/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 94458
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 72): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 72): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -7813,6 +8303,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -8347,7 +8852,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "og",
@@ -8375,23 +8880,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "og",
@@ -8419,18 +8924,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "short-news",
@@ -8449,6 +8954,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "direct_aosp_camera",
+      "image_collection": {
+        "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 5,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 1,
@@ -8668,8 +9188,94 @@
       ],
       "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.",
       "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/s2461/Quail4Blog_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 571165
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/w1200-h630-p-k-no-nu/Quail4Blog_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 341036
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/s2461/Quail4Blog_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 571165
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/w1200-h630-p-k-no-nu/Quail4Blog_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 341036
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "short-news",
       "reason": "Android Developers Blog (official, high, score 60): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)",
       "collection_reason": "Android Developers Blog (official, high, score 60): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)",
@@ -8686,6 +9292,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "cpp_ai_tooling_fallback",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -8917,6 +9538,27 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "cpp_ai_tooling_fallback",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 429
+          },
+          {
+            "attempt": 2,
+            "ok": false,
+            "reason": "http_error",
+            "status": 429
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -9188,7 +9830,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -9216,23 +9858,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -9260,18 +9902,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -9290,6 +9932,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "direct_aosp_camera",
+      "image_collection": {
+        "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 5,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -9519,6 +10176,27 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 429
+          },
+          {
+            "attempt": 2,
+            "ok": false,
+            "reason": "http_error",
+            "status": 429
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -9753,7 +10431,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=he",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
           "sourceKind": "article-img",
@@ -9783,7 +10461,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=he",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
           "sourceKind": "article-img",
@@ -9813,6 +10491,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 2,
+        "valid_count": 2,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -10053,6 +10746,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -10330,6 +11038,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -10586,6 +11309,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -10892,6 +11630,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -11135,6 +11888,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -11384,6 +12152,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "android",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -11637,6 +12420,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -11894,6 +12692,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -12132,6 +12945,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28382/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -12367,6 +13195,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28380/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -12602,6 +13445,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28366/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -12840,6 +13698,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28384/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -13078,6 +13951,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28368/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -13316,6 +14204,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28360/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -13551,6 +14454,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28385/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -13786,6 +14704,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28383/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -14122,6 +15055,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/how-to-prepare-for-ai-driven-code-modernization-projects",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 9,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -14460,6 +15408,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/build-plugins-for-claude",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 8,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -14724,6 +15687,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.281",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -15062,6 +16040,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/claude-opus-5-5-built-for-coding-sessions-that-use-more-context",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 8,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -15400,6 +16393,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/how-coderabbit-power-digital-and-thoughtspot-scale-with-snowflake-and-vercel-on-claude-marketplace",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 6,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 1,
@@ -15686,6 +16694,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "cpp_ai_tooling_fallback",
+      "image_collection": {
+        "article_url": "https://www.anthropic.com/claude-opus-5-5",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -15950,6 +16973,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.283",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -16181,6 +17219,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/ringg",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -16519,6 +17572,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://www.anthropic.com/news/claude-discovers-novel-enzyme-system",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 3,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -16857,6 +17925,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://www.anthropic.com/features/ebola-response",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 6,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -17121,6 +18204,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.280",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -17352,6 +18450,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/invideo-builds-with-gpt-6-astra",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -17583,6 +18696,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/grab-openai-ai-skills-southeast-asia",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -17814,6 +18942,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/parallel-cuts-time-and-cost-with-astra",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -18045,6 +19188,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/higgsfield-from-prompt-to-production-with-astra",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -18383,6 +19541,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/claude-tag-now-supports-personal-connectors-in-channels",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 8,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -18721,6 +19894,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/claude-marketplace",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 12,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -18952,6 +20140,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/openai-extends-cyber-access-to-ukraine-for-civilian-defense",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -19183,6 +20386,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/chatgpt-ads-expands-southeast-asia-taiwan",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -19414,6 +20632,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/expanding-openai-academy-with-new-learning-paths",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -19654,6 +20887,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://www.kernel.org/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -20091,7 +21339,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ru",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
           "sourceKind": "og",
@@ -20119,7 +21367,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=ru",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
           "sourceKind": "article-img",
@@ -20135,7 +21383,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ru",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
           "sourceKind": "og",
@@ -20163,7 +21411,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=ru",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
           "sourceKind": "article-img",
@@ -20193,6 +21441,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 5,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -20409,38 +21672,8 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [
-        {
-          "url": "https://opengraph.githubassets.com/da59e7683f150c3b56cc4129c8f28761faa0152629c5d44e4734d23887bd1e95/anthropics/claude-code/releases/tag/v2.1.265",
-          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.265",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Code Changelog",
-          "validationStatus": "ok",
-          "contentLength": 53505
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://opengraph.githubassets.com/da59e7683f150c3b56cc4129c8f28761faa0152629c5d44e4734d23887bd1e95/anthropics/claude-code/releases/tag/v2.1.265",
-          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.265",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Code Changelog",
-          "validationStatus": "ok",
-          "contentLength": 53505
-        }
-      ],
+      "imageCandidates": [],
+      "image_candidates": [],
       "candidateTier": "watchlist-reference",
       "reason": "Claude Code Changelog (official, medium, score 68): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Claude Code Changelog (official, medium, score 68): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -20457,6 +21690,28 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.265",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [
+          {
+            "url": "https://opengraph.githubassets.com/da59e7683f150c3b56cc4129c8f28761faa0152629c5d44e4734d23887bd1e95/anthropics/claude-code/releases/tag/v2.1.265",
+            "stage": "image_validation",
+            "status": 429,
+            "reason": "HTTP 429"
+          }
+        ],
+        "extracted_count": 1,
+        "valid_count": 0,
+        "outcome": "image_validation_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -20796,11 +22051,11 @@
       "filter_counts": {
         "duplicate": 0,
         "deferred_coverage": 10,
-        "outside_window": 1,
-        "relevance": 14,
+        "outside_window": 3,
+        "relevance": 13,
         "series_collapsed": 0,
         "source_cap": 0,
-        "global_cap": 7
+        "global_cap": 6
       }
     },
     "collabora-blog": {
@@ -21220,8 +22475,8 @@
       "filter_counts": {
         "duplicate": 1,
         "deferred_coverage": 17,
-        "outside_window": 5,
-        "relevance": 9
+        "outside_window": 7,
+        "relevance": 7
       }
     },
     "edge-ai-vision-alliance": {
@@ -21434,13 +22689,13 @@
       "release_row_date": 1
     },
     "received_bytes_by_source": {
-      "aosp-site-updates": 1493727,
+      "aosp-site-updates": 1493723,
       "qualcomm-security-bulletins": 161412,
       "android-ndk-releases": 187447,
       "anthropic-news": 3544658,
       "claude-blog": 5151668,
       "claude-code-changelog": 644815,
-      "codex-releases": 6296717
+      "codex-releases": 6296727
     },
     "article_cap_counts_by_source": {
       "anthropic-news": {
