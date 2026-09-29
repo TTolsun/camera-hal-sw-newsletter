@@ -20,7 +20,7 @@
     "collected_count": 50,
     "eligible_count": 15,
     "selected_count": 5,
-    "rendered_main_count": 4,
+    "rendered_main_count": 5,
     "source_gap_count": 35,
     "generic_noise_count": 30,
     "duplicate_count": 0,
@@ -3179,8 +3179,8 @@
       "filter_counts": {
         "duplicate": 1,
         "deferred_coverage": 17,
-        "outside_window": 5,
-        "relevance": 9
+        "outside_window": 7,
+        "relevance": 7
       },
       "candidate_count": 0,
       "collection_status": "COLLECTION_UNKNOWN",
@@ -4280,7 +4280,7 @@
       "collected_count": 8,
       "eligible_count": 7,
       "selected_count": 3,
-      "rendered_main_count": 2,
+      "rendered_main_count": 3,
       "source_gap_count": 1,
       "camera_relevant_raw_count": 8,
       "parser_repair_reason_count": 0,
@@ -4321,10 +4321,10 @@
       "reddit_only_blocked_count": 0,
       "eligible_rate": 0.875,
       "selection_rate": 0.4286,
-      "rendered_rate": 0.6667,
+      "rendered_rate": 1,
       "source_gap_rate": 0.125,
       "noise_rate": 0,
-      "effectiveness_score": 68.22,
+      "effectiveness_score": 78.22,
       "discovered_count": null,
       "in_window_count": null,
       "raw_collected_count": 101,
@@ -5134,11 +5134,11 @@
       "filter_counts": {
         "duplicate": 0,
         "deferred_coverage": 10,
-        "outside_window": 1,
-        "relevance": 14,
+        "outside_window": 3,
+        "relevance": 13,
         "series_collapsed": 0,
         "source_cap": 0,
-        "global_cap": 7
+        "global_cap": 6
       },
       "candidate_count": 0,
       "collection_status": "COLLECTION_CAPPED",

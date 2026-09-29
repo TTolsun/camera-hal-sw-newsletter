@@ -1,6 +1,6 @@
 # 2026 W39 (09.21 ~ 09.27)
 
-이번 주 뉴스레터에서는 Android Studio가 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성을 확장하며 새로운 가능성을 열었습니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 AI 기술의 발전을 이끌었습니다. 또한, 르네사스 RZ/V2H EVK는 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화를 추진하고 있으며, 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 주목할 만합니다. 독자 여러분의 많은 관심 부탁드립니다.
+이번 주 뉴스레터에서는 Android Studio의 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성이 확장되는 소식을 전합니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 주목받고 있습니다. 또한, 르네사스 RZ/V2H EVK의 Mali-C55 ISP 및 IVC 하드웨어 활성화를 위한 리눅스 커널 패치 소식과 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 준비했습니다. 마지막으로 삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안 소식까지, 풍성한 기술 업데이트를 확인해 보세요.
 
 
 
@@ -10,11 +10,12 @@
 - 앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개
 - 르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진
 - 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고
+- 삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안
 
 ## 2. Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장
 
 
-![Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png)
+![Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png)
 
 _이미지: [Build your way: Use any AI agent of your choice in Android Studio](https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html)_
 
@@ -48,9 +49,9 @@ Android Studio가 개발자가 선택한 임의의 AI 에이전트를 통합할 
 ## 3. 앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개
 
 
-![앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개](https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg)
+![앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표](https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg)
 
-_이미지: [Anthropic News](https://www.anthropic.com/claude-opus-5-5)_
+_이미지: [Claude Opus 5.5](https://www.anthropic.com/claude-opus-5-5)_
 
 
 _Anthropic News (2026-09-22)_
@@ -141,6 +142,34 @@ IMX681 센서 통합 시, libcamera 0.7.2-4.1 및 mesa 최신 버전 환경에�
 
 - [Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor](https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/T/#t)
 
+---
+
+## 6. 삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안
+
+
+![삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안 image](../../assets/images/fallback/newsletter-default.svg)
+
+
+_lore.kernel.org linux-media list (2026-09-24)_
+
+삼성의 20메가픽셀 CMOS 이미지 센서인 S5K3T2를 지원하기 위한 Linux 커널 드라이버 패치가 제안되어 향후 신규 디바이스 통합에 기여할 것으로 기대됩니다.
+
+이번에 제안된 패치 시리즈는 4개의 MIPI D PHY 레인을 지원하는 20메가픽셀 CMOS 이미지 센서인 Samsung S5K3T2의 드라이버와 디바이스 트리 바인딩을 추가합니다. 이 센서는 Xiaomi POCO F3 기기의 전면 카메라에 탑재되어 있는 모델입니다.
+
+해당 드라이버는 Qualcomm CAMSS 드라이버가 활성화된 환경에서 작성되고 테스트되었습니다. 다만 현재 메인라인 커널에는 Xiaomi POCO F3의 디바이스 트리가 포함되어 있지 않아 이번 패치 시리즈 자체에는 바인딩을 직접 사용하는 디바이스 트리 노드가 추가되지 않았습니다.
+
+### Android HAL 통합을 위한 고려사항
+
+이 변경 사항은 아직 메인라인 커널에 머지되지 않은 제안 단계. 새로운 센서 드라이버의 추가는 하위 드라이버 계층의 지원 범위를 넓히는 작업이며 실제 Android HAL에 직접적인 영향을 미치지는 않습니다. 개발팀은 향후 S5K3T2 센서를 사용하는 프로젝트가 있을 경우 이 드라이버의 V4L2 서브디바이스 컨트롤과 센서 모드 설정을 검토하여 통합 계획을 수립할 수 있습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+직접적인 HAL 변경은 없으나 S5K3T2 센서 도입 시 V4L2 서브디바이스를 통한 센서 모드 설정 및 MIPI D-PHY 레인 구성을 사전에 검토해야 합니다.
+
+**출처**
+
+- [[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor](https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/T/#t)
+
 
 ## 참고 / 더 읽을거리
 
@@ -155,3 +184,4 @@ IMX681 센서 통합 시, libcamera 0.7.2-4.1 및 mesa 최신 버전 환경에�
 - [Claude Opus 5.5](https://www.anthropic.com/claude-opus-5-5)
 - [[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK](https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/T/#t)
 - [Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor](https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/T/#t)
+- [[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor](https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/T/#t)

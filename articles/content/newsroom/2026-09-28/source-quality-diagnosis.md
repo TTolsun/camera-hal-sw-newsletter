@@ -10,17 +10,17 @@ Date: 2026-09-28
 - Android multimedia camera output 후보 수: 0
 - 주요 진단: 파서 추출 실패, 소스 풀 부족 위험, Fallback 기사만 남음, Source discovery 중복 또는 무효
 - 결론: 수집·분류·탐색 단계의 점검 신호가 있습니다. 이 신호만으로 특정 주제의 실제 뉴스 부족 여부를 판단할 수 없습니다.
-- 병합 레코드 / 고유 URL: 86 / 73
+- 병합 레코드 / 고유 URL: 85 / 72
 - Gemini 신규 URL: 0
-- 링크 파생 신규 URL / 발행 가능 후보: 23 / 0
-- 결정론적 선택 / 본문 반영 / hard-blocked group / 명시적 강등: 5 / 4 / 1 / 0
+- 링크 파생 신규 URL / 발행 가능 후보: 22 / 0
+- 결정론적 선택 / 본문 반영 / hard-blocked group / 명시적 강등: 5 / 5 / 0 / 0
 
 ## 진단 플래그
 
 | 진단 항목 | 내부 키 | 상태 | 근거 |
 | --- | --- | --- | --- |
 | 실제 뉴스 부족 | `actual_news_shortage` | false | 진단 신호 없음 |
-| 파서 추출 실패 | `parser_extraction_failure` | true | Gemini discovery parser extraction failures=2. |
+| 파서 추출 실패 | `parser_extraction_failure` | true | Gemini discovery parser extraction failures=1. |
 | 소스 풀 부족 위험 | `source_gap_risk` | true | android-developers-blog has source coverage risk: source_gap_count=5. |
 | 분류 체계 누락 | `taxonomy_missing` | false | 진단 신호 없음 |
 | Fallback 기사만 남음 | `fallback_only_composition` | true | composition_mode indicates fallback composition: FALLBACK_COMPOSITION. |
@@ -125,7 +125,6 @@ Date: 2026-09-28
 | android-developers-blog | #3271 |  | unknown |  | missing_date_evidence |  |
 | android-developers-blog | #3338 |  | unknown |  | missing_date_evidence |  |
 | android-developers-blog | #3375 |  | unknown |  | missing_date_evidence |  |
-| android-developers-blog | #3393 |  | unknown |  | missing_date_evidence |  |
 | android-developers-blog | #3322 |  | unknown |  | missing_date_evidence |  |
 | android-developers-blog | #3350 |  | unknown |  | missing_date_evidence |  |
 
@@ -162,7 +161,5 @@ Date: 2026-09-28
 
 ## 경고
 
-| 유형 | 메시지 | Source artifact | 심각도 |
-| --- | --- | --- | --- |
-| missing_optional_artifact | articles/content/newsroom/2026-09-28/evidence-pack-summary.json not found; partial diagnosis will continue. | articles/content/newsroom/2026-09-28/evidence-pack-summary.json |  |
+_없음_
 

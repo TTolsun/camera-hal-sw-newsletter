@@ -2,32 +2,22 @@
   "schema_version": 1,
   "date": "2026-09-28",
   "status": "PASS",
-  "removed_sections": [
-    {
-      "index": 1,
-      "headline": "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안",
-      "source_urls": [
-        "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
-      ],
-      "source_titles": [
-        "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor"
-      ],
-      "version_or_release": "",
-      "api_or_component": "",
-      "behavior_change": "",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "editorial_priority": 5
-    }
-  ],
-  "dropped_selected_groups": [
-    {
-      "article_group_key": "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
-      "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
-      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
-    }
-  ],
+  "removed_sections": [],
+  "dropped_selected_groups": [],
   "restored_to_keep_minimum": [],
   "final_section_sources": [
+    {
+      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
+      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
+    },
+    {
+      "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+    },
+    {
+      "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
+      "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+    },
     {
       "title": "Build your way: Use any AI agent of your choice in Android Studio",
       "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
@@ -35,14 +25,6 @@
     {
       "title": "Claude Opus 5.5",
       "url": "https://www.anthropic.com/claude-opus-5-5"
-    },
-    {
-      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
-      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
-    },
-    {
-      "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
-      "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
     }
   ],
   "stale_claim_items_removed": [],

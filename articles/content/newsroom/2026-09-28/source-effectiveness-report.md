@@ -9,7 +9,7 @@ Date: 2026-09-28
 - Unregistered candidates: 0
 - Eligible candidates: 15
 - Selected candidates: 5
-- Rendered main articles: 4
+- Rendered main articles: 5
 - Source gap candidates: 35
 - Generic noise candidates: 30
 - Duplicate candidates: 0
@@ -64,7 +64,7 @@ Date: 2026-09-28
 | google-open-source-blog | COLLECTION_UNKNOWN | — | — | 1 | 1 | 0 | 0 | 0 | relevance=1 |
 | google-research-blog | COLLECTION_CAPPED | — | — | 1 | 1 | 0 | 0 | 0 | global_cap, global_cap=1 |
 | google-security-blog | COLLECTION_UNKNOWN | — | — | 25 | 25 | 0 | 0 | 0 | outside_window=25 |
-| hacker-news | COLLECTION_UNKNOWN | — | — | 32 | 32 | 0 | 0 | 0 | duplicate=1, deferred_coverage=17, outside_window=5, relevance=9 |
+| hacker-news | COLLECTION_UNKNOWN | — | — | 32 | 32 | 0 | 0 | 0 | duplicate=1, deferred_coverage=17, outside_window=7, relevance=7 |
 | huggingface-blog | COLLECTION_UNKNOWN | — | — | 869 | 869 | 0 | 0 | 0 | deferred_coverage=1, outside_window=847, relevance=21 |
 | ieee-spectrum-embedded-ai | COLLECTION_UNKNOWN | — | — | 1 | 1 | 0 | 0 | 0 | relevance=1 |
 | ieee-spectrum-embedded-systems | COLLECTION_UNKNOWN | — | — | 1 | 1 | 0 | 0 | 0 | relevance=1 |
@@ -79,7 +79,7 @@ Date: 2026-09-28
 | llvm-project-blog | COLLECTION_INCOMPLETE | — | — | 0 | 0 | 0 | 0 | 0 | source_fetch_failed |
 | llvm-release-notes | COLLECTION_CAPPED | — | — | 1 | 1 | 0 | 0 | 0 | global_cap, global_cap=1 |
 | lore-linux-media-ipu | COLLECTION_UNKNOWN | — | — | — | — | 0 | 0 | 0 |  |
-| lore-linux-media-list | COLLECTION_CAPPED | — | — | 101 | 93 | 8 | 3 | 2 | source_cap, duplicate=1, deferred_coverage=42, outside_window=12, series_collapsed=35, source_cap=3 |
+| lore-linux-media-list | COLLECTION_CAPPED | — | — | 101 | 93 | 8 | 3 | 3 | source_cap, duplicate=1, deferred_coverage=42, outside_window=12, series_collapsed=35, source_cap=3 |
 | lwn-camera-media-articles | COLLECTION_CAPPED | — | — | 15 | 15 | 0 | 0 | 0 | global_cap, deferred_coverage=3, relevance=8, global_cap=4 |
 | mediatek-security-bulletin | COLLECTION_CAPPED | — | — | 1 | 1 | 0 | 0 | 0 | global_cap, global_cap=1 |
 | microisp-neural-isp | COLLECTION_CAPPED | — | — | 1 | 1 | 0 | 0 | 0 | global_cap, global_cap=1 |
@@ -88,7 +88,7 @@ Date: 2026-09-28
 | naver-deview | COLLECTION_UNKNOWN | — | — | — | — | 0 | 0 | 0 |  |
 | openai-news | COLLECTION_CAPPED | — | — | 1235 | 1227 | 8 | 0 | 0 | source_cap, duplicate=4, deferred_coverage=5, outside_window=1149, relevance=34, source_cap=35 |
 | patchwork-libcamera-patches | COLLECTION_CAPPED | — | — | 500 | 492 | 8 | 0 | 0 | source_cap, deferred_coverage=5, outside_window=223, series_collapsed=216, source_cap=48 |
-| phoronix-linux-camera-media | COLLECTION_CAPPED | — | — | 32 | 32 | 0 | 0 | 0 | global_cap, deferred_coverage=10, outside_window=1, relevance=14, global_cap=7 |
+| phoronix-linux-camera-media | COLLECTION_CAPPED | — | — | 32 | 32 | 0 | 0 | 0 | global_cap, deferred_coverage=10, outside_window=3, relevance=13, global_cap=6 |
 | pynet-learned-isp | COLLECTION_CAPPED | — | — | 1 | 1 | 0 | 0 | 0 | global_cap, global_cap=1 |
 | qualcomm-security-bulletins | COLLECTION_CAPPED | — | — | 1 | 1 | 0 | 0 | 0 | global_cap, global_cap=1 |
 | raspberry-pi-blog | COLLECTION_CAPPED | — | — | 10 | 10 | 0 | 0 | 0 | global_cap, deferred_coverage=1, outside_window=1, relevance=7, global_cap=1 |
@@ -143,7 +143,7 @@ _없음_
 
 | Source | Recommendation | Score | Collected | Eligible | Selected | Rendered |
 | --- | --- | --- | --- | --- | --- | --- |
-| lore-linux-media-list | KEEP | 68.22 | 8 | 7 | 3 | 2 |
+| lore-linux-media-list | KEEP | 78.22 | 8 | 7 | 3 | 3 |
 | anthropic-news | REVIEW_SOURCE_OR_PARSER | 46.66 | 3 | 1 | 1 | 1 |
 | android-developers-blog | REVIEW_SOURCE_OR_PARSER | 33.33 | 8 | 3 | 1 | 1 |
 
@@ -181,7 +181,7 @@ _없음_
 | samsung-mobile-security-updates | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | software-engineering-daily | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | venturebeat-ai | NO_RECENT_SIGNAL | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lore-linux-media-list | KEEP | 68.22 | 8 | 0.875 | 0.4286 | 0.6667 | 0.125 | 0 | 0 |
+| lore-linux-media-list | KEEP | 78.22 | 8 | 0.875 | 0.4286 | 1 | 0.125 | 0 | 0 |
 | anthropic-news | REVIEW_SOURCE_OR_PARSER | 46.66 | 3 | 0.3333 | 1 | 1 | 0.6667 | 0.6667 | 0 |
 | android-developers-blog | REVIEW_SOURCE_OR_PARSER | 33.33 | 8 | 0.375 | 0.3333 | 1 | 0.625 | 0.625 | 0 |
 | android-developers-latest-updates | REVIEW_SOURCE_OR_PARSER | 5 | 2 | 0.5 | 0 | 0 | 0.5 | 0 | 0 |

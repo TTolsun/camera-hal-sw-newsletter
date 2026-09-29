@@ -7,6 +7,27 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me",
+      "series_identity_key": "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
+      "series_subject_key": "media i2c samsung s5k3t2 image sensor",
+      "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "source_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me",
+      "newsletter_date": "2026-09-28",
+      "newsletter_url": "newsletters/2026-09-28/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-09-28",
+      "newsletter_article_date": "2026-09-28",
+      "cooldown_until": "2026-10-19",
+      "first_exposed_at": "2026-09-28",
+      "last_exposed_at": "2026-09-28",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com",
       "series_identity_key": "lore-series:20260926092828.11675-germanpapulindez@gmail.com",
       "series_subject_key": "test for patch v7 0 3 add support for the sony imx681 camera sensor",
@@ -69,7 +90,7 @@
     },
     {
       "article_identity_key": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-      "title": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
+      "title": "안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원",
       "source_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
       "newsletter_date": "2026-09-28",
       "newsletter_url": "newsletters/2026-09-28/index.html",

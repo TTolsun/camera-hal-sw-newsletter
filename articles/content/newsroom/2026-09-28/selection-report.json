@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-09-28",
-  "generated_at": "2026-09-29T10:01:14.053Z",
+  "generated_at": "2026-09-29T10:53:16.818Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -82,7 +82,7 @@
   "headline_decision": {
     "decision": "latest_camera_hal_article",
     "reason": "latest_camera_hal_article",
-    "current_headline_key": "url:https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+    "current_headline_key": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
     "replacement_headline_key": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
     "previous_stored_current_score": null,
     "runtime_decayed_score": null,
@@ -143,7 +143,7 @@
     }
   ],
   "counts": {
-    "input_candidate_count": 86,
+    "input_candidate_count": 85,
     "eligible_candidate_count": 11,
     "selected_article_count": 5,
     "deterministic_selected_count": 5,
@@ -173,7 +173,7 @@
   },
   "republication_cooldown_blocked": {
     "history_loaded": true,
-    "history_main_article_count": 32,
+    "history_main_article_count": 36,
     "count": 1,
     "urls": [
       "https://patchwork.libcamera.org/patch/28366/"
@@ -199,85 +199,85 @@
   "exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
-      "count": 42
+      "count": 41
     },
     {
       "reason": "main_eligible=false",
-      "count": 42
+      "count": 41
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 42
+      "count": 41
     },
     {
       "reason": "briefing_only=true",
-      "count": 37
+      "count": 36
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 37
+      "count": 36
     },
     {
       "reason": "reference_only=true",
-      "count": 37
+      "count": 36
     },
     {
       "reason": "missing dated evidence",
-      "count": 32
-    },
-    {
-      "reason": "selection_window=unknown_not_main",
       "count": 30
     },
     {
+      "reason": "selection_window=unknown_not_main",
+      "count": 28
+    },
+    {
       "reason": "finalSelectionEligibility=unknown",
-      "count": 23
+      "count": 22
     },
     {
       "reason": "duplicate URL or near-duplicate title",
-      "count": 6
+      "count": 7
     }
   ],
   "final_exclusion_reason_summary": [
     {
       "reason": "final_selection_blocked=true",
-      "count": 42
+      "count": 41
     },
     {
       "reason": "main_eligible=false",
-      "count": 42
+      "count": 41
     },
     {
       "reason": "source_gap_risk=true",
-      "count": 42
+      "count": 41
     },
     {
       "reason": "briefing_only=true",
-      "count": 37
+      "count": 36
     },
     {
       "reason": "finalSelectionEligibility=watchlist",
-      "count": 37
+      "count": 36
     },
     {
       "reason": "reference_only=true",
-      "count": 37
+      "count": 36
     },
     {
       "reason": "missing dated evidence",
-      "count": 32
-    },
-    {
-      "reason": "selection_window=unknown_not_main",
       "count": 30
     },
     {
+      "reason": "selection_window=unknown_not_main",
+      "count": 28
+    },
+    {
       "reason": "finalSelectionEligibility=unknown",
-      "count": 23
+      "count": 22
     },
     {
       "reason": "duplicate URL or near-duplicate title",
-      "count": 6
+      "count": 7
     }
   ],
   "candidate_diagnostics": [
@@ -1195,26 +1195,6 @@
       ]
     },
     {
-      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "stage": "excluded",
-      "base_total": -60.75,
-      "camera_hal_directness": 2.25,
-      "scope_relevance": 0,
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "final_selection_eligibility": "watchlist",
-      "exclusion_reasons": [
-        "missing dated evidence",
-        "finalSelectionEligibility=watchlist",
-        "final_selection_blocked=true",
-        "source_gap_risk=true",
-        "main_eligible=false",
-        "briefing_only=true",
-        "reference_only=true",
-        "selection_window=unknown_not_main"
-      ]
-    },
-    {
       "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
       "stage": "excluded",
       "base_total": -63.75,
@@ -1515,20 +1495,6 @@
       ]
     },
     {
-      "url": "https://github.com/androidx/media/issues/3393",
-      "stage": "excluded",
-      "base_total": -59,
-      "camera_hal_directness": 0,
-      "scope_relevance": 0,
-      "freshness_window": "unknown",
-      "relevance_bucket": "generic_tech_watchlist",
-      "exclusion_reasons": [
-        "missing dated evidence",
-        "finalSelectionEligibility=unknown",
-        "selection_window=unknown_not_main"
-      ]
-    },
-    {
       "url": "https://github.com/androidx/media/issues/3322",
       "stage": "excluded",
       "base_total": -59,
@@ -1555,9 +1521,22 @@
         "finalSelectionEligibility=unknown",
         "selection_window=unknown_not_main"
       ]
+    },
+    {
+      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "stage": "excluded",
+      "base_total": 94,
+      "camera_hal_directness": 3,
+      "scope_relevance": 3,
+      "freshness_window": "reference",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "short",
+      "exclusion_reasons": [
+        "selection_window=reference_not_main"
+      ]
     }
   ],
-  "candidate_diagnostics_count": 73,
+  "candidate_diagnostics_count": 72,
   "candidate_diagnostics_not_evaluated": 13,
   "candidate_diagnostics_truncated": false,
   "candidate_score_threshold": 42,

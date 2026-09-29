@@ -29,7 +29,7 @@
 ## Homepage Headline
 
 - decision: latest_camera_hal_article
-- current_headline_key: url:https://github.com/openai/codex/releases/tag/rust-v0.155.1
+- current_headline_key: url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html
 - replacement_headline_key: url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown

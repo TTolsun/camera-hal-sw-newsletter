@@ -2,64 +2,23 @@
   {
     "attempt": 1,
     "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
-    "score": 93,
+    "score": 94,
     "threshold": 60,
     "status": "PASS",
-    "rendered_main_article_count": 4,
-    "locked_article_count": 4,
-    "demoted_article_count": 1,
-    "reserve_pool_opened": true,
-    "reserve_open_reason": "completion_missing_1_article_after_demote_or_remove",
+    "rendered_main_article_count": 5,
+    "locked_article_count": 5,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
     "reserve_candidates_used": [],
-    "candidate_rejections": [
-      {
-        "title": "Build your way: Use any AI agent of your choice in Android Studio",
-        "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-        "source": "Android Developers Blog",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 2,
-        "reason": "duplicate_locked_url"
-      },
-      {
-        "title": "Claude Opus 5.5",
-        "url": "https://www.anthropic.com/claude-opus-5-5",
-        "source": "Anthropic News",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 2,
-        "reason": "duplicate_locked_url"
-      },
-      {
-        "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
-        "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
-        "source": "lore.kernel.org linux-media list",
-        "relevance_bucket": "android",
-        "editorial_priority": 3,
-        "reason": "duplicate_locked_url"
-      },
-      {
-        "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
-        "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
-        "source": "lore.kernel.org linux-media list",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
-        "reason": "duplicate_demoted_url"
-      },
-      {
-        "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
-        "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
-        "source": "lore.kernel.org linux-media list",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
-        "reason": "duplicate_locked_url"
-      }
-    ],
-    "underfilled_reason": "completion top-up failed; published 4 passing article(s) below target 5",
-    "completion_fallback_to_prepass": true,
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
     "deductions": [
       {
         "category": "editorial-story",
         "points": 1,
-        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
         "location": "briefing 1",
         "blocking": false,
         "severity": "soft",
@@ -69,7 +28,7 @@
       {
         "category": "editorial-story",
         "points": 1,
-        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "reason": "Briefing bullet misses story structure elements: what_happened.",
         "location": "briefing 2",
         "blocking": false,
         "severity": "soft",
@@ -79,7 +38,7 @@
       {
         "category": "editorial-story",
         "points": 1,
-        "reason": "Briefing bullet misses story structure elements: reader_perspective.",
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
         "location": "briefing 3",
         "blocking": false,
         "severity": "soft",
@@ -90,7 +49,7 @@
         "category": "image-fallback",
         "points": 1,
         "reason": "Article image uses a local fallback visual.",
-        "location": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
+        "location": "르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -100,7 +59,7 @@
         "category": "image-fallback",
         "points": 1,
         "reason": "Article image uses a local fallback visual.",
-        "location": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
+        "location": "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -110,17 +69,7 @@
         "category": "image-fallback",
         "points": 1,
         "reason": "Article image uses a local fallback visual.",
-        "location": "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
-        "blocking": false,
-        "severity": "soft",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "image-fallback",
-        "points": 1,
-        "reason": "Article image uses a local fallback visual.",
-        "location": "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
+        "location": "소니 IMX681 카메라 센서 지원 패치에 대한 테스트 보고서 공개",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -128,52 +77,26 @@
       }
     ],
     "selected_article_headlines": [
-      "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-      "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
-      "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
-      "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고"
+      "르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안",
+      "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안",
+      "소니 IMX681 카메라 센서 지원 패치에 대한 테스트 보고서 공개",
+      "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표",
+      "앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표"
     ],
     "locked_article_headlines": [
-      "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-      "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
-      "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
-      "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고"
+      "르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안",
+      "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안",
+      "소니 IMX681 카메라 센서 지원 패치에 대한 테스트 보고서 공개",
+      "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표",
+      "앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표"
     ],
     "source_gap_sections": [],
-    "demoted_sections": [
-      "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안"
-    ],
-    "replaced_sections": [
-      "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안"
-    ],
+    "demoted_sections": [],
+    "replaced_sections": [],
     "locked_sections": [
       {
         "index": 1,
-        "headline": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "urls": [
-          "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
-        ],
-        "source_titles": [
-          "Build your way: Use any AI agent of your choice in Android Studio"
-        ]
-      },
-      {
-        "index": 2,
-        "headline": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "urls": [
-          "https://www.anthropic.com/claude-opus-5-5"
-        ],
-        "source_titles": [
-          "Claude Opus 5.5"
-        ]
-      },
-      {
-        "index": 3,
-        "headline": "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
+        "headline": "르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안",
         "category": "android",
         "relevance_bucket": "android",
         "urls": [
@@ -184,22 +107,8 @@
         ]
       },
       {
-        "index": 4,
-        "headline": "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "urls": [
-          "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
-        ],
-        "source_titles": [
-          "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor"
-        ]
-      }
-    ],
-    "failed_sections": [
-      {
-        "index": 1,
-        "headline": "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안",
+        "index": 2,
+        "headline": "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안",
         "category": "camera_driver_image_pipeline",
         "relevance_bucket": "camera_driver_image_pipeline",
         "urls": [
@@ -208,142 +117,52 @@
         "source_titles": [
           "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor"
         ]
+      },
+      {
+        "index": 3,
+        "headline": "소니 IMX681 카메라 센서 지원 패치에 대한 테스트 보고서 공개",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+        ],
+        "source_titles": [
+          "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+        ],
+        "source_titles": [
+          "Build your way: Use any AI agent of your choice in Android Studio"
+        ]
+      },
+      {
+        "index": 5,
+        "headline": "앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://www.anthropic.com/claude-opus-5-5"
+        ],
+        "source_titles": [
+          "Claude Opus 5.5"
+        ]
       }
     ],
+    "failed_sections": [],
     "regenerated_sections": [],
     "rejected_retry_outputs": [],
-    "repair_actions": [
-      "replace-or-demote(deterministic-demote): 삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안"
-    ],
+    "repair_actions": [],
     "max_section_repairs": 1,
     "repair_plan": [
       {
-        "headline": "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안",
-        "sources": [
-          "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
-        ],
-        "action": "replace-or-demote",
-        "failure_type": "unknown_evidence_id",
-        "allow_rewrite": false,
-        "policy_reason": "claim evidence, source binding, or coverage failure must be demoted or replaced",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [
-          {
-            "category": "source-integrity",
-            "points": 8,
-            "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
-            "reason_code": "",
-            "location": "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안"
-          },
-          {
-            "category": "claim-evidence",
-            "points": 8,
-            "reason": "Claim references unresolved evidence_id: candidate:20128ac1ca49ba04:source-summary.",
-            "reason_code": "unknown_evidence_id",
-            "location": "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안"
-          },
-          {
-            "category": "claim-evidence",
-            "points": 8,
-            "reason": "Claim references unresolved evidence_id: candidate:20128ac1ca49ba04:source-summary.",
-            "reason_code": "unknown_evidence_id",
-            "location": "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안"
-          },
-          {
-            "category": "claim-evidence",
-            "points": 8,
-            "reason": "Claim references unresolved evidence_id: candidate:20128ac1ca49ba04:source-summary.",
-            "reason_code": "unknown_evidence_id",
-            "location": "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안"
-          },
-          {
-            "category": "claim-evidence",
-            "points": 8,
-            "reason": "Claim references unresolved evidence_id: candidate:20128ac1ca49ba04:source-summary.",
-            "reason_code": "unknown_evidence_id",
-            "location": "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안"
-          },
-          {
-            "category": "image-fallback",
-            "points": 1,
-            "reason": "Article image uses a local fallback visual.",
-            "reason_code": "",
-            "location": "삼성 S5K3T2 이미지 센서, 리눅스 커널 드라이버 및 바인딩 패치 제안"
-          }
-        ],
-        "recommended_fixes": []
-      }
-    ],
-    "skipped_repair_sections": [
-      {
-        "headline": "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
-        "sources": [
-          "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
-        ],
-        "action": "replace-or-demote",
-        "failure_type": "article-gate-fail",
-        "allow_rewrite": false,
-        "policy_reason": "article gate status FAIL requires replacement path (replace-or-demote)",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [
-          {
-            "category": "image-fallback",
-            "points": 1,
-            "reason": "Article image uses a local fallback visual.",
-            "reason_code": "",
-            "location": "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고"
-          }
-        ],
-        "recommended_fixes": []
-      },
-      {
-        "headline": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-        "sources": [
-          "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
-        ],
-        "action": "repair-section",
-        "failure_type": "image-fallback",
-        "allow_rewrite": true,
-        "policy_reason": "section-scoped repair is allowed",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [
-          {
-            "category": "image-fallback",
-            "points": 1,
-            "reason": "Article image uses a local fallback visual.",
-            "reason_code": "",
-            "location": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장"
-          }
-        ],
-        "recommended_fixes": []
-      },
-      {
-        "headline": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
-        "sources": [
-          "https://www.anthropic.com/claude-opus-5-5"
-        ],
-        "action": "repair-section",
-        "failure_type": "image-fallback",
-        "allow_rewrite": true,
-        "policy_reason": "section-scoped repair is allowed",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [
-          {
-            "category": "image-fallback",
-            "points": 1,
-            "reason": "Article image uses a local fallback visual.",
-            "reason_code": "",
-            "location": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개"
-          }
-        ],
-        "recommended_fixes": []
-      },
-      {
-        "headline": "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
+        "headline": "르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안",
         "sources": [
           "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
         ],
@@ -359,53 +178,80 @@
             "points": 1,
             "reason": "Article image uses a local fallback visual.",
             "reason_code": "",
-            "location": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장"
-          },
+            "location": "르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안"
+          }
+        ],
+        "recommended_fixes": [
+          "Section 1 (르네사스 RZ V2H EVK 디바이스 트리 패치로 Arm Mali C55 ISP 및 IVC 활성화 제안): public_article.camera_hal_takeaway는 '직접적인 Android HAL 변경은 없으나'와 같은 디스클레이머로 시작하지 않고 구체적인 점검 항목을 먼저 제시하도록 수정하는 것이 좋습니다."
+        ]
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
           {
             "category": "image-fallback",
             "points": 1,
             "reason": "Article image uses a local fallback visual.",
             "reason_code": "",
-            "location": "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진"
+            "location": "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안"
           }
         ],
         "recommended_fixes": []
+      },
+      {
+        "headline": "소니 IMX681 카메라 센서 지원 패치에 대한 테스트 보고서 공개",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "소니 IMX681 카메라 센서 지원 패치에 대한 테스트 보고서 공개"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표",
+        "sources": [
+          "https://www.anthropic.com/claude-opus-5-5"
+        ],
+        "action": "repair-section",
+        "failure_type": "recommended-fix",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [],
+        "recommended_fixes": [
+          "Section 5 (앤트로픽, 코드 생성 및 테스트 역량이 강화된 Claude Opus 5.5 공개): public_article.camera_hal_takeaway는 '직접적인 HAL 변경은 없으나'와 같은 디스클레이머로 시작하지 않고 구체적인 점검 항목을 먼저 제시하도록 수정하는 것이 좋습니다."
+        ]
       }
     ],
     "article_locks": [
       {
         "index": 1,
-        "headline": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "urls": [
-          "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
-        ],
-        "source_titles": [
-          "Build your way: Use any AI agent of your choice in Android Studio"
-        ],
-        "status": "PASS",
-        "reason": "",
-        "locked": true
-      },
-      {
-        "index": 2,
-        "headline": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "urls": [
-          "https://www.anthropic.com/claude-opus-5-5"
-        ],
-        "source_titles": [
-          "Claude Opus 5.5"
-        ],
-        "status": "PASS",
-        "reason": "",
-        "locked": true
-      },
-      {
-        "index": 3,
-        "headline": "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
+        "headline": "르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안",
         "category": "android",
         "relevance_bucket": "android",
         "urls": [
@@ -419,8 +265,23 @@
         "locked": true
       },
       {
-        "index": 4,
-        "headline": "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
+        "index": 2,
+        "headline": "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+        ],
+        "source_titles": [
+          "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "소니 IMX681 카메라 센서 지원 패치에 대한 테스트 보고서 공개",
         "category": "camera_driver_image_pipeline",
         "relevance_bucket": "camera_driver_image_pipeline",
         "urls": [
@@ -432,15 +293,45 @@
         "status": "PASS",
         "reason": "",
         "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+        ],
+        "source_titles": [
+          "Build your way: Use any AI agent of your choice in Android Studio"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 5,
+        "headline": "앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://www.anthropic.com/claude-opus-5-5"
+        ],
+        "source_titles": [
+          "Claude Opus 5.5"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
       }
     ],
     "final_article_slot_distribution": {
-      "android_camera_platform_api": 0,
+      "android_camera_platform_api": 1,
       "camerax_aosp_camera_compatibility": 0,
       "linux_camera_libcamera_v4l2": 1,
-      "ai_camera_path_hal_workflow": 2,
+      "ai_camera_path_hal_workflow": 3,
       "cpp_toolchain_fallback": 0,
-      "other": 1
+      "other": 0
     },
     "reporter_eligibility_blocked_sections": [],
     "rejected_main_ineligible_candidates": [],

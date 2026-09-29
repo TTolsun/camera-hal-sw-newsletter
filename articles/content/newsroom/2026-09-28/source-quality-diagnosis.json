@@ -11,7 +11,7 @@
     "source_quality_report": "articles/content/newsroom/2026-09-28/source-quality-report.json",
     "source_discovery_feedback_report": "articles/content/newsroom/2026-09-28/source-discovery-feedback-report.json",
     "merged_candidate_manifest": "articles/content/collected-news/2026-09-28/merged-candidate-manifest.json",
-    "evidence_pack_summary": null
+    "evidence_pack_summary": "articles/content/newsroom/2026-09-28/evidence-pack-summary.json"
   },
   "evidence_completeness": {
     "candidate_input": true,
@@ -22,7 +22,7 @@
     "source_quality_report": true,
     "source_discovery_feedback_report": true,
     "merged_candidate_manifest": true,
-    "evidence_pack_summary": false
+    "evidence_pack_summary": true
   },
   "raw_candidate_count": 50,
   "eligible_candidate_count": 11,
@@ -40,7 +40,7 @@
     "actual_news_shortage": [],
     "parser_extraction_failure": [
       {
-        "reason": "Gemini discovery parser extraction failures=2.",
+        "reason": "Gemini discovery parser extraction failures=1.",
         "source_artifact": "articles/content/newsroom/2026-09-28/source-discovery-feedback-report.json",
         "severity": "high"
       }
@@ -2321,16 +2321,6 @@
     },
     {
       "source_id": "lore-linux-media-ipu",
-      "title": "[PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro - Felipe Calliari",
-      "url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
-      "published_date": "2026-09-23",
-      "freshness_window": "primary",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [],
-      "reason_codes": []
-    },
-    {
-      "source_id": "lore-linux-media-ipu",
       "title": "[PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190 - Nihal Kumar Gupta",
       "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/",
       "published_date": "2026-09-23",
@@ -2343,6 +2333,26 @@
       "source_id": "lore-linux-media-ipu",
       "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK - Linus Walleij",
       "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+      "published_date": "2026-09-25",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "lore-linux-media-ipu",
+      "title": "[PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro - Felipe Calliari",
+      "url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+      "published_date": "2026-09-23",
+      "freshness_window": "primary",
+      "gerrit_change_status": "",
+      "source_policy_blockers": [],
+      "reason_codes": []
+    },
+    {
+      "source_id": "lore-linux-media-ipu",
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
       "published_date": "2026-09-25",
       "freshness_window": "primary",
       "gerrit_change_status": "",
@@ -2591,18 +2601,6 @@
     },
     {
       "source_id": "android-developers-blog",
-      "title": "#3393",
-      "url": "https://github.com/androidx/media/issues/3393",
-      "published_date": "",
-      "freshness_window": "unknown",
-      "gerrit_change_status": "",
-      "source_policy_blockers": [],
-      "reason_codes": [
-        "missing_date_evidence"
-      ]
-    },
-    {
-      "source_id": "android-developers-blog",
       "title": "#3322",
       "url": "https://github.com/androidx/media/issues/3322",
       "published_date": "",
@@ -2675,16 +2673,16 @@
   ],
   "candidate_counts": {
     "raw": 50,
-    "merged_records": 86,
-    "merged_unique_urls": 73,
+    "merged_records": 85,
+    "merged_unique_urls": 72,
     "gemini_new_unique_urls": 0,
-    "derived_new_unique_urls": 23,
+    "derived_new_unique_urls": 22,
     "derived_publishable": 0
   },
   "publication_counts": {
     "deterministic_selected": 5,
-    "rendered": 4,
-    "hard_blocked_groups": 1,
+    "rendered": 5,
+    "hard_blocked_groups": 0,
     "explicitly_demoted_groups": 0
   },
   "recommended_issues": [
@@ -2819,11 +2817,5 @@
       "raw_count": 1
     }
   ],
-  "warnings": [
-    {
-      "type": "missing_optional_artifact",
-      "message": "articles/content/newsroom/2026-09-28/evidence-pack-summary.json not found; partial diagnosis will continue.",
-      "source_artifact": "articles/content/newsroom/2026-09-28/evidence-pack-summary.json"
-    }
-  ]
+  "warnings": []
 }

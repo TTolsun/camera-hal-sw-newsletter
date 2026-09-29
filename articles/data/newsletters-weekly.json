@@ -5,7 +5,7 @@
     "weekEndDate": "2026-10-04",
     "date": "2026-09-28",
     "title": "2026 W40",
-    "summary": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장\n앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개\n르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진\n소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
+    "summary": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장\n앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개\n르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진\n소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고\n삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안",
     "html": "newsletters/2026-W40/index.html",
     "md": "newsletters/2026-W40/newsletter.md",
     "tags": [
@@ -15,7 +15,7 @@
       "Image Processing",
       "Camera HAL"
     ],
-    "article_count": 4,
+    "article_count": 5,
     "article_images": [
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
       "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg"

@@ -4,7 +4,7 @@
 
 - Reporter candidates: 12
 - Reporter-selected candidates: 12
-- Final input candidates: 86
+- Final input candidates: 85
 - Final eligible candidates: 11
 - Final selected articles: 5
 - Deterministic primary articles: 5
@@ -35,7 +35,7 @@
 - release_class_after_reconciliation_admitted: 0
 - release_class_after_reconciliation_blocked_reason: lineup_at_max
 - republication_history_loaded: true
-- republication_history_main_articles: 32
+- republication_history_main_articles: 36
 - republication_cooldown_blocked: 1
 - evidence_unchecked_main_blocked: 0
 
@@ -44,15 +44,15 @@ Source/parser recovery hint:
 - No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.
 
 주요 final exclusion reason:
-- final_selection_blocked=true (42)
-- main_eligible=false (42)
-- source_gap_risk=true (42)
-- briefing_only=true (37)
-- finalSelectionEligibility=watchlist (37)
+- final_selection_blocked=true (41)
+- main_eligible=false (41)
+- source_gap_risk=true (41)
+- briefing_only=true (36)
+- finalSelectionEligibility=watchlist (36)
 
 Homepage Headline:
 - decision: latest_camera_hal_article
-- current_headline_key: url:https://github.com/openai/codex/releases/tag/rust-v0.155.1
+- current_headline_key: url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html
 - replacement_headline_key: url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown

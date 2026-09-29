@@ -5,9 +5,9 @@
 - seed_used: false
 - public_output_expected: true
 - status: PASS
-- present: 78/103
+- present: 79/95
 - missing_required: 0
-- attention_required: 3
+- attention_required: 2
 
 ## 읽는 순서
 
@@ -46,17 +46,21 @@
 - `articles/content/newsroom/2026-09-28/quality-report.md` - changed
 - `articles/content/newsroom/2026-09-28/hal-signal-quality-report.md` - changed
 - `articles/content/newsroom/2026-09-28/stale-claim-report.md` - changed
+- `articles/content/newsroom/2026-09-28/image-audit-report.md` - present
 - `articles/content/newsroom/2026-09-28/source-quality-report.md` - present
 
 ## 후보 선정 진단
 
 - `articles/content/newsroom/2026-09-28/selection-diagnostics.md` - present
 - `articles/content/newsroom/2026-09-28/selection-report.md` - present
+- `articles/content/newsroom/2026-09-28/source-quality-diagnosis.md` - present
+- `articles/content/newsroom/2026-09-28/source-followup-issues.md` - present
 
 ## 필요 시 확인
 
 - `articles/content/newsroom/2026-09-28/release-qa-report.md` - changed
 - `articles/content/newsroom/2026-09-28/retry-history.md` - changed
+- `articles/content/newsroom/2026-09-28/source-effectiveness-report.md` - present
 - `articles/content/newsroom/2026-09-28/source-discovery-feedback-report.md` - present
 - `articles/content/newsroom/2026-09-28/gemini-source-discovery-report.md` - present
 
@@ -80,7 +84,12 @@
 - `articles/content/newsroom/2026-09-28/selection-report.json` - present
 - `articles/content/newsroom/2026-09-28/article-capsules.json` - changed
 - `articles/content/newsroom/2026-09-28/background-context.json` - changed
+- `articles/content/newsroom/2026-09-28/evidence-pack-summary.json` - present
+- `articles/content/newsroom/2026-09-28/image-audit-report.json` - present
 - `articles/content/newsroom/2026-09-28/source-quality-report.json` - present
+- `articles/content/newsroom/2026-09-28/source-quality-diagnosis.json` - present
+- `articles/content/newsroom/2026-09-28/source-followup-issues.json` - present
+- `articles/content/newsroom/2026-09-28/source-effectiveness-report.json` - present
 - `articles/content/newsroom/2026-09-28/source-discovery-feedback-report.json` - present
 - `articles/content/newsroom/2026-09-28/source-clusters.json` - present
 - `articles/content/newsroom/2026-09-28/gemini-source-proposals.json` - present
@@ -98,23 +107,15 @@
 - `articles/content/newsroom/2026-09-28/editor-draft-attempt-1.md` - present
 - `articles/content/newsroom/2026-09-28/editor-invalid-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/editor-public-article-judge-attempt-1.json` - changed
-- `articles/content/newsroom/2026-09-28/editor-repair-attempt-1.json` - present
-- `articles/content/newsroom/2026-09-28/editor-repair-attempt-1.md` - present
-- `articles/content/newsroom/2026-09-28/editor-repair-sections-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/editor-validation-error-attempt-1.json` - present
-- `articles/content/newsroom/2026-09-28/fact-check-repair-attempt-1.json` - present
-- `articles/content/newsroom/2026-09-28/fact-check-repair-attempt-1.md` - present
 - `articles/content/newsroom/2026-09-28/fact-check-report-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/fact-check-report-attempt-1.md` - present
 - `articles/content/newsroom/2026-09-28/quality-report-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/quality-report-attempt-1.md` - present
-- `articles/content/newsroom/2026-09-28/quality-report-repair-attempt-1.json` - present
-- `articles/content/newsroom/2026-09-28/quality-report-repair-attempt-1.md` - present
 - `articles/content/newsroom/2026-09-28/reporter-candidates-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/artifact-manifest.json` - changed
 
 ## 미분류 산출물
 
 - `articles/content/newsroom/2026-09-28/coverage-reconciliation.json` - present
-- `articles/content/newsroom/2026-09-28/editor-public-article-judge-targeted-repair-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/editorial-plan.json` - present

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-09-28",
-  "generated_at": "2026-09-29T10:01:26.244Z",
+  "generated_at": "2026-09-29T10:53:27.975Z",
   "inputs": {
     "required": [],
     "preferred": [
@@ -40,7 +40,7 @@
   "publish_status": {
     "status": "publish-ready",
     "run_mode": "publish_ready",
-    "quality_score": 93,
+    "quality_score": 94,
     "quality_threshold": 60,
     "fact_check_status": "PASS",
     "final_publish_ready": true,
@@ -48,11 +48,11 @@
     "review_pr_ready": true
   },
   "selection_summary": {
-    "raw_candidate_count": 86,
+    "raw_candidate_count": 85,
     "eligible_candidate_count": 11,
     "selected_main_article_count": 5,
     "reserve_candidate_count": 6,
-    "excluded_candidate_count": 76,
+    "excluded_candidate_count": 74,
     "primary_camera_stack_count": 2,
     "android_multimedia_camera_output_count": 0,
     "supporting_bucket_count": 1,
@@ -68,11 +68,11 @@
   },
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 13,
-    "total_claims": 13,
+    "bound_claims": 20,
+    "total_claims": 20,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
-    "available_article_count": 4,
+    "available_article_count": 5,
     "not_available_article_count": 0
   },
   "hal_impact_summary": {
@@ -409,15 +409,15 @@
         "\\b(?:build|test|debug|profil(?:e|ing)|run|device execution|agent workflow|coding assistant|native app)\\b[^.\\n]{0,140}\\bAndroid\\b"
       ],
       "key_evidence": [
-        "behavior_change: Android Studio에서 AI 기반 개발 도구를 활용하여 에이전트 기반 Android 앱 개발의 유연성을 높입니다.",
-        "version_or_release: 2026-09-24",
+        "behavior_change: Android Studio에서 AI 에이전트를 활용한 개발이 더욱 개방적이고 유연해졌습니다. 개발팀이 최적의 방식으로 Android 앱을 빌드할 수 있도록 다양한 AI 코딩 에이전트, 맞춤형 엔터프라이즈 하네스, 자율 도구를 채택할 수 있게 되었습니다.",
+        "version_or_release: 2026년 9월 24일",
         "summary: Posted by Matthew Warner, Product Manager, Android Developer Experience AI-powered developer tools have become an essential multiplier for engineering..."
       ],
       "selection_reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "available",
-        "bound_claims": 2,
-        "total_claims": 2,
+        "bound_claims": 4,
+        "total_claims": 4,
         "overclaim_risk": "low"
       }
     },
@@ -474,15 +474,15 @@
         "\\b(?:Codex|Claude Code|agentic coding)\\b[^.\\n]{0,180}\\b(?:build|test(?:s|ing)?|CI|debug|code review|pull request|coding|session[s]?|sandbox|permission[s]?|CLI|TUI|terminal)\\b"
       ],
       "key_evidence": [
-        "behavior_change: Claude Opus 5.5는 Anthropic이 테스트한 모델 중 가장 강력한 성능을 보이며, 포괄적인 정렬 테스트를 통과했습니다.",
-        "version_or_release: Opus 5.5",
+        "behavior_change: Claude Opus 5.5는 Anthropic이 테스트한 모델 중 가장 강력한 성능을 보이며, 가장 포괄적인 정렬 테스트를 통과했습니다. 또한, 가장 유능한 모델을 위해 개발된 안전 장치도 함께 제공됩니다.",
+        "version_or_release: Claude Opus 5.5",
         "summary: Claude Opus 5.5 September 22, 2026 (1) Introduction (2) Performance and cost (3) Safety (4) Availability Scroll down We’re introducing Claude Opus 5.5..."
       ],
       "selection_reason": "Anthropic News (official, medium, score 56): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
       "claim_validation": {
         "status": "available",
-        "bound_claims": 3,
-        "total_claims": 3,
+        "bound_claims": 4,
+        "total_claims": 4,
         "overclaim_risk": "low"
       }
     },
@@ -522,8 +522,8 @@
         "\\bArm\\b"
       ],
       "key_evidence": [
-        "behavior_change: 이 패치 시리즈는 RZ/V2H(P) IVC 및 Arm Mali-C55 ISP 노드를 추가하고, 비디오 엔드포인트를 연결하며, RZ/V2H EVK에서 두 블록을 활성화합니다. 이는 아직 머지되지 않은 제안입니다.",
-        "version_or_release: v2",
+        "behavior_change: 이 패치 시리즈는 RZ/V2H(P) IVC 및 Arm Mali-C55 ISP 노드를 추가하고, 해당 비디오 엔드포인트를 연결하며, RZ/V2H EVK에서 두 블록을 모두 활성화합니다. 이 변경은 ISP DMA 라인 틱 및 IVC 프레임 시작/정지 인터럽트...",
+        "version_or_release: 9000043.31032022.0",
         "summary: Describe the optional ISP DMA line-tick and IVC frame-start/frame-stop interrupts. Add the RZ/V2H(P) IVC and Arm Mali-C55 ISP nodes, connect their vid..."
       ],
       "selection_reason": "lore.kernel.org linux-media list (project-official, high, score 51): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 3 article-level signal(s) from article_text.)",
@@ -571,8 +571,8 @@
         "\\bV4L2\\b"
       ],
       "key_evidence": [
-        "behavior_change: 이 패치 시리즈는 Samsung S5K3T2 이미지 센서(20 Mpixel CMOS, 4개 MIPI D-PHY 레인)에 대한 바인딩 및 드라이버를 추가합니다. 이는 아직 머지되지 않은 제안입니다.",
-        "version_or_release: v3",
+        "behavior_change: 이 패치 시리즈는 20메가픽셀 CMOS 이미지 센서인 Samsung S5K3T2에 대한 바인딩 및 드라이버를 추가하며, 4개의 MIPI D-PHY 레인을 지원합니다. 이 센서는 Xiaomi POCO F3의 전면 카메라에 사용됩니다.",
+        "version_or_release: 2026년 9월 24일",
         "summary: This series adds a binding and a driver for the Samsung S5K3T2, a 20 Mpixel CMOS image sensor with four MIPI D-PHY lanes. The sensor is the front came..."
       ],
       "selection_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 3 article-level signal(s) from article_text.)",
@@ -619,16 +619,16 @@
         "\\bcamera sensor\\b"
       ],
       "key_evidence": [
-        "behavior_change: 이 테스트는 Sony IMX681 카메라 센서 지원을 추가하는 패치 시리즈에 대한 것으로, 최신 버전의 mesa (3:26.2.3-1) 및 libcamera (0.7.2-4.1)를 사용하여 수행되었습니다. 이는 아직 머지되지 않은 제안입니다.",
-        "version_or_release: v7",
+        "behavior_change: 이 테스트는 Sony IMX681 카메라 센서 지원을 추가하는 패치 시리즈에 대한 것입니다. 테스트는 최신 안정 채널 버전의 Mesa (3:26.2.3-1) 및 libcamera (0.7.2-4.1)를 사용하며, 커널은 7.3-rc4 버전을 사용합니다.",
+        "version_or_release: mesa 3:26.2.3-1, libcamera 0.7.2-4.1, kernel 7.3-rc4",
         "summary: For this test im using every component and program used to its latest version available in the stable chanel (the only exception is the kernel, wich i..."
       ],
       "selection_reason": "lore.kernel.org linux-media list (project-official, high, score 100): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
       "claim_validation": {
-        "status": "not_available",
-        "bound_claims": null,
-        "total_claims": null,
-        "overclaim_risk": "unknown"
+        "status": "available",
+        "bound_claims": 4,
+        "total_claims": 4,
+        "overclaim_risk": "low"
       }
     }
   ],

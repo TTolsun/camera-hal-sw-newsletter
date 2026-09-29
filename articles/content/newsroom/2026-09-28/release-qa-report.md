@@ -37,9 +37,9 @@
 
 ## 산출물 리뷰 순서
 
-- present: 78/103
+- present: 79/95
 - missing_required: 0
-- attention_required: 3
+- attention_required: 2
 
 ### 편집장 브리프
 
@@ -67,17 +67,21 @@
 - `articles/content/newsroom/2026-09-28/quality-report.md` - changed
 - `articles/content/newsroom/2026-09-28/hal-signal-quality-report.md` - changed
 - `articles/content/newsroom/2026-09-28/stale-claim-report.md` - changed
+- `articles/content/newsroom/2026-09-28/image-audit-report.md` - present
 - `articles/content/newsroom/2026-09-28/source-quality-report.md` - present
 
 ### 후보 선정 진단
 
 - `articles/content/newsroom/2026-09-28/selection-diagnostics.md` - present
 - `articles/content/newsroom/2026-09-28/selection-report.md` - present
+- `articles/content/newsroom/2026-09-28/source-quality-diagnosis.md` - present
+- `articles/content/newsroom/2026-09-28/source-followup-issues.md` - present
 
 ### 필요 시 확인
 
 - `articles/content/newsroom/2026-09-28/release-qa-report.md` - changed
 - `articles/content/newsroom/2026-09-28/retry-history.md` - changed
+- `articles/content/newsroom/2026-09-28/source-effectiveness-report.md` - present
 - `articles/content/newsroom/2026-09-28/source-discovery-feedback-report.md` - present
 - `articles/content/newsroom/2026-09-28/gemini-source-discovery-report.md` - present
 
@@ -101,7 +105,12 @@
 - `articles/content/newsroom/2026-09-28/selection-report.json` - present
 - `articles/content/newsroom/2026-09-28/article-capsules.json` - changed
 - `articles/content/newsroom/2026-09-28/background-context.json` - changed
+- `articles/content/newsroom/2026-09-28/evidence-pack-summary.json` - present
+- `articles/content/newsroom/2026-09-28/image-audit-report.json` - present
 - `articles/content/newsroom/2026-09-28/source-quality-report.json` - present
+- `articles/content/newsroom/2026-09-28/source-quality-diagnosis.json` - present
+- `articles/content/newsroom/2026-09-28/source-followup-issues.json` - present
+- `articles/content/newsroom/2026-09-28/source-effectiveness-report.json` - present
 - `articles/content/newsroom/2026-09-28/source-discovery-feedback-report.json` - present
 - `articles/content/newsroom/2026-09-28/source-clusters.json` - present
 - `articles/content/newsroom/2026-09-28/gemini-source-proposals.json` - present
@@ -119,25 +128,17 @@
 - `articles/content/newsroom/2026-09-28/editor-draft-attempt-1.md` - present
 - `articles/content/newsroom/2026-09-28/editor-invalid-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/editor-public-article-judge-attempt-1.json` - changed
-- `articles/content/newsroom/2026-09-28/editor-repair-attempt-1.json` - present
-- `articles/content/newsroom/2026-09-28/editor-repair-attempt-1.md` - present
-- `articles/content/newsroom/2026-09-28/editor-repair-sections-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/editor-validation-error-attempt-1.json` - present
-- `articles/content/newsroom/2026-09-28/fact-check-repair-attempt-1.json` - present
-- `articles/content/newsroom/2026-09-28/fact-check-repair-attempt-1.md` - present
 - `articles/content/newsroom/2026-09-28/fact-check-report-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/fact-check-report-attempt-1.md` - present
 - `articles/content/newsroom/2026-09-28/quality-report-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/quality-report-attempt-1.md` - present
-- `articles/content/newsroom/2026-09-28/quality-report-repair-attempt-1.json` - present
-- `articles/content/newsroom/2026-09-28/quality-report-repair-attempt-1.md` - present
 - `articles/content/newsroom/2026-09-28/reporter-candidates-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/artifact-manifest.json` - changed
 
 ### 미분류 산출물
 
 - `articles/content/newsroom/2026-09-28/coverage-reconciliation.json` - present
-- `articles/content/newsroom/2026-09-28/editor-public-article-judge-targeted-repair-attempt-1.json` - present
 - `articles/content/newsroom/2026-09-28/editorial-plan.json` - present
 
 
@@ -152,7 +153,7 @@ Validated 38 newsletter entries.
 > camera-hal-sw-newsletter@1.0.0 validate:images
 > node src/generator/validate/validate-external-images.js
 
-Validated 8 article images.
+Validated 10 article images.
 
 ## 잔여 TODO 여부
 
@@ -169,7 +170,7 @@ Validated 8 article images.
 - source gap 개수: 0
 
 ## 품질 게이트
-- 품질 점수: 93/100
+- 품질 점수: 94/100
 - 품질 기준: 60
 - 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2); 1pt editorial-story (briefing 3); 1pt image-fallback (Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장); 1pt image-fallback (앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개)
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2); 1pt editorial-story (briefing 3); 1pt image-fallback (르네사스 RZ V2H EVK 플랫폼을 위한 ISP 및 IVC 활성화 패치 제안); 1pt image-fallback (삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안)

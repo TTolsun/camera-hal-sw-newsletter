@@ -3,12 +3,13 @@
   "public_contract_version": "story-v2",
   "generation_contract_version": 2,
   "title": "2026 W39 (09.21 ~ 09.27)",
-  "summary": "이번 주 뉴스레터에서는 Android Studio가 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성을 확장하며 새로운 가능성을 열었습니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 AI 기술의 발전을 이끌었습니다. 또한, 르네사스 RZ/V2H EVK는 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화를 추진하고 있으며, 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 주목할 만합니다. 독자 여러분의 많은 관심 부탁드립니다.",
+  "summary": "이번 주 뉴스레터에서는 Android Studio의 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성이 확장되는 소식을 전합니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 주목받고 있습니다. 또한, 르네사스 RZ/V2H EVK의 Mali-C55 ISP 및 IVC 하드웨어 활성화를 위한 리눅스 커널 패치 소식과 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 준비했습니다. 마지막으로 삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안 소식까지, 풍성한 기술 업데이트를 확인해 보세요.",
   "briefing": [
     "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
     "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
     "르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진",
-    "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고"
+    "소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
+    "삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안"
   ],
   "sections": [
     {
@@ -172,68 +173,54 @@
           "contentLength": 12454
         },
         {
-          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
-          "sourceUrl": "https://www.anthropic.com/news",
-          "articleUrl": "https://www.anthropic.com/claude-opus-5-5",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/jpeg",
-          "licenseStatus": "unknown",
-          "attribution": "Anthropic News",
-          "validationStatus": "ok",
-          "contentLength": 88082
-        },
-        {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
           "sourceKind": "og",
           "width": null,
           "height": null,
           "alt": "",
           "contentType": "image/png",
           "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
+          "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 31847
+          "contentLength": 162392
         },
         {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
+          "attribution": "Android Developers Blog",
           "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
-          "sourceUrl": "https://developer.android.com/latest-updates",
-          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Latest Updates",
-          "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 12454
         }
       ],
       "selectedImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
       "imageSource": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
       "imageAttribution": "Build your way: Use any AI agent of your choice in Android Studio",
-      "imageAlt": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장",
+      "imageAlt": "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "No suitable image available.",
+      "imageUsageDecisionReason": "No image candidates selected to avoid rights risks.",
       "sources": [
         {
           "title": "Build your way: Use any AI agent of your choice in Android Studio",
@@ -422,6 +409,20 @@
       "imageCandidates": [
         {
           "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
+          "sourceUrl": "https://www.anthropic.com/claude-opus-5-5",
+          "articleUrl": "https://www.anthropic.com/claude-opus-5-5",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Opus 5.5",
+          "validationStatus": "ok",
+          "contentLength": 88082
+        },
+        {
+          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
           "sourceUrl": "https://www.anthropic.com/news",
           "articleUrl": "https://www.anthropic.com/claude-opus-5-5",
           "sourceKind": "og",
@@ -437,10 +438,10 @@
       ],
       "selectedImage": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
       "imageSource": "https://www.anthropic.com/claude-opus-5-5",
-      "imageAttribution": "Anthropic News",
-      "imageAlt": "앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개",
+      "imageAttribution": "Claude Opus 5.5",
+      "imageAlt": "앤트로픽, 성능과 안전성을 개선한 Claude Opus 5.5 모델 발표",
       "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "기존 후보 이미지가 검증 가능한 metadata를 갖고 있어 대표 이미지로 선택했습니다.",
+      "imageUsageDecisionReason": "No image candidates selected to avoid rights risks.",
       "sources": [
         {
           "title": "Claude Opus 5.5",
@@ -485,6 +486,21 @@
         "validationSource": "candidate_metadata",
         "candidateUrl": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
         "exclusionEvidence": []
+      },
+      "image_recovery": {
+        "article_url": "https://www.anthropic.com/claude-opus-5-5",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
       }
     },
     {
@@ -988,12 +1004,305 @@
         "reason": "no selected image; local fallback visual used"
       },
       "coverage_type": "fresh"
+    },
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "삼성 S5K3T2 이미지 센서를 위한 Linux 커널 드라이버 패치 제안",
+      "what_changed": "Samsung S5K3T2 20메가픽셀 CMOS 이미지 센서에 대한 바인딩 및 드라이버를 추가하는 패치 시리즈 v3가 제안되었습니다.",
+      "confirmed_facts": [
+        "2026년 9월 24일 Samsung S5K3T2 이미지 센서에 대한 드라이버 및 바인딩을 추가하는 패치 v3가 lore.kernel.org linux-media 리스트에 제출되었습니다.",
+        "이 센서는 20메가픽셀 CMOS 이미지 센서로 4개의 MIPI D-PHY 레인을 지원합니다.",
+        "이 드라이버는 Xiaomi POCO F3의 전면 카메라를 대상으로 Qualcomm CAMSS 드라이버 환경에서 작성 및 테스트되었습니다.",
+        "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 단계입니다."
+      ],
+      "evidence_summary": "Samsung S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 및 바인딩 패치 v3가 제안되었습니다.",
+      "specificity_checks": [
+        "Version: Patch v3",
+        "Date: 2026-09-24",
+        "Component: Samsung S5K3T2 image sensor driver",
+        "Platform: Xiaomi POCO F3 (Qualcomm CAMSS)"
+      ],
+      "source_verification_notes": [
+        "Xiaomi POCO F3의 메인라인 디바이스 트리가 아직 없으므로 바인딩 사용자가 추가되지 않았음을 명시합니다."
+      ],
+      "public_article": {
+        "headline": "삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안",
+        "lead": "삼성의 20메가픽셀 CMOS 이미지 센서인 S5K3T2를 지원하기 위한 Linux 커널 드라이버 패치가 제안되어 향후 신규 디바이스 통합에 기여할 것으로 기대됩니다.",
+        "body_markdown": "이번에 제안된 패치 시리즈는 4개의 MIPI D PHY 레인을 지원하는 20메가픽셀 CMOS 이미지 센서인 Samsung S5K3T2의 드라이버와 디바이스 트리 바인딩을 추가합니다. 이 센서는 Xiaomi POCO F3 기기의 전면 카메라에 탑재되어 있는 모델입니다.\n\n해당 드라이버는 Qualcomm CAMSS 드라이버가 활성화된 환경에서 작성되고 테스트되었습니다. 다만 현재 메인라인 커널에는 Xiaomi POCO F3의 디바이스 트리가 포함되어 있지 않아 이번 패치 시리즈 자체에는 바인딩을 직접 사용하는 디바이스 트리 노드가 추가되지 않았습니다.\n\n### Android HAL 통합을 위한 고려사항\n\n이 변경 사항은 아직 메인라인 커널에 머지되지 않은 제안 단계. 새로운 센서 드라이버의 추가는 하위 드라이버 계층의 지원 범위를 넓히는 작업이며 실제 Android HAL에 직접적인 영향을 미치지는 않습니다. 개발팀은 향후 S5K3T2 센서를 사용하는 프로젝트가 있을 경우 이 드라이버의 V4L2 서브디바이스 컨트롤과 센서 모드 설정을 검토하여 통합 계획을 수립할 수 있습니다.",
+        "camera_hal_takeaway": "직접적인 HAL 변경은 없으나 S5K3T2 센서 도입 시 V4L2 서브디바이스를 통한 센서 모드 설정 및 MIPI D-PHY 레인 구성을 사전에 검토해야 합니다.",
+        "reader_checkpoints": [
+          "S5K3T2 센서 드라이버의 V4L2 서브디바이스 컨트롤 등록 여부를 확인합니다.",
+          "MIPI D-PHY 4레인 구성에서의 프레임 레이트 및 해상도 설정을 검증합니다."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+            "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "lore.kernel.org linux-media list (2026-09-24)",
+        "editorial_story": {
+          "not_to_overclaim": "이 패치는 아직 제안 단계이며 Xiaomi POCO F3의 메인라인 디바이스 트리가 없어 바인딩 사용자가 포함되지 않았습니다.",
+          "editor_take": "삼성 S5K3T2 센서 지원을 위한 하위 드라이버 기반이 마련되었으므로 관련 센서를 검토 중인 팀은 참고할 가치가 있습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 9월 24일 Samsung S5K3T2 이미지 센서에 대한 드라이버 및 바인딩을 추가하는 패치 v3가 lore.kernel.org linux-media 리스트에 제출되었습니다.",
+          "이 센서는 20메가픽셀 CMOS 이미지 센서로 4개의 MIPI D-PHY 레인을 지원합니다.",
+          "이 드라이버는 Xiaomi POCO F3의 전면 카메라를 대상으로 Qualcomm CAMSS 드라이버 환경에서 작성 및 테스트되었습니다.",
+          "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 단계입니다."
+        ],
+        "background_context": "드라이버, 센서, ISP, libcamera, V4L2 변경은 이미지 파이프라인 검증, 프레임 타이밍, 포맷 협상, 다운스트림 카메라 통합 작업에 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "새로운 이미지 센서 드라이버의 추가는 Linux 미디어 스택의 하드웨어 지원을 확장하며, 향후 Android 기기에서 해당 센서를 활용할 수 있는 드라이버 레벨의 기반을 제공합니다.",
+        "action_items": [
+          "S5K3T2 센서 드라이버 패치를 적용하여 V4L2 서브디바이스 등록 상태를 테스트한다.",
+          "Qualcomm CAMSS 환경에서 v4l2-compliance 테스트를 수행하여 드라이버 표준 준수 여부를 확인한다."
+        ],
+        "team_share_points": "Samsung S5K3T2 센서 지원을 위한 Linux 드라이버 패치 v3가 제안되었으므로 관련 센서 도입을 검토 중인 하위 스택 개발팀은 드라이버 구성을 참고하시기 바랍니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "Samsung S5K3T2 센서 드라이버 패치 v3가 2026년 9월 24일에 제안되어 신규 센서 지원을 위한 드라이버 검토가 가능합니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "S5K3T2 센서 드라이버의 V4L2 서브디바이스 컨트롤 및 MIPI 레인 구성을 검토합니다.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치는 아직 머지되지 않은 제안이며 Android Camera HAL의 동작을 직접 변경하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim_samsung_1",
+          "text": "2026년 9월 24일 Samsung S5K3T2 이미지 센서에 대한 드라이버 및 바인딩을 추가하는 패치 v3가 lore.kernel.org linux-media 리스트에 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:20128ac1ca49ba04:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_samsung_2",
+          "text": "이 센서는 20메가픽셀 CMOS 이미지 센서로 4개의 MIPI D-PHY 레인을 지원합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:20128ac1ca49ba04:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_samsung_3",
+          "text": "이 드라이버는 Xiaomi POCO F3의 전면 카메라를 대상으로 Qualcomm CAMSS 드라이버 환경에서 작성 및 테스트되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:20128ac1ca49ba04:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim_samsung_4",
+          "text": "이 패치 시리즈는 아직 메인라인 커널에 머지되지 않은 제안 단계입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:20128ac1ca49ba04:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "S5K3T2 센서 드라이버 패치를 적용하여 V4L2 서브디바이스 등록 상태를 테스트한다."
+      ],
+      "action_hints": [
+        "Qualcomm CAMSS 환경에서 v4l2-compliance 테스트를 수행하여 드라이버 표준 준수 여부를 확인한다."
+      ],
+      "action_items": [
+        "S5K3T2 센서 드라이버 패치를 적용하여 V4L2 서브디바이스 등록 상태를 테스트한다.",
+        "Qualcomm CAMSS 환경에서 v4l2-compliance 테스트를 수행하여 드라이버 표준 준수 여부를 확인한다."
+      ],
+      "is_ai_related": false,
+      "article_type": "camera_driver_image_pipeline",
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 162392
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        },
+        {
+          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
+          "sourceUrl": "https://www.anthropic.com/news",
+          "articleUrl": "https://www.anthropic.com/claude-opus-5-5",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Anthropic News",
+          "validationStatus": "ok",
+          "contentLength": 88082
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/latest-updates",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Latest Updates",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No image candidates available for this section.",
+      "sources": [
+        {
+          "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+          "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
+        }
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+      "source_candidate_hash": "20128ac1ca49ba04a02616e7e37eb579cff963b981190c104b348b4bb880e5cd",
+      "article_group_key": "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 4,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
     }
   ],
   "action_items": [
-    "안드로이드 스튜디오의 AI 에이전트 기능을 시범 도입하여 C++ Camera HAL 코드의 단위 테스트 케이스 생성을 자동화하고 생산성을 측정합니다.",
-    "르네사스 RZ/V2H EVK 플랫폼 환경에서 제안된 DTS 패치를 적용하여 Mali-C55 ISP 및 IVC 노드의 활성화 여부와 인터럽트 동작을 검증합니다.",
-    "삼성 S5K3T2 및 소니 IMX681 센서 드라이버 패치를 대상 커널에 적용하고 v4l2-compliance 및 libcamera 연동 테스트를 통해 표준 준수 여부를 확인합니다."
+    "RZ V2H EVK 플랫폼에서 패치 적용 후 dmesg 콘솔 로그를 통해 Mali C55 ISP 감지 메시지를 검증한다.",
+    "S5K3T2 센서 드라이버 패치를 적용하여 V4L2 서브디바이스 등록 상태를 테스트한다.",
+    "Sony IMX681 패치를 커널 7.3 rc4에 적용하고 빌드 호환성을 검증한다.",
+    "안드로이드 스튜디오에서 AI 에이전트 통합 설정을 확인하고 팀의 C++ 코드 스타일 가이드를 적용해 본다.",
+    "Claude Opus 5.5 API를 활용하여 기존 C++ 카메라 드라이버 코드의 리팩토링 및 주석 생성 작업을 테스트한다."
   ],
   "references": [
     {
@@ -1011,20 +1320,18 @@
     {
       "title": "Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor",
       "url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
+    },
+    {
+      "title": "[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
     }
   ],
   "explicitly_demoted_groups": [],
-  "hard_blocked_groups": [
-    {
-      "article_group_key": "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
-      "hard_block_reason": "deterministic demote dropped an unpublishable article",
-      "reason_code": "quality_hard_blocker"
-    }
-  ],
+  "hard_blocked_groups": [],
   "selected_group_count": 5,
-  "rendered_group_count": 4,
+  "rendered_group_count": 5,
   "explicitly_demoted_group_count": 0,
-  "hard_blocked_group_count": 1,
+  "hard_blocked_group_count": 0,
   "selected_representative_group_keys": [
     "android_native_tooling_workflow",
     "article:https://www.anthropic.com/claude-opus-5-5",
@@ -1033,15 +1340,14 @@
     "lore-series:20260926092828.11675-germanpapulindez@gmail.com"
   ],
   "rendered_group_keys": [
-    "android_native_tooling_workflow",
-    "article:https://www.anthropic.com/claude-opus-5-5",
     "lore-series:20260925-mali-c55-renesas-dts-v2-69f728a474a2@kernel.org",
-    "lore-series:20260926092828.11675-germanpapulindez@gmail.com"
+    "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me",
+    "lore-series:20260926092828.11675-germanpapulindez@gmail.com",
+    "android_native_tooling_workflow",
+    "article:https://www.anthropic.com/claude-opus-5-5"
   ],
   "explicitly_demoted_group_keys": [],
-  "hard_blocked_group_keys": [
-    "lore-series:20260924-upstream-s5k3t2-v3-a5c58dfcec29@proton.me"
-  ],
+  "hard_blocked_group_keys": [],
   "publish_mode": "DEEP",
   "reference_articles": [
     {
@@ -1085,7 +1391,7 @@
   "coverage_end_date": "2026-09-27",
   "coverage_mode": "iso_week",
   "generation_anchor_date": "2026-09-28",
-  "intro_letter": "이번 주 뉴스레터에서는 Android Studio가 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성을 확장하며 새로운 가능성을 열었습니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 AI 기술의 발전을 이끌었습니다. 또한, 르네사스 RZ/V2H EVK는 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화를 추진하고 있으며, 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 주목할 만합니다. 독자 여러분의 많은 관심 부탁드립니다.",
+  "intro_letter": "이번 주 뉴스레터에서는 Android Studio의 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성이 확장되는 소식을 전합니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 주목받고 있습니다. 또한, 르네사스 RZ/V2H EVK의 Mali-C55 ISP 및 IVC 하드웨어 활성화를 위한 리눅스 커널 패치 소식과 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 준비했습니다. 마지막으로 삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안 소식까지, 풍성한 기술 업데이트를 확인해 보세요.",
   "weekly_key": "2026-W40",
   "week_start_date": "2026-09-28",
   "week_end_date": "2026-10-04"
