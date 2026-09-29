@@ -115,9 +115,12 @@ const FOLLOWED_SOURCE_RESOLVERS = [
   {
     id: 'anthropic-news',
     requiresFetchClient: true,
+    // 목록 카드가 /news 밖(모델 발표 /claude-opus-5-5, 특집 /features/...)으로도 간다.
+    // 같은 origin이면 경로와 무관하게 카드를 받는다 — canonical·날짜 검증은 그대로 적용된다.
     resolve: ({ text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts }) =>
       resolveDatedArticleIndexItems({
-        html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts
+        html: text, source, fetchClient, now, lookbackDays, onDiagnostic, onArticleCapCounts,
+        offPrefixArticleLinks: true
       })
   }
 ];

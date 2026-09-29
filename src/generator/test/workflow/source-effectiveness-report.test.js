@@ -446,3 +446,138 @@ test('effectiveness recommendation vocabulary no longer contains KEEP_AND_FIX_PA
     'KEEP_AND_MONITOR'
   ]);
 });
+
+function collectionReport({ caps, counts, events = [], failures = [] } = {}) {
+  return source(buildReport({
+    collectedCandidates: {
+      candidates: [], failures,
+      collection_counts_by_source: counts ? { 'effective-camera': counts } : {},
+      dated_article_collection: { article_cap_counts_by_source: caps ? { 'effective-camera': caps } : {}, events }
+    },
+    shortlistReport: {}, reporterCandidates: {}, editorDraft: null, factCheckReport: null
+  }), 'effective-camera');
+}
+
+test('only a verified listing with no in-window cards establishes no recent signal', () => {
+  const noNews = collectionReport({
+    caps: { discovered_card_count: 4, unresolved_card_count: 0, in_window_card_count: 0 },
+    counts: { raw_collected_count: 0, filtered_out_count: 0, filter_counts: {} }
+  });
+  assert.equal(noNews.collection_status, 'NO_RECENT_SIGNAL');
+  assert.equal(noNews.recommendation, 'NO_RECENT_SIGNAL');
+  const emptyListing = collectionReport({ caps: { discovered_card_count: 0, unresolved_card_count: 0, in_window_card_count: 0 } });
+  assert.equal(emptyListing.collection_status, 'COLLECTION_UNKNOWN');
+  assert.equal(emptyListing.recommendation, 'REVIEW_SOURCE_OR_PARSER');
+});
+
+test('a source without listing card counts keeps the quiet-week recommendation but stays unverified', () => {
+  const result = collectionReport();
+  assert.equal(result.collection_status, 'COLLECTION_UNKNOWN');
+  assert.equal(result.recommendation, 'NO_RECENT_SIGNAL');
+  assert.match(result.reasons.join(' '), /completeness is not verified/);
+});
+
+test('filtered articles remain distinguishable from no news', () => {
+  const result = collectionReport({
+    caps: { discovered_card_count: 10, unresolved_card_count: 0, in_window_card_count: 2 },
+    counts: { raw_collected_count: 2, filtered_out_count: 2, filter_counts: { relevance: 2 } }
+  });
+  assert.equal(result.collection_status, 'COLLECTION_COMPLETE');
+  assert.equal(result.discovered_count, 10);
+  assert.equal(result.raw_collected_count, 2);
+  assert.equal(result.filtered_out_count, 2);
+  assert.equal(result.candidate_count, 0);
+  assert.equal(result.selected_count, 0);
+  assert.notEqual(result.recommendation, 'NO_RECENT_SIGNAL');
+});
+
+test('collected articles without listing counts are not reported as a quiet week after filtering', () => {
+  for (const reason of ['relevance', 'duplicate', 'deferred_coverage']) {
+    const counts = { raw_collected_count: 3, filtered_out_count: 3, candidate_count: 0, filter_counts: { [reason]: 3 } };
+    const result = collectionReport({ counts });
+    assert.equal(result.discovered_count, null);
+    assert.equal(result.collection_status, 'COLLECTION_UNKNOWN');
+    assert.equal(result.raw_collected_count, 3);
+    assert.equal(result.filtered_out_count, 3);
+    assert.equal(result.collected_count, 0);
+    assert.equal(result.recommendation, 'KEEP_AND_MONITOR');
+    assert.match(result.reasons.join(' '), /Articles were collected.*filter counts/);
+
+    const failed = collectionReport({ counts, failures: [{ source_id: 'effective-camera', message: 'timeout' }] });
+    assert.equal(failed.collection_status, 'COLLECTION_INCOMPLETE');
+    assert.equal(failed.recommendation, 'REVIEW_SOURCE_OR_PARSER');
+  }
+});
+
+test('collected items removed only as outside the window are a quiet week', () => {
+  const quiet = collectionReport({
+    counts: { raw_collected_count: 10, filtered_out_count: 10, filter_counts: { outside_window: 10, relevance: 0 } }
+  });
+  assert.equal(quiet.collection_status, 'COLLECTION_UNKNOWN');
+  assert.equal(quiet.recommendation, 'NO_RECENT_SIGNAL');
+  assert.match(quiet.reasons.join(' '), /outside the collection window/);
+
+  const mixed = collectionReport({
+    counts: { raw_collected_count: 10, filtered_out_count: 10, filter_counts: { outside_window: 9, relevance: 1 } }
+  });
+  assert.equal(mixed.recommendation, 'KEEP_AND_MONITOR');
+  assert.match(mixed.reasons.join(' '), /Articles were collected.*filter counts/);
+
+  const failed = collectionReport({
+    counts: { raw_collected_count: 10, filtered_out_count: 10, filter_counts: { outside_window: 10 } },
+    failures: [{ source_id: 'effective-camera', message: 'timeout' }]
+  });
+  assert.equal(failed.recommendation, 'REVIEW_SOURCE_OR_PARSER');
+});
+
+test('partial parsing, article caps and fetch failures never claim no news', () => {
+  for (const input of [
+    { caps: { discovered_card_count: 2, unresolved_card_count: 1, in_window_card_count: 0 } },
+    { events: [{ source_id: 'effective-camera', kind: 'article_fetch_failed' }] },
+    { events: [{ source_id: 'effective-camera', kind: 'index_collection_incomplete' }] },
+    { failures: [{ source_id: 'effective-camera', message: 'timeout' }] }
+  ]) {
+    const result = collectionReport(input);
+    assert.equal(result.collection_status, 'COLLECTION_INCOMPLETE');
+    assert.equal(result.recommendation, 'REVIEW_SOURCE_OR_PARSER');
+    assert.ok(result.collection_reasons.length > 0);
+  }
+});
+
+test('caps are reported separately from collection losses and never claim no news', () => {
+  for (const input of [
+    { caps: { discovered_card_count: 2, unresolved_card_count: 0, in_window_card_count: 2, skipped_article_cap_count: 1 } },
+    { counts: { raw_collected_count: 2, filtered_out_count: 2, filter_counts: { global_cap: 2 } } }
+  ]) {
+    const result = collectionReport(input);
+    assert.equal(result.collection_status, 'COLLECTION_CAPPED');
+    assert.notEqual(result.recommendation, 'NO_RECENT_SIGNAL');
+    assert.notEqual(result.recommendation, 'REVIEW_SOURCE_OR_PARSER');
+  }
+});
+
+test('routine caps and per-article fail-closed do not override a source that kept candidates', () => {
+  const baseline = source(buildReport(), 'effective-camera');
+  assert.ok(baseline.collected_count > 0);
+  const result = source(buildReport({
+    collectedCandidates: {
+      ...fixture.collectedCandidates,
+      dated_article_collection: {
+        article_cap_counts_by_source: { 'effective-camera': {
+          discovered_card_count: 25, unresolved_card_count: 0, in_window_card_count: 21, skipped_article_cap_count: 13
+        } },
+        events: [{ source_id: 'effective-camera', kind: 'fail_closed' }]
+      }
+    }
+  }), 'effective-camera');
+  assert.equal(result.collection_status, 'COLLECTION_INCOMPLETE');
+  assert.deepEqual(result.collection_reasons, ['article_cap', 'fail_closed']);
+  assert.equal(result.recommendation, baseline.recommendation);
+});
+
+test('collection stage markdown exposes missing evidence rather than a numeric zero', () => {
+  const markdown = renderSourceEffectivenessMarkdown(buildReport());
+  assert.match(markdown, /## Collection stages/);
+  assert.match(markdown, /Raw collected.*Filtered out.*Candidates.*Selected.*Rendered/);
+  assert.match(markdown, /COLLECTION_UNKNOWN \| — \| — \| —/);
+});

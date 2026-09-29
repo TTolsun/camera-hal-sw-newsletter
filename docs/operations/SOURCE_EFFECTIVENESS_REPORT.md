@@ -47,11 +47,36 @@ node src/generator/publish/build-source-effectiveness-report.js --date YYYY-MM-D
 
 모든 비율(rate)은 분모(denominator)가 `0`이면 `0`으로 계산합니다. Markdown table은 정렬 순서가 고정(deterministic sort)이라, 같은 입력이면 항상 같은 출력이 나옵니다.
 
+## Collection stages
+
+schema version 3부터 source마다 수집 단계 수와 `collection_status`를 함께 기록합니다. `collected_count`는 호환성을 위해 필터·상한 적용 후 유지된 후보 수라는 의미를 유지합니다.
+
+- `discovered_count`: 날짜 결속 목록(dated article index)에서 발견한 카드 수입니다. 목록 카드 계수가 없는 소스는 `null`(표에서는 `—`)입니다.
+- `in_window_count`: 발견 카드 중 수집 기간 안에 있는 카드 수입니다.
+- `raw_collected_count`: 중복 제거·필터 전 수집 후보 수입니다.
+- `filtered_out_count`, `filter_counts`: `duplicate`, `deferred_coverage`, `outside_window`, `relevance`, `series_collapsed`, `source_cap`, `global_cap` 단계별 제외 수입니다.
+- `collection_reasons`: 수집 손실 사유(수집 사건 kind, `source_fetch_failed`, `unresolved_article_cards`)와 상한 사유(`article_cap`, `source_cap`, `global_cap`)입니다.
+
+`collection_status`는 위에서부터 처음 맞는 값 하나입니다.
+
+1. `COLLECTION_INCOMPLETE`: 수집 손실 사유가 하나 이상 있습니다.
+2. `NO_RECENT_SIGNAL`: 목록 카드가 1건 이상 모두 해석됐고, 수집 기간 안 카드가 0건입니다.
+3. `COLLECTION_CAPPED`: 손실은 없지만 상한 때문에 일부 기사·후보가 빠졌습니다. 상한은 정상 운영에서도 매 실행 걸리므로 손실로 세지 않습니다.
+4. `COLLECTION_COMPLETE`: 목록이 모두 해석됐고 필터 전 수집 수가 기록됐습니다.
+5. `COLLECTION_UNKNOWN`: 완결성을 판단할 근거가 없습니다.
+
 ## Recommendation
 
 `recommendation`은 아래 분기를 위에서부터 순서대로 평가해 처음 매칭되는 값 하나로 정합니다. 실제로 나올 수 있는 값은 7개입니다.
 
-1. `NO_RECENT_SIGNAL`: 해당 날짜 artifact에서 수집된 후보가 없습니다(`collected_count`가 `0`).
+1. 유지 후보가 없는 경우(`collected_count`가 `0`)는 아래 `collection_status`로 먼저 갈립니다. 후보가 1건 이상이면 `collection_status`는 권고를 바꾸지 않고 2번부터 평가합니다.
+   - `COLLECTION_INCOMPLETE` → `REVIEW_SOURCE_OR_PARSER`: 수집 손실이 기록돼 0건을 새 소식 없음으로 볼 수 없습니다.
+   - 위 실패 조건에 해당하지 않고 `raw_collected_count > 0`이며 제외 사유가 `outside_window` 하나뿐 → `NO_RECENT_SIGNAL`: 피드·목록은 정상으로 읽혔고 수집 기간 안 항목이 없었습니다. RSS처럼 새 글이 없어도 최근 항목을 늘 돌려주는 소스의 조용한 주입니다.
+   - 그 밖에 `raw_collected_count > 0` → `KEEP_AND_MONITOR`: 실제로 수집한 후보가 모두 필터·상한에서 제외됐습니다. 카드 계수 유무와 무관하게 무소식 판정보다 먼저 적용하며, `collection_status`는 그대로 유지합니다.
+   - `NO_RECENT_SIGNAL` → `NO_RECENT_SIGNAL`: 정상 해석된 목록에 수집 기간 안 기사가 없음을 확인했습니다.
+   - `COLLECTION_UNKNOWN`이고 목록 카드 계수(`discovered_count`)가 있는 소스 → `REVIEW_SOURCE_OR_PARSER`.
+   - `COLLECTION_UNKNOWN`이고 목록 카드 계수가 없는 소스(RSS 등) → `NO_RECENT_SIGNAL`: 실패 기록이 없는 조용한 주로 보되, 완결성은 검증되지 않았다고 reason에 남깁니다.
+   - `COLLECTION_COMPLETE`/`COLLECTION_CAPPED` → `KEEP_AND_MONITOR`: 기사는 수집됐지만 필터·상한에서 모두 빠졌습니다. `filter_counts`를 확인합니다.
 2. `OFFICIAL_SOURCE_NEEDS_PARSER_REPAIR`: official 또는 high priority source가 camera 관련 raw signal은 냈지만(`camera_relevant_raw_count > 0`), eligible 후보가 하나도 없고, rejection reason이 parser/parsing/extraction의 실패 신호(fail, error, did not, fallback)를 담고 있거나 `source_extraction.used_fallback=true`인 경우(`parser_repair_reason_count > 0`)입니다. 날짜, 수집 기간 창, 일반 source gap 사유는 파서 고장 증거로 세지 않습니다.
 3. `KEEP`: rendered main article 기여가 있고(`rendered_main_count > 0`), effectiveness score가 `60` 이상, source gap 비율이 `0.3` 이하, noise 비율이 `0.5` 이하인 source입니다.
 4. `REVIEW_SOURCE_OR_PARSER`(official 분기): official 또는 high priority source가 eligible 후보를 하나도 내지 못했고 source gap 비율이 `0.25` 이상인 상태입니다. source gap만으로는 파서 고장을 단정할 수 없으므로, source와 exclusion을 함께 점검하라는 권고입니다. eligible 후보가 하나라도 있으면 파서가 항목을 뽑아 낸 것이므로 이 분기를 건너뛰고 아래 분기를 그대로 따라갑니다.

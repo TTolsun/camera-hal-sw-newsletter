@@ -8,6 +8,56 @@ const {
 } = require('../../../collect/dated-article-card-parsing');
 const { readTextFixture } = require('../../helpers/fixture-loader');
 
+const newsOptions = { pathPrefix: '/news', articleOrigin: 'https://www.anthropic.com' };
+
+test('discovers dated news cards independently of destination path', () => {
+  const html = '<nav><a href="/pricing">Sep 22, 2026 Pricing</a></nav>'
+    + '<a href="/claude-opus-5-5"><h2>Introducing Claude Opus 5.5</h2><time>Sep 22, 2026</time></a>'
+    + "<a href='https://www.anthropic.com/features/ebola-response'><time>Sep 22, 2026</time>The Situation Report</a>"
+    + '<a href="/news/ordinary"><time>Sep 21, 2026</time>Ordinary news</a>'
+    + '<a href="/careers">Careers</a>';
+  assert.deepEqual(parseDatedArticleCards(html, newsOptions).map(card => card.path), [
+    '/claude-opus-5-5', '/features/ebola-response', '/news/ordinary'
+  ]);
+  assert.equal(datedArticleCardDiagnostics(html, newsOptions).discovered_card_count, 3);
+});
+
+test('counts unsupported and malformed news cards even alongside a healthy card', () => {
+  const html = '<a href="/news/healthy"><time>Sep 22, 2026</time>Healthy</a>'
+    + '<a href="https://elsewhere.example/story"><time>Sep 22, 2026</time>External</a>'
+    + '<a href="javascript:alert(1)"><time>Sep 22, 2026</time>Unsafe</a>'
+    + '<a href="/broken"><time>Sep 41, 2026</time>Broken date</a>'
+    + '<a><time>Sep 22, 2026</time>Missing href</a>';
+  const diagnostics = datedArticleCardDiagnostics(html, newsOptions);
+  assert.equal(diagnostics.discovered_card_count, 5);
+  assert.equal(diagnostics.resolved_card_count, 1);
+  assert.equal(diagnostics.unresolved_slugs.length, 4);
+});
+
+test('deduplicates absolute/relative card links and rejects conflicting dates', () => {
+  const html = '<a href="/launch"><time>Sep 22, 2026</time>Launch</a>'
+    + '<a href="https://www.anthropic.com/launch"><time>Sep 21, 2026</time>Launch</a>';
+  assert.deepEqual(parseDatedArticleCards(html, newsOptions), []);
+  assert.equal(datedArticleCardDiagnostics(html, newsOptions).discovered_card_count, 1);
+  assert.match(datedArticleCardCollectionFailure(html, newsOptions), /collection failure/);
+});
+
+test('counts recognizable article cards before interpreting dates', () => {
+  const html = '<a href="/old"><time>Aug 22, 2026</time>Old article</a>'
+    + '<article role="listitem"><a href="/new-model">New model</a><span>broken-date</span></article>'
+    + '<a href="/another-model" class="FeaturedGrid-module-scss-module__newhash__sideLink">No date</a>';
+  const diagnostics = datedArticleCardDiagnostics(html, newsOptions);
+  assert.equal(diagnostics.discovered_card_count, 3);
+  assert.equal(diagnostics.resolved_card_count, 1);
+  assert.equal(diagnostics.unresolved_slugs.length, 2);
+});
+
+test('the existing news fixture includes an off-prefix feature card', () => {
+  const cards = parseDatedArticleCards(readTextFixture('source-html/anthropic-news-index-cards.html'), newsOptions);
+  assert.equal(cards.length, 5);
+  assert.ok(cards.some(card => card.path === '/features/making-of-claude-code'));
+});
+
 test('resolves every Claude Blog list card to a slug and a date', () => {
   const html = readTextFixture('source-html/claude-blog-index-cards.html');
   const diagnostics = datedArticleCardDiagnostics(html, { pathPrefix: '/blog' });

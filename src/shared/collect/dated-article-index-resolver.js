@@ -153,6 +153,7 @@ const DATED_ARTICLE_DIAGNOSTIC_KINDS = [
   'recent_window_budget_exhausted',
   'fail_closed',
   'index_collection_failed',
+  'index_collection_incomplete',
   'collection_window_truncated',
   'aosp_site_update_date_lookup_failed',
   'aosp_site_update_date_lookup_skipped',
@@ -394,7 +395,8 @@ async function resolveDatedArticleIndexItems({
   now,
   lookbackDays,
   onDiagnostic,
-  onArticleCapCounts
+  onArticleCapCounts,
+  offPrefixArticleLinks = false
 } = {}) {
   const emit = typeof onDiagnostic === 'function' ? onDiagnostic : noop;
 
@@ -444,9 +446,12 @@ async function resolveDatedArticleIndexItems({
   // 이 resolver의 반환값은 두 경우 모두 빈 배열이라 구분이 안 된다. console.warn만으로는
   // 이 사건이 artifact에 남지 않아 다섯 개 덜 중요한 사건은 세면서 가장 시끄러운 실패만
   // 조용히 사라진다 — 그래서 다른 다섯 kind와 똑같이 onDiagnostic으로 낸다.
-  const collectionFailure = datedArticleCardCollectionFailure(html, { pathPrefix });
+  // 목록 밖 경로(/claude-opus-5-5, /features/...)로 가는 카드를 받을지는 레지스트리 항목이
+  // 정한다(offPrefixArticleLinks). 소스 id를 여기 적으면 등록과 동작이 두 곳으로 갈라진다.
+  const cardOptions = { pathPrefix, ...(offPrefixArticleLinks === true ? { articleOrigin: origin } : {}) };
+  const cardDiagnostics = datedArticleCardDiagnostics(html, cardOptions);
+  const collectionFailure = datedArticleCardCollectionFailure(html, cardOptions);
   if (collectionFailure) {
-    const cardDiagnostics = datedArticleCardDiagnostics(html, { pathPrefix });
     emit({
       kind: 'index_collection_failed',
       url: parentUrl,
@@ -461,7 +466,15 @@ async function resolveDatedArticleIndexItems({
     });
   }
 
-  const cards = parseDatedArticleCards(html, { pathPrefix });
+  if (!collectionFailure && cardDiagnostics.unresolved_slugs.length > 0) {
+    emit({
+      kind: 'index_collection_incomplete', source_id: source.id, url: parentUrl,
+      unresolved_count: cardDiagnostics.unresolved_slugs.length,
+      detail: 'Some discovered article cards have unsupported links or ambiguous dates'
+    });
+  }
+
+  const cards = parseDatedArticleCards(html, cardOptions);
 
   // fetch 우선순위(2026-08-23 fix round 1로 6번 구현):
   // 1. canonical dedupe — Task 1의 parseDatedArticleCards가 이미 slug당 카드 1개만 돌려주므로
@@ -498,6 +511,9 @@ async function resolveDatedArticleIndexItems({
   const skippedArticleCapCount = inWindowCardCount - scheduledArticleCount;
   if (typeof onArticleCapCounts === 'function') {
     onArticleCapCounts({
+      discovered_card_count: cardDiagnostics.discovered_card_count ?? cardDiagnostics.anchor_slug_count,
+      resolved_card_count: cardDiagnostics.resolved_card_count,
+      unresolved_card_count: cardDiagnostics.unresolved_slugs.length,
       in_window_card_count: inWindowCardCount,
       scheduled_article_count: scheduledArticleCount,
       skipped_article_cap_count: skippedArticleCapCount

@@ -34,7 +34,7 @@ const {
   sourceQualityFieldDrift
 } = require('../../shared/collect/source-quality-classifier');
 
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 const MAX_SAMPLE_URLS = 5;
 const MAX_REASON_ROWS = 5;
 const RECOMMENDATION_ORDER = [
@@ -503,13 +503,42 @@ function parserRepairReason(reason = '') {
   return parserFailureReason(reason);
 }
 
+function onlyOutsideWindowLosses(filterCounts = {}) {
+  const lossKeys = Object.entries(filterCounts).filter(([, count]) => count > 0).map(([key]) => key);
+  return lossKeys.length === 1 && lossKeys[0] === 'outside_window';
+}
+
 function recommendationFor(source, metrics) {
   const reasons = [];
   let recommendation = 'KEEP_AND_MONITOR';
 
-  if (metrics.collected_count === 0) {
+  // 수집 상태는 유지 후보가 0건일 때만 권고를 바꾼다. 상한·기사 단위 fail-closed는 정상
+  // 운영에서도 매주 생기므로, 후보가 남은 소스까지 덮어쓰면 권고가 소음으로 묻힌다.
+  if (metrics.collected_count === 0 && metrics.collection_status === 'COLLECTION_INCOMPLETE') {
+    recommendation = 'REVIEW_SOURCE_OR_PARSER';
+    reasons.push('Collection is incomplete; inspect collection reasons before interpreting candidate counts.');
+  } else if (metrics.collected_count === 0 && metrics.raw_collected_count > 0 && onlyOutsideWindowLosses(metrics.filter_counts)) {
+    // RSS는 새 글이 없어도 최근 N건을 늘 돌려준다. 수집한 항목이 전부 기간 밖에서만 빠졌다면
+    // 피드는 정상으로 읽혔고 기간 안 글이 없었다는 뜻이다 — 필터 점검이 아니라 조용한 주다.
     recommendation = 'NO_RECENT_SIGNAL';
-    reasons.push('No recent candidates were collected for this source.');
+    reasons.push('Collected items were all outside the collection window.');
+  } else if (metrics.collected_count === 0 && metrics.raw_collected_count > 0) {
+    // RSS 등 카드 계수가 없는 소스도 실제 수집 근거가 있으면 조용한 주가 아니다.
+    // 완결성 상태는 그대로 두고, 실패 판정 다음·무소식 판정 전에 필터 탈락을 구분한다.
+    reasons.push('Articles were collected but none remain in the candidate pool; inspect filter counts.');
+  } else if (metrics.collected_count === 0 && metrics.collection_status === 'NO_RECENT_SIGNAL') {
+    recommendation = 'NO_RECENT_SIGNAL';
+    reasons.push('The parsed listing contains no articles in the collection window.');
+  } else if (metrics.collected_count === 0 && metrics.collection_status === 'COLLECTION_UNKNOWN' && metrics.discovered_count !== null) {
+    recommendation = 'REVIEW_SOURCE_OR_PARSER';
+    reasons.push('Collection completeness is unknown; zero retained candidates does not establish no recent news.');
+  } else if (metrics.collected_count === 0 && metrics.collection_status === 'COLLECTION_UNKNOWN') {
+    // 목록 카드 계수가 없는 소스(RSS 등)는 완결성을 증명할 수단이 없다. 실패 사건이 없으면
+    // 조용한 주로 본다 — 여기서 점검 권고를 내면 0건이 정상인 소스가 매주 울린다.
+    recommendation = 'NO_RECENT_SIGNAL';
+    reasons.push('No candidates and no collection failure were recorded; completeness is not verified for this source type.');
+  } else if (metrics.collected_count === 0) {
+    reasons.push('Articles were collected but none remain in the candidate pool; inspect filter counts.');
   } else if (
     officialLike(source) &&
     metrics.eligible_count === 0 &&
@@ -573,6 +602,45 @@ function recommendationFor(source, metrics) {
   return {
     recommendation,
     reasons: uniqueSorted(reasons)
+  };
+}
+
+function collectionMetrics(source, payload, candidateCount) {
+  const diagnostics = payload.dated_article_collection || {};
+  const caps = diagnostics.article_cap_counts_by_source?.[source.source_id] || {};
+  const counts = payload.collection_counts_by_source?.[source.source_id];
+  const events = ensureArray(diagnostics.events).filter(event => event.source_id === source.source_id);
+  const failures = ensureArray(payload.failures).filter(failure => failure.source_id === source.source_id || failure.source === source.source_name);
+  // 상한은 정상 운영에서도 매 실행 걸린다(claude-blog는 창 안 21건 중 8건만 받는다).
+  // 손실과 섞으면 모든 상한 소스가 '불완전'으로 읽히므로 따로 세고 상태도 따로 둔다.
+  const lossReasons = uniqueSorted([
+    ...events.map(event => text(event.kind)).filter(Boolean),
+    ...failures.map(() => 'source_fetch_failed'),
+    ...(caps.unresolved_card_count > 0 ? ['unresolved_article_cards'] : [])
+  ]);
+  const capReasons = uniqueSorted([
+    ...(caps.skipped_article_cap_count > 0 ? ['article_cap'] : []),
+    ...Object.entries(counts?.filter_counts || {}).filter(([key, count]) => ['source_cap', 'global_cap'].includes(key) && count > 0).map(([key]) => key)
+  ]);
+  const reasons = uniqueSorted([...lossReasons, ...capReasons]);
+  const discovered = Number.isInteger(caps.discovered_card_count) ? caps.discovered_card_count : null;
+  // A successful HTTP response or an empty retained pool is not proof of a complete listing.
+  const listVerified = discovered > 0 && caps.unresolved_card_count === 0;
+  const raw = Number.isInteger(counts?.raw_collected_count) ? counts.raw_collected_count : null;
+  const status = lossReasons.length > 0 ? 'COLLECTION_INCOMPLETE'
+    : listVerified && caps.in_window_card_count === 0 ? 'NO_RECENT_SIGNAL'
+    : capReasons.length > 0 ? 'COLLECTION_CAPPED'
+    : listVerified && raw !== null ? 'COLLECTION_COMPLETE'
+    : 'COLLECTION_UNKNOWN';
+  return {
+    discovered_count: discovered,
+    in_window_count: Number.isInteger(caps.in_window_card_count) ? caps.in_window_card_count : null,
+    raw_collected_count: raw,
+    filtered_out_count: counts?.filtered_out_count ?? null,
+    filter_counts: counts?.filter_counts || {},
+    candidate_count: candidateCount,
+    collection_status: status,
+    collection_reasons: reasons
   };
 }
 
@@ -724,6 +792,7 @@ function finalizeState(state) {
     100
   ), 2);
 
+  Object.assign(metrics, collectionMetrics(source, state.collectionPayload || {}, metrics.collected_count));
   const recommendation = recommendationFor(source, metrics);
 
   return {
@@ -780,7 +849,7 @@ function buildSourceEffectivenessReport(options = {}) {
   const candidatesByKey = new Map();
 
   function ensureState(source) {
-    if (!states.has(source.source_id)) states.set(source.source_id, sourceState(source));
+    if (!states.has(source.source_id)) states.set(source.source_id, { ...sourceState(source), collectionPayload: options.collectedCandidates || {} });
     return states.get(source.source_id);
   }
 
@@ -957,6 +1026,18 @@ function renderSourceEffectivenessMarkdown(report) {
     `- Unknown source quality: ${report.summary.unknown_source_quality_count || 0}`,
     `- Source quality field drift: ${report.summary.source_quality_field_drift_count || 0}`,
     `- Legacy source quality warnings: ${report.summary.legacy_source_quality_warning_count || 0}`,
+    '',
+    '## Collection stages',
+    '',
+    '발견은 목록 전체 카드 수, 수집은 필터 전 후보 수입니다. 기존 Collected는 유지된 후보 수이며, 알 수 없는 값은 —로 표시합니다. 최종 선정은 Selected, 실제 본문 반영은 Rendered를 확인하세요.',
+    '',
+    markdownTable(
+      ['Source', 'Status', 'Discovered', 'In window', 'Raw collected', 'Filtered out', 'Candidates', 'Selected', 'Rendered', 'Reasons'],
+      sources.map(source => [source.source_id, source.collection_status,
+        source.discovered_count ?? '—', source.in_window_count ?? '—', source.raw_collected_count ?? '—',
+        source.filtered_out_count ?? '—', source.candidate_count, source.selected_count, source.rendered_main_count,
+        [...source.collection_reasons, ...Object.entries(source.filter_counts).filter(([, count]) => count > 0).map(([reason, count]) => `${reason}=${count}`)].join(', ')])
+    ),
     '',
     '## Source Quality Summary',
     '',

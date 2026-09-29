@@ -15,6 +15,41 @@ const ORIGIN = 'https://claude.com';
 const PATH_PREFIX = '/blog';
 const INDEX_URL = `${ORIGIN}${PATH_PREFIX}`;
 
+test('fetches off-prefix news articles while retaining canonical/date checks and partial diagnostics', async () => {
+  const origin = 'https://www.anthropic.com';
+  const paths = ['/claude-opus-5-5', '/features/ebola-response'];
+  const html = paths.map(path => `<a href="${path}"><time>Sep 22, 2026</time>Article</a>`).join('')
+    + '<a href="https://outside.example/post"><time>Sep 22, 2026</time>External</a>';
+  const fetched = [];
+  const events = [];
+  let counts;
+  const result = await resolveDatedArticleIndexItems({
+    html, source: { id: 'anthropic-news', sourceUrl: `${origin}/news` },
+    now: new Date('2026-09-28T00:00:00Z'), lookbackDays: 35, offPrefixArticleLinks: true,
+    onDiagnostic: event => events.push(event), onArticleCapCounts: value => { counts = value; },
+    fetchClient: {
+      async fetchBounded(url) {
+        fetched.push(url);
+        return { ok: true, body: minimalArticleHtml({ canonical: url, headerDateText: 'Sep 22, 2026' }) };
+      }
+    }
+  });
+  assert.deepEqual(fetched, paths.map(path => origin + path));
+  assert.deepEqual(result.map(item => item.url), fetched);
+  assert.equal(counts.discovered_card_count, 3);
+  assert.equal(counts.unresolved_card_count, 1);
+  assert.equal(events[0].kind, 'index_collection_incomplete');
+  const rejected = await resolveDatedArticleIndexItems({
+    html: '<a href="/claude-opus-5-5"><time>Sep 22, 2026</time>Article</a>',
+    source: { id: 'anthropic-news', sourceUrl: `${origin}/news` },
+    now: new Date('2026-09-28T00:00:00Z'), offPrefixArticleLinks: true,
+    fetchClient: { async fetchBounded() { return { ok: true, body: minimalArticleHtml({
+      canonical: `${origin}/another-page`, headerDateText: 'Sep 22, 2026'
+    }) }; } }
+  });
+  assert.deepEqual(rejected, []);
+});
+
 // normalizeCandidate는 registry entry 수준의 source 필드를 읽는다(aosp-release-camera-changes.test.js와
 // 같은 패턴) — candidate.source는 이 객체를 그대로 들고 있다가 normalizeCandidate가 source.name 등을
 // 평면 문자열 필드로 풀어낸다.

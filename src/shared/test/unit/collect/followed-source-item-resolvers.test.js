@@ -454,12 +454,47 @@ for (const registryCase of [
     assert.equal(seenCounts.length, 1,
       '레지스트리 항목이 onArticleCapCounts를 풀어 넘기지 않으면 콜백이 아예 안 불려 이 단언이 깨진다');
     assert.deepEqual(seenCounts[0], {
+      discovered_card_count: 10,
+      resolved_card_count: 10,
+      unresolved_card_count: 0,
       in_window_card_count: 10,
       scheduled_article_count: 8,
       skipped_article_cap_count: 2
     });
   });
 }
+
+// 목록 밖 경로 카드 허용은 레지스트리 항목이 정한다. 소스 id 분기가 resolver 안에 되살아나거나
+// 항목이 플래그 전달을 빠뜨리면, anthropic-news는 /news 밖 카드를 다시 놓치고 claude-blog는
+// 의도치 않게 넓은 탐색으로 바뀐다 — 그래서 표를 통과시켜 두 항목을 대조한다.
+test('only the anthropic-news registry entry follows off-prefix article cards', async () => {
+  const now = new Date('2026-09-28T00:00:00Z');
+  const fetchedBySource = {};
+  for (const registryCase of [
+    { id: 'anthropic-news', origin: 'https://www.anthropic.com', pathPrefix: '/news' },
+    { id: 'claude-blog', origin: 'https://claude.com', pathPrefix: '/blog' }
+  ]) {
+    const fetched = [];
+    const fetchClient = createBoundedFetchClient({
+      fetchImpl: async url => { fetched.push(String(url)); return new Response('<h1>Placeholder</h1>', { status: 200 }); }
+    });
+    const sourceUrl = `${registryCase.origin}${registryCase.pathPrefix}`;
+    await resolveFollowedSourceItems(
+      { id: registryCase.id, name: registryCase.id, url: sourceUrl, sourceUrl },
+      {
+        indexItems: [],
+        text: `<a href="/model-launch"><time>Sep 26, 2026</time>Launch</a>`
+          + `<a href="${registryCase.pathPrefix}/ordinary"><time>Sep 25, 2026</time>Ordinary</a>`,
+        fetchClient, now, lookbackDays: 21
+      }
+    );
+    fetchedBySource[registryCase.id] = fetched;
+  }
+  assert.deepEqual(fetchedBySource['anthropic-news'], [
+    'https://www.anthropic.com/model-launch', 'https://www.anthropic.com/news/ordinary'
+  ]);
+  assert.deepEqual(fetchedBySource['claude-blog'], ['https://claude.com/blog/ordinary']);
+});
 
 // 목록 origin·경로의 정본은 registry(news-sources.json)의 sourceUrl 하나다. 이 표가 그 값을
 // 상수로 또 들고 있으면(항목의 config든 source 재작성이든) registry의 URL만 바꿨을 때 인덱스는
