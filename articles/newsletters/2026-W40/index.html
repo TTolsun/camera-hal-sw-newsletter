@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko" data-alternate-href="/camera-hal-sw-newsletter/en/newsletters/2026-W40/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W39 Camera SW Newsletter (발행 W40)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W40/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W40/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W40/index.html" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta name="description" content="이번 주 뉴스레터에서는 Android Studio가 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성을 확장하며 새로운 가능성을 열었습니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 AI 기술의 발전을 이끌었습니다. 또한, 르네사스 RZ/V2H EVK는 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화를 추진하고 있으며, 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 주목할 만합니다. 독자 여러분의 많은 관심 부탁드립니다." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W40/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W39 Camera SW Newsletter (발행 W40)" />
+  <meta property="og:description" content="이번 주 뉴스레터에서는 Android Studio가 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성을 확장하며 새로운 가능성을 열었습니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 AI 기술의 발전을 이끌었습니다. 또한, 르네사스 RZ/V2H EVK는 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화를 추진하고 있으며, 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 주목할 만합니다. 독자 여러분의 많은 관심 부탁드립니다." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W40/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W39 Camera SW Newsletter (발행 W40)" />
+  <meta name="twitter:description" content="이번 주 뉴스레터에서는 Android Studio가 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성을 확장하며 새로운 가능성을 열었습니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 AI 기술의 발전을 이끌었습니다. 또한, 르네사스 RZ/V2H EVK는 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화를 추진하고 있으며, 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 주목할 만합니다. 독자 여러분의 많은 관심 부탁드립니다." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <script src="../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../index.html">홈</a>
+        <a href="../../archive.html">아카이브</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← 뉴스룸</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.09.21 – 09.27</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W39</span></h1>
+        <p class="issue-publish-badge">발행 W40</p>
+        <p class="subtitle">이번 주 뉴스레터에서는 Android Studio가 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성을 확장하며 새로운 가능성을 열었습니다. 앤트로픽은 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5를 공개하며 AI 기술의 발전을 이끌었습니다. 또한, 르네사스 RZ/V2H EVK는 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화를 추진하고 있으며, 소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고도 주목할 만합니다. 독자 여러분의 많은 관심 부탁드립니다.</p>
+        <div class="tag-row issue-tags"><span class="tag">AI</span><span class="tag">Android</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Camera HAL</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">이번 호 기사</h2>
+          <ul><li>Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장</li><li>앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개</li><li>르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진</li><li>소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-android-studio-ai" aria-labelledby="article-android-studio-ai-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-android-studio-ai-title" class="article-title">Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장</h2>
+        <p class="article-source-subtitle">Android Developers Blog (2026-09-24)</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../assets/images/fallback/ai.svg" alt="Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장 image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">Android Studio가 개발자가 선택한 임의의 AI 에이전트를 통합할 수 있는 개방형 환경을 제공하며 네이티브 개발 워크플로우의 변화를 예고했습니다.</p>
+        <h3 class="article-subheading">AI 에이전트 연동을 통한 개발 환경의 개방성 확보</h3>
+        <p>구글은 최근 안드로이드 스튜디오에서 개발자가 원하는 AI 에이전트를 자유롭게 선택하고 통합하여 사용할 수 있는 새로운 기능을 발표했습니다. 이는 개발팀이 자체적으로 구축한 맞춤형 엔터프라이즈 하네스나 특화된 AI 코딩 에이전트, 그리고 자율 도구들을 안드로이드 스튜디오 내에 유연하게 결합할 수 있도록 돕습니다.</p>
+        <p>카메라 및 드라이버 개발 분야에서 이 기능은 복잡한 네이티브 코드 베이스의 탐색과 디버깅 속도를 높이는 도구로 활용될 수 있습니다. 특히 빌드 시스템이나 정적 분석 도구와의 연동을 통해 개발 생산성을 높이는 승수 역할을 할 것으로 기대됩니다.</p>
+        <h3 class="article-subheading">네이티브 개발 워크플로우의 최적화</h3>
+        <p>이 변화는 안드로이드 카메라 런타임이나 HAL의 직접적인 동작 변경을 의미하지는 않습니다. 대신 Clang 및 LLVM 기반의 안드로이드 네이티브 툴체인을 다루는 엔터프라이즈 환경에서 빌드 스크립트 작성이나 테스트 케이스 생성 같은 반복 작업을 자동화하는 데 초점이 맞춰져 있습니다.</p>
+        <p>따라서 개발팀은 이 도구를 활용해 카메라 서비스나 드라이버 코드의 아키텍처를 분석하고, 복잡한 바인더 통신이나 메모리 관리 로직의 테스트 시나리오를 설계할 때 도움을 받을 수 있습니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>직접적인 HAL 계약 변경은 없으나, LLVM Clang 툴체인 기반의 네이티브 카메라 서비스 및 드라이버 코드 분석 시 맞춤형 AI 에이전트를 연동하여 정적 분석 및 단위 테스트 케이스 생성을 자동화할 수 있습니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html">Build your way: Use any AI agent of your choice in Android Studio</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-ai-claude-opus-5-5" aria-labelledby="article-ai-claude-opus-5-5-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-ai-claude-opus-5-5-title" class="article-title">앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개</h2>
+        <p class="article-source-subtitle">Anthropic News (2026-09-22)</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg" alt="앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://www.anthropic.com/claude-opus-5-5">Anthropic News</a></figcaption>
+        </figure>
+        <p class="article-lead">앤트로픽이 자사 모델 중 가장 강력한 성능을 자랑하며 강화된 안전 장치를 탑재한 Claude Opus 5.5를 선보였습니다.</p>
+        <h3 class="article-subheading">고성능 모델의 등장과 개발 생산성 변화</h3>
+        <p>앤트로픽은 최근 새로운 Claude 5.5 제품군의 첫 번째 모델인 Claude Opus 5.5를 발표했습니다. 이 모델은 포괄적인 정렬 테스트를 통과하며 높은 안전성을 입증했으며, 이전 세대인 Opus 5 대비 실행 비용을 약 40% 절감한 것이 특징입니다.</p>
+        <p>테스트 과정에서 단일 프롬프트로 게임을 제작하는 과제를 수행했을 때, 다른 모델 대비 그래픽 완성도와 세부 묘사에서 가장 높은 점수를 기록했습니다. 이러한 고성능 코드 생성 및 분석 능력은 네이티브 시스템 소프트웨어를 다루는 엔터프라이즈 환경에서도 유용하게 활용될 수 있습니다.</p>
+        <h3 class="article-subheading">네이티브 시스템 개발에서의 간접적 활용</h3>
+        <p>이 모델의 출시는 안드로이드 카메라 프레임워크나 HAL 런타임에 직접적인 기능 변화를 가져오지 않습니다. 대신 복잡한 C++ 코드의 리팩토링, 메모리 누수 분석, 그리고 드라이버 스택의 문서화 작업 등에서 개발자들을 지원하는 간접적인 도구로 기능합니다.</p>
+        <p>특히 카메라 드라이버나 ISP 파이프라인처럼 하드웨어 제어와 실시간 성능이 중요한 영역에서, 복잡한 V4L2 인터페이스나 미디어 컨트롤러 구조를 분석하고 테스트 시나리오를 도출하는 데 유용하게 쓰일 수 있습니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>직접적인 HAL 런타임 영향은 없으나, C++ 기반의 Camera HAL 및 드라이버 소스 코드 분석, 메모리 세니타이저 로그 해석, V4L2 subdev 제어 로직의 정적 검증 시 고성능 AI 모델을 보조 도구로 활용할 수 있습니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://www.anthropic.com/claude-opus-5-5">Claude Opus 5.5</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-rz-v2h-evk-mali-c55-isp-ivc" aria-labelledby="article-rz-v2h-evk-mali-c55-isp-ivc-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-rz-v2h-evk-mali-c55-isp-ivc-title" class="article-title">르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list (2026-09-25)</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../assets/images/fallback/android.svg" alt="르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진 image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">르네사스 RZ/V2H EVK 플랫폼에서 이미지 신호 프로세서와 비디오 코덱 노드를 활성화하기 위한 디바이스 트리 패치가 제안되었습니다.</p>
+        <h3 class="article-subheading">디바이스 트리를 통한 하드웨어 노드 추가</h3>
+        <p>리눅스 미디어 메일링 리스트에 르네사스 RZ/V2H EVK 평가 보드에서 Arm Mali-C55 ISP 및 IVC 하드웨어 블록을 활성화하는 디바이스 트리 소스 패치 시리즈가 제출되었습니다. 이 패치는 아직 메인라인 커널에 머지되지 않은 제안 상태의 변경 사항입니다.</p>
+        <p>제안된 패치는 선택적인 ISP DMA 라인 틱 인터럽트와 IVC 프레임 시작 및 정지 인터럽트를 정의하고 있습니다. 또한 RZ/V2H IVC 및 Arm Mali-C55 ISP 노드를 추가하여 비디오 엔드포인트를 상호 연결하는 작업을 포함합니다.</p>
+        <h3 class="article-subheading">드라이버 활성화 및 콘솔 확인</h3>
+        <p>이 패치를 적용하고 적절한 리눅스 드라이버를 활성화하면, 시스템 부팅 시 콘솔에서 Mali-C55 ISP 하드웨어가 정상적으로 감지되었다는 메시지를 확인할 수 있게 됩니다. 이는 하위 커널 레벨에서 이미지 파이프라인의 물리적 제어 기반이 마련됨을 뜻합니다.</p>
+        <p>카메라 드라이버 및 HAL 개발자 관점에서 이 변경은 하드웨어 파이프라인의 전력 소비와 이미지 처리 성능에 영향을 미치는 시작점입니다. 다만 이 패치는 특정 평가 보드용 DTS 변경에 국한되므로, 안드로이드 카메라 프레임워크나 HAL API 자체의 계약을 직접 변경하지는 않습니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>RZ/V2H EVK 플랫폼 기반 개발 시, Mali-C55 ISP 및 IVC 노드가 활성화됨에 따라 V4L2 subdev 인터페이스를 통한 이미지 포맷 협상, 프레임 타이밍 검증, DMA 버퍼 라이프사이클을 하위 스택에서 점검해야 합니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/">[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK</a> — <a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/T/#t">전체 패치 시리즈</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-imx681-libcamera" aria-labelledby="article-imx681-libcamera-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-imx681-libcamera-title" class="article-title">소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list (2026-09-26)</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고 image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">소니 IMX681 카메라 센서 지원을 추가하는 패치 시리즈와 함께, 최신 libcamera 및 mesa 환경에서의 컴파일 및 검증 결과가 공유되었습니다.</p>
+        <h3 class="article-subheading">최신 사용자 공간 라이브러리와의 연동 검증</h3>
+        <p>리눅스 미디어 메일링 리스트에 소니 IMX681 카메라 센서 지원 패치 시리즈 v7에 대한 테스트 보고서가 제출되었습니다. 이 테스트는 커널 7.3-rc4 버전을 제외하고 안정 채널에서 사용 가능한 최신 버전의 구성 요소들을 사용하여 수행되었습니다.</p>
+        <p>검증 환경에는 mesa 3:26.2.3-1 및 libcamera 0.7.2-4.1 버전이 사용되었습니다. 특정 클라이언트 정보 구조체 관련 코드를 삭제하는 필수 패치를 적용한 후, 커널이 정상적으로 컴파일되었으며 카메라 센서에 대한 철저한 조사가 완료되었습니다.</p>
+        <h3 class="article-subheading">이미지 파이프라인 안정성 확보</h3>
+        <p>새로운 센서 지원과 libcamera 및 mesa 환경에서의 통합 테스트는 카메라 드라이버 스택의 안정성을 확보하는 데 중요한 이정표입니다. 이는 하위 드라이버의 변경이 상위 사용자 공간 라이브러리 및 이미지 파이프라인 검증 도구들과 조화롭게 동작함을 입증합니다.</p>
+        <p>카메라 개발자들은 이러한 검증 결과를 바탕으로, 향후 안드로이드 환경에서 libcamera 기반의 파이프라인 핸들러나 V4L2 호환 레이어를 통해 IMX681 센서를 통합할 때 발생할 수 있는 빌드 오류나 런타임 호환성 문제를 사전에 예방할 수 있습니다. 이 패치 역시 아직 머지되지 않은 제안 상태입니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>IMX681 센서 통합 시, libcamera 0.7.2-4.1 및 mesa 최신 버전 환경에서의 컴파일 성공 사례를 참고하여, HAL3 구현체와의 프레임 버퍼 큐잉 및 포맷 협상 시 발생할 수 있는 호환성 이슈를 점검해야 합니다.</p></div>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/">Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor</a> — <a href="https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/T/#t">전체 패치 시리즈</a></li></ul></div>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">참고 · 더 읽을거리</h2>
+        <ul class="reference-articles-list"><li><a href="https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/">[PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-25) · 카메라 드라이버 / 이미지 파이프라인 참고</span></li><li><a href="https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/">[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-25) · 카메라 드라이버 / 이미지 파이프라인 참고</span></li><li><a href="https://patchwork.libcamera.org/patch/28380/">[1/4] libcamera: v4l2_event: Add V4L2Event class and functionality</a><span class="reference-meta">libcamera Patchwork (patch review) (2026-09-25) · 카메라 드라이버 / 이미지 파이프라인 참고</span></li><li><a href="https://patchwork.libcamera.org/patch/28382/">[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP</a><span class="reference-meta">libcamera Patchwork (patch review) (2026-09-25) · 카메라 드라이버 / 이미지 파이프라인 참고</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">참고자료</h2>
+        <div class="reference-list"><ul><li><a href="https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html">Build your way: Use any AI agent of your choice in Android Studio</a></li><li><a href="https://www.anthropic.com/claude-opus-5-5">Claude Opus 5.5</a></li><li><a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/">[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK</a> — <a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/T/#t">전체 패치 시리즈</a></li><li><a href="https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/">Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor</a> — <a href="https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/T/#t">전체 패치 시리즈</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="이슈 하단 이동">
+        <a href="../../index.html">← 뉴스룸으로</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">아카이브 전체 보기 →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">뉴스레터</span>
+          <a class="footer-link" href="../../index.html">홈</a>
+          <a class="footer-link" href="../../archive.html">아카이브</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">주제</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">리소스</span>
+          <a class="footer-link" href="../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (지원예정)</span>
+          <span class="footer-note">편집 정책 (지원예정)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Gemini 뉴스룸이 모아 사람이 검토·발행합니다.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
