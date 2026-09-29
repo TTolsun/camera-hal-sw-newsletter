@@ -9,7 +9,13 @@
       "Camera HAL",
       "Android"
     ],
-    "public_contract_version": "story-v2"
+    "public_contract_version": "story-v2",
+    "en": {
+      "title": "2026 W40",
+      "summary": "Android Studio Expands Native Development Flexibility with Support for Developer-Customized AI Agent Integration\nAnthropic Unveils High-Performance AI Model Claude Opus 5.5, Having Passed Alignment Tests\nRenesas RZ/V2H EVK Pushes to Enable Mali-C55 ISP and IVC Hardware with Linux Kernel Patch\nSony IMX681 Camera Sensor Support Patch and Integrated Test Report Based on Latest libcamera",
+      "html": "en/newsletters/2026-W40/index.html",
+      "md": "en/newsletters/2026-W40/newsletter.md"
+    }
   },
   {
     "date": "2026-09-21",
