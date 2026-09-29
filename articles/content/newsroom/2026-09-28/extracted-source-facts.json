@@ -139,52 +139,6 @@
       "warnings": []
     },
     {
-      "id": "b0a4ea83fd0911fa",
-      "url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/",
-      "title": "[PATCH 2/4] media: ipu-bridge: Add the ST VD55G1 (TBE20A1)",
-      "published_at": "2026-09-24T17:19:25Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Add the ACPI HID Lenovo uses for the ST VD55G1 IR camera of the ThinkPad X1 Carbon Gen 14. The firmware describes one CSI-2 data lane and, as usual, no link frequency, so the value has to come from this table; the vd55g1 driver requires exactly one. Use 402 MHz (804 Mbps). The sensor derives its MIPI rate and clock tree from this value and the IPU7 CSI-2 receiver reads the same value back through V4L2_CID_LINK_FREQ, so both ends agree by construction. At 804 Mbps a full-width 10-bit line takes a",
-          "evidence_text": "<html><head><title>[PATCH 2/4] media: ipu-bridge: Add the ST VD55G1 (TBE20A1) - Ruslan Koreev</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen and ",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.8,
-      "android_hal_relevance": 0.8,
-      "ai_relevance": 0,
-      "technical_depth": 0.85,
-      "warnings": []
-    },
-    {
-      "id": "gemini-8317255190bffdd5",
-      "url": "https://lore.kernel.org/linux-media/20260924171820.1179823-3-koreev.r@gmail.com/",
-      "title": "[PATCH 2/4] media: ipu-bridge: Add the ST VD55G1 (TBE20A1) - Ruslan Koreev",
-      "published_at": "2026-09-24",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH 2/4] media: ipu-bridge: Add the ST VD55G1 (TBE20A1) - Ruslan Koreev",
-          "evidence_text": "<html><head><title>[PATCH 2/4] media: ipu-bridge: Add the ST VD55G1 (TBE20A1) - Ruslan Koreev</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen and ",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
       "id": "c5e56e4dc3a1f9f1",
       "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
       "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK",
@@ -231,10 +185,10 @@
       "warnings": []
     },
     {
-      "id": "4cd09ea37ab474d8",
-      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur",
-      "published_at": "2026-09-25T05:49:01Z",
+      "id": "28d43bd77b0175a1",
+      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/",
+      "title": "[PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190",
+      "published_at": "2026-09-23T11:04:13Z",
       "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -242,22 +196,22 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "This series adds Camera Subsystem (CAMSS) support for the Qualcomm Glymur SoC. Glymur's camera hardware topology: - 3x CSIPHY (CSI Physical Layer) - 3x CSID + 2x CSID Lite (CSI Decoder) - 3x TPG (Test Pattern Generator) - 2x VFE + 2x VFE Lite (Video Front End) The CSIPHY block is the same hardware version as x1e80100 (3ph-1-0), differing only in instance count (3 vs 4). TPG, CSID, VFE, CSID wrapper, and ICC resources are fully shared with x1e80100. Used following tools for the sanity check of th",
-          "evidence_text": "<html><head><title>[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen and (p",
+          "claim": "From: Hangxiang Ma <hangxiang.ma@oss.qualcomm.com> Add support for the Video Front End (VFE) on Hawi SoC. VFE gen4 has support for VFE 1190. VFE 1190 uses a different bus write master register layout from the VFE 1080/980 variants: the per-write-master register block has a 0x200 stride based at 0x1000, and several individual registers sit at different offsets. Parameterize the bus register macros on the VFE version so the gen4 driver can serve VFE 1080, 980 and 1190. This change limits Hawi VFE",
+          "evidence_text": "<html><head><title>[PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190 - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.69,
-      "android_hal_relevance": 0.69,
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
       "ai_relevance": 0,
-      "technical_depth": 0.761,
+      "technical_depth": 0.758,
       "warnings": []
     },
     {
-      "id": "gemini-f84d1e30b1dc03da",
-      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
-      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
-      "published_at": "2026-09-25",
+      "id": "gemini-fe6341d2bb2d8fb1",
+      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/",
+      "title": "[PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190 - Nihal Kumar Gupta",
+      "published_at": "2026-09-23",
       "source_type": "unknown",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -265,60 +219,14 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
-          "evidence_text": "<html><head><title>[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen and (p",
+          "claim": "[PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190 - Nihal Kumar Gupta",
+          "evidence_text": "<html><head><title>[PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190 - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia",
           "confidence": "medium"
         }
       ],
       "camera_relevance": 0.7,
       "android_hal_relevance": 0.7,
       "ai_relevance": 0,
-      "technical_depth": 0.81,
-      "warnings": []
-    },
-    {
-      "id": "e48cec75a50d6af4",
-      "url": "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/",
-      "title": "[PATCH v3 00/21] IPU6 multi-stream and metadata support preparation",
-      "published_at": "2026-09-22T12:05:46Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Hi folks, I split this set off of the metadata series as it seems it can be merged early. Basically, it prepares the ipu6 driver for streaming multiple streams from a single source, when the rest of the necessary patches are merged. All the patches in the set can be found in my metadata branch. This set possibly depends on the metadata preparation series < https://lore.kernel.org/linux-media/20260914114145.574791-1-sakari.ailus@linux.intel.com/T/#t > I posted earlier today. since v2: - Fixed han",
-          "evidence_text": "<html><head><title>[PATCH v3 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"scr",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.5,
-      "android_hal_relevance": 0.5,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.73,
-      "warnings": []
-    },
-    {
-      "id": "gemini-b78eebd68bc66a8f",
-      "url": "https://lore.kernel.org/linux-media/20260922120538.896684-1-sakari.ailus@linux.intel.com/",
-      "title": "[PATCH v3 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus",
-      "published_at": "2026-09-22",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v3 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus",
-          "evidence_text": "<html><head><title>[PATCH v3 00/21] IPU6 multi-stream and metadata support preparation - Sakari Ailus</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"scr",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0.5,
       "technical_depth": 0.81,
       "warnings": []
     },
@@ -421,13 +329,13 @@
       "published_at": "Thu, 24 Sep 2026 15:59:00 +0000",
       "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
           "claim": "Posted by Matthew Warner, Product Manager, Android Developer Experience AI-powered developer tools have become an essential multiplier for engineering productivity, with teams adopting specialized AI coding agents, custom enterprise harnesses, and autonomous tools. It’s important for you to be able to build Android apps in the way that works best for you and your team, and agentic Android development is more open and flexible than ever before. Last year, Android Studio opened up to any AI model",
-          "evidence_text": "",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
@@ -438,95 +346,72 @@
       "warnings": []
     },
     {
-      "id": "215862005c40e900",
-      "url": "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/",
-      "title": "[PATCH v7 3/3] media: ipu-bridge: Add Sony IMX681",
-      "published_at": "2026-09-23T21:18:52Z",
-      "source_type": "rss_item",
+      "id": "gemini-348919c03d831171",
+      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "title": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
+      "published_at": "",
+      "source_type": "official_blog",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "The Microsoft Surface Pro 11 for Business (Intel Lunar Lake, IPU7) carries a Sony IMX681 as its user-facing sensor, enumerated as ACPI device SONY0681. Add it so ipu_bridge_connect_sensors() builds its half of the graph; without the entry the sensor is never connected, whatever driver is present. One link frequency, 969.6 MHz, on two CSI-2 lanes. Signed-off-by: Sergey Lebedev <lsa.uz@pm.me> --- drivers/media/pci/intel/ipu-bridge.c | 2 ++ 1 file changed , 2 insertions(+) diff --git a/drivers/medi",
-          "evidence_text": "<html><head><title>[PATCH v7 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen and (prefers",
+          "claim": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.62,
-      "android_hal_relevance": 0.62,
-      "ai_relevance": 0,
-      "technical_depth": 0.778,
-      "warnings": []
-    },
-    {
-      "id": "gemini-b86272fac15703a2",
-      "url": "https://lore.kernel.org/linux-media/20260923211816.89954-4-lsa.uz@pm.me/",
-      "title": "[PATCH v7 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev",
-      "published_at": "2026-09-23",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v7 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev",
-          "evidence_text": "<html><head><title>[PATCH v7 3/3] media: ipu-bridge: Add Sony IMX681 - Sergey Lebedev</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen and (prefers",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.72,
-      "warnings": []
-    },
-    {
-      "id": "532247ef9981b9ad",
-      "url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
-      "title": "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove",
-      "published_at": "2026-09-24T11:03:17Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "isys_remove() tears down the registered ISYS devices but does not call ipu7_fw_isys_release() after a successful probe. The probe error path already uses this helper after ipu7_fw_isys_init() succeeds. Without the matching release, resources initialized by ipu7_fw_isys_init() remain allocated on normal device removal. Call ipu7_fw_isys_release() after unregistering the ISYS devices to match the cleanup performed by the probe error path. Fixes: a516d36bdc3d (\"media: staging/ipu7: add IPU7 input s",
-          "evidence_text": "<html><head><title>[PATCH] media: staging/ipu7: release ISYS firmware resources on remove - Guangshuo Li</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.5,
-      "android_hal_relevance": 0.5,
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
       "ai_relevance": 0.5,
-      "technical_depth": 0.685,
+      "technical_depth": 0.492,
       "warnings": []
     },
     {
-      "id": "gemini-a5b4d734241ead8d",
-      "url": "https://lore.kernel.org/linux-media/20260924110310.1555150-1-lgs201920130244@gmail.com/",
-      "title": "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove - Guangshuo Li",
-      "published_at": "2026-09-24",
-      "source_type": "unknown",
+      "id": "6ac026046fb3ce0d",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+      "title": "CameraX Release Notes - CameraX 1.6.2",
+      "published_at": "August 26, 2026",
+      "source_type": "release_note_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "[PATCH] media: staging/ipu7: release ISYS firmware resources on remove - Guangshuo Li",
-          "evidence_text": "<html><head><title>[PATCH] media: staging/ipu7: release ISYS firmware resources on remove - Guangshuo Li</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"",
+          "claim": "Fixed a compilation crash on newer JDK versions when resolving transitively imported JSpecify type annotations on CameraX internal fields. ( I00bb4 , b/543937345 )",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"zh-CN-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develope",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
+      "camera_relevance": 0.72,
+      "android_hal_relevance": 0.72,
       "ai_relevance": 0,
-      "technical_depth": 0.765,
+      "technical_depth": 0.78,
+      "warnings": []
+    },
+    {
+      "id": "4cd09ea37ab474d8",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur",
+      "published_at": "2026-09-25T05:49:01Z",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "This series adds Camera Subsystem (CAMSS) support for the Qualcomm Glymur SoC. Glymur's camera hardware topology: - 3x CSIPHY (CSI Physical Layer) - 3x CSID + 2x CSID Lite (CSI Decoder) - 3x TPG (Test Pattern Generator) - 2x VFE + 2x VFE Lite (Video Front End) The CSIPHY block is the same hardware version as x1e80100 (3ph-1-0), differing only in instance count (3 vs 4). TPG, CSID, VFE, CSID wrapper, and ICC resources are fully shared with x1e80100. Used following tools for the sanity check of th",
+          "evidence_text": "<html><head><title>[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen and (p",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.69,
+      "android_hal_relevance": 0.69,
+      "ai_relevance": 0,
+      "technical_depth": 0.761,
       "warnings": []
     },
     {
@@ -622,19 +507,65 @@
       "warnings": []
     },
     {
+      "id": "21b44fe8a4dd43a6",
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "title": "Claude Opus 5.5",
+      "published_at": "2026-09-22",
+      "source_type": "blog_post_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Claude Opus 5.5 September 22, 2026 (1) Introduction (2) Performance and cost (3) Safety (4) Availability Scroll down We’re introducing Claude Opus 5.5, the first model in our new Claude 5.5 family. It performs at the level of Claude Fable 5.1 on most work and costs 40% less to run than Opus 5. Claude Opus 5.5 is our first release since we called for pacing the frontier . It was tested before release by external evaluators, including Frontier Design and METR . On our automated behavioral audit, t",
+          "evidence_text": "<!DOCTYPE html><html lang=\"en\" class=\"anthropicsans_dce02d96-module__tEBbKW__variable anthropicserif_e7e46c4-module__uImRTq__variable anthropicmono_fae19af3-module__c5XAsG__variable copernicus_e225fe92-module__gIXlfG__variable styrenea_ba30709d-module__X1taUa__variable styreneb_ef815608-module__QsOdUa__variable tiempostext_b1e9a056-module__lQ_52W__variable jetbrainsmono_4a81325a-module__1wasHq__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scal",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.56,
+      "android_hal_relevance": 0.56,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.746,
+      "warnings": []
+    },
+    {
+      "id": "gemini-0dd3bed5c7dd1c27",
+      "url": "https://www.anthropic.com/claude-opus-5-5",
+      "title": "Introducing Claude Opus 5.5 \\ Anthropic",
+      "published_at": "",
+      "source_type": "official_blog",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Introducing Claude Opus 5.5 \\ Anthropic",
+          "evidence_text": "<!DOCTYPE html><html lang=\"en\" class=\"anthropicsans_dce02d96-module__tEBbKW__variable anthropicserif_e7e46c4-module__uImRTq__variable anthropicmono_fae19af3-module__c5XAsG__variable copernicus_e225fe92-module__gIXlfG__variable styrenea_ba30709d-module__X1taUa__variable styreneb_ef815608-module__QsOdUa__variable tiempostext_b1e9a056-module__lQ_52W__variable jetbrainsmono_4a81325a-module__1wasHq__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scal",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0,
+      "technical_depth": 0.492,
+      "warnings": []
+    },
+    {
       "id": "c70c758816ffadd7",
       "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
       "title": "Emulator control for adaptive app development",
       "published_at": "Mon, 31 Aug 2026 16:00:00 +0000",
       "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
           "claim": "Posted by Rob Orgiu, Developer Relations Engineer, Adaptive Apps, Android Adaptive app development is fundamental on Android, but making sure everything looks good and every feature works the way it should require multiple tests on multiple devices. Or does it? Well, yes… and no! While Android Studio is bundled with the Resizable Emulator to let you test layouts manually, there’s a faster, more streamlined way to control form factors directly from your terminal. By leveraging fire-and-forget con",
-          "evidence_text": "",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
@@ -645,49 +576,26 @@
       "warnings": []
     },
     {
-      "id": "5e3d1c181d2f7a37",
-      "url": "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/",
-      "title": "[PATCH v3 4/5] media: ipu-bridge: Add the OV02C10 26 MHz link frequency",
-      "published_at": "2026-09-23T23:42:08Z",
-      "source_type": "rss_item",
+      "id": "gemini-6f8916deba211090",
+      "url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+      "title": "Android Developers Blog: Emulator control for adaptive app development",
+      "published_at": "",
+      "source_type": "official_blog",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "With a 26 MHz external clock the OV02C10 runs its CSI-2 link at 399.479167 MHz instead of 400 MHz. Add that link frequency to the OVTI02C1 entry so the sensor driver can use it. Signed-off-by: Felipe Calliari <calliarifelipe@gmail.com> --- Notes: Changes in v3: - New patch. The ov02c10 now advertises the 26 MHz link frequency on its own (Sakari), so the bridge has to list it. drivers/media/pci/intel/ipu-bridge.c | 2 +- 1 file changed , 1 insertion(+), 1 deletion(-) diff --git a/drivers/media/pci",
-          "evidence_text": "<html><head><title>[PATCH v3 4/5] media: ipu-bridge: Add the OV02C10 26 MHz link frequency - Felipe Calliari</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmed",
+          "claim": "Android Developers Blog: Emulator control for adaptive app development",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.5,
-      "android_hal_relevance": 0.5,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.73,
-      "warnings": []
-    },
-    {
-      "id": "gemini-f7ead5308ffd2974",
-      "url": "https://lore.kernel.org/linux-media/20260923234100.318151-5-calliarifelipe@gmail.com/",
-      "title": "[PATCH v3 4/5] media: ipu-bridge: Add the OV02C10 26 MHz link frequency - Felipe Calliari",
-      "published_at": "2026-09-23",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v3 4/5] media: ipu-bridge: Add the OV02C10 26 MHz link frequency - Felipe Calliari",
-          "evidence_text": "<html><head><title>[PATCH v3 4/5] media: ipu-bridge: Add the OV02C10 26 MHz link frequency - Felipe Calliari</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmed",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
       "ai_relevance": 0,
-      "technical_depth": 0.72,
+      "technical_depth": 0.492,
       "warnings": []
     },
     {
@@ -697,13 +605,13 @@
       "published_at": "Tue, 01 Sep 2026 15:00:00 +0000",
       "source_type": "rss_item",
       "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
           "claim": "Posted by Amman Fasil Asfaw, Product Manager, Android Studio Android Studio Quail 4 is now stable and ready for you to use in production. This is the final stable release for Android Studio Quail. The new features in Android Studio enable you to build premium apps with AI efficiently and effectively. Check out the video below to see the most helpful new features from the last 4 releases that can help improve and speed up your development. Here is a deep dive into what’s new in Android Studio Qua",
-          "evidence_text": "",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
@@ -714,26 +622,26 @@
       "warnings": []
     },
     {
-      "id": "c7dc6fb35d697d90",
-      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
-      "title": "1.6.2",
-      "published_at": "August 26, 2026",
-      "source_type": "release_note_item",
+      "id": "gemini-a8cd06df28457612",
+      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+      "published_at": "",
+      "source_type": "official_blog",
       "source_fetch_used": true,
       "source_fetch_status": "success",
       "source_fetch_error": "",
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "1.6.2",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"pt-BR-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Develope",
+          "claim": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
+          "evidence_text": "<!DOCTYPE html>\n<html class='v2 detail-page' dir='ltr' itemscope='' itemtype='http://schema.org/Blog' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr' xmlns:og='http://ogp.me/ns#'>\n<head>\n<link href='https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css' rel='stylesheet' type='text/css'/>\n<!-- Google Tag Manager -->\n<script>\n      (function(w",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.6,
-      "android_hal_relevance": 0.6,
-      "ai_relevance": 0,
-      "technical_depth": 0.552,
+      "camera_relevance": 0.45,
+      "android_hal_relevance": 0.45,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.492,
       "warnings": []
     }
   ]
