@@ -24,7 +24,13 @@
     "coverage_start_date": "2026-09-21",
     "coverage_end_date": "2026-09-27",
     "coverage_mode": "iso_week",
-    "generation_anchor_date": "2026-09-28"
+    "generation_anchor_date": "2026-09-28",
+    "en": {
+      "title": "2026 W40",
+      "summary": "Android Studio Extends Native Development Flexibility with Support for Developer-Customized AI Agent Integration\nAnthropic Unveils High-Performance AI Model Claude Opus 5.5, Passing Alignment Tests\nRenesas RZ/V2H EVK Pushes for Mali-C55 ISP and IVC Hardware Activation with Linux Kernel Patch\nSony IMX681 Camera Sensor Support Patch and Latest libcamera-based Integration Test Report",
+      "html": "en/newsletters/2026-W40/index.html",
+      "md": "en/newsletters/2026-W40/newsletter.md"
+    }
   },
   {
     "weeklyKey": "2026-W39",
