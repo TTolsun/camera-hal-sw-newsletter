@@ -271,7 +271,8 @@ Workflow/Stage: 작성 규칙은 editorial plan, reporter, editor draft, editor 
 - 작성 단계는 잘리기 전까지 실제로 적힌 내용만 확인된 사실로 씁니다. 잘린 뒤쪽을 추론하지 않고, 다른 근거(`source_extraction`, `seed_evidence`, 잘리지 않은 근거 항목)가 직접 뒷받침할 때만 그 결론을 씁니다. 수집 내부 사정(500자 제한, 잘림 표시)은 독자용 본문에 쓰지 않습니다.
 - 검증 단계는 잘린 근거가 유일한 근거인 claim의 뒤쪽 결론을 원문이 뒷받침한다고 판정하지 않고, source가 직접 뒷받침하지 않는 claim으로 `must_fix[]`에 넣습니다. 반대로 근거가 잘렸다는 사실만으로 기사를 문제 삼거나, 잘린 뒷부분이 기사와 반대일 것이라고 추측해 `must_fix[]`에 넣지 않습니다.
 - 이 규칙은 결론어를 정규식으로 잡아 `must_fix`로 올리는 결정론 게이트가 아닙니다. 판정은 fact-check LLM이 하며, 규칙이 실제로 프롬프트에 들어 있는지는 `prompt-contract.test.js`가 조립된 문자열로 검사합니다.
-- 표시가 붙는 것은 `normalizeCandidate`를 거치는 후보뿐입니다. seed evidence와 Gemini discovery 후보처럼 자체 빌더로 만든 후보는 이 필드를 싣지 않으므로 표시 없음으로 읽힙니다. 이 중 seed evidence는 요약을 220자에서 줄일 때 `...`를 붙이므로 위 `...` 규칙이 다루고, Gemini discovery는 요약을 자르지 않습니다.
+- 수집기가 `summary_truncated`를 싣는 것은 `normalizeCandidate`를 거치는 후보뿐입니다. 이월 후보, seed evidence, Gemini discovery 후보처럼 필드가 없는 후보는 capsule을 만들 때 요약 길이(499자 이상)로 유도해 표시합니다. 그래서 요약을 자르지 않는 경로(Gemini discovery)의 긴 요약도 표시될 수 있고, seed evidence는 요약을 220자에서 `...`를 붙여 줄이므로 유도로는 표시되지 않고 위 `...` 규칙이 다룹니다.
+- 공개 본문에 필드 이름이 나오면 안 되므로 `summary_truncated`는 `HARD_PUBLIC_IDENTIFIERS`(`src/generator/reporter/public-prose-leakage.js`)에 올라 있습니다. 식별자만 집행하고 "500자 제한" 같은 자연어 문구를 잡는 규칙은 없습니다.
 
 ### Article section contract
 

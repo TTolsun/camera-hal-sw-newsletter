@@ -77,7 +77,7 @@ function seriesContextPrompt() {
 function truncatedSourceDefinitionLines() {
   return [
     'capsule의 summary_truncated=true는 수집 단계에서 원문 요약을 500자에서 잘라 저장했다는 표시입니다. allowed_claim_evidence[] 항목에 붙은 summary_truncated=true는 그 항목의 text가 그렇게 잘린 요약을 담고 있다는 뜻입니다. 잘린 요약은 원문의 앞부분일 뿐이고, 그 뒤에 무엇이 이어졌는지(문제 목록, 한계, 예외, 후속 결과)는 capsule 어디에도 없습니다. summary에서 뽑은 behavior_change, what_changed, evidence의 summary 항목도 같은 잘린 요약에서 나온 것일 수 있습니다. 이 잘림에는 끝 표시가 붙지 않으므로 텍스트 끝만 보고는 알 수 없습니다.',
-    '근거 텍스트가 `...`로 끝나면 capsule이나 근거를 줄이는 과정에서 잘린 것이고, 원문에 `...`가 있었다는 뜻이 아닙니다. summary_truncated 표시와 `...` 끝 표시는 잘린 이유만 다를 뿐, 잘린 뒤쪽 내용을 알 수 없다는 점은 같습니다.'
+    '근거 텍스트가 `...`로 끝나면 capsule이나 근거를 줄이는 과정에서 잘린 것일 수 있고, 원문이 실제로 `...`로 끝난 것일 수도 있습니다. 어느 쪽인지 알 수 없으므로 그 뒤에 내용이 이어졌는지 확인할 수 없다고 다룹니다. summary_truncated 표시와 `...` 끝 표시는 잘린 이유만 다를 뿐, 잘린 뒤쪽 내용을 알 수 없다는 점은 같습니다.'
   ];
 }
 
@@ -98,7 +98,7 @@ function truncatedSourceWritingPrompt() {
 function truncatedSourceFactCheckPrompt() {
   return [
     ...truncatedSourceDefinitionLines(),
-    'summary_truncated=true 표시가 붙었거나 `...`로 끝나는 근거가 유일한 근거인 claim은, 그 근거가 잘리기 전까지 실제로 적은 내용만 뒷받침받은 것으로 판정하세요. 잘린 뒷부분이 무엇을 말했는지 알 수 없으므로, 뒤쪽에 있었을 결론(완료, 확인, 입증, 통과, 가장 강력한 성능 같은 것)을 원문이 뒷받침한다고 판정하지 마세요. 그런 claim은 source가 직접 뒷받침하지 않는 claim으로 다루어 must_fix[]에 넣으세요.',
+    'summary_truncated=true 표시가 붙었거나 `...`로 끝나는 근거가 유일한 근거인 claim은, 그 근거가 잘리기 전까지 실제로 적은 내용만 뒷받침받은 것으로 판정하세요. 잘린 뒷부분이 무엇을 말했는지 알 수 없으므로, 뒤쪽에 있었을 결론(완료, 확인, 입증, 통과, 가장 강력한 성능 같은 것)을 원문이 뒷받침한다고 판정하지 마세요. 그런 claim은 source가 직접 뒷받침하지 않는 claim으로 다루어 must_fix[]에 넣으세요. 이것은 앞서 정한 must_fix[] 기준에 더하는 항목입니다.',
     '반대로 근거가 잘렸다는 사실만으로 기사를 문제 삼지 마세요. 잘린 뒷부분이 기사와 반대일 것이라고 추측해 must_fix[]에 넣는 것도 안 됩니다. 확인할 수 없다는 것과 모순된다는 것은 다릅니다. 잘리기 전 내용이 뒷받침하는 claim과 다른 근거가 직접 뒷받침하는 claim은 종전 기준대로 판정하세요.'
   ].join('\n');
 }

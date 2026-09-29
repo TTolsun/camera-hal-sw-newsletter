@@ -682,6 +682,9 @@ test('truncated source rules tell the flag and the ellipsis suffix apart and sta
     assert.match(rule, /summary_truncated=true/);
     assert.match(rule, /allowed_claim_evidence\[\] 항목/);
     assert.match(rule, /`\.\.\.`로 끝나면/);
+    // `...`는 원문이 실제로 그렇게 끝난 경우도 부정할 수 없으므로 어느 쪽인지 단정하지 않는다.
+    assert.match(rule, /원문이 실제로 `\.\.\.`로 끝난 것일 수도/);
+    assert.doesNotMatch(rule, /원문에 `\.\.\.`가 있었다는 뜻이 아닙니다/);
     // 잘림 표시에는 끝 표시가 없다는 점(그래서 표시 필드가 필요하다)과 뒤쪽을 알 수 없다는 점.
     assert.match(rule, /끝 표시가 붙지 않으므로/);
     assert.match(rule, /잘린 뒤쪽 내용을 알 수 없다/);
@@ -701,6 +704,9 @@ test('truncated source rules tell the flag and the ellipsis suffix apart and sta
   const verifying = truncatedSourceFactCheckPrompt();
   assert.match(verifying, /원문이 뒷받침한다고 판정하지 마세요/);
   assert.match(verifying, /must_fix\[\]에 넣으세요/);
+  // repair·completion fact-check는 바로 앞 문장이 must_fix[]를 "직접 반증하는 오류, 누락·위조된 출처,
+  // 명시된 정책 위반 전용"으로 한정한다. 새 항목이 그 한정과 부딪히지 않고 더해지는 것임을 밝힌다.
+  assert.match(verifying, /앞서 정한 must_fix\[\] 기준에 더하는 항목/);
   assert.match(verifying, /잘렸다는 사실만으로 기사를 문제 삼지 마세요/);
   assert.match(verifying, /확인할 수 없다는 것과 모순된다는 것은 다릅니다/);
 });

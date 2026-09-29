@@ -745,8 +745,38 @@ test('capsule carries summary_truncated when the candidate summary was cut at co
 
 test('capsule omits summary_truncated for a candidate whose summary was not cut (#1226)', () => {
   // 대부분의 후보가 여기에 해당한다. series_context와 같이 값이 없으면 키를 떼어 payload를 키우지 않는다.
-  assert.ok(!('summary_truncated' in buildArticleCapsule(candidate())));
-  assert.ok(!('summary_truncated' in buildArticleCapsule(candidate({ summary_truncated: false }))));
+  const short = 'The driver adds a new I2C sensor binding.';
+  assert.ok(!('summary_truncated' in buildArticleCapsule(candidate({ summary: short }))));
+  assert.ok(!('summary_truncated' in buildArticleCapsule(candidate({ summary: short, summary_truncated: false }))));
+});
+
+// 이월(not_yet_eligible) 후보는 이전 주 산출물을 정규화 없이 그대로 읽어 오므로 이 필드가 없다. 그
+// 후보가 이번 호의 수집 풀 핵심이라, 필드가 없으면 요약 길이로 유도하지 않는 한 사각지대가 그대로 남는다.
+const CARRIED_LONG_SUMMARY = `${'Test report for the carried series. 1) The first stage exercised the sensor bring up path. '.repeat(6)}`.slice(0, 500);
+
+test('capsule derives summary_truncated from the summary length for a candidate without the field (#1226)', () => {
+  assert.equal(CARRIED_LONG_SUMMARY.length, 500);
+  const carried = candidate({ summary: CARRIED_LONG_SUMMARY });
+  assert.ok(!('summary_truncated' in carried), 'fixture must not carry the field');
+  const capsule = buildArticleCapsule(carried);
+  assert.equal(capsule.summary_truncated, true);
+  assert.ok(capsule.allowed_claim_evidence.some(item => item.summary_truncated === true));
+  // 정규화가 상한에서 한 글자 모자란 499자로 남기는 경우도 같다.
+  assert.equal(buildArticleCapsule(candidate({ summary: 'y'.repeat(499) })).summary_truncated, true);
+  assert.ok(!('summary_truncated' in buildArticleCapsule(candidate({ summary: 'y'.repeat(498) }))));
+});
+
+test('capsule does not derive summary_truncated for a short summary without the field (#1226)', () => {
+  const capsule = buildArticleCapsule(candidate({ summary: CARRIED_LONG_SUMMARY.slice(0, 300) }));
+  assert.ok(!('summary_truncated' in capsule));
+  for (const item of capsule.allowed_claim_evidence) assert.ok(!('summary_truncated' in item));
+});
+
+test('capsule keeps an explicit summary_truncated=false even when the summary is long (#1226)', () => {
+  // 명시된 값은 정규화가 이미 판정한 것이므로 길이로 뒤집지 않는다.
+  const capsule = buildArticleCapsule(candidate({ summary: CARRIED_LONG_SUMMARY, summary_truncated: false }));
+  assert.ok(!('summary_truncated' in capsule));
+  for (const item of capsule.allowed_claim_evidence) assert.ok(!('summary_truncated' in item));
 });
 
 test('claim evidence built from the truncated summary is marked, other evidence is not (#1226)', () => {
@@ -767,7 +797,7 @@ test('claim evidence built from the truncated summary is marked, other evidence 
 });
 
 test('claim evidence carries no truncation mark when the summary was not cut (#1226)', () => {
-  const capsule = buildArticleCapsule(candidate());
+  const capsule = buildArticleCapsule(candidate({ summary: 'The driver adds a new I2C sensor binding.' }));
   for (const item of capsule.allowed_claim_evidence) assert.ok(!('summary_truncated' in item));
 });
 

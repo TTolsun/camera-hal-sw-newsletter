@@ -1,4 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { isSummaryTruncated } = require('../../shared/common/summary-truncation');
 const crypto = require('crypto');
 
 const {
@@ -886,7 +887,7 @@ function buildAllowedClaimEvidence(candidate = {}, section = {}, options = {}) {
   // 후보 요약이 수집 단계에서 500자로 잘렸다면(#1226), 그 요약을 조각으로 담은 근거 항목에 표시를 붙인다.
   // fact-check가 받는 근거는 이 배열이라, 표시가 없으면 잘린 근거를 온전한 것으로 읽고 뒤쪽 결론과의
   // 모순을 찾지 못한 채 통과시킨다. 본문 전체에서 읽은 근거(source_extraction 등)에는 붙이지 않는다.
-  const cutSummary = candidate.summary_truncated === true ? text(candidate.summary) : '';
+  const cutSummary = isSummaryTruncated(candidate) ? text(candidate.summary) : '';
   return [...evidenceIndex.byId.values()]
     .filter(item => item && item.status === 'allowed' && item.provenance_only !== true)
     .map(item => ({

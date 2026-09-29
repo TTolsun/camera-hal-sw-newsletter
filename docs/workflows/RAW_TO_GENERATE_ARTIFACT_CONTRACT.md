@@ -48,9 +48,11 @@ v1 transition(전환) 기간에는 `manual-candidates.json`과 `candidates.json`
 
 - 판정은 `normalizeCandidate` 한 곳에서 합니다. 마크업을 제거한 요약이 499자 이상이면 `true`입니다. 500자에서 미리 자르는 생산자(`dated-article-index-resolver`, `ai-coding-releases`, `raspberrypi-libcamera-releases`)는 자른 뒤 끝 공백이 정리되어 499자로 도착할 수 있어서 상한보다 한 글자 낮게 잡습니다. 온전한 499~500자 요약이 `true`가 되는 오탐은 허용합니다(잘렸다고 알리는 쪽이 안전한 방향입니다).
 - 요약 문자열 끝에 표식을 덧붙이지 않습니다. `summary`와 `behavior_change`의 길이, `behavior_change`의 요약 파생, news-summary-cache 키가 모두 요약 문자열에 묶여 있어서 요약 텍스트는 그대로 둡니다.
-- 필드는 `normalizeCandidate` 반환 객체의 whitelist에 있어야 `candidates.json`에 남습니다. 필드가 없는 후보(seed evidence, Gemini discovery처럼 자체 빌더로 만든 후보)는 `false`로 읽습니다.
+- 필드는 `normalizeCandidate` 반환 객체의 whitelist에 있어야 `candidates.json`에 남습니다.
+- 필드가 없는 후보는 읽는 쪽(`isSummaryTruncated`, `src/shared/common/summary-truncation.js`)이 같은 기준(요약 499자 이상)으로 요약 길이에서 유도합니다. 이월(`not_yet_eligible`) 후보는 이전 주 산출물을 정규화 없이 그대로 읽어 오고, seed evidence와 Gemini discovery 후보는 `normalizeCandidate`를 거치지 않기 때문입니다. 수집기가 값을 실어 둔 후보(`true`/`false`)는 그 값을 그대로 씁니다. 유도한 값은 `candidates.json`에 다시 쓰지 않고 capsule을 만들 때만 씁니다.
+- 유도의 한계: 필드가 없는 후보의 요약이 500자에서 잘린 것이 아니라 원래 길었던 경우(예: 자르지 않는 Gemini discovery 후보)에도 499자 이상이면 잘림으로 표시됩니다. 잘렸다고 알리는 쪽이 안전한 방향이라 허용한 오탐입니다. seed evidence 후보는 요약을 220자에서 `...`를 붙여 줄이므로 유도로는 표시되지 않고 `...` 규칙이 다룹니다.
 - 소비 경로: article capsule의 `summary_truncated`(값이 `true`일 때만 키를 둡니다)와 `allowed_claim_evidence[]` 중 그 요약을 담은 항목의 `summary_truncated`로 전달됩니다. fact-check 단계는 같은 capsule JSON을 받으므로 같은 표시를 봅니다. 표시를 읽는 프롬프트 규칙은 [뉴스룸 LLM Prompt 운영 Reference](../operations/NEWSROOM_LLM_PROMPTS.md)의 "잘린 요약 규칙"에 있습니다.
-- `CANDIDATE_SCHEMA_VERSION`은 올리지 않습니다. 필드를 읽는 쪽은 값이 없으면 `false`로 취급하므로 이전 스키마 후보와 호환됩니다.
+- `CANDIDATE_SCHEMA_VERSION`은 올리지 않습니다. 필드를 읽는 쪽이 값이 없으면 요약 길이로 유도하므로 필드가 없는 이전 산출물도 같은 기준으로 읽힙니다.
 
 ## Stage 2 Optional Gemini Source Discovery Boundary
 

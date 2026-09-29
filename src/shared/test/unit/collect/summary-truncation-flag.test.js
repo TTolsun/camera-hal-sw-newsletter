@@ -209,3 +209,20 @@ test('dated article intro cut at the summary limit is flagged after normalizatio
   assert.equal(items[0].summary.length, 499, 'the resolver trims the cut summary, so it arrives one short of the cap');
   assert.equal(normalizeCandidate(items[0]).summary_truncated, true);
 });
+
+// 이월 후보는 이전 주 산출물을 정규화 없이 읽어 오므로 필드가 없다. 읽는 쪽 함수는 수집기와 같은 기준으로
+// 요약 길이에서 유도하되, 수집기가 실어 둔 boolean은 뒤집지 않는다.
+test('isSummaryTruncated derives from the summary only when the collector left no boolean (#1226)', () => {
+  const { isSummaryTruncated } = require('../../../common/summary-truncation');
+  assert.equal(isSummaryTruncated({ summary: 'x'.repeat(500) }), true);
+  assert.equal(isSummaryTruncated({ summary: 'x'.repeat(499) }), true);
+  assert.equal(isSummaryTruncated({ summary: 'x'.repeat(498) }), false);
+  assert.equal(isSummaryTruncated({}), false);
+  assert.equal(isSummaryTruncated({ summary: 'x'.repeat(500), summary_truncated: false }), false);
+  assert.equal(isSummaryTruncated({ summary: 'short', summary_truncated: true }), true);
+  // 정규화가 만든 후보를 그대로 다시 읽어도 같은 값이다(이월 후보가 이 경로다).
+  const cut = normalizeCandidate(rawCandidate('word '.repeat(200)));
+  const { summary_truncated: _dropped, ...carried } = cut;
+  assert.equal(isSummaryTruncated(carried), cut.summary_truncated);
+  assert.equal(cut.summary_truncated, true);
+});

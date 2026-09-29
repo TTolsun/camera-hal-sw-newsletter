@@ -17,6 +17,10 @@ const {
 } = require('../common/candidate-artifacts');
 const { parseManualSourceUrls } = require('../collect/collection-intent');
 const { ensureArray } = require('../common/value-coercion');
+const {
+  CANDIDATE_TEXT_MAX_LENGTH,
+  summaryReachesCutLength
+} = require('../common/summary-truncation');
 const { readRuntimeConfig, resolveRunMode } = require('../common/runtime-config');
 const {
   displayDate,
@@ -203,16 +207,6 @@ let activeSourcesPath = legacySourcesPath;
 // `<a href="…">`는 태그다. 태그를 빈 문자열이 아니라 공백으로 치환하는 이유는
 // `now<br />embedded`에서 단어가 붙지 않게 하기 위해서다.
 const MARKUP_PATTERN = /<!--[\s\S]*?-->|<![^>]*>|<\/?[a-zA-Z][a-zA-Z0-9:._-]*(?:\s[^<>]*)?\/?>/g;
-
-// 후보 본문 계열 필드(summary, behavior_change)에 공통으로 거는 길이 상한이다. 같은 문장이
-// 두 칸으로 흘러오므로 상한이 갈리면 표식·게이트가 서로 다른 조각을 보게 된다(#976).
-const CANDIDATE_TEXT_MAX_LENGTH = 500;
-// 요약이 수집 단계에서 잘렸다고 표시하는 최소 길이(#1226). 상한에서 한 글자 모자란 값인 이유: 요약을
-// 500자에서 미리 자르는 생산자(dated-article-index-resolver, ai-coding-releases, raspberrypi-libcamera-releases)는
-// 자른 뒤 끝 공백을 다듬거나 뒤이은 stripMarkup이 공백을 정리한다. 500번째 글자가 공백이면 잘렸는데도
-// 499자로 도착하므로, 500자 이상만 잘림으로 보면 그 경우만 조용히 빠진다. 온전한 499~500자 요약이 잘림으로
-// 표시되는 오탐은 드물고, 잘렸다고 알리는 쪽이 안전한 방향이다.
-const SUMMARY_TRUNCATED_MIN_LENGTH = CANDIDATE_TEXT_MAX_LENGTH - 1;
 
 // `String(value || '')`로 받는다. `String(null)`은 `'null'`이라, 이 자리에서 String(value)만
 // 쓰면 title이나 summary가 null인 후보에서 리터럴 "null"이 영속 후보로 들어간다. 옛 decode는
@@ -1050,10 +1044,11 @@ function normalizeCandidate(raw) {
   const title = stripMarkup(raw.title);
   const strippedSummary = stripMarkup(raw.summary);
   const summary = strippedSummary.slice(0, CANDIDATE_TEXT_MAX_LENGTH);
-  // 잘림 판정은 요약을 자르는 이 자리 하나에서 한다(#1226). 표식 문자열을 요약 끝에 붙이지 않고 boolean으로
-  // 싣는 이유: 요약 길이, behavior_change 파생, news-summary-cache 키가 모두 요약 문자열에 묶여 있다.
-  // 요약 텍스트 자체는 그대로다.
-  const summaryTruncated = strippedSummary.length >= SUMMARY_TRUNCATED_MIN_LENGTH;
+  // 잘림 판정은 요약을 자르는 이 자리에서 한다(#1226). 기준은 shared/common/summary-truncation.js가
+  // 정한다(capsule 쪽이 같은 함수로 필드 없는 후보를 유도한다). 표식 문자열을 요약 끝에 붙이지 않고
+  // boolean으로 싣는 이유: 요약 길이, behavior_change 파생, news-summary-cache 키가 모두 요약 문자열에
+  // 묶여 있다. 요약 텍스트 자체는 그대로다.
+  const summaryTruncated = summaryReachesCutLength(strippedSummary);
   const rawSourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
   const sourceType = raw.sourceType || raw.source_type || rawSourceKind;
   const url = canonicalContentUrl(raw.url);
