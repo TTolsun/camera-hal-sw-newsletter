@@ -1,5 +1,32 @@
 [
   {
+    "weeklyKey": "2026-W40",
+    "weekStartDate": "2026-09-28",
+    "weekEndDate": "2026-10-04",
+    "date": "2026-09-28",
+    "title": "2026 W40",
+    "summary": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장\n앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개\n르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진\n소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고",
+    "html": "newsletters/2026-W40/index.html",
+    "md": "newsletters/2026-W40/newsletter.md",
+    "tags": [
+      "AI",
+      "Android",
+      "Driver",
+      "Image Processing",
+      "Camera HAL"
+    ],
+    "article_count": 4,
+    "article_images": [
+      "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg"
+    ],
+    "public_contract_version": "story-v2",
+    "coverage_week_key": "2026-W39",
+    "coverage_start_date": "2026-09-21",
+    "coverage_end_date": "2026-09-27",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-09-28"
+  },
+  {
     "weeklyKey": "2026-W39",
     "weekStartDate": "2026-09-21",
     "weekEndDate": "2026-09-27",
