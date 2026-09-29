@@ -909,3 +909,14 @@ test('disabled pass-through path moves future-dated seed candidates to not_yet_e
   assert.equal(result.status, 'PASS');
   assertSeedCandidateCarriedForward(root);
 });
+
+test('discovery receives all 50 collector candidates and bounds oversized inputs', () => {
+  const candidates = Array.from({ length: 51 }, (_, i) => ({
+    title: `candidate-${i + 1}`, url: `https://example.com/article-${i + 1}`
+  }));
+  const prompt = buildProposalPrompt({ date: '2026-09-28', manualCandidates: candidates });
+  assert.ok(prompt.includes('https://example.com/article-50'));
+  assert.ok(!prompt.includes('https://example.com/article-51'));
+  const { MAX_FINAL_CANDIDATES } = require('../../../cli/collect-news-candidates');
+  assert.equal(MAX_FINAL_CANDIDATES, 50);
+});

@@ -124,7 +124,7 @@ const AUDIENCE = 'AOSP Camera / Camera Driver / SoC Platform / C++ engineer';
 // high-volume source (e.g. an Android Developers Blog roundup that explodes into
 // many child topics) from monopolizing the pool and evicting lower-ranked but
 // useful camera-driver / V4L2 / libcamera / ISP leads before the slice.
-const MAX_FINAL_CANDIDATES = 40;
+const MAX_FINAL_CANDIDATES = 50;
 const MAX_CANDIDATES_PER_SOURCE = 8;
 
 // coverage 경계 밖([E, U))에서 분리해 다음 실행 carry-forward로 넘기는 목록의 상한. 소스가

@@ -97,7 +97,7 @@ function normalizeProposalPayload(payload = {}, date = '') {
 }
 
 function buildProposalPrompt({ date, manualCandidates = [], sourceRegistry = {} }) {
-  const candidateSummary = manualCandidates.slice(0, 40).map(candidate => ({
+  const candidateSummary = manualCandidates.slice(0, 50).map(candidate => ({
     title: candidateTitle(candidate),
     url: candidate.url || candidate.articleUrl || candidate.article_url || '',
     source: candidate.source || candidate.source_name || '',

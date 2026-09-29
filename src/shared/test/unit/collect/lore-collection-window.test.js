@@ -134,3 +134,12 @@ test('lore search query keeps the bare ipu token out of the linux-media feed (#1
     '맨몸 ipu는 Intel Infrastructure Processing Unit(네트워크 오프로드)과 겹친다. 비카메라 후보는 분류기가 떨어뜨리지만 그 전에 소스당 캡 8칸을 먼저 먹으므로, 질의 단계에서 빼는 편이 싸다.'
   );
 });
+
+// IPU 전용 피드는 수집 대상에서 제외하지만 과거 산출물의 소스 ID와 질의는 보존한다.
+test('active source registry excludes the dedicated Intel IPU feed', () => {
+  const { normalizeEnabledSources } = require('../../../collect/news-source-section-resolver');
+  const registry = JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf8'));
+  const { sources } = normalizeEnabledSources(registry);
+  assert.ok(!sources.some(source => source.id === 'lore-linux-media-ipu'));
+  assert.ok(sources.some(source => source.id === 'lore-linux-media-list'));
+});
