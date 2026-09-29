@@ -46,6 +46,14 @@ const {
   writePublicNewsletterArtifacts
 } = require('../helpers/workflow-fixtures');
 
+// workflow_dispatch의 재발행 옵션이 테스트의 기본 차단 시나리오에 섞이지 않게 한다.
+const inheritedRepublish = process.env.NEWSLETTER_ALLOW_REPUBLISH;
+test.beforeEach(() => { delete process.env.NEWSLETTER_ALLOW_REPUBLISH; });
+test.afterEach(() => {
+  if (inheritedRepublish === undefined) delete process.env.NEWSLETTER_ALLOW_REPUBLISH;
+  else process.env.NEWSLETTER_ALLOW_REPUBLISH = inheritedRepublish;
+});
+
 test('FAILED_REPAIR_REVIEWABLE status is reviewable but never publish-ready', () => {
   const outputs = buildGenerationStatusOutputs({
     status: 'FAILED_REPAIR_REVIEWABLE',
