@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W40/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W39 Camera SW Newsletter (Published W40)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W40/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W40/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W40/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week, we cover 5 news items, including &#39;Android Studio to support developer-customized AI coding agent integration&#39; and &#39;Anthropic unveils Claude Opus 5.5 with enhanced code generation and testing capabilities&#39;." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W40/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W39 Camera SW Newsletter (Published W40)" />
+  <meta property="og:description" content="This week, we cover 5 news items, including &#39;Android Studio to support developer-customized AI coding agent integration&#39; and &#39;Anthropic unveils Claude Opus 5.5 with enhanced code generation and testing capabilities&#39;." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W40/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W39 Camera SW Newsletter (Published W40)" />
+  <meta name="twitter:description" content="This week, we cover 5 news items, including &#39;Android Studio to support developer-customized AI coding agent integration&#39; and &#39;Anthropic unveils Claude Opus 5.5 with enhanced code generation and testing capabilities&#39;." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.09.21 – 09.27</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W39</span></h1>
+        <p class="issue-publish-badge">Published W40</p>
+        <p class="subtitle">This week, we cover 5 news items, including &#39;Android Studio to support developer-customized AI coding agent integration&#39; and &#39;Anthropic unveils Claude Opus 5.5 with enhanced code generation and testing capabilities&#39;.</p>
+        <div class="tag-row issue-tags"><span class="tag">Android</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">AI</span><span class="tag">Camera HAL</span></div>
+      </header>
+
+      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">In this issue</h2>
+          <ul><li>Android Studio to Support Integration of Developer-Customized AI Coding Agents</li><li>Anthropic Unveils Claude Opus 5.5 with Enhanced Code Generation and Testing Capabilities</li><li>Proposal to Enable Arm Mali C55 ISP and IVC with Renesas RZ V2H EVK Device Tree Patch</li><li>Proposed Linux Kernel Driver Patch v3 for Samsung S5K3T2 Image Sensor Support</li><li>Sharing Latest Kernel and libcamera Test Results for Sony IMX681 Camera Sensor Support Patch v7</li></ul>
+        </div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-android-studio-to-support-integration-of-developer-customized-ai-coding-agents" aria-labelledby="article-android-studio-to-support-integration-of-developer-customized-ai-coding-agents-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-android-studio-to-support-integration-of-developer-customized-ai-coding-agents-title" class="article-title">Android Studio to Support Integration of Developer-Customized AI Coding Agents</h2>
+        <p class="article-source-subtitle">Android Developers Blog (2026-09-24)</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png" alt="Announcement of support for selecting and integrating third-party AI agents in Android Studio" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html">Build your way: Use any AI agent of your choice in Android Studio</a></figcaption>
+        </figure>
+        <p class="article-lead">Android Studio now offers an environment where various AI agents can be freely selected and integrated, enabling development teams to build customized workflows.</p>
+        <p>Google announced that Android Studio will support open and flexible AI agent integration, allowing development teams to build Android apps in the most optimal way. Development teams can now freely adopt specialized AI coding agents, custom enterprise harnesses, and autonomous tools.</p>
+        <p>This update focuses on improving the productivity of developer tools and helps developers integrate and utilize their preferred AI tools directly within Android Studio.</p>
+        <h3 class="article-subheading">Changes in Native Development Workflow</h3>
+        <p>This update concerns Android Studio development tools and does not directly modify the Android Camera HAL API or runtime behavior. Native C++ and HAL development teams can evaluate whether this integration can improve workflow productivity in code generation, debugging, and test case creation, and consider adopting AI tools suitable for their team&#39;s development environment.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Although there are no direct HAL changes, C++ native development teams can consider integrating AI agents within Android Studio to improve code writing and debugging productivity.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html">Build your way: Use any AI agent of your choice in Android Studio</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-anthropic-unveils-claude-opus-5-5-with-enhanced-code-generation-and-testing-capa" aria-labelledby="article-anthropic-unveils-claude-opus-5-5-with-enhanced-code-generation-and-testing-capa-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-anthropic-unveils-claude-opus-5-5-with-enhanced-code-generation-and-testing-capa-title" class="article-title">Anthropic Unveils Claude Opus 5.5 with Enhanced Code Generation and Testing Capabilities</h2>
+        <p class="article-source-subtitle">Anthropic News (2026-09-22)</p>
+        <figure class="article-media">
+        <img class="article-image" src="https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg" alt="Anthropic announces Claude Opus 5.5 model with improved performance and safety" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://www.anthropic.com/claude-opus-5-5">Claude Opus 5.5</a></figcaption>
+        </figure>
+        <p class="article-lead">Anthropic has announced Claude Opus 5.5, its latest large language model with significantly enhanced performance and safety features, offering developers an option to improve code writing and verification efficiency.</p>
+        <p>Anthropic has unveiled Claude Opus 5.5, the first model in the new Claude 5.5 family. This model demonstrates the most powerful performance Anthropic has tested to date and has passed the most comprehensive alignment tests.</p>
+        <p>Claude Opus 5.5 is designed to perform at the level of Claude Fable 5.1 for most tasks, while being approximately 40% cheaper to run than previous Opus 5 models. It also comes with advanced safety features developed for the most capable models.</p>
+        <h3 class="article-subheading">Evolution of Code Generation and Testing Capabilities</h3>
+        <p>This news is about the performance improvement of general large language models and does not directly modify the Android Camera HAL or driver stack. However, native C++ and camera driver development teams can leverage Claude Opus 5.5&#39;s enhanced code generation and testing capabilities as a tool to improve development productivity in implementing complex algorithms, writing test scripts, and debugging processes.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Although there are no direct HAL changes, productivity can be improved by utilizing the Claude Opus 5.5 model for generating native C++ code snippets and writing unit test scripts.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://www.anthropic.com/claude-opus-5-5">Claude Opus 5.5</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-proposal-to-enable-arm-mali-c55-isp-and-ivc-with-renesas-rz-v2h-evk-device-tree-" aria-labelledby="article-proposal-to-enable-arm-mali-c55-isp-and-ivc-with-renesas-rz-v2h-evk-device-tree--title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-proposal-to-enable-arm-mali-c55-isp-and-ivc-with-renesas-rz-v2h-evk-device-tree--title" class="article-title">Proposal to Enable Arm Mali C55 ISP and IVC with Renesas RZ V2H EVK Device Tree Patch</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list (2026-09-25)</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Proposal to Enable Arm Mali C55 ISP and IVC with Renesas RZ V2H EVK Device Tree Patch image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A device tree patch has been proposed to support hardware-accelerated image processing on the Renesas RZ V2H EVK platform, anticipating changes in the lower image pipeline.</p>
+        <p>This proposed patch series aims to add RZ V2H and RZ V2HP IVC nodes and Arm Mali C55 ISP nodes, and connect their video endpoints to enable hardware blocks. These changes improve frame timing control by defining optional ISP DMA line ticks and IVC frame start and frame stop interrupts.</p>
+        <p>After applying the patch and activating the driver, a Mali C55 ISP version 9000043.31032022.0 detection message can be confirmed in the system console. This indicates that the image signal processor is correctly recognized at the hardware level and ready for operation.</p>
+        <h3 class="article-subheading">Laying the Foundation for Hardware-Accelerated Image Processing</h3>
+        <p>This patch series is still in the proposal stage and has not yet been merged into the mainline kernel. While it does not directly change the actual upper Android camera HAL or framework contracts, it provides an essential foundation for utilizing hardware acceleration capabilities in the lower driver layer. Development teams should continuously track the merge status of this patch and any changes in controls exposed through the V4L2 interface.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Although there are no direct Android HAL changes, the ISP and IVC control interfaces exposed via the V4L2 uAPI in the lower driver layer, as well as frame start and stop interrupt timings, should be reviewed.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/">[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK</a> — <a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-proposed-linux-kernel-driver-patch-v3-for-samsung-s5k3t2-image-sensor-support" aria-labelledby="article-proposed-linux-kernel-driver-patch-v3-for-samsung-s5k3t2-image-sensor-support-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-proposed-linux-kernel-driver-patch-v3-for-samsung-s5k3t2-image-sensor-support-title" class="article-title">Proposed Linux Kernel Driver Patch v3 for Samsung S5K3T2 Image Sensor Support</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list (2026-09-24)</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Proposed Linux Kernel Driver Patch v3 for Samsung S5K3T2 Image Sensor Support image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">A Linux kernel driver patch has been proposed to support Samsung&#39;s 20-megapixel CMOS image sensor, the S5K3T2, which is expected to contribute to future new device integration.</p>
+        <p>This proposed patch series adds a driver and device tree binding for the Samsung S5K3T2, a 20-megapixel CMOS image sensor supporting 4 MIPI D PHY lanes. This sensor is installed as the front camera in the Xiaomi POCO F3 device.</p>
+        <p>The driver was written and tested in an environment where the Qualcomm CAMSS driver was enabled. However, since the mainline kernel currently does not include the device tree for the Xiaomi POCO F3, this patch series itself does not add a device tree node that directly uses the binding.</p>
+        <h3 class="article-subheading">Considerations for Android HAL Integration</h3>
+        <p>This change is still in the proposed stage and has not yet been merged into the mainline kernel. The addition of a new sensor driver expands the scope of support for the lower driver layer and does not directly affect the actual Android HAL. If there is a future project using the S5K3T2 sensor, development teams can review the V4L2 subdevice controls and sensor mode settings of this driver to formulate an integration plan.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Although there are no direct HAL changes, when introducing the S5K3T2 sensor, the sensor mode settings via V4L2 subdevice and MIPI D-PHY lane configuration should be reviewed in advance.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/">[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-sharing-latest-kernel-and-libcamera-test-results-for-sony-imx681-camera-sensor-s" aria-labelledby="article-sharing-latest-kernel-and-libcamera-test-results-for-sony-imx681-camera-sensor-s-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 5">05</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-sharing-latest-kernel-and-libcamera-test-results-for-sony-imx681-camera-sensor-s-title" class="article-title">Sharing Latest Kernel and libcamera Test Results for Sony IMX681 Camera Sensor Support Patch v7</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list (2026-09-26)</p>
+        <figure class="article-media">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Sharing Latest Kernel and libcamera Test Results for Sony IMX681 Camera Sensor Support Patch v7 image" loading="lazy" decoding="async">
+        </figure>
+        <p class="article-lead">Test results for patch series v7, which supports the Sony IMX681 camera sensor, have been released, confirming compatibility with the latest Linux media stack.</p>
+        <p>This recently published test report was conducted on patch series v7, which adds support for the Sony IMX681 camera sensor. The test environment used Mesa version 3:26.2.3 1 and libcamera version 0.7.2 4.1 from the latest stable channel, and kernel version 7.3 rc4 was applied.</p>
+        <p>During the testing process, it was confirmed that the kernel compiled normally after applying the necessary patch to remove specific lines of code. This means that build compatibility with the latest kernel framework has been secured at the lower driver layer.</p>
+        <h3 class="article-subheading">Changes in libcamera and V4L2 Stack</h3>
+        <p>This test is a validation result for proposed changes that have not yet been merged. New camera sensor support for libcamera and V4L2 drivers directly impacts the Linux image pipeline and provides the lower-layer support needed for the Android HAL to process and expose image data through that sensor in the future. Development teams should continuously monitor the stability of the sensor driver with the latest libcamera and kernel version combinations.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Although there are no direct HAL changes, when introducing the IMX681 sensor, build compatibility and driver loading status in the latest libcamera 0.7.2 and kernel 7.3 environment should be checked.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/">Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor</a> — <a href="https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/">[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK</a> — <a href="https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/T/#t">Full patch series</a></li><li><a href="https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/">[PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor</a> — <a href="https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/T/#t">Full patch series</a></li><li><a href="https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/">Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor</a> — <a href="https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/T/#t">Full patch series</a></li><li><a href="https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html">Build your way: Use any AI agent of your choice in Android Studio</a></li><li><a href="https://www.anthropic.com/claude-opus-5-5">Claude Opus 5.5</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
