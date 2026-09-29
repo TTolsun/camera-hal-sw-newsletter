@@ -958,6 +958,42 @@
       }
     },
     {
+      "candidate_id": "gemini-fe6341d2bb2d8fb1",
+      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/",
+      "title": "[PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190 - Nihal Kumar Gupta",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-ecbdddd00636b5e9",
+      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK - Linus Walleij",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "gemini-19b6398e6b0d5427",
       "url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
       "title": "[PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro - Felipe Calliari",
@@ -968,6 +1004,24 @@
         "camera_relevance": 0.7,
         "android_hal_relevance": 0.7,
         "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-f84d1e30b1dc03da",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.7,
+        "android_hal_relevance": 0.7,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -1030,63 +1084,9 @@
       }
     },
     {
-      "candidate_id": "gemini-fe6341d2bb2d8fb1",
-      "url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/",
-      "title": "[PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190 - Nihal Kumar Gupta",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-ecbdddd00636b5e9",
-      "url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
-      "title": "[PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK - Linus Walleij",
-      "source_quality_score": 0.81,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-348919c03d831171",
       "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
       "title": "Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.45,
-        "android_hal_relevance": 0.45,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-a8cd06df28457612",
-      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
@@ -1498,24 +1498,6 @@
       }
     },
     {
-      "candidate_id": "gemini-linked-e06c54d7b6fbabdf",
-      "url": "https://github.com/androidx/media/issues/3393",
-      "title": "#3393",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "gemini-linked-eb93287b5d67c594",
       "url": "https://github.com/androidx/media/issues/3322",
       "title": "#3322",
@@ -1554,8 +1536,8 @@
   ],
   "counts": {
     "review_candidate": 14,
-    "blocked_candidate": 42,
-    "strong_candidate": 7,
-    "weak_candidate": 23
+    "blocked_candidate": 41,
+    "strong_candidate": 8,
+    "weak_candidate": 22
   }
 }

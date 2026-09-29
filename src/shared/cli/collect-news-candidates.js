@@ -1334,26 +1334,12 @@ function normalizeCandidate(raw) {
 }
 
 async function enrichImageCandidates(candidate) {
-  const source = {
+  const { collectArticleImages } = require('../render/article-image-collection');
+  const result = await collectArticleImages(candidate.articleUrl || candidate.url, {
     name: candidate.source,
-    sourceUrl: candidate.sourceUrl || candidate.source_url,
-    url: candidate.sourceUrl || candidate.source_url
-  };
-  let imageCandidates = Array.isArray(candidate.imageCandidates) ? candidate.imageCandidates : [];
-
-  try {
-    const html = await fetchText(candidate.articleUrl || candidate.url, 4500);
-    imageCandidates = imageCandidates.concat(extractImageCandidatesFromHtml(html, candidate.articleUrl || candidate.url, source));
-  } catch {
-    // Article pages often block lightweight collectors. Keep RSS/source-page candidates when available.
-  }
-
-  const validated = await validateImageCandidates(imageCandidates);
-  return {
-    ...candidate,
-    imageCandidates: validated,
-    image_candidates: validated
-  };
+    sourceUrl: candidate.sourceUrl || candidate.source_url
+  }, candidate.imageCandidates || []);
+  return { ...candidate, imageCandidates: result.images, image_candidates: result.images, image_collection: result.diagnostics };
 }
 
 function candidateTier(score, finalSelectionEligibility = '') {

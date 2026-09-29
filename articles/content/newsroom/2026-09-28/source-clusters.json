@@ -124,20 +124,13 @@
       "cluster_key": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
       "canonical_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
       "canonical_title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-      "candidate_count": 2,
-      "duplicate_count": 1,
+      "candidate_count": 1,
+      "duplicate_count": 0,
       "candidates": [
         {
           "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
           "title": "Leverage Android skills and Gemma 4 in Android Studio Quail 4",
           "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-          "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-          "canonical": false,
           "reliability": "official",
           "manual_seed": false
         }
@@ -367,13 +360,20 @@
       "cluster_key": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
       "canonical_title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur",
-      "candidate_count": 1,
-      "duplicate_count": 0,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
           "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur",
           "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        },
+        {
+          "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+          "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+          "canonical": false,
           "reliability": "project-official",
           "manual_seed": false
         }
@@ -1268,23 +1268,6 @@
         {
           "url": "https://github.com/androidx/media/issues/3375",
           "title": "#3375",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "e06c54d7b6fbabdf",
-      "cluster_key": "https://github.com/androidx/media/issues/3393",
-      "canonical_url": "https://github.com/androidx/media/issues/3393",
-      "canonical_title": "#3393",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://github.com/androidx/media/issues/3393",
-          "title": "#3393",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false

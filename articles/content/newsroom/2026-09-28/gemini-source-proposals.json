@@ -4,318 +4,303 @@
   "newsletter_date": "2026-09-28",
   "proposals": [
     {
-      "proposal_id": "camera-hal-sensor-sony-imx681-support",
-      "topic_gap": "Add support for the Sony IMX681 camera sensor in the Linux kernel's media subsystem.",
+      "proposal_id": "camera-hal-sensor-sony-imx681",
+      "topic_gap": "Camera HAL SW needs to track new sensor support in the Linux kernel.",
       "source_family": "linux-camera",
       "allowed_domains": [],
       "search_keywords": [
-        "Sony IMX681 kernel driver",
-        "linux-media Sony IMX681",
-        "camera sensor support linux"
+        "Sony IMX681",
+        "linux kernel media",
+        "camera sensor driver"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/"
       ],
       "expected_evidence": [
-        "Kernel patch",
-        "Sony IMX681",
-        "camera sensor driver",
-        "linux-media list"
+        "New camera sensor support",
+        "Linux kernel driver details",
+        "Camera HAL relevance"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-sensor-samsung-s5k3t2-driver",
-      "topic_gap": "Introduce a Linux kernel driver for the Samsung S5K3T2 image sensor.",
+      "proposal_id": "camera-hal-sensor-samsung-s5k3t2",
+      "topic_gap": "Camera HAL SW needs to track new sensor support in the Linux kernel.",
       "source_family": "linux-camera",
       "allowed_domains": [],
       "search_keywords": [
-        "Samsung S5K3T2 kernel driver",
-        "linux-media Samsung S5K3T2",
-        "camera sensor driver linux"
+        "Samsung S5K3T2",
+        "linux kernel media",
+        "camera sensor driver"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/"
       ],
       "expected_evidence": [
-        "Kernel patch",
-        "Samsung S5K3T2",
-        "image sensor driver",
-        "linux-media list"
+        "New camera sensor support",
+        "Linux kernel driver details",
+        "Camera HAL relevance"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-qcom-camss-offline-processing",
-      "topic_gap": "Enable CAMSS Offline Processing Engine support in the Linux kernel for Qualcomm platforms.",
+      "proposal_id": "camera-hal-qcom-camss-ope",
+      "topic_gap": "Camera HAL SW needs to track new ISP features and support in the Linux kernel.",
       "source_family": "linux-camera",
       "allowed_domains": [],
       "search_keywords": [
-        "Qualcomm CAMSS OPE kernel",
-        "linux-media CAMSS offline processing",
-        "ISP driver Qualcomm"
+        "Qualcomm CAMSS",
+        "ISP offline processing",
+        "linux kernel media"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/"
       ],
       "expected_evidence": [
-        "Kernel patch",
-        "Qualcomm CAMSS",
-        "Offline Processing Engine",
-        "ISP driver"
+        "Qualcomm ISP features",
+        "CAMSS driver updates",
+        "Linux kernel media"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-ipu-bridge-quirk-galaxy-book3-pro",
-      "topic_gap": "Add a DMI quirk for upside-down sensor behavior in the ipu-bridge driver for Samsung Galaxy Book3 Pro.",
+      "proposal_id": "camera-hal-qcom-camss-vfe1190",
+      "topic_gap": "Camera HAL SW needs to track new ISP features and support in the Linux kernel.",
       "source_family": "linux-camera",
       "allowed_domains": [],
       "search_keywords": [
-        "ipu-bridge Samsung Galaxy Book3 Pro",
-        "linux-media sensor quirk",
-        "camera driver upside down"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/"
-      ],
-      "expected_evidence": [
-        "Kernel patch",
-        "ipu-bridge driver",
-        "Samsung Galaxy Book3 Pro",
-        "sensor quirk"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-qcom-camss-glymur-support",
-      "topic_gap": "Add CAMSS support for Qualcomm Glymur platform in the Linux kernel.",
-      "source_family": "linux-camera",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Qualcomm CAMSS Glymur kernel",
-        "linux-media Glymur camera",
-        "camera driver Qualcomm"
-      ],
-      "candidate_urls": [
-        "https://lore.kernel.com/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/"
-      ],
-      "expected_evidence": [
-        "Kernel patch",
-        "Qualcomm CAMSS",
-        "Glymur platform",
-        "camera driver"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "libcamera-pipeline-reject-multiple-processed-streams",
-      "topic_gap": "libcamera: Reject multiple processed streams when using a software ISP.",
-      "source_family": "linux-camera",
-      "allowed_domains": [],
-      "search_keywords": [
-        "libcamera software ISP",
-        "libcamera pipeline multiple streams",
-        "libcamera patch review"
-      ],
-      "candidate_urls": [
-        "https://patchwork.libcamera.org/patch/28382/"
-      ],
-      "expected_evidence": [
-        "libcamera patch",
-        "software ISP",
-        "processed streams",
-        "pipeline handling"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "libcamera-v4l2-event-class",
-      "topic_gap": "libcamera: Introduce V4L2Event class and related functionality.",
-      "source_family": "linux-camera",
-      "allowed_domains": [],
-      "search_keywords": [
-        "libcamera V4L2Event",
-        "libcamera event handling",
-        "libcamera patch review"
-      ],
-      "candidate_urls": [
-        "https://patchwork.libcamera.org/patch/28380/"
-      ],
-      "expected_evidence": [
-        "libcamera patch",
-        "V4L2Event",
-        "event handling",
-        "camera framework"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "libcamera-sensor-controls-metadata",
-      "topic_gap": "libcamera: Add LensShadingCorrection maps and ToneCurve to controls metadata.",
-      "source_family": "linux-camera",
-      "allowed_domains": [],
-      "search_keywords": [
-        "libcamera LensShadingCorrection",
-        "libcamera ToneCurve metadata",
-        "libcamera patch review"
-      ],
-      "candidate_urls": [
-        "https://patchwork.libcamera.org/patch/28366/"
-      ],
-      "expected_evidence": [
-        "libcamera patch",
-        "LensShadingCorrection",
-        "ToneCurve",
-        "controls metadata"
-      ],
-      "risk_notes": []
-    },
-    {
-      "proposal_id": "camera-hal-qcom-camss-vfe-1190-support",
-      "topic_gap": "Add support for VFE 1190 in the Qualcomm CAMSS VFE driver within the Linux kernel.",
-      "source_family": "linux-camera",
-      "allowed_domains": [],
-      "search_keywords": [
-        "Qualcomm CAMSS VFE 1190 kernel",
-        "linux-media CAMSS VFE",
-        "ISP driver Qualcomm"
+        "Qualcomm CAMSS VFE",
+        "ISP driver",
+        "linux kernel media"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/"
       ],
       "expected_evidence": [
-        "Kernel patch",
-        "Qualcomm CAMSS VFE",
-        "VFE 1190",
-        "camera driver"
+        "Qualcomm ISP features",
+        "CAMSS VFE driver updates",
+        "Linux kernel media"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-renesas-rz-v2h-isp-ivc-enable",
-      "topic_gap": "Enable ISP and IVC on Renesas RZ/V2H EVK in the Linux kernel device tree.",
+      "proposal_id": "camera-hal-renesas-rzv2h-isp-ivc",
+      "topic_gap": "Camera HAL SW needs to track new SoC support for camera processing in the Linux kernel.",
       "source_family": "linux-camera",
       "allowed_domains": [],
       "search_keywords": [
-        "Renesas RZ/V2H kernel DTS",
-        "linux-media ISP IVC",
-        "embedded AI camera"
+        "Renesas RZ/V2H",
+        "ISP driver",
+        "linux kernel media"
       ],
       "candidate_urls": [
         "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/"
       ],
       "expected_evidence": [
-        "Kernel DTS patch",
-        "Renesas RZ/V2H EVK",
-        "ISP",
-        "IVC"
+        "Renesas SoC camera support",
+        "ISP and IVC enablement",
+        "Linux kernel device tree"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-camerax-release-1.6.2",
-      "topic_gap": "CameraX 1.6.2 release notes detailing any changes relevant to camera output or HAL interactions.",
-      "source_family": "android-camera-api",
+      "proposal_id": "camera-hal-ipu-bridge-samsung-book3-pro",
+      "topic_gap": "Camera HAL SW needs to track device-specific quirks and fixes in the Linux kernel.",
+      "source_family": "linux-camera",
       "allowed_domains": [],
       "search_keywords": [
-        "CameraX 1.6.2 release notes",
-        "androidx.camera release 1.6.2",
-        "CameraX HAL changes"
+        "ipu-bridge",
+        "Samsung Galaxy Book3 Pro",
+        "linux kernel media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/"
+      ],
+      "expected_evidence": [
+        "IPU bridge driver",
+        "Sensor quirk for Samsung device",
+        "Linux kernel media"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-qcom-camss-glymur",
+      "topic_gap": "Camera HAL SW needs to track new SoC support for camera processing in the Linux kernel.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Qualcomm Glymur",
+        "CAMSS driver",
+        "linux kernel media"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Qualcomm SoC camera support",
+        "CAMSS driver updates",
+        "Linux kernel media"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-pipeline-software-isp-limit",
+      "topic_gap": "Camera HAL SW needs to understand limitations and changes in camera pipeline processing frameworks.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "pipeline",
+        "software ISP",
+        "stream"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28382/"
+      ],
+      "expected_evidence": [
+        "libcamera pipeline changes",
+        "Software ISP limitations",
+        "Stream processing"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-v4l2-event-support",
+      "topic_gap": "Camera HAL SW needs to be aware of new event handling mechanisms in camera frameworks.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "V4L2 event",
+        "camera framework"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28380/"
+      ],
+      "expected_evidence": [
+        "libcamera V4L2 event handling",
+        "New event class implementation",
+        "Camera framework updates"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-sensor-metadata-controls",
+      "topic_gap": "Camera HAL SW needs to track updates to sensor metadata and control exposure in camera frameworks.",
+      "source_family": "linux-camera",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera",
+        "sensor metadata",
+        "controls"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28366/"
+      ],
+      "expected_evidence": [
+        "libcamera sensor metadata",
+        "Lens Shading Correction",
+        "Tone Curve controls"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camerax-release-1.6.2",
+      "topic_gap": "Camera HAL SW needs to track the latest stable releases of CameraX for new features and bug fixes.",
+      "source_family": "camera-api",
+      "allowed_domains": [],
+      "search_keywords": [
+        "CameraX",
+        "release notes",
+        "1.6.2"
       ],
       "candidate_urls": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2"
       ],
       "expected_evidence": [
         "CameraX release notes",
-        "version 1.6.2",
-        "camera output",
-        "HAL interaction"
+        "Version 1.6.2 details",
+        "Bug fixes or new features relevant to HAL"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "android-media3-release-1.11.1",
-      "topic_gap": "Media3 1.11.1 release notes, focusing on any updates impacting camera-generated media playback or A/V sync.",
-      "source_family": "android-media",
+      "proposal_id": "android-developers-blog-ai-agent-studio",
+      "topic_gap": "Camera HAL SW may be impacted by new AI agent integrations in Android Studio.",
+      "source_family": "android",
       "allowed_domains": [],
       "search_keywords": [
-        "Media3 1.11.1 release notes",
-        "androidx.media3 release 1.11.1",
-        "Media3 camera output A/V sync"
+        "Android Studio",
+        "AI agent",
+        "developer tools"
       ],
       "candidate_urls": [
-        "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1"
+        "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
       ],
       "expected_evidence": [
-        "Media3 release notes",
-        "version 1.11.1",
-        "camera output",
-        "A/V sync",
-        "playback"
+        "AI agent integration",
+        "Android Studio features",
+        "Developer tooling impact"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-android-studio-ai-agents",
-      "topic_gap": "Integration or usage of AI agents within Android Studio for camera-related development workflows.",
-      "source_family": "android-developers-blog",
+      "proposal_id": "android-developers-blog-gemma-4-studio",
+      "topic_gap": "Camera HAL SW may be impacted by new AI model integrations in Android Studio.",
+      "source_family": "android",
       "allowed_domains": [],
       "search_keywords": [
-        "Android Studio AI camera development",
-        "AI agents for Android camera",
-        "Android Studio tooling camera"
+        "Android Studio",
+        "Gemma 4",
+        "developer tools"
       ],
       "candidate_urls": [
-        "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
         "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html"
       ],
       "expected_evidence": [
-        "Android Studio AI integration",
-        "camera development tools",
-        "AI agents"
+        "AI model integration",
+        "Android Studio features",
+        "Developer tooling impact"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-emulator-adaptive-development",
-      "topic_gap": "Using the Android emulator for adaptive development, potentially impacting camera preview or capture scenarios.",
-      "source_family": "android-developers-blog",
+      "proposal_id": "android-developers-blog-emulator-adaptive",
+      "topic_gap": "Camera HAL SW needs to understand emulator capabilities for adaptive app development.",
+      "source_family": "android",
       "allowed_domains": [],
       "search_keywords": [
-        "Android emulator adaptive camera",
-        "emulator camera testing",
-        "adaptive app development camera"
+        "Android emulator",
+        "adaptive development",
+        "testing"
       ],
       "candidate_urls": [
         "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html"
       ],
       "expected_evidence": [
-        "Android emulator",
-        "adaptive development",
-        "camera preview",
-        "camera capture"
+        "Emulator features",
+        "Adaptive app development",
+        "Testing camera scenarios"
       ],
       "risk_notes": []
     },
     {
-      "proposal_id": "camera-hal-claude-opus-5-5-release",
-      "topic_gap": "Release of Claude Opus 5.5, potentially relevant for AI-assisted camera development or image processing tasks.",
+      "proposal_id": "anthropic-opus-5-5",
+      "topic_gap": "Camera HAL SW may benefit from understanding advancements in large language models relevant to coding and development.",
       "source_family": "ai",
       "allowed_domains": [],
       "search_keywords": [
-        "Claude Opus 5.5 camera",
-        "AI image processing Claude",
-        "Anthropic AI coding"
+        "Claude Opus 5.5",
+        "LLM",
+        "coding"
       ],
       "candidate_urls": [
         "https://www.anthropic.com/claude-opus-5-5"
       ],
       "expected_evidence": [
-        "Claude Opus 5.5",
-        "AI model release",
-        "coding assistance",
-        "image processing"
+        "LLM advancements",
+        "Coding capabilities",
+        "Developer productivity"
       ],
       "risk_notes": []
     }

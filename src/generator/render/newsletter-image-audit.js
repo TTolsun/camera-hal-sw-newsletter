@@ -769,6 +769,7 @@ async function buildNewsletterImageAuditReport(options = {}) {
       index: article.index,
       headline: article.headline,
       selectedImage: article.selectedImage,
+      image_recovery: ensureArray(issue?.sections)[article.index - 1]?.image_recovery || null,
       image_candidate_count: article.image_candidate_count,
       valid_image_candidate_count: article.valid_image_candidate_count,
       selected_image_is_fallback: article.selected_image_is_fallback,

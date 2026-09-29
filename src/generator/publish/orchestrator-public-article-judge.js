@@ -60,6 +60,7 @@ async function repairEditorSemanticWithLlm({
       'Claim repair에는 허용된 claim_type과 impact_level 값만 사용하세요. 직접 HAL contract를 뒷받침하는 근거가 없으면 CameraX/adaptive UI impact는 app_api_or_framework_adjacent로 매핑하세요.',
       'briefing failure는 briefing을 정확히 3개 item으로 고치고 draft의 나머지는 보존하세요.',
       'desk_target_explanation / desk_layer_distinction / desk_source_limitations / desk_subject_attribution issue가 있으면, 해당 section의 한국어 prose를 source와 reporter_evidence 범위 안에서 수정하세요: 대상 기술을 설명하고, 레이어(HAL/framework/kernel/V4L2/sensor/ISP/toolchain/trend)를 구분하고, source 한계를 보존하고, 주체(제조사/작성자/vendor/board/device) 혼동을 바로잡으세요. section 수·순서·headline·source·claims는 바꾸지 마세요.',
+      '서사 품질로 public_prose_pass가 실패하면 해당 public_article.lead와 body_markdown의 전개를 근거 범위 안에서 고치세요. 반복 요약·추상적 효용 나열을 줄이고 이 기사 고유의 문제와 확인된 변화가 연결되게 하세요. 문단 수만 바꾸거나 허구 장면을 넣어 통과시키지 마세요.',
       'Source fact 또는 source material을 만들지 마세요. 근거에 없는 대상 설명이나 한계를 지어내지 말고, 그런 경우 prose를 과장 없이 두세요.',
       'Schema-compliant JSON만 반환하세요.'
     ].join('\n'),

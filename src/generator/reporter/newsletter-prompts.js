@@ -173,7 +173,8 @@ function cameraHalEditorialVoiceBaseLines() {
   // 나오는데, 그것이 v1에서 서사가 사라진 원인이었다. 다뤄야 할 내용은 그대로 요구하고
   // 배치 순서만 기사에 맡긴다.
   const narrativeArc = 'body_markdown은 고정된 순서 틀을 따르지 말고 기사마다 흐름을 새로 정하세요. 다만 원문에서 실제로 일어난 일, 그 기술의 정체·적용 대상·현재 상태와 Camera HAL과의 거리감(직접 변경인지, lower-stack 참고 흐름인지), 그리고 직접 변경 / 참고할 흐름 / 추적할 리스크 중 무엇인지에 대한 현실적인 takeaway는 어떤 순서로 쓰든 본문에 모두 담아야 합니다. Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고 중요도 판단 기준으로만 쓰세요.';
-  return [voice, narrativeArc];
+  const narrativeQuality = '기사마다 독자가 이해해야 할 문제나 선택에서 출발해 확인된 변화와 의미가 이어지도록 쓰세요. 장면은 근거가 있거나 명시적인 가정일 때만 쓰고 인물·대화·사건을 꾸미지 마세요. 모든 기사를 발표 요약 → 일반적 활용 가능성 → HAL 영향 없음의 같은 틀로 찍어내지 마세요. 문단 수나 질문형 도입을 억지로 달리할 필요는 없지만 각 기사의 근거와 쟁점에 맞는 전개가 필요합니다.';
+  return [voice, narrativeArc, narrativeQuality];
 }
 
 function cameraHalEditorialVoicePrompt() {
@@ -222,6 +223,8 @@ function publicArticleJudgePrompt() {
     '제공된 evidence boundary 안에서만 해석하면 PASS입니다. 직접 근거 없는 HAL/driver/vendor pipeline 영향을 주장하면 FAIL입니다.',
     'public_prose_pass는 public_article에 workflow/debug/schema/validator/publish gate 같은 내부 운영 언어가 없고 독자-facing 한국어 technical prose이면 PASS입니다.',
     storyV2StyleExemptionPrompt(),
+    'story-v2 본문의 public_prose_pass는 형식 충족만으로 PASS가 아닙니다. lead에서 제시한 문제·변화가 본문에서 근거와 의미로 전개되는지, 문단이 같은 발표를 되풀이하거나 일반적 효용만 나열하는지 판정하세요. 기사들을 함께 읽고 동일한 추상 소제목과 전개가 반복돼 기사 고유의 쟁점이 사라지면 해당 기사를 FAIL로 판단하세요. 문단 수·소제목 수가 같다는 사실만으로 FAIL하지 마세요. 질문형 도입이나 허구의 장면을 강제하지 마세요.',
+    '서사 품질 FAIL은 public_prose_pass=false와 issues[].field=public_article.body_markdown, severity=P2로 보고하고 실제 반복 문장·누락된 연결과 근거 안에서 가능한 수정 방향을 명시하세요. 이는 desk advisory가 아니라 기존 semantic repair 대상입니다.',
     '문제가 있으면 issues[]에 field, severity(P1/P2/P3), reason, suggested_fix를 짧게 작성하세요. 문제가 없으면 issues는 빈 배열입니다.',
     '추가로 아래 4개 desk-review 축을 점검하세요. 위반이 있을 때만 issues[]에 severity를 반드시 "P3"으로, field를 지정된 이름으로 적으세요(P3는 advisory라 발행을 막지 않습니다). 제공된 근거(reporter_evidence, do_not_overstate, do_not_claim, claims, relevance_bucket, prose)로만 판정하고, 근거가 부족하면 위반으로 단정하지 말고 보수적으로 통과시키세요. 없는 설명을 지어내도록 유도하지 마세요.',
     'desk_target_explanation: prose가 대상 기술(driver/sensor/ISP/API/tool 등)이 무엇인지 reporter_evidence(api_or_component, behavior_change) 범위에서 설명했는가. 설명 없이 사건만 나열하면 위반입니다.',

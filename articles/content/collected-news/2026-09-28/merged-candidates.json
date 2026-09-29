@@ -4,7 +4,7 @@
   "newsletter_date": "2026-09-28",
   "audience": "AOSP Camera / Camera Driver / SoC Platform / C++ engineer",
   "lookback_days": 35,
-  "generated_at": "2026-09-29T09:56:38.425Z",
+  "generated_at": "2026-09-29T10:33:33.330Z",
   "sources_path": "src/shared/data/news-sources.json",
   "section_map": {
     "android": "Android / AOSP / Camera",
@@ -50,7 +50,7 @@
     "coverage_end_exclusive_at": "2026-09-28T00:00:00.000Z"
   },
   "generation_anchor_date": "2026-09-28",
-  "collection_observed_at": "2026-09-29T09:55:37.153Z",
+  "collection_observed_at": "2026-09-29T10:32:26.016Z",
   "run_mode": "manual",
   "not_yet_eligible": [
     {
@@ -6871,8 +6871,94 @@
       ],
       "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.",
       "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 162392
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 162392
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/w1200-h630-p-k-no-nu/BYOA-Backup-Metadata_1.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 150705
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "short-news",
       "reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
       "collection_reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 3 article-level signal(s) from article_text.)",
@@ -6889,6 +6975,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "cpp_ai_tooling_fallback",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -6919,9 +7020,9 @@
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": false,
-      "editor_review_required": false,
+      "editor_review_required": true,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass"
+      "evidence_validation_status": "fetch_failed_review_required"
     },
     {
       "schema_version": 7,
@@ -7111,8 +7212,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWrJTrzZ9lP8s5cDts7_rZ6pN8hKeKGX0TBS-yKLf7gmghzv8jYm-jTpuEit_zDds2v2PsS2-F4aT7K7mULWOWeR-THg3oGwLal0kjVxxwlrD_RFgx24qUq3-YSKlJHU0GBbWJh4XVzCXvV3jjiH8bska_0wd_ysjNOHkuMtFQwOX28mnnibqkOTe0oFk/s2469/Games_for_car__Meta%20.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 169551
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWrJTrzZ9lP8s5cDts7_rZ6pN8hKeKGX0TBS-yKLf7gmghzv8jYm-jTpuEit_zDds2v2PsS2-F4aT7K7mULWOWeR-THg3oGwLal0kjVxxwlrD_RFgx24qUq3-YSKlJHU0GBbWJh4XVzCXvV3jjiH8bska_0wd_ysjNOHkuMtFQwOX28mnnibqkOTe0oFk/w1200-h630-p-k-no-nu/Games_for_car__Meta%20.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 112858
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWrJTrzZ9lP8s5cDts7_rZ6pN8hKeKGX0TBS-yKLf7gmghzv8jYm-jTpuEit_zDds2v2PsS2-F4aT7K7mULWOWeR-THg3oGwLal0kjVxxwlrD_RFgx24qUq3-YSKlJHU0GBbWJh4XVzCXvV3jjiH8bska_0wd_ysjNOHkuMtFQwOX28mnnibqkOTe0oFk/s2469/Games_for_car__Meta%20.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 169551
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWrJTrzZ9lP8s5cDts7_rZ6pN8hKeKGX0TBS-yKLf7gmghzv8jYm-jTpuEit_zDds2v2PsS2-F4aT7K7mULWOWeR-THg3oGwLal0kjVxxwlrD_RFgx24qUq3-YSKlJHU0GBbWJh4XVzCXvV3jjiH8bska_0wd_ysjNOHkuMtFQwOX28mnnibqkOTe0oFk/w1200-h630-p-k-no-nu/Games_for_car__Meta%20.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 112858
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 66): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 66): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -7129,6 +7316,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -7351,8 +7553,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZ23jouRlBYpndeQfXUDihEq7NUP1buhHRy3jQVXEGXVpu2msSEIn_ZeAAkQKGz9paMkDxqCj7Dawksp37nHL8-qZKct_EXy_e85FiC6Nxb8GK0aK3ft5fhn42jPeV_zFD9Vcc9LFer6KgG8O93v2K9ls7cnrzbMQgtHp0piPBY5W12zGff_q-A4UYxQg/s2048/Googlebook-Blog-Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1206746
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZ23jouRlBYpndeQfXUDihEq7NUP1buhHRy3jQVXEGXVpu2msSEIn_ZeAAkQKGz9paMkDxqCj7Dawksp37nHL8-qZKct_EXy_e85FiC6Nxb8GK0aK3ft5fhn42jPeV_zFD9Vcc9LFer6KgG8O93v2K9ls7cnrzbMQgtHp0piPBY5W12zGff_q-A4UYxQg/w1200-h630-p-k-no-nu/Googlebook-Blog-Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 471357
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZ23jouRlBYpndeQfXUDihEq7NUP1buhHRy3jQVXEGXVpu2msSEIn_ZeAAkQKGz9paMkDxqCj7Dawksp37nHL8-qZKct_EXy_e85FiC6Nxb8GK0aK3ft5fhn42jPeV_zFD9Vcc9LFer6KgG8O93v2K9ls7cnrzbMQgtHp0piPBY5W12zGff_q-A4UYxQg/s2048/Googlebook-Blog-Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 1206746
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiZ23jouRlBYpndeQfXUDihEq7NUP1buhHRy3jQVXEGXVpu2msSEIn_ZeAAkQKGz9paMkDxqCj7Dawksp37nHL8-qZKct_EXy_e85FiC6Nxb8GK0aK3ft5fhn42jPeV_zFD9Vcc9LFer6KgG8O93v2K9ls7cnrzbMQgtHp0piPBY5W12zGff_q-A4UYxQg/w1200-h630-p-k-no-nu/Googlebook-Blog-Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 471357
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 60): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -7369,6 +7657,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/adaptive-development-scale-app-googlebook.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -7591,8 +7894,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/s2049/Bench%202.0%20Metadata-bench.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 62567
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/w1200-h630-p-k-no-nu/Bench%202.0%20Metadata-bench.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 60409
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/s2049/Bench%202.0%20Metadata-bench.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 62567
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCs6gPNr-l6f79eAyix8OZ59gg6K5y8QVTb6vuU2mNR9qdIlN2VUvGzbTenI-pIEGhMYql-E-t7Hs2Z0vI_UYnHte1w3vPRpjk7E0DPenuSkt-3gUM3y5GYZKHgciA4o3Ox2oxVkNuHiCwUX1WKCUkQhzBAd2FJhFiB-k5UKXYA67hXQHRVdFwrjHWFLQ/w1200-h630-p-k-no-nu/Bench%202.0%20Metadata-bench.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 60409
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 84): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 84): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -7609,6 +7998,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -7831,8 +8235,94 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/s2048/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 131087
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/w1200-h630-p-k-no-nu/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 94458
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/s2048/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 131087
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioB4K78NUxVQK1foY4gDCZi1RnMBISSZJ7hOzM_zaAYieAOZDhJCWGUw2moIF4ggyH8sc8KgpI-m9Jvk11tuP_BONUHkvQKoFIsviCz56uPhJDa9kmCwevKb0EXQrsTiFp4-X94STHPmk1vYxsOh1ksdKDzMBjR2OmvK-6to0zrlzL2_05T6Y3DK-2zXU/w1200-h630-p-k-no-nu/Ensuring-a-safe-GenAI-ecosystem-on-Google-Play-Metadata.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 94458
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "watchlist-reference",
       "reason": "Android Developers Blog (official, high, score 72): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Android Developers Blog (official, high, score 72): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -7849,6 +8339,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/08/ensuring-safety-genai-preventing-non-consensual-intimate-content.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -8392,7 +8897,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "og",
@@ -8420,23 +8925,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "og",
@@ -8464,18 +8969,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=tr",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "short-news",
@@ -8494,6 +8999,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "direct_aosp_camera",
+      "image_collection": {
+        "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.2",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 5,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 1,
@@ -8722,8 +9242,94 @@
       ],
       "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.",
       "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.",
-      "imageCandidates": [],
-      "image_candidates": [],
+      "imageCandidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/s2461/Quail4Blog_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 571165
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/w1200-h630-p-k-no-nu/Quail4Blog_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 341036
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
+      "image_candidates": [
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/s2461/Quail4Blog_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 571165
+        },
+        {
+          "url": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgAC7egt3KI6TzQ0_drlA339KxYZgivK5OTkxFEQ2a_DG3hJLsARHq3L94pgPrYWA44pk884Q9_W1vYpDBdpv9R2H2Qhhz0Ks0MqlMR0ngx9g4kv_PgxzSOIXL3swg8mhc_2M-0k9zpBlYn-2fV00eZYTrmvBlM30FskbbCWk5kXL6jd3pLrnG7i0ZV_B4/w1200-h630-p-k-no-nu/Quail4Blog_Meta.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 341036
+        },
+        {
+          "url": "https://developer.android.com/static/images/logos/android.svg",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "hero android logo",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 12454
+        }
+      ],
       "candidateTier": "short-news",
       "reason": "Android Developers Blog (official, high, score 60): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)",
       "collection_reason": "Android Developers Blog (official, high, score 60): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)",
@@ -8740,6 +9346,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "cpp_ai_tooling_fallback",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 7,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -8770,9 +9391,9 @@
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": false,
-      "editor_review_required": false,
+      "editor_review_required": true,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass"
+      "evidence_validation_status": "fetch_failed_review_required"
     },
     {
       "schema_version": 7,
@@ -8980,6 +9601,27 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "cpp_ai_tooling_fallback",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/08/emulator-adaptive.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 429
+          },
+          {
+            "attempt": 2,
+            "ok": false,
+            "reason": "http_error",
+            "status": 429
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -9010,9 +9652,9 @@
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": false,
-      "editor_review_required": false,
+      "editor_review_required": true,
       "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass"
+      "evidence_validation_status": "fetch_failed_review_required"
     },
     {
       "schema_version": 7,
@@ -9260,7 +9902,7 @@
       "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -9288,23 +9930,23 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-cn",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "og",
@@ -9332,18 +9974,18 @@
           "contentLength": 5562
         },
         {
-          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-cn",
           "sourceUrl": "https://developer.android.com/latest-updates",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "sourceKind": "article-img",
           "width": null,
           "height": null,
-          "alt": "YouTube",
-          "contentType": "image/png",
+          "alt": "",
+          "contentType": "image/svg+xml",
           "licenseStatus": "unknown",
           "attribution": "Android Developers Latest Updates",
           "validationStatus": "ok",
-          "contentLength": 2833
+          "contentLength": 1760
         }
       ],
       "candidateTier": "watchlist-reference",
@@ -9362,6 +10004,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "direct_aosp_camera",
+      "image_collection": {
+        "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 5,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -9600,6 +10257,27 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://android-developers.googleblog.com/2026/09/introducing-androidx-security-state-libraries.html",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 429
+          },
+          {
+            "attempt": 2,
+            "ok": false,
+            "reason": "http_error",
+            "status": 429
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -9843,7 +10521,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=he",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
           "sourceKind": "article-img",
@@ -9873,7 +10551,7 @@
           "contentLength": 4824
         },
         {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=he",
+          "url": "https://source.android.com/_static/images/translated.svg?hl=ar",
           "sourceUrl": "https://source.android.com/docs/security/bulletin",
           "articleUrl": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
           "sourceKind": "article-img",
@@ -9903,6 +10581,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://source.android.com/docs/security/bulletin/2026/2026-09-01",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 2,
+        "valid_count": 2,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -10152,6 +10845,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -10438,6 +11146,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -10703,6 +11426,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -11018,6 +11756,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -11270,6 +12023,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -11528,6 +12296,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "android",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -11790,6 +12573,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -12056,6 +12854,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -12303,6 +13116,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28382/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -12547,6 +13375,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28380/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -12791,6 +13634,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28366/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -13038,6 +13896,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28384/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -13285,6 +14158,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28368/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -13532,6 +14420,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "camera_driver_image_pipeline",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28360/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -13776,6 +14679,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28385/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -14020,6 +14938,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://patchwork.libcamera.org/patch/28383/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -14365,6 +15298,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/how-to-prepare-for-ai-driven-code-modernization-projects",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 9,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -14712,6 +15660,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/build-plugins-for-claude",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 8,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -14985,6 +15948,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.281",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -15332,6 +16310,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/claude-opus-5-5-built-for-coding-sessions-that-use-more-context",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 8,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -15679,6 +16672,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/how-coderabbit-power-digital-and-thoughtspot-scale-with-snowflake-and-vercel-on-claude-marketplace",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 6,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 1,
@@ -15974,6 +16982,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "cpp_ai_tooling_fallback",
+      "image_collection": {
+        "article_url": "https://www.anthropic.com/claude-opus-5-5",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -16247,6 +17270,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.283",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -16487,6 +17525,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/ringg",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -16834,6 +17887,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://www.anthropic.com/news/claude-discovers-novel-enzyme-system",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 3,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -17181,6 +18249,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://www.anthropic.com/features/ebola-response",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 6,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -17454,6 +18537,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.280",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -17694,6 +18792,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/invideo-builds-with-gpt-6-astra",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -17934,6 +19047,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/grab-openai-ai-skills-southeast-asia",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -18174,6 +19302,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/parallel-cuts-time-and-cost-with-astra",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -18414,6 +19557,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/higgsfield-from-prompt-to-production-with-astra",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -18761,6 +19919,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/claude-tag-now-supports-personal-connectors-in-channels",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 8,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -19108,6 +20281,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://claude.com/blog/claude-marketplace",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 12,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -19348,6 +20536,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/openai-extends-cyber-access-to-ukraine-for-civilian-defense",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -19588,6 +20791,21 @@
       "has_date": true,
       "has_concrete_change": false,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/chatgpt-ads-expands-southeast-asia-taiwan",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -19828,6 +21046,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://openai.com/index/expanding-openai-academy-with-new-learning-paths",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": false,
+            "reason": "http_error",
+            "status": 403
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "page_fetch_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -20077,6 +21310,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://www.kernel.org/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -20523,7 +21771,7 @@
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "imageCandidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ru",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
           "sourceKind": "og",
@@ -20551,7 +21799,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=ru",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
           "sourceKind": "article-img",
@@ -20567,7 +21815,7 @@
       ],
       "image_candidates": [
         {
-          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ru",
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
           "sourceKind": "og",
@@ -20595,7 +21843,7 @@
           "contentLength": 5562
         },
         {
-          "url": "https://developer.android.com/_static/images/translated.svg?hl=ru",
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=zh-tw",
           "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
           "articleUrl": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
           "sourceKind": "article-img",
@@ -20625,6 +21873,21 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 5,
+        "valid_count": 3,
+        "outcome": "available"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -20850,38 +22113,8 @@
       "aosp_camera_evidence_terms": [],
       "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
       "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "imageCandidates": [
-        {
-          "url": "https://opengraph.githubassets.com/da59e7683f150c3b56cc4129c8f28761faa0152629c5d44e4734d23887bd1e95/anthropics/claude-code/releases/tag/v2.1.265",
-          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.265",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Code Changelog",
-          "validationStatus": "ok",
-          "contentLength": 53505
-        }
-      ],
-      "image_candidates": [
-        {
-          "url": "https://opengraph.githubassets.com/da59e7683f150c3b56cc4129c8f28761faa0152629c5d44e4734d23887bd1e95/anthropics/claude-code/releases/tag/v2.1.265",
-          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
-          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.265",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Claude Code Changelog",
-          "validationStatus": "ok",
-          "contentLength": 53505
-        }
-      ],
+      "imageCandidates": [],
+      "image_candidates": [],
       "candidateTier": "watchlist-reference",
       "reason": "Claude Code Changelog (official, medium, score 68): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
       "collection_reason": "Claude Code Changelog (official, medium, score 68): generic_tech_watchlist; article-level camera, driver, SoC, or native tooling evidence was weak.",
@@ -20898,6 +22131,28 @@
       "has_date": true,
       "has_concrete_change": true,
       "topic_bucket": "generic_tech_watchlist",
+      "image_collection": {
+        "article_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.265",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [
+          {
+            "url": "https://opengraph.githubassets.com/da59e7683f150c3b56cc4129c8f28761faa0152629c5d44e4734d23887bd1e95/anthropics/claude-code/releases/tag/v2.1.265",
+            "stage": "image_validation",
+            "status": 429,
+            "reason": "HTTP 429"
+          }
+        ],
+        "extracted_count": 1,
+        "valid_count": 0,
+        "outcome": "image_validation_failed"
+      },
       "linked_evidence_summary": {
         "schema_version": 1,
         "total_count": 0,
@@ -20965,18 +22220,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Add support for the Sony IMX681 camera sensor in the Linux kernel's media subsystem."
+        "Camera HAL SW needs to track new sensor support in the Linux kernel."
       ],
       "keywords": [
-        "Sony IMX681 kernel driver",
-        "linux-media Sony IMX681",
-        "camera sensor support linux"
+        "Sony IMX681",
+        "linux kernel media",
+        "camera sensor driver"
       ],
       "evidence": [
-        "Kernel patch",
-        "Sony IMX681",
-        "camera sensor driver",
-        "linux-media list"
+        "New camera sensor support",
+        "Linux kernel driver details",
+        "Camera HAL relevance"
       ],
       "warnings": [],
       "publishedAt": "2026-09-26",
@@ -20994,9 +22248,9 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "camera-hal-sensor-sony-imx681-support",
-      "proposal_trace_id": "camera-hal-sensor-sony-imx681-support",
-      "discovery_topic_gap": "Add support for the Sony IMX681 camera sensor in the Linux kernel's media subsystem.",
+      "proposal_id": "camera-hal-sensor-sony-imx681",
+      "proposal_trace_id": "camera-hal-sensor-sony-imx681",
+      "discovery_topic_gap": "Camera HAL SW needs to track new sensor support in the Linux kernel.",
       "discovery_source_family": "linux-camera",
       "source_quality_score": 0.765,
       "source_quality_bucket": "review_candidate",
@@ -21041,18 +22295,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Introduce a Linux kernel driver for the Samsung S5K3T2 image sensor."
+        "Camera HAL SW needs to track new sensor support in the Linux kernel."
       ],
       "keywords": [
-        "Samsung S5K3T2 kernel driver",
-        "linux-media Samsung S5K3T2",
-        "camera sensor driver linux"
+        "Samsung S5K3T2",
+        "linux kernel media",
+        "camera sensor driver"
       ],
       "evidence": [
-        "Kernel patch",
-        "Samsung S5K3T2",
-        "image sensor driver",
-        "linux-media list"
+        "New camera sensor support",
+        "Linux kernel driver details",
+        "Camera HAL relevance"
       ],
       "warnings": [],
       "publishedAt": "2026-09-24",
@@ -21070,9 +22323,9 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "camera-hal-sensor-samsung-s5k3t2-driver",
-      "proposal_trace_id": "camera-hal-sensor-samsung-s5k3t2-driver",
-      "discovery_topic_gap": "Introduce a Linux kernel driver for the Samsung S5K3T2 image sensor.",
+      "proposal_id": "camera-hal-sensor-samsung-s5k3t2",
+      "proposal_trace_id": "camera-hal-sensor-samsung-s5k3t2",
+      "discovery_topic_gap": "Camera HAL SW needs to track new sensor support in the Linux kernel.",
       "discovery_source_family": "linux-camera",
       "source_quality_score": 0.765,
       "source_quality_bucket": "review_candidate",
@@ -21117,18 +22370,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Enable CAMSS Offline Processing Engine support in the Linux kernel for Qualcomm platforms."
+        "Camera HAL SW needs to track new ISP features and support in the Linux kernel."
       ],
       "keywords": [
-        "Qualcomm CAMSS OPE kernel",
-        "linux-media CAMSS offline processing",
-        "ISP driver Qualcomm"
+        "Qualcomm CAMSS",
+        "ISP offline processing",
+        "linux kernel media"
       ],
       "evidence": [
-        "Kernel patch",
-        "Qualcomm CAMSS",
-        "Offline Processing Engine",
-        "ISP driver"
+        "Qualcomm ISP features",
+        "CAMSS driver updates",
+        "Linux kernel media"
       ],
       "warnings": [],
       "publishedAt": "2026-09-25",
@@ -21146,9 +22398,9 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "camera-hal-qcom-camss-offline-processing",
-      "proposal_trace_id": "camera-hal-qcom-camss-offline-processing",
-      "discovery_topic_gap": "Enable CAMSS Offline Processing Engine support in the Linux kernel for Qualcomm platforms.",
+      "proposal_id": "camera-hal-qcom-camss-ope",
+      "proposal_trace_id": "camera-hal-qcom-camss-ope",
+      "discovery_topic_gap": "Camera HAL SW needs to track new ISP features and support in the Linux kernel.",
       "discovery_source_family": "linux-camera",
       "source_quality_score": 0.72,
       "source_quality_bucket": "review_candidate",
@@ -21159,316 +22411,6 @@
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "pass"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-19b6398e6b0d5427",
-      "source_candidate_id": "gemini-19b6398e6b0d5427",
-      "title": "[PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro - Felipe Calliari",
-      "url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
-      "articleUrl": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
-      "article_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
-      "source": "lore.kernel.org linux-media list (Intel IPU)",
-      "source_name": "lore.kernel.org linux-media list (Intel IPU)",
-      "sourceName": "lore.kernel.org linux-media list (Intel IPU)",
-      "sourceUrl": "https://lore.kernel.org/linux-media/",
-      "source_url": "https://lore.kernel.org/linux-media/",
-      "source_id": "lore-linux-media-ipu",
-      "category": "linux-camera",
-      "source_category": "linux-camera",
-      "section": "linux-camera",
-      "source_section": "linux-camera",
-      "priority": "high",
-      "reliability": "project-official",
-      "source_reliability": "project-official",
-      "origin": "gemini_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "unknown",
-      "source_type": "unknown",
-      "requiresCrossCheck": true,
-      "requires_cross_check": true,
-      "candidateOnly": false,
-      "candidate_only": false,
-      "topics": [
-        "Add a DMI quirk for upside-down sensor behavior in the ipu-bridge driver for Samsung Galaxy Book3 Pro."
-      ],
-      "keywords": [
-        "ipu-bridge Samsung Galaxy Book3 Pro",
-        "linux-media sensor quirk",
-        "camera driver upside down"
-      ],
-      "evidence": [
-        "Kernel patch",
-        "ipu-bridge driver",
-        "Samsung Galaxy Book3 Pro",
-        "sensor quirk"
-      ],
-      "warnings": [],
-      "publishedAt": "2026-09-23",
-      "published_date": "2026-09-23",
-      "hasDatedEvidence": true,
-      "has_dated_evidence": true,
-      "finalSelectionEligibility": "short",
-      "final_selection_eligibility": "short",
-      "source_gap_risk": false,
-      "source_gap_risk_level": "low",
-      "main_eligible": true,
-      "briefing_only": false,
-      "reference_only": false,
-      "relevanceScore": 70,
-      "relevance_score": 70,
-      "cameraHalRelevanceScore": 70,
-      "camera_hal_relevance_score": 70,
-      "proposal_id": "camera-hal-ipu-bridge-quirk-galaxy-book3-pro",
-      "proposal_trace_id": "camera-hal-ipu-bridge-quirk-galaxy-book3-pro",
-      "discovery_topic_gap": "Add a DMI quirk for upside-down sensor behavior in the ipu-bridge driver for Samsung Galaxy Book3 Pro.",
-      "discovery_source_family": "linux-camera",
-      "source_quality_score": 0.765,
-      "source_quality_bucket": "review_candidate",
-      "source_quality_report_ref": "gemini-19b6398e6b0d5427",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "low",
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "pass"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-3c9f683ad7d46e11",
-      "source_candidate_id": "gemini-3c9f683ad7d46e11",
-      "title": "[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP - Patchwork",
-      "url": "https://patchwork.libcamera.org/patch/28382/",
-      "articleUrl": "https://patchwork.libcamera.org/patch/28382/",
-      "article_url": "https://patchwork.libcamera.org/patch/28382/",
-      "source": "libcamera Patchwork (patch review)",
-      "source_name": "libcamera Patchwork (patch review)",
-      "sourceName": "libcamera Patchwork (patch review)",
-      "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
-      "source_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
-      "source_id": "patchwork-libcamera-patches",
-      "category": "linux-camera",
-      "source_category": "linux-camera",
-      "section": "linux-camera",
-      "source_section": "linux-camera",
-      "priority": "high",
-      "reliability": "project-official",
-      "source_reliability": "project-official",
-      "origin": "gemini_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "unknown",
-      "source_type": "unknown",
-      "requiresCrossCheck": true,
-      "requires_cross_check": true,
-      "candidateOnly": false,
-      "candidate_only": false,
-      "topics": [
-        "libcamera: Reject multiple processed streams when using a software ISP."
-      ],
-      "keywords": [
-        "libcamera software ISP",
-        "libcamera pipeline multiple streams",
-        "libcamera patch review"
-      ],
-      "evidence": [
-        "libcamera patch",
-        "software ISP",
-        "processed streams",
-        "pipeline handling"
-      ],
-      "warnings": [
-        "missing dated evidence from deterministic fetch"
-      ],
-      "publishedAt": "",
-      "published_date": "",
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_gap_risk": true,
-      "source_gap_risk_level": "high",
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "relevanceScore": 45,
-      "relevance_score": 45,
-      "cameraHalRelevanceScore": 45,
-      "camera_hal_relevance_score": 45,
-      "proposal_id": "libcamera-pipeline-reject-multiple-processed-streams",
-      "proposal_trace_id": "libcamera-pipeline-reject-multiple-processed-streams",
-      "discovery_topic_gap": "libcamera: Reject multiple processed streams when using a software ISP.",
-      "discovery_source_family": "linux-camera",
-      "source_quality_score": 0.545,
-      "source_quality_bucket": "blocked_candidate",
-      "source_quality_report_ref": "gemini-3c9f683ad7d46e11",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "",
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-935628717af7ac19",
-      "source_candidate_id": "gemini-935628717af7ac19",
-      "title": "[1/4] libcamera: v4l2_event: Add V4L2Event class and functionality - Patchwork",
-      "url": "https://patchwork.libcamera.org/patch/28380/",
-      "articleUrl": "https://patchwork.libcamera.org/patch/28380/",
-      "article_url": "https://patchwork.libcamera.org/patch/28380/",
-      "source": "libcamera Patchwork (patch review)",
-      "source_name": "libcamera Patchwork (patch review)",
-      "sourceName": "libcamera Patchwork (patch review)",
-      "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
-      "source_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
-      "source_id": "patchwork-libcamera-patches",
-      "category": "linux-camera",
-      "source_category": "linux-camera",
-      "section": "linux-camera",
-      "source_section": "linux-camera",
-      "priority": "high",
-      "reliability": "project-official",
-      "source_reliability": "project-official",
-      "origin": "gemini_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "unknown",
-      "source_type": "unknown",
-      "requiresCrossCheck": true,
-      "requires_cross_check": true,
-      "candidateOnly": false,
-      "candidate_only": false,
-      "topics": [
-        "libcamera: Introduce V4L2Event class and related functionality."
-      ],
-      "keywords": [
-        "libcamera V4L2Event",
-        "libcamera event handling",
-        "libcamera patch review"
-      ],
-      "evidence": [
-        "libcamera patch",
-        "V4L2Event",
-        "event handling",
-        "camera framework"
-      ],
-      "warnings": [
-        "missing dated evidence from deterministic fetch"
-      ],
-      "publishedAt": "",
-      "published_date": "",
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_gap_risk": true,
-      "source_gap_risk_level": "high",
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "relevanceScore": 45,
-      "relevance_score": 45,
-      "cameraHalRelevanceScore": 45,
-      "camera_hal_relevance_score": 45,
-      "proposal_id": "libcamera-v4l2-event-class",
-      "proposal_trace_id": "libcamera-v4l2-event-class",
-      "discovery_topic_gap": "libcamera: Introduce V4L2Event class and related functionality.",
-      "discovery_source_family": "linux-camera",
-      "source_quality_score": 0.545,
-      "source_quality_bucket": "blocked_candidate",
-      "source_quality_report_ref": "gemini-935628717af7ac19",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "",
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-ee6be76db729d498",
-      "source_candidate_id": "gemini-ee6be76db729d498",
-      "title": "[v2] libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork",
-      "url": "https://patchwork.libcamera.org/patch/28366/",
-      "articleUrl": "https://patchwork.libcamera.org/patch/28366/",
-      "article_url": "https://patchwork.libcamera.org/patch/28366/",
-      "source": "libcamera Patchwork (patch review)",
-      "source_name": "libcamera Patchwork (patch review)",
-      "sourceName": "libcamera Patchwork (patch review)",
-      "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
-      "source_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
-      "source_id": "patchwork-libcamera-patches",
-      "category": "linux-camera",
-      "source_category": "linux-camera",
-      "section": "linux-camera",
-      "source_section": "linux-camera",
-      "priority": "high",
-      "reliability": "project-official",
-      "source_reliability": "project-official",
-      "origin": "gemini_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "unknown",
-      "source_type": "unknown",
-      "requiresCrossCheck": true,
-      "requires_cross_check": true,
-      "candidateOnly": false,
-      "candidate_only": false,
-      "topics": [
-        "libcamera: Add LensShadingCorrection maps and ToneCurve to controls metadata."
-      ],
-      "keywords": [
-        "libcamera LensShadingCorrection",
-        "libcamera ToneCurve metadata",
-        "libcamera patch review"
-      ],
-      "evidence": [
-        "libcamera patch",
-        "LensShadingCorrection",
-        "ToneCurve",
-        "controls metadata"
-      ],
-      "warnings": [
-        "missing dated evidence from deterministic fetch"
-      ],
-      "publishedAt": "",
-      "published_date": "",
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_gap_risk": true,
-      "source_gap_risk_level": "high",
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "relevanceScore": 45,
-      "relevance_score": 45,
-      "cameraHalRelevanceScore": 45,
-      "camera_hal_relevance_score": 45,
-      "proposal_id": "libcamera-sensor-controls-metadata",
-      "proposal_trace_id": "libcamera-sensor-controls-metadata",
-      "discovery_topic_gap": "libcamera: Add LensShadingCorrection maps and ToneCurve to controls metadata.",
-      "discovery_source_family": "linux-camera",
-      "source_quality_score": 0.545,
-      "source_quality_bucket": "blocked_candidate",
-      "source_quality_report_ref": "gemini-ee6be76db729d498",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "",
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked"
     },
     {
       "schema_version": 5,
@@ -21503,18 +22445,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Add support for VFE 1190 in the Qualcomm CAMSS VFE driver within the Linux kernel."
+        "Camera HAL SW needs to track new ISP features and support in the Linux kernel."
       ],
       "keywords": [
-        "Qualcomm CAMSS VFE 1190 kernel",
-        "linux-media CAMSS VFE",
-        "ISP driver Qualcomm"
+        "Qualcomm CAMSS VFE",
+        "ISP driver",
+        "linux kernel media"
       ],
       "evidence": [
-        "Kernel patch",
-        "Qualcomm CAMSS VFE",
-        "VFE 1190",
-        "camera driver"
+        "Qualcomm ISP features",
+        "CAMSS VFE driver updates",
+        "Linux kernel media"
       ],
       "warnings": [],
       "publishedAt": "2026-09-23",
@@ -21532,9 +22473,9 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "camera-hal-qcom-camss-vfe-1190-support",
-      "proposal_trace_id": "camera-hal-qcom-camss-vfe-1190-support",
-      "discovery_topic_gap": "Add support for VFE 1190 in the Qualcomm CAMSS VFE driver within the Linux kernel.",
+      "proposal_id": "camera-hal-qcom-camss-vfe1190",
+      "proposal_trace_id": "camera-hal-qcom-camss-vfe1190",
+      "discovery_topic_gap": "Camera HAL SW needs to track new ISP features and support in the Linux kernel.",
       "discovery_source_family": "linux-camera",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
@@ -21579,18 +22520,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Enable ISP and IVC on Renesas RZ/V2H EVK in the Linux kernel device tree."
+        "Camera HAL SW needs to track new SoC support for camera processing in the Linux kernel."
       ],
       "keywords": [
-        "Renesas RZ/V2H kernel DTS",
-        "linux-media ISP IVC",
-        "embedded AI camera"
+        "Renesas RZ/V2H",
+        "ISP driver",
+        "linux kernel media"
       ],
       "evidence": [
-        "Kernel DTS patch",
-        "Renesas RZ/V2H EVK",
-        "ISP",
-        "IVC"
+        "Renesas SoC camera support",
+        "ISP and IVC enablement",
+        "Linux kernel device tree"
       ],
       "warnings": [],
       "publishedAt": "2026-09-25",
@@ -21608,9 +22548,9 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "proposal_id": "camera-hal-renesas-rz-v2h-isp-ivc-enable",
-      "proposal_trace_id": "camera-hal-renesas-rz-v2h-isp-ivc-enable",
-      "discovery_topic_gap": "Enable ISP and IVC on Renesas RZ/V2H EVK in the Linux kernel device tree.",
+      "proposal_id": "camera-hal-renesas-rzv2h-isp-ivc",
+      "proposal_trace_id": "camera-hal-renesas-rzv2h-isp-ivc",
+      "discovery_topic_gap": "Camera HAL SW needs to track new SoC support for camera processing in the Linux kernel.",
       "discovery_source_family": "linux-camera",
       "source_quality_score": 0.81,
       "source_quality_bucket": "strong_candidate",
@@ -21621,6 +22561,388 @@
       "editor_review_required": false,
       "unsupported_claims_excluded": false,
       "evidence_validation_status": "pass"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-19b6398e6b0d5427",
+      "source_candidate_id": "gemini-19b6398e6b0d5427",
+      "title": "[PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro - Felipe Calliari",
+      "url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+      "articleUrl": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+      "article_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "source_name": "lore.kernel.org linux-media list (Intel IPU)",
+      "sourceName": "lore.kernel.org linux-media list (Intel IPU)",
+      "sourceUrl": "https://lore.kernel.org/linux-media/",
+      "source_url": "https://lore.kernel.org/linux-media/",
+      "source_id": "lore-linux-media-ipu",
+      "category": "linux-camera",
+      "source_category": "linux-camera",
+      "section": "linux-camera",
+      "source_section": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "source_reliability": "project-official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "unknown",
+      "source_type": "unknown",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW needs to track device-specific quirks and fixes in the Linux kernel."
+      ],
+      "keywords": [
+        "ipu-bridge",
+        "Samsung Galaxy Book3 Pro",
+        "linux kernel media"
+      ],
+      "evidence": [
+        "IPU bridge driver",
+        "Sensor quirk for Samsung device",
+        "Linux kernel media"
+      ],
+      "warnings": [],
+      "publishedAt": "2026-09-23",
+      "published_date": "2026-09-23",
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_gap_risk": false,
+      "source_gap_risk_level": "low",
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "relevanceScore": 70,
+      "relevance_score": 70,
+      "cameraHalRelevanceScore": 70,
+      "camera_hal_relevance_score": 70,
+      "proposal_id": "camera-hal-ipu-bridge-samsung-book3-pro",
+      "proposal_trace_id": "camera-hal-ipu-bridge-samsung-book3-pro",
+      "discovery_topic_gap": "Camera HAL SW needs to track device-specific quirks and fixes in the Linux kernel.",
+      "discovery_source_family": "linux-camera",
+      "source_quality_score": 0.765,
+      "source_quality_bucket": "review_candidate",
+      "source_quality_report_ref": "gemini-19b6398e6b0d5427",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "low",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-f84d1e30b1dc03da",
+      "source_candidate_id": "gemini-f84d1e30b1dc03da",
+      "title": "[PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta",
+      "url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "articleUrl": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "article_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/",
+      "source": "lore.kernel.org linux-media list (Intel IPU)",
+      "source_name": "lore.kernel.org linux-media list (Intel IPU)",
+      "sourceName": "lore.kernel.org linux-media list (Intel IPU)",
+      "sourceUrl": "https://lore.kernel.org/linux-media/",
+      "source_url": "https://lore.kernel.org/linux-media/",
+      "source_id": "lore-linux-media-ipu",
+      "category": "linux-camera",
+      "source_category": "linux-camera",
+      "section": "linux-camera",
+      "source_section": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "source_reliability": "project-official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "unknown",
+      "source_type": "unknown",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW needs to track new SoC support for camera processing in the Linux kernel."
+      ],
+      "keywords": [
+        "Qualcomm Glymur",
+        "CAMSS driver",
+        "linux kernel media"
+      ],
+      "evidence": [
+        "Qualcomm SoC camera support",
+        "CAMSS driver updates",
+        "Linux kernel media"
+      ],
+      "warnings": [],
+      "publishedAt": "2026-09-25",
+      "published_date": "2026-09-25",
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_gap_risk": false,
+      "source_gap_risk_level": "low",
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "relevanceScore": 70,
+      "relevance_score": 70,
+      "cameraHalRelevanceScore": 70,
+      "camera_hal_relevance_score": 70,
+      "proposal_id": "camera-hal-qcom-camss-glymur",
+      "proposal_trace_id": "camera-hal-qcom-camss-glymur",
+      "discovery_topic_gap": "Camera HAL SW needs to track new SoC support for camera processing in the Linux kernel.",
+      "discovery_source_family": "linux-camera",
+      "source_quality_score": 0.81,
+      "source_quality_bucket": "strong_candidate",
+      "source_quality_report_ref": "gemini-f84d1e30b1dc03da",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "low",
+      "final_selection_blocked": false,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "pass"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-3c9f683ad7d46e11",
+      "source_candidate_id": "gemini-3c9f683ad7d46e11",
+      "title": "[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP - Patchwork",
+      "url": "https://patchwork.libcamera.org/patch/28382/",
+      "articleUrl": "https://patchwork.libcamera.org/patch/28382/",
+      "article_url": "https://patchwork.libcamera.org/patch/28382/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_name": "libcamera Patchwork (patch review)",
+      "sourceName": "libcamera Patchwork (patch review)",
+      "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
+      "source_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
+      "source_id": "patchwork-libcamera-patches",
+      "category": "linux-camera",
+      "source_category": "linux-camera",
+      "section": "linux-camera",
+      "source_section": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "source_reliability": "project-official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "unknown",
+      "source_type": "unknown",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW needs to understand limitations and changes in camera pipeline processing frameworks."
+      ],
+      "keywords": [
+        "libcamera",
+        "pipeline",
+        "software ISP",
+        "stream"
+      ],
+      "evidence": [
+        "libcamera pipeline changes",
+        "Software ISP limitations",
+        "Stream processing"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "libcamera-pipeline-software-isp-limit",
+      "proposal_trace_id": "libcamera-pipeline-software-isp-limit",
+      "discovery_topic_gap": "Camera HAL SW needs to understand limitations and changes in camera pipeline processing frameworks.",
+      "discovery_source_family": "linux-camera",
+      "source_quality_score": 0.545,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-3c9f683ad7d46e11",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-935628717af7ac19",
+      "source_candidate_id": "gemini-935628717af7ac19",
+      "title": "[1/4] libcamera: v4l2_event: Add V4L2Event class and functionality - Patchwork",
+      "url": "https://patchwork.libcamera.org/patch/28380/",
+      "articleUrl": "https://patchwork.libcamera.org/patch/28380/",
+      "article_url": "https://patchwork.libcamera.org/patch/28380/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_name": "libcamera Patchwork (patch review)",
+      "sourceName": "libcamera Patchwork (patch review)",
+      "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
+      "source_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
+      "source_id": "patchwork-libcamera-patches",
+      "category": "linux-camera",
+      "source_category": "linux-camera",
+      "section": "linux-camera",
+      "source_section": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "source_reliability": "project-official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "unknown",
+      "source_type": "unknown",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW needs to be aware of new event handling mechanisms in camera frameworks."
+      ],
+      "keywords": [
+        "libcamera",
+        "V4L2 event",
+        "camera framework"
+      ],
+      "evidence": [
+        "libcamera V4L2 event handling",
+        "New event class implementation",
+        "Camera framework updates"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "libcamera-v4l2-event-support",
+      "proposal_trace_id": "libcamera-v4l2-event-support",
+      "discovery_topic_gap": "Camera HAL SW needs to be aware of new event handling mechanisms in camera frameworks.",
+      "discovery_source_family": "linux-camera",
+      "source_quality_score": 0.545,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-935628717af7ac19",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
+    },
+    {
+      "schema_version": 5,
+      "id": "gemini-ee6be76db729d498",
+      "source_candidate_id": "gemini-ee6be76db729d498",
+      "title": "[v2] libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork",
+      "url": "https://patchwork.libcamera.org/patch/28366/",
+      "articleUrl": "https://patchwork.libcamera.org/patch/28366/",
+      "article_url": "https://patchwork.libcamera.org/patch/28366/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_name": "libcamera Patchwork (patch review)",
+      "sourceName": "libcamera Patchwork (patch review)",
+      "sourceUrl": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
+      "source_url": "https://patchwork.libcamera.org/api/patches/?order=-date&per_page=250&format=json",
+      "source_id": "patchwork-libcamera-patches",
+      "category": "linux-camera",
+      "source_category": "linux-camera",
+      "section": "linux-camera",
+      "source_section": "linux-camera",
+      "priority": "high",
+      "reliability": "project-official",
+      "source_reliability": "project-official",
+      "origin": "gemini_discovery",
+      "collectionStage": "gemini",
+      "collection_stage": "gemini",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "unknown",
+      "source_type": "unknown",
+      "requiresCrossCheck": true,
+      "requires_cross_check": true,
+      "candidateOnly": false,
+      "candidate_only": false,
+      "topics": [
+        "Camera HAL SW needs to track updates to sensor metadata and control exposure in camera frameworks."
+      ],
+      "keywords": [
+        "libcamera",
+        "sensor metadata",
+        "controls"
+      ],
+      "evidence": [
+        "libcamera sensor metadata",
+        "Lens Shading Correction",
+        "Tone Curve controls"
+      ],
+      "warnings": [
+        "missing dated evidence from deterministic fetch"
+      ],
+      "publishedAt": "",
+      "published_date": "",
+      "hasDatedEvidence": false,
+      "has_dated_evidence": false,
+      "finalSelectionEligibility": "watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_gap_risk": true,
+      "source_gap_risk_level": "high",
+      "main_eligible": false,
+      "briefing_only": true,
+      "reference_only": true,
+      "relevanceScore": 45,
+      "relevance_score": 45,
+      "cameraHalRelevanceScore": 45,
+      "camera_hal_relevance_score": 45,
+      "proposal_id": "libcamera-sensor-metadata-controls",
+      "proposal_trace_id": "libcamera-sensor-metadata-controls",
+      "discovery_topic_gap": "Camera HAL SW needs to track updates to sensor metadata and control exposure in camera frameworks.",
+      "discovery_source_family": "linux-camera",
+      "source_quality_score": 0.545,
+      "source_quality_bucket": "blocked_candidate",
+      "source_quality_report_ref": "gemini-ee6be76db729d498",
+      "duplicate_of_selected_source": false,
+      "stale_claim_risk": "",
+      "final_selection_blocked": true,
+      "editor_review_required": false,
+      "unsupported_claims_excluded": false,
+      "evidence_validation_status": "blocked"
     },
     {
       "schema_version": 5,
@@ -21655,17 +22977,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Integration or usage of AI agents within Android Studio for camera-related development workflows."
+        "Camera HAL SW may be impacted by new AI agent integrations in Android Studio."
       ],
       "keywords": [
-        "Android Studio AI camera development",
-        "AI agents for Android camera",
-        "Android Studio tooling camera"
+        "Android Studio",
+        "AI agent",
+        "developer tools"
       ],
       "evidence": [
-        "Android Studio AI integration",
-        "camera development tools",
-        "AI agents"
+        "AI agent integration",
+        "Android Studio features",
+        "Developer tooling impact"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -21685,90 +23007,13 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "camera-hal-android-studio-ai-agents",
-      "proposal_trace_id": "camera-hal-android-studio-ai-agents",
-      "discovery_topic_gap": "Integration or usage of AI agents within Android Studio for camera-related development workflows.",
-      "discovery_source_family": "android-developers-blog",
+      "proposal_id": "android-developers-blog-ai-agent-studio",
+      "proposal_trace_id": "android-developers-blog-ai-agent-studio",
+      "discovery_topic_gap": "Camera HAL SW may be impacted by new AI agent integrations in Android Studio.",
+      "discovery_source_family": "android",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-348919c03d831171",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "",
-      "final_selection_blocked": true,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "blocked"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-a8cd06df28457612",
-      "source_candidate_id": "gemini-a8cd06df28457612",
-      "title": "Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4",
-      "url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "articleUrl": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "article_url": "https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html",
-      "source": "Android Developers Blog",
-      "source_name": "Android Developers Blog",
-      "sourceName": "Android Developers Blog",
-      "sourceUrl": "https://android-developers.googleblog.com/",
-      "source_url": "https://android-developers.googleblog.com/",
-      "source_id": "android-developers-blog",
-      "category": "android",
-      "source_category": "android",
-      "section": "android",
-      "source_section": "android",
-      "priority": "high",
-      "reliability": "official",
-      "source_reliability": "official",
-      "origin": "gemini_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "sourceType": "official_blog",
-      "source_type": "official_blog",
-      "requiresCrossCheck": false,
-      "requires_cross_check": false,
-      "candidateOnly": false,
-      "candidate_only": false,
-      "topics": [
-        "Integration or usage of AI agents within Android Studio for camera-related development workflows."
-      ],
-      "keywords": [
-        "Android Studio AI camera development",
-        "AI agents for Android camera",
-        "Android Studio tooling camera"
-      ],
-      "evidence": [
-        "Android Studio AI integration",
-        "camera development tools",
-        "AI agents"
-      ],
-      "warnings": [
-        "missing dated evidence from deterministic fetch"
-      ],
-      "publishedAt": "",
-      "published_date": "",
-      "hasDatedEvidence": false,
-      "has_dated_evidence": false,
-      "finalSelectionEligibility": "watchlist",
-      "final_selection_eligibility": "watchlist",
-      "source_gap_risk": true,
-      "source_gap_risk_level": "high",
-      "main_eligible": false,
-      "briefing_only": true,
-      "reference_only": true,
-      "relevanceScore": 45,
-      "relevance_score": 45,
-      "cameraHalRelevanceScore": 45,
-      "camera_hal_relevance_score": 45,
-      "proposal_id": "camera-hal-android-studio-ai-agents",
-      "proposal_trace_id": "camera-hal-android-studio-ai-agents",
-      "discovery_topic_gap": "Integration or usage of AI agents within Android Studio for camera-related development workflows.",
-      "discovery_source_family": "android-developers-blog",
-      "source_quality_score": 0.492,
-      "source_quality_bucket": "blocked_candidate",
-      "source_quality_report_ref": "gemini-a8cd06df28457612",
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": true,
@@ -21809,18 +23054,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Using the Android emulator for adaptive development, potentially impacting camera preview or capture scenarios."
+        "Camera HAL SW needs to understand emulator capabilities for adaptive app development."
       ],
       "keywords": [
-        "Android emulator adaptive camera",
-        "emulator camera testing",
-        "adaptive app development camera"
-      ],
-      "evidence": [
         "Android emulator",
         "adaptive development",
-        "camera preview",
-        "camera capture"
+        "testing"
+      ],
+      "evidence": [
+        "Emulator features",
+        "Adaptive app development",
+        "Testing camera scenarios"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -21840,10 +23084,10 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "camera-hal-emulator-adaptive-development",
-      "proposal_trace_id": "camera-hal-emulator-adaptive-development",
-      "discovery_topic_gap": "Using the Android emulator for adaptive development, potentially impacting camera preview or capture scenarios.",
-      "discovery_source_family": "android-developers-blog",
+      "proposal_id": "android-developers-blog-emulator-adaptive",
+      "proposal_trace_id": "android-developers-blog-emulator-adaptive",
+      "discovery_topic_gap": "Camera HAL SW needs to understand emulator capabilities for adaptive app development.",
+      "discovery_source_family": "android",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
       "source_quality_report_ref": "gemini-6f8916deba211090",
@@ -21887,18 +23131,17 @@
       "candidateOnly": false,
       "candidate_only": false,
       "topics": [
-        "Release of Claude Opus 5.5, potentially relevant for AI-assisted camera development or image processing tasks."
+        "Camera HAL SW may benefit from understanding advancements in large language models relevant to coding and development."
       ],
       "keywords": [
-        "Claude Opus 5.5 camera",
-        "AI image processing Claude",
-        "Anthropic AI coding"
+        "Claude Opus 5.5",
+        "LLM",
+        "coding"
       ],
       "evidence": [
-        "Claude Opus 5.5",
-        "AI model release",
-        "coding assistance",
-        "image processing"
+        "LLM advancements",
+        "Coding capabilities",
+        "Developer productivity"
       ],
       "warnings": [
         "missing dated evidence from deterministic fetch"
@@ -21918,9 +23161,9 @@
       "relevance_score": 45,
       "cameraHalRelevanceScore": 45,
       "camera_hal_relevance_score": 45,
-      "proposal_id": "camera-hal-claude-opus-5-5-release",
-      "proposal_trace_id": "camera-hal-claude-opus-5-5-release",
-      "discovery_topic_gap": "Release of Claude Opus 5.5, potentially relevant for AI-assisted camera development or image processing tasks.",
+      "proposal_id": "anthropic-opus-5-5",
+      "proposal_trace_id": "anthropic-opus-5-5",
+      "discovery_topic_gap": "Camera HAL SW may benefit from understanding advancements in large language models relevant to coding and development.",
       "discovery_source_family": "ai",
       "source_quality_score": 0.492,
       "source_quality_bucket": "blocked_candidate",
@@ -21968,7 +23211,7 @@
       "anchor_text": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
       "link_context": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "New Driver",
+      "suggested_article_type": "New Driver Development",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -21976,7 +23219,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com",
         "anchor_text": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
         "evidence_role": "secondary_context",
-        "selection_reason": "This is a new RFC patch series for adding an OmniVision OV2312 RGB-IR sensor driver, which is relevant to Camera HAL and image sensors.",
+        "selection_reason": "This is a RFC patch series for adding a new OmniVision OV2312 RGB-IR sensor driver, which is relevant to Camera HAL/Driver development.",
         "links": [
           {
             "url": "https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899",
@@ -22031,7 +23274,7 @@
       "anchor_text": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com/",
       "link_context": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Development Update",
+      "suggested_article_type": "Driver Development Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22039,7 +23282,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com",
         "anchor_text": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com/",
         "evidence_role": "secondary_context",
-        "selection_reason": "This is a secondary context for the OmniVision OV2312 driver, indicating ongoing development and discussion in the Linux media community.",
+        "selection_reason": "This RFC patch series is related to the OmniVision OV2312 RGB-IR sensor driver, indicating ongoing development in sensor integration.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20250818155809.469479-1-mirela.rabulea@nxp.com",
@@ -22094,7 +23337,7 @@
       "anchor_text": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312/",
       "link_context": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Code Commits",
+      "suggested_article_type": "Driver Development Progress",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22102,7 +23345,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com",
         "anchor_text": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312/",
         "evidence_role": "secondary_context",
-        "selection_reason": "This commit history directly relates to the OV2312 sensor driver, providing concrete code changes and development progress.",
+        "selection_reason": "This GitHub commit history shows the development progress for the OV2312 sensor driver, relevant for Camera HAL/Driver news.",
         "links": [
           {
             "url": "https://github.com/RISHI27-dot/linux/commits/lpc/ov2312",
@@ -22157,7 +23400,7 @@
       "anchor_text": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
       "link_context": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Implementation Details",
+      "suggested_article_type": "ISP/Pipeline Integration",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22165,7 +23408,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925133001.2780868-1-r-donadkar@ti.com",
         "anchor_text": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
         "evidence_role": "secondary_context",
-        "selection_reason": "This file modification within edgeai-gst-plugins related to OV2312 suggests integration efforts and specific implementation details for the sensor.",
+        "selection_reason": "This commit relates to GStreamer plugins and TIovx ISP, which are components of the camera pipeline and relevant for HAL/Driver updates.",
         "links": [
           {
             "url": "https://github.com/RISHI27-dot/edgeai-gst-plugins/blob/lpc/ov2312/ext/tiovx/gsttiovxisp.c",
@@ -22220,7 +23463,7 @@
       "anchor_text": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
       "link_context": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Code Commits",
+      "suggested_article_type": "Camera HAL/Driver Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22228,7 +23471,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
         "evidence_role": "secondary_context",
-        "selection_reason": "This commit history for libcamera related to CAMSS pipeline indicates updates and improvements in the camera stack, relevant to Camera HAL and V4L2/libcamera.",
+        "selection_reason": "This commit history indicates updates to the libcamera project, specifically related to the CAMSS pipeline, relevant for Camera HAL/Driver news.",
         "links": [
           {
             "url": "https://github.com/jwrdegoede/libcamera/commits/camss_pipeline_v2.1",
@@ -22283,7 +23526,7 @@
       "anchor_text": "https://github.com/loicpoulain/camss-isp-m2m-test",
       "link_context": "https://github.com/loicpoulain/camss-isp-m2m-test",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Testing Framework",
+      "suggested_article_type": "Driver Testing/Validation",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22291,7 +23534,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://github.com/loicpoulain/camss-isp-m2m-test",
         "evidence_role": "secondary_context",
-        "selection_reason": "This repository contains tests for CAMSS ISP, which is directly relevant to Camera HAL and ISP development.",
+        "selection_reason": "This repository contains tests for CAMSS ISP, which is relevant for understanding and validating camera driver functionality.",
         "links": [
           {
             "url": "https://github.com/loicpoulain/camss-isp-m2m-test",
@@ -22346,7 +23589,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Patch Series",
+      "suggested_article_type": "ISP/Driver Feature",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22354,7 +23597,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This is a patch in a series for CAMSS Offline Processing Engine support, relevant to Camera HAL and ISP.",
+        "selection_reason": "This patch series is about CAMSS Offline Processing Engine support, a significant update for camera ISP and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260923-camss-isp-ope-v9-0-86a75dc18b83@oss.qualcomm.com",
@@ -22409,7 +23652,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Patch Series",
+      "suggested_article_type": "ISP/Driver Feature Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22417,7 +23660,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This is an earlier version of the CAMSS ISP OPE patch series, showing development progression.",
+        "selection_reason": "This patch continues the development of CAMSS Offline Processing Engine support, relevant for camera ISP and driver news.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260921-camss-isp-ope-v8-0-dd1c86a3c8a0@oss.qualcomm.com",
@@ -22472,7 +23715,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Patch Series",
+      "suggested_article_type": "ISP/Driver Feature Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22480,7 +23723,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "Another version of the CAMSS ISP OPE patch series, indicating continuous development.",
+        "selection_reason": "This patch is part of the ongoing effort to add CAMSS Offline Processing Engine support, important for camera ISP and driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260915-camss-isp-ope-v7-0-77b13d131d3d@oss.qualcomm.com",
@@ -22535,7 +23778,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Patch Series",
+      "suggested_article_type": "ISP/Driver Feature Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22543,7 +23786,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "An older version of the CAMSS ISP OPE patch series, useful for tracking the evolution of the feature.",
+        "selection_reason": "This patch series contributes to the CAMSS Offline Processing Engine support, relevant for camera ISP and driver news.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260724-camss-isp-ope-v5-0-e70ad4fa39ce@oss.qualcomm.com",
@@ -22598,7 +23841,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Patch Series",
+      "suggested_article_type": "ISP/Driver Feature Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22606,7 +23849,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "Yet another version of the CAMSS ISP OPE patch series, providing historical context.",
+        "selection_reason": "This patch series is related to CAMSS Offline Processing Engine support, indicating ongoing development in camera ISP.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260710-camss-isp-ope-v4-0-51207a0319d8@oss.qualcomm.com",
@@ -22661,7 +23904,7 @@
       "anchor_text": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com/",
       "link_context": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Driver Quirk",
+      "suggested_article_type": "Driver Quirks/Compatibility",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22669,7 +23912,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com",
         "anchor_text": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com/",
         "evidence_role": "secondary_context",
-        "selection_reason": "This patch adds an upside-down sensor DMI quirk for a specific device, relevant to sensor drivers and HAL.",
+        "selection_reason": "This patch adds a DMI quirk for an upside-down sensor on a specific Samsung device, relevant for camera driver compatibility.",
         "links": [
           {
             "url": "https://lore.kernel.org/linux-media/20260922063507.690-1-tmorolias@gmail.com",
@@ -22724,7 +23967,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Patch Series",
+      "suggested_article_type": "Driver Integration",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22732,7 +23975,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "This is a patch in a series for adding CAMSS support for Qualcomm Glymur, relevant to Camera HAL and ISP.",
+        "selection_reason": "This patch series adds CAMSS support for Qualcomm Glymur, a significant update for camera driver integration.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260917-glymur_camss-v3-0-1d0e2d47ad2e@oss.qualcomm.com",
@@ -22787,7 +24030,7 @@
       "anchor_text": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
       "link_context": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Patch Series",
+      "suggested_article_type": "Driver Integration Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22795,7 +24038,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
         "evidence_role": "secondary_context",
-        "selection_reason": "An earlier version of the CAMSS support for Qualcomm Glymur patch series, showing development progress.",
+        "selection_reason": "This patch series continues the effort to add CAMSS support for Qualcomm Glymur, relevant for camera driver development.",
         "links": [
           {
             "url": "https://lore.kernel.org/r/20260907-glymur_camss-v2-0-75f7982dc983@oss.qualcomm.com",
@@ -22850,7 +24093,7 @@
       "anchor_text": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
       "link_context": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
       "evidence_role": "secondary_context",
-      "suggested_article_type": "Patch Series",
+      "suggested_article_type": "Driver Integration Foundation",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22858,7 +24101,7 @@
         "parent_url": "https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com",
         "anchor_text": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com/",
         "evidence_role": "secondary_context",
-        "selection_reason": "The initial version of the CAMSS support for Qualcomm Glymur patch series, providing foundational information.",
+        "selection_reason": "This is an early patch series for adding CAMSS support for Qualcomm Glymur, indicating foundational work for camera driver integration.",
         "links": [
           {
             "url": "https://lore.kernel.org/all/20260529-glymur_camss-v1-0-bee535396d22@oss.qualcomm.com",
@@ -22913,7 +24156,7 @@
       "anchor_text": "#3348",
       "link_context": "#3348",
       "evidence_role": "primary_evidence",
-      "suggested_article_type": "Bug Report",
+      "suggested_article_type": "Android Media Framework Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22921,7 +24164,7 @@
         "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
         "anchor_text": "#3348",
         "evidence_role": "primary_evidence",
-        "selection_reason": "This issue relates to ExoPlayer and media playback, which is part of the broader Android media ecosystem and relevant to Camera HAL indirectly through media processing.",
+        "selection_reason": "This issue relates to Media3 and camera functionality, indicating potential improvements or bug fixes in the Android media framework.",
         "links": [
           {
             "url": "https://github.com/androidx/media/issues/3348",
@@ -22976,7 +24219,7 @@
       "anchor_text": "#3377",
       "link_context": "#3377",
       "evidence_role": "primary_evidence",
-      "suggested_article_type": "Bug Report",
+      "suggested_article_type": "Android Media Framework Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -22984,7 +24227,7 @@
         "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
         "anchor_text": "#3377",
         "evidence_role": "primary_evidence",
-        "selection_reason": "This issue concerns ExoPlayer's handling of certain media formats, relevant to the media pipeline that camera output feeds into.",
+        "selection_reason": "This issue is related to Media3, suggesting ongoing development or bug fixes in the Android media ecosystem, relevant to camera usage.",
         "links": [
           {
             "url": "https://github.com/androidx/media/issues/3377",
@@ -23039,7 +24282,7 @@
       "anchor_text": "#3271",
       "link_context": "#3271",
       "evidence_role": "primary_evidence",
-      "suggested_article_type": "Code Improvement",
+      "suggested_article_type": "Android Media Framework Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -23047,7 +24290,7 @@
         "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
         "anchor_text": "#3271",
         "evidence_role": "primary_evidence",
-        "selection_reason": "This pull request addresses an issue in Media3, which is relevant to the Android media framework that camera components interact with.",
+        "selection_reason": "This pull request for Media3 indicates changes or additions to the Android media library, which could impact camera functionality.",
         "links": [
           {
             "url": "https://github.com/androidx/media/pull/3271",
@@ -23102,7 +24345,7 @@
       "anchor_text": "#3338",
       "link_context": "#3338",
       "evidence_role": "primary_evidence",
-      "suggested_article_type": "Bug Report",
+      "suggested_article_type": "Android Media Framework Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -23110,7 +24353,7 @@
         "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
         "anchor_text": "#3338",
         "evidence_role": "primary_evidence",
-        "selection_reason": "This issue is about ExoPlayer's performance with specific codecs, relevant to the media processing pipeline after camera capture.",
+        "selection_reason": "This issue pertains to Media3, suggesting potential updates or fixes in the Android media framework that might affect camera operations.",
         "links": [
           {
             "url": "https://github.com/androidx/media/issues/3338",
@@ -23165,7 +24408,7 @@
       "anchor_text": "#3375",
       "link_context": "#3375",
       "evidence_role": "primary_evidence",
-      "suggested_article_type": "Bug Report",
+      "suggested_article_type": "Android Media Framework Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -23173,7 +24416,7 @@
         "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
         "anchor_text": "#3375",
         "evidence_role": "primary_evidence",
-        "selection_reason": "This issue relates to ExoPlayer's playback capabilities, indirectly relevant to the camera's role in content creation.",
+        "selection_reason": "This issue related to Media3 indicates ongoing work on the Android media framework, relevant for camera integration and performance.",
         "links": [
           {
             "url": "https://github.com/androidx/media/issues/3375",
@@ -23185,69 +24428,6 @@
       "source_quality_score": 0.367,
       "source_quality_bucket": "weak_candidate",
       "source_quality_report_ref": "gemini-linked-00e865791f6d6187",
-      "duplicate_of_selected_source": false,
-      "stale_claim_risk": "",
-      "final_selection_blocked": false,
-      "editor_review_required": false,
-      "unsupported_claims_excluded": false,
-      "evidence_validation_status": "not_checked"
-    },
-    {
-      "schema_version": 5,
-      "id": "gemini-linked-e06c54d7b6fbabdf",
-      "source_candidate_id": "gemini-linked-e06c54d7b6fbabdf",
-      "title": "#3393",
-      "url": "https://github.com/androidx/media/issues/3393",
-      "articleUrl": "https://github.com/androidx/media/issues/3393",
-      "article_url": "https://github.com/androidx/media/issues/3393",
-      "source": "Android Developers Blog",
-      "source_name": "Android Developers Blog",
-      "sourceName": "Android Developers Blog",
-      "sourceUrl": "https://android-developers.googleblog.com/",
-      "source_url": "https://android-developers.googleblog.com/",
-      "source_id": "android-developers-blog",
-      "category": "android",
-      "source_category": "android",
-      "section": "android",
-      "source_section": "android",
-      "priority": "high",
-      "reliability": "official",
-      "source_reliability": "official",
-      "origin": "gemini_linked_discovery",
-      "collectionStage": "gemini",
-      "collection_stage": "gemini",
-      "manualSeed": false,
-      "manual_seed": false,
-      "derived_from_url": "https://developer.android.com/jetpack/androidx/releases/media3",
-      "parent_candidate_id": "",
-      "parentUrl": "https://developer.android.com/jetpack/androidx/releases/media3",
-      "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
-      "parentTitle": "Media3 Release Notes - Media3 1.11.1",
-      "parent_title": "Media3 Release Notes - Media3 1.11.1",
-      "anchorText": "#3393",
-      "anchor_text": "#3393",
-      "link_context": "#3393",
-      "evidence_role": "primary_evidence",
-      "suggested_article_type": "Bug Report",
-      "outgoing_links": [],
-      "source_extraction": {
-        "mode": "gemini_linked_discovery",
-        "parent_candidate_id": "",
-        "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
-        "anchor_text": "#3393",
-        "evidence_role": "primary_evidence",
-        "selection_reason": "This issue concerns ExoPlayer's behavior with certain media streams, relevant to the overall media playback ecosystem.",
-        "links": [
-          {
-            "url": "https://github.com/androidx/media/issues/3393",
-            "text": "#3393",
-            "role": "derived_candidate"
-          }
-        ]
-      },
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "source_quality_report_ref": "gemini-linked-e06c54d7b6fbabdf",
       "duplicate_of_selected_source": false,
       "stale_claim_risk": "",
       "final_selection_blocked": false,
@@ -23291,7 +24471,7 @@
       "anchor_text": "#3322",
       "link_context": "#3322",
       "evidence_role": "primary_evidence",
-      "suggested_article_type": "Bug Report",
+      "suggested_article_type": "Android Media Framework Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -23299,7 +24479,7 @@
         "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
         "anchor_text": "#3322",
         "evidence_role": "primary_evidence",
-        "selection_reason": "This issue is about ExoPlayer's error handling, which is part of the media playback stack that camera output is used with.",
+        "selection_reason": "This issue in the Media3 repository suggests updates or bug fixes in the Android media framework that could be relevant to camera features.",
         "links": [
           {
             "url": "https://github.com/androidx/media/issues/3322",
@@ -23354,7 +24534,7 @@
       "anchor_text": "#3350",
       "link_context": "#3350",
       "evidence_role": "primary_evidence",
-      "suggested_article_type": "Bug Report",
+      "suggested_article_type": "Android Media Framework Update",
       "outgoing_links": [],
       "source_extraction": {
         "mode": "gemini_linked_discovery",
@@ -23362,7 +24542,7 @@
         "parent_url": "https://developer.android.com/jetpack/androidx/releases/media3",
         "anchor_text": "#3350",
         "evidence_role": "primary_evidence",
-        "selection_reason": "This issue relates to ExoPlayer's support for specific media features, relevant to the end-to-end media experience.",
+        "selection_reason": "This issue related to Media3 indicates progress or fixes in the Android media framework, which can impact camera HAL and driver interactions.",
         "links": [
           {
             "url": "https://github.com/androidx/media/issues/3350",
@@ -23695,11 +24875,11 @@
       "filter_counts": {
         "duplicate": 0,
         "deferred_coverage": 10,
-        "outside_window": 1,
-        "relevance": 14,
+        "outside_window": 3,
+        "relevance": 13,
         "series_collapsed": 0,
         "source_cap": 0,
-        "global_cap": 7
+        "global_cap": 6
       }
     },
     "collabora-blog": {
@@ -24119,8 +25299,8 @@
       "filter_counts": {
         "duplicate": 1,
         "deferred_coverage": 17,
-        "outside_window": 5,
-        "relevance": 9
+        "outside_window": 7,
+        "relevance": 7
       }
     },
     "edge-ai-vision-alliance": {
@@ -24333,13 +25513,13 @@
       "release_row_date": 1
     },
     "received_bytes_by_source": {
-      "aosp-site-updates": 1493727,
+      "aosp-site-updates": 1493723,
       "qualcomm-security-bulletins": 161412,
       "android-ndk-releases": 187447,
       "anthropic-news": 3544658,
       "claude-blog": 5151668,
       "claude-code-changelog": 644815,
-      "codex-releases": 6296717
+      "codex-releases": 6296727
     },
     "article_cap_counts_by_source": {
       "anthropic-news": {

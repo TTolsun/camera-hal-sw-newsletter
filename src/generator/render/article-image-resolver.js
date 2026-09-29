@@ -5,7 +5,8 @@ const {
   validateImageUrl
 } = require('../../shared/render/image-candidates');
 const {
-  analyzeImageCandidateFromMetadata
+  analyzeImageCandidateFromMetadata,
+  selectImageForSectionFromMetadata
 } = require('./newsletter-image-audit');
 
 function comparableUrl(value) {
@@ -213,10 +214,33 @@ async function resolveArticleImage(section = {}, options = {}) {
   });
 }
 
+async function recoverMissingArticleImage(section, options) {
+  const articleUrl = section.source_candidate_url || section.sources?.[0]?.url || '';
+  const { collectArticleImages } = require('../../shared/render/article-image-collection');
+  const result = await (options.collectArticleImages || collectArticleImages)(articleUrl, {
+    name: section.sources?.[0]?.title || 'Original article', sourceUrl: articleUrl
+  }, [], options.imageCollectionOptions || {});
+  section.image_recovery = result.diagnostics;
+  // 다른 기사 후보의 기존 fallback 경로는 유지하되, 현재 원문에서 얻은 근거를 먼저 검토한다.
+  section.imageCandidates = [...result.images, ...(section.imageCandidates || [])];
+  const selection = selectImageForSectionFromMetadata(section);
+  const image = selection.selectedCandidate;
+  if (!image) return;
+  section.selectedImage = image.url;
+  section.imageSource = image.articleUrl || articleUrl;
+  section.imageAttribution = image.attribution || section.sources?.[0]?.title || 'Original article';
+  section.imageAlt = image.alt || section.headline;
+  section.imageLicenseStatus = image.licenseStatus || 'unknown';
+}
+
 async function resolveIssueArticleImages(issue = {}, options = {}) {
   if (!Array.isArray(issue.sections)) return issue;
   for (const section of issue.sections) {
     section.resolvedImage = await resolveArticleImage(section, options);
+    if (options.recoverMissingImages && section.resolvedImage.usedFallback && !section.image_recovery) {
+      await recoverMissingArticleImage(section, options);
+      section.resolvedImage = await resolveArticleImage(section, options);
+    }
     if (section.resolvedImage.originalUrl) {
       section.originalImage = section.resolvedImage.originalUrl;
     }

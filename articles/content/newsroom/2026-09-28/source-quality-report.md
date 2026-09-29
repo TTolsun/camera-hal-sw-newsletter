@@ -55,14 +55,14 @@
 | review_candidate | 0.765 | Test for [PATCH v7 0/3] Add support for the Sony IMX681 camera sensor - German Pablo Lindo | https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com/ |
 | review_candidate | 0.765 | [PATCH v3 0/2] media: i2c: Samsung S5K3T2 image sensor - Armandas Kvietkus via B4 Relay | https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me/ |
 | review_candidate | 0.72 | [PATCH v10 0/9] media: qcom: camss: CAMSS Offline Processing Engine support - Loic Poulain | https://lore.kernel.org/linux-media/20260925-camss-isp-ope-v10-0-2622411034cb@oss.qualcomm.com/ |
+| strong_candidate | 0.81 | [PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190 - Nihal Kumar Gupta | https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/ |
+| strong_candidate | 0.81 | [PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK - Linus Walleij | https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/ |
 | review_candidate | 0.765 | [PATCH] media: ipu-bridge: Add upside-down sensor DMI quirk for Samsung Galaxy Book3 Pro - Felipe Calliari | https://lore.kernel.org/linux-media/20260923145219.177368-1-calliarifelipe@gmail.com/ |
+| strong_candidate | 0.81 | [PATCH v4 0/3] Add CAMSS support for Qualcomm Glymur - Nihal Kumar Gupta | https://lore.kernel.org/linux-media/20260925-glymur_camss-v4-0-d7c2983d6d7b@oss.qualcomm.com/ |
 | blocked_candidate | 0.545 | [v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP - Patchwork | https://patchwork.libcamera.org/patch/28382/ |
 | blocked_candidate | 0.545 | [1/4] libcamera: v4l2_event: Add V4L2Event class and functionality - Patchwork | https://patchwork.libcamera.org/patch/28380/ |
 | blocked_candidate | 0.545 | [v2] libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata - Patchwork | https://patchwork.libcamera.org/patch/28366/ |
-| strong_candidate | 0.81 | [PATCH RFC 06/15] media: qcom: camss: vfe: Add support for VFE 1190 - Nihal Kumar Gupta | https://lore.kernel.org/linux-media/20260923-hawi-maili-camss-v1-6-cbbb42e534ef@oss.qualcomm.com/ |
-| strong_candidate | 0.81 | [PATCH v2 0/4] arm64: dts: renesas: Enable ISP and IVC on RZ/V2H EVK - Linus Walleij | https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org/ |
 | blocked_candidate | 0.492 | Android Developers Blog: Build your way: Use any AI agent of your choice in Android Studio | https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html |
-| blocked_candidate | 0.492 | Android Developers Blog: Leverage Android skills and Gemma 4 in Android Studio Quail 4 | https://android-developers.googleblog.com/2026/09/leverage-gemma-4-android-studio-quail.html |
 | blocked_candidate | 0.492 | Android Developers Blog: Emulator control for adaptive app development | https://android-developers.googleblog.com/2026/08/emulator-adaptive.html |
 | blocked_candidate | 0.492 | Introducing Claude Opus 5.5 \ Anthropic | https://www.anthropic.com/claude-opus-5-5 |
 | weak_candidate | 0.367 | https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899 | https://gist.github.com/RISHI27-dot/1876791cba10798412050e1142fa7899 |
@@ -85,7 +85,6 @@
 | weak_candidate | 0.367 | #3271 | https://github.com/androidx/media/pull/3271 |
 | weak_candidate | 0.367 | #3338 | https://github.com/androidx/media/issues/3338 |
 | weak_candidate | 0.367 | #3375 | https://github.com/androidx/media/issues/3375 |
-| weak_candidate | 0.367 | #3393 | https://github.com/androidx/media/issues/3393 |
 | weak_candidate | 0.367 | #3322 | https://github.com/androidx/media/issues/3322 |
 | weak_candidate | 0.367 | #3350 | https://github.com/androidx/media/issues/3350 |
 
