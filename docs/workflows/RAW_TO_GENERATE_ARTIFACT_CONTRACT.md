@@ -42,6 +42,16 @@ Stage 1이 만드는 산출물과 동작 규칙은 다음과 같습니다.
 
 v1 transition(전환) 기간에는 `manual-candidates.json`과 `candidates.json`이 같은 payload를 가져야 합니다. `candidates.json`은 기존 selector/generator와의 호환을 위해 남겨 둔 것이고, 새 workflow 계약에서 canonical(정본) input은 `manual-candidates.json`입니다.
 
+### 후보 요약 잘림 표시 (`summary_truncated`)
+
+후보의 `summary`는 수집 단계(`normalizeCandidate`)에서 500자(`CANDIDATE_TEXT_MAX_LENGTH`)로 잘립니다. 잘린 요약은 원문의 앞부분일 뿐인데 요약 문자열에는 잘림 표시가 붙지 않으므로, 잘렸다는 사실을 별도 boolean 필드 `summary_truncated`로 싣습니다(#1226).
+
+- 판정은 `normalizeCandidate` 한 곳에서 합니다. 마크업을 제거한 요약이 499자 이상이면 `true`입니다. 500자에서 미리 자르는 생산자(`dated-article-index-resolver`, `ai-coding-releases`, `raspberrypi-libcamera-releases`)는 자른 뒤 끝 공백이 정리되어 499자로 도착할 수 있어서 상한보다 한 글자 낮게 잡습니다. 온전한 499~500자 요약이 `true`가 되는 오탐은 허용합니다(잘렸다고 알리는 쪽이 안전한 방향입니다).
+- 요약 문자열 끝에 표식을 덧붙이지 않습니다. `summary`와 `behavior_change`의 길이, `behavior_change`의 요약 파생, news-summary-cache 키가 모두 요약 문자열에 묶여 있어서 요약 텍스트는 그대로 둡니다.
+- 필드는 `normalizeCandidate` 반환 객체의 whitelist에 있어야 `candidates.json`에 남습니다. 필드가 없는 후보(seed evidence, Gemini discovery처럼 자체 빌더로 만든 후보)는 `false`로 읽습니다.
+- 소비 경로: article capsule의 `summary_truncated`(값이 `true`일 때만 키를 둡니다)와 `allowed_claim_evidence[]` 중 그 요약을 담은 항목의 `summary_truncated`로 전달됩니다. fact-check 단계는 같은 capsule JSON을 받으므로 같은 표시를 봅니다. 표시를 읽는 프롬프트 규칙은 [뉴스룸 LLM Prompt 운영 Reference](../operations/NEWSROOM_LLM_PROMPTS.md)의 "잘린 요약 규칙"에 있습니다.
+- `CANDIDATE_SCHEMA_VERSION`은 올리지 않습니다. 필드를 읽는 쪽은 값이 없으면 `false`로 취급하므로 이전 스키마 후보와 호환됩니다.
+
 ## Stage 2 Optional Gemini Source Discovery Boundary
 
 ### Seed Evidence Expansion

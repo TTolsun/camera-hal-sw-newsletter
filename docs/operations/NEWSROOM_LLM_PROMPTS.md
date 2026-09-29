@@ -251,6 +251,28 @@ Workflow/Stage: reporter, editor, fact-check, repair, completion 계열 prompt
 
 주요 guardrail: `source_quality`를 누락, 복구, override하지 않습니다. Blocked 또는 failed linked evidence를 factual support로 쓰지 않습니다. Seed URL을 Stage 3에서 다시 fetch, crawl, browse하지 않습니다. Keyword hint를 source-backed fact로 표시하지 않습니다.
 
+### 잘린 요약 규칙
+
+이름: `truncatedSourceWritingPrompt()`(작성 단계용), `truncatedSourceFactCheckPrompt()`(검증 단계용). 두 함수는 정의 문단(`truncatedSourceDefinitionLines()`)을 공유합니다.
+
+목적: 후보 요약이 수집 단계에서 500자로 잘렸는데 그 사실이 근거에 표시되지 않아, 잘린 요약만 받은 작성 단계와 검증 단계가 잘린 뒤쪽의 결론(완료, 확인, 입증, 통과)을 추론하거나 그대로 통과시키던 문제를 막습니다(#1226). 작성 단계와 검증 단계가 같은 잘린 근거를 보므로 사각지대도 같았습니다.
+
+위치: `src/generator/reporter/newsletter-prompts.js`. 표시 필드는 후보의 `summary_truncated`(boolean)이고, capsule의 `summary_truncated`와 `allowed_claim_evidence[]` 항목의 `summary_truncated`로 전달됩니다. 계약은 [RAW-to-Generate Artifact Contract](../workflows/RAW_TO_GENERATE_ARTIFACT_CONTRACT.md)에 있습니다.
+
+Workflow/Stage: 작성 규칙은 editorial plan, reporter, editor draft, editor repair patch, completion editor prompt에 넣습니다. 검증 규칙은 fact-check, repair fact-check, completion fact-check prompt에 넣습니다. 이 두 규칙은 서로의 단계에 넣지 않습니다. 작성 단계에 검증 지시(`must_fix[]`)를 넣으면 존재하지 않는 출력 필드를 지시하게 되고, 검증 단계에 작성 지시를 넣으면 `must_fix` 판정이 흔들리기 때문입니다.
+
+주요 입력: 별도 입력을 추가하지 않습니다. 이미 전달되는 article capsule의 `summary_truncated`와 근거 항목의 `summary_truncated`를 읽는 방법만 규칙으로 적습니다.
+
+출력/schema: 별도 schema 없음. LLM 응답 schema에 필드를 추가하지 않습니다.
+
+주요 guardrail:
+
+- `summary_truncated=true`는 수집 단계가 원문 요약을 500자에서 잘랐다는 표시이고, 그 잘림에는 끝 표시가 붙지 않습니다. 근거 텍스트가 `...`로 끝나는 것은 capsule이나 근거를 줄이는 과정에서 잘렸다는 뜻이며, 두 경우 모두 잘린 뒤쪽 내용을 알 수 없다는 점은 같다고 한 규칙에서 함께 설명합니다.
+- 작성 단계는 잘리기 전까지 실제로 적힌 내용만 확인된 사실로 씁니다. 잘린 뒤쪽을 추론하지 않고, 다른 근거(`source_extraction`, `seed_evidence`, 잘리지 않은 근거 항목)가 직접 뒷받침할 때만 그 결론을 씁니다. 수집 내부 사정(500자 제한, 잘림 표시)은 독자용 본문에 쓰지 않습니다.
+- 검증 단계는 잘린 근거가 유일한 근거인 claim의 뒤쪽 결론을 원문이 뒷받침한다고 판정하지 않고, source가 직접 뒷받침하지 않는 claim으로 `must_fix[]`에 넣습니다. 반대로 근거가 잘렸다는 사실만으로 기사를 문제 삼거나, 잘린 뒷부분이 기사와 반대일 것이라고 추측해 `must_fix[]`에 넣지 않습니다.
+- 이 규칙은 결론어를 정규식으로 잡아 `must_fix`로 올리는 결정론 게이트가 아닙니다. 판정은 fact-check LLM이 하며, 규칙이 실제로 프롬프트에 들어 있는지는 `prompt-contract.test.js`가 조립된 문자열로 검사합니다.
+- 표시가 붙는 것은 `normalizeCandidate`를 거치는 후보뿐입니다. seed evidence와 Gemini discovery 후보처럼 자체 빌더로 만든 후보는 이 필드를 싣지 않으므로 표시 없음으로 읽힙니다. 이 중 seed evidence는 요약을 220자에서 줄일 때 `...`를 붙이므로 위 `...` 규칙이 다루고, Gemini discovery는 요약을 자르지 않습니다.
+
 ### Article section contract
 
 이름: `articleSectionContractPrompt()`

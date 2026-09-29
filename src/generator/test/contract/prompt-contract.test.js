@@ -14,6 +14,8 @@ const {
   cameraHalEditorialVoicePrompt,
   cameraHalEditorialVoiceWithPlanPrompt,
   seriesContextPrompt,
+  truncatedSourceFactCheckPrompt,
+  truncatedSourceWritingPrompt,
   sourceExtractionPromptGuardrails
 } = require('../../reporter/newsletter-prompts');
 const {
@@ -598,4 +600,107 @@ test('series context rule keeps the series title a hint, not a confirmed fact (#
   assert.match(rule, /source-backed fact로 제시하지 마세요/);
   assert.match(rule, /확인된 범위는/);
   assert.doesNotMatch(rule, /기사가 다루는 범위는[^\n]*series 전체입니다/);
+});
+
+// 옵션 분기마다 조립 결과를 만든다. 한 조합만 보면 publishMode나 locked 여부로 조립을 갈랐을 때 검사한
+// 조합만 통과하고 나머지 실행에서는 규칙이 빠진다(위 series context 테스트와 같은 이유).
+function everyEditorPrompt() {
+  const prompts = [];
+  for (const publishMode of ['NORMAL', 'DEEP', 'CONTEXT', 'QUIET']) {
+    for (const hasLockedSections of [false, true]) {
+      for (const hasCatchUpCoverage of [false, true]) {
+        prompts.push([
+          `editor (${publishMode}, locked=${hasLockedSections}, catchUp=${hasCatchUpCoverage})`,
+          editorSystemPrompt({ publishMode, hasLockedSections, hasCatchUpCoverage })
+        ]);
+      }
+    }
+  }
+  return prompts;
+}
+
+test('truncated source rule reaches every stage that writes article text (#1226)', () => {
+  // capsule에 summary_truncated를 실어도 그것을 읽는 방법이 없으면 60여 필드 중 하나로 조용히 얹힐
+  // 뿐이다. 잘린 요약의 뒤쪽 결론("철저한 조사 완료", "정렬 테스트 통과")을 추론해 쓴 본문이 첫
+  // 발행과 재발행 모두에 나갔으므로(2026-09-28호), 조립된 프롬프트 문자열에 규칙이 있는지 잠근다.
+  const rule = truncatedSourceWritingPrompt();
+  const writingStages = [
+    ['editorial plan', editorialPlanSystemPrompt()],
+    ['reporter', reporterSystemPrompt()],
+    ['reporter (locked)', reporterSystemPrompt({ hasLockedSections: true })],
+    ['editor repair', editorRepairPatchSystemPrompt()],
+    ['completion', editorCompletionSystemPrompt({ missingArticleCount: 1 })],
+    ['completion (many)', editorCompletionSystemPrompt({ missingArticleCount: 3 })],
+    ...everyEditorPrompt()
+  ];
+  for (const [stage, prompt] of writingStages) {
+    assert.ok(prompt.includes(rule), `${stage} prompt should carry the truncated source writing rule`);
+  }
+});
+
+test('truncated source rule reaches every fact-check stage so verification does not share the blind spot (#1226)', () => {
+  // 사실 검증이 작성 단계와 같은 잘린 근거와 비교해 모순을 못 찾고 PASS했다. fact-check 호출은 세
+  // 곳(최초, repair 뒤, completion 뒤)이고 마지막 것이 발행 판정에 쓰이므로 셋 모두에 넣는다.
+  const rule = truncatedSourceFactCheckPrompt();
+  const verifyingStages = [
+    ['fact check', factCheckSystemPrompt()],
+    ['fact check repair', factCheckRepairSystemPrompt()],
+    ['fact check completion', factCheckCompletionSystemPrompt()]
+  ];
+  for (const [stage, prompt] of verifyingStages) {
+    assert.ok(prompt.includes(rule), `${stage} prompt should carry the truncated source fact-check rule`);
+  }
+});
+
+test('truncated source writing and fact-check rules stay on their own side (#1226)', () => {
+  // fact-checker에 작성 지시("이렇게 쓰세요")를 넣으면 must_fix 판정이 흔들리고, 작성 단계에 검증 지시
+  // ("must_fix[]에 넣으세요")를 넣으면 존재하지 않는 출력 필드를 지시하게 된다.
+  const writing = truncatedSourceWritingPrompt();
+  const verifying = truncatedSourceFactCheckPrompt();
+  assert.notEqual(writing, verifying);
+  for (const [stage, prompt] of [
+    ['editorial plan', editorialPlanSystemPrompt()],
+    ['reporter', reporterSystemPrompt()],
+    ['editor repair', editorRepairPatchSystemPrompt()],
+    ['completion', editorCompletionSystemPrompt({ missingArticleCount: 1 })],
+    ...everyEditorPrompt()
+  ]) {
+    assert.ok(!prompt.includes(verifying), `${stage} prompt should not carry the fact-check rule`);
+  }
+  for (const [stage, prompt] of [
+    ['fact check', factCheckSystemPrompt()],
+    ['fact check repair', factCheckRepairSystemPrompt()],
+    ['fact check completion', factCheckCompletionSystemPrompt()]
+  ]) {
+    assert.ok(!prompt.includes(writing), `${stage} prompt should not carry the writing rule`);
+  }
+});
+
+test('truncated source rules tell the flag and the ellipsis suffix apart and stay honest (#1226)', () => {
+  for (const rule of [truncatedSourceWritingPrompt(), truncatedSourceFactCheckPrompt()]) {
+    // 표시 필드 두 곳(capsule, 근거 항목)과 `...` 끝 표시를 모두 설명한다.
+    assert.match(rule, /summary_truncated=true/);
+    assert.match(rule, /allowed_claim_evidence\[\] 항목/);
+    assert.match(rule, /`\.\.\.`로 끝나면/);
+    // 잘림 표시에는 끝 표시가 없다는 점(그래서 표시 필드가 필요하다)과 뒤쪽을 알 수 없다는 점.
+    assert.match(rule, /끝 표시가 붙지 않으므로/);
+    assert.match(rule, /잘린 뒤쪽 내용을 알 수 없다/);
+    // 결론어 예시가 있어야 모델이 "완료·확인·입증·통과"를 잘린 뒤쪽의 결론으로 알아본다.
+    assert.match(rule, /완료/);
+    assert.match(rule, /입증/);
+    assert.match(rule, /통과/);
+  }
+  // 작성 단계: 확인 가능한 것(잘리기 전 내용, 다른 근거)과 불가능한 것(잘린 뒤쪽)을 구분하고,
+  // 수집 내부 사정을 독자 본문에 쓰지 않게 한다.
+  const writing = truncatedSourceWritingPrompt();
+  assert.match(writing, /잘리기 전까지 실제로 적힌 내용만 확인된 사실로 쓰세요/);
+  assert.match(writing, /추론하지 마세요/);
+  assert.match(writing, /다른 근거\(source_extraction, seed_evidence/);
+  assert.match(writing, /독자용 본문에 쓰지 마세요/);
+  // 검증 단계: 뒷받침한다고 판정하지 않되, 잘림만으로 문제 삼거나 뒷부분이 반대라고 추측하지도 않는다.
+  const verifying = truncatedSourceFactCheckPrompt();
+  assert.match(verifying, /원문이 뒷받침한다고 판정하지 마세요/);
+  assert.match(verifying, /must_fix\[\]에 넣으세요/);
+  assert.match(verifying, /잘렸다는 사실만으로 기사를 문제 삼지 마세요/);
+  assert.match(verifying, /확인할 수 없다는 것과 모순된다는 것은 다릅니다/);
 });
