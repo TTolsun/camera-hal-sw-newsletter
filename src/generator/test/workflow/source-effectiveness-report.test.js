@@ -465,9 +465,16 @@ test('only a verified listing with no in-window cards establishes no recent sign
   });
   assert.equal(noNews.collection_status, 'NO_RECENT_SIGNAL');
   assert.equal(noNews.recommendation, 'NO_RECENT_SIGNAL');
-  assert.equal(collectionReport().collection_status, 'COLLECTION_UNKNOWN');
-  assert.notEqual(collectionReport().recommendation, 'NO_RECENT_SIGNAL');
-  assert.equal(collectionReport({ caps: { discovered_card_count: 0, unresolved_card_count: 0, in_window_card_count: 0 } }).collection_status, 'COLLECTION_UNKNOWN');
+  const emptyListing = collectionReport({ caps: { discovered_card_count: 0, unresolved_card_count: 0, in_window_card_count: 0 } });
+  assert.equal(emptyListing.collection_status, 'COLLECTION_UNKNOWN');
+  assert.equal(emptyListing.recommendation, 'REVIEW_SOURCE_OR_PARSER');
+});
+
+test('a source without listing card counts keeps the quiet-week recommendation but stays unverified', () => {
+  const result = collectionReport();
+  assert.equal(result.collection_status, 'COLLECTION_UNKNOWN');
+  assert.equal(result.recommendation, 'NO_RECENT_SIGNAL');
+  assert.match(result.reasons.join(' '), /completeness is not verified/);
 });
 
 test('filtered articles remain distinguishable from no news', () => {
@@ -487,19 +494,47 @@ test('filtered articles remain distinguishable from no news', () => {
 test('partial parsing, article caps and fetch failures never claim no news', () => {
   for (const input of [
     { caps: { discovered_card_count: 2, unresolved_card_count: 1, in_window_card_count: 0 } },
-    { caps: { discovered_card_count: 2, unresolved_card_count: 0, in_window_card_count: 2, skipped_article_cap_count: 1 } },
     { events: [{ source_id: 'effective-camera', kind: 'article_fetch_failed' }] },
     { events: [{ source_id: 'effective-camera', kind: 'index_collection_incomplete' }] },
-    { failures: [{ source_id: 'effective-camera', message: 'timeout' }] },
-    { counts: { raw_collected_count: 2, filtered_out_count: 2, filter_counts: { global_cap: 2 } } }
+    { failures: [{ source_id: 'effective-camera', message: 'timeout' }] }
   ]) {
     const result = collectionReport(input);
     assert.equal(result.collection_status, 'COLLECTION_INCOMPLETE');
-    assert.notEqual(result.recommendation, 'NO_RECENT_SIGNAL');
+    assert.equal(result.recommendation, 'REVIEW_SOURCE_OR_PARSER');
     assert.ok(result.collection_reasons.length > 0);
   }
 });
 
+test('caps are reported separately from collection losses and never claim no news', () => {
+  for (const input of [
+    { caps: { discovered_card_count: 2, unresolved_card_count: 0, in_window_card_count: 2, skipped_article_cap_count: 1 } },
+    { counts: { raw_collected_count: 2, filtered_out_count: 2, filter_counts: { global_cap: 2 } } }
+  ]) {
+    const result = collectionReport(input);
+    assert.equal(result.collection_status, 'COLLECTION_CAPPED');
+    assert.notEqual(result.recommendation, 'NO_RECENT_SIGNAL');
+    assert.notEqual(result.recommendation, 'REVIEW_SOURCE_OR_PARSER');
+  }
+});
+
+test('routine caps and per-article fail-closed do not override a source that kept candidates', () => {
+  const baseline = source(buildReport(), 'effective-camera');
+  assert.ok(baseline.collected_count > 0);
+  const result = source(buildReport({
+    collectedCandidates: {
+      ...fixture.collectedCandidates,
+      dated_article_collection: {
+        article_cap_counts_by_source: { 'effective-camera': {
+          discovered_card_count: 25, unresolved_card_count: 0, in_window_card_count: 21, skipped_article_cap_count: 13
+        } },
+        events: [{ source_id: 'effective-camera', kind: 'fail_closed' }]
+      }
+    }
+  }), 'effective-camera');
+  assert.equal(result.collection_status, 'COLLECTION_INCOMPLETE');
+  assert.deepEqual(result.collection_reasons, ['article_cap', 'fail_closed']);
+  assert.equal(result.recommendation, baseline.recommendation);
+});
 
 test('collection stage markdown exposes missing evidence rather than a numeric zero', () => {
   const markdown = renderSourceEffectivenessMarkdown(buildReport());
