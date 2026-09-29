@@ -784,3 +784,200 @@ test('#869: 합쳐진 report는 앞 스크럽이 지운 섹션의 원인 그룹�
     ['group-attempt', 'group-salvage']
   );
 });
+
+// W40(2026-09-28, #1226) 재현. 삼성 센서명(S5K3T2)은 영문 한 글자로 시작해 글자 두 개 이상 +
+// 숫자 두 개 이상 형태에 걸리지 않았다. 그래서 S5K3T2 섹션이 빠졌는데도 summary와 briefing에
+// "삼성 S5K3T2 드라이버 패치"가 남았고, stale-claim-report는 "Removed Section Claims: none"으로
+// 기록됐다. imx576 시나리오와 같은 구성에 토큰만 삼성 계열로 바꿔 같은 잔재가 지워지는지 본다.
+test('scrub removes Samsung S5K sensor claims from a selected group the editor never rendered', () => {
+  const ar0234 = section({
+    headline: 'Linux 커널에 onsemi AR0234 글로벌 셔터 CMOS 이미지 센서 드라이버 패치(v2) 제출',
+    article_group_key: 'lore-series:ar0234',
+    sources: [source('https://lore.kernel.org/linux-media/ar0234-v2', 'AR0234 driver v2')]
+  });
+  const editor = {
+    date: '2026-09-28',
+    summary: '이번 주에는 삼성 S5K3T2, onsemi AR0234 등 신규 이미지 센서 드라이버 패치가 제안되었습니다. AR0234 v2 드라이버가 제출되었습니다.',
+    briefing: [
+      '삼성 S5K3T2 이미지 센서 드라이버 패치가 제출되었습니다.',
+      'onsemi AR0234(v2) 글로벌 셔터 센서 드라이버 패치가 제출되었습니다.',
+      '삼성 S5KJN1 센서 바인딩도 함께 공개되었습니다.'
+    ],
+    action_items: [
+      '삼성 S5K3T2 센서 도입 검토 시 제안된 드라이버 패치를 로컬 커널에 적용해 검증한다.',
+      'onsemi AR0234 드라이버 패치를 대표 기기에서 검증한다.'
+    ],
+    sections: [ar0234],
+    references: [source('https://lore.kernel.org/linux-media/ar0234-v2', 'AR0234 driver v2')]
+  };
+  const reporter = {
+    candidates: [
+      {
+        title: '[PATCH v2 0/2] media: i2c: Add Samsung S5K3T2 camera sensor driver',
+        url: 'https://lore.kernel.org/linux-media/s5k3t2-v2',
+        article_group_key: 'lore-series:s5k3t2',
+        final_selected: true
+      },
+      {
+        title: '[PATCH] dt-bindings: media: i2c: Add Samsung S5KJN1 image sensor',
+        url: 'https://lore.kernel.org/linux-media/s5kjn1-v1',
+        article_group_key: 'lore-series:s5kjn1',
+        final_selected: true
+      },
+      {
+        title: 'AR0234 driver v2',
+        url: 'https://lore.kernel.org/linux-media/ar0234-v2',
+        article_group_key: 'lore-series:ar0234',
+        final_selected: true
+      }
+    ]
+  };
+
+  const { editor: scrubbed, report } = scrubStaleClaims(editor, {
+    date: '2026-09-28',
+    removedSections: [],
+    reporter
+  });
+
+  const globalText = [scrubbed.summary, scrubbed.briefing, scrubbed.action_items].flat().join(' ');
+  assert.doesNotMatch(globalText, /S5K3T2/i);
+  assert.doesNotMatch(globalText, /S5KJN1/i);
+  // 렌더된 기사 이야기는 살아 있어야 한다.
+  assert.match(globalText, /AR0234/i);
+  assert.equal(scrubbed.briefing.length, 3);
+  assert.deepEqual(report.hard_failures, []);
+  assert.equal(report.status, 'PASS');
+  // 보고서의 "Removed Section Claims"가 none으로 남던 것이 이 결함의 관측 증상이다.
+  assert.equal(report.stale_claim_items_removed.length > 0, true);
+  assert.deepEqual(
+    report.dropped_selected_groups.map(group => group.article_group_key).sort(),
+    ['lore-series:s5k3t2', 'lore-series:s5kjn1']
+  );
+});
+
+// 차집합이 삼성 센서명에도 작동해야 한다. 살아남은 기사가 같은 s5k 토큰을 쓰면 그 기사의
+// 참인 문장을 지우면 안 된다.
+test('scrub keeps a Samsung S5K identifier that a surviving article also uses', () => {
+  const rendered = section({
+    headline: 'Qualcomm CAMSS 드라이버가 S5K3T2 센서를 지원한다',
+    article_group_key: 'lore-series:camss',
+    sources: [source('https://lore.kernel.org/linux-media/camss-v7', 'CAMSS v7')]
+  });
+  const editor = {
+    date: '2026-09-28',
+    summary: 'S5K3T2 지원이 CAMSS 드라이버에 들어왔습니다.',
+    briefing: [
+      'S5K3T2 센서 지원이 CAMSS v7 패치에 포함되었습니다.',
+      'CSI-2 레인 구성을 확인할 시점입니다.',
+      'S5KJN1 바인딩 문서도 함께 공개되었습니다.'
+    ],
+    action_items: ['S5K3T2 경로를 대표 기기에서 확인한다.'],
+    sections: [rendered],
+    references: [source('https://lore.kernel.org/linux-media/camss-v7', 'CAMSS v7')]
+  };
+  const reporter = {
+    candidates: [
+      {
+        // 빠진 후보도 S5K3T2를 말한다. 살아남은 기사가 쓰는 낱말이므로 지우면 안 된다.
+        title: 'Add s5k3t2 and s5kjn1 notes',
+        url: 'https://lore.kernel.org/linux-media/s5k-notes',
+        article_group_key: 'lore-series:s5k-notes',
+        final_selected: true
+      },
+      {
+        title: 'CAMSS v7',
+        url: 'https://lore.kernel.org/linux-media/camss-v7',
+        article_group_key: 'lore-series:camss',
+        final_selected: true
+      }
+    ]
+  };
+
+  const { editor: scrubbed } = scrubStaleClaims(editor, {
+    date: '2026-09-28',
+    removedSections: [],
+    reporter
+  });
+
+  // 원문 문장이 그대로 살아 있는지를 본다. 폴백 summary와 대체 briefing이 headline을
+  // 다시 쓰므로 globalText에 토큰이 있는지만 보면 원문이 파괴돼도 통과한다.
+  assert.equal(scrubbed.summary, 'S5K3T2 지원이 CAMSS 드라이버에 들어왔습니다.');
+  assert.ok(scrubbed.briefing.includes('S5K3T2 센서 지원이 CAMSS v7 패치에 포함되었습니다.'));
+  assert.ok(scrubbed.action_items.includes('S5K3T2 경로를 대표 기기에서 확인한다.'));
+  assert.ok(scrubbed.briefing.includes('CSI-2 레인 구성을 확인할 시점입니다.'));
+  // 같은 후보 제목의 S5KJN1은 어느 살아남은 기사도 쓰지 않는다. 이 토큰만 삭제 키가 된다.
+  assert.equal(scrubbed.briefing.length, 3);
+  assert.equal(scrubbed.briefing.some(item => /S5KJN1/i.test(item)), false);
+});
+
+// s5k 접두사만 예외로 넓힌 것이 다른 짧은 기술 어휘까지 모델명으로 삼지 않는지 본다.
+// 삭제 키가 되면 살아남은 기사의 참인 문장이 조용히 상투구로 바뀐다.
+test('scrub does not treat a bare s5k prefix or other short technical tokens as model identifiers', () => {
+  const rendered = section({
+    headline: 'AR0234 글로벌 셔터 드라이버',
+    article_group_key: 'lore-series:ar0234',
+    sources: [source('https://lore.kernel.org/linux-media/ar0234-v2', 'AR0234 v2')]
+  });
+  const editor = {
+    date: '2026-09-28',
+    summary: 'S5K 계열 센서와 x264 인코더 경로가 논의되었습니다.',
+    briefing: [
+      'H264 인코더와 V4L2 경로를 점검합니다.',
+      'A53 코어의 M2M 디바이스를 확인합니다.',
+      'S5 시리즈 문서를 참고합니다.'
+    ],
+    action_items: ['x264와 h264 경로를 점검한다.'],
+    sections: [rendered],
+    references: [source('https://lore.kernel.org/linux-media/ar0234-v2', 'AR0234 v2')]
+  };
+  const reporter = {
+    candidates: [
+      {
+        title: 'Samsung S5K note with x264 h264 v4l2 a53 m2m s5 tokens',
+        url: 'https://lore.kernel.org/linux-media/s5k-generic',
+        article_group_key: 'lore-series:s5k-generic',
+        final_selected: true
+      },
+      {
+        title: 'AR0234 v2',
+        url: 'https://lore.kernel.org/linux-media/ar0234-v2',
+        article_group_key: 'lore-series:ar0234',
+        final_selected: true
+      }
+    ]
+  };
+
+  const { editor: scrubbed, report } = scrubStaleClaims(editor, {
+    date: '2026-09-28',
+    removedSections: [],
+    reporter
+  });
+
+  assert.equal(scrubbed.summary, 'S5K 계열 센서와 x264 인코더 경로가 논의되었습니다.');
+  assert.deepEqual(scrubbed.briefing, editor.briefing);
+  assert.deepEqual(scrubbed.action_items, editor.action_items);
+  assert.equal(report.stale_claim_items_removed.length, 0);
+});
+
+// 같은 판정을 쓰는 fact-check 정리도 삼성 센서명을 낱말 단위 모델명으로 다뤄야 한다.
+// 그렇지 않으면 삭제된 S5K3T2 문장 때문에 난 must_fix가 부분 문자열 비교로 넘어가고,
+// 'S5K3T2'가 들어간 무관한 must_fix를 같이 자르는 쪽과 낱말 단위로 정확히 자르는 쪽이 갈린다.
+test('prune drops fact-check items naming a removed S5K identifier as a whole word only', () => {
+  const staleReport = {
+    stale_claim_items_removed: [{ stale_claims: ['s5k3t2'], unsupported_release_claims: [] }],
+    unsupported_release_claims_removed: []
+  };
+  const factCheck = {
+    status: 'NEEDS_FIX',
+    must_fix: [
+      '삼성 S5K3T2 드라이버 패치가 요약에 남아 있다.',
+      's5k3t20 같은 다른 표기는 별개의 센서다.'
+    ],
+    recommended_fixes: [],
+    source_gaps: []
+  };
+
+  const pruned = pruneResolvedStaleFactCheckItems(factCheck, staleReport);
+
+  assert.deepEqual(pruned.must_fix, ['s5k3t20 같은 다른 표기는 별개의 센서다.']);
+});
