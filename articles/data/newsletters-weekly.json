@@ -5,14 +5,14 @@
     "weekEndDate": "2026-10-04",
     "date": "2026-09-28",
     "title": "2026 W40",
-    "summary": "Android Studio, 개발자 맞춤형 AI 에이전트 연동 지원으로 네이티브 개발 유연성 확장\n앤트로픽, 정렬 테스트를 통과한 고성능 AI 모델 Claude Opus 5.5 공개\n르네사스 RZ/V2H EVK, 리눅스 커널 패치로 Mali-C55 ISP 및 IVC 하드웨어 활성화 추진\n소니 IMX681 카메라 센서 지원 패치 및 최신 libcamera 기반 통합 테스트 보고\n삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안",
+    "summary": "안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원\n앤트로픽, 코드 생성 및 테스트 역량이 강화된 Claude Opus 5.5 공개\n르네사스 RZ V2H EVK 디바이스 트리 패치로 Arm Mali C55 ISP 및 IVC 활성화 제안\n삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안\n소니 IMX681 카메라 센서 지원 패치 v7에 대한 최신 커널 및 libcamera 테스트 결과 공유",
     "html": "newsletters/2026-W40/index.html",
     "md": "newsletters/2026-W40/newsletter.md",
     "tags": [
-      "AI",
       "Android",
       "Driver",
       "Image Processing",
+      "AI",
       "Camera HAL"
     ],
     "article_count": 5,
