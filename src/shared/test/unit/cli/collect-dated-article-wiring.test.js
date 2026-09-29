@@ -253,6 +253,9 @@ test('상한이 자른 카드 수가 실제 artifact 요약까지 도달한다(c
   });
 
   assert.deepEqual(summary.article_cap_counts_by_source['claude-blog'], {
+    discovered_card_count: 21,
+    resolved_card_count: 21,
+    unresolved_card_count: 0,
     in_window_card_count: 21,
     scheduled_article_count: 8,
     skipped_article_cap_count: 13

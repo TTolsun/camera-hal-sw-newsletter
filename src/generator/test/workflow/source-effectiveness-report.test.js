@@ -446,3 +446,64 @@ test('effectiveness recommendation vocabulary no longer contains KEEP_AND_FIX_PA
     'KEEP_AND_MONITOR'
   ]);
 });
+
+function collectionReport({ caps, counts, events = [], failures = [] } = {}) {
+  return source(buildReport({
+    collectedCandidates: {
+      candidates: [], failures,
+      collection_counts_by_source: counts ? { 'effective-camera': counts } : {},
+      dated_article_collection: { article_cap_counts_by_source: caps ? { 'effective-camera': caps } : {}, events }
+    },
+    shortlistReport: {}, reporterCandidates: {}, editorDraft: null, factCheckReport: null
+  }), 'effective-camera');
+}
+
+test('only a verified listing with no in-window cards establishes no recent signal', () => {
+  const noNews = collectionReport({
+    caps: { discovered_card_count: 4, unresolved_card_count: 0, in_window_card_count: 0 },
+    counts: { raw_collected_count: 0, filtered_out_count: 0, filter_counts: {} }
+  });
+  assert.equal(noNews.collection_status, 'NO_RECENT_SIGNAL');
+  assert.equal(noNews.recommendation, 'NO_RECENT_SIGNAL');
+  assert.equal(collectionReport().collection_status, 'COLLECTION_UNKNOWN');
+  assert.notEqual(collectionReport().recommendation, 'NO_RECENT_SIGNAL');
+  assert.equal(collectionReport({ caps: { discovered_card_count: 0, unresolved_card_count: 0, in_window_card_count: 0 } }).collection_status, 'COLLECTION_UNKNOWN');
+});
+
+test('filtered articles remain distinguishable from no news', () => {
+  const result = collectionReport({
+    caps: { discovered_card_count: 10, unresolved_card_count: 0, in_window_card_count: 2 },
+    counts: { raw_collected_count: 2, filtered_out_count: 2, filter_counts: { relevance: 2 } }
+  });
+  assert.equal(result.collection_status, 'COLLECTION_COMPLETE');
+  assert.equal(result.discovered_count, 10);
+  assert.equal(result.raw_collected_count, 2);
+  assert.equal(result.filtered_out_count, 2);
+  assert.equal(result.candidate_count, 0);
+  assert.equal(result.selected_count, 0);
+  assert.notEqual(result.recommendation, 'NO_RECENT_SIGNAL');
+});
+
+test('partial parsing, article caps and fetch failures never claim no news', () => {
+  for (const input of [
+    { caps: { discovered_card_count: 2, unresolved_card_count: 1, in_window_card_count: 0 } },
+    { caps: { discovered_card_count: 2, unresolved_card_count: 0, in_window_card_count: 2, skipped_article_cap_count: 1 } },
+    { events: [{ source_id: 'effective-camera', kind: 'article_fetch_failed' }] },
+    { events: [{ source_id: 'effective-camera', kind: 'index_collection_incomplete' }] },
+    { failures: [{ source_id: 'effective-camera', message: 'timeout' }] },
+    { counts: { raw_collected_count: 2, filtered_out_count: 2, filter_counts: { global_cap: 2 } } }
+  ]) {
+    const result = collectionReport(input);
+    assert.equal(result.collection_status, 'COLLECTION_INCOMPLETE');
+    assert.notEqual(result.recommendation, 'NO_RECENT_SIGNAL');
+    assert.ok(result.collection_reasons.length > 0);
+  }
+});
+
+
+test('collection stage markdown exposes missing evidence rather than a numeric zero', () => {
+  const markdown = renderSourceEffectivenessMarkdown(buildReport());
+  assert.match(markdown, /## Collection stages/);
+  assert.match(markdown, /Raw collected.*Filtered out.*Candidates.*Selected.*Rendered/);
+  assert.match(markdown, /COLLECTION_UNKNOWN \| — \| — \| —/);
+});

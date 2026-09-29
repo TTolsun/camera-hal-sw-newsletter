@@ -34,7 +34,7 @@ const {
   sourceQualityFieldDrift
 } = require('../../shared/collect/source-quality-classifier');
 
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 const MAX_SAMPLE_URLS = 5;
 const MAX_REASON_ROWS = 5;
 const RECOMMENDATION_ORDER = [
@@ -507,9 +507,17 @@ function recommendationFor(source, metrics) {
   const reasons = [];
   let recommendation = 'KEEP_AND_MONITOR';
 
-  if (metrics.collected_count === 0) {
+  if (metrics.collection_status === 'COLLECTION_INCOMPLETE') {
+    recommendation = 'REVIEW_SOURCE_OR_PARSER';
+    reasons.push('Collection is incomplete; inspect collection reasons before interpreting candidate counts.');
+  } else if (metrics.collected_count === 0 && metrics.collection_status === 'NO_RECENT_SIGNAL') {
     recommendation = 'NO_RECENT_SIGNAL';
-    reasons.push('No recent candidates were collected for this source.');
+    reasons.push('The parsed listing contains no articles in the collection window.');
+  } else if (metrics.collected_count === 0 && metrics.collection_status === 'COLLECTION_UNKNOWN') {
+    recommendation = 'REVIEW_SOURCE_OR_PARSER';
+    reasons.push('Collection completeness is unknown; zero retained candidates does not establish no recent news.');
+  } else if (metrics.collected_count === 0) {
+    reasons.push('Articles were collected but none remain in the candidate pool; inspect filter counts.');
   } else if (
     officialLike(source) &&
     metrics.eligible_count === 0 &&
@@ -573,6 +581,39 @@ function recommendationFor(source, metrics) {
   return {
     recommendation,
     reasons: uniqueSorted(reasons)
+  };
+}
+
+function collectionMetrics(source, payload, candidateCount) {
+  const diagnostics = payload.dated_article_collection || {};
+  const caps = diagnostics.article_cap_counts_by_source?.[source.source_id] || {};
+  const counts = payload.collection_counts_by_source?.[source.source_id];
+  const events = ensureArray(diagnostics.events).filter(event => event.source_id === source.source_id);
+  const failures = ensureArray(payload.failures).filter(failure => failure.source_id === source.source_id || failure.source === source.source_name);
+  const reasons = uniqueSorted([
+    ...events.map(event => text(event.kind)).filter(Boolean),
+    ...failures.map(() => 'source_fetch_failed'),
+    ...(caps.unresolved_card_count > 0 ? ['unresolved_article_cards'] : []),
+    ...(caps.skipped_article_cap_count > 0 ? ['article_cap'] : []),
+    ...Object.entries(counts?.filter_counts || {}).filter(([key, count]) => ['source_cap', 'global_cap'].includes(key) && count > 0).map(([key]) => key)
+  ]);
+  const discovered = Number.isInteger(caps.discovered_card_count) ? caps.discovered_card_count : null;
+  // A successful HTTP response or an empty retained pool is not proof of a complete listing.
+  const listVerified = discovered > 0 && caps.unresolved_card_count === 0;
+  const raw = Number.isInteger(counts?.raw_collected_count) ? counts.raw_collected_count : null;
+  const status = reasons.length > 0 ? 'COLLECTION_INCOMPLETE'
+    : listVerified && caps.in_window_card_count === 0 ? 'NO_RECENT_SIGNAL'
+    : listVerified && raw !== null ? 'COLLECTION_COMPLETE'
+    : 'COLLECTION_UNKNOWN';
+  return {
+    discovered_count: discovered,
+    in_window_count: Number.isInteger(caps.in_window_card_count) ? caps.in_window_card_count : null,
+    raw_collected_count: raw,
+    filtered_out_count: counts?.filtered_out_count ?? null,
+    filter_counts: counts?.filter_counts || {},
+    candidate_count: candidateCount,
+    collection_status: status,
+    collection_reasons: reasons
   };
 }
 
@@ -724,6 +765,7 @@ function finalizeState(state) {
     100
   ), 2);
 
+  Object.assign(metrics, collectionMetrics(source, state.collectionPayload || {}, metrics.collected_count));
   const recommendation = recommendationFor(source, metrics);
 
   return {
@@ -780,7 +822,7 @@ function buildSourceEffectivenessReport(options = {}) {
   const candidatesByKey = new Map();
 
   function ensureState(source) {
-    if (!states.has(source.source_id)) states.set(source.source_id, sourceState(source));
+    if (!states.has(source.source_id)) states.set(source.source_id, { ...sourceState(source), collectionPayload: options.collectedCandidates || {} });
     return states.get(source.source_id);
   }
 
@@ -957,6 +999,18 @@ function renderSourceEffectivenessMarkdown(report) {
     `- Unknown source quality: ${report.summary.unknown_source_quality_count || 0}`,
     `- Source quality field drift: ${report.summary.source_quality_field_drift_count || 0}`,
     `- Legacy source quality warnings: ${report.summary.legacy_source_quality_warning_count || 0}`,
+    '',
+    '## Collection stages',
+    '',
+    '발견은 목록 전체 카드 수, 수집은 필터 전 후보 수입니다. 기존 Collected는 유지된 후보 수이며, 알 수 없는 값은 —로 표시합니다. 최종 선정은 Selected, 실제 본문 반영은 Rendered를 확인하세요.',
+    '',
+    markdownTable(
+      ['Source', 'Status', 'Discovered', 'In window', 'Raw collected', 'Filtered out', 'Candidates', 'Selected', 'Rendered', 'Reasons'],
+      sources.map(source => [source.source_id, source.collection_status,
+        source.discovered_count ?? '—', source.in_window_count ?? '—', source.raw_collected_count ?? '—',
+        source.filtered_out_count ?? '—', source.candidate_count, source.selected_count, source.rendered_main_count,
+        [...source.collection_reasons, ...Object.entries(source.filter_counts).filter(([, count]) => count > 0).map(([reason, count]) => `${reason}=${count}`)].join(', ')])
+    ),
     '',
     '## Source Quality Summary',
     '',

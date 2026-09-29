@@ -454,6 +454,9 @@ for (const registryCase of [
     assert.equal(seenCounts.length, 1,
       '레지스트리 항목이 onArticleCapCounts를 풀어 넘기지 않으면 콜백이 아예 안 불려 이 단언이 깨진다');
     assert.deepEqual(seenCounts[0], {
+      discovered_card_count: 10,
+      resolved_card_count: 10,
+      unresolved_card_count: 0,
       in_window_card_count: 10,
       scheduled_article_count: 8,
       skipped_article_cap_count: 2

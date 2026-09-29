@@ -1747,8 +1747,7 @@ function datedArticleCollectionSectionLines(datedArticleCollection, candidates) 
   ])].sort();
   if (nonZeroKindCounts.length === 0 && diagnosticSourceIds.length === 0) return lines;
 
-  // collected_count는 최종 후보에서 센다. "이 소스가 0건"이 한눈에 보여야 상한 때문에 줄어든
-  // 것인지 목록 자체를 못 읽은 것인지가 같은 줄에서 갈린다.
+  // 기존 collected_count는 유지된 후보 수다. 실제 필터 전 수집량과 혼동하지 않게 표에 명시한다.
   const collectedCountBySource = {};
   for (const item of candidates) {
     const sourceId = String(item.source_id || '');
@@ -1760,6 +1759,8 @@ function datedArticleCollectionSectionLines(datedArticleCollection, candidates) 
   }
 
   lines.push('## 날짜 결속 수집 진단');
+  lines.push('');
+  lines.push('이 표의 collected_count는 필터·상한 적용 후 유지된 후보 수이며, 0건만으로 새 소식 없음을 의미하지 않습니다. 단계별 수집량은 source-effectiveness-report를 확인하세요.');
   lines.push('');
   if (diagnosticSourceIds.length > 0) {
     lines.push('| Source | collected_count | in_window_card_count | scheduled_article_count | skipped_article_cap_count | received_bytes |');
@@ -2166,6 +2167,33 @@ function summarizeDatedArticleCollection({
   };
 }
 
+// Count each pipeline removal separately; raw collection is not the retained candidate pool.
+function buildCollectionCounts(stages, sourceIds = []) {
+  const counts = Object.fromEntries(sourceIds.map(id => [id, { raw_collected_count: 0, candidate_count: 0, filtered_out_count: 0, filter_counts: {} }]));
+  const countBySource = items => {
+    const result = {};
+    for (const item of items) {
+      const id = String(item.source_id || 'unknown');
+      result[id] = (result[id] || 0) + 1;
+      if (!counts[id]) counts[id] = { raw_collected_count: 0, candidate_count: 0, filtered_out_count: 0, filter_counts: {} };
+    }
+    return result;
+  };
+  let previous = countBySource(stages[0].items);
+  for (const [id, count] of Object.entries(previous)) counts[id].raw_collected_count = count;
+  for (const stage of stages.slice(1)) {
+    const current = countBySource(stage.items);
+    for (const [id, count] of Object.entries(previous)) {
+      const removed = Math.max(0, count - (current[id] || 0));
+      counts[id].filter_counts[stage.reason] = removed;
+      counts[id].filtered_out_count += removed;
+    }
+    previous = current;
+  }
+  for (const [id, count] of Object.entries(previous)) counts[id].candidate_count = count;
+  return counts;
+}
+
 async function main() {
   // Fail fast on a malformed manual_source_urls input before doing any
   // collection work, so we never leave a manifest-less candidate artifact.
@@ -2186,13 +2214,13 @@ async function main() {
       const result = await collectFromSource(source, {
         now,
         lookbackDays,
-        onDiagnostic: collectionDiagnostics.record,
+        onDiagnostic: event => collectionDiagnostics.record({ ...event, source_id: source.id }),
         onSourceBytes: collectionDiagnostics.recordSourceBytes,
         onArticleCapCounts: collectionDiagnostics.recordArticleCapCounts
       });
       candidates.push(...result.candidates);
     } catch (error) {
-      failures.push({ source: source.name, message: error.message });
+      failures.push({ source_id: source.id, source: source.name, message: error.message });
     }
   }
 
@@ -2223,17 +2251,31 @@ async function main() {
 
   // [E, U) 후보(이번 coverage 주보다 최신인 후보)는 이번 호 대상이 아니다 — cap 이전에 떼어내
   // 다음 실행 carry-forward 원천으로 보존한다(Task 8/9).
+  const rawCandidates = candidates;
+  const deduplicatedCandidates = dedupe(candidates);
   const { notYetEligible, currentCoveragePool } = partitionByCoverageEligibility(
-    dedupe(candidates), coverage, now, lookbackDays
+    deduplicatedCandidates, coverage, now, lookbackDays
   );
   const notYetEligibleCap = capNotYetEligible(notYetEligible);
   writeNotYetEligibleOverflowIfNeeded(root, date, notYetEligibleCap);
 
-  const rankedCandidates = currentCoveragePool
-    .filter(item => withinLookback(item, now, lookbackDays))
+  const datedCandidates = currentCoveragePool.filter(item => withinLookback(item, now, lookbackDays));
+  const rankedCandidates = datedCandidates
     .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high')
     .sort(candidateRankOrder(now, coverage));
-  candidates = capPerSource(collapseSeriesRepresentatives(rankedCandidates), MAX_CANDIDATES_PER_SOURCE).slice(0, MAX_FINAL_CANDIDATES);
+  const seriesCandidates = collapseSeriesRepresentatives(rankedCandidates);
+  const sourceCappedCandidates = capPerSource(seriesCandidates, MAX_CANDIDATES_PER_SOURCE);
+  candidates = sourceCappedCandidates.slice(0, MAX_FINAL_CANDIDATES);
+  const collectionCountsBySource = buildCollectionCounts([
+    { items: rawCandidates },
+    { reason: 'duplicate', items: deduplicatedCandidates },
+    { reason: 'deferred_coverage', items: currentCoveragePool },
+    { reason: 'outside_window', items: datedCandidates },
+    { reason: 'relevance', items: rankedCandidates },
+    { reason: 'series_collapsed', items: seriesCandidates },
+    { reason: 'source_cap', items: sourceCappedCandidates },
+    { reason: 'global_cap', items: candidates }
+  ], sources.map(source => source.id));
 
   const enrichedCandidates = [];
   for (const candidate of candidates) {
@@ -2280,6 +2322,7 @@ async function main() {
     carry_source: carryForward.carrySource,
     candidates,
     failures,
+    collection_counts_by_source: collectionCountsBySource,
     dated_article_collection: summarizeDatedArticleCollection({
       events: collectionDiagnostics.events(),
       candidates,
@@ -2311,6 +2354,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  buildCollectionCounts,
   MAX_FINAL_CANDIDATES,
   MAX_CANDIDATES_PER_SOURCE,
   NOT_YET_ELIGIBLE_MAX_COUNT,

@@ -159,7 +159,8 @@ function resolveCards(html, pathPrefix) {
  * 목록의 배치 순서(marquee가 grid보다 앞)와 발행 순서는 다르다. 호출부가 '앞에서 N건'을
  * 집는 흔한 실수를 막으려고 최신순으로 돌려준다. 같은 날짜면 문서 위치로 안정 정렬한다.
  */
-function parseDatedArticleCards(html = '', { pathPrefix = '/blog' } = {}) {
+function parseDatedArticleCards(html = '', { pathPrefix = '/blog', articleOrigin = '' } = {}) {
+  if (articleOrigin) return discoverDatedLinkCards(html, { pathPrefix, articleOrigin }).cards;
   return [...resolveCards(html, pathPrefix).values()]
     .filter(card => card.dateConflict !== true)
     .map(({ dateConflict, ...card }) => card)
@@ -173,7 +174,8 @@ function parseDatedArticleCards(html = '', { pathPrefix = '/blog' } = {}) {
 /**
  * 카드가 깨진 이유를 세어 둔다. 파서가 몇 건 뽑았는지만 보면 "0건인데 통과"를 못 잡는다.
  */
-function datedArticleCardDiagnostics(html = '', { pathPrefix = '/blog' } = {}) {
+function datedArticleCardDiagnostics(html = '', { pathPrefix = '/blog', articleOrigin = '' } = {}) {
+  if (articleOrigin) return discoverDatedLinkCards(html, { pathPrefix, articleOrigin }).diagnostics;
   const value = withoutComments(html);
   const anchors = [...value.matchAll(articleLinkPattern(pathPrefix))];
   const anchorSlugs = new Set(anchors.map(match => match[1]));
@@ -194,10 +196,77 @@ function datedArticleCardDiagnostics(html = '', { pathPrefix = '/blog' } = {}) {
  * 사이트가 href 표기를 바꾸면 unresolved_slugs는 텅 빈 채로 깨끗해 보이므로
  * (분모가 파서와 같은 정규식에서 나온다) 카운트 자체를 판정 근거로 쓴다.
  */
-function datedArticleCardCollectionFailure(html = '', { pathPrefix = '/blog' } = {}) {
-  const diagnostics = datedArticleCardDiagnostics(html, { pathPrefix });
+function datedArticleCardCollectionFailure(html = '', { pathPrefix = '/blog', articleOrigin = '' } = {}) {
+  const diagnostics = datedArticleCardDiagnostics(html, { pathPrefix, articleOrigin });
   if (diagnostics.resolved_card_count > 0) return '';
   return `${pathPrefix} index yielded no dated cards (anchors=${diagnostics.anchor_count}); treat as collection failure, not an empty week`;
+}
+
+// News cards can point outside /news (model landing pages and /features).
+// Discover dated anchor blocks independently of their URL, then validate their
+// destination. Unsupported links must remain visible in diagnostics.
+function discoverDatedLinkCards(html, { pathPrefix, articleOrigin }) {
+  const value = withoutComments(html)
+    .replace(/<(script|style|svg|nav|footer)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, match => ' '.repeat(match.length));
+  const byPath = new Map();
+  const discovered = new Set();
+  const unresolved = new Set();
+  const conflicted = new Set();
+  let anchorCount = 0;
+  const blocks = [...value.matchAll(/<a\b[^>]*>/gi)].map(match => ({
+    start: match.index, html: elementBlock(value, match.index, 'a'),
+    opening: match[0], explicit: /FeaturedGrid-module/.test(match[0])
+  }));
+  for (const match of value.matchAll(LIST_ITEM_PATTERN)) {
+    blocks.push({ start: match.index, html: elementBlock(value, match.index, match[1]), opening: match[0], explicit: true });
+  }
+  for (const candidate of blocks) {
+    const block = candidate.html || candidate.opening;
+    // A time element or written date identifies a news card even if its URL
+    // is missing/unsupported or its date cannot be parsed.
+    if (!candidate.explicit && !(/<(?:time|h[2-4])\b/i.test(block)
+      || new RegExp(MONTH_DAY_YEAR_SCAN.source, 'i').test(cardText(block)))) continue;
+    anchorCount += 1;
+    const links = [...block.matchAll(/<a\b[^>]*>/gi)]
+      .map(anchor => /\bhref\s*=\s*(["'])(.*?)\1/i.exec(anchor[0]))
+      .filter(Boolean);
+    const hrefMatch = links[0];
+    const href = hrefMatch ? decodeHtml(hrefMatch[2]).trim() : '';
+    let url;
+    try { url = new URL(href, articleOrigin); } catch { /* recorded below */ }
+    const identity = url ? url.href.replace(/\/$/, '') : href || `card@${candidate.start}`;
+    discovered.add(identity);
+    const dates = distinctIsoDates(block);
+    const destinations = new Set(links.map(link => {
+      try { return new URL(decodeHtml(link[2]), articleOrigin).href; } catch { return link[2]; }
+    }));
+    if (!candidate.html || destinations.size !== 1 || !href || !url || url.origin !== articleOrigin || url.username || url.password
+      || url.search || url.hash || url.pathname === '/' || url.pathname.replace(/\/$/, '') === pathPrefix
+      || dates.length !== 1) {
+      unresolved.add(identity);
+      continue;
+    }
+    const path = url.pathname.replace(/\/$/, '');
+    const previous = byPath.get(path);
+    if (previous && previous.publishedAt !== dates[0]) conflicted.add(path);
+    if (!previous || block.length < previous.blockBytes) {
+      byPath.set(path, {
+        slug: path.startsWith(`${pathPrefix}/`) ? path.slice(pathPrefix.length + 1) : path.slice(1),
+        path, publishedAt: dates[0], blockStart: candidate.start, blockBytes: block.length
+      });
+    }
+  }
+  const cards = [...byPath.values()].filter(card => !conflicted.has(card.path))
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || a.blockStart - b.blockStart);
+  for (const path of conflicted) unresolved.add(new URL(path, articleOrigin).href);
+  return {
+    cards,
+    diagnostics: {
+      anchor_count: anchorCount, anchor_slug_count: discovered.size,
+      discovered_card_count: discovered.size, resolved_card_count: cards.length,
+      unresolved_slugs: [...unresolved].sort(), conflicted_slugs: [...conflicted].sort()
+    }
+  };
 }
 
 module.exports = {
