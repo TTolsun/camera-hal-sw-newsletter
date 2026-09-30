@@ -519,6 +519,10 @@ test('summary ends on a sentence boundary and the sentence across the limit move
   assert.ok(item.behavior_change.startsWith('On our automated build audit'),
     `걸친 문장은 머리부터 통째로 behavior_change가 돼야 한다: ${JSON.stringify(item.behavior_change.slice(0, 40))}`);
   assert.ok(!item.summary.includes('On our automated'), '걸친 문장의 머리가 summary에 남으면 문장이 둘로 갈라진 것이다');
+  // 근거 섹션도 같은 rest에서 나오므로 문장 머리부터 시작해야 한다. 단어 중간에서 시작하는 조각이
+  // 표시 없는 온전한 근거로 읽히는 것이 #1226의 Opus 5.5 사례다.
+  assert.ok(item.source_extraction.workflow.sections[0].items[0].text.startsWith('On our automated build audit'),
+    '근거 섹션은 걸친 문장의 머리부터 시작해야 한다');
 
   // #1230의 잘림 표시는 요약 길이가 499자 이상일 때 켜진다. 문장 경계로 가르면 요약이 그보다 짧아지는데도
   // 기사는 이어지므로, 해석기가 직접 알려야 잘림 표시가 꺼지지 않는다.

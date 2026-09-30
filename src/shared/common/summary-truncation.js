@@ -6,7 +6,7 @@
 const CANDIDATE_TEXT_MAX_LENGTH = 500;
 
 // 잘림으로 보는 최소 길이. 상한에서 한 글자 모자란 값인 이유: 요약을 500자에서 미리 자르는 생산자
-// (dated-article-index-resolver, ai-coding-releases, raspberrypi-libcamera-releases)는 자른 뒤 끝 공백을
+// (ai-coding-releases, raspberrypi-libcamera-releases)는 자른 뒤 끝 공백을
 // 다듬거나 뒤이은 마크업 제거가 공백을 정리한다. 500번째 글자가 공백이면 잘렸는데도 499자로 도착하므로,
 // 500자 이상만 잘림으로 보면 그 경우만 조용히 빠진다. 온전한 499~500자 요약이 잘림으로 표시되는 오탐은
 // 드물고, 잘렸다고 알리는 쪽이 안전한 방향이다.
