@@ -257,9 +257,26 @@ function spansOverlap(left, right) {
   return left.start < right.end && right.start < left.end;
 }
 
+// summary와 근거(rest)를 가르는 경계. SUMMARY_LIMIT 안에서 끝나는 마지막 문장 경계에서 가른다.
+// 고정 글자 수에서 자르면 경계에 걸친 문장이 두 필드로 쪼개져, summary는 그 문장의 머리에서
+// 끝나고 behavior_change는 단어 중간에서 시작하는 꼬리를 담는다(#1226). 걸친 문장은 통째로
+// rest로 넘어간다. 첫 문장이 SUMMARY_LIMIT보다 길면 문장 경계가 없으므로 종전처럼 그 자리에서 자른다.
+// 경계는 SENTENCE_BOUNDARY_PATTERN(마침표·불릿 뒤 공백)이 정한다. 그래서 "e.g. "나 "v1.2. " 바로
+// 뒤가 경계로 잡히면 그 문장은 종전처럼 중간에서 갈리고, 500자 안의 경계가 그 약어 뒤 하나뿐이면
+// summary가 극단적으로 짧아질 수 있다. 잘려 나간 글은 rest로 가서 behavior_change와 섹션 후보가 되고,
+// summary가 500자보다 짧아진 사실은 summary_truncated로 알린다. 약어를 가려내는 일은 하지 않는다.
+function summaryBoundary(bodyText) {
+  let boundary = 0;
+  for (const sentence of splitSentencesWithOffsets(bodyText)) {
+    if (sentence.end > SUMMARY_LIMIT) break;
+    boundary = sentence.end;
+  }
+  return boundary > 0 ? boundary : SUMMARY_LIMIT;
+}
+
 /**
  * workflow 근거 추출. summary와 behavior_change/sections는 서로 다른 구간에서 나온다 —
- * summary는 도입부 SUMMARY_LIMIT자, 근거는 그 뒤(rest)에서만 찾는다. 겹치지 않게 분리해 둬야
+ * summary는 도입부 SUMMARY_LIMIT자 안의 문장들, 근거는 그 뒤(rest)에서만 찾는다. 겹치지 않게 분리해 둬야
  * "summary가 앵커 문구를 담으면 이 test는 앵커가 아니라 summary를 재게 된다"는 골든 케이스의
  * 음성 대조군이 항상 성립한다.
  *
@@ -296,8 +313,9 @@ function spansOverlap(left, right) {
  *    문장과 문단을 각각 세어, 실제로 구별되는 근거 구간보다 1 크게 나올 수 있다.
  */
 function workflowEvidence(bodyText) {
-  const summary = bodyText.slice(0, SUMMARY_LIMIT).trim();
-  const rest = bodyText.slice(SUMMARY_LIMIT);
+  const boundary = summaryBoundary(bodyText);
+  const summary = bodyText.slice(0, boundary).trim();
+  const rest = bodyText.slice(boundary);
 
   const rankedSentences = splitSentencesWithOffsets(rest)
     .map(sentence => ({ ...sentence, score: countAnchorHits(sentence.text) }))
@@ -326,7 +344,10 @@ function workflowEvidence(bodyText) {
   }
 
   const componentMatch = KNOWN_COMPONENT_PATTERN.exec(bodyText);
-  return { summary, behaviorChange, sections, component: componentMatch ? componentMatch[0] : '' };
+  // 요약 뒤에 본문이 이어지면 요약은 기사의 앞부분일 뿐이다. 문장 경계로 가르면 요약이 500자보다
+  // 훨씬 짧아질 수 있어서, normalizeCandidate의 길이 기준(499자 이상)으로는 이 사실을 알 수 없다.
+  const summaryTruncated = rest.trim() !== '';
+  return { summary, summaryTruncated, behaviorChange, sections, component: componentMatch ? componentMatch[0] : '' };
 }
 
 /**
@@ -648,6 +669,7 @@ async function resolveDatedArticleIndexItems({
       date_confidence: dateSourceConfidence(dateSource),
       date_evidence_url: dateEvidenceUrl,
       summary: evidence.summary,
+      summary_truncated: evidence.summaryTruncated,
       api_or_component: evidence.component,
       behavior_change: evidence.behaviorChange,
       source_extraction: { workflow: { sections: evidence.sections } },
