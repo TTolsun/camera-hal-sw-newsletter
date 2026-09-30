@@ -404,24 +404,6 @@ test('source extraction prompt guardrails keep source facts separate from editor
   assert.match(prompt, /validation checklist/);
 });
 
-// #1226: LLM이 읽는 capsule·fact bundle은 길이 상한을 넘는 근거를 다시 잘라 끝에 `...`를 붙인다
-// (article-capsules.js compactText, source-fact-bundle.js compactText). 그 표시를 읽고 결론을
-// 지어내지 않는 규칙은 작성·편집·수선 단계가 함께 쓰는 guardrail에, 뒷받침 없는 결론을 막는 기준은
-// fact-check에 있다. 표시 글자가 이 두 compactText와 다르면 규칙은 LLM이 보지 못하는 글자를 기다린다.
-test('source extraction guardrails tell every stage not to infer conclusions from truncated evidence', () => {
-  const prompt = sourceExtractionPromptGuardrails();
-
-  assert.match(prompt, /말줄임표\(`\.\.\.`\)로 끝나면 길이 상한에서 잘린 것/);
-  assert.match(prompt, /완료, 확인, 확보, 입증/);
-});
-
-test('fact-check prompt raises must_fix for conclusions that truncated evidence does not support', () => {
-  const prompt = factCheckSystemPrompt();
-
-  assert.match(prompt, /말줄임표\(`\.\.\.`\)로 끝나 잘렸는데/);
-  assert.match(prompt, /다른 근거가 뒷받침하지 않으면 must_fix/);
-});
-
 test('LLM editor, repair, completion, and fact-check prompts include article section contract', () => {
   const source = promptHostSource();
   const usageCount = (source.match(/articleSectionContractPrompt\(\),/g) || []).length;

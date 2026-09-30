@@ -519,6 +519,20 @@ test('summary ends on a sentence boundary and the sentence across the limit move
   assert.ok(item.behavior_change.startsWith('On our automated build audit'),
     `걸친 문장은 머리부터 통째로 behavior_change가 돼야 한다: ${JSON.stringify(item.behavior_change.slice(0, 40))}`);
   assert.ok(!item.summary.includes('On our automated'), '걸친 문장의 머리가 summary에 남으면 문장이 둘로 갈라진 것이다');
+
+  // #1230의 잘림 표시는 요약 길이가 499자 이상일 때 켜진다. 문장 경계로 가르면 요약이 그보다 짧아지는데도
+  // 기사는 이어지므로, 해석기가 직접 알려야 잘림 표시가 꺼지지 않는다.
+  assert.ok(item.summary.length < 499, `전제: 이 요약은 길이 기준만으로는 잘림으로 읽히지 않는다: ${item.summary.length}`);
+  assert.equal(item.summary_truncated, true, '요약 뒤에 본문이 이어지면 잘림이다');
+  assert.equal(normalizeCandidate(item).summary_truncated, true,
+    '정규화를 거쳐도 해석기가 실은 잘림 표시가 유지돼야 한다');
+});
+
+test('summary is not flagged as truncated when the whole body fits in it', async () => {
+  const item = await resolveBodyText('A short article that fits. It has two sentences.');
+
+  assert.equal(item.summary_truncated, false);
+  assert.equal(normalizeCandidate(item).summary_truncated, false);
 });
 
 test('summary falls back to the hard limit when the first sentence alone exceeds it', async () => {

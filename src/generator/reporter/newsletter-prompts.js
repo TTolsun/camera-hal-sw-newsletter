@@ -116,7 +116,6 @@ function sourceExtractionPromptGuardrails() {
     'CameraX / AndroidX release notes에서는 source_extraction.release.sections[].items[].text가 source-confirmed release-note behavior evidence입니다. artifact table, dependency declaration, page navigation, generic update text로 대체하지 마세요.',
     'derived_editorial_hints를 article_sections.verified_facts에 복사하거나 HAL boundary, validation_targets, do_not_claim, warnings, relevance hint를 source fact처럼 제시하지 마세요.',
     'source URL 또는 전체 source page를 독립 분석하지 마세요. 제공된 article capsule, source_extraction JSON, derived_editorial_hints JSON, source fields만 사용하세요.',
-    'capsule의 what_changed, evidence 줄, source fact가 말줄임표(`...`)로 끝나면 길이 상한에서 잘린 것입니다. 잘린 근거에서 완료, 확인, 확보, 입증 같은 결론이나 빠진 뒷부분의 내용을 추론하거나 채우지 마세요. 잘리기 전까지 적힌 내용만 사실로 쓰세요.',
     'source_extraction에 release date, release version, API/component, 구체적인 release-note bullet이 없으면 누락된 release evidence를 만들지 말고 해당 항목을 demote 또는 exclude하세요.',
     'CameraX main article은 해당 field가 제공될 때 release version, release date, 구체적인 release-note bullet, HAL boundary, validation checklist를 명시하세요.'
   ].join('\n');

@@ -155,7 +155,6 @@ function factCheckSystemPrompt() {
     'article이 rolling page나 generic watch item을 concrete update처럼 제시했는데 version, release date, API/component name, behavior change가 없으면 must_fix로 다루세요.',
     'dated evidence 없이 finalSelectionEligibility=watchlist/exclude candidate 또는 watch page가 main article로 사용되면 must_fix로 다루세요.',
     'source 없는 claim은 must_fix로 분류해야 합니다.',
-    '근거(what_changed, evidence 줄, source fact)가 말줄임표(`...`)로 끝나 잘렸는데, 기사가 쓴 결론(완료, 확인, 확보, 입증, 통과 등)을 잘리기 전까지의 내용과 source_extraction·source fact의 다른 근거가 뒷받침하지 않으면 must_fix로 분류하세요. 잘린 근거가 뒷부분을 말하지 않는다는 이유로 그 결론을 맞다고 보지 마세요.',
     articleSectionContractPrompt(),
     publicArticleContractPrompt(),
     publicationBoundaryPrompt(),

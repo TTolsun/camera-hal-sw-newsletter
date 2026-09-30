@@ -262,7 +262,9 @@ function spansOverlap(left, right) {
 // 끝나고 behavior_change는 단어 중간에서 시작하는 꼬리를 담는다(#1226). 걸친 문장은 통째로
 // rest로 넘어간다. 첫 문장이 SUMMARY_LIMIT보다 길면 문장 경계가 없으므로 종전처럼 그 자리에서 자른다.
 // 경계는 SENTENCE_BOUNDARY_PATTERN(마침표·불릿 뒤 공백)이 정한다. 그래서 "e.g. "나 "v1.2. " 바로
-// 뒤가 경계로 잡히면 그 문장은 종전처럼 중간에서 갈린다 — 약어를 가려내는 일은 하지 않는다.
+// 뒤가 경계로 잡히면 그 문장은 종전처럼 중간에서 갈리고, 500자 안의 경계가 그 약어 뒤 하나뿐이면
+// summary가 극단적으로 짧아질 수 있다. 잘려 나간 글은 rest로 가서 behavior_change와 섹션 후보가 되고,
+// summary가 500자보다 짧아진 사실은 summary_truncated로 알린다. 약어를 가려내는 일은 하지 않는다.
 function summaryBoundary(bodyText) {
   let boundary = 0;
   for (const sentence of splitSentencesWithOffsets(bodyText)) {
@@ -342,7 +344,10 @@ function workflowEvidence(bodyText) {
   }
 
   const componentMatch = KNOWN_COMPONENT_PATTERN.exec(bodyText);
-  return { summary, behaviorChange, sections, component: componentMatch ? componentMatch[0] : '' };
+  // 요약 뒤에 본문이 이어지면 요약은 기사의 앞부분일 뿐이다. 문장 경계로 가르면 요약이 500자보다
+  // 훨씬 짧아질 수 있어서, normalizeCandidate의 길이 기준(499자 이상)으로는 이 사실을 알 수 없다.
+  const summaryTruncated = rest.trim() !== '';
+  return { summary, summaryTruncated, behaviorChange, sections, component: componentMatch ? componentMatch[0] : '' };
 }
 
 /**
@@ -664,6 +669,7 @@ async function resolveDatedArticleIndexItems({
       date_confidence: dateSourceConfidence(dateSource),
       date_evidence_url: dateEvidenceUrl,
       summary: evidence.summary,
+      summary_truncated: evidence.summaryTruncated,
       api_or_component: evidence.component,
       behavior_change: evidence.behaviorChange,
       source_extraction: { workflow: { sections: evidence.sections } },

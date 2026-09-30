@@ -75,6 +75,21 @@ test('normalizeCandidate reads a candidate with no summary as not truncated (#12
   assert.equal(normalizeCandidate(withoutSummary).summary_truncated, false);
 });
 
+test('normalizeCandidate keeps the truncation flag a collector set instead of re-deriving it from the length (#1226)', () => {
+  // 날짜 기사 해석기는 문장 경계로 요약을 가르므로 요약이 짧아도 기사는 이어진다. 길이 기준으로 다시
+  // 유도하면 그 잘림이 조용히 꺼진다. 반대로 수집기가 온전하다고 실은 긴 요약도 뒤집지 않는다.
+  const short = 'The driver adds a new I2C sensor binding and a test pattern control.';
+  assert.equal(normalizeCandidate(rawCandidate(short, { summary_truncated: true })).summary_truncated, true);
+
+  const long = 'Sentence about the sensor bring up sequence continues here. '.repeat(20);
+  assert.equal(normalizeCandidate(rawCandidate(long, { summary_truncated: false })).summary_truncated, false);
+});
+
+test('normalizeCandidate ignores a truncation flag that is not a boolean (#1226)', () => {
+  const long = 'Sentence about the sensor bring up sequence continues here. '.repeat(20);
+  assert.equal(normalizeCandidate(rawCandidate(long, { summary_truncated: 'false' })).summary_truncated, true);
+});
+
 test('normalizeCandidate measures the summary after markup removal, not the raw markup length (#1226)', () => {
   // 태그가 많아 원문은 500자를 넘지만 텍스트는 짧다. 잘린 것이 아니므로 표시하면 안 된다.
   const markupHeavy = '<p><span class="a">hi</span></p>'.repeat(40);

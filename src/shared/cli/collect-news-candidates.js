@@ -1048,7 +1048,11 @@ function normalizeCandidate(raw) {
   // 정한다(capsule 쪽이 같은 함수로 필드 없는 후보를 유도한다). 표식 문자열을 요약 끝에 붙이지 않고
   // boolean으로 싣는 이유: 요약 길이, behavior_change 파생, news-summary-cache 키가 모두 요약 문자열에
   // 묶여 있다. 요약 텍스트 자체는 그대로다.
-  const summaryTruncated = summaryReachesCutLength(strippedSummary);
+  // 수집기가 잘림 여부를 판정해 실어 준 boolean이 있으면 그 값이 정본이다(isSummaryTruncated와
+  // 같은 규칙). 날짜 기사 해석기는 문장 경계로 요약을 가르므로 길이만으로는 잘림을 알 수 없다.
+  const summaryTruncated = typeof raw.summary_truncated === 'boolean'
+    ? raw.summary_truncated
+    : summaryReachesCutLength(strippedSummary);
   const rawSourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
   const sourceType = raw.sourceType || raw.source_type || rawSourceKind;
   const url = canonicalContentUrl(raw.url);
