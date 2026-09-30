@@ -402,6 +402,22 @@ test('source extraction prompt guardrails keep source facts separate from editor
   assert.match(prompt, /validation checklist/);
 });
 
+// #1226: 후보 요약이 길이 상한에서 잘리면 끝에 말줄임표가 붙는다. 그 표시를 읽고 결론을 지어내지
+// 않는 규칙은 작성·편집·수선 단계가 함께 쓰는 guardrail에, 지어낸 결론을 막는 기준은 fact-check에 있다.
+test('source extraction guardrails tell every stage not to infer conclusions from truncated evidence', () => {
+  const prompt = sourceExtractionPromptGuardrails();
+
+  assert.match(prompt, /말줄임표\(…\)로 끝나면 길이 상한에서 잘린 것/);
+  assert.match(prompt, /완료, 확인, 확보, 입증/);
+});
+
+test('fact-check prompt raises must_fix for conclusions that truncated evidence does not support', () => {
+  const prompt = factCheckSystemPrompt();
+
+  assert.match(prompt, /말줄임표\(…\)로 끝나 잘렸는데 기사가 그 근거에 없는 결론/);
+  assert.match(prompt, /결론.*사실로 쓰면 must_fix/);
+});
+
 test('LLM editor, repair, completion, and fact-check prompts include article section contract', () => {
   const source = promptHostSource();
   const usageCount = (source.match(/articleSectionContractPrompt\(\),/g) || []).length;

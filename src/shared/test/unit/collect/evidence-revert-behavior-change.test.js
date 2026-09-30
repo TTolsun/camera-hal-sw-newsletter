@@ -475,3 +475,47 @@ test('#976 긴 본문도 summary 와 behavior_change 가 같은 지점에서 잘
   assert.equal(normalized.behavior_change.length, 500);
   assert.equal(normalized.behavior_change, normalized.summary, '두 칸은 같은 조각이어야 한다');
 });
+
+// #1226: 상한에서 잘린 본문에 잘림 표시가 없으면 기사를 쓰는 쪽과 검증하는 쪽이 잘린 조각을 완결된
+// 원문으로 읽고 빠진 결론을 채운다(IMX681 테스트 보고의 "안정성 입증"). 표시는 상한 안에서 붙는다.
+function normalizeReleaseBody(body) {
+  return normalizeCandidate({
+    source: {
+      ...RELEASE_SOURCE,
+      url: 'https://github.com/raspberrypi/libcamera/releases',
+      sourceUrl: 'https://github.com/raspberrypi/libcamera/releases',
+      section: 'Camera Driver / V4L2',
+      keywords: ['libcamera', 'camera']
+    },
+    title: 'Raspberry Pi libcamera Releases - v1.0.0',
+    url: 'https://github.com/raspberrypi/libcamera/releases/tag/v1.0.0',
+    publishedAt: '2026-08-17T10:00:00Z',
+    sourceKind: 'release_note_item',
+    version_or_release: 'v1.0.0',
+    api_or_component: 'libcamera / V4L2 camera pipeline',
+    summary: body,
+    behavior_change: body
+  });
+}
+
+test('#1226 상한에서 잘린 summary 와 behavior_change 는 끝에 말줄임표가 붙고 길이는 상한을 넘지 않는다', () => {
+  const body = `Tested the imx681 sensor on mesa and libcamera. ${'word '.repeat(200)}`;
+  assert.ok(body.length > 500, 'fixture must exceed the cut');
+
+  const normalized = normalizeReleaseBody(body);
+
+  assert.equal(normalized.summary.length, 500);
+  assert.ok(normalized.summary.endsWith('…'), '잘렸다는 표시가 있어야 한다');
+  assert.equal(normalized.summary.slice(0, -1), body.slice(0, 499), '표시 앞은 원문 앞부분 그대로다');
+  assert.equal(normalized.behavior_change, normalized.summary, '두 칸은 같은 조각·같은 표시여야 한다');
+});
+
+test('#1226 상한 이하 본문에는 말줄임표를 붙이지 않는다', () => {
+  const exactlyAtLimit = `Fixed the imx296 embedded data negotiation. ${'x'.repeat(500 - 'Fixed the imx296 embedded data negotiation. '.length)}`;
+  assert.equal(exactlyAtLimit.length, 500);
+
+  const normalized = normalizeReleaseBody(exactlyAtLimit);
+
+  assert.equal(normalized.summary, exactlyAtLimit, '정확히 상한인 본문은 잘리지 않은 것이다');
+  assert.ok(!normalized.summary.endsWith('…'));
+});

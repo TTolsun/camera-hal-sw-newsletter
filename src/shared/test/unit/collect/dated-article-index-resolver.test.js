@@ -484,6 +484,51 @@ test('does not put the same paragraph into two workflow evidence sections', asyn
     '(evidence 줄 vs source_extraction.workflow.sections)로 가므로 독립 근거 2건으로 세어지지 않는다');
 });
 
+async function resolveBodyText(bodyText) {
+  const slug = 'summary-boundary';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'Summary boundary' });
+  const articleHtml = minimalArticleHtml({
+    canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+    headerDateText: 'Aug 18, 2026',
+    title: 'Summary boundary',
+    bodyHtml: `<p>${bodyText}</p>`
+  });
+  const items = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+  assert.equal(items.length, 1, 'expected exactly one resolved item');
+  return items[0];
+}
+
+// #1226: 고정 500자에서 가르면 경계에 걸친 문장이 두 필드로 쪼개진다. summary는 그 문장의 머리에서
+// 끝나고 behavior_change는 단어 중간에서 시작하는 꼬리를 담아, 기사를 쓰는 쪽이 조각을 이어 붙여 읽게
+// 된다. 걸친 문장은 통째로 한쪽(근거)에 있어야 한다.
+test('summary ends on a sentence boundary and the sentence across the limit moves whole into the evidence', async () => {
+  const neutral = 'Our small kitchen team spent the spring rewriting the family cookbook. ';
+  const prefix = neutral.repeat(6);
+  const straddling = 'On our automated build audit the agent passed every regression check we run across the pull request queue. ';
+  assert.ok(prefix.length < 500 && prefix.length + straddling.length > 500,
+    '전제: 앵커 문장이 500자 경계에 걸쳐야 이 본문이 경계를 재는 것이 된다');
+
+  const item = await resolveBodyText(`${prefix}${straddling}The last chapter is a list of pots.`);
+
+  // 본문 텍스트는 제목 머리글부터 시작하므로 summary 앞에 그 머리글이 붙는다. 끝이 어디인지를 잰다.
+  assert.ok(item.summary.endsWith(prefix.trim()), 'summary는 500자 안에서 끝나는 마지막 완결 문장까지다');
+  assert.ok(item.summary.length <= 500, `summary는 상한을 넘지 않는다: length=${item.summary.length}`);
+  assert.ok(item.behavior_change.startsWith('On our automated build audit'),
+    `걸친 문장은 머리부터 통째로 behavior_change가 돼야 한다: ${JSON.stringify(item.behavior_change.slice(0, 40))}`);
+  assert.ok(!item.summary.includes('On our automated'), '걸친 문장의 머리가 summary에 남으면 문장이 둘로 갈라진 것이다');
+});
+
+test('summary falls back to the hard limit when the first sentence alone exceeds it', async () => {
+  const item = await resolveBodyText(`${'word '.repeat(200)}ends here. Then the build agent opened a pull request.`);
+
+  assert.ok(item.summary.length > 0 && item.summary.length <= 500,
+    `문장 경계가 없으면 종전처럼 상한에서 자른다: length=${item.summary.length}`);
+  assert.ok(item.summary.includes('word word'), 'summary가 비면 안 된다');
+});
+
 test('api_or_component carries the measured token, not the source registry constant', async () => {
   const item = await firstResolvedItem();
   // 이 픽스처 본문에는 KNOWN_COMPONENT_PATTERN의 여섯 토큰 중 "Claude Code"가 가장 먼저

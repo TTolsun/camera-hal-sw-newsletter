@@ -257,9 +257,22 @@ function spansOverlap(left, right) {
   return left.start < right.end && right.start < left.end;
 }
 
+// summary와 근거(rest)를 가르는 경계. SUMMARY_LIMIT 안에서 끝나는 마지막 문장 경계에서 가른다.
+// 고정 글자 수에서 자르면 경계에 걸친 문장이 두 필드로 쪼개져, summary는 그 문장의 머리에서
+// 끝나고 behavior_change는 단어 중간에서 시작하는 꼬리를 담는다(#1226). 걸친 문장은 통째로
+// rest로 넘어간다. 첫 문장이 SUMMARY_LIMIT보다 길면 문장 경계가 없으므로 종전처럼 그 자리에서 자른다.
+function summaryBoundary(bodyText) {
+  let boundary = 0;
+  for (const sentence of splitSentencesWithOffsets(bodyText)) {
+    if (sentence.end > SUMMARY_LIMIT) break;
+    boundary = sentence.end;
+  }
+  return boundary > 0 ? boundary : SUMMARY_LIMIT;
+}
+
 /**
  * workflow 근거 추출. summary와 behavior_change/sections는 서로 다른 구간에서 나온다 —
- * summary는 도입부 SUMMARY_LIMIT자, 근거는 그 뒤(rest)에서만 찾는다. 겹치지 않게 분리해 둬야
+ * summary는 도입부 SUMMARY_LIMIT자 안의 문장들, 근거는 그 뒤(rest)에서만 찾는다. 겹치지 않게 분리해 둬야
  * "summary가 앵커 문구를 담으면 이 test는 앵커가 아니라 summary를 재게 된다"는 골든 케이스의
  * 음성 대조군이 항상 성립한다.
  *
@@ -296,8 +309,9 @@ function spansOverlap(left, right) {
  *    문장과 문단을 각각 세어, 실제로 구별되는 근거 구간보다 1 크게 나올 수 있다.
  */
 function workflowEvidence(bodyText) {
-  const summary = bodyText.slice(0, SUMMARY_LIMIT).trim();
-  const rest = bodyText.slice(SUMMARY_LIMIT);
+  const boundary = summaryBoundary(bodyText);
+  const summary = bodyText.slice(0, boundary).trim();
+  const rest = bodyText.slice(boundary);
 
   const rankedSentences = splitSentencesWithOffsets(rest)
     .map(sentence => ({ ...sentence, score: countAnchorHits(sentence.text) }))
