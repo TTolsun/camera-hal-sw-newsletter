@@ -524,9 +524,12 @@ test('summary ends on a sentence boundary and the sentence across the limit move
 test('summary falls back to the hard limit when the first sentence alone exceeds it', async () => {
   const item = await resolveBodyText(`${'word '.repeat(200)}ends here. Then the build agent opened a pull request.`);
 
-  assert.ok(item.summary.length > 0 && item.summary.length <= 500,
+  // 500번째 글자가 공백이면 trim으로 499자가 된다. 그 밖의 길이라면 경계를 엉뚱한 곳에 잡은 것이다.
+  assert.ok(item.summary.length >= 499 && item.summary.length <= 500,
     `문장 경계가 없으면 종전처럼 상한에서 자른다: length=${item.summary.length}`);
   assert.ok(item.summary.includes('word word'), 'summary가 비면 안 된다');
+  assert.equal(item.behavior_change, 'Then the build agent opened a pull request.',
+    '상한 뒤의 다음 문장이 근거로 남아야 한다(경계 폴백이 rest를 통째로 삼키면 안 된다)');
 });
 
 test('api_or_component carries the measured token, not the source registry constant', async () => {

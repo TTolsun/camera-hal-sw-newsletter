@@ -208,25 +208,6 @@ const MARKUP_PATTERN = /<!--[\s\S]*?-->|<![^>]*>|<\/?[a-zA-Z][a-zA-Z0-9:._-]*(?:
 // 두 칸으로 흘러오므로 상한이 갈리면 표식·게이트가 서로 다른 조각을 보게 된다(#976).
 const CANDIDATE_TEXT_MAX_LENGTH = 500;
 
-// 상한을 넘겨 잘린 본문은 끝에 말줄임표를 붙여 잘렸음을 드러낸다. 표시가 없으면 잘린 본문이
-// 완결된 원문처럼 읽혀서, 기사를 쓰는 쪽과 검증하는 쪽이 빠진 결론을 채워 넣는다(#1226).
-// 표시 자리를 상한 안에서 마련하므로 잘린 값의 길이는 항상 상한과 같다.
-const TRUNCATION_MARK = '…';
-
-function capCandidateText(value) {
-  if (value.length <= CANDIDATE_TEXT_MAX_LENGTH) return value;
-  return `${value.slice(0, CANDIDATE_TEXT_MAX_LENGTH - TRUNCATION_MARK.length)}${TRUNCATION_MARK}`;
-}
-
-// 잘린 값은 끝 글자가 표시로 바뀌어 있어 원문의 앞부분(prefix)이 아니다. 앞부분 비교를 하는 쪽
-// (수집기 템플릿 문장 판정)은 비교 전에 표시를 떼야 잘린 템플릿 문장을 알아본다. 길이가 상한과
-// 같을 때만 뗀다 — 상한 아래의 값은 잘린 적이 없으므로 끝의 말줄임표는 원문의 것이다.
-function withoutTruncationMark(value) {
-  return value.length === CANDIDATE_TEXT_MAX_LENGTH && value.endsWith(TRUNCATION_MARK)
-    ? value.slice(0, -TRUNCATION_MARK.length)
-    : value;
-}
-
 // `String(value || '')`로 받는다. `String(null)`은 `'null'`이라, 이 자리에서 String(value)만
 // 쓰면 title이나 summary가 null인 후보에서 리터럴 "null"이 영속 후보로 들어간다. 옛 decode는
 // null에 `.replace`를 걸어 예외로 죽었으므로, 조용히 문자열을 오염시키는 쪽으로 바뀌지 않게 한다.
@@ -574,7 +555,7 @@ function collapseWhitespace(value) {
 }
 
 function isCollectorTemplateSentence(raw, value) {
-  const candidate = withoutTruncationMark(collapseWhitespace(value));
+  const candidate = collapseWhitespace(value);
   const template = collapseWhitespace(raw?.collector_template_sentence);
   if (!candidate || !template) return false;
   return template.startsWith(candidate) || stripMarkup(template).startsWith(candidate);
@@ -931,7 +912,7 @@ function evidenceMetadata(raw, source, title, summary, score, candidateOnly) {
   // 않는다. 길이 상한을 함께 맞추는 이유도 같다: 긴 본문에서 두 칸이 서로 다른 지점에서 잘리면
   // 표식·게이트가 다시 다른 문자열을 보게 된다.
   const behaviorChangeTexts = titleFallback => [
-    capCandidateText(stripMarkup(raw.behavior_change)),
+    stripMarkup(raw.behavior_change).slice(0, CANDIDATE_TEXT_MAX_LENGTH),
     firstBehavior(summary || titleFallback),
     toolingEvidence.eligible ? 'Official Android tooling article describes native Android app workflow behavior.' : ''
   ].map(value => String(value || ''));
@@ -1061,7 +1042,7 @@ function normalizeCandidate(raw) {
   // 여기 들어오는 값은 파서나 소스별 수집기가 이미 entity를 푼 텍스트다. 남은 일은 그 해제로
   // 리터럴이 된 마크업을 걷어내는 것뿐이라 stripMarkup만 건다(#975).
   const title = stripMarkup(raw.title);
-  const summary = capCandidateText(stripMarkup(raw.summary));
+  const summary = stripMarkup(raw.summary).slice(0, CANDIDATE_TEXT_MAX_LENGTH);
   const rawSourceKind = raw.sourceKind || raw.source_kind || inferFallbackSourceKind(source);
   const sourceType = raw.sourceType || raw.source_type || rawSourceKind;
   const url = canonicalContentUrl(raw.url);

@@ -261,6 +261,8 @@ function spansOverlap(left, right) {
 // 고정 글자 수에서 자르면 경계에 걸친 문장이 두 필드로 쪼개져, summary는 그 문장의 머리에서
 // 끝나고 behavior_change는 단어 중간에서 시작하는 꼬리를 담는다(#1226). 걸친 문장은 통째로
 // rest로 넘어간다. 첫 문장이 SUMMARY_LIMIT보다 길면 문장 경계가 없으므로 종전처럼 그 자리에서 자른다.
+// 경계는 SENTENCE_BOUNDARY_PATTERN(마침표·불릿 뒤 공백)이 정한다. 그래서 "e.g. "나 "v1.2. " 바로
+// 뒤가 경계로 잡히면 그 문장은 종전처럼 중간에서 갈린다 — 약어를 가려내는 일은 하지 않는다.
 function summaryBoundary(bodyText) {
   let boundary = 0;
   for (const sentence of splitSentencesWithOffsets(bodyText)) {
