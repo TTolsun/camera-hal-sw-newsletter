@@ -1613,3 +1613,31 @@ test('#944: workflow section_key uses its own prefix, not the release prefix', (
   // texts는 workflow 컨테이너 값만 담는다(이 컨테이너에는 version/date/component가 없다).
   assert.deepEqual(index.byId.get(workflowId).texts, [WORKFLOW_PARAGRAPH_FIRST]);
 });
+
+// 이슈 #1226: fact-check가 보는 근거(allowed_claim_evidence)는 작성 단계가 본 capsule의 그 배열이다.
+// 요약이 수집 단계에서 500자로 잘렸다면, 그 요약을 담은 근거 항목에 잘림 표시가 있어야 fact-check가
+// 잘린 근거만 보고 "모순 없음"으로 판정하지 않는다.
+test('allowed claim evidence marks the items that carry a summary cut at collection (#1226)', () => {
+  const url = 'https://lore.kernel.org/linux-media/imx681-report';
+  const summary = 'Test report v7. 1) The first sta';
+  const cand = {
+    title: 'IMX681 v7 test report',
+    url,
+    source_candidate_hash: 'abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789',
+    summary,
+    summary_truncated: true,
+    source_extraction: { evidence_blocks: [{ text: 'A block read from the full page body.', url }] }
+  };
+  const sec = section({ sources: [{ title: 'lore', url }] });
+  const allowed = buildAllowedClaimEvidence(cand, sec);
+  const marked = allowed.filter(item => item.summary_truncated === true);
+  assert.ok(marked.length > 0, 'the item built from the summary must be marked');
+  for (const item of marked) assert.ok(item.text.includes(summary), 'only items that carry the summary are marked');
+  assert.ok(
+    allowed.some(item => item.kind === 'source_extraction_item' && !('summary_truncated' in item)),
+    'evidence read from the full page body stays unmarked'
+  );
+
+  const uncut = buildAllowedClaimEvidence({ ...cand, summary_truncated: false }, sec);
+  for (const item of uncut) assert.ok(!('summary_truncated' in item));
+});

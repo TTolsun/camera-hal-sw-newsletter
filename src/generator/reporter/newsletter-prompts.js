@@ -63,6 +63,46 @@ function seriesContextPrompt() {
   ].join('\n');
 }
 
+// 원문 요약이 수집 단계에서 500자로 잘렸는데 그 사실이 어디에도 없어서, 잘린 요약만 받은 기자와
+// fact-check가 잘린 뒤쪽의 결론을 추론해 쓰고 통과시킨 사례가 2026-09-28호에서 첫 발행과 재발행 모두에
+// 나왔다(#1226): 메일 원문의 500자 뒤에 문제 목록이 있던 IMX681 v7 테스트 보고를 "철저한 조사 완료,
+// 안정성 입증"으로, 요약이 "…automated behavioral audit, t"에서 끊긴 Opus 5.5를 "정렬 테스트 통과"로 썼다.
+// 검증 단계도 같은 500자 근거와 비교하므로 모순을 찾지 못했다 — 쓰는 단계와 검증 단계가 같은 사각지대를
+// 공유한다. 그래서 payload에 표시(summary_truncated)를 싣는 것으로 끝내지 않고, 두 단계 모두에 그 표시를
+// 읽는 방법을 규칙으로 적는다.
+//
+// 이 잘림 표시는 요약 문자열 끝에 덧붙이지 않고 별도 boolean이다(요약 길이, behavior_change 파생,
+// news-summary-cache 키가 모두 요약 문자열에 묶여 있다). 반면 capsule과 근거 텍스트를 줄일 때 붙는
+// `...`는 문자열 끝 표시다. 둘 다 "뒤쪽 내용을 알 수 없다"는 같은 뜻이므로 한 규칙에서 함께 다룬다.
+function truncatedSourceDefinitionLines() {
+  return [
+    'capsule의 summary_truncated=true는 수집 단계에서 원문 요약을 500자에서 잘라 저장했다는 표시입니다. allowed_claim_evidence[] 항목에 붙은 summary_truncated=true는 그 항목의 text가 그렇게 잘린 요약을 담고 있다는 뜻입니다. 잘린 요약은 원문의 앞부분일 뿐이고, 그 뒤에 무엇이 이어졌는지(문제 목록, 한계, 예외, 후속 결과)는 capsule 어디에도 없습니다. summary에서 뽑은 behavior_change, what_changed, evidence의 summary 항목도 같은 잘린 요약에서 나온 것일 수 있습니다. 이 잘림에는 끝 표시가 붙지 않으므로 텍스트 끝만 보고는 알 수 없습니다.',
+    '근거 텍스트가 `...`로 끝나면 capsule이나 근거를 줄이는 과정에서 잘린 것일 수 있고, 원문이 실제로 `...`로 끝난 것일 수도 있습니다. 어느 쪽인지 알 수 없으므로 그 뒤에 내용이 이어졌는지 확인할 수 없다고 다룹니다. summary_truncated 표시와 `...` 끝 표시는 잘린 이유만 다를 뿐, 잘린 뒤쪽 내용을 알 수 없다는 점은 같습니다.'
+  ];
+}
+
+// 작성 단계(editorial plan, reporter, editor, repair, completion)용. 확인 가능한 것은 잘리기 전까지
+// 실제로 적힌 내용이고, 불가능한 것은 잘린 뒤쪽과 그 뒤에 있었을 결론이다. "요약이 잘렸으니 이 기사는
+// 쓸 수 없다"로 읽히면 멀쩡한 기사까지 막히므로, 잘리기 전 내용으로 쓸 수 있다는 점을 함께 적는다.
+function truncatedSourceWritingPrompt() {
+  return [
+    ...truncatedSourceDefinitionLines(),
+    'summary_truncated=true 표시가 붙었거나 `...`로 끝나는 근거에서는 잘리기 전까지 실제로 적힌 내용만 확인된 사실로 쓰세요. 잘린 뒤쪽에 무엇이 있었는지는 추론하지 마세요. 특히 조사·테스트·검증이 "완료"됐다거나, 안정성·호환성이 "확인·입증"됐다거나, 성능이나 정렬 테스트를 "통과"했다거나, 가장 강력하다는 결론은 요약의 앞부분이 그 방향으로 시작한다는 이유만으로 쓰지 마세요. 그런 결론은 뒤에 이어지는 문제 목록이나 예외로 뒤집힐 수 있습니다.',
+    '잘린 근거가 아닌 다른 근거(source_extraction, seed_evidence, 잘리지 않은 allowed_claim_evidence 항목)가 그 결론을 직접 뒷받침하면 그 근거로 쓸 수 있습니다. 결론이 기사의 핵심인데 잘리지 않은 근거로는 확인되지 않으면, 결론을 단정하지 말고 확인된 범위까지만 쓰거나 기존 규칙대로 강등하세요. 수집 내부 사정(500자 제한, 잘림 표시)은 독자용 본문에 쓰지 마세요.'
+  ].join('\n');
+}
+
+// 검증 단계(fact-check)용. 검증이 같은 잘린 근거와 대조해 "모순 없음"으로 통과시키는 것이 이 규칙이
+// 막으려는 상태다. 반대 방향도 막는다: 잘린 뒷부분이 기사와 반대일 것이라 추측해 must_fix를 올리면
+// 확인할 수 없다는 것과 모순이라는 것을 혼동하게 된다.
+function truncatedSourceFactCheckPrompt() {
+  return [
+    ...truncatedSourceDefinitionLines(),
+    'summary_truncated=true 표시가 붙었거나 `...`로 끝나는 근거가 유일한 근거인 claim은, 그 근거가 잘리기 전까지 실제로 적은 내용만 뒷받침받은 것으로 판정하세요. 잘린 뒷부분이 무엇을 말했는지 알 수 없으므로, 뒤쪽에 있었을 결론(완료, 확인, 입증, 통과, 가장 강력한 성능 같은 것)을 원문이 뒷받침한다고 판정하지 마세요. 그런 claim은 source가 직접 뒷받침하지 않는 claim으로 다루어 must_fix[]에 넣으세요. 이것은 앞서 정한 must_fix[] 기준에 더하는 항목입니다.',
+    '반대로 근거가 잘렸다는 사실만으로 기사를 문제 삼지 마세요. 잘린 뒷부분이 기사와 반대일 것이라고 추측해 must_fix[]에 넣는 것도 안 됩니다. 확인할 수 없다는 것과 모순된다는 것은 다릅니다. 잘리기 전 내용이 뒷받침하는 claim과 다른 근거가 직접 뒷받침하는 claim은 종전 기준대로 판정하세요.'
+  ].join('\n');
+}
+
 function sourceExtractionPromptGuardrails() {
   return [
     'Source extraction contract: source_extraction은 source가 확인한 structured fact로만 다루고, derived_editorial_hints는 editorial guidance로만 다루세요.',
@@ -357,6 +397,8 @@ module.exports = {
   buildPromptContexts,
   linkedEvidencePromptGuardrails,
   seriesContextPrompt,
+  truncatedSourceFactCheckPrompt,
+  truncatedSourceWritingPrompt,
   sourceExtractionPromptGuardrails,
   articleSectionContractPrompt,
   publicArticleContractPrompt,

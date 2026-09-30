@@ -11,6 +11,9 @@ const {
 const {
   stableSourceExtractionItemId
 } = require('../../../quality/claim-source-binding');
+const {
+  selectedReporterCapsules
+} = require('../../../publish/orchestrator-reporter-normalize');
 
 function candidate(overrides = {}) {
   return {
@@ -731,4 +734,83 @@ test('capsule series revision is null when the series carries no usable version 
   }));
   assert.equal(capsule.series_context.name, 'softisp: Five fixes found on a camera with no hardware ISP');
   assert.equal(capsule.series_context.revision, null);
+});
+
+// 이슈 #1226: 후보 요약은 수집 단계에서 500자로 잘리는데 잘림 표시가 없어서, 잘린 요약만 받은 기자와
+// fact-check가 뒤쪽의 결론을 추론해 썼다. 후보의 summary_truncated를 capsule과 근거 항목이 실어 나른다.
+test('capsule carries summary_truncated when the candidate summary was cut at collection (#1226)', () => {
+  const capsule = buildArticleCapsule(candidate({ summary_truncated: true }));
+  assert.equal(capsule.summary_truncated, true);
+});
+
+test('capsule omits summary_truncated for a candidate whose summary was not cut (#1226)', () => {
+  // 대부분의 후보가 여기에 해당한다. series_context와 같이 값이 없으면 키를 떼어 payload를 키우지 않는다.
+  const short = 'The driver adds a new I2C sensor binding.';
+  assert.ok(!('summary_truncated' in buildArticleCapsule(candidate({ summary: short }))));
+  assert.ok(!('summary_truncated' in buildArticleCapsule(candidate({ summary: short, summary_truncated: false }))));
+});
+
+// 이월(not_yet_eligible) 후보는 이전 주 산출물을 정규화 없이 그대로 읽어 오므로 이 필드가 없다. 그
+// 후보가 이번 호의 수집 풀 핵심이라, 필드가 없으면 요약 길이로 유도하지 않는 한 사각지대가 그대로 남는다.
+const CARRIED_LONG_SUMMARY = `${'Test report for the carried series. 1) The first stage exercised the sensor bring up path. '.repeat(6)}`.slice(0, 500);
+
+test('capsule derives summary_truncated from the summary length for a candidate without the field (#1226)', () => {
+  assert.equal(CARRIED_LONG_SUMMARY.length, 500);
+  const carried = candidate({ summary: CARRIED_LONG_SUMMARY });
+  assert.ok(!('summary_truncated' in carried), 'fixture must not carry the field');
+  const capsule = buildArticleCapsule(carried);
+  assert.equal(capsule.summary_truncated, true);
+  assert.ok(capsule.allowed_claim_evidence.some(item => item.summary_truncated === true));
+  // 정규화가 상한에서 한 글자 모자란 499자로 남기는 경우도 같다.
+  assert.equal(buildArticleCapsule(candidate({ summary: 'y'.repeat(499) })).summary_truncated, true);
+  assert.ok(!('summary_truncated' in buildArticleCapsule(candidate({ summary: 'y'.repeat(498) }))));
+});
+
+test('capsule does not derive summary_truncated for a short summary without the field (#1226)', () => {
+  const capsule = buildArticleCapsule(candidate({ summary: CARRIED_LONG_SUMMARY.slice(0, 300) }));
+  assert.ok(!('summary_truncated' in capsule));
+  for (const item of capsule.allowed_claim_evidence) assert.ok(!('summary_truncated' in item));
+});
+
+test('capsule keeps an explicit summary_truncated=false even when the summary is long (#1226)', () => {
+  // 명시된 값은 정규화가 이미 판정한 것이므로 길이로 뒤집지 않는다.
+  const capsule = buildArticleCapsule(candidate({ summary: CARRIED_LONG_SUMMARY, summary_truncated: false }));
+  assert.ok(!('summary_truncated' in capsule));
+  for (const item of capsule.allowed_claim_evidence) assert.ok(!('summary_truncated' in item));
+});
+
+test('claim evidence built from the truncated summary is marked, other evidence is not (#1226)', () => {
+  const summary = 'Test report v7. 1) The first sta';
+  const capsule = buildArticleCapsule(candidate({
+    summary,
+    summary_truncated: true,
+    source_extraction: {
+      evidence_blocks: [{ text: 'A block that the extractor read from the full page body.' }]
+    }
+  }));
+  const fromSummary = capsule.allowed_claim_evidence.filter(item => item.text.includes(summary));
+  assert.ok(fromSummary.length > 0, 'an allowed evidence item must carry the candidate summary');
+  for (const item of fromSummary) assert.equal(item.summary_truncated, true);
+  const others = capsule.allowed_claim_evidence.filter(item => !item.text.includes(summary));
+  assert.ok(others.length > 0, 'fixture must include evidence that does not carry the summary');
+  for (const item of others) assert.ok(!('summary_truncated' in item), `${item.kind} evidence must stay unmarked`);
+});
+
+test('claim evidence carries no truncation mark when the summary was not cut (#1226)', () => {
+  const capsule = buildArticleCapsule(candidate({ summary: 'The driver adds a new I2C sensor binding.' }));
+  for (const item of capsule.allowed_claim_evidence) assert.ok(!('summary_truncated' in item));
+});
+
+test('the capsules handed to the fact-check stage carry the truncation mark (#1226)', () => {
+  // fact-check는 gemini-newsroom-newsletter의 호출부에서 selectedReporterCapsules로 만든 capsule JSON을
+  // 그대로 받는다. 쓰는 단계와 검증 단계가 같은 사각지대를 공유하지 않도록, 그 경로의 JSON에 표시가
+  // 실제로 들어 있는지 잠근다.
+  const cut = candidate({ summary: 'Test report v7. 1) The first sta', summary_truncated: true });
+  const shortlistReport = { selected_articles: [cut], reserve_candidates: [], shortlisted_candidates: [cut] };
+  const reporter = { candidates: [cut] };
+  const report = buildArticleCapsuleReport('2026-09-28', shortlistReport, reporter);
+  const sent = JSON.parse(JSON.stringify(selectedReporterCapsules('2026-09-28', reporter, report)));
+  assert.equal(sent.candidates.length, 1);
+  assert.equal(sent.candidates[0].summary_truncated, true);
+  assert.ok(sent.candidates[0].allowed_claim_evidence.some(item => item.summary_truncated === true));
 });

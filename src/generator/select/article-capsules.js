@@ -1,4 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { isSummaryTruncated } = require('../../shared/common/summary-truncation');
 const CAPSULE_TOKEN_TARGET = '700-1200';
 const MAX_TEXT = 420;
 const MAX_EVIDENCE_ITEMS = 3;
@@ -508,6 +509,11 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
     main_article_readiness: readiness,
     component: compactText(candidate.api_or_component || candidate.version_or_release, 160),
     source_fact_bundle: buildArticleSourceFactBundle(candidate, contextCandidates),
+    // 원문 요약이 수집 단계에서 500자로 잘렸는지(#1226). 요약 문자열에는 표식이 붙지 않으므로 이 필드가
+    // 없으면 잘린 요약과 온전한 요약을 구별할 수 없다. 수집기가 값을 싣지 않은 후보(이월 후보 등)는
+    // isSummaryTruncated가 요약 길이로 유도한다. 잘리지 않은 후보가 대부분이라 false면 키를 아래에서
+    // 뗀다. 이 필드를 읽는 규칙은 newsletter-prompts.js의 truncatedSource*Prompt다.
+    summary_truncated: isSummaryTruncated(candidate),
     what_changed: compactText(cleanedBehavior.text || candidate.behavior_change || candidate.summary || summaryCacheText(candidate), MAX_TEXT),
     background_context_static: compactText(buildStaticBackgroundContext(fieldCandidate), MAX_TEXT),
     camera_hal_perspective_static: compactText(buildHalPerspective(fieldCandidate), MAX_TEXT),
@@ -611,6 +617,7 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
   if (!capsule.parent_context) delete capsule.parent_context;
   // 시리즈가 아닌 후보가 대부분이라, 빈 값을 남기면 payload에 null만 늘어난다(parent_context와 같은 처리).
   if (!capsule.series_context) delete capsule.series_context;
+  if (!capsule.summary_truncated) delete capsule.summary_truncated;
   return {
     ...capsule,
     estimated_tokens: estimatedTokens(capsule)
