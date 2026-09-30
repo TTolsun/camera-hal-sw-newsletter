@@ -115,6 +115,21 @@ test('the v2 body field name is a forbidden public identifier', () => {
   assert.equal(RESERVED_SUBHEADING_TERMS.includes('body_markdown'), true);
 });
 
+// capsule 필드 이름은 독자 글에 나오면 누수다(#1226). 새 프롬프트가 "수집 내부 사정을 독자용 본문에
+// 쓰지 마세요"라고 지시해도 필드 이름 자체는 집행되지 않으면 그대로 나갈 수 있으므로, 다른 capsule 필드와
+// 같이 식별자 목록에서 집행한다. 이 이름은 정상 공개 문장에 나올 이유가 없다.
+test('the truncated summary capsule field name is a forbidden public identifier (#1226)', () => {
+  const { HARD_PUBLIC_IDENTIFIERS, publicProseLeakageIssues } = require('../../reporter/public-prose-leakage');
+
+  assert.equal(HARD_PUBLIC_IDENTIFIERS.includes('summary_truncated'), true);
+  assert.deepEqual(
+    publicProseLeakageIssues('원문 요약에 summary_truncated 표시가 붙었습니다.'),
+    ['public text contains hard internal identifier: summary_truncated']
+  );
+  // 식별자만 집행한다. 자연어 문구를 잡는 규칙은 판정이 모호해서 두지 않는다.
+  assert.deepEqual(publicProseLeakageIssues('원문 요약이 500자에서 잘려 뒷부분은 확인하지 못했습니다.'), []);
+});
+
 // 발행 직전 public JSON 스캐너도 필드 이름을 열거한다. public_article 하위 값은
 // keyPath 조건이 이미 걷지만, 그 조상 없이 놓인 본문 값은 이름 목록에만 걸린다.
 // 이 단언이 없으면 목록에서 이름을 빼도 아무 테스트가 깨지지 않는다.

@@ -40,6 +40,7 @@ const HARD_PUBLIC_IDENTIFIERS = Object.freeze([
   'specificity_checks',
   'overclaim_guardrails',
   'main_article_readiness',
+  'summary_truncated',
   'reader_owners',
   'check_within_2_weeks',
   'why_now',
