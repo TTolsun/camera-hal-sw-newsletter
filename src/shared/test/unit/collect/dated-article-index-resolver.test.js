@@ -550,13 +550,50 @@ test('summary falls back to the hard limit when the first sentence alone exceeds
     '상한 뒤의 다음 문장이 근거로 남아야 한다(경계 폴백이 rest를 통째로 삼키면 안 된다)');
 });
 
+// Claude Blog 개별 기사의 머리글 뒤에는 게시 정보 목록(hero_blog_post_details_list: Category, Date,
+// Reading time, Share/Copy link와 자기 URL, Author)이 온다. 본문이 <h1>부터 시작하므로 이 목록이
+// 평문에 그대로 들어가, summary 앞쪽을 차지하고 api_or_component 라벨까지 만든다. 이 장식은 기사
+// 내용이 아니므로 본문 추출 단계에서 걷어낸다 — 분류기 쪽 근접 패턴을 넓히는 것으로는 막지 못한다.
+test('keeps the Claude Blog post-details list (category, date, reading time, share link) out of the summary', async () => {
+  const item = await firstResolvedItem();
+
+  for (const chrome of ['Category', 'Enterprise AI', 'Date August 18, 2026', 'Reading time', 'Share', 'Copy link', 'Author(s)', 'Sachin Malhotra']) {
+    assert.ok(!item.summary.includes(chrome), `페이지 장식이 summary에 남았다: ${chrome}`);
+  }
+  assert.ok(!item.summary.includes(item.url), '자기 URL(Copy link가 담는 값)이 summary에 남았다');
+
+  // 장식만 걷어내야 한다. 제목, 머리글 아래 부제, 본문 첫 문장은 그대로 이어져야 한다.
+  assert.match(item.summary, /^Claude on call: How Claude Tag serves as Anthropic’s first responder for CI\/CD failures An engineer on our Continuous Integration team walks through the agent he built/);
+  assert.match(item.summary, /AI incident response for CI\/CD: Claude on call at Anthropic A few weeks ago, I was on-call/);
+});
+
+test('removes only the post-details list and keeps the text around it', async () => {
+  const slug = 'details-list';
+  const indexHtml = oneCardHtml({ slug, dateText: 'Aug 18, 2026', title: 'Details list' });
+  const articleHtml = minimalArticleHtml({
+    canonical: `${ORIGIN}${PATH_PREFIX}/${slug}`,
+    headerDateText: 'Aug 18, 2026',
+    title: 'Details list',
+    bodyHtml: '<p>Subtitle before the list.</p>'
+      + '<ul role="list" class="hero_blog_post_details_list"><li><div>Category</div><div>Product</div></li>'
+      + '<li><div>Reading time</div><div>5</div></li></ul>'
+      + '<ul><li>First real bullet stays.</li></ul><p>Closing paragraph stays.</p>'
+  });
+  const [item] = await runResolver({
+    html: indexHtml,
+    fetchClient: makeClient({ indexHtml, defaultArticleHtml: articleHtml })
+  });
+
+  assert.equal(item.summary, 'Details list Aug 18, 2026 Body Subtitle before the list. First real bullet stays. Closing paragraph stays.');
+});
+
 test('api_or_component carries the measured token, not the source registry constant', async () => {
   const item = await firstResolvedItem();
-  // 이 픽스처 본문에는 KNOWN_COMPONENT_PATTERN의 여섯 토큰 중 "Claude Code"가 가장 먼저
-  // 나온다(hero detail의 Category 목록 세 번째 항목) — GitHub/PagerDuty/Grafana/Kubernetes는
-  // 본문 훨씬 뒤 Triage 문단에서야 나온다. by-value로 잰다 — truthy만 재면 이 값이 여전히
-  // 레지스트리 상수(과거 componentLabel)로 새는지 구분할 수 없다.
-  assert.equal(item.api_or_component, 'Claude Code',
+  // 이 픽스처 본문에서 KNOWN_COMPONENT_PATTERN의 여섯 토큰 중 가장 먼저 나오는 것은 Grafana다.
+  // 한때 "Claude Code"가 먼저 잡혔지만 그것은 머리글 게시 정보 목록의 Category 라벨이었고, 그 목록을
+  // 본문에서 걷어낸 뒤로는 기사 문장에서 실제로 나온 토큰만 남는다. by-value로 잰다 — truthy만
+  // 재면 이 값이 여전히 레지스트리 상수(과거 componentLabel)로 새는지 구분할 수 없다.
+  assert.equal(item.api_or_component, 'Grafana',
     '본문에서 실제로 매치된 첫 토큰이어야 한다');
 });
 
