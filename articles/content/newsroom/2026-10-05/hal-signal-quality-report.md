@@ -16,8 +16,8 @@
 ## Summary
 
 - main_article_count: 2
-- strong_signal_count: 0
-- usable_signal_count: 2
+- strong_signal_count: 2
+- usable_signal_count: 0
 - weak_signal_count: 0
 - watchlist_only_count: 0
 - blocked_source_gap_count: 0
@@ -29,9 +29,9 @@
 - hal_signal_hard_blocker_count: 0
 - hard_blocker_reason_code_counts: {}
 - hal_impact_axis_counts: {"cts_vts_its_cdd":1,"driver_image_pipeline":1,"stream_buffer_metadata":1}
-- actionability_level_counts: {"concrete_check":2}
-- effective_actionability_level_counts: {"concrete_check":2}
-- signal_quality_status_counts: {"usable_signal":2}
+- actionability_level_counts: {"owner_metric_log":2}
+- effective_actionability_level_counts: {"owner_metric_log":2}
+- signal_quality_status_counts: {"strong_signal":2}
 
 ## Count Semantics
 
@@ -42,5 +42,5 @@
 
 | # | Article | signal_quality_status | actionability_level | effective_actionability_level | hal_impact_axes | capsule | hard_blocker_reason_codes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입 | usable_signal | concrete_check | concrete_check | cts_vts_its_cdd | yes | none |
-| 2 | libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의 | usable_signal | concrete_check | concrete_check | driver_image_pipeline, stream_buffer_metadata | yes | none |
+| 1 | Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목 | strong_signal | owner_metric_log | owner_metric_log | cts_vts_its_cdd | yes | none |
+| 2 | libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기 | strong_signal | owner_metric_log | owner_metric_log | driver_image_pipeline, stream_buffer_metadata | yes | none |

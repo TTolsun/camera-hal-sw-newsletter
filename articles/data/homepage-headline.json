@@ -3,8 +3,8 @@
   "updated_at": "2026-10-05T00:00:00+09:00",
   "current_headline": {
     "article_identity_key": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-    "title": "Android 17 카메라 이미지 테스트 스위트 검증을 위한 가상 환경 패키지 번들링 권장 사항",
-    "summary": "Android 17 카메라 검증을 준비하는 팀이라면, 테스트 환경의 일관성을 유지하기 위한 새로운 권장 사항에 주목해야 합니다.",
+    "title": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+    "summary": "Android 17 Camera ITS를 준비할 때 맞춰야 할 것은 Python 패키지 목록만이 아닙니다. Python과 FFmpeg 실행 파일의 버전, 테스트 차트, CTS Verifier의 활동 구성을 함께 확인해야 합니다.",
     "source_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
     "newsletter_date": "2026-10-05",
     "newsletter_url": "newsletters/2026-10-05/index.html",
@@ -40,7 +40,7 @@
       "category": "direct_aosp_camera",
       "source_name": "aosp-camera-its-release-notes"
     },
-    "newsletter_article_url": "newsletters/2026-10-05/index.html#article-android-17",
+    "newsletter_article_url": "newsletters/2026-10-05/index.html#article-android-17-camera-its",
     "image_url": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png",
     "image_alt": "Android Open Source Project"
   },

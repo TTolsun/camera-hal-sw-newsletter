@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-05",
-  "generated_at": "2026-10-05T13:21:53.964Z",
+  "generated_at": "2026-10-05T14:41:07.682Z",
   "status": "OK",
   "failure_stage": "",
   "failure_reason": "",
@@ -82,7 +82,7 @@
   "headline_decision": {
     "decision": "latest_camera_hal_article",
     "reason": "latest_camera_hal_article",
-    "current_headline_key": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+    "current_headline_key": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
     "replacement_headline_key": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
     "previous_stored_current_score": null,
     "runtime_decayed_score": null,
@@ -107,11 +107,7 @@
     "removed_due_to_headline_inclusion_count": 0
   },
   "removed_due_to_headline_inclusion": [],
-  "article_exposure_coverage": {
-    "mode": "forward_only",
-    "coverage_starts_at": "2026-07-27",
-    "backfill_included": true
-  },
+  "article_exposure_coverage": null,
   "candidate_pool_preflight_passed": true,
   "candidate_shortage_reviewable": false,
   "candidate_shortage_summary": {
@@ -166,14 +162,10 @@
     "blocked_reason": "no_eligible_candidate",
     "evidence_unchecked_skips": 0
   },
-  "release_class_catch_up_after_reconciliation": {
-    "pool_size": 0,
-    "admitted": 0,
-    "blocked_reason": "no_eligible_candidate"
-  },
+  "release_class_catch_up_after_reconciliation": null,
   "republication_cooldown_blocked": {
     "history_loaded": true,
-    "history_main_article_count": 40,
+    "history_main_article_count": 39,
     "count": 0,
     "urls": []
   },
@@ -191,20 +183,20 @@
     {
       "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
       "stage": "selected",
-      "base_total": 119,
+      "base_total": 114,
       "camera_hal_directness": 5,
       "scope_relevance": 3,
-      "freshness_window": "primary",
+      "freshness_window": "fallback",
       "relevance_bucket": "direct_aosp_camera",
       "final_selection_eligibility": "main"
     },
     {
       "url": "https://patchwork.libcamera.org/patch/28387",
       "stage": "selected",
-      "base_total": 120,
+      "base_total": 115,
       "camera_hal_directness": 5,
       "scope_relevance": 3,
-      "freshness_window": "primary",
+      "freshness_window": "fallback",
       "relevance_bucket": "camera_driver_image_pipeline",
       "final_selection_eligibility": "short"
     }

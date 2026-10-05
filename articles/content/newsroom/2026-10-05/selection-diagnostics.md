@@ -31,11 +31,11 @@
 - release_class_admitted: 0
 - release_class_blocked_reason: no_eligible_candidate
 - release_class_evidence_unchecked_skips: 0
-- release_class_after_reconciliation_pool_size: 0
-- release_class_after_reconciliation_admitted: 0
-- release_class_after_reconciliation_blocked_reason: no_eligible_candidate
+- release_class_after_reconciliation_pool_size: unknown
+- release_class_after_reconciliation_admitted: unknown
+- release_class_after_reconciliation_blocked_reason: unknown
 - republication_history_loaded: true
-- republication_history_main_articles: 40
+- republication_history_main_articles: 39
 - republication_cooldown_blocked: 0
 - evidence_unchecked_main_blocked: 0
 
@@ -48,7 +48,7 @@ Source/parser recovery hint:
 
 Homepage Headline:
 - decision: latest_camera_hal_article
-- current_headline_key: url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html
+- current_headline_key: url:https://source.android.com/docs/compatibility/cts/its-release-notes-17
 - replacement_headline_key: url:https://source.android.com/docs/compatibility/cts/its-release-notes-17
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown

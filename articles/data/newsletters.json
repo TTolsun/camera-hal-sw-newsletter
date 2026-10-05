@@ -1,18 +1,20 @@
 [
   {
     "date": "2026-10-05",
-    "title": "Camera HAL / SW Newsletter - 2026-10-05",
-    "summary": "이번 주 뉴스레터에서는 Android 17 Camera ITS의 가상 환경 구성을 위한 패키지 번들링 권장 사항과 libcamera에 제안된 자동 화이트 밸런스(AWB) 제어 확장 패치를 다룹니다. 검증 환경의 일관성 확보와 하위 이미지 파이프라인의 제어 설계 흐름을 파악하는 데 유용한 정보입니다.",
+    "title": "Android 17 ITS 검증 환경과 libcamera AWB 제어 제안",
+    "summary": "ITS의 실행 버전·차트·검사 항목과 libcamera AWB의 게인 고정·재탐색 조건을 원문으로 확인합니다.",
     "html": "newsletters/2026-10-05/index.html",
     "md": "newsletters/2026-10-05/newsletter.md",
     "tags": [
       "Camera HAL",
+      "Driver",
+      "Image Processing",
       "Android"
     ],
     "public_contract_version": "story-v2",
     "en": {
       "title": "2026 W41",
-      "summary": "Recommendations for Bundling Virtual Environment Packages for Android 17 Camera Image Test Suite Validation\nlibcamera Automatic White Balance Control Expansion and Metadata Override Proposal",
+      "summary": "Android 17 Camera ITS: Runtime Versions and Updated Tests\nlibcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence",
       "html": "en/newsletters/2026-W41/index.html",
       "md": "en/newsletters/2026-W41/newsletter.md"
     }

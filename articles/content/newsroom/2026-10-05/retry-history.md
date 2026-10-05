@@ -2,76 +2,37 @@
 
 | 시도 | 모델 | 점수 | 상태 | Rendered | Locked | Demoted | Reserve used | 중복 거절 | Source gap | Must-fix |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash | 97/60 | PASS | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
+| 1 | reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash | 83/60 | NEEDS_FIX | 1 | 0 | 1 | 0 | 0 | 0 | 4 |
+| 2 | repair-fallback | 83/60 | FAILED_REPAIR_REVIEWABLE | 1 | 0 | 0 | 0 | 0 | 0 | 4 |
+| 3 | manual editorial revision; gemini-3.5-flash review | 98/60 | PASS | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
 
-## 후보 선택 진단
 
-- Reporter candidates: 2
-- Reporter-selected candidates: 2
-- Final input candidates: 2
-- Final eligible candidates: 2
-- Final selected articles: 2
-- Deterministic primary articles: 2
-- Selected representative groups: 2
-- Rendered groups: unknown
-- Explicitly demoted groups (editor): 0
-- Reconciliation-demoted groups: 0
-- Reserve candidates: 0
-- Demoted candidates: unknown
-- Composition mode: NORMAL
-- Editor review required: false
-- Reporter-selected but final-excluded: 0
-- direct_aosp_camera: 1
-- android: 0
-- camera_driver_image_pipeline: 1
-- android_multimedia_camera_output: 0
-- soc_platform_signal: 0
-- cpp_ai_tooling_fallback: 0
-- Primary Camera Stack: 2
-- Supporting main articles: 0
-- Forbidden main articles: 0
-- Non-fallback reviewable: 2
-- release_class_pool_size: 0
-- release_class_admitted: 0
-- release_class_blocked_reason: no_eligible_candidate
-- release_class_evidence_unchecked_skips: 0
-- release_class_after_reconciliation_pool_size: 0
-- release_class_after_reconciliation_admitted: 0
-- release_class_after_reconciliation_blocked_reason: no_eligible_candidate
-- republication_history_loaded: true
-- republication_history_main_articles: 40
-- republication_cooldown_blocked: 0
-- evidence_unchecked_main_blocked: 0
-
-Source/parser recovery hint:
-- No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.
-- Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
-
-주요 final exclusion reason:
-- none
-
-Homepage Headline:
-- decision: latest_camera_hal_article
-- current_headline_key: url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html
-- replacement_headline_key: url:https://source.android.com/docs/compatibility/cts/its-release-notes-17
-- public_render_reconciled: false
-- public_rendered_headline_key: unknown
-- public_render_reconciliation_reason: unknown
-- runtime_decayed_score: unknown
-- previous_stored_current_score: unknown
-- last_scored_at: unknown
-- scored_at: 2026-10-05
-- included_as_latest: false
-- latest_inclusion_mode: none
-- injected_from_snapshot: false
-- removed_due_to_headline_inclusion_count: 0
-
-Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation.
 
 ## 시도 1
 
-- 선택 기사: Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입; libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의
-- Lock된 기사: Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입; libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의
+- 선택 기사: Android 17 Camera ITS 업데이트 분석: 테스트 병렬화와 신규 검증 항목 도입
+- Lock된 기사: 없음
+- Source gap section: 없음
+- Demoted section: libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입
+- Replaced section: libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입
+- Reserve candidate used: 없음
+- Candidate rejection: Android 17 Camera Image Test Suite release notes | Android Open Source Project (duplicate_locked_url); [1/5] libcamera: controls: Expand AWB controls (duplicate_demoted_url)
+- Underfilled reason: missing 1 article(s); no eligible non-duplicate primary/reserve completion candidate remains
+- 실패 section: libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입
+- 재생성 section: 없음
+- 거절된 retry output: 없음
+- Repair action: replace-or-demote(deterministic-demote): libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입
+- Final slot distribution: {"android_camera_platform_api":0,"camerax_aosp_camera_compatibility":1,"linux_camera_libcamera_v4l2":0,"ai_camera_path_hal_workflow":0,"cpp_toolchain_fallback":0,"other":0}
+- Reporter eligibility blocked section: 없음
+- Rejected main-ineligible candidate: 없음
+- Lock blocker: 없음
+- 거절된 중복 기사: 없음
+- 감점: 1pt editorial-story (briefing 2): Briefing bullet misses story structure elements: reader_perspective, action_hint.; 1pt editorial-story (briefing 3): Briefing bullet misses story structure elements: reader_perspective, action_hint.; 15pt source-integrity: Fact checker returned 4 must_fix item(s).
+
+## 시도 2
+
+- 선택 기사: Android 17 Camera ITS 업데이트 분석: 테스트 병렬화와 신규 검증 항목 도입
+- Lock된 기사: 없음
 - Source gap section: 없음
 - Demoted section: 없음
 - Replaced section: 없음
@@ -81,10 +42,31 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 - 실패 section: 없음
 - 재생성 section: 없음
 - 거절된 retry output: 없음
-- Repair action: 없음
-- Final slot distribution: {"android_camera_platform_api":0,"camerax_aosp_camera_compatibility":1,"linux_camera_libcamera_v4l2":1,"ai_camera_path_hal_workflow":0,"cpp_toolchain_fallback":0,"other":0}
+- Repair action: editor attempt 2/2: fallback-to-last-known-valid-editor
+- Final slot distribution: {"android_camera_platform_api":0,"camerax_aosp_camera_compatibility":1,"linux_camera_libcamera_v4l2":0,"ai_camera_path_hal_workflow":0,"cpp_toolchain_fallback":0,"other":0}
 - Reporter eligibility blocked section: 없음
 - Rejected main-ineligible candidate: 없음
 - Lock blocker: 없음
 - 거절된 중복 기사: 없음
-- 감점: 1pt editorial-story (briefing 1): Briefing bullet misses story structure elements: action_hint.; 1pt editorial-story (briefing 2): Briefing bullet misses story structure elements: reader_perspective.; 1pt image-fallback (libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의): Article image uses a local fallback visual.
+- 감점: 1pt editorial-story (briefing 2): Briefing bullet misses story structure elements: reader_perspective, action_hint.; 1pt editorial-story (briefing 3): Briefing bullet misses story structure elements: reader_perspective, action_hint.; 15pt source-integrity: Fact checker returned 4 must_fix item(s).
+
+## 시도 3
+
+- 선택 기사: Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목; libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기
+- Lock된 기사: 없음
+- Source gap section: 없음
+- Demoted section: 없음
+- Replaced section: 없음
+- Reserve candidate used: 없음
+- Candidate rejection: 없음
+- Underfilled reason: 없음
+- 실패 section: 없음
+- 재생성 section: Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목; libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기
+- 거절된 retry output: 없음
+- Repair action: 원문 대조에 따라 두 기사를 직접 교정하고 새 팩트체크와 독립 원문 검토를 통과했습니다.
+- Final slot distribution: {"android_camera_platform_api":0,"camerax_aosp_camera_compatibility":1,"linux_camera_libcamera_v4l2":0,"ai_camera_path_hal_workflow":0,"cpp_toolchain_fallback":0,"other":0}
+- Reporter eligibility blocked section: 없음
+- Rejected main-ineligible candidate: 없음
+- Lock blocker: 없음
+- 거절된 중복 기사: 없음
+- 감점: 1pt editorial-story (briefing 2): Briefing bullet misses story structure elements: reader_perspective, action_hint.; 1pt image-fallback (libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기): Article image uses a local fallback visual.

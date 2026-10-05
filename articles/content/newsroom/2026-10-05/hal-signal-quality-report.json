@@ -2,7 +2,7 @@
   "schema_version": 1,
   "report_type": "hal_signal_quality",
   "date": "2026-10-05",
-  "generated_at": "2026-10-05T13:21:54.994Z",
+  "generated_at": "2026-10-05T14:45:18.460Z",
   "status": "PASS",
   "input_completeness": "complete",
   "input_statuses": {
@@ -61,14 +61,14 @@
   "hal_signal_quality_summary": {
     "schema_version": 1,
     "main_article_count": 2,
-    "strong_signal_count": 0,
-    "usable_signal_count": 2,
+    "strong_signal_count": 2,
+    "usable_signal_count": 0,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
     "article_count_with_hal_signal_capsule": 2,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_owner_metric_log": 2,
     "main_articles_with_concrete_action": 2,
     "fallback_main_article_count": 0,
     "android_multimedia_camera_output_count": 0,
@@ -82,19 +82,19 @@
       "stream_buffer_metadata": 1
     },
     "actionability_level_counts": {
-      "concrete_check": 2
+      "owner_metric_log": 2
     },
     "effective_actionability_level_counts": {
-      "concrete_check": 2
+      "owner_metric_log": 2
     },
     "signal_quality_status_counts": {
-      "usable_signal": 2
+      "strong_signal": 2
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "title": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
       "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
@@ -103,17 +103,17 @@
       "reader_owners": [
         "camera_hal_owner"
       ],
-      "actionability_level": "concrete_check",
-      "effective_actionability_level": "concrete_check",
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
       "actionability_upgrade_reason": "",
-      "signal_quality_status": "usable_signal",
-      "concrete_action_signal_count": 2,
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
       "fallback_guard_notes": [
-        "이 변경 사항은 카메라 하드웨어 추상화 계층의 API나 메타데이터 계약을 변경하지 않습니다."
+        "검증 환경 및 검사 항목에 관한 안내입니다. 릴리스 노트의 갱신일을 모든 변경의 최초 도입일로 해석하거나 HAL API 변경으로 확대하지 않습니다."
       ],
-      "soc_signal_type": "",
+      "soc_signal_type": "isp_image_pipeline",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -124,7 +124,7 @@
     },
     {
       "index": 2,
-      "title": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "title": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
       "url": "https://patchwork.libcamera.org/patch/28387/",
       "relevance_bucket": "camera_driver_image_pipeline",
       "hal_impact_axes": [
@@ -135,16 +135,15 @@
         "camera_hal_owner",
         "camera_driver_owner"
       ],
-      "actionability_level": "concrete_check",
-      "effective_actionability_level": "concrete_check",
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
       "actionability_upgrade_reason": "",
-      "signal_quality_status": "usable_signal",
-      "concrete_action_signal_count": 2,
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 63): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 패치는 아직 머지되지 않은 제안이며 안드로이드 카메라 하드웨어 추상화 계층에 직접 적용되지 않습니다.",
-        "원문 요약이 일부 누락되어 AwbTrigger의 전체 동작 세부 사항은 확정되지 않았습니다."
+        "제출된 패치 시리즈의 제안이며 Android Camera HAL API 변경이나 확정된 수렴 계약이 아닙니다. 커밋 설명과 diff의 불일치를 보존합니다."
       ],
       "soc_signal_type": "",
       "soc_signal_source_allowed": true,
