@@ -9,7 +9,13 @@
       "Camera HAL",
       "Android"
     ],
-    "public_contract_version": "story-v2"
+    "public_contract_version": "story-v2",
+    "en": {
+      "title": "2026 W41",
+      "summary": "Mali-C55 ISP Driver Power Management Improvement Prevents Frame Interrupt Loss on System Resume\nChromeOS Camera Stack Enhances Image Processing Stability by Introducing APPn Parsing and BLOB Buffer Boundary Checks\nChromeOS Camera Adapter Prevents Buffer Management Conflicts by Enforcing Exclusive Buffer IDs",
+      "html": "en/newsletters/2026-W41/index.html",
+      "md": "en/newsletters/2026-W41/newsletter.md"
+    }
   },
   {
     "date": "2026-09-28",
