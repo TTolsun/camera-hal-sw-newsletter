@@ -475,6 +475,8 @@ function text(value) {
   return String(value || '').trim();
 }
 
+// 필드는 줄바꿈으로 잇는다. 근접 패턴의 `[^.\n]{0,N}`는 한 문장 안을 뜻하는데, 공백으로 이으면
+// 한 필드 끝의 제품 이름과 다음 필드 첫머리의 동사가 한 문장처럼 매치된다(#1233).
 function candidateArticleText(candidate = {}) {
   return [
     candidate.title,
@@ -488,7 +490,7 @@ function candidateArticleText(candidate = {}) {
     candidate.reason,
     candidate.collection_reason,
     candidate.relevance_reason
-  ].map(text).join(' ');
+  ].map(text).join('\n');
 }
 
 function sourceHintText(candidate = {}) {
