@@ -9,6 +9,8 @@
 const assert = require('node:assert/strict');
 
 const EXPECTED_LABELS = ['홈', '아카이브', 'GitHub'];
+// 영문판(`articles/en/`) 헤더 나브. 마크업은 한국어판과 같고 라벨만 다르다.
+const EXPECTED_LABELS_EN = ['Home', 'Archive', 'GitHub'];
 const GITHUB_URL = 'https://github.com/TTolsun/camera-hal-sw-newsletter';
 
 // 컨테이너 본문을 짝이 맞는 닫는 태그까지 자른다. 첫 `</div>` 에서 끊으면 나브 안에 중첩 div 가
@@ -99,11 +101,12 @@ function navLinks(html) {
   return navBody === null ? null : anchors(navBody);
 }
 
-// rootPath 는 그 페이지에서 사이트 루트로 가는 접두어다('' 또는 '../../').
-function assertSharedNav(html, rootPath = '') {
+// rootPath 는 그 페이지에서 그 언어판의 루트로 가는 접두어다. 한국어판은 사이트 루트라 '' 또는
+// '../../' 이고, 영문판은 `en/` 이 루트라 영문 홈·아카이브는 '', 영문 이슈 페이지는 '../../../en/' 이다.
+function assertSharedNav(html, rootPath = '', expectedLabels = EXPECTED_LABELS) {
   const links = navLinks(html);
   assert.ok(links, '<header> 안에 nav-links 컨테이너가 있어야 한다');
-  assert.deepEqual(links.map(link => link.label), EXPECTED_LABELS);
+  assert.deepEqual(links.map(link => link.label), expectedLabels);
   assert.deepEqual(links.map(link => link.href), [
     `${rootPath}index.html`,
     `${rootPath}archive.html`,
@@ -224,6 +227,7 @@ function assertSharedBrand(html, rootPath = '') {
 
 module.exports = {
   EXPECTED_LABELS,
+  EXPECTED_LABELS_EN,
   EXPECTED_BRAND_LABEL,
   BRAND_LOGO_PATH,
   EXPECTED_FOOTER_COLUMN_TITLES,
