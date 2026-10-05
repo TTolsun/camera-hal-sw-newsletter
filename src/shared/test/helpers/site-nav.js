@@ -143,6 +143,28 @@ const EXPECTED_FOOTER_PLACEHOLDER_NOTES = [
 // 개수만 본다 — 항목이 늘거나 줄면 그건 편집이 아니라 푸터 구조 변경이다.
 const EXPECTED_FOOTER_TOPIC_NOTE_COUNT = 3;
 
+// 언어판별 푸터 기대값. 구조(컬럼 셋, 「주제」 노트 개수, 링크 순서)는 두 언어가 같고 문구만 다르다.
+const EXPECTED_FOOTER_KO = {
+  columnTitles: EXPECTED_FOOTER_COLUMN_TITLES,
+  linkLabels: EXPECTED_FOOTER_LINK_LABELS,
+  placeholderNotes: EXPECTED_FOOTER_PLACEHOLDER_NOTES
+};
+
+// 영문판(`articles/en/`) 푸터. 렌더러 문구(`src/generator/render/locale/en.js`)와 손으로 쓴 영문
+// 홈·아카이브가 같은 값을 써야 한다 — 한동안 손으로 쓴 두 페이지만 `Topic`, 렌더된 호는 `Topics`였다.
+const EXPECTED_FOOTER_EN = {
+  columnTitles: ['Newsletter', 'Topics', 'Resources'],
+  linkLabels: [
+    ['Home', 'Archive'],
+    [],
+    ['AI Engineering Lab', 'GitHub']
+  ],
+  placeholderNotes: [
+    [],
+    ['RSS (coming soon)', 'Editorial policy (coming soon)']
+  ]
+};
+
 // `.site-footer` 안의 `.footer-cols` 를 컬럼 단위로 쪼갠다. 컬럼 경계를 지키는 이유는, 라벨을
 // 평평한 한 배열로 모으면 「홈」이 「리소스」 컬럼으로 옮겨가도 통과하기 때문이다.
 function footerColumns(html) {
@@ -166,15 +188,18 @@ function footerColumns(html) {
 // Lab href 잠금이 대체 없이 사라졌다: 배포본을 훑는 homepage-archive.test.js 는 단언 전에
 // assemble-site.js 의 withLearningFooterLink() 를 거치는데, 그게 label 로 찾은 링크를 통째로
 // 정규화하므로 커밋본의 href 가 틀려도 잡지 못한다(실측: 홈의 href 를 바꿔도 fail 0).
-function assertSharedFooterNav(html, rootPath = '', labHref = `${rootPath}learning/ai-engineering/index.html`) {
+//
+// expected 는 언어판별 기대값이다(EXPECTED_FOOTER_KO 또는 EXPECTED_FOOTER_EN). 영문판에서는 rootPath 가
+// 영문판 루트이고, Lab 은 영문판이 없어 사이트 루트 쪽 경로를 labHref 로 넘긴다.
+function assertSharedFooterNav(html, rootPath = '', labHref = `${rootPath}learning/ai-engineering/index.html`, expected = EXPECTED_FOOTER_KO) {
   const columns = footerColumns(html);
   assert.ok(columns, '<footer class="site-footer"> 안에 footer-cols 컨테이너가 있어야 한다');
-  assert.deepEqual(columns.map(column => column.title), EXPECTED_FOOTER_COLUMN_TITLES);
+  assert.deepEqual(columns.map(column => column.title), expected.columnTitles);
   assert.deepEqual(
     columns.map(column => column.links.map(link => link.label)),
-    EXPECTED_FOOTER_LINK_LABELS
+    expected.linkLabels
   );
-  assert.deepEqual([columns[0].notes, columns[2].notes], EXPECTED_FOOTER_PLACEHOLDER_NOTES);
+  assert.deepEqual([columns[0].notes, columns[2].notes], expected.placeholderNotes);
   assert.equal(columns[1].notes.length, EXPECTED_FOOTER_TOPIC_NOTE_COUNT);
   assert.deepEqual(columns[0].links.map(link => link.href), [
     `${rootPath}index.html`,
@@ -215,11 +240,13 @@ function siteBrand(html) {
   return null;
 }
 
-// rootPath 는 assertSharedNav 와 같은 뜻이다('' 또는 '../../').
-function assertSharedBrand(html, rootPath = '') {
+// rootPath 는 사이트 루트로 가는 접두어다('' 또는 '../../') — 로고 이미지는 언어판과 무관하게 사이트
+// 루트의 assets 를 쓴다. homeHref 는 브랜드 링크가 가리키는 그 언어판의 홈이다. 한국어판은 사이트
+// 루트의 홈이라 기본값으로 유도되고, 영문판은 `en/` 의 홈이라 따로 넘긴다.
+function assertSharedBrand(html, rootPath = '', homeHref = `${rootPath}index.html`) {
   const brand = siteBrand(html);
   assert.ok(brand, '<header> 안에 site-brand 링크가 있어야 한다');
-  assert.equal(brand.href, `${rootPath}index.html`);
+  assert.equal(brand.href, homeHref);
   assert.equal(brand.ariaLabel, EXPECTED_BRAND_LABEL);
   assert.equal(brand.logoSrc, `${rootPath}${BRAND_LOGO_PATH}`);
   assert.equal(brand.wordmark, EXPECTED_BRAND_LABEL);
@@ -234,6 +261,8 @@ module.exports = {
   EXPECTED_FOOTER_LINK_LABELS,
   EXPECTED_FOOTER_PLACEHOLDER_NOTES,
   EXPECTED_FOOTER_TOPIC_NOTE_COUNT,
+  EXPECTED_FOOTER_KO,
+  EXPECTED_FOOTER_EN,
   GITHUB_URL,
   hasClassToken,
   navLinks,
