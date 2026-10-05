@@ -81,7 +81,11 @@ const {
   completeStoryPublicArticle
 } = require('./editor-section-builders');
 
-const { identifierNotationIssues } = require('./identifier-notation-validation');
+const {
+  identifierNotationIssues,
+  snapshotIdentifierReferences,
+  identifierReferenceForSection
+} = require('./identifier-notation-validation');
 
 const REQUIRED_BRIEFING_COUNT = 3;
 
@@ -1283,7 +1287,7 @@ function validateEditorOutputContract(value, date, options = {}) {
     requireStoryContract: options.requireStoryContract === true
   });
   const notationIssues = value.sections.flatMap((section, index) => identifierNotationIssues(
-    section, index, options.identifierReferenceSections?.[index] || section
+    section, index, identifierReferenceForSection(section, options.identifierReferenceSections) || section
   ));
   if (notationIssues.length > 0) {
     throw semanticError('Editor output lost source identifier punctuation.', {
@@ -1426,11 +1430,12 @@ async function repairEditorOutputContract({
   repairFn
 }) {
   const invalidEditor = cloneJson(value);
-  let identifierReferenceSections;
+  const identifierReferenceSections = snapshotIdentifierReferences(toLegacyEditorIssue(value, { date })?.sections);
+  let initialValidation = true;
   const validate = candidate => validateEditorOutputContract(candidate, date, {
-    // Repair may edit facts for other reasons, but it must not erase the original
-    // spelling evidence to make an identifier notation failure disappear.
-    identifierReferenceSections,
+    // Freeze the spellings that failed validation, including anchors supplied by
+    // normalization rather than present in the raw draft.
+    identifierReferenceSections: initialValidation ? undefined : identifierReferenceSections,
     reporter,
     normalizeSection,
     strictClaims,
@@ -1490,9 +1495,15 @@ async function repairEditorOutputContract({
     };
   } catch (error) {
     if (!(error instanceof EditorSemanticValidationError)) throw error;
+    initialValidation = false;
     const repairField = error.details?.field || error.field || '';
     if (repairField === 'sections.identifier_notation') {
-      identifierReferenceSections = invalidEditor.sections;
+      for (const issue of error.details.issues) {
+        const index = issue.index - 1;
+        const reference = identifierReferenceSections[index];
+        if (!reference) continue;
+        reference.confirmed_facts.push(issue.expected);
+      }
     }
     let deterministicRepair = null;
     let deterministicRepairFailureReasonCodes = [];

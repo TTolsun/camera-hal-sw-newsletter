@@ -8,6 +8,8 @@ const {
   validatePublicArticleJudgeOrRepair
 } = require('../../publish/orchestrator-public-article-judge');
 const { BODY_MARKDOWN_ACTIVE_CHARACTERS } = require('../../reporter/public-body-markdown');
+const { storyV2Editor } = require('../../../shared/test/helpers/editor-builders');
+const { validateEditor } = require('../../publish/orchestrator-editor-validation');
 
 // 추출 전 main()의 editor public-article judge / semantic repair 흐름을 입력→출력으로 고정한다.
 // 모듈의 책임은 orchestration(judge → 차단 시 repair → 재judge → status 기록)이며,
@@ -137,6 +139,24 @@ function stagedDeps({ judgeReports, repairOutput, recorded, calls }) {
     validateEditor: (value) => value
   };
 }
+
+test('judge repair cannot replace fact and prose spellings together to erase notation evidence', async () => {
+  const editor = storyV2Editor();
+  editor.sections[0].confirmed_facts = ['Mali-C55 ISP를 지원합니다.'];
+  editor.sections[0].public_article.lead = 'Mali-C55 ISP를 검증합니다.';
+  const repaired = JSON.parse(JSON.stringify(editor));
+  repaired.sections[0].confirmed_facts = ['Mali C55 ISP를 지원합니다.'];
+  repaired.sections[0].public_article.lead = 'Mali C55 ISP를 검증합니다.';
+  const report = blockingJudgeReport();
+  report.sections = editor.sections.map((_, index) => ({ ...report.sections[0], section_index: index + 1 }));
+  const calls = [];
+  const recorded = [];
+  const deps = { ...stagedDeps({ judgeReports: [report], repairOutput: repaired, recorded, calls }), validateEditor };
+  await assert.rejects(validatePublicArticleJudgeOrRepair({ ...baseArgs, editor }, deps),
+    error => error.field === 'sections.identifier_notation');
+  assert.equal(calls.length, 2);
+  assert.equal(recorded.at(-1).repairSucceeded, false);
+});
 
 test('desk-only advisory가 repair를 트리거하고, repair가 해소하면 repaired editor를 반환한다', async () => {
   const editor = editorWithOneSection();

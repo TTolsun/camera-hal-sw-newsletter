@@ -16,6 +16,7 @@ test('source-backed model and version punctuation loss is detected without rewri
     const issues = identifierNotationIssues(section);
     assert.equal(issues.length, 1, expected);
     assert.equal(issues[0].expected, expected);
+    assert.equal(issues[0].observed, observed);
     assert.equal(issues[0].field, 'public_article.body_markdown');
     assert.equal(JSON.stringify(section), before);
   }
@@ -46,6 +47,9 @@ test('dates, fractions, ordinary compound words, URLs and cross-field fragments 
 test('identifier matches respect token boundaries and preserve field addresses', () => {
   assert.deepEqual(identifierNotationIssues(article('Mali-C55', 'SuperMali C55 또는 Mali C550')), []);
   assert.deepEqual(identifierNotationIssues(article('7.3-rc4', '7.3 rc4.1')), []);
+  assert.equal(identifierNotationIssues(article('Mali-C55', 'Mali-C55-v2와 Mali C55를 비교합니다.')).length, 1);
+  assert.deepEqual(identifierNotationIssues(article('Mali-C55', 'Mali C55-v2를 확인합니다.')), []);
+  assert.deepEqual(identifierNotationIssues(article('Mali-C55', 'Other/Mali C55를 확인합니다.')), []);
   const section = {
     sources: [{ title: 'MIPI D-PHY 변경' }],
     public_article: { reader_checkpoints: ['D PHY를 확인합니다.'] }
@@ -67,4 +71,25 @@ test('verified facts and fact claims provide anchors while editorial hints do no
     claims: [{ claim_type: 'interpretation', text: 'Mali-C55' }],
     public_article: { lead: 'Mali C55를 확인합니다.' }
   }), []);
+  assert.equal(identifierNotationIssues({
+    confirmed_facts: ['Mali-C55'],
+    claims: [{ claim_type: 'fact', text: 'Mali C55' }],
+    public_article: { lead: 'Mali C55를 확인합니다.' }
+  }).length, 1);
+});
+
+test('displayed source labels are checked without masking authored prose errors', () => {
+  for (const field of ['source_subtitle', 'source_links']) {
+    const section = article('Mali-C55', 'Mali-C55를 확인합니다.');
+    section.public_article[field] = field === 'source_links'
+      ? [{ title: 'Mali C55 변경', url: 'https://example.com/Mali-C55' }]
+      : 'Mali C55 변경';
+    const issues = identifierNotationIssues(section);
+    assert.equal(issues.length, 1);
+    assert.equal(issues[0].field, field === 'source_links'
+      ? 'public_article.source_links.0.title' : 'public_article.source_subtitle');
+  }
+  const section = article('Mali-C55', 'Mali C55를 확인합니다.');
+  section.public_article.source_links = [{ title: 'Mali-C55 원문', url: 'https://example.com/Mali-C55' }];
+  assert.equal(identifierNotationIssues(section).length, 1);
 });

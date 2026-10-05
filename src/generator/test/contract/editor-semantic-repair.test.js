@@ -23,6 +23,7 @@ const {
 const DATE = '2026-05-08';
 
 const { mergePublicArticleFromLlm } = require('../../reporter/public-article-contract');
+const { snapshotIdentifierReferences } = require('../../editor/identifier-notation-validation');
 
 function normalizeWithSourceGate(value, index, reporter) {
   return normalizeSection(mergePublicArticleFromLlm(value, value), index, reporter);
@@ -67,6 +68,54 @@ test('unrepaired notation loss cannot pass by changing the fact spelling or anot
     }), error => error instanceof EditorSemanticValidationError && error.field === 'sections.identifier_notation');
     assert.equal(calls, 1);
   }
+});
+
+test('notation repair cannot erase a reference introduced by section normalization', async () => {
+  const draft = editor();
+  draft.sections[0].confirmed_facts = [];
+  draft.sections[0].what_changed = 'Mali-C55 ISP를 지원합니다.';
+  draft.sections[0].public_article.lead = 'Mali C55 ISP를 검증합니다.';
+  let calls = 0;
+  await assert.rejects(repairEditorOutputContract({
+    value: draft, date: DATE,
+    normalizeSection: value => ({
+      ...normalizeSection(value),
+      confirmed_facts: value.confirmed_facts.length ? value.confirmed_facts : [value.what_changed]
+    }),
+    repairFn: async ({ invalidEditor }) => {
+      calls += 1;
+      invalidEditor.sections[0].what_changed = 'Mali C55 ISP를 지원합니다.';
+      return invalidEditor;
+    }
+  }), error => error instanceof EditorSemanticValidationError && error.field === 'sections.identifier_notation');
+  assert.equal(calls, 1);
+});
+
+test('an earlier briefing repair cannot erase the original identifier anchors', async () => {
+  const draft = editor({ briefing: [] });
+  draft.sections[0].confirmed_facts = ['Mali-C55 ISP를 지원합니다.'];
+  draft.sections[0].public_article.lead = 'Mali C55 ISP를 검증합니다.';
+  await assert.rejects(repairEditorOutputContract({
+    value: draft, date: DATE, normalizeSection,
+    repairFn: async ({ invalidEditor, validationError }) => {
+      assert.equal(validationError.field, 'briefing');
+      invalidEditor.briefing = ['one', 'two', 'three'];
+      invalidEditor.sections[0].confirmed_facts = ['Mali C55 ISP를 지원합니다.'];
+      return invalidEditor;
+    }
+  }), error => error instanceof EditorSemanticValidationError && error.field === 'sections.identifier_notation');
+});
+
+test('identifier reference snapshots follow article identity when coverage repair reorders sections', () => {
+  const draft = editor();
+  draft.sections[0].confirmed_facts = ['Mali-C55 ISP를 지원합니다.'];
+  draft.sections[0].public_article.lead = 'Mali-C55 ISP를 검증합니다.';
+  draft.sections[1].public_article.lead = 'Mali C55 표기는 이 기사의 근거에 없습니다.';
+  const references = snapshotIdentifierReferences(draft.sections);
+  draft.sections = [draft.sections[1], draft.sections[0], draft.sections[2]];
+  assert.doesNotThrow(() => validateEditorOutputContract(draft, DATE, {
+    normalizeSection, identifierReferenceSections: references
+  }));
 });
 
 test('normalization source-link errors save diagnostics and enter bounded semantic repair', async () => {

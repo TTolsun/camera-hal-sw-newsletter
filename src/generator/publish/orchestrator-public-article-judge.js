@@ -14,6 +14,7 @@ const {
 } = require('../editor/editor-output-contract');
 const { claimRepairEvidencePrompt, publicArticleJudgePrompt } = require('../reporter/newsletter-prompts');
 const { BODY_MARKDOWN_ACTIVE_CHARACTER_RULE } = require('../reporter/public-body-markdown');
+const { snapshotIdentifierReferences } = require('../editor/identifier-notation-validation');
 const { writeJson } = require('../../shared/common/common');
 const { cloneJson } = require('./orchestrator-shared-helpers');
 const {
@@ -125,6 +126,7 @@ async function validatePublicArticleJudgeOrRepair({
   newsroomDir
 }, deps) {
   const { recordEditorSemanticStatus, validateEditor } = deps;
+  const identifierReferenceSections = snapshotIdentifierReferences(editor.sections);
   const judgeStage = derivedStageRun(editorStage, DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE);
   const judgeRepairStage = derivedStageRun(editorStage, DERIVED_STAGE_KINDS.PUBLIC_ARTICLE_JUDGE_REPAIR);
   const initialJudge = await runPublicArticleJudge({
@@ -166,6 +168,7 @@ async function validatePublicArticleJudgeOrRepair({
       validationError: initialDetails
     }, deps);
     const repairedEditor = validateEditor(repairedRaw, date, reporter, {
+      identifierReferenceSections,
       strictClaims: true,
       requireStoryContract: true
     });

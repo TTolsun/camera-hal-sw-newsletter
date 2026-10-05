@@ -75,6 +75,7 @@ function validateEditor(value, date, reporter = { candidates: [] }, options = {}
   return validateEditorOutputContract(value, date, {
     reporter,
     normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
+    identifierReferenceSections: options.identifierReferenceSections,
     strictClaims: options.strictClaims === true,
     requireStoryContract: options.requireStoryContract === true,
     seedEvidencePack: options.seedEvidencePack || null,
