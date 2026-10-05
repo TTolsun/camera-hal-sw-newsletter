@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "weekly_key": "2026-W41",
-  "source_hash": "sha256:dbf091e72bba5bbab8a50e1df3d17fb6b118bee2d2947af8633286e8016fec12",
+  "source_hash": "sha256:6496e6bb5ab77fa7c72d406d0a6c2b72faafaba3112c85a43ece823edad159b1",
   "title": "2026 W40 (09.28 ~ 10.04)",
   "summary": "This week's newsletter brings important information about preparing for Android 17 Camera ITS. Learn more about what to check beyond the Python package list, including the execution environment version and changed verification items. Also, there's news about a libcamera AWB proposal. See how a new approach of fixing automatic gain and reconverging when needed can improve color changes.",
   "sections": [

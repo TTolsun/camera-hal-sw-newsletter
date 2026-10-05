@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>2026 W40 Camera SW Newsletter</title>
+  <title>Camera SW Newsletter - 2026-10-05</title>
   <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-10-05/index.html" />
   <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-10-05/index.html" />
   <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-10-05/index.html" />
@@ -12,12 +12,12 @@
   <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-10-05/index.html" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Camera SW Newsletter" />
-  <meta property="og:title" content="2026 W40 Camera SW Newsletter" />
+  <meta property="og:title" content="Camera SW Newsletter - 2026-10-05" />
   <meta property="og:description" content="ITS의 실행 버전·차트·검사 항목과 libcamera AWB의 게인 고정·재탐색 조건을 원문으로 확인합니다." />
   <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-10-05/index.html" />
   <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="2026 W40 Camera SW Newsletter" />
+  <meta name="twitter:title" content="Camera SW Newsletter - 2026-10-05" />
   <meta name="twitter:description" content="ITS의 실행 버전·차트·검사 항목과 libcamera AWB의 게인 고정·재탐색 조건을 원문으로 확인합니다." />
   <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
@@ -45,11 +45,11 @@
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← 뉴스룸</a>
         <div class="article-meta issue-hero-meta">
-          <span class="issue-kicker">2026.09.28 – 10.04</span>
+          <span class="issue-kicker">주간 뉴스레터 2026-10-05</span>
         </div>
-        <h1 class="issue-title"><span>2026 W40</span></h1>
+        <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-10-05</span></h1>
         <p class="subtitle">ITS의 실행 버전·차트·검사 항목과 libcamera AWB의 게인 고정·재탐색 조건을 원문으로 확인합니다.</p>
-        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Android</span></div>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
       </header>
 
       <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
@@ -75,7 +75,7 @@
         <p>확인할 대상은 테스트를 실제로 실행하는 환경입니다. Python 3.14로 만든 가상 환경을 활성화한 뒤 Python 버전을 확인하고, pip freeze 결과를 공식 패키지 목록과 비교합니다. 같은 환경에서 ffmpeg -version이 7.0.2를 가리키는지도 확인해야 합니다. 다른 버전이 실행된다면 문서가 안내하는 것처럼 실행 경로와 가상 환경의 바이너리 연결을 점검할 수 있습니다. 가상 환경을 만들었다는 사실만으로 시스템에 설치된 다른 FFmpeg가 호출되는 문제까지 해결되지는 않습니다.</p>
         <h3 class="article-subheading">차트와 검사 항목도 달라집니다</h3>
         <p>새로운 gen2_chart 장면은 태블릿 대신 종이 차트를 사용합니다. scene3는 ArUco 마커로 차트를 검출하도록 바뀌어 망원 카메라의 다양한 화각과 거리 조건을 다룹니다. 기존 차트를 그대로 사용하면 새 검사 조건과 맞지 않을 수 있으므로, 실행 환경의 버전과 별도로 차트 구성도 확인할 필요가 있습니다.</p>
-        <p>신규 검사 중 test_tonemap_sequence는 android.tonemap.mode 적용을 확인하고, test_jca_jpegr_ip는 JPEG_R JCA 미리보기 스냅샷과 캡처 이미지 사이의 화이트 밸런스 차이를 검사합니다. test_display_p3는 P3 JPEG의 ICC 프로파일과 sRGB 색역 밖의 색상 비율이 1%를 넘는지 확인합니다. 기존 test_yuv_jpeg_capture_sameness는 RMS 차이 임계값을 낮춰 눈에 보이는 색상 차이를 실패로 잡도록 변경됐습니다. 문서에는 이 임계값의 새 수치가 제시되어 있지 않습니다.</p>
+        <p>신규 검사 중 test_tonemap_sequence는 android.tonemap.mode 적용을 확인하고, test_jca_jpegr_ip는 JPEG_R JCA 미리보기 스냅샷과 캡처 이미지 사이의 화이트 밸런스 차이를 검사합니다. test_display_p3는 P3 JPEG에 적절한 ICC 프로파일이 있는지, sRGB 색역 밖의 색상 비율이 1%를 넘는지 확인합니다. 기존 test_yuv_jpeg_capture_sameness는 RMS 차이 임계값을 낮춰 눈에 보이는 색상 차이를 실패로 잡도록 변경됐습니다. 문서에는 이 임계값의 새 수치가 제시되어 있지 않습니다.</p>
         <p>테스트는 CTS Verifier의 Camera ITS Test와 Camera ITS Sensor Fusion Rig Test 활동으로 분리됩니다. 후자는 feature_combination과 sensor_fusion 장면을 포함하며, 별도 기기에서 병렬로 시험할 수 있도록 한 구성입니다. 추가로 경계 수준의 통과를 표시하는 PASS 별표 상태가 도입됩니다. sensor_fusion/test_video_stabilization은 폐기되며 test_video_stabilization_jca를 사용하도록 안내합니다. 동일한 빌드 지문(build fingerprint)을 사용하는 여러 기기와 세션에서 얻은 ITS 결과를 모아 빌드 승인에 제출하는 절차도 설명합니다.</p>
         <p>Gen2 리그로 옮겨진 멀티 카메라 전환·플래시·센서 퓨전 테스트에는 새 차트가 필요합니다. config.yml의 chart_scaling은 망원 카메라의 차트 배율 문제를 다루며, 광색역 시험용 태블릿 허용 목록에는 Samsung Galaxy Tab S10 FE가 추가됐습니다.</p>
         <p>이는 HAL API가 바뀌었다는 뜻이 아니라 시험 실행 환경과 검증 범위가 달라진다는 의미입니다. 릴리스 노트의 갱신일만으로 각 변경 사항의 최초 도입일을 단정할 수는 없습니다.</p>
@@ -103,11 +103,6 @@
         <p>이 기사는 제출된 시리즈의 설계와 코드를 비교한 내용입니다. 설명과 구현의 차이가 남아 있어 확정된 API 계약이나 이미 배포된 기능으로 받아들이면 안 됩니다. Android Camera HAL 규격 자체의 변경도 아닙니다. libcamera 기반 카메라 스택을 다루는 팀에는 수동 전환 시 유지할 게인과 재탐색 완료 상태를 어떻게 표현할지 참고할 수 있는 제안입니다.</p>
         <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.</p></div>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://patchwork.libcamera.org/patch/28387/">libcamera AWB series patch 28387</a></li><li><a href="https://patchwork.libcamera.org/cover/28386/">Add AwbState metadata and AwbTrigger control</a></li><li><a href="https://patchwork.libcamera.org/patch/28388/">libcamera AWB series patch 28388</a></li><li><a href="https://patchwork.libcamera.org/patch/28389/">libcamera AWB series patch 28389</a></li><li><a href="https://patchwork.libcamera.org/patch/28390/">libcamera AWB series patch 28390</a></li><li><a href="https://patchwork.libcamera.org/patch/28391/">libcamera AWB series patch 28391</a></li></ul></div>
-      </section>
-
-      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
-        <h2 id="issue-reference-articles-title">참고 · 더 읽을거리</h2>
-        <ul class="reference-articles-list"><li><a href="https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/">[PATCH 3/3] media: mali-c55: Keep ISP powered while IRQ wake is armed</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-29) · Mali-C55 ISP 전원 관리 패치 제안</span></li><li>ChromeOS 카메라 변경 모음: <a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692">camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2</a> (2026-09-30) · <a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146">camera: Enforce exclusive buffer IDs - chromiumos/platform2</a> (2026-09-30)</li></ul>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">

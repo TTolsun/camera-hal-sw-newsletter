@@ -29,7 +29,7 @@ Android 17 Camera ITS 릴리스 노트는 Python 3.14와 FFmpeg 7.0.2를 사용�
 
 새로운 gen2_chart 장면은 태블릿 대신 종이 차트를 사용합니다. scene3는 ArUco 마커로 차트를 검출하도록 바뀌어 망원 카메라의 다양한 화각과 거리 조건을 다룹니다. 기존 차트를 그대로 사용하면 새 검사 조건과 맞지 않을 수 있으므로, 실행 환경의 버전과 별도로 차트 구성도 확인할 필요가 있습니다.
 
-신규 검사 중 test_tonemap_sequence는 android.tonemap.mode 적용을 확인하고, test_jca_jpegr_ip는 JPEG_R JCA 미리보기 스냅샷과 캡처 이미지 사이의 화이트 밸런스 차이를 검사합니다. test_display_p3는 P3 JPEG의 ICC 프로파일과 sRGB 색역 밖의 색상 비율이 1%를 넘는지 확인합니다. 기존 test_yuv_jpeg_capture_sameness는 RMS 차이 임계값을 낮춰 눈에 보이는 색상 차이를 실패로 잡도록 변경됐습니다. 문서에는 이 임계값의 새 수치가 제시되어 있지 않습니다.
+신규 검사 중 test_tonemap_sequence는 android.tonemap.mode 적용을 확인하고, test_jca_jpegr_ip는 JPEG_R JCA 미리보기 스냅샷과 캡처 이미지 사이의 화이트 밸런스 차이를 검사합니다. test_display_p3는 P3 JPEG에 적절한 ICC 프로파일이 있는지, sRGB 색역 밖의 색상 비율이 1%를 넘는지 확인합니다. 기존 test_yuv_jpeg_capture_sameness는 RMS 차이 임계값을 낮춰 눈에 보이는 색상 차이를 실패로 잡도록 변경됐습니다. 문서에는 이 임계값의 새 수치가 제시되어 있지 않습니다.
 
 테스트는 CTS Verifier의 Camera ITS Test와 Camera ITS Sensor Fusion Rig Test 활동으로 분리됩니다. 후자는 feature_combination과 sensor_fusion 장면을 포함하며, 별도 기기에서 병렬로 시험할 수 있도록 한 구성입니다. 추가로 경계 수준의 통과를 표시하는 PASS 별표 상태가 도입됩니다. sensor_fusion/test_video_stabilization은 폐기되며 test_video_stabilization_jca를 사용하도록 안내합니다. 동일한 빌드 지문(build fingerprint)을 사용하는 여러 기기와 세션에서 얻은 ITS 결과를 모아 빌드 승인에 제출하는 절차도 설명합니다.
 
