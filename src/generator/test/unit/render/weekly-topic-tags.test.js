@@ -32,6 +32,11 @@ test('an android bucket article that counts as an SoC topic adds SoC Platform in
   assert.deepEqual(tags, ['SoC Platform']);
 });
 
+test('the SoC flag only matters inside the android bucket', () => {
+  assert.deepEqual(weeklyTopicTags([article('direct_aosp_camera', { counts_as_soc_topic: true })]), ['Camera HAL']);
+  assert.deepEqual(weeklyTopicTags([article('camera_driver_image_pipeline', { counts_as_soc_topic: true })]), ['Driver', 'Image Processing']);
+});
+
 test('the combined C++ and AI bucket splits by the article own is_ai_related flag', () => {
   assert.deepEqual(weeklyTopicTags([article('cpp_ai_tooling_fallback', { is_ai_related: false })]), ['C++']);
   assert.deepEqual(weeklyTopicTags([article('cpp_ai_tooling_fallback', { is_ai_related: true })]), ['AI']);

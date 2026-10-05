@@ -85,6 +85,27 @@ test('weekly tags derive archive topics and kicker from article relevance bucket
   assert.equal(issue.tags[0], 'Driver');
 });
 
+test('weekly tags use the per-article flags that the editor stage writes, in issue.json and in the index', async () => {
+  const root = tempRoot();
+  const compiler = {
+    ...section('compiler', 'https://example.com/compiler'),
+    relevance_bucket: 'cpp_ai_tooling_fallback',
+    is_ai_related: false
+  };
+  const soc = {
+    ...section('soc', 'https://example.com/soc'),
+    relevance_bucket: 'android',
+    counts_as_soc_topic: true
+  };
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([compiler, soc]) });
+
+  // is_ai_related·counts_as_soc_topic 이 생성 경로에서 지워지면 C++ 는 AI 로, SoC Platform 은
+  // Android 로 조용히 되돌아가므로, 생성 경로 끝(issue.json·주간 인덱스)에서 고정한다.
+  const index = JSON.parse(fs.readFileSync(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), 'utf8'));
+  assert.deepEqual(readIssue(root, '2026-W23').tags, ['C++', 'SoC Platform']);
+  assert.deepEqual(index.find(entry => entry.weeklyKey === '2026-W23').tags, ['C++', 'SoC Platform']);
+});
+
 test('written index.html carries the merged weekly tags and re-renders byte-identically from issue.json', async () => {
   const root = tempRoot();
   const driver = { ...section('driver', 'https://example.com/driver'), relevance_bucket: 'camera_driver_image_pipeline' };
