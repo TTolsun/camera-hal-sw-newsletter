@@ -12,6 +12,7 @@ const {
 const {
   section,
   editor,
+  storyV2Editor,
   normalizeSection,
   reporterForClaimTests,
   tempNewsroomDir,
@@ -26,6 +27,47 @@ const { mergePublicArticleFromLlm } = require('../../reporter/public-article-con
 function normalizeWithSourceGate(value, index, reporter) {
   return normalizeSection(mergePublicArticleFromLlm(value, value), index, reporter);
 }
+
+test('source identifier notation loss in Story v2 enters bounded repair and preserves article identity', async () => {
+  const draft = storyV2Editor();
+  draft.sections[0].confirmed_facts = ['Mali-C55 ISP를 지원합니다.'];
+  draft.sections[0].public_article.lead = 'Mali C55 ISP를 검증합니다.';
+  let calls = 0;
+  const result = await repairEditorOutputContract({
+    value: draft, date: DATE, normalizeSection,
+    repairFn: async ({ invalidEditor, validationError }) => {
+      calls += 1;
+      assert.equal(validationError.field, 'sections.identifier_notation');
+      assert.equal(validationError.details.issues[0].expected, 'Mali-C55');
+      assert.equal(validationError.details.issues[0].field, 'public_article.lead');
+      invalidEditor.sections[0].public_article.lead = 'Mali-C55 ISP를 검증합니다.';
+      return invalidEditor;
+    }
+  });
+  assert.equal(calls, 1);
+  assert.equal(result.repairSucceeded, true);
+  assert.equal(result.editor.sections[0].public_article.lead, 'Mali-C55 ISP를 검증합니다.');
+  assert.deepEqual(result.editor.sections.map(section => section.sources), draft.sections.map(section => section.sources));
+});
+
+test('unrepaired notation loss cannot pass by changing the fact spelling or another article', async () => {
+  for (const eraseAnchor of [false, true]) {
+    const draft = editor();
+    draft.sections[0].confirmed_facts = ['Mali-C55 ISP를 지원합니다.'];
+    draft.sections[0].public_article.lead = 'Mali C55 ISP를 검증합니다.';
+    let calls = 0;
+    await assert.rejects(repairEditorOutputContract({
+      value: draft, date: DATE, normalizeSection,
+      repairFn: async ({ invalidEditor }) => {
+        calls += 1;
+        if (eraseAnchor) invalidEditor.sections[0].confirmed_facts = ['Mali C55 ISP를 지원합니다.'];
+        invalidEditor.sections[1].public_article.lead = 'Mali-C55 ISP를 검증합니다.';
+        return invalidEditor;
+      }
+    }), error => error instanceof EditorSemanticValidationError && error.field === 'sections.identifier_notation');
+    assert.equal(calls, 1);
+  }
+});
 
 test('normalization source-link errors save diagnostics and enter bounded semantic repair', async () => {
   const draft = editor();

@@ -402,6 +402,8 @@ test('source extraction prompt guardrails keep source facts separate from editor
   assert.match(prompt, /source URL 또는 전체 source page를 독립 분석하지 마세요/);
   assert.match(prompt, /release version/);
   assert.match(prompt, /validation checklist/);
+  assert.match(prompt, /모델명·버전·식별자의 하이픈, 슬래시, 괄호/);
+  assert.match(prompt, /원문 표기를 그대로 보존/);
 });
 
 test('LLM editor, repair, completion, and fact-check prompts include article section contract', () => {

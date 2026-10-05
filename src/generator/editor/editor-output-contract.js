@@ -81,6 +81,8 @@ const {
   completeStoryPublicArticle
 } = require('./editor-section-builders');
 
+const { identifierNotationIssues } = require('./identifier-notation-validation');
+
 const REQUIRED_BRIEFING_COUNT = 3;
 
 const REPAIRABLE_SEMANTIC_FIELDS = new Set([
@@ -91,6 +93,7 @@ const REPAIRABLE_SEMANTIC_FIELDS = new Set([
   'sections.public_article.source_links',
   'sections.hal_signal_capsule',
   'sections.field_hygiene',
+  'sections.identifier_notation',
   'sections.group_coverage',
   'sections.blocked_context',
   'sections.claims'
@@ -1279,6 +1282,16 @@ function validateEditorOutputContract(value, date, options = {}) {
   validatePublicArticleContract(value, {
     requireStoryContract: options.requireStoryContract === true
   });
+  const notationIssues = value.sections.flatMap((section, index) => identifierNotationIssues(
+    section, index, options.identifierReferenceSections?.[index] || section
+  ));
+  if (notationIssues.length > 0) {
+    throw semanticError('Editor output lost source identifier punctuation.', {
+      field: 'sections.identifier_notation',
+      sectionCount: value.sections.length,
+      issues: notationIssues
+    });
+  }
   validateArticleSectionContract(value);
   validateHalSignalCapsules(value);
   validateFieldHygiene(value);
@@ -1413,7 +1426,11 @@ async function repairEditorOutputContract({
   repairFn
 }) {
   const invalidEditor = cloneJson(value);
+  let identifierReferenceSections;
   const validate = candidate => validateEditorOutputContract(candidate, date, {
+    // Repair may edit facts for other reasons, but it must not erase the original
+    // spelling evidence to make an identifier notation failure disappear.
+    identifierReferenceSections,
     reporter,
     normalizeSection,
     strictClaims,
@@ -1474,6 +1491,9 @@ async function repairEditorOutputContract({
   } catch (error) {
     if (!(error instanceof EditorSemanticValidationError)) throw error;
     const repairField = error.details?.field || error.field || '';
+    if (repairField === 'sections.identifier_notation') {
+      identifierReferenceSections = invalidEditor.sections;
+    }
     let deterministicRepair = null;
     let deterministicRepairFailureReasonCodes = [];
     if (repairField === 'sections.article_sections' || repairField === 'sections.hal_signal_capsule' || repairField === 'sections.public_article') {
