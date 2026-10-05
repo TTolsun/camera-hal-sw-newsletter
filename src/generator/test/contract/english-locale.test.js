@@ -11,7 +11,7 @@ const { languagePaths } = require('../../../../articles/assets/js/site-header');
 const { renderArchiveCard } = require('../../../../articles/assets/js/newsletter-archive');
 const { writeEnglishEditions } = require('../../render/english-edition');
 const { tempRoot, writeText, writeJson, readJson } = require('../../../shared/test/helpers/fs');
-const { assertSharedNav, navLinks, EXPECTED_LABELS_EN } = require('../../../shared/test/helpers/site-nav');
+const { assertSharedNav, assertSharedBrand, assertSharedFooterNav, EXPECTED_LABELS_EN, EXPECTED_FOOTER_EN } = require('../../../shared/test/helpers/site-nav');
 
 // Synthetic display/overlay inputs, not publication-quality golden artifacts.
 function sample() {
@@ -99,8 +99,11 @@ test('English HTML and Markdown retain structure, source links and resolved imag
   assert.match(html, /<html lang="en"/);
   assert.match(html, /content="en_US"/);
   assert.match(html, /href="\.\.\/\.\.\/\.\.\/en\/index.html"/);
-  // 헤더 나브는 영문 라벨로, 영문판 홈·아카이브를 가리킨다.
+  // 헤더 나브·브랜드·푸터는 영문 문구로, 영문판 홈·아카이브를 가리킨다. 로고와 Lab 은 영문판이
+  // 없어 사이트 루트 쪽 경로다.
   assertSharedNav(html, '../../../en/', EXPECTED_LABELS_EN);
+  assertSharedBrand(html, '../../../', '../../../en/index.html');
+  assertSharedFooterNav(html, '../../../en/', '../../../learning/ai-engineering/index.html', EXPECTED_FOOTER_EN);
   assert.match(html, /href="\.\.\/\.\.\/\.\.\/css\/styles.css"/);
   assert.doesNotMatch(html, /[가-힣]/);
   assert.doesNotMatch(markdown, /[가-힣]/);
@@ -396,33 +399,42 @@ test('every committed English edition renders with the same structure and order 
   }
 });
 
-// 영문 홈·아카이브와 커밋된 영문 이슈 페이지 전부의 헤더 나브. 한국어판은 공용 헬퍼로 잠겨 있었지만
-// 영문판에는 그 헬퍼를 거는 테스트가 없어서, 영문 라벨이 한국어로 돌아가거나 링크가 한국어판을
-// 가리켜도 잡지 못했다. 긴 한국어 산문만 잡는 validate-localization 은 짧은 나브 라벨을 보지 않는다.
-test('every committed English page carries the English header nav', () => {
+// 영문 홈·아카이브와 커밋된 영문 이슈 페이지 전부의 헤더 나브·브랜드·푸터. 한국어판은 공용 헬퍼로
+// 잠겨 있었지만 영문판에는 그 헬퍼를 거는 테스트가 없어서, 영문 문구가 한국어로 돌아가거나 링크가
+// 한국어판을 가리켜도 잡지 못했다. 긴 한국어 산문만 잡는 validate-localization 은 짧은 라벨을 보지 않는다.
+//
+// 페이지마다 접두어가 둘이다. 나브·브랜드 링크·푸터의 홈·아카이브는 영문판 루트(`en/`)로 가고,
+// 로고와 Lab 링크는 영문판이 없어 사이트 루트로 간다.
+test('every committed English page carries the English header, brand and footer', () => {
   const repoRoot = path.join(__dirname, '../../../..');
   const englishRoot = path.join(repoRoot, 'articles', 'en');
   const issuesRoot = path.join(englishRoot, 'newsletters');
   const pages = [
-    [path.join(englishRoot, 'index.html'), ''],
-    [path.join(englishRoot, 'archive.html'), ''],
+    { file: path.join(englishRoot, 'index.html'), englishPrefix: '', sitePrefix: '../' },
+    { file: path.join(englishRoot, 'archive.html'), englishPrefix: '', sitePrefix: '../' },
     ...fs.readdirSync(issuesRoot, { withFileTypes: true })
       .filter(entry => entry.isDirectory())
-      .map(entry => [path.join(issuesRoot, entry.name, 'index.html'), '../../../en/'])
-      .filter(([file]) => fs.existsSync(file))
+      .map(entry => ({ file: path.join(issuesRoot, entry.name, 'index.html'), englishPrefix: '../../../en/', sitePrefix: '../../../' }))
+      .filter(page => fs.existsSync(page.file))
   ];
   assert.ok(pages.length > 2, '커밋된 영문 이슈 페이지가 있어야 한다');
 
-  // 첫 실패에서 멈추지 않고, 어느 페이지가 어떤 라벨을 갖고 있는지 전부 모아 보고한다.
+  // 첫 실패에서 멈추지 않고, 어느 페이지의 어느 축이 어긋났는지 전부 모아 보고한다.
   const mismatched = [];
-  for (const [file, rootPath] of pages) {
+  for (const { file, englishPrefix, sitePrefix } of pages) {
     const html = fs.readFileSync(file, 'utf8');
-    try {
-      assertSharedNav(html, rootPath, EXPECTED_LABELS_EN);
-    } catch {
-      const links = navLinks(html) || [];
-      mismatched.push(`${path.relative(repoRoot, file)} 나브=${JSON.stringify(links.map(link => `${link.label} -> ${link.href}`))}`);
+    const checks = {
+      nav: () => assertSharedNav(html, englishPrefix, EXPECTED_LABELS_EN),
+      brand: () => assertSharedBrand(html, sitePrefix, `${englishPrefix}index.html`),
+      footer: () => assertSharedFooterNav(html, englishPrefix, `${sitePrefix}learning/ai-engineering/index.html`, EXPECTED_FOOTER_EN)
+    };
+    for (const [axis, check] of Object.entries(checks)) {
+      try {
+        check();
+      } catch (error) {
+        mismatched.push(`${path.relative(repoRoot, file)} [${axis}] ${String(error.message).split('\n')[0]}`);
+      }
     }
   }
-  assert.deepEqual(mismatched, [], `영문 헤더 나브가 어긋난 페이지 ${mismatched.length}개:\n${mismatched.join('\n')}`);
+  assert.deepEqual(mismatched, [], `영문 헤더·브랜드·푸터가 어긋난 자리 ${mismatched.length}개:\n${mismatched.join('\n')}`);
 });
