@@ -227,7 +227,7 @@
           console.error(newsletterError);
         }
         const matchedNewsletter = findHeadlineNewsletter(headline, newsletters);
-        const date = headline.newsletter_date || headline.selected_at || '';
+        const date = archiveHelpers.headlinePeriodText(matchedNewsletter, headline.newsletter_date || headline.selected_at || '');
         const metaText = [date, sourceName].filter(Boolean).join(' · ');
         featuredCard.classList.add('is-article');
         featuredCard.innerHTML = `

@@ -390,6 +390,17 @@
     return { title, summary, imageAlt: String(section.image_alt || '').trim() };
   }
 
+  function headlinePeriodText(entry, fallbackDate = '') {
+    const coverage = entryCoverageVariant(entry);
+    if (coverage && coverage.variant === 'iso_week') {
+      return `${coverage.key.slice(5)} · ${coverage.start}~${coverage.end}`;
+    }
+    if (coverage && coverage.variant === 'legacy_rolling') {
+      return `${coverage.start}~${coverage.end}`;
+    }
+    return fallbackDate;
+  }
+
   const api = {
     TOPICS,
     DEFAULT_STATE,
@@ -403,7 +414,8 @@
     getSafeNewsletterHref,
     isFallbackImage,
     renderArchiveCard,
-    englishHeadlineCopy
+    englishHeadlineCopy,
+    headlinePeriodText
   };
 
   if (typeof module !== 'undefined' && module.exports) {
