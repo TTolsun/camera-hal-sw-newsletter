@@ -77,7 +77,7 @@ node --test src/generator/test/contract/fixture-policy.test.js # one file via No
 
 ## 구현 컨벤션 (Conventions)
 
-- CommonJS `require`, 2칸 들여쓰기, 세미콜론, Node 20 compatibility.
+- CommonJS `require`, 2칸 들여쓰기, 세미콜론, Node 24 compatibility.
 
 ## 검증 (Validation)
 
