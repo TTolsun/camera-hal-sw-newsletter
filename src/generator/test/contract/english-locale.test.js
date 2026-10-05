@@ -155,6 +155,9 @@ test('English archive links translated issues and marks untranslated issues with
   const item = { weeklyKey: '2026-W39', title: '한국어 제목', summary: '한국어 요약', html: 'newsletters/2026-W39/index.html' };
   const fallback = renderArchiveCard(item, { locale: 'en', rootPath: '../' });
   assert.match(fallback, /Korean only/);
+  // styles.css 의 `.card-body .tag` 가 이 표시를 무채색 알약으로 그린다. 표시가 .card-body 밖으로
+  // 나가면 그 규칙이 빠지고 공용 .tag 의 파랑 틴트로 돌아가므로 위치를 함께 잠근다.
+  assert.match(fallback, /<div class="card-body">\s*<div class="card-kicker">[^<]*<\/div>\s*<span class="tag" lang="en">Korean only<\/span>/);
   assert.match(fallback, /한국어 제목/);
   assert.doesNotMatch(fallback, /한국어 요약/);
   assert.match(fallback, /href="\.\.\/newsletters\/2026-W39\/index.html"/);

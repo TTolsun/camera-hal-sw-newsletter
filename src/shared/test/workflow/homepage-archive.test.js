@@ -852,6 +852,20 @@ test('review-only publication notice uses the parchment box, not the accent tint
   assertCssDeclaration(notice, 'border', 'none');
 });
 
+test('the Korean only card tag is a neutral parchment pill, not the accent tint', () => {
+  const css = readStylesheet();
+  // 알약 모양은 이슈 페이지 태그와 한 규칙이다 — 블록이 갈라지면 두 알약이 따로 흘러간다.
+  assert.match(css, /\.newsletter-issue-page \.issue-tags \.tag,\s*\.card-body \.tag\s*\{/);
+  const pill = selectorGroupBlock(css, '.newsletter-issue-page .issue-tags .tag');
+
+  // 공용 .tag 는 --chip 배경 + 파랑 글자다. 상태 표시에 파랑을 쓰면 단일 액센트 원칙에 어긋난다.
+  assertCssDeclaration(pill, 'background', 'var(--bg)');
+  assertCssDeclaration(pill, 'color', 'var(--muted)');
+  assertCssDeclaration(pill, 'border', 'none');
+  // flex column 안에서 카드 폭으로 늘어나지 않는다.
+  assertCssDeclaration(exactSelectorBlock(css, '.card-body .tag'), 'align-self', 'flex-start');
+});
+
 test('footer links and notes use the muted text token, not an off-palette literal', () => {
   // 팔레트 밖 리터럴(#515154)이 있던 자리다. 보조 텍스트 층은 --muted 하나로 낸다.
   assertCssDeclaration(selectorGroupBlock(readStylesheet(), '.footer-link'), 'color', 'var(--muted)');
