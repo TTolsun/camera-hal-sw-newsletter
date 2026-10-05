@@ -33,6 +33,7 @@ const {
 } = require('./document-section-extractors');
 const { firstSentence } = require('./document-section-parsing');
 const { normalizeOutgoingLinks } = require('./outgoing-links');
+const { classifyAospCameraStackCandidate } = require('../domain/aosp-camera-scope');
 
 const SNAPSHOT_SCHEMA_VERSION = 1;
 const PROCESSED_ID_LIMIT = 500;
@@ -879,6 +880,13 @@ function candidateFromEvent(event, source) {
   // 이벤트가 만들어졌다는 것 자체가 "본문이 바뀌었다"는 뜻이므로(날짜만 바뀐 날은 여기까지
   // 오지 않는다) 이 증거를 그 주의 사건 내용으로 쓰는 것이 정확하다.
   const releaseNoteEvidence = event.release_note_evidence || null;
+  // Classify source text once at collection; a bucket without its relevance
+  // fields otherwise becomes a zero-scope candidate at selection time.
+  const scope = classifyAospCameraStackCandidate({
+    title: event.title,
+    api_or_component: releaseNoteEvidence?.api_or_component || '',
+    behavior_change: releaseNoteEvidence?.behavior_change || ''
+  });
   const sourceQuality = sourceQualityForEvent({
     ...event,
     main_article_allowed: mainDateEligible
@@ -942,7 +950,8 @@ function candidateFromEvent(event, source) {
     datePrecision: event.effective_date ? 'day' : '',
     date_precision: event.effective_date ? 'day' : '',
     relevance_bucket: bucket,
-    relevanceBucket: bucket,
+    ...scope,
+    relevanceBucket: scope.relevance_bucket,
     category: ensureArray(source.expected_categories)[0] || 'android',
     source_category: ensureArray(source.expected_categories)[0] || 'android',
     priority: source.source_priority,

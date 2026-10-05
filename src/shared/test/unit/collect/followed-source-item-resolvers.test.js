@@ -110,7 +110,10 @@ test('routes patchwork-libcamera-patches to the patch resolver with text (JSON) 
   assert.equal(items[0].sourceKind, 'rss_item');
   assert.equal(items[0].publishedAt, '2026-07-03');
   // 창 안 페이지 다음은 등록부 sourceUrl에서 파생한 page=2를 조회한다 — fetchTextImpl 배선 확인(#970).
-  assert.deepEqual(fetched, [`${PATCHWORK_LIST_API}&page=2`]);
+  assert.deepEqual(fetched, [
+    `${PATCHWORK_LIST_API}&page=2`,
+    'https://patchwork.libcamera.org/patch/27198/mbox/'
+  ]);
 });
 
 test('passes the collection window to patchwork so paging stops at the lookback edge (#970)', async () => {

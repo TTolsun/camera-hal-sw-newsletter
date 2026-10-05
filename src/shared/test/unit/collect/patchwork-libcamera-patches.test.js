@@ -21,6 +21,47 @@ function source(overrides = {}) {
   };
 }
 
+test('contract evidence requests are bounded and skip stale or documentation patches', async () => {
+  const rows = Array.from({ length: 15 }, (_, index) => patch(
+    99000 + index, '2026-10-01T12:00:00', '[1/2] libcamera: controls: Add state metadata', 9990 + index
+  ));
+  rows.unshift(
+    patch(98998, '2026-10-01T12:00:00', '[PATCH] Documentation: Explain controls'),
+    patch(98999, '2026-08-01T12:00:00', '[PATCH] libcamera: controls: Add old control')
+  );
+  const fetched = [];
+  const items = await resolvePatchworkLibcameraPatchItems(JSON.stringify(rows), source(), {
+    now: new Date('2026-10-05'),
+    fetchTextImpl: async (url, timeout) => {
+      fetched.push(url);
+      assert.equal(timeout, 10000);
+      return '';
+    }
+  });
+  assert.equal(items.length, rows.length);
+  assert.equal(fetched.length, 12);
+  assert.ok(fetched.every(url => url.endsWith('/mbox/')));
+  assert.ok(fetched.every(url => !/98998|98999/.test(url)));
+  assert.ok(items.every(item => !item.behavior_change));
+});
+
+test('failed contract evidence fetch preserves the candidate without fabricated prose', async () => {
+  const rows = [patch(99001, '2026-10-01T12:00:00', '[PATCH] libcamera: controls: Add state metadata')];
+  const { warnings } = await captureWarnings(async () => {
+    const items = await resolvePatchworkLibcameraPatchItems(JSON.stringify(rows), source(), {
+      now: new Date('2026-10-05'),
+      fetchTextImpl: async url => {
+        if (url.endsWith('/mbox/')) throw new Error('timeout');
+        return '[]';
+      }
+    });
+    assert.equal(items.length, 1);
+    assert.equal(items[0].behavior_change, undefined);
+    assert.match(items[0].summary, /proposed change not yet landed/);
+  });
+  assert.ok(warnings.some(line => /evidence fetch failed/.test(line)));
+});
+
 // Representative patchwork REST API page: a bare JSON array, newest-first. Includes
 // a substantive uAPI patch, a churn patch, and two malformed rows to drop.
 function apiJson() {
@@ -158,6 +199,8 @@ function busyWeekPages() {
 
 function pagedFetch(pages, fetched = []) {
   return async (url) => {
+    // These assertions count list pagination; evidence requests are tested below.
+    if (url.endsWith('/mbox/')) return '';
     fetched.push(url);
     const page = Number(new URL(url).searchParams.get('page'));
     return JSON.stringify(pages[page] || []);

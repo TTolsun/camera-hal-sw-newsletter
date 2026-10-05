@@ -73,3 +73,21 @@ test('html renders the reference-articles section with links', () => {
   assert.match(html, /<span class="reference-meta">CameraX Release Notes \(2026-03-25\) · AOSP Camera 프레임워크 관련 참고<\/span>/);
   assert.match(html, /href="https:\/\/isocpp\.org\/blog\/gcc-16-1"/);
 });
+
+test('ChromeOS references share one item while retaining each link and date', () => {
+  const issue = issueWithReferences();
+  issue.reference_articles = [1, 2].map(id => ({
+    title: `Camera buffer change ${id}`, source: 'ChromeOS Gerrit',
+    url: `https://chromium-review.googlesource.com/c/chromiumos/platform2/+/${id}`,
+    published_date: `2026-09-0${id}`, note: '참고'
+  }));
+  const md = buildMarkdown(issue);
+  const html = buildHtml(issue);
+  assert.equal((md.match(/^- ChromeOS 카메라 변경 모음:/gm) || []).length, 1);
+  assert.equal((html.match(/<li>ChromeOS 카메라 변경 모음:/g) || []).length, 1);
+  for (const article of issue.reference_articles) {
+    assert.ok(md.includes(article.url));
+    assert.ok(html.includes(article.url));
+    assert.ok(md.includes(article.published_date));
+  }
+});

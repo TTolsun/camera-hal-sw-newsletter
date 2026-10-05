@@ -2892,7 +2892,7 @@
       "enabled": true,
       "candidateOnly": false,
       "requiresCrossCheck": false,
-      "usageHint": "ChromeOS platform2의 camera/ 아래 병합된 변경만 수집한다. ChromeOS camera 서비스는 Android Camera HAL v3 인터페이스를 구현하므로 capture request/result, stream·buffer 수명주기, 3A, ISP, JPEG/RAW/YUV, 외부 카메라 변경이 Camera HAL 독자에게 직접 읽힌다. 미병합 변경과 chromiumos/platform/camera의 vendor HAL은 이 소스 범위 밖이다",
+      "usageHint": "ChromeOS platform2의 camera/ 아래 병합된 변경만 수집한다. 플랫폼 내부의 개별 안정성 수정은 짧은 참고 묶음으로 다룬다. Android Camera HAL과 유사한 인터페이스나 buffer·3A·ISP 용어만으로 직접 영향이나 주요 기사 중요도를 단정하지 않는다. 실제 담당 플랫폼과의 관련성 또는 여러 구현에 영향을 주는 공통 문제의 구체적인 근거가 있을 때 주요 기사로 검토한다. 미병합 변경과 chromiumos/platform/camera의 vendor HAL은 이 소스 범위 밖이다",
       "keywords": [
         "ChromeOS",
         "Gerrit",

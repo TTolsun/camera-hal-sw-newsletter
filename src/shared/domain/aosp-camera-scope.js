@@ -92,6 +92,7 @@ const DIRECT_AOSP_PATTERNS = [
   /\bCameraEffect\b/i,
   /\bCamera images automation\b/i,
   /\bTest camera images\b/i,
+  /\bCamera (?:ITS|Image Test Suite)\b/i,
   /\bAutomotive Camera Service\b/i,
   /\bcamera image(?:s)? automation\b/i,
   /\bImageReader\b/i,
