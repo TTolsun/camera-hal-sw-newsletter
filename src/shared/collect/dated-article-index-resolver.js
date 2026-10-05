@@ -99,6 +99,14 @@ const ARTICLE_BODY_CLOSING_TAG_MARKERS = [
   /<\/main\s*>/i
 ];
 
+// Claude Blog 개별 기사는 <h1> 바로 뒤에 게시 정보 목록(Category, Date, Reading time, Share/Copy link와
+// 그 기사 자신의 URL, Author(s))을 <ul class="hero_blog_post_details_list">로 둔다. 본문이 <h1>부터
+// 시작하므로 이 목록이 평문에 그대로 섞여 summary의 앞쪽을 차지하고, 카테고리 라벨("Claude Code")이
+// api_or_component 근거가 되며, 자기 URL의 점(claude.com)이 문장 경계처럼 보여 분류 근접 패턴을 끊는다
+// (2026-09-21 Projects redesigned). 기사 내용이 아니므로 본문 추출에서 걷어낸다. 이 목록에는 중첩된
+// <ul>이 없다(Category·Author 목록은 <div role="list">) — 라이브 페이지와 픽스처에서 확인했다.
+const ARTICLE_POST_DETAILS_LIST = /<ul\b[^>]*\bhero_blog_post_details_list\b[^>]*>[\s\S]*?<\/ul\s*>/gi;
+
 // 넓게 잡으면(bucket 패턴 전부의 합집합) 추출이 오탐 토큰을 오히려 농축한다는 것이
 // 별도 조사에서 확인됐다 — 그래서 workflow 신호로만 좁힌다.
 const WORKFLOW_ANCHORS = [
@@ -209,7 +217,8 @@ function extractArticleBody(html) {
     const markerIndex = afterBodyStart.search(marker);
     if (markerIndex >= 0 && bodyStart + markerIndex < bodyEnd) bodyEnd = bodyStart + markerIndex;
   }
-  return { title, bodyText: cardText(value.slice(bodyStart, bodyEnd)) };
+  const bodyHtml = value.slice(bodyStart, bodyEnd).replace(ARTICLE_POST_DETAILS_LIST, ' ');
+  return { title, bodyText: cardText(bodyHtml) };
 }
 
 // 문장 단위로 자르되 각 문장의 시작/끝 offset도 함께 돌려준다(뒤에서 그 offset을 기준으로
