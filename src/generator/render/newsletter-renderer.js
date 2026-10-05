@@ -1,5 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
-const { compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
+const { canonicalBucket, compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
 const { loreThreadUrl } = require('../../shared/common/article-groups');
 const { isFallbackImagePath } = require('../../shared/render/image-candidates');
 const {
@@ -220,34 +220,34 @@ function articleCategoryLabel(section = {}) {
 }
 
 // relevance bucket -> archive/home 카드 topic 태그. archive 필터 TOPICS(Camera HAL / Android /
-// Driver / Image Processing / AI / SoC Platform) 값에 맞춘다. 각 리스트의 첫 항목이 그 bucket 의
+// Driver / Image Processing / AI / SoC Platform / C++) 값에 맞춘다. 각 리스트의 첫 항목이 그 bucket 의
 // primary topic 이고, lead 기사(첫 section)의 primary 가 카드 kicker(tags[0]) 가 된다.
 // generic_tech_watchlist 는 topic 이 아니라 편집 상태 마커라 비워 둔다.
+// android bucket 의 SoC Platform 과 cpp_ai_tooling_fallback bucket 의 C++/AI 는 bucket 하나로
+// 정해지지 않아 articleTopicTags 가 기사 자신의 필드로 가른다.
 const BUCKET_TOPIC_TAGS = {
   direct_aosp_camera: ['Camera HAL'],
   camera_driver_image_pipeline: ['Driver', 'Image Processing'],
   android: ['Android'],
-  android_multimedia_camera_output: ['Android', 'Image Processing'],
-  soc_platform_signal: ['SoC Platform'],
-  cpp_ai_tooling_fallback: ['AI'],
   generic_tech_watchlist: []
 };
 
-// 모든 카메라 뉴스레터가 공통으로 걸치는 baseline topic — 카드 필터가 항상 잡도록 맨 뒤에 붙인다.
-const BASELINE_TOPIC_TAGS = ['Camera HAL', 'Android'];
+// 기사 한 건이 얻는 주제 태그. 기사에 근거가 없는 주제는 붙이지 않는다.
+//  - android bucket 은 SoC 플랫폼 기사(counts_as_soc_topic)면 SoC Platform, 아니면 Android.
+//  - cpp_ai_tooling_fallback bucket 은 C++ 도구와 AI 도구를 함께 담는다. 편집 단계가 채우는
+//    is_ai_related 가 false 면 C++, 그 밖에는(true 이거나 이 필드가 없던 옛 기사) AI.
+function articleTopicTags(section) {
+  const bucket = canonicalBucket(sectionRelevanceBucket(section));
+  if (bucket === 'android' && section.counts_as_soc_topic === true) return ['SoC Platform'];
+  if (bucket === 'cpp_ai_tooling_fallback') return section.is_ai_related === false ? ['C++'] : ['AI'];
+  return BUCKET_TOPIC_TAGS[bucket] || [];
+}
 
-// 그 주 기사(section)들의 relevance bucket 을 archive/home 카드 topic 태그로 집계한다. lead 기사
-// topic 을 앞에 두어 카드 kicker(tags[0]) 로 삼고, 나머지 기사 topic, 마지막에 baseline 순으로
-// 중복을 제거한다. 이슈 레벨 editor.tags(대개 ['Camera HAL','Android'] 기본값)에 의존하지 않으므로
-// Driver·Image Processing·AI·SoC Platform 필터가 실제로 채워지고 카드 kicker 가 다양화된다.
+// 그 주 기사(section)들의 주제를 archive/home 카드 topic 태그로 집계한다. lead 기사 topic 을 앞에
+// 두어 카드 kicker(tags[0]) 로 삼고, 중복은 제거한다. 이슈 레벨 editor.tags 에 의존하지 않고 기사에
+// 근거가 있는 주제만 싣기 때문에, 해당 기사가 없는 주간호는 그 주제 필터에서 빠진다.
 function weeklyTopicTags(sections = []) {
-  const ordered = [];
-  for (const section of ensureArray(sections)) {
-    for (const tag of BUCKET_TOPIC_TAGS[sectionRelevanceBucket(section)] || []) {
-      ordered.push(tag);
-    }
-  }
-  return [...new Set([...ordered, ...BASELINE_TOPIC_TAGS])];
+  return [...new Set(ensureArray(sections).flatMap(articleTopicTags))];
 }
 
 function issueTags(issue) {

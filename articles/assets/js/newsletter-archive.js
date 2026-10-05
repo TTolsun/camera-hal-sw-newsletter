@@ -6,7 +6,8 @@
     { key: 'driver', label: 'Driver', tag: 'Driver' },
     { key: 'image-processing', label: 'Image Processing', tag: 'Image Processing' },
     { key: 'ai', label: 'AI', tag: 'AI' },
-    { key: 'soc-platform', label: 'SoC Platform', tag: 'SoC Platform' }
+    { key: 'soc-platform', label: 'SoC Platform', tag: 'SoC Platform' },
+    { key: 'cpp', label: 'C++', tag: 'C++' }
   ];
   const DEFAULT_STATE = { topic: 'all', sort: 'latest', page: 1 };
   const MANAGED_QUERY_KEYS = ['topic', 'sort', 'page'];

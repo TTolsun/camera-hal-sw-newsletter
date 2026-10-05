@@ -79,9 +79,9 @@ test('weekly tags derive archive topics and kicker from article relevance bucket
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([driver, ai]) });
 
   // 위클리 tags 는 이슈 기본값이 아니라 그 주 기사 버킷에서 나온다: lead(camera_driver) topic 이
-  // 맨 앞이라 카드 kicker 가 되고, AI 도 채워지며 baseline(Camera HAL/Android)이 뒤에 붙는다.
+  // 맨 앞이라 카드 kicker 가 되고, AI 도 채워진다. Camera HAL·Android 기사가 없으니 그 태그는 없다.
   const issue = readIssue(root, '2026-W23');
-  assert.deepEqual(issue.tags, ['Driver', 'Image Processing', 'AI', 'Camera HAL', 'Android']);
+  assert.deepEqual(issue.tags, ['Driver', 'Image Processing', 'AI']);
   assert.equal(issue.tags[0], 'Driver');
 });
 
