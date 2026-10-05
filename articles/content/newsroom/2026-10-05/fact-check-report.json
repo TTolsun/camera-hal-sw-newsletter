@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "Mali-C55 ISP 드라이버의 전원 관리 개선 패치 제안으로, 시스템 suspend/resume 시 카메라 파이프라인 안정성 확보를 위한 구체적인 검증 포인트를 제시합니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "ChromeOS 카메라 스택의 이미지 처리 안정성 개선 패치로, Android Camera HAL의 JPEG/BLOB 처리 모듈 보안 강화에 참고할 만한 구체적인 액션 아이템을 제공합니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "ChromeOS 카메라 어댑터의 버퍼 관리 개선 패치로, Android Camera HAL의 다중 스트림 버퍼 ID 관리 안정성 확보에 참고할 만한 구체적인 검증 포인트를 제시합니다."
+    },
+    {
+      "section_index": 3,
+      "headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
+      "publishable": true,
+      "confidence": "high",
+      "reason": "AI 에이전트의 개발 워크플로우 통합 사례를 통해 네이티브 C++ 및 HAL 개발 팀의 생산성 향상 가능성을 탐색할 수 있는 실질적인 시사점과 액션 아이템을 제공합니다."
+    }
+  ],
+  "final_comment": "모든 기사는 사실 확인, 출처 명시, 과장 금지 원칙을 잘 따르고 있습니다. 각 기사의 내용과 HAL/Driver/SoC 플랫폼 엔지니어에게 제공하는 실질적인 가치도 충분하여 발행 가능합니다. `summary_truncated=true` 표시가 있는 근거를 사용한 클레임들도, 잘린 부분 이전의 내용만으로 클레임이 충분히 뒷받침되므로 문제가 없습니다. `public_article.body_markdown`의 마크다운 문법 및 문단 구성도 정책을 준수합니다."
+}
