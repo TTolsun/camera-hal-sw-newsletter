@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-05",
-  "score": 90,
+  "score": 97,
   "max_score": 100,
   "threshold": 60,
   "status": "PASS",
@@ -20,7 +20,7 @@
     {
       "category": "editorial-story",
       "points": 1,
-      "reason": "Briefing bullet misses story structure elements: what_happened.",
+      "reason": "Briefing bullet misses story structure elements: reader_perspective.",
       "location": "briefing 2",
       "blocking": false,
       "severity": "soft",
@@ -28,60 +28,10 @@
       "dedupe_key": ""
     },
     {
-      "category": "editorial-story",
-      "points": 1,
-      "reason": "Briefing bullet misses story structure elements: what_happened.",
-      "location": "briefing 3",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
-    {
       "category": "image-fallback",
       "points": 1,
       "reason": "Article image uses a local fallback visual.",
-      "location": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
-    {
-      "category": "linked-evidence-limitation",
-      "points": 2,
-      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-      "location": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
-    {
-      "category": "image-fallback",
-      "points": 1,
-      "reason": "Article image uses a local fallback visual.",
-      "location": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
-    {
-      "category": "linked-evidence-limitation",
-      "points": 2,
-      "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-      "location": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
-    {
-      "category": "image-fallback",
-      "points": 1,
-      "reason": "Article image uses a local fallback visual.",
-      "location": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
+      "location": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
       "blocking": false,
       "severity": "soft",
       "reason_code": "",
@@ -92,252 +42,40 @@
   "article_results": [
     {
       "index": 1,
-      "headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-      "category": "camera_driver_image_pipeline",
+      "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "category": "direct_aosp_camera",
       "status": "PASS",
       "repair_action": "preserve",
       "sources": [
         {
-          "title": "PATCH 3/3 media: mali-c55: Keep ISP powered while IRQ wake is armed",
-          "url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+          "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
         }
       ],
       "section_contract": {
         "complete": true,
         "missing_keys": [],
         "missing_required_keys": [],
-        "present_optional_keys": [
-          "known_limitations",
-          "watch_items",
-          "do_not_claim"
-        ],
+        "present_optional_keys": [],
         "unexpected_keys": [],
-        "has_limitations": true,
-        "has_watch_items": true,
-        "has_do_not_claim": true,
-        "limitation_visibility": "public-limitation"
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
       },
       "scope_count": {
         "index": 1,
-        "headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-        "source_candidate_url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/",
-        "source_candidate_hash": "ed711c4bf2fa1c7c86e5c6524eea32d89fb444589e1c0cc872e270e08641dd67",
-        "relevance_bucket": "android",
-        "editorial_priority": 3,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_supporting_main_article": true,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "android counts toward supporting_main_article_count, not primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
-      },
-      "guardrail_impact_class": "camera_stack_source",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "performance_latency_frame_drop"
-      ],
-      "actionability_level": "",
-      "effective_actionability_level": "",
-      "hard_fail_reasons": [],
-      "soft_deductions": [
-        {
-          "category": "image-fallback",
-          "points": 1,
-          "reason": "Article image uses a local fallback visual."
-        }
-      ]
-    },
-    {
-      "index": 2,
-      "headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-      "category": "camera_driver_image_pipeline",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
-          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": [],
-        "missing_required_keys": [],
-        "present_optional_keys": [
-          "known_limitations",
-          "watch_items",
-          "do_not_claim"
-        ],
-        "unexpected_keys": [],
-        "has_limitations": true,
-        "has_watch_items": true,
-        "has_do_not_claim": true,
-        "limitation_visibility": "public-limitation"
-      },
-      "scope_count": {
-        "index": 2,
-        "headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-        "source_candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
-        "source_candidate_hash": "70779ee88af5f0a0703dd6edcb237705543616f9b933c0834734cd65be2ea4ec",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
+        "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+        "source_candidate_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+        "source_candidate_hash": "d893134af706f7df8f1c0716f00e4d4128532960bd3886f2d05056796785855e",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
         "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      "guardrail_impact_class": "camera_stack_source",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "stream_buffer_metadata"
-      ],
-      "actionability_level": "",
-      "effective_actionability_level": "",
-      "hard_fail_reasons": [],
-      "soft_deductions": [
-        {
-          "category": "linked-evidence-limitation",
-          "points": 2,
-          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
-        },
-        {
-          "category": "image-fallback",
-          "points": 1,
-          "reason": "Article image uses a local fallback visual."
-        }
-      ]
-    },
-    {
-      "index": 3,
-      "headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-      "category": "camera_driver_image_pipeline",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "camera: Enforce exclusive buffer IDs - chromiumos/platform2",
-          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": [],
-        "missing_required_keys": [],
-        "present_optional_keys": [
-          "known_limitations",
-          "watch_items",
-          "do_not_claim"
-        ],
-        "unexpected_keys": [],
-        "has_limitations": true,
-        "has_watch_items": true,
-        "has_do_not_claim": true,
-        "limitation_visibility": "public-limitation"
-      },
-      "scope_count": {
-        "index": 3,
-        "headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-        "source_candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
-        "source_candidate_hash": "011a94a65703be29ba6c9da042017f94e9948f0531659b4919fc4893f7b9e46b",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      "guardrail_impact_class": "camera_stack_source",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "stream_buffer_metadata"
-      ],
-      "actionability_level": "",
-      "effective_actionability_level": "",
-      "hard_fail_reasons": [],
-      "soft_deductions": [
-        {
-          "category": "linked-evidence-limitation",
-          "points": 2,
-          "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics."
-        },
-        {
-          "category": "image-fallback",
-          "points": 1,
-          "reason": "Article image uses a local fallback visual."
-        }
-      ]
-    },
-    {
-      "index": 4,
-      "headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-      "category": "cpp_ai_tooling_fallback",
-      "status": "PASS",
-      "repair_action": "preserve",
-      "sources": [
-        {
-          "title": "Barclays scales Claude to upgrade operations and improve client experience",
-          "url": "https://www.anthropic.com/news/barclays-scales-claude"
-        }
-      ],
-      "section_contract": {
-        "complete": true,
-        "missing_keys": [],
-        "missing_required_keys": [],
-        "present_optional_keys": [
-          "known_limitations",
-          "watch_items",
-          "do_not_claim"
-        ],
-        "unexpected_keys": [],
-        "has_limitations": true,
-        "has_watch_items": true,
-        "has_do_not_claim": true,
-        "limitation_visibility": "public-limitation"
-      },
-      "scope_count": {
-        "index": 4,
-        "headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-        "source_candidate_url": "https://www.anthropic.com/news/barclays-scales-claude",
-        "source_candidate_hash": "c08402b8f22a4b159df3858cefc3416269ca944c9595105093b01c30fd1a8c02",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": false,
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_supporting_main_article": false,
         "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "tooling_support",
+        "guardrail_impact_class": "direct_hal_contract",
         "evidence_origin": "article_text",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -345,58 +83,120 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
         "exclusion_reason_if_not_counted": ""
       },
-      "guardrail_impact_class": "tooling_support",
+      "guardrail_impact_class": "direct_hal_contract",
       "hal_impact_axes": [
-        "native_tooling_workflow"
+        "cts_vts_its_cdd"
       ],
       "actionability_level": "",
       "effective_actionability_level": "",
       "hard_fail_reasons": [],
       "soft_deductions": []
+    },
+    {
+      "index": 2,
+      "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "category": "camera_driver_image_pipeline",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[1/5] libcamera: controls: Expand AWB controls",
+          "url": "https://patchwork.libcamera.org/patch/28387/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28387/",
+        "source_candidate_hash": "74221d8f077b88a9d02df0ec690ec0e58e44318f0b459f549a340905eae1c81b",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
     }
   ],
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 13,
-    "total_claims": 13,
+    "bound_claims": 7,
+    "total_claims": 9,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
-    "available_article_count": 4,
+    "available_article_count": 2,
     "not_available_article_count": 0
   },
   "claim_results": [
     {
       "article_index": 1,
-      "article_headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-      "claim_id": "claim:ed711c4bf2fa1c7c:pm_issue",
+      "article_headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "claim_id": "claim-its-17-recommendation",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "driver_image_pipeline",
+      "impact_level": "cts_vts_its_cdd",
       "overclaim_risk": "low",
-      "text": "시스템 suspend 시 IRQ wake를 활성화한 후 pm_runtime_force_suspend()를 호출하면 활성 ISP의 리셋이 어서트되고 클럭이 비활성화되어 프레임 인터럽트를 생성할 수 없게 되는 문제가 존재합니다.",
+      "text": "Android 17 카메라 이미지 테스트 스위트 릴리스 노트에서 가상 환경을 위해 패키지 관리 소프트웨어를 사용하여 올바른 버전의 패키지를 번들링할 것을 강력히 권장합니다.",
       "evidence_ids": [
-        "candidate:ed711c4bf2fa1c7c:source-summary"
+        "evidence-7db255a84cbe69453a1286f93c83faa8"
       ],
       "resolved_evidence_ids": [
-        "candidate:ed711c4bf2fa1c7c:source-summary"
+        "evidence-7db255a84cbe69453a1286f93c83faa8"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:ed711c4bf2fa1c7c:source-summary",
-          "resolved_evidence_id": "candidate:ed711c4bf2fa1c7c:source-summary",
+          "evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
+          "resolved_evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+        "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -404,33 +204,33 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-      "claim_id": "claim:ed711c4bf2fa1c7c:pm_fix",
+      "article_headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "claim_id": "claim-its-17-python-env",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "driver_image_pipeline",
+      "impact_level": "cts_vts_its_cdd",
       "overclaim_risk": "low",
-      "text": "제안된 패치는 IRQ wake를 활성화하기 전에 런타임 PM 참조를 가져와 resume 시까지 유지함으로써 유휴 ISP의 전원을 켜고 IRQ wake를 활성화할 수 있도록 합니다.",
+      "text": "이 권장 사항은 파이썬 및 패키지 버전에 대한 기준을 다루며 카메라 이미지 테스트 스위트의 개발 환경 구성에 영향을 미칩니다.",
       "evidence_ids": [
-        "candidate:ed711c4bf2fa1c7c:source-summary"
+        "evidence-7db255a84cbe69453a1286f93c83faa8"
       ],
       "resolved_evidence_ids": [
-        "candidate:ed711c4bf2fa1c7c:source-summary"
+        "evidence-7db255a84cbe69453a1286f93c83faa8"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:ed711c4bf2fa1c7c:source-summary",
-          "resolved_evidence_id": "candidate:ed711c4bf2fa1c7c:source-summary",
+          "evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
+          "resolved_evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+        "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -438,67 +238,67 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-      "claim_id": "claim:ed711c4bf2fa1c7c:pm_fail_handling",
-      "claim_type": "fact",
+      "article_headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "claim_id": "claim-its-17-inference",
+      "claim_type": "inference",
       "status": "bound",
-      "impact_level": "driver_image_pipeline",
+      "impact_level": "no_hal_runtime_impact",
       "overclaim_risk": "low",
-      "text": "IRQ wake 설정이 실패하는 경우에는 가져왔던 PM 참조를 즉시 해제합니다.",
+      "text": "이 변경은 카메라 하드웨어 추상화 계층의 런타임 동작을 직접 변경하지 않으며, 검증 환경의 일관성을 높이기 위한 조치입니다.",
       "evidence_ids": [
-        "candidate:ed711c4bf2fa1c7c:source-summary"
+        "evidence-7db255a84cbe69453a1286f93c83faa8"
       ],
       "resolved_evidence_ids": [
-        "candidate:ed711c4bf2fa1c7c:source-summary"
+        "evidence-7db255a84cbe69453a1286f93c83faa8"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:ed711c4bf2fa1c7c:source-summary",
-          "resolved_evidence_id": "candidate:ed711c4bf2fa1c7c:source-summary",
+          "evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
+          "resolved_evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+        "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
       ],
-      "bound": true,
+      "bound": false,
       "derived_evidence_mapping": false,
       "issues": []
     },
     {
-      "article_index": 1,
-      "article_headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-      "claim_id": "claim:ed711c4bf2fa1c7c:patch_status",
+      "article_index": 2,
+      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "claim_id": "claim-libcamera-awb-series",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
+      "impact_level": "driver_image_pipeline",
       "overclaim_risk": "low",
-      "text": "이 패치는 아직 머지되지 않은 제안 상태의 패치 시리즈 중 세 번째 조각입니다.",
+      "text": "이것은 Add AwbState metadata and AwbTrigger control 패치 시리즈의 첫 번째 조각입니다.",
       "evidence_ids": [
-        "candidate:ed711c4bf2fa1c7c:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "resolved_evidence_ids": [
-        "candidate:ed711c4bf2fa1c7c:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:ed711c4bf2fa1c7c:source-summary",
-          "resolved_evidence_id": "candidate:ed711c4bf2fa1c7c:source-summary",
+          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
+          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+        "https://patchwork.libcamera.org/patch/28387/"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -506,33 +306,33 @@
     },
     {
       "article_index": 2,
-      "article_headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-      "claim_id": "claim:70779ee88af5f0a0:merge_date",
+      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "claim_id": "claim-libcamera-awb-state-core",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
+      "impact_level": "driver_image_pipeline",
       "overclaim_risk": "low",
-      "text": "Gerrit 변경 8424692가 2026년 9월 30일에 병합되었습니다.",
+      "text": "AwbState는 드래프트에서 코어 컨트롤로 이동합니다.",
       "evidence_ids": [
-        "candidate:70779ee88af5f0a0:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "resolved_evidence_ids": [
-        "candidate:70779ee88af5f0a0:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:70779ee88af5f0a0:source-summary",
-          "resolved_evidence_id": "candidate:70779ee88af5f0a0:source-summary",
+          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
+          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692"
+        "https://patchwork.libcamera.org/patch/28387/"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -540,33 +340,33 @@
     },
     {
       "article_index": 2,
-      "article_headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-      "claim_id": "claim:70779ee88af5f0a0:affected_file",
+      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "claim_id": "claim-libcamera-awb-locked",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "driver_image_pipeline",
       "overclaim_risk": "low",
-      "text": "이 변경은 chromiumos/platform2/camera/common/still_capture_processor.cc 파일에 영향을 미칩니다.",
+      "text": "AwbLocked는 자동 화이트 밸런스 상태를 고정하는 컨트롤로 재정의됩니다.",
       "evidence_ids": [
-        "candidate:70779ee88af5f0a0:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "resolved_evidence_ids": [
-        "candidate:70779ee88af5f0a0:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:70779ee88af5f0a0:source-summary",
-          "resolved_evidence_id": "candidate:70779ee88af5f0a0:source-summary",
+          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
+          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692"
+        "https://patchwork.libcamera.org/patch/28387/"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -574,239 +374,103 @@
     },
     {
       "article_index": 2,
-      "article_headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-      "claim_id": "claim:70779ee88af5f0a0:bounds_check",
+      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "claim_id": "claim-libcamera-awb-trigger",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "driver_image_pipeline",
       "overclaim_risk": "low",
-      "text": "APPn 마커 파싱 및 BLOB 출력 버퍼 크기에 대한 경계 검사를 추가하여 안정성을 향상시킵니다.",
+      "text": "AwbTrigger는 게인 재계산을 강제하는 메커니즘으로 추가됩니다.",
       "evidence_ids": [
-        "candidate:70779ee88af5f0a0:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "resolved_evidence_ids": [
-        "candidate:70779ee88af5f0a0:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:70779ee88af5f0a0:source-summary",
-          "resolved_evidence_id": "candidate:70779ee88af5f0a0:source-summary",
+          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
+          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692"
+        "https://patchwork.libcamera.org/patch/28387/"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
       "issues": []
     },
     {
-      "article_index": 3,
-      "article_headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-      "claim_id": "claim:011a94a65703be29:merge_date",
+      "article_index": 2,
+      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "claim_id": "claim-libcamera-awb-pending",
       "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "이 패치는 아직 머지되지 않은 제안이며, libcamera Patchwork에서 검토 중입니다.",
+      "evidence_ids": [
+        "candidate:74221d8f077b88a9:source-summary"
+      ],
+      "resolved_evidence_ids": [
+        "candidate:74221d8f077b88a9:source-summary"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
+          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28387/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "claim_id": "claim-libcamera-awb-inference",
+      "claim_type": "inference",
       "status": "bound",
       "impact_level": "no_hal_runtime_impact",
       "overclaim_risk": "low",
-      "text": "Gerrit 변경 8411146이 2026년 9월 30일에 병합되었습니다.",
+      "text": "이 변경 사항은 안드로이드 카메라 하드웨어 추상화 계층에 직접 적용되지 않으며 하위 파이프라인 설계의 참고 자료로 활용되어야 합니다.",
       "evidence_ids": [
-        "candidate:011a94a65703be29:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "resolved_evidence_ids": [
-        "candidate:011a94a65703be29:source-summary"
+        "candidate:74221d8f077b88a9:source-summary"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:011a94a65703be29:source-summary",
-          "resolved_evidence_id": "candidate:011a94a65703be29:source-summary",
+          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
+          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
+        "https://patchwork.libcamera.org/patch/28387/"
       ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 3,
-      "article_headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-      "claim_id": "claim:011a94a65703be29:affected_files",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "이 변경은 chromiumos/platform2/camera/hal_adapter/camera_device_adapter.cc 및 camera_device_adapter.h 파일에 영향을 미칩니다.",
-      "evidence_ids": [
-        "candidate:011a94a65703be29:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:011a94a65703be29:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:011a94a65703be29:source-summary",
-          "resolved_evidence_id": "candidate:011a94a65703be29:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 3,
-      "article_headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-      "claim_id": "claim:011a94a65703be29:exclusivity",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "버퍼 ID의 독점성을 강제하여 버퍼 관리의 일관성과 안정성을 개선합니다.",
-      "evidence_ids": [
-        "candidate:011a94a65703be29:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:011a94a65703be29:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:011a94a65703be29:source-summary",
-          "resolved_evidence_id": "candidate:011a94a65703be29:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 4,
-      "article_headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-      "claim_id": "claim:c08402b8f22a4b15:modernize",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "native_tooling_workflow",
-      "overclaim_risk": "low",
-      "text": "Barclays는 Claude를 사용하여 레거시 플랫폼을 현대화하고 소프트웨어 품질을 개선하며 기술 전문가가 가장 복잡한 문제에 집중할 수 있도록 돕고 있습니다.",
-      "evidence_ids": [
-        "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2"
-      ],
-      "resolved_evidence_ids": [
-        "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2",
-          "resolved_evidence_id": "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://www.anthropic.com/news/barclays-scales-claude"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 4,
-      "article_headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-      "claim_id": "claim:c08402b8f22a4b15:adoption_rate",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "native_tooling_workflow",
-      "overclaim_risk": "low",
-      "text": "Barclays는 Claude Code 채택률이 2026년 말까지 개발자 인구의 50%에 도달하고, 2027년에는 대다수의 소프트웨어 엔지니어로 확대될 것으로 예상하고 있습니다.",
-      "evidence_ids": [
-        "sx:c08402b8f22a4b15:da7f739f6271:2dc9de80555ec1cf"
-      ],
-      "resolved_evidence_ids": [
-        "sx:c08402b8f22a4b15:da7f739f6271:2dc9de80555ec1cf"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "sx:c08402b8f22a4b15:da7f739f6271:2dc9de80555ec1cf",
-          "resolved_evidence_id": "sx:c08402b8f22a4b15:da7f739f6271:2dc9de80555ec1cf",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://www.anthropic.com/news/barclays-scales-claude"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 4,
-      "article_headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-      "claim_id": "claim:c08402b8f22a4b15:agentic_capability",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "native_tooling_workflow",
-      "overclaim_risk": "low",
-      "text": "AI가 기술 구축, 테스트, 보안 및 운영 방식에 점점 더 에이전트 역량으로 내장되고 있습니다.",
-      "evidence_ids": [
-        "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2"
-      ],
-      "resolved_evidence_ids": [
-        "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2",
-          "resolved_evidence_id": "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://www.anthropic.com/news/barclays-scales-claude"
-      ],
-      "bound": true,
+      "bound": false,
       "derived_evidence_mapping": false,
       "issues": []
     }
@@ -814,66 +478,60 @@
   "uncovered_facts": [],
   "hal_signal_quality_summary": {
     "schema_version": 1,
-    "main_article_count": 4,
-    "strong_signal_count": 3,
-    "usable_signal_count": 1,
+    "main_article_count": 2,
+    "strong_signal_count": 0,
+    "usable_signal_count": 2,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
-    "article_count_with_hal_signal_capsule": 4,
+    "article_count_with_hal_signal_capsule": 2,
     "article_count_without_hal_signal_capsule": 0,
     "main_articles_with_owner_metric_log": 0,
-    "main_articles_with_concrete_action": 4,
-    "fallback_main_article_count": 1,
+    "main_articles_with_concrete_action": 2,
+    "fallback_main_article_count": 0,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "generic_signal_hard_blocker_count": 0,
     "hal_signal_hard_blocker_count": 0,
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
-      "driver_image_pipeline": 3,
-      "performance_latency_frame_drop": 1,
-      "stream_buffer_metadata": 2,
-      "native_tooling_workflow": 1
+      "cts_vts_its_cdd": 1,
+      "driver_image_pipeline": 1,
+      "stream_buffer_metadata": 1
     },
     "actionability_level_counts": {
-      "measurable_test": 3,
-      "concrete_check": 1
+      "concrete_check": 2
     },
     "effective_actionability_level_counts": {
-      "measurable_test": 3,
-      "concrete_check": 1
+      "concrete_check": 2
     },
     "signal_quality_status_counts": {
-      "strong_signal": 3,
-      "usable_signal": 1
+      "usable_signal": 2
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-      "url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/",
-      "relevance_bucket": "android",
+      "title": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
-        "driver_image_pipeline",
-        "performance_latency_frame_drop"
+        "cts_vts_its_cdd"
       ],
       "reader_owners": [
-        "camera_driver_owner",
-        "soc_platform_owner"
+        "camera_hal_owner"
       ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
+      "actionability_level": "concrete_check",
+      "effective_actionability_level": "concrete_check",
       "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 3,
+      "signal_quality_status": "usable_signal",
+      "concrete_action_signal_count": 2,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 87): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 2 article-level signal(s) from article_text.)",
+      "fallback_promotion_reason": "",
       "fallback_guard_notes": [
-        "이 패치는 제안 단계의 패치이므로 공식 리눅스 커널이나 Android 공통 커널에 아직 병합되지 않았습니다."
+        "이 변경 사항은 카메라 하드웨어 추상화 계층의 API나 메타데이터 계약을 변경하지 않습니다."
       ],
-      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_type": "",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -884,8 +542,8 @@
     },
     {
       "index": 2,
-      "title": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "title": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "url": "https://patchwork.libcamera.org/patch/28387/",
       "relevance_bucket": "camera_driver_image_pipeline",
       "hal_impact_axes": [
         "driver_image_pipeline",
@@ -894,69 +552,6 @@
       "reader_owners": [
         "camera_hal_owner",
         "camera_driver_owner"
-      ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 3,
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "ChromeOS Gerrit (platform2 camera merged changes) (official, medium, score 62): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "이 변경은 ChromeOS 플랫폼 소스 코드에 적용된 것이며 Android AOSP Camera HAL에 직접 적용되는 것은 아닙니다."
-      ],
-      "soc_signal_type": "isp_image_pipeline",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 3,
-      "title": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "stream_buffer_metadata"
-      ],
-      "reader_owners": [
-        "camera_hal_owner",
-        "camera_driver_owner"
-      ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
-      "actionability_upgrade_reason": "",
-      "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 3,
-      "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "ChromeOS Gerrit (platform2 camera merged changes) (official, medium, score 62): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
-      "fallback_guard_notes": [
-        "이 변경은 ChromeOS 플랫폼 소스 코드에 적용된 것이며 Android AOSP Camera HAL에 직접 적용되는 것은 아닙니다."
-      ],
-      "soc_signal_type": "isp_image_pipeline",
-      "soc_signal_source_allowed": true,
-      "camera_pipeline_link": "",
-      "has_hal_signal_capsule": true,
-      "hal_signal_capsule_complete": true,
-      "hal_signal_capsule_missing_keys": [],
-      "hard_blockers": [],
-      "hard_blocker_reason_codes": []
-    },
-    {
-      "index": 4,
-      "title": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-      "url": "https://www.anthropic.com/news/barclays-scales-claude",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "hal_impact_axes": [
-        "native_tooling_workflow"
-      ],
-      "reader_owners": [
-        "native_tooling_owner",
-        "camera_test_owner"
       ],
       "actionability_level": "concrete_check",
       "effective_actionability_level": "concrete_check",
@@ -964,11 +559,12 @@
       "signal_quality_status": "usable_signal",
       "concrete_action_signal_count": 2,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "Anthropic News (official, medium, score 74): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 63): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 소식은 개발 워크플로우 도구에 대한 것이며 Android Camera HAL의 런타임 동작이나 API 계약에 직접적인 변경을 가져오지 않습니다."
+        "이 패치는 아직 머지되지 않은 제안이며 안드로이드 카메라 하드웨어 추상화 계층에 직접 적용되지 않습니다.",
+        "원문 요약이 일부 누락되어 AwbTrigger의 전체 동작 세부 사항은 확정되지 않았습니다."
       ],
-      "soc_signal_type": "accelerator_camera_workload",
+      "soc_signal_type": "",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -979,38 +575,38 @@
     }
   ],
   "metrics": {
-    "article_count": 4,
+    "article_count": 2,
     "briefing_count": 3,
     "camera_article_count": 2,
-    "legacy_regex_camera_article_count": 3,
-    "expanded_scope_article_count": 4,
-    "direct_aosp_camera_count": 0,
-    "camera_driver_image_pipeline_count": 2,
+    "legacy_regex_camera_article_count": 2,
+    "expanded_scope_article_count": 2,
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 1,
     "android_count": 0,
     "android_multimedia_camera_output_count": 0,
-    "soc_platform_signal_count": 1,
-    "cpp_ai_tooling_fallback_count": 1,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
     "generic_tech_watchlist_count": 0,
     "primary_camera_stack_count": 2,
-    "supporting_main_article_count": 1,
+    "supporting_main_article_count": 0,
     "forbidden_main_article_count": 0,
-    "fallback_relevance_count": 1,
-    "publishable_scope_count": 4,
-    "composition_mode": "FALLBACK_COMPOSITION",
+    "fallback_relevance_count": 0,
+    "publishable_scope_count": 2,
+    "composition_mode": "NORMAL",
     "section_count_details": [
       {
         "index": 1,
-        "headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-        "source_candidate_url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/",
-        "source_candidate_hash": "ed711c4bf2fa1c7c86e5c6524eea32d89fb444589e1c0cc872e270e08641dd67",
-        "relevance_bucket": "android",
-        "editorial_priority": 3,
-        "counts_as_primary_camera_topic": false,
+        "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+        "source_candidate_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+        "source_candidate_hash": "d893134af706f7df8f1c0716f00e4d4128532960bd3886f2d05056796785855e",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
         "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
-        "counts_as_supporting_main_article": true,
+        "counts_as_supporting_main_article": false,
         "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
+        "guardrail_impact_class": "direct_hal_contract",
         "evidence_origin": "article_text",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -1018,14 +614,14 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "android counts toward supporting_main_article_count, not primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
       },
       {
         "index": 2,
-        "headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-        "source_candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
-        "source_candidate_hash": "70779ee88af5f0a0703dd6edcb237705543616f9b933c0834734cd65be2ea4ec",
+        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+        "source_candidate_url": "https://patchwork.libcamera.org/patch/28387/",
+        "source_candidate_hash": "74221d8f077b88a9d02df0ec690ec0e58e44318f0b459f549a340905eae1c81b",
         "relevance_bucket": "camera_driver_image_pipeline",
         "editorial_priority": 5,
         "counts_as_primary_camera_topic": true,
@@ -1042,67 +638,21 @@
         "publishable_scope": true,
         "missing_score_fields": [],
         "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      {
-        "index": 3,
-        "headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-        "source_candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
-        "source_candidate_hash": "011a94a65703be29ba6c9da042017f94e9948f0531659b4919fc4893f7b9e46b",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
-        "counts_as_soc_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
-        "exclusion_reason_if_not_counted": ""
-      },
-      {
-        "index": 4,
-        "headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-        "source_candidate_url": "https://www.anthropic.com/news/barclays-scales-claude",
-        "source_candidate_hash": "c08402b8f22a4b159df3858cefc3416269ca944c9595105093b01c30fd1a8c02",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "editorial_priority": 2,
-        "counts_as_primary_camera_topic": false,
-        "counts_as_driver_topic": false,
-        "counts_as_soc_topic": false,
-        "counts_as_supporting_main_article": false,
-        "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "tooling_support",
-        "evidence_origin": "article_text",
-        "metadata_source": "merged",
-        "binding_status": "bound",
-        "binding_source": "shortlist_selected",
-        "binding_reason": "",
-        "publishable_scope": true,
-        "missing_score_fields": [],
-        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
         "exclusion_reason_if_not_counted": ""
       }
     ],
     "relevance_bucket_counts": {
-      "direct_aosp_camera": 0,
-      "camera_driver_image_pipeline": 2,
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 1,
       "android": 0,
-      "android_supporting": 1,
-      "cpp_ai_tooling_fallback": 1,
+      "android_supporting": 0,
+      "cpp_ai_tooling_fallback": 0,
       "generic_tech_watchlist": 0
     },
     "topic_tier_distribution": {
       "direct_camera": 2,
-      "supporting": 1,
-      "fallback": 1,
+      "supporting": 0,
+      "fallback": 0,
       "watchlist": 0
     },
     "topic_tier_distribution_source": "relevance_bucket",
@@ -1122,7 +672,7 @@
         "generic_tech_watchlist"
       ]
     },
-    "ai_article_count": 1,
+    "ai_article_count": 0,
     "fact_check_status": "PASS",
     "must_fix_count": 0,
     "source_gap_count": 0,
@@ -1133,14 +683,14 @@
     "blocking_deduction_count": 0,
     "blocking_deduction_categories": [],
     "hard_fail_count": 0,
-    "soft_deduction_count": 8,
+    "soft_deduction_count": 3,
     "article_gate_counts": {
-      "PASS": 4,
+      "PASS": 2,
       "DEMOTE": 0,
       "FAIL": 0
     },
     "article_section_contract": {
-      "complete_count": 4,
+      "complete_count": 2,
       "incomplete_count": 0,
       "missing_key_counts": {
         "verified_facts": 0,
@@ -1149,150 +699,102 @@
         "action_items": 0,
         "team_share_points": 0
       },
-      "optional_key_counts": {
-        "known_limitations": 4,
-        "watch_items": 4,
-        "do_not_claim": 4
-      },
+      "optional_key_counts": {},
       "limitation_visibility_counts": {
-        "public-limitation": 4
+        "none": 2
       },
       "summaries": [
         {
           "complete": true,
           "missing_keys": [],
           "missing_required_keys": [],
-          "present_optional_keys": [
-            "known_limitations",
-            "watch_items",
-            "do_not_claim"
-          ],
+          "present_optional_keys": [],
           "unexpected_keys": [],
-          "has_limitations": true,
-          "has_watch_items": true,
-          "has_do_not_claim": true,
-          "limitation_visibility": "public-limitation"
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
         },
         {
           "complete": true,
           "missing_keys": [],
           "missing_required_keys": [],
-          "present_optional_keys": [
-            "known_limitations",
-            "watch_items",
-            "do_not_claim"
-          ],
+          "present_optional_keys": [],
           "unexpected_keys": [],
-          "has_limitations": true,
-          "has_watch_items": true,
-          "has_do_not_claim": true,
-          "limitation_visibility": "public-limitation"
-        },
-        {
-          "complete": true,
-          "missing_keys": [],
-          "missing_required_keys": [],
-          "present_optional_keys": [
-            "known_limitations",
-            "watch_items",
-            "do_not_claim"
-          ],
-          "unexpected_keys": [],
-          "has_limitations": true,
-          "has_watch_items": true,
-          "has_do_not_claim": true,
-          "limitation_visibility": "public-limitation"
-        },
-        {
-          "complete": true,
-          "missing_keys": [],
-          "missing_required_keys": [],
-          "present_optional_keys": [
-            "known_limitations",
-            "watch_items",
-            "do_not_claim"
-          ],
-          "unexpected_keys": [],
-          "has_limitations": true,
-          "has_watch_items": true,
-          "has_do_not_claim": true,
-          "limitation_visibility": "public-limitation"
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
         }
       ]
     },
     "claim_validation_summary": {
       "status": "available",
-      "bound_claims": 13,
-      "total_claims": 13,
+      "bound_claims": 7,
+      "total_claims": 9,
       "derived_evidence_mapping_count": 0,
       "overclaim_risk": "low",
-      "available_article_count": 4,
+      "available_article_count": 2,
       "not_available_article_count": 0
     },
     "derived_evidence_mapping_count": 0,
     "uncovered_fact_count": 0,
     "hal_signal_quality_summary": {
       "schema_version": 1,
-      "main_article_count": 4,
-      "strong_signal_count": 3,
-      "usable_signal_count": 1,
+      "main_article_count": 2,
+      "strong_signal_count": 0,
+      "usable_signal_count": 2,
       "weak_signal_count": 0,
       "watchlist_only_count": 0,
       "blocked_source_gap_count": 0,
-      "article_count_with_hal_signal_capsule": 4,
+      "article_count_with_hal_signal_capsule": 2,
       "article_count_without_hal_signal_capsule": 0,
       "main_articles_with_owner_metric_log": 0,
-      "main_articles_with_concrete_action": 4,
-      "fallback_main_article_count": 1,
+      "main_articles_with_concrete_action": 2,
+      "fallback_main_article_count": 0,
       "android_multimedia_camera_output_count": 0,
       "soc_platform_signal_count": 0,
       "generic_signal_hard_blocker_count": 0,
       "hal_signal_hard_blocker_count": 0,
       "hard_blocker_reason_code_counts": {},
       "hal_impact_axis_counts": {
-        "driver_image_pipeline": 3,
-        "performance_latency_frame_drop": 1,
-        "stream_buffer_metadata": 2,
-        "native_tooling_workflow": 1
+        "cts_vts_its_cdd": 1,
+        "driver_image_pipeline": 1,
+        "stream_buffer_metadata": 1
       },
       "actionability_level_counts": {
-        "measurable_test": 3,
-        "concrete_check": 1
+        "concrete_check": 2
       },
       "effective_actionability_level_counts": {
-        "measurable_test": 3,
-        "concrete_check": 1
+        "concrete_check": 2
       },
       "signal_quality_status_counts": {
-        "strong_signal": 3,
-        "usable_signal": 1
+        "usable_signal": 2
       }
     },
     "main_article_signal_checks": [
       {
         "index": 1,
-        "title": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-        "url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/",
-        "relevance_bucket": "android",
+        "title": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+        "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+        "relevance_bucket": "direct_aosp_camera",
         "hal_impact_axes": [
-          "driver_image_pipeline",
-          "performance_latency_frame_drop"
+          "cts_vts_its_cdd"
         ],
         "reader_owners": [
-          "camera_driver_owner",
-          "soc_platform_owner"
+          "camera_hal_owner"
         ],
-        "actionability_level": "measurable_test",
-        "effective_actionability_level": "measurable_test",
+        "actionability_level": "concrete_check",
+        "effective_actionability_level": "concrete_check",
         "actionability_upgrade_reason": "",
-        "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 3,
+        "signal_quality_status": "usable_signal",
+        "concrete_action_signal_count": 2,
         "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 87): android (Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 2 article-level signal(s) from article_text.)",
+        "fallback_promotion_reason": "",
         "fallback_guard_notes": [
-          "이 패치는 제안 단계의 패치이므로 공식 리눅스 커널이나 Android 공통 커널에 아직 병합되지 않았습니다."
+          "이 변경 사항은 카메라 하드웨어 추상화 계층의 API나 메타데이터 계약을 변경하지 않습니다."
         ],
-        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_type": "",
         "soc_signal_source_allowed": true,
         "camera_pipeline_link": "",
         "has_hal_signal_capsule": true,
@@ -1303,8 +805,8 @@
       },
       {
         "index": 2,
-        "title": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-        "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+        "title": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+        "url": "https://patchwork.libcamera.org/patch/28387/",
         "relevance_bucket": "camera_driver_image_pipeline",
         "hal_impact_axes": [
           "driver_image_pipeline",
@@ -1313,69 +815,6 @@
         "reader_owners": [
           "camera_hal_owner",
           "camera_driver_owner"
-        ],
-        "actionability_level": "measurable_test",
-        "effective_actionability_level": "measurable_test",
-        "actionability_upgrade_reason": "",
-        "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 3,
-        "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "ChromeOS Gerrit (platform2 camera merged changes) (official, medium, score 62): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
-        "fallback_guard_notes": [
-          "이 변경은 ChromeOS 플랫폼 소스 코드에 적용된 것이며 Android AOSP Camera HAL에 직접 적용되는 것은 아닙니다."
-        ],
-        "soc_signal_type": "isp_image_pipeline",
-        "soc_signal_source_allowed": true,
-        "camera_pipeline_link": "",
-        "has_hal_signal_capsule": true,
-        "hal_signal_capsule_complete": true,
-        "hal_signal_capsule_missing_keys": [],
-        "hard_blockers": [],
-        "hard_blocker_reason_codes": []
-      },
-      {
-        "index": 3,
-        "title": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-        "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "hal_impact_axes": [
-          "driver_image_pipeline",
-          "stream_buffer_metadata"
-        ],
-        "reader_owners": [
-          "camera_hal_owner",
-          "camera_driver_owner"
-        ],
-        "actionability_level": "measurable_test",
-        "effective_actionability_level": "measurable_test",
-        "actionability_upgrade_reason": "",
-        "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 3,
-        "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "ChromeOS Gerrit (platform2 camera merged changes) (official, medium, score 62): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
-        "fallback_guard_notes": [
-          "이 변경은 ChromeOS 플랫폼 소스 코드에 적용된 것이며 Android AOSP Camera HAL에 직접 적용되는 것은 아닙니다."
-        ],
-        "soc_signal_type": "isp_image_pipeline",
-        "soc_signal_source_allowed": true,
-        "camera_pipeline_link": "",
-        "has_hal_signal_capsule": true,
-        "hal_signal_capsule_complete": true,
-        "hal_signal_capsule_missing_keys": [],
-        "hard_blockers": [],
-        "hard_blocker_reason_codes": []
-      },
-      {
-        "index": 4,
-        "title": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-        "url": "https://www.anthropic.com/news/barclays-scales-claude",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "hal_impact_axes": [
-          "native_tooling_workflow"
-        ],
-        "reader_owners": [
-          "native_tooling_owner",
-          "camera_test_owner"
         ],
         "actionability_level": "concrete_check",
         "effective_actionability_level": "concrete_check",
@@ -1383,11 +822,12 @@
         "signal_quality_status": "usable_signal",
         "concrete_action_signal_count": 2,
         "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "Anthropic News (official, medium, score 74): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 63): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
         "fallback_guard_notes": [
-          "이 소식은 개발 워크플로우 도구에 대한 것이며 Android Camera HAL의 런타임 동작이나 API 계약에 직접적인 변경을 가져오지 않습니다."
+          "이 패치는 아직 머지되지 않은 제안이며 안드로이드 카메라 하드웨어 추상화 계층에 직접 적용되지 않습니다.",
+          "원문 요약이 일부 누락되어 AwbTrigger의 전체 동작 세부 사항은 확정되지 않았습니다."
         ],
-        "soc_signal_type": "accelerator_camera_workload",
+        "soc_signal_type": "",
         "soc_signal_source_allowed": true,
         "camera_pipeline_link": "",
         "has_hal_signal_capsule": true,
@@ -1400,15 +840,11 @@
     "top_deduction_categories": [
       {
         "category": "editorial-story",
-        "count": 3
+        "count": 2
       },
       {
         "category": "image-fallback",
-        "count": 3
-      },
-      {
-        "category": "linked-evidence-limitation",
-        "count": 2
+        "count": 1
       }
     ],
     "candidate_exclusion_summary": []

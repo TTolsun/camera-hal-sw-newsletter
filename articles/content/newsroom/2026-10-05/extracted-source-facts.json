@@ -1,10 +1,33 @@
 {
   "sources": [
     {
-      "id": "8bc786c47efaf36d",
-      "url": "https://lore.kernel.org/linux-media/20260930-sk5jn5-v6-0-517c9b34008a@oss.qualcomm.com/",
-      "title": "[PATCH v6 0/2] media: i2c: Add Samsung S5KJN5 image sensor",
-      "published_at": "2026-09-30T08:08:19Z",
+      "id": "90b6cdc01cb95494",
+      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+      "published_at": "",
+      "source_type": "source_change_event",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "last_updated_changed: Date signal changed with normalized content hash changed.",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open Source Project\">\n ",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.85,
+      "android_hal_relevance": 0.85,
+      "ai_relevance": 0,
+      "technical_depth": 0.5,
+      "warnings": []
+    },
+    {
+      "id": "19659fe90bc9bb8d",
+      "url": "https://patchwork.libcamera.org/patch/28387/",
+      "title": "[1/5] libcamera: controls: Expand AWB controls",
+      "published_at": "2026-09-28",
       "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -12,176 +35,15 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "This series adds support for the Samsung S5KJN5, a 50 MP 10-bit RAW MIPI CSI-2 image sensor. This is implemented as a separate driver rather than extending the existing s5kjn1 driver. Although both sensors belong to the same family, they are different parts with different register maps and power supplies. Combining support for both devices in a single driver would result in very little shared code while introducing separate initialization and control paths, so keeping them as independent drivers",
-          "evidence_text": "<html><head><title>[PATCH v6 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen and (p",
+          "claim": "Expand the AWB controls. AwbState is moved from draft to core, but the Idle state is dropped since it effectively replicates the meaning of AwbEnable == false. The AwbLocked metadata item is repurposed as a control designed to allow users to freeze the AWB state. AwbTrigger is added a mechanism for forcing a recalculation of the gains to be applied despite that nominally frozen state. Patch under review on the project patch tracker; state new, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[1/5] libcamera: controls: Expand AWB controls - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"/>\n  <scri",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 1,
-      "android_hal_relevance": 1,
-      "ai_relevance": 0,
-      "technical_depth": 0.93,
-      "warnings": []
-    },
-    {
-      "id": "gemini-2e027ba91a7ebd28",
-      "url": "https://lore.kernel.org/linux-media/20260930-sk5jn5-v6-0-517c9b34008a@oss.qualcomm.com/",
-      "title": "[PATCH v6 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu",
-      "published_at": "2026-09-30",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v6 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu",
-          "evidence_text": "<html><head><title>[PATCH v6 0/2] media: i2c: Add Samsung S5KJN5 image sensor - Wenmeng Liu</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen and (p",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.765,
-      "warnings": []
-    },
-    {
-      "id": "95903ff36407b4fa",
-      "url": "https://lore.kernel.org/linux-media/20261002-submission-media-yogabook-v10-b4-final-v10-0-817ec765b257@gmail.com/",
-      "title": "[PATCH v10 00/15] media: Add Lenovo Yoga Book camera support",
-      "published_at": "2026-10-02T08:57:52Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Add camera support for the Lenovo Yoga Book YB1-X91L. The tablet uses an AtomISP ISP2401 with an OV2740 front sensor, an OV8858 rear sensor and a WV517S rear-camera lens actuator. The series adds the missing ACPI and bridge configuration, selects the OV2740 link frequency through the existing IPU PCI-ID mechanism, derives AtomISP CSI-2 timing from the sensor link frequency, enables raw Bayer capture and adds the sensor controls and actuator driver needed by the hardware. Runtime validation used",
-          "evidence_text": "<html><head><title>[PATCH v10 00/15] media: Add Lenovo Yoga Book camera support - Maurizio Casciano via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.93,
-      "android_hal_relevance": 0.93,
-      "ai_relevance": 0,
-      "technical_depth": 0.902,
-      "warnings": []
-    },
-    {
-      "id": "gemini-8486183e90805527",
-      "url": "https://lore.kernel.org/linux-media/20261002-submission-media-yogabook-v10-b4-final-v10-0-817ec765b257@gmail.com/",
-      "title": "[PATCH v10 00/15] media: Add Lenovo Yoga Book camera support - Maurizio Casciano via B4 Relay",
-      "published_at": "2026-10-01",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v10 00/15] media: Add Lenovo Yoga Book camera support - Maurizio Casciano via B4 Relay",
-          "evidence_text": "<html><head><title>[PATCH v10 00/15] media: Add Lenovo Yoga Book camera support - Maurizio Casciano via B4 Relay</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.765,
-      "warnings": []
-    },
-    {
-      "id": "ade0605a82019658",
-      "url": "https://lore.kernel.org/linux-media/CAO7O_xjhrLNFu6sKEFWp8z+UCkcHu9kr9KfxtEQ=T9yKHCQT-w@mail.gmail.com/",
-      "title": "[PATCH v9 00/15] media: Add Lenovo Yoga Book camera support",
-      "published_at": "2026-10-02T08:35:10Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Add camera support for the Lenovo Yoga Book YB1-X91L. The tablet uses an AtomISP ISP2401 with an OV2740 front sensor, an OV8858 rear sensor and a WV517S rear-camera lens actuator. The series adds the missing ACPI and bridge configuration, selects the OV2740 link frequency through the existing IPU PCI-ID mechanism, derives AtomISP CSI-2 timing from the sensor link frequency, enables raw Bayer capture and adds the sensor controls and actuator driver needed by the hardware. Runtime validation used",
-          "evidence_text": "<html><head><title>[PATCH v9 00/15] media: Add Lenovo Yoga Book camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.93,
-      "android_hal_relevance": 0.93,
-      "ai_relevance": 0,
-      "technical_depth": 0.902,
-      "warnings": []
-    },
-    {
-      "id": "gemini-95b3621598864c24",
-      "url": "https://lore.kernel.org/linux-media/CAO7O_xjhrLNFu6sKEFWp8z+UCkcHu9kr9KfxtEQ=T9yKHCQT-w@mail.gmail.com/",
-      "title": "[PATCH v9 00/15] media: Add Lenovo Yoga Book camera support - Maurizio Casciano",
-      "published_at": "2026-10-02",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v9 00/15] media: Add Lenovo Yoga Book camera support - Maurizio Casciano",
-          "evidence_text": "<html><head><title>[PATCH v9 00/15] media: Add Lenovo Yoga Book camera support - Maurizio Casciano</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.765,
-      "warnings": []
-    },
-    {
-      "id": "f161e5b8ff91162b",
-      "url": "https://lore.kernel.org/linux-media/CAO7O_xi61=0kUtYkYFKonaSEJRC_KiXKvgMLSwRbnDTVfmQsPg@mail.gmail.com/",
-      "title": "[PATCH v8 00/15] media: Add Lenovo Yoga Book camera support",
-      "published_at": "2026-10-02T08:16:00Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Add camera support for the Lenovo Yoga Book YB1-X91L. The tablet uses an AtomISP ISP2401 with an OV2740 front sensor, an OV8858 rear sensor and a WV517S rear-camera lens actuator. The series adds the missing ACPI and bridge configuration, selects the OV2740 link frequency through the existing IPU PCI-ID mechanism, derives AtomISP CSI-2 timing from the sensor link frequency, enables raw Bayer capture and adds the sensor controls and actuator driver needed by the hardware. Runtime validation used",
-          "evidence_text": "<html><head><title>[PATCH v8 00/15] media: Add Lenovo Yoga Book camera support - mauriziocasciano7</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.93,
-      "android_hal_relevance": 0.93,
-      "ai_relevance": 0,
-      "technical_depth": 0.902,
-      "warnings": []
-    },
-    {
-      "id": "gemini-0de2532111e61ed6",
-      "url": "https://lore.kernel.org/linux-media/CAO7O_xi61=0kUtYkYFKonaSEJRC_KiXKvgMLSwRbnDTVfmQsPg@mail.gmail.com/",
-      "title": "[PATCH v8 00/15] media: Add Lenovo Yoga Book camera support - mauriziocasciano7",
-      "published_at": "2026-10-02",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v8 00/15] media: Add Lenovo Yoga Book camera support - mauriziocasciano7",
-          "evidence_text": "<html><head><title>[PATCH v8 00/15] media: Add Lenovo Yoga Book camera support - mauriziocasciano7</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"screen",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.765,
+      "camera_relevance": 0.63,
+      "android_hal_relevance": 0.63,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.5,
       "warnings": []
     },
     {
@@ -197,405 +59,14 @@
       "claims": [
         {
           "claim": "System suspend enables IRQ wake and then calls pm_runtime_force_suspend(). For an active ISP this asserts its resets and disables its clocks, so it can no longer generate frame interrupts. An already runtime-suspended ISP is left powered off as well. Take a runtime PM reference before arming IRQ wake and retain it until resume. This powers up an idle ISP and keeps an active ISP's configuration intact. Release the reference if arming wake fails, and use the PM wake policy in both suspend and resu",
-          "evidence_text": "<html><head><title>[PATCH 3/3] media: mali-c55: Keep ISP powered while IRQ wake is armed - Linus Walleij</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"",
+          "evidence_text": "<html><head><title>[PATCH 3/3] media: mali-c55: Keep ISP powered while IRQ wake is armed - Linus Walleij</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?69f2051c /><link\ntype=text/css\nrel=stylesheet\nmedia=\"screen and (prefers-color-sch",
           "confidence": "medium"
         }
       ],
       "camera_relevance": 0.87,
       "android_hal_relevance": 0.87,
       "ai_relevance": 0.5,
-      "technical_depth": 0.878,
-      "warnings": []
-    },
-    {
-      "id": "gemini-3f82fdb8eba27065",
-      "url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/",
-      "title": "[PATCH 3/3] media: mali-c55: Keep ISP powered while IRQ wake is armed - Linus Walleij",
-      "published_at": "2026-09-29",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH 3/3] media: mali-c55: Keep ISP powered while IRQ wake is armed - Linus Walleij",
-          "evidence_text": "<html><head><title>[PATCH 3/3] media: mali-c55: Keep ISP powered while IRQ wake is armed - Linus Walleij</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nmedia=\"",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.81,
-      "warnings": []
-    },
-    {
-      "id": "401f08bb83e4b503",
-      "url": "https://lore.kernel.org/linux-media/20261001085130.84565-1-barnabas.pocze+renesas@ideasonboard.com/",
-      "title": "[PATCH v2] media: rcar-isp: ispcore: Fix inconsistent step sizes",
-      "published_at": "2026-10-01T08:51:36Z",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "`risp_io_{input,capture}_enum_framesizes()` sets the horizontal and vertical step size to 2. However, `risp_io_{input,capture}_try_format()` passes 2 to `v4l_bound_align_image()`, which corresponds to a step size of 2^2 = 4. So move these constants into macros to avoid the repetition, and with that, use 4 as the step size everywhere. Fixes: 2151350f60d1 (\"media: rcar-isp: Add support for ISPCORE\") Signed-off-by: Barnabás Pőcze <barnabas.pocze+renesas@ideasonboard.com> Reviewed-by: Niklas Söderlu",
-          "evidence_text": "<html><head><title>[PATCH v2] media: rcar-isp: ispcore: Fix inconsistent step sizes - Barnab&#225;s P&#337;cze</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nm",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.81,
-      "android_hal_relevance": 0.81,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.854,
-      "warnings": []
-    },
-    {
-      "id": "gemini-b8dd7c76c67f7fd4",
-      "url": "https://lore.kernel.org/linux-media/20261001085130.84565-1-barnabas.pocze+renesas@ideasonboard.com/",
-      "title": "[PATCH v2] media: rcar-isp: ispcore: Fix inconsistent step sizes - Barnab&#225;s P&#337;cze",
-      "published_at": "2026-10-01",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[PATCH v2] media: rcar-isp: ispcore: Fix inconsistent step sizes - Barnab&#225;s P&#337;cze",
-          "evidence_text": "<html><head><title>[PATCH v2] media: rcar-isp: ispcore: Fix inconsistent step sizes - Barnab&#225;s P&#337;cze</title><link\nrel=alternate\ntitle=\"Atom feed\"\nhref=\"../new.atom\"\ntype=\"application/atom+xml\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><style>*{overflow-wrap:anywhere;font-size:100%;font-family:monospace}</style><link\ntype=text/css\nrel=stylesheet\nmedia=screen,print\nhref=../216light.css?6ab69223 /><link\ntype=text/css\nrel=stylesheet\nhref=../216dark.css?6ab69223\nm",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.81,
-      "warnings": []
-    },
-    {
-      "id": "04f18f4ec0b911ac",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
-      "title": "cros_camera_service: Fix UAF in StreamManipulatorHelper - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8247959 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id I090804c2f0ee3d774de0a23bf75c6a407eb5805e; current revision 883b9e0b6fe1. Reviewed: Code-Review carries an approving or recommending vote. It changes 4 file(s) +25/-7, of which 4 are camera paths: chromiumos/platform2/camera/features/hdrnet/hdrnet_stream_manipulator.h, chromiumos/platform2/camera/common/stream_manipulator_helper.h, chromiumos/platform2/camera/common/stream_manipulator_helper.c",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"DSkei9WyfhQH7SXHO1pT8g\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.62,
-      "android_hal_relevance": 0.62,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.815,
-      "warnings": []
-    },
-    {
-      "id": "gemini-9f4e62229aa23ae5",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
-      "title": "Fix for Use-After-Free in StreamManipulatorHelper in cros_camera_service for ChromeOS",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Fix for Use-After-Free in StreamManipulatorHelper in cros_camera_service for ChromeOS",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"DSkei9WyfhQH7SXHO1pT8g\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.583,
-      "warnings": []
-    },
-    {
-      "id": "6bdc7bf72ddbf00a",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
-      "title": "camera: Fix cross-thread UAF in HdrNetStreamManipulator options reload - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8397354 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id Iaf5d08ccfe86faf955089432cd2da53229e2ef88; current revision 45d90b0584e8. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +25/-2, of which 2 are camera paths: chromiumos/platform2/camera/features/hdrnet/hdrnet_stream_manipulator.h, chromiumos/platform2/camera/features/hdrnet/hdrnet_stream_manipulator.cc.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"m-rdMtiiLFK64PWai1sOqg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.62,
-      "android_hal_relevance": 0.62,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.815,
-      "warnings": []
-    },
-    {
-      "id": "gemini-2c7b006a72881e6e",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
-      "title": "Fix for cross-thread Use-After-Free in HdrNetStreamManipulator options reload for ChromeOS camera",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Fix for cross-thread Use-After-Free in HdrNetStreamManipulator options reload for ChromeOS camera",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"m-rdMtiiLFK64PWai1sOqg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.583,
-      "warnings": []
-    },
-    {
-      "id": "a8304a7ecb8d7906",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
-      "title": "camera: Enforce exclusive buffer IDs - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8411146 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id Id1ce4ae76b4855b8d3c562e62a1a8e249c472d85; current revision ac2db0c34901. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +69/-36, of which 2 are camera paths: chromiumos/platform2/camera/hal_adapter/camera_device_adapter.cc, chromiumos/platform2/camera/hal_adapter/camera_device_adapter.h.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"QofVw6L8q27hWney0qwd7g\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.62,
-      "android_hal_relevance": 0.62,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.815,
-      "warnings": []
-    },
-    {
-      "id": "gemini-011a94a65703be29",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
-      "title": "Enforcement of exclusive buffer IDs in ChromeOS camera",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Enforcement of exclusive buffer IDs in ChromeOS camera",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"QofVw6L8q27hWney0qwd7g\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.583,
-      "warnings": []
-    },
-    {
-      "id": "50c77c259dc18a1e",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
-      "title": "camera: Prevent UAF on watcher callback in ReloadableConfigFile - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8424687 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id I711801da6b2e3735da777efc0e1939007c476b61; current revision abd360353a8c. Reviewed: Code-Review carries an approving or recommending vote. It changes 3 file(s) +37/-10, of which 3 are camera paths: chromiumos/platform2/camera/common/reloadable_config_file.cc, chromiumos/platform2/camera/common/reloadable_config_file.h, chromiumos/platform2/camera/features/hdrnet/hdrnet_stream_manipulator.cc.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"5zaeIFE1hD0LWr11WxjKxg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.62,
-      "android_hal_relevance": 0.62,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.815,
-      "warnings": []
-    },
-    {
-      "id": "gemini-80d5fb89c255993c",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
-      "title": "Prevention of Use-After-Free on watcher callback in ReloadableConfigFile for ChromeOS camera",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Prevention of Use-After-Free on watcher callback in ReloadableConfigFile for ChromeOS camera",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"5zaeIFE1hD0LWr11WxjKxg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.537,
-      "warnings": []
-    },
-    {
-      "id": "51cf61e868482023",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
-      "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8424689 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id I1be554dc973fa299b11e0e64e2e9c18ea9bcfebf; current revision 4ef608370cf0. Reviewed: Code-Review carries an approving or recommending vote. It changes 5 file(s) +77/-31, of which 5 are camera paths: chromiumos/platform2/camera/features/portrait_mode/portrait_mode_stream_manipulator.cc, chromiumos/platform2/camera/features/portrait_mode/portrait_mode_effect.h, chromiumos/platform2/camera/feature",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"sAXvsTdAYf7ytUWJieanHA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.62,
-      "android_hal_relevance": 0.62,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.815,
-      "warnings": []
-    },
-    {
-      "id": "gemini-8c3e4fdd73ea0301",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
-      "title": "Prevention of buffer Use-After-Free on PortraitModeEffect timeout in ChromeOS camera",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Prevention of buffer Use-After-Free on PortraitModeEffect timeout in ChromeOS camera",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"sAXvsTdAYf7ytUWJieanHA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.583,
-      "warnings": []
-    },
-    {
-      "id": "1b473ceac34eb92d",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
-      "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8424690 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id Ibff6348ebe8262b286b41e37791ae7cbd328c5d0; current revision 50497e8f36ab. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +59/-5, of which 2 are camera paths: chromiumos/platform2/camera/common/camera_buffer_manager_impl.cc, chromiumos/platform2/camera/hal_adapter/camera_device_adapter.cc.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"o3J6-GN47MUR22owZ_1bgA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.62,
-      "android_hal_relevance": 0.62,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.815,
-      "warnings": []
-    },
-    {
-      "id": "gemini-5383bfc0408ae81d",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
-      "title": "Validation of plane sizes against dmabuf bounds in RegisterBuffer for ChromeOS camera",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Validation of plane sizes against dmabuf bounds in RegisterBuffer for ChromeOS camera",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"o3J6-GN47MUR22owZ_1bgA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.583,
-      "warnings": []
-    },
-    {
-      "id": "325dffdce8c1db73",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
-      "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8424691 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id Ib1ecb1a6d66f60c1350793cc9c00d709a85632fa; current revision 1dbb920a372e. Reviewed: Code-Review carries an approving or recommending vote. It changes 1 file(s) +17/-0, of which 1 are camera paths: chromiumos/platform2/camera/hal_adapter/camera_device_adapter.cc.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"zHUfsR1C5Q81An6iZ2EDWQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.62,
-      "android_hal_relevance": 0.62,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.815,
-      "warnings": []
-    },
-    {
-      "id": "gemini-8d28e7d3853c3aef",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
-      "title": "Validation of plane offsets in RegisterBuffer for ChromeOS camera",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Validation of plane offsets in RegisterBuffer for ChromeOS camera",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"zHUfsR1C5Q81An6iZ2EDWQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.583,
+      "technical_depth": 0.5,
       "warnings": []
     },
     {
@@ -611,136 +82,21 @@
       "claims": [
         {
           "claim": "Gerrit change 8424692 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id I26a2d3853c2ea3755c55d1867a3866ee6fd2be12; current revision a4eb974708fa. Reviewed: Code-Review carries an approving or recommending vote. It changes 1 file(s) +121/-27, of which 1 are camera paths: chromiumos/platform2/camera/common/still_capture_processor_impl.cc.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"cme5jb4sfW6gF40vAXECoQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"y8QqUJ_It7rQi2zCDgk5kg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
       "camera_relevance": 0.62,
       "android_hal_relevance": 0.62,
       "ai_relevance": 0.5,
-      "technical_depth": 0.815,
+      "technical_depth": 0.5,
       "warnings": []
     },
     {
-      "id": "gemini-70779ee88af5f0a0",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
-      "title": "Bounds-checking APPn parsing and BLOB output buffer size in ChromeOS camera",
-      "published_at": "",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Bounds-checking APPn parsing and BLOB output buffer size in ChromeOS camera",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"cme5jb4sfW6gF40vAXECoQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.583,
-      "warnings": []
-    },
-    {
-      "id": "90b6cdc01cb95494",
-      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-      "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
-      "published_at": "",
-      "source_type": "source_change_event",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "last_updated_changed: Date signal changed with normalized content hash changed.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open So",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.85,
-      "android_hal_relevance": 0.85,
-      "ai_relevance": 0,
-      "technical_depth": 0.788,
-      "warnings": []
-    },
-    {
-      "id": "gemini-d893134af706f7df",
-      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-      "title": "Android 17 Camera Image Test Suite release notes &nbsp;|&nbsp; Android Open Source Project",
-      "published_at": "2026-10-01",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Android 17 Camera Image Test Suite release notes &nbsp;|&nbsp; Android Open Source Project",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"es-419-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Open So",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.802,
-      "warnings": []
-    },
-    {
-      "id": "22c6a84df756ebee",
-      "url": "https://android-developers.googleblog.com/2026/10/android-cli-device-streaming-and-skills.html",
-      "title": "Device Streaming and Android skills - available in Android CLI",
-      "published_at": "Fri, 02 Oct 2026 16:00:00 +0000",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Posted by Simona Milanovic, Developer Relations Engineer As Android developers, you have many choices when it comes to the agents, LLMs, tools, and command-line interfaces (CLI) you use for app development. Our goal is to help you build beautiful, high-quality Android apps, no matter how you choose to build. We’re announcing updates to our Android CLI command-line tooling, including the ability to access real devices through Android Device Streaming. We’re also sharing more Android skills , and",
-          "evidence_text": "",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.78,
-      "android_hal_relevance": 0.78,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.794,
-      "warnings": []
-    },
-    {
-      "id": "0031c77075a2b86e",
-      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
-      "title": "Build your way: Use any AI agent of your choice in Android Studio",
-      "published_at": "Thu, 24 Sep 2026 15:59:00 +0000",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "failed",
-      "source_fetch_error": "fetch failed: 429",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Posted by Matthew Warner, Product Manager, Android Developer Experience AI-powered developer tools have become an essential multiplier for engineering productivity, with teams adopting specialized AI coding agents, custom enterprise harnesses, and autonomous tools. It’s important for you to be able to build Android apps in the way that works best for you and your team, and agentic Android development is more open and flexible than ever before. Last year, Android Studio opened up to any AI model",
-          "evidence_text": "",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.96,
-      "android_hal_relevance": 0.96,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.786,
-      "warnings": []
-    },
-    {
-      "id": "49e11beff1e52751",
-      "url": "https://patchwork.libcamera.org/patch/28382/",
-      "title": "[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP",
-      "published_at": "2026-09-25",
+      "id": "a8304a7ecb8d7906",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
+      "title": "camera: Enforce exclusive buffer IDs - chromiumos/platform2",
+      "published_at": "2026-09-30",
       "source_type": "rss_item",
       "source_fetch_used": true,
       "source_fetch_status": "success",
@@ -748,176 +104,15 @@
       "validation_mode": "source_fetch",
       "claims": [
         {
-          "claim": "Patch under review on the project patch tracker (submitted by Alexi Birlinger); state new, a proposed change not yet landed.",
-          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/stati",
+          "claim": "Gerrit change 8411146 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id Id1ce4ae76b4855b8d3c562e62a1a8e249c472d85; current revision ac2db0c34901. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +69/-36, of which 2 are camera paths: chromiumos/platform2/camera/hal_adapter/camera_device_adapter.cc, chromiumos/platform2/camera/hal_adapter/camera_device_adapter.h.",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"HKXnA38__wLGbUZl2VFJlw\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
-      "camera_relevance": 0.69,
-      "android_hal_relevance": 0.69,
-      "ai_relevance": 0,
-      "technical_depth": 0.786,
-      "warnings": []
-    },
-    {
-      "id": "gemini-3c9f683ad7d46e11",
-      "url": "https://patchwork.libcamera.org/patch/28382/",
-      "title": "[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP - Patchwork",
-      "published_at": "",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP - Patchwork",
-          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2] libcamera: pipeline: simple: Reject multiple processed streams with software ISP - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/stati",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.545,
-      "warnings": []
-    },
-    {
-      "id": "6e070def1f0204df",
-      "url": "https://patchwork.libcamera.org/patch/28394/",
-      "title": "[v2] libcamera: software_isp: Add R10 and R10_CSI2P monochrome formats",
-      "published_at": "2026-10-03",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Patch under review on the project patch tracker (submitted by Alain Cousinié); state new, a proposed change not yet landed.",
-          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2] libcamera: software_isp: Add R10 and R10_CSI2P monochrome formats - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3e",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.63,
-      "android_hal_relevance": 0.63,
+      "camera_relevance": 0.62,
+      "android_hal_relevance": 0.62,
       "ai_relevance": 0.5,
-      "technical_depth": 0.782,
-      "warnings": []
-    },
-    {
-      "id": "gemini-f8dbebf1d2349816",
-      "url": "https://patchwork.libcamera.org/patch/28394/",
-      "title": "[v2] libcamera: software_isp: Add R10 and R10_CSI2P monochrome formats - Patchwork",
-      "published_at": "",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "[v2] libcamera: software_isp: Add R10 and R10_CSI2P monochrome formats - Patchwork",
-          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>[v2] libcamera: software_isp: Add R10 and R10_CSI2P monochrome formats - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3e",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.45,
-      "android_hal_relevance": 0.45,
-      "ai_relevance": 0,
-      "technical_depth": 0.545,
-      "warnings": []
-    },
-    {
-      "id": "1d1e568a3519b43c",
-      "url": "https://www.anthropic.com/news/barclays-scales-claude",
-      "title": "Barclays scales Claude to upgrade operations and improve client experience",
-      "published_at": "2026-10-01",
-      "source_type": "blog_post_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Barclays scales Claude to upgrade operations and improve client experience Oct 1, 2026 Barclays, the British universal bank, is expanding its strategic collaboration with Anthropic to integrate secure, enterprise-grade AI systems across its global operations. Barclays is extending Claude across the bank to accelerate software development, modernize legacy systems, and improve operational efficiency.",
-          "evidence_text": "<!DOCTYPE html><html lang=\"en\" class=\"anthropicsans_dce02d96-module__tEBbKW__variable anthropicserif_e7e46c4-module__uImRTq__variable anthropicmono_fae19af3-module__c5XAsG__variable copernicus_e225fe92-module__gIXlfG__variable styrenea_ba30709d-module__X1taUa__variable styreneb_ef815608-module__QsOdUa__variable tiempostext_b1e9a056-module__lQ_52W__variable jetbrainsmono_4a81325a-module__1wasHq__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scal",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.74,
-      "android_hal_relevance": 0.74,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.773,
-      "warnings": []
-    },
-    {
-      "id": "gemini-c08402b8f22a4b15",
-      "url": "https://www.anthropic.com/news/barclays-scales-claude",
-      "title": "Barclays scales Claude to upgrade operations and improve client experience \\ Anthropic",
-      "published_at": "2026-10-01",
-      "source_type": "official_blog",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Barclays scales Claude to upgrade operations and improve client experience \\ Anthropic",
-          "evidence_text": "<!DOCTYPE html><html lang=\"en\" class=\"anthropicsans_dce02d96-module__tEBbKW__variable anthropicserif_e7e46c4-module__uImRTq__variable anthropicmono_fae19af3-module__c5XAsG__variable copernicus_e225fe92-module__gIXlfG__variable styrenea_ba30709d-module__X1taUa__variable styreneb_ef815608-module__QsOdUa__variable tiempostext_b1e9a056-module__lQ_52W__variable jetbrainsmono_4a81325a-module__1wasHq__variable\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scal",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.757,
-      "warnings": []
-    },
-    {
-      "id": "01bdb98ef74fa01b",
-      "url": "https://patchwork.libcamera.org/patch/28214/",
-      "title": "libcamera: sensor: Decrease priority for CameraSensorRaw",
-      "published_at": "2026-09-09",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Patch under review on the project patch tracker (submitted by Jai Luthra); state accepted, a proposed change not yet landed.",
-          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: sensor: Decrease priority for CameraSensorRaw - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.75,
-      "android_hal_relevance": 0.75,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.735,
-      "warnings": []
-    },
-    {
-      "id": "gemini-91736b47694caf2a",
-      "url": "https://patchwork.libcamera.org/patch/28214/",
-      "title": "libcamera: sensor: Decrease priority for CameraSensorRaw - Patchwork",
-      "published_at": "2026-09-09",
-      "source_type": "unknown",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "libcamera: sensor: Decrease priority for CameraSensorRaw - Patchwork",
-          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: sensor: Decrease priority for CameraSensorRaw - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac970bf6b.css\"",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.7,
-      "android_hal_relevance": 0.7,
-      "ai_relevance": 0,
-      "technical_depth": 0.715,
+      "technical_depth": 0.5,
       "warnings": []
     }
   ]

@@ -8,18 +8,18 @@
 - Max threshold USD: 0.25
 - Pro policy: disabled
 - Request count: 1
-- Prompt tokens: 2997
-- Output tokens: 1977
+- Prompt tokens: 1918
+- Output tokens: 1218
 - Thinking tokens: 0
 - Cached tokens: 0
-- Total tokens: 4974
-- Estimated cost USD: 0.005842
+- Total tokens: 3136
+- Estimated cost USD: 0.003620
 
 ## Calls
 
 | Provider | Stage | Group | Primary | Attempt Model | Resolved By | Fallbacks | Model | Attempt | Prompt | Output | Thinking | Requested Budget | Applied Budget | Cached | Pro | Estimated USD |
 | --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
-| gemini | translate attempt 1/2 | translate | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 2997 | 1977 | 0 | 0 | 0 | 0 | no | 0.005842 |
+| gemini | translate attempt 1/2 | translate | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 1918 | 1218 | 0 | 0 | 0 | 0 | no | 0.003620 |
 
 ## Warnings
 

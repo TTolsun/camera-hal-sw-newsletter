@@ -7,20 +7,12 @@
   "restored_to_keep_minimum": [],
   "final_section_sources": [
     {
-      "title": "PATCH 3/3 media: mali-c55: Keep ISP powered while IRQ wake is armed",
-      "url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+      "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+      "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
     },
     {
-      "title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692"
-    },
-    {
-      "title": "camera: Enforce exclusive buffer IDs - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
-    },
-    {
-      "title": "Barclays scales Claude to upgrade operations and improve client experience",
-      "url": "https://www.anthropic.com/news/barclays-scales-claude"
+      "title": "[1/5] libcamera: controls: Expand AWB controls",
+      "url": "https://patchwork.libcamera.org/patch/28387/"
     }
   ],
   "stale_claim_items_removed": [],
