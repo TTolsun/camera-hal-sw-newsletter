@@ -1,0 +1,408 @@
+{
+  "schema_version": 1,
+  "proposal_type": "gemini_source_discovery",
+  "newsletter_date": "2026-10-05",
+  "proposals": [
+    {
+      "proposal_id": "camera-hal-aosp-its-release-notes-17",
+      "topic_gap": "Android 17 Camera Image Test Suite release notes",
+      "source_family": "aosp-camera-its-release-notes",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android 17 Camera ITS release notes",
+        "Camera Image Test Suite changes"
+      ],
+      "candidate_urls": [
+        "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
+      ],
+      "expected_evidence": [
+        "Camera ITS release notes for Android 17",
+        "New test cases or changes in existing tests",
+        "Impact on camera HAL or device compatibility"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-yogabook-support",
+      "topic_gap": "Lenovo Yoga Book camera support in Linux kernel media subsystem",
+      "source_family": "lore.kernel.org linux-media list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Lenovo Yoga Book camera Linux kernel",
+        "linux-media patches Yogabook",
+        "V4L2 driver Yogabook"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20261002-submission-media-yogabook-v10-b4-final-v10-0-817ec765b257@gmail.com/",
+        "https://lore.kernel.org/linux-media/CAO7O_xjhrLNFu6sKEFWp8z+UCkcHu9kr9KfxtEQ=T9yKHCQT-w@mail.gmail.com/",
+        "https://lore.kernel.org/linux-media/CAO7O_xi61=0kUtYkYFKonaSEJRC_KiXKvgMLSwRbnDTVfmQsPg@mail.gmail.com/"
+      ],
+      "expected_evidence": [
+        "Kernel patches for Lenovo Yoga Book camera driver",
+        "Integration with V4L2 or media controller framework",
+        "Specific sensor or ISP support details"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-samsung-jn5-sensor",
+      "topic_gap": "Samsung S5KJN5 image sensor support in Linux kernel media subsystem",
+      "source_family": "lore.kernel.org linux-media list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Samsung S5KJN5 sensor Linux kernel",
+        "linux-media patches S5KJN5",
+        "V4L2 driver S5KJN5"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260930-sk5jn5-v6-0-517c9b34008a@oss.qualcomm.com/"
+      ],
+      "expected_evidence": [
+        "Kernel patches for Samsung S5KJN5 sensor",
+        "Integration with V4L2 or media controller framework",
+        "Sensor capabilities and driver implementation"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-mali-c55-isp-power",
+      "topic_gap": "Mali-C55 ISP power management during IRQ wake in Linux kernel",
+      "source_family": "lore.kernel.org linux-media list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Mali-C55 ISP power Linux kernel",
+        "linux-media Mali-C55 IRQ wake",
+        "ISP power management"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+      ],
+      "expected_evidence": [
+        "Kernel patch for Mali-C55 power management",
+        "Details on IRQ wake handling",
+        "Impact on camera pipeline stability or power consumption"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-rcar-ispcore-steps",
+      "topic_gap": "Fix for inconsistent step sizes in R-Car ISPcore in Linux kernel",
+      "source_family": "lore.kernel.org linux-media list",
+      "allowed_domains": [],
+      "search_keywords": [
+        "R-Car ISPcore step size Linux kernel",
+        "linux-media rcar-ispcore fix",
+        "ISP step size inconsistency"
+      ],
+      "candidate_urls": [
+        "https://lore.kernel.org/linux-media/20261001085130.84565-1-barnabas.pocze+renesas@ideasonboard.com/"
+      ],
+      "expected_evidence": [
+        "Kernel patch for R-Car ISPcore step size correction",
+        "Explanation of the inconsistency and fix",
+        "Impact on image processing or camera output"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-software-isp-formats",
+      "topic_gap": "Addition of R10 and R10_CSI2P monochrome formats to libcamera's software ISP",
+      "source_family": "libcamera Patchwork (patch review)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera software ISP R10",
+        "monochrome formats libcamera",
+        "R10_CSI2P support"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28394/"
+      ],
+      "expected_evidence": [
+        "libcamera patch for new monochrome formats",
+        "Support for R10 and R10_CSI2P formats",
+        "Impact on software ISP capabilities"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-sensor-priority-decrease",
+      "topic_gap": "Decreased priority for CameraSensorRaw in libcamera",
+      "source_family": "libcamera Patchwork (patch review)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera CameraSensorRaw priority",
+        "camera sensor handling",
+        "libcamera pipeline optimization"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28214/"
+      ],
+      "expected_evidence": [
+        "libcamera patch for CameraSensorRaw priority",
+        "Reasoning for the priority decrease",
+        "Impact on camera sensor handling or pipeline"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-pipeline-simple-reject-multiple-streams",
+      "topic_gap": "Rejection of multiple processed streams with software ISP in libcamera's simple pipeline",
+      "source_family": "libcamera Patchwork (patch review)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera simple pipeline streams",
+        "software ISP stream rejection",
+        "libcamera pipeline limitations"
+      ],
+      "candidate_urls": [
+        "https://patchwork.libcamera.org/patch/28382/"
+      ],
+      "expected_evidence": [
+        "libcamera patch for pipeline stream rejection",
+        "Conditions under which multiple streams are rejected",
+        "Impact on software ISP usage in simple pipelines"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "chromeos-camera-bounds-check-appn-blob",
+      "topic_gap": "Bounds-checking APPn parsing and BLOB output buffer size in ChromeOS camera",
+      "source_family": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ChromeOS camera APPn bounds check",
+        "BLOB buffer size camera",
+        "chromiumos platform2 camera security"
+      ],
+      "candidate_urls": [
+        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692"
+      ],
+      "expected_evidence": [
+        "ChromeOS camera patch for APPn parsing and BLOB buffer size",
+        "Security or stability improvements",
+        "Impact on camera data handling"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "chromeos-camera-validate-plane-offsets",
+      "topic_gap": "Validation of plane offsets in RegisterBuffer for ChromeOS camera",
+      "source_family": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ChromeOS camera RegisterBuffer plane offsets",
+        "camera buffer validation",
+        "chromiumos platform2 camera dmabuf"
+      ],
+      "candidate_urls": [
+        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691"
+      ],
+      "expected_evidence": [
+        "ChromeOS camera patch for plane offset validation",
+        "RegisterBuffer functionality",
+        "Impact on camera buffer management"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "chromeos-camera-validate-plane-sizes",
+      "topic_gap": "Validation of plane sizes against dmabuf bounds in RegisterBuffer for ChromeOS camera",
+      "source_family": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ChromeOS camera RegisterBuffer plane sizes",
+        "dmabuf bounds camera",
+        "chromiumos platform2 camera buffer security"
+      ],
+      "candidate_urls": [
+        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690"
+      ],
+      "expected_evidence": [
+        "ChromeOS camera patch for plane size validation",
+        "dmabuf bounds checking",
+        "Impact on camera buffer integrity"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "chromeos-camera-prevent-buffer-uaf-portraitmode",
+      "topic_gap": "Prevention of buffer Use-After-Free on PortraitModeEffect timeout in ChromeOS camera",
+      "source_family": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ChromeOS camera PortraitModeEffect UAF",
+        "camera buffer Use-After-Free",
+        "chromiumos platform2 camera stability"
+      ],
+      "candidate_urls": [
+        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689"
+      ],
+      "expected_evidence": [
+        "ChromeOS camera patch for PortraitModeEffect UAF",
+        "Memory safety improvements",
+        "Impact on camera stability during portrait mode"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "chromeos-camera-prevent-uaf-watcher-callback",
+      "topic_gap": "Prevention of Use-After-Free on watcher callback in ReloadableConfigFile for ChromeOS camera",
+      "source_family": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ChromeOS camera ReloadableConfigFile UAF",
+        "watcher callback camera",
+        "chromiumos platform2 camera config"
+      ],
+      "candidate_urls": [
+        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687"
+      ],
+      "expected_evidence": [
+        "ChromeOS camera patch for ReloadableConfigFile UAF",
+        "Watcher callback handling",
+        "Impact on camera configuration loading"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "chromeos-cros-camera-service-fix-streammanipulator-uaf",
+      "topic_gap": "Fix for Use-After-Free in StreamManipulatorHelper in cros_camera_service for ChromeOS",
+      "source_family": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ChromeOS cros_camera_service StreamManipulatorHelper UAF",
+        "camera stream manipulator",
+        "chromiumos platform2 camera service"
+      ],
+      "candidate_urls": [
+        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959"
+      ],
+      "expected_evidence": [
+        "ChromeOS camera service patch for StreamManipulatorHelper UAF",
+        "Stream manipulator logic",
+        "Impact on camera processing pipeline"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "chromeos-camera-fix-hdrnetstream-uaf",
+      "topic_gap": "Fix for cross-thread Use-After-Free in HdrNetStreamManipulator options reload for ChromeOS camera",
+      "source_family": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ChromeOS camera HdrNetStreamManipulator UAF",
+        "cross-thread UAF camera",
+        "chromiumos platform2 camera HDR"
+      ],
+      "candidate_urls": [
+        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354"
+      ],
+      "expected_evidence": [
+        "ChromeOS camera patch for HdrNetStreamManipulator UAF",
+        "Cross-thread synchronization",
+        "Impact on HDR processing and configuration"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "chromeos-camera-enforce-exclusive-buffer-ids",
+      "topic_gap": "Enforcement of exclusive buffer IDs in ChromeOS camera",
+      "source_family": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "allowed_domains": [],
+      "search_keywords": [
+        "ChromeOS camera exclusive buffer IDs",
+        "camera buffer allocation",
+        "chromiumos platform2 camera buffer management"
+      ],
+      "candidate_urls": [
+        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
+      ],
+      "expected_evidence": [
+        "ChromeOS camera patch for exclusive buffer IDs",
+        "Buffer ID management",
+        "Impact on camera buffer allocation and usage"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-device-streaming",
+      "topic_gap": "Device streaming capabilities on Android, potentially impacting camera output or remote access",
+      "source_family": "Android Developers Blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android device streaming",
+        "camera streaming Android",
+        "remote camera access Android"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/10/android-cli-device-streaming-and-skills.html"
+      ],
+      "expected_evidence": [
+        "Details on device streaming features",
+        "How it relates to camera or media pipelines",
+        "Developer impact or new capabilities"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "android-developers-blog-android-studio-ai-agents",
+      "topic_gap": "Integration of AI agents in Android Studio, potentially affecting developer workflows for camera features",
+      "source_family": "Android Developers Blog",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Android Studio AI agents",
+        "camera development AI",
+        "developer tools Android"
+      ],
+      "candidate_urls": [
+        "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+      ],
+      "expected_evidence": [
+        "Information on AI agents in Android Studio",
+        "How they can be used for camera development or debugging",
+        "Developer productivity enhancements"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "barclays-claude-ai-upgrade",
+      "topic_gap": "Barclays scaling Claude for operations, potentially indicating advancements in AI agent capabilities relevant to media processing or analysis.",
+      "source_family": "Anthropic News",
+      "allowed_domains": [],
+      "search_keywords": [
+        "Barclays Claude AI",
+        "AI agent scaling",
+        "enterprise AI adoption"
+      ],
+      "candidate_urls": [
+        "https://www.anthropic.com/news/barclays-scales-claude"
+      ],
+      "expected_evidence": [
+        "Details on how Claude is used by Barclays",
+        "Impact on operations or client experience",
+        "Advancements in AI agent technology"
+      ],
+      "risk_notes": []
+    },
+    {
+      "proposal_id": "libcamera-upstream-r10-r10_csi2p",
+      "topic_gap": "Upstream libcamera support for R10 and R10_CSI2P monochrome formats.",
+      "source_family": "libcamera Upstream Releases",
+      "allowed_domains": [],
+      "search_keywords": [
+        "libcamera R10 format",
+        "R10_CSI2P monochrome",
+        "libcamera upstream release notes"
+      ],
+      "candidate_urls": [
+        "https://gitlab.com/libcamera/libcamera/-/tags"
+      ],
+      "expected_evidence": [
+        "Release notes or commit logs mentioning R10/R10_CSI2P formats",
+        "Details on the implementation in libcamera",
+        "Support for these formats in camera pipelines"
+      ],
+      "risk_notes": []
+    }
+  ]
+}

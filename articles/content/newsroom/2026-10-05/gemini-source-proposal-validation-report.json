@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "report_type": "gemini_source_proposal_validation",
+  "newsletter_date": "2026-10-05",
+  "validations": [
+    {
+      "proposal_id": "camera-hal-aosp-its-release-notes-17",
+      "candidate_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "normalized_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "android-compatibility-definition-document"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-yogabook-support",
+      "candidate_url": "https://lore.kernel.org/linux-media/20261002-submission-media-yogabook-v10-b4-final-v10-0-817ec765b257@gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20261002-submission-media-yogabook-v10-b4-final-v10-0-817ec765b257@gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-yogabook-support",
+      "candidate_url": "https://lore.kernel.org/linux-media/CAO7O_xjhrLNFu6sKEFWp8z+UCkcHu9kr9KfxtEQ=T9yKHCQT-w@mail.gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/CAO7O_xjhrLNFu6sKEFWp8z+UCkcHu9kr9KfxtEQ=T9yKHCQT-w@mail.gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-yogabook-support",
+      "candidate_url": "https://lore.kernel.org/linux-media/CAO7O_xi61=0kUtYkYFKonaSEJRC_KiXKvgMLSwRbnDTVfmQsPg@mail.gmail.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/CAO7O_xi61=0kUtYkYFKonaSEJRC_KiXKvgMLSwRbnDTVfmQsPg@mail.gmail.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-samsung-jn5-sensor",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260930-sk5jn5-v6-0-517c9b34008a@oss.qualcomm.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260930-sk5jn5-v6-0-517c9b34008a@oss.qualcomm.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-mali-c55-isp-power",
+      "candidate_url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "camera-hal-linux-media-rcar-ispcore-steps",
+      "candidate_url": "https://lore.kernel.org/linux-media/20261001085130.84565-1-barnabas.pocze+renesas@ideasonboard.com/",
+      "normalized_url": "https://lore.kernel.org/linux-media/20261001085130.84565-1-barnabas.pocze+renesas@ideasonboard.com/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "lore-linux-media-ipu"
+    },
+    {
+      "proposal_id": "libcamera-software-isp-formats",
+      "candidate_url": "https://patchwork.libcamera.org/patch/28394/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/28394/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-sensor-priority-decrease",
+      "candidate_url": "https://patchwork.libcamera.org/patch/28214/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/28214/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "libcamera-pipeline-simple-reject-multiple-streams",
+      "candidate_url": "https://patchwork.libcamera.org/patch/28382/",
+      "normalized_url": "https://patchwork.libcamera.org/patch/28382/",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "patchwork-libcamera-patches"
+    },
+    {
+      "proposal_id": "chromeos-camera-bounds-check-appn-blob",
+      "candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "chromeos-gerrit-camera-changes"
+    },
+    {
+      "proposal_id": "chromeos-camera-validate-plane-offsets",
+      "candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "chromeos-gerrit-camera-changes"
+    },
+    {
+      "proposal_id": "chromeos-camera-validate-plane-sizes",
+      "candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "chromeos-gerrit-camera-changes"
+    },
+    {
+      "proposal_id": "chromeos-camera-prevent-buffer-uaf-portraitmode",
+      "candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "chromeos-gerrit-camera-changes"
+    },
+    {
+      "proposal_id": "chromeos-camera-prevent-uaf-watcher-callback",
+      "candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
+      "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "chromeos-gerrit-camera-changes"
+    },
+    {
+      "proposal_id": "chromeos-cros-camera-service-fix-streammanipulator-uaf",
+      "candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
+      "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "chromeos-gerrit-camera-changes"
+    },
+    {
+      "proposal_id": "chromeos-camera-fix-hdrnetstream-uaf",
+      "candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
+      "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "chromeos-gerrit-camera-changes"
+    },
+    {
+      "proposal_id": "chromeos-camera-enforce-exclusive-buffer-ids",
+      "candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
+      "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "chromeos-gerrit-camera-changes"
+    },
+    {
+      "proposal_id": "android-developers-blog-device-streaming",
+      "candidate_url": "https://android-developers.googleblog.com/2026/10/android-cli-device-streaming-and-skills.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/10/android-cli-device-streaming-and-skills.html",
+      "accepted": false,
+      "rejected_reason": "fetch_failed",
+      "source_policy_match": "android-developers-blog",
+      "message": "fetch failed: 429"
+    },
+    {
+      "proposal_id": "android-developers-blog-android-studio-ai-agents",
+      "candidate_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "normalized_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "accepted": false,
+      "rejected_reason": "fetch_failed",
+      "source_policy_match": "android-developers-blog",
+      "message": "fetch failed: 429"
+    },
+    {
+      "proposal_id": "barclays-claude-ai-upgrade",
+      "candidate_url": "https://www.anthropic.com/news/barclays-scales-claude",
+      "normalized_url": "https://www.anthropic.com/news/barclays-scales-claude",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "anthropic-news"
+    },
+    {
+      "proposal_id": "libcamera-upstream-r10-r10_csi2p",
+      "candidate_url": "https://gitlab.com/libcamera/libcamera/-/tags",
+      "normalized_url": "https://gitlab.com/libcamera/libcamera/-/tags",
+      "accepted": true,
+      "rejected_reason": "",
+      "source_policy_match": "libcamera-upstream-releases"
+    }
+  ],
+  "counts": {
+    "accepted": 20,
+    "fetch_failed": 2
+  }
+}
