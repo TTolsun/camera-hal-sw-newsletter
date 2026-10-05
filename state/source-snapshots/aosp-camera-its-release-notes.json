@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "aosp-camera-its-release-notes",
-  "updated_at": "2026-09-28T00:00:00.000Z",
+  "updated_at": "2026-10-05T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "aosp-camera-its-release-notes:a67cc111aac23254e453759a5bae82dc",
@@ -28,8 +28,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-09-28T00:00:00.000Z",
-      "seen_count": 15,
+      "last_seen_at": "2026-10-05T00:00:00.000Z",
+      "seen_count": 16,
       "status": 200
     },
     {
@@ -38,17 +38,17 @@
       "canonical_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
       "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
       "visible_date": "",
-      "visible_last_updated": "2026-09-22",
+      "visible_last_updated": "2026-10-01",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-09-22",
-      "content_hash": "a3a4238272a2133fbb1a9b16c4518f6b43197c1f7bb0f2e3341586d3ca2a1fa9",
-      "normalized_content_hash": "c9e7c745912629068a83a0332558d5556b862a363f57bb3e71f500bc9b0fe425",
+      "http_last_modified": "2026-10-01",
+      "content_hash": "9f6c2e11a534fb42dcc14cdccf8dc24c989cc816844f9d1375240efcb4e3f9ce",
+      "normalized_content_hash": "2520441c8626ffb8f0b199a2aed7572b3cc9a7fcd3e6aa9508571f13cc928f59",
       "release_note_sections": [
         {
           "heading": "Python and package versions",
-          "hash": "5d49367941066b4f"
+          "hash": "268169d9559f8515"
         },
         {
           "heading": "New or updated scenes",
@@ -98,8 +98,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-03T00:00:00.000Z",
-      "last_seen_at": "2026-09-28T00:00:00.000Z",
-      "seen_count": 15,
+      "last_seen_at": "2026-10-05T00:00:00.000Z",
+      "seen_count": 16,
       "status": 200
     }
   ],
@@ -110,7 +110,8 @@
     "source-event-2de70121de00c902be944bc113470942",
     "source-event-ccd0690c57ad3f4db1f1e3509abf02e4",
     "source-event-668e228b103409e520cb2146e738ec03",
-    "source-event-d49655b8b45bba0c8786d7958540bc18"
+    "source-event-d49655b8b45bba0c8786d7958540bc18",
+    "source-event-063bd66226c13cf7ea7f64c1d82476d5"
   ],
   "processed_evidence_ids": [
     "evidence-e3e8f17f3e26e490f5c7766bd371bcae",
@@ -118,6 +119,7 @@
     "evidence-ef0a9f4a7df7d82f0fd078b98765087f",
     "evidence-e879d366803f89f8d90d69c6f7a15ca7",
     "evidence-50404c40b2189dcfcf44f0360bbd5f67",
-    "evidence-a1d50c4f6c8bffeff92b8ffafae16e4c"
+    "evidence-a1d50c4f6c8bffeff92b8ffafae16e4c",
+    "evidence-7db255a84cbe69453a1286f93c83faa8"
   ]
 }

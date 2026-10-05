@@ -118,6 +118,16 @@
           "date_confidence": 85,
           "origin": "document_section",
           "detected_at": "2026-09-28"
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",
+          "excerpt": "For Android 17 and higher, we strongly recommend using package management software to bundle the correct versions of packages to create a virtual environment for Android release development.",
+          "fingerprint": "268169d9559f8515",
+          "effective_date": "2026-10-01",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "document_section",
+          "detected_at": "2026-10-05"
         }
       ]
     },
@@ -516,6 +526,34 @@
           "date_confidence": 85,
           "origin": "monitor_event",
           "detected_at": "2026-09-28"
+        },
+        {
+          "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+          "excerpt": "Date signal changed with normalized content hash changed.",
+          "fingerprint": "evidence-7db255a84cbe69453a1286f93c83faa8",
+          "effective_date": "2026-10-01",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "monitor_event",
+          "detected_at": "2026-10-05"
+        }
+      ]
+    },
+    {
+      "topic_key": "https://android-developers.googleblog.com/2026/09/jetpack-compose-ai-native-ui-instagram-direct.html",
+      "title": "How Instagram Direct engineers built AI-native UI architecture with Jetpack Compose and reduced token cost per agent session by 33%",
+      "bucket": "android",
+      "status": "queued",
+      "evidence": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/09/jetpack-compose-ai-native-ui-instagram-direct.html",
+          "excerpt": "Posted by Pavlo Stavytskyi, Software Engineer, Meta and Rebecca Franks, Developer Relations Engineer, Google This blog post is written in collaboration with the Meta team. Instagram Direct is one of the core surfaces on Instagram, handling billions of user messages every single day. Over years of iteration, the team squeezed every micro-optimization possible",
+          "fingerprint": "1d0fa1aa32794c35d55c67c4",
+          "effective_date": "Wed, 30 Sep 2026 19:00:00 +0000",
+          "date_source": "candidate_published_at",
+          "date_confidence": 0,
+          "origin": "demoted_candidate",
+          "detected_at": "2026-10-05"
         }
       ]
     }
