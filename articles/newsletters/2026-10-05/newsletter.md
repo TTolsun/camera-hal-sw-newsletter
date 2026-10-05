@@ -86,6 +86,11 @@ _libcamera Patchwork 메일링 리스트_
 - [libcamera AWB series patch 28391](https://patchwork.libcamera.org/patch/28391/)
 
 
+## 참고 / 더 읽을거리
+
+- [\[PATCH 3/3\] media: mali-c55: Keep ISP powered while IRQ wake is armed](<https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/>) — lore.kernel.org linux-media list (2026-09-29) · Mali-C55 ISP 전원 관리 패치 제안
+- ChromeOS 카메라 변경 모음: [camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2](<https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692>) (2026-09-30) · [camera: Enforce exclusive buffer IDs - chromiumos/platform2](<https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146>) (2026-09-30)
+
 ## 참고자료
 
 - [Android 17 Camera Image Test Suite release notes](https://source.android.com/docs/compatibility/cts/its-release-notes-17)

@@ -49,7 +49,7 @@
         </div>
         <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-10-05</span></h1>
         <p class="subtitle">ITS의 실행 버전·차트·검사 항목과 libcamera AWB의 게인 고정·재탐색 조건을 원문으로 확인합니다.</p>
-        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Android</span></div>
       </header>
 
       <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
@@ -103,6 +103,11 @@
         <p>이 기사는 제출된 시리즈의 설계와 코드를 비교한 내용입니다. 설명과 구현의 차이가 남아 있어 확정된 API 계약이나 이미 배포된 기능으로 받아들이면 안 됩니다. Android Camera HAL 규격 자체의 변경도 아닙니다. libcamera 기반 카메라 스택을 다루는 팀에는 수동 전환 시 유지할 게인과 재탐색 완료 상태를 어떻게 표현할지 참고할 수 있는 제안입니다.</p>
         <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.</p></div>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://patchwork.libcamera.org/patch/28387/">libcamera AWB series patch 28387</a></li><li><a href="https://patchwork.libcamera.org/cover/28386/">Add AwbState metadata and AwbTrigger control</a></li><li><a href="https://patchwork.libcamera.org/patch/28388/">libcamera AWB series patch 28388</a></li><li><a href="https://patchwork.libcamera.org/patch/28389/">libcamera AWB series patch 28389</a></li><li><a href="https://patchwork.libcamera.org/patch/28390/">libcamera AWB series patch 28390</a></li><li><a href="https://patchwork.libcamera.org/patch/28391/">libcamera AWB series patch 28391</a></li></ul></div>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">참고 · 더 읽을거리</h2>
+        <ul class="reference-articles-list"><li><a href="https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/">[PATCH 3/3] media: mali-c55: Keep ISP powered while IRQ wake is armed</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-29) · Mali-C55 ISP 전원 관리 패치 제안</span></li><li>ChromeOS 카메라 변경 모음: <a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692">camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2</a> (2026-09-30) · <a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146">camera: Enforce exclusive buffer IDs - chromiumos/platform2</a> (2026-09-30)</li></ul>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
