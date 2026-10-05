@@ -25,6 +25,7 @@ const { callLlmJson } = require('../../publish/orchestrator-llm-instrumentation'
 const { recordEditorSemanticStatus } = require('../../publish/orchestrator-status-builders');
 const { generationRunState } = require('../../publish/orchestrator-run-state');
 const { DATE, editor } = require('../../../shared/test/helpers/editor-builders');
+const { snapshotIdentifierReferences } = require('../../editor/identifier-notation-validation');
 
 function resetLastKnownValidState() {
   generationRunState.lastKnownValidEditor = null;
@@ -80,6 +81,16 @@ test('validateEditor는 editor-output-contract로 위임해 유효 draft를 그�
 
 test('validateEditor는 briefing이 누락된 draft를 거부한다(게이트 보존)', () => {
   assert.throws(() => validateEditor(editor({ briefing: undefined }), DATE));
+});
+
+test('validateEditor forwards immutable identifier references into repair validation', () => {
+  const draft = editor();
+  draft.sections[0].confirmed_facts = ['Mali-C55'];
+  const references = snapshotIdentifierReferences(draft.sections);
+  draft.sections[0].confirmed_facts = ['Mali C55'];
+  draft.sections[0].public_article.lead = 'Mali C55를 확인합니다.';
+  assert.throws(() => validateEditor(draft, DATE, { candidates: [] }, { identifierReferenceSections: references }),
+    error => error.field === 'sections.identifier_notation');
 });
 
 test('recordLastKnownValidEditor는 run state에 마지막 유효 draft의 복제본을 기록한다', () => {

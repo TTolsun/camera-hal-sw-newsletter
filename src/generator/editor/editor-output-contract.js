@@ -81,6 +81,12 @@ const {
   completeStoryPublicArticle
 } = require('./editor-section-builders');
 
+const {
+  identifierNotationIssues,
+  snapshotIdentifierReferences,
+  identifierReferenceForSection
+} = require('./identifier-notation-validation');
+
 const REQUIRED_BRIEFING_COUNT = 3;
 
 const REPAIRABLE_SEMANTIC_FIELDS = new Set([
@@ -91,6 +97,7 @@ const REPAIRABLE_SEMANTIC_FIELDS = new Set([
   'sections.public_article.source_links',
   'sections.hal_signal_capsule',
   'sections.field_hygiene',
+  'sections.identifier_notation',
   'sections.group_coverage',
   'sections.blocked_context',
   'sections.claims'
@@ -1279,6 +1286,16 @@ function validateEditorOutputContract(value, date, options = {}) {
   validatePublicArticleContract(value, {
     requireStoryContract: options.requireStoryContract === true
   });
+  const notationIssues = value.sections.flatMap((section, index) => identifierNotationIssues(
+    section, index, identifierReferenceForSection(section, options.identifierReferenceSections) || section
+  ));
+  if (notationIssues.length > 0) {
+    throw semanticError('Editor output lost source identifier punctuation.', {
+      field: 'sections.identifier_notation',
+      sectionCount: value.sections.length,
+      issues: notationIssues
+    });
+  }
   validateArticleSectionContract(value);
   validateHalSignalCapsules(value);
   validateFieldHygiene(value);
@@ -1413,7 +1430,12 @@ async function repairEditorOutputContract({
   repairFn
 }) {
   const invalidEditor = cloneJson(value);
+  const identifierReferenceSections = snapshotIdentifierReferences(toLegacyEditorIssue(value, { date })?.sections);
+  let initialValidation = true;
   const validate = candidate => validateEditorOutputContract(candidate, date, {
+    // Freeze the spellings that failed validation, including anchors supplied by
+    // normalization rather than present in the raw draft.
+    identifierReferenceSections: initialValidation ? undefined : identifierReferenceSections,
     reporter,
     normalizeSection,
     strictClaims,
@@ -1473,7 +1495,16 @@ async function repairEditorOutputContract({
     };
   } catch (error) {
     if (!(error instanceof EditorSemanticValidationError)) throw error;
+    initialValidation = false;
     const repairField = error.details?.field || error.field || '';
+    if (repairField === 'sections.identifier_notation') {
+      for (const issue of error.details.issues) {
+        const index = issue.index - 1;
+        const reference = identifierReferenceSections[index];
+        if (!reference) continue;
+        reference.confirmed_facts.push(issue.expected);
+      }
+    }
     let deterministicRepair = null;
     let deterministicRepairFailureReasonCodes = [];
     if (repairField === 'sections.article_sections' || repairField === 'sections.hal_signal_capsule' || repairField === 'sections.public_article') {
