@@ -7,9 +7,10 @@
 // (aosp-camera-scope)에, main 승급은 mailing-list cross-check 게이트(mailing-list-patch-eligibility)에
 // 맡긴다. 두 가지를 의도적으로 하지 않는다: (1) relevanceBucketHint를 강제하지 않는다 — 제목이
 // 카메라 근거를 가질 때만 분류기가 카메라 버킷으로 올린다. (2) summary에 카메라/스코어링 키워드를
-// 넣지 않는다 — technicalDepth는 제목+summary를 읽으므로, summary가 키워드를 주입하면 docs/build
+// 만들어 넣지 않는다 — technicalDepth는 제목+summary를 읽으므로, summary가 키워드를 주입하면 docs/build
 // 같은 churn 패치까지 technicalDepth 하한을 넘어 main 슬롯 승급 대상이 되어버린다. summary는
-// 중립으로 두고 실제 patch 제목만 technicalDepth를 결정하게 한다.
+// 원문을 읽기 전에는 중립으로 둔다. 공통 제어·메타데이터 변경은 제한된 수의 mbox 원문을 읽어
+// 제목과 diff가 일치하는 제출 설명을 보강하며, 검증·승급은 기존 게이트가 결정한다.
 //
 // 목록은 한 응답으로 끝나지 않는다(#970). 등록부 URL 하나만 읽으면 이 소스가 실제로 보는 창은
 // 파이프라인 lookback(35일)이 아니라 "응답 한 페이지가 덮는 시간"이고, 그 폭은 제출량에 반비례한다.
@@ -43,6 +44,45 @@ const MAX_PATCH_PAGES = 4;
 // 페이지 하나가 350KB 안팎이고 실측 응답이 2.3~4.7초다. 수집 루프의 공용 fetch는 기본 타임아웃이
 // 없어서, 지연된 페이지 하나가 수집 실행 전체를 멈춰 세울 수 있다(aosp-release-camera-changes와 같은 이유).
 const PATCH_PAGE_FETCH_TIMEOUT_MS = 10000;
+const MAX_CONTRACT_PATCH_FETCHES = 12;
+
+// Fetch actual commit prose for shared control/API changes. Titles alone miss
+// their technical evidence; never manufacture a summary from the series name.
+async function enrichContractPatches(candidates, options) {
+  if (typeof options.fetchTextImpl !== 'function') return candidates;
+  const now = options.now instanceof Date ? options.now : new Date();
+  const cutoff = now.getTime() - (options.lookbackDays || DEFAULT_LOOKBACK_DAYS) * DAY_MS;
+  let fetched = 0;
+  for (const candidate of candidates) {
+    if (fetched >= MAX_CONTRACT_PATCH_FETCHES) break;
+    if (!/\b(?:controls?|metadata|API)\b/i.test(candidate.title)) continue;
+    if (/\b(?:docs?|documentation|meson|build|formatting)\b/i.test(candidate.title)) continue;
+    if (Date.parse(candidate.publishedAt) < cutoff) continue;
+    if (!/^https:\/\/patchwork\.libcamera\.org\/patch\/\d+\/$/.test(candidate.url)) continue;
+    fetched += 1;
+    try {
+      const mail = String(await options.fetchTextImpl(`${candidate.url}mbox/`, PATCH_PAGE_FETCH_TIMEOUT_MS));
+      const split = mail.search(/\r?\n\r?\n/);
+      if (split < 0) continue;
+      const headers = mail.slice(0, split).replace(/\r?\n[ \t]+/g, ' ');
+      if (!/^Subject:.*\bPATCH\b/im.test(headers)) continue;
+      const subject = headers.match(/^Subject:\s*(.+)$/im)?.[1] || '';
+      const subjectKey = value => value.replace(/^\s*\[[^\]]+\]\s*/, '').replace(/\s+/g, ' ').trim();
+      if (subjectKey(subject) !== subjectKey(candidate.title)) continue;
+      // Encoded or multipart bodies need decoding; leave them unpromoted.
+      if (/^Content-Transfer-Encoding:\s*(?:base64|quoted-printable)/im.test(headers) ||
+          /^Content-Type:\s*multipart\//im.test(headers)) continue;
+      const body = mail.slice(split).trim();
+      const prose = body.split(/^(?:Signed-off-by:|---\s*$|diff --git)/m)[0].trim();
+      if (!prose || /<html\b/i.test(prose) || !/^diff --git /m.test(body)) continue;
+      candidate.summary = `${prose.slice(0, 4000)}\n\n${candidate.summary}`;
+      candidate.behavior_change = prose.slice(0, 4000);
+    } catch (error) {
+      console.warn(`patchwork-libcamera-patches: evidence fetch failed for ${candidate.url}: ${error.message}`);
+    }
+  }
+  return candidates;
+}
 
 // patchwork patch 객체의 series id. 한 시리즈의 조각들이 같은 series id를 공유하므로, 이 id를 후보에
 // 실어 선정 단계 dedup(article-groups seriesKey)이 시리즈를 하나의 대표 기사로 collapse하게 한다(#795).
@@ -201,7 +241,7 @@ function patchPageUrl(sourceUrl, page) {
  * 건너뛴다(graceful). 창 밖 후보를 여기서 버리지는 않는다 — 수집 풀 필터(withinLookback)가
  * 창의 정본이고, 리졸버는 그 창을 "어디까지 읽을지"에만 쓴다.
  */
-async function resolvePatchworkLibcameraPatchItems(text = '', source = {}, options = {}) {
+async function collectPatchItems(text = '', source = {}, options = {}) {
   let patches = parsePatchPage(text);
   if (!patches) return [];
 
@@ -273,6 +313,10 @@ async function resolvePatchworkLibcameraPatchItems(text = '', source = {}, optio
       + `the ${lookbackDays}-day window; the ${candidates.length} collected patch(es) are a lower bound, not the whole window`);
   }
   return candidates;
+}
+
+async function resolvePatchworkLibcameraPatchItems(text = '', source = {}, options = {}) {
+  return enrichContractPatches(await collectPatchItems(text, source, options), options);
 }
 
 module.exports = {

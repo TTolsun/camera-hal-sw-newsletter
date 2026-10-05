@@ -8,6 +8,7 @@ module.exports = {
   "briefing": "This week in three points",
   "reading": "Further reading",
   "readingHtml": "Further reading",
+  "chromeosReferences": "ChromeOS camera changes",
   "reviewNotice": "This is a reviewed edition.",
   "rss": "RSS (coming soon)",
   "allArchive": "View all issues",

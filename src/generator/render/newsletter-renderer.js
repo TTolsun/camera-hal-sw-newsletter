@@ -803,11 +803,30 @@ function escapeMarkdownLinkText(value) {
   return String(value).replace(/[[\]]/g, '\\$&');
 }
 
+function referenceArticleGroups(articles) {
+  const groups = [];
+  let chromeos;
+  for (const article of articles) {
+    if (/^https:\/\/chromium-review\.googlesource\.com\/c\/chromiumos\/platform2\//.test(article.url)) {
+      if (!chromeos) {
+        chromeos = [];
+        groups.push(chromeos);
+      }
+      chromeos.push(article);
+    } else {
+      groups.push([article]);
+    }
+  }
+  return groups;
+}
+
 function referenceArticlesMarkdown(issue) {
   const articles = Array.isArray(issue?.reference_articles) ? issue.reference_articles : [];
   if (!articles.length) return '';
-  const bullets = articles
-    .map(article => `- [${escapeMarkdownLinkText(article.title)}](<${article.url}>) — ${article.source} (${article.published_date}) · ${article.note}`)
+  const bullets = referenceArticleGroups(articles)
+    .map(group => group.length > 1
+      ? `- ${t.chromeosReferences}: ${group.map(article => `[${escapeMarkdownLinkText(article.title)}](<${article.url}>) (${article.published_date})`).join(' · ')}`
+      : group.map(article => `- [${escapeMarkdownLinkText(article.title)}](<${article.url}>) — ${article.source} (${article.published_date}) · ${article.note}`).join(''))
     .join('\n');
   return `## ${REFERENCE_ARTICLES_HEADING}
 
@@ -822,8 +841,10 @@ const REFERENCE_ARTICLES_HEADING_HTML = t.readingHtml;
 function referenceArticlesHtml(issue) {
   const articles = Array.isArray(issue?.reference_articles) ? issue.reference_articles : [];
   if (!articles.length) return '';
-  const items = articles
-    .map(article => `<li><a href="${escapeHtml(article.url)}">${escapeHtml(article.title)}</a><span class="reference-meta">${escapeHtml(article.source)} (${escapeHtml(article.published_date)}) · ${escapeHtml(article.note)}</span></li>`)
+  const items = referenceArticleGroups(articles)
+    .map(group => group.length > 1
+      ? `<li>${escapeHtml(t.chromeosReferences)}: ${group.map(article => `<a href="${escapeHtml(article.url)}">${escapeHtml(article.title)}</a> (${escapeHtml(article.published_date)})`).join(' · ')}</li>`
+      : group.map(article => `<li><a href="${escapeHtml(article.url)}">${escapeHtml(article.title)}</a><span class="reference-meta">${escapeHtml(article.source)} (${escapeHtml(article.published_date)}) · ${escapeHtml(article.note)}</span></li>`).join(''))
     .join('');
   return `\n      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
         <h2 id="issue-reference-articles-title">${escapeHtml(REFERENCE_ARTICLES_HEADING_HTML)}</h2>

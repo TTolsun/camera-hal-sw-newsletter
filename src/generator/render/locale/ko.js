@@ -8,6 +8,7 @@ module.exports = {
   "briefing": "이번 주 3줄 브리핑",
   "reading": "참고 / 더 읽을거리",
   "readingHtml": "참고 · 더 읽을거리",
+  "chromeosReferences": "ChromeOS 카메라 변경 모음",
   "reviewNotice": "검토 발행본입니다.",
   "rss": "RSS (지원예정)",
   "allArchive": "아카이브 전체 보기",
