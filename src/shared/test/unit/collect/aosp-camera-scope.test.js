@@ -544,3 +544,22 @@ test('does not leak Intel Infrastructure Processing Unit into the camera driver 
   assert.notEqual(nonCamera.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
   assert.equal(nonCamera.counts_as_driver_topic, false);
 });
+
+test('does not join proximity evidence across candidate fields (#1233)', () => {
+  // 2026-10-05 Barclays 도입 사례: api_or_component 의 "Claude Code" 와 behavior_change 인용문의
+  // "build" 가 필드 경계를 넘어 한 문장처럼 이어져 tooling 근거로 잡혔다.
+  const adoptionStory = classifyAospCameraStackCandidate({
+    title: 'Barclays scales Claude to upgrade operations and improve client experience',
+    summary: 'Barclays, the British universal bank, is expanding its strategic collaboration with Anthropic to integrate secure, enterprise-grade AI systems across its global operations. Barclays is extending Claude across the bank to accelerate software development, modernize legacy systems, and improve operational efficiency.',
+    api_or_component: 'Claude Code',
+    behavior_change: '“We\'re moving towards AI as an increasingly agentic capability embedded within how we build, test, secure, and operate technology.'
+  });
+  const sameSentence = classifyAospCameraStackCandidate({
+    title: 'Claude Code v2.1.288',
+    summary: 'Claude Code now runs build commands inside the sandbox by default.',
+    api_or_component: 'Claude Code'
+  });
+
+  assert.equal(adoptionStory.relevance_bucket, BUCKETS.GENERIC_TECH_WATCHLIST);
+  assert.equal(sameSentence.relevance_bucket, BUCKETS.CPP_AI_TOOLING_FALLBACK);
+});
