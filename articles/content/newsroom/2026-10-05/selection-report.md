@@ -13,16 +13,16 @@
 ## Shortage Hints
 
 - No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.
-- Keep forbidden buckets out of main article selection: generic_tech_watchlist.
+- Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
 
 ## Candidate Pool Preflight
 
 - candidate_shortage_reviewable: false
 - candidate_pool_preflight_passed: true
 - shortage_reason_codes: none
-- publishable_candidate_count: 12
+- publishable_candidate_count: 2
 - required_publishable_candidate_count: 1
-- reserve_candidate_count: 7
+- reserve_candidate_count: 0
 - required_reserve_candidate_count: 0
 - Reserve requirement: diagnostics only
 
@@ -30,7 +30,7 @@
 
 - decision: latest_camera_hal_article
 - current_headline_key: url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html
-- replacement_headline_key: url:https://www.anthropic.com/news/barclays-scales-claude
+- replacement_headline_key: url:https://source.android.com/docs/compatibility/cts/its-release-notes-17
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
 - public_render_reconciliation_reason: unknown
@@ -46,13 +46,13 @@
 ## Source Parser Hints
 
 - SOURCE_COVERAGE_REVIEW: No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.
-- CANDIDATE_POOL_SHORTAGE: Keep forbidden buckets out of main article selection: generic_tech_watchlist.
+- CAMERA_DRIVER_SOURCE_SHORTAGE: Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
 
 ## Gate Summary
 
-- non_fallback_reviewable_article_count: 4
+- non_fallback_reviewable_article_count: 2
 - primary_camera_stack_topic_count: 2
-- supporting_main_article_count: 1
+- supporting_main_article_count: 0
 - forbidden_main_article_count: 0
 - Minimum publishable article count: 1
 - Primary camera stack requirement: disabled by one-article policy

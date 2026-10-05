@@ -1,13 +1,13 @@
 {
   "schema_version": 5,
   "date": "2026-10-05",
-  "generated_at": "2026-10-05T04:57:38.883Z",
+  "generated_at": "2026-10-05T13:21:55.034Z",
   "review_summary": {
     "total": 93,
-    "present": 68,
-    "missing": 25,
+    "present": 77,
+    "missing": 16,
     "missingRequired": 0,
-    "reviewBlocking": 12,
+    "reviewBlocking": 13,
     "attentionRequired": 2,
     "seedUsed": false,
     "publicOutputExpected": true,
@@ -75,6 +75,9 @@
       "path": "articles/content/newsroom/2026-10-05/editorial-plan.json"
     },
     {
+      "path": "articles/content/newsroom/2026-10-05/evidence-pack-summary.json"
+    },
+    {
       "path": "articles/content/newsroom/2026-10-05/evidence-validation-report.json"
     },
     {
@@ -112,6 +115,12 @@
     },
     {
       "path": "articles/content/newsroom/2026-10-05/hal-signal-quality-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/image-audit-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/image-audit-report.md"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/quality-report-attempt-1.json"
@@ -160,6 +169,24 @@
     },
     {
       "path": "articles/content/newsroom/2026-10-05/source-discovery-feedback-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-effectiveness-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-effectiveness-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-followup-issues.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-followup-issues.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-quality-diagnosis.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-quality-diagnosis.md"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/source-quality-report.json"
@@ -469,7 +496,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 36,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "public_source_of_truth"
     },
@@ -560,9 +587,9 @@
       "role": "image_audit",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 44,
       "changed": false,
@@ -624,7 +651,7 @@
       "role": "source_quality_diagnosis",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
@@ -640,7 +667,7 @@
       "role": "source_followup_issues",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
@@ -752,7 +779,7 @@
       "role": "source_effectiveness",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
@@ -837,7 +864,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.001,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -869,7 +896,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.003,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -885,7 +912,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.004,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -901,7 +928,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.005,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1232,7 +1259,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1248,7 +1275,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1280,7 +1307,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1296,7 +1323,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1312,7 +1339,7 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
@@ -1707,9 +1734,9 @@
     }
   ],
   "missing_required_review_artifacts": [],
-  "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269",
+  "retention_location": "local-snapshot",
   "retention_summary": {
-    "review_required_compact": 40,
+    "review_required_compact": 49,
     "public_source_of_truth": 12,
     "debug_heavy": 8,
     "transient_attempt": 8
@@ -1717,115 +1744,115 @@
   "retained_heavy_artifacts": [
     {
       "path": "articles/content/newsroom/2026-10-05/reporter-candidates.json",
-      "size": 245092,
-      "sha256": "82672ee620e5ed9e46f6c09933310efc53e2b95bd5f3999423395e2fc62bf7cf",
+      "size": 40454,
+      "sha256": "6be855be1f7ee2d9ec56fd8e97931019ded124f476e4d8d73542184eb79ff403",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/editor-draft.json",
-      "size": 150701,
-      "sha256": "2b925ec145806c2d38d36f7ad98fad6c598310fc21f7f28f0106c3c925126459",
+      "size": 79596,
+      "sha256": "a75e972081af454106791e3161306bee394210783c972a18d8309d53011d8f7d",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/editor-draft.md",
-      "size": 13117,
-      "sha256": "c7a53e8000e60d026729d04c133991dfd2f648125fba98062411595dc84cf8c0",
+      "size": 6164,
+      "sha256": "eac714f37836db3478198018a7052ca469eb08cb7e53033efbe8ae4b81a4f83e",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/shortlisted-candidates.json",
-      "size": 1364553,
-      "sha256": "27e300c73d86d6ba5e49dbc8f54a92c368687c69eeb70e2fec7b13fda6e2b1ac",
+      "size": 158881,
+      "sha256": "1bcc174a092bbff2f21bbf9d98a482f7d51774344cd49915c48eb2ac9f92f8bf",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/article-capsules.json",
-      "size": 239896,
-      "sha256": "3b783518650b181ec016049b0e136b68248a4f4e78fb4b51c1211d3c5a95cfb2",
+      "size": 43914,
+      "sha256": "424a40c6fadfd291e6712e52bf43c61783a52da882837f73270763761dd80303",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/background-context.json",
-      "size": 3106,
-      "sha256": "b8e8fde93b47fc2ebdba0ec588bde12cfafe3baea7ef89ab6faa394ee8c9e64f",
+      "size": 2939,
+      "sha256": "980d172a259c892a2713448bc1a7e6b5d28bca4eb45f15a552eb675529d1120c",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/editor-draft-attempt-1.json",
-      "size": 64428,
-      "sha256": "4df156ee344b721ef6e078ebba784306a9f57c2e3f0f94a3719294edf65336f7",
+      "size": 33208,
+      "sha256": "8169bed35be3d63abe46cce36ec6a810f35b8229eb39a4dd637d115f4d8b72dd",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/editor-draft-attempt-1.md",
-      "size": 13117,
-      "sha256": "c7a53e8000e60d026729d04c133991dfd2f648125fba98062411595dc84cf8c0",
+      "size": 6164,
+      "sha256": "eac714f37836db3478198018a7052ca469eb08cb7e53033efbe8ae4b81a4f83e",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/editor-public-article-judge-attempt-1.json",
-      "size": 1434,
-      "sha256": "ab0ab3cfc7741a290e2ffe05cf61061b5c585b7194b2b5e0f6fe8ff74b1378b9",
+      "size": 778,
+      "sha256": "f1df51d81c2730d40219c6988e6967d8b95c093bfe05ed84908e37490ff95027",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/fact-check-report-attempt-1.json",
-      "size": 2470,
-      "sha256": "e986901d4de97fd18745bda23a42ca8206c0cda625790d45ea4a8e570a81aeb2",
+      "size": 1293,
+      "sha256": "9bd0f99b9a1f7e9042b1dd1d43e4e79436818bfd150456a47c152b587944548f",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/fact-check-report-attempt-1.md",
-      "size": 699,
-      "sha256": "f3c0696dd8cf5c1b266128e5b5cc7e5290080178b5adbdba1c01f8224c8a5ec2",
+      "size": 440,
+      "sha256": "cb58b8f248ee66cf24ac372d8450d38cfbbae4d4343b70ba0d7eccda1a602c3b",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/quality-report-attempt-1.json",
-      "size": 57552,
-      "sha256": "2aedad74a0e969dcf232c1918ccc5b5941cbfe8aa83877a201e0f381364e1193",
+      "size": 31627,
+      "sha256": "7245cb3a5651adaef04e3a6d42c9ceae3ab5f210d60696ad562f3c999d9e7abb",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/quality-report-attempt-1.md",
-      "size": 16451,
-      "sha256": "4454603e680921e3c91fc63ab3c1d0bec8884b93e8e6d8f00967717b45a4e664",
+      "size": 10079,
+      "sha256": "c930045b503906bf106e31d43159b687d8802adb71418e72506f0f4dd3e99bf9",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/reporter-candidates-attempt-1.json",
-      "size": 245092,
-      "sha256": "82672ee620e5ed9e46f6c09933310efc53e2b95bd5f3999423395e2fc62bf7cf",
+      "size": 40454,
+      "sha256": "6be855be1f7ee2d9ec56fd8e97931019ded124f476e4d8d73542184eb79ff403",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/coverage-reconciliation.json",
-      "size": 3207,
-      "sha256": "e5738f4335ff9f6bb642ce1197c5008dc6eac0d78465f17cb6c7bfb044263f07",
+      "size": 1231,
+      "sha256": "a736b0f39b0f942e6e76615fef0469ccb9c3b584a01f877bf153ba802e75ba1c",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-05/editorial-plan.json",
-      "size": 14180,
-      "sha256": "2dd18645361a6de1f4e4ca815fcdd1b010a9a5f4c04aad022fa315368e1bb43d",
+      "size": 4241,
+      "sha256": "dcd19e455d2f1b9709f7e778c05fdbe37e3acce4da8246e79c7c7de7964159a2",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-37265225269"
+      "retention_location": "local-snapshot"
     }
   ],
   "committed_artifacts": [
@@ -1874,6 +1901,10 @@
       "retention_grade": "review_required_compact"
     },
     {
+      "path": "articles/content/newsroom/2026-10-05/evidence-pack-summary.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
       "path": "articles/content/newsroom/2026-10-05/evidence-validation-report.json",
       "retention_grade": "review_required_compact"
     },
@@ -1918,6 +1949,14 @@
       "retention_grade": "review_required_compact"
     },
     {
+      "path": "articles/content/newsroom/2026-10-05/image-audit-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/image-audit-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
       "path": "articles/content/newsroom/2026-10-05/quality-report.json",
       "retention_grade": "review_required_compact"
     },
@@ -1959,6 +1998,30 @@
     },
     {
       "path": "articles/content/newsroom/2026-10-05/source-discovery-feedback-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-effectiveness-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-effectiveness-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-followup-issues.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-followup-issues.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-quality-diagnosis.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-05/source-quality-diagnosis.md",
       "retention_grade": "review_required_compact"
     },
     {

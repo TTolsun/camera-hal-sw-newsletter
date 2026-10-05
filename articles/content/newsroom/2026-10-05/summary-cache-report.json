@@ -1,20 +1,24 @@
 {
   "schema_version": 1,
   "date": "2026-10-05",
-  "generated_at": "2026-10-05T04:53:59.741Z",
+  "generated_at": "2026-10-05T13:20:12.499Z",
   "cache_root": "cache/news-summary",
   "totals": {
-    "candidate_count": 12,
-    "hit_count": 0,
-    "miss_count": 12,
-    "by_url_hit_count": 0,
+    "candidate_count": 2,
+    "hit_count": 1,
+    "miss_count": 1,
+    "by_url_hit_count": 1,
     "by_content_hit_count": 0,
     "legacy_hit_count": 0
   },
   "reasons": [
     {
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "count": 12
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 1
+    },
+    {
+      "reason": "url-hit",
+      "count": 1
     }
   ],
   "entries": [
@@ -30,185 +34,25 @@
         "content_hash": "27d0cd4dfd410dee542d1069b4111d9ab82dc3b6491d262256fbc7d1e5a3a6f2"
       },
       "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
       "lookup_source": "none",
       "cache_record_path": ""
     },
     {
-      "title": "Barclays scales Claude to upgrade operations and improve client experience",
-      "url": "https://www.anthropic.com/news/barclays-scales-claude",
-      "source": "Anthropic News",
-      "published_date": "2026-10-01",
+      "title": "[1/5] libcamera: controls: Expand AWB controls",
+      "url": "https://patchwork.libcamera.org/patch/28387/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-09-28",
       "cache_key": {
-        "normalized_url": "https://www.anthropic.com/news/barclays-scales-claude",
-        "url_hash": "c08402b8f22a4b159df3858cefc3416269ca944c9595105093b01c30fd1a8c02",
-        "published_date": "2026-10-01",
-        "content_hash": "f642dd2d571f91bbae6bedf07b78ad20e42b472781a6b7053ef8877d23a5d2cb"
+        "normalized_url": "https://patchwork.libcamera.org/patch/28387",
+        "url_hash": "74221d8f077b88a9d02df0ec690ec0e58e44318f0b459f549a340905eae1c81b",
+        "published_date": "2026-09-28",
+        "content_hash": "f4974e45c158493cd201b5e8ac7ecc2dd736da66d761aa3e25b5491404ea4475"
       },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "[PATCH 3/3] media: mali-c55: Keep ISP powered while IRQ wake is armed",
-      "url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-09-29T12:02:40Z",
-      "cache_key": {
-        "normalized_url": "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org",
-        "url_hash": "ed711c4bf2fa1c7c86e5c6524eea32d89fb444589e1c0cc872e270e08641dd67",
-        "published_date": "2026-09-29T12:02:40Z",
-        "content_hash": "524c002e7212f24a22331a0de985464b5a35e9b9d50e836f8e36cee082e34f3f"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "[PATCH v2] media: rcar-isp: ispcore: Fix inconsistent step sizes",
-      "url": "https://lore.kernel.org/linux-media/20261001085130.84565-1-barnabas.pocze+renesas@ideasonboard.com/",
-      "source": "lore.kernel.org linux-media list",
-      "published_date": "2026-10-01T08:51:36Z",
-      "cache_key": {
-        "normalized_url": "https://lore.kernel.org/linux-media/20261001085130.84565-1-barnabas.pocze+renesas@ideasonboard.com",
-        "url_hash": "89f7ae180a890aff47ba7d29a05788a38b3bfc13ce71b7e36da21703db1eba07",
-        "published_date": "2026-10-01T08:51:36Z",
-        "content_hash": "969aa62b59ea17620c77ca75e678867406ca89137f69560df86332a3bcb18e79"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
-      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
-      "published_date": "2026-09-30",
-      "cache_key": {
-        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
-        "url_hash": "70779ee88af5f0a0703dd6edcb237705543616f9b933c0834734cd65be2ea4ec",
-        "published_date": "2026-09-30",
-        "content_hash": "e68130b0377742414ce107a5aac768f187f5c3aaf4fe2c57a78c9d0109697058"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "camera: Enforce exclusive buffer IDs - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
-      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
-      "published_date": "2026-09-30",
-      "cache_key": {
-        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
-        "url_hash": "011a94a65703be29ba6c9da042017f94e9948f0531659b4919fc4893f7b9e46b",
-        "published_date": "2026-09-30",
-        "content_hash": "6f8ca343a20d8a26b7dbe2466ac02c22d0a0c7ce986d2afaa3c1cec012ed1d54"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
-      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
-      "published_date": "2026-09-30",
-      "cache_key": {
-        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
-        "url_hash": "8c3e4fdd73ea030192349fe8041514ed0b975cac3bcb1595f3f08fa970b342b6",
-        "published_date": "2026-09-30",
-        "content_hash": "6df266fd0188856e48a201cd3745ae8ca86362b0247aeebfe0a0ed98ee81f961"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
-      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
-      "published_date": "2026-09-30",
-      "cache_key": {
-        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
-        "url_hash": "8d28e7d3853c3aef581b29e4ce236e99d3e681dc47b6e0ad350684f0e970ad65",
-        "published_date": "2026-09-30",
-        "content_hash": "761417cff1a70c7c5e18efb738686df6fd0fb689615e53438a706e447ef71624"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
-      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
-      "published_date": "2026-09-30",
-      "cache_key": {
-        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
-        "url_hash": "5383bfc0408ae81d2bc6432bfa1d6ac59a99d9509ab71e4b3359ff9e6fe4d60f",
-        "published_date": "2026-09-30",
-        "content_hash": "42e0882377d41cb12edad0f132465e5adb2aebcc8bee83fc1b544e3bbd220655"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "camera: Fix cross-thread UAF in HdrNetStreamManipulator options reload - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
-      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
-      "published_date": "2026-09-30",
-      "cache_key": {
-        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
-        "url_hash": "2c7b006a72881e6e12a8c15b0af1afa93aae3c6f4104cb09fa5a730caf5f127f",
-        "published_date": "2026-09-30",
-        "content_hash": "d2f6acf225b4916d8c64afc284380a8709014db7658b507271ff7ae68d2c69fc"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "camera: Prevent UAF on watcher callback in ReloadableConfigFile - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
-      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
-      "published_date": "2026-09-30",
-      "cache_key": {
-        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
-        "url_hash": "80d5fb89c255993ce6b49a95c29ed7175c7fd3c1fcd720e4c47285f06769012a",
-        "published_date": "2026-09-30",
-        "content_hash": "c25edbcd53393039520faefab9da0b4810156e41816f3a3f8421aeebd5e48bdc"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
-    },
-    {
-      "title": "cros_camera_service: Fix UAF in StreamManipulatorHelper - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
-      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
-      "published_date": "2026-09-30",
-      "cache_key": {
-        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
-        "url_hash": "9f4e62229aa23ae57c40eeadb260f7528518c0f5494659c6478cf79067e1dac4",
-        "published_date": "2026-09-30",
-        "content_hash": "63a8ab3190c4b2e3f37a312df15a132bfdf7fb84e1048fc196baf5b98f995cc6"
-      },
-      "hit": false,
-      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
-      "lookup_source": "none",
-      "cache_record_path": ""
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/74221d8f077b88a9d02df0ec690ec0e58e44318f0b459f549a340905eae1c81b.json"
     }
   ]
 }

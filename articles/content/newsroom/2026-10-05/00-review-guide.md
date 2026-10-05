@@ -5,7 +5,7 @@
 - seed_used: false
 - public_output_expected: true
 - status: PASS
-- present: 68/93
+- present: 77/93
 - missing_required: 0
 - attention_required: 2
 
@@ -38,7 +38,7 @@
 - `articles/newsletters/2026-W41/issue.json` - changed
 - `articles/content/audit/newsletter-provenance-ledger.md` - present
 - `articles/data/newsletters-weekly.json` - changed
-- `articles/sitemap.xml` - present
+- `articles/sitemap.xml` - changed
 
 ## 사실성 / 품질 / HAL 게이트
 
@@ -46,27 +46,31 @@
 - `articles/content/newsroom/2026-10-05/quality-report.md` - changed
 - `articles/content/newsroom/2026-10-05/hal-signal-quality-report.md` - changed
 - `articles/content/newsroom/2026-10-05/stale-claim-report.md` - changed
+- `articles/content/newsroom/2026-10-05/image-audit-report.md` - present
 - `articles/content/newsroom/2026-10-05/source-quality-report.md` - present
 
 ## 후보 선정 진단
 
 - `articles/content/newsroom/2026-10-05/selection-diagnostics.md` - present
 - `articles/content/newsroom/2026-10-05/selection-report.md` - present
+- `articles/content/newsroom/2026-10-05/source-quality-diagnosis.md` - present
+- `articles/content/newsroom/2026-10-05/source-followup-issues.md` - present
 
 ## 필요 시 확인
 
 - `articles/content/newsroom/2026-10-05/release-qa-report.md` - changed
 - `articles/content/newsroom/2026-10-05/retry-history.md` - changed
+- `articles/content/newsroom/2026-10-05/source-effectiveness-report.md` - present
 - `articles/content/newsroom/2026-10-05/source-discovery-feedback-report.md` - present
 - `articles/content/newsroom/2026-10-05/gemini-source-discovery-report.md` - present
 
 ## 디버그 근거
 
-- `articles/content/collected-news/2026-10-05/manual-candidates.json` - present
+- `articles/content/collected-news/2026-10-05/manual-candidates.json` - changed
 - `articles/content/collected-news/2026-10-05/candidates.json` - present
-- `articles/content/collected-news/2026-10-05/raw-candidate-manifest.json` - present
-- `articles/content/collected-news/2026-10-05/merged-candidates.json` - changed
-- `articles/content/collected-news/2026-10-05/merged-candidate-manifest.json` - changed
+- `articles/content/collected-news/2026-10-05/raw-candidate-manifest.json` - changed
+- `articles/content/collected-news/2026-10-05/merged-candidates.json` - present
+- `articles/content/collected-news/2026-10-05/merged-candidate-manifest.json` - present
 - `articles/content/newsroom/2026-10-05/generation-status.json` - present
 - `articles/content/newsroom/2026-10-05/reporter-candidates.json` - changed
 - `articles/content/newsroom/2026-10-05/editor-draft.json` - changed
@@ -80,7 +84,12 @@
 - `articles/content/newsroom/2026-10-05/selection-report.json` - present
 - `articles/content/newsroom/2026-10-05/article-capsules.json` - changed
 - `articles/content/newsroom/2026-10-05/background-context.json` - changed
+- `articles/content/newsroom/2026-10-05/evidence-pack-summary.json` - present
+- `articles/content/newsroom/2026-10-05/image-audit-report.json` - present
 - `articles/content/newsroom/2026-10-05/source-quality-report.json` - present
+- `articles/content/newsroom/2026-10-05/source-quality-diagnosis.json` - present
+- `articles/content/newsroom/2026-10-05/source-followup-issues.json` - present
+- `articles/content/newsroom/2026-10-05/source-effectiveness-report.json` - present
 - `articles/content/newsroom/2026-10-05/source-discovery-feedback-report.json` - present
 - `articles/content/newsroom/2026-10-05/source-clusters.json` - present
 - `articles/content/newsroom/2026-10-05/gemini-source-proposals.json` - present

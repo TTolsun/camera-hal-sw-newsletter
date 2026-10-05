@@ -5,7 +5,7 @@
   "status": "shadow_selected",
   "activated": true,
   "trigger": {
-    "direct_aosp_camera_weekly_final_count": 0,
+    "direct_aosp_camera_weekly_final_count": 1,
     "activated": true
   },
   "selected_topic_key": "https://source.android.com/docs/compatibility/cts/its-release-notes-17#package-versions",

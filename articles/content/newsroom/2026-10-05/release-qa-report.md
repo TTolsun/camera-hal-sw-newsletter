@@ -2,8 +2,8 @@
 
 ## 생성 파일 목록
 
-- articles/content/collected-news/2026-10-05/merged-candidates.json
-- articles/content/collected-news/2026-10-05/merged-candidate-manifest.json
+- articles/content/collected-news/2026-10-05/manual-candidates.json
+- articles/content/collected-news/2026-10-05/raw-candidate-manifest.json
 - articles/content/newsroom/2026-10-05/shortlisted-candidates.json
 - articles/content/newsroom/2026-10-05/article-capsules.json
 - articles/content/newsroom/2026-10-05/background-context.json
@@ -30,6 +30,12 @@
 - articles/data/newsletters.json
 - articles/data/homepage-headline.json
 - state/article-exposure-history.json
+- articles/data/newsletters-weekly.json
+- articles/en/newsletters/2026-W41/index.html
+- articles/en/newsletters/2026-W41/newsletter.md
+- articles/newsletters/2026-W41/translation.en.json
+- articles/newsletters/2026-W41/translation-cost-report.md
+- articles/sitemap.xml
 - articles/newsletters/2026-W41/index.html
 - articles/newsletters/2026-W41/newsletter.md
 - articles/newsletters/2026-W41/issue.json
@@ -37,7 +43,7 @@
 
 ## 산출물 리뷰 순서
 
-- present: 68/93
+- present: 77/93
 - missing_required: 0
 - attention_required: 2
 
@@ -59,7 +65,7 @@
 - `articles/newsletters/2026-W41/issue.json` - changed
 - `articles/content/audit/newsletter-provenance-ledger.md` - present
 - `articles/data/newsletters-weekly.json` - changed
-- `articles/sitemap.xml` - present
+- `articles/sitemap.xml` - changed
 
 ### 사실성 / 품질 / HAL 게이트
 
@@ -67,27 +73,31 @@
 - `articles/content/newsroom/2026-10-05/quality-report.md` - changed
 - `articles/content/newsroom/2026-10-05/hal-signal-quality-report.md` - changed
 - `articles/content/newsroom/2026-10-05/stale-claim-report.md` - changed
+- `articles/content/newsroom/2026-10-05/image-audit-report.md` - present
 - `articles/content/newsroom/2026-10-05/source-quality-report.md` - present
 
 ### 후보 선정 진단
 
 - `articles/content/newsroom/2026-10-05/selection-diagnostics.md` - present
 - `articles/content/newsroom/2026-10-05/selection-report.md` - present
+- `articles/content/newsroom/2026-10-05/source-quality-diagnosis.md` - present
+- `articles/content/newsroom/2026-10-05/source-followup-issues.md` - present
 
 ### 필요 시 확인
 
 - `articles/content/newsroom/2026-10-05/release-qa-report.md` - changed
 - `articles/content/newsroom/2026-10-05/retry-history.md` - changed
+- `articles/content/newsroom/2026-10-05/source-effectiveness-report.md` - present
 - `articles/content/newsroom/2026-10-05/source-discovery-feedback-report.md` - present
 - `articles/content/newsroom/2026-10-05/gemini-source-discovery-report.md` - present
 
 ### 디버그 근거
 
-- `articles/content/collected-news/2026-10-05/manual-candidates.json` - present
+- `articles/content/collected-news/2026-10-05/manual-candidates.json` - changed
 - `articles/content/collected-news/2026-10-05/candidates.json` - present
-- `articles/content/collected-news/2026-10-05/raw-candidate-manifest.json` - present
-- `articles/content/collected-news/2026-10-05/merged-candidates.json` - changed
-- `articles/content/collected-news/2026-10-05/merged-candidate-manifest.json` - changed
+- `articles/content/collected-news/2026-10-05/raw-candidate-manifest.json` - changed
+- `articles/content/collected-news/2026-10-05/merged-candidates.json` - present
+- `articles/content/collected-news/2026-10-05/merged-candidate-manifest.json` - present
 - `articles/content/newsroom/2026-10-05/generation-status.json` - present
 - `articles/content/newsroom/2026-10-05/reporter-candidates.json` - changed
 - `articles/content/newsroom/2026-10-05/editor-draft.json` - changed
@@ -101,7 +111,12 @@
 - `articles/content/newsroom/2026-10-05/selection-report.json` - present
 - `articles/content/newsroom/2026-10-05/article-capsules.json` - changed
 - `articles/content/newsroom/2026-10-05/background-context.json` - changed
+- `articles/content/newsroom/2026-10-05/evidence-pack-summary.json` - present
+- `articles/content/newsroom/2026-10-05/image-audit-report.json` - present
 - `articles/content/newsroom/2026-10-05/source-quality-report.json` - present
+- `articles/content/newsroom/2026-10-05/source-quality-diagnosis.json` - present
+- `articles/content/newsroom/2026-10-05/source-followup-issues.json` - present
+- `articles/content/newsroom/2026-10-05/source-effectiveness-report.json` - present
 - `articles/content/newsroom/2026-10-05/source-discovery-feedback-report.json` - present
 - `articles/content/newsroom/2026-10-05/source-clusters.json` - present
 - `articles/content/newsroom/2026-10-05/gemini-source-proposals.json` - present
@@ -142,7 +157,7 @@ Validated 39 newsletter entries.
 > camera-hal-sw-newsletter@1.0.0 validate:images
 > node src/generator/validate/validate-external-images.js
 
-Validated 8 article images.
+Validated 4 article images.
 
 ## 잔여 TODO 여부
 
@@ -159,7 +174,7 @@ Validated 8 article images.
 - source gap 개수: 0
 
 ## 품질 게이트
-- 품질 점수: 90/100
+- 품질 점수: 97/100
 - 품질 기준: 60
 - 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2); 1pt editorial-story (briefing 3); 1pt image-fallback (Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안); 2pt linked-evidence-limitation (ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가)
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2); 1pt image-fallback (libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의)

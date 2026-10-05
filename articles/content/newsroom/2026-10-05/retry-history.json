@@ -2,11 +2,11 @@
   {
     "attempt": 1,
     "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
-    "score": 90,
+    "score": 97,
     "threshold": 60,
     "status": "PASS",
-    "rendered_main_article_count": 4,
-    "locked_article_count": 4,
+    "rendered_main_article_count": 2,
+    "locked_article_count": 2,
     "demoted_article_count": 0,
     "reserve_pool_opened": false,
     "reserve_open_reason": "",
@@ -28,7 +28,7 @@
       {
         "category": "editorial-story",
         "points": 1,
-        "reason": "Briefing bullet misses story structure elements: what_happened.",
+        "reason": "Briefing bullet misses story structure elements: reader_perspective.",
         "location": "briefing 2",
         "blocking": false,
         "severity": "soft",
@@ -36,60 +36,10 @@
         "dedupe_key": ""
       },
       {
-        "category": "editorial-story",
-        "points": 1,
-        "reason": "Briefing bullet misses story structure elements: what_happened.",
-        "location": "briefing 3",
-        "blocking": false,
-        "severity": "soft",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
         "category": "image-fallback",
         "points": 1,
         "reason": "Article image uses a local fallback visual.",
-        "location": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-        "blocking": false,
-        "severity": "soft",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "linked-evidence-limitation",
-        "points": 2,
-        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-        "location": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-        "blocking": false,
-        "severity": "soft",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "image-fallback",
-        "points": 1,
-        "reason": "Article image uses a local fallback visual.",
-        "location": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-        "blocking": false,
-        "severity": "soft",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "linked-evidence-limitation",
-        "points": 2,
-        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-        "location": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-        "blocking": false,
-        "severity": "soft",
-        "reason_code": "",
-        "dedupe_key": ""
-      },
-      {
-        "category": "image-fallback",
-        "points": 1,
-        "reason": "Article image uses a local fallback visual.",
-        "location": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
+        "location": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -97,16 +47,12 @@
       }
     ],
     "selected_article_headlines": [
-      "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-      "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-      "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-      "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례"
+      "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의"
     ],
     "locked_article_headlines": [
-      "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-      "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-      "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-      "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례"
+      "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의"
     ],
     "source_gap_sections": [],
     "demoted_sections": [],
@@ -114,50 +60,26 @@
     "locked_sections": [
       {
         "index": 1,
-        "headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "android",
+        "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
         "urls": [
-          "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+          "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
         ],
         "source_titles": [
-          "PATCH 3/3 media: mali-c55: Keep ISP powered while IRQ wake is armed"
+          "Android 17 Camera Image Test Suite release notes | Android Open Source Project"
         ]
       },
       {
         "index": 2,
-        "headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
+        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
         "category": "camera_driver_image_pipeline",
         "relevance_bucket": "camera_driver_image_pipeline",
         "urls": [
-          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692"
+          "https://patchwork.libcamera.org/patch/28387/"
         ],
         "source_titles": [
-          "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2"
-        ]
-      },
-      {
-        "index": 3,
-        "headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "urls": [
-          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
-        ],
-        "source_titles": [
-          "camera: Enforce exclusive buffer IDs - chromiumos/platform2"
-        ]
-      },
-      {
-        "index": 4,
-        "headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "urls": [
-          "https://www.anthropic.com/news/barclays-scales-claude"
-        ],
-        "source_titles": [
-          "Barclays scales Claude to upgrade operations and improve client experience"
+          "[1/5] libcamera: controls: Expand AWB controls"
         ]
       }
     ],
@@ -168,9 +90,9 @@
     "max_section_repairs": 1,
     "repair_plan": [
       {
-        "headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
+        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
         "sources": [
-          "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+          "https://patchwork.libcamera.org/patch/28387/"
         ],
         "action": "repair-section",
         "failure_type": "image-fallback",
@@ -184,83 +106,24 @@
             "points": 1,
             "reason": "Article image uses a local fallback visual.",
             "reason_code": "",
-            "location": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안"
+            "location": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의"
           }
         ],
         "recommended_fixes": []
       }
     ],
-    "skipped_repair_sections": [
-      {
-        "headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
-        "sources": [
-          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692"
-        ],
-        "action": "repair-section",
-        "failure_type": "linked-evidence-limitation",
-        "allow_rewrite": true,
-        "policy_reason": "section-scoped repair is allowed",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [
-          {
-            "category": "linked-evidence-limitation",
-            "points": 2,
-            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-            "reason_code": "",
-            "location": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가"
-          },
-          {
-            "category": "image-fallback",
-            "points": 1,
-            "reason": "Article image uses a local fallback visual.",
-            "reason_code": "",
-            "location": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가"
-          }
-        ],
-        "recommended_fixes": []
-      },
-      {
-        "headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-        "sources": [
-          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
-        ],
-        "action": "repair-section",
-        "failure_type": "linked-evidence-limitation",
-        "allow_rewrite": true,
-        "policy_reason": "section-scoped repair is allowed",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [
-          {
-            "category": "linked-evidence-limitation",
-            "points": 2,
-            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
-            "reason_code": "",
-            "location": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용"
-          },
-          {
-            "category": "image-fallback",
-            "points": 1,
-            "reason": "Article image uses a local fallback visual.",
-            "reason_code": "",
-            "location": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용"
-          }
-        ],
-        "recommended_fixes": []
-      }
-    ],
+    "skipped_repair_sections": [],
     "article_locks": [
       {
         "index": 1,
-        "headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "android",
+        "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
         "urls": [
-          "https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/"
+          "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
         ],
         "source_titles": [
-          "PATCH 3/3 media: mali-c55: Keep ISP powered while IRQ wake is armed"
+          "Android 17 Camera Image Test Suite release notes | Android Open Source Project"
         ],
         "status": "PASS",
         "reason": "",
@@ -268,44 +131,14 @@
       },
       {
         "index": 2,
-        "headline": "ChromeOS 플랫폼의 카메라 스택 안정성 강화: APPn 파싱 및 BLOB 출력 버퍼 크기 경계 검사 추가",
+        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
         "category": "camera_driver_image_pipeline",
         "relevance_bucket": "camera_driver_image_pipeline",
         "urls": [
-          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692"
+          "https://patchwork.libcamera.org/patch/28387/"
         ],
         "source_titles": [
-          "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2"
-        ],
-        "status": "PASS",
-        "reason": "",
-        "locked": true
-      },
-      {
-        "index": 3,
-        "headline": "ChromeOS 카메라 어댑터의 버퍼 관리 강화: 독점적인 버퍼 ID 강제 적용",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "urls": [
-          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
-        ],
-        "source_titles": [
-          "camera: Enforce exclusive buffer IDs - chromiumos/platform2"
-        ],
-        "status": "PASS",
-        "reason": "",
-        "locked": true
-      },
-      {
-        "index": 4,
-        "headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-        "category": "cpp_ai_tooling_fallback",
-        "relevance_bucket": "cpp_ai_tooling_fallback",
-        "urls": [
-          "https://www.anthropic.com/news/barclays-scales-claude"
-        ],
-        "source_titles": [
-          "Barclays scales Claude to upgrade operations and improve client experience"
+          "[1/5] libcamera: controls: Expand AWB controls"
         ],
         "status": "PASS",
         "reason": "",
@@ -313,12 +146,12 @@
       }
     ],
     "final_article_slot_distribution": {
-      "android_camera_platform_api": 2,
-      "camerax_aosp_camera_compatibility": 0,
-      "linux_camera_libcamera_v4l2": 0,
-      "ai_camera_path_hal_workflow": 1,
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 1,
+      "ai_camera_path_hal_workflow": 0,
       "cpp_toolchain_fallback": 0,
-      "other": 1
+      "other": 0
     },
     "reporter_eligibility_blocked_sections": [],
     "rejected_main_ineligible_candidates": [],

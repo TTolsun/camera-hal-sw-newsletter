@@ -1,113 +1,80 @@
 # 2026 W40 (09.28 ~ 10.04)
 
-이번 주 뉴스레터에서는 카메라 시스템의 안정성과 효율성을 높이는 다양한 개선 사항을 다룹니다. 먼저 Mali-C55 ISP 드라이버의 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실을 방지하는 소식을 전합니다. 또한, ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사를 도입하여 이미지 처리 안정성을 강화하고, ChromeOS 카메라 어댑터에서 독점적 버퍼 ID를 강제하여 버퍼 관리 충돌을 방지하는 중요한 업데이트도 확인하실 수 있습니다.
+이번 주 뉴스레터에서는 Android 17 카메라 검증을 위한 중요한 소식과 libcamera의 새로운 기능 제안을 다룹니다. Android 17 카메라 이미지 테스트 스위트 검증을 위한 가상 환경 패키지 번들링 권장 사항을 통해 테스트 환경의 일관성을 확보하세요. 또한, libcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안으로 하위 이미지 파이프라인 제어의 정밀도를 높일 수 있는 방안을 살펴보시기 바랍니다.
 
 
 
 ## 1. 이번 주 기사
 
-- Mali-C55 ISP 드라이버 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실 방지
-- ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사 도입으로 이미지 처리 안정성 강화
-- ChromeOS 카메라 어댑터에서 독점적 버퍼 ID 강제로 버퍼 관리 충돌 방지
+- Android 17 카메라 이미지 테스트 스위트 검증을 위한 가상 환경 패키지 번들링 권장 사항
+- libcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안
 
-## 2. Mali-C55 ISP 드라이버 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실 방지
-
-
-![Mali-C55 ISP 드라이버 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실 방지 image](../../assets/images/fallback/newsletter-default.svg)
+## 2. Android 17 카메라 이미지 테스트 스위트 검증을 위한 가상 환경 패키지 번들링 권장 사항
 
 
-_lore.kernel.org linux-media list (2026-09-29)_
+![Android Open Source Project](https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png)
 
-시스템이 대기 모드로 들어갔다 깨어나는 순간 카메라 화면이 멈추거나 프레임이 누락되는 현상을 겪어보셨다면, 하위 드라이버의 전원 관리 타이밍을 의심해볼 필요가 있습니다.
+_이미지: [Android 17 Camera Image Test Suite release notes | Android Open Source Project](https://source.android.com/docs/compatibility/cts/its-release-notes-17)_
 
-리눅스 미디어 서브시스템 메일링 리스트에 mali-c55 ISP 드라이버의 전원 관리 동작을 개선하는 패치가 제안되었습니다. 이번에 공개된 패치는 시스템 suspend 및 resume 과정에서 발생할 수 있는 ISP 인터럽트 유실 문제를 해결하는 데 초점을 맞추고 있습니다.
 
-기존 구조에서는 시스템 suspend가 IRQ wake를 활성화한 직후 pm_runtime_force_suspend()를 호출하는 방식으로 동작했습니다. 이 과정에서 활성화 상태였던 ISP의 리셋 신호가 어서트되고 클럭이 비활성화되면서, ISP가 더 이상 프레임 인터럽트를 생성할 수 없는 상태에 빠지는 문제가 있었습니다. 이미 런타임 suspend 상태였던 ISP 역시 전원이 꺼진 채로 방치되었습니다.
+_Android Open Source Project 공식 문서_
 
-### 런타임 PM 참조 유지를 통한 전원 확보
+Android 17 카메라 검증을 준비하는 팀이라면, 테스트 환경의 일관성을 유지하기 위한 새로운 권장 사항에 주목해야 합니다.
 
-제안된 변경 사항은 IRQ wake를 활성화하기 전에 런타임 PM 참조를 명시적으로 가져오고, 이를 시스템이 완전히 resume될 때까지 유지하도록 합니다. 이를 통해 유휴 상태의 ISP 전원을 켜진 상태로 유지하고 IRQ wake가 정상적으로 활성화될 수 있도록 보장합니다. 만약 IRQ wake 설정이 실패하면 가져왔던 참조를 즉시 해제하여 불필요한 전력 소모를 방지합니다.
+Android 17 카메라 이미지 테스트 스위트의 환경 구성 방식에 변화가 생겼습니다. 공식 문서에 따르면 가상 환경을 설정할 때 패키지 관리 소프트웨어를 사용하여 올바른 버전의 패키지를 번들링할 것을 강력히 권장하고 있습니다.
 
-이 패치는 아직 리눅스 커널 메인라인에 머지되지 않은 제안 단계의 패치 시리즈 중 일부입니다. 실제 하드웨어 플랫폼에 적용하기 전에 전력 소비 변화와 suspend/resume 주기에서의 카메라 파이프라인 안정성을 충분히 검증해야 합니다.
+이 권장 사항은 파이썬과 관련 패키지 버전에 대한 기준을 다룹니다. 카메라 이미지 테스트 스위트의 개발 및 검증 환경 구성에 직접적인 영향을 미치는 요소입니다.
+
+### 테스트 환경의 일관성 확보
+
+카메라 하드웨어 추상화 계층의 동작을 검증하는 테스트 환경은 파이썬 패키지 버전 불일치로 인해 예기치 않은 오류를 겪기 쉽습니다. 이번에 제시된 가상 환경 번들링 방식은 이러한 버전 파편화를 방지하고 검증의 신뢰성을 높이기 위한 조치입니다.
+
+다만 이 변경 사항은 하드웨어 추상화 계층의 실제 동작이나 인터페이스 자체를 수정하는 것은 아닙니다. 어디까지나 하드웨어 추상화 계층 구현을 검증하는 테스트 환경을 구성할 때 적용되는 권장 지침입니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-이 변경은 하위 ISP 드라이버의 안정성을 높여 HAL 계층에 안정적인 이미지 스트림을 공급하는 데 기여합니다. Mali-C55 ISP를 사용하는 SoC 플랫폼 개발자는 시스템 suspend/resume 복귀 시점에 HAL에서 프레임 드롭이나 타임아웃 로그가 발생하는지 확인하고, 드라이버 계층에서 PM 참조가 정상적으로 해제되는지 전력 소모 메트릭을 모니터링해야 합니다.
+Android 17 이상을 대상으로 하는 카메라 하드웨어 추상화 계층 검증을 위해, 카메라 이미지 테스트 스위트 실행 환경을 설정할 때 패키지 관리 소프트웨어를 도입하여 파이썬 패키지 버전을 동기화해야 합니다. 이는 테스트 스크립트 실행 중 발생할 수 있는 환경적 무작위 오류를 줄이는 데 기여합니다.
 
 **출처**
 
-- [PATCH 3/3 media: mali-c55: Keep ISP powered while IRQ wake is armed](https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/T/#t)
+- [Android 17 Camera Image Test Suite release notes](https://source.android.com/docs/compatibility/cts/its-release-notes-17)
 
 ---
 
-## 3. ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사 도입으로 이미지 처리 안정성 강화
+## 3. libcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안
 
 
-![ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사 도입으로 이미지 처리 안정성 강화 image](../../assets/images/fallback/newsletter-default.svg)
+![libcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안 image](../../assets/images/fallback/newsletter-default.svg)
 
 
-_ChromeOS Gerrit (2026-09-30)_
+_libcamera Patchwork 메일링 리스트_
 
-카메라 캡처 과정에서 이미지 메타데이터를 파싱할 때 경계 검사가 누락되면 메모리 오버플로우나 시스템 크래시로 이어질 수 있습니다.
+하위 이미지 파이프라인에서 자동 화이트 밸런스를 더 정밀하게 제어하기 위한 새로운 설계 제안이 논의되고 있습니다.
 
-ChromeOS의 카메라 공통 라이브러리 스택에 이미지 캡처 처리 안정성을 높이기 위한 보안 패치가 병합되었습니다. 이번 변경은 정적 이미지 캡처 프로세서에서 발생할 수 있는 버퍼 오버런 위험을 차단하는 데 중점을 둡니다.
+libcamera 프로젝트에 자동 화이트 밸런스 제어 기능을 확장하는 패치 시리즈의 첫 번째 조각이 제출되었습니다. 이번 제안은 기존의 드래프트 단계에 있던 자동 화이트 밸런스 상태를 코어 컨트롤로 이동시키는 내용을 담고 있습니다.
 
-Gerrit 변경 사항에 따르면, 개발진은 still capture processor 모듈의 소스 코드를 수정하여 JPEG 이미지의 APPn 마커를 파싱할 때와 BLOB 출력 버퍼 크기를 결정할 때 엄격한 경계 검사를 수행하도록 했습니다. 구체적으로는 still capture processor 소스 파일 내에서 버퍼의 남은 공간과 파싱하려는 데이터 크기를 대조하는 로직이 보강되었습니다.
+제안에 따르면 자동 화이트 밸런스 상태를 나타내는 메타데이터 항목인 AwbLocked가 상태를 고정하는 제어 명령으로 재정의됩니다. 또한 상태가 고정된 상황에서도 임시로 화이트 밸런스 게인 값을 다시 계산하도록 강제하는 AwbTrigger 메커니즘이 새롭게 추가됩니다.
 
-### 이미지 메타데이터 파싱의 안전성 확보
+### 하위 이미지 파이프라인과의 거리감
 
-APPn 마커는 JPEG 파일 내에서 애플리케이션 고유의 메타데이터(예: Exif 데이터 등)를 담는 영역입니다. 이 영역을 파싱할 때 입력 데이터의 크기를 제대로 검증하지 않으면 잘못된 메모리 주소에 접근하거나 버퍼 크기를 초과하여 데이터를 쓰는 문제가 발생할 수 있습니다. 이번 경계 검사 추가를 통해 비정상적인 메타데이터를 포함한 이미지 프레임이 입력되더라도 카메라 서비스가 크래시 없이 안전하게 예외 처리를 수행할 수 있게 되었습니다.
+이 변경 사항은 리눅스 기반 하위 카메라 스택인 libcamera에 제안된 내용으로 안드로이드 카메라 하드웨어 추상화 계층에 즉각적으로 반영되는 것은 아닙니다. 하위 이미지 파이프라인 수준에서 자동 화이트 밸런스 동작이 어떻게 정교화되는지 보여주는 설계 참고 자료로 보아야 합니다.
 
-이 변경은 ChromeOS 플랫폼의 카메라 스택에 적용된 것이지만, 동일한 JPEG 파싱 및 BLOB 버퍼 관리 메커니즘을 사용하는 Android Camera HAL 및 공통 이미지 프로세서 구현에서도 참고할 만한 중요한 안정성 개선 사례입니다.
-
-### Camera HAL/Driver 관점에서의 의미
-
-Android Camera HAL에서 JPEG/BLOB 스트림을 처리할 때도 동일한 취약점이 발생할 수 있습니다. HAL 개발자는 JPEG 인코딩 및 Exif/APPn 메타데이터 파싱 시 입력 버퍼 크기와 출력 BLOB 버퍼 크기에 대한 경계 검사가 누락되지 않았는지 정적 분석 도구 및 퍼징 테스트를 통해 점검해야 합니다.
-
-**출처**
-
-- [camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2](https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692)
-
----
-
-## 4. ChromeOS 카메라 어댑터에서 독점적 버퍼 ID 강제로 버퍼 관리 충돌 방지
-
-
-![ChromeOS 카메라 어댑터에서 독점적 버퍼 ID 강제로 버퍼 관리 충돌 방지 image](../../assets/images/fallback/newsletter-default.svg)
-
-
-_ChromeOS Gerrit (2026-09-30)_
-
-카메라 버퍼를 관리할 때 동일한 ID가 중복 할당되거나 오용되면 심각한 메모리 오염이나 프레임 왜곡이 발생할 수 있습니다.
-
-ChromeOS 카메라 HAL 어댑터 스택에 버퍼 관리의 일관성을 높이고 버퍼 ID 충돌을 방지하기 위한 중요한 패치가 병합되었습니다. 이번 변경은 카메라 디바이스 어댑터 계층에서 버퍼 ID의 독점성을 엄격히 강제하도록 설계되었습니다.
-
-Gerrit 변경 내역에 따르면, 개발진은 카메라 디바이스 어댑터의 소스 코드를 수정하여 시스템 내에서 활성화된 각 카메라 버퍼가 고유하고 독점적인 ID를 가지도록 보장하는 로직을 추가했습니다. 이 변경은 버퍼 할당 및 사용 주기 전반에 걸쳐 버퍼 ID의 일관성을 유지하는 데 기여합니다.
-
-### 버퍼 ID 충돌 및 오용 차단
-
-카메라 파이프라인에서 여러 스트림이 동시에 활성화될 때, 버퍼 ID가 고유하게 관리되지 않으면 특정 스트림의 버퍼가 다른 스트림에 의해 잘못 덮어씌워지거나 런타임에 버퍼 소유권이 꼬이는 문제가 발생할 수 있습니다. 이번 패치는 버퍼 ID 등록 및 해제 시점에 독점성 검증을 강제함으로써 이러한 동시성 버그와 메모리 관리 오류를 원천 차단합니다.
-
-이 변경은 ChromeOS 카메라 어댑터에 적용된 것이지만, 다중 스트림 환경에서 복잡한 버퍼 라이프사이클을 관리해야 하는 Android Camera HAL 개발자들에게도 버퍼 관리의 안정성을 높이는 좋은 설계 기준을 제시합니다.
+현재 이 패치는 머지되지 않은 제안 상태이며 메일링 리스트에서 검토가 진행 중입니다. 또한 제공된 요약 정보가 일부 생략되어 있어 게인 재계산 강제 메커니즘의 상세한 동작 조건은 향후 변경될 가능성이 있습니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-Android Camera HAL3 구현에서도 버퍼 ID 독점성 관리는 매우 중요합니다. HAL3에서는 프레임 요청 시 버퍼 ID를 매핑하여 관리하므로, HAL 개발자는 다중 스트림 구성 시 버퍼 ID 충돌이 발생하지 않도록 버퍼 맵 등록 로직을 점검하고, 중복된 버퍼 ID가 입력될 경우 즉시 에러를 반환하는 방어 로직을 구현해야 합니다.
+직접적인 안드로이드 카메라 하드웨어 추상화 계층의 변경은 아니지만, 하위 이미지 파이프라인 수준에서 자동 화이트 밸런스 상태 고정 및 강제 트리거가 구현되는 방식을 참고할 수 있습니다. 향후 안드로이드 카메라 하드웨어 추상화 계층의 자동 화이트 밸런스 메타데이터 매핑 설계 시 하위 드라이버와의 제어 정렬을 검토하는 데 유용합니다.
 
 **출처**
 
-- [camera: Enforce exclusive buffer IDs - chromiumos/platform2](https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146)
+- [[1/5] libcamera: controls: Expand AWB controls](https://patchwork.libcamera.org/patch/28387/)
 
 
 ## 참고 / 더 읽을거리
 
-- [\[PATCH v2\] media: rcar-isp: ispcore: Fix inconsistent step sizes](<https://lore.kernel.org/linux-media/20261001085130.84565-1-barnabas.pocze+renesas@ideasonboard.com/>) — lore.kernel.org linux-media list (2026-10-01) · Android 플랫폼 · 미디어 출력 · SoC 신호 참고
-- [camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2](<https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689>) — ChromeOS Gerrit (platform2 camera merged changes) (2026-09-30) · 카메라 드라이버 / 이미지 파이프라인 참고
-- [camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2](<https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691>) — ChromeOS Gerrit (platform2 camera merged changes) (2026-09-30) · 카메라 드라이버 / 이미지 파이프라인 참고
-- [camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2](<https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690>) — ChromeOS Gerrit (platform2 camera merged changes) (2026-09-30) · 카메라 드라이버 / 이미지 파이프라인 참고
+- [\[PATCH 3/3\] media: mali-c55: Keep ISP powered while IRQ wake is armed](<https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/>) — lore.kernel.org linux-media list (2026-09-29) · Mali-C55 ISP 전원 관리 패치 제안
+- ChromeOS 카메라 변경 모음: [camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2](<https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692>) (2026-09-30) · [camera: Enforce exclusive buffer IDs - chromiumos/platform2](<https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146>) (2026-09-30)
 
 ## 참고자료
 
-- [PATCH 3/3 media: mali-c55: Keep ISP powered while IRQ wake is armed](https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/T/#t)
-- [camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2](https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692)
-- [camera: Enforce exclusive buffer IDs - chromiumos/platform2](https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146)
+

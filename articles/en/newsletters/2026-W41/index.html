@@ -8,17 +8,17 @@
   <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W41/index.html" />
   <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W41/index.html" />
   <meta property="og:locale" content="en_US" />
-  <meta name="description" content="This week&#39;s newsletter covers various improvements that enhance the stability and efficiency of camera systems. First, we report on power management improvements for the Mali-C55 ISP driver, which prevent frame interrupt loss upon system resume. You will also find important updates on the ChromeOS camera stack, which strengthens image processing stability by introducing APPn parsing and BLOB buffer boundary checks, and the ChromeOS camera adapter, which prevents buffer management conflicts by enforcing exclusive buffer IDs." />
+  <meta name="description" content="This week&#39;s newsletter covers important news for Android 17 camera validation and new feature proposals for libcamera. Ensure consistency in your test environment with the recommendation for bundling virtual environment packages for Android 17 Camera Image Test Suite validation. Additionally, explore ways to enhance the precision of sub-image pipeline control with the libcamera automatic white balance control expansion and metadata override proposals." />
   <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W41/index.html" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Camera SW Newsletter" />
   <meta property="og:title" content="2026 W40 Camera SW Newsletter (Published W41)" />
-  <meta property="og:description" content="This week&#39;s newsletter covers various improvements that enhance the stability and efficiency of camera systems. First, we report on power management improvements for the Mali-C55 ISP driver, which prevent frame interrupt loss upon system resume. You will also find important updates on the ChromeOS camera stack, which strengthens image processing stability by introducing APPn parsing and BLOB buffer boundary checks, and the ChromeOS camera adapter, which prevents buffer management conflicts by enforcing exclusive buffer IDs." />
+  <meta property="og:description" content="This week&#39;s newsletter covers important news for Android 17 camera validation and new feature proposals for libcamera. Ensure consistency in your test environment with the recommendation for bundling virtual environment packages for Android 17 Camera Image Test Suite validation. Additionally, explore ways to enhance the precision of sub-image pipeline control with the libcamera automatic white balance control expansion and metadata override proposals." />
   <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W41/index.html" />
   <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="2026 W40 Camera SW Newsletter (Published W41)" />
-  <meta name="twitter:description" content="This week&#39;s newsletter covers various improvements that enhance the stability and efficiency of camera systems. First, we report on power management improvements for the Mali-C55 ISP driver, which prevent frame interrupt loss upon system resume. You will also find important updates on the ChromeOS camera stack, which strengthens image processing stability by introducing APPn parsing and BLOB buffer boundary checks, and the ChromeOS camera adapter, which prevents buffer management conflicts by enforcing exclusive buffer IDs." />
+  <meta name="twitter:description" content="This week&#39;s newsletter covers important news for Android 17 camera validation and new feature proposals for libcamera. Ensure consistency in your test environment with the recommendation for bundling virtual environment packages for Android 17 Camera Image Test Suite validation. Additionally, explore ways to enhance the precision of sub-image pipeline control with the libcamera automatic white balance control expansion and metadata override proposals." />
   <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -49,85 +49,66 @@
         </div>
         <h1 class="issue-title"><span>2026 W40</span></h1>
         <p class="issue-publish-badge">Published W41</p>
-        <p class="subtitle">This week&#39;s newsletter covers various improvements that enhance the stability and efficiency of camera systems. First, we report on power management improvements for the Mali-C55 ISP driver, which prevent frame interrupt loss upon system resume. You will also find important updates on the ChromeOS camera stack, which strengthens image processing stability by introducing APPn parsing and BLOB buffer boundary checks, and the ChromeOS camera adapter, which prevents buffer management conflicts by enforcing exclusive buffer IDs.</p>
-        <div class="tag-row issue-tags"><span class="tag">Android</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Camera HAL</span></div>
+        <p class="subtitle">This week&#39;s newsletter covers important news for Android 17 camera validation and new feature proposals for libcamera. Ensure consistency in your test environment with the recommendation for bundling virtual environment packages for Android 17 Camera Image Test Suite validation. Additionally, explore ways to enhance the precision of sub-image pipeline control with the libcamera automatic white balance control expansion and metadata override proposals.</p>
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Android</span></div>
       </header>
 
       <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
           <h2 id="issue-briefing-title">In this issue</h2>
-          <ul><li>Mali-C55 ISP Driver Power Management Improvement Prevents Frame Interrupt Loss on System Resume</li><li>ChromeOS Camera Stack Enhances Image Processing Stability by Introducing APPn Parsing and BLOB Buffer Boundary Checks</li><li>ChromeOS Camera Adapter Prevents Buffer Management Conflicts by Enforcing Exclusive Buffer IDs</li></ul>
+          <ul><li>Recommendations for Bundling Virtual Environment Packages for Android 17 Camera Image Test Suite Validation</li><li>libcamera Automatic White Balance Control Expansion and Metadata Override Proposal</li></ul>
         </div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-mali-c55-isp-driver-power-management-improvement-prevents-frame-interrupt-loss-o" aria-labelledby="article-mali-c55-isp-driver-power-management-improvement-prevents-frame-interrupt-loss-o-title">
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-recommendations-for-bundling-virtual-environment-packages-for-android-17-camera-" aria-labelledby="article-recommendations-for-bundling-virtual-environment-packages-for-android-17-camera--title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
-          <span class="issue-story-category">Android Platform</span>
+          <span class="issue-story-category">AOSP Camera</span>
         </div>
-        <h2 id="article-mali-c55-isp-driver-power-management-improvement-prevents-frame-interrupt-loss-o-title" class="article-title">Mali-C55 ISP Driver Power Management Improvement Prevents Frame Interrupt Loss on System Resume</h2>
-        <p class="article-source-subtitle">lore.kernel.org linux-media list (2026-09-29)</p>
+        <h2 id="article-recommendations-for-bundling-virtual-environment-packages-for-android-17-camera--title" class="article-title">Recommendations for Bundling Virtual Environment Packages for Android 17 Camera Image Test Suite Validation</h2>
+        <p class="article-source-subtitle">Android Open Source Project Official Documentation</p>
         <figure class="article-media">
-        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Mali-C55 ISP Driver Power Management Improvement Prevents Frame Interrupt Loss on System Resume image" loading="lazy" decoding="async">
+        <img class="article-image" src="https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png" alt="Android Open Source Project" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://source.android.com/docs/compatibility/cts/its-release-notes-17">Android 17 Camera Image Test Suite release notes | Android Open Source Project</a></figcaption>
         </figure>
-        <p class="article-lead">If you&#39;ve experienced the camera screen freezing or frames being lost when your system enters and wakes from standby, you might need to suspect the power management timing of the underlying driver.</p>
-        <p>A patch has been proposed to the Linux media subsystem mailing list to improve the power management behavior of the mali-c55 ISP driver. The patch focuses on resolving ISP interrupt loss issues that can occur during system suspend and resume.</p>
-        <p>In the existing structure, system suspend operated by calling pm_runtime_force_suspend() immediately after enabling IRQ wake. During this process, the active ISP&#39;s reset signal was asserted and its clock disabled, leading to a problem where the ISP could no longer generate frame interrupts. ISPs that were already in runtime suspend also remained powered off.</p>
-        <h3 class="article-subheading">Securing Power by Maintaining Runtime PM Reference</h3>
-        <p>The proposed changes explicitly acquire a runtime PM reference before enabling IRQ wake and maintain it until the system fully resumes. This ensures that the idle ISP remains powered on and IRQ wake can be enabled normally. If IRQ wake setup fails, the acquired reference is immediately released to prevent unnecessary power consumption.</p>
-        <p>This patch is part of a proposed patch series that has not yet been merged into the Linux kernel mainline. Before applying it to actual hardware platforms, power consumption changes and camera pipeline stability during suspend/resume cycles must be thoroughly verified.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This change contributes to improving the stability of the underlying ISP driver, providing a stable image stream to the HAL layer. SoC platform developers using the Mali-C55 ISP should check for frame drops or timeout logs in the HAL upon system suspend/resume, and monitor power consumption metrics to ensure that PM references are correctly released at the driver layer.</p></div>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/">PATCH 3/3 media: mali-c55: Keep ISP powered while IRQ wake is armed</a> — <a href="https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/T/#t">Full patch series</a></li></ul></div>
+        <p class="article-lead">Teams preparing for Android 17 camera validation should pay attention to new recommendations for maintaining test environment consistency.</p>
+        <p>The environment configuration for the Android 17 Camera Image Test Suite has changed. According to the official documentation, it is strongly recommended to use package management software to bundle the correct versions of packages when setting up a virtual environment.</p>
+        <p>This recommendation covers the standards for Python and related package versions. These are factors that directly affect the development and validation environment configuration of the Camera Image Test Suite.</p>
+        <h3 class="article-subheading">Ensuring Test Environment Consistency</h3>
+        <p>Test environments that validate the behavior of the camera hardware abstraction layer are prone to unexpected errors due to Python package version mismatches. The proposed virtual environment bundling method is a measure to prevent such version fragmentation and increase the reliability of validation.</p>
+        <p>However, this change does not modify the actual behavior or interface of the hardware abstraction layer itself. It is merely a recommended guideline to be applied when configuring the test environment to validate the hardware abstraction layer implementation.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>For validating the camera hardware abstraction layer targeting Android 17 and above, it is necessary to introduce package management software to synchronize Python package versions when setting up the Camera Image Test Suite execution environment. This helps reduce environmental random errors that may occur during test script execution.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://source.android.com/docs/compatibility/cts/its-release-notes-17">Android 17 Camera Image Test Suite release notes | Android Open Source Project</a></li></ul></div>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-chromeos-camera-stack-enhances-image-processing-stability-by-introducing-appn-pa" aria-labelledby="article-chromeos-camera-stack-enhances-image-processing-stability-by-introducing-appn-pa-title">
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-libcamera-automatic-white-balance-control-expansion-and-metadata-override-propos" aria-labelledby="article-libcamera-automatic-white-balance-control-expansion-and-metadata-override-propos-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 2">02</span>
           <span class="issue-story-category">Camera Driver · ISP</span>
         </div>
-        <h2 id="article-chromeos-camera-stack-enhances-image-processing-stability-by-introducing-appn-pa-title" class="article-title">ChromeOS Camera Stack Enhances Image Processing Stability by Introducing APPn Parsing and BLOB Buffer Boundary Checks</h2>
-        <p class="article-source-subtitle">ChromeOS Gerrit (2026-09-30)</p>
+        <h2 id="article-libcamera-automatic-white-balance-control-expansion-and-metadata-override-propos-title" class="article-title">libcamera Automatic White Balance Control Expansion and Metadata Override Proposal</h2>
+        <p class="article-source-subtitle">libcamera Patchwork Mailing List</p>
         <figure class="article-media">
-        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="ChromeOS Camera Stack Enhances Image Processing Stability by Introducing APPn Parsing and BLOB Buffer Boundary Checks image" loading="lazy" decoding="async">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="libcamera Automatic White Balance Control Expansion and Metadata Override Proposal image" loading="lazy" decoding="async">
         </figure>
-        <p class="article-lead">If boundary checks are omitted when parsing image metadata during camera capture, it can lead to memory overflow or system crashes.</p>
-        <p>A security patch has been merged into the ChromeOS camera common library stack to improve image capture processing stability. This change focuses on preventing buffer overrun risks that can occur in the still image capture processor.</p>
-        <p>According to the Gerrit change, developers modified the source code of the still capture processor module to perform strict boundary checks when parsing APPn markers in JPEG images and when determining BLOB output buffer sizes. Specifically, the logic within the still capture processor source file was enhanced to compare the remaining buffer space with the size of the data to be parsed.</p>
-        <h3 class="article-subheading">Ensuring Safety of Image Metadata Parsing</h3>
-        <p>APPn markers are areas within a JPEG file that contain application-specific metadata (e.g., Exif data). If the size of the input data is not properly validated when parsing this area, problems such as accessing incorrect memory addresses or writing data beyond the buffer size can occur. By adding these boundary checks, the camera service can safely handle exceptions without crashing, even when image frames containing abnormal metadata are input.</p>
-        <p>While this change has been applied to the ChromeOS platform&#39;s camera stack, it is an important stability improvement case that can also be referenced by Android Camera HAL and common image processor implementations that use the same JPEG parsing and BLOB buffer management mechanisms.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>The same vulnerability can occur when processing JPEG/BLOB streams in the Android Camera HAL. HAL developers should use static analysis tools and fuzzing tests to check for missing boundary checks on input buffer size and output BLOB buffer size during JPEG encoding and Exif/APPn metadata parsing.</p></div>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692">camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2</a></li></ul></div>
-      </section>
-
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-chromeos-camera-adapter-prevents-buffer-management-conflicts-by-enforcing-exclus" aria-labelledby="article-chromeos-camera-adapter-prevents-buffer-management-conflicts-by-enforcing-exclus-title">
-        <div class="issue-story-eyebrow">
-          <span class="issue-story-number" aria-label="Article 3">03</span>
-          <span class="issue-story-category">Camera Driver · ISP</span>
-        </div>
-        <h2 id="article-chromeos-camera-adapter-prevents-buffer-management-conflicts-by-enforcing-exclus-title" class="article-title">ChromeOS Camera Adapter Prevents Buffer Management Conflicts by Enforcing Exclusive Buffer IDs</h2>
-        <p class="article-source-subtitle">ChromeOS Gerrit (2026-09-30)</p>
-        <figure class="article-media">
-        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="ChromeOS Camera Adapter Prevents Buffer Management Conflicts by Enforcing Exclusive Buffer IDs image" loading="lazy" decoding="async">
-        </figure>
-        <p class="article-lead">If the same ID is redundantly allocated or misused when managing camera buffers, it can lead to severe memory corruption or frame distortion.</p>
-        <p>A significant patch has been merged into the ChromeOS camera HAL adapter stack to improve buffer management consistency and prevent buffer ID conflicts. This change is designed to strictly enforce the exclusivity of buffer IDs at the camera device adapter layer.</p>
-        <p>According to the Gerrit change history, developers modified the source code of the camera device adapter to add logic that ensures each active camera buffer within the system has a unique and exclusive ID. This change contributes to maintaining buffer ID consistency throughout the buffer allocation and usage lifecycle.</p>
-        <h3 class="article-subheading">Preventing Buffer ID Conflicts and Misuse</h3>
-        <p>When multiple streams are simultaneously active in the camera pipeline, if buffer IDs are not uniquely managed, a buffer from one stream can be incorrectly overwritten by another stream, or buffer ownership can become entangled at runtime. This patch prevents such concurrency bugs and memory management errors by enforcing exclusivity checks during buffer ID registration and de-registration.</p>
-        <p>While this change has been applied to the ChromeOS camera adapter, it also provides a good design standard for Android Camera HAL developers who need to manage complex buffer lifecycles in multi-stream environments, improving the stability of buffer management.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Buffer ID exclusivity management is also very important in Android Camera HAL3 implementations. Since HAL3 manages buffer IDs by mapping them during frame requests, HAL developers must check buffer map registration logic to prevent buffer ID conflicts in multi-stream configurations, and implement defensive logic to immediately return an error if duplicate buffer IDs are input.</p></div>
-        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146">camera: Enforce exclusive buffer IDs - chromiumos/platform2</a></li></ul></div>
+        <p class="article-lead">New design proposals for more precise automatic white balance control in the sub-image pipeline are being discussed.</p>
+        <p>The first piece of a patch series to expand automatic white balance control functionality in the libcamera project has been submitted. This proposal moves the existing draft-stage automatic white balance state to core controls.</p>
+        <p>According to the proposal, the AwbLocked metadata item, which indicates the automatic white balance state, will be redefined as a control command that locks the state. Additionally, an AwbTrigger mechanism will be newly added to temporarily force recalculation of white balance gain values even when the state is locked.</p>
+        <h3 class="article-subheading">Distance from Sub-Image Pipeline</h3>
+        <p>This change is a proposal for libcamera, a Linux-based sub-camera stack, and will not be immediately reflected in the Android camera hardware abstraction layer. It should be viewed as a design reference showing how automatic white balance behavior is refined at the sub-image pipeline level.</p>
+        <p>Currently, this patch is in a proposed state and is under review on the mailing list. Also, some of the provided summary information is omitted, so the detailed operating conditions of the gain recalculation enforcement mechanism may change in the future.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Although not a direct change to the Android camera hardware abstraction layer, it provides a reference for how automatic white balance state locking and forced triggering are implemented at the sub-image pipeline level. It will be useful for reviewing control alignment with lower-level drivers when designing automatic white balance metadata mapping for the Android camera hardware abstraction layer in the future.</p></div>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://patchwork.libcamera.org/patch/28387/">[1/5] libcamera: controls: Expand AWB controls</a></li></ul></div>
       </section>
 
       <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
         <h2 id="issue-reference-articles-title">Further reading</h2>
-        <ul class="reference-articles-list"><li><a href="https://lore.kernel.org/linux-media/20261001085130.84565-1-barnabas.pocze+renesas@ideasonboard.com/">[PATCH v2] media: rcar-isp: ispcore: Fix inconsistent step sizes</a><span class="reference-meta">lore.kernel.org linux-media list (2026-10-01) · Android Platform · Media Output · SoC Signal Reference</span></li><li><a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689">camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2</a><span class="reference-meta">ChromeOS Gerrit (platform2 camera merged changes) (2026-09-30) · Camera Driver / Image Pipeline Reference</span></li><li><a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691">camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2</a><span class="reference-meta">ChromeOS Gerrit (platform2 camera merged changes) (2026-09-30) · Camera Driver / Image Pipeline Reference</span></li><li><a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690">camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2</a><span class="reference-meta">ChromeOS Gerrit (platform2 camera merged changes) (2026-09-30) · Camera Driver / Image Pipeline Reference</span></li></ul>
+        <ul class="reference-articles-list"><li><a href="https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/">[PATCH 3/3] media: mali-c55: Keep ISP powered while IRQ wake is armed</a><span class="reference-meta">lore.kernel.org linux-media list (2026-09-29) · Mali-C55 ISP Power Management Patch Proposal</span></li><li>ChromeOS camera changes: <a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692">camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2</a> (2026-09-30) · <a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146">camera: Enforce exclusive buffer IDs - chromiumos/platform2</a> (2026-09-30)</li></ul>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">References</h2>
-        <div class="reference-list"><ul><li><a href="https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/">PATCH 3/3 media: mali-c55: Keep ISP powered while IRQ wake is armed</a> — <a href="https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/T/#t">Full patch series</a></li><li><a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692">camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2</a></li><li><a href="https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146">camera: Enforce exclusive buffer IDs - chromiumos/platform2</a></li></ul></div>
+        <div class="reference-list"><ul></ul></div>
       </section>
 
       <nav class="issue-footer-navigation" aria-label="Issue navigation">

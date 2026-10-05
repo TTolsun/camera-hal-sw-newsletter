@@ -5,18 +5,18 @@
     "weekEndDate": "2026-10-11",
     "date": "2026-10-05",
     "title": "2026 W41",
-    "summary": "Mali-C55 ISP 드라이버 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실 방지\nChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사 도입으로 이미지 처리 안정성 강화\nChromeOS 카메라 어댑터에서 독점적 버퍼 ID 강제로 버퍼 관리 충돌 방지",
+    "summary": "Android 17 카메라 이미지 테스트 스위트 검증을 위한 가상 환경 패키지 번들링 권장 사항\nlibcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안",
     "html": "newsletters/2026-W41/index.html",
     "md": "newsletters/2026-W41/newsletter.md",
     "tags": [
-      "Android",
+      "Camera HAL",
       "Driver",
       "Image Processing",
-      "Camera HAL"
+      "Android"
     ],
-    "article_count": 3,
+    "article_count": 2,
     "article_images": [
-      "assets/images/fallback/newsletter-default.svg"
+      "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png"
     ],
     "public_contract_version": "story-v2",
     "coverage_week_key": "2026-W40",
@@ -26,7 +26,7 @@
     "generation_anchor_date": "2026-10-05",
     "en": {
       "title": "2026 W41",
-      "summary": "Mali-C55 ISP Driver Power Management Improvement Prevents Frame Interrupt Loss on System Resume\nChromeOS Camera Stack Enhances Image Processing Stability by Introducing APPn Parsing and BLOB Buffer Boundary Checks\nChromeOS Camera Adapter Prevents Buffer Management Conflicts by Enforcing Exclusive Buffer IDs",
+      "summary": "Recommendations for Bundling Virtual Environment Packages for Android 17 Camera Image Test Suite Validation\nlibcamera Automatic White Balance Control Expansion and Metadata Override Proposal",
       "html": "en/newsletters/2026-W41/index.html",
       "md": "en/newsletters/2026-W41/newsletter.md"
     }
