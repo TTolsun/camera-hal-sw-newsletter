@@ -543,6 +543,7 @@ function buildArticleCapsule(candidate, contextCandidates = [], options = {}) {
       }
     } : null,
     source_extraction: compactSourceExtraction(candidate.source_extraction),
+    ...(candidate.article_source_reading ? { article_source_reading: candidate.article_source_reading } : {}),
     derived_editorial_hints: compactDerivedHints(candidate.derived_editorial_hints),
     extraction_quality: candidate.extraction_quality || candidate.source_extraction?.extraction_quality || null,
     risk: risk(candidate),

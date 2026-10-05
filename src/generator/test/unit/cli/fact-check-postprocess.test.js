@@ -11,6 +11,23 @@ const {
 } = require('../../../publish/fact-check-postprocess');
 const { buildAllowedClaimEvidence } = require('../../../quality/claim-source-binding');
 
+test('material source findings cannot coexist with a publishable verdict', () => {
+  for (const field of ['material_omissions', 'unaddressed_source_conflicts']) {
+    const review = { core_change: 'Source change', article_explanation: 'Generic advice',
+      material_omissions: [], unaddressed_source_conflicts: [], [field]: ['Missing control condition'] };
+    const result = validateFactCheck({ status: 'PASS', article_quality: [{ section_index: 0,
+      publishable: true, reason: 'Useful', source_review: review }] });
+    assert.equal(result.article_quality[0].publishable, false);
+    assert.match(result.article_quality[0].reason, /Missing control condition/);
+    assert.deepEqual(result.article_quality[0].source_review, review);
+  }
+  const result = validateFactCheck({ status: 'PASS', article_quality: [{ section_index: 0,
+    publishable: true, reason: 'Explains the proposal without an action checklist',
+    source_review: { core_change: 'Proposal tradeoffs', article_explanation: 'Tradeoffs explained',
+      material_omissions: [], unaddressed_source_conflicts: [] } }] });
+  assert.equal(result.article_quality[0].publishable, true);
+});
+
 test('isSchemaFieldFactCheckViolation flags internal/schema-owned locations', () => {
   assert.equal(isSchemaFieldFactCheckViolation({ location: 'sections[0].public_article.decision_metadata.impact' }), true);
   assert.equal(isSchemaFieldFactCheckViolation({ location: 'sections[0].relevance_bucket' }), true);

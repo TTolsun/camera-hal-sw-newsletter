@@ -27,6 +27,7 @@ const EXPECTED_LABELS = [
   [LLM_STAGES.EDITOR, 'editor attempt 1/2'],
   [LLM_STAGES.FACT_CHECKER, 'fact-checker attempt 1/2'],
   [LLM_STAGES.BACKGROUND_CONTEXT, 'background-context attempt 1/2'],
+  [LLM_STAGES.ARTICLE_SOURCE_REVIEW, 'article-source-review attempt 1/2'],
   [LLM_STAGES.EDITORIAL_PLAN, 'editorial-plan attempt 1/2'],
   [LLM_STAGES.EDITOR_REPAIR, 'editor repair attempt 1/2'],
   [LLM_STAGES.FACT_CHECKER_REPAIR, 'fact-checker repair attempt 1/2'],
@@ -54,8 +55,8 @@ function runFor(definition) {
   return stageRun(definition, { qualityAttempt: 1, totalAttempts: 2 });
 }
 
-test('catalog가 production stage 23개를 정의한다', () => {
-  assert.equal(Object.keys(LLM_STAGES).length, 23);
+test('catalog가 production stage 24개를 정의한다', () => {
+  assert.equal(Object.keys(LLM_STAGES).length, 24);
   const ids = Object.values(LLM_STAGES).map(definition => definition.id);
   assert.equal(new Set(ids).size, ids.length, 'definition id가 중복이다');
 });

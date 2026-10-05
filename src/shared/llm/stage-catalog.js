@@ -158,6 +158,16 @@ const BASE_STAGES = {
     statusRole: 'factcheck',
     label: { kind: LABEL_KINDS.ATTEMPT, prefix: 'fact-checker' }
   }),
+  ARTICLE_SOURCE_REVIEW: defineStage({
+    id: 'article_source_review',
+    modelGroup: LLM_STAGE_GROUPS.FACTCHECK,
+    sampling: {
+      temperatureProfile: TEMPERATURE_PROFILES.FACTCHECK,
+      thinkingProfile: THINKING_PROFILES.FACTCHECK
+    },
+    statusRole: 'factcheck',
+    label: { kind: LABEL_KINDS.ATTEMPT, prefix: 'article-source-review' }
+  }),
   BACKGROUND_CONTEXT: defineStage({
     // model group은 reporter인데 sampling에는 전용 분기가 없어 default temperature와
     // thinking 없음으로 떨어진다(#979 2번).

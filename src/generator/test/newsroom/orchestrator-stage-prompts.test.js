@@ -74,3 +74,16 @@ test('빌더 출력은 결정론적이다(같은 입력 같은 출력)', () => {
     editorSystemPrompt({ publishMode: 'NORMAL', hasLockedSections: true })
   );
 });
+
+test('writing and verification use original evidence without imposing one article template', () => {
+  for (const prompt of [reporterSystemPrompt(), editorSystemPrompt({ publishMode: 'NORMAL' }),
+    factCheckSystemPrompt(), factCheckRepairSystemPrompt(), editorRepairPatchSystemPrompt()]) {
+    assert.match(prompt, /article_source_reading.documents/);
+    assert.match(prompt, /고정 목차나 필수 필드가 아닙니다/);
+    assert.match(prompt, /API 정의 diff/);
+  }
+  for (const prompt of [factCheckSystemPrompt(), factCheckRepairSystemPrompt()]) {
+    assert.match(prompt, /핵심 변화·중요한 조건을 생략/);
+    assert.match(prompt, /article_quality.publishable=false/);
+  }
+});

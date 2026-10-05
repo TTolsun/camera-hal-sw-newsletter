@@ -166,7 +166,7 @@ function factCheckSystemPrompt() {
     'AOSP Camera, camera driver, SoC platform, native development 또는 Camera developer workflow 해석이 전혀 없는 일반 AI/C++/SoC news는 must_fix[]에 넣으세요.',
     'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
     'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
-    '구체적인 Action Item content가 없는 main article은 같은 source 안에서 실행 가능한 action을 만들 수 있으면 recommended_fixes[]에 넣고, source가 실무 action을 뒷받침하지 못하면 must_fix[]에 넣으세요.',
+    '행동 권고가 필요한 기사에서는 source가 뒷받침하는 구체적인 action으로 보강하도록 recommended_fixes[]에 적으세요. 설계 논의나 발표처럼 설명 자체가 유용한 기사는 action 부재만으로 must_fix하지 마세요. 내용의 충실도 부족은 article_quality에서 판정하세요.',
     'action_items가 막연하지만 같은 source가 더 구체적인 action을 뒷받침하면 must_fix가 아니라 recommended_fixes[]로 분류하세요. must_fix[]는 발행을 막아야 하는 factual/source 오류 전용입니다.',
     'claims[].impact_level, claim_type, overclaim_risk는 고정 enum입니다. 허용된 enum 목록에 없는 값(예: stream_configuration_behavior, buffer_lifecycle_management)을 suggestion으로 제시하지 말고, 유효한 enum 값을 단지 "too broad" 또는 "too specific"라는 이유로 must_fix하지 마세요. 분류가 실제로 틀렸을 때만 허용된 enum 값 중 하나를 suggestion으로 제시하세요.',
     'sections[*].public_article.decision_metadata.{impact, scope, action, overclaim_risk}는 deterministic builder가 public output 직전에 derive/overwrite하는 internal metadata입니다. enum 위반은 deterministic validator(validateDecisionMetadataShape)가 담당하므로 fact-checker는 이 field 값을 must_fix[] 또는 recommended_fixes[]에 넣지 마세요.',

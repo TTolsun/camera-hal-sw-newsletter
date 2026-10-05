@@ -32,6 +32,18 @@ function isSchemaFieldFactCheckViolation(item) {
 }
 
 function validateFactCheck(value) {
+  for (const item of ensureArray(value.article_quality)) {
+    const review = item?.source_review;
+    if (!review) continue; // Historical reports predate the source comparison.
+    const findings = [
+      ...ensureArray(review.material_omissions),
+      ...ensureArray(review.unaddressed_source_conflicts)
+    ].filter(item => typeof item === 'string' && item.trim());
+    if (findings.length) {
+      item.publishable = false;
+      item.reason = [item.reason, ...findings].filter(Boolean).join(' / ');
+    }
+  }
   if (!['PASS', 'NEEDS_FIX'].includes(value.status)) {
     value.status = ensureArray(value.must_fix).length > 0 ? 'NEEDS_FIX' : 'PASS';
   }
@@ -48,6 +60,7 @@ function validateFactCheck(value) {
     // high/medium/low/unspecified stays in newsletter-quality's normalizeVerdictConfidence so
     // there is a single source of truth for the level.
     confidence: String(item?.confidence || ''),
+    ...(item?.source_review ? { source_review: item.source_review } : {}),
     reason: String(item?.reason || '')
   }));
   value.final_comment = value.final_comment || '';

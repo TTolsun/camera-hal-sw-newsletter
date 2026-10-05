@@ -414,11 +414,24 @@ const articleQualityVerdict = {
   properties: {
     section_index: number,
     headline: string,
+    source_review: {
+      type: 'OBJECT',
+      properties: {
+        core_change: string,
+        article_explanation: string,
+        material_omissions: stringArray,
+        unaddressed_source_conflicts: {
+          ...stringArray,
+          description: 'Only source contradictions hidden or misrepresented by the article. Return [] when the article explicitly explains the conflicting accounts and uncertainty.'
+        }
+      },
+      required: ['core_change', 'article_explanation', 'material_omissions', 'unaddressed_source_conflicts']
+    },
     publishable: { type: 'BOOLEAN' },
     confidence: string,
     reason: string
   },
-  required: ['section_index', 'publishable', 'reason']
+  required: ['section_index', 'source_review', 'publishable', 'reason']
 };
 
 const factCheckSchema = {
