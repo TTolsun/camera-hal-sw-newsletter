@@ -3,241 +3,13 @@
   "public_contract_version": "story-v2",
   "generation_contract_version": 2,
   "title": "2026 W40 (09.28 ~ 10.04)",
-  "summary": "이번 주 뉴스레터에서는 카메라 시스템의 안정성과 효율성을 높이는 다양한 개선 사항을 다룹니다. 먼저 Mali-C55 ISP 드라이버의 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실을 방지하는 소식을 전합니다. 또한, ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사를 도입하여 이미지 처리 안정성을 강화하고, ChromeOS 카메라 어댑터에서 독점적 버퍼 ID를 강제하여 버퍼 관리 충돌을 방지하는 중요한 업데이트도 확인하실 수 있습니다. 마지막으로, 대규모 개발 환경에서의 AI 에이전트 도입 흐름과 소프트웨어 품질 개선 효과에 대한 심층 분석도 놓치지 마세요.",
+  "summary": "이번 주 뉴스레터에서는 카메라 시스템의 안정성과 효율성을 높이는 다양한 개선 사항을 다룹니다. 먼저 Mali-C55 ISP 드라이버의 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실을 방지하는 소식을 전합니다. 또한, ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사를 도입하여 이미지 처리 안정성을 강화하고, ChromeOS 카메라 어댑터에서 독점적 버퍼 ID를 강제하여 버퍼 관리 충돌을 방지하는 중요한 업데이트도 확인하실 수 있습니다.",
   "briefing": [
-    "대규모 개발 환경에서의 AI 에이전트 도입 흐름과 소프트웨어 품질 개선 효과",
     "Mali-C55 ISP 드라이버 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실 방지",
     "ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사 도입으로 이미지 처리 안정성 강화",
     "ChromeOS 카메라 어댑터에서 독점적 버퍼 ID 강제로 버퍼 관리 충돌 방지"
   ],
   "sections": [
-    {
-      "category": "cpp_ai_tooling_fallback",
-      "headline": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-      "what_changed": "Barclays가 Anthropic의 Claude를 도입하여 레거시 플랫폼 현대화 및 소프트웨어 품질 개선을 추진하며, 2026년 말까지 개발자의 50%, 2027년에는 대다수 소프트웨어 엔지니어로 Claude Code 채택을 확대할 계획을 발표했습니다.",
-      "confirmed_facts": [
-        "Barclays는 Claude를 사용하여 레거시 플랫폼을 현대화하고 소프트웨어 품질을 개선하며 기술 전문가가 가장 복잡한 문제에 집중할 수 있도록 돕고 있습니다.",
-        "Barclays는 Claude Code 채택률이 2026년 말까지 개발자 인구의 50%에 도달하고, 2027년에는 대다수의 소프트웨어 엔지니어로 확대될 것으로 예상하고 있습니다.",
-        "AI가 기술 구축, 테스트, 보안 및 운영 방식에 점점 더 에이전트 역량으로 내장되고 있습니다."
-      ],
-      "evidence_summary": "Anthropic 공식 뉴스 페이지에 2026년 10월 1일 발표된 내용을 바탕으로 합니다.",
-      "specificity_checks": [
-        "Version/Release: Anthropic News (2026-10-01)",
-        "Component: Claude Code integration in developer workflow",
-        "Behavior Change: Scaling Claude Code adoption to 50% of developers by end of 2026 and majority in 2027."
-      ],
-      "source_verification_notes": [
-        "Anthropic의 공식 발표 자료를 바탕으로 하였으며, 이는 금융권 대규모 개발 환경에서의 도입 사례임을 명시합니다."
-      ],
-      "public_article": {
-        "headline": "대규모 개발 환경에서의 AI 에이전트 도입 흐름과 소프트웨어 품질 개선 효과",
-        "lead": "매일 반복되는 빌드와 테스트, 레거시 코드 분석 작업에 지쳐 있다면, 개발 워크플로우에 깊숙이 통합된 AI 에이전트의 등장을 주목해야 합니다.",
-        "body_markdown": "글로벌 금융 기업인 Barclays가 Anthropic의 Claude를 활용해 소프트웨어 개발 및 운영 방식을 대대적으로 현대화하고 있다는 소식이 전해졌습니다. 이번 발표는 단순한 AI 도구 도입을 넘어, 개발 프로세스 전반에 에이전트 역량을 내장하는 흐름을 보여줍니다.\n\nBarclays는 Claude를 도입하여 레거시 플랫폼을 현대화하고 전반적인 소프트웨어 품질을 개선하는 작업을 진행 중입니다. 이를 통해 개발자들이 보다 복잡하고 고도화된 아키텍처 설계와 문제 해결에 집중할 수 있도록 지원하고 있습니다.\n\n### 개발자 절반 이상으로 확대되는 AI 에이전트 도입\n\n발표에 따르면 Barclays는 2026년 말까지 전체 개발자 인구의 50%가 Claude Code를 채택하도록 하고, 2027년에는 대다수의 소프트웨어 엔지니어가 이를 활용하도록 확장할 계획입니다. 이는 복잡하고 규제가 엄격한 금융권 개발 환경에서도 AI 에이전트가 실무적인 가치를 입증하고 있음을 보여주는 지표입니다.\n\n이러한 흐름은 네이티브 C++ 및 Android 카메라 스택을 다루는 개발 팀에게도 시사하는 바가 큽니다. 복잡한 HAL 코드의 정적 분석, 테스트 케이스 자동 생성, 레거시 드라이버 코드의 현대화 작업 등에서 AI 에이전트를 활용한 생산성 향상 가능성을 탐색할 수 있는 계기가 될 것입니다.",
-        "camera_hal_takeaway": "복잡한 네이티브 C++ 코드를 다루는 HAL 개발 팀에서는 Clang/LLVM 기반 빌드 환경 및 정적 분석 도구와 AI 에이전트를 연계하여, 레거시 코드 리팩토링이나 유닛 테스트 케이스 자동 생성 등의 영역에서 생산성 도구로서의 활용 가능성을 검토할 수 있습니다.",
-        "reader_checkpoints": [
-          "네이티브 C++ 코드 분석 및 테스트 케이스 생성에 AI 에이전트 도구를 시범 적용할 수 있는 영역이 있는지 검토합니다.",
-          "사내 보안 가이드라인 내에서 안전하게 AI 코딩 도구를 활용할 수 있는 방안을 확인합니다."
-        ],
-        "source_links": [
-          {
-            "title": "Barclays scales Claude to upgrade operations and improve client experience",
-            "url": "https://www.anthropic.com/news/barclays-scales-claude"
-          }
-        ],
-        "story_contract_version": 2,
-        "source_subtitle": "Anthropic News (2026-10-01)",
-        "editorial_story": {
-          "not_to_overclaim": "이 기사는 Barclays의 Claude 도입 사례를 다루며, Android Camera HAL 또는 드라이버 개발 환경에 대한 직접적인 적용 사례나 계획은 언급하지 않습니다.",
-          "editor_take": "AI 에이전트 기술이 네이티브 시스템 소프트웨어 개발 영역까지 확장됨에 따라, 복잡한 C++ 코드베이스의 유지보수 효율성을 높이기 위한 도구적 접근을 고민해볼 시점입니다."
-        },
-        "decision_metadata": {
-          "impact": "Medium",
-          "scope": [
-            "Tooling",
-            "AI"
-          ],
-          "action": [
-            "Watch",
-            "Test"
-          ],
-          "overclaim_risk": "Medium"
-        }
-      },
-      "article_sections": {
-        "verified_facts": [
-          "Barclays는 Claude를 사용하여 레거시 플랫폼을 현대화하고 소프트웨어 품질을 개선하며 기술 전문가가 가장 복잡한 문제에 집중할 수 있도록 돕고 있습니다.",
-          "Barclays는 Claude Code 채택률이 2026년 말까지 개발자 인구의 50%에 도달하고, 2027년에는 대다수의 소프트웨어 엔지니어로 확대될 것으로 예상하고 있습니다.",
-          "AI가 기술 구축, 테스트, 보안 및 운영 방식에 점점 더 에이전트 역량으로 내장되고 있습니다."
-        ],
-        "background_context": "Native build, test, sanitizer, compiler, debug workflow 변경은 Camera HAL과 driver 팀을 지원할 수 있지만, camera-specific runtime evidence가 없으면 workflow signal로만 표현해야 합니다.",
-        "hal_driver_impact": "AI 에이전트가 소프트웨어 개발, 테스트, 보안 및 운영 워크플로우에 통합되는 방식은 Camera HAL 및 드라이버 개발 팀의 생산성과 효율성에 장기적으로 영향을 미칠 수 있습니다.",
-        "action_items": [
-          "사내 C++ 개발 및 테스트 워크플로우에서 AI 에이전트 도구를 활용해 레거시 코드 분석 및 유닛 테스트 생성을 시범 수행하고 생산성 지표를 측정합니다.",
-          "네이티브 모듈 빌드 및 정적 분석 파이프라인에 AI 기반 보안 진단 도구를 연계할 수 있는지 타당성을 검토합니다."
-        ],
-        "team_share_points": "대규모 소프트웨어 환경에서 AI 에이전트의 실무 도입이 가속화되고 있으므로, 네이티브 개발 팀에서도 코드 품질 개선 및 테스트 자동화를 위해 AI 도구의 적극적인 활용 방안을 논의할 가치가 있습니다.",
-        "known_limitations": [
-          "이 기사는 Barclays의 도입 사례이며 Android Camera HAL 개발 환경에 대한 직접적인 적용 사례는 아닙니다."
-        ],
-        "watch_items": [
-          "네이티브 시스템 소프트웨어 개발 환경에서의 AI 에이전트 활용 도구 출시 동향을 모니터링합니다."
-        ],
-        "do_not_claim": [
-          "제공된 출처 증거가 명시하지 않는 한 HAL API, 메타데이터 계약, 스트림, 버퍼, 요청/결과, CTS 변경으로 과장하지 마세요."
-        ]
-      },
-      "hal_signal_capsule": {
-        "why_now": "2026년 10월 1일 발표된 대규모 금융권의 AI 에이전트 도입 사례는 네이티브 개발 생산성 향상을 위한 도구 도입의 타당성 검토에 좋은 참고 자료가 됩니다.",
-        "reader_owners": [
-          "native_tooling_owner",
-          "camera_test_owner"
-        ],
-        "check_within_2_weeks": "개발 팀 내에서 AI 코딩 도구를 활용한 C++ 코드 리팩토링 및 테스트 케이스 생성 실험을 소규모로 진행합니다.",
-        "impact_axes": [
-          "native_tooling_workflow"
-        ],
-        "do_not_overstate": [
-          "이 소식은 개발 워크플로우 도구에 대한 것이며 Android Camera HAL의 런타임 동작이나 API 계약에 직접적인 변경을 가져오지 않습니다."
-        ]
-      },
-      "claims": [
-        {
-          "claim_id": "claim:c08402b8f22a4b15:modernize",
-          "text": "Barclays는 Claude를 사용하여 레거시 플랫폼을 현대화하고 소프트웨어 품질을 개선하며 기술 전문가가 가장 복잡한 문제에 집중할 수 있도록 돕고 있습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2"
-          ],
-          "source_urls": [
-            "https://www.anthropic.com/news/barclays-scales-claude"
-          ],
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "claim:c08402b8f22a4b15:adoption_rate",
-          "text": "Barclays는 Claude Code 채택률이 2026년 말까지 개발자 인구의 50%에 도달하고, 2027년에는 대다수의 소프트웨어 엔지니어로 확대될 것으로 예상하고 있습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "sx:c08402b8f22a4b15:da7f739f6271:2dc9de80555ec1cf"
-          ],
-          "source_urls": [
-            "https://www.anthropic.com/news/barclays-scales-claude"
-          ],
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "claim:c08402b8f22a4b15:agentic_capability",
-          "text": "AI가 기술 구축, 테스트, 보안 및 운영 방식에 점점 더 에이전트 역량으로 내장되고 있습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "sx:c08402b8f22a4b15:da7f739f6271:8911949f692f65a2"
-          ],
-          "source_urls": [
-            "https://www.anthropic.com/news/barclays-scales-claude"
-          ],
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low"
-        }
-      ],
-      "camera_hal_checks": [
-        "네이티브 C++ 코드 분석 및 테스트 케이스 생성에 AI 에이전트 도구를 시범 적용할 수 있는 영역이 있는지 검토합니다."
-      ],
-      "action_hints": [
-        "사내 C++ 개발 및 테스트 워크플로우에서 AI 에이전트 도구를 활용해 레거시 코드 분석 및 유닛 테스트 생성을 시범 수행하고 생산성 지표를 측정합니다."
-      ],
-      "action_items": [
-        "사내 C++ 개발 및 테스트 워크플로우에서 AI 에이전트 도구를 활용해 레거시 코드 분석 및 유닛 테스트 생성을 시범 수행하고 생산성 지표를 측정합니다.",
-        "네이티브 모듈 빌드 및 정적 분석 파이프라인에 AI 기반 보안 진단 도구를 연계할 수 있는지 타당성을 검토합니다."
-      ],
-      "is_ai_related": true,
-      "article_type": "cpp_ai_tooling_fallback",
-      "imageCandidates": [
-        {
-          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
-          "sourceUrl": "https://www.anthropic.com/news/barclays-scales-claude",
-          "articleUrl": "https://www.anthropic.com/news/barclays-scales-claude",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/jpeg",
-          "licenseStatus": "unknown",
-          "attribution": "Barclays scales Claude to upgrade operations and improve client experience",
-          "validationStatus": "ok",
-          "contentLength": 30702
-        },
-        {
-          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
-          "sourceUrl": "https://www.anthropic.com/news",
-          "articleUrl": "https://www.anthropic.com/news/barclays-scales-claude",
-          "sourceKind": "og",
-          "licenseStatus": "unknown",
-          "attribution": "Anthropic News",
-          "validationStatus": "ok",
-          "contentType": "image/jpeg",
-          "width": null,
-          "height": null,
-          "alt": ""
-        }
-      ],
-      "selectedImage": "https://www-cdn.anthropic.com/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
-      "imageSource": "https://www.anthropic.com/news/barclays-scales-claude",
-      "imageAttribution": "Barclays scales Claude to upgrade operations and improve client experience",
-      "imageAlt": "개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "No suitable free-licensed image available.",
-      "sources": [
-        {
-          "title": "Barclays scales Claude to upgrade operations and improve client experience",
-          "url": "https://www.anthropic.com/news/barclays-scales-claude"
-        }
-      ],
-      "source_candidate_url": "https://www.anthropic.com/news/barclays-scales-claude",
-      "source_candidate_hash": "c08402b8f22a4b159df3858cefc3416269ca944c9595105093b01c30fd1a8c02",
-      "article_group_key": "article:https://www.anthropic.com/news/barclays-scales-claude",
-      "tooling_workflow_type": "",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "editorial_priority": 2,
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 3,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "finalSelectionEligibility": "short",
-      "source_gap_risk": false,
-      "main_article_readiness": null,
-      "do_not_claim": [],
-      "evidence_origin": "article_text",
-      "source_hint": "Claude, Claude Code, AI coding, agentic workflow, safety update 확인",
-      "resolvedImage": {
-        "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
-        "src": "https://www-cdn.anthropic.com/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": ""
-      },
-      "image_recovery": {
-        "article_url": "https://www.anthropic.com/news/barclays-scales-claude",
-        "page_attempts": [
-          {
-            "attempt": 1,
-            "ok": true,
-            "reason": "ok",
-            "status": 0
-          }
-        ],
-        "validation_failures": [],
-        "extracted_count": 1,
-        "valid_count": 1,
-        "outcome": "available"
-      },
-      "coverage_type": "fresh"
-    },
     {
       "category": "camera_driver_image_pipeline",
       "headline": "Mali-C55 ISP 드라이버의 전원 관리 개선: IRQ Wake 활성화 중 ISP 전원 유지 패치 제안",
@@ -950,8 +722,7 @@
   "action_items": [
     "Mali-C55 ISP 드라이버 전원 관리 패치를 테스트 빌드에 적용하고 시스템 suspend/resume 복귀 시 프레임 드롭 여부를 검증합니다.",
     "Android Camera HAL의 JPEG 인코더 및 Exif 파서 모듈에서 입력 버퍼 크기 검증 로직을 검토합니다.",
-    "Android Camera HAL의 버퍼 매핑 테이블 등록 로직에서 버퍼 ID의 중복 여부를 검사하는 코드를 검토합니다.",
-    "사내 C++ 개발 및 테스트 워크플로우에서 AI 에이전트 도구를 활용해 레거시 코드 분석 및 유닛 테스트 생성을 시범 수행하고 생산성 지표를 측정합니다."
+    "Android Camera HAL의 버퍼 매핑 테이블 등록 로직에서 버퍼 ID의 중복 여부를 검사하는 코드를 검토합니다."
   ],
   "references": [
     {
@@ -965,20 +736,15 @@
     {
       "title": "camera: Enforce exclusive buffer IDs - chromiumos/platform2",
       "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
-    },
-    {
-      "title": "Barclays scales Claude to upgrade operations and improve client experience",
-      "url": "https://www.anthropic.com/news/barclays-scales-claude"
     }
   ],
   "explicitly_demoted_groups": [],
   "hard_blocked_groups": [],
-  "selected_group_count": 4,
-  "rendered_group_count": 4,
+  "selected_group_count": 3,
+  "rendered_group_count": 3,
   "explicitly_demoted_group_count": 0,
   "hard_blocked_group_count": 0,
   "selected_representative_group_keys": [
-    "article:https://www.anthropic.com/news/barclays-scales-claude",
     "lore-series:20260929-mali-c55-irq-supend-resume-v1-e3af34afff12@kernel.org",
     "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
     "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
@@ -986,8 +752,7 @@
   "rendered_group_keys": [
     "lore-series:20260929-mali-c55-irq-supend-resume-v1-e3af34afff12@kernel.org",
     "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
-    "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
-    "article:https://www.anthropic.com/news/barclays-scales-claude"
+    "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146"
   ],
   "explicitly_demoted_group_keys": [],
   "hard_blocked_group_keys": [],
@@ -1026,7 +791,6 @@
     "Android",
     "Driver",
     "Image Processing",
-    "AI",
     "Camera HAL"
   ],
   "coverage_week_key": "2026-W40",
@@ -1034,7 +798,7 @@
   "coverage_end_date": "2026-10-04",
   "coverage_mode": "iso_week",
   "generation_anchor_date": "2026-10-05",
-  "intro_letter": "이번 주 뉴스레터에서는 카메라 시스템의 안정성과 효율성을 높이는 다양한 개선 사항을 다룹니다. 먼저 Mali-C55 ISP 드라이버의 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실을 방지하는 소식을 전합니다. 또한, ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사를 도입하여 이미지 처리 안정성을 강화하고, ChromeOS 카메라 어댑터에서 독점적 버퍼 ID를 강제하여 버퍼 관리 충돌을 방지하는 중요한 업데이트도 확인하실 수 있습니다. 마지막으로, 대규모 개발 환경에서의 AI 에이전트 도입 흐름과 소프트웨어 품질 개선 효과에 대한 심층 분석도 놓치지 마세요.",
+  "intro_letter": "이번 주 뉴스레터에서는 카메라 시스템의 안정성과 효율성을 높이는 다양한 개선 사항을 다룹니다. 먼저 Mali-C55 ISP 드라이버의 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실을 방지하는 소식을 전합니다. 또한, ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사를 도입하여 이미지 처리 안정성을 강화하고, ChromeOS 카메라 어댑터에서 독점적 버퍼 ID를 강제하여 버퍼 관리 충돌을 방지하는 중요한 업데이트도 확인하실 수 있습니다.",
   "weekly_key": "2026-W41",
   "week_start_date": "2026-10-05",
   "week_end_date": "2026-10-11"

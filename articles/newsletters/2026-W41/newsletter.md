@@ -1,49 +1,16 @@
 # 2026 W40 (09.28 ~ 10.04)
 
-이번 주 뉴스레터에서는 카메라 시스템의 안정성과 효율성을 높이는 다양한 개선 사항을 다룹니다. 먼저 Mali-C55 ISP 드라이버의 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실을 방지하는 소식을 전합니다. 또한, ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사를 도입하여 이미지 처리 안정성을 강화하고, ChromeOS 카메라 어댑터에서 독점적 버퍼 ID를 강제하여 버퍼 관리 충돌을 방지하는 중요한 업데이트도 확인하실 수 있습니다. 마지막으로, 대규모 개발 환경에서의 AI 에이전트 도입 흐름과 소프트웨어 품질 개선 효과에 대한 심층 분석도 놓치지 마세요.
+이번 주 뉴스레터에서는 카메라 시스템의 안정성과 효율성을 높이는 다양한 개선 사항을 다룹니다. 먼저 Mali-C55 ISP 드라이버의 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실을 방지하는 소식을 전합니다. 또한, ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사를 도입하여 이미지 처리 안정성을 강화하고, ChromeOS 카메라 어댑터에서 독점적 버퍼 ID를 강제하여 버퍼 관리 충돌을 방지하는 중요한 업데이트도 확인하실 수 있습니다.
 
 
 
 ## 1. 이번 주 기사
 
-- 대규모 개발 환경에서의 AI 에이전트 도입 흐름과 소프트웨어 품질 개선 효과
 - Mali-C55 ISP 드라이버 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실 방지
 - ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사 도입으로 이미지 처리 안정성 강화
 - ChromeOS 카메라 어댑터에서 독점적 버퍼 ID 강제로 버퍼 관리 충돌 방지
 
-## 2. 대규모 개발 환경에서의 AI 에이전트 도입 흐름과 소프트웨어 품질 개선 효과
-
-
-![개발 워크플로우에 AI 에이전트 통합: Barclays의 Claude Code 대규모 도입 사례](https://www-cdn.anthropic.com/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg)
-
-_이미지: [Barclays scales Claude to upgrade operations and improve client experience](https://www.anthropic.com/news/barclays-scales-claude)_
-
-
-_Anthropic News (2026-10-01)_
-
-매일 반복되는 빌드와 테스트, 레거시 코드 분석 작업에 지쳐 있다면, 개발 워크플로우에 깊숙이 통합된 AI 에이전트의 등장을 주목해야 합니다.
-
-글로벌 금융 기업인 Barclays가 Anthropic의 Claude를 활용해 소프트웨어 개발 및 운영 방식을 대대적으로 현대화하고 있다는 소식이 전해졌습니다. 이번 발표는 단순한 AI 도구 도입을 넘어, 개발 프로세스 전반에 에이전트 역량을 내장하는 흐름을 보여줍니다.
-
-Barclays는 Claude를 도입하여 레거시 플랫폼을 현대화하고 전반적인 소프트웨어 품질을 개선하는 작업을 진행 중입니다. 이를 통해 개발자들이 보다 복잡하고 고도화된 아키텍처 설계와 문제 해결에 집중할 수 있도록 지원하고 있습니다.
-
-### 개발자 절반 이상으로 확대되는 AI 에이전트 도입
-
-발표에 따르면 Barclays는 2026년 말까지 전체 개발자 인구의 50%가 Claude Code를 채택하도록 하고, 2027년에는 대다수의 소프트웨어 엔지니어가 이를 활용하도록 확장할 계획입니다. 이는 복잡하고 규제가 엄격한 금융권 개발 환경에서도 AI 에이전트가 실무적인 가치를 입증하고 있음을 보여주는 지표입니다.
-
-이러한 흐름은 네이티브 C++ 및 Android 카메라 스택을 다루는 개발 팀에게도 시사하는 바가 큽니다. 복잡한 HAL 코드의 정적 분석, 테스트 케이스 자동 생성, 레거시 드라이버 코드의 현대화 작업 등에서 AI 에이전트를 활용한 생산성 향상 가능성을 탐색할 수 있는 계기가 될 것입니다.
-
-### Camera HAL/Driver 관점에서의 의미
-
-복잡한 네이티브 C++ 코드를 다루는 HAL 개발 팀에서는 Clang/LLVM 기반 빌드 환경 및 정적 분석 도구와 AI 에이전트를 연계하여, 레거시 코드 리팩토링이나 유닛 테스트 케이스 자동 생성 등의 영역에서 생산성 도구로서의 활용 가능성을 검토할 수 있습니다.
-
-**출처**
-
-- [Barclays scales Claude to upgrade operations and improve client experience](https://www.anthropic.com/news/barclays-scales-claude)
-
----
-
-## 3. Mali-C55 ISP 드라이버 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실 방지
+## 2. Mali-C55 ISP 드라이버 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실 방지
 
 
 ![Mali-C55 ISP 드라이버 전원 관리 개선으로 시스템 복귀 시 프레임 인터럽트 유실 방지 image](../../assets/images/fallback/newsletter-default.svg)
@@ -73,7 +40,7 @@ _lore.kernel.org linux-media list (2026-09-29)_
 
 ---
 
-## 4. ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사 도입으로 이미지 처리 안정성 강화
+## 3. ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사 도입으로 이미지 처리 안정성 강화
 
 
 ![ChromeOS 카메라 스택에서 APPn 파싱 및 BLOB 버퍼 경계 검사 도입으로 이미지 처리 안정성 강화 image](../../assets/images/fallback/newsletter-default.svg)
@@ -103,7 +70,7 @@ Android Camera HAL에서 JPEG/BLOB 스트림을 처리할 때도 동일한 취�
 
 ---
 
-## 5. ChromeOS 카메라 어댑터에서 독점적 버퍼 ID 강제로 버퍼 관리 충돌 방지
+## 4. ChromeOS 카메라 어댑터에서 독점적 버퍼 ID 강제로 버퍼 관리 충돌 방지
 
 
 ![ChromeOS 카메라 어댑터에서 독점적 버퍼 ID 강제로 버퍼 관리 충돌 방지 image](../../assets/images/fallback/newsletter-default.svg)
@@ -144,4 +111,3 @@ Android Camera HAL3 구현에서도 버퍼 ID 독점성 관리는 매우 중요�
 - [PATCH 3/3 media: mali-c55: Keep ISP powered while IRQ wake is armed](https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/T/#t)
 - [camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2](https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692)
 - [camera: Enforce exclusive buffer IDs - chromiumos/platform2](https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146)
-- [Barclays scales Claude to upgrade operations and improve client experience](https://www.anthropic.com/news/barclays-scales-claude)
