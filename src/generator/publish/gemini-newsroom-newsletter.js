@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const { readArticleSources } = require('../reporter/article-source-reader');
+const { reviewArticleSources } = require('../quality/article-source-review');
 const { ensureArray } = require('../../shared/common/value-coercion');
 const {
   kstDate,
@@ -414,6 +416,7 @@ async function main() {
     selectionWindowPolicy: runtimeConfig.selectionWindowPolicy,
     coverageWeekKeyOverride: runtimeConfig.coverageWeekKeyOverride || undefined
   });
+  await readArticleSources(shortlistReport);
   generationRunState.shortlistReport = shortlistReport;
   generationRunState.selectedInputs = shortlistReport.selected_articles;
   writeJson(path.join(newsroomDir, 'shortlisted-candidates.json'), shortlistReport);
@@ -803,6 +806,13 @@ async function main() {
       repairPlan,
       skippedRepairPlan
     } = passResult);
+
+    factCheck = await reviewArticleSources(
+      editor, articleCapsuleReport, factCheck,
+      (...args) => callLlmJson(stageRun(LLM_STAGES.ARTICLE_SOURCE_REVIEW, { qualityAttempt: attempt, totalAttempts }), ...args)
+    );
+    generationRunState.factCheck = factCheck;
+    ({ editor, qualityReport } = runQualityGateAndPersist(editor, factCheck, attempt, 'attempt', qualityGateContext));
 
     excludedSections = appendUniqueSections(excludedSections, demotedSections);
     const lockSelection = selectLockedArticles(editor, qualityReport, factCheck);
