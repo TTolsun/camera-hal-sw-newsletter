@@ -29,7 +29,7 @@
 ## Homepage Headline
 
 - decision: latest_camera_hal_article
-- current_headline_key: url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html
+- current_headline_key: url:https://source.android.com/docs/compatibility/cts/its-release-notes-17
 - replacement_headline_key: url:https://source.android.com/docs/compatibility/cts/its-release-notes-17
 - public_render_reconciled: false
 - public_rendered_headline_key: unknown
@@ -41,7 +41,7 @@
 - latest_inclusion_mode: none
 - injected_from_snapshot: false
 - removed_due_to_headline_inclusion_count: 0
-- exposure_history_coverage: forward_only since 2026-07-27
+- exposure_history_coverage: unknown since unknown
 
 ## Source Parser Hints
 

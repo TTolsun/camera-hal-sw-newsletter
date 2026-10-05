@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "date": "2026-10-05",
-  "generated_at": "2026-10-05T13:20:12.499Z",
+  "generated_at": "2026-10-05T14:20:32.503Z",
   "cache_root": "cache/news-summary",
   "totals": {
     "candidate_count": 2,
     "hit_count": 1,
     "miss_count": 1,
-    "by_url_hit_count": 1,
-    "by_content_hit_count": 0,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 1,
     "legacy_hit_count": 0
   },
   "reasons": [
@@ -17,7 +17,7 @@
       "count": 1
     },
     {
-      "reason": "url-hit",
+      "reason": "content-hash-hit",
       "count": 1
     }
   ],
@@ -50,9 +50,9 @@
         "content_hash": "f4974e45c158493cd201b5e8ac7ecc2dd736da66d761aa3e25b5491404ea4475"
       },
       "hit": true,
-      "reason": "url-hit",
-      "lookup_source": "by-url",
-      "cache_record_path": "cache/news-summary/by-url/74221d8f077b88a9d02df0ec690ec0e58e44318f0b459f549a340905eae1c81b.json"
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/f4974e45c158493cd201b5e8ac7ecc2dd736da66d761aa3e25b5491404ea4475.json"
     }
   ]
 }

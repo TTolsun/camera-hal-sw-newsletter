@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-05",
+  "overall_pass": true,
+  "summary": "The newsletter is of high quality, with excellent source disclosure and clear disclaimers preventing overclaim of Camera HAL impact. A minor mismatch in the week number (W40 vs W41) was found in the HTML header.",
+  "issues": [
+    {
+      "field": "html_text",
+      "severity": "P3",
+      "reason": "The HTML header text displays '2026 W40' and the date range '2026.09.28 – 10.04', whereas the newsletter date is 2026-10-05 (W41) and the English metadata title is '2026 W41'.",
+      "suggested_fix": "Update the HTML template header to reflect '2026 W41' and the correct date range for the week of October 5, 2026."
+    }
+  ],
+  "llm_diagnostics": {
+    "stage_key_format": "canonical-v1",
+    "quota_error_count": 0,
+    "invalid_json_count": 0,
+    "model_usage": {
+      "post_generation_quality_judge#0": {
+        "stage_key": "post_generation_quality_judge#0",
+        "stage_id": "post_generation_quality_judge",
+        "quality_attempt": 0,
+        "label": "post-generation public quality judge",
+        "parent_run_key": null,
+        "models": {
+          "gemini-3.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      }
+    },
+    "model_routing": {
+      "post_generation_quality_judge#0": {
+        "stage_group": "judge",
+        "stage_group_known": true,
+        "routing_warning": "",
+        "primary_model": "gemini-3.5-flash",
+        "fallback_models": [
+          "gemini-2.5-flash",
+          "gemini-2.5-flash-lite"
+        ],
+        "primary_resolved_by": "NEWSROOM_JUDGE_MODEL",
+        "resolved_by": "NEWSROOM_JUDGE_MODEL",
+        "global_override_applied": false,
+        "stage_key": "post_generation_quality_judge#0",
+        "stage_id": "post_generation_quality_judge",
+        "quality_attempt": 0,
+        "label": "post-generation public quality judge",
+        "parent_run_key": null
+      }
+    },
+    "cost_report": {
+      "calls": [
+        {
+          "provider": "gemini",
+          "stage_key": "post_generation_quality_judge#0",
+          "stage_id": "post_generation_quality_judge",
+          "quality_attempt": 0,
+          "label": "post-generation public quality judge",
+          "parent_run_key": null,
+          "stage_group": "judge",
+          "stage_group_known": true,
+          "routing_warning": "",
+          "model": "gemini-3.5-flash",
+          "primary_model": "gemini-3.5-flash",
+          "attempt_model": "gemini-3.5-flash",
+          "fallback_models": [
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite"
+          ],
+          "primary_resolved_by": "NEWSROOM_JUDGE_MODEL",
+          "attempt_resolved_by": "NEWSROOM_JUDGE_MODEL",
+          "resolved_by": "NEWSROOM_JUDGE_MODEL",
+          "fallback_index": null,
+          "global_override_applied": false,
+          "attempt": 1,
+          "pro_model": false,
+          "usage_metadata_present": true,
+          "prompt_tokens": 5694,
+          "output_tokens": 240,
+          "thinking_tokens": 1429,
+          "thinking_budget_requested": 1024,
+          "thinking_budget_applied": null,
+          "thinking_budget_note": "gemini 3.x: thinkingBudget 1024 -> thinkingLevel=MEDIUM",
+          "thinking_level": "MEDIUM",
+          "cached_tokens": 0,
+          "total_tokens": 7363,
+          "billable_input_tokens": 5694,
+          "billable_output_tokens": 1669,
+          "estimated_cost_usd": 0.023562,
+          "pricing_usd_per_million": {
+            "input_usd_per_million": 1.5,
+            "output_usd_per_million": 9,
+            "cached_input_usd_per_million": 0.15,
+            "large_prompt_threshold_tokens": null,
+            "large_prompt_applied": false
+          },
+          "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing",
+          "pricing_warning": ""
+        }
+      ]
+    }
+  }
+}

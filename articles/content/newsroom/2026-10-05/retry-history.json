@@ -2,24 +2,41 @@
   {
     "attempt": 1,
     "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
-    "score": 97,
+    "score": 83,
     "threshold": 60,
-    "status": "PASS",
-    "rendered_main_article_count": 2,
-    "locked_article_count": 2,
-    "demoted_article_count": 0,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 0,
+    "demoted_article_count": 1,
     "reserve_pool_opened": false,
     "reserve_open_reason": "",
     "reserve_candidates_used": [],
-    "candidate_rejections": [],
-    "underfilled_reason": "",
+    "candidate_rejections": [
+      {
+        "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+        "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+        "source": "aosp-camera-its-release-notes",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "[1/5] libcamera: controls: Expand AWB controls",
+        "url": "https://patchwork.libcamera.org/patch/28387/",
+        "source": "libcamera Patchwork (patch review)",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_demoted_url"
+      }
+    ],
+    "underfilled_reason": "missing 1 article(s); no eligible non-duplicate primary/reserve completion candidate remains",
     "completion_fallback_to_prepass": false,
     "deductions": [
       {
         "category": "editorial-story",
         "points": 1,
-        "reason": "Briefing bullet misses story structure elements: action_hint.",
-        "location": "briefing 1",
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -28,7 +45,311 @@
       {
         "category": "editorial-story",
         "points": 1,
-        "reason": "Briefing bullet misses story structure elements: reader_perspective.",
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 4 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Android 17 Camera ITS 업데이트 분석: 테스트 병렬화와 신규 검증 항목 도입"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [
+      "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+    ],
+    "replaced_sections": [
+      "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+    ],
+    "locked_sections": [],
+    "failed_sections": [
+      {
+        "index": 1,
+        "headline": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://patchwork.libcamera.org/patch/28387/"
+        ],
+        "source_titles": [
+          "[1/5] libcamera: controls: Expand AWB controls"
+        ]
+      }
+    ],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "replace-or-demote(deterministic-demote): libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입",
+        "sources": [
+          "https://patchwork.libcamera.org/patch/28387/"
+        ],
+        "action": "replace-or-demote",
+        "failure_type": "unknown_evidence_id",
+        "allow_rewrite": false,
+        "policy_reason": "claim evidence, source binding, or coverage failure must be demoted or replaced",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "source-integrity",
+            "points": 8,
+            "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+            "reason_code": "",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: source-body:461567ea2d0941649500.",
+            "reason_code": "unknown_evidence_id",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: source-body:461567ea2d0941649500.",
+            "reason_code": "unknown_evidence_id",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: source-body:461567ea2d0941649500.",
+            "reason_code": "unknown_evidence_id",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-source-binding",
+            "points": 8,
+            "reason": "Claim source_url does not match bound candidate evidence: https://patchwork.libcamera.org/patch/28391/.",
+            "reason_code": "source_url_mismatch",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: source-body:55d262d61f6e7782c3f7.",
+            "reason_code": "unknown_evidence_id",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-source-binding",
+            "points": 8,
+            "reason": "Claim source_url does not match bound candidate evidence: https://patchwork.libcamera.org/patch/28390/.",
+            "reason_code": "source_url_mismatch",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: source-body:c5ad18d2c606c6a587e9.",
+            "reason_code": "unknown_evidence_id",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-source-binding",
+            "points": 8,
+            "reason": "Claim source_url does not match bound candidate evidence: https://patchwork.libcamera.org/patch/28388/.",
+            "reason_code": "source_url_mismatch",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: source-body:b9536d31b925390f4e32.",
+            "reason_code": "unknown_evidence_id",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-source-binding",
+            "points": 8,
+            "reason": "Claim source_url does not match bound candidate evidence: https://patchwork.libcamera.org/cover/28386/.",
+            "reason_code": "source_url_mismatch",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: source-body:7b2d92ebbbc1da5d0057.",
+            "reason_code": "unknown_evidence_id",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "libcamera 자동 화이트 밸런스 제어 확장: 상태 세분화와 수동 게인 고정 메커니즘 도입"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 4
+  },
+  {
+    "attempt": 2,
+    "model": "repair-fallback",
+    "score": 83,
+    "threshold": 60,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "rendered_main_article_count": 1,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 4 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Android 17 Camera ITS 업데이트 분석: 테스트 병렬화와 신규 검증 항목 도입"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "editor attempt 2/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 0,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 4,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output used an invalid group state reason code.",
+      "details": {
+        "field": "sections.group_coverage",
+        "invalid_demotions": [
+          {
+            "article_group_key": "patchwork-series:6214",
+            "reason_code": "missing_dated_evidence"
+          }
+        ],
+        "invalid_hard_blocks": [],
+        "allowed_demotion_reason_codes": [
+          "duplicate_or_near_duplicate",
+          "forbidden_bucket",
+          "explicit_editor_hold"
+        ],
+        "allowed_hard_block_reason_codes": [
+          "source_gap_risk",
+          "missing_dated_evidence",
+          "blocked_source_quality",
+          "fact_check_must_fix",
+          "quality_hard_blocker"
+        ]
+      },
+      "field": "sections.group_coverage",
+      "stage": "editor attempt 2/2",
+      "attempt": 2,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 1
+    }
+  },
+  {
+    "attempt": 3,
+    "model": "manual editorial revision; gemini-3.5-flash review",
+    "score": 98,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 2,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
         "location": "briefing 2",
         "blocking": false,
         "severity": "soft",
@@ -39,7 +360,7 @@
         "category": "image-fallback",
         "points": 1,
         "reason": "Article image uses a local fallback visual.",
-        "location": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+        "location": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
         "blocking": false,
         "severity": "soft",
         "reason_code": "",
@@ -47,108 +368,35 @@
       }
     ],
     "selected_article_headlines": [
-      "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
-      "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의"
+      "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+      "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기"
     ],
-    "locked_article_headlines": [
-      "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
-      "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의"
-    ],
+    "locked_article_headlines": [],
     "source_gap_sections": [],
     "demoted_sections": [],
     "replaced_sections": [],
-    "locked_sections": [
-      {
-        "index": 1,
-        "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
-        "category": "direct_aosp_camera",
-        "relevance_bucket": "direct_aosp_camera",
-        "urls": [
-          "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
-        ],
-        "source_titles": [
-          "Android 17 Camera Image Test Suite release notes | Android Open Source Project"
-        ]
-      },
-      {
-        "index": 2,
-        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "urls": [
-          "https://patchwork.libcamera.org/patch/28387/"
-        ],
-        "source_titles": [
-          "[1/5] libcamera: controls: Expand AWB controls"
-        ]
-      }
-    ],
+    "locked_sections": [],
     "failed_sections": [],
-    "regenerated_sections": [],
-    "rejected_retry_outputs": [],
-    "repair_actions": [],
-    "max_section_repairs": 1,
-    "repair_plan": [
+    "regenerated_sections": [
       {
-        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
-        "sources": [
-          "https://patchwork.libcamera.org/patch/28387/"
-        ],
-        "action": "repair-section",
-        "failure_type": "image-fallback",
-        "allow_rewrite": true,
-        "policy_reason": "section-scoped repair is allowed",
-        "source_gap": false,
-        "reporter_eligibility_violations": [],
-        "deductions": [
-          {
-            "category": "image-fallback",
-            "points": 1,
-            "reason": "Article image uses a local fallback visual.",
-            "reason_code": "",
-            "location": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의"
-          }
-        ],
-        "recommended_fixes": []
-      }
-    ],
-    "skipped_repair_sections": [],
-    "article_locks": [
-      {
-        "index": 1,
-        "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
-        "category": "direct_aosp_camera",
-        "relevance_bucket": "direct_aosp_camera",
-        "urls": [
-          "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
-        ],
-        "source_titles": [
-          "Android 17 Camera Image Test Suite release notes | Android Open Source Project"
-        ],
-        "status": "PASS",
-        "reason": "",
-        "locked": true
+        "headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목"
       },
       {
-        "index": 2,
-        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
-        "category": "camera_driver_image_pipeline",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "urls": [
-          "https://patchwork.libcamera.org/patch/28387/"
-        ],
-        "source_titles": [
-          "[1/5] libcamera: controls: Expand AWB controls"
-        ],
-        "status": "PASS",
-        "reason": "",
-        "locked": true
+        "headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기"
       }
     ],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "원문 대조에 따라 두 기사를 직접 교정하고 새 팩트체크와 독립 원문 검토를 통과했습니다."
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
     "final_article_slot_distribution": {
       "android_camera_platform_api": 0,
       "camerax_aosp_camera_compatibility": 1,
-      "linux_camera_libcamera_v4l2": 1,
+      "linux_camera_libcamera_v4l2": 0,
       "ai_camera_path_hal_workflow": 0,
       "cpp_toolchain_fallback": 0,
       "other": 0
@@ -158,6 +406,38 @@
     "lock_blockers": [],
     "rejected_duplicate_headlines": [],
     "source_gap_count": 0,
-    "must_fix_count": 0
+    "must_fix_count": 0,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output used an invalid group state reason code.",
+      "details": {
+        "field": "sections.group_coverage",
+        "invalid_demotions": [
+          {
+            "article_group_key": "patchwork-series:6214",
+            "reason_code": "missing_dated_evidence"
+          }
+        ],
+        "invalid_hard_blocks": [],
+        "allowed_demotion_reason_codes": [
+          "duplicate_or_near_duplicate",
+          "forbidden_bucket",
+          "explicit_editor_hold"
+        ],
+        "allowed_hard_block_reason_codes": [
+          "source_gap_risk",
+          "missing_dated_evidence",
+          "blocked_source_quality",
+          "fact_check_must_fix",
+          "quality_hard_blocker"
+        ]
+      },
+      "field": "sections.group_coverage",
+      "stage": "editor attempt 2/2",
+      "attempt": 2,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 1
+    }
   }
 ]

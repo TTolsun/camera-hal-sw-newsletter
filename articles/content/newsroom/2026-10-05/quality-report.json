@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-05",
-  "score": 97,
+  "score": 98,
   "max_score": 100,
   "threshold": 60,
   "status": "PASS",
@@ -10,17 +10,7 @@
     {
       "category": "editorial-story",
       "points": 1,
-      "reason": "Briefing bullet misses story structure elements: action_hint.",
-      "location": "briefing 1",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
-    {
-      "category": "editorial-story",
-      "points": 1,
-      "reason": "Briefing bullet misses story structure elements: reader_perspective.",
+      "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
       "location": "briefing 2",
       "blocking": false,
       "severity": "soft",
@@ -31,7 +21,7 @@
       "category": "image-fallback",
       "points": 1,
       "reason": "Article image uses a local fallback visual.",
-      "location": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "location": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
       "blocking": false,
       "severity": "soft",
       "reason_code": "",
@@ -42,13 +32,13 @@
   "article_results": [
     {
       "index": 1,
-      "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
       "category": "direct_aosp_camera",
       "status": "PASS",
       "repair_action": "preserve",
       "sources": [
         {
-          "title": "Android 17 Camera Image Test Suite release notes | Android Open Source Project",
+          "title": "Android 17 Camera Image Test Suite release notes",
           "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
         }
       ],
@@ -65,7 +55,7 @@
       },
       "scope_count": {
         "index": 1,
-        "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+        "headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
         "source_candidate_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
         "source_candidate_hash": "d893134af706f7df8f1c0716f00e4d4128532960bd3886f2d05056796785855e",
         "relevance_bucket": "direct_aosp_camera",
@@ -97,14 +87,34 @@
     },
     {
       "index": 2,
-      "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
       "category": "camera_driver_image_pipeline",
       "status": "PASS",
       "repair_action": "preserve",
       "sources": [
         {
-          "title": "[1/5] libcamera: controls: Expand AWB controls",
+          "title": "libcamera AWB series patch 28387",
           "url": "https://patchwork.libcamera.org/patch/28387/"
+        },
+        {
+          "title": "Add AwbState metadata and AwbTrigger control",
+          "url": "https://patchwork.libcamera.org/cover/28386/"
+        },
+        {
+          "title": "libcamera AWB series patch 28388",
+          "url": "https://patchwork.libcamera.org/patch/28388/"
+        },
+        {
+          "title": "libcamera AWB series patch 28389",
+          "url": "https://patchwork.libcamera.org/patch/28389/"
+        },
+        {
+          "title": "libcamera AWB series patch 28390",
+          "url": "https://patchwork.libcamera.org/patch/28390/"
+        },
+        {
+          "title": "libcamera AWB series patch 28391",
+          "url": "https://patchwork.libcamera.org/patch/28391/"
         }
       ],
       "section_contract": {
@@ -120,7 +130,7 @@
       },
       "scope_count": {
         "index": 2,
-        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+        "headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
         "source_candidate_url": "https://patchwork.libcamera.org/patch/28387/",
         "source_candidate_hash": "74221d8f077b88a9d02df0ec690ec0e58e44318f0b459f549a340905eae1c81b",
         "relevance_bucket": "camera_driver_image_pipeline",
@@ -160,7 +170,7 @@
   ],
   "claim_validation_summary": {
     "status": "available",
-    "bound_claims": 7,
+    "bound_claims": 9,
     "total_claims": 9,
     "derived_evidence_mapping_count": 0,
     "overclaim_risk": "low",
@@ -170,26 +180,26 @@
   "claim_results": [
     {
       "article_index": 1,
-      "article_headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
-      "claim_id": "claim-its-17-recommendation",
+      "article_headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+      "claim_id": "reviewed-0-0",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "cts_vts_its_cdd",
       "overclaim_risk": "low",
-      "text": "Android 17 카메라 이미지 테스트 스위트 릴리스 노트에서 가상 환경을 위해 패키지 관리 소프트웨어를 사용하여 올바른 버전의 패키지를 번들링할 것을 강력히 권장합니다.",
+      "text": "Android 17 Camera ITS 릴리스 노트는 Python 3.14와 FFmpeg 7.0.2를 사용하는 환경 구성 절차를 안내합니다.",
       "evidence_ids": [
-        "evidence-7db255a84cbe69453a1286f93c83faa8"
+        "source-body:a62a16468cac6cfc54e7"
       ],
       "resolved_evidence_ids": [
-        "evidence-7db255a84cbe69453a1286f93c83faa8"
+        "source-body:a62a16468cac6cfc54e7"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
-          "resolved_evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
+          "evidence_id": "source-body:a62a16468cac6cfc54e7",
+          "resolved_evidence_id": "source-body:a62a16468cac6cfc54e7",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
@@ -204,26 +214,26 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
-      "claim_id": "claim-its-17-python-env",
+      "article_headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+      "claim_id": "reviewed-0-1",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "cts_vts_its_cdd",
       "overclaim_risk": "low",
-      "text": "이 권장 사항은 파이썬 및 패키지 버전에 대한 기준을 다루며 카메라 이미지 테스트 스위트의 개발 환경 구성에 영향을 미칩니다.",
+      "text": "gen2_chart는 종이 차트를 사용하며 scene3는 ArUco 마커 검출을 사용합니다.",
       "evidence_ids": [
-        "evidence-7db255a84cbe69453a1286f93c83faa8"
+        "source-body:a62a16468cac6cfc54e7"
       ],
       "resolved_evidence_ids": [
-        "evidence-7db255a84cbe69453a1286f93c83faa8"
+        "source-body:a62a16468cac6cfc54e7"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
-          "resolved_evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
+          "evidence_id": "source-body:a62a16468cac6cfc54e7",
+          "resolved_evidence_id": "source-body:a62a16468cac6cfc54e7",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
@@ -238,26 +248,26 @@
     },
     {
       "article_index": 1,
-      "article_headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
-      "claim_id": "claim-its-17-inference",
-      "claim_type": "inference",
+      "article_headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+      "claim_id": "reviewed-0-2",
+      "claim_type": "fact",
       "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
+      "impact_level": "cts_vts_its_cdd",
       "overclaim_risk": "low",
-      "text": "이 변경은 카메라 하드웨어 추상화 계층의 런타임 동작을 직접 변경하지 않으며, 검증 환경의 일관성을 높이기 위한 조치입니다.",
+      "text": "test_display_p3는 P3 JPEG의 ICC 프로파일과 sRGB 색역 밖 색상 비율이 1%를 넘는지 검사합니다.",
       "evidence_ids": [
-        "evidence-7db255a84cbe69453a1286f93c83faa8"
+        "source-body:a62a16468cac6cfc54e7"
       ],
       "resolved_evidence_ids": [
-        "evidence-7db255a84cbe69453a1286f93c83faa8"
+        "source-body:a62a16468cac6cfc54e7"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
-          "resolved_evidence_id": "evidence-7db255a84cbe69453a1286f93c83faa8",
+          "evidence_id": "source-body:a62a16468cac6cfc54e7",
+          "resolved_evidence_id": "source-body:a62a16468cac6cfc54e7",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
@@ -266,32 +276,168 @@
       "source_urls": [
         "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
       ],
-      "bound": false,
+      "bound": true,
       "derived_evidence_mapping": false,
       "issues": []
     },
     {
-      "article_index": 2,
-      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
-      "claim_id": "claim-libcamera-awb-series",
+      "article_index": 1,
+      "article_headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+      "claim_id": "reviewed-0-3",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "driver_image_pipeline",
+      "impact_level": "cts_vts_its_cdd",
       "overclaim_risk": "low",
-      "text": "이것은 Add AwbState metadata and AwbTrigger control 패치 시리즈의 첫 번째 조각입니다.",
+      "text": "test_yuv_jpeg_capture_sameness의 RMS 차이 임계값이 낮아졌습니다.",
       "evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
+        "source-body:a62a16468cac6cfc54e7"
       ],
       "resolved_evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
+        "source-body:a62a16468cac6cfc54e7"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
+          "evidence_id": "source-body:a62a16468cac6cfc54e7",
+          "resolved_evidence_id": "source-body:a62a16468cac6cfc54e7",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+      "claim_id": "reviewed-0-4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "cts_vts_its_cdd",
+      "overclaim_risk": "low",
+      "text": "CTS Verifier에서 Camera ITS Test와 Camera ITS Sensor Fusion Rig Test가 분리되며, 후자는 feature_combination과 sensor_fusion 장면을 포함합니다.",
+      "evidence_ids": [
+        "source-body:a62a16468cac6cfc54e7"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:a62a16468cac6cfc54e7"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:a62a16468cac6cfc54e7",
+          "resolved_evidence_id": "source-body:a62a16468cac6cfc54e7",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://source.android.com/docs/compatibility/cts/its-release-notes-17"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
+      "claim_id": "reviewed-1-0",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "제안은 자동 AWB 동작 중 수동 게인을 자동 게인으로 갱신하여 AwbEnable=false 전환 시 마지막 자동 게인을 유지합니다.",
+      "evidence_ids": [
+        "source-body:c5ad18d2c606c6a587e9"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:c5ad18d2c606c6a587e9"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:c5ad18d2c606c6a587e9",
+          "resolved_evidence_id": "source-body:c5ad18d2c606c6a587e9",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28390/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
+      "claim_id": "reviewed-1-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "AwbTrigger=true는 AwbEnable=false일 때 재탐색하고, 수렴한 게인을 수동 게인에 반영한 뒤 Locked로 돌아갑니다.",
+      "evidence_ids": [
+        "source-body:55d262d61f6e7782c3f7"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:55d262d61f6e7782c3f7"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:55d262d61f6e7782c3f7",
+          "resolved_evidence_id": "source-body:55d262d61f6e7782c3f7",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://patchwork.libcamera.org/patch/28391/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
+      "claim_id": "reviewed-1-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "실제 API diff는 AwbLocked 출력 메타데이터를 제거하고 AwbState 출력과 AwbTrigger 입력을 정의합니다.",
+      "evidence_ids": [
+        "source-body:461567ea2d0941649500"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:461567ea2d0941649500"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:461567ea2d0941649500",
+          "resolved_evidence_id": "source-body:461567ea2d0941649500",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
@@ -306,171 +452,45 @@
     },
     {
       "article_index": 2,
-      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
-      "claim_id": "claim-libcamera-awb-state-core",
+      "article_headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
+      "claim_id": "reviewed-1-3",
       "claim_type": "fact",
       "status": "bound",
       "impact_level": "driver_image_pipeline",
       "overclaim_risk": "low",
-      "text": "AwbState는 드래프트에서 코어 컨트롤로 이동합니다.",
+      "text": "API 설명의 5% 수렴 기준과 구현 패치의 10% 범위·5회 누적 기준은 일치하지 않습니다.",
       "evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
+        "source-body:461567ea2d0941649500",
+        "source-body:00ba400e4795be8af0d9"
       ],
       "resolved_evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
+        "source-body:461567ea2d0941649500",
+        "source-body:00ba400e4795be8af0d9"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
+          "evidence_id": "source-body:461567ea2d0941649500",
+          "resolved_evidence_id": "source-body:461567ea2d0941649500",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        },
+        {
+          "evidence_id": "source-body:00ba400e4795be8af0d9",
+          "resolved_evidence_id": "source-body:00ba400e4795be8af0d9",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://patchwork.libcamera.org/patch/28387/"
+        "https://patchwork.libcamera.org/patch/28387/",
+        "https://patchwork.libcamera.org/patch/28389/"
       ],
       "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
-      "claim_id": "claim-libcamera-awb-locked",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "AwbLocked는 자동 화이트 밸런스 상태를 고정하는 컨트롤로 재정의됩니다.",
-      "evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://patchwork.libcamera.org/patch/28387/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
-      "claim_id": "claim-libcamera-awb-trigger",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "AwbTrigger는 게인 재계산을 강제하는 메커니즘으로 추가됩니다.",
-      "evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://patchwork.libcamera.org/patch/28387/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
-      "claim_id": "claim-libcamera-awb-pending",
-      "claim_type": "fact",
-      "status": "bound",
-      "impact_level": "driver_image_pipeline",
-      "overclaim_risk": "low",
-      "text": "이 패치는 아직 머지되지 않은 제안이며, libcamera Patchwork에서 검토 중입니다.",
-      "evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://patchwork.libcamera.org/patch/28387/"
-      ],
-      "bound": true,
-      "derived_evidence_mapping": false,
-      "issues": []
-    },
-    {
-      "article_index": 2,
-      "article_headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
-      "claim_id": "claim-libcamera-awb-inference",
-      "claim_type": "inference",
-      "status": "bound",
-      "impact_level": "no_hal_runtime_impact",
-      "overclaim_risk": "low",
-      "text": "이 변경 사항은 안드로이드 카메라 하드웨어 추상화 계층에 직접 적용되지 않으며 하위 파이프라인 설계의 참고 자료로 활용되어야 합니다.",
-      "evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
-      ],
-      "resolved_evidence_ids": [
-        "candidate:74221d8f077b88a9:source-summary"
-      ],
-      "invalid_evidence_ids": [],
-      "blocked_evidence_ids": [],
-      "source_mismatched_evidence_ids": [],
-      "evidence_statuses": [
-        {
-          "evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "resolved_evidence_id": "candidate:74221d8f077b88a9:source-summary",
-          "status": "allowed",
-          "raw_status": "allowed",
-          "normalized_status": "allowed"
-        }
-      ],
-      "source_urls": [
-        "https://patchwork.libcamera.org/patch/28387/"
-      ],
-      "bound": false,
       "derived_evidence_mapping": false,
       "issues": []
     }
@@ -479,14 +499,14 @@
   "hal_signal_quality_summary": {
     "schema_version": 1,
     "main_article_count": 2,
-    "strong_signal_count": 0,
-    "usable_signal_count": 2,
+    "strong_signal_count": 2,
+    "usable_signal_count": 0,
     "weak_signal_count": 0,
     "watchlist_only_count": 0,
     "blocked_source_gap_count": 0,
     "article_count_with_hal_signal_capsule": 2,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_owner_metric_log": 2,
     "main_articles_with_concrete_action": 2,
     "fallback_main_article_count": 0,
     "android_multimedia_camera_output_count": 0,
@@ -500,19 +520,19 @@
       "stream_buffer_metadata": 1
     },
     "actionability_level_counts": {
-      "concrete_check": 2
+      "owner_metric_log": 2
     },
     "effective_actionability_level_counts": {
-      "concrete_check": 2
+      "owner_metric_log": 2
     },
     "signal_quality_status_counts": {
-      "usable_signal": 2
+      "strong_signal": 2
     }
   },
   "main_article_signal_checks": [
     {
       "index": 1,
-      "title": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+      "title": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
       "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
       "relevance_bucket": "direct_aosp_camera",
       "hal_impact_axes": [
@@ -521,17 +541,17 @@
       "reader_owners": [
         "camera_hal_owner"
       ],
-      "actionability_level": "concrete_check",
-      "effective_actionability_level": "concrete_check",
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
       "actionability_upgrade_reason": "",
-      "signal_quality_status": "usable_signal",
-      "concrete_action_signal_count": 2,
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "",
       "fallback_guard_notes": [
-        "이 변경 사항은 카메라 하드웨어 추상화 계층의 API나 메타데이터 계약을 변경하지 않습니다."
+        "검증 환경 및 검사 항목에 관한 안내입니다. 릴리스 노트의 갱신일을 모든 변경의 최초 도입일로 해석하거나 HAL API 변경으로 확대하지 않습니다."
       ],
-      "soc_signal_type": "",
+      "soc_signal_type": "isp_image_pipeline",
       "soc_signal_source_allowed": true,
       "camera_pipeline_link": "",
       "has_hal_signal_capsule": true,
@@ -542,7 +562,7 @@
     },
     {
       "index": 2,
-      "title": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+      "title": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
       "url": "https://patchwork.libcamera.org/patch/28387/",
       "relevance_bucket": "camera_driver_image_pipeline",
       "hal_impact_axes": [
@@ -553,16 +573,15 @@
         "camera_hal_owner",
         "camera_driver_owner"
       ],
-      "actionability_level": "concrete_check",
-      "effective_actionability_level": "concrete_check",
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
       "actionability_upgrade_reason": "",
-      "signal_quality_status": "usable_signal",
-      "concrete_action_signal_count": 2,
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
       "fallback_promotion_allowed": true,
       "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 63): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "이 패치는 아직 머지되지 않은 제안이며 안드로이드 카메라 하드웨어 추상화 계층에 직접 적용되지 않습니다.",
-        "원문 요약이 일부 누락되어 AwbTrigger의 전체 동작 세부 사항은 확정되지 않았습니다."
+        "제출된 패치 시리즈의 제안이며 Android Camera HAL API 변경이나 확정된 수렴 계약이 아닙니다. 커밋 설명과 diff의 불일치를 보존합니다."
       ],
       "soc_signal_type": "",
       "soc_signal_source_allowed": true,
@@ -578,7 +597,7 @@
     "article_count": 2,
     "briefing_count": 3,
     "camera_article_count": 2,
-    "legacy_regex_camera_article_count": 2,
+    "legacy_regex_camera_article_count": 1,
     "expanded_scope_article_count": 2,
     "direct_aosp_camera_count": 1,
     "camera_driver_image_pipeline_count": 1,
@@ -596,7 +615,7 @@
     "section_count_details": [
       {
         "index": 1,
-        "headline": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+        "headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
         "source_candidate_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
         "source_candidate_hash": "d893134af706f7df8f1c0716f00e4d4128532960bd3886f2d05056796785855e",
         "relevance_bucket": "direct_aosp_camera",
@@ -619,7 +638,7 @@
       },
       {
         "index": 2,
-        "headline": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+        "headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
         "source_candidate_url": "https://patchwork.libcamera.org/patch/28387/",
         "source_candidate_hash": "74221d8f077b88a9d02df0ec690ec0e58e44318f0b459f549a340905eae1c81b",
         "relevance_bucket": "camera_driver_image_pipeline",
@@ -676,14 +695,14 @@
     "fact_check_status": "PASS",
     "must_fix_count": 0,
     "source_gap_count": 0,
-    "stale_claim_status": "PASS",
+    "stale_claim_status": "UNKNOWN",
     "stale_claim_removed_count": 0,
     "stale_claim_hard_failure_count": 0,
     "source_integrity_violation_count": 0,
     "blocking_deduction_count": 0,
     "blocking_deduction_categories": [],
     "hard_fail_count": 0,
-    "soft_deduction_count": 3,
+    "soft_deduction_count": 2,
     "article_gate_counts": {
       "PASS": 2,
       "DEMOTE": 0,
@@ -730,7 +749,7 @@
     },
     "claim_validation_summary": {
       "status": "available",
-      "bound_claims": 7,
+      "bound_claims": 9,
       "total_claims": 9,
       "derived_evidence_mapping_count": 0,
       "overclaim_risk": "low",
@@ -742,14 +761,14 @@
     "hal_signal_quality_summary": {
       "schema_version": 1,
       "main_article_count": 2,
-      "strong_signal_count": 0,
-      "usable_signal_count": 2,
+      "strong_signal_count": 2,
+      "usable_signal_count": 0,
       "weak_signal_count": 0,
       "watchlist_only_count": 0,
       "blocked_source_gap_count": 0,
       "article_count_with_hal_signal_capsule": 2,
       "article_count_without_hal_signal_capsule": 0,
-      "main_articles_with_owner_metric_log": 0,
+      "main_articles_with_owner_metric_log": 2,
       "main_articles_with_concrete_action": 2,
       "fallback_main_article_count": 0,
       "android_multimedia_camera_output_count": 0,
@@ -763,19 +782,19 @@
         "stream_buffer_metadata": 1
       },
       "actionability_level_counts": {
-        "concrete_check": 2
+        "owner_metric_log": 2
       },
       "effective_actionability_level_counts": {
-        "concrete_check": 2
+        "owner_metric_log": 2
       },
       "signal_quality_status_counts": {
-        "usable_signal": 2
+        "strong_signal": 2
       }
     },
     "main_article_signal_checks": [
       {
         "index": 1,
-        "title": "Android 17 Camera ITS 환경 구성을 위한 가상 환경 패키지 번들링 권장 사항 도입",
+        "title": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
         "url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
         "relevance_bucket": "direct_aosp_camera",
         "hal_impact_axes": [
@@ -784,17 +803,17 @@
         "reader_owners": [
           "camera_hal_owner"
         ],
-        "actionability_level": "concrete_check",
-        "effective_actionability_level": "concrete_check",
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
         "actionability_upgrade_reason": "",
-        "signal_quality_status": "usable_signal",
-        "concrete_action_signal_count": 2,
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
         "fallback_promotion_allowed": true,
         "fallback_promotion_reason": "",
         "fallback_guard_notes": [
-          "이 변경 사항은 카메라 하드웨어 추상화 계층의 API나 메타데이터 계약을 변경하지 않습니다."
+          "검증 환경 및 검사 항목에 관한 안내입니다. 릴리스 노트의 갱신일을 모든 변경의 최초 도입일로 해석하거나 HAL API 변경으로 확대하지 않습니다."
         ],
-        "soc_signal_type": "",
+        "soc_signal_type": "isp_image_pipeline",
         "soc_signal_source_allowed": true,
         "camera_pipeline_link": "",
         "has_hal_signal_capsule": true,
@@ -805,7 +824,7 @@
       },
       {
         "index": 2,
-        "title": "libcamera 자동 화이트 밸런스 컨트롤 확장 제안 및 메타데이터 재정의",
+        "title": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
         "url": "https://patchwork.libcamera.org/patch/28387/",
         "relevance_bucket": "camera_driver_image_pipeline",
         "hal_impact_axes": [
@@ -816,16 +835,15 @@
           "camera_hal_owner",
           "camera_driver_owner"
         ],
-        "actionability_level": "concrete_check",
-        "effective_actionability_level": "concrete_check",
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
         "actionability_upgrade_reason": "",
-        "signal_quality_status": "usable_signal",
-        "concrete_action_signal_count": 2,
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
         "fallback_promotion_allowed": true,
         "fallback_promotion_reason": "libcamera Patchwork (patch review) (project-official, high, score 63): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
         "fallback_guard_notes": [
-          "이 패치는 아직 머지되지 않은 제안이며 안드로이드 카메라 하드웨어 추상화 계층에 직접 적용되지 않습니다.",
-          "원문 요약이 일부 누락되어 AwbTrigger의 전체 동작 세부 사항은 확정되지 않았습니다."
+          "제출된 패치 시리즈의 제안이며 Android Camera HAL API 변경이나 확정된 수렴 계약이 아닙니다. 커밋 설명과 diff의 불일치를 보존합니다."
         ],
         "soc_signal_type": "",
         "soc_signal_source_allowed": true,
@@ -840,7 +858,7 @@
     "top_deduction_categories": [
       {
         "category": "editorial-story",
-        "count": 2
+        "count": 1
       },
       {
         "category": "image-fallback",

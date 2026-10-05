@@ -7,18 +7,30 @@
   "article_quality": [
     {
       "section_index": 0,
-      "headline": "Android 17 카메라 이미지 테스트 스위트 검증을 위한 가상 환경 패키지 번들링 권장 사항",
+      "headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
       "publishable": true,
       "confidence": "high",
-      "reason": "Android 17 Camera ITS 환경 구성에 대한 구체적인 권장 사항을 제공하여 HAL 엔지니어의 테스트 환경 설정에 실질적인 도움을 줍니다."
+      "source_review": {
+        "core_change": "Android 17 Camera ITS의 실행 환경(Python 3.14, FFmpeg 7.0.2) 요구사항 정의, 신규/갱신 장면(gen2_chart, wide_gamut, ArUco 마커 기반 scene3) 및 테스트 도입, CTS Verifier 활동 분리, PASS* 상태 도입, 태블릿 허용 목록 추가 및 빌드 승인을 위한 결과 통합 제출 프로세스 도입",
+        "article_explanation": "Python 3.14 및 FFmpeg 7.0.2 가상 환경 구성 방법, gen2_chart 및 ArUco 마커 기반 scene3 등의 차트 변경 사항, 신규/개정 테스트 항목, CTS Verifier 활동 분리(Camera ITS Test와 Sensor Fusion Rig Test), PASS* 상태 도입, 태블릿 허용 목록 및 결과 통합 제출 절차를 설명함",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": []
+      },
+      "reason": "Android 17 Camera ITS를 준비하는 개발자들에게 필요한 호스트 환경 요구사항과 변경된 테스트 항목들을 구체적인 버전 및 수치와 함께 정확하게 전달하고 있습니다. / Android 17 Camera ITS의 실행 환경 요구사항과 신규/변경 테스트 항목, 그리고 결과 제출 방식의 변화를 정확하게 설명하고 있습니다."
     },
     {
       "section_index": 1,
-      "headline": "libcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안",
+      "headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
       "publishable": true,
       "confidence": "high",
-      "reason": "libcamera의 AWB 컨트롤 확장 제안은 하위 이미지 파이프라인의 설계 흐름을 이해하고 향후 Android Camera HAL의 AWB 메타데이터 매핑을 고려하는 데 유용한 정보를 제공합니다."
+      "source_review": {
+        "core_change": "AwbEnable=false 전환 시 마지막 자동 게인을 유지하도록 수동 게인을 자동 게인으로 업데이트하는 메커니즘 도입, 수동 상태에서 재탐색을 강제하는 AwbTrigger 제어 추가, AwbState 메타데이터를 core로 이동하고 AwbLocked 메타데이터 제거",
+        "article_explanation": "AwbEnable=false 시 마지막 자동 게인 유지 동작, AwbTrigger를 통한 재탐색 및 Locked 복귀 흐름, AwbLocked 제거 및 AwbState 상태 보고(Searching, Converged, Locked)를 설명함. 또한 1번 패치 커밋 메시지(AwbLocked를 제어로 재사용)와 실제 diff(AwbLocked 제거)의 불일치, 그리고 yaml 설명(5% 임계값)과 실제 구현 코드(10%/15% 임계값 및 5프레임 누적)의 수렴 기준 모순을 명확히 짚어냄",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": []
+      },
+      "reason": "제안된 패치 시리즈의 설계 의도뿐만 아니라 API 문서와 실제 구현 코드 간의 불일치(5% vs 10%)까지 정확하게 분석하여 개발자들에게 실질적인 기술적 가치를 제공합니다. / libcamera AWB 패치 시리즈의 핵심 설계 변경 사항을 정확히 짚어냈으며, 패치 커밋 메시지와 실제 코드 diff 사이의 불일치 및 수렴 기준의 모순을 명확히 분석하여 설명하고 있습니다."
     }
   ],
-  "final_comment": "제공된 모든 기사는 사실 확인, 출처 명시, 과장 방지 측면에서 정책을 잘 준수하고 있습니다. HAL 엔지니어에게 실질적인 가치를 제공하는 구체적인 정보와 실행 항목을 포함하고 있어 발행 가능합니다."
+  "final_comment": "두 기사 모두 공식 문서와 패치 소스 코드를 매우 정확하고 깊이 있게 분석하여 작성되었습니다. 특히 libcamera AWB 제안 기사는 API 정의와 실제 구현 코드 간의 불일치까지 짚어내는 뛰어난 분석력을 보여주어, 개발자들에게 매우 유용한 정보를 제공합니다. 수정이 필요한 오류나 누락은 발견되지 않았습니다."
 }

@@ -1,26 +1,3 @@
-# LLM cost report - 2026-10-05
+# W41 영문판 재번역
 
-## Summary
-
-- Enforcement: warning-only
-- Pricing source: https://ai.google.dev/gemini-api/docs/pricing
-- Warning threshold USD: 0.15
-- Max threshold USD: 0.25
-- Pro policy: disabled
-- Request count: 1
-- Prompt tokens: 1918
-- Output tokens: 1218
-- Thinking tokens: 0
-- Cached tokens: 0
-- Total tokens: 3136
-- Estimated cost USD: 0.003620
-
-## Calls
-
-| Provider | Stage | Group | Primary | Attempt Model | Resolved By | Fallbacks | Model | Attempt | Prompt | Output | Thinking | Requested Budget | Applied Budget | Cached | Pro | Estimated USD |
-| --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
-| gemini | translate attempt 1/2 | translate | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 1918 | 1218 | 0 | 0 | 0 | 0 | no | 0.003620 |
-
-## Warnings
-
-- none
+Gemini 2.5 Flash를 두 차례 호출했습니다. 본문 번역 후 다른 기사의 출처 제목이 섞인 응답 메타데이터를 원본 URL 목록에 맞춰 교정했습니다. 결정론 번역 검사를 통과했습니다. 이번 두 호출의 비용 계측은 저장되지 않았습니다.

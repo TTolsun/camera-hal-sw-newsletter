@@ -1,15 +1,15 @@
 # 2026 W40 (09.28 ~ 10.04)
 
-This week's newsletter covers important news for Android 17 camera validation and new feature proposals for libcamera. Ensure consistency in your test environment with the recommendation for bundling virtual environment packages for Android 17 Camera Image Test Suite validation. Additionally, explore ways to enhance the precision of sub-image pipeline control with the libcamera automatic white balance control expansion and metadata override proposals.
+This week's newsletter brings important information about preparing for Android 17 Camera ITS. Learn more about what to check beyond the Python package list, including the execution environment version and changed verification items. Also, there's news about a libcamera AWB proposal. See how a new approach of fixing automatic gain and reconverging when needed can improve color changes.
 
 
 
 ## 1. This week’s articles
 
-- Recommendations for Bundling Virtual Environment Packages for Android 17 Camera Image Test Suite Validation
-- libcamera Automatic White Balance Control Expansion and Metadata Override Proposal
+- Android 17 Camera ITS: Runtime Versions and Updated Tests
+- libcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence
 
-## 2. Recommendations for Bundling Virtual Environment Packages for Android 17 Camera Image Test Suite Validation
+## 2. Android 17 Camera ITS: Runtime Versions and Updated Tests
 
 
 ![Android Open Source Project](https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png)
@@ -17,64 +17,85 @@ This week's newsletter covers important news for Android 17 camera validation an
 _Image: [Android 17 Camera Image Test Suite release notes | Android Open Source Project](https://source.android.com/docs/compatibility/cts/its-release-notes-17)_
 
 
-_Android Open Source Project Official Documentation_
+_Official Android Open Source Project Documentation_
 
-Teams preparing for Android 17 camera validation should pay attention to new recommendations for maintaining test environment consistency.
+When preparing for Android 17 Camera ITS, it's not just the Python package list that needs to be aligned. The versions of Python and FFmpeg executables, test charts, and CTS Verifier activity configurations must be checked together.
 
-The environment configuration for the Android 17 Camera Image Test Suite has changed. According to the official documentation, it is strongly recommended to use package management software to bundle the correct versions of packages when setting up a virtual environment.
+The Android 17 Camera ITS release notes guide you through the environment configuration procedure using Python 3.14 and FFmpeg 7.0.2. It is strongly recommended to create a virtual environment for each Android release and install the Python packages of the versions specified in the document. Python itself and FFmpeg executables are not prepared by simply installing Python packages, so they must be installed separately.
 
-This recommendation covers the standards for Python and related package versions. These are factors that directly affect the development and validation environment configuration of the Camera Image Test Suite.
+The target to check is the environment where the tests are actually run. After activating a virtual environment created with Python 3.14, check the Python version and compare the pip freeze results with the official package list. In the same environment, you should also check if ffmpeg -version points to 7.0.2. If a different version is running, you can check the execution path and the binary link of the virtual environment as guided by the document. Creating a virtual environment alone does not solve the problem of other FFmpeg installed on the system being called.
 
-### Ensuring Test Environment Consistency
+### Charts and Inspection Items Also Change
 
-Test environments that validate the behavior of the camera hardware abstraction layer are prone to unexpected errors due to Python package version mismatches. The proposed virtual environment bundling method is a measure to prevent such version fragmentation and increase the reliability of validation.
+The new gen2_chart scene uses a paper chart instead of a tablet. scene3 has been changed to detect charts with ArUco markers, covering various angles of view and distance conditions for telephoto cameras. If you use existing charts as is, they may not match the new inspection conditions, so it is necessary to check the chart configuration separately from the execution environment version.
 
-However, this change does not modify the actual behavior or interface of the hardware abstraction layer itself. It is merely a recommended guideline to be applied when configuring the test environment to validate the hardware abstraction layer implementation.
+Among the new inspections, test_tonemap_sequence checks the application of android.tonemap.mode, and test_jca_jpegr_ip checks the white balance difference between JPEG_R JCA preview snapshots and captured images. test_display_p3 checks that P3 JPEG output has an appropriate ICC profile and that more than 1% of its colors fall outside the sRGB gamut. The existing test_yuv_jpeg_capture_sameness has been changed to lower the RMS difference threshold to catch visible color differences as failures. The document does not provide the new value for this threshold.
+
+Tests are separated into Camera ITS Test and Camera ITS Sensor Fusion Rig Test activities in CTS Verifier. The latter includes feature_combination and sensor_fusion scenes, a configuration that allows parallel testing on separate devices. Additionally, a PASS asterisk status is introduced to indicate boundary-level passes. sensor_fusion/test_video_stabilization is deprecated and guides to use test_video_stabilization_jca. The procedure for collecting ITS results obtained from multiple devices and sessions using the same build fingerprint and submitting them for build approval is also described.
+
+Multi-camera switching, flash, and sensor fusion tests moved to the Gen2 rig require new charts. chart_scaling in config.yml addresses chart scaling issues for telephoto cameras, and the Samsung Galaxy Tab S10 FE has been added to the wide-gamut test tablet allowlist.
+
+This does not mean that the HAL API has changed, but rather that the test execution environment and verification scope have changed. The update date of the release notes alone cannot determine the initial introduction date of each change.
 
 ### Camera HAL/Driver perspective: what it means
 
-For validating the camera hardware abstraction layer targeting Android 17 and above, it is necessary to introduce package management software to synchronize Python package versions when setting up the Camera Image Test Suite execution environment. This helps reduce environmental random errors that may occur during test script execution.
+When analyzing verification failures, it is necessary to distinguish between differences in the execution environment version/path, chart configuration, and HAL output. In particular, YUV/JPEG color differences and white balance between JPEG_R preview/capture are items to compare results against new inspection conditions.
 
 **Sources**
 
-- [Android 17 Camera Image Test Suite release notes | Android Open Source Project](https://source.android.com/docs/compatibility/cts/its-release-notes-17)
+- [Android 17 Camera Image Test Suite release notes](https://source.android.com/docs/compatibility/cts/its-release-notes-17)
 
 ---
 
-## 3. libcamera Automatic White Balance Control Expansion and Metadata Override Proposal
+## 3. libcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence
 
 
-![libcamera Automatic White Balance Control Expansion and Metadata Override Proposal image](../../../assets/images/fallback/newsletter-default.svg)
+![libcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence image](../../../assets/images/fallback/newsletter-default.svg)
 
 
 _libcamera Patchwork Mailing List_
 
-New design proposals for more precise automatic white balance control in the sub-image pipeline are being discussed.
+This proposal aims to improve the behavior where colors suddenly change when turning off automatic white balance by reverting to the old manual gain. It adds a flow that maintains the last automatic gain and updates to a new gain only when requested.
 
-The first piece of a patch series to expand automatic white balance control functionality in the libcamera project has been submitted. This proposal moves the existing draft-stage automatic white balance state to core controls.
+A libcamera AWB patch series submitted on September 28, 2026, addresses gain transitions when switching from automatic to manual mode. Previously, automatic and manual gains were separate, so switching to AwbEnable=false would revert to the previous manual values. The proposal continuously updates manual gain with the gain calculated during automatic operation, so that the last automatic gain is maintained the moment AWB is turned off.
 
-According to the proposal, the AwbLocked metadata item, which indicates the automatic white balance state, will be redefined as a control command that locks the state. Additionally, an AwbTrigger mechanism will be newly added to temporarily force recalculation of white balance gain values even when the state is locked.
+If the lighting changes in the locked state and you want to readjust, you can request AwbTrigger=true. This control works when AwbEnable=false. The algorithm determines reconvergence in the Searching state, reflects the converged gain in the manual gain, and then returns to Locked. If AwbEnable=true, the trigger has no effect. Therefore, it is possible to distinguish between continuous automatic AWB operation and a single re-search operation in manual mode.
 
-### Distance from Sub-Image Pipeline
+### Removal of AwbLocked and AwbState Status Reporting
 
-This change is a proposal for libcamera, a Linux-based sub-camera stack, and will not be immediately reflected in the Android camera hardware abstraction layer. It should be viewed as a design reference showing how automatic white balance behavior is refined at the sub-image pipeline level.
+The actual diff removes the existing AwbLocked output metadata. It is not a change to convert it to an input control. Status reporting is handled by AwbState, which has been moved from draft to core, and provides three states: Searching, Converged, and Locked. A separate inactive state is removed. The explanation of the input control transition in the commit message of patch #1 (28387) of the series does not match this diff, so here we explain based on the actual code's removal/addition.
 
-Currently, this patch is in a proposed state and is under review on the mailing list. Also, some of the provided summary information is omitted, so the detailed operating conditions of the gain recalculation enforcement mechanism may change in the future.
+The convergence criteria also do not yet match. The AwbState description in control_ids_core.yaml of patch #1 uses a 5% criterion compared to the previous frame, but implementation patch #3 (28389) uses a method of accumulating 5 frames within a 10% range. According to the implementation comments, the range between 10% and 15% pauses accumulation, and a difference exceeding 15% resets the counter, so simply summarizing it as '5 consecutive frames' is also not accurate. After convergence, the stored converged gain is used as the comparison criterion instead of the immediately preceding frame.
+
+The series also includes an extension of the Vector comparison operator to support gain vector comparison. This is an internal implementation change that supports AWB's convergence determination.
+
+This article compares the design and code of the submitted series. Differences between the explanation and implementation remain, so it should not be taken as a finalized API contract or already deployed feature. It is also not a change to the Android Camera HAL specification itself. For teams dealing with libcamera-based camera stacks, this is a proposal that can be referenced for how to express the gain to maintain during manual switching and the re-search completion status.
 
 ### Camera HAL/Driver perspective: what it means
 
-Although not a direct change to the Android camera hardware abstraction layer, it provides a reference for how automatic white balance state locking and forced triggering are implemented at the sub-image pipeline level. It will be useful for reviewing control alignment with lower-level drivers when designing automatic white balance metadata mapping for the Android camera hardware abstraction layer in the future.
+The core is the gain to maintain when turning off AWB and the re-search operation in manual mode. In libcamera-based implementations, this behavior and the expression of the AWB state in the upper layer should be reviewed together, but the current patch's convergence criteria should not be applied as a finalized contract.
 
 **Sources**
 
-- [[1/5] libcamera: controls: Expand AWB controls](https://patchwork.libcamera.org/patch/28387/)
+- [libcamera AWB series patch 28387](https://patchwork.libcamera.org/patch/28387/)
+- [Add AwbState metadata and AwbTrigger control](https://patchwork.libcamera.org/cover/28386/)
+- [libcamera AWB series patch 28388](https://patchwork.libcamera.org/patch/28388/)
+- [libcamera AWB series patch 28389](https://patchwork.libcamera.org/patch/28389/)
+- [libcamera AWB series patch 28390](https://patchwork.libcamera.org/patch/28390/)
+- [libcamera AWB series patch 28391](https://patchwork.libcamera.org/patch/28391/)
 
 
 ## Further reading
 
-- [\[PATCH 3/3\] media: mali-c55: Keep ISP powered while IRQ wake is armed](<https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/>) — lore.kernel.org linux-media list (2026-09-29) · Mali-C55 ISP Power Management Patch Proposal
+- [\[PATCH 3/3\] media: mali-c55: Keep ISP powered while IRQ wake is armed](<https://lore.kernel.org/linux-media/20260929-mali-c55-irq-supend-resume-v1-3-e3af34afff12@kernel.org/>) — lore.kernel.org linux-media list (2026-09-29) · Mali-C55 ISP power management patch proposal
 - ChromeOS camera changes: [camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2](<https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692>) (2026-09-30) · [camera: Enforce exclusive buffer IDs - chromiumos/platform2](<https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146>) (2026-09-30)
 
 ## References
 
-
+- [Android 17 Camera Image Test Suite release notes](https://source.android.com/docs/compatibility/cts/its-release-notes-17)
+- [libcamera AWB series patch 28387](https://patchwork.libcamera.org/patch/28387/)
+- [Add AwbState metadata and AwbTrigger control](https://patchwork.libcamera.org/cover/28386/)
+- [libcamera AWB series patch 28388](https://patchwork.libcamera.org/patch/28388/)
+- [libcamera AWB series patch 28389](https://patchwork.libcamera.org/patch/28389/)
+- [libcamera AWB series patch 28390](https://patchwork.libcamera.org/patch/28390/)
+- [libcamera AWB series patch 28391](https://patchwork.libcamera.org/patch/28391/)

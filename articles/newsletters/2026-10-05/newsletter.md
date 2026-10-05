@@ -1,16 +1,16 @@
-# Camera HAL / SW Newsletter - 2026-10-05
+# Android 17 ITS 검증 환경과 libcamera AWB 제어 제안
 
-이번 주 뉴스레터에서는 Android 17 Camera ITS의 가상 환경 구성을 위한 패키지 번들링 권장 사항과 libcamera에 제안된 자동 화이트 밸런스(AWB) 제어 확장 패치를 다룹니다. 검증 환경의 일관성 확보와 하위 이미지 파이프라인의 제어 설계 흐름을 파악하는 데 유용한 정보입니다.
+ITS의 실행 버전·차트·검사 항목과 libcamera AWB의 게인 고정·재탐색 조건을 원문으로 확인합니다.
 
 
 
 ## 1. 이번 주 3줄 브리핑
 
-- Android 17 Camera ITS에서 가상 환경 구성을 위해 패키지 관리 소프트웨어를 통한 패키지 번들링을 강력히 권장합니다.
-- libcamera Patchwork에서 자동 화이트 밸런스(AWB) 상태를 코어로 이동하고 강제 트리거를 도입하는 컨트롤 확장 패치가 검토 중입니다.
-- 각 변경 사항은 직접적인 하드웨어 추상화 계층의 런타임 변경을 수반하지 않으나, 검증 인프라 및 하위 파이프라인 설계 정렬 관점에서 선제적인 분석이 필요합니다.
+- Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목
+- libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기
+- Mali-C55와 ChromeOS 카메라 변경은 짧은 참고 항목으로 확인합니다.
 
-## 2. Android 17 카메라 이미지 테스트 스위트 검증을 위한 가상 환경 패키지 번들링 권장 사항
+## 2. Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목
 
 
 ![Android Open Source Project](https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png)
@@ -20,21 +20,27 @@ _이미지: [Android 17 Camera Image Test Suite release notes | Android Open Sou
 
 _Android Open Source Project 공식 문서_
 
-Android 17 카메라 검증을 준비하는 팀이라면, 테스트 환경의 일관성을 유지하기 위한 새로운 권장 사항에 주목해야 합니다.
+Android 17 Camera ITS를 준비할 때 맞춰야 할 것은 Python 패키지 목록만이 아닙니다. Python과 FFmpeg 실행 파일의 버전, 테스트 차트, CTS Verifier의 활동 구성을 함께 확인해야 합니다.
 
-Android 17 카메라 이미지 테스트 스위트의 환경 구성 방식에 변화가 생겼습니다. 공식 문서에 따르면 가상 환경을 설정할 때 패키지 관리 소프트웨어를 사용하여 올바른 버전의 패키지를 번들링할 것을 강력히 권장하고 있습니다.
+Android 17 Camera ITS 릴리스 노트는 Python 3.14와 FFmpeg 7.0.2를 사용하는 환경 구성 절차를 안내합니다. Android 릴리스별로 가상 환경을 만들고, 문서에 제시된 버전의 Python 패키지를 설치하는 방식을 강력히 권장합니다. Python 자체와 FFmpeg 실행 파일은 Python 패키지 설치만으로 준비되지 않으므로 따로 설치해야 합니다.
 
-이 권장 사항은 파이썬과 관련 패키지 버전에 대한 기준을 다룹니다. 카메라 이미지 테스트 스위트의 개발 및 검증 환경 구성에 직접적인 영향을 미치는 요소입니다.
+확인할 대상은 테스트를 실제로 실행하는 환경입니다. Python 3.14로 만든 가상 환경을 활성화한 뒤 Python 버전을 확인하고, pip freeze 결과를 공식 패키지 목록과 비교합니다. 같은 환경에서 ffmpeg -version이 7.0.2를 가리키는지도 확인해야 합니다. 다른 버전이 실행된다면 문서가 안내하는 것처럼 실행 경로와 가상 환경의 바이너리 연결을 점검할 수 있습니다. 가상 환경을 만들었다는 사실만으로 시스템에 설치된 다른 FFmpeg가 호출되는 문제까지 해결되지는 않습니다.
 
-### 테스트 환경의 일관성 확보
+### 차트와 검사 항목도 달라집니다
 
-카메라 하드웨어 추상화 계층의 동작을 검증하는 테스트 환경은 파이썬 패키지 버전 불일치로 인해 예기치 않은 오류를 겪기 쉽습니다. 이번에 제시된 가상 환경 번들링 방식은 이러한 버전 파편화를 방지하고 검증의 신뢰성을 높이기 위한 조치입니다.
+새로운 gen2_chart 장면은 태블릿 대신 종이 차트를 사용합니다. scene3는 ArUco 마커로 차트를 검출하도록 바뀌어 망원 카메라의 다양한 화각과 거리 조건을 다룹니다. 기존 차트를 그대로 사용하면 새 검사 조건과 맞지 않을 수 있으므로, 실행 환경의 버전과 별도로 차트 구성도 확인할 필요가 있습니다.
 
-다만 이 변경 사항은 하드웨어 추상화 계층의 실제 동작이나 인터페이스 자체를 수정하는 것은 아닙니다. 어디까지나 하드웨어 추상화 계층 구현을 검증하는 테스트 환경을 구성할 때 적용되는 권장 지침입니다.
+신규 검사 중 test_tonemap_sequence는 android.tonemap.mode 적용을 확인하고, test_jca_jpegr_ip는 JPEG_R JCA 미리보기 스냅샷과 캡처 이미지 사이의 화이트 밸런스 차이를 검사합니다. test_display_p3는 P3 JPEG의 ICC 프로파일과 sRGB 색역 밖의 색상 비율이 1%를 넘는지 확인합니다. 기존 test_yuv_jpeg_capture_sameness는 RMS 차이 임계값을 낮춰 눈에 보이는 색상 차이를 실패로 잡도록 변경됐습니다. 문서에는 이 임계값의 새 수치가 제시되어 있지 않습니다.
+
+테스트는 CTS Verifier의 Camera ITS Test와 Camera ITS Sensor Fusion Rig Test 활동으로 분리됩니다. 후자는 feature_combination과 sensor_fusion 장면을 포함하며, 별도 기기에서 병렬로 시험할 수 있도록 한 구성입니다. 추가로 경계 수준의 통과를 표시하는 PASS 별표 상태가 도입됩니다. sensor_fusion/test_video_stabilization은 폐기되며 test_video_stabilization_jca를 사용하도록 안내합니다. 동일한 빌드 지문(build fingerprint)을 사용하는 여러 기기와 세션에서 얻은 ITS 결과를 모아 빌드 승인에 제출하는 절차도 설명합니다.
+
+Gen2 리그로 옮겨진 멀티 카메라 전환·플래시·센서 퓨전 테스트에는 새 차트가 필요합니다. config.yml의 chart_scaling은 망원 카메라의 차트 배율 문제를 다루며, 광색역 시험용 태블릿 허용 목록에는 Samsung Galaxy Tab S10 FE가 추가됐습니다.
+
+이는 HAL API가 바뀌었다는 뜻이 아니라 시험 실행 환경과 검증 범위가 달라진다는 의미입니다. 릴리스 노트의 갱신일만으로 각 변경 사항의 최초 도입일을 단정할 수는 없습니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-Android 17 이상을 대상으로 하는 카메라 하드웨어 추상화 계층 검증을 위해, 카메라 이미지 테스트 스위트 실행 환경을 설정할 때 패키지 관리 소프트웨어를 도입하여 파이썬 패키지 버전을 동기화해야 합니다. 이는 테스트 스크립트 실행 중 발생할 수 있는 환경적 무작위 오류를 줄이는 데 기여합니다.
+검증 실패를 분석할 때 실행 환경의 버전·경로, 차트 구성, HAL 출력의 차이를 구분해야 합니다. 특히 YUV/JPEG 색상 차이와 JPEG_R 미리보기·캡처 간 화이트 밸런스는 새 검사 조건을 기준으로 결과를 비교할 항목입니다.
 
 **출처**
 
@@ -42,33 +48,42 @@ Android 17 이상을 대상으로 하는 카메라 하드웨어 추상화 계층
 
 ---
 
-## 3. libcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안
+## 3. libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기
 
 
-![libcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안 image](../../assets/images/fallback/newsletter-default.svg)
+![libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기 image](../../assets/images/fallback/newsletter-default.svg)
 
 
 _libcamera Patchwork 메일링 리스트_
 
-하위 이미지 파이프라인에서 자동 화이트 밸런스를 더 정밀하게 제어하기 위한 새로운 설계 제안이 논의되고 있습니다.
+자동 화이트 밸런스를 끌 때 예전 수동 게인으로 되돌아가면서 색이 갑자기 변하는 동작을 개선하려는 제안입니다. 마지막 자동 게인을 유지하고, 요청할 때만 새 게인으로 갱신하는 흐름을 추가합니다.
 
-libcamera 프로젝트에 자동 화이트 밸런스 제어 기능을 확장하는 패치 시리즈의 첫 번째 조각이 제출되었습니다. 이번 제안은 기존의 드래프트 단계에 있던 자동 화이트 밸런스 상태를 코어 컨트롤로 이동시키는 내용을 담고 있습니다.
+2026년 9월 28일 제출된 libcamera의 AWB 패치 시리즈는 자동 모드에서 수동 모드로 바꿀 때의 게인 전환을 다룹니다. 기존에는 자동 게인과 수동 게인이 분리돼 있어 AwbEnable=false로 전환하면 이전 수동 값으로 돌아갔습니다. 제안은 자동 동작 중 계산한 게인으로 수동 게인을 계속 갱신하여, AWB를 끄는 순간 마지막 자동 게인을 유지하도록 합니다.
 
-제안에 따르면 자동 화이트 밸런스 상태를 나타내는 메타데이터 항목인 AwbLocked가 상태를 고정하는 제어 명령으로 재정의됩니다. 또한 상태가 고정된 상황에서도 임시로 화이트 밸런스 게인 값을 다시 계산하도록 강제하는 AwbTrigger 메커니즘이 새롭게 추가됩니다.
+잠금 상태에서 조명이 바뀌어 다시 맞추고 싶을 때는 AwbTrigger=true를 요청할 수 있습니다. 이 제어는 AwbEnable=false일 때 작동합니다. 알고리즘은 Searching 상태에서 다시 수렴을 판단하고, 수렴한 게인을 수동 게인에 반영한 뒤 Locked로 돌아갑니다. AwbEnable=true이면 트리거는 효과가 없습니다. 따라서 자동 AWB를 계속 켜 두는 동작과, 수동 상태에서 한 번 재탐색하는 동작을 구분할 수 있습니다.
 
-### 하위 이미지 파이프라인과의 거리감
+### AwbLocked 제거와 AwbState 상태 보고
 
-이 변경 사항은 리눅스 기반 하위 카메라 스택인 libcamera에 제안된 내용으로 안드로이드 카메라 하드웨어 추상화 계층에 즉각적으로 반영되는 것은 아닙니다. 하위 이미지 파이프라인 수준에서 자동 화이트 밸런스 동작이 어떻게 정교화되는지 보여주는 설계 참고 자료로 보아야 합니다.
+실제 diff는 기존 AwbLocked 출력 메타데이터를 제거합니다. 입력 제어로 바꾸는 변경이 아닙니다. 상태 보고는 draft에서 core로 옮긴 AwbState가 맡고, Searching, Converged, Locked의 세 상태를 제공합니다. 별도의 비활성 상태는 제거됩니다. 시리즈 1번 패치(28387) 커밋 메시지의 입력 제어 전환 설명은 이 diff와 일치하지 않으므로, 여기서는 실제 코드의 제거·추가 내용을 기준으로 설명합니다.
 
-현재 이 패치는 머지되지 않은 제안 상태이며 메일링 리스트에서 검토가 진행 중입니다. 또한 제공된 요약 정보가 일부 생략되어 있어 게인 재계산 강제 메커니즘의 상세한 동작 조건은 향후 변경될 가능성이 있습니다.
+수렴 기준도 아직 일치하지 않습니다. 1번 패치의 control_ids_core.yaml에 있는 AwbState 설명은 이전 프레임 대비 5%를 기준으로 쓰지만, 3번 구현 패치(28389)는 10% 범위의 프레임을 5회 누적하는 방식을 사용합니다. 구현 주석상 10%와 15% 사이 구간은 누적을 멈추고 15%를 넘으면 초기화하므로, 단순히 ‘연속 5프레임’이라고 요약하는 것도 정확하지 않습니다. 수렴 뒤에는 직전 프레임 대신 저장한 수렴 게인을 비교 기준으로 삼습니다.
+
+시리즈에는 게인 벡터 비교를 지원하는 Vector 비교 연산자 확장도 포함됩니다. 이는 AWB의 수렴 판정을 뒷받침하는 내부 구현 변경입니다.
+
+이 기사는 제출된 시리즈의 설계와 코드를 비교한 내용입니다. 설명과 구현의 차이가 남아 있어 확정된 API 계약이나 이미 배포된 기능으로 받아들이면 안 됩니다. Android Camera HAL 규격 자체의 변경도 아닙니다. libcamera 기반 카메라 스택을 다루는 팀에는 수동 전환 시 유지할 게인과 재탐색 완료 상태를 어떻게 표현할지 참고할 수 있는 제안입니다.
 
 ### Camera HAL/Driver 관점에서의 의미
 
-직접적인 안드로이드 카메라 하드웨어 추상화 계층의 변경은 아니지만, 하위 이미지 파이프라인 수준에서 자동 화이트 밸런스 상태 고정 및 강제 트리거가 구현되는 방식을 참고할 수 있습니다. 향후 안드로이드 카메라 하드웨어 추상화 계층의 자동 화이트 밸런스 메타데이터 매핑 설계 시 하위 드라이버와의 제어 정렬을 검토하는 데 유용합니다.
+핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.
 
 **출처**
 
-- [[1/5] libcamera: controls: Expand AWB controls](https://patchwork.libcamera.org/patch/28387/)
+- [libcamera AWB series patch 28387](https://patchwork.libcamera.org/patch/28387/)
+- [Add AwbState metadata and AwbTrigger control](https://patchwork.libcamera.org/cover/28386/)
+- [libcamera AWB series patch 28388](https://patchwork.libcamera.org/patch/28388/)
+- [libcamera AWB series patch 28389](https://patchwork.libcamera.org/patch/28389/)
+- [libcamera AWB series patch 28390](https://patchwork.libcamera.org/patch/28390/)
+- [libcamera AWB series patch 28391](https://patchwork.libcamera.org/patch/28391/)
 
 
 ## 참고 / 더 읽을거리
@@ -78,4 +93,10 @@ libcamera 프로젝트에 자동 화이트 밸런스 제어 기능을 확장하�
 
 ## 참고자료
 
-
+- [Android 17 Camera Image Test Suite release notes](https://source.android.com/docs/compatibility/cts/its-release-notes-17)
+- [libcamera AWB series patch 28387](https://patchwork.libcamera.org/patch/28387/)
+- [Add AwbState metadata and AwbTrigger control](https://patchwork.libcamera.org/cover/28386/)
+- [libcamera AWB series patch 28388](https://patchwork.libcamera.org/patch/28388/)
+- [libcamera AWB series patch 28389](https://patchwork.libcamera.org/patch/28389/)
+- [libcamera AWB series patch 28390](https://patchwork.libcamera.org/patch/28390/)
+- [libcamera AWB series patch 28391](https://patchwork.libcamera.org/patch/28391/)

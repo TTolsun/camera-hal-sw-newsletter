@@ -5,7 +5,7 @@
     "weekEndDate": "2026-10-11",
     "date": "2026-10-05",
     "title": "2026 W41",
-    "summary": "Android 17 카메라 이미지 테스트 스위트 검증을 위한 가상 환경 패키지 번들링 권장 사항\nlibcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안",
+    "summary": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목\nlibcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
     "html": "newsletters/2026-W41/index.html",
     "md": "newsletters/2026-W41/newsletter.md",
     "tags": [
@@ -26,7 +26,7 @@
     "generation_anchor_date": "2026-10-05",
     "en": {
       "title": "2026 W41",
-      "summary": "Recommendations for Bundling Virtual Environment Packages for Android 17 Camera Image Test Suite Validation\nlibcamera Automatic White Balance Control Expansion and Metadata Override Proposal",
+      "summary": "Android 17 Camera ITS: Runtime Versions and Updated Tests\nlibcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence",
       "html": "en/newsletters/2026-W41/index.html",
       "md": "en/newsletters/2026-W41/newsletter.md"
     }

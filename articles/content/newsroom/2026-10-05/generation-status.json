@@ -7,10 +7,10 @@
   "fact_check_status": "PASS",
   "must_fix_count": 0,
   "quality_status": "PASS",
-  "quality_attempt_count": 1,
-  "quality_score": 97,
+  "quality_attempt_count": 3,
+  "quality_score": 98,
   "quality_threshold": 60,
-  "quality_deduction_count": 3,
+  "quality_deduction_count": 2,
   "stage_status_log": [
     {
       "stage_id": "reporter",
@@ -48,6 +48,20 @@
       "stage": "editor attempt 1/2 public article judge"
     },
     {
+      "stage_id": "editor.semantic_repair",
+      "role": "repair",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2 semantic repair"
+    },
+    {
+      "stage_id": "editor.public_article_judge_repair",
+      "role": "repair",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "editor attempt 1/2 public article judge repair"
+    },
+    {
       "stage_id": "fact_checker",
       "role": "factcheck",
       "attempt": 1,
@@ -58,22 +72,87 @@
       "stage_id": "quality_gate",
       "role": "quality_gate",
       "attempt": 1,
-      "status": "passed",
-      "stage": "quality_gate"
+      "status": "failed",
+      "stage": "quality_gate",
+      "reason": "NEEDS_FIX"
     },
     {
-      "stage_id": "render",
-      "role": "render",
+      "stage_id": "editor.repair.public_article_judge",
+      "role": "repair",
       "attempt": 1,
       "status": "passed",
-      "stage": "render"
+      "stage": "editor repair attempt 1/2 public article judge"
     },
     {
-      "stage_id": "intro_letter",
-      "role": "intro-letter",
-      "attempt": 0,
+      "stage_id": "fact_checker.repair",
+      "role": "repair",
+      "attempt": 1,
       "status": "passed",
-      "stage": "intro-letter"
+      "stage": "fact-checker repair attempt 1/2"
+    },
+    {
+      "stage_id": "quality_gate.repair",
+      "role": "quality_gate",
+      "attempt": 1,
+      "status": "failed",
+      "stage": "quality_gate",
+      "reason": "NEEDS_FIX"
+    },
+    {
+      "stage_id": "article_source_review",
+      "role": "factcheck",
+      "attempt": 1,
+      "status": "passed",
+      "stage": "article-source-review attempt 1/2"
+    },
+    {
+      "stage_id": "reporter",
+      "role": "reporter",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "reporter attempt 2/2"
+    },
+    {
+      "stage_id": "background_context",
+      "role": "background-context",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "background-context attempt 2/2"
+    },
+    {
+      "stage_id": "editorial_plan",
+      "role": "editor",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "editorial-plan attempt 2/2"
+    },
+    {
+      "stage_id": "editor",
+      "role": "editor",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "editor attempt 2/2"
+    },
+    {
+      "stage_id": "editor.semantic_repair",
+      "role": "repair",
+      "attempt": 2,
+      "status": "passed",
+      "stage": "editor attempt 2/2 semantic repair"
+    },
+    {
+      "stage_id": "manual_editorial_review",
+      "role": "editor",
+      "attempt": 3,
+      "status": "passed",
+      "stage": "Source-grounded manual correction and independent LLM review"
+    },
+    {
+      "stage_id": "manual_publication_validation",
+      "role": "quality_gate",
+      "attempt": 3,
+      "status": "passed",
+      "stage": "Full validation and post-generation LLM quality judge"
     }
   ],
   "quota_error_count": 0,
@@ -160,6 +239,38 @@
         }
       }
     },
+    "editor.semantic_repair#1": {
+      "stage_key": "editor.semantic_repair#1",
+      "stage_id": "editor.semantic_repair",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 semantic repair",
+      "parent_run_key": "editor#1",
+      "models": {
+        "gemini-3.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor.public_article_judge_repair#1": {
+      "stage_key": "editor.public_article_judge_repair#1",
+      "stage_id": "editor.public_article_judge_repair",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 public article judge repair",
+      "parent_run_key": "editor#1",
+      "models": {
+        "gemini-2.5-flash-lite": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
     "fact_checker#1": {
       "stage_key": "fact_checker#1",
       "stage_id": "fact_checker",
@@ -176,14 +287,126 @@
         }
       }
     },
-    "intro_letter#0": {
-      "stage_key": "intro_letter#0",
-      "stage_id": "intro_letter",
-      "quality_attempt": 0,
-      "label": "intro-letter",
+    "editor.repair.public_article_judge#1": {
+      "stage_key": "editor.repair.public_article_judge#1",
+      "stage_id": "editor.repair.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor repair attempt 1/2 public article judge",
+      "parent_run_key": "editor.repair#1",
+      "models": {
+        "gemini-2.5-flash-lite": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "fact_checker.repair#1": {
+      "stage_key": "fact_checker.repair#1",
+      "stage_id": "fact_checker.repair",
+      "quality_attempt": 1,
+      "label": "fact-checker repair attempt 1/2",
       "parent_run_key": null,
       "models": {
         "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "article_source_review#1": {
+      "stage_key": "article_source_review#1",
+      "stage_id": "article_source_review",
+      "quality_attempt": 1,
+      "label": "article-source-review attempt 1/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "reporter#2": {
+      "stage_key": "reporter#2",
+      "stage_id": "reporter",
+      "quality_attempt": 2,
+      "label": "reporter attempt 2/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "background_context#2": {
+      "stage_key": "background_context#2",
+      "stage_id": "background_context",
+      "quality_attempt": 2,
+      "label": "background-context attempt 2/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editorial_plan#2": {
+      "stage_key": "editorial_plan#2",
+      "stage_id": "editorial_plan",
+      "quality_attempt": 2,
+      "label": "editorial-plan attempt 2/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-2.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor#2": {
+      "stage_key": "editor#2",
+      "stage_id": "editor",
+      "quality_attempt": 2,
+      "label": "editor attempt 2/2",
+      "parent_run_key": null,
+      "models": {
+        "gemini-3.5-flash": {
+          "requests": 1,
+          "successes": 1,
+          "invalid_json": 0,
+          "quota_errors": 0,
+          "api_errors": 0
+        }
+      }
+    },
+    "editor.semantic_repair#2": {
+      "stage_key": "editor.semantic_repair#2",
+      "stage_id": "editor.semantic_repair",
+      "quality_attempt": 2,
+      "label": "editor attempt 2/2 semantic repair",
+      "parent_run_key": "editor#2",
+      "models": {
+        "gemini-3.5-flash": {
           "requests": 1,
           "successes": 1,
           "invalid_json": 0,
@@ -280,6 +503,41 @@
       "label": "editor attempt 1/2 public article judge",
       "parent_run_key": "editor#1"
     },
+    "editor.semantic_repair#1": {
+      "stage_group": "repair",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.semantic_repair#1",
+      "stage_id": "editor.semantic_repair",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 semantic repair",
+      "parent_run_key": "editor#1"
+    },
+    "editor.public_article_judge_repair#1": {
+      "stage_group": "judge",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash-lite",
+      "fallback_models": [
+        "gemini-2.5-flash"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.public_article_judge_repair#1",
+      "stage_id": "editor.public_article_judge_repair",
+      "quality_attempt": 1,
+      "label": "editor attempt 1/2 public article judge repair",
+      "parent_run_key": "editor#1"
+    },
     "fact_checker#1": {
       "stage_group": "factcheck",
       "stage_group_known": true,
@@ -297,7 +555,58 @@
       "label": "fact-checker attempt 1/2",
       "parent_run_key": null
     },
-    "intro_letter#0": {
+    "editor.repair.public_article_judge#1": {
+      "stage_group": "judge",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash-lite",
+      "fallback_models": [
+        "gemini-2.5-flash"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.repair.public_article_judge#1",
+      "stage_id": "editor.repair.public_article_judge",
+      "quality_attempt": 1,
+      "label": "editor repair attempt 1/2 public article judge",
+      "parent_run_key": "editor.repair#1"
+    },
+    "fact_checker.repair#1": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "fact_checker.repair#1",
+      "stage_id": "fact_checker.repair",
+      "quality_attempt": 1,
+      "label": "fact-checker repair attempt 1/2",
+      "parent_run_key": null
+    },
+    "article_source_review#1": {
+      "stage_group": "factcheck",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "article_source_review#1",
+      "stage_id": "article_source_review",
+      "quality_attempt": 1,
+      "label": "article-source-review attempt 1/2",
+      "parent_run_key": null
+    },
+    "reporter#2": {
       "stage_group": "reporter",
       "stage_group_known": true,
       "routing_warning": "",
@@ -308,22 +617,92 @@
       "primary_resolved_by": "code_default",
       "resolved_by": "code_default",
       "global_override_applied": false,
-      "stage_key": "intro_letter#0",
-      "stage_id": "intro_letter",
-      "quality_attempt": 0,
-      "label": "intro-letter",
+      "stage_key": "reporter#2",
+      "stage_id": "reporter",
+      "quality_attempt": 2,
+      "label": "reporter attempt 2/2",
       "parent_run_key": null
+    },
+    "background_context#2": {
+      "stage_group": "reporter",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "background_context#2",
+      "stage_id": "background_context",
+      "quality_attempt": 2,
+      "label": "background-context attempt 2/2",
+      "parent_run_key": null
+    },
+    "editorial_plan#2": {
+      "stage_group": "editorialPlan",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-2.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editorial_plan#2",
+      "stage_id": "editorial_plan",
+      "quality_attempt": 2,
+      "label": "editorial-plan attempt 2/2",
+      "parent_run_key": null
+    },
+    "editor#2": {
+      "stage_group": "editor",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor#2",
+      "stage_id": "editor",
+      "quality_attempt": 2,
+      "label": "editor attempt 2/2",
+      "parent_run_key": null
+    },
+    "editor.semantic_repair#2": {
+      "stage_group": "repair",
+      "stage_group_known": true,
+      "routing_warning": "",
+      "primary_model": "gemini-3.5-flash",
+      "fallback_models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite"
+      ],
+      "primary_resolved_by": "code_default",
+      "resolved_by": "code_default",
+      "global_override_applied": false,
+      "stage_key": "editor.semantic_repair#2",
+      "stage_id": "editor.semantic_repair",
+      "quality_attempt": 2,
+      "label": "editor attempt 2/2 semantic repair",
+      "parent_run_key": "editor#2"
     }
   },
   "candidate_input": {
     "mode": "artifact",
-    "candidate_artifact": "articles/content/collected-news/2026-10-05/manual-candidates.json",
+    "candidate_artifact": "articles/content/collected-news/2026-10-05/merged-candidates.json",
     "candidate_artifact_hash": "80e8dad6dc5173ee2fda5b7edf4b4852d1d24410c0366f242dda71d4f785edf2",
-    "manifest": "articles/content/collected-news/2026-10-05/raw-candidate-manifest.json",
-    "manifest_type": "raw_candidate",
+    "manifest": "articles/content/collected-news/2026-10-05/merged-candidate-manifest.json",
+    "manifest_type": "merged_candidate",
     "manifest_status": "validated",
     "llm_used": false,
-    "merge_mode": "",
+    "merge_mode": "disabled_pass_through",
     "candidate_count": 2
   },
   "run_context": {
@@ -331,55 +710,6 @@
     "github_sha": "",
     "github_ref": ""
   },
-  "locked_article_count": 2,
-  "repaired_section_count": 0,
-  "failed_section_count": 0,
-  "skipped_repair_section_count": 0,
-  "rejected_duplicate_article_count": 0,
-  "validate_ok": true,
-  "failure_kind": "",
-  "public_output_expected": true,
-  "weekly_output_status": "written",
-  "weekly_output_failure_reason": "",
-  "intro_letter_status": "generated",
-  "intro_letter_reason": "",
-  "todo_found": false,
-  "empty_source_sections": [],
-  "source_gap_count": 0,
-  "stale_claim_status": "PASS",
-  "stale_claim_removed_count": 0,
-  "stale_claim_hard_failure_count": 0,
-  "completion_fallback_to_prepass": false,
-  "editor_semantic_validation": null,
-  "editor_public_article_judge": {
-    "date": "2026-10-05",
-    "overall_pass": true,
-    "section_count_expected": 2,
-    "section_count_actual": 2,
-    "sections": [
-      {
-        "section_index": 1,
-        "headline": "Android 17 카메라 이미지 테스트 스위트 검증을 위한 가상 환경 패키지 번들링 권장 사항",
-        "public_article_pass": true,
-        "reader_checkpoints_pass": true,
-        "source_boundary_pass": true,
-        "public_prose_pass": true,
-        "issues": []
-      },
-      {
-        "section_index": 2,
-        "headline": "libcamera 자동 화이트 밸런스 제어 확장과 메타데이터 재정의 제안",
-        "public_article_pass": true,
-        "reader_checkpoints_pass": true,
-        "source_boundary_pass": true,
-        "public_prose_pass": true,
-        "issues": []
-      }
-    ]
-  },
-  "editor_desk_advisory": [],
-  "repairAttempted": false,
-  "repairSucceeded": false,
   "input_candidate_count": 2,
   "eligible_candidate_count": 2,
   "eligible_candidate_urls": [
@@ -410,31 +740,14 @@
   "explicitly_demoted_outside_selection_group_keys": [],
   "hard_blocked_outside_selection_group_keys": [],
   "group_coverage_ok": true,
-  "deterministic_selected_representative_group_keys": [
-    "article:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-    "patchwork-series:6214"
-  ],
+  "deterministic_selected_representative_group_keys": [],
   "reconciliation_demoted_group_keys": [],
   "reconciliation_demoted_groups": [],
-  "editorial_plan_scored_candidates": [
-    {
-      "candidate_key": "d893134af706f7df8f1c0716f00e4d4128532960bd3886f2d05056796785855e",
-      "lineup_role": "selected",
-      "article_group_key": "article:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-      "coverage_decision": "main_article",
-      "reason_code": null
-    },
-    {
-      "candidate_key": "74221d8f077b88a9d02df0ec690ec0e58e44318f0b459f549a340905eae1c81b",
-      "lineup_role": "selected",
-      "article_group_key": "patchwork-series:6214",
-      "coverage_decision": "main_article",
-      "reason_code": null
-    }
-  ],
+  "editorial_plan_scored_candidates": [],
   "reconciliation_promoted_group_keys": [],
   "reserve_candidate_count": 0,
   "demoted_article_count": 0,
+  "locked_article_count": null,
   "fallback_topic_count": 0,
   "reporter_candidate_count": 2,
   "reporter_selected_count": 2,
@@ -551,7 +864,7 @@
       "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
     }
   ],
-  "editor_review_required": true,
+  "editor_review_required": false,
   "non_fallback_reviewable_article_count": 2,
   "eligible_non_fallback_reviewable_article_count": 2,
   "primary_camera_stack_topic_count": 2,
@@ -573,7 +886,7 @@
   "headline_decision": {
     "decision": "latest_camera_hal_article",
     "reason": "latest_camera_hal_article",
-    "current_headline_key": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+    "current_headline_key": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
     "replacement_headline_key": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
     "previous_stored_current_score": null,
     "runtime_decayed_score": null,
@@ -598,25 +911,17 @@
     "removed_due_to_headline_inclusion_count": 0
   },
   "removed_due_to_headline_inclusion": [],
-  "article_exposure_coverage": {
-    "mode": "forward_only",
-    "coverage_starts_at": "2026-07-27",
-    "backfill_included": true
-  },
+  "article_exposure_coverage": null,
   "release_class_catch_up": {
     "pool_size": 0,
     "admitted": 0,
     "blocked_reason": "no_eligible_candidate",
     "evidence_unchecked_skips": 0
   },
-  "release_class_catch_up_after_reconciliation": {
-    "pool_size": 0,
-    "admitted": 0,
-    "blocked_reason": "no_eligible_candidate"
-  },
+  "release_class_catch_up_after_reconciliation": null,
   "republication_cooldown_blocked": {
     "history_loaded": true,
-    "history_main_article_count": 40,
+    "history_main_article_count": 39,
     "count": 0,
     "urls": []
   },
@@ -634,5 +939,48 @@
   "carry_forward_status": "missing_expected",
   "carry_source": null,
   "not_yet_eligible_count": 0,
-  "not_yet_eligible_overflow": false
+  "not_yet_eligible_overflow": false,
+  "public_output_expected": true,
+  "weekly_output_status": "written",
+  "validate_ok": true,
+  "source_gap_count": 0,
+  "editor_public_article_judge": {
+    "date": "2026-10-05",
+    "overall_pass": true,
+    "section_count_expected": 2,
+    "section_count_actual": 2,
+    "sections": [
+      {
+        "section_index": 1,
+        "headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      },
+      {
+        "section_index": 2,
+        "headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
+        "public_article_pass": true,
+        "reader_checkpoints_pass": true,
+        "source_boundary_pass": true,
+        "public_prose_pass": true,
+        "issues": []
+      }
+    ]
+  },
+  "manual_republication_review": {
+    "mode": "source_grounded_manual_revision",
+    "automated_generation_status": "FAILED_REPAIR_REVIEWABLE",
+    "factcheck_model": "gemini-3.5-flash",
+    "source_review_model": "gemini-3.5-flash",
+    "factcheck_status": "PASS",
+    "source_review_publishable": [
+      true,
+      true
+    ],
+    "reason": "자동 초안의 사실 오류를 직접 교정했습니다. 최초 자동 생성 실패 이력은 retry-history에 보존합니다.",
+    "post_generation_quality": "PASS"
+  }
 }
