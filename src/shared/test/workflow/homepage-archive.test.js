@@ -251,6 +251,27 @@ test('featured hero renders the current headline with escaped copy, image, kicke
   assert.doesNotMatch(html, /rel="noopener"/);
 });
 
+test('featured hero uses the coverage week and full date range while linking to the publication week', async () => {
+  const weekly = {
+    ...newsletter('2026-09-28', 'Weekly issue'),
+    weeklyKey: '2026-W40',
+    weekStartDate: '2026-09-28',
+    weekEndDate: '2026-10-04',
+    html: 'newsletters/2026-W40/index.html',
+    coverage_week_key: '2026-W39',
+    coverage_start_date: '2026-09-21',
+    coverage_end_date: '2026-09-27',
+    coverage_mode: 'iso_week'
+  };
+  const { elements } = await renderHomepage([weekly], validHeadlineState({
+    newsletter_date: '2026-09-28',
+    newsletter_article_url: 'newsletters/2026-09-28/index.html#article-ai'
+  }));
+  const html = elements['featured-card'].innerHTML;
+  assert.match(html, /<div class="featured-meta">W39 · 2026-09-21~2026-09-27 · Example Source<\/div>/);
+  assert.match(html, /href="newsletters\/2026-W40\/index\.html#article-ai"/);
+});
+
 // DESIGN.md(#1008): 동봉 fallback 그래픽 4종은 실제 기사 이미지와 같이 16:9 풀커버다.
 // .is-brand(44% 중앙 + drop-shadow)는 투명 배경 마스코트 전용이라 여기서는 붙지 않는다 —
 // 붙이면 불투명 SVG 가 패널 위에 얹힌 사각형으로 보인다.

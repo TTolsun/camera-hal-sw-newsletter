@@ -237,7 +237,7 @@
         const matchedNewsletter = findHeadlineNewsletter(headline, newsletters);
         const copy = await fetchEnglishHeadlineCopy(headline, matchedNewsletter);
         if (!copy) return;
-        const date = headline.newsletter_date || headline.selected_at || '';
+        const date = archiveHelpers.headlinePeriodText(matchedNewsletter, headline.newsletter_date || headline.selected_at || '');
         const metaText = [date, sourceName].filter(Boolean).join(' · ');
         featuredCard.classList.add('is-article');
         featuredCard.innerHTML = `
