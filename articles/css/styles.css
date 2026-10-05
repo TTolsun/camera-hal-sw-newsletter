@@ -927,6 +927,13 @@ pre code {
   text-transform: uppercase;
 }
 
+/* 영문 아카이브에서 번역되지 않은 호의 카드에 붙는 `Korean only` 표시. 알약 모양은 아래 이슈
+   페이지 태그 규칙과 한 그룹이다. 여기에는 카드 전용 배치만 둔다 — .card-body 가 flex column
+   이라 align-self 가 없으면 알약이 카드 폭으로 늘어난다. */
+.card-body .tag {
+  align-self: flex-start;
+}
+
 .archive-card:hover .card-thumb-img {
   transform: scale(1.045);
 }
@@ -1361,12 +1368,14 @@ pre code {
   margin-top: 10px;
 }
 
-/* mockup: 이슈 태그는 무채색 파치먼트 알약. */
+/* mockup: 이슈 태그는 무채색 파치먼트 알약. 영문 아카이브 카드의 `Korean only` 표시도 상호작용
+   요소가 아닌 상태 표시라 파랑 대신 같은 알약을 쓴다(정의를 한 곳에 두려고 그룹으로 묶는다). */
 .newsletter-issue-page .issue-tags {
   margin-top: 20px;
 }
 
-.newsletter-issue-page .issue-tags .tag {
+.newsletter-issue-page .issue-tags .tag,
+.card-body .tag {
   min-height: 0;
   padding: 5px 12px;
   border: none;
