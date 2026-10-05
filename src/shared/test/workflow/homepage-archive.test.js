@@ -805,6 +805,22 @@ test('the shared focus ring covers non-native focus targets at an opaque accent'
   assert.equal(focusRule, selectorGroupBlock(css, 'a:focus-visible'));
 });
 
+// 언어 선택기(#1193)는 #1181 정렬 뒤에 들어와 2px focus 링과 6px·4px 반경을 따로 가졌다.
+// 전용 :focus-visible 규칙은 전역 링보다 셀렉터 우선순위가 높아 링을 조용히 덮어쓴다.
+test('the language selector uses the shared focus ring and the control token language', () => {
+  const css = readStylesheet();
+
+  assert.doesNotMatch(css, /\.language-[^{}]*:focus-visible/);
+  const button = exactSelectorBlock(css, '.language-button');
+  assertCssDeclaration(button, 'border', '1px solid #d2d2d7');
+  assertCssDeclaration(button, 'border-radius', 'var(--radius-pill)');
+  // 바로 옆 나브 링크와 같은 글자 크기·굵기다.
+  assertCssDeclaration(button, 'font-size', '0.875rem');
+  assertCssDeclaration(button, 'font-weight', '500');
+  assertCssDeclaration(exactSelectorBlock(css, '.language-options'), 'border-radius', 'var(--radius-sm)');
+  assertCssDeclaration(exactSelectorBlock(css, '.language-options a'), 'border-radius', 'var(--radius-xs)');
+});
+
 test('font weights stay on the DESIGN.md 400/500/600 ramp', () => {
   const css = readStylesheet();
 
