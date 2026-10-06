@@ -65,3 +65,44 @@ test('legacy bucket names fold into the android bucket before topics are chosen'
   assert.deepEqual(weeklyTopicTags([article('soc_platform_signal', { counts_as_soc_topic: true })]), ['SoC Platform']);
   assert.deepEqual(weeklyTopicTags([article('android_multimedia_camera_output')]), ['Android']);
 });
+
+test('a driver article about an SoC camera block also gets SoC Platform', () => {
+  // Qualcomm CAMSS 는 SoC 카메라 서브시스템이라 Driver 와 SoC Platform 에 함께 해당한다. (#1250)
+  const camss = article('camera_driver_image_pipeline', { headline: 'Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개' });
+  const platformDts = article('camera_driver_image_pipeline', { headline: 'Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개' });
+
+  assert.deepEqual(weeklyTopicTags([camss]), ['Driver', 'Image Processing', 'SoC Platform']);
+  assert.deepEqual(weeklyTopicTags([platformDts]), ['Driver', 'Image Processing', 'SoC Platform']);
+});
+
+test('an external sensor driver article stays Driver only, even from a company that also makes SoCs', () => {
+  for (const headline of [
+    'Samsung S5KJN5 50MP 이미지 센서 지원을 위한 독립형 V4L2 드라이버 패치 제안',
+    'Sony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)',
+    'libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 지원을 위한 EGL 텍스처 필터 파라미터 추가'
+  ]) {
+    assert.deepEqual(weeklyTopicTags([article('camera_driver_image_pipeline', { headline })]), ['Driver', 'Image Processing'], headline);
+  }
+});
+
+test('the SoC camera block title rule only applies to driver articles', () => {
+  const headline = 'Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개';
+
+  assert.deepEqual(weeklyTopicTags([article('direct_aosp_camera', { headline })]), ['Camera HAL']);
+  assert.deepEqual(weeklyTopicTags([article('android', { headline })]), ['Android']);
+});
+
+test('a watchlist article whose title is about a C++ toolchain is filed under C++', () => {
+  for (const headline of [
+    'Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety',
+    'C++26 assert(): Camera HAL debug-build 검토 범위',
+    'Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack'
+  ]) {
+    assert.deepEqual(weeklyTopicTags([article('generic_tech_watchlist', { headline })]), ['C++'], headline);
+  }
+});
+
+test('a watchlist article gets no C++ tag when it is an AI article or its title is not about C++', () => {
+  assert.deepEqual(weeklyTopicTags([article('generic_tech_watchlist', { headline: 'Clang 기반 AI 코딩 도구', is_ai_related: true })]), []);
+  assert.deepEqual(weeklyTopicTags([article('generic_tech_watchlist', { headline: 'Kotlin 2.3 릴리스', what_changed: 'C++ interop 개선' })]), []);
+});

@@ -616,12 +616,13 @@ test('newsletter renderer keeps v1 output byte-identical', () => {
     // (AI Engineering Lab 링크 때와 같은 종류의 변경). **markdown 3종이 그대로인
     // 것이 이 변경이 HTML 전용이라는 증거다** — markdown 이 함께 움직였다면 그건 결함이다.
     // #1190: HTML adds locale metadata and the language-selector script; Markdown stays unchanged.
+    // #1250: HTML 3종은 공통 footer 주제 노트에 C++ 를 더해 갱신했다. markdown 3종은 그대로다.
     plainMarkdown: 'c48f47e42dc73097',
-    plainHtml: 'c036af7eba3ff24a',
+    plainHtml: '6dff0554d11336e0',
     storyMarkdown: 'f3602357add8a9ff',
-    storyHtml: 'f51963705d3c57c1',
+    storyHtml: '1b0830316d7f7276',
     contextMarkdown: 'e754eef59b3f0cff',
-    contextHtml: '92ce1da626fafa08'
+    contextHtml: '1c8cfefe108945d9'
   });
 });
 
