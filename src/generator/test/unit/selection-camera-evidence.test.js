@@ -38,9 +38,12 @@ test('control patches gain evidence from fetched commit prose, never metadata al
   // 참고 레인에는 남고, 그 항목은 기술 동향 참고로 표시된다.
   const [referenceItem] = buildReferenceArticles([enriched]);
   assert.equal(referenceItem.note, '오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고');
+  // trend_reference_project 가 어떤 후보든 main 을 막으므로 main_article_source_allowed 로는 근거 거부를
+  // 가를 수 없다. 근거로 인정되지 않은 본문은 source_gap_risk 가 남고 요약이 보강되지 않는지로 본다.
   for (const invalid of ['', '<html>not a patch</html>', mail.replace('Extend white balance controls', 'Unrelated patch')]) {
     const blocked = await collect(invalid);
-    assert.equal(blocked.main_article_source_allowed, false);
+    assert.equal(blocked.source_gap_risk, true);
+    assert.doesNotMatch(blocked.summary, /state metadata/);
   }
 });
 
