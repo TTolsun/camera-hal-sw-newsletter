@@ -8,7 +8,7 @@ API key, runtime secret, prompt 전체 원문, generated artifact 내용은 이 
 
 - [Stage 3 system prompt 정의](../../src/generator/publish/orchestrator-stage-prompts.js)
 - [Stage 3 진입점(thin dispatcher)](../../src/generator/publish/gemini-newsroom-newsletter.js)
-- [Stage 2 source discovery prompt host](../../src/discovery/gemini-source-discovery.js)
+- [Stage 2 linked evidence 선택 prompt host](../../src/discovery/linked-evidence-candidate-expansion.js)
 - [Editorial policy](../EDITORIAL_POLICY.md)
 - [Newsletter template](../NEWSLETTER_TEMPLATE.md)
 - [Newsletter policy config](../../src/shared/config/newsletter-policy.json)
@@ -34,19 +34,19 @@ Workflow/Stage: Stage 1 RAW collection
 
 ### Newsletters 02 - Source Discovery PR
 
-이름: Source discovery proposal prompt
+이름: Linked evidence selection prompt
 
-목적: manual candidate와 source registry를 바탕으로 부족한 source coverage를 보강할 discovery intent를 제안합니다. Gemini output은 후보 진실값이 아니라 proposal입니다.
+목적: 수동 후보에 보존된 `outgoing_links` 중 아직 수집하지 않은 공식·등록 도메인 링크에서 뉴스레터 기사 가치가 있는 것만 고릅니다. Gemini output은 후보 진실값이 아니라 선택 판정입니다. 고른 링크는 파생 후보로 기존 selection 게이트를 그대로 통과해야 합니다. (Gemini가 URL을 제안하던 source discovery proposal prompt는 #1186에서 제거했습니다.)
 
-위치: `src/discovery/gemini-source-discovery.js`의 `buildProposalPrompt()`와 `buildProposalPayload()`
+위치: `src/discovery/linked-evidence-candidate-expansion.js`의 `buildSelectionPrompt()`와 `selectNewsworthyLinks()`
 
 Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
-주요 입력: newsletter date, 최대 50개 manual candidate 요약, enabled source registry 요약
+주요 입력: newsletter date, manual 후보의 `outgoing_links`에서 추린 링크 목록(url, link_context, evidence_role, 부모 후보 제목·URL). 기본 상한은 후보당 8개, 실행당 40개입니다.
 
-출력/schema: `proposalResponseSchema()`, `articles/content/newsroom/<date>/gemini-source-proposals.json`
+출력/schema: `selectionResponseSchema()`(`selections[]`의 url, is_newsworthy, reason, suggested_article_type), 선택된 링크는 `merged-candidates.json`에 origin `gemini_linked_discovery` 파생 후보로 반영
 
-주요 guardrail: newsletter article을 직접 쓰지 않습니다. 제안할 수 있는 source URL은 제공된 registry domain이나 linked evidence domain에 속한 것뿐입니다. 그중에서도 deterministic fetch, normalize, schema validation을 모두 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영됩니다.
+주요 guardrail: newsletter article을 직접 쓰지 않습니다. 이 선택 호출 자체는 추가 네트워크 fetch를 하지 않고(extract-only, 파생 후보의 근거 원문은 이후 근거 추출 단계가 가져옵니다), 호출이 실패하거나 결과가 비어도 실행을 실패시키지 않습니다. 고른 링크도 deterministic selection 게이트(source binding, dated evidence)를 통과해야 main 기사가 됩니다.
 
 ## Newsletters 03 - Editor PR
 

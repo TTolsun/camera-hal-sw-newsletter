@@ -363,7 +363,7 @@ Stage별 기본 모델은 다음과 같습니다.
 - public article judge / source discovery: `gemini-2.5-flash-lite`
 - 기본 fallback: `gemini-2.5-flash` → `gemini-2.5-flash-lite` 순서 (flash 우선, flash-lite는 최후 안전망)
 
-source discovery(`newsletters-02-source-discovery-pr.yml`의 Gemini source/linked evidence 발견)는 후보를 새로 쓰지 않고 선별/판정만 하는 단계라서, 비용이 가장 낮은 `gemini-2.5-flash-lite`로 고정합니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call 단위 `pro_model` audit marker를 유지하지만, 정상 run에서는 항상 `false`여야 하고 report 단위 정책은 `Pro policy: disabled`로 고정됩니다.
+source discovery(`newsletters-02-source-discovery-pr.yml`의 Gemini linked evidence 발견)는 후보를 새로 쓰지 않고 선별/판정만 하는 단계라서, 비용이 가장 낮은 `gemini-2.5-flash-lite`로 고정합니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call 단위 `pro_model` audit marker를 유지하지만, 정상 run에서는 항상 `false`여야 하고 report 단위 정책은 `Pro policy: disabled`로 고정됩니다.
 
 Stage별 model routing은 아래 우선순위를 따릅니다.
 
@@ -469,7 +469,7 @@ Legacy-pattern test failure(과거 패턴 때문에 나는 테스트 실패)는 
 - quality threshold, selector gate, publish gate relaxation
 - private/internal URL fetch 또는 redirect-to-private fetch
 - blocked/failed evidence가 article fact로 사용됨
-- Gemini proposal이 deterministic validation 없이 candidate truth가 됨
+- linked evidence 파생 후보가 selection 게이트(source binding, dated evidence)를 우회함
 - Stage 3 seed crawling/fetch 재수행
 - manual editorial field override
 - broken evidence id mapping
@@ -503,10 +503,8 @@ workflow는 `main`에 직접 push하지 않습니다. 수동 실행 시에는 RA
 현재 schedule entrypoint는 `Newsletters 00 - Weekly Orchestrator` (`.github/workflows/newsletters-00-orchestrator.yml`)입니다. cron(`0 0 * * 1`)을 가진 workflow는 00 하나뿐이고, 00이 collect(01) → discover(02) → generate(03)를 순서대로 호출합니다. 따라서 final newsletter generation도 예약 경로에서 자동 실행됩니다. 단, 그보다 먼저 `published-guard` job이 대상 날짜나 그 주가 main에 이미 발행돼 있는지 보고, 발행돼 있으면 세 단계를 모두 돌리지 않습니다(#1167, 자세한 내용은 `docs/workflows/RAW_TO_GENERATE_ARTIFACT_CONTRACT.md`). 각 단계를 따로 돌리려면 `workflow_dispatch`로 수동 실행합니다.
 
 - `Newsletters 01 - Source Collection PR` (`.github/workflows/newsletters-01-source-collect-pr.yml`): `collect`만 실행해 `manual-candidates.json`, 호환용 `candidates.json`, `raw-candidate-manifest.json`을 만듭니다. Gemini/API secret은 쓰지 않습니다.
-- `Newsletters 02 - Source Discovery PR` (`.github/workflows/newsletters-02-source-discovery-pr.yml`): source discovery 전용 workflow입니다. 따라서 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하고, 별도 toggle input은 없습니다. 동작 순서는 LLM credential preflight → Gemini proposal을 `gemini-source-proposals.json`에 저장 → deterministic fetch/normalize/schema validation을 통과한 URL만 `gemini-candidates.json`과 `merged-candidates.json`에 반영, 입니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`로 자격 증명 없이 도는 disabled pass-through는 code 수준에서는 여전히 지원하지만, 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록합니다. `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 이 파일들의 존재를 필수로 검증하므로, 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
+- `Newsletters 02 - Source Discovery PR` (`.github/workflows/newsletters-02-source-discovery-pr.yml`): source discovery 전용 workflow입니다. 따라서 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하고, 별도 toggle input은 없습니다. 동작 순서는 LLM credential preflight → seed evidence 확장(결정론) → linked evidence 선택(Gemini 호출은 이 하나) → seed·파생 후보를 `merged-candidates.json`에 반영, 입니다. Gemini가 URL을 제안하고 승격하던 제안 단계는 #1186에서 제거했습니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`로 자격 증명 없이 도는 disabled pass-through는 code 수준에서는 여전히 지원하지만, 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록합니다. `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 이 파일들의 존재를 필수로 검증하므로, 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
   - `gemini-usage-report.json` (`usage_report` 필드)
-  - `gemini-source-proposals.json` (Gemini 제안 원문)
-  - `gemini-source-proposal-validation-report.json` (`proposal_validation_report` 필드)
   - `source-clusters.json` (`source_clusters` 필드)
   - `evidence-validation-report.json` (`evidence_validation_report` 필드)
   - `extracted-source-facts.json` (소스 사실 추출 결과)
@@ -654,7 +652,7 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 `newsletters-01-source-collect-pr.yml`과 `newsletters-02-source-discovery-pr.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
 
-`articles/content/collected-news/YYYY-MM-DD/`에 있는 파이프라인 입력 파일들(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03 사이를 넘겨주는 핸드오프 상태이므로 `review_required_compact` 등급입니다. 이 중 `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 만들며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋해야 합니다. 순수 디버그 파일인 `gemini-candidates.json`은 `debug_heavy` 등급이라 `.gitignore`로 제외합니다.
+`articles/content/collected-news/YYYY-MM-DD/`에 있는 파이프라인 입력 파일들(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03 사이를 넘겨주는 핸드오프 상태이므로 `review_required_compact` 등급입니다. 이 중 `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 만들며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋해야 합니다. `gemini-candidates.json`은 #1186이 제안 단계를 제거해 더는 만들지 않으므로 등급 목록과 `.gitignore`에서도 뺐습니다.
 
 ## 공개 사이트의 영문 로케일
 

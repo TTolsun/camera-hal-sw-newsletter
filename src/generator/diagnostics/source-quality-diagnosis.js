@@ -46,15 +46,13 @@ const DIAGNOSIS_KEYS = [
   'parser_extraction_failure',
   'source_gap_risk',
   'taxonomy_missing',
-  'fallback_only_composition',
-  'duplicate_or_noop_source_discovery'
+  'fallback_only_composition'
 ];
 
 const ACTION_PRIORITY = Object.freeze({
   KEEP_AND_FIX_PARSER: 1,
   ADD_MULTIMEDIA_BUCKET: 2,
   REVIEW_SOURCE_GAP: 3,
-  REPAIR_SOURCE_DISCOVERY_DUPLICATES: 4,
   DOWNGRADE_GENERIC_SOURCE: 5,
   NO_ACTION_THIN_WEEK: 6,
   KEEP_AND_MONITOR: 7
@@ -472,17 +470,6 @@ function buildRecommendedIssues(sourceBreakdown, reasons) {
       source_artifact: reasons.taxonomy_missing[0]?.source_artifact || ''
     });
   }
-  if (boolFromReasons(reasons, 'duplicate_or_noop_source_discovery')) {
-    issues.push({
-      action: 'REPAIR_SOURCE_DISCOVERY_DUPLICATES',
-      action_label: RECOMMENDED_ACTION_LABELS_KO.REPAIR_SOURCE_DISCOVERY_DUPLICATES,
-      source_id: '',
-      source_name: '',
-      reason: compactReasonText(reasons.duplicate_or_noop_source_discovery),
-      severity: 'medium',
-      source_artifact: reasons.duplicate_or_noop_source_discovery[0]?.source_artifact || ''
-    });
-  }
   const actualNewsShortageReasons = ensureArray(reasons.actual_news_shortage)
     .filter(reason => reason.severity !== 'info');
   if (actualNewsShortageReasons.length > 0) {
@@ -628,7 +615,6 @@ function buildSourceQualityDiagnosisReport(options = {}) {
   const selectionRel = inputRefs.selection_report || newsroomRelPath(date, 'selection-report.json');
   const generationRel = inputRefs.generation_status || newsroomRelPath(date, 'generation-status.json');
   const feedbackRel = inputRefs.source_discovery_feedback_report || newsroomRelPath(date, 'source-discovery-feedback-report.json');
-  const manifestRel = inputRefs.merged_candidate_manifest || mergedCandidateManifestRelPath(date);
 
   const parserRepairSources = ensureArray(sourceEffectivenessReport.sources)
     .filter(source => parserSignalsFromSource(source).length > 0);
@@ -651,15 +637,6 @@ function buildSourceQualityDiagnosisReport(options = {}) {
       reasons,
       'parser_extraction_failure',
       `source-discovery feedback reports parser_gap_count=${sourceDiscoveryFeedbackReport.parser_gap_count}.`,
-      feedbackRel,
-      'high'
-    );
-  }
-  if (Number(sourceDiscoveryFeedbackReport.gemini_parser_failure_count || 0) > 0) {
-    addReason(
-      reasons,
-      'parser_extraction_failure',
-      `Gemini discovery parser extraction failures=${sourceDiscoveryFeedbackReport.gemini_parser_failure_count}.`,
       feedbackRel,
       'high'
     );
@@ -756,45 +733,12 @@ function buildSourceQualityDiagnosisReport(options = {}) {
     );
   }
 
-  const geminiCandidateCount = Number(mergedCandidateManifest.gemini_candidate_count || 0);
-  const geminiNewUnique = numberOrNull(mergedCandidateManifest.gemini_new_unique_url_count);
-  const geminiPublishable = numberOrNull(mergedCandidateManifest.gemini_publishable_candidate_count);
-  const geminiManualDuplicate = Number(mergedCandidateManifest.gemini_manual_duplicate_url_count || 0);
-  if (geminiCandidateCount > 0 && geminiNewUnique === 0) {
-    addReason(
-      reasons,
-      'duplicate_or_noop_source_discovery',
-      `Gemini discovery produced ${geminiCandidateCount} candidate(s) but gemini_new_unique_url_count=0.`,
-      manifestRel,
-      'medium'
-    );
-  }
-  if (geminiCandidateCount > 0 && geminiPublishable === 0) {
-    addReason(
-      reasons,
-      'duplicate_or_noop_source_discovery',
-      'Gemini discovery produced no new publishable candidates.',
-      manifestRel,
-      'medium'
-    );
-  }
-  if (geminiManualDuplicate > 0 || Number(sourceDiscoveryFeedbackReport.duplicate_discovery_gap_count || 0) > 0) {
-    addReason(
-      reasons,
-      'duplicate_or_noop_source_discovery',
-      `Duplicate discovery signal detected: gemini_manual_duplicate_url_count=${geminiManualDuplicate}, duplicate_discovery_gap_count=${Number(sourceDiscoveryFeedbackReport.duplicate_discovery_gap_count || 0)}.`,
-      geminiManualDuplicate > 0 ? manifestRel : feedbackRel,
-      'medium'
-    );
-  }
-
   const shortage = candidateShortage(candidateShortageSummary, generationStatus, selectionReport);
   const otherFailureSignals = [
     'parser_extraction_failure',
     'taxonomy_missing',
     'source_gap_risk',
-    'fallback_only_composition',
-    'duplicate_or_noop_source_discovery'
+    'fallback_only_composition'
   ].some(key => boolFromReasons(reasons, key)) || ensureArray(candidatePayload.failures).length > 0;
   if (
     shortage &&
@@ -862,7 +806,6 @@ function buildSourceQualityDiagnosisReport(options = {}) {
       raw: numberOrNull(mergedCandidateManifest.manual_candidate_count) ?? rawCandidateCount,
       merged_records: hasCandidateInput ? candidates.length : null,
       merged_unique_urls: hasCandidateInput ? new Set(candidates.map(candidateUrl).filter(Boolean).map(normalizeUrl)).size : null,
-      gemini_new_unique_urls: numberOrNull(mergedCandidateManifest.gemini_new_unique_url_count),
       derived_new_unique_urls: numberOrNull(mergedCandidateManifest.derived_new_unique_url_count),
       derived_publishable: numberOrNull(mergedCandidateManifest.derived_publishable_candidate_count)
     },
@@ -1080,7 +1023,6 @@ function renderSourceQualityDiagnosisMarkdown(report) {
     `- 주요 진단: ${labels.join(', ') || '없음'}`,
     `- 결론: ${conclusion}`,
     `- 병합 레코드 / 고유 URL: ${displayValue(report.candidate_counts?.merged_records)} / ${displayValue(report.candidate_counts?.merged_unique_urls)}`,
-    `- Gemini 신규 URL: ${displayValue(report.candidate_counts?.gemini_new_unique_urls)}`,
     `- 링크 파생 신규 URL / 발행 가능 후보: ${displayValue(report.candidate_counts?.derived_new_unique_urls)} / ${displayValue(report.candidate_counts?.derived_publishable)}`,
     `- 결정론적 선택 / 본문 반영 / hard-blocked group / 명시적 강등: ${displayValue(report.publication_counts?.deterministic_selected)} / ${displayValue(report.publication_counts?.rendered)} / ${displayValue(report.publication_counts?.hard_blocked_groups)} / ${displayValue(report.publication_counts?.explicitly_demoted_groups)}`,
     '',

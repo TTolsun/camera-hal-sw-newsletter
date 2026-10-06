@@ -185,95 +185,91 @@ test('RAW candidate PR body puts editor-facing summary before detailed compatibi
   assert.doesNotMatch(body, /Priority Override \/ Legacy Compatibility/);
 });
 
-test('source discovery PR report normalizes top rejected reasons and handoff states', () => {
+test('source discovery PR report renders handoff states and the new stage 2 candidate rows', () => {
   const date = '2026-05-16';
-  const passThrough = renderSourceDiscoveryReport({
+  const mergedCandidateRelPath = `articles/content/collected-news/${date}/merged-candidates.json`;
+  // #1186: 제안 단계를 제거했으므로 새 후보가 없는 주가 정상 상태이고 03 진행으로 안내한다.
+  const noNewCandidates = renderSourceDiscoveryReport({
     date,
     status: 'PASS',
     disabledPassThrough: true,
-    llmUsed: false,
-    geminiCandidateCount: 0,
     mergeMode: 'disabled_pass_through',
     discoveryStats: {
       manual_candidate_count: 1,
-      gemini_candidate_count: 0,
-      gemini_new_unique_url_count: 0,
-      gemini_publishable_candidate_count: 0,
-      gemini_manual_duplicate_url_count: 0,
       merged_candidate_count: 1
     },
-    mergedCandidateRelPath: `articles/content/collected-news/${date}/merged-candidates.json`
+    mergedCandidateRelPath
   });
-  assert.match(passThrough, /next_step: strengthen_candidates/);
-  assert.match(passThrough, /03 진행 가능하나 후보 보강 권장/);
+  assert.match(noNewCandidates, /next_step: run_03/);
+  assert.doesNotMatch(noNewCandidates, /strengthen_candidates/);
+  assert.doesNotMatch(noNewCandidates, /Gemini 신규 URL 없음/);
 
   const seedPublishable = renderSourceDiscoveryReport({
     date,
     status: 'PASS',
     disabledPassThrough: true,
-    llmUsed: false,
-    geminiCandidateCount: 0,
     mergeMode: 'seed_evidence_expansion',
     discoveryStats: {
       manual_candidate_count: 1,
-      gemini_candidate_count: 0,
-      gemini_new_unique_url_count: 0,
-      gemini_publishable_candidate_count: 0,
-      gemini_manual_duplicate_url_count: 0,
       seed_candidate_count: 1,
       seed_new_unique_url_count: 1,
       seed_publishable_candidate_count: 1,
       merged_candidate_count: 2
     },
-    mergedCandidateRelPath: `articles/content/collected-news/${date}/merged-candidates.json`
+    mergedCandidateRelPath
   });
   assert.match(seedPublishable, /next_step: run_03/);
-  assert.match(seedPublishable, /Seed evidence expansion에서 publishable 후보가 확인되었습니다/);
-  assert.match(seedPublishable, /\| seed publishable 후보 \| 1 \| 있음 \|/);
+  assert.match(seedPublishable, /Seed evidence expansion 또는 linked evidence 파생에서 publishable 후보가 확인되었습니다/);
+  assert.ok(seedPublishable.includes('| seed publishable 후보 | 1 | 있음 |'));
+
+  const derivedPublishable = renderSourceDiscoveryReport({
+    date,
+    status: 'PASS',
+    disabledPassThrough: false,
+    mergeMode: 'gemini_source_discovery',
+    discoveryStats: {
+      manual_candidate_count: 40,
+      derived_candidate_count: 2,
+      derived_publishable_candidate_count: 1,
+      merged_candidate_count: 42
+    },
+    mergedCandidateRelPath
+  });
+  assert.match(derivedPublishable, /next_step: run_03/);
+  assert.ok(derivedPublishable.includes('| linked 파생 publishable 후보 | 1 | 있음 |'));
 
   const parserWarning = renderSourceDiscoveryReport({
     date,
     status: 'PASS',
     disabledPassThrough: false,
-    llmUsed: true,
-    geminiCandidateCount: 2,
     mergeMode: 'gemini_source_discovery',
     discoveryStats: {
       manual_candidate_count: 40,
-      gemini_candidate_count: 2,
-      gemini_new_unique_url_count: 0,
-      gemini_publishable_candidate_count: 0,
-      gemini_manual_duplicate_url_count: 2,
-      merged_candidate_count: 42
+      merged_candidate_count: 40
     },
-    mergedCandidateRelPath: `articles/content/collected-news/${date}/merged-candidates.json`,
+    mergedCandidateRelPath,
     sourceDiscoveryFeedbackReport: {
       status: 'WARNING',
-      parser_gap_count: 1,
-      gemini_parser_failure_count: 2
-    },
-    rejectedProposals: [
-      { rejected_reason: 'discovered_not_extractable', url: 'https://example.com/a' },
-      { rejected_reason: 'domain_not_allowed', url: 'https://example.com/b' }
-    ]
+      parser_gap_count: 1
+    }
   });
-  const parserWarningTop = parserWarning.slice(0, parserWarning.indexOf('## 상세 report'));
-  assert.match(parserWarningTop, /rejected: parser_gap/);
-  assert.match(parserWarningTop, /rejected: taxonomy_gap/);
-  assert.doesNotMatch(parserWarningTop, /discovered_not_extractable/);
-  assert.doesNotMatch(parserWarning, /discovered_not_extractable/);
+  assert.match(parserWarning, /next_step: strengthen_candidates/);
+  assert.match(parserWarning, /03 진행 가능하나 후보 보강 권장/);
+  assert.ok(parserWarning.includes('| parser gap | 1 | 보강 필요 |'));
+
+  // 제안 단계가 사라졌으므로 제안 검증 report 참조와 rejected proposal 행이 보고서에 없어야 한다.
+  for (const report of [noNewCandidates, seedPublishable, derivedPublishable, parserWarning]) {
+    assert.doesNotMatch(report, /proposal_validation_report|rejected proposal|rejected:|Gemini parser failure|gemini_candidate_artifact/);
+  }
 
   const credentialFailure = renderSourceDiscoveryReport({
     date,
     status: FAILED_LLM_CREDENTIALS,
     disabledPassThrough: false,
-    llmUsed: false,
-    geminiCandidateCount: 0,
     mergeMode: 'gemini_source_discovery',
     discoveryStats: null
   });
   assert.match(credentialFailure, /next_step: blocked/);
-  assert.match(credentialFailure, /rejected: credential_failure/);
 });
 
 test('newsroom PR body treats FAILED_REPAIR_REVIEWABLE as needs-fix review flow', () => {

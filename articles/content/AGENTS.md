@@ -58,10 +58,10 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
   - `articles/content/collected-news/YYYY-MM-DD/seed-evidence-pack.json` (seed_used=true 런에서 workflow 02 seed evidence expansion 산출물; 동일한 hash strict-check 대상)
 - **workflow 02 Gemini source discovery 산출물** (워크플로 핸드오프 상태 — `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'`인 경우 strict-check하므로 반드시 Git에 커밋해야 합니다. workflow 03이 이 파일들을 main에서 읽을 수 있어야 합니다):
   - `articles/content/newsroom/YYYY-MM-DD/gemini-usage-report.json` (`usage_report` 필드 strict-check 대상)
-  - `articles/content/newsroom/YYYY-MM-DD/gemini-source-proposals.json` (workflow 02 Gemini 제안 원문; manifest 참조 파일)
+  - `articles/content/newsroom/YYYY-MM-DD/gemini-source-proposals.json` (#1186 이전 호가 커밋한 파일; 제안 단계 제거로 더는 새로 쓰지 않으며, 지우지 않고 `review_required_compact`로 둠)
   - `articles/content/newsroom/YYYY-MM-DD/source-clusters.json` (`source_clusters` 필드 strict-check 대상)
   - `articles/content/newsroom/YYYY-MM-DD/evidence-validation-report.json` (`evidence_validation_report` 필드 strict-check 대상)
-  - `articles/content/newsroom/YYYY-MM-DD/gemini-source-proposal-validation-report.json` (`proposal_validation_report` 필드 strict-check 대상)
+  - `articles/content/newsroom/YYYY-MM-DD/gemini-source-proposal-validation-report.json` (#1186 이전 호가 커밋한 파일; 더는 strict-check 대상이 아니고 새로 쓰지 않으며, 지우지 않고 `review_required_compact`로 둠)
   - `articles/content/newsroom/YYYY-MM-DD/extracted-source-facts.json` (workflow 02 소스 사실 추출 결과; manifest 참조 파일)
 
 ### debug_heavy (Actions + manifest만, 커밋 제외)
@@ -72,8 +72,6 @@ artifact는 아래 4등급으로 분류합니다. 등급은 `artifact-manifest.j
 - `seed-fetch-report.json`, `seed-merge-report.json` — workflow 02가 `articles/content/newsroom/`을 통째로 `git add`하므로 커밋 경로 위에 있고, 커밋되지 않는 이유는 `.gitignore` 하나뿐입니다. 목록에서 빠지면 `seed_used=true` 첫 실행에서 커밋되어 `check:artifact-retention`이 hard fail 합니다(#1089).
 - `recovery-prompt.md` — heavy LLM prompt dump (~10 MB 규모). Git에 커밋하지 않음; GitHub Actions artifact `newsroom-final-debug-<run_id>` + `artifact-manifest.json` → `retained_heavy_artifacts`에서 조회.
 - `news-candidates.md` — workflow 01이 `articles/content/newsroom/YYYY-MM-DD/`에 쓰지만, 01의 `git add` 목록에는 그 경로가 없습니다. workflow 02는 별도 러너에서 `main`을 새로 체크아웃하므로 01이 만든 이 파일을 보지 못합니다. 그래서 커밋되지 않고 GitHub Actions artifact `newsroom-raw-debug-<run_id>`(보존 14일)에서만 조회됩니다. 날짜 결속 수집 진단(#945)이 커밋되어 남는 짝은 `articles/content/collected-news/YYYY-MM-DD/candidates.json`의 `dated_article_collection` 필드입니다. 트리에 남은 `2026-06-02` 이전 18건은 데일리 발행 시절 잔재이고, 생성 산출물 보존 규칙에 따라 지우지 않습니다(#1062).
-- `articles/content/collected-news/YYYY-MM-DD/` 순수 디버그 파일 (파이프라인 입력 파일 제외):
-  - `gemini-candidates.json`
 
 > **`editor-draft.{json,md}`는 리뷰 신뢰원(source of truth)이 아닙니다.** debug_heavy 등급이라 커밋되지 않으므로, 로컬 디스크에 남은 `editor-draft.{json,md}`는 커밋된 review artifact를 만든 run이 아니라 **리뷰어의 이전(로컬) `generate` run이 남긴 미커밋 잔재**일 수 있습니다(예: 위클리 incremental로 기사가 나중 run에 추가되면, 로컬 editor-draft는 기사가 더 적은 중간 상태만 담을 수 있음). 발행된 실제 내용을 리뷰할 때는 커밋되는 `review_required_compact` artifact(`newsletter.md`·`quality-report.{json,md}`·`retry-history.{json,md}`)를 신뢰원으로 보세요 — 이들은 한 run에서 함께 커밋되어 서로 일관됩니다. 같은 이유로 로컬 `validate:quality`가 stale editor-draft를 재채점해 거짓 stale을 낼 수 있는데(clean clone·CI에는 editor-draft가 없어 재현 안 됨), 로컬 `editor-draft.json`을 치우고 다시 실행하면 해소됩니다.
 
@@ -181,7 +179,7 @@ heavy artifact 전체는 GitHub Actions artifact `newsroom-final-debug-<run_id>`
 
 `newsletters-01-source-collect-pr.yml`과 `newsletters-02-source-discovery-pr.yml`은 candidate JSON 자체가 리뷰 대상이므로 candidate JSON을 의도적으로 커밋합니다. 이 워크플로에는 `add-paths` 허용목록 제한을 적용하지 않습니다.
 
-파이프라인 입력 파일(candidates.json, manual-candidates.json, raw-candidate-manifest.json, merged-candidates.json, merged-candidate-manifest.json, collection-intent.json, seed-candidates.json, seed-evidence-pack.json)은 `review_required_compact` 등급 파일로서, workflow 01 → 02 → 03의 핸드오프 상태입니다. 이 파일들은 `.gitignore`에서 제외되며 Git에 항상 커밋됩니다. 순수 디버그 collected-news 파일(gemini-candidates.json)은 여전히 `.gitignore` 처리됩니다.
+파이프라인 입력 파일(candidates.json, manual-candidates.json, raw-candidate-manifest.json, merged-candidates.json, merged-candidate-manifest.json, collection-intent.json, seed-candidates.json, seed-evidence-pack.json)은 `review_required_compact` 등급 파일로서, workflow 01 → 02 → 03의 핸드오프 상태입니다. 이 파일들은 `.gitignore`에서 제외되며 Git에 항상 커밋됩니다. `gemini-candidates.json`은 #1186이 제안 단계를 제거해 더는 만들지 않으므로 `.gitignore` 항목도 없습니다.
 
 ## 보존 규칙 (Preservation Rules)
 

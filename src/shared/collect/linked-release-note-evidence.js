@@ -1,6 +1,5 @@
 const {
-  canonicalContentUrl,
-  fetchTextWithLimit
+  canonicalContentUrl
 } = require('./source-intelligence-utils');
 const {
   hasConcreteVersionedReleaseExtraction,
@@ -183,15 +182,7 @@ async function resolveLinkedReleaseNoteEvidenceItems(items = [], parentSource = 
   return resolved;
 }
 
-function fetchTextWithConfiguredLimit(fetchImpl, options = {}) {
-  return url => fetchTextWithLimit(fetchImpl, url, {
-    timeoutMs: options.timeoutMs || 5000,
-    maxBytes: options.maxBytes || 200000
-  });
-}
-
 module.exports = {
-  fetchTextWithConfiguredLimit,
   isTrustedLinkedReleaseNoteTarget,
   linkedReleaseNoteFetchCacheKey,
   markUnresolvedLinkedReleaseNote,

@@ -54,7 +54,6 @@ JSON field와 enum은 CI/test가 읽는 machine contract(기계 판독 계약)�
 - `source_gap_risk`: 소스 풀 부족 위험
 - `taxonomy_missing`: 분류 체계 누락
 - `fallback_only_composition`: Fallback 기사만 남음
-- `duplicate_or_noop_source_discovery`: Source discovery 중복 또는 무효
 
 `true`로 켜진 diagnosis flag마다 `diagnosis_reasons`에 판단 근거와 source artifact 참조를 최소 하나씩 남깁니다. `warnings`에는 optional/preferred artifact 누락, partial diagnosis, contract drift, unknown source quality 같은 참고용(advisory) 이슈를 남깁니다. JSON에는 `evidence_completeness`가 들어 있어, 어떤 입력 artifact를 실제로 쓸 수 있었는지 확인할 수 있습니다.
 
@@ -70,7 +69,7 @@ JSON field와 enum은 CI/test가 읽는 machine contract(기계 판독 계약)�
 
 - 소스 단위: `source_breakdown`에서 같은 소스에 같은 조치형 권고가 10회 연속 붙은 소스입니다.
 - 실행 단위: 실행 전체 진단 `taxonomy_missing`이 이번 실행에서 참이면 초안 1건을 씁니다. 연속을 기다리지 않는 이유는 이 진단이 드물게만 켜지기 때문입니다. 현재 판정으로 커밋된 진단을 다시 계산하면, 재계산 가능한 23회 중 0회 참입니다. 이 초안은 목록 맨 앞에 옵니다.
-- `duplicate_or_noop_source_discovery`는 초안을 만들지 않습니다. 커밋된 31회 기록에서 매번 참이라 초안으로 연결하면 매주 같은 초안이 나옵니다. 이 진단이 가리키는 문제는 #1180에서 다룹니다.
+- `duplicate_or_noop_source_discovery`는 초안을 만들지 않습니다. 커밋된 31회 기록에서 매번 참이라 초안으로 연결하면 매주 같은 초안이 나옵니다. 그 원인인 Gemini URL 제안 단계를 #1186이 제거했고 새 진단에는 이 키가 없습니다. 과거 호가 커밋한 진단에는 남아 있어 계속 초안 대상에서 뺍니다.
 
 - 생성: final PR workflow가 진단 리포트 스텝 직후에 `npm run report:source-followup-issues -- --date YYYY-MM-DD`를 돌립니다. 실패해도 publish gate를 막지 않습니다.
 - 출력: `articles/content/newsroom/YYYY-MM-DD/source-followup-issues.json`과 `source-followup-issues.md`. 초안이 0건이어도 파일은 생깁니다.
