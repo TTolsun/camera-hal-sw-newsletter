@@ -12,12 +12,6 @@ const {
   extractedSourceFactsRelPath,
   collectedCandidatesPath,
   collectedCandidatesRelPath,
-  geminiCandidatesPath,
-  geminiCandidatesRelPath,
-  geminiSourceProposalValidationReportPath,
-  geminiSourceProposalValidationReportRelPath,
-  geminiSourceProposalsPath,
-  geminiSourceProposalsRelPath,
   geminiUsageReportPath,
   geminiUsageReportRelPath,
   manualCandidatesPath,
@@ -50,7 +44,6 @@ const {
 } = require('../shared/common/artifact-paths');
 const {
   sourceDiscoveryCandidateStats,
-  sourceDiscoveryStatsSummary,
   writeMergedCandidateArtifacts
 } = require('../shared/common/candidate-artifacts');
 const {
@@ -65,9 +58,6 @@ const {
 const {
   renderEditorPrSummary
 } = require('../shared/common/editor-pr-summary');
-const {
-  runGeminiSourceDiscovery
-} = require('./gemini-source-discovery');
 const {
   expandLinkedEvidenceCandidates
 } = require('./linked-evidence-candidate-expansion');
@@ -114,15 +104,6 @@ const {
 const FAILED_LLM_CREDENTIALS = 'FAILED_LLM_CREDENTIALS';
 const SEED_ONLY_LLM_CREDENTIALS_MISSING = 'SEED_ONLY_LLM_CREDENTIALS_MISSING';
 
-const REJECTED_REASON_LABELS = {
-  duplicate_source: '이미 수집된 후보와 중복',
-  parser_gap: 'source extraction 보강 필요',
-  source_gap: '기사 근거 부족',
-  taxonomy_gap: 'bucket/classifier 또는 허용 domain 보강 필요',
-  credential_failure: 'Gemini 실행 불가',
-  other: '기타 확인 필요'
-};
-
 function parseArgs(argv = process.argv.slice(2)) {
   const args = {};
   for (let index = 0; index < argv.length; index += 1) {
@@ -153,54 +134,27 @@ function findManualCandidatePath(root, date) {
   throw new Error(`Missing manual candidate artifact: ${manualCandidatesRelPath(date)} or ${collectedCandidatesRelPath(date)}`);
 }
 
-function normalizeRejectedReason(reason = '') {
-  const value = String(reason || '').toLowerCase();
-  if (/credential|auth|api[_ -]?key/.test(value)) return 'credential_failure';
-  if (/duplicate|already|manual/.test(value)) return 'duplicate_source';
-  if (/parser|extract|not_extractable/.test(value)) return 'parser_gap';
-  if (/source[_ -]?gap|evidence|missing_source/.test(value)) return 'source_gap';
-  if (/domain|taxonomy|bucket|policy|not_allowed|scope/.test(value)) return 'taxonomy_gap';
-  return 'other';
-}
-
-function rejectedReasonSummary(rejectedProposals = [], status = '') {
-  const counts = new Map();
-  if (status === FAILED_LLM_CREDENTIALS) {
-    counts.set('credential_failure', 1);
-  }
-  for (const item of Array.isArray(rejectedProposals) ? rejectedProposals : []) {
-    const key = normalizeRejectedReason(item?.rejected_reason || item?.reason || item?.message);
-    counts.set(key, (counts.get(key) || 0) + 1);
-  }
-  return [...counts.entries()]
-    .map(([key, count]) => ({
-      key,
-      count,
-      interpretation: REJECTED_REASON_LABELS[key] || REJECTED_REASON_LABELS.other
-    }))
-    .sort((a, b) => a.key.localeCompare(b.key));
-}
-
 function numberStat(stats, key) {
   const value = Number(stats?.[key] ?? 0);
   return Number.isFinite(value) ? value : 0;
+}
+
+// seed 근거 확장과 linked evidence 파생이 이 단계가 새로 더하는 후보의 전부다. 새 후보가 없는
+// 주가 정상 상태이므로(manual 후보만으로 03을 진행한다) "신규 후보 없음"을 경고로 다루지 않는다.
+function newStagePublishableCount(stats) {
+  return numberStat(stats, 'seed_publishable_candidate_count') +
+    numberStat(stats, 'derived_publishable_candidate_count');
 }
 
 function sourceDiscoveryHandoff({
   status,
   stats = null,
   mergedCandidateRelPath = '',
-  sourceDiscoveryFeedbackReport = null,
-  llmUsed = false
+  sourceDiscoveryFeedbackReport = null
 } = {}) {
   const mergedCount = numberStat(stats, 'merged_candidate_count');
-  const geminiPublishableCount = numberStat(stats, 'gemini_publishable_candidate_count');
-  const seedPublishableCount = numberStat(stats, 'seed_publishable_candidate_count');
-  const publishableCount = geminiPublishableCount + seedPublishableCount;
-  const geminiNewUniqueCount = numberStat(stats, 'gemini_new_unique_url_count');
-  const newUniqueCount = geminiNewUniqueCount + numberStat(stats, 'seed_new_unique_url_count');
+  const publishableCount = newStagePublishableCount(stats);
   const hasMergedArtifact = Boolean(mergedCandidateRelPath);
-  const geminiDiscoveryNoNewUniqueUrl = Boolean(llmUsed) && geminiNewUniqueCount === 0;
   if (status === FAILED_LLM_CREDENTIALS || !hasMergedArtifact || mergedCount === 0) {
     return {
       nextStep: 'blocked',
@@ -213,28 +167,21 @@ function sourceDiscoveryHandoff({
   if (publishableCount > 0) {
     return {
       nextStep: 'run_03',
-      label: geminiDiscoveryNoNewUniqueUrl ? '03 진행 가능 — Gemini 신규 URL 없음' : '03 진행 가능',
-      reason: seedPublishableCount > 0 && geminiPublishableCount === 0
-        ? 'Seed evidence expansion에서 publishable 후보가 확인되었습니다.'
-        : 'Gemini 또는 seed discovery에서 publishable 후보가 확인되었습니다.',
-      gemini_discovery_no_new_unique_url: geminiDiscoveryNoNewUniqueUrl
+      label: '03 진행 가능',
+      reason: 'Seed evidence expansion 또는 linked evidence 파생에서 publishable 후보가 확인되었습니다.'
     };
   }
-  if (newUniqueCount === 0 || sourceDiscoveryFeedbackReport?.status === 'WARNING') {
+  if (sourceDiscoveryFeedbackReport?.status === 'WARNING') {
     return {
       nextStep: 'strengthen_candidates',
-      label: geminiDiscoveryNoNewUniqueUrl
-        ? '03 진행 가능하나 후보 보강 권장 — Gemini 신규 URL 없음'
-        : '03 진행 가능하나 후보 보강 권장',
-      reason: 'merged artifact는 생성되었지만 Gemini 신규 publishable 후보가 없거나 parser/source gap이 남아 있습니다.',
-      gemini_discovery_no_new_unique_url: geminiDiscoveryNoNewUniqueUrl
+      label: '03 진행 가능하나 후보 보강 권장',
+      reason: 'merged artifact는 생성되었지만 parser/source gap이 남아 있습니다.'
     };
   }
   return {
     nextStep: 'run_03',
     label: '03 진행 가능',
-    reason: 'merged candidate artifact가 생성되었습니다.',
-    gemini_discovery_no_new_unique_url: false
+    reason: 'merged candidate artifact가 생성되었습니다.'
   };
 }
 
@@ -258,29 +205,25 @@ function sourceDiscoveryVerdict({
       firstLook: `parser/source feedback warning이 있습니다. parser_gap_count=${sourceDiscoveryFeedbackReport.parser_gap_count ?? 0}`
     };
   }
-  const geminiPublishableCount = numberStat(stats, 'gemini_publishable_candidate_count');
-  const seedPublishableCount = numberStat(stats, 'seed_publishable_candidate_count');
-  const publishableCount = geminiPublishableCount + seedPublishableCount;
+  const publishableCount = newStagePublishableCount(stats);
   if (publishableCount > 0) {
     return {
       label: '검토 가능',
       action: 'merged 후보를 확인한 뒤 03 final newsletter generation으로 진행할 수 있습니다.',
-      firstLook: seedPublishableCount > 0 && geminiPublishableCount === 0
-        ? `${seedPublishableCount}개 seed publishable 후보가 있습니다.`
-        : `${publishableCount}개 publishable 후보가 있습니다.`
+      firstLook: `${publishableCount}개 seed 또는 linked 파생 publishable 후보가 있습니다.`
     };
   }
   if (status === 'PASS') {
     return {
-      label: '검토 필요',
-      action: '후보 품질을 확인하고 필요하면 source를 보강한 뒤 03 진행 여부를 판단하세요.',
-      firstLook: 'Gemini 신규 publishable 후보가 없습니다.'
+      label: '검토 가능',
+      action: 'manual 후보로 03 final newsletter generation을 진행할 수 있습니다.',
+      firstLook: 'seed 또는 linked 파생 신규 후보 없이 manual 후보만 병합했습니다.'
     };
   }
   return {
     label: '검토 필요',
     action: 'source discovery report와 artifact를 확인하세요.',
-    firstLook: '상세 report의 status와 rejected proposal을 확인하세요.'
+    firstLook: '상세 report의 status를 확인하세요.'
   };
 }
 
@@ -289,28 +232,22 @@ function renderReport({
   status,
   statusDetail = '',
   disabledPassThrough,
-  llmUsed,
-  geminiCandidateCount,
   mergeMode,
   discoveryStats = null,
   sourceCandidateRelPath = '',
-  geminiCandidateRelPath = '',
   mergedCandidateRelPath = '',
   manifestRelPath = '',
-  proposalValidationReportRelPath = '',
   seedEvidenceRefs = {},
   sourceDiscoveryFeedbackReportRelPath = '',
   sourceDiscoveryFeedbackReportMarkdownRelPath = '',
-  sourceDiscoveryFeedbackReport = null,
-  rejectedProposals = []
+  sourceDiscoveryFeedbackReport = null
 }) {
   const stats = discoveryStats && typeof discoveryStats === 'object' ? discoveryStats : null;
   const handoff = sourceDiscoveryHandoff({
     status,
     stats,
     mergedCandidateRelPath,
-    sourceDiscoveryFeedbackReport,
-    llmUsed
+    sourceDiscoveryFeedbackReport
   });
   const verdict = sourceDiscoveryVerdict({
     status,
@@ -318,10 +255,6 @@ function renderReport({
     handoff,
     sourceDiscoveryFeedbackReport
   });
-  const rejectedSummary = rejectedReasonSummary(rejectedProposals, status);
-  const rejectedRows = rejectedSummary.length > 0
-    ? rejectedSummary.map(item => [`rejected: ${item.key}`, item.count, item.interpretation])
-    : [['rejected proposal', 0, '없음']];
   const lines = [
     `# Gemini Source Discovery Report - ${date}`,
     '',
@@ -339,54 +272,32 @@ function renderReport({
       ],
       checklistItems: [
         {
-          label: 'Gemini 또는 seed publishable 후보 여부 확인',
-          checked: numberStat(stats, 'gemini_publishable_candidate_count') + numberStat(stats, 'seed_publishable_candidate_count') > 0
+          label: 'seed 또는 linked 파생 publishable 후보 여부 확인',
+          checked: newStagePublishableCount(stats) > 0
         },
-        { label: 'manual 후보와 중복만 생성했는지 확인', checked: false },
         { label: 'parser/source/taxonomy gap 확인', checked: false },
         { label: 'merged-candidates artifact 정상 생성 확인', checked: Boolean(mergedCandidateRelPath) },
         { label: '03 진행 전 source_gap 후보가 main으로 승격되지 않았는지 확인', checked: false }
       ],
       resultRows: [
         ['manual 후보', stats?.manual_candidate_count ?? 'unknown', '입력'],
-        ['Gemini 후보', stats?.gemini_candidate_count ?? geminiCandidateCount ?? 'unknown', llmUsed ? '실행됨' : '비활성/pass-through'],
-        ['Gemini 신규 unique 후보', stats?.gemini_new_unique_url_count ?? 'unknown', Number(stats?.gemini_new_unique_url_count ?? 0) > 0 ? '있음' : '없음'],
-        ['Gemini publishable 후보', stats?.gemini_publishable_candidate_count ?? 0, Number(stats?.gemini_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
         ['linked evidence 파생 후보', stats?.derived_candidate_count ?? 0, Number(stats?.derived_candidate_count ?? 0) > 0 ? '있음' : '없음(non-failing)'],
         ['linked 파생 publishable 후보', stats?.derived_publishable_candidate_count ?? 0, Number(stats?.derived_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
         ['seed 후보', stats?.seed_candidate_count ?? 0, Number(stats?.seed_candidate_count ?? 0) > 0 ? '있음' : '없음'],
         ['seed 신규 unique 후보', stats?.seed_new_unique_url_count ?? 0, Number(stats?.seed_new_unique_url_count ?? 0) > 0 ? '있음' : '없음'],
         ['seed publishable 후보', stats?.seed_publishable_candidate_count ?? 0, Number(stats?.seed_publishable_candidate_count ?? 0) > 0 ? '있음' : '없음'],
-        ['중복 후보', stats?.gemini_manual_duplicate_url_count ?? 0, Number(stats?.gemini_manual_duplicate_url_count ?? 0) > 0 ? '확인 필요' : '낮음'],
-        ['parser gap', sourceDiscoveryFeedbackReport?.parser_gap_count ?? 0, Number(sourceDiscoveryFeedbackReport?.parser_gap_count ?? 0) > 0 ? '보강 필요' : '없음'],
-        ['Gemini parser failure', sourceDiscoveryFeedbackReport?.gemini_parser_failure_count ?? 0, Number(sourceDiscoveryFeedbackReport?.gemini_parser_failure_count ?? 0) > 0 ? '보강 필요' : '없음'],
-        ...rejectedRows
+        ['parser gap', sourceDiscoveryFeedbackReport?.parser_gap_count ?? 0, Number(sourceDiscoveryFeedbackReport?.parser_gap_count ?? 0) > 0 ? '보강 필요' : '없음']
       ]
     }),
     '- 원본 후보와 merged 후보는 아래 artifact에서 확인하세요.',
     `- source_candidate_artifact: ${sourceCandidateRelPath || '없음'}`,
-    `- gemini_candidate_artifact: ${geminiCandidateRelPath || '없음'}`,
     `- merged_candidate_artifact: ${mergedCandidateRelPath || '없음'}`,
     `- merged_candidate_manifest: ${manifestRelPath || '없음'}`,
-    `- proposal_validation_report: ${proposalValidationReportRelPath || '없음'}`,
     `- source_discovery_feedback_report: ${sourceDiscoveryFeedbackReportMarkdownRelPath || sourceDiscoveryFeedbackReportRelPath || '없음'}`,
-    '- rejected proposal 원문: proposal_validation_report artifact에서 확인하세요.',
     '- parser/source feedback 원문: source_discovery_feedback_report artifact에서 확인하세요.',
     '- PR body에는 편집장 1차 판단에 필요한 요약만 남깁니다.',
     ''
   ];
-
-  if (handoff.gemini_discovery_no_new_unique_url) {
-    lines.push(
-      '### ⚠️ Gemini 신규 URL 없음 (Ineffective Discovery)',
-      '',
-      `Gemini discovery가 실행됐지만 manual 후보와 전부 중복입니다 (gemini_new_unique_url_count=${stats?.gemini_new_unique_url_count ?? 0}).`,
-      'source coverage가 늘지 않았습니다.',
-      '',
-      '**권장 조치:** source family 확장, discovery prompt 재검토, 또는 seed URL 추가를 고려하세요.',
-      ''
-    );
-  }
 
   if (status === FAILED_LLM_CREDENTIALS) {
     lines.push(
@@ -431,9 +342,6 @@ function removeIfExists(filePath) {
 function removeStaleNormalOutputs(root, date) {
   removeIfExists(mergedCandidatesPath(root, date));
   removeIfExists(mergedCandidateManifestPath(root, date));
-  removeIfExists(geminiCandidatesPath(root, date));
-  removeIfExists(geminiSourceProposalsPath(root, date));
-  removeIfExists(geminiSourceProposalValidationReportPath(root, date));
   removeIfExists(geminiUsageReportPath(root, date));
   removeIfExists(extractedSourceFactsPath(root, date));
   removeIfExists(sourceQualityReportPath(root, date));
@@ -460,8 +368,6 @@ function assertEnabledCredentials(root, date, env, { writeReportOnFailure = true
         date,
         status: FAILED_LLM_CREDENTIALS,
         disabledPassThrough: false,
-        llmUsed: false,
-        geminiCandidateCount: 0,
         mergeMode: 'credential_preflight_failed'
       });
       error.reportPath = writeReport(root, date, report);
@@ -499,7 +405,6 @@ function isPlainObject(value) {
 // 병합 단계가 새로 만든 후보의 origin. stage 1이 이미 만든 manual 후보는 여기 없다 —
 // stage 1의 partitionByCoverageEligibility가 그 경계를 이미 적용했기 때문이다.
 const NEW_MERGE_CANDIDATE_ORIGINS = new Set([
-  'gemini_discovery',
   'seed_url_evidence',
   'gemini_linked_discovery'
 ]);
@@ -632,25 +537,6 @@ function urlParts(value = '') {
       family: ''
     };
   }
-}
-
-function normalizedCandidateUrlForFeedback(candidate = {}) {
-  const raw = candidateUrl(candidate);
-  if (!raw) return '';
-  try {
-    const parsed = new URL(raw);
-    const protocol = parsed.protocol.toLowerCase();
-    const hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
-    const port = parsed.port ? `:${parsed.port}` : '';
-    const pathname = parsed.pathname.replace(/\/$/, '');
-    return `${protocol}//${hostname}${port}${pathname}${parsed.hash}`;
-  } catch (_error) {
-    return String(raw || '').trim();
-  }
-}
-
-function candidateUrlFamily(candidate = {}) {
-  return urlParts(candidateUrl(candidate)).family;
 }
 
 function sourceIdentity(candidate = {}) {
@@ -803,29 +689,9 @@ function selectorExclusionReason(candidate = {}) {
     : 'source_extraction.release.sections has no concrete bullet';
 }
 
-function duplicateDiscoveryMatches(manualCandidates = [], geminiCandidates = []) {
-  const exactUrls = new Set();
-  const familyUrls = new Set();
-  for (const gemini of geminiCandidates) {
-    const url = normalizedCandidateUrlForFeedback(gemini);
-    const family = candidateUrlFamily(gemini);
-    if (url) exactUrls.add(url);
-    if (family) familyUrls.add(family);
-  }
-  const duplicateMatches = new Map();
-  for (const manual of manualCandidates) {
-    const url = normalizedCandidateUrlForFeedback(manual);
-    const family = candidateUrlFamily(manual);
-    const key = candidateKey(manual);
-    if (url && exactUrls.has(url)) {
-      duplicateMatches.set(key, 'exact_normalized_url');
-    } else if (family && familyUrls.has(family)) {
-      duplicateMatches.set(key, 'same_release_page_family');
-    }
-  }
-  return duplicateMatches;
-}
-
+// Gemini 단계가 만든 후보는 parser 수리 대상이 아니다. collectionStage가 'gemini'인 linked 파생
+// 후보와, 옛 제안 단계가 만들어 carry-forward에 남아 있을 수 있는 gemini_discovery origin 후보를
+// 함께 거른다.
 function isGeminiDiscoveryCandidate(candidate = {}) {
   return candidate.origin === 'gemini_discovery' ||
     candidate.collectionStage === 'gemini' ||
@@ -835,11 +701,8 @@ function isGeminiDiscoveryCandidate(candidate = {}) {
 function buildSourceDiscoveryFeedbackReport({
   date,
   manualCandidates = [],
-  mergedCandidates = [],
-  geminiCandidates = [],
-  proposalValidations = []
+  mergedCandidates = []
 } = {}) {
-  const duplicateMatches = duplicateDiscoveryMatches(manualCandidates, geminiCandidates);
   const candidatesByKey = new Map();
   for (const candidate of mergedCandidates) {
     if (isGeminiDiscoveryCandidate(candidate)) continue;
@@ -862,7 +725,6 @@ function buildSourceDiscoveryFeedbackReport({
     const key = candidateKey(candidate);
     const reason = parserGapReason(candidate);
     const title = firstText(candidate.version_or_release, candidate.versionOrRelease, candidateTitle(candidate), candidate.title);
-    const duplicateMatchType = duplicateMatches.get(key) || null;
     const item = {
       severity: 'warning',
       action: 'PARSER_REPAIR_REQUIRED',
@@ -871,8 +733,6 @@ function buildSourceDiscoveryFeedbackReport({
       url: candidateUrl(candidate),
       source_id: sourceIdentity(candidate),
       adapter_hint: hints.adapter_hint,
-      duplicate_discovered_by_gemini: Boolean(duplicateMatchType),
-      duplicate_match_type: duplicateMatchType,
       source_gap_risk: boolTrue(candidate.source_gap_risk),
       evidence_validation_status: firstText(candidate.evidence_validation_status, candidate.source_validation_status) || null,
       source_quality_bucket: firstText(candidate.source_quality_bucket) || null,
@@ -885,30 +745,12 @@ function buildSourceDiscoveryFeedbackReport({
     items.push(item);
   }
 
-  const gemini_parser_failures = (Array.isArray(proposalValidations) ? proposalValidations : [])
-    .filter(item => ['parser_repair_required', 'discovered_not_extractable'].includes(item.rejected_reason))
-    .map(item => ({
-      severity: 'warning',
-      action: 'GEMINI_PARSER_EXTRACTION_REQUIRED',
-      candidate_url: item.normalized_url || item.candidate_url || '',
-      source_policy_match: item.source_policy_match || '',
-      discovery_status: item.discovery_status || 'discovered',
-      extraction_status: item.extraction_status || item.rejected_reason,
-      adapter_hint: item.adapter_hint || null,
-      rejected_reason: item.rejected_reason || '',
-      suggested_fixture_case: item.suggested_fixture_case || '',
-      message: item.message || ''
-    }));
-  const duplicateDiscoveryGapCount = items.filter(item => item.duplicate_discovered_by_gemini).length;
   return {
     schema_version: 1,
     report_type: 'source_discovery_feedback',
     date,
-    status: items.length > 0 || gemini_parser_failures.length > 0 ? 'WARNING' : 'PASS',
+    status: items.length > 0 ? 'WARNING' : 'PASS',
     parser_gap_count: items.length,
-    duplicate_discovery_gap_count: duplicateDiscoveryGapCount,
-    gemini_parser_failure_count: gemini_parser_failures.length,
-    gemini_parser_failures,
     items
   };
 }
@@ -919,11 +761,9 @@ function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
     '',
     `status=${report.status || 'PASS'}`,
     `parser_gap_count=${Number(report.parser_gap_count || 0)}`,
-    `duplicate_discovery_gap_count=${Number(report.duplicate_discovery_gap_count || 0)}`,
-    `gemini_parser_failure_count=${Number(report.gemini_parser_failure_count || 0)}`,
     '',
-    '| Action | Reason | Candidate | Adapter | Duplicate Discovery | Duplicate Match | Confidence | URL |',
-    '|---|---|---|---|---|---|---|---|'
+    '| Action | Reason | Candidate | Adapter | Confidence | URL |',
+    '|---|---|---|---|---|---|'
   ];
   for (const item of report.items || []) {
     lines.push([
@@ -931,47 +771,14 @@ function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
       item.reason || '',
       String(item.candidate_title || '').replace(/\|/g, '\\|'),
       item.adapter_hint || '',
-      item.duplicate_discovered_by_gemini ? 'true' : 'false',
-      item.duplicate_match_type || '',
       item.confidence || '',
       item.url || ''
     ].join(' | ').replace(/^/, '| ').replace(/$/, ' |'));
   }
   if (!Array.isArray(report.items) || report.items.length === 0) {
-    lines.push('| none | none | none | none | false |  |  |  |');
+    lines.push('| none | none | none | none |  |  |');
   }
   lines.push('');
-
-  lines.push('## Gemini parser extraction failures', '');
-  lines.push('| Action | Reason | Discovery Status | Extraction Status | Adapter | Source | URL |');
-  lines.push('|---|---|---|---|---|---|---|');
-  for (const item of report.gemini_parser_failures || []) {
-    lines.push([
-      item.action || '',
-      item.rejected_reason || '',
-      item.discovery_status || '',
-      item.extraction_status || '',
-      item.adapter_hint || '',
-      String(item.source_policy_match || '').replace(/\|/g, '\\|'),
-      item.candidate_url || ''
-    ].join(' | ').replace(/^/, '| ').replace(/$/, ' |'));
-  }
-  if (!Array.isArray(report.gemini_parser_failures) || report.gemini_parser_failures.length === 0) {
-    lines.push('| none | none | none | none | none | none |  |');
-  }
-  lines.push('');
-
-  for (const item of report.gemini_parser_failures || []) {
-    lines.push(
-      `- ${item.action}: ${item.candidate_url || 'unknown'}`,
-      `  - rejected_reason: ${item.rejected_reason || ''}`,
-      `  - discovery_status: ${item.discovery_status || ''}`,
-      `  - extraction_status: ${item.extraction_status || ''}`,
-      `  - adapter_hint: ${item.adapter_hint || ''}`,
-      `  - suggested_fixture_case: ${item.suggested_fixture_case || ''}`,
-      ''
-    );
-  }
 
   for (const item of report.items || []) {
     lines.push(
@@ -979,8 +786,6 @@ function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
       `  - url: ${item.url || ''}`,
       `  - adapter_hint: ${item.adapter_hint || ''}`,
       `  - reason: ${item.reason || ''}`,
-      `  - duplicate_discovered_by_gemini: ${item.duplicate_discovered_by_gemini ? 'true' : 'false'}`,
-      `  - duplicate_match_type: ${item.duplicate_match_type || ''}`,
       `  - confidence: ${item.confidence || ''}`,
       `  - source_gap_risk: ${item.source_gap_risk ? 'true' : 'false'}`,
       `  - evidence_validation_status: ${item.evidence_validation_status || ''}`,
@@ -994,15 +799,11 @@ function renderSourceDiscoveryFeedbackMarkdown(report = {}) {
 function renderSourceDiscoveryFeedbackSummary(report = {}, markdownRelPath = '') {
   const status = report.status || 'PASS';
   const parserGapCount = Number(report.parser_gap_count || 0);
-  const duplicateGapCount = Number(report.duplicate_discovery_gap_count || 0);
-  const geminiParserFailureCount = Number(report.gemini_parser_failure_count || 0);
   const lines = [
     '## Parser/source feedback',
     '',
     `status=${status}`,
-    `parser_gap_count=${parserGapCount}`,
-    `duplicate_discovery_gap_count=${duplicateGapCount}`,
-    `gemini_parser_failure_count=${geminiParserFailureCount}`
+    `parser_gap_count=${parserGapCount}`
   ];
   if (markdownRelPath) {
     lines.push(`source_discovery_feedback_report_markdown=${markdownRelPath}`);
@@ -1014,28 +815,12 @@ function renderSourceDiscoveryFeedbackSummary(report = {}, markdownRelPath = '')
       `  - url: ${item.url || ''}`,
       `  - adapter_hint: ${item.adapter_hint || ''}`,
       `  - reason: ${item.reason || ''}`,
-      `  - duplicate_match_type: ${item.duplicate_match_type || ''}`,
       `  - confidence: ${item.confidence || ''}`,
-      item.duplicate_discovered_by_gemini
-        ? `  - Gemini rediscovered this URL (${item.duplicate_match_type || 'unknown_match'}), but the manual candidate lacks concrete source_extraction bullets.`
-        : '  - Manual candidate lacks concrete source_extraction bullets.'
+      '  - Manual candidate lacks concrete source_extraction bullets.'
     );
   }
   if (parserGapCount > 3) {
     lines.push(`- ${parserGapCount - 3} more item(s) in ${markdownRelPath}`);
-  }
-  for (const item of (report.gemini_parser_failures || []).slice(0, 3)) {
-    lines.push(
-      `- ${item.action}: ${item.candidate_url || 'unknown'}`,
-      `  - rejected_reason: ${item.rejected_reason || ''}`,
-      `  - discovery_status: ${item.discovery_status || ''}`,
-      `  - extraction_status: ${item.extraction_status || ''}`,
-      `  - adapter_hint: ${item.adapter_hint || ''}`,
-      `  - suggested_fixture_case: ${item.suggested_fixture_case || ''}`
-    );
-  }
-  if (geminiParserFailureCount > 3) {
-    lines.push(`- ${geminiParserFailureCount - 3} more Gemini parser failure item(s) in ${markdownRelPath}`);
   }
   lines.push('');
   return lines;
@@ -1223,7 +1008,6 @@ function writeSeedOnlySourceDiscoveryResult({
   const discoveryStats = sourceDiscoveryCandidateStats({
     manualCandidates,
     seedCandidates: seedExpansion?.seedCandidates || [],
-    geminiCandidates: [],
     mergedCandidates
   });
   if (seedExpansion?.stats) {
@@ -1232,7 +1016,6 @@ function writeSeedOnlySourceDiscoveryResult({
   const feedback = writeSourceDiscoveryFeedbackReport(root, date, buildSourceDiscoveryFeedbackReport({
     date,
     manualCandidates,
-    geminiCandidates: [],
     mergedCandidates
   }));
   const generatedAt = new Date().toISOString();
@@ -1243,10 +1026,8 @@ function writeSeedOnlySourceDiscoveryResult({
     sourceCandidatePath,
     sourceManifestPath,
     seedPayload: seedExpansion?.seedPayload || null,
-    geminiPayload: [],
     generatedAt,
     mergeMode,
-    geminiCandidateCount: 0,
     llmUsed: false,
     seedUsed,
     status: 'PASS',
@@ -1267,17 +1048,9 @@ function writeSeedOnlySourceDiscoveryResult({
     status: 'PASS',
     statusDetail,
     disabledPassThrough: !seedUsed,
-    llmUsed: false,
-    geminiCandidateCount: 0,
     mergeMode,
     discoveryStats,
-    summary: statusDetail === SEED_ONLY_LLM_CREDENTIALS_MISSING
-      ? 'Seed evidence expansion ran; Gemini discovery was skipped because LLM credentials were missing.'
-      : seedUsed
-        ? 'Seed evidence expansion ran without Gemini; manual candidates were merged with approved seed evidence.'
-        : sourceDiscoveryStatsSummary(discoveryStats, { llmUsed: false }),
     sourceCandidateRelPath,
-    geminiCandidateRelPath: geminiCandidatesRelPath(date),
     mergedCandidateRelPath: mergedCandidatesRelPath(date),
     manifestRelPath: mergedCandidateManifestRelPath(date),
     seedEvidenceRefs: seedExpansion?.reportRefs || {},
@@ -1294,7 +1067,6 @@ function writeSeedOnlySourceDiscoveryResult({
     candidate_count: mergedPayload.candidates?.length ?? candidateItems(manualPayload).length,
     source_candidate_artifact: sourceCandidateRelPath,
     source_manifest: fs.existsSync(sourceManifestPath) ? rawCandidateManifestRelPath(date) : '',
-    gemini_candidate_artifact: geminiCandidatesRelPath(date),
     merged_candidate_artifact: mergedCandidatesRelPath(date),
     merged_candidate_manifest: mergedCandidateManifestRelPath(date),
     seed_candidate_artifact: seedExpansion?.reportRefs?.seed_candidate_artifact || '',
@@ -1312,7 +1084,6 @@ async function runEnabled({
   env,
   date,
   preflightOnly = false,
-  proposalPayload = null,
   callLlmJsonBudgetedImpl = null,
   fetchImpl = globalThis.fetch,
   lookupImpl
@@ -1367,18 +1138,8 @@ async function runEnabled({
     });
   }
   const budget = createGeminiUsageBudget({ root });
-  const discovery = await runGeminiSourceDiscovery({
-    root,
-    date,
-    manualPayload,
-    budget,
-    proposalPayload,
-    callLlmJsonBudgetedImpl,
-    fetchImpl
-  });
   const manualCandidates = candidateItems(manualPayload);
   const seedCandidates = seedExpansion?.seedCandidates || [];
-  const geminiCandidates = discovery.promotedCandidates;
 
   // #429: linked evidence expansion. 수동 후보에 이미 보존된 outgoing_links에서 아직 모르는
   // 공식/등록 도메인 링크를 골라 Gemini(sourceDiscovery 단계)가 뉴스레터 가치를 판정하고,
@@ -1403,14 +1164,12 @@ async function runEnabled({
 
   const mergedInput = [
     ...(seedExpansion ? seedExpansion.mergedCandidates : manualCandidates),
-    ...geminiCandidates,
     ...derivedCandidates
   ];
   const seedUsed = seedExpansion?.stats?.seed_used === true;
   const mergeMode = seedUsed ? 'seed_evidence_plus_gemini_discovery' : 'gemini_source_discovery';
 
-  // Task 10: 병합 단계가 새로 만든 후보(gemini_discovery·seed_url_evidence·
-  // gemini_linked_discovery origin)에도 stage 1과 같은 coverage 경계 [E, U)를 적용한다.
+  // Task 10: 병합 단계가 새로 만든 후보(seed_url_evidence·gemini_linked_discovery origin)에도 stage 1과 같은 coverage 경계 [E, U)를 적용한다.
   // LLM 판정·score·rank·cap을 타기 전에 분리해야 다음 실행 carry-forward 원천이 이번
   // selection 파생값(cap·rank)으로 오염되지 않는다. manual 후보는 stage 1이 이미 이
   // 경계로 걸러냈으므로 대상에서 뺀다.
@@ -1446,12 +1205,10 @@ async function runEnabled({
   // calls는 budget이 stage_counts와 같은 누적 진단에서 채운다(#1203). 위 linked evidence 호출도 포함된다.
   const usageReport = budget.writeReport(geminiUsageReportPath(root, date), { date });
 
-  const geminiAnnotatedCandidates = evidence.annotatedCandidates.filter(item => item.origin === 'gemini_discovery');
   const derivedAnnotatedCandidates = evidence.annotatedCandidates.filter(item => item.origin === 'gemini_linked_discovery');
   const discoveryStats = sourceDiscoveryCandidateStats({
     manualCandidates,
     seedCandidates,
-    geminiCandidates: geminiAnnotatedCandidates,
     derivedCandidates: derivedAnnotatedCandidates,
     mergedCandidates: evidence.annotatedCandidates,
     linkedDiscoveryStatus: linkedExpansion.stats.linked_discovery_status
@@ -1462,9 +1219,7 @@ async function runEnabled({
   const feedback = writeSourceDiscoveryFeedbackReport(root, date, buildSourceDiscoveryFeedbackReport({
     date,
     manualCandidates,
-    geminiCandidates: geminiAnnotatedCandidates,
-    mergedCandidates: evidence.annotatedCandidates,
-    proposalValidations: discovery.proposalValidationReport.validations
+    mergedCandidates: evidence.annotatedCandidates
   }));
   const mergedPayload = candidatePayload(date, evidence.annotatedCandidates, manualPayload);
   // Task 10: stage 1이 넘겨준 not_yet_eligible과 이번 병합 단계에서 새로 걸러낸 후보를 합쳐
@@ -1476,9 +1231,6 @@ async function runEnabled({
     stage1Payload: manualPayload,
     mergeStageNotYetEligible: mergeStageSplit.notYetEligible
   });
-  const geminiPayload = candidatePayload(date, geminiAnnotatedCandidates, {
-    failures: discovery.rejectedProposals
-  });
   const generatedAt = new Date().toISOString();
   const result = writeMergedCandidateArtifacts({
     root,
@@ -1487,10 +1239,8 @@ async function runEnabled({
     sourceCandidatePath,
     sourceManifestPath,
     seedPayload: seedExpansion?.seedPayload || null,
-    geminiPayload,
     generatedAt,
     mergeMode,
-    geminiCandidateCount: geminiPayload.candidates.length,
     llmUsed: true,
     seedUsed,
     status: 'PASS',
@@ -1498,7 +1248,6 @@ async function runEnabled({
     discoveryStats,
     reportRefs: {
       usage_report: geminiUsageReportRelPath(date),
-      proposal_validation_report: geminiSourceProposalValidationReportRelPath(date),
       source_quality_report: sourceQualityReportRelPath(date),
       source_quality_report_markdown: sourceQualityReportMarkdownRelPath(date),
       source_clusters: sourceClustersRelPath(date),
@@ -1512,26 +1261,15 @@ async function runEnabled({
     date,
     status: 'PASS',
     disabledPassThrough: false,
-    llmUsed: true,
-    geminiCandidateCount: geminiPayload.candidates.length,
     mergeMode,
     discoveryStats,
-    summary: sourceDiscoveryStatsSummary(discoveryStats, { llmUsed: true }),
     sourceCandidateRelPath,
-    proposalRelPath: geminiSourceProposalsRelPath(date),
-    proposalValidationReportRelPath: geminiSourceProposalValidationReportRelPath(date),
-    geminiCandidateRelPath: geminiCandidatesRelPath(date),
     mergedCandidateRelPath: mergedCandidatesRelPath(date),
     manifestRelPath: mergedCandidateManifestRelPath(date),
-    usageReportRelPath: geminiUsageReportRelPath(date),
-    sourceQualityReportRelPath: sourceQualityReportRelPath(date),
-    sourceClustersRelPath: sourceClustersRelPath(date),
-    evidenceValidationReportRelPath: evidenceValidationReportRelPath(date),
     seedEvidenceRefs: seedExpansion?.reportRefs || {},
     sourceDiscoveryFeedbackReportRelPath: feedback.jsonRelPath,
     sourceDiscoveryFeedbackReportMarkdownRelPath: feedback.markdownRelPath,
-    sourceDiscoveryFeedbackReport: feedback.report,
-    rejectedProposals: discovery.rejectedProposals
+    sourceDiscoveryFeedbackReport: feedback.report
   });
   const reportPath = writeReport(root, date, report);
 
@@ -1541,9 +1279,6 @@ async function runEnabled({
     candidate_count: mergedPayload.candidates.length,
     source_candidate_artifact: sourceCandidateRelPath,
     source_manifest: fs.existsSync(sourceManifestPath) ? rawCandidateManifestRelPath(date) : '',
-    gemini_source_proposals: geminiSourceProposalsRelPath(date),
-    proposal_validation_report: geminiSourceProposalValidationReportRelPath(date),
-    gemini_candidate_artifact: geminiCandidatesRelPath(date),
     merged_candidate_artifact: mergedCandidatesRelPath(date),
     merged_candidate_manifest: mergedCandidateManifestRelPath(date),
     seed_candidate_artifact: seedExpansion?.reportRefs?.seed_candidate_artifact || '',
@@ -1563,7 +1298,6 @@ async function run({
   date: inputDate = '',
   preflightOnly = false,
   dryRun = false,
-  proposalPayload = null,
   callLlmJsonBudgetedImpl = null,
   fetchImpl = globalThis.fetch,
   lookupImpl
@@ -1577,7 +1311,6 @@ async function run({
       env,
       date,
       preflightOnly,
-      proposalPayload,
       callLlmJsonBudgetedImpl,
       fetchImpl,
       lookupImpl
@@ -1632,7 +1365,6 @@ async function run({
   const discoveryStats = sourceDiscoveryCandidateStats({
     manualCandidates,
     seedCandidates: seedExpansion?.seedCandidates || [],
-    geminiCandidates: [],
     mergedCandidates
   });
   if (seedExpansion?.stats) {
@@ -1645,10 +1377,8 @@ async function run({
     sourceCandidatePath,
     sourceManifestPath,
     seedPayload: seedExpansion?.seedPayload || null,
-    geminiPayload: [],
     generatedAt,
     mergeMode,
-    geminiCandidateCount: 0,
     llmUsed: false,
     seedUsed,
     status: 'PASS',
@@ -1659,7 +1389,6 @@ async function run({
   const feedback = writeSourceDiscoveryFeedbackReport(root, date, buildSourceDiscoveryFeedbackReport({
     date,
     manualCandidates,
-    geminiCandidates: [],
     mergedCandidates
   }));
   const sourceCandidateRelPath = sourceCandidatePath.endsWith('manual-candidates.json')
@@ -1669,15 +1398,9 @@ async function run({
     date,
     status: 'PASS',
     disabledPassThrough: !seedUsed,
-    llmUsed: false,
-    geminiCandidateCount: 0,
     mergeMode,
     discoveryStats,
-    summary: seedUsed
-      ? 'Seed evidence expansion ran without Gemini; manual candidates were merged with approved seed evidence.'
-      : sourceDiscoveryStatsSummary(discoveryStats, { llmUsed: false }),
     sourceCandidateRelPath,
-    geminiCandidateRelPath: geminiCandidatesRelPath(date),
     mergedCandidateRelPath: mergedCandidatesRelPath(date),
     manifestRelPath: mergedCandidateManifestRelPath(date),
     seedEvidenceRefs: seedExpansion?.reportRefs || {},
@@ -1693,7 +1416,6 @@ async function run({
     candidate_count: candidateItems(payload).length,
     source_candidate_artifact: sourceCandidateRelPath,
     source_manifest: fs.existsSync(sourceManifestPath) ? rawCandidateManifestRelPath(date) : '',
-    gemini_candidate_artifact: geminiCandidatesRelPath(date),
     merged_candidate_artifact: mergedCandidatesRelPath(date),
     merged_candidate_manifest: mergedCandidateManifestRelPath(date),
     seed_candidate_artifact: seedExpansion?.reportRefs?.seed_candidate_artifact || '',
@@ -1735,9 +1457,7 @@ module.exports = {
   buildSourceDiscoveryFeedbackReport,
   findManualCandidatePath,
   mergeNotYetEligibleByUrl,
-  normalizeRejectedReason,
   parseArgs,
-  rejectedReasonSummary,
   renderReport,
   renderSourceDiscoveryFeedbackMarkdown,
   run,

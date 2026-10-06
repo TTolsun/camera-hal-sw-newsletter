@@ -108,7 +108,6 @@ Duplicate merge precedence(중복 병합 우선순위)는 field 단위로 고정
 - 충돌이 생기면 `articles/content/newsroom/<date>/seed-merge-report.json`과 `.md`에 기록합니다.
 
 - optional output: `articles/content/collected-news/<date>/merged-candidates.json`
-- Gemini discovery delta artifact: `articles/content/collected-news/<date>/gemini-candidates.json`
 - provenance manifest: `articles/content/collected-news/<date>/merged-candidate-manifest.json`
 - report: `articles/content/newsroom/<date>/gemini-source-discovery-report.md`
 
@@ -124,11 +123,9 @@ Stage 2를 실행하지 않는 경우입니다. 이때 Stage 3은 `manual-candid
 
 - `disabled_pass_through=true`
 - `llm_used=false`
-- `gemini_candidate_count=0`
-- `gemini_candidate_artifact=articles/content/collected-news/<date>/gemini-candidates.json`
 - `merge_mode=disabled_pass_through`
 
-disabled pass-through는 `gemini-candidates.json`을 정확히 빈 배열 `[]`로 씁니다. 이 파일은 Stage 2 boundary artifact일 뿐, Stage 3 generation의 input이 아닙니다.
+Gemini가 URL을 제안하고 승격하던 제안 단계는 #1186에서 제거했습니다. 그래서 Stage 2는 `gemini-candidates.json`, `gemini-source-proposals.json`, `gemini-source-proposal-validation-report.json`을 새로 쓰지 않고, manifest에도 `gemini_candidate_*`, `gemini_*_url_count`, `proposal_validation_report` 필드를 싣지 않습니다. 과거 호가 이미 커밋해 둔 제안 산출물은 지우지 않습니다.
 
 ### Enabled Gemini Source Discovery
 
@@ -136,11 +133,11 @@ disabled pass-through는 `gemini-candidates.json`을 정확히 빈 배열 `[]`�
 
 성공한 경우의 처리 순서:
 
-- Gemini의 응답은 `articles/content/newsroom/<date>/gemini-source-proposals.json` proposal artifact로 저장합니다.
-- proposal은 아직 candidate가 아닙니다. deterministic fetch / normalize / schema validation을 모두 통과한 URL만 `gemini-candidates.json`으로 승격합니다.
-- `gemini-candidates.json`에는 승격된 candidate만 담습니다.
-- `merged-candidates.json`은 manual candidates를 그대로 보존하고, schema가 유효한 Gemini candidates만 추가합니다.
-- v2 `merged-candidate-manifest.json`은 usage, proposal validation, quality, cluster, evidence report의 path를 포함합니다.
+- 승인된 seed가 있으면 seed evidence 확장을 먼저 결정론적으로 수행합니다(위 절).
+- linked evidence 확장: 수동 후보에 보존된 `outgoing_links` 중 아직 수집하지 않은 공식·등록 도메인 링크를 Gemini(`sourceDiscovery` 단계)가 뉴스레터 기사 가치로 판정하고, 고른 링크는 `origin=gemini_linked_discovery` 파생 후보가 됩니다. 추가 fetch는 하지 않고, 호출이 실패하거나 결과가 비어도 실행을 실패시키지 않습니다. 이 호출이 Stage 2의 유일한 LLM 호출이라서 `llm_used`는 계속 `true`입니다.
+- 파생 후보도 manual 후보와 같은 selection 게이트(source binding, dated evidence)를 그대로 통과해야 합니다.
+- `merged-candidates.json`은 manual candidates를 그대로 보존하고, seed로 보강한 후보와 schema가 유효한 linked 파생 후보만 추가합니다.
+- v2 `merged-candidate-manifest.json`은 usage, quality, cluster, evidence report의 path를 포함합니다.
 - manual candidates는 어떤 경우에도 자동으로 제외하지 않습니다.
 
 ## Stage 3 Final Generation

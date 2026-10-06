@@ -7,7 +7,6 @@ const { translationArtifactPaths } = require('../render/translation-state');
 const {
   collectionIntentRelPath,
   collectedCandidatesRelPath,
-  geminiCandidatesRelPath,
   manualCandidatesRelPath,
   mergedCandidateManifestRelPath,
   mergedCandidatesRelPath,
@@ -587,14 +586,17 @@ const DEBUG_RRC_PATHS = new Set([
   'seed-candidates.json',
   'seed-evidence-pack.json',
   // workflow 02 Gemini source discovery output files: strict-checked by validateMergedManifestSchema
-  // (usage_report, proposal_validation_report, source_clusters, evidence_validation_report fields)
+  // (usage_report, source_clusters, evidence_validation_report fields)
   // when llm_used=true or merge_mode='gemini_source_discovery'. Must be on main for workflow 03.
   'gemini-usage-report.json',
-  'gemini-source-proposals.json',
   'source-clusters.json',
   'evidence-validation-report.json',
-  'gemini-source-proposal-validation-report.json',
-  'extracted-source-facts.json'
+  'extracted-source-facts.json',
+  // #1186이 제안 단계를 제거해 두 파일을 더는 새로 쓰지 않는다. 과거 호가 이미 커밋해 둔 38+38개를
+  // debug_heavy로 재분류하면 check:artifact-retention이 위반으로 잡으므로 등급 목록과
+  // debugExactCatalog의 항목을 함께 남긴다. 과거 산출물은 지우지 않는다.
+  'gemini-source-proposals.json',
+  'gemini-source-proposal-validation-report.json'
 ]);
 
 function debugEntryRetentionGrade(relPath) {
@@ -610,7 +612,6 @@ function debugExactCatalog(date) {
     rawCandidateManifestRelPath(date),
     mergedCandidatesRelPath(date),
     mergedCandidateManifestRelPath(date),
-    geminiCandidatesRelPath(date),
     seedCandidatesRelPath(date),
     seedEvidencePackRelPath(date),
     seedFetchReportRelPath(date),

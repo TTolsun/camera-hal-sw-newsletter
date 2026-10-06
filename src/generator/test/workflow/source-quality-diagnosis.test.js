@@ -155,7 +155,9 @@ function diagnosisInputs(overrides = {}) {
   };
 }
 
-test('source quality diagnosis separates parser, taxonomy, fallback, and discovery causes', () => {
+// #1186: 제안 단계를 제거했으므로 입력에 남아 있는 옛 gemini_* 신호(과거 호의 manifest·feedback 값)는
+// 진단에 영향을 주지 않는다. diagnosisInputs()가 그 옛 필드를 일부러 계속 싣는다.
+test('source quality diagnosis separates parser, taxonomy and fallback causes and ignores the removed Gemini discovery signals', () => {
   const report = buildSourceQualityDiagnosisReport(diagnosisInputs());
 
   assert.equal(report.raw_candidate_count, 46);
@@ -163,7 +165,9 @@ test('source quality diagnosis separates parser, taxonomy, fallback, and discove
   assert.equal(report.diagnosis.parser_extraction_failure, true);
   assert.equal(report.diagnosis.taxonomy_missing, false);
   assert.equal(report.diagnosis.fallback_only_composition, true);
-  assert.equal(report.diagnosis.duplicate_or_noop_source_discovery, true);
+  assert.equal(Object.hasOwn(report.diagnosis, 'duplicate_or_noop_source_discovery'), false);
+  assert.equal(report.recommended_issues.some(issue => issue.action === 'REPAIR_SOURCE_DISCOVERY_DUPLICATES'), false);
+  assert.equal(Object.hasOwn(report.candidate_counts, 'gemini_new_unique_urls'), false);
   assert.equal(report.diagnosis.source_gap_risk, true);
   assert.equal(report.diagnosis.actual_news_shortage, false);
   assert.ok(report.diagnosis_reasons.parser_extraction_failure.length >= 1);
@@ -345,7 +349,17 @@ test('source quality diagnosis markdown renders Korean labels and recommended ac
   assert.match(markdown, /`parser_extraction_failure`/);
   assert.match(markdown, /소스 유지, 파서 수정/);
   assert.match(markdown, /`KEEP_AND_FIX_PARSER`/);
-  assert.match(markdown, /Source discovery 중복 또는 무효/);
+  assert.doesNotMatch(markdown, /Source discovery 중복 또는 무효|Gemini 신규 URL/);
+});
+
+test('Gemini proposal parser failures alone no longer raise parser_extraction_failure', () => {
+  const report = buildSourceQualityDiagnosisReport(diagnosisInputs({
+    sourceEffectivenessReport: { summary: {}, sources: [] },
+    sourceDiscoveryFeedbackReport: { parser_gap_count: 0, gemini_parser_failure_count: 3 },
+    candidates: []
+  }));
+
+  assert.equal(report.diagnosis.parser_extraction_failure, false);
 });
 
 test('source quality diagnosis writer produces partial report when optional artifacts are missing', () => {

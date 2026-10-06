@@ -361,15 +361,16 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage2, /node src\/discovery\/gemini-source-discovery-boundary\.js --date/);
   assert.doesNotMatch(stage2RunStep, /--preflight-only/);
   assert.match(stage2, /gemini-source-discovery-report\.md/);
-  assert.match(stage2, /gemini-source-proposals\.json/);
-  assert.match(stage2, /gemini-source-proposal-validation-report\.json/);
+  // #1186: 제안 단계를 제거했으므로 제안 산출물과 gemini-candidates.json은 디버그 업로드 목록에도 없다.
+  assert.doesNotMatch(stage2, /gemini-source-proposals\.json/);
+  assert.doesNotMatch(stage2, /gemini-source-proposal-validation-report\.json/);
+  assert.doesNotMatch(stage2, /gemini-candidates\.json/);
   assert.match(stage2, /gemini-usage-report\.json/);
   assert.match(stage2, /source-quality-report\.json/);
   assert.match(stage2, /source-clusters\.json/);
   assert.match(stage2, /evidence-validation-report\.json/);
   assert.match(stage2UploadStep, /source-discovery-feedback-report\.json/);
   assert.match(stage2UploadStep, /source-discovery-feedback-report\.md/);
-  assert.match(stage2, /gemini-candidates\.json/);
   assert.match(stage2, /merged-candidates\.json/);
   assert.match(stage2, /merged-candidate-manifest\.json/);
 

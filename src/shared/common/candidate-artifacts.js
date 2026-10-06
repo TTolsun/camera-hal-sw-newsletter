@@ -6,8 +6,6 @@ const {
   collectedCandidatesPath,
   collectedCandidatesRelPath,
   collectionIntentRelPath,
-  geminiCandidatesPath,
-  geminiCandidatesRelPath,
   manualCandidatesPath,
   manualCandidatesRelPath,
   mergedCandidateManifestPath,
@@ -127,14 +125,6 @@ function finalSelectionEligibility(candidate = {}) {
   return text(candidate.finalSelectionEligibility || candidate.final_selection_eligibility);
 }
 
-function isPublishableGeminiCandidate(candidate = {}) {
-  return candidate.origin === 'gemini_discovery' &&
-    Boolean(normalizedCandidateUrl(candidate)) &&
-    !boolTrue(candidate.source_gap_risk) &&
-    !boolFalse(candidate.main_eligible) &&
-    ['main', 'short'].includes(finalSelectionEligibility(candidate));
-}
-
 function isPublishableSeedCandidate(candidate = {}) {
   return candidate.origin === 'seed_url_evidence' &&
     Boolean(normalizedCandidateUrl(candidate)) &&
@@ -154,43 +144,22 @@ function isPublishableDerivedCandidate(candidate = {}) {
 function sourceDiscoveryCandidateStats({
   manualCandidates = [],
   seedCandidates = [],
-  geminiCandidates = [],
   derivedCandidates = [],
   mergedCandidates = [],
   linkedDiscoveryStatus = ''
 } = {}) {
   const manualRecords = Array.isArray(manualCandidates) ? manualCandidates : [];
   const seedRecords = Array.isArray(seedCandidates) ? seedCandidates : [];
-  const geminiRecords = Array.isArray(geminiCandidates) ? geminiCandidates : [];
   const mergedRecords = Array.isArray(mergedCandidates) ? mergedCandidates : [];
   const manualUrls = normalizedUrlSet(manualRecords);
   const seedUrls = normalizedUrlSet(seedRecords);
-  const geminiUrls = normalizedUrlSet(geminiRecords);
   const mergedUrls = normalizedUrlSet(mergedRecords);
-
-  let geminiNewUniqueUrlCount = 0;
-  let geminiManualDuplicateUrlCount = 0;
-  for (const url of geminiUrls) {
-    if (manualUrls.has(url)) {
-      geminiManualDuplicateUrlCount += 1;
-    } else {
-      geminiNewUniqueUrlCount += 1;
-    }
-  }
 
   const stats = {
     manual_candidate_count: manualRecords.length,
     manual_unique_url_count: manualUrls.size,
-    gemini_candidate_count: geminiRecords.length,
-    gemini_unique_url_count: geminiUrls.size,
-    gemini_new_unique_url_count: geminiNewUniqueUrlCount,
-    gemini_manual_duplicate_url_count: geminiManualDuplicateUrlCount,
-    gemini_duplicate_record_count: geminiRecords
-      .filter(candidate => manualUrls.has(normalizedCandidateUrl(candidate)))
-      .length,
     merged_candidate_count: mergedRecords.length,
-    merged_unique_url_count: mergedUrls.size,
-    gemini_publishable_candidate_count: geminiRecords.filter(isPublishableGeminiCandidate).length
+    merged_unique_url_count: mergedUrls.size
   };
   if (seedRecords.length > 0) {
     let seedNewUniqueUrlCount = 0;
@@ -232,19 +201,6 @@ function sourceDiscoveryCandidateStats({
   return stats;
 }
 
-function sourceDiscoveryStatsSummary(stats = {}, options = {}) {
-  if (options.llmUsed !== true) {
-    return 'Gemini source discovery was disabled; manual candidates were passed through.';
-  }
-  const newUniqueCount = Number(stats.gemini_new_unique_url_count || 0);
-  const publishableCount = Number(stats.gemini_publishable_candidate_count || 0);
-  const duplicateUrlCount = Number(stats.gemini_manual_duplicate_url_count || 0);
-  if (newUniqueCount === 0 && publishableCount === 0) {
-    return 'Gemini ran, but found no new unique publishable candidates.';
-  }
-  return `Gemini added ${newUniqueCount} new unique URL(s), ${publishableCount} publishable candidate(s), and ${duplicateUrlCount} manual-duplicate URL(s).`;
-}
-
 function isObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
@@ -272,7 +228,6 @@ function validateMergedManifestSchema(root, manifest, manifestRelPath, validatio
 
   const reportFields = [
     'usage_report',
-    'proposal_validation_report',
     'source_quality_report',
     'source_quality_report_markdown',
     'source_clusters',
@@ -571,10 +526,8 @@ function buildMergedCandidateManifest({
   sourceManifestPath = rawCandidateManifestPath(root, date),
   seedCandidatePath = seedCandidatesPath(root, date),
   seedEvidencePackFilePath = seedEvidencePackPath(root, date),
-  geminiCandidatePath = geminiCandidatesPath(root, date),
   generatedAt = new Date().toISOString(),
   mergeMode = 'disabled_pass_through',
-  geminiCandidateCount = 0,
   llmUsed = false,
   seedUsed = false,
   status = 'PASS',
@@ -601,9 +554,6 @@ function buildMergedCandidateManifest({
     source_candidate_artifact_hash: hashFileIfExists(sourceCandidatePath),
     source_manifest: fs.existsSync(sourceManifestPath) ? relPath(root, sourceManifestPath) : '',
     source_manifest_hash: hashFileIfExists(sourceManifestPath),
-    gemini_candidate_artifact: fs.existsSync(geminiCandidatePath) ? relPath(root, geminiCandidatePath) : '',
-    gemini_candidate_artifact_hash: hashFileIfExists(geminiCandidatePath),
-    gemini_candidate_count: geminiCandidateCount,
     llm_used: llmUsed,
     seed_used: seedUsed,
     github_run_id: process.env.GITHUB_RUN_ID || '',
@@ -614,7 +564,6 @@ function buildMergedCandidateManifest({
   }
   if (schemaVersion >= 2) {
     manifest.usage_report = reportRefs.usage_report || '';
-    manifest.proposal_validation_report = reportRefs.proposal_validation_report || '';
     manifest.source_quality_report = reportRefs.source_quality_report || '';
     manifest.source_quality_report_markdown = reportRefs.source_quality_report_markdown || '';
     manifest.source_clusters = reportRefs.source_clusters || '';
@@ -652,11 +601,9 @@ function writeMergedCandidateArtifacts({
   sourceManifestPath = rawCandidateManifestPath(root, date),
   seedCandidatePath = seedCandidatesPath(root, date),
   seedEvidencePackFilePath = seedEvidencePackPath(root, date),
-  geminiPayload = null,
   seedPayload = null,
   generatedAt = new Date().toISOString(),
   mergeMode = 'disabled_pass_through',
-  geminiCandidateCount = 0,
   llmUsed = false,
   seedUsed = false,
   status = 'PASS',
@@ -667,10 +614,6 @@ function writeMergedCandidateArtifacts({
 } = {}) {
   const mergedPath = mergedCandidatesPath(root, date);
   writeJson(mergedPath, payload);
-  const geminiPath = geminiCandidatesPath(root, date);
-  if (geminiPayload !== null) {
-    writeJson(geminiPath, geminiPayload);
-  }
   const seedPath = seedCandidatePath;
   if (seedPayload !== null) {
     writeJson(seedPath, seedPayload);
@@ -685,10 +628,8 @@ function writeMergedCandidateArtifacts({
     sourceManifestPath,
     seedCandidatePath: seedPath,
     seedEvidencePackFilePath,
-    geminiCandidatePath: geminiPath,
     generatedAt,
     mergeMode,
-    geminiCandidateCount,
     llmUsed,
     seedUsed,
     status,
@@ -702,7 +643,6 @@ function writeMergedCandidateArtifacts({
   return {
     mergedPath,
     seedPath: seedPayload !== null ? seedPath : '',
-    geminiPath: geminiPayload !== null ? geminiPath : '',
     manifestPath,
     manifest
   };
@@ -952,14 +892,12 @@ module.exports = {
   hashFile,
   resolveCandidateInputArtifact,
   sourceDiscoveryCandidateStats,
-  sourceDiscoveryStatsSummary,
   validateCandidateArtifact,
   writeManualCandidateArtifacts,
   writeMergedCandidateArtifacts,
   collectionIntentRelPath,
   collectedCandidatesRelPath,
   manualCandidatesRelPath,
-  geminiCandidatesRelPath,
   mergedCandidateManifestRelPath,
   mergedCandidatesRelPath,
   rawCandidateManifestRelPath,

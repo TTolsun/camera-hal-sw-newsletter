@@ -56,7 +56,8 @@ const ACTIONABLE_SOURCE_ACTIONS = new Set([
 //
 // `duplicate_or_noop_source_discovery`: 재계산 가능한 23회 모두 참이다. 이 진단이 켜지는 조건
 // 하나(수동 후보와 겹치는 URL이 1건 이상)는 31회 모두 참이라, 연결하면 매 실행 같은 draft가
-// 나온다. owner 결정으로 초안 대상에서 빼고 #1180에서 원인 쪽을 다룬다.
+// 나온다. owner 결정으로 초안 대상에서 뺐고, 원인인 제안 단계는 #1186이 제거했다. 새 진단에는 이 키가
+// 없지만 과거 호가 커밋한 진단에는 남아 있어 이 모듈이 계속 읽으므로 초안 대상에서 뺀 채로 둔다.
 const DIAGNOSIS_FILE = 'source-quality-diagnosis.json';
 
 const TAXONOMY_DRAFT = {

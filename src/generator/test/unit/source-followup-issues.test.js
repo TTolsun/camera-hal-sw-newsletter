@@ -51,7 +51,8 @@ const TAXONOMY_REASON = '3 camera-relevant candidate(s) were not mapped to a kno
 // taxonomyMissingLastRuns 만큼의 최근 회차에만 참으로 둔다.
 //
 // duplicate_or_noop_source_discovery는 모든 회차에서 참으로 둔다. 커밋된 31회분의 기록이
-// 전부 그렇고(#1180), 그래도 draft가 나오지 않아야 한다는 것이 이 파일의 전제다.
+// 전부 그렇고(#1180), 그래도 draft가 나오지 않아야 한다는 것이 이 파일의 전제다. #1186 이후의
+// 새 진단에는 이 키가 없지만, 과거 호의 커밋된 진단을 계속 읽으므로 이 모양을 그대로 둔다.
 function stageRuns(root, {
   sourceRows = [],
   recommendedIssues = [],

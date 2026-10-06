@@ -182,7 +182,6 @@ jobs:
         with:
           name: newsroom-source-discovery-debug-${{ github.run_id }}
           path: |
-            articles/content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-candidates.json
             articles/content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/seed-candidates.json
             articles/content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/seed-evidence-pack.json
             articles/content/collected-news/${{ steps.resolve-newsletter-date.outputs.date }}/merged-candidates.json
@@ -192,8 +191,6 @@ jobs:
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-evidence-pack.md
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-merge-report.json
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/seed-merge-report.md
-            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-proposals.json
-            articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-source-proposal-validation-report.json
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/gemini-usage-report.json
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/extracted-source-facts.json
             articles/content/newsroom/${{ steps.resolve-newsletter-date.outputs.date }}/source-quality-report.json

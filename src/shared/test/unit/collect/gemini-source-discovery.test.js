@@ -6,7 +6,6 @@ const test = require('node:test');
 
 const {
   collectionIntentPath,
-  geminiCandidatesPath,
   manualCandidatesPath,
   mergedCandidateManifestPath,
   mergedCandidatesPath,
@@ -26,19 +25,11 @@ const {
   splitMergeStageNotYetEligible
 } = require('../../../../discovery/gemini-source-discovery-boundary');
 const {
-  buildProposalPrompt,
-  promoteProposalUrls
-} = require('../../../../discovery/gemini-source-discovery');
-const {
   calculateSourceQuality
 } = require('../../../../discovery/score-source-candidates');
 const {
-  sourceDiscoveryCandidateStats,
-  sourceDiscoveryStatsSummary
+  sourceDiscoveryCandidateStats
 } = require('../../../common/candidate-artifacts');
-const {
-  readTextFixture
-} = require('../../helpers/fixture-loader');
 
 function registry() {
   return {
@@ -114,64 +105,112 @@ function candidatePayload(date = '2026-05-16') {
   };
 }
 
-function proposal(proposalId) {
-  return {
-    schema_version: 1,
-    proposal_type: 'gemini_source_discovery',
-    newsletter_date: '2026-05-16',
-    proposals: [{
-      proposal_id: proposalId,
-      topic_gap: 'CameraX release notes',
-      source_family: 'official_android',
-      candidate_urls: ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1'],
-      search_keywords: ['CameraX'],
-      expected_evidence: ['published date'],
-      risk_notes: []
-    }]
+// #1186: 제안 단계(LLM이 URL을 제안하고 승격하는 경로)를 제거했다. 남은 LLM 호출은 linked evidence
+// 선택 하나뿐이고, 제안 산출물은 새로 쓰지 않는다. llm_used는 그대로 true라서 Stage 3 strict
+// 검증이 manifest의 필수 report 항목을 요구한다 — 제안 report를 쓰지 않으면서 그 항목이 남아
+// 있으면 그 주 발행이 terminal failure로 끝난다. 그래서 manifest 검증까지 함께 잠근다.
+test('enabled boundary makes only the linked evidence LLM call and writes no proposal artifacts', async () => {
+  const root = tempRoot();
+  const date = '2026-05-16';
+  const payload = {
+    ...candidatePayload(date),
+    coverage: {
+      coverage_week_key: '2026-W19',
+      coverage_start_date: '2026-05-04',
+      coverage_end_date: '2026-05-10',
+      coverage_end_exclusive_at: '2026-05-11T00:00:00.000Z'
+    },
+    not_yet_eligible: [],
+    carry_forward_status: 'not_applicable'
   };
-}
+  payload.candidates[0].outgoing_links = [{
+    url: 'https://github.com/androidx/androidx/releases/tag/camera-1.6.1',
+    text: 'CameraX 1.6.1 release',
+    source_field: 'rss.body',
+    extraction_method: 'html_anchor'
+  }];
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
 
-function proposalWithUrls(proposalId, candidateUrls = []) {
-  const payload = proposal(proposalId);
-  return {
-    ...payload,
-    proposals: [{
-      ...payload.proposals[0],
-      candidate_urls: candidateUrls
-    }]
-  };
-}
-
-async function fetchOk() {
-  return {
-    ok: true,
-    text: async () => readTextFixture('source-html/camerax-release-notes-live-structure.html')
-  };
-}
-
-async function fetchWithoutParserEvidence() {
-  return {
-    ok: true,
-    text: async () => '<html><head><title>CameraX release notes</title><meta name="datePublished" content="2026-05-15"></head></html>'
-  };
-}
-
-test('source discovery prompt includes official Android media scope and rejection guardrails', () => {
-  const prompt = buildProposalPrompt({
-    date: '2026-05-16',
-    manualCandidates: [],
-    sourceRegistry: registry()
+  const prompts = [];
+  const result = await runSourceDiscoveryBoundary({
+    root,
+    date,
+    env: {
+      NEWSLETTER_DATE: date,
+      NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true',
+      GEMINI_API_KEY: 'test-key',
+      GEMINI_RETRY_DELAYS_MS: '0'
+    },
+    callLlmJsonBudgetedImpl: async (_stage, _system, prompt, _schema, options = {}) => {
+      prompts.push(prompt);
+      options.budget.mergeDiagnostics({
+        model_usage: {
+          'source_discovery#0': {
+            stage_key: 'source_discovery#0',
+            stage_id: 'source_discovery',
+            quality_attempt: 0,
+            label: 'sourceDiscovery',
+            parent_run_key: null,
+            models: { fake: { requests: 1, successes: 1 } }
+          }
+        },
+        cost_report: { calls: [{ stage_key: 'source_discovery#0', stage_id: 'source_discovery', model: 'fake' }] }
+      });
+      return {
+        selections: [{
+          url: 'https://github.com/androidx/androidx/releases/tag/camera-1.6.1',
+          is_newsworthy: true,
+          reason: 'CameraX release'
+        }]
+      };
+    },
+    fetchImpl: async () => ({ ok: false, status: 404, text: async () => '' })
   });
 
-  assert.match(prompt, /Official Android media\/camera-output discovery intent/);
-  assert.match(prompt, /Media3 release notes/);
-  assert.match(prompt, /MediaCodec/);
-  assert.match(prompt, /Photo Picker/);
-  assert.match(prompt, /camera-output\/media-pipeline relevance/);
-  assert.match(prompt, /official source quality만으로 topic relevance를 우회하지 마세요/);
-  assert.match(prompt, /Reference docs\(MediaCodec, MediaRecorder, MediaStore, Photo Picker training docs, supported formats\)/);
-  assert.match(prompt, /generic playback\/player-only/);
-  assert.match(prompt, /audio-only/);
+  assert.equal(result.status, 'PASS');
+  assert.equal(prompts.length, 1, '제안 호출이 남아 있으면 LLM 호출이 2회가 된다');
+  assert.match(prompts[0], /linked evidence URL/);
+
+  const collectedDir = path.join(root, 'articles', 'content', 'collected-news', date);
+  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
+  assert.equal(fs.existsSync(path.join(collectedDir, 'gemini-candidates.json')), false);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'gemini-source-proposals.json')), false);
+  assert.equal(fs.existsSync(path.join(newsroomDir, 'gemini-source-proposal-validation-report.json')), false);
+  assert.equal(result.gemini_candidate_artifact, undefined);
+  assert.equal(result.gemini_source_proposals, undefined);
+  assert.equal(result.proposal_validation_report, undefined);
+
+  const merged = readJson(mergedCandidatesPath(root, date));
+  assert.deepEqual(merged.candidates.map(item => item.origin || 'manual'), ['manual', 'gemini_linked_discovery']);
+
+  const manifest = readJson(mergedCandidateManifestPath(root, date));
+  assert.equal(manifest.llm_used, true);
+  assert.equal(manifest.merge_mode, 'gemini_source_discovery');
+  assert.equal(manifest.derived_candidate_count, 1);
+  for (const field of [
+    'proposal_validation_report',
+    'gemini_candidate_artifact',
+    'gemini_candidate_artifact_hash',
+    'gemini_candidate_count',
+    'gemini_new_unique_url_count',
+    'gemini_publishable_candidate_count'
+  ]) {
+    assert.equal(Object.prototype.hasOwnProperty.call(manifest, field), false, `${field}는 더 이상 manifest에 없어야 한다`);
+  }
+  const usage = readJson(path.join(newsroomDir, 'gemini-usage-report.json'));
+  assert.equal(usage.calls.length, 1);
+
+  const validated = validateCandidateArtifact({
+    root,
+    date,
+    candidatePath: mergedCandidatesPath(root, date),
+    manifestPath: mergedCandidateManifestPath(root, date),
+    requireManifest: true,
+    validationMode: 'strict',
+    expectedManifestType: 'merged_candidate',
+    expectedLlmUsed: 'any'
+  });
+  assert.equal(validated.validation_status, 'validated');
 });
 
 test('enabled boundary writes seed-only artifacts when Gemini credentials are missing after approved seed expansion', async () => {
@@ -215,7 +254,7 @@ test('enabled boundary writes seed-only artifacts when Gemini credentials are mi
   assert.equal(result.status_detail, SEED_ONLY_LLM_CREDENTIALS_MISSING);
   assert.equal(fs.existsSync(seedCandidatesPath(root, date)), true);
   assert.equal(fs.existsSync(seedEvidencePackPath(root, date)), true);
-  assert.equal(fs.existsSync(geminiCandidatesPath(root, date)), true);
+  assert.equal(fs.existsSync(path.join(root, 'articles', 'content', 'collected-news', date, 'gemini-candidates.json')), false);
   const manifest = readJson(mergedCandidateManifestPath(root, date));
   assert.equal(manifest.status, 'PASS');
   assert.equal(manifest.status_detail, SEED_ONLY_LLM_CREDENTIALS_MISSING);
@@ -241,19 +280,32 @@ test('merge-stage overflow promotes carry_forward_status to overflow even when s
   // Stage 1 finished healthy and under the not-yet-eligible cap (60) -- the merge stage is the
   // only place this run overflows, so a regression that forgets to re-derive
   // carry_forward_status after the merge-stage cap would leave this 'loaded' value in place.
-  payload.not_yet_eligible = [];
+  payload.not_yet_eligible = Array.from({ length: 58 }, (_, index) => ({
+    title: `Stage 1 not-yet-eligible ${index}`,
+    url: `https://developer.android.com/stage1-notyet-${index}`,
+    publishedAt: '2099-02-01',
+    published_date: '2099-02-01'
+  }));
   payload.not_yet_eligible_overflow = false;
   payload.carry_forward_status = 'loaded';
-  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
 
-  // 65 Gemini-discovered URLs dated after the coverage window -- splitMergeStageNotYetEligible
-  // classifies every one of them as not_yet_eligible, which pushes the merge-stage cap (60) into
-  // overflow purely from candidates the merge stage itself introduced.
-  const overflowUrls = Array.from(
-    { length: 65 },
-    (_, index) => `https://developer.android.com/notyet-eligible-${index}`
+  // stage 1은 상한(60)보다 2건 모자란 58건을 넘겼고(overflow=false), 병합 단계가 seed 근거 확장으로
+  // coverage 이후 날짜의 seed 후보를 4건 새로 더한다. 62건이 상한을 넘기는 곳은 병합 단계뿐이다.
+  const seedUrls = Array.from(
+    { length: 4 },
+    (_, index) => `https://developer.android.com/notyet-eligible-seed-${index}`
   );
-  const proposalPayload = proposalWithUrls('overflow-proposal', overflowUrls);
+  writeJson(collectionIntentPath(root, date), {
+    schema_version: 1,
+    newsletter_date: date,
+    seed_urls: seedUrls.map((url, index) => ({
+      seed_id: `seed-${index}`,
+      url,
+      expected_topic: 'CameraX release notes'
+    })),
+    keyword_hints: []
+  });
+  writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
 
   const result = await runSourceDiscoveryBoundary({
     root,
@@ -263,17 +315,8 @@ test('merge-stage overflow promotes carry_forward_status to overflow even when s
       NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY: 'true',
       GEMINI_API_KEY: 'test-key'
     },
-    proposalPayload,
     lookupImpl: async () => [{ address: '93.184.216.34', family: 4 }],
-    fetchImpl: async (url) => ({
-      ok: true,
-      status: 200,
-      url,
-      headers: { get: () => '' },
-      text: async () => '<html><head><title>Future camera signal</title>' +
-        '<meta name="datePublished" content="2099-01-01"></head>' +
-        '<body>2099-01-01 candidate dated after this week\'s coverage window.</body></html>'
-    })
+    fetchImpl: fetchFutureDatedSeedPage
   });
 
   assert.equal(result.status, 'PASS');
@@ -290,7 +333,7 @@ test('enabled boundary without seed keeps missing credential path strictly no-mu
   const date = '2026-05-16';
   const payload = candidatePayload(date);
   writeManualCandidateArtifacts({ root, date, payload, sourceCount: 1 });
-  writeMergedCandidateArtifacts({ root, date, payload, geminiPayload: [] });
+  writeMergedCandidateArtifacts({ root, date, payload });
   const beforeMerged = fs.readFileSync(mergedCandidatesPath(root, date), 'utf8');
   const beforeManifest = fs.readFileSync(mergedCandidateManifestPath(root, date), 'utf8');
 
@@ -314,116 +357,6 @@ test('enabled boundary without seed keeps missing credential path strictly no-mu
   assert.equal(fs.existsSync(manualCandidatesPath(root, date)), true);
 });
 
-test('promoted Gemini candidate id is stable for the normalized URL across proposal ids', async () => {
-  const first = await promoteProposalUrls({
-    proposalPayload: proposal('proposal-a'),
-    sourceRegistry: registry(),
-    fetchImpl: fetchOk
-  });
-  const second = await promoteProposalUrls({
-    proposalPayload: proposal('proposal-b'),
-    sourceRegistry: registry(),
-    fetchImpl: fetchOk
-  });
-
-  assert.equal(first.promoted.length, 1);
-  assert.equal(second.promoted.length, 1);
-  assert.equal(first.promoted[0].id, second.promoted[0].id);
-  assert.equal(first.promoted[0].source_candidate_id, second.promoted[0].source_candidate_id);
-  assert.equal(first.promoted[0].source_id, 'camerax-release-notes');
-  assert.equal(first.promoted[0].source_gap_risk, false);
-  assert.equal(first.promoted[0].source_extraction.mode, 'versioned_release_row');
-  assert.equal(first.promoted[0].source_extraction.extraction_quality.used_versioned_release_row_extractor, true);
-  assert.deepEqual(
-    first.promoted[0].source_extraction.bullets,
-    first.promoted[0].source_extraction.release.sections.flatMap(section => section.items.map(item => item.text))
-  );
-  assert.equal(first.promoted[0].proposal_id, 'proposal-a');
-  assert.equal(second.promoted[0].proposal_trace_id, 'proposal-b');
-});
-
-test('release-note URL matching tolerates trailing slash before fragment', async () => {
-  const result = await promoteProposalUrls({
-    proposalPayload: proposalWithUrls('proposal-trailing-slash', [
-      'https://developer.android.com/jetpack/androidx/releases/camera/#1.6.1'
-    ]),
-    sourceRegistry: registry(),
-    fetchImpl: fetchOk
-  });
-
-  assert.equal(result.promoted.length, 1);
-  assert.equal(result.promoted[0].source_id, 'camerax-release-notes');
-  assert.equal(result.validationReport[0].extraction_status, 'parser_extracted');
-});
-
-test('release-note URL matching strips Android hl query before anchor comparison', async () => {
-  const result = await promoteProposalUrls({
-    proposalPayload: proposalWithUrls('proposal-hl-query', [
-      'https://developer.android.com/jetpack/androidx/releases/camera?hl=ko#1.6.1'
-    ]),
-    sourceRegistry: registry(),
-    fetchImpl: fetchOk
-  });
-
-  assert.equal(result.promoted.length, 1);
-  assert.equal(result.promoted[0].source_id, 'camerax-release-notes');
-  assert.equal(result.validationReport[0].source_policy_match, 'camerax-release-notes');
-});
-
-test('source matching selects CameraX release notes regardless of registry order', async () => {
-  const result = await promoteProposalUrls({
-    proposalPayload: proposal('proposal-order'),
-    sourceRegistry: {
-      sources: [...registry().sources].reverse()
-    },
-    fetchImpl: fetchOk
-  });
-
-  assert.equal(result.promoted.length, 1);
-  assert.equal(result.promoted[0].source_id, 'camerax-release-notes');
-  assert.equal(result.validationReport[0].source_policy_match, 'camerax-release-notes');
-});
-
-test('proposal validation report records accepted and rejected URL decisions', async () => {
-  const result = await promoteProposalUrls({
-    proposalPayload: proposalWithUrls('proposal-a', [
-      'https://developer.android.com/jetpack/androidx/releases/camera#1.6.1',
-      'https://example.com/not-allowed'
-    ]),
-    sourceRegistry: registry(),
-    fetchImpl: fetchOk
-  });
-
-  assert.equal(result.validationReport.length, 2);
-  assert.deepEqual(
-    result.validationReport.map(item => [item.normalized_url || item.candidate_url, item.accepted, item.rejected_reason]),
-    [
-      ['https://developer.android.com/jetpack/androidx/releases/camera#1.6.1', true, ''],
-      ['https://example.com/not-allowed', false, 'domain_not_allowed']
-    ]
-  );
-  assert.equal(result.validationReport[0].extraction_status, 'parser_extracted');
-  assert.equal(result.validationReport[0].adapter_hint, 'android-developers-jetpack-release');
-});
-
-test('release-note source discovery blocks shallow promotion when parser extraction fails', async () => {
-  const result = await promoteProposalUrls({
-    proposalPayload: proposal('proposal-a'),
-    sourceRegistry: registry(),
-    fetchImpl: fetchWithoutParserEvidence
-  });
-
-  assert.equal(result.promoted.length, 0);
-  assert.equal(result.rejected.length, 1);
-  assert.equal(result.rejected[0].rejected_reason, 'discovered_not_extractable');
-  assert.equal(result.rejected[0].discovery_status, 'discovered');
-  assert.equal(result.rejected[0].extraction_status, 'discovered_not_extractable');
-  assert.equal(result.rejected[0].adapter_hint, 'android-developers-jetpack-release');
-  assert.equal(result.validationReport[0].accepted, false);
-  assert.equal(result.validationReport[0].rejected_reason, 'discovered_not_extractable');
-  assert.equal(result.validationReport[0].suggested_fixture_case.includes('CameraX release-note fixture'), true);
-});
-
 test('source gap risk has bucket precedence over high numeric source quality', () => {
   const item = calculateSourceQuality({
     id: 'source-gap',
@@ -442,34 +375,11 @@ test('source gap risk has bucket precedence over high numeric source quality', (
   assert.equal(item.source_quality_bucket, 'blocked_candidate');
 });
 
-test('source discovery stats separate Gemini records, unique URLs, and manual duplicates', () => {
+test('source discovery stats count manual and merged URLs without any Gemini proposal fields', () => {
   const stats = sourceDiscoveryCandidateStats({
     manualCandidates: [
       { url: 'https://example.com/a' },
       { url: 'https://example.com/b' }
-    ],
-    geminiCandidates: [
-      {
-        url: 'https://example.com/a',
-        origin: 'gemini_discovery',
-        finalSelectionEligibility: 'watchlist',
-        source_gap_risk: true,
-        main_eligible: false
-      },
-      {
-        url: 'https://example.com/c',
-        origin: 'gemini_discovery',
-        finalSelectionEligibility: 'main',
-        source_gap_risk: false,
-        main_eligible: true
-      },
-      {
-        url: 'https://example.com/c',
-        origin: 'gemini_discovery',
-        final_selection_eligibility: 'short',
-        source_gap_risk: false,
-        main_eligible: true
-      }
     ],
     mergedCandidates: [
       { url: 'https://example.com/a' },
@@ -480,21 +390,16 @@ test('source discovery stats separate Gemini records, unique URLs, and manual du
     ]
   });
 
+  // 제안 단계(#1186)와 함께 gemini_* 통계를 모두 없앴다. 키 집합을 통째로 고정한다.
   assert.deepEqual(stats, {
     manual_candidate_count: 2,
     manual_unique_url_count: 2,
-    gemini_candidate_count: 3,
-    gemini_unique_url_count: 2,
-    gemini_new_unique_url_count: 1,
-    gemini_manual_duplicate_url_count: 1,
-    gemini_duplicate_record_count: 1,
     merged_candidate_count: 5,
-    merged_unique_url_count: 3,
-    gemini_publishable_candidate_count: 2
+    merged_unique_url_count: 3
   });
 });
 
-test('source discovery stats separate seed evidence records from Gemini records', () => {
+test('source discovery stats separate seed evidence records', () => {
   const stats = sourceDiscoveryCandidateStats({
     manualCandidates: [
       { url: 'https://example.com/a' }
@@ -516,19 +421,9 @@ test('source discovery stats separate seed evidence records from Gemini records'
         main_eligible: false
       }
     ],
-    geminiCandidates: [
-      {
-        url: 'https://example.com/c',
-        origin: 'gemini_discovery',
-        finalSelectionEligibility: 'short',
-        source_gap_risk: false,
-        main_eligible: true
-      }
-    ],
     mergedCandidates: [
       { url: 'https://example.com/a' },
-      { url: 'https://example.com/b' },
-      { url: 'https://example.com/c' }
+      { url: 'https://example.com/b' }
     ]
   });
 
@@ -538,8 +433,6 @@ test('source discovery stats separate seed evidence records from Gemini records'
   assert.equal(stats.seed_enriched_duplicate_count, 1);
   assert.equal(stats.seed_publishable_candidate_count, 1);
   assert.equal(stats.seed_primary_evidence_count, 1);
-  assert.equal(stats.gemini_candidate_count, 1);
-  assert.equal(stats.gemini_new_unique_url_count, 1);
 });
 
 test('source discovery stats report linked evidence derived candidates only when status is provided', () => {
@@ -582,60 +475,29 @@ test('source discovery stats report linked evidence derived candidates only when
   assert.equal(stats.derived_publishable_candidate_count, 1);
 });
 
-test('source discovery summary reports no new publishable Gemini candidates distinctly from duplicate URLs', () => {
-  const stats = sourceDiscoveryCandidateStats({
-    manualCandidates: [
-      { url: 'https://example.com/a' },
-      { url: 'https://example.com/b' },
-      { url: 'https://example.com/c' },
-      { url: 'https://example.com/d' },
-      { url: 'https://example.com/e' },
-      { url: 'https://example.com/f' }
-    ],
-    geminiCandidates: ['a', 'b', 'c', 'd', 'e', 'f'].map(item => ({
-      url: `https://example.com/${item}`,
-      origin: 'gemini_discovery',
-      finalSelectionEligibility: 'watchlist',
-      source_gap_risk: true,
-      main_eligible: false
-    })),
-    mergedCandidates: []
-  });
-
-  assert.equal(stats.gemini_candidate_count, 6);
-  assert.equal(stats.gemini_unique_url_count, 6);
-  assert.equal(stats.gemini_new_unique_url_count, 0);
-  assert.equal(stats.gemini_manual_duplicate_url_count, 6);
-  assert.equal(stats.gemini_duplicate_record_count, 6);
-  assert.equal(stats.gemini_publishable_candidate_count, 0);
-  assert.equal(
-    sourceDiscoveryStatsSummary(stats, { llmUsed: true }),
-    'Gemini ran, but found no new unique publishable candidates.'
-  );
-});
-
-test('source discovery stats use URL aliases and exclude URL-less Gemini candidates from publishable count', () => {
+test('source discovery stats use URL aliases for manual, seed and derived candidates', () => {
   const stats = sourceDiscoveryCandidateStats({
     manualCandidates: [
       { source_candidate_url: 'https://example.com/a' }
     ],
-    geminiCandidates: [
+    seedCandidates: [
       {
         articleUrl: 'https://example.com/a',
-        origin: 'gemini_discovery',
+        origin: 'seed_url_evidence',
         finalSelectionEligibility: 'main',
         source_gap_risk: false,
         main_eligible: true
       },
       {
         normalized_url: 'https://example.com/b',
-        origin: 'gemini_discovery',
+        origin: 'seed_url_evidence',
         final_selection_eligibility: 'short',
         source_gap_risk: false,
         main_eligible: true
       },
       {
-        origin: 'gemini_discovery',
+        // URL이 없는 후보는 publishable로 세지 않는다.
+        origin: 'seed_url_evidence',
         finalSelectionEligibility: 'main',
         source_gap_risk: false,
         main_eligible: true
@@ -649,14 +511,13 @@ test('source discovery stats use URL aliases and exclude URL-less Gemini candida
 
   assert.equal(stats.manual_candidate_count, 1);
   assert.equal(stats.manual_unique_url_count, 1);
-  assert.equal(stats.gemini_candidate_count, 3);
-  assert.equal(stats.gemini_unique_url_count, 2);
-  assert.equal(stats.gemini_new_unique_url_count, 1);
-  assert.equal(stats.gemini_manual_duplicate_url_count, 1);
-  assert.equal(stats.gemini_duplicate_record_count, 1);
+  assert.equal(stats.seed_candidate_count, 3);
+  assert.equal(stats.seed_unique_url_count, 2);
+  assert.equal(stats.seed_new_unique_url_count, 1);
+  assert.equal(stats.seed_enriched_duplicate_count, 1);
+  assert.equal(stats.seed_publishable_candidate_count, 2);
   assert.equal(stats.merged_candidate_count, 2);
   assert.equal(stats.merged_unique_url_count, 2);
-  assert.equal(stats.gemini_publishable_candidate_count, 2);
 });
 
 test('merge-stage not-yet-eligible split keeps manual-origin candidates regardless of date', () => {
@@ -672,15 +533,23 @@ test('merge-stage not-yet-eligible split keeps manual-origin candidates regardle
     publishedAt: '2026-05-01'
     // origin is absent, as stage 1 manual/carry candidates carry no discovery origin tag.
   };
-  const geminiPastDated = {
-    url: 'https://example.com/gemini-past',
-    title: 'Gemini candidate published inside the coverage window',
-    origin: 'gemini_discovery',
+  const linkedPastDated = {
+    url: 'https://example.com/linked-past',
+    title: 'Linked discovery candidate published inside the coverage window',
+    origin: 'gemini_linked_discovery',
     publishedAt: '2026-04-22'
   };
-  const geminiFutureDated = {
-    url: 'https://example.com/gemini-future',
-    title: 'Gemini candidate published after coverage end',
+  const linkedFutureDated = {
+    url: 'https://example.com/linked-future',
+    title: 'Linked discovery candidate published after coverage end',
+    origin: 'gemini_linked_discovery',
+    publishedAt: '2026-05-01'
+  };
+  // 제안 단계(#1186)가 만들던 옛 origin이다. 병합 단계가 새로 만드는 후보가 아니므로 날짜와 무관하게
+  // 거르지 않는다 — carry-forward로 들어온 옛 후보는 stage 1이 이미 경계를 적용했다.
+  const legacyProposalFutureDated = {
+    url: 'https://example.com/legacy-proposal-future',
+    title: 'Legacy proposal-stage candidate carried forward',
     origin: 'gemini_discovery',
     publishedAt: '2026-05-01'
   };
@@ -699,17 +568,17 @@ test('merge-stage not-yet-eligible split keeps manual-origin candidates regardle
   };
 
   const { eligible, notYetEligible } = splitMergeStageNotYetEligible(
-    [manualFutureDated, geminiPastDated, geminiFutureDated, seedFutureDated, linkedUndated],
+    [manualFutureDated, linkedPastDated, linkedFutureDated, seedFutureDated, linkedUndated, legacyProposalFutureDated],
     coverage
   );
 
-  assert.deepEqual(notYetEligible, [geminiFutureDated, seedFutureDated]);
-  assert.deepEqual(eligible, [manualFutureDated, geminiPastDated, linkedUndated]);
+  assert.deepEqual(notYetEligible, [linkedFutureDated, seedFutureDated]);
+  assert.deepEqual(eligible, [manualFutureDated, linkedPastDated, linkedUndated, legacyProposalFutureDated]);
 });
 
 test('merge-stage not-yet-eligible split skips filtering entirely without a coverage object', () => {
   const candidates = [
-    { url: 'https://example.com/a', origin: 'gemini_discovery', publishedAt: '2099-01-01' }
+    { url: 'https://example.com/a', origin: 'seed_url_evidence', publishedAt: '2099-01-01' }
   ];
   assert.deepEqual(splitMergeStageNotYetEligible(candidates, null), {
     eligible: candidates,
@@ -910,13 +779,7 @@ test('disabled pass-through path moves future-dated seed candidates to not_yet_e
   assertSeedCandidateCarriedForward(root);
 });
 
-test('discovery receives all 50 collector candidates and bounds oversized inputs', () => {
-  const candidates = Array.from({ length: 51 }, (_, i) => ({
-    title: `candidate-${i + 1}`, url: `https://example.com/article-${i + 1}`
-  }));
-  const prompt = buildProposalPrompt({ date: '2026-09-28', manualCandidates: candidates });
-  assert.ok(prompt.includes('https://example.com/article-50'));
-  assert.ok(!prompt.includes('https://example.com/article-51'));
+test('collector hands at most 50 final candidates to the later stages', () => {
   const { MAX_FINAL_CANDIDATES } = require('../../../cli/collect-news-candidates');
   assert.equal(MAX_FINAL_CANDIDATES, 50);
 });

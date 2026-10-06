@@ -15,10 +15,10 @@
 
 ## 02 PR 읽는 순서
 
-1. `최종 판단`에서 Gemini discovery가 새 publishable 후보를 찾았는지 확인합니다.
-2. `주요 결과`에서 manual/Gemini/신규/publishable/중복 후보 수를 봅니다.
+1. `최종 판단`에서 seed 근거 확장이나 linked evidence 파생이 새 publishable 후보를 더했는지 확인합니다. 새 후보가 없는 주는 manual 후보만으로 03을 진행하는 정상 상태입니다.
+2. `주요 결과`에서 manual/linked 파생/seed/publishable 후보 수를 봅니다.
 3. parser/source/taxonomy gap 요약을 보고 source 보강 또는 parser fixture 보완이 필요한지 판단합니다.
-4. 원본 rejected proposal 목록은 PR body에 붙이지 않습니다. `proposal_validation_report`와 `source_discovery_feedback_report` artifact에서 필요한 경우만 확인합니다.
+4. parser/source feedback 원문은 PR body에 붙이지 않습니다. `source_discovery_feedback_report` artifact에서 필요한 경우만 확인합니다.
 
 ## 03 PR 읽는 순서
 
