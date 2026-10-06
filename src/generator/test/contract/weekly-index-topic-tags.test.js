@@ -52,10 +52,27 @@ test('the SoC Platform filter finds the week with the Renesas RZ/V2H article', (
   assert.ok(weeklyKeysFor('soc-platform').includes('2026-W40'));
 });
 
+test('weeks with a Qualcomm CAMSS driver article match both the Driver and SoC Platform filters', () => {
+  // W29 OPE 드라이버, W32 MIPI C-PHY 는 SoC 카메라 서브시스템 드라이버 기사다. (#1250)
+  for (const weeklyKey of ['2026-W29', '2026-W32']) {
+    assert.ok(weeklyKeysFor('driver').includes(weeklyKey), `${weeklyKey} must match the Driver filter`);
+    assert.ok(weeklyKeysFor('soc-platform').includes(weeklyKey), `${weeklyKey} must match the SoC Platform filter`);
+  }
+  // 외부 센서 드라이버 기사만 있는 주는 SoC Platform 에 들어가지 않는다.
+  assert.ok(!weeklyKeysFor('soc-platform').includes('2026-W33'));
+});
+
 test('compiler tooling articles are filed under C++ and not under AI', () => {
   // W28 의 dw2102 버퍼 오버플로 수정은 LLVM/Clang 환경 문제라 is_ai_related=false 다.
   assert.ok(weeklyKeysFor('cpp').includes('2026-W28'));
   assert.ok(!weeklyKeysFor('ai').includes('2026-W28'));
+});
+
+test('watchlist C++ toolchain articles reach the C++ filter', () => {
+  // W19 C++26 assert(), W20 GCC 16, W21 GCC 16.1·Glaze 7.2 는 watchlist bucket 이다. (#1250)
+  for (const weeklyKey of ['2026-W19', '2026-W20', '2026-W21']) {
+    assert.ok(weeklyKeysFor('cpp').includes(weeklyKey), `${weeklyKey} must match the C++ filter`);
+  }
 });
 
 test('weeks that really carry AI tooling articles stay in the AI filter', () => {

@@ -75,7 +75,8 @@
     "tags": [
       "Driver",
       "Image Processing",
-      "AI"
+      "AI",
+      "SoC Platform"
     ],
     "article_count": 5,
     "article_images": [
@@ -106,7 +107,8 @@
     "md": "newsletters/2026-W38/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing"
+      "Image Processing",
+      "SoC Platform"
     ],
     "article_count": 4,
     "article_images": [
@@ -135,7 +137,8 @@
     "md": "newsletters/2026-W37/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing"
+      "Image Processing",
+      "SoC Platform"
     ],
     "article_count": 5,
     "article_images": [
@@ -164,7 +167,8 @@
     "md": "newsletters/2026-W36/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing"
+      "Image Processing",
+      "SoC Platform"
     ],
     "article_count": 5,
     "article_images": [
@@ -279,7 +283,8 @@
     "md": "newsletters/2026-W32/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing"
+      "Image Processing",
+      "SoC Platform"
     ],
     "article_count": 4,
     "article_images": [
@@ -308,7 +313,8 @@
     "md": "newsletters/2026-W31/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing"
+      "Image Processing",
+      "SoC Platform"
     ],
     "article_count": 5,
     "article_images": [
@@ -366,7 +372,8 @@
     "md": "newsletters/2026-W29/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing"
+      "Image Processing",
+      "SoC Platform"
     ],
     "article_count": 3,
     "article_images": [
@@ -487,7 +494,8 @@
       "Driver",
       "Image Processing",
       "Android",
-      "C++"
+      "C++",
+      "SoC Platform"
     ],
     "article_count": 6,
     "article_images": [
@@ -594,7 +602,8 @@
       "AI",
       "Android",
       "Driver",
-      "Image Processing"
+      "Image Processing",
+      "C++"
     ],
     "article_count": 5,
     "article_images": [
@@ -619,7 +628,8 @@
     "html": "newsletters/2026-W20/index.html",
     "md": "newsletters/2026-W20/newsletter.md",
     "tags": [
-      "Camera HAL"
+      "Camera HAL",
+      "C++"
     ],
     "article_count": 3,
     "article_images": [
@@ -651,7 +661,8 @@
       "Driver",
       "Image Processing",
       "AI",
-      "Android"
+      "Android",
+      "C++"
     ],
     "article_count": 6,
     "article_images": [
