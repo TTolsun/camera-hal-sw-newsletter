@@ -1,6 +1,5 @@
 const {
-  canonicalContentUrl,
-  fetchTextWithLimit
+  canonicalContentUrl
 } = require('./source-intelligence-utils');
 const {
   hasConcreteVersionedReleaseExtraction,
