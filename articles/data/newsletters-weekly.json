@@ -11,8 +11,7 @@
     "tags": [
       "Camera HAL",
       "Driver",
-      "Image Processing",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 2,
     "article_images": [
@@ -41,11 +40,10 @@
     "html": "newsletters/2026-W40/index.html",
     "md": "newsletters/2026-W40/newsletter.md",
     "tags": [
-      "Android",
       "Driver",
       "Image Processing",
       "AI",
-      "Camera HAL"
+      "SoC Platform"
     ],
     "article_count": 5,
     "article_images": [
@@ -77,9 +75,7 @@
     "tags": [
       "Driver",
       "Image Processing",
-      "AI",
-      "Camera HAL",
-      "Android"
+      "AI"
     ],
     "article_count": 5,
     "article_images": [
@@ -110,9 +106,7 @@
     "md": "newsletters/2026-W38/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 4,
     "article_images": [
@@ -141,9 +135,7 @@
     "md": "newsletters/2026-W37/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 5,
     "article_images": [
@@ -172,9 +164,7 @@
     "md": "newsletters/2026-W36/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 5,
     "article_images": [
@@ -203,9 +193,7 @@
     "md": "newsletters/2026-W35/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 1,
     "article_images": [
@@ -233,8 +221,7 @@
     "html": "newsletters/2026-W34/index.html",
     "md": "newsletters/2026-W34/newsletter.md",
     "tags": [
-      "Camera HAL",
-      "Android"
+      "Camera HAL"
     ],
     "article_count": 1,
     "article_images": [
@@ -263,9 +250,7 @@
     "md": "newsletters/2026-W33/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 2,
     "article_images": [
@@ -294,9 +279,7 @@
     "md": "newsletters/2026-W32/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 4,
     "article_images": [
@@ -325,9 +308,7 @@
     "md": "newsletters/2026-W31/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 5,
     "article_images": [
@@ -356,9 +337,7 @@
     "md": "newsletters/2026-W30/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 1,
     "article_images": [
@@ -387,9 +366,7 @@
     "md": "newsletters/2026-W29/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 3,
     "article_images": [
@@ -419,8 +396,7 @@
       "Camera HAL",
       "Driver",
       "Image Processing",
-      "AI",
-      "Android"
+      "C++"
     ],
     "article_count": 3,
     "article_images": [
@@ -449,9 +425,7 @@
     "md": "newsletters/2026-W27/newsletter.md",
     "tags": [
       "Driver",
-      "Image Processing",
-      "Camera HAL",
-      "Android"
+      "Image Processing"
     ],
     "article_count": 2,
     "article_images": [
@@ -480,9 +454,8 @@
     "tags": [
       "Driver",
       "Image Processing",
-      "AI",
       "Android",
-      "Camera HAL"
+      "C++"
     ],
     "article_count": 4,
     "article_images": [
@@ -514,8 +487,7 @@
       "Driver",
       "Image Processing",
       "Android",
-      "AI",
-      "Camera HAL"
+      "C++"
     ],
     "article_count": 6,
     "article_images": [
@@ -540,8 +512,7 @@
     "html": "newsletters/2026-W24/index.html",
     "md": "newsletters/2026-W24/newsletter.md",
     "tags": [
-      "Android",
-      "Camera HAL"
+      "Android"
     ],
     "article_count": 1,
     "article_images": [
@@ -565,8 +536,7 @@
     "html": "newsletters/2026-W23/index.html",
     "md": "newsletters/2026-W23/newsletter.md",
     "tags": [
-      "Camera HAL",
-      "Android"
+      "Camera HAL"
     ],
     "article_count": 2,
     "article_images": [
@@ -592,8 +562,7 @@
     "md": "newsletters/2026-W22/newsletter.md",
     "tags": [
       "Android",
-      "AI",
-      "Camera HAL"
+      "AI"
     ],
     "article_count": 2,
     "article_images": [
@@ -625,8 +594,7 @@
       "AI",
       "Android",
       "Driver",
-      "Image Processing",
-      "Camera HAL"
+      "Image Processing"
     ],
     "article_count": 5,
     "article_images": [
@@ -651,8 +619,7 @@
     "html": "newsletters/2026-W20/index.html",
     "md": "newsletters/2026-W20/newsletter.md",
     "tags": [
-      "Camera HAL",
-      "Android"
+      "Camera HAL"
     ],
     "article_count": 3,
     "article_images": [
@@ -684,8 +651,7 @@
       "Driver",
       "Image Processing",
       "AI",
-      "Android",
-      "Camera HAL"
+      "Android"
     ],
     "article_count": 6,
     "article_images": [
