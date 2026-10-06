@@ -422,6 +422,21 @@ test('the same source keeps main eligibility when the article evidence is direct
   assert.deepEqual(sourceQuality.main_article_source_blockers, []);
 });
 
+test('the bucket is read from either spelling and legacy names fold before the comparison', () => {
+  const classify = overrides => classifySourceQuality({
+    candidate: candidate(overrides),
+    source: libcameraProjectSource,
+    metadata: metadata()
+  });
+
+  assert.equal(classify({ relevanceBucket: 'direct_aosp_camera' }).main_article_source_allowed, true);
+  assert.equal(classify({ relevanceBucket: 'camera_driver_image_pipeline' }).main_article_source_allowed, false);
+  // 옛 이름은 android bucket 으로 접히므로 direct_aosp_camera 가 아니다.
+  assert.equal(classify({ relevance_bucket: 'soc_platform_signal' }).main_article_source_allowed, false);
+  // bucket 이 비어 있으면 Android Camera HAL 근거가 확인되지 않은 것이라 막는다.
+  assert.equal(classify({ relevance_bucket: '' }).main_article_source_allowed, false);
+});
+
 test('a source without the requirement is unaffected by the bucket', () => {
   const { mainArticleRequiresAndroidCameraHal, ...ordinarySource } = libcameraProjectSource;
   const sourceQuality = classifySourceQuality({

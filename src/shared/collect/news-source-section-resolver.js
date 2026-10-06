@@ -107,6 +107,7 @@ function normalizeSourceEntry(source, sectionMap, options = {}) {
     sourceUrlQualityHint: source.sourceUrlQualityHint || '',
     mainArticlePolicy: source.mainArticlePolicy || '',
     requiresCrossCheckDefault: source.requiresCrossCheckDefault === true,
+    mainArticleRequiresAndroidCameraHal: source.mainArticleRequiresAndroidCameraHal === true,
     evidenceGranularityHint: source.evidenceGranularityHint || '',
     suppressGenericCandidateFallback: source.suppressGenericCandidateFallback === true,
     sourceQualityNotes: Array.isArray(source.sourceQualityNotes) ? source.sourceQualityNotes : [],

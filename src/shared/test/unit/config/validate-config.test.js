@@ -273,9 +273,11 @@ test('mainArticleRequiresAndroidCameraHal must be a boolean when present', () =>
 
 // #1252: libcamera 프로젝트 출처는 전부 기술 동향 참고 대상이다. 출처를 새로 등록하면서 이 요구를
 // 빠뜨리면 그 출처의 패치가 다시 주요 기사 자리를 차지한다.
+// 운영 수집기가 쓰는 것은 정규화(normalizeEnabledSources)를 거친 출처다. 정규화가 필드를 버리면 레지스트리에 값이
+// 있어도 분류기는 보지 못하므로, 원본이 아니라 정규화 결과를 확인한다.
 test('every libcamera project source requires Android Camera HAL evidence for main', () => {
   const registry = JSON.parse(fs.readFileSync('src/shared/data/news-sources.json', 'utf8'));
-  const libcameraSources = registry.sources.filter(source => /libcamera/i.test(source.id));
+  const libcameraSources = normalizeEnabledSources(registry).sources.filter(source => /libcamera/i.test(source.id));
 
   assert.ok(libcameraSources.length >= 5, 'libcamera 출처가 레지스트리에서 사라졌습니다');
   for (const source of libcameraSources) {

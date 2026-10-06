@@ -1297,6 +1297,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
   // 그대로 지나므로 품질 게이트 약화는 없다. 일반(thin-week) 레인은 기존대로 reference 창만
   // 보고, release-class 레인만 fallback 창 후보까지 본다(fallback 창이 릴리스가 실제로
   // 갇히는 지점이다).
+  // 위 실측의 libcamera 릴리스는 #1252 이후 이 레인으로 main에 오르지 않는다. libcamera 프로젝트
+  // 출처는 기술 동향 참고 대상이라 trend_reference_project blocker가 isMainSlotEligible에서
+  // 걸린다(Android Camera HAL을 직접 다루는 근거가 있을 때만 예외). 이 레인은 다른 릴리스 채널을
+  // 위해 남는다.
   const maxReleaseClassArticles = Number(catchUpPolicy.maxReleaseClassArticles) || 0;
   const thinWeek = selected.length < catchUpTarget;
   // #879: 1차 판정이 실제로 본 release-class pool. 2차 pass(coverage 재조정 뒤)가 같은 pool을
