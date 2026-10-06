@@ -5,9 +5,16 @@ const { decorateCandidate } = require('../../select/newsroom-selection');
 const { resolvePatchworkLibcameraPatchItems } = require('../../../shared/collect/patchwork-libcamera-patches');
 const { normalizeCandidate } = require('../../../shared/cli/collect-news-candidates');
 const registry = require('../../../shared/data/news-sources.json');
+const { normalizeEnabledSources } = require('../../../shared/collect/news-source-section-resolver');
+const { buildReferenceArticles } = require('../../render/reference-articles');
 
-test('control patches gain eligibility from fetched commit prose, never metadata alone', async () => {
-  const source = registry.sources.find(item => item.id === 'patchwork-libcamera-patches');
+// #1252: libcamera는 Exynos Camera HAL이 아닌 기술 동향 참고 대상이다. 가져온 커밋 설명이 근거를
+// 보강하는 것(요약, source_gap_risk)은 그대로이지만, 그 근거로 main 자격을 얻지는 않는다. Android Camera HAL을
+// 직접 다루는 근거가 아니면 trend_reference_project blocker가 붙어 참고 섹션으로만 노출된다.
+// 출처는 운영 수집기와 같이 normalizeEnabledSources를 거친 것을 쓴다. 원본 레지스트리 항목을 직접 넘기면
+// 정규화가 새 필드를 버려도 이 테스트가 통과한다(#1252 리뷰에서 실제로 그랬다).
+test('control patches gain evidence from fetched commit prose, never metadata alone, but stay trend references', async () => {
+  const source = normalizeEnabledSources(registry).sources.find(item => item.id === 'patchwork-libcamera-patches');
   const row = {
     id: 99001, name: '[1/2] libcamera: controls: Extend white balance controls',
     web_url: 'https://patchwork.libcamera.org/patch/99001/', date: '2026-10-01T12:00:00',
@@ -26,10 +33,17 @@ test('control patches gain eligibility from fetched commit prose, never metadata
   assert.match(enriched.summary, /state metadata/);
   assert.match(enriched.summary, /proposed change not yet landed/);
   assert.equal(enriched.source_gap_risk, false);
-  assert.equal(enriched.main_article_source_allowed, true);
+  assert.equal(enriched.main_article_source_allowed, false);
+  assert.ok(enriched.main_article_source_blockers.includes('trend_reference_project'));
+  // 참고 레인에는 남고, 그 항목은 기술 동향 참고로 표시된다.
+  const [referenceItem] = buildReferenceArticles([enriched]);
+  assert.equal(referenceItem.note, '오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고');
+  // trend_reference_project 가 어떤 후보든 main 을 막으므로 main_article_source_allowed 로는 근거 거부를
+  // 가를 수 없다. 근거로 인정되지 않은 본문은 source_gap_risk 가 남고 요약이 보강되지 않는지로 본다.
   for (const invalid of ['', '<html>not a patch</html>', mail.replace('Extend white balance controls', 'Unrelated patch')]) {
     const blocked = await collect(invalid);
-    assert.equal(blocked.main_article_source_allowed, false);
+    assert.equal(blocked.source_gap_risk, true);
+    assert.doesNotMatch(blocked.summary, /state metadata/);
   }
 });
 

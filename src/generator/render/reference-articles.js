@@ -30,6 +30,12 @@ const BUCKET_NOTE = {
   [BUCKETS.CPP_AI_TOOLING_FALLBACK]: 'C++ / AI 네이티브 툴링 참고'
 };
 
+// libcamera 같은 외부 오픈소스 HAL 프로젝트 소식은 우리 제품(Exynos Camera HAL) 소식이 아니라 기술 동향
+// 참고 대상이다(#1252). 수집 단계의 분류기가 main 자격을 막으며 남기는 blocker 값으로 알아본다.
+// 그 항목은 bucket 설명 대신 이 문구를 달아 참고 이유를 드러낸다.
+const TREND_REFERENCE_BLOCKER = 'trend_reference_project';
+const TREND_REFERENCE_NOTE = '오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고';
+
 const DEFAULT_LIMIT = 4;
 
 function pick(candidate, ...keys) {
@@ -149,6 +155,13 @@ function referenceArticleExcludeUrls(shortlistReport = {}) {
     .filter(Boolean);
 }
 
+function referenceNote(candidate, bucket) {
+  if (ensureArray(candidate.main_article_source_blockers).includes(TREND_REFERENCE_BLOCKER)) {
+    return TREND_REFERENCE_NOTE;
+  }
+  return BUCKET_NOTE[bucket] || '참고 자료';
+}
+
 function buildReferenceArticles(candidates = [], options = {}) {
   const limit = Number.isFinite(options.limit) ? Math.max(0, options.limit) : DEFAULT_LIMIT;
   const excluded = new Set((Array.isArray(options.excludeUrls) ? options.excludeUrls : []).map(normalizeUrl));
@@ -178,7 +191,7 @@ function buildReferenceArticles(candidates = [], options = {}) {
       url,
       source,
       published_date: publishedDate,
-      note: BUCKET_NOTE[bucket] || '참고 자료'
+      note: referenceNote(candidate, bucket)
     });
   }
 

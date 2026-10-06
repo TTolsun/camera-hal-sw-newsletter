@@ -755,3 +755,53 @@ test('non-reddit candidates are not marked as community signals', () => {
   assert.equal(candidate.community_signal, false);
   assert.equal(candidate.community_signal_source, undefined);
 });
+
+// #1252: libcamera 프로젝트 출처 후보는 수집 단계에서 기술 동향 참고로 표시되고, 판정은 출처로 한다.
+function libcameraSource(overrides = {}) {
+  return source({
+    id: 'libcamera-upstream-releases',
+    name: 'libcamera Upstream Releases',
+    url: 'https://gitlab.com/libcamera/libcamera/-/tags',
+    sourceUrl: 'https://gitlab.com/libcamera/libcamera/-/tags',
+    category: 'linux-camera',
+    section: 'Linux Kernel / Platform Watch',
+    reliability: 'project-official',
+    requiresCrossCheck: false,
+    sourceRole: 'project_release_source',
+    mainArticlePolicy: 'allowed',
+    mainArticleRequiresAndroidCameraHal: true,
+    ...overrides
+  });
+}
+
+test('collector marks a libcamera project release as a trend reference, not a main article source', () => {
+  const candidate = normalizeCandidate(raw({
+    source: libcameraSource(),
+    title: 'libcamera v0.8.0 released',
+    url: 'https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0',
+    summary: 'libcamera v0.8.0 adds a SoftISP lens shading algorithm and new IPA controls for sensor pipelines.'
+  }));
+
+  assert.equal(candidate.relevance_bucket, BUCKETS.CAMERA_DRIVER_IMAGE_PIPELINE);
+  assert.equal(candidate.main_article_source_allowed, false);
+  assert.ok(candidate.main_article_source_blockers.includes('trend_reference_project'));
+});
+
+test('a sensor driver patch that only mentions libcamera as a test tool is not a trend reference', () => {
+  const candidate = normalizeCandidate(raw({
+    source: source({
+      id: 'lore-linux-media',
+      name: 'lore.kernel.org linux-media list',
+      category: 'linux-camera',
+      reliability: 'official',
+      requiresCrossCheck: false,
+      sourceRole: 'project_mailing_list_source',
+      mainArticlePolicy: 'allowed'
+    }),
+    title: '[PATCH v7] media: i2c: add imx681 image sensor driver',
+    url: 'https://lore.kernel.org/linux-media/imx681-v7@example.com/',
+    summary: 'Adds the imx681 image sensor driver. Tested on a board with libcamera cam and the V4L2 media controller.'
+  }));
+
+  assert.ok(!(candidate.main_article_source_blockers || []).includes('trend_reference_project'));
+});

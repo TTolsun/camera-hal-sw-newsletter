@@ -1,3 +1,5 @@
+const { BUCKETS, canonicalBucket } = require('../domain/aosp-camera-scope');
+
 const MAIN_ARTICLE_POLICIES = Object.freeze([
   'allowed',
   'conditional',
@@ -26,6 +28,7 @@ const SOURCE_QUALITY_BLOCKERS = Object.freeze([
   'undated_reference_page',
   'source_gap_risk',
   'reference_only',
+  'trend_reference_project',
   'policy_locked_out_of_main',
   'generic_trend_without_hal_workflow_link',
   'cross_check_required_but_missing',
@@ -339,6 +342,7 @@ function reasonFor(blockers, allowed, mainArticlePolicy = '') {
     undated_reference_page: 'Reference page does not provide dated article evidence.',
     source_gap_risk: 'Candidate still has source gap risk.',
     reference_only: 'Source is reference/background only and cannot be promoted as a dated main article.',
+    trend_reference_project: 'External open-source camera HAL project news is a technology-trend reference; it needs direct Android Camera HAL evidence to be a main article.',
     policy_locked_out_of_main: 'Source policy keeps this candidate out of main articles.',
     generic_trend_without_hal_workflow_link: 'Generic AI/IT trend lacks explicit Camera HAL, Android Camera, driver, SoC, or native workflow evidence.',
     cross_check_required_but_missing: 'Source requires primary confirmation before main promotion.',
@@ -379,6 +383,16 @@ function classifySourceQuality(input = {}) {
   if (sourceUrlQuality === 'undated_reference_page') blockers.push('undated_reference_page');
   if (candidate.source_gap_risk === true || metadata.source_gap_risk === true) blockers.push('source_gap_risk');
   if (candidate.reference_only === true || metadata.reference_only === true || mainArticlePolicy === 'reference_only') blockers.push('reference_only');
+  // libcamera 같은 외부 오픈소스 HAL 프로젝트는 우리 제품(Exynos Camera HAL)이 아니라 기술 동향 참고
+  // 대상이다. 그 출처의 후보는 기사 근거가 Android Camera HAL을 직접 다루는 direct_aosp_camera
+  // 분류일 때만 main 자격을 유지한다. 판정은 본문 문자열이 아니라 출처로 하므로, libcamera를 시험
+  // 환경으로만 언급한 다른 출처의 센서 드라이버 기사는 걸리지 않는다(#1252).
+  if (
+    source.mainArticleRequiresAndroidCameraHal === true &&
+    canonicalBucket(candidate.relevance_bucket || candidate.relevanceBucket) !== BUCKETS.DIRECT_AOSP_CAMERA
+  ) {
+    blockers.push('trend_reference_project');
+  }
   // watchlist_only와 blocked는 "이 후보는 main 기사가 될 수 없다"는 정책 선언이다. 그 사실을 blocker
   // 값으로 실어 두면 승급 판정이 blocker 배열의 길이가 아니라 값을 근거로 막을 수 있다(#1056).
   // reference_only는 바로 위에서 자기 blocker를 싣기 때문에 여기 대상이 아니다.

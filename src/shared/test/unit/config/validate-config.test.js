@@ -263,6 +263,39 @@ test('section resolver derives source section from category', () => {
   assert.equal(normalized.sources[0].section, 'AI / SW Engineering Trends');
 });
 
+test('mainArticleRequiresAndroidCameraHal must be a boolean when present', () => {
+  assert.equal(validate(validRegistry({ sources: [validSource({ mainArticleRequiresAndroidCameraHal: true })] })).ok, true);
+
+  const wrongType = validate(validRegistry({ sources: [validSource({ mainArticleRequiresAndroidCameraHal: 'yes' })] }));
+  assert.equal(wrongType.ok, false);
+  assert.match(wrongType.errors.join('\n'), /mainArticleRequiresAndroidCameraHal must be a boolean/);
+});
+
+// #1252: libcamera 프로젝트 출처는 전부 기술 동향 참고 대상이다. 출처를 새로 등록하면서 이 요구를
+// 빠뜨리면 그 출처의 패치가 다시 주요 기사 자리를 차지한다.
+// 운영 수집기가 쓰는 것은 정규화(normalizeEnabledSources)를 거친 출처다. 정규화가 필드를 버리면 레지스트리에 값이
+// 있어도 분류기는 보지 못하므로, 원본이 아니라 정규화 결과를 확인한다.
+test('every libcamera project source requires Android Camera HAL evidence for main', () => {
+  const registry = JSON.parse(fs.readFileSync('src/shared/data/news-sources.json', 'utf8'));
+  const libcameraSources = normalizeEnabledSources(registry).sources.filter(source => /libcamera/i.test(source.id));
+
+  assert.ok(libcameraSources.length >= 5, 'libcamera 출처가 레지스트리에서 사라졌습니다');
+  for (const source of libcameraSources) {
+    assert.ok(
+      source.mainArticleRequiresAndroidCameraHal === true || source.mainArticlePolicy === 'reference_only',
+      `${source.id} must set mainArticleRequiresAndroidCameraHal or be reference_only`
+    );
+  }
+});
+
+test('the trend-reference field and blocker are documented', () => {
+  const fields = fs.readFileSync('docs/config/NEWS_SOURCES_FIELDS.md', 'utf8');
+  const blockers = fs.readFileSync('docs/editorial/SOURCE_QUALITY_ISSUE_MAP.md', 'utf8');
+
+  assert.ok(fields.includes('`mainArticleRequiresAndroidCameraHal`'));
+  assert.ok(blockers.includes('`trend_reference_project`'));
+});
+
 test('source quality enum docs stay in sync with config validator', () => {
   const docs = fs.readFileSync('docs/config/NEWS_SOURCES_FIELDS.md', 'utf8');
   for (const value of [

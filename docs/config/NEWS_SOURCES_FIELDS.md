@@ -72,6 +72,7 @@ collector는 런타임 normalized source 객체와 `articles/content/collected-n
 | `sourceUrlQualityHint` | Default URL quality hint for candidates from this source. | Required for every enabled source. `unknown` is main-ineligible unless classifier resolves it before Stage 3. |
 | `mainArticlePolicy` | Default main-article source policy. | Required for every enabled source. Valid values: `allowed`, `conditional`, `watchlist_only`, `reference_only`, `blocked`. |
 | `requiresCrossCheckDefault` | Whether candidates from this source normally need primary confirmation. | Boolean. Conditional cross-check sources must set this or use an explicit evidence-rule URL quality hint. |
+| `mainArticleRequiresAndroidCameraHal` | 이 출처의 소식을 Exynos Camera HAL이 아닌 외부 오픈소스 HAL 프로젝트(libcamera)의 기술 동향 참고 대상으로 다룹니다. | 선택 필드이고 boolean입니다. `true`이면 그 출처 후보는 기사 근거가 Android Camera HAL을 직접 다루는 `direct_aosp_camera` 분류일 때만 main 자격을 유지하고, 그 밖에는 `trend_reference_project` blocker가 붙어 참고 섹션으로만 노출됩니다. libcamera 프로젝트 출처에는 모두 `true`를 둡니다. 판정은 본문 문자열이 아니라 출처 기준이라, libcamera를 시험 환경으로만 언급한 다른 출처의 기사에는 영향이 없습니다. |
 | `evidenceGranularityHint` | Expected evidence granularity. | Human-facing hint; examples: `versioned_release_row`, `article_level_native_hal_workflow_evidence`. |
 | `sourceQualityNotes` | Human review notes for source policy. | Array of strings. Notes do not override enum policy. |
 

@@ -388,3 +388,83 @@ test('non-reddit community lead source is still promotable with satisfied cross-
   assert.equal(sourceQuality.cross_check_status, 'required_satisfied');
   assert.equal(sourceQuality.main_article_source_allowed, true);
 });
+
+// #1252: libcamera 같은 외부 오픈소스 HAL 프로젝트 소식은 우리 제품(Exynos Camera HAL) 소식이 아니라
+// 기술 동향 참고 대상이다. 기사 근거가 Android Camera HAL을 직접 다룰 때만 주요 기사가 될 수 있다.
+const libcameraProjectSource = {
+  id: 'libcamera-upstream-releases',
+  sourceRole: 'project_release_source',
+  mainArticlePolicy: 'allowed',
+  mainArticleRequiresAndroidCameraHal: true
+};
+
+test('a source that requires Android Camera HAL evidence keeps driver pipeline items out of main', () => {
+  const sourceQuality = classifySourceQuality({
+    candidate: candidate({ relevance_bucket: 'camera_driver_image_pipeline' }),
+    source: libcameraProjectSource,
+    metadata: metadata()
+  });
+
+  assert.equal(sourceQuality.main_article_source_allowed, false);
+  assert.equal(sourceQuality.source_quality_status, 'blocked');
+  assert.deepEqual(sourceQuality.main_article_source_blockers, ['trend_reference_project']);
+  assert.match(sourceQuality.main_article_source_allowed_reason, /technology-trend reference/i);
+});
+
+test('the same source keeps main eligibility when the article evidence is direct Android Camera HAL', () => {
+  const sourceQuality = classifySourceQuality({
+    candidate: candidate({ relevance_bucket: 'direct_aosp_camera' }),
+    source: libcameraProjectSource,
+    metadata: metadata()
+  });
+
+  assert.equal(sourceQuality.main_article_source_allowed, true);
+  assert.deepEqual(sourceQuality.main_article_source_blockers, []);
+});
+
+test('the bucket is read from either spelling and legacy names fold before the comparison', () => {
+  const classify = overrides => classifySourceQuality({
+    candidate: candidate(overrides),
+    source: libcameraProjectSource,
+    metadata: metadata()
+  });
+
+  assert.equal(classify({ relevanceBucket: 'direct_aosp_camera' }).main_article_source_allowed, true);
+  assert.equal(classify({ relevanceBucket: 'camera_driver_image_pipeline' }).main_article_source_allowed, false);
+  // 옛 이름은 android bucket 으로 접히므로 direct_aosp_camera 가 아니다.
+  assert.equal(classify({ relevance_bucket: 'soc_platform_signal' }).main_article_source_allowed, false);
+  // bucket 이 비어 있으면 Android Camera HAL 근거가 확인되지 않은 것이라 막는다.
+  assert.equal(classify({ relevance_bucket: '' }).main_article_source_allowed, false);
+});
+
+test('a source without the requirement is unaffected by the bucket', () => {
+  const { mainArticleRequiresAndroidCameraHal, ...ordinarySource } = libcameraProjectSource;
+  const sourceQuality = classifySourceQuality({
+    candidate: candidate({ relevance_bucket: 'camera_driver_image_pipeline' }),
+    source: ordinarySource,
+    metadata: metadata()
+  });
+
+  assert.equal(sourceQuality.main_article_source_allowed, true);
+  assert.deepEqual(sourceQuality.main_article_source_blockers, []);
+});
+
+test('a satisfied cross-check does not lift the trend-reference block of a conditional source', () => {
+  const sourceQuality = classifySourceQuality({
+    candidate: candidate({
+      relevance_bucket: 'camera_driver_image_pipeline',
+      primary_confirmation: true
+    }),
+    source: {
+      ...libcameraProjectSource,
+      id: 'patchwork-libcamera-patches',
+      sourceRole: 'project_mailing_list_source',
+      mainArticlePolicy: 'conditional',
+      requiresCrossCheckDefault: true
+    },
+    metadata: metadata()
+  });
+
+  assert.equal(sourceQuality.main_article_source_allowed, false);
+  assert.ok(sourceQuality.main_article_source_blockers.includes('trend_reference_project'));
+});

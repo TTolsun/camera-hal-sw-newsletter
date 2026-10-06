@@ -163,6 +163,14 @@ test('editorialPlanPrompt는 coverage/impact enum과 안전 경계를 담는다'
   assert.match(prompt, /발행 안전 판단의 최종 강제는 deterministic validation layer가 담당/);
 });
 
+// #1252: libcamera는 Exynos Camera HAL이 아닌 기술 동향 참고 대상이다. 편집 계획이 libcamera 계약 변경을
+// 우선 검토하라고 말하면 이 결정과 반대 방향의 지시가 된다. Android 쪽 검증 요구 변경 문구는 남는다.
+test('editorialPlanPrompt는 libcamera 변경을 우선 검토하라고 지시하지 않는다', () => {
+  const prompt = editorialPlanPrompt();
+  assert.doesNotMatch(prompt, /libcamera AWB/);
+  assert.match(prompt, /Camera ITS·CTS의 검증 요구 변경을 우선 검토하세요/);
+});
+
 test('editorialPlanSystemPrompt는 assessor 페르소나와 plan 계약을 조립한다', () => {
   const prompt = editorialPlanSystemPrompt();
   assert.match(prompt, /AI editorial assessor/);

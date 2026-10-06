@@ -285,6 +285,9 @@ function validateSource(errors, source, index, sectionMap, seenIds) {
     errors.push(`${label}.mainArticlePolicy must be one of: ${[...VALID_MAIN_ARTICLE_POLICIES].join(', ')}.`);
   }
   validateBoolean(errors, `${label}.requiresCrossCheckDefault`, source.requiresCrossCheckDefault);
+  if (Object.prototype.hasOwnProperty.call(source, 'mainArticleRequiresAndroidCameraHal')) {
+    validateBoolean(errors, `${label}.mainArticleRequiresAndroidCameraHal`, source.mainArticleRequiresAndroidCameraHal);
+  }
   validateString(errors, `${label}.evidenceGranularityHint`, source.evidenceGranularityHint);
   validateStringArray(errors, `${label}.sourceQualityNotes`, source.sourceQualityNotes);
   if (
