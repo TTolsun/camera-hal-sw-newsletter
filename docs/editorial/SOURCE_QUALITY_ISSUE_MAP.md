@@ -43,6 +43,7 @@ main article 승격을 막는 blocker 코드(기계가 읽는 식별자)는 다�
 - `undated_reference_page`
 - `source_gap_risk`
 - `reference_only`
+- `trend_reference_project` (출처에 `mainArticleRequiresAndroidCameraHal`이 `true`이고 후보의 `relevance_bucket`이 `direct_aosp_camera`가 아닐 때 실립니다. libcamera 같은 외부 오픈소스 HAL 프로젝트 소식은 기술 동향 참고 대상이라 main 슬롯에서 빠지고 참고 섹션에 남습니다. 이 blocker는 mailing-list 강한 근거 승급이 대신할 수 있는 목록에 없으므로 승급으로 풀리지 않습니다)
 - `policy_locked_out_of_main` (분류 시점에 `mainArticlePolicy`가 `watchlist_only`이거나 `blocked`이면 실립니다. 이미 `source_quality`가 실린 후보는 그 값을 그대로 쓰므로 재분류되지 않습니다)
 - `generic_trend_without_hal_workflow_link`
 - `cross_check_required_but_missing`

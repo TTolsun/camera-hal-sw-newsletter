@@ -968,6 +968,7 @@
       "sourceRole": "project_release_source",
       "sourceUrlQualityHint": "project_release",
       "mainArticlePolicy": "allowed",
+      "mainArticleRequiresAndroidCameraHal": true,
       "requiresCrossCheckDefault": false,
       "evidenceGranularityHint": "article_level_concrete_source_fact",
       "sourceQualityNotes": []
@@ -1030,6 +1031,7 @@
       "sourceRole": "project_mailing_list_source",
       "sourceUrlQualityHint": "project_mailing_list_release",
       "mainArticlePolicy": "allowed",
+      "mainArticleRequiresAndroidCameraHal": true,
       "requiresCrossCheckDefault": false,
       "evidenceGranularityHint": "dated_project_announcement",
       "sourceQualityNotes": []
@@ -1090,6 +1092,7 @@
       "sourceRole": "project_release_source",
       "sourceUrlQualityHint": "project_release",
       "mainArticlePolicy": "allowed",
+      "mainArticleRequiresAndroidCameraHal": true,
       "requiresCrossCheckDefault": false,
       "evidenceGranularityHint": "dated_project_announcement",
       "sourceQualityNotes": [
@@ -1152,6 +1155,7 @@
       "sourceRole": "project_release_source",
       "sourceUrlQualityHint": "project_release",
       "mainArticlePolicy": "allowed",
+      "mainArticleRequiresAndroidCameraHal": true,
       "requiresCrossCheckDefault": false,
       "evidenceGranularityHint": "dated_project_announcement",
       "sourceQualityNotes": []
@@ -2873,6 +2877,7 @@
       "sourceRole": "project_mailing_list_source",
       "sourceUrlQualityHint": "project_mailing_list_release",
       "mainArticlePolicy": "conditional",
+      "mainArticleRequiresAndroidCameraHal": true,
       "requiresCrossCheckDefault": true,
       "evidenceGranularityHint": "article_with_primary_confirmation",
       "sourceQualityNotes": [

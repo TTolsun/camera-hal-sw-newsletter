@@ -304,3 +304,25 @@ test('returns empty for empty or non-array input', () => {
   assert.deepEqual(buildReferenceArticles([]), []);
   assert.deepEqual(buildReferenceArticles(undefined), []);
 });
+
+// #1252: libcamera 같은 외부 오픈소스 HAL 프로젝트 소식은 참고 레인에서 기술 동향 참고로 표시한다.
+test('a trend-reference project item says so in its note and other items keep the bucket note', () => {
+  const items = buildReferenceArticles([
+    candidate({
+      title: 'libcamera v0.8.0',
+      url: 'https://example.com/libcamera-0.8.0',
+      relevance_bucket: 'camera_driver_image_pipeline',
+      source: 'libcamera Upstream Releases',
+      main_article_source_blockers: ['trend_reference_project']
+    }),
+    candidate({
+      title: 'Camera ITS tests',
+      url: 'https://example.com/its',
+      relevance_bucket: 'camera_driver_image_pipeline',
+      source: 'AOSP Site Updates'
+    })
+  ]);
+
+  assert.equal(items[0].note, '오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고');
+  assert.equal(items[1].note, '카메라 드라이버 / 이미지 파이프라인 참고');
+});
