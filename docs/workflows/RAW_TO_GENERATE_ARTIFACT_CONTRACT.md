@@ -134,7 +134,7 @@ Gemini가 URL을 제안하고 승격하던 제안 단계는 #1186에서 제거�
 성공한 경우의 처리 순서:
 
 - 승인된 seed가 있으면 seed evidence 확장을 먼저 결정론적으로 수행합니다(위 절).
-- linked evidence 확장: 수동 후보에 보존된 `outgoing_links` 중 아직 수집하지 않은 공식·등록 도메인 링크를 Gemini(`sourceDiscovery` 단계)가 뉴스레터 기사 가치로 판정하고, 고른 링크는 `origin=gemini_linked_discovery` 파생 후보가 됩니다. 추가 fetch는 하지 않고, 호출이 실패하거나 결과가 비어도 실행을 실패시키지 않습니다. 이 호출이 Stage 2의 유일한 LLM 호출이라서 `llm_used`는 계속 `true`입니다.
+- linked evidence 확장: 수동 후보에 보존된 `outgoing_links` 중 아직 수집하지 않은 공식·등록 도메인 링크를 Gemini(`sourceDiscovery` 단계)가 뉴스레터 기사 가치로 판정하고, 고른 링크는 `origin=gemini_linked_discovery` 파생 후보가 됩니다. 선택 단계 자체는 추가 fetch를 하지 않습니다(파생 후보의 근거 원문은 이후 근거 추출 단계가 다른 후보와 같은 방식으로 가져옵니다). 호출이 실패하거나 결과가 비어도 실행을 실패시키지 않습니다. 이 호출이 Stage 2의 유일한 LLM 호출이라서 `llm_used`는 계속 `true`입니다.
 - 파생 후보도 manual 후보와 같은 selection 게이트(source binding, dated evidence)를 그대로 통과해야 합니다.
 - `merged-candidates.json`은 manual candidates를 그대로 보존하고, seed로 보강한 후보와 schema가 유효한 linked 파생 후보만 추가합니다.
 - v2 `merged-candidate-manifest.json`은 usage, quality, cluster, evidence report의 path를 포함합니다.

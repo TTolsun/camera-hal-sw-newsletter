@@ -179,11 +179,6 @@ function sourceForUrl(sourceRegistry = {}, url = '') {
   return domainMatchesList[0]?.source || null;
 }
 
-function isUrlAllowed(sourceRegistry = {}, url = '') {
-  const host = urlHostname(url);
-  return Boolean(host && registryAllowedDomains(sourceRegistry).some(domain => domainMatches(host, domain)));
-}
-
 function numeric(value, fallback = 0) {
   const number = Number(value);
   return Number.isFinite(number) ? number : fallback;
@@ -287,7 +282,6 @@ module.exports = {
   fetchTextWithLimit,
   finalSelectionEligible,
   isObject,
-  isUrlAllowed,
   numeric,
   normalizeUrl,
   registryAllowedDomains,

@@ -101,8 +101,8 @@ test('check PASSES when only REVIEW_REQUIRED_COMPACT files are present', () => {
 });
 
 // #1186이 제안 단계를 제거해 두 파일을 더는 새로 쓰지 않지만, 과거 호가 이미 커밋해 둔 파일(각 39개)이
-// main에 남아 있다. 등급 목록(DEBUG_RRC_PATHS)과 debugExactCatalog 항목을 함께 지우면 둘이 debug_heavy로
-// 다시 분류되어 이 검사가 과거 산출물을 위반으로 잡는다. 과거 산출물은 지우지 않는다.
+// main에 남아 있다. 등급 목록(DEBUG_RRC_PATHS)에서 빠지면 둘이 debug_heavy로 분류되어 이 검사가 과거
+// 산출물을 위반으로 잡고, debugExactCatalog 항목만 빠지면 미인식 파일 경고로 바뀐다. 과거 산출물은 지우지 않는다.
 test('#1186: legacy Gemini proposal artifacts committed by past issues stay compact and are not flagged', () => {
   const legacy = [
     'articles/content/newsroom/2026-09-21/gemini-source-proposals.json',

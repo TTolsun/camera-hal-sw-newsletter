@@ -363,7 +363,7 @@ Stage별 기본 모델은 다음과 같습니다.
 - public article judge / source discovery: `gemini-2.5-flash-lite`
 - 기본 fallback: `gemini-2.5-flash` → `gemini-2.5-flash-lite` 순서 (flash 우선, flash-lite는 최후 안전망)
 
-source discovery(`newsletters-02-source-discovery-pr.yml`의 Gemini source/linked evidence 발견)는 후보를 새로 쓰지 않고 선별/판정만 하는 단계라서, 비용이 가장 낮은 `gemini-2.5-flash-lite`로 고정합니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call 단위 `pro_model` audit marker를 유지하지만, 정상 run에서는 항상 `false`여야 하고 report 단위 정책은 `Pro policy: disabled`로 고정됩니다.
+source discovery(`newsletters-02-source-discovery-pr.yml`의 Gemini linked evidence 발견)는 후보를 새로 쓰지 않고 선별/판정만 하는 단계라서, 비용이 가장 낮은 `gemini-2.5-flash-lite`로 고정합니다. Gemini Pro 계열 모델명은 모든 public model override 경로에서 validation error로 차단합니다. 비용 리포트는 call 단위 `pro_model` audit marker를 유지하지만, 정상 run에서는 항상 `false`여야 하고 report 단위 정책은 `Pro policy: disabled`로 고정됩니다.
 
 Stage별 model routing은 아래 우선순위를 따릅니다.
 
@@ -652,7 +652,7 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 `newsletters-01-source-collect-pr.yml`과 `newsletters-02-source-discovery-pr.yml`은 candidate JSON이 리뷰 대상이므로 이 허용목록 제한을 적용하지 않습니다.
 
-`articles/content/collected-news/YYYY-MM-DD/`에 있는 파이프라인 입력 파일들(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03 사이를 넘겨주는 핸드오프 상태이므로 `review_required_compact` 등급입니다. 이 중 `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 만들며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋해야 합니다. 순수 디버그 파일인 `gemini-candidates.json`은 `debug_heavy` 등급이라 `.gitignore`로 제외합니다.
+`articles/content/collected-news/YYYY-MM-DD/`에 있는 파이프라인 입력 파일들(`candidates.json`, `manual-candidates.json`, `raw-candidate-manifest.json`, `merged-candidates.json`, `merged-candidate-manifest.json`, `collection-intent.json`, `seed-candidates.json`, `seed-evidence-pack.json`)은 workflow 01 → 02 → 03 사이를 넘겨주는 핸드오프 상태이므로 `review_required_compact` 등급입니다. 이 중 `seed-candidates.json`과 `seed-evidence-pack.json`은 seed_used=true 런에서 workflow 02가 만들며, `validateMergedManifestSchema`가 hash 일치를 strict-check하므로 반드시 커밋해야 합니다. `gemini-candidates.json`은 #1186이 제안 단계를 제거해 더는 만들지 않으므로 등급 목록과 `.gitignore`에서도 뺐습니다.
 
 ## 공개 사이트의 영문 로케일
 

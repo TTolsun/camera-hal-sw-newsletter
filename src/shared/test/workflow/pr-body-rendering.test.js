@@ -220,7 +220,7 @@ test('source discovery PR report renders handoff states and the new stage 2 cand
   });
   assert.match(seedPublishable, /next_step: run_03/);
   assert.match(seedPublishable, /Seed evidence expansion 또는 linked evidence 파생에서 publishable 후보가 확인되었습니다/);
-  assert.match(seedPublishable, /| seed publishable 후보 | 1 | 있음 |/);
+  assert.ok(seedPublishable.includes('| seed publishable 후보 | 1 | 있음 |'));
 
   const derivedPublishable = renderSourceDiscoveryReport({
     date,
@@ -236,7 +236,7 @@ test('source discovery PR report renders handoff states and the new stage 2 cand
     mergedCandidateRelPath
   });
   assert.match(derivedPublishable, /next_step: run_03/);
-  assert.match(derivedPublishable, /| linked 파생 publishable 후보 | 1 | 있음 |/);
+  assert.ok(derivedPublishable.includes('| linked 파생 publishable 후보 | 1 | 있음 |'));
 
   const parserWarning = renderSourceDiscoveryReport({
     date,
@@ -255,7 +255,7 @@ test('source discovery PR report renders handoff states and the new stage 2 cand
   });
   assert.match(parserWarning, /next_step: strengthen_candidates/);
   assert.match(parserWarning, /03 진행 가능하나 후보 보강 권장/);
-  assert.match(parserWarning, /| parser gap | 1 | 보강 필요 |/);
+  assert.ok(parserWarning.includes('| parser gap | 1 | 보강 필요 |'));
 
   // 제안 단계가 사라졌으므로 제안 검증 report 참조와 rejected proposal 행이 보고서에 없어야 한다.
   for (const report of [noNewCandidates, seedPublishable, derivedPublishable, parserWarning]) {

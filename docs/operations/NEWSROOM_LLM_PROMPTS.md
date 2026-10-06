@@ -46,7 +46,7 @@ Workflow/Stage: `Newsletters 02 - Source Discovery PR`, `sourceDiscovery`
 
 출력/schema: `selectionResponseSchema()`(`selections[]`의 url, is_newsworthy, reason, suggested_article_type), 선택된 링크는 `merged-candidates.json`에 origin `gemini_linked_discovery` 파생 후보로 반영
 
-주요 guardrail: newsletter article을 직접 쓰지 않습니다. 추가 네트워크 fetch를 하지 않고(extract-only), 호출이 실패하거나 결과가 비어도 실행을 실패시키지 않습니다. 고른 링크도 deterministic selection 게이트(source binding, dated evidence)를 통과해야 main 기사가 됩니다.
+주요 guardrail: newsletter article을 직접 쓰지 않습니다. 이 선택 호출 자체는 추가 네트워크 fetch를 하지 않고(extract-only, 파생 후보의 근거 원문은 이후 근거 추출 단계가 가져옵니다), 호출이 실패하거나 결과가 비어도 실행을 실패시키지 않습니다. 고른 링크도 deterministic selection 게이트(source binding, dated evidence)를 통과해야 main 기사가 됩니다.
 
 ## Newsletters 03 - Editor PR
 
