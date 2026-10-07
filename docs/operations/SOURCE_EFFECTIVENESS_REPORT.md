@@ -54,8 +54,10 @@ schema version 3부터 source마다 수집 단계 수와 `collection_status`를 
 - `discovered_count`: 날짜 결속 목록(dated article index)에서 발견한 카드 수입니다. 목록 카드 계수가 없는 소스는 `null`(표에서는 `—`)입니다.
 - `in_window_count`: 발견 카드 중 수집 기간 안에 있는 카드 수입니다.
 - `raw_collected_count`: 중복 제거·필터 전 수집 후보 수입니다.
-- `filtered_out_count`, `filter_counts`: `duplicate`, `deferred_coverage`, `outside_window`, `relevance`, `series_collapsed`, `source_cap`, `global_cap` 단계별 제외 수입니다.
+- `filtered_out_count`, `filter_counts`: `duplicate`, `deferred_coverage`, `outside_window`, `relevance`, `series_collapsed`, `source_cap`, `global_cap`, `triage` 단계별 제외 수입니다.
 - `collection_reasons`: 수집 손실 사유(수집 사건 kind, `source_fetch_failed`, `unresolved_article_cards`)와 상한 사유(`article_cap`, `source_cap`, `global_cap`)입니다.
+
+마지막 후보 선별 단계는 `candidate_triage.mode`가 `llm` 또는 `all_fit`이면 `triage`로, `keyword_fallback`이면 `global_cap`으로 집계합니다. `all_fit`의 제외 수는 0입니다. `triage`는 상한 압력으로 취급하지 않으므로 그 자체로 `COLLECTION_CAPPED`를 만들거나 `collection_reasons`에 추가되지 않습니다.
 
 `collection_status`는 위에서부터 처음 맞는 값 하나입니다.
 
