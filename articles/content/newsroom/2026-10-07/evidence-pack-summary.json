@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-07",
+  "generated_at": "2026-10-07T14:57:17.308Z",
+  "inputs": {
+    "required": [],
+    "preferred": [
+      "articles/content/newsroom/2026-10-07/generation-status.json",
+      "articles/content/newsroom/2026-10-07/selection-report.json",
+      "articles/content/newsroom/2026-10-07/shortlisted-candidates.json",
+      "articles/content/collected-news/2026-10-07/candidates.json"
+    ],
+    "optional": [
+      "articles/content/newsroom/2026-10-07/article-capsules.json",
+      "articles/content/newsroom/2026-10-07/reporter-candidates.json",
+      "articles/content/newsroom/2026-10-07/quality-report.json",
+      "articles/content/newsroom/2026-10-07/fact-check-report.json",
+      "articles/content/newsroom/2026-10-07/source-effectiveness-report.json",
+      "articles/content/source-events/2026-10-07/source-change-events.json",
+      "articles/content/newsroom/2026-10-07/repair-failure.json",
+      "articles/content/newsroom/2026-10-07/stale-claim-report.json"
+    ],
+    "missing": [
+      "articles/content/newsroom/2026-10-07/generation-status.json",
+      "articles/content/newsroom/2026-10-07/selection-report.json",
+      "articles/content/newsroom/2026-10-07/shortlisted-candidates.json",
+      "articles/content/newsroom/2026-10-07/article-capsules.json",
+      "articles/content/newsroom/2026-10-07/reporter-candidates.json",
+      "articles/content/newsroom/2026-10-07/quality-report.json",
+      "articles/content/newsroom/2026-10-07/fact-check-report.json",
+      "articles/content/newsroom/2026-10-07/source-effectiveness-report.json",
+      "articles/content/newsroom/2026-10-07/repair-failure.json",
+      "articles/content/newsroom/2026-10-07/stale-claim-report.json"
+    ],
+    "used": [
+      "articles/content/collected-news/2026-10-07/candidates.json",
+      "articles/content/source-events/2026-10-07/source-change-events.json"
+    ]
+  },
+  "publish_status": {
+    "status": "unknown",
+    "run_mode": "unknown",
+    "quality_score": null,
+    "quality_threshold": null,
+    "fact_check_status": "UNKNOWN",
+    "final_publish_ready": null,
+    "public_newsletter_ready": null,
+    "review_pr_ready": null
+  },
+  "selection_summary": {
+    "raw_candidate_count": 50,
+    "eligible_candidate_count": null,
+    "selected_main_article_count": null,
+    "reserve_candidate_count": null,
+    "excluded_candidate_count": 50,
+    "primary_camera_stack_count": null,
+    "android_multimedia_camera_output_count": null,
+    "supporting_bucket_count": null,
+    "fallback_window_used": null,
+    "fallback_window_consulted": null,
+    "fallback_window_reason": "",
+    "fallback_candidates_promoted_count": null,
+    "fallback_bucket_used": null,
+    "candidate_shortage_hints": []
+  },
+  "claim_validation_summary": {
+    "status": "not_available",
+    "bound_claims": null,
+    "total_claims": null,
+    "overclaim_risk": "unknown",
+    "available_article_count": 0,
+    "not_available_article_count": 0
+  },
+  "hal_impact_summary": {
+    "axes": [],
+    "article_count_with_axes": 0,
+    "article_count_without_axes": 0
+  },
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 0,
+    "strong_signal_count": 0,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 0,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_concrete_action": 0,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {},
+    "actionability_level_counts": {},
+    "effective_actionability_level_counts": {},
+    "signal_quality_status_counts": {}
+  },
+  "main_article_signal_checks": [],
+  "selected_main_articles": [],
+  "reserve_candidates": [],
+  "excluded_candidates_top": [
+    {
+      "candidate_id": "https://www.kernel.org/",
+      "title": "7.3-rc6: mainline",
+      "url": "https://www.kernel.org/",
+      "source": "kernel.org Linux Releases",
+      "source_role": "official_release_source",
+      "source_url_quality": "official_dated_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://www.phoronix.com/news/Linux-7.3-rc6-Released",
+      "title": "Linux 7.3-rc6 Released: Normal For The New \"AI Normal\"",
+      "url": "https://www.phoronix.com/news/Linux-7.3-rc6-Released",
+      "source": "Phoronix Linux Camera / Media",
+      "source_role": "tech_media_lead_source",
+      "source_url_quality": "tech_media_lead_requires_cross_check",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://lwn.net/Articles/1098404/",
+      "title": "Seven stable kernels for Saturday",
+      "url": "https://lwn.net/Articles/1098404/",
+      "source": "LWN Camera / Media Articles",
+      "source_role": "tech_media_lead_source",
+      "source_url_quality": "tech_media_lead_requires_cross_check",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://patchwork.libcamera.org/patch/28387/",
+      "title": "[1/5] libcamera: controls: Expand AWB controls",
+      "url": "https://patchwork.libcamera.org/patch/28387/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Eligible for short newsletter use."
+    },
+    {
+      "candidate_id": "https://patchwork.libcamera.org/patch/28366/",
+      "title": "[v2] libcamera: Adding LensShadingCorrection maps and ToneCurve to controls metadata",
+      "url": "https://patchwork.libcamera.org/patch/28366/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present."
+    },
+    {
+      "candidate_id": "https://patchwork.libcamera.org/patch/28394/",
+      "title": "[v2] libcamera: software_isp: Add R10 and R10_CSI2P monochrome formats",
+      "url": "https://patchwork.libcamera.org/patch/28394/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Eligible for short newsletter use."
+    },
+    {
+      "candidate_id": "https://patchwork.libcamera.org/patch/28360/",
+      "title": "[v4] libcamera: controls: Remove common enum prefix",
+      "url": "https://patchwork.libcamera.org/patch/28360/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Excluded from main/short selection because source evidence is incomplete or source-gap risk is present."
+    },
+    {
+      "candidate_id": "https://patchwork.libcamera.org/patch/28395/",
+      "title": "[v4] ipa: softisp: adjust: Read default contrast from tuning",
+      "url": "https://patchwork.libcamera.org/patch/28395/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reason": "Generic technology item without article-level camera, driver, SoC, or native tooling evidence; keep as watchlist/briefing material."
+    },
+    {
+      "candidate_id": "https://patchwork.libcamera.org/patch/28392/",
+      "title": "[v1] ipa: {rkisp1,mali-c55}: Expand uncalibrated tuning files",
+      "url": "https://patchwork.libcamera.org/patch/28392/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Excluded or low-confidence item below the main/short candidate tier."
+    },
+    {
+      "candidate_id": "https://patchwork.libcamera.org/patch/28245/",
+      "title": "[v3,01/41] libcamera: delayed_controls: Add push() function that accepts a sequence number",
+      "url": "https://patchwork.libcamera.org/patch/28245/",
+      "source": "libcamera Patchwork (patch review)",
+      "source_role": "project_mailing_list_source",
+      "source_url_quality": "project_mailing_list_release",
+      "freshness_window": "unknown",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "exclusion_reason": "Excluded or low-confidence item below the main/short candidate tier."
+    }
+  ],
+  "excluded_candidates_truncated": true,
+  "failure_diagnostics": {
+    "quality_hard_failures": [],
+    "fact_check_must_fix": [],
+    "repair_failures": [],
+    "candidate_shortage_hints": [],
+    "source_gap_warnings": [],
+    "missing_artifacts": [
+      "articles/content/newsroom/2026-10-07/generation-status.json",
+      "articles/content/newsroom/2026-10-07/selection-report.json",
+      "articles/content/newsroom/2026-10-07/shortlisted-candidates.json",
+      "articles/content/newsroom/2026-10-07/article-capsules.json",
+      "articles/content/newsroom/2026-10-07/reporter-candidates.json",
+      "articles/content/newsroom/2026-10-07/quality-report.json",
+      "articles/content/newsroom/2026-10-07/fact-check-report.json",
+      "articles/content/newsroom/2026-10-07/source-effectiveness-report.json",
+      "articles/content/newsroom/2026-10-07/repair-failure.json",
+      "articles/content/newsroom/2026-10-07/stale-claim-report.json"
+    ],
+    "invalid_artifacts": []
+  },
+  "warnings": [
+    "Missing preferred artifact: articles/content/newsroom/2026-10-07/generation-status.json",
+    "Missing preferred artifact: articles/content/newsroom/2026-10-07/selection-report.json",
+    "Missing preferred artifact: articles/content/newsroom/2026-10-07/shortlisted-candidates.json",
+    "Missing optional artifact: articles/content/newsroom/2026-10-07/article-capsules.json",
+    "Missing optional artifact: articles/content/newsroom/2026-10-07/reporter-candidates.json",
+    "Missing optional artifact: articles/content/newsroom/2026-10-07/quality-report.json",
+    "Missing optional artifact: articles/content/newsroom/2026-10-07/fact-check-report.json",
+    "Missing optional artifact: articles/content/newsroom/2026-10-07/source-effectiveness-report.json",
+    "Missing optional artifact: articles/content/newsroom/2026-10-07/repair-failure.json",
+    "Missing optional artifact: articles/content/newsroom/2026-10-07/stale-claim-report.json"
+  ]
+}
