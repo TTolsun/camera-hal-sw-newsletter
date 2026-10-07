@@ -123,13 +123,6 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
   const fallback = Array.isArray(keywordFallback) ? keywordFallback : usable.slice(0, maxFinal);
   const baseReport = { pool_size: usable.length, max_final: maxFinal };
 
-  if (usable.length <= maxFinal) {
-    return {
-      candidates: usable,
-      report: { ...baseReport, mode: TRIAGE_MODES.ALL_FIT, selected_count: usable.length, filled_by_keyword_count: 0 }
-    };
-  }
-
   const triagePool = usable.slice(0, MAX_TRIAGE_POOL);
   const fallbackResult = reason => ({
     candidates: fallback,
@@ -142,7 +135,14 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
     }
   });
 
+  // LLM이 없으면 풀 크기와 상관없이 예전 결과를 그대로 쓴다(relevance 하한 포함).
   if (typeof callLlm !== 'function') return fallbackResult('llm_unavailable');
+  if (usable.length <= maxFinal) {
+    return {
+      candidates: usable,
+      report: { ...baseReport, mode: TRIAGE_MODES.ALL_FIT, selected_count: usable.length, filled_by_keyword_count: 0 }
+    };
+  }
 
   const items = triageItems(triagePool);
   let picks;
@@ -154,11 +154,15 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
   }
   if (picks.length === 0) return fallbackResult('llm_selected_nothing');
 
-  // 채움은 URL로 겹침을 판단한다. 폴백 목록은 relevance 하한을 건 뒤 시리즈를 다시 접어서 만들므로
-  // 같은 기사가 다른 객체로 들어 있을 수 있다.
+  // 채움은 URL로 겹침을 판단하고, 판단 풀에 있는 후보만 쓴다. 폴백 목록은 relevance 하한을 건 뒤
+  // 시리즈 접기와 소스별 상한을 따로 다시 적용해 만들므로, 풀에 없는 후보(같은 소스의 9번째 글,
+  // 같은 시리즈의 다른 패치)가 들어 있을 수 있다. 그대로 채우면 소스별 상한과 시리즈 접기가 깨진다.
   const picked = picks.map(pick => triagePool[pick.index]);
   const pickedUrls = new Set(picked.map(candidateKey));
-  const filled = fallback.filter(candidate => !pickedUrls.has(candidateKey(candidate))).slice(0, maxFinal - picks.length);
+  const poolUrls = new Set(triagePool.map(candidateKey));
+  const filled = fallback
+    .filter(candidate => poolUrls.has(candidateKey(candidate)) && !pickedUrls.has(candidateKey(candidate)))
+    .slice(0, maxFinal - picks.length);
   const selected = [...picked, ...filled];
   const selectedUrls = new Set(selected.map(candidateKey));
 
@@ -173,7 +177,8 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
       filled_by_keyword_count: filled.length,
       llm_selected: picks.map(pick => reportEntry(triagePool[pick.index], { reason: pick.reason })),
       keyword_filled: filled.map(candidate => reportEntry(candidate)),
-      not_selected: usable.filter(candidate => !selectedUrls.has(candidateKey(candidate))).map(candidate => reportEntry(candidate))
+      // 탈락 목록 전체는 candidates.json을 수십 KB 키우므로 건수만 남긴다.
+      not_selected_count: usable.filter(candidate => !selectedUrls.has(candidateKey(candidate))).length
     }
   };
 }

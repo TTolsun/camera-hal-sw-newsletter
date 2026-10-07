@@ -39,6 +39,31 @@ test('a pool that already fits the cap skips the llm', async () => {
   assert.deepEqual(result.candidates, items);
 });
 
+// LLM이 없으면 풀이 작아도 예전 결과(relevance 하한 적용)를 그대로 쓴다.
+test('without an llm even a small pool uses the keyword result', async () => {
+  const items = pool(3);
+  const keywordFallback = items.slice(0, 1);
+  const result = await triageCandidatePool(items, { maxFinal: 5, keywordFallback });
+
+  assert.equal(result.report.mode, TRIAGE_MODES.KEYWORD_FALLBACK);
+  assert.equal(result.report.failure_reason, 'llm_unavailable');
+  assert.deepEqual(result.candidates, keywordFallback);
+});
+
+// 폴백 목록에만 있는 후보(풀 밖의 같은 소스 9번째 글, 같은 시리즈의 다른 패치)로는 채우지 않는다.
+test('keyword fill only uses candidates that are in the triage pool', async () => {
+  const items = pool(4);
+  const outsidePool = candidate(99, { source_id: 'source-0' });
+  const result = await triageCandidatePool(items, {
+    maxFinal: 3,
+    keywordFallback: [outsidePool, { ...items[2] }],
+    callLlm: async () => ({ selected: [{ id: 'c1' }] })
+  });
+
+  assert.deepEqual(result.candidates.map(item => item.title), ['Candidate 0', 'Candidate 2']);
+  assert.equal(result.report.filled_by_keyword_count, 1);
+});
+
 // 2026-10-05 실측: 키워드 순서로는 상한 밖이던 Claude Sonnet 5.5를 LLM이 고르면 그대로 넘어간다.
 test('the llm choice replaces keyword order and keyword order fills the rest', async () => {
   const items = pool(6);
@@ -59,7 +84,7 @@ test('the llm choice replaces keyword order and keyword order fills the rest', a
   assert.equal(result.report.llm_selected_count, 2);
   assert.equal(result.report.filled_by_keyword_count, 1);
   assert.equal(result.report.llm_selected[0].reason, 'model release');
-  assert.deepEqual(result.report.not_selected.map(item => item.title), ['Candidate 2', 'Candidate 3', 'Candidate 4']);
+  assert.equal(result.report.not_selected_count, 3);
 });
 
 test('the selection keeps only known ids, once each, up to the cap', () => {
