@@ -19,8 +19,121 @@ const {
   seedMergeReportPath
 } = require('../../common/artifact-paths');
 const { readJsonFixture } = require('../helpers/fixture-loader');
+const { sourceQualityFieldDrift } = require('../../collect/source-quality-classifier');
+const { buildArticleCapsule } = require('../../../generator/select/article-capsules');
 
-function tempRoot() {
+function policySeed(sourceOverrides = {}, candidateOverrides = {}) {
+  return seedCandidateFromEvidence({
+    date: '2026-10-05',
+    seed: { seed_id: 'policy-seed', url: 'https://camera.example/releases/1' },
+    source: {
+      id: 'camera-project', name: 'Camera project', category: 'camera-hal',
+      sourceRole: 'project_release_source', sourceUrlQualityHint: 'official_dated_release',
+      mainArticlePolicy: 'allowed', ...sourceOverrides
+    },
+    candidate: { title: 'libcamera ISP buffer fix', ...candidateOverrides },
+    primaryEvidence: {
+      evidence_id: 'policy-evidence', url: 'https://camera.example/releases/1',
+      published_at: '2026-10-01', source_backed_items: [candidateOverrides.title || 'Fixed libcamera ISP buffer handling.']
+    },
+    packIndex: 0
+  });
+}
+
+test('seed candidates honor registry source restrictions and retain the direct Android Camera HAL exception', () => {
+  for (const [source, blocker] of [
+    [{ mainArticleRequiresAndroidCameraHal: true }, 'trend_reference_project'],
+    [{ mainArticlePolicy: 'reference_only' }, 'reference_only'],
+    [{ mainArticlePolicy: 'watchlist_only' }, 'policy_locked_out_of_main'],
+    [{ mainArticlePolicy: 'blocked' }, 'policy_locked_out_of_main'],
+    [{ requiresCrossCheck: true }, 'cross_check_required_but_missing']
+  ]) {
+    const candidate = policySeed(source, { mainArticlePolicy: 'allowed' });
+    assert.equal(candidate.main_article_source_allowed, false);
+    assert.ok(candidate.main_article_source_blockers.includes(blocker), blocker);
+    assert.equal(candidate.main_eligible, false);
+    assert.deepEqual(sourceQualityFieldDrift(candidate), []);
+  }
+  const direct = policySeed({ mainArticleRequiresAndroidCameraHal: true }, { title: 'Android Camera HAL camera3_capture_request buffer contract changed' });
+  assert.equal(direct.relevance_bucket, 'direct_aosp_camera');
+  assert.equal(direct.main_article_source_allowed, true);
+  assert.equal(direct.main_eligible, true);
+  const confirmed = policySeed({ requiresCrossCheck: true }, { primary_confirmation: true });
+  assert.equal(confirmed.cross_check_status, 'required_satisfied');
+  assert.equal(confirmed.main_article_source_allowed, true);
+});
+
+test('seed policy enrichment preserves explicit blockers and does not allow unknown sources', () => {
+  const blocked = policySeed({}, { main_article_source_allowed: false, main_article_source_blockers: ['linked_evidence_blocked'] });
+  assert.equal(blocked.main_article_source_allowed, false);
+  assert.ok(blocked.main_article_source_blockers.includes('linked_evidence_blocked'));
+  const unknown = policySeed({ sourceRole: '', sourceUrlQualityHint: '', mainArticlePolicy: 'conditional' });
+  assert.equal(unknown.main_article_source_allowed, false);
+  assert.ok(unknown.main_article_source_blockers.includes('unknown_source_quality'));
+  for (const restriction of [{ source_gap_risk: true }, { reference_only: true }, { mainArticlePolicy: 'blocked' },
+    { requiresCrossCheck: true }, { requires_cross_check: true }, { candidateOnly: true }, { candidate_only: true },
+    { linked_evidence_summary: { by_fetch_status: { blocked: 1 } } },
+    { source_aware_linked_evidence_summary: { by_fetch_status: { failed: 1 } } }, { sourceUrlQuality: 'unknown' }]) {
+    const [restricted] = mergeSeedCandidates([{ url: blocked.url, ...restriction }], [policySeed()]).mergedCandidates;
+    assert.equal(restricted.main_article_source_allowed, false);
+    assert.match(restricted.main_article_source_allowed_reason, /Seed source restrictions/);
+    assert.deepEqual(sourceQualityFieldDrift(restricted), []);
+  }
+  const [explicit] = mergeSeedCandidates([{ url: blocked.url, main_article_source_allowed: false }], [policySeed()]).mergedCandidates;
+  assert.equal(explicit.main_article_source_allowed, false);
+});
+
+test('duplicate seed enrichment preserves manual fields and unions source safety restrictions', () => {
+  const seed = policySeed({ mainArticlePolicy: 'reference_only' });
+  const manual = {
+    url: seed.url, title: 'Manual title', priority: 'urgent', source_id: 'manual-source',
+    mainArticlePolicy: 'allowed', main_eligible: true,
+    source_quality: { source_role: 'project_release_source', source_url_quality: 'official_dated_release',
+      source_quality_status: 'blocked', main_article_source_allowed: false,
+      main_article_source_blockers: ['linked_evidence_blocked'] }
+  };
+  const [merged] = mergeSeedCandidates([manual], [seed]).mergedCandidates;
+  assert.equal(merged.title, manual.title);
+  assert.equal(merged.priority, manual.priority);
+  assert.equal(merged.source_id, manual.source_id);
+  assert.equal(merged.main_eligible, false);
+  assert.equal(merged.main_article_source_allowed, false);
+  assert.ok(merged.main_article_source_blockers.includes('reference_only'));
+  assert.ok(merged.main_article_source_blockers.includes('linked_evidence_blocked'));
+  assert.deepEqual(sourceQualityFieldDrift(merged), []);
+  const [enriched] = mergeSeedCandidates([{ url: seed.url, title: 'Manual source without quality metadata' }], [policySeed()]).mergedCandidates;
+  assert.equal(enriched.main_article_source_allowed, true);
+  const [unknown] = mergeSeedCandidates([{ url: seed.url, title: 'Unknown manual source' }], [policySeed({ sourceRole: '', sourceUrlQualityHint: '', mainArticlePolicy: 'conditional' })]).mergedCandidates;
+  assert.equal(unknown.main_article_source_allowed, false);
+  assert.ok(unknown.main_article_source_blockers.includes('unknown_source_quality'));
+});
+
+test('duplicate seed enrichment preserves raw restrictions beside canonical quality and completed cross checks', () => {
+  const seed = policySeed();
+  for (const restriction of [{ requires_cross_check: true }, { candidateOnly: true }, { linked_evidence_summary: { by_fetch_status: { blocked: 1 } } }]) {
+    const [merged] = mergeSeedCandidates([{ ...seed, ...restriction }], [seed]).mergedCandidates;
+    assert.equal(merged.main_article_source_allowed, false);
+    assert.ok(merged.main_article_source_blockers.length > 0);
+  }
+  const confirmed = { ...seed, mainArticlePolicy: 'conditional', requires_cross_check: true,
+    primary_confirmation: true, api_or_component: 'Camera HAL', source_quality: undefined };
+  const [merged] = mergeSeedCandidates([confirmed], [policySeed({ requiresCrossCheck: true })]).mergedCandidates;
+  assert.equal(merged.main_article_source_allowed, true);
+  assert.equal(merged.cross_check_status, 'required_satisfied');
+  assert.equal(merged.source_quality_status, 'allowed');
+  assert.deepEqual(merged.main_article_source_blockers, []);
+  const [locked] = mergeSeedCandidates([confirmed], [policySeed({ requiresCrossCheck: true, mainArticlePolicy: 'reference_only' })]).mergedCandidates;
+  assert.equal(locked.main_article_source_allowed, false);
+  assert.ok(locked.main_article_source_blockers.includes('reference_only'));
+  const [newRequirement] = mergeSeedCandidates([{ url: seed.url, primary_confirmation: true }], [policySeed({ requiresCrossCheck: true })]).mergedCandidates;
+  assert.equal(newRequirement.main_article_source_allowed, true);
+  assert.equal(newRequirement.cross_check_status, 'required_satisfied');
+  const [blockedCheck] = mergeSeedCandidates([{ url: seed.url, primary_confirmation: true, cross_check_status: 'required_blocked' }], [policySeed({ requiresCrossCheck: true })]).mergedCandidates;
+  assert.equal(blockedCheck.main_article_source_allowed, false);
+  assert.equal(blockedCheck.cross_check_status, 'required_blocked');
+});
+
+function tempRoot(sourceOverrides = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'seed-url-evidence-'));
   fs.mkdirSync(path.join(root, 'src', 'shared', 'data'), { recursive: true });
   fs.writeFileSync(path.join(root, 'src', 'shared', 'data', 'news-sources.json'), JSON.stringify({
@@ -32,6 +145,7 @@ function tempRoot() {
       category: 'android',
       priority: 'high',
       reliability: 'official',
+      ...sourceOverrides,
       linkedEvidencePolicy: {
         enabled: true,
         allowedDomains: ['developer.android.com']
@@ -40,6 +154,34 @@ function tempRoot() {
   }, null, 2), 'utf8');
   return root;
 }
+
+test('seed expansion carries registry policy through duplicate merge and reporter capsule', async () => {
+  for (const [sourceOverrides, title, allowed] of [
+    [{ mainArticleRequiresAndroidCameraHal: true }, 'libcamera ISP buffer change', false],
+    [{ mainArticleRequiresAndroidCameraHal: true }, 'Android Camera HAL camera3_capture_request buffer contract changed', true],
+    [{ mainArticlePolicy: 'allowed' }, 'CameraX stream buffer fix', true]
+  ]) {
+    const root = tempRoot(sourceOverrides);
+    const url = 'https://developer.android.com/news/seed-change';
+    try {
+      const result = await runSeedEvidenceExpansion({
+        root, date: '2026-10-05',
+        manualPayload: { candidates: [{ url, title, priority: 'urgent', source_id: 'manual-source' }] },
+        collectionIntent: { payload: { seed_urls: [{ seed_id: 'registry-seed', url }] } },
+        lookupImpl: publicLookup,
+        fetchImpl: async () => htmlResponse({ body: `<html><head><title>${title}</title><meta name="datePublished" content="2026-10-01"></head><body>${title}</body></html>` })
+      });
+      const candidate = result.mergedCandidates[0];
+      assert.equal(candidate.source_id, 'manual-source');
+      assert.equal(candidate.priority, 'urgent');
+      assert.equal(candidate.main_article_source_allowed, allowed);
+      assert.equal(buildArticleCapsule(candidate).source_quality.main_article_source_allowed, allowed);
+      assert.deepEqual(sourceQualityFieldDrift(candidate), []);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  }
+});
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -562,6 +704,7 @@ const workflowGroupSeed = {
 const workflowGroupSource = {
   name: 'Android Developers Blog',
   category: 'android',
+  reliability: 'official',
   sourceUrl: 'https://developer.android.com/'
 };
 const workflowItemText = 'Workflow paragraph describing an Android camera pipeline change.';

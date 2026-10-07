@@ -61,6 +61,8 @@ v1 transition(전환) 기간에는 `manual-candidates.json`과 `candidates.json`
 
 승인된 `collection-intent.json`이 있으면, Stage 2는 Gemini credential(자격 증명) 유무와 상관없이 deterministic seed evidence expansion(결정론적 씨앗 근거 확장)을 먼저 실행합니다. 즉 Gemini가 꺼져 있어도 seed expansion만으로 `merged-candidates.json`을 만들 수 있습니다.
 
+Seed 후보도 실제 source registry의 출처 정책을 적용합니다. 날짜와 사실 근거가 있어도 `reference_only`, `watchlist_only`, `blocked`, 교차 확인 요구를 우회할 수 없습니다. `mainArticleRequiresAndroidCameraHal` 출처는 근거 텍스트가 `direct_aosp_camera`로 분류될 때만 해당 제한의 예외가 됩니다. 같은 URL의 수동 후보를 보강할 때는 제목·우선순위·`source_id`를 유지하며, 기존의 명시적 출처 제한과 seed의 출처 제한을 함께 보존합니다. 출처 정보가 비어 있다는 이유만으로 추론한 차단을 추가하지 않으며, 확인할 수 없는 seed 출처는 계속 차단합니다.
+
 Seed evidence가 만드는 artifact 목록:
 
 - `articles/content/collected-news/<date>/seed-candidates.json`

@@ -45,6 +45,12 @@ const {
 const {
   CANDIDATE_SCHEMA_VERSION
 } = require('../shared/common/candidate-artifacts');
+const { classifyAospCameraStackCandidate } = require('../shared/domain/aosp-camera-scope');
+const {
+  classifySourceQuality,
+  normalizeSourceQuality,
+  sourceQualityFlatFields
+} = require('../shared/collect/source-quality-classifier');
 
 const SCHEMA_VERSION = 1;
 const DEFAULT_LIMITS = Object.freeze({
@@ -351,7 +357,7 @@ function seedCandidateFromEvidence({
   const url = primaryEvidence.url || seed.url;
   const id = `seed-${stableId([seed.seed_id, url, primaryEvidence.evidence_id])}`;
   const facts = primaryEvidence.source_backed_items || [];
-  return {
+  const output = {
     schema_version: CANDIDATE_SCHEMA_VERSION,
     id,
     source_candidate_id: id,
@@ -413,6 +419,85 @@ function seedCandidateFromEvidence({
     cameraHalRelevanceScore: facts.length > 0 ? 70 : 45,
     camera_hal_relevance_score: facts.length > 0 ? 70 : 45
   };
+  const scope = classifyAospCameraStackCandidate(output);
+  const quality = classifySourceQuality({
+    candidate: {
+      ...output,
+      ...scope,
+      primary_confirmation: candidate.primary_confirmation,
+      cross_check_satisfied: candidate.cross_check_satisfied,
+      has_primary_confirmation: candidate.has_primary_confirmation,
+      primary_confirmation_sources: candidate.primary_confirmation_sources,
+      cross_check_evidence: candidate.cross_check_evidence
+    },
+    source
+  });
+  return applySeedSourceQuality({ ...output, ...scope }, quality, candidate);
+}
+
+// seed 근거는 빈 정보를 보강하지만, 이미 명시된 출처 제한을 해제하지 않는다.
+function applySeedSourceQuality(output, quality, previous = {}) {
+  const priorInput = {
+    ...output,
+    source_role: previous.source_role || previous.sourceRole || quality.source_role,
+    source_url_quality: previous.source_url_quality || previous.sourceUrlQuality || quality.source_url_quality,
+    ...previous
+  };
+  const prior = normalizeSourceQuality(priorInput);
+  // canonical quality가 있어도 별도로 실린 교차 확인 요구·차단 링크를 버리지 않는다.
+  const restrictions = classifySourceQuality({ candidate: {
+    ...priorInput,
+    cross_check_status: priorInput.cross_check_status === 'not_required' ? undefined : priorInput.cross_check_status,
+    crossCheckStatus: priorInput.crossCheckStatus === 'not_required' ? undefined : priorInput.crossCheckStatus
+  }, source: {
+    sourceRole: priorInput.source_role,
+    sourceUrlQualityHint: priorInput.source_url_quality,
+    requiresCrossCheck: quality.requires_cross_check || priorInput.requires_cross_check === true || priorInput.requiresCrossCheck === true,
+    mainArticlePolicy: 'allowed'
+  } });
+  const confirmed = restrictions.cross_check_status === 'required_satisfied' &&
+    restrictions.main_article_source_allowed && prior.main_article_source_allowed;
+  const confirmationBlockers = ['cross_check_required_but_missing', 'candidate_only_without_primary_confirmation'];
+  const seedBlockers = quality.main_article_source_blockers.filter(blocker => !confirmed || !confirmationBlockers.includes(blocker));
+  const seedAllowed = quality.main_article_source_allowed ||
+    (confirmed && quality.main_article_source_blockers.length > 0 && seedBlockers.length === 0);
+  const priorPolicy = previous.mainArticlePolicy || previous.main_article_policy;
+  const blockers = [...new Set([
+    ...seedBlockers,
+    ...ensureArray(prior?.main_article_source_blockers),
+    ...restrictions.main_article_source_blockers,
+    ...(previous.source_gap_risk === true ? ['source_gap_risk'] : []),
+    ...(previous.reference_only === true || priorPolicy === 'reference_only' ? ['reference_only'] : []),
+    ...(['watchlist_only', 'blocked'].includes(priorPolicy) ? ['policy_locked_out_of_main'] : [])
+  ])];
+  const allowed = seedAllowed && prior?.main_article_source_allowed !== false && restrictions.main_article_source_allowed &&
+    previous.main_article_source_allowed !== false && previous.mainArticleSourceAllowed !== false && blockers.length === 0;
+  const combined = {
+    ...quality,
+    main_article_source_allowed: allowed,
+    main_article_source_blockers: blockers,
+    ...(allowed && !quality.main_article_source_allowed ? {
+      source_quality_status: 'allowed',
+      main_article_source_allowed_reason: 'Existing primary confirmation satisfies the seed source cross-check requirement.'
+    } : {}),
+    ...((prior.requires_cross_check || restrictions.requires_cross_check) ? {
+      requires_cross_check: true,
+      cross_check_status: restrictions.cross_check_status
+    } : {}),
+    ...(!allowed ? {
+      source_quality_status: blockers.includes('unknown_source_quality') ? 'unknown' : 'blocked',
+      main_article_source_allowed_reason: blockers.length > 0
+        ? `Seed source restrictions: ${blockers.join(', ')}.`
+        : 'An existing source restriction does not allow a main article.'
+    } : {})
+  };
+  return {
+    ...output,
+    source_quality: combined,
+    ...(output.sourceQuality ? { sourceQuality: combined } : {}),
+    ...sourceQualityFlatFields(combined),
+    main_eligible: output.main_eligible !== false && previous.main_eligible !== false && allowed
+  };
 }
 
 function preserveManualEditorialFields(manual, seedCandidate) {
@@ -454,7 +539,9 @@ function preserveManualEditorialFields(manual, seedCandidate) {
     ...ensureArray(output.do_not_claim),
     ...ensureArray(seedCandidate.compact_evidence?.do_not_claim)
   ])];
-  return output;
+  return seedCandidate.source_quality
+    ? applySeedSourceQuality(output, seedCandidate.source_quality, manual)
+    : output;
 }
 
 function mergeSeedCandidates(manualCandidates = [], seedCandidates = []) {
