@@ -119,6 +119,11 @@ jobs:
 
       - name: Collect RAW news candidates
         id: collect
+        # 전역 상한 50건은 LLM 1차 선별로 고른다(#1258, candidate-triage.js). 키는 이 step에만
+        # 준다. 키가 없거나 호출이 실패하면 수집기는 예전 키워드 순서 결과로 폴백하고 실패 사유를
+        # candidates.json의 candidate_triage에 남긴다. 모델은 repo variable이 아니라 code default다.
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: npm run collect
 
       - name: Resolve RAW metadata

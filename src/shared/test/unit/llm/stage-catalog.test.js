@@ -36,6 +36,7 @@ const EXPECTED_LABELS = [
   [LLM_STAGES.WEEKLY_MERGE, 'weekly-merge'],
   [LLM_STAGES.INTRO_LETTER, 'intro-letter'],
   [LLM_STAGES.POST_GENERATION_QUALITY_JUDGE, 'post-generation public quality judge'],
+  [LLM_STAGES.CANDIDATE_TRIAGE, 'candidate-triage'],
   [LLM_STAGES.SOURCE_DISCOVERY, 'sourceDiscovery']
 ];
 
@@ -55,8 +56,8 @@ function runFor(definition) {
   return stageRun(definition, { qualityAttempt: 1, totalAttempts: 2 });
 }
 
-test('catalog가 production stage 24개를 정의한다', () => {
-  assert.equal(Object.keys(LLM_STAGES).length, 24);
+test('catalog가 production stage 25개를 정의한다', () => {
+  assert.equal(Object.keys(LLM_STAGES).length, 25);
   const ids = Object.values(LLM_STAGES).map(definition => definition.id);
   assert.equal(new Set(ids).size, ids.length, 'definition id가 중복이다');
 });
@@ -74,7 +75,7 @@ test('definition의 group과 sampling profile이 모두 유효한 어휘다', ()
   });
 });
 
-test('기본 stage 14개의 label이 현행과 byte 단위로 같다', () => {
+test('기본 stage 15개의 label이 현행과 byte 단위로 같다', () => {
   EXPECTED_LABELS.forEach(([definition, expected]) => {
     assert.equal(runFor(definition).label, expected);
   });

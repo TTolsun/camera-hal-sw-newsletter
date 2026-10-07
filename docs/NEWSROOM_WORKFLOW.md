@@ -185,7 +185,7 @@ source registry
 
 `llm_provider`, `llm_model`, `llm_fallback_models` input이 `LLM_PROVIDER`, `LLM_MODEL`, `LLM_FALLBACK_MODELS` runtime env로 전달되는 경우는 `workflow_dispatch` 수동 실행뿐입니다. stage별 selector는 다음과 같습니다.
 
-- Stage 1 source collection: LLM을 호출하지 않으므로 `llm_provider` selector가 없습니다.
+- Stage 1 source collection: 후보 1차 선별(`candidate_triage` stage, #1258) 한 번만 LLM을 호출하며 항상 code default provider/model을 씁니다. `llm_provider` selector는 없습니다.
 - Stage 2 source discovery: `llm_provider`와 `llm_model`을 제공합니다.
 - Stage 3 final generation: `llm_provider`, `llm_model`, `llm_fallback_models`를 모두 제공합니다.
 
@@ -502,7 +502,7 @@ workflow는 `main`에 직접 push하지 않습니다. 수동 실행 시에는 RA
 
 현재 schedule entrypoint는 `Newsletters 00 - Weekly Orchestrator` (`.github/workflows/newsletters-00-orchestrator.yml`)입니다. cron(`0 0 * * 1`)을 가진 workflow는 00 하나뿐이고, 00이 collect(01) → discover(02) → generate(03)를 순서대로 호출합니다. 따라서 final newsletter generation도 예약 경로에서 자동 실행됩니다. 단, 그보다 먼저 `published-guard` job이 대상 날짜나 그 주가 main에 이미 발행돼 있는지 보고, 발행돼 있으면 세 단계를 모두 돌리지 않습니다(#1167, 자세한 내용은 `docs/workflows/RAW_TO_GENERATE_ARTIFACT_CONTRACT.md`). 각 단계를 따로 돌리려면 `workflow_dispatch`로 수동 실행합니다.
 
-- `Newsletters 01 - Source Collection PR` (`.github/workflows/newsletters-01-source-collect-pr.yml`): `collect`만 실행해 `manual-candidates.json`, 호환용 `candidates.json`, `raw-candidate-manifest.json`을 만듭니다. Gemini/API secret은 쓰지 않습니다.
+- `Newsletters 01 - Source Collection PR` (`.github/workflows/newsletters-01-source-collect-pr.yml`): `collect`만 실행해 `manual-candidates.json`, 호환용 `candidates.json`, `raw-candidate-manifest.json`을 만듭니다. `GEMINI_API_KEY`는 수집 step에만 주며 후보 1차 선별에만 씁니다. 키가 없거나 호출이 실패하면 키워드 순서로 폴백하고, 결과는 `candidates.json`의 `candidate_triage`에 남습니다.
 - `Newsletters 02 - Source Discovery PR` (`.github/workflows/newsletters-02-source-discovery-pr.yml`): source discovery 전용 workflow입니다. 따라서 `NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=true`로 고정 실행하고, 별도 toggle input은 없습니다. 동작 순서는 LLM credential preflight → seed evidence 확장(결정론) → linked evidence 선택(Gemini 호출은 이 하나) → seed·파생 후보를 `merged-candidates.json`에 반영, 입니다. Gemini가 URL을 제안하고 승격하던 제안 단계는 #1186에서 제거했습니다. (`NEWSROOM_ENABLE_GEMINI_SOURCE_DISCOVERY=false`로 자격 증명 없이 도는 disabled pass-through는 code 수준에서는 여전히 지원하지만, 이 workflow에서는 노출하지 않습니다.) workflow 02는 아래 파일들을 `merged-candidate-manifest.json`의 strict-check 필드에 기록합니다. `validateMergedManifestSchema`가 `llm_used=true` 또는 `merge_mode='gemini_source_discovery'` 조건에서 이 파일들의 존재를 필수로 검증하므로, 모두 Git에 커밋(`review_required_compact` 등급)해야 합니다:
   - `gemini-usage-report.json` (`usage_report` 필드)
   - `source-clusters.json` (`source_clusters` 필드)
