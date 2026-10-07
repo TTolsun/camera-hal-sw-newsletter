@@ -67,7 +67,7 @@ const {
   classifyAospCameraStackCandidate,
   detectNativeAndroidToolingWorkflow
 } = require('../domain/aosp-camera-scope');
-const { triageCandidatePool } = require('../collect/candidate-triage');
+const { TRIAGE_MODES, triageCandidatePool } = require('../collect/candidate-triage');
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,
@@ -2194,6 +2194,14 @@ function buildCollectionCounts(stages, sourceIds = []) {
   return counts;
 }
 
+function buildCollectionCountsAfterTriage(stages, triage, sourceIds = []) {
+  // LLM 선별 탈락은 상한 압력이 아니다. 키워드 폴백만 기존 global_cap 집계를 유지한다.
+  return buildCollectionCounts([
+    ...stages,
+    { reason: triage.report.mode === TRIAGE_MODES.KEYWORD_FALLBACK ? 'global_cap' : 'triage', items: triage.candidates }
+  ], sourceIds);
+}
+
 // 후보 1차 선별 LLM 호출. llm-client는 provider SDK와 runtime config를 로드하므로 수집기 모듈을
 // require하는 테스트가 그 비용을 지지 않게 호출 시점에 불러온다. 키가 없거나 호출이 실패하면
 // 던지고, triageCandidatePool이 키워드 폴백으로 닫는다.
@@ -2294,16 +2302,15 @@ async function main() {
   const rankedCandidates = usedKeywordFallback ? keywordRanked : triageRanked;
   const seriesCandidates = usedKeywordFallback ? collapseSeriesRepresentatives(keywordRanked) : triageSeries;
   const sourceCappedCandidates = capPerSource(seriesCandidates, MAX_CANDIDATES_PER_SOURCE);
-  const collectionCountsBySource = buildCollectionCounts([
+  const collectionCountsBySource = buildCollectionCountsAfterTriage([
     { items: rawCandidates },
     { reason: 'duplicate', items: deduplicatedCandidates },
     { reason: 'deferred_coverage', items: currentCoveragePool },
     { reason: 'outside_window', items: datedCandidates },
     { reason: 'relevance', items: rankedCandidates },
     { reason: 'series_collapsed', items: seriesCandidates },
-    { reason: 'source_cap', items: sourceCappedCandidates },
-    { reason: 'global_cap', items: candidates }
-  ], sources.map(source => source.id));
+    { reason: 'source_cap', items: sourceCappedCandidates }
+  ], triage, sources.map(source => source.id));
 
   const enrichedCandidates = [];
   for (const candidate of candidates) {
@@ -2384,6 +2391,7 @@ if (require.main === module) {
 
 module.exports = {
   buildCollectionCounts,
+  buildCollectionCountsAfterTriage,
   MAX_FINAL_CANDIDATES,
   MAX_CANDIDATES_PER_SOURCE,
   NOT_YET_ELIGIBLE_MAX_COUNT,

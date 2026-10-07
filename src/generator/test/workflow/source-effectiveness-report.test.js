@@ -556,6 +556,29 @@ test('caps are reported separately from collection losses and never claim no new
   }
 });
 
+test('triage exclusions preserve collection completeness without claiming cap pressure or no news', () => {
+  for (const verified of [false, true]) {
+    const counts = { raw_collected_count: 2, filtered_out_count: 2, candidate_count: 0, filter_counts: { triage: 2 } };
+    const result = collectionReport({
+      counts,
+      ...(verified ? { caps: { discovered_card_count: 2, unresolved_card_count: 0, in_window_card_count: 2 } } : {})
+    });
+    assert.equal(result.collection_status, verified ? 'COLLECTION_COMPLETE' : 'COLLECTION_UNKNOWN');
+    assert.equal(result.recommendation, 'KEEP_AND_MONITOR');
+    assert.deepEqual(result.filter_counts, { triage: 2 });
+    assert.equal(result.filtered_out_count, 2);
+    assert.equal(result.candidate_count, 0);
+    assert.deepEqual(result.collection_reasons, []);
+  }
+
+  const capped = collectionReport({
+    counts: { raw_collected_count: 3, filtered_out_count: 3, candidate_count: 0, filter_counts: { source_cap: 1, triage: 2 } }
+  });
+  assert.equal(capped.collection_status, 'COLLECTION_CAPPED');
+  assert.deepEqual(capped.collection_reasons, ['source_cap']);
+  assert.deepEqual(capped.filter_counts, { source_cap: 1, triage: 2 });
+});
+
 test('routine caps and per-article fail-closed do not override a source that kept candidates', () => {
   const baseline = source(buildReport(), 'effective-camera');
   assert.ok(baseline.collected_count > 0);
