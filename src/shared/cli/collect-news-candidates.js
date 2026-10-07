@@ -68,6 +68,10 @@ const {
   detectNativeAndroidToolingWorkflow
 } = require('../domain/aosp-camera-scope');
 const {
+  AI_MODEL_RELEASE_REFERENCE_LIMIT,
+  isAiModelReleaseCandidate
+} = require('../domain/ai-model-release');
+const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,
   loreSeriesKey,
@@ -2193,6 +2197,21 @@ function buildCollectionCounts(stages, sourceIds = []) {
   return counts;
 }
 
+// 전역 상한을 적용하되, 상한 밖으로 밀린 모델 출시 글을 최신순으로 limit건까지 뒤에 붙인다.
+// 상한 안에 이미 든 모델 출시 글도 limit에 센다 - 이 레인이 한 호에 싣는 총량은 limit을 넘지 않는다.
+// lanePool은 소스별 상한 이전 목록이다 - 소스 하나가 8건을 넘는 주에도 출시 글이 그 상한에서 먼저
+// 잘리지 않게 한다.
+function withAiModelReleaseLane(rankedCandidates, maxFinal, { limit = AI_MODEL_RELEASE_REFERENCE_LIMIT, lanePool = rankedCandidates } = {}) {
+  const capped = rankedCandidates.slice(0, maxFinal);
+  const cappedSet = new Set(capped);
+  const room = Math.max(0, limit - capped.filter(isAiModelReleaseCandidate).length);
+  const lane = lanePool
+    .filter(item => !cappedSet.has(item) && isAiModelReleaseCandidate(item))
+    .sort((a, b) => (Date.parse(b.publishedAt) || 0) - (Date.parse(a.publishedAt) || 0))
+    .slice(0, room);
+  return [...capped, ...lane];
+}
+
 async function main() {
   // Fail fast on a malformed manual_source_urls input before doing any
   // collection work, so we never leave a manifest-less candidate artifact.
@@ -2259,12 +2278,16 @@ async function main() {
   writeNotYetEligibleOverflowIfNeeded(root, date, notYetEligibleCap);
 
   const datedCandidates = currentCoveragePool.filter(item => withinLookback(item, now, lookbackDays));
+  // 공식 AI 소스의 모델 출시 글은 카메라 키워드가 거의 없어 relevance 하한과 전역 상한을 넘지
+  // 못한다(#1258, 실측 2026-10-05: Claude Sonnet 5.5가 32점으로 전역 상한에서 탈락). 이 글은
+  // 참고 섹션 전용 칸으로만 쓰이므로 relevance 하한을 면제하고, 전역 상한 50건과 별도로 최신
+  // AI_MODEL_RELEASE_REFERENCE_LIMIT건까지 덧붙인다. 카메라 후보의 자리를 빼앗지 않는다.
   const rankedCandidates = datedCandidates
-    .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high')
+    .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high' || isAiModelReleaseCandidate(item))
     .sort(candidateRankOrder(now, coverage));
   const seriesCandidates = collapseSeriesRepresentatives(rankedCandidates);
   const sourceCappedCandidates = capPerSource(seriesCandidates, MAX_CANDIDATES_PER_SOURCE);
-  candidates = sourceCappedCandidates.slice(0, MAX_FINAL_CANDIDATES);
+  candidates = withAiModelReleaseLane(sourceCappedCandidates, MAX_FINAL_CANDIDATES, { lanePool: seriesCandidates });
   const collectionCountsBySource = buildCollectionCounts([
     { items: rawCandidates },
     { reason: 'duplicate', items: deduplicatedCandidates },
@@ -2362,6 +2385,7 @@ module.exports = {
   candidateRankOrder,
   capNotYetEligible,
   capPerSource,
+  withAiModelReleaseLane,
   collapseSeriesRepresentatives,
   collectFromSource,
   componentFromText,

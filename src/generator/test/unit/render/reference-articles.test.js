@@ -326,3 +326,53 @@ test('a trend-reference project item says so in its note and other items keep th
   assert.equal(items[0].note, '오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고');
   assert.equal(items[1].note, '카메라 드라이버 / 이미지 파이프라인 참고');
 });
+
+// #1258 (2026-10-07 결정): 공식 AI 소스의 모델 출시 글은 generic_tech_watchlist라 일반 참고
+// 경로로는 실리지 않는다. 전용 칸으로 카메라 참고 항목 뒤에 붙고, 그 상한과 경쟁하지 않는다.
+function modelRelease(overrides = {}) {
+  return {
+    title: 'Claude Sonnet 5.5',
+    url: 'https://www.anthropic.com/claude-sonnet-5-5',
+    published_date: '2026-09-28',
+    relevance_bucket: 'generic_tech_watchlist',
+    source: 'Anthropic News',
+    source_category: 'ai',
+    source_reliability: 'official',
+    has_published_date: true,
+    ...overrides
+  };
+}
+
+test('model releases get their own slot after a full camera reference list', () => {
+  const camera = [1, 2, 3, 4].map(index => candidate({ title: `Camera ${index}`, url: `https://a.example/${index}` }));
+  const items = buildReferenceArticlesForIssue({
+    shortlisted_candidates: camera,
+    ai_model_release_reference_candidates: [modelRelease()]
+  });
+
+  assert.deepEqual(items.map(item => item.title), ['Camera 1', 'Camera 2', 'Camera 3', 'Camera 4', 'Claude Sonnet 5.5']);
+  assert.equal(items[4].note, 'AI 모델 출시 · 개발 도구 동향 참고');
+});
+
+test('the model release slot skips main articles, non-release titles and caps at the limit', () => {
+  const items = buildReferenceArticlesForIssue({
+    selected_articles: [{ url: 'https://www.anthropic.com/claude-sonnet-5-5' }],
+    ai_model_release_reference_candidates: [
+      modelRelease(),
+      modelRelease({ title: 'Barclays scales Claude', url: 'https://www.anthropic.com/news/barclays' }),
+      modelRelease({ title: 'Gemini 4', url: 'https://blog.google/gemini-4', published_date: '2026-09-30', source: 'Google Blog' }),
+      modelRelease({ title: 'GPT-6', url: 'https://openai.com/gpt-6', published_date: '2026-10-01', source: 'OpenAI News' }),
+      modelRelease({ title: 'Llama 5', url: 'https://ai.meta.com/llama-5', published_date: '2026-09-29', source: 'Meta AI' })
+    ]
+  });
+
+  assert.deepEqual(items.map(item => item.title), ['GPT-6', 'Gemini 4']);
+});
+
+test('a model release that is not from an official ai source does not get the slot', () => {
+  const items = buildReferenceArticlesForIssue({
+    ai_model_release_reference_candidates: [modelRelease({ source_reliability: 'tech-media' })]
+  });
+
+  assert.deepEqual(items, []);
+});

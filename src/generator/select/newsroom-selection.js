@@ -40,8 +40,10 @@ const {
 const {
   coverageForAnchorDate,
   coverageAgeDays,
-  classifyCoverageWindow
+  classifyCoverageWindow,
+  isCoverageWeekWindow
 } = require('../../shared/common/coverage-week');
+const { isAiModelReleaseCandidate } = require('../../shared/domain/ai-model-release');
 const {
   candidateScope,
   isForbiddenMainScope,
@@ -1232,6 +1234,17 @@ function evidenceUncheckedMainBlockedObservation(blockedCandidates) {
   return { count: candidateUrls.length, candidate_urls: candidateUrls };
 }
 
+// 참고 섹션 모델 출시 칸의 후보(#1258). 이 글은 generic_tech_watchlist라 main 경쟁 풀과
+// reference 창 풀 어디에도 남지 않으므로(exclusion_reasons로 바로 excluded), 수집 후보에서 따로
+// 골라 싣는다. 커버리지 주 안의 글만 받는다 - 같은 출시가 다음 호에 다시 실리지 않게 한다.
+// main 선정에는 쓰이지 않는다.
+function aiModelReleaseReferenceCandidates(rawCandidates, date, options = {}) {
+  return ensureArray(rawCandidates)
+    .filter(candidate => candidate && typeof candidate === 'object' && isAiModelReleaseCandidate(candidate))
+    .map(candidate => decorateCandidate(candidate, date, options))
+    .filter(candidate => isCoverageWeekWindow(candidate.freshness_window));
+}
+
 function buildShortlistReport(date, collectedCandidates, options = {}) {
   const rawCandidates = ensureArray(collectedCandidates?.candidates || collectedCandidates);
   const coverageLineage = collectedCoverageLineage(collectedCandidates);
@@ -1549,6 +1562,10 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     selected_articles: selected,
     reserve_candidates: reserve,
     reference_context_candidates: referenceContextCandidates,
+    ai_model_release_reference_candidates: aiModelReleaseReferenceCandidates(rawCandidates, date, {
+      selectionWindowPolicy,
+      coverageWeekKeyOverride: options.coverageWeekKeyOverride
+    }),
     demoted_candidates: [],
     excluded_candidates: excluded,
     release_class_catch_up: {

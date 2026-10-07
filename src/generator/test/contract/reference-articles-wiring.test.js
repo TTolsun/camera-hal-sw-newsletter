@@ -140,3 +140,40 @@ test('the reference section orders coverage-week candidates ahead of a higher-pr
     '창 안 항목이 모두 앞에 오고 창 밖 항목은 남은 자리만 채운다'
   );
 });
+
+// #1258: 모델 출시 글은 generic_tech_watchlist라 selection에서 바로 excluded로 빠진다. 참고 섹션의
+// 전용 칸에 닿는 유일한 길은 ai_model_release_reference_candidates이고, 그 필드가 정규화를 거쳐
+// render까지 살아 있어야 한다. coverage 주(anchor 2026-08-19 -> 08-10~08-16) 밖의 출시는 싣지 않는다.
+function modelRelease(overrides = {}) {
+  return {
+    title: 'Claude Sonnet 5.5',
+    url: 'https://www.anthropic.com/claude-sonnet-5-5',
+    published_date: '2026-08-14',
+    publishedAt: '2026-08-14',
+    source: 'Anthropic News',
+    source_name: 'Anthropic News',
+    source_category: 'ai',
+    source_reliability: 'official',
+    has_published_date: true,
+    relevance_bucket: 'generic_tech_watchlist',
+    finalSelectionEligibility: 'watchlist',
+    main_eligible: false,
+    source_gap_risk: true,
+    reference_only: true,
+    ...overrides
+  };
+}
+
+test('a coverage-week model release reaches its reference slot through the shortlist report', () => {
+  const report = buildShortlistReport('2026-08-19', [
+    policyDriverCandidate(0, { url: 'https://example.com/driver-0', published_date: '2026-08-14' }),
+    modelRelease(),
+    modelRelease({ title: 'Claude Opus 5.5', url: 'https://www.anthropic.com/claude-opus-5-5', published_date: '2026-08-05', publishedAt: '2026-08-05' })
+  ], { minArticles: 1 });
+  const renderInput = normalizeShortlistReport(report, null);
+
+  assert.deepEqual(renderInput.ai_model_release_reference_candidates.map(item => item.title), ['Claude Sonnet 5.5']);
+  const items = buildReferenceArticlesForIssue(renderInput);
+  assert.equal(items.at(-1).title, 'Claude Sonnet 5.5');
+  assert.equal(items.filter(item => item.title === 'Claude Opus 5.5').length, 0);
+});
