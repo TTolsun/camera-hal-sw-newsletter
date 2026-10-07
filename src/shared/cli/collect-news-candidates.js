@@ -67,6 +67,7 @@ const {
   classifyAospCameraStackCandidate,
   detectNativeAndroidToolingWorkflow
 } = require('../domain/aosp-camera-scope');
+const { triageCandidatePool } = require('../collect/candidate-triage');
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
   NATIVE_TOOLING_WORKFLOW_TYPE,
@@ -2193,6 +2194,17 @@ function buildCollectionCounts(stages, sourceIds = []) {
   return counts;
 }
 
+// 후보 1차 선별 LLM 호출. llm-client는 provider SDK와 runtime config를 로드하므로 수집기 모듈을
+// require하는 테스트가 그 비용을 지지 않게 호출 시점에 불러온다. 키가 없거나 호출이 실패하면
+// 던지고, triageCandidatePool이 키워드 폴백으로 닫는다.
+function candidateTriageLlmCall() {
+  return async (systemInstruction, prompt, schema) => {
+    const { callLlmJson } = require('../llm/llm-client');
+    const { LLM_STAGES, stageRun } = require('../llm/stage-catalog');
+    return callLlmJson(stageRun(LLM_STAGES.CANDIDATE_TRIAGE), systemInstruction, prompt, schema);
+  };
+}
+
 async function main() {
   // Fail fast on a malformed manual_source_urls input before doing any
   // collection work, so we never leave a manifest-less candidate artifact.
@@ -2259,12 +2271,29 @@ async function main() {
   writeNotYetEligibleOverflowIfNeeded(root, date, notYetEligibleCap);
 
   const datedCandidates = currentCoveragePool.filter(item => withinLookback(item, now, lookbackDays));
-  const rankedCandidates = datedCandidates
-    .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high')
-    .sort(candidateRankOrder(now, coverage));
-  const seriesCandidates = collapseSeriesRepresentatives(rankedCandidates);
+  // 전역 상한 50건을 고르는 기준은 LLM 1차 선별이다(#1258, candidate-triage.js). 판단 풀은
+  // 날짜 창 안의 전체 후보(키워드 relevance 하한 없음)에서 시리즈 대표만 남기고 소스별 상한을
+  // 적용한 목록이다. 키워드 순서는 풀의 정렬, 프롬프트 크기 제한, LLM을 못 쓸 때의 폴백으로만 쓴다.
+  const triageRanked = [...datedCandidates].sort(candidateRankOrder(now, coverage));
+  const triageSeries = collapseSeriesRepresentatives(triageRanked);
+  const triagePool = capPerSource(triageSeries, MAX_CANDIDATES_PER_SOURCE);
+  // 폴백 = 예전 결과 그대로: relevance 하한(30, high 소스 면제) -> 키워드 순서 -> 상한.
+  const keywordRanked = triageRanked
+    .filter(item => item.cameraHalRelevanceScore >= 30 || item.source_priority === 'high');
+  const keywordFallback = capPerSource(collapseSeriesRepresentatives(keywordRanked), MAX_CANDIDATES_PER_SOURCE)
+    .slice(0, MAX_FINAL_CANDIDATES);
+  const triage = await triageCandidatePool(triagePool, {
+    maxFinal: MAX_FINAL_CANDIDATES,
+    keywordFallback,
+    callLlm: candidateTriageLlmCall()
+  });
+  console.log(`Candidate triage: mode=${triage.report.mode}, pool=${triage.report.pool_size}, selected=${triage.report.selected_count}` +
+    (triage.report.failure_reason ? `, fallback_reason=${triage.report.failure_reason}` : ''));
+  candidates = triage.candidates;
+  const usedKeywordFallback = triage.report.mode === 'keyword_fallback';
+  const rankedCandidates = usedKeywordFallback ? keywordRanked : triageRanked;
+  const seriesCandidates = usedKeywordFallback ? collapseSeriesRepresentatives(keywordRanked) : triageSeries;
   const sourceCappedCandidates = capPerSource(seriesCandidates, MAX_CANDIDATES_PER_SOURCE);
-  candidates = sourceCappedCandidates.slice(0, MAX_FINAL_CANDIDATES);
   const collectionCountsBySource = buildCollectionCounts([
     { items: rawCandidates },
     { reason: 'duplicate', items: deduplicatedCandidates },
@@ -2322,6 +2351,7 @@ async function main() {
     candidates,
     failures,
     collection_counts_by_source: collectionCountsBySource,
+    candidate_triage: triage.report,
     dated_article_collection: summarizeDatedArticleCollection({
       events: collectionDiagnostics.events(),
       candidates,

@@ -266,6 +266,19 @@ const BASE_STAGES = {
     statusRole: 'judge',
     label: { kind: LABEL_KINDS.STATIC, text: 'post-generation public quality judge' }
   }),
+  CANDIDATE_TRIAGE: defineStage({
+    // 수집 후보 1차 선별(#1258). 키워드 점수 전역 상한 대신 후보 목록 전체를 한 번에 판단한다.
+    // 분류·판단 stage라 editorial-plan과 같은 model group(gemini-2.5-flash)을 쓰고, 목록이 길어
+    // thinking은 끈다.
+    id: 'candidate_triage',
+    modelGroup: LLM_STAGE_GROUPS.EDITORIAL_PLAN,
+    sampling: {
+      temperatureProfile: TEMPERATURE_PROFILES.JUDGE,
+      thinkingProfile: THINKING_PROFILES.DISABLED
+    },
+    statusRole: 'candidate-triage',
+    label: { kind: LABEL_KINDS.STATIC, text: 'candidate-triage' }
+  }),
   SOURCE_DISCOVERY: defineStage({
     // status role이 정해진 어휘가 아니라 label 소문자 값 그대로다. 현행 결과를 보존한다(#979 6번).
     id: 'source_discovery',

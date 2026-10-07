@@ -315,7 +315,11 @@ test('split newsroom workflows preserve #88 stage boundaries', () => {
   assert.match(stage1, /run: npm run doctor:config -- --no-llm-credentials/);
   assert.match(stage1, /run: npm run collect/);
   assert.doesNotMatch(stage1, /npm run generate/);
-  assert.doesNotMatch(stage1, /GEMINI_API_KEY/);
+  // #1258: 수집 step만 후보 1차 선별용 키를 받는다. 다른 step과 job 전역 env에는 없다.
+  const stage1CollectStep = workflowStep(stage1, 'Collect RAW news candidates');
+  assert.match(stage1CollectStep, /GEMINI_API_KEY: \$\{\{ secrets\.GEMINI_API_KEY \}\}/);
+  assert.equal(stage1.match(/secrets\.GEMINI_API_KEY/g).length, 1);
+  assert.doesNotMatch(stage1, /vars\.LLM_/);
   assert.doesNotMatch(stage1, /INTERNAL_LLM_API_KEY/);
   assert.match(stage1, /branch=newsroom-raw\/\$\{DATE\}/);
   assert.match(stage1, /manual-candidates\.json/);
