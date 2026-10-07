@@ -27,7 +27,11 @@ test('model release titles start with a model family name and a version', () => 
     'Claude Opus 5',
     'Introducing GPT-6',
     'Gemini 3.1',
-    'Meet Llama 5'
+    'Meet Llama 5',
+    'Claude 3.5 Sonnet',
+    'Introducing GPT-4o',
+    'Introducing o3',
+    'o4-mini'
   ]) {
     assert.equal(isAiModelReleaseTitle(title), true, title);
   }
@@ -41,7 +45,9 @@ test('mentions, patch releases and customer stories are not model releases', () 
     'Claude Code v2.1.288',
     'Barclays scales Claude to upgrade operations and improve client experience',
     'Introducing the Life Sciences Verification Program',
-    'Claude Sonnet 5.5.1 hotfix notes'
+    'Claude Sonnet 5.5.1 hotfix notes',
+    'Our approach to model safety',
+    'GPT-4ox launch'
   ]) {
     assert.equal(isAiModelReleaseTitle(title), false, title);
   }

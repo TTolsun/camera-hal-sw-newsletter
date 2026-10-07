@@ -12,7 +12,11 @@
 const AI_MODEL_RELEASE_TITLE = new RegExp(
   '^(?:(?:introducing|announcing|meet)\\s+)?(?:the\\s+)?(?:' + [
     '(?:claude\\s+)?(?:fable|mythos|opus|sonnet|haiku)\\s+\\d+(?:\\.\\d+)?',
-    'gpt-\\d+(?:\\.\\d+)?',
+    // 버전이 앞에 오는 예전 Claude 표기("Claude 3.5 Sonnet")
+    'claude\\s+\\d+(?:\\.\\d+)?\\s+(?:fable|mythos|opus|sonnet|haiku)',
+    // 글자 접미가 붙는 GPT("GPT-4o")와 o 계열("o3", "o4-mini")
+    'gpt-\\d+(?:\\.\\d+)?[a-z]?',
+    'o\\d+(?:-mini|-pro)?',
     'gemini\\s+\\d+(?:\\.\\d+)?',
     'gemma\\s+\\d+(?:\\.\\d+)?',
     'llama\\s+\\d+(?:\\.\\d+)?'
