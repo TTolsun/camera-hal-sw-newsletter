@@ -67,10 +67,6 @@ const {
   classifyAospCameraStackCandidate,
   detectNativeAndroidToolingWorkflow
 } = require('../domain/aosp-camera-scope');
-const {
-  AI_MODEL_RELEASE_REFERENCE_LIMIT,
-  isAiModelReleaseCandidate
-} = require('../domain/ai-model-release');
 const { triageCandidatePool } = require('../collect/candidate-triage');
 const {
   ANDROID_NATIVE_TOOLING_GROUP_KEY,
@@ -2209,21 +2205,6 @@ function candidateTriageLlmCall() {
   };
 }
 
-// 전역 상한을 적용하되, 상한 밖으로 밀린 모델 출시 글을 최신순으로 limit건까지 뒤에 붙인다.
-// 상한 안에 이미 든 모델 출시 글도 limit에 센다 - 이 레인이 한 호에 싣는 총량은 limit을 넘지 않는다.
-// lanePool은 소스별 상한 이전 목록이다 - 소스 하나가 8건을 넘는 주에도 출시 글이 그 상한에서 먼저
-// 잘리지 않게 한다.
-function withAiModelReleaseLane(rankedCandidates, maxFinal, { limit = AI_MODEL_RELEASE_REFERENCE_LIMIT, lanePool = rankedCandidates } = {}) {
-  const capped = rankedCandidates.slice(0, maxFinal);
-  const cappedSet = new Set(capped);
-  const room = Math.max(0, limit - capped.filter(isAiModelReleaseCandidate).length);
-  const lane = lanePool
-    .filter(item => !cappedSet.has(item) && isAiModelReleaseCandidate(item))
-    .sort((a, b) => (Date.parse(b.publishedAt) || 0) - (Date.parse(a.publishedAt) || 0))
-    .slice(0, room);
-  return [...capped, ...lane];
-}
-
 async function main() {
   // Fail fast on a malformed manual_source_urls input before doing any
   // collection work, so we never leave a manifest-less candidate artifact.
@@ -2308,9 +2289,7 @@ async function main() {
   });
   console.log(`Candidate triage: mode=${triage.report.mode}, pool=${triage.report.pool_size}, selected=${triage.report.selected_count}` +
     (triage.report.failure_reason ? `, fallback_reason=${triage.report.failure_reason}` : ''));
-  // 공식 AI 소스의 모델 출시 글은 참고 섹션 전용 칸 몫으로 상한과 별도로 최신 2건까지 덧붙인다.
-  // 선별이 이미 골랐으면 그 건수만큼 덜 붙는다(withAiModelReleaseLane).
-  candidates = withAiModelReleaseLane(triage.candidates, MAX_FINAL_CANDIDATES, { lanePool: triageSeries });
+  candidates = triage.candidates;
   const usedKeywordFallback = triage.report.mode === 'keyword_fallback';
   const rankedCandidates = usedKeywordFallback ? keywordRanked : triageRanked;
   const seriesCandidates = usedKeywordFallback ? collapseSeriesRepresentatives(keywordRanked) : triageSeries;
@@ -2413,7 +2392,6 @@ module.exports = {
   candidateRankOrder,
   capNotYetEligible,
   capPerSource,
-  withAiModelReleaseLane,
   collapseSeriesRepresentatives,
   collectFromSource,
   componentFromText,

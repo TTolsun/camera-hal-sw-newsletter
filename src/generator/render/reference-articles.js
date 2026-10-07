@@ -16,7 +16,6 @@ const { isCoverageWeekWindow } = require('../../shared/common/coverage-week');
 const { displayDate } = require('../../shared/common/date-signals');
 const { normalizeUrl } = require('../../shared/common/selection-normalizers');
 const { ensureArray } = require('../../shared/common/value-coercion');
-const { AI_MODEL_RELEASE_REFERENCE_LIMIT, isAiModelReleaseCandidate } = require('../../shared/domain/ai-model-release');
 
 // generic_tech_watchlist를 뺀 모든 도메인 버킷이 참고 섹션 적격이다.
 // 도메인 enum에서 파생해 버킷이 바뀌어도 동기화가 유지되도록 한다.
@@ -36,10 +35,6 @@ const BUCKET_NOTE = {
 // 그 항목은 bucket 설명 대신 이 문구를 달아 참고 이유를 드러낸다.
 const TREND_REFERENCE_BLOCKER = 'trend_reference_project';
 const TREND_REFERENCE_NOTE = '오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고';
-
-// 공식 AI 소스의 주요 모델 출시 글 전용 칸(#1258, 2026-10-07 결정). 버킷이 generic_tech_watchlist라
-// 위 REFERENCE_BUCKETS 경로로는 실리지 않고, 카메라 참고 항목과 상한을 두고 경쟁하지도 않는다.
-const AI_MODEL_RELEASE_NOTE = 'AI 모델 출시 · 개발 도구 동향 참고';
 
 const DEFAULT_LIMIT = 4;
 
@@ -167,41 +162,6 @@ function referenceNote(candidate, bucket) {
   return BUCKET_NOTE[bucket] || '참고 자료';
 }
 
-function referenceItem(candidate, note) {
-  const url = pick(candidate, 'url', 'article_url', 'sourceUrl');
-  const title = pick(candidate, 'title');
-  const source = pick(candidate, 'source_name', 'source');
-  const publishedDate = displayPublishedDate(candidate);
-  if (!url || !title || !source || !publishedDate || !isHttpUrl(url)) return null;
-  return { title, url, source, published_date: publishedDate, note };
-}
-
-/**
- * 모델 출시 칸 항목. 후보 풀은 selection이 커버리지 주 안으로 이미 좁힌
- * ai_model_release_reference_candidates이고, 여기서는 출시 판정을 다시 확인한 뒤 main 기사·
- * 일반 참고 항목과 겹치는 URL을 빼고 최신순으로 상한까지 담는다.
- */
-function buildAiModelReleaseReferenceArticles(candidates = [], options = {}) {
-  const limit = Number.isFinite(options.limit) ? Math.max(0, options.limit) : AI_MODEL_RELEASE_REFERENCE_LIMIT;
-  const excluded = new Set((Array.isArray(options.excludeUrls) ? options.excludeUrls : []).map(normalizeUrl));
-  const items = [];
-  const usable = ensureArray(candidates)
-    .filter(candidate => candidate && typeof candidate === 'object' && isAiModelReleaseCandidate(candidate))
-    .map((candidate, index) => ({ candidate, index }))
-    .sort((left, right) => publishedTime(right.candidate) - publishedTime(left.candidate) || left.index - right.index)
-    .map(entry => entry.candidate);
-  for (const candidate of usable) {
-    if (items.length >= limit) break;
-    const item = referenceItem(candidate, AI_MODEL_RELEASE_NOTE);
-    if (!item) continue;
-    const key = normalizeUrl(item.url);
-    if (!key || excluded.has(key)) continue;
-    excluded.add(key);
-    items.push(item);
-  }
-  return items;
-}
-
 function buildReferenceArticles(candidates = [], options = {}) {
   const limit = Number.isFinite(options.limit) ? Math.max(0, options.limit) : DEFAULT_LIMIT;
   const excluded = new Set((Array.isArray(options.excludeUrls) ? options.excludeUrls : []).map(normalizeUrl));
@@ -216,14 +176,23 @@ function buildReferenceArticles(candidates = [], options = {}) {
     const bucket = candidateBucket(candidate);
     if (!REFERENCE_BUCKETS.has(bucket)) continue;
 
-    const item = referenceItem(candidate, referenceNote(candidate, bucket));
-    if (!item) continue;
+    const url = pick(candidate, 'url', 'article_url', 'sourceUrl');
+    const title = pick(candidate, 'title');
+    const source = pick(candidate, 'source_name', 'source');
+    const publishedDate = displayPublishedDate(candidate);
+    if (!url || !title || !source || !publishedDate || !isHttpUrl(url)) continue;
 
-    const key = normalizeUrl(item.url);
+    const key = normalizeUrl(url);
     if (!key || excluded.has(key) || seen.has(key)) continue;
     seen.add(key);
 
-    items.push(item);
+    items.push({
+      title,
+      url,
+      source,
+      published_date: publishedDate,
+      note: referenceNote(candidate, bucket)
+    });
   }
 
   return items;
@@ -235,22 +204,13 @@ function buildReferenceArticles(candidates = [], options = {}) {
  * 배선을 되돌려도 단위 테스트가 전부 통과하는 상태가 된다(2026-08-11 리뷰 지적).
  */
 function buildReferenceArticlesForIssue(shortlistReport = {}, options = {}) {
-  const excludeUrls = referenceArticleExcludeUrls(shortlistReport);
-  const items = buildReferenceArticles(referenceArticleCandidatePool(shortlistReport), {
+  return buildReferenceArticles(referenceArticleCandidatePool(shortlistReport), {
     ...options,
-    excludeUrls
+    excludeUrls: referenceArticleExcludeUrls(shortlistReport)
   });
-  return [
-    ...items,
-    ...buildAiModelReleaseReferenceArticles(shortlistReport.ai_model_release_reference_candidates, {
-      excludeUrls: [...excludeUrls, ...items.map(item => item.url)]
-    })
-  ];
 }
 
 module.exports = {
-  AI_MODEL_RELEASE_NOTE,
-  buildAiModelReleaseReferenceArticles,
   buildReferenceArticles,
   buildReferenceArticlesForIssue,
   referenceArticleCandidatePool,
