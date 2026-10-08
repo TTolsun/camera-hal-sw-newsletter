@@ -168,9 +168,24 @@ function bindingTieBreakScore(section, entry) {
   return Number(score.toFixed(4));
 }
 
+// 같은 후보 하나가 shortlist(우선순위 1)와 reporter(우선순위 3) 양쪽에 실려 오므로, 같은 URL의
+// entry 수를 그대로 세면 선정된 기사는 언제나 "공유 URL"이 된다. 그러면 본문에 버전·날짜가 없는
+// 기사가 바인딩을 잃고, claim 검증이 빈 후보로 돌아 모든 근거 id가 unknown_evidence_id가 된다
+// (2026-10-05 libcamera AWB 시리즈: 커버레터·패치 원문 근거 11건이 전부 거부돼 자동 강등).
+// version_or_release와 api_or_component는 reporter 병합이 LLM 값으로 덮으므로 키에서 뺀다.
+// release-note/watch 수집 모드는 아래 정규식이 entry 수와 무관하게 계속 공유로 본다.
+function sameUrlCandidateKey(candidate = {}) {
+  return [
+    candidate.source_id || candidate.source,
+    candidate.title,
+    candidate.published_date || candidate.publishedAt
+  ].map(value => normalizeForMatch(value)).join('|');
+}
+
 function isSharedWatchOrReleaseNoteUrl(entry, sameUrlEntries) {
   const candidate = entry?.candidate || {};
-  if (ensureArray(sameUrlEntries).length > 1) return true;
+  const distinctCandidates = new Set(ensureArray(sameUrlEntries).map(item => sameUrlCandidateKey(item?.candidate)));
+  if (distinctCandidates.size > 1) return true;
   return /release-note|watch|documentation_page|watchlist/i.test([
     candidate.collectionMode,
     candidate.collection_mode,
