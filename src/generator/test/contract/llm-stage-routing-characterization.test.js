@@ -272,13 +272,13 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // 부모가 editor repair면 같은 판정 stage의 status role이 judge가 아니라 repair가 된다.
+    // 판정 stage의 status role은 부모와 무관하게 judge다(#979 4·8번: 예전에는 repair).
     label: 'editor repair attempt 1/2 public article judge',
     stageId: 'editor.repair.public_article_judge',
     modelGroup: 'judge',
     temperatureField: 'geminiTemperatureJudge',
     thinkingField: 'geminiThinkingBudgetJudge',
-    statusRole: 'repair',
+    statusRole: 'judge',
     artifactScope: 'targeted-repair'
   },
   {
@@ -431,14 +431,10 @@ test('catalog의 판정 stage 집합과 artifact scope 표의 키 집합이 일�
 
 // 축이 갈리는 조합. 표에서 이미 검증되지만, 무심코 바뀌면 어느 축이 움직였는지
 // 실패 메시지로 바로 드러나게 못 박아 둔다.
-test('축이 갈리는 조합 2개가 현행 그대로다', () => {
+test('축이 갈리는 조합이 현행 그대로다', () => {
   const factCheckRepair = stageDefinitionById('fact_checker.repair');
   assert.equal(factCheckRepair.modelGroup, 'factcheck');
   assert.equal(factCheckRepair.statusRole, 'repair');
-
-  const repairJudge = stageDefinitionById('editor.repair.public_article_judge');
-  assert.equal(repairJudge.modelGroup, 'judge');
-  assert.equal(repairJudge.statusRole, 'repair');
 });
 
 // #980이 기록해 둔 현행 동작: 진단 조회가 label exact 일치였고, 그래서

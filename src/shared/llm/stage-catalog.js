@@ -92,7 +92,8 @@ function defineStage(spec) {
 }
 
 // 판정 계열 stage는 부모별로 정의가 따로 있다. 키가 겹치는 문제만이 아니라, 부모에 따라
-// status role과 artifact scope가 실제로 달라 정책 단위 자체가 다르기 때문이다. 부모가 셋인
+// artifact scope가 실제로 달라 정책 단위 자체가 다르기 때문이다. status role은 부모와
+// 무관하게 같다(#979 4·8번). 부모가 셋인
 // 이유는 orchestrator-repair-completion.js가 editorStage 자리에 repair stage(:313)와
 // completion stage(:480)를 넣어 판정을 돌리기 때문이다.
 const JUDGE_FAMILY = [
@@ -105,8 +106,9 @@ const JUDGE_FAMILY = [
   {
     parent: { id: 'editor.repair', key: 'EDITOR_REPAIR' },
     semanticRepairStatusRole: 'repair',
-    // 부모 label에 repair가 들어 있어 status tracker가 judge보다 repair를 먼저 잡는다.
-    judgeStatusRole: 'repair',
+    // 판정은 부모와 무관하게 judge다. 예전에는 부모 label의 repair를 tracker가 먼저 잡아
+    // repair로 기록됐다(#979 4·8번).
+    judgeStatusRole: 'judge',
     judgeRepairStatusRole: 'repair'
   },
   {
@@ -411,7 +413,7 @@ const DERIVED_STAGE_KINDS = Object.freeze({
 
 /**
  * 부모 run에서 파생 run을 만든다. 부모가 editor인지 editor repair인지 editor completion인지에
- * 따라 서로 다른 definition이 나온다 -- 부모마다 status role과 artifact scope가 다르기 때문이다.
+ * 따라 서로 다른 definition이 나온다 -- 부모마다 artifact scope가 다르기 때문이다.
  */
 function derivedStageRun(parentRun, kind) {
   assertStageRun(parentRun);
