@@ -12,8 +12,8 @@
 // which knows the canonical sequence per workflow profile.
 //
 // 한 행은 한 attempt의 한 stage다(#979 3·4·8번). 예전에는 role이 행의 키였는데, role은
-// 다이어그램에 칠할 묶음이라 stage보다 거칠다 -- LLM stage 21개가 role 8개를 나눠 쓰고
-// `repair` 하나에 9개가 몰린다. 그래서 같은 role의 stage들이 한 행으로 뭉개졌고, 나중에
+// 다이어그램에 칠할 묶음이라 stage보다 거칠다 -- 여러 LLM stage가 role 하나를 나눠 쓰고
+// 특히 `repair`에 가장 많이 몰린다. 그래서 같은 role의 stage들이 한 행으로 뭉개졌고, 나중에
 // 실행된 stage가 앞선 stage의 상태를 덮었다. 2026-08-24 실행에서는 editorial-plan 호출이
 // editor 행에 덮여 기록에서 통째로 사라졌다(model_routing에는 6종, 이 로그에는 5종).
 //

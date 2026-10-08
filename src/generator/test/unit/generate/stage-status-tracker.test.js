@@ -46,8 +46,8 @@ test('same stage across different attempts produces distinct ordered entries', (
   ]);
 });
 
-// #979 3·4·8번이 고친 것. role은 다이어그램에 칠할 묶음이라 stage보다 거칠다 -- LLM stage
-// 21개가 role 8개를 나눠 쓰고 `repair` 하나에 9개가 몰린다. role이 행의 키였을 때는 같은
+// #979 3·4·8번이 고친 것. role은 다이어그램에 칠할 묶음이라 stage보다 거칠다 -- 여러 LLM
+// stage가 role 하나를 나눠 쓰고 특히 `repair`에 가장 많이 몰린다. role이 행의 키였을 때는 같은
 // attempt 안에서 나중 stage가 앞선 stage를 덮어 기록이 사라졌다.
 test('role이 같아도 stage가 다르면 같은 attempt에서 행이 갈린다', () => {
   const tracker = createStageStatusTracker();
