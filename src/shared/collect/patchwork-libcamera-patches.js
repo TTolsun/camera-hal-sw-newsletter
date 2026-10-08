@@ -50,7 +50,7 @@ const MAX_CONTRACT_PATCH_FETCHES = 12;
 // their technical evidence; never manufacture a summary from the series name.
 //
 // #1252 이후 이 출처 후보는 direct_aosp_camera 예외일 때만 main에 오르지만, 이 보강은 남긴다.
-// 보강이 없으면 그 후보에 source_gap_risk가 남아 참고 레인(reference-articles.js의 근거 하한)에서도
+// 보강이 없으면 control/metadata/API 패치 후보에 source_gap_risk가 남아 참고 레인(reference-articles.js의 근거 하한)에서도
 // 빠지고, 예외 경로 기사는 커밋 설명 근거를 잃는다. 지우는 것은 정리가 아니라 선정 변경이다.
 async function enrichContractPatches(candidates, options) {
   if (typeof options.fetchTextImpl !== 'function') return candidates;
