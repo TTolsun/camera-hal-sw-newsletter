@@ -414,7 +414,7 @@ test('stage-specific model routing selects the configured model for each newsroo
       'factcheck-model',
       'factcheck-model',
       'repair-model',
-      'repair-model'
+      'editor-model'
     ]
   );
 

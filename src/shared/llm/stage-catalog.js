@@ -213,9 +213,10 @@ const BASE_STAGES = {
     label: { kind: LABEL_KINDS.ATTEMPT, prefix: 'fact-checker repair' }
   }),
   EDITOR_COMPLETION: defineStage({
-    // model group은 repair인데 sampling은 editor를 쓴다(#979 1번).
+    // 빠진 기사를 새로 쓰는 단계라 model group과 sampling 모두 editor를 쓴다. 예전에는 model
+    // group만 repair였다(#979 1번).
     id: 'editor.completion',
-    modelGroup: LLM_STAGE_GROUPS.REPAIR,
+    modelGroup: LLM_STAGE_GROUPS.EDITOR,
     sampling: {
       temperatureProfile: TEMPERATURE_PROFILES.EDITOR,
       thinkingProfile: THINKING_PROFILES.EDITOR

@@ -173,10 +173,10 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // model group은 repair인데 temperature/thinking은 editor를 쓴다.
+    // 빠진 기사를 새로 쓰는 단계라 모든 축이 editor다(#979 1번: 예전 model group은 repair).
     label: 'editor completion attempt 1/2',
     stageId: 'editor.completion',
-    modelGroup: 'repair',
+    modelGroup: 'editor',
     temperatureField: 'geminiTemperatureEditor',
     thinkingField: 'geminiThinkingBudgetEditor',
     statusRole: 'editor',
@@ -431,11 +431,7 @@ test('catalog의 판정 stage 집합과 artifact scope 표의 키 집합이 일�
 
 // 축이 갈리는 조합. 표에서 이미 검증되지만, 무심코 바뀌면 어느 축이 움직였는지
 // 실패 메시지로 바로 드러나게 못 박아 둔다.
-test('축이 갈리는 조합 3개가 현행 그대로다', () => {
-  const completion = stageDefinitionById('editor.completion');
-  assert.equal(completion.modelGroup, 'repair');
-  assert.equal(temperatureForSampling(completion.sampling, SENTINEL_CONFIG), TEMPERATURE_SENTINELS.geminiTemperatureEditor);
-
+test('축이 갈리는 조합 2개가 현행 그대로다', () => {
   const factCheckRepair = stageDefinitionById('fact_checker.repair');
   assert.equal(factCheckRepair.modelGroup, 'factcheck');
   assert.equal(factCheckRepair.statusRole, 'repair');
