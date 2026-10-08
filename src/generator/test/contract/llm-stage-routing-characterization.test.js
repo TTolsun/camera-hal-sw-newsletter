@@ -192,19 +192,17 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // #981 전에는 어느 정규식에도 걸리지 않아 reporter로 조용히 라우팅되고 경고가 남았다.
-    // 지금은 등록된 stage라 경고가 없다. 모델 선택은 그때와 같은 reporter group이다(#979 5번).
+    // 모델은 reporter group, 판정 stage라 temperature는 judge다(#979 5번: 예전에는 default).
     label: 'weekly-merge',
     stageId: 'weekly_merge',
     modelGroup: 'reporter',
-    temperatureField: 'geminiTemperatureDefault',
+    temperatureField: 'geminiTemperatureJudge',
     thinkingField: NO_THINKING_MAPPING,
     statusRole: 'weekly-merge',
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // weekly-merge와 같은 finalize 부속 stage(T10, #853): reporter group, default temperature,
-    // thinking 없음.
+    // finalize 부속 stage(T10, #853): reporter group, default temperature, thinking 없음.
     label: 'intro-letter',
     stageId: 'intro_letter',
     modelGroup: 'reporter',

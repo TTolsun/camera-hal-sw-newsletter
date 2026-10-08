@@ -76,7 +76,7 @@ function buildWeeklyMergeResolver({ callLlmJson, stage = stageRun(LLM_STAGES.WEE
       existing_article: existing,
       new_article: incoming
     });
-    return callLlmJson(stage, WEEKLY_MERGE_SYSTEM_INSTRUCTION, prompt, WEEKLY_MERGE_RESPONSE_SCHEMA, { temperature: 0 });
+    return callLlmJson(stage, WEEKLY_MERGE_SYSTEM_INSTRUCTION, prompt, WEEKLY_MERGE_RESPONSE_SCHEMA);
   };
   return {
     mergeDuplicate,

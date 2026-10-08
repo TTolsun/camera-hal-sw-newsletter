@@ -237,19 +237,21 @@ const BASE_STAGES = {
     label: { kind: LABEL_KINDS.ATTEMPT, prefix: 'fact-checker completion' }
   }),
   WEEKLY_MERGE: defineStage({
-    // 예전에는 어느 정규식에도 걸리지 않아 reporter로 조용히 라우팅됐다. 현행 결과를 보존한다(#979 5번).
+    // 같은 주 중복 기사를 append/merge/reject로 판정하는 소형 stage다. 모델은 reporter group을
+    // 쓰고, 판정이 흔들리지 않게 temperature는 judge profile로 낮춘다(#979 5번). 호출부가 넘기던
+    // temperature 0은 provider가 읽지 않아 실제로는 default로 돌았다.
     id: 'weekly_merge',
     modelGroup: LLM_STAGE_GROUPS.REPORTER,
     sampling: {
-      temperatureProfile: TEMPERATURE_PROFILES.DEFAULT,
+      temperatureProfile: TEMPERATURE_PROFILES.JUDGE,
       thinkingProfile: THINKING_PROFILES.DISABLED
     },
     statusRole: 'weekly-merge',
     label: { kind: LABEL_KINDS.STATIC, text: 'weekly-merge' }
   }),
   INTRO_LETTER: defineStage({
-    // 주간 에디터 레터 생성(T10, #853). weekly_merge처럼 finalize 부속의 소형 stage라
-    // reporter model group + default temperature + thinking 없음으로 둔다.
+    // 주간 에디터 레터 생성(T10, #853). finalize 부속의 소형 stage라 reporter model group +
+    // default temperature + thinking 없음으로 둔다.
     id: 'intro_letter',
     modelGroup: LLM_STAGE_GROUPS.REPORTER,
     sampling: {
