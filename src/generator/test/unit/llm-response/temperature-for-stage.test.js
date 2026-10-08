@@ -134,7 +134,7 @@ test('catalog의 모든 thinking profile이 provider 표와 런타임 config에 
 test('catalog definition이 실제로 이 매핑을 쓴다', () => {
   assert.equal(temperatureForSampling(LLM_STAGES.EDITOR.sampling, config), 0.55);
   assert.equal(temperatureForSampling(LLM_STAGES.FACT_CHECKER.sampling, config), 0.20);
-  // background-context는 전용 temperature 분기가 없어 default로 떨어진다(#979 2번 항목).
+  // background-context는 보조 stage라 default temperature, thinking 없음이 의도다(#979 2번).
   assert.equal(temperatureForSampling(LLM_STAGES.BACKGROUND_CONTEXT.sampling, config), 0.35);
   assert.equal(thinkingBudgetForSampling(LLM_STAGES.BACKGROUND_CONTEXT.sampling, config), 0);
 });

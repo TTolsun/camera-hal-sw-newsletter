@@ -28,9 +28,8 @@ function runForStageId(stageId) {
 // #981이 그 resolver들을 stage catalog로 대체하면서, 같은 값을 이제 catalog를 통해 확인한다.
 // 표에 적힌 값은 그때와 byte 단위로 같다 -- 바뀐 것은 값이 아니라 그 값이 나오는 경로다.
 //
-// 여기 적힌 값이 곧 "옳은 값"이라는 뜻은 아니다. 이상해 보이는 조합(예: editor completion은
-// model group이 repair인데 sampling은 editor를 쓴다)도 그대로 기록해 두는 것이 목적이다.
-// 의심 항목의 의도 결정은 #979 umbrella에서 항목별로 다룬다.
+// #979에서 항목별로 의도를 정한 뒤 바뀐 행은 주석에 항목 번호와 예전 값을 적어 두었다.
+// 표의 값을 바꾸는 변경은 그 행 한 줄의 diff로 드러나야 한다.
 
 // temperature/thinking은 기본 숫자가 아니라 "어느 config field로 해석되는가"가 계약이다.
 // 그래서 field마다 고유한 sentinel 값을 넣고, 돌아온 값이 그 field에서 왔는지 확인한다.
@@ -56,8 +55,7 @@ const THINKING_SENTINELS = {
 
 const SENTINEL_CONFIG = Object.freeze({ ...TEMPERATURE_SENTINELS, ...THINKING_SENTINELS });
 
-// thinkingField가 null이면 "매핑되는 분기가 없어 0으로 떨어진다"는 뜻이다.
-// 누락인지 의도인지는 코드에서 구분되지 않는다(#979 2번 항목).
+// thinkingField가 null이면 그 stage가 thinking을 쓰지 않는다는 뜻이다(THINKING_PROFILES.DISABLED).
 const NO_THINKING_MAPPING = null;
 
 // artifact scope는 판정(public article judge) stage에서만 조회된다. 나머지 stage에 대한
@@ -134,7 +132,7 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // temperature/thinking 어느 쪽에도 background-context 분기가 없다.
+    // 보조 stage라 default temperature, thinking 없음이 의도다(#979 2번).
     label: 'background-context attempt 1/2',
     stageId: 'background_context',
     modelGroup: 'reporter',
@@ -144,7 +142,7 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // model group은 전용 그룹인데 sampling은 judge를 재사용하고 status role은 editor가 된다.
+    // 전용 model group, judge sampling, status role editor가 의도다(#979 3번).
     label: 'editorial-plan attempt 1/2',
     stageId: 'editorial_plan',
     modelGroup: 'editorialPlan',
@@ -173,10 +171,10 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // model group은 repair인데 temperature/thinking은 editor를 쓴다.
+    // 빠진 기사를 새로 쓰는 단계라 모든 축이 editor다(#979 1번: 예전 model group은 repair).
     label: 'editor completion attempt 1/2',
     stageId: 'editor.completion',
-    modelGroup: 'repair',
+    modelGroup: 'editor',
     temperatureField: 'geminiTemperatureEditor',
     thinkingField: 'geminiThinkingBudgetEditor',
     statusRole: 'editor',
@@ -192,19 +190,17 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // #981 전에는 어느 정규식에도 걸리지 않아 reporter로 조용히 라우팅되고 경고가 남았다.
-    // 지금은 등록된 stage라 경고가 없다. 모델 선택은 그때와 같은 reporter group이다(#979 5번).
+    // 모델은 reporter group, 판정 stage라 temperature는 judge다(#979 5번: 예전에는 default).
     label: 'weekly-merge',
     stageId: 'weekly_merge',
     modelGroup: 'reporter',
-    temperatureField: 'geminiTemperatureDefault',
+    temperatureField: 'geminiTemperatureJudge',
     thinkingField: NO_THINKING_MAPPING,
     statusRole: 'weekly-merge',
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // weekly-merge와 같은 finalize 부속 stage(T10, #853): reporter group, default temperature,
-    // thinking 없음.
+    // finalize 부속 stage(T10, #853): reporter group, default temperature, thinking 없음.
     label: 'intro-letter',
     stageId: 'intro_letter',
     modelGroup: 'reporter',
@@ -272,13 +268,13 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // 부모가 editor repair면 같은 판정 stage의 status role이 judge가 아니라 repair가 된다.
+    // 판정 stage의 status role은 부모와 무관하게 judge다(#979 4·8번: 예전에는 repair).
     label: 'editor repair attempt 1/2 public article judge',
     stageId: 'editor.repair.public_article_judge',
     modelGroup: 'judge',
     temperatureField: 'geminiTemperatureJudge',
     thinkingField: 'geminiThinkingBudgetJudge',
-    statusRole: 'repair',
+    statusRole: 'judge',
     artifactScope: 'targeted-repair'
   },
   {
@@ -431,18 +427,10 @@ test('catalog의 판정 stage 집합과 artifact scope 표의 키 집합이 일�
 
 // 축이 갈리는 조합. 표에서 이미 검증되지만, 무심코 바뀌면 어느 축이 움직였는지
 // 실패 메시지로 바로 드러나게 못 박아 둔다.
-test('축이 갈리는 조합 3개가 현행 그대로다', () => {
-  const completion = stageDefinitionById('editor.completion');
-  assert.equal(completion.modelGroup, 'repair');
-  assert.equal(temperatureForSampling(completion.sampling, SENTINEL_CONFIG), TEMPERATURE_SENTINELS.geminiTemperatureEditor);
-
+test('축이 갈리는 조합이 현행 그대로다', () => {
   const factCheckRepair = stageDefinitionById('fact_checker.repair');
   assert.equal(factCheckRepair.modelGroup, 'factcheck');
   assert.equal(factCheckRepair.statusRole, 'repair');
-
-  const repairJudge = stageDefinitionById('editor.repair.public_article_judge');
-  assert.equal(repairJudge.modelGroup, 'judge');
-  assert.equal(repairJudge.statusRole, 'repair');
 });
 
 // #980이 기록해 둔 현행 동작: 진단 조회가 label exact 일치였고, 그래서

@@ -18,9 +18,9 @@
 // profile을 쓴다. shared catalog가 특정 provider의 config 모양에 묶이면 안 되고, provider가
 // profile을 자기 field로 변환해야 stage 예외 분기가 provider에 남지 않는다.
 //
-// 이 파일은 #980이 고정한 현행 routing을 그대로 옮긴 것이다. 이상해 보이는 조합(예:
-// editor completion은 model group이 repair인데 sampling은 editor를 쓴다)도 보존한다.
-// 의미 교정은 #979에서 항목별로 한다.
+// 이 파일은 #980이 고정한 routing에서 출발했고, #979에서 항목별로 의도를 정했다. 축이 서로
+// 다른 조합(예: editorial-plan은 전용 model group에 judge sampling, status role은 editor)은
+// 결정된 의도이며 각 definition 주석에 이유를 적는다.
 
 const { LLM_STAGE_GROUPS, assertLlmStageGroup } = require('./model-policy');
 
@@ -92,7 +92,8 @@ function defineStage(spec) {
 }
 
 // 판정 계열 stage는 부모별로 정의가 따로 있다. 키가 겹치는 문제만이 아니라, 부모에 따라
-// status role과 artifact scope가 실제로 달라 정책 단위 자체가 다르기 때문이다. 부모가 셋인
+// artifact scope가 실제로 달라 정책 단위 자체가 다르기 때문이다. status role은 부모와
+// 무관하게 같다(#979 4·8번). 부모가 셋인
 // 이유는 orchestrator-repair-completion.js가 editorStage 자리에 repair stage(:313)와
 // completion stage(:480)를 넣어 판정을 돌리기 때문이다.
 const JUDGE_FAMILY = [
@@ -105,8 +106,9 @@ const JUDGE_FAMILY = [
   {
     parent: { id: 'editor.repair', key: 'EDITOR_REPAIR' },
     semanticRepairStatusRole: 'repair',
-    // 부모 label에 repair가 들어 있어 status tracker가 judge보다 repair를 먼저 잡는다.
-    judgeStatusRole: 'repair',
+    // 판정은 부모와 무관하게 judge다. 예전에는 부모 label의 repair를 tracker가 먼저 잡아
+    // repair로 기록됐다(#979 4·8번).
+    judgeStatusRole: 'judge',
     judgeRepairStatusRole: 'repair'
   },
   {
@@ -169,8 +171,8 @@ const BASE_STAGES = {
     label: { kind: LABEL_KINDS.ATTEMPT, prefix: 'article-source-review' }
   }),
   BACKGROUND_CONTEXT: defineStage({
-    // model group은 reporter인데 sampling에는 전용 분기가 없어 default temperature와
-    // thinking 없음으로 떨어진다(#979 2번).
+    // 기사마다 짧은 배경 문단을 붙이는 보조 stage라 reporter model에 default temperature,
+    // thinking 없음으로 비용을 아낀다. 의도된 설정이다(#979 2번).
     id: 'background_context',
     modelGroup: LLM_STAGE_GROUPS.REPORTER,
     sampling: {
@@ -181,7 +183,8 @@ const BASE_STAGES = {
     label: { kind: LABEL_KINDS.ATTEMPT, prefix: 'background-context' }
   }),
   EDITORIAL_PLAN: defineStage({
-    // 전용 model group을 쓰지만 sampling은 judge를 재사용하고 status role은 editor가 된다(#979 3번).
+    // 분류·판단 stage라 전용 model group에 judge sampling을 쓴다. status role은 editor로 두어
+    // 실행 요약 다이어그램에서 편집 단계로 묶는다. 의도된 설정이다(#979 3번).
     id: 'editorial_plan',
     modelGroup: LLM_STAGE_GROUPS.EDITORIAL_PLAN,
     sampling: {
@@ -213,9 +216,10 @@ const BASE_STAGES = {
     label: { kind: LABEL_KINDS.ATTEMPT, prefix: 'fact-checker repair' }
   }),
   EDITOR_COMPLETION: defineStage({
-    // model group은 repair인데 sampling은 editor를 쓴다(#979 1번).
+    // 빠진 기사를 새로 쓰는 단계라 model group과 sampling 모두 editor를 쓴다. 예전에는 model
+    // group만 repair였다(#979 1번).
     id: 'editor.completion',
-    modelGroup: LLM_STAGE_GROUPS.REPAIR,
+    modelGroup: LLM_STAGE_GROUPS.EDITOR,
     sampling: {
       temperatureProfile: TEMPERATURE_PROFILES.EDITOR,
       thinkingProfile: THINKING_PROFILES.EDITOR
@@ -234,19 +238,22 @@ const BASE_STAGES = {
     label: { kind: LABEL_KINDS.ATTEMPT, prefix: 'fact-checker completion' }
   }),
   WEEKLY_MERGE: defineStage({
-    // 예전에는 어느 정규식에도 걸리지 않아 reporter로 조용히 라우팅됐다. 현행 결과를 보존한다(#979 5번).
+    // 같은 주 중복 기사를 append/merge/reject로 판정하는 소형 stage다. 모델은 reporter group을
+    // 쓰고, 판정이 흔들리지 않게 temperature는 judge profile로 낮춘다(#979 5번). 호출부가 넘기던
+    // temperature 0은 provider가 읽지 않아 실제로는 default로 돌았다.
     id: 'weekly_merge',
     modelGroup: LLM_STAGE_GROUPS.REPORTER,
     sampling: {
-      temperatureProfile: TEMPERATURE_PROFILES.DEFAULT,
+      temperatureProfile: TEMPERATURE_PROFILES.JUDGE,
       thinkingProfile: THINKING_PROFILES.DISABLED
     },
+    // stage 전용 role이다. 다이어그램 노드가 아니라 기록에만 남는다(#979 7번).
     statusRole: 'weekly-merge',
     label: { kind: LABEL_KINDS.STATIC, text: 'weekly-merge' }
   }),
   INTRO_LETTER: defineStage({
-    // 주간 에디터 레터 생성(T10, #853). weekly_merge처럼 finalize 부속의 소형 stage라
-    // reporter model group + default temperature + thinking 없음으로 둔다.
+    // 주간 에디터 레터 생성(T10, #853). finalize 부속의 소형 stage라 reporter model group +
+    // default temperature + thinking 없음으로 둔다.
     id: 'intro_letter',
     modelGroup: LLM_STAGE_GROUPS.REPORTER,
     sampling: {
@@ -410,7 +417,7 @@ const DERIVED_STAGE_KINDS = Object.freeze({
 
 /**
  * 부모 run에서 파생 run을 만든다. 부모가 editor인지 editor repair인지 editor completion인지에
- * 따라 서로 다른 definition이 나온다 -- 부모마다 status role과 artifact scope가 다르기 때문이다.
+ * 따라 서로 다른 definition이 나온다 -- 부모마다 artifact scope가 다르기 때문이다.
  */
 function derivedStageRun(parentRun, kind) {
   assertStageRun(parentRun);
