@@ -174,12 +174,13 @@ function bindingTieBreakScore(section, entry) {
 // (2026-10-05 libcamera AWB 시리즈: 커버레터·패치 원문 근거 11건이 전부 거부돼 자동 강등).
 // version_or_release와 api_or_component는 reporter 병합이 LLM 값으로 덮으므로 키에서 뺀다.
 // release-note/watch 수집 모드는 아래 정규식이 entry 수와 무관하게 계속 공유로 본다.
+// normalizeForMatch는 한글·ASCII 밖의 문자를 지워 다른 제목을 한 키로 묶을 수 있어 쓰지 않는다.
 function sameUrlCandidateKey(candidate = {}) {
   return [
     candidate.source_id || candidate.source,
     candidate.title,
     candidate.published_date || candidate.publishedAt
-  ].map(value => normalizeForMatch(value)).join('|');
+  ].map(value => text(value).normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim()).join('|');
 }
 
 function isSharedWatchOrReleaseNoteUrl(entry, sameUrlEntries) {

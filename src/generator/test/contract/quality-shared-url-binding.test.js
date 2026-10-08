@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const { candidateBindingIndex } = require('../../quality/candidate-claim-matching');
-const { bindCandidateForSection } = require('../../quality/quality-section-binding');
+const { bindCandidateForSection, isSharedWatchOrReleaseNoteUrl } = require('../../quality/quality-section-binding');
 const {
   reportFor,
   scopedCandidate,
@@ -73,6 +73,33 @@ test('two different candidates on one URL still need matching date or version ev
 
   assert.equal(binding.status, 'evidence_mismatch');
   assert.match(binding.reason, /Shared watch\/release-note URL requires matching/);
+});
+
+test('candidates whose titles differ only in non-Korean, non-ASCII text stay distinct', () => {
+  const entries = [
+    { candidate: patchCandidate({ title: '相机驱动更新' }) },
+    { candidate: patchCandidate({ title: 'カメラドライバ更新' }) }
+  ];
+
+  assert.equal(isSharedWatchOrReleaseNoteUrl(entries[0], entries), true);
+});
+
+test('a release-note item carried by both shortlist and reporter still needs date or version evidence', () => {
+  const releaseUrl = 'https://developer.android.com/jetpack/androidx/releases/camera';
+  const candidate = scopedCandidate(releaseUrl, 'android', {
+    title: 'CameraX - 1.6.0',
+    collectionMode: 'release-note-item',
+    version_or_release: '1.6.0',
+    published_date: '2026-09-24'
+  });
+  const index = candidateBindingIndex(
+    { candidates: [{ ...candidate }] },
+    { selected_articles: [candidate], shortlisted_candidates: [candidate] }
+  );
+
+  const binding = bindCandidateForSection(section({ headline: 'CameraX 업데이트', url: releaseUrl }), index);
+
+  assert.equal(binding.status, 'evidence_mismatch');
 });
 
 test('series evidence read from the cover letter binds when shortlist and reporter share the candidate', () => {
