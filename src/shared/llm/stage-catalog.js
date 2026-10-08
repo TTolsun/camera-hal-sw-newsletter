@@ -280,14 +280,15 @@ const BASE_STAGES = {
     label: { kind: LABEL_KINDS.STATIC, text: 'candidate-triage' }
   }),
   SOURCE_DISCOVERY: defineStage({
-    // status role이 정해진 어휘가 아니라 label 소문자 값 그대로다. 현행 결과를 보존한다(#979 6번).
+    // status role은 다른 stage 전용 role(background-context, candidate-triage)과 같은 kebab-case
+    // 어휘를 쓴다. 예전 값 'sourcediscovery'는 label을 소문자로 바꾼 fallthrough였다(#979 6번).
     id: 'source_discovery',
     modelGroup: LLM_STAGE_GROUPS.SOURCE_DISCOVERY,
     sampling: {
       temperatureProfile: TEMPERATURE_PROFILES.SOURCE_DISCOVERY,
       thinkingProfile: THINKING_PROFILES.DISABLED
     },
-    statusRole: 'sourcediscovery',
+    statusRole: 'source-discovery',
     label: { kind: LABEL_KINDS.STATIC, text: 'sourceDiscovery' }
   })
 };

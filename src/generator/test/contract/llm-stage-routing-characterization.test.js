@@ -223,13 +223,13 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
-    // status role은 정해진 role이 아니라 label을 소문자로 바꾼 값이 그대로 나온다.
+    // status role은 kebab-case stage 전용 role이다(#979 6번: 예전 값은 label 소문자 'sourcediscovery').
     label: 'sourceDiscovery',
     stageId: 'source_discovery',
     modelGroup: 'sourceDiscovery',
     temperatureField: 'geminiTemperatureSourceDiscovery',
     thinkingField: NO_THINKING_MAPPING,
-    statusRole: 'sourcediscovery',
+    statusRole: 'source-discovery',
     artifactScope: SCOPE_NOT_CONSULTED
   },
 
