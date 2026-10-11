@@ -2,17 +2,37 @@
 
 ## 생성 파일 목록
 
+- articles/content/collected-news/2026-10-12/candidates.json
 - articles/content/newsroom/2026-10-12/00-review-guide.md
 - articles/content/newsroom/2026-10-12/article-capsules.json
 - articles/content/newsroom/2026-10-12/artifact-manifest.json
+- articles/content/newsroom/2026-10-12/background-context.json
 - articles/content/newsroom/2026-10-12/cost-report.md
+- articles/content/newsroom/2026-10-12/coverage-reconciliation.json
 - articles/content/newsroom/2026-10-12/deep-dive-report.json
+- articles/content/newsroom/2026-10-12/editor-draft-attempt-1.json
+- articles/content/newsroom/2026-10-12/editor-draft-attempt-1.md
 - articles/content/newsroom/2026-10-12/editor-draft.json
 - articles/content/newsroom/2026-10-12/editor-draft.md
 - articles/content/newsroom/2026-10-12/editor-in-chief-brief.md
+- articles/content/newsroom/2026-10-12/editor-invalid-attempt-2.json
+- articles/content/newsroom/2026-10-12/editor-invalid-repair-attempt-2.json
+- articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-1.json
+- articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-3.json
+- articles/content/newsroom/2026-10-12/editor-public-article-judge-targeted-repair-attempt-1.json
+- articles/content/newsroom/2026-10-12/editor-repair-attempt-1.json
+- articles/content/newsroom/2026-10-12/editor-repair-attempt-1.md
+- articles/content/newsroom/2026-10-12/editor-repair-sections-attempt-1.json
+- articles/content/newsroom/2026-10-12/editor-validation-error-attempt-2.json
+- articles/content/newsroom/2026-10-12/editor-validation-error-repair-attempt-2.json
+- articles/content/newsroom/2026-10-12/editorial-plan.json
 - articles/content/newsroom/2026-10-12/evidence-pack-summary.json
 - articles/content/newsroom/2026-10-12/evidence-validation-report.json
 - articles/content/newsroom/2026-10-12/extracted-source-facts.json
+- articles/content/newsroom/2026-10-12/fact-check-repair-attempt-1.json
+- articles/content/newsroom/2026-10-12/fact-check-repair-attempt-1.md
+- articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.json
+- articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.md
 - articles/content/newsroom/2026-10-12/fact-check-report.json
 - articles/content/newsroom/2026-10-12/fact-check-report.md
 - articles/content/newsroom/2026-10-12/gemini-source-discovery-report.md
@@ -22,9 +42,17 @@
 - articles/content/newsroom/2026-10-12/hal-signal-quality-report.md
 - articles/content/newsroom/2026-10-12/image-audit-report.json
 - articles/content/newsroom/2026-10-12/image-audit-report.md
+- articles/content/newsroom/2026-10-12/quality-report-attempt-1.json
+- articles/content/newsroom/2026-10-12/quality-report-attempt-1.md
+- articles/content/newsroom/2026-10-12/quality-report-repair-attempt-1.json
+- articles/content/newsroom/2026-10-12/quality-report-repair-attempt-1.md
 - articles/content/newsroom/2026-10-12/quality-report.json
 - articles/content/newsroom/2026-10-12/quality-report.md
+- articles/content/newsroom/2026-10-12/recovery-prompt.md
 - articles/content/newsroom/2026-10-12/release-qa-report.md
+- articles/content/newsroom/2026-10-12/repair-failure.json
+- articles/content/newsroom/2026-10-12/reporter-candidates-attempt-1.json
+- articles/content/newsroom/2026-10-12/reporter-candidates-attempt-2.json
 - articles/content/newsroom/2026-10-12/reporter-candidates.json
 - articles/content/newsroom/2026-10-12/retry-history.json
 - articles/content/newsroom/2026-10-12/retry-history.md
@@ -59,9 +87,9 @@
 
 ## 산출물 리뷰 순서
 
-- present: 65/83
+- present: 91/107
 - missing_required: 0
-- attention_required: 0
+- attention_required: 5
 
 ### 편집장 브리프
 
@@ -109,8 +137,9 @@
 
 ### 디버그 근거
 
+- `articles/content/newsroom/2026-10-12/recovery-prompt.md` - changed
 - `articles/content/collected-news/2026-10-12/manual-candidates.json` - present
-- `articles/content/collected-news/2026-10-12/candidates.json` - present
+- `articles/content/collected-news/2026-10-12/candidates.json` - changed
 - `articles/content/collected-news/2026-10-12/raw-candidate-manifest.json` - present
 - `articles/content/collected-news/2026-10-12/merged-candidates.json` - present
 - `articles/content/collected-news/2026-10-12/merged-candidate-manifest.json` - present
@@ -126,6 +155,7 @@
 - `articles/content/newsroom/2026-10-12/shortlisted-candidates.json` - changed
 - `articles/content/newsroom/2026-10-12/selection-report.json` - changed
 - `articles/content/newsroom/2026-10-12/article-capsules.json` - changed
+- `articles/content/newsroom/2026-10-12/background-context.json` - changed
 - `articles/content/newsroom/2026-10-12/evidence-pack-summary.json` - changed
 - `articles/content/newsroom/2026-10-12/image-audit-report.json` - changed
 - `articles/content/newsroom/2026-10-12/source-quality-report.json` - changed
@@ -143,13 +173,50 @@
 - `articles/content/newsroom/2026-10-12/deep-dive-report.json` - changed
 - `articles/content/source-events/2026-10-12/source-change-events.md` - present
 - `articles/content/source-events/2026-10-12/source-change-events.json` - present
-- `articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-3.json` - present
+- `articles/content/newsroom/2026-10-12/editor-draft-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-draft-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/editor-invalid-attempt-2.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-invalid-repair-attempt-2.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-3.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-repair-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-repair-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/editor-repair-sections-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-validation-error-attempt-2.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-validation-error-repair-attempt-2.json` - changed
+- `articles/content/newsroom/2026-10-12/fact-check-repair-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/fact-check-repair-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/quality-report-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/quality-report-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/quality-report-repair-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/quality-report-repair-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/reporter-candidates-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/reporter-candidates-attempt-2.json` - changed
 - `articles/content/newsroom/2026-10-12/artifact-manifest.json` - changed
+
+### 미분류 산출물
+
+- `articles/content/newsroom/2026-10-12/coverage-reconciliation.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-public-article-judge-targeted-repair-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editorial-plan.json` - changed
+- `articles/content/newsroom/2026-10-12/repair-failure.json` - changed
 
 
 ## npm run validate 실행 결과
 
-npm.cmd run test: PASS (3475 passed, 1 skipped). npm.cmd run validate: PASS. Image lineage audit: PASS (3 articles, 0 publish blockers).
+> camera-hal-sw-newsletter@1.0.0 validate:site
+> node src/generator/validate/validate-site.js
+
+Validated 40 newsletter entries.
+
+
+> camera-hal-sw-newsletter@1.0.0 validate:images
+> node src/generator/validate/validate-external-images.js
+
+Validated 6 article images.
+Full npm.cmd run test and npm.cmd run validate passed. Chrome screenshots inspected.
 
 ## 잔여 TODO 여부
 
@@ -166,7 +233,7 @@ npm.cmd run test: PASS (3475 passed, 1 skipped). npm.cmd run validate: PASS. Ima
 - source gap 개수: 0
 
 ## 품질 게이트
-- 품질 점수: 95/100
+- 품질 점수: 96/100
 - 품질 기준: 60
 - 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3); 1pt image-fallback (cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안); 1pt image-fallback (Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토); 1pt image-fallback (ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지)
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3); 1pt image-fallback (cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안); 1pt image-fallback (Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토)

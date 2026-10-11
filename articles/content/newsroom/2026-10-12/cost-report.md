@@ -5,47 +5,39 @@
 - Enforcement: warning-only
 - Pricing source: https://ai.google.dev/gemini-api/docs/pricing
 - Warning threshold USD: 0.5
-- Max threshold USD: 0.7
-- Pro policy: disabled
-- Request count: 26
-- Prompt tokens: 732018
-- Output tokens: 41308
-- Thinking tokens: 35030
-- Cached tokens: 36344
-- Total tokens: 808356
-- Estimated cost USD: 0.609967
+- Max threshold USD: 1
+- Pro policy: n/a
+- Request count: 18
+- Prompt tokens: 449264
+- Output tokens: 38877
+- Thinking tokens: 36153
+- Cached tokens: 0
+- Total tokens: 524294
+- Estimated cost USD: 0.691386
 
 ## Calls
 
 | Provider | Stage | Group | Primary | Attempt Model | Resolved By | Fallbacks | Model | Attempt | Prompt | Output | Thinking | Requested Budget | Applied Budget | Cached | Pro | Estimated USD |
 | --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
-| gemini | reporter attempt 1/2 | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 68035 | 1708 | 508 | 512 | 512 | 0 | no | 0.025951 |
-| gemini | background-context attempt 1/2 | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 26869 | 1132 | 0 | 0 | 0 | 0 | no | 0.010891 |
-| gemini | editorial-plan attempt 1/2 | editorialPlan | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 69108 | 1964 | 1020 | 1024 | 1024 | 0 | no | 0.028192 |
-| gemini | editor attempt 1/2 | editor | gemini-3.5-flash | gemini-3.5-flash | code_default | gemini-2.5-flash, gemini-2.5-flash-lite | gemini-3.5-flash | 1 | 35695 | 8513 | 3168 | 1024 | MEDIUM | 0 | no | 0.158671 |
-| gemini | editor attempt 1/2 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 8516 | 336 | 838 | 1024 | 1024 | 0 | no | 0.001321 |
-| gemini | fact-checker attempt 1/2 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 45681 | 1372 | 1878 | 2048 | 2048 | 0 | no | 0.021829 |
-| gemini | article-source-review attempt 1/2 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 7745 | 851 | 1637 | 2048 | 2048 | 0 | no | 0.008544 |
-| gemini | reporter attempt 2/2 | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 69553 | 1721 | 506 | 512 | 512 | 2018 | no | 0.025889 |
-| gemini | background-context attempt 2/2 | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 27279 | 1193 | 0 | 0 | 0 | 0 | no | 0.011166 |
-| gemini | editorial-plan attempt 2/2 | editorialPlan | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 69518 | 2054 | 1020 | 1024 | 1024 | 0 | no | 0.028540 |
-| gemini | editor attempt 2/2 | editor | gemini-3.5-flash | gemini-3.5-flash | code_default | gemini-2.5-flash, gemini-2.5-flash-lite | gemini-3.5-flash | 1 | 20961 | 7148 | 6150 | 1024 | MEDIUM | 0 | no | 0.151123 |
-| gemini | editor attempt 2/2 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 7706 | 336 | 771 | 1024 | 1024 | 0 | no | 0.001213 |
-| gemini | fact-checker attempt 2/2 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 29137 | 1389 | 2046 | 2048 | 2048 | 0 | no | 0.017329 |
-| gemini | article-source-review attempt 2/2 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 7745 | 782 | 1582 | 2048 | 2048 | 7327 | no | 0.006255 |
-| gemini | intro-letter | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 252 | 87 | 0 | 0 | 0 | 0 | no | 0.000293 |
-| gemini | post-generation public quality judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 2846 | 86 | 698 | 1024 | 1024 | 0 | no | 0.000598 |
-| gemini | editor attempt 3/3 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 8580 | 336 | 796 | 1024 | 1024 | 0 | no | 0.001311 |
-| gemini | fact-checker attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 50297 | 1170 | 2046 | 2048 | 2048 | 0 | no | 0.023129 |
-| gemini | article-source-review attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 19423 | 905 | 1712 | 2048 | 2048 | 0 | no | 0.012369 |
-| gemini | editor attempt 3/3 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 8580 | 336 | 801 | 1024 | 1024 | 8418 | no | 0.000555 |
-| gemini | fact-checker attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 50365 | 3824 | 2044 | 2048 | 2048 | 0 | no | 0.029780 |
-| gemini | article-source-review attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 19423 | 1032 | 1519 | 2048 | 2048 | 0 | no | 0.012204 |
-| gemini | editor attempt 3/3 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 8552 | 336 | 797 | 1024 | 1024 | 0 | no | 0.001308 |
-| gemini | fact-checker attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 50346 | 1129 | 2044 | 2048 | 2048 | 0 | no | 0.023036 |
-| gemini | article-source-review attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 19423 | 1403 | 1449 | 2048 | 2048 | 18581 | no | 0.007940 |
-| gemini | intro-letter | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 383 | 165 | 0 | 0 | 0 | 0 | no | 0.000527 |
+| gemini | reporter attempt 1/2 | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 28476 | 2173 | 509 | 512 | 512 | 0 | no | 0.015248 |
+| gemini | background-context attempt 1/2 | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 28739 | 1249 | 0 | 0 | 0 | 0 | no | 0.011744 |
+| gemini | editorial-plan attempt 1/2 | editorialPlan | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 30707 | 1899 | 901 | 1024 | 1024 | 0 | no | 0.016212 |
+| gemini | editor attempt 1/2 | editor | gemini-3.5-flash | gemini-3.5-flash | code_default | gemini-2.5-flash, gemini-2.5-flash-lite | gemini-3.5-flash | 1 | 39774 | 8123 | 11236 | 1024 | MEDIUM | 0 | no | 0.233892 |
+| gemini | editor attempt 1/2 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 8595 | 332 | 786 | 1024 | 1024 | 0 | no | 0.001307 |
+| gemini | fact-checker attempt 1/2 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 48056 | 1185 | 1822 | 2048 | 2048 | 0 | no | 0.021934 |
+| gemini | editor repair attempt 1/2 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 6475 | 233 | 770 | 1024 | 1024 | 0 | no | 0.001049 |
+| gemini | fact-checker repair attempt 1/2 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 43136 | 2292 | 2047 | 2048 | 2048 | 0 | no | 0.023788 |
+| gemini | article-source-review attempt 1/2 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 8664 | 1128 | 2046 | 2048 | 2048 | 0 | no | 0.010534 |
+| gemini | reporter attempt 2/2 | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 30096 | 2234 | 501 | 512 | 512 | 0 | no | 0.015866 |
+| gemini | background-context attempt 2/2 | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 29426 | 1179 | 0 | 0 | 0 | 0 | no | 0.011775 |
+| gemini | editorial-plan attempt 2/2 | editorialPlan | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 31394 | 1928 | 852 | 1024 | 1024 | 0 | no | 0.016368 |
+| gemini | editor attempt 2/2 | editor | gemini-3.5-flash | gemini-3.5-flash | code_default | gemini-2.5-flash, gemini-2.5-flash-lite | gemini-3.5-flash | 1 | 28842 | 6521 | 6826 | 1024 | MEDIUM | 0 | no | 0.163386 |
+| gemini | editor attempt 2/2 semantic repair | repair | gemini-3.5-flash | gemini-3.5-flash | code_default | gemini-2.5-flash, gemini-2.5-flash-lite | gemini-3.5-flash | 1 | 24491 | 5606 | 3093 | 1024 | MEDIUM | 0 | no | 0.115028 |
+| gemini | editor attempt 3/3 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 8691 | 326 | 923 | 1024 | 1024 | 0 | no | 0.001369 |
+| gemini | fact-checker attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 42389 | 1100 | 1904 | 2048 | 2048 | 0 | no | 0.020227 |
+| gemini | article-source-review attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 10917 | 1222 | 1937 | 2048 | 2048 | 0 | no | 0.011173 |
+| gemini | intro-letter | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 396 | 147 | 0 | 0 | 0 | 0 | no | 0.000486 |
 
 ## Warnings
 
-- Estimated LLM cost 0.60996676 USD reached NEWSROOM_WARN_COST_USD 0.5 USD.
+- Estimated LLM cost 0.6913859 USD reached NEWSROOM_WARN_COST_USD 0.5 USD.

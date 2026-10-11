@@ -18,4 +18,4 @@ PASS
 
 ## 최종 의견
 
-모든 기사가 편집 정책을 준수하며, 출처에 기반한 사실과 HAL/드라이버 관점의 실질적인 정보를 제공합니다. 과장된 표현이나 출처 없는 주장은 발견되지 않았습니다. 모든 `summary_truncated=true` 항목은 유일한 근거가 아니거나, 잘린 내용이 뒷받침하지 않는 결론적 주장을 포함하지 않아 `must_fix`로 분류되지 않았습니다.
+All articles are factual, well-sourced, and adhere to the editorial policy regarding concrete evidence, relevance, actionability, and overclaim guardrails. The markdown syntax is correct, and there is no undue repetition. All claims are backed by the provided evidence, and no truncated evidence leads to overclaimed conclusions. The articles are publishable.

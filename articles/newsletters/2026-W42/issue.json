@@ -3,11 +3,11 @@
   "public_contract_version": "story-v2",
   "generation_contract_version": 2,
   "title": "2026 W41 (10.05 ~ 10.11)",
-  "summary": "이번 주에는 AOSP cameraserver의 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안을 살펴봅니다. Qualcomm CAMSS ISP 파라미터 문서화 패치에서는 공통 구조체 적용에 관한 리뷰를 확인합니다. ChromeOS 카메라 IPC에서는 타입이 명시된 platform handle로의 전환과 파일 디스크립터 전달 경로의 변경을 다룹니다.",
+  "summary": "이번 주에는 AOSP의 조건부 카메라 mute 제안, Qualcomm CAMSS ISP 파라미터 uAPI 문서 리뷰, Claude Haiku 5.5 발표를 살펴봅니다. 카메라 관련 두 기사는 아직 제안·리뷰 단계이므로 적용 조건과 확인할 사항을 구분했습니다. Haiku는 반복 코딩 작업을 맡길 보조 모델로 소개하고, 실제 업무에서 품질·비용·응답 시간을 비교하는 방법을 제안합니다.",
   "briefing": [
     "AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안",
-    "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의",
-    "ChromeOS 카메라 IPC, 타입이 명시된 platform handle로 전환"
+    "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+    "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의"
   ],
   "sections": [
     {
@@ -242,6 +242,214 @@
         "extracted_count": 0,
         "valid_count": 0,
         "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "cpp_ai_tooling_fallback",
+      "headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+      "what_changed": "Anthropic은 Haiku 5.5의 실행 비용이 Haiku 4.5보다 평균 약 75% 낮다고 발표했습니다. 공식 발표는 Haiku 5.5를 요약·분류 등 반복 작업과 Opus 5.5·Sonnet 5.5의 코딩 보조 에이전트에 적합한 모델로 설명합니다. Haiku 5.5는 Haiku 계열에서 처음으로 effort 설정을 조절할 수 있는 모델입니다.",
+      "confirmed_facts": [
+        "Anthropic은 Haiku 5.5의 실행 비용이 Haiku 4.5보다 평균 약 75% 낮다고 발표했습니다.",
+        "공식 발표는 Haiku 5.5를 요약·분류 등 반복 작업과 Opus 5.5·Sonnet 5.5의 코딩 보조 에이전트에 적합한 모델로 설명합니다.",
+        "Haiku 5.5는 Haiku 계열에서 처음으로 effort 설정을 조절할 수 있는 모델입니다."
+      ],
+      "evidence_summary": "Anthropic의 공식 발표 본문에서 반복 작업·코딩 subagent 활용, 평균 실행 비용 비교, effort 설정을 확인했습니다.",
+      "specificity_checks": [
+        "Claude Haiku 5.5",
+        "2026-10-07",
+        "Haiku 4.5 대비 평균 약 75%",
+        "adjustable effort",
+        "coding subagent"
+      ],
+      "source_verification_notes": [
+        "발표일은 공식 뉴스 목록의 2026-10-07 날짜와 canonical URL을 대조했습니다.",
+        "비용과 활용 설명은 Anthropic의 발표이며, Camera HAL 개발 업무에서의 자체 성능 측정 결과는 아닙니다."
+      ],
+      "public_article": {
+        "headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+        "lead": "빌드 오류 요약이나 단순 분류처럼 반복되는 작업을 큰 모델에 모두 맡길 필요가 줄어듭니다. Anthropic은 이런 작업과 코딩 보조 에이전트를 겨냥한 Haiku 5.5를 발표했습니다.",
+        "body_markdown": "10월 7일 발표된 Claude Haiku 5.5는 많은 요청을 빠르게 처리하면서 비용을 줄이는 데 초점을 둔 소형 언어 모델입니다. 공식 발표는 요약, 대화 내용 압축, 데이터베이스 질의, 분류를 대표적인 반복 작업으로 들고 있습니다.\n\n코딩에서는 Opus 5.5나 Sonnet 5.5와 함께 보조 에이전트로 쓰는 구성을 제시합니다. 큰 모델이 전체 작업을 관리하고, 작게 나눌 수 있는 작업을 Haiku에 맡기는 방식으로 이해할 수 있습니다. 어떤 업무를 분리할지는 팀의 실제 입력과 결과 품질로 판단해야 합니다.\n\n### 비용과 정확도를 함께 조절하는 선택지\n\nAnthropic은 Haiku 4.5보다 실행 비용이 평균 약 75% 낮다고 설명합니다. 이는 공급사가 제시한 평균 비교이며, 모든 요청이나 우리 팀의 월간 비용이 똑같이 줄어든다는 보장은 아닙니다. Haiku 계열에 처음 도입된 effort 설정은 비용과 답변 성능 사이의 선택을 조절하는 수단입니다.\n\nCamera HAL 개발 팀에서는 빌드 오류 로그의 요약·분류를 시험 대상으로 삼을 수 있습니다. 이는 편집 제안이며 원문이 Camera HAL 로그에서 성능을 검증했다는 뜻은 아닙니다. 같은 표본을 현재 모델과 Haiku에 주고, 정답 일치율과 중요한 오류의 누락률, 요청당 비용, 응답 시간을 함께 비교하면 도입 여부를 판단할 수 있습니다.\n\n이번 소식의 실무 가치는 반복 작업을 별도 모델에 맡길 선택지가 생겼다는 점입니다. 성능이 충분한 작업부터 나누되, 복잡한 원인 분석까지 일괄 전환할 근거로 사용해서는 안 됩니다.",
+        "camera_hal_takeaway": "개발 도구 담당자는 빌드 오류 로그 요약·분류 표본으로 현재 모델과 Haiku 5.5를 비교할 수 있습니다. 정확도와 누락률을 유지하는 범위에서 비용·응답 시간 개선 여부를 측정하는 것이 도입 판단의 기준입니다.",
+        "reader_checkpoints": [
+          "동일한 표본에서 정답 일치율·누락률·요청당 비용·응답 시간을 비교",
+          "effort 설정을 바꿨을 때 품질과 비용이 함께 어떻게 변하는지 기록"
+        ],
+        "source_links": [
+          {
+            "title": "Claude Haiku 5.5",
+            "url": "https://www.anthropic.com/claude-haiku-5-5"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "Anthropic News 공식 발표",
+        "editorial_story": {
+          "not_to_overclaim": "평균 비용 절감은 공급사 발표이며 Camera HAL 업무에서 측정한 결과가 아닙니다.",
+          "editor_take": "반복 작업을 작은 모델로 분리할 수 있는지 실제 업무 표본으로 비교할 만한 출시입니다."
+        },
+        "decision_metadata": {
+          "impact": "Medium",
+          "scope": [
+            "Tooling"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Anthropic은 Haiku 5.5의 실행 비용이 Haiku 4.5보다 평균 약 75% 낮다고 발표했습니다.",
+          "공식 발표는 Haiku 5.5를 요약·분류 등 반복 작업과 Opus 5.5·Sonnet 5.5의 코딩 보조 에이전트에 적합한 모델로 설명합니다.",
+          "Haiku 5.5는 Haiku 계열에서 처음으로 effort 설정을 조절할 수 있는 모델입니다."
+        ],
+        "background_context": "보조 에이전트는 전체 작업 중 일부를 맡아 처리합니다. 모델을 역할별로 나누려면 작은 작업에서 필요한 정확도를 먼저 확인해야 합니다.",
+        "hal_driver_impact": "개발 도구와 반복 업무 처리에 관한 소식입니다. 카메라 런타임이나 HAL 인터페이스가 바뀐다는 근거는 없습니다.",
+        "action_items": [
+          "개발 도구 담당자가 같은 빌드 오류 log 요약·분류 표본으로 Haiku 5.5와 현재 모델을 비교하고, 정답 일치율·누락률·요청당 비용·응답 latency를 기록합니다.",
+          "동일한 입력과 채점 기준을 유지한 test에서 effort 설정별 비용과 정확도를 비교한 뒤 반복 작업만 분리할지 결정합니다."
+        ],
+        "team_share_points": "평균 비용 절감 수치와 우리 팀의 실제 절감 효과를 구분하고, 반복 작업의 품질·비용·응답 시간을 함께 비교합니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "10월 7일 Haiku 5.5가 발표되어 코딩 보조 모델의 비용과 effort 선택지가 바뀌었습니다.",
+        "reader_owners": [
+          "native_tooling_owner"
+        ],
+        "check_within_2_weeks": "개발 도구 담당자가 같은 빌드 오류 log 요약·분류 표본으로 Haiku 5.5와 현재 모델을 비교하고, 정답 일치율·누락률·요청당 비용·응답 latency를 기록합니다. 동일한 입력과 채점 기준을 유지한 test에서 effort 설정별 비용과 정확도를 비교한 뒤 반복 작업만 분리할지 결정합니다.",
+        "impact_axes": [
+          "native_tooling_workflow"
+        ],
+        "do_not_overstate": [
+          "공급사의 평균 비용 비교를 Camera HAL 개발 업무의 측정 결과로 표현하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "haiku_f1",
+          "text": "Anthropic은 Haiku 5.5의 실행 비용이 Haiku 4.5보다 평균 약 75% 낮다고 발표했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:e5a9ffcfb49ebe7a8c13"
+          ],
+          "source_urls": [
+            "https://www.anthropic.com/claude-haiku-5-5"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "haiku_f2",
+          "text": "공식 발표는 Haiku 5.5를 요약·분류 등 반복 작업과 Opus 5.5·Sonnet 5.5의 코딩 보조 에이전트에 적합한 모델로 설명합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:e5a9ffcfb49ebe7a8c13"
+          ],
+          "source_urls": [
+            "https://www.anthropic.com/claude-haiku-5-5"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "haiku_f3",
+          "text": "Haiku 5.5는 Haiku 계열에서 처음으로 effort 설정을 조절할 수 있는 모델입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:e5a9ffcfb49ebe7a8c13"
+          ],
+          "source_urls": [
+            "https://www.anthropic.com/claude-haiku-5-5"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "개발 도구 담당자가 같은 빌드 오류 log 요약·분류 표본으로 Haiku 5.5와 현재 모델을 비교하고, 정답 일치율·누락률·요청당 비용·응답 latency를 기록합니다.",
+        "동일한 입력과 채점 기준을 유지한 test에서 effort 설정별 비용과 정확도를 비교한 뒤 반복 작업만 분리할지 결정합니다."
+      ],
+      "action_hints": [
+        "개발 도구 담당자가 같은 빌드 오류 log 요약·분류 표본으로 Haiku 5.5와 현재 모델을 비교하고, 정답 일치율·누락률·요청당 비용·응답 latency를 기록합니다.",
+        "동일한 입력과 채점 기준을 유지한 test에서 effort 설정별 비용과 정확도를 비교한 뒤 반복 작업만 분리할지 결정합니다."
+      ],
+      "action_items": [
+        "개발 도구 담당자가 같은 빌드 오류 log 요약·분류 표본으로 Haiku 5.5와 현재 모델을 비교하고, 정답 일치율·누락률·요청당 비용·응답 latency를 기록합니다.",
+        "동일한 입력과 채점 기준을 유지한 test에서 effort 설정별 비용과 정확도를 비교한 뒤 반복 작업만 분리할지 결정합니다."
+      ],
+      "is_ai_related": true,
+      "article_type": "main",
+      "imageCandidates": [
+        {
+          "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg",
+          "sourceUrl": "https://www.anthropic.com/claude-haiku-5-5",
+          "articleUrl": "https://www.anthropic.com/claude-haiku-5-5",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/jpeg",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Haiku 5.5",
+          "validationStatus": "ok",
+          "contentLength": 80418
+        }
+      ],
+      "selectedImage": "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg",
+      "imageSource": "https://www.anthropic.com/claude-haiku-5-5",
+      "imageAttribution": "Claude Haiku 5.5",
+      "imageAlt": "Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "No suitable image candidates provided in source capsule.",
+      "sources": [
+        {
+          "title": "Claude Haiku 5.5",
+          "url": "https://www.anthropic.com/claude-haiku-5-5"
+        }
+      ],
+      "source_candidate_url": "https://www.anthropic.com/claude-haiku-5-5",
+      "source_candidate_hash": "cdb1d51fae0431106fedcd9b04b5f3c39e2b73ba97f1a80fa573c763d8f96f73",
+      "article_group_key": "article:https://www.anthropic.com/claude-haiku-5-5",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 3,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "Claude, Claude Code, AI coding, agentic workflow, safety update 확인",
+      "resolvedImage": {
+        "url": "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg",
+        "src": "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": ""
+      },
+      "image_recovery": {
+        "article_url": "https://www.anthropic.com/claude-haiku-5-5",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 1,
+        "valid_count": 1,
+        "outcome": "available"
       },
       "coverage_type": "fresh"
     },
@@ -495,264 +703,13 @@
         "outcome": "no_image_extracted"
       },
       "coverage_type": "fresh"
-    },
-    {
-      "category": "camera_driver_image_pipeline",
-      "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
-      "what_changed": "chromiumos/platform2/camera/mojo/gpu 영역의 mojom 파일들을 legacy handle에서 신규 handle 타입으로 전환하는 변경이 머지되었습니다.",
-      "confirmed_facts": [
-        "2026년 10월 7일 chromiumos/platform2 프로젝트 main 브랜치에 Gerrit 변경 8506716이 머지 완료되었습니다.",
-        "카메라 소스 파일 20개가 변경되어 69줄 추가 및 91줄 삭제(+69/-91)되었습니다.",
-        "GPU mojom뿐 아니라 camera3.mojom, 알고리즘 인터페이스, HAL 어댑터와 C++ 구현까지 함께 수정되었습니다."
-      ],
-      "evidence_summary": "ChromeOS platform2 카메라 구성요소의 IPC 정의 파일들이 레거시 핸들 선언에서 신규 mojom 핸들 구조로 마이그레이션 머지되었습니다.",
-      "specificity_checks": [
-        "Gerrit 8506716",
-        "chromiumos/platform2/camera/mojo/gpu",
-        "2026-10-07",
-        "+69/-91",
-        "20 files"
-      ],
-      "source_verification_notes": [
-        "공식 Gerrit REST API에서 머지 상태와 수집 후보와 동일한 revision의 전체 20개 파일 diff를 확인했습니다. 잘린 PolyGerrit HTML은 근거로 사용하지 않았습니다.",
-        "외부 Chromium 의존 변경과 연결된 Bug의 전체 내용은 미확인입니다. 본 기사 범위는 해당 platform2 커밋과 diff에 한정합니다.",
-        "Linked evidence remains unresolved: 연결된 Bug 및 외부 의존 변경의 내용은 확인하지 못했으며 해당 자료의 상세 내용이나 해결 여부는 단정하지 않습니다."
-      ],
-      "public_article": {
-        "headline": "ChromeOS 카메라 IPC, 타입이 명시된 platform handle로 전환",
-        "lead": "10월 7일 머지된 ChromeOS platform2 변경은 카메라 Mojom 인터페이스와 C++ 구현의 핸들 표현을 함께 전환해 플랫폼 파일 디스크립터를 직접 전달하도록 정리했습니다.",
-        "body_markdown": "Gerrit 변경 8506716은 chromiumos/platform2의 main 브랜치에 10월 7일 머지되었습니다. 커밋 메시지는 Chromium에서 타입 없는 레거시 Mojom handle 표기를 폐기하는 흐름에 맞춰, platform 타입을 명시한 핸들과 C++의 mojo::PlatformHandle로 옮긴다고 설명합니다.\n\n변경은 camera/mojo/gpu의 dmabuf·JPEG 인터페이스에만 한정되지 않습니다. camera3.mojom과 카메라 알고리즘 인터페이스, HAL 어댑터 및 C++ 호출부를 포함한 20개 파일이 함께 바뀌었습니다. 예를 들어 버퍼 fd 배열은 mojo::ScopedHandle 대신 mojo::PlatformHandle을 사용하고, acquire/release fence를 회수할 때는 UnwrapPlatformHandle을 거치던 코드가 핸들의 ReleaseFD()를 직접 호출합니다.\n\n### 인터페이스와 C++ 호출부를 함께 확인해야 하는 이유\n\nMojom 정의만 복사하고 송수신 측 C++ 타입을 그대로 두면 이 변경과 동일한 상태가 되지 않습니다. ChromeOS 카메라 코드를 유지하는 팀은 버퍼 등록과 fence 반환 경로의 타입·유효성 검사·fd 소유권 전달을 함께 확인해야 합니다.\n\n이것은 ChromeOS 내부 IPC 타입 전환이며 AOSP Camera HAL3/AIDL 규격 변경이 아닙니다. 커밋의 TEST 항목은 CQ를 기록하지만 카메라 지연 시간이나 영상 품질 개선을 실측한 자료는 제시하지 않습니다.",
-        "camera_hal_takeaway": "ChromeOS 파생 카메라 스택을 유지한다면 Mojom 정의와 C++ 송수신 코드를 함께 대조하고, 버퍼 fd 및 fence의 유효성·소유권 전달을 시험해야 합니다. Android HAL 인터페이스 변경으로 확대 해석하지 않습니다.",
-        "reader_checkpoints": [
-          "camera3.mojom·dmabuf.mojom과 HAL 어댑터의 핸들 타입 대조",
-          "버퍼 등록 및 acquire/release fence 반환 경로의 fd 유효성·소유권 시험"
-        ],
-        "source_links": [
-          {
-            "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
-            "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
-            "publisher": "ChromeOS Gerrit",
-            "source_role": "primary",
-            "checked_at": "2026-10-12"
-          }
-        ],
-        "story_contract_version": 2,
-        "source_subtitle": "ChromeOS Gerrit",
-        "editorial_story": {
-          "not_to_overclaim": "ChromeOS platform2 카메라 IPC 내부 구현 변경이므로 Android AOSP Camera HAL API의 직간접 변경으로 확장하지 않습니다.",
-          "editor_take": "ChromeOS 카메라 서비스의 모던 IPC 타입 전환 사례로 플랫폼 간 버퍼 핸들 전달 방식의 변화 흐름을 파악하는 데 유용합니다."
-        },
-        "decision_metadata": {
-          "impact": "High",
-          "scope": [
-            "HAL",
-            "Driver",
-            "SoC"
-          ],
-          "action": [
-            "Watch",
-            "Test"
-          ],
-          "overclaim_risk": "High"
-        }
-      },
-      "article_sections": {
-        "verified_facts": [
-          "2026년 10월 7일 chromiumos/platform2 프로젝트 main 브랜치에 Gerrit 변경 8506716이 머지 완료되었습니다.",
-          "카메라 소스 파일 20개가 변경되어 69줄 추가 및 91줄 삭제(+69/-91)되었습니다.",
-          "GPU mojom뿐 아니라 camera3.mojom, 알고리즘 인터페이스, HAL 어댑터와 C++ 구현까지 함께 수정되었습니다."
-        ],
-        "background_context": "Mojom은 Chromium 및 ChromeOS 플랫폼에서 프로세스 간 통신(IPC) 구조체와 인터페이스를 정의하는 IDL입니다. platform2 리포지토리의 카메라 서비스는 GPU 및 버퍼 관리 모듈과의 통신에 Mojom 핸들을 사용합니다.",
-        "hal_driver_impact": "ChromeOS 파생 카메라 스택을 유지한다면 Mojom 정의와 C++ 송수신 코드를 함께 대조하고, 버퍼 fd 및 fence의 유효성·소유권 전달을 시험해야 합니다. Android HAL 인터페이스 변경으로 확대 해석하지 않습니다.",
-        "action_items": [
-          "camera3.mojom·dmabuf.mojom과 HAL 어댑터의 핸들 타입 대조",
-          "버퍼 등록 및 acquire/release fence 반환 경로의 fd 유효성·소유권 시험"
-        ],
-        "team_share_points": "ChromeOS platform2의 카메라 GPU IPC 파일에서 레거시 mojom 핸들 제거가 이루어졌으므로 관련 타깃 빌드 시 참고가 필요합니다."
-      },
-      "hal_signal_capsule": {
-        "why_now": "2026년 10월 7일 ChromeOS platform2 main 브랜치에 mojom 핸들 마이그레이션 패치가 머지 완료되었습니다.",
-        "reader_owners": [
-          "camera_driver_owner",
-          "soc_platform_owner"
-        ],
-        "check_within_2_weeks": "버퍼 등록 및 acquire/release fence 반환 경로의 fd 유효성·소유권 시험",
-        "impact_axes": [
-          "driver_image_pipeline"
-        ],
-        "do_not_overstate": [
-          "ChromeOS platform2 전용 패치이므로 AOSP Android Camera HAL3 API 표준 변경으로 오인하지 마십시오.",
-          "mojom 파일 마이그레이션을 Linux 커널 V4L2 드라이버 uAPI 변경으로 확장하여 설명하지 마십시오."
-        ]
-      },
-      "claims": [
-        {
-          "claim_id": "claim-213fab-1",
-          "text": "2026년 10월 7일 chromiumos/platform2 프로젝트 main 브랜치에 Gerrit 변경 8506716이 머지 완료되었습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "source-body:8e1635754c310eaf70aa"
-          ],
-          "source_urls": [
-            "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
-          ],
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "claim-213fab-2",
-          "text": "카메라 소스 파일 20개가 변경되어 69줄 추가 및 91줄 삭제(+69/-91)되었습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "source-body:8e1635754c310eaf70aa"
-          ],
-          "source_urls": [
-            "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
-          ],
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "claim-213fab-3",
-          "text": "GPU mojom뿐 아니라 camera3.mojom, 알고리즘 인터페이스, HAL 어댑터와 C++ 구현까지 함께 수정되었습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "source-body:8e1635754c310eaf70aa"
-          ],
-          "source_urls": [
-            "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
-          ],
-          "impact_level": "driver_image_pipeline",
-          "overclaim_risk": "low"
-        }
-      ],
-      "camera_hal_checks": [
-        "ChromeOS platform2 카메라 IPC 및 mojom 핸들 호환성 점검"
-      ],
-      "action_hints": [
-        "chromiumos/platform2/camera/mojo/gpu 패치 확인"
-      ],
-      "action_items": [
-        "ChromeOS platform2 카메라 IPC 및 dmabuf 핸들 정의 변경점 비교"
-      ],
-      "is_ai_related": false,
-      "article_type": "technical_report",
-      "imageCandidates": [
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v097103d8ccd7b257790809ea4cc5e5fee6daa6e24890a4af388296e58364bc31/androidsource/images/lockup.png",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Open Source Project",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "aosp-camera-docs",
-          "validationStatus": "ok",
-          "contentLength": 4824
-        },
-        {
-          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/svg+xml",
-          "licenseStatus": "unknown",
-          "attribution": "aosp-camera-docs",
-          "validationStatus": "ok",
-          "contentLength": 1760
-        },
-        {
-          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png?hl=bn",
-          "sourceUrl": "https://source.android.com/docs/core/camera",
-          "articleUrl": "https://source.android.com/docs/core/camera",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Camera HAL আইকন",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "aosp-camera-docs",
-          "validationStatus": "ok",
-          "contentLength": 2242
-        }
-      ],
-      "selectedImage": "",
-      "imageSource": "",
-      "imageAttribution": "",
-      "imageAlt": "",
-      "imageLicenseStatus": "none",
-      "imageUsageDecisionReason": "No valid high-quality image provided in source material.",
-      "sources": [
-        {
-          "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
-          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
-        }
-      ],
-      "hal_impact_axes": [
-        "driver_image_pipeline",
-        "soc_resource_contention"
-      ],
-      "reader_owners": [
-        "camera_driver_owner",
-        "soc_platform_owner"
-      ],
-      "source_candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
-      "source_candidate_hash": "213fab6f32ddbcb90fbc1b8674665dadeb26612c642e897555c2389b89de1a1d",
-      "article_group_key": "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
-      "tooling_workflow_type": "",
-      "relevance_bucket": "camera_driver_image_pipeline",
-      "editorial_priority": 5,
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 3,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 0,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_driver_topic": true,
-      "counts_as_soc_topic": false,
-      "finalSelectionEligibility": "short",
-      "source_gap_risk": false,
-      "main_article_readiness": null,
-      "do_not_claim": [],
-      "evidence_origin": "article_text",
-      "source_hint": "ChromeOS platform2의 camera/ 아래 병합된 변경만 수집한다. 플랫폼 내부의 개별 안정성 수정은 짧은 참고 묶음으로 다룬다. Android Camera HAL과 유사한 인터페이스나 buffer·3A·ISP 용어만으로 직접 영향이나 주요 기사 중요도를 단정하지 않는다. 실제 담당 플랫폼과의 관련성 또는 여러 구현에 영향을 주는 공통 문제의 구체적인 근거가 있을 때 주요 기사로 검토한다. 미병합 변경과 chrom",
-      "resolvedImage": {
-        "url": "../../assets/images/fallback/newsletter-default.svg",
-        "src": "../../assets/images/fallback/newsletter-default.svg",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": true,
-        "reason": "no selected image; local fallback visual used"
-      },
-      "image_recovery": {
-        "article_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
-        "page_attempts": [
-          {
-            "attempt": 1,
-            "ok": true,
-            "reason": "ok",
-            "status": 0
-          }
-        ],
-        "validation_failures": [],
-        "extracted_count": 0,
-        "valid_count": 0,
-        "outcome": "no_image_extracted"
-      },
-      "coverage_type": "fresh"
     }
   ],
   "action_items": [
-    "Gerrit 4348947의 리뷰 및 머지 상태 확인",
-    "UID 가시성·mute 지원 조합별 ERROR_CAMERA_DISABLED와 세션 유지 여부 비교",
-    "qcom-camss-config.h 메타데이터 블록 정의 및 OPE 파이프라인 단계별 구조체 확인",
-    "v4l2_isp 공통 구조체 적용에 따른 메인라인 커널 패치 머지 추적",
-    "camera3.mojom·dmabuf.mojom과 HAL 어댑터의 핸들 타입 대조",
-    "버퍼 등록 및 acquire/release fence 반환 경로의 fd 유효성·소유권 시험"
+    "libcameraservice 패치 적용 환경에서 센서 프라이버시 토글 시 카메라 프레임 드롭이나 타임아웃 발생 여부 로그 확인",
+    "linux-media 패치 시리즈의 qcom-camss-config.h 헤더 파라미터 블록 레이아웃 검토",
+    "개발 도구 담당자가 같은 빌드 오류 log 요약·분류 표본으로 Haiku 5.5와 현재 모델을 비교하고, 정답 일치율·누락률·요청당 비용·응답 latency를 기록합니다.",
+    "동일한 입력과 채점 기준을 유지한 test에서 effort 설정별 비용과 정확도를 비교한 뒤 반복 작업만 분리할지 결정합니다."
   ],
   "references": [
     {
@@ -764,8 +721,8 @@
       "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
     },
     {
-      "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+      "title": "Claude Haiku 5.5",
+      "url": "https://www.anthropic.com/claude-haiku-5-5"
     }
   ],
   "explicitly_demoted_groups": [],
@@ -777,12 +734,12 @@
   "selected_representative_group_keys": [
     "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
     "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com",
-    "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+    "article:https://www.anthropic.com/claude-haiku-5-5"
   ],
   "rendered_group_keys": [
     "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
     "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com",
-    "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+    "article:https://www.anthropic.com/claude-haiku-5-5"
   ],
   "explicitly_demoted_group_keys": [],
   "hard_blocked_group_keys": [],
@@ -818,6 +775,7 @@
   ],
   "tags": [
     "Camera HAL",
+    "AI",
     "Driver",
     "Image Processing",
     "SoC Platform"
@@ -827,7 +785,7 @@
   "coverage_end_date": "2026-10-11",
   "coverage_mode": "iso_week",
   "generation_anchor_date": "2026-10-12",
-  "intro_letter": "이번 주에는 AOSP cameraserver의 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안을 살펴봅니다. Qualcomm CAMSS ISP 파라미터 문서화 패치에서는 공통 구조체 적용에 관한 리뷰를 확인합니다. ChromeOS 카메라 IPC에서는 타입이 명시된 platform handle로의 전환과 파일 디스크립터 전달 경로의 변경을 다룹니다.",
+  "intro_letter": "이번 주에는 AOSP의 조건부 카메라 mute 제안, Qualcomm CAMSS ISP 파라미터 uAPI 문서 리뷰, Claude Haiku 5.5 발표를 살펴봅니다. 카메라 관련 두 기사는 아직 제안·리뷰 단계이므로 적용 조건과 확인할 사항을 구분했습니다. Haiku는 반복 코딩 작업을 맡길 보조 모델로 소개하고, 실제 업무에서 품질·비용·응답 시간을 비교하는 방법을 제안합니다.",
   "weekly_key": "2026-W42",
   "week_start_date": "2026-10-12",
   "week_end_date": "2026-10-18"

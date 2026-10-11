@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "date": "2026-10-12",
-  "score": 95,
+  "score": 96,
   "max_score": 100,
   "threshold": 60,
   "status": "PASS",
@@ -20,7 +20,7 @@
     {
       "category": "editorial-story",
       "points": 1,
-      "reason": "Briefing bullet misses story structure elements: what_happened.",
+      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
       "location": "briefing 3",
       "blocking": false,
       "severity": "soft",
@@ -42,16 +42,6 @@
       "points": 1,
       "reason": "Article image uses a local fallback visual.",
       "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
-      "blocking": false,
-      "severity": "soft",
-      "reason_code": "",
-      "dedupe_key": ""
-    },
-    {
-      "category": "image-fallback",
-      "points": 1,
-      "reason": "Article image uses a local fallback visual.",
-      "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
       "blocking": false,
       "severity": "soft",
       "reason_code": "",
@@ -186,14 +176,14 @@
     },
     {
       "index": 3,
-      "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
-      "category": "camera_driver_image_pipeline",
+      "headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+      "category": "cpp_ai_tooling_fallback",
       "status": "PASS",
       "repair_action": "preserve",
       "sources": [
         {
-          "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
-          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+          "title": "Claude Haiku 5.5",
+          "url": "https://www.anthropic.com/claude-haiku-5-5"
         }
       ],
       "section_contract": {
@@ -209,17 +199,17 @@
       },
       "scope_count": {
         "index": 3,
-        "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
-        "source_candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
-        "source_candidate_hash": "213fab6f32ddbcb90fbc1b8674665dadeb26612c642e897555c2389b89de1a1d",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
+        "headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+        "source_candidate_url": "https://www.anthropic.com/claude-haiku-5-5",
+        "source_candidate_hash": "cdb1d51fae0431106fedcd9b04b5f3c39e2b73ba97f1a80fa573c763d8f96f73",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_supporting_main_article": false,
         "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
+        "guardrail_impact_class": "tooling_support",
         "evidence_origin": "article_text",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -227,24 +217,17 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
         "exclusion_reason_if_not_counted": ""
       },
-      "guardrail_impact_class": "camera_stack_source",
+      "guardrail_impact_class": "tooling_support",
       "hal_impact_axes": [
-        "driver_image_pipeline",
-        "soc_resource_contention"
+        "native_tooling_workflow"
       ],
       "actionability_level": "",
       "effective_actionability_level": "",
       "hard_fail_reasons": [],
-      "soft_deductions": [
-        {
-          "category": "image-fallback",
-          "points": 1,
-          "reason": "Article image uses a local fallback visual."
-        }
-      ]
+      "soft_deductions": []
     }
   ],
   "claim_validation_summary": {
@@ -429,33 +412,33 @@
     },
     {
       "article_index": 3,
-      "article_headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
-      "claim_id": "claim-213fab-1",
+      "article_headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+      "claim_id": "haiku_f1",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "driver_image_pipeline",
+      "impact_level": "native_tooling_workflow",
       "overclaim_risk": "low",
-      "text": "2026년 10월 7일 chromiumos/platform2 프로젝트 main 브랜치에 Gerrit 변경 8506716이 머지 완료되었습니다.",
+      "text": "Anthropic은 Haiku 5.5의 실행 비용이 Haiku 4.5보다 평균 약 75% 낮다고 발표했습니다.",
       "evidence_ids": [
-        "source-body:8e1635754c310eaf70aa"
+        "source-body:e5a9ffcfb49ebe7a8c13"
       ],
       "resolved_evidence_ids": [
-        "source-body:8e1635754c310eaf70aa"
+        "source-body:e5a9ffcfb49ebe7a8c13"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "source-body:8e1635754c310eaf70aa",
-          "resolved_evidence_id": "source-body:8e1635754c310eaf70aa",
+          "evidence_id": "source-body:e5a9ffcfb49ebe7a8c13",
+          "resolved_evidence_id": "source-body:e5a9ffcfb49ebe7a8c13",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+        "https://www.anthropic.com/claude-haiku-5-5"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -463,33 +446,33 @@
     },
     {
       "article_index": 3,
-      "article_headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
-      "claim_id": "claim-213fab-2",
+      "article_headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+      "claim_id": "haiku_f2",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "driver_image_pipeline",
+      "impact_level": "native_tooling_workflow",
       "overclaim_risk": "low",
-      "text": "카메라 소스 파일 20개가 변경되어 69줄 추가 및 91줄 삭제(+69/-91)되었습니다.",
+      "text": "공식 발표는 Haiku 5.5를 요약·분류 등 반복 작업과 Opus 5.5·Sonnet 5.5의 코딩 보조 에이전트에 적합한 모델로 설명합니다.",
       "evidence_ids": [
-        "source-body:8e1635754c310eaf70aa"
+        "source-body:e5a9ffcfb49ebe7a8c13"
       ],
       "resolved_evidence_ids": [
-        "source-body:8e1635754c310eaf70aa"
+        "source-body:e5a9ffcfb49ebe7a8c13"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "source-body:8e1635754c310eaf70aa",
-          "resolved_evidence_id": "source-body:8e1635754c310eaf70aa",
+          "evidence_id": "source-body:e5a9ffcfb49ebe7a8c13",
+          "resolved_evidence_id": "source-body:e5a9ffcfb49ebe7a8c13",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+        "https://www.anthropic.com/claude-haiku-5-5"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -497,33 +480,33 @@
     },
     {
       "article_index": 3,
-      "article_headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
-      "claim_id": "claim-213fab-3",
+      "article_headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+      "claim_id": "haiku_f3",
       "claim_type": "fact",
       "status": "bound",
-      "impact_level": "driver_image_pipeline",
+      "impact_level": "native_tooling_workflow",
       "overclaim_risk": "low",
-      "text": "GPU mojom뿐 아니라 camera3.mojom, 알고리즘 인터페이스, HAL 어댑터와 C++ 구현까지 함께 수정되었습니다.",
+      "text": "Haiku 5.5는 Haiku 계열에서 처음으로 effort 설정을 조절할 수 있는 모델입니다.",
       "evidence_ids": [
-        "source-body:8e1635754c310eaf70aa"
+        "source-body:e5a9ffcfb49ebe7a8c13"
       ],
       "resolved_evidence_ids": [
-        "source-body:8e1635754c310eaf70aa"
+        "source-body:e5a9ffcfb49ebe7a8c13"
       ],
       "invalid_evidence_ids": [],
       "blocked_evidence_ids": [],
       "source_mismatched_evidence_ids": [],
       "evidence_statuses": [
         {
-          "evidence_id": "source-body:8e1635754c310eaf70aa",
-          "resolved_evidence_id": "source-body:8e1635754c310eaf70aa",
+          "evidence_id": "source-body:e5a9ffcfb49ebe7a8c13",
+          "resolved_evidence_id": "source-body:e5a9ffcfb49ebe7a8c13",
           "status": "allowed",
           "raw_status": "allowed",
           "normalized_status": "allowed"
         }
       ],
       "source_urls": [
-        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+        "https://www.anthropic.com/claude-haiku-5-5"
       ],
       "bound": true,
       "derived_evidence_mapping": false,
@@ -541,9 +524,9 @@
     "blocked_source_gap_count": 0,
     "article_count_with_hal_signal_capsule": 3,
     "article_count_without_hal_signal_capsule": 0,
-    "main_articles_with_owner_metric_log": 0,
+    "main_articles_with_owner_metric_log": 1,
     "main_articles_with_concrete_action": 3,
-    "fallback_main_article_count": 0,
+    "fallback_main_article_count": 1,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
     "generic_signal_hard_blocker_count": 0,
@@ -551,15 +534,17 @@
     "hard_blocker_reason_code_counts": {},
     "hal_impact_axis_counts": {
       "framework_hal_contract": 1,
-      "driver_image_pipeline": 3,
+      "driver_image_pipeline": 2,
       "stream_buffer_metadata": 1,
-      "soc_resource_contention": 1
+      "native_tooling_workflow": 1
     },
     "actionability_level_counts": {
-      "measurable_test": 3
+      "measurable_test": 2,
+      "owner_metric_log": 1
     },
     "effective_actionability_level_counts": {
-      "measurable_test": 3
+      "measurable_test": 2,
+      "owner_metric_log": 1
     },
     "signal_quality_status_counts": {
       "strong_signal": 3
@@ -634,27 +619,24 @@
     },
     {
       "index": 3,
-      "title": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
-      "relevance_bucket": "camera_driver_image_pipeline",
+      "title": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+      "url": "https://www.anthropic.com/claude-haiku-5-5",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
       "hal_impact_axes": [
-        "driver_image_pipeline",
-        "soc_resource_contention"
+        "native_tooling_workflow"
       ],
       "reader_owners": [
-        "camera_driver_owner",
-        "soc_platform_owner"
+        "native_tooling_owner"
       ],
-      "actionability_level": "measurable_test",
-      "effective_actionability_level": "measurable_test",
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
       "actionability_upgrade_reason": "",
       "signal_quality_status": "strong_signal",
-      "concrete_action_signal_count": 4,
+      "concrete_action_signal_count": 6,
       "fallback_promotion_allowed": true,
-      "fallback_promotion_reason": "ChromeOS Gerrit (platform2 camera merged changes) (official, medium, score 50): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
+      "fallback_promotion_reason": "Anthropic News (official, medium, score 56): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
       "fallback_guard_notes": [
-        "ChromeOS platform2 전용 패치이므로 AOSP Android Camera HAL3 API 표준 변경으로 오인하지 마십시오.",
-        "mojom 파일 마이그레이션을 Linux 커널 V4L2 드라이버 uAPI 변경으로 확장하여 설명하지 마십시오."
+        "공급사의 평균 비용 비교를 Camera HAL 개발 업무의 측정 결과로 표현하지 않습니다."
       ],
       "soc_signal_type": "accelerator_camera_workload",
       "soc_signal_source_allowed": true,
@@ -669,17 +651,17 @@
   "metrics": {
     "article_count": 3,
     "briefing_count": 3,
-    "camera_article_count": 3,
-    "legacy_regex_camera_article_count": 0,
+    "camera_article_count": 2,
+    "legacy_regex_camera_article_count": 1,
     "expanded_scope_article_count": 3,
     "direct_aosp_camera_count": 1,
-    "camera_driver_image_pipeline_count": 2,
+    "camera_driver_image_pipeline_count": 1,
     "android_count": 0,
     "android_multimedia_camera_output_count": 0,
     "soc_platform_signal_count": 0,
-    "cpp_ai_tooling_fallback_count": 0,
+    "cpp_ai_tooling_fallback_count": 1,
     "generic_tech_watchlist_count": 0,
-    "primary_camera_stack_count": 3,
+    "primary_camera_stack_count": 2,
     "supporting_main_article_count": 0,
     "forbidden_main_article_count": 0,
     "fallback_relevance_count": 0,
@@ -734,17 +716,17 @@
       },
       {
         "index": 3,
-        "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
-        "source_candidate_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
-        "source_candidate_hash": "213fab6f32ddbcb90fbc1b8674665dadeb26612c642e897555c2389b89de1a1d",
-        "relevance_bucket": "camera_driver_image_pipeline",
-        "editorial_priority": 5,
-        "counts_as_primary_camera_topic": true,
-        "counts_as_driver_topic": true,
+        "headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+        "source_candidate_url": "https://www.anthropic.com/claude-haiku-5-5",
+        "source_candidate_hash": "cdb1d51fae0431106fedcd9b04b5f3c39e2b73ba97f1a80fa573c763d8f96f73",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 2,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
         "counts_as_soc_topic": false,
         "counts_as_supporting_main_article": false,
         "counts_as_forbidden_main_article": false,
-        "guardrail_impact_class": "camera_stack_source",
+        "guardrail_impact_class": "tooling_support",
         "evidence_origin": "article_text",
         "metadata_source": "merged",
         "binding_status": "bound",
@@ -752,22 +734,22 @@
         "binding_reason": "",
         "publishable_scope": true,
         "missing_score_fields": [],
-        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "count_reason": "cpp_ai_tooling_fallback is an independent main article, not a camera or supporting topic.",
         "exclusion_reason_if_not_counted": ""
       }
     ],
     "relevance_bucket_counts": {
       "direct_aosp_camera": 1,
-      "camera_driver_image_pipeline": 2,
+      "camera_driver_image_pipeline": 1,
       "android": 0,
       "android_supporting": 0,
-      "cpp_ai_tooling_fallback": 0,
+      "cpp_ai_tooling_fallback": 1,
       "generic_tech_watchlist": 0
     },
     "topic_tier_distribution": {
-      "direct_camera": 3,
+      "direct_camera": 2,
       "supporting": 0,
-      "fallback": 0,
+      "fallback": 1,
       "watchlist": 0
     },
     "topic_tier_distribution_source": "relevance_bucket",
@@ -798,7 +780,7 @@
     "blocking_deduction_count": 0,
     "blocking_deduction_categories": [],
     "hard_fail_count": 0,
-    "soft_deduction_count": 5,
+    "soft_deduction_count": 4,
     "article_gate_counts": {
       "PASS": 3,
       "DEMOTE": 0,
@@ -875,9 +857,9 @@
       "blocked_source_gap_count": 0,
       "article_count_with_hal_signal_capsule": 3,
       "article_count_without_hal_signal_capsule": 0,
-      "main_articles_with_owner_metric_log": 0,
+      "main_articles_with_owner_metric_log": 1,
       "main_articles_with_concrete_action": 3,
-      "fallback_main_article_count": 0,
+      "fallback_main_article_count": 1,
       "android_multimedia_camera_output_count": 0,
       "soc_platform_signal_count": 0,
       "generic_signal_hard_blocker_count": 0,
@@ -885,15 +867,17 @@
       "hard_blocker_reason_code_counts": {},
       "hal_impact_axis_counts": {
         "framework_hal_contract": 1,
-        "driver_image_pipeline": 3,
+        "driver_image_pipeline": 2,
         "stream_buffer_metadata": 1,
-        "soc_resource_contention": 1
+        "native_tooling_workflow": 1
       },
       "actionability_level_counts": {
-        "measurable_test": 3
+        "measurable_test": 2,
+        "owner_metric_log": 1
       },
       "effective_actionability_level_counts": {
-        "measurable_test": 3
+        "measurable_test": 2,
+        "owner_metric_log": 1
       },
       "signal_quality_status_counts": {
         "strong_signal": 3
@@ -968,27 +952,24 @@
       },
       {
         "index": 3,
-        "title": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
-        "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
-        "relevance_bucket": "camera_driver_image_pipeline",
+        "title": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+        "url": "https://www.anthropic.com/claude-haiku-5-5",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
         "hal_impact_axes": [
-          "driver_image_pipeline",
-          "soc_resource_contention"
+          "native_tooling_workflow"
         ],
         "reader_owners": [
-          "camera_driver_owner",
-          "soc_platform_owner"
+          "native_tooling_owner"
         ],
-        "actionability_level": "measurable_test",
-        "effective_actionability_level": "measurable_test",
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
         "actionability_upgrade_reason": "",
         "signal_quality_status": "strong_signal",
-        "concrete_action_signal_count": 4,
+        "concrete_action_signal_count": 6,
         "fallback_promotion_allowed": true,
-        "fallback_promotion_reason": "ChromeOS Gerrit (platform2 camera merged changes) (official, medium, score 50): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 2 article-level signal(s) from article_text.)",
+        "fallback_promotion_reason": "Anthropic News (official, medium, score 56): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 1 article-level signal(s) from article_text.)",
         "fallback_guard_notes": [
-          "ChromeOS platform2 전용 패치이므로 AOSP Android Camera HAL3 API 표준 변경으로 오인하지 마십시오.",
-          "mojom 파일 마이그레이션을 Linux 커널 V4L2 드라이버 uAPI 변경으로 확장하여 설명하지 마십시오."
+          "공급사의 평균 비용 비교를 Camera HAL 개발 업무의 측정 결과로 표현하지 않습니다."
         ],
         "soc_signal_type": "accelerator_camera_workload",
         "soc_signal_source_allowed": true,
@@ -1002,11 +983,11 @@
     ],
     "top_deduction_categories": [
       {
-        "category": "image-fallback",
-        "count": 3
+        "category": "editorial-story",
+        "count": 2
       },
       {
-        "category": "editorial-story",
+        "category": "image-fallback",
         "count": 2
       }
     ],

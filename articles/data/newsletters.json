@@ -2,7 +2,7 @@
   {
     "date": "2026-10-12",
     "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-10-12",
-    "summary": "AOSP 프라이버시 토글의 조건부 mute 제안, Qualcomm CAMSS ISP 문서화 패치의 구조체 리뷰, ChromeOS 카메라 IPC 핸들 타입 전환을 살펴봅니다.",
+    "summary": "AOSP의 조건부 카메라 mute 제안, Qualcomm CAMSS ISP 파라미터 uAPI 문서 리뷰, Claude Haiku 5.5의 반복 작업·코딩 보조 모델 활용을 살펴봅니다.",
     "html": "newsletters/2026-10-12/index.html",
     "md": "newsletters/2026-10-12/newsletter.md",
     "tags": [

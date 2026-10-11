@@ -5,9 +5,9 @@
 - seed_used: false
 - public_output_expected: true
 - status: PASS
-- present: 65/83
+- present: 91/107
 - missing_required: 0
-- attention_required: 0
+- attention_required: 5
 
 ## 읽는 순서
 
@@ -66,8 +66,9 @@
 
 ## 디버그 근거
 
+- `articles/content/newsroom/2026-10-12/recovery-prompt.md` - changed
 - `articles/content/collected-news/2026-10-12/manual-candidates.json` - present
-- `articles/content/collected-news/2026-10-12/candidates.json` - present
+- `articles/content/collected-news/2026-10-12/candidates.json` - changed
 - `articles/content/collected-news/2026-10-12/raw-candidate-manifest.json` - present
 - `articles/content/collected-news/2026-10-12/merged-candidates.json` - present
 - `articles/content/collected-news/2026-10-12/merged-candidate-manifest.json` - present
@@ -83,6 +84,7 @@
 - `articles/content/newsroom/2026-10-12/shortlisted-candidates.json` - changed
 - `articles/content/newsroom/2026-10-12/selection-report.json` - changed
 - `articles/content/newsroom/2026-10-12/article-capsules.json` - changed
+- `articles/content/newsroom/2026-10-12/background-context.json` - changed
 - `articles/content/newsroom/2026-10-12/evidence-pack-summary.json` - changed
 - `articles/content/newsroom/2026-10-12/image-audit-report.json` - changed
 - `articles/content/newsroom/2026-10-12/source-quality-report.json` - changed
@@ -100,5 +102,32 @@
 - `articles/content/newsroom/2026-10-12/deep-dive-report.json` - changed
 - `articles/content/source-events/2026-10-12/source-change-events.md` - present
 - `articles/content/source-events/2026-10-12/source-change-events.json` - present
-- `articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-3.json` - present
+- `articles/content/newsroom/2026-10-12/editor-draft-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-draft-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/editor-invalid-attempt-2.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-invalid-repair-attempt-2.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-3.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-repair-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-repair-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/editor-repair-sections-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-validation-error-attempt-2.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-validation-error-repair-attempt-2.json` - changed
+- `articles/content/newsroom/2026-10-12/fact-check-repair-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/fact-check-repair-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/quality-report-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/quality-report-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/quality-report-repair-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/quality-report-repair-attempt-1.md` - changed
+- `articles/content/newsroom/2026-10-12/reporter-candidates-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/reporter-candidates-attempt-2.json` - changed
 - `articles/content/newsroom/2026-10-12/artifact-manifest.json` - changed
+
+## 미분류 산출물
+
+- `articles/content/newsroom/2026-10-12/coverage-reconciliation.json` - changed
+- `articles/content/newsroom/2026-10-12/editor-public-article-judge-targeted-repair-attempt-1.json` - changed
+- `articles/content/newsroom/2026-10-12/editorial-plan.json` - changed
+- `articles/content/newsroom/2026-10-12/repair-failure.json` - changed

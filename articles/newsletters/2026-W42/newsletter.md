@@ -1,14 +1,14 @@
 # 2026 W41 (10.05 ~ 10.11)
 
-이번 주에는 AOSP cameraserver의 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안을 살펴봅니다. Qualcomm CAMSS ISP 파라미터 문서화 패치에서는 공통 구조체 적용에 관한 리뷰를 확인합니다. ChromeOS 카메라 IPC에서는 타입이 명시된 platform handle로의 전환과 파일 디스크립터 전달 경로의 변경을 다룹니다.
+이번 주에는 AOSP의 조건부 카메라 mute 제안, Qualcomm CAMSS ISP 파라미터 uAPI 문서 리뷰, Claude Haiku 5.5 발표를 살펴봅니다. 카메라 관련 두 기사는 아직 제안·리뷰 단계이므로 적용 조건과 확인할 사항을 구분했습니다. Haiku는 반복 코딩 작업을 맡길 보조 모델로 소개하고, 실제 업무에서 품질·비용·응답 시간을 비교하는 방법을 제안합니다.
 
 
 
 ## 1. 이번 주 기사
 
 - AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안
+- Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델
 - Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의
-- ChromeOS 카메라 IPC, 타입이 명시된 platform handle로 전환
 
 ## 2. AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안
 
@@ -40,7 +40,41 @@ UID가 비활성 상태가 될 때 사용하는 blockClientsForUid()는 이 패�
 
 ---
 
-## 3. Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의
+## 3. Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델
+
+
+![Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용](https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg)
+
+_이미지: [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5)_
+
+
+_Anthropic News 공식 발표_
+
+빌드 오류 요약이나 단순 분류처럼 반복되는 작업을 큰 모델에 모두 맡길 필요가 줄어듭니다. Anthropic은 이런 작업과 코딩 보조 에이전트를 겨냥한 Haiku 5.5를 발표했습니다.
+
+10월 7일 발표된 Claude Haiku 5.5는 많은 요청을 빠르게 처리하면서 비용을 줄이는 데 초점을 둔 소형 언어 모델입니다. 공식 발표는 요약, 대화 내용 압축, 데이터베이스 질의, 분류를 대표적인 반복 작업으로 들고 있습니다.
+
+코딩에서는 Opus 5.5나 Sonnet 5.5와 함께 보조 에이전트로 쓰는 구성을 제시합니다. 큰 모델이 전체 작업을 관리하고, 작게 나눌 수 있는 작업을 Haiku에 맡기는 방식으로 이해할 수 있습니다. 어떤 업무를 분리할지는 팀의 실제 입력과 결과 품질로 판단해야 합니다.
+
+### 비용과 정확도를 함께 조절하는 선택지
+
+Anthropic은 Haiku 4.5보다 실행 비용이 평균 약 75% 낮다고 설명합니다. 이는 공급사가 제시한 평균 비교이며, 모든 요청이나 우리 팀의 월간 비용이 똑같이 줄어든다는 보장은 아닙니다. Haiku 계열에 처음 도입된 effort 설정은 비용과 답변 성능 사이의 선택을 조절하는 수단입니다.
+
+Camera HAL 개발 팀에서는 빌드 오류 로그의 요약·분류를 시험 대상으로 삼을 수 있습니다. 이는 편집 제안이며 원문이 Camera HAL 로그에서 성능을 검증했다는 뜻은 아닙니다. 같은 표본을 현재 모델과 Haiku에 주고, 정답 일치율과 중요한 오류의 누락률, 요청당 비용, 응답 시간을 함께 비교하면 도입 여부를 판단할 수 있습니다.
+
+이번 소식의 실무 가치는 반복 작업을 별도 모델에 맡길 선택지가 생겼다는 점입니다. 성능이 충분한 작업부터 나누되, 복잡한 원인 분석까지 일괄 전환할 근거로 사용해서는 안 됩니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+개발 도구 담당자는 빌드 오류 로그 요약·분류 표본으로 현재 모델과 Haiku 5.5를 비교할 수 있습니다. 정확도와 누락률을 유지하는 범위에서 비용·응답 시간 개선 여부를 측정하는 것이 도입 판단의 기준입니다.
+
+**출처**
+
+- [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5)
+
+---
+
+## 4. Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의
 
 
 ![Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의 image](../../assets/images/fallback/newsletter-default.svg)
@@ -66,36 +100,6 @@ Qualcomm platform 커널 드라이버 연동 시 qcom-camss-config.h uAPI 구조
 
 - [[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation](https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/)
 
----
-
-## 4. ChromeOS 카메라 IPC, 타입이 명시된 platform handle로 전환
-
-
-![ChromeOS 카메라 IPC, 타입이 명시된 platform handle로 전환 image](../../assets/images/fallback/newsletter-default.svg)
-
-
-_ChromeOS Gerrit_
-
-10월 7일 머지된 ChromeOS platform2 변경은 카메라 Mojom 인터페이스와 C++ 구현의 핸들 표현을 함께 전환해 플랫폼 파일 디스크립터를 직접 전달하도록 정리했습니다.
-
-Gerrit 변경 8506716은 chromiumos/platform2의 main 브랜치에 10월 7일 머지되었습니다. 커밋 메시지는 Chromium에서 타입 없는 레거시 Mojom handle 표기를 폐기하는 흐름에 맞춰, platform 타입을 명시한 핸들과 C++의 mojo::PlatformHandle로 옮긴다고 설명합니다.
-
-변경은 camera/mojo/gpu의 dmabuf·JPEG 인터페이스에만 한정되지 않습니다. camera3.mojom과 카메라 알고리즘 인터페이스, HAL 어댑터 및 C++ 호출부를 포함한 20개 파일이 함께 바뀌었습니다. 예를 들어 버퍼 fd 배열은 mojo::ScopedHandle 대신 mojo::PlatformHandle을 사용하고, acquire/release fence를 회수할 때는 UnwrapPlatformHandle을 거치던 코드가 핸들의 ReleaseFD()를 직접 호출합니다.
-
-### 인터페이스와 C++ 호출부를 함께 확인해야 하는 이유
-
-Mojom 정의만 복사하고 송수신 측 C++ 타입을 그대로 두면 이 변경과 동일한 상태가 되지 않습니다. ChromeOS 카메라 코드를 유지하는 팀은 버퍼 등록과 fence 반환 경로의 타입·유효성 검사·fd 소유권 전달을 함께 확인해야 합니다.
-
-이것은 ChromeOS 내부 IPC 타입 전환이며 AOSP Camera HAL3/AIDL 규격 변경이 아닙니다. 커밋의 TEST 항목은 CQ를 기록하지만 카메라 지연 시간이나 영상 품질 개선을 실측한 자료는 제시하지 않습니다.
-
-### Camera HAL/Driver 관점에서의 의미
-
-ChromeOS 파생 카메라 스택을 유지한다면 Mojom 정의와 C++ 송수신 코드를 함께 대조하고, 버퍼 fd 및 fence의 유효성·소유권 전달을 시험해야 합니다. Android HAL 인터페이스 변경으로 확대 해석하지 않습니다.
-
-**출처**
-
-- [camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2](https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716)
-
 
 ## 참고 / 더 읽을거리
 
@@ -108,4 +112,4 @@ ChromeOS 파생 카메라 스택을 유지한다면 Mojom 정의와 C++ 송수�
 
 - [cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av](https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947)
 - [[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation](https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/)
-- [camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2](https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716)
+- [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5)

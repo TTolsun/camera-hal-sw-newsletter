@@ -7,9 +7,9 @@
 - 렌더된 이미지 수 (`rendered_image_count`): 3
 - Markdown 이미지 수 (`markdown_image_count`): 3
 - 임시 시각 요소 수 (`fallback_visual_count`): 0
-- 이미지 후보 수 (`image_candidates_count`): 9
-- 검증 통과 이미지 후보 수 (`valid_image_candidate_count`): 0
-- 선택된 대표 이미지 수 (`selected_image_count`): 0
+- 이미지 후보 수 (`image_candidates_count`): 7
+- 검증 통과 이미지 후보 수 (`valid_image_candidate_count`): 1
+- 선택된 대표 이미지 수 (`selected_image_count`): 1
 - 출처 근거 부족 대표 이미지 수 (`selected_image_without_valid_candidate_count`): 0
 - 후보 목록 불일치 대표 이미지 수 (`selected_image_not_in_candidates_count`): 0
 - 복원 가능 기사 수 (`repairable_article_count`): 0
@@ -23,7 +23,7 @@
 | ---: | --- | --- | ---: | ---: | --- |
 | 1 | AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
 | 2 | Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
-| 3 | ChromeOS 카메라 IPC, 타입이 명시된 platform handle로 전환 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
+| 3 | Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델 | 있음 | 1 | 1 | 대표 이미지 선택됨 (selected) |
 
 ## 복원 가능 기사
 

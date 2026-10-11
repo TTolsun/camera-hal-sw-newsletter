@@ -2,31 +2,30 @@
 
 ## 이번 주 핵심 메시지
 
-AOSP 프라이버시 토글의 조건부 mute 제안, Qualcomm CAMSS ISP 문서화 패치의 구조체 리뷰, ChromeOS 카메라 IPC 핸들 타입 전환을 살펴봅니다.
+AOSP의 조건부 카메라 mute 제안, Qualcomm CAMSS ISP 파라미터 uAPI 문서 리뷰, Claude Haiku 5.5의 반복 작업·코딩 보조 모델 활용을 살펴봅니다.
 
 ## 메인으로 봐야 할 기사
 
 cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안
 
 ## Camera HAL 업무 연결 포인트
-- Gerrit 4348947의 리뷰 및 머지 상태 확인
-- UID 가시성·mute 지원 조합별 ERROR_CAMERA_DISABLED와 세션 유지 여부 비교
-- qcom-camss-config.h 메타데이터 블록 정의 및 OPE 파이프라인 단계별 구조체 확인
-- v4l2_isp 공통 구조체 적용에 따른 메인라인 커널 패치 머지 추적
-- camera3.mojom·dmabuf.mojom과 HAL 어댑터의 핸들 타입 대조
+- libcameraservice 패치 적용 환경에서 센서 프라이버시 토글 시 카메라 프레임 드롭이나 타임아웃 발생 여부 로그 확인
+- linux-media 패치 시리즈의 qcom-camss-config.h 헤더 파라미터 블록 레이아웃 검토
+- 개발 도구 담당자가 같은 빌드 오류 log 요약·분류 표본으로 Haiku 5.5와 현재 모델을 비교하고, 정답 일치율·누락률·요청당 비용·응답 latency를 기록합니다.
+- 동일한 입력과 채점 기준을 유지한 test에서 effort 설정별 비용과 정확도를 비교한 뒤 반복 작업만 분리할지 결정합니다.
 
 ## 검증 결과 요약
 
 - 상태: PASS
 - must_fix 개수: 0
 - source gap 개수: 0
-- 의견: 모든 기사가 편집 정책을 준수하며, 출처에 기반한 사실과 HAL/드라이버 관점의 실질적인 정보를 제공합니다. 과장된 표현이나 출처 없는 주장은 발견되지 않았습니다. 모든 `summary_truncated=true` 항목은 유일한 근거가 아니거나, 잘린 내용이 뒷받침하지 않는 결론적 주장을 포함하지 않아 `must_fix`로 분류되지 않았습니다.
+- 의견: All articles are factual, well-sourced, and adhere to the editorial policy regarding concrete evidence, relevance, actionability, and overclaim guardrails. The markdown syntax is correct, and there is no undue repetition. All claims are backed by the provided evidence, and no truncated evidence leads to overclaimed conclusions. The articles are publishable.
 
 ## 품질 게이트
-- 품질 점수: 95/100
+- 품질 점수: 96/100
 - 품질 기준: 60
 - 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3); 1pt image-fallback (cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안); 1pt image-fallback (Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토); 1pt image-fallback (ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지)
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3); 1pt image-fallback (cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안); 1pt image-fallback (Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토)
 
 ## Article Structure Contract
 
@@ -34,7 +33,7 @@ cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카�
 | ---: | --- | --- | --- | --- | --- | --- |
 | 1 | cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안 | pass | present | framework_hal_contract, driver_image_pipeline | present | none |
 | 2 | Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토 | pass | present | driver_image_pipeline, stream_buffer_metadata | present | none |
-| 3 | ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지 | pass | present | driver_image_pipeline, soc_resource_contention | present | none |
+| 3 | Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델 | pass | present | native_tooling_workflow | present | none |
 
 ## Stale Claim Gate
 
@@ -46,28 +45,28 @@ cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카�
 
 ## 후보 선택 진단
 
-- Reporter candidates: 12
-- Reporter-selected candidates: 12
-- Final input candidates: 61
-- Final eligible candidates: 12
+- Reporter candidates: unknown
+- Reporter-selected candidates: unknown
+- Final input candidates: 3
+- Final eligible candidates: 3
 - Final selected articles: 3
 - Deterministic primary articles: 3
 - Selected representative groups: 3
 - Rendered groups: unknown
 - Explicitly demoted groups (editor): 0
-- Reconciliation-demoted groups: 0
-- Reserve candidates: 4
+- Reconciliation-demoted groups: unknown
+- Reserve candidates: 0
 - Demoted candidates: 0
 - Composition mode: NORMAL
 - Editor review required: false
-- Reporter-selected but final-excluded: 9
+- Reporter-selected but final-excluded: unknown
 - direct_aosp_camera: 1
 - android: 0
-- camera_driver_image_pipeline: 2
+- camera_driver_image_pipeline: 1
 - android_multimedia_camera_output: 0
 - soc_platform_signal: 0
-- cpp_ai_tooling_fallback: 0
-- Primary Camera Stack: 3
+- cpp_ai_tooling_fallback: 1
+- Primary Camera Stack: 2
 - Supporting main articles: 0
 - Forbidden main articles: 0
 - Non-fallback reviewable: 3
@@ -75,33 +74,28 @@ cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카�
 - release_class_admitted: 0
 - release_class_blocked_reason: no_eligible_candidate
 - release_class_evidence_unchecked_skips: 0
-- release_class_after_reconciliation_pool_size: 0
-- release_class_after_reconciliation_admitted: 0
-- release_class_after_reconciliation_blocked_reason: no_eligible_candidate
+- release_class_after_reconciliation_pool_size: unknown
+- release_class_after_reconciliation_admitted: unknown
+- release_class_after_reconciliation_blocked_reason: unknown
 - republication_history_loaded: true
-- republication_history_main_articles: 39
-- republication_cooldown_blocked: 2
+- republication_history_main_articles: 42
+- republication_cooldown_blocked: 0
 - evidence_unchecked_main_blocked: 0
 
 Source/parser recovery hint:
 - No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.
 - Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.
-- Keep forbidden buckets out of main article selection: generic_tech_watchlist.
 
 주요 final exclusion reason:
-- final_selection_blocked=true (32)
-- main_eligible=false (30)
-- source_gap_risk=true (30)
-- reference_only=true (22)
-- briefing_only=true (21)
+- none
 
 Homepage Headline:
 - decision: latest_camera_hal_article
-- current_headline_key: url:https://source.android.com/docs/compatibility/cts/its-release-notes-17
+- current_headline_key: url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com
 - replacement_headline_key: url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947
-- public_render_reconciled: true
-- public_rendered_headline_key: url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com
-- public_render_reconciliation_reason: selected_headline_not_rendered_in_public_issue
+- public_render_reconciled: false
+- public_rendered_headline_key: unknown
+- public_render_reconciliation_reason: unknown
 - runtime_decayed_score: unknown
 - previous_stored_current_score: unknown
 - last_scored_at: unknown

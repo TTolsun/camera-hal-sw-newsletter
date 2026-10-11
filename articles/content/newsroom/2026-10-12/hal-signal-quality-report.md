@@ -28,9 +28,9 @@
 - generic_signal_hard_blocker_count: 0
 - hal_signal_hard_blocker_count: 0
 - hard_blocker_reason_code_counts: {}
-- hal_impact_axis_counts: {"framework_hal_contract":1,"driver_image_pipeline":3,"stream_buffer_metadata":1,"soc_resource_contention":1}
-- actionability_level_counts: {"measurable_test":3}
-- effective_actionability_level_counts: {"measurable_test":3}
+- hal_impact_axis_counts: {"framework_hal_contract":1,"driver_image_pipeline":2,"stream_buffer_metadata":1,"native_tooling_workflow":1}
+- actionability_level_counts: {"measurable_test":2,"owner_metric_log":1}
+- effective_actionability_level_counts: {"measurable_test":2,"owner_metric_log":1}
 - signal_quality_status_counts: {"strong_signal":3}
 
 ## Count Semantics
@@ -44,4 +44,4 @@
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안 | strong_signal | measurable_test | measurable_test | framework_hal_contract, driver_image_pipeline | yes | none |
 | 2 | Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토 | strong_signal | measurable_test | measurable_test | driver_image_pipeline, stream_buffer_metadata | yes | none |
-| 3 | ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지 | strong_signal | measurable_test | measurable_test | driver_image_pipeline, soc_resource_contention | yes | none |
+| 3 | Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델 | strong_signal | owner_metric_log | owner_metric_log | native_tooling_workflow | yes | none |

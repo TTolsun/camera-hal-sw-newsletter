@@ -1,0 +1,44 @@
+{
+  "deterministic_selected": [
+    "d584298342e95060848eabc0ff7b7c5544f9d641a22b2ace41d89e256360fafc",
+    "cdb1d51fae0431106fedcd9b04b5f3c39e2b73ba97f1a80fa573c763d8f96f73",
+    "88783652821718ad0180e28fd8b0675adf32b3087055dbef2924df2619b78cfa"
+  ],
+  "reconciled_selected": [
+    "d584298342e95060848eabc0ff7b7c5544f9d641a22b2ace41d89e256360fafc",
+    "cdb1d51fae0431106fedcd9b04b5f3c39e2b73ba97f1a80fa573c763d8f96f73",
+    "88783652821718ad0180e28fd8b0675adf32b3087055dbef2924df2619b78cfa"
+  ],
+  "changes": [],
+  "deterministic_selected_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+    "article:https://www.anthropic.com/claude-haiku-5-5",
+    "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com"
+  ],
+  "demoted_group_keys": [],
+  "demoted_groups": [],
+  "editorial_plan_scored_candidates": [
+    {
+      "candidate_key": "d584298342e95060848eabc0ff7b7c5544f9d641a22b2ace41d89e256360fafc",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "cdb1d51fae0431106fedcd9b04b5f3c39e2b73ba97f1a80fa573c763d8f96f73",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://www.anthropic.com/claude-haiku-5-5",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "88783652821718ad0180e28fd8b0675adf32b3087055dbef2924df2619b78cfa",
+      "lineup_role": "selected",
+      "article_group_key": "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    }
+  ],
+  "promoted_group_keys": []
+}
