@@ -3,11 +3,11 @@
 ## 요약
 
 - 상태: 정상 또는 조치 없음
-- 기사 수 (`article_count`): 1
-- 렌더된 이미지 수 (`rendered_image_count`): 1
-- Markdown 이미지 수 (`markdown_image_count`): 1
+- 기사 수 (`article_count`): 3
+- 렌더된 이미지 수 (`rendered_image_count`): 3
+- Markdown 이미지 수 (`markdown_image_count`): 3
 - 임시 시각 요소 수 (`fallback_visual_count`): 0
-- 이미지 후보 수 (`image_candidates_count`): 3
+- 이미지 후보 수 (`image_candidates_count`): 9
 - 검증 통과 이미지 후보 수 (`valid_image_candidate_count`): 0
 - 선택된 대표 이미지 수 (`selected_image_count`): 0
 - 출처 근거 부족 대표 이미지 수 (`selected_image_without_valid_candidate_count`): 0
@@ -21,7 +21,9 @@
 
 | # | 기사 | 선택된 대표 이미지 | 후보 | 검증 통과 후보 | 상태 |
 | ---: | --- | --- | ---: | ---: | --- |
-| 1 | Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
+| 1 | AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
+| 2 | Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
+| 3 | ChromeOS 카메라 IPC, 타입이 명시된 platform handle로 전환 | 없음 | 3 | 0 | 추출 출처 정보 부족 (missing_extraction_source) |
 
 ## 복원 가능 기사
 

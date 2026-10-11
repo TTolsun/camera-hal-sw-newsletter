@@ -2,42 +2,46 @@
 
 ## 이번 주 핵심 메시지
 
-이번 주 뉴스레터에서는 cameraserver의 센서 프라이버시 음소거 동작 제안, Qualcomm CAMSS ISP 파라미터 uAPI 문서화 v10 패치, ChromiumOS platform2 카메라 모듈의 mojom 핸들 마이그레이션 소식을 다룹니다.
+AOSP 프라이버시 토글의 조건부 mute 제안, Qualcomm CAMSS ISP 문서화 패치의 구조체 리뷰, ChromeOS 카메라 IPC 핸들 타입 전환을 살펴봅니다.
 
 ## 메인으로 봐야 할 기사
 
-Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토
+cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안
 
 ## Camera HAL 업무 연결 포인트
-- cameraserver 센서 프라이버시 음소거 제안(Gerrit 4348947) 검토 및 HAL 세션 상태 전이 영향 분석
-- Qualcomm CAMSS ISP v10 패치(V4L2_META_FMT_QCOM_ISP_PARAMS) uAPI 메타데이터 구조 및 OPE 파라미터 블록 검토
-- ChromiumOS platform2 카메라 스택의 mojom 핸들 마이그레이션 패치(Gerrit 8506716) IPC 바인딩 변경점 확인
+- Gerrit 4348947의 리뷰 및 머지 상태 확인
+- UID 가시성·mute 지원 조합별 ERROR_CAMERA_DISABLED와 세션 유지 여부 비교
+- qcom-camss-config.h 메타데이터 블록 정의 및 OPE 파이프라인 단계별 구조체 확인
+- v4l2_isp 공통 구조체 적용에 따른 메인라인 커널 패치 머지 추적
+- camera3.mojom·dmabuf.mojom과 HAL 어댑터의 핸들 타입 대조
 
 ## 검증 결과 요약
 
 - 상태: PASS
 - must_fix 개수: 0
 - source gap 개수: 0
-- 의견: 모든 기사가 사실에 기반하고 있으며, 출처가 명확합니다. 과장된 표현이나 누락된 날짜 정보도 발견되지 않았습니다. 각 기사는 카메라 HAL SW 엔지니어에게 실질적인 가치를 제공하며, HAL/드라이버 관점의 영향과 구체적인 실행 항목을 잘 설명하고 있습니다. `evidence_summary` 및 `confirmed_facts`에 `...` 또는 `summary_truncated=true` 표시가 없으므로, 잘린 근거로 인한 문제는 없습니다.
+- 의견: 모든 기사가 편집 정책을 준수하며, 출처에 기반한 사실과 HAL/드라이버 관점의 실질적인 정보를 제공합니다. 과장된 표현이나 출처 없는 주장은 발견되지 않았습니다. 모든 `summary_truncated=true` 항목은 유일한 근거가 아니거나, 잘린 내용이 뒷받침하지 않는 결론적 주장을 포함하지 않아 `must_fix`로 분류되지 않았습니다.
 
 ## 품질 게이트
-- 품질 점수: 97/100
+- 품질 점수: 95/100
 - 품질 기준: 60
 - 품질 상태: PASS
-- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 2); 1pt image-fallback (Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토)
+- 주요 감점: 1pt editorial-story (briefing 1); 1pt editorial-story (briefing 3); 1pt image-fallback (cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안); 1pt image-fallback (Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토); 1pt image-fallback (ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지)
 
 ## Article Structure Contract
 
 | # | Article | 5-section | Fact boundary | HAL impact axis | Actionability | Limitations |
 | ---: | --- | --- | --- | --- | --- | --- |
-| 1 | Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토 | pass | present | driver_image_pipeline, stream_buffer_metadata | present | none |
+| 1 | cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안 | pass | present | framework_hal_contract, driver_image_pipeline | present | none |
+| 2 | Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토 | pass | present | driver_image_pipeline, stream_buffer_metadata | present | none |
+| 3 | ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지 | pass | present | driver_image_pipeline, soc_resource_contention | present | none |
 
 ## Stale Claim Gate
 
 - Stale claim status: PASS
-- Removed global stale items: 1
+- Removed global stale items: 0
 - Removed unsupported release claims: 0
-- Unused references removed: 2
+- Unused references removed: 0
 - Hard failures: 0
 
 ## 후보 선택 진단
@@ -53,7 +57,7 @@ Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문�
 - Explicitly demoted groups (editor): 0
 - Reconciliation-demoted groups: 0
 - Reserve candidates: 4
-- Demoted candidates: unknown
+- Demoted candidates: 0
 - Composition mode: NORMAL
 - Editor review required: false
 - Reporter-selected but final-excluded: 9
@@ -95,9 +99,9 @@ Homepage Headline:
 - decision: latest_camera_hal_article
 - current_headline_key: url:https://source.android.com/docs/compatibility/cts/its-release-notes-17
 - replacement_headline_key: url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947
-- public_render_reconciled: false
-- public_rendered_headline_key: unknown
-- public_render_reconciliation_reason: unknown
+- public_render_reconciled: true
+- public_rendered_headline_key: url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com
+- public_render_reconciliation_reason: selected_headline_not_rendered_in_public_issue
 - runtime_decayed_score: unknown
 - previous_stored_current_score: unknown
 - last_scored_at: unknown

@@ -1,14 +1,14 @@
 {
   "schema_version": 5,
   "date": "2026-10-12",
-  "generated_at": "2026-10-11T15:19:08.328Z",
+  "generated_at": "2026-10-11T15:43:03.117Z",
   "review_summary": {
-    "total": 100,
-    "present": 74,
-    "missing": 26,
+    "total": 83,
+    "present": 65,
+    "missing": 18,
     "missingRequired": 0,
-    "reviewBlocking": 12,
-    "attentionRequired": 2,
+    "reviewBlocking": 13,
+    "attentionRequired": 0,
     "seedUsed": false,
     "publicOutputExpected": true,
     "status": "PASS"
@@ -42,28 +42,10 @@
       "path": "articles/content/newsroom/2026-10-12/article-capsules.json"
     },
     {
-      "path": "articles/content/newsroom/2026-10-12/background-context.json"
-    },
-    {
       "path": "articles/content/newsroom/2026-10-12/cost-report.md"
     },
     {
-      "path": "articles/content/newsroom/2026-10-12/coverage-reconciliation.json"
-    },
-    {
       "path": "articles/content/newsroom/2026-10-12/deep-dive-report.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-1.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-1.md"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-2.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-2.md"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/editor-draft.json"
@@ -75,31 +57,16 @@
       "path": "articles/content/newsroom/2026-10-12/editor-in-chief-brief.md"
     },
     {
-      "path": "articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-1.json"
+      "path": "articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-3.json"
     },
     {
-      "path": "articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-2.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editorial-plan.json"
+      "path": "articles/content/newsroom/2026-10-12/evidence-pack-summary.json"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/evidence-validation-report.json"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/extracted-source-facts.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.md"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-2.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-2.md"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/fact-check-report.json"
@@ -123,16 +90,10 @@
       "path": "articles/content/newsroom/2026-10-12/hal-signal-quality-report.md"
     },
     {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-1.json"
+      "path": "articles/content/newsroom/2026-10-12/image-audit-report.json"
     },
     {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-1.md"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-2.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-2.md"
+      "path": "articles/content/newsroom/2026-10-12/image-audit-report.md"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/quality-report.json"
@@ -142,12 +103,6 @@
     },
     {
       "path": "articles/content/newsroom/2026-10-12/release-qa-report.md"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/reporter-candidates-attempt-1.json"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/reporter-candidates-attempt-2.json"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/reporter-candidates.json"
@@ -178,6 +133,24 @@
     },
     {
       "path": "articles/content/newsroom/2026-10-12/source-discovery-feedback-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-effectiveness-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-effectiveness-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-followup-issues.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-followup-issues.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-quality-diagnosis.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-quality-diagnosis.md"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/source-quality-report.json"
@@ -578,12 +551,12 @@
       "role": "image_audit",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 44,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -599,7 +572,7 @@
       "review_blocking": true,
       "review_attention_required": false,
       "review_order": 45,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -615,7 +588,7 @@
       "review_blocking": true,
       "review_attention_required": false,
       "review_order": 50,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -631,7 +604,7 @@
       "review_blocking": true,
       "review_attention_required": false,
       "review_order": 51,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -642,12 +615,12 @@
       "role": "source_quality_diagnosis",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 52,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -658,12 +631,12 @@
       "role": "source_followup_issues",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 53,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -695,7 +668,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 61,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "debug_heavy"
     },
@@ -770,12 +743,12 @@
       "role": "source_effectiveness",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 66,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -791,7 +764,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 67,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -807,7 +780,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 68,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -903,7 +876,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.004,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -919,7 +892,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.005,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -999,7 +972,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.011,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1159,7 +1132,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.021,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1218,12 +1191,12 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": true,
+      "present": false,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.025,
-      "changed": true,
+      "changed": false,
       "derived": false,
       "retention_grade": "debug_heavy"
     },
@@ -1234,12 +1207,12 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.026,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1250,12 +1223,12 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.027,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1271,7 +1244,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.028,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1282,12 +1255,12 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.029,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1298,12 +1271,12 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.03,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1314,12 +1287,12 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.031,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1335,7 +1308,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.032,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1351,7 +1324,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.033,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1399,7 +1372,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.036,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1415,7 +1388,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.037,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1431,7 +1404,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.038,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1463,7 +1436,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.04,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1479,7 +1452,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.041,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1495,7 +1468,7 @@
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.042,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1532,247 +1505,7 @@
       "retention_grade": "review_required_compact"
     },
     {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-1.md",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": true,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-2.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-2.md",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": true,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-2.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": true,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.md",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": true,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-2.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-2.md",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": true,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-1.md",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": true,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-2.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-2.md",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": true,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/reporter-candidates-attempt-1.json",
-      "group": "debug_evidence",
-      "label": "디버그 근거",
-      "role": "debug_attempt",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": false,
-      "review_order": 91,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "transient_attempt"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/reporter-candidates-attempt-2.json",
+      "path": "articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-3.json",
       "group": "debug_evidence",
       "label": "디버그 근거",
       "role": "debug_attempt",
@@ -1802,216 +1535,58 @@
       "changed": true,
       "derived": true,
       "retention_grade": "review_required_compact"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/coverage-reconciliation.json",
-      "group": "unknown_artifacts",
-      "label": "미분류 산출물",
-      "role": "unclassified",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": true,
-      "review_order": 95,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "debug_heavy"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editorial-plan.json",
-      "group": "unknown_artifacts",
-      "label": "미분류 산출물",
-      "role": "unclassified",
-      "required": "optional",
-      "requiredActive": false,
-      "present": true,
-      "human_readable": false,
-      "review_blocking": false,
-      "review_attention_required": true,
-      "review_order": 95,
-      "changed": false,
-      "derived": false,
-      "retention_grade": "debug_heavy"
     }
   ],
   "missing_required_review_artifacts": [],
-  "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517",
+  "retention_location": "local-snapshot",
   "retention_summary": {
-    "review_required_compact": 38,
+    "review_required_compact": 47,
     "public_source_of_truth": 12,
-    "debug_heavy": 8,
-    "transient_attempt": 16
+    "debug_heavy": 5,
+    "transient_attempt": 1
   },
   "retained_heavy_artifacts": [
     {
       "path": "articles/content/newsroom/2026-10-12/reporter-candidates.json",
-      "size": 365442,
-      "sha256": "54c5ce8124974e592d0774f554bf77215e1013fa22b4de8414729d4d5e7de5d6",
+      "size": 433580,
+      "sha256": "7968532a6f4ec05822c42934221d3dfb7146c57582aeb947014f08189d7b08de",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/editor-draft.json",
-      "size": 36809,
-      "sha256": "36101b7894e3cc58691cbb4311533300c32b31035318989ac0226c109e8b188c",
+      "size": 107970,
+      "sha256": "3c35756b7a95925321711f08386d8ab8537c1a316db509c282b437ab6cc55c0b",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/editor-draft.md",
-      "size": 2752,
-      "sha256": "79753e9e6fc7ebe2b20193a1f99b29d4a4481148790d698a14f5bafca3d65560",
+      "size": 9370,
+      "sha256": "aa74737c53094dcd2820ad1d325c40199ee009f40e2d1bad449b09317f409965",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/shortlisted-candidates.json",
-      "size": 1561116,
-      "sha256": "82f6b164c6445f9d2be107136075aff77695ba2cbecca8a5b6d05cb52cdd6d9f",
+      "size": 1765530,
+      "sha256": "598c0a5c7f5fc51a8713a736e929133cf12fb278b13205ad7093afcbe569b5d1",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
+      "retention_location": "local-snapshot"
     },
     {
       "path": "articles/content/newsroom/2026-10-12/article-capsules.json",
-      "size": 314251,
-      "sha256": "7028e079c0094601b993438c66741e06b9bd953281ed326429c7de2ed0093530",
+      "size": 384867,
+      "sha256": "72fd48baf2ab353e97bf83b223b91164cc696fa215f12a22f8d0736ebce0a8a2",
       "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
+      "retention_location": "local-snapshot"
     },
     {
-      "path": "articles/content/newsroom/2026-10-12/background-context.json",
-      "size": 4495,
-      "sha256": "3519c6cc7c805e7036af5592276310391921cf36e10e8357030b858ed088aa84",
-      "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-1.json",
-      "size": 43139,
-      "sha256": "1c1fdc7ac5ad576e19290e505a2c4c88db14630558737a030bde55ad63ed7f3c",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-1.md",
-      "size": 7136,
-      "sha256": "54ae9a0fa7db25d6aaff5b1a715e5c46cef1ad5b041fe7dcf0d70d2b00297d9b",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-2.json",
-      "size": 43076,
-      "sha256": "2f86003d74556210e7ed9adfd5fe56d064c5241741d53e3c7f256e23ba33da4a",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-draft-attempt-2.md",
-      "size": 6955,
-      "sha256": "00848a915b122fbac23167a8e7a69ebd9d5fa4792723143a203f56a0d81f6464",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-1.json",
+      "path": "articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-3.json",
       "size": 1097,
       "sha256": "f367edaa66010ab20c140b5b9c55f3b18eece4fd089b091433e0aef904dee619",
       "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editor-public-article-judge-attempt-2.json",
-      "size": 1097,
-      "sha256": "f367edaa66010ab20c140b5b9c55f3b18eece4fd089b091433e0aef904dee619",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.json",
-      "size": 5348,
-      "sha256": "4f89d59f9f4e4c91ac3e6ea04c752a339c9f9237bb87082bd10cc2ea22bf4d69",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-1.md",
-      "size": 503,
-      "sha256": "17be5ee2106c98b3f7015b03eba2b6524f44474a029e7eb09c15aa41086f3472",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-2.json",
-      "size": 5418,
-      "sha256": "d92054decf56879901ae41825afca7381ba018b70c39c18a7bb58b8ec52d3aea",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/fact-check-report-attempt-2.md",
-      "size": 669,
-      "sha256": "7728fc20cedaace4c9eaa187d352ef9c171475d8a65b157dcb0f7daf659926cc",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-1.json",
-      "size": 42858,
-      "sha256": "2a7ee2c79a2a746eb60a66be392a6a937627fa80353a843c7ca467ebf83c0f2f",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-1.md",
-      "size": 13483,
-      "sha256": "cea3dde98f5b4910c285b20543a1093ecf5855dc5335bd32cf4871175da37bbe",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-2.json",
-      "size": 43411,
-      "sha256": "c2185a5cdd01f98ce1e9cb8fc9fd83b5cc4d60c9a44918a12ac44e70857907f8",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/quality-report-attempt-2.md",
-      "size": 13970,
-      "sha256": "3cfef44a0cd1a54127f834cc9f036e5fa93cb79eaae4b74fb077ec0e88f8e261",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/reporter-candidates-attempt-1.json",
-      "size": 366143,
-      "sha256": "bcaad7a8ed05a2d6d4c75ff967deeb48b527e4544696cae123f79867203a0934",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/reporter-candidates-attempt-2.json",
-      "size": 365442,
-      "sha256": "54c5ce8124974e592d0774f554bf77215e1013fa22b4de8414729d4d5e7de5d6",
-      "retention_grade": "transient_attempt",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/coverage-reconciliation.json",
-      "size": 1884,
-      "sha256": "b060e48f542f4edbed653c038ed6aa8278cb3485a5924d4db52d7e17cad3c4ff",
-      "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
-    },
-    {
-      "path": "articles/content/newsroom/2026-10-12/editorial-plan.json",
-      "size": 7907,
-      "sha256": "72169030ebbf564e42f31466d1281aeda04d61af98c38b101729865303c10bfe",
-      "retention_grade": "debug_heavy",
-      "retention_location": "github-actions-artifact:newsroom-final-debug-38150142517"
+      "retention_location": "local-snapshot"
     }
   ],
   "committed_artifacts": [
@@ -2060,6 +1635,10 @@
       "retention_grade": "review_required_compact"
     },
     {
+      "path": "articles/content/newsroom/2026-10-12/evidence-pack-summary.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
       "path": "articles/content/newsroom/2026-10-12/evidence-validation-report.json",
       "retention_grade": "review_required_compact"
     },
@@ -2093,6 +1672,14 @@
     },
     {
       "path": "articles/content/newsroom/2026-10-12/hal-signal-quality-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/image-audit-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/image-audit-report.md",
       "retention_grade": "review_required_compact"
     },
     {
@@ -2137,6 +1724,30 @@
     },
     {
       "path": "articles/content/newsroom/2026-10-12/source-discovery-feedback-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-effectiveness-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-effectiveness-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-followup-issues.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-followup-issues.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-quality-diagnosis.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-12/source-quality-diagnosis.md",
       "retention_grade": "review_required_compact"
     },
     {

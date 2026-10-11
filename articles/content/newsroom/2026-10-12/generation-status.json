@@ -1,143 +1,17 @@
 {
-  "status": "PASS",
-  "fact_check_status": "PASS",
-  "must_fix_count": 0,
-  "failure_kind": "",
-  "failure_class": "",
-  "quality_status": "PASS",
-  "quality_score": 97,
-  "quality_threshold": 60,
-  "publish_ready": true,
-  "selection_publish_ready": true,
-  "final_publish_ready": true,
-  "editor_review_required": false,
   "date": "2026-10-12",
+  "status": "PASS",
   "failure_stage": "",
   "failure_reason": "",
-  "quality_attempt_count": 2,
-  "quality_deduction_count": 3,
+  "failure_class": "",
+  "fact_check_status": "PASS",
+  "must_fix_count": 0,
+  "quality_status": "PASS",
+  "quality_attempt_count": 3,
+  "quality_score": 95,
+  "quality_threshold": 60,
+  "quality_deduction_count": 5,
   "stage_status_log": [
-    {
-      "stage_id": "reporter",
-      "role": "reporter",
-      "attempt": 1,
-      "status": "passed",
-      "stage": "reporter attempt 1/2"
-    },
-    {
-      "stage_id": "background_context",
-      "role": "background-context",
-      "attempt": 1,
-      "status": "passed",
-      "stage": "background-context attempt 1/2"
-    },
-    {
-      "stage_id": "editorial_plan",
-      "role": "editor",
-      "attempt": 1,
-      "status": "passed",
-      "stage": "editorial-plan attempt 1/2"
-    },
-    {
-      "stage_id": "editor",
-      "role": "editor",
-      "attempt": 1,
-      "status": "passed",
-      "stage": "editor attempt 1/2"
-    },
-    {
-      "stage_id": "editor.public_article_judge",
-      "role": "judge",
-      "attempt": 1,
-      "status": "passed",
-      "stage": "editor attempt 1/2 public article judge"
-    },
-    {
-      "stage_id": "fact_checker",
-      "role": "factcheck",
-      "attempt": 1,
-      "status": "passed",
-      "stage": "fact-checker attempt 1/2"
-    },
-    {
-      "stage_id": "quality_gate",
-      "role": "quality_gate",
-      "attempt": 1,
-      "status": "failed",
-      "stage": "quality_gate",
-      "reason": "NEEDS_FIX"
-    },
-    {
-      "stage_id": "article_source_review",
-      "role": "factcheck",
-      "attempt": 1,
-      "status": "passed",
-      "stage": "article-source-review attempt 1/2"
-    },
-    {
-      "stage_id": "reporter",
-      "role": "reporter",
-      "attempt": 2,
-      "status": "passed",
-      "stage": "reporter attempt 2/2"
-    },
-    {
-      "stage_id": "background_context",
-      "role": "background-context",
-      "attempt": 2,
-      "status": "passed",
-      "stage": "background-context attempt 2/2"
-    },
-    {
-      "stage_id": "editorial_plan",
-      "role": "editor",
-      "attempt": 2,
-      "status": "passed",
-      "stage": "editorial-plan attempt 2/2"
-    },
-    {
-      "stage_id": "editor",
-      "role": "editor",
-      "attempt": 2,
-      "status": "passed",
-      "stage": "editor attempt 2/2"
-    },
-    {
-      "stage_id": "editor.public_article_judge",
-      "role": "judge",
-      "attempt": 2,
-      "status": "passed",
-      "stage": "editor attempt 2/2 public article judge"
-    },
-    {
-      "stage_id": "fact_checker",
-      "role": "factcheck",
-      "attempt": 2,
-      "status": "passed",
-      "stage": "fact-checker attempt 2/2"
-    },
-    {
-      "stage_id": "quality_gate",
-      "role": "quality_gate",
-      "attempt": 2,
-      "status": "failed",
-      "stage": "quality_gate",
-      "reason": "NEEDS_FIX"
-    },
-    {
-      "stage_id": "article_source_review",
-      "role": "factcheck",
-      "attempt": 2,
-      "status": "passed",
-      "stage": "article-source-review attempt 2/2"
-    },
-    {
-      "stage_id": "render",
-      "role": "render",
-      "attempt": 2,
-      "status": "passed",
-      "stage": "render"
-    },
     {
       "stage_id": "intro_letter",
       "role": "intro-letter",
@@ -150,230 +24,6 @@
   "invalid_json_count": 0,
   "stage_key_format": "canonical-v1",
   "model_usage": {
-    "reporter#1": {
-      "stage_key": "reporter#1",
-      "stage_id": "reporter",
-      "quality_attempt": 1,
-      "label": "reporter attempt 1/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "background_context#1": {
-      "stage_key": "background_context#1",
-      "stage_id": "background_context",
-      "quality_attempt": 1,
-      "label": "background-context attempt 1/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "editorial_plan#1": {
-      "stage_key": "editorial_plan#1",
-      "stage_id": "editorial_plan",
-      "quality_attempt": 1,
-      "label": "editorial-plan attempt 1/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "editor#1": {
-      "stage_key": "editor#1",
-      "stage_id": "editor",
-      "quality_attempt": 1,
-      "label": "editor attempt 1/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-3.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "editor.public_article_judge#1": {
-      "stage_key": "editor.public_article_judge#1",
-      "stage_id": "editor.public_article_judge",
-      "quality_attempt": 1,
-      "label": "editor attempt 1/2 public article judge",
-      "parent_run_key": "editor#1",
-      "models": {
-        "gemini-2.5-flash-lite": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "fact_checker#1": {
-      "stage_key": "fact_checker#1",
-      "stage_id": "fact_checker",
-      "quality_attempt": 1,
-      "label": "fact-checker attempt 1/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "article_source_review#1": {
-      "stage_key": "article_source_review#1",
-      "stage_id": "article_source_review",
-      "quality_attempt": 1,
-      "label": "article-source-review attempt 1/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "reporter#2": {
-      "stage_key": "reporter#2",
-      "stage_id": "reporter",
-      "quality_attempt": 2,
-      "label": "reporter attempt 2/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "background_context#2": {
-      "stage_key": "background_context#2",
-      "stage_id": "background_context",
-      "quality_attempt": 2,
-      "label": "background-context attempt 2/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "editorial_plan#2": {
-      "stage_key": "editorial_plan#2",
-      "stage_id": "editorial_plan",
-      "quality_attempt": 2,
-      "label": "editorial-plan attempt 2/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "editor#2": {
-      "stage_key": "editor#2",
-      "stage_id": "editor",
-      "quality_attempt": 2,
-      "label": "editor attempt 2/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-3.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "editor.public_article_judge#2": {
-      "stage_key": "editor.public_article_judge#2",
-      "stage_id": "editor.public_article_judge",
-      "quality_attempt": 2,
-      "label": "editor attempt 2/2 public article judge",
-      "parent_run_key": "editor#2",
-      "models": {
-        "gemini-2.5-flash-lite": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "fact_checker#2": {
-      "stage_key": "fact_checker#2",
-      "stage_id": "fact_checker",
-      "quality_attempt": 2,
-      "label": "fact-checker attempt 2/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
-    "article_source_review#2": {
-      "stage_key": "article_source_review#2",
-      "stage_id": "article_source_review",
-      "quality_attempt": 2,
-      "label": "article-source-review attempt 2/2",
-      "parent_run_key": null,
-      "models": {
-        "gemini-2.5-flash": {
-          "requests": 1,
-          "successes": 1,
-          "invalid_json": 0,
-          "quota_errors": 0,
-          "api_errors": 0
-        }
-      }
-    },
     "intro_letter#0": {
       "stage_key": "intro_letter#0",
       "stage_id": "intro_letter",
@@ -392,246 +42,6 @@
     }
   },
   "model_routing": {
-    "reporter#1": {
-      "stage_group": "reporter",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "reporter#1",
-      "stage_id": "reporter",
-      "quality_attempt": 1,
-      "label": "reporter attempt 1/2",
-      "parent_run_key": null
-    },
-    "background_context#1": {
-      "stage_group": "reporter",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "background_context#1",
-      "stage_id": "background_context",
-      "quality_attempt": 1,
-      "label": "background-context attempt 1/2",
-      "parent_run_key": null
-    },
-    "editorial_plan#1": {
-      "stage_group": "editorialPlan",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "editorial_plan#1",
-      "stage_id": "editorial_plan",
-      "quality_attempt": 1,
-      "label": "editorial-plan attempt 1/2",
-      "parent_run_key": null
-    },
-    "editor#1": {
-      "stage_group": "editor",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-3.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash",
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "editor#1",
-      "stage_id": "editor",
-      "quality_attempt": 1,
-      "label": "editor attempt 1/2",
-      "parent_run_key": null
-    },
-    "editor.public_article_judge#1": {
-      "stage_group": "judge",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash-lite",
-      "fallback_models": [
-        "gemini-2.5-flash"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "editor.public_article_judge#1",
-      "stage_id": "editor.public_article_judge",
-      "quality_attempt": 1,
-      "label": "editor attempt 1/2 public article judge",
-      "parent_run_key": "editor#1"
-    },
-    "fact_checker#1": {
-      "stage_group": "factcheck",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "fact_checker#1",
-      "stage_id": "fact_checker",
-      "quality_attempt": 1,
-      "label": "fact-checker attempt 1/2",
-      "parent_run_key": null
-    },
-    "article_source_review#1": {
-      "stage_group": "factcheck",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "article_source_review#1",
-      "stage_id": "article_source_review",
-      "quality_attempt": 1,
-      "label": "article-source-review attempt 1/2",
-      "parent_run_key": null
-    },
-    "reporter#2": {
-      "stage_group": "reporter",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "reporter#2",
-      "stage_id": "reporter",
-      "quality_attempt": 2,
-      "label": "reporter attempt 2/2",
-      "parent_run_key": null
-    },
-    "background_context#2": {
-      "stage_group": "reporter",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "background_context#2",
-      "stage_id": "background_context",
-      "quality_attempt": 2,
-      "label": "background-context attempt 2/2",
-      "parent_run_key": null
-    },
-    "editorial_plan#2": {
-      "stage_group": "editorialPlan",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "editorial_plan#2",
-      "stage_id": "editorial_plan",
-      "quality_attempt": 2,
-      "label": "editorial-plan attempt 2/2",
-      "parent_run_key": null
-    },
-    "editor#2": {
-      "stage_group": "editor",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-3.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash",
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "editor#2",
-      "stage_id": "editor",
-      "quality_attempt": 2,
-      "label": "editor attempt 2/2",
-      "parent_run_key": null
-    },
-    "editor.public_article_judge#2": {
-      "stage_group": "judge",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash-lite",
-      "fallback_models": [
-        "gemini-2.5-flash"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "editor.public_article_judge#2",
-      "stage_id": "editor.public_article_judge",
-      "quality_attempt": 2,
-      "label": "editor attempt 2/2 public article judge",
-      "parent_run_key": "editor#2"
-    },
-    "fact_checker#2": {
-      "stage_group": "factcheck",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "fact_checker#2",
-      "stage_id": "fact_checker",
-      "quality_attempt": 2,
-      "label": "fact-checker attempt 2/2",
-      "parent_run_key": null
-    },
-    "article_source_review#2": {
-      "stage_group": "factcheck",
-      "stage_group_known": true,
-      "routing_warning": "",
-      "primary_model": "gemini-2.5-flash",
-      "fallback_models": [
-        "gemini-2.5-flash-lite"
-      ],
-      "primary_resolved_by": "code_default",
-      "resolved_by": "code_default",
-      "global_override_applied": false,
-      "stage_key": "article_source_review#2",
-      "stage_id": "article_source_review",
-      "quality_attempt": 2,
-      "label": "article-source-review attempt 2/2",
-      "parent_run_key": null
-    },
     "intro_letter#0": {
       "stage_group": "reporter",
       "stage_group_known": true,
@@ -662,16 +72,17 @@
     "candidate_count": 61
   },
   "run_context": {
-    "github_run_id": "38150142517",
-    "github_sha": "9ec85adbf6917a75885a8bf8c9ec925b7c1ee317",
-    "github_ref": "refs/heads/main"
+    "github_run_id": "",
+    "github_sha": "",
+    "github_ref": ""
   },
   "locked_article_count": 3,
-  "repaired_section_count": 0,
+  "repaired_section_count": 3,
   "failed_section_count": 0,
   "skipped_repair_section_count": 4,
   "rejected_duplicate_article_count": 6,
   "validate_ok": true,
+  "failure_kind": "",
   "public_output_expected": true,
   "weekly_output_status": "written",
   "weekly_output_failure_reason": "",
@@ -681,7 +92,7 @@
   "empty_source_sections": [],
   "source_gap_count": 0,
   "stale_claim_status": "PASS",
-  "stale_claim_removed_count": 3,
+  "stale_claim_removed_count": 0,
   "stale_claim_hard_failure_count": 0,
   "completion_fallback_to_prepass": false,
   "editor_semantic_validation": null,
@@ -741,11 +152,11 @@
   ],
   "selected_article_count": 3,
   "deterministic_selected_count": 3,
-  "rendered_main_article_count": 1,
+  "rendered_main_article_count": 3,
   "selected_group_count": 3,
-  "rendered_group_count": 1,
+  "rendered_group_count": 3,
   "explicitly_demoted_group_count": 0,
-  "hard_blocked_group_count": 2,
+  "hard_blocked_group_count": 0,
   "rendered_outside_selection_count": 0,
   "explicitly_demoted_outside_selection_count": 0,
   "hard_blocked_outside_selection_count": 0,
@@ -755,13 +166,12 @@
     "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
   ],
   "rendered_group_keys": [
-    "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com"
-  ],
-  "explicitly_demoted_group_keys": [],
-  "hard_blocked_group_keys": [
     "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+    "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com",
     "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
   ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
   "rendered_outside_selection_group_keys": [],
   "explicitly_demoted_outside_selection_group_keys": [],
   "hard_blocked_outside_selection_group_keys": [],
@@ -808,6 +218,9 @@
   "reporter_selected_but_final_excluded_count": 9,
   "ai_selected_article_count": 2,
   "underfilled": false,
+  "publish_ready": true,
+  "selection_publish_ready": true,
+  "final_publish_ready": true,
   "review_gate_passed": true,
   "publish_gate_passed": true,
   "min_final_articles": 1,
@@ -917,6 +330,7 @@
       "reason": "Keep forbidden buckets out of main article selection: generic_tech_watchlist."
     }
   ],
+  "editor_review_required": false,
   "non_fallback_reviewable_article_count": 3,
   "eligible_non_fallback_reviewable_article_count": 11,
   "primary_camera_stack_topic_count": 3,
@@ -1094,22 +508,543 @@
   },
   "not_yet_eligible_count": 0,
   "not_yet_eligible_overflow": false,
-  "weekly_page_structure_status": "ok",
-  "weekly_page_structure_key": "2026-W42",
-  "weekly_page_structure_errors": [],
-  "public_newsletter_ready": true,
-  "review_publication_ready": false,
-  "diagnostics_only": false,
-  "homepage_visible_after_merge": true,
-  "public_state": "PUBLISH_READY",
-  "run_mode": "publish_ready",
-  "effective_homepage_visible": true,
-  "existing_public_artifact_detected": true,
-  "retention_valid": false,
-  "retention_error": "",
-  "public_artifact_policy": "latest_public_ready",
-  "public_artifact_source": "latest_run",
-  "reconciliation_required": false,
-  "reconciliation_action": "none_latest_public_ready",
-  "reconciliation_reason": "latest run is final publish-ready and public structure is valid"
+  "recovery": {
+    "mode": "manual_current_issue",
+    "original_workflow_run": "38150142517",
+    "reviewed_at": "2026-10-11T15:40:09.411Z",
+    "source_method": "Official Gerrit REST metadata and full patch at the collected revision; direct lore message",
+    "review_round_count": 3,
+    "final_review_calls": [
+      {
+        "stage_id": "editor.public_article_judge",
+        "model": "gemini-2.5-flash-lite"
+      },
+      {
+        "stage_id": "fact_checker",
+        "model": "gemini-2.5-flash"
+      },
+      {
+        "stage_id": "article_source_review",
+        "model": "gemini-2.5-flash"
+      }
+    ],
+    "original_run_context": {
+      "github_run_id": "38150142517",
+      "github_sha": "9ec85adbf6917a75885a8bf8c9ec925b7c1ee317",
+      "github_ref": "refs/heads/main"
+    },
+    "original_stage_status_log": [
+      {
+        "stage_id": "reporter",
+        "role": "reporter",
+        "attempt": 1,
+        "status": "passed",
+        "stage": "reporter attempt 1/2"
+      },
+      {
+        "stage_id": "background_context",
+        "role": "background-context",
+        "attempt": 1,
+        "status": "passed",
+        "stage": "background-context attempt 1/2"
+      },
+      {
+        "stage_id": "editorial_plan",
+        "role": "editor",
+        "attempt": 1,
+        "status": "passed",
+        "stage": "editorial-plan attempt 1/2"
+      },
+      {
+        "stage_id": "editor",
+        "role": "editor",
+        "attempt": 1,
+        "status": "passed",
+        "stage": "editor attempt 1/2"
+      },
+      {
+        "stage_id": "editor.public_article_judge",
+        "role": "judge",
+        "attempt": 1,
+        "status": "passed",
+        "stage": "editor attempt 1/2 public article judge"
+      },
+      {
+        "stage_id": "fact_checker",
+        "role": "factcheck",
+        "attempt": 1,
+        "status": "passed",
+        "stage": "fact-checker attempt 1/2"
+      },
+      {
+        "stage_id": "quality_gate",
+        "role": "quality_gate",
+        "attempt": 1,
+        "status": "failed",
+        "stage": "quality_gate",
+        "reason": "NEEDS_FIX"
+      },
+      {
+        "stage_id": "article_source_review",
+        "role": "factcheck",
+        "attempt": 1,
+        "status": "passed",
+        "stage": "article-source-review attempt 1/2"
+      },
+      {
+        "stage_id": "reporter",
+        "role": "reporter",
+        "attempt": 2,
+        "status": "passed",
+        "stage": "reporter attempt 2/2"
+      },
+      {
+        "stage_id": "background_context",
+        "role": "background-context",
+        "attempt": 2,
+        "status": "passed",
+        "stage": "background-context attempt 2/2"
+      },
+      {
+        "stage_id": "editorial_plan",
+        "role": "editor",
+        "attempt": 2,
+        "status": "passed",
+        "stage": "editorial-plan attempt 2/2"
+      },
+      {
+        "stage_id": "editor",
+        "role": "editor",
+        "attempt": 2,
+        "status": "passed",
+        "stage": "editor attempt 2/2"
+      },
+      {
+        "stage_id": "editor.public_article_judge",
+        "role": "judge",
+        "attempt": 2,
+        "status": "passed",
+        "stage": "editor attempt 2/2 public article judge"
+      },
+      {
+        "stage_id": "fact_checker",
+        "role": "factcheck",
+        "attempt": 2,
+        "status": "passed",
+        "stage": "fact-checker attempt 2/2"
+      },
+      {
+        "stage_id": "quality_gate",
+        "role": "quality_gate",
+        "attempt": 2,
+        "status": "failed",
+        "stage": "quality_gate",
+        "reason": "NEEDS_FIX"
+      },
+      {
+        "stage_id": "article_source_review",
+        "role": "factcheck",
+        "attempt": 2,
+        "status": "passed",
+        "stage": "article-source-review attempt 2/2"
+      },
+      {
+        "stage_id": "render",
+        "role": "render",
+        "attempt": 2,
+        "status": "passed",
+        "stage": "render"
+      },
+      {
+        "stage_id": "intro_letter",
+        "role": "intro-letter",
+        "attempt": 0,
+        "status": "passed",
+        "stage": "intro-letter"
+      }
+    ],
+    "original_model_usage": {
+      "reporter#1": {
+        "stage_key": "reporter#1",
+        "stage_id": "reporter",
+        "quality_attempt": 1,
+        "label": "reporter attempt 1/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "background_context#1": {
+        "stage_key": "background_context#1",
+        "stage_id": "background_context",
+        "quality_attempt": 1,
+        "label": "background-context attempt 1/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "editorial_plan#1": {
+        "stage_key": "editorial_plan#1",
+        "stage_id": "editorial_plan",
+        "quality_attempt": 1,
+        "label": "editorial-plan attempt 1/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "editor#1": {
+        "stage_key": "editor#1",
+        "stage_id": "editor",
+        "quality_attempt": 1,
+        "label": "editor attempt 1/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-3.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "editor.public_article_judge#1": {
+        "stage_key": "editor.public_article_judge#1",
+        "stage_id": "editor.public_article_judge",
+        "quality_attempt": 1,
+        "label": "editor attempt 1/2 public article judge",
+        "parent_run_key": "editor#1",
+        "models": {
+          "gemini-2.5-flash-lite": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "fact_checker#1": {
+        "stage_key": "fact_checker#1",
+        "stage_id": "fact_checker",
+        "quality_attempt": 1,
+        "label": "fact-checker attempt 1/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "article_source_review#1": {
+        "stage_key": "article_source_review#1",
+        "stage_id": "article_source_review",
+        "quality_attempt": 1,
+        "label": "article-source-review attempt 1/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "reporter#2": {
+        "stage_key": "reporter#2",
+        "stage_id": "reporter",
+        "quality_attempt": 2,
+        "label": "reporter attempt 2/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "background_context#2": {
+        "stage_key": "background_context#2",
+        "stage_id": "background_context",
+        "quality_attempt": 2,
+        "label": "background-context attempt 2/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "editorial_plan#2": {
+        "stage_key": "editorial_plan#2",
+        "stage_id": "editorial_plan",
+        "quality_attempt": 2,
+        "label": "editorial-plan attempt 2/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "editor#2": {
+        "stage_key": "editor#2",
+        "stage_id": "editor",
+        "quality_attempt": 2,
+        "label": "editor attempt 2/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-3.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "editor.public_article_judge#2": {
+        "stage_key": "editor.public_article_judge#2",
+        "stage_id": "editor.public_article_judge",
+        "quality_attempt": 2,
+        "label": "editor attempt 2/2 public article judge",
+        "parent_run_key": "editor#2",
+        "models": {
+          "gemini-2.5-flash-lite": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "fact_checker#2": {
+        "stage_key": "fact_checker#2",
+        "stage_id": "fact_checker",
+        "quality_attempt": 2,
+        "label": "fact-checker attempt 2/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "article_source_review#2": {
+        "stage_key": "article_source_review#2",
+        "stage_id": "article_source_review",
+        "quality_attempt": 2,
+        "label": "article-source-review attempt 2/2",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      },
+      "intro_letter#0": {
+        "stage_key": "intro_letter#0",
+        "stage_id": "intro_letter",
+        "quality_attempt": 0,
+        "label": "intro-letter",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      }
+    },
+    "final_review_cost_calls": [
+      {
+        "provider": "gemini",
+        "stage_key": "editor.public_article_judge#3",
+        "stage_id": "editor.public_article_judge",
+        "quality_attempt": 3,
+        "label": "editor attempt 3/3 public article judge",
+        "parent_run_key": "editor#3",
+        "stage_group": "judge",
+        "stage_group_known": true,
+        "routing_warning": "",
+        "model": "gemini-2.5-flash-lite",
+        "primary_model": "gemini-2.5-flash-lite",
+        "attempt_model": "gemini-2.5-flash-lite",
+        "fallback_models": [
+          "gemini-2.5-flash"
+        ],
+        "primary_resolved_by": "code_default",
+        "attempt_resolved_by": "code_default",
+        "resolved_by": "code_default",
+        "fallback_index": null,
+        "global_override_applied": false,
+        "attempt": 1,
+        "pro_model": false,
+        "usage_metadata_present": true,
+        "prompt_tokens": 8552,
+        "output_tokens": 336,
+        "thinking_tokens": 797,
+        "thinking_budget_requested": 1024,
+        "thinking_budget_applied": 1024,
+        "thinking_budget_note": "",
+        "thinking_level": null,
+        "cached_tokens": 0,
+        "total_tokens": 9685,
+        "billable_input_tokens": 8552,
+        "billable_output_tokens": 1133,
+        "estimated_cost_usd": 0.0013084,
+        "pricing_usd_per_million": {
+          "input_usd_per_million": 0.1,
+          "output_usd_per_million": 0.4,
+          "cached_input_usd_per_million": 0.01,
+          "large_prompt_threshold_tokens": null,
+          "large_prompt_applied": false
+        },
+        "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing",
+        "pricing_warning": ""
+      },
+      {
+        "provider": "gemini",
+        "stage_key": "fact_checker#3",
+        "stage_id": "fact_checker",
+        "quality_attempt": 3,
+        "label": "fact-checker attempt 3/3",
+        "parent_run_key": null,
+        "stage_group": "factcheck",
+        "stage_group_known": true,
+        "routing_warning": "",
+        "model": "gemini-2.5-flash",
+        "primary_model": "gemini-2.5-flash",
+        "attempt_model": "gemini-2.5-flash",
+        "fallback_models": [
+          "gemini-2.5-flash-lite"
+        ],
+        "primary_resolved_by": "code_default",
+        "attempt_resolved_by": "code_default",
+        "resolved_by": "code_default",
+        "fallback_index": null,
+        "global_override_applied": false,
+        "attempt": 1,
+        "pro_model": false,
+        "usage_metadata_present": true,
+        "prompt_tokens": 50346,
+        "output_tokens": 1129,
+        "thinking_tokens": 2044,
+        "thinking_budget_requested": 2048,
+        "thinking_budget_applied": 2048,
+        "thinking_budget_note": "",
+        "thinking_level": null,
+        "cached_tokens": 0,
+        "total_tokens": 53519,
+        "billable_input_tokens": 50346,
+        "billable_output_tokens": 3173,
+        "estimated_cost_usd": 0.0230363,
+        "pricing_usd_per_million": {
+          "input_usd_per_million": 0.3,
+          "output_usd_per_million": 2.5,
+          "cached_input_usd_per_million": 0.03,
+          "large_prompt_threshold_tokens": null,
+          "large_prompt_applied": false
+        },
+        "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing",
+        "pricing_warning": ""
+      },
+      {
+        "provider": "gemini",
+        "stage_key": "article_source_review#3",
+        "stage_id": "article_source_review",
+        "quality_attempt": 3,
+        "label": "article-source-review attempt 3/3",
+        "parent_run_key": null,
+        "stage_group": "factcheck",
+        "stage_group_known": true,
+        "routing_warning": "",
+        "model": "gemini-2.5-flash",
+        "primary_model": "gemini-2.5-flash",
+        "attempt_model": "gemini-2.5-flash",
+        "fallback_models": [
+          "gemini-2.5-flash-lite"
+        ],
+        "primary_resolved_by": "code_default",
+        "attempt_resolved_by": "code_default",
+        "resolved_by": "code_default",
+        "fallback_index": null,
+        "global_override_applied": false,
+        "attempt": 1,
+        "pro_model": false,
+        "usage_metadata_present": true,
+        "prompt_tokens": 19423,
+        "output_tokens": 1403,
+        "thinking_tokens": 1449,
+        "thinking_budget_requested": 2048,
+        "thinking_budget_applied": 2048,
+        "thinking_budget_note": "",
+        "thinking_level": null,
+        "cached_tokens": 18581,
+        "total_tokens": 22275,
+        "billable_input_tokens": 842,
+        "billable_output_tokens": 2852,
+        "estimated_cost_usd": 0.00794003,
+        "pricing_usd_per_million": {
+          "input_usd_per_million": 0.3,
+          "output_usd_per_million": 2.5,
+          "cached_input_usd_per_million": 0.03,
+          "large_prompt_threshold_tokens": null,
+          "large_prompt_applied": false
+        },
+        "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing",
+        "pricing_warning": ""
+      }
+    ],
+    "intro_letter_edit": "Removed unsupported privacy-strengthening and transparency predictions; replacement summarizes verified article content and passes lintIntroLetter."
+  }
 }

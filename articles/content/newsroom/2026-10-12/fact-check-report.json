@@ -11,13 +11,39 @@
       "publishable": true,
       "confidence": "high",
       "source_review": {
-        "core_change": "The source is a review comment on a documentation patch (v10 5/9) for Qualcomm CAMSS ISP parameters (V4L2_META_FMT_QCOM_ISP_PARAMS). The core change proposed by the patch is to document this new metadata format, which uses a block-based structure for configuring ISP hardware modules like white balance, color correction, and gamma curves, with the Offline Processing Engine (OPE) as the first consumer. The review comment specifically suggests using common V4L2 ISP structures (`v4l2_isp_buffer`, `v4l2_isp_block_header`, `V4L2_ISP_VERSION_V1`) instead of legacy/specific ones in the documentation's examples.",
-        "article_explanation": "The article accurately describes the documentation patch for Qualcomm CAMSS ISP parameters (V4L2_META_FMT_QCOM_ISP_PARAMS) as being based on the V4L2 extensible ISP parameters system, with OPE as the first user. It correctly identifies the block-unit structures for configuring hardware modules. Crucially, it also explicitly mentions the discussion during the review process regarding the adoption of common V4L2 ISP structures (`v4l2_isp_buffer`, `v4l2_isp_block_header`) over older ones for standardization.",
+        "core_change": "AOSP Gerrit 변경 4348947은 CameraService.cpp의 blockAllClients() 및 blockPrivacyEnabledClients() 함수에서 무조건적인 BasicClient::block() 호출을 수정합니다. 대신, 클라이언트의 UID 프로세스 상태가 PROCESS_STATE_BOUND_TOP 이하이고 supportsCameraMute()가 참일 경우에만 setCameraMute(true)를 호출하고, 그렇지 않으면 기존 block()을 유지하도록 변경합니다. 이는 SensorPrivacyManager 콜백과 AppOpsManager의 opChanged() 사이의 race condition을 해결하여, mute 지원 클라이언트가 프라이버시 토글 시 ERROR_CAMERA_DISABLED로 강제 종료되는 대신 mute되도록 합니다. blockClientsForUid()는 변경되지 않습니다.",
+        "article_explanation": "기사는 CameraService.cpp의 프라이버시 처리 경로를 수정하는 패치 제안이라고 설명합니다. SensorPrivacyManager 콜백과 AppOpsManager의 opChanged()가 서로 다른 binder 경로로 실행되어 무조건적인 block()이 먼저 실행되어 클라이언트를 끊는 race condition 문제를 지적합니다. diff가 blockAllClients()와 blockPrivacyEnabledClients()에 UID 프로세스 상태가 PROCESS_STATE_BOUND_TOP 이하이고 supportsCameraMute()가 참일 때만 setCameraMute(true)를 호출하고, 그렇지 않으면 기존 block()을 유지하는 조건 검사를 추가한다고 정확히 설명합니다. 또한 mute 지원 판단이 ANDROID_SENSOR_AVAILABLE_TEST_PATTERN_MODES와 관련됨을 언급하고, blockClientsForUid()는 변경되지 않음을 명시합니다.",
         "material_omissions": [],
         "unaddressed_source_conflicts": []
       },
-      "reason": "Qualcomm CAMSS ISP의 uAPI 메타데이터 구조 표준화 논의를 구체적으로 다루고, 드라이버 및 HAL 개발자가 확인해야 할 헤더 파일 및 구조체 변경 사항을 명시하여 실무적 가치를 제공합니다. / The article accurately describes the proposed documentation change and explicitly addresses the review comments regarding the use of common V4L2 ISP structures, which is the main point of discussion in the source."
+      "reason": "AOSP cameraserver의 프라이버시 처리 로직 변경 제안으로, HAL과 프레임워크 간의 동작 변화를 이해하고 검증하는 데 실질적인 도움이 됩니다. / 기사는 원문의 핵심 변화, 즉 프라이버시 토글 시 특정 조건에서 카메라를 mute하는 조건부 동작으로의 전환을 정확하게 설명하고 있습니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "PATCH v10은 Qualcomm CAMSS ISP 파라미터 메타데이터 형식인 V4L2_META_FMT_QCOM_ISP_PARAMS에 대한 문서화를 추가합니다. 이 형식은 V4L2 확장 가능 ISP 파라미터 시스템을 기반으로 하며, qcom-camss-config.h uAPI 헤더에 정의된 블록 단위 구조체를 사용합니다. Offline Processing Engine(OPE)의 ope_params 노드가 첫 번째 소비자입니다. 리뷰 의견에서는 레거시 v4l2_isp_params_buffer 대신 공통 v4l2_isp_buffer를, 그리고 공통 v4l2_isp_block_header를 사용할 것을 제안합니다.",
+        "article_explanation": "기사는 Qualcomm CAMSS ISP 파라미터 제어를 위한 V4L2 메타데이터 포맷 문서화 패치 시리즈가 v10 리비전으로 검토되고 있다고 설명합니다. V4L2_META_FMT_QCOM_ISP_PARAMS 포맷이 공통 V4L2 확장 가능 ISP 파라미터 구조를 기반으로 설계되었으며, OPE의 ope_params 노드가 이를 활용한다고 언급합니다. 또한 메타데이터 버퍼 내부에 블록 단위 구조체를 배치하여 하드웨어 모듈을 설정하는 방식과, 리뷰 과정에서 구형 레거시 드라이버 호환용 구조체 대신 공통 v4l2_isp_buffer 및 v4l2_isp_block_header 적용에 대한 의견이 교환되었음을 정확히 전달합니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": []
+      },
+      "reason": "Qualcomm CAMSS ISP의 V4L2 uAPI 구조체 변경 논의를 다루어, 드라이버 및 HAL 개발자가 향후 플랫폼 연동 시 참조할 수 있는 구체적인 정보를 제공합니다. / 기사는 원문의 핵심 내용인 Qualcomm CAMSS ISP 파라미터 문서화와 V4L2 공통 구조체 적용 논의를 정확하게 전달하고 있습니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "ChromeOS Gerrit 변경 8506716은 Chromium의 레거시 타입 없는 Mojom `handle` 표기 폐기 흐름에 맞춰, `chromiumos/platform2` 내 카메라 Mojom 인터페이스와 C++ 구현에서 `handle` / `mojo::ScopedHandle`을 `handle<platform>` / `mojo::PlatformHandle`로 마이그레이션합니다. 이 변경은 dmabuf, JPEG 인터페이스뿐만 아니라 camera3.mojom, 카메라 알고리즘 인터페이스, HAL 어댑터 및 C++ 호출부를 포함한 20개 파일에 걸쳐 적용되며, `mojo::UnwrapPlatformHandle(...).ReleaseFD()` 대신 `ReleaseFD()`를 직접 호출하는 방식으로 변경됩니다.",
+        "article_explanation": "기사는 ChromeOS platform2 변경이 카메라 Mojom 인터페이스와 C++ 구현의 핸들 표현을 타입 없는 레거시 Mojom `handle`에서 `handle<platform>` (C++의 `mojo::PlatformHandle`에 매핑)으로 전환했다고 설명합니다. 변경이 dmabuf, JPEG 인터페이스에만 한정되지 않고 camera3.mojom, 카메라 알고리즘 인터페이스, HAL 어댑터 및 C++ 호출부를 포함한 20개 파일에 걸쳐 이루어졌음을 명시합니다. 버퍼 fd 배열에 `mojo::ScopedHandle` 대신 `mojo::PlatformHandle`을 사용하고, fence 회수 시 `UnwrapPlatformHandle`을 거치지 않고 `ReleaseFD()`를 직접 호출하는 예시를 들어 변경된 동작을 정확히 설명합니다. 또한 Mojom 정의와 C++ 호출부를 함께 확인해야 하는 이유를 제시하고, 이것이 ChromeOS 내부 IPC 타입 전환이며 AOSP Camera HAL3/AIDL 규격 변경이 아님을 명확히 합니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": []
+      },
+      "reason": "ChromeOS 카메라 스택의 IPC 핸들 타입 전환 사례를 통해 플랫폼 간 버퍼 핸들 전달 방식의 변화 흐름을 파악하고, 유사한 네이티브 개발 환경에서 참고할 수 있는 구체적인 정보를 제공합니다. / 기사는 원문의 핵심 변화인 ChromeOS 카메라 IPC 핸들 타입 마이그레이션의 범위, 변경 내용, 그리고 관련 동작을 정확하게 설명하고 있습니다."
     }
   ],
-  "final_comment": "모든 기사가 사실에 기반하고 있으며, 출처가 명확합니다. 과장된 표현이나 누락된 날짜 정보도 발견되지 않았습니다. 각 기사는 카메라 HAL SW 엔지니어에게 실질적인 가치를 제공하며, HAL/드라이버 관점의 영향과 구체적인 실행 항목을 잘 설명하고 있습니다. `evidence_summary` 및 `confirmed_facts`에 `...` 또는 `summary_truncated=true` 표시가 없으므로, 잘린 근거로 인한 문제는 없습니다."
+  "final_comment": "모든 기사가 편집 정책을 준수하며, 출처에 기반한 사실과 HAL/드라이버 관점의 실질적인 정보를 제공합니다. 과장된 표현이나 출처 없는 주장은 발견되지 않았습니다. 모든 `summary_truncated=true` 항목은 유일한 근거가 아니거나, 잘린 내용이 뒷받침하지 않는 결론적 주장을 포함하지 않아 `must_fix`로 분류되지 않았습니다."
 }

@@ -694,5 +694,90 @@
     ],
     "source_gap_count": 0,
     "must_fix_count": 0
+  },
+  {
+    "attempt": 3,
+    "recovery_reason": "Manual current-issue recovery: replaced PolyGerrit JavaScript shell with matching official Gerrit REST revision patches; corrected CAMSS submission/review dates; narrowed unsupported impact classifications. Three Gemini judge/fact/source-review rounds were performed; the final round passed.",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "quality_status": "PASS",
+    "quality_score": 95,
+    "fact_check_status": "PASS",
+    "selected_article_headlines": [
+      "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+      "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+      "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+    ],
+    "locked_article_headlines": [
+      "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+      "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+      "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [
+      {
+        "headline": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안"
+      },
+      {
+        "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토"
+      },
+      {
+        "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+      }
+    ],
+    "skipped_repair_sections": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
   }
 ]

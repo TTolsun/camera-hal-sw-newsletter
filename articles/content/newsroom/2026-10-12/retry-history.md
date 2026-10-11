@@ -4,6 +4,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash | 90/60 | NEEDS_FIX | 3 | 3 | 0 | 0 | 0 | 0 | 0 |
 | 2 | reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash | 90/60 | NEEDS_FIX | 3 | 3 | 0 | 0 | 6 | 0 | 0 |
+| 3 | default | undefined/undefined |  | 3 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## 후보 선택 진단
 
@@ -18,7 +19,7 @@
 - Explicitly demoted groups (editor): 0
 - Reconciliation-demoted groups: 0
 - Reserve candidates: 4
-- Demoted candidates: unknown
+- Demoted candidates: 0
 - Composition mode: NORMAL
 - Editor review required: false
 - Reporter-selected but final-excluded: 9
@@ -60,9 +61,9 @@ Homepage Headline:
 - decision: latest_camera_hal_article
 - current_headline_key: url:https://source.android.com/docs/compatibility/cts/its-release-notes-17
 - replacement_headline_key: url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947
-- public_render_reconciled: false
-- public_rendered_headline_key: unknown
-- public_render_reconciliation_reason: unknown
+- public_render_reconciled: true
+- public_rendered_headline_key: url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com
+- public_render_reconciliation_reason: selected_headline_not_rendered_in_public_issue
 - runtime_decayed_score: unknown
 - previous_stored_current_score: unknown
 - last_scored_at: unknown
@@ -115,3 +116,24 @@ Reporter-selected candidates are not necessarily publishable. Publication readin
 - Lock blocker: 없음
 - 거절된 중복 기사: cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av (duplicate_locked_url); [PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation (duplicate_locked_url); camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2 (duplicate_locked_url); cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안 (duplicate_locked_url); Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토 (duplicate_locked_url); ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지 (duplicate_locked_url)
 - 감점: 1pt editorial-story (briefing 1): Briefing bullet misses story structure elements: what_happened, action_hint.; 1pt editorial-story (briefing 2): Briefing bullet misses story structure elements: reader_perspective, action_hint.; 1pt editorial-story (briefing 3): Briefing bullet misses story structure elements: what_happened, action_hint.; 2pt linked-evidence-limitation (cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안): Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.; 1pt image-fallback (cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안): Article image uses a local fallback visual.; 1pt image-fallback (Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토): Article image uses a local fallback visual.; 2pt linked-evidence-limitation (ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지): Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.; 1pt image-fallback (ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지): Article image uses a local fallback visual.
+
+## 시도 3
+
+- 선택 기사: cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안; Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토; ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지
+- Lock된 기사: cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안; Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토; ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지
+- Source gap section: 없음
+- Demoted section: 없음
+- Replaced section: 없음
+- Reserve candidate used: 없음
+- Candidate rejection: 없음
+- Underfilled reason: 없음
+- 실패 section: 없음
+- 재생성 section: cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안; Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토; ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지
+- 거절된 retry output: 없음
+- Repair action: 없음
+- Final slot distribution: {}
+- Reporter eligibility blocked section: 없음
+- Rejected main-ineligible candidate: 없음
+- Lock blocker: 없음
+- 거절된 중복 기사: 없음
+- 감점: 1pt editorial-story (briefing 1): Briefing bullet misses story structure elements: reader_perspective, action_hint.; 1pt editorial-story (briefing 3): Briefing bullet misses story structure elements: what_happened.; 1pt image-fallback (cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안): Article image uses a local fallback visual.; 1pt image-fallback (Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토): Article image uses a local fallback visual.; 1pt image-fallback (ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지): Article image uses a local fallback visual.

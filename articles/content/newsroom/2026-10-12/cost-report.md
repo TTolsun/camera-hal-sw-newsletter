@@ -7,13 +7,13 @@
 - Warning threshold USD: 0.5
 - Max threshold USD: 0.7
 - Pro policy: disabled
-- Request count: 16
-- Prompt tokens: 496646
-- Output tokens: 30672
-- Thinking tokens: 21822
-- Cached tokens: 9345
-- Total tokens: 549140
-- Estimated cost USD: 0.497806
+- Request count: 26
+- Prompt tokens: 732018
+- Output tokens: 41308
+- Thinking tokens: 35030
+- Cached tokens: 36344
+- Total tokens: 808356
+- Estimated cost USD: 0.609967
 
 ## Calls
 
@@ -35,7 +35,17 @@
 | gemini | article-source-review attempt 2/2 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 7745 | 782 | 1582 | 2048 | 2048 | 7327 | no | 0.006255 |
 | gemini | intro-letter | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 252 | 87 | 0 | 0 | 0 | 0 | no | 0.000293 |
 | gemini | post-generation public quality judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 2846 | 86 | 698 | 1024 | 1024 | 0 | no | 0.000598 |
+| gemini | editor attempt 3/3 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 8580 | 336 | 796 | 1024 | 1024 | 0 | no | 0.001311 |
+| gemini | fact-checker attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 50297 | 1170 | 2046 | 2048 | 2048 | 0 | no | 0.023129 |
+| gemini | article-source-review attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 19423 | 905 | 1712 | 2048 | 2048 | 0 | no | 0.012369 |
+| gemini | editor attempt 3/3 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 8580 | 336 | 801 | 1024 | 1024 | 8418 | no | 0.000555 |
+| gemini | fact-checker attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 50365 | 3824 | 2044 | 2048 | 2048 | 0 | no | 0.029780 |
+| gemini | article-source-review attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 19423 | 1032 | 1519 | 2048 | 2048 | 0 | no | 0.012204 |
+| gemini | editor attempt 3/3 public article judge | judge | gemini-2.5-flash-lite | gemini-2.5-flash-lite | code_default | gemini-2.5-flash | gemini-2.5-flash-lite | 1 | 8552 | 336 | 797 | 1024 | 1024 | 0 | no | 0.001308 |
+| gemini | fact-checker attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 50346 | 1129 | 2044 | 2048 | 2048 | 0 | no | 0.023036 |
+| gemini | article-source-review attempt 3/3 | factcheck | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 19423 | 1403 | 1449 | 2048 | 2048 | 18581 | no | 0.007940 |
+| gemini | intro-letter | reporter | gemini-2.5-flash | gemini-2.5-flash | code_default | gemini-2.5-flash-lite | gemini-2.5-flash | 1 | 383 | 165 | 0 | 0 | 0 | 0 | no | 0.000527 |
 
 ## Warnings
 
-- none
+- Estimated LLM cost 0.60996676 USD reached NEWSROOM_WARN_COST_USD 0.5 USD.

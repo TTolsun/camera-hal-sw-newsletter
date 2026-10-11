@@ -7,14 +7,52 @@
   },
   "articles": [
     {
-      "article_identity_key": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
-      "title": "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의",
-      "source_url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+      "article_identity_key": "url:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+      "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+      "source_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
       "newsletter_date": "2026-10-12",
       "newsletter_url": "newsletters/2026-10-12/index.html",
-      "exposure_type": "homepage_headline",
-      "headline_score": 100,
-      "reuse_reason": "latest_camera_hal_article",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-12",
+      "newsletter_article_date": "2026-10-12",
+      "cooldown_until": "2026-11-02",
+      "first_exposed_at": "2026-10-12",
+      "last_exposed_at": "2026-10-12",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "newsletter_date": "2026-10-12",
+      "newsletter_url": "newsletters/2026-10-12/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-12",
+      "newsletter_article_date": "2026-10-12",
+      "cooldown_until": "2026-11-02",
+      "first_exposed_at": "2026-10-12",
+      "last_exposed_at": "2026-10-12",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+      "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+      "source_url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+      "newsletter_date": "2026-10-12",
+      "newsletter_url": "newsletters/2026-10-12/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
       "exposed_at": "2026-10-12",
       "first_exposed_at": "2026-10-12",
       "last_exposed_at": "2026-10-12",
