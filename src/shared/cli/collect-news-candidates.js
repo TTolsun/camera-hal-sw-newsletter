@@ -586,6 +586,14 @@ function hasBehaviorChangeForRaw(raw, behaviorChange) {
   // 실제 본문에서 추출한 개발 workflow의 변화도 동작 근거다. 'CI jobs increase'처럼
   // add/fix가 없는 변화 문장을 놓치지 않되, 제목/소스 힌트만으로 이 경로를 열지는 않는다.
   const workflowSections = raw?.source_extraction?.workflow?.sections;
+  // 본문에 그대로 있는 코딩 subagent 사용법도 구체적 동작 근거다. 모델명만으로는 인정하지 않는다.
+  if (raw.sourceKind === 'blog_post_item' && behaviorChange
+    && Array.isArray(workflowSections)
+    && workflowSections.some(section => (section.items || []).some(item =>
+      String(item.text || '').includes(behaviorChange)))
+    && /\b(?:works?|pairs?|runs?|used)\b[^\n]{0,160}\bas a subagent\b[^\n]{0,80}\bcoding\b/i.test(behaviorChange)) {
+    return true;
+  }
   if (raw.sourceKind === 'blog_post_item' && Array.isArray(workflowSections)
     && workflowSections.some(section => (section.items || []).some(item =>
       String(item.text || '').includes(behaviorChange)))

@@ -62,7 +62,7 @@ function candidateKey(candidate) {
 }
 
 function candidateDate(candidate) {
-  return text(candidate.publishedAt || candidate.published_date).slice(0, 10);
+  return text(candidate.effective_date || candidate.publishedAt || candidate.published_date).slice(0, 10);
 }
 
 function triageItems(pool) {
@@ -71,8 +71,16 @@ function triageItems(pool) {
     source: text(candidate.source_name || candidate.source || candidate.source_id),
     source_priority: text(candidate.source_priority),
     published: candidateDate(candidate),
+    date_source: text(candidate.date_source),
+    date_evidence_url: text(candidate.date_evidence_url),
+    url: text(candidate.url),
     title: text(candidate.title),
-    summary: text(candidate.summary).slice(0, SUMMARY_PREVIEW_LENGTH)
+    summary: text(candidate.summary).slice(0, SUMMARY_PREVIEW_LENGTH),
+    api_or_component: text(candidate.api_or_component).slice(0, 160),
+    behavior_change: text(candidate.behavior_change).slice(0, 500),
+    workflow_evidence: (candidate.source_extraction?.workflow?.sections || [])
+      .flatMap(section => (section.items || []).map(item => text(item.text)))
+      .filter(Boolean).slice(0, 2).map(value => value.slice(0, 500))
   }));
 }
 
@@ -177,8 +185,13 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
       filled_by_keyword_count: filled.length,
       llm_selected: picks.map(pick => reportEntry(triagePool[pick.index], { reason: pick.reason })),
       keyword_filled: filled.map(candidate => reportEntry(candidate)),
-      // 탈락 목록 전체는 candidates.json을 수십 KB 키우므로 건수만 남긴다.
-      not_selected_count: usable.filter(candidate => !selectedUrls.has(candidateKey(candidate))).length
+      not_selected_count: usable.filter(candidate => !selectedUrls.has(candidateKey(candidate))).length,
+      // 모델의 내부 사유를 추측하지 않고, 어느 경계에서 제외됐는지와 실제 선별 입력을 보존한다.
+      not_selected: usable.flatMap((candidate, index) => selectedUrls.has(candidateKey(candidate)) ? [] : [{
+        ...reportEntry(candidate),
+        reason: index < triagePool.length ? 'not_selected_by_llm_or_keyword_fill' : 'triage_pool_cap',
+        ...(index < triagePool.length ? { triage_input: items[index] } : {})
+      }])
     }
   };
 }

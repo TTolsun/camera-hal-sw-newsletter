@@ -124,3 +124,40 @@ test('the prompt is bounded to the top of the keyword-ordered pool', async () =>
 
   assert.equal(prompt.split('\n').filter(line => line.startsWith('{')).length, MAX_TRIAGE_POOL);
 });
+
+test('triage preserves list-date and developer evidence beyond the summary preview', async () => {
+  const behavior = 'It pairs well with larger models as a subagent on coding work.';
+  const items = [candidate(0), candidate(1, {
+    publishedAt: '', effective_date: '2026-10-07', date_source: 'release_row_date',
+    date_evidence_url: 'https://example.com/news', title: 'Small model release',
+    summary: 'Overview. '.repeat(60), api_or_component: 'Small model 5.5',
+    behavior_change: behavior,
+    source_extraction: { workflow: { sections: [{ items: [{ text: behavior }] }] } }
+  })];
+  const result = await triageCandidatePool(items, {
+    maxFinal: 1, keywordFallback: [],
+    callLlm: async (system, prompt) => {
+      const input = JSON.parse(prompt.split('\n').find(line => line.startsWith('{"id":"c2"')));
+      assert.equal(input.published, '2026-10-07');
+      assert.equal(input.date_source, 'release_row_date');
+      assert.equal(input.date_evidence_url, items[1].date_evidence_url);
+      assert.equal(input.behavior_change, behavior);
+      assert.deepEqual(input.workflow_evidence, [behavior]);
+      assert.equal(input.summary.length, 280);
+      return { selected: [{ id: 'c1' }] };
+    }
+  });
+  assert.equal(result.report.not_selected[0].url, items[1].url);
+  assert.equal(result.report.not_selected[0].reason, 'not_selected_by_llm_or_keyword_fill');
+  assert.equal(result.report.not_selected[0].triage_input.behavior_change, behavior);
+});
+
+test('diagnostics distinguish pool cap exclusion from an actual triage decision', async () => {
+  const items = pool(MAX_TRIAGE_POOL + 1);
+  const result = await triageCandidatePool(items, {
+    maxFinal: 1, keywordFallback: [], callLlm: async () => ({ selected: [{ id: 'c1' }] })
+  });
+  assert.equal(result.report.not_selected.length, MAX_TRIAGE_POOL);
+  assert.equal(result.report.not_selected.at(-1).reason, 'triage_pool_cap');
+  assert.equal(result.report.not_selected.at(-1).triage_input, undefined);
+});
