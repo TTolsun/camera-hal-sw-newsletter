@@ -23,13 +23,13 @@ test('policy review can veto mechanical coverage but cannot invent, omit or dupl
   const tool = { url: 'https://example.com/tool', source_candidate_hash: 'b', coverage_decision: 'main_article' };
   const excluded = { url: 'https://example.com/other', source_candidate_hash: 'c', coverage_decision: 'exclude' };
   const report = { editorial_plans: [mechanical, tool, excluded] };
-  const reviews = [{ ...mechanical, coverage_decision: 'exclude', reason: 'Existing platform handle semantics; type syntax only.' },
-    { ...tool, reason: 'Concrete coding agent workflow.' }];
+  const reviews = [{ review_id: 'r1', coverage_decision: 'exclude', reason: 'Existing platform handle semantics; type syntax only.' },
+    { review_id: 'r2', coverage_decision: 'main_article', reason: 'Concrete coding agent workflow.' }];
   const result = applyCoveragePolicyReview(report, { reviews });
   assert.deepEqual(result.editorial_plans.map(item => item.coverage_decision), ['exclude', 'main_article', 'exclude']);
   assert.equal(report.editorial_plans[0].coverage_decision, 'main_article');
-  for (const invalid of [reviews.slice(0, 1), [...reviews, reviews[0]], [...reviews, { ...excluded, reason: 'Promote' }],
-    [{ ...reviews[0], source_candidate_hash: 'wrong' }, reviews[1]]]) {
+  for (const invalid of [reviews.slice(0, 1), [...reviews, reviews[0]], [...reviews, { review_id: 'r3', reason: 'Promote' }],
+    [{ ...reviews[0], review_id: 'wrong' }, reviews[1]]]) {
     assert.throws(() => applyCoveragePolicyReview(report, { reviews: invalid }), /Editorial policy review/);
   }
 });
@@ -59,6 +59,35 @@ test('buildEditorialPlanReport는 LLM 호출이 실패하면 throw해서 파이�
   } finally {
     delete require.cache[stageKey];
     if (savedInstr) require.cache[instrKey] = savedInstr; else delete require.cache[instrKey];
+    delete require.cache[stageKey];
+  }
+});
+
+test('policy review receives actual persisted url_hash capsules and can reject a proposed main', async () => {
+  const instrKey = require.resolve('../../publish/orchestrator-llm-instrumentation');
+  const stageKey = require.resolve('../../publish/orchestrator-editorial-plan-stage');
+  const saved = require.cache[instrKey];
+  const capsule = { url: 'https://example.com/wrapper', url_hash: 'real-hash', title: 'Wrapper migration',
+    what_changed: 'Type spelling changes; transfer semantics are unchanged.' };
+  const plan = { url: capsule.url, source_candidate_hash: capsule.url_hash, coverage_decision: 'main_article' };
+  let calls = 0;
+  require.cache[instrKey] = { id: instrKey, filename: instrKey, loaded: true, exports: {
+    callLlmJson: async (stage, system, input) => {
+      calls += 1;
+      if (calls === 1) return { editorial_plans: [plan] };
+      assert.deepEqual(JSON.parse(input).items[0].capsules, [capsule]);
+      return { reviews: [{ review_id: 'r1', coverage_decision: 'exclude', reason: 'No change in transfer semantics.' }] };
+    }
+  } };
+  delete require.cache[stageKey];
+  try {
+    const { buildEditorialPlanReport: build } = require('../../publish/orchestrator-editorial-plan-stage');
+    const report = await build({ date: '2026-10-12', commonContext: '', stage: 'test',
+      articleCapsuleReport: { shortlisted_capsules: [capsule] } });
+    assert.equal(calls, 2);
+    assert.equal(report.editorial_plans[0].coverage_decision, 'exclude');
+  } finally {
+    require.cache[instrKey] = saved;
     delete require.cache[stageKey];
   }
 });
@@ -166,6 +195,9 @@ test('editorial HAL impact is constrained by the same candidate evidence, not im
   }
   const supported = { ...capsule, allowed_claim_evidence: [{ supports_direct_hal_contract: true }] };
   assert.equal(normalizeEditorialPlanReport({ editorial_plans: [item] }, '2026-10-12', [supported])
+    .editorial_plans[0].direct_hal_impact, true);
+  const persistedCapsule = { ...supported, source_candidate_hash: undefined, url_hash: item.source_candidate_hash };
+  assert.equal(normalizeEditorialPlanReport({ editorial_plans: [item] }, '2026-10-12', [persistedCapsule])
     .editorial_plans[0].direct_hal_impact, true);
 });
 
