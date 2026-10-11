@@ -58,6 +58,16 @@ function promptHostSource() {
   return `${host}\n${prompts}\n${stagePrompts}`;
 }
 
+test('all claim-writing stages distinguish framework behavior from direct HAL contracts', () => {
+  for (const prompt of [editorSystemPrompt(), editorRepairPatchSystemPrompt(), editorCompletionSystemPrompt()]) {
+    assert.match(prompt, /supports_direct_hal_contract=false/);
+    assert.match(prompt, /CameraService\/cameraserver/);
+    assert.match(prompt, /camera_framework_behavior/);
+  }
+  const plan = editorialPlanSystemPrompt();
+  assert.match(plan, /Direct Impact.*direct_aosp_camera.*direct_hal_contract/);
+});
+
 function assertStagePromptUsesFactCheckHelpers(source, stageAnchor) {
   const start = source.indexOf(stageAnchor);
   assert.notEqual(start, -1, `Missing stage anchor: ${stageAnchor}`);

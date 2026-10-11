@@ -31,6 +31,38 @@ function section(overrides = {}) {
   };
 }
 
+test('framework evidence advertises its claim boundary while direct HAL misclassification stays blocking', () => {
+  const url = 'https://example.com/camera-change';
+  const fact = 'CameraService keeps a visible client connected when camera mute is supported.';
+  const cand = {
+    url, title: 'CameraService privacy policy', relevance_bucket: 'direct_aosp_camera',
+    impact_claim_level: 'direct_hal_contract',
+    source_extraction: { evidence_blocks: [{ text: fact, links: [{ url }] }] }
+  };
+  const evidence = buildAllowedClaimEvidence(cand).find(item => item.text.includes(fact));
+  assert.ok(evidence);
+  assert.equal(evidence.supports_direct_hal_contract, false);
+  const claim = {
+    claim_id: 'privacy-claim', text: fact, claim_type: 'fact',
+    evidence_ids: [evidence.evidence_id], source_urls: [url], overclaim_risk: 'low'
+  };
+  for (const impact of ['camera_framework_behavior', 'direct_hal_contract']) {
+    const result = validateArticleClaims({
+      candidate: cand, strict: true,
+      section: { sources: [{ url }], article_sections: { verified_facts: [fact] },
+        claims: [{ ...claim, impact_level: impact }] }
+    });
+    assert.equal(result.claim_results[0].issues.some(issue =>
+      issue.reason_code === 'direct_hal_claim_without_direct_evidence'), impact === 'direct_hal_contract');
+    if (impact === 'camera_framework_behavior') assert.equal(result.claim_results[0].bound, true);
+  }
+  const directFact = 'The Camera HAL API contract changes the stream configuration requirements.';
+  const direct = buildAllowedClaimEvidence({
+    url, source_extraction: { evidence_blocks: [{ text: directFact, links: [{ url }] }] }
+  }).find(item => item.text.includes(directFact));
+  assert.equal(direct.supports_direct_hal_contract, true);
+});
+
 function candidate(overrides = {}) {
   return {
     title: 'CameraX release notes',

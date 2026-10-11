@@ -30,6 +30,7 @@
     "independentMainBuckets": [
       "cpp_ai_tooling_fallback"
     ],
+    "collectionIndependentBucketMin": 1,
     "supportingMainBuckets": [
       "android_supporting"
     ],

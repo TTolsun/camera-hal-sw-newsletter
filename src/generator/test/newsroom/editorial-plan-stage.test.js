@@ -158,7 +158,8 @@ test('editorialPlanPrompt는 coverage/impact enum과 안전 경계를 담는다'
   assert.doesNotMatch(prompt, /reference_only/, '결과가 exclude와 같은 등급을 다시 제시하면 안 된다');
   assert.match(prompt, /Direct Impact, Design Reference, Trend Watch, Exclude/);
   assert.match(prompt, /public 본문에 라벨로 노출하지 않습니다/);
-  assert.match(prompt, /direct_hal_impact는 source가 직접 HAL\/runtime 변경을 뒷받침할 때만 true/);
+  assert.match(prompt, /direct_hal_impact는 HAL 인터페이스·계약 자체의 변경을 원문이 직접 뒷받침할 때만 true/);
+  assert.match(prompt, /camera_framework_behavior/);
   assert.match(prompt, /이미지 센서 제조사, SoC\/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 마세요/);
   assert.match(prompt, /발행 안전 판단의 최종 강제는 deterministic validation layer가 담당/);
 });
