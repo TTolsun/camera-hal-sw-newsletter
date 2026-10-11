@@ -29,7 +29,10 @@ function normalizeEditorialPlanReport(value, date, capsules = []) {
       title: stringOrEmpty(item?.title),
       url: stringOrEmpty(item?.url),
       source_candidate_hash: stringOrEmpty(item?.source_candidate_hash),
-      coverage_decision: stringOrEmpty(item?.coverage_decision),
+      change_assessment: stringOrEmpty(item?.change_assessment),
+      mechanical_only: item?.mechanical_only === true,
+      // This is the LLM's editorial assessment, not a topic/keyword heuristic.
+      coverage_decision: item?.mechanical_only === true ? 'exclude' : stringOrEmpty(item?.coverage_decision),
       impact_level: stringOrEmpty(item?.impact_level),
       // Editorial importance cannot manufacture a HAL contract boundary. Keep
       // the existing claim validator's evidence prerequisite at the plan handoff.

@@ -258,6 +258,26 @@ function linkedEvidenceNotesText(section) {
   return text(section?.source_verification_notes);
 }
 
+function hasUnresolvedConfirmationClaim(section, candidate) {
+  const documents = candidate?.article_source_reading?.status === 'read'
+    ? ensureArray(candidate.article_source_reading.documents).filter(doc =>
+      doc.url === candidate.url && doc.evidence_id && doc.text && doc.truncated === false)
+    : [];
+  // A fetched primary patch is independent of unresolved links extracted from
+  // that patch. Only an explicitly scoped URL + evidence id can distinguish it.
+  const notes = ensureArray(section?.source_verification_notes).filter(note => {
+    const value = text(note);
+    const urls = value.match(/https?:\/\/[^\s<>"')]+/g) || [];
+    const primaryOnly = /primary source|원문/i.test(value) &&
+      !/linked|모든|전체|\ball\b|\bevery\b|\bentire\b/i.test(value);
+    return !(primaryOnly && urls.length === 1 && documents.some(doc =>
+      urls[0].replace(/[.,;]+$/, '') === doc.url && value.includes(doc.evidence_id)));
+  });
+  return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(linkedEvidenceArticleText({
+    ...section, source_verification_notes: notes
+  }));
+}
+
 function linkedEvidenceDiagnostics(candidate = {}) {
   const hasSummary = Object.prototype.hasOwnProperty.call(candidate, 'linked_evidence_summary') ||
     Object.prototype.hasOwnProperty.call(candidate, 'linkedEvidenceSummary');
@@ -325,7 +345,7 @@ function addLinkedEvidenceQualityDeductions(state, section, candidate, location)
   const explicitRuntimeEvidence = LINKED_EVIDENCE_RUNTIME_TERMS.test(evidenceText);
   const overclaimReasons = [];
 
-  if (diagnostics.hasUnresolvedEvidence && LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(articleText)) {
+  if (diagnostics.hasUnresolvedEvidence && hasUnresolvedConfirmationClaim(section, candidate)) {
     overclaimReasons.push('Article describes unresolved linked evidence as confirmed detail.');
   }
   if (impactType === IMPACT_TYPES.BUILD_DEPENDENCY_FIX && runtimeClaim) {

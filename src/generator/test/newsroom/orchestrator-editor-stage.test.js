@@ -108,6 +108,20 @@ function baseEditor() {
   };
 }
 
+test('locked claims are restored by exact sources before validation without overwriting other articles', () => {
+  const { restoreLockedSection } = require('../../publish/orchestrator-section-locking');
+  const locked = { ...baseEditor().sections[0], claims: [{ text: 'Verified fact', evidence_ids: ['source-body:one'] }] };
+  const corrupted = { ...locked, claims: [], confirmed_facts: ['An unrelated retry rewrite'] };
+  const restored = restoreLockedSection(corrupted, [locked]);
+  assert.deepEqual(restored, locked);
+  assert.notEqual(restored, locked);
+  restored.claims[0].text = 'Mutated';
+  assert.equal(locked.claims[0].text, 'Verified fact');
+  const other = { ...corrupted, sources: [{ url: 'https://example.com/other' }] };
+  assert.equal(restoreLockedSection(other, [locked]), other);
+  assert.equal(restoreLockedSection({ headline: locked.headline }, [locked]).claims, undefined);
+});
+
 function baseArgs(overrides = {}) {
   return {
     date: '2026-05-08',

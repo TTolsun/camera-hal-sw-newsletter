@@ -152,6 +152,13 @@ test('editorial HAL impact is constrained by the same candidate evidence, not im
     .editorial_plans[0].direct_hal_impact, true);
 });
 
+test('a mechanical-only assessment cannot contradict itself by requesting a main article', () => {
+  const report = normalizeEditorialPlanReport({ editorial_plans: [{ url: 'https://example.com/migration',
+    coverage_decision: 'main_article', mechanical_only: true, change_assessment: 'Only wrapper syntax changes.' }] }, '2026-10-12');
+  assert.equal(report.editorial_plans[0].coverage_decision, 'exclude');
+  assert.equal(report.editorial_plans[0].mechanical_only, true);
+});
+
 test('editorialPlanSchema는 plan 식별자와 핵심 추론 필드를 required로 둔다', () => {
   const item = editorialPlanSchema.properties.editorial_plans.items;
   for (const key of [

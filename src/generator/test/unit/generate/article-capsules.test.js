@@ -643,6 +643,15 @@ test('article capsule prompt input omits linked evidence diagnostics fields', ()
   assert.equal(serialized.includes('resolved'), false);
 });
 
+test('unresolved link statuses reach writers as limitations without claiming primary reading resolved them', () => {
+  for (const status of ['blocked', 'failed', 'skipped', 'unsupported', 'unresolved']) {
+    const capsule = buildArticleCapsule({ linked_evidence_summary: { by_fetch_status: { [status]: 1 } } }, []);
+    const serialized = JSON.stringify(capsule);
+    assert.ok(serialized.includes(`Do not use ${status} linked evidence as factual support.`));
+    assert.ok(serialized.includes('Primary article reading does not confirm these linked documents.'));
+  }
+});
+
 // #1034: 편집 계획의 채점 우주는 이 함수가 만든다. 계획 입력은
 // capsuleInputFromReport(report, 'shortlisted')이고, 재조정의 채점 투영은 그 우주와 같아야
 // "목록에 없다 = 계획이 채점하지 않았다"는 읽기 규칙이 참이 된다. 1:1 관계가 깨지면 투영이
