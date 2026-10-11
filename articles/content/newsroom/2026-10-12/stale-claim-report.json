@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "status": "PASS",
+  "removed_sections": [],
+  "dropped_selected_groups": [],
+  "restored_to_keep_minimum": [],
+  "final_section_sources": [
+    {
+      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+    },
+    {
+      "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+      "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+    },
+    {
+      "title": "Claude Haiku 5.5",
+      "url": "https://www.anthropic.com/claude-haiku-5-5"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

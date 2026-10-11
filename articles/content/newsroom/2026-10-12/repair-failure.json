@@ -1,0 +1,45 @@
+{
+  "name": "EditorSemanticValidationError",
+  "message": "Editor output failed selected group coverage validation.",
+  "details": {
+    "field": "sections.group_coverage",
+    "selected_group_count": 3,
+    "rendered_group_count": 2,
+    "explicitly_demoted_group_count": 0,
+    "hard_blocked_group_count": 0,
+    "rendered_outside_selection_count": 0,
+    "explicitly_demoted_outside_selection_count": 0,
+    "hard_blocked_outside_selection_count": 0,
+    "selected_representative_group_keys": [
+      "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "article:https://www.anthropic.com/claude-haiku-5-5",
+      "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com"
+    ],
+    "rendered_group_keys": [
+      "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com"
+    ],
+    "duplicate_rendered_group_keys": [],
+    "explicitly_demoted_group_keys": [],
+    "hard_blocked_group_keys": [],
+    "rendered_outside_selection_group_keys": [],
+    "explicitly_demoted_outside_selection_group_keys": [],
+    "hard_blocked_outside_selection_group_keys": [],
+    "missing_group_keys": [
+      "article:https://www.anthropic.com/claude-haiku-5-5"
+    ],
+    "overlapping_group_keys": [],
+    "hard_blocked_rendered_overlap_group_keys": [],
+    "hard_blocked_demoted_overlap_group_keys": [],
+    "demotion_missing_reason_group_keys": [],
+    "hard_block_missing_reason_group_keys": [],
+    "ok": false,
+    "sectionCount": 2
+  },
+  "field": "sections.group_coverage",
+  "stage": "editor attempt 2/2",
+  "attempt": 2,
+  "status": "FAILED_REPAIR_REVIEWABLE",
+  "lastKnownValidAttempt": 1,
+  "fallbackEditorSectionCount": 2
+}

@@ -1,0 +1,521 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 78,
+    "threshold": 60,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 2,
+    "locked_article_count": 1,
+    "demoted_article_count": 1,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [
+      {
+        "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+        "source": "AOSP Gerrit (camera changes under review)",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Claude Haiku 5.5",
+        "url": "https://www.anthropic.com/claude-haiku-5-5",
+        "source": "Anthropic News",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "editorial_priority": 2,
+        "reason": "duplicate_demoted_url"
+      },
+      {
+        "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+        "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+        "source": "lore.kernel.org linux-media list",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "underfilled_reason": "missing 1 article(s); no eligible non-duplicate primary/reserve completion candidate remains",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 포맷 uAPI 문서 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 5 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안",
+      "Qualcomm CAMSS ISP 파라미터 메타데이터 포맷 uAPI 문서 제안"
+    ],
+    "locked_article_headlines": [
+      "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [
+      "Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용"
+    ],
+    "replaced_sections": [
+      "Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용"
+    ],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+        ],
+        "source_titles": [
+          "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av"
+        ]
+      }
+    ],
+    "failed_sections": [
+      {
+        "index": 1,
+        "headline": "Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용",
+        "category": "cpp_ai_tooling_fallback",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://www.anthropic.com/claude-haiku-5-5"
+        ],
+        "source_titles": [
+          "Claude Haiku 5.5"
+        ]
+      }
+    ],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "replace-or-demote(deterministic-demote): Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용",
+        "sources": [
+          "https://www.anthropic.com/claude-haiku-5-5"
+        ],
+        "action": "replace-or-demote",
+        "failure_type": "unknown_evidence_id",
+        "allow_rewrite": false,
+        "policy_reason": "claim evidence, source binding, or coverage failure must be demoted or replaced",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "source-integrity",
+            "points": 8,
+            "reason": "Shared watch/release-note URL requires matching version_or_release or published_date evidence.",
+            "reason_code": "",
+            "location": "Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: source-body:e5a9ffcfb49ebe7a8c13.",
+            "reason_code": "unknown_evidence_id",
+            "location": "Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용"
+          },
+          {
+            "category": "claim-evidence",
+            "points": 8,
+            "reason": "Claim references unresolved evidence_id: sx:cdb1d51fae043110:da7f739f6271:95128ef27a07c50b.",
+            "reason_code": "unknown_evidence_id",
+            "location": "Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+        ],
+        "action": "repair-section",
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 포맷 uAPI 문서 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 포맷 uAPI 문서 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+        ],
+        "source_titles": [
+          "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 5
+  },
+  {
+    "attempt": 2,
+    "model": "repair-fallback",
+    "score": 78,
+    "threshold": 60,
+    "status": "FAILED_REPAIR_REVIEWABLE",
+    "rendered_main_article_count": 2,
+    "locked_article_count": 0,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 포맷 uAPI 문서 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "source-integrity",
+        "points": 15,
+        "reason": "Fact checker returned 5 must_fix item(s).",
+        "location": "",
+        "blocking": true,
+        "severity": "hard",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "AOSP cameraserver, 센서 프라이버시 토글 시 강제 해제 대신 카메라 음소거 전환 제안",
+      "Qualcomm CAMSS ISP 파라미터 메타데이터 포맷 uAPI 문서 제안"
+    ],
+    "locked_article_headlines": [],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "editor attempt 2/2: fallback-to-last-known-valid-editor"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [],
+    "skipped_repair_sections": [],
+    "article_locks": [],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 5,
+    "repair_failure": {
+      "name": "EditorSemanticValidationError",
+      "message": "Editor output failed selected group coverage validation.",
+      "details": {
+        "field": "sections.group_coverage",
+        "selected_group_count": 3,
+        "rendered_group_count": 2,
+        "explicitly_demoted_group_count": 0,
+        "hard_blocked_group_count": 0,
+        "rendered_outside_selection_count": 0,
+        "explicitly_demoted_outside_selection_count": 0,
+        "hard_blocked_outside_selection_count": 0,
+        "selected_representative_group_keys": [
+          "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+          "article:https://www.anthropic.com/claude-haiku-5-5",
+          "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com"
+        ],
+        "rendered_group_keys": [
+          "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+          "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com"
+        ],
+        "duplicate_rendered_group_keys": [],
+        "explicitly_demoted_group_keys": [],
+        "hard_blocked_group_keys": [],
+        "rendered_outside_selection_group_keys": [],
+        "explicitly_demoted_outside_selection_group_keys": [],
+        "hard_blocked_outside_selection_group_keys": [],
+        "missing_group_keys": [
+          "article:https://www.anthropic.com/claude-haiku-5-5"
+        ],
+        "overlapping_group_keys": [],
+        "hard_blocked_rendered_overlap_group_keys": [],
+        "hard_blocked_demoted_overlap_group_keys": [],
+        "demotion_missing_reason_group_keys": [],
+        "hard_block_missing_reason_group_keys": [],
+        "ok": false,
+        "sectionCount": 2
+      },
+      "field": "sections.group_coverage",
+      "stage": "editor attempt 2/2",
+      "attempt": 2,
+      "status": "FAILED_REPAIR_REVIEWABLE",
+      "lastKnownValidAttempt": 1,
+      "fallbackEditorSectionCount": 2
+    }
+  },
+  {
+    "attempt": 3,
+    "quality_status": "PASS",
+    "quality_score": 96,
+    "fact_check_status": "PASS",
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+      "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+      "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델"
+    ],
+    "locked_article_headlines": [],
+    "failed_sections": [],
+    "regenerated_sections": [
+      {
+        "headline": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안"
+      },
+      {
+        "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토"
+      },
+      {
+        "headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델"
+      }
+    ],
+    "skipped_repair_sections": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0,
+    "recovery_reason": "User-selected AOSP/CAMSS/Haiku composition; preserved previously verified camera prose and edited Haiku with official source facts and explicitly proposed workflow evaluation; fresh Gemini judge, fact check, and source review passed."
+  }
+]

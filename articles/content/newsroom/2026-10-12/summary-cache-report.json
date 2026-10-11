@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "generated_at": "2026-10-11T16:22:24.211Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 3,
+    "hit_count": 0,
+    "miss_count": 3,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 3
+    }
+  ],
+  "entries": [
+    {
+      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "source": "AOSP Gerrit (camera changes under review)",
+      "published_date": "2026-10-07",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+        "url_hash": "d584298342e95060848eabc0ff7b7c5544f9d641a22b2ace41d89e256360fafc",
+        "published_date": "2026-10-07",
+        "content_hash": "63a39a0e3c4207f045a4f0c4e6f4dc09eba3f3846918d81d363c0127bf4c145f"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Claude Haiku 5.5",
+      "url": "https://www.anthropic.com/claude-haiku-5-5",
+      "source": "Anthropic News",
+      "published_date": "",
+      "cache_key": {
+        "normalized_url": "https://www.anthropic.com/claude-haiku-5-5",
+        "url_hash": "cdb1d51fae0431106fedcd9b04b5f3c39e2b73ba97f1a80fa573c763d8f96f73",
+        "published_date": "",
+        "content_hash": "a3d7838931806270a81103d660496b279f85d898f344e6a867cebcafc646396f"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+      "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-06T08:19:09Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+        "url_hash": "88783652821718ad0180e28fd8b0675adf32b3087055dbef2924df2619b78cfa",
+        "published_date": "2026-10-06T08:19:09Z",
+        "content_hash": "9457244fa37f83a26d47d44c9e5ad8c63e1fc479c5bf696d7abe9f4f708824c8"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

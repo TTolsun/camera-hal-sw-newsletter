@@ -7,6 +7,67 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://www.anthropic.com/claude-haiku-5-5",
+      "title": "Claude Haiku 5.5",
+      "source_url": "https://www.anthropic.com/claude-haiku-5-5",
+      "newsletter_date": "2026-10-12",
+      "newsletter_url": "newsletters/2026-10-12/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-12",
+      "newsletter_article_date": "2026-10-12",
+      "cooldown_until": "2026-11-02",
+      "first_exposed_at": "2026-10-12",
+      "last_exposed_at": "2026-10-12",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "newsletter_date": "2026-10-12",
+      "newsletter_url": "newsletters/2026-10-12/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-12",
+      "newsletter_article_date": "2026-10-12",
+      "cooldown_until": "2026-11-02",
+      "first_exposed_at": "2026-10-12",
+      "last_exposed_at": "2026-10-12",
+      "exposure_count": 2,
+      "exposure_types": [
+        "newsletter_article",
+        "homepage_headline"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+      "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+      "source_url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+      "newsletter_date": "2026-10-12",
+      "newsletter_url": "newsletters/2026-10-12/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-12",
+      "first_exposed_at": "2026-10-12",
+      "last_exposed_at": "2026-10-12",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "series_identity_key": "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com",
+      "series_subject_key": "media documentation uapi add qcom camss isp params documentation",
+      "newsletter_article_date": "2026-10-12",
+      "cooldown_until": "2026-11-02"
+    },
+    {
       "article_identity_key": "url:https://patchwork.libcamera.org/patch/28387",
       "series_identity_key": "patchwork-series:6214",
       "series_subject_key": "libcamera controls expand awb controls",

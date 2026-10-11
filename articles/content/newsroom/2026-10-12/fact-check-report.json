@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "AOSP cameraserver에서 SensorPrivacyManager 콜백과 AppOpsManager의 opChanged()가 서로 다른 binder 경로로 실행될 때, UID 가시성과 카메라 mute 지원 여부를 검사하는 opChanged()의 결정이 무조건적인 block() 호출에 의해 무시되어 클라이언트가 강제 종료되는 문제를 해결합니다. blockAllClients()와 blockPrivacyEnabledClients()에 isUidVisible && supportsCameraMute() 조건을 추가하여, 해당 조건이 만족될 경우 setCameraMute(true)를 호출하도록 변경합니다.",
+        "article_explanation": "기사는 SensorPrivacyManager 콜백과 AppOpsManager의 opChanged()가 서로 다른 binder 경로로 실행되어 무조건적인 block()이 먼저 실행되어 클라이언트를 강제 종료하는 문제를 지적합니다. 패치가 blockAllClients()와 blockPrivacyEnabledClients()에 UID의 프로세스 상태가 PROCESS_STATE_BOUND_TOP 이하이고 supportsCameraMute()가 참일 때 setCameraMute(true)를 호출하도록 조건을 추가하며, 그렇지 않으면 기존 block()을 유지한다고 설명합니다. 또한 mute 지원 판단이 ANDROID_SENSOR_AVAILABLE_TEST_PATTERN_MODES와 관련됨을 언급하고, blockClientsForUid()는 변경되지 않음을 명시합니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": []
+      },
+      "reason": "AOSP cameraserver의 프라이버시 처리 로직 변경 제안을 구체적인 코드 변경점과 함께 설명하여 Camera HAL 엔지니어에게 실질적인 검증 포인트를 제공합니다. / 기사는 원문의 핵심 변화인 프라이버시 토글 시 조건부 mute 적용 조건을 정확히 설명하고, 변경되지 않는 경로도 명확히 구분하여 전달합니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식인 V4L2_META_FMT_QCOM_ISP_PARAMS에 대한 문서화를 추가하고, 이 형식이 V4L2 확장 가능 ISP 파라미터 시스템을 기반으로 하며 Offline Processing Engine(OPE)의 ope_params 노드가 첫 번째 소비자가 됨을 명시합니다. 또한, v4l2_isp_params_buffer 대신 v4l2_isp_buffer와 v4l2_isp_block_header 대신 v4l2_isp_block_header를 사용하는 공통 구조체 적용에 대한 논의를 포함합니다.",
+        "article_explanation": "기사는 Qualcomm CAMSS ISP 파라미터 메타데이터 형식인 V4L2_META_FMT_QCOM_ISP_PARAMS 문서화 패치 시리즈가 v10으로 검토 중이며, 이 포맷이 공통 V4L2 확장 가능 ISP 파라미터 구조를 기반으로 설계되었다고 설명합니다. OPE의 ope_params 노드가 이 메타데이터 형식을 활용하며, 메타데이터 버퍼 내부에 블록 단위 구조체를 배치하여 화이트 밸런스 게인, 색상 보정 행렬, 감마 곡선 등을 설정한다고 언급합니다. 또한, 리뷰 과정에서 구형 레거시 드라이버 호환용 구조체 대신 v4l2_isp_buffer 및 v4l2_isp_block_header와 같은 공통 구조체를 사용하는 방향으로 커널 내 표준화 작업이 진행 중임을 설명합니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": []
+      },
+      "reason": "Qualcomm CAMSS ISP의 uAPI 메타데이터 구조 표준화 논의를 다루어 드라이버 및 HAL 개발자가 주목해야 할 하위 스택 변경 사항을 명확히 제시합니다. / 기사는 원문의 핵심 변화인 CAMSS ISP 파라미터 문서화와 V4L2 공통 구조체 적용 논의를 정확하게 설명합니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "Anthropic이 Claude Haiku 5.5를 출시하며, 이는 고용량, 비용에 민감한 반복 작업(요약, 압축, 데이터베이스 질의, 분류)에 최적화된 가장 저렴하고 빠른 소형 언어 모델입니다. Opus 5.5 및 Sonnet 5.5와 함께 코딩 작업의 보조 에이전트로 활용될 수 있으며, Haiku 4.5 대비 평균 약 75% 낮은 실행 비용을 제공하고, Haiku 계열에 처음으로 effort 설정을 도입하여 비용과 답변 성능을 조절할 수 있게 합니다.",
+        "article_explanation": "기사는 Claude Haiku 5.5가 많은 요청을 빠르게 처리하고 비용을 줄이는 데 초점을 맞춘 소형 언어 모델이며, 요약, 대화 내용 압축, 데이터베이스 질의, 분류를 대표적인 반복 작업으로 제시한다고 설명합니다. 코딩에서는 Opus 5.5나 Sonnet 5.5와 함께 보조 에이전트로 쓰는 구성을 제시하며, Haiku 4.5보다 실행 비용이 평균 약 75% 낮고, Haiku 계열에 처음 도입된 effort 설정으로 비용과 답변 성능을 조절할 수 있다고 설명합니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": []
+      },
+      "reason": "AI 모델의 성능 및 비용 효율성 개선이 카메라 HAL 개발 워크플로우에 어떻게 적용될 수 있는지 구체적인 테스트 시나리오를 제시하여 실질적인 가치를 제공합니다. / 기사는 원문의 핵심 변화인 Claude Haiku 5.5의 주요 특징, 용도, 비용 효율성 및 새로운 effort 설정 도입을 정확하게 설명합니다."
+    }
+  ],
+  "final_comment": "All articles are factual, well-sourced, and adhere to the editorial policy regarding concrete evidence, relevance, actionability, and overclaim guardrails. The markdown syntax is correct, and there is no undue repetition. All claims are backed by the provided evidence, and no truncated evidence leads to overclaimed conclusions. The articles are publishable."
+}

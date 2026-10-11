@@ -1,5 +1,17 @@
 [
   {
+    "date": "2026-10-12",
+    "title": "AOSP Camera / Driver / SoC Platform 뉴스레터 - 2026-10-12",
+    "summary": "AOSP의 조건부 카메라 mute 제안, Qualcomm CAMSS ISP 파라미터 uAPI 문서 리뷰, Claude Haiku 5.5의 반복 작업·코딩 보조 모델 활용을 살펴봅니다.",
+    "html": "newsletters/2026-10-12/index.html",
+    "md": "newsletters/2026-10-12/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ],
+    "public_contract_version": "story-v2"
+  },
+  {
     "date": "2026-10-05",
     "title": "Android 17 ITS 검증 환경과 libcamera AWB 제어 제안",
     "summary": "ITS의 실행 버전·차트·검사 항목과 libcamera AWB의 게인 고정·재탐색 조건을 원문으로 확인합니다.",
