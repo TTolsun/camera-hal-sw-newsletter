@@ -266,12 +266,23 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
   // A fetched primary patch is independent of unresolved links extracted from
   // that patch. The evidence id binds the note to that exact fetched document;
   // any explicit URL must agree too. A blanket confirmation remains blocked.
-  const notes = ensureArray(section?.source_verification_notes).filter(note => {
+    const verificationNotes = ensureArray(section?.source_verification_notes).map(text);
+    // The schema permits URL, evidence id and reading status on separate lines.
+    // Only explicit single-value labels provide shared primary-document context;
+    // other prose must still establish its own scope and is checked below.
+    const sourceLabels = verificationNotes.filter(note => /^Source URL:\s*https?:\/\/\S+\s*$/i.test(note));
+    const evidenceLabels = verificationNotes.filter(note => /^Evidence ID:\s*source-body:[a-zA-Z0-9_-]+\s*$/i.test(note));
+    const labeledDocument = sourceLabels.length === 1 && evidenceLabels.length === 1
+      ? documents.find(doc => sourceLabels[0].replace(/^Source URL:\s*/i, '').trim() === doc.url &&
+        evidenceLabels[0].replace(/^Evidence ID:\s*/i, '').trim() === doc.evidence_id)
+      : null;
+    const notes = verificationNotes.filter(note => {
     const value = text(note);
     const urls = value.match(/https?:\/\/[^\s<>"')]+/g) || [];
     const evidenceIds = value.match(/source-body:[a-zA-Z0-9_-]+/g) || [];
-    const primaryOnly = /primary source|원문|\bfrom\b/i.test(value) &&
+      const primaryOnly = /primary source|원문|\bfrom\b|\bpatch details\b|\bcommit message\b/i.test(value) &&
       !/linked|모든|전체|\ball\b|\bevery\b|\bentire\b/i.test(value);
+      if (primaryOnly && labeledDocument && evidenceIds.length === 0 && urls.length === 0) return false;
     return !(primaryOnly && evidenceIds.length === 1 && urls.length <= 1 && documents.some(doc =>
       evidenceIds[0] === doc.evidence_id &&
       (urls.length === 0 || urls[0].replace(/[.,;]+$/, '') === doc.url)));

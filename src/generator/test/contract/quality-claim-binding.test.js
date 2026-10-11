@@ -774,6 +774,22 @@ test('primary source confirmation is scoped to a fully read URL and evidence id,
   assert.equal(linkedDeductions(reportWithTargetSection(article, candidate), 'linked-evidence-overclaim').length, 0);
   const idBoundNote = { ...article, source_verification_notes: ['Verified from Gerrit patch (source-body:primary).'] };
   assert.equal(linkedDeductions(reportWithTargetSection(idBoundNote, candidate), 'linked-evidence-overclaim').length, 0);
+  const splitNotes = [`Source URL: ${url}`, 'Evidence ID: source-body:primary',
+    'Verified patch details and commit message in Gerrit.'];
+  const splitArticle = { ...article, source_verification_notes: splitNotes };
+  assert.equal(linkedDeductions(reportWithTargetSection(splitArticle, candidate), 'linked-evidence-overclaim').length, 0);
+  for (const badNotes of [
+    splitNotes.slice(1), splitNotes.filter(note => !note.startsWith('Evidence ID:')),
+    splitNotes.map(note => note.replace(url, 'https://example.com/other')),
+    splitNotes.map(note => note.replace('source-body:primary', 'source-body:missing')),
+    [...splitNotes, 'Source URL: https://example.com/other'],
+    [...splitNotes, 'Evidence ID: source-body:another'],
+    [...splitNotes, 'Gerrit linked evidence verified'],
+    [...splitNotes, 'All Gerrit patch details verified']
+  ]) {
+    assert.ok(linkedDeductions(reportWithTargetSection({ ...article, source_verification_notes: badNotes }, candidate),
+      'linked-evidence-overclaim').some(item => item.blocking), JSON.stringify(badNotes));
+  }
   for (const badNote of [
     'Gerrit verified', note.replace('source-body:primary', 'source-body:missing'),
     note.replace(url, 'https://example.com/other'), `${note}; all linked evidence verified`,
@@ -786,6 +802,8 @@ test('primary source confirmation is scoped to a fully read URL and evidence id,
     { status: 'read', documents: [{ ...document, truncated: true }] }]) {
     const report = reportWithTargetSection(article, { ...candidate, article_source_reading: reading });
     assert.ok(linkedDeductions(report, 'linked-evidence-overclaim').some(item => item.blocking));
+    assert.ok(linkedDeductions(reportWithTargetSection(splitArticle, { ...candidate, article_source_reading: reading }),
+      'linked-evidence-overclaim').some(item => item.blocking));
   }
   const prose = { ...article, what_changed: 'Gerrit linked evidence confirmed the implementation.' };
   assert.ok(linkedDeductions(reportWithTargetSection(prose, candidate), 'linked-evidence-overclaim').some(item => item.blocking));
