@@ -702,7 +702,9 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 Story v2의 기존 public article judge는 형식뿐 아니라 lead와 본문의 연결, 근거에 따른 전개, 기사 사이의 추상적 반복을 평가합니다. 서사 품질 실패는 `public_prose_pass=false`와 구체적인 수정 사유를 통해 기존 semantic repair로 처리합니다. 동일한 문단 개수 자체를 실패로 보거나 허구의 장면을 요구하지 않습니다.
 
-생성 단계는 선정 이후 주요 후보부터 원문을 읽어 `article_source_reading.documents`로 reporter·editor·fact-checker에게 전달합니다. HTML 탐색 메뉴를 제거하고 본문·표·패치 diff를 보존하며, libcamera Patchwork는 Related 목록에 실제로 연결된 커버레터와 패치도 최대 5개 읽습니다. 실행당 최대 24개 문서, 수신 합계 6 MiB, 문서당 발췌 16,000자로 제한하고 잘림·실패를 명시합니다. 같은 출처의 리다이렉트만 허용하고, 검수된 seed evidence는 다시 수집하지 않습니다. 추가 근거는 기존 evidence ID와 출처 연결 검사를 거치며 후보의 발행 자격·날짜·source quality를 승격하지 않습니다.
+생성 단계는 선정 이후 주요 후보부터 원문을 읽어 `article_source_reading.documents`로 reporter·editor·fact-checker에게 전달합니다. HTML 탐색 메뉴를 제거하고 본문·표·패치 diff를 보존하며, libcamera Patchwork는 Related 목록에 실제로 연결된 커버레터와 패치도 최대 5개 읽습니다. 실행당 최대 24개 출처 읽기, 수신 합계 6 MiB, HTML 문서당 발췌 16,000자로 제한하고 잘림·실패를 명시합니다. 같은 출처의 리다이렉트만 허용하고, 검수된 seed evidence는 다시 수집하지 않습니다. 추가 근거는 기존 evidence ID와 출처 연결 검사를 거치며 후보의 발행 자격·날짜·source quality를 승격하지 않습니다.
+
+AOSP·ChromeOS Gerrit 변경은 PolyGerrit HTML 대신 공식 REST metadata와 revision별 base64 patch를 읽습니다. change 번호·project·수집 당시 `gerrit_commit_sha`가 일치해야 하며, revision이 달라졌으면 새 patch를 기존 후보의 근거로 붙이지 않습니다. 커밋 메시지와 diff는 HTML 제거를 거치지 않아 `handle<platform>` 같은 타입과 삭제·추가 행이 보존됩니다. metadata와 patch의 합계가 64,000자 이내일 때만 전체를 최대 16,000자씩 나누어 전달하며, 각 조각에 `revision`, `fetched_from`, `part`, `parts`를 남깁니다. 합계 상한 초과·잘못된 응답·읽기 실패는 `unavailable`로 남기고 부분 patch나 JavaScript 안내문으로 대체하지 않습니다. 같은 후보를 다시 읽으면 이전 원문 evidence ID를 교체하여 오래된 patch가 새 결과에 남지 않도록 합니다.
 
 기사의 충실도는 유형별 핵심 변화와 적용 조건을 원문에 대조해 기존 `article_quality.publishable` 판정으로 검사합니다. 모든 기사에 같은 목차·표·체크리스트를 요구하지 않습니다. 사실 오류와 출처 모순은 fact-check에서, 핵심 내용을 빠뜨린 일반론이나 요약의 반복은 기사 품질에서 다룹니다. 짧은 근거를 억지로 늘리는 대신 편집 계획에서 short/reference를 제안합니다.
 
