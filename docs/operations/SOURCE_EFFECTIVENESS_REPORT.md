@@ -59,6 +59,8 @@ schema version 3부터 source마다 수집 단계 수와 `collection_status`를 
 
 마지막 후보 선별 단계는 `candidate_triage.mode`가 `llm` 또는 `all_fit`이면 `triage`로, `keyword_fallback`이면 `global_cap`으로 집계합니다. `all_fit`의 제외 수는 0입니다. `triage`는 상한 압력으로 취급하지 않으므로 그 자체로 `COLLECTION_CAPPED`를 만들거나 `collection_reasons`에 추가되지 않습니다.
 
+`llm` 선별의 `candidate_triage.not_selected`에는 제외된 후보의 URL과 제외 단계가 남습니다. `not_selected_by_llm_or_keyword_fill`은 모델 선택과 키워드 채움에 포함되지 않았다는 뜻이며, 모델의 내부 판단 사유를 뜻하지 않습니다. 이 항목의 `triage_input`으로 실제 전달된 날짜·날짜 출처·요약·동작 변경·본문 workflow 근거를 확인할 수 있습니다. `triage_pool_cap`은 모델에 전달되기 전 판단 풀 상한에서 제외된 후보입니다. 선별 날짜에는 `effective_date`를 우선 사용하므로 개별 페이지의 게시일이 비어 있어도 검증된 목록 날짜가 사라지지 않습니다.
+
 `collection_status`는 위에서부터 처음 맞는 값 하나입니다.
 
 1. `COLLECTION_INCOMPLETE`: 수집 손실 사유가 하나 이상 있습니다.

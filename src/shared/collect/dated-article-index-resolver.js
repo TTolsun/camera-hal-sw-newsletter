@@ -123,8 +123,9 @@ const WORKFLOW_ANCHORS = [
 // api_or_component 2 + behavior_change 2)를 이 소스의 모든 후보가 구조적으로 통과하게 만들었다
 // (risk-reviewer 지적, 2026-08). 지금은 relevanceBucketHint가 비어 있어(분류는 후속 PR) 그 효과가
 // 안 보이지만, 후속 PR이 이 lane을 일반 후보 풀로 열면 그 즉시 게이트가 무력화된다. 그래서 이
-// 목록은 아래 여섯 개로 좁힌다 — 임의로 늘리면 근거 없는 라벨을 만들 위험이 있다.
-const KNOWN_COMPONENT_PATTERN = /\b(?:Claude Code|GitHub Actions|GitHub|PagerDuty|Grafana|Kubernetes)\b/;
+// 목록은 명시적 도구명과 버전이 붙은 모델명으로 좁힌다. 본문에서 측정된 이름만 사용하며,
+// 모델명만 있어도 날짜·동작 변경·개발 workflow 관련성 검사를 별도로 통과해야 한다.
+const KNOWN_COMPONENT_PATTERN = /\b(?:Claude (?:Haiku|Sonnet|Opus) \d+(?:\.\d+)+|Claude Code|GitHub Actions|GitHub|PagerDuty|Grafana|Kubernetes)\b/;
 
 // 마침표 또는 불릿 뒤 공백을 문장 경계로 본다.
 const SENTENCE_BOUNDARY_PATTERN = /[.•]\s+/;

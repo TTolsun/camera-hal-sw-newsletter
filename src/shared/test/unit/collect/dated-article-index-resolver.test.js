@@ -615,6 +615,35 @@ test('leaves api_or_component empty when the body has no known component token, 
     '구조적으로 게이트를 통과했다');
 });
 
+test('dated model announcement preserves measured coding subagent evidence without granting brand-only eligibility', async () => {
+  const source = require('../../../data/news-sources.json').sources.find(row => row.id === 'anthropic-news');
+  const url = 'https://www.anthropic.com/claude-haiku-5-5';
+  const behavior = 'It pairs well with Opus 5.5 and Sonnet 5.5 as a subagent on coding work.';
+  const body = `<link rel="canonical" href="${url}"><main><h1>Claude Haiku 5.5</h1>`
+    + '<p>Performance Pricing Safety Further updates Model ID claude-haiku-5-5. '
+    + 'Introducing Claude Haiku 5.5: the cheapest, fastest, and most capable small model we have released. '
+    + 'Claude Haiku 5.5 is designed for high-volume, cost-sensitive tasks. It reliably handles quick and repetitive workloads '
+    + '(like summaries, compactions, database queries, and classification requests). Additional details about this release and its practical usage follow below.</p>'
+    + `<p>${behavior}</p></main>`;
+  const rows = await resolveDatedArticleIndexItems({
+    source, html: '<a href="/claude-haiku-5-5"><time>Oct 7, 2026</time>Claude Haiku 5.5</a>',
+    now: new Date('2026-10-11T15:12:04Z'), lookbackDays: 35, offPrefixArticleLinks: true,
+    fetchClient: { fetchBounded: async () => ({ ok: true, body }) }
+  });
+  assert.equal(rows.length, 1);
+  const raw = rows[0];
+  assert.equal(raw.api_or_component, 'Claude Haiku 5.5');
+  assert.equal(raw.effective_date, '2026-10-07');
+  assert.equal(raw.behavior_change, behavior);
+  const candidate = normalizeCandidate(raw);
+  assert.equal(candidate.relevance_bucket, 'cpp_ai_tooling_fallback');
+  assert.equal(candidate.main_eligible, true, JSON.stringify(candidate));
+  assert.equal(candidate.source_gap_risk, false);
+  assert.equal(normalizeCandidate({ ...raw, source_extraction: undefined }).main_eligible, false);
+  assert.equal(normalizeCandidate({ ...raw, effective_date: '', publishedAt: '' }).main_eligible, false);
+  assert.equal(normalizeCandidate({ ...raw, behavior_change: '', source_extraction: undefined }).main_eligible, false);
+});
+
 test('emits blog_post_item and lets the collector derive the collection mode', async () => {
   const item = await firstResolvedItem();
   assert.equal(item.sourceKind, 'blog_post_item');
