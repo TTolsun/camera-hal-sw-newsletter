@@ -264,14 +264,17 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
       doc.url === candidate.url && doc.evidence_id && doc.text && doc.truncated === false)
     : [];
   // A fetched primary patch is independent of unresolved links extracted from
-  // that patch. Only an explicitly scoped URL + evidence id can distinguish it.
+  // that patch. The evidence id binds the note to that exact fetched document;
+  // any explicit URL must agree too. A blanket confirmation remains blocked.
   const notes = ensureArray(section?.source_verification_notes).filter(note => {
     const value = text(note);
     const urls = value.match(/https?:\/\/[^\s<>"')]+/g) || [];
-    const primaryOnly = /primary source|원문/i.test(value) &&
+    const evidenceIds = value.match(/source-body:[a-zA-Z0-9_-]+/g) || [];
+    const primaryOnly = /primary source|원문|\bfrom\b/i.test(value) &&
       !/linked|모든|전체|\ball\b|\bevery\b|\bentire\b/i.test(value);
-    return !(primaryOnly && urls.length === 1 && documents.some(doc =>
-      urls[0].replace(/[.,;]+$/, '') === doc.url && value.includes(doc.evidence_id)));
+    return !(primaryOnly && evidenceIds.length === 1 && urls.length <= 1 && documents.some(doc =>
+      evidenceIds[0] === doc.evidence_id &&
+      (urls.length === 0 || urls[0].replace(/[.,;]+$/, '') === doc.url)));
   });
   return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(linkedEvidenceArticleText({
     ...section, source_verification_notes: notes

@@ -772,9 +772,12 @@ test('primary source confirmation is scoped to a fully read URL and evidence id,
   const note = `Primary source Gerrit verified: ${url} source-body:primary`;
   const article = section({ url, source_verification_notes: [note] });
   assert.equal(linkedDeductions(reportWithTargetSection(article, candidate), 'linked-evidence-overclaim').length, 0);
+  const idBoundNote = { ...article, source_verification_notes: ['Verified from Gerrit patch (source-body:primary).'] };
+  assert.equal(linkedDeductions(reportWithTargetSection(idBoundNote, candidate), 'linked-evidence-overclaim').length, 0);
   for (const badNote of [
     'Gerrit verified', note.replace('source-body:primary', 'source-body:missing'),
-    note.replace(url, 'https://example.com/other'), `${note}; all linked evidence verified`
+    note.replace(url, 'https://example.com/other'), `${note}; all linked evidence verified`,
+    `${note} source-body:another`
   ]) {
     const report = reportWithTargetSection({ ...article, source_verification_notes: [badNote] }, candidate);
     assert.ok(linkedDeductions(report, 'linked-evidence-overclaim').some(item => item.blocking));
