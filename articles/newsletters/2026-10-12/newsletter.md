@@ -20,7 +20,7 @@ _lore.kernel.org linux-media list_
 
 Qualcomm CAMSS 하위 시스템의 ISP 파라미터를 제어하기 위한 V4L2 메타데이터 포맷 문서화 패치 시리즈가 v10 리비전으로 검토되고 있습니다.
 
-10월 6일 linux-media 메일링 리스트에 제출된 PATCH v10 패치 패밀리는 Qualcomm CAMSS ISP 파라미터 메타데이터 형식인 V4L2_META_FMT_QCOM_ISP_PARAMS 제안을 포함합니다. 이 포맷은 공통 V4L2 확장 가능 ISP 파라미터 구조를 기반으로 설계되었습니다.
+9월 25일 제출된 PATCH v10 문서화 패치에 대해 10월 6일 linux-media 메일링 리스트에서 리뷰 의견이 올라왔습니다. 이 패치는 Qualcomm CAMSS ISP 파라미터 메타데이터 형식인 V4L2_META_FMT_QCOM_ISP_PARAMS 제안을 포함합니다. 이 포맷은 공통 V4L2 확장 가능 ISP 파라미터 구조를 기반으로 설계되었습니다.
 
 주요 구성 요소인 Offline Processing Engine(OPE)의 ope_params 노드가 이 메타데이터 형식을 가장 먼저 활용합니다. 메타데이터 버퍼 내부에 블록 단위 구조체를 배치하여 화이트 밸런스 게인, 색상 보정 행렬, 감마 곡선 등의 하드웨어 모듈을 설정하는 방식입니다.
 
