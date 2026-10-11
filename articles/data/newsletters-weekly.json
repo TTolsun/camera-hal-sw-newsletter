@@ -1,5 +1,30 @@
 [
   {
+    "weeklyKey": "2026-W42",
+    "weekStartDate": "2026-10-12",
+    "weekEndDate": "2026-10-18",
+    "date": "2026-10-12",
+    "title": "2026 W42",
+    "summary": "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의",
+    "html": "newsletters/2026-W42/index.html",
+    "md": "newsletters/2026-W42/newsletter.md",
+    "tags": [
+      "Driver",
+      "Image Processing",
+      "SoC Platform"
+    ],
+    "article_count": 1,
+    "article_images": [
+      "assets/images/fallback/newsletter-default.svg"
+    ],
+    "public_contract_version": "story-v2",
+    "coverage_week_key": "2026-W41",
+    "coverage_start_date": "2026-10-05",
+    "coverage_end_date": "2026-10-11",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-10-12"
+  },
+  {
     "weeklyKey": "2026-W41",
     "weekStartDate": "2026-10-05",
     "weekEndDate": "2026-10-11",

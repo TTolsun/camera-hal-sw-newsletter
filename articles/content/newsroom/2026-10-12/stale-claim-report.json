@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "status": "PASS",
+  "removed_sections": [
+    {
+      "index": 1,
+      "headline": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+      ],
+      "source_titles": [
+        "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av"
+      ],
+      "version_or_release": "",
+      "api_or_component": "",
+      "behavior_change": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1
+    },
+    {
+      "index": 2,
+      "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+      "source_urls": [
+        "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+      ],
+      "source_titles": [
+        "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2"
+      ],
+      "version_or_release": "",
+      "api_or_component": "",
+      "behavior_change": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5
+    }
+  ],
+  "dropped_selected_groups": [
+    {
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+    },
+    {
+      "article_group_key": "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+      "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+    }
+  ],
+  "restored_to_keep_minimum": [],
+  "final_section_sources": [
+    {
+      "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+      "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+    }
+  ],
+  "stale_claim_items_removed": [
+    {
+      "field": "briefing",
+      "text": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안이 Gerrit에 제출되었습니다.",
+      "stale_claims": [
+        "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안"
+      ],
+      "unsupported_release_claims": [],
+      "action": "removed-item"
+    }
+  ],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [
+    {
+      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+    },
+    {
+      "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+    }
+  ],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

@@ -1,0 +1,348 @@
+{
+  "date": "2026-10-12",
+  "public_contract_version": "story-v2",
+  "generation_contract_version": 2,
+  "title": "2026 W41 (10.05 ~ 10.11)",
+  "summary": "이번 주 뉴스레터에서는 Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의 소식을 전해드립니다. Qualcomm CAMSS 하위 시스템의 ISP 파라미터를 제어하기 위한 V4L2 메타데이터 포맷 문서화 패치 시리즈가 v10 리비전으로 검토되고 있으니 많은 관심 부탁드립니다.",
+  "briefing": [
+    "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의"
+  ],
+  "sections": [
+    {
+      "category": "camera_driver_image_pipeline",
+      "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+      "what_changed": "Qualcomm CAMSS ISP 파라미터 메타데이터 포맷(V4L2_META_FMT_QCOM_ISP_PARAMS)에 대한 v10 패치 시리즈 문서 추가(metafmt-qcom-isp.rst) 작업이 진행 중입니다.",
+      "confirmed_facts": [
+        "2026년 10월 6일 linux-media 메일링 리스트에 PATCH v10 5/9 패치 문서 리뷰 의견이 접수되었습니다.",
+        "V4L2_META_FMT_QCOM_ISP_PARAMS 포맷은 V4L2 확장 가능한 ISP 파라미터 시스템 기반으로 qcom-camss-config.h uAPI 헤더에 블록별 구조체를 정의합니다.",
+        "Offline Processing Engine(OPE)의 ope_params 노드가 해당 파라미터 메타데이터의 첫 번째 소비자입니다."
+      ],
+      "evidence_summary": "Qualcomm CAMSS ISP 파라미터를 V4L2 extensible ISP params 시스템 구조로 전달하기 위한 v10 문서화 패치가 linux-media 메일링 리스트에서 논의되었습니다.",
+      "specificity_checks": [
+        "PATCH v10 5/9",
+        "2026-10-06",
+        "V4L2_META_FMT_QCOM_ISP_PARAMS",
+        "qcom-camss-config.h",
+        "Offline Processing Engine (OPE)",
+        "metafmt-qcom-isp.rst"
+      ],
+      "source_verification_notes": [
+        "lore.kernel.org linux-media 패치 검토 메일을 확인했으며 전체 9개 패치 시리즈 중 5번째 문서화 조각에 해당합니다."
+      ],
+      "public_article": {
+        "headline": "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의",
+        "lead": "Qualcomm CAMSS 하위 시스템의 ISP 파라미터를 제어하기 위한 V4L2 메타데이터 포맷 문서화 패치 시리즈가 v10 리비전으로 검토되고 있습니다.",
+        "body_markdown": "10월 6일 linux-media 메일링 리스트에 제출된 PATCH v10 패치 패밀리는 Qualcomm CAMSS ISP 파라미터 메타데이터 형식인 V4L2_META_FMT_QCOM_ISP_PARAMS 제안을 포함합니다. 이 포맷은 공통 V4L2 확장 가능 ISP 파라미터 구조를 기반으로 설계되었습니다.\n\n주요 구성 요소인 Offline Processing Engine(OPE)의 ope_params 노드가 이 메타데이터 형식을 가장 먼저 활용합니다. 메타데이터 버퍼 내부에 블록 단위 구조체를 배치하여 화이트 밸런스 게인, 색상 보정 행렬, 감마 곡선 등의 하드웨어 모듈을 설정하는 방식입니다.\n\n### uAPI 구조체와 헤더 호환성 논의\n\n리뷰 과정에서 공통 ISP 구조체인 v4l2_isp_buffer 및 v4l2_isp_block_header 적용에 대한 의견이 교환되었습니다. 구형 레거시 드라이버 호환용 구조체 대신 공통 구조체를 사용하는 방향으로 커널 내 표준화 작업이 지속 진행되고 있습니다.",
+        "camera_hal_takeaway": "Qualcomm platform 커널 드라이버 연동 시 qcom-camss-config.h uAPI 구조체 및 v4l2_isp 공통 헤더 변경 사항을 사전 점검해야 합니다.",
+        "reader_checkpoints": [
+          "qcom-camss-config.h 메타데이터 블록 정의 및 OPE 파이프라인 단계별 구조체 확인",
+          "v4l2_isp 공통 구조체 적용에 따른 메인라인 커널 패치 머지 추적"
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+            "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+            "publisher": "lore.kernel.org",
+            "source_role": "primary",
+            "checked_at": "2026-10-12"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "lore.kernel.org linux-media list",
+        "editorial_story": {
+          "not_to_overclaim": "이 패치는 9개 조각 패치 시리즈 중 5번째 문서화 제안이며, 메인라인 커널에 완결 머지된 기능이 아니므로 커널 버전 명시 없이 확정 기능으로 기재하지 않습니다.",
+          "editor_take": "CAMSS ISP 제어 구조가 V4L2 공통 ISP 파라미터 프레임워크로 정립되고 있어, 향후 벤더 HAL 개발 시 유용한 참조점이 됩니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 10월 6일 linux-media 메일링 리스트에 PATCH v10 5/9 패치 문서 리뷰 의견이 접수되었습니다.",
+          "V4L2_META_FMT_QCOM_ISP_PARAMS 포맷은 V4L2 확장 가능한 ISP 파라미터 시스템 기반으로 qcom-camss-config.h uAPI 헤더에 블록별 구조체를 정의합니다.",
+          "Offline Processing Engine(OPE)의 ope_params 노드가 해당 파라미터 메타데이터의 첫 번째 소비자입니다."
+        ],
+        "background_context": "Qualcomm CAMSS(Camera Subsystem)는 카메라 센서 인터페이스와 ISP 파이프라인을 관장합니다. V4L2 extensible ISP params 시스템은 다양한 SoC Vendor의 ISP 파라미터 블록을 표준화된 방식으로 사용자 공간에 노출하기 위한 리눅스 커널 구조입니다.",
+        "hal_driver_impact": "OPE 및 CAMSS ISP 노드를 제어하는 카메라 드라이버 및 HAL 파이프라인 연동 개발 시, qcom-camss-config.h 헤더의 파라미터 블록 구조와 v4l2_isp_block_header 정렬 사양을 대조해야 합니다.",
+        "action_items": [
+          "linux-media 패치 시리즈의 qcom-camss-config.h 헤더 파라미터 블록 레이아웃 검토",
+          "OPE 파이프라인 input/output 포맷 표준 정의와 드라이버 메타데이터 전달 구조체 확인"
+        ],
+        "team_share_points": "Qualcomm CAMSS ISP의 uAPI 메타데이터 구조가 v4l2-isp 공통 기반으로 정립 중이므로 드라이버 개발 시 uAPI 헤더 변경을 주시해야 합니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 10월 6일 v10 리비전 메일링 리스트 리뷰를 통해 CAMSS uAPI 구조체 공통화 논의가 업데이트되었습니다.",
+        "reader_owners": [
+          "camera_driver_owner",
+          "soc_platform_owner"
+        ],
+        "check_within_2_weeks": "qcom-camss-config.h uAPI 파라미터 구조체 및 v4l2_isp_block_header 버전 점검",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "v10 패치 시리즈 중 5번째 문서화 패치 조각이므로 전체 파치 시리즈가 Linux 메인라인에 완전 머지된 것으로 서술하지 마십시오.",
+          "Android HAL 직접 API 규격이 수정된 것으로 과장하지 마십시오."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "claim-887836-1",
+          "text": "2026년 10월 6일 linux-media 메일링 리스트에 PATCH v10 5/9 패치 문서 리뷰 의견이 접수되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:88783652821718ad:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim-887836-2",
+          "text": "V4L2_META_FMT_QCOM_ISP_PARAMS 포맷은 V4L2 확장 가능한 ISP 파라미터 시스템 기반으로 qcom-camss-config.h uAPI 헤더에 블록별 구조체를 정의합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:88783652821718ad:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "claim-887836-3",
+          "text": "Offline Processing Engine(OPE)의 ope_params 노드가 해당 파라미터 메타데이터의 첫 번째 소비자입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:88783652821718ad:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "CAMSS OPE 파라미터 메타데이터 구조체 연동 및 uAPI 헤더 버전 확인"
+      ],
+      "action_hints": [
+        "qcom-camss-config.h uAPI 변경 사항 모니터링"
+      ],
+      "action_items": [
+        "linux-media 패치 시리즈의 qcom-camss-config.h 헤더 파라미터 블록 레이아웃 검토"
+      ],
+      "is_ai_related": false,
+      "article_type": "technical_report",
+      "imageCandidates": [
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v097103d8ccd7b257790809ea4cc5e5fee6daa6e24890a4af388296e58364bc31/androidsource/images/lockup.png",
+          "sourceUrl": "https://source.android.com/docs/core/camera",
+          "articleUrl": "https://source.android.com/docs/core/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Open Source Project",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "aosp-camera-docs",
+          "validationStatus": "ok",
+          "contentLength": 4824
+        },
+        {
+          "url": "https://source.android.com/_static/images/translated.svg?hl=bn",
+          "sourceUrl": "https://source.android.com/docs/core/camera",
+          "articleUrl": "https://source.android.com/docs/core/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "aosp-camera-docs",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://source.android.com/static/docs/core/camera/images/ape_fwk_hal_camera.png?hl=bn",
+          "sourceUrl": "https://source.android.com/docs/core/camera",
+          "articleUrl": "https://source.android.com/docs/core/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Camera HAL আইকন",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "aosp-camera-docs",
+          "validationStatus": "ok",
+          "contentLength": 2242
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "No valid high-quality image provided in source material.",
+      "sources": [
+        {
+          "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+          "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+        }
+      ],
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_driver_owner",
+        "soc_platform_owner"
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+      "source_candidate_hash": "88783652821718ad0180e28fd8b0675adf32b3087055dbef2924df2619b78cfa",
+      "article_group_key": "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "cameraserver 센서 프라이버시 음소거 제안(Gerrit 4348947) 검토 및 HAL 세션 상태 전이 영향 분석",
+    "Qualcomm CAMSS ISP v10 패치(V4L2_META_FMT_QCOM_ISP_PARAMS) uAPI 메타데이터 구조 및 OPE 파라미터 블록 검토",
+    "ChromiumOS platform2 카메라 스택의 mojom 핸들 마이그레이션 패치(Gerrit 8506716) IPC 바인딩 변경점 확인"
+  ],
+  "references": [
+    {
+      "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+      "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [
+    {
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "hard_block_reason": "thin-week salvage dropped unpublishable article",
+      "reason_code": "quality_hard_blocker"
+    },
+    {
+      "article_group_key": "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+      "hard_block_reason": "thin-week salvage dropped unpublishable article",
+      "reason_code": "quality_hard_blocker"
+    }
+  ],
+  "selected_group_count": 3,
+  "rendered_group_count": 1,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 2,
+  "selected_representative_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+    "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com",
+    "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+  ],
+  "rendered_group_keys": [
+    "lore-series:20260925-camss-isp-ope-v10-2622411034cb@oss.qualcomm.com"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+    "article:https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+  ],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "[PATCH 0/3] media: Add GalaxyCore GC5035 and GC8034 sensor drivers",
+      "url": "https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-09",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "[PATCH 0/2] media: i2c: Add OmniVision OV3660 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-08",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "[PATCH v1 0/2] media: support upside-down camera mounting",
+      "url": "https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-07",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "[PATCH v3 0/2] media: rkisp1: Add YUV bypass support for rkisp1",
+      "url": "https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-06",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    }
+  ],
+  "tags": [
+    "Driver",
+    "Image Processing",
+    "SoC Platform"
+  ],
+  "coverage_week_key": "2026-W41",
+  "coverage_start_date": "2026-10-05",
+  "coverage_end_date": "2026-10-11",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-10-12",
+  "intro_letter": "이번 주 뉴스레터에서는 Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의 소식을 전해드립니다. Qualcomm CAMSS 하위 시스템의 ISP 파라미터를 제어하기 위한 V4L2 메타데이터 포맷 문서화 패치 시리즈가 v10 리비전으로 검토되고 있으니 많은 관심 부탁드립니다.",
+  "weekly_key": "2026-W42",
+  "week_start_date": "2026-10-12",
+  "week_end_date": "2026-10-18"
+}

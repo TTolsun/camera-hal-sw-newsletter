@@ -1,0 +1,1324 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "generated_at": "2026-10-11T15:19:07.758Z",
+  "status": "OK",
+  "failure_stage": "",
+  "failure_reason": "",
+  "selection_errors": [],
+  "selection_warnings": [],
+  "selection_shortage_hints": [
+    "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect.",
+    "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present.",
+    "Keep forbidden buckets out of main article selection: generic_tech_watchlist."
+  ],
+  "review_gate_passed": true,
+  "publish_gate_passed": true,
+  "gate_summary": {
+    "review_gate_passed": true,
+    "publish_gate_passed": true,
+    "non_fallback_reviewable_article_count": 3,
+    "primary_camera_stack_topic_count": 3,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "eligible_non_fallback_reviewable_article_count": 11,
+    "min_final_articles": 1,
+    "max_final_articles": 5,
+    "absolute_min_reviewable_articles": 0,
+    "min_non_fallback_publish_ready_articles": 0,
+    "selected_article_count": 3
+  },
+  "coverage_week_key": "2026-W41",
+  "coverage_start_date": "2026-10-05",
+  "coverage_end_date": "2026-10-11",
+  "generation_anchor_date": "2026-10-12",
+  "composition_mode": "NORMAL",
+  "composition_reason": "Normal composition: Primary Camera Stack topics satisfy the Newsletter Policy without supporting main articles.",
+  "composition_summary": {
+    "selected_article_count": 3,
+    "bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 2,
+      "android": 0,
+      "android_supporting": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 2,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 3,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 3,
+    "fallback_topic_count": 0
+  },
+  "eligible_composition_summary": {
+    "selected_article_count": 12,
+    "bucket_counts": {
+      "direct_aosp_camera": 1,
+      "camera_driver_image_pipeline": 10,
+      "android": 0,
+      "android_supporting": 0,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 1
+    },
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 10,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 1,
+    "primary_camera_stack_topic_count": 11,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 1,
+    "non_fallback_reviewable_article_count": 11,
+    "fallback_topic_count": 0
+  },
+  "headline_decision": {
+    "decision": "latest_camera_hal_article",
+    "reason": "latest_camera_hal_article",
+    "current_headline_key": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+    "replacement_headline_key": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+    "previous_stored_current_score": null,
+    "runtime_decayed_score": null,
+    "last_scored_at": null,
+    "scored_at": "2026-10-12",
+    "retained": false,
+    "replaced": true,
+    "cleared": false,
+    "seeded": false,
+    "injected": false,
+    "snapshot_revalidated": true,
+    "revalidation_failure_reason": "",
+    "selected_normally": true,
+    "latest_inclusion_required": false,
+    "removed_due_to_headline_inclusion_count": 0,
+    "public_rendered_headline_key": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+    "public_render_reconciled": true,
+    "public_render_reconciliation_reason": "selected_headline_not_rendered_in_public_issue"
+  },
+  "headline_latest_inclusion": {
+    "included": false,
+    "mode": "none",
+    "injected_from_snapshot": false,
+    "snapshot_revalidated": true,
+    "removed_due_to_headline_inclusion_count": 0
+  },
+  "removed_due_to_headline_inclusion": [],
+  "article_exposure_coverage": {
+    "mode": "forward_only",
+    "coverage_starts_at": "2026-07-27",
+    "backfill_included": true
+  },
+  "candidate_pool_preflight_passed": true,
+  "candidate_shortage_reviewable": false,
+  "candidate_shortage_summary": {
+    "publishable_candidate_count": 12,
+    "required_publishable_candidate_count": 1,
+    "reserve_candidate_count": 4,
+    "required_reserve_candidate_count": 0,
+    "primary_camera_stack_candidate_count": 11,
+    "required_primary_camera_stack_candidate_count": 0,
+    "camera_stack_candidate_count": 11,
+    "required_camera_stack_candidate_count": 0,
+    "direct_camera_or_driver_candidate_count": 11,
+    "camera_adjacent_candidate_count": 0,
+    "supporting_candidate_count": 0,
+    "selected_article_count": 3,
+    "selected_primary_camera_stack_count": 3
+  },
+  "shortage_reason_codes": [],
+  "source_parser_hints": [
+    {
+      "code": "SOURCE_COVERAGE_REVIEW",
+      "source_id": "unknown",
+      "reason": "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect."
+    },
+    {
+      "code": "CAMERA_DRIVER_SOURCE_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    },
+    {
+      "code": "CANDIDATE_POOL_SHORTAGE",
+      "source_id": "unknown",
+      "reason": "Keep forbidden buckets out of main article selection: generic_tech_watchlist."
+    }
+  ],
+  "counts": {
+    "input_candidate_count": 61,
+    "eligible_candidate_count": 12,
+    "selected_article_count": 3,
+    "deterministic_selected_count": 3,
+    "reserve_candidate_count": 4,
+    "direct_aosp_camera_count": 1,
+    "camera_driver_image_pipeline_count": 2,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_topic_count": 3,
+    "supporting_main_article_count": 0,
+    "forbidden_main_article_count": 0,
+    "non_fallback_reviewable_article_count": 3
+  },
+  "release_class_catch_up": {
+    "pool_size": 0,
+    "admitted": 0,
+    "blocked_reason": "no_eligible_candidate",
+    "evidence_unchecked_skips": 0
+  },
+  "release_class_catch_up_after_reconciliation": {
+    "pool_size": 0,
+    "admitted": 0,
+    "blocked_reason": "no_eligible_candidate"
+  },
+  "republication_cooldown_blocked": {
+    "history_loaded": true,
+    "history_main_article_count": 39,
+    "count": 2,
+    "urls": [
+      "https://lore.kernel.org/linux-media/20261011-upstream-s5k3t2-v4-0-d33b12fb3263@proton.me/",
+      "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html"
+    ]
+  },
+  "evidence_unchecked_main_blocked": {
+    "count": 0,
+    "candidate_urls": []
+  },
+  "eligible_candidate_urls": [
+    "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+    "https://source.android.com/docs/core/camera",
+    "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+    "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+    "https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog/",
+    "https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com/",
+    "https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com/",
+    "https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com/",
+    "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+    "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+    "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+    "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690"
+  ],
+  "exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 32
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 30
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 30
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 22
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 21
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 21
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 12
+    },
+    {
+      "reason": "finalSelectionEligibility=unknown",
+      "count": 11
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 11
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 11
+    }
+  ],
+  "final_exclusion_reason_summary": [
+    {
+      "reason": "final_selection_blocked=true",
+      "count": 32
+    },
+    {
+      "reason": "main_eligible=false",
+      "count": 30
+    },
+    {
+      "reason": "source_gap_risk=true",
+      "count": 30
+    },
+    {
+      "reason": "reference_only=true",
+      "count": 22
+    },
+    {
+      "reason": "briefing_only=true",
+      "count": 21
+    },
+    {
+      "reason": "finalSelectionEligibility=watchlist",
+      "count": 21
+    },
+    {
+      "reason": "missing dated evidence",
+      "count": 12
+    },
+    {
+      "reason": "finalSelectionEligibility=unknown",
+      "count": 11
+    },
+    {
+      "reason": "selection_window=reference_not_main",
+      "count": 11
+    },
+    {
+      "reason": "selection_window=unknown_not_main",
+      "count": 11
+    }
+  ],
+  "candidate_diagnostics": [
+    {
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "stage": "selected",
+      "base_total": 120,
+      "total": 122,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "direct_aosp_camera",
+      "final_selection_eligibility": "main"
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+      "stage": "selected",
+      "base_total": 120,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "main"
+    },
+    {
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+      "stage": "selected",
+      "base_total": 117,
+      "total": 119,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog",
+      "stage": "reserve",
+      "base_total": 118,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com",
+      "stage": "reserve",
+      "base_total": 118,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com",
+      "stage": "reserve",
+      "base_total": 118,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com",
+      "stage": "reserve",
+      "base_total": 118,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://source.android.com/docs/core/camera",
+      "stage": "shortlisted",
+      "base_total": 43,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "main"
+    },
+    {
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "stage": "shortlisted",
+      "base_total": 116,
+      "total": 118,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "stage": "shortlisted",
+      "base_total": 116,
+      "total": 118,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "stage": "shortlisted",
+      "base_total": 116,
+      "total": 118,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "stage": "shortlisted",
+      "base_total": 116,
+      "total": 118,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "short"
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261010-kaanapali-camss-v20-0-63e98ce9ac0c@oss.qualcomm.com",
+      "stage": "excluded",
+      "base_total": 93,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261007090041.3732717-1-gjorgji.rosikopulos@oss.qualcomm.com",
+      "stage": "excluded",
+      "base_total": 89,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20261009",
+      "stage": "excluded",
+      "base_total": 59,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "trend_reference_project"
+      ],
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "watch page without dated evidence",
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://docs.qualcomm.com/securitybulletin/october-2026-bulletin.html",
+      "stage": "excluded",
+      "base_total": 90,
+      "total": 92,
+      "camera_hal_directness": 5,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
+      "stage": "excluded",
+      "base_total": 12,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://www.phoronix.com/news/qualcomm-msm-drm-hdr",
+      "stage": "excluded",
+      "base_total": 12.55,
+      "camera_hal_directness": 2.95,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://community.arm.com/arm-community-blogs/b/mobile-graphics-and-gaming-blog/posts/diagnosing-vk-error-device-lost-on-mali-gpus-with-vk-ext-device-fault",
+      "stage": "excluded",
+      "base_total": 19,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
+      "stage": "excluded",
+      "base_total": 73.55,
+      "camera_hal_directness": 2.95,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://lwn.net/articles/1098670",
+      "stage": "excluded",
+      "base_total": 95.85,
+      "camera_hal_directness": 2.65,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "short",
+      "source_policy_blockers": [
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "final_selection_blocked=true"
+      ]
+    },
+    {
+      "url": "https://www.phoronix.com/news/linux-ai-agent-resources",
+      "stage": "excluded",
+      "base_total": 1,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://www.phoronix.com/news/sashiko-linux-ai-metrics",
+      "stage": "excluded",
+      "base_total": -8.85,
+      "camera_hal_directness": 2.35,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://www.phoronix.com/news/ubuntu-26.10-gcc-15-default",
+      "stage": "excluded",
+      "base_total": 65.45,
+      "camera_hal_directness": 2.05,
+      "scope_relevance": 3,
+      "freshness_window": "primary",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://www.raspberrypi.com/news/seeing-understanding-and-responding-low-power-cnn-vlm-and-slm-workloads-on-raspberry-pi-5",
+      "stage": "excluded",
+      "base_total": 6.45,
+      "camera_hal_directness": 2.05,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/arm-a-profile-architecture-developments-2026",
+      "stage": "excluded",
+      "base_total": -24.25,
+      "camera_hal_directness": 1.75,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://lwn.net/articles/1099764",
+      "stage": "excluded",
+      "base_total": -30.95,
+      "camera_hal_directness": 1.45,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://www.collabora.com/news-and-blog/news-and-events/usb-c-displayport-alt-mode-on-rockchip-rk3588-and-rk3576-starting-with-the-flipper-one.html",
+      "stage": "excluded",
+      "base_total": -30.95,
+      "camera_hal_directness": 1.45,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://lwn.net/articles/1099602",
+      "stage": "excluded",
+      "base_total": -21.65,
+      "camera_hal_directness": 1.15,
+      "scope_relevance": 0,
+      "freshness_window": "primary",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://community.arm.com/arm-community-blogs/b/tools-software-ides-blog/posts/what-is-new-in-llvm-23",
+      "stage": "excluded",
+      "base_total": 68.55,
+      "camera_hal_directness": 2.95,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false"
+      ]
+    },
+    {
+      "url": "https://www.collabora.com/news-and-blog/news-and-events/mesa-on-android-how-we-brought-turnip,-skiavk,-and-cuttlefish-to-ci.html",
+      "stage": "excluded",
+      "base_total": -19.55,
+      "camera_hal_directness": 2.05,
+      "scope_relevance": 0,
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://www.collabora.com/news-and-blog/news-and-events/building-gpu-drivers-in-rust-tyr-at-rustconf-2026.html",
+      "stage": "excluded",
+      "base_total": -3.55,
+      "camera_hal_directness": 2.05,
+      "scope_relevance": 0,
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://www.raspberrypi.com/news/turn-text-input-into-actions-with-needle-a-14mb-function-calling-llm",
+      "stage": "excluded",
+      "base_total": 1.45,
+      "camera_hal_directness": 2.05,
+      "scope_relevance": 0,
+      "freshness_window": "fallback",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "candidate_only_without_primary_confirmation",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://www.collabora.com/news-and-blog/news-and-events/decoding-with-rockchip-at-kernel-recipes-2026.html",
+      "stage": "excluded",
+      "base_total": -19,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/c-in-the-age-of-ai-visual-studio-at-cppcon-2026",
+      "stage": "excluded",
+      "base_total": -12.95,
+      "camera_hal_directness": 2.45,
+      "scope_relevance": 0,
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-7-18-10",
+      "stage": "excluded",
+      "base_total": -19.65,
+      "camera_hal_directness": 2.15,
+      "scope_relevance": 0,
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/msvc-c23-constexpr-cmath-with-llvm-libc",
+      "stage": "excluded",
+      "base_total": 56.35,
+      "camera_hal_directness": 2.15,
+      "scope_relevance": 3,
+      "freshness_window": "reference",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-september-2026",
+      "stage": "excluded",
+      "base_total": -15.65,
+      "camera_hal_directness": 2.15,
+      "scope_relevance": 0,
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/faster-c-code-intelligence-for-copilot-cli-with-whole-codebase-indexing",
+      "stage": "excluded",
+      "base_total": -39.05,
+      "camera_hal_directness": 1.55,
+      "scope_relevance": 0,
+      "freshness_window": "fallback",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/bringing-correctly-rounded-math-to-production-with-llvm-libc",
+      "stage": "excluded",
+      "base_total": 42.55,
+      "camera_hal_directness": 0.95,
+      "scope_relevance": 3,
+      "freshness_window": "reference",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "cross_check_required_but_missing"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+      "stage": "excluded",
+      "base_total": -8,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "reference",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true",
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://android-developers.googleblog.com/2026/10/android-cli-device-streaming-and-skills.html",
+      "stage": "excluded",
+      "base_total": 99,
+      "camera_hal_directness": 3,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "short",
+      "exclusion_reasons": [
+        "final_selection_blocked=true"
+      ]
+    },
+    {
+      "url": "https://android-developers.googleblog.com/2026/09/jetpack-compose-ai-native-ui-instagram-direct.html",
+      "stage": "excluded",
+      "base_total": 83,
+      "camera_hal_directness": 5,
+      "scope_relevance": 2,
+      "freshness_window": "fallback",
+      "relevance_bucket": "android",
+      "final_selection_eligibility": "exclude",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=exclude",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "stage": "excluded",
+      "base_total": -3,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "fallback",
+      "relevance_bucket": "generic_tech_watchlist",
+      "final_selection_eligibility": "watchlist",
+      "source_policy_blockers": [
+        "source_gap_risk",
+        "reference_only"
+      ],
+      "exclusion_reasons": [
+        "finalSelectionEligibility=watchlist",
+        "final_selection_blocked=true",
+        "source_gap_risk=true",
+        "main_eligible=false",
+        "briefing_only=true",
+        "reference_only=true"
+      ]
+    },
+    {
+      "url": "https://github.com/nic-fio/chuwi-hi10x1-cameras",
+      "stage": "excluded",
+      "base_total": -59,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-1-18-6",
+      "stage": "excluded",
+      "base_total": -64,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/rethinking-c-performance-faster-code-navigation-and-github-copilot-tools-with-whole-codebase-indexing",
+      "stage": "excluded",
+      "base_total": -72,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/project-specific-build-optimizations-with-github-copilot",
+      "stage": "excluded",
+      "base_total": -76,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/faster-c-iterative-builds-with-github-copilot",
+      "stage": "excluded",
+      "base_total": -76,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/visualstudio/the-visual-studio-debugger-agentic-workflow-gets-a-test-driven-upgrade",
+      "stage": "excluded",
+      "base_total": -66,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/msvc-version-1451-available",
+      "stage": "excluded",
+      "base_total": -76,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/c-performance-improvements-in-msvc-build-tools-v14-51",
+      "stage": "excluded",
+      "base_total": -60,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/nuget-packagereference-for-c-projects-in-visual-studio",
+      "stage": "excluded",
+      "base_total": -26,
+      "camera_hal_directness": 3,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/visualstudio/visual-studio-july-update-meet-the-new-agent-powered-by-copilot-sdk",
+      "stage": "excluded",
+      "base_total": -64,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-july-2026",
+      "stage": "excluded",
+      "base_total": -64,
+      "camera_hal_directness": 0,
+      "scope_relevance": 0,
+      "freshness_window": "unknown",
+      "relevance_bucket": "generic_tech_watchlist",
+      "exclusion_reasons": [
+        "missing dated evidence",
+        "finalSelectionEligibility=unknown",
+        "selection_window=unknown_not_main"
+      ]
+    },
+    {
+      "url": "https://github.com/android/ndk/releases/tag/r30",
+      "stage": "excluded",
+      "base_total": 94,
+      "camera_hal_directness": 3,
+      "scope_relevance": 3,
+      "freshness_window": "reference",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "short",
+      "exclusion_reasons": [
+        "selection_window=reference_not_main"
+      ]
+    },
+    {
+      "url": "https://lore.kernel.org/linux-media/20261011-upstream-s5k3t2-v4-0-d33b12fb3263@proton.me",
+      "stage": "excluded",
+      "base_total": 128,
+      "camera_hal_directness": 5,
+      "scope_relevance": 4,
+      "freshness_window": "primary",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "final_selection_eligibility": "main",
+      "exclusion_reasons": [
+        "published as a main article within the republication cooldown"
+      ]
+    },
+    {
+      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "stage": "excluded",
+      "base_total": 99,
+      "camera_hal_directness": 3,
+      "scope_relevance": 3,
+      "freshness_window": "fallback",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "final_selection_eligibility": "short",
+      "exclusion_reasons": [
+        "published as a main article within the republication cooldown"
+      ]
+    }
+  ],
+  "candidate_diagnostics_count": 58,
+  "candidate_diagnostics_not_evaluated": 3,
+  "candidate_diagnostics_truncated": false,
+  "candidate_score_threshold": 42,
+  "candidate_selection_note": "Reporter-selected candidates are not necessarily publishable. Publication readiness is determined by deterministic final selection and quality validation."
+}

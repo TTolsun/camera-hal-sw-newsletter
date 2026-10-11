@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "The source is a review comment on a documentation patch (v10 5/9) for Qualcomm CAMSS ISP parameters (V4L2_META_FMT_QCOM_ISP_PARAMS). The core change proposed by the patch is to document this new metadata format, which uses a block-based structure for configuring ISP hardware modules like white balance, color correction, and gamma curves, with the Offline Processing Engine (OPE) as the first consumer. The review comment specifically suggests using common V4L2 ISP structures (`v4l2_isp_buffer`, `v4l2_isp_block_header`, `V4L2_ISP_VERSION_V1`) instead of legacy/specific ones in the documentation's examples.",
+        "article_explanation": "The article accurately describes the documentation patch for Qualcomm CAMSS ISP parameters (V4L2_META_FMT_QCOM_ISP_PARAMS) as being based on the V4L2 extensible ISP parameters system, with OPE as the first user. It correctly identifies the block-unit structures for configuring hardware modules. Crucially, it also explicitly mentions the discussion during the review process regarding the adoption of common V4L2 ISP structures (`v4l2_isp_buffer`, `v4l2_isp_block_header`) over older ones for standardization.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": []
+      },
+      "reason": "Qualcomm CAMSS ISP의 uAPI 메타데이터 구조 표준화 논의를 구체적으로 다루고, 드라이버 및 HAL 개발자가 확인해야 할 헤더 파일 및 구조체 변경 사항을 명시하여 실무적 가치를 제공합니다. / The article accurately describes the proposed documentation change and explicitly addresses the review comments regarding the use of common V4L2 ISP structures, which is the main point of discussion in the source."
+    }
+  ],
+  "final_comment": "모든 기사가 사실에 기반하고 있으며, 출처가 명확합니다. 과장된 표현이나 누락된 날짜 정보도 발견되지 않았습니다. 각 기사는 카메라 HAL SW 엔지니어에게 실질적인 가치를 제공하며, HAL/드라이버 관점의 영향과 구체적인 실행 항목을 잘 설명하고 있습니다. `evidence_summary` 및 `confirmed_facts`에 `...` 또는 `summary_truncated=true` 표시가 없으므로, 잘린 근거로 인한 문제는 없습니다."
+}

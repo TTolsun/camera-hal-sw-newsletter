@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-10-05T00:00:00+09:00",
+  "updated_at": "2026-10-12T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-    "title": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
-    "summary": "Android 17 Camera ITS를 준비할 때 맞춰야 할 것은 Python 패키지 목록만이 아닙니다. Python과 FFmpeg 실행 파일의 버전, 테스트 차트, CTS Verifier의 활동 구성을 함께 확인해야 합니다.",
-    "source_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
-    "newsletter_date": "2026-10-05",
-    "newsletter_url": "newsletters/2026-10-05/index.html",
-    "selected_at": "2026-10-05",
+    "article_identity_key": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+    "title": "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의",
+    "summary": "Qualcomm CAMSS 하위 시스템의 ISP 파라미터를 제어하기 위한 V4L2 메타데이터 포맷 문서화 패치 시리즈가 v10 리비전으로 검토되고 있습니다.",
+    "source_url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+    "newsletter_date": "2026-10-12",
+    "newsletter_url": "newsletters/2026-10-12/index.html",
+    "selected_at": "2026-10-12",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-10-05",
+    "last_scored_at": "2026-10-12",
     "date_evidence": {
-      "date": "2026-10-01",
-      "date_field": "effective_date",
-      "evidence_level": "",
+      "date": "2026-10-06T08:19:09Z",
+      "date_field": "published_date",
+      "evidence_level": "watch",
       "publish_ready_date_evidence": true
     },
     "quality_flags": {
@@ -28,7 +28,7 @@
       "base_score": 100,
       "official_source_bonus": 8,
       "camera_bucket_bonus": 6,
-      "driver_or_soc_bonus": 0,
+      "driver_or_soc_bonus": 3,
       "fallback_penalty": 0,
       "generic_topic_penalty": 0,
       "source_gap_penalty": 0,
@@ -37,14 +37,59 @@
       "total": 100
     },
     "snapshot": {
-      "category": "direct_aosp_camera",
-      "source_name": "aosp-camera-its-release-notes"
+      "category": "camera_driver_image_pipeline",
+      "source_name": "lore.kernel.org linux-media list"
     },
-    "newsletter_article_url": "newsletters/2026-10-05/index.html#article-android-17-camera-its",
-    "image_url": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png",
-    "image_alt": "Android Open Source Project"
+    "newsletter_article_url": "newsletters/2026-10-12/index.html#article-qualcomm-camss-isp-uapi-v10",
+    "image_url": "assets/images/fallback/newsletter-default.svg",
+    "image_alt": "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "title": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+      "summary": "Android 17 Camera ITS를 준비할 때 맞춰야 할 것은 Python 패키지 목록만이 아닙니다. Python과 FFmpeg 실행 파일의 버전, 테스트 차트, CTS Verifier의 활동 구성을 함께 확인해야 합니다.",
+      "source_url": "https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+      "newsletter_date": "2026-10-05",
+      "newsletter_url": "newsletters/2026-10-05/index.html",
+      "selected_at": "2026-10-05",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-10-05",
+      "date_evidence": {
+        "date": "2026-10-01",
+        "date_field": "effective_date",
+        "evidence_level": "",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "direct_aosp_camera",
+        "source_name": "aosp-camera-its-release-notes"
+      },
+      "newsletter_article_url": "newsletters/2026-10-05/index.html#article-android-17-camera-its",
+      "image_url": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png",
+      "image_alt": "Android Open Source Project",
+      "replaced_at": "2026-10-12",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
       "title": "안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원",

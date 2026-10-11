@@ -1,0 +1,698 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 90,
+    "threshold": 60,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 3,
+    "locked_article_count": 3,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+      "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+      "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+    ],
+    "locked_article_headlines": [
+      "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+      "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+      "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+        ],
+        "source_titles": [
+          "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+        ],
+        "source_titles": [
+          "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+        ],
+        "source_titles": [
+          "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+        ],
+        "action": "repair-section",
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "sources": [
+          "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "sources": [
+          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+        ],
+        "action": "repair-section",
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+        ],
+        "source_titles": [
+          "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+        ],
+        "source_titles": [
+          "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+        ],
+        "source_titles": [
+          "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 2,
+      "ai_camera_path_hal_workflow": 1,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  },
+  {
+    "attempt": 2,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.5-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-2.5-flash",
+    "score": 90,
+    "threshold": 60,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 3,
+    "locked_article_count": 3,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [
+      {
+        "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+        "source": "AOSP Gerrit (camera changes under review)",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+        "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+        "source": "lore.kernel.org linux-media list",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+        "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+        "source": "ChromeOS Gerrit (platform2 camera merged changes)",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+        "source": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+        "source": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+        "source": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+      "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+      "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+    ],
+    "locked_article_headlines": [
+      "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+      "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+      "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+        ],
+        "source_titles": [
+          "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+        ],
+        "source_titles": [
+          "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+        ],
+        "source_titles": [
+          "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+        ],
+        "action": "repair-section",
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "sources": [
+          "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+        ],
+        "action": "repair-section",
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토"
+          }
+        ],
+        "recommended_fixes": []
+      },
+      {
+        "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "sources": [
+          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+        ],
+        "action": "repair-section",
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지"
+          }
+        ],
+        "recommended_fixes": []
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947"
+        ],
+        "source_titles": [
+          "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/"
+        ],
+        "source_titles": [
+          "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "category": "camera_driver_image_pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716"
+        ],
+        "source_titles": [
+          "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 0,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 2,
+      "ai_camera_path_hal_workflow": 1,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [
+      {
+        "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+        "source": "AOSP Gerrit (camera changes under review)",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+        "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+        "source": "lore.kernel.org linux-media list",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+        "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+        "source": "ChromeOS Gerrit (platform2 camera merged changes)",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "cameraserver: 센서 프라이버시 활성화 시 무조건 차단 대신 카메라 음소거 동작 제안",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+        "source": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Qualcomm CAMSS ISP 파라미터 메타데이터 형식 v10 패치 및 uAPI 문서화 검토",
+        "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+        "source": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "ChromeOS platform2 카메라 모듈: legacy handle에서 mojom handle로 마이그레이션 머지",
+        "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+        "source": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

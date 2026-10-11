@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "generated_at": "2026-10-11T15:15:11.123Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 3,
+    "miss_count": 9,
+    "by_url_hit_count": 3,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 8
+    },
+    {
+      "reason": "url-hit",
+      "count": 3
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "source": "AOSP Gerrit (camera changes under review)",
+      "published_date": "2026-10-07",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+        "url_hash": "d584298342e95060848eabc0ff7b7c5544f9d641a22b2ace41d89e256360fafc",
+        "published_date": "2026-10-07",
+        "content_hash": "63a39a0e3c4207f045a4f0c4e6f4dc09eba3f3846918d81d363c0127bf4c145f"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Camera | Android OS core topics | Android Open Source Project",
+      "url": "https://source.android.com/docs/core/camera",
+      "source": "aosp-camera-docs",
+      "published_date": "",
+      "cache_key": {
+        "normalized_url": "https://source.android.com/docs/core/camera",
+        "url_hash": "2e09be47b7d035b1b1509fe59f1caf95edd44bab9f4919926cd7de56c0bd6f6a",
+        "published_date": "",
+        "content_hash": "932a9ca28544583f1f56816feb9ef56b712170aed3a43619725cd3c8caba561d"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+      "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-06T08:19:09Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+        "url_hash": "88783652821718ad0180e28fd8b0675adf32b3087055dbef2924df2619b78cfa",
+        "published_date": "2026-10-06T08:19:09Z",
+        "content_hash": "9457244fa37f83a26d47d44c9e5ad8c63e1fc479c5bf696d7abe9f4f708824c8"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "published_date": "2026-10-07",
+      "cache_key": {
+        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+        "url_hash": "213fab6f32ddbcb90fbc1b8674665dadeb26612c642e897555c2389b89de1a1d",
+        "published_date": "2026-10-07",
+        "content_hash": "65d8981485e02d230e54961075effd93670ec0d1e79417aae7eb6a052ab96538"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/2] media: i2c: Add OmniVision OV3660 image sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-08T16:07:17Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog",
+        "url_hash": "53b0c64b80129a099d091349dffd234a5d6432dd3298a3502050dfbf1052a1aa",
+        "published_date": "2026-10-08T16:07:17Z",
+        "content_hash": "cc4f399b283af77adeb6649d12456bd7457d0a0a4c82d2876e6f34c2327f7d60"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH 0/3] media: Add GalaxyCore GC5035 and GC8034 sensor drivers",
+      "url": "https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-09T07:27:53Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com",
+        "url_hash": "e50034884075f30b11b28850a268452924be624ebfa90c6094e7a053f002d35b",
+        "published_date": "2026-10-09T07:27:53Z",
+        "content_hash": "074f769b9fbea0e94a450b747e441fd63ab8b32c1f1c3cc9062fb6702a9686d6"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v1 0/2] media: support upside-down camera mounting",
+      "url": "https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-07T03:49:57Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com",
+        "url_hash": "337511017b3d93b790120a23639b11f4ee9a8c8969fcf51a45786d4d21861cbe",
+        "published_date": "2026-10-07T03:49:57Z",
+        "content_hash": "ecfaf45c2783064594f260ded7fa98657d9204ead14b956f37c7bef492d8e1dc"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v3 0/2] media: rkisp1: Add YUV bypass support for rkisp1",
+      "url": "https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-06T10:28:49Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com",
+        "url_hash": "761cd73ab222ce6bb6d8b33a1eee938d62d2f027efdfc91b94c7fee9982b778d",
+        "published_date": "2026-10-06T10:28:49Z",
+        "content_hash": "820efa6037726cf4d7a8bc69bcd74bde0bfa60cc335ca4118a5f8ecad8271dc9"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "published_date": "2026-09-30",
+      "cache_key": {
+        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+        "url_hash": "70779ee88af5f0a0703dd6edcb237705543616f9b933c0834734cd65be2ea4ec",
+        "published_date": "2026-09-30",
+        "content_hash": "e68130b0377742414ce107a5aac768f187f5c3aaf4fe2c57a78c9d0109697058"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "published_date": "2026-09-30",
+      "cache_key": {
+        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+        "url_hash": "8c3e4fdd73ea030192349fe8041514ed0b975cac3bcb1595f3f08fa970b342b6",
+        "published_date": "2026-09-30",
+        "content_hash": "6df266fd0188856e48a201cd3745ae8ca86362b0247aeebfe0a0ed98ee81f961"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/8c3e4fdd73ea030192349fe8041514ed0b975cac3bcb1595f3f08fa970b342b6.json"
+    },
+    {
+      "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "published_date": "2026-09-30",
+      "cache_key": {
+        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+        "url_hash": "8d28e7d3853c3aef581b29e4ce236e99d3e681dc47b6e0ad350684f0e970ad65",
+        "published_date": "2026-09-30",
+        "content_hash": "761417cff1a70c7c5e18efb738686df6fd0fb689615e53438a706e447ef71624"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/8d28e7d3853c3aef581b29e4ce236e99d3e681dc47b6e0ad350684f0e970ad65.json"
+    },
+    {
+      "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "published_date": "2026-09-30",
+      "cache_key": {
+        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+        "url_hash": "5383bfc0408ae81d2bc6432bfa1d6ac59a99d9509ab71e4b3359ff9e6fe4d60f",
+        "published_date": "2026-09-30",
+        "content_hash": "42e0882377d41cb12edad0f132465e5adb2aebcc8bee83fc1b544e3bbd220655"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/5383bfc0408ae81d2bc6432bfa1d6ac59a99d9509ab71e4b3359ff9e6fe4d60f.json"
+    }
+  ]
+}
