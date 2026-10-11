@@ -134,6 +134,24 @@ test('editorFacingEditorialPlan은 null/비배열을 안전하게 통과한다',
   assert.deepEqual(editorFacingEditorialPlan({ x: 1 }), { x: 1 });
 });
 
+test('editorial HAL impact is constrained by the same candidate evidence, not importance or another article', () => {
+  const item = { title: 'CameraService privacy policy', url: 'https://example.com/framework',
+    source_candidate_hash: 'framework', direct_hal_impact: true, impact_level: 'Direct Impact',
+    coverage_decision: 'main_article' };
+  const capsule = { url: item.url, source_candidate_hash: item.source_candidate_hash,
+    allowed_claim_evidence: [{ supports_direct_hal_contract: false }] };
+  for (const capsules of [[], [capsule], [{ ...capsule, source_candidate_hash: 'another',
+    allowed_claim_evidence: [{ supports_direct_hal_contract: true }] }]]) {
+    const plan = normalizeEditorialPlanReport({ editorial_plans: [item] }, '2026-10-12', capsules).editorial_plans[0];
+    assert.equal(plan.direct_hal_impact, false);
+    assert.equal(plan.coverage_decision, 'main_article');
+    assert.match(plan.source_limitations[0], /실제 변경 계층/);
+  }
+  const supported = { ...capsule, allowed_claim_evidence: [{ supports_direct_hal_contract: true }] };
+  assert.equal(normalizeEditorialPlanReport({ editorial_plans: [item] }, '2026-10-12', [supported])
+    .editorial_plans[0].direct_hal_impact, true);
+});
+
 test('editorialPlanSchema는 plan 식별자와 핵심 추론 필드를 required로 둔다', () => {
   const item = editorialPlanSchema.properties.editorial_plans.items;
   for (const key of [
@@ -175,7 +193,10 @@ test('editorialPlanPrompt는 libcamera 변경을 우선 검토하라고 지시�
 test('editorialPlanSystemPrompt는 assessor 페르소나와 plan 계약을 조립한다', () => {
   const prompt = editorialPlanSystemPrompt();
   assert.match(prompt, /AI editorial assessor/);
-  assert.match(prompt, /selection을 다시 하지 말고/);
+  assert.match(prompt, /selected 표시는 잠정 선택/);
+  assert.match(prompt, /가치가 낮은 잠정 선택은 exclude/);
+  assert.match(prompt, /deterministic reconciler가 출처 자격·상한·최소 기사 수/);
+  assert.doesNotMatch(prompt, /selection을 다시 하지 말고/);
   assert.match(prompt, /Editorial plan contract/);
 });
 

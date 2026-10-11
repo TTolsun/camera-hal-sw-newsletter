@@ -16,7 +16,11 @@ const { editorialPlanSchema } = require('../render/newsletter-schema');
 const { editorialPlanSystemPrompt } = require('./orchestrator-stage-prompts');
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
 
-function normalizeEditorialPlanReport(value, date) {
+function normalizeEditorialPlanReport(value, date, capsules = []) {
+  const hasDirectEvidence = item => ensureArray(capsules).some(capsule =>
+    capsule.url === item?.url && capsule.source_candidate_hash === item?.source_candidate_hash &&
+    Boolean(capsule.url && capsule.source_candidate_hash) &&
+    ensureArray(capsule.allowed_claim_evidence).some(evidence => evidence.supports_direct_hal_contract === true));
   return {
     schema_version: Number(value?.schema_version || 1),
     date,
@@ -27,13 +31,19 @@ function normalizeEditorialPlanReport(value, date) {
       source_candidate_hash: stringOrEmpty(item?.source_candidate_hash),
       coverage_decision: stringOrEmpty(item?.coverage_decision),
       impact_level: stringOrEmpty(item?.impact_level),
-      direct_hal_impact: item?.direct_hal_impact === true,
+      // Editorial importance cannot manufacture a HAL contract boundary. Keep
+      // the existing claim validator's evidence prerequisite at the plan handoff.
+      direct_hal_impact: item?.direct_hal_impact === true && hasDirectEvidence(item),
       target_description: stringOrEmpty(item?.target_description),
       editorial_angle: stringOrEmpty(item?.editorial_angle),
       why_it_matters: stringOrEmpty(item?.why_it_matters),
       reader_takeaway: stringOrEmpty(item?.reader_takeaway),
       misunderstanding_risks: ensureArray(item?.misunderstanding_risks).map(stringOrEmpty).filter(Boolean),
-      source_limitations: ensureArray(item?.source_limitations).map(stringOrEmpty).filter(Boolean),
+      source_limitations: [
+        ...ensureArray(item?.source_limitations).map(stringOrEmpty).filter(Boolean),
+        ...(item?.direct_hal_impact === true && !hasDirectEvidence(item)
+          ? ['제공된 원문 근거는 직접 HAL 인터페이스 계약 변경을 뒷받침하지 않습니다. 프레임워크·드라이버·도구 등 실제 변경 계층 안에서 설명하세요.'] : [])
+      ],
       // v2 작성 안내(설계 4.3). 이 정규화는 고정 키 목록으로 item을 새로 만들기 때문에,
       // 여기 적지 않은 필드는 스키마와 프롬프트에 있어도 editor까지 가지 못한다.
       narrative_arc: stringOrEmpty(item?.narrative_arc),
@@ -51,7 +61,7 @@ async function buildEditorialPlanReport({ date, articleCapsuleReport, commonCont
     `${commonContext}\n\nSelected article capsule JSON:\n${JSON.stringify(capsuleInputFromReport(articleCapsuleReport, 'shortlisted'), null, 2)}`,
     editorialPlanSchema
   );
-  const normalized = normalizeEditorialPlanReport(result, date);
+  const normalized = normalizeEditorialPlanReport(result, date, articleCapsuleReport?.shortlisted_capsules || articleCapsuleReport?.selected_capsules);
   if (normalized.editorial_plans.length === 0) {
     throw new Error('Editorial plan stage produced no usable editorial_plans');
   }

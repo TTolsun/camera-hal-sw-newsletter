@@ -242,10 +242,11 @@ function cameraHalEditorialVoiceWithPlanPrompt() {
 // freshness/hard-fail)는 결정론 코드가 그대로 담당하므로 plan은 그 안전 봉투 안에서 편집 판단만 한다.
 function editorialPlanPrompt() {
   return [
-    'Editorial plan contract: 제공된 selected article capsule마다 editorial_plans[] item을 하나씩 생성하세요. 이것은 public article prose가 아니라 작성을 안내할 내부 editorial plan입니다.',
+    'Editorial plan contract: 제공된 shortlisted article capsule마다 editorial_plans[] item을 하나씩 생성하세요. 이것은 public article prose가 아니라 작성을 안내할 내부 editorial plan입니다.',
     'title, url, source_candidate_hash는 capsule에서 정확히 echo하세요(매칭용 식별자). 새 값을 만들지 마세요.',
     'coverage_decision은 main_article, exclude 중 하나입니다. impact_level은 Direct Impact, Design Reference, Trend Watch, Exclude 중 하나입니다. 이 값은 내부 추론 결과이며 public 본문에 라벨로 노출하지 않습니다.',
     'AOSP Camera가 최우선이며 GCC·C++ 개발 도구와 AI 개발 도구는 그다음 우선순위의 메인 기사입니다. cpp_ai_tooling_fallback이라는 호환용 버킷 이름 때문에 보조 기사나 짧은 소식으로 강등하지 마세요. Driver보다 먼저 다루되 출처·날짜·품질 자격은 동일하게 확인하세요.',
+    '개발 도구의 중요도는 코딩·빌드·테스트·디버깅·에이전트 작업의 구체적인 기능 변화로 평가하세요. 공식 모델 발표가 코딩 에이전트 역할, 지원 작업, 사용 조건 등 구체적인 개발 워크플로 근거를 제공하면 독립 메인 기사로 평가합니다. 카메라 전용 사례, Camera HAL 통합, HAL 런타임/API 변경이 없다는 이유만으로 exclude하지 마세요. direct_hal_impact=false 또는 Trend Watch도 main_article과 양립합니다. 반대로 원문에 개발 작업 근거가 없는 일반 성능 홍보나 사업 소식은 이 규칙으로 승격하지 마세요.',
     '카메라 관련 코드라는 사실과 독자에게 중요한 변화인지는 구분하세요. Camera ITS·CTS의 검증 요구 변경을 우선 검토하세요. 테스트 변경이라는 이유로 중요도를 낮추지 말고, 실제 변경 범위와 날짜 근거를 확인하세요.',
     '특정 플랫폼 내부의 기계적 타입 표기·IPC 핸들 래퍼 마이그레이션은 기본적으로 exclude하세요. 공개 API/ABI, 소유권·수명, 전달 동작, 오류 조건 또는 호환성 요구가 실제로 달라진다는 원문 근거가 있을 때만 main_article로 제안하세요. 내부 코드가 카메라 버퍼·펜스를 다룬다거나 다른 플랫폼 설계에 참고된다는 일반론은 변경의 중요성에 대한 근거가 아닙니다.',
     'Mali-C55 전원 관리나 ChromeOS 카메라 버퍼 검사처럼 특정 ISP·플랫폼에 한정된 개별 수정은 기본적으로 main_article에서 exclude하여 짧은 참고 링크 후보로 남기세요. 참고 노출은 별도 결정론 경로가 출처·날짜 자격을 확인합니다. 실제 담당 플랫폼과의 관련성 또는 여러 구현에 영향을 주는 공통 문제라는 구체적 근거가 있을 때만 주요 기사로 제안하세요. 일반적인 안정성 개선이나 HAL에도 참고 가능하다는 설명만으로 승격하지 마세요. 제안 중인 패치는 반영된 기능으로 쓰지 마세요.',

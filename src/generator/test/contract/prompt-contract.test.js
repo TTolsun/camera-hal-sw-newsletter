@@ -3,6 +3,14 @@ const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
 
+test('editorial planning evaluates tooling on concrete developer workflow evidence without requiring HAL changes', () => {
+  const prompt = editorialPlanSystemPrompt();
+  assert.match(prompt, /shortlisted article capsule마다/);
+  assert.match(prompt, /카메라 전용 사례, Camera HAL 통합, HAL 런타임\/API 변경이 없다는 이유만으로 exclude하지/);
+  assert.match(prompt, /direct_hal_impact=false 또는 Trend Watch도 main_article과 양립/);
+  assert.match(prompt, /개발 작업 근거가 없는 일반 성능 홍보나 사업 소식은 이 규칙으로 승격하지/);
+});
+
 const {
   articleClaimContractPrompt,
   articleSectionContractPrompt,
