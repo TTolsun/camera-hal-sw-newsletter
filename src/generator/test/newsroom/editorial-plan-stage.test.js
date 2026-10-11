@@ -10,12 +10,29 @@ const test = require('node:test');
 
 const {
   normalizeEditorialPlanReport,
+  applyCoveragePolicyReview,
   buildEditorialPlanReport,
   editorFacingEditorialPlan
 } = require('../../publish/orchestrator-editorial-plan-stage');
 const { editorialPlanSchema } = require('../../render/newsletter-schema');
 const { editorialPlanPrompt } = require('../../reporter/newsletter-prompts');
 const { editorialPlanSystemPrompt } = require('../../publish/orchestrator-stage-prompts');
+
+test('policy review can veto mechanical coverage but cannot invent, omit or duplicate article decisions', () => {
+  const mechanical = { url: 'https://example.com/type', source_candidate_hash: 'a', coverage_decision: 'main_article' };
+  const tool = { url: 'https://example.com/tool', source_candidate_hash: 'b', coverage_decision: 'main_article' };
+  const excluded = { url: 'https://example.com/other', source_candidate_hash: 'c', coverage_decision: 'exclude' };
+  const report = { editorial_plans: [mechanical, tool, excluded] };
+  const reviews = [{ ...mechanical, coverage_decision: 'exclude', reason: 'Existing platform handle semantics; type syntax only.' },
+    { ...tool, reason: 'Concrete coding agent workflow.' }];
+  const result = applyCoveragePolicyReview(report, { reviews });
+  assert.deepEqual(result.editorial_plans.map(item => item.coverage_decision), ['exclude', 'main_article', 'exclude']);
+  assert.equal(report.editorial_plans[0].coverage_decision, 'main_article');
+  for (const invalid of [reviews.slice(0, 1), [...reviews, reviews[0]], [...reviews, { ...excluded, reason: 'Promote' }],
+    [{ ...reviews[0], source_candidate_hash: 'wrong' }, reviews[1]]]) {
+    assert.throws(() => applyCoveragePolicyReview(report, { reviews: invalid }), /Editorial policy review/);
+  }
+});
 
 test('buildEditorialPlanReport는 LLM 호출이 실패하면 throw해서 파이프라인을 멈춘다', async () => {
   // fail-fast: editorial-plan이 실패하면 editor/fact-check/quality 같은 뒤 단계를 돌리지 않고

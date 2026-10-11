@@ -16,6 +16,36 @@ const { editorialPlanSchema } = require('../render/newsletter-schema');
 const { editorialPlanSystemPrompt } = require('./orchestrator-stage-prompts');
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
 
+const coverageReviewSchema = {
+  type: 'OBJECT', properties: { reviews: { type: 'ARRAY', items: {
+    type: 'OBJECT', properties: {
+      url: { type: 'STRING' }, source_candidate_hash: { type: 'STRING' },
+      coverage_decision: { type: 'STRING', enum: ['main_article', 'exclude'] },
+      reason: { type: 'STRING' }
+    }, required: ['url', 'source_candidate_hash', 'coverage_decision', 'reason']
+  } } }, required: ['reviews']
+};
+
+function applyCoveragePolicyReview(report, review) {
+  const proposed = report.editorial_plans.filter(item => item.coverage_decision === 'main_article');
+  const key = item => `${item.url}|${item.source_candidate_hash}`;
+  const expected = new Set(proposed.map(key));
+  const decisions = new Map();
+  for (const item of ensureArray(review?.reviews)) {
+    if (!expected.has(key(item)) || decisions.has(key(item)) ||
+      !['main_article', 'exclude'].includes(item.coverage_decision) || !stringOrEmpty(item.reason)) {
+      throw new Error('Editorial policy review has invalid or duplicate source identity/decision');
+    }
+    decisions.set(key(item), item);
+  }
+  if (decisions.size !== expected.size) throw new Error('Editorial policy review omitted proposed main articles');
+  return { ...report, editorial_plans: report.editorial_plans.map(item => {
+    const decision = decisions.get(key(item));
+    return decision ? { ...item, coverage_decision: decision.coverage_decision,
+      policy_review_reason: decision.reason } : item;
+  }) };
+}
+
 function normalizeEditorialPlanReport(value, date, capsules = []) {
   const hasDirectEvidence = item => ensureArray(capsules).some(capsule =>
     capsule.url === item?.url && capsule.source_candidate_hash === item?.source_candidate_hash &&
@@ -68,7 +98,20 @@ async function buildEditorialPlanReport({ date, articleCapsuleReport, commonCont
   if (normalized.editorial_plans.length === 0) {
     throw new Error('Editorial plan stage produced no usable editorial_plans');
   }
-  return normalized;
+  const proposed = normalized.editorial_plans.filter(item => item.coverage_decision === 'main_article');
+  if (proposed.length === 0) return normalized;
+  const review = await callLlmJson(stage, [
+    '당신은 뉴스레터 편집 정책의 독립 검토자입니다. 첫 편집 계획의 주장과 선정은 검토 대상이지 사실 근거가 아닙니다.',
+    '제안된 main 기사마다 원문 capsule만 보고 실제 변경 전후를 대조하여 main_article 유지 또는 exclude를 결정하세요. 모든 제안에 정확히 한 번 응답하세요.',
+    '플랫폼 내부 타입·구문·래퍼 치환을 새로운 IPC 동작이나 소유권·수명·안전성 개선으로 해석하지 마세요. 타입을 명시적으로 바꿨다는 사실만 있고 전달 의미·호환성 변화의 원문 근거가 없으면 exclude입니다. 버퍼·펜스·FD를 다룬다는 사실과 다른 플랫폼 설계에 참고된다는 추측은 예외가 아닙니다.',
+    '예: 기존에도 플랫폼 핸들을 전달했는데 handle을 handle<platform>으로 표기하고 대응 C++ 래퍼만 바꾸는 경우는 exclude입니다. 이미 지원하던 기능을 새로운 기능으로 읽지 마세요.',
+    '조건부 mute와 강제 연결 종료의 차이는 실제 framework 동작입니다. ISP 파라미터 uAPI 구조와 소비 노드 문서화는 구체적 driver 계약 참고입니다. 코딩 에이전트의 지원 작업이 명시된 모델 발표는 독립 개발 도구 기사이며 카메라 전용 기능이나 HAL 변경이 없다는 이유로 제외하지 마세요.',
+    'source gap, 날짜, claim의 발행 안전 검사는 이후 별도로 유지됩니다. 이 검토는 편집 가치와 원문에 없는 효과를 선정 이유로 삼았는지만 판단합니다.'
+  ].join('\n'), JSON.stringify({ proposed_plans: proposed,
+    capsules: (articleCapsuleReport?.shortlisted_capsules || articleCapsuleReport?.selected_capsules || [])
+      .filter(capsule => proposed.some(item => item.url === capsule.url && item.source_candidate_hash === capsule.source_candidate_hash))
+  }), coverageReviewSchema);
+  return applyCoveragePolicyReview(normalized, review);
 }
 
 // #700: editor에게 넘기는 plan에서 coverage 권한 신호(coverage_decision/impact_level)를 뺀다.
@@ -90,6 +133,7 @@ function editorFacingEditorialPlan(report) {
 
 module.exports = {
   normalizeEditorialPlanReport,
+  applyCoveragePolicyReview,
   buildEditorialPlanReport,
   editorFacingEditorialPlan
 };
