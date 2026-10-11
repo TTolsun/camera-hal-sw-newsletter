@@ -498,6 +498,16 @@
           "date_confidence": 85,
           "origin": "monitor_event",
           "detected_at": "2026-09-07"
+        },
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "excerpt": "Date signal changed with normalized content hash changed.",
+          "fingerprint": "evidence-0290b92330e0c3dfc25353b0085d9275",
+          "effective_date": "2026-10-09",
+          "date_source": "visible_last_updated",
+          "date_confidence": 85,
+          "origin": "monitor_event",
+          "detected_at": "2026-10-12"
         }
       ]
     },
