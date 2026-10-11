@@ -2,8 +2,9 @@ const { createBoundedFetchClient } = require('../../shared/collect/bounded-fetch
 const { articleBody } = require('../../shared/collect/document-section-parsing');
 const { decodeHtml } = require('../../shared/common/common');
 const { createHash } = require('crypto');
+const { gerritTarget, readGerritSource } = require('./gerrit-source-reader');
 
-const MAX_DOCUMENTS = 24;
+const MAX_SOURCE_READS = 24;
 const MAX_DOCUMENT_CHARS = 16000;
 
 // Read source content, not the first bytes of HTML (usually navigation/metadata).
@@ -60,12 +61,33 @@ async function readArticleSources(report, { fetchImpl = globalThis.fetch } = {})
     maxBytesPerSourceRun: 6 * 1024 * 1024
   });
   const documents = new Map();
-  async function read(url) {
-    if (documents.has(url)) return documents.get(url);
-    if (!url || documents.size >= MAX_DOCUMENTS) return { status: 'skipped', blocks: [] };
+  async function read(url, candidate = {}) {
+    const key = `${url}\n${candidate.gerrit_commit_sha || ''}`;
+    if (documents.has(key)) return documents.get(key);
+    if (!url || documents.size >= MAX_SOURCE_READS) return { status: 'skipped', blocks: [] };
+    const gerrit = gerritTarget(url);
+    if (gerrit) {
+      const source = await readGerritSource(gerrit, candidate, client);
+      const result = { status: source.status, error: source.error, blocks: [], related: [] };
+      if (source.body) {
+        for (let offset = 0; offset < source.body.length; offset += MAX_DOCUMENT_CHARS) {
+          const content = source.body.slice(offset, offset + MAX_DOCUMENT_CHARS);
+          result.blocks.push({
+            evidence_id: `source-body:${createHash('sha256').update(url + '\n' + source.revision + '\n' + offset + '\n' + content).digest('hex').slice(0, 20)}`,
+            url, text: content, truncated: false, revision: source.revision,
+            fetched_from: source.fetched_from,
+            part: result.blocks.length + 1, parts: Math.ceil(source.body.length / MAX_DOCUMENT_CHARS)
+          });
+        }
+      }
+      documents.set(key, result);
+      return result;
+    }
     const response = await client.fetchBounded(url);
-    const body = response.ok ? sourceBody(response.body) : '';
-    const result = { status: body ? 'read' : 'unavailable', error: response.error || (!body ? 'empty_source_body' : ''), truncated: body.length > MAX_DOCUMENT_CHARS, blocks: [], related: response.ok ? relatedPatchUrls(response.body, url) : [] };
+    const extracted = response.ok ? sourceBody(response.body) : '';
+    const shell = /To use PolyGerrit, please enable JavaScript/i.test(extracted);
+    const body = shell ? '' : extracted;
+    const result = { status: body ? 'read' : 'unavailable', error: response.error || (shell ? 'polygerrit_shell' : !body ? 'empty_source_body' : ''), truncated: body.length > MAX_DOCUMENT_CHARS, blocks: [], related: response.ok ? relatedPatchUrls(response.body, url) : [] };
     if (body) {
       // The full excerpt travels separately from the compact summary. Its ID is
       // also indexed by the existing deterministic claim/source binding checks.
@@ -75,7 +97,7 @@ async function readArticleSources(report, { fetchImpl = globalThis.fetch } = {})
         url, text: content, truncated: result.truncated
       });
     }
-    documents.set(url, result);
+    documents.set(key, result);
     return result;
   }
   const enriched = new Map();
@@ -84,11 +106,12 @@ async function readArticleSources(report, { fetchImpl = globalThis.fetch } = {})
     // Seed evidence has a separate reviewed provenance contract; do not refetch it.
     if (candidate.compact_evidence || candidate.source_extraction_ref || candidate.manual_seed || candidate.manualSeed) continue;
     const url = publicSourceUrl(candidate.url || candidate.article_url || candidate.articleUrl);
-    if (!url || enriched.has(url)) continue;
-    const primary = await read(url);
+    const key = `${url}\n${candidate.gerrit_commit_sha || ''}`;
+    if (!url || enriched.has(key)) continue;
+    const primary = await read(url, candidate);
     const blocks = [...primary.blocks];
     for (const related of primary.related || []) blocks.push(...(await read(related)).blocks);
-    enriched.set(url, { blocks, status: primary.status, error: primary.error || '' });
+    enriched.set(key, { blocks, status: primary.status, error: primary.error || '' });
   }
   const attached = new WeakSet();
   for (const value of Object.values(report)) {
@@ -96,13 +119,16 @@ async function readArticleSources(report, { fetchImpl = globalThis.fetch } = {})
     for (const candidate of value) {
       if (!candidate || typeof candidate !== 'object' || attached.has(candidate) ||
           candidate.compact_evidence || candidate.source_extraction_ref || candidate.manual_seed || candidate.manualSeed) continue;
-      const read = enriched.get(publicSourceUrl(candidate.url || candidate.article_url || candidate.articleUrl));
+      const url = publicSourceUrl(candidate.url || candidate.article_url || candidate.articleUrl);
+      const read = enriched.get(`${url}\n${candidate.gerrit_commit_sha || ''}`);
       if (!read) continue;
       attached.add(candidate);
+      const previousIds = new Set((candidate.article_source_reading?.documents || []).map(d => d.evidence_id));
       candidate.article_source_reading = { status: read.status, error: read.error, documents: read.blocks };
       candidate.source_extraction = {
         ...candidate.source_extraction,
-        evidence_blocks: [...(candidate.source_extraction?.evidence_blocks || []), ...read.blocks]
+        evidence_blocks: [...(candidate.source_extraction?.evidence_blocks || [])
+          .filter(block => !previousIds.has(block.evidence_id)), ...read.blocks]
       };
     }
   }
