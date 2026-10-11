@@ -1,0 +1,1111 @@
+{
+  "schema_version": 1,
+  "report_type": "source_quality",
+  "newsletter_date": "2026-10-12",
+  "candidates": [
+    {
+      "candidate_id": "e5f6162b42a53b1d",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "source_quality_score": 0.85,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.82,
+        "android_hal_relevance": 0.82,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c35e99e8ae5a1040",
+      "url": "https://lore.kernel.org/linux-media/20261011-upstream-s5k3t2-v4-0-d33b12fb3263@proton.me/",
+      "title": "[PATCH v4 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "source_quality_score": 0.93,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "72a7fc8c3d4a0aaf",
+      "url": "https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com/",
+      "title": "[PATCH 0/3] media: Add GalaxyCore GC5035 and GC8034 sensor drivers",
+      "source_quality_score": 0.734,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9f89f398d1e78f8b",
+      "url": "https://lore.kernel.org/linux-media/20261010-kaanapali-camss-v20-0-63e98ce9ac0c@oss.qualcomm.com/",
+      "title": "[PATCH v20 00/13] media: qcom: camss: Add Kaanapali support",
+      "source_quality_score": 0.596,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.39,
+        "android_hal_relevance": 0.39,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "87bdb2fb0ae0a2e3",
+      "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+      "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+      "source_quality_score": 0.878,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.87,
+        "android_hal_relevance": 0.87,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c305f83ab501240c",
+      "url": "https://lore.kernel.org/linux-media/20261007090041.3732717-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+      "title": "[PATCH RESEND 00/45] media: qcom: camss: add IFE pixel path support",
+      "source_quality_score": 0.482,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.33,
+        "android_hal_relevance": 0.33,
+        "technical_depth": 0.25,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "619b668556d03f88",
+      "url": "https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog/",
+      "title": "[PATCH 0/2] media: i2c: Add OmniVision OV3660 image sensor driver",
+      "source_quality_score": 0.83,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.75,
+        "android_hal_relevance": 0.75,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "5062c15d106dc4b0",
+      "url": "https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com/",
+      "title": "[PATCH v1 0/2] media: support upside-down camera mounting",
+      "source_quality_score": 0.806,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.69,
+        "android_hal_relevance": 0.69,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "7b3b7756c8632df9",
+      "url": "https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com/",
+      "title": "[PATCH v3 0/2] media: rkisp1: Add YUV bypass support for rkisp1",
+      "source_quality_score": 0.734,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.51,
+        "android_hal_relevance": 0.51,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "57012060fbfe98f3",
+      "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20261009",
+      "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20261009",
+      "source_quality_score": 0.764,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.81,
+        "android_hal_relevance": 0.81,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f10b4a443302f6f6",
+      "url": "https://docs.qualcomm.com/securitybulletin/october-2026-bulletin.html",
+      "title": "October 2026 Security Bulletin: CVE-2026-25263 — Camera Driver",
+      "source_quality_score": 0.653,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.44,
+        "android_hal_relevance": 0.44,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4c6cdca54b2e84b7",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+      "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+      "source_quality_score": 0.722,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.5,
+        "android_hal_relevance": 0.5,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3cd514a2359f679f",
+      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
+      "title": "Media3 Release Notes - Media3 1.11.1",
+      "source_quality_score": 0.695,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.73,
+        "android_hal_relevance": 0.73,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "32667fe599dc43e8",
+      "url": "https://github.com/android/ndk/releases/tag/r30",
+      "title": "Android NDK r30",
+      "source_quality_score": 0.675,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.25,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "a470e73da7be1555",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
+      "source_quality_score": 0.795,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "325dffdce8c1db73",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
+      "source_quality_score": 0.795,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "1b473ceac34eb92d",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
+      "source_quality_score": 0.795,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "51cf61e868482023",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
+      "source_quality_score": 0.795,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "50c77c259dc18a1e",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
+      "title": "camera: Prevent UAF on watcher callback in ReloadableConfigFile - chromiumos/platform2",
+      "source_quality_score": 0.795,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "04f18f4ec0b911ac",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
+      "title": "cros_camera_service: Fix UAF in StreamManipulatorHelper - chromiumos/platform2",
+      "source_quality_score": 0.795,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6bdc7bf72ddbf00a",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
+      "title": "camera: Fix cross-thread UAF in HdrNetStreamManipulator options reload - chromiumos/platform2",
+      "source_quality_score": 0.795,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 0.8,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "eee8f6e209a0e882",
+      "url": "https://www.phoronix.com/news/Qualcomm-MSM-DRM-HDR",
+      "title": "HDR Support Coming For Qualcomm MSM Driver To Benefit Snapdragon X Laptops On Linux",
+      "source_quality_score": 0.429,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.59,
+        "android_hal_relevance": 0.59,
+        "technical_depth": 0.85,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4125843065ae5740",
+      "url": "https://community.arm.com/arm-community-blogs/b/mobile-graphics-and-gaming-blog/posts/diagnosing-vk-error-device-lost-on-mali-gpus-with-vk-ext-device-fault",
+      "title": "Blog Post: Diagnosing VK_ERROR_DEVICE_LOST on Arm GPUs with VK_EXT_device_fault",
+      "source_quality_score": 0.386,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.71,
+        "android_hal_relevance": 0.71,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "27c77ee0361749b2",
+      "url": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
+      "title": "Blog Post: How Arm and Google are improving ML Drift performance on Arm GPUs",
+      "source_quality_score": 0.429,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.59,
+        "android_hal_relevance": 0.59,
+        "technical_depth": 0.85,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "2fbcde983a4a6fbf",
+      "url": "https://lwn.net/Articles/1098670/",
+      "title": "[$] Adding kernel control-flow-integrity checking to GCC",
+      "source_quality_score": 0.495,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.53,
+        "android_hal_relevance": 0.53,
+        "technical_depth": 0.85,
+        "recency_score": 0.15,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c4832b51d0f5c1c3",
+      "url": "https://www.phoronix.com/news/Linux-AI-Agent-Resources",
+      "title": "New AI Agent Resources Proposed For The Linux Kernel, AI Skills To Help Developers",
+      "source_quality_score": 0.405,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.53,
+        "android_hal_relevance": 0.53,
+        "technical_depth": 0.85,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "798ec89c4905368c",
+      "url": "https://www.phoronix.com/news/Sashiko-Linux-AI-Metrics",
+      "title": "Google's Sashiko AI Has Completed 191k Patch Reviews, Cited On Nearly 500 Kernel CVEs",
+      "source_quality_score": 0.231,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.47,
+        "android_hal_relevance": 0.47,
+        "technical_depth": 0.85,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0.15
+      }
+    },
+    {
+      "candidate_id": "dbf5455cef701d8c",
+      "url": "https://www.phoronix.com/news/Ubuntu-26.10-GCC-15-Default",
+      "title": "Ubuntu 26.10 Sticks To Using GCC 15 By Default",
+      "source_quality_score": 0.311,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.55,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6d1bf0a873127d6d",
+      "url": "https://www.raspberrypi.com/news/seeing-understanding-and-responding-low-power-cnn-vlm-and-slm-workloads-on-raspberry-pi-5/",
+      "title": "Seeing, understanding, and responding: low-power CNN, VLM and SLM workloads on Raspberry Pi 5",
+      "source_quality_score": 0.267,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6ee3b350ad99e776",
+      "url": "https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/arm-a-profile-architecture-developments-2026",
+      "title": "Blog Post: Arm A-Profile Architecture Developments 2026",
+      "source_quality_score": 0.242,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.35,
+        "android_hal_relevance": 0.35,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c06a7309beb65cbd",
+      "url": "https://lwn.net/Articles/1099764/",
+      "title": "Stable kernels 7.2.10 and 6.18.56",
+      "source_quality_score": 0.308,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.29,
+        "android_hal_relevance": 0.29,
+        "technical_depth": 0.85,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "70a93712e9fdd280",
+      "url": "https://www.collabora.com/news-and-blog/news-and-events/usb-c-displayport-alt-mode-on-rockchip-rk3588-and-rk3576-starting-with-the-flipper-one.html",
+      "title": "USB-C DisplayPort Alt Mode on Rockchip RK3588 and RK3576, starting with the Flipper One",
+      "source_quality_score": 0.308,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.29,
+        "android_hal_relevance": 0.29,
+        "technical_depth": 0.85,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "a48fdea3a3fb80a3",
+      "url": "https://lwn.net/Articles/1099602/",
+      "title": "Python 3.15 released",
+      "source_quality_score": 0.24,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.23,
+        "android_hal_relevance": 0.23,
+        "technical_depth": 0.55,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "e45a210f95da8a82",
+      "url": "https://community.arm.com/arm-community-blogs/b/tools-software-ides-blog/posts/what-is-new-in-llvm-23",
+      "title": "Blog Post: What is new in LLVM 23?",
+      "source_quality_score": 0.384,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.59,
+        "android_hal_relevance": 0.59,
+        "technical_depth": 0.55,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "41d618e762c28869",
+      "url": "https://www.collabora.com/news-and-blog/news-and-events/mesa-on-android-how-we-brought-turnip,-skiavk,-and-cuttlefish-to-ci.html",
+      "title": "Mesa on Android: How we brought Turnip, SkiaVK, and Cuttlefish to CI",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6f92e77a031269cc",
+      "url": "https://www.collabora.com/news-and-blog/news-and-events/building-gpu-drivers-in-rust-tyr-at-rustconf-2026.html",
+      "title": "Building GPU Drivers in Rust: Tyr at RustConf 2026",
+      "source_quality_score": 0.367,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "e2aedcff75600704",
+      "url": "https://www.raspberrypi.com/news/turn-text-input-into-actions-with-needle-a-14mb-function-calling-llm/",
+      "title": "Turn text input into actions with Needle, a 14MB function-calling LLM",
+      "source_quality_score": 0.277,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.41,
+        "android_hal_relevance": 0.41,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "4eef64aa36cfdae0",
+      "url": "https://www.collabora.com/news-and-blog/news-and-events/decoding-with-rockchip-at-kernel-recipes-2026.html",
+      "title": "Decoding with Rockchip at Kernel Recipes 2026",
+      "source_quality_score": 0.343,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.35,
+        "android_hal_relevance": 0.35,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "74a1b234e9746d34",
+      "url": "https://devblogs.microsoft.com/cppblog/c-in-the-age-of-ai-visual-studio-at-cppcon-2026/",
+      "title": "C++ in the Age of AI: Visual Studio at CppCon 2026",
+      "source_quality_score": 0.308,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.49,
+        "android_hal_relevance": 0.49,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "aef1778edfa358b0",
+      "url": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-7-18-10/",
+      "title": "What’s New for C++ Developers in Visual Studio 2026 (18.7 – 18.10)",
+      "source_quality_score": 0.33,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.43,
+        "android_hal_relevance": 0.43,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "0887a8765f18fa52",
+      "url": "https://devblogs.microsoft.com/cppblog/msvc-c23-constexpr-cmath-with-llvm-libc/",
+      "title": "MSVC C++23: constexpr cmath with LLVM Libc",
+      "source_quality_score": 0.285,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.43,
+        "android_hal_relevance": 0.43,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "f99a0b909f81d699",
+      "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-september-2026/",
+      "title": "MSVC Build Tools Preview updates – September 2026",
+      "source_quality_score": 0.33,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.43,
+        "android_hal_relevance": 0.43,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "920edee2a3979412",
+      "url": "https://devblogs.microsoft.com/cppblog/faster-c-code-intelligence-for-copilot-cli-with-whole-codebase-indexing/",
+      "title": "Faster C++ code intelligence for Copilot CLI with Whole Codebase Indexing",
+      "source_quality_score": 0.236,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.31,
+        "android_hal_relevance": 0.31,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "02d7dcc738082284",
+      "url": "https://devblogs.microsoft.com/cppblog/bringing-correctly-rounded-math-to-production-with-llvm-libc/",
+      "title": "Bringing Correctly Rounded Math to Production with LLVM-libc",
+      "source_quality_score": 0.189,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.19,
+        "android_hal_relevance": 0.19,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "3b706c68997892b6",
+      "url": "https://source.android.com/docs/core/camera",
+      "title": "Camera | Android OS core topics | Android Open Source Project",
+      "source_quality_score": 0.788,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.85,
+        "android_hal_relevance": 0.85,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "0031c77075a2b86e",
+      "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "title": "Build your way: Use any AI agent of your choice in Android Studio",
+      "source_quality_score": 0.786,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.96,
+        "android_hal_relevance": 0.96,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "495a4431da1e7ff3",
+      "url": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+      "title": "Android Bench 2.0: Pushing the frontier with challenging long-horizon tasks",
+      "source_quality_score": 0.589,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.84,
+        "android_hal_relevance": 0.84,
+        "technical_depth": 0.85,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0.15
+      }
+    },
+    {
+      "candidate_id": "22c6a84df756ebee",
+      "url": "https://android-developers.googleblog.com/2026/10/android-cli-device-streaming-and-skills.html",
+      "title": "Device Streaming and Android skills - available in Android CLI",
+      "source_quality_score": 0.794,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.78,
+        "android_hal_relevance": 0.78,
+        "technical_depth": 0.85,
+        "recency_score": 0.15,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "76bfe8c9d1263510",
+      "url": "https://android-developers.googleblog.com/2026/09/jetpack-compose-ai-native-ui-instagram-direct.html",
+      "title": "How Instagram Direct engineers built AI-native UI architecture with Jetpack Compose and reduced token cost per agent session by 33%",
+      "source_quality_score": 0.577,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.66,
+        "android_hal_relevance": 0.66,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "9bf211c2ecec3d36",
+      "url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "title": "Bring your Android game to the car screen today",
+      "source_quality_score": 0.577,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.66,
+        "android_hal_relevance": 0.66,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-56616126509e3bad",
+      "url": "https://github.com/nic-fio/chuwi-hi10x1-cameras",
+      "title": "https://github.com/nic-fio/chuwi-hi10x1-cameras",
+      "source_quality_score": 0.413,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.55,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-e19b4a8ec794a731",
+      "url": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-1-18-6",
+      "title": "What’s New for C++ Developers in Visual Studio 2026 (18.1-18.6)",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-730194078ce6c1f0",
+      "url": "https://devblogs.microsoft.com/cppblog/rethinking-c-performance-faster-code-navigation-and-github-copilot-tools-with-whole-codebase-indexing",
+      "title": "Rethinking C++ Performance: Faster Code Navigation and GitHub Copilot Tools with Whole Codebase Indexing",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-ba159d876c0286b5",
+      "url": "https://devblogs.microsoft.com/cppblog/project-specific-build-optimizations-with-github-copilot",
+      "title": "Project-Specific Build Optimizations with GitHub Copilot",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-ca4d5b3ad2e8c147",
+      "url": "https://devblogs.microsoft.com/cppblog/faster-c-iterative-builds-with-github-copilot",
+      "title": "Faster C++ iterative builds with GitHub Copilot",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-9d6112afbb86afe3",
+      "url": "https://devblogs.microsoft.com/visualstudio/the-visual-studio-debugger-agentic-workflow-gets-a-test-driven-upgrade",
+      "title": "The Visual Studio Debugger Agentic Workflow Gets a Test-Driven Upgrade",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-ef552cb556227ce8",
+      "url": "https://devblogs.microsoft.com/cppblog/msvc-version-1451-available",
+      "title": "MSVC Build Tools version 14.51 Available",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-62dd45857e623f5e",
+      "url": "https://devblogs.microsoft.com/cppblog/c-performance-improvements-in-msvc-build-tools-v14-51",
+      "title": "C++ Performance Improvements in MSVC Build Tools v14.51",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-f6613c2ab6541e48",
+      "url": "https://devblogs.microsoft.com/cppblog/nuget-packagereference-for-c-projects-in-visual-studio",
+      "title": "NuGet PackageReference for C++ Projects in Visual Studio",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-6520c27aa7703516",
+      "url": "https://devblogs.microsoft.com/visualstudio/visual-studio-july-update-meet-the-new-agent-powered-by-copilot-sdk",
+      "title": "Visual Studio July update",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "gemini-linked-1a961083b00a9aa6",
+      "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-july-2026",
+      "title": "July 2026",
+      "source_quality_score": 0.167,
+      "source_quality_bucket": "weak_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0,
+        "android_hal_relevance": 0,
+        "technical_depth": 0.25,
+        "recency_score": 0.25,
+        "evidence_strength": 0.55,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    }
+  ],
+  "counts": {
+    "strong_candidate": 5,
+    "review_candidate": 14,
+    "blocked_candidate": 30,
+    "weak_candidate": 12
+  }
+}

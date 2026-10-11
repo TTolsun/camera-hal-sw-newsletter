@@ -1,0 +1,54 @@
+# Gemini Source Discovery Report - 2026-10-12
+
+## 최종 판단
+
+- 상태: 검토 필요
+- 편집장 액션: parser/source feedback을 확인하고 후보 보강 여부를 판단하세요.
+- 가장 먼저 볼 항목: parser/source feedback warning이 있습니다. parser_gap_count=1
+
+## 이번 PR 요약
+
+| 항목 | 값 |
+| --- | --- |
+| 생성 단계 | Gemini source discovery |
+| 기준 날짜 | 2026-10-12 |
+| status_detail | none |
+| merge_mode | gemini_source_discovery |
+| merged candidate artifact | articles/content/collected-news/2026-10-12/merged-candidates.json |
+| source discovery feedback | articles/content/newsroom/2026-10-12/source-discovery-feedback-report.json |
+
+- 다음 단계 안내: 03 진행 가능하나 후보 보강 권장
+- 다음 단계 사유: merged artifact는 생성되었지만 parser/source gap이 남아 있습니다.
+- next_step: strengthen_candidates
+
+## 반드시 확인할 항목
+
+- [ ] seed 또는 linked 파생 publishable 후보 여부 확인
+- [ ] parser/source/taxonomy gap 확인
+- [x] merged-candidates artifact 정상 생성 확인
+- [ ] 03 진행 전 source_gap 후보가 main으로 승격되지 않았는지 확인
+
+## 주요 결과
+
+| 항목 | 값 | 판단 |
+| --- | --- | --- |
+| manual 후보 | 50 | 입력 |
+| linked evidence 파생 후보 | 11 | 있음 |
+| linked 파생 publishable 후보 | 0 | 없음 |
+| seed 후보 | 0 | 없음 |
+| seed 신규 unique 후보 | 0 | 없음 |
+| seed publishable 후보 | 0 | 없음 |
+| parser gap | 1 | 보강 필요 |
+
+## 상세 report
+
+아래 항목은 상세 판단용 요약과 artifact pointer입니다. 원본 로그와 전체 artifact는 생성 산출물에서 확인하세요.
+
+- 원본 후보와 merged 후보는 아래 artifact에서 확인하세요.
+- source_candidate_artifact: articles/content/collected-news/2026-10-12/manual-candidates.json
+- merged_candidate_artifact: articles/content/collected-news/2026-10-12/merged-candidates.json
+- merged_candidate_manifest: articles/content/collected-news/2026-10-12/merged-candidate-manifest.json
+- source_discovery_feedback_report: articles/content/newsroom/2026-10-12/source-discovery-feedback-report.md
+- parser/source feedback 원문: source_discovery_feedback_report artifact에서 확인하세요.
+- PR body에는 편집장 1차 판단에 필요한 요약만 남깁니다.
+

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "report_type": "source_discovery_feedback",
+  "date": "2026-10-12",
+  "status": "WARNING",
+  "parser_gap_count": 1,
+  "items": [
+    {
+      "severity": "warning",
+      "action": "PARSER_REPAIR_REQUIRED",
+      "reason": "missing_source_extraction",
+      "candidate_title": "Camera | Android OS core topics | Android Open Source Project",
+      "url": "https://source.android.com/docs/core/camera",
+      "source_id": "aosp-camera-docs",
+      "adapter_hint": "aosp-camera-docs",
+      "source_gap_risk": false,
+      "evidence_validation_status": "pass",
+      "source_quality_bucket": "review_candidate",
+      "final_selection_eligibility": "main",
+      "confidence": "high",
+      "selector_exclusion_reason": "missing source_extraction for official parser-backed candidate",
+      "recommendation": "Check AOSP camera update row extraction."
+    }
+  ]
+}

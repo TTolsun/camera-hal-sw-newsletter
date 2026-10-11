@@ -1,0 +1,1044 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-10-12",
+  "clusters": [
+    {
+      "cluster_id": "d584298342e95060",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "canonical_title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+          "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1edf3e3a13874eb7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261011-upstream-s5k3t2-v4-0-d33b12fb3263@proton.me",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261011-upstream-s5k3t2-v4-0-d33b12fb3263@proton.me/",
+      "canonical_title": "[PATCH v4 0/2] media: i2c: Samsung S5K3T2 image sensor",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261011-upstream-s5k3t2-v4-0-d33b12fb3263@proton.me/",
+          "title": "[PATCH v4 0/2] media: i2c: Samsung S5K3T2 image sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e50034884075f30b",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com/",
+      "canonical_title": "[PATCH 0/3] media: Add GalaxyCore GC5035 and GC8034 sensor drivers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com/",
+          "title": "[PATCH 0/3] media: Add GalaxyCore GC5035 and GC8034 sensor drivers",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3364fdebf2bfdd6d",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261010-kaanapali-camss-v20-0-63e98ce9ac0c@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261010-kaanapali-camss-v20-0-63e98ce9ac0c@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v20 00/13] media: qcom: camss: Add Kaanapali support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261010-kaanapali-camss-v20-0-63e98ce9ac0c@oss.qualcomm.com/",
+          "title": "[PATCH v20 00/13] media: qcom: camss: Add Kaanapali support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "88783652821718ad",
+      "cluster_key": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+      "canonical_title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/",
+          "title": "[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "03d08428f5b9f908",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261007090041.3732717-1-gjorgji.rosikopulos@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261007090041.3732717-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+      "canonical_title": "[PATCH RESEND 00/45] media: qcom: camss: add IFE pixel path support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261007090041.3732717-1-gjorgji.rosikopulos@oss.qualcomm.com/",
+          "title": "[PATCH RESEND 00/45] media: qcom: camss: add IFE pixel path support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "53b0c64b80129a09",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog/",
+      "canonical_title": "[PATCH 0/2] media: i2c: Add OmniVision OV3660 image sensor driver",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog/",
+          "title": "[PATCH 0/2] media: i2c: Add OmniVision OV3660 image sensor driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "337511017b3d93b7",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com/",
+      "canonical_title": "[PATCH v1 0/2] media: support upside-down camera mounting",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com/",
+          "title": "[PATCH v1 0/2] media: support upside-down camera mounting",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "761cd73ab222ce6b",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com/",
+      "canonical_title": "[PATCH v3 0/2] media: rkisp1: Add YUV bypass support for rkisp1",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com/",
+          "title": "[PATCH v3 0/2] media: rkisp1: Add YUV bypass support for rkisp1",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d1ebf6ac4346ec99",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20261009",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20261009",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20261009",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20261009",
+          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20261009",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "798b5d4a8de8ca41",
+      "cluster_key": "https://docs.qualcomm.com/securitybulletin/october-2026-bulletin.html",
+      "canonical_url": "https://docs.qualcomm.com/securitybulletin/october-2026-bulletin.html",
+      "canonical_title": "October 2026 Security Bulletin: CVE-2026-25263 — Camera Driver",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://docs.qualcomm.com/securitybulletin/october-2026-bulletin.html",
+          "title": "October 2026 Security Bulletin: CVE-2026-25263 — Camera Driver",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "213fab6f32ddbcb9",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+      "canonical_title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8506716",
+          "title": "camera: Migrate mojom files from legacy handle to handle - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5e9a33e9fbaae52e",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
+      "canonical_title": "Media3 Release Notes - Media3 1.11.1",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.11.1",
+          "title": "Media3 Release Notes - Media3 1.11.1",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "82a5dcdd4092510b",
+      "cluster_key": "https://github.com/android/ndk/releases/tag/r30",
+      "canonical_url": "https://github.com/android/ndk/releases/tag/r30",
+      "canonical_title": "Android NDK r30",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/android/ndk/releases/tag/r30",
+          "title": "Android NDK r30",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "70779ee88af5f0a0",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "canonical_title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+          "title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8d28e7d3853c3aef",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "canonical_title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+          "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5383bfc0408ae81d",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "canonical_title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+          "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8c3e4fdd73ea0301",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "canonical_title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+          "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "80d5fb89c255993c",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
+      "canonical_title": "camera: Prevent UAF on watcher callback in ReloadableConfigFile - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
+          "title": "camera: Prevent UAF on watcher callback in ReloadableConfigFile - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9f4e62229aa23ae5",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
+      "canonical_title": "cros_camera_service: Fix UAF in StreamManipulatorHelper - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
+          "title": "cros_camera_service: Fix UAF in StreamManipulatorHelper - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2c7b006a72881e6e",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
+      "canonical_title": "camera: Fix cross-thread UAF in HdrNetStreamManipulator options reload - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
+          "title": "camera: Fix cross-thread UAF in HdrNetStreamManipulator options reload - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "002a9e53cf429614",
+      "cluster_key": "https://www.phoronix.com/news/qualcomm-msm-drm-hdr",
+      "canonical_url": "https://www.phoronix.com/news/Qualcomm-MSM-DRM-HDR",
+      "canonical_title": "HDR Support Coming For Qualcomm MSM Driver To Benefit Snapdragon X Laptops On Linux",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.phoronix.com/news/Qualcomm-MSM-DRM-HDR",
+          "title": "HDR Support Coming For Qualcomm MSM Driver To Benefit Snapdragon X Laptops On Linux",
+          "canonical": true,
+          "reliability": "tech-media",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3b4a060edb806095",
+      "cluster_key": "https://community.arm.com/arm-community-blogs/b/mobile-graphics-and-gaming-blog/posts/diagnosing-vk-error-device-lost-on-mali-gpus-with-vk-ext-device-fault",
+      "canonical_url": "https://community.arm.com/arm-community-blogs/b/mobile-graphics-and-gaming-blog/posts/diagnosing-vk-error-device-lost-on-mali-gpus-with-vk-ext-device-fault",
+      "canonical_title": "Blog Post: Diagnosing VK_ERROR_DEVICE_LOST on Arm GPUs with VK_EXT_device_fault",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://community.arm.com/arm-community-blogs/b/mobile-graphics-and-gaming-blog/posts/diagnosing-vk-error-device-lost-on-mali-gpus-with-vk-ext-device-fault",
+          "title": "Blog Post: Diagnosing VK_ERROR_DEVICE_LOST on Arm GPUs with VK_EXT_device_fault",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "65810478d8da6521",
+      "cluster_key": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
+      "canonical_url": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
+      "canonical_title": "Blog Post: How Arm and Google are improving ML Drift performance on Arm GPUs",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
+          "title": "Blog Post: How Arm and Google are improving ML Drift performance on Arm GPUs",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "de93de6f8917cd96",
+      "cluster_key": "https://lwn.net/articles/1098670",
+      "canonical_url": "https://lwn.net/Articles/1098670/",
+      "canonical_title": "[$] Adding kernel control-flow-integrity checking to GCC",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lwn.net/Articles/1098670/",
+          "title": "[$] Adding kernel control-flow-integrity checking to GCC",
+          "canonical": true,
+          "reliability": "tech-media",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f59e740d2cf0a453",
+      "cluster_key": "https://www.phoronix.com/news/linux-ai-agent-resources",
+      "canonical_url": "https://www.phoronix.com/news/Linux-AI-Agent-Resources",
+      "canonical_title": "New AI Agent Resources Proposed For The Linux Kernel, AI Skills To Help Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.phoronix.com/news/Linux-AI-Agent-Resources",
+          "title": "New AI Agent Resources Proposed For The Linux Kernel, AI Skills To Help Developers",
+          "canonical": true,
+          "reliability": "tech-media",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d6333d52f8a79913",
+      "cluster_key": "https://www.phoronix.com/news/sashiko-linux-ai-metrics",
+      "canonical_url": "https://www.phoronix.com/news/Sashiko-Linux-AI-Metrics",
+      "canonical_title": "Google's Sashiko AI Has Completed 191k Patch Reviews, Cited On Nearly 500 Kernel CVEs",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.phoronix.com/news/Sashiko-Linux-AI-Metrics",
+          "title": "Google's Sashiko AI Has Completed 191k Patch Reviews, Cited On Nearly 500 Kernel CVEs",
+          "canonical": true,
+          "reliability": "tech-media",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cb3da7f949d35b5b",
+      "cluster_key": "https://www.phoronix.com/news/ubuntu-26.10-gcc-15-default",
+      "canonical_url": "https://www.phoronix.com/news/Ubuntu-26.10-GCC-15-Default",
+      "canonical_title": "Ubuntu 26.10 Sticks To Using GCC 15 By Default",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.phoronix.com/news/Ubuntu-26.10-GCC-15-Default",
+          "title": "Ubuntu 26.10 Sticks To Using GCC 15 By Default",
+          "canonical": true,
+          "reliability": "tech-media",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d50d46312ddcd365",
+      "cluster_key": "https://www.raspberrypi.com/news/seeing-understanding-and-responding-low-power-cnn-vlm-and-slm-workloads-on-raspberry-pi-5",
+      "canonical_url": "https://www.raspberrypi.com/news/seeing-understanding-and-responding-low-power-cnn-vlm-and-slm-workloads-on-raspberry-pi-5/",
+      "canonical_title": "Seeing, understanding, and responding: low-power CNN, VLM and SLM workloads on Raspberry Pi 5",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.raspberrypi.com/news/seeing-understanding-and-responding-low-power-cnn-vlm-and-slm-workloads-on-raspberry-pi-5/",
+          "title": "Seeing, understanding, and responding: low-power CNN, VLM and SLM workloads on Raspberry Pi 5",
+          "canonical": true,
+          "reliability": "engineering-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "56fedaeaeec3c484",
+      "cluster_key": "https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/arm-a-profile-architecture-developments-2026",
+      "canonical_url": "https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/arm-a-profile-architecture-developments-2026",
+      "canonical_title": "Blog Post: Arm A-Profile Architecture Developments 2026",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/arm-a-profile-architecture-developments-2026",
+          "title": "Blog Post: Arm A-Profile Architecture Developments 2026",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dcdfba902e2fdc43",
+      "cluster_key": "https://lwn.net/articles/1099764",
+      "canonical_url": "https://lwn.net/Articles/1099764/",
+      "canonical_title": "Stable kernels 7.2.10 and 6.18.56",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lwn.net/Articles/1099764/",
+          "title": "Stable kernels 7.2.10 and 6.18.56",
+          "canonical": true,
+          "reliability": "tech-media",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d82f94d588f588e8",
+      "cluster_key": "https://www.collabora.com/news-and-blog/news-and-events/usb-c-displayport-alt-mode-on-rockchip-rk3588-and-rk3576-starting-with-the-flipper-one.html",
+      "canonical_url": "https://www.collabora.com/news-and-blog/news-and-events/usb-c-displayport-alt-mode-on-rockchip-rk3588-and-rk3576-starting-with-the-flipper-one.html",
+      "canonical_title": "USB-C DisplayPort Alt Mode on Rockchip RK3588 and RK3576, starting with the Flipper One",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.collabora.com/news-and-blog/news-and-events/usb-c-displayport-alt-mode-on-rockchip-rk3588-and-rk3576-starting-with-the-flipper-one.html",
+          "title": "USB-C DisplayPort Alt Mode on Rockchip RK3588 and RK3576, starting with the Flipper One",
+          "canonical": true,
+          "reliability": "engineering-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "88cc3c6604e0c3c2",
+      "cluster_key": "https://lwn.net/articles/1099602",
+      "canonical_url": "https://lwn.net/Articles/1099602/",
+      "canonical_title": "Python 3.15 released",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lwn.net/Articles/1099602/",
+          "title": "Python 3.15 released",
+          "canonical": true,
+          "reliability": "tech-media",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ce7d0cf5eca60608",
+      "cluster_key": "https://community.arm.com/arm-community-blogs/b/tools-software-ides-blog/posts/what-is-new-in-llvm-23",
+      "canonical_url": "https://community.arm.com/arm-community-blogs/b/tools-software-ides-blog/posts/what-is-new-in-llvm-23",
+      "canonical_title": "Blog Post: What is new in LLVM 23?",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://community.arm.com/arm-community-blogs/b/tools-software-ides-blog/posts/what-is-new-in-llvm-23",
+          "title": "Blog Post: What is new in LLVM 23?",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0ebf4641cf738a79",
+      "cluster_key": "https://www.collabora.com/news-and-blog/news-and-events/mesa-on-android-how-we-brought-turnip,-skiavk,-and-cuttlefish-to-ci.html",
+      "canonical_url": "https://www.collabora.com/news-and-blog/news-and-events/mesa-on-android-how-we-brought-turnip,-skiavk,-and-cuttlefish-to-ci.html",
+      "canonical_title": "Mesa on Android: How we brought Turnip, SkiaVK, and Cuttlefish to CI",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.collabora.com/news-and-blog/news-and-events/mesa-on-android-how-we-brought-turnip,-skiavk,-and-cuttlefish-to-ci.html",
+          "title": "Mesa on Android: How we brought Turnip, SkiaVK, and Cuttlefish to CI",
+          "canonical": true,
+          "reliability": "engineering-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "aac3f9356289f648",
+      "cluster_key": "https://www.collabora.com/news-and-blog/news-and-events/building-gpu-drivers-in-rust-tyr-at-rustconf-2026.html",
+      "canonical_url": "https://www.collabora.com/news-and-blog/news-and-events/building-gpu-drivers-in-rust-tyr-at-rustconf-2026.html",
+      "canonical_title": "Building GPU Drivers in Rust: Tyr at RustConf 2026",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.collabora.com/news-and-blog/news-and-events/building-gpu-drivers-in-rust-tyr-at-rustconf-2026.html",
+          "title": "Building GPU Drivers in Rust: Tyr at RustConf 2026",
+          "canonical": true,
+          "reliability": "engineering-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c2090ca684330838",
+      "cluster_key": "https://www.raspberrypi.com/news/turn-text-input-into-actions-with-needle-a-14mb-function-calling-llm",
+      "canonical_url": "https://www.raspberrypi.com/news/turn-text-input-into-actions-with-needle-a-14mb-function-calling-llm/",
+      "canonical_title": "Turn text input into actions with Needle, a 14MB function-calling LLM",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.raspberrypi.com/news/turn-text-input-into-actions-with-needle-a-14mb-function-calling-llm/",
+          "title": "Turn text input into actions with Needle, a 14MB function-calling LLM",
+          "canonical": true,
+          "reliability": "engineering-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6ca4a7d66d97fb6c",
+      "cluster_key": "https://www.collabora.com/news-and-blog/news-and-events/decoding-with-rockchip-at-kernel-recipes-2026.html",
+      "canonical_url": "https://www.collabora.com/news-and-blog/news-and-events/decoding-with-rockchip-at-kernel-recipes-2026.html",
+      "canonical_title": "Decoding with Rockchip at Kernel Recipes 2026",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.collabora.com/news-and-blog/news-and-events/decoding-with-rockchip-at-kernel-recipes-2026.html",
+          "title": "Decoding with Rockchip at Kernel Recipes 2026",
+          "canonical": true,
+          "reliability": "engineering-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "a2faf93ea11e9382",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/c-in-the-age-of-ai-visual-studio-at-cppcon-2026",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/c-in-the-age-of-ai-visual-studio-at-cppcon-2026/",
+      "canonical_title": "C++ in the Age of AI: Visual Studio at CppCon 2026",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/c-in-the-age-of-ai-visual-studio-at-cppcon-2026/",
+          "title": "C++ in the Age of AI: Visual Studio at CppCon 2026",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cedcbc17e676236e",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-7-18-10",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-7-18-10/",
+      "canonical_title": "What’s New for C++ Developers in Visual Studio 2026 (18.7 – 18.10)",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-7-18-10/",
+          "title": "What’s New for C++ Developers in Visual Studio 2026 (18.7 – 18.10)",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dae77dc891d50357",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/msvc-c23-constexpr-cmath-with-llvm-libc",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/msvc-c23-constexpr-cmath-with-llvm-libc/",
+      "canonical_title": "MSVC C++23: constexpr cmath with LLVM Libc",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/msvc-c23-constexpr-cmath-with-llvm-libc/",
+          "title": "MSVC C++23: constexpr cmath with LLVM Libc",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "48b0194febbbe674",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-september-2026",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-september-2026/",
+      "canonical_title": "MSVC Build Tools Preview updates – September 2026",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-september-2026/",
+          "title": "MSVC Build Tools Preview updates – September 2026",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2ca1eaef1be6c5b0",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/faster-c-code-intelligence-for-copilot-cli-with-whole-codebase-indexing",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/faster-c-code-intelligence-for-copilot-cli-with-whole-codebase-indexing/",
+      "canonical_title": "Faster C++ code intelligence for Copilot CLI with Whole Codebase Indexing",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/faster-c-code-intelligence-for-copilot-cli-with-whole-codebase-indexing/",
+          "title": "Faster C++ code intelligence for Copilot CLI with Whole Codebase Indexing",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "67b539c595ed1583",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/bringing-correctly-rounded-math-to-production-with-llvm-libc",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/bringing-correctly-rounded-math-to-production-with-llvm-libc/",
+      "canonical_title": "Bringing Correctly Rounded Math to Production with LLVM-libc",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/bringing-correctly-rounded-math-to-production-with-llvm-libc/",
+          "title": "Bringing Correctly Rounded Math to Production with LLVM-libc",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2e09be47b7d035b1",
+      "cluster_key": "https://source.android.com/docs/core/camera",
+      "canonical_url": "https://source.android.com/docs/core/camera",
+      "canonical_title": "Camera | Android OS core topics | Android Open Source Project",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://source.android.com/docs/core/camera",
+          "title": "Camera | Android OS core topics | Android Open Source Project",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "348919c03d831171",
+      "cluster_key": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+      "canonical_title": "Build your way: Use any AI agent of your choice in Android Studio",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "title": "Build your way: Use any AI agent of your choice in Android Studio",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c6e0349fc991205d",
+      "cluster_key": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+      "canonical_title": "Android Bench 2.0: Pushing the frontier with challenging long-horizon tasks",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/09/android-bench-2-long-horizon-tasks.html",
+          "title": "Android Bench 2.0: Pushing the frontier with challenging long-horizon tasks",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ee989b2407ae159e",
+      "cluster_key": "https://android-developers.googleblog.com/2026/10/android-cli-device-streaming-and-skills.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/10/android-cli-device-streaming-and-skills.html",
+      "canonical_title": "Device Streaming and Android skills - available in Android CLI",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/10/android-cli-device-streaming-and-skills.html",
+          "title": "Device Streaming and Android skills - available in Android CLI",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "31df3b8cafad7290",
+      "cluster_key": "https://android-developers.googleblog.com/2026/09/jetpack-compose-ai-native-ui-instagram-direct.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/09/jetpack-compose-ai-native-ui-instagram-direct.html",
+      "canonical_title": "How Instagram Direct engineers built AI-native UI architecture with Jetpack Compose and reduced token cost per agent session by 33%",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/09/jetpack-compose-ai-native-ui-instagram-direct.html",
+          "title": "How Instagram Direct engineers built AI-native UI architecture with Jetpack Compose and reduced token cost per agent session by 33%",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "09096535ee7708a2",
+      "cluster_key": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "canonical_url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+      "canonical_title": "Bring your Android game to the car screen today",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-developers.googleblog.com/2026/09/bring-android-game-to-car-screen.html",
+          "title": "Bring your Android game to the car screen today",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "56616126509e3bad",
+      "cluster_key": "https://github.com/nic-fio/chuwi-hi10x1-cameras",
+      "canonical_url": "https://github.com/nic-fio/chuwi-hi10x1-cameras",
+      "canonical_title": "https://github.com/nic-fio/chuwi-hi10x1-cameras",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/nic-fio/chuwi-hi10x1-cameras",
+          "title": "https://github.com/nic-fio/chuwi-hi10x1-cameras",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e19b4a8ec794a731",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-1-18-6",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-1-18-6",
+      "canonical_title": "What’s New for C++ Developers in Visual Studio 2026 (18.1-18.6)",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/whats-new-for-c-developers-in-visual-studio-2026-18-1-18-6",
+          "title": "What’s New for C++ Developers in Visual Studio 2026 (18.1-18.6)",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "730194078ce6c1f0",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/rethinking-c-performance-faster-code-navigation-and-github-copilot-tools-with-whole-codebase-indexing",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/rethinking-c-performance-faster-code-navigation-and-github-copilot-tools-with-whole-codebase-indexing",
+      "canonical_title": "Rethinking C++ Performance: Faster Code Navigation and GitHub Copilot Tools with Whole Codebase Indexing",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/rethinking-c-performance-faster-code-navigation-and-github-copilot-tools-with-whole-codebase-indexing",
+          "title": "Rethinking C++ Performance: Faster Code Navigation and GitHub Copilot Tools with Whole Codebase Indexing",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ba159d876c0286b5",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/project-specific-build-optimizations-with-github-copilot",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/project-specific-build-optimizations-with-github-copilot",
+      "canonical_title": "Project-Specific Build Optimizations with GitHub Copilot",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/project-specific-build-optimizations-with-github-copilot",
+          "title": "Project-Specific Build Optimizations with GitHub Copilot",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ca4d5b3ad2e8c147",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/faster-c-iterative-builds-with-github-copilot",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/faster-c-iterative-builds-with-github-copilot",
+      "canonical_title": "Faster C++ iterative builds with GitHub Copilot",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/faster-c-iterative-builds-with-github-copilot",
+          "title": "Faster C++ iterative builds with GitHub Copilot",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9d6112afbb86afe3",
+      "cluster_key": "https://devblogs.microsoft.com/visualstudio/the-visual-studio-debugger-agentic-workflow-gets-a-test-driven-upgrade",
+      "canonical_url": "https://devblogs.microsoft.com/visualstudio/the-visual-studio-debugger-agentic-workflow-gets-a-test-driven-upgrade",
+      "canonical_title": "The Visual Studio Debugger Agentic Workflow Gets a Test-Driven Upgrade",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/visualstudio/the-visual-studio-debugger-agentic-workflow-gets-a-test-driven-upgrade",
+          "title": "The Visual Studio Debugger Agentic Workflow Gets a Test-Driven Upgrade",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "ef552cb556227ce8",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/msvc-version-1451-available",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/msvc-version-1451-available",
+      "canonical_title": "MSVC Build Tools version 14.51 Available",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/msvc-version-1451-available",
+          "title": "MSVC Build Tools version 14.51 Available",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "62dd45857e623f5e",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/c-performance-improvements-in-msvc-build-tools-v14-51",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/c-performance-improvements-in-msvc-build-tools-v14-51",
+      "canonical_title": "C++ Performance Improvements in MSVC Build Tools v14.51",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/c-performance-improvements-in-msvc-build-tools-v14-51",
+          "title": "C++ Performance Improvements in MSVC Build Tools v14.51",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f6613c2ab6541e48",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/nuget-packagereference-for-c-projects-in-visual-studio",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/nuget-packagereference-for-c-projects-in-visual-studio",
+      "canonical_title": "NuGet PackageReference for C++ Projects in Visual Studio",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/nuget-packagereference-for-c-projects-in-visual-studio",
+          "title": "NuGet PackageReference for C++ Projects in Visual Studio",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6520c27aa7703516",
+      "cluster_key": "https://devblogs.microsoft.com/visualstudio/visual-studio-july-update-meet-the-new-agent-powered-by-copilot-sdk",
+      "canonical_url": "https://devblogs.microsoft.com/visualstudio/visual-studio-july-update-meet-the-new-agent-powered-by-copilot-sdk",
+      "canonical_title": "Visual Studio July update",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/visualstudio/visual-studio-july-update-meet-the-new-agent-powered-by-copilot-sdk",
+          "title": "Visual Studio July update",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1a961083b00a9aa6",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-july-2026",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-july-2026",
+      "canonical_title": "July 2026",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-preview-updates-july-2026",
+          "title": "July 2026",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}
