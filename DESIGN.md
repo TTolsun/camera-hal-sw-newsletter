@@ -1,12 +1,12 @@
 ---
 version: 1
 name: Camera SW Newsroom
-description: Camera SW Newsletter 공개 사이트의 디자인 시스템. Apple Newsroom 계열의 조용한 편집(editorial) 룩 — Pretendard 타이포, 흰/파치먼트 캔버스, 단일 blue 액센트(#0066cc), 이미지 앞세운(image-forward) 카드, 평평한 elevation. 장식(그라디언트·과한 셰도우)을 걷어내고 콘텐츠(기사·이미지)가 말하게 한다.
+description: Camera SW Newsletter 공개 사이트의 디자인 시스템. Apple Newsroom 계열의 조용한 편집(editorial) 룩 — Pretendard 타이포, 흰/파치먼트 캔버스, 단일 blue 액센트(#0066cc), 중요 변화와 업무상 의미를 먼저 보여 주는 홈페이지, 평평한 elevation. 장식(그라디언트·과한 셰도우)을 걷어내고 콘텐츠(기사·이미지)가 말하게 한다.
 ---
 
 ## 개요
 
-Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 따른다. 흰색과 파치먼트(#f5f5f7)가 지배하는 캔버스 위에 Pretendard로 조판하고, 상호작용 요소는 전부 하나의 파랑(`#0066cc`)만 쓴다. UI chrome은 물러나고 16:9 이미지와 헤드라인이 전면에 온다. 셰도우는 카드 가독성을 위한 최소한의 저알파 하나와, featured 브랜드 이미지에 얹는 단일 product drop-shadow만 남긴다.
+Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 따른다. 흰색과 파치먼트(#f5f5f7)가 지배하는 캔버스 위에 Pretendard로 조판하고, 상호작용 요소는 전부 하나의 파랑(`#0066cc`)만 쓴다. UI chrome은 물러나고 홈페이지에서는 중요한 변화와 업무상 의미를 먼저 보여 준다. 주간호는 핵심 목록 하나에서 상세 기사로 이어지며, 기사 이미지는 중앙 읽기 영역의 크기와 비율을 유지한다. 셰도우는 카드 가독성을 위한 최소한의 저알파 하나와, featured 브랜드 이미지에 얹는 단일 product drop-shadow만 남긴다.
 
 이 문서는 정본(canonical) 디자인 방향이다. 실제 값의 source of truth는 [articles/css/styles.css](articles/css/styles.css)의 `:root` 토큰이며, 홈/아카이브/이슈 페이지의 CSS·HTML 계약은 `src/shared/test/workflow/homepage-archive.test.js`, `.../archive-page.test.js`, `src/generator/test/contract/newsletter-renderer.test.js`, `src/generator/validate/validate-site.js`가 잠근다. AI Engineering Lab 페이지만 공용 stylesheet 위에 [articles/css/learning.css](articles/css/learning.css)를 하나 더 얹고, 그 파일의 계약은 `src/shared/test/workflow/learning-page.test.js`가 따로 잠근다(아래 「AI Engineering Lab」 참고). 이 문서와 코드가 어긋나면 코드가 우선한다.
 
@@ -39,7 +39,7 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 
 ## 레이아웃 & 간격
 
-- 콘텐츠 폭: 풀블리드 흰 셸(라운드 프레임 없음) 안에서 홈/아카이브 콘텐츠 `min(100% - 44px, 1036px)`(mockup 1080px에 좌우 22px 거터), 이슈 wrap `min(100% - 44px, 760px)`, featured 리딩 블록 ~1000px.
+- 콘텐츠 폭: 홈·아카이브·주간호의 바깥 영역은 `min(100% - 44px, 1036px)`로 통일한다. 기사 제목·소제목·본문·이미지·출처·기사 이동은 최대 760px의 중앙 읽기 영역을 공유한다. 소제목의 개별 margin도 좌우 auto를 유지한다. 모바일은 공통 좌우 여백을 사용한다.
 - 라운드: `--radius-lg` 18px(카드 썸네일·featured 패널), `--radius-md` 14px, `--radius-sm` 12px, `--radius-xs` 8px, `--radius-pill` 999px(chip·sort·버튼).
 - 그리드: 카드 그리드는 1‑col → 2‑col(≥700px) → 3‑col(≥1000px, 홈 `.latest-grid`·아카이브 `.archive-page .archive-grid`).
 
@@ -56,12 +56,13 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 ## 컴포넌트
 
 - **헤더(`.site-header.homepage-site-header`)**: sticky 58px, 반투명 흰 배경(rgba(255,255,255,.82)) + `backdrop-filter: saturate(180%) blur(20px)`, hairline bottom. 좌측 브랜드, 우측 나브(홈 / 아카이브 / GitHub — GitHub만 tertiary 색, 14px/500).
-- **Featured 히어로(`.featured-hero`)**: 16:9 라운드 미디어 패널(`.featured-thumb`, hairline) 위/아래로, 가운데 정렬된 kicker → h1 타이틀 → lead → `date · source` → "기사 읽기 →" 링크. `source`는 **발행처 이름**(수집 단계의 `candidate.source`)이지 문서 제목이 아니다 — 발행된 이슈 HTML의 앵커 라벨에서 되읽지 않는다(`headline-render-reconciliation`). featured 이미지는 실제 기사 이미지든 동봉 fallback 그래픽이든 **16:9 풀커버**(`.featured-img`)다. 44% 중앙 + product drop-shadow(`.featured-img.is-brand`)는 **투명 배경 마스코트 전용**이고, 지금 그것을 쓰는 곳은 헤드라인 데이터가 없을 때 나오는 정적 브랜드 히어로(HALley + 브랜드 카피, h1 유지) 하나뿐이다. `assets/images/fallback/`의 카테고리 fallback 4종(`ai`/`android`/`cpp`/`newsletter-default`)은 캔버스를 채우는 불투명 `rect`를 가져서 축소하면 product shot이 아니라 패널 위에 얹힌 사각형으로 읽힌다(#1008). 그 `rect` 색은 카테고리마다 다른 off-palette 흰색이었는데, 풀커버로 바꾸면서 넷 다 `--surface-soft`로 맞췄다 — 이제 그래픽과 패널이 같은 표면이라 경계가 없다. 아카이브 카드(`.card-thumb-img`)도 fallback 여부와 무관하게 풀커버이므로 히어로와 카드가 같은 모양이 된다. 대신 fallback 자리와 실제 기사 이미지가 모양으로는 구분되지 않는다 — 구분은 kicker·meta가 낸다.
+- **홈페이지 독자 요약(`.reader-issue`)**: 최신 주간호의 `reader_brief` 첫 기사에서 가장 먼저 읽을 변화, 무엇이 바뀌는지, 업무상 의미를 보여 준다. 전체 소개는 접고 나머지 기사는 함께 볼 소식으로 연결한다. 공개 headline·lead·takeaway와 실제 anchor를 사용하며, 내부 QA 필드를 노출하지 않는다. 주간호에는 별도 목차 대신 핵심 목록 하나를 두고 소개는 그 뒤에 접어 제공한다.
+- **기존 Featured 히어로(`.featured-hero`, 이전 표시 경로)**: 16:9 라운드 미디어 패널(`.featured-thumb`, hairline) 위/아래로, 가운데 정렬된 kicker → h1 타이틀 → lead → `date · source` → "기사 읽기 →" 링크. `source`는 **발행처 이름**(수집 단계의 `candidate.source`)이지 문서 제목이 아니다 — 발행된 이슈 HTML의 앵커 라벨에서 되읽지 않는다(`headline-render-reconciliation`). featured 이미지는 실제 기사 이미지든 동봉 fallback 그래픽이든 **16:9 풀커버**(`.featured-img`)다. 44% 중앙 + product drop-shadow(`.featured-img.is-brand`)는 **투명 배경 마스코트 전용**이고, 지금 그것을 쓰는 곳은 헤드라인 데이터가 없을 때 나오는 정적 브랜드 히어로(HALley + 브랜드 카피, h1 유지) 하나뿐이다. `assets/images/fallback/`의 카테고리 fallback 4종(`ai`/`android`/`cpp`/`newsletter-default`)은 캔버스를 채우는 불투명 `rect`를 가져서 축소하면 product shot이 아니라 패널 위에 얹힌 사각형으로 읽힌다(#1008). 그 `rect` 색은 카테고리마다 다른 off-palette 흰색이었는데, 풀커버로 바꾸면서 넷 다 `--surface-soft`로 맞췄다 — 이제 그래픽과 패널이 같은 표면이라 경계가 없다. 아카이브 카드(`.card-thumb-img`)도 fallback 여부와 무관하게 풀커버이므로 히어로와 카드가 같은 모양이 된다. 대신 fallback 자리와 실제 기사 이미지가 모양으로는 구분되지 않는다 — 구분은 kicker·meta가 낸다.
 - **이미지 카드(`.archive-card`, 공유 `renderArchiveCard`)**: 16:9 썸네일(`.card-thumb` — hairline, hover 시 1.045 scale) → uppercase kicker(주제) → 톱 기사 헤드라인(hover underline) → 주(week) meta. **카드 프레임**은 배경·테두리 없는 투명 카드다(테두리는 썸네일에만). 홈 "최신 소식" 그리드와 아카이브 그리드가 공유한다. 썸네일은 첫 **실제(비-fallback)** 기사 이미지를 우선하고 없을 때만 placeholder를 쓴다(`cardImage`). kicker(주제)와 아카이브 필터 카운트는 그 주 기사 relevance bucket에서 파생한 위클리 topic 태그(첫 값이 kicker)에서 나온다(`weeklyTopicTags`) — 이슈 레벨 기본 태그가 아니다.
 - **주제 chip(`.keyword`)**: 평평한 pill, 기본 #f5f5f7, 활성 ink 채움. 아카이브 chip은 카운트 뱃지(`.archive-topic-count`)를 곁들인다.
 - **정렬(`.nc-sort`)**: pill 셀렉트 + 인라인 chevron. 최신순/오래된순. chevron 은 data URI 라 `var()` 를 못 쓰므로 3차 메타 색과 같은 값을 리터럴로 박아 둔다 — `--text-tertiary` 를 바꾸면 이 리터럴도 같이 바꾼다.
 - **아카이브 헤더·통계행**: kicker "Newsletter Archive" → h1 "아카이브" → **muted 설명 문장**(`.archive-hero-description`, `--muted`). 그 아래 통계행(`.archive-stat-grid`)은 발행 호수(`N호`) / 주제 / 정렬 — hairline으로만 나눈 오픈 밴드(라벨 12px tertiary, 값 30px/600). 세로 리듬은 mockup을 따른다: 헤더 hairline 바로 아래 통계밴드(‌`.homepage .archive-page-section` 세로 패딩·최소 높이 없음), 결과 요약 줄(`.archive-result-summary`)은 sr-only(시각 숨김·스크린리더 유지), 페이지당 12개(`ARCHIVE_PAGE_SIZE`)라 현재 발행분은 한 페이지에 전부 보이고 성장 시에만 페이지네이션이 나타난다.
-- **이슈 기사(`.issue-story.issue-section`)**: 카드 프레임 없이 hairline+60px 리듬으로 구분되는 평문 흐름 — 제로패딩 아웃라인 번호(`01`, #d2d2d7 원) + uppercase 카테고리 눈썹 → 헤드라인 → 회색 출처 서브타이틀 → **풀폭 16:9 라운드 이미지 + 평문 캡션**(캡션은 기사 출처에서 가져온 이미지에만 붙는다 — repo fallback 이미지는 어느 출처에서도 오지 않았으므로 캡션 없이 그림만 나온다) → 19px/500 리드 → 17px prose(Story Contract v2 기사는 이 흐름 안에 기사별 소제목 `h3.article-subheading`이 0~4개 섞인다) → "Camera HAL · Driver 관점" 파치먼트 take 박스 → 세로 불릿 출처 목록. 페이지 끝에는 `issue-footer-navigation`("← 뉴스룸으로 · 아카이브 전체 보기 →").
+- **이슈 기사(`.issue-story.issue-section`)**: 전체 폭의 구분선과 여백으로 기사를 구분하고, 중앙 읽기 영역 안에서 번호·카테고리 → 제목 → 출처 서브타이틀 → lead → Camera HAL · Driver 관점 → 이미지·캡션 → 본문·소제목 → 출처·기사 이동 순으로 보여 준다. 이미지 영역은 최대 760px, 16:9, `object-fit: contain`으로 원본 비율과 전체 내용을 보존한다. fallback도 같은 크기이며 임의로 축소하거나 흐리게 하지 않는다. 캡션은 기사 출처 이미지에만 붙인다. 소제목과 문단의 좌우 정렬을 함께 검증한다.
 - **푸터(`.site-footer`)**: 파치먼트 배경 + hairline top, 3컬럼(뉴스레터/주제/리소스) + 법적 표기(tertiary).
 
 ## 영문 로케일(`/en/`)
@@ -71,7 +72,7 @@ Camera SW Newsletter 사이트는 **Apple Newsroom 계열의 편집형 룩**을 
 - **문서 언어:** `<html lang="en">`. 한국어 이슈 페이지와 영문 이슈 페이지는 `<html data-alternate-href>`로 서로를 가리키고, `<link rel="alternate" hreflang>` 세 개(`ko`·`en`·`x-default`)를 단다. `x-default`는 한국어판이다.
 - **나브·브랜드:** 나브 라벨은 `Home / Archive / GitHub`이고 `aria-label="Primary navigation"`이다. 링크 대상은 영문판 홈·아카이브다. 워드마크("Camera SW Newsroom")와 로고는 한국어판과 같다.
 - **데이터:** 영문 홈·아카이브는 한국어판과 같은 `articles/data/newsletters-weekly.json`을 읽고, 각 항목의 `en` 필드(`title`·`summary`·`html`·`md`)로 영문판을 고른다. 별도 영문 인덱스는 없다.
-- **번역되지 않은 호:** 영문판은 한국어 호가 머지된 뒤 번역 PR로 따로 들어온다. 그래서 영문판이 아직 없는 호가 생긴다. 영문 아카이브는 그런 호를 숨기지 않고, 카드에 `Korean only` 태그를 달고, 한국어 제목을 그대로(`lang="ko"`) 보여 주되 한국어 요약은 숨기며, 링크는 한국어판으로 보낸다. 영문 홈은 헤드라인 호에 영문판이 없으면 정적 브랜드 히어로로 돌아간다.
+- **번역되지 않은 호:** 영문판은 한국어 호가 머지된 뒤 번역 PR로 따로 들어온다. 그래서 영문판이 아직 없는 호가 생긴다. 영문 아카이브는 그런 호를 숨기지 않고, 카드에 `Korean only` 태그를 달고, 한국어 제목을 그대로(`lang="ko"`) 보여 주되 한국어 요약은 숨기며, 링크는 한국어판으로 보낸다. 영문 홈의 최신 주간호 요약도 번역이 없으면 `Korean only` 상태와 한국어판 링크를 제공한다.
 - **타이포:** 같은 Pretendard 스택과 같은 스케일을 쓴다. 헤드라인의 음의 letter-spacing도 그대로 적용된다.
 
 ### 언어 선택기(`.language-selector`)

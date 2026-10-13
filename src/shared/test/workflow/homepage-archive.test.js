@@ -1064,6 +1064,7 @@ test('newsletter issue page CSS follows the newsroom flat article layout', () =>
   // Story Contract v2 기사별 소제목: 본문(17px)과 기사 h2 사이 단계, weight 램프의 헤드라인 값.
   assertCssDeclaration(issueArticleSubheading, 'font-size', '1.1875rem');
   assertCssDeclaration(issueArticleSubheading, 'font-weight', '600');
+  assertCssDeclaration(issueArticleSubheading, 'margin', '28px auto 0');
   assertCssDeclaration(issueArticleSubheading, 'letter-spacing', '-0.014em');
   // 기사 섹션은 카드 프레임 없이 hairline 위 평문 흐름(60px 리듬).
   assertCssDeclaration(issueSection, 'border-top', '1px solid var(--line)');
