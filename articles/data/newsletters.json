@@ -9,7 +9,13 @@
       "Camera HAL",
       "Android"
     ],
-    "public_contract_version": "story-v2"
+    "public_contract_version": "story-v2",
+    "en": {
+      "title": "2026 W42",
+      "summary": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled\nClaude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks\nDiscussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
+      "html": "en/newsletters/2026-W42/index.html",
+      "md": "en/newsletters/2026-W42/newsletter.md"
+    }
   },
   {
     "date": "2026-10-05",

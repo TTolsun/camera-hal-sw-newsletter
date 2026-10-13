@@ -24,7 +24,13 @@
     "coverage_start_date": "2026-10-05",
     "coverage_end_date": "2026-10-11",
     "coverage_mode": "iso_week",
-    "generation_anchor_date": "2026-10-12"
+    "generation_anchor_date": "2026-10-12",
+    "en": {
+      "title": "2026 W42",
+      "summary": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled\nClaude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks\nDiscussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
+      "html": "en/newsletters/2026-W42/index.html",
+      "md": "en/newsletters/2026-W42/newsletter.md"
+    }
   },
   {
     "weeklyKey": "2026-W41",
