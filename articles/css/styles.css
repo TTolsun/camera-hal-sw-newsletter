@@ -1616,6 +1616,7 @@ pre code {
 }
 
 .newsletter-issue-page .issue-section .article-media {
+  max-width: 760px;
   margin-top: 24px;
 }
 
