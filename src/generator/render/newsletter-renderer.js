@@ -894,14 +894,13 @@ function summaryProse(headline, lead, takeaway) {
 }
 
 function readerBriefHtml(brief) {
-  return `${brief.intro ? `<p class="reader-brief-intro">${escapeHtml(brief.intro)}</p>` : ''}
-          <ol class="reader-brief-items">${brief.items.map(item => {
+  return `<ol class="reader-brief-items">${brief.items.map(item => {
     const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
     return `<li>
             <a href="#${escapeHtml(item.href.split('#')[1])}">${escapeHtml(item.headline)}</a>
             ${meaning ? `<p class="reader-brief-takeaway">${escapeHtml(meaning)}</p>` : lead ? paragraphHtml(lead) : ''}
           </li>`;
-  }).join('')}</ol>`;
+  }).join('')}</ol>${brief.intro ? `<details class="reader-brief-context"><summary>${t.aboutIssue}</summary><p class="reader-brief-intro">${escapeHtml(brief.intro)}</p></details>` : ''}`;
 }
 
 function readerBriefMarkdown(brief) {
@@ -994,9 +993,10 @@ ${articleSeoHead(issue)}
   <script src="${rootPath}assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">${t.skipToContent}</a>
   ${homepageHeaderHtml(rootPath)}
 
-  <main class="site-main article-page newsletter-main">
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
       ${issueHeroHtml(issue, brief)}
 

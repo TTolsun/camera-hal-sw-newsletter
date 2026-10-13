@@ -83,7 +83,12 @@ test('highlights replace contents and all navigation reaches focusable anchors i
       assert.equal((html.match(/aria-label="(?:이전 기사|Previous article):/g) || []).length, 2);
       assert.equal((html.match(/aria-label="(?:다음 기사|Next article):/g) || []).length, 2);
       assert.match(html, /id="issue-briefing" tabindex="-1"/);
-      assert.doesNotMatch(html, /class="issue-contents"|<details/);
+      assert.doesNotMatch(html, /class="issue-contents"/);
+      assert.match(html, /<details class="reader-brief-context"><summary>/);
+      assert.doesNotMatch(html, /<details[^>]*\bopen/);
+      assert.ok(html.indexOf('reader-brief-items') < html.indexOf('reader-brief-context'));
+      assert.match(html, /class="skip-link" href="#main-content"/);
+      assert.match(html, /<main id="main-content" tabindex="-1"/);
       const md = buildMarkdown(issue(3), { locale });
       assert.match(md, /<a id="issue-briefing"><\/a>/);
       assert.doesNotMatch(md, /#issue-contents|## (?:목차|Contents)|Existing title list/);

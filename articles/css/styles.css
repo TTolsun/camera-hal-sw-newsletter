@@ -1414,7 +1414,7 @@ pre code {
 
 /* mockup "이번 호 기사" 박스: 파치먼트 라운드 박스 + 소형 uppercase 라벨. */
 .newsletter-issue-page .issue-briefing {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 
@@ -2300,6 +2300,35 @@ pre code {
   line-height: 1.75;
 }
 
+.reader-brief-context summary {
+  cursor: pointer;
+  padding: 10px 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 16px;
+  z-index: 1000;
+  padding: 12px 16px;
+  background: var(--surface);
+  color: var(--primary);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid var(--focus-ring);
+}
+
+#main-content {
+  scroll-margin-top: 150px;
+}
+
+.newsletter-issue-page .reader-brief-items li:first-child {
+  margin-top: 0;
+}
+
 .newsletter-issue-page .article-navigation {
   display: flex;
   flex-wrap: wrap;
@@ -2342,6 +2371,14 @@ pre code {
 @media (max-width: 640px) {
   .newsletter-issue-page .issue-briefing-card {
     padding: 20px;
+  }
+
+  .newsletter-issue-page .issue-back {
+    margin-bottom: 14px;
+  }
+
+  .newsletter-issue-page .issue-tags {
+    margin-top: 12px;
   }
 
   .newsletter-issue-page .issue-story.issue-section {

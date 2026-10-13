@@ -1,4 +1,6 @@
 module.exports = {
+  "skipToContent": "Skip to content",
+  "aboutIssue": "About this issue",
   "weeklyCore": "This week’s highlights",
   "backToHighlights": "Back to this week’s highlights",
   "contents": "Contents",

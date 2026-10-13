@@ -8,11 +8,11 @@
 
 ## 1. This week’s highlights
 
-This week, we look at AOSP's proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work.
+This issue covers a proposal to keep camera connections open, a review of the Qualcomm CAMSS control format, and the Claude Haiku 5.5 announcement. The camera changes are proposals under review; Haiku needs comparison on real tasks before adoption.
 
 - [AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled](#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl)
 
-  When testing privacy toggles, it is necessary to differentiate based on UID visibility and camera mute support, and verify that the connection is maintained only when conditions are met. Blocking of other clients and the UID inactive path also need to be verified.
+  On supported devices, check that a visible app stays connected while its video is blocked. On unsupported devices and for other apps, check that the camera connection is still closed as before.
 
 - [Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks](#article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks)
 
@@ -31,11 +31,11 @@ This week, we look at AOSP's proposed conditional camera mute, a review of Qualc
 
 _AOSP Gerrit (camera changes under review)_
 
-A patch has been proposed to AOSP to fix an issue where clients of a visible UID that supports camera mute are forcibly terminated immediately after a privacy toggle.
+An Android patch proposes keeping a visible app connected to the camera while blocking its video when camera access is turned off. This applies only to devices that support this behavior. The change is still a proposal.
 
 ### Camera HAL/Driver perspective: what it means
 
-When testing privacy toggles, it is necessary to differentiate based on UID visibility and camera mute support, and verify that the connection is maintained only when conditions are met. Blocking of other clients and the UID inactive path also need to be verified.
+On supported devices, check that a visible app stays connected while its video is blocked. On unsupported devices and for other apps, check that the camera connection is still closed as before.
 
 
 ![](../../../assets/images/fallback/newsletter-default.svg)
