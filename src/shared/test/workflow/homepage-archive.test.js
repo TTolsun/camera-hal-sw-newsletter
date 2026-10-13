@@ -79,6 +79,8 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
   const errors = [];
   const elements = {
     'featured-card': createElement(),
+    'reader-issue': createElement(),
+    'featured': createElement({ hidden: true }),
     'latest-grid': createElement(),
     'latest-topics': createElement(),
     'latest-sort': createElement({ value: 'latest' }),
@@ -242,12 +244,12 @@ test('featured hero renders the current headline with escaped copy, image, kicke
   }));
 
   const html = elements['featured-card'].innerHTML;
-  assert.match(html, /<h1 id="featured-title" class="featured-title">&lt;Camera HAL headline&gt;<\/h1>/);
+  assert.match(html, /<h2 id="featured-title" class="featured-title">&lt;Camera HAL headline&gt;<\/h2>/);
   assert.match(html, /<p class="featured-lead">Summary &amp; details<\/p>/);
   assert.match(html, /<img class="featured-img" src="https:\/\/example\.com\/headline\.png" alt="&lt;Camera preview image&gt;"/);
-  assert.match(html, /<p class="featured-kicker">Camera HAL<\/p>/);
+  assert.match(html, /<p class="featured-kicker">Example Source<\/p>/);
   assert.match(html, /<div class="featured-meta">2026-05-23 · Example Source<\/div>/);
-  assert.match(html, /href="newsletters\/2026-W21\/index\.html#article-camerax-preview"[^>]*>기사 읽기 →<\/a>/);
+  assert.match(html, /href="newsletters\/2026-W21\/index\.html"[^>]*>주간호 읽기 →<\/a>/);
   assert.doesNotMatch(html, /rel="noopener"/);
 });
 
@@ -269,32 +271,16 @@ test('featured hero uses the coverage week and full date range while linking to 
   }));
   const html = elements['featured-card'].innerHTML;
   assert.match(html, /<div class="featured-meta">W39 · 2026-09-21~2026-09-27 · Example Source<\/div>/);
-  assert.match(html, /href="newsletters\/2026-W40\/index\.html#article-ai"/);
+  assert.match(html, /href="newsletters\/2026-W40\/index\.html"/);
 });
 
-// DESIGN.md(#1008): 동봉 fallback 그래픽 4종은 실제 기사 이미지와 같이 16:9 풀커버다.
-// .is-brand(44% 중앙 + drop-shadow)는 투명 배경 마스코트 전용이라 여기서는 붙지 않는다 —
-// 붙이면 불투명 SVG 가 패널 위에 얹힌 사각형으로 보인다.
-// alt 가 비는 것도 같이 잠근다 — fallback 은 기사 정보를 담지 않는 장식이고, image_alt 는 기사
-// 제목에서 파생돼 그대로 두면 바로 아래 h1 과 같은 문장이 두 번 읽힌다.
-test('featured hero renders bundled fallback graphics full-cover with an empty alt', async () => {
+test('separate headline omits decorative fallback media', async () => {
   for (const name of ['ai', 'android', 'cpp', 'newsletter-default']) {
-    const imageSrc = `assets/images/fallback/${name}.svg`;
-    const { elements } = await renderHomepage(
-      [newsletter('2026-05-23', 'Weekly issue')],
-      validHeadlineState({ image_url: imageSrc, image_alt: 'Camera HAL headline image' })
-    );
-    const html = elements['featured-card'].innerHTML;
-    assert.match(
-      html,
-      new RegExp(`<img class="featured-img" src="${imageSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}" alt=""`),
-      `${imageSrc} must render full-cover with an empty alt`
-    );
-    assert.doesNotMatch(html, /is-brand/, `${imageSrc} must not get the transparent-mascot treatment`);
+    const { elements } = await renderHomepage([newsletter('2026-05-23')], validHeadlineState({ image_url: `assets/images/fallback/${name}.svg` }));
+    assert.doesNotMatch(elements['featured-card'].innerHTML, /<img/);
   }
 });
 
-// 로드 실패로 fallback 으로 갈아탈 때도 alt 를 비운다: 갈아탄 그림은 기사가 아니라 장식이다.
 test('featured hero clears the alt when a real image falls back at load time', async () => {
   const { elements } = await renderHomepage(
     [newsletter('2026-05-23', 'Weekly issue')],
@@ -302,10 +288,10 @@ test('featured hero clears the alt when a real image falls back at load time', a
   );
   const html = elements['featured-card'].innerHTML;
   assert.match(html, /<img class="featured-img" src="https:\/\/example\.com\/headline\.png" alt="Camera HAL headline image"/);
-  assert.match(html, /onerror="this\.onerror=null;this\.alt='';this\.src='assets\/images\/fallback\/newsletter-default\.svg'"/);
+  assert.match(html, /onerror="this\.onerror=null;this\.alt='';this\.parentElement\.hidden=true"/);
 });
 
-test('featured hero leaves the static brand hero in place when the headline is missing', async () => {
+test('separate headline stays hidden when selection is missing', async () => {
   const { elements, errors } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], null);
   // The harness starts the featured card empty; a missing headline must not inject article markup.
   assert.equal(elements['featured-card'].innerHTML, '');
@@ -381,9 +367,9 @@ test('featured hero falls back to the external source link when no internal URL 
   assert.match(html, /href="https:\/\/example\.com\/source" rel="noopener">원문 보기 →<\/a>/);
 });
 
-test('featured hero uses the site fallback image when the headline image is unusable', async () => {
+test('separate headline uses text when its image is unavailable', async () => {
   const { elements } = await renderHomepage([newsletter('2026-05-23', 'Current issue')], validHeadlineState());
-  assert.match(elements['featured-card'].innerHTML, /src="assets\/images\/fallback\/newsletter-default\.svg"/);
+  assert.doesNotMatch(elements['featured-card'].innerHTML, /<img/);
 });
 
 test('featured hero escapes a long headline title without truncating the DOM text', async () => {
@@ -417,11 +403,35 @@ test('최신 소식 grid renders every weekly issue as an image-forward card in 
 test('최신 소식 grid shows an empty message when there are no newsletters', async () => {
   const { elements } = await renderHomepage([], null);
   assert.match(elements['latest-grid'].innerHTML, /등록된 뉴스레터가 없습니다/);
+  assert.match(elements['reader-issue'].innerHTML, /<h1 id="reader-title">등록된 뉴스레터가 없습니다/);
 });
 
 test('최신 소식 grid surfaces a fetch error without throwing', async () => {
   const { elements, errors } = await renderHomepage([], null, { newsletterFetchError: true });
   assert.match(elements['latest-grid'].innerHTML, /뉴스레터 정보를 불러오지 못했습니다/);
+  assert.match(elements['reader-issue'].innerHTML, /최신호를 불러오지 못했습니다/);
+  assert.match(elements['reader-issue'].innerHTML, /href="archive.html"/);
+  assert.equal(errors.length, 1);
+});
+
+test('latest issue remains latest while the issue list is filtered or reordered', async () => {
+  const { elements } = await renderHomepage([
+    newsletter('2026-05-25', 'Newest issue'),
+    { ...newsletter('2026-05-24', 'Android issue'), tags: ['Android'] }
+  ]);
+  const initial = elements['reader-issue'].innerHTML;
+  assert.match(initial, /Newest issue/);
+  assert.match(initial, /href="newsletters\/2026-05-25\/index.html"/);
+  elements['latest-topics'].listeners.click({ target: createTopicTarget('android') });
+  elements['latest-sort'].value = 'oldest';
+  elements['latest-sort'].listeners.change();
+  assert.equal(elements['reader-issue'].innerHTML, initial);
+});
+
+test('malformed weekly index uses the homepage error state without inventing a destination', async () => {
+  const { elements, errors } = await renderHomepage({ items: [] });
+  assert.match(elements['reader-issue'].innerHTML, /최신호를 불러오지 못했습니다/);
+  assert.doesNotMatch(elements['reader-issue'].innerHTML, /newsletters\//);
   assert.equal(errors.length, 1);
 });
 
@@ -478,7 +488,7 @@ test('최신 소식 grid surfaces a fallback edition as the card kicker', async 
 
 // ---- Shared card renderer ----
 
-test('renderArchiveCard builds an image-forward card with kicker, headline, and week meta', () => {
+test('legacy cards keep the headline and week meta without unrelated media', () => {
   const html = NewsletterArchive.renderArchiveCard({
     weeklyKey: '2026-W28',
     date: '2026-07-06',
@@ -492,9 +502,8 @@ test('renderArchiveCard builds an image-forward card with kicker, headline, and 
     article_images: ['https://example.com/thumb.png']
   });
 
-  assert.ok(html.indexOf('card-thumb') < html.indexOf('card-body'));
-  assert.match(html, /<img class="card-thumb-img" src="https:\/\/example\.com\/thumb\.png"[^>]*onerror=/);
-  assert.match(html, /<div class="card-kicker">Camera HAL<\/div>/);
+  assert.doesNotMatch(html, /<img|thumb\.png/);
+  assert.match(html, /<div class="card-kicker">주간호<\/div>/);
   // Headline is the issue's top article title (first summary line), not the issue label.
   assert.match(html, /<h3 class="card-title clamp-2 nc-h">기사 A<\/h3>/);
   // 표시 계약 v2: coverage 필드가 전혀 없는 weekly entry는 "발행 WNN · 대상 기간 미확인"으로
@@ -614,8 +623,8 @@ test('renderArchiveCard falls back to the site newsletter image and a kicker whe
     html: 'newsletters/2026-06-03/index.html'
   });
 
-  assert.match(html, /src="assets\/images\/fallback\/newsletter-default\.svg"/);
-  assert.match(html, /<div class="card-kicker">Camera HAL<\/div>/);
+  assert.doesNotMatch(html, /<img/);
+  assert.match(html, /<div class="card-kicker">주간호<\/div>/);
   assert.match(html, /<h3 class="card-title clamp-2 nc-h">Daily issue<\/h3>/);
 });
 
@@ -635,7 +644,7 @@ test('renderArchiveCard uses the lead article image instead of another article i
 
   const html = NewsletterArchive.renderArchiveCard(entry, { rootPath: '../' });
 
-  assert.match(html, /<img class="card-thumb-img" src="\.\.\/assets\/images\/fallback\/newsletter-default\.svg"/);
+  assert.doesNotMatch(html, /<img/);
   assert.doesNotMatch(html, /haiku\.jpg/);
   assert.match(html, /<h3 class="card-title clamp-2 nc-h">AOSP 기사<\/h3>/);
 
@@ -643,11 +652,11 @@ test('renderArchiveCard uses the lead article image instead of another article i
   assert.match(realLead, /<img class="card-thumb-img" src="https:\/\/example\.com\/aosp\.png"/);
 
   const emptyLead = NewsletterArchive.renderArchiveCard({ ...entry, lead_article_image: '' });
-  assert.match(emptyLead, /<img class="card-thumb-img" src="assets\/images\/fallback\/newsletter-default\.svg"/);
+  assert.doesNotMatch(emptyLead, /<img/);
 });
 
-// lead_article_image가 없는 예전 항목은 기존처럼 article_images의 첫 실제 이미지를 쓴다(과거 카드 표시 불변).
-test('renderArchiveCard keeps the article_images choice for entries without lead_article_image', () => {
+// 공통 계약 v1 §5: lead_article_image가 없는 예전 항목에서 다른 기사 이미지를 추정하지 않는다.
+test('renderArchiveCard uses text for entries without lead_article_image', () => {
   const html = NewsletterArchive.renderArchiveCard({
     weeklyKey: '2026-W41',
     date: '2026-10-05',
@@ -658,22 +667,19 @@ test('renderArchiveCard keeps the article_images choice for entries without lead
     article_images: ['assets/images/fallback/android.svg', 'https://example.com/a.png']
   });
 
-  assert.match(html, /<img class="card-thumb-img" src="https:\/\/example\.com\/a\.png"/);
+  assert.doesNotMatch(html, /<img/);
 });
 
 // ---- Static homepage markup contracts ----
 
-test('homepage renders a static brand featured hero and a 최신 소식 grid with sort and topic hooks', () => {
+test('homepage leads with the latest issue and retains sort, topic and navigation hooks', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 
-  // A static brand hero keeps a single H1 present before the headline data loads.
-  assert.match(html, /<article id="featured-card" class="featured-hero">/);
-  // 이 마스코트가 `.featured-img.is-brand` 의 유일한 소비자다(#1008 이후). DESIGN.md elevation 이
-  // 허용한 단 하나의 product drop-shadow 예외가 이 한 줄에 걸려 있으므로 함께 잠근다 —
-  // 여기서 빠지면 styles.css 의 .featured-img.is-brand 가 조용히 dead 규칙이 된다.
-  assert.match(html, /<img class="featured-img is-brand" src="assets\/images\/brand\/HALley\.png"/);
-  assert.match(html, /<h1 id="featured-title" class="featured-title">보이지 않는 카메라의 오늘, 그러나 미래<\/h1>/);
-  assert.match(html, /<p class="featured-kicker">Camera SW Newsroom<\/p>/);
+  assert.match(html, /<article id="reader-issue" class="reader-issue" aria-live="polite">/);
+  assert.match(html, /<h1 id="reader-title">최신 주간 뉴스레터<\/h1>/);
+  assert.match(html, /href="css\/homepage\.css"/);
+  assert.ok(html.indexOf('id="reader-issue"') < html.indexOf('id="latest"'));
+  assert.doesNotMatch(html, /featured-img is-brand/);
   // 최신 소식 grid section with sort + topic filter + grid hooks.
   assert.match(html, /<h2 id="latest-title">최신 소식<\/h2>/);
   assert.match(html, /<select id="latest-sort" class="nc-sort"[\s\S]*?<option value="latest">최신순<\/option>[\s\S]*?<option value="oldest">오래된순<\/option>/);
@@ -934,23 +940,16 @@ test('footer links and notes use the muted text token, not an off-palette litera
   assertCssDeclaration(selectorGroupBlock(readStylesheet(), '.footer-link'), 'color', 'var(--muted)');
 });
 
-test('homepage featured hero and latest grid CSS cover the rebuilt layout', () => {
-  const css = readStylesheet();
-  const featuredHero = exactSelectorBlock(css, '.featured-hero');
-  const featuredThumb = exactSelectorBlock(css, '.featured-thumb');
-  const featuredCopy = exactSelectorBlock(css, '.featured-copy');
-  const featuredTitle = exactSelectorBlock(css, '.featured-title');
-  const wideLatestGrid = exactSelectorBlock(mediaBlock(css, '(min-width: 1000px)'), '.latest-grid');
-
-  // The rebuilt homepage renders `.featured-hero`/`.latest-grid` (not `.site-hero`); assert the
-  // live layout so a regression in the new hero is caught, not just the retained dead-CSS pins.
-  assertCssDeclaration(featuredHero, 'display', 'grid');
-  assertCssDeclaration(featuredThumb, 'aspect-ratio', '16 / 9');
-  assertCssDeclaration(featuredThumb, 'border', '1px solid var(--line)');
-  assertCssDeclaration(featuredThumb, 'border-radius', 'var(--radius-lg)');
-  assertCssDeclaration(featuredCopy, 'text-align', 'center');
-  assertCssDeclaration(featuredTitle, 'font-size', 'clamp(1.9rem, 3.4vw, 2.9rem)');
-  assertCssDeclaration(wideLatestGrid, 'grid-template-columns', 'repeat(3, minmax(0, 1fr))');
+test('home-only styles give prose priority, constrain media and retain mobile wrapping', () => {
+  const css = fs.readFileSync(path.join(root, 'articles/css/homepage.css'), 'utf8');
+  assertCssDeclaration(exactSelectorBlock(css, '.homepage .reader-issue'), 'grid-template-columns', 'minmax(0, 1fr)');
+  assertCssDeclaration(exactSelectorBlock(css, '.homepage .reader-issue'), 'overflow-wrap', 'anywhere');
+  assertCssDeclaration(exactSelectorBlock(css, '.homepage .reader-issue > .reader-media'), 'max-width', '280px');
+  assertCssDeclaration(exactSelectorBlock(css, '.homepage .reader-actions'), 'flex-wrap', 'wrap');
+  assertCssDeclaration(exactSelectorBlock(css, '.homepage .reader-actions a'), 'min-height', '44px');
+  assertCssDeclaration(exactSelectorBlock(css, '.homepage .featured-copy'), 'text-align', 'left');
+  assertCssDeclaration(exactSelectorBlock(css, '.homepage .featured-thumb[hidden]'), 'display', 'none');
+  assert.match(css, /\.reader-issue:has\(> \.reader-media:not\(\[hidden\]\)\)/);
 });
 
 test('latest and archive card CSS preserves whole-card links and mobile summary behavior', () => {
