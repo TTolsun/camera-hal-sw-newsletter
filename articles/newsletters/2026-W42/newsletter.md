@@ -1,7 +1,30 @@
 # 2026 W41 (10.05 ~ 10.11)
 
+
+
+
+
+## 이번 주 핵심
+
 이번 주에는 AOSP의 조건부 카메라 mute 제안, Qualcomm CAMSS ISP 파라미터 uAPI 문서 리뷰, Claude Haiku 5.5 발표를 살펴봅니다. 카메라 관련 두 기사는 아직 제안·리뷰 단계이므로 적용 조건과 확인할 사항을 구분했습니다. Haiku는 반복 코딩 작업을 맡길 보조 모델로 소개하고, 실제 업무에서 품질·비용·응답 시간을 비교하는 방법을 제안합니다.
 
+- [AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안](#article-aosp-cameraserver-mute)
+
+  카메라 mute를 지원하고 화면에 보이는 UID의 클라이언트도 프라이버시 토글 직후 강제 종료되는 문제를 고치려는 패치가 AOSP에 제안되었습니다.
+
+  프라이버시 토글 시험을 UID 가시성 및 camera mute 지원 여부로 나누고, 조건을 만족할 때만 연결을 유지하는지 확인해야 합니다. 나머지 클라이언트와 UID 비활성 경로의 차단도 함께 검증할 대상입니다.
+
+- [Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델](#article-claude-haiku-5-5)
+
+  빌드 오류 요약이나 단순 분류처럼 반복되는 작업을 큰 모델에 모두 맡길 필요가 줄어듭니다. Anthropic은 이런 작업과 코딩 보조 에이전트를 겨냥한 Haiku 5.5를 발표했습니다.
+
+  개발 도구 담당자는 빌드 오류 로그 요약·분류 표본으로 현재 모델과 Haiku 5.5를 비교할 수 있습니다. 정확도와 누락률을 유지하는 범위에서 비용·응답 시간 개선 여부를 측정하는 것이 도입 판단의 기준입니다.
+
+- [Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의](#article-qualcomm-camss-isp-uapi-v10)
+
+  Qualcomm CAMSS 하위 시스템의 ISP 파라미터를 제어하기 위한 V4L2 메타데이터 포맷 문서화 패치 시리즈가 v10 리비전으로 검토되고 있습니다.
+
+  Qualcomm platform 커널 드라이버 연동 시 qcom-camss-config.h uAPI 구조체 및 v4l2_isp 공통 헤더 변경 사항을 사전 점검해야 합니다.
 
 
 ## 1. 이번 주 기사
@@ -9,16 +32,29 @@
 - AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안
 - Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델
 - Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의
+<a id="issue-contents"></a>
+
+## 목차
+
+- [AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안](#article-aosp-cameraserver-mute)
+- [Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델](#article-claude-haiku-5-5)
+- [Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의](#article-qualcomm-camss-isp-uapi-v10)
+
+<a id="article-aosp-cameraserver-mute"></a>
 
 ## 2. AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안
-
-
-![AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안 image](../../assets/images/fallback/newsletter-default.svg)
-
 
 _AOSP Gerrit (camera changes under review)_
 
 카메라 mute를 지원하고 화면에 보이는 UID의 클라이언트도 프라이버시 토글 직후 강제 종료되는 문제를 고치려는 패치가 AOSP에 제안되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+프라이버시 토글 시험을 UID 가시성 및 camera mute 지원 여부로 나누고, 조건을 만족할 때만 연결을 유지하는지 확인해야 합니다. 나머지 클라이언트와 UID 비활성 경로의 차단도 함께 검증할 대상입니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
 
 쉽게 말해, 카메라 영상을 가리는 것과 앱의 카메라 연결을 끊는 것을 구분하려는 제안입니다. 화상회의 중 카메라 접근을 차단하는 상황을 예로 들면, 화면에 보이는 앱이고 기기가 camera mute를 지원할 때는 영상을 차단하면서 연결을 유지하고, 그 밖에는 기존처럼 연결을 끊습니다. 여기서 mute는 마이크 음소거가 아니라 카메라 영상 차단을 뜻합니다. 프라이버시 보호를 유지하면서 불필요한 연결 종료를 줄이려는 제안이며, 아직 반영이 완료된 기능은 아닙니다.
 
@@ -32,9 +68,7 @@ diff는 blockAllClients()와 blockPrivacyEnabledClients()에 같은 조건 검�
 
 UID가 비활성 상태가 될 때 사용하는 blockClientsForUid()는 이 패치에서 바꾸지 않습니다. 따라서 모든 앱의 카메라 세션을 유지하는 변경으로 해석하면 안 됩니다. 기기에서 race 해소나 성능 개선을 실측한 결과는 제공되지 않았으므로, 패치의 의도와 실제 검증 결과도 구분해야 합니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-프라이버시 토글 시험을 UID 가시성 및 camera mute 지원 여부로 나누고, 조건을 만족할 때만 연결을 유지하는지 확인해야 합니다. 나머지 클라이언트와 UID 비활성 경로의 차단도 함께 검증할 대상입니다.
+[목차로 돌아가기](#issue-contents)
 
 **출처**
 
@@ -42,17 +76,23 @@ UID가 비활성 상태가 될 때 사용하는 blockClientsForUid()는 이 패�
 
 ---
 
+<a id="article-claude-haiku-5-5"></a>
+
 ## 3. Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델
+
+_Anthropic News 공식 발표_
+
+빌드 오류 요약이나 단순 분류처럼 반복되는 작업을 큰 모델에 모두 맡길 필요가 줄어듭니다. Anthropic은 이런 작업과 코딩 보조 에이전트를 겨냥한 Haiku 5.5를 발표했습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+개발 도구 담당자는 빌드 오류 로그 요약·분류 표본으로 현재 모델과 Haiku 5.5를 비교할 수 있습니다. 정확도와 누락률을 유지하는 범위에서 비용·응답 시간 개선 여부를 측정하는 것이 도입 판단의 기준입니다.
 
 
 ![Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용](https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg)
 
 _이미지: [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5)_
 
-
-_Anthropic News 공식 발표_
-
-빌드 오류 요약이나 단순 분류처럼 반복되는 작업을 큰 모델에 모두 맡길 필요가 줄어듭니다. Anthropic은 이런 작업과 코딩 보조 에이전트를 겨냥한 Haiku 5.5를 발표했습니다.
 
 10월 7일 발표된 Claude Haiku 5.5는 많은 요청을 빠르게 처리하면서 비용을 줄이는 데 초점을 둔 소형 언어 모델입니다. 공식 발표는 요약, 대화 내용 압축, 데이터베이스 질의, 분류를 대표적인 반복 작업으로 들고 있습니다.
 
@@ -66,9 +106,7 @@ Camera HAL 개발 팀에서는 빌드 오류 로그의 요약·분류를 시험 
 
 이번 소식의 실무 가치는 반복 작업을 별도 모델에 맡길 선택지가 생겼다는 점입니다. 성능이 충분한 작업부터 나누되, 복잡한 원인 분석까지 일괄 전환할 근거로 사용해서는 안 됩니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-개발 도구 담당자는 빌드 오류 로그 요약·분류 표본으로 현재 모델과 Haiku 5.5를 비교할 수 있습니다. 정확도와 누락률을 유지하는 범위에서 비용·응답 시간 개선 여부를 측정하는 것이 도입 판단의 기준입니다.
+[목차로 돌아가기](#issue-contents)
 
 **출처**
 
@@ -76,15 +114,21 @@ Camera HAL 개발 팀에서는 빌드 오류 로그의 요약·분류를 시험 
 
 ---
 
+<a id="article-qualcomm-camss-isp-uapi-v10"></a>
+
 ## 4. Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의
-
-
-![Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의 image](../../assets/images/fallback/newsletter-default.svg)
-
 
 _lore.kernel.org linux-media list_
 
 Qualcomm CAMSS 하위 시스템의 ISP 파라미터를 제어하기 위한 V4L2 메타데이터 포맷 문서화 패치 시리즈가 v10 리비전으로 검토되고 있습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Qualcomm platform 커널 드라이버 연동 시 qcom-camss-config.h uAPI 구조체 및 v4l2_isp 공통 헤더 변경 사항을 사전 점검해야 합니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
 
 9월 25일 제출된 PATCH v10 문서화 패치에 대해 10월 6일 linux-media 메일링 리스트에서 리뷰 의견이 올라왔습니다. 이 패치는 Qualcomm CAMSS ISP 파라미터 메타데이터 형식인 V4L2_META_FMT_QCOM_ISP_PARAMS 제안을 포함합니다. 이 포맷은 공통 V4L2 확장 가능 ISP 파라미터 구조를 기반으로 설계되었습니다.
 
@@ -94,9 +138,7 @@ Qualcomm CAMSS 하위 시스템의 ISP 파라미터를 제어하기 위한 V4L2 
 
 리뷰 과정에서 공통 ISP 구조체인 v4l2_isp_buffer 및 v4l2_isp_block_header 적용에 대한 의견이 교환되었습니다. 구형 레거시 드라이버 호환용 구조체 대신 공통 구조체를 사용하는 방향으로 커널 내 표준화 작업이 지속 진행되고 있습니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-Qualcomm platform 커널 드라이버 연동 시 qcom-camss-config.h uAPI 구조체 및 v4l2_isp 공통 헤더 변경 사항을 사전 점검해야 합니다.
+[목차로 돌아가기](#issue-contents)
 
 **출처**
 
