@@ -27,6 +27,7 @@ const {
   publicArticleJudgeArtifactScope
 } = require('./orchestrator-judge-helpers');
 const { selectedReporterCapsules } = require('./orchestrator-reporter-normalize');
+const { sourceReviewInput } = require('../quality/article-source-review');
 const { DERIVED_STAGE_KINDS, derivedStageRun } = require('../../shared/llm/stage-catalog');
 
 async function repairEditorSemanticWithLlm({
@@ -52,6 +53,7 @@ async function repairEditorSemanticWithLlm({
       'Section을 추가, 제거, 합치기, 분할, 재정렬, 교체하지 마세요. Validation error가 명시한 field만 in-place로 수정하세요.',
       'public_article.body_markdown을 고칠 때도 허용 문법을 지키세요: 빈 줄로 구분한 평문 문단과 "### "로 시작하는 소제목 줄만 쓸 수 있습니다. 리스트, 인용, 링크, 이미지, 코드/백틱, HTML 태그, 볼드 표기를 넣으면 결정론 lint가 다시 실패합니다. ' + BODY_MARKDOWN_ACTIVE_CHARACTER_RULE,
       'Validation error가 명시적으로 해당 field를 가리키지 않으면 article headline, category, source URL, image field, action_items, references를 변경하지 마세요.',
+      'validation error가 sections.public_article 전체의 사실성·충실도를 가리키면 public_article의 headline·lead·takeaway·body가 수정 범위입니다. 그 범위에서 제안의 확정 상태를 암시하는 공개 제목도 원문 상태에 맞게 고치세요. section 최상위 headline·category·sources는 article identity이므로 그대로 유지하세요.',
       claimRepairEvidencePrompt(),
       'sections.group_coverage failure는 missing selected representative group을 selected capsule만 사용해 article로 복구하세요. 해당 group을 render할 수 없으면 article_group_key, reason_code, reason text를 포함해 explicitly_demoted_groups[] 또는 hard_blocked_groups[]에 기록하세요.',
       'sections.blocked_context failure는 article sources와 headline에서 blocked context URL/title을 제거하세요. Blocked context는 diagnostic context로만 남길 수 있습니다.',
@@ -72,7 +74,8 @@ async function repairEditorSemanticWithLlm({
       lockedContext,
       `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter || { candidates: [] }, articleCapsuleReport, { seedEvidencePack }), null, 2)}`,
       `Editor semantic validation error JSON:\n${JSON.stringify(validationError, null, 2)}`,
-      `Invalid editor draft JSON:\n${JSON.stringify(invalidEditor, null, 2)}`
+      `Invalid editor draft JSON:\n${JSON.stringify(invalidEditor, null, 2)}`,
+      `Section-bound source documents for repair (review suggestions are not evidence) JSON:\n${JSON.stringify(sourceReviewInput(invalidEditor, articleCapsuleReport).map(({ section_index, source_documents }) => ({ section_index, source_documents })), null, 2)}`
     ].filter(Boolean).join('\n\n'),
     editorSchema
   );
@@ -123,7 +126,9 @@ async function validatePublicArticleJudgeOrRepair({
   editorStage,
   commonContext,
   lockedContext,
-  newsroomDir
+  newsroomDir,
+  articleCapsuleReport = null,
+  seedEvidencePack = null
 }, deps) {
   const { recordEditorSemanticStatus, validateEditor } = deps;
   const identifierReferenceSections = snapshotIdentifierReferences(editor.sections);
@@ -164,13 +169,17 @@ async function validatePublicArticleJudgeOrRepair({
       editorStage,
       commonContext,
       lockedContext,
+      reporter,
+      articleCapsuleReport,
+      seedEvidencePack,
       invalidEditor: cloneJson(editor),
       validationError: initialDetails
     }, deps);
     const repairedEditor = validateEditor(repairedRaw, date, reporter, {
       identifierReferenceSections,
       strictClaims: true,
-      requireStoryContract: true
+      requireStoryContract: true,
+      seedEvidencePack
     });
     assertSectionsAndSourcesPreserved(editor, repairedRaw);
     const repairedJudge = await runPublicArticleJudge({

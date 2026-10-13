@@ -51,6 +51,8 @@ test('all fact-check stages distinguish unsupported facts from non-actionable bu
     assert.match(prompt, /action_items·owner·metric이 없다는 이유만으로 must_fix하지/);
     assert.match(prompt, /기존 source binding·dated evidence·cross-check 누락은 그대로 차단/);
     assert.match(prompt, /설명이 일반론에 그치면 article_quality에서 판정/);
+    assert.match(prompt, /수정 제안의 사실성도 검증/);
+    assert.match(prompt, /같은 의미의 한국어 어순·접속사 변경/);
     assert.match(prompt, /내부 검토 필드로 공개 설명의 누락을 메우지/);
     assert.doesNotMatch(prompt, /measurable metrics가 빠진 C\+\+ tooling action item/);
   }
@@ -147,6 +149,23 @@ test('new writers use existing source roles and every reviewer sees status/effec
     assert.match(prompt, /최소 대조 예시 3/);
     assert.match(prompt, /source에 없는 항목을 material_omissions로 만들지/);
   }
+});
+
+test('writing, source review and repairs preserve source predicates and treat reviewer suggestions as unverified', () => {
+  const { claimRepairEvidencePrompt, publicInterpretationReviewPrompt } = require('../../reporter/newsletter-prompts');
+  for (const prompt of [editorSystemPrompt(), editorCompletionSystemPrompt(),
+    editorRepairPatchSystemPrompt(), claimRepairEvidencePrompt(), publicInterpretationReviewPrompt()]) {
+    assert.match(prompt, /1% 초과/);
+    assert.match(prompt, /이전 설정·활성화 상태 유지/);
+    assert.match(prompt, /DSC가 항상 활성화된다는 결론은 나오지/);
+  }
+  for (const prompt of [editorRepairPatchSystemPrompt(), claimRepairEvidencePrompt()]) {
+    assert.match(prompt, /검토 의견이며 사실 근거가 아닙니다/);
+    assert.match(prompt, /잘못된 제안은 본문에 복사하지/);
+  }
+  const review = publicInterpretationReviewPrompt();
+  assert.match(review, /source URL과 짧은 원문 구절/);
+  assert.match(review, /이후 상태를 모른다는 이유만으로 source_gaps/);
 });
 
 for (const sample of cases) {
