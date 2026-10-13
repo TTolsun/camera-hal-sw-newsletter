@@ -10,7 +10,24 @@ const MAX_DOCUMENT_CHARS = 16000;
 // Read source content, not the first bytes of HTML (usually navigation/metadata).
 // Keep table cells and diff lines separate so conditions and removed lines survive.
 function sourceBody(html) {
-  let body = articleBody(html);
+  const cleaned = String(html || '')
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
+  let body = articleBody(cleaned);
+  // A news article may contain testimonial cards that are themselves articles.
+  // The shared devsite helper stops at the first closing tag; balance the outer
+  // article here so pricing, limitations and footnotes after those cards survive.
+  let depth = 0;
+  let start = -1;
+  for (const tag of cleaned.matchAll(/<\/?article\b[^>]*>/gi)) {
+    if (!tag[0].startsWith('</')) {
+      if (depth === 0) start = tag.index + tag[0].length;
+      depth++;
+    } else if (depth > 0 && --depth === 0) {
+      body = cleaned.slice(start, tag.index);
+      break;
+    }
+  }
   const patchStart = body.search(/<h2\b[^>]*>\s*(?:Commit Message|Message)\s*<\/h2>/i);
   if (patchStart >= 0) body = body.slice(patchStart);
   return decodeHtml(body

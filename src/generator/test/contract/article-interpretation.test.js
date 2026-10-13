@@ -12,6 +12,7 @@ const {
 const { publicArticleJudgePrompt } = require('../../reporter/newsletter-prompts');
 const {
   PUBLIC_ARTICLE_V2_ALLOWED_KEYS,
+  PUBLIC_SOURCE_ROLES,
   validatePublicArticle
 } = require('../../reporter/public-article-contract');
 const { publicArticleSchema } = require('../../render/newsletter-schema');
@@ -120,6 +121,8 @@ function syntheticIssue(sample) {
 }
 
 test('public schema and version preserve existing required QA fields with no new status/owner/action fields', () => {
+  assert.deepEqual(publicArticleSchema.properties.source_links.items.properties.source_role.enum, PUBLIC_SOURCE_ROLES);
+  assert.ok(!publicArticleSchema.properties.source_links.items.required.includes('source_role'));
   assert.deepEqual(Object.keys(publicArticleSchema.properties).sort(),
     PUBLIC_ARTICLE_V2_ALLOWED_KEYS.filter(key => key !== 'decision_metadata').sort());
   for (const key of ['headline', 'lead', 'camera_hal_takeaway', 'body_markdown', 'reader_checkpoints', 'source_links']) {
@@ -129,6 +132,20 @@ test('public schema and version preserve existing required QA fields with no new
     const issue = syntheticIssue(sample);
     assert.deepEqual(validatePublicArticle(issue.sections[0], 0, { issue }), []);
     assert.equal(issue.sections[0].public_article.story_contract_version, 2);
+  }
+});
+
+test('new writers use existing source roles and every reviewer sees status/effect counterexamples', () => {
+  for (const prompt of [editorSystemPrompt(), editorRepairPatchSystemPrompt(), editorCompletionSystemPrompt()]) {
+    assert.match(prompt, /primary, seed_evidence, related_context/);
+    assert.match(prompt, /official_blog.*source_role 값/);
+    assert.match(prompt, /현재 미병합 상태의 증거도 아닙니다/);
+  }
+  for (const prompt of [factCheckSystemPrompt(), factCheckRepairSystemPrompt(), factCheckCompletionSystemPrompt(), publicArticleJudgePrompt()]) {
+    assert.match(prompt, /최소 대조 예시 1/);
+    assert.match(prompt, /최소 대조 예시 2/);
+    assert.match(prompt, /최소 대조 예시 3/);
+    assert.match(prompt, /source에 없는 항목을 material_omissions로 만들지/);
   }
 });
 
