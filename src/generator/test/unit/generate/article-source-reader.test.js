@@ -8,6 +8,34 @@ function report(candidate) {
 }
 const response = body => ({ ok: true, status: 200, headers: {}, text: async () => body });
 
+test('nested article cards do not hide later pricing conditions or footnotes', async () => {
+  const input = report({ url: 'https://example.com/model', title: 'Coding assistant release' });
+  await readArticleSources(input, { fetchImpl: async () => response(
+    '<nav>Site navigation</nav><article><p>Coding assistant release.</p>' +
+    '<article><p>Customer benchmark.</p></article>' +
+    '<article><p>Another customer.</p></article>' +
+    '<h2>Pricing</h2><p>Cost depends on input length.</p>' +
+    '<h2>Footnotes</h2><p>The tokenizer changes the tokens per task.</p></article>' +
+    '<footer>Unrelated site links</footer><article>Other news</article>') });
+  const doc = input.selected_articles[0].article_source_reading.documents[0];
+  assert.match(doc.text, /Cost depends on input length/);
+  assert.match(doc.text, /tokenizer changes the tokens per task/);
+  assert.equal(doc.truncated, false);
+  assert.doesNotMatch(doc.text, /Site navigation|Unrelated site links|Other news/);
+  const capsule = buildArticleCapsuleReport('2026-10-12', input).selected_capsules[0];
+  assert.ok(capsule.allowed_claim_evidence.some(e => e.evidence_id === doc.evidence_id));
+});
+
+test('article-looking strings in scripts and comments cannot terminate the source body', () => {
+  const body = sourceBody('<article><p>First fact.</p>' +
+    '<script>const fake = "</article><article>";</script><!-- </article> -->' +
+    '<ARTICLE><p>Nested fact.</p></ARTICLE><p>Last fact.</p></article><footer>Navigation</footer>');
+  assert.match(body, /First fact/);
+  assert.match(body, /Nested fact/);
+  assert.match(body, /Last fact/);
+  assert.doesNotMatch(body, /const fake|Navigation/);
+});
+
 test('release-note bodies retain setup versions and later test rows beyond the summary', async () => {
   const candidate = { url: 'https://source.android.com/docs/test', title: 'Camera ITS', summary: 'Use a virtual environment.' };
   const input = report(candidate);

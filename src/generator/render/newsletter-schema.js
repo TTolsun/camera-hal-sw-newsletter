@@ -8,6 +8,7 @@ const {
   OVERCLAIM_RISKS
 } = require('../quality/claim-source-binding');
 const { HAL_IMPACT_AXES } = require('../reporter/hal-signal-quality');
+const { PUBLIC_SOURCE_ROLES } = require('../reporter/public-article-contract');
 
 const string = { type: 'STRING' };
 const number = { type: 'NUMBER' };
@@ -33,7 +34,7 @@ const publicSourceLink = {
     title: string,
     url: string,
     publisher: string,
-    source_role: string,
+    source_role: enumString(PUBLIC_SOURCE_ROLES),
     checked_at: string
   },
   required: ['title', 'url']

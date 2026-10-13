@@ -6,6 +6,7 @@ const {
   SUBHEADING_PREFIX
 } = require('./public-body-markdown');
 const { HAL_IMPACT_AXES } = require('./hal-signal-quality');
+const { PUBLIC_SOURCE_ROLES } = require('./public-article-contract');
 
 // v2 본문 규약은 lint와 **같은 상수**에서 공급한다. 여기에 같은 목록을 리터럴로 적으면
 // lint가 막는 것과 프롬프트가 금지하는 것이 갈라져, 모델이 프롬프트를 그대로 지켜도
@@ -136,10 +137,26 @@ function articleInterpretationCriteriaPrompt() {
     'AI/C++ 개발 도구: 새 선택지와 build/test/debug/code review 등 원문이 뒷받침하는 개발 업무, 지원 조건과 검증되지 않은 부분을 설명하세요. 새 기술을 발견하고 이해하는 것도 독자 가치입니다. 모든 도구를 HAL 직접 변경이나 도입 지시로 연결하지 마세요.',
     '연구·패치 제안·참고 소식: 주목할 설계·비교 대상·적용 조건과 확정되지 않은 부분을 설명하세요. 특정 스택의 제안을 일반 Android HAL 대응으로 확대하지 마세요. reference_only/watchlist의 main 승격 금지는 그대로 유지합니다.',
     '변경 상태는 제안·리뷰·병합·배포를 구분하세요. 패치 revision, 리뷰 응답 또는 벤치마크 발표만으로 병합·배포·제품 적용을 추정하지 마세요. 상태가 확인되지 않으면 확인되지 않은 범위를 자연어로 설명하고 빈칸을 사실로 채우지 마세요.',
+    '리뷰 메일에서 제안을 확인했다는 사실은 현재 미병합 상태의 증거도 아닙니다. 이후 상태 근거가 없으면 "아직 병합되지 않았다"도 단정하지 말고 확인한 날짜의 리뷰 내용까지만 설명하세요.',
     '공급사의 성능·비용 주장은 공급사 주장으로 귀속하고 비교 조건·한계를 보존하세요. 사내 활용 실적·비용 절감·제품 영향·팀 실측 결과로 바꾸지 마세요. 편집자가 제안하는 활용이나 비교 방법은 확인된 사실과 다른 문장으로 구분하세요.',
+    '새 도구의 활용 예시를 제안할 때 "이 업무의 대기 시간을 줄입니다"처럼 검증된 효과로 쓰지 마세요. 해당 업무에서의 효과는 미검증임을 밝히고, 필요하면 비교할 입력과 결과를 제안하세요. 원문에 없는 임계값을 보강하려고 만들지 마세요.',
     '근거가 부족한 사례는 확인한 내용과 확인하지 못한 범위를 구분하세요. 같은 근거에 없는 version/API/로그/수치/상태를 필수 항목을 채우기 위해 만들지 마세요. 기존 source binding, dated evidence, fact-check와 발행 안전 기준을 유지하세요.',
     '독자가 무엇이 바뀌었는가, 누구에게 해당하거나 어떤 업무에 유용한가, 어디까지 확인됐는가를 공개 headline·lead·camera_hal_takeaway·body_markdown에서 이해할 수 있어야 합니다. reader_checkpoints, decision_metadata, hal_signal_capsule, editorial_story는 내부 검토용이며 공개 설명을 대신하지 못합니다.',
     '원문에 구체 사실이 있는데도 "검토할 수 있다" 같은 일반론, 상투적인 HAL 연결, 반복 문장만 쓰면 충분한 해석이 아닙니다. 반대로 설명·인지·참고가 적절한 기사에 실행 지시나 비교 실험을 강요하지 마세요.'
+  ].join('\n');
+}
+
+// Semantic criteria shared by source-only review and existing fact/judge paths.
+// These are examples of evidence boundaries, not keyword or topic gates.
+function publicInterpretationReviewPrompt() {
+  return [
+    '공개 설명 대조: headline·lead·body_markdown(legacy body_paragraphs)·camera_hal_takeaway만 독자가 읽은 설명으로 평가하세요. claims, verified_facts, reader_checkpoints, decision_metadata, hal_signal_capsule, editorial_story에만 있는 조건이나 한계는 공개 설명의 누락을 메우지 못합니다.',
+    '기사의 공개 문장과 실제 source document를 한 쌍씩 대조하세요. 후보 summary나 내부 guardrail이 상태를 말해도 source document가 확인하지 않으면 상태 근거로 인정하지 마세요. 원문의 날짜와 그 문서가 증명하는 상태 범위를 구분하세요.',
+    '최소 대조 예시 1: source가 특정 날짜의 패치 리뷰만 제공하고 병합 이력을 제공하지 않는데 기사가 "아직 최종 병합되지 않았습니다"라고 쓰면 미확인 상태 단정입니다. "해당 날짜의 리뷰에서는 공통 구조체 사용을 제안했습니다"처럼 확인한 사실만 쓰면 상태를 추측하지 않은 설명입니다.',
+    '최소 대조 예시 2: source의 공급사 benchmark가 빠르다는 이유로 기사가 "우리 C++ 업무의 응답 대기 시간을 줄입니다"라고 쓰면 그 업무의 효과를 뒷받침하지 못합니다. 공급사 비교 조건을 보존하고 "이 업무에서의 효과는 검증되지 않았으며 동일 입력으로 비교할 수 있습니다"라고 쓰는 편집 제안과 구분하세요.',
+    '최소 대조 예시 3: source는 이미지 검사에서 ICC 프로파일과 색역 비율 조건을 설명하는데 기사는 검사 이름만 나열하고 내부 claims에만 조건을 적었다면 공개 검증 설명에는 조건이 빠져 있습니다. 기사 주제를 이해하는 데 필요한 조건의 누락을 명명하세요. 모든 검사나 원문 전부를 소개하라고 요구하는 것은 아닙니다.',
+    '최소 대조 예시 4: source가 RMS 기준 강화만 설명하고 새 수치를 주지 않으면 그 수치의 부재는 기사 누락이 아닙니다. 기사가 "새 수치는 제시되지 않았습니다"라고 설명했을 때 값을 추가하도록 요구하지 마세요. source에 없는 항목을 material_omissions로 만들지 마세요.',
+    '유용한 주제, 구체적인 식별자, 내부 QA의 정답만으로 PASS를 주지 마세요. 근거 없는 공개 단정과 중요한 공개 설명의 누락을 각각 지적하고, 수정 방향도 실제 source가 뒷받침하는 범위로 제한하세요.'
   ].join('\n');
 }
 
@@ -213,6 +230,7 @@ function publicArticleContractPrompt() {
     'public_article은 한국어 독자-facing technical newsletter prose로 작성하세요. validation report, checklist, enum, schema/debug field name을 노출하지 마세요.',
     'claim/schema contract와 public prose contract를 섞지 마세요. enum, diagnostic term, internal field name은 public_article 문장에 쓰지 마세요.',
     'source_links는 selected capsule의 primary 또는 seed evidence URL만 사용하고 새 URL을 만들지 마세요.',
+    `source_links[].source_role을 쓰면 기존 허용값 ${PUBLIC_SOURCE_ROLES.join(', ')} 중 해당 URL에 허용된 역할만 사용하세요. official_blog 같은 출처 종류를 source_role 값으로 새로 만들지 마세요. related_context는 selected capsule이 명시적으로 허용한 경우에만 사용합니다.`,
     'camera_hal_takeaway는 호환성을 위해 이름을 유지하는 공개 의미 문장입니다. "Camera HAL/Driver 관점에서의 의미"처럼 표시되더라도 AI/C++ 기사는 해당 개발 업무의 의미를 설명하세요. "직접적인 HAL 변경은 없으나" 같은 디스클레이머로 문장을 시작하지 말고, 직접 변경은 적용 대상과 필요한 확인 포인트를, 도구·연구·제안은 활용 가능한 업무나 알아둘 설계와 한계를 먼저 제시하세요. 직접 HAL/Driver 근거가 있는 경우에만 관련 metadata key, request/result 필드, CTS/VTS/ITS 항목, V4L2/uAPI 구조체, 버퍼/포맷, 라이브러리 버전·재빌드 영향 등을 사용하세요. source_extraction/behavior_change가 뒷받침하지 않는 HAL/driver/runtime 영향은 지어내지 말고, 그 범위를 벗어나는 부분만 참고 맥락으로 쓰세요.',
     'android_multimedia_camera_output article의 camera_hal_takeaway는 Camera HAL 직접 변경이 아니라 camera-generated output, preview/recording, gallery/media access, sharing, video communication, A/V sync 같은 downstream validation 의미로 제한해 쓰세요.',
     'reader_checkpoints는 최소 2개이며 내부 QA/checklist용 필드입니다. Markdown/HTML에 직접 렌더링되지 않으므로, public body나 "Camera HAL/Driver 관점에서의 의미" 섹션을 대체하지 마세요. 독자가 실제로 확인할 행동과 source 범위 제한을 자연어로 작성하되 body_markdown과 camera_hal_takeaway를 반복하는 bullet list로 만들지 마세요.',
@@ -297,6 +315,7 @@ function publicArticleJudgePrompt() {
     '각 section에 대해 public_article_pass, reader_checkpoints_pass, source_boundary_pass, public_prose_pass를 boolean으로 반환하세요.',
     articleInterpretationCriteriaPrompt(),
     articleActionGuidancePrompt(),
+    publicInterpretationReviewPrompt(),
     'reader_checkpoints_pass는 Camera HAL / Driver / Android Camera / Camera API / native tooling 독자가 실제로 확인, 측정, 비교, 점검, 추적할 수 있는 항목이면 PASS입니다.',
     'reader_checkpoints가 source가 말하지 않는 HAL/driver/runtime 변경을 사실처럼 단정하거나, 너무 일반적인 모니터링/공유 수준이면 FAIL입니다.',
     'reader_checkpoints_pass는 실행 지시 유무가 아니라 유형에 맞는 구체 확인 대상과 근거 경계를 평가하세요. 특정 설계 조건·지원 범위·리뷰 쟁점을 확인하는 내부 QA도 유효합니다. 단순 인지 기사에서 owner·실험·metric이 없다는 이유만으로 FAIL하지 마세요.',
@@ -386,6 +405,7 @@ function cameraDeveloperToolingFactCheckPrompt() {
 
 function articleQualityVerdictPrompt() {
   return [
+    publicInterpretationReviewPrompt(),
     '기사 유형별 실무 해석 기준으로 공개 설명의 충실도를 검토하세요. HAL/Framework/Driver 기사는 적용 조건·동작·한계를, AI/C++ 도구는 새 선택지·관련 개발 업무·미검증 범위를, 연구·패치 제안·참고는 설계·미확정 상태를 원문과 비교하세요. 내부 검토 필드로 공개 설명의 누락을 메우지 마세요. 단순 인지·참고 가치가 충분하면 불필요한 업무 지시나 비교 실험을 요구하지 마세요.',
     'publishable을 판정하기 전에 source_review를 작성하세요. core_change에는 원문에서 확인한 핵심 변화와 그 조건을, article_explanation에는 public_article 본문이 실제로 설명한 내용을 적으세요. 내부 confirmed_facts/claims/캡슐의 정보는 독자가 읽는 본문에 없는 설명을 대신하지 못합니다. material_omissions에는 기사 주제를 이해하는 데 필요한데 본문에서 빠진 구체적인 조건·버전·동작을 적고, unaddressed_source_conflicts에는 원문 문서들 사이의 충돌 중 본문이 밝히지 않고 한쪽을 단정한 항목을 적으세요. 원문 전체를 요약하지 않았다는 이유로 무관한 누락을 넣지 마세요. 원문의 서로 다른 절·diff까지 확인하세요. 두 문제 배열 중 하나라도 비어 있지 않으면 publishable=false입니다. 구체적인 점검을 안내한다고 주장하는 기사가 실제 버전·대상·확인 방법을 설명하지 않으면 일반적인 검토 권고를 실질적 가이드로 평가하지 마세요.',
     '기사 충실도를 article_source_reading.documents 및 제공된 원문 근거와 비교하세요. 핵심 변화·중요한 조건을 생략한 채 요약을 일반론으로 늘렸거나, 독자가 무엇이 어떻게 달라졌는지 설명할 수 없으면 article_quality.publishable=false로 판정하세요. 누락된 구체 사실이나 반복 문장을 reason에 명명하세요. 표·목차·체크리스트·행동 권고의 존재만으로 통과/탈락시키지 마세요. 관찰·설계 논의도 근거와 쟁점을 충분히 설명하면 유용한 기사입니다.',
@@ -442,6 +462,7 @@ function buildPromptContexts({ date, editorialPolicy, newsletterTemplate, golden
 }
 
 module.exports = {
+  publicInterpretationReviewPrompt,
   buildPromptContexts,
   linkedEvidencePromptGuardrails,
   seriesContextPrompt,
