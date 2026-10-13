@@ -918,6 +918,18 @@ pre code {
   padding: 0 2px;
 }
 
+/* Keep card rows aligned while treating missing source images as decoration. */
+.archive-card .reader-media.is-fallback {
+  display: grid;
+  place-items: center;
+}
+
+.archive-card .reader-media.is-fallback .card-thumb-img {
+  width: 42%;
+  height: 70%;
+  object-fit: contain;
+}
+
 .card-kicker {
   color: var(--muted);
   font-size: 0.75rem;
