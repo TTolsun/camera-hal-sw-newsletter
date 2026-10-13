@@ -161,3 +161,67 @@ test('diagnostics distinguish pool cap exclusion from an actual triage decision'
   assert.equal(result.report.not_selected.at(-1).reason, 'triage_pool_cap');
   assert.equal(result.report.not_selected.at(-1).triage_input, undefined);
 });
+
+function qualifiedTool(index, overrides = {}) {
+  return candidate(index, {
+    relevance_bucket: 'cpp_ai_tooling_fallback', main_eligible: true,
+    main_article_source_allowed: true, source_gap_risk: false,
+    has_dated_evidence: true, reference_only: false, ...overrides
+  });
+}
+
+test('independent developer coverage survives an LLM omission without raising the collection cap', async () => {
+  const items = [candidate(0, { relevance_bucket: 'direct_aosp_camera' }),
+    candidate(1, { relevance_bucket: 'camera_driver_image_pipeline' }), qualifiedTool(2)];
+  const result = await triageCandidatePool(items, {
+    maxFinal: 2, keywordFallback: items.slice(0, 2),
+    callLlm: async () => ({ selected: [{ id: 'c1' }, { id: 'c2' }] })
+  });
+  assert.deepEqual(result.candidates, [items[0], items[2]]);
+  assert.equal(result.report.coverage_preserved[0].url, items[2].url);
+  assert.equal(result.report.not_selected[0].reason, 'coverage_priority_displaced');
+  assert.equal(items[2].main_eligible, true);
+});
+
+test('coverage does not rescue missing evidence, source-blocked or reference-only developer items', async () => {
+  for (const override of [
+    { main_eligible: false }, { main_article_source_allowed: false },
+    { source_gap_risk: true }, { has_dated_evidence: false }, { reference_only: true },
+    { source_quality: { main_article_source_allowed: false } }
+  ]) {
+    const items = [candidate(0), qualifiedTool(1, override)];
+    const result = await triageCandidatePool(items, {
+      maxFinal: 1, keywordFallback: [], callLlm: async () => ({ selected: [{ id: 'c1' }] })
+    });
+    assert.deepEqual(result.candidates, [items[0]]);
+    assert.equal(result.report.coverage_preserved.length, 0);
+  }
+});
+
+test('coverage honors bounded pools and never displaces equal or higher editorial priority', async () => {
+  for (const bucket of ['direct_aosp_camera', 'cpp_ai_tooling_fallback']) {
+    const items = [candidate(0, { relevance_bucket: bucket }), qualifiedTool(1)];
+    const result = await triageCandidatePool(items, {
+      maxFinal: 1, keywordFallback: [], callLlm: async () => ({ selected: [{ id: 'c1' }] })
+    });
+    assert.deepEqual(result.candidates, [items[0]]);
+  }
+  const items = [...pool(MAX_TRIAGE_POOL), qualifiedTool(MAX_TRIAGE_POOL)];
+  const result = await triageCandidatePool(items, {
+    maxFinal: 1, keywordFallback: [], callLlm: async () => ({ selected: [{ id: 'c1' }] })
+  });
+  assert.deepEqual(result.candidates, [items[0]]);
+});
+
+test('coverage prefers recent eligible evidence without hardcoding a model or source', async () => {
+  const items = [candidate(0), qualifiedTool(1), qualifiedTool(2, { effective_date: '2026-10-07' })];
+  const result = await triageCandidatePool(items, {
+    maxFinal: 1, keywordFallback: [], callLlm: async () => ({ selected: [{ id: 'c1' }] })
+  });
+  assert.deepEqual(result.candidates, [items[2]]);
+  const alreadySelected = await triageCandidatePool(items, {
+    maxFinal: 1, keywordFallback: [], callLlm: async () => ({ selected: [{ id: 'c2' }] })
+  });
+  assert.deepEqual(alreadySelected.candidates, [items[1]]);
+  assert.equal(alreadySelected.report.coverage_preserved.length, 0);
+});

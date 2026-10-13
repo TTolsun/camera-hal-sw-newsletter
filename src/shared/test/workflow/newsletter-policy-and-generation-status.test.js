@@ -45,6 +45,7 @@ test('newsletter policy validates candidate pool preflight thresholds', () => {
       editorialPriority: articlePolicy.editorialPriority,
       driverMainMaxAllowed: articlePolicy.driverMainMaxAllowed,
       independentMainBuckets: articlePolicy.independentMainBuckets,
+      collectionIndependentBucketMin: articlePolicy.collectionIndependentBucketMin,
       mainArticleCount: { min: 3, max: 5 },
       primaryCameraStack: {
         minRequired: 1,
@@ -83,6 +84,7 @@ test('newsletter policy validates selection window contract without enforcing se
       editorialPriority: articlePolicy.editorialPriority,
       driverMainMaxAllowed: articlePolicy.driverMainMaxAllowed,
       independentMainBuckets: articlePolicy.independentMainBuckets,
+      collectionIndependentBucketMin: articlePolicy.collectionIndependentBucketMin,
       mainArticleCount: { min: 3, max: 5 },
       primaryCameraStack: {
         minRequired: 1,
@@ -165,6 +167,7 @@ test('newsletter policy validates publish-ready composition contract separately 
       editorialPriority: articlePolicy.editorialPriority,
       driverMainMaxAllowed: articlePolicy.driverMainMaxAllowed,
       independentMainBuckets: articlePolicy.independentMainBuckets,
+      collectionIndependentBucketMin: articlePolicy.collectionIndependentBucketMin,
       mainArticleCount: { min: 3, max: 5 },
       primaryCameraStack: {
         minRequired: 1,

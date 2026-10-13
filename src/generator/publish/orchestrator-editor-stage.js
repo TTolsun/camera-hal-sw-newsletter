@@ -94,6 +94,7 @@ async function runEditorStage({
       editorStage,
       commonContext,
       lockedContext,
+      lockedSections,
       newsroomDir,
       articleCapsuleReport,
       seedEvidencePack,

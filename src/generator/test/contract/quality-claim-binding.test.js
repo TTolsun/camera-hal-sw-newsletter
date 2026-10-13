@@ -761,6 +761,54 @@ test('linked evidence absent or unresolved without inference does not create ove
   assert.equal(linkedDeductions(unresolved, 'linked-evidence-limitation').length, 0);
 });
 
+test('primary source confirmation is scoped to a fully read URL and evidence id, not unresolved links', () => {
+  const url = 'https://example.com/patch';
+  const document = { url, evidence_id: 'source-body:primary', text: 'Patch adds a conditional mute.', truncated: false };
+  const candidate = linkedEvidenceCandidate(url, 'direct_aosp_camera', {
+    article_source_reading: { status: 'read', documents: [document] },
+    linked_evidence_summary: linkedEvidenceSummary({ by_fetch_status: { unsupported: 1 }, has_unresolved_evidence: true }),
+    impact_classification: impactClassification({ impact_type: 'unknown', recommended_article_type: 'unknown' })
+  });
+  const note = `Primary source Gerrit verified: ${url} source-body:primary`;
+  const article = section({ url, source_verification_notes: [note] });
+  assert.equal(linkedDeductions(reportWithTargetSection(article, candidate), 'linked-evidence-overclaim').length, 0);
+  const idBoundNote = { ...article, source_verification_notes: ['Verified from Gerrit patch (source-body:primary).'] };
+  assert.equal(linkedDeductions(reportWithTargetSection(idBoundNote, candidate), 'linked-evidence-overclaim').length, 0);
+  const splitNotes = [`Source URL: ${url}`, 'Evidence ID: source-body:primary',
+    'Verified patch details and commit message in Gerrit.'];
+  const splitArticle = { ...article, source_verification_notes: splitNotes };
+  assert.equal(linkedDeductions(reportWithTargetSection(splitArticle, candidate), 'linked-evidence-overclaim').length, 0);
+  for (const badNotes of [
+    splitNotes.slice(1), splitNotes.filter(note => !note.startsWith('Evidence ID:')),
+    splitNotes.map(note => note.replace(url, 'https://example.com/other')),
+    splitNotes.map(note => note.replace('source-body:primary', 'source-body:missing')),
+    [...splitNotes, 'Source URL: https://example.com/other'],
+    [...splitNotes, 'Evidence ID: source-body:another'],
+    [...splitNotes, 'Gerrit linked evidence verified'],
+    [...splitNotes, 'All Gerrit patch details verified']
+  ]) {
+    assert.ok(linkedDeductions(reportWithTargetSection({ ...article, source_verification_notes: badNotes }, candidate),
+      'linked-evidence-overclaim').some(item => item.blocking), JSON.stringify(badNotes));
+  }
+  for (const badNote of [
+    'Gerrit verified', note.replace('source-body:primary', 'source-body:missing'),
+    note.replace(url, 'https://example.com/other'), `${note}; all linked evidence verified`,
+    `${note} source-body:another`
+  ]) {
+    const report = reportWithTargetSection({ ...article, source_verification_notes: [badNote] }, candidate);
+    assert.ok(linkedDeductions(report, 'linked-evidence-overclaim').some(item => item.blocking));
+  }
+  for (const reading of [{ status: 'failed', documents: [document] },
+    { status: 'read', documents: [{ ...document, truncated: true }] }]) {
+    const report = reportWithTargetSection(article, { ...candidate, article_source_reading: reading });
+    assert.ok(linkedDeductions(report, 'linked-evidence-overclaim').some(item => item.blocking));
+    assert.ok(linkedDeductions(reportWithTargetSection(splitArticle, { ...candidate, article_source_reading: reading }),
+      'linked-evidence-overclaim').some(item => item.blocking));
+  }
+  const prose = { ...article, what_changed: 'Gerrit linked evidence confirmed the implementation.' };
+  assert.ok(linkedDeductions(reportWithTargetSection(prose, candidate), 'linked-evidence-overclaim').some(item => item.blocking));
+});
+
 test('malformed linked evidence diagnostics are soft and non-fatal', () => {
   const cases = [
     {

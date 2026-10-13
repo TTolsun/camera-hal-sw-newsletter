@@ -121,6 +121,7 @@ function recordLastKnownValidEditor(editor, {
 // orchestrator-public-article-judge.js로 분리되어 있다. callLlmJson/recordEditorSemanticStatus/
 // validateEditor는 god-file local(run-state 결합)이라 deps 객체로 묶어 주입한다.
 const publicArticleJudgeDeps = { callLlmJson, recordEditorSemanticStatus, validateEditor };
+const { restoreLockedSection } = require('./orchestrator-section-locking');
 
 async function validateOrRepairEditor(value, {
   date,
@@ -129,6 +130,7 @@ async function validateOrRepairEditor(value, {
   editorStage,
   commonContext,
   lockedContext,
+  lockedSections = [],
   newsroomDir,
   articleCapsuleReport = null,
   seedEvidencePack = null,
@@ -140,7 +142,10 @@ async function validateOrRepairEditor(value, {
   // 누락이 editor 단계에서 먼저 hard-fail해 발행 가능한 draft가 통째로 막힌다. reconcile는 strict
   // 오라클이 evidence가 claim을 실제 뒷받침한다고 확인할 때만 채우므로(없던 근거를 만들지 않음)
   // 게이트 약화가 아니다.
-  value = reconcileFactClaimEvidence(value, { reporter, seedEvidencePack });
+  const restore = draft => Array.isArray(draft?.sections)
+    ? { ...draft, sections: draft.sections.map(section => restoreLockedSection(section, lockedSections)) }
+    : draft;
+  value = reconcileFactClaimEvidence(restore(value), { reporter, seedEvidencePack });
   const result = await repairEditorOutputContract({
     value,
     date,
@@ -152,7 +157,7 @@ async function validateOrRepairEditor(value, {
     requireStoryContract: true,
     publishMode,
     seedEvidencePack,
-    normalizeSection: (section, index) => normalizeEditorSection(section, index, reporter),
+    normalizeSection: (section, index) => normalizeEditorSection(restoreLockedSection(section, lockedSections), index, reporter),
     repairFn: async ({ invalidEditor, validationError }) => repairEditorSemanticWithLlm({
       date,
       editorStage,
@@ -175,7 +180,9 @@ async function validateOrRepairEditor(value, {
     commonContext,
     lockedContext,
     newsroomDir
-  }, publicArticleJudgeDeps);
+  }, { ...publicArticleJudgeDeps,
+    validateEditor: (draft, ...args) => validateEditor(restore(draft), ...args)
+  });
 }
 
 module.exports = {

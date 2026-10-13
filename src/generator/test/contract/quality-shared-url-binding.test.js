@@ -75,6 +75,27 @@ test('two different candidates on one URL still need matching date or version ev
   assert.match(binding.reason, /Shared watch\/release-note URL requires matching/);
 });
 
+test('an extracted article URL does not inherit its parent homepage watch binding requirement', () => {
+  const candidate = patchCandidate({
+    collectionMode: 'article-item',
+    sourceCollectionMode: 'homepage-watch',
+    source_kind: 'blog_post_item',
+    published_date: ''
+  });
+  const index = candidateBindingIndex({ candidates: [{ ...candidate }] }, { selected_articles: [candidate] });
+  assert.equal(bindCandidateForSection(awbSection(), index).status, 'bound');
+
+  for (const overrides of [
+    { collectionMode: 'homepage-watch' },
+    { collectionMode: '', collection_mode: '', sourceCollectionMode: 'homepage-watch' },
+    { source_kind: 'documentation_page' }
+  ]) {
+    const watch = { ...candidate, ...overrides };
+    const watchIndex = candidateBindingIndex({}, { selected_articles: [watch] });
+    assert.equal(bindCandidateForSection(awbSection(), watchIndex).status, 'evidence_mismatch');
+  }
+});
+
 test('candidates whose titles differ only in non-Korean, non-ASCII text stay distinct', () => {
   const entries = [
     { candidate: patchCandidate({ title: '相机驱动更新' }) },

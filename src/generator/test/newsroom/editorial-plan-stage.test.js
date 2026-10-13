@@ -10,12 +10,29 @@ const test = require('node:test');
 
 const {
   normalizeEditorialPlanReport,
+  applyCoveragePolicyReview,
   buildEditorialPlanReport,
   editorFacingEditorialPlan
 } = require('../../publish/orchestrator-editorial-plan-stage');
 const { editorialPlanSchema } = require('../../render/newsletter-schema');
 const { editorialPlanPrompt } = require('../../reporter/newsletter-prompts');
 const { editorialPlanSystemPrompt } = require('../../publish/orchestrator-stage-prompts');
+
+test('policy review can veto mechanical coverage but cannot invent, omit or duplicate article decisions', () => {
+  const mechanical = { url: 'https://example.com/type', source_candidate_hash: 'a', coverage_decision: 'main_article' };
+  const tool = { url: 'https://example.com/tool', source_candidate_hash: 'b', coverage_decision: 'main_article' };
+  const excluded = { url: 'https://example.com/other', source_candidate_hash: 'c', coverage_decision: 'exclude' };
+  const report = { editorial_plans: [mechanical, tool, excluded] };
+  const reviews = [{ review_id: 'r1', coverage_decision: 'exclude', reason: 'Existing platform handle semantics; type syntax only.' },
+    { review_id: 'r2', coverage_decision: 'main_article', reason: 'Concrete coding agent workflow.' }];
+  const result = applyCoveragePolicyReview(report, { reviews });
+  assert.deepEqual(result.editorial_plans.map(item => item.coverage_decision), ['exclude', 'main_article', 'exclude']);
+  assert.equal(report.editorial_plans[0].coverage_decision, 'main_article');
+  for (const invalid of [reviews.slice(0, 1), [...reviews, reviews[0]], [...reviews, { review_id: 'r3', reason: 'Promote' }],
+    [{ ...reviews[0], review_id: 'wrong' }, reviews[1]]]) {
+    assert.throws(() => applyCoveragePolicyReview(report, { reviews: invalid }), /Editorial policy review/);
+  }
+});
 
 test('buildEditorialPlanReport는 LLM 호출이 실패하면 throw해서 파이프라인을 멈춘다', async () => {
   // fail-fast: editorial-plan이 실패하면 editor/fact-check/quality 같은 뒤 단계를 돌리지 않고
@@ -42,6 +59,35 @@ test('buildEditorialPlanReport는 LLM 호출이 실패하면 throw해서 파이�
   } finally {
     delete require.cache[stageKey];
     if (savedInstr) require.cache[instrKey] = savedInstr; else delete require.cache[instrKey];
+    delete require.cache[stageKey];
+  }
+});
+
+test('policy review receives actual persisted url_hash capsules and can reject a proposed main', async () => {
+  const instrKey = require.resolve('../../publish/orchestrator-llm-instrumentation');
+  const stageKey = require.resolve('../../publish/orchestrator-editorial-plan-stage');
+  const saved = require.cache[instrKey];
+  const capsule = { url: 'https://example.com/wrapper', url_hash: 'real-hash', title: 'Wrapper migration',
+    what_changed: 'Type spelling changes; transfer semantics are unchanged.' };
+  const plan = { url: capsule.url, source_candidate_hash: capsule.url_hash, coverage_decision: 'main_article' };
+  let calls = 0;
+  require.cache[instrKey] = { id: instrKey, filename: instrKey, loaded: true, exports: {
+    callLlmJson: async (stage, system, input) => {
+      calls += 1;
+      if (calls === 1) return { editorial_plans: [plan] };
+      assert.deepEqual(JSON.parse(input).items[0].capsules, [capsule]);
+      return { reviews: [{ review_id: 'r1', coverage_decision: 'exclude', reason: 'No change in transfer semantics.' }] };
+    }
+  } };
+  delete require.cache[stageKey];
+  try {
+    const { buildEditorialPlanReport: build } = require('../../publish/orchestrator-editorial-plan-stage');
+    const report = await build({ date: '2026-10-12', commonContext: '', stage: 'test',
+      articleCapsuleReport: { shortlisted_capsules: [capsule] } });
+    assert.equal(calls, 2);
+    assert.equal(report.editorial_plans[0].coverage_decision, 'exclude');
+  } finally {
+    require.cache[instrKey] = saved;
     delete require.cache[stageKey];
   }
 });
@@ -134,6 +180,34 @@ test('editorFacingEditorialPlan은 null/비배열을 안전하게 통과한다',
   assert.deepEqual(editorFacingEditorialPlan({ x: 1 }), { x: 1 });
 });
 
+test('editorial HAL impact is constrained by the same candidate evidence, not importance or another article', () => {
+  const item = { title: 'CameraService privacy policy', url: 'https://example.com/framework',
+    source_candidate_hash: 'framework', direct_hal_impact: true, impact_level: 'Direct Impact',
+    coverage_decision: 'main_article' };
+  const capsule = { url: item.url, source_candidate_hash: item.source_candidate_hash,
+    allowed_claim_evidence: [{ supports_direct_hal_contract: false }] };
+  for (const capsules of [[], [capsule], [{ ...capsule, source_candidate_hash: 'another',
+    allowed_claim_evidence: [{ supports_direct_hal_contract: true }] }]]) {
+    const plan = normalizeEditorialPlanReport({ editorial_plans: [item] }, '2026-10-12', capsules).editorial_plans[0];
+    assert.equal(plan.direct_hal_impact, false);
+    assert.equal(plan.coverage_decision, 'main_article');
+    assert.match(plan.source_limitations[0], /실제 변경 계층/);
+  }
+  const supported = { ...capsule, allowed_claim_evidence: [{ supports_direct_hal_contract: true }] };
+  assert.equal(normalizeEditorialPlanReport({ editorial_plans: [item] }, '2026-10-12', [supported])
+    .editorial_plans[0].direct_hal_impact, true);
+  const persistedCapsule = { ...supported, source_candidate_hash: undefined, url_hash: item.source_candidate_hash };
+  assert.equal(normalizeEditorialPlanReport({ editorial_plans: [item] }, '2026-10-12', [persistedCapsule])
+    .editorial_plans[0].direct_hal_impact, true);
+});
+
+test('a mechanical-only assessment cannot contradict itself by requesting a main article', () => {
+  const report = normalizeEditorialPlanReport({ editorial_plans: [{ url: 'https://example.com/migration',
+    coverage_decision: 'main_article', mechanical_only: true, change_assessment: 'Only wrapper syntax changes.' }] }, '2026-10-12');
+  assert.equal(report.editorial_plans[0].coverage_decision, 'exclude');
+  assert.equal(report.editorial_plans[0].mechanical_only, true);
+});
+
 test('editorialPlanSchema는 plan 식별자와 핵심 추론 필드를 required로 둔다', () => {
   const item = editorialPlanSchema.properties.editorial_plans.items;
   for (const key of [
@@ -158,7 +232,8 @@ test('editorialPlanPrompt는 coverage/impact enum과 안전 경계를 담는다'
   assert.doesNotMatch(prompt, /reference_only/, '결과가 exclude와 같은 등급을 다시 제시하면 안 된다');
   assert.match(prompt, /Direct Impact, Design Reference, Trend Watch, Exclude/);
   assert.match(prompt, /public 본문에 라벨로 노출하지 않습니다/);
-  assert.match(prompt, /direct_hal_impact는 source가 직접 HAL\/runtime 변경을 뒷받침할 때만 true/);
+  assert.match(prompt, /direct_hal_impact는 HAL 인터페이스·계약 자체의 변경을 원문이 직접 뒷받침할 때만 true/);
+  assert.match(prompt, /camera_framework_behavior/);
   assert.match(prompt, /이미지 센서 제조사, SoC\/platform vendor, ISP IP 제공자, 패치 작성자, 테스트 보드, 적용 디바이스를 혼동하지 마세요/);
   assert.match(prompt, /발행 안전 판단의 최종 강제는 deterministic validation layer가 담당/);
 });
@@ -174,7 +249,10 @@ test('editorialPlanPrompt는 libcamera 변경을 우선 검토하라고 지시�
 test('editorialPlanSystemPrompt는 assessor 페르소나와 plan 계약을 조립한다', () => {
   const prompt = editorialPlanSystemPrompt();
   assert.match(prompt, /AI editorial assessor/);
-  assert.match(prompt, /selection을 다시 하지 말고/);
+  assert.match(prompt, /selected 표시는 잠정 선택/);
+  assert.match(prompt, /가치가 낮은 잠정 선택은 exclude/);
+  assert.match(prompt, /deterministic reconciler가 출처 자격·상한·최소 기사 수/);
+  assert.doesNotMatch(prompt, /selection을 다시 하지 말고/);
   assert.match(prompt, /Editorial plan contract/);
 });
 

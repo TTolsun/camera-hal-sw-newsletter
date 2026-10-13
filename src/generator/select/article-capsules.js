@@ -278,11 +278,10 @@ function linkedEvidenceDoNotClaim(candidate) {
   const byStatus = candidate.linked_evidence_summary?.by_fetch_status ||
     candidate.source_aware_linked_evidence_summary?.by_fetch_status ||
     {};
-  if (Number(byStatus.blocked || 0) > 0) {
-    messages.push('Do not use blocked linked evidence as factual support.');
-  }
-  if (Number(byStatus.failed || 0) > 0) {
-    messages.push('Do not use failed linked evidence as factual support.');
+  for (const status of ['blocked', 'failed', 'skipped', 'unsupported', 'unresolved']) {
+    if (Number(byStatus[status] || 0) > 0) {
+      messages.push(`Do not use ${status} linked evidence as factual support. Primary article reading does not confirm these linked documents.`);
+    }
   }
   return messages;
 }

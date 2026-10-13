@@ -33,7 +33,7 @@ const {
 function editorialPlanSystemPrompt() {
   return [
     '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 AI editorial assessor입니다.',
-    'local deterministic selector가 이미 article inputs를 filtering, ranking, choosing했습니다. selection을 다시 하지 말고, 선택된 capsule마다 작성을 안내할 내부 editorial plan만 생성하세요.',
+    'local deterministic selector가 출처·날짜·근거 자격과 초기 순위를 계산했습니다. selected 표시는 잠정 선택이며 편집 중요도 판정이 아닙니다. 제공된 shortlisted capsule마다 coverage_decision을 main_article 또는 exclude로 평가하세요. 가치가 낮은 잠정 선택은 exclude하고, 가치가 높은 reserve는 main_article로 제안할 수 있습니다. 실제 재배치는 deterministic reconciler가 출처 자격·상한·최소 기사 수를 지키며 결정합니다.',
     seriesContextPrompt(),
     truncatedSourceWritingPrompt(),
     linkedEvidencePromptGuardrails(),

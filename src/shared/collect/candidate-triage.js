@@ -17,6 +17,8 @@
 
 const MAX_TRIAGE_POOL = 400;
 const SUMMARY_PREVIEW_LENGTH = 280;
+const { articlePolicy } = require('../config/newsletter-policy.json');
+const { editorialPriority } = require('../domain/aosp-camera-scope');
 
 const TRIAGE_MODES = Object.freeze({
   ALL_FIT: 'all_fit',
@@ -32,7 +34,10 @@ const SYSTEM_INSTRUCTION = [
   'Pick the candidates that give this reader the most practical value this week: concrete changes they may need to act on,',
   'test, or understand. Skip customer case studies, funding or partnership announcements, general business news,',
   'and items unrelated to camera, multimedia, platform, or developer tooling work.',
-  'Judge by meaning, not by keyword overlap. Return candidate ids only from the given list, most valuable first.'
+  'Judge by meaning, not by keyword overlap. Return candidate ids only from the given list, most valuable first.',
+  `Editorial priority (highest first): ${articlePolicy.editorialPriority.join(', ')}.`,
+  'C++ and AI developer tools are independent main topics, not filler. A dated model release with concrete coding workflow evidence does not need to change Camera HAL to be valuable.',
+  'Prefer changes to developer capabilities, behavior, or interfaces over platform-local mechanical cleanup. A camera-related path alone does not make a change important.'
 ].join(' ');
 
 const RESPONSE_SCHEMA = {
@@ -75,6 +80,7 @@ function triageItems(pool) {
     date_evidence_url: text(candidate.date_evidence_url),
     url: text(candidate.url),
     title: text(candidate.title),
+    relevance_bucket: text(candidate.relevance_bucket),
     summary: text(candidate.summary).slice(0, SUMMARY_PREVIEW_LENGTH),
     api_or_component: text(candidate.api_or_component).slice(0, 160),
     behavior_change: text(candidate.behavior_change).slice(0, 500),
@@ -114,6 +120,38 @@ function reportEntry(candidate, extra = {}) {
     url: text(candidate.url),
     ...extra
   };
+}
+
+// Preserve an opportunity for policy-defined independent main topics before the
+// irreversible collection cap. This reserves candidate input, never publication.
+// Only already-qualified candidates in the bounded, source-capped pool can enter.
+function preserveIndependentCoverage(selected, pool, maxFinal) {
+  const result = [...selected];
+  const added = [];
+  const displaced = [];
+  const qualified = candidate => candidate.main_eligible === true &&
+    candidate.main_article_source_allowed === true && candidate.source_gap_risk === false &&
+    candidate.has_dated_evidence === true && !candidate.reference_only &&
+    candidate.source_quality?.main_article_source_allowed !== false;
+  for (const bucket of articlePolicy.independentMainBuckets) {
+    const available = pool.filter(candidate => candidate.relevance_bucket === bucket && qualified(candidate))
+      .sort((a, b) => candidateDate(b).localeCompare(candidateDate(a)));
+    let count = result.filter(candidate => candidate.relevance_bucket === bucket && qualified(candidate)).length;
+    for (const candidate of available) {
+      if (count >= articlePolicy.collectionIndependentBucketMin) break;
+      if (result.some(item => candidateKey(item) === candidateKey(candidate))) continue;
+      if (result.length >= maxFinal) {
+        const index = result.findLastIndex(item => editorialPriority(item) > editorialPriority(candidate));
+        if (index < 0) break;
+        displaced.push(result[index]);
+        result.splice(index, 1);
+      }
+      result.push(candidate);
+      added.push(candidate);
+      count += 1;
+    }
+  }
+  return { selected: result, added, displaced };
 }
 
 /**
@@ -171,7 +209,8 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
   const filled = fallback
     .filter(candidate => poolUrls.has(candidateKey(candidate)) && !pickedUrls.has(candidateKey(candidate)))
     .slice(0, maxFinal - picks.length);
-  const selected = [...picked, ...filled];
+  const coverage = preserveIndependentCoverage([...picked, ...filled], triagePool, maxFinal);
+  const selected = coverage.selected;
   const selectedUrls = new Set(selected.map(candidateKey));
 
   return {
@@ -185,11 +224,15 @@ async function triageCandidatePool(pool, { maxFinal, keywordFallback, callLlm = 
       filled_by_keyword_count: filled.length,
       llm_selected: picks.map(pick => reportEntry(triagePool[pick.index], { reason: pick.reason })),
       keyword_filled: filled.map(candidate => reportEntry(candidate)),
+      coverage_preserved: coverage.added.map(candidate => reportEntry(candidate, { reason: 'independent_main_bucket_coverage' })),
+      coverage_displaced: coverage.displaced.map(candidate => reportEntry(candidate, { reason: 'lower_editorial_priority' })),
       not_selected_count: usable.filter(candidate => !selectedUrls.has(candidateKey(candidate))).length,
       // 모델의 내부 사유를 추측하지 않고, 어느 경계에서 제외됐는지와 실제 선별 입력을 보존한다.
       not_selected: usable.flatMap((candidate, index) => selectedUrls.has(candidateKey(candidate)) ? [] : [{
         ...reportEntry(candidate),
-        reason: index < triagePool.length ? 'not_selected_by_llm_or_keyword_fill' : 'triage_pool_cap',
+        reason: coverage.displaced.some(item => candidateKey(item) === candidateKey(candidate))
+          ? 'coverage_priority_displaced'
+          : index < triagePool.length ? 'not_selected_by_llm_or_keyword_fill' : 'triage_pool_cap',
         ...(index < triagePool.length ? { triage_input: items[index] } : {})
       }])
     }

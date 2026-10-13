@@ -94,6 +94,15 @@ function removeDisallowedSelections(reporter, lockedSections, excludedSections =
   return rejected;
 }
 
+function restoreLockedSection(section, lockedSections = []) {
+  const urls = sectionUrls(section).slice().sort();
+  const locked = urls.length > 0 && ensureArray(lockedSections).find(item =>
+    JSON.stringify(sectionUrls(item).slice().sort()) === JSON.stringify(urls));
+  // Restore only the exact source identity, never a title/topic match. The
+  // restored article still goes through the current strict validators.
+  return locked ? JSON.parse(JSON.stringify(locked)) : section;
+}
+
 function mergeLockedSections(lockedSections, generatedSections, excludedSections = []) {
   const merged = [];
   const rejected = [];
@@ -269,6 +278,7 @@ module.exports = {
   candidatesForSections,
   removeDisallowedSelections,
   mergeLockedSections,
+  restoreLockedSection,
   sectionLockRecord,
   buildLockedArticleContext,
   lockedArticleHeadlines,

@@ -895,6 +895,9 @@ function buildAllowedClaimEvidence(candidate = {}, section = {}, options = {}) {
       kind: item.kind || 'evidence',
       source_urls: uniqueTexts(item.urls).slice(0, 4),
       text: evidencePromptText(item.texts),
+      // Expose the existing validator boundary to authors; true is not proof of
+      // any specific claim. The claim validator still checks the actual evidence.
+      supports_direct_hal_contract: DIRECT_HAL_WORDING.test(item.texts.join(' ')),
       ...(cutSummary && item.texts.includes(cutSummary) ? { summary_truncated: true } : {})
     }))
     .sort((left, right) => {

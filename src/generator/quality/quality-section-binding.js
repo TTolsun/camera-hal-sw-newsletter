@@ -188,10 +188,9 @@ function isSharedWatchOrReleaseNoteUrl(entry, sameUrlEntries) {
   const distinctCandidates = new Set(ensureArray(sameUrlEntries).map(item => sameUrlCandidateKey(item?.candidate)));
   if (distinctCandidates.size > 1) return true;
   return /release-note|watch|documentation_page|watchlist/i.test([
-    candidate.collectionMode,
-    candidate.collection_mode,
-    candidate.sourceCollectionMode,
-    candidate.source_collection_mode,
+    // Resolved article mode describes this URL; source mode describes its parent feed/watch page.
+    candidate.collectionMode || candidate.collection_mode ||
+      candidate.sourceCollectionMode || candidate.source_collection_mode,
     candidate.source_kind
   ].map(text).join(' '));
 }
