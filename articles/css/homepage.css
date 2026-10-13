@@ -128,8 +128,12 @@
   max-width: 240px;
 }
 
+.homepage .featured-thumb[hidden] {
+  display: none;
+}
+
 @media (min-width: 800px) {
-  .homepage .reader-issue:has(> .reader-media) {
+  .homepage .reader-issue:has(> .reader-media:not([hidden])) {
     grid-template-columns: minmax(0, 1fr) 240px;
   }
 }

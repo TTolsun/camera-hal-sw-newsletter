@@ -948,6 +948,8 @@ test('home-only styles give prose priority, constrain media and retain mobile wr
   assertCssDeclaration(exactSelectorBlock(css, '.homepage .reader-actions'), 'flex-wrap', 'wrap');
   assertCssDeclaration(exactSelectorBlock(css, '.homepage .reader-actions a'), 'min-height', '44px');
   assertCssDeclaration(exactSelectorBlock(css, '.homepage .featured-copy'), 'text-align', 'left');
+  assertCssDeclaration(exactSelectorBlock(css, '.homepage .featured-thumb[hidden]'), 'display', 'none');
+  assert.match(css, /\.reader-issue:has\(> \.reader-media:not\(\[hidden\]\)\)/);
 });
 
 test('latest and archive card CSS preserves whole-card links and mobile summary behavior', () => {
