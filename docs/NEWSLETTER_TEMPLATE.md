@@ -69,7 +69,9 @@ lead는 본문으로 들어가는 문을 여는 한두 문장입니다. 독자�
 
 본문과 별도 필드(`camera_hal_takeaway`)이며 렌더링 때 고정 라벨이 붙습니다. 본문에 같은 라벨을 다시 쓰지 않습니다.
 
-"직접적인 HAL 변경은 없으나" 같은 디스클레이머로 시작하지 않고, 개발자가 점검할 구체 항목을 먼저 제시합니다. 관련 metadata key, request/result 필드, CTS/VTS/ITS 항목, V4L2/uAPI 구조체, 버퍼·포맷, 라이브러리 버전과 재빌드 영향 중 출처가 뒷받침하는 것을 씁니다.
+"직접적인 HAL 변경은 없으나" 같은 디스클레이머로 시작하지 않고, 기사 유형에 맞는 독자 의미와 적용 조건을 먼저 설명합니다. HAL/Framework/Driver 변경은 관련 metadata key, request/result 필드, CTS/VTS/ITS 항목, V4L2/uAPI 구조체, 버퍼·포맷, 라이브러리 버전과 재빌드 영향 중 출처가 뒷받침하는 내용을 씁니다.
+
+AI/C++ 도구는 어떤 개발 업무에서 새로운 선택지가 되는지와 지원 범위·미검증 사항을 설명합니다. 연구·패치 제안은 참고할 설계와 리뷰 쟁점, 확정되지 않은 부분을 설명합니다. 기술 인지 자체로 유용한 기사에 실행 지시나 비교 실험을 강요하지 않으며, 사내 제품·담당자·성과를 추측하지 않습니다. 필요한 확인 사항은 공개 문장 안에 설명하고 `reader_checkpoints` 등 내부 QA 필드는 공개하지 않습니다.
 
 가능하면 다음 용어를 구체적으로 사용합니다.
 
@@ -96,11 +98,14 @@ lead는 본문으로 들어가는 문을 여는 한두 문장입니다. 독자�
 - 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket(보조·금지 버킷): `src/shared/config/newsletter-policy.json`과 운영 문서의 generated Newsletter Policy block을 따릅니다.
 - `generic_tech_watchlist` 버킷 후보는 main article로 쓰지 않고 briefing/watchlist로만 사용합니다.
 
-## 이번 주 실행 항목
+## 실행 항목 작성 기준
 
-- 이슈 전체에서 가장 중요한 팀 action을 3-6개로 정리합니다.
-- 각 action은 2주 안에 확인 가능한 형태여야 합니다.
-- stream 조합, metadata, CTS/VTS/Camera ITS, CameraX compatibility, native runtime, AI input path 중 가능한 구체 항목을 포함합니다.
+확인할 일이 있는 기사에만 적용하는 작성 기준이며, 별도 공개 섹션이나 고정 개수의 실행 항목을 요구하지 않습니다.
+
+- 적용 대상과 확인할 결과를 출처가 뒷받침하는 범위 안에서 구체적으로 설명합니다.
+- stream 조합, metadata, CTS/VTS/Camera ITS, CameraX compatibility, native 개발 업무 등 해당 기사에 맞는 대상을 사용합니다.
+- 비교 방법을 제안할 때는 출처의 실측 결과와 편집 제안을 구분합니다. 설명·인지·참고가 적절하면 실행 지시 없이 의미와 한계를 전달합니다.
+- 내부 QA의 필수 필드와 발행 안전 검증은 유지합니다.
 
 ## 참고자료
 

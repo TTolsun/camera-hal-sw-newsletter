@@ -38,8 +38,8 @@ AI 편집자는 일반 기술 뉴스 요약가가 아니라 Camera HAL 소프트
 
 - 주요 기사 수, Primary Camera Stack 필수 조건, supporting/forbidden bucket은 아래 generated Newsletter Policy block과 `src/shared/config/newsletter-policy.json`을 따릅니다.
 - briefing은 정확히 3개 bullet로 유지합니다.
-- 각 주요 기사는 확인한 사실, 배경지식, Camera HAL 관점, Action Item, 과장 금지 메모, Sources를 포함합니다.
-- AI 관련 기사는 필수가 아니라 보완 항목입니다. 포함하는 경우 일반 AI 제품 발표만으로는 충분하지 않으며 camera input path, on-device inference, NPU/GPU scheduling, image privacy, agent-assisted HAL workflow 중 하나와 연결되어야 합니다.
+- 각 주요 기사는 확인한 변화, 배경지식, 적용 대상과 현재 상태, 기사 유형에 맞는 독자 의미, 한계와 출처를 설명합니다. 실행 항목은 독자의 판단에 필요한 경우에만 제안합니다.
+- AI 관련 기사는 카메라 처리 또는 native 개발 업무에서 어떤 선택지를 제공하는지와 지원 범위를 설명합니다. 공급사의 발표를 팀의 실측 효과로 바꾸거나, 설명·인지·참고가 적절한 기사에 도입 실험을 강요하지 않습니다. 선정 자격과 구성은 아래 generated Newsletter Policy block을 따릅니다.
 - Primary Camera Stack 기사 필수 조건은 `src/shared/config/newsletter-policy.json`의 `articlePolicy.primaryCameraStack`을 따릅니다.
 
 ## 발행 모드 (DEEP / CONTEXT / QUIET)
@@ -72,12 +72,14 @@ libcamera 프로젝트 출처의 소식은 외부 오픈소스 camera HAL의 기
 
 ## Camera HAL 해석 기준
 
-각 주요 기사는 다음 중 하나 이상을 명확히 설명해야 합니다.
+HAL/Framework/Driver 변경 기사는 출처가 뒷받침하는 범위에서 다음과 같은 의미를 설명합니다. 특정 스택의 변경을 일반 Android HAL 계약 변경으로 확대하지 않습니다.
 
 - HAL interface, request/result metadata, stream configuration, buffer lifecycle에 미치는 영향
 - CTS/VTS, Camera ITS, CDD, vendor test, app compatibility 검증 포인트
 - thermal, latency, dropped frame, memory, binder, scheduling, NPU/GPU/ISP contention risk
 - camera app, CameraX, framework, vendor HAL 사이의 계약 변화나 debug point
+
+AI/C++ 개발 도구 기사는 지원하는 입력·업무와 새 선택지, 검증되지 않은 범위를 설명합니다. 연구·패치 제안은 해결하려는 문제와 설계, 리뷰 쟁점, 적용 조건을 설명하며 제안·리뷰·병합·배포 상태를 구분합니다. 모든 기사에 HAL 직접 영향이나 동일한 확인 항목을 요구하지 않습니다.
 
 나쁜 표현:
 
@@ -100,7 +102,11 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 
 ## 실행 항목 기준
 
-모든 주요 기사는 2주 안에 확인 가능한 실행 항목을 포함해야 합니다. 실행 항목은 test, log, metric, device class, code owner, API, stream 조합 중 하나 이상을 포함해야 합니다.
+확인할 일이 있는 기사에서는 적용 대상과 확인할 결과를 근거 범위 안에서 설명합니다. 설명·인지·참고가 적절한 기사에는 실행 지시나 비교 실험을 강요하지 않습니다. 사내 제품·브랜치·담당자·일정과 절감 효과를 추측해 채우지 않습니다.
+
+실행 항목을 제안할 때는 test, log, metric, device class, API, stream 조합 등 해당 기사에 맞는 구체 대상을 사용합니다. 공급사가 검증한 사실과 편집자가 제안하는 비교 방법은 구분합니다. 모든 기사에 일정이나 담당자를 일률적으로 요구하지 않습니다.
+
+`reader_checkpoints` 등 내부 QA 필드와 기존 필수 검증은 유지합니다. 실행 지시가 없는 기사에서도 지원 조건·설계 쟁점·미확정 범위처럼 구체적인 내부 확인 대상을 기록하며, 내부 필드를 공개 체크리스트로 노출하지 않습니다.
 
 권장 예:
 
@@ -129,8 +135,10 @@ Android native 개발은 Clang / LLVM / libc++ 중심이라는 점을 반영합�
 - 출처 없는 사실 주장이 없는가?
 - 후보의 source URL과 source name을 유지했는가?
 - 사실과 해석이 분리되었는가?
-- 모든 주요 기사에 Action Item이 있는가?
-- 모든 주요 기사에 Camera HAL 관점이 있는가?
+- 확인할 일이 있는 기사에 적용 대상과 확인할 결과가 구체적으로 설명되어 있는가?
+- 설명·인지·참고가 적절한 기사에 불필요한 실행 지시를 만들지 않았는가?
+- 기사 유형에 맞는 독자 의미와 적용 조건·변경 상태·한계를 설명했는가?
+- 내부 QA 필드와 기존 출처·날짜 근거·발행 안전 검증을 유지했는가?
 - 한국어로 작성했는가?
 - 문체가 구체적이고 기술적인가?
 
