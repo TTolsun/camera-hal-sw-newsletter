@@ -7,6 +7,7 @@ const {
   INTRO_LETTER_RESPONSE_SCHEMA,
   buildIntroLetterGenerator,
   lintIntroLetter,
+  introLetterSourceHash,
   resolveIntroLetter
 } = require('../../../editor/intro-letter');
 
@@ -21,10 +22,7 @@ const ARTICLES = [
 ];
 
 // 두 기사 모두의 변별 토큰(libcamera, SM8750)을 담고, 길이·문장 수 경계 안에 있는 통과 레터.
-const PASSING_LETTER =
-  '이번 주에는 libcamera v0.7.2 릴리스를 살펴봅니다. ' +
-  'SM8750 ISP 드라이버 패치 시리즈도 함께 다룹니다. ' +
-  '두 소식 모두 실무 검증 포인트를 정리했습니다.';
+const PASSING_LETTER = ARTICLES.map(item => item.public_article.lead).join(' ');
 
 test('lintIntroLetter: 모든 기사의 변별 토큰을 담은 레터는 통과한다', () => {
   const result = lintIntroLetter(PASSING_LETTER, ARTICLES);
@@ -89,7 +87,7 @@ test('resolveIntroLetter: 저장된 레터가 게이트를 통과하면 생성 �
   let generatorCalls = 0;
   const resolution = await resolveIntroLetter({
     articles: ARTICLES,
-    storedIntroLetter: PASSING_LETTER,
+    storedIntroLetter: PASSING_LETTER, storedSourceHash: introLetterSourceHash(ARTICLES),
     generateIntroLetter: async () => { generatorCalls += 1; return '새 레터'; }
   });
   assert.equal(resolution.introLetter, PASSING_LETTER);
@@ -133,14 +131,14 @@ test('resolveIntroLetter: 생성 호출이 던져도 fallback으로 끝난다(�
 });
 
 test('resolveIntroLetter: 생성기가 없으면 저장 레터 재사용만 하고 아니면 fallback한다', async () => {
-  const reused = await resolveIntroLetter({ articles: ARTICLES, storedIntroLetter: PASSING_LETTER });
+  const reused = await resolveIntroLetter({ articles: ARTICLES, storedIntroLetter: PASSING_LETTER, storedSourceHash: introLetterSourceHash(ARTICLES) });
   assert.equal(reused.status, 'reused');
   const fallback = await resolveIntroLetter({ articles: ARTICLES, storedIntroLetter: '' });
   assert.equal(fallback.status, 'fallback');
   assert.equal(fallback.reason, 'no_generator');
 });
 
-test('buildIntroLetterGenerator: intro-letter stage로 headline+lead만 실어 호출하고 문자열을 돌려준다', async () => {
+test('buildIntroLetterGenerator: 공개 headline/lead/takeaway만 intro-letter stage에 전달한다', async () => {
   const calls = [];
   const generateIntroLetter = buildIntroLetterGenerator({
     callLlmJson: async (stage, systemInstruction, prompt, schema, options) => {
@@ -153,13 +151,113 @@ test('buildIntroLetterGenerator: intro-letter stage로 headline+lead만 실어 �
   assert.equal(calls.length, 1);
   assert.equal(calls[0].stage.label, 'intro-letter');
   assert.equal(calls[0].schema, INTRO_LETTER_RESPONSE_SCHEMA);
-  // 드리프트 재료 차단: 프롬프트에는 최종 기사의 headline+lead만 실린다.
+  // 내부 QA·원시 근거·본문은 생성 입력에서 제외한다.
   const promptPayload = JSON.parse(calls[0].prompt);
   assert.deepEqual(promptPayload, {
-    articles: ARTICLES.map(item => ({ headline: item.public_article.headline, lead: item.public_article.lead }))
+    articles: ARTICLES.map(item => ({ headline: item.public_article.headline, lead: item.public_article.lead, takeaway: '' }))
   });
 });
 
 test('buildIntroLetterGenerator: callLlmJson이 없으면 null을 돌려준다', () => {
   assert.equal(buildIntroLetterGenerator({}), null);
+});
+
+test('intro grounding rejects state reversals, invented numbers, internal outcomes and forced trends', () => {
+  const articles = [article('SM8750 드라이버 제안', 'SM8750 드라이버 패치를 제안했습니다.')];
+  articles[0].public_article.camera_hal_takeaway = '해당 드라이버를 쓰는 독자는 적용 조건을 참고할 수 있습니다.';
+  const supported = `${articles[0].public_article.lead} ${articles[0].public_article.camera_hal_takeaway}`;
+  assert.equal(lintIntroLetter(supported, articles).ok, true);
+  for (const claim of [
+    'SM8750 드라이버 패치를 배포했습니다.',
+    'SM8750 드라이버 성능이 20% 향상됐습니다.',
+    '사내 비용을 절감하고 제품 위험을 해결했습니다.',
+    '이번 주 모든 플랫폼이 같은 방향으로 전환됐습니다.'
+  ]) {
+    const lint = lintIntroLetter(`${supported} ${claim}`, articles);
+    assert.ok(lint.issues.some(issue => issue.startsWith('unsupported_public_sentence:')), claim);
+  }
+});
+
+test('takeaway identifiers are allowed only when its complete public sentence supports the intro', () => {
+  const articles = [article('libcamera 제안', 'libcamera 동작을 바꾸는 방안을 제안했습니다.')];
+  articles[0].public_article.camera_hal_takeaway = 'imx296 사용자는 embedded data 조건을 참고할 수 있습니다.';
+  const letter = `${articles[0].public_article.lead} ${articles[0].public_article.camera_hal_takeaway}`;
+  assert.equal(lintIntroLetter(letter, articles).ok, true);
+  assert.equal(lintIntroLetter(letter.replace('참고할 수 있습니다', '적용해야 합니다'), articles).ok, false);
+});
+
+test('grounding retains the qualifying context of multi-sentence public fields', () => {
+  const articles = [article('SM8750 제안', 'SM8750 변경은 아직 제안 단계입니다. 적용 후 개선 여부를 검증해야 합니다.')];
+  articles[0].public_article.camera_hal_takeaway = 'SM8750 사용자는 해당 조건을 참고할 수 있습니다.';
+  const full = `${articles[0].public_article.lead} ${articles[0].public_article.camera_hal_takeaway}`;
+  assert.equal(lintIntroLetter(full, articles).ok, true);
+  const partial = `적용 후 개선 여부를 검증해야 합니다. ${articles[0].public_article.camera_hal_takeaway}`;
+  assert.ok(lintIntroLetter(partial, articles).issues.some(issue => issue.startsWith('unsupported_public_sentence:')));
+});
+
+test('source fingerprint covers final identity, order, public prose and sources, excluding image and internal QA', () => {
+  const articles = structuredClone(ARTICLES);
+  articles[0].public_article.body_paragraphs = ['검증된 공개 본문입니다.'];
+  articles[0].public_article.source_links = [{ url: 'https://example.com/a', title: 'Source', source_role: 'primary' }];
+  const hash = introLetterSourceHash(articles);
+  assert.match(hash, /^sha256:[a-f0-9]{64}$/);
+  for (const mutate of [
+    value => value.reverse(),
+    value => value.pop(),
+    value => { value[0].id = 'new-id'; },
+    value => { value[0].public_article.headline += ' 수정'; },
+    value => { value[0].public_article.lead += ' 수정'; },
+    value => { value[0].public_article.camera_hal_takeaway = '의미 수정'; },
+    value => { value[0].public_article.body_paragraphs[0] += ' 수정'; },
+    value => { value[0].public_article.source_links[0].url = 'https://example.com/b'; }
+  ]) {
+    const changed = structuredClone(articles);
+    mutate(changed);
+    assert.notEqual(introLetterSourceHash(changed), hash);
+  }
+  articles[0].selectedImage = 'https://example.com/image.png';
+  articles[0].published_at = '2026-10-13';
+  articles[0].public_article.reader_checkpoints = ['내부 QA 변경'];
+  articles[0].decision_metadata = { private: true };
+  assert.equal(introLetterSourceHash(articles), hash);
+});
+
+test('missing or stale stored fingerprint cannot reuse a lint-passing intro', async () => {
+  for (const storedSourceHash of [undefined, 'sha256:stale']) {
+    let calls = 0;
+    const resolution = await resolveIntroLetter({ articles: ARTICLES, storedIntroLetter: PASSING_LETTER,
+      storedSourceHash, generateIntroLetter: async () => { calls += 1; return PASSING_LETTER; } });
+    assert.equal(resolution.status, 'generated');
+    assert.equal(calls, 1);
+    assert.equal(resolution.sourceHash, introLetterSourceHash(ARTICLES));
+    const fallback = await resolveIntroLetter({ articles: ARTICLES, storedIntroLetter: PASSING_LETTER, storedSourceHash });
+    assert.equal(fallback.status, 'fallback');
+    assert.equal(fallback.sourceHash, undefined);
+  }
+});
+
+test('story-v2 public markdown participates in the fingerprint after normalization', () => {
+  const articles = [article('SM8750 드라이버 제안', 'SM8750 변경을 제안했습니다.')];
+  articles[0].public_article.story_contract_version = 2;
+  articles[0].public_article.body_markdown = '## 조건\r\n\r\n검토 중인 변경입니다.';
+  const before = introLetterSourceHash(articles);
+  articles[0].public_article.body_markdown = '## 조건\n\n검토 중인 변경입니다.';
+  assert.equal(introLetterSourceHash(articles), before);
+  articles[0].public_article.body_markdown += '\n\n근거를 수정했습니다.';
+  assert.notEqual(introLetterSourceHash(articles), before);
+});
+
+test('intro generation never passes internal review fields to the model', async () => {
+  const articles = structuredClone(ARTICLES);
+  articles[0].public_article.camera_hal_takeaway = '조건을 참고할 수 있습니다.';
+  articles[0].reader_checkpoints = ['private-check'];
+  articles[0].hal_signal_capsule = { private: 'private-signal' };
+  articles[0].public_article.editorial_story = { private: 'private-story' };
+  articles[0].public_article.body_paragraphs = ['private-body'];
+  const generate = buildIntroLetterGenerator({ callLlmJson: async (_stage, _system, prompt) => {
+    assert.doesNotMatch(prompt, /private-/);
+    assert.equal(JSON.parse(prompt).articles[0].takeaway, '조건을 참고할 수 있습니다.');
+    return { intro_letter: PASSING_LETTER };
+  } });
+  await generate({ articles });
 });

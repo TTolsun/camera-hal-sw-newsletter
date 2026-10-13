@@ -10,6 +10,7 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
 const { buildHtml, buildMarkdown } = require('./newsletter-renderer');
+const { introLetterSourceHash, lintIntroLetter } = require('../editor/intro-letter');
 const {
   weekBoundsForDate,
   weekBoundsForKey,
@@ -71,11 +72,17 @@ function weeklySummaryText(titles = []) {
   return `이번 주에는 ${quote(clean[0])}, ${quote(clean[1])} 등 ${clean.length}건의 소식을 다룹니다.`;
 }
 
+function orderedWeeklySections(sections) {
+  return [...ensureArray(sections)].sort((a, b) =>
+    Number(a.coverage_type === 'catch_up') - Number(b.coverage_type === 'catch_up') || compareEditorialPriority(a, b));
+}
+
 function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
-  const sections = [...ensureArray(draft.sections)].sort((a, b) =>
-    Number(a.coverage_type === 'catch_up') - Number(b.coverage_type === 'catch_up') || compareEditorialPriority(a, b));
+  const sections = orderedWeeklySections(draft.sections);
   const titles = articleTitles(sections);
+  const introValid = draft.intro_letter && draft.intro_letter_source_hash === introLetterSourceHash(sections) &&
+    lintIntroLetter(draft.intro_letter, sections).ok;
   const coverageBounds = coverageDisplayBounds(draft);
   const issue = {
     ...draft,
@@ -88,10 +95,14 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
     // The hero subtitle (and markdown line 2, og/meta description) is the gate-passing weekly
     // editor letter when one was adopted (T10, #853); otherwise the deterministic headline-derived
     // summary, then the per-run draft summary when there are no titles.
-    summary: draft.intro_letter || weeklySummaryText(titles) || draft.summary,
+    summary: (introValid ? draft.intro_letter : '') || weeklySummaryText(titles) || draft.summary,
     // Under the title we list this week's article titles instead of a 3-line briefing.
     briefing: titles.length ? titles : draft.briefing
   };
+  if (!introValid) {
+    delete issue.intro_letter;
+    delete issue.intro_letter_source_hash;
+  }
   return {
     weeklyKey: bounds.weeklyKey,
     weekStartDate: bounds.weekStartDate,
@@ -108,5 +119,6 @@ module.exports = {
   buildWeeklyNewsletterPage,
   weeklyDisplayTitle,
   weeklySummaryText,
-  articleTitles
+  articleTitles,
+  orderedWeeklySections
 };
