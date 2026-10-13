@@ -598,11 +598,11 @@ test('newsletter renderer keeps reviewed v1 reading layout stable', () => {
     contextMarkdown: sha256(buildMarkdown(contextIssue)),
     contextHtml: sha256(buildHtml(contextIssue))
   }, {
-    plainMarkdown: 'c2571b1e798c7561',
+    plainMarkdown: '2fa461e7128984b6',
     plainHtml: 'e0d26a657c86f2e4',
-    storyMarkdown: 'c9b78c960d61284b',
+    storyMarkdown: '62cbfb5687e2ad9c',
     storyHtml: '84061f03b26d8054',
-    contextMarkdown: '95dbb8ad17f1a37e',
+    contextMarkdown: '55eced2f272bf222',
     contextHtml: 'bfb03b3602c048fe'
   });
 });

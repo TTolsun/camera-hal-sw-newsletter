@@ -126,8 +126,8 @@ function articleMediaHtml(section, publicArticle = null) {
   if (image && image.src) {
     const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
     const fallback = isFallbackImagePath(image.src);
-    const imageHtml = `<img class="article-image" src="${escapeHtml(image.src)}" alt="${fallback ? '' : escapeHtml(alt)}" loading="lazy" decoding="async">`;
-    if (isFallbackImagePath(image.src)) {
+    const imageHtml = `<img class="article-image" src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`;
+    if (fallback) {
       return `<figure class="article-media article-media-decoration" aria-hidden="true">
             ${imageHtml}
           </figure>`;
@@ -656,11 +656,11 @@ ${takeaway}${articleImageMarkdown(section, publicArticle)}
 
 ${articleBodyMarkdown(publicArticle, storyContractVersion)}
 
+[${t.backToContents}](#issue-contents)
+
 **${t.source}**
 
 ${sourceListMarkdown(publicArticle.source_links)}
-
-[${t.backToContents}](#issue-contents)
 `;
 }
 
@@ -781,9 +781,11 @@ ${brief ? '' : issue.summary}
 
 ${publicationNoticeMarkdown(issue)}
 
+${brief ? readerBriefMarkdown(brief) : ''}
+
 ## 1. ${briefingHeading(issue)}
 
-${brief ? readerBriefMarkdown(brief) : bulletsMarkdown(issue.briefing)}
+${bulletsMarkdown(issue.briefing)}
 ${contentsMarkdown(issue)}
 ${contextLensLabelMarkdown(issue)}
 ${sectionsMarkdownWithCatchUpDivider(issue)}
@@ -882,8 +884,8 @@ function readerBriefForIssue(issue) {
   return brief;
 }
 
-// Old issues sometimes repeat the headline in both summary fields. Hide exact duplicates
-// only in the presentation; the shared projection and public prose remain untouched.
+// 과거 호에서 제목과 요약이 완전히 같으면 화면에서만 반복을 생략합니다.
+// 공유 projection과 원래 공개 문장은 수정하지 않습니다.
 function summaryProse(headline, lead, takeaway) {
   const seen = new Set([String(headline || '').trim()]);
   return [lead, takeaway].map(value => {
@@ -907,7 +909,7 @@ function readerBriefHtml(brief) {
 }
 
 function readerBriefMarkdown(brief) {
-  return `### ${t.weeklyCore}\n\n${brief.intro}\n\n` + brief.items.map(item => {
+  return `## ${t.weeklyCore}\n\n${brief.intro}\n\n` + brief.items.map(item => {
     const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
     return `- [${escapeMarkdownLinkText(item.headline)}](#${item.href.split('#')[1]})\n${lead ? `\n  ${lead}\n` : ''}${meaning ? `\n  ${meaning}\n` : ''}`;
   }).join('\n');
@@ -916,7 +918,7 @@ function readerBriefMarkdown(brief) {
 function contentsMarkdown(issue) {
   const rows = normalizedSections(issue);
   if (!rows.length) return '';
-  return `<a id="issue-contents"></a>\n\n### ${t.contents}\n\n` + rows.map(row =>
+  return `<a id="issue-contents"></a>\n\n## ${t.contents}\n\n` + rows.map(row =>
     `- [${escapeMarkdownLinkText(row.headingCategory)}](#${row.anchorId})`
   ).join('\n');
 }

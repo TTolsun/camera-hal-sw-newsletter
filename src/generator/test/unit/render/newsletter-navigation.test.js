@@ -45,7 +45,7 @@ test('weekly highlights copy only public prose and put the introduction in one p
     const html = buildHtml(draft);
     const md = buildMarkdown(draft);
     assert.match(html, /id="issue-briefing-title">이번 주 핵심/);
-    assert.match(md, /### 이번 주 핵심/);
+    assert.match(md, /## 이번 주 핵심/);
     assert.equal((html.match(/>Source-backed introduction\.</g) || []).length, 1);
     assert.equal((md.match(/Source-backed introduction\./g) || []).length, 1);
     assert.match(html, /Camera &lt;sample&gt; &amp; proposal/);
@@ -68,7 +68,7 @@ test('lead and practical meaning precede images and detail in HTML and Markdown'
     assert.ok(output.indexOf('Detailed limitations') < output.indexOf('Original source'));
   }
   assert.match(html, /class="article-media article-media-decoration" aria-hidden="true"/);
-  assert.match(html, /alt=""/);
+  assert.match(html, /alt="Source diagram"/);
   assert.doesNotMatch(html, /article-image-caption/);
 });
 
