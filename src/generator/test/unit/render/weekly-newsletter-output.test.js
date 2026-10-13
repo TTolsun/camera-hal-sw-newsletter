@@ -444,6 +444,28 @@ test('syncWeeklyArticleImages updates lead_article_image when the first article 
   assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, imageUrl);
 });
 
+// issue는 이미 수리됐는데 index만 낡은 상태(index 쓰기 전에 중단)라면, 고칠 섹션이 없어도 다음 동기화가
+// 현재 issue 섹션에서 다시 계산해 index를 맞춘다.
+test('syncWeeklyArticleImages repairs a stale lead_article_image even when no section needs patching', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  const imageUrl = 'https://publisher.example.com/images/camera-card.png';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]) });
+  const repaired = repairedImageSection('1.7.0', url, imageUrl);
+  syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
+
+  const indexPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
+  const index = readWeeklyIndexFile(root);
+  index[0].lead_article_image = 'assets/images/fallback/android.svg';
+  fs.writeFileSync(indexPath, `${JSON.stringify(index, null, 2)}\n`, 'utf8');
+
+  const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
+
+  assert.equal(result.patchedSectionCount, 0);
+  assert.equal(result.articleImagesUpdated, true);
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, imageUrl);
+});
+
 test('syncWeeklyArticleImages patches the matching weekly section, rewrites weekly artifacts, and updates article_images', async () => {
   const root = tempRoot();
   const url = 'https://example.com/camerax-release';
