@@ -271,6 +271,83 @@ test('article image caption attribution is required only for images that came fr
   }
 });
 
+// 캡션 출처 링크는 그 그림의 <figure> 안에서만 찾는다. 본문 재배치로 출처 목록이 그림 바로 뒤에
+// 오면(PR #1291), 고정 글자 수 창으로는 출처 목록 링크를 캡션 링크로 오인해 게이트가 꺼진다.
+test('caption attribution ignores https links outside the image figure', () => {
+  const sourcedImage = 'https://developer.android.com/static/images/social/android-developers.png';
+  const root = tempRoot('rendered-issue-structure-');
+  const date = writeNewsletterIndex(root);
+  const editor = issue({
+    date,
+    sections: withImageSection(root, {
+      selectedImage: sourcedImage,
+      section: {
+        imageCandidates: [{ url: sourcedImage }],
+        resolvedImage: { url: sourcedImage, src: sourcedImage, usedFallback: false }
+      }
+    })
+  });
+  const html = buildHtml(editor);
+  const sourceListRightAfterFigure = '</figure>\n<ul class="source-list"><li><a href="https://example.com/source">Example source</a></li></ul>';
+  const badHtml = html
+    .replace(/<figcaption class="article-image-caption">[\s\S]*?<\/figcaption>/, '<figcaption class="article-image-caption">Image source</figcaption>')
+    .replace(/<\/figure>/, sourceListRightAfterFigure);
+  assert.match(badHtml, /Image source<\/figcaption>\s*<\/figure>\s*<ul class="source-list"><li><a href="https:/);
+
+  const result = validateRenderedIssueStructure({ root, date, editor, markdown: buildMarkdown(editor), html: badHtml });
+
+  assert.equal(result.ok, false, 'a caption without its own source link must fail even when a source list follows the figure');
+  assert.match(result.text, /caption attribution/);
+});
+
+// 각 그림은 자기를 감싼 <figure>의 캡션만 쓴다. 같은 태그가 두 번 나오거나 figure 밖에 있으면
+// 앞이나 뒤의 다른 figure 캡션을 빌려 쓰면 안 된다. 캡션은 class 토큰으로만 인정한다.
+test('caption attribution is checked per image occurrence and per caption class token', () => {
+  const sourcedImage = 'https://developer.android.com/static/images/social/android-developers.png';
+  const sourcedRoot = tempRoot('rendered-issue-structure-');
+  const sourcedDate = writeNewsletterIndex(sourcedRoot);
+  const sourcedEditor = issue({
+    date: sourcedDate,
+    sections: withImageSection(sourcedRoot, {
+      selectedImage: sourcedImage,
+      section: {
+        imageCandidates: [{ url: sourcedImage }],
+        resolvedImage: { url: sourcedImage, src: sourcedImage, usedFallback: false }
+      }
+    })
+  });
+  const sourcedHtml = buildHtml(sourcedEditor);
+  const imgTag = sourcedHtml.match(/<img class="article-image"[^>]*>/)[0];
+  const validate = (html, root = sourcedRoot, date = sourcedDate, editor = sourcedEditor) =>
+    validateRenderedIssueStructure({ root, date, editor, markdown: buildMarkdown(editor), html });
+
+  const sourcedFailures = [
+    ['same image again in a figure without caption',
+      sourcedHtml.replace('</figure>', `</figure>\n<figure class="article-media">${imgTag}</figure>`)],
+    ['image outside any figure before a captioned figure',
+      sourcedHtml.replace('<figure class="article-media">', `${imgTag}\n<figure class="article-media">`)],
+    ['caption class only in a non-class attribute',
+      sourcedHtml.replace(/<figcaption class="article-image-caption">[\s\S]*?<\/figcaption>/,
+        '<div data-role="article-image-caption"><a href="https://example.com/source">Example</a></div>')]
+  ];
+  for (const [name, badHtml] of sourcedFailures) {
+    const result = validate(badHtml);
+    assert.equal(result.ok, false, `${name} unexpectedly passed`);
+    assert.match(result.text, /caption attribution/, name);
+  }
+
+  const fallbackRoot = tempRoot('rendered-issue-structure-');
+  const fallbackDate = writeNewsletterIndex(fallbackRoot);
+  const fallbackEditor = issue({ date: fallbackDate, sections: withImageSection(fallbackRoot) });
+  const twoCaptions = buildHtml(fallbackEditor).replace(
+    /(<img class="article-image"[^>]*>)/,
+    '$1\n<p class="article-image-caption">이미지</p><p class="article-image-caption"><a href="https://example.com/source">Example</a></p>'
+  );
+  const fallbackResult = validate(twoCaptions, fallbackRoot, fallbackDate, fallbackEditor);
+  assert.equal(fallbackResult.ok, false, 'a later linked caption on a fallback image unexpectedly passed');
+  assert.match(fallbackResult.text, /fallback article image must not carry a source attribution caption/);
+});
+
 test('article image attribution belongs to its own figure caption, not nearby article links', () => {
   const root = tempRoot('image-caption-scope-');
   const image = '<img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="Android" loading="lazy">';
