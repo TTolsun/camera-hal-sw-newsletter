@@ -2334,12 +2334,6 @@ pre code {
   scroll-margin-top: 100px;
 }
 
-.newsletter-issue-page .issue-section figure.article-media-decoration {
-  max-width: 160px;
-  margin-top: 20px;
-  opacity: 0.6;
-}
-
 /* Old published markup can contain a large generated placeholder. */
 .newsletter-issue-page .issue-section .article-placeholder-visual {
   display: none;
@@ -2363,7 +2357,4 @@ pre code {
     padding: 18px;
   }
 
-  .newsletter-issue-page .issue-section figure.article-media-decoration {
-    max-width: 112px;
-  }
 }
