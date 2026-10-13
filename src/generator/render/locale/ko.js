@@ -1,5 +1,6 @@
 module.exports = {
   "weeklyCore": "이번 주 핵심",
+  "backToHighlights": "이번 주 핵심으로",
   "contents": "목차",
   "backToContents": "목차로 돌아가기",
   "previousArticle": "이전 기사",

@@ -67,6 +67,20 @@ test('single item real image preserves alt and loading failures become text with
   assert.equal(img.parentElement.hidden, true);
 });
 
+test('both locales lead with the change and work implications while keeping the introduction optional', () => {
+  for (const locale of ['ko', 'en']) {
+    const { entry, brief } = sample(locale);
+    const html = archive.renderLatestIssue(entry, { locale });
+    assert.ok(html.indexOf('reader-decision') < html.indexOf('reader-stories'));
+    assert.ok(html.indexOf('reader-stories') < html.indexOf('reader-context'));
+    assert.match(html, /<details class="reader-context">/);
+    assert.doesNotMatch(html, /<details[^>]*\bopen/);
+    assert.equal(html.split(brief.items[0].takeaway).length - 1, 1);
+    assert.doesNotMatch(archive.renderArchiveCard(entry, { locale, compact: true }), /card-takeaway/);
+    assert.match(archive.renderArchiveCard(entry, { locale }), /card-takeaway/);
+  }
+});
+
 test('public item order and distinct duplicate-title anchors are preserved', () => {
   const { entry, brief } = sample();
   brief.items[1].headline = brief.items[0].headline;

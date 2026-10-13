@@ -321,8 +321,9 @@ function englishHomeFixture() {
 
 test('English home mirrors the Korean home with the translated headline and every issue', async () => {
   const { elements, fetched } = await renderEnglishHome(englishHomeFixture());
-  const hero = elements['featured-card'].innerHTML;
-  assert.match(hero, /<h2 id="featured-title" class="featured-title">Codex released<\/h2>/);
+  const hero = elements['reader-issue'].innerHTML;
+  assert.equal(elements['featured-card'].innerHTML, '');
+  assert.match(hero, /<h1 id="reader-title">Codex released<\/h1>/);
   assert.match(hero, /The Codex CLI release changes defaults\./);
   assert.match(hero, /href="\.\.\/en\/newsletters\/2026-W39\/index\.html#article-codex-released">Read article →/);
   assert.match(hero, /alt="Codex image"/);
@@ -350,14 +351,17 @@ test('English home hides the separate headline without a published English proje
 
 test('English home hero alt never leaks the Korean title and stays empty for fallback art', async () => {
   const noAlt = englishHomeFixture();
+  noAlt.newsletters.push({ weeklyKey: '2026-W40', date: '2026-09-28', title: '2026 W40', summary: '', html: 'newsletters/2026-W40/index.html' });
   noAlt.newsletters[0].en.reader_brief.items[0].image.alt = '';
   const hero = (await renderEnglishHome(noAlt)).elements['featured-card'].innerHTML;
   assert.match(hero, /alt="Codex released"/);
   assert.doesNotMatch(hero, /[가-힣]/);
   const koreanAlt = englishHomeFixture();
+  koreanAlt.newsletters.push(noAlt.newsletters[2]);
   koreanAlt.headline.current_headline.image_alt = '한국어 이미지 설명';
   assert.match((await renderEnglishHome(koreanAlt)).elements['featured-card'].innerHTML, /alt="Codex image"/);
   const fallback = englishHomeFixture();
+  fallback.newsletters.push(noAlt.newsletters[2]);
   fallback.newsletters[0].en.reader_brief.items[0].image = { src: 'assets/images/fallback/newsletter-default.svg', alt: '', is_fallback: true };
   const fallbackHero = (await renderEnglishHome(fallback)).elements['featured-card'].innerHTML;
   assert.doesNotMatch(fallbackHero, /<img/);

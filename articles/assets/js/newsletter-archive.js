@@ -338,16 +338,18 @@
     const headlines = String(display.summary || '').split(/\n+|\s+·\s+/).map(line => line.trim()).filter(Boolean);
     const items = brief ? brief.items : headlines.map(headline => ({ headline }));
     return `<div class="reader-issue-copy">
-      <p class="reader-kicker">${en ? 'Latest issue' : '최신호'} · ${escapeHtml(cardTitle({ title: display.title }))}</p>
+      <p class="reader-kicker">${first ? (en ? 'Start here' : '먼저 읽을 변화') : (en ? 'Latest issue' : '최신호')} · ${escapeHtml(cardTitle({ title: display.title }))}</p>
       <h1 id="reader-title"${display.koreanOnly ? ' lang="ko"' : ''}>${escapeHtml(first?.headline || (!brief && headlines[0]) || display.title || (en ? 'Weekly newsletter' : '주간 뉴스레터'))}</h1>
       <div class="reader-meta">${cardMetaHtml(entry, locale)}</div>
       ${display.koreanOnly ? '<p class="reader-language" lang="en">Korean only</p>' : ''}
       <div class="reader-actions"><a class="reader-primary" href="${escapeHtml(rootPath + display.href)}">${en ? 'Read this issue →' : '주간호 읽기 →'}</a>${first ? `<a href="${escapeHtml(rootPath + first.href)}">${en ? 'Read article →' : '기사 읽기 →'}</a>` : ''}</div>
-      ${brief?.intro ? `<p class="reader-intro">${escapeHtml(brief.intro)}</p>` : ''}
-      ${first?.lead ? `<p class="reader-lead">${escapeHtml(first.lead)}</p>` : ''}
-      ${first?.takeaway ? `<p class="reader-takeaway">${escapeHtml(first.takeaway)}</p>` : ''}
+      ${first?.lead || first?.takeaway ? `<div class="reader-decision">
+        ${first.lead ? `<section><h2>${en ? 'What changed' : '무엇이 바뀌나'}</h2><p class="reader-lead">${escapeHtml(first.lead)}</p></section>` : ''}
+        ${first.takeaway ? `<section><h2>${en ? 'What to check in your work' : '업무에서 무엇을 확인하나'}</h2><p class="reader-takeaway">${escapeHtml(first.takeaway)}</p></section>` : ''}
+      </div>` : ''}
       ${first?.tags.length ? `<p class="reader-tags">${escapeHtml(first.tags.join(' · '))}</p>` : ''}
-      ${items.length > 1 ? `<nav class="reader-stories" aria-label="${en ? 'In this issue' : '이번 호 주요 기사'}"><ul>${items.slice(1).map(item => `<li>${item.href ? `<a href="${escapeHtml(rootPath + item.href)}">${escapeHtml(item.headline)}</a>` : escapeHtml(item.headline)}</li>`).join('')}</ul></nav>` : ''}
+      ${items.length > 1 ? `<nav class="reader-stories" aria-label="${en ? 'Also in this issue' : '함께 볼 소식'}"><h2>${en ? 'Also in this issue' : '함께 볼 소식'}</h2><ul>${items.slice(1).map(item => `<li>${item.href ? `<a href="${escapeHtml(rootPath + item.href)}">${escapeHtml(item.headline)}</a>` : escapeHtml(item.headline)}</li>`).join('')}</ul></nav>` : ''}
+      ${brief?.intro ? `<details class="reader-context"><summary>${en ? 'About this issue' : '이번 호 전체 소개'}</summary><p class="reader-intro">${escapeHtml(brief.intro)}</p></details>` : ''}
     </div>${readerMedia(brief ? first : legacyReaderItem(entry), rootPath, true)}`;
   }
 
@@ -444,7 +446,7 @@
           ${!item || item.tags.length ? `<div class="card-kicker">${escapeHtml(item ? item.tags.join(' · ') : entry.homepage_badge || (locale === 'en' ? 'Weekly issue' : '주간호'))}</div>` : ''}
           ${koreanOnly ? '<span class="tag" lang="en">Korean only</span>' : ''}
           <h3 class="card-title clamp-2 nc-h"${koreanOnly ? ' lang="ko"' : ''}>${escapeHtml(headline)}</h3>
-          ${item?.takeaway ? `<p class="card-takeaway">${escapeHtml(item.takeaway)}</p>` : ''}
+          ${item?.takeaway && !options.compact ? `<p class="card-takeaway">${escapeHtml(item.takeaway)}</p>` : ''}
           <div class="card-meta archive-card-meta">${cardMetaHtml(entry, locale)}</div>
         </div>
       </a>

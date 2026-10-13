@@ -45,7 +45,7 @@ test('weekly highlights copy only public prose and put the introduction in one p
     const html = buildHtml(draft);
     const md = buildMarkdown(draft);
     assert.match(html, /id="issue-briefing-title">이번 주 핵심/);
-    assert.match(md, /## 이번 주 핵심/);
+    assert.match(md, /## 1\. 이번 주 핵심/);
     assert.equal((html.match(/>Source-backed introduction\.</g) || []).length, 1);
     assert.equal((md.match(/Source-backed introduction\./g) || []).length, 1);
     assert.match(html, /Camera &lt;sample&gt; &amp; proposal/);
@@ -72,7 +72,7 @@ test('lead and practical meaning precede images and detail in HTML and Markdown'
   assert.doesNotMatch(html, /article-image-caption/);
 });
 
-test('contents, previous and next links reach unique focusable anchors in both locales', () => {
+test('highlights replace contents and all navigation reaches focusable anchors in both locales', () => {
   withSyntheticBuilder(() => {
     for (const locale of ['ko', 'en']) {
       const html = buildHtml(issue(3), { locale });
@@ -82,7 +82,14 @@ test('contents, previous and next links reach unique focusable anchors in both l
       assert.equal((html.match(/class="article-navigation"/g) || []).length, 3);
       assert.equal((html.match(/aria-label="(?:이전 기사|Previous article):/g) || []).length, 2);
       assert.equal((html.match(/aria-label="(?:다음 기사|Next article):/g) || []).length, 2);
-      assert.match(html, /id="issue-contents" tabindex="-1"/);
+      assert.match(html, /id="issue-briefing" tabindex="-1"/);
+      assert.doesNotMatch(html, /class="issue-contents"|<details/);
+      const md = buildMarkdown(issue(3), { locale });
+      assert.match(md, /<a id="issue-briefing"><\/a>/);
+      assert.doesNotMatch(md, /#issue-contents|## (?:목차|Contents)|Existing title list/);
+      const label = locale === 'ko' ? '이번 주 핵심으로' : 'Back to this week’s highlights';
+      assert.equal(html.split(`href="#issue-briefing">${label}`).length - 1, 3);
+      assert.equal(md.split(`[${label}](#issue-briefing)`).length - 1, 3);
       assert.match(html, /id="article-camera-sample-proposal-2" tabindex="-1"/);
       assert.match(html, /Source diagram/);
       assert.match(html, /article-image-caption/);
@@ -101,7 +108,7 @@ test('single article and missing fields produce no empty box or fabricated media
     assert.doesNotMatch(html, /class="article-lead"|class="article-block camera-hal-takeaway"|article-placeholder-visual|class="article-media|aria-label="이전 기사:|aria-label="다음 기사:/);
     assert.match(html, /Detailed evidence paragraph one/);
     assert.match(html, /Original source/);
-    assert.match(html, /목차로 돌아가기/);
+    assert.match(html, /이번 주 핵심으로/);
   });
 });
 
@@ -114,7 +121,7 @@ test('legacy repeated headline summaries are displayed once without rewriting pu
     const html = buildHtml(draft);
     assert.doesNotMatch(html, /class="article-lead"|class="article-block camera-hal-takeaway"|class="reader-brief-takeaway"/);
     assert.match(html, /Detailed evidence paragraph one/);
-    assert.match(html, /<details>\s*<summary id="issue-contents-title">/);
+    assert.doesNotMatch(html, /<details>|issue-contents-title/);
     assert.equal(JSON.stringify(draft), before);
   });
 });
@@ -128,6 +135,8 @@ test('unknown or malformed projection is diagnosed and returns to the legacy sum
         assert.match(html, /Existing title list/);
         assert.match(html, /class="subtitle">Source-backed introduction/);
         assert.doesNotMatch(html, /javascript:/);
+        assert.match(html, /id="issue-contents" tabindex="-1"/);
+        assert.match(html, /href="#issue-contents">목차로 돌아가기/);
       }, transform);
     }
     assert.equal(warning.mock.callCount(), 3);
