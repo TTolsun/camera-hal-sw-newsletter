@@ -31,6 +31,26 @@ function section(overrides = {}) {
   };
 }
 
+test('AI development tool claims bind with the canonical native workflow enum while invalid enums stay blocked', () => {
+  const url = 'https://example.com/coding-tool';
+  const fact = 'The sample coding tool exposes an adjustable effort setting for code review.';
+  const cand = { url, title: 'Coding tool update', source_extraction: {
+    evidence_blocks: [{ text: fact, links: [{ url }] }]
+  } };
+  const evidence = buildAllowedClaimEvidence(cand).find(item => item.text.includes(fact));
+  const base = { sources: [{ url }], article_sections: { verified_facts: [fact] }, claims: [{
+    claim_id: 'coding-claim', text: fact, claim_type: 'fact', evidence_ids: [evidence.evidence_id],
+    source_urls: [url], impact_level: 'native_tooling_workflow', overclaim_risk: 'low'
+  }] };
+  const result = validateArticleClaims({ candidate: cand, section: base, strict: true });
+  assert.equal(result.claim_results[0].bound, true);
+  assert.equal(result.status, 'available');
+  const invalid = structuredClone(base);
+  invalid.claims[0].impact_level = 'invented_tooling_layer';
+  const rejected = validateArticleClaims({ candidate: cand, section: invalid, strict: true });
+  assert.equal(rejected.status, 'needs_fix');
+});
+
 test('framework evidence advertises its claim boundary while direct HAL misclassification stays blocking', () => {
   const url = 'https://example.com/camera-change';
   const fact = 'CameraService keeps a visible client connected when camera mute is supported.';

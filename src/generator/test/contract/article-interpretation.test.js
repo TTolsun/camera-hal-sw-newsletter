@@ -58,6 +58,26 @@ test('all fact-check stages distinguish unsupported facts from non-actionable bu
   }
 });
 
+test('claim classification and fact review use the canonical enums and distinguish actual gaps from unknown future state', () => {
+  const { CLAIM_IMPACT_LEVELS } = require('../../reporter/source-binding-policy');
+  const { articleClaimContractPrompt, claimRepairEvidencePrompt } = require('../../reporter/newsletter-prompts');
+  assert.match(articleClaimContractPrompt(), new RegExp(CLAIM_IMPACT_LEVELS.join(', ')));
+  assert.ok(CLAIM_IMPACT_LEVELS.includes('native_tooling_workflow'));
+  for (const prompt of [editorSystemPrompt(), editorCompletionSystemPrompt(), claimRepairEvidencePrompt()]) {
+    assert.match(prompt, /AI 모델·코딩 에이전트·effort·개발 SDK|개발 도구의 모델·코딩 에이전트·effort·개발 SDK/);
+    assert.match(prompt, /native_tooling_workflow/);
+  }
+  for (const prompt of [factCheckSystemPrompt(), factCheckRepairSystemPrompt(), factCheckCompletionSystemPrompt()]) {
+    assert.match(prompt, /이미 같은 값인 source_subtitle/);
+    assert.match(prompt, /title의 더 나은 표현.*recommended_fixes/);
+    assert.match(prompt, /requires_cross_check=true.*cross_check_status=required_missing/);
+    assert.match(prompt, /cross-check 누락은 source_gaps에 실제 누락으로 남기/);
+    assert.match(prompt, /병합 커밋이나 배포 증거는 그 주장에 필수 근거가 아닙니다/);
+    assert.match(prompt, /conditional_evidence_type=project_patch_strong_evidence/);
+    assert.match(prompt, /blocked\/required_missing을 모델 판단으로 required_satisfied로 바꾸지/);
+  }
+});
+
 test('reporter extracts status and limitations into existing evidence fields without writing public articles', () => {
   const prompt = reporterSystemPrompt();
   assert.match(prompt, /기존 evidence_notes에 source가 확인한 적용 스택·브랜치·조건/);
