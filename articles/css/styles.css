@@ -19,19 +19,15 @@
   /* 불투명 액센트다. 35% 틴트는 흰 배경 1.72:1, 파치먼트 1.69:1 로 WCAG 1.4.11(3:1) 미달이라
      초점이 어디 있는지가 잘 안 보였다. #0066cc 는 각각 5.57:1 · 5.11:1 이다. */
   --focus-ring: #0066cc;
-  --primary-border: rgba(0, 102, 204, 0.22);
   /* Apple은 chrome에 셰도우를 쓰지 않고 hairline border+표면색으로 elevation을 낸다.
      카드 가독성을 위한 최소한의 단일 저알파 셰도우만 남긴다(DESIGN.md Apple flat). */
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-md: 0 1px 3px rgba(15, 23, 42, 0.05);
-  --shadow-lg: 0 4px 12px rgba(15, 23, 42, 0.06);
   --shadow: var(--shadow-md);
   --radius-lg: 18px;
   --radius-md: 14px;
   --radius-sm: 12px;
   --radius-xs: 8px;
   --radius-pill: 999px;
-  --space-1: 4px;
   --space-2: 8px;
   --space-3: 10px;
   --space-4: 12px;
@@ -39,18 +35,12 @@
   --space-6: 18px;
   --space-7: 20px;
   --space-8: 22px;
-  --space-9: 24px;
-  --space-10: 28px;
-  --space-11: 34px;
-  --space-12: 56px;
   --content: 1280px;
   --reading: 960px;
   --content-gutter: 40px;
   --content-gutter-mobile: 28px;
   --control-height: 44px;
   --control-padding-x: 18px;
-  --card-padding-lg: 34px;
-  --card-padding-md: 24px;
   --card-padding-sm: 20px;
   --section-gap: 56px;
 }

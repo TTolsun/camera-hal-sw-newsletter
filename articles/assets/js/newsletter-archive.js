@@ -266,10 +266,15 @@
     return String(src ?? '').trim().startsWith(FALLBACK_IMAGE_PREFIX);
   }
 
-  // First real weekly article image, or the shared newsletter fallback when none is available.
+  // 카드 제목은 첫 기사의 제목(cardHeadline)이므로 이미지도 그 기사의 것(lead_article_image)을 쓴다.
+  // 그 기사가 fallback이면 fallback을 보여 주고, 같은 호의 다른 기사 이미지를 대신 붙이지 않는다(#1275).
+  // lead_article_image가 없는 예전 항목은 기존처럼 article_images의 첫 실제 이미지를 쓴다.
   // Some legacy entries list a bundled fallback placeholder before a real https image, so we
   // prefer the first non-fallback source and only fall back to the placeholder when none exists.
   function cardImage(entry) {
+    if (entry && typeof entry.lead_article_image === 'string') {
+      return entry.lead_article_image.trim() || FALLBACK_CARD_IMAGE;
+    }
     const images = ensureArray(entry && entry.article_images)
       .map(src => String(src ?? '').trim())
       .filter(Boolean);

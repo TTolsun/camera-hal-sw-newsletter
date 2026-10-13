@@ -619,6 +619,48 @@ test('renderArchiveCard falls back to the site newsletter image and a kicker whe
   assert.match(html, /<h3 class="card-title clamp-2 nc-h">Daily issue<\/h3>/);
 });
 
+// 카드 제목은 첫 기사의 제목이다. lead_article_image가 있으면 그 기사의 이미지만 쓰고, 같은 호의 다른
+// 기사 이미지(article_images)를 대신 붙이지 않는다(2026-W42: AOSP 제목에 Haiku 이미지, #1275).
+test('renderArchiveCard uses the lead article image instead of another article image from the same issue', () => {
+  const entry = {
+    weeklyKey: '2026-W42',
+    date: '2026-10-12',
+    title: '2026 W42',
+    summary: 'AOSP 기사\nHaiku 기사',
+    tags: [],
+    html: 'newsletters/2026-W42/index.html',
+    article_images: ['https://example.com/haiku.jpg'],
+    lead_article_image: 'assets/images/fallback/newsletter-default.svg'
+  };
+
+  const html = NewsletterArchive.renderArchiveCard(entry, { rootPath: '../' });
+
+  assert.match(html, /<img class="card-thumb-img" src="\.\.\/assets\/images\/fallback\/newsletter-default\.svg"/);
+  assert.doesNotMatch(html, /haiku\.jpg/);
+  assert.match(html, /<h3 class="card-title clamp-2 nc-h">AOSP 기사<\/h3>/);
+
+  const realLead = NewsletterArchive.renderArchiveCard({ ...entry, lead_article_image: 'https://example.com/aosp.png' });
+  assert.match(realLead, /<img class="card-thumb-img" src="https:\/\/example\.com\/aosp\.png"/);
+
+  const emptyLead = NewsletterArchive.renderArchiveCard({ ...entry, lead_article_image: '' });
+  assert.match(emptyLead, /<img class="card-thumb-img" src="assets\/images\/fallback\/newsletter-default\.svg"/);
+});
+
+// lead_article_image가 없는 예전 항목은 기존처럼 article_images의 첫 실제 이미지를 쓴다(과거 카드 표시 불변).
+test('renderArchiveCard keeps the article_images choice for entries without lead_article_image', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W41',
+    date: '2026-10-05',
+    title: '2026 W41',
+    summary: '기사 A',
+    tags: [],
+    html: 'newsletters/2026-W41/index.html',
+    article_images: ['assets/images/fallback/android.svg', 'https://example.com/a.png']
+  });
+
+  assert.match(html, /<img class="card-thumb-img" src="https:\/\/example\.com\/a\.png"/);
+});
+
 // ---- Static homepage markup contracts ----
 
 test('homepage renders a static brand featured hero and a 최신 소식 grid with sort and topic hooks', () => {
