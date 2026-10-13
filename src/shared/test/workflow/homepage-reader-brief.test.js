@@ -37,9 +37,12 @@ test('homepage and cards keep A copy and classification without borrowing B medi
     const card = archive.renderArchiveCard(entry);
     for (const html of [home, card]) {
       assert.match(html, /Proposal A &lt;review&gt;/);
-      assert.doesNotMatch(html, /<img|b\.jpg|<[^>]*>AI<\//);
+      assert.doesNotMatch(html, /b\.jpg|<[^>]*>AI<\//);
       assert.match(html, /Camera HAL/);
     }
+    assert.doesNotMatch(home, /<img/);
+    assert.match(card, /is-fallback/);
+    assert.match(card, /src="assets\/images\/fallback\/newsletter-default.svg" alt=""/);
     assert.match(home, /Proposed; not yet merged\./);
     assert.match(home, /Review the applicable conditions\./);
     assert.match(home, /href="newsletters\/2026-W42\/index\.html#article-a"/);
@@ -180,12 +183,38 @@ test('legacy lead_article_image is safe to reuse but never overrides a present p
   entry.lead_article_image = 'https://example.com/legacy-a.png';
   brief.items[0].image = null;
   for (const render of [archive.renderLatestIssue, archive.renderArchiveCard]) {
-    assert.doesNotMatch(render(entry), /legacy-a.png|<img/);
+    assert.doesNotMatch(render(entry), /legacy-a.png/);
     delete entry.reader_brief;
     assert.match(render(entry, { rootPath: '../' }), /src="https:\/\/example.com\/legacy-a.png" alt=""/);
     for (const invalid of ['', 'javascript:alert(1)', '../assets/a.png', 'http://example.com/a.png', 'assets/images/fallback/android.svg']) {
-      assert.doesNotMatch(render({ ...entry, lead_article_image: invalid }), /<img/);
+      const output = render({ ...entry, lead_article_image: invalid });
+      assert.doesNotMatch(output, /src="(?:javascript:|http:|\.\.\/assets)/);
+      if (render === archive.renderLatestIssue) assert.doesNotMatch(output, /<img/);
+      else assert.match(output, /is-fallback/);
     }
     entry.reader_brief = brief;
+  }
+});
+
+test('card image failures retain their frame and use a decorative local fallback in both locales', () => {
+  for (const locale of ['ko', 'en']) {
+    const { entry, brief } = sample(locale);
+    brief.items = [brief.items[1]];
+    const rootPath = locale === 'en' ? '../' : '';
+    const html = archive.renderArchiveCard(entry, { locale, rootPath });
+    const classes = [];
+    const img = { onerror() {}, alt: 'Tool B image', src: 'https://example.com/b.jpg',
+      dataset: { fallbackSrc: rootPath + 'assets/images/fallback/newsletter-default.svg' },
+      parentElement: { hidden: false, classList: { add: value => classes.push(value) } } };
+    Function(html.match(/onerror="([^"]+)"/)[1]).call(img);
+    assert.equal(img.src, img.dataset.fallbackSrc);
+    assert.equal(img.alt, '');
+    assert.equal(img.onerror, null);
+    assert.equal(img.parentElement.hidden, false);
+    assert.deepEqual(classes, ['is-fallback']);
+    delete entry.reader_brief;
+    if (entry.en) delete entry.en.reader_brief;
+    entry.lead_article_image = 'assets/images/fallback/android.svg';
+    assert.ok(archive.renderArchiveCard(entry, { locale, rootPath }).includes(`src="${rootPath}assets/images/fallback/android.svg" alt=""`));
   }
 });

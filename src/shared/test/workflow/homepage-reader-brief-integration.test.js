@@ -68,7 +68,8 @@ test('actual weekly output serializes the W42 public projection consumed by home
   }
   const firstSources = issue.sections[0].public_article.source_links;
   for (const source of firstSources) assert.ok(html.includes(escaped(source.url)));
-  assert.doesNotMatch(archive.renderArchiveCard(entry), /<img/, 'W42 AOSP fallback must not borrow the Haiku image');
+  assert.match(archive.renderArchiveCard(entry), /src="assets\/images\/fallback\/newsletter-default.svg" alt=""/);
+  assert.doesNotMatch(archive.renderArchiveCard(entry), /src="https:/, 'W42 AOSP fallback must not borrow the Haiku image');
   const firstOutput = fs.readFileSync(path.join(dir, 'articles/newsletters/2026-W42/issue.json'), 'utf8');
   await writeWeeklyNewsletterArtifacts({ root: dir, date: editor.date, editor });
   assert.equal(fs.readFileSync(path.join(dir, 'articles/newsletters/2026-W42/issue.json'), 'utf8'), firstOutput);
@@ -170,7 +171,8 @@ for (const [weeklyKey, locale] of [['2026-W42', 'ko'], ['2026-W41', 'en']]) {
     assert.ok(home.includes(escaped(first.lead)));
     assert.ok(home.includes(escaped(first.takeaway)));
     if (!first.image || first.image.is_fallback) {
-      assert.doesNotMatch(card, /<img/);
+      assert.match(card, /is-fallback/);
+      assert.doesNotMatch(card, /src="https:/);
       assert.doesNotMatch(home, /<img/);
     } else {
       assert.ok(card.includes(`src="${escaped(first.image.src)}"`));
