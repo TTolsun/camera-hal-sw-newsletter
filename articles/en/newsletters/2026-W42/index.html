@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W42/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W41 Camera SW Newsletter (Published W42)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W42/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W42/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W42/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week, we look at AOSP&#39;s proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W42/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W41 Camera SW Newsletter (Published W42)" />
+  <meta property="og:description" content="This week, we look at AOSP&#39;s proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W42/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W41 Camera SW Newsletter (Published W42)" />
+  <meta name="twitter:description" content="This week, we look at AOSP&#39;s proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css?v=single-briefing-v1" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.10.05 – 10.11</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W41</span></h1>
+        <p class="issue-publish-badge">Published W42</p>
+
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">AI</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">SoC Platform</span></div>
+      </header>
+
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">This week’s highlights</h2>
+          <p class="reader-brief-intro">This week, we look at AOSP&#39;s proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work.</p>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl">AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled</a>
+            <p class="reader-brief-takeaway">When testing privacy toggles, it is necessary to differentiate based on UID visibility and camera mute support, and verify that the connection is maintained only when conditions are met. Blocking of other clients and the UID inactive path also need to be verified.</p>
+          </li><li>
+            <a href="#article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks">Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks</a>
+            <p class="reader-brief-takeaway">Development tool managers can compare the current model with Haiku 5.5 using samples of build error log summarization and classification. The criterion for adoption is to measure whether cost and response time can be improved while maintaining accuracy and omission rates.</p>
+          </li><li>
+            <a href="#article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch">Discussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch</a>
+            <p class="reader-brief-takeaway">When integrating Qualcomm platform kernel drivers, it is necessary to pre-check changes to the qcom-camss-config.h uAPI structure and v4l2_isp common headers.</p>
+          </li></ol>
+        </div>
+
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl" tabindex="-1" aria-labelledby="article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl-title" class="article-title">AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled</h2>
+        <p class="article-source-subtitle">AOSP Gerrit (camera changes under review)</p>
+        <p class="article-lead">A patch has been proposed to AOSP to fix an issue where clients of a visible UID that supports camera mute are forcibly terminated immediately after a privacy toggle.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>When testing privacy toggles, it is necessary to differentiate based on UID visibility and camera mute support, and verify that the connection is maintained only when conditions are met. Blocking of other clients and the UID inactive path also need to be verified.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled image" loading="lazy" decoding="async">
+        </figure>
+        <p>Simply put, this proposal aims to distinguish between obscuring camera video and disconnecting the app&#39;s camera connection. Taking the example of blocking camera access during a video conference, if the app is visible on screen and the device supports camera mute, the video is blocked while maintaining the connection; otherwise, the connection is severed as before. Here, &quot;mute&quot; refers to blocking camera video, not muting the microphone. This proposal aims to reduce unnecessary connection terminations while maintaining privacy protection, and it is not yet a fully implemented feature.</p>
+        <p>The Gerrit change 4348947, submitted to the android17-release branch on October 7, proposes modifying the privacy handling path in CameraService.cpp. The reviewed revision is still in the NEW state and is not yet a change fully reflected in Android.</p>
+        <p>The commit message explains that for the same privacy toggle, SensorPrivacyManager callbacks and AppOpsManager&#39;s opChanged() are executed via different binder paths. opChanged() checks UID visibility and camera mute support, but the patch author points out that if an unconditional block() in another path executes first, it severs the client connection by returning ERROR_CAMERA_DISABLED.</p>
+        <h3 class="article-subheading">Conditions for mute application and maintained blocking paths</h3>
+        <p>The diff adds the same condition check to blockAllClients() and blockPrivacyEnabledClients(). It calls setCameraMute(true) only when the UID&#39;s process state is PROCESS_STATE_BOUND_TOP or lower and supportsCameraMute() is true; otherwise, it maintains the existing block(). The commit message explains that the mute support determination is related to ANDROID_SENSOR_AVAILABLE_TEST_PATTERN_MODES.</p>
+        <p>blockClientsForUid(), used when a UID becomes inactive, is not changed by this patch. Therefore, this should not be interpreted as a change that maintains camera sessions for all apps. Since no results from actual measurements of race resolution or performance improvement on devices are provided, the intent of the patch and the actual verification results should be distinguished.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947">cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks" aria-label="Next article: Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks" tabindex="-1" aria-labelledby="article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">C++ · AI Tooling</span>
+        </div>
+        <h2 id="article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks-title" class="article-title">Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks</h2>
+        <p class="article-source-subtitle">Anthropic News Official Announcement</p>
+        <p class="article-lead">The need to assign all repetitive tasks, such as build error summarization or simple classification, to large models is reduced. Anthropic has announced Haiku 5.5, targeting these tasks and coding auxiliary agents.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Development tool managers can compare the current model with Haiku 5.5 using samples of build error log summarization and classification. The criterion for adoption is to measure whether cost and response time can be improved while maintaining accuracy and omission rates.</p></div>
+        <figure class="article-media">
+        <img class="article-image" src="https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg" alt="Anthropic&#39;s small AI model Claude Haiku 5.5 announced and its utilization in native development workflows" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://www.anthropic.com/claude-haiku-5-5">Claude Haiku 5.5</a></figcaption>
+        </figure>
+        <p>Claude Haiku 5.5, announced on October 7, is a small language model focused on quickly processing many requests while reducing costs. The official announcement lists summarization, conversation content compression, database querying, and classification as typical repetitive tasks.</p>
+        <p>In coding, it suggests a configuration where it is used as an auxiliary agent alongside Opus 5.5 or Sonnet 5.5. This can be understood as a larger model managing the overall task, while smaller, divisible tasks are assigned to Haiku. Which tasks to separate should be determined by the team&#39;s actual input and output quality.</p>
+        <h3 class="article-subheading">An option to adjust both cost and accuracy</h3>
+        <p>Anthropic explains that Haiku 5.5 has an average execution cost approximately 75% lower than Haiku 4.5. This is an average comparison provided by the vendor, and there is no guarantee that all requests or our team&#39;s monthly costs will decrease by the same amount. The &#39;effort&#39; setting, newly introduced to the Haiku series, is a means to adjust the trade-off between cost and response performance.</p>
+        <p>The Camera HAL development team could use build error log summarization and classification as test subjects. This is an editorial suggestion and does not mean that the original text verified performance on Camera HAL logs. By providing the same sample to the current model and Haiku, and comparing the accuracy rate, the omission rate of critical errors, cost per request, and response time, a decision can be made on whether to adopt it.</p>
+        <p>The practical value of this news is that there is now an option to assign repetitive tasks to a separate model. Tasks that have sufficient performance should be separated first, but this should not be used as a basis for a wholesale transition of complex root cause analysis.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://www.anthropic.com/claude-haiku-5-5">Claude Haiku 5.5</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl" aria-label="Previous article: AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch" aria-label="Next article: Discussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch" tabindex="-1" aria-labelledby="article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch-title" class="article-title">Discussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
+        <p class="article-lead">A patch series documenting the V4L2 metadata format for controlling ISP parameters of the Qualcomm CAMSS subsystem is being reviewed at v10 revision.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>When integrating Qualcomm platform kernel drivers, it is necessary to pre-check changes to the qcom-camss-config.h uAPI structure and v4l2_isp common headers.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Discussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch image" loading="lazy" decoding="async">
+        </figure>
+        <p>On October 6, review comments were posted on the linux-media mailing list regarding the PATCH v10 documentation patch submitted on September 25. This patch includes a proposal for the V4L2_META_FMT_QCOM_ISP_PARAMS metadata format for Qualcomm CAMSS ISP parameters. This format is designed based on the common V4L2 extensible ISP parameter structure.</p>
+        <p>The ope_params node of the Offline Processing Engine (OPE), a key component, is the first to utilize this metadata format. It configures hardware modules such as white balance gain, color correction matrix, and gamma curve by placing block-unit structures within the metadata buffer.</p>
+        <h3 class="article-subheading">Discussion on uAPI structure and header compatibility</h3>
+        <p>During the review process, opinions were exchanged regarding the application of common ISP structures, v4l2_isp_buffer and v4l2_isp_block_header. Standardization efforts within the kernel are ongoing, moving towards using common structures instead of legacy driver compatibility structures.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/">[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks" aria-label="Previous article: Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+
+        </nav>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com/">[PATCH 0/3] media: Add GalaxyCore GC5035 and GC8034 sensor drivers</a><span class="reference-meta">lore.kernel.org linux-media list (2026-10-09) · Camera driver / Image pipeline reference</span></li><li><a href="https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog/">[PATCH 0/2] media: i2c: Add OmniVision OV3660 image sensor driver</a><span class="reference-meta">lore.kernel.org linux-media list (2026-10-08) · Camera driver / Image pipeline reference</span></li><li><a href="https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com/">[PATCH v1 0/2] media: support upside-down camera mounting</a><span class="reference-meta">lore.kernel.org linux-media list (2026-10-07) · Camera driver / Image pipeline reference</span></li><li><a href="https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com/">[PATCH v3 0/2] media: rkisp1: Add YUV bypass support for rkisp1</a><span class="reference-meta">lore.kernel.org linux-media list (2026-10-06) · Camera driver / Image pipeline reference</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947">cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av</a></li><li><a href="https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/">[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation</a></li><li><a href="https://www.anthropic.com/claude-haiku-5-5">Claude Haiku 5.5</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
