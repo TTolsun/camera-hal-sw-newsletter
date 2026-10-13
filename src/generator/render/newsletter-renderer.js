@@ -77,14 +77,6 @@ function paragraphHtml(value) {
   return `<p>${escapeHtml(value || '')}</p>`;
 }
 
-function publicVisualLabel(value) {
-  return String(value || 'Article visual')
-    .replace(/\bFallback\b/gi, 'Tooling Watch')
-    .replace(/cpp_ai_tooling_fallback/gi, 'Tooling Watch')
-    .replace(/\s*\/\s*Tooling Watch\s*$/i, ' / Tooling Watch')
-    .trim() || 'Article visual';
-}
-
 function httpsUrlOrFallback(value, fallback) {
   return /^https:\/\//i.test(String(value || '').trim()) ? String(value).trim() : fallback;
 }
@@ -122,7 +114,7 @@ function articleImageMarkdown(section, publicArticle = null) {
   if (!image || !image.src) return '';
   const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
   if (isFallbackImagePath(image.src)) {
-    return `\n![${alt}](${image.src})\n`;
+    return `\n![](${image.src})\n`;
   }
   const attribution = section.imageAttribution || section.sources?.[0]?.title || t.sourceArticle;
   const source = articleImageSource(section);
@@ -133,9 +125,10 @@ function articleMediaHtml(section, publicArticle = null) {
   const image = resolvedArticleImage(section);
   if (image && image.src) {
     const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
-    const imageHtml = `<img class="article-image" src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`;
+    const fallback = isFallbackImagePath(image.src);
+    const imageHtml = `<img class="article-image" src="${escapeHtml(image.src)}" alt="${fallback ? '' : escapeHtml(alt)}" loading="lazy" decoding="async">`;
     if (isFallbackImagePath(image.src)) {
-      return `<figure class="article-media">
+      return `<figure class="article-media article-media-decoration" aria-hidden="true">
             ${imageHtml}
           </figure>`;
     }
@@ -147,14 +140,7 @@ function articleMediaHtml(section, publicArticle = null) {
           </figure>`;
   }
 
-  // placeholder 는 패턴 하나다(DESIGN.md). 기사 종류별 variant 클래스는 붙이지 않는다 —
-  // article_type·category 는 LLM 자유 텍스트라 클래스 어휘가 닫히지 않고, 스타일 차이도 없었다.
-  // 과거 호의 category는 한국어 자유 텍스트("주간 다이제스트")일 수 있어, 한국어가 아닌 페이지는
-  // 눈썹 라벨과 같은 locale 표로 읽는다.
-  const visualLabel = locale === 'ko' ? publicVisualLabel(section.category) : articleCategoryLabel(section);
-  return `<div class="article-media article-placeholder-visual" role="img" aria-label="${escapeHtml(visualLabel)}">
-            <span></span>
-          </div>`;
+  return '';
 }
 
 function issueCameraAnchorCount(issue) {
@@ -481,27 +467,28 @@ const CATCH_UP_DIVIDER_HEADING = t.catchUp;
 function sectionsMarkdownWithCatchUpDivider(issue) {
   let dividerEmitted = false;
   return normalizedSections(issue)
-    .map(({ heading, section, isCatchUp }) => {
+    .map(({ heading, section, isCatchUp, anchorId }) => {
       let prefix = '';
       if (isCatchUp && !dividerEmitted) {
         prefix = `## ${CATCH_UP_DIVIDER_HEADING}\n\n`;
         dividerEmitted = true;
       }
-      return prefix + publicArticleMarkdown(issue, heading, section);
+      return prefix + `<a id="${anchorId}"></a>\n\n` + publicArticleMarkdown(issue, heading, section);
     })
     .join('\n---\n\n');
 }
 
 function sectionsHtmlWithCatchUpDivider(issue) {
   let dividerEmitted = false;
-  return normalizedSections(issue)
-    .map(({ htmlHeading, headingCategory, anchorId, articleNumber, section, isCatchUp }) => {
+  const rows = normalizedSections(issue);
+  return rows
+    .map(({ htmlHeading, headingCategory, anchorId, articleNumber, section, isCatchUp }, index) => {
       let prefix = '';
       if (isCatchUp && !dividerEmitted) {
         prefix = `      <h2 class="catch-up-divider">${escapeHtml(CATCH_UP_DIVIDER_HEADING)}</h2>\n`;
         dividerEmitted = true;
       }
-      return prefix + publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section);
+      return prefix + publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section, rows[index - 1], rows[index + 1]);
     })
     .join('\n\n');
 }
@@ -657,21 +644,23 @@ function publicArticleMarkdown(issue, heading, section) {
   const sourceSubtitle = publicArticle.source_subtitle
     ? `_${publicArticle.source_subtitle}_\n\n`
     : '';
+  const [lead, meaning] = summaryProse(publicArticle.headline, publicArticle.lead, publicArticle.camera_hal_takeaway);
+  const takeaway = meaning
+    ? `### ${perspectiveHeading}\n\n${meaning}\n\n`
+    : '';
   return `${heading}
 
-${articleImageMarkdown(section, publicArticle)}
+${sourceSubtitle}${lead}
 
-${sourceSubtitle}${publicArticle.lead}
+${takeaway}${articleImageMarkdown(section, publicArticle)}
 
 ${articleBodyMarkdown(publicArticle, storyContractVersion)}
-
-### ${perspectiveHeading}
-
-${publicArticle.camera_hal_takeaway}
 
 **${t.source}**
 
 ${sourceListMarkdown(publicArticle.source_links)}
+
+[${t.backToContents}](#issue-contents)
 `;
 }
 
@@ -785,15 +774,17 @@ function referenceArticlesHtml(issue) {
 }
 
 function buildPublicMarkdown(issue) {
+  const brief = readerBriefForIssue(issue);
   return `# ${issue.title}
 
-${issue.summary}
+${brief ? '' : issue.summary}
 
 ${publicationNoticeMarkdown(issue)}
 
 ## 1. ${briefingHeading(issue)}
 
-${bulletsMarkdown(issue.briefing)}
+${brief ? readerBriefMarkdown(brief) : bulletsMarkdown(issue.briefing)}
+${contentsMarkdown(issue)}
 ${contextLensLabelMarkdown(issue)}
 ${sectionsMarkdownWithCatchUpDivider(issue)}
 
@@ -803,9 +794,8 @@ ${sourceListMarkdown(issue.references)}
 `;
 }
 
-// mockup 기사 흐름: [번호+카테고리 눈썹] → 제목 → 출처 서브타이틀 → 이미지 → 리드 → 본문 →
-// 관점 박스 → 출처. 카드 프레임 없이 섹션 자체가 hairline 으로 구분된다.
-function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section) {
+// Public lead and takeaway precede media and detailed evidence. No internal QA fields are shown.
+function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section, previous, next) {
   const storyContractVersion = storyContractRenderVersion(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
   assertRenderableBody(publicArticle, storyContractVersion);
@@ -815,6 +805,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
     ? `        <p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>`
     : '';
   const displayNumber = String(articleNumber).padStart(2, '0');
+  const [lead, meaning] = summaryProse(publicArticle.headline, publicArticle.lead, publicArticle.camera_hal_takeaway);
   const mediaHtml = articleMediaHtml(section, publicArticle)
     .split('\n')
     .map(line => `        ${line.trimStart()}`)
@@ -827,8 +818,9 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
     ).map(paragraph => `        ${paragraphHtml(paragraph)}`);
   const articleBodyBlocks = [
     sourceSubtitle,
+    lead ? `        <p class="article-lead">${escapeHtml(lead)}</p>` : '',
+    meaning ? `        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(meaning)}</div>` : '',
     mediaHtml,
-    `        <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>`,
     ...bodyBlocksHtml
   ].filter(Boolean).join('\n');
   const articleTypeClass = storyV2 || isStoryArticle(publicArticle) ? ' story-article' : '';
@@ -837,21 +829,25 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
   const articleTagsBlock = articleTags ? `\n        ${articleTags}` : '';
   // 클래스는 결정론 훅만 붙인다. article_type(LLM 자유 텍스트)을 클래스로 찍으면
   // "Android Camera / Platform API" 처럼 공백·슬래시가 든 값이 class 속성에 그대로 들어간다.
-  return `      <section class="section issue-story issue-section article-card${articleTypeClass} ${articleImageClass}" id="${escapeHtml(anchorId)}" aria-labelledby="${escapeHtml(anchorId)}-title">
+  return `      <section class="section issue-story issue-section article-card${articleTypeClass} ${articleImageClass}" id="${escapeHtml(anchorId)}" tabindex="-1" aria-labelledby="${escapeHtml(anchorId)}-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article ${escapeHtml(articleNumber)}">${escapeHtml(displayNumber)}</span>
           <span class="issue-story-category">${escapeHtml(articleCategoryLabel(section))}</span>
         </div>
         <h2 id="${escapeHtml(anchorId)}-title" class="article-title">${escapeHtml(publicArticle.headline || htmlHeading)}</h2>${articleTagsBlock}
 ${articleBodyBlocks}
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
         <div class="source-list"><strong>${t.source}</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
+        <nav class="article-navigation" aria-label="${escapeHtml(t.articleNavigation)}">
+          ${previous ? `<a href="#${escapeHtml(previous.anchorId)}" aria-label="${escapeHtml(`${t.previousArticle}: ${previous.headingCategory}`)}">← ${t.previousArticle}</a>` : ''}
+          <a href="#issue-contents">${t.backToContents}</a>
+          ${next ? `<a href="#${escapeHtml(next.anchorId)}" aria-label="${escapeHtml(`${t.nextArticle}: ${next.headingCategory}`)}">${t.nextArticle} →</a>` : ''}
+        </nav>
       </section>`;
 }
 
 // 표시 계약 v2: iso_week variant일 때만 h1 아래 "발행 WNN" 보조 배지를 붙인다(대상 주 제목과
 // 발행 주가 갈릴 때 두 identity를 함께 보여줘 아카이브 카드-이슈 페이지 표시가 어긋나지 않게 한다).
-function issueHeroHtml(issue) {
+function issueHeroHtml(issue, brief) {
   const publishedWeekBadge = issuePublishedWeekBadgeText(issue);
   const publishedWeekBadgeHtml = publishedWeekBadge
     ? `\n        <p class="issue-publish-badge">${escapeHtml(publishedWeekBadge)}</p>`
@@ -862,17 +858,87 @@ function issueHeroHtml(issue) {
           <span class="issue-kicker">${escapeHtml(issueKickerText(issue))}</span>
         </div>
         <h1 class="issue-title">${issueTitleHtml(issue)}</h1>${publishedWeekBadgeHtml}
-        <p class="subtitle">${escapeHtml(issue.summary)}</p>
+        ${brief ? '' : `<p class="subtitle">${escapeHtml(issue.summary)}</p>`}
         <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
       </header>`;
 }
 
-function issueBriefingHtml(issue) {
+function readerBriefForIssue(issue) {
+  if (!issue.weekly_key) return null;
+  // #1276 owns this builder; both body and index consume the same final public projection.
+  const { buildReaderBrief } = require('./reader-brief');
+  const issueHref = `${locale === 'en' ? 'en/' : ''}newsletters/${issue.weekly_key}/index.html`;
+  const brief = buildReaderBrief(issue, { locale, issueHref });
+  if (brief?.schema_version !== 1 || brief.locale !== locale || typeof brief.intro !== 'string' ||
+    !Array.isArray(brief.items) || brief.items.length !== ensureArray(issue.sections).length || brief.items.some(item => !item ||
+      !['id', 'href', 'headline', 'lead', 'takeaway'].every(key => typeof item[key] === 'string') ||
+      !Array.isArray(item.tags) || item.tags.some(tag => typeof tag !== 'string') ||
+      (item.image !== null && (!item.image || typeof item.image.src !== 'string' ||
+        typeof item.image.alt !== 'string' || typeof item.image.is_fallback !== 'boolean')) ||
+      !item.href.startsWith(`${issueHref}#`))) {
+    console.warn('newsletter-renderer: invalid reader_brief; using legacy briefing');
+    return null;
+  }
+  return brief;
+}
+
+// Old issues sometimes repeat the headline in both summary fields. Hide exact duplicates
+// only in the presentation; the shared projection and public prose remain untouched.
+function summaryProse(headline, lead, takeaway) {
+  const seen = new Set([String(headline || '').trim()]);
+  return [lead, takeaway].map(value => {
+    const text = String(value || '');
+    if (!text.trim() || seen.has(text.trim())) return '';
+    seen.add(text.trim());
+    return text;
+  });
+}
+
+function readerBriefHtml(brief) {
+  return `${brief.intro ? `<p class="reader-brief-intro">${escapeHtml(brief.intro)}</p>` : ''}
+          <ol class="reader-brief-items">${brief.items.map(item => {
+    const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
+    return `<li>
+            <a href="#${escapeHtml(item.href.split('#')[1])}">${escapeHtml(item.headline)}</a>
+            ${lead ? paragraphHtml(lead) : ''}
+            ${meaning ? `<p class="reader-brief-takeaway">${escapeHtml(meaning)}</p>` : ''}
+          </li>`;
+  }).join('')}</ol>`;
+}
+
+function readerBriefMarkdown(brief) {
+  return `### ${t.weeklyCore}\n\n${brief.intro}\n\n` + brief.items.map(item => {
+    const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
+    return `- [${escapeMarkdownLinkText(item.headline)}](#${item.href.split('#')[1]})\n${lead ? `\n  ${lead}\n` : ''}${meaning ? `\n  ${meaning}\n` : ''}`;
+  }).join('\n');
+}
+
+function contentsMarkdown(issue) {
+  const rows = normalizedSections(issue);
+  if (!rows.length) return '';
+  return `<a id="issue-contents"></a>\n\n### ${t.contents}\n\n` + rows.map(row =>
+    `- [${escapeMarkdownLinkText(row.headingCategory)}](#${row.anchorId})`
+  ).join('\n');
+}
+
+function contentsHtml(issue) {
+  const rows = normalizedSections(issue);
+  if (!rows.length) return '';
+  return `<nav class="issue-contents" id="issue-contents" tabindex="-1" aria-labelledby="issue-contents-title">
+          <details${issue.weekly_key ? '' : ' open'}>
+          <summary id="issue-contents-title">${t.contents}</summary>
+          <ol>${rows.map(row => `<li><a href="#${escapeHtml(row.anchorId)}">${escapeHtml(row.headingCategory)}</a></li>`).join('')}</ol>
+          </details>
+        </nav>`;
+}
+
+function issueBriefingHtml(issue, brief) {
   return `<section class="section issue-briefing" aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
-          <h2 id="issue-briefing-title">${briefingHeadingHtml(issue)}</h2>
-          <ul>${bulletsHtml(issue.briefing)}</ul>
+          <h2 id="issue-briefing-title">${brief ? t.weeklyCore : briefingHeadingHtml(issue)}</h2>
+          ${brief ? readerBriefHtml(brief) : `<ul>${bulletsHtml(issue.briefing)}</ul>`}
         </div>
+        ${contentsHtml(issue)}
       </section>`;
 }
 
@@ -913,6 +979,7 @@ function articleSeoHead(issue = {}) {
 }
 
 function buildPublicHtml(issue) {
+  const brief = readerBriefForIssue(issue);
   const publicationNotice = publicationNoticeHtml(issue);
   const publicationNoticeBlock = publicationNotice ? `      ${publicationNotice}\n\n` : '';
   const rootPath = locale === 'ko' ? '../../' : '../../../';
@@ -933,9 +1000,9 @@ ${articleSeoHead(issue)}
 
   <main class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
-      ${issueHeroHtml(issue)}
+      ${issueHeroHtml(issue, brief)}
 
-${publicationNoticeBlock}      ${issueBriefingHtml(issue)}
+${publicationNoticeBlock}      ${issueBriefingHtml(issue, brief)}
 ${contextLensLabelHtml(issue)}
 ${sectionsHtmlWithCatchUpDivider(issue)}
 ${watchPointsHtml(issue)}${referenceArticlesHtml(issue)}

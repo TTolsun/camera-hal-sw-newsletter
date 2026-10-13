@@ -1427,6 +1427,7 @@ pre code {
   margin-top: 40px;
 }
 
+
 .issue-briefing-card {
   display: grid;
   gap: 14px;
@@ -2253,4 +2254,125 @@ pre code {
 
 .language-options a:hover {
   color: var(--primary);
+}
+
+/* Keep reading and navigation rules on issue pages; archive cards share this stylesheet. */
+.newsletter-issue-page .issue-wrap {
+  max-width: 840px;
+  overflow-wrap: anywhere;
+}
+
+.newsletter-issue-page .issue-contents {
+  margin-top: 28px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.newsletter-issue-page .issue-contents summary {
+  margin: 0 0 12px;
+  padding: 8px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.newsletter-issue-page .issue-contents ol,
+.newsletter-issue-page .reader-brief-items {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.newsletter-issue-page .issue-contents li {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+.newsletter-issue-page .reader-brief-items li {
+  margin-top: 20px;
+  padding-left: 4px;
+}
+
+.newsletter-issue-page .reader-brief-items a {
+  font-weight: 600;
+}
+
+.newsletter-issue-page .reader-brief-items p {
+  margin: 8px 0 0;
+  line-height: 1.65;
+}
+
+.newsletter-issue-page .reader-brief-takeaway {
+  color: var(--muted);
+}
+
+.newsletter-issue-page .reader-brief-intro {
+  margin: 4px 0 0;
+  line-height: 1.75;
+}
+
+.newsletter-issue-page .article-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 0.9375rem;
+}
+
+.newsletter-issue-page .article-navigation a,
+.newsletter-issue-page .issue-contents a {
+  display: inline-block;
+  padding: 8px 0;
+}
+
+.newsletter-issue-page .issue-wrap a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.newsletter-issue-page a:focus-visible,
+.newsletter-issue-page summary:focus-visible,
+.newsletter-issue-page [tabindex="-1"]:focus {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
+}
+
+.newsletter-issue-page .issue-story,
+.newsletter-issue-page .issue-contents {
+  scroll-margin-top: 100px;
+}
+
+.newsletter-issue-page .issue-section figure.article-media-decoration {
+  max-width: 160px;
+  margin-top: 20px;
+  opacity: 0.6;
+}
+
+/* Old published markup can contain a large generated placeholder. */
+.newsletter-issue-page .issue-section .article-placeholder-visual {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .newsletter-issue-page .issue-briefing-card {
+    padding: 20px;
+  }
+
+  .newsletter-issue-page .issue-story.issue-section {
+    margin-top: 36px;
+    padding-top: 28px;
+  }
+
+  .newsletter-issue-page .article-card p {
+    line-height: 1.8;
+  }
+
+  .newsletter-issue-page .camera-hal-takeaway {
+    padding: 18px;
+  }
+
+  .newsletter-issue-page .issue-section figure.article-media-decoration {
+    max-width: 112px;
+  }
 }
