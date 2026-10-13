@@ -162,3 +162,20 @@ test('actual projection builder and renderer share final article identity, prose
     assert.equal(mainArticleBlocks(buildMarkdown(draft, { locale })).length, brief.items.length);
   }
 });
+
+
+test('future weekly issues reuse the shared reading surface in both locales', () => {
+  const draft = issue(1);
+  draft.weekly_key = '2027-W02';
+  draft.date = '2027-01-11';
+  for (const locale of ['ko', 'en']) {
+    const html = buildHtml(draft, { locale });
+    assert.match(html, /css\/styles\.css/);
+    assert.match(html, /class="wrap issue-wrap"/);
+    assert.match(html, /class="skip-link"/);
+    assert.match(html, /class="reader-brief-items"/);
+    assert.match(html, /<details class="reader-brief-context">/);
+    assert.doesNotMatch(html, /class="issue-contents"|2026-W42/);
+    assert.ok(html.indexOf('reader-brief-items') < html.indexOf('reader-brief-context'));
+  }
+});

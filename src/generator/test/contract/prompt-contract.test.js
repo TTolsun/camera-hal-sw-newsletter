@@ -740,3 +740,16 @@ test('truncated source rules tell the flag and the ellipsis suffix apart and sta
   assert.match(verifying, /잘렸다는 사실만으로 기사를 문제 삼지 마세요/);
   assert.match(verifying, /확인할 수 없다는 것과 모순된다는 것은 다릅니다/);
 });
+
+
+test('reader-facing explanations persist through writing, repair, completion and review stages', () => {
+  for (const prompt of [editorSystemPrompt(), editorRepairPatchSystemPrompt(), editorCompletionSystemPrompt()]) {
+    assert.match(prompt, /첫 화면 설명 기준/);
+    assert.match(prompt, /홈페이지가 이 필드를 직접 사용/);
+    assert.match(prompt, /지원 조건·예외·제안 상태를 없애지/);
+  }
+  for (const prompt of [publicArticleJudgePrompt(), factCheckSystemPrompt(), factCheckRepairSystemPrompt(), factCheckCompletionSystemPrompt()]) {
+    assert.match(prompt, /첫 화면 가독성 검토/);
+    assert.match(prompt, /문체만으로 사실 오류를 만들지/);
+  }
+});

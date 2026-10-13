@@ -125,6 +125,8 @@ test('one failed response is retried once with check feedback and stage telemetr
   const result = await translateIssue(target, { call: async (run, system, prompt) => {
     assert.equal(run.definition.modelGroup, 'translate');
     assert.match(system, /unmerged/);
+    assert.match(system, /plain English in headline, lead, and camera_hal_takeaway/);
+    assert.match(system, /support conditions, exceptions, uncertainty/);
     calls++;
     assert.equal(run.qualityAttempt, calls);
     if (calls === 1) return { ...overlay, title: '오류' };
