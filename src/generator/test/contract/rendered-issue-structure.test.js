@@ -359,6 +359,7 @@ test('article image attribution belongs to its own figure caption, not nearby ar
   const cases = [
     ['article sources cannot replace caption attribution', `<figure>${image}<figcaption class="article-image-caption">Image source</figcaption></figure>${sourceList}`, 1],
     ['a link outside the caption cannot provide attribution', `<figure>${image}${link}<figcaption class="article-image-caption">Image source</figcaption></figure>`, 1],
+    ['a link after the caption cannot provide attribution', `<figure>${image}<figcaption class="article-image-caption">Image source</figcaption>${link}</figure>`, 1],
     ['an adjacent figure cannot provide attribution', `<figure>${image}</figure><figure>${caption}</figure>`, 1],
     ['an image outside a figure cannot borrow a caption', `${image}<figure>${caption}</figure>`, 1],
     ['identical image tags retain separate caption requirements', `<figure>${image}${caption}</figure><figure>${image}</figure>`, 1],
