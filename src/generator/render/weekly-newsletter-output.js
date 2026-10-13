@@ -203,7 +203,7 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
   let currentIssue = issue;
   let currentSections = ensureArray(issue.sections);
   if (result.patchedSectionCount > 0) {
-    const page = buildWeeklyNewsletterPage(issue, { weeklyKey });
+    const page = buildWeeklyNewsletterPage(issue, { weeklyKey, preservePublishedProse: true });
     result.files.push(...invalidateTranslation(root, weeklyKey, `${JSON.stringify(page.issue, null, 2)}\n`));
     const dir = path.join(root, 'articles', 'newsletters', weeklyKey);
     fs.writeFileSync(path.join(dir, 'index.html'), page.html, 'utf8');

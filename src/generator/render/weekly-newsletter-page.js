@@ -77,12 +77,17 @@ function orderedWeeklySections(sections) {
     Number(a.coverage_type === 'catch_up') - Number(b.coverage_type === 'catch_up') || compareEditorialPriority(a, b));
 }
 
-function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
+function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey, preservePublishedProse = false } = {}) {
   const bounds = date ? weekBoundsForDate(date) : weekBoundsForKey(weeklyKey);
-  const sections = orderedWeeklySections(draft.sections);
+  // 이미지 전용 repair는 저장된 호의 prose와 순서를 다시 편집하지 않는다. 새 발행은 항상
+  // resolveIntroLetter의 fingerprint/grounding 경로를 거치며 이 옵션을 사용하지 않는다.
+  const sections = preservePublishedProse ? [...ensureArray(draft.sections)] : orderedWeeklySections(draft.sections);
   const titles = articleTitles(sections);
-  const introValid = draft.intro_letter && draft.intro_letter_source_hash === introLetterSourceHash(sections) &&
-    lintIntroLetter(draft.intro_letter, sections).ok;
+  const legacyIntro = preservePublishedProse && draft.weekly_key === bounds.weeklyKey &&
+    !Object.hasOwn(draft, 'intro_letter_source_hash') &&
+    typeof draft.intro_letter === 'string' && draft.intro_letter.trim() && draft.summary === draft.intro_letter;
+  const introValid = legacyIntro || (draft.intro_letter &&
+    draft.intro_letter_source_hash === introLetterSourceHash(sections) && lintIntroLetter(draft.intro_letter, sections).ok);
   const coverageBounds = coverageDisplayBounds(draft);
   const issue = {
     ...draft,
@@ -91,13 +96,14 @@ function buildWeeklyNewsletterPage(draft = {}, { date, weeklyKey } = {}) {
     weekly_key: bounds.weeklyKey,
     week_start_date: bounds.weekStartDate,
     week_end_date: bounds.weekEndDate,
-    title: weeklyDisplayTitle(titleDisplayBounds(coverageBounds, bounds)),
+    title: preservePublishedProse ? draft.title : weeklyDisplayTitle(titleDisplayBounds(coverageBounds, bounds)),
     // The hero subtitle (and markdown line 2, og/meta description) is the gate-passing weekly
     // editor letter when one was adopted (T10, #853); otherwise the deterministic headline-derived
     // summary, then the per-run draft summary when there are no titles.
-    summary: (introValid ? draft.intro_letter : '') || weeklySummaryText(titles) || draft.summary,
+    summary: preservePublishedProse && (!draft.intro_letter || legacyIntro) ? draft.summary :
+      (introValid ? draft.intro_letter : '') || weeklySummaryText(titles) || draft.summary,
     // Under the title we list this week's article titles instead of a 3-line briefing.
-    briefing: titles.length ? titles : draft.briefing
+    briefing: preservePublishedProse ? draft.briefing : titles.length ? titles : draft.briefing
   };
   if (!introValid) {
     delete issue.intro_letter;

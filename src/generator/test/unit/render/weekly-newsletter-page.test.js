@@ -92,6 +92,31 @@ test('draft.intro_letter가 없으면 issue.summary는 기존 weeklySummaryText 
   assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API']);
 });
 
+test('only published image-repair mode preserves an unversioned legacy intro, never a stale hash', () => {
+  const draft = publishReadyDraft();
+  draft.weekly_key = '2026-W23';
+  draft.intro_letter = '이번 주에는 CameraX 변경 소식을 살펴봅니다. 공개된 근거와 조건을 함께 소개합니다.';
+  draft.summary = draft.intro_letter;
+  const options = { weeklyKey: '2026-W23', preservePublishedProse: true };
+  assert.equal(buildWeeklyNewsletterPage(draft, options).issue.intro_letter, draft.intro_letter);
+  assert.equal(buildWeeklyNewsletterPage(draft, { weeklyKey: '2026-W23' }).issue.intro_letter, undefined);
+  assert.equal(draft.intro_letter_source_hash, undefined);
+  draft.intro_letter_source_hash = 'sha256:stale';
+  const stale = buildWeeklyNewsletterPage(draft, options).issue;
+  assert.equal(stale.intro_letter, undefined);
+  assert.equal(stale.intro_letter_source_hash, undefined);
+});
+
+test('image-repair mode keeps the published summary even when the historical issue has no intro', () => {
+  const draft = publishReadyDraft();
+  draft.weekly_key = '2026-W23';
+  const before = structuredClone(draft);
+  const page = buildWeeklyNewsletterPage(draft, { weeklyKey: '2026-W23', preservePublishedProse: true });
+  assert.equal(page.issue.summary, draft.summary);
+  assert.equal(page.issue.intro_letter, undefined);
+  assert.deepEqual(draft, before);
+});
+
 test('weekly issue site footer always links to the AI Engineering learning page exactly once', () => {
   const page = buildWeeklyNewsletterPage(publishReadyDraft(), { date: '2026-06-04' });
   const hrefMatches = page.html.match(/\.\.\/\.\.\/learning\/ai-engineering\/index\.html/g) || [];
