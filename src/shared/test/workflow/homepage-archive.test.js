@@ -1042,8 +1042,8 @@ test('newsletter issue page CSS follows the newsroom flat article layout', () =>
   // mockup: 홈·이슈 페이지 캔버스는 그라디언트 없는 순백 풀블리드.
   assertCssDeclaration(pageBackground, 'background', '#ffffff');
   assertCssDeclaration(issueArticlePage, 'padding', '34px 0 0');
-  // Issue pages read in a narrow single column (mockup): 760px wrap, 80px bottom exit.
-  assertCssDeclaration(issueWrap, 'width', 'min(100% - 44px, 760px)');
+  // Issue containers align with the homepage; prose has a separate reading measure.
+  assertCssDeclaration(issueWrap, 'width', 'min(100% - 44px, 1036px)');
   assertCssDeclaration(issueWrap, 'max-width', 'none');
   assertCssDeclaration(issueWrap, 'padding-bottom', '80px');
   assertCssDeclaration(issueHero, 'grid-template-columns', '1fr');
@@ -1089,7 +1089,7 @@ test('newsletter issue page CSS follows the newsroom flat article layout', () =>
   // 하단 내비("← 뉴스룸으로 · 아카이브 전체 보기 →")가 있어야 한다.
   assertCssDeclaration(issueFooterNavigation, 'margin-top', '48px');
   assertCssDeclaration(issueMobileArticlePage, 'padding-top', '28px');
-  assertCssDeclaration(issueCompactWrap, 'width', 'min(100% - var(--content-gutter-mobile), 760px)');
+  assertCssDeclaration(issueCompactWrap, 'width', 'min(100% - var(--content-gutter-mobile), 1036px)');
   assertCssDeclaration(issueCompactStory, 'padding-top', '28px');
 });
 
