@@ -1617,6 +1617,7 @@ pre code {
 
 .newsletter-issue-page .issue-section .article-media {
   max-width: 760px;
+  margin-inline: auto;
   margin-top: 24px;
 }
 
@@ -2253,9 +2254,10 @@ pre code {
   overflow-wrap: anywhere;
 }
 
-/* Wide media and headings share the homepage edges; prose keeps its reading measure. */
-.newsletter-issue-page .issue-story > :is(p, ul, ol, blockquote, h3, h4, .article-block, .source-list) {
+/* Keep the article reading column centered inside the wider issue container. */
+.newsletter-issue-page .issue-story > :is(p, ul, ol, blockquote, h2, h3, h4, .article-block, .source-list, .issue-story-eyebrow, .article-navigation) {
   max-width: 760px;
+  margin-inline: auto;
 }
 
 .newsletter-issue-page .issue-contents {
