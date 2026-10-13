@@ -361,10 +361,17 @@ function validateArticleImages(relPath, html, root, errors) {
     //
     // 두 방향을 다 검사해야 게이트가 닫힙니다. fallback 쪽을 검사에서 빼기만 하면, 가짜 출처
     // 캡션이 다시 생겨도 게이트가 통과시킵니다.
-    const start = String(html || '').indexOf(tag);
-    const nearby = start >= 0 ? String(html || '').slice(start, start + 900) : '';
-    const hasCaption = /article-image-caption/.test(nearby);
-    const hasCaptionSourceLink = /<a\s+[^>]*href=["']https:\/\//i.test(nearby);
+    // 캡션은 그 그림을 감싼 <figure> 안에서만 찾는다. 고정 글자 수 창으로 찾으면 그림 바로 뒤의
+    // 출처 목록 링크를 캡션 링크로 오인해, 출처 링크 없는 캡션도 통과한다(PR #1291 재배치에서 드러남).
+    // 렌더러는 기사 그림을 항상 <figure>로 감싸며, 커밋된 과거 호의 기사 그림도 전부 <figure> 안에 있다.
+    const content = String(html || '');
+    const start = content.indexOf(tag);
+    const figureEnd = start >= 0 ? content.indexOf('</figure>', start) : -1;
+    const figure = figureEnd >= 0 ? content.slice(start, figureEnd) : '';
+    // 요소 종류는 가리지 않는다. #863이 지운 가짜 출처 캡션은 <p class="article-image-caption">였다.
+    const captionMatch = figure.match(/<([a-z][a-z0-9]*)\b[^>]*\barticle-image-caption\b[^>]*>([\s\S]*?)<\/\1>/i);
+    const hasCaption = Boolean(captionMatch);
+    const hasCaptionSourceLink = hasCaption && /<a\s+[^>]*href=["']https:\/\//i.test(captionMatch[2]);
     if (isFallbackImagePath(src)) {
       // 가짜 출처 캡션 금지는 발행 대상 호만이 아니라 모든 호에 적용합니다. 예전에는 이 규칙이
       // 생기기 전에 발행된 호 53건이 이미 이 캡션을 달고 있어서 발행 대상 호에만 적용했지만,

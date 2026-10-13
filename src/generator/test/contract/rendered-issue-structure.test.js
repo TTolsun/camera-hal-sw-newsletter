@@ -270,6 +270,35 @@ test('article image caption attribution is required only for images that came fr
   }
 });
 
+// 캡션 출처 링크는 그 그림의 <figure> 안에서만 찾는다. 본문 재배치로 출처 목록이 그림 바로 뒤에
+// 오면(PR #1291), 고정 글자 수 창으로는 출처 목록 링크를 캡션 링크로 오인해 게이트가 꺼진다.
+test('caption attribution ignores https links outside the image figure', () => {
+  const sourcedImage = 'https://developer.android.com/static/images/social/android-developers.png';
+  const root = tempRoot('rendered-issue-structure-');
+  const date = writeNewsletterIndex(root);
+  const editor = issue({
+    date,
+    sections: withImageSection(root, {
+      selectedImage: sourcedImage,
+      section: {
+        imageCandidates: [{ url: sourcedImage }],
+        resolvedImage: { url: sourcedImage, src: sourcedImage, usedFallback: false }
+      }
+    })
+  });
+  const html = buildHtml(editor);
+  const sourceListRightAfterFigure = '</figure>\n<ul class="source-list"><li><a href="https://example.com/source">Example source</a></li></ul>';
+  const badHtml = html
+    .replace(/<figcaption class="article-image-caption">[\s\S]*?<\/figcaption>/, '<figcaption class="article-image-caption">Image source</figcaption>')
+    .replace(/<\/figure>/, sourceListRightAfterFigure);
+  assert.match(badHtml, /Image source<\/figcaption>\s*<\/figure>\s*<ul class="source-list"><li><a href="https:/);
+
+  const result = validateRenderedIssueStructure({ root, date, editor, markdown: buildMarkdown(editor), html: badHtml });
+
+  assert.equal(result.ok, false, 'a caption without its own source link must fail even when a source list follows the figure');
+  assert.match(result.text, /caption attribution/);
+});
+
 test('fallback article image carrying a source attribution caption is rejected', () => {
   // 캡션 규칙은 fallback 쪽에서 방향이 반대다 — 요구가 아니라 금지다. 이 검사가 없으면
   // 가짜 출처 캡션이 다시 생겨도 게이트가 통과시킨다.
