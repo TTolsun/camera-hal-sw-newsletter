@@ -16,6 +16,7 @@ const path = require('path');
 const { applyTranslation } = require('./apply-translation');
 const { buildHtml, buildMarkdown } = require('./newsletter-renderer');
 const { writeSitemap } = require('./generate-sitemap');
+const { buildReaderBrief } = require('./reader-brief');
 
 const TRANSLATION_FILE = 'translation.en.json';
 
@@ -36,6 +37,7 @@ function buildEnglishEdition(root, weeklyKey) {
     entry: {
       title: String(weeklyKey).replace('-W', ' W'),
       summary: issue.briefing.join('\n'),
+      reader_brief: buildReaderBrief(issue, { locale: 'en', issueHref: `en/newsletters/${weeklyKey}/index.html` }),
       html: `en/newsletters/${weeklyKey}/index.html`,
       md: `en/newsletters/${weeklyKey}/newsletter.md`
     }

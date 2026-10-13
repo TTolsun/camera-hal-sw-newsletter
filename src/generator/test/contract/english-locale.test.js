@@ -263,7 +263,14 @@ test('English edition writer renders from committed issue.json and records the e
   writeJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'), [{ weeklyKey: '2026-W39', date: issue.date, title: '2026 W39', html: 'newsletters/2026-W39/index.html' }]);
   writeEnglishEditions(root, ['2026-W39']);
   const [entry] = readJson(path.join(root, 'articles', 'data', 'newsletters-weekly.json'));
-  assert.deepEqual(entry.en, { title: '2026 W39', summary: 'Camera changes', html: 'en/newsletters/2026-W39/index.html', md: 'en/newsletters/2026-W39/newsletter.md' });
+  const { reader_brief: brief, ...legacyEntry } = entry.en;
+  assert.deepEqual(legacyEntry, { title: '2026 W39', summary: 'Camera changes', html: 'en/newsletters/2026-W39/index.html', md: 'en/newsletters/2026-W39/newsletter.md' });
+  assert.equal(brief.schema_version, 1);
+  assert.equal(brief.locale, 'en');
+  assert.equal(brief.intro, translation.summary);
+  assert.equal(brief.items[0].headline, 'Camera changes');
+  assert.equal(brief.items[0].href, 'en/newsletters/2026-W39/index.html#article-camera-changes');
+  assert.equal(brief.items[0].image.src, 'assets/images/fallback/newsletter-default.svg');
   assert.equal(entry.title, '2026 W39');
   assert.match(fs.readFileSync(path.join(root, 'articles', 'en', 'newsletters', '2026-W39', 'index.html'), 'utf8'), /<html lang="en"/);
   assert.ok(fs.readFileSync(path.join(root, 'articles', 'sitemap.xml'), 'utf8').includes('en/newsletters/2026-W39/index.html'));
