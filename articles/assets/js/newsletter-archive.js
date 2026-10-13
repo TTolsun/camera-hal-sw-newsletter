@@ -244,20 +244,11 @@
     return firstLine || cardTitle(entry);
   }
 
-  // Primary topic used as the card kicker; fallback issues surface their edition tag here.
-  function cardKicker(entry) {
-    const [first] = visibleTags(entry && entry.tags);
-    return first || 'Camera HAL';
-  }
-
   const FALLBACK_IMAGE_PREFIX = 'assets/images/fallback/';
-  const FALLBACK_CARD_IMAGE = `${FALLBACK_IMAGE_PREFIX}newsletter-default.svg`;
 
   // 저장소에 동봉된 fallback 그래픽인지 판정한다. article-image-resolver 는 카테고리별로 여러 장
   // (ai/android/cpp/newsletter-default) 을 내보내므로 특정 파일명이 아니라 폴더로 가른다.
-  // 홈 featured 히어로도 이 판정을 그대로 써야 한다 — 판정이 갈리면 같은 그래픽이 카드에서는
-  // 장식(alt="")으로, 히어로에서는 기사 이미지로 취급돼 기사 제목이 alt 로 붙는다.
-  // (모양은 이제 양쪽 다 풀커버라 갈리지 않는다 — #1008.)
+  // 홈과 카드는 이 그래픽을 기사 이미지로 표시하지 않고 텍스트 구성으로 돌아간다.
   //
   // 전제: site root 기준으로 정규화된 경로만 받는다. 이슈 페이지가 쓰는 `../../assets/...` 같은
   // 페이지 상대 경로는 조용히 false 가 되므로, 그 층에서는 먼저 정규화한다
@@ -266,15 +257,85 @@
     return String(src ?? '').trim().startsWith(FALLBACK_IMAGE_PREFIX);
   }
 
-  // First real weekly article image, or the shared newsletter fallback when none is available.
-  // Some legacy entries list a bundled fallback placeholder before a real https image, so we
-  // prefer the first non-fallback source and only fall back to the placeholder when none exists.
-  function cardImage(entry) {
-    const images = ensureArray(entry && entry.article_images)
-      .map(src => String(src ?? '').trim())
-      .filter(Boolean);
-    const firstReal = images.find(src => !isFallbackImage(src));
-    return firstReal || images[0] || FALLBACK_CARD_IMAGE;
+  function safeReaderImage(src) {
+    if (typeof src !== 'string' || /[\s\\<>"']/.test(src)) return false;
+    if (/^assets\/[A-Za-z0-9_./-]+$/.test(src)) return !src.split('/').includes('..');
+    if (!/^https:\/\//i.test(src)) return false;
+    try {
+      const url = new URL(src);
+      return url.protocol === 'https:' && Boolean(url.hostname) && !url.username && !url.password;
+    } catch {
+      return false;
+    }
+  }
+
+  function entryDisplay(entry, locale = 'ko') {
+    const englishPath = entry?.en?.html;
+    const translated = locale === 'en' && englishPath === `en/${getSafeNewsletterHref(entry)}`;
+    return {
+      href: translated ? englishPath : getSafeNewsletterHref(entry),
+      title: translated ? entry.en.title : entry?.title,
+      summary: translated ? entry.en.summary : locale === 'en' ? '' : entry?.summary,
+      koreanOnly: locale === 'en' && !translated
+    };
+  }
+
+  // Consume only the serialized public projection. Never reconstruct anchors or borrow
+  // another article's media. Missing legacy data is normal; malformed projections diagnose.
+  function readerBrief(entry, locale = 'ko') {
+    const brief = locale === 'en' ? entry?.en?.reader_brief : entry?.reader_brief;
+    if (brief == null) return null;
+    const display = entryDisplay(entry, locale);
+    const ids = new Set();
+    const hrefs = new Set();
+    const valid = !display.koreanOnly && Boolean(weeklyKeyOf(entry)) &&
+      brief.schema_version === 1 && brief.locale === locale &&
+      typeof brief.intro === 'string' && Array.isArray(brief.items) && brief.items.every(item => {
+        if (!item || typeof item.id !== 'string' || !item.id.trim() || ids.has(item.id) ||
+            typeof item.href !== 'string' || !item.href.startsWith(`${display.href}#`) ||
+            !/^[A-Za-z0-9_-]+$/.test(item.href.slice(display.href.length + 1)) || hrefs.has(item.href) ||
+            !['headline', 'lead', 'takeaway'].every(key => typeof item[key] === 'string') ||
+            !item.headline.trim() || !Array.isArray(item.tags) || !item.tags.every(tag => typeof tag === 'string')) return false;
+        ids.add(item.id);
+        hrefs.add(item.href);
+        const image = item.image;
+        return image === null || Boolean(image && safeReaderImage(image.src) && typeof image.alt === 'string' &&
+          typeof image.is_fallback === 'boolean' &&
+          (image.is_fallback ? isFallbackImage(image.src) && image.alt === '' : !isFallbackImage(image.src)));
+      });
+    if (valid) return brief;
+    global.console?.warn?.('Invalid reader_brief; using legacy display.', { issue: weeklyKeyOf(entry), locale });
+    return null;
+  }
+
+  function readerMedia(item, rootPath = '', eager = false) {
+    if (!item?.image || item.image.is_fallback) return '';
+    const image = item.image;
+    const src = /^https:/i.test(image.src) ? image.src : rootPath + image.src;
+    return `<div class="card-thumb nc-thumb reader-media"><img class="card-thumb-img" src="${escapeHtml(src)}" alt="${escapeHtml(image.alt)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" onerror="this.onerror=null;this.alt='';this.parentElement.hidden=true"></div>`;
+  }
+
+  function renderLatestIssue(entry, options = {}) {
+    const locale = options.locale || 'ko';
+    const rootPath = options.rootPath || '';
+    const en = locale === 'en';
+    const display = entryDisplay(entry, locale);
+    const brief = readerBrief(entry, locale);
+    const first = brief?.items[0];
+    const headlines = String(display.summary || '').split(/\n+|\s+·\s+/).map(line => line.trim()).filter(Boolean);
+    const items = brief ? brief.items : headlines.map(headline => ({ headline }));
+    return `<div class="reader-issue-copy">
+      <p class="reader-kicker">${en ? 'Latest issue' : '최신호'} · ${escapeHtml(cardTitle({ title: display.title }))}</p>
+      <h1 id="reader-title"${display.koreanOnly ? ' lang="ko"' : ''}>${escapeHtml(first?.headline || (!brief && headlines[0]) || display.title || (en ? 'Weekly newsletter' : '주간 뉴스레터'))}</h1>
+      <div class="reader-meta">${cardMetaHtml(entry, locale)}</div>
+      ${display.koreanOnly ? '<p class="reader-language" lang="en">Korean only</p>' : ''}
+      <div class="reader-actions"><a class="reader-primary" href="${escapeHtml(rootPath + display.href)}">${en ? 'Read this issue →' : '주간호 읽기 →'}</a>${first ? `<a href="${escapeHtml(rootPath + first.href)}">${en ? 'Read article →' : '기사 읽기 →'}</a>` : ''}</div>
+      ${brief?.intro ? `<p class="reader-intro">${escapeHtml(brief.intro)}</p>` : ''}
+      ${first?.lead ? `<p class="reader-lead">${escapeHtml(first.lead)}</p>` : ''}
+      ${first?.takeaway ? `<p class="reader-takeaway">${escapeHtml(first.takeaway)}</p>` : ''}
+      ${first?.tags.length ? `<p class="reader-tags">${escapeHtml(first.tags.join(' · '))}</p>` : ''}
+      ${items.length > 1 ? `<nav class="reader-stories" aria-label="${en ? 'In this issue' : '이번 호 주요 기사'}"><ul>${items.slice(1).map(item => `<li>${item.href ? `<a href="${escapeHtml(rootPath + item.href)}">${escapeHtml(item.headline)}</a>` : escapeHtml(item.headline)}</li>`).join('')}</ul></nav>` : ''}
+    </div>${readerMedia(first, rootPath, true)}`;
   }
 
   function formatDotRange(start, end) {
@@ -349,28 +410,25 @@
     return fallback;
   }
 
-  // Image-forward card: 16:9 thumbnail, topic kicker, top-article headline, week meta line.
+  // Weekly cards use the first public item's copy, topic and media as one unit.
   function renderArchiveCard(entry, options = {}) {
     const locale = options.locale || 'ko';
     const rootPath = options.rootPath || '';
-    const englishPath = entry && entry.en && entry.en.html;
-    const translated = locale === 'en' && englishPath === `en/${getSafeNewsletterHref(entry)}`;
-    const koreanOnly = locale === 'en' && !translated;
-    const href = rootPath + (translated ? englishPath : getSafeNewsletterHref(entry));
-    if (translated) entry = { ...entry, title: entry.en.title, summary: entry.en.summary };
-    else if (koreanOnly) entry = { ...entry, summary: '' };
-    const image = cardImage(entry);
-    const imageSrc = /^(?:https?:|\/)/.test(image) ? image : rootPath + image;
+    const display = entryDisplay(entry, locale);
+    const brief = readerBrief(entry, locale);
+    const item = brief?.items[0];
+    const koreanOnly = display.koreanOnly;
+    const href = rootPath + display.href;
+    entry = { ...entry, title: display.title, summary: display.summary };
     const accessibleName = `${entry && entry.date || ''} ${entry && entry.title || ''} ${options.ariaSuffix || (locale === 'en' ? 'Open newsletter' : '뉴스레터 열기')}${koreanOnly ? ' · Korean only' : ''}`.trim();
     return `
       <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
-        <div class="card-thumb nc-thumb">
-          <img class="card-thumb-img" src="${escapeHtml(imageSrc)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${escapeHtml(rootPath + FALLBACK_CARD_IMAGE)}'">
-        </div>
+        ${readerMedia(item, rootPath)}
         <div class="card-body">
-          <div class="card-kicker">${escapeHtml(cardKicker(entry))}</div>
+          ${!item || item.tags.length ? `<div class="card-kicker">${escapeHtml(item ? item.tags.join(' · ') : entry.homepage_badge || (locale === 'en' ? 'Weekly issue' : '주간호'))}</div>` : ''}
           ${koreanOnly ? '<span class="tag" lang="en">Korean only</span>' : ''}
-          <h3 class="card-title clamp-2 nc-h"${koreanOnly ? ' lang="ko"' : ''}>${escapeHtml(cardHeadline(entry))}</h3>
+          <h3 class="card-title clamp-2 nc-h"${koreanOnly ? ' lang="ko"' : ''}>${escapeHtml(item?.headline || (brief ? cardTitle(entry) : cardHeadline(entry)))}</h3>
+          ${item?.takeaway ? `<p class="card-takeaway">${escapeHtml(item.takeaway)}</p>` : ''}
           <div class="card-meta archive-card-meta">${cardMetaHtml(entry, locale)}</div>
         </div>
       </a>
@@ -415,6 +473,8 @@
     getSafeNewsletterHref,
     isFallbackImage,
     renderArchiveCard,
+    readerBrief,
+    renderLatestIssue,
     englishHeadlineCopy,
     headlinePeriodText
   };

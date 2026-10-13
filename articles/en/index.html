@@ -19,6 +19,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="stylesheet" href="../css/homepage.css" />
   <script src="../assets/js/site-header.js" defer></script>
   <meta property="og:locale" content="en_US" />
   <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/index.html" />
@@ -41,16 +42,10 @@
   </header>
 
   <main class="site-main">
-    <section id="featured" class="featured-section content-wrap" aria-labelledby="featured-title">
-      <article id="featured-card" class="featured-hero">
-        <div class="featured-thumb nc-thumb">
-          <img class="featured-img is-brand" src="../assets/images/brand/HALley.png" alt="HALley, the newsletter mascot" width="1254" height="1254" decoding="async" fetchpriority="high">
-        </div>
-        <div class="featured-copy">
-          <p class="featured-kicker">Camera SW Newsroom</p>
-          <h1 id="featured-title" class="featured-title">The camera you don’t see: today, and what comes next</h1>
-          <p class="featured-lead">Tracking how mobile camera technology changes across Camera HAL, Android, Linux drivers and AI.</p>
-        </div>
+    <section class="reader-section content-wrap" aria-labelledby="reader-title">
+      <article id="reader-issue" class="reader-issue" aria-live="polite">
+        <h1 id="reader-title">Latest weekly newsletter</h1>
+        <p class="muted">Loading newsletters.</p>
       </article>
     </section>
 
@@ -77,6 +72,9 @@
       <div id="latest-empty" class="archive-empty-state" hidden>
         <p class="muted">No newsletters match this topic.</p>
       </div>
+    </section>
+    <section id="featured" class="featured-section content-wrap" aria-labelledby="featured-title" hidden>
+      <article id="featured-card" class="featured-hero"></article>
     </section>
   </main>
 
@@ -136,7 +134,6 @@
     };
 
     const ROOT = '../';
-    const FALLBACK_IMAGE = '../assets/images/fallback/newsletter-default.svg';
     const archiveHelpers = window.NewsletterArchive;
 
     async function fetchHomepageNewsletters() {
@@ -164,55 +161,29 @@
       return within || newsletters.find(item => item && item.date === date) || null;
     }
 
-    // Featured hero panel image: the headline image, or the shared newsletter fallback SVG.
+    // The separately selected headline keeps its own media and source attribution.
     function renderFeaturedMedia(headline) {
-      const imageSrc = safeImageSrc(headline.image_url) || FALLBACK_IMAGE;
-      // 헤드라인 이미지는 실제 기사 이미지든 동봉 fallback 그래픽이든 16:9 풀커버로 둔다(#1008).
-      // 44% 중앙 + product drop-shadow(.is-brand)는 투명 배경 마스코트(HALley) 전용이다 —
-      // fallback SVG 4종은 캔버스를 채우는 불투명 rect 를 가져서, 줄이고 그림자를 두르면
-      // product shot 이 아니라 패널 위에 얹힌 사각형으로 보인다. 아카이브 카드(.card-thumb-img)도
-      // fallback 여부와 무관하게 풀커버라, 히어로와 카드가 같은 모양이 된다.
-      // isFallbackImage는 사이트 루트 기준 경로(assets/...)로 판정하므로 /en/의 ../ 를 떼고 묻는다.
-      const isFallback = archiveHelpers.isFallbackImage(imageSrc.replace(/^\.\.\//, ''));
-      // fallback 그래픽은 기사에 대해 아무 정보도 주지 않는 장식이라 alt 를 비운다. image_alt 는
-      // 기사 제목에서 파생되므로, 그대로 두면 스크린리더가 바로 아래 h1 과 같은 문장을 두 번
-      // 읽는다. 아카이브 카드(renderArchiveCard)도 같은 이유로 alt="" 다. 실제 이미지가 로드에
-      // 실패해 fallback 으로 갈아탈 때도 같은 이유로 alt 를 비운다.
-      const alt = isFallback ? '' : escapeHtml(headline.image_alt || headline.title);
-      return `<div class="featured-thumb nc-thumb">
-              <img class="featured-img" src="${escapeHtml(imageSrc)}" alt="${alt}" loading="eager" decoding="async" onerror="this.onerror=null;this.alt='';this.src='${FALLBACK_IMAGE}'">
-            </div>`;
+      const imageSrc = safeImageSrc(headline.image_url);
+      if (!imageSrc || archiveHelpers.isFallbackImage(imageSrc.replace(/^\.\.\//, ''))) return '';
+      return `<div class="featured-thumb nc-thumb"><img class="featured-img" src="${escapeHtml(imageSrc)}" alt="${escapeHtml(headline.image_alt || headline.title)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.alt='';this.parentElement.hidden=true"></div>`;
     }
 
-    // Kicker above the featured headline: the matched issue's primary topic, else the source name.
     function featuredKicker(matchedNewsletter, headline) {
-      const [tag] = visibleTags(matchedNewsletter && matchedNewsletter.tags);
-      if (tag) return tag;
-      const source = headline.snapshot && headline.snapshot.source_name;
-      return source || 'Camera SW Newsroom';
+      return headline.snapshot && headline.snapshot.source_name || 'Camera SW Newsroom';
     }
 
-    // The English headline reuses the translated article of the matched weekly issue: its
-    // translation overlay (served next to issue.json) holds the headline and lead under the
-    // article identity. Without an English edition the static brand hero stays.
+    // English copy and anchors come only from the published projection, never a raw overlay.
     async function fetchEnglishHeadlineCopy(headline, matchedNewsletter) {
-      const issuePath = safeInternalPath(matchedNewsletter && matchedNewsletter.en && matchedNewsletter.html);
-      if (!issuePath) return null;
-      const response = await fetch(`${ROOT}${issuePath.replace(/index\.html$/, '')}translation.en.json`, { cache: 'no-store' });
-      if (!response.ok) return null;
-      return archiveHelpers.englishHeadlineCopy(headline, await response.json());
+      const brief = archiveHelpers.readerBrief(matchedNewsletter, 'en');
+      const item = brief && brief.items.find(item => item.id === headline.article_identity_key);
+      return item ? { title: item.headline, summary: item.lead, imageAlt: item.image && item.image.alt, item } : null;
     }
 
-    // "Read article →" opens the English issue page. Its article anchors come from English titles,
-    // so the Korean anchor is not reused.
-    function renderFeaturedLink(matchedNewsletter) {
-      const href = safeInternalPath(matchedNewsletter.en.html);
-      if (!href) return '';
-      return `<a class="featured-link" href="${escapeHtml(ROOT + href)}">Read article →</a>`;
+    function renderFeaturedLink(matchedNewsletter, copy) {
+      return `<a class="featured-link" href="${escapeHtml(ROOT + copy.item.href)}">Read article →</a>`;
     }
 
-    // The featured hero shows the current headline (the latest issue's top article). When the
-    // headline data is missing or malformed the static brand hero already in the markup stays.
+    // The separate editorial headline is hidden until a usable selection is available.
     async function loadHomepageHeadline() {
       const featuredCard = document.getElementById('featured-card');
       if (!featuredCard) return;
@@ -240,14 +211,16 @@
         const date = archiveHelpers.headlinePeriodText(matchedNewsletter, headline.newsletter_date || headline.selected_at || '');
         const metaText = [date, sourceName].filter(Boolean).join(' · ');
         featuredCard.classList.add('is-article');
+        const featuredSection = document.getElementById('featured');
+        if (featuredSection) featuredSection.hidden = false;
         featuredCard.innerHTML = `
-          ${renderFeaturedMedia({ ...headline, title: copy.title, image_alt: copy.imageAlt || (/[가-힣]/.test(headline.image_alt || '') ? '' : headline.image_alt) })}
+          ${renderFeaturedMedia({ ...headline, title: copy.title, image_url: copy.item.image && copy.item.image.src, image_alt: copy.imageAlt })}
           <div class="featured-copy">
             <p class="featured-kicker">${escapeHtml(featuredKicker(matchedNewsletter, headline))}</p>
-            <h1 id="featured-title" class="featured-title">${escapeHtml(copy.title)}</h1>
+            <h2 id="featured-title" class="featured-title">${escapeHtml(copy.title)}</h2>
             <p class="featured-lead">${escapeHtml(copy.summary)}</p>
             <div class="featured-meta">${escapeHtml(metaText)}</div>
-            ${renderFeaturedLink(matchedNewsletter)}
+            ${renderFeaturedLink(matchedNewsletter, copy)}
           </div>
         `;
       } catch (error) {
@@ -300,6 +273,9 @@
       const gridEl = document.getElementById('latest-grid');
       try {
         const newsletters = await fetchHomepageNewsletters();
+        const reader = document.getElementById('reader-issue');
+        const latest = archiveHelpers.latestEntry(newsletters);
+        if (reader) reader.innerHTML = latest ? archiveHelpers.renderLatestIssue(latest, { locale: 'en', rootPath: ROOT }) : '<h1 id="reader-title">No newsletters yet.</h1>';
         latestEntries = archiveHelpers.sortEntries(newsletters, 'latest');
         if (latestEntries.length === 0) {
           if (gridEl) gridEl.innerHTML = '<p class="muted">No newsletters yet.</p>';
@@ -309,6 +285,8 @@
         applyLatestState(latestState);
       } catch (error) {
         if (gridEl) gridEl.innerHTML = '<p class="muted">Could not load newsletters.</p>';
+        const reader = document.getElementById('reader-issue');
+        if (reader) reader.innerHTML = '<h1 id="reader-title">Could not load the latest issue.</h1><a href="archive.html">View archive →</a>';
         console.error(error);
       }
     }
