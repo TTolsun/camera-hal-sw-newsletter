@@ -55,6 +55,8 @@ function reporterSystemPrompt({ hasLockedSections = false } = {}) {
     sourceExtractionPromptGuardrails(),
     'Reporter stage는 evidence-backed candidate facts와 guardrails만 제공해야 합니다. final article-level claims[]를 만들지 마세요. article claims[]는 editor가 담당합니다.',
     '가능하면 version_or_release, api_or_component, behavior_change, evidence_notes, cross_check_status 같은 concrete evidence를 추출하세요.',
+    '기존 evidence_notes에 source가 확인한 적용 스택·브랜치·조건, 제안·리뷰·병합·배포 상태와 미확정 범위를 구분해 적으세요. 확인되지 않은 상태나 사내 브랜치·제품·담당자는 추정하지 마세요. 새 status/owner/action enum이나 필드를 만들지 마세요.',
+    'AI/C++ 도구는 제공된 source의 개발 업무·지원 조건을, 연구·패치 제안은 설계 쟁점·적용 조건을 추출하세요. 공급사 수치와 비교 조건은 공급사 주장으로 귀속하고 팀 실측으로 바꾸지 마세요. 원문 사실과 편집 활용 제안을 구분하며 누락된 근거는 evidence_notes/do_not_overstate에 남기세요.',
     'source가 rolling page, release-note watch page, documentation watch page, homepage 또는 다른 watch page이면 evidence_notes에 명시하세요. candidate가 date/version/API/component/behavior evidence를 제공하지 않으면 dated release처럼 쓰지 마세요.',
     'rolling release-note page는 정확한 date, version/release, API/component, behavior change를 evidence_notes에 명명하세요. 없으면 누락 사실을 적고 만들어내지 마세요.',
     'cross_check_status는 not-required, official-source, cross-checked, needs-cross-check 중 하나여야 합니다.',
@@ -111,9 +113,6 @@ function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLocked
     '정확한 source, version/release, API/component, date, behavior를 명명하지 않는 한 "monitor AOSP updates" 또는 "review CameraX changes" 같은 generic advice를 쓰지 마세요.',
     'SoC, AI, C++, Linux, tooling article은 AOSP Camera, Camera HAL, Camera Driver, V4L2/libcamera, image pipeline/ISP/sensor, SoC performance/power/thermal, native development productivity와의 연결을 명시하세요.',
     'cpp_ai_tooling_fallback article에서는 Android native development가 Clang / LLVM / libc++ 중심임을 명시하세요. GCC, C++ standard, C++ library news가 Android HAL toolchain migration을 뜻한다고 암시하지 마세요.',
-    '각 action_items entry는 2주 안에 실행 가능해야 하며 concrete test, log, metric, device class, API/component, stream combination, code-owner style handoff 중 하나 이상을 포함해야 합니다.',
-    'action_items는 막연한 "정상 구성되는지 검증하세요" / "로그로 확인하세요"로 끝내지 말고, 검증 대상(대표 device class 또는 구성)과 확인할 구체 신호(구체적 log 태그·패턴 또는 metric·임계값)를 함께 명시하세요. 단 source가 뒷받침하는 범위 안에서만 구체화하고, source가 말하지 않는 수치나 사실을 지어내지 마세요.',
-    'C++ tooling action_items에는 HAL/native owner, target structure 또는 API, experiment 또는 serialization target, CPU time, latency, binary size, boilerplate LOC 같은 metric을 명명하세요.',
     '각 article은 해당 article imageCandidates에서 selectedImage를 최대 1개만 고르세요. relevance, rights risk, logo-only content, screenshot text density, source fit이 불명확하면 selectedImage는 empty string으로 두세요.',
     'image URL을 만들지 마세요. selectedImage는 imageCandidates.url 값 중 하나와 정확히 일치하거나 empty string이어야 합니다.',
     'generic, logo-only, promotional image보다 source article의 직접 관련된 16:9 또는 4:3 clean image를 우선하세요.',
@@ -165,7 +164,6 @@ function factCheckSystemPrompt() {
     storyV2StyleExemptionPrompt(),
     'AOSP Camera, camera driver, SoC platform, native development 또는 Camera developer workflow 해석이 전혀 없는 일반 AI/C++/SoC news는 must_fix[]에 넣으세요.',
     'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
-    'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
     '행동 권고가 필요한 기사에서는 source가 뒷받침하는 구체적인 action으로 보강하도록 recommended_fixes[]에 적으세요. 설계 논의나 발표처럼 설명 자체가 유용한 기사는 action 부재만으로 must_fix하지 마세요. 내용의 충실도 부족은 article_quality에서 판정하세요.',
     'action_items가 막연하지만 같은 source가 더 구체적인 action을 뒷받침하면 must_fix가 아니라 recommended_fixes[]로 분류하세요. must_fix[]는 발행을 막아야 하는 factual/source 오류 전용입니다.',
     'claims[].impact_level, claim_type, overclaim_risk는 고정 enum입니다. 허용된 enum 목록에 없는 값(예: stream_configuration_behavior, buffer_lifecycle_management)을 suggestion으로 제시하지 말고, 유효한 enum 값을 단지 "too broad" 또는 "too specific"라는 이유로 must_fix하지 마세요. 분류가 실제로 틀렸을 때만 허용된 enum 값 중 하나를 suggestion으로 제시하세요.',
@@ -216,7 +214,6 @@ function factCheckRepairSystemPrompt() {
     'main article에서 release date, version/release, API/component 또는 library/artifact, concrete behavior change, expanded editorial-scope relevance가 누락되면 must_fix로 다루세요.',
     '남아 있는 source gap 또는 main article로 사용된 watchlist/reference page는 must_fix로 다루세요.',
     'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
-    'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
     'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
     'schema와 일치하는 JSON만 반환하세요.'
   ].join('\n');
@@ -266,7 +263,6 @@ function factCheckCompletionSystemPrompt() {
     storyV2StyleExemptionPrompt(),
     'Added section이 eligible reporter candidates만 사용하는지, full draft가 Newsletter Policy article composition contract를 만족하는지에 집중하세요.',
     'cpp_ai_tooling_fallback article이 Android native development를 Clang / LLVM / libc++ 중심으로 framing하지 않고 GCC, C++ standard, C++ library news에서 Android HAL toolchain migration을 암시하면 must_fix[]에 넣으세요.',
-    'HAL/native owner, target structure 또는 API, experiment 또는 serialization target, measurable metrics가 빠진 C++ tooling action item은 같은 source 안에서 보강 가능하면 recommended_fixes[]에 넣고, 보강할 source evidence가 없으면 must_fix[]에 넣으세요.',
     'selectedImage가 repo-local fallback path이고 originalImage 또는 resolvedImage.originalUrl이 external original을 보존하면 resolvedImage.usedFallback=true를 must_fix로 다루지 마세요. selectedImage가 여전히 깨진 external image URL이거나 fallback path가 누락된 경우에만 must_fix로 다루세요.',
     'schema와 일치하는 JSON만 반환하세요.'
   ].join('\n');
