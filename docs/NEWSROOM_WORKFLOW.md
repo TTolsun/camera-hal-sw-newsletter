@@ -100,6 +100,10 @@ HTML은 파싱한 텍스트를 이스케이프하며 임의 HTML이나 인라인
 않습니다. 기존 `briefing`과 index `summary`는 제목 목록을 유지합니다. 유효한 번역은 영문
 entry에도 별도 projection을 만들며 원문 변경으로 번역이 무효화되면 함께 제거합니다.
 이미지 repair는 같은 identity의 item.image를 갱신하며 prose hash를 변경하지 않습니다.
+이미지 필드만 바꾸는 repair는 저장된 기사 순서·제목·briefing을 유지하며, hash 도입 전
+발행된 intro와 그 summary도 그대로 보존합니다. 이 호환 경로는 새 발행이나 공개 기사
+수정에서 hash가 없는 레터를 재사용하는 예외가 아닙니다. 저장된 hash가 불일치하면
+이미지 repair에서도 레터를 무효화합니다.
 
 주간 산출물 쓰기가 실패하면 `weekly_output_status=failed`와 사유를 기록하고 발행을
 차단합니다. 품질 검사 자체가 PASS여도 `final_publish_ready=false`, `validate_ok=false`로

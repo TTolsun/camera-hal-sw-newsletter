@@ -745,6 +745,33 @@ test('image repair refreshes the same reader item without invalidating its prose
   assert.deepEqual({ ...item, image: null }, { ...originalItem, image: null });
 });
 
+test('image-only repair preserves published legacy intro, summary, title, briefing and article order', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/legacy';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([
+    fallbackImageSection('1.7.0', url), section('1.8.0', 'https://example.com/second')
+  ]) });
+  const file = path.join(root, 'articles/newsletters/2026-W23/issue.json');
+  const stored = readIssue(root, '2026-W23');
+  stored.intro_letter = '이번 주에는 CameraX 변경 소식을 살펴봅니다. 공개된 근거와 조건을 함께 소개합니다.';
+  stored.summary = stored.intro_letter;
+  stored.title = '저장된 주간 제목';
+  stored.briefing = ['저장된 제목 목록'];
+  stored.sections.reverse();
+  fs.writeFileSync(file, JSON.stringify(stored), 'utf8');
+  const image = 'https://publisher.example.com/repaired.png';
+  syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repairedImageSection('1.7.0', url, image)] });
+  const repaired = readIssue(root, '2026-W23');
+  for (const key of ['intro_letter', 'summary', 'title', 'briefing']) assert.deepEqual(repaired[key], stored[key]);
+  assert.equal(repaired.intro_letter_source_hash, undefined);
+  assert.deepEqual(repaired.sections.map(section => section.source_candidate_url), stored.sections.map(section => section.source_candidate_url));
+  assert.equal(readWeeklyIndexFile(root)[0].reader_brief.intro, stored.summary);
+  assert.equal(repaired.sections.find(section => section.source_candidate_url === url).selectedImage, image);
+  const newRun = await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([]) });
+  assert.equal(newRun.introLetterStatus, 'fallback');
+  assert.equal(readIssue(root, '2026-W23').intro_letter, undefined, 'fresh upsert still requires a fingerprint');
+});
+
 test('image repair recovers only a stale reader item when issue and legacy image fields already agree', async () => {
   const root = tempRoot();
   const url = 'https://example.com/camerax-release';
