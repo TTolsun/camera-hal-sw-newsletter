@@ -82,11 +82,24 @@ HTML은 파싱한 텍스트를 이스케이프하며 임의 HTML이나 인라인
 
 ### 주간 출력과 에디터 레터
 
-최종 기사들의 headline과 lead로 `intro_letter`를 생성합니다. `lintIntroLetter`가 기사
-커버리지, 기술 식별자, 내부 문구 유출, 길이를 검사합니다. 실패하면 한 번 재생성하고,
-다시 실패하면 제목에서 파생한 `weeklySummaryText`를 사용합니다. 저장된 레터도 현재
-기사 집합으로 다시 검사한 뒤 재사용합니다. 결과는 `intro_letter_status`와
-`intro_letter_reason`에 남습니다.
+병합·중복 제거·제한·최종 정렬을 마친 기사의 공개 headline, lead, camera_hal_takeaway로
+`intro_letter`를 생성합니다. `lintIntroLetter`가 기사 커버리지, 기술 식별자, 내부 문구 유출,
+길이와 공개 문장의 근거를 검사합니다. lead 또는 takeaway 필드 전체를 그대로 연결한 문장만
+채택하므로 상태·수치·주체를 바꾸거나 조건을 생략한 주장, 공개 입력에 없는 종합 해석과
+사내 성과는 fallback 대상입니다. 기존 생성·재시도 예산을 유지하며 실패하면 제목에서
+파생한 `weeklySummaryText`를 사용합니다.
+
+저장된 레터는 검사 통과와 `intro_letter_source_hash` 일치를 모두 만족해야 재사용합니다.
+이 hash는 최종 순서의 기사 identity, 공개 headline·lead·takeaway·정규화한 본문·출처를
+포함하고 이미지와 발행 시각은 제외합니다. 기사 변경이나 hash 누락으로 재사용할 수 없고
+재생성도 실패하면 레터와 hash를 함께 제거합니다. 순수 페이지 렌더링은 LLM을 호출하지
+않습니다. 결과는 `intro_letter_status`와 `intro_letter_reason`에 남습니다.
+
+홈페이지 표시용 `reader_brief`는 최종 렌더용 summary와 공개 기사 표시 helper로 만드는
+결정론적 ReaderBriefV1입니다. 주간 index entry에 저장하며 issue.json에는 중복 저장하지
+않습니다. 기존 `briefing`과 index `summary`는 제목 목록을 유지합니다. 유효한 번역은 영문
+entry에도 별도 projection을 만들며 원문 변경으로 번역이 무효화되면 함께 제거합니다.
+이미지 repair는 같은 identity의 item.image를 갱신하며 prose hash를 변경하지 않습니다.
 
 주간 산출물 쓰기가 실패하면 `weekly_output_status=failed`와 사유를 기록하고 발행을
 차단합니다. 품질 검사 자체가 PASS여도 `final_publish_ready=false`, `validate_ok=false`로
