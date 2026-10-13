@@ -148,3 +148,18 @@ test('public prose is escaped without inserting HTML or internal QA values', () 
   assert.match(html, /Lead &amp; details/);
   assert.doesNotMatch(html, /<script|INTERNAL_CHECKPOINT/);
 });
+
+test('legacy lead_article_image is safe to reuse but never overrides a present projection', () => {
+  const { entry, brief } = sample();
+  entry.lead_article_image = 'https://example.com/legacy-a.png';
+  brief.items[0].image = null;
+  for (const render of [archive.renderLatestIssue, archive.renderArchiveCard]) {
+    assert.doesNotMatch(render(entry), /legacy-a.png|<img/);
+    delete entry.reader_brief;
+    assert.match(render(entry, { rootPath: '../' }), /src="https:\/\/example.com\/legacy-a.png" alt=""/);
+    for (const invalid of ['', 'javascript:alert(1)', '../assets/a.png', 'http://example.com/a.png', 'assets/images/fallback/android.svg']) {
+      assert.doesNotMatch(render({ ...entry, lead_article_image: invalid }), /<img/);
+    }
+    entry.reader_brief = brief;
+  }
+});

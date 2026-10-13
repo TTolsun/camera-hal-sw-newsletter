@@ -315,6 +315,15 @@
     return `<div class="card-thumb nc-thumb reader-media"><img class="card-thumb-img" src="${escapeHtml(src)}" alt="${escapeHtml(image.alt)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" onerror="this.onerror=null;this.alt='';this.parentElement.hidden=true"></div>`;
   }
 
+  // #1286 binds this legacy field to the first article. It is never a substitute
+  // for a present projection's null image, and article_images is never consulted.
+  function legacyReaderItem(entry) {
+    const src = typeof entry?.lead_article_image === 'string' ? entry.lead_article_image.trim() : '';
+    return safeReaderImage(src) && !isFallbackImage(src)
+      ? { image: { src, alt: '', is_fallback: false } }
+      : null;
+  }
+
   function renderLatestIssue(entry, options = {}) {
     const locale = options.locale || 'ko';
     const rootPath = options.rootPath || '';
@@ -335,7 +344,7 @@
       ${first?.takeaway ? `<p class="reader-takeaway">${escapeHtml(first.takeaway)}</p>` : ''}
       ${first?.tags.length ? `<p class="reader-tags">${escapeHtml(first.tags.join(' · '))}</p>` : ''}
       ${items.length > 1 ? `<nav class="reader-stories" aria-label="${en ? 'In this issue' : '이번 호 주요 기사'}"><ul>${items.slice(1).map(item => `<li>${item.href ? `<a href="${escapeHtml(rootPath + item.href)}">${escapeHtml(item.headline)}</a>` : escapeHtml(item.headline)}</li>`).join('')}</ul></nav>` : ''}
-    </div>${readerMedia(first, rootPath, true)}`;
+    </div>${readerMedia(brief ? first : legacyReaderItem(entry), rootPath, true)}`;
   }
 
   function formatDotRange(start, end) {
@@ -423,7 +432,7 @@
     const accessibleName = `${entry && entry.date || ''} ${entry && entry.title || ''} ${options.ariaSuffix || (locale === 'en' ? 'Open newsletter' : '뉴스레터 열기')}${koreanOnly ? ' · Korean only' : ''}`.trim();
     return `
       <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
-        ${readerMedia(item, rootPath)}
+        ${readerMedia(brief ? item : legacyReaderItem(entry), rootPath)}
         <div class="card-body">
           ${!item || item.tags.length ? `<div class="card-kicker">${escapeHtml(item ? item.tags.join(' · ') : entry.homepage_badge || (locale === 'en' ? 'Weekly issue' : '주간호'))}</div>` : ''}
           ${koreanOnly ? '<span class="tag" lang="en">Korean only</span>' : ''}

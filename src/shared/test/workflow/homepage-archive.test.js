@@ -628,6 +628,48 @@ test('renderArchiveCard falls back to the site newsletter image and a kicker whe
   assert.match(html, /<h3 class="card-title clamp-2 nc-h">Daily issue<\/h3>/);
 });
 
+// 카드 제목은 첫 기사의 제목이다. lead_article_image가 있으면 그 기사의 이미지만 쓰고, 같은 호의 다른
+// 기사 이미지(article_images)를 대신 붙이지 않는다(2026-W42: AOSP 제목에 Haiku 이미지, #1275).
+test('renderArchiveCard uses the lead article image instead of another article image from the same issue', () => {
+  const entry = {
+    weeklyKey: '2026-W42',
+    date: '2026-10-12',
+    title: '2026 W42',
+    summary: 'AOSP 기사\nHaiku 기사',
+    tags: [],
+    html: 'newsletters/2026-W42/index.html',
+    article_images: ['https://example.com/haiku.jpg'],
+    lead_article_image: 'assets/images/fallback/newsletter-default.svg'
+  };
+
+  const html = NewsletterArchive.renderArchiveCard(entry, { rootPath: '../' });
+
+  assert.doesNotMatch(html, /<img/);
+  assert.doesNotMatch(html, /haiku\.jpg/);
+  assert.match(html, /<h3 class="card-title clamp-2 nc-h">AOSP 기사<\/h3>/);
+
+  const realLead = NewsletterArchive.renderArchiveCard({ ...entry, lead_article_image: 'https://example.com/aosp.png' });
+  assert.match(realLead, /<img class="card-thumb-img" src="https:\/\/example\.com\/aosp\.png"/);
+
+  const emptyLead = NewsletterArchive.renderArchiveCard({ ...entry, lead_article_image: '' });
+  assert.doesNotMatch(emptyLead, /<img/);
+});
+
+// 공통 계약 v1 §5: lead_article_image가 없는 예전 항목에서 다른 기사 이미지를 추정하지 않는다.
+test('renderArchiveCard uses text for entries without lead_article_image', () => {
+  const html = NewsletterArchive.renderArchiveCard({
+    weeklyKey: '2026-W41',
+    date: '2026-10-05',
+    title: '2026 W41',
+    summary: '기사 A',
+    tags: [],
+    html: 'newsletters/2026-W41/index.html',
+    article_images: ['assets/images/fallback/android.svg', 'https://example.com/a.png']
+  });
+
+  assert.doesNotMatch(html, /<img/);
+});
+
 // ---- Static homepage markup contracts ----
 
 test('homepage leads with the latest issue and retains sort, topic and navigation hooks', () => {
