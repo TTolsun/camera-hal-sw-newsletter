@@ -243,7 +243,7 @@ test('broken external selectedImage is replaced with local fallback in final iss
 
     const markdown = buildMarkdown(issue);
     const html = buildHtml(issue);
-    assert.match(markdown, /!\[Android camera AI illustration\]\(\.\.\/\.\.\/assets\/images\/fallback\/ai\.svg\)/);
+    assert.match(markdown, /!\[\]\(\.\.\/\.\.\/assets\/images\/fallback\/ai\.svg\)/);
     assert.match(html, /<img class="article-image" src="\.\.\/\.\.\/assets\/images\/fallback\/ai\.svg"/);
     assert.doesNotMatch(markdown, /!\[[^\]]*\]\(https:\/\/blogger\.googleusercontent\.com\/broken\.png\)/);
     assert.doesNotMatch(html, /<img class="article-image" src="https:\/\/blogger\.googleusercontent\.com\/broken\.png"/);
@@ -275,7 +275,7 @@ test('fallback image renders without a source attribution caption', async () => 
     const html = buildHtml(issue);
 
     // 이미지 자체는 그대로 렌더된다.
-    assert.match(markdown, /!\[Android camera AI illustration\]\(\.\.\/\.\.\/assets\/images\/fallback\/ai\.svg\)/);
+    assert.match(markdown, /!\[\]\(\.\.\/\.\.\/assets\/images\/fallback\/ai\.svg\)/);
     assert.match(html, /<img class="article-image" src="\.\.\/\.\.\/assets\/images\/fallback\/ai\.svg"/);
 
     // 그러나 그 이미지는 출처 기사에서 온 것이 아니므로 출처 캡션을 붙이지 않는다.
