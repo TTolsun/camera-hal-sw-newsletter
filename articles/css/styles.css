@@ -1273,7 +1273,7 @@ pre code {
 }
 
 .newsletter-issue-page .wrap {
-  width: min(100% - 44px, 760px);
+  width: min(100% - 44px, 1036px);
   max-width: none;
   padding-bottom: 80px;
 }
@@ -2038,7 +2038,7 @@ pre code {
   }
 
   .newsletter-issue-page .wrap {
-    width: min(100% - var(--content-gutter-mobile), 760px);
+    width: min(100% - var(--content-gutter-mobile), 1036px);
   }
 
   .newsletter-issue-page .article-header {
@@ -2248,8 +2248,13 @@ pre code {
 
 /* Keep reading and navigation rules on issue pages; archive cards share this stylesheet. */
 .newsletter-issue-page .issue-wrap {
-  max-width: 840px;
+  max-width: none;
   overflow-wrap: anywhere;
+}
+
+/* Wide media and headings share the homepage edges; prose keeps its reading measure. */
+.newsletter-issue-page .issue-story > :is(p, ul, ol, blockquote, h3, h4, .article-block, .source-list) {
+  max-width: 760px;
 }
 
 .newsletter-issue-page .issue-contents {
