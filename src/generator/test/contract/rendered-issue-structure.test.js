@@ -287,6 +287,11 @@ test('article image attribution belongs to its own figure caption, not nearby ar
     ['identical image tags retain separate caption requirements', `<figure>${image}${caption}</figure><figure>${image}</figure>`, 1],
     ['a long caption is not limited by an arbitrary character window', `<figure>${image}<figcaption class="article-image-caption">${'description '.repeat(100)}${link}</figcaption></figure>`, 0],
     ['a caption class on another element is not a figcaption', `<figure>${image}<div class="article-image-caption">${link}</div></figure>`, 1],
+    ['a data attribute cannot masquerade as a caption class', `<figure>${image}<figcaption data-class="article-image-caption">${link}</figcaption></figure>`, 1],
+    ['a data attribute cannot masquerade as an attribution href', `<figure>${image}<figcaption class="article-image-caption"><a data-href="https://example.com">Source</a></figcaption></figure>`, 1],
+    ['an unclosed figcaption cannot provide valid attribution', `<figure>${image}<figcaption class="article-image-caption">${link}</figure>`, 1],
+    ['nested fallback captions cannot hide a later source link', `<figure>${fallbackImage}<div class="article-image-caption"><div>Illustration</div>${link}</div></figure>`, 1],
+    ['a later fallback caption cannot hide behind an unlinked caption', `<figure>${fallbackImage}<figcaption class="article-image-caption">Illustration</figcaption>${caption}</figure>`, 1],
     ['a fallback figure cannot inherit attribution from the next figure', `<figure>${fallbackImage}</figure><figure>${image}${caption}</figure>`, 0],
     ['nearby article sources are not a fabricated fallback attribution', `<figure>${fallbackImage}<figcaption class="article-image-caption">Illustration</figcaption></figure>${sourceList}`, 0]
   ];
@@ -294,7 +299,7 @@ test('article image attribution belongs to its own figure caption, not nearby ar
     const errors = [];
     validateArticleImages('caption-scope.html', html, root, errors);
     assert.equal(errors.length, expectedErrors, `${name}: ${errors.join('; ')}`);
-    if (expectedErrors) assert.match(errors[0], /caption attribution/);
+    if (expectedErrors) assert.match(errors[0], /caption attribution|source attribution caption/);
   }
 });
 

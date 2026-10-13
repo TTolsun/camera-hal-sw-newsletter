@@ -321,6 +321,35 @@ function validateMarkdownStructure(date, markdown, errors, { briefingBulletCount
   }
 }
 
+function attributedImageCaptions(figure) {
+  const captions = [];
+  let active = [];
+  // Track same-tag nesting so a nested div cannot hide a later attribution link
+  // in a legacy div caption. Only actual class/href attributes count.
+  for (const tag of String(figure || '').matchAll(/<(\/?)([a-z][\w:-]*)\b([^>]*)>/gi)) {
+    const name = tag[2].toLowerCase();
+    if (tag[1]) {
+      for (const caption of active) {
+        if (caption.name === name && --caption.depth === 0) caption.closed = true;
+      }
+      active = active.filter(caption => caption.depth > 0);
+      continue;
+    }
+    for (const caption of active) if (caption.name === name) caption.depth++;
+    const attrs = Object.fromEntries([...tag[3].matchAll(/([^\s=]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g)]
+      .map(attr => [attr[1].toLowerCase(), attr[2] ?? attr[3] ?? attr[4]]));
+    if (String(attrs.class || '').split(/\s+/).includes('article-image-caption')) {
+      const caption = { name, depth: 1, hasSourceLink: false };
+      captions.push(caption);
+      active.push(caption);
+    }
+    if (name === 'a' && /^https:\/\//i.test(attrs.href || '')) {
+      for (const caption of active) caption.hasSourceLink = true;
+    }
+  }
+  return captions.filter(caption => caption.hasSourceLink);
+}
+
 function validateArticleImages(relPath, html, root, errors) {
   const content = String(html || '');
   // Renderer figures are not nested. Keep captions inside the containing figure;
@@ -368,9 +397,7 @@ function validateArticleImages(relPath, html, root, errors) {
     // 캡션이 다시 생겨도 게이트가 통과시킵니다.
     const figure = figures.find(match => match.index < imageMatch.index
       && imageMatch.index + tag.length <= match.index + match[0].length);
-    const captions = [...String(figure?.[0] || '').matchAll(/<([a-z][\w:-]*)\b(?=[^>]*class=["'][^"']*\barticle-image-caption\b)([^>]*)>([\s\S]*?)<\/\1\s*>/gi)]
-      .filter(caption => hasClassToken(caption[2], 'article-image-caption')
-        && /<a\s+[^>]*href=["']https:\/\//i.test(caption[3]));
+    const captions = attributedImageCaptions(figure?.[0]);
     if (isFallbackImagePath(src)) {
       // 가짜 출처 캡션 금지는 발행 대상 호만이 아니라 모든 호에 적용합니다. 예전에는 이 규칙이
       // 생기기 전에 발행된 호 53건이 이미 이 캡션을 달고 있어서 발행 대상 호에만 적용했지만,
@@ -381,7 +408,7 @@ function validateArticleImages(relPath, html, root, errors) {
       if (captions.length > 0) {
         errors.push(`Newsletter fallback article image must not carry a source attribution caption: ${relPath}`);
       }
-    } else if (!captions.some(caption => caption[1].toLowerCase() === 'figcaption')) {
+    } else if (!captions.some(caption => caption.name === 'figcaption' && caption.closed)) {
       errors.push(`Newsletter article image missing caption attribution link: ${relPath}`);
     }
   }
