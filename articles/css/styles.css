@@ -101,6 +101,13 @@ body {
      않은 UI 텍스트(나브·칩·메타·푸터·스탯)가 1.6 으로 늘어지지 않도록 base 를 normal 로 맞춘다.
      본문·prose·헤드라인 등은 각자 명시적 line-height 가 있어 영향받지 않는다. */
   line-height: normal;
+  /* 한글은 기본값(normal)에서 음절 사이 어디서든 줄이 바뀌어 "모아봅/니다"처럼 단어가 끊긴다.
+     keep-all 은 공백(어절) 경계에서만 줄을 바꾼다. 다만 공백 없는 긴 토큰은 keep-all 이 쪼개지
+     못하므로, 컨테이너보다 넓을 때만 쪼개는 overflow-wrap: break-word 를 함께 둔다. break-word 는
+     min-content 크기를 줄이지 않아 flex·grid 레이아웃을 바꾸지 않고, 개별 규칙의
+     overflow-wrap: anywhere 는 그대로 우선한다. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
