@@ -20,6 +20,8 @@ _AOSP Gerrit (camera changes under review)_
 
 카메라 mute를 지원하고 화면에 보이는 UID의 클라이언트도 프라이버시 토글 직후 강제 종료되는 문제를 고치려는 패치가 AOSP에 제안되었습니다.
 
+쉽게 말해, 카메라 영상을 가리는 것과 앱의 카메라 연결을 끊는 것을 구분하려는 제안입니다. 화상회의 중 카메라 접근을 차단하는 상황을 예로 들면, 화면에 보이는 앱이고 기기가 camera mute를 지원할 때는 영상을 차단하면서 연결을 유지하고, 그 밖에는 기존처럼 연결을 끊습니다. 여기서 mute는 마이크 음소거가 아니라 카메라 영상 차단을 뜻합니다. 프라이버시 보호를 유지하면서 불필요한 연결 종료를 줄이려는 제안이며, 아직 반영이 완료된 기능은 아닙니다.
+
 10월 7일 android17-release 브랜치에 제출된 Gerrit 변경 4348947은 CameraService.cpp의 프라이버시 처리 경로를 수정하는 제안입니다. 확인한 revision은 아직 NEW 상태로, Android에 반영이 완료된 변경은 아닙니다.
 
 커밋 메시지는 같은 프라이버시 토글에서 SensorPrivacyManager 콜백과 AppOpsManager의 opChanged()가 서로 다른 binder 경로로 실행된다고 설명합니다. opChanged()는 UID 가시성과 camera mute 지원 여부를 검사하지만, 다른 경로의 무조건적인 block()이 먼저 실행되면 ERROR_CAMERA_DISABLED를 전달하며 클라이언트를 끊는다는 것이 패치 작성자가 지적한 문제입니다.
