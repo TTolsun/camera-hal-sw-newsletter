@@ -13,7 +13,7 @@
 // (newsroom:repair-images) rewrites the daily editor draft AFTER generation. The exact-duplicate
 // reject above means a re-run cannot carry the repaired image into the weekly issue, so the repair
 // step calls syncWeeklyArticleImages to converge the weekly section image fields and the weekly
-// index article_images to the repaired daily state.
+// index article_images/lead_article_image to the repaired daily state.
 
 const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
@@ -53,8 +53,8 @@ function normalizedFallbackImagePath(section = {}) {
   return normalized.startsWith('assets/images/fallback/') ? normalized : '';
 }
 
-// Distinct https article images for the issue, in section order. The Latest card picks the first one
-// that does not match the homepage headline image (see index.html), so order/dedup are preserved.
+// Distinct https article images for the issue, in section order. 카드는 lead_article_image를 쓰고,
+// 그 필드가 없는 예전 항목만 이 목록의 첫 실제 이미지를 쓴다(newsletter-archive.js cardImage).
 // When no https image exists in the whole issue, one site-root-relative fallback asset path is
 // emitted instead so the Latest card always has an image to show.
 function weeklyArticleImages(sections = []) {
@@ -74,6 +74,15 @@ function weeklyArticleImages(sections = []) {
     }
   }
   return images;
+}
+
+// 홈 카드 제목(index summary 첫 줄 = articleTitles의 첫 항목)과 같은 기사의 최종 이미지다.
+// 그 기사가 fallback이면 fallback 경로를 그대로 둔다. article_images는 호 전체의 실제 이미지
+// 목록이라, 거기서 고르면 다른 기사의 이미지가 대표 제목에 붙는다(#1275).
+function leadArticleImage(sections = []) {
+  const lead = ensureArray(sections).find(section => section && (section.public_article?.headline || section.headline));
+  if (!lead) return '';
+  return sectionBrowserImage(lead) || normalizedFallbackImagePath(lead);
 }
 
 function loadExistingWeeklyIssue(root, weeklyKey) {
@@ -211,14 +220,16 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
   }
 
   const articleImages = weeklyArticleImages(currentSections);
+  const leadImage = leadArticleImage(currentSections);
   const dataPath = weeklyIndexPath(root);
   const index = readWeeklyIndex(dataPath);
   const entry = index.find(item => item && item.weeklyKey === weeklyKey);
   const readerBrief = buildReaderBrief(currentIssue, { issueHref: `newsletters/${weeklyKey}/index.html` });
   if (entry && (JSON.stringify(ensureArray(entry.article_images)) !== JSON.stringify(articleImages) ||
-    (result.patchedSectionCount > 0 && JSON.stringify(entry.reader_brief) !== JSON.stringify(readerBrief)))) {
+    entry.lead_article_image !== leadImage || JSON.stringify(entry.reader_brief) !== JSON.stringify(readerBrief))) {
     entry.article_images = articleImages;
     entry.reader_brief = readerBrief;
+    entry.lead_article_image = leadImage;
     fs.writeFileSync(dataPath, `${JSON.stringify(index, null, 2)}\n`, 'utf8');
     result.articleImagesUpdated = true;
     result.files.push('articles/data/newsletters-weekly.json');
@@ -409,6 +420,8 @@ async function writeWeeklyNewsletterArtifacts({
     // article image that is not the headline image.
     article_images: weeklyArticleImages(page.issue.sections),
     reader_brief: buildReaderBrief(page.issue, { issueHref: page.indexRoute }),
+    // 카드 대표 이미지: 카드 제목과 같은 첫 기사의 이미지(#1275).
+    lead_article_image: leadArticleImage(page.issue.sections),
     ...contractVersionField,
     // issue.json과 동일한 pass-through: 있으면 index entry에도 싣는다(홈·아카이브가 fetch하는
     // 정본은 이 index이기 때문에 여기 없으면 coverage 표시를 만들 수 없다).

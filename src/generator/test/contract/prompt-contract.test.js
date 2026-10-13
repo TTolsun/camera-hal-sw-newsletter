@@ -185,7 +185,7 @@ test('public article contract prompt keeps public output separate from diagnosti
   }
   assert.match(prompt, /독자-facing/);
   // v1의 reader_scenario 슬롯 지시는 사라졌지만 "가정형" 요구는 lead로 이식됐다.
-  assert.match(prompt, /장면이나 질문으로 열되 가정형으로 쓰고/);
+  assert.match(prompt, /장면이나 질문으로 열 수도 있지만 가정형으로 쓰고/);
   assert.match(prompt, /source-confirmed fact/);
   assert.match(prompt, /모든 기사에 같은 작성 기준/);
   assert.match(prompt, /fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장/);
@@ -215,7 +215,7 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /Public-facing impact wording과 claim-level classification은 public_article\.camera_hal_takeaway, article_sections\.hal_driver_impact, claims\[\]\.impact_level/);
   assert.match(prompt, /source가 뒷받침하는 범위 안에서만 HAL\/driver\/runtime 영향을 서술하고, source가 말하지 않는 영향을 지어내거나 확대하지 마세요/);
   assert.match(prompt, /Camera HAL\/Driver 관점에서의 의미/);
-  // camera_hal_takeaway는 디스클레이머로 시작하지 말고 구체 점검 항목을 먼저 제시해야 한다(de-hedge).
+  // takeaway는 유형에 맞는 의미를 먼저 전달한다. 직접 HAL 근거가 있을 때만 HAL 점검을 제안한다.
   assert.match(prompt, /"직접적인 HAL 변경은 없으나" 같은 디스클레이머로 문장을 시작하지 말고/);
   assert.match(prompt, /관련 metadata key, request\/result 필드, CTS\/VTS\/ITS 항목, V4L2\/uAPI 구조체, 버퍼\/포맷, 라이브러리 버전·재빌드 영향/);
   // 단, overclaim 안전장치(source 미근거 영향 지어내기 금지)는 유지되어야 한다.
