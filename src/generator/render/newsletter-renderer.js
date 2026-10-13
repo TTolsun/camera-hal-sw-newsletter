@@ -464,7 +464,7 @@ function normalizedSections(issue) {
 
 const CATCH_UP_DIVIDER_HEADING = t.catchUp;
 
-function sectionsMarkdownWithCatchUpDivider(issue) {
+function sectionsMarkdownWithCatchUpDivider(issue, brief) {
   let dividerEmitted = false;
   return normalizedSections(issue)
     .map(({ heading, section, isCatchUp, anchorId }) => {
@@ -473,12 +473,12 @@ function sectionsMarkdownWithCatchUpDivider(issue) {
         prefix = `## ${CATCH_UP_DIVIDER_HEADING}\n\n`;
         dividerEmitted = true;
       }
-      return prefix + `<a id="${anchorId}"></a>\n\n` + publicArticleMarkdown(issue, heading, section);
+      return prefix + `<a id="${anchorId}"></a>\n\n` + publicArticleMarkdown(issue, heading, section, brief);
     })
     .join('\n---\n\n');
 }
 
-function sectionsHtmlWithCatchUpDivider(issue) {
+function sectionsHtmlWithCatchUpDivider(issue, brief) {
   let dividerEmitted = false;
   const rows = normalizedSections(issue);
   return rows
@@ -488,7 +488,7 @@ function sectionsHtmlWithCatchUpDivider(issue) {
         prefix = `      <h2 class="catch-up-divider">${escapeHtml(CATCH_UP_DIVIDER_HEADING)}</h2>\n`;
         dividerEmitted = true;
       }
-      return prefix + publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section, rows[index - 1], rows[index + 1]);
+      return prefix + publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section, rows[index - 1], rows[index + 1], brief);
     })
     .join('\n\n');
 }
@@ -636,7 +636,7 @@ function articleBodyMarkdown(publicArticle, storyContractVersion) {
   return paragraphs.join('\n\n');
 }
 
-function publicArticleMarkdown(issue, heading, section) {
+function publicArticleMarkdown(issue, heading, section, brief) {
   const storyContractVersion = storyContractRenderVersion(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
   assertRenderableBody(publicArticle, storyContractVersion);
@@ -656,7 +656,7 @@ ${takeaway}${articleImageMarkdown(section, publicArticle)}
 
 ${articleBodyMarkdown(publicArticle, storyContractVersion)}
 
-[${t.backToContents}](#issue-contents)
+[${brief ? t.backToHighlights : t.backToContents}](#${brief ? 'issue-briefing' : 'issue-contents'})
 
 **${t.source}**
 
@@ -783,12 +783,9 @@ ${publicationNoticeMarkdown(issue)}
 
 ${brief ? readerBriefMarkdown(brief) : ''}
 
-## 1. ${briefingHeading(issue)}
-
-${bulletsMarkdown(issue.briefing)}
-${contentsMarkdown(issue)}
+${brief ? '' : `## 1. ${briefingHeading(issue)}\n\n${bulletsMarkdown(issue.briefing)}\n${contentsMarkdown(issue)}`}
 ${contextLensLabelMarkdown(issue)}
-${sectionsMarkdownWithCatchUpDivider(issue)}
+${sectionsMarkdownWithCatchUpDivider(issue, brief)}
 
 ${watchPointsMarkdown(issue)}${referenceArticlesMarkdown(issue)}## ${t.references}
 
@@ -797,7 +794,7 @@ ${sourceListMarkdown(issue.references)}
 }
 
 // Public lead and takeaway precede media and detailed evidence. No internal QA fields are shown.
-function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section, previous, next) {
+function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section, previous, next, brief) {
   const storyContractVersion = storyContractRenderVersion(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
   assertRenderableBody(publicArticle, storyContractVersion);
@@ -841,7 +838,7 @@ ${articleBodyBlocks}
         <div class="source-list"><strong>${t.source}</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
         <nav class="article-navigation" aria-label="${escapeHtml(t.articleNavigation)}">
           ${previous ? `<a href="#${escapeHtml(previous.anchorId)}" aria-label="${escapeHtml(`${t.previousArticle}: ${previous.headingCategory}`)}">← ${t.previousArticle}</a>` : ''}
-          <a href="#issue-contents">${t.backToContents}</a>
+          <a href="#${brief ? 'issue-briefing' : 'issue-contents'}">${brief ? t.backToHighlights : t.backToContents}</a>
           ${next ? `<a href="#${escapeHtml(next.anchorId)}" aria-label="${escapeHtml(`${t.nextArticle}: ${next.headingCategory}`)}">${t.nextArticle} →</a>` : ''}
         </nav>
       </section>`;
@@ -902,16 +899,15 @@ function readerBriefHtml(brief) {
     const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
     return `<li>
             <a href="#${escapeHtml(item.href.split('#')[1])}">${escapeHtml(item.headline)}</a>
-            ${lead ? paragraphHtml(lead) : ''}
-            ${meaning ? `<p class="reader-brief-takeaway">${escapeHtml(meaning)}</p>` : ''}
+            ${meaning ? `<p class="reader-brief-takeaway">${escapeHtml(meaning)}</p>` : lead ? paragraphHtml(lead) : ''}
           </li>`;
   }).join('')}</ol>`;
 }
 
 function readerBriefMarkdown(brief) {
-  return `## ${t.weeklyCore}\n\n${brief.intro}\n\n` + brief.items.map(item => {
+  return `<a id="issue-briefing"></a>\n\n## 1. ${t.weeklyCore}\n\n${brief.intro}\n\n` + brief.items.map(item => {
     const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
-    return `- [${escapeMarkdownLinkText(item.headline)}](#${item.href.split('#')[1]})\n${lead ? `\n  ${lead}\n` : ''}${meaning ? `\n  ${meaning}\n` : ''}`;
+    return `- [${escapeMarkdownLinkText(item.headline)}](#${item.href.split('#')[1]})\n${meaning || lead ? `\n  ${meaning || lead}\n` : ''}`;
   }).join('\n');
 }
 
@@ -935,12 +931,12 @@ function contentsHtml(issue) {
 }
 
 function issueBriefingHtml(issue, brief) {
-  return `<section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+  return `<section class="section issue-briefing"${brief ? ' id="issue-briefing" tabindex="-1"' : ''} aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
           <h2 id="issue-briefing-title">${brief ? t.weeklyCore : briefingHeadingHtml(issue)}</h2>
           ${brief ? readerBriefHtml(brief) : `<ul>${bulletsHtml(issue.briefing)}</ul>`}
         </div>
-        ${contentsHtml(issue)}
+        ${brief ? '' : contentsHtml(issue)}
       </section>`;
 }
 
@@ -1006,7 +1002,7 @@ ${articleSeoHead(issue)}
 
 ${publicationNoticeBlock}      ${issueBriefingHtml(issue, brief)}
 ${contextLensLabelHtml(issue)}
-${sectionsHtmlWithCatchUpDivider(issue)}
+${sectionsHtmlWithCatchUpDivider(issue, brief)}
 ${watchPointsHtml(issue)}${referenceArticlesHtml(issue)}
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">${t.references}</h2>

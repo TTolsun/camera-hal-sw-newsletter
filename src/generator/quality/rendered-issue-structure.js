@@ -111,6 +111,8 @@ function hasReferencesSection(markdown) {
 // 번호로 거르지는 않는다: 브리핑을 번호 없이 찍던 형식에서는 `## 1.`이 첫 기사다
 // (public-newsletter-validator.test.js의 "checks rendered markdown article 1").
 const NON_ARTICLE_NUMBERED_TITLES = new Set([
+  koLocale.weeklyCore,
+  enLocale.weeklyCore,
   // 렌더러가 `## 1.`로 찍는 브리핑(newsletter-renderer.js briefingHeading).
   koLocale.briefing,
   koLocale.weeklyBriefing,

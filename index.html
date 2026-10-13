@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <link rel="stylesheet" href="css/styles.css?v=reader-brief-v3" />
-  <link rel="stylesheet" href="css/homepage.css?v=reader-brief-v2" />
+  <link rel="stylesheet" href="css/homepage.css?v=reader-focus-v1" />
   <script src="assets/js/site-header.js" defer></script>
   <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/index.html" />
   <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/index.html" />
@@ -103,7 +103,7 @@
     </div>
   </footer>
 
-  <script src="assets/js/newsletter-archive.js?v=reader-brief-v2"></script>
+  <script src="assets/js/newsletter-archive.js?v=reader-focus-v1"></script>
   <script>
     const escapeHtml = (value) => String(value ?? '')
       .replaceAll('&', '&amp;')
@@ -202,6 +202,8 @@
           console.error(newsletterError);
         }
         const matchedNewsletter = findHeadlineNewsletter(headline, newsletters);
+        const latestBrief = archiveHelpers.readerBrief(archiveHelpers.latestEntry(newsletters), 'ko');
+        if (latestBrief?.items.some(item => item.id === headline.article_identity_key)) return;
         const date = archiveHelpers.headlinePeriodText(matchedNewsletter, headline.newsletter_date || headline.selected_at || '');
         const metaText = [date, sourceName].filter(Boolean).join(' · ');
         featuredCard.classList.add('is-article');
@@ -250,7 +252,7 @@
         archiveHelpers.filterEntries(latestEntries, latestState),
         latestState.sort
       );
-      gridEl.innerHTML = filtered.map(entry => archiveHelpers.renderArchiveCard(entry)).join('');
+      gridEl.innerHTML = filtered.map(entry => archiveHelpers.renderArchiveCard(entry, { compact: true })).join('');
       if (emptyEl) emptyEl.hidden = filtered.length > 0;
     }
 

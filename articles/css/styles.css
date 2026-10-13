@@ -2329,6 +2329,7 @@ pre code {
 }
 
 .newsletter-issue-page .issue-story,
+.newsletter-issue-page .issue-briefing,
 .newsletter-issue-page .issue-contents {
   scroll-margin-top: 100px;
 }
