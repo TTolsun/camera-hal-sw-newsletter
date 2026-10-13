@@ -429,14 +429,17 @@
     const koreanOnly = display.koreanOnly;
     const href = rootPath + display.href;
     entry = { ...entry, title: display.title, summary: display.summary };
-    const accessibleName = `${entry && entry.date || ''} ${entry && entry.title || ''} ${options.ariaSuffix || (locale === 'en' ? 'Open newsletter' : '뉴스레터 열기')}${koreanOnly ? ' · Korean only' : ''}`.trim();
+    const headline = item?.headline || (brief ? cardTitle(entry) : cardHeadline(entry));
+    const accessibleName = [headline, entry.date, entry.title !== headline ? entry.title : '',
+      options.ariaSuffix || (locale === 'en' ? 'Open newsletter' : '뉴스레터 열기'),
+      koreanOnly ? 'Korean only' : ''].filter(Boolean).join(' · ');
     return `
       <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
         ${readerMedia(brief ? item : legacyReaderItem(entry), rootPath)}
         <div class="card-body">
           ${!item || item.tags.length ? `<div class="card-kicker">${escapeHtml(item ? item.tags.join(' · ') : entry.homepage_badge || (locale === 'en' ? 'Weekly issue' : '주간호'))}</div>` : ''}
           ${koreanOnly ? '<span class="tag" lang="en">Korean only</span>' : ''}
-          <h3 class="card-title clamp-2 nc-h"${koreanOnly ? ' lang="ko"' : ''}>${escapeHtml(item?.headline || (brief ? cardTitle(entry) : cardHeadline(entry)))}</h3>
+          <h3 class="card-title clamp-2 nc-h"${koreanOnly ? ' lang="ko"' : ''}>${escapeHtml(headline)}</h3>
           ${item?.takeaway ? `<p class="card-takeaway">${escapeHtml(item.takeaway)}</p>` : ''}
           <div class="card-meta archive-card-meta">${cardMetaHtml(entry, locale)}</div>
         </div>

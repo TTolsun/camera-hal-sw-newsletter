@@ -149,6 +149,32 @@ test('public prose is escaped without inserting HTML or internal QA values', () 
   assert.doesNotMatch(html, /<script|INTERNAL_CHECKPOINT/);
 });
 
+test('card link names include the visible headline in both locales and legacy states', () => {
+  for (const locale of ['ko', 'en']) {
+    const { entry, brief } = sample(locale);
+    const options = { locale, ariaSuffix: 'Open this issue' };
+    function assertNamedHeadline(expected) {
+      const html = archive.renderArchiveCard(entry, options);
+      const label = html.match(/aria-label="([^"]+)"/)[1];
+      assert.ok(label.includes(expected), `visible headline missing from link name: ${label}`);
+      assert.ok(label.includes(entry.date));
+      assert.ok(label.includes('Open this issue'));
+      assert.match(html, new RegExp(`<h3[^>]*>${expected}</h3>`));
+    }
+    assertNamedHeadline('Proposal A &lt;review&gt;');
+    brief.items = [];
+    assertNamedHeadline(entry.title);
+    if (locale === 'en') delete entry.en.reader_brief;
+    else delete entry.reader_brief;
+    assertNamedHeadline(locale === 'en' ? 'English legacy A' : 'Legacy A');
+    if (locale === 'en') {
+      delete entry.en;
+      assertNamedHeadline(entry.title);
+      assert.match(archive.renderArchiveCard(entry, options), /aria-label="[^"]*Korean only/);
+    }
+  }
+});
+
 test('legacy lead_article_image is safe to reuse but never overrides a present projection', () => {
   const { entry, brief } = sample();
   entry.lead_article_image = 'https://example.com/legacy-a.png';
