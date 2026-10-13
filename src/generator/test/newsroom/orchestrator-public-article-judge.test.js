@@ -312,3 +312,43 @@ test('차단도 desk advisory도 없으면 repair 없이 editor를 반환한다'
   assert.equal(result, editor);
   assert.equal(calls.length, 1); // judge만, repair 없음
 });
+
+test('judge-triggered repair receives only documents bound to its existing sections without promoting candidates', async () => {
+  const editor = editorWithOneSection();
+  editor.sections[0].source_candidate_url = 'https://example.com/review';
+  editor.sections[0].sources = [{ url: 'https://example.com/review' }];
+  const document = { evidence_id: 'body:review', url: 'https://example.com/review',
+    text: 'Stage A is always enabled. Stage B downsamples luma when required.' };
+  const articleCapsuleReport = { shortlisted_capsules: [
+    { url: document.url, article_source_reading: { documents: [document] } },
+    { url: 'https://example.com/other', article_source_reading: { documents: [
+      { evidence_id: 'body:other', text: 'UNRELATED_SOURCE' }
+    ] } }
+  ] };
+  const before = structuredClone(articleCapsuleReport);
+  const seedEvidencePack = { evidence_pack_id: 'synthetic-pack', items: [] };
+  let judgeCalls = 0;
+  let repairInput;
+  const result = await validatePublicArticleJudgeOrRepair({ ...baseArgs, editor, articleCapsuleReport, seedEvidencePack }, {
+    callLlmJson: async (stage, system, input) => {
+      if (/semantic repair$/.test(stage.label)) {
+        repairInput = input;
+        assert.match(system, /검토 의견이며 사실 근거가 아닙니다/);
+        return structuredClone(editor);
+      }
+      judgeCalls += 1;
+      return judgeCalls === 1 ? blockingJudgeReport() : cleanJudgeReport();
+    },
+    recordEditorSemanticStatus: () => {},
+    validateEditor: (value, date, reporter, options) => {
+      assert.equal(options.seedEvidencePack, seedEvidencePack);
+      assert.equal(options.strictClaims, true);
+      return value;
+    }
+  });
+  const sourceInput = repairInput.split('Section-bound source documents for repair (review suggestions are not evidence) JSON:\n')[1].split('\n\n')[0];
+  assert.deepEqual(JSON.parse(sourceInput), [{ section_index: 0, source_documents: [document] }]);
+  assert.doesNotMatch(repairInput, /UNRELATED_SOURCE/);
+  assert.deepEqual(articleCapsuleReport, before);
+  assert.deepEqual(result.sections.map(section => section.sources), editor.sections.map(section => section.sources));
+});

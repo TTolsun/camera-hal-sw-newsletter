@@ -51,8 +51,30 @@ test('all fact-check stages distinguish unsupported facts from non-actionable bu
     assert.match(prompt, /action_items·owner·metric이 없다는 이유만으로 must_fix하지/);
     assert.match(prompt, /기존 source binding·dated evidence·cross-check 누락은 그대로 차단/);
     assert.match(prompt, /설명이 일반론에 그치면 article_quality에서 판정/);
+    assert.match(prompt, /수정 제안의 사실성도 검증/);
+    assert.match(prompt, /같은 의미의 한국어 어순·접속사 변경/);
     assert.match(prompt, /내부 검토 필드로 공개 설명의 누락을 메우지/);
     assert.doesNotMatch(prompt, /measurable metrics가 빠진 C\+\+ tooling action item/);
+  }
+});
+
+test('claim classification and fact review use the canonical enums and distinguish actual gaps from unknown future state', () => {
+  const { CLAIM_IMPACT_LEVELS } = require('../../reporter/source-binding-policy');
+  const { articleClaimContractPrompt, claimRepairEvidencePrompt } = require('../../reporter/newsletter-prompts');
+  assert.match(articleClaimContractPrompt(), new RegExp(CLAIM_IMPACT_LEVELS.join(', ')));
+  assert.ok(CLAIM_IMPACT_LEVELS.includes('native_tooling_workflow'));
+  for (const prompt of [editorSystemPrompt(), editorCompletionSystemPrompt(), claimRepairEvidencePrompt()]) {
+    assert.match(prompt, /AI 모델·코딩 에이전트·effort·개발 SDK|개발 도구의 모델·코딩 에이전트·effort·개발 SDK/);
+    assert.match(prompt, /native_tooling_workflow/);
+  }
+  for (const prompt of [factCheckSystemPrompt(), factCheckRepairSystemPrompt(), factCheckCompletionSystemPrompt()]) {
+    assert.match(prompt, /이미 같은 값인 source_subtitle/);
+    assert.match(prompt, /title의 더 나은 표현.*recommended_fixes/);
+    assert.match(prompt, /requires_cross_check=true.*cross_check_status=required_missing/);
+    assert.match(prompt, /cross-check 누락은 source_gaps에 실제 누락으로 남기/);
+    assert.match(prompt, /병합 커밋이나 배포 증거는 그 주장에 필수 근거가 아닙니다/);
+    assert.match(prompt, /conditional_evidence_type=project_patch_strong_evidence/);
+    assert.match(prompt, /blocked\/required_missing을 모델 판단으로 required_satisfied로 바꾸지/);
   }
 });
 
@@ -147,6 +169,23 @@ test('new writers use existing source roles and every reviewer sees status/effec
     assert.match(prompt, /최소 대조 예시 3/);
     assert.match(prompt, /source에 없는 항목을 material_omissions로 만들지/);
   }
+});
+
+test('writing, source review and repairs preserve source predicates and treat reviewer suggestions as unverified', () => {
+  const { claimRepairEvidencePrompt, publicInterpretationReviewPrompt } = require('../../reporter/newsletter-prompts');
+  for (const prompt of [editorSystemPrompt(), editorCompletionSystemPrompt(),
+    editorRepairPatchSystemPrompt(), claimRepairEvidencePrompt(), publicInterpretationReviewPrompt()]) {
+    assert.match(prompt, /1% 초과/);
+    assert.match(prompt, /이전 설정·활성화 상태 유지/);
+    assert.match(prompt, /DSC가 항상 활성화된다는 결론은 나오지/);
+  }
+  for (const prompt of [editorRepairPatchSystemPrompt(), claimRepairEvidencePrompt()]) {
+    assert.match(prompt, /검토 의견이며 사실 근거가 아닙니다/);
+    assert.match(prompt, /잘못된 제안은 본문에 복사하지/);
+  }
+  const review = publicInterpretationReviewPrompt();
+  assert.match(review, /source URL과 짧은 원문 구절/);
+  assert.match(review, /이후 상태를 모른다는 이유만으로 source_gaps/);
 });
 
 for (const sample of cases) {

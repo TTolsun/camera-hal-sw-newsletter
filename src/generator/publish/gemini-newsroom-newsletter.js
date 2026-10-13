@@ -729,6 +729,12 @@ async function main() {
     editor = sanitizeClaimEvidenceIds(editor, reporter, seedEvidencePack);
     editor = stampCoverageType(editor, shortlistReport);
     factCheck = pruneCatchUpFramingFactCheckItems(factCheck, editor);
+    // Source omissions must reach the repair plan, not appear only after its
+    // budget is spent. The final review below still checks newly repaired prose.
+    factCheck = await reviewArticleSources(
+      editor, articleCapsuleReport, factCheck,
+      (...args) => callLlmJson(stageRun(LLM_STAGES.ARTICLE_SOURCE_REVIEW, { qualityAttempt: attempt, totalAttempts }), ...args)
+    );
     generationRunState.factCheck = factCheck;
     writeJson(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.json`), factCheck);
     fs.writeFileSync(path.join(newsroomDir, `fact-check-report-attempt-${attempt}.md`), buildFactCheckMarkdown(date, factCheck), 'utf8');

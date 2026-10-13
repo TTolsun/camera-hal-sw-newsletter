@@ -424,18 +424,28 @@ test('source extraction prompt guardrails keep source facts separate from editor
   assert.match(prompt, /원문 표기를 그대로 보존/);
 });
 
-test('LLM editor, repair, completion, and fact-check prompts include article section contract', () => {
-  const source = promptHostSource();
-  const usageCount = (source.match(/articleSectionContractPrompt\(\),/g) || []).length;
-
-  assert.ok(usageCount >= 5);
+test('writers carry the full section contract while fact checkers verify its evidence without layout instructions', () => {
+  for (const prompt of [editorSystemPrompt(), editorRepairPatchSystemPrompt(), editorCompletionSystemPrompt()]) {
+    assert.ok(prompt.includes(articleSectionContractPrompt()));
+  }
+  for (const prompt of [factCheckSystemPrompt(), factCheckRepairSystemPrompt(), factCheckCompletionSystemPrompt()]) {
+    assert.match(prompt, /article_sections\.verified_facts와 claims의 사실/);
+    assert.match(prompt, /verified_facts에는 해당 기사 근거에 바인딩된 fact claim/);
+    assert.match(prompt, /required field·schema enum·Markdown 문법·source\/claim binding·dated evidence/);
+    assert.ok(!prompt.includes(articleSectionContractPrompt()));
+  }
 });
 
-test('LLM editor, repair, completion, and fact-check prompts include public article contract', () => {
-  const source = promptHostSource();
-  const usageCount = (source.match(/publicArticleContractPrompt\(\),/g) || []).length;
-
-  assert.ok(usageCount >= 6);
+test('writers carry the full public contract while fact checkers retain public source and semantic checks', () => {
+  for (const prompt of [editorSystemPrompt(), editorRepairPatchSystemPrompt(), editorCompletionSystemPrompt()]) {
+    assert.ok(prompt.includes(publicArticleContractPrompt()));
+  }
+  for (const prompt of [factCheckSystemPrompt(), factCheckRepairSystemPrompt(), factCheckCompletionSystemPrompt()]) {
+    assert.match(prompt, /공개 headline·lead·body_markdown·camera_hal_takeaway의 상태·주체·수치·적용 범위/);
+    assert.match(prompt, /허용된 URL과 역할만/);
+    assert.match(prompt, /새 URL·evidence_id·역할로 출처 누락을 메우지/);
+    assert.ok(!prompt.includes(publicArticleContractPrompt()));
+  }
 });
 
 test('LLM reporter, editor, repair, completion, and fact-check prompts include source extraction guardrails', () => {

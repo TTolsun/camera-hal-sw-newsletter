@@ -179,7 +179,9 @@ async function validateOrRepairEditor(value, {
     editorStage,
     commonContext,
     lockedContext,
-    newsroomDir
+    newsroomDir,
+    articleCapsuleReport,
+    seedEvidencePack
   }, { ...publicArticleJudgeDeps,
     validateEditor: (draft, ...args) => validateEditor(restore(draft), ...args)
   });

@@ -57,6 +57,18 @@ test('validateFactCheck keeps a genuine factual must_fix and stays NEEDS_FIX', (
   assert.equal(result.status, 'NEEDS_FIX');
 });
 
+test('claim classification failures and required cross-check gaps remain blocking after normalization', () => {
+  const failure = { location: 'sections[0].claims[0].impact_level', problem: 'AI development tool classified as an Android app API',
+    suggestion: 'Use native_tooling_workflow', source_url: 'https://example.com/tool' };
+  const gap = 'Synthetic patch https://example.com/patch: required primary cross-check is missing';
+  const result = validateFactCheck({ status: 'NEEDS_FIX', must_fix: [failure], source_gaps: [gap],
+    source_gap_count: 1, article_quality: [{ section_index: 0, publishable: true, reason: 'Clear explanation' }] });
+  assert.deepEqual(result.must_fix, [failure]);
+  assert.deepEqual(result.source_gaps, [gap]);
+  assert.equal(result.source_gap_count, 1);
+  assert.equal(result.status, 'NEEDS_FIX');
+});
+
 // #654: validateFactCheck reshapes each article_quality item before the quality gate runs.
 // It must preserve the fact-checker's `confidence`, otherwise the gate always sees undefined
 // and the confidence surfacing is inert in the real pipeline (the gate's own unit test bypasses

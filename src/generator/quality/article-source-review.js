@@ -10,7 +10,8 @@ function publicProseForReview(article = {}) {
     .map(key => [key, article[key]]));
 }
 
-function sourceReviewInput(editor, capsuleReport) {
+function sourceReviewInput(editor, capsuleReport = {}) {
+  capsuleReport = capsuleReport || {};
   const capsules = [...(capsuleReport.shortlisted_capsules || []), ...(capsuleReport.selected_capsules || []), ...(capsuleReport.reserve_capsules || [])];
   return (editor.sections || []).flatMap((section, section_index) => {
     const urls = new Set([section.source_candidate_url, ...(section.sources || []).map(s => s.url)]);

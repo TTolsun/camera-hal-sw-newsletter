@@ -324,7 +324,9 @@ async function runRepairAndCompletionPasses({
         editorStage: repairStage,
         commonContext,
         lockedContext,
-        newsroomDir
+        newsroomDir,
+        articleCapsuleReport,
+        seedEvidencePack
       }, publicArticleJudgeDeps);
       attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
       await resolveIssueArticleImages(editor, { root, recoverMissingImages: true });
@@ -491,7 +493,9 @@ async function runRepairAndCompletionPasses({
           editorStage: completionStage,
           commonContext,
           lockedContext,
-          newsroomDir
+          newsroomDir,
+          articleCapsuleReport,
+          seedEvidencePack
         }, publicArticleJudgeDeps);
         attemptedSections = appendUniqueSections(attemptedSections, editor.sections);
         await resolveIssueArticleImages(editor, { root, recoverMissingImages: true });
