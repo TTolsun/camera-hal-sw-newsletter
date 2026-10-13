@@ -677,7 +677,7 @@ test('homepage leads with the latest issue and retains sort, topic and navigatio
 
   assert.match(html, /<article id="reader-issue" class="reader-issue" aria-live="polite">/);
   assert.match(html, /<h1 id="reader-title">최신 주간 뉴스레터<\/h1>/);
-  assert.match(html, /href="css\/homepage\.css"/);
+  assert.match(html, /href="css\/homepage\.css\?v=reader-brief-v1"/);
   assert.ok(html.indexOf('id="reader-issue"') < html.indexOf('id="latest"'));
   assert.doesNotMatch(html, /featured-img is-brand/);
   // 최신 소식 grid section with sort + topic filter + grid hooks.
@@ -765,6 +765,8 @@ test('every deployed public page loads only local scripts that exist', () => {
   const pages = [
     { file: path.join(root, 'index.html'), base: path.join(root, 'articles') },
     { file: path.join(root, 'articles', 'archive.html') },
+    { file: path.join(root, 'articles', 'en', 'index.html') },
+    { file: path.join(root, 'articles', 'en', 'archive.html') },
     { file: path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html') },
     ...publishedIssuePages().map(file => ({ file }))
   ];
@@ -775,7 +777,8 @@ test('every deployed public page loads only local scripts that exist', () => {
     for (const match of html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi)) {
       const src = match[1];
       if (/^(?:https?:)?\/\//i.test(src)) continue;
-      if (!fs.existsSync(path.resolve(base, src))) {
+      // URL queries select a cache version; only the path names a local file.
+      if (!fs.existsSync(path.resolve(base, src.split(/[?#]/, 1)[0]))) {
         missing.push(`${path.relative(root, file)} -> ${src}`);
       }
     }
