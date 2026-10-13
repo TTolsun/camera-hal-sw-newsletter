@@ -321,27 +321,42 @@ function validateMarkdownStructure(date, markdown, errors, { briefingBulletCount
   }
 }
 
-// 위치 `at`의 그림을 실제로 감싸는 <figure>의 내용을 돌려준다. 그림 앞에서 가장 가까운 <figure가
-// 그림보다 먼저 닫혔으면 그림은 figure 밖에 있다. 렌더러는 figure를 중첩하지 않는다.
-function enclosingFigure(content, at) {
-  const open = content.lastIndexOf('<figure', at);
-  const close = content.indexOf('</figure>', at);
-  if (open < 0 || close < 0 || content.lastIndexOf('</figure>', at) > open) return '';
-  return content.slice(open, close);
-}
-
-// figure 안에서 class 토큰에 article-image-caption이 있는 첫 요소부터 figure 끝까지를 돌려준다.
-// 끝을 figure 끝으로 잡아 캡션 안의 중첩 요소나 뒤따르는 두 번째 캡션의 링크도 함께 본다.
-function captionRegion(figure) {
-  for (const match of figure.matchAll(/<[a-z][a-z0-9]*\b[^>]*\bclass\s*=\s*["']([^"']*)["'][^>]*>/gi)) {
-    if (match[1].split(/\s+/).includes('article-image-caption')) return figure.slice(match.index);
+function attributedImageCaptions(figure) {
+  const captions = [];
+  let active = [];
+  // Track same-tag nesting so a nested div cannot hide a later attribution link
+  // in a legacy div caption. Only actual class/href attributes count.
+  for (const tag of String(figure || '').matchAll(/<(\/?)([a-z][\w:-]*)\b([^>]*)>/gi)) {
+    const name = tag[2].toLowerCase();
+    if (tag[1]) {
+      for (const caption of active) {
+        if (caption.name === name && --caption.depth === 0) caption.closed = true;
+      }
+      active = active.filter(caption => caption.depth > 0);
+      continue;
+    }
+    for (const caption of active) if (caption.name === name) caption.depth++;
+    const attrs = Object.fromEntries([...tag[3].matchAll(/([^\s=]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g)]
+      .map(attr => [attr[1].toLowerCase(), attr[2] ?? attr[3] ?? attr[4]]));
+    if (String(attrs.class || '').split(/\s+/).includes('article-image-caption')) {
+      const caption = { name, depth: 1, hasSourceLink: false };
+      captions.push(caption);
+      active.push(caption);
+    }
+    if (name === 'a' && /^https:\/\//i.test(attrs.href || '')) {
+      for (const caption of active) caption.hasSourceLink = true;
+    }
   }
-  return null;
+  return captions.filter(caption => caption.hasSourceLink);
 }
 
 function validateArticleImages(relPath, html, root, errors) {
   const content = String(html || '');
-  for (const imageMatch of content.matchAll(/<img\b(?=[^>]*class=["'][^"']*\barticle-image\b)[^>]*>/gi)) {
+  // Renderer figures are not nested. Keep captions inside the containing figure;
+  // neither article sources nor a following figure can supply image attribution.
+  const figures = [...content.matchAll(/<figure\b[^>]*>(?:(?!<figure\b)[\s\S])*?<\/figure\s*>/gi)];
+  const imageTags = content.matchAll(/<img\b(?=[^>]*class=["'][^"']*\barticle-image\b)[^>]*>/gi);
+  for (const imageMatch of imageTags) {
     const tag = imageMatch[0];
     const src = htmlAttr(tag, 'src');
     const alt = htmlAttr(tag, 'alt');
@@ -380,23 +395,20 @@ function validateArticleImages(relPath, html, root, errors) {
     //
     // 두 방향을 다 검사해야 게이트가 닫힙니다. fallback 쪽을 검사에서 빼기만 하면, 가짜 출처
     // 캡션이 다시 생겨도 게이트가 통과시킵니다.
-    // 캡션은 이 그림을 감싼 <figure> 안에서만 찾는다. 고정 글자 수 창으로 찾으면 그림 바로 뒤의
-    // 출처 목록 링크를 캡션 링크로 오인해, 출처 링크 없는 캡션도 통과한다(PR #1291 재배치에서 드러남).
-    // 같은 태그가 여러 번 나와도 각 위치의 figure를 따로 본다. figure 밖의 그림은 캡션이 없는 것이다.
-    // 렌더러는 기사 그림을 항상 <figure>로 감싸며, 커밋된 과거 호의 기사 그림도 전부 <figure> 안에 있다.
-    // 캡션 요소 종류는 가리지 않는다. #863이 지운 가짜 출처 캡션은 <p class="article-image-caption">였다.
-    const caption = captionRegion(enclosingFigure(content, imageMatch.index));
-    const hasCaption = caption !== null;
-    const hasCaptionSourceLink = hasCaption && /<a\s+[^>]*href=["']https:\/\//i.test(caption);
+    const figure = figures.find(match => match.index < imageMatch.index
+      && imageMatch.index + tag.length <= match.index + match[0].length);
+    const captions = attributedImageCaptions(figure?.[0]);
     if (isFallbackImagePath(src)) {
       // 가짜 출처 캡션 금지는 발행 대상 호만이 아니라 모든 호에 적용합니다. 예전에는 이 규칙이
       // 생기기 전에 발행된 호 53건이 이미 이 캡션을 달고 있어서 발행 대상 호에만 적용했지만,
       // #863에서 그 53건을 지웠으므로 더 이상 예외를 둘 이유가 없습니다. 예외를 되살리면
       // 과거 호에 가짜 출처 캡션이 다시 들어가도 게이트가 통과시킵니다.
-      if (hasCaption && hasCaptionSourceLink) {
+      // A fabricated fallback attribution is forbidden even in a non-semantic
+      // caption element (for example, a legacy paragraph instead of figcaption).
+      if (captions.length > 0) {
         errors.push(`Newsletter fallback article image must not carry a source attribution caption: ${relPath}`);
       }
-    } else if (!hasCaption || !hasCaptionSourceLink) {
+    } else if (!captions.some(caption => caption.name === 'figcaption' && caption.closed)) {
       errors.push(`Newsletter article image missing caption attribution link: ${relPath}`);
     }
   }
