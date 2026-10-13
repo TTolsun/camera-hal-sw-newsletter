@@ -248,7 +248,7 @@
 
   // 저장소에 동봉된 fallback 그래픽인지 판정한다. article-image-resolver 는 카테고리별로 여러 장
   // (ai/android/cpp/newsletter-default) 을 내보내므로 특정 파일명이 아니라 폴더로 가른다.
-  // 홈과 카드는 이 그래픽을 기사 이미지로 표시하지 않고 텍스트 구성으로 돌아간다.
+  // 홈 hero는 생략하고, 카드에서는 출처 사진이 아닌 작은 장식으로 표시한다.
   //
   // 전제: site root 기준으로 정규화된 경로만 받는다. 이슈 페이지가 쓰는 `../../assets/...` 같은
   // 페이지 상대 경로는 조용히 false 가 되므로, 그 층에서는 먼저 정규화한다
@@ -308,19 +308,23 @@
     return null;
   }
 
-  function readerMedia(item, rootPath = '', eager = false) {
-    if (!item?.image || item.image.is_fallback) return '';
-    const image = item.image;
+  function readerMedia(item, rootPath = '', eager = false, card = false) {
+    if ((!item?.image || item.image.is_fallback) && !card) return '';
+    const fallbackSrc = rootPath + 'assets/images/fallback/newsletter-default.svg';
+    const image = item?.image || { src: 'assets/images/fallback/newsletter-default.svg', alt: '', is_fallback: true };
     const src = /^https:/i.test(image.src) ? image.src : rootPath + image.src;
-    return `<div class="card-thumb nc-thumb reader-media"><img class="card-thumb-img" src="${escapeHtml(src)}" alt="${escapeHtml(image.alt)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" onerror="this.onerror=null;this.alt='';this.parentElement.hidden=true"></div>`;
+    const onerror = card
+      ? "this.onerror=null;this.alt='';this.parentElement.classList.add('is-fallback');this.src=this.dataset.fallbackSrc"
+      : "this.onerror=null;this.alt='';this.parentElement.hidden=true";
+    return `<div class="card-thumb nc-thumb reader-media${image.is_fallback ? ' is-fallback' : ''}"><img class="card-thumb-img" src="${escapeHtml(src)}" alt="${escapeHtml(image.is_fallback ? '' : image.alt)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async"${card ? ` data-fallback-src="${escapeHtml(fallbackSrc)}"` : ''} onerror="${onerror}"></div>`;
   }
 
   // #1286 binds this legacy field to the first article. It is never a substitute
   // for a present projection's null image, and article_images is never consulted.
   function legacyReaderItem(entry) {
     const src = typeof entry?.lead_article_image === 'string' ? entry.lead_article_image.trim() : '';
-    return safeReaderImage(src) && !isFallbackImage(src)
-      ? { image: { src, alt: '', is_fallback: false } }
+    return safeReaderImage(src)
+      ? { image: { src, alt: '', is_fallback: isFallbackImage(src) } }
       : null;
   }
 
@@ -435,7 +439,7 @@
       koreanOnly ? 'Korean only' : ''].filter(Boolean).join(' · ');
     return `
       <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
-        ${readerMedia(brief ? item : legacyReaderItem(entry), rootPath)}
+        ${readerMedia(brief ? item : legacyReaderItem(entry), rootPath, false, true)}
         <div class="card-body">
           ${!item || item.tags.length ? `<div class="card-kicker">${escapeHtml(item ? item.tags.join(' · ') : entry.homepage_badge || (locale === 'en' ? 'Weekly issue' : '주간호'))}</div>` : ''}
           ${koreanOnly ? '<span class="tag" lang="en">Korean only</span>' : ''}

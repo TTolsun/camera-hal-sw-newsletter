@@ -502,7 +502,8 @@ test('legacy cards keep the headline and week meta without unrelated media', () 
     article_images: ['https://example.com/thumb.png']
   });
 
-  assert.doesNotMatch(html, /<img|thumb\.png/);
+  assert.doesNotMatch(html, /thumb\.png/);
+  assert.match(html, /is-fallback/);
   assert.match(html, /<div class="card-kicker">주간호<\/div>/);
   // Headline is the issue's top article title (first summary line), not the issue label.
   assert.match(html, /<h3 class="card-title clamp-2 nc-h">기사 A<\/h3>/);
@@ -623,7 +624,7 @@ test('renderArchiveCard falls back to the site newsletter image and a kicker whe
     html: 'newsletters/2026-06-03/index.html'
   });
 
-  assert.doesNotMatch(html, /<img/);
+  assert.match(html, /src="assets\/images\/fallback\/newsletter-default.svg" alt=""/);
   assert.match(html, /<div class="card-kicker">주간호<\/div>/);
   assert.match(html, /<h3 class="card-title clamp-2 nc-h">Daily issue<\/h3>/);
 });
@@ -644,7 +645,7 @@ test('renderArchiveCard uses the lead article image instead of another article i
 
   const html = NewsletterArchive.renderArchiveCard(entry, { rootPath: '../' });
 
-  assert.doesNotMatch(html, /<img/);
+  assert.match(html, /src="\.\.\/assets\/images\/fallback\/newsletter-default.svg" alt=""/);
   assert.doesNotMatch(html, /haiku\.jpg/);
   assert.match(html, /<h3 class="card-title clamp-2 nc-h">AOSP 기사<\/h3>/);
 
@@ -652,11 +653,11 @@ test('renderArchiveCard uses the lead article image instead of another article i
   assert.match(realLead, /<img class="card-thumb-img" src="https:\/\/example\.com\/aosp\.png"/);
 
   const emptyLead = NewsletterArchive.renderArchiveCard({ ...entry, lead_article_image: '' });
-  assert.doesNotMatch(emptyLead, /<img/);
+  assert.match(emptyLead, /is-fallback/);
 });
 
 // 공통 계약 v1 §5: lead_article_image가 없는 예전 항목에서 다른 기사 이미지를 추정하지 않는다.
-test('renderArchiveCard uses text for entries without lead_article_image', () => {
+test('renderArchiveCard uses decorative fallback for entries without lead_article_image', () => {
   const html = NewsletterArchive.renderArchiveCard({
     weeklyKey: '2026-W41',
     date: '2026-10-05',
@@ -667,7 +668,8 @@ test('renderArchiveCard uses text for entries without lead_article_image', () =>
     article_images: ['assets/images/fallback/android.svg', 'https://example.com/a.png']
   });
 
-  assert.doesNotMatch(html, /<img/);
+  assert.match(html, /src="assets\/images\/fallback\/newsletter-default.svg" alt=""/);
+  assert.doesNotMatch(html, /example\.com\/a.png/);
 });
 
 // ---- Static homepage markup contracts ----
@@ -677,7 +679,7 @@ test('homepage leads with the latest issue and retains sort, topic and navigatio
 
   assert.match(html, /<article id="reader-issue" class="reader-issue" aria-live="polite">/);
   assert.match(html, /<h1 id="reader-title">최신 주간 뉴스레터<\/h1>/);
-  assert.match(html, /href="css\/homepage\.css"/);
+  assert.match(html, /href="css\/homepage\.css\?v=reader-brief-v2"/);
   assert.ok(html.indexOf('id="reader-issue"') < html.indexOf('id="latest"'));
   assert.doesNotMatch(html, /featured-img is-brand/);
   // 최신 소식 grid section with sort + topic filter + grid hooks.
@@ -765,6 +767,8 @@ test('every deployed public page loads only local scripts that exist', () => {
   const pages = [
     { file: path.join(root, 'index.html'), base: path.join(root, 'articles') },
     { file: path.join(root, 'articles', 'archive.html') },
+    { file: path.join(root, 'articles', 'en', 'index.html') },
+    { file: path.join(root, 'articles', 'en', 'archive.html') },
     { file: path.join(root, 'articles', 'learning', 'ai-engineering', 'index.html') },
     ...publishedIssuePages().map(file => ({ file }))
   ];
@@ -775,7 +779,8 @@ test('every deployed public page loads only local scripts that exist', () => {
     for (const match of html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["']/gi)) {
       const src = match[1];
       if (/^(?:https?:)?\/\//i.test(src)) continue;
-      if (!fs.existsSync(path.resolve(base, src))) {
+      // URL queries select a cache version; only the path names a local file.
+      if (!fs.existsSync(path.resolve(base, src.split(/[?#]/, 1)[0]))) {
         missing.push(`${path.relative(root, file)} -> ${src}`);
       }
     }
