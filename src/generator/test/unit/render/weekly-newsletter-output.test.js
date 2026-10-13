@@ -384,6 +384,66 @@ test('article_images stays empty when sections have neither https nor fallback-a
   assert.deepEqual(readWeeklyIndexFile(root)[0].article_images, []);
 });
 
+// 홈 카드 제목은 첫 기사의 제목이므로, 첫 기사가 fallback이면 다른 기사의 실제 이미지를 대표로 삼지 않는다
+// (2026-W42: AOSP 제목에 Haiku 이미지가 붙음, #1275).
+test('lead_article_image is the first article image even when a later article has a real image', async () => {
+  const root = tempRoot();
+  const laterImage = 'https://publisher.example.com/images/later.png';
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: draft([
+      fallbackImageSection('1.7.0', 'https://example.com/a'),
+      repairedImageSection('1.8.0', 'https://example.com/b', laterImage)
+    ])
+  });
+
+  const [entry] = readWeeklyIndexFile(root);
+  assert.equal(entry.summary.split('\n')[0], 'CameraX 1.7.0');
+  assert.equal(entry.lead_article_image, 'assets/images/fallback/android.svg');
+  assert.deepEqual(entry.article_images, [laterImage]);
+});
+
+test('lead_article_image is the first article https image when it has one', async () => {
+  const root = tempRoot();
+  const leadImage = 'https://publisher.example.com/images/lead.png';
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: draft([
+      repairedImageSection('1.7.0', 'https://example.com/a', leadImage),
+      fallbackImageSection('1.8.0', 'https://example.com/b')
+    ])
+  });
+
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, leadImage);
+});
+
+test('lead_article_image is empty when the first article has neither an https nor a fallback-asset image', async () => {
+  const root = tempRoot();
+  const local = {
+    ...section('1.7.0', 'https://example.com/a'),
+    selectedImage: '',
+    resolvedImage: { url: '../../some/other/local.png', src: '../../some/other/local.png', usedFallback: true }
+  };
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([local]) });
+
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, '');
+});
+
+test('syncWeeklyArticleImages updates lead_article_image when the first article image is repaired', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  const imageUrl = 'https://publisher.example.com/images/camera-card.png';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]) });
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, 'assets/images/fallback/android.svg');
+
+  const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repairedImageSection('1.7.0', url, imageUrl)] });
+
+  assert.equal(result.articleImagesUpdated, true);
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, imageUrl);
+});
+
 test('syncWeeklyArticleImages patches the matching weekly section, rewrites weekly artifacts, and updates article_images', async () => {
   const root = tempRoot();
   const url = 'https://example.com/camerax-release';
