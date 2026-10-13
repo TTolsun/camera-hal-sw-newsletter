@@ -4,7 +4,8 @@ const path = require('node:path');
 const test = require('node:test');
 
 const {
-  validateRenderedIssueStructure
+  validateRenderedIssueStructure,
+  validateArticleImages
 } = require('../../quality/rendered-issue-structure');
 const {
   buildMarkdown,
@@ -267,6 +268,33 @@ test('article image caption attribution is required only for images that came fr
     });
     assert.equal(sourcedResult.ok, false, `${name} unexpectedly passed`);
     assert.match(sourcedResult.text, /caption attribution/, name);
+  }
+});
+
+test('article image attribution belongs to its own figure caption, not nearby article links', () => {
+  const root = tempRoot('image-caption-scope-');
+  const image = '<img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="Android" loading="lazy">';
+  const link = '<a href="https://developer.android.com/camera">Source</a>';
+  const caption = `<figcaption class="article-image-caption">${link}</figcaption>`;
+  const sourceList = `<ul class="source-list"><li>${link}</li></ul>`;
+  withImageSection(root);
+  const fallbackImage = image.replace('https://developer.android.com/static/images/social/android-developers.png', '../../assets/images/fallback/android.svg');
+  const cases = [
+    ['article sources cannot replace caption attribution', `<figure>${image}<figcaption class="article-image-caption">Image source</figcaption></figure>${sourceList}`, 1],
+    ['a link outside the caption cannot provide attribution', `<figure>${image}${link}<figcaption class="article-image-caption">Image source</figcaption></figure>`, 1],
+    ['an adjacent figure cannot provide attribution', `<figure>${image}</figure><figure>${caption}</figure>`, 1],
+    ['an image outside a figure cannot borrow a caption', `${image}<figure>${caption}</figure>`, 1],
+    ['identical image tags retain separate caption requirements', `<figure>${image}${caption}</figure><figure>${image}</figure>`, 1],
+    ['a long caption is not limited by an arbitrary character window', `<figure>${image}<figcaption class="article-image-caption">${'description '.repeat(100)}${link}</figcaption></figure>`, 0],
+    ['a caption class on another element is not a figcaption', `<figure>${image}<div class="article-image-caption">${link}</div></figure>`, 1],
+    ['a fallback figure cannot inherit attribution from the next figure', `<figure>${fallbackImage}</figure><figure>${image}${caption}</figure>`, 0],
+    ['nearby article sources are not a fabricated fallback attribution', `<figure>${fallbackImage}<figcaption class="article-image-caption">Illustration</figcaption></figure>${sourceList}`, 0]
+  ];
+  for (const [name, html, expectedErrors] of cases) {
+    const errors = [];
+    validateArticleImages('caption-scope.html', html, root, errors);
+    assert.equal(errors.length, expectedErrors, `${name}: ${errors.join('; ')}`);
+    if (expectedErrors) assert.match(errors[0], /caption attribution/);
   }
 });
 
