@@ -1,5 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
-const { canonicalBucket, compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
+const { orderedArticleSections, resolvedArticleImage: resolveDisplayImage, sectionRelevanceBucket, weeklyTopicTags } = require('./article-display');
 const { loreThreadUrl } = require('../../shared/common/article-groups');
 const { isFallbackImagePath } = require('../../shared/render/image-candidates');
 const {
@@ -22,9 +22,7 @@ const {
   DEFAULT_STORY_CONTRACT_VERSION,
   usesBodyMarkdown
 } = require('../../shared/common/story-contract-version');
-const {
-  uniqueArticleAnchorId
-} = require('../reporter/article-anchor');
+
 const {
   SITE_BASE_URL,
   DEFAULT_OG_IMAGE
@@ -79,35 +77,12 @@ function paragraphHtml(value) {
   return `<p>${escapeHtml(value || '')}</p>`;
 }
 
-function publicVisualLabel(value) {
-  return String(value || 'Article visual')
-    .replace(/\bFallback\b/gi, 'Tooling Watch')
-    .replace(/cpp_ai_tooling_fallback/gi, 'Tooling Watch')
-    .replace(/\s*\/\s*Tooling Watch\s*$/i, ' / Tooling Watch')
-    .trim() || 'Article visual';
-}
-
 function httpsUrlOrFallback(value, fallback) {
   return /^https:\/\//i.test(String(value || '').trim()) ? String(value).trim() : fallback;
 }
 
-function localizedImagePath(value) {
-  return locale === 'en' && /^\.\.\/\.\.\//.test(value) ? `../${value}` : value;
-}
-
 function resolvedArticleImage(section) {
-  const resolved = section.resolvedImage && (section.resolvedImage.url || section.resolvedImage.src) ? section.resolvedImage : null;
-  if (resolved) {
-    return {
-      ...resolved,
-      src: localizedImagePath(resolved.url || resolved.src)
-    };
-  }
-  if (!section.selectedImage) return null;
-  return {
-    src: localizedImagePath(section.selectedImage),
-    usedFallback: false
-  };
+  return resolveDisplayImage(section, locale);
 }
 
 function articleImageSource(section) {
@@ -139,7 +114,7 @@ function articleImageMarkdown(section, publicArticle = null) {
   if (!image || !image.src) return '';
   const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
   if (isFallbackImagePath(image.src)) {
-    return `\n![${alt}](${image.src})\n`;
+    return `\n![](${image.src})\n`;
   }
   const attribution = section.imageAttribution || section.sources?.[0]?.title || t.sourceArticle;
   const source = articleImageSource(section);
@@ -150,9 +125,10 @@ function articleMediaHtml(section, publicArticle = null) {
   const image = resolvedArticleImage(section);
   if (image && image.src) {
     const alt = section.imageAlt || `${publicArticle?.headline || section.headline || 'Article'} image`;
+    const fallback = isFallbackImagePath(image.src);
     const imageHtml = `<img class="article-image" src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`;
-    if (isFallbackImagePath(image.src)) {
-      return `<figure class="article-media">
+    if (fallback) {
+      return `<figure class="article-media article-media-decoration" aria-hidden="true">
             ${imageHtml}
           </figure>`;
     }
@@ -164,34 +140,12 @@ function articleMediaHtml(section, publicArticle = null) {
           </figure>`;
   }
 
-  // placeholder 는 패턴 하나다(DESIGN.md). 기사 종류별 variant 클래스는 붙이지 않는다 —
-  // article_type·category 는 LLM 자유 텍스트라 클래스 어휘가 닫히지 않고, 스타일 차이도 없었다.
-  // 과거 호의 category는 한국어 자유 텍스트("주간 다이제스트")일 수 있어, 한국어가 아닌 페이지는
-  // 눈썹 라벨과 같은 locale 표로 읽는다.
-  const visualLabel = locale === 'ko' ? publicVisualLabel(section.category) : articleCategoryLabel(section);
-  return `<div class="article-media article-placeholder-visual" role="img" aria-label="${escapeHtml(visualLabel)}">
-            <span></span>
-          </div>`;
+  return '';
 }
 
 function issueCameraAnchorCount(issue) {
   const parsed = Number(issue?.camera_anchor_count);
   return Number.isFinite(parsed) ? parsed : null;
-}
-
-function sectionRelevanceBucket(section = {}) {
-  return String(
-    section.final_relevance_bucket ||
-    section.bound_candidate?.relevance_bucket ||
-    section.public_article?.bound_candidate?.relevance_bucket ||
-    section.final_candidate?.relevance_bucket ||
-    section.relevance_bucket ||
-    section.aosp_camera_stack_bucket ||
-    section.aospCameraStackBucket ||
-    section.categoryBucket ||
-    section.source_candidate?.relevance_bucket ||
-    ''
-  ).trim();
 }
 
 function articlePerspectiveLabel(issue, section) {
@@ -225,75 +179,6 @@ function articleCategoryLabel(section = {}) {
 // generic_tech_watchlist 는 topic 이 아니라 편집 상태 마커라 비워 둔다.
 // android bucket 의 SoC Platform 과 cpp_ai_tooling_fallback bucket 의 C++/AI 는 bucket 하나로
 // 정해지지 않아 articleTopicTags 가 기사 자신의 필드로 가른다.
-const BUCKET_TOPIC_TAGS = {
-  direct_aosp_camera: ['Camera HAL'],
-  camera_driver_image_pipeline: ['Driver', 'Image Processing'],
-  android: ['Android'],
-  generic_tech_watchlist: []
-};
-
-// 드라이버 기사의 주제가 SoC 에 통합된 카메라 블록인지 가르는 제목 어휘. 외부 센서 드라이버(Sony IMX,
-// Himax, onsemi 등)는 Driver 로만 두고, SoC 카메라 서브시스템·ISP 블록이나 SoC 플랫폼 카메라 지원이면
-// SoC Platform 을 함께 붙인다(#1250 CAMSS 사례). 공개 주제 태그 전용이다. 수집 분류의
-// counts_as_soc_topic 과 구성 게이트(counts.soc)는 바꾸지 않으므로 선정·발행 구성에는 영향이 없다.
-// Samsung·Sony 처럼 센서도 만드는 회사 이름은 넣지 않는다(S5KJN5 같은 센서 기사가 걸린다).
-const SOC_CAMERA_BLOCK_TITLE_PATTERNS = [
-  /\bSoC\b/i,
-  /\bcamss\b/i,
-  /\brkisp\d*\b/i,
-  /\batomisp\b/i,
-  /\bmtk[-_]?(?:isp|cam)\b/i,
-  /\bipu[367]\b/i,
-  /\bMali[-\s]?C\d{2}\b/i,
-  // \uD50C\uB7AB\uD3FC 은 한국어 제목의 '플랫폼'이다(렌더러 소스에는 한국어 리터럴을 두지 않는다).
-  /\b(?:Qualcomm|MediaTek|Rockchip|Renesas|Snapdragon|Exynos)\b[^.\n]{0,60}(?:platform|\uD50C\uB7AB\uD3FC)/i
-];
-
-// watchlist 로 남은 옛 Tooling Watch 기사 중 제목이 C++ 언어·툴체인을 다루는 것(GCC 16, C++26 등).
-// 본문의 지나가는 언급이 아니라 제목, 곧 기사 주제로만 판정한다.
-const CPP_TITLE_PATTERNS = [
-  /\bC\+\+/i,
-  /\blibc\+\+/i,
-  /\bGCC\b/i,
-  /\bLLVM\b/i,
-  /\bClang\b/i
-];
-
-function sectionTitle(section) {
-  return String(section.headline || section.title || '');
-}
-
-function titleMatches(section, patterns) {
-  const title = sectionTitle(section);
-  return patterns.some(pattern => pattern.test(title));
-}
-
-// 기사 한 건이 얻는 주제 태그. 기사에 근거가 없는 주제는 붙이지 않는다.
-//  - android bucket 은 SoC 플랫폼 기사(counts_as_soc_topic)면 SoC Platform, 아니면 Android.
-//  - cpp_ai_tooling_fallback bucket 은 C++ 도구와 AI 도구를 함께 담는다. 편집 단계가 채우는
-//    is_ai_related 가 false 면 C++, 그 밖에는(true 이거나 이 필드가 없던 옛 기사) AI.
-//  - camera_driver_image_pipeline bucket 은 제목이 SoC 카메라 블록을 다루면 SoC Platform 을 더한다.
-//  - generic_tech_watchlist bucket 은 AI 기사가 아니고 제목이 C++ 언어·툴체인을 다루면 C++.
-function articleTopicTags(section) {
-  const bucket = canonicalBucket(sectionRelevanceBucket(section));
-  if (bucket === 'android' && section.counts_as_soc_topic === true) return ['SoC Platform'];
-  if (bucket === 'cpp_ai_tooling_fallback') return section.is_ai_related === false ? ['C++'] : ['AI'];
-  if (bucket === 'camera_driver_image_pipeline' && titleMatches(section, SOC_CAMERA_BLOCK_TITLE_PATTERNS)) {
-    return [...BUCKET_TOPIC_TAGS[bucket], 'SoC Platform'];
-  }
-  if (bucket === 'generic_tech_watchlist' && section.is_ai_related !== true && titleMatches(section, CPP_TITLE_PATTERNS)) {
-    return ['C++'];
-  }
-  return BUCKET_TOPIC_TAGS[bucket] || [];
-}
-
-// 그 주 기사(section)들의 주제를 archive/home 카드 topic 태그로 집계한다. lead 기사 topic 을 앞에
-// 두어 카드 kicker(tags[0]) 로 삼고, 중복은 제거한다. 이슈 레벨 editor.tags 에 의존하지 않고 기사에
-// 근거가 있는 주제만 싣기 때문에, 해당 기사가 없는 주간호는 그 주제 필터에서 빠진다.
-function weeklyTopicTags(sections = []) {
-  return [...new Set(ensureArray(sections).flatMap(articleTopicTags))];
-}
-
 function issueTags(issue) {
   const tags = ensureArray(issue.tags).length > 0 ? issue.tags : ['Camera HAL', 'Android'];
   if (issue?.publication_mode !== PUBLICATION_MODES.FALLBACK_PUBLIC && issue?.fallback_only !== true) return tags;
@@ -562,26 +447,15 @@ function catchUpWeeksLabel(section) {
 // 다시 정렬하면 그 뒤 바뀐 우선순위 규칙으로 과거 호의 순서가 바뀐다(2026-W19~W28 중 8개 호에서
 // 실측). 발행 시점에는 같은 규칙으로 이미 정렬된 입력이라 새 호의 출력은 달라지지 않는다.
 function normalizedSections(issue) {
-  const usedAnchors = new Set();
-  const ordered = ensureArray(issue.sections)
-    .map((section, originalIndex) => ({ section, originalIndex }))
-    .sort((a, b) => {
-      if (issue.weekly_key) return a.originalIndex - b.originalIndex;
-      const aCatch = a.section.coverage_type === 'catch_up' ? 1 : 0;
-      const bCatch = b.section.coverage_type === 'catch_up' ? 1 : 0;
-      return aCatch - bCatch || compareEditorialPriority(a.section, b.section) || a.originalIndex - b.originalIndex;
-    });
-  return ordered.map(({ section }, index) => {
-    const publicArticle = publicArticleForSection(section, { issue });
-    const category = publicArticle.headline || `Main Article ${index + 1}`;
+  return orderedArticleSections(issue).map(({ section, category, anchorId, articleNumber }) => {
     const isCatchUp = section.coverage_type === 'catch_up';
     const badge = isCatchUp ? catchUpWeeksLabel(section) : '';
     return {
-      heading: `## ${index + 2}. ${category}${badge}`,
-      htmlHeading: `${index + 2}. ${category}${badge}`,
+      heading: `## ${articleNumber + 1}. ${category}${badge}`,
+      htmlHeading: `${articleNumber + 1}. ${category}${badge}`,
       headingCategory: category,
-      anchorId: uniqueArticleAnchorId(category, index, usedAnchors),
-      articleNumber: index + 1,
+      anchorId,
+      articleNumber,
       isCatchUp,
       section
     };
@@ -590,30 +464,31 @@ function normalizedSections(issue) {
 
 const CATCH_UP_DIVIDER_HEADING = t.catchUp;
 
-function sectionsMarkdownWithCatchUpDivider(issue) {
+function sectionsMarkdownWithCatchUpDivider(issue, brief) {
   let dividerEmitted = false;
   return normalizedSections(issue)
-    .map(({ heading, section, isCatchUp }) => {
+    .map(({ heading, section, isCatchUp, anchorId }) => {
       let prefix = '';
       if (isCatchUp && !dividerEmitted) {
         prefix = `## ${CATCH_UP_DIVIDER_HEADING}\n\n`;
         dividerEmitted = true;
       }
-      return prefix + publicArticleMarkdown(issue, heading, section);
+      return prefix + `<a id="${anchorId}"></a>\n\n` + publicArticleMarkdown(issue, heading, section, brief);
     })
     .join('\n---\n\n');
 }
 
-function sectionsHtmlWithCatchUpDivider(issue) {
+function sectionsHtmlWithCatchUpDivider(issue, brief) {
   let dividerEmitted = false;
-  return normalizedSections(issue)
-    .map(({ htmlHeading, headingCategory, anchorId, articleNumber, section, isCatchUp }) => {
+  const rows = normalizedSections(issue);
+  return rows
+    .map(({ htmlHeading, headingCategory, anchorId, articleNumber, section, isCatchUp }, index) => {
       let prefix = '';
       if (isCatchUp && !dividerEmitted) {
         prefix = `      <h2 class="catch-up-divider">${escapeHtml(CATCH_UP_DIVIDER_HEADING)}</h2>\n`;
         dividerEmitted = true;
       }
-      return prefix + publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section);
+      return prefix + publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section, rows[index - 1], rows[index + 1], brief);
     })
     .join('\n\n');
 }
@@ -761,7 +636,7 @@ function articleBodyMarkdown(publicArticle, storyContractVersion) {
   return paragraphs.join('\n\n');
 }
 
-function publicArticleMarkdown(issue, heading, section) {
+function publicArticleMarkdown(issue, heading, section, brief) {
   const storyContractVersion = storyContractRenderVersion(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
   assertRenderableBody(publicArticle, storyContractVersion);
@@ -769,17 +644,19 @@ function publicArticleMarkdown(issue, heading, section) {
   const sourceSubtitle = publicArticle.source_subtitle
     ? `_${publicArticle.source_subtitle}_\n\n`
     : '';
+  const [lead, meaning] = summaryProse(publicArticle.headline, publicArticle.lead, publicArticle.camera_hal_takeaway);
+  const takeaway = meaning
+    ? `### ${perspectiveHeading}\n\n${meaning}\n\n`
+    : '';
   return `${heading}
 
-${articleImageMarkdown(section, publicArticle)}
+${sourceSubtitle}${lead}
 
-${sourceSubtitle}${publicArticle.lead}
+${takeaway}${articleImageMarkdown(section, publicArticle)}
 
 ${articleBodyMarkdown(publicArticle, storyContractVersion)}
 
-### ${perspectiveHeading}
-
-${publicArticle.camera_hal_takeaway}
+[${brief ? t.backToHighlights : t.backToContents}](#${brief ? 'issue-briefing' : 'issue-contents'})
 
 **${t.source}**
 
@@ -897,17 +774,18 @@ function referenceArticlesHtml(issue) {
 }
 
 function buildPublicMarkdown(issue) {
+  const brief = readerBriefForIssue(issue);
   return `# ${issue.title}
 
-${issue.summary}
+${brief ? '' : issue.summary}
 
 ${publicationNoticeMarkdown(issue)}
 
-## 1. ${briefingHeading(issue)}
+${brief ? readerBriefMarkdown(brief) : ''}
 
-${bulletsMarkdown(issue.briefing)}
+${brief ? '' : `## 1. ${briefingHeading(issue)}\n\n${bulletsMarkdown(issue.briefing)}\n${contentsMarkdown(issue)}`}
 ${contextLensLabelMarkdown(issue)}
-${sectionsMarkdownWithCatchUpDivider(issue)}
+${sectionsMarkdownWithCatchUpDivider(issue, brief)}
 
 ${watchPointsMarkdown(issue)}${referenceArticlesMarkdown(issue)}## ${t.references}
 
@@ -915,9 +793,8 @@ ${sourceListMarkdown(issue.references)}
 `;
 }
 
-// mockup 기사 흐름: [번호+카테고리 눈썹] → 제목 → 출처 서브타이틀 → 이미지 → 리드 → 본문 →
-// 관점 박스 → 출처. 카드 프레임 없이 섹션 자체가 hairline 으로 구분된다.
-function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section) {
+// Public lead and takeaway precede media and detailed evidence. No internal QA fields are shown.
+function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articleNumber, section, previous, next, brief) {
   const storyContractVersion = storyContractRenderVersion(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
   assertRenderableBody(publicArticle, storyContractVersion);
@@ -927,6 +804,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
     ? `        <p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>`
     : '';
   const displayNumber = String(articleNumber).padStart(2, '0');
+  const [lead, meaning] = summaryProse(publicArticle.headline, publicArticle.lead, publicArticle.camera_hal_takeaway);
   const mediaHtml = articleMediaHtml(section, publicArticle)
     .split('\n')
     .map(line => `        ${line.trimStart()}`)
@@ -939,8 +817,9 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
     ).map(paragraph => `        ${paragraphHtml(paragraph)}`);
   const articleBodyBlocks = [
     sourceSubtitle,
+    lead ? `        <p class="article-lead">${escapeHtml(lead)}</p>` : '',
+    meaning ? `        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(meaning)}</div>` : '',
     mediaHtml,
-    `        <p class="article-lead">${escapeHtml(publicArticle.lead)}</p>`,
     ...bodyBlocksHtml
   ].filter(Boolean).join('\n');
   const articleTypeClass = storyV2 || isStoryArticle(publicArticle) ? ' story-article' : '';
@@ -949,21 +828,25 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
   const articleTagsBlock = articleTags ? `\n        ${articleTags}` : '';
   // 클래스는 결정론 훅만 붙인다. article_type(LLM 자유 텍스트)을 클래스로 찍으면
   // "Android Camera / Platform API" 처럼 공백·슬래시가 든 값이 class 속성에 그대로 들어간다.
-  return `      <section class="section issue-story issue-section article-card${articleTypeClass} ${articleImageClass}" id="${escapeHtml(anchorId)}" aria-labelledby="${escapeHtml(anchorId)}-title">
+  return `      <section class="section issue-story issue-section article-card${articleTypeClass} ${articleImageClass}" id="${escapeHtml(anchorId)}" tabindex="-1" aria-labelledby="${escapeHtml(anchorId)}-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article ${escapeHtml(articleNumber)}">${escapeHtml(displayNumber)}</span>
           <span class="issue-story-category">${escapeHtml(articleCategoryLabel(section))}</span>
         </div>
         <h2 id="${escapeHtml(anchorId)}-title" class="article-title">${escapeHtml(publicArticle.headline || htmlHeading)}</h2>${articleTagsBlock}
 ${articleBodyBlocks}
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">${escapeHtml(perspectiveHeading)}</strong>${paragraphHtml(publicArticle.camera_hal_takeaway)}</div>
         <div class="source-list"><strong>${t.source}</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
+        <nav class="article-navigation" aria-label="${escapeHtml(t.articleNavigation)}">
+          ${previous ? `<a href="#${escapeHtml(previous.anchorId)}" aria-label="${escapeHtml(`${t.previousArticle}: ${previous.headingCategory}`)}">← ${t.previousArticle}</a>` : ''}
+          <a href="#${brief ? 'issue-briefing' : 'issue-contents'}">${brief ? t.backToHighlights : t.backToContents}</a>
+          ${next ? `<a href="#${escapeHtml(next.anchorId)}" aria-label="${escapeHtml(`${t.nextArticle}: ${next.headingCategory}`)}">${t.nextArticle} →</a>` : ''}
+        </nav>
       </section>`;
 }
 
 // 표시 계약 v2: iso_week variant일 때만 h1 아래 "발행 WNN" 보조 배지를 붙인다(대상 주 제목과
 // 발행 주가 갈릴 때 두 identity를 함께 보여줘 아카이브 카드-이슈 페이지 표시가 어긋나지 않게 한다).
-function issueHeroHtml(issue) {
+function issueHeroHtml(issue, brief) {
   const publishedWeekBadge = issuePublishedWeekBadgeText(issue);
   const publishedWeekBadgeHtml = publishedWeekBadge
     ? `\n        <p class="issue-publish-badge">${escapeHtml(publishedWeekBadge)}</p>`
@@ -974,17 +857,86 @@ function issueHeroHtml(issue) {
           <span class="issue-kicker">${escapeHtml(issueKickerText(issue))}</span>
         </div>
         <h1 class="issue-title">${issueTitleHtml(issue)}</h1>${publishedWeekBadgeHtml}
-        <p class="subtitle">${escapeHtml(issue.summary)}</p>
+        ${brief ? '' : `<p class="subtitle">${escapeHtml(issue.summary)}</p>`}
         <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
       </header>`;
 }
 
-function issueBriefingHtml(issue) {
-  return `<section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+function readerBriefForIssue(issue) {
+  if (!issue.weekly_key) return null;
+  // #1276 owns this builder; both body and index consume the same final public projection.
+  const { buildReaderBrief } = require('./reader-brief');
+  const issueHref = `${locale === 'en' ? 'en/' : ''}newsletters/${issue.weekly_key}/index.html`;
+  const brief = buildReaderBrief(issue, { locale, issueHref });
+  if (brief?.schema_version !== 1 || brief.locale !== locale || typeof brief.intro !== 'string' ||
+    !Array.isArray(brief.items) || brief.items.length !== ensureArray(issue.sections).length || brief.items.some(item => !item ||
+      !['id', 'href', 'headline', 'lead', 'takeaway'].every(key => typeof item[key] === 'string') ||
+      !Array.isArray(item.tags) || item.tags.some(tag => typeof tag !== 'string') ||
+      (item.image !== null && (!item.image || typeof item.image.src !== 'string' ||
+        typeof item.image.alt !== 'string' || typeof item.image.is_fallback !== 'boolean')) ||
+      !item.href.startsWith(`${issueHref}#`))) {
+    console.warn('newsletter-renderer: invalid reader_brief; using legacy briefing');
+    return null;
+  }
+  return brief;
+}
+
+// 과거 호에서 제목과 요약이 완전히 같으면 화면에서만 반복을 생략합니다.
+// 공유 projection과 원래 공개 문장은 수정하지 않습니다.
+function summaryProse(headline, lead, takeaway) {
+  const seen = new Set([String(headline || '').trim()]);
+  return [lead, takeaway].map(value => {
+    const text = String(value || '');
+    if (!text.trim() || seen.has(text.trim())) return '';
+    seen.add(text.trim());
+    return text;
+  });
+}
+
+function readerBriefHtml(brief) {
+  return `${brief.intro ? `<p class="reader-brief-intro">${escapeHtml(brief.intro)}</p>` : ''}
+          <ol class="reader-brief-items">${brief.items.map(item => {
+    const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
+    return `<li>
+            <a href="#${escapeHtml(item.href.split('#')[1])}">${escapeHtml(item.headline)}</a>
+            ${meaning ? `<p class="reader-brief-takeaway">${escapeHtml(meaning)}</p>` : lead ? paragraphHtml(lead) : ''}
+          </li>`;
+  }).join('')}</ol>`;
+}
+
+function readerBriefMarkdown(brief) {
+  return `<a id="issue-briefing"></a>\n\n## 1. ${t.weeklyCore}\n\n${brief.intro}\n\n` + brief.items.map(item => {
+    const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
+    return `- [${escapeMarkdownLinkText(item.headline)}](#${item.href.split('#')[1]})\n${meaning || lead ? `\n  ${meaning || lead}\n` : ''}`;
+  }).join('\n');
+}
+
+function contentsMarkdown(issue) {
+  const rows = normalizedSections(issue);
+  if (!rows.length) return '';
+  return `<a id="issue-contents"></a>\n\n## ${t.contents}\n\n` + rows.map(row =>
+    `- [${escapeMarkdownLinkText(row.headingCategory)}](#${row.anchorId})`
+  ).join('\n');
+}
+
+function contentsHtml(issue) {
+  const rows = normalizedSections(issue);
+  if (!rows.length) return '';
+  return `<nav class="issue-contents" id="issue-contents" tabindex="-1" aria-labelledby="issue-contents-title">
+          <details${issue.weekly_key ? '' : ' open'}>
+          <summary id="issue-contents-title">${t.contents}</summary>
+          <ol>${rows.map(row => `<li><a href="#${escapeHtml(row.anchorId)}">${escapeHtml(row.headingCategory)}</a></li>`).join('')}</ol>
+          </details>
+        </nav>`;
+}
+
+function issueBriefingHtml(issue, brief) {
+  return `<section class="section issue-briefing"${brief ? ' id="issue-briefing" tabindex="-1"' : ''} aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
-          <h2 id="issue-briefing-title">${briefingHeadingHtml(issue)}</h2>
-          <ul>${bulletsHtml(issue.briefing)}</ul>
+          <h2 id="issue-briefing-title">${brief ? t.weeklyCore : briefingHeadingHtml(issue)}</h2>
+          ${brief ? readerBriefHtml(brief) : `<ul>${bulletsHtml(issue.briefing)}</ul>`}
         </div>
+        ${brief ? '' : contentsHtml(issue)}
       </section>`;
 }
 
@@ -1025,6 +977,7 @@ function articleSeoHead(issue = {}) {
 }
 
 function buildPublicHtml(issue) {
+  const brief = readerBriefForIssue(issue);
   const publicationNotice = publicationNoticeHtml(issue);
   const publicationNoticeBlock = publicationNotice ? `      ${publicationNotice}\n\n` : '';
   const rootPath = locale === 'ko' ? '../../' : '../../../';
@@ -1045,11 +998,11 @@ ${articleSeoHead(issue)}
 
   <main class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
-      ${issueHeroHtml(issue)}
+      ${issueHeroHtml(issue, brief)}
 
-${publicationNoticeBlock}      ${issueBriefingHtml(issue)}
+${publicationNoticeBlock}      ${issueBriefingHtml(issue, brief)}
 ${contextLensLabelHtml(issue)}
-${sectionsHtmlWithCatchUpDivider(issue)}
+${sectionsHtmlWithCatchUpDivider(issue, brief)}
 ${watchPointsHtml(issue)}${referenceArticlesHtml(issue)}
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">${t.references}</h2>

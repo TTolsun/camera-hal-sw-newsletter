@@ -12,7 +12,7 @@ const {
 } = require('../../../render/weekly-newsletter-output');
 const { buildWeeklyNewsletterPage } = require('../../../render/weekly-newsletter-page');
 const { buildHtml } = require('../../../render/newsletter-renderer');
-const { translationSourceHash } = require('../../../render/apply-translation');
+const { translationSourceHash, sectionKey } = require('../../../render/apply-translation');
 
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'weekly-output-'));
@@ -78,11 +78,10 @@ test('weekly tags derive archive topics and kicker from article relevance bucket
   const ai = { ...section('ai', 'https://example.com/ai'), relevance_bucket: 'cpp_ai_tooling_fallback' };
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([driver, ai]) });
 
-  // 위클리 tags 는 이슈 기본값이 아니라 그 주 기사 버킷에서 나온다: lead(camera_driver) topic 이
-  // 맨 앞이라 카드 kicker 가 되고, AI 도 채워진다. Camera HAL·Android 기사가 없으니 그 태그는 없다.
+  // 최종 페이지 순서의 첫 기사(AI)가 kicker를 정한다. 초안 배열 순서가 정본이 아니다.
   const issue = readIssue(root, '2026-W23');
-  assert.deepEqual(issue.tags, ['Driver', 'Image Processing', 'AI']);
-  assert.equal(issue.tags[0], 'Driver');
+  assert.deepEqual(issue.tags, ['AI', 'Driver', 'Image Processing']);
+  assert.equal(issue.tags[0], 'AI');
 });
 
 test('weekly tags use the per-article flags that the editor stage writes, in issue.json and in the index', async () => {
@@ -142,6 +141,33 @@ test('weekly regeneration invalidates a translation bound to the previous issue 
   assert.ok(result.files.includes('articles/newsletters/2026-W23/translation.en.json'));
   assert.equal(fs.existsSync(path.join(dir, 'translation.en.json')), false);
   assert.equal(JSON.parse(fs.readFileSync(indexPath, 'utf8'))[0].en, undefined);
+});
+
+test('unchanged weekly upsert refreshes the English projection only from a valid translation overlay', async () => {
+  const root = tempRoot();
+  const editor = draft([section('1.7.0', 'https://example.com/a')]);
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor });
+  const dir = path.join(root, 'articles/newsletters/2026-W23');
+  const sourceText = fs.readFileSync(path.join(dir, 'issue.json'), 'utf8');
+  const issue = JSON.parse(sourceText);
+  const overlay = { schemaVersion: 1, weekly_key: '2026-W23', source_hash: translationSourceHash(sourceText),
+    title: 'Weekly camera news', summary: 'A compatibility change and its scope.', watch_points: [], reference_articles: [],
+    sections: issue.sections.map(article => ({ id: sectionKey(article), headline: 'Camera compatibility change',
+      lead: 'CameraX 1.7.0 provides a compatibility signal.', body_markdown: 'Public evidence.', why_it_matters: 'Review compatibility.' })) };
+  fs.writeFileSync(path.join(dir, 'translation.en.json'), JSON.stringify(overlay), 'utf8');
+  const indexPath = path.join(root, 'articles/data/newsletters-weekly.json');
+  const index = readWeeklyIndexFile(root);
+  index[0].en = { title: '2026 W23', summary: overlay.sections[0].headline,
+    html: 'en/newsletters/2026-W23/index.html', md: 'en/newsletters/2026-W23/newsletter.md' };
+  fs.writeFileSync(indexPath, JSON.stringify(index), 'utf8');
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor });
+  const refreshed = readWeeklyIndexFile(root)[0];
+  assert.equal(refreshed.en.reader_brief.locale, 'en');
+  assert.equal(refreshed.en.reader_brief.intro, overlay.summary);
+  assert.equal(refreshed.en.reader_brief.items[0].headline, overlay.sections[0].headline);
+  assert.equal(refreshed.en.reader_brief.items[0].href, 'en/newsletters/2026-W23/index.html#article-camera-compatibility-change');
+  assert.equal(refreshed.reader_brief.locale, 'ko');
+  assert.equal(fs.readFileSync(path.join(dir, 'translation.en.json'), 'utf8'), JSON.stringify(overlay));
 });
 
 test('publishing a weekly issue regenerates sitemap.xml with the issue URL', async () => {
@@ -384,6 +410,88 @@ test('article_images stays empty when sections have neither https nor fallback-a
   assert.deepEqual(readWeeklyIndexFile(root)[0].article_images, []);
 });
 
+// 홈 카드 제목은 첫 기사의 제목이므로, 첫 기사가 fallback이면 다른 기사의 실제 이미지를 대표로 삼지 않는다
+// (2026-W42: AOSP 제목에 Haiku 이미지가 붙음, #1275).
+test('lead_article_image is the first article image even when a later article has a real image', async () => {
+  const root = tempRoot();
+  const laterImage = 'https://publisher.example.com/images/later.png';
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: draft([
+      fallbackImageSection('1.7.0', 'https://example.com/a'),
+      repairedImageSection('1.8.0', 'https://example.com/b', laterImage)
+    ])
+  });
+
+  const [entry] = readWeeklyIndexFile(root);
+  assert.equal(entry.summary.split('\n')[0], 'CameraX 1.7.0');
+  assert.equal(entry.lead_article_image, 'assets/images/fallback/android.svg');
+  assert.deepEqual(entry.article_images, [laterImage]);
+});
+
+test('lead_article_image is the first article https image when it has one', async () => {
+  const root = tempRoot();
+  const leadImage = 'https://publisher.example.com/images/lead.png';
+  await writeWeeklyNewsletterArtifacts({
+    root,
+    date: '2026-06-04',
+    editor: draft([
+      repairedImageSection('1.7.0', 'https://example.com/a', leadImage),
+      fallbackImageSection('1.8.0', 'https://example.com/b')
+    ])
+  });
+
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, leadImage);
+});
+
+test('lead_article_image is empty when the first article has neither an https nor a fallback-asset image', async () => {
+  const root = tempRoot();
+  const local = {
+    ...section('1.7.0', 'https://example.com/a'),
+    selectedImage: '',
+    resolvedImage: { url: '../../some/other/local.png', src: '../../some/other/local.png', usedFallback: true }
+  };
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([local]) });
+
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, '');
+});
+
+test('syncWeeklyArticleImages updates lead_article_image when the first article image is repaired', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  const imageUrl = 'https://publisher.example.com/images/camera-card.png';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]) });
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, 'assets/images/fallback/android.svg');
+
+  const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repairedImageSection('1.7.0', url, imageUrl)] });
+
+  assert.equal(result.articleImagesUpdated, true);
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, imageUrl);
+});
+
+// issue는 이미 수리됐는데 index만 낡은 상태(index 쓰기 전에 중단)라면, 고칠 섹션이 없어도 다음 동기화가
+// 현재 issue 섹션에서 다시 계산해 index를 맞춘다.
+test('syncWeeklyArticleImages repairs a stale lead_article_image even when no section needs patching', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  const imageUrl = 'https://publisher.example.com/images/camera-card.png';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([fallbackImageSection('1.7.0', url)]) });
+  const repaired = repairedImageSection('1.7.0', url, imageUrl);
+  syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
+
+  const indexPath = path.join(root, 'articles', 'data', 'newsletters-weekly.json');
+  const index = readWeeklyIndexFile(root);
+  index[0].lead_article_image = 'assets/images/fallback/android.svg';
+  fs.writeFileSync(indexPath, `${JSON.stringify(index, null, 2)}\n`, 'utf8');
+
+  const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
+
+  assert.equal(result.patchedSectionCount, 0);
+  assert.equal(result.articleImagesUpdated, true);
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, imageUrl);
+});
+
 test('syncWeeklyArticleImages patches the matching weekly section, rewrites weekly artifacts, and updates article_images', async () => {
   const root = tempRoot();
   const url = 'https://example.com/camerax-release';
@@ -522,7 +630,7 @@ function headlineOverriddenSection(base, headline, lead) {
 }
 
 const SINGLE_ARTICLE_LETTER =
-  '이번 주에는 CameraX 1.7.0 소식을 정리했습니다. 실무에서 확인할 포인트를 함께 담았습니다.';
+  'CameraX 1.7.0는 호환성 확인 신호를 제공합니다. 검증 트리거로 다룹니다.';
 
 test('게이트를 통과한 intro_letter가 issue.summary로 채택되고 briefing은 제목 목록 그대로다', async () => {
   const root = tempRoot();
@@ -538,6 +646,12 @@ test('게이트를 통과한 intro_letter가 issue.summary로 채택되고 brief
   assert.equal(issue.intro_letter, SINGLE_ARTICLE_LETTER);
   assert.equal(issue.summary, SINGLE_ARTICLE_LETTER);
   assert.deepEqual(issue.briefing, ['CameraX 1.7.0']);
+  assert.match(issue.intro_letter_source_hash, /^sha256:[a-f0-9]{64}$/);
+  const entry = readWeeklyIndexFile(root)[0];
+  assert.equal(entry.summary, 'CameraX 1.7.0');
+  assert.equal(entry.reader_brief.intro, SINGLE_ARTICLE_LETTER);
+  assert.equal(entry.reader_brief.items[0].lead, issue.sections[0].public_article.lead);
+  assert.equal(issue.reader_brief, undefined, 'projection is not duplicated into issue.json');
 });
 
 test('같은 주 재-upsert에서 저장된 레터가 게이트를 통과하면 생성 없이 바이트 동일하게 재사용한다', async () => {
@@ -578,7 +692,7 @@ test('기사 추가 드리프트로 저장 레터가 게이트에 실패하면 �
     'SM8750 ISP 드라이버 패치 시리즈가 리뷰에 올라왔습니다.'
   );
   const regeneratedLetter =
-    'CameraX 1.7.0 소식과 함께 SM8750 ISP 드라이버 패치 소식을 정리했습니다. 실무에서 확인할 포인트도 담았습니다.';
+    'CameraX 1.7.0는 호환성 확인 신호를 제공합니다. SM8750 ISP 드라이버 패치 시리즈가 리뷰에 올라왔습니다.';
   const rerun = await writeWeeklyNewsletterArtifacts({
     root,
     date: '2026-06-04',
@@ -605,8 +719,94 @@ test('레터 생성이 게이트에 계속 실패하면 intro_letter 없이 기�
   assert.ok(result.introLetterReason.length > 0);
   const issue = readIssue(root, '2026-W23');
   assert.equal(issue.intro_letter, undefined);
+  assert.equal(issue.intro_letter_source_hash, undefined);
   assert.equal(issue.summary, '이번 주에는 ‘CameraX 1.7.0’ 소식을 다룹니다.');
   assert.deepEqual(issue.briefing, ['CameraX 1.7.0']);
+});
+
+test('image repair refreshes the same reader item without invalidating its prose fingerprint', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04',
+    editor: draft([fallbackImageSection('1.7.0', url)]), generateIntroLetter: async () => SINGLE_ARTICLE_LETTER });
+  const before = readIssue(root, '2026-W23');
+  const originalItem = readWeeklyIndexFile(root)[0].reader_brief.items[0];
+  assert.equal(originalItem.image.is_fallback, true);
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, originalItem.image.src);
+  const image = 'https://publisher.example.com/repaired.png';
+  syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repairedImageSection('1.7.0', url, image)] });
+  const after = readIssue(root, '2026-W23');
+  const item = readWeeklyIndexFile(root)[0].reader_brief.items[0];
+  assert.equal(after.intro_letter_source_hash, before.intro_letter_source_hash);
+  assert.equal(after.intro_letter, before.intro_letter);
+  assert.equal(item.image.src, image);
+  assert.equal(item.image.is_fallback, false);
+  assert.equal(readWeeklyIndexFile(root)[0].lead_article_image, image);
+  assert.deepEqual({ ...item, image: null }, { ...originalItem, image: null });
+});
+
+test('image-only repair preserves published legacy intro, summary, title, briefing and article order', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/legacy';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([
+    fallbackImageSection('1.7.0', url), section('1.8.0', 'https://example.com/second')
+  ]) });
+  const file = path.join(root, 'articles/newsletters/2026-W23/issue.json');
+  const stored = readIssue(root, '2026-W23');
+  stored.intro_letter = '이번 주에는 CameraX 변경 소식을 살펴봅니다. 공개된 근거와 조건을 함께 소개합니다.';
+  stored.summary = stored.intro_letter;
+  stored.title = '저장된 주간 제목';
+  stored.briefing = ['저장된 제목 목록'];
+  stored.sections.reverse();
+  fs.writeFileSync(file, JSON.stringify(stored), 'utf8');
+  const image = 'https://publisher.example.com/repaired.png';
+  syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repairedImageSection('1.7.0', url, image)] });
+  const repaired = readIssue(root, '2026-W23');
+  for (const key of ['intro_letter', 'summary', 'title', 'briefing']) assert.deepEqual(repaired[key], stored[key]);
+  assert.equal(repaired.intro_letter_source_hash, undefined);
+  assert.deepEqual(repaired.sections.map(section => section.source_candidate_url), stored.sections.map(section => section.source_candidate_url));
+  assert.equal(readWeeklyIndexFile(root)[0].reader_brief.intro, stored.summary);
+  assert.equal(repaired.sections.find(section => section.source_candidate_url === url).selectedImage, image);
+  const newRun = await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([]) });
+  assert.equal(newRun.introLetterStatus, 'fallback');
+  assert.equal(readIssue(root, '2026-W23').intro_letter, undefined, 'fresh upsert still requires a fingerprint');
+});
+
+test('image repair recovers only a stale reader item when issue and legacy image fields already agree', async () => {
+  const root = tempRoot();
+  const url = 'https://example.com/camerax-release';
+  const image = 'https://publisher.example.com/repaired.png';
+  const repaired = repairedImageSection('1.7.0', url, image);
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([repaired]) });
+  const index = readWeeklyIndexFile(root);
+  index[0].reader_brief.items[0].image = null;
+  fs.writeFileSync(path.join(root, 'articles/data/newsletters-weekly.json'), JSON.stringify(index), 'utf8');
+  const result = syncWeeklyArticleImages({ root, date: '2026-06-04', sections: [repaired] });
+  assert.equal(result.patchedSectionCount, 0);
+  assert.equal(result.articleImagesUpdated, true);
+  const entry = readWeeklyIndexFile(root)[0];
+  assert.equal(entry.reader_brief.items[0].image.src, image);
+  assert.equal(entry.lead_article_image, image);
+  assert.deepEqual(entry.article_images, [image]);
+});
+
+test('public body-only correction and article removal invalidate an otherwise lint-passing cached intro', async () => {
+  for (const change of ['body', 'remove']) {
+    const root = tempRoot();
+    await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/a')]),
+      generateIntroLetter: async () => SINGLE_ARTICLE_LETTER });
+    const file = path.join(root, 'articles/newsletters/2026-W23/issue.json');
+    const stored = readIssue(root, '2026-W23');
+    if (change === 'body') stored.sections[0].public_article.body_paragraphs.push('수정된 공개 근거입니다.');
+    else stored.sections = [];
+    fs.writeFileSync(file, JSON.stringify(stored), 'utf8');
+    const result = await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([]) });
+    const issue = readIssue(root, '2026-W23');
+    assert.equal(result.introLetterStatus, 'fallback');
+    assert.equal(issue.intro_letter, undefined);
+    assert.equal(issue.intro_letter_source_hash, undefined);
+    assert.equal(readWeeklyIndexFile(root)[0].reader_brief.items.length, change === 'body' ? 1 : 0);
+  }
 });
 
 // H1 회귀: editor draft가 intro_letter 키를 들고 와도(스프레드 유래) 게이트 없이 채택되면

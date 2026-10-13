@@ -156,6 +156,9 @@ test('CLI writes both matching English entries and parity passes without touchin
   const dated = readJson(path.join(root, 'articles/data/newsletters.json'))[0];
   assert.deepEqual(dated.en, weekly.en);
   assert.equal(weekly.en.html, `en/newsletters/${key}/index.html`);
+  assert.equal(weekly.en.reader_brief.locale, 'en');
+  assert.equal(weekly.en.reader_brief.intro, overlay.summary);
+  assert.equal(weekly.en.reader_brief.items[0].headline, overlay.sections[0].headline);
   assert.equal(fs.readFileSync(path.join(target.dir, 'index.html'), 'utf8'), korean);
   assert.equal(fs.readFileSync(target.sourcePath, 'utf8'), target.sourceText);
   assert.deepEqual(validateTranslationParity(root).errors, []);
@@ -179,6 +182,7 @@ test('Korean corrections invalidate stale indexes, backing files and sitemap bef
     assert.equal(fs.existsSync(path.join(root, file)), false);
   }
   assert.equal(readJson(path.join(root, 'articles/data/newsletters.json'))[0].en, undefined);
+  assert.equal(readJson(path.join(root, 'articles/data/newsletters-weekly.json'))[0].en, undefined);
   assert.doesNotMatch(fs.readFileSync(path.join(root, 'articles/sitemap.xml'), 'utf8'), /en\/newsletters\/2026-W39/);
   assert.deepEqual(validateTranslationParity(root), { errors: [], untranslated: [key] });
   assert.equal(selectTarget(root).key, key);

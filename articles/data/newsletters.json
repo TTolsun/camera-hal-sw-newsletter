@@ -13,6 +13,60 @@
     "en": {
       "title": "2026 W42",
       "summary": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled\nClaude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks\nDiscussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week, we look at AOSP's proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work.",
+        "items": [
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+            "href": "en/newsletters/2026-W42/index.html#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl",
+            "headline": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled",
+            "lead": "A patch has been proposed to AOSP to fix an issue where clients of a visible UID that supports camera mute are forcibly terminated immediately after a privacy toggle.",
+            "takeaway": "When testing privacy toggles, it is necessary to differentiate based on UID visibility and camera mute support, and verify that the connection is maintained only when conditions are met. Blocking of other clients and the UID inactive path also need to be verified.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://www.anthropic.com/claude-haiku-5-5",
+            "href": "en/newsletters/2026-W42/index.html#article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks",
+            "headline": "Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks",
+            "lead": "The need to assign all repetitive tasks, such as build error summarization or simple classification, to large models is reduced. Anthropic has announced Haiku 5.5, targeting these tasks and coding auxiliary agents.",
+            "takeaway": "Development tool managers can compare the current model with Haiku 5.5 using samples of build error log summarization and classification. The criterion for adoption is to measure whether cost and response time can be improved while maintaining accuracy and omission rates.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg",
+              "alt": "Anthropic's small AI model Claude Haiku 5.5 announced and its utilization in native development workflows",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+            "href": "en/newsletters/2026-W42/index.html#article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch",
+            "headline": "Discussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
+            "lead": "A patch series documenting the V4L2 metadata format for controlling ISP parameters of the Qualcomm CAMSS subsystem is being reviewed at v10 revision.",
+            "takeaway": "When integrating Qualcomm platform kernel drivers, it is necessary to pre-check changes to the qcom-camss-config.h uAPI structure and v4l2_isp common headers.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      },
       "html": "en/newsletters/2026-W42/index.html",
       "md": "en/newsletters/2026-W42/newsletter.md"
     }

@@ -13,16 +13,18 @@
 // (newsroom:repair-images) rewrites the daily editor draft AFTER generation. The exact-duplicate
 // reject above means a re-run cannot carry the repaired image into the weekly issue, so the repair
 // step calls syncWeeklyArticleImages to converge the weekly section image fields and the weekly
-// index article_images to the repaired daily state.
+// index article_images/lead_article_image to the repaired daily state.
 
 const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 
-const { buildWeeklyNewsletterPage } = require('./weekly-newsletter-page');
+const { buildWeeklyNewsletterPage, orderedWeeklySections } = require('./weekly-newsletter-page');
 const { weeklyTopicTags } = require('./newsletter-renderer');
 const { writeSitemap } = require('./generate-sitemap');
 const { invalidateTranslation } = require('./translation-state');
+const { buildReaderBrief } = require('./reader-brief');
+const { applyTranslation } = require('./apply-translation');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { applyWeeklyArticleLimits } = require('../reporter/weekly-article-limits');
 const { resolveWeeklyArticles, sectionIdentity } = require('../reporter/weekly-duplicate-merge');
@@ -51,8 +53,8 @@ function normalizedFallbackImagePath(section = {}) {
   return normalized.startsWith('assets/images/fallback/') ? normalized : '';
 }
 
-// Distinct https article images for the issue, in section order. The Latest card picks the first one
-// that does not match the homepage headline image (see index.html), so order/dedup are preserved.
+// Distinct https article images for the issue, in section order. 카드는 lead_article_image를 쓰고,
+// 그 필드가 없는 예전 항목만 이 목록의 첫 실제 이미지를 쓴다(newsletter-archive.js cardImage).
 // When no https image exists in the whole issue, one site-root-relative fallback asset path is
 // emitted instead so the Latest card always has an image to show.
 function weeklyArticleImages(sections = []) {
@@ -72,6 +74,15 @@ function weeklyArticleImages(sections = []) {
     }
   }
   return images;
+}
+
+// 홈 카드 제목(index summary 첫 줄 = articleTitles의 첫 항목)과 같은 기사의 최종 이미지다.
+// 그 기사가 fallback이면 fallback 경로를 그대로 둔다. article_images는 호 전체의 실제 이미지
+// 목록이라, 거기서 고르면 다른 기사의 이미지가 대표 제목에 붙는다(#1275).
+function leadArticleImage(sections = []) {
+  const lead = ensureArray(sections).find(section => section && (section.public_article?.headline || section.headline));
+  if (!lead) return '';
+  return sectionBrowserImage(lead) || normalizedFallbackImagePath(lead);
 }
 
 function loadExistingWeeklyIssue(root, weeklyKey) {
@@ -189,15 +200,17 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
     result.patchedSectionCount += 1;
   }
 
+  let currentIssue = issue;
   let currentSections = ensureArray(issue.sections);
   if (result.patchedSectionCount > 0) {
-    const page = buildWeeklyNewsletterPage(issue, { weeklyKey });
+    const page = buildWeeklyNewsletterPage(issue, { weeklyKey, preservePublishedProse: true });
     result.files.push(...invalidateTranslation(root, weeklyKey, `${JSON.stringify(page.issue, null, 2)}\n`));
     const dir = path.join(root, 'articles', 'newsletters', weeklyKey);
     fs.writeFileSync(path.join(dir, 'index.html'), page.html, 'utf8');
     fs.writeFileSync(path.join(dir, 'newsletter.md'), page.markdown, 'utf8');
     fs.writeFileSync(path.join(dir, 'issue.json'), `${JSON.stringify(page.issue, null, 2)}\n`, 'utf8');
     currentSections = ensureArray(page.issue.sections);
+    currentIssue = page.issue;
     // result.files는 changedArtifacts에 쓰이는 디스크-상대 경로(articles/ 아래)다.
     result.files.push(
       `articles/newsletters/${weeklyKey}/index.html`,
@@ -207,11 +220,16 @@ function syncWeeklyArticleImages({ root = process.cwd(), date, sections } = {}) 
   }
 
   const articleImages = weeklyArticleImages(currentSections);
+  const leadImage = leadArticleImage(currentSections);
   const dataPath = weeklyIndexPath(root);
   const index = readWeeklyIndex(dataPath);
   const entry = index.find(item => item && item.weeklyKey === weeklyKey);
-  if (entry && JSON.stringify(ensureArray(entry.article_images)) !== JSON.stringify(articleImages)) {
+  const readerBrief = buildReaderBrief(currentIssue, { issueHref: `newsletters/${weeklyKey}/index.html` });
+  if (entry && (JSON.stringify(ensureArray(entry.article_images)) !== JSON.stringify(articleImages) ||
+    entry.lead_article_image !== leadImage || JSON.stringify(entry.reader_brief) !== JSON.stringify(readerBrief))) {
     entry.article_images = articleImages;
+    entry.reader_brief = readerBrief;
+    entry.lead_article_image = leadImage;
     fs.writeFileSync(dataPath, `${JSON.stringify(index, null, 2)}\n`, 'utf8');
     result.articleImagesUpdated = true;
     result.files.push('articles/data/newsletters-weekly.json');
@@ -292,7 +310,8 @@ async function writeWeeklyNewsletterArtifacts({
     mergeDuplicate,
     validateMerged
   });
-  const { articles } = applyWeeklyArticleLimits({ existing: resolved.existingArticles, incoming: resolved.appendedArticles });
+  const limited = applyWeeklyArticleLimits({ existing: resolved.existingArticles, incoming: resolved.appendedArticles });
+  const articles = orderedWeeklySections(limited.articles);
 
   // 주간 에디터 레터(T10, #853): 최종 기사 세트(merge·dedupe·limit 이후)가 확정된 이 지점에서
   // 결정한다. 저장 레터가 현재 기사 집합의 게이트를 통과하면 바이트 동일 재사용(멱등),
@@ -302,6 +321,7 @@ async function writeWeeklyNewsletterArtifacts({
   const introLetterResolution = await resolveIntroLetter({
     articles,
     storedIntroLetter: existingIssue && existingIssue.intro_letter,
+    storedSourceHash: existingIssue && existingIssue.intro_letter_source_hash,
     generateIntroLetter
   });
   if (introLetterResolution.status === 'fallback' && introLetterResolution.reason !== 'no_generator') {
@@ -348,8 +368,10 @@ async function writeWeeklyNewsletterArtifacts({
   // fallback이면 키를 제거해 렌더러가 weeklySummaryText로 떨어진다.
   if (introLetterResolution.introLetter) {
     mergedDraft.intro_letter = introLetterResolution.introLetter;
+    mergedDraft.intro_letter_source_hash = introLetterResolution.sourceHash;
   } else {
     delete mergedDraft.intro_letter;
+    delete mergedDraft.intro_letter_source_hash;
   }
   const page = buildWeeklyNewsletterPage(mergedDraft, { date });
 
@@ -361,7 +383,14 @@ async function writeWeeklyNewsletterArtifacts({
   // 엔트리만 옛 값으로 남겨, 공개 정본과 아티팩트가 어긋난 상태로 끝난다.
   const contractVersionField = indexContractVersionField(page.weeklyKey, page.issue, weeklyIndexEntry(root, page.weeklyKey));
   const invalidatedFiles = invalidateTranslation(root, weeklyKey, `${JSON.stringify(page.issue, null, 2)}\n`);
-  const existingTranslation = weeklyIndexEntry(root, weeklyKey)?.en;
+  let existingTranslation = weeklyIndexEntry(root, weeklyKey)?.en;
+  if (existingTranslation) {
+    const sourceText = `${JSON.stringify(page.issue, null, 2)}\n`;
+    const overlay = JSON.parse(fs.readFileSync(path.join(root, 'articles/newsletters', weeklyKey, 'translation.en.json'), 'utf8'));
+    const englishIssue = applyTranslation(page.issue, overlay, { sourceText });
+    existingTranslation = { ...existingTranslation,
+      reader_brief: buildReaderBrief(englishIssue, { locale: 'en', issueHref: `en/${page.indexRoute}` }) };
+  }
 
   const dir = path.join(root, 'articles', 'newsletters', weeklyKey);
   fs.mkdirSync(dir, { recursive: true });
@@ -390,6 +419,9 @@ async function writeWeeklyNewsletterArtifacts({
     // Distinct https article images (section order) so the homepage Latest card can show one
     // article image that is not the headline image.
     article_images: weeklyArticleImages(page.issue.sections),
+    reader_brief: buildReaderBrief(page.issue, { issueHref: page.indexRoute }),
+    // 카드 대표 이미지: 카드 제목과 같은 첫 기사의 이미지(#1275).
+    lead_article_image: leadArticleImage(page.issue.sections),
     ...contractVersionField,
     // issue.json과 동일한 pass-through: 있으면 index entry에도 싣는다(홈·아카이브가 fetch하는
     // 정본은 이 index이기 때문에 여기 없으면 coverage 표시를 만들 수 없다).

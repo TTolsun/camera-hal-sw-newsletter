@@ -391,10 +391,10 @@ test('newsletter renderer does not synthesize public prose for legacy sections',
   const html = buildHtml(draft);
 
   assert.match(markdown, /## 2\. Main Article 1/);
-  assert.match(markdown, /Camera HAL\/Driver 관점에서의 의미/);
+  assert.doesNotMatch(markdown, /Camera HAL\/Driver 관점에서의 의미/);
   assert.doesNotMatch(markdown, /Internal fallback headline must not render/);
   assert.doesNotMatch(html, /Internal fallback headline must not render/);
-  assert.match(html, /camera-hal-takeaway/);
+  assert.doesNotMatch(html, /camera-hal-takeaway/);
   assert.doesNotMatch(html, /reader-checkpoints/);
   assert.doesNotMatch(markdown, /HAL Signal Capsule/);
   assert.doesNotMatch(html, /hal-signal-capsule/);
@@ -580,25 +580,14 @@ test('newsletter renderer fails when only the issue declares v2 and the section 
   assert.throws(() => buildMarkdown(partialIssue), /empty body_markdown/);
 });
 
-// v1 바이트 불변 잠금.
-//
-// v2 분기는 additive여야 한다 — v1 산출물의 바이트가 한 글자라도 달라지면 과거 호
-// 재렌더(syncWeeklyArticleImages)와 quality recompute가 조용히 달라진다. 구조 단언은
-// 그 종류의 드리프트를 못 잡으므로 산출물 전체를 해시로 잠근다.
-//
-// 픽스처 파일이 아니라 해시인 이유: 이 저장소의 fixture ledger는 use 값을
-// good/bad/linked-evidence/parser-source-html/workflow-shape로 제한해 렌더 산출물 골든이
-// 들어갈 자리가 없다. 정책을 넓히는 것은 이 변경의 범위가 아니다.
-//
-// 불일치가 나면 해시를 갱신하지 말고 먼저 원인을 보라. v1 출력이 바뀌었다면 그것이 결함이다.
-// 어느 픽스처가 어긋났는지는 실패 메시지의 키가 알려주고, 실제 문자열은 이 파일의 픽스처를
-// 그대로 써서 다시 뽑는다:
-//   node --test --test-name-pattern "byte-identical" src/generator/test/contract/newsletter-renderer.test.js
+// #1278 intentionally moves public takeaways before detail and adds navigation.
+// These hashes lock the reviewed reading layout; prose/source preservation is also checked
+// in newsletter-navigation.test.js. The helper-only PR retains the original output hashes.
 function sha256(text) {
   return crypto.createHash('sha256').update(text, 'utf8').digest('hex').slice(0, 16);
 }
 
-test('newsletter renderer keeps v1 output byte-identical', () => {
+test('newsletter renderer keeps reviewed v1 reading layout stable', () => {
   // CONTEXT 모드는 기사 셸 밖(이슈 수준 note)을 타는 별도 분기라 함께 잠근다.
   const contextIssue = issue({ publish_mode: 'CONTEXT' });
   assert.deepEqual({
@@ -609,20 +598,12 @@ test('newsletter renderer keeps v1 output byte-identical', () => {
     contextMarkdown: sha256(buildMarkdown(contextIssue)),
     contextHtml: sha256(buildHtml(contextIssue))
   }, {
-    // context 2종은 #856 에서 갱신했다. 기간-수준 사실 주장이던 quiet-core 문장을 관점 라벨로
-    // 바꾼 결과이므로, CONTEXT 분기 밖 4종이 그대로인 것이 이 변경이 좁다는 증거다.
-    // plain/story HTML 2종은 그 전 공통 footer의 AI Engineering Lab 링크 추가로 갱신한 값이다.
-    // HTML 3종은 #671 에서 구독 CTA 를 붙이며 갱신했고, 구독 기능을 걷어내며 다시 갱신했다
-    // (AI Engineering Lab 링크 때와 같은 종류의 변경). **markdown 3종이 그대로인
-    // 것이 이 변경이 HTML 전용이라는 증거다** — markdown 이 함께 움직였다면 그건 결함이다.
-    // #1190: HTML adds locale metadata and the language-selector script; Markdown stays unchanged.
-    // #1250: HTML 3종은 공통 footer 주제 노트에 C++ 를 더해 갱신했다. markdown 3종은 그대로다.
-    plainMarkdown: 'c48f47e42dc73097',
-    plainHtml: '6dff0554d11336e0',
-    storyMarkdown: 'f3602357add8a9ff',
-    storyHtml: '1b0830316d7f7276',
-    contextMarkdown: 'e754eef59b3f0cff',
-    contextHtml: '1c8cfefe108945d9'
+    plainMarkdown: '2fa461e7128984b6',
+    plainHtml: 'e0d26a657c86f2e4',
+    storyMarkdown: '62cbfb5687e2ad9c',
+    storyHtml: '84061f03b26d8054',
+    contextMarkdown: '55eced2f272bf222',
+    contextHtml: 'bfb03b3602c048fe'
   });
 });
 

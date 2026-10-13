@@ -19,15 +19,124 @@
     "article_images": [
       "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "public_contract_version": "story-v2",
     "coverage_week_key": "2026-W41",
     "coverage_start_date": "2026-10-05",
     "coverage_end_date": "2026-10-11",
     "coverage_mode": "iso_week",
     "generation_anchor_date": "2026-10-12",
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 AOSP의 조건부 카메라 mute 제안, Qualcomm CAMSS ISP 파라미터 uAPI 문서 리뷰, Claude Haiku 5.5 발표를 살펴봅니다. 카메라 관련 두 기사는 아직 제안·리뷰 단계이므로 적용 조건과 확인할 사항을 구분했습니다. Haiku는 반복 코딩 작업을 맡길 보조 모델로 소개하고, 실제 업무에서 품질·비용·응답 시간을 비교하는 방법을 제안합니다.",
+      "items": [
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+          "href": "newsletters/2026-W42/index.html#article-aosp-cameraserver-mute",
+          "headline": "AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안",
+          "lead": "카메라 mute를 지원하고 화면에 보이는 UID의 클라이언트도 프라이버시 토글 직후 강제 종료되는 문제를 고치려는 패치가 AOSP에 제안되었습니다.",
+          "takeaway": "프라이버시 토글 시험을 UID 가시성 및 camera mute 지원 여부로 나누고, 조건을 만족할 때만 연결을 유지하는지 확인해야 합니다. 나머지 클라이언트와 UID 비활성 경로의 차단도 함께 검증할 대상입니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://www.anthropic.com/claude-haiku-5-5",
+          "href": "newsletters/2026-W42/index.html#article-claude-haiku-5-5",
+          "headline": "Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델",
+          "lead": "빌드 오류 요약이나 단순 분류처럼 반복되는 작업을 큰 모델에 모두 맡길 필요가 줄어듭니다. Anthropic은 이런 작업과 코딩 보조 에이전트를 겨냥한 Haiku 5.5를 발표했습니다.",
+          "takeaway": "개발 도구 담당자는 빌드 오류 로그 요약·분류 표본으로 현재 모델과 Haiku 5.5를 비교할 수 있습니다. 정확도와 누락률을 유지하는 범위에서 비용·응답 시간 개선 여부를 측정하는 것이 도입 판단의 기준입니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg",
+            "alt": "Anthropic 소형 AI 모델 Claude Haiku 5.5 발표 및 네이티브 개발 워크플로 활용",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+          "href": "newsletters/2026-W42/index.html#article-qualcomm-camss-isp-uapi-v10",
+          "headline": "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의",
+          "lead": "Qualcomm CAMSS 하위 시스템의 ISP 파라미터를 제어하기 위한 V4L2 메타데이터 포맷 문서화 패치 시리즈가 v10 리비전으로 검토되고 있습니다.",
+          "takeaway": "Qualcomm platform 커널 드라이버 연동 시 qcom-camss-config.h uAPI 구조체 및 v4l2_isp 공통 헤더 변경 사항을 사전 점검해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
+    },
     "en": {
       "title": "2026 W42",
       "summary": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled\nClaude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks\nDiscussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week, we look at AOSP's proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work.",
+        "items": [
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+            "href": "en/newsletters/2026-W42/index.html#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl",
+            "headline": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled",
+            "lead": "A patch has been proposed to AOSP to fix an issue where clients of a visible UID that supports camera mute are forcibly terminated immediately after a privacy toggle.",
+            "takeaway": "When testing privacy toggles, it is necessary to differentiate based on UID visibility and camera mute support, and verify that the connection is maintained only when conditions are met. Blocking of other clients and the UID inactive path also need to be verified.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://www.anthropic.com/claude-haiku-5-5",
+            "href": "en/newsletters/2026-W42/index.html#article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks",
+            "headline": "Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks",
+            "lead": "The need to assign all repetitive tasks, such as build error summarization or simple classification, to large models is reduced. Anthropic has announced Haiku 5.5, targeting these tasks and coding auxiliary agents.",
+            "takeaway": "Development tool managers can compare the current model with Haiku 5.5 using samples of build error log summarization and classification. The criterion for adoption is to measure whether cost and response time can be improved while maintaining accuracy and omission rates.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg",
+              "alt": "Anthropic's small AI model Claude Haiku 5.5 announced and its utilization in native development workflows",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
+            "href": "en/newsletters/2026-W42/index.html#article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch",
+            "headline": "Discussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
+            "lead": "A patch series documenting the V4L2 metadata format for controlling ISP parameters of the Qualcomm CAMSS subsystem is being reviewed at v10 revision.",
+            "takeaway": "When integrating Qualcomm platform kernel drivers, it is necessary to pre-check changes to the qcom-camss-config.h uAPI structure and v4l2_isp common headers.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      },
       "html": "en/newsletters/2026-W42/index.html",
       "md": "en/newsletters/2026-W42/newsletter.md"
     }
@@ -50,6 +159,7 @@
     "article_images": [
       "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png"
     ],
+    "lead_article_image": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png",
     "public_contract_version": "story-v2",
     "coverage_week_key": "2026-W40",
     "coverage_start_date": "2026-09-28",
@@ -83,6 +193,7 @@
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
       "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg"
     ],
+    "lead_article_image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
     "public_contract_version": "story-v2",
     "coverage_week_key": "2026-W39",
     "coverage_start_date": "2026-09-21",
@@ -117,6 +228,7 @@
       "https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271",
       "https://opengraph.githubassets.com/60e99469eda788e15e80df021267df18b608398448e68c696b9d49d004c4bd91/openai/codex/releases/tag/rust-v0.155.1"
     ],
+    "lead_article_image": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aac1eaf2091cb214f764427_og_projects-redesigned.jpg",
     "coverage_week_key": "2026-W38",
     "coverage_start_date": "2026-09-14",
     "coverage_end_date": "2026-09-20",
@@ -147,6 +259,7 @@
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "coverage_week_key": "2026-W37",
     "coverage_start_date": "2026-09-07",
     "coverage_end_date": "2026-09-13",
@@ -177,6 +290,7 @@
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "coverage_week_key": "2026-W36",
     "coverage_start_date": "2026-08-31",
     "coverage_end_date": "2026-09-06",
@@ -207,6 +321,7 @@
     "article_images": [
       "assets/images/fallback/android.svg"
     ],
+    "lead_article_image": "assets/images/fallback/android.svg",
     "coverage_week_key": "2026-W35",
     "coverage_start_date": "2026-08-24",
     "coverage_end_date": "2026-08-30",
@@ -236,6 +351,7 @@
     "article_images": [
       "assets/images/fallback/android.svg"
     ],
+    "lead_article_image": "assets/images/fallback/android.svg",
     "coverage_week_key": "2026-W34",
     "coverage_start_date": "2026-08-17",
     "coverage_end_date": "2026-08-23",
@@ -264,6 +380,7 @@
     "article_images": [
       "https://developer.android.com/static/images/social/android-developers.png?hl=ar"
     ],
+    "lead_article_image": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
     "coverage_week_key": "2026-W33",
     "coverage_start_date": "2026-08-10",
     "coverage_end_date": "2026-08-16",
@@ -293,6 +410,7 @@
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "coverage_week_key": "2026-W32",
     "coverage_start_date": "2026-08-03",
     "coverage_end_date": "2026-08-09",
@@ -323,6 +441,7 @@
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "coverage_week_key": "2026-W31",
     "coverage_start_date": "2026-07-27",
     "coverage_end_date": "2026-08-02",
@@ -353,6 +472,7 @@
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "coverage_week_key": "2026-W30",
     "coverage_start_date": "2026-07-20",
     "coverage_end_date": "2026-07-26",
@@ -382,6 +502,7 @@
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "coverage_week_key": "2026-W29",
     "coverage_start_date": "2026-07-13",
     "coverage_end_date": "2026-07-19",
@@ -412,6 +533,7 @@
     "article_images": [
       "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609"
     ],
+    "lead_article_image": "assets/images/fallback/android.svg",
     "coverage_start_date": "2026-07-06",
     "coverage_end_date": "2026-07-13",
     "coverage_mode": "legacy_rolling",
@@ -442,6 +564,7 @@
     "article_images": [
       "https://developer.android.com/static/images/social/android-developers.png"
     ],
+    "lead_article_image": "https://developer.android.com/static/images/social/android-developers.png",
     "coverage_week_key": "2026-W27",
     "coverage_start_date": "2026-06-29",
     "coverage_end_date": "2026-07-05",
@@ -471,6 +594,7 @@
     "article_images": [
       "assets/images/fallback/newsletter-default.svg"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "coverage_start_date": "2026-06-22",
     "coverage_end_date": "2026-06-29",
     "coverage_mode": "legacy_rolling",
@@ -502,6 +626,7 @@
       "assets/images/fallback/newsletter-default.svg",
       "https://developer.android.com/static/images/social/android-developers.png?hl=th"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "coverage_week_key": "2026-W25",
     "coverage_start_date": "2026-06-15",
     "coverage_end_date": "2026-06-21",
@@ -535,6 +660,7 @@
       "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
       "assets/images/fallback/newsletter-default.svg"
     ],
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
     "coverage_mode": "unverified",
     "en": {
       "title": "2026 W25",
@@ -559,6 +685,7 @@
     "article_images": [
       "https://developer.android.com/static/images/social/android-developers.png?hl=hi"
     ],
+    "lead_article_image": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
     "coverage_mode": "unverified",
     "en": {
       "title": "2026 W24",
@@ -584,6 +711,7 @@
       "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
       "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20609"
     ],
+    "lead_article_image": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
     "coverage_mode": "unverified",
     "en": {
       "title": "2026 W23",
@@ -610,6 +738,7 @@
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png"
     ],
+    "lead_article_image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
     "coverage_week_key": "2026-W21",
     "coverage_start_date": "2026-05-18",
     "coverage_end_date": "2026-05-24",
@@ -643,6 +772,7 @@
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png"
     ],
+    "lead_article_image": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
     "coverage_mode": "unverified",
     "en": {
       "title": "2026 W21",
@@ -669,6 +799,7 @@
       "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
       "https://developer.android.com/static/images/social/android-developers.png"
     ],
+    "lead_article_image": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
     "coverage_week_key": "2026-W19",
     "coverage_start_date": "2026-05-04",
     "coverage_end_date": "2026-05-10",
@@ -703,6 +834,7 @@
       "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
       "assets/images/fallback/newsletter-default.svg"
     ],
+    "lead_article_image": "",
     "coverage_mode": "unverified",
     "en": {
       "title": "2026 W19",

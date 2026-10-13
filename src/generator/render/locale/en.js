@@ -1,4 +1,11 @@
 module.exports = {
+  "weeklyCore": "This week’s highlights",
+  "backToHighlights": "Back to this week’s highlights",
+  "contents": "Contents",
+  "backToContents": "Back to contents",
+  "previousArticle": "Previous article",
+  "nextArticle": "Next article",
+  "articleNavigation": "Article navigation",
   "legal": "© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.",
   "reviewBoundary": "Articles are interpreted within their public sources without overstating direct Camera HAL changes.",
   "perspectiveHtml": "Camera HAL · Driver perspective",
