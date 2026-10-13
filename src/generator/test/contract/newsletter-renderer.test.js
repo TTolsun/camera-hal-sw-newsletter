@@ -344,7 +344,8 @@ test('newsletter renderer keeps article anchors unique when titles repeat', () =
 test('newsletter renderer structures issue pages as newsroom flow articles', () => {
   const html = buildHtml(issue());
 
-  assert.match(html, /<main class="site-main article-page newsletter-main">/);
+  assert.match(html, /<a class="skip-link" href="#main-content">본문 바로가기<\/a>/);
+  assert.match(html, /<main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">/);
   assert.match(html, /<article class="wrap issue-wrap">/);
   assert.match(html, /<header class="article-header issue-hero">/);
   assert.match(html, /<h1 class="issue-title"><span>Camera SW<\/span><span>Newsletter - 2026-05-03<\/span><\/h1>/);
@@ -584,6 +585,10 @@ test('newsletter renderer fails when only the issue declares v2 and the section 
 // These hashes lock the reviewed reading layout; prose/source preservation is also checked
 // in newsletter-navigation.test.js. The helper-only PR retains the original output hashes.
 function sha256(text) {
+  // The new skip link is verified separately; retain the reviewed article/layout
+  // baseline to catch any unrelated legacy prose or navigation changes.
+  text = text.replace(/  <a class="skip-link" href="#main-content">[^<]+<\/a>\n/, '')
+    .replace('<main id="main-content" tabindex="-1" class=', '<main class=');
   return crypto.createHash('sha256').update(text, 'utf8').digest('hex').slice(0, 16);
 }
 

@@ -17,8 +17,8 @@ const {
   siteBrand
 } = require('../helpers/site-nav');
 
-function extractHomepageScript() {
-  const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+function extractHomepageScript(locale = 'ko') {
+  const html = fs.readFileSync(path.join(root, locale === 'en' ? 'articles/en/index.html' : 'index.html'), 'utf8');
   const scripts = [...html.matchAll(/<script\b[^>]*>\s*([\s\S]*?)\s*<\/script>/gi)]
     .map(match => match[1]);
   const homepageScript = scripts.find(script =>
@@ -75,7 +75,7 @@ function createElement(overrides = {}) {
 }
 
 async function renderHomepage(newsletters, headlineState = null, options = {}) {
-  const script = extractHomepageScript();
+  const script = extractHomepageScript(options.locale);
   const errors = [];
   const elements = {
     'featured-card': createElement(),
@@ -84,11 +84,22 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
     'latest-grid': createElement(),
     'latest-topics': createElement(),
     'latest-sort': createElement({ value: 'latest' }),
-    'latest-empty': createElement({ hidden: true })
+    'latest-empty': createElement({ hidden: true }),
+    'latest-status': createElement()
   };
   const window = {
-    location: { pathname: '/index.html', search: '', hash: '' },
-    NewsletterArchive
+    location: { pathname: options.locale === 'en' ? '/en/index.html' : '/index.html', search: options.search || '', hash: '' },
+    NewsletterArchive,
+    listeners: {},
+    addEventListener(type, handler) { this.listeners[type] = handler; },
+    history: {
+      urls: [],
+      pushState(_state, _unused, url) {
+        this.urls.push(url);
+        const parsed = new URL(url, 'https://example.com');
+        Object.assign(window.location, { pathname: parsed.pathname, search: parsed.search, hash: parsed.hash });
+      }
+    }
   };
 
   const context = {
@@ -101,6 +112,7 @@ async function renderHomepage(newsletters, headlineState = null, options = {}) {
       }
     },
     fetch: async (url, fetchOptions) => {
+      url = url.replace(/^\.\.\//, '');
       assert.equal(fetchOptions.cache, 'no-store');
       if (url === 'data/homepage-headline.json') {
         if (headlineState === null) {
@@ -426,6 +438,38 @@ test('latest issue remains latest while the issue list is filtered or reordered'
   elements['latest-sort'].value = 'oldest';
   elements['latest-sort'].listeners.change();
   assert.equal(elements['reader-issue'].innerHTML, initial);
+});
+
+test('both homepage locales restore URL filters, retain keyboard focus and handle Back', async () => {
+  const entries = [newsletter('2026-05-25', 'Camera issue'),
+    { ...newsletter('2026-05-24', 'Android issue'), tags: ['Android'] }];
+  for (const locale of ['ko', 'en']) {
+    const { elements, context, errors } = await renderHomepage(entries, null, { locale });
+    const oldButton = createTopicTarget('android');
+    context.document.activeElement = oldButton;
+    const replacement = { focus() { context.document.activeElement = this; }, getAttribute() { return 'android'; } };
+    elements['latest-topics'].querySelector = selector => {
+      assert.equal(selector, '[data-latest-topic="android"]');
+      return replacement;
+    };
+    elements['latest-topics'].listeners.click({ target: oldButton });
+    assert.equal(context.document.activeElement, replacement);
+    assert.equal(context.window.location.search, '?topic=android');
+    assert.equal(context.window.history.urls.length, 1);
+    assert.match(elements['latest-grid'].innerHTML, /Android issue/);
+    assert.doesNotMatch(elements['latest-grid'].innerHTML, /Camera issue/);
+    assert.match(elements['latest-status'].textContent, /1/);
+    const reload = await renderHomepage(entries, null, { locale, search: '?topic=android&sort=oldest' });
+    assert.match(reload.elements['latest-topics'].innerHTML, /data-latest-topic="android" aria-pressed="true"/);
+    assert.equal(reload.elements['latest-sort'].value, 'oldest');
+    assert.equal(reload.context.window.history.urls.length, 0);
+    context.window.location.search = '';
+    context.window.listeners.popstate();
+    assert.match(elements['latest-grid'].innerHTML, /Camera issue/);
+    assert.match(elements['latest-topics'].innerHTML, /data-latest-topic="all" aria-pressed="true"/);
+    assert.equal(context.window.history.urls.length, 1, 'Back must not add another history entry');
+    assert.deepEqual(errors, []);
+  }
 });
 
 test('malformed weekly index uses the homepage error state without inventing a destination', async () => {

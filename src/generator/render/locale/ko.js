@@ -1,4 +1,6 @@
 module.exports = {
+  "skipToContent": "본문 바로가기",
+  "aboutIssue": "이번 호 소개",
   "weeklyCore": "이번 주 핵심",
   "backToHighlights": "이번 주 핵심으로",
   "contents": "목차",

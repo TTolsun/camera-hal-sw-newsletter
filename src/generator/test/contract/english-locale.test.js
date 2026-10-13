@@ -288,7 +288,8 @@ async function renderEnglishHome({ headline, newsletters, translation }) {
   const elements = { 'featured-card': element(), 'reader-issue': element(), 'latest-grid': element(), 'latest-topics': element(), 'latest-sort': element(), 'latest-empty': element() };
   const fetched = [];
   const context = {
-    window: { NewsletterArchive: require('../../../../articles/assets/js/newsletter-archive') },
+    window: { location: { search: '' }, NewsletterArchive: require('../../../../articles/assets/js/newsletter-archive') },
+    URLSearchParams,
     document: { getElementById: id => elements[id] },
     console: { error() {} },
     fetch: async url => {

@@ -8,24 +8,25 @@
   <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W42/index.html" />
   <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W42/index.html" />
   <meta property="og:locale" content="en_US" />
-  <meta name="description" content="This week, we look at AOSP&#39;s proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work." />
+  <meta name="description" content="This issue covers a proposal to keep camera connections open, a review of the Qualcomm CAMSS control format, and the Claude Haiku 5.5 announcement. The camera changes are proposals under review; Haiku needs comparison on real tasks before adoption." />
   <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W42/index.html" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Camera SW Newsletter" />
   <meta property="og:title" content="2026 W41 Camera SW Newsletter (Published W42)" />
-  <meta property="og:description" content="This week, we look at AOSP&#39;s proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work." />
+  <meta property="og:description" content="This issue covers a proposal to keep camera connections open, a review of the Qualcomm CAMSS control format, and the Claude Haiku 5.5 announcement. The camera changes are proposals under review; Haiku needs comparison on real tasks before adoption." />
   <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W42/index.html" />
   <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="2026 W41 Camera SW Newsletter (Published W42)" />
-  <meta name="twitter:description" content="This week, we look at AOSP&#39;s proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work." />
+  <meta name="twitter:description" content="This issue covers a proposal to keep camera connections open, a review of the Qualcomm CAMSS control format, and the Claude Haiku 5.5 announcement. The camera changes are proposals under review; Haiku needs comparison on real tasks before adoption." />
   <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-  <link rel="stylesheet" href="../../../css/styles.css?v=issue-media-v1" />
+  <link rel="stylesheet" href="../../../css/styles.css?v=reader-access-v1" />
   <script src="../../../assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
@@ -40,7 +41,7 @@
     </div>
   </header>
 
-  <main class="site-main article-page newsletter-main">
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← Newsroom</a>
@@ -56,17 +57,16 @@
       <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
           <h2 id="issue-briefing-title">This week’s highlights</h2>
-          <p class="reader-brief-intro">This week, we look at AOSP&#39;s proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work.</p>
           <ol class="reader-brief-items"><li>
             <a href="#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl">AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled</a>
-            <p class="reader-brief-takeaway">When testing privacy toggles, it is necessary to differentiate based on UID visibility and camera mute support, and verify that the connection is maintained only when conditions are met. Blocking of other clients and the UID inactive path also need to be verified.</p>
+            <p class="reader-brief-takeaway">On supported devices, check that a visible app stays connected while its video is blocked. On unsupported devices and for other apps, check that the camera connection is still closed as before.</p>
           </li><li>
             <a href="#article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks">Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks</a>
             <p class="reader-brief-takeaway">Development tool managers can compare the current model with Haiku 5.5 using samples of build error log summarization and classification. The criterion for adoption is to measure whether cost and response time can be improved while maintaining accuracy and omission rates.</p>
           </li><li>
             <a href="#article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch">Discussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch</a>
             <p class="reader-brief-takeaway">When integrating Qualcomm platform kernel drivers, it is necessary to pre-check changes to the qcom-camss-config.h uAPI structure and v4l2_isp common headers.</p>
-          </li></ol>
+          </li></ol><details class="reader-brief-context"><summary>About this issue</summary><p class="reader-brief-intro">This issue covers a proposal to keep camera connections open, a review of the Qualcomm CAMSS control format, and the Claude Haiku 5.5 announcement. The camera changes are proposals under review; Haiku needs comparison on real tasks before adoption.</p></details>
         </div>
 
       </section>
@@ -78,8 +78,8 @@
         </div>
         <h2 id="article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl-title" class="article-title">AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled</h2>
         <p class="article-source-subtitle">AOSP Gerrit (camera changes under review)</p>
-        <p class="article-lead">A patch has been proposed to AOSP to fix an issue where clients of a visible UID that supports camera mute are forcibly terminated immediately after a privacy toggle.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>When testing privacy toggles, it is necessary to differentiate based on UID visibility and camera mute support, and verify that the connection is maintained only when conditions are met. Blocking of other clients and the UID inactive path also need to be verified.</p></div>
+        <p class="article-lead">An Android patch proposes keeping a visible app connected to the camera while blocking its video when camera access is turned off. This applies only to devices that support this behavior. The change is still a proposal.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>On supported devices, check that a visible app stays connected while its video is blocked. On unsupported devices and for other apps, check that the camera connection is still closed as before.</p></div>
         <figure class="article-media article-media-decoration" aria-hidden="true">
         <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled image" loading="lazy" decoding="async">
         </figure>

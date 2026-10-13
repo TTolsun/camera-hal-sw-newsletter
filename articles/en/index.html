@@ -18,7 +18,7 @@
   <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-  <link rel="stylesheet" href="../css/styles.css?v=reader-brief-v3" />
+  <link rel="stylesheet" href="../css/styles.css?v=reader-access-v1" />
   <link rel="stylesheet" href="../css/homepage.css?v=reader-focus-v1" />
   <script src="../assets/js/site-header.js" defer></script>
   <meta property="og:locale" content="en_US" />
@@ -27,6 +27,7 @@
   <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/index.html" />
 </head>
 <body class="homepage">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="index.html" aria-label="Camera SW Newsroom">
@@ -41,7 +42,7 @@
     </div>
   </header>
 
-  <main class="site-main">
+  <main id="main-content" tabindex="-1" class="site-main">
     <section class="reader-section content-wrap" aria-labelledby="reader-title">
       <article id="reader-issue" class="reader-issue" aria-live="polite">
         <h1 id="reader-title">Latest weekly newsletter</h1>
@@ -66,6 +67,7 @@
         </div>
       </div>
       <div id="latest-topics" class="keyword-row latest-topics" role="group" aria-label="Topic filter"></div>
+      <p id="latest-status" class="sr-only" role="status"></p>
       <div id="latest-grid" class="archive-grid latest-grid">
         <p class="muted">Loading newsletters.</p>
       </div>
@@ -232,7 +234,7 @@
 
     const LATEST_TOPICS = archiveHelpers.TOPICS;
     let latestEntries = [];
-    let latestState = { topic: 'all', sort: 'latest' };
+    let latestState = archiveHelpers.normalizeArchiveState(new URLSearchParams(window.location.search));
 
     function topicCountOf(topic) {
       if (topic.key === 'all') return latestEntries.length;
@@ -242,12 +244,14 @@
     function renderLatestTopics(activeTopic) {
       const topicsEl = document.getElementById('latest-topics');
       if (!topicsEl) return;
+      const focusedTopic = document.activeElement?.getAttribute('data-latest-topic');
       topicsEl.innerHTML = LATEST_TOPICS.map(topic => {
         const isActive = topic.key === activeTopic;
         const disabled = topic.key !== 'all' && topicCountOf(topic) === 0;
         const classes = ['keyword', 'latest-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
         return `<button type="button" class="${classes}" data-latest-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}>${escapeHtml(topic.key === 'all' ? 'All' : topic.label)}</button>`;
       }).join('');
+      if (focusedTopic) topicsEl.querySelector(`[data-latest-topic="${focusedTopic}"]`)?.focus();
     }
 
     function renderLatestGrid() {
@@ -260,15 +264,22 @@
       );
       gridEl.innerHTML = filtered.map(entry => archiveHelpers.renderArchiveCard(entry, { locale: 'en', rootPath: ROOT, compact: true })).join('');
       if (emptyEl) emptyEl.hidden = filtered.length > 0;
+      const status = document.getElementById('latest-status');
+      if (status) status.textContent = `${filtered.length} issues`;
     }
 
-    function applyLatestState(nextState) {
+    function applyLatestState(nextState, updateUrl = false) {
       const normalized = archiveHelpers.normalizeArchiveState(nextState);
       latestState = { topic: normalized.topic, sort: normalized.sort };
       const sortEl = document.getElementById('latest-sort');
       if (sortEl) sortEl.value = latestState.sort;
       renderLatestTopics(latestState.topic);
       renderLatestGrid();
+      if (updateUrl) {
+        const url = archiveHelpers.buildCanonicalArchiveUrl(window.location, latestState);
+        const current = window.location.pathname + window.location.search + window.location.hash;
+        if (url !== current) window.history.pushState(null, '', url);
+      }
     }
 
     async function loadNewsletters() {
@@ -301,14 +312,20 @@
           : null;
         if (!button) return;
         if (typeof button.hasAttribute === 'function' && button.hasAttribute('disabled')) return;
-        applyLatestState({ topic: button.getAttribute('data-latest-topic'), sort: latestState.sort });
+        applyLatestState({ topic: button.getAttribute('data-latest-topic'), sort: latestState.sort }, true);
       });
     }
 
     const latestSortEl = document.getElementById('latest-sort');
     if (latestSortEl && typeof latestSortEl.addEventListener === 'function') {
       latestSortEl.addEventListener('change', () => {
-        applyLatestState({ topic: latestState.topic, sort: latestSortEl.value });
+        applyLatestState({ topic: latestState.topic, sort: latestSortEl.value }, true);
+      });
+    }
+
+    if (typeof window.addEventListener === 'function') {
+      window.addEventListener('popstate', () => {
+        applyLatestState(new URLSearchParams(window.location.search));
       });
     }
 

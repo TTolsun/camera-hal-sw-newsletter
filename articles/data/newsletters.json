@@ -16,14 +16,14 @@
       "reader_brief": {
         "schema_version": 1,
         "locale": "en",
-        "intro": "This week, we look at AOSP's proposed conditional camera mute, a review of Qualcomm CAMSS ISP parameter uAPI documentation, and the announcement of Claude Haiku 5.5. The two camera-related articles are still in the proposal/review stage, so we have distinguished between the conditions for application and the points to check. Haiku is introduced as an auxiliary model for repetitive coding tasks, and we propose methods for comparing quality, cost, and response time in actual work.",
+        "intro": "This issue covers a proposal to keep camera connections open, a review of the Qualcomm CAMSS control format, and the Claude Haiku 5.5 announcement. The camera changes are proposals under review; Haiku needs comparison on real tasks before adoption.",
         "items": [
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
             "href": "en/newsletters/2026-W42/index.html#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl",
             "headline": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled",
-            "lead": "A patch has been proposed to AOSP to fix an issue where clients of a visible UID that supports camera mute are forcibly terminated immediately after a privacy toggle.",
-            "takeaway": "When testing privacy toggles, it is necessary to differentiate based on UID visibility and camera mute support, and verify that the connection is maintained only when conditions are met. Blocking of other clients and the UID inactive path also need to be verified.",
+            "lead": "An Android patch proposes keeping a visible app connected to the camera while blocking its video when camera access is turned off. This applies only to devices that support this behavior. The change is still a proposal.",
+            "takeaway": "On supported devices, check that a visible app stays connected while its video is blocked. On unsupported devices and for other apps, check that the camera connection is still closed as before.",
             "tags": [
               "Camera HAL"
             ],
