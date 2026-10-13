@@ -86,14 +86,14 @@
       "reader_brief": {
         "schema_version": 1,
         "locale": "en",
-        "intro": "This issue covers a proposal to keep camera connections open, a review of the Qualcomm CAMSS control format, and the Claude Haiku 5.5 announcement. The camera changes are proposals under review; Haiku needs comparison on real tasks before adoption.",
+        "intro": "This issue covers a proposed change to camera privacy controls, a review of the Qualcomm CAMSS control format, and the Claude Haiku 5.5 announcement. Both camera changes are still under review. Test Haiku on your own tasks before deciding whether to adopt it.",
         "items": [
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
             "href": "en/newsletters/2026-W42/index.html#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl",
             "headline": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled",
-            "lead": "An Android patch proposes keeping a visible app connected to the camera while blocking its video when camera access is turned off. This applies only to devices that support this behavior. The change is still a proposal.",
-            "takeaway": "On supported devices, check that a visible app stays connected while its video is blocked. On unsupported devices and for other apps, check that the camera connection is still closed as before.",
+            "lead": "An Android patch proposes blocking camera video without disconnecting an app that is visible on screen. The device must support camera mute. The change is still a proposal.",
+            "takeaway": "On supported devices, check that an app visible on screen stays connected while its video is blocked. For other apps and unsupported devices, check that the camera connection still closes as before.",
             "tags": [
               "Camera HAL"
             ],
@@ -107,14 +107,14 @@
             "id": "url:https://www.anthropic.com/claude-haiku-5-5",
             "href": "en/newsletters/2026-W42/index.html#article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks",
             "headline": "Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks",
-            "lead": "The need to assign all repetitive tasks, such as build error summarization or simple classification, to large models is reduced. Anthropic has announced Haiku 5.5, targeting these tasks and coding auxiliary agents.",
-            "takeaway": "Development tool managers can compare the current model with Haiku 5.5 using samples of build error log summarization and classification. The criterion for adoption is to measure whether cost and response time can be improved while maintaining accuracy and omission rates.",
+            "lead": "Anthropic has announced Haiku 5.5 for repetitive tasks and coding support. It offers an alternative to using larger models for tasks such as summarizing build errors or simple classification.",
+            "takeaway": "Teams responsible for development tools can compare Haiku 5.5 with their current model on build-log summaries and classification. Check whether it reduces cost and response time without reducing accuracy or missing more errors.",
             "tags": [
               "AI"
             ],
             "image": {
               "src": "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg",
-              "alt": "Anthropic's small AI model Claude Haiku 5.5 announced and its utilization in native development workflows",
+              "alt": "Claude Haiku 5.5 announcement graphic",
               "is_fallback": false
             }
           },
@@ -122,8 +122,8 @@
             "id": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
             "href": "en/newsletters/2026-W42/index.html#article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch",
             "headline": "Discussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
-            "lead": "A patch series documenting the V4L2 metadata format for controlling ISP parameters of the Qualcomm CAMSS subsystem is being reviewed at v10 revision.",
-            "takeaway": "When integrating Qualcomm platform kernel drivers, it is necessary to pre-check changes to the qcom-camss-config.h uAPI structure and v4l2_isp common headers.",
+            "lead": "A patch series proposes a V4L2 metadata format for controlling Qualcomm CAMSS ISP parameters. Its documentation is under review in revision v10.",
+            "takeaway": "When integrating Qualcomm kernel drivers, check the proposed changes to the qcom-camss-config.h uAPI structures and the shared v4l2_isp headers.",
             "tags": [
               "Driver",
               "Image Processing",
