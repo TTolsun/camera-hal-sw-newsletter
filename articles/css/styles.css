@@ -101,6 +101,10 @@ body {
      않은 UI 텍스트(나브·칩·메타·푸터·스탯)가 1.6 으로 늘어지지 않도록 base 를 normal 로 맞춘다.
      본문·prose·헤드라인 등은 각자 명시적 line-height 가 있어 영향받지 않는다. */
   line-height: normal;
+  /* 한글은 기본값(normal)에서 음절 사이 어디서든 줄이 바뀌어 "모아봅/니다"처럼 단어가 끊긴다.
+     keep-all 은 공백(어절) 경계에서만 줄을 바꾼다. 긴 URL·영문 토큰은 keep-all 영향이 없고,
+     넘침 방지는 각 규칙의 overflow-wrap: anywhere 가 계속 맡는다. */
+  word-break: keep-all;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
