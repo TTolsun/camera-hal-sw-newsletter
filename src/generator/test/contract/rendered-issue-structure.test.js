@@ -299,6 +299,54 @@ test('caption attribution ignores https links outside the image figure', () => {
   assert.match(result.text, /caption attribution/);
 });
 
+// 각 그림은 자기를 감싼 <figure>의 캡션만 쓴다. 같은 태그가 두 번 나오거나 figure 밖에 있으면
+// 앞이나 뒤의 다른 figure 캡션을 빌려 쓰면 안 된다. 캡션은 class 토큰으로만 인정한다.
+test('caption attribution is checked per image occurrence and per caption class token', () => {
+  const sourcedImage = 'https://developer.android.com/static/images/social/android-developers.png';
+  const sourcedRoot = tempRoot('rendered-issue-structure-');
+  const sourcedDate = writeNewsletterIndex(sourcedRoot);
+  const sourcedEditor = issue({
+    date: sourcedDate,
+    sections: withImageSection(sourcedRoot, {
+      selectedImage: sourcedImage,
+      section: {
+        imageCandidates: [{ url: sourcedImage }],
+        resolvedImage: { url: sourcedImage, src: sourcedImage, usedFallback: false }
+      }
+    })
+  });
+  const sourcedHtml = buildHtml(sourcedEditor);
+  const imgTag = sourcedHtml.match(/<img class="article-image"[^>]*>/)[0];
+  const validate = (html, root = sourcedRoot, date = sourcedDate, editor = sourcedEditor) =>
+    validateRenderedIssueStructure({ root, date, editor, markdown: buildMarkdown(editor), html });
+
+  const sourcedFailures = [
+    ['same image again in a figure without caption',
+      sourcedHtml.replace('</figure>', `</figure>\n<figure class="article-media">${imgTag}</figure>`)],
+    ['image outside any figure before a captioned figure',
+      sourcedHtml.replace('<figure class="article-media">', `${imgTag}\n<figure class="article-media">`)],
+    ['caption class only in a non-class attribute',
+      sourcedHtml.replace(/<figcaption class="article-image-caption">[\s\S]*?<\/figcaption>/,
+        '<div data-role="article-image-caption"><a href="https://example.com/source">Example</a></div>')]
+  ];
+  for (const [name, badHtml] of sourcedFailures) {
+    const result = validate(badHtml);
+    assert.equal(result.ok, false, `${name} unexpectedly passed`);
+    assert.match(result.text, /caption attribution/, name);
+  }
+
+  const fallbackRoot = tempRoot('rendered-issue-structure-');
+  const fallbackDate = writeNewsletterIndex(fallbackRoot);
+  const fallbackEditor = issue({ date: fallbackDate, sections: withImageSection(fallbackRoot) });
+  const twoCaptions = buildHtml(fallbackEditor).replace(
+    /(<img class="article-image"[^>]*>)/,
+    '$1\n<p class="article-image-caption">이미지</p><p class="article-image-caption"><a href="https://example.com/source">Example</a></p>'
+  );
+  const fallbackResult = validate(twoCaptions, fallbackRoot, fallbackDate, fallbackEditor);
+  assert.equal(fallbackResult.ok, false, 'a later linked caption on a fallback image unexpectedly passed');
+  assert.match(fallbackResult.text, /fallback article image must not carry a source attribution caption/);
+});
+
 test('fallback article image carrying a source attribution caption is rejected', () => {
   // 캡션 규칙은 fallback 쪽에서 방향이 반대다 — 요구가 아니라 금지다. 이 검사가 없으면
   // 가짜 출처 캡션이 다시 생겨도 게이트가 통과시킨다.
