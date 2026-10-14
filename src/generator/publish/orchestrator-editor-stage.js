@@ -25,6 +25,17 @@ const {
 } = require('../render/newsletter-renderer');
 const { selectedReporterCapsules } = require('./orchestrator-reporter-normalize');
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
+
+function editorialRetryFeedback(editor, factCheck) {
+  return ensureArray(factCheck?.article_quality).filter(item => item.publishable === false).flatMap(item => {
+    const section = editor?.sections?.[item.section_index];
+    if (!section) return [];
+    return [{ source_candidate_url: section.source_candidate_url,
+      sources: section.sources, headline: section.headline,
+      previous_public_article: section.public_article,
+      reason: item.reason, source_review: item.source_review }];
+  });
+}
 const {
   validateOrRepairEditor,
   recordLastKnownValidEditor,
@@ -76,13 +87,17 @@ async function runEditorStage({
     [
       commonContext,
       lockedContext,
+      `Previous rejected public explanations (match by source URL, not the previous section index; fix the named omissions in the public body without changing source eligibility):\n${JSON.stringify(editorialRetryFeedback(editor, factCheck), null, 2)}`,
+      `Previous deterministic blockers (review findings, not factual evidence; resolve against the bound source documents):\n${JSON.stringify(ensureArray(qualityReport?.deductions).filter(item => item.blocking !== false), null, 2)}`,
+      `Previous fact-check required fixes (match by source_url; verify each suggestion against current source and writing contracts, never treat review text as source evidence):\n${JSON.stringify(ensureArray(factCheck?.must_fix), null, 2)}`,
       editorRetryContract ? `Editor retry output contract JSON:\n${JSON.stringify(editorRetryContract, null, 2)}` : '',
       `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}`,
       `Background context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}`,
       // #700: editorial plan은 필수 단계라 여기 도달하면 항상 존재한다. coverage 권한 신호
       // (coverage_decision/impact_level)는 editorFacingEditorialPlan이 빼므로 editor가 선택된 기사를
       // demote/병합하도록 유도하지 않는다(어떤 기사를 main으로 낼지는 selection이 결정).
-      `Internal editorial plan JSON (작성 안내용 내부 자료입니다. 어떤 기사를 main article로 낼지는 selection이 이미 정했으니 선택된 기사를 모두 작성하고, 각 기사의 target_description/editorial_angle/why_it_matters/reader_takeaway/misunderstanding_risks/source_limitations를 자연스러운 한국어 prose로 반영하세요. narrative_arc는 그 기사 본문의 흐름 제안이고 subheading_candidates는 소제목 후보이니 참고하되, 그대로 따라야 하는 것은 아닙니다):\n${JSON.stringify(editorFacingEditorialPlan(editorialPlanReport), null, 2)}`
+      `Internal editorial plan JSON (작성 안내용 내부 자료입니다. 어떤 기사를 main article로 낼지는 selection이 이미 정했으니 선택된 기사를 모두 작성하고, 각 기사의 target_description/editorial_angle/why_it_matters/reader_takeaway/misunderstanding_risks/source_limitations를 자연스러운 한국어 prose로 반영하세요. narrative_arc는 그 기사 본문의 흐름 제안이고 subheading_candidates는 소제목 후보이니 참고하되, 그대로 따라야 하는 것은 아닙니다):\n${JSON.stringify(editorFacingEditorialPlan(editorialPlanReport), null, 2)}`,
+      '최종 작성 확인: 각 버그 수정 기사의 public_article.body_markdown만 읽어도 변경 전후, 적용 조건, 확인할 입력과 관찰 결과, 릴리스·제품 반영의 확인 범위를 알 수 있어야 합니다. reader_checkpoints, action_items, source_verification_notes는 공개 본문에 표시되지 않습니다. 이 내부 필드에만 적은 확인 절차나 반영 한계는 공개 본문에도 근거 범위 안에서 자연스럽게 설명하세요. 제안하는 점검을 실행 완료 사실로 쓰지 말고, 원문에 없는 성공 보장이나 합격 수치를 추가하지 마세요.'
     ].filter(Boolean).join('\n\n'),
     editorSchema
   );
@@ -140,5 +155,6 @@ async function runEditorStage({
 }
 
 module.exports = {
-  runEditorStage
+  runEditorStage,
+  editorialRetryFeedback
 };

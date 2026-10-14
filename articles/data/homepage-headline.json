@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-10-12T00:00:00+09:00",
+  "updated_at": "2026-10-15T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
-    "title": "AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안",
-    "summary": "카메라 mute를 지원하고 화면에 보이는 UID의 클라이언트도 프라이버시 토글 직후 강제 종료되는 문제를 고치려는 패치가 AOSP에 제안되었습니다.",
-    "source_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
-    "newsletter_date": "2026-10-12",
-    "newsletter_url": "newsletters/2026-10-12/index.html",
-    "selected_at": "2026-10-12",
+    "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073",
+    "title": "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지",
+    "summary": "CameraX의 차세대 백엔드인 CameraPipe에서 세션 생성 직후 지연 서피스가 등록될 때 초기 캡처 요청이 재전송되지 못하고 정체되던 동기화 결함이 해소되었습니다.",
+    "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073",
+    "newsletter_date": "2026-10-15",
+    "newsletter_url": "newsletters/2026-10-15/index.html",
+    "selected_at": "2026-10-15",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-10-12",
+    "last_scored_at": "2026-10-15",
     "date_evidence": {
-      "date": "2026-10-07",
+      "date": "2026-10-10",
       "date_field": "published_date",
       "evidence_level": "watch",
       "publish_ready_date_evidence": true
@@ -38,13 +38,103 @@
     },
     "snapshot": {
       "category": "direct_aosp_camera",
-      "source_name": "AOSP Gerrit (camera changes under review)"
+      "source_name": "AndroidX Gerrit Camera"
     },
-    "newsletter_article_url": "newsletters/2026-10-12/index.html#article-aosp-cameraserver-mute",
+    "newsletter_article_url": "newsletters/2026-10-15/index.html#article-camerapipe-capturesessionstate",
     "image_url": "assets/images/fallback/newsletter-default.svg",
-    "image_alt": "AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안 image"
+    "image_alt": "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4352209",
+      "title": "Camera2CaptureSequenceProcessor의 부분 Surface 캡처 요청 거부 및 재시도 메커니즘 도입",
+      "summary": "CameraPipe 파이프라인에서 일부 Surface가 준비되지 않은 상태로 제출된 캡처 요청을 유실하지 않고 명령 큐에 보존하여 재시도하는 로직이 추가되었습니다.",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4352209",
+      "newsletter_date": "2026-10-15",
+      "newsletter_url": "newsletters/2026-10-15/index.html",
+      "selected_at": "2026-10-15",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-10-15",
+      "date_evidence": {
+        "date": "2026-10-10",
+        "date_field": "published_date",
+        "evidence_level": "watch",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "direct_aosp_camera",
+        "source_name": "AndroidX Gerrit Camera"
+      },
+      "newsletter_article_url": "newsletters/2026-10-15/index.html#article-camera2capturesequenceprocessor-surface",
+      "image_url": "assets/images/fallback/newsletter-default.svg",
+      "image_alt": "Camera2CaptureSequenceProcessor의 부분 Surface 캡처 요청 거부 및 재시도 메커니즘 도입 image",
+      "replaced_at": "2026-10-15",
+      "replacement_reason": "latest_camera_hal_article"
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "title": "AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안",
+      "summary": "카메라 mute를 지원하고 화면에 보이는 UID의 클라이언트도 프라이버시 토글 직후 강제 종료되는 문제를 고치려는 패치가 AOSP에 제안되었습니다.",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "newsletter_date": "2026-10-12",
+      "newsletter_url": "newsletters/2026-10-12/index.html",
+      "selected_at": "2026-10-12",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-10-12",
+      "date_evidence": {
+        "date": "2026-10-07",
+        "date_field": "published_date",
+        "evidence_level": "watch",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "direct_aosp_camera",
+        "source_name": "AOSP Gerrit (camera changes under review)"
+      },
+      "newsletter_article_url": "newsletters/2026-10-12/index.html#article-aosp-cameraserver-mute",
+      "image_url": "assets/images/fallback/newsletter-default.svg",
+      "image_alt": "AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안 image",
+      "replaced_at": "2026-10-15",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
       "title": "Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의",

@@ -9,10 +9,21 @@ test('technical briefing guidance reaches writing stages while preserving source
     assert.match(prompt, /변경 전후 동작 → 적용 조건과 업무 영향 → 필요한 확인 사항/);
     assert.match(prompt, /커밋 병합, 라이브러리 릴리스, 제품 빌드 반영/);
     assert.match(prompt, /근거 없이 configureStreams\/processCaptureRequest/);
+    assert.match(prompt, /공개 body_markdown에도 재현할 입력·세션 조건과 관찰할 결과/);
+    assert.match(prompt, /릴리스·제품 반영 확인의 한계를 공개 본문에 명시/);
   }
   assert.match(editorialPlanSystemPrompt(), /direct_hal_impact를 높여 승격시키지/);
+  assert.match(editorialPlanSystemPrompt(), /상태 전이·동기화·재시도 수정/);
   assert.match(editorRepairPatchSystemPrompt(), /변경 전후 동작, 적용 조건과 업무 영향, 근거 있는 확인 사항을 보존/);
   assert.match(articleSectionContractPrompt(), /원문이 확인한 재현·테스트 결과와 독자에게 제안하는 확인 사항을 구분/);
+});
+
+test('writing and review share the same public technical briefing requirements', () => {
+  const { technicalBriefingContractPrompt } = require('../../reporter/technical-briefing-contract');
+  for (const build of [editorSystemPrompt, editorCompletionSystemPrompt, editorRepairPatchSystemPrompt,
+    factCheckSystemPrompt, factCheckRepairSystemPrompt, factCheckCompletionSystemPrompt]) {
+    assert.ok(build().includes(technicalBriefingContractPrompt()));
+  }
 });
 
 test('editorial planning evaluates tooling on concrete developer workflow evidence without requiring HAL changes', () => {

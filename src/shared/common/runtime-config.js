@@ -9,21 +9,21 @@ const {
 const DEFAULT_LLM_PROVIDER = 'gemini';
 const LLM_PROVIDER_VALUES = Object.freeze(['gemini', 'openapi']);
 const DEFAULT_LLM_MODEL = 'gemini-2.5-flash';
-// 공용 fallback. editor/repair primary(gemini-3.5-flash)가 503 등으로 죽으면 먼저
+// 공용 fallback. editor/repair primary(gemini-3.8-flash)가 503 등으로 죽으면 먼저
 // gemini-2.5-flash로 폴백한다 — flash-lite는 schema는 수용하지만 contract version 등
 // 출력 품질이 editor/completion 게이트를 못 넘어 발행에 실패함을 실측 확인(PR #633로
 // schema를 슬림화해 두 모델 모두 schema 자체는 수용). flash-lite는 최후 안전망으로 남긴다.
-// reporter/factcheck(primary=gemini-2.5-flash)는 dedup으로 기존과 동일하고,
+// reporter(primary=gemini-2.5-flash)는 dedup으로 기존과 동일하고,
 // judge/sourceDiscovery(primary=flash-lite)는 폴백 안전망이 flash로 강화된다.
 const DEFAULT_LLM_FALLBACK_MODELS = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
 const DEFAULT_LLM_STAGE_MODELS = Object.freeze({
   reporter: 'gemini-2.5-flash',
-  editor: 'gemini-3.5-flash',
-  factcheck: 'gemini-2.5-flash',
-  repair: 'gemini-3.5-flash',
+  editor: 'gemini-3.8-flash',
+  factcheck: 'gemini-3.8-flash',
+  repair: 'gemini-3.8-flash',
   judge: 'gemini-2.5-flash-lite',
   // #700 editorial-plan은 분류·판단 stage라 flash-lite보다 분류 정확도가 좋은 gemini-2.5-flash를
-  // 기본으로 둔다(editor의 비싼 gemini-3.5-flash는 불필요). 자체 노브로 독립 튜닝·비용 관측한다.
+  // 기본으로 둔다(editor의 비싼 gemini-3.8-flash는 불필요). 자체 노브로 독립 튜닝·비용 관측한다.
   editorialPlan: 'gemini-2.5-flash',
   sourceDiscovery: 'gemini-2.5-flash-lite',
   translate: 'gemini-2.5-flash'

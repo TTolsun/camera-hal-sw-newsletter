@@ -6,6 +6,7 @@ const test = require('node:test');
 const archive = require('../../../../articles/assets/js/newsletter-archive');
 const { applyTranslation } = require('../../../generator/render/apply-translation');
 const { buildHtml } = require('../../../generator/render/newsletter-renderer');
+const { articlePolicy } = require('../../common/newsletter-policy');
 const root = path.resolve(__dirname, '../../../..');
 const escaped = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
 
@@ -51,7 +52,12 @@ const productionOptions = { skip: !buildReaderBrief && '#1276 production paths a
 test('actual weekly output serializes the W42 public projection consumed by homepage and article links', productionOptions, async t => {
   const { writeWeeklyNewsletterArtifacts } = require('../../../generator/render/weekly-newsletter-output');
   const dir = productionRoot(t);
-  const editor = publishedInput('2026-W42');
+  const published = publishedInput('2026-W42');
+  // A persisted weekly issue may accumulate multiple runs. The writer accepts
+  // one bounded run at a time, so replaying the whole week is not an idempotent
+  // single-run input once the issue exceeds the per-run cap.
+  const editor = { ...published,
+    sections: published.sections.slice(0, articlePolicy.mainArticleCount.max) };
   const result = await writeWeeklyNewsletterArtifacts({ root: dir, date: editor.date, editor });
   assert.equal(result.weeklyKey, '2026-W42');
   const entry = indexEntry(dir, result.weeklyKey);

@@ -34,6 +34,52 @@ const {
 
 const DATE = '2026-05-08';
 
+test('prose-only repair preserves explicit group declarations for the unchanged coverage gate', () => {
+  const { validateTargetedRepairResult: validate } = require('../../publish/orchestrator-targeted-repair');
+  const baseIssue = { explicitly_demoted_groups: [{ article_group_key: 'article:held', reason_code: 'explicit_editor_hold', demotion_reason: 'Held for review' }],
+    hard_blocked_groups: [{ article_group_key: 'article:blocked', reason_code: 'source_gap', reason: 'Missing evidence' }] };
+  let checked = false;
+  validate({ date: DATE, baseIssue, validateEditor: value => {
+    assert.deepEqual(value.explicitly_demoted_groups, baseIssue.explicitly_demoted_groups);
+    assert.deepEqual(value.hard_blocked_groups, baseIssue.hard_blocked_groups);
+    assert.notEqual(value.explicitly_demoted_groups, baseIssue.explicitly_demoted_groups);
+    checked = true;
+  } });
+  assert.equal(checked, true);
+  assert.throws(() => validate({ date: DATE, baseIssue, validateEditor: () => { throw new Error('Invalid coverage'); } }), /Invalid coverage/);
+});
+
+test('semantic briefing rejection gets bounded source-preserving repair even without deductions', () => {
+  const failed = section('Callback change', 'https://example.com/callback');
+  const passed = section('Other change', 'https://example.com/other');
+  const verdict = { section_index: 0, publishable: false, reason: 'Public body omits early-close condition and next-session observation' };
+  const fact = { article_quality: [verdict, { section_index: 1, publishable: true }] };
+  const plan = buildSectionRepairPlan({ sections: [failed, passed] }, { deductions: [] }, fact, [], { maxSectionRepairs: 1 });
+  assert.equal(plan.length, 1);
+  assert.equal(plan[0].action, 'repair-section');
+  assert.deepEqual(plan[0].article_quality_feedback, verdict);
+  assert.equal(buildSectionRepairPlan({ sections: [failed] }, { deductions: [] }, fact, [], { maxSectionRepairs: 0 }).length, 0);
+  const blocked = buildSectionRepairPlan({ sections: [failed] }, { deductions: [] },
+    { ...fact, source_gaps: ['Callback change has no dated evidence.'], source_gap_count: 1 }, []);
+  assert.equal(blocked[0].action, 'replace-or-demote');
+  assert.equal(blocked[0].allow_rewrite, false);
+});
+
+test('bounded repair prioritizes rejected prose over an accepted article with a fallback image', () => {
+  const passed = section('Accepted change', 'https://example.com/accepted');
+  const failed = section('Missing public checks', 'https://example.com/failed');
+  const quality = { deductions: [{ category: 'image-fallback', reason: 'Local fallback visual',
+    location: passed.headline, points: 1, blocking: false }] };
+  const fact = { article_quality: [{ section_index: 0, publishable: true },
+    { section_index: 1, publishable: false, reason: 'Public verification missing' }] };
+  const plan = buildSectionRepairPlan({ sections: [passed, failed] }, quality, fact, [], { maxSectionRepairs: 1 });
+  assert.equal(plan.length, 1);
+  assert.equal(plan[0].headline, failed.headline);
+  assert.equal(plan[0].publication_blocked, true);
+  assert.equal(plan[0].action, 'repair-section');
+  assert.equal(buildSectionRepairPlan({ sections: [passed, failed] }, quality, fact, [], { maxSectionRepairs: 0 }).length, 0);
+});
+
 function tempRoot() {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'targeted-retry-'));
 }

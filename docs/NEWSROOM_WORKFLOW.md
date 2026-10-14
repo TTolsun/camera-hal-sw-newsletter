@@ -341,9 +341,10 @@ thinking 설정은 호출하는 모델의 패밀리(family)에 맞춰 다르게 
 
 Stage별 기본 모델은 다음과 같습니다.
 
-- reporter/fact-checker: `gemini-2.5-flash`
-- editor: `gemini-3.5-flash`
-- repair: `gemini-3.5-flash` (editor와 같은 schema를 재생성하므로 editor 모델에 맞춤)
+- reporter: `gemini-2.5-flash`
+- fact-checker / article source review: `gemini-3.8-flash`
+- editor: `gemini-3.8-flash`
+- repair: `gemini-3.8-flash` (editor와 같은 schema를 재생성하므로 editor 모델에 맞춤)
 - public article judge / source discovery: `gemini-2.5-flash-lite`
 - 기본 fallback: `gemini-2.5-flash` → `gemini-2.5-flash-lite` 순서 (flash 우선, flash-lite는 최후 안전망)
 
@@ -359,16 +360,16 @@ Stage별 model routing은 아래 우선순위를 따릅니다.
 
 | 설정 | reporter | editor | factcheck | repair | judge | sourceDiscovery |
 | --- | --- | --- | --- | --- | --- | --- |
-| env 없음 | `gemini-2.5-flash` | `gemini-3.5-flash` | `gemini-2.5-flash` | `gemini-3.5-flash` | `gemini-2.5-flash-lite` | `gemini-2.5-flash-lite` |
-| `NEWSROOM_EDITOR_MODEL=gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-3.5-flash` | `gemini-2.5-flash-lite` | `gemini-2.5-flash-lite` |
+| env 없음 | `gemini-2.5-flash` | `gemini-3.8-flash` | `gemini-2.5-flash` | `gemini-3.8-flash` | `gemini-2.5-flash-lite` | `gemini-2.5-flash-lite` |
+| `NEWSROOM_EDITOR_MODEL=gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-3.8-flash` | `gemini-2.5-flash-lite` | `gemini-2.5-flash-lite` |
 | `LLM_FALLBACK_MODELS=gemini-2.5-flash-lite` | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback |
 
 fact-checker는 새 글을 쓰는 stage가 아닙니다. source gap, unsupported claim, dated evidence 누락, forbidden bucket, 과장된 HAL impact 같은 구조화된 위반(structured violation)을 탐지하는 stage입니다. source binding과 hard blocker의 최종 방어선은 deterministic validator이지만, 품질 판정 자체는 fact-checker(LLM)에 맡깁니다. 그래서 fact-checker 기본 모델은 `gemini-2.5-flash`로 두면서 thinking(추론)을 켜 판정 신뢰성을 높입니다.
 
 모델 선택의 나머지 이유는 다음과 같습니다.
 
-- 문장 작성이 가장 복잡한 editor에는 `gemini-3.5-flash`(thinkingLevel MEDIUM)를 씁니다.
-- 발행 구제(repair)는 editor와 같은 section 재생성 schema를 다루므로 같은 `gemini-3.5-flash`로 맞춥니다.
+- 문장 작성이 가장 복잡한 editor에는 `gemini-3.8-flash`(thinkingLevel MEDIUM)를 씁니다.
+- 발행 구제(repair)는 editor와 같은 section 재생성 schema를 다루므로 같은 `gemini-3.8-flash`로 맞춥니다.
 - `gemini-2.5-flash`는 이 복잡한 nested section schema를 serving 단계에서 거부합니다(HTTP 400, "schema produces a constraint that has too many states for serving"). 그래서 repair에는 쓸 수 없습니다.
 - repair의 thinking은 model-family routing에 따라, 3.x에서는 thinkingBudget 1024가 thinkingLevel MEDIUM으로 번역됩니다.
 
@@ -393,7 +394,7 @@ fact-checker는 새 글을 쓰는 stage가 아닙니다. source gap, unsupported
 
 ## Safe Scheduled Defaults
 
-현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 정해집니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.5-flash`, public article judge·source discovery `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash` → `gemini-2.5-flash-lite`입니다. Workflow YAML은 Pro 계열 fallback 모델을 자동으로 추가하지 않으며, runtime config는 Gemini Pro 계열 모델명을 모든 public model override 경로에서 차단합니다.
+현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 정해집니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.8-flash`, public article judge·source discovery `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash` → `gemini-2.5-flash-lite`입니다. Workflow YAML은 Pro 계열 fallback 모델을 자동으로 추가하지 않으며, runtime config는 Gemini Pro 계열 모델명을 모든 public model override 경로에서 차단합니다.
 
 scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default를 쓰고, 나머지는 workflow와 runtime config의 기본값을 그대로 씁니다.
 
@@ -403,9 +404,9 @@ LLM_PROVIDER=gemini
 LLM_MODEL unset
 GEMINI_MODEL unset
 NEWSROOM_REPORTER_MODEL=gemini-2.5-flash
-NEWSROOM_EDITOR_MODEL=gemini-3.5-flash
-NEWSROOM_FACTCHECK_MODEL=gemini-2.5-flash
-NEWSROOM_REPAIR_MODEL=gemini-3.5-flash
+NEWSROOM_EDITOR_MODEL=gemini-3.8-flash
+NEWSROOM_FACTCHECK_MODEL=gemini-3.8-flash
+NEWSROOM_REPAIR_MODEL=gemini-3.8-flash
 NEWSROOM_JUDGE_MODEL=gemini-2.5-flash-lite
 NEWSROOM_SOURCEDISCOVERY_MODEL=gemini-2.5-flash-lite
 LLM_FALLBACK_MODELS=gemini-2.5-flash,gemini-2.5-flash-lite
@@ -693,3 +694,15 @@ AOSP·ChromeOS Gerrit 변경은 PolyGerrit HTML 대신 공식 REST metadata와 r
 기사의 충실도는 유형별 핵심 변화와 적용 조건을 원문에 대조해 기존 `article_quality.publishable` 판정으로 검사합니다. 모든 기사에 같은 목차·표·체크리스트를 요구하지 않습니다. 사실 오류와 출처 모순은 fact-check에서, 핵심 내용을 빠뜨린 일반론이나 요약의 반복은 기사 품질에서 다룹니다. 짧은 근거를 억지로 늘리는 대신 편집 계획에서 short/reference를 제안합니다.
 
 수정·보완 뒤 `article_source_review` 단계는 후보 요약·내부 claims를 제외하고 공개 본문과 원문만 다시 대조합니다. `source_review`에 핵심 변화, 본문 설명, 중요한 누락, 본문에서 다루지 않은 출처 충돌을 기록합니다. 문제가 남으면 발행 불가로 처리하며 앞선 검사의 거부 판정을 뒤집을 수 없습니다. 원문이 있는 기사에 검토 결과가 없거나 중복되면 실행을 중단합니다. 원문을 확보하지 못한 기사는 이 추가 검토를 수행했다고 기록하지 않고 기존 사실·출처·품질 검사를 유지합니다. 추가 LLM 호출 비용과 원문 수신 시간이 발생합니다.
+
+작성·보완·수정·검수는 공통 기술 브리핑 기준을 사용합니다. 버그 수정 기사는 공개 본문에서 발생 조건과 변경 전후, 실제 변경 계층과 적용 범위, 확인 조건과 관찰 대상, 소스 병합과 릴리스·제품 반영의 차이를 설명합니다. 내부 체크리스트만으로 공개 설명을 대신하지 않습니다. 확인 제안과 수행한 시험을 구분하며, 상위 계층의 우회 조치를 HAL 근본 수정이나 모든 요청의 성공 보장으로 확대하지 않습니다.
+
+원문 대조는 기사별로 분리하며, diff와 실패 테스트를 해석하는 `article_source_review` 단계는 fact-check 모델 그룹을 사용하고 fact-check sampling을 유지합니다. 일반 사실 검증과 repair/completion 사실 재검증도 기본적으로 `gemini-3.8-flash`를 사용합니다. `effect_boundaries`에는 원문의 입력·결과·예외와 공개 기사의 예상 결과를 각각 기록하여 대조합니다. 내부 `claim_type=limitation`은 공개 본문에서 한계 문장을 삭제하는 근거가 아닙니다. 기사별 모델 호출로 검수 비용과 시간이 늘어날 수 있습니다.
+
+출처 검증 메모는 `Source URL`, `Evidence ID`, `Primary source`, `Linked evidence`를 별도 항목으로 기록합니다. URL과 ID가 한 항목에 합쳐졌으면 실제로 끝까지 읽은 동일 원문에 결속될 때만 분리합니다. Gerrit 원문의 병합 상태는 미확인 연결 링크의 상태와 구분합니다. 원문 메타데이터의 변경 번호·프로젝트·브랜치·병합 날짜에 정확히 일치하는 상태 표현만 기존 연결 근거 과장 검사에서 구분하며, 다른 링크 확인 주장이나 불일치·잘린 원문은 이 처리로 통과시키지 않습니다.
+
+제한된 기사 수정 횟수는 발행 차단 사유에 우선 사용합니다. 같은 수정 유형에서는 공개 본문 검수 실패와 blocking deduction이 기본 이미지 등의 비차단 감점보다 먼저 선택됩니다. 출처 누락의 강등·교체 우선순위와 수정 횟수 제한은 유지하며, 수정한 기사도 동일한 검증을 다시 통과해야 합니다.
+
+재시도 작성 대상과 전체 초안 검수 대상은 구분합니다. 사실 검증·수정 검수에는 새 작성 대상뿐 아니라 보존된 기사가 인용한 reporter 원문 근거도 전달합니다. 이 입력 보완은 후보의 선정 플래그나 발행 자격을 변경하지 않으며, reporter에 없는 URL의 근거를 생성하지 않습니다.
+
+원문 검수는 `source_review.briefing_checks`에 `scope_and_behavior`, `public_verification`, `release_limitations`, `effect_boundaries`를 각각 기록합니다. 적용 가능한 기준은 해당 기사의 공개 문단 ID를 `evidence_passage_ids`로 참조해야 합니다. 코드는 참조가 실제로 존재하는지 확인하고 그 원문을 `verified_passages`에 기록합니다. 여러 문단을 모델이 하나의 인용으로 합치지 않으며, 미충족·누락·다른 기사의 문단·존재하지 않는 ID는 해당 기사를 발행 불가로 유지합니다. 이전 문자열 인용 형식은 실제 공개 문장과 정확히 일치할 때만 읽습니다. 설계 제안 등에서 비적용을 판단하면 이유를 남깁니다. 숫자 감점이 없어도 `article_quality.publishable=false`인 기사는 통과 기사로 고정하지 않고 기존 횟수 제한 안에서 수정 대상으로 삼습니다. 다음 작성 시도에는 출처 URL에 연결된 이전 본문과 검수 피드백을 전달합니다. 출처 누락과 발행 자격 위반에 대한 강등 우선순위는 유지합니다.

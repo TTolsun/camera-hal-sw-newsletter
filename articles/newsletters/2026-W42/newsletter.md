@@ -8,11 +8,31 @@
 
 ## 1. 이번 주 핵심
 
-카메라 연결 유지 제안, Qualcomm CAMSS 제어 형식 리뷰, Claude Haiku 5.5 발표를 살펴봅니다. 카메라 변경은 제안·리뷰 단계이며, Haiku의 실무 효과는 직접 비교가 필요합니다.
+이번 주에는 ‘AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안’, ‘Camera Extensions 조기 완료 콜백 시 발생하던 NullPointerException 및 세션 타임아웃 수정’ 등 8건의 소식을 다룹니다.
 
 - [AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안](#article-aosp-cameraserver-mute)
 
   지원 기기에서 화면에 표시된 앱은 영상만 차단되는지 확인할 사안입니다. 기능을 지원하지 않는 기기와 나머지 앱은 기존처럼 연결이 끊기는지도 확인해야 합니다.
+
+- [Camera Extensions 조기 완료 콜백 시 발생하던 NullPointerException 및 세션 타임아웃 수정](#article-camera-extensions-nullpointerexception)
+
+  Camera Extensions 연동 시 조기 완료 콜백 조건에서 CXCP-Camera-H 스레드의 예외 발생 여부를 점검하고 라이브러리 및 제품 빌드 반영 상태를 추적하세요.
+
+- [Camera2CaptureSequenceProcessor의 부분 Surface 캡처 요청 거부 및 재시도 메커니즘 도입](#article-camera2capturesequenceprocessor-surface)
+
+  비동기 Surface 바인딩 시차 환경에서 partial Surface 요청 거부 및 GraphLoop invalidate 신호에 따른 재시도 동작을 점검하세요.
+
+- [Android 16 특정 기기의 세션 재구성 지연을 우회하는 CameraDevice 강제 종료 쿼크](#article-android-16-cameradevice)
+
+  HAL이나 프레임워크 내부의 camera3_device_t 핸들 및 flush 로직을 직접 수정하지 않고, 상위 CameraX 레벨에서 장치를 완전히 닫고 다시 열도록 강제하여 스트림 플러시 실패를 우회하는 패치입니다.
+
+- [10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한](#article-10-sdr)
+
+  HAL 구현 시 10비트 HDR 프로필 키만 노출하고 DYNAMIC_RANGE_TEN_BIT 역량을 누락하면 상위 프레임워크와의 계약 위반이 발생하므로 메타데이터 정합성 검증이 필수적입니다.
+
+- [CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지](#article-camerapipe-capturesessionstate)
+
+  HAL 드라이버 인터페이스 계약 변경은 아니지만, 지연 서피스 패턴에서 세션 구성 직후 보류된 캡처 요청이 빠짐없이 유입되므로 초기 스트림 요청 인입 신뢰성을 검증하는 데 유용합니다.
 
 - [Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델](#article-claude-haiku-5-5)
 
@@ -61,9 +81,175 @@ UID가 비활성 상태가 될 때 사용하는 blockClientsForUid()는 이 패�
 
 ---
 
+<a id="article-camera-extensions-nullpointerexception"></a>
+
+## 3. Camera Extensions 조기 완료 콜백 시 발생하던 NullPointerException 및 세션 타임아웃 수정
+
+_AndroidX Gerrit Camera_
+
+CameraX Extension API 사용 시 캡처 완료 콜백이 조기에 도달할 때 핸들러 스레드가 비정상 종료되던 예외가 동기화 구조 개선으로 해결되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Camera Extensions 연동 시 조기 완료 콜백 조건에서 CXCP-Camera-H 스레드의 예외 발생 여부를 점검하고 라이브러리 및 제품 빌드 반영 상태를 추적하세요.
+
+
+![](../../assets/images/fallback/android.svg)
+
+
+카메라 확장 기능을 사용하는 환경에서 빠른 세션 열기와 닫기 주기를 반복할 때 onCaptureSequenceCompleted 콜백이 onCaptureStarted보다 먼저 전송되는 타이밍 경합으로 인해 예외가 발생하던 현상이 보고되었습니다.
+
+원인 분석에 따르면 ExtensionCaptureCallback의 완료 콜백은 프레임 번호를 제공하지 않는 반면 Camera2CaptureCallback은 프레임 번호를 요구합니다. 이를 연결하기 위해 internal extensionSessionMap에서 세션별 합성 프레임 번호를 추적했으나, 세션 시작 직후 프레임 캡처 전에 중단되면 맵에 값이 존재하지 않아 널 참조 예외가 던져졌습니다. 이 예외는 단일 스레드인 CXCP-Camera-H 핸들러의 루퍼를 종료시켜 후속 캡처 세션 구성 전체를 타임아웃시켰습니다.
+
+### 맵 동기화 및 합성 프레임 번호 안전 할당
+
+개발팀은 extensionSessionMap을 Collections.synchronizedMap으로 감싸고 onCaptureSequenceCompleted 호출 시 computeIfAbsent 메서드를 적용하도록 코드를 수정했습니다. 이를 통해 onCaptureStarted가 사전에 호출되지 않더라도 안전하게 유효한 합성 프레임 번호를 할당하여 전달합니다.
+
+또한 Android S 전용 콜백 핸들러의 onCaptureFailed 경로에도 getOrPut 방식을 적용하여 조기 실패 디스패치 시의 널 참조 위험을 차단했습니다. 수정을 검증하려면 세션 생성 직후 프레임 시작 전에 세션을 즉시 종료하거나 닫는 타이밍을 모사하여 CXCP-Camera-H 스레드에 예외 로그가 찍히지 않고 캡처 완료 통지가 정상 처리되는지 관찰해야 합니다. 본 소스는 Gerrit 병합 상태만 확인되었으며 실제 릴리스 패키지 및 기기 빌드 포함 여부는 미확인 상태입니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [AndroidX Gerrit Change 4334156](https://android-review.googlesource.com/c/platform/frameworks/support/+/4334156)
+
+---
+
+<a id="article-camera2capturesequenceprocessor-surface"></a>
+
+## 4. Camera2CaptureSequenceProcessor의 부분 Surface 캡처 요청 거부 및 재시도 메커니즘 도입
+
+_AndroidX Gerrit Camera_
+
+CameraPipe 파이프라인에서 일부 Surface가 준비되지 않은 상태로 제출된 캡처 요청을 유실하지 않고 명령 큐에 보존하여 재시도하는 로직이 추가되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+비동기 Surface 바인딩 시차 환경에서 partial Surface 요청 거부 및 GraphLoop invalidate 신호에 따른 재시도 동작을 점검하세요.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
+
+카메라 세션 초기화 및 스트림 설정 과정에서 모든 출력 스트림의 Surface 바인딩이 동시에 마무리되지 않고 시차가 발생하는 상황이 발생할 수 있습니다.
+
+이전 Camera2CaptureSequenceProcessor 구현에서는 일부 스트림의 Surface만 준비된 불완전 상태의 요청이 들어왔을 때 해당 명령을 제대로 처리하지 못했음에도 명령 큐에서 즉시 제거되었습니다. 이로 인해 뒤늦게 Surface 바인딩이 완료되더라도 큐에 기존 요청이 남아있지 않아 스트리밍 재개가 유실되는 문제가 존재했습니다.
+
+### 불완전 요청의 큐 보존 및 Invalidate 재시도
+
+이번 패치에서는 파이프라인 내부 제출 검증을 개편하여, 모든 스트림에 대응하는 유효한 Surface가 바인딩되지 않은 요청은 build 및 submit 단계를 거부하고 명령 큐에 보존하도록 수정했습니다.
+
+이후 GraphLoop가 Invalidate 명령을 받았을 때 큐에 남아 있던 요청을 다시 꺼내어 재시도를 수행합니다. 해당 동작을 직접 검증하려면 Surface 바인딩 미완료 상태를 모사하여 요청 거부를 유도한 후 invalidate 신호를 전달했을 때 큐의 요청이 재시도되어 정상 제출되는지 로그를 관찰해야 합니다. 본 변경은 Gerrit 소스 병합이 확인되었으나 라이브러리 정식 배포 및 기기 빌드 반영은 미확인 상태입니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [AndroidX Gerrit Change 4352209](https://android-review.googlesource.com/c/platform/frameworks/support/+/4352209)
+
+---
+
+<a id="article-android-16-cameradevice"></a>
+
+## 5. Android 16 특정 기기의 세션 재구성 지연을 우회하는 CameraDevice 강제 종료 쿼크
+
+_AndroidX Gerrit Camera (Gerrit Change 4341473)_
+
+유스케이스를 다시 바인딩하거나 전면과 후면 카메라를 전환할 때 프레임 수신이 멈추는 현상을 막기 위해, Android 16 환경의 특정 기기에서 세션 전환 시 CameraDevice 자체를 완전히 닫았다가 다시 열도록 쿼크 규칙이 확장되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+HAL이나 프레임워크 내부의 camera3_device_t 핸들 및 flush 로직을 직접 수정하지 않고, 상위 CameraX 레벨에서 장치를 완전히 닫고 다시 열도록 강제하여 스트림 플러시 실패를 우회하는 패치입니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
+
+카메라 앱에서 전면과 후면 렌즈를 번갈아 전환하거나 여러 유스케이스를 바인딩 해제 후 다시 연결할 때 간헐적으로 다음 세션에서 프레임이 전혀 들어오지 않는 정체 현상이 보고되었습니다. 이 증상은 특히 Android 16 (API 36) 이상으로 구동되는 특정 삼성 갤럭시 시리즈의 스냅드래곤 기기군에서 관찰되었습니다.
+
+원인은 프레임워크와 하위 네이티브 계층 사이의 상태 불일치에 있었습니다. 세션 초기 셋업 중 지연 도착한 바인더 onDeviceIdle 콜백이 이미 반복 요청이 실행 중인 상태에서 CameraDeviceImpl의 mIdle 플래그를 성급하게 true로 덮어쓰는 문제가 있었습니다. 이로 인해 이후 세션을 중단하기 위해 abortCaptures를 호출했을 때, 프레임워크의 플러시 로직이 이미 유휴 상태라고 잘못 판단하여 네이티브 HAL의 flush를 호출하지 않고 복귀해 버렸습니다. 또한 이전 인스턴스에서 닫힌 오래된 네이티브 camera3_device_t 핸들이 유지되면서 HAL 스트림 플러시 미디에이터의 SignalStreamFlush 단계에서 실패가 발생하는 구조였습니다.
+
+구글 안드로이드X 팀은 CloseCameraDeviceOnCameraGraphCloseQuirk의 적용 대상에 안드로이드 16 이상이면서 퀄컴 하드웨어 기반의 갤럭시 S22부터 S24 시리즈 모델(sm-s901, sm-s906, sm-s908, sm-s911, sm-s916, sm-s918, sm-s921, sm-s926, sm-s928)을 추가했습니다. 이 규칙이 활성화되면 동일한 디바이스 인스턴스에서 세션만 재구성하는 대신, CameraGraph가 닫힐 때마다 CameraDevice를 명시적으로 닫아 네이티브 핸들과 유휴 플래그 상태를 처음부터 안전하게 초기화합니다.
+
+이번 패치는 안드로이드X 오픈소스 메인 브랜치에 머지되었으나 정식 라이브러리 배포 버전이나 기기 상용 펌웨어에 반영된 시점은 별도로 확인해야 합니다. 실무 엔지니어는 해당 타깃 기기에서 ImageAnalysis나 Preview 바인딩을 해제하고 카메라 방향을 반복 전환하는 시나리오를 구성하여, 이전 세션의 잔류 요청이나 플러시 지연 없이 3초 이내에 새 프레임 프록시가 정상 전달되는지 점검할 수 있습니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473)
+
+---
+
+<a id="article-10-sdr"></a>
+
+## 6. 10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한
+
+_AndroidX Gerrit Camera (Gerrit Change 4350587)_
+
+카메라 메타데이터에 10비트 다이내믹 레인지 프로필이 나열되어 있더라도 기기가 10비트 역량을 선언하지 않았다면 CameraX가 프로필을 해석하지 않고 SDR 지원만 보고하도록 변경되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+HAL 구현 시 10비트 HDR 프로필 키만 노출하고 DYNAMIC_RANGE_TEN_BIT 역량을 누락하면 상위 프레임워크와의 계약 위반이 발생하므로 메타데이터 정합성 검증이 필수적입니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
+
+일부 안드로이드 기기에서 CameraCharacteristics의 다이내믹 레인지 프로필 목록에는 HLG10 같은 10비트 프로필이 채워져 있지만, 정작 기기의 지원 역량 배열인 REQUEST_AVAILABLE_CAPABILITIES에는 REQUEST_AVAILABLE_CAPABILITIES_DYNAMIC_RANGE_TEN_BIT가 빠져 있는 비정상적인 구성이 발견되었습니다. 예시로 확인된 단말은 레노버 TB520FU 모델입니다.
+
+Camera2 규격에 따르면 10비트 출력 스트림 구성은 해당 역량이 공식 선언된 기기에서만 유효합니다. 이 역량이 없으면 기저의 cameraserver는 표준 범위를 벗어난 10비트 구성을 거부합니다. 그러나 기존 CameraX의 DynamicRangeProfilesCompat은 역량 배열을 대조하지 않고 프로필 목록만을 읽어 HLG10을 지원하는 것으로 판단했습니다. 그 결과 앱이 10비트 DynamicRange를 설정하여 유스케이스를 바인딩하면 SupportedSurfaceCombination 검증에서 일치하는 서피스 조합을 찾지 못해 예외가 발생하며 바인딩 자체가 실패했습니다.
+
+이번 패치는 DynamicRangeProfilesCompat.fromCameraMetaData에서 시스템 버전이 API 33 이상이면서 동시에 cameraMetadata.supportsDynamicRangeTenBit가 참인 경우에만 다이내믹 레인지 프로필을 파싱하도록 조건을 강화했습니다. 역량이 선언되지 않은 상태라면 프로필 목록에 무엇이 적혀 있든 SDR 지원만을 보고합니다. 아울러 DynamicRangeResolver에서도 10비트 역량이 꺼져 있으면 권장 10비트 프로필 조회를 건너뜁니다. 이에 따라 미지정 동적 범위 요청은 SDR로 정상 해결되지만, 앱이 10비트 동적 범위를 명시적으로 요구하면 SDR로 자동 변환되지 않고 지원 서피스 조합 검증에서 IllegalArgumentException 예외가 발생하며 요청이 거부됩니다.
+
+점검 시에는 10비트 역량이 선언되지 않은 단말 환경에서 동적 범위를 미지정으로 두고 유스케이스를 구성했을 때 SDR로 정상 바인딩되는지, 반대로 명시적 10비트 구성을 요청했을 때 IllegalArgumentException 예외가 의도대로 발생하는지 관찰할 수 있습니다. 이는 패치 테스트 코드에서 도출한 확인 제안이며 기기 실측 결과는 아닙니다. 현재 확인된 상태는 platform/frameworks/support의 androidx-main 브랜치 머지까지이며, 실제 CameraX 공식 배포 라이브러리 릴리스와 상용 기기 제품 빌드 반영 여부는 확인되지 않았습니다. HAL 구현팀은 10비트 프로필 키와 역량 선언의 정합성을 사내 덤프로 점검해야 합니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587)
+
+---
+
+<a id="article-camerapipe-capturesessionstate"></a>
+
+## 7. CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지
+
+_AndroidX Gerrit Camera (Gerrit Change 4337073)_
+
+CameraX의 차세대 백엔드인 CameraPipe에서 세션 생성 직후 지연 서피스가 등록될 때 초기 캡처 요청이 재전송되지 못하고 정체되던 동기화 결함이 해소되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+HAL 드라이버 인터페이스 계약 변경은 아니지만, 지연 서피스 패턴에서 세션 구성 직후 보류된 캡처 요청이 빠짐없이 유입되므로 초기 스트림 요청 인입 신뢰성을 검증하는 데 유용합니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
+
+CameraPipe 기반 파이프라인에서 서피스가 준비되기 전에 세션을 먼저 초기화하는 지연 서피스 구조를 사용할 때, 세션 시작 콜백과 출력 구성 완료 시점 사이의 동시성 결함으로 인해 요청이 누락되는 현상이 존재했습니다.
+
+기존 동기화 구조에서는 createCaptureSession 호출이 즉시 반환되거나 하위 계층의 onConfigured 콜백이 극도로 신속하게 도착하는 환경에서 레이스 컨디션이 유발되었습니다. onGraphStarted 콜백이 의도치 않게 여러 차례 호출되거나 출력 파이널라이제이션 이후에야 뒤늦게 호출되는 순서 역전이 발생했습니다. 또한 동일한 GraphRequestProcessor 인스턴스로 두 번째 onGraphStarted가 유입되면 GraphLoop 큐가 갱신되지 못했고, 출력 구성을 파이널라이즈할 때 내부적으로 재시도 허용 플래그가 꺼져 있어 지연 서피스가 배치된 뒤에도 보류 중이던 캡처 요청이 카메라 드라이버로 전달되지 못했습니다.
+
+이번 변경은 CaptureSessionState에 STARTED라는 새로운 상태를 도입하여 전이 모델을 재설계했습니다. 세션 생성이 완료되면 출력 파이널라이제이션보다 먼저 onGraphStarted를 호출하고 상태를 STARTED로 전이시킵니다. 아울러 finalizeOutputsIfAvailable 내부에서 재시도를 제한하던 조건을 제거하여, 지연되던 서피스가 유입되는 즉시 onGraphModified를 통해 큐에 대기 중이던 캡처 요청이 누락 없이 재전송되도록 동기화 흐름을 바로잡았습니다.
+
+점검을 진행할 때는 세션 생성 직후 지연 서피스가 뒤늦게 바인딩되는 시나리오를 구성하여, onGraphStarted가 정확히 1회만 호출되고 지연 서피스 등록 시점에 onGraphModified가 유입되어 대기 요청이 하위 파이프라인으로 전송되는지 관찰하는 방법을 적용할 수 있습니다. 이는 패치의 단위 테스트 구조에 근거한 편집 제안이며 실측 단말 보고는 아닙니다.
+
+현재 이 수정은 platform/frameworks/support의 androidx-main 브랜치에 병합된 상태입니다. 그러나 공식 CameraX 라이브러리 릴리스 배포나 상용 단말 펌웨어 빌드 반영 여부는 확인되지 않았으며, Camera HAL3 인터페이스나 시스템 레벨 Camera2 API 사양 자체를 변경하는 것은 아닙니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [Rework CaptureSessionState state model and synchronization - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073)
+
+---
+
 <a id="article-claude-haiku-5-5"></a>
 
-## 3. Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델
+## 8. Claude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델
 
 _Anthropic News 공식 발표_
 
@@ -101,7 +287,7 @@ Camera HAL 개발 팀에서는 빌드 오류 로그의 요약·분류를 시험 
 
 <a id="article-qualcomm-camss-isp-uapi-v10"></a>
 
-## 4. Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의
+## 9. Qualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의
 
 _lore.kernel.org linux-media list_
 
@@ -130,15 +316,13 @@ Qualcomm platform 커널 드라이버 연동 시 qcom-camss-config.h uAPI 구조
 - [[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation](https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/)
 
 
-## 참고 / 더 읽을거리
-
-- [\[PATCH 0/3\] media: Add GalaxyCore GC5035 and GC8034 sensor drivers](<https://lore.kernel.org/linux-media/20261009072733.39877-1-nicfio@gmail.com/>) — lore.kernel.org linux-media list (2026-10-09) · 카메라 드라이버 / 이미지 파이프라인 참고
-- [\[PATCH 0/2\] media: i2c: Add OmniVision OV3660 image sensor driver](<https://lore.kernel.org/linux-media/20261008160650.73927-1-tien.nguyenminh@embeddedlinux.blog/>) — lore.kernel.org linux-media list (2026-10-08) · 카메라 드라이버 / 이미지 파이프라인 참고
-- [\[PATCH v1 0/2\] media: support upside-down camera mounting](<https://lore.kernel.org/linux-media/20261007034914.1654831-1-jimmy.su@intel.com/>) — lore.kernel.org linux-media list (2026-10-07) · 카메라 드라이버 / 이미지 파이프라인 참고
-- [\[PATCH v3 0/2\] media: rkisp1: Add YUV bypass support for rkisp1](<https://lore.kernel.org/linux-media/20261006-media-rkisp1-add-yuv-bypass-support-for-rkisp1-v3-0-93d3d43991a0@ideasonboard.com/>) — lore.kernel.org linux-media list (2026-10-06) · 카메라 드라이버 / 이미지 파이프라인 참고
-
 ## 참고자료
 
 - [cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av](https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947)
 - [[PATCH v10 5/9] media: Documentation: uapi: Add qcom-camss ISP params documentation](https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com/)
 - [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5)
+- [AndroidX Gerrit Change 4334156](https://android-review.googlesource.com/c/platform/frameworks/support/+/4334156)
+- [AndroidX Gerrit Change 4352209](https://android-review.googlesource.com/c/platform/frameworks/support/+/4352209)
+- [Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473)
+- [Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587)
+- [Rework CaptureSessionState state model and synchronization - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073)

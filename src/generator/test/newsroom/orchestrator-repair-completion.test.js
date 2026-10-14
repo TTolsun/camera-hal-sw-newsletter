@@ -53,7 +53,7 @@ function makeStubs(state) {
     }),
     '../../publish/orchestrator-reporter-normalize': () => ({
       isReserveCandidate: () => false,
-      selectedReporterCapsules: () => [],
+      reviewReporterCapsules: () => [],
       reserveReporterCapsules: () => [],
       reporterCandidateCapsules: () => []
     }),

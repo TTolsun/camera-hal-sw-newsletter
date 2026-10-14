@@ -51,6 +51,29 @@ test('source identifier notation loss in Story v2 enters bounded repair and pres
   assert.deepEqual(result.editor.sections.map(section => section.sources), draft.sections.map(section => section.sources));
 });
 
+test('semantic repair restores only an omitted hash independently recomputed for unchanged sources', async () => {
+  for (const mode of ['omitted', 'changed', 'different-source', 'wrong-recomputed']) {
+    const draft = storyV2Editor();
+    draft.sections[0].source_candidate_hash = 'trusted-hash';
+    draft.sections[0].confirmed_facts = ['Mali-C55 ISP를 지원합니다.'];
+    draft.sections[0].public_article.lead = 'Mali C55 ISP를 검증합니다.';
+    const run = repairEditorOutputContract({
+      value: draft, date: DATE,
+      normalizeSection: (value, index, reporter) => ({ ...normalizeSection(value, index, reporter),
+        ...(index === 0 ? { source_candidate_hash: mode === 'wrong-recomputed' ? 'other' : 'trusted-hash' } : {}) }),
+      repairFn: async ({ invalidEditor }) => {
+        invalidEditor.sections[0].public_article.lead = 'Mali-C55 ISP를 검증합니다.';
+        delete invalidEditor.sections[0].source_candidate_hash;
+        if (mode === 'changed') invalidEditor.sections[0].source_candidate_hash = 'changed-hash';
+        if (mode === 'different-source') invalidEditor.sections[0].sources[0].title += ' changed';
+        return invalidEditor;
+      }
+    });
+    if (mode === 'omitted') assert.equal((await run).repairSucceeded, true);
+    else await assert.rejects(run, error => error instanceof EditorSemanticValidationError);
+  }
+});
+
 test('unrepaired notation loss cannot pass by changing the fact spelling or another article', async () => {
   for (const eraseAnchor of [false, true]) {
     const draft = editor();

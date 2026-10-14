@@ -1,0 +1,44 @@
+{
+  "deterministic_selected": [
+    "0d11ab5273eb747408a9f8317c7bf885c78f4fadf44f87532ec15af12969561c",
+    "35eea6da2a4db6c9d187ef5552a9bc4276cfb6bf8d640899389de37bea308b9a",
+    "22aca2a8fa3ef11b25d728555b3b33a997ea2061ffd5d0e14a74ea756da96549"
+  ],
+  "reconciled_selected": [
+    "0d11ab5273eb747408a9f8317c7bf885c78f4fadf44f87532ec15af12969561c",
+    "35eea6da2a4db6c9d187ef5552a9bc4276cfb6bf8d640899389de37bea308b9a",
+    "22aca2a8fa3ef11b25d728555b3b33a997ea2061ffd5d0e14a74ea756da96549"
+  ],
+  "changes": [],
+  "deterministic_selected_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073"
+  ],
+  "demoted_group_keys": [],
+  "demoted_groups": [],
+  "editorial_plan_scored_candidates": [
+    {
+      "candidate_key": "0d11ab5273eb747408a9f8317c7bf885c78f4fadf44f87532ec15af12969561c",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "35eea6da2a4db6c9d187ef5552a9bc4276cfb6bf8d640899389de37bea308b9a",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    },
+    {
+      "candidate_key": "22aca2a8fa3ef11b25d728555b3b33a997ea2061ffd5d0e14a74ea756da96549",
+      "lineup_role": "selected",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073",
+      "coverage_decision": "main_article",
+      "reason_code": null
+    }
+  ],
+  "promoted_group_keys": []
+}

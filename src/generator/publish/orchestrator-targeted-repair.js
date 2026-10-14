@@ -180,6 +180,12 @@ function validateTargetedRepairResult({
   if (baseIssue && baseIssue.generation_contract_version !== undefined) {
     storyMarkers.generation_contract_version = baseIssue.generation_contract_version;
   }
+  // Retain already-validated selection declarations in this synthetic wrapper.
+  // Dropping a held group here falsely turns a prose-only patch into missing coverage.
+  const groupDeclarations = {};
+  for (const key of ['explicitly_demoted_groups', 'hard_blocked_groups']) {
+    if (Array.isArray(baseIssue?.[key])) groupDeclarations[key] = cloneJson(baseIssue[key]);
+  }
   validateEditor({
     date,
     title: `Camera HAL / SW Newsletter - ${date}`,
@@ -188,7 +194,8 @@ function validateTargetedRepairResult({
     sections: after,
     action_items: [],
     references: [],
-    ...storyMarkers
+    ...storyMarkers,
+    ...groupDeclarations
   }, date, reporter, { strictClaims: false });
   return true;
 }

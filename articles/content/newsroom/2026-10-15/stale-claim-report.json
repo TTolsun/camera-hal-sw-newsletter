@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-15",
+  "status": "PASS",
+  "removed_sections": [],
+  "dropped_selected_groups": [],
+  "restored_to_keep_minimum": [],
+  "final_section_sources": [
+    {
+      "title": "Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473"
+    },
+    {
+      "title": "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587"
+    },
+    {
+      "title": "Rework CaptureSessionState state model and synchronization - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073"
+    }
+  ],
+  "stale_claim_items_removed": [],
+  "unsupported_release_claims_removed": [],
+  "unused_references_removed": [],
+  "retained_release_claims": [],
+  "hard_failures": []
+}

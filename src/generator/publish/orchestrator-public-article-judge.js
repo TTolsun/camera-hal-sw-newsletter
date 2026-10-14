@@ -26,7 +26,7 @@ const {
   judgeRepairError,
   publicArticleJudgeArtifactScope
 } = require('./orchestrator-judge-helpers');
-const { selectedReporterCapsules } = require('./orchestrator-reporter-normalize');
+const { reviewReporterCapsules } = require('./orchestrator-reporter-normalize');
 const { sourceReviewInput } = require('../quality/article-source-review');
 const { DERIVED_STAGE_KINDS, derivedStageRun } = require('../../shared/llm/stage-catalog');
 
@@ -72,7 +72,7 @@ async function repairEditorSemanticWithLlm({
     [
       commonContext,
       lockedContext,
-      `Primary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter || { candidates: [] }, articleCapsuleReport, { seedEvidencePack }), null, 2)}`,
+      `Current draft source capsule JSON (includes preserved articles; writing-selection flags are not source-access verdicts):\n${JSON.stringify(reviewReporterCapsules(date, reporter || { candidates: [] }, articleCapsuleReport, invalidEditor, { seedEvidencePack }), null, 2)}`,
       `Editor semantic validation error JSON:\n${JSON.stringify(validationError, null, 2)}`,
       `Invalid editor draft JSON:\n${JSON.stringify(invalidEditor, null, 2)}`,
       `Section-bound source documents for repair (review suggestions are not evidence) JSON:\n${JSON.stringify(sourceReviewInput(invalidEditor, articleCapsuleReport).map(({ section_index, source_documents }) => ({ section_index, source_documents })), null, 2)}`

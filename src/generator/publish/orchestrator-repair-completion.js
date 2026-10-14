@@ -67,7 +67,7 @@ const {
 } = require('./orchestrator-repair-plan');
 const {
   isReserveCandidate,
-  selectedReporterCapsules,
+  reviewReporterCapsules,
   reserveReporterCapsules,
   reporterCandidateCapsules
 } = require('./orchestrator-reporter-normalize');
@@ -273,7 +273,7 @@ async function runRepairAndCompletionPasses({
         const patchResponse = await callLlmJson(
           repairStage,
           editorRepairPatchSystemPrompt(),
-          `${commonContext}\n\nFailed sections to patch JSON:\n${JSON.stringify(patchTargets, null, 2)}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
+          `${commonContext}\n\nFailed sections to patch JSON:\n${JSON.stringify(patchTargets, null, 2)}\n\nRepair plan JSON:\n${JSON.stringify(repairPlan, null, 2)}\n\nCurrent draft source capsule JSON (includes preserved articles; writing-selection flags are not source-access verdicts):\n${JSON.stringify(reviewReporterCapsules(date, reporter, articleCapsuleReport, editor, { seedEvidencePack }), null, 2)}\n\nCurrent fact-check JSON:\n${JSON.stringify(factCheck, null, 2)}\n\nCurrent quality deductions JSON:\n${JSON.stringify(ensureArray(qualityReport?.deductions), null, 2)}`,
           editorRepairPatchSchema
         );
         const patches = ensureArray(patchResponse && patchResponse.patches);
@@ -348,7 +348,7 @@ async function runRepairAndCompletionPasses({
       factCheck = validateFactCheck(await callLlmJson(
         repairFactCheckStage,
         factCheckRepairSystemPrompt(),
-      `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+      `${commonContext}\n\nCurrent draft source capsule JSON (includes preserved articles; writing-selection flags are not source-access verdicts):\n${JSON.stringify(reviewReporterCapsules(date, reporter, articleCapsuleReport, editor, { seedEvidencePack }), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nRepaired editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
         factCheckSchema
       ));
       eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections, {
@@ -508,7 +508,7 @@ async function runRepairAndCompletionPasses({
         factCheck = validateFactCheck(await callLlmJson(
           completionFactCheckStage,
           factCheckCompletionSystemPrompt(),
-        `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+        `${commonContext}\n\nCurrent draft source capsule JSON (includes preserved articles; writing-selection flags are not source-access verdicts):\n${JSON.stringify(reviewReporterCapsules(date, reporter, articleCapsuleReport, editor, { seedEvidencePack }), null, 2)}\n\nReserve article capsule pool JSON:\n${JSON.stringify(reserveReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nCompleted editor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
           factCheckSchema
         ));
         eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections, {

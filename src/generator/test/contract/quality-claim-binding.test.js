@@ -809,6 +809,45 @@ test('primary source confirmation is scoped to a fully read URL and evidence id,
   assert.ok(linkedDeductions(reportWithTargetSection(prose, candidate), 'linked-evidence-overclaim').some(item => item.blocking));
 });
 
+test('fetched primary Gerrit merge metadata never confirms unresolved linked evidence', () => {
+  const url = 'https://android-review.googlesource.com/c/platform/example/+/123';
+  const metadata = { change_number: 123, project: 'platform/example', branch: 'main',
+    status: 'MERGED', submitted: '2026-01-02 12:00:00.000000000' };
+  const document = { url, evidence_id: 'source-body:primary', truncated: false,
+    text: `Official Gerrit metadata (UTC timestamps):\n${JSON.stringify(metadata, null, 2)}\n\nComplete revision patch (commit message and diff):\nSynthetic patch` };
+  const candidate = linkedEvidenceCandidate(url, 'direct_aosp_camera', {
+    article_source_reading: { status: 'read', documents: [document] },
+    linked_evidence_summary: linkedEvidenceSummary({ by_fetch_status: { unsupported: 1 }, has_unresolved_evidence: true }),
+    impact_classification: impactClassification({ impact_type: 'unknown', recommended_article_type: 'unknown' })
+  });
+  const claim = 'Gerrit change 123이 2026-01-02 main 브랜치에 MERGED 상태입니다.';
+  const summary = 'Gerrit change 123 (platform/example, status=MERGED)';
+  const article = section({ url, what_changed: claim, evidence_summary: summary });
+  const blocked = (a, c = candidate) => linkedDeductions(reportWithTargetSection(a, c), 'linked-evidence-overclaim').some(d => d.blocking);
+  assert.equal(blocked(article), false);
+  const expandedClaim = 'Gerrit change 123이 2026-01-02에 platform/example main 브랜치에 status=MERGED로 병합됨';
+  const koreanClaim = 'Gerrit 변경 123은 2026-01-02에 platform/example의 main 브랜치에 병합(MERGED)되었습니다.';
+  assert.equal(blocked({ ...article, confirmed_facts: [koreanClaim] }), false);
+  for (const invalid of [koreanClaim.replace('123', '456'), koreanClaim.replace('main', 'release'),
+    koreanClaim.replace('platform/example', 'platform/other'), koreanClaim + ' Linked evidence verified.']) {
+    assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
+  }
+  assert.equal(blocked({ ...article, confirmed_facts: [expandedClaim] }), false);
+  for (const invalid of [expandedClaim.replace('platform/example', 'platform/other'),
+    expandedClaim.replace('01-02', '01-03'), expandedClaim + ' Linked evidence verified.']) {
+    assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
+  }
+  for (const badClaim of [claim.replace('123', '456'), claim.replace('01-02', '01-03'), claim.replace('main', 'release'),
+    claim + ' Gerrit linked evidence verified.', claim + ' This proves the linked evidence.']) {
+    assert.equal(blocked({ ...article, what_changed: badClaim }), true, badClaim);
+  }
+  for (const changedDocument of [
+    { ...document, truncated: true }, { ...document, url: url.replace('123', '456') },
+    { ...document, text: document.text.replace('MERGED', 'NEW') },
+    { ...document, text: document.text.replace('123', '456') }
+  ]) assert.equal(blocked(article, { ...candidate, article_source_reading: { status: 'read', documents: [changedDocument] } }), true);
+});
+
 test('malformed linked evidence diagnostics are soft and non-fatal', () => {
   const cases = [
     {

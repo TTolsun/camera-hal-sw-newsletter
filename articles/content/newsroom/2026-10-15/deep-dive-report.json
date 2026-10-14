@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-15",
+  "rollout_stage": "shadow",
+  "status": "skipped",
+  "activated": false,
+  "trigger": {
+    "direct_aosp_camera_weekly_final_count": 6,
+    "activated": false
+  },
+  "selected_topic_key": null,
+  "skip_reason": "not_activated",
+  "error": null,
+  "queue_size": 0,
+  "accrued_this_week": 0,
+  "evidence_used": []
+}

@@ -249,7 +249,7 @@ function articleResultForSection(section, qualityReport) {
 
 function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFindings = [], options = {}) {
   const maxSectionRepairs = Number.isInteger(options.maxSectionRepairs) ? options.maxSectionRepairs : Infinity;
-  const sectionPlans = ensureArray(editor.sections).map(section => {
+  const sectionPlans = ensureArray(editor.sections).map((section, sectionIndex) => {
     const deductions = ensureArray(qualityReport?.deductions)
       .filter(deduction => deductionMatchesSection(deduction, section));
     const recommendedFixes = ensureArray(factCheck?.recommended_fixes)
@@ -258,10 +258,23 @@ function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFin
     const hasSourceGap = sectionHasSourceGap(section, factCheck);
     const hasReporterEligibilityBlock = sectionEligibilityFindings.length > 0;
     const articleResult = articleResultForSection(section, qualityReport);
+    const qualityVerdict = ensureArray(factCheck?.article_quality)
+      .find(item => item.section_index === sectionIndex && item.publishable === false);
     const policies = [
       ...deductions.map(deductionRepairPolicy),
       ...recommendedFixes.map(item => deductionRepairPolicy({ category: 'recommended-fix', reason: item }))
     ];
+    // Semantic failures block publication independently of numeric deductions.
+    // Give them the same bounded repair opportunity; source blockers below
+    // still take precedence and cannot be repaired by rewriting prose.
+    if (qualityVerdict) {
+      policies.push({
+        failure_type: 'article-quality',
+        action: 'repair-section',
+        allow_rewrite: true,
+        reason: qualityVerdict.reason || 'repair the rejected public explanation using the existing source evidence'
+      });
+    }
     if (articleResult?.status === 'DEMOTE') {
       policies.push({
         failure_type: 'scope-demotion',
@@ -304,6 +317,8 @@ function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFin
       headline: sectionLabel(section),
       sources: sectionUrls(section),
       action,
+      publication_blocked: Boolean(qualityVerdict || hasSourceGap || hasReporterEligibilityBlock ||
+        ['FAIL', 'DEMOTE'].includes(articleResult?.status) || deductions.some(item => item.blocking !== false)),
       failure_type: policy?.failure_type || '',
       allow_rewrite: policy?.allow_rewrite !== false,
       policy_reason: policy?.reason || '',
@@ -324,12 +339,14 @@ function buildSectionRepairPlan(editor, qualityReport, factCheck, eligibilityFin
         reason_code: deduction.reason_code || '',
         location: deduction.location || ''
       })),
-      recommended_fixes: recommendedFixes
+      recommended_fixes: recommendedFixes,
+      article_quality_feedback: qualityVerdict || null
     };
   }).filter(item => item.action !== 'preserve');
   const priority = { 'replace-or-demote': 0, 'replace-section': 1, 'repair-section': 2 };
   return sectionPlans
-    .sort((a, b) => (priority[a.action] ?? 9) - (priority[b.action] ?? 9))
+    .sort((a, b) => (priority[a.action] ?? 9) - (priority[b.action] ?? 9) ||
+      Number(b.publication_blocked) - Number(a.publication_blocked))
     .slice(0, maxSectionRepairs);
 }
 

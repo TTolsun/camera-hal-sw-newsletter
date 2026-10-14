@@ -8,6 +8,7 @@ const {
 const { HAL_IMPACT_AXES } = require('./hal-signal-quality');
 const { PUBLIC_SOURCE_ROLES } = require('./public-article-contract');
 const { CLAIM_IMPACT_LEVELS } = require('./source-binding-policy');
+const { technicalBriefingContractPrompt } = require('./technical-briefing-contract');
 
 // v2 본문 규약은 lint와 **같은 상수**에서 공급한다. 여기에 같은 목록을 리터럴로 적으면
 // lint가 막는 것과 프롬프트가 금지하는 것이 갈라져, 모델이 프롬프트를 그대로 지켜도
@@ -290,7 +291,8 @@ function cameraHalEditorialVoiceBaseLines() {
   const narrativeArc = 'body_markdown은 기술 브리핑의 기본 전개를 따르되, 설계 제안이나 도구 소개처럼 다른 설명 순서가 더 명확한 기사는 근거와 쟁점에 맞게 조정하세요. 원문에서 실제로 일어난 일, 그 기술의 정체·적용 대상·현재 상태와 Camera HAL과의 거리감(직접 변경인지, lower-stack 참고 흐름인지), 그리고 직접 변경 / 참고할 흐름 / 추적할 리스크 중 무엇인지에 대한 현실적인 takeaway는 본문에 모두 담아야 합니다. Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고 중요도 판단 기준으로만 쓰세요.';
   const narrativeQuality = '기사마다 독자가 이해해야 할 문제나 선택에서 출발해 확인된 변화와 의미가 이어지도록 쓰세요. 장면은 근거가 있거나 명시적인 가정일 때만 쓰고 인물·대화·사건을 꾸미지 마세요. 모든 기사를 발표 요약 → 일반적 활용 가능성 → HAL 영향 없음의 같은 틀로 찍어내지 마세요. 문단 수나 질문형 도입을 억지로 달리할 필요는 없지만 각 기사의 근거와 쟁점에 맞는 전개가 필요합니다.';
   const briefing = '기술 브리핑의 기본 전개는 변경 전후 동작 → 적용 조건과 업무 영향 → 필요한 확인 사항입니다. 특히 버그 수정은 발생 조건, 기존 실패, 수정 원리를 연결하고, 핵심 조건은 내부 article_sections나 claims에만 두지 말고 공개 lead/body에도 설명하세요. 본문 문법과 기존 소제목 제한은 유지하며 고정 라벨이나 새 블록은 필요하지 않습니다. HAL API 자체 변경, 상위 CameraX 세션·콜백 변경, 하위 인코더 출력 변경을 구분하고, 직접 HAL 변경이 아니라면 어느 계층에서 증상을 분리해 확인하는 데 도움이 되는지 설명하세요. 근거 없이 configureStreams/processCaptureRequest 호출 변화나 ISP 변경을 덧붙이지 마세요. 커밋 병합, 라이브러리 릴리스, 제품 빌드 반영은 각각 별도 근거가 필요합니다.';
-  return [voice, narrativeArc, narrativeQuality, briefing];
+  const publicChecks = '실무 점검을 안내하는 버그 수정 기사에서는 공개 body_markdown에도 재현할 입력·세션 조건과 관찰할 결과를 연결한 확인 문장을 쓰세요. reader_checkpoints나 action_items에만 적은 테스트 이름은 독자에게 보이지 않으므로 본문 설명을 대신하지 못합니다. 원문에 없는 테스트 결과·합격 수치·기기 범위는 만들지 말고, 제안하는 확인은 수행 완료 사실과 구분하세요. 커밋 근거 기사에는 병합된 수정이라는 현재 상태와 릴리스·제품 반영 확인의 한계를 공개 본문에 명시하세요. 우회 패치를 근본 원인 제거 또는 모든 기기에서의 해결 보장으로 표현하지 마세요.';
+  return [voice, narrativeArc, narrativeQuality, briefing, publicChecks, technicalBriefingContractPrompt()];
 }
 
 function cameraHalEditorialVoicePrompt() {
@@ -315,6 +317,7 @@ function editorialPlanPrompt() {
   return [
     'AndroidX CameraPipe·Extensions·HeifWriter의 개별 수정은 HAL ABI/API 변경이 아니어도 구체적인 발생 조건·실패 증상·수정 동작이 원문에 있으면 개발자가 세션·콜백·출력 문제를 구분하는 데 유용한 기사로 평가하세요. direct_hal_impact를 높여 승격시키지 말고 기존 자격·우선순위·개수 제한 안에서 판단하세요. change_assessment와 editorial_angle에는 변경 내용, 영향을 받는 구성, 독자가 확인할 결과를 연결하고, 없는 조건이나 테스트는 만들어 채우지 마세요. 파일 수·삽입 줄 수·카메라 경로만 있는 후보는 동작 설명의 근거가 아니므로 실제 source document를 확인하세요.',
     'Editorial plan contract: 제공된 shortlisted article capsule마다 editorial_plans[] item을 하나씩 생성하세요. 이것은 public article prose가 아니라 작성을 안내할 내부 editorial plan입니다.',
+    '내부 구현 변경과 동작 변화 없는 정리를 구분하세요. 상태 전이·동기화·재시도 수정으로 실제 요청 유실이나 세션 정지가 달라진다는 근거가 있으면 공개 API 변화가 없어도 main_article 후보입니다. 반대로 테스트 리소스 정리만으로 제품 런타임 누수 수정이라고 해석하지 마세요. change_assessment에서 구체적인 실패와 수정 동작을 확인했는데도 exclude한다면, 단순히 내부 구현이라는 이유 대신 독자 가치가 부족한 근거를 editorial_angle에 설명하세요.',
     'title, url, source_candidate_hash는 capsule에서 정확히 echo하세요(매칭용 식별자). 새 값을 만들지 마세요.',
     'coverage_decision은 main_article, exclude 중 하나입니다. impact_level은 Direct Impact, Design Reference, Trend Watch, Exclude 중 하나입니다. 이 값은 내부 추론 결과이며 public 본문에 라벨로 노출하지 않습니다.',
     'AOSP Camera가 최우선이며 GCC·C++ 개발 도구와 AI 개발 도구는 그다음 우선순위의 메인 기사입니다. cpp_ai_tooling_fallback이라는 호환용 버킷 이름 때문에 보조 기사나 짧은 소식으로 강등하지 마세요. Driver보다 먼저 다루되 출처·날짜·품질 자격은 동일하게 확인하세요.',
@@ -335,6 +338,8 @@ function editorialPlanPrompt() {
 
 function publicArticleJudgePrompt() {
   return [
+    technicalBriefingContractPrompt(),
+    '버그 수정의 공개 body_markdown에 확인 조건·관찰 결과 또는 릴리스·제품 반영의 미확인 한계가 빠졌으면 public_article_pass=false와 issues[].field=public_article.body_markdown, severity=P2로 기록하세요. 내부 reader_checkpoints나 not_to_overclaim이 충실해도 공개 본문 누락을 대신하지 못합니다. suggested_fix에는 제공된 근거 안에서 넣을 내용을 명명하세요. 이 검사는 P3 desk advisory가 아니라 기존 semantic repair 대상입니다.',
     '당신은 AOSP Camera / Driver / SoC Platform Newsletter의 public article semantic judge입니다.',
     '역할은 article을 다시 쓰는 것이 아니라, 제공된 JSON이 독자에게 발행 가능한 의미 품질을 갖췄는지 판정하는 것입니다.',
     '단어 매칭이나 특정 keyword 출현 여부로 판정하지 마세요. 한국어 표현, 동의어, 자연스러운 기술 문장을 의미 기준으로 평가하세요.',
@@ -402,6 +407,7 @@ function claimRepairEvidencePrompt() {
 // 바꿀 수 없고, 독자-facing 문구만 교체한다. 반환은 {patches:[...]}만 허용한다.
 function editorRepairPatchPrompt() {
   return [
+    technicalBriefingContractPrompt(),
     '수정할 때 공개 본문의 변경 전후 동작, 적용 조건과 업무 영향, 근거 있는 확인 사항을 보존하세요. 사실 오류를 고친다는 이유로 구체 설명을 일반적인 모니터링 권고로 대체하지 마세요. 확인 제안을 테스트 완료 사실로 바꾸거나 상위 라이브러리 수정을 HAL API 변경으로 바꾸지 마세요.',
     'Patch-only repair contract: full editor 또는 full section JSON을 반환하지 마세요. {patches:[...]} 객체만 반환하세요.',
     '각 patch는 section_index, op, path, value를 가집니다. section_key는 제공되면 section_index와 같은 section을 가리키도록 echo하세요.',
@@ -427,6 +433,7 @@ function factCheckSeverityPrompt() {
     'source policy가 cross_check_status=required_satisfied, conditional_evidence_type=project_patch_strong_evidence로 제공했다면 기존 결정론 정책이 패치 1차 산출물의 근거를 확인한 것입니다. requires_cross_check=true라는 값만으로 다시 required_missing을 만들어내거나 병합 증거를 추가로 요구하지 마세요. 이 자격은 병합·배포의 사실 증명이 아니므로 공개 상태 주장은 여전히 원문과 대조하세요. blocked/required_missing을 모델 판단으로 required_satisfied로 바꾸지 마세요.',
     'source_gaps 항목에는 해당 headline 또는 URL과 어떤 근거(예: 날짜, 주장 지원, 필수 cross-check)가 실제로 빠졌는지를 명명하세요. 미확인 병합 상태와 필수 cross-check 누락을 하나로 뭉뚱그리지 마세요. 이미 제공된 원문이 확인한 제안 내용을 검증하는 데 근거 없는 병합 상태를 추가하도록 repair를 유도하지 마세요.',
     '수정 제안의 사실성도 검증하세요. must_fix는 공개 문장의 실제 사실 오류와 그 오류를 반증하거나 뒷받침하지 못하는 source 구절을 명명해야 합니다. 같은 의미의 한국어 어순·접속사 변경, 더 좋은 제목, 원문 식별자의 단순 강조는 factual 오류가 아닙니다. 추천 문구가 현재 문구와 동일하면 수정 대상으로 올리지 마세요.',
+    'claims[].claim_type은 내부 근거 분류이며 공개 본문에서 허용되는 문장 유형을 제한하지 않습니다. recommendation·limitation·risk_note는 그 성격과 불확실성을 분명히 밝히면 공개 body_markdown에 포함해야 합니다. 내부 claims에 이미 있다는 이유만으로 공개 한계 설명을 삭제하라는 must_fix를 만들지 마세요. 검증 제안의 예상 결과도 원문의 실제 동작 범위를 넘으면 must_fix입니다.',
     '최소 대조: source의 "Always enabled; not configurable through this format"를 "항상 활성화되며 이 포맷으로 구성할 수 없습니다"라고 쓴 것은 두 조건을 보존합니다. "구성할 수 없지만 항상 활성화됩니다"로 어순을 바꾸라고 must_fix하지 마세요. 반면 이 조건을 source가 그렇게 말하지 않은 다른 모듈로 확대하면 실제 factual 오류입니다. 문체 제안은 필요할 때만 recommended_fixes로 남기고, 사실 수정 제안은 source 문장으로 먼저 검증하세요.',
     'Fact-check 결과 매핑: 발행하면 안 되는 factual/source 오류는 must_fix[]에 넣으세요. 출처 커버리지, 날짜 근거, cross-check가 부족한 항목은 source_gaps[]에도 넣고 source_gap_count는 source_gaps.length와 일치시키세요.',
     '같은 source 안에서 표현, 구체성, actionability를 보강하면 되는 항목만 recommended_fixes[]에 넣으세요. must_fix[]에는 가능한 한 location, problem, suggestion, source_url을 채우세요.',
@@ -459,6 +466,7 @@ function cameraDeveloperToolingFactCheckPrompt() {
 function articleQualityVerdictPrompt() {
   return [
     publicInterpretationReviewPrompt(),
+    technicalBriefingContractPrompt(),
     '기사 유형별 실무 해석 기준으로 공개 설명의 충실도를 검토하세요. HAL/Framework/Driver 기사는 적용 조건·동작·한계를, AI/C++ 도구는 새 선택지·관련 개발 업무·미검증 범위를, 연구·패치 제안·참고는 설계·미확정 상태를 원문과 비교하세요. 내부 검토 필드로 공개 설명의 누락을 메우지 마세요. 단순 인지·참고 가치가 충분하면 불필요한 업무 지시나 비교 실험을 요구하지 마세요.',
     'publishable을 판정하기 전에 source_review를 작성하세요. core_change에는 원문에서 확인한 핵심 변화와 그 조건을, article_explanation에는 public_article 본문이 실제로 설명한 내용을 적으세요. 내부 confirmed_facts/claims/캡슐의 정보는 독자가 읽는 본문에 없는 설명을 대신하지 못합니다. material_omissions에는 기사 주제를 이해하는 데 필요한데 본문에서 빠진 구체적인 조건·버전·동작을 적고, unaddressed_source_conflicts에는 원문 문서들 사이의 충돌 중 본문이 밝히지 않고 한쪽을 단정한 항목을 적으세요. 원문 전체를 요약하지 않았다는 이유로 무관한 누락을 넣지 마세요. 원문의 서로 다른 절·diff까지 확인하세요. 두 문제 배열 중 하나라도 비어 있지 않으면 publishable=false입니다. 구체적인 점검을 안내한다고 주장하는 기사가 실제 버전·대상·확인 방법을 설명하지 않으면 일반적인 검토 권고를 실질적 가이드로 평가하지 마세요.',
     '기사 충실도를 article_source_reading.documents 및 제공된 원문 근거와 비교하세요. 핵심 변화·중요한 조건을 생략한 채 요약을 일반론으로 늘렸거나, 독자가 무엇이 어떻게 달라졌는지 설명할 수 없으면 article_quality.publishable=false로 판정하세요. 누락된 구체 사실이나 반복 문장을 reason에 명명하세요. 표·목차·체크리스트·행동 권고의 존재만으로 통과/탈락시키지 마세요. 관찰·설계 논의도 근거와 쟁점을 충분히 설명하면 유용한 기사입니다.',

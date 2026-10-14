@@ -287,9 +287,30 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
       evidenceIds[0] === doc.evidence_id &&
       (urls.length === 0 || urls[0].replace(/[.,;]+$/, '') === doc.url)));
   });
-  return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(linkedEvidenceArticleText({
+  let articleText = linkedEvidenceArticleText({
     ...section, source_verification_notes: notes
-  }));
+  });
+  // A primary change's fetched status is not the status of its linked bugs.
+  // Recognize only exact metadata-backed renderings; leave other assertions
+  // (including neighbouring confirmations) visible to the existing blocker.
+  for (const document of documents) {
+    const match = document.text.match(/^Official Gerrit metadata \(UTC timestamps\):\s*\n(\{[\s\S]*?\n\})\s*\n\nComplete revision patch/);
+    if (!match) continue;
+    let metadata;
+    try { metadata = JSON.parse(match[1]); } catch { continue; }
+    const changeId = String(candidate.url || '').match(/^https:\/\/android-review\.googlesource\.com\/c\/.+\/\+\/(\d+)\/?$/)?.[1];
+    if (!changeId || String(metadata.change_number) !== changeId || metadata.status !== 'MERGED' ||
+      !metadata.project || !metadata.branch || !/^\d{4}-\d{2}-\d{2} /.test(metadata.submitted || '')) continue;
+    const date = metadata.submitted.slice(0, 10);
+    const phrases = [
+      `Gerrit change ${changeId} (${metadata.project}, status=MERGED`,
+      ...['이', '가'].map(particle => `Gerrit change ${changeId}${particle} ${date}에 ${metadata.project} ${metadata.branch} 브랜치에 status=MERGED`),
+      ...['은', '는'].map(particle => `Gerrit 변경 ${changeId}${particle} ${date}에 ${metadata.project}의 ${metadata.branch} 브랜치에 병합(MERGED)`),
+      ...['이', '가'].map(particle => `Gerrit change ${changeId}${particle} ${date} ${metadata.branch} 브랜치에 MERGED`)
+    ];
+    for (const phrase of phrases) articleText = articleText.split(phrase).join('Gerrit primary source state');
+  }
+  return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(articleText);
 }
 
 function linkedEvidenceDiagnostics(candidate = {}) {

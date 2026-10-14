@@ -162,6 +162,7 @@ const BASE_STAGES = {
   }),
   ARTICLE_SOURCE_REVIEW: defineStage({
     id: 'article_source_review',
+    // Keep source review on the same configurable model as other fact checks.
     modelGroup: LLM_STAGE_GROUPS.FACTCHECK,
     sampling: {
       temperatureProfile: TEMPERATURE_PROFILES.FACTCHECK,
