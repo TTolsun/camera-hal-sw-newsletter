@@ -631,6 +631,8 @@ function headlineOverriddenSection(base, headline, lead) {
 
 const SINGLE_ARTICLE_LETTER =
   'CameraX 1.7.0는 호환성 확인 신호를 제공합니다. 검증 트리거로 다룹니다.';
+// 사실 확인 단계(intro_letter_review)가 통과시키는 검토자. 레터 채택 경로에서 생성기와 함께 넘긴다.
+const acceptIntroReview = async () => ({ ok: true, issues: [] });
 
 test('게이트를 통과한 intro_letter가 issue.summary로 채택되고 briefing은 제목 목록 그대로다', async () => {
   const root = tempRoot();
@@ -638,7 +640,7 @@ test('게이트를 통과한 intro_letter가 issue.summary로 채택되고 brief
     root,
     date: '2026-06-04',
     editor: draft([section('1.7.0', 'https://example.com/a')]),
-    generateIntroLetter: async () => SINGLE_ARTICLE_LETTER
+    generateIntroLetter: async () => SINGLE_ARTICLE_LETTER, reviewIntroLetter: acceptIntroReview
   });
 
   assert.equal(result.introLetterStatus, 'generated');
@@ -661,7 +663,7 @@ test('같은 주 재-upsert에서 저장된 레터가 게이트를 통과하면 
     root,
     date: '2026-06-01',
     editor: draft([section('1.7.0', url)]),
-    generateIntroLetter: async () => SINGLE_ARTICLE_LETTER
+    generateIntroLetter: async () => SINGLE_ARTICLE_LETTER, reviewIntroLetter: acceptIntroReview
   });
 
   let generatorCalls = 0;
@@ -683,7 +685,7 @@ test('기사 추가 드리프트로 저장 레터가 게이트에 실패하면 �
     root,
     date: '2026-06-01',
     editor: draft([section('1.7.0', 'https://example.com/a')]),
-    generateIntroLetter: async () => SINGLE_ARTICLE_LETTER
+    generateIntroLetter: async () => SINGLE_ARTICLE_LETTER, reviewIntroLetter: acceptIntroReview
   });
 
   const driverArticle = headlineOverriddenSection(
@@ -697,7 +699,7 @@ test('기사 추가 드리프트로 저장 레터가 게이트에 실패하면 �
     root,
     date: '2026-06-04',
     editor: draft([driverArticle]),
-    generateIntroLetter: async () => regeneratedLetter
+    generateIntroLetter: async () => regeneratedLetter, reviewIntroLetter: acceptIntroReview
   });
 
   assert.equal(rerun.introLetterStatus, 'generated');
@@ -728,7 +730,7 @@ test('image repair refreshes the same reader item without invalidating its prose
   const root = tempRoot();
   const url = 'https://example.com/camerax-release';
   await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04',
-    editor: draft([fallbackImageSection('1.7.0', url)]), generateIntroLetter: async () => SINGLE_ARTICLE_LETTER });
+    editor: draft([fallbackImageSection('1.7.0', url)]), generateIntroLetter: async () => SINGLE_ARTICLE_LETTER, reviewIntroLetter: acceptIntroReview });
   const before = readIssue(root, '2026-W23');
   const originalItem = readWeeklyIndexFile(root)[0].reader_brief.items[0];
   assert.equal(originalItem.image.is_fallback, true);
@@ -794,7 +796,7 @@ test('public body-only correction and article removal invalidate an otherwise li
   for (const change of ['body', 'remove']) {
     const root = tempRoot();
     await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: draft([section('1.7.0', 'https://example.com/a')]),
-      generateIntroLetter: async () => SINGLE_ARTICLE_LETTER });
+      generateIntroLetter: async () => SINGLE_ARTICLE_LETTER, reviewIntroLetter: acceptIntroReview });
     const file = path.join(root, 'articles/newsletters/2026-W23/issue.json');
     const stored = readIssue(root, '2026-W23');
     if (change === 'body') stored.sections[0].public_article.body_paragraphs.push('수정된 공개 근거입니다.');

@@ -20,7 +20,6 @@ const STATUS_BUILDERS = '../../publish/orchestrator-status-builders';
 const ARTIFACT_WRITERS = '../../publish/orchestrator-artifact-writers';
 const RECOVERY_WRITERS = '../../publish/orchestrator-recovery-writers';
 const WEEKLY_OUTPUT = '../../render/weekly-newsletter-output';
-const WEEKLY_DEEP_DIVE = '../../render/weekly-deep-dive';
 
 function stubModule(key, exports) {
   const resolved = require.resolve(key);
@@ -30,7 +29,7 @@ function stubModule(key, exports) {
 }
 
 // 무거운 협력자를 모두 stub으로 교체하고 호출 기록을 모아 control-flow를 고정한다.
-// options.weeklyThrows / options.deepDiveThrows로 해당 협력자의 실패를 주입할 수 있고,
+// options.weeklyThrows로 weekly writer의 실패를 주입할 수 있고,
 // options.weeklyMergeWarnings로 weekly 병합 경고를 실어 부가 산출물 기록 경로를 켤 수 있다.
 async function withStubbedCollaborators(run, options = {}) {
   const decisionKey = require.resolve(DECISION_MODULE);
@@ -45,13 +44,9 @@ async function withStubbedCollaborators(run, options = {}) {
     // #870: weekly writer에 넘어간 병합 검증 클로저. 이 배선은 writer를 stub으로 갈아끼우면
     // 보이지 않으므로 클로저 자체를 붙잡아 직접 호출해 확인한다.
     weeklyValidateMerged: null,
-    // 심층(deep-dive)은 공개 산출물 기록 뒤에 와야 하므로 호출 순서까지 기록한다.
-    deepDive: [],
-    order: [],
     selectionStatusExtraOptions: []
   };
   const weeklyArticles = [{ headline: 'weekly final A' }, { headline: 'weekly final B' }];
-  calls.weeklyArticles = weeklyArticles;
   const stubs = [
     stubModule(VALIDATE_RUNNER, {
       // 비reviewable 경로에서만 호출되어야 한다. 호출 횟수로 그 분기를 검증한다.
@@ -92,8 +87,8 @@ async function withStubbedCollaborators(run, options = {}) {
     stubModule(WEEKLY_OUTPUT, {
       writeWeeklyNewsletterArtifacts: async (args) => {
         calls.weekly += 1;
-        calls.order.push('weekly');
         calls.weeklyValidateMerged = args.validateMerged;
+        calls.weeklyIntroLetter = { generate: args.generateIntroLetter, review: args.reviewIntroLetter };
         if (options.weeklyThrows) throw options.weeklyThrows;
         return {
           files: ['articles/newsletters/weekly/x/index.html'],
@@ -102,14 +97,6 @@ async function withStubbedCollaborators(run, options = {}) {
           weeklyKey: 'wk',
           articles: weeklyArticles
         };
-      }
-    }),
-    stubModule(WEEKLY_DEEP_DIVE, {
-      runWeeklyDeepDive: (args) => {
-        calls.deepDive.push(args);
-        calls.order.push('deepDive');
-        if (options.deepDiveThrows) throw options.deepDiveThrows;
-        return { status: 'skipped', skip_reason: 'queue_empty', selected_topic_key: null };
       }
     })
   ];
@@ -222,48 +209,20 @@ test('비reviewable PASS 입력: 공개 산출물을 쓰고 validate를 돌리�
     assert.equal(out.generationStatusArtifact.weekly_output_status, 'written');
     assert.equal(out.generationStatusArtifact.weekly_output_failure_reason, '');
 
-    // 심층(deep-dive)은 weekly writer 뒤에, 그 주의 최종 기사 목록을 받아 실행된다.
-    assert.deepEqual(calls.order, ['weekly', 'deepDive']);
-    assert.equal(calls.deepDive.length, 1);
-    assert.equal(calls.deepDive[0].date, '2026-05-08');
-    assert.deepEqual(calls.deepDive[0].articles, calls.weeklyArticles);
-
     // generation-status가 정확히 한 번 기록된다.
     assert.equal(calls.writeGenerationStatus.length, 1);
     assert.equal(out.generationStatusArtifact.status, 'PASS');
   });
 });
 
-// 불변식 3: 심층 구현 오류는 weekly writer의 바깥 catch에 삼켜져 console 한 줄이 되면 안 된다.
-// 동시에 그 오류가 그 주의 공개 산출물을 없애서도 안 된다 — 심층은 공개 산출물이 기록되고
-// weeklyArtifactFiles에 등록된 뒤에 돌기 때문이다.
-test('심층 구현 오류는 공개 산출물을 기록한 뒤 그대로 전파된다(조용한 skip이 아니다)', async () => {
-  await withStubbedCollaborators(async (decide, calls) => {
-    const newsroomDir = tempRoot('publish-decision-newsroom-');
-    const newsletterDir = tempRoot('publish-decision-newsletter-');
-
-    await assert.rejects(
-      () => decide(baseArgs(newsroomDir, newsletterDir)),
-      /deep-dive-topic-queue 파일이 손상됐습니다/
-    );
-
-    // 공개 산출물은 심층이 돌기 전에 이미 기록됐다.
-    assert.equal(fs.readFileSync(path.join(newsletterDir, 'newsletter.md'), 'utf8'), '# stub markdown');
-    assert.equal(fs.readFileSync(path.join(newsletterDir, 'index.html'), 'utf8'), '<html>stub</html>');
-    assert.equal(calls.updateNewsletterData.length, 1);
-    assert.deepEqual(calls.order, ['weekly', 'deepDive']);
-  }, { deepDiveThrows: new Error('deep-dive-topic-queue 파일이 손상됐습니다(state/deep-dive-topic-queue.json)') });
-});
-
-// 주간 출력 실패 시 심층을 실행하지 않고 진단에 필요한 산출물을 보존한다.
-test('weekly 기록이 실패하면 심층을 돌리지 않고 진단용 산출물을 보존한다', async () => {
+// 주간 출력 실패 시 진단에 필요한 산출물을 보존한다.
+test('weekly 기록이 실패하면 진단용 산출물을 보존한다', async () => {
   await withStubbedCollaborators(async (decide, calls) => {
     const newsroomDir = tempRoot('publish-decision-newsroom-');
     const newsletterDir = tempRoot('publish-decision-newsletter-');
     const out = await decide(baseArgs(newsroomDir, newsletterDir));
 
     assert.equal(calls.weekly, 1);
-    assert.equal(calls.deepDive.length, 0);
     assert.equal(out.validateResult.ok, false);
     assert.equal(calls.selectionStatusExtraOptions[0].finalPublishReady, false);
     assert.ok(fs.existsSync(path.join(newsletterDir, 'newsletter.md')));
@@ -356,7 +315,6 @@ test('weekly가 기록된 주는 부가 산출물이 실패해도 written으로 
 
     // weekly가 실제로 기록됐다는 증거 — 상태는 바로 이 값에서 파생돼야 한다.
     assert.ok(out.files.includes('articles/newsletters/weekly/x/index.html'));
-    assert.equal(calls.deepDive.length, 1);
   }, { weeklyMergeWarnings: ['weekly merge warning'] });
 });
 
@@ -411,6 +369,19 @@ test('비용 리포트는 늦은 LLM 호출을 내는 weekly writer 뒤, validat
     assert.deepEqual(calls.writeCostReport, [
       { date: '2026-05-08', weeklyCallsBefore: 1, validateCallsBefore: 0 }
     ]);
+  });
+});
+
+// 에디터 레터는 생성과 사실 확인을 함께 넘겨야 채택될 수 있다. 검토자가 빠지면 레터가 매주 조용히
+// no_reviewer로 fallback하므로 배선을 잠근다(#1276 후속).
+test('weekly writer receives both the intro letter generator and its fact reviewer', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    await decide(baseArgs(newsroomDir, newsletterDir));
+
+    assert.equal(typeof calls.weeklyIntroLetter.generate, 'function');
+    assert.equal(typeof calls.weeklyIntroLetter.review, 'function');
   });
 });
 

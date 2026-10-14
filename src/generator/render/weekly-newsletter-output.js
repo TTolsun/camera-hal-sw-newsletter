@@ -264,6 +264,7 @@ async function writeWeeklyNewsletterArtifacts({
   mergeDuplicate,
   validateMerged,
   generateIntroLetter,
+  reviewIntroLetter,
   coverageWeekKeyOverride
 } = {}) {
   const weeklyKey = weeklyKeyForDate(date);
@@ -322,7 +323,8 @@ async function writeWeeklyNewsletterArtifacts({
     articles,
     storedIntroLetter: existingIssue && existingIssue.intro_letter,
     storedSourceHash: existingIssue && existingIssue.intro_letter_source_hash,
-    generateIntroLetter
+    generateIntroLetter,
+    reviewIntroLetter
   });
   if (introLetterResolution.status === 'fallback' && introLetterResolution.reason !== 'no_generator') {
     console.warn(`weekly intro letter fallback: ${introLetterResolution.reason}`);

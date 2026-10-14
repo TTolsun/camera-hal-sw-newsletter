@@ -566,7 +566,8 @@ const DEBUG_RRC_PATHS = new Set([
   'cost-report.md',
   'summary-cache-report.md',
   'summary-cache-report.json',
-  // 심층(deep-dive) shadow report: selection-report.json과 동일하게 REVIEW_REQUIRED_COMPACT로 커밋한다.
+  // 심층(deep-dive) shadow report: 기능은 #1091 정리로 제거되어 새로 만들지 않는다. 커밋된 과거 호의
+  // 파일(2026-08-17~10-12)을 계속 같은 등급으로 분류하려고 남긴다.
   'deep-dive-report.json',
   'source-change-events.md',
   // 짝인 .json도 커밋된다. 워크플로 01이 articles/content/source-events/ 를 명시적으로 git add
@@ -649,8 +650,7 @@ function debugExactCatalog(date) {
     newsroomRelPath(date, 'cost-report.md'),
     newsroomRelPath(date, 'summary-cache-report.md'),
     newsroomRelPath(date, 'summary-cache-report.json'),
-    // 심층(deep-dive) shadow 단계: 위클리 공개 산출물을 쓴 뒤 발행 결정 단계
-    // (orchestrator-publish-decision.js)가 매 실행마다 남기는 발동/선정 report
+    // 심층(deep-dive) shadow report: 기능 제거(#1091) 뒤에는 생성되지 않는다. 과거 호 산출물 인식용으로 남긴다.
     newsroomRelPath(date, 'deep-dive-report.json'),
     repoPath('articles', 'content', 'source-events', date, 'source-change-events.md'),
     repoPath('articles', 'content', 'source-events', date, 'source-change-events.json')

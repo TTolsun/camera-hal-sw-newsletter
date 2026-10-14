@@ -21,7 +21,7 @@ function runForStageId(stageId) {
 
 // LLM stage routing characterization (#980, #981).
 //
-// production stage 22개의 routing 결과를 표 한 장으로 고정한다. 열은 label, model group,
+// production stage 23개의 routing 결과를 표 한 장으로 고정한다. 열은 label, model group,
 // temperature/thinking config field, status role, artifact scope다.
 //
 // #980에서 이 표는 자유 문자열 label을 정규식으로 해석하던 resolver 다섯의 답을 고정했다.
@@ -81,6 +81,7 @@ const EXPECTED_BASE_LABELS = [
   'fact-checker completion attempt 1/2',
   'weekly-merge',
   'intro-letter',
+  'intro-letter-review',
   'post-generation public quality judge',
   'sourceDiscovery'
 ];
@@ -210,6 +211,16 @@ const PRODUCTION_STAGE_CASES = [
     artifactScope: SCOPE_NOT_CONSULTED
   },
   {
+    // 에디터 레터 사실 확인(#1276 후속): 판정 stage라 fact-checker와 같은 group·sampling.
+    label: 'intro-letter-review',
+    stageId: 'intro_letter_review',
+    modelGroup: 'factcheck',
+    temperatureField: 'geminiTemperatureFactcheck',
+    thinkingField: 'geminiThinkingBudgetFactcheck',
+    statusRole: 'intro-letter',
+    artifactScope: SCOPE_NOT_CONSULTED
+  },
+  {
     label: 'post-generation public quality judge',
     stageId: 'post_generation_quality_judge',
     modelGroup: 'judge',
@@ -315,8 +326,8 @@ const PRODUCTION_STAGE_CASES = [
   }
 ];
 
-test('표가 production stage 22개를 정확히 그대로 덮는다', () => {
-  assert.equal(EXPECTED_LABELS.length, 22);
+test('표가 production stage 23개를 정확히 그대로 덮는다', () => {
+  assert.equal(EXPECTED_LABELS.length, 23);
 
   const labels = PRODUCTION_STAGE_CASES.map(stageCase => stageCase.label);
   assert.equal(new Set(labels).size, labels.length, '표에 중복 label이 있다');

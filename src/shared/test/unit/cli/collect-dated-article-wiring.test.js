@@ -9,7 +9,7 @@ const {
   createSourceCollectionDiagnostics,
   renderCandidateMarkdown,
   usesDatedArticleResolver,
-  writeCollectArtifactsThenAccrueDeepDiveTopics
+  writeCollectArtifacts
 } = require('../../../cli/collect-news-candidates');
 const { CANDIDATE_SCHEMA_VERSION } = require('../../../common/candidate-artifacts');
 const { newsroomDir } = require('../../../common/artifact-paths');
@@ -481,7 +481,7 @@ test('실제로 기록된 news-candidates.md에 진단이 들어간다(호출부
   const root = tempRoot('collect-dated-article-report-');
   const date = '2026-08-24';
 
-  writeCollectArtifactsThenAccrueDeepDiveTopics({
+  writeCollectArtifacts({
     root,
     date,
     candidatePayload: {

@@ -179,7 +179,7 @@ async function resolveAospSiteUpdateItems(html, source, { indexItems, fetchClien
       // `number(candidate.date_confidence, dateSourceConfidence(source))` 폴백은 0 도 유효한
       // 숫자로 받아 그대로 쓴다. 그러면 date_source 가 옳아도 main_article_date_eligible 이
       // false 가 되어 보강이 무의미해진다. 다른 생산자(source-monitor, dated-article-index-
-      // resolver, deep-dive-topic-accrual)도 전부 이 짝을 같이 적는다.
+      // resolver)도 전부 이 짝을 같이 적는다.
       date_confidence: dateSourceConfidence(signal.dateSource),
       // 표가 말한 월은 근거 추적용으로 남긴다. 이 필드가 있다는 것이 곧 대상 페이지에서
       // 날짜를 올렸다는 표시다.

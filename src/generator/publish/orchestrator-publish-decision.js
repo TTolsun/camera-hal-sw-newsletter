@@ -36,7 +36,7 @@ const {
   persistHeadlineStateArtifacts
 } = require('./orchestrator-terminal-contracts');
 const { buildWeeklyMergeResolver } = require('../editor/weekly-merge');
-const { buildIntroLetterGenerator } = require('../editor/intro-letter');
+const { buildIntroLetterGenerator, buildIntroLetterReviewer } = require('../editor/intro-letter');
 const {
   editorRenderedGroupKeys,
   editorExplicitlyDemotedGroups,
@@ -46,7 +46,6 @@ const {
 const {
   writeWeeklyNewsletterArtifacts
 } = require('../render/weekly-newsletter-output');
-const { runWeeklyDeepDive } = require('../render/weekly-deep-dive');
 const { callLlmJson } = require('./orchestrator-llm-instrumentation');
 const { writeCostReport, writeGenerationStatus } = require('./orchestrator-artifact-writers');
 const {
@@ -90,7 +89,6 @@ async function decidePublishReadinessAndWriteStatus({
   const newsletterHtml = path.join(newsletterDir, 'index.html');
   const shouldWritePublicArtifacts = !editorialReviewable;
   let weeklyArtifactFiles = [];
-  let weeklyFinalArticles = [];
   // 주간 출력 실패는 사유를 기록한 뒤 발행 검증 실패로 처리한다.
   // not_attempted는 편집 검토 경로, failed는 실제 주간 쓰기 실패다.
   let weeklyOutputStatus = 'not_attempted';
@@ -122,13 +120,13 @@ async function decidePublishReadinessAndWriteStatus({
         date,
         editor,
         coverageWeekKeyOverride: runtimeConfig.coverageWeekKeyOverride || undefined,
-        // 주간 에디터 레터(T10, #853): 최종 기사 세트 확정 후 소형 LLM 호출 1건. 결정론 게이트
-        // (lintIntroLetter)와 fallback은 writeWeeklyNewsletterArtifacts 안에 있다.
+        // 주간 에디터 레터(T10, #853): 최종 기사 세트 확정 후 생성 1건 + 사실 확인 1건(시도당).
+        // 결정론 게이트(lintIntroLetter), 사실 확인 채택, fallback은 writeWeeklyNewsletterArtifacts 안에 있다.
         generateIntroLetter: buildIntroLetterGenerator({ callLlmJson }),
+        reviewIntroLetter: buildIntroLetterReviewer({ callLlmJson }),
         ...weeklyMerge
       });
       weeklyArtifactFiles = weeklyResult.files;
-      weeklyFinalArticles = ensureArray(weeklyResult.articles);
       introLetterStatus = weeklyResult.introLetterStatus;
       introLetterReason = weeklyResult.introLetterReason;
       if (ensureArray(weeklyResult.mergeWarnings).length > 0 ||
@@ -269,17 +267,6 @@ async function decidePublishReadinessAndWriteStatus({
     }
   });
   writeGenerationStatus(generationStatusArtifact);
-  // 심층(deep-dive)은 선택 부가 기능이라 이 함수가 할 일을 **전부 마친 뒤** 마지막에 실행한다.
-  // 앞쪽에서 부르면 여기서 나는 throw 하나가 그 주의 headline state·validate·generation-status
-  // 기록까지 통째로 건너뛰게 하고, weekly writer 안이나 그 catch 안에서 부르면 위클리 공개 3종이
-  // 아예 기록되지 않거나 실패가 console 한 줄로 사라진다.
-  // throw가 나면 호출 위치와 무관하게 워크플로의 이미지 바인딩 스텝은 함께 skip된다(그 스텝이
-  // generate 성공을 조건으로 걸기 때문). 이것은 불변식 3(구현 오류는 시끄럽게 실패)의 대가다.
-  // 예상 콘텐츠 실패(미발동·큐 빔)는 값으로 돌아온다. 구현 오류(큐 JSON 손상 등)만 throw하며,
-  // 그 throw는 여기서 그대로 전파된다 — 조용한 skip으로 위장하지 않는다(불변식 3).
-  if (weeklyArtifactFiles.length > 0) {
-    runWeeklyDeepDive({ root, date, articles: weeklyFinalArticles });
-  }
   return {
     editorialReviewable,
     shouldWritePublicArtifacts,
