@@ -151,6 +151,9 @@ function isSubstantiveFile(filePath) {
  * 통째로 후보에서 사라진다.
  */
 function isCameraScopedFile(project, filePath) {
+  // AndroidX camera output encoding lives outside camera/. Keep this exception
+  // repository-specific; a similarly named directory elsewhere is not evidence.
+  if (project === 'platform/frameworks/support' && /^heifwriter\//.test(filePath)) return true;
   return CAMERA_PATH_PATTERN.test(String(project || '')) || CAMERA_PATH_PATTERN.test(String(filePath || ''));
 }
 
@@ -403,12 +406,16 @@ async function resolveGerritCameraChangeItems(text = '', source = {}, options = 
     .filter(entry => entry.dateInfo.timeMs >= cutoffMs && entry.dateInfo.timeMs <= now.getTime())
     .sort((left, right) => right.dateInfo.timeMs - left.dateInfo.timeMs);
 
-  const targets = inWindow.slice(0, MAX_DETAIL_FETCHES);
+  // AndroidX is substantially more active than platform HAL repositories. Read
+  // its bounded list page so recent UI/test changes do not consume all 12 slots
+  // before session or encoder fixes can be inspected. Keep truncation visible.
+  const maxDetails = source.id === 'androidx-gerrit-camera-changes' ? MIN_LIST_PAGE_SIZE : MAX_DETAIL_FETCHES;
+  const targets = inWindow.slice(0, maxDetails);
   if (inWindow.length > targets.length) {
     console.warn(`gerrit-camera-changes: ${inWindow.length} change(s) are inside the ${lookbackDays}-day window but only `
-      + `the newest ${MAX_DETAIL_FETCHES} are read; the remainder is not collected this run.`);
+      + `the newest ${maxDetails} are read; the remainder is not collected this run.`);
     announceTruncation(`${inWindow.length} change(s) are inside the ${lookbackDays}-day window but only the newest `
-      + `${MAX_DETAIL_FETCHES} are read; the remainder is not collected this run`);
+      + `${maxDetails} are read; the remainder is not collected this run`);
   }
 
   const candidates = [];

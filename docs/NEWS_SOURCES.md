@@ -59,6 +59,8 @@ collector는 schema v5 후보 metadata를 기록해 reporter/editor 단계가 �
 
 ### Gerrit 변경의 proposal / review / landed lifecycle
 
+AndroidX Gerrit 수집원 `androidx-gerrit-camera-changes`와 `androidx-gerrit-heifwriter-changes`는 각각 `platform/frameworks/support`의 `camera/`와 `heifwriter/`에서 병합된 변경을 수집합니다. 두 라이브러리의 소스별 후보 상한을 분리하여 CameraX 변경이 많아도 HEIF 수정이 편집 판단 전에 밀려나지 않도록 합니다. CameraPipe·Extensions의 세션 및 콜백 수정과 HEIF 출력 변경을 릴리스 노트 이전에도 확인하기 위한 경로입니다. 날짜는 `submitted`를 사용하고, 작성 단계에서 수집한 리비전의 커밋 메시지와 패치를 읽습니다. 병합은 라이브러리 릴리스나 제품 반영을 뜻하지 않습니다. 목록 또는 상세 조회 상한에 도달했다는 수집 진단이 있으면 해당 기간 전체를 조사했다고 주장하지 않습니다. 발행 자격과 품질 검증은 다른 출처와 동일합니다.
+
 AOSP Gerrit과 ChromeOS Gerrit 출처는 릴리스 드롭보다 앞선 단계를 봅니다. 릴리스 드롭이 "공개된 확정 변경"을 몇 달에 한 번 통째로 보여 준다면, Gerrit은 아직 리뷰 중인 제안까지 날짜와 상태가 붙은 채로 보여 줍니다. 둘은 대체 관계가 아니라 proposal → landed 관계이므로 함께 유지합니다.
 
 기사 승격 정책은 상태로 정합니다.
