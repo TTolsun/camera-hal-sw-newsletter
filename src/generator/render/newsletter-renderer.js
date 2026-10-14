@@ -889,8 +889,9 @@ function readerBriefForIssue(issue) {
 
 // 기사가 1건인 호는 "이번 주 핵심" 상자가 본문 첫머리를 그대로 반복하므로 상자를 넣지 않습니다
 // (#1278 소유자 결정). 이번 호 소개 문장은 상자 대신 제목 아래에 둡니다.
+// 정확히 1건일 때만 뺍니다. 기사가 0건인 호는 예전처럼 상자를 두어, 구조 검사가 그 호를 그대로 잡게 합니다.
 function showsHighlights(brief) {
-  return Boolean(brief) && brief.items.length > 1;
+  return Boolean(brief) && brief.items.length !== 1;
 }
 
 // 기사 끝에서 돌아갈 곳입니다. 상자가 없는 단일 기사 호는 돌아갈 곳이 없어 링크를 두지 않습니다.

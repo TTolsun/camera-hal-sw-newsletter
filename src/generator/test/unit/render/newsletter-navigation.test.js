@@ -138,6 +138,10 @@ test('single article issues skip the highlights box and keep the introduction on
         assert.equal(md.split(sentence).length - 1, 1, `${locale} markdown repeats: ${sentence}`);
       }
     }
+    // 상자를 빼는 것은 정확히 1건일 때뿐이다. 0건인 호는 예전처럼 상자를 둔다.
+    const empty = buildHtml(issue(0));
+    assert.match(empty, /class="section issue-briefing"/);
+    assert.doesNotMatch(empty, /<p class="subtitle">/);
   });
 });
 
