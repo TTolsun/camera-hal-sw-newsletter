@@ -3,7 +3,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { normalizeCandidate, withinLookback, newsletterDateWindowEnd, candidateRankOrder } =
   require('../../../cli/collect-news-candidates');
-const { deepDiveAccrualEntries } = require('../../../collect/deep-dive-topic-accrual');
 const { coverageForWeekKey } = require('../../../common/coverage-week');
 
 const source = {
@@ -32,17 +31,6 @@ test('수집기는 후보 레코드에 측정하지 않은 date_source를 스탬
   const candidate = normalizeCandidate(raw());
   assert.equal(candidate.date_source || '', '',
     'raw가 date_source를 싣지 않았는데 정규화가 기본값을 지어냈다');
-});
-
-test('강등 후보 심층 적립은 수집기 정규화를 거쳐도 날짜 신뢰도를 지어내지 않는다', () => {
-  const candidate = normalizeCandidate(raw());
-  candidate.relevance_bucket = 'direct_aosp_camera';
-  candidate.finalSelectionEligibility = 'watchlist';
-  const entries = deepDiveAccrualEntries({
-    candidates: [candidate], monitorEvents: [], pageExtracts: [], primaryLaneSources: new Map()
-  });
-  assert.equal(entries[0].evidence[0].date_source, 'candidate_published_at');
-  assert.equal(entries[0].evidence[0].date_confidence, 0);
 });
 
 test('정본이 읽어낸 날짜가 창 밖이면 35일 풀에서 빠진다(날짜 파서 불일치로 새지 않는다)', () => {

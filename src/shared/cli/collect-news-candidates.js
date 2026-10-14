@@ -97,9 +97,6 @@ const {
   runSourceMonitor
 } = require('../collect/source-monitor');
 const {
-  accrueDeepDiveTopicsFromCollect
-} = require('../collect/deep-dive-topic-accrual');
-const {
   createBoundedFetchClient,
   MAX_BYTES_PER_INDEX_PAGE,
   MAX_BYTES_PER_SOURCE_RUN
@@ -1318,10 +1315,9 @@ function normalizeCandidate(raw) {
     //
     // 여기 실을 수 있는 것은 raw가 실제로 측정해 온 값뿐이다. resolveCandidateDateEvidence가
     // 돌려주는 date_source는 못 찾았을 때 'visible_date'/'missing'으로 메운 기본값이라,
-    // 그걸 후보 레코드에 굳히면 측정하지 않은 출처를 후보가 주장하게 된다. 실제로
-    // deep-dive-topic-accrual.candidateDateFields는 candidate.date_source가 있으면 그대로
-    // 믿고 신뢰도를 표에서 뽑으므로, 기본값 'visible_date'가 심층 큐 state에 신뢰도 100으로
-    // 굳는다(실측 32일 강등 후보 44건 전부 0→100). 파생값은 읽는 쪽이 정본으로 다시 구한다.
+    // 그걸 후보 레코드에 굳히면 측정하지 않은 출처를 후보가 주장하게 된다. date_source를
+    // 그대로 믿고 신뢰도를 표에서 뽑는 소비자가 있으면 기본값 'visible_date'가 신뢰도 100으로
+    // 굳는다(옛 심층 큐에서 실측: 32일 강등 후보 44건 전부 0→100). 파생값은 읽는 쪽이 정본으로 다시 구한다.
     //
     // 날짜 문자열은 displayDate로만 옮긴다. normalizeDate는 'August 14, 2026'을 로컬 자정으로
     // 해석해 Asia/Seoul에서 하루 앞당기고(실측 -> '2026-08-13'), '2026-08'을 '2026-08-01'로
@@ -1914,15 +1910,8 @@ function markdown(date, candidates, failures, lookbackDays, options = {}) {
   return lines.join('\n');
 }
 
-// 수집 산출물(후보 artifact·raw 매니페스트·후보 markdown·날짜 파일·모니터 스냅샷)을 전부
-// 디스크에 기록한 뒤에 심층(deep-dive) 주제 큐를 적립한다. 이 순서 자체가 계약이다.
-//
-// 이유: 적립은 선택 부가 기능인데 큐 파일이 손상되면 그대로 throw한다(구현 오류를 콘텐츠
-// 실패로 위장하지 않는다는 불변식 3). 적립을 먼저 부르면 그 throw 하나로 그날의 후보·
-// 매니페스트·진단이 통째로 디스크에 남지 않는다 — 적립과 아무 상관 없는 수집 결과까지
-// 같이 사라진다. 그래서 throw는 그대로 두고(시끄러워야 한다) 순서만 뒤집는다. 산출물이
-// 이미 기록된 뒤라 구현 오류가 그날의 수집 결과를 데려가지 못한다.
-function writeCollectArtifactsThenAccrueDeepDiveTopics({
+// 수집 산출물(후보 artifact·raw 매니페스트·후보 markdown·날짜 파일·모니터 스냅샷)을 기록한다.
+function writeCollectArtifacts({
   root,
   date,
   candidatePayload,
@@ -1970,15 +1959,6 @@ function writeCollectArtifactsThenAccrueDeepDiveTopics({
       )
     });
   }
-
-  const deepDiveAccrual = accrueDeepDiveTopicsFromCollect({
-    root,
-    date,
-    candidates,
-    monitorResult: sourceMonitorResult
-  });
-  console.log(`Deep-dive queue: +${deepDiveAccrual.accruedFingerprintCount} fingerprints, ${deepDiveAccrual.queueSize} topics`);
-  return deepDiveAccrual;
 }
 
 // 목록 fetch는 collector가, 기사 fetch와 fail-closed 판정은 resolver가 소유한다.
@@ -2374,7 +2354,7 @@ async function main() {
       articleCapCountsBySource: collectionDiagnostics.articleCapCountsBySource()
     })
   };
-  writeCollectArtifactsThenAccrueDeepDiveTopics({
+  writeCollectArtifacts({
     root,
     date,
     candidatePayload,
@@ -2430,5 +2410,5 @@ module.exports = {
   usesDatedArticleResolver,
   withinLookback,
   writeNotYetEligibleOverflowIfNeeded,
-  writeCollectArtifactsThenAccrueDeepDiveTopics
+  writeCollectArtifacts
 };
