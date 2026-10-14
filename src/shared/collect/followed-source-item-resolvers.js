@@ -93,6 +93,11 @@ const FOLLOWED_SOURCE_RESOLVERS = [
       resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays, onDiagnostic })
   },
   {
+    id: 'androidx-gerrit-camera-changes',
+    resolve: ({ text, source, fetchTextImpl, now, lookbackDays, onDiagnostic }) =>
+      resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays, onDiagnostic })
+  },
+  {
     id: 'chromeos-gerrit-camera-changes',
     resolve: ({ text, source, fetchTextImpl, now, lookbackDays, onDiagnostic }) =>
       resolveGerritCameraChangeItems(text, source, { fetchTextImpl, now, lookbackDays, onDiagnostic })

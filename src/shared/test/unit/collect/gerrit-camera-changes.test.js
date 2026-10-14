@@ -104,6 +104,59 @@ async function resolveOne(change, detailOptions = {}) {
   return { items, requested: stub.requested };
 }
 
+test('AndroidX collection includes camera and HEIF output changes without admitting unrelated modules', async () => {
+  const source = registry.sources.find(item => item.id === 'androidx-gerrit-camera-changes');
+  assert.ok(source?.enabled);
+  assert.equal(source.mainArticlePolicy, 'conditional');
+  const query = new URL(source.sourceUrl).searchParams.get('q');
+  assert.match(query, /project:platform\/frameworks\/support/);
+  assert.match(query, /directory:camera OR directory:heifwriter/);
+  assert.match(query, /status:merged/);
+  for (const file of ['camera/camera-camera2-pipe/Session.kt', 'camera/camera-extensions/Callback.java', 'heifwriter/heifwriter/EncoderBase.java']) {
+    const change = listChange({ project: 'platform/frameworks/support', status: 'MERGED', subject: 'Fix input handling', submitted: '2026-08-25 00:00:00.000000000' });
+    const stub = stubFetch({ [change._number]: detailFor(change, { files: [file] }) });
+    const items = await resolveGerritCameraChangeItems(listBody([change]), source, {
+      fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS
+    });
+    assert.equal(items.length, 1, file);
+    assert.equal(items[0].publishedAt, '2026-08-25');
+    assert.equal(items[0].gerrit_commit_sha, 'f'.repeat(40));
+    assert.equal(items[0].gerrit_effective_date_field, 'submitted');
+    if (file.startsWith('heifwriter/')) {
+      const normalized = normalizeCandidate({ ...items[0], source: { ...source, url: source.sourceUrl, section: 'Android / AOSP / Camera' } });
+      assert.equal(normalized.relevance_bucket, 'android');
+      assert.ok(normalized.multimedia_camera_output_relevance > 0);
+    }
+  }
+  for (const [project, files] of [
+    ['platform/frameworks/support', ['compose/ui/Layout.kt']],
+    ['other/project', ['heifwriter/Encoder.java']],
+    ['platform/frameworks/support', ['heifwriter/Encoder.java', 'compose/A.kt', 'compose/B.kt']],
+    ['platform/frameworks/support', ['heifwriter/OWNERS']]
+  ]) {
+    const { items } = await resolveOne(listChange({ project }), { files });
+    assert.equal(items.length, 0, `${project}: ${files}`);
+  }
+});
+
+test('AndroidX reads past the platform detail budget but retains a bounded page and truncation diagnostics', async () => {
+  const source = registry.sources.find(item => item.id === 'androidx-gerrit-camera-changes');
+  const changes = Array.from({ length: MIN_LIST_PAGE_SIZE + 1 }, (_, index) => listChange({
+    _number: 6000 + index, project: 'platform/frameworks/support', status: 'MERGED',
+    submitted: '2026-08-25 00:00:00.000000000'
+  }));
+  const details = Object.fromEntries(changes.map(change => [change._number, detailFor(change, { files: ['camera/Session.kt'] })]));
+  const stub = stubFetch(details);
+  const events = [];
+  const items = await resolveGerritCameraChangeItems(listBody(changes), source, {
+    fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS,
+    onDiagnostic: event => events.push(event)
+  });
+  assert.equal(stub.requested.length, MIN_LIST_PAGE_SIZE);
+  assert.equal(items.length, MIN_LIST_PAGE_SIZE);
+  assert.ok(events.some(event => /newest 100/.test(event.detail)));
+});
+
 test('MERGED uses submitted and NEW uses created as the effective date; updated is never used', () => {
   assert.deepEqual(
     effectiveDate({ status: 'MERGED', created: '2026-07-13 18:33:17.000000000', submitted: '2026-07-15 15:22:15.000000000', updated: '2026-09-01 00:00:00.000000000' }),
@@ -391,9 +444,9 @@ test('a non-Gerrit body yields no candidates instead of throwing', async () => {
 
 // 목록 한 페이지가 수집 창을 덮는다는 전제는 등록부 URL의 n에 달려 있다. 등록부만 낮추면 코드는
 // 그대로인 채 창의 일부만 보게 되므로 둘을 한 쌍으로 잠근다(patchwork의 per_page x MAX_PATCH_PAGES와 같은 이유).
-test('both Gerrit registry entries ask for at least the measured list page size', () => {
+test('all Gerrit registry entries ask for at least the measured list page size', () => {
   const gerritSources = registry.sources.filter(source => source.id.endsWith('-gerrit-camera-changes'));
-  assert.equal(gerritSources.length, 2);
+  assert.equal(gerritSources.length, 3);
   for (const source of gerritSources) {
     const pageSize = Number(new URL(source.sourceUrl).searchParams.get('n'));
     assert.ok(pageSize >= MIN_LIST_PAGE_SIZE, `${source.id} must request at least ${MIN_LIST_PAGE_SIZE} changes per page`);

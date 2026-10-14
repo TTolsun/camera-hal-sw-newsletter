@@ -7,6 +7,18 @@ const {
   BUCKET_PRIORITY
 } = require('../../../domain/aosp-camera-scope');
 
+test('AndroidX HeifWriter paths identify downstream output without promoting generic HEIF news', () => {
+  const output = classifyAospCameraStackCandidate({
+    title: 'Fix 8-bit surface input color range',
+    summary: 'Changed platform/frameworks/support/heifwriter/heifwriter/EncoderBase.java'
+  });
+  assert.equal(output.relevance_bucket, BUCKETS.ANDROID);
+  assert.equal(output.counts_as_primary_camera_topic, false);
+  assert.ok(output.multimedia_camera_output_relevance > 0);
+  const generic = classifyAospCameraStackCandidate({ title: 'HEIF encoder updated', summary: 'A generic image application release.' });
+  assert.equal(generic.multimedia_camera_output_relevance, 0);
+});
+
 test('classifies direct AOSP Camera framework and CameraX evidence', () => {
   const framework = classifyAospCameraStackCandidate({
     title: 'CameraService update changes CameraProvider stream configuration',

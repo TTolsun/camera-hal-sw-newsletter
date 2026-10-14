@@ -3,6 +3,18 @@ const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
 
+test('technical briefing guidance reaches writing stages while preserving source and HAL boundaries', () => {
+  for (const build of [editorSystemPrompt, editorCompletionSystemPrompt]) {
+    const prompt = build();
+    assert.match(prompt, /변경 전후 동작 → 적용 조건과 업무 영향 → 필요한 확인 사항/);
+    assert.match(prompt, /커밋 병합, 라이브러리 릴리스, 제품 빌드 반영/);
+    assert.match(prompt, /근거 없이 configureStreams\/processCaptureRequest/);
+  }
+  assert.match(editorialPlanSystemPrompt(), /direct_hal_impact를 높여 승격시키지/);
+  assert.match(editorRepairPatchSystemPrompt(), /변경 전후 동작, 적용 조건과 업무 영향, 근거 있는 확인 사항을 보존/);
+  assert.match(articleSectionContractPrompt(), /원문이 확인한 재현·테스트 결과와 독자에게 제안하는 확인 사항을 구분/);
+});
+
 test('editorial planning evaluates tooling on concrete developer workflow evidence without requiring HAL changes', () => {
   const prompt = editorialPlanSystemPrompt();
   assert.match(prompt, /shortlisted article capsule마다/);
@@ -246,7 +258,7 @@ test('camera HAL editorial voice prompt carries the #693 narrative arc and overc
   assert.match(prompt, /lower camera stack/);
   // v2는 순서를 고정하지 않는다. 다뤄야 할 내용은 그대로 요구한다.
   assert.doesNotMatch(prompt, /원문에서 실제로 일어난 일을 먼저 설명/);
-  assert.match(prompt, /고정된 순서 틀을 따르지 말고 기사마다 흐름을 새로 정하세요/);
+  assert.match(prompt, /기술 브리핑의 기본 전개를 따르되/);
   assert.match(prompt, /원문에서 실제로 일어난 일/);
   assert.match(prompt, /Camera HAL과의 거리감/);
   assert.match(prompt, /직접 변경 \/ 참고할 흐름 \/ 추적할 리스크/);
@@ -294,7 +306,7 @@ test('editorial voice prompt slims generic guardrails when an editorial plan is 
 
   // 서사 요구(순서는 자유, 내용은 필수)와 내부 라벨 비노출은 두 버전 모두 항상 유지된다.
   for (const prompt of [full, slim]) {
-    assert.match(prompt, /고정된 순서 틀을 따르지 말고 기사마다 흐름을 새로 정하세요/);
+    assert.match(prompt, /기술 브리핑의 기본 전개를 따르되/);
     assert.match(prompt, /원문에서 실제로 일어난 일/);
     assert.match(prompt, /Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고/);
   }

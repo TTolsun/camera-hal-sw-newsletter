@@ -248,6 +248,9 @@ const DIRECT_CAMERA_RUNTIME_CONTEXT_PATTERNS = [
 ];
 
 const MULTIMEDIA_CAMERA_OUTPUT_STRONG_PATTERNS = [
+  // AndroidX's still-image output encoder is downstream of Camera HAL. Scope
+  // this to the repository path rather than treating arbitrary HEIF news as HAL.
+  /\bframeworks\/support\/heifwriter\//i,
   /\bcamera\s+output\b/i,
   /\bgallery\s+output\b/i,
   /\b(?:camera|capture|captured|recording|gallery)\b[^.\n]{0,100}\bmedia\s+output\b/i,

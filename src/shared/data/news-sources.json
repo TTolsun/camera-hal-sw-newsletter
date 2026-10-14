@@ -587,6 +587,36 @@
       ]
     },
     {
+      "id": "androidx-gerrit-camera-changes",
+      "name": "AndroidX Gerrit Camera and HeifWriter",
+      "sourceUrl": "https://android-review.googlesource.com/changes/?q=project%3Aplatform%2Fframeworks%2Fsupport%20AND%20(directory%3Acamera%20OR%20directory%3Aheifwriter)%20AND%20status%3Amerged&n=100",
+      "rssUrl": null,
+      "collectionModeHint": "rss-source",
+      "category": "android",
+      "priority": "high",
+      "reliability": "official",
+      "enabled": true,
+      "candidateOnly": false,
+      "requiresCrossCheck": false,
+      "usageHint": "AndroidX CameraPipe·Camera Extensions·HeifWriter의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
+      "keywords": [
+        "AndroidX",
+        "CameraX",
+        "CameraPipe",
+        "Camera Extensions",
+        "HeifWriter"
+      ],
+      "sourceRole": "project_mailing_list_source",
+      "sourceUrlQualityHint": "project_mailing_list_release",
+      "mainArticlePolicy": "conditional",
+      "requiresCrossCheckDefault": false,
+      "evidenceGranularityHint": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "Google이 운영하는 공식 Gerrit REST API이며 개별 변경의 날짜·상태·리비전을 보존합니다.",
+        "CameraX와 HeifWriter의 변경은 HAL 인터페이스 변경과 구분합니다. 파일 경로만으로 실무 영향이나 발행 자격을 확정하지 않습니다."
+      ]
+    },
+    {
       "id": "aosp-whats-new-release-notes",
       "name": "AOSP What's New / Release Notes",
       "sourceUrl": "https://source.android.com/docs/whatsnew",

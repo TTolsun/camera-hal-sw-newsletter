@@ -187,6 +187,7 @@ function publicInterpretationReviewPrompt() {
 
 function articleActionGuidancePrompt() {
   return [
+    '버그 수정의 확인 사항은 원문에 나온 발생 조건과 수정 후 기대 동작을 연결하세요. 예를 들어 세션 조기 종료라는 조건이 확인되면 해당 조건에서 콜백 처리와 후속 세션 구성을 확인하는 편집 제안을 할 수 있습니다. 원문이 확인한 재현·테스트 결과와 독자에게 제안하는 확인 사항을 구분하고, 후자를 이미 검증된 결과나 필수 CTS 요구로 쓰지 마세요.',
     '함께 제공된 문서에 모든 주요 기사의 실행 항목을 일률적으로 요구하는 문구가 있더라도 아래 유형별 기준을 우선하세요. 확인 가능한 내부 QA는 유지하되, 설명·인지·참고가 적절한 기사에 공개 실행 지시를 강요하지 마세요.',
     '확인할 일이 있는 기사에서만 행동을 제안하세요. 대상(스택·구성·업무)과 확인할 결과(동작·출력·제약)를 source 범위 안에서 구체적으로 설명하세요. 구체적 action은 필요한 경우에만 test, log, metric, API/component 등의 근거 있는 대상을 명명하며, source가 없는 로그 태그·임계값·담당자를 지어내지 마세요.',
     'AI/C++ 도구의 비교 실험은 선택 판단에 유용할 때만 편집 제안으로 작성하세요. 그 경우 동일한 입력/구성과 확인할 출력·정확도·누락·latency·비용 등 적절한 비교 항목을 명명하되, 실측 수치·성능 우위·도입 효과를 미리 단정하지 마세요. owner나 metric의 존재 자체를 모든 도구 기사의 필수 품질 조건으로 만들지 마세요.',
@@ -285,12 +286,11 @@ function publicationBoundaryPrompt() {
 // 서사 아크와 내부 라벨 비노출은 두 단계 공통 작성 형식이라 baseLines로 공유한다.
 function cameraHalEditorialVoiceBaseLines() {
   const voice = '에디토리얼 보이스: 원문을 일반 IT 뉴스처럼 요약하지 말고, 원문에서 확인되는 변경을 Camera HAL / lower camera stack(Android native, Linux media, V4L2, driver, ISP/sensor, build/test/debug) 개발자 관점으로 재해석하세요. 이 재해석은 코드가 주입하는 것이 아니라 source evidence에 근거해 작성합니다.';
-  // v2는 고정 3-beat 아크를 지시하지 않는다. 순서를 고정하면 모든 기사가 같은 틀로
-  // 나오는데, 그것이 v1에서 서사가 사라진 원인이었다. 다뤄야 할 내용은 그대로 요구하고
-  // 배치 순서만 기사에 맡긴다.
-  const narrativeArc = 'body_markdown은 고정된 순서 틀을 따르지 말고 기사마다 흐름을 새로 정하세요. 다만 원문에서 실제로 일어난 일, 그 기술의 정체·적용 대상·현재 상태와 Camera HAL과의 거리감(직접 변경인지, lower-stack 참고 흐름인지), 그리고 직접 변경 / 참고할 흐름 / 추적할 리스크 중 무엇인지에 대한 현실적인 takeaway는 어떤 순서로 쓰든 본문에 모두 담아야 합니다. Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고 중요도 판단 기준으로만 쓰세요.';
+  // Keep article-specific prose while giving technical changes a useful default order.
+  const narrativeArc = 'body_markdown은 기술 브리핑의 기본 전개를 따르되, 설계 제안이나 도구 소개처럼 다른 설명 순서가 더 명확한 기사는 근거와 쟁점에 맞게 조정하세요. 원문에서 실제로 일어난 일, 그 기술의 정체·적용 대상·현재 상태와 Camera HAL과의 거리감(직접 변경인지, lower-stack 참고 흐름인지), 그리고 직접 변경 / 참고할 흐름 / 추적할 리스크 중 무엇인지에 대한 현실적인 takeaway는 본문에 모두 담아야 합니다. Impact, Layer, Scope, HAL Relevance 같은 라벨 제목은 본문에 노출하지 말고 중요도 판단 기준으로만 쓰세요.';
   const narrativeQuality = '기사마다 독자가 이해해야 할 문제나 선택에서 출발해 확인된 변화와 의미가 이어지도록 쓰세요. 장면은 근거가 있거나 명시적인 가정일 때만 쓰고 인물·대화·사건을 꾸미지 마세요. 모든 기사를 발표 요약 → 일반적 활용 가능성 → HAL 영향 없음의 같은 틀로 찍어내지 마세요. 문단 수나 질문형 도입을 억지로 달리할 필요는 없지만 각 기사의 근거와 쟁점에 맞는 전개가 필요합니다.';
-  return [voice, narrativeArc, narrativeQuality];
+  const briefing = '기술 브리핑의 기본 전개는 변경 전후 동작 → 적용 조건과 업무 영향 → 필요한 확인 사항입니다. 특히 버그 수정은 발생 조건, 기존 실패, 수정 원리를 연결하고, 핵심 조건은 내부 article_sections나 claims에만 두지 말고 공개 lead/body에도 설명하세요. 본문 문법과 기존 소제목 제한은 유지하며 고정 라벨이나 새 블록은 필요하지 않습니다. HAL API 자체 변경, 상위 CameraX 세션·콜백 변경, 하위 인코더 출력 변경을 구분하고, 직접 HAL 변경이 아니라면 어느 계층에서 증상을 분리해 확인하는 데 도움이 되는지 설명하세요. 근거 없이 configureStreams/processCaptureRequest 호출 변화나 ISP 변경을 덧붙이지 마세요. 커밋 병합, 라이브러리 릴리스, 제품 빌드 반영은 각각 별도 근거가 필요합니다.';
+  return [voice, narrativeArc, narrativeQuality, briefing];
 }
 
 function cameraHalEditorialVoicePrompt() {
@@ -313,6 +313,7 @@ function cameraHalEditorialVoiceWithPlanPrompt() {
 // freshness/hard-fail)는 결정론 코드가 그대로 담당하므로 plan은 그 안전 봉투 안에서 편집 판단만 한다.
 function editorialPlanPrompt() {
   return [
+    'AndroidX CameraPipe·Extensions·HeifWriter의 개별 수정은 HAL ABI/API 변경이 아니어도 구체적인 발생 조건·실패 증상·수정 동작이 원문에 있으면 개발자가 세션·콜백·출력 문제를 구분하는 데 유용한 기사로 평가하세요. direct_hal_impact를 높여 승격시키지 말고 기존 자격·우선순위·개수 제한 안에서 판단하세요. change_assessment와 editorial_angle에는 변경 내용, 영향을 받는 구성, 독자가 확인할 결과를 연결하고, 없는 조건이나 테스트는 만들어 채우지 마세요. 파일 수·삽입 줄 수·카메라 경로만 있는 후보는 동작 설명의 근거가 아니므로 실제 source document를 확인하세요.',
     'Editorial plan contract: 제공된 shortlisted article capsule마다 editorial_plans[] item을 하나씩 생성하세요. 이것은 public article prose가 아니라 작성을 안내할 내부 editorial plan입니다.',
     'title, url, source_candidate_hash는 capsule에서 정확히 echo하세요(매칭용 식별자). 새 값을 만들지 마세요.',
     'coverage_decision은 main_article, exclude 중 하나입니다. impact_level은 Direct Impact, Design Reference, Trend Watch, Exclude 중 하나입니다. 이 값은 내부 추론 결과이며 public 본문에 라벨로 노출하지 않습니다.',
@@ -401,6 +402,7 @@ function claimRepairEvidencePrompt() {
 // 바꿀 수 없고, 독자-facing 문구만 교체한다. 반환은 {patches:[...]}만 허용한다.
 function editorRepairPatchPrompt() {
   return [
+    '수정할 때 공개 본문의 변경 전후 동작, 적용 조건과 업무 영향, 근거 있는 확인 사항을 보존하세요. 사실 오류를 고친다는 이유로 구체 설명을 일반적인 모니터링 권고로 대체하지 마세요. 확인 제안을 테스트 완료 사실로 바꾸거나 상위 라이브러리 수정을 HAL API 변경으로 바꾸지 마세요.',
     'Patch-only repair contract: full editor 또는 full section JSON을 반환하지 마세요. {patches:[...]} 객체만 반환하세요.',
     '각 patch는 section_index, op, path, value를 가집니다. section_key는 제공되면 section_index와 같은 section을 가리키도록 echo하세요.',
     'op는 "replace"만 허용됩니다. path는 반드시 "/article_sections/" 또는 "/public_article/"로 시작해야 합니다.',
