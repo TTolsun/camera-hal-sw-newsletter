@@ -89,13 +89,14 @@ function retryDelay(attempt, error) {
   return effectiveRetryDelaysMs[attempt - 1] ?? effectiveRetryDelaysMs[effectiveRetryDelaysMs.length - 1];
 }
 
-function recordUsageMetadata(run, provider, modelName, attempt, response, requestState = {}, routing = {}) {
+function recordUsageMetadata(run, provider, modelName, attempt, response, requestState = {}, routing = {}, requestedAt) {
   const usage = provider.usageMetadataFromResponse(response);
-  const cost = provider.estimateCallCost(modelName, usage);
+  const cost = provider.estimateCallCost(modelName, usage, requestedAt);
   const thinkingBudget = requestState.thinkingBudget || {};
   const fallbackIndex = Number.isInteger(routing.fallback_index) ? routing.fallback_index : null;
   diagnostics.recordCostCall({
     provider: provider.id,
+    requested_at: requestedAt,
     ...stageRunIdentity(run),
     stage_group: routing.stage_group,
     stage_group_known: routing.stage_group_known !== false,
@@ -149,13 +150,14 @@ async function generateContentJsonWithRetry(run, provider, context, requestState
     try {
       diagnostics.recordRequest(run, modelName);
       console.log(`[${stage}] ${provider.displayName} request attempt ${attempt}/${maxRetries + 1} using model ${modelName}.`);
+      const requestedAt = new Date().toISOString();
       const response = await callWithTimeout(
         provider.execute({ context, request: requestState.request, modelName, stage }),
         runtimeConfig.geminiCallTimeoutMs,
         stage,
         modelName
       );
-      recordUsageMetadata(run, provider, modelName, attempt, response, requestState, routing);
+      recordUsageMetadata(run, provider, modelName, attempt, response, requestState, routing, requestedAt);
       const text = provider.textFromResponse(response);
       const json = extractJson(text, stage, provider.displayName);
       diagnostics.recordSuccess(run, modelName);
