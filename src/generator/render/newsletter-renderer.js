@@ -656,9 +656,9 @@ ${takeaway}${articleImageMarkdown(section, publicArticle)}
 
 ${articleBodyMarkdown(publicArticle, storyContractVersion)}
 
-[${brief ? t.backToHighlights : t.backToContents}](#${brief ? 'issue-briefing' : 'issue-contents'})
+${articleBackLink(brief) ? `[${articleBackLink(brief).label}](#${articleBackLink(brief).href})
 
-**${t.source}**
+` : ''}**${t.source}**
 
 ${sourceListMarkdown(publicArticle.source_links)}
 `;
@@ -777,7 +777,7 @@ function buildPublicMarkdown(issue) {
   const brief = readerBriefForIssue(issue);
   return `# ${issue.title}
 
-${brief ? '' : issue.summary}
+${showsHighlights(brief) ? '' : issue.summary}
 
 ${publicationNoticeMarkdown(issue)}
 
@@ -836,12 +836,18 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
         <h2 id="${escapeHtml(anchorId)}-title" class="article-title">${escapeHtml(publicArticle.headline || htmlHeading)}</h2>${articleTagsBlock}
 ${articleBodyBlocks}
         <div class="source-list"><strong>${t.source}</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
-        <nav class="article-navigation" aria-label="${escapeHtml(t.articleNavigation)}">
+${articleNavigationHtml(previous, next, articleBackLink(brief))}      </section>`;
+}
+
+function articleNavigationHtml(previous, next, back) {
+  // 이동할 곳이 하나도 없으면(단일 기사 호) 빈 nav 랜드마크를 남기지 않습니다.
+  if (!previous && !next && !back) return '';
+  return `        <nav class="article-navigation" aria-label="${escapeHtml(t.articleNavigation)}">
           ${previous ? `<a href="#${escapeHtml(previous.anchorId)}" aria-label="${escapeHtml(`${t.previousArticle}: ${previous.headingCategory}`)}">← ${t.previousArticle}</a>` : ''}
-          <a href="#${brief ? 'issue-briefing' : 'issue-contents'}">${brief ? t.backToHighlights : t.backToContents}</a>
+          ${back ? `<a href="#${back.href}">${back.label}</a>` : ''}
           ${next ? `<a href="#${escapeHtml(next.anchorId)}" aria-label="${escapeHtml(`${t.nextArticle}: ${next.headingCategory}`)}">${t.nextArticle} →</a>` : ''}
         </nav>
-      </section>`;
+`;
 }
 
 // 표시 계약 v2: iso_week variant일 때만 h1 아래 "발행 WNN" 보조 배지를 붙인다(대상 주 제목과
@@ -857,7 +863,7 @@ function issueHeroHtml(issue, brief) {
           <span class="issue-kicker">${escapeHtml(issueKickerText(issue))}</span>
         </div>
         <h1 class="issue-title">${issueTitleHtml(issue)}</h1>${publishedWeekBadgeHtml}
-        ${brief ? '' : `<p class="subtitle">${escapeHtml(issue.summary)}</p>`}
+        ${showsHighlights(brief) ? '' : `<p class="subtitle">${escapeHtml(issue.summary)}</p>`}
         <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
       </header>`;
 }
@@ -879,6 +885,19 @@ function readerBriefForIssue(issue) {
     return null;
   }
   return brief;
+}
+
+// 기사가 1건인 호는 "이번 주 핵심" 상자가 본문 첫머리를 그대로 반복하므로 상자를 넣지 않습니다
+// (#1278 소유자 결정). 이번 호 소개 문장은 상자 대신 제목 아래에 둡니다.
+// 정확히 1건일 때만 뺍니다. 기사가 0건인 호는 예전처럼 상자를 두어, 구조 검사가 그 호를 그대로 잡게 합니다.
+function showsHighlights(brief) {
+  return Boolean(brief) && brief.items.length !== 1;
+}
+
+// 기사 끝에서 돌아갈 곳입니다. 상자가 없는 단일 기사 호는 돌아갈 곳이 없어 링크를 두지 않습니다.
+function articleBackLink(brief) {
+  if (!brief) return { href: 'issue-contents', label: t.backToContents };
+  return showsHighlights(brief) ? { href: 'issue-briefing', label: t.backToHighlights } : null;
 }
 
 // 과거 호에서 제목과 요약이 완전히 같으면 화면에서만 반복을 생략합니다.
@@ -904,6 +923,12 @@ function readerBriefHtml(brief) {
 }
 
 function readerBriefMarkdown(brief) {
+  // 단일 기사 호: Markdown은 기사 번호(## 2.)와 구조 검사가 기대하는 ## 1. 섹션을 남기되 제목 링크만
+  // 둔다. 소개 문장은 제목 아래에, 리드·의미 문장은 본문에 한 번씩만 나온다.
+  if (!showsHighlights(brief)) {
+    return `## 1. ${t.weeklyCore}\n\n` + brief.items.map(item =>
+      `- [${escapeMarkdownLinkText(item.headline)}](#${item.href.split('#')[1]})`).join('\n') + '\n';
+  }
   return `<a id="issue-briefing"></a>\n\n## 1. ${t.weeklyCore}\n\n${brief.intro}\n\n` + brief.items.map(item => {
     const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
     return `- [${escapeMarkdownLinkText(item.headline)}](#${item.href.split('#')[1]})\n${meaning || lead ? `\n  ${meaning || lead}\n` : ''}`;
@@ -930,6 +955,7 @@ function contentsHtml(issue) {
 }
 
 function issueBriefingHtml(issue, brief) {
+  if (brief && !showsHighlights(brief)) return '';
   return `<section class="section issue-briefing"${brief ? ' id="issue-briefing" tabindex="-1"' : ''} aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
           <h2 id="issue-briefing-title">${brief ? t.weeklyCore : briefingHeadingHtml(issue)}</h2>
