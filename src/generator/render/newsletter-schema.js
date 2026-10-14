@@ -65,7 +65,7 @@ const publicArticle = {
     lead: string,
     // v2 본문은 문단 배열이 아니라 markdown 문자열 하나다. 허용 문법(### 소제목 줄과
     // 평문 문단)과 lint는 public-body-markdown.js가 정본이다.
-    body_markdown: string,
+    body_markdown: { ...string, description: '독자에게 실제 표시되는 본문입니다. 버그 수정은 발생 조건과 변경 전후, 적용 범위, 구체적인 확인 조건과 관찰 결과, 병합/릴리스/제품 반영의 확인 한계를 모두 본문 문단에 설명합니다. reader_checkpoints 또는 editorial_story에만 적으면 본문에서 누락됩니다. 원문에 없는 시험 결과나 해결 보장을 만들지 않습니다.' },
     camera_hal_takeaway: string,
     reader_checkpoints: stringArray,
     editorial_story: editorialStory,

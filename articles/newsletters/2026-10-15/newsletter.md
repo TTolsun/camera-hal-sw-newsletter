@@ -1,0 +1,123 @@
+# Camera HAL / SW Newsletter - 2026-10-15
+
+AndroidX Camera 및 CameraPipe 파이프라인에서 카메라 세션 재구성 지연 해소, 10비트 다이내믹 레인지 역량 미지원 기기의 SDR 폴백 보장, 지연 서피스 바인딩 시 캡처 요청 누락 방지를 위한 동기화 모델 개편이 반영되었습니다.
+
+
+
+
+
+## 1. 이번 주 3줄 브리핑
+
+- 특정 Android 16 기기에서 세션 재구성 지연으로 인한 프레임 수신 중단을 방지하기 위해 그래프 종료 시 CameraDevice를 닫는 쿼크가 활성화되었습니다.
+- DYNAMIC_RANGE_TEN_BIT 역량이 선언되지 않은 기기에서 10비트 프로필이 잘못 보고될 경우 SDR로 폴백하도록 제한해 유스케이스 바인딩 실패를 방지했습니다.
+- CameraPipe CaptureSessionState에 STARTED 상태를 신설하고 출력 파이널라이제이션 재시도 제한을 해제해 지연 서피스 처리 시 요청 누락을 해소했습니다.
+<a id="issue-contents"></a>
+
+## 목차
+
+- [Android 16 특정 기기의 세션 재구성 지연을 우회하는 CameraDevice 강제 종료 쿼크](#article-android-16-cameradevice)
+- [10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한](#article-10-sdr)
+- [CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지](#article-camerapipe-capturesessionstate)
+
+<a id="article-android-16-cameradevice"></a>
+
+## 2. Android 16 특정 기기의 세션 재구성 지연을 우회하는 CameraDevice 강제 종료 쿼크
+
+_AndroidX Gerrit Camera (Gerrit Change 4341473)_
+
+유스케이스를 다시 바인딩하거나 전면과 후면 카메라를 전환할 때 프레임 수신이 멈추는 현상을 막기 위해, Android 16 환경의 특정 기기에서 세션 전환 시 CameraDevice 자체를 완전히 닫았다가 다시 열도록 쿼크 규칙이 확장되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+HAL이나 프레임워크 내부의 camera3_device_t 핸들 및 flush 로직을 직접 수정하지 않고, 상위 CameraX 레벨에서 장치를 완전히 닫고 다시 열도록 강제하여 스트림 플러시 실패를 우회하는 패치입니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
+
+카메라 앱에서 전면과 후면 렌즈를 번갈아 전환하거나 여러 유스케이스를 바인딩 해제 후 다시 연결할 때 간헐적으로 다음 세션에서 프레임이 전혀 들어오지 않는 정체 현상이 보고되었습니다. 이 증상은 특히 Android 16 (API 36) 이상으로 구동되는 특정 삼성 갤럭시 시리즈의 스냅드래곤 기기군에서 관찰되었습니다.
+
+원인은 프레임워크와 하위 네이티브 계층 사이의 상태 불일치에 있었습니다. 세션 초기 셋업 중 지연 도착한 바인더 onDeviceIdle 콜백이 이미 반복 요청이 실행 중인 상태에서 CameraDeviceImpl의 mIdle 플래그를 성급하게 true로 덮어쓰는 문제가 있었습니다. 이로 인해 이후 세션을 중단하기 위해 abortCaptures를 호출했을 때, 프레임워크의 플러시 로직이 이미 유휴 상태라고 잘못 판단하여 네이티브 HAL의 flush를 호출하지 않고 복귀해 버렸습니다. 또한 이전 인스턴스에서 닫힌 오래된 네이티브 camera3_device_t 핸들이 유지되면서 HAL 스트림 플러시 미디에이터의 SignalStreamFlush 단계에서 실패가 발생하는 구조였습니다.
+
+구글 안드로이드X 팀은 CloseCameraDeviceOnCameraGraphCloseQuirk의 적용 대상에 안드로이드 16 이상이면서 퀄컴 하드웨어 기반의 갤럭시 S22부터 S24 시리즈 모델(sm-s901, sm-s906, sm-s908, sm-s911, sm-s916, sm-s918, sm-s921, sm-s926, sm-s928)을 추가했습니다. 이 규칙이 활성화되면 동일한 디바이스 인스턴스에서 세션만 재구성하는 대신, CameraGraph가 닫힐 때마다 CameraDevice를 명시적으로 닫아 네이티브 핸들과 유휴 플래그 상태를 처음부터 안전하게 초기화합니다.
+
+이번 패치는 안드로이드X 오픈소스 메인 브랜치에 머지되었으나 정식 라이브러리 배포 버전이나 기기 상용 펌웨어에 반영된 시점은 별도로 확인해야 합니다. 실무 엔지니어는 해당 타깃 기기에서 ImageAnalysis나 Preview 바인딩을 해제하고 카메라 방향을 반복 전환하는 시나리오를 구성하여, 이전 세션의 잔류 요청이나 플러시 지연 없이 3초 이내에 새 프레임 프록시가 정상 전달되는지 점검할 수 있습니다.
+
+[목차로 돌아가기](#issue-contents)
+
+**출처**
+
+- [Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473)
+
+---
+
+<a id="article-10-sdr"></a>
+
+## 3. 10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한
+
+_AndroidX Gerrit Camera (Gerrit Change 4350587)_
+
+카메라 메타데이터에 10비트 다이내믹 레인지 프로필이 나열되어 있더라도 기기가 10비트 역량을 선언하지 않았다면 CameraX가 프로필을 해석하지 않고 SDR 지원만 보고하도록 변경되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+HAL 구현 시 10비트 HDR 프로필 키만 노출하고 DYNAMIC_RANGE_TEN_BIT 역량을 누락하면 상위 프레임워크와의 계약 위반이 발생하므로 메타데이터 정합성 검증이 필수적입니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
+
+일부 안드로이드 기기에서 CameraCharacteristics의 다이내믹 레인지 프로필 목록에는 HLG10 같은 10비트 프로필이 채워져 있지만, 정작 기기의 지원 역량 배열인 REQUEST_AVAILABLE_CAPABILITIES에는 REQUEST_AVAILABLE_CAPABILITIES_DYNAMIC_RANGE_TEN_BIT가 빠져 있는 비정상적인 구성이 발견되었습니다. 예시로 확인된 단말은 레노버 TB520FU 모델입니다.
+
+Camera2 규격에 따르면 10비트 출력 스트림 구성은 해당 역량이 공식 선언된 기기에서만 유효합니다. 이 역량이 없으면 기저의 cameraserver는 표준 범위를 벗어난 10비트 구성을 거부합니다. 그러나 기존 CameraX의 DynamicRangeProfilesCompat은 역량 배열을 대조하지 않고 프로필 목록만을 읽어 HLG10을 지원하는 것으로 판단했습니다. 그 결과 앱이 10비트 DynamicRange를 설정하여 유스케이스를 바인딩하면 SupportedSurfaceCombination 검증에서 일치하는 서피스 조합을 찾지 못해 예외가 발생하며 바인딩 자체가 실패했습니다.
+
+이번 패치는 DynamicRangeProfilesCompat.fromCameraMetaData에서 시스템 버전이 API 33 이상이면서 동시에 cameraMetadata.supportsDynamicRangeTenBit가 참인 경우에만 다이내믹 레인지 프로필을 파싱하도록 조건을 강화했습니다. 역량이 선언되지 않은 상태라면 프로필 목록에 무엇이 적혀 있든 SDR 지원만을 보고합니다. 아울러 DynamicRangeResolver에서도 10비트 역량이 꺼져 있으면 권장 10비트 프로필 조회를 건너뜁니다. 이에 따라 미지정 동적 범위 요청은 SDR로 정상 해결되지만, 앱이 10비트 동적 범위를 명시적으로 요구하면 SDR로 자동 변환되지 않고 지원 서피스 조합 검증에서 IllegalArgumentException 예외가 발생하며 요청이 거부됩니다.
+
+점검 시에는 10비트 역량이 선언되지 않은 단말 환경에서 동적 범위를 미지정으로 두고 유스케이스를 구성했을 때 SDR로 정상 바인딩되는지, 반대로 명시적 10비트 구성을 요청했을 때 IllegalArgumentException 예외가 의도대로 발생하는지 관찰할 수 있습니다. 이는 패치 테스트 코드에서 도출한 확인 제안이며 기기 실측 결과는 아닙니다. 현재 확인된 상태는 platform/frameworks/support의 androidx-main 브랜치 머지까지이며, 실제 CameraX 공식 배포 라이브러리 릴리스와 상용 기기 제품 빌드 반영 여부는 확인되지 않았습니다. HAL 구현팀은 10비트 프로필 키와 역량 선언의 정합성을 사내 덤프로 점검해야 합니다.
+
+[목차로 돌아가기](#issue-contents)
+
+**출처**
+
+- [Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587)
+
+---
+
+<a id="article-camerapipe-capturesessionstate"></a>
+
+## 4. CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지
+
+_AndroidX Gerrit Camera (Gerrit Change 4337073)_
+
+CameraX의 차세대 백엔드인 CameraPipe에서 세션 생성 직후 지연 서피스가 등록될 때 초기 캡처 요청이 재전송되지 못하고 정체되던 동기화 결함이 해소되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+HAL 드라이버 인터페이스 계약 변경은 아니지만, 지연 서피스 패턴에서 세션 구성 직후 보류된 캡처 요청이 빠짐없이 유입되므로 초기 스트림 요청 인입 신뢰성을 검증하는 데 유용합니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
+
+CameraPipe 기반 파이프라인에서 서피스가 준비되기 전에 세션을 먼저 초기화하는 지연 서피스 구조를 사용할 때, 세션 시작 콜백과 출력 구성 완료 시점 사이의 동시성 결함으로 인해 요청이 누락되는 현상이 존재했습니다.
+
+기존 동기화 구조에서는 createCaptureSession 호출이 즉시 반환되거나 하위 계층의 onConfigured 콜백이 극도로 신속하게 도착하는 환경에서 레이스 컨디션이 유발되었습니다. onGraphStarted 콜백이 의도치 않게 여러 차례 호출되거나 출력 파이널라이제이션 이후에야 뒤늦게 호출되는 순서 역전이 발생했습니다. 또한 동일한 GraphRequestProcessor 인스턴스로 두 번째 onGraphStarted가 유입되면 GraphLoop 큐가 갱신되지 못했고, 출력 구성을 파이널라이즈할 때 내부적으로 재시도 허용 플래그가 꺼져 있어 지연 서피스가 배치된 뒤에도 보류 중이던 캡처 요청이 카메라 드라이버로 전달되지 못했습니다.
+
+이번 변경은 CaptureSessionState에 STARTED라는 새로운 상태를 도입하여 전이 모델을 재설계했습니다. 세션 생성이 완료되면 출력 파이널라이제이션보다 먼저 onGraphStarted를 호출하고 상태를 STARTED로 전이시킵니다. 아울러 finalizeOutputsIfAvailable 내부에서 재시도를 제한하던 조건을 제거하여, 지연되던 서피스가 유입되는 즉시 onGraphModified를 통해 큐에 대기 중이던 캡처 요청이 누락 없이 재전송되도록 동기화 흐름을 바로잡았습니다.
+
+점검을 진행할 때는 세션 생성 직후 지연 서피스가 뒤늦게 바인딩되는 시나리오를 구성하여, onGraphStarted가 정확히 1회만 호출되고 지연 서피스 등록 시점에 onGraphModified가 유입되어 대기 요청이 하위 파이프라인으로 전송되는지 관찰하는 방법을 적용할 수 있습니다. 이는 패치의 단위 테스트 구조에 근거한 편집 제안이며 실측 단말 보고는 아닙니다.
+
+현재 이 수정은 platform/frameworks/support의 androidx-main 브랜치에 병합된 상태입니다. 그러나 공식 CameraX 라이브러리 릴리스 배포나 상용 단말 펌웨어 빌드 반영 여부는 확인되지 않았으며, Camera HAL3 인터페이스나 시스템 레벨 Camera2 API 사양 자체를 변경하는 것은 아닙니다.
+
+[목차로 돌아가기](#issue-contents)
+
+**출처**
+
+- [Rework CaptureSessionState state model and synchronization - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073)
+
+
+## 참고자료
+
+- [Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473)
+- [Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587)
+- [Rework CaptureSessionState state model and synchronization - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073)

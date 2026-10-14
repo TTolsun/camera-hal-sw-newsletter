@@ -478,6 +478,14 @@ test('LLM_MODEL and LLM_FALLBACK_MODELS override Gemini compatibility aliases', 
   assert.deepEqual(config.geminiFallbackModels, ['llm-fallback']);
 });
 
+test('fact-check defaults to Gemini 3.8 Flash while retaining explicit overrides and fallbacks', () => {
+  const config = readRuntimeConfig({});
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.FACTCHECK),
+    ['gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  const overridden = readRuntimeConfig({ NEWSROOM_FACTCHECK_MODEL: 'custom-factcheck' });
+  assert.equal(configuredModelsForGroup(overridden, LLM_STAGE_GROUPS.FACTCHECK)[0], 'custom-factcheck');
+});
+
 test('stage model env vars independently override code defaults', () => {
   const config = readRuntimeConfig({
     NEWSROOM_REPORTER_MODEL: 'reporter-model',
@@ -759,13 +767,13 @@ test('Gemini Pro model names are rejected across public model config surfaces', 
 test('non-Pro model routing remains stage-specific without Pro fallback append', () => {
   const config = readRuntimeConfig({
     LLM_PROVIDER: 'gemini',
-    NEWSROOM_EDITOR_MODEL: 'gemini-3.5-flash',
-    NEWSROOM_REPAIR_MODEL: 'gemini-3.5-flash',
+    NEWSROOM_EDITOR_MODEL: 'gemini-3.8-flash',
+    NEWSROOM_REPAIR_MODEL: 'gemini-3.8-flash',
     NEWSROOM_JUDGE_MODEL: 'gemini-2.5-flash-lite'
   });
 
-  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-3.5-flash', 'gemini-2.5-flash-lite']);
-  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.REPAIR), ['gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModels(config), ['gemini-2.5-flash', 'gemini-3.8-flash', 'gemini-2.5-flash-lite']);
+  assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.REPAIR), ['gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']);
   assert.deepEqual(configuredModelsForGroup(config, LLM_STAGE_GROUPS.JUDGE), ['gemini-2.5-flash-lite', 'gemini-2.5-flash']);
   assert.equal(sanitizeRuntimeConfig(config).proModelConfigured, false);
 });

@@ -181,7 +181,9 @@ function selectLockedArticles(editor, qualityReport, factCheck) {
   }
   return {
     articles: ensureArray(editor.sections)
-      .filter(section => sectionPassesArticleGate(section, qualityReport, factCheck))
+      .filter((section, index) => !ensureArray(factCheck?.article_quality)
+        .some(verdict => Number(verdict.section_index) === index && verdict.publishable === false) &&
+        sectionPassesArticleGate(section, qualityReport, factCheck))
       .slice(0, articlePolicy.mainArticleCount.max),
     blockers
   };

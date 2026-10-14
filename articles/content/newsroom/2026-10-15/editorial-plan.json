@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-15",
+  "stage": "gemini-editorial-plan",
+  "editorial_plans": [
+    {
+      "title": "AndroidX Camera, 특정 Android 16+ 기기에서 카메라 세션 재구성 지연 문제 해결",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+      "source_candidate_hash": "0d11ab5273eb747408a9f8317c7bf885c78f4fadf44f87532ec15af12969561c",
+      "change_assessment": "AndroidX Camera 라이브러리(`platform/frameworks/support`)의 변경 사항으로, 특정 Android 16 (API 36) 이상 기기에서 카메라 그래프가 닫힐 때 `CameraDevice`를 닫도록 하여 유스케이스 재바인딩 또는 전면/후면 카메라 전환 시 캡처 세션 재구성 지연으로 인한 프레임 수신 중단 문제를 해결합니다. 이 변경은 `CloseCameraDeviceOnCameraGraphCloseQuirk`를 무조건 활성화합니다. 영향을 받는 기기에는 Exynos7570, Exynos7870, Snapdragon 845 Galaxy S9, 그리고 Android 16+의 Samsung Galaxy S22-S24 Snapdragon 시리즈가 포함됩니다.",
+      "mechanical_only": false,
+      "coverage_decision": "main_article",
+      "impact_level": "Direct Impact",
+      "direct_hal_impact": false,
+      "target_description": "AndroidX Camera 라이브러리 및 특정 Android 16 (API 36) 이상 기기의 카메라 동작",
+      "editorial_angle": "CameraX 앱 개발자 및 특정 기기에서 카메라 세션 재구성 문제를 겪는 HAL/프레임워크 엔지니어 관점",
+      "why_it_matters": "특정 Android 16 이상 기기에서 카메라 유스케이스 재바인딩 또는 전면/후면 카메라 전환 시 발생하던 프레임 수신 중단 문제를 해결하여, 앱 안정성과 사용자 경험을 개선합니다. 이는 CameraX를 사용하는 앱의 안정성에 직접적인 영향을 미칩니다.",
+      "reader_takeaway": "Android 16 (API 36) 이상을 대상으로 하는 CameraX 앱 개발자는 이 변경으로 특정 삼성 스냅드래곤 기기(S22-S24) 및 구형 Exynos/Snapdragon 845 기기에서 카메라 전환 또는 유스케이스 재바인딩 시 발생하던 프레임 중단 문제를 해결할 수 있습니다. 해당 시나리오에서 앱의 카메라 동작을 재확인하여 안정성 개선 여부를 검증해야 합니다.",
+      "misunderstanding_risks": [
+        "이 변경이 모든 Android 버전 또는 모든 기기에서 동일한 문제를 해결한다고 오해할 수 있습니다. 이 변경은 Android 16 (API 36) 이상 및 특정 기기 모델에 한정됩니다.",
+        "이 변경이 Camera HAL 인터페이스 자체를 직접 수정한다고 오해할 수 있습니다. 이 변경은 AndroidX Camera 라이브러리 내부의 동작 수정입니다."
+      ],
+      "source_limitations": [
+        "원문 요약이 500자에서 잘렸으므로, 잘린 내용 뒤에 이어지는 문제 목록, 한계, 예외, 후속 결과는 확인할 수 없습니다."
+      ],
+      "narrative_arc": "특정 Android 16+ 기기에서 CameraX 앱의 카메라 세션 재구성 문제를 해결하는 중요한 변경 사항을 소개하고, 그 배경과 영향을 설명합니다.",
+      "subheading_candidates": [
+        "프레임 수신 중단 문제의 원인",
+        "영향을 받는 기기 및 Android 버전",
+        "CloseCameraDeviceOnCameraGraphCloseQuirk의 역할"
+      ],
+      "policy_review_reason": "이 변경은 특정 Android 16 (API 36) 이상 기기에서 카메라 세션 재구성 지연으로 인한 프레임 수신 중단 문제를 해결하기 위해 AndroidX Camera 라이브러리의 동작을 수정합니다. 이는 단순히 내부 타입이나 래퍼를 변경하는 것이 아니라, 특정 기기에서 카메라 유스케이스 재바인딩 또는 전면/후면 카메라 전환 시 발생하는 실제 기능적 문제를 해결하는 구체적인 동작 변경입니다. 이는 앱 안정성과 사용자 경험에 직접적인 영향을 미치므로 main_article로 유지합니다."
+    },
+    {
+      "title": "카메라 10비트 다이내믹 레인지 프로필, DYNAMIC_RANGE_TEN_BIT 기능 지원 여부로 제한",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
+      "source_candidate_hash": "35eea6da2a4db6c9d187ef5552a9bc4276cfb6bf8d640899389de37bea308b9a",
+      "change_assessment": "AndroidX Camera 라이브러리(`platform/frameworks/support`)의 변경 사항으로, 카메라가 `DYNAMIC_RANGE_TEN_BIT` 기능을 광고할 때만 10비트 다이내믹 레인지 프로필을 사용하도록 제한합니다. 이전에는 일부 기기(예: Lenovo TB520FU)에서 해당 기능 없이 10비트 프로필을 잘못 보고하여 유스케이스 바인딩 실패를 초래했습니다. 이제 10비트 기능이 지원되지 않으면 SDR(Standard Dynamic Range)로 폴백하며, `DynamicRangeResolver`에서 권장 10비트 프로필을 무시합니다. 이 변경은 Android 13 (API 33) 이상에 적용됩니다.",
+      "mechanical_only": false,
+      "coverage_decision": "main_article",
+      "impact_level": "Direct Impact",
+      "direct_hal_impact": false,
+      "target_description": "AndroidX Camera 라이브러리의 다이내믹 레인지 프로필 처리 로직 및 Camera2 API의 `DYNAMIC_RANGE_TEN_BIT` 기능",
+      "editorial_angle": "CameraX 앱 개발자 및 10비트 HDR 지원 기기의 HAL/프레임워크 엔지니어 관점",
+      "why_it_matters": "일부 기기에서 10비트 HDR 프로필이 잘못 보고되어 유스케이스 바인딩 실패를 초래하던 문제를 해결하여, CameraX 앱의 안정성을 높이고 다이내믹 레인지 처리의 일관성을 확보합니다. 이는 10비트 HDR 기능을 사용하는 앱의 개발 및 테스트에 중요한 영향을 미칩니다.",
+      "reader_takeaway": "Android 13 (API 33) 이상에서 CameraX 앱이 10비트 HDR 다이내믹 레인지를 사용할 때, 카메라가 `DYNAMIC_RANGE_TEN_BIT` 기능을 명시적으로 지원하는지 확인해야 합니다. 이 기능이 없는 기기에서는 10비트 프로필이 보고되더라도 SDR로 폴백되므로, 예상치 못한 바인딩 실패를 방지하기 위해 `CameraInfo.querySupportedDynamicRanges()`를 통해 실제 지원 여부를 확인하는 것이 중요합니다.",
+      "misunderstanding_risks": [
+        "이 변경이 모든 10비트 HDR 관련 문제를 해결한다고 오해할 수 있습니다. 이 변경은 `DYNAMIC_RANGE_TEN_BIT` 기능 광고 여부와 관련된 프로필 보고 오류에 한정됩니다.",
+        "이 변경이 Camera HAL 자체의 10비트 HDR 구현을 수정한다고 오해할 수 있습니다. 이 변경은 AndroidX 라이브러리에서 HAL이 보고하는 기능을 해석하고 사용하는 방식에 대한 수정입니다."
+      ],
+      "source_limitations": [
+        "원문 요약이 500자에서 잘렸으므로, 잘린 내용 뒤에 이어지는 문제 목록, 한계, 예외, 후속 결과는 확인할 수 없습니다."
+      ],
+      "narrative_arc": "카메라 10비트 HDR 다이내믹 레인지 프로필이 잘못 보고되던 문제를 해결하는 AndroidX Camera 변경 사항을 설명하고, 개발자가 주의해야 할 사항을 제시합니다.",
+      "subheading_candidates": [
+        "10비트 HDR 프로필 보고 문제",
+        "DYNAMIC_RANGE_TEN_BIT 기능의 중요성",
+        "SDR 폴백 동작"
+      ],
+      "policy_review_reason": "이 변경은 카메라가 DYNAMIC_RANGE_TEN_BIT 기능을 광고할 때만 10비트 다이내믹 레인지 프로필을 사용하도록 제한하여, 일부 기기에서 잘못된 프로필 보고로 인한 유스케이스 바인딩 실패 문제를 해결합니다. 이는 AndroidX Camera 라이브러리 내에서 카메라 기능 보고를 해석하고 사용하는 방식에 대한 구체적인 동작 변경이며, 앱의 안정성과 다이내믹 레인지 처리의 일관성에 직접적인 영향을 미칩니다. 따라서 main_article로 유지합니다."
+    },
+    {
+      "title": "AndroidX CameraPipe, CaptureSessionState 상태 모델 및 동기화 재작업으로 안정성 개선",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073",
+      "source_candidate_hash": "22aca2a8fa3ef11b25d728555b3b33a997ea2061ffd5d0e14a74ea756da96549",
+      "change_assessment": "AndroidX CameraPipe의 `CaptureSessionState` 상태 모델과 동기화 로직이 재작업되었습니다. 이 변경은 `onGraphStarted()`의 중복 호출, 파이널라이제이션 후 호출, 그리고 지연된 Surface가 배치된 후 보류 중인 요청이 재전송되지 않는 문제를 해결합니다. 새로운 'STARTED' 상태가 추가되어 캡처 세션이 생성되고 그래프가 시작되었음을 명확히 나타내며, 출력 구성 파이널라이제이션 시 항상 재시도하고, 출력 파이널라이제이션 전에 `onGraphStarted()`를 알리도록 변경되었습니다.",
+      "mechanical_only": false,
+      "coverage_decision": "main_article",
+      "impact_level": "Direct Impact",
+      "direct_hal_impact": false,
+      "target_description": "AndroidX CameraPipe의 `CaptureSessionState` 내부 상태 관리 및 동기화 로직",
+      "editorial_angle": "CameraPipe를 사용하는 AndroidX Camera 앱 개발자 및 Camera HAL/프레임워크의 세션 관리 안정성에 관심 있는 엔지니어 관점",
+      "why_it_matters": "CameraPipe 내부의 `CaptureSessionState` 동기화 문제를 해결하여, 캡처 세션의 안정성을 높이고 프레임 유실 또는 세션 중단과 같은 예측 불가능한 동작을 줄입니다. 이는 CameraX 앱의 전반적인 카메라 동작 신뢰성에 기여합니다.",
+      "reader_takeaway": "CameraPipe를 사용하는 AndroidX Camera 앱 개발자는 이 변경으로 캡처 세션의 내부 상태 관리 및 동기화가 개선되어, `onGraphStarted()` 호출 문제나 보류 중인 요청 재전송 실패와 같은 시나리오에서 앱의 안정성이 향상될 수 있습니다. 특히 복잡한 세션 전환이나 Surface 지연 처리 시나리오에서 카메라 동작의 일관성을 기대할 수 있습니다.",
+      "misunderstanding_risks": [
+        "이 변경이 Camera HAL API나 Camera2 API의 직접적인 변경이라고 오해할 수 있습니다. 이 변경은 AndroidX CameraPipe 라이브러리 내부 구현의 개선입니다.",
+        "이 변경이 모든 카메라 세션 관련 문제를 해결한다고 오해할 수 있습니다. 이 변경은 `CaptureSessionState`의 특정 동기화 및 상태 전이 문제에 초점을 맞춥니다."
+      ],
+      "source_limitations": [
+        "원문 요약이 500자에서 잘렸으므로, 잘린 내용 뒤에 이어지는 문제 목록, 한계, 예외, 후속 결과는 확인할 수 없습니다."
+      ],
+      "narrative_arc": "AndroidX CameraPipe의 `CaptureSessionState` 내부 로직 개선을 통해 캡처 세션의 안정성을 높이는 변경 사항을 설명합니다.",
+      "subheading_candidates": [
+        "기존 동기화 모델의 문제점",
+        "새로운 상태 모델과 개선된 동작",
+        "CameraPipe 안정성 향상"
+      ],
+      "policy_review_reason": "이 변경은 AndroidX CameraPipe의 CaptureSessionState 상태 모델과 동기화 로직을 재작업하여 onGraphStarted()의 중복 호출, 파이널라이제이션 후 호출, 지연된 Surface 배치 후 보류 중인 요청 재전송 실패와 같은 문제를 해결합니다. 이는 CameraPipe 내부의 캡처 세션 관리 안정성을 직접적으로 개선하는 구체적인 동작 변경이며, 앱의 카메라 동작 신뢰성에 기여합니다. 따라서 main_article로 유지합니다."
+    }
+  ]
+}

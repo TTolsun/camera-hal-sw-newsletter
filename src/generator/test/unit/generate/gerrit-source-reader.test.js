@@ -54,6 +54,8 @@ for (const [host, project] of [['android-review.googlesource.com', 'platform/fra
     assert.deepEqual(sourceReviewInput(editor, capsules)[0].source_documents, [doc]);
     const fact = await reviewArticleSources(editor, capsules, { article_quality: [{ section_index: 0, publishable: false }] },
       async () => ({ article_quality: [{ section_index: 0, publishable: true, reason: 'Read patch',
+        briefing_checks: Object.fromEntries(['scope_and_behavior', 'public_verification', 'release_limitations', 'effect_boundaries']
+          .map(key => [key, { applicable: false, satisfied: false, evidence: '', reason: 'Synthetic design review' }])),
         source_review: { core_change: 'Typed handles', article_explanation: 'Typed handles', material_omissions: [], unaddressed_source_conflicts: [] } }] }));
     assert.equal(fact.article_quality[0].publishable, false); // fetching never overrides a failed primary verdict
   });

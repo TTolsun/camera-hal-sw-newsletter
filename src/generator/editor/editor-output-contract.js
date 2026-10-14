@@ -1662,7 +1662,20 @@ async function repairEditorOutputContract({
       // identity/source/structure firewall, which rejects the LLM rewriting
       // article identity before the output is ever accepted.
       if (!['sections.group_coverage', 'sections.blocked_context'].includes(repairField)) {
-        const patchContract = checkRepairPatchContract(invalidEditor, repairedRaw);
+        const contractView = cloneJson(repairedRaw);
+        ensureArray(contractView.sections).forEach((section, index) => {
+          const before = invalidEditor.sections?.[index];
+          const validated = repairedEditor.sections?.[index];
+          // Locked sections carry a deterministic hash absent from the LLM
+          // schema. Restore only an omitted value independently recomputed by
+          // validation for the same ordered, unchanged source binding.
+          if (before?.source_candidate_hash && !Object.hasOwn(section, 'source_candidate_hash') &&
+            validated?.source_candidate_hash === before.source_candidate_hash &&
+            JSON.stringify(section.sources) === JSON.stringify(before.sources)) {
+            section.source_candidate_hash = before.source_candidate_hash;
+          }
+        });
+        const patchContract = checkRepairPatchContract(invalidEditor, contractView);
         if (!patchContract.ok) {
           throw semanticError('Editor semantic repair violated the article-preserving patch contract.', {
             field: 'sections.repair_patch',

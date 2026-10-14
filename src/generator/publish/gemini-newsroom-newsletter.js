@@ -137,7 +137,7 @@ const {
   validateReporter,
   enforceDeterministicReporterSelection,
   syncReporterSelectionToMain,
-  selectedReporterCapsules,
+  reviewReporterCapsules,
   reporterImageCandidatesForSection,
   authoritativeImageProvenanceByUrl,
   restoreImageProvenance,
@@ -720,7 +720,7 @@ async function main() {
     factCheck = validateFactCheck(await callLlmJson(
       factCheckStage,
       factCheckSystemPrompt(),
-      `${commonContext}\n\nPrimary selected article capsule JSON:\n${JSON.stringify(selectedReporterCapsules(date, reporter, articleCapsuleReport, { seedEvidencePack }), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
+      `${commonContext}\n\nCurrent draft source capsule JSON (includes preserved articles; writing-selection flags are not source-access verdicts):\n${JSON.stringify(reviewReporterCapsules(date, reporter, articleCapsuleReport, editor, { seedEvidencePack }), null, 2)}\n\nBackground context JSON:\n${JSON.stringify(backgroundContextReport, null, 2)}\n\nEditor draft JSON:\n${JSON.stringify(editor, null, 2)}`,
       factCheckSchema
     ));
     let eligibilityFindings = reporterEligibilityFindings(editor, reporter, lockedSections);

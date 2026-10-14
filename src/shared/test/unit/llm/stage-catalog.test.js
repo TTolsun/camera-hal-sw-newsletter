@@ -56,6 +56,13 @@ function runFor(definition) {
   return stageRun(definition, { qualityAttempt: 1, totalAttempts: 2 });
 }
 
+test('source diff review uses the fact-check model, sampling and identity', () => {
+  const review = runFor(LLM_STAGES.ARTICLE_SOURCE_REVIEW);
+  assert.equal(review.definition.modelGroup, LLM_STAGE_GROUPS.FACTCHECK);
+  assert.equal(review.definition.sampling.temperatureProfile, TEMPERATURE_PROFILES.FACTCHECK);
+  assert.equal(review.definition.statusRole, 'factcheck');
+});
+
 test('catalog가 production stage 25개를 정의한다', () => {
   assert.equal(Object.keys(LLM_STAGES).length, 25);
   const ids = Object.values(LLM_STAGES).map(definition => definition.id);

@@ -248,6 +248,10 @@ function articleResultForSection(section, qualityReport) {
 function sectionPassesArticleGate(section, qualityReport, factCheck) {
   const articleResult = articleResultForSection(section, qualityReport);
   if (articleResult && articleResult.status !== 'PASS') return false;
+  // A semantic PASS cannot lock an article that still fails a deterministic
+  // safety check, including categories added after the legacy depth checks.
+  if (blockingDeductions(qualityReport?.deductions)
+    .some(deduction => deductionMatchesSection(deduction, section))) return false;
   return !sectionHasQualityDeductions(section, qualityReport?.deductions) &&
     !sectionHasFactCheckMustFix(section, factCheck) &&
     !sectionHasSourceGap(section, factCheck);

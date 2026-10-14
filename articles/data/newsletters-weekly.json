@@ -5,7 +5,7 @@
     "weekEndDate": "2026-10-18",
     "date": "2026-10-12",
     "title": "2026 W42",
-    "summary": "AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안\nClaude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델\nQualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의",
+    "summary": "AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안\nCamera Extensions 조기 완료 콜백 시 발생하던 NullPointerException 및 세션 타임아웃 수정\nCamera2CaptureSequenceProcessor의 부분 Surface 캡처 요청 거부 및 재시도 메커니즘 도입\nAndroid 16 특정 기기의 세션 재구성 지연을 우회하는 CameraDevice 강제 종료 쿼크\n10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한\nCameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지\nClaude Haiku 5.5: 반복 코딩 작업을 위한 저비용 보조 모델\nQualcomm CAMSS ISP 파라미터 uAPI 포맷 문서화 v10 패치 논의",
     "html": "newsletters/2026-W42/index.html",
     "md": "newsletters/2026-W42/newsletter.md",
     "tags": [
@@ -15,21 +15,14 @@
       "Image Processing",
       "SoC Platform"
     ],
-    "article_count": 3,
+    "article_count": 8,
     "article_images": [
       "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg"
     ],
-    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
-    "public_contract_version": "story-v2",
-    "coverage_week_key": "2026-W41",
-    "coverage_start_date": "2026-10-05",
-    "coverage_end_date": "2026-10-11",
-    "coverage_mode": "iso_week",
-    "generation_anchor_date": "2026-10-12",
     "reader_brief": {
       "schema_version": 1,
       "locale": "ko",
-      "intro": "카메라 연결 유지 제안, Qualcomm CAMSS 제어 형식 리뷰, Claude Haiku 5.5 발표를 살펴봅니다. 카메라 변경은 제안·리뷰 단계이며, Haiku의 실무 효과는 직접 비교가 필요합니다.",
+      "intro": "이번 주에는 ‘AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안’, ‘Camera Extensions 조기 완료 콜백 시 발생하던 NullPointerException 및 세션 타임아웃 수정’ 등 8건의 소식을 다룹니다.",
       "items": [
         {
           "id": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
@@ -37,6 +30,81 @@
           "headline": "AOSP cameraserver, 프라이버시 토글 시 조건부 mute를 유지하는 패치 제안",
           "lead": "카메라 접근을 껐을 때, 화면에 표시된 앱의 연결을 유지하면서 영상만 차단하는 Android 패치가 제안됐습니다. 이 동작을 지원하는 기기에만 해당하며, 아직 적용이 확정된 변경은 아닙니다.",
           "takeaway": "지원 기기에서 화면에 표시된 앱은 영상만 차단되는지 확인할 사안입니다. 기능을 지원하지 않는 기기와 나머지 앱은 기존처럼 연결이 끊기는지도 확인해야 합니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4334156",
+          "href": "newsletters/2026-W42/index.html#article-camera-extensions-nullpointerexception",
+          "headline": "Camera Extensions 조기 완료 콜백 시 발생하던 NullPointerException 및 세션 타임아웃 수정",
+          "lead": "CameraX Extension API 사용 시 캡처 완료 콜백이 조기에 도달할 때 핸들러 스레드가 비정상 종료되던 예외가 동기화 구조 개선으로 해결되었습니다.",
+          "takeaway": "Camera Extensions 연동 시 조기 완료 콜백 조건에서 CXCP-Camera-H 스레드의 예외 발생 여부를 점검하고 라이브러리 및 제품 빌드 반영 상태를 추적하세요.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4352209",
+          "href": "newsletters/2026-W42/index.html#article-camera2capturesequenceprocessor-surface",
+          "headline": "Camera2CaptureSequenceProcessor의 부분 Surface 캡처 요청 거부 및 재시도 메커니즘 도입",
+          "lead": "CameraPipe 파이프라인에서 일부 Surface가 준비되지 않은 상태로 제출된 캡처 요청을 유실하지 않고 명령 큐에 보존하여 재시도하는 로직이 추가되었습니다.",
+          "takeaway": "비동기 Surface 바인딩 시차 환경에서 partial Surface 요청 거부 및 GraphLoop invalidate 신호에 따른 재시도 동작을 점검하세요.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+          "href": "newsletters/2026-W42/index.html#article-android-16-cameradevice",
+          "headline": "Android 16 특정 기기의 세션 재구성 지연을 우회하는 CameraDevice 강제 종료 쿼크",
+          "lead": "유스케이스를 다시 바인딩하거나 전면과 후면 카메라를 전환할 때 프레임 수신이 멈추는 현상을 막기 위해, Android 16 환경의 특정 기기에서 세션 전환 시 CameraDevice 자체를 완전히 닫았다가 다시 열도록 쿼크 규칙이 확장되었습니다.",
+          "takeaway": "HAL이나 프레임워크 내부의 camera3_device_t 핸들 및 flush 로직을 직접 수정하지 않고, 상위 CameraX 레벨에서 장치를 완전히 닫고 다시 열도록 강제하여 스트림 플러시 실패를 우회하는 패치입니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
+          "href": "newsletters/2026-W42/index.html#article-10-sdr",
+          "headline": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+          "lead": "카메라 메타데이터에 10비트 다이내믹 레인지 프로필이 나열되어 있더라도 기기가 10비트 역량을 선언하지 않았다면 CameraX가 프로필을 해석하지 않고 SDR 지원만 보고하도록 변경되었습니다.",
+          "takeaway": "HAL 구현 시 10비트 HDR 프로필 키만 노출하고 DYNAMIC_RANGE_TEN_BIT 역량을 누락하면 상위 프레임워크와의 계약 위반이 발생하므로 메타데이터 정합성 검증이 필수적입니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073",
+          "href": "newsletters/2026-W42/index.html#article-camerapipe-capturesessionstate",
+          "headline": "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지",
+          "lead": "CameraX의 차세대 백엔드인 CameraPipe에서 세션 생성 직후 지연 서피스가 등록될 때 초기 캡처 요청이 재전송되지 못하고 정체되던 동기화 결함이 해소되었습니다.",
+          "takeaway": "HAL 드라이버 인터페이스 계약 변경은 아니지만, 지연 서피스 패턴에서 세션 구성 직후 보류된 캡처 요청이 빠짐없이 유입되므로 초기 스트림 요청 인입 신뢰성을 검증하는 데 유용합니다.",
           "tags": [
             "Camera HAL"
           ],
@@ -80,20 +148,102 @@
         }
       ]
     },
+    "lead_article_image": "assets/images/fallback/newsletter-default.svg",
+    "public_contract_version": "story-v2",
+    "coverage_week_key": "2026-W41",
+    "coverage_start_date": "2026-10-05",
+    "coverage_end_date": "2026-10-11",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-10-12",
     "en": {
       "title": "2026 W42",
-      "summary": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled\nClaude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks\nDiscussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
+      "summary": "AOSP cameraserver proposes patch to maintain conditional mute during privacy toggle\nFixes NullPointerException and session timeouts that occurred during early completion callbacks for Camera Extensions\nIntroduction of Camera2CaptureSequenceProcessor's partial Surface capture request rejection and retry mechanism\nCameraDevice forced termination quirk to bypass session reconfiguration delays on specific Android 16 devices\nRestricting dynamic range profiles to SDR on devices missing 10-bit capability declaration\nCameraPipe CaptureSessionState refactoring prevents loss of delayed surface requests\nClaude Haiku 5.5: Low-cost auxiliary model for repetitive coding tasks\nDiscussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
       "reader_brief": {
         "schema_version": 1,
         "locale": "en",
-        "intro": "This issue covers a proposed change to camera privacy controls, a review of the Qualcomm CAMSS control format, and the Claude Haiku 5.5 announcement. Both camera changes are still under review. Test Haiku on your own tasks before deciding whether to adopt it.",
+        "intro": "This week, we cover 8 news items, including 'AOSP cameraserver proposes a patch to maintain conditional mute during privacy toggle' and 'Fixing NullPointerException and session timeouts that occurred during early completion callbacks for Camera Extensions'.",
         "items": [
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
-            "href": "en/newsletters/2026-W42/index.html#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-when-privacy-toggl",
-            "headline": "AOSP cameraserver proposes patch to maintain conditional mute when privacy toggle is enabled",
-            "lead": "An Android patch proposes blocking camera video without disconnecting an app that is visible on screen. The device must support camera mute. The change is still a proposal.",
-            "takeaway": "On supported devices, check that an app visible on screen stays connected while its video is blocked. For other apps and unsupported devices, check that the camera connection still closes as before.",
+            "href": "en/newsletters/2026-W42/index.html#article-aosp-cameraserver-proposes-patch-to-maintain-conditional-mute-during-privacy-tog",
+            "headline": "AOSP cameraserver proposes patch to maintain conditional mute during privacy toggle",
+            "lead": "An Android patch has been proposed to maintain the connection and only block video for on-screen apps when camera access is turned off. This applies only to devices that support this behavior and is not yet a confirmed change.",
+            "takeaway": "This is a matter to check whether only video is blocked while the connection is maintained for apps displayed on screen on supported devices. It is also necessary to check whether devices that do not support the feature and other apps are disconnected as before.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4334156",
+            "href": "en/newsletters/2026-W42/index.html#article-fixes-nullpointerexception-and-session-timeouts-that-occurred-during-early-compl",
+            "headline": "Fixes NullPointerException and session timeouts that occurred during early completion callbacks for Camera Extensions",
+            "lead": "An exception that caused abnormal termination of the handler thread when a capture completion callback arrived early while using the CameraX Extension API has been resolved by improving the synchronization structure.",
+            "takeaway": "When integrating Camera Extensions, check for exceptions in the CXCP-Camera-H thread under early completion callback conditions and track the reflection status in library and product builds.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4352209",
+            "href": "en/newsletters/2026-W42/index.html#article-introduction-of-camera2capturesequenceprocessor-s-partial-surface-capture-reques",
+            "headline": "Introduction of Camera2CaptureSequenceProcessor's partial Surface capture request rejection and retry mechanism",
+            "lead": "Logic has been added to the CameraPipe pipeline to preserve capture requests submitted with some Surfaces not ready in the command queue and retry them, preventing loss.",
+            "takeaway": "Check the partial Surface request rejection and retry behavior based on the GraphLoop invalidate signal in an asynchronous Surface binding time lag environment.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+            "href": "en/newsletters/2026-W42/index.html#article-cameradevice-forced-termination-quirk-to-bypass-session-reconfiguration-delays-o",
+            "headline": "CameraDevice forced termination quirk to bypass session reconfiguration delays on specific Android 16 devices",
+            "lead": "To prevent frames from stopping when rebinding use cases or switching between front and rear cameras, a quirk rule has been extended for specific Android 16 devices to completely close and reopen the CameraDevice itself during session transitions.",
+            "takeaway": "This patch bypasses stream flush failures by forcing the device to be completely closed and reopened at the higher CameraX level, instead of directly modifying the camera3_device_t handle or flush logic within the HAL or framework.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
+            "href": "en/newsletters/2026-W42/index.html#article-restricting-dynamic-range-profiles-to-sdr-on-devices-missing-10-bit-capability-d",
+            "headline": "Restricting dynamic range profiles to SDR on devices missing 10-bit capability declaration",
+            "lead": "Even if 10-bit dynamic range profiles are listed in camera metadata, if the device does not declare 10-bit capability, CameraX will not interpret the profiles and will only report SDR support.",
+            "takeaway": "When implementing HAL, exposing only 10-bit HDR profile keys and omitting the DYNAMIC_RANGE_TEN_BIT capability results in a breach of contract with the higher framework, making metadata consistency verification essential.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073",
+            "href": "en/newsletters/2026-W42/index.html#article-camerapipe-capturesessionstate-refactoring-prevents-loss-of-delayed-surface-requ",
+            "headline": "CameraPipe CaptureSessionState refactoring prevents loss of delayed surface requests",
+            "lead": "A synchronization defect in CameraPipe, CameraX's next-generation backend, has been resolved, where initial capture requests were not retransmitted and stalled when delayed surfaces were registered immediately after session creation.",
+            "takeaway": "Although it is not a change to the HAL driver interface contract, it is useful for verifying the reliability of initial stream request ingress because pending capture requests are fully received immediately after session configuration in delayed surface patterns.",
             "tags": [
               "Camera HAL"
             ],
@@ -105,16 +255,16 @@
           },
           {
             "id": "url:https://www.anthropic.com/claude-haiku-5-5",
-            "href": "en/newsletters/2026-W42/index.html#article-claude-haiku-5-5-a-low-cost-auxiliary-model-for-repetitive-coding-tasks",
-            "headline": "Claude Haiku 5.5: A low-cost auxiliary model for repetitive coding tasks",
-            "lead": "Anthropic has announced Haiku 5.5 for repetitive tasks and coding support. It offers an alternative to using larger models for tasks such as summarizing build errors or simple classification.",
-            "takeaway": "Teams responsible for development tools can compare Haiku 5.5 with their current model on build-log summaries and classification. Check whether it reduces cost and response time without reducing accuracy or missing more errors.",
+            "href": "en/newsletters/2026-W42/index.html#article-claude-haiku-5-5-low-cost-auxiliary-model-for-repetitive-coding-tasks",
+            "headline": "Claude Haiku 5.5: Low-cost auxiliary model for repetitive coding tasks",
+            "lead": "The need to rely on large models for repetitive tasks like build error summarization or simple classification is reduced. Anthropic has announced Haiku 5.5, targeting these tasks and coding auxiliary agents.",
+            "takeaway": "Development tool managers can compare the current model and Haiku 5.5 using build error log summarization and classification samples. The criterion for adoption is to measure whether cost and response time improvements can be achieved while maintaining accuracy and omission rates.",
             "tags": [
               "AI"
             ],
             "image": {
               "src": "https://www-cdn.anthropic.com/images/4zrzovbb/website/89e9b0fbfe0181f6ca565d913686ce8e49b5e9c2-1200x630.jpg",
-              "alt": "Claude Haiku 5.5 announcement graphic",
+              "alt": "Anthropic small AI model Claude Haiku 5.5 announcement and utilization in native development workflow",
               "is_fallback": false
             }
           },
@@ -122,8 +272,8 @@
             "id": "url:https://lore.kernel.org/linux-media/7fde4308-f177-4031-bca0-de576ce69a7e@nxp.com",
             "href": "en/newsletters/2026-W42/index.html#article-discussion-on-qualcomm-camss-isp-parameter-uapi-format-documentation-v10-patch",
             "headline": "Discussion on Qualcomm CAMSS ISP parameter uAPI format documentation v10 patch",
-            "lead": "A patch series proposes a V4L2 metadata format for controlling Qualcomm CAMSS ISP parameters. Its documentation is under review in revision v10.",
-            "takeaway": "When integrating Qualcomm kernel drivers, check the proposed changes to the qcom-camss-config.h uAPI structures and the shared v4l2_isp headers.",
+            "lead": "A patch series documenting the V4L2 metadata format for controlling Qualcomm CAMSS subsystem's ISP parameters is being reviewed at v10 revision.",
+            "takeaway": "When integrating Qualcomm platform kernel drivers, it is necessary to pre-check changes to the qcom-camss-config.h uAPI structure and v4l2_isp common header.",
             "tags": [
               "Driver",
               "Image Processing",

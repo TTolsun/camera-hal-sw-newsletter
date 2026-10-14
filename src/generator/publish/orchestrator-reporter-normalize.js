@@ -9,6 +9,7 @@
 // generation orchestrator (gemini-newsroom-newsletter.js).
 
 const { ensureArray } = require('../../shared/common/value-coercion');
+const { bindPrimaryReadingNotes } = require('../reporter/primary-reading-provenance');
 const { isSafeExternalImageUrl } = require('../../shared/render/image-candidates');
 const { numberOrDefault, stringOrEmpty } = require('./orchestrator-shared-helpers');
 const {
@@ -274,6 +275,17 @@ function selectedReporterCapsules(date, reporter, capsuleReport, options = {}) {
   return capsuleInputForCandidates(date, ensureArray(reporter.candidates).filter(isFinalSelected), capsuleReport, options);
 }
 
+// A retry's writing selection excludes locked articles, but a whole-draft
+// review must still receive their original evidence. This does not select or
+// promote candidates; only known source-bound candidates are added for review.
+function reviewReporterCapsules(date, reporter, capsuleReport, editor, options = {}) {
+  const urls = new Set(ensureArray(editor?.sections).flatMap(section =>
+    ensureArray(section.sources).map(source => normalizeUrl(source?.url))).filter(Boolean));
+  const candidates = ensureArray(reporter?.candidates).filter(candidate => isFinalSelected(candidate) ||
+    urls.has(normalizeUrl(candidate.url || candidate.article_url || candidate.articleUrl)));
+  return capsuleInputForCandidates(date, candidates, capsuleReport, options);
+}
+
 function reserveReporterCapsules(date, reporter, capsuleReport, options = {}) {
   return capsuleInputForCandidates(date, ensureArray(reporter.candidates).filter(isReserveCandidate), capsuleReport, options);
 }
@@ -500,6 +512,10 @@ function normalizeEditorSection(section, index, reporter) {
     ...deterministicMetadata,
     ...normalizeSectionImageFields(normalized, reporter)
   }, normalized, deterministicMetadata);
+  const candidate = ensureArray(reporter?.candidates).find(item => item.url === merged.source_candidate_url);
+  if (candidate) {
+    merged.source_verification_notes = bindPrimaryReadingNotes(merged, candidate);
+  }
   // LLM 이 임의로 채운 decision/evidenceLevel/selection 은 deterministic 코드가 결정해야 하므로 제거.
   delete merged.decision;
   delete merged.evidenceLevel;
@@ -521,6 +537,7 @@ module.exports = {
   enforceDeterministicReporterSelection,
   syncReporterSelectionToMain,
   selectedReporterCapsules,
+  reviewReporterCapsules,
   reserveReporterCapsules,
   reporterCandidateCapsules,
   reporterImageCandidatesForSection,

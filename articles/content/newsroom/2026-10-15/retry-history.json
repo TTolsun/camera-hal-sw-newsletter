@@ -1,0 +1,743 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.8-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-3.8-flash",
+    "score": 94,
+    "threshold": 60,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 3,
+    "locked_article_count": 2,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraPipe의 CaptureSessionState 상태 모델 및 출력 동기화 재작업",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+      "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+      "CameraPipe의 CaptureSessionState 상태 모델 및 출력 동기화 재작업"
+    ],
+    "locked_article_headlines": [
+      "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+      "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473"
+        ],
+        "source_titles": [
+          "Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587"
+        ],
+        "source_titles": [
+          "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support"
+        ]
+      }
+    ],
+    "failed_sections": [
+      {
+        "index": 1,
+        "headline": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587"
+        ],
+        "source_titles": [
+          "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support"
+        ]
+      }
+    ],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "repair-section(patch): 10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587"
+        ],
+        "action": "repair-section",
+        "publication_blocked": true,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": {
+          "section_index": 1,
+          "headline": "10비트 역량 선언 없는 다이내믹 레인지 프로필의 SDR 자동 폴백 처리",
+          "publishable": false,
+          "confidence": "high",
+          "source_review": {
+            "core_change": "REQUEST_AVAILABLE_CAPABILITIES_DYNAMIC_RANGE_TEN_BIT 역량이 누락된 기기에서 REQUEST_AVAILABLE_DYNAMIC_RANGE_PROFILES 키가 존재하더라도 DynamicRangeProfilesCompat이 이를 무시하고 SDR만 지원하도록 제한하며, DynamicRangeResolver의 권장 10비트 프로필 조회를 건너뛰도록 수정함.",
+            "article_explanation": "변경 전후와 적용 범위는 레노버 TB520FU 사례, API 33 조건, DynamicRangeProfilesCompat 파싱 조건 강화 등으로 설명했으나, 구체적인 관찰 대상과 절차를 갖춘 검증 제안이 없고 릴리스 라이브러리 및 제품 빌드 반영 한계가 공개 본문에 누락됨.",
+            "material_omissions": [
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587: 'Assert.assertThrows(IllegalArgumentException::class.java)' — 10비트 역량 미선언 기기에서 10비트 다이내믹 레인지를 명시적으로 요청하면 SDR로 자동 변환되지 않고 예외가 발생한다는 실패 조건 및 점검 관찰 대상 누락.",
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587: 'status: MERGED' — 소스 메인 브랜치 병합 외에 실제 배포 라이브러리 버전 및 제품 롬 빌드 포함 여부는 확인되지 않았다는 반영 한계 설명 누락.",
+              "public_verification: 사내 메타데이터 덤프 대조라는 일반적 제안만 있을 뿐, 역량이 없는 상태에서 UNSPECIFIED 요청 시 SDR 확인 및 명시적 10비트 요청 시 예외 발생 등 구체적인 입력 조건과 관찰 결과가 공개 본문에 없습니다.",
+              "release_limitations: 오픈소스 메인 브랜치 머지 사실만 언급했을 뿐, CameraX 릴리스 라이브러리 배포 및 실제 기기 제품 빌드 반영 여부가 미확인이라는 한계 설명이 누락되었습니다.",
+              "effect_boundaries: 원문에서 10비트 역량이 없으면 UNSPECIFIED만 SDR로 해결되고 명시적 10비트 구성 요청은 거부(IllegalArgumentException)되는데, 기사는 'SDR 자동 폴백 처리'로 표현하여 실행 성공이나 자동 전환을 과장했습니다."
+            ],
+            "unaddressed_source_conflicts": [],
+            "briefing_checks": {
+              "scope_and_behavior": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "1:body_markdown:0",
+                  "1:body_markdown:1",
+                  "1:body_markdown:2"
+                ],
+                "reason": "영향을 받는 기기 조건(API 33 이상이면서 10비트 역량 미선언 기기)과 수정 전 바인딩 실패, 수정 후 DynamicRangeProfilesCompat 및 DynamicRangeResolver 변경 사항을 설명했습니다.",
+                "verified_passages": [
+                  {
+                    "id": "1:body_markdown:0",
+                    "text": "일부 안드로이드 기기에서 CameraCharacteristics의 다이내믹 레인지 프로필 목록에는 HLG10 같은 10비트 프로필이 채워져 있지만, 정작 기기의 지원 역량 배열인 REQUEST_AVAILABLE_CAPABILITIES에는 REQUEST_AVAILABLE_CAPABILITIES_DYNAMIC_RANGE_TEN_BIT가 빠져 있는 비정상적인 구성이 발견되었습니다. 예시로 확인된 단말은 레노버 TB520FU 모델입니다."
+                  },
+                  {
+                    "id": "1:body_markdown:1",
+                    "text": "Camera2 규격에 따르면 10비트 출력 스트림 구성은 해당 역량이 공식 선언된 기기에서만 유효합니다. 이 역량이 없으면 기저의 cameraserver는 표준 범위를 벗어난 10비트 구성을 거부합니다. 그러나 기존 CameraX의 DynamicRangeProfilesCompat은 역량 배열을 대조하지 않고 프로필 목록만을 읽어 HLG10을 지원하는 것으로 판단했습니다. 그 결과 앱이 10비트 DynamicRange를 설정하여 유스케이스를 바인딩하면 SupportedSurfaceCombination 검증에서 일치하는 서피스 조합을 찾지 못해 예외가 발생하며 바인딩 자체가 실패했습니다."
+                  },
+                  {
+                    "id": "1:body_markdown:2",
+                    "text": "이번 패치는 DynamicRangeProfilesCompat.fromCameraMetaData에서 시스템 버전이 API 33 이상이면서 동시에 cameraMetadata.supportsDynamicRangeTenBit가 참인 경우에만 다이내믹 레인지 프로필을 파싱하도록 조건을 강화했습니다. 역량이 선언되지 않은 상태라면 프로필 목록에 무엇이 적혀 있든 SDR 지원만을 보고합니다. 아울러 DynamicRangeResolver에서도 10비트 역량이 꺼져 있으면 권장 10비트 프로필 조회를 건너뜁니다."
+                  }
+                ]
+              },
+              "public_verification": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "사내 메타데이터 덤프 대조라는 일반적 제안만 있을 뿐, 역량이 없는 상태에서 UNSPECIFIED 요청 시 SDR 확인 및 명시적 10비트 요청 시 예외 발생 등 구체적인 입력 조건과 관찰 결과가 공개 본문에 없습니다."
+              },
+              "release_limitations": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "오픈소스 메인 브랜치 머지 사실만 언급했을 뿐, CameraX 릴리스 라이브러리 배포 및 실제 기기 제품 빌드 반영 여부가 미확인이라는 한계 설명이 누락되었습니다."
+              },
+              "effect_boundaries": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "원문에서 10비트 역량이 없으면 UNSPECIFIED만 SDR로 해결되고 명시적 10비트 구성 요청은 거부(IllegalArgumentException)되는데, 기사는 'SDR 자동 폴백 처리'로 표현하여 실행 성공이나 자동 전환을 과장했습니다.",
+                "source_behavior": "DynamicRangeProfilesCompat은 SDR 지원만 보고하고, UNSPECIFIED 동적 범위는 SDR로 해결되지만, 앱이 10비트 동적 범위를 명시적으로 요구하는 경우 SupportedSurfaceCombination에서 IllegalArgumentException을 던집니다.",
+                "article_behavior": "헤드라인과 리드에서 10비트 다이내믹 레인지 프로필 구성 요청 전체가 표준 SDR로 안전하게 자동 폴백 처리되는 것처럼 보장했습니다."
+              }
+            }
+          },
+          "reason": "HAL 메타데이터 키와 DYNAMIC_RANGE_TEN_BIT 역량 간 불일치로 인한 상위 프레임워크 크래시 문제를 정확히 짚고, 벤더 HAL 메타데이터 검증 포인트를 제공함 / 10비트 역량이 없을 때 명시적 10비트 요청은 SDR로 자동 폴백되지 않고 예외가 발생함에도 기사가 헤드라인과 리드에서 'SDR 자동 폴백 처리'로 동작 범위를 왜곡했으며 검증 관찰 절차와 배포 반영 한계가 누락되었습니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587: 'Assert.assertThrows(IllegalArgumentException::class.java)' — 10비트 역량 미선언 기기에서 10비트 다이내믹 레인지를 명시적으로 요청하면 SDR로 자동 변환되지 않고 예외가 발생한다는 실패 조건 및 점검 관찰 대상 누락. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587: 'status: MERGED' — 소스 메인 브랜치 병합 외에 실제 배포 라이브러리 버전 및 제품 롬 빌드 포함 여부는 확인되지 않았다는 반영 한계 설명 누락. / public_verification: 사내 메타데이터 덤프 대조라는 일반적 제안만 있을 뿐, 역량이 없는 상태에서 UNSPECIFIED 요청 시 SDR 확인 및 명시적 10비트 요청 시 예외 발생 등 구체적인 입력 조건과 관찰 결과가 공개 본문에 없습니다. / release_limitations: 오픈소스 메인 브랜치 머지 사실만 언급했을 뿐, CameraX 릴리스 라이브러리 배포 및 실제 기기 제품 빌드 반영 여부가 미확인이라는 한계 설명이 누락되었습니다. / effect_boundaries: 원문에서 10비트 역량이 없으면 UNSPECIFIED만 SDR로 해결되고 명시적 10비트 구성 요청은 거부(IllegalArgumentException)되는데, 기사는 'SDR 자동 폴백 처리'로 표현하여 실행 성공이나 자동 전환을 과장했습니다."
+        }
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "CameraPipe의 CaptureSessionState 상태 모델 및 출력 동기화 재작업",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073"
+        ],
+        "action": "repair-section",
+        "publication_blocked": true,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "CameraPipe의 CaptureSessionState 상태 모델 및 출력 동기화 재작업"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": {
+          "section_index": 2,
+          "headline": "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지",
+          "publishable": false,
+          "confidence": "high",
+          "source_review": {
+            "core_change": "CaptureSessionState에 STARTED 상태를 추가하고 출력 파이널라이제이션 시 항상 재시도를 허용하여 지연 서피스 등록 후 대기 캡처 요청이 onGraphModified를 통해 정상 재전송되도록 동기화 모델을 개편함.",
+            "article_explanation": "지연 서피스 등록 조건과 기존 실패 원인, STARTED 상태 도입 및 finalizeOutputsIfAvailable 재시도 허용 전후 동작, 첫 프레임 요청 유입 관찰 대상은 기술했으나 라이브러리 릴리스 및 제품 빌드 반영의 미확인 한계가 공개 본문에 누락됨.",
+            "material_omissions": [
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073의 'status: MERGED' 및 androidx-main 브랜치 정보 외에 라이브러리 공식 릴리스 및 상용 제품 빌드 포함 여부는 확인되지 않았다는 한계 설명이 누락됨.",
+              "release_limitations: androidx-main 브랜치에 병합되었다는 점만 밝히고 실제 CameraX/Jetpack 라이브러리 릴리스 및 기기 빌드 포함 여부가 확인되지 않았다는 한계를 분리하여 설명하지 않음."
+            ],
+            "unaddressed_source_conflicts": [],
+            "briefing_checks": {
+              "scope_and_behavior": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "2:body_markdown:0",
+                  "2:body_markdown:1",
+                  "2:body_markdown:2"
+                ],
+                "reason": "지연 서피스 사용 시 createCaptureSession 즉각 반환으로 인한 onGraphStarted 다중 호출 및 재시도 차단 문제와 STARTED 상태 도입을 통한 재전송 원리를 상세히 설명함.",
+                "verified_passages": [
+                  {
+                    "id": "2:body_markdown:0",
+                    "text": "CameraPipe를 사용할 때 서피스 준비가 완료되기 전에 캡처 세션을 먼저 구성하는 지연 서피스 패턴에서, 세션 시작 콜백과 서피스 파이널라이제이션 순서가 꼬여 대기 중이던 캡처 요청이 재전송되지 못하는 문제가 존재했습니다."
+                  },
+                  {
+                    "id": "2:body_markdown:1",
+                    "text": "기존 동기화 모델에서는 createCaptureSession이 동기적으로 즉시 반환되거나 onConfigured 콜백이 극도로 빠르게 도착할 때 동시성 문제가 발생했습니다. onGraphStarted 콜백이 여러 번 호출되거나 이미 출력이 완료된 이후에 호출되는 상황이 벌어졌고, 동일한 GraphRequestProcessor 인스턴스로 두 번째 onGraphStarted가 유입되면서 내부 GraphLoop 큐가 무효화되지 못했습니다. 더구나 출력 구성을 파이널라이즈할 때 재시도 허용 플래그가 비활성화되어 있어, 지연 서피스가 모두 준비된 후에도 대기 중이던 요청이 카메라 장치로 전달되지 않는 결과를 낳았습니다."
+                  },
+                  {
+                    "id": "2:body_markdown:2",
+                    "text": "이번 변경은 CaptureSessionState에 STARTED라는 새로운 상태를 도입했습니다. 기존 CREATED 상태에서 세션 설정이 완료되면 출력 파이널라이제이션에 앞서 onGraphStarted를 먼저 호출하고 상태를 STARTED로 전이시킵니다. 또한 출력 구성 파이널라이제이션을 수행할 때 항상 재시도가 가능하도록 finalizeOutputsIfAvailable 내부의 제한 조건을 해제하여, 지연된 서피스가 바인딩되면 즉시 onGraphModified를 통해 큐에 머물던 요청을 다시 제출하도록 구조를 정리했습니다."
+                  }
+                ]
+              },
+              "public_verification": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "2:body_markdown:3"
+                ],
+                "reason": "지연 서피스 구성 조건에서 파이프라인 정체 없이 첫 프레임 요청이 유입되는지 관찰하는 점검 방향을 제시함.",
+                "verified_passages": [
+                  {
+                    "id": "2:body_markdown:3",
+                    "text": "이 수정은 platform/frameworks/support의 androidx-main 브랜치에 병합된 내부 엔진 레벨의 개선입니다. 특정 HAL 인터페이스를 변경하지는 않지만, 세션 초기화가 극도로 빠른 고성능 하드웨어 환경에서 지연 서피스를 활용할 때 파이프라인 정체 없이 첫 프레임 요청이 정상 유입되는지 점검하는 데 유용한 변경입니다."
+                  }
+                ]
+              },
+              "release_limitations": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "androidx-main 브랜치에 병합되었다는 점만 밝히고 실제 CameraX/Jetpack 라이브러리 릴리스 및 기기 빌드 포함 여부가 확인되지 않았다는 한계를 분리하여 설명하지 않음."
+              },
+              "effect_boundaries": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "2:body_markdown:3",
+                  "2:camera_hal_takeaway:0"
+                ],
+                "reason": "HAL 인터페이스 직접 수정이 아니며 frameworks/support 내부 CameraPipe 엔진 상태 제어 개선임을 밝혀 효과 범위를 정확히 한정함.",
+                "source_behavior": "CaptureSessionState 내부의 동기화 상태 머신과 finalizeOutputsIfAvailable의 재시도 로직을 수정한 것으로 HAL 드라이버 자체 변경은 포함되지 않음.",
+                "article_behavior": "특정 HAL 인터페이스를 변경하지 않는 내부 엔진 개선이며 CameraPipe 레벨의 요청 전달 신뢰성 향상으로 명확히 한정함.",
+                "verified_passages": [
+                  {
+                    "id": "2:body_markdown:3",
+                    "text": "이 수정은 platform/frameworks/support의 androidx-main 브랜치에 병합된 내부 엔진 레벨의 개선입니다. 특정 HAL 인터페이스를 변경하지는 않지만, 세션 초기화가 극도로 빠른 고성능 하드웨어 환경에서 지연 서피스를 활용할 때 파이프라인 정체 없이 첫 프레임 요청이 정상 유입되는지 점검하는 데 유용한 변경입니다."
+                  },
+                  {
+                    "id": "2:camera_hal_takeaway:0",
+                    "text": "HAL 드라이버 자체의 변화는 없으나, CameraPipe가 세션 구성 직후 지연 서피스를 파이널라이즈할 때 요청을 누락하지 않고 즉각 전달하므로 초기 스트림 요청 타이밍의 신뢰성이 향상됩니다."
+                  }
+                ]
+              }
+            }
+          },
+          "reason": "CameraPipe 내부 상태 머신과 지연 서피스 동기화 메커니즘을 상세히 다루어 고성능 카메라 파이프라인 구현 및 검증에 유용한 정보를 제공함 / 공개 본문에서 androidx-main 브랜치 병합 상태만 서술하고 배포 라이브러리 릴리스 및 실제 기기 제품 빌드 반영이 미확인이라는 한계를 명시하지 않아 기준을 충족하지 못함. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073의 'status: MERGED' 및 androidx-main 브랜치 정보 외에 라이브러리 공식 릴리스 및 상용 제품 빌드 포함 여부는 확인되지 않았다는 한계 설명이 누락됨. / release_limitations: androidx-main 브랜치에 병합되었다는 점만 밝히고 실제 CameraX/Jetpack 라이브러리 릴리스 및 기기 빌드 포함 여부가 확인되지 않았다는 한계를 분리하여 설명하지 않음."
+        }
+      },
+      {
+        "headline": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473"
+        ],
+        "source_titles": [
+          "Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587"
+        ],
+        "source_titles": [
+          "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 2,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 1,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  },
+  {
+    "attempt": 2,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.8-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-3.8-flash",
+    "score": 94,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 3,
+    "locked_article_count": 3,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [
+      {
+        "title": "Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+        "source": "Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
+        "source": "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+      "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+      "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지"
+    ],
+    "locked_article_headlines": [
+      "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+      "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+      "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473"
+        ],
+        "source_titles": [
+          "Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587"
+        ],
+        "source_titles": [
+          "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073"
+        ],
+        "source_titles": [
+          "Rework CaptureSessionState state model and synchronization - platform/frameworks/support"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473"
+        ],
+        "source_titles": [
+          "Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587"
+        ],
+        "source_titles": [
+          "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "CameraPipe CaptureSessionState 개편으로 지연 서피스 요청 누락 방지",
+        "category": "direct_aosp_camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073"
+        ],
+        "source_titles": [
+          "Rework CaptureSessionState state model and synchronization - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 2,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 1,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [
+      {
+        "title": "Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Android 16 특정 기기의 세션 재구성 중단을 막기 위한 CameraDevice 종료 쿼크 활성화",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+        "source": "Close camera device on graph close to prevent session reconfiguration stalls - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "10비트 역량 선언이 누락된 기기에서 다이내믹 레인지 프로필을 SDR로 제한",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
+        "source": "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

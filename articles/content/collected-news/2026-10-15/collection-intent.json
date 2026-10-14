@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "newsletter_date": "2026-10-15",
+  "generated_at": "2026-10-14T15:59:06.242Z",
+  "seed_urls": [
+    {
+      "seed_id": "seed-01-cb8dcfc7de",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4337073,https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587,https://android-review.googlesource.com/c/platform/frameworks/support/+/4341473",
+      "source_id": "",
+      "expected_topic": "",
+      "priority": "medium",
+      "editor_note": ""
+    }
+  ],
+  "keyword_hints": [],
+  "policy": {
+    "keyword_hints_are_facts": false,
+    "source_backed_facts_must_come_from_evidence_pack": true
+  }
+}
