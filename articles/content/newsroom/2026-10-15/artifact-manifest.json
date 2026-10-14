@@ -1,13 +1,13 @@
 {
   "schema_version": 5,
   "date": "2026-10-15",
-  "generated_at": "2026-10-14T19:57:29.523Z",
+  "generated_at": "2026-10-14T20:00:38.029Z",
   "review_summary": {
     "total": 122,
-    "present": 87,
-    "missing": 35,
+    "present": 89,
+    "missing": 33,
     "missingRequired": 0,
-    "reviewBlocking": 8,
+    "reviewBlocking": 9,
     "attentionRequired": 8,
     "seedUsed": false,
     "publicOutputExpected": false,
@@ -160,6 +160,12 @@
     },
     {
       "path": "articles/content/newsroom/2026-10-15/hal-signal-quality-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-15/image-audit-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-15/image-audit-report.md"
     },
     {
       "path": "articles/content/newsroom/2026-10-15/quality-report-attempt-1.json"
@@ -617,12 +623,12 @@
       "role": "image_audit",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": true,
-      "review_blocking": false,
+      "review_blocking": true,
       "review_attention_required": false,
       "review_order": 44,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -1293,12 +1299,12 @@
       "role": "debug_json",
       "required": "optional",
       "requiredActive": false,
-      "present": false,
+      "present": true,
       "human_readable": false,
       "review_blocking": false,
       "review_attention_required": false,
       "review_order": 90.027,
-      "changed": false,
+      "changed": true,
       "derived": false,
       "retention_grade": "review_required_compact"
     },
@@ -2234,7 +2240,7 @@
   "missing_required_review_artifacts": [],
   "retention_location": "local-snapshot",
   "retention_summary": {
-    "review_required_compact": 28,
+    "review_required_compact": 30,
     "public_source_of_truth": 12,
     "debug_heavy": 13,
     "transient_attempt": 34
@@ -2629,6 +2635,14 @@
     },
     {
       "path": "articles/content/newsroom/2026-10-15/hal-signal-quality-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-15/image-audit-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-15/image-audit-report.md",
       "retention_grade": "review_required_compact"
     },
     {

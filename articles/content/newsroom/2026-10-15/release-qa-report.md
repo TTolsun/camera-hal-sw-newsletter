@@ -63,7 +63,6 @@
 - articles/content/newsroom/2026-10-15/quality-report.md
 - articles/content/newsroom/2026-10-15/recovery-prompt.md
 - articles/content/newsroom/2026-10-15/release-qa-report.md
-- articles/content/newsroom/2026-10-15/repair-failure.json
 - articles/content/newsroom/2026-10-15/reporter-candidates-attempt-1.json
 - articles/content/newsroom/2026-10-15/reporter-candidates-attempt-2.json
 - articles/content/newsroom/2026-10-15/reporter-candidates.json
@@ -89,10 +88,12 @@
 - articles/newsletters/2026-W42/newsletter.md
 - articles/sitemap.xml
 - state/article-exposure-history.json
+- articles/content/newsroom/2026-10-15/image-audit-report.json
+- articles/content/newsroom/2026-10-15/image-audit-report.md
 
 ## 산출물 리뷰 순서
 
-- present: 87/122
+- present: 89/122
 - missing_required: 0
 - attention_required: 8
 
@@ -122,6 +123,7 @@
 - `articles/content/newsroom/2026-10-15/quality-report.md` - changed
 - `articles/content/newsroom/2026-10-15/hal-signal-quality-report.md` - changed
 - `articles/content/newsroom/2026-10-15/stale-claim-report.md` - changed
+- `articles/content/newsroom/2026-10-15/image-audit-report.md` - changed
 
 ### 후보 선정 진단
 
@@ -153,6 +155,7 @@
 - `articles/content/newsroom/2026-10-15/selection-report.json` - changed
 - `articles/content/newsroom/2026-10-15/article-capsules.json` - changed
 - `articles/content/newsroom/2026-10-15/background-context.json` - changed
+- `articles/content/newsroom/2026-10-15/image-audit-report.json` - changed
 - `articles/content/newsroom/2026-10-15/cost-report.md` - changed
 - `articles/content/newsroom/2026-10-15/summary-cache-report.md` - changed
 - `articles/content/newsroom/2026-10-15/summary-cache-report.json` - changed
