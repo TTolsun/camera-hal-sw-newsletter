@@ -263,6 +263,18 @@ const BASE_STAGES = {
     statusRole: 'intro-letter',
     label: { kind: LABEL_KINDS.STATIC, text: 'intro-letter' }
   }),
+  INTRO_LETTER_REVIEW: defineStage({
+    // 생성된 에디터 레터의 문장마다 공개 기사 근거를 판정하는 사실 확인 stage(#1276 후속).
+    // 판정 stage라 fact-checker와 같은 model group·sampling을 쓴다. 기록은 intro-letter와 같은 role이다.
+    id: 'intro_letter_review',
+    modelGroup: LLM_STAGE_GROUPS.FACTCHECK,
+    sampling: {
+      temperatureProfile: TEMPERATURE_PROFILES.FACTCHECK,
+      thinkingProfile: THINKING_PROFILES.FACTCHECK
+    },
+    statusRole: 'intro-letter',
+    label: { kind: LABEL_KINDS.STATIC, text: 'intro-letter-review' }
+  }),
   POST_GENERATION_QUALITY_JUDGE: defineStage({
     id: 'post_generation_quality_judge',
     modelGroup: LLM_STAGE_GROUPS.JUDGE,
