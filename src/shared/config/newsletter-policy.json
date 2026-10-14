@@ -98,9 +98,6 @@
       "source quality drift"
     ]
   },
-  "deepDivePolicy": {
-    "directAospCameraMaxForActivation": 1
-  },
   "sourceEligibilityPolicy": {
     "mailingListPatchMainArticle": {
       "enabled": true,
