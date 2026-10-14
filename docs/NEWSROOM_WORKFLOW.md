@@ -339,6 +339,8 @@ thinking 설정은 호출하는 모델의 패밀리(family)에 맞춰 다르게 
 
 `NEWSROOM_WARN_COST_USD`와 `NEWSROOM_MAX_COST_USD`는 비용 관찰용 기준값입니다. 현재 운영 기준으로 두 값을 넘어도 workflow를 실패시키지 않고 warning만 출력합니다. 이 리포트는 비용 발생 위치를 파악하기 위한 artifact이며, 품질 점수나 publish readiness 판단을 변경하지 않습니다.
 
+`gemini-3.8-flash` 비용은 [공식 Standard 유료 요금](https://ai.google.dev/gemini-api/docs/pricing#gemini-3.8-flash)을 적용합니다(2026-10-15 확인). 100만 토큰당 입력/출력·추론/캐시 입력 단가는 2026-12-31까지 각각 USD 0.75/3.75/0.075이며, 2027-01-01부터 1.50/7.50/0.15입니다. 요금 전환은 각 요청 시도의 시작 시각(`requested_at`)에 해당하는 UTC 날짜를 사용하며, 과거 사용량을 재계산할 때는 `estimateCallCost`의 `asOf` 인자에 당시 호출 시각을 지정합니다. 캐시 입력은 일반 입력 토큰에서 차감하고 별도 단가를 적용하며, 추론 토큰은 출력 요금으로 계산합니다. 이 추정치는 현재 동기 텍스트 호출의 토큰 요금이며 무료 할당량·세금·검색 도구 요금·명시적 캐시 저장료를 포함한 청구서 합계가 아닙니다. 미등록 모델은 기존처럼 비용 미상 경고를 남깁니다.
+
 Stage별 기본 모델은 다음과 같습니다.
 
 - reporter: `gemini-2.5-flash`

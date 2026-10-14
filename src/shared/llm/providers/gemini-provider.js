@@ -8,6 +8,21 @@ const { isFreeTierQuotaExhausted } = require('../llm-errors');
 
 const PRICING_SOURCE_URL = 'https://ai.google.dev/gemini-api/docs/pricing';
 const PRICE_TABLE = [
+  // Official Standard paid-tier rates, checked 2026-10-15 at PRICING_SOURCE_URL.
+  // The introductory rates expire after December 31, 2026 (UTC).
+  {
+    match: /^gemini-3\.8-flash$/i,
+    effectiveBefore: '2027-01-01T00:00:00Z',
+    inputUsdPerMillion: 0.75,
+    outputUsdPerMillion: 3.75,
+    cachedInputUsdPerMillion: 0.075
+  },
+  {
+    match: /^gemini-3\.8-flash$/i,
+    inputUsdPerMillion: 1.5,
+    outputUsdPerMillion: 7.5,
+    cachedInputUsdPerMillion: 0.15
+  },
   {
     match: /^gemini-3\.5-flash$/i,
     inputUsdPerMillion: 1.5,
@@ -34,9 +49,12 @@ const PRICE_TABLE = [
   }
 ];
 
-function findPricing(model, promptTokens = 0) {
+function findPricing(model, promptTokens = 0, asOf = new Date()) {
   const modelName = String(model || '').trim();
-  const pricing = PRICE_TABLE.find(item => item.match.test(modelName));
+  const timestamp = new Date(asOf).getTime();
+  if (!Number.isFinite(timestamp)) throw new RangeError('Invalid Gemini pricing date');
+  const pricing = PRICE_TABLE.find(item => item.match.test(modelName) &&
+    (!item.effectiveBefore || timestamp < Date.parse(item.effectiveBefore)));
   if (!pricing) return null;
   const largePrompt = pricing.largePromptThresholdTokens &&
     number(promptTokens) > pricing.largePromptThresholdTokens;
@@ -91,7 +109,7 @@ function usageMetadataFromResponse(response) {
   };
 }
 
-function estimateCallCost(model, usage) {
+function estimateCallCost(model, usage, asOf = new Date()) {
   const tokens = {
     prompt_tokens: number(usage?.prompt_tokens),
     output_tokens: number(usage?.output_tokens),
@@ -99,7 +117,7 @@ function estimateCallCost(model, usage) {
     cached_tokens: number(usage?.cached_tokens),
     total_tokens: number(usage?.total_tokens)
   };
-  const pricing = findPricing(model, tokens.prompt_tokens);
+  const pricing = findPricing(model, tokens.prompt_tokens, asOf);
   const billableInputTokens = Math.max(0, tokens.prompt_tokens - tokens.cached_tokens);
   const billableOutputTokens = tokens.output_tokens + tokens.thinking_tokens;
   if (!pricing) {

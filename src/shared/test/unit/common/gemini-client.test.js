@@ -516,6 +516,29 @@ test('cost estimation separates cached input and output including thinking token
   assert.equal(cost.pricing_usd_per_million.cached_input_usd_per_million, 0.01);
 });
 
+test('3.8 response crossing the pricing boundary retains the request-time rate', async t => {
+  const client = loadClient({ GEMINI_MODEL: 'gemini-3.8-flash' });
+  t.mock.timers.enable({ apis: ['Date'], now: new Date('2026-12-31T23:59:59Z') });
+  class BoundaryGemini {
+    constructor() {
+      this.models = { generateContent: async () => {
+        t.mock.timers.setTime(Date.parse('2027-01-01T00:00:01Z'));
+        return { text: () => '{"ok":true}', usageMetadata: {
+          promptTokenCount: 1000, candidatesTokenCount: 100,
+          thoughtsTokenCount: 25, cachedContentTokenCount: 100
+        } };
+      } };
+    }
+  }
+  await client.callGeminiJson(run('EDITOR'), 'system', 'prompt', {}, { GoogleGenAI: BoundaryGemini });
+  const calls = client.getGeminiCostCalls();
+  assert.equal(calls[0].requested_at, '2026-12-31T23:59:59.000Z');
+  assert.equal(calls[0].estimated_cost_usd, 0.00115125);
+  // A subsequent request actually starts after the boundary and pays the new rate.
+  await client.callGeminiJson(run('EDITOR'), 'system', 'prompt', {}, { GoogleGenAI: BoundaryGemini });
+  assert.equal(client.getGeminiCostCalls()[1].estimated_cost_usd, 0.0023025);
+});
+
 test('Gemini 3.5 Flash pricing uses official standard rates for stable model only', () => {
   const client = loadClient();
 
