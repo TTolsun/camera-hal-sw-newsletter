@@ -11,7 +11,8 @@ const {
   reviewSignals,
   subjectIsNoise
 } = require('../../../collect/gerrit-camera-changes');
-const { normalizeCandidate } = require('../../../cli/collect-news-candidates');
+const { normalizeCandidate, capPerSource, MAX_CANDIDATES_PER_SOURCE } = require('../../../cli/collect-news-candidates');
+const { resolveFollowedSourceItems } = require('../../../collect/followed-source-item-resolvers');
 const { DATED_ARTICLE_DIAGNOSTIC_KINDS } = require('../../../collect/dated-article-index-resolver');
 const registry = require('../../../data/news-sources.json');
 
@@ -110,12 +111,16 @@ test('AndroidX collection includes camera and HEIF output changes without admitt
   assert.equal(source.mainArticlePolicy, 'conditional');
   const query = new URL(source.sourceUrl).searchParams.get('q');
   assert.match(query, /project:platform\/frameworks\/support/);
-  assert.match(query, /directory:camera OR directory:heifwriter/);
+  assert.match(query, /directory:camera/);
+  assert.doesNotMatch(query, /directory:heifwriter/);
   assert.match(query, /status:merged/);
   for (const file of ['camera/camera-camera2-pipe/Session.kt', 'camera/camera-extensions/Callback.java', 'heifwriter/heifwriter/EncoderBase.java']) {
+    const itemSource = file.startsWith('heifwriter/')
+      ? registry.sources.find(item => item.id === 'androidx-gerrit-heifwriter-changes') : source;
     const change = listChange({ project: 'platform/frameworks/support', status: 'MERGED', subject: 'Fix input handling', submitted: '2026-08-25 00:00:00.000000000' });
     const stub = stubFetch({ [change._number]: detailFor(change, { files: [file] }) });
-    const items = await resolveGerritCameraChangeItems(listBody([change]), source, {
+    const items = await resolveFollowedSourceItems(itemSource, {
+      text: listBody([change]),
       fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS
     });
     assert.equal(items.length, 1, file);
@@ -123,7 +128,7 @@ test('AndroidX collection includes camera and HEIF output changes without admitt
     assert.equal(items[0].gerrit_commit_sha, 'f'.repeat(40));
     assert.equal(items[0].gerrit_effective_date_field, 'submitted');
     if (file.startsWith('heifwriter/')) {
-      const normalized = normalizeCandidate({ ...items[0], source: { ...source, url: source.sourceUrl, section: 'Android / AOSP / Camera' } });
+      const normalized = normalizeCandidate({ ...items[0], source: { ...itemSource, url: itemSource.sourceUrl, section: 'Android Media / Camera Output' } });
       assert.equal(normalized.relevance_bucket, 'android');
       assert.ok(normalized.multimedia_camera_output_relevance > 0);
     }
@@ -137,6 +142,33 @@ test('AndroidX collection includes camera and HEIF output changes without admitt
     const { items } = await resolveOne(listChange({ project }), { files });
     assert.equal(items.length, 0, `${project}: ${files}`);
   }
+});
+
+test('CameraX candidates cannot exhaust the separate HeifWriter source cap before triage', async () => {
+  const camera = registry.sources.find(source => source.id === 'androidx-gerrit-camera-changes');
+  const heif = registry.sources.find(source => source.id === 'androidx-gerrit-heifwriter-changes');
+  const heifQuery = new URL(heif.sourceUrl).searchParams.get('q');
+  assert.match(heifQuery, /project:platform\/frameworks\/support AND directory:heifwriter AND status:merged/);
+  const normalized = [];
+  for (const source of [camera, heif]) {
+    const count = source === camera ? MAX_CANDIDATES_PER_SOURCE + 1 : 1;
+    const changes = Array.from({ length: count }, (_, index) => listChange({
+      _number: (source === camera ? 7000 : 8000) + index,
+      project: 'platform/frameworks/support', status: 'MERGED', subject: 'Fix input handling',
+      submitted: '2026-08-25 00:00:00.000000000'
+    }));
+    const file = source === camera ? 'camera/Session.kt' : 'heifwriter/Encoder.java';
+    const stub = stubFetch(Object.fromEntries(changes.map(change => [change._number, detailFor(change, { files: [file] })])));
+    const items = await resolveFollowedSourceItems(source, {
+      text: listBody(changes), fetchTextImpl: stub.fetchTextImpl, now: NOW, lookbackDays: LOOKBACK_DAYS
+    });
+    normalized.push(...items.map(item => normalizeCandidate(item)));
+  }
+  // Even when every CameraX item ranks ahead of HEIF, the normal eight-item
+  // per-source cap must leave HEIF available to the subsequent LLM triage.
+  const capped = capPerSource(normalized, MAX_CANDIDATES_PER_SOURCE);
+  assert.equal(capped.filter(item => item.source_id === camera.id).length, MAX_CANDIDATES_PER_SOURCE);
+  assert.equal(capped.filter(item => item.source_id === heif.id).length, 1);
 });
 
 test('AndroidX reads past the platform detail budget but retains a bounded page and truncation diagnostics', async () => {
@@ -445,8 +477,8 @@ test('a non-Gerrit body yields no candidates instead of throwing', async () => {
 // 목록 한 페이지가 수집 창을 덮는다는 전제는 등록부 URL의 n에 달려 있다. 등록부만 낮추면 코드는
 // 그대로인 채 창의 일부만 보게 되므로 둘을 한 쌍으로 잠근다(patchwork의 per_page x MAX_PATCH_PAGES와 같은 이유).
 test('all Gerrit registry entries ask for at least the measured list page size', () => {
-  const gerritSources = registry.sources.filter(source => source.id.endsWith('-gerrit-camera-changes'));
-  assert.equal(gerritSources.length, 3);
+  const gerritSources = registry.sources.filter(source => /-gerrit-(camera|heifwriter)-changes$/.test(source.id));
+  assert.equal(gerritSources.length, 4);
   for (const source of gerritSources) {
     const pageSize = Number(new URL(source.sourceUrl).searchParams.get('n'));
     assert.ok(pageSize >= MIN_LIST_PAGE_SIZE, `${source.id} must request at least ${MIN_LIST_PAGE_SIZE} changes per page`);
