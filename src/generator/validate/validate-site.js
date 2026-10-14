@@ -23,9 +23,8 @@ const {
   strictTargetDates
 } = require('../reporter/validation-targets');
 const {
-  REQUIRED_ISSUE_CLASSES,
-  hasClassToken,
   mainArticleBlocks,
+  missingIssueClasses,
   validateArticleImages,
   validateRenderedIssueStructure
 } = require('../quality/rendered-issue-structure');
@@ -715,10 +714,8 @@ for (const relPath of htmlFiles) {
     // 다시 적어 두었고, 그 사본이 부분 문자열로 보는 동안 정본은 토큰으로 봐서 위클리 레인이
     // 약한 쪽으로 잠겨 있었다(#1019 가 판정만 맞췄다). 목록까지 한 곳으로 모아야 다음에 클래스가
     // 늘 때 한쪽만 따라가는 일이 없다.
-    for (const className of REQUIRED_ISSUE_CLASSES) {
-      if (!hasClassToken(content, className)) {
-        fail(`Newsletter HTML missing ${className}: ${relPath}`);
-      }
+    for (const className of missingIssueClasses(content)) {
+      fail(`Newsletter HTML missing ${className}: ${relPath}`);
     }
     const sourceBlocks = [];
     const sourceClassPattern = /class=["'][^"']*source-list[^"']*["']/gi;

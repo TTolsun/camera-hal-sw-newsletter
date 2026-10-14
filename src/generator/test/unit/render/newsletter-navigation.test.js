@@ -113,7 +113,31 @@ test('single article and missing fields produce no empty box or fabricated media
     assert.doesNotMatch(html, /class="article-lead"|class="article-block camera-hal-takeaway"|article-placeholder-visual|class="article-media|aria-label="이전 기사:|aria-label="다음 기사:/);
     assert.match(html, /Detailed evidence paragraph one/);
     assert.match(html, /Original source/);
-    assert.match(html, /이번 주 핵심으로/);
+  });
+});
+
+// 기사가 1건이면 "이번 주 핵심" 상자가 본문 첫머리를 그대로 반복하므로 넣지 않는다(#1278 소유자 결정).
+// 이번 호 소개는 제목 아래에 한 번 두고, 돌아갈 곳이 없으니 기사 끝 이동 링크도 두지 않는다.
+test('single article issues skip the highlights box and keep the introduction once', () => {
+  withSyntheticBuilder(() => {
+    for (const locale of ['ko', 'en']) {
+      const draft = issue(1);
+      const html = buildHtml(draft, { locale });
+      const md = buildMarkdown(draft, { locale });
+      assert.doesNotMatch(html, /class="section issue-briefing"|id="issue-briefing"|reader-brief-items|class="article-navigation"/);
+      // Markdown은 기사 번호와 구조 검사를 위해 ## 1. 섹션을 남기되 제목 링크만 둔다.
+      assert.doesNotMatch(md, /issue-briefing/);
+      assert.match(md, /## 1\. [^\n]+\n\n- \[Camera <sample> & proposal\]\(#[^)]+\)\n/);
+      assert.match(html, /<p class="subtitle">Source-backed introduction\.<\/p>/);
+      // <head>의 description 메타는 화면에 보이지 않으므로 본문만 센다.
+      const body = html.slice(html.indexOf('<body'));
+      assert.equal((body.match(/Source-backed introduction\./g) || []).length, 1);
+      assert.equal((md.match(/Source-backed introduction\./g) || []).length, 1);
+      for (const sentence of ['Public change remains a proposal.', 'The public application conditions remain unconfirmed.']) {
+        assert.equal(body.split(sentence).length - 1, 1, `${locale} html repeats: ${sentence}`);
+        assert.equal(md.split(sentence).length - 1, 1, `${locale} markdown repeats: ${sentence}`);
+      }
+    }
   });
 });
 
@@ -165,7 +189,8 @@ test('actual projection builder and renderer share final article identity, prose
 
 
 test('future weekly issues reuse the shared reading surface in both locales', () => {
-  const draft = issue(1);
+  // 상자는 기사가 2건 이상인 호에만 있다(단일 기사 호는 위 테스트가 다룬다).
+  const draft = issue(2);
   draft.weekly_key = '2027-W02';
   draft.date = '2027-01-11';
   for (const locale of ['ko', 'en']) {

@@ -151,6 +151,19 @@ function mainArticleBlocks(markdown) {
   return blocks;
 }
 
+function classTokenCount(content, className) {
+  return [...String(content || '').matchAll(/class=["']([^"']*)["']/gi)]
+    .filter(match => String(match[1] || '').split(/\s+/).includes(className)).length;
+}
+
+// 기사가 1건인 호는 "이번 주 핵심" 상자가 본문과 같은 내용만 반복하므로 렌더러가 상자를 넣지
+// 않는다(소유자 결정, #1278). 그 경우에만 issue-briefing을 요구하지 않는다.
+function missingIssueClasses(content) {
+  const singleArticle = classTokenCount(content, 'issue-section') === 1;
+  return REQUIRED_ISSUE_CLASSES.filter(className =>
+    !(singleArticle && className === 'issue-briefing') && !hasClassToken(content, className));
+}
+
 function hasClassToken(content, className) {
   const classPattern = /class=["']([^"']*)["']/gi;
   let match;
@@ -432,10 +445,8 @@ function validateHtmlStructure(date, html, root, errors) {
     errors.push(`Published HTML contains TODO: ${relPath}`);
   }
 
-  for (const className of REQUIRED_ISSUE_CLASSES) {
-    if (!hasClassToken(content, className)) {
-      errors.push(`Newsletter HTML missing ${className}: ${relPath}`);
-    }
+  for (const className of missingIssueClasses(content)) {
+    errors.push(`Newsletter HTML missing ${className}: ${relPath}`);
   }
 
   const sourceBlocks = [];
@@ -538,6 +549,7 @@ function validateRenderedIssueStructure({
 
 module.exports = {
   REQUIRED_ISSUE_CLASSES,
+  missingIssueClasses,
   hasAny,
   hasClassToken,
   validateArticleImages,

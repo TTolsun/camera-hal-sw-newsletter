@@ -4,6 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 
 const {
+  missingIssueClasses,
   validateRenderedIssueStructure,
   validateArticleImages
 } = require('../../quality/rendered-issue-structure');
@@ -165,6 +166,21 @@ test('rendered issue structure rejects markdown structural failures', () => {
     assert.equal(result.ok, false, `${name} unexpectedly passed`);
     assert.match(result.text, pattern, name);
   }
+});
+
+// 기사가 1건인 호에서만 "이번 주 핵심" 상자(issue-briefing)를 요구하지 않는다(#1278 소유자 결정).
+// 기사가 2건 이상이면 상자가 없을 때 계속 실패해야 한다.
+test('issue-briefing is optional only for single-article issues', () => {
+  const page = sections => `<section class="section issue-briefing"></section>${sections}` +
+    '<div class="source-list"></div><div class="reference-list"></div>';
+  const article = '<section class="section issue-story issue-section article-card"></section>';
+  const withoutBriefing = html => html.replace('<section class="section issue-briefing"></section>', '');
+
+  assert.deepEqual(missingIssueClasses(page(article)), []);
+  assert.deepEqual(missingIssueClasses(withoutBriefing(page(article))), []);
+  assert.deepEqual(missingIssueClasses(page(article + article)), []);
+  assert.deepEqual(missingIssueClasses(withoutBriefing(page(article + article))), ['issue-briefing']);
+  assert.deepEqual(missingIssueClasses(withoutBriefing(page(''))), ['issue-briefing', 'issue-section']);
 });
 
 test('rendered issue structure rejects HTML structural failures', () => {
