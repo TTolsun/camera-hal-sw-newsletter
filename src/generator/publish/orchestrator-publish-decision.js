@@ -36,7 +36,7 @@ const {
   persistHeadlineStateArtifacts
 } = require('./orchestrator-terminal-contracts');
 const { buildWeeklyMergeResolver } = require('../editor/weekly-merge');
-const { buildIntroLetterGenerator } = require('../editor/intro-letter');
+const { buildIntroLetterGenerator, buildIntroLetterReviewer } = require('../editor/intro-letter');
 const {
   editorRenderedGroupKeys,
   editorExplicitlyDemotedGroups,
@@ -122,9 +122,10 @@ async function decidePublishReadinessAndWriteStatus({
         date,
         editor,
         coverageWeekKeyOverride: runtimeConfig.coverageWeekKeyOverride || undefined,
-        // 주간 에디터 레터(T10, #853): 최종 기사 세트 확정 후 소형 LLM 호출 1건. 결정론 게이트
-        // (lintIntroLetter)와 fallback은 writeWeeklyNewsletterArtifacts 안에 있다.
+        // 주간 에디터 레터(T10, #853): 최종 기사 세트 확정 후 생성 1건 + 사실 확인 1건(시도당).
+        // 결정론 게이트(lintIntroLetter), 사실 확인 채택, fallback은 writeWeeklyNewsletterArtifacts 안에 있다.
         generateIntroLetter: buildIntroLetterGenerator({ callLlmJson }),
+        reviewIntroLetter: buildIntroLetterReviewer({ callLlmJson }),
         ...weeklyMerge
       });
       weeklyArtifactFiles = weeklyResult.files;

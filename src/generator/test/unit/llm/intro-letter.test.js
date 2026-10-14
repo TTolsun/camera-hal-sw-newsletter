@@ -5,7 +5,9 @@ const test = require('node:test');
 
 const {
   INTRO_LETTER_RESPONSE_SCHEMA,
+  INTRO_LETTER_REVIEW_RESPONSE_SCHEMA,
   buildIntroLetterGenerator,
+  buildIntroLetterReviewer,
   lintIntroLetter,
   introLetterSourceHash,
   resolveIntroLetter
@@ -23,6 +25,9 @@ const ARTICLES = [
 
 // 두 기사 모두의 변별 토큰(libcamera, SM8750)을 담고, 길이·문장 수 경계 안에 있는 통과 레터.
 const PASSING_LETTER = ARTICLES.map(item => item.public_article.lead).join(' ');
+
+// 사실 확인 단계가 통과시키는 검토자. 채택 경로 테스트에서 쓴다.
+const ACCEPT = async () => ({ ok: true, issues: [] });
 
 test('lintIntroLetter: 모든 기사의 변별 토큰을 담은 레터는 통과한다', () => {
   const result = lintIntroLetter(PASSING_LETTER, ARTICLES);
@@ -113,7 +118,8 @@ test('resolveIntroLetter: 저장된 레터가 없으면 생성 1회 실패 후 �
   const resolution = await resolveIntroLetter({
     articles: ARTICLES,
     storedIntroLetter: '',
-    generateIntroLetter: async () => responses.shift()
+    generateIntroLetter: async () => responses.shift(),
+    reviewIntroLetter: ACCEPT
   });
   assert.equal(resolution.introLetter, PASSING_LETTER);
   assert.equal(resolution.status, 'regenerated');
@@ -162,37 +168,105 @@ test('buildIntroLetterGenerator: callLlmJson이 없으면 null을 돌려준다',
   assert.equal(buildIntroLetterGenerator({}), null);
 });
 
-test('intro grounding rejects state reversals, invented numbers, internal outcomes and forced trends', () => {
-  const articles = [article('SM8750 드라이버 제안', 'SM8750 드라이버 패치를 제안했습니다.')];
-  articles[0].public_article.camera_hal_takeaway = '해당 드라이버를 쓰는 독자는 적용 조건을 참고할 수 있습니다.';
-  const supported = `${articles[0].public_article.lead} ${articles[0].public_article.camera_hal_takeaway}`;
-  assert.equal(lintIntroLetter(supported, articles).ok, true);
-  for (const claim of [
-    'SM8750 드라이버 패치를 배포했습니다.',
-    'SM8750 드라이버 성능이 20% 향상됐습니다.',
-    '사내 비용을 절감하고 제품 위험을 해결했습니다.',
-    '이번 주 모든 플랫폼이 같은 방향으로 전환됐습니다.'
+// 소개·연결 문장은 결정론 게이트에서 막지 않는다. 예전 규칙(공개 문장 그대로만 허용)은 이런
+// 레터를 전부 막아 매주 fallback했다(#1276 후속). 사실성은 사실 확인 단계가 판정한다.
+test('lintIntroLetter accepts a connective overview that names every article', () => {
+  const overview = '이번 주에는 libcamera v0.7.2 릴리스와 SM8750 ISP 드라이버 패치를 살펴봅니다. ' +
+    '두 소식 모두 적용 조건과 확인할 사항을 기사에서 구분했습니다.';
+  assert.deepEqual(lintIntroLetter(overview, ARTICLES).issues, []);
+});
+
+// 게이트를 통과해도 사실 확인이 거부하면 채택하지 않는다. 상태 반전·없는 수치·사내 성과·근거 없는
+// 추세처럼 결정론으로 잡을 수 없는 문장이 이 경로로 막힌다.
+test('resolveIntroLetter adopts a lint-passing letter only when the fact review accepts it', async () => {
+  const claim = 'SM8750 ISP 드라이버 패치를 배포했습니다.';
+  const letter = `${PASSING_LETTER} ${claim}`;
+  assert.equal(lintIntroLetter(letter, ARTICLES).ok, true);
+  const reviews = [];
+  const rejected = await resolveIntroLetter({
+    articles: ARTICLES,
+    storedIntroLetter: '',
+    generateIntroLetter: async () => letter,
+    reviewIntroLetter: async input => { reviews.push(input); return { ok: false, issues: [`unsupported:${claim}`] }; }
+  });
+  assert.equal(rejected.status, 'fallback');
+  assert.equal(rejected.introLetter, '');
+  assert.match(rejected.reason, /attempt_1_failed_review:unsupported:SM8750 ISP 드라이버 패치를 배포했습니다\./);
+  assert.match(rejected.reason, /attempt_2_failed_review:/);
+  assert.equal(reviews.length, 2);
+  assert.equal(reviews[0].introLetter, letter);
+  assert.equal(reviews[0].articles, ARTICLES);
+
+  const accepted = await resolveIntroLetter({
+    articles: ARTICLES, storedIntroLetter: '', generateIntroLetter: async () => PASSING_LETTER, reviewIntroLetter: ACCEPT
+  });
+  assert.equal(accepted.status, 'generated');
+  assert.equal(accepted.introLetter, PASSING_LETTER);
+});
+
+// 검증하지 못한 레터는 발행하지 않는다: 검토자가 없거나, 던지거나, ok가 정확히 true가 아니면 탈락.
+test('resolveIntroLetter fails closed when the fact review is missing, errors or is not an explicit pass', async () => {
+  for (const [reviewIntroLetter, reason] of [
+    [undefined, /no_reviewer/],
+    [async () => { throw new Error('judge unavailable'); }, /review_error:judge unavailable/],
+    [async () => ({ ok: 'yes' }), /review_rejected/],
+    [async () => null, /review_rejected/]
   ]) {
-    const lint = lintIntroLetter(`${supported} ${claim}`, articles);
-    assert.ok(lint.issues.some(issue => issue.startsWith('unsupported_public_sentence:')), claim);
+    const resolution = await resolveIntroLetter({
+      articles: ARTICLES, storedIntroLetter: '', generateIntroLetter: async () => PASSING_LETTER, reviewIntroLetter
+    });
+    assert.equal(resolution.status, 'fallback');
+    assert.equal(resolution.introLetter, '');
+    assert.match(resolution.reason, reason);
   }
 });
 
-test('takeaway identifiers are allowed only when its complete public sentence supports the intro', () => {
-  const articles = [article('libcamera 제안', 'libcamera 동작을 바꾸는 방안을 제안했습니다.')];
-  articles[0].public_article.camera_hal_takeaway = 'imx296 사용자는 embedded data 조건을 참고할 수 있습니다.';
-  const letter = `${articles[0].public_article.lead} ${articles[0].public_article.camera_hal_takeaway}`;
-  assert.equal(lintIntroLetter(letter, articles).ok, true);
-  assert.equal(lintIntroLetter(letter.replace('참고할 수 있습니다', '적용해야 합니다'), articles).ok, false);
+test('a stored letter with a matching fingerprint is reused without another fact review', async () => {
+  let reviews = 0;
+  const resolution = await resolveIntroLetter({
+    articles: ARTICLES,
+    storedIntroLetter: PASSING_LETTER,
+    storedSourceHash: introLetterSourceHash(ARTICLES),
+    generateIntroLetter: async () => '새 레터',
+    reviewIntroLetter: async () => { reviews += 1; return { ok: true, issues: [] }; }
+  });
+  assert.equal(resolution.status, 'reused');
+  assert.equal(reviews, 0);
 });
 
-test('grounding retains the qualifying context of multi-sentence public fields', () => {
-  const articles = [article('SM8750 제안', 'SM8750 변경은 아직 제안 단계입니다. 적용 후 개선 여부를 검증해야 합니다.')];
-  articles[0].public_article.camera_hal_takeaway = 'SM8750 사용자는 해당 조건을 참고할 수 있습니다.';
-  const full = `${articles[0].public_article.lead} ${articles[0].public_article.camera_hal_takeaway}`;
-  assert.equal(lintIntroLetter(full, articles).ok, true);
-  const partial = `적용 후 개선 여부를 검증해야 합니다. ${articles[0].public_article.camera_hal_takeaway}`;
-  assert.ok(lintIntroLetter(partial, articles).issues.some(issue => issue.startsWith('unsupported_public_sentence:')));
+test('buildIntroLetterReviewer sends only public fields and the letter to the intro-letter-review stage', async () => {
+  const articles = structuredClone(ARTICLES);
+  articles[0].public_article.camera_hal_takeaway = '조건을 참고할 수 있습니다.';
+  articles[0].reader_checkpoints = ['private-check'];
+  articles[0].public_article.body_paragraphs = ['private-body'];
+  const calls = [];
+  const review = buildIntroLetterReviewer({ callLlmJson: async (stage, systemInstruction, prompt, schema) => {
+    calls.push({ stage, systemInstruction, prompt, schema });
+    return { supported: true, unsupported_sentences: [] };
+  } });
+  assert.deepEqual(await review({ introLetter: PASSING_LETTER, articles }), { ok: true, issues: [] });
+  assert.equal(calls[0].stage.label, 'intro-letter-review');
+  assert.equal(calls[0].stage.definition.modelGroup, 'factcheck');
+  assert.equal(calls[0].schema, INTRO_LETTER_REVIEW_RESPONSE_SCHEMA);
+  assert.doesNotMatch(calls[0].prompt, /private-/);
+  assert.deepEqual(JSON.parse(calls[0].prompt), {
+    articles: articles.map(item => ({
+      headline: item.public_article.headline, lead: item.public_article.lead, takeaway: item.public_article.camera_hal_takeaway || ''
+    })),
+    intro_letter: PASSING_LETTER
+  });
+  assert.equal(buildIntroLetterReviewer({}), null);
+});
+
+test('buildIntroLetterReviewer passes only an explicit supported verdict with no unsupported sentence', async () => {
+  const reviewWith = response => buildIntroLetterReviewer({ callLlmJson: async () => response })({ introLetter: PASSING_LETTER, articles: ARTICLES });
+  assert.deepEqual(await reviewWith({ supported: true, unsupported_sentences: [] }), { ok: true, issues: [] });
+  assert.deepEqual(await reviewWith({ supported: true, unsupported_sentences: ['성능이 20% 향상됐습니다.'] }),
+    { ok: false, issues: ['unsupported:성능이 20% 향상됐습니다.'] });
+  assert.deepEqual(await reviewWith({ supported: false, unsupported_sentences: [] }), { ok: false, issues: ['review_rejected'] });
+  for (const malformed of [null, {}, { supported: 'true', unsupported_sentences: [] }, { supported: true }]) {
+    assert.deepEqual(await reviewWith(malformed), { ok: false, issues: ['review_malformed_response'] });
+  }
 });
 
 test('source fingerprint covers final identity, order, public prose and sources, excluding image and internal QA', () => {
@@ -226,7 +300,7 @@ test('missing or stale stored fingerprint cannot reuse a lint-passing intro', as
   for (const storedSourceHash of [undefined, 'sha256:stale']) {
     let calls = 0;
     const resolution = await resolveIntroLetter({ articles: ARTICLES, storedIntroLetter: PASSING_LETTER,
-      storedSourceHash, generateIntroLetter: async () => { calls += 1; return PASSING_LETTER; } });
+      storedSourceHash, generateIntroLetter: async () => { calls += 1; return PASSING_LETTER; }, reviewIntroLetter: ACCEPT });
     assert.equal(resolution.status, 'generated');
     assert.equal(calls, 1);
     assert.equal(resolution.sourceHash, introLetterSourceHash(ARTICLES));

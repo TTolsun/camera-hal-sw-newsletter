@@ -94,6 +94,7 @@ async function withStubbedCollaborators(run, options = {}) {
         calls.weekly += 1;
         calls.order.push('weekly');
         calls.weeklyValidateMerged = args.validateMerged;
+        calls.weeklyIntroLetter = { generate: args.generateIntroLetter, review: args.reviewIntroLetter };
         if (options.weeklyThrows) throw options.weeklyThrows;
         return {
           files: ['articles/newsletters/weekly/x/index.html'],
@@ -411,6 +412,19 @@ test('비용 리포트는 늦은 LLM 호출을 내는 weekly writer 뒤, validat
     assert.deepEqual(calls.writeCostReport, [
       { date: '2026-05-08', weeklyCallsBefore: 1, validateCallsBefore: 0 }
     ]);
+  });
+});
+
+// 에디터 레터는 생성과 사실 확인을 함께 넘겨야 채택될 수 있다. 검토자가 빠지면 레터가 매주 조용히
+// no_reviewer로 fallback하므로 배선을 잠근다(#1276 후속).
+test('weekly writer receives both the intro letter generator and its fact reviewer', async () => {
+  await withStubbedCollaborators(async (decide, calls) => {
+    const newsroomDir = tempRoot('publish-decision-newsroom-');
+    const newsletterDir = tempRoot('publish-decision-newsletter-');
+    await decide(baseArgs(newsroomDir, newsletterDir));
+
+    assert.equal(typeof calls.weeklyIntroLetter.generate, 'function');
+    assert.equal(typeof calls.weeklyIntroLetter.review, 'function');
   });
 });
 
