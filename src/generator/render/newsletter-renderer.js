@@ -932,13 +932,13 @@ function summaryProse(headline, lead, takeaway) {
 }
 
 function readerBriefHtml(brief) {
-  return `<ol class="reader-brief-items reader-brief-titles">${brief.items.map(item => `<li><a href="#${escapeHtml(item.href.split('#')[1])}">${escapeHtml(item.headline)}</a></li>`).join('')}</ol><details class="reader-brief-details"><summary>${t.articleSummaries}</summary><ol class="reader-brief-items">${brief.items.map(item => {
+  return `<ol class="reader-brief-items">${brief.items.map(item => {
     const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
     return `<li>
             <a href="#${escapeHtml(item.href.split('#')[1])}">${escapeHtml(item.headline)}</a>
             ${meaning ? `<p class="reader-brief-takeaway">${escapeHtml(meaning)}</p>` : lead ? paragraphHtml(lead) : ''}
           </li>`;
-  }).join('')}</ol></details>${brief.intro ? `<details class="reader-brief-context"><summary>${t.aboutIssue}</summary><p class="reader-brief-intro">${escapeHtml(brief.intro)}</p></details>` : ''}`;
+  }).join('')}</ol>${brief.intro ? `<details class="reader-brief-context"><summary>${t.aboutIssue}</summary><p class="reader-brief-intro">${escapeHtml(brief.intro)}</p></details>` : ''}`;
 }
 
 function readerBriefMarkdown(brief) {
