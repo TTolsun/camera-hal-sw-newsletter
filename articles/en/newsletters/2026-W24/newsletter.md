@@ -4,11 +4,24 @@ This week covers ‘Android CLI developer tools add a 'Migration to CameraX' ski
 
 
 
-## 1. This week’s articles
+## 1. This week’s highlights
 
-- Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption
+- [Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption](#article-android-cli-developer-tools-add-a-migration-to-camerax-skill-expected-to-acceler)
+
+
+
+
+<a id="article-android-cli-developer-tools-add-a-migration-to-camerax-skill-expected-to-acceler"></a>
 
 ## 2. Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption
+
+_Android Developers Blog - Top 3 updates for Android developer productivity_
+
+A 'Migration to CameraX' skill has been newly introduced to the official tools for improving Android developer productivity. By supporting developers, through an LLM-based workflow, in migrating from existing complex camera implementations to the Jetpack CameraX library, this update is expected to further accelerate CameraX adoption in the upper application layer.
+
+### Camera HAL/Driver perspective: what it means
+
+This change is not a direct API contract change to the Camera HAL itself, but by encouraging upper-layer apps to switch to CameraX, it steers the stream configurations and metadata requests delivered to the HAL to converge on CameraX's standard usage patterns. HAL teams should strengthen their CameraX compatibility validation scenarios.
 
 
 ![Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption](https://developer.android.com/static/images/social/android-developers.png?hl=hi)
@@ -16,19 +29,11 @@ This week covers ‘Android CLI developer tools add a 'Migration to CameraX' ski
 _Image: [Android Developers Blog](https://developer.android.com/tools/agents/android-cli#skills-add)_
 
 
-_Android Developers Blog - Top 3 updates for Android developer productivity_
-
-A 'Migration to CameraX' skill has been newly introduced to the official tools for improving Android developer productivity. By supporting developers, through an LLM-based workflow, in migrating from existing complex camera implementations to the Jetpack CameraX library, this update is expected to further accelerate CameraX adoption in the upper application layer.
-
 Google is expanding the Android skills repository, provided through the Android CLI and GitHub, to help developers more easily apply specific development patterns based on best practices. The newly added skills include 'Migration to CameraX', which guides complex camera API transition work through a structured workflow.
 
 CameraX is a Jetpack library that abstracts the Android Camera2 API and simplifies lifecycle management and use cases such as preview, image capture, and video capture. If this tooling support leads more app developers to switch to CameraX, the stream configuration and metadata request patterns coming into the Camera HAL layer are also likely to follow CameraX's standard behavior.
 
 Camera HAL and driver engineers therefore need to understand the standardized stream combination requirements that this tooling change in the upper framework will bring, and proactively prepare compatibility and stability validation at the HAL layer.
-
-### Camera HAL/Driver perspective: what it means
-
-This change is not a direct API contract change to the Camera HAL itself, but by encouraging upper-layer apps to switch to CameraX, it steers the stream configurations and metadata requests delivered to the HAL to converge on CameraX's standard usage patterns. HAL teams should strengthen their CameraX compatibility validation scenarios.
 
 **Sources**
 

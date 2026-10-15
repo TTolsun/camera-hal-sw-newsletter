@@ -1,23 +1,49 @@
 # 2026 W19 (05.04 ~ 05.10)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. 이번 주 핵심
+
 이번 주에는 ‘libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트’, ‘libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선’ 등 6건의 소식을 다룹니다.
 
+- [libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트](#article-libcamera-v0-7-1)
+
+  libcamera v0.7.1의 pipeline handler와 sensor configuration 업데이트는 upstream Linux camera stack의 sensor mode 설정과 pipeline setup 변화를 확인할 신호입니다. Android HAL 영향은 vendor stack이 해당 libcamera 경로를 실제로 쓰는 경우에만 검토합니다.
+
+- [libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선](#article-libcamera-v0-7-1-softisp)
+
+  libcamera v0.7.1의 SoftISP debayering과 throughput 개선은 RAW image processing 경로의 upstream 변경 신호입니다. Android 제품 영향은 해당 SoftISP 경로가 vendor stack에 통합된 경우에만 image quality와 latency 검증으로 이어집니다.
+
+- [Claude Code 2.1.128: Camera HAL workflow review 범위](#article-claude-code-2-1-128-camera-hal-workflow-review)
+
+  Claude Code 2.1.128은 플러그인 아카이브와 명령 사용성을 개선한 개발 도구 업데이트입니다. Camera HAL 팀에는 제품 동작 변화가 아니라 코드 리뷰 보조, 로그 요약, 반복 작업 정리에 쓸 수 있는 workflow 신호입니다.
+
+- [2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위](#article-2026-5-android-camera-related-cve)
+
+  2026년 5월 Android 보안 게시판은 platform, kernel, vendor component 보안 패치 확인 자료입니다. Camera HAL 영향은 게시판 항목이 실제 제품 camera path와 연결되는 CVE 또는 패치로 매핑될 때만 생깁니다.
+
+- [Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위](#article-firebase-ai-logic-camera-hal-npu-gpu)
+
+  Firebase AI Logic의 하이브리드 추론은 앱이 온디바이스와 클라우드 실행 경로를 함께 고려할 수 있게 하는 Android 앱 계층 기능입니다. Camera frame을 입력으로 쓰는 제품 기능이 있을 때만 HAL 팀의 NPU/GPU 부하, stream format, frame rate 검토로 이어집니다.
+
+- [C++26 assert(): Camera HAL debug-build 검토 범위](#article-c-26-assert-camera-hal-debug-build)
+
+  C++26 assert 개선은 실패 시 더 풍부한 context를 남기는 language/toolchain 동향입니다. Camera HAL 제품 동작을 바꾸는 내용은 아니지만 debug-build와 host utility의 진단 품질을 높일 후보입니다.
 
 
-## 1. 이번 주 기사
 
-- libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트
-- libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선
-- Claude Code 2.1.128: Camera HAL workflow review 범위
-- 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위
-- Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위
-- C++26 assert(): Camera HAL debug-build 검토 범위
+
+<a id="article-libcamera-v0-7-1"></a>
 
 ## 2. libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트
 
 
 
-libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트
+
 
 libcamera v0.7.1의 pipeline handler와 sensor configuration 업데이트는 upstream Linux camera stack의 sensor mode 설정과 pipeline setup 변화를 확인할 신호입니다. Android HAL 영향은 vendor stack이 해당 libcamera 경로를 실제로 쓰는 경우에만 검토합니다.
 
@@ -25,7 +51,7 @@ pipeline handler는 sensor, ISP, buffer flow를 묶어 camera device를 구성�
 
 이 source만으로 Android Camera HAL API나 metadata contract 변경이 입증되지는 않습니다. 제품 branch에 관련 libcamera 변경이 들어왔는지 확인한 뒤, 적용된 platform에서만 CTS/VTS/Camera ITS와 device log를 연결해 봐야 합니다.
 
-**Camera HAL / Driver 관점**
+### Camera HAL / Driver 관점
 
 libcamera v0.7.1은 upstream camera pipeline 신호입니다. HAL 팀은 vendor kernel/libcamera fork 적용 여부를 먼저 확인하고, 적용된 장치에서만 stream configuration과 sensor mode 회귀를 검토해야 합니다.
 
@@ -37,9 +63,7 @@ libcamera v0.7.1은 upstream camera pipeline 신호입니다. HAL 팀은 vendor 
 
 - downstream integration evidence가 없으면 upstream note로만 남기고 HAL issue를 열지 않습니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -47,11 +71,13 @@ libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트
 
 ---
 
+<a id="article-libcamera-v0-7-1-softisp"></a>
+
 ## 3. libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선
 
 
 
-libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선
+
 
 libcamera v0.7.1의 SoftISP debayering과 throughput 개선은 RAW image processing 경로의 upstream 변경 신호입니다. Android 제품 영향은 해당 SoftISP 경로가 vendor stack에 통합된 경우에만 image quality와 latency 검증으로 이어집니다.
 
@@ -59,7 +85,7 @@ SoftISP는 Bayer RAW 데이터를 RGB/YUV로 복원하는 software ISP 경로이
 
 제품 통합이 확인된 경우에는 RAW/YUV output, debayering 품질, frame drop, end-to-end latency를 기존 regression 범위 안에서 비교해야 합니다. 통합 근거가 없으면 upstream image pipeline 동향으로만 기록하는 것이 맞습니다.
 
-**Camera HAL / Driver 관점**
+### Camera HAL / Driver 관점
 
 SoftISP 변경은 camera image pipeline 관찰 신호이지 Android HAL contract 변경이 아닙니다. 제품에서 libcamera SoftISP를 실제로 쓰는 장치만 regression 대상으로 삼아야 합니다.
 
@@ -71,9 +97,7 @@ SoftISP 변경은 camera image pipeline 관찰 신호이지 Android HAL contract
 
 - throughput follow-up은 downstream performance regression이나 제품 요구가 있을 때만 엽니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -81,11 +105,13 @@ libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선
 
 ---
 
+<a id="article-claude-code-2-1-128-camera-hal-workflow-review"></a>
+
 ## 4. Claude Code 2.1.128: Camera HAL workflow review 범위
 
 
 
-Claude Code 2.1.128: Camera HAL workflow review 범위
+
 
 Claude Code 2.1.128은 플러그인 아카이브와 명령 사용성을 개선한 개발 도구 업데이트입니다. Camera HAL 팀에는 제품 동작 변화가 아니라 코드 리뷰 보조, 로그 요약, 반복 작업 정리에 쓸 수 있는 workflow 신호입니다.
 
@@ -93,7 +119,7 @@ Camera HAL 코드베이스는 vendor branch, board-specific 설정, CTS/VTS/Came
 
 도입할 경우 AI agent가 제안한 수정은 HAL branch에 바로 반영하지 않고 사람이 확인할 후보로만 남겨야 합니다. 플러그인 아카이브는 내부 템플릿이나 review command를 묶는 용도로 제한하고, stream/buffer/metadata 동작 변경은 별도 제품 요구사항과 검증 근거가 있을 때만 다룹니다.
 
-**Android Native / Tooling 관점**
+### Android Native / Tooling 관점
 
 Claude Code 2.1.128은 Camera HAL runtime을 바꾸는 소식이 아니라 개발 workflow 보조 도구 업데이트입니다. HAL owner는 code review와 log triage에 실제로 시간을 줄이는지 확인하되, AI 제안을 제품 동작 근거로 승격하지 않아야 합니다.
 
@@ -105,9 +131,7 @@ Claude Code 2.1.128은 Camera HAL runtime을 바꾸는 소식이 아니라 개�
 
 - 내부 플러그인 아카이브를 쓰는 경우 HAL coding guideline, review template, log triage command 연결 여부만 PoC로 확인합니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-Claude Code 2.1.128: Camera HAL workflow review 범위
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -115,7 +139,11 @@ Claude Code 2.1.128: Camera HAL workflow review 범위
 
 ---
 
+<a id="article-2026-5-android-camera-related-cve"></a>
+
 ## 5. 2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위
+
+
 
 
 ![2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위 image](https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png)
@@ -123,15 +151,13 @@ Claude Code 2.1.128: Camera HAL workflow review 범위
 _이미지: [Android Security Bulletin](https://source.android.com/docs/security/bulletin/asb-overview)_
 
 
-2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위
-
 2026년 5월 Android 보안 게시판은 platform, kernel, vendor component 보안 패치 확인 자료입니다. Camera HAL 영향은 게시판 항목이 실제 제품 camera path와 연결되는 CVE 또는 패치로 매핑될 때만 생깁니다.
 
 이 게시판을 Camera HAL 관점에서 읽을 때 핵심은 전체 취약점 수가 아니라 제품 camera stack에 닿는 항목이 있는지입니다. kernel media path, vendor driver, framework camera service, multimedia component가 제품 branch와 연결되는지 보안 담당자와 HAL owner가 함께 확인해야 합니다.
 
 매핑이 확인되지 않은 항목을 Camera HAL regression 업무로 만들면 잘못된 triage가 됩니다. 반대로 camera path와 연결되는 CVE가 확인되면 affected device branch, vendor component, CTS/VTS/Camera ITS smoke 범위를 짧게 묶어야 합니다.
 
-**Camera HAL / Driver 관점**
+### Camera HAL / Driver 관점
 
 보안 게시판은 camera impact가 이미 있다는 증거가 아니라 확인 출발점입니다. Camera HAL 팀은 CVE/패치와 제품 camera path의 연결이 확인된 항목만 follow-up으로 승격해야 합니다.
 
@@ -143,9 +169,7 @@ _이미지: [Android Security Bulletin](https://source.android.com/docs/security
 
 - camera path 연결이 없으면 HAL follow-up 없음으로 기록하고 일반 보안 patch tracking으로만 처리합니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -153,7 +177,11 @@ _이미지: [Android Security Bulletin](https://source.android.com/docs/security
 
 ---
 
+<a id="article-firebase-ai-logic-camera-hal-npu-gpu"></a>
+
 ## 6. Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위
+
+
 
 
 ![Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위 image](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png)
@@ -161,15 +189,13 @@ _이미지: [Android Security Bulletin](https://source.android.com/docs/security
 _이미지: [Android Developers Blog](https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html)_
 
 
-Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위
-
 Firebase AI Logic의 하이브리드 추론은 앱이 온디바이스와 클라우드 실행 경로를 함께 고려할 수 있게 하는 Android 앱 계층 기능입니다. Camera frame을 입력으로 쓰는 제품 기능이 있을 때만 HAL 팀의 NPU/GPU 부하, stream format, frame rate 검토로 이어집니다.
 
 하이브리드 추론 자체는 Camera HAL scheduling, metadata contract, stream buffer 동작 변경을 말하지 않습니다. 다만 앱/프레임워크 팀이 camera frame을 AI 분석 입력으로 쓰는 기능을 계획하고 있다면, HAL 팀은 해상도, format, frame rate, buffer usage 요구가 기존 pipeline에 맞는지 확인할 필요가 있습니다.
 
 검토 순서는 제품 요구 확인이 먼저입니다. 제품 경로가 없으면 Firebase AI Logic은 Android app/API 동향으로만 공유하고, 제품 경로가 있으면 NPU/GPU resource contention, thermal budget, preview/capture latency 영향 범위를 별도 validation plan으로 분리합니다.
 
-**Camera HAL / Driver 관점**
+### Camera HAL / Driver 관점
 
 Firebase AI Logic은 HAL 변경 근거가 아니라 camera-frame AI 기능이 제품에 들어올 때 확인할 app/framework 신호입니다. 제품 요구가 확인될 때만 stream, buffer, metadata, accelerator resource 검토로 이어집니다.
 
@@ -181,9 +207,7 @@ Firebase AI Logic은 HAL 변경 근거가 아니라 camera-frame AI 기능이 �
 
 - 제품 계획이 없으면 HAL scheduling 또는 metadata 변경 요구로 기록하지 않습니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -191,13 +215,15 @@ Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 �
 
 ---
 
+<a id="article-c-26-assert-camera-hal-debug-build"></a>
+
 ## 7. C++26 assert(): Camera HAL debug-build 검토 범위
 
 
-![C++26 assert(): Camera HAL debug-build 검토 범위 image](../../assets/images/fallback/newsletter-default.svg)
 
 
-C++26 assert(): Camera HAL debug-build 검토 범위
+![](../../assets/images/fallback/newsletter-default.svg)
+
 
 C++26 assert 개선은 실패 시 더 풍부한 context를 남기는 language/toolchain 동향입니다. Camera HAL 제품 동작을 바꾸는 내용은 아니지만 debug-build와 host utility의 진단 품질을 높일 후보입니다.
 
@@ -205,7 +231,7 @@ HAL 코드에서는 request/result 변환, metadata table, buffer state transiti
 
 단, production runtime 정책과 Android platform toolchain 지원 여부가 먼저입니다. C++26 assert 관련 검토는 host-side tool, debug-build, unit test helper에 한정하고, shipping HAL 동작 변경은 별도 requirement와 compiler support가 확인된 뒤 다뤄야 합니다.
 
-**Android Native / Tooling 관점**
+### Android Native / Tooling 관점
 
 C++26 assert는 Camera HAL 기능 변경이 아니라 debug 진단 개선 후보입니다. HAL owner는 assert 사용 위치를 inventory로 정리하고, production path가 아닌 debug/host utility부터 실험해야 합니다.
 
@@ -217,9 +243,7 @@ C++26 assert는 Camera HAL 기능 변경이 아니라 debug 진단 개선 후보
 
 - PoC는 host utility 또는 debug-build에서만 진행하고 release build behavior 변경은 금지합니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-C++26 assert(): Camera HAL debug-build 검토 범위
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 

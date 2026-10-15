@@ -1,26 +1,53 @@
 # 2026 W35 (08.24 ~ 08.30)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. 이번 주 핵심
+
 이번 주에는 ‘AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가’, ‘libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토’ 등 5건의 소식을 다룹니다.
 
+- [AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가](#article-atomisp-lenovo-yoga-book-ov2740-d-phy)
+
+  드라이버 레벨의 D-PHY 타이밍 파생 및 패딩 처리는 V4L2 서브시스템을 거쳐 Android Camera HAL의 스트림 구성 유효성 검사에 영향을 미칩니다. 특히 RAW Bayer 캡처 시 패딩 픽셀(12픽셀)이 메타데이터(active array size 등)에 정확히 반영되지 않으면 이미지 왜곡이나 CTS 테스트 실패가 발생할 수 있으므로 주의 깊게 점검해야 합니다.
+
+- [libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토](#article-libcamera-quad-bayer-cfa)
+
+  libcamera 계층에서 쿼드-베이어 CFA 레이아웃을 직접 인식하고 처리함으로써, Android Camera HAL이 하위 스택에서 수신하는 RAW 데이터의 디베이어링(debayering) 품질과 스트라이드 계산의 정확도가 향상됩니다. 이는 HAL이 RAW_SENSOR 또는 RAW10/RAW12 스트림을 처리할 때 버퍼 오버플로우나 메모리 정렬 오류를 방지하는 데 기여합니다.
+
+- [Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개](#article-linux-lenovo-yoga-book-yb1-x91)
+
+  드라이버 레벨에서 RAW Bayer 캡처 노출, 채널별 화이트 밸런스 제어, 렌즈 액추에이터(WV517S)가 추가됨에 따라, Camera HAL은 해당 하드웨어의 3A(Auto Exposure, Auto White Balance, Auto Focus) 제어 기능을 V4L2 컨트롤을 통해 직접 매핑할 수 있게 됩니다. 이는 HAL의 `android.control` 메타데이터 계약을 충족하고 CTS/VTS 검증을 통과하는 데 필수적입니다.
+
+- [Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련](#article-sony-imx908-linux-device-tree)
+
+  Device Tree 바인딩을 통해 센서의 MIPI CSI-2 레인 수(2 또는 4레인)와 RAW 포맷(RAW10/RAW12)이 커널에 올바르게 정의되면, Camera HAL은 드라이버로부터 정확한 센서 해상도(3856x2176)와 포맷 정보를 쿼리할 수 있습니다. 이는 HAL의 `SensorCharacteristics` 메타데이터를 구성하고, 고해상도 RAW 스트림 조합의 안정성을 확보하는 데 기여합니다.
+
+- [libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가](#article-libcamera-isp-egl-createtexture2d)
+
+  소프트웨어 ISP의 EGL 텍스처 생성 시 필터링 옵션을 제어할 수 있게 됨으로써, GPU 가속을 활용한 이미지 스케일링이나 디베이어링 후처리 단계에서 시각적 품질(예: 앨리어싱 감소, 샤프니스 조절)을 미세 조정할 수 있습니다. 이는 하드웨어 ISP가 없는 보급형 SoC 플랫폼에서 libcamera 기반 Android Camera HAL을 구현할 때 프리뷰 이미지의 품질 향상에 직접적인 영향을 미칩니다.
 
 
-## 1. 이번 주 기사
 
-- AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가
-- libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토
-- Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개
-- Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련
-- libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가
+
+<a id="article-atomisp-lenovo-yoga-book-ov2740-d-phy"></a>
 
 ## 2. AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가
-
-
-![AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가 image](../../assets/images/fallback/android.svg)
-
 
 _lore.kernel.org linux-media list - PATCH v3_
 
 Linux 커널 미디어 서브시스템에 AtomISP 브리지 드라이버와 OV2740 이미지 센서의 통합을 개선하는 PATCH v3 패치 시리즈가 제출되었습니다. 이번 변경은 하드웨어 펌웨어의 불완전한 카메라 링크 정보를 드라이버 레벨에서 보완하고, 센서 링크 주파수로부터 D-PHY 타이밍을 동적으로 파생할 수 있도록 지원합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+드라이버 레벨의 D-PHY 타이밍 파생 및 패딩 처리는 V4L2 서브시스템을 거쳐 Android Camera HAL의 스트림 구성 유효성 검사에 영향을 미칩니다. 특히 RAW Bayer 캡처 시 패딩 픽셀(12픽셀)이 메타데이터(active array size 등)에 정확히 반영되지 않으면 이미지 왜곡이나 CTS 테스트 실패가 발생할 수 있으므로 주의 깊게 점검해야 합니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
 
 이번에 공개된 PATCH v3 패치 시리즈는 Lenovo Yoga Book YB1-X91L 디바이스의 전면 OV2740 카메라 센서 통합을 목표로 합니다. 기존 펌웨어는 완전한 카메라 링크 정보를 제공하지 않아 드라이버가 이미지 파이프라인을 구성하는 데 어려움이 있었습니다. 이를 해결하기 위해 드라이버 레벨에서 전면 OV2740 센서가 2개의 CSI-2 레인을 사용하고 288 MHz 링크 주파수로 동작함을 명시하도록 변경되었습니다.
 
@@ -28,9 +55,7 @@ Linux 커널 미디어 서브시스템에 AtomISP 브리지 드라이버와 OV27
 
 이러한 드라이버 레벨의 변경은 하위 이미지 파이프라인의 안정성을 높이고, Android Camera HAL이 V4L2 인터페이스를 통해 센서 모드 및 프레임 타이밍을 쿼리할 때 정확한 데이터를 수신할 수 있도록 돕습니다. 비록 직접적인 HAL API 변경은 아니지만, RAW Bayer 캡처 및 스트림 구성 유효성 검증 시 중요한 참고 자료가 됩니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-드라이버 레벨의 D-PHY 타이밍 파생 및 패딩 처리는 V4L2 서브시스템을 거쳐 Android Camera HAL의 스트림 구성 유효성 검사에 영향을 미칩니다. 특히 RAW Bayer 캡처 시 패딩 픽셀(12픽셀)이 메타데이터(active array size 등)에 정확히 반영되지 않으면 이미지 왜곡이나 CTS 테스트 실패가 발생할 수 있으므로 주의 깊게 점검해야 합니다.
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -38,15 +63,21 @@ Linux 커널 미디어 서브시스템에 AtomISP 브리지 드라이버와 OV27
 
 ---
 
+<a id="article-libcamera-quad-bayer-cfa"></a>
+
 ## 3. libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토
-
-
-![libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토 image](../../assets/images/fallback/android.svg)
-
 
 _libcamera Patchwork - Patch ID 28095_
 
 libcamera 프레임워크에 최신 고해상도 이미지 센서에서 널리 사용되는 쿼드-베이어(Quad-Bayer) CFA(Color Filter Array) 레이아웃 지원을 추가하는 패치가 제안되었습니다. 이번 변경은 하위 이미지 처리 파이프라인에서 RAW 데이터 처리의 정확성을 높이는 데 기여할 것으로 기대됩니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+libcamera 계층에서 쿼드-베이어 CFA 레이아웃을 직접 인식하고 처리함으로써, Android Camera HAL이 하위 스택에서 수신하는 RAW 데이터의 디베이어링(debayering) 품질과 스트라이드 계산의 정확도가 향상됩니다. 이는 HAL이 RAW_SENSOR 또는 RAW10/RAW12 스트림을 처리할 때 버퍼 오버플로우나 메모리 정렬 오류를 방지하는 데 기여합니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
 
 최신 모바일 기기에 탑재되는 고해상도 이미지 센서들은 감도 향상과 노이즈 감소를 위해 쿼드-베이어 구조를 채택하는 경우가 많습니다. 그러나 기존 libcamera 프레임워크는 이러한 특수한 CFA 레이아웃을 표준 베이어 패턴과 다르게 처리하는 데 한계가 있었습니다. 이번 패치는 libcamera가 쿼드-베이어 레이아웃을 직접 인식하고 처리할 수 있도록 지원을 추가합니다.
 
@@ -54,9 +85,7 @@ Frederic Laing이 제출한 이번 패치는 쿼드-베이어 CFA 레이아웃 �
 
 Android Camera HAL은 종종 하위 계층으로 libcamera를 활용하므로, 이러한 변경사항은 HAL이 RAW_SENSOR 또는 RAW10/RAW12 스트림을 처리할 때 버퍼 정렬 및 디베이어링 품질을 높이는 데 직접적인 영향을 미칩니다. 향후 고해상도 센서 도입을 준비하는 팀에게 중요한 기술적 기반이 될 것입니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-libcamera 계층에서 쿼드-베이어 CFA 레이아웃을 직접 인식하고 처리함으로써, Android Camera HAL이 하위 스택에서 수신하는 RAW 데이터의 디베이어링(debayering) 품질과 스트라이드 계산의 정확도가 향상됩니다. 이는 HAL이 RAW_SENSOR 또는 RAW10/RAW12 스트림을 처리할 때 버퍼 오버플로우나 메모리 정렬 오류를 방지하는 데 기여합니다.
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -64,15 +93,21 @@ libcamera 계층에서 쿼드-베이어 CFA 레이아웃을 직접 인식하고 
 
 ---
 
+<a id="article-linux-lenovo-yoga-book-yb1-x91"></a>
+
 ## 4. Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개
-
-
-![Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개 image](../../assets/images/fallback/android.svg)
-
 
 _lore.kernel.org linux-media list - PATCH v2_
 
 Lenovo Yoga Book YB1-X91 디바이스의 카메라 하드웨어를 완벽히 지원하기 위한 Linux 커널 드라이버 패치 시리즈(PATCH v2)가 공개되었습니다. 이번 패치는 부족한 ACPI 펌웨어 정보를 드라이버 수준에서 보완하고, 전/후면 센서 및 렌즈 액추에이터의 제어 기능을 통합하는 데 중점을 둡니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+드라이버 레벨에서 RAW Bayer 캡처 노출, 채널별 화이트 밸런스 제어, 렌즈 액추에이터(WV517S)가 추가됨에 따라, Camera HAL은 해당 하드웨어의 3A(Auto Exposure, Auto White Balance, Auto Focus) 제어 기능을 V4L2 컨트롤을 통해 직접 매핑할 수 있게 됩니다. 이는 HAL의 `android.control` 메타데이터 계약을 충족하고 CTS/VTS 검증을 통과하는 데 필수적입니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
 
 Lenovo Yoga Book YB1-X91L 디바이스는 Cherry Trail AtomISP를 기반으로 전면 OV2740 센서와 후면 OV8858 센서를 탑재하고 있습니다. 그러나 기존 시스템 펌웨어는 드라이버가 완전한 카메라 링크를 구성하기에 충분한 정보를 제공하지 못했습니다. 이번 패치 시리즈는 ACPI ID 및 브리지 데이터를 추가하여 이러한 한계를 극복합니다.
 
@@ -80,9 +115,7 @@ Lenovo Yoga Book YB1-X91L 디바이스는 Cherry Trail AtomISP를 기반으로 �
 
 이러한 하위 드라이버의 기능 확장은 Android Camera HAL이 하드웨어의 물리적 특성을 정확히 인식하고, 3A(자동 노출, 자동 화이트 밸런스, 자동 초점) 제어 기능을 원활하게 구현할 수 있는 기반이 됩니다. 하드웨어 통합을 담당하는 엔지니어들에게 중요한 참조 모델이 될 것입니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-드라이버 레벨에서 RAW Bayer 캡처 노출, 채널별 화이트 밸런스 제어, 렌즈 액추에이터(WV517S)가 추가됨에 따라, Camera HAL은 해당 하드웨어의 3A(Auto Exposure, Auto White Balance, Auto Focus) 제어 기능을 V4L2 컨트롤을 통해 직접 매핑할 수 있게 됩니다. 이는 HAL의 `android.control` 메타데이터 계약을 충족하고 CTS/VTS 검증을 통과하는 데 필수적입니다.
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -90,15 +123,21 @@ Lenovo Yoga Book YB1-X91L 디바이스는 Cherry Trail AtomISP를 기반으로 �
 
 ---
 
+<a id="article-sony-imx908-linux-device-tree"></a>
+
 ## 5. Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련
-
-
-![Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련 image](../../assets/images/fallback/android.svg)
-
 
 _lore.kernel.org linux-media list - PATCH v3_
 
 Sony IMX908 이미지 센서의 Linux 커널 공식 지원을 위한 Device Tree 바인딩 패치(PATCH v3)가 공개되었습니다. 이번 바인딩 정의는 신규 센서를 탑재하는 SoC 플랫폼 개발자들에게 표준 하드웨어 인터페이스 구성 가이드를 제공합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Device Tree 바인딩을 통해 센서의 MIPI CSI-2 레인 수(2 또는 4레인)와 RAW 포맷(RAW10/RAW12)이 커널에 올바르게 정의되면, Camera HAL은 드라이버로부터 정확한 센서 해상도(3856x2176)와 포맷 정보를 쿼리할 수 있습니다. 이는 HAL의 `SensorCharacteristics` 메타데이터를 구성하고, 고해상도 RAW 스트림 조합의 안정성을 확보하는 데 기여합니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
 
 Sony IMX908은 8.39메가픽셀(3856x2176) 해상도를 지원하는 고성능 CMOS 이미지 센서입니다. MIPI CSI-2 인터페이스를 통해 RAW10 및 RAW12 출력을 지원하며, 시스템 요구사항에 따라 2개 또는 4개의 데이터 레인을 유연하게 구성할 수 있는 특징을 가지고 있습니다.
 
@@ -106,9 +145,7 @@ Sony IMX908은 8.39메가픽셀(3856x2176) 해상도를 지원하는 고성능 C
 
 Device Tree 바인딩이 커널에 통합되면, Android 기기 개발 시 dts 파일에 센서 노드를 표준 방식으로 선언할 수 있습니다. 이는 Android Camera HAL이 드라이버를 통해 센서의 물리적 해상도와 데이터 포맷을 정확히 인식하고 RAW 스트림을 구성하는 출발점이 됩니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-Device Tree 바인딩을 통해 센서의 MIPI CSI-2 레인 수(2 또는 4레인)와 RAW 포맷(RAW10/RAW12)이 커널에 올바르게 정의되면, Camera HAL은 드라이버로부터 정확한 센서 해상도(3856x2176)와 포맷 정보를 쿼리할 수 있습니다. 이는 HAL의 `SensorCharacteristics` 메타데이터를 구성하고, 고해상도 RAW 스트림 조합의 안정성을 확보하는 데 기여합니다.
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -116,15 +153,21 @@ Device Tree 바인딩을 통해 센서의 MIPI CSI-2 레인 수(2 또는 4레인
 
 ---
 
+<a id="article-libcamera-isp-egl-createtexture2d"></a>
+
 ## 6. libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가
-
-
-![libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가 image](../../assets/images/fallback/android.svg)
-
 
 _libcamera Patchwork - v15_
 
 libcamera 프레임워크의 소프트웨어 ISP EGL 모듈에서 이미지 처리 품질을 미세 조정할 수 있는 v15 패치가 공개되었습니다. 이번 변경은 텍스처 생성 시 필터링 옵션을 직접 제어할 수 있도록 파라미터를 추가하여 GPU 가속 렌더링 파이프라인의 유연성을 높입니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+소프트웨어 ISP의 EGL 텍스처 생성 시 필터링 옵션을 제어할 수 있게 됨으로써, GPU 가속을 활용한 이미지 스케일링이나 디베이어링 후처리 단계에서 시각적 품질(예: 앨리어싱 감소, 샤프니스 조절)을 미세 조정할 수 있습니다. 이는 하드웨어 ISP가 없는 보급형 SoC 플랫폼에서 libcamera 기반 Android Camera HAL을 구현할 때 프리뷰 이미지의 품질 향상에 직접적인 영향을 미칩니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
 
 하드웨어 ISP가 부족하거나 없는 저가형 SoC 플랫폼에서는 CPU와 GPU를 활용하는 소프트웨어 ISP의 역할이 매우 중요합니다. libcamera는 이러한 환경을 위해 software_isp 모듈을 제공하며, EGL을 통해 GPU 가속을 활용합니다. 이번에 제출된 v15 패치는 EGL 모듈의 핵심 함수 중 하나인 `createTexture2D()`에 필터 파라미터를 추가합니다.
 
@@ -132,9 +175,7 @@ Milan Zamazal이 제안한 이 패치는 텍스처 생성 시 선형(Linear) 또
 
 Android Camera HAL 구현 시 하위 이미지 처리 파이프라인으로 libcamera의 소프트웨어 ISP를 사용하는 경우, 이번 필터 파라미터 추가를 통해 프리뷰 이미지의 품질을 한층 더 미세하게 조정할 수 있게 됩니다. 성능과 화질 간의 균형을 맞추는 데 유용한 도구가 될 것입니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-소프트웨어 ISP의 EGL 텍스처 생성 시 필터링 옵션을 제어할 수 있게 됨으로써, GPU 가속을 활용한 이미지 스케일링이나 디베이어링 후처리 단계에서 시각적 품질(예: 앨리어싱 감소, 샤프니스 조절)을 미세 조정할 수 있습니다. 이는 하드웨어 ISP가 없는 보급형 SoC 플랫폼에서 libcamera 기반 Android Camera HAL을 구현할 때 프리뷰 이미지의 품질 향상에 직접적인 영향을 미칩니다.
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 

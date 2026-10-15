@@ -26,6 +26,7 @@
   <script src="../../../assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
@@ -40,7 +41,7 @@
     </div>
   </header>
 
-  <main class="site-main article-page newsletter-main">
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← Newsroom</a>
@@ -52,29 +53,24 @@
         <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
       </header>
 
-      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
-        <div class="issue-briefing-card">
-          <h2 id="issue-briefing-title">In this issue</h2>
-          <ul><li>Android CLI developer tools add a &#39;Migration to CameraX&#39; skill, expected to accelerate upper-framework adoption</li></ul>
-        </div>
-      </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-android-cli-developer-tools-add-a-migration-to-camerax-skill-expected-to-acceler" aria-labelledby="article-android-cli-developer-tools-add-a-migration-to-camerax-skill-expected-to-acceler-title">
+
+      <span id="issue-briefing-title" data-legacy-target="article-android-cli-developer-tools-add-a-migration-to-camerax-skill-expected-to-acceler" tabindex="-1"></span><section class="section issue-story issue-section article-card story-article has-image" id="article-android-cli-developer-tools-add-a-migration-to-camerax-skill-expected-to-acceler" tabindex="-1" aria-labelledby="article-android-cli-developer-tools-add-a-migration-to-camerax-skill-expected-to-acceler-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
           <span class="issue-story-category">Android Platform</span>
         </div>
         <h2 id="article-android-cli-developer-tools-add-a-migration-to-camerax-skill-expected-to-acceler-title" class="article-title">Android CLI developer tools add a &#39;Migration to CameraX&#39; skill, expected to accelerate upper-framework adoption</h2>
         <p class="article-source-subtitle">Android Developers Blog - Top 3 updates for Android developer productivity</p>
+        <p class="article-lead">A &#39;Migration to CameraX&#39; skill has been newly introduced to the official tools for improving Android developer productivity. By supporting developers, through an LLM-based workflow, in migrating from existing complex camera implementations to the Jetpack CameraX library, this update is expected to further accelerate CameraX adoption in the upper application layer.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This change is not a direct API contract change to the Camera HAL itself, but by encouraging upper-layer apps to switch to CameraX, it steers the stream configurations and metadata requests delivered to the HAL to converge on CameraX&#39;s standard usage patterns. HAL teams should strengthen their CameraX compatibility validation scenarios.</p></div>
         <figure class="article-media">
         <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png?hl=hi" alt="Android CLI developer tools add a &#39;Migration to CameraX&#39; skill, expected to accelerate upper-framework adoption" loading="lazy" decoding="async">
         <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/tools/agents/android-cli#skills-add">Android Developers Blog</a></figcaption>
         </figure>
-        <p class="article-lead">A &#39;Migration to CameraX&#39; skill has been newly introduced to the official tools for improving Android developer productivity. By supporting developers, through an LLM-based workflow, in migrating from existing complex camera implementations to the Jetpack CameraX library, this update is expected to further accelerate CameraX adoption in the upper application layer.</p>
         <p>Google is expanding the Android skills repository, provided through the Android CLI and GitHub, to help developers more easily apply specific development patterns based on best practices. The newly added skills include &#39;Migration to CameraX&#39;, which guides complex camera API transition work through a structured workflow.</p>
         <p>CameraX is a Jetpack library that abstracts the Android Camera2 API and simplifies lifecycle management and use cases such as preview, image capture, and video capture. If this tooling support leads more app developers to switch to CameraX, the stream configuration and metadata request patterns coming into the Camera HAL layer are also likely to follow CameraX&#39;s standard behavior.</p>
         <p>Camera HAL and driver engineers therefore need to understand the standardized stream combination requirements that this tooling change in the upper framework will bring, and proactively prepare compatibility and stability validation at the HAL layer.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This change is not a direct API contract change to the Camera HAL itself, but by encouraging upper-layer apps to switch to CameraX, it steers the stream configurations and metadata requests delivered to the HAL to converge on CameraX&#39;s standard usage patterns. HAL teams should strengthen their CameraX compatibility validation scenarios.</p></div>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/tools/agents/android-cli#skills-add">Android CLI Skills Update</a></li></ul></div>
       </section>
 
@@ -108,7 +104,7 @@
           <span class="footer-col-title">Topics</span>
           <span class="footer-note">Camera HAL · Android</span>
           <span class="footer-note">Driver · Image Processing</span>
-          <span class="footer-note">AI · SoC Platform</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
         </div>
         <div class="footer-col">
           <span class="footer-col-title">Resources</span>

@@ -1,28 +1,55 @@
 # 2026 W39 (09.21 ~ 09.27)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. This week’s highlights
+
 This week, we cover 5 news items, including 'Android Studio's integrated support for developer-customized AI coding agents' and 'Anthropic Claude Opus 5.5 released: Fable 5.1-level performance with 40% cost reduction compared to Opus 5'.
 
+- [Android Studio to support integrated developer-customized AI coding agents](#article-android-studio-to-support-integrated-developer-customized-ai-coding-agents)
+
+  Although there are no direct HAL changes, C++ native development teams can consider integrating AI agents within Android Studio to improve code writing and debugging productivity.
+
+- [Anthropic Claude Opus 5.5 released: Fable 5.1-level performance with 40% cost reduction compared to Opus 5](#article-anthropic-claude-opus-5-5-released-fable-5-1-level-performance-with-40-cost-redu)
+
+  Although there are no direct HAL changes, productivity can be improved by utilizing the Claude Opus 5.5 model for generating native C++ code snippets and writing unit test scripts.
+
+- [Proposed Renesas RZ/V2H EVK Device Tree Patch to Enable Arm Mali-C55 ISP and IVC](#article-proposed-renesas-rz-v2h-evk-device-tree-patch-to-enable-arm-mali-c55-isp-and-ivc)
+
+  Although there are no direct Android HAL changes, the ISP and IVC control interfaces exposed via the V4L2 uAPI in the lower driver layer, as well as frame start and stop interrupt timings, need to be reviewed.
+
+- [Proposed Linux Kernel Driver Patch v3 for Samsung S5K3T2 Image Sensor Support](#article-proposed-linux-kernel-driver-patch-v3-for-samsung-s5k3t2-image-sensor-support)
+
+  Although there are no direct HAL changes, when introducing the S5K3T2 sensor, the sensor mode settings via the V4L2 subdevice and MIPI D-PHY lane configuration should be reviewed in advance.
+
+- [Sharing Latest Kernel and libcamera Test Results for Sony IMX681 Camera Sensor Support Patch v7](#article-sharing-latest-kernel-and-libcamera-test-results-for-sony-imx681-camera-sensor-s)
+
+  Although there are no direct HAL changes, if considering the adoption of IMX681, it is advisable to confirm how the reported CPU/GPU path issues and build modifications are resolved in subsequent versions before scheduling integration, rather than using v7 as is.
 
 
-## 1. This week’s articles
 
-- Android Studio to support integrated developer-customized AI coding agents
-- Anthropic Claude Opus 5.5 released: Fable 5.1-level performance with 40% cost reduction compared to Opus 5
-- Proposed Renesas RZ/V2H EVK Device Tree Patch to Enable Arm Mali-C55 ISP and IVC
-- Proposed Linux Kernel Driver Patch v3 for Samsung S5K3T2 Image Sensor Support
-- Sharing Latest Kernel and libcamera Test Results for Sony IMX681 Camera Sensor Support Patch v7
+
+<a id="article-android-studio-to-support-integrated-developer-customized-ai-coding-agents"></a>
 
 ## 2. Android Studio to support integrated developer-customized AI coding agents
+
+_Android Developers Blog (2026-09-24)_
+
+Android Studio now provides an environment where various AI agents can be freely selected and integrated, enabling development teams to build customized workflows.
+
+### Camera HAL/Driver perspective: what it means
+
+Although there are no direct HAL changes, C++ native development teams can consider integrating AI agents within Android Studio to improve code writing and debugging productivity.
 
 
 ![Announcement of support for selecting and integrating third-party AI agents in Android Studio](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png)
 
 _Image: [Build your way: Use any AI agent of your choice in Android Studio](https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html)_
 
-
-_Android Developers Blog (2026-09-24)_
-
-Android Studio now provides an environment where various AI agents can be freely selected and integrated, enabling development teams to build customized workflows.
 
 Google announced that Android Studio will support open and flexible AI agent integration, allowing development teams to build Android apps in the most optimal way. Development teams can now freely adopt specialized AI coding agents, custom enterprise harnesses, and autonomous tools.
 
@@ -32,9 +59,7 @@ This update focuses on improving the productivity of developer tools and helps d
 
 This update concerns Android Studio development tools and does not directly modify Android camera HAL APIs or runtime behavior. Native C++ and HAL development teams can evaluate whether this integration can improve workflow productivity in code generation, debugging, and test case creation, and consider adopting AI tools suitable for their team's development environment.
 
-### Camera HAL/Driver perspective: what it means
-
-Although there are no direct HAL changes, C++ native development teams can consider integrating AI agents within Android Studio to improve code writing and debugging productivity.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -42,17 +67,23 @@ Although there are no direct HAL changes, C++ native development teams can consi
 
 ---
 
+<a id="article-anthropic-claude-opus-5-5-released-fable-5-1-level-performance-with-40-cost-redu"></a>
+
 ## 3. Anthropic Claude Opus 5.5 released: Fable 5.1-level performance with 40% cost reduction compared to Opus 5
+
+_Anthropic News (2026-09-22)_
+
+Anthropic has unveiled Claude Opus 5.5, the first model in the Claude 5.5 family. It is stated to deliver Claude Fable 5.1-level performance in most tasks, with execution costs 40% lower than Opus 5.
+
+### Camera HAL/Driver perspective: what it means
+
+Although there are no direct HAL changes, productivity can be improved by utilizing the Claude Opus 5.5 model for generating native C++ code snippets and writing unit test scripts.
 
 
 ![Anthropic Claude Opus 5.5 released: Fable 5.1-level performance with 40% cost reduction compared to Opus 5](https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg)
 
 _Image: [Claude Opus 5.5](https://www.anthropic.com/claude-opus-5-5)_
 
-
-_Anthropic News (2026-09-22)_
-
-Anthropic has unveiled Claude Opus 5.5, the first model in the Claude 5.5 family. It is stated to deliver Claude Fable 5.1-level performance in most tasks, with execution costs 40% lower than Opus 5.
 
 Anthropic has unveiled Claude Opus 5.5, the first model in the new Claude 5.5 family. Before its release, it underwent testing by external evaluation organizations such as Frontier Design and METR. Anthropic stated that its most comprehensive alignment evaluation (automated behavioral audit), which checks if the AI behaves contrary to its intentions, yielded the best results among all models tested to date.
 
@@ -62,9 +93,7 @@ Claude Opus 5.5 is designed to deliver Claude Fable 5.1-level performance in mos
 
 This news concerns the performance improvement of general large language models and does not directly modify the Android camera HAL or driver stack. However, native C++ and camera driver development teams can consider Claude Opus 5.5 as a tool to enhance development productivity in implementing complex algorithms, writing test scripts, and debugging processes.
 
-### Camera HAL/Driver perspective: what it means
-
-Although there are no direct HAL changes, productivity can be improved by utilizing the Claude Opus 5.5 model for generating native C++ code snippets and writing unit test scripts.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -72,15 +101,21 @@ Although there are no direct HAL changes, productivity can be improved by utiliz
 
 ---
 
+<a id="article-proposed-renesas-rz-v2h-evk-device-tree-patch-to-enable-arm-mali-c55-isp-and-ivc"></a>
+
 ## 4. Proposed Renesas RZ/V2H EVK Device Tree Patch to Enable Arm Mali-C55 ISP and IVC
-
-
-![Proposed Renesas RZ/V2H EVK Device Tree Patch to Enable Arm Mali-C55 ISP and IVC image](../../../assets/images/fallback/android.svg)
-
 
 _lore.kernel.org linux-media list (2026-09-25)_
 
 A device tree patch has been proposed to support hardware-accelerated image processing on the Renesas RZ/V2H EVK platform, which is expected to bring changes to the lower image pipeline.
+
+### Camera HAL/Driver perspective: what it means
+
+Although there are no direct Android HAL changes, the ISP and IVC control interfaces exposed via the V4L2 uAPI in the lower driver layer, as well as frame start and stop interrupt timings, need to be reviewed.
+
+
+![](../../../assets/images/fallback/android.svg)
+
 
 This proposed patch series aims to activate hardware blocks by adding RZ/V2H(P) IVC nodes and Arm Mali-C55 ISP nodes and connecting their video endpoints. These changes improve frame timing control by defining optional ISP DMA line ticks and IVC frame start and frame stop interrupts.
 
@@ -90,9 +125,7 @@ After applying the patch and activating the driver, the Mali-C55 ISP version 900
 
 This patch series is a proposed change that has not yet been merged into the mainline kernel. While it does not directly alter the actual higher-level Android camera HAL or framework contracts, it provides the essential foundation for leveraging hardware acceleration capabilities in the lower driver layers. Development teams should continuously track the merge status of this patch and any changes in controls exposed via the V4L2 interface.
 
-### Camera HAL/Driver perspective: what it means
-
-Although there are no direct Android HAL changes, the ISP and IVC control interfaces exposed via the V4L2 uAPI in the lower driver layer, as well as frame start and stop interrupt timings, need to be reviewed.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -100,15 +133,21 @@ Although there are no direct Android HAL changes, the ISP and IVC control interf
 
 ---
 
+<a id="article-proposed-linux-kernel-driver-patch-v3-for-samsung-s5k3t2-image-sensor-support"></a>
+
 ## 5. Proposed Linux Kernel Driver Patch v3 for Samsung S5K3T2 Image Sensor Support
-
-
-![Proposed Linux Kernel Driver Patch v3 for Samsung S5K3T2 Image Sensor Support image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _lore.kernel.org linux-media list (2026-09-24)_
 
 A Linux kernel driver patch has been proposed to support Samsung's 20-megapixel CMOS image sensor, the S5K3T2, which is expected to contribute to future new device integration.
+
+### Camera HAL/Driver perspective: what it means
+
+Although there are no direct HAL changes, when introducing the S5K3T2 sensor, the sensor mode settings via the V4L2 subdevice and MIPI D-PHY lane configuration should be reviewed in advance.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 This proposed patch series adds a driver and device tree binding for the Samsung S5K3T2, a 20-megapixel CMOS image sensor supporting four MIPI D-PHY lanes. This sensor is installed in the front camera of the Xiaomi POCO F3 device.
 
@@ -118,9 +157,7 @@ The driver was written and tested in an environment where the Qualcomm CAMSS dri
 
 This change is still in the proposed stage and has not yet been merged into the mainline kernel. The addition of a new sensor driver extends the scope of support for the lower driver layer and does not directly affect the actual Android HAL. If there is a future project using the S5K3T2 sensor, development teams can review the V4L2 subdevice controls and sensor mode settings of this driver to formulate an integration plan.
 
-### Camera HAL/Driver perspective: what it means
-
-Although there are no direct HAL changes, when introducing the S5K3T2 sensor, the sensor mode settings via the V4L2 subdevice and MIPI D-PHY lane configuration should be reviewed in advance.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -128,15 +165,21 @@ Although there are no direct HAL changes, when introducing the S5K3T2 sensor, th
 
 ---
 
+<a id="article-sharing-latest-kernel-and-libcamera-test-results-for-sony-imx681-camera-sensor-s"></a>
+
 ## 6. Sharing Latest Kernel and libcamera Test Results for Sony IMX681 Camera Sensor Support Patch v7
-
-
-![Sharing Latest Kernel and libcamera Test Results for Sony IMX681 Camera Sensor Support Patch v7 image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _lore.kernel.org linux-media list (2026-09-26)_
 
 A report on testing Sony IMX681 camera sensor support patch series v7 in the latest kernel and libcamera environment has been released. The tester built the kernel after additional modifications but reported finding several issues during camera inspection.
+
+### Camera HAL/Driver perspective: what it means
+
+Although there are no direct HAL changes, if considering the adoption of IMX681, it is advisable to confirm how the reported CPU/GPU path issues and build modifications are resolved in subsequent versions before scheduling integration, rather than using v7 as is.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 This test report covers patch series v7, which adds support for the Sony IMX681 camera sensor. The test environment used the latest stable channel versions of Mesa version 3:26.2.3-1 and libcamera version 0.7.2-4.1, with kernel version 7.3-rc4 applied.
 
@@ -146,9 +189,7 @@ The kernel compiled correctly only after applying an additional patch that remov
 
 This test is a validation result for proposed changes that have not yet been merged. New camera sensor support for libcamera and V4L2 drivers directly impacts the Linux image pipeline and provides the lower-layer support necessary for the Android HAL to process and expose image data through that sensor in the future. This report is not a verification that the driver operates without issues, but rather a signal that problems still remain to be solved. Therefore, development teams should monitor the author's responses to the reported issues and whether subsequent versions incorporate fixes.
 
-### Camera HAL/Driver perspective: what it means
-
-Although there are no direct HAL changes, if considering the adoption of IMX681, it is advisable to confirm how the reported CPU/GPU path issues and build modifications are resolved in subsequent versions before scheduling integration, rather than using v7 as is.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 

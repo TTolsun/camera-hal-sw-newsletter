@@ -26,6 +26,7 @@
   <script src="../../assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">본문 바로가기</a>
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsroom">
@@ -40,7 +41,7 @@
     </div>
   </header>
 
-  <main class="site-main article-page newsletter-main">
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← 뉴스룸</a>
@@ -49,29 +50,37 @@
         </div>
         <h1 class="issue-title"><span>2026 W40</span></h1>
         <p class="issue-publish-badge">발행 W41</p>
-        <p class="subtitle">이번 주 뉴스레터에서는 Android 17 Camera ITS 준비에 대한 중요한 정보를 전해드립니다. 실행 환경 버전과 달라진 검증 항목을 통해 Python 패키지 목록 외에 확인해야 할 사항들을 자세히 알아보세요. 또한, libcamera AWB 제안에 대한 소식도 있습니다. 자동 게인을 고정하고 필요할 때 다시 수렴시키는 새로운 접근 방식이 어떻게 색 변화를 개선할 수 있는지 살펴보시기 바랍니다.</p>
+
         <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Android</span></div>
       </header>
 
-      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
-          <h2 id="issue-briefing-title">이번 호 기사</h2>
-          <ul><li>Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목</li><li>libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기</li></ul>
+          <h2 id="issue-briefing-title">이번 주 핵심</h2>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-android-17-camera-its">Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목</a>
+            <p class="reader-brief-takeaway">검증 실패를 분석할 때 실행 환경의 버전·경로, 차트 구성, HAL 출력의 차이를 구분해야 합니다. 특히 YUV/JPEG 색상 차이와 JPEG_R 미리보기·캡처 간 화이트 밸런스는 새 검사 조건을 기준으로 결과를 비교할 항목입니다.</p>
+          </li><li>
+            <a href="#article-libcamera-awb">libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기</a>
+            <p class="reader-brief-takeaway">핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.</p>
+          </li></ol><details class="reader-brief-context"><summary>이번 호 소개</summary><p class="reader-brief-intro">이번 주 뉴스레터에서는 Android 17 Camera ITS 준비에 대한 중요한 정보를 전해드립니다. 실행 환경 버전과 달라진 검증 항목을 통해 Python 패키지 목록 외에 확인해야 할 사항들을 자세히 알아보세요. 또한, libcamera AWB 제안에 대한 소식도 있습니다. 자동 게인을 고정하고 필요할 때 다시 수렴시키는 새로운 접근 방식이 어떻게 색 변화를 개선할 수 있는지 살펴보시기 바랍니다.</p></details>
         </div>
+
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-android-17-camera-its" aria-labelledby="article-android-17-camera-its-title">
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-android-17-camera-its" tabindex="-1" aria-labelledby="article-android-17-camera-its-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
           <span class="issue-story-category">AOSP Camera</span>
         </div>
         <h2 id="article-android-17-camera-its-title" class="article-title">Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목</h2>
         <p class="article-source-subtitle">Android Open Source Project 공식 문서</p>
+        <p class="article-lead">Android 17 Camera ITS를 준비할 때 맞춰야 할 것은 Python 패키지 목록만이 아닙니다. Python과 FFmpeg 실행 파일의 버전, 테스트 차트, CTS Verifier의 활동 구성을 함께 확인해야 합니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>검증 실패를 분석할 때 실행 환경의 버전·경로, 차트 구성, HAL 출력의 차이를 구분해야 합니다. 특히 YUV/JPEG 색상 차이와 JPEG_R 미리보기·캡처 간 화이트 밸런스는 새 검사 조건을 기준으로 결과를 비교할 항목입니다.</p></div>
         <figure class="article-media">
         <img class="article-image" src="https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png" alt="Android Open Source Project" loading="lazy" decoding="async">
         <figcaption class="article-image-caption">이미지: <a href="https://source.android.com/docs/compatibility/cts/its-release-notes-17">Android 17 Camera Image Test Suite release notes | Android Open Source Project</a></figcaption>
         </figure>
-        <p class="article-lead">Android 17 Camera ITS를 준비할 때 맞춰야 할 것은 Python 패키지 목록만이 아닙니다. Python과 FFmpeg 실행 파일의 버전, 테스트 차트, CTS Verifier의 활동 구성을 함께 확인해야 합니다.</p>
         <p>Android 17 Camera ITS 릴리스 노트는 Python 3.14와 FFmpeg 7.0.2를 사용하는 환경 구성 절차를 안내합니다. Android 릴리스별로 가상 환경을 만들고, 문서에 제시된 버전의 Python 패키지를 설치하는 방식을 강력히 권장합니다. Python 자체와 FFmpeg 실행 파일은 Python 패키지 설치만으로 준비되지 않으므로 따로 설치해야 합니다.</p>
         <p>확인할 대상은 테스트를 실제로 실행하는 환경입니다. Python 3.14로 만든 가상 환경을 활성화한 뒤 Python 버전을 확인하고, pip freeze 결과를 공식 패키지 목록과 비교합니다. 같은 환경에서 ffmpeg -version이 7.0.2를 가리키는지도 확인해야 합니다. 다른 버전이 실행된다면 문서가 안내하는 것처럼 실행 경로와 가상 환경의 바이너리 연결을 점검할 수 있습니다. 가상 환경을 만들었다는 사실만으로 시스템에 설치된 다른 FFmpeg가 호출되는 문제까지 해결되지는 않습니다.</p>
         <h3 class="article-subheading">차트와 검사 항목도 달라집니다</h3>
@@ -80,21 +89,26 @@
         <p>테스트는 CTS Verifier의 Camera ITS Test와 Camera ITS Sensor Fusion Rig Test 활동으로 분리됩니다. 후자는 feature_combination과 sensor_fusion 장면을 포함하며, 별도 기기에서 병렬로 시험할 수 있도록 한 구성입니다. 추가로 경계 수준의 통과를 표시하는 PASS 별표 상태가 도입됩니다. sensor_fusion/test_video_stabilization은 폐기되며 test_video_stabilization_jca를 사용하도록 안내합니다. 동일한 빌드 지문(build fingerprint)을 사용하는 여러 기기와 세션에서 얻은 ITS 결과를 모아 빌드 승인에 제출하는 절차도 설명합니다.</p>
         <p>Gen2 리그로 옮겨진 멀티 카메라 전환·플래시·센서 퓨전 테스트에는 새 차트가 필요합니다. config.yml의 chart_scaling은 망원 카메라의 차트 배율 문제를 다루며, 광색역 시험용 태블릿 허용 목록에는 Samsung Galaxy Tab S10 FE가 추가됐습니다.</p>
         <p>이는 HAL API가 바뀌었다는 뜻이 아니라 시험 실행 환경과 검증 범위가 달라진다는 의미입니다. 릴리스 노트의 갱신일만으로 각 변경 사항의 최초 도입일을 단정할 수는 없습니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>검증 실패를 분석할 때 실행 환경의 버전·경로, 차트 구성, HAL 출력의 차이를 구분해야 합니다. 특히 YUV/JPEG 색상 차이와 JPEG_R 미리보기·캡처 간 화이트 밸런스는 새 검사 조건을 기준으로 결과를 비교할 항목입니다.</p></div>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://source.android.com/docs/compatibility/cts/its-release-notes-17">Android 17 Camera Image Test Suite release notes</a></li></ul></div>
+        <nav class="article-navigation" aria-label="기사 간 이동">
+
+          <a href="#issue-briefing">이번 주 핵심으로</a>
+          <a href="#article-libcamera-awb" aria-label="다음 기사: libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기">다음 기사 →</a>
+        </nav>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-libcamera-awb" aria-labelledby="article-libcamera-awb-title">
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-libcamera-awb" tabindex="-1" aria-labelledby="article-libcamera-awb-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 2">02</span>
           <span class="issue-story-category">Camera Driver · ISP</span>
         </div>
         <h2 id="article-libcamera-awb-title" class="article-title">libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기</h2>
         <p class="article-source-subtitle">libcamera Patchwork 메일링 리스트</p>
-        <figure class="article-media">
+        <p class="article-lead">자동 화이트 밸런스를 끌 때 예전 수동 게인으로 되돌아가면서 색이 갑자기 변하는 동작을 개선하려는 제안입니다. 마지막 자동 게인을 유지하고, 요청할 때만 새 게인으로 갱신하는 흐름을 추가합니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
         <img class="article-image" src="../../assets/images/fallback/newsletter-default.svg" alt="libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기 image" loading="lazy" decoding="async">
         </figure>
-        <p class="article-lead">자동 화이트 밸런스를 끌 때 예전 수동 게인으로 되돌아가면서 색이 갑자기 변하는 동작을 개선하려는 제안입니다. 마지막 자동 게인을 유지하고, 요청할 때만 새 게인으로 갱신하는 흐름을 추가합니다.</p>
         <p>2026년 9월 28일 제출된 libcamera의 AWB 패치 시리즈는 자동 모드에서 수동 모드로 바꿀 때의 게인 전환을 다룹니다. 기존에는 자동 게인과 수동 게인이 분리돼 있어 AwbEnable=false로 전환하면 이전 수동 값으로 돌아갔습니다. 제안은 자동 동작 중 계산한 게인으로 수동 게인을 계속 갱신하여, AWB를 끄는 순간 마지막 자동 게인을 유지하도록 합니다.</p>
         <p>잠금 상태에서 조명이 바뀌어 다시 맞추고 싶을 때는 AwbTrigger=true를 요청할 수 있습니다. 이 제어는 AwbEnable=false일 때 작동합니다. 알고리즘은 Searching 상태에서 다시 수렴을 판단하고, 수렴한 게인을 수동 게인에 반영한 뒤 Locked로 돌아갑니다. AwbEnable=true이면 트리거는 효과가 없습니다. 따라서 자동 AWB를 계속 켜 두는 동작과, 수동 상태에서 한 번 재탐색하는 동작을 구분할 수 있습니다.</p>
         <h3 class="article-subheading">AwbLocked 제거와 AwbState 상태 보고</h3>
@@ -102,8 +116,12 @@
         <p>수렴 기준도 아직 일치하지 않습니다. 1번 패치의 control_ids_core.yaml에 있는 AwbState 설명은 이전 프레임 대비 5%를 기준으로 쓰지만, 3번 구현 패치(28389)는 10% 범위의 프레임을 5회 누적하는 방식을 사용합니다. 구현 주석상 10%와 15% 사이 구간은 누적을 멈추고 15%를 넘으면 초기화하므로, 단순히 ‘연속 5프레임’이라고 요약하는 것도 정확하지 않습니다. 수렴 뒤에는 직전 프레임 대신 저장한 수렴 게인을 비교 기준으로 삼습니다.</p>
         <p>시리즈에는 게인 벡터 비교를 지원하는 Vector 비교 연산자 확장도 포함됩니다. 이는 AWB의 수렴 판정을 뒷받침하는 내부 구현 변경입니다.</p>
         <p>이 기사는 제출된 시리즈의 설계와 코드를 비교한 내용입니다. 설명과 구현의 차이가 남아 있어 확정된 API 계약이나 이미 배포된 기능으로 받아들이면 안 됩니다. Android Camera HAL 규격 자체의 변경도 아닙니다. libcamera 기반 카메라 스택을 다루는 팀에는 수동 전환 시 유지할 게인과 재탐색 완료 상태를 어떻게 표현할지 참고할 수 있는 제안입니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.</p></div>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://patchwork.libcamera.org/patch/28387/">libcamera AWB series patch 28387</a></li><li><a href="https://patchwork.libcamera.org/cover/28386/">Add AwbState metadata and AwbTrigger control</a></li><li><a href="https://patchwork.libcamera.org/patch/28388/">libcamera AWB series patch 28388</a></li><li><a href="https://patchwork.libcamera.org/patch/28389/">libcamera AWB series patch 28389</a></li><li><a href="https://patchwork.libcamera.org/patch/28390/">libcamera AWB series patch 28390</a></li><li><a href="https://patchwork.libcamera.org/patch/28391/">libcamera AWB series patch 28391</a></li></ul></div>
+        <nav class="article-navigation" aria-label="기사 간 이동">
+          <a href="#article-android-17-camera-its" aria-label="이전 기사: Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목">← 이전 기사</a>
+          <a href="#issue-briefing">이번 주 핵심으로</a>
+
+        </nav>
       </section>
 
       <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
@@ -136,7 +154,7 @@
           <span class="footer-col-title">주제</span>
           <span class="footer-note">Camera HAL · Android</span>
           <span class="footer-note">Driver · Image Processing</span>
-          <span class="footer-note">AI · SoC Platform</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
         </div>
         <div class="footer-col">
           <span class="footer-col-title">리소스</span>

@@ -1,25 +1,43 @@
 # 2026 W40 (09.28 ~ 10.04)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. 이번 주 핵심
+
 이번 주 뉴스레터에서는 Android 17 Camera ITS 준비에 대한 중요한 정보를 전해드립니다. 실행 환경 버전과 달라진 검증 항목을 통해 Python 패키지 목록 외에 확인해야 할 사항들을 자세히 알아보세요. 또한, libcamera AWB 제안에 대한 소식도 있습니다. 자동 게인을 고정하고 필요할 때 다시 수렴시키는 새로운 접근 방식이 어떻게 색 변화를 개선할 수 있는지 살펴보시기 바랍니다.
 
+- [Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목](#article-android-17-camera-its)
+
+  검증 실패를 분석할 때 실행 환경의 버전·경로, 차트 구성, HAL 출력의 차이를 구분해야 합니다. 특히 YUV/JPEG 색상 차이와 JPEG_R 미리보기·캡처 간 화이트 밸런스는 새 검사 조건을 기준으로 결과를 비교할 항목입니다.
+
+- [libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기](#article-libcamera-awb)
+
+  핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.
 
 
-## 1. 이번 주 기사
 
-- Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목
-- libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기
+
+<a id="article-android-17-camera-its"></a>
 
 ## 2. Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목
+
+_Android Open Source Project 공식 문서_
+
+Android 17 Camera ITS를 준비할 때 맞춰야 할 것은 Python 패키지 목록만이 아닙니다. Python과 FFmpeg 실행 파일의 버전, 테스트 차트, CTS Verifier의 활동 구성을 함께 확인해야 합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+검증 실패를 분석할 때 실행 환경의 버전·경로, 차트 구성, HAL 출력의 차이를 구분해야 합니다. 특히 YUV/JPEG 색상 차이와 JPEG_R 미리보기·캡처 간 화이트 밸런스는 새 검사 조건을 기준으로 결과를 비교할 항목입니다.
 
 
 ![Android Open Source Project](https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png)
 
 _이미지: [Android 17 Camera Image Test Suite release notes | Android Open Source Project](https://source.android.com/docs/compatibility/cts/its-release-notes-17)_
 
-
-_Android Open Source Project 공식 문서_
-
-Android 17 Camera ITS를 준비할 때 맞춰야 할 것은 Python 패키지 목록만이 아닙니다. Python과 FFmpeg 실행 파일의 버전, 테스트 차트, CTS Verifier의 활동 구성을 함께 확인해야 합니다.
 
 Android 17 Camera ITS 릴리스 노트는 Python 3.14와 FFmpeg 7.0.2를 사용하는 환경 구성 절차를 안내합니다. Android 릴리스별로 가상 환경을 만들고, 문서에 제시된 버전의 Python 패키지를 설치하는 방식을 강력히 권장합니다. Python 자체와 FFmpeg 실행 파일은 Python 패키지 설치만으로 준비되지 않으므로 따로 설치해야 합니다.
 
@@ -37,9 +55,7 @@ Gen2 리그로 옮겨진 멀티 카메라 전환·플래시·센서 퓨전 테�
 
 이는 HAL API가 바뀌었다는 뜻이 아니라 시험 실행 환경과 검증 범위가 달라진다는 의미입니다. 릴리스 노트의 갱신일만으로 각 변경 사항의 최초 도입일을 단정할 수는 없습니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-검증 실패를 분석할 때 실행 환경의 버전·경로, 차트 구성, HAL 출력의 차이를 구분해야 합니다. 특히 YUV/JPEG 색상 차이와 JPEG_R 미리보기·캡처 간 화이트 밸런스는 새 검사 조건을 기준으로 결과를 비교할 항목입니다.
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -47,15 +63,21 @@ Gen2 리그로 옮겨진 멀티 카메라 전환·플래시·센서 퓨전 테�
 
 ---
 
+<a id="article-libcamera-awb"></a>
+
 ## 3. libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기
-
-
-![libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기 image](../../assets/images/fallback/newsletter-default.svg)
-
 
 _libcamera Patchwork 메일링 리스트_
 
 자동 화이트 밸런스를 끌 때 예전 수동 게인으로 되돌아가면서 색이 갑자기 변하는 동작을 개선하려는 제안입니다. 마지막 자동 게인을 유지하고, 요청할 때만 새 게인으로 갱신하는 흐름을 추가합니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.
+
+
+![](../../assets/images/fallback/newsletter-default.svg)
+
 
 2026년 9월 28일 제출된 libcamera의 AWB 패치 시리즈는 자동 모드에서 수동 모드로 바꿀 때의 게인 전환을 다룹니다. 기존에는 자동 게인과 수동 게인이 분리돼 있어 AwbEnable=false로 전환하면 이전 수동 값으로 돌아갔습니다. 제안은 자동 동작 중 계산한 게인으로 수동 게인을 계속 갱신하여, AWB를 끄는 순간 마지막 자동 게인을 유지하도록 합니다.
 
@@ -71,9 +93,7 @@ _libcamera Patchwork 메일링 리스트_
 
 이 기사는 제출된 시리즈의 설계와 코드를 비교한 내용입니다. 설명과 구현의 차이가 남아 있어 확정된 API 계약이나 이미 배포된 기능으로 받아들이면 안 됩니다. Android Camera HAL 규격 자체의 변경도 아닙니다. libcamera 기반 카메라 스택을 다루는 팀에는 수동 전환 시 유지할 게인과 재탐색 완료 상태를 어떻게 표현할지 참고할 수 있는 제안입니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 

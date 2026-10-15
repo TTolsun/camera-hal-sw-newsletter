@@ -1,23 +1,41 @@
 # 2026 W21 (05.18 ~ 05.24)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. 이번 주 핵심
+
 이번 주에는 ‘Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원’, ‘Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신’ 두 건의 소식을 다룹니다.
 
+- [Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원](#article-google-i-o-2026-jetpack-compose-camerax)
+
+  이 변화는 Camera HAL의 직접적인 API나 메타데이터 계약을 변경하지는 않지만, 상위 앱 계층에서 다양한 해상도 및 종횡비 스트림을 동적으로 요청할 가능성을 높입니다. HAL 개발자는 Preview 스트림 구성 시 대화면 및 분할 화면 시나리오에서 발생할 수 있는 스트림 재구성(Stream Reconfiguration) 레이턴시와 프레임 드롭 여부를 검증해야 합니다.
+
+- [Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신](#article-google-ai-studio-android)
+
+  이 도구 자체는 Camera HAL의 런타임 동작에 직접적인 영향을 주지 않습니다. 다만, 카메라 프레임워크나 HAL API의 특정 동작을 재현하기 위한 테스트용 클라이언트 앱(Sample/Prototype App)을 빠르게 빌드하고 배포하는 네이티브 개발 워크플로우 관점에서 유용한 보조 도구로 활용될 수 있습니다.
 
 
-## 1. 이번 주 기사
 
-- Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원
-- Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신
+
+<a id="article-google-i-o-2026-jetpack-compose-camerax"></a>
 
 ## 2. Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원
+
+Jetpack Compose를 활용한 멀티 디바이스 환경에서의 원활한 Android 카메라 경험 구축
+
+### Camera HAL/Driver 관점에서의 의미
+
+이 변화는 Camera HAL의 직접적인 API나 메타데이터 계약을 변경하지는 않지만, 상위 앱 계층에서 다양한 해상도 및 종횡비 스트림을 동적으로 요청할 가능성을 높입니다. HAL 개발자는 Preview 스트림 구성 시 대화면 및 분할 화면 시나리오에서 발생할 수 있는 스트림 재구성(Stream Reconfiguration) 레이턴시와 프레임 드롭 여부를 검증해야 합니다.
 
 
 ![Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원 image](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png)
 
 _이미지: [Android Developers Blog](https://android-developers.googleblog.com/)_
 
-
-Jetpack Compose를 활용한 멀티 디바이스 환경에서의 원활한 Android 카메라 경험 구축
 
 Google I/O 2026에서 Android 생태계가 '기본 적응형(Adaptive by Default)'으로 진화함에 따라, 폴더블폰, 태블릿, XR 등 다양한 화면 크기에서 올바른 카메라 미리보기를 제공하기 위한 Jetpack Compose와 CameraX의 통합이 핵심 도구로 강조되었습니다.
 
@@ -27,9 +45,7 @@ Android 생태계가 스마트폰을 넘어 폴더블, 태블릿, 차량용 디�
 
 카메라 미리보기는 화면의 종횡비, 회전 상태, 그리고 사용 가능한 해상도 스트림 조합에 매우 민감합니다. 특히 폴더블 기기에서 화면을 접거나 펼칠 때 발생하는 동적 레이아웃 변경 환경에서, CameraX와 Compose의 긴밀한 연동은 앱이 카메라 프레임워크로부터 전달받은 Surface 버퍼를 올바른 비율로 렌더링할 수 있도록 돕습니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-이 변화는 Camera HAL의 직접적인 API나 메타데이터 계약을 변경하지는 않지만, 상위 앱 계층에서 다양한 해상도 및 종횡비 스트림을 동적으로 요청할 가능성을 높입니다. HAL 개발자는 Preview 스트림 구성 시 대화면 및 분할 화면 시나리오에서 발생할 수 있는 스트림 재구성(Stream Reconfiguration) 레이턴시와 프레임 드롭 여부를 검증해야 합니다.
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -37,15 +53,21 @@ Android 생태계가 스마트폰을 넘어 폴더블, 태블릿, 차량용 디�
 
 ---
 
+<a id="article-google-ai-studio-android"></a>
+
 ## 3. Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신
+
+설치와 구성 없는 클라우드 기반 네이티브 Android 개발 환경 제공
+
+### Camera HAL/Driver 관점에서의 의미
+
+이 도구 자체는 Camera HAL의 런타임 동작에 직접적인 영향을 주지 않습니다. 다만, 카메라 프레임워크나 HAL API의 특정 동작을 재현하기 위한 테스트용 클라이언트 앱(Sample/Prototype App)을 빠르게 빌드하고 배포하는 네이티브 개발 워크플로우 관점에서 유용한 보조 도구로 활용될 수 있습니다.
 
 
 ![Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신 image](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png)
 
 _이미지: [Android Developers Blog](https://android-developers.googleblog.com/)_
 
-
-설치와 구성 없는 클라우드 기반 네이티브 Android 개발 환경 제공
 
 Google AI Studio가 프롬프트 입력만으로 몇 분 만에 전체 네이티브 Android 앱을 빌드할 수 있는 새로운 기능을 발표했습니다. 복잡한 개발 환경 설정 없이 아이디어를 바로 코드로 구현할 수 있어 네이티브 개발 생산성이 크게 향상될 것으로 기대됩니다.
 
@@ -55,9 +77,7 @@ Google AI Studio가 프롬프트 입력만으로 몇 분 만에 전체 네이티
 
 이 도구는 카메라 HAL이나 드라이버를 개발하는 엔지니어들에게도 유용하게 활용될 수 있습니다. 예를 들어, 특정 카메라 API의 동작을 테스트하거나 간단한 이미지 처리 파이프라인을 검증하기 위한 테스트용 앱을 빠르게 생성하여 로컬 환경에서 즉시 실행해 볼 수 있습니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-이 도구 자체는 Camera HAL의 런타임 동작에 직접적인 영향을 주지 않습니다. 다만, 카메라 프레임워크나 HAL API의 특정 동작을 재현하기 위한 테스트용 클라이언트 앱(Sample/Prototype App)을 빠르게 빌드하고 배포하는 네이티브 개발 워크플로우 관점에서 유용한 보조 도구로 활용될 수 있습니다.
+[이번 주 핵심으로](#issue-briefing)
 
 **출처**
 

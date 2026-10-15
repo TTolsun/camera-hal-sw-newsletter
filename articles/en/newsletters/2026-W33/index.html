@@ -26,6 +26,7 @@
   <script src="../../../assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
@@ -40,7 +41,7 @@
     </div>
   </header>
 
-  <main class="site-main article-page newsletter-main">
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← Newsroom</a>
@@ -49,51 +50,68 @@
         </div>
         <h1 class="issue-title"><span>2026 W32</span></h1>
         <p class="issue-publish-badge">Published W33</p>
-        <p class="subtitle">This week covers ‘Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)’ and ‘Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)’.</p>
+
         <div class="tag-row issue-tags"><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
       </header>
 
-      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
-          <h2 id="issue-briefing-title">In this issue</h2>
-          <ul><li>Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)</li><li>Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)</li></ul>
+          <h2 id="issue-briefing-title">This week’s highlights</h2>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-driver-proposed-for-the-onsemi-ar0234-cmos-image-sensor-with-global-shutter-patc">Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)</a>
+            <p class="reader-brief-takeaway">The characteristics of a global shutter can be used for high-speed capture and machine vision scenarios in the Android Camera HAL. When configuring a 120fps high-speed stream, the HAL&#39;s buffer cycling period and the ISP&#39;s processing latency must be minimized, and you should verify that DPCM 10-&gt;8 decompression or the RAW Bayer 8/10-bit formats are correctly decoded in the ISP pipeline.</p>
+          </li><li>
+            <a href="#article-adding-device-tree-bindings-for-sony-imx908-8-39mp-sensor-support-patch-v2">Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)</a>
+            <p class="reader-brief-takeaway">The correctness of the device tree bindings determines whether sensor probing and initialization succeed. A high-resolution RAW12 (3856x2176) stream requires more buffer memory and bandwidth than RAW10, so DMA-BUF allocation and ISP input buffer size settings must be matched exactly in the HAL and driver layers.</p>
+          </li></ol><details class="reader-brief-context"><summary>About this issue</summary><p class="reader-brief-intro">This week covers ‘Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)’ and ‘Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)’.</p></details>
         </div>
+
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-driver-proposed-for-the-onsemi-ar0234-cmos-image-sensor-with-global-shutter-patc" aria-labelledby="article-driver-proposed-for-the-onsemi-ar0234-cmos-image-sensor-with-global-shutter-patc-title">
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-driver-proposed-for-the-onsemi-ar0234-cmos-image-sensor-with-global-shutter-patc" tabindex="-1" aria-labelledby="article-driver-proposed-for-the-onsemi-ar0234-cmos-image-sensor-with-global-shutter-patc-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
           <span class="issue-story-category">Camera Driver · ISP</span>
         </div>
         <h2 id="article-driver-proposed-for-the-onsemi-ar0234-cmos-image-sensor-with-global-shutter-patc-title" class="article-title">Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)</h2>
         <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
-        <figure class="article-media">
+        <p class="article-lead">This week, a v2 patch series adding a driver for the onsemi AR0234 CMOS image sensor with a global shutter was submitted to the Linux media subsystem. It can be useful in machine vision and AR/VR scenarios that require high-speed capture and precise frame synchronization.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>The characteristics of a global shutter can be used for high-speed capture and machine vision scenarios in the Android Camera HAL. When configuring a 120fps high-speed stream, the HAL&#39;s buffer cycling period and the ISP&#39;s processing latency must be minimized, and you should verify that DPCM 10-&gt;8 decompression or the RAW Bayer 8/10-bit formats are correctly decoded in the ISP pipeline.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
         <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2) image" loading="lazy" decoding="async">
         </figure>
-        <p class="article-lead">This week, a v2 patch series adding a driver for the onsemi AR0234 CMOS image sensor with a global shutter was submitted to the Linux media subsystem. It can be useful in machine vision and AR/VR scenarios that require high-speed capture and precise frame synchronization.</p>
         <p>Adding the onsemi AR0234 CMOS image sensor driver to the Linux kernel has important implications for Android Camera HAL and driver development. The sensor supports a global shutter and delivers up to 120fps at 1920x1200 resolution. This can be useful for high-speed image capture and certain machine vision applications.</p>
         <p>Support for MIPI CSI-2 output, RAW Bayer formats (8/10-bit), and DPCM 10-&gt;8 compression directly affects how the HAL efficiently receives and processes data from the sensor. The HAL can pass this RAW data to the ISP (Image Signal Processor) for final image processing, or provide RAW output to apps through the Camera2 API.</p>
         <p>A global shutter can improve image quality by preventing rolling shutter distortion when capturing moving objects, which becomes an important validation point for certain use cases. Development teams should closely review transfer stability when running at high frame rates and the decoding performance of the compressed format.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>The characteristics of a global shutter can be used for high-speed capture and machine vision scenarios in the Android Camera HAL. When configuring a 120fps high-speed stream, the HAL&#39;s buffer cycling period and the ISP&#39;s processing latency must be minimized, and you should verify that DPCM 10-&gt;8 decompression or the RAW Bayer 8/10-bit formats are correctly decoded in the ISP pipeline.</p></div>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/">[PATCH v2 0/2] media: i2c: Add onsemi AR0234 camera sensor driver</a> — <a href="https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com/T/#t">Full patch series</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-adding-device-tree-bindings-for-sony-imx908-8-39mp-sensor-support-patch-v2" aria-label="Next article: Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)">Next article →</a>
+        </nav>
       </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-adding-device-tree-bindings-for-sony-imx908-8-39mp-sensor-support-patch-v2" aria-labelledby="article-adding-device-tree-bindings-for-sony-imx908-8-39mp-sensor-support-patch-v2-title">
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-adding-device-tree-bindings-for-sony-imx908-8-39mp-sensor-support-patch-v2" tabindex="-1" aria-labelledby="article-adding-device-tree-bindings-for-sony-imx908-8-39mp-sensor-support-patch-v2-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 2">02</span>
           <span class="issue-story-category">Camera Driver · ISP</span>
         </div>
         <h2 id="article-adding-device-tree-bindings-for-sony-imx908-8-39mp-sensor-support-patch-v2-title" class="article-title">Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)</h2>
         <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
-        <figure class="article-media">
+        <p class="article-lead">This week, a v2 patch series adding Linux device tree bindings for the Sony IMX908 8.39MP CMOS image sensor was submitted. A hardware interface definition was added for a sensor that supports high-resolution RAW output, laying the groundwork for platform integration.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>The correctness of the device tree bindings determines whether sensor probing and initialization succeed. A high-resolution RAW12 (3856x2176) stream requires more buffer memory and bandwidth than RAW10, so DMA-BUF allocation and ISP input buffer size settings must be matched exactly in the HAL and driver layers.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
         <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2) image" loading="lazy" decoding="async">
         </figure>
-        <p class="article-lead">This week, a v2 patch series adding Linux device tree bindings for the Sony IMX908 8.39MP CMOS image sensor was submitted. A hardware interface definition was added for a sensor that supports high-resolution RAW output, laying the groundwork for platform integration.</p>
         <p>Adding device tree bindings for the Sony IMX908 sensor means providing the hardware information the Linux kernel needs to recognize and initialize the sensor. The device tree is the mechanism for passing hardware configuration information to the kernel on Linux systems; for camera sensors, it defines important parameters such as MIPI CSI-2 lane configuration, clocks, power management, and I2C addresses.</p>
         <p>The fact that the IMX908 is an 8.39-megapixel (3856x2176) CMOS image sensor supporting RAW10 and RAW12 output suggests that the Android Camera HAL must be able to handle high-resolution RAW data from this sensor. The HAL passes this RAW data to the ISP or exposes it directly to apps through the Camera2 API, enabling advanced image processing features.</p>
         <p>Because the correctness of the device tree bindings directly affects the correct operation of the sensor and the stability of the camera pipeline, HAL and driver developers should review this change closely. In particular, it is important to confirm whether sufficient bandwidth is secured for the configured number of MIPI CSI-2 lanes.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>The correctness of the device tree bindings determines whether sensor probing and initialization succeed. A high-resolution RAW12 (3856x2176) stream requires more buffer memory and bandwidth than RAW10, so DMA-BUF allocation and ISP input buffer size settings must be matched exactly in the HAL and driver layers.</p></div>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/">[PATCH v2 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor</a> — <a href="https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com/T/#t">Full patch series</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-driver-proposed-for-the-onsemi-ar0234-cmos-image-sensor-with-global-shutter-patc" aria-label="Previous article: Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+
+        </nav>
       </section>
 
       <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
@@ -126,7 +144,7 @@
           <span class="footer-col-title">Topics</span>
           <span class="footer-note">Camera HAL · Android</span>
           <span class="footer-note">Driver · Image Processing</span>
-          <span class="footer-note">AI · SoC Platform</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
         </div>
         <div class="footer-col">
           <span class="footer-col-title">Resources</span>
