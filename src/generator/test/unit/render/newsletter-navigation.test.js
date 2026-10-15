@@ -85,6 +85,10 @@ test('highlights replace contents and all navigation reaches focusable anchors i
       assert.match(html, /id="issue-briefing" tabindex="-1"/);
       assert.doesNotMatch(html, /class="issue-contents"/);
       assert.match(html, /<details class="reader-brief-context"><summary>/);
+      const highlights = html.split('<ol class="reader-brief-items">')[1].split('</ol>')[0];
+      assert.equal((highlights.match(/class="reader-brief-takeaway"/g) || []).length, 3);
+      assert.doesNotMatch(html, /reader-brief-details|reader-brief-titles/);
+      assert.ok(html.indexOf('reader-brief-takeaway') < html.indexOf('<details'));
       assert.doesNotMatch(html, /<details[^>]*\bopen/);
       assert.ok(html.indexOf('reader-brief-items') < html.indexOf('reader-brief-context'));
       assert.match(html, /class="skip-link" href="#main-content"/);
