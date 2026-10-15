@@ -335,7 +335,7 @@ test('English home mirrors the Korean home with the translated headline and ever
   assert.match(grid, /1 article</);
   assert.match(grid, /Korean only/);
   assert.match(grid, /href="\.\.\/newsletters\/2026-W38\/index\.html"/);
-  assert.match(elements['latest-topics'].innerHTML, />All</);
+  assert.match(elements['latest-topics'].innerHTML, />Weekly issues</);
 });
 
 test('English home hides the separate headline without a published English projection', async () => {
@@ -455,4 +455,13 @@ test('every committed English page carries the English header, brand and footer'
     }
   }
   assert.deepEqual(mismatched, [], `영문 헤더·브랜드·푸터가 어긋난 자리 ${mismatched.length}개:\n${mismatched.join('\n')}`);
+});
+
+test('language links retain archive queries without carrying translated article slugs', () => {
+  const basePath = '/newsletter/';
+  const state = { basePath, pathname: basePath + 'archive.html', search: '?topic=driver&sort=oldest&page=2', hash: '' };
+  assert.equal(languagePaths(state).en, basePath + 'en/archive.html?topic=driver&sort=oldest&page=2');
+  assert.equal(languagePaths({ ...state, pathname: basePath + 'en/archive.html' }).ko, basePath + 'archive.html?topic=driver&sort=oldest&page=2');
+  assert.equal(languagePaths({ basePath, pathname: basePath + 'newsletters/2026-W42/index.html', hash: '#article-camera' }).en, basePath + 'en/newsletters/2026-W42/index.html');
+  assert.equal(languagePaths({ basePath, pathname: basePath + 'learning/ai-engineering/index.html', hash: '#lesson' }).en, basePath + 'en/archive.html');
 });

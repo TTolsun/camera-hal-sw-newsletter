@@ -72,6 +72,7 @@
           </div>
         </div>
 
+        <p class="browse-help">Browse weekly issues, or choose a topic to find individual articles.</p>
         <form class="archive-page-controls" aria-label="Archive controls">
           <div class="keyword-row archive-topic-list" data-topic-filter role="group" aria-label="Archive topic filter"></div>
           <label class="archive-sort-control archive-page-sort">
@@ -210,7 +211,7 @@
         const isActive = topic.key === activeTopic;
         const disabled = count === 0 && topic.key !== 'all';
         const classes = ['keyword', 'archive-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
-        return `<button type="button" class="${classes}" data-archive-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}><span>${escapeHtml(topic.key === 'all' ? 'All' : topic.label)}</span><span class="archive-topic-count">${count}</span></button>`;
+        return `<button type="button" class="${classes}" data-archive-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}><span>${escapeHtml(topic.key === 'all' ? 'Weekly issues' : topic.label)}</span><span class="archive-topic-count">${count} ${topic.key === 'all' ? 'issues' : 'articles'}</span></button>`;
       }).join('');
     }
 

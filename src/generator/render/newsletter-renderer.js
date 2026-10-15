@@ -294,10 +294,9 @@ function issueCoverageDisplay(issue = {}) {
 // 함께 보여준다. 세 variant는 카드(articles/assets/js/newsletter-archive.js entryCoverageVariant)와
 // 같은 판정을 쓴다 — 판정 기준이 갈리면 카드와 이슈 페이지가 서로 다른 표시를 보여준다.
 //
-// - iso_week: coverage 3필드가 모두 유효. 제목/kicker는 issueCoverageDisplay(위)가 이미 대상
-//   주로 바꿔치기하므로 여기서는 "발행 WNN" 보조 배지만 추가한다.
+// - iso_week: coverage 3필드가 모두 유효. 제목은 발행 주, kicker는 대상 주와 기간을 표시한다.
 // - legacy_rolling: 실제 ISO 주가 아닌 rolling 조회 범위라 대상엔 날짜만 있다. kicker에 "대상"
-//   접두를 붙인다(제목은 이미 issueCoverageDisplay가 rolling range로 바꿔치기했으므로 그대로 둔다).
+//   접두를 붙이고 제목은 발행 주를 유지한다.
 // - unverified: coverage_mode가 명시적으로 unverified이거나, weekly_key가 있는데 coverage 필드가
 //   통째로 없다. 이 경우 issueCoverageDisplay는 null을 돌려주고 kicker/제목은 발행 주의 실제
 //   달력 날짜로 폴백하는데, 그 날짜를 "대상 기간"인 것처럼 보여주면 모르는 기간을 아는 것처럼
@@ -329,28 +328,16 @@ function issueCoverageVariant(issue = {}) {
   return null;
 }
 
-// iso_week variant에서만 "발행 WNN" 배지를 보여준다 — legacy_rolling/unverified는 제목이나
-// kicker가 이미 발행 주 기준으로 남아 있어서 별도 배지가 발행 identity를 중복 표시할 뿐이다.
-function issuePublishedWeekBadgeText(issue = {}) {
-  const variant = issueCoverageVariant(issue);
-  if (!variant || variant.variant !== 'iso_week') return '';
-  const weeklyKey = String(issue.weekly_key || '').trim();
-  return /^\d{4}-W\d{2}$/.test(weeklyKey) ? `${t.published}${weeklyKey.slice(5)}` : '';
-}
-
-// Weekly issues are labeled by ISO week ("2026-W22" -> "2026 W22"); daily issues fall back to date.
-// coverage(대상 주)가 유효하면 그것을 우선 쓴다 — 발행 identity(weekly_key)는 그대로 두고 표시만
-// 대상 주로 바꾼다. 없으면(과거호·전환 전, 또는 legacy_rolling이라 key가 없으면) 기존 weekly_key
-// 표시를 그대로 유지한다.
+// Use the publication identity for the page title; coverage belongs in the kicker.
 function issueWeekLabel(issue = {}) {
   const coverage = issueCoverageDisplay(issue);
-  const key = (coverage && coverage.key) || String(issue.weekly_key || '').trim();
+  const key = String(issue.weekly_key || '').trim() || (coverage && coverage.key);
   return /^\d{4}-W\d{2}$/.test(key) ? key.replace('-W', ' W') : '';
 }
 
 // Weekly issue hero kicker shows the week's date range in the mockup format ("2026.05.25 – 05.31").
 // 연말처럼 주가 연도를 걸치면 끝 날짜의 연도를 생략하지 않는다.
-// coverage(대상 주)가 유효하면 그것으로 range를 만든다 — issueWeekLabel과 같은 판정을 쓴다.
+// coverage(대상 주)가 유효하면 그것으로 range를 만든다.
 //
 // 표시 계약 v2: unverified variant는 발행 주의 실제 날짜를 대상 기간인 것처럼 보여주지 않고
 // "대상 기간 미확인"으로 바꾼다. legacy_rolling은 실제 ISO 주가 아닌 rolling 범위임을 밝히려고
@@ -368,7 +355,7 @@ function issueKickerText(issue = {}) {
   if (/^\d{4}-\d{2}-\d{2}$/.test(start) && /^\d{4}-\d{2}-\d{2}$/.test(end)) {
     const sameYear = start.slice(0, 4) === end.slice(0, 4);
     const range = `${dot(start)} – ${sameYear ? dot(end).slice(5) : dot(end)}`;
-    const prefix = (variant && variant.variant === 'legacy_rolling') ? t.coverage : '';
+    const prefix = coverage ? `${t.coverage}${coverage.key ? coverage.key.replace('-W', ' W') + ' · ' : ''}` : '';
     return `${prefix}${range}`;
   }
   return `${archive?.daily ? t.newsletter + ' ' : t.weeklyNewsletter}${issue.date || ''}`.trim();
@@ -379,8 +366,7 @@ function issueKickerText(issue = {}) {
 function issuePageTitle(issue = {}) {
   const weekLabel = issueWeekLabel(issue);
   if (weekLabel) {
-    const badge = issuePublishedWeekBadgeText(issue);
-    return `${weekLabel} Camera SW Newsletter${badge ? ` (${badge})` : ''}`;
+    return `${weekLabel} Camera SW Newsletter`;
   }
   const date = issueDisplayDate(issue);
   return date ? `Camera SW Newsletter - ${date}` : 'Camera SW Newsletter';
@@ -888,19 +874,14 @@ function articleNavigationHtml(previous, next, back) {
 `;
 }
 
-// 표시 계약 v2: iso_week variant일 때만 h1 아래 "발행 WNN" 보조 배지를 붙인다(대상 주 제목과
-// 발행 주가 갈릴 때 두 identity를 함께 보여줘 아카이브 카드-이슈 페이지 표시가 어긋나지 않게 한다).
+// The hero names the published issue and separately labels its coverage.
 function issueHeroHtml(issue, brief) {
-  const publishedWeekBadge = issuePublishedWeekBadgeText(issue);
-  const publishedWeekBadgeHtml = publishedWeekBadge
-    ? `\n        <p class="issue-publish-badge">${escapeHtml(publishedWeekBadge)}</p>`
-    : '';
   return `<header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← ${t.newsroom}</a>
         <div class="article-meta issue-hero-meta">
           <span class="issue-kicker">${escapeHtml(issueKickerText(issue))}</span>
         </div>
-        <h1 class="issue-title">${issueTitleHtml(issue)}</h1>${publishedWeekBadgeHtml}
+        <h1 class="issue-title">${issueTitleHtml(issue)}</h1>
         ${showsHighlights(brief) ? '' : `<p class="subtitle">${escapeHtml(issue.summary)}</p>`}
         <div class="tag-row issue-tags">${tagsHtml(issueTags(issue))}</div>
       </header>`;
@@ -951,13 +932,13 @@ function summaryProse(headline, lead, takeaway) {
 }
 
 function readerBriefHtml(brief) {
-  return `<ol class="reader-brief-items">${brief.items.map(item => {
+  return `<ol class="reader-brief-items reader-brief-titles">${brief.items.map(item => `<li><a href="#${escapeHtml(item.href.split('#')[1])}">${escapeHtml(item.headline)}</a></li>`).join('')}</ol><details class="reader-brief-details"><summary>${t.articleSummaries}</summary><ol class="reader-brief-items">${brief.items.map(item => {
     const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
     return `<li>
             <a href="#${escapeHtml(item.href.split('#')[1])}">${escapeHtml(item.headline)}</a>
             ${meaning ? `<p class="reader-brief-takeaway">${escapeHtml(meaning)}</p>` : lead ? paragraphHtml(lead) : ''}
           </li>`;
-  }).join('')}</ol>${brief.intro ? `<details class="reader-brief-context"><summary>${t.aboutIssue}</summary><p class="reader-brief-intro">${escapeHtml(brief.intro)}</p></details>` : ''}`;
+  }).join('')}</ol></details>${brief.intro ? `<details class="reader-brief-context"><summary>${t.aboutIssue}</summary><p class="reader-brief-intro">${escapeHtml(brief.intro)}</p></details>` : ''}`;
 }
 
 function readerBriefMarkdown(brief) {

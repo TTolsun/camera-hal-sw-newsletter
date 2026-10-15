@@ -55,8 +55,8 @@
         아카이브를 불러오는 중입니다.
       </section>
 
-      <section class="archive-page-panel" data-archive-controls aria-label="Archive controls" hidden>
-        <div class="archive-stat-grid" aria-label="Archive summary">
+      <section class="archive-page-panel" data-archive-controls aria-label="탐색 설정" hidden>
+        <div class="archive-stat-grid" aria-label="탐색 결과 요약">
           <div class="archive-stat">
             <span class="archive-stat-label">결과</span>
             <strong data-archive-count>-</strong>
@@ -71,10 +71,11 @@
           </div>
         </div>
 
-        <form class="archive-page-controls" aria-label="Archive controls">
-          <div class="keyword-row archive-topic-list" data-topic-filter role="group" aria-label="Archive topic filter"></div>
+        <p class="browse-help">주간호를 둘러보거나, 주제를 선택해 개별 기사를 찾아보세요.</p>
+        <form class="archive-page-controls" aria-label="탐색 설정">
+          <div class="keyword-row archive-topic-list" data-topic-filter role="group" aria-label="기사 주제 선택"></div>
           <label class="archive-sort-control archive-page-sort">
-            <select class="nc-sort" data-sort-control aria-label="Archive sort order">
+            <select class="nc-sort" data-sort-control aria-label="정렬 순서">
               <option value="latest">최신순</option>
               <option value="oldest">오래된순</option>
             </select>
@@ -85,7 +86,7 @@
       </section>
 
       <div class="archive-grid" data-archive-grid></div>
-      <nav class="archive-pagination" data-archive-pagination aria-label="Archive pages" hidden></nav>
+      <nav class="archive-pagination" data-archive-pagination aria-label="아카이브 페이지" hidden></nav>
 
       <div class="archive-empty-state" data-empty-state hidden>
         <p class="muted">선택한 주제에 해당하는 뉴스레터가 없습니다.</p>
@@ -209,7 +210,7 @@
         const isActive = topic.key === activeTopic;
         const disabled = count === 0 && topic.key !== 'all';
         const classes = ['keyword', 'archive-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
-        return `<button type="button" class="${classes}" data-archive-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}><span>${escapeHtml(topic.label)}</span><span class="archive-topic-count">${count}</span></button>`;
+        return `<button type="button" class="${classes}" data-archive-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}><span>${escapeHtml(topic.key === 'all' ? '주간호' : topic.label)}</span><span class="archive-topic-count">${count}${topic.key === 'all' ? '호' : '건'}</span></button>`;
       }).join('');
     }
 
@@ -229,7 +230,7 @@
 
       paginationEl.innerHTML = `
         <button type="button" class="archive-page-button archive-page-button-prev" data-archive-page="${Math.max(1, page - 1)}"${page === 1 ? ' disabled aria-disabled="true"' : ''}>이전</button>
-        <div class="archive-page-list" aria-label="Archive page list">${pageButtons}</div>
+        <div class="archive-page-list" aria-label="페이지 번호">${pageButtons}</div>
         <button type="button" class="archive-page-button archive-page-button-next" data-archive-page="${Math.min(pageCount, page + 1)}"${page === pageCount ? ' disabled aria-disabled="true"' : ''}>다음</button>
       `;
       setHidden(paginationEl, false);

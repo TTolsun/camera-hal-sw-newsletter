@@ -65,6 +65,7 @@
           </label>
         </div>
       </div>
+        <p class="browse-help">주간호를 둘러보거나, 주제를 선택해 개별 기사를 찾아보세요.</p>
       <div id="latest-topics" class="keyword-row latest-topics" role="group" aria-label="주제 필터"></div>
       <p id="latest-status" class="sr-only" role="status"></p>
       <div id="latest-grid" class="archive-grid latest-grid">
@@ -243,7 +244,7 @@
         const isActive = topic.key === activeTopic;
         const disabled = topic.key !== 'all' && topicCountOf(topic) === 0;
         const classes = ['keyword', 'latest-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
-        return `<button type="button" class="${classes}" data-latest-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}>${escapeHtml(topic.label)}</button>`;
+        return `<button type="button" class="${classes}" data-latest-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}>${escapeHtml(topic.key === 'all' ? '주간호' : topic.label)}</button>`;
       }).join('');
       if (focusedTopic) topicsEl.querySelector(`[data-latest-topic="${focusedTopic}"]`)?.focus();
     }

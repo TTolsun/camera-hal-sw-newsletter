@@ -81,7 +81,7 @@
     return trimmed || '/';
   }
 
-  function languagePaths({ pathname, basePath = '/', alternateHref = '' }) {
+  function languagePaths({ pathname, basePath = '/', alternateHref = '', search = '', hash = '' }) {
     const base = basePath.endsWith('/') ? basePath : `${basePath}/`;
     const relative = pathname.startsWith(base) ? pathname.slice(base.length) : '';
     const english = relative.startsWith('en/');
@@ -89,9 +89,11 @@
     // 주간호는 모두 영문판이 있다(과거 호는 수동 번역, 이후 호는 data-alternate-href). 날짜 호는 없다.
     const supported = ['', 'index.html', 'archive.html'].includes(page) || /^newsletters\/\d{4}-W\d{2}\/index\.html$/.test(page);
     const alternate = alternateHref.startsWith(base) && !alternateHref.startsWith('//') ? alternateHref : '';
+    // Article slugs are translated, so only carry fragments on shared navigation pages.
+    const suffix = supported ? `${search}${page.startsWith('newsletters/') ? '' : hash}` : '';
     return {
-      ko: english ? (alternate || `${base}${page}`) : pathname,
-      en: english ? pathname : (alternate || `${base}en/${supported ? page : 'archive.html'}`)
+      ko: (english ? (alternate || `${base}${page}`) : pathname) + suffix,
+      en: (english ? pathname : (alternate || `${base}en/${supported ? page : 'archive.html'}`)) + suffix
     };
   }
 
@@ -110,14 +112,21 @@
       nav.appendChild(container);
       const button = container.querySelector('button');
       const list = container.querySelector('ul');
+      const refreshPaths = () => {
+        const current = languagePaths({ pathname: global.location.pathname, search: global.location.search,
+          hash: global.location.hash, basePath, alternateHref: doc.documentElement.getAttribute('data-alternate-href') || '' });
+        for (const link of list.querySelectorAll('a')) link.setAttribute('href', current[link.getAttribute('lang')]);
+      };
       const close = () => { list.hidden = true; button.setAttribute('aria-expanded', 'false'); };
       button.addEventListener('click', () => {
+        refreshPaths();
         list.hidden = !list.hidden;
         button.setAttribute('aria-expanded', String(!list.hidden));
       });
       button.addEventListener('keydown', event => {
         if (event.key !== 'ArrowDown') return;
         event.preventDefault();
+        refreshPaths();
         list.hidden = false;
         button.setAttribute('aria-expanded', 'true');
         list.querySelector('a').focus();

@@ -66,6 +66,7 @@
           </label>
         </div>
       </div>
+        <p class="browse-help">Browse weekly issues, or choose a topic to find individual articles.</p>
       <div id="latest-topics" class="keyword-row latest-topics" role="group" aria-label="Topic filter"></div>
       <p id="latest-status" class="sr-only" role="status"></p>
       <div id="latest-grid" class="archive-grid latest-grid">
@@ -249,7 +250,7 @@
         const isActive = topic.key === activeTopic;
         const disabled = topic.key !== 'all' && topicCountOf(topic) === 0;
         const classes = ['keyword', 'latest-topic-chip', isActive ? 'is-active' : ''].filter(Boolean).join(' ');
-        return `<button type="button" class="${classes}" data-latest-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}>${escapeHtml(topic.key === 'all' ? 'All' : topic.label)}</button>`;
+        return `<button type="button" class="${classes}" data-latest-topic="${topic.key}" aria-pressed="${isActive ? 'true' : 'false'}"${disabled ? ' disabled aria-disabled="true"' : ''}>${escapeHtml(topic.key === 'all' ? 'Weekly issues' : topic.label)}</button>`;
       }).join('');
       if (focusedTopic) topicsEl.querySelector(`[data-latest-topic="${focusedTopic}"]`)?.focus();
     }

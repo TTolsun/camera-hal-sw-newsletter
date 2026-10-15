@@ -357,7 +357,7 @@ test('topic pagination counts matching articles and retains each own thumbnail a
   assert.match(html, /Driver article 13|#article-13|image-13\.png/);
   assert.doesNotMatch(html, /Unrelated AI lead|image-0\.png/);
   assert.equal(elements['[data-archive-count]'].textContent, '13건의 기사');
-  assert.match(elements['[data-topic-filter]'].innerHTML, /data-archive-topic="driver"[^>]*>.*?archive-topic-count">13</);
+  assert.match(elements['[data-topic-filter]'].innerHTML, /data-archive-topic="driver"[^>]*>.*?archive-topic-count">13건</);
   assert.equal(location.search, '?topic=driver&page=2');
 });
 

@@ -363,7 +363,7 @@
       </div>` : ''}
       ${first?.tags.length ? `<p class="reader-tags">${escapeHtml(first.tags.join(' · '))}</p>` : ''}
       ${items.length > 1 ? `<nav class="reader-stories" aria-label="${en ? 'Also in this issue' : '함께 볼 소식'}"><h2>${en ? 'Also in this issue' : '함께 볼 소식'}</h2><ul>${items.slice(1).map(item => `<li>${item.href ? `<a href="${escapeHtml(rootPath + item.href)}">${escapeHtml(item.headline)}</a>` : escapeHtml(item.headline)}</li>`).join('')}</ul></nav>` : ''}
-      ${brief?.intro ? `<details class="reader-context"><summary>${en ? 'About this issue' : '이번 호 전체 소개'}</summary><p class="reader-intro">${escapeHtml(brief.intro)}</p></details>` : ''}
+      ${brief?.intro && !items.some(item => brief.intro.includes(item.headline)) ? `<details class="reader-context"><summary>${en ? 'About this issue' : '이번 호 전체 소개'}</summary><p class="reader-intro">${escapeHtml(brief.intro)}</p></details>` : ''}
     </div>${readerMedia(brief ? first : legacyReaderItem(entry), rootPath, true)}`;
   }
 
