@@ -9,6 +9,8 @@ const { assembleSite } = require('../../publish/assemble-site');
 
 const root = path.resolve(__dirname, '../../../..');
 const issuePattern = /^\d{4}-(?:W\d{2}|\d{2}-\d{2})$/;
+const deployedUrl = process.env.DEPLOYED_SITE_URL;
+const reportDir = path.join(root, '.tmp', 'deployed-layout');
 
 function publishedPages(site) {
   return ['newsletters', 'en/newsletters'].flatMap(prefix =>
@@ -65,7 +67,7 @@ async function checkMenu(page) {
   assert.equal(await menu.isVisible(), false);
 }
 
-test('published weekly and historical daily pages preserve full-size images and reachable language menus', { timeout: 240000 }, async t => {
+test('published weekly and historical daily pages preserve full-size images and reachable language menus', { timeout: deployedUrl ? 1200000 : 240000 }, async t => {
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'newsletter-layout-'));
   let browser;
   let server;
@@ -97,12 +99,18 @@ test('published weekly and historical daily pages preserve full-size images and 
     fs.createReadStream(file).pipe(res);
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-  const origin = `http://127.0.0.1:${server.address().port}`;
+  const origin = deployedUrl ? new URL(deployedUrl).origin : `http://127.0.0.1:${server.address().port}`;
+  const baseUrl = deployedUrl ? `${deployedUrl.replace(/\/$/, '')}/` : `${origin}/`;
+  const results = [];
+  if (deployedUrl) {
+    fs.mkdirSync(reportDir, { recursive: true });
+    t.after(() => fs.writeFileSync(path.join(reportDir, 'results.json'), JSON.stringify({ baseUrl, results }, null, 2)));
+  }
   browser = await chromium.launch(process.env.BROWSER_PATH ? { executablePath: process.env.BROWSER_PATH } : {});
   const page = await browser.newPage();
   page.setDefaultTimeout(10000);
   // External availability is outside this layout contract. Local fallback SVGs are served unchanged.
-  await page.route('**/*', route => {
+  if (!deployedUrl) await page.route('**/*', route => {
     if (new URL(route.request().url()).origin === origin) return route.continue();
     if (route.request().resourceType() === 'image') {
       return route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="640" height="360" fill="gray"/></svg>' });
@@ -111,27 +119,49 @@ test('published weekly and historical daily pages preserve full-size images and 
   });
   let fallbackCount = 0;
   let imageCount = 0;
-  for (const width of [320, 390, 1280]) {
+  const widths = deployedUrl ? [320] : [320, 390, 1280];
+  for (const width of widths) {
     await page.setViewportSize({ width, height: 900 });
     for (const file of pages) {
       await t.test(`${width}px ${file}`, async () => {
-        const response = await page.goto(`${origin}/${file}`);
-        assert.equal(response.status(), 200);
-        await page.locator('.language-button').waitFor();
-        // Force lazy images to load without changing their sizing or scrolling the header away.
-        await page.locator('.article-image').evaluateAll(elements => Promise.all(elements.map(async img => {
-          img.loading = 'eager';
-          await img.decode();
-        })));
-        const images = await checkImages(page);
-        imageCount += images.length;
-        fallbackCount += images.filter(img => img.src.includes('/images/fallback/')).length;
-        await checkMenu(page);
+        const result = { file, width, passed: false };
+        results.push(result);
+        try {
+          const response = await page.goto(new URL(file, baseUrl).href);
+          assert.equal(response.status(), 200);
+          await page.locator('.language-button').waitFor();
+          // Force lazy images to load without changing their sizing or scrolling the header away.
+          await page.locator('.article-image').evaluateAll(elements => Promise.all(elements.map(async img => {
+            img.loading = 'eager';
+            let timer;
+            try {
+              await Promise.race([
+                img.decode(),
+                new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`image load timeout: ${img.src}`)), 30000); })
+              ]);
+            } finally {
+              clearTimeout(timer);
+            }
+          })));
+          const images = await checkImages(page);
+          const expectedImages = (fs.readFileSync(path.join(site, file), 'utf8').match(/class="article-image"/g) || []).length;
+          assert.equal(images.length, expectedImages, 'all published article images must be present');
+          imageCount += images.length;
+          fallbackCount += images.filter(img => img.src.includes('/images/fallback/')).length;
+          await checkMenu(page);
+          result.images = images;
+          result.passed = true;
+        } catch (error) {
+          result.error = error.message;
+          if (deployedUrl) await page.screenshot({ path: path.join(reportDir, `${file.replaceAll('/', '-')}.png`), fullPage: true });
+          throw error;
+        }
       });
     }
   }
   assert.ok(imageCount > 0 && fallbackCount > 0, 'must exercise real article and fallback images');
-  t.diagnostic(`${pages.length} published pages × 3 viewports; ${imageCount} image checks (${fallbackCount} fallback)`);
+  t.diagnostic(`${pages.length} published pages × ${widths.length} viewports; ${imageCount} image checks (${fallbackCount} fallback)`);
+  if (deployedUrl) return;
   // Prove the assertions catch the original bugs on an earlier issue, not just the latest.
   const olderIssue = pages.find(file => file.startsWith('newsletters/') && /-W\d{2}\//.test(file)
     && fs.readFileSync(path.join(site, file), 'utf8').includes('/images/fallback/'));

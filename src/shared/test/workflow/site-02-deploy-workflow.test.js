@@ -94,6 +94,19 @@ test('Site 02 deploy preserves the single pages concurrency group, triggers, and
 });
 
 // #888 — 서빙 결과를 정하는 입력이 push.paths에서 빠져 배포를 못 깨우던 회귀를 막는다.
+test('Site 02 requires a live browser check after deployment and preserves failure evidence', () => {
+  const yaml = fs.readFileSync(workflowPath, 'utf8');
+  const verify = yaml.slice(yaml.indexOf('\n  verify-deployed-layout:'));
+  assert.match(verify, /needs: deploy/);
+  assert.match(verify, /DEPLOYED_SITE_URL: \$\{\{ needs\.deploy\.outputs\.page_url \}\}/);
+  assert.match(verify, /test -n "\$DEPLOYED_SITE_URL"/);
+  assert.match(verify, /npm run test:browser/);
+  assert.doesNotMatch(verify, /continue-on-error: true/);
+  assert.match(verify, /if: always\(\)/);
+  assert.match(verify, /path: \.tmp\/deployed-layout\//);
+  assert.match(verify, /include-hidden-files: true/);
+});
+
 test('Site 02 deploy triggers on every input that decides what gets served', () => {
   const yaml = fs.readFileSync(workflowPath, 'utf8');
   const filters = pushPathFilters(yaml);
