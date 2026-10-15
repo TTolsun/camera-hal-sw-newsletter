@@ -1,5 +1,5 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
-const { orderedArticleSections, resolvedArticleImage: resolveDisplayImage, sectionRelevanceBucket, weeklyTopicTags } = require('./article-display');
+const { articleCategoryLabel: displayCategoryLabel, orderedArticleSections, resolvedArticleImage: resolveDisplayImage, sectionRelevanceBucket, weeklyTopicTags } = require('./article-display');
 const { loreThreadUrl } = require('../../shared/common/article-groups');
 const { isFallbackImagePath } = require('../../shared/render/image-candidates');
 const {
@@ -30,9 +30,10 @@ const {
 
 const locales = { ko: require('./locale/ko'), en: require('./locale/en') };
 
-function createRenderer(locale = 'ko') {
+function createRenderer(locale = 'ko', archive = null) {
   const t = Object.hasOwn(locales, locale) ? locales[locale] : null;
   if (!t) throw new Error(`Unsupported locale: ${locale}`);
+  const hasEnglishEdition = issue => Boolean(issue?.weekly_key) && archive?.daily !== true;
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -50,11 +51,24 @@ function markdownLink(source) {
   return `- [${title}](${source.url})${suffix}`;
 }
 
-function sourceListMarkdown(sources) {
+function publishedInlineMarkdown(tokens) {
+  return tokens.map(token => token.type === 'link' ? `[${token.text}](${token.url})` : token.text).join('');
+}
+
+function publishedInlineHtml(tokens) {
+  return tokens.map(token => {
+    const content = token.type === 'link' ? `<a href="${escapeHtml(token.url)}">${escapeHtml(token.text)}</a>` : escapeHtml(token.text);
+    return token.meta ? `<span class="reference-meta">${content}</span>` : content;
+  }).join('');
+}
+
+function sourceListMarkdown(sources, published) {
+  if (published) return published.map(tokens => `- ${publishedInlineMarkdown(tokens)}`).join('\n');
   return ensureArray(sources).filter(source => source && source.url).map(markdownLink).join('\n');
 }
 
-function sourceListHtml(sources) {
+function sourceListHtml(sources, published) {
+  if (published) return published.map(tokens => `<li>${publishedInlineHtml(tokens)}</li>`).join('');
   return ensureArray(sources)
     .filter(source => source && source.url)
     .map(source => {
@@ -163,14 +177,10 @@ function articlePerspectiveHeadingHtml() {
 }
 
 // mockup 카테고리 눈썹 라벨: relevance bucket -> 표시 라벨.
-const ARTICLE_CATEGORY_LABELS = t.categories;
-
 // bucket 은 sectionRelevanceBucket 이 8개 필드 변형에서 해석한다. article_type 은
 // 예전 아티팩트가 bucket 값을 article_type 에 실었던 경우를 위한 보조 키다.
 function articleCategoryLabel(section = {}) {
-  return ARTICLE_CATEGORY_LABELS[sectionRelevanceBucket(section)] ||
-    ARTICLE_CATEGORY_LABELS[String(section.article_type || '').trim()] ||
-    'Camera';
+  return displayCategoryLabel(section, { locale });
 }
 
 // relevance bucket -> archive/home 카드 topic 태그. archive 필터 TOPICS(Camera HAL / Android /
@@ -198,6 +208,7 @@ function reviewPublicationNoticeLines() {
 }
 
 function publicationNoticeLines(issue) {
+  if (archive?.noticeLines) return archive.noticeLines;
   const fallbackNotice = issue?.publication_mode === PUBLICATION_MODES.FALLBACK_PUBLIC || issue?.fallback_only === true;
   if (fallbackNotice) {
     if (locale === 'ko' && Array.isArray(issue.publication_notice) && issue.publication_notice.length > 0) {
@@ -360,7 +371,7 @@ function issueKickerText(issue = {}) {
     const prefix = (variant && variant.variant === 'legacy_rolling') ? t.coverage : '';
     return `${prefix}${range}`;
   }
-  return `${t.weeklyNewsletter}${issue.date || ''}`.trim();
+  return `${archive?.daily ? t.newsletter + ' ' : t.weeklyNewsletter}${issue.date || ''}`.trim();
 }
 
 // 표시 계약 v2: iso_week variant만 "(발행 WNN)" 접미를 붙인다 — 브라우저 탭 제목/공유 카드에서도
@@ -447,11 +458,11 @@ function catchUpWeeksLabel(section) {
 // 다시 정렬하면 그 뒤 바뀐 우선순위 규칙으로 과거 호의 순서가 바뀐다(2026-W19~W28 중 8개 호에서
 // 실측). 발행 시점에는 같은 규칙으로 이미 정렬된 입력이라 새 호의 출력은 달라지지 않는다.
 function normalizedSections(issue) {
-  return orderedArticleSections(issue).map(({ section, category, anchorId, articleNumber }) => {
+  return orderedArticleSections(issue, { archive }).map(({ section, category, anchorId, articleNumber }) => {
     const isCatchUp = section.coverage_type === 'catch_up';
     const badge = isCatchUp ? catchUpWeeksLabel(section) : '';
     return {
-      heading: `## ${articleNumber + 1}. ${category}${badge}`,
+      heading: archivedArticle(section, issue)?.markdownHeading || `## ${articleNumber + 1}. ${category}${badge}`,
       htmlHeading: `${articleNumber + 1}. ${category}${badge}`,
       headingCategory: category,
       anchorId,
@@ -636,17 +647,34 @@ function articleBodyMarkdown(publicArticle, storyContractVersion) {
   return paragraphs.join('\n\n');
 }
 
+// Only the explicit archive adapter supplies these recovered public blocks. No story version is
+// inferred or stamped on historical data. Unknown markup is rejected by the recovery boundary.
+function archivedArticle(section, issue) {
+  return archive?.articles?.[ensureArray(issue.sections).indexOf(section)];
+}
+
+function archivedBlocksMarkdown(blocks) {
+  return blocks.map((block, index) => `${index ? block.origin === 'published-markdown' && block.type === 'bullet' && blocks[index - 1].type === 'bullet' ? '\n' : '\n\n' : ''}${block.type === 'subheading' ? '### ' : block.type === 'bullet' ? '- ' : ''}${block.text}`).join('');
+}
+
+function archivedInlineHtml(text) {
+  return String(text).split(/(`[^`\n]+`)/g).map(part => /^`[^`\n]+`$/.test(part)
+    ? `<code>${escapeHtml(part.slice(1, -1))}</code>` : escapeHtml(part)).join('');
+}
+
 function publicArticleMarkdown(issue, heading, section, brief) {
   const storyContractVersion = storyContractRenderVersion(issue, section);
   const publicArticle = publicArticleForSection(section, { issue });
   assertRenderableBody(publicArticle, storyContractVersion);
+  const recovered = archivedArticle(section, issue);
   const perspectiveHeading = articlePerspectiveHeading(issue, section);
-  const sourceSubtitle = publicArticle.source_subtitle
-    ? `_${publicArticle.source_subtitle}_\n\n`
+  const subtitle = recovered?.subtitle || publicArticle.source_subtitle;
+  const sourceSubtitle = subtitle
+    ? `_${subtitle}_\n\n`
     : '';
   const [lead, meaning] = summaryProse(publicArticle.headline, publicArticle.lead, publicArticle.camera_hal_takeaway);
   const takeaway = meaning
-    ? `### ${perspectiveHeading}\n\n${meaning}\n\n`
+    ? `### ${recovered?.perspectiveHeading || perspectiveHeading}\n\n${meaning}\n\n`
     : '';
   return `${heading}
 
@@ -654,13 +682,13 @@ ${sourceSubtitle}${lead}
 
 ${takeaway}${articleImageMarkdown(section, publicArticle)}
 
-${articleBodyMarkdown(publicArticle, storyContractVersion)}
+${recovered ? archivedBlocksMarkdown(recovered.blocks) : articleBodyMarkdown(publicArticle, storyContractVersion)}
 
 ${articleBackLink(brief) ? `[${articleBackLink(brief).label}](#${articleBackLink(brief).href})
 
 ` : ''}**${t.source}**
 
-${sourceListMarkdown(publicArticle.source_links)}
+${sourceListMarkdown(publicArticle.source_links, archive?.sourceLists?.articles?.[ensureArray(issue.sections).indexOf(section)])}
 `;
 }
 
@@ -742,6 +770,7 @@ function referenceArticleGroups(articles) {
 }
 
 function referenceArticlesMarkdown(issue) {
+  if (archive?.reading?.length) return archive.reading.map(section => `## ${section.markdownHeading}\n\n${section.markdown}\n\n`).join('');
   const articles = Array.isArray(issue?.reference_articles) ? issue.reference_articles : [];
   if (!articles.length) return '';
   const bullets = referenceArticleGroups(articles)
@@ -760,6 +789,11 @@ ${bullets}
 const REFERENCE_ARTICLES_HEADING_HTML = t.readingHtml;
 
 function referenceArticlesHtml(issue) {
+  if (archive?.reading?.length) return archive.reading.map(section => `
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">${escapeHtml(section.heading)}</h2>
+        <ul class="reference-articles-list">${section.items.map(tokens => `<li>${publishedInlineHtml(tokens)}</li>`).join('')}</ul>
+      </section>\n`).join('');
   const articles = Array.isArray(issue?.reference_articles) ? issue.reference_articles : [];
   if (!articles.length) return '';
   const items = referenceArticleGroups(articles)
@@ -789,7 +823,7 @@ ${sectionsMarkdownWithCatchUpDivider(issue, brief)}
 
 ${watchPointsMarkdown(issue)}${referenceArticlesMarkdown(issue)}## ${t.references}
 
-${sourceListMarkdown(issue.references)}
+${sourceListMarkdown(issue.references, archive?.sourceLists?.references)}
 `;
 }
 
@@ -800,8 +834,10 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
   assertRenderableBody(publicArticle, storyContractVersion);
   const perspectiveHeading = articlePerspectiveHeadingHtml();
   const storyV2 = usesBodyMarkdown(storyContractVersion);
-  const sourceSubtitle = publicArticle.source_subtitle
-    ? `        <p class="article-source-subtitle">${escapeHtml(publicArticle.source_subtitle)}</p>`
+  const recovered = archivedArticle(section, issue);
+  const subtitle = recovered?.subtitle || publicArticle.source_subtitle;
+  const sourceSubtitle = subtitle
+    ? `        <p class="article-source-subtitle">${escapeHtml(subtitle)}</p>`
     : '';
   const displayNumber = String(articleNumber).padStart(2, '0');
   const [lead, meaning] = summaryProse(publicArticle.headline, publicArticle.lead, publicArticle.camera_hal_takeaway);
@@ -809,7 +845,9 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
     .split('\n')
     .map(line => `        ${line.trimStart()}`)
     .join('\n');
-  const bodyBlocksHtml = storyV2
+  const bodyBlocksHtml = recovered ? recovered.blocks.map(block => block.type === 'subheading'
+    ? `        <h3 class="article-subheading">${escapeHtml(block.text)}</h3>` : block.type === 'bullet'
+      ? `        <ul><li>${block.origin === 'published-markdown' ? archivedInlineHtml(block.text) : escapeHtml(block.text)}</li></ul>` : `        <p>${block.origin === 'published-markdown' ? archivedInlineHtml(block.text) : escapeHtml(block.text)}</p>`) : storyV2
     ? [storyV2BodyHtml(publicArticle)]
     : (isStoryArticle(publicArticle)
       ? storyBodyParagraphsForRender(publicArticle)
@@ -835,7 +873,7 @@ function publicArticleHtml(issue, htmlHeading, headingCategory, anchorId, articl
         </div>
         <h2 id="${escapeHtml(anchorId)}-title" class="article-title">${escapeHtml(publicArticle.headline || htmlHeading)}</h2>${articleTagsBlock}
 ${articleBodyBlocks}
-        <div class="source-list"><strong>${t.source}</strong><ul>${sourceListHtml(publicArticle.source_links)}</ul></div>
+        <div class="source-list"><strong>${t.source}</strong><ul>${sourceListHtml(publicArticle.source_links, archive?.sourceLists?.articles?.[ensureArray(issue.sections).indexOf(section)])}</ul></div>
 ${articleNavigationHtml(previous, next, articleBackLink(brief))}      </section>`;
 }
 
@@ -869,11 +907,11 @@ function issueHeroHtml(issue, brief) {
 }
 
 function readerBriefForIssue(issue) {
-  if (!issue.weekly_key) return null;
+  if (!issue.weekly_key && !archive) return null;
   // #1276 owns this builder; both body and index consume the same final public projection.
   const { buildReaderBrief } = require('./reader-brief');
-  const issueHref = `${locale === 'en' ? 'en/' : ''}newsletters/${issue.weekly_key}/index.html`;
-  const brief = buildReaderBrief(issue, { locale, issueHref });
+  const issueHref = `${locale === 'en' ? 'en/' : ''}newsletters/${issue.weekly_key || issue.date}/index.html`;
+  const brief = buildReaderBrief(issue, { locale, issueHref, archive });
   if (brief?.schema_version !== 1 || brief.locale !== locale || typeof brief.intro !== 'string' ||
     !Array.isArray(brief.items) || brief.items.length !== ensureArray(issue.sections).length || brief.items.some(item => !item ||
       !['id', 'href', 'headline', 'lead', 'takeaway'].every(key => typeof item[key] === 'string') ||
@@ -897,7 +935,7 @@ function showsHighlights(brief) {
 // 기사 끝에서 돌아갈 곳입니다. 상자가 없는 단일 기사 호는 돌아갈 곳이 없어 링크를 두지 않습니다.
 function articleBackLink(brief) {
   if (!brief) return { href: 'issue-contents', label: t.backToContents };
-  return showsHighlights(brief) ? { href: 'issue-briefing', label: t.backToHighlights } : null;
+  return showsHighlights(brief) ? { href: 'issue-briefing', label: archive?.daily ? t.backToIssueHighlights : t.backToHighlights } : null;
 }
 
 // 과거 호에서 제목과 요약이 완전히 같으면 화면에서만 반복을 생략합니다.
@@ -923,13 +961,14 @@ function readerBriefHtml(brief) {
 }
 
 function readerBriefMarkdown(brief) {
+  const coreHeading = archive?.daily ? t.issueCore : t.weeklyCore;
   // 단일 기사 호: Markdown은 기사 번호(## 2.)와 구조 검사가 기대하는 ## 1. 섹션을 남기되 제목 링크만
   // 둔다. 소개 문장은 제목 아래에, 리드·의미 문장은 본문에 한 번씩만 나온다.
   if (!showsHighlights(brief)) {
-    return `## 1. ${t.weeklyCore}\n\n` + brief.items.map(item =>
+    return `## 1. ${coreHeading}\n\n` + brief.items.map(item =>
       `- [${escapeMarkdownLinkText(item.headline)}](#${item.href.split('#')[1]})`).join('\n') + '\n';
   }
-  return `<a id="issue-briefing"></a>\n\n## 1. ${t.weeklyCore}\n\n${brief.intro}\n\n` + brief.items.map(item => {
+  return `<a id="issue-briefing"></a>\n\n## 1. ${coreHeading}\n\n${brief.intro}\n\n` + brief.items.map(item => {
     const [lead, meaning] = summaryProse(item.headline, item.lead, item.takeaway);
     return `- [${escapeMarkdownLinkText(item.headline)}](#${item.href.split('#')[1]})\n${meaning || lead ? `\n  ${meaning || lead}\n` : ''}`;
   }).join('\n');
@@ -958,7 +997,7 @@ function issueBriefingHtml(issue, brief) {
   if (brief && !showsHighlights(brief)) return '';
   return `<section class="section issue-briefing"${brief ? ' id="issue-briefing" tabindex="-1"' : ''} aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
-          <h2 id="issue-briefing-title">${brief ? t.weeklyCore : briefingHeadingHtml(issue)}</h2>
+          <h2 id="issue-briefing-title">${brief ? (archive?.daily ? t.issueCore : t.weeklyCore) : briefingHeadingHtml(issue)}</h2>
           ${brief ? readerBriefHtml(brief) : `<ul>${bulletsHtml(issue.briefing)}</ul>`}
         </div>
         ${brief ? '' : contentsHtml(issue)}
@@ -984,7 +1023,7 @@ function articleSeoHead(issue = {}) {
   const url = issueCanonicalUrl(issue);
   const image = DEFAULT_OG_IMAGE;
   return [
-    ...['ko', 'en', 'x-default'].map(language => `  <link rel="alternate" hreflang="${language}" href="${SITE_BASE_URL}${language === 'en' ? 'en/' : ''}newsletters/${escapeHtml(issue.weekly_key || issue.date)}/index.html" />`),
+    ...(hasEnglishEdition(issue) ? ['ko', 'en', 'x-default'] : ['ko', 'x-default']).map(language => `  <link rel="alternate" hreflang="${language}" href="${SITE_BASE_URL}${language === 'en' ? 'en/' : ''}newsletters/${escapeHtml(issue.weekly_key || issue.date)}/index.html" />`),
     `  <meta property="og:locale" content="${locale === 'ko' ? 'ko_KR' : 'en_US'}" />`,
     `  <meta name="description" content="${escapeHtml(description)}" />`,
     `  <link rel="canonical" href="${escapeHtml(url)}" />`,
@@ -1007,7 +1046,7 @@ function buildPublicHtml(issue) {
   const publicationNoticeBlock = publicationNotice ? `      ${publicationNotice}\n\n` : '';
   const rootPath = locale === 'ko' ? '../../' : '../../../';
   return `<!DOCTYPE html>
-<html lang="${locale}" data-alternate-href="${escapeHtml(alternateIssuePath(issue))}">
+<html lang="${locale}"${hasEnglishEdition(issue) ? ` data-alternate-href="${escapeHtml(alternateIssuePath(issue))}"` : ''}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -1032,7 +1071,7 @@ ${sectionsHtmlWithCatchUpDivider(issue, brief)}
 ${watchPointsHtml(issue)}${referenceArticlesHtml(issue)}
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">${t.references}</h2>
-        <div class="reference-list"><ul>${sourceListHtml(issue.references)}</ul></div>
+        <div class="reference-list"><ul>${sourceListHtml(issue.references, archive?.sourceLists?.references)}</ul></div>
       </section>
 
       <nav class="issue-footer-navigation" aria-label="${t.footerNavigation}">
@@ -1072,6 +1111,6 @@ return {
 
 module.exports = {
   ...createRenderer(),
-  buildHtml: (issue, { locale = 'ko' } = {}) => createRenderer(locale).buildHtml(issue),
-  buildMarkdown: (issue, { locale = 'ko' } = {}) => createRenderer(locale).buildMarkdown(issue)
+  buildHtml: (issue, { locale = 'ko', archive } = {}) => createRenderer(locale, archive).buildHtml(issue),
+  buildMarkdown: (issue, { locale = 'ko', archive } = {}) => createRenderer(locale, archive).buildMarkdown(issue)
 };

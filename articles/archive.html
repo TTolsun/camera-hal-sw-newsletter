@@ -58,7 +58,7 @@
       <section class="archive-page-panel" data-archive-controls aria-label="Archive controls" hidden>
         <div class="archive-stat-grid" aria-label="Archive summary">
           <div class="archive-stat">
-            <span class="archive-stat-label">발행 호수</span>
+            <span class="archive-stat-label">결과</span>
             <strong data-archive-count>-</strong>
           </div>
           <div class="archive-stat">
@@ -174,7 +174,7 @@
 
     function sortedVisibleEntries(state) {
       return archiveHelpers.sortEntries(
-        archiveHelpers.filterEntries(archiveEntries, state),
+        archiveHelpers.cardEntries(archiveEntries, state, 'ko'),
         state.sort
       );
     }
@@ -196,16 +196,7 @@
     function topicCounts(entries) {
       const counts = new Map();
       for (const topic of archiveHelpers.TOPICS) {
-        counts.set(topic.key, 0);
-      }
-      for (const entry of entries) {
-        counts.set('all', (counts.get('all') || 0) + 1);
-        const tags = Array.isArray(entry && entry.tags) ? entry.tags.map(String) : [];
-        for (const topic of archiveHelpers.TOPICS) {
-          if (topic.key !== 'all' && tags.includes(topic.tag)) {
-            counts.set(topic.key, (counts.get(topic.key) || 0) + 1);
-          }
-        }
+        counts.set(topic.key, archiveHelpers.cardEntries(entries, { topic: topic.key }, 'ko').length);
       }
       return counts;
     }
@@ -256,8 +247,8 @@
     function renderArchive() {
       const visibleEntries = sortedVisibleEntries(currentState);
       const topic = topicLabel(currentState.topic);
+      const unit = currentState.topic === 'all' ? '아카이브' : '기사';
       const count = visibleEntries.length;
-      const total = archiveEntries.length;
       const pageCount = pageCountFor(count);
       const page = Math.min(Math.max(currentState.page, 1), pageCount);
       const startIndex = count > 0 ? (page - 1) * ARCHIVE_PAGE_SIZE : 0;
@@ -265,10 +256,10 @@
       const endIndex = startIndex + pageEntries.length;
       const summary = count > 0
         ? pageCount > 1
-          ? `${topic} ${count}개 아카이브 중 ${startIndex + 1}-${endIndex}개를 ${sortLabel(currentState.sort)}으로 표시 중입니다.`
-          : `${topic} ${count}개 아카이브를 ${sortLabel(currentState.sort)}으로 표시 중입니다.`
+          ? `${topic} ${count}개 ${unit} 중 ${startIndex + 1}-${endIndex}개를 ${sortLabel(currentState.sort)}으로 표시 중입니다.`
+          : `${topic} ${count}개 ${unit}를 ${sortLabel(currentState.sort)}으로 표시 중입니다.`
         : `${topic} 결과가 없습니다.`;
-      const countLabel = currentState.topic === 'all' ? `${count}호` : `${count}/${total}호`;
+      const countLabel = currentState.topic === 'all' ? `${count}호` : `${count}건의 기사`;
 
       if (archiveGridEl) {
         archiveGridEl.innerHTML = pageEntries.map(entry => archiveHelpers.renderArchiveCard(entry)).join('');

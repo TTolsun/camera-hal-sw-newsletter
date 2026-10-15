@@ -107,6 +107,20 @@
     return ensureArray(entries).filter(entry => entryMatchesTopic(entry, normalized.topic));
   }
 
+  // All shows issues. A selected topic shows each matching public article with its own stable
+  // identity. A weekly issue without a valid projection cannot borrow its lead article instead.
+  function cardEntries(entries, state = DEFAULT_STATE, locale = 'ko') {
+    const topic = topicByKey(normalizeArchiveState(state).topic);
+    if (topic.key === 'all') return ensureArray(entries).slice();
+    return ensureArray(entries).flatMap(entry => {
+      if (!weeklyKeyOf(entry)) return entryMatchesTopic(entry, topic.key) ? [entry] : [];
+      const display = entryDisplay(entry, locale);
+      const brief = readerBrief(entry, display.koreanOnly ? 'ko' : locale);
+      return ensureArray(brief?.items).filter(item => item.tags.includes(topic.tag))
+        .map(item => ({ ...entry, display_article_id: item.id }));
+    });
+  }
+
   function latestEntry(entries) {
     return sortEntries(entries, 'latest')[0] || null;
   }
@@ -425,19 +439,21 @@
     return fallback;
   }
 
-  // Weekly cards use the first public item's copy, topic and media as one unit.
+  // Keep the chosen public item's copy, topic, media and anchor together on each card.
   function renderArchiveCard(entry, options = {}) {
     const locale = options.locale || 'ko';
     const rootPath = options.rootPath || '';
     const display = entryDisplay(entry, locale);
-    const brief = readerBrief(entry, locale);
-    const item = brief?.items[0];
+    const brief = readerBrief(entry, display.koreanOnly && entry.display_article_id ? 'ko' : locale);
+    const selected = typeof entry.display_article_id === 'string';
+    const item = selected ? brief?.items.find(item => item.id === entry.display_article_id) : brief?.items[0];
+    if (selected && !item) return '';
     const koreanOnly = display.koreanOnly;
-    const href = rootPath + display.href;
-    entry = { ...entry, title: display.title, summary: display.summary };
+    const href = rootPath + (selected ? item.href : display.href);
+    entry = { ...entry, title: display.title, summary: display.summary, ...(selected ? { article_count: 0 } : {}) };
     const headline = item?.headline || (brief ? cardTitle(entry) : cardHeadline(entry));
     const accessibleName = [headline, entry.date, entry.title !== headline ? entry.title : '',
-      options.ariaSuffix || (locale === 'en' ? 'Open newsletter' : '뉴스레터 열기'),
+      options.ariaSuffix || (selected ? (locale === 'en' ? 'Read article' : '기사 읽기') : (locale === 'en' ? 'Open newsletter' : '뉴스레터 열기')),
       koreanOnly ? 'Korean only' : ''].filter(Boolean).join(' · ');
     return `
       <a class="archive-card" href="${escapeHtml(href)}" aria-label="${escapeHtml(accessibleName)}">
@@ -486,6 +502,7 @@
     buildCanonicalArchiveUrl,
     sortEntries,
     filterEntries,
+    cardEntries,
     latestEntry,
     archivePreviewEntries,
     getSafeNewsletterHref,

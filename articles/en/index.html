@@ -238,7 +238,7 @@
 
     function topicCountOf(topic) {
       if (topic.key === 'all') return latestEntries.length;
-      return latestEntries.filter(entry => visibleTags(entry.tags).includes(topic.tag)).length;
+      return archiveHelpers.cardEntries(latestEntries, { topic: topic.key }, 'en').length;
     }
 
     function renderLatestTopics(activeTopic) {
@@ -259,13 +259,13 @@
       const emptyEl = document.getElementById('latest-empty');
       if (!gridEl) return;
       const filtered = archiveHelpers.sortEntries(
-        archiveHelpers.filterEntries(latestEntries, latestState),
+        archiveHelpers.cardEntries(latestEntries, latestState, 'en'),
         latestState.sort
       );
       gridEl.innerHTML = filtered.map(entry => archiveHelpers.renderArchiveCard(entry, { locale: 'en', rootPath: ROOT, compact: true })).join('');
       if (emptyEl) emptyEl.hidden = filtered.length > 0;
       const status = document.getElementById('latest-status');
-      if (status) status.textContent = `${filtered.length} issues`;
+      if (status) status.textContent = `${filtered.length} ${latestState.topic === 'all' ? 'issues' : 'articles'}`;
     }
 
     function applyLatestState(nextState, updateUrl = false) {

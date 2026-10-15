@@ -38,9 +38,18 @@ test('daily issue canonical/og:url point at the dated public path', () => {
   assert.equal(seoTagUrl(html, 'og:url'), expected);
 });
 
+test('ordinary daily rendering never advertises an English edition that does not exist', () => {
+  const html = buildHtml(baseIssue({ date: '2026-10-15' }));
+  assert.doesNotMatch(html, /data-alternate-href=|hreflang="en"/);
+  assert.match(html, /hreflang="ko"/);
+  assert.match(html, /hreflang="x-default"/);
+});
+
 test('weekly issue canonical/og:url use the weekly_key path', () => {
   const html = buildHtml(baseIssue({ weekly_key: '2026-W23', date: '2026-06-01' }));
   const expected = `${SITE_BASE_URL}newsletters/2026-W23/index.html`;
   assert.equal(seoTagUrl(html, 'canonical'), expected);
   assert.equal(seoTagUrl(html, 'og:url'), expected);
+  assert.match(html, /data-alternate-href="\/camera-hal-sw-newsletter\/en\/newsletters\/2026-W23\/index\.html"/);
+  assert.match(html, /hreflang="en"/);
 });

@@ -21,6 +21,8 @@
     "newsroom:audit-images": "node src/generator/publish/audit-newsletter-images.js",
     "newsroom:repair-images": "node src/generator/publish/repair-newsletter-images.js",
     "audit:historical-newsletters": "node src/generator/publish/audit-historical-newsletters.js",
+    "migrate:public-newsletters": "node src/generator/publish/migrate-public-newsletters.js",
+    "refresh:reader-briefs": "node src/generator/publish/refresh-reader-briefs.js",
     "sync:policy-docs": "node src/shared/tooling/cli/sync-policy-docs.js",
     "generate:sitemap": "node src/generator/render/generate-sitemap.js",
     "test": "npm run test:unit && npm run test:script",
