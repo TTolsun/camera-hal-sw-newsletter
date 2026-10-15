@@ -351,6 +351,7 @@
     const first = brief?.items[0];
     const headlines = String(display.summary || '').split(/\n+|\s+·\s+/).map(line => line.trim()).filter(Boolean);
     const items = brief ? brief.items : headlines.map(headline => ({ headline }));
+    const stories = items.length > 1 ? `<nav class="reader-stories" aria-label="${en ? 'Also in this issue' : '함께 볼 소식'}"><h2>${en ? 'Also in this issue' : '함께 볼 소식'}</h2><ul>${items.slice(1).map(item => `<li>${item.href ? `<a href="${escapeHtml(rootPath + item.href)}">${escapeHtml(item.headline)}</a>` : escapeHtml(item.headline)}</li>`).join('')}</ul></nav>` : '';
     return `<div class="reader-issue-copy">
       <p class="reader-kicker">${first ? (en ? 'Start here' : '먼저 읽을 변화') : (en ? 'Latest issue' : '최신호')} · ${escapeHtml(cardTitle({ title: display.title }))}</p>
       <h1 id="reader-title"${display.koreanOnly ? ' lang="ko"' : ''}>${escapeHtml(first?.headline || (!brief && headlines[0]) || display.title || (en ? 'Weekly newsletter' : '주간 뉴스레터'))}</h1>
@@ -362,8 +363,7 @@
         ${first.takeaway ? `<section><h2>${en ? 'What to check in your work' : '업무에서 무엇을 확인하나'}</h2><p class="reader-takeaway">${escapeHtml(first.takeaway)}</p></section>` : ''}
       </div>` : ''}
       ${first?.tags.length ? `<p class="reader-tags">${escapeHtml(first.tags.join(' · '))}</p>` : ''}
-      ${items.length > 1 ? `<nav class="reader-stories" aria-label="${en ? 'Also in this issue' : '함께 볼 소식'}"><h2>${en ? 'Also in this issue' : '함께 볼 소식'}</h2><ul>${items.slice(1).map(item => `<li>${item.href ? `<a href="${escapeHtml(rootPath + item.href)}">${escapeHtml(item.headline)}</a>` : escapeHtml(item.headline)}</li>`).join('')}</ul></nav>` : ''}
-      ${brief?.intro ? `<details class="reader-context"><summary>${en ? 'About this issue' : '이번 호 전체 소개'}</summary><p class="reader-intro">${escapeHtml(brief.intro)}</p></details>` : ''}
+      ${brief?.intro || stories ? `<details class="reader-context"><summary>${en ? 'About this issue' : '이번 호 전체 소개'}</summary>${brief?.intro ? `<p class="reader-intro">${escapeHtml(brief.intro)}</p>` : ''}${stories}</details>` : ''}
     </div>${readerMedia(brief ? first : legacyReaderItem(entry), rootPath, true)}`;
   }
 
