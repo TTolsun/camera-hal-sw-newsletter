@@ -127,6 +127,10 @@ function generatedNewsletterDatesFromEntries(entries = []) {
     if (/^articles\/content\/newsroom\/\d{4}-\d{2}-\d{2}\/image-audit-report\.(?:json|md)$/.test(normalized)) {
       continue;
     }
+    // A recovered archive input is not a newly published issue. Modified public HTML/Markdown
+    // still belong to strict targets, and added public output or newsroom evidence still marks
+    // an actual generation. Never fabricate historical run reports from this projection.
+    if (/^articles\/newsletters\/\d{4}-\d{2}-\d{2}\/publication-source\.json$/.test(normalized)) continue;
     if (PUBLIC_NEWSLETTER_PATH.test(normalized) && !status.startsWith('A')) continue;
     const date = changedArtifactDate(filePath);
     if (date) dates.add(date);

@@ -79,6 +79,38 @@ test('editing a published page stays a strict target but is not a generation tar
   );
 });
 
+test('adding a recovered archive input stays strict without fabricating a new generation', () => {
+  const changedEntries = [
+    { status: 'A', path: 'articles/newsletters/2026-06-16/publication-source.json' },
+    { status: 'M', path: 'articles/newsletters/2026-06-16/index.html' },
+    { status: 'M', path: 'articles/newsletters/2026-06-16/newsletter.md' }
+  ];
+  assert.deepEqual([...strictTargetDatesFromInputs({ changedFiles: changedEntries.map(entry => entry.path) })], ['2026-06-16']);
+  assert.deepEqual([...generatedTargetDatesFromInputs({ changedEntries })], []);
+});
+
+test('an archive projection cannot exempt newly added public output from generation gates', () => {
+  for (const name of ['index.html', 'newsletter.md']) {
+    const changedEntries = [
+      { status: 'A', path: 'articles/newsletters/2026-06-16/publication-source.json' },
+      { status: 'A', path: `articles/newsletters/2026-06-16/${name}` }
+    ];
+    assert.deepEqual([...generatedTargetDatesFromInputs({ changedEntries })], ['2026-06-16']);
+  }
+});
+
+test('archive input recognition does not exempt newsroom changes or similar filenames', () => {
+  for (const entry of [
+    { status: 'M', path: 'articles/content/newsroom/2026-06-16/generation-status.json' },
+    { status: 'A', path: 'articles/newsletters/2026-06-16/publication-source.json.backup' },
+    { status: 'A', path: 'articles/newsletters/2026-06-16/issue.json' }
+  ]) {
+    assert.deepEqual([...generatedTargetDatesFromInputs({ changedEntries: [
+      { status: 'A', path: 'articles/newsletters/2026-06-16/publication-source.json' }, entry
+    ] })], ['2026-06-16']);
+  }
+});
+
 test('a newly published issue and its newsroom artifacts are generation targets', () => {
   const dates = generatedTargetDatesFromInputs({
     changedEntries: [

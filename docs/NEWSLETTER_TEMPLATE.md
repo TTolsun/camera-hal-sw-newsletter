@@ -141,6 +141,10 @@ npm.cmd run migrate:public-newsletters -- --issue 2026-10-12 --locale ko --dry-r
 원본 파일 경로·hash, 발행 날짜, 공개 기사·참고자료·이미지와 본문 블록을 보존합니다.
 이후 재실행은 이 입력을 사용합니다. 새 Story Contract 버전이나 발행 적합성 판정을
 역사적 데이터에 부여하지 않으며, 주간 키나 존재하지 않는 영어판도 만들지 않습니다.
+복원 입력인 `publication-source.json`의 추가만으로 새 생성 실행을 판정하지 않습니다.
+수정한 공개 페이지는 계속 strict 검증 대상이며, 새 HTML·Markdown이나 newsroom 실행 기록이
+추가되면 기존 생성 실행 검증도 그대로 적용합니다. 과거 실행의 정본 입력이 없는 상태에서
+quality-report나 image-audit-report를 사후에 만들어 검사에 맞추지 않습니다.
 
 기존 ID가 새 렌더 결과에서 없어지면 대응 기사 또는 탐색 목록에 호환 anchor를 남깁니다.
 기사 순서·문장·출처·이미지·alt·캡션·canonical·참고자료와 Markdown 본문을 전후 대조하고,

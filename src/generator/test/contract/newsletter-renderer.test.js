@@ -593,6 +593,9 @@ function sha256(text) {
 }
 
 test('newsletter renderer keeps reviewed v1 reading layout stable', () => {
+  // Daily editions no longer advertise nonexistent English pages. The three HTML hashes
+  // were reviewed against main: removing only data-alternate-href and the en alternate link
+  // produces exactly these outputs; the article body and Markdown remain byte-identical.
   // CONTEXT 모드는 기사 셸 밖(이슈 수준 note)을 타는 별도 분기라 함께 잠근다.
   const contextIssue = issue({ publish_mode: 'CONTEXT' });
   assert.deepEqual({
@@ -604,11 +607,11 @@ test('newsletter renderer keeps reviewed v1 reading layout stable', () => {
     contextHtml: sha256(buildHtml(contextIssue))
   }, {
     plainMarkdown: '2fa461e7128984b6',
-    plainHtml: 'e0d26a657c86f2e4',
+    plainHtml: '4d71e18f09ed35c6',
     storyMarkdown: '62cbfb5687e2ad9c',
-    storyHtml: '84061f03b26d8054',
+    storyHtml: 'c3b655e13d6dd8b2',
     contextMarkdown: '55eced2f272bf222',
-    contextHtml: 'bfb03b3602c048fe'
+    contextHtml: 'e917aac2c5e8fdc1'
   });
 });
 
