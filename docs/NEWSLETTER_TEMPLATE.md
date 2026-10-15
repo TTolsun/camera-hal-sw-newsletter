@@ -145,6 +145,9 @@ npm.cmd run migrate:public-newsletters -- --issue 2026-10-12 --locale ko --dry-r
 수정한 공개 페이지는 계속 strict 검증 대상이며, 새 HTML·Markdown이나 newsroom 실행 기록이
 추가되면 기존 생성 실행 검증도 그대로 적용합니다. 과거 실행의 정본 입력이 없는 상태에서
 quality-report나 image-audit-report를 사후에 만들어 검사에 맞추지 않습니다.
+이미지 실시간 검증은 한 실행 안에서 정확히 같은 URL의 결과를 공유합니다. 중복 참조의
+불필요한 CDN 요청을 줄이되 실패 결과도 모든 참조에 적용하고, 다음 실행에는 다시 검증합니다.
+로컬 파일·URL scheme·strict 대상·이미지 응답 형식과 크기 기준은 그대로 검사합니다.
 
 기존 ID가 새 렌더 결과에서 없어지면 대응 기사 또는 탐색 목록에 호환 anchor를 남깁니다.
 기사 순서·문장·출처·이미지·alt·캡션·canonical·참고자료와 Markdown 본문을 전후 대조하고,
