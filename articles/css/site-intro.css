@@ -64,6 +64,9 @@
     bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   }
 }
+@media (max-width: 600px) and (orientation: portrait) {
+  .site-intro video { transform: scale(1.2); }
+}
 @media (prefers-reduced-motion: reduce) {
   .site-intro, .site-intro::backdrop { transition: none; }
 }
