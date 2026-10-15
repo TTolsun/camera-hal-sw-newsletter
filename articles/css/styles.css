@@ -2404,10 +2404,10 @@ pre code {
 
 }
 
-/* Keep browsing units explicit and decorative fallback images compact. */
+/* Keep browsing units explicit and mobile controls reachable. */
 .browse-help { color: var(--text-secondary, #555); font-size: .9rem; line-height: 1.5; margin: 12px 0; }
-.newsletter-issue-page .article-image[src*="assets/images/fallback/"] { width: 160px; max-height: 90px; object-fit: contain; margin: 16px 0; }
 @media (max-width: 600px) {
+  .language-selector { margin-inline-start: auto; }
   .language-button, .latest-topic-chip, .archive-topic-chip, .article-navigation a { min-height: 44px; }
   .article-navigation { flex-wrap: wrap; }
 }
