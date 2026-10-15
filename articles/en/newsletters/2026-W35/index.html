@@ -26,6 +26,7 @@
   <script src="../../../assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
@@ -40,7 +41,7 @@
     </div>
   </header>
 
-  <main class="site-main article-page newsletter-main">
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← Newsroom</a>
@@ -53,28 +54,23 @@
         <div class="tag-row issue-tags"><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">Camera HAL</span><span class="tag">Android</span></div>
       </header>
 
-      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
-        <div class="issue-briefing-card">
-          <h2 id="issue-briefing-title">In this issue</h2>
-          <ul><li>Raspberry Pi libcamera v0.7.2+rpt20260817 released: stability improvements to the Linux camera driver stack and what HAL engineers should note</li></ul>
-        </div>
-      </section>
 
-      <section class="section issue-story issue-section article-card story-article has-image" id="article-raspberry-pi-libcamera-v0-7-2-rpt20260817-released-stability-improvements-to-the" aria-labelledby="article-raspberry-pi-libcamera-v0-7-2-rpt20260817-released-stability-improvements-to-the-title">
+
+      <span id="issue-briefing-title" data-legacy-target="article-raspberry-pi-libcamera-v0-7-2-rpt20260817-released-stability-improvements-to-the" tabindex="-1"></span><section class="section issue-story issue-section article-card story-article has-image" id="article-raspberry-pi-libcamera-v0-7-2-rpt20260817-released-stability-improvements-to-the" tabindex="-1" aria-labelledby="article-raspberry-pi-libcamera-v0-7-2-rpt20260817-released-stability-improvements-to-the-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
           <span class="issue-story-category">Camera Driver · ISP</span>
         </div>
         <h2 id="article-raspberry-pi-libcamera-v0-7-2-rpt20260817-released-stability-improvements-to-the-title" class="article-title">Raspberry Pi libcamera v0.7.2+rpt20260817 released: stability improvements to the Linux camera driver stack and what HAL engineers should note</h2>
         <p class="article-source-subtitle">Official Raspberry Pi libcamera release</p>
-        <figure class="article-media">
+        <p class="article-lead">On August 17, 2026, Raspberry Pi&#39;s downstream libcamera library was officially updated to version v0.7.2+rpt20260817. This release focuses on strengthening the stability and efficiency of Linux-based camera pipelines, and offers technical inspiration to engineers developing Android Camera HALs and lower-level drivers.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>There is no direct Android Camera HAL API contract change, but platforms that use a V4L2/libcamera-based lower driver stack can benchmark the exception handling in frame timing control and format negotiation logic to maximize the stability of buffer lifecycle management between the driver and the ISP.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
         <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Raspberry Pi libcamera v0.7.2+rpt20260817 released: stability improvements to the Linux camera driver stack and what HAL engineers should note image" loading="lazy" decoding="async">
         </figure>
-        <p class="article-lead">On August 17, 2026, Raspberry Pi&#39;s downstream libcamera library was officially updated to version v0.7.2+rpt20260817. This release focuses on strengthening the stability and efficiency of Linux-based camera pipelines, and offers technical inspiration to engineers developing Android Camera HALs and lower-level drivers.</p>
         <p>Raspberry Pi&#39;s libcamera v0.7.2+rpt20260817 release is the latest downstream stabilization version of libcamera, the core framework of the Linux camera subsystem. libcamera is a framework developed to resolve the complexity of the legacy V4L2 interface and to efficiently control modern ISPs and multi-stream configurations, and its importance in embedded and mobile camera stacks keeps growing.</p>
         <p>This update focuses on substantially improving the stability of the interaction between Raspberry Pi platform-specific drivers, ISP control logic, and applications. In particular, the exception-handling routines in frame timing control and format negotiation were reinforced, further raising reliability in continuous frame capture environments.</p>
         <p>From an Android Camera HAL engineer&#39;s perspective, this change does not mean a direct change to the AOSP framework. However, the stream configuration and buffer lifecycle management model adopted by libcamera shares a structural philosophy with the Android Camera HAL3 architecture. Their optimization techniques for resolving bottlenecks in the lower driver layer and maximizing data transfer efficiency with the ISP therefore serve as very useful benchmark material when developing custom Android platforms.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>There is no direct Android Camera HAL API contract change, but platforms that use a V4L2/libcamera-based lower driver stack can benchmark the exception handling in frame timing control and format negotiation logic to maximize the stability of buffer lifecycle management between the driver and the ISP.</p></div>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817">Raspberry Pi libcamera Releases - v0.7.2+rpt20260817</a></li></ul></div>
       </section>
 
@@ -108,7 +104,7 @@
           <span class="footer-col-title">Topics</span>
           <span class="footer-note">Camera HAL · Android</span>
           <span class="footer-note">Driver · Image Processing</span>
-          <span class="footer-note">AI · SoC Platform</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
         </div>
         <div class="footer-col">
           <span class="footer-col-title">Resources</span>

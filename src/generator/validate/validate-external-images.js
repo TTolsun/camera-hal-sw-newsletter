@@ -50,6 +50,17 @@ function shouldLiveValidate(date, strictDates) {
   return strictDates.has(date);
 }
 
+// A migrated archive can reference the same URL in many HTML and Markdown files. Probe each
+// exact URL once per invocation, retaining failed results too so every reference still fails.
+// The cache never persists between runs and does not normalize paths or query strings.
+function createLiveImageValidator(validate = validateImageUrl) {
+  const results = new Map();
+  return url => {
+    if (!results.has(url)) results.set(url, validate(url, { timeoutMs: 8000, attempts: 2, backoffMs: 500 }));
+    return results.get(url);
+  };
+}
+
 // 이미지 감사 리포트 부재를 차단할 날짜 집합이다. 공개 산출물이 커밋(변경 집합)에 들어온 날짜만
 // "감사가 돌았어야 하는 주"로 본다. 이는 감사 스텝을 무장시키는 public_newsletter_ready와 같은
 // 층의 구조 조건이며, 순서 때문에 필요하다. 워크플로 03에서 validate:images는 감사 스텝보다 먼저
@@ -306,6 +317,7 @@ async function main() {
   const strictDates = strictTargetDatesFromInputs({ changedFiles, newsletterDate });
   const generatedDates = generatedTargetDatesFromInputs({ changedEntries, newsletterDate });
   const committedPublicDates = changedPublicNewsletterDates(changedFiles);
+  const validateLiveImage = createLiveImageValidator();
   const images = [];
   for (const item of newsletterItems()) {
     fallbackWarningsFromEditor(item.date, readEditor(item.date));
@@ -359,11 +371,7 @@ async function main() {
     // 외부 이미지만 live fetch해, 외부 호스트 link rot이 무관한 PR을 막거나 느리게 하지 않게 한다.
     if (!shouldLiveValidate(image.date, strictDates)) continue;
 
-    const result = await validateImageUrl(image.src, {
-      timeoutMs: 8000,
-      attempts: 2,
-      backoffMs: 500
-    });
+    const result = await validateLiveImage(image.src);
     if (!result.ok) {
       fail([
         `External article image failed live validation: ${image.relPath}`,
@@ -402,4 +410,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { changedPublicNewsletterDates, resolveLocalImage, shouldLiveValidate };
+module.exports = { changedPublicNewsletterDates, resolveLocalImage, shouldLiveValidate, createLiveImageValidator };

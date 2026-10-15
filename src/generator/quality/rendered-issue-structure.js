@@ -100,6 +100,13 @@ function briefingSection(markdown) {
   return markdownSection(markdown, /^##\s+1\.\s+.+$/m);
 }
 
+// Migrated daily pages have one navigation entry per preserved article, rather than a fixed
+// three-line editorial briefing. All existing briefing formats keep their original count rule.
+function issueHighlightsCount(markdown) {
+  const heading = String(markdown).match(/^## 1\. (.+)$/m)?.[1];
+  return [koLocale.issueCore, enLocale.issueCore].includes(heading) ? mainArticleBlocks(markdown).length : null;
+}
+
 function hasReferencesSection(markdown) {
   const referencesLabelPattern = ['References', '참고자료', LEGACY_REFERENCES_LABEL].map(escapeRegExp).join('|');
   return new RegExp(`^##\\s+(${referencesLabelPattern})\\s*$`, 'm').test(markdown);
@@ -113,6 +120,8 @@ function hasReferencesSection(markdown) {
 const NON_ARTICLE_NUMBERED_TITLES = new Set([
   koLocale.weeklyCore,
   enLocale.weeklyCore,
+  koLocale.issueCore,
+  enLocale.issueCore,
   // 렌더러가 `## 1.`로 찍는 브리핑(newsletter-renderer.js briefingHeading).
   koLocale.briefing,
   koLocale.weeklyBriefing,
@@ -302,6 +311,8 @@ function validateNewsletterIndex(root, relativePath, errors) {
 // (TODO 금지, 참고자료 섹션, 출처 heading, 출처 항목)은 주간호에도 그대로 유효하므로 남긴다.
 function validateMarkdownStructure(date, markdown, errors, { briefingBulletCount = 3 } = {}) {
   const content = String(markdown || '');
+  const highlightsCount = issueHighlightsCount(content);
+  if (highlightsCount !== null) briefingBulletCount = highlightsCount;
   if (/\bTODO\b/.test(content)) {
     errors.push(`Published newsletter contains TODO: newsletters/${date}/newsletter.md`);
   }
@@ -313,6 +324,13 @@ function validateMarkdownStructure(date, markdown, errors, { briefingBulletCount
     const briefingBullets = briefing
       .split('\n')
       .filter(line => /^- /.test(line.trim()));
+    if (highlightsCount !== null) {
+      const anchors = [...content.matchAll(/^<a id="(article-[^"]+)"><\/a>$/gm)].map(match => match[1]);
+      const targets = briefingBullets.map(line => line.match(/\]\(#([^)]+)\)/)?.[1]);
+      if (targets.some(target => !target || !anchors.includes(target)) || new Set(targets).size !== targets.length) {
+        errors.push(`Newsletter ${date} issue highlights must link distinct preserved article anchors`);
+      }
+    }
     if (briefingBulletCount === null) {
       if (briefingBullets.length === 0) {
         errors.push(`Newsletter ${date} briefing section has no bullets`);
@@ -555,6 +573,7 @@ module.exports = {
   validateArticleImages,
   newsletterIndexContractVersion,
   mainArticleBlocks,
+  issueHighlightsCount,
   sourceBlock,
   validateRenderedIssueStructure
 };

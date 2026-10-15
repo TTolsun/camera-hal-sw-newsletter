@@ -7,7 +7,8 @@ const path = require('path');
 const {
   changedPublicNewsletterDates,
   resolveLocalImage,
-  shouldLiveValidate
+  shouldLiveValidate,
+  createLiveImageValidator
 } = require('../../../validate/validate-external-images');
 
 // 회귀: resolveLocalImage가 서빙 URL relPath(newsletters/<date>/...)를 repo root 기준으로 풀어
@@ -67,4 +68,37 @@ test('changedPublicNewsletterDates ignores non-public artifacts of the same date
     'src/generator/validate/validate-external-images.js'
   ]);
   assert.deepEqual([...dates], []);
+});
+
+test('duplicate live image references share one probe with the existing timeout and retry policy', async () => {
+  let calls = 0;
+  const expected = { ok: true, status: 200, contentType: 'image/png', contentLength: 2048 };
+  const validate = createLiveImageValidator(async (url, options) => {
+    calls++;
+    assert.equal(url, 'https://example.com/article.png');
+    assert.deepEqual(options, { timeoutMs: 8000, attempts: 2, backoffMs: 500 });
+    return expected;
+  });
+  const [html, markdown] = await Promise.all([validate('https://example.com/article.png'), validate('https://example.com/article.png')]);
+  assert.equal(calls, 1);
+  assert.equal(html, expected);
+  assert.equal(markdown, expected);
+});
+
+test('a failed live probe remains failed for every duplicate image reference', async () => {
+  let calls = 0;
+  const expected = { ok: false, status: 404, reason: 'HTTP 404' };
+  const validate = createLiveImageValidator(async () => { calls++; return expected; });
+  assert.equal(await validate('https://example.com/missing.png'), expected);
+  assert.equal(await validate('https://example.com/missing.png'), expected);
+  assert.equal(calls, 1);
+});
+
+test('live image result reuse never crosses invocations or normalizes distinct URLs', async () => {
+  const urls = [];
+  const probe = async url => { urls.push(url); return { ok: true }; };
+  const first = createLiveImageValidator(probe);
+  for (const url of ['https://example.com/A.png', 'https://example.com/a.png', 'https://example.com/a.png?size=1', 'https://example.com/a.png?size=2']) await first(url);
+  await createLiveImageValidator(probe)('https://example.com/A.png');
+  assert.equal(urls.length, 5);
 });

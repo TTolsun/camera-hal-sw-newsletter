@@ -46,6 +46,11 @@ test('a combined bucket article without the flag keeps the earlier AI classifica
   assert.deepEqual(weeklyTopicTags([article('cpp_ai_tooling_fallback')]), ['AI']);
 });
 
+test('legacy combined-bucket articles with an explicit C++ toolchain title remain searchable as C++', () => {
+  assert.deepEqual(weeklyTopicTags([article('cpp_ai_tooling_fallback', { headline: 'GCC 16 C++26 diagnostics' })]), ['C++']);
+  assert.deepEqual(weeklyTopicTags([article('cpp_ai_tooling_fallback', { headline: 'Clang AI assistant', is_ai_related: true })]), ['AI']);
+});
+
 test('the watchlist bucket, an empty bucket and an unknown bucket add no topic', () => {
   assert.deepEqual(weeklyTopicTags([article('generic_tech_watchlist'), article(''), article('주간 다이제스트')]), []);
 });

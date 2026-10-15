@@ -329,8 +329,8 @@ test('archive page filters by topic, updates aria-pressed, and changes sort orde
   assert.match(html, /Older Android issue/);
   assert.doesNotMatch(html, /Camera issue/);
   assert.match(rendered.elements['[data-topic-filter]'].innerHTML, /data-archive-topic="android" aria-pressed="true"/);
-  assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 아카이브를 최신순으로 표시 중입니다/);
-  assert.equal(rendered.elements['[data-archive-count]'].textContent, '2/3호');
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 기사를 최신순으로 표시 중입니다/);
+  assert.equal(rendered.elements['[data-archive-count]'].textContent, '2건의 기사');
   assert.equal(rendered.elements['[data-archive-topic-label]'].textContent, 'Android');
   assert.equal(rendered.elements['[data-archive-sort-label]'].textContent, '최신순');
   assert.equal(rendered.elements['[data-archive-pagination]'].hidden, true);
@@ -339,8 +339,26 @@ test('archive page filters by topic, updates aria-pressed, and changes sort orde
   sortHandler();
   html = rendered.elements['[data-archive-grid]'].innerHTML;
   assert.ok(html.indexOf('Older Android issue') < html.indexOf('Newer Android issue'));
-  assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 아카이브를 오래된순으로 표시 중입니다/);
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 기사를 오래된순으로 표시 중입니다/);
   assert.equal(rendered.elements['[data-archive-sort-label]'].textContent, '오래된순');
+});
+
+test('topic pagination counts matching articles and retains each own thumbnail and anchor', async () => {
+  const entry = { weeklyKey: '2026-W42', date: '2026-10-12', title: 'Synthetic weekly issue',
+    html: 'newsletters/2026-W42/index.html', tags: ['AI', 'Driver'],
+    reader_brief: { schema_version: 1, locale: 'ko', intro: '', items: Array.from({ length: 14 }, (_, index) => ({
+      id: `story-${index}`, href: `newsletters/2026-W42/index.html#article-${index}`,
+      headline: index === 0 ? 'Unrelated AI lead' : `Driver article ${index}`, lead: '', takeaway: '',
+      tags: [index === 0 ? 'AI' : 'Driver'], image: { src: `https://example.com/image-${index}.png`, alt: `Article ${index} image`, is_fallback: false }
+    })) } };
+  const { elements, location } = await renderArchivePage([entry], { search: '?topic=driver&page=2' });
+  const html = elements['[data-archive-grid]'].innerHTML;
+  assert.equal(archiveCards(html).length, 1);
+  assert.match(html, /Driver article 13|#article-13|image-13\.png/);
+  assert.doesNotMatch(html, /Unrelated AI lead|image-0\.png/);
+  assert.equal(elements['[data-archive-count]'].textContent, '13건의 기사');
+  assert.match(elements['[data-topic-filter]'].innerHTML, /data-archive-topic="driver"[^>]*>.*?archive-topic-count">13</);
+  assert.equal(location.search, '?topic=driver&page=2');
 });
 
 test('archive page clamps stale page URLs and resets page when filters change', async () => {
@@ -360,7 +378,7 @@ test('archive page clamps stale page URLs and resets page when filters change', 
   topicHandler({ target: createTopicTarget('android') });
 
   assert.equal(rendered.location.search, '?topic=android');
-  assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 아카이브를 최신순으로 표시 중입니다/);
+  assert.match(rendered.elements['[data-result-summary]'].textContent, /Android 2개 기사를 최신순으로 표시 중입니다/);
   assert.equal(rendered.elements['[data-archive-pagination]'].hidden, true);
 });
 
@@ -389,7 +407,7 @@ test('archive page shows no-result state for direct topic URL with no matches', 
   assert.equal(elements['[data-empty-state]'].hidden, false);
   assert.equal(elements['[data-archive-pagination]'].hidden, true);
   assert.match(elements['[data-result-summary]'].textContent, /SoC Platform 결과가 없습니다/);
-  assert.equal(elements['[data-archive-count]'].textContent, '0/1호');
+  assert.equal(elements['[data-archive-count]'].textContent, '0건의 기사');
   assert.match(elements['[data-topic-filter]'].innerHTML, /data-archive-topic="soc-platform" aria-pressed="true" disabled aria-disabled="true"/);
 });
 

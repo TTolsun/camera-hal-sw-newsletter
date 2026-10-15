@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "format": "published-html-projection",
+  "daily": true,
+  "provenance": [
+    {
+      "path": "articles/newsletters/2026-05-15/index.html",
+      "hash": "sha256:f22e81f9559928300031f52769574fa68f678214da63bd4ebf7b398920862d84"
+    },
+    {
+      "path": "articles/newsletters/2026-05-15/newsletter.md",
+      "hash": "sha256:67868c771b9fab510585fc839c220112717cc871d52bdc2ad2436646fdc088b2"
+    }
+  ],
+  "articles": [
+    {
+      "anchor": "article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-",
+      "subtitle": "",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Camera HAL native code는 build flag, sanitizer, LTO/PGO, warning policy 같은 toolchain 설정에 민감합니다. GCC 16 benchmark는 compiler optimization 동향을 보여주지만, Android product branch에 바로 GCC를 적용하거나 HAL runtime 성능 개선을 주장할 근거는 아닙니다."
+        },
+        {
+          "type": "paragraph",
+          "text": "실무적으로는 Clang/LLVM 쪽 equivalent feature와 Android platform toolchain 정책을 함께 비교하는 정도가 적절합니다. host-side utility나 offline analysis tool이 GCC를 쓰는 경우에만 별도 benchmark를 열 수 있습니다."
+        },
+        {
+          "type": "subheading",
+          "text": "확인할 점",
+          "origin": "published-markdown"
+        },
+        {
+          "type": "bullet",
+          "text": "현재 Android branch의 Clang/LLVM version, C++ standard flag, sanitizer 설정을 확인합니다.",
+          "origin": "published-markdown"
+        },
+        {
+          "type": "bullet",
+          "text": "GCC 16 성능 결과를 product HAL 성능 개선 근거로 쓰지 않습니다.",
+          "origin": "published-markdown"
+        },
+        {
+          "type": "bullet",
+          "text": "host-side tool이나 standalone benchmark가 GCC를 쓰는 경우에만 별도 비교를 진행합니다.",
+          "origin": "published-markdown"
+        }
+      ],
+      "markdownHeading": "## 2. Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+      "perspectiveHeading": "Android Native / Tooling 관점"
+    }
+  ],
+  "noticeLines": [
+    "Tooling Watch Edition: C++ / Tooling Watch",
+    "이번 호는 Camera HAL / Driver / Android multimedia 직접 후보가 부족하여 C++/tooling 중심의 참고 issue로 발행되었습니다.",
+    "Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다."
+  ],
+  "reading": [],
+  "sourceLists": {
+    "articles": [
+      [
+        [
+          {
+            "type": "link",
+            "text": "GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+            "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22"
+          }
+        ]
+      ]
+    ],
+    "references": [
+      [
+        {
+          "type": "link",
+          "text": "GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+          "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22"
+        }
+      ]
+    ]
+  },
+  "issue": {
+    "date": "2026-05-15",
+    "title": "Camera HAL / SW Newsletter - 2026-05-15",
+    "summary": "이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+    "tags": [
+      "Tooling Watch Edition",
+      "Tooling Watch",
+      "Android"
+    ],
+    "briefing": [
+      "GCC 16 성능 비교 소식은 C++ compiler optimization과 binary performance를 관찰할 tooling 신호입니다. Android Camera HAL은 주로 Clang/LLVM 기반이므로 이 항목은 즉시 적용 변경이 아니라 장기 toolchain 비교 자료로 읽어야 합니다.",
+      "이 항목은 Camera HAL runtime 변경이 아니라 native tooling watch입니다. HAL 팀은 Android branch의 Clang/LLVM 정책을 기준으로 보고, host utility 또는 benchmark 환경에서만 제한적으로 비교해야 합니다.",
+      "현재 Android branch의 Clang/LLVM version, C++ standard flag, sanitizer 설정을 확인하는 것부터 보면 기사 내용을 실제 검증 작업으로 옮기기 쉽습니다."
+    ],
+    "sections": [
+      {
+        "id": "article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-",
+        "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+        "sources": [
+          {
+            "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+            "title": "GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22"
+          }
+        ],
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "is_ai_related": false,
+        "selectedImage": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
+        "imageAlt": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+        "imageSource": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+        "imageAttribution": "Phoronix Linux Camera / Media",
+        "public_article": {
+          "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+          "lead": "GCC 16 성능 비교 소식은 C++ compiler optimization과 binary performance를 관찰할 tooling 신호입니다. Android Camera HAL은 주로 Clang/LLVM 기반이므로 이 항목은 즉시 적용 변경이 아니라 장기 toolchain 비교 자료로 읽어야 합니다.",
+          "camera_hal_takeaway": "이 항목은 Camera HAL runtime 변경이 아니라 native tooling watch입니다. HAL 팀은 Android branch의 Clang/LLVM 정책을 기준으로 보고, host utility 또는 benchmark 환경에서만 제한적으로 비교해야 합니다.",
+          "body_paragraphs": [
+            "Camera HAL native code는 build flag, sanitizer, LTO/PGO, warning policy 같은 toolchain 설정에 민감합니다. GCC 16 benchmark는 compiler optimization 동향을 보여주지만, Android product branch에 바로 GCC를 적용하거나 HAL runtime 성능 개선을 주장할 근거는 아닙니다.",
+            "실무적으로는 Clang/LLVM 쪽 equivalent feature와 Android platform toolchain 정책을 함께 비교하는 정도가 적절합니다. host-side utility나 offline analysis tool이 GCC를 쓰는 경우에만 별도 benchmark를 열 수 있습니다."
+          ],
+          "source_links": [
+            {
+              "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+              "title": "GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22"
+            }
+          ]
+        }
+      }
+    ],
+    "references": [
+      {
+        "url": "https://www.phoronix.com/review/gcc-16-vs-clang-22",
+        "title": "GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22"
+      }
+    ],
+    "reference_articles": []
+  }
+}

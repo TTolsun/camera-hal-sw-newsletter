@@ -1,23 +1,41 @@
 # 2026 W23 (06.01 ~ 06.07)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. This week’s highlights
+
 This week covers ‘CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied’ and ‘Google I/O '26: CameraXViewfinder Composable Announced, Built on Jetpack CameraX and Media3’.
 
+- [CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied](#article-camerax-1-6-0-stable-release-use-case-pre-query-api-introduced-and-numerous-devi)
+
+  This release carries significant implications for Camera HAL development teams. With an API now introduced at the upper framework layer to query use-case combination support in advance, the accuracy of the CameraCharacteristics and isStreamCombinationSupported interfaces declared at the HAL level is held to a stricter standard. Also, since instability at the HAL/driver layer, such as the Z Fold 4 YUV distortion and the A53 torch-linked capture failure, is being forcibly worked around (Exclude/Filter) in upper libraries, vendors should re-verify the stream combination reliability and buffer handling logic of their own devices.
+
+- [Google I/O '26: CameraXViewfinder Composable Announced, Built on Jetpack CameraX and Media3](#article-google-i-o-26-cameraxviewfinder-composable-announced-built-on-jetpack-camerax-an)
+
+  This change does not involve a direct interface change to the Camera HAL, but it shows how the framework and app layers consume and render the streams (Preview, ImageCapture) that the HAL provides. It suggests that the HAL must supply buffers reliably, without frame drops, in response to Surface reconfiguration and stream reconfiguration requests that may occur when a foldable device's screen changes.
 
 
-## 1. This week’s articles
 
-- CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied
-- Google I/O '26: CameraXViewfinder Composable Announced, Built on Jetpack CameraX and Media3
+
+<a id="article-camerax-1-6-0-stable-release-use-case-pre-query-api-introduced-and-numerous-devi"></a>
 
 ## 2. CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied
+
+CameraX 1.6.0 Release Notes (March 25, 2026)
+
+### Camera HAL/Driver perspective: what it means
+
+This release carries significant implications for Camera HAL development teams. With an API now introduced at the upper framework layer to query use-case combination support in advance, the accuracy of the CameraCharacteristics and isStreamCombinationSupported interfaces declared at the HAL level is held to a stricter standard. Also, since instability at the HAL/driver layer, such as the Z Fold 4 YUV distortion and the A53 torch-linked capture failure, is being forcibly worked around (Exclude/Filter) in upper libraries, vendors should re-verify the stream combination reliability and buffer handling logic of their own devices.
 
 
 ![CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied image](https://developer.android.com/static/images/social/android-developers.png?hl=bn)
 
 _Image: [CameraX Release Notes](https://developer.android.com/jetpack/androidx/releases/camera)_
 
-
-CameraX 1.6.0 Release Notes (March 25, 2026)
 
 The CameraX 1.6.0 release, officially announced on March 25, 2026, introduces a powerful feature combination query API that lets apps check in advance whether the device hardware supports a configuration before binding to the camera lifecycle. Alongside it, a crash fix for the upcoming Android 17 and numerous compatibility patches were applied that work around YUV stream distortion and flash-linked capture failures reported on specific devices such as the Samsung Z Fold 4 and A53.
 
@@ -29,9 +47,7 @@ Numerous compatibility patches addressing device-specific hardware characteristi
 
 In addition, numerous detailed fixes were made to improve the stability of the downstream image processing pipeline, such as fixing images coming out dark due to underexposure when using the flash on the ultra-wide camera, and updating the ExifInterface library dependency to fix image parsing failures caused by some devices' JPEG encoders adding 0xFF padding bytes before markers.
 
-### Camera HAL/Driver perspective: what it means
-
-This release carries significant implications for Camera HAL development teams. With an API now introduced at the upper framework layer to query use-case combination support in advance, the accuracy of the CameraCharacteristics and isStreamCombinationSupported interfaces declared at the HAL level is held to a stricter standard. Also, since instability at the HAL/driver layer, such as the Z Fold 4 YUV distortion and the A53 torch-linked capture failure, is being forcibly worked around (Exclude/Filter) in upper libraries, vendors should re-verify the stream combination reliability and buffer handling logic of their own devices.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -39,7 +55,17 @@ This release carries significant implications for Camera HAL development teams. 
 
 ---
 
+<a id="article-google-i-o-26-cameraxviewfinder-composable-announced-built-on-jetpack-camerax-an"></a>
+
 ## 3. Google I/O '26: CameraXViewfinder Composable Announced, Built on Jetpack CameraX and Media3
+
+_Building High-Quality Android Media Experiences with Jetpack CameraX and Media3_
+
+At Google I/O '26, the CameraXViewfinder Composable was announced, using Jetpack CameraX and Media3 to provide a camera preview that responds flexibly across diverse form factors such as foldables and tablets.
+
+### Camera HAL/Driver perspective: what it means
+
+This change does not involve a direct interface change to the Camera HAL, but it shows how the framework and app layers consume and render the streams (Preview, ImageCapture) that the HAL provides. It suggests that the HAL must supply buffers reliably, without frame drops, in response to Surface reconfiguration and stream reconfiguration requests that may occur when a foldable device's screen changes.
 
 
 ![Google I/O '26 Android Developers session thumbnail](https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20609)
@@ -47,19 +73,13 @@ This release carries significant implications for Camera HAL development teams. 
 _Image: [Android Developers Blog](https://android-developers.googleblog.com/)_
 
 
-_Building High-Quality Android Media Experiences with Jetpack CameraX and Media3_
-
-At Google I/O '26, the CameraXViewfinder Composable was announced, using Jetpack CameraX and Media3 to provide a camera preview that responds flexibly across diverse form factors such as foldables and tablets.
-
 As the Android ecosystem evolves into a platform that supports a high-quality media lifecycle, Google presented a toolkit to simplify the development journey from first capture to final playback. The core of this Google I/O '26 announcement is the tight integration of Jetpack CameraX and Media3.
 
 The newly introduced CameraXViewfinder Composable helps implement camera preview easily in Jetpack Compose, a declarative UI framework. In particular, it provides a viewfinder that scales and responds seamlessly to layout changes on foldable devices whose screen size changes dynamically and on large-screen tablets.
 
 This toolkit is designed so that application developers can build native-level, high-quality camera and playback experiences without complex Surface lifecycle management or aspect ratio calculations. This is expected to significantly shorten the app development process.
 
-### Camera HAL/Driver perspective: what it means
-
-This change does not involve a direct interface change to the Camera HAL, but it shows how the framework and app layers consume and render the streams (Preview, ImageCapture) that the HAL provides. It suggests that the HAL must supply buffers reliably, without frame drops, in response to Surface reconfiguration and stream reconfiguration requests that may occur when a foldable device's screen changes.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 

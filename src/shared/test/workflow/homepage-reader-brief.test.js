@@ -232,3 +232,46 @@ test('card image failures retain their frame and use a decorative local fallback
     assert.ok(archive.renderArchiveCard(entry, { locale, rootPath }).includes(`src="${rootPath}assets/images/fallback/android.svg" alt=""`));
   }
 });
+
+test('topic cards select the matching article title, image and anchor together instead of the issue lead', () => {
+  for (const locale of ['ko', 'en']) {
+    const { entry, brief } = sample(locale);
+    const before = JSON.stringify(entry);
+    const cards = archive.cardEntries([entry], { topic: 'ai' }, locale);
+    assert.equal(cards.length, 1);
+    const html = archive.renderArchiveCard(cards[0], { locale, rootPath: locale === 'en' ? '../' : '' });
+    assert.match(html, /Tool B<\/h3>/);
+    assert.match(html, /b\.jpg" alt="Tool B image"/);
+    assert.ok(html.includes(brief.items[1].href));
+    assert.doesNotMatch(html, /Proposal A|#article-a|총 2건|2 articles/);
+    assert.equal(JSON.stringify(entry), before);
+    assert.equal(archive.cardEntries([entry], { topic: 'all' }, locale)[0], entry);
+  }
+});
+
+test('a topic emits every matching article with distinct identities even when headlines repeat', () => {
+  const { entry, brief } = sample();
+  brief.items[0].tags = ['AI'];
+  brief.items[0].headline = brief.items[1].headline;
+  const cards = archive.cardEntries([entry], { topic: 'ai' });
+  assert.equal(cards.length, 2);
+  assert.notEqual(cards[0].display_article_id, cards[1].display_article_id);
+  assert.match(archive.renderArchiveCard(cards[0]), /#article-a/);
+  assert.match(archive.renderArchiveCard(cards[1]), /#article-b/);
+});
+
+test('missing or malformed weekly article data cannot substitute an unrelated lead card for a topic', () => {
+  const { entry } = sample();
+  delete entry.reader_brief;
+  assert.deepEqual(archive.cardEntries([entry], { topic: 'ai' }), []);
+  assert.equal(archive.renderArchiveCard({ ...entry, display_article_id: 'javascript:wrong' }), '');
+});
+
+test('untranslated article topic results retain their Korean identity and explicit language label', () => {
+  const { entry } = sample();
+  const cards = archive.cardEntries([entry], { topic: 'ai' }, 'en');
+  const html = archive.renderArchiveCard(cards[0], { locale: 'en', rootPath: '../' });
+  assert.match(html, /Korean only/);
+  assert.match(html, /href="\.\.\/newsletters\/2026-W42\/index.html#article-b"/);
+  assert.match(html, /<h3[^>]*lang="ko"[^>]*>Tool B/);
+});

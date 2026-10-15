@@ -4,6 +4,7 @@ const { isFallbackImagePath } = require('../../shared/render/image-candidates');
 const { publicArticleForSection } = require('../reporter/public-article-contract');
 const { uniqueArticleAnchorId } = require('../reporter/article-anchor');
 const { sectionIdentity } = require('../reporter/weekly-duplicate-merge');
+const CATEGORY_LABELS = { ko: require('./locale/ko').categories, en: require('./locale/en').categories };
 
 function localizedImagePath(value, locale = 'ko') {
   return locale === 'en' && /^\.\.\/\.\.\//.test(value) ? `../${value}` : value;
@@ -91,7 +92,8 @@ function titleMatches(section, patterns) {
 function articleTopicTags(section) {
   const bucket = canonicalBucket(sectionRelevanceBucket(section));
   if (bucket === 'android' && section.counts_as_soc_topic === true) return ['SoC Platform'];
-  if (bucket === 'cpp_ai_tooling_fallback') return section.is_ai_related === false ? ['C++'] : ['AI'];
+  if (bucket === 'cpp_ai_tooling_fallback') return section.is_ai_related === false ||
+    (section.is_ai_related !== true && titleMatches(section, CPP_TITLE_PATTERNS)) ? ['C++'] : ['AI'];
   if (bucket === 'camera_driver_image_pipeline' && titleMatches(section, SOC_CAMERA_BLOCK_TITLE_PATTERNS)) {
     return [...BUCKET_TOPIC_TAGS[bucket], 'SoC Platform'];
   }
@@ -108,12 +110,27 @@ function weeklyTopicTags(sections = []) {
   return [...new Set(ensureArray(sections).flatMap(articleTopicTags))];
 }
 
-function orderedArticleSections(issue) {
+// Public article labels describe the topic, not editorial status or a mixed internal bucket.
+// This projection does not change stored buckets, archive filter tags, or selection eligibility.
+function articleCategoryLabel(section = {}, { locale = 'ko' } = {}) {
+  const labels = CATEGORY_LABELS[locale === 'en' ? 'en' : 'ko'];
+  const raw = sectionRelevanceBucket(section) || String(section.article_type || '').trim();
+  const bucket = canonicalBucket(raw);
+  const cpp = titleMatches(section, CPP_TITLE_PATTERNS);
+  if (bucket === 'cpp_ai_tooling_fallback') {
+    return section.is_ai_related === false || (section.is_ai_related !== true && cpp) ? 'C++' : 'AI Tooling';
+  }
+  if ((bucket === 'generic_tech_watchlist' || !bucket) && section.is_ai_related !== true && cpp) return 'C++';
+  if (!bucket && titleMatches(section, SOC_CAMERA_BLOCK_TITLE_PATTERNS)) return labels.camera_driver_image_pipeline;
+  return labels[raw] || labels[bucket] || 'Camera';
+}
+
+function orderedArticleSections(issue, { archive } = {}) {
   const usedAnchors = new Set();
   const ordered = ensureArray(issue.sections)
     .map((section, originalIndex) => ({ section, originalIndex }))
     .sort((a, b) => {
-      if (issue.weekly_key) return a.originalIndex - b.originalIndex;
+      if (issue.weekly_key || archive) return a.originalIndex - b.originalIndex;
       const aCatch = a.section.coverage_type === 'catch_up' ? 1 : 0;
       const bCatch = b.section.coverage_type === 'catch_up' ? 1 : 0;
       return aCatch - bCatch || compareEditorialPriority(a.section, b.section) || a.originalIndex - b.originalIndex;
@@ -121,18 +138,19 @@ function orderedArticleSections(issue) {
   return ordered.map(({ section }, index) => {
     const publicArticle = publicArticleForSection(section, { issue });
     const category = publicArticle.headline || `Main Article ${index + 1}`;
-    return { section, publicArticle, category, anchorId: uniqueArticleAnchorId(category, index, usedAnchors), articleNumber: index + 1 };
+    const anchorId = archive?.articles?.[index]?.anchor || uniqueArticleAnchorId(category, index, usedAnchors);
+    return { section, publicArticle, category, anchorId, articleNumber: index + 1 };
   });
 }
 
 // Public projection only: input already carries final order and locale prose.
-function articleDisplayRows(issue, { locale = 'ko', issueHref } = {}) {
+function articleDisplayRows(issue, { locale = 'ko', issueHref, archive } = {}) {
   if (!['ko', 'en'].includes(locale)) throw new Error(`Unsupported locale: ${locale}`);
   const prefix = locale === 'en' ? 'en/' : '';
   if (typeof issueHref !== 'string' || !new RegExp(`^${prefix}newsletters/[0-9]{4}-(?:W[0-9]{2}|[0-9]{2}-[0-9]{2})/index\\.html$`).test(issueHref)) {
     throw new Error('Invalid relative issueHref');
   }
-  return orderedArticleSections(issue).map(({ section, publicArticle, anchorId }) => {
+  return orderedArticleSections(issue, { archive }).map(({ section, publicArticle, anchorId }) => {
     const resolved = resolvedArticleImage(section, locale);
     let src = resolved?.src || '';
     if (src.startsWith('assets/')) {
@@ -153,7 +171,10 @@ function articleDisplayRows(issue, { locale = 'ko', issueHref } = {}) {
       id: section.id !== undefined ? section.id : sectionIdentity(section),
       href: `${issueHref}#${anchorId}`,
       headline: publicArticle.headline,
-      lead: publicArticle.lead,
+      lead: archive && [publicArticle.headline, ''].includes(publicArticle.lead) &&
+        [publicArticle.headline, ''].includes(publicArticle.camera_hal_takeaway)
+        ? archive.articles?.[issue.sections.indexOf(section)]?.blocks.find(block => block.type === 'paragraph')?.text || publicArticle.lead
+        : publicArticle.lead,
       takeaway: publicArticle.camera_hal_takeaway,
       tags: [...articleTopicTags(section)],
       image: src ? { src, alt: fallback ? '' : section.imageAlt || `${publicArticle.headline || section.headline || 'Article'} image`, is_fallback: fallback } : null
@@ -161,4 +182,4 @@ function articleDisplayRows(issue, { locale = 'ko', issueHref } = {}) {
   });
 }
 
-module.exports = { articleDisplayRows, orderedArticleSections, resolvedArticleImage, sectionRelevanceBucket, weeklyTopicTags };
+module.exports = { articleCategoryLabel, articleDisplayRows, orderedArticleSections, resolvedArticleImage, sectionRelevanceBucket, weeklyTopicTags };

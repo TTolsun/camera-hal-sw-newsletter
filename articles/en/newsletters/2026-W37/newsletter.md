@@ -1,26 +1,53 @@
 # 2026 W36 (08.31 ~ 09.06)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. This week’s highlights
+
 This week covers 5 stories, including ‘Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver’ and ‘Qualcomm x1e/Hamoa platform camera DTS support patch v6 posted’.
 
+- [Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver](#article-linux-kernel-patch-v6-posted-to-support-the-omnivision-og0va1b-monochrome-vga-se)
+
+  There is no direct Android Camera HAL change, but because a 10-bit monochrome RAW (Y10) format is added at the lower V4L2 driver level, when implementing HAL3 you should check that the Y10 format is correctly defined in the RAW stream configuration and the ISP pixel format mapping table.
+
+- [Qualcomm x1e/Hamoa platform camera DTS support patch v6 posted](#article-qualcomm-x1e-hamoa-platform-camera-dts-support-patch-v6-posted)
+
+  There is no direct HAL change, but the data lane alignment and power supply changes directly affect the physical connection stability of the camera subsystem. Lower-stack verification should be done first so that MIPI CSI-2 receiver initialization errors or power-on failures do not occur at the driver level.
+
+- [Linux kernel patch v7 posted for Lenovo Yoga Book YB1-X91 camera support](#article-linux-kernel-patch-v7-posted-for-lenovo-yoga-book-yb1-x91-camera-support)
+
+  There is no direct HAL change, but because the OV2740's manual white balance and the OV8858's gain control are exposed as V4L2 controls, you should verify that Camera HAL3 3A metadata control requests are accurately mapped to the kernel driver's V4L2 controls and work correctly.
+
+- [libcamera control storage union naming patch v3 accepted](#article-libcamera-control-storage-union-naming-patch-v3-accepted)
+
+  This part by itself is a step that tidies up the storage representation, so it does not change HAL runtime behavior. However, projects that customize the libcamera source and integrate it into the lower layers of an Android HAL should check build compatibility to make sure the union naming change does not cause compile errors in existing custom control code.
+
+- [libcamera patch posted to skip unnecessary stop call before the software ISP worker starts](#article-libcamera-patch-posted-to-skip-unnecessary-stop-call-before-the-software-isp-wor)
+
+  There is no direct HAL change, but if you have seen a symptom where opening the camera fails and the call hangs without returning in a pipeline that goes through the software ISP, you can suspect this path. Please check, with a scenario that deliberately injects a capture start failure, that the error is propagated up to the upper layers.
 
 
-## 1. This week’s articles
 
-- Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver
-- Qualcomm x1e/Hamoa platform camera DTS support patch v6 posted
-- Linux kernel patch v7 posted for Lenovo Yoga Book YB1-X91 camera support
-- libcamera control storage union naming patch v3 accepted
-- libcamera patch posted to skip unnecessary stop call before the software ISP worker starts
+
+<a id="article-linux-kernel-patch-v6-posted-to-support-the-omnivision-og0va1b-monochrome-vga-se"></a>
 
 ## 2. Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver
-
-
-![Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _lore.kernel.org linux-media list patch analysis_
 
 A v6 patch series has been posted to add a driver to the Linux media subsystem for the OG0VA1B, OmniVision's 1/10-inch low-power monochrome VGA sensor. With support for a single-lane MIPI CSI-2 interface and Y10 RAW format output, it appears set to lay the groundwork for building embedded and mobile monochrome camera pipelines.
+
+### Camera HAL/Driver perspective: what it means
+
+There is no direct Android Camera HAL change, but because a 10-bit monochrome RAW (Y10) format is added at the lower V4L2 driver level, when implementing HAL3 you should check that the Y10 format is correctly defined in the RAW stream configuration and the ISP pixel format mapping table.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 On September 1, 2026, Qualcomm's Wenmeng Liu submitted a v6 patch set adding the OmniVision OG0VA1B image sensor driver via the Linux media mailing list. The OG0VA1B is an ultra-small 1/10-inch monochrome CMOS VGA sensor, designed to be suitable mainly for low-power sensing or auxiliary camera systems.
 
@@ -28,9 +55,7 @@ According to this driver patch, the sensor can output 10-bit RAW (Y10) frames at
 
 The patch is currently in review for merging into the kernel mainline, and because it includes handling of the Y10 pixel format specific to monochrome sensors and single-lane MIPI CSI-2 timing configuration, it will be an important reference for lower-level driver developers.
 
-### Camera HAL/Driver perspective: what it means
-
-There is no direct Android Camera HAL change, but because a 10-bit monochrome RAW (Y10) format is added at the lower V4L2 driver level, when implementing HAL3 you should check that the Y10 format is correctly defined in the RAW stream configuration and the ISP pixel format mapping table.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -38,15 +63,21 @@ There is no direct Android Camera HAL change, but because a 10-bit monochrome RA
 
 ---
 
+<a id="article-qualcomm-x1e-hamoa-platform-camera-dts-support-patch-v6-posted"></a>
+
 ## 3. Qualcomm x1e/Hamoa platform camera DTS support patch v6 posted
-
-
-![Qualcomm x1e/Hamoa platform camera DTS support patch v6 posted image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _lore.kernel.org linux-media list patch analysis_
 
 A v6 patch adding Device Tree Source (DTS) support that defines the camera hardware configuration of the Qualcomm x1e/Hamoa platform has been posted. This update focuses on improving hardware initialization stability, for example by aligning the data lane ordering of the CAMSS node with the PHY layer and making the power supply schema consistent.
+
+### Camera HAL/Driver perspective: what it means
+
+There is no direct HAL change, but the data lane alignment and power supply changes directly affect the physical connection stability of the camera subsystem. Lower-stack verification should be done first so that MIPI CSI-2 receiver initialization errors or power-on failures do not occur at the driver level.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 On September 6, 2026, a v6 patch series improving the camera subsystem (CAMSS) DTS configuration of the Qualcomm x1e/Hamoa platform was submitted via the Linaro mailing list. DTS is the core specification that describes hardware resources to the kernel, and it defines the physical connections between camera sensors and the SoC.
 
@@ -54,9 +85,7 @@ The one change in v6 is adjusting the data lane start index in the CAMSS node fr
 
 These changes are essential for preventing camera hardware initialization failures or image corruption at the lower level, and they provide an important hardware configuration guide for camera driver and SoC integration engineers working on the x1e platform.
 
-### Camera HAL/Driver perspective: what it means
-
-There is no direct HAL change, but the data lane alignment and power supply changes directly affect the physical connection stability of the camera subsystem. Lower-stack verification should be done first so that MIPI CSI-2 receiver initialization errors or power-on failures do not occur at the driver level.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -64,15 +93,21 @@ There is no direct HAL change, but the data lane alignment and power supply chan
 
 ---
 
+<a id="article-linux-kernel-patch-v7-posted-for-lenovo-yoga-book-yb1-x91-camera-support"></a>
+
 ## 4. Linux kernel patch v7 posted for Lenovo Yoga Book YB1-X91 camera support
-
-
-![Linux kernel patch v7 posted for Lenovo Yoga Book YB1-X91 camera support image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _lore.kernel.org linux-media list patch analysis_
 
 A v7 patch series has been posted to fully support the front and rear camera system of the Lenovo Yoga Book YB1-X91. This patch contains comprehensive hardware control logic covering not only the OV8858 and OV2740 image sensor drivers but also AtomISP, the IPU bridge, and the WV517S lens actuator.
+
+### Camera HAL/Driver perspective: what it means
+
+There is no direct HAL change, but because the OV2740's manual white balance and the OV8858's gain control are exposed as V4L2 controls, you should verify that Camera HAL3 3A metadata control requests are accurately mapped to the kernel driver's V4L2 controls and work correctly.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 On September 2, 2026, Maurizio Casciano submitted a v7 patch series to enable the camera hardware stack of the Lenovo Yoga Book YB1-X91 tablet. This patch fleshes out driver support for the front and rear camera modules that work with AtomISP on the Intel Cherry Trail platform.
 
@@ -80,9 +115,7 @@ According to the patch details, the rear OV8858 sensor gets a 19.2 MHz clock set
 
 It also includes optimization of AtomISP's RAW frame capture logic and CSI-2 timing adjustments, as well as IPU bridge data and firmware ID mapping, and is expected to greatly improve the stability of the lower-level image pipeline.
 
-### Camera HAL/Driver perspective: what it means
-
-There is no direct HAL change, but because the OV2740's manual white balance and the OV8858's gain control are exposed as V4L2 controls, you should verify that Camera HAL3 3A metadata control requests are accurately mapped to the kernel driver's V4L2 controls and work correctly.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -90,15 +123,21 @@ There is no direct HAL change, but because the OV2740's manual white balance and
 
 ---
 
+<a id="article-libcamera-control-storage-union-naming-patch-v3-accepted"></a>
+
 ## 5. libcamera control storage union naming patch v3 accepted
-
-
-![libcamera control storage union naming patch v3 accepted image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _libcamera Patchwork analysis_
 
 A v3 patch giving a clear name to the control storage union structure inside libcamera was submitted and moved to accepted state. The stated purpose in the commit message is to make it possible to copy the storage as a single unit regardless of which member is active, and this patch is the first of a 5-patch series that introduces a move constructor and a swap() operation.
+
+### Camera HAL/Driver perspective: what it means
+
+This part by itself is a step that tidies up the storage representation, so it does not change HAL runtime behavior. However, projects that customize the libcamera source and integrate it into the lower layers of an Android HAL should check build compatibility to make sure the union naming change does not cause compile errors in existing custom control code.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 On September 3, 2026, the v3 libcamera control storage union naming patch submitted by Barnabás Pőcze was confirmed as accepted in the project patch tracker. The main point of this patch is to give a clear name to the control storage structure that was previously declared as an anonymous union.
 
@@ -106,9 +145,7 @@ The reason for naming the union members is to copy the storage as a single block
 
 Engineers who build and use libcamera directly, or who develop driver stacks by adding custom controls, should take note of this change to prevent minor compile compatibility issues that may arise when updating sources in the future.
 
-### Camera HAL/Driver perspective: what it means
-
-This part by itself is a step that tidies up the storage representation, so it does not change HAL runtime behavior. However, projects that customize the libcamera source and integrate it into the lower layers of an Android HAL should check build compatibility to make sure the union naming change does not cause compile errors in existing custom control code.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -116,15 +153,21 @@ This part by itself is a step that tidies up the storage representation, so it d
 
 ---
 
+<a id="article-libcamera-patch-posted-to-skip-unnecessary-stop-call-before-the-software-isp-wor"></a>
+
 ## 6. libcamera patch posted to skip unnecessary stop call before the software ISP worker starts
-
-
-![libcamera patch posted to skip unnecessary stop call before the software ISP worker starts image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _libcamera Patchwork analysis_
 
 A patch has been submitted that fixes a problem in libcamera's software image signal processing (software_isp) component where a call would hang indefinitely when starting the camera failed. It changes the code to return early instead of waiting for a worker thread that has not yet started, so that the original capture error is passed on to the caller as-is.
+
+### Camera HAL/Driver perspective: what it means
+
+There is no direct HAL change, but if you have seen a symptom where opening the camera fails and the call hangs without returning in a pipeline that goes through the software ISP, you can suspect this path. Please check, with a scenario that deliberately injects a capture start failure, that the error is propagated up to the upper layers.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 On September 6, 2026, Birk Skyum submitted a patch via the libcamera patch tracker that fixes the stop path of software_isp. software_isp is a core module that performs image processing using CPU resources on systems without a hardware ISP.
 
@@ -132,9 +175,7 @@ According to the patch description, the simple pipeline calls stop() before Soft
 
 Thanks to this, Camera::start() can report the original capture error to the caller. The patch links libcamera issue 349 on freedesktop GitLab as its basis, and its current state in the patch tracker is superseded, with a follow-up revision posted.
 
-### Camera HAL/Driver perspective: what it means
-
-There is no direct HAL change, but if you have seen a symptom where opening the camera fails and the call hangs without returning in a pipeline that goes through the software ISP, you can suspect this path. Please check, with a scenario that deliberately injects a capture start failure, that the error is propagated up to the upper layers.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 

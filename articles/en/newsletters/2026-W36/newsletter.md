@@ -1,26 +1,53 @@
 # 2026 W35 (08.24 ~ 08.30)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. This week’s highlights
+
 This week covers 5 stories, including ‘AtomISP driver adds Lenovo Yoga Book OV2740 sensor link and D-PHY timing derivation support’ and ‘libcamera reviews patch adding Quad-Bayer CFA layout support for high-resolution sensor handling’.
 
+- [AtomISP driver adds Lenovo Yoga Book OV2740 sensor link and D-PHY timing derivation support](#article-atomisp-driver-adds-lenovo-yoga-book-ov2740-sensor-link-and-d-phy-timing-derivat)
+
+  Driver-level D-PHY timing derivation and padding handling pass through the V4L2 subsystem and affect stream configuration validation in the Android Camera HAL. In particular, during RAW Bayer capture, if the padding pixels (12 pixels) are not correctly reflected in metadata (such as the active array size), image distortion or CTS test failures can occur, so this should be checked carefully.
+
+- [libcamera reviews patch adding Quad-Bayer CFA layout support for high-resolution sensor handling](#article-libcamera-reviews-patch-adding-quad-bayer-cfa-layout-support-for-high-resolution)
+
+  With the libcamera layer directly recognizing and handling the Quad-Bayer CFA layout, the debayering quality and the accuracy of stride calculation for the RAW data that the Android Camera HAL receives from the lower stack are improved. This helps prevent buffer overflows or memory alignment errors when the HAL processes RAW_SENSOR or RAW10/RAW12 streams.
+
+- [Linux kernel: Lenovo Yoga Book YB1-X91 camera driver and sensor integration patch series posted](#article-linux-kernel-lenovo-yoga-book-yb1-x91-camera-driver-and-sensor-integration-patch)
+
+  With RAW Bayer capture exposure, per-channel white balance control, and a lens actuator (WV517S) added at the driver level, the Camera HAL can directly map the 3A (Auto Exposure, Auto White Balance, Auto Focus) controls of this hardware through V4L2 controls. This is essential for meeting the HAL's `android.control` metadata contract and passing CTS/VTS verification.
+
+- [Sony IMX908 image sensor: Linux Device Tree binding added, laying the groundwork for official support](#article-sony-imx908-image-sensor-linux-device-tree-binding-added-laying-the-groundwork-f)
+
+  When the sensor's MIPI CSI-2 lane count (2 or 4 lanes) and RAW formats (RAW10/RAW12) are correctly defined in the kernel through the Device Tree binding, the Camera HAL can query accurate sensor resolution (3856x2176) and format information from the driver. This contributes to building the HAL's `SensorCharacteristics` metadata and securing the stability of high-resolution RAW stream combinations.
+
+- [libcamera adds filter parameter to createTexture2D() in the software ISP EGL module](#article-libcamera-adds-filter-parameter-to-createtexture2d-in-the-software-isp-egl-modul)
+
+  Because filtering options can now be controlled when the software ISP creates EGL textures, visual quality (e.g., reduced aliasing, sharpness adjustment) can be fine-tuned in GPU-accelerated image scaling or debayering post-processing stages. This directly affects improving preview image quality when implementing a libcamera-based Android Camera HAL on entry-level SoC platforms without a hardware ISP.
 
 
-## 1. This week’s articles
 
-- AtomISP driver adds Lenovo Yoga Book OV2740 sensor link and D-PHY timing derivation support
-- libcamera reviews patch adding Quad-Bayer CFA layout support for high-resolution sensor handling
-- Linux kernel: Lenovo Yoga Book YB1-X91 camera driver and sensor integration patch series posted
-- Sony IMX908 image sensor: Linux Device Tree binding added, laying the groundwork for official support
-- libcamera adds filter parameter to createTexture2D() in the software ISP EGL module
+
+<a id="article-atomisp-driver-adds-lenovo-yoga-book-ov2740-sensor-link-and-d-phy-timing-derivat"></a>
 
 ## 2. AtomISP driver adds Lenovo Yoga Book OV2740 sensor link and D-PHY timing derivation support
-
-
-![AtomISP driver adds Lenovo Yoga Book OV2740 sensor link and D-PHY timing derivation support image](../../../assets/images/fallback/android.svg)
-
 
 _lore.kernel.org linux-media list - PATCH v3_
 
 A PATCH v3 patch series improving the integration of the AtomISP bridge driver and the OV2740 image sensor has been submitted to the Linux kernel media subsystem. This change compensates at the driver level for incomplete camera link information in the hardware firmware, and supports dynamically deriving D-PHY timing from the sensor link frequency.
+
+### Camera HAL/Driver perspective: what it means
+
+Driver-level D-PHY timing derivation and padding handling pass through the V4L2 subsystem and affect stream configuration validation in the Android Camera HAL. In particular, during RAW Bayer capture, if the padding pixels (12 pixels) are not correctly reflected in metadata (such as the active array size), image distortion or CTS test failures can occur, so this should be checked carefully.
+
+
+![](../../../assets/images/fallback/android.svg)
+
 
 The newly posted PATCH v3 patch series targets integration of the front OV2740 camera sensor of the Lenovo Yoga Book YB1-X91L device. The existing firmware does not provide complete camera link information, which made it difficult for the driver to configure the image pipeline. To solve this, the driver level was changed to explicitly specify that the front OV2740 sensor uses 2 CSI-2 lanes and operates at a 288 MHz link frequency.
 
@@ -28,9 +55,7 @@ In addition, the transmitted frame format is defined as 1932x1092 BGGR, configur
 
 These driver-level changes improve the stability of the lower image pipeline and help the Android Camera HAL receive accurate data when it queries sensor modes and frame timing through the V4L2 interface. Although it is not a direct HAL API change, it is an important reference when validating RAW Bayer capture and stream configurations.
 
-### Camera HAL/Driver perspective: what it means
-
-Driver-level D-PHY timing derivation and padding handling pass through the V4L2 subsystem and affect stream configuration validation in the Android Camera HAL. In particular, during RAW Bayer capture, if the padding pixels (12 pixels) are not correctly reflected in metadata (such as the active array size), image distortion or CTS test failures can occur, so this should be checked carefully.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -38,15 +63,21 @@ Driver-level D-PHY timing derivation and padding handling pass through the V4L2 
 
 ---
 
+<a id="article-libcamera-reviews-patch-adding-quad-bayer-cfa-layout-support-for-high-resolution"></a>
+
 ## 3. libcamera reviews patch adding Quad-Bayer CFA layout support for high-resolution sensor handling
-
-
-![libcamera reviews patch adding Quad-Bayer CFA layout support for high-resolution sensor handling image](../../../assets/images/fallback/android.svg)
-
 
 _libcamera Patchwork - Patch ID 28095_
 
 A patch has been proposed that adds support to the libcamera framework for the Quad-Bayer CFA (Color Filter Array) layout, which is widely used in recent high-resolution image sensors. This change is expected to contribute to improving the accuracy of RAW data processing in the lower image processing pipeline.
+
+### Camera HAL/Driver perspective: what it means
+
+With the libcamera layer directly recognizing and handling the Quad-Bayer CFA layout, the debayering quality and the accuracy of stride calculation for the RAW data that the Android Camera HAL receives from the lower stack are improved. This helps prevent buffer overflows or memory alignment errors when the HAL processes RAW_SENSOR or RAW10/RAW12 streams.
+
+
+![](../../../assets/images/fallback/android.svg)
+
 
 High-resolution image sensors in recent mobile devices often adopt a Quad-Bayer structure to improve sensitivity and reduce noise. However, the existing libcamera framework had limitations in handling such special CFA layouts differently from the standard Bayer pattern. This patch adds support so that libcamera can directly recognize and handle the Quad-Bayer layout.
 
@@ -54,9 +85,7 @@ This patch, submitted by Frederic Laing, includes Quad-Bayer CFA layout support 
 
 Because the Android Camera HAL often uses libcamera as a lower layer, these changes directly affect improving buffer alignment and debayering quality when the HAL processes RAW_SENSOR or RAW10/RAW12 streams. It will be an important technical foundation for teams preparing to adopt high-resolution sensors in the future.
 
-### Camera HAL/Driver perspective: what it means
-
-With the libcamera layer directly recognizing and handling the Quad-Bayer CFA layout, the debayering quality and the accuracy of stride calculation for the RAW data that the Android Camera HAL receives from the lower stack are improved. This helps prevent buffer overflows or memory alignment errors when the HAL processes RAW_SENSOR or RAW10/RAW12 streams.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -64,15 +93,21 @@ With the libcamera layer directly recognizing and handling the Quad-Bayer CFA la
 
 ---
 
+<a id="article-linux-kernel-lenovo-yoga-book-yb1-x91-camera-driver-and-sensor-integration-patch"></a>
+
 ## 4. Linux kernel: Lenovo Yoga Book YB1-X91 camera driver and sensor integration patch series posted
-
-
-![Linux kernel: Lenovo Yoga Book YB1-X91 camera driver and sensor integration patch series posted image](../../../assets/images/fallback/android.svg)
-
 
 _lore.kernel.org linux-media list - PATCH v2_
 
 A Linux kernel driver patch series (PATCH v2) to fully support the camera hardware of the Lenovo Yoga Book YB1-X91 device has been posted. This patch focuses on compensating at the driver level for missing ACPI firmware information and integrating control of the front/rear sensors and the lens actuator.
+
+### Camera HAL/Driver perspective: what it means
+
+With RAW Bayer capture exposure, per-channel white balance control, and a lens actuator (WV517S) added at the driver level, the Camera HAL can directly map the 3A (Auto Exposure, Auto White Balance, Auto Focus) controls of this hardware through V4L2 controls. This is essential for meeting the HAL's `android.control` metadata contract and passing CTS/VTS verification.
+
+
+![](../../../assets/images/fallback/android.svg)
+
 
 The Lenovo Yoga Book YB1-X91L device is based on the Cherry Trail AtomISP and carries a front OV2740 sensor and a rear OV8858 sensor. However, the existing system firmware did not provide enough information for the driver to configure complete camera links. This patch series overcomes this limitation by adding ACPI IDs and bridge data.
 
@@ -80,9 +115,7 @@ The main changes in the patch series include adding descriptions for both camera
 
 This functional expansion of the lower-level drivers becomes the foundation for the Android Camera HAL to accurately recognize the physical characteristics of the hardware and smoothly implement 3A (auto exposure, auto white balance, auto focus) control. It will be an important reference model for engineers responsible for hardware integration.
 
-### Camera HAL/Driver perspective: what it means
-
-With RAW Bayer capture exposure, per-channel white balance control, and a lens actuator (WV517S) added at the driver level, the Camera HAL can directly map the 3A (Auto Exposure, Auto White Balance, Auto Focus) controls of this hardware through V4L2 controls. This is essential for meeting the HAL's `android.control` metadata contract and passing CTS/VTS verification.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -90,15 +123,21 @@ With RAW Bayer capture exposure, per-channel white balance control, and a lens a
 
 ---
 
+<a id="article-sony-imx908-image-sensor-linux-device-tree-binding-added-laying-the-groundwork-f"></a>
+
 ## 5. Sony IMX908 image sensor: Linux Device Tree binding added, laying the groundwork for official support
-
-
-![Sony IMX908 image sensor: Linux Device Tree binding added, laying the groundwork for official support image](../../../assets/images/fallback/android.svg)
-
 
 _lore.kernel.org linux-media list - PATCH v3_
 
 A Device Tree binding patch (PATCH v3) for official Linux kernel support of the Sony IMX908 image sensor has been posted. This binding definition provides a standard hardware interface configuration guide for developers of SoC platforms that carry the new sensor.
+
+### Camera HAL/Driver perspective: what it means
+
+When the sensor's MIPI CSI-2 lane count (2 or 4 lanes) and RAW formats (RAW10/RAW12) are correctly defined in the kernel through the Device Tree binding, the Camera HAL can query accurate sensor resolution (3856x2176) and format information from the driver. This contributes to building the HAL's `SensorCharacteristics` metadata and securing the stability of high-resolution RAW stream combinations.
+
+
+![](../../../assets/images/fallback/android.svg)
+
 
 The Sony IMX908 is a high-performance CMOS image sensor that supports 8.39-megapixel (3856x2176) resolution. It supports RAW10 and RAW12 output over a MIPI CSI-2 interface, and features flexible configuration of 2 or 4 data lanes depending on system requirements.
 
@@ -106,9 +145,7 @@ In this PATCH v3, reflecting the actual hardware design specification, the bindi
 
 Once the Device Tree binding is integrated into the kernel, the sensor node can be declared in the standard way in dts files when developing Android devices. This becomes the starting point for the Android Camera HAL to accurately recognize the sensor's physical resolution and data formats through the driver and to configure RAW streams.
 
-### Camera HAL/Driver perspective: what it means
-
-When the sensor's MIPI CSI-2 lane count (2 or 4 lanes) and RAW formats (RAW10/RAW12) are correctly defined in the kernel through the Device Tree binding, the Camera HAL can query accurate sensor resolution (3856x2176) and format information from the driver. This contributes to building the HAL's `SensorCharacteristics` metadata and securing the stability of high-resolution RAW stream combinations.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -116,15 +153,21 @@ When the sensor's MIPI CSI-2 lane count (2 or 4 lanes) and RAW formats (RAW10/RA
 
 ---
 
+<a id="article-libcamera-adds-filter-parameter-to-createtexture2d-in-the-software-isp-egl-modul"></a>
+
 ## 6. libcamera adds filter parameter to createTexture2D() in the software ISP EGL module
-
-
-![libcamera adds filter parameter to createTexture2D() in the software ISP EGL module image](../../../assets/images/fallback/android.svg)
-
 
 _libcamera Patchwork - v15_
 
 A v15 patch has been posted that allows fine-tuning of image processing quality in the software ISP EGL module of the libcamera framework. This change adds a parameter so that filtering options can be controlled directly when creating textures, increasing the flexibility of the GPU-accelerated rendering pipeline.
+
+### Camera HAL/Driver perspective: what it means
+
+Because filtering options can now be controlled when the software ISP creates EGL textures, visual quality (e.g., reduced aliasing, sharpness adjustment) can be fine-tuned in GPU-accelerated image scaling or debayering post-processing stages. This directly affects improving preview image quality when implementing a libcamera-based Android Camera HAL on entry-level SoC platforms without a hardware ISP.
+
+
+![](../../../assets/images/fallback/android.svg)
+
 
 On low-cost SoC platforms where a hardware ISP is limited or absent, the role of a software ISP that uses the CPU and GPU is very important. libcamera provides the software_isp module for such environments and uses GPU acceleration through EGL. The v15 patch submitted this time adds a filter parameter to `createTexture2D()`, one of the core functions of the EGL module.
 
@@ -132,9 +175,7 @@ This patch, proposed by Milan Zamazal, lets developers directly specify options 
 
 When implementing an Android Camera HAL that uses libcamera's software ISP as the lower image processing pipeline, this added filter parameter makes it possible to fine-tune preview image quality even further. It will be a useful tool for balancing performance and image quality.
 
-### Camera HAL/Driver perspective: what it means
-
-Because filtering options can now be controlled when the software ISP creates EGL textures, visual quality (e.g., reduced aliasing, sharpness adjustment) can be fine-tuned in GPU-accelerated image scaling or debayering post-processing stages. This directly affects improving preview image quality when implementing a libcamera-based Android Camera HAL on entry-level SoC platforms without a hardware ISP.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 

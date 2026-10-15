@@ -111,6 +111,101 @@ AI/C++ 도구는 어떤 개발 업무에서 새로운 선택지가 되는지와 
 - 비교 방법을 제안할 때는 출처의 실측 결과와 편집 제안을 구분합니다. 설명·인지·참고가 적절하면 실행 지시 없이 의미와 한계를 전달합니다.
 - 내부 QA의 필수 필드와 발행 안전 검증은 유지합니다.
 
+## 과거 공개 페이지의 화면 전환
+
+`npm.cmd run migrate:public-newsletters -- --inventory`는 Git이 추적하는 공개 한국어·영어
+페이지의 입력 형식, 원본 hash, 기사·출처·이미지·ID, 색인 노출과 번역 정합성을 읽기만 합니다.
+이슈 #1305의 W19~W41 한영과 2026-10-12까지의 일간 URL을 `candidate`, W42 한영을
+`regression`, 이후 추가된 일간 페이지를 `post_issue_scope`로 구분합니다. 새 페이지를
+기존 전환 범위에 자동으로 포함하지 않습니다.
+
+대상을 명시하면 현재 공통 renderer로 만든 결과와 보존 검사를 JSON으로 출력합니다.
+기본값은 파일을 쓰지 않는 dry-run입니다. 변경 파일에는 전후 텍스트와 SHA-256 hash가
+포함되므로 실제 쓰기 전에 차이를 검토할 수 있습니다.
+
+```powershell
+npm.cmd run migrate:public-newsletters -- --issue 2026-W19,2026-W41 --locale ko,en --dry-run
+npm.cmd run migrate:public-newsletters -- --issue 2026-10-12 --locale ko --dry-run
+```
+
+검토한 선택에 `--write`를 지정하면 해당 파일만 갱신합니다. 선택한 페이지 중 하나라도
+복원·번역·보존 검사에 실패하면 전체 선택의 쓰기를 차단합니다. 주간호는 기존 `issue.json`과
+`translation.en.json`의 바이트를 유지하며, 원본 hash를 새로 찍거나 번역을 무효화하지 않습니다.
+홈페이지·아카이브 색인, sitemap, 역사적 newsroom 실행 기록도 쓰지 않습니다.
+구형 주간 JSON 본문에 독립된 Markdown 소제목·강조 제목·목록이 들어 있으면,
+화면에서만 실제 소제목과 목록으로 표시합니다. 기사 제목과 요약이 같아 핵심 목록의 설명이
+비는 경우에는 기존 본문의 첫 설명 문단을 사용합니다. 원본 문장이나 번역 hash는 바꾸지 않습니다.
+
+일간호는 공개 HTML과 Markdown에서 복원한 입력을 같은 디렉터리의
+`publication-source.json`에 저장합니다. 이 파일은 `published-html-projection` 형식이며,
+원본 파일 경로·hash, 발행 날짜, 공개 기사·참고자료·이미지와 본문 블록을 보존합니다.
+이후 재실행은 이 입력을 사용합니다. 새 Story Contract 버전이나 발행 적합성 판정을
+역사적 데이터에 부여하지 않으며, 주간 키나 존재하지 않는 영어판도 만들지 않습니다.
+복원 입력인 `publication-source.json`의 추가만으로 새 생성 실행을 판정하지 않습니다.
+수정한 공개 페이지는 계속 strict 검증 대상이며, 새 HTML·Markdown이나 newsroom 실행 기록이
+추가되면 기존 생성 실행 검증도 그대로 적용합니다. 과거 실행의 정본 입력이 없는 상태에서
+quality-report나 image-audit-report를 사후에 만들어 검사에 맞추지 않습니다.
+이미지 실시간 검증은 한 실행 안에서 정확히 같은 URL의 결과를 공유합니다. 중복 참조의
+불필요한 CDN 요청을 줄이되 실패 결과도 모든 참조에 적용하고, 다음 실행에는 다시 검증합니다.
+로컬 파일·URL scheme·strict 대상·이미지 응답 형식과 크기 기준은 그대로 검사합니다.
+
+기존 ID가 새 렌더 결과에서 없어지면 대응 기사 또는 탐색 목록에 호환 anchor를 남깁니다.
+기사 순서·문장·출처·이미지·alt·캡션·canonical·참고자료와 Markdown 본문을 전후 대조하고,
+중복 ID와 끊어진 내부 anchor를 차단합니다. 제목과 같은 문장의 중복 표시 제거, 고정 관점
+라벨 이동, fallback 이미지의 Markdown 장식 표시는 현재 공통 renderer의 표시 계약을 따릅니다.
+
+일간 복원기는 평문 문단·소제목, 기사당 이미지 한 개, 공개 체크리스트와 인라인 코드를 지원합니다.
+Markdown 기사의 개수·순서·제목을 HTML과 먼저 대조합니다. 같은 기사의 Markdown에만 남은
+문단·소제목·체크리스트는 `origin: "published-markdown"` 블록으로 보존하고 HTML에도 표시합니다.
+이 복원으로 추가되는 공개 문장에는 dry-run 결과의 `contentEdits`에 원본 Markdown 경로와
+`same-article-published-markdown` 근거를 남깁니다. 다른 호나 newsroom 기록에서 내용을 가져오지 않습니다.
+기존 catch-up 제목·주 단위 나이 표시는 그대로 두며 정확한 경과 일수를 추정하지 않습니다.
+
+과거 출처 목록은 텍스트와 링크를 묶은 구조로 보존하므로 현재 renderer가 자동으로 붙이는
+패치 시리즈 URL을 과거 기사에 새로 추가하지 않습니다. 참고자료의 월 단위·자유 형식 날짜와
+ChromeOS 링크 묶음도 원문 그대로 유지합니다. 기존 발행 안내문은 문구를 보존하며,
+Tooling Watch를 정상 Camera HAL 발행이나 새로운 발행 적합성 판정으로 바꾸지 않습니다.
+복잡한 코드·표·인용·인라인 마크업과 지원하지 않는 Markdown 블록은 삭제하거나 평문으로
+축약하지 않고 차단 사유로 보고합니다. 저장한 projection도 기사 정체성·블록 형식·출처 연결과
+링크 protocol을 다시 검증합니다.
+차단은 원본 자체가 복원 불가능하다는 판정이 아니라 추가 호환 처리가 필요하다는 뜻입니다.
+임시 실행 결과와 화면 캡처는 `.tmp/` 아래에 보관하고 공식 문서로 커밋하지 않습니다.
+
+배치는 한영 쌍과 소수 대표 일간호 단위로 검토합니다. 되돌릴 때는 해당 배치의 공개 HTML·Markdown과
+새로 추가한 `publication-source.json`만 함께 되돌립니다. 기존 입력 JSON과 번역은 전환 전후
+동일해야 합니다. 재실행의 변경 파일이 0개인지, 관련 회귀 테스트와 전체 test·validate 및
+한영 실제 Chrome 데스크톱·모바일 화면이 정상인지 확인한 뒤 다음 배치로 넘어갑니다.
+
+기사 제목 위 TAG만 정리할 때는 `--tags-only`를 사용합니다. `--all-tags`는 추적 중인 공개
+한영 페이지 전체의 TAG를 검사하며, 전체 화면 전환과 별도로 동작합니다.
+
+```powershell
+npm.cmd run migrate:public-newsletters -- --all-tags --dry-run
+npm.cmd run migrate:public-newsletters -- --issue 2026-W19 --tags-only --dry-run
+```
+
+기사 TAG는 `article-display.js`의 `articleCategoryLabel`이 표시합니다. C++ 기사와 AI 도구
+기사를 `C++`와 `AI Tooling`으로 구분하고, C++ 기사에 편집 상태인 `Tooling Watch`를 붙이지
+않습니다. JSON이 없는 일간호는 자기 페이지의 기존 제목·분류·클래스만 읽습니다. 제목에
+CameraX·libcamera·Mali-C55처럼 구체적인 주제가 있으면 해당 표시를 사용하고, 모호한
+`main`·`camera-hal` 클래스만으로 정밀한 분류를 만들지 않습니다. 확인할 수 없는 분류는
+일반 `Camera` 표시와 보고서의 `preciseCategoryKnown: false`로 드러냅니다.
+
+TAG 정리는 기존 카테고리 span 또는 번호 옆의 공통 eyebrow 영역만 고칩니다. 기사 본문,
+Markdown, 원본 JSON, 번역, 이미지, 홈페이지·아카이브 필터 태그를 수정하지 않습니다.
+원본 기사 수·제목이 맞지 않거나 본문·출처·이미지·ID 보존 검사에 실패하면 쓰기를 막습니다.
+
+홈·아카이브의 `전체`는 주간호를 표시하며, 주제 TAG를 선택하면 해당 주제의 기사별 카드를
+표시합니다. 같은 호에 해당 기사가 여러 개 있으면 각각 표시하며, 각 카드의 제목·썸네일·alt·
+본문 anchor는 같은 공개 기사의 `reader_brief.items`에서 가져옵니다. 건수와 페이지 나누기도
+필터를 통과한 기사 수를 기준으로 합니다. 유효한 기사 데이터가 없는 주간호에서 첫 기사나
+다른 기사 이미지를 대신 가져와 필터 결과를 만들지 않습니다.
+
+과거 주간호의 기사별 데이터를 보강할 때는 `npm.cmd run refresh:reader-briefs -- --dry-run`으로
+확인한 뒤 `--write`로 갱신합니다. 이 도구는 모든 한영 입력과 실제 공개 기사 수·제목·anchor를
+먼저 검증하고 `articles/data/newsletters-weekly.json`의 한영 `reader_brief`만 갱신합니다.
+원본 JSON·번역 hash·본문·호 순서·날짜·기존 색인 필드는 유지하며 재실행은 추가 변경이 없어야 합니다.
+
 ## 참고자료
 
 - [출처 제목](https://example.com)

@@ -1,25 +1,49 @@
 # 2026 W37 (09.07 ~ 09.13)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. This week’s highlights
+
 This week covers 4 stories, including ‘Rockchip RKISP1 ISP driver: patch posted to fix Bayer demosaicing bypass logic error’ and ‘New Linux driver patch posted for the OmniVision os02g10 image sensor’.
 
+- [Rockchip RKISP1 ISP driver: patch posted to fix Bayer demosaicing bypass logic error](#article-rockchip-rkisp1-isp-driver-patch-posted-to-fix-bayer-demosaicing-bypass-logic-er)
+
+  There is no direct Android Camera HAL change, but because the demosaicing bypass logic of the underlying ISP driver is being fixed, color distortion or noise control behavior may change when outputting RAW streams and applying ISP tuning parameters. Quality verification of RAW and YUV streams should be performed at the HAL layer.
+
+- [New Linux driver patch posted for the OmniVision os02g10 image sensor](#article-new-linux-driver-patch-posted-for-the-omnivision-os02g10-image-sensor)
+
+  With the addition of the new sensor driver, a lower-level path has been secured for implementing manual exposure and gain control (SENSOR_EXPOSURE_TIME, SENSOR_SENSITIVITY), flip control, and more in the Android Camera HAL. The 1080p30 SBGGR10 stream configuration should be mapped into the HAL's stream map, and its integration with the V4L2 controls should be verified.
+
+- [libcamera: patch proposed to fix Sony IMX355 sensor test pattern mode mapping](#article-libcamera-patch-proposed-to-fix-sony-imx355-sensor-test-pattern-mode-mapping)
+
+  There is no direct HAL change, but because the IMX355 sensor's test pattern mapping is fixed in the lower libcamera layer, it can ensure that the correct hardware test pattern is output when the Camera HAL sets SENSOR_TEST_PATTERN_MODE. This is useful for CTS test pattern verification and for debugging the data path between the sensor and the HAL.
+
+- [libcamera: proposal to add LensShadingCorrection and ToneCurve to controls metadata](#article-libcamera-proposal-to-add-lensshadingcorrection-and-tonecurve-to-controls-metada)
+
+  The key is to check the frame results of the Raspberry Pi pipeline together with the DNG saving path. You can compare DNG and JPEG of the same scene and verify that the channel layout and size of the lens shading correction maps, and the tone curve data, are correctly reflected in the file. Android Camera HAL integration is an area that requires separate implementation and verification, and this patch does not include changes that connect HAL requests to ISP control.
 
 
-## 1. This week’s articles
 
-- Rockchip RKISP1 ISP driver: patch posted to fix Bayer demosaicing bypass logic error
-- New Linux driver patch posted for the OmniVision os02g10 image sensor
-- libcamera: patch proposed to fix Sony IMX355 sensor test pattern mode mapping
-- libcamera: proposal to add LensShadingCorrection and ToneCurve to controls metadata
+
+<a id="article-rockchip-rkisp1-isp-driver-patch-posted-to-fix-bayer-demosaicing-bypass-logic-er"></a>
 
 ## 2. Rockchip RKISP1 ISP driver: patch posted to fix Bayer demosaicing bypass logic error
-
-
-![Rockchip RKISP1 ISP driver: patch posted to fix Bayer demosaicing bypass logic error image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _lore.kernel.org linux-media mailing list patch proposal (2026-09-11)_
 
 A patch has been proposed that fixes a logic error in the Rockchip RKISP1 ISP driver where the Bayer demosaicing bypass bit was handled inversely.
+
+### Camera HAL/Driver perspective: what it means
+
+There is no direct Android Camera HAL change, but because the demosaicing bypass logic of the underlying ISP driver is being fixed, color distortion or noise control behavior may change when outputting RAW streams and applying ISP tuning parameters. Quality verification of RAW and YUV streams should be performed at the HAL layer.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 On September 11, 2026, a patch fixing the Bayer demosaicing bypass control logic of the Rockchip RKISP1 ISP was proposed on the lore.kernel.org linux-media mailing list. In the existing driver implementation, the control logic worked completely in reverse: it cleared the bypass bit (RKISP1_CIF_ISP_DEMOSAIC_BYPASS) when the demosaicing block should be bypassed, and set the bit when demosaicing should be enabled.
 
@@ -27,9 +51,7 @@ This patch changes it so that the bypass bit is set when the demosaicing block i
 
 The patch is currently under review at the proposal stage (v1), and whether it is actually merged into the mainline kernel needs continued monitoring. Development teams on platforms that use the rkisp1 driver, such as Rockchip ISP and NXP i.MX8MP, can use this patch to proactively verify the behavioral integrity of the image pipeline.
 
-### Camera HAL/Driver perspective: what it means
-
-There is no direct Android Camera HAL change, but because the demosaicing bypass logic of the underlying ISP driver is being fixed, color distortion or noise control behavior may change when outputting RAW streams and applying ISP tuning parameters. Quality verification of RAW and YUV streams should be performed at the HAL layer.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -37,15 +59,21 @@ There is no direct Android Camera HAL change, but because the demosaicing bypass
 
 ---
 
+<a id="article-new-linux-driver-patch-posted-for-the-omnivision-os02g10-image-sensor"></a>
+
 ## 3. New Linux driver patch posted for the OmniVision os02g10 image sensor
-
-
-![New Linux driver patch posted for the OmniVision os02g10 image sensor image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _lore.kernel.org linux-media mailing list patch proposal (2026-09-08)_
 
 A new V4L2 driver patch series (v5) has been proposed to officially support the OmniVision os02g10 image sensor.
+
+### Camera HAL/Driver perspective: what it means
+
+With the addition of the new sensor driver, a lower-level path has been secured for implementing manual exposure and gain control (SENSOR_EXPOSURE_TIME, SENSOR_SENSITIVITY), flip control, and more in the Android Camera HAL. The 1080p30 SBGGR10 stream configuration should be mapped into the HAL's stream map, and its integration with the V4L2 controls should be verified.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 On September 8, 2026, a patch series (v5) adding a new i2c driver for the OmniVision os02g10 camera sensor was posted on the lore.kernel.org linux-media mailing list. This patch is part of a contribution to integrate a new hardware sensor into the Linux media subsystem.
 
@@ -53,9 +81,7 @@ The proposed driver includes a variety of controls essential for practical camer
 
 The driver was verified for correct operation and compliance on the IMX8MP Debix Model A development board using the mainline v7.0-rc2 kernel and the v4l2-compliance 1.31.0-5387 tool. Hardware and driver development teams planning to ship the new sensor can carry out early validation based on this patch.
 
-### Camera HAL/Driver perspective: what it means
-
-With the addition of the new sensor driver, a lower-level path has been secured for implementing manual exposure and gain control (SENSOR_EXPOSURE_TIME, SENSOR_SENSITIVITY), flip control, and more in the Android Camera HAL. The 1080p30 SBGGR10 stream configuration should be mapped into the HAL's stream map, and its integration with the V4L2 controls should be verified.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -63,15 +89,21 @@ With the addition of the new sensor driver, a lower-level path has been secured 
 
 ---
 
+<a id="article-libcamera-patch-proposed-to-fix-sony-imx355-sensor-test-pattern-mode-mapping"></a>
+
 ## 4. libcamera: patch proposed to fix Sony IMX355 sensor test pattern mode mapping
-
-
-![libcamera: patch proposed to fix Sony IMX355 sensor test pattern mode mapping image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _libcamera Patchwork patch proposal (2026-09-08)_
 
 A patch has been proposed in the libcamera project that corrects a test pattern mode mapping error for the Sony IMX355 sensor, improving the verification reliability of the lower camera stack.
+
+### Camera HAL/Driver perspective: what it means
+
+There is no direct HAL change, but because the IMX355 sensor's test pattern mapping is fixed in the lower libcamera layer, it can ensure that the correct hardware test pattern is output when the Camera HAL sets SENSOR_TEST_PATTERN_MODE. This is useful for CTS test pattern verification and for debugging the data path between the sensor and the HAL.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 On September 8, 2026, a patch was proposed via libcamera Patchwork to fix a test pattern mode mapping problem in the Sony IMX355 camera sensor driver. This patch is the first part ([1/2]) of a two-patch series submitted by Samuel LEGROS.
 
@@ -79,9 +111,7 @@ The existing libcamera IMX355 sensor properties mapped color bars (TestPatternMo
 
 The patch is currently in 'new' state and under review in the project patch tracker, and it is a proposal that has not yet been merged into mainline. Development teams that ship the IMX355 sensor and use a libcamera-based hardware abstraction layer can apply this patch to proactively verify the reliability of test pattern output.
 
-### Camera HAL/Driver perspective: what it means
-
-There is no direct HAL change, but because the IMX355 sensor's test pattern mapping is fixed in the lower libcamera layer, it can ensure that the correct hardware test pattern is output when the Camera HAL sets SENSOR_TEST_PATTERN_MODE. This is useful for CTS test pattern verification and for debugging the data path between the sensor and the HAL.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -89,15 +119,21 @@ There is no direct HAL change, but because the IMX355 sensor's test pattern mapp
 
 ---
 
+<a id="article-libcamera-proposal-to-add-lensshadingcorrection-and-tonecurve-to-controls-metada"></a>
+
 ## 5. libcamera: proposal to add LensShadingCorrection and ToneCurve to controls metadata
-
-
-![libcamera: proposal to add LensShadingCorrection and ToneCurve to controls metadata image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _libcamera Patchwork patch proposal (2026-09-10)_
 
 A patch has been proposed for libcamera that provides lens shading correction maps and tone curves as frame result metadata, aiming to match the color reproduction of DNG files to JPEG.
+
+### Camera HAL/Driver perspective: what it means
+
+The key is to check the frame results of the Raspberry Pi pipeline together with the DNG saving path. You can compare DNG and JPEG of the same scene and verify that the channel layout and size of the lens shading correction maps, and the tone curve data, are correctly reflected in the file. Android Camera HAL integration is an area that requires separate implementation and verification, and this patch does not include changes that connect HAL requests to ISP control.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 On September 10, 2026, a patch was submitted to libcamera Patchwork that provides lens shading correction maps (LensShadingCorrectionMaps) and tone curves (ToneCurve) as frame result metadata. It was written by Michael Kunz and submitted on the author's behalf by Kieran Bingham due to a mail server problem.
 
@@ -105,9 +141,7 @@ The patch extends the frame metadata reporting path of the Raspberry Pi pipeline
 
 This patch is at the proposal stage. Development teams that save RAW/DNG based on Raspberry Pi and libcamera can check, after applying the patch, whether the correction maps and tone curves are included in the result metadata and whether the DNG saving program actually reflects them in the file.
 
-### Camera HAL/Driver perspective: what it means
-
-The key is to check the frame results of the Raspberry Pi pipeline together with the DNG saving path. You can compare DNG and JPEG of the same scene and verify that the channel layout and size of the lens shading correction maps, and the tone curve data, are correctly reflected in the file. Android Camera HAL integration is an area that requires separate implementation and verification, and this patch does not include changes that connect HAL requests to ISP control.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 

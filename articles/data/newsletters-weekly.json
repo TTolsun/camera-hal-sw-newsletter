@@ -320,7 +320,83 @@
       "title": "2026 W41",
       "summary": "Android 17 Camera ITS: Runtime Versions and Updated Tests\nlibcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence",
       "html": "en/newsletters/2026-W41/index.html",
-      "md": "en/newsletters/2026-W41/newsletter.md"
+      "md": "en/newsletters/2026-W41/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week's newsletter brings important information about preparing for Android 17 Camera ITS. Learn more about what to check beyond the Python package list, including the execution environment version and changed verification items. Also, there's news about a libcamera AWB proposal. See how a new approach of fixing automatic gain and reconverging when needed can improve color changes.",
+        "items": [
+          {
+            "id": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+            "href": "en/newsletters/2026-W41/index.html#article-android-17-camera-its-runtime-versions-and-updated-tests",
+            "headline": "Android 17 Camera ITS: Runtime Versions and Updated Tests",
+            "lead": "When preparing for Android 17 Camera ITS, it's not just the Python package list that needs to be aligned. The versions of Python and FFmpeg executables, test charts, and CTS Verifier activity configurations must be checked together.",
+            "takeaway": "When analyzing verification failures, it is necessary to distinguish between differences in the execution environment version/path, chart configuration, and HAL output. In particular, YUV/JPEG color differences and white balance between JPEG_R preview/capture are items to compare results against new inspection conditions.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png",
+              "alt": "Android Open Source Project",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/28387",
+            "href": "en/newsletters/2026-W41/index.html#article-libcamera-awb-proposal-freeze-automatic-gains-and-trigger-reconvergence",
+            "headline": "libcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence",
+            "lead": "This proposal aims to improve the behavior where colors suddenly change when turning off automatic white balance by reverting to the old manual gain. It adds a flow that maintains the last automatic gain and updates to a new gain only when requested.",
+            "takeaway": "The core is the gain to maintain when turning off AWB and the re-search operation in manual mode. In libcamera-based implementations, this behavior and the expression of the AWB state in the upper layer should be reviewed together, but the current patch's convergence criteria should not be applied as a finalized contract.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주 뉴스레터에서는 Android 17 Camera ITS 준비에 대한 중요한 정보를 전해드립니다. 실행 환경 버전과 달라진 검증 항목을 통해 Python 패키지 목록 외에 확인해야 할 사항들을 자세히 알아보세요. 또한, libcamera AWB 제안에 대한 소식도 있습니다. 자동 게인을 고정하고 필요할 때 다시 수렴시키는 새로운 접근 방식이 어떻게 색 변화를 개선할 수 있는지 살펴보시기 바랍니다.",
+      "items": [
+        {
+          "id": "url:https://source.android.com/docs/compatibility/cts/its-release-notes-17",
+          "href": "newsletters/2026-W41/index.html#article-android-17-camera-its",
+          "headline": "Android 17 Camera ITS: 실행 환경 버전과 달라진 검증 항목",
+          "lead": "Android 17 Camera ITS를 준비할 때 맞춰야 할 것은 Python 패키지 목록만이 아닙니다. Python과 FFmpeg 실행 파일의 버전, 테스트 차트, CTS Verifier의 활동 구성을 함께 확인해야 합니다.",
+          "takeaway": "검증 실패를 분석할 때 실행 환경의 버전·경로, 차트 구성, HAL 출력의 차이를 구분해야 합니다. 특히 YUV/JPEG 색상 차이와 JPEG_R 미리보기·캡처 간 화이트 밸런스는 새 검사 조건을 기준으로 결과를 비교할 항목입니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png",
+            "alt": "Android Open Source Project",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/28387",
+          "href": "newsletters/2026-W41/index.html#article-libcamera-awb",
+          "headline": "libcamera AWB 제안: 자동 게인을 고정하고 필요할 때 다시 수렴시키기",
+          "lead": "자동 화이트 밸런스를 끌 때 예전 수동 게인으로 되돌아가면서 색이 갑자기 변하는 동작을 개선하려는 제안입니다. 마지막 자동 게인을 유지하고, 요청할 때만 새 게인으로 갱신하는 흐름을 추가합니다.",
+          "takeaway": "핵심은 AWB를 끌 때 유지할 게인과 수동 상태에서의 재탐색 동작입니다. libcamera를 사용하는 구현에서는 이 동작과 상위 계층의 AWB 상태 표현을 함께 검토하되, 현재 패치의 수렴 기준을 확정된 계약으로 적용하지 않아야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -354,7 +430,175 @@
       "title": "2026 W40",
       "summary": "Android Studio to support integrated developer-customized AI coding agents\nAnthropic Claude Opus 5.5 released: Fable 5.1-level performance with 40% cost reduction compared to Opus 5\nProposed Renesas RZ/V2H EVK Device Tree Patch to Enable Arm Mali-C55 ISP and IVC\nProposed Linux Kernel Driver Patch v3 for Samsung S5K3T2 Image Sensor Support\nSharing Latest Kernel and libcamera Test Results for Sony IMX681 Camera Sensor Support Patch v7",
       "html": "en/newsletters/2026-W40/index.html",
-      "md": "en/newsletters/2026-W40/newsletter.md"
+      "md": "en/newsletters/2026-W40/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week, we cover 5 news items, including 'Android Studio's integrated support for developer-customized AI coding agents' and 'Anthropic Claude Opus 5.5 released: Fable 5.1-level performance with 40% cost reduction compared to Opus 5'.",
+        "items": [
+          {
+            "id": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+            "href": "en/newsletters/2026-W40/index.html#article-android-studio-to-support-integrated-developer-customized-ai-coding-agents",
+            "headline": "Android Studio to support integrated developer-customized AI coding agents",
+            "lead": "Android Studio now provides an environment where various AI agents can be freely selected and integrated, enabling development teams to build customized workflows.",
+            "takeaway": "Although there are no direct HAL changes, C++ native development teams can consider integrating AI agents within Android Studio to improve code writing and debugging productivity.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+              "alt": "Announcement of support for selecting and integrating third-party AI agents in Android Studio",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://www.anthropic.com/claude-opus-5-5",
+            "href": "en/newsletters/2026-W40/index.html#article-anthropic-claude-opus-5-5-released-fable-5-1-level-performance-with-40-cost-redu",
+            "headline": "Anthropic Claude Opus 5.5 released: Fable 5.1-level performance with 40% cost reduction compared to Opus 5",
+            "lead": "Anthropic has unveiled Claude Opus 5.5, the first model in the Claude 5.5 family. It is stated to deliver Claude Fable 5.1-level performance in most tasks, with execution costs 40% lower than Opus 5.",
+            "takeaway": "Although there are no direct HAL changes, productivity can be improved by utilizing the Claude Opus 5.5 model for generating native C++ code snippets and writing unit test scripts.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
+              "alt": "Anthropic Claude Opus 5.5 released: Fable 5.1-level performance with 40% cost reduction compared to Opus 5",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org",
+            "href": "en/newsletters/2026-W40/index.html#article-proposed-renesas-rz-v2h-evk-device-tree-patch-to-enable-arm-mali-c55-isp-and-ivc",
+            "headline": "Proposed Renesas RZ/V2H EVK Device Tree Patch to Enable Arm Mali-C55 ISP and IVC",
+            "lead": "A device tree patch has been proposed to support hardware-accelerated image processing on the Renesas RZ/V2H EVK platform, which is expected to bring changes to the lower image pipeline.",
+            "takeaway": "Although there are no direct Android HAL changes, the ISP and IVC control interfaces exposed via the V4L2 uAPI in the lower driver layer, as well as frame start and stop interrupt timings, need to be reviewed.",
+            "tags": [
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me",
+            "href": "en/newsletters/2026-W40/index.html#article-proposed-linux-kernel-driver-patch-v3-for-samsung-s5k3t2-image-sensor-support",
+            "headline": "Proposed Linux Kernel Driver Patch v3 for Samsung S5K3T2 Image Sensor Support",
+            "lead": "A Linux kernel driver patch has been proposed to support Samsung's 20-megapixel CMOS image sensor, the S5K3T2, which is expected to contribute to future new device integration.",
+            "takeaway": "Although there are no direct HAL changes, when introducing the S5K3T2 sensor, the sensor mode settings via the V4L2 subdevice and MIPI D-PHY lane configuration should be reviewed in advance.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com",
+            "href": "en/newsletters/2026-W40/index.html#article-sharing-latest-kernel-and-libcamera-test-results-for-sony-imx681-camera-sensor-s",
+            "headline": "Sharing Latest Kernel and libcamera Test Results for Sony IMX681 Camera Sensor Support Patch v7",
+            "lead": "A report on testing Sony IMX681 camera sensor support patch series v7 in the latest kernel and libcamera environment has been released. The tester built the kernel after additional modifications but reported finding several issues during camera inspection.",
+            "takeaway": "Although there are no direct HAL changes, if considering the adoption of IMX681, it is advisable to confirm how the reported CPU/GPU path issues and build modifications are resolved in subsequent versions before scheduling integration, rather than using v7 as is.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원’, ‘앤트로픽 Claude Opus 5.5 공개: Fable 5.1급 성능에 Opus 5 대비 비용 40% 절감’ 등 5건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://android-developers.googleblog.com/2026/09/build-your-way-use-any-ai-agent-in-android-studio.html",
+          "href": "newsletters/2026-W40/index.html#article-ai",
+          "headline": "안드로이드 스튜디오에서 개발자 맞춤형 AI 코딩 에이전트 통합 지원",
+          "lead": "안드로이드 스튜디오에서 다양한 AI 에이전트를 자유롭게 선택하고 통합할 수 있는 환경이 마련되어 개발팀의 맞춤형 워크플로우 구축이 가능해졌습니다.",
+          "takeaway": "직접적인 HAL 변경은 없으나 C++ 네이티브 개발팀의 코드 작성 및 디버깅 생산성 향상을 위해 안드로이드 스튜디오 내 AI 에이전트 통합 환경을 검토할 수 있습니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVijlUmODt3ow1Idsd8Ym6PooGBLRhyphenhyphen-iQZDu4HdVmBqD2pXpoToSAS95n2KGmCOPZffaac-lFhs11rbr49ooB6HyzI6ePNGzhQ83xx-5qTwPUOnwlKbWLP5bIPi1CmDy-vU0UVVW_dh-T2jLK33nbI1gBwHxmIBoXV748JStkCSUONOoH5zBBHX0jlLE/s2049/BYOA-Backup-Metadata_1.png",
+            "alt": "Android Studio에서 서드파티 AI 에이전트 선택 및 통합 지원 발표",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://www.anthropic.com/claude-opus-5-5",
+          "href": "newsletters/2026-W40/index.html#article-claude-opus-5-5-fable-5-1-opus-5-40",
+          "headline": "앤트로픽 Claude Opus 5.5 공개: Fable 5.1급 성능에 Opus 5 대비 비용 40% 절감",
+          "lead": "앤트로픽이 Claude 5.5 제품군의 첫 모델인 Claude Opus 5.5를 공개했습니다. 대부분의 작업에서 Claude Fable 5.1 수준의 성능을 내면서 실행 비용은 Opus 5보다 40% 낮다고 밝혔습니다.",
+          "takeaway": "직접적인 HAL 변경은 없으나 네이티브 C++ 코드 스니펫 생성 및 단위 테스트 스크립트 작성 시 Claude Opus 5.5 모델을 활용한 생산성 향상을 도모할 수 있습니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://www-cdn.anthropic.com/images/4zrzovbb/website/f4d37a1d1f582f53f4e89440062b649b6273a093-1200x630.jpg",
+            "alt": "앤트로픽 Claude Opus 5.5 공개: Fable 5.1급 성능에 Opus 5 대비 비용 40% 절감",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260925-mali-c55-renesas-dts-v2-0-69f728a474a2@kernel.org",
+          "href": "newsletters/2026-W40/index.html#article-rz-v2h-evk-arm-mali-c55-isp-ivc",
+          "headline": "르네사스 RZ/V2H EVK 디바이스 트리 패치로 Arm Mali-C55 ISP 및 IVC 활성화 제안",
+          "lead": "르네사스 RZ/V2H EVK 플랫폼에서 하드웨어 가속 이미지 처리를 지원하기 위한 디바이스 트리 패치가 제안되어 하위 이미지 파이프라인의 변화가 예상됩니다.",
+          "takeaway": "직접적인 Android HAL 변경은 없으나 하위 드라이버 계층에서 V4L2 uAPI를 통해 노출되는 ISP 및 IVC 제어 인터페이스와 프레임 시작 및 정지 인터럽트 타이밍을 점검해야 합니다.",
+          "tags": [
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260924-upstream-s5k3t2-v3-0-a5c58dfcec29@proton.me",
+          "href": "newsletters/2026-W40/index.html#article-s5k3t2-linux-v3",
+          "headline": "삼성 S5K3T2 이미지 센서 지원을 위한 Linux 커널 드라이버 패치 v3 제안",
+          "lead": "삼성의 20메가픽셀 CMOS 이미지 센서인 S5K3T2를 지원하기 위한 Linux 커널 드라이버 패치가 제안되어 향후 신규 디바이스 통합에 기여할 것으로 기대됩니다.",
+          "takeaway": "직접적인 HAL 변경은 없으나 S5K3T2 센서 도입 시 V4L2 서브디바이스를 통한 센서 모드 설정 및 MIPI D-PHY 레인 구성을 사전에 검토해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260926092828.11675-1-germanpapulindez@gmail.com",
+          "href": "newsletters/2026-W40/index.html#article-imx681-v7-libcamera",
+          "headline": "소니 IMX681 카메라 센서 지원 패치 v7에 대한 최신 커널 및 libcamera 테스트 결과 공유",
+          "lead": "소니 IMX681 카메라 센서 지원 패치 시리즈 v7을 최신 커널과 libcamera 환경에서 시험한 보고가 공개됐습니다. 테스터는 추가 수정을 거쳐 커널을 빌드했지만, 카메라를 점검하는 과정에서 여러 문제를 발견했다고 밝혔습니다.",
+          "takeaway": "직접적인 HAL 변경은 없으나 IMX681 도입을 검토한다면 v7을 그대로 쓰기보다, 보고된 CPU·GPU 경로 문제와 빌드 수정이 후속 버전에서 어떻게 정리되는지 확인한 뒤 통합 일정을 잡아야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -388,7 +632,177 @@
       "title": "2026 W39",
       "summary": "Claude Code projects feature redesigned, with conversational profiling and parallel PR opening\nClaude Code v2.1.271 released, with fast mode for remote sessions and improved TUI mouse support\nCodex rust-v0.155.1 released, improving API compatibility by disabling reasoning summaries by default in local TUI sessions\nIntel IPU6 driver: v2 patch series proposed to prepare for multi-stream and metadata support\nDMI quirk patch proposed to fix upside-down rear camera output on Microsoft Surface Pro 11",
       "html": "en/newsletters/2026-W39/index.html",
-      "md": "en/newsletters/2026-W39/newsletter.md"
+      "md": "en/newsletters/2026-W39/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 5 stories, including ‘Claude Code projects feature redesigned, with conversational profiling and parallel PR opening’ and ‘Claude Code v2.1.271 released, with fast mode for remote sessions and improved TUI mouse support’.",
+        "items": [
+          {
+            "id": "url:https://claude.com/blog/projects-redesigned",
+            "href": "en/newsletters/2026-W39/index.html#article-claude-code-projects-feature-redesigned-with-conversational-profiling-and-parall",
+            "headline": "Claude Code projects feature redesigned, with conversational profiling and parallel PR opening",
+            "lead": "The project management feature of the AI coding tool Claude Code has been fully redesigned. Developers can now automate tasks such as code profiling, optimization testing, and parallel PR creation through conversational sessions.",
+            "takeaway": "Teams that review changes across multiple repositories can try out parallel PRs and the test flow with a single small task that can run in the cloud. Because each thread works on a separate branch and repository copy, merge conflicts need to be reviewed when the same code is modified. This does not mean that HAL builds or sensor validation that depend on local equipment or the internal network will run as-is in the cloud.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aac1eaf2091cb214f764427_og_projects-redesigned.jpg",
+              "alt": "Claude projects redesigned interface showing conversation-based workflow",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+            "href": "en/newsletters/2026-W39/index.html#article-claude-code-v2-1-271-released-with-fast-mode-for-remote-sessions-and-improved-tu",
+            "headline": "Claude Code v2.1.271 released, with fast mode for remote sessions and improved TUI mouse support",
+            "lead": "Claude Code, an AI terminal coding tool, has been updated to v2.1.271. The main points of this update are a fast mode that speeds up processing in remote development sessions and improved mouse usability in the terminal user interface (TUI).",
+            "takeaway": "There is no direct change to HAL behavior, but it is useful for engineers who analyze and debug C++ camera stack code on large build servers or remote self-hosted runners. Using fast mode in remote sessions can reduce waiting time when analyzing complex build error logs or summarizing static analysis results, which helps maintain the continuity of the debugging workflow.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271",
+              "alt": "Claude Code v2.1.271 release open graph image",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+            "href": "en/newsletters/2026-W39/index.html#article-codex-rust-v0-155-1-released-improving-api-compatibility-by-disabling-reasoning-",
+            "headline": "Codex rust-v0.155.1 released, improving API compatibility by disabling reasoning summaries by default in local TUI sessions",
+            "lead": "The rust-v0.155.1 release of the Codex CLI disables reasoning summaries by default in new local TUI sessions. It fixes request rejections by API providers that do not support reasoning summaries, while preserving explicitly specified settings.",
+            "takeaway": "If you have run into request rejections while performing code analysis with the Codex CLI connected to a different API provider, you can check the reasoning summaries setting of new local TUI sessions. After updating, check whether the issue reproduces by distinguishing between the default setting and an explicitly enabled setting. This fix concerns whether reasoning summaries are supported; it does not guarantee full API compatibility or offline operation.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://opengraph.githubassets.com/60e99469eda788e15e80df021267df18b608398448e68c696b9d49d004c4bd91/openai/codex/releases/tag/rust-v0.155.1",
+              "alt": "Codex rust-v0.155.1 release open graph image",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com",
+            "href": "en/newsletters/2026-W39/index.html#article-intel-ipu6-driver-v2-patch-series-proposed-to-prepare-for-multi-stream-and-metad",
+            "headline": "Intel IPU6 driver: v2 patch series proposed to prepare for multi-stream and metadata support",
+            "lead": "A v2 series of 21 patches preparing multi-stream and metadata support for the Intel IPU6 driver has been proposed. Together with follow-up patches, it is preparatory work for handling multiple streams from a single source; it is not an announcement that the feature is complete with this series alone.",
+            "takeaway": "Teams reviewing IPU6 changes will find it useful to first check the dependency relationship between this series and the follow-up metadata patches, and to run regression checks that existing single-stream capture still works before and after a backport. Verification of multi-stream behavior should be done on a configuration that includes the required follow-up patches. The proposal does not guarantee Android HAL3 API changes, complete simultaneous YUV/RAW support, or any buffer latency or performance improvement figures.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me",
+            "href": "en/newsletters/2026-W39/index.html#article-dmi-quirk-patch-proposed-to-fix-upside-down-rear-camera-output-on-microsoft-surf",
+            "headline": "DMI quirk patch proposed to fix upside-down rear camera output on Microsoft Surface Pro 11",
+            "lead": "A patch has been proposed that adds a DMI-based 180-degree rotation per-device quirk to the camera driver, to fix the rear camera image being output upside down on the Microsoft Surface Pro 11 (Intel) model.",
+            "takeaway": "It can serve as an example when investigating sensor orientation errors, comparing the firmware's SSDB and _PLD information against the actual mounting orientation. On the affected Surface Pro 11 (Intel) model, compare the camera_sensor_rotation and libcamera Rotation values before and after the patch, and also check the preview and capture orientation. This patch alone does not guarantee Android SENSOR_ORIENTATION mapping, removal of GPU/CPU rotation cost, or passing CTS/VTS.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Claude Code 프로젝트 기능 재설계, 대화형 프로파일링 및 병렬 PR 오픈 지원’, ‘Claude Code v2.1.271 릴리스, 원격 세션 빠른 모드 및 TUI 마우스 지원 개선’ 등 5건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://claude.com/blog/projects-redesigned",
+          "href": "newsletters/2026-W39/index.html#article-claude-code-pr",
+          "headline": "Claude Code 프로젝트 기능 재설계, 대화형 프로파일링 및 병렬 PR 오픈 지원",
+          "lead": "AI 코딩 도구인 Claude Code의 프로젝트 관리 기능이 전면 재설계되었습니다. 이제 개발자는 대화형 세션을 통해 코드 프로파일링, 최적화 테스트, 병렬 PR 생성 등의 작업을 자동화할 수 있습니다.",
+          "takeaway": "여러 저장소의 변경을 함께 검토하는 팀이라면, 클라우드에서 실행 가능한 작은 작업 하나로 병렬 PR과 테스트 흐름을 시험해 볼 수 있습니다. 각 스레드는 별도 브랜치와 저장소 사본에서 동작하므로 동일 코드 수정 시에는 병합 충돌 검토가 필요합니다. 로컬 장비·사내망에 의존하는 HAL 빌드나 센서 검증이 클라우드에서 그대로 실행된다는 의미는 아닙니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://cdn.prod.website-files.com/68a44d4040f98a4adf2207b6/6aac1eaf2091cb214f764427_og_projects-redesigned.jpg",
+            "alt": "Claude projects redesigned interface showing conversation-based workflow",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://github.com/anthropics/claude-code/releases/tag/v2.1.271",
+          "href": "newsletters/2026-W39/index.html#article-claude-code-v2-1-271-tui",
+          "headline": "Claude Code v2.1.271 릴리스, 원격 세션 빠른 모드 및 TUI 마우스 지원 개선",
+          "lead": "AI 터미널 코딩 도구인 Claude Code가 v2.1.271 버전으로 업데이트되었습니다. 이번 업데이트는 원격 개발 세션에서의 처리 속도를 높이는 빠른 모드와 터미널 사용자 인터페이스(TUI)의 마우스 편의성 개선을 골자로 합니다.",
+          "takeaway": "직접적인 HAL 동작 변화는 없으나, 대규모 빌드 서버나 원격 자체 호스팅 러너 환경에서 C++ 카메라 스택 코드를 분석하고 디버깅하는 엔지니어들에게 유용합니다. 원격 세션의 빠른 모드를 활용하면 복잡한 빌드 오류 로그 분석이나 정적 분석 결과 요약 시 대기 시간을 줄일 수 있어, 디버깅 워크플로우의 연속성을 유지하는 데 도움이 됩니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://opengraph.githubassets.com/add00c53a834d0fc9e435e92939b09adb042a29923e9e24bccd2af203a0aa9c7/anthropics/claude-code/releases/tag/v2.1.271",
+            "alt": "Claude Code v2.1.271 release open graph image",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://github.com/openai/codex/releases/tag/rust-v0.155.1",
+          "href": "newsletters/2026-W39/index.html#article-codex-rust-v0-155-1-tui-api",
+          "headline": "Codex rust-v0.155.1 릴리스, 로컬 TUI 세션 추론 요약 기본 비활성화로 API 호환성 개선",
+          "lead": "Codex CLI의 rust-v0.155.1 릴리스는 새 로컬 TUI 세션에서 추론 요약을 기본 비활성화합니다. 추론 요약을 지원하지 않는 API 제공업체의 요청 거부를 해결하며, 명시적으로 지정한 설정은 유지합니다.",
+          "takeaway": "다른 API 제공업체와 Codex CLI를 연결해 코드 분석을 수행하다 요청 거부를 겪었다면, 새 로컬 TUI 세션의 추론 요약 설정을 확인할 수 있습니다. 업데이트 후 기본 설정과 명시적으로 활성화한 설정을 구분해 재현 여부를 점검하세요. 이번 수정은 추론 요약 지원 여부에 관한 것으로, 모든 API 호환성이나 오프라인 동작을 보장하지는 않습니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://opengraph.githubassets.com/60e99469eda788e15e80df021267df18b608398448e68c696b9d49d004c4bd91/openai/codex/releases/tag/rust-v0.155.1",
+            "alt": "Codex rust-v0.155.1 release open graph image",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260917113923.59004-1-sakari.ailus@linux.intel.com",
+          "href": "newsletters/2026-W39/index.html#article-intel-ipu6-v2",
+          "headline": "Intel IPU6 드라이버, 멀티 스트림 및 메타데이터 지원을 위한 v2 패치 시리즈 제안",
+          "lead": "Intel IPU6 드라이버의 멀티 스트림·메타데이터 지원을 준비하는 21개 패치의 v2 시리즈가 제안되었습니다. 후속 패치와 함께 단일 소스의 여러 스트림을 처리하기 위한 준비 작업이며, 이 시리즈만으로 기능이 완성되었다는 발표는 아닙니다.",
+          "takeaway": "IPU6 변경을 검토하는 팀은 이 시리즈와 후속 메타데이터 패치의 의존 관계를 먼저 확인하고, 백포트 전후의 기존 단일 스트림 캡처가 유지되는지 회귀 검증하는 것이 유용합니다. 여러 스트림의 동작 확인은 필요한 후속 패치까지 포함한 구성에서 진행해야 합니다. 제안문은 Android HAL3 API 변경, YUV/RAW 동시 지원 완성, 버퍼 지연이나 성능 개선 수치를 보장하지 않습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260917144527.24804-1-lsa.uz@pm.me",
+          "href": "newsletters/2026-W39/index.html#article-microsoft-surface-pro-11-dmi",
+          "headline": "Microsoft Surface Pro 11 후면 카메라 거꾸로 출력되는 현상 해결을 위한 DMI 보정 패치 제안",
+          "lead": "Microsoft Surface Pro 11 (Intel) 모델에서 후면 카메라 이미지가 상하가 뒤집혀 출력되는 문제를 해결하기 위해, 카메라 드라이버에 DMI 기반의 180도 회전 장치별 보정(quirk)을 추가하는 패치가 제안되었습니다.",
+          "takeaway": "센서 방향 오류를 조사할 때 펌웨어의 SSDB·_PLD 정보와 실제 장착 방향을 대조하는 사례로 활용할 수 있습니다. 해당 Surface Pro 11 (Intel) 모델에서는 패치 전후의 camera_sensor_rotation과 libcamera Rotation 값을 비교하고 프리뷰·캡처 방향을 함께 확인하세요. 이 패치만으로 Android SENSOR_ORIENTATION 매핑, GPU/CPU 회전 비용 제거 또는 CTS/VTS 통과가 보장되지는 않습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -419,7 +833,151 @@
       "title": "2026 W38",
       "summary": "Rockchip RKISP1 ISP driver: patch posted to fix Bayer demosaicing bypass logic error\nNew Linux driver patch posted for the OmniVision os02g10 image sensor\nlibcamera: patch proposed to fix Sony IMX355 sensor test pattern mode mapping\nlibcamera: proposal to add LensShadingCorrection and ToneCurve to controls metadata",
       "html": "en/newsletters/2026-W38/index.html",
-      "md": "en/newsletters/2026-W38/newsletter.md"
+      "md": "en/newsletters/2026-W38/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 4 stories, including ‘Rockchip RKISP1 ISP driver: patch posted to fix Bayer demosaicing bypass logic error’ and ‘New Linux driver patch posted for the OmniVision os02g10 image sensor’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com",
+            "href": "en/newsletters/2026-W38/index.html#article-rockchip-rkisp1-isp-driver-patch-posted-to-fix-bayer-demosaicing-bypass-logic-er",
+            "headline": "Rockchip RKISP1 ISP driver: patch posted to fix Bayer demosaicing bypass logic error",
+            "lead": "A patch has been proposed that fixes a logic error in the Rockchip RKISP1 ISP driver where the Bayer demosaicing bypass bit was handled inversely.",
+            "takeaway": "There is no direct Android Camera HAL change, but because the demosaicing bypass logic of the underlying ISP driver is being fixed, color distortion or noise control behavior may change when outputting RAW streams and applying ISP tuning parameters. Quality verification of RAW and YUV streams should be performed at the HAL layer.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io",
+            "href": "en/newsletters/2026-W38/index.html#article-new-linux-driver-patch-posted-for-the-omnivision-os02g10-image-sensor",
+            "headline": "New Linux driver patch posted for the OmniVision os02g10 image sensor",
+            "lead": "A new V4L2 driver patch series (v5) has been proposed to officially support the OmniVision os02g10 image sensor.",
+            "takeaway": "With the addition of the new sensor driver, a lower-level path has been secured for implementing manual exposure and gain control (SENSOR_EXPOSURE_TIME, SENSOR_SENSITIVITY), flip control, and more in the Android Camera HAL. The 1080p30 SBGGR10 stream configuration should be mapped into the HAL's stream map, and its integration with the V4L2 controls should be verified.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/28200",
+            "href": "en/newsletters/2026-W38/index.html#article-libcamera-patch-proposed-to-fix-sony-imx355-sensor-test-pattern-mode-mapping",
+            "headline": "libcamera: patch proposed to fix Sony IMX355 sensor test pattern mode mapping",
+            "lead": "A patch has been proposed in the libcamera project that corrects a test pattern mode mapping error for the Sony IMX355 sensor, improving the verification reliability of the lower camera stack.",
+            "takeaway": "There is no direct HAL change, but because the IMX355 sensor's test pattern mapping is fixed in the lower libcamera layer, it can ensure that the correct hardware test pattern is output when the Camera HAL sets SENSOR_TEST_PATTERN_MODE. This is useful for CTS test pattern verification and for debugging the data path between the sensor and the HAL.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/28219",
+            "href": "en/newsletters/2026-W38/index.html#article-libcamera-proposal-to-add-lensshadingcorrection-and-tonecurve-to-controls-metada",
+            "headline": "libcamera: proposal to add LensShadingCorrection and ToneCurve to controls metadata",
+            "lead": "A patch has been proposed for libcamera that provides lens shading correction maps and tone curves as frame result metadata, aiming to match the color reproduction of DNG files to JPEG.",
+            "takeaway": "The key is to check the frame results of the Raspberry Pi pipeline together with the DNG saving path. You can compare DNG and JPEG of the same scene and verify that the channel layout and size of the lens shading correction maps, and the tone curve data, are correctly reflected in the file. Android Camera HAL integration is an area that requires separate implementation and verification, and this patch does not include changes that connect HAL requests to ISP control.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개’, ‘OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 공개’ 등 4건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260911-imx8mp-demosaicing-bypass-v1-1-5568a7a560a6@ideasonboard.com",
+          "href": "newsletters/2026-W38/index.html#article-rockchip-rkisp1-isp-bayer-demosaicing",
+          "headline": "Rockchip RKISP1 ISP 드라이버, Bayer Demosaicing 바이패스 로직 오류 수정 패치 공개",
+          "lead": "Rockchip RKISP1 ISP 드라이버에서 Bayer demosaicing 바이패스 비트가 반대로 처리되던 로직 오류를 해결하는 패치가 제안되었습니다.",
+          "takeaway": "직접적인 Android Camera HAL 변경은 없으나, 하위 ISP 드라이버의 demosaicing 바이패스 로직이 수정됨에 따라 RAW 스트림 출력 및 ISP 튜닝 파라미터 적용 시 색상 왜곡이나 노이즈 제어 동작이 달라질 수 있습니다. HAL 계층에서 RAW 및 YUV 스트림의 품질 검증을 수행해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260908114235.86568-1-elgin.perumbilly@siliconsignals.io",
+          "href": "newsletters/2026-W38/index.html#article-omnivision-os02g10",
+          "headline": "OmniVision os02g10 이미지 센서용 신규 리눅스 드라이버 패치 공개",
+          "lead": "OmniVision os02g10 이미지 센서를 공식 지원하기 위한 신규 V4L2 드라이버 패치 시리즈(v5)가 제안되었습니다.",
+          "takeaway": "새로운 센서 드라이버의 추가로 Android Camera HAL에서 수동 노출 및 게인 제어(SENSOR_EXPOSURE_TIME, SENSOR_SENSITIVITY), 플립 제어 등을 구현할 수 있는 하위 경로가 확보되었습니다. 1080p30 SBGGR10 스트림 구성을 HAL의 스트림 맵에 매핑하고 V4L2 컨트롤과의 연동을 검증해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/28200",
+          "href": "newsletters/2026-W38/index.html#article-libcamera-sony-imx355",
+          "headline": "libcamera, Sony IMX355 센서 테스트 패턴 모드 매핑 수정 패치 제안",
+          "lead": "libcamera 프로젝트에서 Sony IMX355 센서의 테스트 패턴 모드 매핑 오류를 바로잡아 하위 카메라 스택의 검증 신뢰성을 높이는 패치가 제안되었습니다.",
+          "takeaway": "직접적인 HAL 변경은 없으나, 하위 libcamera 계층에서 IMX355 센서의 테스트 패턴 매핑이 수정됨에 따라 Camera HAL에서 SENSOR_TEST_PATTERN_MODE를 설정할 때 정확한 하드웨어 테스트 패턴이 출력되도록 보장할 수 있습니다. 이는 CTS 테스트 패턴 검증 및 센서-HAL 간 데이터 경로 디버깅에 유용합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/28219",
+          "href": "newsletters/2026-W38/index.html#article-libcamera-lensshadingcorrection-tonecurve",
+          "headline": "libcamera, 컨트롤 메타데이터에 LensShadingCorrection 및 ToneCurve 추가 제안",
+          "lead": "libcamera에서 렌즈 음영 보정 맵과 톤 곡선을 프레임 결과 메타데이터로 제공하여, DNG 파일의 색 재현을 JPEG에 맞추려는 패치가 제안되었습니다.",
+          "takeaway": "Raspberry Pi 파이프라인의 프레임 결과와 DNG 저장 경로를 함께 확인하는 것이 핵심입니다. 같은 장면의 DNG와 JPEG를 비교하고, 렌즈 음영 보정 맵의 채널 구성과 크기, 톤 곡선 데이터가 파일에 올바르게 반영되는지 검증할 수 있습니다. Android Camera HAL 연동은 별도 구현과 검증이 필요한 영역이며, 이 패치에 HAL 요청을 ISP 제어로 연결하는 변경은 포함되어 있지 않습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -450,7 +1008,183 @@
       "title": "2026 W37",
       "summary": "Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver\nQualcomm x1e/Hamoa platform camera DTS support patch v6 posted\nLinux kernel patch v7 posted for Lenovo Yoga Book YB1-X91 camera support\nlibcamera control storage union naming patch v3 accepted\nlibcamera patch posted to skip unnecessary stop call before the software ISP worker starts",
       "html": "en/newsletters/2026-W37/index.html",
-      "md": "en/newsletters/2026-W37/newsletter.md"
+      "md": "en/newsletters/2026-W37/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 5 stories, including ‘Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver’ and ‘Qualcomm x1e/Hamoa platform camera DTS support patch v6 posted’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com",
+            "href": "en/newsletters/2026-W37/index.html#article-linux-kernel-patch-v6-posted-to-support-the-omnivision-og0va1b-monochrome-vga-se",
+            "headline": "Linux kernel patch v6 posted to support the OmniVision OG0VA1B monochrome VGA sensor driver",
+            "lead": "A v6 patch series has been posted to add a driver to the Linux media subsystem for the OG0VA1B, OmniVision's 1/10-inch low-power monochrome VGA sensor. With support for a single-lane MIPI CSI-2 interface and Y10 RAW format output, it appears set to lay the groundwork for building embedded and mobile monochrome camera pipelines.",
+            "takeaway": "There is no direct Android Camera HAL change, but because a 10-bit monochrome RAW (Y10) format is added at the lower V4L2 driver level, when implementing HAL3 you should check that the Y10 format is correctly defined in the RAW stream configuration and the ISP pixel format mapping table.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org",
+            "href": "en/newsletters/2026-W37/index.html#article-qualcomm-x1e-hamoa-platform-camera-dts-support-patch-v6-posted",
+            "headline": "Qualcomm x1e/Hamoa platform camera DTS support patch v6 posted",
+            "lead": "A v6 patch adding Device Tree Source (DTS) support that defines the camera hardware configuration of the Qualcomm x1e/Hamoa platform has been posted. This update focuses on improving hardware initialization stability, for example by aligning the data lane ordering of the CAMSS node with the PHY layer and making the power supply schema consistent.",
+            "takeaway": "There is no direct HAL change, but the data lane alignment and power supply changes directly affect the physical connection stability of the camera subsystem. Lower-stack verification should be done first so that MIPI CSI-2 receiver initialization errors or power-on failures do not occur at the driver level.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com",
+            "href": "en/newsletters/2026-W37/index.html#article-linux-kernel-patch-v7-posted-for-lenovo-yoga-book-yb1-x91-camera-support",
+            "headline": "Linux kernel patch v7 posted for Lenovo Yoga Book YB1-X91 camera support",
+            "lead": "A v7 patch series has been posted to fully support the front and rear camera system of the Lenovo Yoga Book YB1-X91. This patch contains comprehensive hardware control logic covering not only the OV8858 and OV2740 image sensor drivers but also AtomISP, the IPU bridge, and the WV517S lens actuator.",
+            "takeaway": "There is no direct HAL change, but because the OV2740's manual white balance and the OV8858's gain control are exposed as V4L2 controls, you should verify that Camera HAL3 3A metadata control requests are accurately mapped to the kernel driver's V4L2 controls and work correctly.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/28179",
+            "href": "en/newsletters/2026-W37/index.html#article-libcamera-control-storage-union-naming-patch-v3-accepted",
+            "headline": "libcamera control storage union naming patch v3 accepted",
+            "lead": "A v3 patch giving a clear name to the control storage union structure inside libcamera was submitted and moved to accepted state. The stated purpose in the commit message is to make it possible to copy the storage as a single unit regardless of which member is active, and this patch is the first of a 5-patch series that introduces a move constructor and a swap() operation.",
+            "takeaway": "This part by itself is a step that tidies up the storage representation, so it does not change HAL runtime behavior. However, projects that customize the libcamera source and integrate it into the lower layers of an Android HAL should check build compatibility to make sure the union naming change does not cause compile errors in existing custom control code.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/28194",
+            "href": "en/newsletters/2026-W37/index.html#article-libcamera-patch-posted-to-skip-unnecessary-stop-call-before-the-software-isp-wor",
+            "headline": "libcamera patch posted to skip unnecessary stop call before the software ISP worker starts",
+            "lead": "A patch has been submitted that fixes a problem in libcamera's software image signal processing (software_isp) component where a call would hang indefinitely when starting the camera failed. It changes the code to return early instead of waiting for a worker thread that has not yet started, so that the original capture error is passed on to the caller as-is.",
+            "takeaway": "There is no direct HAL change, but if you have seen a symptom where opening the camera fails and the call hangs without returning in a pipeline that goes through the software ISP, you can suspect this path. Please check, with a scenario that deliberately injects a capture start failure, that the error is propagated up to the upper layers.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개’, ‘Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개’ 등 5건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260901-og0va1b-v6-0-a05b2d04c892@oss.qualcomm.com",
+          "href": "newsletters/2026-W37/index.html#article-omnivision-og0va1b-vga-linux-v6",
+          "headline": "OmniVision OG0VA1B 흑백 VGA 센서 드라이버 지원을 위한 Linux 커널 패치 v6 공개",
+          "lead": "Linux 미디어 하위 시스템에 OmniVision의 1/10인치 저전력 흑백 VGA 센서인 OG0VA1B 드라이버를 추가하기 위한 v6 패치 시리즈가 공개되었습니다. 단일 레인 MIPI CSI-2 인터페이스와 Y10 RAW 포맷 출력을 지원하여, 임베디드 및 모바일 흑백 카메라 파이프라인 구축의 기반이 마련될 것으로 보입니다.",
+          "takeaway": "직접적인 Android Camera HAL 변경은 없으나, 하위 V4L2 드라이버 레벨에서 10비트 흑백 RAW (Y10) 포맷이 추가되므로 HAL3 구현 시 RAW 스트림 구성 및 ISP 픽셀 포맷 매핑 테이블에 Y10 형식이 올바르게 정의되어 있는지 점검해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260906-x1e-camss-csi2-phy-dtsi-v6-0-067f2ecc4630@linaro.org",
+          "href": "newsletters/2026-W37/index.html#article-qualcomm-x1e-hamoa-dts-v6",
+          "headline": "Qualcomm x1e/Hamoa 플랫폼 카메라 DTS 지원 패치 v6 공개",
+          "lead": "Qualcomm x1e/Hamoa 플랫폼의 카메라 하드웨어 구성을 정의하는 Device Tree Source (DTS) 지원 v6 패치가 공개되었습니다. 이번 업데이트는 CAMSS 노드의 데이터 레인 정렬을 PHY 계층과 일치시키고 전원 공급 스키마를 정합화하는 등 하드웨어 초기화 안정성을 높이는 데 초점을 맞추었습니다.",
+          "takeaway": "직접적인 HAL 변경은 없으나, 데이터 레인 정렬 및 전원 공급 변경은 카메라 서브시스템의 물리적 연결 안정성에 직결됩니다. 드라이버 레벨에서 MIPI CSI-2 수신기 초기화 에러나 전원 인가 실패가 발생하지 않도록 하위 스택 검증을 선행해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/cover.1788360629.git.mauriziocasciano7@gmail.com",
+          "href": "newsletters/2026-W37/index.html#article-lenovo-yoga-book-yb1-x91-linux-v7",
+          "headline": "Lenovo Yoga Book YB1-X91 카메라 지원을 위한 Linux 커널 패치 v7 공개",
+          "lead": "Lenovo Yoga Book YB1-X91의 전면 및 후면 카메라 시스템을 완벽히 지원하기 위한 v7 패치 시리즈가 공개되었습니다. 이번 패치는 OV8858 및 OV2740 이미지 센서 드라이버뿐만 아니라, AtomISP, IPU 브리지, 그리고 WV517S 렌즈 액추에이터까지 아우르는 종합적인 하드웨어 제어 로직을 담고 있습니다.",
+          "takeaway": "직접적인 HAL 변경은 없으나, OV2740의 수동 화이트 밸런스 및 OV8858의 게인 제어 기능이 V4L2 컨트롤로 노출되므로, Camera HAL3의 3A 메타데이터 제어 요청이 커널 드라이버의 V4L2 컨트롤러에 정확히 매핑되고 정상 동작하는지 검증해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/28179",
+          "href": "newsletters/2026-W37/index.html#article-libcamera-v3",
+          "headline": "libcamera 컨트롤 스토리지 유니온 명명 패치 v3 승인",
+          "lead": "libcamera 내부의 컨트롤 스토리지 유니온 구조체에 명확한 이름을 부여하는 v3 패치가 제출되어 accepted 상태로 전환되었습니다. 커밋 메시지가 밝힌 목적은 활성 멤버가 무엇이든 저장소를 한 단위로 복사할 수 있게 만드는 것이며, 이 패치는 이동 생성자와 swap() 연산을 도입하는 5패치 시리즈의 첫 번째입니다.",
+          "takeaway": "이 조각 자체는 저장소 표현을 정리하는 단계라 HAL 런타임 동작을 바꾸지 않습니다. 다만 libcamera 소스를 커스텀하여 Android HAL 하위 계층에 연동하는 프로젝트라면, 유니온 명명 변경으로 기존 커스텀 제어 코드에서 컴파일 에러가 나지 않는지 빌드 호환성을 점검해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/28194",
+          "href": "newsletters/2026-W37/index.html#article-libcamera-isp-stop",
+          "headline": "libcamera 소프트웨어 ISP 워커 시작 전 불필요한 stop 호출 생략 패치 공개",
+          "lead": "libcamera의 소프트웨어 이미지 신호 처리(software_isp) 컴포넌트에서 카메라 시작이 실패했을 때 호출이 무한정 멈추던 문제를 고치는 패치가 제출되었습니다. 아직 구동되지 않은 워커 스레드를 기다리지 않고 일찍 반환하도록 바꾸어, 원래의 캡처 오류가 호출자에게 그대로 전달되게 합니다.",
+          "takeaway": "직접적인 HAL 변경은 없으나, 소프트웨어 ISP를 경유하는 파이프라인에서 카메라 열기가 실패했는데도 호출이 반환되지 않고 멈추는 증상을 겪었다면 이 경로를 의심해 볼 수 있습니다. 캡처 시작 실패를 일부러 주입하는 시나리오로 오류가 상위 계층까지 전달되는지 확인하시기 바랍니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -481,7 +1215,183 @@
       "title": "2026 W36",
       "summary": "AtomISP driver adds Lenovo Yoga Book OV2740 sensor link and D-PHY timing derivation support\nlibcamera reviews patch adding Quad-Bayer CFA layout support for high-resolution sensor handling\nLinux kernel: Lenovo Yoga Book YB1-X91 camera driver and sensor integration patch series posted\nSony IMX908 image sensor: Linux Device Tree binding added, laying the groundwork for official support\nlibcamera adds filter parameter to createTexture2D() in the software ISP EGL module",
       "html": "en/newsletters/2026-W36/index.html",
-      "md": "en/newsletters/2026-W36/newsletter.md"
+      "md": "en/newsletters/2026-W36/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 5 stories, including ‘AtomISP driver adds Lenovo Yoga Book OV2740 sensor link and D-PHY timing derivation support’ and ‘libcamera reviews patch adding Quad-Bayer CFA layout support for high-resolution sensor handling’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+            "href": "en/newsletters/2026-W36/index.html#article-atomisp-driver-adds-lenovo-yoga-book-ov2740-sensor-link-and-d-phy-timing-derivat",
+            "headline": "AtomISP driver adds Lenovo Yoga Book OV2740 sensor link and D-PHY timing derivation support",
+            "lead": "A PATCH v3 patch series improving the integration of the AtomISP bridge driver and the OV2740 image sensor has been submitted to the Linux kernel media subsystem. This change compensates at the driver level for incomplete camera link information in the hardware firmware, and supports dynamically deriving D-PHY timing from the sensor link frequency.",
+            "takeaway": "Driver-level D-PHY timing derivation and padding handling pass through the V4L2 subsystem and affect stream configuration validation in the Android Camera HAL. In particular, during RAW Bayer capture, if the padding pixels (12 pixels) are not correctly reflected in metadata (such as the active array size), image distortion or CTS test failures can occur, so this should be checked carefully.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/28095",
+            "href": "en/newsletters/2026-W36/index.html#article-libcamera-reviews-patch-adding-quad-bayer-cfa-layout-support-for-high-resolution",
+            "headline": "libcamera reviews patch adding Quad-Bayer CFA layout support for high-resolution sensor handling",
+            "lead": "A patch has been proposed that adds support to the libcamera framework for the Quad-Bayer CFA (Color Filter Array) layout, which is widely used in recent high-resolution image sensors. This change is expected to contribute to improving the accuracy of RAW data processing in the lower image processing pipeline.",
+            "takeaway": "With the libcamera layer directly recognizing and handling the Quad-Bayer CFA layout, the debayering quality and the accuracy of stride calculation for the RAW data that the Android Camera HAL receives from the lower stack are improved. This helps prevent buffer overflows or memory alignment errors when the HAL processes RAW_SENSOR or RAW10/RAW12 streams.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com",
+            "href": "en/newsletters/2026-W36/index.html#article-linux-kernel-lenovo-yoga-book-yb1-x91-camera-driver-and-sensor-integration-patch",
+            "headline": "Linux kernel: Lenovo Yoga Book YB1-X91 camera driver and sensor integration patch series posted",
+            "lead": "A Linux kernel driver patch series (PATCH v2) to fully support the camera hardware of the Lenovo Yoga Book YB1-X91 device has been posted. This patch focuses on compensating at the driver level for missing ACPI firmware information and integrating control of the front/rear sensors and the lens actuator.",
+            "takeaway": "With RAW Bayer capture exposure, per-channel white balance control, and a lens actuator (WV517S) added at the driver level, the Camera HAL can directly map the 3A (Auto Exposure, Auto White Balance, Auto Focus) controls of this hardware through V4L2 controls. This is essential for meeting the HAL's `android.control` metadata contract and passing CTS/VTS verification.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com",
+            "href": "en/newsletters/2026-W36/index.html#article-sony-imx908-image-sensor-linux-device-tree-binding-added-laying-the-groundwork-f",
+            "headline": "Sony IMX908 image sensor: Linux Device Tree binding added, laying the groundwork for official support",
+            "lead": "A Device Tree binding patch (PATCH v3) for official Linux kernel support of the Sony IMX908 image sensor has been posted. This binding definition provides a standard hardware interface configuration guide for developers of SoC platforms that carry the new sensor.",
+            "takeaway": "When the sensor's MIPI CSI-2 lane count (2 or 4 lanes) and RAW formats (RAW10/RAW12) are correctly defined in the kernel through the Device Tree binding, the Camera HAL can query accurate sensor resolution (3856x2176) and format information from the driver. This contributes to building the HAL's `SensorCharacteristics` metadata and securing the stability of high-resolution RAW stream combinations.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/28105",
+            "href": "en/newsletters/2026-W36/index.html#article-libcamera-adds-filter-parameter-to-createtexture2d-in-the-software-isp-egl-modul",
+            "headline": "libcamera adds filter parameter to createTexture2D() in the software ISP EGL module",
+            "lead": "A v15 patch has been posted that allows fine-tuning of image processing quality in the software ISP EGL module of the libcamera framework. This change adds a parameter so that filtering options can be controlled directly when creating textures, increasing the flexibility of the GPU-accelerated rendering pipeline.",
+            "takeaway": "Because filtering options can now be controlled when the software ISP creates EGL textures, visual quality (e.g., reduced aliasing, sharpness adjustment) can be fine-tuned in GPU-accelerated image scaling or debayering post-processing stages. This directly affects improving preview image quality when implementing a libcamera-based Android Camera HAL on entry-level SoC platforms without a hardware ISP.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가’, ‘libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토’ 등 5건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/34736c93669fcb3e34023137b7785d469a843254.1787872237.git.mauriziocasciano7@gmail.com",
+          "href": "newsletters/2026-W36/index.html#article-atomisp-lenovo-yoga-book-ov2740-d-phy",
+          "headline": "AtomISP 드라이버, Lenovo Yoga Book OV2740 센서 링크 및 D-PHY 타이밍 파생 지원 추가",
+          "lead": "Linux 커널 미디어 서브시스템에 AtomISP 브리지 드라이버와 OV2740 이미지 센서의 통합을 개선하는 PATCH v3 패치 시리즈가 제출되었습니다. 이번 변경은 하드웨어 펌웨어의 불완전한 카메라 링크 정보를 드라이버 레벨에서 보완하고, 센서 링크 주파수로부터 D-PHY 타이밍을 동적으로 파생할 수 있도록 지원합니다.",
+          "takeaway": "드라이버 레벨의 D-PHY 타이밍 파생 및 패딩 처리는 V4L2 서브시스템을 거쳐 Android Camera HAL의 스트림 구성 유효성 검사에 영향을 미칩니다. 특히 RAW Bayer 캡처 시 패딩 픽셀(12픽셀)이 메타데이터(active array size 등)에 정확히 반영되지 않으면 이미지 왜곡이나 CTS 테스트 실패가 발생할 수 있으므로 주의 깊게 점검해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/28095",
+          "href": "newsletters/2026-W36/index.html#article-libcamera-quad-bayer-cfa",
+          "headline": "libcamera, 고해상도 센서 처리를 위한 쿼드-베이어(Quad-Bayer) CFA 레이아웃 지원 패치 검토",
+          "lead": "libcamera 프레임워크에 최신 고해상도 이미지 센서에서 널리 사용되는 쿼드-베이어(Quad-Bayer) CFA(Color Filter Array) 레이아웃 지원을 추가하는 패치가 제안되었습니다. 이번 변경은 하위 이미지 처리 파이프라인에서 RAW 데이터 처리의 정확성을 높이는 데 기여할 것으로 기대됩니다.",
+          "takeaway": "libcamera 계층에서 쿼드-베이어 CFA 레이아웃을 직접 인식하고 처리함으로써, Android Camera HAL이 하위 스택에서 수신하는 RAW 데이터의 디베이어링(debayering) 품질과 스트라이드 계산의 정확도가 향상됩니다. 이는 HAL이 RAW_SENSOR 또는 RAW10/RAW12 스트림을 처리할 때 버퍼 오버플로우나 메모리 정렬 오류를 방지하는 데 기여합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260827181756.2430054-1-mauriziocasciano7@gmail.com",
+          "href": "newsletters/2026-W36/index.html#article-linux-lenovo-yoga-book-yb1-x91",
+          "headline": "Linux 커널, Lenovo Yoga Book YB1-X91 카메라 드라이버 및 센서 통합 패치 시리즈 공개",
+          "lead": "Lenovo Yoga Book YB1-X91 디바이스의 카메라 하드웨어를 완벽히 지원하기 위한 Linux 커널 드라이버 패치 시리즈(PATCH v2)가 공개되었습니다. 이번 패치는 부족한 ACPI 펌웨어 정보를 드라이버 수준에서 보완하고, 전/후면 센서 및 렌즈 액추에이터의 제어 기능을 통합하는 데 중점을 둡니다.",
+          "takeaway": "드라이버 레벨에서 RAW Bayer 캡처 노출, 채널별 화이트 밸런스 제어, 렌즈 액추에이터(WV517S)가 추가됨에 따라, Camera HAL은 해당 하드웨어의 3A(Auto Exposure, Auto White Balance, Auto Focus) 제어 기능을 V4L2 컨트롤을 통해 직접 매핑할 수 있게 됩니다. 이는 HAL의 `android.control` 메타데이터 계약을 충족하고 CTS/VTS 검증을 통과하는 데 필수적입니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260828064843.65047-2-lachlan.michael@sony.com",
+          "href": "newsletters/2026-W36/index.html#article-sony-imx908-linux-device-tree",
+          "headline": "Sony IMX908 이미지 센서, Linux Device Tree 바인딩 추가로 공식 지원 기반 마련",
+          "lead": "Sony IMX908 이미지 센서의 Linux 커널 공식 지원을 위한 Device Tree 바인딩 패치(PATCH v3)가 공개되었습니다. 이번 바인딩 정의는 신규 센서를 탑재하는 SoC 플랫폼 개발자들에게 표준 하드웨어 인터페이스 구성 가이드를 제공합니다.",
+          "takeaway": "Device Tree 바인딩을 통해 센서의 MIPI CSI-2 레인 수(2 또는 4레인)와 RAW 포맷(RAW10/RAW12)이 커널에 올바르게 정의되면, Camera HAL은 드라이버로부터 정확한 센서 해상도(3856x2176)와 포맷 정보를 쿼리할 수 있습니다. 이는 HAL의 `SensorCharacteristics` 메타데이터를 구성하고, 고해상도 RAW 스트림 조합의 안정성을 확보하는 데 기여합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/28105",
+          "href": "newsletters/2026-W36/index.html#article-libcamera-isp-egl-createtexture2d",
+          "headline": "libcamera, 소프트웨어 ISP EGL 모듈의 createTexture2D()에 필터 파라미터 추가",
+          "lead": "libcamera 프레임워크의 소프트웨어 ISP EGL 모듈에서 이미지 처리 품질을 미세 조정할 수 있는 v15 패치가 공개되었습니다. 이번 변경은 텍스처 생성 시 필터링 옵션을 직접 제어할 수 있도록 파라미터를 추가하여 GPU 가속 렌더링 파이프라인의 유연성을 높입니다.",
+          "takeaway": "소프트웨어 ISP의 EGL 텍스처 생성 시 필터링 옵션을 제어할 수 있게 됨으로써, GPU 가속을 활용한 이미지 스케일링이나 디베이어링 후처리 단계에서 시각적 품질(예: 앨리어싱 감소, 샤프니스 조절)을 미세 조정할 수 있습니다. 이는 하드웨어 ISP가 없는 보급형 SoC 플랫폼에서 libcamera 기반 Android Camera HAL을 구현할 때 프리뷰 이미지의 품질 향상에 직접적인 영향을 미칩니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -511,7 +1421,53 @@
       "title": "2026 W35",
       "summary": "Raspberry Pi libcamera v0.7.2+rpt20260817 released: stability improvements to the Linux camera driver stack and what HAL engineers should note",
       "html": "en/newsletters/2026-W35/index.html",
-      "md": "en/newsletters/2026-W35/newsletter.md"
+      "md": "en/newsletters/2026-W35/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers ‘Raspberry Pi libcamera v0.7.2+rpt20260817 released: stability improvements to the Linux camera driver stack and what HAL engineers should note’.",
+        "items": [
+          {
+            "id": "url:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+            "href": "en/newsletters/2026-W35/index.html#article-raspberry-pi-libcamera-v0-7-2-rpt20260817-released-stability-improvements-to-the",
+            "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 released: stability improvements to the Linux camera driver stack and what HAL engineers should note",
+            "lead": "On August 17, 2026, Raspberry Pi's downstream libcamera library was officially updated to version v0.7.2+rpt20260817. This release focuses on strengthening the stability and efficiency of Linux-based camera pipelines, and offers technical inspiration to engineers developing Android Camera HALs and lower-level drivers.",
+            "takeaway": "There is no direct Android Camera HAL API contract change, but platforms that use a V4L2/libcamera-based lower driver stack can benchmark the exception handling in frame timing control and format negotiation logic to maximize the stability of buffer lifecycle management between the driver and the ISP.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점’ 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20260817",
+          "href": "newsletters/2026-W35/index.html#article-raspberry-pi-libcamera-v0-7-2-rpt20260817-linux-hal",
+          "headline": "Raspberry Pi libcamera v0.7.2+rpt20260817 출시: Linux 카메라 드라이버 스택의 안정성 개선과 HAL 엔지니어가 주목해야 할 점",
+          "lead": "2026년 8월 17일, Raspberry Pi의 다운스트림 libcamera 라이브러리가 v0.7.2+rpt20260817 버전으로 공식 업데이트되었습니다. 이번 릴리스는 Linux 기반 카메라 파이프라인의 안정성과 효율성을 강화하는 데 초점을 맞추고 있으며, Android Camera HAL 및 하위 드라이버를 개발하는 엔지니어들에게 기술적 영감을 제공합니다.",
+          "takeaway": "직접적인 Android Camera HAL API 계약 변경은 없으나, V4L2/libcamera 기반의 하위 드라이버 스택을 사용하는 플랫폼의 경우 프레임 타이밍 제어 및 포맷 협상 로직의 예외 처리 방식을 벤치마킹하여 드라이버-ISP 간 버퍼 수명주기 관리의 안정성을 극대화할 수 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -540,7 +1496,51 @@
       "title": "2026 W34",
       "summary": "CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix",
       "html": "en/newsletters/2026-W34/index.html",
-      "md": "en/newsletters/2026-W34/newsletter.md"
+      "md": "en/newsletters/2026-W34/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers ‘CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix’.",
+        "items": [
+          {
+            "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+            "href": "en/newsletters/2026-W34/index.html#article-camerax-1-7-0-alpha03-released-camera2interop-api-overhaul-and-multi-camera-zsl-",
+            "headline": "CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix",
+            "lead": "The recently published Android Jetpack CameraX 1.7.0-alpha03 release extensively overhauls the Camera2Interop API, the key path through which app developers interact with the underlying Camera2 and HAL layers. Along with this, a critical HAL crash bug that occurred when zooming across physical camera boundaries with ZSL (Zero-Shutter Lag) enabled on multi-camera devices was fixed, significantly improving system stability.",
+            "takeaway": "This change is not a direct HAL3 specification change, but it is closely tied to how the upper framework passes requests to the HAL. In particular, the fix for the HAL crash when switching zoom between physical cameras with ZSL enabled (b/527782712) suggests that multi-camera stream configuration and buffer lifecycle control logic should be reviewed. Also, as in the fix for HDR video recording failures on specific vendor devices such as the Samsung Galaxy S25/S26/Fold 7 (b/529618629), you should verify through VTS and your own scenario tests that no exceptions occur in vendor-specific HDR metadata handling and codec integration.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+              "alt": "CameraX 1.7.0-alpha03 released: Camera2Interop API overhaul and multi-camera ZSL HAL crash fix",
+              "is_fallback": false
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결’ 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "href": "newsletters/2026-W34/index.html#article-camerax-1-7-0-alpha03-camera2interop-api-zsl-hal",
+          "headline": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결",
+          "lead": "최근 공개된 Android Jetpack CameraX 1.7.0-alpha03 릴리스에서는 앱 개발자가 하위 Camera2 및 HAL 계층과 상호작용하는 핵심 통로인 Camera2Interop API가 대대적으로 개편되었습니다. 이와 함께 멀티 카메라 기기에서 ZSL(Zero-Shutter Lag)을 활성화한 채 물리 카메라 경계를 넘나들며 줌을 조작할 때 발생하던 치명적인 HAL 충돌 버그가 수정되어, 시스템 안정성이 크게 개선되었습니다.",
+          "takeaway": "이번 변경은 직접적인 HAL3 규격 변경은 아니지만, 상위 프레임워크가 HAL에 요청을 전달하는 방식과 밀접하게 연계되어 있습니다. 특히 ZSL 활성화 상태에서 물리 카메라 간 줌 전환 시 발생하는 HAL 충돌 수정(b/527782712)은 멀티 카메라 스트림 구성 및 버퍼 수명 주기 제어 로직을 점검해야 함을 시사합니다. 또한 삼성 Galaxy S25/S26/Fold 7 등 특정 벤더 기기 대상의 HDR 비디오 녹화 실패 수정(b/529618629) 사례처럼, 벤더 고유의 HDR 메타데이터 처리 및 코덱 연동부에서 예외가 발생하지 않는지 VTS 및 자체 시나리오 테스트를 통해 검증해야 합니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "https://developer.android.com/static/images/social/android-developers.png?hl=ar",
+            "alt": "CameraX 1.7.0-alpha03 출시: Camera2Interop API 개편 및 멀티 카메라 ZSL HAL 충돌 해결",
+            "is_fallback": false
+          }
+        }
+      ]
     }
   },
   {
@@ -570,7 +1570,85 @@
       "title": "2026 W33",
       "summary": "Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)\nAdding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)",
       "html": "en/newsletters/2026-W33/index.html",
-      "md": "en/newsletters/2026-W33/newsletter.md"
+      "md": "en/newsletters/2026-W33/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers ‘Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)’ and ‘Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com",
+            "href": "en/newsletters/2026-W33/index.html#article-driver-proposed-for-the-onsemi-ar0234-cmos-image-sensor-with-global-shutter-patc",
+            "headline": "Driver proposed for the onsemi AR0234 CMOS image sensor with global shutter (PATCH v2)",
+            "lead": "This week, a v2 patch series adding a driver for the onsemi AR0234 CMOS image sensor with a global shutter was submitted to the Linux media subsystem. It can be useful in machine vision and AR/VR scenarios that require high-speed capture and precise frame synchronization.",
+            "takeaway": "The characteristics of a global shutter can be used for high-speed capture and machine vision scenarios in the Android Camera HAL. When configuring a 120fps high-speed stream, the HAL's buffer cycling period and the ISP's processing latency must be minimized, and you should verify that DPCM 10->8 decompression or the RAW Bayer 8/10-bit formats are correctly decoded in the ISP pipeline.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com",
+            "href": "en/newsletters/2026-W33/index.html#article-adding-device-tree-bindings-for-sony-imx908-8-39mp-sensor-support-patch-v2",
+            "headline": "Adding device tree bindings for Sony IMX908 8.39MP sensor support (PATCH v2)",
+            "lead": "This week, a v2 patch series adding Linux device tree bindings for the Sony IMX908 8.39MP CMOS image sensor was submitted. A hardware interface definition was added for a sensor that supports high-resolution RAW output, laying the groundwork for platform integration.",
+            "takeaway": "The correctness of the device tree bindings determines whether sensor probing and initialization succeed. A high-resolution RAW12 (3856x2176) stream requires more buffer memory and bandwidth than RAW10, so DMA-BUF allocation and ISP input buffer size settings must be matched exactly in the HAL and driver layers.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)’, ‘Sony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)’ 두 건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260807102847.1813059-1-eagle.alexander923@gmail.com",
+          "href": "newsletters/2026-W33/index.html#article-onsemi-ar0234-cmos-patch-v2",
+          "headline": "글로벌 셔터를 지원하는 onsemi AR0234 CMOS 이미지 센서 드라이버 추가 제안 (PATCH v2)",
+          "lead": "이번 주 글로벌 셔터 기능을 갖춘 onsemi AR0234 CMOS 이미지 센서 드라이버를 추가하는 v2 패치 시리즈가 Linux 미디어 서브시스템에 제출되었습니다. 고속 촬영 및 정밀한 프레임 동기화가 필요한 머신 비전 및 AR/VR 시나리오에서 유용하게 활용될 수 있습니다.",
+          "takeaway": "글로벌 셔터의 특성은 Android Camera HAL에서 고속 캡처 및 머신 비전 시나리오에 활용될 수 있습니다. 120fps 고속 스트림 구성 시 HAL의 버퍼 순환 주기와 ISP의 처리 지연 시간을 최소화해야 하며, DPCM 10->8 압축 해제 또는 RAW Bayer 8/10비트 포맷이 ISP 파이프라인에서 올바르게 디코딩되는지 검증해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260806070934.21764-2-lachlan.michael@sony.com",
+          "href": "newsletters/2026-W33/index.html#article-sony-imx908-8-39mp-patch-v2",
+          "headline": "Sony IMX908 8.39MP 센서 지원을 위한 디바이스 트리 바인딩 추가 (PATCH v2)",
+          "lead": "이번 주 Sony IMX908 8.39MP CMOS 이미지 센서의 Linux 디바이스 트리 바인딩을 추가하는 v2 패치 시리즈가 제출되었습니다. 고해상도 RAW 출력을 지원하는 센서의 하드웨어 인터페이스 정의가 추가되어 플랫폼 통합의 기반이 마련되었습니다.",
+          "takeaway": "디바이스 트리 바인딩의 정확성은 센서 프로빙(probing) 및 초기화 성공 여부를 결정합니다. RAW12 고해상도(3856x2176) 스트림은 RAW10에 비해 더 넓은 버퍼 메모리와 대역폭을 요구하므로, HAL 및 드라이버 레이어에서 DMA-BUF 할당 및 ISP 입력 버퍼 크기 설정을 정확히 매칭해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -601,7 +1679,151 @@
       "title": "2026 W32",
       "summary": "V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor\nNew V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor\nV4L2 driver patch v5 submitted for the OmniVision OG0VA1B mono VGA sensor\nPatch v9 published to support MIPI C-PHY configuration in the Qualcomm CAMSS camera subsystem",
       "html": "en/newsletters/2026-W32/index.html",
-      "md": "en/newsletters/2026-W32/newsletter.md"
+      "md": "en/newsletters/2026-W32/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 4 stories, including ‘V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor’ and ‘New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com",
+            "href": "en/newsletters/2026-W32/index.html#article-v4l2-driver-patch-v6-published-for-the-himax-hm1092-mono-near-infrared-sensor",
+            "headline": "V4L2 driver patch v6 published for the Himax HM1092 mono near-infrared sensor",
+            "lead": "V4L2 subdev driver patch v6 supporting the Himax HM1092 mono near-infrared (NIR) image sensor was submitted to the Linux kernel media subsystem.",
+            "takeaway": "There is no direct HAL API change, but in face recognition (Face Unlock) scenarios using IR cameras, you should confirm that the lower V4L2 subdev exposure and gain controls are correctly mapped to the Android Camera HAL's biometric metadata requirements.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com",
+            "href": "en/newsletters/2026-W32/index.html#article-new-v4l2-driver-patch-submitted-for-the-onsemi-ar0234-global-shutter-cmos-sensor",
+            "headline": "New V4L2 driver patch submitted for the onsemi AR0234 global shutter CMOS sensor",
+            "lead": "A new V4L2 driver patch for the onsemi AR0234 global shutter CMOS image sensor, which supports high-speed capture, was submitted to the Linux kernel media subsystem.",
+            "takeaway": "When adopting a global shutter sensor, you should verify at the driver and HAL layers whether YUV/RAW frames are dropped in high frame rate (120fps) stream configurations and whether bandwidth bottlenecks arise depending on the MIPI CSI-2 lane configuration.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com",
+            "href": "en/newsletters/2026-W32/index.html#article-v4l2-driver-patch-v5-submitted-for-the-omnivision-og0va1b-mono-vga-sensor",
+            "headline": "V4L2 driver patch v5 submitted for the OmniVision OG0VA1B mono VGA sensor",
+            "lead": "V4L2 driver patch v5 for the OmniVision OG0VA1B mono VGA image sensor, suited for low-power auxiliary cameras and sensing, was submitted to the Linux kernel media subsystem.",
+            "takeaway": "When receiving a VGA-class low-resolution Y10 RAW format stream, you should confirm that the ISP pipeline and Camera HAL correctly handle the 10-bit monochrome format (Y10) and allocate frame buffers properly.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz",
+            "href": "en/newsletters/2026-W32/index.html#article-patch-v9-published-to-support-mipi-c-phy-configuration-in-the-qualcomm-camss-cam",
+            "headline": "Patch v9 published to support MIPI C-PHY configuration in the Qualcomm CAMSS camera subsystem",
+            "lead": "Patch series v9 was proposed to support high-bandwidth MIPI C-PHY physical layer configuration in the open-source camera subsystem (CAMSS) driver for Qualcomm platforms.",
+            "takeaway": "As the physical layer switches to C-PHY, you should closely verify through driver and ISP integration tests that no frame drops or transfer delays caused by signal integrity occur when configuring high-bandwidth streams.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개’, ‘onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출’ 등 4건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260801-hm1092-driver-v6-0-5979f223748a@gmail.com",
+          "href": "newsletters/2026-W32/index.html#article-himax-hm1092-v4l2-v6",
+          "headline": "Himax HM1092 흑백 근적외선 센서용 V4L2 드라이버 패치 v6 공개",
+          "lead": "Linux 커널 미디어 서브시스템에 Himax HM1092 흑백 근적외선(NIR) 이미지 센서를 지원하기 위한 V4L2 subdev 드라이버 패치 v6가 제출되었습니다.",
+          "takeaway": "직접적인 HAL API 변경은 없으나, IR 카메라를 활용한 얼굴 인식(Face Unlock) 시나리오에서 하위 V4L2 subdev 노출 및 게인 컨트롤이 Android Camera HAL의 생체 인식 메타데이터 요구사항과 올바르게 매핑되는지 확인해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260731073505.2278769-1-eagle.alexander923@gmail.com",
+          "href": "newsletters/2026-W32/index.html#article-onsemi-ar0234-cmos-v4l2",
+          "headline": "onsemi AR0234 글로벌 셔터 CMOS 센서용 신규 V4L2 드라이버 패치 제출",
+          "lead": "Linux 커널 미디어 서브시스템에 고속 캡처를 지원하는 onsemi AR0234 글로벌 셔터 CMOS 이미지 센서용 신규 V4L2 드라이버 패치가 제출되었습니다.",
+          "takeaway": "글로벌 셔터 센서 도입 시, 고속 프레임률(120fps) 스트림 구성에서 YUV/RAW 프레임 드롭 여부와 MIPI CSI-2 레인 구성에 따른 대역폭 병목을 드라이버 및 HAL 레이어에서 검증해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260731-og0va1b-v5-0-c2b90b601241@oss.qualcomm.com",
+          "href": "newsletters/2026-W32/index.html#article-omnivision-og0va1b-vga-v4l2-v5",
+          "headline": "OmniVision OG0VA1B 흑백 VGA 센서용 V4L2 드라이버 패치 v5 제출",
+          "lead": "Linux 커널 미디어 서브시스템에 저전력 보조 카메라 및 감지용으로 적합한 OmniVision OG0VA1B 흑백 VGA 이미지 센서용 V4L2 드라이버 패치 v5가 제출되었습니다.",
+          "takeaway": "VGA급 저해상도 Y10 RAW 포맷 스트림을 수신할 때, ISP 파이프라인 및 Camera HAL에서 10비트 흑백 포맷(Y10)을 올바르게 처리하고 프레임 버퍼를 할당하는지 확인해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz",
+          "href": "newsletters/2026-W32/index.html#article-qualcomm-camss-mipi-c-phy-v9",
+          "headline": "Qualcomm CAMSS 카메라 서브시스템 MIPI C-PHY 구성 지원 패치 v9 공개",
+          "lead": "Qualcomm 플랫폼의 오픈소스 카메라 서브시스템(CAMSS) 드라이버에 고대역폭 MIPI C-PHY 물리 계층 구성을 지원하기 위한 패치 시리즈 v9가 제안되었습니다.",
+          "takeaway": "물리 계층이 C-PHY로 전환됨에 따라, 고대역폭 스트림 구성 시 신호 정합성으로 인한 프레임 드롭이나 전송 지연이 발생하지 않는지 드라이버 및 ISP 연동 테스트를 통해 밀착 검증해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -632,7 +1854,183 @@
       "title": "2026 W31",
       "summary": "Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV\nNew V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor\nlibcamera: patch proposed to harden control serializer size and input validation\nlibcamera: EGLDisplay caching optimization patch proposed to avoid redundant initialization\nStandalone V4L2 driver patch proposed to support the Samsung S5KJN5 50MP image sensor",
       "html": "en/newsletters/2026-W31/index.html",
-      "md": "en/newsletters/2026-W31/newsletter.md"
+      "md": "en/newsletters/2026-W31/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 5 stories, including ‘Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV’ and ‘New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com",
+            "href": "en/newsletters/2026-W31/index.html#article-qualcomm-camss-patch-proposed-to-add-an-ope-offline-processing-engine-driver-tha",
+            "headline": "Qualcomm CAMSS: patch proposed to add an OPE (Offline Processing Engine) driver that converts raw Bayer to YUV",
+            "lead": "Patch v5 was proposed to add an OPE (Offline Processing Engine) image processing driver, which converts raw Bayer frames to YUV, to the Qualcomm CAMSS driver.",
+            "takeaway": "This change is a proposal to add an ISP block in the kernel driver layer and does not bring direct changes to the Android Camera HAL API or metadata contract. However, when using offline YUV conversion and ISP hardware acceleration on Qualcomm SoC-based devices, it can become a lower-level foundation for optimizing buffer lifecycle and processing latency in memory-to-memory (M2M) pipelines.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca",
+            "href": "en/newsletters/2026-W31/index.html#article-new-v4l2-driver-patch-published-to-support-the-himax-hm1092-monochrome-infrared-",
+            "headline": "New V4L2 driver patch published to support the Himax HM1092 monochrome infrared (IR) sensor",
+            "lead": "A new V4L2 driver patch series adding support for the Himax HM1092 monochrome infrared image sensor was published.",
+            "takeaway": "This patch is a change in the lower driver layer and does not directly affect the Android Camera HAL API or metadata contract. However, devices equipped with this sensor need to configure RAW10 format support and the related stream combination validation at the Camera HAL level to handle the monochrome infrared stream correctly.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/27507",
+            "href": "en/newsletters/2026-W31/index.html#article-libcamera-patch-proposed-to-harden-control-serializer-size-and-input-validation",
+            "headline": "libcamera: patch proposed to harden control serializer size and input validation",
+            "lead": "The libcamera project has a proposed patch v2 that improves stability by hardening size checks and input validation in the control serializer.",
+            "takeaway": "This patch is a stability improvement inside libcamera and does not bring direct changes to the Android Camera HAL API or metadata contract. However, for systems that build their lower driver stack on libcamera, it can help reduce the risk of crashes in the layers below the HAL by strengthening the exception-handling routines in control data deserialization.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/27496",
+            "href": "en/newsletters/2026-W31/index.html#article-libcamera-egldisplay-caching-optimization-patch-proposed-to-avoid-redundant-init",
+            "headline": "libcamera: EGLDisplay caching optimization patch proposed to avoid redundant initialization",
+            "lead": "The libcamera project has a proposed performance optimization patch that caches the EGLDisplay object to avoid redundant graphics resource initialization and teardown overhead.",
+            "takeaway": "This patch is a graphics resource optimization inside libcamera and does not bring direct changes to the Android Camera HAL API or metadata contract. However, when running buffer processing and rendering pipelines in a libcamera-based lower stack, removing redundant EGL initialization overhead can indirectly help reduce camera stream startup latency and the risk of frame drops.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com",
+            "href": "en/newsletters/2026-W31/index.html#article-standalone-v4l2-driver-patch-proposed-to-support-the-samsung-s5kjn5-50mp-image-s",
+            "headline": "Standalone V4L2 driver patch proposed to support the Samsung S5KJN5 50MP image sensor",
+            "lead": "Patch v2 was proposed to support the Samsung S5KJN5 50MP high-resolution image sensor by adding a separate standalone V4L2 driver instead of extending an existing driver.",
+            "takeaway": "This patch is a change in the lower driver layer and does not directly affect the Android Camera HAL API or metadata contract. However, devices equipped with this high-resolution sensor need to define 50MP high-resolution RAW stream and pixel remosaicing processing paths at the Camera HAL level, and should closely verify the resulting impact on memory bandwidth and power consumption.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Qualcomm CAMSS, raw Bayer를 YUV로 변환하는 OPE(Offline Processing Engine) 드라이버 추가 패치 제안’, ‘Himax HM1092 단색 적외선(IR) 센서 지원을 위한 신규 V4L2 드라이버 패치 공개’ 등 5건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260724-camss-isp-ope-v5-4-e70ad4fa39ce@oss.qualcomm.com",
+          "href": "newsletters/2026-W31/index.html#article-qualcomm-camss-raw-bayer-yuv-ope-offline-processing-engine",
+          "headline": "Qualcomm CAMSS, raw Bayer를 YUV로 변환하는 OPE(Offline Processing Engine) 드라이버 추가 패치 제안",
+          "lead": "Qualcomm CAMSS 드라이버에 raw Bayer 프레임을 YUV로 변환하는 OPE(Offline Processing Engine) 이미지 처리 드라이버를 추가하는 패치 v5가 제안되었습니다.",
+          "takeaway": "이 변경은 커널 드라이버 계층의 ISP 블록 추가 제안으로, Android Camera HAL API나 메타데이터 계약에 직접적인 변경을 가져오지는 않습니다. 하지만 Qualcomm SoC 기반 기기에서 오프라인 YUV 변환 및 ISP 하드웨어 가속을 활용할 때, 메모리-투-메모리(M2M) 파이프라인의 버퍼 라이프사이클 및 처리 지연 시간(latency)을 최적화하는 하위 기반이 될 수 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260726214401.19042-1-j@metarealtyinc.ca",
+          "href": "newsletters/2026-W31/index.html#article-himax-hm1092-ir-v4l2",
+          "headline": "Himax HM1092 단색 적외선(IR) 센서 지원을 위한 신규 V4L2 드라이버 패치 공개",
+          "lead": "Himax HM1092 단색 적외선 이미지 센서 지원을 추가하는 신규 V4L2 드라이버 패치 시리즈가 공개되었습니다.",
+          "takeaway": "이 패치는 하위 드라이버 계층의 변경 사항으로 Android Camera HAL API나 메타데이터 계약에 직접적인 영향을 주지 않습니다. 다만, 이 센서를 탑재하는 기기에서는 Camera HAL 수준에서 단색 적외선 스트림을 올바르게 처리하기 위해 RAW10 포맷 지원 및 관련 스트림 조합 유효성 검사(stream combination validation)를 구성해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/27507",
+          "href": "newsletters/2026-W31/index.html#article-libcamera-control-serializer",
+          "headline": "libcamera, 제어 직렬화기(Control Serializer) 크기 및 입력 유효성 검사 강화 패치 제안",
+          "lead": "libcamera 프로젝트에서 제어 직렬화기(control serializer)의 크기 검증 및 입력 유효성 검사를 강화하여 안정성을 높이는 패치 v2가 제안되었습니다.",
+          "takeaway": "이 패치는 libcamera 내부의 안정성 개선 사항으로 Android Camera HAL API나 메타데이터 계약에 직접적인 변경을 가져오지는 않습니다. 다만, libcamera를 기반으로 하위 드라이버 스택을 구성하는 시스템의 경우, 제어 데이터 역직렬화 과정에서의 예외 처리 루틴을 강화하여 HAL 하위 계층에서 발생할 수 있는 비정상 종료 위험을 줄이는 데 기여할 수 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/27496",
+          "href": "newsletters/2026-W31/index.html#article-libcamera-egldisplay",
+          "headline": "libcamera, 불필요한 초기화 방지를 위한 EGLDisplay 캐싱 최적화 패치 제안",
+          "lead": "libcamera 프로젝트에서 EGLDisplay 객체를 캐싱하여 불필요한 그래픽 리소스 초기화 및 해제 오버헤드를 방지하는 성능 최적화 패치가 제안되었습니다.",
+          "takeaway": "이 패치는 libcamera 내부의 그래픽 리소스 최적화 사항으로 Android Camera HAL API나 메타데이터 계약에 직접적인 변경을 가져오지는 않습니다. 다만, libcamera 기반 하위 스택에서 버퍼 처리 및 렌더링 파이프라인을 운영할 때, 불필요한 EGL 초기화 오버헤드를 제거함으로써 카메라 스트림의 시작 지연 시간(startup latency) 및 프레임 드롭 위험을 줄이는 데 간접적인 도움을 줄 수 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260724-sk5jn5-v2-0-871d3b9a2e47@oss.qualcomm.com",
+          "href": "newsletters/2026-W31/index.html#article-samsung-s5kjn5-50mp-v4l2",
+          "headline": "Samsung S5KJN5 50MP 이미지 센서 지원을 위한 독립형 V4L2 드라이버 패치 제안",
+          "lead": "Samsung S5KJN5 50MP 고해상도 이미지 센서 지원을 위해 기존 드라이버 확장 대신 별도의 독립형 V4L2 드라이버를 추가하는 패치 v2가 제안되었습니다.",
+          "takeaway": "이 패치는 하위 드라이버 계층의 변경 사항으로 Android Camera HAL API나 메타데이터 계약에 직접적인 영향을 주지 않습니다. 그러나 이 고해상도 센서를 탑재하는 기기에서는 Camera HAL 수준에서 50MP 고해상도 RAW 스트림 및 픽셀 리모자이킹(remosaicing) 처리 경로를 정의해야 하며, 이에 따른 메모리 대역폭 및 전력 소모 영향을 면밀히 검증해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -662,7 +2060,53 @@
       "title": "2026 W30",
       "summary": "libcamera: patch proposed to add IMX335 image sensor test pattern properties",
       "html": "en/newsletters/2026-W30/index.html",
-      "md": "en/newsletters/2026-W30/newsletter.md"
+      "md": "en/newsletters/2026-W30/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers ‘libcamera: patch proposed to add IMX335 image sensor test pattern properties’.",
+        "items": [
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/27362",
+            "href": "en/newsletters/2026-W30/index.html#article-libcamera-patch-proposed-to-add-imx335-image-sensor-test-pattern-properties",
+            "headline": "libcamera: patch proposed to add IMX335 image sensor test pattern properties",
+            "lead": "A patch adding test pattern properties for the Sony IMX335 image sensor was recently proposed on the libcamera patchwork and is under review. The patch aims to define standardized test patterns at the driver level to make image pipeline validation and debugging easier.",
+            "takeaway": "This patch does not directly change the Android Camera HAL, but it provides a basis for using test pattern properties when validating the IMX335 sensor in the lower driver and libcamera stack. When integrating this sensor in the future, developers should check the validation path to confirm that driver-level test pattern metadata is correctly propagated through V4L2 and libcamera up to the HAL layer.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안’ 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/27362",
+          "href": "newsletters/2026-W30/index.html#article-libcamera-imx335",
+          "headline": "libcamera, IMX335 이미지 센서 테스트 패턴 속성 추가 패치 제안",
+          "lead": "최근 libcamera 패치워크에 소니 IMX335 이미지 센서의 테스트 패턴 속성을 추가하는 패치가 제안되어 검토가 진행 중입니다. 이번 패치는 드라이버 수준에서 표준화된 테스트 패턴을 정의하여 이미지 파이프라인의 검증과 디버깅 편의성을 높이는 것을 목표로 합니다.",
+          "takeaway": "본 패치는 Android Camera HAL을 직접 변경하지는 않으나, 하위 드라이버 및 libcamera 스택에서 IMX335 센서 검증 시 테스트 패턴 속성을 활용할 수 있는 기반을 제공합니다. 개발자는 향후 해당 센서 통합 시 드라이버 단의 테스트 패턴 메타데이터가 V4L2 및 libcamera를 거쳐 상위 HAL 계층까지 올바르게 전달되는지 검증 경로를 점검해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -692,7 +2136,119 @@
       "title": "2026 W29",
       "summary": "Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing\nlibcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)\nRaspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version",
       "html": "en/newsletters/2026-W29/index.html",
-      "md": "en/newsletters/2026-W29/newsletter.md"
+      "md": "en/newsletters/2026-W29/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 3 stories, including ‘Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing’ and ‘libcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org",
+            "href": "en/newsletters/2026-W29/index.html#article-qualcomm-camss-ope-driver-v4-patch-proposed-to-accelerate-offline-image-processi",
+            "headline": "Qualcomm CAMSS: OPE driver v4 patch proposed to accelerate offline image processing",
+            "lead": "A v4 patch was proposed to add an OPE (Offline Processing Engine) driver dedicated to offline image processing to Qualcomm CAMSS (Camera Subsystem).",
+            "takeaway": "It does not make direct API changes to the Android Camera HAL, but as the RAW-to-YUV offline conversion path is optimized at the lower driver level, the efficiency and power consumption of concurrent YUV_420_888 and RAW stream processing may improve.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/27346",
+            "href": "en/newsletters/2026-W29/index.html#article-libcamera-software-isp-introducing-an-egl-texture-filter-parameter-to-strengthen",
+            "headline": "libcamera software ISP: introducing an EGL texture filter parameter to strengthen lens shading correction (LSC)",
+            "lead": "A patch was recently proposed that adds a filter parameter to the createTexture2D() function in libcamera's software ISP EGL module to improve lens shading correction (LSC) performance.",
+            "takeaway": "There is no direct impact on the Android Camera HAL, but a foundation has been laid for simultaneously improving LSC correction quality and GPU texture processing efficiency on platforms that use the libcamera software ISP.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+            "href": "en/newsletters/2026-W29/index.html#article-raspberry-pi-ships-libcamera-v0-7-1-rpt20260609-downstream-version",
+            "headline": "Raspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version",
+            "lead": "On June 9, 2026, Raspberry Pi officially released libcamera v0.7.1+rpt20260609, a downstream version optimized for its platform.",
+            "takeaway": "It does not bring direct API or contract changes to the Android Camera HAL, but it can be used as a reference for benchmarking V4L2-based driver integration and optimization techniques for embedded Linux camera stacks.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+              "alt": "Raspberry Pi ships libcamera v0.7.1+rpt20260609 downstream version",
+              "is_fallback": false
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안’, ‘libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입’ 등 3건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/da70ed94-fd76-4105-8071-1ed8d8e41d84@linaro.org",
+          "href": "newsletters/2026-W29/index.html#article-qualcomm-camss-ope-v4",
+          "headline": "Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안",
+          "lead": "Qualcomm CAMSS(Camera Subsystem)에 오프라인 이미지 처리를 전담하는 OPE(Offline Processing Engine) 드라이버를 추가하는 v4 패치가 제안되었습니다.",
+          "takeaway": "Android Camera HAL에 직접적인 API 변경을 주지는 않으나, 하위 드라이버 레벨에서 RAW-to-YUV 오프라인 변환 경로가 최적화됨에 따라 YUV_420_888 및 RAW 스트림의 동시 처리 효율성과 전력 소모가 개선될 가능성이 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/27346",
+          "href": "newsletters/2026-W29/index.html#article-libcamera-isp-lsc-egl",
+          "headline": "libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입",
+          "lead": "최근 libcamera의 소프트웨어 ISP EGL 모듈에서 렌즈 쉐이딩 보정(LSC) 성능을 개선하기 위해 createTexture2D() 함수에 필터 파라미터를 추가하는 패치가 제안되었습니다.",
+          "takeaway": "Android Camera HAL에 직접적인 영향은 없으나, libcamera 소프트웨어 ISP를 사용하는 플랫폼에서 LSC 보정 품질과 GPU 텍스처 처리 효율성을 동시에 높일 수 있는 기반이 마련되었습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+          "href": "newsletters/2026-W29/index.html#article-raspberry-pi-libcamera-v0-7-1-rpt20260609",
+          "headline": "Raspberry Pi, libcamera v0.7.1+rpt20260609 다운스트림 버전 배포",
+          "lead": "지난 2026년 6월 9일, Raspberry Pi가 자사 플랫폼에 최적화된 libcamera v0.7.1+rpt20260609 다운스트림 버전을 공식 릴리스했습니다.",
+          "takeaway": "Android Camera HAL에 직접적인 API나 계약 변화를 주지는 않으나, V4L2 기반 드라이버 통합 및 임베디드 리눅스 카메라 스택의 최적화 기법을 벤치마킹하는 용도로 참고할 수 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609",
+            "alt": "Raspberry Pi, libcamera v0.7.1+rpt20260609 다운스트림 버전 배포",
+            "is_fallback": false
+          }
+        }
+      ]
     }
   },
   {
@@ -724,7 +2280,113 @@
       "title": "2026 W28",
       "summary": "CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced\nlibcamera: SensorSequence metadata control patch proposed for sensor frame tracking\nAnalysis of a patch fixing a media driver buffer overflow in LLVM/Clang build environments",
       "html": "en/newsletters/2026-W28/index.html",
-      "md": "en/newsletters/2026-W28/newsletter.md"
+      "md": "en/newsletters/2026-W28/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 3 stories, including ‘CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced’ and ‘libcamera: SensorSequence metadata control patch proposed for sensor frame tracking’.",
+        "items": [
+          {
+            "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+            "href": "en/newsletters/2026-W28/index.html#article-camerax-1-7-0-alpha02-released-gpu-based-image-analysis-and-night-mode-indicator",
+            "headline": "CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced",
+            "lead": "The CameraX 1.7.0-alpha02 release, published on July 1, 2026, adds a large set of new APIs, including hardware buffer exposure to support GPU-based image analysis and APIs for detecting night mode status.",
+            "takeaway": "There is no direct HAL change, but because apps perform GPU analysis through PRIVATE streams, buffer allocation and acquisition latency need to be validated. In addition, since the night mode indicator API is tied to the HAL's AE mode and vendor extension metadata state, it should be verified that metadata is delivered accurately.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "https://developer.android.com/static/images/social/android-developers.png",
+              "alt": "CameraX 1.7.0-alpha02 released: GPU-based image analysis and night mode indicator APIs introduced",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://patchwork.libcamera.org/patch/27198",
+            "href": "en/newsletters/2026-W28/index.html#article-libcamera-sensorsequence-metadata-control-patch-proposed-for-sensor-frame-tracki",
+            "headline": "libcamera: SensorSequence metadata control patch proposed for sensor frame tracking",
+            "lead": "A libcamera patch v2 proposed on July 3, 2026 discusses adding a SensorSequence metadata control to precisely control and track sensor frame sequences.",
+            "takeaway": "This is a driver-level change that may help improve the precision of frame synchronization and sequence tracking in the lower driver stack. There is no direct Android Camera HAL API change, but the sequence information provided by lower drivers can be used to enhance frame synchronization debugging at the HAL level.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org",
+            "href": "en/newsletters/2026-W28/index.html#article-analysis-of-a-patch-fixing-a-media-driver-buffer-overflow-in-llvm-clang-build-en",
+            "headline": "Analysis of a patch fixing a media driver buffer overflow in LLVM/Clang build environments",
+            "lead": "A kernel patch v2 submitted on July 5, 2026 proposes a fix for a buffer overflow and kernel oops in the dw2102 media driver that occurs only when building with the LLVM+Clang compiler.",
+            "takeaway": "This case shows the driver stability risk that comes with build toolchain changes, and bounds checking in camera driver firmware loaders needs to be strengthened. There is no direct Android Camera HAL impact, but it is an important reference for ensuring the stability of driver modules that use an LLVM/Clang build environment.",
+            "tags": [
+              "C++"
+            ],
+            "image": {
+              "src": "assets/images/fallback/cpp.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입’, ‘libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안’ 등 3건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
+          "href": "newsletters/2026-W28/index.html#article-camerax-1-7-0-alpha02-gpu-api",
+          "headline": "CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입",
+          "lead": "2026년 7월 1일 공개된 CameraX 1.7.0-alpha02 릴리스에서는 GPU 기반 이미지 분석을 지원하기 위한 하드웨어 버퍼 노출과 야간 모드 상태를 감지할 수 있는 신규 API가 대거 추가되었습니다.",
+          "takeaway": "직접적인 HAL 변경은 없으나, 앱이 PRIVATE 스트림을 통해 GPU 분석을 수행하므로 버퍼 할당 및 획득 지연 시간 검증이 필요합니다. 또한 야간 모드 인디케이터 API는 HAL의 AE 모드 및 벤더 확장 메타데이터 상태와 연동되므로 정확한 메타데이터 전달 여부를 확인해야 합니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "https://developer.android.com/static/images/social/android-developers.png",
+            "alt": "CameraX 1.7.0-alpha02 발표: GPU 기반 이미지 분석 및 야간 모드 인디케이터 API 도입",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://patchwork.libcamera.org/patch/27198",
+          "href": "newsletters/2026-W28/index.html#article-libcamera-sensorsequence",
+          "headline": "libcamera, 센서 프레임 추적을 위한 SensorSequence 메타데이터 컨트롤 패치 제안",
+          "lead": "2026년 7월 3일 제안된 libcamera 패치 v2에서는 센서 프레임 시퀀스를 정밀하게 제어하고 추적하기 위한 SensorSequence 메타데이터 컨트롤 추가가 논의되고 있습니다.",
+          "takeaway": "하위 드라이버 스택에서 프레임 동기화 및 시퀀스 추적의 정밀도를 높이는 데 기여할 수 있는 드라이버 레벨의 변경 사항입니다. 직접적인 Android Camera HAL API 변경은 없으나, 하위 드라이버가 제공하는 시퀀스 정보를 활용해 HAL 단에서 프레임 동기화 디버깅을 고도화할 수 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260705144550.455058-1-pinigin@mapicom.org",
+          "href": "newsletters/2026-W28/index.html#article-llvm-clang",
+          "headline": "LLVM/Clang 빌드 환경에서 발생하는 미디어 드라이버 버퍼 오버플로우 수정 패치 분석",
+          "lead": "2026년 7월 5일 제출된 커널 패치 v2에서는 LLVM+Clang 컴파일러로 빌드할 때만 발생하는 dw2102 미디어 드라이버의 버퍼 오버플로우 및 커널 oops 문제를 해결하는 방안이 제시되었습니다.",
+          "takeaway": "빌드 툴체인 변화에 따른 드라이버 안정성 리스크를 보여주는 사례로, 카메라 드라이버 펌웨어 로더의 메모리 경계 검사를 강화할 필요가 있습니다. 직접적인 Android Camera HAL 영향은 없으나, LLVM/Clang 빌드 환경을 사용하는 드라이버 모듈의 안정성 확보에 중요한 참고가 됩니다.",
+          "tags": [
+            "C++"
+          ],
+          "image": {
+            "src": "assets/images/fallback/cpp.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -753,7 +2415,85 @@
       "title": "2026 W27",
       "summary": "A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer\nV4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function",
       "html": "en/newsletters/2026-W27/index.html",
-      "md": "en/newsletters/2026-W27/newsletter.md"
+      "md": "en/newsletters/2026-W27/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers ‘A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer’ and ‘V4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain",
+            "href": "en/newsletters/2026-W27/index.html#article-a-new-change-to-v4l2-sub-device-pad-ops-proposal-to-introduce-a-v4l2-subdev-clie",
+            "headline": "A new change to V4L2 sub-device pad ops: proposal to introduce a v4l2_subdev_client_info pointer",
+            "lead": "A patch proposal has been published that adds a v4l2_subdev_client_info pointer to improve how pad operations (pad ops) exchange information in the Linux kernel's V4L2 sub-device framework.",
+            "takeaway": "This patch proposal does not directly affect Android Camera HAL APIs or framework contracts. However, since it may change format negotiation and driver integration in the lower image pipeline, it should be referenced as a driver compatibility validation item when SoC vendors update their kernels in the future.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com",
+            "href": "en/newsletters/2026-W27/index.html#article-v4l2-driver-build-warning-missing-parameter-description-in-the-cvs-csi-set-fmt-f",
+            "headline": "V4L2 driver build warning: missing parameter description in the cvs_csi_set_fmt function",
+            "lead": "It has been confirmed that a compiler warning was raised during a build of sailus-media-tree, a V4L2 driver development branch of the Linux kernel, because a parameter description was missing for the cvs_csi_set_fmt function.",
+            "takeaway": "This warning is a simple missing-documentation warning that does not affect the runtime behavior or performance of the Android Camera HAL. However, to keep builds warning-free in driver code quality control and static analysis build environments, it is advisable to check whether similar warnings occur when building vendor drivers.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘V4L2 서브디바이스 패드 작업의 새로운 변화: v4l2_subdev_client_info 포인터 도입 제안’, ‘V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락’ 두 건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/akEtov7zdEDaPe15@kekkonen.localdomain",
+          "href": "newsletters/2026-W27/index.html#article-v4l2-v4l2-subdev-client-info",
+          "headline": "V4L2 서브디바이스 패드 작업의 새로운 변화: v4l2_subdev_client_info 포인터 도입 제안",
+          "lead": "Linux 커널의 V4L2 서브디바이스 프레임워크에서 패드 작업(pad ops)의 정보 교환 방식을 개선하기 위해 v4l2_subdev_client_info 포인터를 추가하는 패치 제안이 공개되었습니다.",
+          "takeaway": "본 패치 제안은 Android Camera HAL API나 프레임워크 계약에 직접적인 영향을 주지 않습니다. 그러나 하위 이미지 파이프라인의 포맷 협상 및 드라이버 통합 방식에 변화를 줄 수 있으므로, 향후 SoC 벤더의 커널 업데이트 시 드라이버 호환성 검증 요소로 참고해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/202606291022.4ZXe8Dz4-lkp@intel.com",
+          "href": "newsletters/2026-W27/index.html#article-v4l2-cvs-csi-set-fmt",
+          "headline": "V4L2 드라이버 빌드 경고 발생: cvs_csi_set_fmt 함수의 파라미터 설명 누락",
+          "lead": "Linux 커널의 V4L2 드라이버 개발 브랜치인 sailus-media-tree에서 빌드 중 cvs_csi_set_fmt 함수의 파라미터 설명이 누락되어 컴파일러 경고가 발생한 것으로 확인되었습니다.",
+          "takeaway": "본 경고는 Android Camera HAL의 런타임 동작이나 성능에 영향을 주지 않는 단순 문서화 누락 경고입니다. 다만, 드라이버 코드의 품질 관리 및 정적 분석 빌드 환경에서 경고를 무결하게 유지하기 위해 벤더 드라이버 빌드 시 유사 경고 발생 여부를 체크하는 것이 좋습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -786,7 +2526,145 @@
       "title": "2026 W26",
       "summary": "V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor\nV4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor\nGCC 16 release upcoming: improved template error messages and SARIF static analysis output\nAndroid CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem",
       "html": "en/newsletters/2026-W26/index.html",
-      "md": "en/newsletters/2026-W26/newsletter.md"
+      "md": "en/newsletters/2026-W26/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 4 stories, including ‘V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor’ and ‘V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain",
+            "href": "en/newsletters/2026-W26/index.html#article-v4l2-sub-device-driver-patch-v10-proposed-for-the-himax-hm1246-image-sensor",
+            "headline": "V4L2 sub-device driver patch v10 proposed for the Himax HM1246 image sensor",
+            "lead": "A V4L2 sub-device driver patch v10 to support the Himax HM1246 image sensor has been proposed to the Linux kernel media subsystem. Adding a driver for this sensor, which includes an internal ISP, will offer a new option for validating low-power/entry-level camera pipelines.",
+            "takeaway": "This patch is a driver-level proposal and does not cause direct API changes to the Android Camera HAL, but because it provides a standard V4L2 sub-device control approach for a parallel-bus sensor with an internal ISP, it can serve as a reference when validating the lower image pipeline.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com",
+            "href": "en/newsletters/2026-W26/index.html#article-v4l2-sub-device-driver-patch-v2-proposed-for-the-sony-imx576-image-sensor",
+            "headline": "V4L2 sub-device driver patch v2 proposed for the Sony IMX576 image sensor",
+            "lead": "A V4L2 sub-device driver patch v2 to support the Sony IMX576 high-resolution image sensor has been proposed. It supports 2880x2156 30fps output along with manual exposure and gain control, laying the groundwork for building high-quality camera pipelines.",
+            "takeaway": "This patch is a driver-layer proposal and does not directly affect the Android Camera HAL, but because it provides driver interfaces for manual control and high-resolution stream configuration, it can serve as a reference when integrating HAL3 manual control features.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+            "href": "en/newsletters/2026-W26/index.html#article-gcc-16-release-upcoming-improved-template-error-messages-and-sarif-static-analys",
+            "headline": "GCC 16 release upcoming: improved template error messages and SARIF static analysis output",
+            "lead": "With GCC 16 scheduled for release, debugging and static analysis workflows in the C++ native development environment are expected to improve. The key points are more readable template error messages and support for the SARIF standard format.",
+            "takeaway": "Because Android Camera HAL native code is built with Clang/LLVM, GCC 16 has no direct runtime impact. However, it is useful for improving debugging productivity and introducing SARIF-based static analysis in Linux kernel driver build environments or standalone C++ test toolchains.",
+            "tags": [
+              "C++"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://developer.android.com/tools/agents/android-cli",
+            "href": "en/newsletters/2026-W26/index.html#article-android-cli-adds-a-camerax-migration-skill-expanding-the-app-compatibility-valid",
+            "headline": "Android CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem",
+            "lead": "Google recently expanded the Android skills repository provided through the Android CLI and GitHub and added a new skill for CameraX migration. This is not a direct Camera HAL change, but it accelerates the camera API transition in the upper app layer, raising the importance of HAL compatibility validation.",
+            "takeaway": "It does not bring direct API or metadata changes to the Camera HAL, but as CameraX migration in upper-layer apps becomes more active, CameraX compatibility testing (CTS/VTS and real-scenario validation) should be strengthened to prevent potential stream configuration and buffer management errors.",
+            "tags": [
+              "Android"
+            ],
+            "image": {
+              "src": "https://developer.android.com/static/images/social/android-developers.png?hl=th",
+              "alt": "Android CLI adds a CameraX migration skill, expanding the app compatibility validation ecosystem",
+              "is_fallback": false
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안’, ‘Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안’ 등 4건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain",
+          "href": "newsletters/2026-W26/index.html#article-himax-hm1246-v4l2-v10",
+          "headline": "Himax HM1246 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v10 제안",
+          "lead": "Linux 커널 미디어 서브시스템에 Himax HM1246 이미지 센서를 지원하기 위한 V4L2 서브디바이스 드라이버 패치 v10이 제안되었습니다. 내부 ISP를 포함한 이 센서의 드라이버 추가는 저전력/보급형 카메라 파이프라인 검증에 새로운 선택지를 제공할 것입니다.",
+          "takeaway": "본 패치는 드라이버 레벨의 제안 사항으로 Android Camera HAL에 직접적인 API 변경을 일으키지는 않으나, 내부 ISP를 가진 병렬 버스 센서의 V4L2 서브디바이스 표준 제어 방식을 제공하므로 하위 이미지 파이프라인 검증 시 참고할 수 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com",
+          "href": "newsletters/2026-W26/index.html#article-sony-imx576-v4l2-v2",
+          "headline": "Sony IMX576 이미지 센서용 V4L2 서브디바이스 드라이버 패치 v2 제안",
+          "lead": "Sony IMX576 고해상도 이미지 센서를 지원하기 위한 V4L2 서브디바이스 드라이버 패치 v2가 제안되었습니다. 수동 노출 및 게인 제어와 함께 2880x2156 30fps 출력을 지원하여 고화질 카메라 파이프라인 구성의 토대를 마련합니다.",
+          "takeaway": "본 패치는 드라이버 레이어의 제안 사항으로 Android Camera HAL에 직접적인 영향을 주지는 않으나, 수동 제어 및 고해상도 스트림 구성을 위한 드라이버 인터페이스를 제공하므로 HAL3 수동 제어 기능 연동 시 참고할 수 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+          "href": "newsletters/2026-W26/index.html#article-gcc-16-sarif",
+          "headline": "GCC 16 릴리스 예정: 템플릿 오류 메시지 개선 및 SARIF 정적 분석 출력 지원",
+          "lead": "GCC 16의 릴리스가 예정됨에 따라 C++ 네이티브 개발 환경의 디버깅 및 정적 분석 워크플로우가 개선될 전망입니다. 템플릿 오류 메시지의 가독성 향상과 SARIF 표준 포맷 지원이 핵심입니다.",
+          "takeaway": "Android Camera HAL 네이티브 코드는 Clang/LLVM 기반으로 빌드되므로 GCC 16이 직접적인 런타임 영향을 주지는 않습니다. 다만, 리눅스 커널 드라이버 빌드 환경이나 독립 실행형 C++ 테스트 도구 체인에서 디버깅 생산성을 높이고 SARIF 기반 정적 분석을 도입하는 데 유용합니다.",
+          "tags": [
+            "C++"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://developer.android.com/tools/agents/android-cli",
+          "href": "newsletters/2026-W26/index.html#article-android-cli-camerax",
+          "headline": "Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장",
+          "lead": "최근 구글이 Android CLI 및 GitHub를 통해 제공되는 Android skills 저장소를 확장하고, CameraX 마이그레이션을 위한 신규 스킬을 추가했습니다. 이는 Camera HAL 직접 변경은 아니지만, 상위 앱 계층의 카메라 API 전환을 가속화하여 HAL 호환성 검증의 중요성을 높입니다.",
+          "takeaway": "Camera HAL에 직접적인 API나 메타데이터 변경을 가져오지는 않으나, 상위 앱의 CameraX 마이그레이션이 활발해짐에 따라 CameraX 호환성 테스트(CTS/VTS 및 실제 시나리오 검증)를 강화하여 잠재적인 스트림 구성 및 버퍼 관리 오류를 예방해야 합니다.",
+          "tags": [
+            "Android"
+          ],
+          "image": {
+            "src": "https://developer.android.com/static/images/social/android-developers.png?hl=th",
+            "alt": "Android CLI, CameraX 마이그레이션 스킬 추가로 앱 호환성 검증 생태계 확장",
+            "is_fallback": false
+          }
+        }
+      ]
     }
   },
   {
@@ -816,7 +2694,211 @@
       "title": "2026 W25",
       "summary": "ARM Mali C55 ISP: patches for CCM and RGB Gamma support published\nAndroid developer productivity: CameraX migration skill added\nGCC 16 released: major improvements to error messages and SARIF output\nHimax HM1246 image sensor driver v10 patches proposed for the Linux kernel\nV4L2 sub-device driver patch v10 for the Himax HM1246 image sensor published\nV4L2 driver patch v2 for the Sony IMX576 image sensor published",
       "html": "en/newsletters/2026-W25/index.html",
-      "md": "en/newsletters/2026-W25/newsletter.md"
+      "md": "en/newsletters/2026-W25/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 6 stories, including ‘ARM Mali C55 ISP: patches for CCM and RGB Gamma support published’ and ‘Android developer productivity: CameraX migration skill added’.",
+        "items": [
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com",
+            "href": "en/newsletters/2026-W25/index.html#article-arm-mali-c55-isp-patches-for-ccm-and-rgb-gamma-support-published",
+            "headline": "ARM Mali C55 ISP: patches for CCM and RGB Gamma support published",
+            "lead": "Patches adding CCM (Color Correction Matrix) and RGB Gamma support to the ARM Mali C55 ISP driver were recently published on the Linux media mailing list. The patches appear set to strengthen core functions of the image processing pipeline and enable more accurate color reproduction.",
+            "takeaway": "These patches strengthen the low-level image processing capabilities of the Mali C55 ISP, giving Camera HAL implementations an opportunity to optimize color correction and gamma processing logic through integration with the driver. The HAL should review whether it can use these ISP functions to improve final image quality and get better results in specific color profile or HDR scenarios.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://developer.android.com/tools/agents/android-cli",
+            "href": "en/newsletters/2026-W25/index.html#article-android-developer-productivity-camerax-migration-skill-added",
+            "headline": "Android developer productivity: CameraX migration skill added",
+            "lead": "On June 9, 2026, a new batch of Android skills for improving Android developer productivity included a skill related to CameraX migration. This update uses LLMs (Large Language Models) to help developers handle CameraX-related work more efficiently.",
+            "takeaway": "This update is not a change to the Camera HAL itself, but because it affects the CameraX app development workflow, it may indirectly affect compatibility and performance validation of CameraX-based apps. When debugging specific camera behavior issues in CameraX apps (e.g., preview, capture, video recording), HAL teams should be aware of new patterns or potential issues arising from the use of these developer tools.",
+            "tags": [
+              "Android"
+            ],
+            "image": {
+              "src": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
+              "alt": "Android Developers Blog logo",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+            "href": "en/newsletters/2026-W25/index.html#article-gcc-16-released-major-improvements-to-error-messages-and-sarif-output",
+            "headline": "GCC 16 released: major improvements to error messages and SARIF output",
+            "lead": "On June 15, 2026, GCC 16 was released, bringing welcome news for developers. This version adds improved error messages and SARIF (Static Analysis Results Interchange Format) output, which are expected to greatly improve code quality analysis and debugging efficiency in C++ development workflows.",
+            "takeaway": "GCC 16's improved error messages and SARIF output do not directly change the Android HAL toolchain (Clang/LLVM), but they offer insight into build, debug, and static analysis workflows for C++-based HAL and driver code. HAL engineers can consider using similar features in a Clang/LLVM environment, or managing code quality analysis results in an integrated way through standardized output formats such as SARIF.",
+            "tags": [
+              "C++"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at",
+            "href": "en/newsletters/2026-W25/index.html#article-himax-hm1246-image-sensor-driver-v10-patches-proposed-for-the-linux-kernel",
+            "headline": "Himax HM1246 image sensor driver v10 patches proposed for the Linux kernel",
+            "lead": "A v10 patch series to support the Himax HM1246 image sensor was recently proposed to the Linux kernel media subsystem. The driver initially supports only Native RAW mode and is under review with the sensor's internal ISP pipeline not enabled.",
+            "takeaway": "Because the Himax HM1246 driver supports only Native RAW mode, generating YUV or JPEG streams at the Android Camera HAL level requires integration with the AP's hardware ISP or a software image processing pipeline. Architecture design must reflect the fact that simple YUV output using the sensor's internal ISP is not possible.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain",
+            "href": "en/newsletters/2026-W25/index.html#article-v4l2-sub-device-driver-patch-v10-for-the-himax-hm1246-image-sensor-published",
+            "headline": "V4L2 sub-device driver patch v10 for the Himax HM1246 image sensor published",
+            "lead": "A v10 patch series for adding a Himax HM1246 image sensor driver was recently submitted to the Linux media mailing list. The sensor supports an I2C interface and a parallel bus and has a built-in internal ISP, and is expected to contribute to future integration into the lower image pipeline of embedded and Android devices.",
+            "takeaway": "Because this patch is still at the proposal stage, it has no direct impact on Android Camera HAL APIs or metadata contracts. However, since it is a parallel-bus sensor with a built-in internal ISP, future HAL integration may require compatibility validation in frame timing and V4L2 sub-device format negotiation.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com",
+            "href": "en/newsletters/2026-W25/index.html#article-v4l2-driver-patch-v2-for-the-sony-imx576-image-sensor-published",
+            "headline": "V4L2 driver patch v2 for the Sony IMX576 image sensor published",
+            "lead": "A v2 patch series for supporting the Sony IMX576 image sensor was recently submitted to the Linux media mailing list. The driver includes support for a high-resolution active array along with manual exposure, gain, and blanking controls, and will serve as a foundation for future integration into high-performance camera pipelines.",
+            "takeaway": "The Sony IMX576 sensor's high resolution (5760 x 4312) and manual controls (exposure, gain, blanking) map directly to the manual control features (Manual Camera capabilities) of Android Camera HAL3. Once the driver stabilizes, it will help secure the reliability of the 3A engine and manual metadata control at the HAL level.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개’, ‘Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가’ 등 6건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260616-mali-c55-ccm-gamma-v1-1-174fe4fedea3@ideasonboard.com",
+          "href": "newsletters/2026-W25/index.html#article-arm-mali-c55-isp-ccm-rgb-gamma",
+          "headline": "ARM Mali C55 ISP, CCM 및 RGB Gamma 지원 패치 공개",
+          "lead": "최근 Linux media mailing list를 통해 ARM Mali C55 ISP 드라이버에 CCM(Color Correction Matrix) 및 RGB Gamma 지원을 추가하는 패치가 공개되었습니다. 이 패치는 이미지 처리 파이프라인의 핵심 기능을 강화하여 보다 정확한 색상 표현을 가능하게 할 것으로 보입니다.",
+          "takeaway": "이 패치는 Mali C55 ISP의 저수준 이미지 처리 기능을 강화하는 것으로, Camera HAL 구현 시 드라이버와의 연동을 통해 색상 보정 및 감마 처리 로직을 최적화할 기회를 제공합니다. HAL은 이러한 ISP 기능을 활용하여 최종 이미지 품질을 개선하고, 특정 색상 프로파일 또는 HDR 시나리오에서 더 나은 결과를 얻을 수 있는지 검토해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://developer.android.com/tools/agents/android-cli",
+          "href": "newsletters/2026-W25/index.html#article-android-camerax",
+          "headline": "Android 개발자 생산성 향상: CameraX 마이그레이션 스킬 추가",
+          "lead": "2026년 6월 9일, Android 개발자 생산성 향상을 위한 새로운 Android skills 배치에 CameraX 마이그레이션 관련 스킬이 포함되었습니다. 이 업데이트는 LLM(Large Language Model)을 활용하여 개발자들이 CameraX 관련 작업을 더욱 효율적으로 처리할 수 있도록 돕습니다.",
+          "takeaway": "이 업데이트는 Camera HAL 자체의 변경 사항은 아니지만, CameraX 앱 개발 워크플로우에 영향을 미치므로 CameraX 기반 앱의 호환성 및 성능 검증에 간접적인 영향을 줄 수 있습니다. HAL 팀은 CameraX 앱에서 발생하는 특정 카메라 동작 문제(예: 미리보기, 캡처, 비디오 녹화)를 디버깅할 때, 이러한 개발자 도구의 사용으로 인한 새로운 패턴이나 잠재적 이슈를 인지하고 있어야 합니다.",
+          "tags": [
+            "Android"
+          ],
+          "image": {
+            "src": "https://developer.android.com/static/images/social/android-developers.png?hl=tr",
+            "alt": "Android Developers Blog 로고",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://isocpp.org//blog/2026/06/new-features-in-gcc-16-improved-error-messages-and-sarif-output-david-malco",
+          "href": "newsletters/2026-W25/index.html#article-gcc-16-sarif",
+          "headline": "GCC 16 출시: 오류 메시지 및 SARIF 출력 기능 대폭 개선",
+          "lead": "2026년 6월 15일, GCC 16이 출시되며 개발자들에게 반가운 소식을 전했습니다. 이번 버전에서는 개선된 오류 메시지와 SARIF(Static Analysis Results Interchange Format) 출력 기능이 추가되어 C++ 개발 워크플로우의 코드 품질 분석 및 디버깅 효율성을 크게 향상시킬 것으로 기대됩니다.",
+          "takeaway": "GCC 16의 개선된 오류 메시지와 SARIF 출력 기능은 직접적으로 Android HAL 툴체인(Clang/LLVM)을 변경하지는 않지만, C++ 기반 HAL 및 드라이버 코드의 빌드, 디버그, 정적 분석 워크플로우에 대한 통찰력을 제공합니다. HAL 엔지니어는 이러한 기능들을 Clang/LLVM 환경에서 유사하게 활용하거나, SARIF와 같은 표준화된 출력 형식을 통해 코드 품질 분석 결과를 통합 관리하는 방안을 검토할 수 있습니다.",
+          "tags": [
+            "C++"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260619-hm1246-v10-0-d88e431a6c11@emfend.at",
+          "href": "newsletters/2026-W25/index.html#article-linux-himax-hm1246-v10",
+          "headline": "Linux 커널에 Himax HM1246 이미지 센서 드라이버 v10 패치 제안",
+          "lead": "최근 Himax HM1246 이미지 센서를 지원하기 위한 v10 패치 시리즈가 Linux 커널 미디어 서브시스템에 제안되었습니다. 이번 드라이버는 Native RAW 모드만을 우선 지원하며, 센서 내부 ISP 파이프라인은 활성화되지 않은 상태로 검토 중입니다.",
+          "takeaway": "Himax HM1246 드라이버는 Native RAW 모드만 지원하므로, Android Camera HAL 수준에서 YUV나 JPEG 스트림을 생성하기 위해서는 AP의 하드웨어 ISP 또는 소프트웨어 이미지 처리 파이프라인과의 연동이 필수적입니다. 센서 내부 ISP를 활용한 간편한 YUV 출력이 불가능하다는 점을 아키텍처 설계 시 반영해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/ajZcTs5MoTmFbmmz@kekkonen.localdomain",
+          "href": "newsletters/2026-W25/index.html#article-himax-hm1246-v4l2-v10",
+          "headline": "Himax HM1246 이미지 센서용 V4L2 하위 장치 드라이버 패치 v10 공개",
+          "lead": "최근 Linux 미디어 메일링 리스트에 Himax HM1246 이미지 센서 드라이버 추가를 위한 v10 패치 시리즈가 제출되었습니다. 이 센서는 I2C 인터페이스와 병렬 버스를 지원하며 내부 ISP를 내장하고 있어, 향후 임베디드 및 Android 기기의 하위 이미지 파이프라인 통합에 기여할 것으로 기대됩니다.",
+          "takeaway": "본 패치는 아직 제안 단계이므로 Android Camera HAL API나 메타데이터 계약에 직접적인 영향은 없습니다. 그러나 내부 ISP를 내장한 병렬 버스 기반 센서이므로, 향후 HAL 통합 시 프레임 타이밍 및 V4L2 하위 장치 포맷 협상(format negotiation) 단에서의 호환성 검증이 필요할 수 있습니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20260620132749.GE3552167@killaraus.ideasonboard.com",
+          "href": "newsletters/2026-W25/index.html#article-sony-imx576-v4l2-v2",
+          "headline": "Sony IMX576 이미지 센서용 V4L2 드라이버 패치 v2 공개",
+          "lead": "최근 Linux 미디어 메일링 리스트에 Sony IMX576 이미지 센서 지원을 위한 v2 패치 시리즈가 제출되었습니다. 이 드라이버는 고해상도 활성 어레이 지원과 함께 수동 노출, 게인, 블랭킹 제어 기능을 포함하고 있어 향후 고성능 카메라 파이프라인 통합의 기반이 될 것입니다.",
+          "takeaway": "Sony IMX576 센서의 고해상도(5760 x 4312) 및 수동 제어 기능(노출, 게인, 블랭킹)은 Android Camera HAL3의 수동 제어 기능(Manual Camera capabilities)과 직접 매핑됩니다. 드라이버가 안정화되면 HAL 단에서 3A 엔진 및 수동 메타데이터 제어의 신뢰성을 확보하는 데 기여할 것입니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   },
   {
@@ -841,7 +2923,51 @@
       "title": "2026 W24",
       "summary": "Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption",
       "html": "en/newsletters/2026-W24/index.html",
-      "md": "en/newsletters/2026-W24/newsletter.md"
+      "md": "en/newsletters/2026-W24/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers ‘Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption’.",
+        "items": [
+          {
+            "id": "url:https://developer.android.com/tools/agents/android-cli",
+            "href": "en/newsletters/2026-W24/index.html#article-android-cli-developer-tools-add-a-migration-to-camerax-skill-expected-to-acceler",
+            "headline": "Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption",
+            "lead": "A 'Migration to CameraX' skill has been newly introduced to the official tools for improving Android developer productivity. By supporting developers, through an LLM-based workflow, in migrating from existing complex camera implementations to the Jetpack CameraX library, this update is expected to further accelerate CameraX adoption in the upper application layer.",
+            "takeaway": "This change is not a direct API contract change to the Camera HAL itself, but by encouraging upper-layer apps to switch to CameraX, it steers the stream configurations and metadata requests delivered to the HAL to converge on CameraX's standard usage patterns. HAL teams should strengthen their CameraX compatibility validation scenarios.",
+            "tags": [
+              "Android"
+            ],
+            "image": {
+              "src": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+              "alt": "Android CLI developer tools add a 'Migration to CameraX' skill, expected to accelerate upper-framework adoption",
+              "is_fallback": false
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망’ 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://developer.android.com/tools/agents/android-cli",
+          "href": "newsletters/2026-W24/index.html#article-android-cli-migration-to-camerax",
+          "headline": "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망",
+          "lead": "Android 개발자 생산성 향상을 위한 공식 도구에 'Migration to CameraX' 스킬이 새롭게 도입되었습니다. 이번 업데이트는 개발자들이 기존의 복잡한 카메라 구현에서 Jetpack CameraX 라이브러리로 마이그레이션하는 과정을 LLM 기반 워크플로우를 통해 지원함으로써, 상위 애플리케이션 계층에서의 CameraX 채택을 더욱 가속화할 것으로 기대됩니다.",
+          "takeaway": "이번 변화는 Camera HAL 자체의 직접적인 API 계약 변경은 아니지만, 상위 앱들의 CameraX 전환을 촉진하여 HAL로 전달되는 스트림 구성(Stream Configuration)과 메타데이터 요청이 CameraX의 표준 사용 패턴으로 수렴하도록 유도합니다. HAL 팀은 CameraX 호환성 검증 시나리오를 강화해야 합니다.",
+          "tags": [
+            "Android"
+          ],
+          "image": {
+            "src": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+            "alt": "Android CLI 개발 도구에 'Migration to CameraX' 스킬 추가, 상위 프레임워크 채택 가속화 전망",
+            "is_fallback": false
+          }
+        }
+      ]
     }
   },
   {
@@ -867,7 +2993,77 @@
       "title": "2026 W23",
       "summary": "CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied\nGoogle I/O '26: CameraXViewfinder Composable Announced, Built on Jetpack CameraX and Media3",
       "html": "en/newsletters/2026-W23/index.html",
-      "md": "en/newsletters/2026-W23/newsletter.md"
+      "md": "en/newsletters/2026-W23/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers ‘CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied’ and ‘Google I/O '26: CameraXViewfinder Composable Announced, Built on Jetpack CameraX and Media3’.",
+        "items": [
+          {
+            "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+            "href": "en/newsletters/2026-W23/index.html#article-camerax-1-6-0-stable-release-use-case-pre-query-api-introduced-and-numerous-devi",
+            "headline": "CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied",
+            "lead": "CameraX 1.6.0 Release Notes (March 25, 2026)",
+            "takeaway": "This release carries significant implications for Camera HAL development teams. With an API now introduced at the upper framework layer to query use-case combination support in advance, the accuracy of the CameraCharacteristics and isStreamCombinationSupported interfaces declared at the HAL level is held to a stricter standard. Also, since instability at the HAL/driver layer, such as the Z Fold 4 YUV distortion and the A53 torch-linked capture failure, is being forcibly worked around (Exclude/Filter) in upper libraries, vendors should re-verify the stream combination reliability and buffer handling logic of their own devices.",
+            "tags": [],
+            "image": {
+              "src": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
+              "alt": "CameraX 1.6.0 Stable Release: Use-Case Pre-Query API Introduced and Numerous Device-Specific Stream Compatibility Patches Applied image",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+            "href": "en/newsletters/2026-W23/index.html#article-google-i-o-26-cameraxviewfinder-composable-announced-built-on-jetpack-camerax-an",
+            "headline": "Google I/O '26: CameraXViewfinder Composable Announced, Built on Jetpack CameraX and Media3",
+            "lead": "At Google I/O '26, the CameraXViewfinder Composable was announced, using Jetpack CameraX and Media3 to provide a camera preview that responds flexibly across diverse form factors such as foldables and tablets.",
+            "takeaway": "This change does not involve a direct interface change to the Camera HAL, but it shows how the framework and app layers consume and render the streams (Preview, ImageCapture) that the HAL provides. It suggests that the HAL must supply buffers reliably, without frame drops, in response to Surface reconfiguration and stream reconfiguration requests that may occur when a foldable device's screen changes.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20609",
+              "alt": "Google I/O '26 Android Developers session thumbnail",
+              "is_fallback": false
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영’, ‘Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표’ 두 건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.0",
+          "href": "newsletters/2026-W23/index.html#article-camerax-1-6-0-api",
+          "headline": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영",
+          "lead": "CameraX 1.6.0 Release Notes (March 25, 2026)",
+          "takeaway": "이번 릴리스는 Camera HAL 개발팀에게 시사하는 바가 큽니다. 상위 프레임워크 계층에서 유스케이스 조합 지원 여부를 사전에 쿼리하는 API가 도입됨에 따라, HAL 수준에서 선언하는 CameraCharacteristics 및 isStreamCombinationSupported 인터페이스의 정확성이 더욱 엄격하게 요구됩니다. 또한 Z Fold 4의 YUV 왜곡이나 A53의 토치 연동 캡처 실패처럼 HAL/드라이버 계층의 불안정성이 상위 라이브러리에서 강제로 우회(Exclude/Filter) 처리되고 있는 만큼, 벤더사에서는 자사 기기의 스트림 조합 신뢰성과 버퍼 처리 로직을 재검증해야 합니다.",
+          "tags": [],
+          "image": {
+            "src": "https://developer.android.com/static/images/social/android-developers.png?hl=bn",
+            "alt": "CameraX 1.6.0 정식 출시: 유스케이스 사전 쿼리 API 도입 및 기기별 스트림 호환성 패치 대거 반영 image",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://youtube.com/playlist?list=PLWz5rJ2EKKc8lSdmWQ_fSpV9yEGRvEL6S&si=H6-8-AbtEyTqSxeY",
+          "href": "newsletters/2026-W23/index.html#article-google-i-o-26-jetpack-camerax-media3-cameraxviewfinder-composable",
+          "headline": "Google I/O '26: Jetpack CameraX 및 Media3 기반 CameraXViewfinder Composable 발표",
+          "lead": "Google I/O '26에서 Jetpack CameraX와 Media3를 활용하여 폴더블 및 태블릿 등 다양한 폼 팩터에서 유연하게 반응하는 카메라 미리보기를 제공하는 CameraXViewfinder Composable이 발표되었습니다.",
+          "takeaway": "이번 변화는 Camera HAL의 직접적인 인터페이스 변경을 수반하지는 않지만, 프레임워크 및 앱 계층에서 HAL이 제공하는 스트림(Preview, ImageCapture)을 어떻게 소비하고 렌더링하는지 보여줍니다. 폴더블 기기의 화면 전환 시 발생할 수 있는 Surface 재구성 및 스트림 재설정 요청에 대해 HAL이 프레임 드롭 없이 안정적으로 버퍼를 공급해야 함을 시사합니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "https://i.ytimg.com/vi/Wh3LWb_Phfk/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLA4wZOV-TY1ydEqFUXpCAG3sm5sQA&days_since_epoch=20609",
+            "alt": "Google I/O '26 Android Developers session thumbnail",
+            "is_fallback": false
+          }
+        }
+      ]
     }
   },
   {
@@ -898,7 +3094,81 @@
       "title": "2026 W22",
       "summary": "Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens\nGoogle AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow",
       "html": "en/newsletters/2026-W22/index.html",
-      "md": "en/newsletters/2026-W22/newsletter.md"
+      "md": "en/newsletters/2026-W22/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers ‘Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens’ and ‘Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow’.",
+        "items": [
+          {
+            "id": "url:https://goo.gle/AdaptiveApps_IO26",
+            "href": "en/newsletters/2026-W22/index.html#article-google-i-o-2026-jetpack-compose-and-camerax-integration-supports-optimized-adapt",
+            "headline": "Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens",
+            "lead": "Building seamless Android camera experiences in multi-device environments with Jetpack Compose",
+            "takeaway": "This change does not alter the Camera HAL's direct APIs or metadata contracts, but it increases the likelihood that the upper app layer will dynamically request streams of various resolutions and aspect ratios. HAL developers should verify stream reconfiguration (Stream Reconfiguration) latency and whether frame drops occur in large-screen and split-screen scenarios when configuring the Preview stream.",
+            "tags": [
+              "Android"
+            ],
+            "image": {
+              "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+              "alt": "Google I/O 2026: Jetpack Compose and CameraX Integration Supports Optimized Adaptive Camera Preview on Large Screens image",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+            "href": "en/newsletters/2026-W22/index.html#article-google-ai-studio-prompt-based-native-android-app-builds-transform-the-prototypin",
+            "headline": "Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow",
+            "lead": "A cloud-based native Android development environment with no installation or configuration",
+            "takeaway": "This tool itself does not directly affect the Camera HAL's runtime behavior. However, it can serve as a useful auxiliary tool from a native development workflow perspective, for quickly building and deploying test client apps (Sample/Prototype App) that reproduce specific behaviors of the camera framework or HAL APIs.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+              "alt": "Google AI Studio: Prompt-Based Native Android App Builds Transform the Prototyping Workflow image",
+              "is_fallback": false
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원’, ‘Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신’ 두 건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://goo.gle/AdaptiveApps_IO26",
+          "href": "newsletters/2026-W22/index.html#article-google-i-o-2026-jetpack-compose-camerax",
+          "headline": "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원",
+          "lead": "Jetpack Compose를 활용한 멀티 디바이스 환경에서의 원활한 Android 카메라 경험 구축",
+          "takeaway": "이 변화는 Camera HAL의 직접적인 API나 메타데이터 계약을 변경하지는 않지만, 상위 앱 계층에서 다양한 해상도 및 종횡비 스트림을 동적으로 요청할 가능성을 높입니다. HAL 개발자는 Preview 스트림 구성 시 대화면 및 분할 화면 시나리오에서 발생할 수 있는 스트림 재구성(Stream Reconfiguration) 레이턴시와 프레임 드롭 여부를 검증해야 합니다.",
+          "tags": [
+            "Android"
+          ],
+          "image": {
+            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+            "alt": "Google I/O 2026: Jetpack Compose와 CameraX 통합으로 대화면 적응형 카메라 미리보기 최적화 지원 image",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "href": "newsletters/2026-W22/index.html#article-google-ai-studio-android",
+          "headline": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신",
+          "lead": "설치와 구성 없는 클라우드 기반 네이티브 Android 개발 환경 제공",
+          "takeaway": "이 도구 자체는 Camera HAL의 런타임 동작에 직접적인 영향을 주지 않습니다. 다만, 카메라 프레임워크나 HAL API의 특정 동작을 재현하기 위한 테스트용 클라이언트 앱(Sample/Prototype App)을 빠르게 빌드하고 배포하는 네이티브 개발 워크플로우 관점에서 유용한 보조 도구로 활용될 수 있습니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+            "alt": "Google AI Studio: 프롬프트 기반 네이티브 Android 앱 빌드 지원으로 프로토타이핑 워크플로우 혁신 image",
+            "is_fallback": false
+          }
+        }
+      ]
     }
   },
   {
@@ -928,7 +3198,149 @@
       "title": "2026 W21",
       "summary": "Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration\nJetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes\nlibcamera Release Announcements - libcamera v0.7.1\nTooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!\nTooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
       "html": "en/newsletters/2026-W21/index.html",
-      "md": "en/newsletters/2026-W21/newsletter.md"
+      "md": "en/newsletters/2026-W21/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 5 stories, including ‘Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration’ and ‘Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes’.",
+        "items": [
+          {
+            "id": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+            "href": "en/newsletters/2026-W21/index.html#article-google-ai-studio-supports-prompt-based-native-android-app-generation-and-camera-",
+            "headline": "Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration",
+            "lead": "Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000",
+            "takeaway": "This news is a tooling trend showing that Google AI Studio can use Android APIs such as Camera in native Android app prototypes. It is not grounds for a Camera HAL runtime change, and its use should be limited to referencing how sample apps set up Camera permissions and CameraX/Camera2 calls.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+              "alt": "Google AI Studio Supports Prompt-Based Native Android App Generation and Camera API Integration image",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://goo.gle/AdaptiveApps_IO26",
+            "href": "en/newsletters/2026-W21/index.html#article-jetpack-compose-and-camerax-checkpoints-for-camera-preview-across-screen-sizes",
+            "headline": "Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes",
+            "lead": "Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes",
+            "takeaway": "Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes",
+            "tags": [
+              "Android"
+            ],
+            "image": {
+              "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+              "alt": "Jetpack Compose and CameraX: Checkpoints for Camera Preview Across Screen Sizes image",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+            "href": "en/newsletters/2026-W21/index.html#article-libcamera-release-announcements-libcamera-v0-7-1",
+            "headline": "libcamera Release Announcements - libcamera v0.7.1",
+            "lead": "libcamera Release Announcements - libcamera v0.7.1",
+            "takeaway": "libcamera Release Announcements - libcamera v0.7.1",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": null
+          },
+          {
+            "id": "url:https://isocpp.org//blog/2026/04/gcc-16.1",
+            "href": "en/newsletters/2026-W21/index.html#article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20-",
+            "headline": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+            "lead": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+            "takeaway": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+            "tags": [
+              "C++"
+            ],
+            "image": null
+          },
+          {
+            "id": "url:https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+            "href": "en/newsletters/2026-W21/index.html#article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more",
+            "headline": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+            "lead": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+            "takeaway": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+            "tags": [
+              "C++"
+            ],
+            "image": null
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동’, ‘Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트’ 등 5건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://android-developers.googleblog.com/2026/05/build-android-apps-google-ai-studio.html",
+          "href": "newsletters/2026-W21/index.html#article-ai-api",
+          "headline": "구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동",
+          "lead": "Android Developers Blog · Tue, 19 May 2026 12:45:00 +0000",
+          "takeaway": "이 소식은 Google AI Studio가 native Android 앱 prototype에서 Camera 같은 Android API를 사용할 수 있음을 보여주는 tooling 동향입니다. Camera HAL runtime 변경 근거는 아니며, 샘플 앱이 Camera 권한과 CameraX/Camera2 호출을 어떻게 구성하는지 참고하는 수준으로 제한해야 합니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd6QUmqCnkvDT9M0IoWA6y_752MRk01nHVQOa644yYkgoMGMDk8Dy6ow6X4SqFzzODP-a1kRaNcuF-1ZyR_lk5fTfdbuEMKDvuX4s7LFaGNuMswzvMCFoYeaQ3RLf2OZPYUWN5BsnqRIsmDub85hpYZNGY7AsaHCsHlfkxLqfqm0PozMhkyqK4i6WfgGM/s2048/GoogleForDevelopers-AndroidCombo2-StrapiMetacard-2048x1323.png",
+            "alt": "구글 AI 스튜디오, 프롬프트 기반 네이티브 안드로이드 앱 생성 지원 및 카메라 API 연동 image",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://goo.gle/AdaptiveApps_IO26",
+          "href": "newsletters/2026-W21/index.html#article-jetpack-compose-camerax-preview",
+          "headline": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
+          "lead": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
+          "takeaway": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트",
+          "tags": [
+            "Android"
+          ],
+          "image": {
+            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhdDsacfyGtp3onpFDB8MfwDNaY70RiTJpN0e_M0NK9W7au1Ex8ghyphenhyphenGNrIq0sqqc1eb-g2fUPUYL1sS7Fhk5r7GTDZm3p-3gRDulDyPa0RqLcDXk6uV3TjBpLMDU5RMnvySqazjwL-8dKrrjkfqkgM_ODlmZVgGNnX5e067nNgWL146AHbsejj6KtLrtIs/s2048/GoogleForDevelopers-ComboIO-StrapiMetacard-2048x1323%20(1).png",
+            "alt": "Jetpack Compose와 CameraX: 다양한 화면 크기의 camera preview 확인 포인트 image",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://lists.libcamera.org/pipermail/libcamera-devel/2026-April/058408.html",
+          "href": "newsletters/2026-W21/index.html#article-libcamera-release-announcements-libcamera-v0-7-1",
+          "headline": "libcamera Release Announcements - libcamera v0.7.1",
+          "lead": "libcamera Release Announcements - libcamera v0.7.1",
+          "takeaway": "libcamera Release Announcements - libcamera v0.7.1",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": null
+        },
+        {
+          "id": "url:https://isocpp.org//blog/2026/04/gcc-16.1",
+          "href": "newsletters/2026-W21/index.html#article-tooling-watch-gcc-16-1-released-c-26-reflection-contracts-safety-hardening-c-20-",
+          "headline": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "lead": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "takeaway": "Tooling Watch: GCC 16.1 released: C++26 reflection / contracts / safety hardening, C++20 by default, and more!",
+          "tags": [
+            "C++"
+          ],
+          "image": null
+        },
+        {
+          "id": "url:https://isocpp.org//blog/2026/04/glaze-7.2-cpp26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "href": "newsletters/2026-W21/index.html#article-tooling-watch-glaze-7-2-c-26-reflection-yaml-cbor-messagepack-toml-and-more",
+          "headline": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "lead": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "takeaway": "Tooling Watch: Glaze 7.2 - C++26 Reflection | YAML, CBOR, MessagePack, TOML and more",
+          "tags": [
+            "C++"
+          ],
+          "image": null
+        }
+      ]
     }
   },
   {
@@ -959,7 +3371,81 @@
       "title": "2026 W20",
       "summary": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22\nCameraX 1.6.1 Update: Observing Android Camera Compatibility",
       "html": "en/newsletters/2026-W20/index.html",
-      "md": "en/newsletters/2026-W20/newsletter.md"
+      "md": "en/newsletters/2026-W20/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’ and ‘CameraX 1.6.1 Update: Observing Android Camera Compatibility’.",
+        "items": [
+          {
+            "id": "url:https://www.phoronix.com/review/gcc-16-vs-clang-22",
+            "href": "en/newsletters/2026-W20/index.html#article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-",
+            "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+            "lead": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+            "takeaway": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+            "tags": [
+              "C++"
+            ],
+            "image": {
+              "src": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
+              "alt": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 image",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+            "href": "en/newsletters/2026-W20/index.html#article-camerax-1-6-1-update-observing-android-camera-compatibility",
+            "headline": "CameraX 1.6.1 Update: Observing Android Camera Compatibility",
+            "lead": "CameraX 1.6.1 Update: Observing Android Camera Compatibility",
+            "takeaway": "CameraX 1.6.1 Update: Observing Android Camera Compatibility",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "https://developer.android.com/static/images/social/android-developers.png",
+              "alt": "CameraX 1.6.1 Update: Observing Android Camera Compatibility image",
+              "is_fallback": false
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’, ‘CameraX 1.6.1 업데이트: Android Camera 호환성 관찰’ 두 건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://www.phoronix.com/review/gcc-16-vs-clang-22",
+          "href": "newsletters/2026-W20/index.html#article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-",
+          "headline": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+          "lead": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+          "takeaway": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22",
+          "tags": [
+            "C++"
+          ],
+          "image": {
+            "src": "https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&image=thelio_gcc16_1",
+            "alt": "Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 image",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+          "href": "newsletters/2026-W20/index.html#article-camerax-1-6-1-android-camera",
+          "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+          "lead": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+          "takeaway": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "https://developer.android.com/static/images/social/android-developers.png",
+            "alt": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 image",
+            "is_fallback": false
+          }
+        }
+      ]
     }
   },
   {
@@ -990,7 +3476,181 @@
       "title": "2026 W19",
       "summary": "libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates\nlibcamera v0.7.1: SoftISP Debayering and Throughput Improvements\nClaude Code 2.1.128: Scope of Camera HAL Workflow Review\nMay 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs\nFirebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration\nC++26 assert(): Camera HAL Debug-Build Review Scope",
       "html": "en/newsletters/2026-W19/index.html",
-      "md": "en/newsletters/2026-W19/newsletter.md"
+      "md": "en/newsletters/2026-W19/newsletter.md",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week covers 6 stories, including ‘libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates’ and ‘libcamera v0.7.1: SoftISP Debayering and Throughput Improvements’.",
+        "items": [
+          {
+            "id": "url:https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+            "href": "en/newsletters/2026-W19/index.html#article-libcamera-v0-7-1-pipeline-handler-and-sensor-configuration-updates",
+            "headline": "libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates",
+            "lead": "libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates",
+            "takeaway": "libcamera v0.7.1: Pipeline Handler and Sensor Configuration Updates",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": null
+          },
+          {
+            "id": "url:https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+            "href": "en/newsletters/2026-W19/index.html#article-libcamera-v0-7-1-softisp-debayering-and-throughput-improvements",
+            "headline": "libcamera v0.7.1: SoftISP Debayering and Throughput Improvements",
+            "lead": "libcamera v0.7.1: SoftISP Debayering and Throughput Improvements",
+            "takeaway": "libcamera v0.7.1: SoftISP Debayering and Throughput Improvements",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": null
+          },
+          {
+            "id": "url:https://code.claude.com/docs/en/changelog",
+            "href": "en/newsletters/2026-W19/index.html#article-claude-code-2-1-128-scope-of-camera-hal-workflow-review",
+            "headline": "Claude Code 2.1.128: Scope of Camera HAL Workflow Review",
+            "lead": "Claude Code 2.1.128: Scope of Camera HAL Workflow Review",
+            "takeaway": "Claude Code 2.1.128: Scope of Camera HAL Workflow Review",
+            "tags": [
+              "AI"
+            ],
+            "image": null
+          },
+          {
+            "id": "url:https://source.android.com/docs/security/bulletin/asb-overview",
+            "href": "en/newsletters/2026-W19/index.html#article-may-2026-android-security-bulletin-scope-for-checking-camera-related-cves",
+            "headline": "May 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs",
+            "lead": "May 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs",
+            "takeaway": "May 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs",
+            "tags": [
+              "Android"
+            ],
+            "image": {
+              "src": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+              "alt": "May 2026 Android Security Bulletin: Scope for Checking Camera-Related CVEs image",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+            "href": "en/newsletters/2026-W19/index.html#article-firebase-ai-logic-hybrid-inference-npu-gpu-review-scope-for-camera-hal-integrati",
+            "headline": "Firebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration",
+            "lead": "Firebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration",
+            "takeaway": "Firebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+              "alt": "Firebase AI Logic Hybrid Inference: NPU/GPU Review Scope for Camera HAL Integration image",
+              "is_fallback": false
+            }
+          },
+          {
+            "id": "url:https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+            "href": "en/newsletters/2026-W19/index.html#article-c-26-assert-camera-hal-debug-build-review-scope",
+            "headline": "C++26 assert(): Camera HAL Debug-Build Review Scope",
+            "lead": "C++26 assert(): Camera HAL Debug-Build Review Scope",
+            "takeaway": "C++26 assert(): Camera HAL Debug-Build Review Scope",
+            "tags": [
+              "C++"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      }
+    },
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 ‘libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트’, ‘libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선’ 등 6건의 소식을 다룹니다.",
+      "items": [
+        {
+          "id": "url:https://gitlab.freedesktop.org/camera/libcamera/-/issues/300",
+          "href": "newsletters/2026-W19/index.html#article-libcamera-v0-7-1",
+          "headline": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+          "lead": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+          "takeaway": "libcamera v0.7.1: 파이프라인 핸들러 및 센서 구성 업데이트",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": null
+        },
+        {
+          "id": "url:https://gitlab.freedesktop.org/camera/libcamera/-/issues/311",
+          "href": "newsletters/2026-W19/index.html#article-libcamera-v0-7-1-softisp",
+          "headline": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+          "lead": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+          "takeaway": "libcamera v0.7.1: SoftISP 디베이어링 및 처리량 개선",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": null
+        },
+        {
+          "id": "url:https://code.claude.com/docs/en/changelog",
+          "href": "newsletters/2026-W19/index.html#article-claude-code-2-1-128-camera-hal-workflow-review",
+          "headline": "Claude Code 2.1.128: Camera HAL workflow review 범위",
+          "lead": "Claude Code 2.1.128: Camera HAL workflow review 범위",
+          "takeaway": "Claude Code 2.1.128: Camera HAL workflow review 범위",
+          "tags": [
+            "AI"
+          ],
+          "image": null
+        },
+        {
+          "id": "url:https://source.android.com/docs/security/bulletin/asb-overview",
+          "href": "newsletters/2026-W19/index.html#article-2026-5-android-camera-related-cve",
+          "headline": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+          "lead": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+          "takeaway": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위",
+          "tags": [
+            "Android"
+          ],
+          "image": {
+            "src": "https://www.gstatic.com/devrel-devsite/prod/v579073a50c63499824df5a68b8922367066583d283ef78fdade1028efdb4ceb5/androidsource/images/lockup.png",
+            "alt": "2026년 5월 Android 보안 게시판: camera-related CVE 확인 범위 image",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://android-developers.googleblog.com/2026/04/Hybrid-inference-and-new-AI-models-are-coming-to-Android.html",
+          "href": "newsletters/2026-W19/index.html#article-firebase-ai-logic-camera-hal-npu-gpu",
+          "headline": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+          "lead": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+          "takeaway": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgoPylOD-Ekyhe8AVg3iMvz6S1rsvUT_2Eb4m-77FRH4eebi5psKE8VJwu6xVxCzKXyTXpoxb3-k04e21C6-8KX0BQw0qiCBGToSHJzVYQRckBYqby9csdOCHWp_23DTfPOpWqfjFTL-vJh86Q-DhGLZnbs1L62q4iUsaHHWlpQ2oyLXo3OO0rGsH9ngxw/s1600/Hybrid%20inference%20solution%20for%20Android%20%20-%20Meta.png",
+            "alt": "Firebase AI Logic 하이브리드 추론: Camera HAL 통합 시 NPU/GPU 검토 범위 image",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://isocpp.org//blog/2026/05/cpp26-a-user-friendly-assert-macro-sandor-dargo",
+          "href": "newsletters/2026-W19/index.html#article-c-26-assert-camera-hal-debug-build",
+          "headline": "C++26 assert(): Camera HAL debug-build 검토 범위",
+          "lead": "C++26 assert(): Camera HAL debug-build 검토 범위",
+          "takeaway": "C++26 assert(): Camera HAL debug-build 검토 범위",
+          "tags": [
+            "C++"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
     }
   }
 ]

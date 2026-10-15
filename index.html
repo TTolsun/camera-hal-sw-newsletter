@@ -232,7 +232,7 @@
 
     function topicCountOf(topic) {
       if (topic.key === 'all') return latestEntries.length;
-      return latestEntries.filter(entry => visibleTags(entry.tags).includes(topic.tag)).length;
+      return archiveHelpers.cardEntries(latestEntries, { topic: topic.key }, 'ko').length;
     }
 
     function renderLatestTopics(activeTopic) {
@@ -253,13 +253,13 @@
       const emptyEl = document.getElementById('latest-empty');
       if (!gridEl) return;
       const filtered = archiveHelpers.sortEntries(
-        archiveHelpers.filterEntries(latestEntries, latestState),
+        archiveHelpers.cardEntries(latestEntries, latestState, 'ko'),
         latestState.sort
       );
       gridEl.innerHTML = filtered.map(entry => archiveHelpers.renderArchiveCard(entry, { compact: true })).join('');
       if (emptyEl) emptyEl.hidden = filtered.length > 0;
       const status = document.getElementById('latest-status');
-      if (status) status.textContent = `${filtered.length}개 주간호`;
+      if (status) status.textContent = `${filtered.length}개 ${latestState.topic === 'all' ? '주간호' : '기사'}`;
     }
 
     function applyLatestState(nextState, updateUrl = false) {

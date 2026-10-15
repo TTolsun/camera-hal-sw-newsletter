@@ -24,6 +24,7 @@ const {
 } = require('../reporter/validation-targets');
 const {
   mainArticleBlocks,
+  issueHighlightsCount,
   missingIssueClasses,
   validateArticleImages,
   validateRenderedIssueStructure
@@ -49,7 +50,8 @@ const newsletterDatePath = path.join(root, '.tmp', 'newsletter-date.txt');
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 const requiredFields = ['date', 'title', 'summary', 'html', 'md', 'tags'];
 const briefingHeadings = [
-  '## 1. 이번 주 3줄 브리핑'
+  '## 1. 이번 주 3줄 브리핑',
+  '## 1. 이 호의 핵심'
 ];
 const legacySectionHeadings = [
   '## 2. AOSP Camera Watch',
@@ -620,8 +622,9 @@ for (const [index, item] of newsletters.entries()) {
         const briefingBullets = briefing
           .split('\n')
           .filter(line => /^- /.test(line.trim()));
-        if (briefingBullets.length !== 3) {
-          fail(`Newsletter ${item.date} must have exactly 3 briefing bullets, found ${briefingBullets.length}`);
+        const expectedCount = issueHighlightsCount(md) ?? 3;
+        if (briefingBullets.length !== expectedCount) {
+          fail(`Newsletter ${item.date} must have exactly ${expectedCount} briefing bullets, found ${briefingBullets.length}`);
         }
       }
 

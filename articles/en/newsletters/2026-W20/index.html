@@ -26,6 +26,7 @@
   <script src="../../../assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
@@ -40,7 +41,7 @@
     </div>
   </header>
 
-  <main class="site-main article-page newsletter-main">
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← Newsroom</a>
@@ -49,42 +50,52 @@
         </div>
         <h1 class="issue-title"><span>2026 W19</span></h1>
         <p class="issue-publish-badge">Published W20</p>
-        <p class="subtitle">This week covers ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’ and ‘CameraX 1.6.1 Update: Observing Android Camera Compatibility’.</p>
+
         <div class="tag-row issue-tags"><span class="tag">Tooling Watch Edition</span><span class="tag">Tooling Watch</span><span class="tag">Android</span><span class="tag">Camera HAL</span></div>
       </header>
 
-      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
-          <h2 id="issue-briefing-title">In this issue</h2>
-          <ul><li>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</li><li>CameraX 1.6.1 Update: Observing Android Camera Compatibility</li></ul>
+          <h2 id="issue-briefing-title">This week’s highlights</h2>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a>
+            <p>The GCC 16 performance comparison is a tooling signal for watching C++ compiler optimization and binary performance. Since the Android Camera HAL is mainly Clang/LLVM-based, this item should be read as long-term toolchain comparison material, not as a change to apply immediately.</p>
+          </li><li>
+            <a href="#article-camerax-1-6-1-update-observing-android-camera-compatibility">CameraX 1.6.1 Update: Observing Android Camera Compatibility</a>
+            <p>The CameraX 1.6.1 release note is an AndroidX Camera layer update that includes viewfinder- and video-related artifact versions. For the Camera HAL team, it is not a direct contract change but an occasion to check app-facing camera behavior with a smoke test.</p>
+          </li></ol><details class="reader-brief-context"><summary>About this issue</summary><p class="reader-brief-intro">This week covers ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’ and ‘CameraX 1.6.1 Update: Observing Android Camera Compatibility’.</p></details>
         </div>
+
       </section>
 
-      <section class="section issue-story issue-section article-card has-image" id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" aria-labelledby="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title">
+      <section class="section issue-story issue-section article-card has-image" id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" tabindex="-1" aria-labelledby="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
-          <span class="issue-story-category">Tooling Watch</span>
+          <span class="issue-story-category">C++</span>
         </div>
         <h2 id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title" class="article-title">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h2>
         <figure class="article-media">
         <img class="article-image" src="https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&amp;image=thelio_gcc16_1" alt="Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 image" loading="lazy" decoding="async">
         <figcaption class="article-image-caption">Image: <a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">Phoronix Linux Camera / Media</a></figcaption>
         </figure>
-        <p class="article-lead">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</p>
         <p>The GCC 16 performance comparison is a tooling signal for watching C++ compiler optimization and binary performance. Since the Android Camera HAL is mainly Clang/LLVM-based, this item should be read as long-term toolchain comparison material, not as a change to apply immediately.</p>
         <p>Camera HAL native code is sensitive to toolchain settings such as build flags, sanitizers, LTO/PGO, and warning policy. The GCC 16 benchmark shows compiler optimization trends, but it is not grounds for applying GCC directly to an Android product branch or for claiming HAL runtime performance improvements.</p>
         <p>In practice, comparing equivalent features on the Clang/LLVM side together with the Android platform toolchain policy is about the right level. A separate benchmark can be opened only when a host-side utility or offline analysis tool uses GCC.</p>
-        <p>**Android Native / Tooling Perspective**</p>
+        <h3 class="article-subheading">Android Native / Tooling Perspective</h3>
         <p>This item is a native tooling watch, not a Camera HAL runtime change. The HAL team should use the Android branch&#39;s Clang/LLVM policy as the baseline and compare only in a limited way, in host utility or benchmark environments.</p>
-        <p>### What to Check</p>
-        <p>- Check the Clang/LLVM version, C++ standard flag, and sanitizer settings of the current Android branch.</p>
-        <p>- Do not use the GCC 16 performance results as grounds for product HAL performance improvements.</p>
-        <p>- Run a separate comparison only when a host-side tool or standalone benchmark uses GCC.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</p></div>
+        <h3 class="article-subheading">What to Check</h3>
+        <ul><li>Check the Clang/LLVM version, C++ standard flag, and sanitizer settings of the current Android branch.</li></ul>
+        <ul><li>Do not use the GCC 16 performance results as grounds for product HAL performance improvements.</li></ul>
+        <ul><li>Run a separate comparison only when a host-side tool or standalone benchmark uses GCC.</li></ul>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-camerax-1-6-1-update-observing-android-camera-compatibility" aria-label="Next article: CameraX 1.6.1 Update: Observing Android Camera Compatibility">Next article →</a>
+        </nav>
       </section>
 
-      <section class="section issue-story issue-section article-card has-image" id="article-camerax-1-6-1-update-observing-android-camera-compatibility" aria-labelledby="article-camerax-1-6-1-update-observing-android-camera-compatibility-title">
+      <section class="section issue-story issue-section article-card has-image" id="article-camerax-1-6-1-update-observing-android-camera-compatibility" tabindex="-1" aria-labelledby="article-camerax-1-6-1-update-observing-android-camera-compatibility-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 2">02</span>
           <span class="issue-story-category">AOSP Camera</span>
@@ -94,18 +105,21 @@
         <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="CameraX 1.6.1 Update: Observing Android Camera Compatibility image" loading="lazy" decoding="async">
         <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">Android Developers Latest Updates</a></figcaption>
         </figure>
-        <p class="article-lead">CameraX 1.6.1 Update: Observing Android Camera Compatibility</p>
         <p>The CameraX 1.6.1 release note is an AndroidX Camera layer update that includes viewfinder- and video-related artifact versions. For the Camera HAL team, it is not a direct contract change but an occasion to check app-facing camera behavior with a smoke test.</p>
         <p>Since CameraX and Camera2 are layers above the HAL, the release note must not be used directly as grounds for HAL API, stream, or metadata changes. Instead, the safe approach is to check in a reference app that Preview, ImageCapture, and VideoCapture combinations do not break on the existing device matrix.</p>
         <p>In particular, if Camera2 interop, extensions, or session configuration failures are reported, the app/framework logs and the HAL/device logs should be examined separately. Open a HAL follow-up only when there is device log or stream/buffer evidence.</p>
-        <p>**Camera HAL / Driver Perspective**</p>
+        <h3 class="article-subheading">Camera HAL / Driver Perspective</h3>
         <p>CameraX 1.6.1 is an app-facing compatibility check item. HAL owners should distinguish library issues from device HAL regressions through reference app smoke tests and log separation.</p>
-        <p>### What to Check</p>
-        <p>- Decide the combinations for running a Preview + ImageCapture + VideoCapture smoke test with the CameraX 1.6.1 dependency.</p>
-        <p>- Check session configuration failures separately in `dumpsys media.camera`, app logcat, and framework camera logs.</p>
-        <p>- Interpret Camera2 interop or extensions-related changes only within the scope of the release note.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>CameraX 1.6.1 Update: Observing Android Camera Compatibility</p></div>
+        <h3 class="article-subheading">What to Check</h3>
+        <ul><li>Decide the combinations for running a Preview + ImageCapture + VideoCapture smoke test with the CameraX 1.6.1 dependency.</li></ul>
+        <ul><li>Check session configuration failures separately in `dumpsys media.camera`, app logcat, and framework camera logs.</li></ul>
+        <ul><li>Interpret Camera2 interop or extensions-related changes only within the scope of the release note.</li></ul>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">1.6.1</a></li><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07">CameraX 1.4.0-alpha07 release table row</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" aria-label="Previous article: Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+
+        </nav>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
@@ -133,7 +147,7 @@
           <span class="footer-col-title">Topics</span>
           <span class="footer-note">Camera HAL · Android</span>
           <span class="footer-note">Driver · Image Processing</span>
-          <span class="footer-note">AI · SoC Platform</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
         </div>
         <div class="footer-col">
           <span class="footer-col-title">Resources</span>

@@ -1,25 +1,43 @@
 # 2026 W40 (09.28 ~ 10.04)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. This week’s highlights
+
 This week's newsletter brings important information about preparing for Android 17 Camera ITS. Learn more about what to check beyond the Python package list, including the execution environment version and changed verification items. Also, there's news about a libcamera AWB proposal. See how a new approach of fixing automatic gain and reconverging when needed can improve color changes.
 
+- [Android 17 Camera ITS: Runtime Versions and Updated Tests](#article-android-17-camera-its-runtime-versions-and-updated-tests)
+
+  When analyzing verification failures, it is necessary to distinguish between differences in the execution environment version/path, chart configuration, and HAL output. In particular, YUV/JPEG color differences and white balance between JPEG_R preview/capture are items to compare results against new inspection conditions.
+
+- [libcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence](#article-libcamera-awb-proposal-freeze-automatic-gains-and-trigger-reconvergence)
+
+  The core is the gain to maintain when turning off AWB and the re-search operation in manual mode. In libcamera-based implementations, this behavior and the expression of the AWB state in the upper layer should be reviewed together, but the current patch's convergence criteria should not be applied as a finalized contract.
 
 
-## 1. This week’s articles
 
-- Android 17 Camera ITS: Runtime Versions and Updated Tests
-- libcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence
+
+<a id="article-android-17-camera-its-runtime-versions-and-updated-tests"></a>
 
 ## 2. Android 17 Camera ITS: Runtime Versions and Updated Tests
+
+_Official Android Open Source Project Documentation_
+
+When preparing for Android 17 Camera ITS, it's not just the Python package list that needs to be aligned. The versions of Python and FFmpeg executables, test charts, and CTS Verifier activity configurations must be checked together.
+
+### Camera HAL/Driver perspective: what it means
+
+When analyzing verification failures, it is necessary to distinguish between differences in the execution environment version/path, chart configuration, and HAL output. In particular, YUV/JPEG color differences and white balance between JPEG_R preview/capture are items to compare results against new inspection conditions.
 
 
 ![Android Open Source Project](https://www.gstatic.com/devrel-devsite/prod/vfdb441d2e08dbd9d3e48d8cd72b242388a87bcf7626bf5fb9df50c2bdd4a70fd/androidsource/images/lockup.png)
 
 _Image: [Android 17 Camera Image Test Suite release notes | Android Open Source Project](https://source.android.com/docs/compatibility/cts/its-release-notes-17)_
 
-
-_Official Android Open Source Project Documentation_
-
-When preparing for Android 17 Camera ITS, it's not just the Python package list that needs to be aligned. The versions of Python and FFmpeg executables, test charts, and CTS Verifier activity configurations must be checked together.
 
 The Android 17 Camera ITS release notes guide you through the environment configuration procedure using Python 3.14 and FFmpeg 7.0.2. It is strongly recommended to create a virtual environment for each Android release and install the Python packages of the versions specified in the document. Python itself and FFmpeg executables are not prepared by simply installing Python packages, so they must be installed separately.
 
@@ -37,9 +55,7 @@ Multi-camera switching, flash, and sensor fusion tests moved to the Gen2 rig req
 
 This does not mean that the HAL API has changed, but rather that the test execution environment and verification scope have changed. The update date of the release notes alone cannot determine the initial introduction date of each change.
 
-### Camera HAL/Driver perspective: what it means
-
-When analyzing verification failures, it is necessary to distinguish between differences in the execution environment version/path, chart configuration, and HAL output. In particular, YUV/JPEG color differences and white balance between JPEG_R preview/capture are items to compare results against new inspection conditions.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 
@@ -47,15 +63,21 @@ When analyzing verification failures, it is necessary to distinguish between dif
 
 ---
 
+<a id="article-libcamera-awb-proposal-freeze-automatic-gains-and-trigger-reconvergence"></a>
+
 ## 3. libcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence
-
-
-![libcamera AWB Proposal: Freeze Automatic Gains and Trigger Reconvergence image](../../../assets/images/fallback/newsletter-default.svg)
-
 
 _libcamera Patchwork Mailing List_
 
 This proposal aims to improve the behavior where colors suddenly change when turning off automatic white balance by reverting to the old manual gain. It adds a flow that maintains the last automatic gain and updates to a new gain only when requested.
+
+### Camera HAL/Driver perspective: what it means
+
+The core is the gain to maintain when turning off AWB and the re-search operation in manual mode. In libcamera-based implementations, this behavior and the expression of the AWB state in the upper layer should be reviewed together, but the current patch's convergence criteria should not be applied as a finalized contract.
+
+
+![](../../../assets/images/fallback/newsletter-default.svg)
+
 
 A libcamera AWB patch series submitted on September 28, 2026, addresses gain transitions when switching from automatic to manual mode. Previously, automatic and manual gains were separate, so switching to AwbEnable=false would revert to the previous manual values. The proposal continuously updates manual gain with the gain calculated during automatic operation, so that the last automatic gain is maintained the moment AWB is turned off.
 
@@ -71,9 +93,7 @@ The series also includes an extension of the Vector comparison operator to suppo
 
 This article compares the design and code of the submitted series. Differences between the explanation and implementation remain, so it should not be taken as a finalized API contract or already deployed feature. It is also not a change to the Android Camera HAL specification itself. For teams dealing with libcamera-based camera stacks, this is a proposal that can be referenced for how to express the gain to maintain during manual switching and the re-search completion status.
 
-### Camera HAL/Driver perspective: what it means
-
-The core is the gain to maintain when turning off AWB and the re-search operation in manual mode. In libcamera-based implementations, this behavior and the expression of the AWB state in the upper layer should be reviewed together, but the current patch's convergence criteria should not be applied as a finalized contract.
+[Back to this week’s highlights](#issue-briefing)
 
 **Sources**
 

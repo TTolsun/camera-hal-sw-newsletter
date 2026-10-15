@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-alternate-href="/camera-hal-sw-newsletter/en/newsletters/2026-W20/index.html">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2026 W19 Camera SW Newsletter (발행 W20)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W20/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W20/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W20/index.html" />
+  <meta property="og:locale" content="ko_KR" />
   <meta name="description" content="이번 주에는 ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’, ‘CameraX 1.6.1 업데이트: Android Camera 호환성 관찰’ 두 건의 소식을 다룹니다." />
   <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W20/index.html" />
   <meta property="og:type" content="article" />
@@ -19,8 +23,10 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <link rel="stylesheet" href="../../css/styles.css" />
+  <script src="../../assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">본문 바로가기</a>
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsroom">
@@ -35,7 +41,7 @@
     </div>
   </header>
 
-  <main class="site-main article-page newsletter-main">
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
       <header class="article-header issue-hero">
         <a class="issue-back" href="../../index.html">← 뉴스룸</a>
@@ -44,63 +50,76 @@
         </div>
         <h1 class="issue-title"><span>2026 W19</span></h1>
         <p class="issue-publish-badge">발행 W20</p>
-        <p class="subtitle">이번 주에는 ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’, ‘CameraX 1.6.1 업데이트: Android Camera 호환성 관찰’ 두 건의 소식을 다룹니다.</p>
+
         <div class="tag-row issue-tags"><span class="tag">Tooling Watch Edition</span><span class="tag">Tooling Watch</span><span class="tag">Android</span><span class="tag">Camera HAL</span></div>
       </header>
 
-      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
         <div class="issue-briefing-card">
-          <h2 id="issue-briefing-title">이번 호 기사</h2>
-          <ul><li>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</li><li>CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</li></ul>
+          <h2 id="issue-briefing-title">이번 주 핵심</h2>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a>
+            <p>GCC 16 성능 비교 소식은 C++ compiler optimization과 binary performance를 관찰할 tooling 신호입니다. Android Camera HAL은 주로 Clang/LLVM 기반이므로 이 항목은 즉시 적용 변경이 아니라 장기 toolchain 비교 자료로 읽어야 합니다.</p>
+          </li><li>
+            <a href="#article-camerax-1-6-1-android-camera">CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</a>
+            <p>CameraX 1.6.1 release note는 viewfinder와 video 관련 artifact version을 포함한 AndroidX Camera 계층 업데이트입니다. Camera HAL 팀에는 direct contract 변경이 아니라 app-facing camera behavior를 smoke test로 확인할 계기입니다.</p>
+          </li></ol><details class="reader-brief-context"><summary>이번 호 소개</summary><p class="reader-brief-intro">이번 주에는 ‘Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22’, ‘CameraX 1.6.1 업데이트: Android Camera 호환성 관찰’ 두 건의 소식을 다룹니다.</p></details>
         </div>
+
       </section>
 
-      <section class="section issue-story issue-section article-card has-image article" id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" aria-labelledby="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title">
+      <section class="section issue-story issue-section article-card has-image" id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" tabindex="-1" aria-labelledby="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 1">01</span>
-          <span class="issue-story-category">Camera</span>
+          <span class="issue-story-category">C++</span>
         </div>
         <h2 id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title" class="article-title">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h2>
         <figure class="article-media">
         <img class="article-image" src="https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&amp;image=thelio_gcc16_1" alt="Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22 image" loading="lazy" decoding="async">
         <figcaption class="article-image-caption">이미지: <a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">Phoronix Linux Camera / Media</a></figcaption>
         </figure>
-        <p class="article-lead">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</p>
         <p>GCC 16 성능 비교 소식은 C++ compiler optimization과 binary performance를 관찰할 tooling 신호입니다. Android Camera HAL은 주로 Clang/LLVM 기반이므로 이 항목은 즉시 적용 변경이 아니라 장기 toolchain 비교 자료로 읽어야 합니다.</p>
         <p>Camera HAL native code는 build flag, sanitizer, LTO/PGO, warning policy 같은 toolchain 설정에 민감합니다. GCC 16 benchmark는 compiler optimization 동향을 보여주지만, Android product branch에 바로 GCC를 적용하거나 HAL runtime 성능 개선을 주장할 근거는 아닙니다.</p>
         <p>실무적으로는 Clang/LLVM 쪽 equivalent feature와 Android platform toolchain 정책을 함께 비교하는 정도가 적절합니다. host-side utility나 offline analysis tool이 GCC를 쓰는 경우에만 별도 benchmark를 열 수 있습니다.</p>
-        <p>**Android Native / Tooling 관점**</p>
+        <h3 class="article-subheading">Android Native / Tooling 관점</h3>
         <p>이 항목은 Camera HAL runtime 변경이 아니라 native tooling watch입니다. HAL 팀은 Android branch의 Clang/LLVM 정책을 기준으로 보고, host utility 또는 benchmark 환경에서만 제한적으로 비교해야 합니다.</p>
-        <p>### 확인할 점</p>
-        <p>- 현재 Android branch의 Clang/LLVM version, C++ standard flag, sanitizer 설정을 확인합니다.</p>
-        <p>- GCC 16 성능 결과를 product HAL 성능 개선 근거로 쓰지 않습니다.</p>
-        <p>- host-side tool이나 standalone benchmark가 GCC를 쓰는 경우에만 별도 비교를 진행합니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</p></div>
+        <h3 class="article-subheading">확인할 점</h3>
+        <ul><li>현재 Android branch의 Clang/LLVM version, C++ standard flag, sanitizer 설정을 확인합니다.</li></ul>
+        <ul><li>GCC 16 성능 결과를 product HAL 성능 개선 근거로 쓰지 않습니다.</li></ul>
+        <ul><li>host-side tool이나 standalone benchmark가 GCC를 쓰는 경우에만 별도 비교를 진행합니다.</li></ul>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
+        <nav class="article-navigation" aria-label="기사 간 이동">
+
+          <a href="#issue-briefing">이번 주 핵심으로</a>
+          <a href="#article-camerax-1-6-1-android-camera" aria-label="다음 기사: CameraX 1.6.1 업데이트: Android Camera 호환성 관찰">다음 기사 →</a>
+        </nav>
       </section>
 
-      <section class="section issue-story issue-section article-card has-image article" id="article-camerax-1-6-1-android-camera" aria-labelledby="article-camerax-1-6-1-android-camera-title">
+      <section class="section issue-story issue-section article-card has-image" id="article-camerax-1-6-1-android-camera" tabindex="-1" aria-labelledby="article-camerax-1-6-1-android-camera-title">
         <div class="issue-story-eyebrow">
           <span class="issue-story-number" aria-label="Article 2">02</span>
-          <span class="issue-story-category">Camera</span>
+          <span class="issue-story-category">AOSP Camera</span>
         </div>
         <h2 id="article-camerax-1-6-1-android-camera-title" class="article-title">CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</h2>
         <figure class="article-media">
         <img class="article-image" src="https://developer.android.com/static/images/social/android-developers.png" alt="CameraX 1.6.1 업데이트: Android Camera 호환성 관찰 image" loading="lazy" decoding="async">
         <figcaption class="article-image-caption">이미지: <a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">Android Developers Latest Updates</a></figcaption>
         </figure>
-        <p class="article-lead">CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</p>
         <p>CameraX 1.6.1 release note는 viewfinder와 video 관련 artifact version을 포함한 AndroidX Camera 계층 업데이트입니다. Camera HAL 팀에는 direct contract 변경이 아니라 app-facing camera behavior를 smoke test로 확인할 계기입니다.</p>
         <p>CameraX와 Camera2는 HAL 위 계층이므로 release note를 곧바로 HAL API, stream, metadata 변경 근거로 쓰면 안 됩니다. 대신 reference app에서 Preview, ImageCapture, VideoCapture 조합이 기존 device matrix에서 깨지지 않는지 확인하는 방식이 안전합니다.</p>
         <p>특히 Camera2 interop, extensions, session configuration 실패가 보고되면 app/framework log와 HAL/device log를 나눠 봐야 합니다. HAL follow-up은 device log 또는 stream/buffer evidence가 있을 때만 엽니다.</p>
-        <p>**Camera HAL / Driver 관점**</p>
+        <h3 class="article-subheading">Camera HAL / Driver 관점</h3>
         <p>CameraX 1.6.1은 app-facing compatibility 확인 항목입니다. HAL owner는 reference app smoke와 로그 분리를 통해 library issue와 device HAL regression을 구분해야 합니다.</p>
-        <p>### 확인할 점</p>
-        <p>- CameraX 1.6.1 dependency로 Preview + ImageCapture + VideoCapture smoke test를 실행할 조합을 정합니다.</p>
-        <p>- `dumpsys media.camera`, app logcat, framework camera log에서 session configuration 실패를 분리해 확인합니다.</p>
-        <p>- Camera2 interop 또는 extensions 관련 변경은 release note 범위 안에서만 해석합니다.</p>
-        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>CameraX 1.6.1 업데이트: Android Camera 호환성 관찰</p></div>
+        <h3 class="article-subheading">확인할 점</h3>
+        <ul><li>CameraX 1.6.1 dependency로 Preview + ImageCapture + VideoCapture smoke test를 실행할 조합을 정합니다.</li></ul>
+        <ul><li>`dumpsys media.camera`, app logcat, framework camera log에서 session configuration 실패를 분리해 확인합니다.</li></ul>
+        <ul><li>Camera2 interop 또는 extensions 관련 변경은 release note 범위 안에서만 해석합니다.</li></ul>
         <div class="source-list"><strong>출처</strong><ul><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.6.1">1.6.1</a></li><li><a href="https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07">CameraX 1.4.0-alpha07 release table row</a></li></ul></div>
+        <nav class="article-navigation" aria-label="기사 간 이동">
+          <a href="#article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" aria-label="이전 기사: Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22">← 이전 기사</a>
+          <a href="#issue-briefing">이번 주 핵심으로</a>
+
+        </nav>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
@@ -128,10 +147,11 @@
           <span class="footer-col-title">주제</span>
           <span class="footer-note">Camera HAL · Android</span>
           <span class="footer-note">Driver · Image Processing</span>
-          <span class="footer-note">AI · SoC Platform</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
         </div>
         <div class="footer-col">
           <span class="footer-col-title">리소스</span>
+          <a class="footer-link" href="../../learning/ai-engineering/index.html">AI Engineering Lab</a>
           <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
           <span class="footer-note">RSS (지원예정)</span>
           <span class="footer-note">편집 정책 (지원예정)</span>
