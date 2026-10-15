@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "format": "published-html-projection",
+  "daily": true,
+  "provenance": [
+    {
+      "path": "articles/newsletters/2026-05-11/index.html",
+      "hash": "sha256:4bec92385647e6522698b477ada96fd23fd461f20192847654bfb5c7ae9cb254"
+    },
+    {
+      "path": "articles/newsletters/2026-05-11/newsletter.md",
+      "hash": "sha256:fe4076b27976211ef4b3d7266fe289586baf55b80564eb6d130d239ffa016fd5"
+    }
+  ],
+  "articles": [
+    {
+      "anchor": "article-camerax-1-6-1-android-camera",
+      "subtitle": "",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "CameraX는 Camera2 위에서 Preview, ImageCapture, VideoCapture 같은 use case를 앱 개발자가 다루기 쉽게 만드는 layer입니다. artifact version update는 app dependency matrix와 reference app smoke test가 필요한지 판단하는 자료이지, 그 자체로 device HAL behavior 변경을 의미하지 않습니다."
+        },
+        {
+          "type": "paragraph",
+          "text": "회귀가 보일 때는 app logcat, framework camera log, HAL/device log를 분리해 원인을 나눠야 합니다. CameraX/library 문제인지 downstream HAL issue인지 구분하지 않으면 HAL owner에게 잘못된 action item이 생깁니다."
+        },
+        {
+          "type": "subheading",
+          "text": "확인할 점",
+          "origin": "published-markdown"
+        },
+        {
+          "type": "bullet",
+          "text": "CameraX 1.6.1 / 1.7.0-alpha01 artifact를 현재 product dependency matrix와 비교합니다.",
+          "origin": "published-markdown"
+        },
+        {
+          "type": "bullet",
+          "text": "Preview, ImageCapture, VideoCapture smoke run이 필요한 device/API 조합만 표시합니다.",
+          "origin": "published-markdown"
+        },
+        {
+          "type": "bullet",
+          "text": "회귀가 있으면 app logcat, framework camera log, HAL/device log를 분리해 원인을 기록합니다.",
+          "origin": "published-markdown"
+        }
+      ],
+      "markdownHeading": "## 2. CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+      "perspectiveHeading": "Camera HAL / Driver 관점"
+    }
+  ],
+  "noticeLines": [
+    "검토 발행본입니다.",
+    "각 기사는 공개 source 범위 안에서 해석하며 Camera HAL 직접 변경으로 과장하지 않습니다."
+  ],
+  "reading": [],
+  "sourceLists": {
+    "articles": [
+      [
+        [
+          {
+            "type": "link",
+            "text": "Android Developers Latest Updates",
+            "url": "https://developer.android.com/latest-updates"
+          }
+        ]
+      ]
+    ],
+    "references": [
+      [
+        {
+          "type": "link",
+          "text": "Android Developers Latest Updates",
+          "url": "https://developer.android.com/latest-updates"
+        }
+      ]
+    ]
+  },
+  "issue": {
+    "date": "2026-05-11",
+    "title": "Camera HAL / SW Newsletter - 2026-05-11",
+    "summary": "이번 2026-05-11호는 1개 기사(CameraX 1.6.1 업데이트: Android Camera 호환성 관찰)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.",
+    "tags": [
+      "Camera HAL",
+      "Android"
+    ],
+    "briefing": [
+      "AndroidX Camera release note의 CameraX 1.6.1 / 1.7.0-alpha01 artifact 업데이트는 app/framework camera compatibility 확인 신호입니다. HAL 팀은 이를 새 HAL 요구사항이 아니라 기존 CameraX/Camera2 조합의 회귀 확인 입력으로 다뤄야 합니다.",
+      "CameraX 업데이트는 app/framework compatibility 신호입니다. HAL 팀은 제품 dependency matrix와 reference app smoke 결과를 확인하고, device log 근거가 있을 때만 HAL follow-up으로 분리해야 합니다.",
+      "CameraX 1.6.1 / 1.7.0-alpha01 artifact를 현재 product dependency matrix와 비교하는 것부터 보면 기사 내용을 실제 검증 작업으로 옮기기 쉽습니다."
+    ],
+    "sections": [
+      {
+        "id": "article-camerax-1-6-1-android-camera",
+        "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+        "sources": [
+          {
+            "url": "https://developer.android.com/latest-updates",
+            "title": "Android Developers Latest Updates"
+          }
+        ],
+        "relevance_bucket": "direct_aosp_camera",
+        "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=es-419",
+        "imageAlt": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+        "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.6.1",
+        "imageAttribution": "Android Developers Latest Updates",
+        "public_article": {
+          "headline": "CameraX 1.6.1 업데이트: Android Camera 호환성 관찰",
+          "lead": "AndroidX Camera release note의 CameraX 1.6.1 / 1.7.0-alpha01 artifact 업데이트는 app/framework camera compatibility 확인 신호입니다. HAL 팀은 이를 새 HAL 요구사항이 아니라 기존 CameraX/Camera2 조합의 회귀 확인 입력으로 다뤄야 합니다.",
+          "camera_hal_takeaway": "CameraX 업데이트는 app/framework compatibility 신호입니다. HAL 팀은 제품 dependency matrix와 reference app smoke 결과를 확인하고, device log 근거가 있을 때만 HAL follow-up으로 분리해야 합니다.",
+          "body_paragraphs": [
+            "CameraX는 Camera2 위에서 Preview, ImageCapture, VideoCapture 같은 use case를 앱 개발자가 다루기 쉽게 만드는 layer입니다. artifact version update는 app dependency matrix와 reference app smoke test가 필요한지 판단하는 자료이지, 그 자체로 device HAL behavior 변경을 의미하지 않습니다.",
+            "회귀가 보일 때는 app logcat, framework camera log, HAL/device log를 분리해 원인을 나눠야 합니다. CameraX/library 문제인지 downstream HAL issue인지 구분하지 않으면 HAL owner에게 잘못된 action item이 생깁니다."
+          ],
+          "source_links": [
+            {
+              "url": "https://developer.android.com/latest-updates",
+              "title": "Android Developers Latest Updates"
+            }
+          ]
+        }
+      }
+    ],
+    "references": [
+      {
+        "url": "https://developer.android.com/latest-updates",
+        "title": "Android Developers Latest Updates"
+      }
+    ],
+    "reference_articles": [],
+    "review_publication_ready": true
+  }
+}

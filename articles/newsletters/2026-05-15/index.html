@@ -4,9 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Camera SW Newsletter - 2026-05-15</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-05-15/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-05-15/index.html" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta name="description" content="이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-05-15/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="Camera SW Newsletter - 2026-05-15" />
+  <meta property="og:description" content="이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-05-15/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Camera SW Newsletter - 2026-05-15" />
+  <meta name="twitter:description" content="이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <link rel="stylesheet" href="../../css/styles.css" />
+  <script src="../../assets/js/site-header.js" defer></script>
 </head>
 <body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">본문 바로가기</a>
   <header class="site-header homepage-site-header">
     <div class="homepage-nav content-wrap">
       <a class="site-brand homepage-brand" href="../../index.html" aria-label="Camera SW Newsroom">
@@ -21,27 +40,16 @@
     </div>
   </header>
 
-  <main class="site-main article-page newsletter-main">
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
     <article class="wrap issue-wrap">
       <header class="article-header issue-hero">
-        <div class="issue-hero-copy">
-          <div class="article-meta issue-hero-meta">
-            <span class="issue-kicker">주간 뉴스레터 2026-05-15</span>
-            <div class="tag-row issue-tags"><span class="tag">Tooling Watch Edition</span><span class="tag">Tooling Watch</span><span class="tag">Android</span></div>
-          </div>
-          <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-05-15</span></h1>
-          <p class="subtitle">이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.</p>
+        <a class="issue-back" href="../../index.html">← 뉴스룸</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">뉴스레터 2026-05-15</span>
         </div>
-        <figure class="issue-hero-mascot" aria-label="HALley mascot">
-          <img
-            src="../../assets/images/brand/HALley.png"
-            alt="HALley 뉴스레터 마스코트"
-            width="1254"
-            height="1254"
-            decoding="async"
-            loading="eager"
-          />
-        </figure>
+        <h1 class="issue-title"><span>Camera SW</span><span>Newsletter - 2026-05-15</span></h1>
+        <p class="subtitle">이번 2026-05-15호는 1개 기사(Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22)를 Camera HAL / Android camera 개발자가 확인할 변경 범위와 확인 포인트 중심으로 정리했습니다.</p>
+        <div class="tag-row issue-tags"><span class="tag">Tooling Watch Edition</span><span class="tag">Tooling Watch</span><span class="tag">Android</span></div>
       </header>
 
       <div class="publication-notice" role="note">
@@ -50,46 +58,66 @@
           <p>Camera pipeline, Android native 성능, build/test/debug workflow 관점에서 참고 가능한 항목만 선별했으며 정상 Camera HAL issue로 간주하지 않습니다.</p>
         </div>
 
-      <section class="section issue-briefing" aria-labelledby="issue-briefing-title">
-        <div class="card issue-briefing-card">
-          <div class="issue-section-heading">
-            <span class="section-icon section-icon-list" aria-hidden="true"></span>
-            <h2 id="issue-briefing-title">이번 주 3줄 브리핑</h2>
-          </div>
-          <ul><li>GCC 16 성능 비교 소식은 C++ compiler optimization과 binary performance를 관찰할 tooling 신호입니다. Android Camera HAL은 주로 Clang/LLVM 기반이므로 이 항목은 즉시 적용 변경이 아니라 장기 toolchain 비교 자료로 읽어야 합니다.</li><li>이 항목은 Camera HAL runtime 변경이 아니라 native tooling watch입니다. HAL 팀은 Android branch의 Clang/LLVM 정책을 기준으로 보고, host utility 또는 benchmark 환경에서만 제한적으로 비교해야 합니다.</li><li>현재 Android branch의 Clang/LLVM version, C++ standard flag, sanitizer 설정을 확인하는 것부터 보면 기사 내용을 실제 검증 작업으로 옮기기 쉽습니다.</li></ul>
+
+
+      <span id="issue-briefing-title" data-legacy-target="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" tabindex="-1"></span><section class="section issue-story issue-section article-card has-image" id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" tabindex="-1" aria-labelledby="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">C++</span>
         </div>
-      </section>
-
-      <section class="section issue-story" id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with-" aria-labelledby="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title">
-        <span class="issue-story-number" aria-label="Article 1">1</span>
-        <article class="card issue-section article-card has-image tooling-watch">
-          <div class="article-feature-row">
-            <figure class="article-media">
-            <img class="article-image" src="https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&amp;image=thelio_gcc16_1" alt="Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22" loading="lazy" decoding="async">
-            <figcaption class="article-image-caption">이미지: <a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">Phoronix Linux Camera / Media</a></figcaption>
-          </figure>
-            <div class="article-copy">
-
-              <h2 id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title" class="article-title">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h2>
-
-              <p class="article-lead">GCC 16 성능 비교 소식은 C++ compiler optimization과 binary performance를 관찰할 tooling 신호입니다. Android Camera HAL은 주로 Clang/LLVM 기반이므로 이 항목은 즉시 적용 변경이 아니라 장기 toolchain 비교 자료로 읽어야 합니다.</p>
-              <p>Camera HAL native code는 build flag, sanitizer, LTO/PGO, warning policy 같은 toolchain 설정에 민감합니다. GCC 16 benchmark는 compiler optimization 동향을 보여주지만, Android product branch에 바로 GCC를 적용하거나 HAL runtime 성능 개선을 주장할 근거는 아닙니다.</p>
-            <p>실무적으로는 Clang/LLVM 쪽 equivalent feature와 Android platform toolchain 정책을 함께 비교하는 정도가 적절합니다. host-side utility나 offline analysis tool이 GCC를 쓰는 경우에만 별도 benchmark를 열 수 있습니다.</p>
-            </div>
-          </div>
-          <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL/Driver 관점에서의 의미</strong><p>이 항목은 Camera HAL runtime 변경이 아니라 native tooling watch입니다. HAL 팀은 Android branch의 Clang/LLVM 정책을 기준으로 보고, host utility 또는 benchmark 환경에서만 제한적으로 비교해야 합니다.</p></div>
-          <div class="source-list"><strong>출처</strong><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
-        </article>
+        <h2 id="article-tooling-watch-gcc-16-produces-faster-binaries-than-gcc-15-competitive-race-with--title" class="article-title">Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</h2>
+        <p class="article-lead">GCC 16 성능 비교 소식은 C++ compiler optimization과 binary performance를 관찰할 tooling 신호입니다. Android Camera HAL은 주로 Clang/LLVM 기반이므로 이 항목은 즉시 적용 변경이 아니라 장기 toolchain 비교 자료로 읽어야 합니다.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver 관점</strong><p>이 항목은 Camera HAL runtime 변경이 아니라 native tooling watch입니다. HAL 팀은 Android branch의 Clang/LLVM 정책을 기준으로 보고, host utility 또는 benchmark 환경에서만 제한적으로 비교해야 합니다.</p></div>
+        <figure class="article-media">
+        <img class="article-image" src="https://www.phoronix.net/image.php?id=gcc-16-vs-clang-22&amp;image=thelio_gcc16_1" alt="Tooling Watch: GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">이미지: <a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">Phoronix Linux Camera / Media</a></figcaption>
+        </figure>
+        <p>Camera HAL native code는 build flag, sanitizer, LTO/PGO, warning policy 같은 toolchain 설정에 민감합니다. GCC 16 benchmark는 compiler optimization 동향을 보여주지만, Android product branch에 바로 GCC를 적용하거나 HAL runtime 성능 개선을 주장할 근거는 아닙니다.</p>
+        <p>실무적으로는 Clang/LLVM 쪽 equivalent feature와 Android platform toolchain 정책을 함께 비교하는 정도가 적절합니다. host-side utility나 offline analysis tool이 GCC를 쓰는 경우에만 별도 benchmark를 열 수 있습니다.</p>
+        <h3 class="article-subheading">확인할 점</h3>
+        <ul><li>현재 Android branch의 Clang/LLVM version, C++ standard flag, sanitizer 설정을 확인합니다.</li></ul>
+        <ul><li>GCC 16 성능 결과를 product HAL 성능 개선 근거로 쓰지 않습니다.</li></ul>
+        <ul><li>host-side tool이나 standalone benchmark가 GCC를 쓰는 경우에만 별도 비교를 진행합니다.</li></ul>
+        <div class="source-list"><strong>출처</strong><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
       </section>
 
       <section class="section issue-references" aria-labelledby="issue-references-title">
         <h2 id="issue-references-title">참고자료</h2>
-        <div class="card reference-list"><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
+        <div class="reference-list"><ul><li><a href="https://www.phoronix.com/review/gcc-16-vs-clang-22">GCC 16 Produces Faster Binaries Than GCC 15, Competitive Race With LLVM Clang 22</a></li></ul></div>
       </section>
+
+      <nav class="issue-footer-navigation" aria-label="이슈 하단 이동">
+        <a href="../../index.html">← 뉴스룸으로</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">아카이브 전체 보기 →</a>
+      </nav>
+
     </article>
   </main>
   <footer class="site-footer">
-    <div class="content-wrap footer-legal"><small>&copy; 2026 Camera SW Newsletter</small></div>
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">뉴스레터</span>
+          <a class="footer-link" href="../../index.html">홈</a>
+          <a class="footer-link" href="../../archive.html">아카이브</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">주제</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">리소스</span>
+          <a class="footer-link" href="../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (지원예정)</span>
+          <span class="footer-note">편집 정책 (지원예정)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Gemini 뉴스룸이 모아 사람이 검토·발행합니다.</small></div>
+    </div>
   </footer>
 </body>
 </html>

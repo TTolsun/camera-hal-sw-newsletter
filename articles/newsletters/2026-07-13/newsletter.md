@@ -1,24 +1,45 @@
 # AOSP Camera & Driver Platform 기술 뉴스레터 (2026-07-13)
 
+
+
+
+
+<a id="issue-briefing"></a>
+
+## 1. 이 호의 핵심
+
 이번 주 뉴스레터에서는 Qualcomm CAMSS 드라이버 스택에 제안된 Offline Processing Engine(OPE) v4 패치와 libcamera 소프트웨어 ISP의 렌즈 쉐이딩 보정(LSC)을 위한 EGL 모듈 개선 제안을 다룹니다. 또한 지난 6월 9일 배포된 Raspberry Pi의 libcamera 다운스트림 릴리스를 통해 임베디드 리눅스 카메라 드라이버 생태계의 최신 흐름을 짚어봅니다. 하부 드라이버 및 ISP 이미지 파이프라인의 아키텍처 변화가 Android 카메라 스택에 미치는 영향을 실무 관점에서 분석합니다.
 
+- [Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안](#article-qualcomm-camss-ope-v4)
+
+  Android Camera HAL에 직접적인 API 변경을 주지는 않으나, 하위 드라이버 레벨에서 RAW-to-YUV 오프라인 변환 경로가 최적화됨에 따라 YUV_420_888 및 RAW 스트림의 동시 처리 효율성과 전력 소모가 개선될 가능성이 있습니다.
+
+- [libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입](#article-libcamera-isp-lsc-egl)
+
+  Android Camera HAL에 직접적인 영향은 없으나, libcamera 소프트웨어 ISP를 사용하는 플랫폼에서 LSC 보정 품질과 GPU 텍스처 처리 효율성을 동시에 높일 수 있는 기반이 마련되었습니다.
+
+- [Raspberry Pi, libcamera v0.7.1+rpt20260609 다운스트림 버전 배포](#article-raspberry-pi-libcamera-v0-7-1-rpt20260609)
+
+  Android Camera HAL에 직접적인 API나 계약 변화를 주지는 않으나, V4L2 기반 드라이버 통합 및 임베디드 리눅스 카메라 스택의 최적화 기법을 벤치마킹하는 용도로 참고할 수 있습니다.
 
 
-## 1. 이번 주 3줄 브리핑
 
-- Qualcomm CAMSS에 오프라인 이미지 처리를 전담하는 OPE(Offline Processing Engine) 드라이버 v4 패치가 제안되어 RAW-to-YUV 변환 경로의 효율성 개선이 기대됩니다.
-- libcamera 소프트웨어 ISP의 EGL 모듈에 LSC(렌즈 쉐이딩 보정) 지원을 위한 텍스처 필터 파라미터 추가 패치가 제안되어 이미지 주변부 품질 향상의 기반이 마련되었습니다.
-- 지난 6월 9일 배포된 Raspberry Pi libcamera v0.7.1+rpt20260609 다운스트림 버전을 통해 임베디드 V4L2 및 드라이버 통합을 위한 최신 기술 동향을 공유합니다.
+
+<a id="article-qualcomm-camss-ope-v4"></a>
 
 ## 2. Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안
-
-
-![Qualcomm CAMSS, 오프라인 이미지 처리를 가속하는 OPE 드라이버 v4 패치 제안 image](../../assets/images/fallback/android.svg)
-
 
 _lore.kernel.org linux-media 메일링 리스트 패치 분석_
 
 Qualcomm CAMSS(Camera Subsystem)에 오프라인 이미지 처리를 전담하는 OPE(Offline Processing Engine) 드라이버를 추가하는 v4 패치가 제안되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Android Camera HAL에 직접적인 API 변경을 주지는 않으나, 하위 드라이버 레벨에서 RAW-to-YUV 오프라인 변환 경로가 최적화됨에 따라 YUV_420_888 및 RAW 스트림의 동시 처리 효율성과 전력 소모가 개선될 가능성이 있습니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
 
 이번 주 리눅스 미디어 메일링 리스트를 통해 Qualcomm CAMSS 드라이버 스택에 Offline Processing Engine(OPE) 지원을 추가하는 네 번째 패치 시리즈가 공개되었습니다. OPE는 raw Bayer 프레임을 입력받아 YUV 프레임으로 변환하는 메모리-투-메모리(M2M) 방식의 ISP 하드웨어 블록입니다.
 
@@ -26,9 +47,7 @@ Qualcomm CAMSS(Camera Subsystem)에 오프라인 이미지 처리를 전담하�
 
 다만 본 패치는 현재 리눅스 커널 메인라인에 병합되지 않은 제안 단계(PATCH v4)이므로 실제 상용 칩셋 및 Android 디바이스에 적용되기까지는 벤더의 통합 및 검증 프로세스가 추가로 요구됩니다. HAL 개발자들은 하위 드라이버의 M2M 아키텍처 도입에 따른 버퍼 라이프사이클 변화를 장기적으로 관찰할 필요가 있습니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-Android Camera HAL에 직접적인 API 변경을 주지는 않으나, 하위 드라이버 레벨에서 RAW-to-YUV 오프라인 변환 경로가 최적화됨에 따라 YUV_420_888 및 RAW 스트림의 동시 처리 효율성과 전력 소모가 개선될 가능성이 있습니다.
+[이 호의 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -36,15 +55,21 @@ Android Camera HAL에 직접적인 API 변경을 주지는 않으나, 하위 드
 
 ---
 
+<a id="article-libcamera-isp-lsc-egl"></a>
+
 ## 3. libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입
-
-
-![libcamera 소프트웨어 ISP, 렌즈 쉐이딩 보정(LSC) 강화를 위한 EGL 텍스처 필터 파라미터 도입 image](../../assets/images/fallback/android.svg)
-
 
 _libcamera Patchwork RFC v7 패치 검토_
 
 최근 libcamera의 소프트웨어 ISP EGL 모듈에서 렌즈 쉐이딩 보정(LSC) 성능을 개선하기 위해 createTexture2D() 함수에 필터 파라미터를 추가하는 패치가 제안되었습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Android Camera HAL에 직접적인 영향은 없으나, libcamera 소프트웨어 ISP를 사용하는 플랫폼에서 LSC 보정 품질과 GPU 텍스처 처리 효율성을 동시에 높일 수 있는 기반이 마련되었습니다.
+
+
+![](../../assets/images/fallback/android.svg)
+
 
 지난 7월 8일 제안된 RFC v7 패치 시리즈에 따르면, libcamera의 소프트웨어 ISP(software_isp) 내 EGL 모듈에 중요한 인터페이스 변경이 포함되었습니다. 구체적으로 createTexture2D() 함수에 필터 파라미터가 새롭게 추가되었습니다.
 
@@ -52,9 +77,7 @@ _libcamera Patchwork RFC v7 패치 검토_
 
 해당 패치는 아직 검토 단계(RFC v7)에 머물러 있어 메인라인에 완전히 통합되지는 않았습니다. libcamera를 하부 스택으로 활용하는 임베디드 시스템이나 특정 가상화 환경의 Android HAL 개발자들은 소프트웨어 ISP 구동 시의 이미지 품질 향상 여부를 추적할 필요가 있습니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-Android Camera HAL에 직접적인 영향은 없으나, libcamera 소프트웨어 ISP를 사용하는 플랫폼에서 LSC 보정 품질과 GPU 텍스처 처리 효율성을 동시에 높일 수 있는 기반이 마련되었습니다.
+[이 호의 핵심으로](#issue-briefing)
 
 **출처**
 
@@ -64,7 +87,17 @@ Android Camera HAL에 직접적인 영향은 없으나, libcamera 소프트웨�
 
 ## 지난 소식 (Catch-up)
 
+<a id="article-raspberry-pi-libcamera-v0-7-1-rpt20260609"></a>
+
 ## 4. Raspberry Pi, libcamera v0.7.1+rpt20260609 다운스트림 버전 배포 (5주 전 릴리스)
+
+_Raspberry Pi GitHub 공식 릴리스 분석_
+
+지난 2026년 6월 9일, Raspberry Pi가 자사 플랫폼에 최적화된 libcamera v0.7.1+rpt20260609 다운스트림 버전을 공식 릴리스했습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Android Camera HAL에 직접적인 API나 계약 변화를 주지는 않으나, V4L2 기반 드라이버 통합 및 임베디드 리눅스 카메라 스택의 최적화 기법을 벤치마킹하는 용도로 참고할 수 있습니다.
 
 
 ![Raspberry Pi, libcamera v0.7.1+rpt20260609 다운스트림 버전 배포](https://opengraph.githubassets.com/43745a03e57dd7fd1a373cbe920ccddb1ccaf4ae482bbe9bb87049ef908a045d/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609)
@@ -72,19 +105,13 @@ Android Camera HAL에 직접적인 영향은 없으나, libcamera 소프트웨�
 _이미지: [Raspberry Pi libcamera Releases](https://github.com/raspberrypi/libcamera/releases/tag/v0.7.1%2Brpt20260609)_
 
 
-_Raspberry Pi GitHub 공식 릴리스 분석_
-
-지난 2026년 6월 9일, Raspberry Pi가 자사 플랫폼에 최적화된 libcamera v0.7.1+rpt20260609 다운스트림 버전을 공식 릴리스했습니다.
-
 이번 소식은 지난 6월 9일 공개된 Raspberry Pi의 libcamera 프로젝트 다운스트림 릴리스에 대한 회고입니다. 배포된 v0.7.1+rpt20260609 버전은 Raspberry Pi 하드웨어에 특화된 카메라 드라이버 및 이미지 파이프라인 최적화 요소를 담고 있습니다.
 
 libcamera는 리눅스 환경에서 카메라 기기를 추상화하는 핵심 프레임워크로, Raspberry Pi의 다운스트림 버전은 임베디드 리눅스 및 V4L2 서브시스템의 최신 변경 사항을 가장 빠르게 반영하는 창구 역할을 해왔습니다. 이번 릴리스 역시 해당 플랫폼에서의 카메라 구동 안정성을 높이는 데 주안점을 두고 있습니다.
 
 다만 이 릴리스는 Raspberry Pi 특정 하드웨어와 소프트웨어 스택에 초점을 맞추고 있으므로, 일반적인 Android 기기의 Camera HAL3 구현이나 AOSP 프레임워크 계약에는 직접적인 영향을 미치지 않습니다. 임베디드 Android 환경을 다루거나 V4L2 드라이버 통합을 담당하는 엔지니어들이 상류(upstream) 기술 동향을 파악하는 참조 자료로 활용하기에 적합합니다.
 
-### Camera HAL/Driver 관점에서의 의미
-
-Android Camera HAL에 직접적인 API나 계약 변화를 주지는 않으나, V4L2 기반 드라이버 통합 및 임베디드 리눅스 카메라 스택의 최적화 기법을 벤치마킹하는 용도로 참고할 수 있습니다.
+[이 호의 핵심으로](#issue-briefing)
 
 **출처**
 
