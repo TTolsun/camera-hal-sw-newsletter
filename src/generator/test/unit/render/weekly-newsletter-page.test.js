@@ -147,7 +147,7 @@ test('buildWeeklyNewsletterPage renders the draft sections verbatim, including n
   assert.deepEqual(page.issue.briefing, ['CameraX SessionConfig stable API', 'CameraX 1.8.0 alpha SessionProcessor']);
 });
 
-test('coverage 필드가 있으면 제목·표시가 대상 주 기준이 된다', () => {
+test('HTML 제목은 발행 주를, 대상 기간과 markdown 제목은 coverage를 표시한다', () => {
   const page = buildWeeklyNewsletterPage({
     sections: [],
     coverage_week_key: '2026-W33',
@@ -161,11 +161,12 @@ test('coverage 필드가 있으면 제목·표시가 대상 주 기준이 된다
   assert.equal(page.issue.coverage_week_key, '2026-W33');
   assert.match(page.html, /2026\.08\.10 – 08\.16/);
   assert.doesNotMatch(page.html, /08\.17 ~ 08\.23/);              // 미래 기간 표시 제거
-  // 표시 계약 v2: 대상 주(W33)와 발행 주(W34)가 다르므로 h1 아래 발행 배지와 SEO 접미를 둘 다 붙인다.
-  assert.match(page.html, /<h1 class="issue-title"><span>2026 W33<\/span><\/h1>\s*<p class="issue-publish-badge">발행 W34<\/p>/);
-  assert.match(page.html, /<title>2026 W33 Camera SW Newsletter \(발행 W34\)<\/title>/);
-  assert.match(page.html, /<meta property="og:title" content="2026 W33 Camera SW Newsletter \(발행 W34\)" \/>/);
-  assert.match(page.html, /<meta name="twitter:title" content="2026 W33 Camera SW Newsletter \(발행 W34\)" \/>/);
+  assert.match(page.html, /대상 2026 W33 · 2026\.08\.10 – 08\.16/);
+  // 발행 호수는 제목에, 근거가 있는 대상 주와 기간은 kicker에 표시한다.
+  assert.match(page.html, /<h1 class="issue-title"><span>2026 W34<\/span><\/h1>/);
+  assert.match(page.html, /<title>2026 W34 Camera SW Newsletter<\/title>/);
+  assert.match(page.html, /<meta property="og:title" content="2026 W34 Camera SW Newsletter" \/>/);
+  assert.match(page.html, /<meta name="twitter:title" content="2026 W34 Camera SW Newsletter" \/>/);
 });
 
 test('coverage 필드가 없으면 markdown 제목(issue.title)은 기존 출력과 바이트가 같다', () => {

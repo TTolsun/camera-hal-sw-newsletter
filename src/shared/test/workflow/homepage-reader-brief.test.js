@@ -281,3 +281,11 @@ test('untranslated article topic results retain their Korean identity and explic
   assert.match(html, /href="\.\.\/newsletters\/2026-W42\/index.html#article-b"/);
   assert.match(html, /<h3[^>]*lang="ko"[^>]*>Tool B/);
 });
+
+test('homepage omits introductions that repeat the visible article headlines', () => {
+  const { entry, brief } = sample();
+  brief.intro = 'This issue covers ' + brief.items[0].headline;
+  const html = archive.renderLatestIssue(entry);
+  assert.doesNotMatch(html, /reader-intro/);
+  assert.match(html, /<details class="reader-context">[\s\S]*reader-stories[\s\S]*article-b[\s\S]*<\/details>/);
+});
