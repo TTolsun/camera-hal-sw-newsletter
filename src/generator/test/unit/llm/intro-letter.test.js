@@ -6,6 +6,7 @@ const test = require('node:test');
 const {
   INTRO_LETTER_RESPONSE_SCHEMA,
   INTRO_LETTER_REVIEW_RESPONSE_SCHEMA,
+  INTRO_LETTER_SYSTEM_INSTRUCTION,
   buildIntroLetterGenerator,
   buildIntroLetterReviewer,
   lintIntroLetter,
@@ -334,4 +335,55 @@ test('intro generation never passes internal review fields to the model', async 
     return { intro_letter: PASSING_LETTER };
   } });
   await generate({ articles });
+});
+
+test('the generation instruction states the same length and sentence bounds the gate enforces', () => {
+  assert.match(INTRO_LETTER_SYSTEM_INSTRUCTION, /2~5문장/);
+  assert.match(INTRO_LETTER_SYSTEM_INSTRUCTION, /700자 이내/);
+  // 지시문의 700자가 실제 게이트 경계와 같은지 확인한다.
+  const head = 'libcamera와 SM8750 소식입니다. ';
+  const tail = ' 끝입니다.';
+  const sized = length => `${head}${'가'.repeat(length - head.length - tail.length)}${tail}`;
+  assert.equal(sized(700).length, 700);
+  const lengthIssue = letter => lintIntroLetter(letter, ARTICLES).issues.some(issue => issue.startsWith('length_out_of_bounds:'));
+  assert.equal(lengthIssue(sized(700)), false);
+  assert.equal(lengthIssue(sized(701)), true);
+});
+
+test('a regeneration call receives the problems that discarded the previous answer', async () => {
+  const received = [];
+  const responses = ['게이트에 실패하는 첫 응답입니다. 두 번째 문장입니다.', PASSING_LETTER];
+  const resolution = await resolveIntroLetter({
+    articles: ARTICLES,
+    storedIntroLetter: '',
+    generateIntroLetter: async ({ previousAttemptProblems }) => { received.push(previousAttemptProblems); return responses.shift(); },
+    reviewIntroLetter: ACCEPT
+  });
+  assert.equal(resolution.status, 'regenerated');
+  assert.deepEqual(received[0], []);
+  assert.ok(received[1].some(issue => issue.startsWith('uncovered_article:')));
+});
+
+test('a regeneration call after a rejected fact review receives the unsupported sentences', async () => {
+  const received = [];
+  const review = async () => ({ ok: false, issues: ['unsupported:근거 없는 문장'] });
+  await resolveIntroLetter({
+    articles: ARTICLES,
+    storedIntroLetter: '',
+    generateIntroLetter: async ({ previousAttemptProblems }) => { received.push(previousAttemptProblems); return PASSING_LETTER; },
+    reviewIntroLetter: review
+  });
+  assert.deepEqual(received, [[], ['unsupported:근거 없는 문장']]);
+});
+
+test('the generator adds previous_attempt_problems to the prompt only when there are problems', async () => {
+  const prompts = [];
+  const generate = buildIntroLetterGenerator({ callLlmJson: async (_stage, _system, prompt) => {
+    prompts.push(JSON.parse(prompt));
+    return { intro_letter: PASSING_LETTER };
+  } });
+  await generate({ articles: ARTICLES, previousAttemptProblems: [] });
+  await generate({ articles: ARTICLES, previousAttemptProblems: ['length_out_of_bounds:835'] });
+  assert.equal('previous_attempt_problems' in prompts[0], false);
+  assert.deepEqual(prompts[1].previous_attempt_problems, ['length_out_of_bounds:835']);
 });
