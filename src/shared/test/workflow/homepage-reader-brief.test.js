@@ -72,12 +72,18 @@ test('both locales lead with the change and work implications while keeping the 
     const { entry, brief } = sample(locale);
     const html = archive.renderLatestIssue(entry, { locale });
     assert.ok(html.indexOf('reader-decision') < html.indexOf('reader-stories'));
-    assert.ok(html.indexOf('reader-stories') < html.indexOf('reader-context'));
+    const context = html.match(/<details class="reader-context">([\s\S]*?)<\/details>/)[1];
+    assert.ok(context.indexOf('reader-intro') < context.indexOf('reader-stories'));
+    assert.match(context, /article-b/);
     assert.match(html, /<details class="reader-context">/);
     assert.doesNotMatch(html, /<details[^>]*\bopen/);
     assert.equal(html.split(brief.items[0].takeaway).length - 1, 1);
     assert.doesNotMatch(archive.renderArchiveCard(entry, { locale, compact: true }), /card-takeaway/);
     assert.match(archive.renderArchiveCard(entry, { locale }), /card-takeaway/);
+    brief.intro = '';
+    const withoutIntro = archive.renderLatestIssue(entry, { locale });
+    assert.match(withoutIntro, /<details class="reader-context">[\s\S]*reader-stories[\s\S]*article-b[\s\S]*<\/details>/);
+    assert.doesNotMatch(withoutIntro, /reader-intro/);
   }
 });
 
@@ -279,5 +285,7 @@ test('untranslated article topic results retain their Korean identity and explic
 test('homepage omits introductions that repeat the visible article headlines', () => {
   const { entry, brief } = sample();
   brief.intro = 'This issue covers ' + brief.items[0].headline;
-  assert.doesNotMatch(archive.renderLatestIssue(entry), /reader-context/);
+  const html = archive.renderLatestIssue(entry);
+  assert.doesNotMatch(html, /reader-intro/);
+  assert.match(html, /<details class="reader-context">[\s\S]*reader-stories[\s\S]*article-b[\s\S]*<\/details>/);
 });

@@ -723,7 +723,7 @@ test('homepage leads with the latest issue and retains sort, topic and navigatio
 
   assert.match(html, /<article id="reader-issue" class="reader-issue" aria-live="polite">/);
   assert.match(html, /<h1 id="reader-title">최신 주간 뉴스레터<\/h1>/);
-  assert.match(html, /href="css\/homepage\.css\?v=reader-focus-v1"/);
+  assert.match(html, /href="css\/homepage\.css\?v=reader-context-v2"/);
   assert.ok(html.indexOf('id="reader-issue"') < html.indexOf('id="latest"'));
   assert.doesNotMatch(html, /featured-img is-brand/);
   // 최신 소식 grid section with sort + topic filter + grid hooks.
