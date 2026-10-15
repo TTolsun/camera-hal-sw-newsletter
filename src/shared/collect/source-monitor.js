@@ -1142,7 +1142,6 @@ async function collectAndClassifySourceEvents(options = {}) {
   const allDiagnostics = [];
   const snapshotWrites = [];
   const sourceById = new Map();
-  const pageExtracts = [];
 
   for (const source of ensureArray(registry.sources)) {
     sourceById.set(source.source_id, source);
@@ -1167,20 +1166,6 @@ async function collectAndClassifySourceEvents(options = {}) {
       snapshot,
       detectedAt
     }));
-    // 문서 섹션 추출 결과는 스냅샷·이벤트 artifact에는 싣지 않지만(withoutDerivedEvidence),
-    // 이번 실행의 반환값에는 in-memory로 실어 심층 기사 큐 등 호출자가 바로 쓸 수 있게 한다.
-    for (let index = 0; index < collected.observations.length; index += 1) {
-      const current = collected.observations[index];
-      if (!current?.release_note_extract?.sections?.length) continue;
-      pageExtracts.push({
-        source_id: source.source_id,
-        url: current.canonical_url || current.url,
-        title: current.title,
-        release: current.release_note_extract.release,
-        sections: current.release_note_extract.sections,
-        event: events[index]
-      });
-    }
     const currentKeys = new Set(collected.observations.map(observation => observation.source_identity_key));
     for (const previous of snapshot.pages) {
       if (currentKeys.has(previous.source_identity_key)) continue;
@@ -1206,8 +1191,7 @@ async function collectAndClassifySourceEvents(options = {}) {
     events: allEvents,
     diagnostics: allDiagnostics,
     snapshotWrites,
-    sourceById,
-    pageExtracts
+    sourceById
   };
 }
 
@@ -1240,8 +1224,7 @@ async function runSourceMonitor(options = {}) {
   return {
     report,
     candidates: allCandidates,
-    snapshotWrites: collected.snapshotWrites,
-    pageExtracts: collected.pageExtracts
+    snapshotWrites: collected.snapshotWrites
   };
 }
 
