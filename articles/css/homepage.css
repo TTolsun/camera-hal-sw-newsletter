@@ -67,6 +67,11 @@
   font-size: 0.8125rem;
 }
 
+.homepage .reader-stories {
+  margin: 20px 0 12px;
+  color: var(--text);
+}
+
 .homepage .reader-stories ul {
   margin: 16px 0 0;
   padding-left: 20px;
