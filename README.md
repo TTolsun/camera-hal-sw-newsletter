@@ -85,10 +85,13 @@ candidate collection
 | 명령 | 언제 쓰나 | 결과물 |
 | --- | --- | --- |
 | `npm.cmd run test` | 단위/통합 테스트 회귀 확인 | `src/<layer>/test/` 전수 결과 |
+| `npm.cmd run test:browser` | 모든 한국어·영어 주간호와 과거 날짜형 호의 이미지 크기·언어 메뉴 검사 | 320px·390px·1280px 실제 브라우저 레이아웃 |
 | `npm.cmd run validate` | docs·정책·인코딩·site 무결성 검사 | `validate:*` 체인 보고 |
 | `npm.cmd run ci` | test + validate 한꺼번에 | 변경 범위 넓을 때 1차 신뢰도 확인 |
 | `npm.cmd run collect` | `src/shared/data/news-sources.json` 기반 후보 수집 | `articles/content/collected-news/YYYY-MM-DD/` |
 | `npm.cmd run generate` | LLM 뉴스룸 파이프라인 (Gemini 공급자 사용 시 `GEMINI_API_KEY` 필요) | `articles/content/newsroom/YYYY-MM-DD/` |
+
+브라우저 검사는 `npm.cmd ci` 후 `npx.cmd playwright install chromium`으로 브라우저를 한 번 설치한 뒤 실행합니다. 기존 Chrome을 쓰려면 `BROWSER_PATH`에 실행 파일의 절대 경로를 지정할 수 있습니다. `test:browser`는 별도 명령이며, Site 01 PR 검증에서 필수로 실행합니다. 발행 폴더를 자동 탐색하므로 새 호도 검사에 포함됩니다. 외부 기사 이미지 응답은 고정 SVG로 대체해 네트워크 변동을 배제하고, 로컬 fallback 이미지는 실제 파일을 로드해 검사합니다.
 
 > 💡 공급자/모델 재정의와 사내 API Secret 설정은 [GitHub Actions Secret과 Variable(docs/config/ACTION_VARIABLES.md)](docs/config/ACTION_VARIABLES.md)를 보세요.
 

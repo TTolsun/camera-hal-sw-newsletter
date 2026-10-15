@@ -33,6 +33,12 @@ jobs:
       - name: Run unit and regression tests
         run: npm run test
 
+      - name: Install browser for responsive regression tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Check images and language menus across all published issues
+        run: npm run test:browser
+
       - name: Validate structural publication artifacts
         run: |
           npm run check:encoding

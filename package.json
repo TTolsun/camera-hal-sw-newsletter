@@ -27,6 +27,7 @@
     "generate:sitemap": "node src/generator/render/generate-sitemap.js",
     "test": "npm run test:unit && npm run test:script",
     "test:unit": "node src/shared/tooling/cli/run-node-tests.js src",
+    "test:browser": "node --test src/generator/test/browser/newsletter-layout.browser.js",
     "test:source-effectiveness": "node --test src/generator/test/workflow/source-effectiveness-report.test.js",
     "test:script": "node src/shared/tooling/cli/test-artifact-manifest.js && node src/shared/tooling/cli/test-selection-diagnostics.js",
     "test:artifact": "node src/shared/tooling/cli/test-artifact-manifest.js",
@@ -61,5 +62,8 @@
   },
   "dependencies": {
     "@google/genai": "^1.0.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.64.1"
   }
 }
