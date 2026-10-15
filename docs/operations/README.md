@@ -69,6 +69,14 @@ PR을 검토할 때는 상단 요약부터 본 뒤 필요하면 artifact로 내�
 - 명시한 target도, 변경된 public issue도 없으면, 조용히 최신본으로 넘어가지(fallback) 않고 실패합니다.
 - 과거 issue 전체를 검사하는 것은 `node src/generator/publish/annotate-publication-quality.js --all`에서만 합니다.
 
+## 배포 후 모바일 화면 검사
+
+`Site 02 - Build & Deploy`는 Pages 배포 성공 후 `verify-deployed-layout` job에서 실제 배포 URL을 Chromium의 320×900 화면으로 검사합니다. 배포한 revision의 모든 한글·영문 뉴스레터를 수집하므로 최신 주간호, 이전 주간호, 날짜 형식의 과거 호가 자동으로 포함됩니다.
+
+각 페이지에서 언어 메뉴를 열고 닫으며 메뉴와 두 언어 선택지가 화면 안에 있고 클릭 가능한지 확인합니다. 기사 이미지와 fallback 이미지의 로딩, 이미지 개수, 본문 너비 일치와 16:9 비율도 확인합니다. 실제 사이트 검사에서는 외부 이미지를 모의 응답으로 바꾸지 않습니다.
+
+검사 실패는 workflow 실패로 표시되며 이미 완료된 배포를 자동으로 되돌리지는 않습니다. `deployed-layout-320px` artifact의 `results.json`과 실패 화면을 확인한 뒤 수정 PR을 배포합니다. 재검사는 실패한 job만 다시 실행하면 됩니다. 기존 PR 검증의 로컬 320·390·1280px 회귀 검사도 유지됩니다.
+
 ## 🔬 Artifact Review Order
 
 > 💡 artifact는 아래 순서로 보면 결론(PR body)에서 근거(상세 report)로 자연스럽게 내려갑니다.
