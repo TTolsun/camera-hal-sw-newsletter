@@ -477,8 +477,47 @@ function parseHtmlPage(html, source) {
   })];
 }
 
+// Article and registry metadata share token rules; metadata never borrows article text.
+// Split CamelCase for APIs such as ICameraProvider while retaining the original text
+// for names such as MediaCodec, CameraX, and source keywords containing punctuation.
+const KEYWORD_ALIASES = {
+  camera: ['cameras', 'camerax', 'camera2', 'libcamera', 'cameraserver'],
+  android: ['androidx'],
+  'image sensor': ['camera sensor', 'camera_sensor'],
+  arm: ['arm32', 'arm64', 'armv7', 'armv8', 'armv9'],
+  cpp: ['libcpp'],
+  stream: ['streams', 'streaming'],
+  isp: ['softisp', 'rkisp1', 'rkisp2', 'atomisp'],
+  hdr: ['hdrnet', 'hdr10'],
+  raw: ['raw10', 'raw12', 'raw14'],
+  agent: ['agents', 'agentic', 'subagent', 'subagents'],
+  build: ['builds', 'building'],
+  test: ['tests', 'testing', 'tested'],
+  tool: ['tools', 'tooling']
+};
+const PLURAL_KEYWORDS = new Set([
+  'image', 'capture', 'buffer', 'session', 'image sensor', 'cpu', 'gpu', 'npu', 'dsp', 'soc',
+  'model', 'developer', 'sanitizer', 'ai agent', 'coding agent'
+]);
+
 function keywordHits(text, keywords) {
-  return keywords.filter(keyword => text.includes(keyword.toLowerCase())).length;
+  const words = text.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/([A-Z])([A-Z][a-z])/g, '$1 $2');
+  return keywords.filter(keyword => {
+    const key = keyword.toLowerCase();
+    // "its" is an ordinary pronoun. Keep the technical acronym and explicit
+    // Camera ITS spelling, including lower-case source text, without rewarding pronouns.
+    if (key === 'its') {
+      return /(?:^|[^a-zA-Z0-9])ITS(?=$|[^a-zA-Z0-9])/.test(words) ||
+        /(?:^|[^a-z0-9])camera[\s._/-]+its(?=$|[^a-z0-9])/i.test(words);
+    }
+    const forms = [key, ...(Object.hasOwn(KEYWORD_ALIASES, key) ? KEYWORD_ALIASES[key] : [])];
+    if (PLURAL_KEYWORDS.has(key)) forms.push(key + 's');
+    const pattern = key === 'c++'
+      ? '(?:lib)?c\\+\\+(?:\\d+[a-z]?)?'
+      : forms.map(value => value.replace(/[.*+?^$()|[\]{}\\]/g, '\\$&')).join('|');
+    const match = new RegExp('(?:^|[^a-z0-9])(?:' + pattern + ')(?=$|[^a-z0-9])', 'i');
+    return match.test(text) || match.test(words);
+  }).length;
 }
 
 function firstMatch(pattern, value) {
@@ -576,29 +615,25 @@ function withoutCollectorSourceNamePrefix(title, source) {
   return value.startsWith(prefix) ? value.slice(prefix.length).trim() : value;
 }
 
+// These workflow changes must be present in the extracted article body, rather
+// than inferred from a title, model name, or registry hint.
+function hasExtractedWorkflowBehavior(raw, behaviorChange) {
+  const workflowSections = raw?.source_extraction?.workflow?.sections;
+  if (raw.sourceKind !== 'blog_post_item' || !behaviorChange || !Array.isArray(workflowSections) ||
+    !workflowSections.some(section => (section.items || []).some(item =>
+      String(item.text || '').includes(behaviorChange)))) {
+    return false;
+  }
+  return /\b(?:works?|pairs?|runs?|used)\b[^\n]{0,160}\bas a subagent\b[^\n]{0,80}\bcoding\b/i.test(behaviorChange) ||
+    (/\b(?:CI|tests?|build|code review|pull requests?|PRs?)\b/i.test(behaviorChange) &&
+      /\b(?:increas(?:e|es|ed|ing)|reduc(?:e|es|ed|ing)|scal(?:e|es|ed|ing)|automat(?:e|es|ed|ing)|accelerat(?:e|es|ed|ing))\b/i.test(behaviorChange));
+}
+
 function hasBehaviorChangeForRaw(raw, behaviorChange) {
   if (raw?.source_extraction?.mode === 'roundup_child_topic') {
     return ROUNDUP_BEHAVIOR_CHANGE_PATTERN.test(behaviorChange);
   }
-  // 실제 본문에서 추출한 개발 workflow의 변화도 동작 근거다. 'CI jobs increase'처럼
-  // add/fix가 없는 변화 문장을 놓치지 않되, 제목/소스 힌트만으로 이 경로를 열지는 않는다.
-  const workflowSections = raw?.source_extraction?.workflow?.sections;
-  // 본문에 그대로 있는 코딩 subagent 사용법도 구체적 동작 근거다. 모델명만으로는 인정하지 않는다.
-  if (raw.sourceKind === 'blog_post_item' && behaviorChange
-    && Array.isArray(workflowSections)
-    && workflowSections.some(section => (section.items || []).some(item =>
-      String(item.text || '').includes(behaviorChange)))
-    && /\b(?:works?|pairs?|runs?|used)\b[^\n]{0,160}\bas a subagent\b[^\n]{0,80}\bcoding\b/i.test(behaviorChange)) {
-    return true;
-  }
-  if (raw.sourceKind === 'blog_post_item' && Array.isArray(workflowSections)
-    && workflowSections.some(section => (section.items || []).some(item =>
-      String(item.text || '').includes(behaviorChange)))
-    && /\b(?:CI|tests?|build|code review|pull requests?|PRs?)\b/i.test(behaviorChange)
-    && /\b(?:increas(?:e|es|ed|ing)|reduc(?:e|es|ed|ing)|scal(?:e|es|ed|ing)|automat(?:e|es|ed|ing)|accelerat(?:e|es|ed|ing))\b/i.test(behaviorChange)) {
-    return true;
-  }
-  return BEHAVIOR_CHANGE_PATTERN.test(behaviorChange);
+  return hasExtractedWorkflowBehavior(raw, behaviorChange) || BEHAVIOR_CHANGE_PATTERN.test(behaviorChange);
 }
 
 // 컨텍스트 스팬 패턴(예: /\bLinux\b[^.\n]{0,120}\bcamera subsystem\b/)의 매치는 문장 조각이라
@@ -1064,10 +1099,10 @@ function normalizeCandidate(raw) {
   const url = canonicalContentUrl(raw.url);
   const sourceUrl = canonicalContentUrl(source.sourceUrl || source.url);
   const parentUrl = canonicalContentUrl(raw.parentUrl || raw.parent_url || '');
-  const articleText = `${title} ${summary} ${raw.version_or_release || ''} ${raw.api_or_component || ''} ${raw.behavior_change || ''}`.toLowerCase();
+  const articleText = `${title} ${summary} ${raw.version_or_release || ''} ${raw.api_or_component || ''} ${raw.behavior_change || ''}`;
   const cameraHits = keywordHits(articleText, CAMERA_KEYWORDS);
   const techHits = keywordHits(articleText, TECH_KEYWORDS);
-  const sourcePriorHits = keywordHits(`${source.name} ${source.category} ${source.usageHint || ''}`.toLowerCase(), source.keywords);
+  const sourcePriorHits = keywordHits(`${source.name} ${source.category} ${source.usageHint || ''}`, source.keywords);
   const categoryBoost = ['camera-hal', 'camera-api', 'android-media', 'aosp', 'compatibility', 'security'].includes(source.category) ? 5 : 0;
   const priorityBoost = (PRIORITY_WEIGHT[source.priority] || 0) * 4;
   const reliabilityBoost = (RELIABILITY_WEIGHT[source.reliability] || 0) * 3;
@@ -1096,16 +1131,31 @@ function normalizeCandidate(raw) {
   });
   let classification = classifySelection(raw, source, metadata, score, candidateOnly);
   const nativeTooling = metadata.native_android_tooling || {};
-  if (
-    nativeTooling.eligible === true &&
+  // A ranking score must not erase already-qualified article evidence. Reuse
+  // the existing 30-point/evidence floor and keep source-quality checks below.
+  const boundToolingArticle = metadata.source_kind === 'blog_post_item' &&
     scopeMetadata.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK &&
+    hasExtractedWorkflowBehavior(raw, metadata.behavior_change);
+  const cameraOutputRelease = metadata.source_kind === 'release_note_item' &&
+    hasConcreteReleaseEvidence(metadata) &&
+    scopeMetadata.multimedia_camera_output_relevance > 0 &&
+    scopeMetadata.evidence_origin === 'article_text';
+  const evidenceQualifiedArticle = source.reliability === 'official' &&
+    classification.isArticleCandidate === true && metadata.main_eligible === true &&
+    (boundToolingArticle || cameraOutputRelease);
+  if (
+    ((nativeTooling.eligible === true &&
+      scopeMetadata.relevance_bucket === BUCKETS.CPP_AI_TOOLING_FALLBACK) ||
+      (classification.finalSelectionEligibility === 'exclude' && evidenceQualifiedArticle)) &&
     classification.hasDatedEvidence === true &&
     metadata.source_gap_risk === false
   ) {
     classification = {
       ...classification,
       finalSelectionEligibility: 'short',
-      selectionExclusionReason: 'Official dated Android native tooling workflow article; eligible only as cpp_ai_tooling_fallback supporting main context.'
+      selectionExclusionReason: nativeTooling.eligible === true
+        ? 'Official dated Android native tooling workflow article; eligible only as cpp_ai_tooling_fallback supporting main context.'
+        : 'Official dated article retains concrete bound workflow or camera-output evidence for short article selection.'
     };
   }
   if (scopeMetadata.relevance_bucket === BUCKETS.GENERIC_TECH_WATCHLIST) {
