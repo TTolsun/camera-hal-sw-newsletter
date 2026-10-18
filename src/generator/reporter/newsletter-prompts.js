@@ -9,6 +9,7 @@ const { HAL_IMPACT_AXES } = require('./hal-signal-quality');
 const { PUBLIC_SOURCE_ROLES } = require('./public-article-contract');
 const { CLAIM_IMPACT_LEVELS } = require('./source-binding-policy');
 const { technicalBriefingContractPrompt } = require('./technical-briefing-contract');
+const { readableProsePrompt } = require('./readable-prose-prompt');
 
 // v2 본문 규약은 lint와 **같은 상수**에서 공급한다. 여기에 같은 목록을 리터럴로 적으면
 // lint가 막는 것과 프롬프트가 금지하는 것이 갈라져, 모델이 프롬프트를 그대로 지켜도
@@ -236,12 +237,13 @@ function publicArticleContractPrompt() {
     'Story v2 output은 top-level public_contract_version="story-v2", generation_contract_version=2를 포함해야 하며 각 public_article은 story_contract_version=2를 포함해야 합니다.',
     'public_article fields: story_contract_version, headline, source_subtitle, lead, body_markdown, camera_hal_takeaway, reader_checkpoints, editorial_story, source_links.',
     articleInterpretationCriteriaPrompt(),
+    readableProsePrompt(),
     'public_article.headline은 source title을 그대로 복사하지 말고, source_extraction/behavior_change/source_fact_bundle과 기사 본문을 바탕으로 Gemini가 새로 작성하세요. 단, headline과 lead/body는 source-confirmed 핵심 변경점을 누락하거나 generic CameraX/Android framing으로 대체하면 안 됩니다.',
     'editorial_story fields: not_to_overclaim, editor_take. 두 필드는 독자에게 렌더링되지 않는 내부 안전 필드입니다.',
     'lead는 무엇이 바뀌었는지와 핵심 조건·변경 상태를 일찍 전달하는 한두 문장입니다. 독자가 마주칠 법한 장면이나 질문으로 열 수도 있지만 가정형으로 쓰고, source가 확인하지 않은 사건을 실제로 일어난 일처럼 단정하지 마세요. 훅 때문에 확인된 핵심 변화를 본문 뒤로 미루지 마세요.',
     'body_markdown은 기사 본문 전체를 담은 markdown 문자열 하나입니다. 모든 기사에 같은 작성 기준을 적용하고, fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장이나 Camera HAL 관련성 설명으로 축약하지 마세요.',
     'body_markdown은 원문이 말한 발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획을 충실하게 설명하세요. source_fact_bundle.facts, source_extraction evidence_blocks, behavior_change, summary에 있는 구체 명사와 source-confirmed detail을 보존하세요.',
-    '문단 수와 문단 길이는 기사마다 다르게 가져가세요. 짧은 훅 문단과 길게 전개하는 문단을 섞고, 모든 기사를 같은 문단 수와 같은 리듬으로 찍어내지 마세요.',
+    '한 문단에는 한 가지 핵심만 담고 짧게 나누세요. 필요한 기술 설명은 여러 문단으로 연결하되, 기사마다 문단 수를 억지로 맞추거나 이해에 필요한 조건을 삭제하지 마세요.',
     'Camera HAL / lower camera stack과 이 변경 사이의 거리(직접 변경인지, 참고할 하위 스택 흐름인지)는 본문 어딘가에서 반드시 설명하세요. 어느 위치에 쓸지는 자유지만 내용을 빠뜨리면 안 됩니다.',
     bodyMarkdownSyntaxRule(),
     '강조는 볼드나 따옴표가 아니라 문장 구조로 하세요. 중요한 사실은 문장의 주어 자리에 놓거나 짧은 단독 문단으로 분리하세요.',
