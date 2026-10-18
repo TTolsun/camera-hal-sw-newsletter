@@ -5,7 +5,7 @@
     "weekEndDate": "2026-10-25",
     "date": "2026-10-19",
     "title": "2026 W43",
-    "summary": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합\nLinux media 하위 시스템, Himax HM1092 흑백 NIR 센서 드라이버 v7 제안\nLinux atomisp 드라이버, 스트림 생성 오류 분기 정리 패치 제안\n짧은 소식: Android Studio, 외부 AI 에이전트 연동 지원",
+    "summary": "AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정\nGemini 4 Argon, Android Studio와 CLI에서 개발 작업 지원\nLinux HM1092 드라이버 v7 제안: 밝기 조절로 검은 화면이 생기지 않도록 제한\nLinux atomisp 패치 제안: 작동하지 않는 오류 검사를 제거하는 이유",
     "html": "newsletters/2026-W43/index.html",
     "md": "newsletters/2026-W43/newsletter.md",
     "tags": [
@@ -16,20 +16,18 @@
       "SoC Platform"
     ],
     "article_count": 4,
-    "article_images": [
-      "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp"
-    ],
+    "article_images": [],
     "reader_brief": {
       "schema_version": 1,
       "locale": "ko",
-      "intro": "이번 주에는 8비트 HEIF 이미지에서 검은색이 들뜨는 문제를 다룬 HeifWriter 수정부터 살펴봅니다. Surface 입력의 색상 범위와 인코딩 결과를 함께 확인해야 하는 변경입니다. 이어서 HM1092 NIR 센서 드라이버 v7의 게인 제한과 남은 크롭 논의, atomisp의 RAW 캡처 오류 처리 패치 제안을 정리합니다. Android Studio의 외부 AI 에이전트 연동은 마지막에 짧은 개발 도구 소식으로 전합니다.",
+      "intro": "이번 호는 저장 이미지의 검은색 문제를 고친 HeifWriter 소식으로 시작합니다. 이어서 Gemini 4 Argon을 Android 개발 도구에 연결하는 방법과 이용 조건을 살펴봅니다. HM1092의 게인 제한과 atomisp 오류 검사 정리 제안은 센서·드라이버 담당자가 확인할 내용입니다.",
       "items": [
         {
           "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
-          "href": "newsletters/2026-W43/index.html#article-androidx-heifwriter-8",
-          "headline": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합",
-          "lead": "AndroidX의 HEIF 이미지 생성 라이브러리가 8비트 서피스 입력 시 색상 범위를 강제로 전체 범위로 선언하던 로직을 제거해 렌더링 검은색이 들뜨는 현상을 바로잡았습니다.",
-          "takeaway": "8비트 SDR HEIF를 Surface 경로로 저장한다면 검은색 입력의 디코딩 결과와 VUI color_range 선언을 함께 확인하세요. YUV 버퍼 입력과 10비트 HDR 경로는 이번 변경 대상이 아닙니다.",
+          "href": "newsletters/2026-W43/index.html#article-androidx-heifwriter-8-heif",
+          "headline": "AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정",
+          "lead": "검은색으로 저장한 부분이 회색처럼 보였다면, 픽셀 값과 파일의 색상 범위 표시가 어긋났을 수 있습니다. HeifWriter는 일부 8비트 입력에서 이 불일치를 없애는 수정을 병합했습니다.",
+          "takeaway": "HEIF 저장 기능 담당자가 확인할 소식입니다. 특히 8비트 SDR Surface·Bitmap 입력을 살펴보세요. 직접 YUV를 넘기는 버퍼 입력과 10비트 HDR은 변경 대상이 아닙니다.",
           "tags": [
             "Android"
           ],
@@ -40,11 +38,22 @@
           }
         },
         {
+          "id": "url:https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+          "href": "newsletters/2026-W43/index.html#article-gemini-4-argon-android-studio-cli",
+          "headline": "Gemini 4 Argon, Android Studio와 CLI에서 개발 작업 지원",
+          "lead": "AI에게 코드만 물어보는 것에서 빌드 도구를 연결해 작업시키는 방향으로 지원이 넓어졌습니다. Google은 10월 13일 Gemini 4 Argon의 Android 개발 환경 지원을 발표했습니다.",
+          "takeaway": "Android 개발 자동화를 시험하는 팀이 확인할 소식입니다. 구독·API 조건을 먼저 확인하고, 작은 프로젝트에서 오류 로그 확인과 빌드 재실행을 시험해 보세요.",
+          "tags": [
+            "AI"
+          ],
+          "image": null
+        },
+        {
           "id": "url:https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
-          "href": "newsletters/2026-W43/index.html#article-linux-media-himax-hm1092-nir-v7",
-          "headline": "Linux media 하위 시스템, Himax HM1092 흑백 NIR 센서 드라이버 v7 제안",
-          "lead": "노트북 안면 인식 카메라 등에 쓰이는 Himax HM1092 1메가픽셀 흑백 근적외선 센서를 지원하기 위한 리눅스 V4L2 서브디바이스 드라이버 패치 v7이 공개되었습니다.",
-          "takeaway": "NIR 센서를 V4L2로 연동하는 개발자는 v7의 게인 상한 수정과 아직 논의 중인 액티브 어레이 보고 방식을 구분해 살펴보세요.",
+          "href": "newsletters/2026-W43/index.html#article-linux-hm1092-v7",
+          "headline": "Linux HM1092 드라이버 v7 제안: 밝기 조절로 검은 화면이 생기지 않도록 제한",
+          "lead": "밝기를 높이려고 넣은 값이 센서의 처리 범위를 넘으면 오히려 검은 화면이 나올 수 있습니다. HM1092 드라이버 v7은 디지털 게인 값의 상한을 정해 이 문제를 막도록 제안되었습니다.",
+          "takeaway": "NIR 센서를 V4L2에 연결하는 개발자가 확인할 소식입니다. 게인 상한 변경과 아직 논의 중인 영상 영역 보고 방식을 나누어 살펴보세요.",
           "tags": [
             "Driver",
             "Image Processing"
@@ -58,9 +67,9 @@
         {
           "id": "url:https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
           "href": "newsletters/2026-W43/index.html#article-linux-atomisp",
-          "headline": "Linux atomisp 드라이버, 스트림 생성 오류 분기 정리 패치 제안",
-          "lead": "리눅스 스테이징 미디어 트리의 atomisp 드라이버에서 스트림 생성 시 의미 없이 남아 있던 데드 코드 오류 검사를 제거하는 패치가 제출되었습니다.",
-          "takeaway": "atomisp의 RAW·BAYER 경로에서는 뷰파인더 정보가 없다는 반환값과 실제 스트림 생성 실패를 구분해야 합니다.",
+          "headline": "Linux atomisp 패치 제안: 작동하지 않는 오류 검사를 제거하는 이유",
+          "lead": "atomisp에 실제로는 작동하지 않는 오류 검사가 남아 있었습니다. 이번 제안은 그 검사를 제거합니다. 반환값을 받아 검사하도록 고치면 정상적인 RAW 캡처까지 실패할 수 있기 때문입니다.",
+          "takeaway": "atomisp 유지보수 담당자가 확인할 소식입니다. 미리보기 정보가 없다는 결과와 캡처 스트림을 만들 수 없다는 오류를 구분해야 합니다.",
           "tags": [
             "Driver",
             "Image Processing",
@@ -70,21 +79,6 @@
             "src": "assets/images/fallback/newsletter-default.svg",
             "alt": "",
             "is_fallback": true
-          }
-        },
-        {
-          "id": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-          "href": "newsletters/2026-W43/index.html#article-android-studio-ai",
-          "headline": "짧은 소식: Android Studio, 외부 AI 에이전트 연동 지원",
-          "lead": "Android Studio Canary 최신 빌드에 외부 AI 코딩 에이전트를 개발 환경에 직접 연결할 수 있는 BYOA(Bring Your Own Agent) 지원이 추가되었습니다.",
-          "takeaway": "Canary의 개발 보조 기능으로 참고하세요. 현재 사용 중인 빌드·테스트 흐름에 맞는지 확인한 뒤 도입을 판단할 수 있습니다.",
-          "tags": [
-            "AI"
-          ],
-          "image": {
-            "src": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
-            "alt": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
-            "is_fallback": false
           }
         }
       ]
@@ -98,18 +92,18 @@
     "generation_anchor_date": "2026-10-19",
     "en": {
       "title": "2026 W43",
-      "summary": "AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion\nLinux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed\nLinux atomisp driver, stream creation error branch cleanup patch proposed\nBrief News: Android Studio supports external AI agent integration",
+      "summary": "AndroidX HeifWriter fixes gray-looking blacks in 8-bit HEIF images\nGemini 4 Argon supports Android development in Studio and the CLI\nLinux HM1092 driver v7 proposal limits gain to avoid black frames\nLinux atomisp proposal explains why a dead error check should be removed",
       "reader_brief": {
         "schema_version": 1,
         "locale": "en",
-        "intro": "This week, we start with a HeifWriter fix addressing an issue where black colors appeared elevated in 8-bit HEIF images. This change requires checking the color range of Surface input and encoding results together. Next, we cover the gain limits and remaining crop discussions for v7 of the HM1092 NIR sensor driver, and a proposed patch for RAW capture error handling in atomisp. Finally, we have a brief development tool update on Android Studio's external AI agent integration.",
+        "intro": "We start with HeifWriter’s fix for gray-looking blacks in saved images, then examine Gemini 4 Argon’s Android tool integration and access requirements. HM1092 gain limits and the atomisp error-check proposal follow for sensor and driver developers.",
         "items": [
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
-            "href": "en/newsletters/2026-W43/index.html#article-androidx-heifwriter-patch-merged-to-prevent-8-bit-surface-input-color-distortion",
-            "headline": "AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion",
-            "lead": "The AndroidX HEIF image generation library has removed logic that forced a full color range declaration for 8-bit surface input, correcting an issue where rendered black colors appeared elevated.",
-            "takeaway": "If you save 8-bit SDR HEIF via the Surface path, check the decoding result of black input and the VUI color_range declaration together. YUV buffer input and 10-bit HDR paths are not affected by this change.",
+            "href": "en/newsletters/2026-W43/index.html#article-androidx-heifwriter-fixes-gray-looking-blacks-in-8-bit-heif-images",
+            "headline": "AndroidX HeifWriter fixes gray-looking blacks in 8-bit HEIF images",
+            "lead": "If a saved black area looks gray, the pixel values and the file’s color range label may disagree. HeifWriter has merged a fix for this mismatch in some 8-bit input paths.",
+            "takeaway": "This matters to developers responsible for saving HEIF images. Focus on 8-bit SDR Surface and Bitmap input. Direct YUV buffer input and 10-bit HDR are outside this change.",
             "tags": [
               "Android"
             ],
@@ -120,11 +114,22 @@
             }
           },
           {
+            "id": "url:https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+            "href": "en/newsletters/2026-W43/index.html#article-gemini-4-argon-supports-android-development-in-studio-and-the-cli",
+            "headline": "Gemini 4 Argon supports Android development in Studio and the CLI",
+            "lead": "Support is expanding from asking AI about code to connecting development tools. On October 13, Google announced Gemini 4 Argon support across Android development environments.",
+            "takeaway": "This matters to teams evaluating Android development automation. Check subscription and API requirements, then try error-log inspection and build reruns in a small project.",
+            "tags": [
+              "AI"
+            ],
+            "image": null
+          },
+          {
             "id": "url:https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
-            "href": "en/newsletters/2026-W43/index.html#article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed",
-            "headline": "Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed",
-            "lead": "Version 7 of a proposed Linux V4L2 subdevice driver for the Himax HM1092 1-megapixel monochrome near-infrared sensor, used in laptop facial recognition cameras, has been submitted.",
-            "takeaway": "Developers integrating NIR sensors with V4L2 should distinguish between the gain upper limit fix in v7 and the still-under-discussion active array reporting method.",
+            "href": "en/newsletters/2026-W43/index.html#article-linux-hm1092-driver-v7-proposal-limits-gain-to-avoid-black-frames",
+            "headline": "Linux HM1092 driver v7 proposal limits gain to avoid black frames",
+            "lead": "A value intended to brighten an image can instead produce a black frame if it exceeds the sensor’s range. The proposed HM1092 driver v7 limits the digital gain value to prevent this.",
+            "takeaway": "This matters to developers connecting NIR sensors through V4L2. Review the gain limit change separately from the still-open discussion about reporting image areas.",
             "tags": [
               "Driver",
               "Image Processing"
@@ -137,10 +142,10 @@
           },
           {
             "id": "url:https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
-            "href": "en/newsletters/2026-W43/index.html#article-linux-atomisp-driver-stream-creation-error-branch-cleanup-patch-proposed",
-            "headline": "Linux atomisp driver, stream creation error branch cleanup patch proposed",
-            "lead": "A patch has been submitted to remove dead code error checks that remained unnecessarily during stream creation in the atomisp driver within the Linux staging media tree.",
-            "takeaway": "In atomisp's RAW/BAYER path, the return value indicating no viewfinder information must be distinguished from an actual stream creation failure.",
+            "href": "en/newsletters/2026-W43/index.html#article-linux-atomisp-proposal-explains-why-a-dead-error-check-should-be-removed",
+            "headline": "Linux atomisp proposal explains why a dead error check should be removed",
+            "lead": "An error check in atomisp never actually triggered. The proposed patch removes it. Changing it to check the function’s return value could instead break valid RAW capture.",
+            "takeaway": "This matters to atomisp maintainers. Distinguish missing preview information from an error that prevents capture stream creation.",
             "tags": [
               "Driver",
               "Image Processing",
@@ -150,21 +155,6 @@
               "src": "assets/images/fallback/newsletter-default.svg",
               "alt": "",
               "is_fallback": true
-            }
-          },
-          {
-            "id": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-            "href": "en/newsletters/2026-W43/index.html#article-brief-news-android-studio-supports-external-ai-agent-integration",
-            "headline": "Brief News: Android Studio supports external AI agent integration",
-            "lead": "The latest Android Studio Canary build has added BYOA (Bring Your Own Agent) support, allowing direct connection of external AI coding agents to the development environment.",
-            "takeaway": "Refer to this as a development assistance feature in Canary. You can decide whether to adopt it after checking if it fits your current build and test workflow.",
-            "tags": [
-              "AI"
-            ],
-            "image": {
-              "src": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
-              "alt": "Android Studio Canary introduces BYOA support for integrating external coding agents",
-              "is_fallback": false
             }
           }
         ]

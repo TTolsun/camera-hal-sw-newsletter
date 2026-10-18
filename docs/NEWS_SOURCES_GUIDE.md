@@ -6,6 +6,8 @@
 
 registry를 수정한 뒤에는 canonical JSON formatting을 유지하고 `npm.cmd run validate:config`를 통과시켜야 합니다.
 
+Android Developers Blog는 공식 Atom 피드에서 후보를 찾은 뒤 `developer.android.com/blog/posts/`의 영문 상세 페이지를 확인합니다. 짧은 소개문만으로 분류하지 않고 본문의 개발 작업 근거를 사용하며, RSS 갱신일보다 기사 헤더의 게시일을 우선합니다. 관련 기사 목록은 근거에서 제외합니다. 상세 페이지는 실행당 최대 8건을 확인하며 기존 소스별 바이트 예산을 공유합니다. 본문·게시일·canonical URL을 검증할 수 없으면 해당 상세 기사 후보를 제외하고 진단을 남깁니다. 이 과정은 후보 근거를 보충할 뿐 최종 출처·편집 품질 검증을 대신하지 않습니다.
+
 ## Schema 구조
 
 각 source entry는 아래 구조를 사용합니다.
@@ -15,7 +17,7 @@ registry를 수정한 뒤에는 canonical JSON formatting을 유지하고 `npm.c
   "id": "android-developers-blog",
   "name": "Android Developers Blog",
   "sourceUrl": "https://android-developers.googleblog.com/",
-  "rssUrl": "https://android-developers.googleblog.com/feeds/posts/default?alt=rss",
+  "rssUrl": "https://developer.android.com/static/blog/atom.xml",
   "category": "android",
   "priority": "high",
   "reliability": "official",

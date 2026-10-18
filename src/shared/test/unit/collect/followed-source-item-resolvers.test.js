@@ -29,6 +29,7 @@ test('registers exactly the known followed-source resolver ids', () => {
   assert.deepEqual(
     followedSourceResolverIds().sort(),
     [
+      'android-developers-blog',
       'android-ndk-releases',
       'android-security-bulletin',
       'androidx-gerrit-camera-changes',
@@ -48,7 +49,7 @@ test('registers exactly the known followed-source resolver ids', () => {
       'raspberrypi-libcamera-releases'
     ]
   );
-  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 17);
+  assert.equal(FOLLOWED_SOURCE_RESOLVERS.length, 18);
 });
 
 test('routes raspberrypi-libcamera-releases to the release resolver with text (atom) as the first arg', async () => {

@@ -13,11 +13,18 @@ const { resolveAospReleaseCameraChangeItems } = require('./aosp-release-camera-c
 const { resolveGerritCameraChangeItems } = require('./gerrit-camera-changes');
 const { resolveDatedArticleIndexItems } = require('./dated-article-index-resolver');
 const { resolveAiCodingReleaseItems } = require('./ai-coding-releases');
+const { resolveAndroidDeveloperArticles } = require('./android-developer-articles');
 
 // 각 리졸버의 첫 인자가 다르다(security-bulletin은 indexItems, libcamera는 text/indexHtml,
 // raspberrypi는 text/atom, patchwork는 text/JSON). 그래서 레지스트리 항목이 공통 컨텍스트
 // ({ indexItems, text, source, fetchTextImpl })를 받아 각자에게 맞는 위치 인자로 풀어 넘긴다.
 const FOLLOWED_SOURCE_RESOLVERS = [
+  {
+    id: 'android-developers-blog',
+    requiresFetchClient: true,
+    resolve: ({ indexItems, fetchClient, now, lookbackDays, onDiagnostic }) =>
+      resolveAndroidDeveloperArticles(indexItems, { fetchClient, now, lookbackDays, onDiagnostic })
+  },
   ...['codex-releases', 'claude-code-changelog', 'android-ndk-releases'].map(id => ({
     id,
     requiresFetchClient: true,

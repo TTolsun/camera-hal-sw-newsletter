@@ -7,6 +7,25 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "title": "Bringing our latest frontier model to Android Developers",
+      "source_url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "newsletter_date": "2026-10-19",
+      "newsletter_url": "newsletters/2026-W43/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-19",
+      "newsletter_article_date": "2026-10-19",
+      "cooldown_until": "2026-11-09",
+      "first_exposed_at": "2026-10-19",
+      "last_exposed_at": "2026-10-19",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
       "series_identity_key": "lore-series:20261016105553.346322-a.karelin@ideco.ru",
       "series_subject_key": "media atomisp remove dead error check in ia css stream create",
@@ -73,19 +92,16 @@
       "source_url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
       "newsletter_date": "2026-10-19",
       "newsletter_url": "newsletters/2026-10-19/index.html",
-      "exposure_type": "newsletter_article",
+      "exposure_type": "homepage_headline",
       "headline_score": null,
       "reuse_reason": "",
       "exposed_at": "2026-10-19",
       "first_exposed_at": "2026-10-19",
       "last_exposed_at": "2026-10-19",
-      "exposure_count": 2,
+      "exposure_count": 1,
       "exposure_types": [
-        "homepage_headline",
-        "newsletter_article"
-      ],
-      "newsletter_article_date": "2026-10-19",
-      "cooldown_until": "2026-11-09"
+        "homepage_headline"
+      ]
     },
     {
       "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
