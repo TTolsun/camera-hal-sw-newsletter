@@ -2,18 +2,18 @@
   "schemaVersion": 1,
   "updated_at": "2026-10-19T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-    "title": "Android Studio, 맞춤형 AI 코딩 에이전트 연동을 위한 BYOA 기능 도입",
-    "summary": "Android Studio Canary 최신 빌드에 외부 AI 코딩 에이전트를 개발 환경에 직접 연결할 수 있는 BYOA(Bring Your Own Agent) 지원이 추가되었습니다.",
-    "source_url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+    "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+    "title": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합",
+    "summary": "AndroidX의 HEIF 이미지 생성 라이브러리가 8비트 서피스 입력 시 색상 범위를 강제로 전체 범위로 선언하던 로직을 제거해 렌더링 검은색이 들뜨는 현상을 바로잡았습니다.",
+    "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
     "newsletter_date": "2026-10-19",
-    "newsletter_url": "newsletters/2026-10-19/index.html",
+    "newsletter_url": "newsletters/2026-W43/index.html",
     "selected_at": "2026-10-19",
     "base_score": 100,
     "current_score": 100,
     "last_scored_at": "2026-10-19",
     "date_evidence": {
-      "date": "2026-10-15T22:00:41.713Z",
+      "date": "2026-10-16",
       "date_field": "published_date",
       "evidence_level": "primary",
       "publish_ready_date_evidence": true
@@ -37,12 +37,12 @@
       "total": 100
     },
     "snapshot": {
-      "category": "cpp_ai_tooling_fallback",
-      "source_name": "Android Developers Blog"
+      "category": "android",
+      "source_name": "AndroidX Gerrit"
     },
-    "newsletter_article_url": "newsletters/2026-10-19/index.html#article-android-studio-ai-byoa",
-    "image_url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
-    "image_alt": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입"
+    "newsletter_article_url": "newsletters/2026-W43/index.html#article-androidx-heifwriter-8",
+    "image_url": "assets/images/fallback/android.svg",
+    "image_alt": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합"
   },
   "headline_history": [
     {

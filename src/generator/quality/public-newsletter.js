@@ -209,7 +209,10 @@ const ENGLISH_PROSE_STOPWORDS = new Set([
 ]);
 
 function rawEnglishProseRuns(value) {
-  const runs = String(value || '').match(/\b(?:[A-Za-z][A-Za-z0-9+/#.-]*[\s,;:()/-]+){16,}[A-Za-z][A-Za-z0-9+/#.-]*\b/g) || [];
+  // URL path segments are identifiers, not prose. Keep link labels and the
+  // surrounding text so actual untranslated sentences are still checked.
+  const prose = String(value || '').replace(/https?:\/\/[^\s<>"')]+/gi, '\n');
+  const runs = prose.match(/\b(?:[A-Za-z][A-Za-z0-9+/#.-]*[\s,;:()/-]+){16,}[A-Za-z][A-Za-z0-9+/#.-]*\b/g) || [];
   return runs.filter(run => {
     const words = run.toLowerCase().match(/[a-z]+/g) || [];
     const stopwordCount = words.filter(word => ENGLISH_PROSE_STOPWORDS.has(word)).length;
