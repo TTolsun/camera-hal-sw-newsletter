@@ -2,7 +2,7 @@
   {
     "date": "2026-10-19",
     "title": "Camera HAL / SW Newsletter - 2026-10-19",
-    "summary": "이번 주에는 8비트 HEIF 이미지에서 검은색이 들뜨는 문제를 다룬 HeifWriter 수정부터 살펴봅니다. Surface 입력의 색상 범위와 인코딩 결과를 함께 확인해야 하는 변경입니다. 이어서 HM1092 NIR 센서 드라이버 v7의 게인 제한과 남은 크롭 논의, atomisp의 RAW 캡처 오류 처리 패치 제안을 정리합니다. Android Studio의 외부 AI 에이전트 연동은 마지막에 짧은 개발 도구 소식으로 전합니다.",
+    "summary": "이번 호는 세 가지 카메라 문제를 살펴봅니다. 검은색이 회색으로 저장되는 HeifWriter 문제, 밝기를 높이다 검은 화면이 나오는 HM1092 게인 문제, atomisp에서 불필요한 오류 검사를 제거하는 이유입니다. 각 기사에서 원인과 변경점, 확인할 대상을 차례로 설명합니다. 마지막에는 이전에 발표된 Android Studio BYOA를 짧게 소개합니다.",
     "html": "newsletters/2026-10-19/index.html",
     "md": "newsletters/2026-10-19/newsletter.md",
     "tags": [
@@ -15,18 +15,18 @@
     "public_contract_version": "story-v2",
     "en": {
       "title": "2026 W43",
-      "summary": "AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion\nLinux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed\nLinux atomisp driver, stream creation error branch cleanup patch proposed\nBrief News: Android Studio supports external AI agent integration",
+      "summary": "AndroidX HeifWriter fixes gray-looking blacks in 8-bit HEIF images\nLinux HM1092 driver v7 proposal limits gain to avoid black frames\nLinux atomisp proposal explains why a dead error check should be removed\nBrief reference: Connect your AI agent to Android Studio with BYOA",
       "reader_brief": {
         "schema_version": 1,
         "locale": "en",
-        "intro": "This week, we start with a HeifWriter fix addressing an issue where black colors appeared elevated in 8-bit HEIF images. This change requires checking the color range of Surface input and encoding results together. Next, we cover the gain limits and remaining crop discussions for v7 of the HM1092 NIR sensor driver, and a proposed patch for RAW capture error handling in atomisp. Finally, we have a brief development tool update on Android Studio's external AI agent integration.",
+        "intro": "This issue explains three camera topics: gray-looking blacks in HeifWriter, black frames caused by out-of-range HM1092 gain, and why atomisp should remove an unnecessary error check. Each article walks through the cause, the change, and who should check it. We close with a brief reference to the earlier Android Studio BYOA announcement.",
         "items": [
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
-            "href": "en/newsletters/2026-W43/index.html#article-androidx-heifwriter-patch-merged-to-prevent-8-bit-surface-input-color-distortion",
-            "headline": "AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion",
-            "lead": "The AndroidX HEIF image generation library has removed logic that forced a full color range declaration for 8-bit surface input, correcting an issue where rendered black colors appeared elevated.",
-            "takeaway": "If you save 8-bit SDR HEIF via the Surface path, check the decoding result of black input and the VUI color_range declaration together. YUV buffer input and 10-bit HDR paths are not affected by this change.",
+            "href": "en/newsletters/2026-W43/index.html#article-androidx-heifwriter-fixes-gray-looking-blacks-in-8-bit-heif-images",
+            "headline": "AndroidX HeifWriter fixes gray-looking blacks in 8-bit HEIF images",
+            "lead": "If a saved black area looks gray, the pixel values and the file’s color range label may disagree. HeifWriter has merged a fix for this mismatch in some 8-bit input paths.",
+            "takeaway": "This matters to developers responsible for saving HEIF images. Focus on 8-bit SDR Surface and Bitmap input. Direct YUV buffer input and 10-bit HDR are outside this change.",
             "tags": [
               "Android"
             ],
@@ -38,10 +38,10 @@
           },
           {
             "id": "url:https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
-            "href": "en/newsletters/2026-W43/index.html#article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed",
-            "headline": "Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed",
-            "lead": "Version 7 of a proposed Linux V4L2 subdevice driver for the Himax HM1092 1-megapixel monochrome near-infrared sensor, used in laptop facial recognition cameras, has been submitted.",
-            "takeaway": "Developers integrating NIR sensors with V4L2 should distinguish between the gain upper limit fix in v7 and the still-under-discussion active array reporting method.",
+            "href": "en/newsletters/2026-W43/index.html#article-linux-hm1092-driver-v7-proposal-limits-gain-to-avoid-black-frames",
+            "headline": "Linux HM1092 driver v7 proposal limits gain to avoid black frames",
+            "lead": "A value intended to brighten an image can instead produce a black frame if it exceeds the sensor’s range. The proposed HM1092 driver v7 limits the digital gain value to prevent this.",
+            "takeaway": "This matters to developers connecting NIR sensors through V4L2. Review the gain limit change separately from the still-open discussion about reporting image areas.",
             "tags": [
               "Driver",
               "Image Processing"
@@ -54,10 +54,10 @@
           },
           {
             "id": "url:https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
-            "href": "en/newsletters/2026-W43/index.html#article-linux-atomisp-driver-stream-creation-error-branch-cleanup-patch-proposed",
-            "headline": "Linux atomisp driver, stream creation error branch cleanup patch proposed",
-            "lead": "A patch has been submitted to remove dead code error checks that remained unnecessarily during stream creation in the atomisp driver within the Linux staging media tree.",
-            "takeaway": "In atomisp's RAW/BAYER path, the return value indicating no viewfinder information must be distinguished from an actual stream creation failure.",
+            "href": "en/newsletters/2026-W43/index.html#article-linux-atomisp-proposal-explains-why-a-dead-error-check-should-be-removed",
+            "headline": "Linux atomisp proposal explains why a dead error check should be removed",
+            "lead": "An error check in atomisp never actually triggered. The proposed patch removes it. Changing it to check the function’s return value could instead break valid RAW capture.",
+            "takeaway": "This matters to atomisp maintainers. Distinguish missing preview information from an error that prevents capture stream creation.",
             "tags": [
               "Driver",
               "Image Processing",
@@ -71,10 +71,10 @@
           },
           {
             "id": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-            "href": "en/newsletters/2026-W43/index.html#article-brief-news-android-studio-supports-external-ai-agent-integration",
-            "headline": "Brief News: Android Studio supports external AI agent integration",
-            "lead": "The latest Android Studio Canary build has added BYOA (Bring Your Own Agent) support, allowing direct connection of external AI coding agents to the development environment.",
-            "takeaway": "Refer to this as a development assistance feature in Canary. You can decide whether to adopt it after checking if it fits your current build and test workflow.",
+            "href": "en/newsletters/2026-W43/index.html#article-brief-reference-connect-your-ai-agent-to-android-studio-with-byoa",
+            "headline": "Brief reference: Connect your AI agent to Android Studio with BYOA",
+            "lead": "BYOA in Android Studio Canary is a preview feature for using external AI coding agents inside the IDE. We revisit the September 24 announcement as a development tool reference.",
+            "takeaway": "This earlier announcement is a reference for teams trying development tools. Check how it fits your build and test workflow before adopting it.",
             "tags": [
               "AI"
             ],

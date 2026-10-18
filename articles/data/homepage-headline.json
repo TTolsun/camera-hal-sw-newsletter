@@ -3,8 +3,8 @@
   "updated_at": "2026-10-19T00:00:00+09:00",
   "current_headline": {
     "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
-    "title": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합",
-    "summary": "AndroidX의 HEIF 이미지 생성 라이브러리가 8비트 서피스 입력 시 색상 범위를 강제로 전체 범위로 선언하던 로직을 제거해 렌더링 검은색이 들뜨는 현상을 바로잡았습니다.",
+    "title": "AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정",
+    "summary": "검은색으로 저장한 부분이 회색처럼 보였다면, 픽셀 값과 파일의 색상 범위 표시가 어긋났을 수 있습니다. HeifWriter는 일부 8비트 입력에서 이 불일치를 없애는 수정을 병합했습니다.",
     "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
     "newsletter_date": "2026-10-19",
     "newsletter_url": "newsletters/2026-W43/index.html",
@@ -40,9 +40,9 @@
       "category": "android",
       "source_name": "AndroidX Gerrit"
     },
-    "newsletter_article_url": "newsletters/2026-W43/index.html#article-androidx-heifwriter-8",
+    "newsletter_article_url": "newsletters/2026-W43/index.html#article-androidx-heifwriter-8-heif",
     "image_url": "assets/images/fallback/android.svg",
-    "image_alt": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합"
+    "image_alt": "AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정"
   },
   "headline_history": [
     {
