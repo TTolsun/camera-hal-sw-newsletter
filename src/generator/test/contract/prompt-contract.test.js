@@ -3,6 +3,17 @@ const fs = require('fs');
 const path = require('path');
 const test = require('node:test');
 
+test('shared readability guidance survives initial writing, completion and repair without becoming review exemptions', () => {
+  const { readableProsePrompt } = require('../../reporter/readable-prose-prompt');
+  for (const build of [editorSystemPrompt, editorCompletionSystemPrompt, editorRepairPatchSystemPrompt]) {
+    assert.ok(build().includes(readableProsePrompt()));
+    assert.doesNotMatch(build(), /짧은 훅 문단과 길게 전개하는 문단을 섞고/);
+  }
+  for (const build of [factCheckSystemPrompt, factCheckRepairSystemPrompt, factCheckCompletionSystemPrompt]) {
+    assert.ok(!build().includes(readableProsePrompt()));
+  }
+});
+
 test('technical briefing guidance reaches writing stages while preserving source and HAL boundaries', () => {
   for (const build of [editorSystemPrompt, editorCompletionSystemPrompt]) {
     const prompt = build();
@@ -212,9 +223,9 @@ test('public article contract prompt keeps public output separate from diagnosti
   assert.match(prompt, /source-confirmed fact/);
   assert.match(prompt, /모든 기사에 같은 작성 기준/);
   assert.match(prompt, /fallback_public 또는 relevance_bucket 때문에 본문을 짧은 generic 문장/);
-  // v2는 고정 문단 수를 지시하지 않는다. 대신 기사마다 리듬을 달리하라고 요구한다.
+  // v2는 고정 문단 수 대신 한 문단에 한 가지 핵심을 설명하도록 요구한다.
   assert.doesNotMatch(prompt, /3-5개 자연스러운 문단/);
-  assert.match(prompt, /문단 수와 문단 길이는 기사마다 다르게 가져가세요/);
+  assert.match(prompt, /한 문단에는 한 가지 핵심만 담고 짧게 나누세요/);
   assert.match(prompt, /발표, 변경, 배경, 지원 범위, 적용 예시, 제약, 향후 계획/);
   // 허용 문법(allow-list)·소제목 규약·최소 문단 수는 lint와 같은 상수에서 나와야 한다.
   assert.match(prompt, /허용 문법은 두 가지뿐입니다/);

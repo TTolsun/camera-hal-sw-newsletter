@@ -127,6 +127,10 @@ test('one failed response is retried once with check feedback and stage telemetr
     assert.match(system, /unmerged/);
     assert.match(system, /plain English in headline, lead, and camera_hal_takeaway/);
     assert.match(system, /support conditions, exceptions, uncertainty/);
+    const { readableProsePrompt } = require('../../reporter/readable-prose-prompt');
+    assert.ok(system.includes(readableProsePrompt()));
+    assert.match(system, /full English body/);
+    assert.match(system, /must not summarize away details/);
     calls++;
     assert.equal(run.qualityAttempt, calls);
     if (calls === 1) return { ...overlay, title: '오류' };
