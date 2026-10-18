@@ -5,7 +5,7 @@
 - 기사 순서를 HeifWriter → HM1092 → atomisp → Android Studio BYOA로 조정했습니다. BYOA는 두 문단의 짧은 개발 도구 소식으로 줄였습니다.
 - 영어 URL 경로를 산문으로 오인한 검증 오류를 수정했습니다. 실제 영어 문장과 링크 제목의 검사는 유지합니다.
 - 수정본은 전체 test·validate와 1280px·390px Chrome 화면 검사를 통과했습니다.
-- 아래 94점과 팩트체크 PASS는 최초 생성본의 결과입니다. 수정본의 Gemini 발행 품질 재검증은 외부 전송 승인 대기 상태이며, 자동 발행 가능으로 표시하지 않습니다.
+- 아래 94점과 팩트체크 PASS는 최초 생성본의 결과입니다. 수정본은 사용자 승인 후 gemini-2.5-flash-lite로 발행 품질 재검증을 수행했으며 overall_pass=true, 지적 사항 0건으로 통과했습니다. 결과는 llm-publication-quality-report.json/md에 보존했습니다. 기존 편집자 검토 조건은 유지합니다.
 - 현재 공개 파일은 구조 검증을 통과했으며 편집자 검토용입니다. 최신 판단은 PR 본문과 generation-status.json을 확인하세요.
 
 ## 최초 생성 시점의 이번 주 핵심 메시지
