@@ -95,7 +95,83 @@
     "coverage_start_date": "2026-10-12",
     "coverage_end_date": "2026-10-18",
     "coverage_mode": "iso_week",
-    "generation_anchor_date": "2026-10-19"
+    "generation_anchor_date": "2026-10-19",
+    "en": {
+      "title": "2026 W43",
+      "summary": "AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion\nLinux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed\nLinux atomisp driver, stream creation error branch cleanup patch proposed\nBrief News: Android Studio supports external AI agent integration",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week, we start with a HeifWriter fix addressing an issue where black colors appeared elevated in 8-bit HEIF images. This change requires checking the color range of Surface input and encoding results together. Next, we cover the gain limits and remaining crop discussions for v7 of the HM1092 NIR sensor driver, and a proposed patch for RAW capture error handling in atomisp. Finally, we have a brief development tool update on Android Studio's external AI agent integration.",
+        "items": [
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+            "href": "en/newsletters/2026-W43/index.html#article-androidx-heifwriter-patch-merged-to-prevent-8-bit-surface-input-color-distortion",
+            "headline": "AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion",
+            "lead": "The AndroidX HEIF image generation library has removed logic that forced a full color range declaration for 8-bit surface input, correcting an issue where rendered black colors appeared elevated.",
+            "takeaway": "If you save 8-bit SDR HEIF via the Surface path, check the decoding result of black input and the VUI color_range declaration together. YUV buffer input and 10-bit HDR paths are not affected by this change.",
+            "tags": [
+              "Android"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
+            "href": "en/newsletters/2026-W43/index.html#article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed",
+            "headline": "Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed",
+            "lead": "Patch v7 for the Linux V4L2 subdevice driver, supporting the Himax HM1092 1-megapixel monochrome near-infrared sensor used in laptop facial recognition cameras, has been released.",
+            "takeaway": "Developers integrating NIR sensors with V4L2 should distinguish between the gain upper limit fix in v7 and the still-under-discussion active array reporting method.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
+            "href": "en/newsletters/2026-W43/index.html#article-linux-atomisp-driver-stream-creation-error-branch-cleanup-patch-proposed",
+            "headline": "Linux atomisp driver, stream creation error branch cleanup patch proposed",
+            "lead": "A patch has been submitted to remove dead code error checks that remained unnecessarily during stream creation in the atomisp driver within the Linux staging media tree.",
+            "takeaway": "In atomisp's RAW/BAYER path, the return value indicating no viewfinder information must be distinguished from an actual stream creation failure.",
+            "tags": [
+              "Driver",
+              "Image Processing",
+              "SoC Platform"
+            ],
+            "image": {
+              "src": "assets/images/fallback/newsletter-default.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+            "href": "en/newsletters/2026-W43/index.html#article-brief-news-android-studio-supports-external-ai-agent-integration",
+            "headline": "Brief News: Android Studio supports external AI agent integration",
+            "lead": "The latest Android Studio Canary build has added BYOA (Bring Your Own Agent) support, allowing direct connection of external AI coding agents to the development environment.",
+            "takeaway": "Refer to this as a development assistance feature in Canary. You can decide whether to adopt it after checking if it fits your current build and test workflow.",
+            "tags": [
+              "AI"
+            ],
+            "image": {
+              "src": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+              "alt": "Android Studio Canary introduces BYOA support for integrating external coding agents",
+              "is_fallback": false
+            }
+          }
+        ]
+      },
+      "html": "en/newsletters/2026-W43/index.html",
+      "md": "en/newsletters/2026-W43/newsletter.md"
+    }
   },
   {
     "weeklyKey": "2026-W42",

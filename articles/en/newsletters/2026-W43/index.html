@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W43/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W42 Camera SW Newsletter (Published W43)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W43/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W43/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W43/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week, we start with a HeifWriter fix addressing an issue where black colors appeared elevated in 8-bit HEIF images. This change requires checking the color range of Surface input and encoding results together. Next, we cover the gain limits and remaining crop discussions for v7 of the HM1092 NIR sensor driver, and a proposed patch for RAW capture error handling in atomisp. Finally, we have a brief development tool update on Android Studio&#39;s external AI agent integration." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W43/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W42 Camera SW Newsletter (Published W43)" />
+  <meta property="og:description" content="This week, we start with a HeifWriter fix addressing an issue where black colors appeared elevated in 8-bit HEIF images. This change requires checking the color range of Surface input and encoding results together. Next, we cover the gain limits and remaining crop discussions for v7 of the HM1092 NIR sensor driver, and a proposed patch for RAW capture error handling in atomisp. Finally, we have a brief development tool update on Android Studio&#39;s external AI agent integration." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W43/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W42 Camera SW Newsletter (Published W43)" />
+  <meta name="twitter:description" content="This week, we start with a HeifWriter fix addressing an issue where black colors appeared elevated in 8-bit HEIF images. This change requires checking the color range of Surface input and encoding results together. Next, we cover the gain limits and remaining crop discussions for v7 of the HM1092 NIR sensor driver, and a proposed patch for RAW capture error handling in atomisp. Finally, we have a brief development tool update on Android Studio&#39;s external AI agent integration." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.10.12 – 10.18</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W42</span></h1>
+        <p class="issue-publish-badge">Published W43</p>
+        
+        <div class="tag-row issue-tags"><span class="tag">AI</span><span class="tag">Android</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">SoC Platform</span></div>
+      </header>
+
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">This week’s highlights</h2>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-androidx-heifwriter-patch-merged-to-prevent-8-bit-surface-input-color-distortion">AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion</a>
+            <p class="reader-brief-takeaway">If you save 8-bit SDR HEIF via the Surface path, check the decoding result of black input and the VUI color_range declaration together. YUV buffer input and 10-bit HDR paths are not affected by this change.</p>
+          </li><li>
+            <a href="#article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed">Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed</a>
+            <p class="reader-brief-takeaway">Developers integrating NIR sensors with V4L2 should distinguish between the gain upper limit fix in v7 and the still-under-discussion active array reporting method.</p>
+          </li><li>
+            <a href="#article-linux-atomisp-driver-stream-creation-error-branch-cleanup-patch-proposed">Linux atomisp driver, stream creation error branch cleanup patch proposed</a>
+            <p class="reader-brief-takeaway">In atomisp&#39;s RAW/BAYER path, the return value indicating no viewfinder information must be distinguished from an actual stream creation failure.</p>
+          </li><li>
+            <a href="#article-brief-news-android-studio-supports-external-ai-agent-integration">Brief News: Android Studio supports external AI agent integration</a>
+            <p class="reader-brief-takeaway">Refer to this as a development assistance feature in Canary. You can decide whether to adopt it after checking if it fits your current build and test workflow.</p>
+          </li></ol><details class="reader-brief-context"><summary>About this issue</summary><p class="reader-brief-intro">This week, we start with a HeifWriter fix addressing an issue where black colors appeared elevated in 8-bit HEIF images. This change requires checking the color range of Surface input and encoding results together. Next, we cover the gain limits and remaining crop discussions for v7 of the HM1092 NIR sensor driver, and a proposed patch for RAW capture error handling in atomisp. Finally, we have a brief development tool update on Android Studio&#39;s external AI agent integration.</p></details>
+        </div>
+        
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-androidx-heifwriter-patch-merged-to-prevent-8-bit-surface-input-color-distortion" tabindex="-1" aria-labelledby="article-androidx-heifwriter-patch-merged-to-prevent-8-bit-surface-input-color-distortion-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-androidx-heifwriter-patch-merged-to-prevent-8-bit-surface-input-color-distortion-title" class="article-title">AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit (2026-10-16)</p>
+        <p class="article-lead">The AndroidX HEIF image generation library has removed logic that forced a full color range declaration for 8-bit surface input, correcting an issue where rendered black colors appeared elevated.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>If you save 8-bit SDR HEIF via the Surface path, check the decoding result of black input and the VUI color_range declaration together. YUV buffer input and 10-bit HDR paths are not affected by this change.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion image" loading="lazy" decoding="async">
+        </figure>
+        <p>A patch to fix a regression in HeifWriter&#39;s 8-bit color range handling was merged into the Google Android Open Source Project&#39;s frameworks support repository on October 16, 2026. The target file is EncoderBase.java.</p>
+        <p>In the previous implementation, when encoding 8-bit SDR images using Surface or Bitmap input modes, EglWindowSurface created a standard RGBA_8888 EGL surface without specified color space attributes. At this time, some vendor hardware HEVC encoders, such as amlogic or qti, quantized RGB(0, 0, 0) to a limited range luma value of Y=16, but still wrote a full range flag in the bitstream VUI header, following the COLOR_RANGE_FULL directive specified in the format. As a result, upon decoding, black was interpreted as 16/255 instead of 0, causing black areas to appear elevated as gray, and CTS and HeifWriterTest surface tests to fail.</p>
+        <p>This fix branches the 8-bit path using internal surfaces to not set MediaFormat.KEY_COLOR_RANGE, leaving it empty. This delegates to the encoder to consistently match its own hardware conversion range and bitstream VUI header when the surface input lacks dataspace information. In contrast, the buffer input mode, where the client directly passes YUV, maintains the full range setting according to the common JFIF rules for cameras. 10-bit HDR surface input also maintains full range without changes, as BT.2020 dataspace is explicitly passed.</p>
+        <p>This fix has been merged into the library source, and its reflection in specific Android version releases or commercial device ROMs needs to be confirmed separately. Practicing engineers can verify from a HeifWriterTest perspective that the decoded luma value for RGB(0, 0, 0) input does not appear elevated when saving 8-bit SDR HEIF images by connecting a camera capture surface to HeifWriter.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387">heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed" aria-label="Next article: Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed" tabindex="-1" aria-labelledby="article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed-title" class="article-title">Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed</h2>
+        <p class="article-source-subtitle">linux-media mailing list (2026-10-13)</p>
+        <p class="article-lead">Patch v7 for the Linux V4L2 subdevice driver, supporting the Himax HM1092 1-megapixel monochrome near-infrared sensor used in laptop facial recognition cameras, has been released.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Developers integrating NIR sensors with V4L2 should distinguish between the gain upper limit fix in v7 and the still-under-discussion active array reporting method.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed image" loading="lazy" decoding="async">
+        </figure>
+        <p>The HM1092 driver v7, submitted on October 13, 2026, addresses V4L2 integration for a monochrome NIR sensor using a single-lane MIPI CSI-2. It considers Qualcomm device trees and Intel IPU-based ACPI environments, distinguishing operating modes based on 24 MHz and 19.2 MHz external clocks.</p>
+        <p>A notable change in v7 is the digital gain range. The upper limit is restricted to 0x3ff to match the register&#39;s 10-bit 2.8 fixed-point format, preventing issues where values of 1024 or higher would result in a black screen due to ignored upper bits. Changes to get_selection pad operations and runtime PM error handling have also been incorporated.</p>
+        <p>Unresolved issues include dummy borders and crop areas in the 19.2 MHz environment. Discussions remain on how to report the sensor&#39;s active array range, so if integrating similar sensors, it&#39;s worth comparing gain control limits and the selection area exposed to libcamera. This is currently a pre-merge patch proposal and does not imply commercial product support completion.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/">[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver</a> — <a href="https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/T/#t">Full patch series</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-androidx-heifwriter-patch-merged-to-prevent-8-bit-surface-input-color-distortion" aria-label="Previous article: AndroidX HeifWriter patch merged to prevent 8-bit Surface input color distortion">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-linux-atomisp-driver-stream-creation-error-branch-cleanup-patch-proposed" aria-label="Next article: Linux atomisp driver, stream creation error branch cleanup patch proposed">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-linux-atomisp-driver-stream-creation-error-branch-cleanup-patch-proposed" tabindex="-1" aria-labelledby="article-linux-atomisp-driver-stream-creation-error-branch-cleanup-patch-proposed-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-linux-atomisp-driver-stream-creation-error-branch-cleanup-patch-proposed-title" class="article-title">Linux atomisp driver, stream creation error branch cleanup patch proposed</h2>
+        <p class="article-source-subtitle">linux-media mailing list (2026-10-16)</p>
+        <p class="article-lead">A patch has been submitted to remove dead code error checks that remained unnecessarily during stream creation in the atomisp driver within the Linux staging media tree.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>In atomisp&#39;s RAW/BAYER path, the return value indicating no viewfinder information must be distinguished from an actual stream creation failure.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Linux atomisp driver, stream creation error branch cleanup patch proposed image" loading="lazy" decoding="async">
+        </figure>
+        <p>A patch submitted on October 16, 2026, removes two unnecessary error checks in ia_css_stream_create() within drivers/staging/media/atomisp/pci/sh_css.c. This was a branch that always evaluated to false because it checked a previous &#39;err&#39; variable without assigning the return value of sh_css_pipe_get_viewfinder_frame_info().</p>
+        <p>The key point is that simply adding the return value assignment is not the solution. In RAW/BAYER modes without a viewfinder, this function can return -EINVAL, and propagating this would cause even normal stream creation to fail. When maintaining atomisp, the meaning of return values based on output configuration must be verified. This change is a pre-merge proposal and not a basis for indiscriminately removing error handling in other drivers.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/">[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()</a> — <a href="https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/T/#t">Full patch series</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed" aria-label="Previous article: Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-brief-news-android-studio-supports-external-ai-agent-integration" aria-label="Next article: Brief News: Android Studio supports external AI agent integration">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-brief-news-android-studio-supports-external-ai-agent-integration" tabindex="-1" aria-labelledby="article-brief-news-android-studio-supports-external-ai-agent-integration-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">AI Tooling</span>
+        </div>
+        <h2 id="article-brief-news-android-studio-supports-external-ai-agent-integration-title" class="article-title">Brief News: Android Studio supports external AI agent integration</h2>
+        <p class="article-source-subtitle">Android Developers Blog (2026-10-15)</p>
+        <p class="article-lead">The latest Android Studio Canary build has added BYOA (Bring Your Own Agent) support, allowing direct connection of external AI coding agents to the development environment.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Refer to this as a development assistance feature in Canary. You can decide whether to adopt it after checking if it fits your current build and test workflow.</p></div>
+        <figure class="article-media">
+        <img class="article-image" src="https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp" alt="Android Studio Canary introduces BYOA support for integrating external coding agents" loading="lazy" decoding="async">
+        <figcaption class="article-image-caption">Image: <a href="https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio">Build your way: Use any AI agent of your choice in Android Studio</a></figcaption>
+        </figure>
+        <p>BYOA in Android Studio Canary, announced on October 15, provides project/build context and IDE tools to external coding agents via ACP. It supports integration with Claude Agent, Codex, and Antigravity.</p>
+        <p>This is a preview update for teams experimenting with development tools. It does not imply HAL execution behavior or performance improvements, and its usefulness for a team&#39;s C++ build and test tasks needs to be verified separately.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio">Build your way: Use any AI agent of your choice in Android Studio</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-linux-atomisp-driver-stream-creation-error-branch-cleanup-patch-proposed" aria-label="Previous article: Linux atomisp driver, stream creation error branch cleanup patch proposed">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          
+        </nav>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://patchwork.libcamera.org/patch/28492/">[v6,1/4] libcamera: software_isp: Add support for monochrome formats - Shaders</a><span class="reference-meta">libcamera Patchwork (patch review) (2026-10-17) · Open-source camera HAL project changes · Technology trends reference</span></li><li><a href="https://lore.kernel.org/linux-media/20261016-x1e-cphy-rfc-v3-0-40a346a72153@gmail.com/">[PATCH v3 0/6] phy: qcom-mipi-csi2: C-PHY for X1E80100</a><span class="reference-meta">lore.kernel.org linux-media list (2026-10-16) · Camera driver / Image pipeline reference</span></li><li><a href="https://lore.kernel.org/linux-media/20261016075918.19345-2-lachlan.michael@sony.com/">[PATCH v4 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor</a><span class="reference-meta">lore.kernel.org linux-media list (2026-10-16) · Camera driver / Image pipeline reference</span></li><li><a href="https://patchwork.libcamera.org/patch/28471/">v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls</a><span class="reference-meta">libcamera Patchwork (patch review) (2026-10-16) · Open-source camera HAL project changes · Technology trends reference</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio">Build your way: Use any AI agent of your choice in Android Studio</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387">heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support</a></li><li><a href="https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/">[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver</a> — <a href="https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/T/#t">Full patch series</a></li><li><a href="https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/">[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()</a> — <a href="https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
