@@ -67,7 +67,7 @@ This fix has been merged into the library source, and its reflection in specific
 
 _linux-media mailing list (2026-10-13)_
 
-Patch v7 for the Linux V4L2 subdevice driver, supporting the Himax HM1092 1-megapixel monochrome near-infrared sensor used in laptop facial recognition cameras, has been released.
+Version 7 of a proposed Linux V4L2 subdevice driver for the Himax HM1092 1-megapixel monochrome near-infrared sensor, used in laptop facial recognition cameras, has been submitted.
 
 ### Camera HAL/Driver perspective: what it means
 
@@ -107,7 +107,7 @@ In atomisp's RAW/BAYER path, the return value indicating no viewfinder informati
 ![](../../../assets/images/fallback/newsletter-default.svg)
 
 
-A patch submitted on October 16, 2026, removes two unnecessary error checks in ia_css_stream_create() within drivers/staging/media/atomisp/pci/sh_css.c. This was a branch that always evaluated to false because it checked a previous 'err' variable without assigning the return value of sh_css_pipe_get_viewfinder_frame_info().
+A patch submitted on October 16, 2026, removes a two-line unnecessary error check in ia_css_stream_create() within drivers/staging/media/atomisp/pci/sh_css.c. This was a branch that always evaluated to false because it checked a previous 'err' variable without assigning the return value of sh_css_pipe_get_viewfinder_frame_info().
 
 The key point is that simply adding the return value assignment is not the solution. In RAW/BAYER modes without a viewfinder, this function can return -EINVAL, and propagating this would cause even normal stream creation to fail. When maintaining atomisp, the meaning of return values based on output configuration must be verified. This change is a pre-merge proposal and not a basis for indiscriminately removing error handling in other drivers.
 

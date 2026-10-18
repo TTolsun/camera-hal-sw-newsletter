@@ -105,7 +105,7 @@
         </div>
         <h2 id="article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed-title" class="article-title">Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed</h2>
         <p class="article-source-subtitle">linux-media mailing list (2026-10-13)</p>
-        <p class="article-lead">Patch v7 for the Linux V4L2 subdevice driver, supporting the Himax HM1092 1-megapixel monochrome near-infrared sensor used in laptop facial recognition cameras, has been released.</p>
+        <p class="article-lead">Version 7 of a proposed Linux V4L2 subdevice driver for the Himax HM1092 1-megapixel monochrome near-infrared sensor, used in laptop facial recognition cameras, has been submitted.</p>
         <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>Developers integrating NIR sensors with V4L2 should distinguish between the gain upper limit fix in v7 and the still-under-discussion active array reporting method.</p></div>
         <figure class="article-media article-media-decoration" aria-hidden="true">
         <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed image" loading="lazy" decoding="async">
@@ -133,7 +133,7 @@
         <figure class="article-media article-media-decoration" aria-hidden="true">
         <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Linux atomisp driver, stream creation error branch cleanup patch proposed image" loading="lazy" decoding="async">
         </figure>
-        <p>A patch submitted on October 16, 2026, removes two unnecessary error checks in ia_css_stream_create() within drivers/staging/media/atomisp/pci/sh_css.c. This was a branch that always evaluated to false because it checked a previous &#39;err&#39; variable without assigning the return value of sh_css_pipe_get_viewfinder_frame_info().</p>
+        <p>A patch submitted on October 16, 2026, removes a two-line unnecessary error check in ia_css_stream_create() within drivers/staging/media/atomisp/pci/sh_css.c. This was a branch that always evaluated to false because it checked a previous &#39;err&#39; variable without assigning the return value of sh_css_pipe_get_viewfinder_frame_info().</p>
         <p>The key point is that simply adding the return value assignment is not the solution. In RAW/BAYER modes without a viewfinder, this function can return -EINVAL, and propagating this would cause even normal stream creation to fail. When maintaining atomisp, the meaning of return values based on output configuration must be verified. This change is a pre-merge proposal and not a basis for indiscriminately removing error handling in other drivers.</p>
         <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/">[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()</a> — <a href="https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/T/#t">Full patch series</a></li></ul></div>
         <nav class="article-navigation" aria-label="Article navigation">

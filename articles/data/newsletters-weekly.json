@@ -123,7 +123,7 @@
             "id": "url:https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
             "href": "en/newsletters/2026-W43/index.html#article-linux-media-subsystem-himax-hm1092-monochrome-nir-sensor-driver-v7-proposed",
             "headline": "Linux media subsystem, Himax HM1092 monochrome NIR sensor driver v7 proposed",
-            "lead": "Patch v7 for the Linux V4L2 subdevice driver, supporting the Himax HM1092 1-megapixel monochrome near-infrared sensor used in laptop facial recognition cameras, has been released.",
+            "lead": "Version 7 of a proposed Linux V4L2 subdevice driver for the Himax HM1092 1-megapixel monochrome near-infrared sensor, used in laptop facial recognition cameras, has been submitted.",
             "takeaway": "Developers integrating NIR sensors with V4L2 should distinguish between the gain upper limit fix in v7 and the still-under-discussion active array reporting method.",
             "tags": [
               "Driver",
