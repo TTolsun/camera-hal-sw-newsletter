@@ -1,0 +1,925 @@
+{
+  "schema_version": 1,
+  "report_type": "source_clusters",
+  "newsletter_date": "2026-10-19",
+  "clusters": [
+    {
+      "cluster_id": "22c52551573c50ee",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "canonical_title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+          "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "046356b000705af6",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4318206",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4318206",
+      "canonical_title": "Bump heifwriter version to 1.2.0-rc01 - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4318206",
+          "title": "Bump heifwriter version to 1.2.0-rc01 - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4f0b2e3868da3678",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4291871",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4291871",
+      "canonical_title": "Bump heifwriter version to 1.2.0-beta01 - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4291871",
+          "title": "Bump heifwriter version to 1.2.0-beta01 - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "eaa70eb128e994a9",
+      "cluster_key": "https://www.reddit.com/r/androiddev/comments/1x8sd2a/i_hate_camerax_so_i_made_it_a_one_liner",
+      "canonical_url": "https://www.reddit.com/r/androiddev/comments/1x8sd2a/i_hate_camerax_so_i_made_it_a_one_liner/",
+      "canonical_title": "I hate CameraX, so I made it a one liner :)",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.reddit.com/r/androiddev/comments/1x8sd2a/i_hate_camerax_so_i_made_it_a_one_liner/",
+          "title": "I hate CameraX, so I made it a one liner :)",
+          "canonical": true,
+          "reliability": "community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "50009098fbc5bde9",
+      "cluster_key": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+      "canonical_url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+      "canonical_title": "Build your way: Use any AI agent of your choice in Android Studio",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "title": "Build your way: Use any AI agent of your choice in Android Studio",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "16c59b1eb0828bc2",
+      "cluster_key": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
+      "canonical_url": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
+      "canonical_title": "Device Streaming and Android skills - available in Android CLI",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
+          "title": "Device Streaming and Android skills - available in Android CLI",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "cdb1d51fae043110",
+      "cluster_key": "https://www.anthropic.com/claude-haiku-5-5",
+      "canonical_url": "https://www.anthropic.com/claude-haiku-5-5",
+      "canonical_title": "Claude Haiku 5.5",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.anthropic.com/claude-haiku-5-5",
+          "title": "Claude Haiku 5.5",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b6756c0a180ee554",
+      "cluster_key": "https://openai.com/index/benefit-street-partners",
+      "canonical_url": "https://openai.com/index/benefit-street-partners",
+      "canonical_title": "Benefit Street Partners answers questions faster with Codex",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://openai.com/index/benefit-street-partners",
+          "title": "Benefit Street Partners answers questions faster with Codex",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "14a4f06b5942b2a9",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available/",
+      "canonical_title": "MSVC Build Tools Version 14.52 Release Candidate Now Available",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available/",
+          "title": "MSVC Build Tools Version 14.52 Release Candidate Now Available",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "fdd509d7290d5bce",
+      "cluster_key": "https://www.edge-ai-vision.com/2026/10/upcoming-webinar-on-runninge-generative-ai-with-openvino",
+      "canonical_url": "https://www.edge-ai-vision.com/2026/10/upcoming-webinar-on-runninge-generative-ai-with-openvino/",
+      "canonical_title": "Upcoming Webinar on Runninge Generative AI with OpenVINO",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.edge-ai-vision.com/2026/10/upcoming-webinar-on-runninge-generative-ai-with-openvino/",
+          "title": "Upcoming Webinar on Runninge Generative AI with OpenVINO",
+          "canonical": true,
+          "reliability": "tech-media",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "67b539c595ed1583",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/bringing-correctly-rounded-math-to-production-with-llvm-libc",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/bringing-correctly-rounded-math-to-production-with-llvm-libc/",
+      "canonical_title": "Bringing Correctly Rounded Math to Production with LLVM-libc",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/bringing-correctly-rounded-math-to-production-with-llvm-libc/",
+          "title": "Bringing Correctly Rounded Math to Production with LLVM-libc",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7c2e7318624f364d",
+      "cluster_key": "https://community.arm.com/arm-community-blogs/b/announcements/posts/python-3-15-advances-the-native-developer-experience-on-windows-on-arm",
+      "canonical_url": "https://community.arm.com/arm-community-blogs/b/announcements/posts/python-3-15-advances-the-native-developer-experience-on-windows-on-arm",
+      "canonical_title": "Blog Post: Python 3.15 advances the native developer experience on Windows on Arm",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://community.arm.com/arm-community-blogs/b/announcements/posts/python-3-15-advances-the-native-developer-experience-on-windows-on-arm",
+          "title": "Blog Post: Python 3.15 advances the native developer experience on Windows on Arm",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9cd35cb66f88a36e",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261016075918.19345-2-lachlan.michael@sony.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261016075918.19345-2-lachlan.michael@sony.com/",
+      "canonical_title": "[PATCH v4 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261016075918.19345-2-lachlan.michael@sony.com/",
+          "title": "[PATCH v4 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d89b7fee76e9638d",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/",
+      "canonical_title": "[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/",
+          "title": "[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3fd547c62b672632",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261013-hawi-maili-camss-v2-0-fc93222da89c@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261013-hawi-maili-camss-v2-0-fc93222da89c@oss.qualcomm.com/",
+      "canonical_title": "[PATCH v2 0/8] Add CAMSS support for Qualcomm Hawi and Maili",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261013-hawi-maili-camss-v2-0-fc93222da89c@oss.qualcomm.com/",
+          "title": "[PATCH v2 0/8] Add CAMSS support for Qualcomm Hawi and Maili",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5d515081cb41bc59",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261016-x1e-cphy-rfc-v3-0-40a346a72153@gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261016-x1e-cphy-rfc-v3-0-40a346a72153@gmail.com/",
+      "canonical_title": "[PATCH v3 0/6] phy: qcom-mipi-csi2: C-PHY for X1E80100",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261016-x1e-cphy-rfc-v3-0-40a346a72153@gmail.com/",
+          "title": "[PATCH v3 0/6] phy: qcom-mipi-csi2: C-PHY for X1E80100",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7bc7da094d543156",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261017-cphy_support-v1-2-8b0e1237ce95@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261017-cphy_support-v1-2-8b0e1237ce95@oss.qualcomm.com/",
+      "canonical_title": "[PATCH RFC 2/6] media: qcom: camss: Add C-PHY timing fields and get config from sensor",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261017-cphy_support-v1-2-8b0e1237ce95@oss.qualcomm.com/",
+          "title": "[PATCH RFC 2/6] media: qcom: camss: Add C-PHY timing fields and get config from sensor",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b9aaad0d48aa1d43",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261017001116.2318647-1-anusha.nandi@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261017001116.2318647-1-anusha.nandi@oss.qualcomm.com/",
+      "canonical_title": "[PATCH 0/3] arm64: dts: qcom: Add CSI2 PHY common-phy providers for SA8775P, QCS8300 and SC7280",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261017001116.2318647-1-anusha.nandi@oss.qualcomm.com/",
+          "title": "[PATCH 0/3] arm64: dts: qcom: Add CSI2 PHY common-phy providers for SA8775P, QCS8300 and SC7280",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "e43db9f1aff4ab98",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261013083306.1132036-1-hitesh@ebytelogic.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261013083306.1132036-1-hitesh@ebytelogic.com/",
+      "canonical_title": "[PATCH v5 0/4] media: qcom: camss: rebase fixes and SC7280 enablement for the streams API",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261013083306.1132036-1-hitesh@ebytelogic.com/",
+          "title": "[PATCH v5 0/4] media: qcom: camss: rebase fixes and SC7280 enablement for the streams API",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "798b5d4a8de8ca41",
+      "cluster_key": "https://docs.qualcomm.com/securitybulletin/october-2026-bulletin.html",
+      "canonical_url": "https://docs.qualcomm.com/securitybulletin/october-2026-bulletin.html",
+      "canonical_title": "October 2026 Security Bulletin: CVE-2026-25263 — Camera Driver",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://docs.qualcomm.com/securitybulletin/october-2026-bulletin.html",
+          "title": "October 2026 Security Bulletin: CVE-2026-25263 — Camera Driver",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d1ebf6ac4346ec99",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20261009",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20261009",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20261009",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20261009",
+          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20261009",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6ec74816cd98e08f",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28492",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28492/",
+      "canonical_title": "[v6,1/4] libcamera: software_isp: Add support for monochrome formats - Shaders",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28492/",
+          "title": "[v6,1/4] libcamera: software_isp: Add support for monochrome formats - Shaders",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "620bc60a1a10d832",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28502",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28502/",
+      "canonical_title": "libcamera: software_isp: Exclude saturated pixels from AWB sums",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28502/",
+          "title": "libcamera: software_isp: Exclude saturated pixels from AWB sums",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "457abb0eb3fda583",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28471",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28471/",
+      "canonical_title": "v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28471/",
+          "title": "v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b9b68684e72229c1",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28454",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28454/",
+      "canonical_title": "[libcamera-ci,RFC,v1] Run clang-tidy",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28454/",
+          "title": "[libcamera-ci,RFC,v1] Run clang-tidy",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "6dd52fd6f61e47fb",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28450",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28450/",
+      "canonical_title": "[1/2] libcamera: camera_sensor: Add Sony IMX676 sensor properties and helper",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28450/",
+          "title": "[1/2] libcamera: camera_sensor: Add Sony IMX676 sensor properties and helper",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1d3f5c7cd032249b",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28438",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28438/",
+      "canonical_title": "[libcamera-ci,v1] Enable `_LIBCPP_REMOVE_TRANSITIVE_INCLUDES`",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28438/",
+          "title": "[libcamera-ci,v1] Enable `_LIBCPP_REMOVE_TRANSITIVE_INCLUDES`",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b99fc81e0c67ce60",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28501",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28501/",
+      "canonical_title": "libcamera: camera_sensor: Add Hynix Hi556 sensor properties and helper",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28501/",
+          "title": "libcamera: camera_sensor: Add Hynix Hi556 sensor properties and helper",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "70779ee88af5f0a0",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "canonical_title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+          "title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8d28e7d3853c3aef",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "canonical_title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+          "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5383bfc0408ae81d",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "canonical_title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+          "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8c3e4fdd73ea0301",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "canonical_title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+          "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "80d5fb89c255993c",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
+      "canonical_title": "camera: Prevent UAF on watcher callback in ReloadableConfigFile - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
+          "title": "camera: Prevent UAF on watcher callback in ReloadableConfigFile - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9f4e62229aa23ae5",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
+      "canonical_title": "cros_camera_service: Fix UAF in StreamManipulatorHelper - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
+          "title": "cros_camera_service: Fix UAF in StreamManipulatorHelper - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "2c7b006a72881e6e",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
+      "canonical_title": "camera: Fix cross-thread UAF in HdrNetStreamManipulator options reload - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
+          "title": "camera: Fix cross-thread UAF in HdrNetStreamManipulator options reload - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "011a94a65703be29",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
+      "canonical_title": "camera: Enforce exclusive buffer IDs - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8411146",
+          "title": "camera: Enforce exclusive buffer IDs - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9eae8d34a506c4ab",
+      "cluster_key": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "canonical_url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "canonical_title": "Bringing our latest frontier model to Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+          "title": "Bringing our latest frontier model to Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "17980be8470165b3",
+      "cluster_key": "https://developer.android.com/blog/posts/google-play-discovery-engagement-growth",
+      "canonical_url": "https://developer.android.com/blog/posts/google-play-discovery-engagement-growth",
+      "canonical_title": "New ways to drive smarter discovery, deeper engagement, and business growth on Google Play",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/google-play-discovery-engagement-growth",
+          "title": "New ways to drive smarter discovery, deeper engagement, and business growth on Google Play",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "227a219cfd1ce06b",
+      "cluster_key": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
+      "canonical_url": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
+      "canonical_title": "Introducing the Googlebook Linux Terminal Preview: A VM-Backed Environment for AI and Development",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
+          "title": "Introducing the Googlebook Linux Terminal Preview: A VM-Backed Environment for AI and Development",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b721906397706e67",
+      "cluster_key": "https://developer.android.com/blog/posts/android-bench-2-0-pushing-the-frontier-with-challenging-long-horizon-tasks",
+      "canonical_url": "https://developer.android.com/blog/posts/android-bench-2-0-pushing-the-frontier-with-challenging-long-horizon-tasks",
+      "canonical_title": "Android Bench 2.0: Pushing the frontier with challenging long-horizon tasks",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/android-bench-2-0-pushing-the-frontier-with-challenging-long-horizon-tasks",
+          "title": "Android Bench 2.0: Pushing the frontier with challenging long-horizon tasks",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3076fa5761466d20",
+      "cluster_key": "https://developer.android.com/blog/posts/jetpack-compose-ai-native-ui-instagram-direct",
+      "canonical_url": "https://developer.android.com/blog/posts/jetpack-compose-ai-native-ui-instagram-direct",
+      "canonical_title": "How Instagram Direct engineers built AI-native UI architecture with Jetpack Compose and reduced token cost per agent session by 33%",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/jetpack-compose-ai-native-ui-instagram-direct",
+          "title": "How Instagram Direct engineers built AI-native UI architecture with Jetpack Compose and reduced token cost per agent session by 33%",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "640bb9771b15261f",
+      "cluster_key": "https://developer.android.com/blog/posts/bring-your-android-game-to-the-car-screen-today",
+      "canonical_url": "https://developer.android.com/blog/posts/bring-your-android-game-to-the-car-screen-today",
+      "canonical_title": "Bring your Android game to the car screen today",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/bring-your-android-game-to-the-car-screen-today",
+          "title": "Bring your Android game to the car screen today",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "34d43db1e01c1db2",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28473",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28473/",
+      "canonical_title": "[v3,01/11] software-isp: Center the GPU image crop",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28473/",
+          "title": "[v3,01/11] software-isp: Center the GPU image crop",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "61353689de04d5bc",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/",
+      "canonical_title": "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/",
+          "title": "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "94ee28b93f9d2d83",
+      "cluster_key": "https://openai.com/index/block-ai-powered-security",
+      "canonical_url": "https://openai.com/index/block-ai-powered-security",
+      "canonical_title": "How Block is building AI-powered security with OpenAI technology",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://openai.com/index/block-ai-powered-security",
+          "title": "How Block is building AI-powered security with OpenAI technology",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dca7cce8dcd1782c",
+      "cluster_key": "https://github.com/anthropics/claude-code/releases/tag/v2.1.301",
+      "canonical_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.301",
+      "canonical_title": "Claude Code v2.1.301",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.301",
+          "title": "Claude Code v2.1.301",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5dc7e9d03eb17a01",
+      "cluster_key": "https://github.com/anthropics/claude-code/releases/tag/v2.1.300",
+      "canonical_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.300",
+      "canonical_title": "Claude Code v2.1.300",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.300",
+          "title": "Claude Code v2.1.300",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9732b2763df5a67a",
+      "cluster_key": "https://openai.com/index/itau-generative-ai",
+      "canonical_url": "https://openai.com/index/itau-generative-ai",
+      "canonical_title": "How Itaú is building generative AI for its entire customer base",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://openai.com/index/itau-generative-ai",
+          "title": "How Itaú is building generative AI for its entire customer base",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9e63539289a31c86",
+      "cluster_key": "https://openai.com/index/stack-overflow-chatgpt-plugin",
+      "canonical_url": "https://openai.com/index/stack-overflow-chatgpt-plugin",
+      "canonical_title": "Stack Overflow for Agents triples signups with ChatGPT plugin",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://openai.com/index/stack-overflow-chatgpt-plugin",
+          "title": "Stack Overflow for Agents triples signups with ChatGPT plugin",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "57c3309db5bedcde",
+      "cluster_key": "https://openai.com/index/amp-beyond-coding",
+      "canonical_url": "https://openai.com/index/amp-beyond-coding",
+      "canonical_title": "Amp puts AI agents to work beyond code with OpenAI models",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://openai.com/index/amp-beyond-coding",
+          "title": "Amp puts AI agents to work beyond code with OpenAI models",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8e5a78087996f6d9",
+      "cluster_key": "https://lore.kernel.org/all/20261011-kaanapali-camss-v21-0-04fd28d815c6@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/all/20261011-kaanapali-camss-v21-0-04fd28d815c6@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/all/20261011-kaanapali-camss-v21-0-04fd28d815c6@oss.qualcomm.com/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20261011-kaanapali-camss-v21-0-04fd28d815c6@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/all/20261011-kaanapali-camss-v21-0-04fd28d815c6@oss.qualcomm.com/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "b33bf4b21c6e87af",
+      "cluster_key": "https://lore.kernel.org/all/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz",
+      "canonical_url": "https://lore.kernel.org/all/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz",
+      "canonical_title": "https://lore.kernel.org/all/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz",
+          "title": "https://lore.kernel.org/all/20260729-qcom-cphy-v9-0-1f8d9fdab037@ixit.cz/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "dc003e4ada75b3b5",
+      "cluster_key": "https://lore.kernel.org/all/20260917-x1e-camss-csi2-phy-dtsi-v7-0-1a63eb35838b@linaro.org",
+      "canonical_url": "https://lore.kernel.org/all/20260917-x1e-camss-csi2-phy-dtsi-v7-0-1a63eb35838b@linaro.org",
+      "canonical_title": "https://lore.kernel.org/all/20260917-x1e-camss-csi2-phy-dtsi-v7-0-1a63eb35838b@linaro.org/",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/all/20260917-x1e-camss-csi2-phy-dtsi-v7-0-1a63eb35838b@linaro.org",
+          "title": "https://lore.kernel.org/all/20260917-x1e-camss-csi2-phy-dtsi-v7-0-1a63eb35838b@linaro.org/",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f836303187f370d0",
+      "cluster_key": "https://lore.kernel.org/r/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com",
+      "canonical_url": "https://lore.kernel.org/r/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com",
+      "canonical_title": "https://lore.kernel.org/r/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/r/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com",
+          "title": "https://lore.kernel.org/r/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    }
+  ]
+}
