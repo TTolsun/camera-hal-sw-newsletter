@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "android-version-features",
-  "updated_at": "2026-10-12T00:00:00.000Z",
+  "updated_at": "2026-10-19T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "android-version-features:053d08e47e296aef3b799286d58855ac",
@@ -9,12 +9,12 @@
       "canonical_url": "https://developer.android.com/about/versions/17/features",
       "title": "Features and APIs | Android Developers",
       "visible_date": "",
-      "visible_last_updated": "2026-10-01",
+      "visible_last_updated": "2026-10-16",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-10-01",
-      "content_hash": "3de5e19df4d274cedc6b41e8dad0bc82b283c3a2fc26a543ceb2fc5cdbc731ba",
+      "http_last_modified": "2026-10-16",
+      "content_hash": "9cc9c385c10ac3ee34b209c37faef4c758d7b417c091b5115589949deb0105fe",
       "normalized_content_hash": "fbbe02627f5b05b9b60dcc22e705de6bb98ffec62a5241c9128a1ac5b2d81f0e",
       "release_note_sections": [],
       "anchors": [],
@@ -24,8 +24,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-17T00:00:00.000Z",
-      "last_seen_at": "2026-10-12T00:00:00.000Z",
-      "seen_count": 15,
+      "last_seen_at": "2026-10-19T00:00:00.000Z",
+      "seen_count": 16,
       "status": 200
     },
     {
@@ -34,12 +34,12 @@
       "canonical_url": "https://developer.android.com/about/versions/16/features",
       "title": "Features and APIs | Android Developers",
       "visible_date": "",
-      "visible_last_updated": "2026-10-01",
+      "visible_last_updated": "2026-10-16",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-10-01",
-      "content_hash": "63938605107be2142efc9f54242c0ce78f6dfdc26abcede0fe8f50fe11c18230",
+      "http_last_modified": "2026-10-16",
+      "content_hash": "7ee0f8282bb2da769c202871d6e31cf3ab6103e378ab38c8be455412b171bccc",
       "normalized_content_hash": "3687fcf33486d74a4bcb4b95a769048fb3d6d71b7ec90a0dcf4748b83dc7ca98",
       "release_note_sections": [
         {
@@ -76,8 +76,8 @@
       "release_row_hash": "",
       "release_rows": [],
       "first_seen_at": "2026-08-17T00:00:00.000Z",
-      "last_seen_at": "2026-10-12T00:00:00.000Z",
-      "seen_count": 15,
+      "last_seen_at": "2026-10-19T00:00:00.000Z",
+      "seen_count": 16,
       "status": 200
     }
   ],
@@ -88,7 +88,9 @@
     "source-event-5c35dc6401c3af1a9ce390dcc2a18d3c",
     "source-event-e295636e0b79a20a6b8a32b7bf62100b",
     "source-event-b45dd5a782970588319218c564d36e01",
-    "source-event-95019e63ef87929975249fb742b20104"
+    "source-event-95019e63ef87929975249fb742b20104",
+    "source-event-e7546592e0ecbc8a9575b2c7739d3d99",
+    "source-event-425ce7557d5422ea63fa1b62ca63c734"
   ],
   "processed_evidence_ids": [
     "evidence-479bfe80d01cd17a6eea330469485698"
