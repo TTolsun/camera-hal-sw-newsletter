@@ -1,0 +1,308 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.8-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-3.8-flash",
+    "score": 94,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 4,
+    "locked_article_count": 4,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: reader_perspective.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 2",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "AndroidX HeifWriter, 8비트 서피스 입력의 색상 범위 강제 설정 해제",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Linux media 서브시스템, Himax HM1092 흑백 NIR 센서 드라이버 패치 시리즈 v7 제출",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Linux atomisp 드라이버, 스트림 생성 내부의 무효 오류 검사 제거 제안",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
+      "AndroidX HeifWriter, 8비트 서피스 입력의 색상 범위 강제 설정 해제",
+      "Linux media 서브시스템, Himax HM1092 흑백 NIR 센서 드라이버 패치 시리즈 v7 제출",
+      "Linux atomisp 드라이버, 스트림 생성 내부의 무효 오류 검사 제거 제안"
+    ],
+    "locked_article_headlines": [
+      "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
+      "AndroidX HeifWriter, 8비트 서피스 입력의 색상 범위 강제 설정 해제",
+      "Linux media 서브시스템, Himax HM1092 흑백 NIR 센서 드라이버 패치 시리즈 v7 제출",
+      "Linux atomisp 드라이버, 스트림 생성 내부의 무효 오류 검사 제거 제안"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
+        "category": "tooling",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
+        ],
+        "source_titles": [
+          "Build your way: Use any AI agent of your choice in Android Studio"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "AndroidX HeifWriter, 8비트 서피스 입력의 색상 범위 강제 설정 해제",
+        "category": "android",
+        "relevance_bucket": "android",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+        ],
+        "source_titles": [
+          "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "Linux media 서브시스템, Himax HM1092 흑백 NIR 센서 드라이버 패치 시리즈 v7 제출",
+        "category": "driver",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "Linux atomisp 드라이버, 스트림 생성 내부의 무효 오류 검사 제거 제안",
+        "category": "driver",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+        ],
+        "source_titles": [
+          "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "AndroidX HeifWriter, 8비트 서피스 입력의 색상 범위 강제 설정 해제",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "AndroidX HeifWriter, 8비트 서피스 입력의 색상 범위 강제 설정 해제"
+          }
+        ],
+        "recommended_fixes": [
+          "Android Studio BYOA 기사(Section 0)의 경우 ACP 프로토콜을 통한 로컬 C++ 심볼/빌드 그래프 전달 시의 세부 지원 범위는 Canary 단계에서 지속적으로 변동될 수 있음을 점검 권고사항으로 명시하면 더 유용합니다."
+        ],
+        "article_quality_feedback": null
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Linux media 서브시스템, Himax HM1092 흑백 NIR 센서 드라이버 패치 시리즈 v7 제출",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Linux media 서브시스템, Himax HM1092 흑백 NIR 센서 드라이버 패치 시리즈 v7 제출"
+          }
+        ],
+        "recommended_fixes": [
+          "atomisp 드라이버 패치(Section 3)의 경우 해당 드라이버가 커널 drivers/staging에 위치한 레거시 플랫폼(Intel Atom 계열)용 코드임을 본문 또는 takeaway에 한 번 더 상기하면 독자의 적용 플랫폼 판단에 도움이 됩니다."
+        ],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "Linux atomisp 드라이버, 스트림 생성 내부의 무효 오류 검사 제거 제안",
+        "sources": [
+          "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Linux atomisp 드라이버, 스트림 생성 내부의 무효 오류 검사 제거 제안"
+          }
+        ],
+        "recommended_fixes": [
+          "atomisp 드라이버 패치(Section 3)의 경우 해당 드라이버가 커널 drivers/staging에 위치한 레거시 플랫폼(Intel Atom 계열)용 코드임을 본문 또는 takeaway에 한 번 더 상기하면 독자의 적용 플랫폼 판단에 도움이 됩니다."
+        ],
+        "article_quality_feedback": null
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
+        "category": "tooling",
+        "relevance_bucket": "cpp_ai_tooling_fallback",
+        "urls": [
+          "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
+        ],
+        "source_titles": [
+          "Build your way: Use any AI agent of your choice in Android Studio"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "AndroidX HeifWriter, 8비트 서피스 입력의 색상 범위 강제 설정 해제",
+        "category": "android",
+        "relevance_bucket": "android",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+        ],
+        "source_titles": [
+          "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "Linux media 서브시스템, Himax HM1092 흑백 NIR 센서 드라이버 패치 시리즈 v7 제출",
+        "category": "driver",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+        ],
+        "source_titles": [
+          "[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "Linux atomisp 드라이버, 스트림 생성 내부의 무효 오류 검사 제거 제안",
+        "category": "driver",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+        ],
+        "source_titles": [
+          "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 0,
+      "linux_camera_libcamera_v4l2": 1,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]

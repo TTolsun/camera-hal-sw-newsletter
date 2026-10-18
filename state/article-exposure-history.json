@@ -7,6 +7,87 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
+      "series_identity_key": "lore-series:20261016105553.346322-a.karelin@ideco.ru",
+      "series_subject_key": "media atomisp remove dead error check in ia css stream create",
+      "title": "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()",
+      "source_url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
+      "newsletter_date": "2026-10-19",
+      "newsletter_url": "newsletters/2026-10-19/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-19",
+      "newsletter_article_date": "2026-10-19",
+      "cooldown_until": "2026-11-09",
+      "first_exposed_at": "2026-10-19",
+      "last_exposed_at": "2026-10-19",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
+      "series_identity_key": "lore-series:20261013-hm1092-driver-v7-d81a9b152ffd@gmail.com",
+      "series_subject_key": "media add himax hm1092 mono nir sensor driver",
+      "title": "[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver",
+      "source_url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
+      "newsletter_date": "2026-10-19",
+      "newsletter_url": "newsletters/2026-10-19/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-19",
+      "newsletter_article_date": "2026-10-19",
+      "cooldown_until": "2026-11-09",
+      "first_exposed_at": "2026-10-19",
+      "last_exposed_at": "2026-10-19",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "newsletter_date": "2026-10-19",
+      "newsletter_url": "newsletters/2026-10-19/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-19",
+      "newsletter_article_date": "2026-10-19",
+      "cooldown_until": "2026-11-09",
+      "first_exposed_at": "2026-10-19",
+      "last_exposed_at": "2026-10-19",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+      "title": "Build your way: Use any AI agent of your choice in Android Studio",
+      "source_url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+      "newsletter_date": "2026-10-19",
+      "newsletter_url": "newsletters/2026-10-19/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-10-19",
+      "first_exposed_at": "2026-10-19",
+      "last_exposed_at": "2026-10-19",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-10-19",
+      "cooldown_until": "2026-11-09"
+    },
+    {
       "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",
       "title": "Gate dynamic range profiles on DYNAMIC_RANGE_TEN_BIT capability - platform/frameworks/support",
       "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4350587",

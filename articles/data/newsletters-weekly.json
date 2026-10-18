@@ -1,5 +1,103 @@
 [
   {
+    "weeklyKey": "2026-W43",
+    "weekStartDate": "2026-10-19",
+    "weekEndDate": "2026-10-25",
+    "date": "2026-10-19",
+    "title": "2026 W43",
+    "summary": "Android Studio, 맞춤형 AI 코딩 에이전트 연동을 위한 BYOA 기능 도입\nAndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합\nLinux media 하위 시스템, Himax HM1092 흑백 NIR 센서 드라이버 v7 제안\nLinux atomisp 드라이버, 스트림 생성 오류 분기 정리 패치 제안",
+    "html": "newsletters/2026-W43/index.html",
+    "md": "newsletters/2026-W43/newsletter.md",
+    "tags": [
+      "AI",
+      "Android",
+      "Driver",
+      "Image Processing",
+      "SoC Platform"
+    ],
+    "article_count": 4,
+    "article_images": [
+      "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp"
+    ],
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주 뉴스레터에서는 개발 생산성 향상과 이미지 품질 개선에 대한 소식을 전해드립니다. 먼저, Android Studio의 BYOA 기능 도입으로 맞춤형 AI 코딩 에이전트를 개발 환경에 연동할 수 있게 되어 개발 워크플로 확장에 기여할 것으로 보입니다. 이와 함께 AndroidX HeifWriter의 8비트 서피스 입력 색상 왜곡 방지 패치 병합 소식은 HEIF 이미지 인코딩 품질을 개선할 것입니다. 마지막으로 Linux media 하위 시스템의 Himax HM1092 흑백 NIR 센서 드라이버 v7 제안과 Linux atomisp 드라이버의 스트림 생성 오류 분기 정리 패치 제안을 통해 리눅스 커널 드라이버 설계 및 내부 개선 동향을 확인하실 수 있습니다.",
+      "items": [
+        {
+          "id": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "href": "newsletters/2026-W43/index.html#article-android-studio-ai-byoa",
+          "headline": "Android Studio, 맞춤형 AI 코딩 에이전트 연동을 위한 BYOA 기능 도입",
+          "lead": "Android Studio Canary 최신 빌드에 외부 AI 코딩 에이전트를 개발 환경에 직접 연결할 수 있는 BYOA(Bring Your Own Agent) 지원이 추가되었습니다.",
+          "takeaway": "IDE 차원의 개발 워크플로 확장으로, C++ 네이티브 테스트 작성이나 AOSP 빌드 스크립트 수정 시 에이전트 활용성을 점검할 수 있으나 카메라 HAL 런타임 계약 변경은 수반하지 않습니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+            "alt": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+          "href": "newsletters/2026-W43/index.html#article-androidx-heifwriter-8",
+          "headline": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합",
+          "lead": "AndroidX의 HEIF 이미지 생성 라이브러리가 8비트 서피스 입력 시 색상 범위를 강제로 전체 범위로 선언하던 로직을 제거해 렌더링 검은색이 들뜨는 현상을 바로잡았습니다.",
+          "takeaway": "카메라 HAL 자체의 변경은 아니지만, 카메라 프레임워크나 앱이 Surface 경로를 통해 8비트 SDR HEIF를 인코딩할 때 인코더 비트스트림의 VUI color_range 플래그 정합성을 보장해 다운스트림 갤러리 및 이미지 출력 품질 왜곡을 차단합니다.",
+          "tags": [
+            "Android"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
+          "href": "newsletters/2026-W43/index.html#article-linux-media-himax-hm1092-nir-v7",
+          "headline": "Linux media 하위 시스템, Himax HM1092 흑백 NIR 센서 드라이버 v7 제안",
+          "lead": "노트북 안면 인식 카메라 등에 쓰이는 Himax HM1092 1메가픽셀 흑백 근적외선 센서를 지원하기 위한 리눅스 V4L2 서브디바이스 드라이버 패치 v7이 공개되었습니다.",
+          "takeaway": "Android Camera HAL 직접 변경은 아니지만, Linux 커널 레벨에서 단일 레인 MIPI CSI-2 흑백 센서의 V4L2 서브디바이스 모델링, 외부 클럭별 PLL 바인딩, libcamera 호환 픽셀 어레이 선택 타겟 구성을 파악하는 데 유용한 드라이버 설계 참고자료입니다.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
+          "href": "newsletters/2026-W43/index.html#article-linux-atomisp",
+          "headline": "Linux atomisp 드라이버, 스트림 생성 오류 분기 정리 패치 제안",
+          "lead": "리눅스 스테이징 미디어 트리의 atomisp 드라이버에서 스트림 생성 시 의미 없이 남아 있던 데드 코드 오류 검사를 제거하는 패치가 제출되었습니다.",
+          "takeaway": "드라이버 내부 정적 분석 결함 수정으로 직접적인 HAL 계약 변경은 없으나, ISP 펌웨어 래퍼에서 뷰파인더가 생략되는 RAW 캡처 파이프 구성 시 반환 코드 처리와 스트림 생성 성공 여부를 검토하는 데 도움이 됩니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
+    },
+    "lead_article_image": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+    "public_contract_version": "story-v2",
+    "coverage_week_key": "2026-W42",
+    "coverage_start_date": "2026-10-12",
+    "coverage_end_date": "2026-10-18",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-10-19"
+  },
+  {
     "weeklyKey": "2026-W42",
     "weekStartDate": "2026-10-12",
     "weekEndDate": "2026-10-18",

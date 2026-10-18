@@ -1,0 +1,351 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [
+    "atomisp 드라이버 패치(Section 3)의 경우 해당 드라이버가 커널 drivers/staging에 위치한 레거시 플랫폼(Intel Atom 계열)용 코드임을 본문 또는 takeaway에 한 번 더 상기하면 독자의 적용 플랫폼 판단에 도움이 됩니다.",
+    "Android Studio BYOA 기사(Section 0)의 경우 ACP 프로토콜을 통한 로컬 C++ 심볼/빌드 그래프 전달 시의 세부 지원 범위는 Canary 단계에서 지속적으로 변동될 수 있음을 점검 권고사항으로 명시하면 더 유용합니다."
+  ],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Android Studio, 맞춤형 AI 코딩 에이전트 연동을 위한 BYOA 기능 도입",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "Android Studio Canary(Rabbit 2)에 외부 AI 코딩 에이전트를 연결할 수 있는 Bring Your Own Agent(BYOA) 기능이 도입되어 에이전트 클라이언트 프로토콜(ACP)을 통한 코드베이스 맥락 공유 및 네이티브 도구(빌드 진단, Compose 미리보기, SDK 도구, 에뮬레이터 제어) 주입을 지원함",
+        "article_explanation": "적용 범위는 Android Studio Canary 채널이며, ACP 기반의 프로젝트 구조 전달 및 도구 주입 전후 동작을 설명함. 카메라 HAL 직접 수정이 아닌 IDE 워크플로 보조 기능임을 명시하고 런타임 계약 변경 한계를 밝힘",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:lead:0",
+              "0:body_markdown:0",
+              "0:body_markdown:1",
+              "0:body_markdown:2"
+            ],
+            "reason": "Android Studio Canary 최신 빌드 적용 대상과 ACP 기반 에이전트 연동 및 IDE 도구 주입 동작을 구체적으로 설명함",
+            "verified_passages": [
+              {
+                "id": "0:lead:0",
+                "text": "Android Studio Canary 최신 빌드에 외부 AI 코딩 에이전트를 개발 환경에 직접 연결할 수 있는 BYOA(Bring Your Own Agent) 지원이 추가되었습니다."
+              },
+              {
+                "id": "0:body_markdown:0",
+                "text": "구글은 2026년 10월 15일 공식 개발자 블로그를 통해 안드로이드 스튜디오 카나리 최신 릴리스에서 사용자가 선호하는 코딩 에이전트를 연결할 수 있는 BYOA 기능을 발표했습니다. 지난해 단일 AI 모델 선택을 개방한 데 이어 이번에는 에이전트 단위의 통합을 지원합니다."
+              },
+              {
+                "id": "0:body_markdown:1",
+                "text": "이번 통합은 에이전트 클라이언트 프로토콜(ACP)을 기반으로 동작합니다. 안드로이드 스튜디오는 프로젝트 전체 구조, 빌드 구성, 플랫폼 상세 정보를 ACP를 통해 에이전트에 노출합니다. 이를 통해 에이전트는 불필요한 토큰 소비를 줄이면서 관련된 코드 맥락만 선별해 접근할 수 있습니다. 엔터프라이즈 및 개인 계정 플랜에 맞춰 Anthropic의 Claude Agent, OpenAI의 Codex, Google의 Antigravity 에이전트를 선택해 연동할 수 있습니다."
+              },
+              {
+                "id": "0:body_markdown:2",
+                "text": "에이전트는 셸 명령 실행, 파일 읽기 및 편집, 테스트 구동과 같은 기본 작업 외에도 안드로이드 스튜디오의 내부 인프라에 접근합니다. 빌드 진단 도구, Jetpack Compose 미리보기, 안드로이드 SDK 도구, 에뮬레이터 제어 기능이 네이티브 도구 주입 형태로 제공됩니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": false,
+            "satisfied": true,
+            "evidence_passage_ids": [],
+            "reason": "신규 개발 도구 기능 안내 기사로 특정 버그 재현 및 검증 절차 항목이 직접 적용되지 않음"
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:lead:0",
+              "0:body_markdown:0"
+            ],
+            "reason": "안정화 버전이 아닌 Canary 릴리스 기반의 프리뷰 지원 상태임을 명시함",
+            "verified_passages": [
+              {
+                "id": "0:lead:0",
+                "text": "Android Studio Canary 최신 빌드에 외부 AI 코딩 에이전트를 개발 환경에 직접 연결할 수 있는 BYOA(Bring Your Own Agent) 지원이 추가되었습니다."
+              },
+              {
+                "id": "0:body_markdown:0",
+                "text": "구글은 2026년 10월 15일 공식 개발자 블로그를 통해 안드로이드 스튜디오 카나리 최신 릴리스에서 사용자가 선호하는 코딩 에이전트를 연결할 수 있는 BYOA 기능을 발표했습니다. 지난해 단일 AI 모델 선택을 개방한 데 이어 이번에는 에이전트 단위의 통합을 지원합니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:body_markdown:3",
+              "0:camera_hal_takeaway:0"
+            ],
+            "reason": "IDE 엔지니어링 워크플로 지원 도구일 뿐 카메라 HAL 런타임 인터페이스 변경을 수반하지 않는다는 한계를 명확히 설명함",
+            "source_behavior": "Android Studio Canary 환경에서 ACP 프로토콜을 통해 Claude, Codex, Antigravity 등 외부 AI 에이전트를 IDE 도구와 결합하는 기능",
+            "article_behavior": "IDE 차원의 테스트 작성 및 디버깅 보조 도구로 규정하며 실제 카메라 HAL 드라이버 동작을 변경하지 않는다는 경계를 기술함",
+            "verified_passages": [
+              {
+                "id": "0:body_markdown:3",
+                "text": "이 기능은 네이티브 C++ 개발 도구 및 IDE 워크플로 개선에 해당하며 카메라 하드웨어 계층이나 HAL 인터페이스 동작을 직접 수정하지는 않습니다. 그러나 카메라 HAL 컴포넌트나 드라이버 단위 테스트를 작성하고 디버깅하는 엔지니어링 파이프라인에서 개발 보조 도구로 활용할 수 있는 선택지를 넓혀 줍니다."
+              },
+              {
+                "id": "0:camera_hal_takeaway:0",
+                "text": "IDE 차원의 개발 워크플로 확장으로, C++ 네이티브 테스트 작성이나 AOSP 빌드 스크립트 수정 시 에이전트 활용성을 점검할 수 있으나 카메라 HAL 런타임 계약 변경은 수반하지 않습니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "네이티브 C++ 및 AOSP 컴포넌트를 다루는 엔지니어의 로컬 빌드·테스트 작성 워크플로에 적용 가능한 구체적 도구 업데이트와 한계를 균형 있게 설명함 / Android Studio Canary의 BYOA 기능 도입 사실과 ACP 기반 연동 원리, IDE 워크플로 차원의 적용 한계를 원문에 맞추어 정확하게 전달하고 있습니다. / 원문의 BYOA 기능 발표 내용과 ACP 기반 동작 원리를 정확히 설명하고 카메라 HAL 계층에 대한 비변경 한계를 왜곡 없이 규정함"
+    },
+    {
+      "section_index": 1,
+      "headline": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "8비트 서피스 및 비트맵 입력 시 MediaFormat.KEY_COLOR_RANGE를 COLOR_RANGE_FULL로 강제하던 코드를 제거해, 하드웨어 인코더의 제한 범위 RGB-YUV 양자화와 VUI 풀 레인지 플래그 불일치로 인한 블랙 들뜸을 방지함.",
+        "article_explanation": "적용 조건(8비트 SDR 서피스/비트맵 입력), 변경 전후(KEY_COLOR_RANGE를 미설정으로 비워 인코더에 위임하고 버퍼/10비트는 유지), 관찰 대상(RGB 0,0,0 입력 시 디코딩 루마 들뜸 여부 관찰), 반영 한계(소스 병합 확인 및 라이브러리 릴리스/기기 롬 미확인)를 모두 충실히 기술함.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:1",
+              "1:body_markdown:2"
+            ],
+            "reason": "8비트 서피스 입력에서 나타나던 하드웨어 인코더 양자화와 VUI 플래그 불일치 문제를 서술하고, KEY_COLOR_RANGE 미설정 분기 처리 및 버퍼/10비트 경로 유지 동작을 명확히 설명함.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:1",
+                "text": "기존 구현에서는 8비트 SDR 이미지를 서피스나 비트맵 입력 모드로 인코딩할 때 EglWindowSurface가 색상 공간 속성이 지정되지 않은 표준 RGBA_8888 EGL 서피스를 생성했습니다. 이때 amlogic이나 qti 등 일부 벤더 하드웨어 HEVC 인코더는 RGB(0, 0, 0)를 제한된 범위의 루마 값인 Y=16으로 양자화하면서도, 포맷에 지정된 COLOR_RANGE_FULL 지시를 따라 비트스트림 VUI 헤더에는 풀 레인지 플래그를 기록했습니다. 그 결과 디코딩 시 블랙이 0이 아닌 16/255로 해석되어 검은색 영역이 회색으로 들뜨고 CTS 및 HeifWriterTest 서피스 테스트가 실패하는 문제가 발생했습니다."
+              },
+              {
+                "id": "1:body_markdown:2",
+                "text": "이번 수정은 내부 서피스를 사용하는 8비트 경로에서 MediaFormat.KEY_COLOR_RANGE를 설정하지 않고 비워 두도록 분기했습니다. 서피스 입력에 데이터스페이스 정보가 없는 경우 인코더가 자체 하드웨어 변환 범위와 비트스트림 VUI 헤더를 일관되게 맞추도록 위임하는 방식입니다. 반면 클라이언트가 직접 YUV를 전달하는 버퍼 입력 모드는 카메라의 일반적인 JFIF 규칙을 따라 풀 레인지 설정을 유지합니다. 10비트 HDR 서피스 입력 역시 BT.2020 데이터스페이스가 명시적으로 전달되므로 변경 없이 풀 레인지를 유지합니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:3"
+            ],
+            "reason": "카메라 캡처 서피스를 연결한 8비트 SDR HEIF 저장 경로에서 RGB(0, 0, 0) 입력 시 디코딩된 루마 값의 들뜸 여부를 확인하는 입력 조건과 관찰 결과를 구체적으로 제시함.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:3",
+                "text": "이 수정은 라이브러리 소스에 병합된 상태이며 특정 안드로이드 버전 릴리스나 상용 디바이스 롬 반영 여부는 별도로 확인해야 합니다. 실무 엔지니어는 카메라 캡처 서피스를 HeifWriter에 연결해 8비트 SDR HEIF 이미지를 저장하는 경로에서 RGB(0, 0, 0) 입력 시 디코딩된 루마 값이 들뜨지 않는지 HeifWriterTest 관점에서 확인할 수 있습니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:0",
+              "1:body_markdown:3"
+            ],
+            "reason": "패치가 소스 저장소에 병합된 상태임을 명시하고, 특정 안드로이드 릴리스나 상용 디바이스 롬 반영 여부는 별도로 확인해야 한다는 한계를 구분함.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:0",
+                "text": "구글 안드로이드 오픈소스 프로젝트의 frameworks support 저장소에 2026년 10월 16일 HeifWriter의 8비트 색상 범위 처리 회귀를 수정하는 패치가 병합되었습니다. 대상 파일은 EncoderBase.java입니다."
+              },
+              {
+                "id": "1:body_markdown:3",
+                "text": "이 수정은 라이브러리 소스에 병합된 상태이며 특정 안드로이드 버전 릴리스나 상용 디바이스 롬 반영 여부는 별도로 확인해야 합니다. 실무 엔지니어는 카메라 캡처 서피스를 HeifWriter에 연결해 8비트 SDR HEIF 이미지를 저장하는 경로에서 RGB(0, 0, 0) 입력 시 디코딩된 루마 값이 들뜨지 않는지 HeifWriterTest 관점에서 확인할 수 있습니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:2",
+              "1:camera_hal_takeaway:0"
+            ],
+            "reason": "카메라 HAL 자체의 수정이 아닌 상위 인코더 설정 계층의 변경임을 밝히고, 서피스 입력에 대한 인코더 위임 범위와 VUI 헤더 정합성 효과를 사실에 부합하게 한정함.",
+            "source_behavior": "8비트 서피스 입력 시 MediaFormat.KEY_COLOR_RANGE 설정을 생략하여 인코더 드라이버가 입력 변환과 VUI color_range 플래그를 자체적으로 일치시키도록 함.",
+            "article_behavior": "8비트 서피스 경로에서 KEY_COLOR_RANGE를 비워 두어 인코더가 변환 범위와 VUI 헤더를 일치시키도록 하며, 버퍼 및 10비트 경로는 기존 설정을 유지한다고 설명함.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:2",
+                "text": "이번 수정은 내부 서피스를 사용하는 8비트 경로에서 MediaFormat.KEY_COLOR_RANGE를 설정하지 않고 비워 두도록 분기했습니다. 서피스 입력에 데이터스페이스 정보가 없는 경우 인코더가 자체 하드웨어 변환 범위와 비트스트림 VUI 헤더를 일관되게 맞추도록 위임하는 방식입니다. 반면 클라이언트가 직접 YUV를 전달하는 버퍼 입력 모드는 카메라의 일반적인 JFIF 규칙을 따라 풀 레인지 설정을 유지합니다. 10비트 HDR 서피스 입력 역시 BT.2020 데이터스페이스가 명시적으로 전달되므로 변경 없이 풀 레인지를 유지합니다."
+              },
+              {
+                "id": "1:camera_hal_takeaway:0",
+                "text": "카메라 HAL 자체의 변경은 아니지만, 카메라 프레임워크나 앱이 Surface 경로를 통해 8비트 SDR HEIF를 인코딩할 때 인코더 비트스트림의 VUI color_range 플래그 정합성을 보장해 다운스트림 갤러리 및 이미지 출력 품질 왜곡을 차단합니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "카메라 캡처 서피스 출력을 사용하는 8비트 SDR HEIF 인코딩 파이프라인의 색상 왜곡 원인과 분기 로직을 정밀하게 분석하여 프레임워크 및 앱 호환성 엔지니어에게 실질적 가치를 제공함 / 원문의 수정 원리와 적용 범위, 미반영 한계 및 구체적인 관찰 점검 제안이 왜곡이나 누락 없이 정확하게 서술되었습니다. / 적용 범위, 변경 전후 로직, 공개 검증 제안 및 릴리스 한계가 원문 소스 커밋 내용과 정확하게 일치합니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "Linux media 하위 시스템, Himax HM1092 흑백 NIR 센서 드라이버 v7 제안",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "Himax HM1092 1메가픽셀 흑백 NIR 센서를 지원하기 위한 리눅스 V4L2 서브디바이스 드라이버 및 DT 바인딩 v7 패치 시리즈로, 퀄컴 24 MHz EXTCLK(560x360) 및 인텔 IPU 19.2 MHz EXTCLK(648x368) 구성을 지원하고 디지털 게인 제어 범위를 0x3ff로 제한함",
+        "article_explanation": "퀄컴 DT 및 인텔 IPU 환경별 외부 클럭 및 해상도 설정, 10비트 2.8 고정소수점 디지털 게인 범위 제한과 1024 이상 시 검은 화면 방지 수정, ASUS/Dell 기기 검증 현황, 19.2 MHz 크롭 바운드 관련 미해결 논의와 커널 미병합 제안 상태를 충실히 설명함",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:0",
+              "2:body_markdown:1",
+              "2:body_markdown:2"
+            ],
+            "reason": "퀄컴 및 인텔 IPU 플랫폼별 EXTCLK 조건과 해상도 설정, 디지털 게인의 0x3ff 제한 및 블랙 프레임 방지 동작이 구체적으로 명시되었습니다.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:0",
+                "text": "리눅스 미디어 메일링 리스트에 2026년 10월 13일 Himax HM1092 센서를 위한 V4L2 서브디바이스 드라이버와 디바이스 트리 바인딩 패치 시리즈 7번째 개정판이 제출되었습니다. 이번 시리즈는 퀄컴 디바이스 트리 플랫폼과 인텔 IPU 기반 ACPI 시스템 모두를 고려한 초기화 구성을 담고 있습니다."
+              },
+              {
+                "id": "2:body_markdown:1",
+                "text": "HM1092는 10비트 RAW 데이터를 출력하는 1메가픽셀 흑백 근적외선 센서로, 단일 MIPI CSI-2 데이터 레인을 360 Mbit/s 수준으로 구동해 약 30 fps 출력을 생성합니다. 드라이버는 외부 클럭 주파수에 맞춰 동작 모드를 결정하도록 설계되었습니다. 퀄컴 플랫폼의 24 MHz EXTCLK 환경에서는 180 MHz 링크 주파수로 560x360 해상도를 설정하며, 인텔 IPU 환경의 19.2 MHz EXTCLK 설정에서는 180.48 MHz 링크 주파수로 648x368 해상도를 구성합니다. ASUS Zenbook A14와 Dell XPS 16, Dell Latitude 7350 시스템에서 프로빙, 스트리밍, 런타임 PM 전환이 검증되었습니다."
+              },
+              {
+                "id": "2:body_markdown:2",
+                "text": "이번 v7 개정에서는 디지털 게인 레지스터가 10비트 2.8 고정소수점 값이라는 점을 반영해 제어 범위를 0x3ff로 제한했습니다. 상위 비트 무시로 인해 1024 이상 설정 시 검은 화면이 출력되던 문제를 차단한 조치입니다. 또한 get_selection 패드 연산 인터페이스 변경을 반영하고 런타임 PM 오류 처리 방식을 정돈했습니다. 다만 19.2 MHz 환경에서 더미 보더를 포함한 크롭 영역 설정과 관련해 액티브 어레이 범위를 어떻게 보고할지에 대한 논의는 아직 열려 있습니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": false,
+            "satisfied": true,
+            "evidence_passage_ids": [],
+            "reason": "신규 센서 드라이버 패치 시리즈 제안 문서로 단일 버그 재현 검증 대상이 아니며, 하드웨어 테스트 검증 결과가 본문에 적절히 기술되었습니다."
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:3"
+            ],
+            "reason": "해당 패치가 리눅스 커널에 아직 병합되지 않은 제안 상태이며 안드로이드 카메라 HAL API를 직접 수정하는 것이 아님을 명확히 밝혔습니다.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:3",
+                "text": "이 변경은 현재 리눅스 커널에 병합되지 않은 제안 상태이며 안드로이드 카메라 HAL API를 직접 바꾸는 것은 아닙니다. 리눅스 기반 플랫폼이나 V4L2 서브디바이스를 직접 바인딩하는 특수 목적 안드로이드 카메라 드라이버를 개발할 때 단일 레인 NIR 센서 연동 구조로 참고할 수 있습니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:3",
+              "2:camera_hal_takeaway:0"
+            ],
+            "reason": "안드로이드 HAL의 직접 변경이 아니며 리눅스 커널 레벨 V4L2 서브디바이스 모델링 및 설계 참고용임을 명확히 한정했습니다.",
+            "source_behavior": "Himax HM1092 V4L2 서브디바이스 드라이버 및 DT 바인딩 패치 시리즈 v7로, 외부 클럭에 따른 모드 결정과 디지털 게인 제어 제한(0x3ff)을 포함함",
+            "article_behavior": "패치 v7의 클럭별 동작 모드, 게인 버그 수정, 실제 기기 검증 현황 및 커널 미병합 제안 상태를 과장 없이 설명함",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:3",
+                "text": "이 변경은 현재 리눅스 커널에 병합되지 않은 제안 상태이며 안드로이드 카메라 HAL API를 직접 바꾸는 것은 아닙니다. 리눅스 기반 플랫폼이나 V4L2 서브디바이스를 직접 바인딩하는 특수 목적 안드로이드 카메라 드라이버를 개발할 때 단일 레인 NIR 센서 연동 구조로 참고할 수 있습니다."
+              },
+              {
+                "id": "2:camera_hal_takeaway:0",
+                "text": "Android Camera HAL 직접 변경은 아니지만, Linux 커널 레벨에서 단일 레인 MIPI CSI-2 흑백 센서의 V4L2 서브디바이스 모델링, 외부 클럭별 PLL 바인딩, libcamera 호환 픽셀 어레이 선택 타겟 구성을 파악하는 데 유용한 드라이버 설계 참고자료입니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "단일 레인 MIPI CSI-2 흑백 센서의 V4L2 서브디바이스 모델링, PLL 클럭 매핑, 런타임 PM 연동 구조를 구체적으로 제공하여 카메라 드라이버 및 이미지 파이프라인 엔지니어에게 유용함 / 원문의 클럭별 모드 분기, v7 게인 제어 변경 사항, 검증 기기 범위 및 미병합 제안 상태와 HAL 계층 한계가 사실에 맞게 서술되었습니다. / 원문의 핵심 클럭별 동작 모드, v7의 디지털 게인 레지스터 수정 사항, 테스트 기기 범위 및 미병합 제안 상태를 정확하게 설명했습니다."
+    },
+    {
+      "section_index": 3,
+      "headline": "Linux atomisp 드라이버, 스트림 생성 오류 분기 정리 패치 제안",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "atomisp 드라이버의 ia_css_stream_create()에서 sh_css_pipe_get_viewfinder_frame_info() 반환값을 err 변수에 대입하지 않아 이전 그리드 조회를 재검사하던 데드 코드(if (err) goto ERR;)를 삭제함.",
+        "article_explanation": "수정 대상 함수와 파일 위치, if (err) 분기가 데드 코드가 된 원인, RAW 및 BAYER 모드에서 -EINVAL 반환으로 인해 오류를 전파하지 않고 분기를 삭제한 배경, 패치 제안 상태 및 HAL 직접 영향 없음을 모두 설명함.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:0",
+              "3:body_markdown:1",
+              "3:body_markdown:2"
+            ],
+            "reason": "ia_css_stream_create 함수 내 데드 코드 제거와 RAW/BAYER 모드에서의 -EINVAL 반환 배경 등 변경 전후 원리를 구체적으로 기술함.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:0",
+                "text": "리눅스 미디어 서브시스템에 2026년 10월 16일 atomisp 드라이버의 스트림 생성 로직을 정돈하는 패치가 등록되었습니다. 수정 대상은 drivers staging media atomisp pci sh_css.c 파일의 ia_css_stream_create 함수입니다."
+              },
+              {
+                "id": "3:body_markdown:1",
+                "text": "해당 위치에서는 sh_css_pipe_get_viewfinder_frame_info 함수의 반환 값을 err 변수에 대입하지 않은 채 바로 if (err) goto ERR 분기를 검사하고 있었습니다. 이 검사는 직전에 수행된 그리드 정보 조회의 결과를 재검사하는 꼴이 되어 항상 거짓으로 평가되는 데드 코드였습니다."
+              },
+              {
+                "id": "3:body_markdown:2",
+                "text": "정적 분석 도구 SVACE로 이 문제를 발견한 작성자는 단순히 반환값을 err 변수로 전파하도록 고쳐서는 안 된다고 설명합니다. RAW 및 BAYER 캡처 모드에서는 뷰파인더 출력이 애초에 존재하지 않아 해당 함수가 -EINVAL을 반환하기 때문입니다. 오류를 단순 전파할 경우 정상적인 RAW 캡처 파이프의 스트림 생성이 전면 실패하게 되므로, 의미 없는 분기문 두 줄을 삭제하는 방식으로 정리되었습니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": false,
+            "satisfied": true,
+            "evidence_passage_ids": [],
+            "reason": "런타임 동작 변경이 없는 단순 데드 코드 정리 패치 제안이므로 별도의 버그 재현 및 기기 시험 절차는 비적용 대상임."
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:3"
+            ],
+            "reason": "메일링 리스트에 제안된 상태의 패치이며 상용 디바이스 드라이버 릴리스 여부는 별개임을 명확히 구분함.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:3",
+                "text": "이 변경은 현재 제안 상태의 커널 패치이며 상용 디바이스의 드라이버 릴리스 여부는 별개입니다. 스테이징 하위 드라이버의 특정 분기 제거이므로 안드로이드 카메라 HAL 인터페이스 동작을 직접 바꾸지는 않지만, ISP 파이프라인에서 뷰파인더 유무에 따른 스트림 구성 로직을 점검할 때 참고할 수 있습니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:3",
+              "3:camera_hal_takeaway:0"
+            ],
+            "reason": "카메라 HAL 계약에 직접적인 변경이 없음을 밝히고 효과 범위를 과장하지 않음.",
+            "source_behavior": "ia_css_stream_create() 내에서 sh_css_pipe_get_viewfinder_frame_info() 직후 항상 거짓으로 평가되던 if (err) goto ERR; 2줄을 삭제함.",
+            "article_behavior": "스테이징 드라이버 내부의 데드 코드 분기 제거로 안드로이드 카메라 HAL 인터페이스 동작을 직접 바꾸지 않음을 명시함.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:3",
+                "text": "이 변경은 현재 제안 상태의 커널 패치이며 상용 디바이스의 드라이버 릴리스 여부는 별개입니다. 스테이징 하위 드라이버의 특정 분기 제거이므로 안드로이드 카메라 HAL 인터페이스 동작을 직접 바꾸지는 않지만, ISP 파이프라인에서 뷰파인더 유무에 따른 스트림 구성 로직을 점검할 때 참고할 수 있습니다."
+              },
+              {
+                "id": "3:camera_hal_takeaway:0",
+                "text": "드라이버 내부 정적 분석 결함 수정으로 직접적인 HAL 계약 변경은 없으나, ISP 펌웨어 래퍼에서 뷰파인더가 생략되는 RAW 캡처 파이프 구성 시 반환 코드 처리와 스트림 생성 성공 여부를 검토하는 데 도움이 됩니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "ISP 드라이버 파이프라인에서 프리뷰/뷰파인더와 RAW 캡처 파이프 간의 출력 구성 차이 및 스트림 생성 오류 전파 예외 처리 원리를 명확히 설명함 / 원문의 패치 배경, 데드 코드 제거 원리, RAW/BAYER 캡처 파이프 영향 범위, 제안 상태 및 HAL 비변경 한계를 왜곡 없이 충실하게 설명함. / 원문의 데드 코드 삭제 내용과 에러를 단순 전파하지 않은 이유, 패치 제안 상태와 HAL 영향 범위를 사실에 맞게 균형 있게 설명함."
+    }
+  ],
+  "final_comment": "모든 기사가 원문 출처(Android Developers Blog, AndroidX Gerrit, linux-media 패치 시리즈)의 사실적 범위와 일치하며, 과장이나 미확인 병합 단정이 없습니다. Story Contract v2 산문 규칙(금지 마크다운 구문 배제) 및 claims-verified_facts 바인딩 계약을 완벽히 충족하므로 PASS 판정합니다."
+}

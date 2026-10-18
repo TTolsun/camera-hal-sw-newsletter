@@ -1,0 +1,1196 @@
+{
+  "date": "2026-10-19",
+  "public_contract_version": "story-v2",
+  "generation_contract_version": 2,
+  "title": "2026 W42 (10.12 ~ 10.18)",
+  "summary": "이번 주 뉴스레터에서는 개발 생산성 향상과 이미지 품질 개선에 대한 소식을 전해드립니다. 먼저, Android Studio의 BYOA 기능 도입으로 맞춤형 AI 코딩 에이전트를 개발 환경에 연동할 수 있게 되어 개발 워크플로 확장에 기여할 것으로 보입니다. 이와 함께 AndroidX HeifWriter의 8비트 서피스 입력 색상 왜곡 방지 패치 병합 소식은 HEIF 이미지 인코딩 품질을 개선할 것입니다. 마지막으로 Linux media 하위 시스템의 Himax HM1092 흑백 NIR 센서 드라이버 v7 제안과 Linux atomisp 드라이버의 스트림 생성 오류 분기 정리 패치 제안을 통해 리눅스 커널 드라이버 설계 및 내부 개선 동향을 확인하실 수 있습니다.",
+  "briefing": [
+    "Android Studio, 맞춤형 AI 코딩 에이전트 연동을 위한 BYOA 기능 도입",
+    "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합",
+    "Linux media 하위 시스템, Himax HM1092 흑백 NIR 센서 드라이버 v7 제안",
+    "Linux atomisp 드라이버, 스트림 생성 오류 분기 정리 패치 제안"
+  ],
+  "sections": [
+    {
+      "category": "tooling",
+      "headline": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
+      "what_changed": "Android Studio에서 사용자가 선택한 코딩 AI 에이전트를 통합하여 사용할 수 있도록 지원이 추가되었습니다. 이 기능은 Bring Your Own Agent (BYOA)를 통해 Claude Agent, Codex, Antigravity와 같은 에이전트를 Android Studio에 연동하고, IDE의 코드베이스 인식 및 토큰 효율성, 워크플로 연속성, 에이전트 유연성, 네이티브 도구 주입 등의 이점을 제공합니다.",
+      "confirmed_facts": [
+        "Android Studio Canary 최신 버전에서 BYOA(Bring Your Own Agent) 기능이 프리뷰 형태로 도입되었습니다.",
+        "Agent Client Protocol(ACP)을 통해 IDE가 프로젝트 그래프, 빌드 구성, 플랫폼 세부정보를 에이전트에 직접 제공합니다.",
+        "Anthropic의 Claude Agent, OpenAI의 Codex, Google의 Antigravity 에이전트 연동이 지원됩니다.",
+        "빌드 문제 해결, Jetpack Compose Previews, Android SDK 도구, Android Emulator 제어 기능이 에이전트에 네이티브 도구로 주입됩니다."
+      ],
+      "evidence_summary": "2026년 10월 15일 Android Developers Blog 공식 게시글을 통해 Android Studio Canary 릴리스에서 BYOA 기능이 지원됨이 확인되었습니다. ACP 프로토콜을 사용하며 Claude, Codex, Antigravity 등의 에이전트 통합이 가능합니다.",
+      "specificity_checks": [
+        "Source: Android Developers Blog (2026-10-15)",
+        "Component: Android Studio Canary, BYOA (Bring Your Own Agent)",
+        "Protocol: Agent Client Protocol (ACP)",
+        "Behavior: 외부 에이전트 등록 및 IDE 컨텍스트 주입 지원"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+        "Evidence ID: source-body:fd86b97b9b3e3588c202",
+        "Primary source: 원문 블로그 게시물 전체 본문을 읽고 Android Studio Canary의 BYOA 기능 및 ACP 연동을 확인했습니다. Android 런타임/HAL 영향은 없습니다."
+      ],
+      "public_article": {
+        "headline": "Android Studio, 맞춤형 AI 코딩 에이전트 연동을 위한 BYOA 기능 도입",
+        "lead": "Android Studio Canary 최신 빌드에 외부 AI 코딩 에이전트를 개발 환경에 직접 연결할 수 있는 BYOA(Bring Your Own Agent) 지원이 추가되었습니다.",
+        "body_markdown": "구글은 2026년 10월 15일 공식 개발자 블로그를 통해 안드로이드 스튜디오 카나리 최신 릴리스에서 사용자가 선호하는 코딩 에이전트를 연결할 수 있는 BYOA 기능을 발표했습니다. 지난해 단일 AI 모델 선택을 개방한 데 이어 이번에는 에이전트 단위의 통합을 지원합니다.\n\n이번 통합은 에이전트 클라이언트 프로토콜(ACP)을 기반으로 동작합니다. 안드로이드 스튜디오는 프로젝트 전체 구조, 빌드 구성, 플랫폼 상세 정보를 ACP를 통해 에이전트에 노출합니다. 이를 통해 에이전트는 불필요한 토큰 소비를 줄이면서 관련된 코드 맥락만 선별해 접근할 수 있습니다. 엔터프라이즈 및 개인 계정 플랜에 맞춰 Anthropic의 Claude Agent, OpenAI의 Codex, Google의 Antigravity 에이전트를 선택해 연동할 수 있습니다.\n\n에이전트는 셸 명령 실행, 파일 읽기 및 편집, 테스트 구동과 같은 기본 작업 외에도 안드로이드 스튜디오의 내부 인프라에 접근합니다. 빌드 진단 도구, Jetpack Compose 미리보기, 안드로이드 SDK 도구, 에뮬레이터 제어 기능이 네이티브 도구 주입 형태로 제공됩니다.\n\n이 기능은 네이티브 C++ 개발 도구 및 IDE 워크플로 개선에 해당하며 카메라 하드웨어 계층이나 HAL 인터페이스 동작을 직접 수정하지는 않습니다. 그러나 카메라 HAL 컴포넌트나 드라이버 단위 테스트를 작성하고 디버깅하는 엔지니어링 파이프라인에서 개발 보조 도구로 활용할 수 있는 선택지를 넓혀 줍니다.",
+        "camera_hal_takeaway": "IDE 차원의 개발 워크플로 확장으로, C++ 네이티브 테스트 작성이나 AOSP 빌드 스크립트 수정 시 에이전트 활용성을 점검할 수 있으나 카메라 HAL 런타임 계약 변경은 수반하지 않습니다.",
+        "reader_checkpoints": [
+          "Android Studio Canary 빌드에서 ACP 호환 에이전트 설정(설정 > 도구 > AI > 에이전트) 동작을 확인합니다.",
+          "C++ 네이티브 모듈 빌드 로그 파싱 및 단위 테스트 실행 환경에서 네이티브 도구 주입 기능의 유효성을 검토합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Build your way: Use any AI agent of your choice in Android Studio",
+            "url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+            "publisher": "Android Developers Blog",
+            "source_role": "primary",
+            "checked_at": "2026-10-18T15:21:24.360Z"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "Android Developers Blog (2026-10-15)",
+        "editorial_story": {
+          "not_to_overclaim": "이 변경은 IDE 개발 워크플로 지원 기능이며 Camera HAL API, 드라이버 인터페이스 또는 CTS 검증에 영향을 주지 않습니다.",
+          "editor_take": "C++ 네이티브 라이브러리와 유닛 테스트를 다루는 엔지니어의 로컬 생산성 보조 수단으로 적합한 업데이트입니다."
+        },
+        "decision_metadata": {
+          "impact": "Medium",
+          "scope": [
+            "Tooling",
+            "AI"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "High"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Android Studio Canary 최신 버전에서 BYOA(Bring Your Own Agent) 기능이 프리뷰 형태로 도입되었습니다.",
+          "Agent Client Protocol(ACP)을 통해 IDE가 프로젝트 그래프, 빌드 구성, 플랫폼 세부정보를 에이전트에 직접 제공합니다.",
+          "Anthropic의 Claude Agent, OpenAI의 Codex, Google의 Antigravity 에이전트 연동이 지원됩니다.",
+          "빌드 문제 해결, Jetpack Compose Previews, Android SDK 도구, Android Emulator 제어 기능이 에이전트에 네이티브 도구로 주입됩니다."
+        ],
+        "background_context": "AOSP 카메라 및 C++ 네이티브 환경에서는 대규모 빌드 그래프와 복잡한 디버깅 세션이 빈번하므로, IDE가 외부 코딩 에이전트에 제공하는 컨텍스트와 도구 주입 인터페이스가 개발 생산성에 직접적인 영향을 줄 수 있습니다.",
+        "hal_driver_impact": "Camera HAL, 드라이버, 프레임워크 런타임 동작에는 직접적인 영향이 없으며, 네이티브 코드 작성, 유닛 테스트 자동화, 정적 분석 피드백 루프 개선 등 개발 워크플로 차원의 간접적 영향에 국한됩니다.",
+        "action_items": [
+          "Android Studio Canary 환경에서 ACP 기반 코딩 에이전트 연동과 C++ 빌드 진단 도구 연계 동작을 점검합니다."
+        ],
+        "team_share_points": "Android Studio Canary에서 외부 코딩 에이전트(Claude, Codex 등)를 연결할 수 있는 BYOA가 추가되어 네이티브 C++ 및 빌드 스크립트 작성 보조 도구로 활용 가능합니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 10월 15일 공식 발표된 기능으로 IDE 기반 C++ 개발 및 디버깅 워크플로에 새로운 선택지를 제공합니다.",
+        "reader_owners": [
+          "native_tooling_owner"
+        ],
+        "check_within_2_weeks": "Android Studio Canary 환경에서 ACP 기반 에이전트 연동과 네이티브 빌드 진단 도구 연계 동작을 확인합니다.",
+        "impact_axes": [
+          "native_tooling_workflow"
+        ],
+        "do_not_overstate": [
+          "이 변경으로 Camera HAL 런타임 성능, 스트림 구성, 버퍼 관리가 개선된다고 설명하지 마세요."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c_tooling_1",
+          "text": "Android Studio Canary 최신 버전에서 BYOA(Bring Your Own Agent) 기능이 프리뷰 형태로 도입되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:50009098fbc5bde9:source-summary"
+          ],
+          "source_urls": [
+            "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_tooling_2",
+          "text": "Agent Client Protocol(ACP)을 통해 IDE가 프로젝트 그래프, 빌드 구성, 플랫폼 세부정보를 에이전트에 직접 제공합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:fd86b97b9b3e3588c202"
+          ],
+          "source_urls": [
+            "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_tooling_3",
+          "text": "Anthropic의 Claude Agent, OpenAI의 Codex, Google의 Antigravity 에이전트 연동이 지원됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:fd86b97b9b3e3588c202"
+          ],
+          "source_urls": [
+            "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_tooling_4",
+          "text": "빌드 문제 해결, Jetpack Compose Previews, Android SDK 도구, Android Emulator 제어 기능이 에이전트에 네이티브 도구로 주입됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:fd86b97b9b3e3588c202"
+          ],
+          "source_urls": [
+            "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [],
+      "action_hints": [],
+      "action_items": [],
+      "is_ai_related": true,
+      "article_type": "tooling",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+          "sourceUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Build your way: Use any AI agent of your choice in Android Studio",
+          "validationStatus": "ok",
+          "contentLength": 16100
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v9ce9cb5b22b62a465ff52c45061a0a6a2d86a80b685e9aa8a182b203fdfbf420/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Build your way: Use any AI agent of your choice in Android Studio",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_Z1WI1Mt.webp",
+          "sourceUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "article-img",
+          "width": 2001,
+          "height": 1001,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Build your way: Use any AI agent of your choice in Android Studio",
+          "validationStatus": "ok",
+          "contentLength": 29696
+        },
+        {
+          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentType": "image/webp",
+          "width": null,
+          "height": null,
+          "alt": ""
+        }
+      ],
+      "selectedImage": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+      "imageSource": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+      "imageAttribution": "Build your way: Use any AI agent of your choice in Android Studio",
+      "imageAlt": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "라이선스 상태가 명확하지 않고 텍스트 레이아웃 무결성을 위해 이미지를 제외합니다.",
+      "sources": [
+        {
+          "title": "Build your way: Use any AI agent of your choice in Android Studio",
+          "url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
+        }
+      ],
+      "actionability_level": "low",
+      "camera_pipeline_link": "none",
+      "effective_actionability_level": "low",
+      "hal_impact_axes": [
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "native_tooling_owner"
+      ],
+      "source_candidate_url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+      "source_candidate_hash": "50009098fbc5bde94f22b9f4389732f42447c65a7d908d804474ae97c5b3ca9a",
+      "article_group_key": "android_native_tooling_workflow",
+      "tooling_workflow_type": "native_tooling_workflow",
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "editorial_priority": 2,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 3,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "resolvedImage": {
+        "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+        "src": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": ""
+      },
+      "image_recovery": {
+        "article_url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 10,
+        "valid_count": 3,
+        "outcome": "available"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "android",
+      "headline": "AndroidX HeifWriter, 8비트 서피스 입력의 색상 범위 강제 설정 해제",
+      "what_changed": "8비트 서피스 입력에 대해 `MediaFormat.KEY_COLOR_RANGE`를 `COLOR_RANGE_FULL`로 강제 설정하지 않도록 `HeifWriter`의 동작이 변경되었습니다. 이전에는 EglWindowSurface가 8비트 RGBA_8888 EGL 서피스를 생성할 때 하드웨어 HEVC 인코더가 RGB(0,0,0)를 제한된 범위의 루마 Y=16으로 양자화하여 디코딩 시 0.0이 아닌 16/255로 해석되는 문제가 있었습니다. 이 변경은 8비트 서피스 및 비트맵 입력의 경우 `KEY_COLOR_RANGE`를 설정하지 않아 인코더의 변환과 비트스트림 VUI 색상 범위가 일관되도록 합니다.",
+      "confirmed_facts": [
+        "platform/frameworks/support 변경(Change-Id: I2b1bec2139688ffdb61f130284a758ae1b49db28)이 2026년 10월 16일 병합되었습니다.",
+        "수정 파일은 heifwriter/heifwriter/src/main/java/androidx/heifwriter/EncoderBase.java 입니다.",
+        "8비트 SDR 서피스 및 비트맵 입력(!useSurfaceInternally가 아닌 경우)에서 MediaFormat.KEY_COLOR_RANGE를 설정하지 않도록 변경되었습니다.",
+        "버퍼 입력 모드(INPUT_MODE_BUFFER)에서는 기존과 동일하게 COLOR_RANGE_FULL 설정이 유지됩니다.",
+        "10비트 HDR 경로(BT.2020 PQ/HLG)는 변경되지 않고 COLOR_RANGE_FULL을 유지합니다."
+      ],
+      "evidence_summary": "2026년 10월 16일 병합된 Gerrit 체인지 4370387에 따르면, HeifWriter의 8비트 서피스/비트맵 입력 시 MediaFormat.KEY_COLOR_RANGE 강제 지정을 제거하여 하드웨어 HEVC 인코더의 양자화 불일치를 해결했습니다.",
+      "specificity_checks": [
+        "Source: AndroidX Gerrit Change 4370387 (2026-10-16 merged)",
+        "Component: androidx.heifwriter.EncoderBase",
+        "Bug IDs: Bug 562730732, Bug 564773494",
+        "Test targets: HeifWriterTest, AvifWriterTest"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+        "Evidence ID: source-body:fc1b75f1830695bcf375",
+        "Primary source: 원문 Gerrit 메타데이터(status: MERGED, submitted 2026-10-16) 및 diff 전문을 검증했습니다. 라이브러리 공식 릴리스 및 제품 빌드 탑재 일정은 미확인 상태입니다.",
+        "Linked evidence: unresolved — 버그 트래커 세부 내용은 직접 열람하지 못함."
+      ],
+      "public_article": {
+        "headline": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합",
+        "lead": "AndroidX의 HEIF 이미지 생성 라이브러리가 8비트 서피스 입력 시 색상 범위를 강제로 전체 범위로 선언하던 로직을 제거해 렌더링 검은색이 들뜨는 현상을 바로잡았습니다.",
+        "body_markdown": "구글 안드로이드 오픈소스 프로젝트의 frameworks support 저장소에 2026년 10월 16일 HeifWriter의 8비트 색상 범위 처리 회귀를 수정하는 패치가 병합되었습니다. 대상 파일은 EncoderBase.java입니다.\n\n기존 구현에서는 8비트 SDR 이미지를 서피스나 비트맵 입력 모드로 인코딩할 때 EglWindowSurface가 색상 공간 속성이 지정되지 않은 표준 RGBA_8888 EGL 서피스를 생성했습니다. 이때 amlogic이나 qti 등 일부 벤더 하드웨어 HEVC 인코더는 RGB(0, 0, 0)를 제한된 범위의 루마 값인 Y=16으로 양자화하면서도, 포맷에 지정된 COLOR_RANGE_FULL 지시를 따라 비트스트림 VUI 헤더에는 풀 레인지 플래그를 기록했습니다. 그 결과 디코딩 시 블랙이 0이 아닌 16/255로 해석되어 검은색 영역이 회색으로 들뜨고 CTS 및 HeifWriterTest 서피스 테스트가 실패하는 문제가 발생했습니다.\n\n이번 수정은 내부 서피스를 사용하는 8비트 경로에서 MediaFormat.KEY_COLOR_RANGE를 설정하지 않고 비워 두도록 분기했습니다. 서피스 입력에 데이터스페이스 정보가 없는 경우 인코더가 자체 하드웨어 변환 범위와 비트스트림 VUI 헤더를 일관되게 맞추도록 위임하는 방식입니다. 반면 클라이언트가 직접 YUV를 전달하는 버퍼 입력 모드는 카메라의 일반적인 JFIF 규칙을 따라 풀 레인지 설정을 유지합니다. 10비트 HDR 서피스 입력 역시 BT.2020 데이터스페이스가 명시적으로 전달되므로 변경 없이 풀 레인지를 유지합니다.\n\n이 수정은 라이브러리 소스에 병합된 상태이며 특정 안드로이드 버전 릴리스나 상용 디바이스 롬 반영 여부는 별도로 확인해야 합니다. 실무 엔지니어는 카메라 캡처 서피스를 HeifWriter에 연결해 8비트 SDR HEIF 이미지를 저장하는 경로에서 RGB(0, 0, 0) 입력 시 디코딩된 루마 값이 들뜨지 않는지 HeifWriterTest 관점에서 확인할 수 있습니다.",
+        "camera_hal_takeaway": "카메라 HAL 자체의 변경은 아니지만, 카메라 프레임워크나 앱이 Surface 경로를 통해 8비트 SDR HEIF를 인코딩할 때 인코더 비트스트림의 VUI color_range 플래그 정합성을 보장해 다운스트림 갤러리 및 이미지 출력 품질 왜곡을 차단합니다.",
+        "reader_checkpoints": [
+          "8비트 RGBA_8888 서피스를 통한 HeifWriter 인코딩 시 출력 HEVC 비트스트림의 VUI 색상 범위 플래그와 디코딩된 YUV 레벨을 검증합니다.",
+          "버퍼 모드(YUV 직접 전달)와 10비트 HDR(BT.2020 PQ/HLG) 인코딩 경로에서는 기존 COLOR_RANGE_FULL 동작이 보존되는지 확인합니다."
+        ],
+        "source_links": [
+          {
+            "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+            "publisher": "AndroidX Gerrit HeifWriter",
+            "source_role": "primary",
+            "checked_at": "2026-10-18T15:21:24.360Z"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "AndroidX Gerrit (2026-10-16)",
+        "editorial_story": {
+          "not_to_overclaim": "이 변경은 AndroidX HeifWriter의 인코더 설정 변경이며 하드웨어 인코더 드라이버나 Camera HAL 인터페이스 정의를 수정하지 않습니다.",
+          "editor_take": "하드웨어 인코더 특성에 맞추어 불필요한 메타데이터 강제를 제거함으로써 실제 캡처 결과물의 블랙 레벨 정합성을 맞춘 실용적인 수정입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "platform/frameworks/support 변경(Change-Id: I2b1bec2139688ffdb61f130284a758ae1b49db28)이 2026년 10월 16일 병합되었습니다.",
+          "수정 파일은 heifwriter/heifwriter/src/main/java/androidx/heifwriter/EncoderBase.java 입니다.",
+          "8비트 SDR 서피스 및 비트맵 입력(!useSurfaceInternally가 아닌 경우)에서 MediaFormat.KEY_COLOR_RANGE를 설정하지 않도록 변경되었습니다.",
+          "버퍼 입력 모드(INPUT_MODE_BUFFER)에서는 기존과 동일하게 COLOR_RANGE_FULL 설정이 유지됩니다.",
+          "10비트 HDR 경로(BT.2020 PQ/HLG)는 변경되지 않고 COLOR_RANGE_FULL을 유지합니다."
+        ],
+        "background_context": "카메라 파이프라인에서 캡처된 프레임이 서피스를 통해 다운스트림 인코더로 전달될 때, 데이터스페이스 미지정으로 인한 RGB-YUV 색역 변환 불일치는 최종 저장 이미지의 색상 왜곡으로 이어질 수 있습니다.",
+        "hal_driver_impact": "Camera HAL 계약 자체는 건드리지 않으나, 카메라 출력을 소비하는 미디어 인코더 파이프라인에서 비트스트림 헤더와 실제 픽셀 범위의 일관성을 확보해 캡처 이미지 품질 회귀를 방지합니다.",
+        "action_items": [
+          "카메라 앱의 8비트 HEIF 서피스 캡처 시나리오에서 블랙 레벨(RGB 0,0,0)의 인코딩 및 디코딩 루마 정합성을 확인합니다."
+        ],
+        "team_share_points": "HeifWriter에서 8비트 서피스 입력 시 COLOR_RANGE_FULL 강제 지정이 해제되어 벤더 인코더의 YUV 양자화 왜곡 및 테스트 실패가 수정되었습니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 10월 16일 AOSP Gerrit에 병합된 수정으로 다운스트림 HEIF 정지 영상 인코딩 경로의 색상 불일치를 해소합니다.",
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "8비트 SDR 서피스 기반 HEIF 인코딩 테스트 케이스(HeifWriterTest) 실행 결과를 점검합니다.",
+        "impact_axes": [
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "이 변경이 Camera HAL 인터페이스 정의나 카메라 센서 드라이버를 변경한다고 주장하지 마세요."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c_heif_1",
+          "text": "platform/frameworks/support 변경(Change-Id: I2b1bec2139688ffdb61f130284a758ae1b49db28)이 2026년 10월 16일 병합되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:fc1b75f1830695bcf375"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_heif_2",
+          "text": "수정 파일은 heifwriter/heifwriter/src/main/java/androidx/heifwriter/EncoderBase.java 입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:fc1b75f1830695bcf375"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_heif_3",
+          "text": "8비트 SDR 서피스 및 비트맵 입력(!useSurfaceInternally가 아닌 경우)에서 MediaFormat.KEY_COLOR_RANGE를 설정하지 않도록 변경되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:fc1b75f1830695bcf375"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_heif_4",
+          "text": "버퍼 입력 모드(INPUT_MODE_BUFFER)에서는 기존과 동일하게 COLOR_RANGE_FULL 설정이 유지됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:fc1b75f1830695bcf375"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_heif_5",
+          "text": "10비트 HDR 경로(BT.2020 PQ/HLG)는 변경되지 않고 COLOR_RANGE_FULL을 유지합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:fc1b75f1830695bcf375"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+          ],
+          "impact_level": "stream_buffer_metadata",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "8비트 SDR 서피스 입력 기반 HEIF 인코딩 산출물의 VUI 헤더 및 블랙 레벨 정합성 확인"
+      ],
+      "action_hints": [
+        "HeifWriterTest 및 AvifWriterTest를 실행해 서피스 모드 색상 레벨 검증"
+      ],
+      "action_items": [
+        "카메라 앱의 8비트 HEIF 서피스 캡처 시나리오에서 블랙 레벨(RGB 0,0,0)의 인코딩 및 디코딩 루마 정합성을 확인합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "android",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 16100
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v9ce9cb5b22b62a465ff52c45061a0a6a2d86a80b685e9aa8a182b203fdfbf420/android/images/lockup.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_Z1WI1Mt.webp",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "article-img",
+          "width": 2001,
+          "height": 1001,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 29696
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "제공된 이미지 후보가 없습니다.",
+      "sources": [
+        {
+          "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+        }
+      ],
+      "actionability_level": "medium",
+      "camera_pipeline_link": "capture_output_path",
+      "effective_actionability_level": "medium",
+      "hal_impact_axes": [
+        "stream_buffer_metadata",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "source_candidate_hash": "22c52551573c50eedf28b64b50ffc674d3432ead52141ba9e0ee212ad13a924c",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "android",
+      "editorial_priority": 3,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX HeifWriter의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다. CameraX와 소스별 후보 상한을 분리하여 출력 인코더 수정이 편집 판단 전에 밀려나지 않도록 합니다.",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "driver",
+      "headline": "Linux media 서브시스템, Himax HM1092 흑백 NIR 센서 드라이버 패치 시리즈 v7 제출",
+      "what_changed": "이 패치 시리즈는 1메가픽셀 흑백 근적외선(NIR) 이미지 센서인 Himax HM1092를 위한 V4L2 서브디바이스 드라이버와 Device Tree(DT) 바인딩을 추가하는 제안입니다. 이 센서는 MIPI CSI-2 데이터 레인 1개를 사용하며 10비트 RAW 출력을 제공합니다. 드라이버는 고정 모드, 테스트 패턴, 노출, 아날로그/디지털 게인 제어, 픽셀 어레이 선택 타겟을 노출합니다.",
+      "confirmed_facts": [
+        "2026년 10월 13일 linux-media 메일링 리스트에 Himax HM1092 센서 드라이버 패치 시리즈 v7이 제출되었습니다.",
+        "이 패치는 아직 메인라인에 병합되지 않은 제안(review) 상태입니다.",
+        "센서는 1개 MIPI CSI-2 데이터 레인을 사용해 약 360 Mbit/s 대역폭에서 10비트 RAW(Y10) 30fps 출력을 제공합니다.",
+        "24 MHz 외부 클럭(Qualcomm devicetree) 환경에서 560x360 해상도, 19.2 MHz 외부 클럭(Intel IPU ACPI) 환경에서 648x368 해상도를 구성합니다.",
+        "ASUS Zenbook A14, Dell XPS 16, Dell Latitude 7350 플랫폼에서 테스트되었습니다."
+      ],
+      "evidence_summary": "2026년 10월 13일 linux-media 메일링 리스트에 등록된 패치 커버레터([PATCH v7 0/3])를 통해 Himax HM1092 V4L2 서브디바이스 드라이버의 v7 변경 사항과 하드웨어 동작 특성이 확인되었습니다.",
+      "specificity_checks": [
+        "Source: linux-media mailing list (2026-10-13, message-id: 20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com)",
+        "Component: drivers/media/i2c/hm1092.c, Documentation/devicetree/bindings/media/i2c/himax,hm1092.yaml",
+        "Status: Proposed patch series v7 (unmerged)",
+        "Hardware: Himax HM1092 1MP mono NIR sensor, 1-lane MIPI CSI-2"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/",
+        "Evidence ID: source-body:78f7514fe68350c8b9b7",
+        "Primary source: 패치 시리즈 커버레터 전문을 검증했습니다. v7 상태의 제안이며 병합 완료 상태가 아닙니다.",
+        "Linked evidence: unresolved — IPU7용 staging 패치 등 외부 언급 문서는 직접 확인하지 못함."
+      ],
+      "public_article": {
+        "headline": "Linux media 하위 시스템, Himax HM1092 흑백 NIR 센서 드라이버 v7 제안",
+        "lead": "노트북 안면 인식 카메라 등에 쓰이는 Himax HM1092 1메가픽셀 흑백 근적외선 센서를 지원하기 위한 리눅스 V4L2 서브디바이스 드라이버 패치 v7이 공개되었습니다.",
+        "body_markdown": "리눅스 미디어 메일링 리스트에 2026년 10월 13일 Himax HM1092 센서를 위한 V4L2 서브디바이스 드라이버와 디바이스 트리 바인딩 패치 시리즈 7번째 개정판이 제출되었습니다. 이번 시리즈는 퀄컴 디바이스 트리 플랫폼과 인텔 IPU 기반 ACPI 시스템 모두를 고려한 초기화 구성을 담고 있습니다.\n\nHM1092는 10비트 RAW 데이터를 출력하는 1메가픽셀 흑백 근적외선 센서로, 단일 MIPI CSI-2 데이터 레인을 360 Mbit/s 수준으로 구동해 약 30 fps 출력을 생성합니다. 드라이버는 외부 클럭 주파수에 맞춰 동작 모드를 결정하도록 설계되었습니다. 퀄컴 플랫폼의 24 MHz EXTCLK 환경에서는 180 MHz 링크 주파수로 560x360 해상도를 설정하며, 인텔 IPU 환경의 19.2 MHz EXTCLK 설정에서는 180.48 MHz 링크 주파수로 648x368 해상도를 구성합니다. ASUS Zenbook A14와 Dell XPS 16, Dell Latitude 7350 시스템에서 프로빙, 스트리밍, 런타임 PM 전환이 검증되었습니다.\n\n이번 v7 개정에서는 디지털 게인 레지스터가 10비트 2.8 고정소수점 값이라는 점을 반영해 제어 범위를 0x3ff로 제한했습니다. 상위 비트 무시로 인해 1024 이상 설정 시 검은 화면이 출력되던 문제를 차단한 조치입니다. 또한 get_selection 패드 연산 인터페이스 변경을 반영하고 런타임 PM 오류 처리 방식을 정돈했습니다. 다만 19.2 MHz 환경에서 더미 보더를 포함한 크롭 영역 설정과 관련해 액티브 어레이 범위를 어떻게 보고할지에 대한 논의는 아직 열려 있습니다.\n\n이 변경은 현재 리눅스 커널에 병합되지 않은 제안 상태이며 안드로이드 카메라 HAL API를 직접 바꾸는 것은 아닙니다. 리눅스 기반 플랫폼이나 V4L2 서브디바이스를 직접 바인딩하는 특수 목적 안드로이드 카메라 드라이버를 개발할 때 단일 레인 NIR 센서 연동 구조로 참고할 수 있습니다.",
+        "camera_hal_takeaway": "Android Camera HAL 직접 변경은 아니지만, Linux 커널 레벨에서 단일 레인 MIPI CSI-2 흑백 센서의 V4L2 서브디바이스 모델링, 외부 클럭별 PLL 바인딩, libcamera 호환 픽셀 어레이 선택 타겟 구성을 파악하는 데 유용한 드라이버 설계 참고자료입니다.",
+        "reader_checkpoints": [
+          "퀄컴 및 인텔 IPU 환경별 외부 클럭 설정에 따른 V4L2 서브디바이스 모드 초기화 시퀀스를 확인합니다.",
+          "단일 MIPI 레인 10비트 RAW 센서의 링크 주파수 설정과 V4L2 런타임 PM 연동 흐름을 검토합니다."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver",
+            "url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/",
+            "publisher": "lore.kernel.org linux-media list",
+            "source_role": "primary",
+            "checked_at": "2026-10-18T15:21:24.360Z"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "linux-media 메일링 리스트 (2026-10-13)",
+        "editorial_story": {
+          "not_to_overclaim": "이 패치는 Linux 커널 제안 단계이며 공식 커널 병합이나 Android Camera HAL 레이어 확정 스펙이 아닙니다.",
+          "editor_take": "퀄컴과 인텔 플랫폼 모두에서 검증된 레지스터 시퀀스를 공유하며 V4L2 제어 정합성을 다듬은 센서 드라이버 패치입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 10월 13일 linux-media 메일링 리스트에 Himax HM1092 센서 드라이버 패치 시리즈 v7이 제출되었습니다.",
+          "이 패치는 아직 메인라인에 병합되지 않은 제안(review) 상태입니다.",
+          "센서는 1개 MIPI CSI-2 데이터 레인을 사용해 약 360 Mbit/s 대역폭에서 10비트 RAW(Y10) 30fps 출력을 제공합니다.",
+          "24 MHz 외부 클럭(Qualcomm devicetree) 환경에서 560x360 해상도, 19.2 MHz 외부 클럭(Intel IPU ACPI) 환경에서 648x368 해상도를 구성합니다.",
+          "ASUS Zenbook A14, Dell XPS 16, Dell Latitude 7350 플랫폼에서 테스트되었습니다."
+        ],
+        "background_context": "V4L2 서브디바이스 레이어에서 적외선 안면 인식 센서를 구동하려면 단일 레인 CSI-2 대역폭 제약, 런타임 전원 관리, libcamera 호환 픽셀 어레이 선택 타겟이 올바르게 구성되어야 합니다.",
+        "hal_driver_impact": "리눅스 커널 이미지 입력 계층에 10비트 흑백 센서가 추가되는 단계로, 향후 상위 카메라 스택에서 해당 센서를 활용하기 위한 V4L2 디바이스 노드와 링크 파라미터 기반을 제공합니다.",
+        "action_items": [
+          "단일 MIPI CSI-2 레인 기반 10비트 RAW 흑백 센서 연동 시 외부 클럭별 PLL 설정과 V4L2 런타임 PM 전환 동작을 확인합니다."
+        ],
+        "team_share_points": "Himax HM1092 10비트 RAW 흑백 NIR 센서 드라이버 v7이 제출되어 퀄컴 및 인텔 플랫폼 초기화 구성이 추가되었습니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 10월 13일 메일링 리스트에 제출된 최신 v7 패치로 디지털 게인 레지스터 수정 및 크롭 인터페이스 갱신이 포함되었습니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "리눅스 미디어 서브시스템의 v7 패치 리뷰 진척도 및 크롭 경계 논의 추이를 확인합니다.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 드라이버 패치가 AOSP Camera HAL3 구현이나 AIDL Provider 계약을 변경한다고 주장하지 마세요."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c_hm_1",
+          "text": "2026년 10월 13일 linux-media 메일링 리스트에 Himax HM1092 센서 드라이버 패치 시리즈 v7이 제출되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:78f7514fe68350c8b9b7"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_hm_2",
+          "text": "이 패치는 아직 메인라인에 병합되지 않은 제안(review) 상태입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "candidate:d89b7fee76e9638d:source-summary"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_hm_3",
+          "text": "센서는 1개 MIPI CSI-2 데이터 레인을 사용해 약 360 Mbit/s 대역폭에서 10비트 RAW(Y10) 30fps 출력을 제공합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:78f7514fe68350c8b9b7"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_hm_4",
+          "text": "24 MHz 외부 클럭(Qualcomm devicetree) 환경에서 560x360 해상도, 19.2 MHz 외부 클럭(Intel IPU ACPI) 환경에서 648x368 해상도를 구성합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:78f7514fe68350c8b9b7"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_hm_5",
+          "text": "ASUS Zenbook A14, Dell XPS 16, Dell Latitude 7350 플랫폼에서 테스트되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:78f7514fe68350c8b9b7"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [],
+      "action_hints": [],
+      "action_items": [],
+      "is_ai_related": false,
+      "article_type": "driver",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 16100
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v9ce9cb5b22b62a465ff52c45061a0a6a2d86a80b685e9aa8a182b203fdfbf420/android/images/lockup.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_Z1WI1Mt.webp",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "article-img",
+          "width": 2001,
+          "height": 1001,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 29696
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "제공된 이미지 후보가 없습니다.",
+      "sources": [
+        {
+          "title": "[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver",
+          "url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+        }
+      ],
+      "actionability_level": "low",
+      "camera_pipeline_link": "sensor_driver_input",
+      "effective_actionability_level": "low",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/",
+      "source_candidate_hash": "d89b7fee76e9638dc6abf6560891806b1d3512cf962039b905c34d3dcb97ad8b",
+      "article_group_key": "lore-series:20261013-hm1092-driver-v7-d81a9b152ffd@gmail.com",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 4,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "driver",
+      "headline": "Linux atomisp 드라이버, 스트림 생성 내부의 무효 오류 검사 제거 제안",
+      "what_changed": "`ia_css_stream_create()` 함수 내에서 `sh_css_pipe_get_viewfinder_frame_info()`의 반환 값이 `err` 변수에 할당되지 않아, 이후의 `if (err) goto ERR;` 검사가 항상 거짓이 되는 불필요한 오류 검사 로직이 제거되었습니다. 이로 인해 RAW 및 BAYER 캡처 모드에서 뷰파인더 출력이 없는 캡처 파이프에 대해 `stream creation`이 실패할 수 있었던 문제가 수정됩니다.",
+      "confirmed_facts": [
+        "2026년 10월 16일 linux-media 메일링 리스트에 atomisp 드라이버 정리 패치가 제안되었습니다.",
+        "수정 대상 파일은 drivers/staging/media/atomisp/pci/sh_css.c 입니다.",
+        "ia_css_stream_create() 함수 내에서 sh_css_pipe_get_viewfinder_frame_info() 호출 직후 존재하던 미사용 if (err) goto ERR; 검사 2줄이 삭제되었습니다.",
+        "RAW 및 BAYER 캡처 모드에서 뷰파인더 출력이 없는 파이프는 sh_css_pipe_get_viewfinder_frame_info()에서 -EINVAL을 반환하므로, 반환값을 err에 전파하면 정상 캡처 스트림 생성이 실패하게 됩니다.",
+        "이 문제는 Linux Verification Center(linuxtesting.org)의 SVACE 정적 분석 도구에 의해 발견되었습니다."
+      ],
+      "evidence_summary": "2026년 10월 16일 linux-media 메일링 리스트에 제출된 패치 전문을 통해 atomisp 드라이버의 ia_css_stream_create() 함수 내 데드 코드 제거 내용이 확인되었습니다.",
+      "specificity_checks": [
+        "Source: linux-media mailing list (2026-10-16, message-id: 20261016105553.346322-1-a.karelin@ideco.ru)",
+        "Component: drivers/staging/media/atomisp/pci/sh_css.c",
+        "Function: ia_css_stream_create()",
+        "Status: Proposed patch (unmerged)"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/",
+        "Evidence ID: source-body:2cb092691fd7192f0dc1",
+        "Primary source: 원문 패치 메일 및 diff 전문을 검증했습니다. 제안 상태의 패치이며 병합 여부는 미확인입니다."
+      ],
+      "public_article": {
+        "headline": "Linux atomisp 드라이버, 스트림 생성 오류 분기 정리 패치 제안",
+        "lead": "리눅스 스테이징 미디어 트리의 atomisp 드라이버에서 스트림 생성 시 의미 없이 남아 있던 데드 코드 오류 검사를 제거하는 패치가 제출되었습니다.",
+        "body_markdown": "리눅스 미디어 서브시스템에 2026년 10월 16일 atomisp 드라이버의 스트림 생성 로직을 정돈하는 패치가 등록되었습니다. 수정 대상은 drivers staging media atomisp pci sh_css.c 파일의 ia_css_stream_create 함수입니다.\n\n해당 위치에서는 sh_css_pipe_get_viewfinder_frame_info 함수의 반환 값을 err 변수에 대입하지 않은 채 바로 if (err) goto ERR 분기를 검사하고 있었습니다. 이 검사는 직전에 수행된 그리드 정보 조회의 결과를 재검사하는 꼴이 되어 항상 거짓으로 평가되는 데드 코드였습니다.\n\n정적 분석 도구 SVACE로 이 문제를 발견한 작성자는 단순히 반환값을 err 변수로 전파하도록 고쳐서는 안 된다고 설명합니다. RAW 및 BAYER 캡처 모드에서는 뷰파인더 출력이 애초에 존재하지 않아 해당 함수가 -EINVAL을 반환하기 때문입니다. 오류를 단순 전파할 경우 정상적인 RAW 캡처 파이프의 스트림 생성이 전면 실패하게 되므로, 의미 없는 분기문 두 줄을 삭제하는 방식으로 정리되었습니다.\n\n이 변경은 현재 제안 상태의 커널 패치이며 상용 디바이스의 드라이버 릴리스 여부는 별개입니다. 스테이징 하위 드라이버의 특정 분기 제거이므로 안드로이드 카메라 HAL 인터페이스 동작을 직접 바꾸지는 않지만, ISP 파이프라인에서 뷰파인더 유무에 따른 스트림 구성 로직을 점검할 때 참고할 수 있습니다.",
+        "camera_hal_takeaway": "드라이버 내부 정적 분석 결함 수정으로 직접적인 HAL 계약 변경은 없으나, ISP 펌웨어 래퍼에서 뷰파인더가 생략되는 RAW 캡처 파이프 구성 시 반환 코드 처리와 스트림 생성 성공 여부를 검토하는 데 도움이 됩니다.",
+        "reader_checkpoints": [
+          "atomisp 드라이버를 사용하는 타깃에서 RAW 및 BAYER 캡처 파이프 스트림 생성 흐름을 점검합니다.",
+          "sh_css_pipe_get_viewfinder_frame_info 호출 결과가 정상 캡처 스트림 생성 실패로 전파되지 않는지 소스 코드를 확인합니다."
+        ],
+        "source_links": [
+          {
+            "title": "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()",
+            "url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/",
+            "publisher": "lore.kernel.org linux-media list",
+            "source_role": "primary",
+            "checked_at": "2026-10-18T15:21:24.360Z"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "linux-media 메일링 리스트 (2026-10-16)",
+        "editorial_story": {
+          "not_to_overclaim": "이 변경은 Linux 커널 스테이징 드라이버 내부의 로직 정리이며 메인라인 병합 전 단계의 제안입니다.",
+          "editor_take": "단순 변수 할당 누락으로 오인해 오류를 상위로 전파할 경우 발생할 수 있었던 RAW 캡처 오류를 올바르게 방지한 수정입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 10월 16일 linux-media 메일링 리스트에 atomisp 드라이버 정리 패치가 제안되었습니다.",
+          "수정 대상 파일은 drivers/staging/media/atomisp/pci/sh_css.c 입니다.",
+          "ia_css_stream_create() 함수 내에서 sh_css_pipe_get_viewfinder_frame_info() 호출 직후 존재하던 미사용 if (err) goto ERR; 검사 2줄이 삭제되었습니다.",
+          "RAW 및 BAYER 캡처 모드에서 뷰파인더 출력이 없는 파이프는 sh_css_pipe_get_viewfinder_frame_info()에서 -EINVAL을 반환하므로, 반환값을 err에 전파하면 정상 캡처 스트림 생성이 실패하게 됩니다.",
+          "이 문제는 Linux Verification Center(linuxtesting.org)의 SVACE 정적 분석 도구에 의해 발견되었습니다."
+        ],
+        "background_context": "ISP 드라이버 파이프라인에서 프리뷰/뷰파인더와 RAW 캡처 스트림은 상이한 출력 구성을 가지므로, 서브 프레임 정보 부재 시의 반환 코드가 메인 스트림 생성 차단으로 이어지지 않도록 주의해야 합니다.",
+        "hal_driver_impact": "Camera HAL 계약에는 직접 영향이 없으나, 레거시 Intel 플랫폼 기반 atomisp 드라이버를 유지 관리하는 엔지니어에게 RAW 캡처 파이프 초기화 안정성에 관한 근거를 제공합니다.",
+        "action_items": [
+          "atomisp 드라이버 기반 타깃 환경에서 뷰파인더가 없는 RAW 및 BAYER 캡처 스트림 생성 시 -EINVAL 반환 오류 전파 여부를 점검합니다."
+        ],
+        "team_share_points": "atomisp 드라이버의 ia_css_stream_create()에서 뷰파인더 미출력 모드의 스트림 생성을 방해할 수 있었던 잘못된 오류 검사 분기가 제거되었습니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 10월 16일 제출된 패치로 드라이버 코드베이스의 스트림 생성 안정성을 확보합니다.",
+        "reader_owners": [
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "해당 커널 드라이버 패치의 메일링 리스트 피드백 수렴 여부를 확인합니다.",
+        "impact_axes": [
+          "driver_image_pipeline"
+        ],
+        "do_not_overstate": [
+          "이 패치가 atomisp 드라이버 전반의 모든 캡처 문제를 해결하거나 최신 Android 기기 Camera HAL에 영향을 준다고 일반화하지 마세요."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c_atom_1",
+          "text": "2026년 10월 16일 linux-media 메일링 리스트에 atomisp 드라이버 정리 패치가 제안되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:2cb092691fd7192f0dc1"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_atom_2",
+          "text": "수정 대상 파일은 drivers/staging/media/atomisp/pci/sh_css.c 입니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:2cb092691fd7192f0dc1"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_atom_3",
+          "text": "ia_css_stream_create() 함수 내에서 sh_css_pipe_get_viewfinder_frame_info() 호출 직후 존재하던 미사용 if (err) goto ERR; 검사 2줄이 삭제되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:2cb092691fd7192f0dc1"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_atom_4",
+          "text": "RAW 및 BAYER 캡처 모드에서 뷰파인더 출력이 없는 파이프는 sh_css_pipe_get_viewfinder_frame_info()에서 -EINVAL을 반환하므로, 반환값을 err에 전파하면 정상 캡처 스트림 생성이 실패하게 됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:2cb092691fd7192f0dc1"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_atom_5",
+          "text": "이 문제는 Linux Verification Center(linuxtesting.org)의 SVACE 정적 분석 도구에 의해 발견되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:2cb092691fd7192f0dc1"
+          ],
+          "source_urls": [
+            "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+          ],
+          "impact_level": "driver_image_pipeline",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [],
+      "action_hints": [],
+      "action_items": [],
+      "is_ai_related": false,
+      "article_type": "driver",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 16100
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v9ce9cb5b22b62a465ff52c45061a0a6a2d86a80b685e9aa8a182b203fdfbf420/android/images/lockup.png",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_Z1WI1Mt.webp",
+          "sourceUrl": "https://android-developers.googleblog.com/",
+          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "sourceKind": "article-img",
+          "width": 2001,
+          "height": 1001,
+          "alt": "",
+          "contentType": "image/webp",
+          "licenseStatus": "unknown",
+          "attribution": "Android Developers Blog",
+          "validationStatus": "ok",
+          "contentLength": 29696
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "제공된 이미지 후보가 없습니다.",
+      "sources": [
+        {
+          "title": "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()",
+          "url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+        }
+      ],
+      "actionability_level": "low",
+      "camera_pipeline_link": "isp_stream_creation",
+      "effective_actionability_level": "low",
+      "hal_impact_axes": [
+        "driver_image_pipeline"
+      ],
+      "reader_owners": [
+        "camera_driver_owner"
+      ],
+      "source_candidate_url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/",
+      "source_candidate_hash": "61353689de04d5bcf1f4479fc89500d430d41d8ae48f95f3de07a67c818f271e",
+      "article_group_key": "lore-series:20261016105553.346322-a.karelin@ideco.ru",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "V4L2, libcamera, media subsystem patch/release thread; mailing list lead용. main 승격은 release tag/announcement과 cross-check 필요",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/newsletter-default.svg",
+        "src": "../../assets/images/fallback/newsletter-default.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "카메라 앱의 8비트 HEIF 서피스 캡처 시나리오에서 블랙 레벨(RGB 0,0,0)의 인코딩 및 디코딩 루마 정합성을 확인합니다.",
+    "Android Studio Canary 환경에서 ACP 기반 에이전트 연동과 네이티브 빌드 진단 도구 연계 동작을 확인합니다."
+  ],
+  "references": [
+    {
+      "title": "Build your way: Use any AI agent of your choice in Android Studio",
+      "url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
+    },
+    {
+      "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
+    },
+    {
+      "title": "[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/"
+    },
+    {
+      "title": "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()",
+      "url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
+  "selected_group_count": 4,
+  "rendered_group_count": 4,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "android_native_tooling_workflow",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+    "lore-series:20261013-hm1092-driver-v7-d81a9b152ffd@gmail.com",
+    "lore-series:20261016105553.346322-a.karelin@ideco.ru"
+  ],
+  "rendered_group_keys": [
+    "android_native_tooling_workflow",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+    "lore-series:20261013-hm1092-driver-v7-d81a9b152ffd@gmail.com",
+    "lore-series:20261016105553.346322-a.karelin@ideco.ru"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "[v6,1/4] libcamera: software_isp: Add support for monochrome formats - Shaders",
+      "url": "https://patchwork.libcamera.org/patch/28492/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-10-17",
+      "note": "오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고"
+    },
+    {
+      "title": "[PATCH v3 0/6] phy: qcom-mipi-csi2: C-PHY for X1E80100",
+      "url": "https://lore.kernel.org/linux-media/20261016-x1e-cphy-rfc-v3-0-40a346a72153@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-16",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "[PATCH v4 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "url": "https://lore.kernel.org/linux-media/20261016075918.19345-2-lachlan.michael@sony.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-16",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
+      "url": "https://patchwork.libcamera.org/patch/28471/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-10-16",
+      "note": "오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고"
+    }
+  ],
+  "tags": [
+    "AI",
+    "Android",
+    "Driver",
+    "Image Processing",
+    "SoC Platform"
+  ],
+  "coverage_week_key": "2026-W42",
+  "coverage_start_date": "2026-10-12",
+  "coverage_end_date": "2026-10-18",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-10-19",
+  "intro_letter": "이번 주 뉴스레터에서는 개발 생산성 향상과 이미지 품질 개선에 대한 소식을 전해드립니다. 먼저, Android Studio의 BYOA 기능 도입으로 맞춤형 AI 코딩 에이전트를 개발 환경에 연동할 수 있게 되어 개발 워크플로 확장에 기여할 것으로 보입니다. 이와 함께 AndroidX HeifWriter의 8비트 서피스 입력 색상 왜곡 방지 패치 병합 소식은 HEIF 이미지 인코딩 품질을 개선할 것입니다. 마지막으로 Linux media 하위 시스템의 Himax HM1092 흑백 NIR 센서 드라이버 v7 제안과 Linux atomisp 드라이버의 스트림 생성 오류 분기 정리 패치 제안을 통해 리눅스 커널 드라이버 설계 및 내부 개선 동향을 확인하실 수 있습니다.",
+  "intro_letter_source_hash": "sha256:5d8e2a204a6bfc44429ff888ba3642eb1245ca8e087e1b49a69dde3a309228c5",
+  "weekly_key": "2026-W43",
+  "week_start_date": "2026-10-19",
+  "week_end_date": "2026-10-25"
+}
