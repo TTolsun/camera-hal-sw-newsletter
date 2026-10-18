@@ -1,5 +1,103 @@
 [
   {
+    "weeklyKey": "2026-W43",
+    "weekStartDate": "2026-10-19",
+    "weekEndDate": "2026-10-25",
+    "date": "2026-10-19",
+    "title": "2026 W43",
+    "summary": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합\nLinux media 하위 시스템, Himax HM1092 흑백 NIR 센서 드라이버 v7 제안\nLinux atomisp 드라이버, 스트림 생성 오류 분기 정리 패치 제안\n짧은 소식: Android Studio, 외부 AI 에이전트 연동 지원",
+    "html": "newsletters/2026-W43/index.html",
+    "md": "newsletters/2026-W43/newsletter.md",
+    "tags": [
+      "AI",
+      "Android",
+      "Driver",
+      "Image Processing",
+      "SoC Platform"
+    ],
+    "article_count": 4,
+    "article_images": [
+      "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp"
+    ],
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주에는 8비트 HEIF 이미지에서 검은색이 들뜨는 문제를 다룬 HeifWriter 수정부터 살펴봅니다. Surface 입력의 색상 범위와 인코딩 결과를 함께 확인해야 하는 변경입니다. 이어서 HM1092 NIR 센서 드라이버 v7의 게인 제한과 남은 크롭 논의, atomisp의 RAW 캡처 오류 처리 패치 제안을 정리합니다. Android Studio의 외부 AI 에이전트 연동은 마지막에 짧은 개발 도구 소식으로 전합니다.",
+      "items": [
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+          "href": "newsletters/2026-W43/index.html#article-androidx-heifwriter-8",
+          "headline": "AndroidX HeifWriter, 8비트 서피스 입력 색상 왜곡 방지 패치 병합",
+          "lead": "AndroidX의 HEIF 이미지 생성 라이브러리가 8비트 서피스 입력 시 색상 범위를 강제로 전체 범위로 선언하던 로직을 제거해 렌더링 검은색이 들뜨는 현상을 바로잡았습니다.",
+          "takeaway": "8비트 SDR HEIF를 Surface 경로로 저장한다면 검은색 입력의 디코딩 결과와 VUI color_range 선언을 함께 확인하세요. YUV 버퍼 입력과 10비트 HDR 경로는 이번 변경 대상이 아닙니다.",
+          "tags": [
+            "Android"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
+          "href": "newsletters/2026-W43/index.html#article-linux-media-himax-hm1092-nir-v7",
+          "headline": "Linux media 하위 시스템, Himax HM1092 흑백 NIR 센서 드라이버 v7 제안",
+          "lead": "노트북 안면 인식 카메라 등에 쓰이는 Himax HM1092 1메가픽셀 흑백 근적외선 센서를 지원하기 위한 리눅스 V4L2 서브디바이스 드라이버 패치 v7이 공개되었습니다.",
+          "takeaway": "NIR 센서를 V4L2로 연동하는 개발자는 v7의 게인 상한 수정과 아직 논의 중인 액티브 어레이 보고 방식을 구분해 살펴보세요.",
+          "tags": [
+            "Driver",
+            "Image Processing"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
+          "href": "newsletters/2026-W43/index.html#article-linux-atomisp",
+          "headline": "Linux atomisp 드라이버, 스트림 생성 오류 분기 정리 패치 제안",
+          "lead": "리눅스 스테이징 미디어 트리의 atomisp 드라이버에서 스트림 생성 시 의미 없이 남아 있던 데드 코드 오류 검사를 제거하는 패치가 제출되었습니다.",
+          "takeaway": "atomisp의 RAW·BAYER 경로에서는 뷰파인더 정보가 없다는 반환값과 실제 스트림 생성 실패를 구분해야 합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+          "href": "newsletters/2026-W43/index.html#article-android-studio-ai",
+          "headline": "짧은 소식: Android Studio, 외부 AI 에이전트 연동 지원",
+          "lead": "Android Studio Canary 최신 빌드에 외부 AI 코딩 에이전트를 개발 환경에 직접 연결할 수 있는 BYOA(Bring Your Own Agent) 지원이 추가되었습니다.",
+          "takeaway": "Canary의 개발 보조 기능으로 참고하세요. 현재 사용 중인 빌드·테스트 흐름에 맞는지 확인한 뒤 도입을 판단할 수 있습니다.",
+          "tags": [
+            "AI"
+          ],
+          "image": {
+            "src": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
+            "alt": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
+            "is_fallback": false
+          }
+        }
+      ]
+    },
+    "lead_article_image": "assets/images/fallback/android.svg",
+    "public_contract_version": "story-v2",
+    "coverage_week_key": "2026-W42",
+    "coverage_start_date": "2026-10-12",
+    "coverage_end_date": "2026-10-18",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-10-19"
+  },
+  {
     "weeklyKey": "2026-W42",
     "weekStartDate": "2026-10-12",
     "weekEndDate": "2026-10-18",

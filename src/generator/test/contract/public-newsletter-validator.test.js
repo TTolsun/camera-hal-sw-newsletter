@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  rawEnglishProseRuns,
   validatePublicNewsletterArtifacts
 } = require('../../quality/public-newsletter');
 const {
@@ -507,6 +508,15 @@ test('public newsletter validator rejects long English prose in article paragrap
   });
 
   assert.ok(errors.some(error => /long English prose run/.test(error)));
+});
+
+test('English prose detection excludes URL slugs but retains prose and link labels', () => {
+  const url = 'https://example.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-the-editor-with-tools';
+  const sentence = 'This is a detailed explanation of the new tools and the changes that you can use in your application.';
+  assert.deepEqual(rawEnglishProseRuns(`한국어 설명입니다. ${url}`), []);
+  assert.deepEqual(rawEnglishProseRuns(`_이미지: [공식 발표](${url})_`), []);
+  assert.equal(rawEnglishProseRuns(`${url}\n${sentence}`).length, 1);
+  assert.equal(rawEnglishProseRuns(`[${sentence}](${url})`).length, 1);
 });
 
 test('public newsletter validator rejects generic and repeated checkpoints', () => {

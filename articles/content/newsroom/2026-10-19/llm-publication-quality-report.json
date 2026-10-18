@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-19",
+  "overall_pass": true,
+  "summary": "The newsletter content is well-structured, technically accurate, and appropriately scopes the impact of the discussed changes for Camera HAL/Driver engineers. Source links are provided for all articles, and the review-only nature of the publication is handled correctly by the generation status, with the content itself being suitable for public disclosure.",
+  "issues": [],
+  "llm_diagnostics": {
+    "stage_key_format": "canonical-v1",
+    "quota_error_count": 0,
+    "invalid_json_count": 0,
+    "model_usage": {
+      "post_generation_quality_judge#0": {
+        "stage_key": "post_generation_quality_judge#0",
+        "stage_id": "post_generation_quality_judge",
+        "quality_attempt": 0,
+        "label": "post-generation public quality judge",
+        "parent_run_key": null,
+        "models": {
+          "gemini-2.5-flash-lite": {
+            "requests": 1,
+            "successes": 1,
+            "invalid_json": 0,
+            "quota_errors": 0,
+            "api_errors": 0
+          }
+        }
+      }
+    },
+    "model_routing": {
+      "post_generation_quality_judge#0": {
+        "stage_group": "judge",
+        "stage_group_known": true,
+        "routing_warning": "",
+        "primary_model": "gemini-2.5-flash-lite",
+        "fallback_models": [
+          "gemini-2.5-flash"
+        ],
+        "primary_resolved_by": "code_default",
+        "resolved_by": "code_default",
+        "global_override_applied": false,
+        "stage_key": "post_generation_quality_judge#0",
+        "stage_id": "post_generation_quality_judge",
+        "quality_attempt": 0,
+        "label": "post-generation public quality judge",
+        "parent_run_key": null
+      }
+    },
+    "cost_report": {
+      "calls": [
+        {
+          "provider": "gemini",
+          "requested_at": "2026-10-18T15:54:45.740Z",
+          "stage_key": "post_generation_quality_judge#0",
+          "stage_id": "post_generation_quality_judge",
+          "quality_attempt": 0,
+          "label": "post-generation public quality judge",
+          "parent_run_key": null,
+          "stage_group": "judge",
+          "stage_group_known": true,
+          "routing_warning": "",
+          "model": "gemini-2.5-flash-lite",
+          "primary_model": "gemini-2.5-flash-lite",
+          "attempt_model": "gemini-2.5-flash-lite",
+          "fallback_models": [
+            "gemini-2.5-flash"
+          ],
+          "primary_resolved_by": "code_default",
+          "attempt_resolved_by": "code_default",
+          "resolved_by": "code_default",
+          "fallback_index": null,
+          "global_override_applied": false,
+          "attempt": 1,
+          "pro_model": false,
+          "usage_metadata_present": true,
+          "prompt_tokens": 7134,
+          "output_tokens": 103,
+          "thinking_tokens": 806,
+          "thinking_budget_requested": 1024,
+          "thinking_budget_applied": 1024,
+          "thinking_budget_note": "",
+          "thinking_level": null,
+          "cached_tokens": 0,
+          "total_tokens": 8043,
+          "billable_input_tokens": 7134,
+          "billable_output_tokens": 909,
+          "estimated_cost_usd": 0.001077,
+          "pricing_usd_per_million": {
+            "input_usd_per_million": 0.1,
+            "output_usd_per_million": 0.4,
+            "cached_input_usd_per_million": 0.01,
+            "large_prompt_threshold_tokens": null,
+            "large_prompt_applied": false
+          },
+          "pricing_source": "https://ai.google.dev/gemini-api/docs/pricing",
+          "pricing_warning": ""
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-19",
+  "generated_at": "2026-10-18T15:20:58.324Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 0,
+    "miss_count": 12,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 12
+    }
+  ],
+  "entries": [
+    {
+      "title": "Build your way: Use any AI agent of your choice in Android Studio",
+      "url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+      "source": "Android Developers Blog",
+      "published_date": "2026-10-15T22:00:41.713Z",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+        "url_hash": "50009098fbc5bde94f22b9f4389732f42447c65a7d908d804474ae97c5b3ca9a",
+        "published_date": "2026-10-15T22:00:41.713Z",
+        "content_hash": "aebe333e467635422a8172d7e123be35fe0234aac75c19650b6ec50a3409acb9"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "source": "AndroidX Gerrit HeifWriter",
+      "published_date": "2026-10-16",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+        "url_hash": "22c52551573c50eedf28b64b50ffc674d3432ead52141ba9e0ee212ad13a924c",
+        "published_date": "2026-10-16",
+        "content_hash": "162b9bc526ca220698bd892dc86945749150057efb4daef42fd04a7269cdeec7"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver",
+      "url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-13T03:28:31Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
+        "url_hash": "d89b7fee76e9638dc6abf6560891806b1d3512cf962039b905c34d3dcb97ad8b",
+        "published_date": "2026-10-13T03:28:31Z",
+        "content_hash": "eab1547a96e2f4367137f47adbf1a992b789387415c99fd6b235833c61fb6074"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()",
+      "url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-16T10:56:22Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru",
+        "url_hash": "61353689de04d5bcf1f4479fc89500d430d41d8ae48f95f3de07a67c818f271e",
+        "published_date": "2026-10-16T10:56:22Z",
+        "content_hash": "d8fdb8456a136cd21304af0c1af19b0e4e103935f3ea7bf302ca9d0602a93cf1"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v3 0/6] phy: qcom-mipi-csi2: C-PHY for X1E80100",
+      "url": "https://lore.kernel.org/linux-media/20261016-x1e-cphy-rfc-v3-0-40a346a72153@gmail.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-16T14:56:12Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261016-x1e-cphy-rfc-v3-0-40a346a72153@gmail.com",
+        "url_hash": "5d515081cb41bc598f3c187dcdbd211f4b59cd6372736526dc31ea25841328a3",
+        "published_date": "2026-10-16T14:56:12Z",
+        "content_hash": "759761b784c40b485eb64697ea0be44ad78961f8fc771d6c83cdf54eefa6d0a3"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
+      "url": "https://patchwork.libcamera.org/patch/28471/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-10-16",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28471",
+        "url_hash": "457abb0eb3fda583a45a831830c6c82fcb1a322526605d709bb8787bb37eda80",
+        "published_date": "2026-10-16",
+        "content_hash": "19cbe3a683e186ff01aa1955f16bdf38647445b6605b9b8e1f27dbec295ff4fe"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[1/2] libcamera: camera_sensor: Add Sony IMX676 sensor properties and helper",
+      "url": "https://patchwork.libcamera.org/patch/28450/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-10-14",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28450",
+        "url_hash": "6dd52fd6f61e47fbddc5c873b7d198fdc76edc4e79735e61cafc73d86473f2b1",
+        "published_date": "2026-10-14",
+        "content_hash": "a097103c48896a6da15602a46d2bc4ad467ad5fcaa99afa809d4906e0cb4f7f7"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[PATCH v4 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "url": "https://lore.kernel.org/linux-media/20261016075918.19345-2-lachlan.michael@sony.com/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-16T07:59:52Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261016075918.19345-2-lachlan.michael@sony.com",
+        "url_hash": "9cd35cb66f88a36ef6bf4715f56c513f7274afdb0e662b36387df6ec057001ec",
+        "published_date": "2026-10-16T07:59:52Z",
+        "content_hash": "ddd849a13ec94d4cef96b37b9d627abe9f7056e35d085c1962bd20c5d833ebdf"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v3,01/11] software-isp: Center the GPU image crop",
+      "url": "https://patchwork.libcamera.org/patch/28473/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-10-16",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28473",
+        "url_hash": "34d43db1e01c1db23393e2af2f0742fe70a8be541b0bab98f1052aa6c5d59e7d",
+        "published_date": "2026-10-16",
+        "content_hash": "15401f8c9137c1afc7d80352221a7f0cd465778733827d7ba1ecdfb8c0ec0367"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[v6,1/4] libcamera: software_isp: Add support for monochrome formats - Shaders",
+      "url": "https://patchwork.libcamera.org/patch/28492/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-10-17",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28492",
+        "url_hash": "6ec74816cd98e08f004a76c161cb02acfae9bf8b9e16394c5d04cbf19b68fa62",
+        "published_date": "2026-10-17",
+        "content_hash": "77d548722801072d42c3fc504a69b1c23483150aaca82484909102b55c8bdfb0"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[libcamera-ci,RFC,v1] Run clang-tidy",
+      "url": "https://patchwork.libcamera.org/patch/28454/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-10-15",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28454",
+        "url_hash": "b9b68684e72229c16f141b3b6e3bc787b2ea6b3a9f0de266537399a833743194",
+        "published_date": "2026-10-15",
+        "content_hash": "a2e9164f0f940660271886c9c4a08dcd3b14b6dfdb34d6d9d8414aeab640ce7f"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "[libcamera-ci,v1] Enable `_LIBCPP_REMOVE_TRANSITIVE_INCLUDES`",
+      "url": "https://patchwork.libcamera.org/patch/28438/",
+      "source": "libcamera Patchwork (patch review)",
+      "published_date": "2026-10-12",
+      "cache_key": {
+        "normalized_url": "https://patchwork.libcamera.org/patch/28438",
+        "url_hash": "1d3f5c7cd032249b6c983288c682944bc3f71fff41a03b3272cd64fb299788bf",
+        "published_date": "2026-10-12",
+        "content_hash": "e8c41dea11f04847f52b61d86092fb5936cd874d17a47ca048a3eeebe7e556e6"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}
