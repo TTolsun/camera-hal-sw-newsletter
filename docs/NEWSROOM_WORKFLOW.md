@@ -336,7 +336,7 @@ thinking budget과 temperature는 `GEMINI_THINKING_BUDGET_*`, `GEMINI_TEMPERATUR
 
 thinking 설정은 호출하는 모델의 패밀리(family)에 맞춰 다르게 전달됩니다.
 
-- Gemini 3.x 단계(editor): `thinkingBudget` 대신 `thinkingLevel`을 씁니다. budget 값을 `<=512`이면 LOW, `<=2048`이면 MEDIUM, `>2048`이면 HIGH로 번역합니다.
+- Gemini 3.x 호출: `thinkingBudget` 대신 `thinkingLevel`을 씁니다. budget 값을 `<=512`이면 LOW, `<=2048`이면 MEDIUM, `>2048`이면 HIGH로 번역합니다.
 - `gemini-2.5-flash-lite`: budget을 유효 범위(512~24576)로 클램프(clamp)하고, budget이 0이면 thinkingConfig를 아예 생략합니다.
 - `gemini-2.5/2.0-flash`: `thinkingBudget`을 그대로 사용합니다(0이면 off).
 
@@ -365,11 +365,11 @@ Stage별 model routing은 아래 우선순위를 따릅니다.
 
 | 설정 | reporter | editor | factcheck | repair | judge | sourceDiscovery |
 | --- | --- | --- | --- | --- | --- | --- |
-| env 없음 | `gemini-2.5-flash` | `gemini-3.8-flash` | `gemini-2.5-flash` | `gemini-3.8-flash` | `gemini-2.5-flash-lite` | `gemini-2.5-flash-lite` |
-| `NEWSROOM_EDITOR_MODEL=gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-3.8-flash` | `gemini-2.5-flash-lite` | `gemini-2.5-flash-lite` |
+| env 없음 | `gemini-2.5-flash` | `gemini-3.8-flash` | `gemini-3.8-flash` | `gemini-3.8-flash` | `gemini-2.5-flash-lite` | `gemini-2.5-flash-lite` |
+| `NEWSROOM_EDITOR_MODEL=gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-2.5-flash` | `gemini-3.8-flash` | `gemini-3.8-flash` | `gemini-2.5-flash-lite` | `gemini-2.5-flash-lite` |
 | `LLM_FALLBACK_MODELS=gemini-2.5-flash-lite` | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback | primary 실패 시 fallback |
 
-fact-checker는 새 글을 쓰는 stage가 아닙니다. source gap, unsupported claim, dated evidence 누락, forbidden bucket, 과장된 HAL impact 같은 구조화된 위반(structured violation)을 탐지하는 stage입니다. source binding과 hard blocker의 최종 방어선은 deterministic validator이지만, 품질 판정 자체는 fact-checker(LLM)에 맡깁니다. 그래서 fact-checker 기본 모델은 `gemini-2.5-flash`로 두면서 thinking(추론)을 켜 판정 신뢰성을 높입니다.
+fact-checker는 새 글을 쓰는 stage가 아닙니다. source gap, unsupported claim, dated evidence 누락, forbidden bucket, 과장된 HAL impact 같은 구조화된 위반(structured violation)을 탐지하는 stage입니다. source binding과 hard blocker의 최종 방어선은 deterministic validator이지만, 품질 판정 자체는 fact-checker(LLM)에 맡깁니다. fact-checker 기본 모델은 `gemini-3.8-flash`이며, 기본 thinking budget 2048은 모델 패밀리 규칙에 따라 `thinkingLevel: MEDIUM`으로 전달됩니다.
 
 모델 선택의 나머지 이유는 다음과 같습니다.
 
@@ -399,7 +399,7 @@ fact-checker는 새 글을 쓰는 stage가 아닙니다. source gap, unsupported
 
 ## Safe Scheduled Defaults
 
-현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 정해집니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter/fact-checker `gemini-2.5-flash`, editor/repair `gemini-3.8-flash`, public article judge·source discovery `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash` → `gemini-2.5-flash-lite`입니다. Workflow YAML은 Pro 계열 fallback 모델을 자동으로 추가하지 않으며, runtime config는 Gemini Pro 계열 모델명을 모든 public model override 경로에서 차단합니다.
+현재 scheduled run의 provider/model 기본값은 GitHub Variables가 아니라 `DEFAULT_RUNTIME_CONFIG`에서 정해집니다. 기본 provider는 `LLM_PROVIDER=gemini`이고, stage별 code default는 reporter `gemini-2.5-flash`, fact-checker/editor/repair `gemini-3.8-flash`, public article judge·source discovery `gemini-2.5-flash-lite`, fallback `gemini-2.5-flash` → `gemini-2.5-flash-lite`입니다. Workflow YAML은 Pro 계열 fallback 모델을 자동으로 추가하지 않으며, runtime config는 Gemini Pro 계열 모델명을 모든 public model override 경로에서 차단합니다.
 
 scheduled run(예약 자동 실행)의 안전 기본값은 아래와 같습니다. provider/model은 code default를 쓰고, 나머지는 workflow와 runtime config의 기본값을 그대로 씁니다.
 
