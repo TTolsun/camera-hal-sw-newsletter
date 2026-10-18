@@ -2,7 +2,7 @@
   {
     "date": "2026-10-19",
     "title": "Camera HAL / SW Newsletter - 2026-10-19",
-    "summary": "이번 호는 세 가지 카메라 문제를 살펴봅니다. 검은색이 회색으로 저장되는 HeifWriter 문제, 밝기를 높이다 검은 화면이 나오는 HM1092 게인 문제, atomisp에서 불필요한 오류 검사를 제거하는 이유입니다. 각 기사에서 원인과 변경점, 확인할 대상을 차례로 설명합니다. 마지막에는 이전에 발표된 Android Studio BYOA를 짧게 소개합니다.",
+    "summary": "이번 호는 저장 이미지의 검은색 문제를 고친 HeifWriter 소식으로 시작합니다. 이어서 Gemini 4 Argon을 Android 개발 도구에 연결하는 방법과 이용 조건을 살펴봅니다. HM1092의 게인 제한과 atomisp 오류 검사 정리 제안은 센서·드라이버 담당자가 확인할 내용입니다.",
     "html": "newsletters/2026-10-19/index.html",
     "md": "newsletters/2026-10-19/newsletter.md",
     "tags": [
@@ -15,11 +15,11 @@
     "public_contract_version": "story-v2",
     "en": {
       "title": "2026 W43",
-      "summary": "AndroidX HeifWriter fixes gray-looking blacks in 8-bit HEIF images\nLinux HM1092 driver v7 proposal limits gain to avoid black frames\nLinux atomisp proposal explains why a dead error check should be removed\nBrief reference: Connect your AI agent to Android Studio with BYOA",
+      "summary": "AndroidX HeifWriter fixes gray-looking blacks in 8-bit HEIF images\nGemini 4 Argon supports Android development in Studio and the CLI\nLinux HM1092 driver v7 proposal limits gain to avoid black frames\nLinux atomisp proposal explains why a dead error check should be removed",
       "reader_brief": {
         "schema_version": 1,
         "locale": "en",
-        "intro": "This issue explains three camera topics: gray-looking blacks in HeifWriter, black frames caused by out-of-range HM1092 gain, and why atomisp should remove an unnecessary error check. Each article walks through the cause, the change, and who should check it. We close with a brief reference to the earlier Android Studio BYOA announcement.",
+        "intro": "We start with HeifWriter’s fix for gray-looking blacks in saved images, then examine Gemini 4 Argon’s Android tool integration and access requirements. HM1092 gain limits and the atomisp error-check proposal follow for sensor and driver developers.",
         "items": [
           {
             "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
@@ -35,6 +35,17 @@
               "alt": "",
               "is_fallback": true
             }
+          },
+          {
+            "id": "url:https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+            "href": "en/newsletters/2026-W43/index.html#article-gemini-4-argon-supports-android-development-in-studio-and-the-cli",
+            "headline": "Gemini 4 Argon supports Android development in Studio and the CLI",
+            "lead": "Support is expanding from asking AI about code to connecting development tools. On October 13, Google announced Gemini 4 Argon support across Android development environments.",
+            "takeaway": "This matters to teams evaluating Android development automation. Check subscription and API requirements, then try error-log inspection and build reruns in a small project.",
+            "tags": [
+              "AI"
+            ],
+            "image": null
           },
           {
             "id": "url:https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com",
@@ -67,21 +78,6 @@
               "src": "assets/images/fallback/newsletter-default.svg",
               "alt": "",
               "is_fallback": true
-            }
-          },
-          {
-            "id": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-            "href": "en/newsletters/2026-W43/index.html#article-brief-reference-connect-your-ai-agent-to-android-studio-with-byoa",
-            "headline": "Brief reference: Connect your AI agent to Android Studio with BYOA",
-            "lead": "BYOA in Android Studio Canary is a preview feature for using external AI coding agents inside the IDE. We revisit the September 24 announcement as a development tool reference.",
-            "takeaway": "This earlier announcement is a reference for teams trying development tools. Check how it fits your build and test workflow before adopting it.",
-            "tags": [
-              "AI"
-            ],
-            "image": {
-              "src": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
-              "alt": "Android Studio Canary introduces BYOA support for integrating external coding agents",
-              "is_fallback": false
             }
           }
         ]

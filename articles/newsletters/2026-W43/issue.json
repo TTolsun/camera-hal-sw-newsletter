@@ -3,12 +3,12 @@
   "public_contract_version": "story-v2",
   "generation_contract_version": 2,
   "title": "2026 W42 (10.12 ~ 10.18)",
-  "summary": "이번 호는 세 가지 카메라 문제를 살펴봅니다. 검은색이 회색으로 저장되는 HeifWriter 문제, 밝기를 높이다 검은 화면이 나오는 HM1092 게인 문제, atomisp에서 불필요한 오류 검사를 제거하는 이유입니다. 각 기사에서 원인과 변경점, 확인할 대상을 차례로 설명합니다. 마지막에는 이전에 발표된 Android Studio BYOA를 짧게 소개합니다.",
+  "summary": "이번 호는 저장 이미지의 검은색 문제를 고친 HeifWriter 소식으로 시작합니다. 이어서 Gemini 4 Argon을 Android 개발 도구에 연결하는 방법과 이용 조건을 살펴봅니다. HM1092의 게인 제한과 atomisp 오류 검사 정리 제안은 센서·드라이버 담당자가 확인할 내용입니다.",
   "briefing": [
     "AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정",
+    "Gemini 4 Argon, Android Studio와 CLI에서 개발 작업 지원",
     "Linux HM1092 드라이버 v7 제안: 밝기 조절로 검은 화면이 생기지 않도록 제한",
-    "Linux atomisp 패치 제안: 작동하지 않는 오류 검사를 제거하는 이유",
-    "짧은 참고: Android Studio에서 쓰던 AI 에이전트를 연결하는 BYOA"
+    "Linux atomisp 패치 제안: 작동하지 않는 오류 검사를 제거하는 이유"
   ],
   "sections": [
     {
@@ -292,6 +292,404 @@
         "outcome": "no_image_extracted"
       },
       "coverage_type": "fresh"
+    },
+    {
+      "schema_version": 7,
+      "source": "Android Developers Blog",
+      "source_name": "Android Developers Blog",
+      "sourceUrl": "https://android-developers.googleblog.com/",
+      "source_url": "https://android-developers.googleblog.com/",
+      "articleUrl": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "article_url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "source_id": "android-developers-blog",
+      "category": "tooling",
+      "source_category": "android",
+      "priority": "high",
+      "reliability": "official",
+      "source_quality_required": true,
+      "origin": "source_registry",
+      "collectionStage": "raw_collection",
+      "collection_stage": "raw_collection",
+      "manualSeed": false,
+      "manual_seed": false,
+      "sourceType": "blog_post_item",
+      "source_type": "blog_post_item",
+      "source_priority": "high",
+      "source_reliability": "official",
+      "usageHint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "source_usage_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "source_linked_evidence_policy": {
+        "enabled": true,
+        "allowedDomains": [
+          "developer.android.com",
+          "source.android.com",
+          "android-review.googlesource.com",
+          "issuetracker.google.com",
+          "github.com"
+        ],
+        "importantAnchorKeywords": [
+          "release notes",
+          "changelog",
+          "documentation",
+          "source code",
+          "issue",
+          "bug",
+          "security bulletin",
+          "details",
+          "learn more",
+          "gerrit",
+          "commit",
+          "pull request"
+        ],
+        "ignoreAnchorKeywords": [
+          "privacy",
+          "subscribe",
+          "share",
+          "rss",
+          "profile",
+          "terms",
+          "comment",
+          "newsletter",
+          "feed",
+          "sign in"
+        ]
+      },
+      "source_quality": {
+        "source_role": "official_release_source",
+        "source_url_quality": "official_dated_release",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": false,
+        "conditional_evidence_type": "",
+        "evidence_granularity": "article_level_concrete_source_fact",
+        "source_quality_notes": [
+          "official source"
+        ]
+      },
+      "sourceRole": "official_release_source",
+      "source_role": "official_release_source",
+      "sourceUrlQuality": "official_dated_release",
+      "source_url_quality": "official_dated_release",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": false,
+      "requires_conditional_evidence": false,
+      "conditionalEvidenceType": "",
+      "conditional_evidence_type": "",
+      "evidenceGranularity": "article_level_concrete_source_fact",
+      "evidence_granularity": "article_level_concrete_source_fact",
+      "sourceQualityNotes": [
+        "official source"
+      ],
+      "source_quality_notes": [
+        "official source"
+      ],
+      "candidateOnly": false,
+      "candidate_only": false,
+      "community_signal": false,
+      "collectionMode": "article-item",
+      "collection_mode": "article-item",
+      "sourceCollectionMode": "rss-source",
+      "source_collection_mode": "rss-source",
+      "isArticleCandidate": true,
+      "is_article_candidate": true,
+      "isWatchPage": false,
+      "is_watch_page": false,
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "evidenceSignalKind": "dated-concrete-evidence",
+      "evidence_signal_kind": "dated-concrete-evidence",
+      "evidenceLevel": "primary",
+      "evidence_level": "primary",
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_kind": "blog_post_item",
+      "source_extraction": {
+        "workflow": {
+          "sections": [
+            {
+              "heading": "",
+              "items": [
+                {
+                  "text": "Self-Healing Build Loops : When a local build fails, the Antigravity execution harness captures error streams directly from Gradle daemons and Kotlin compiler logs. Using this feedback, Argon was able to iteratively diagnose build errors to arrive at a revised solution."
+                }
+              ]
+            },
+            {
+              "heading": "",
+              "items": [
+                {
+                  "text": "Setting up visually (Antigravity Desktop & Android Studio Canary) In the Antigravity Desktop App: Go to Settings > Customizations > Build With Google Plugins (or the Antigravity Plugin Marketplace), locate android-cli-plugin, and toggle it to Enabled In Android Studio Canary: Log in to your Antigravity account in the agent tool window to enable agentic workflows directly alongside your editor 2. Setting up via the Terminal CLI For Google Antigravity, run: agy plugin install android-cli-plugin 3."
+                }
+              ]
+            }
+          ]
+        },
+        "evidence_blocks": [
+          {
+            "evidence_id": "source-body:42887d1e3dbba04ccf92",
+            "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+            "text": "Bringing our latest frontier model to Android Developers 3 min read 13 Oct 2026",
+            "truncated": false
+          },
+          {
+            "evidence_id": "source-body:40199010f34fb63b62bc",
+            "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+            "text": "Android Developers\n Android Developers' Blog\n Blog\n Stay organized with collections\n Save and categorize content based on your preferences.\n As agentic development accelerates, Android engineering is reaching an exciting new frontier: moving from assistive code completion to agents executing end-to-end under your direction. You have total choice and flexibility in the models and agents you use.&nbsp;\nGemini 4 Argon excels at deep work in complex, real-world tasks across domains including coding, finance, legal, cybersecurity, and science.\nStarting today, Android developers can access Gemini 4 Argon across their development surfaces, including Google Antigravity (standalone and in&nbsp;Android Studio Canary) for Google AI Ultra subscribers, and in Android Studio and Google AI Studio via the paid tier of the Gemini API.\nVelocity & Autonomy: Closed-loop build self-correction\nArgon has significant improvements in long-horizon autonomous execution and the ability to plan and run multi-step, complex software tasks over time.\nSelf-Healing Build Loops: When a local build fails, the Antigravity execution harness captures error streams directly from Gradle daemons and Kotlin compiler logs. Using this feedback, Argon was able to iteratively diagnose build errors to arrive at a revised solution. To achieve this, the model maintained a consistent hypothesis across successive rounds of editing, enabling it to better address the true root-cause of build failures.\nUI sophistication: Fluid motion & shader-backed Jetpack Compose\nArgon demonstrates exceptional design craft, generating production-ready Jetpack Compose code out of the box:\nAGSL Shaders on the GPU: Argon applied advanced mathematical reasoning to write complex, production-ready Android Graphics Shading Language (AGSL) directly into Compose Modifier.graphicsLayer blocks and shader brushes. From live frosted glass shaders to dynamic lighting and ripple effects, Argon can handle complicated vector and rendering math that produces lightweight GPU shaders that run alongside fluid 120 FPS Compose animations.\nA flexible developer experience with Android CLI\nAntigravity operates across multiple surfaces, from the desktop app and IDE extensions to the command line. No matter which surface you prefer, the official Android CLI plugin is the de-facto engine that connects your agent to local Android tools, enabling it to run programmatic commands for common tasks and execute custom developer skills.\nStarting today, you can access and configure this agentic workspace in two primary ways:\n1. Setting up visually (Antigravity Desktop & Android Studio Canary)\nIn the Antigravity Desktop App: Go to Settings > Customizations > Build With Google Plugins (or the Antigravity Plugin Marketplace), locate android-cli-plugin, and toggle it to Enabled\nIn Android Studio Canary: Log in to your Antigravity account in the agent tool window to enable agentic workflows directly alongside your editor \n2. Setting up via the Terminal CLI&nbsp;\nFor Google Antigravity, run:\nagy plugin install android-cli-plugin\n3.&nbsp;For any terminal agent (via Android CLI), run:\nandroid init\nAvailability & getting started\nStarting today, Argon is rolling out globally to developers in supported regions. You can access and begin building with the model in your local environment across three primary development surfaces:\n1. Google Antigravity:&nbsp;Google AI Ultra subscribers can build with Gemini 4 Argon in the standalone Antigravity desktop app (available for macOS, Windows, and Linux) or directly via the terminal CLI\n2. Android Studio:\nVia Google Antigravity: Google AI Ultra subscribers can build with Gemini 4 Argon by logging into Antigravity within the latest Android Studio Canary.\nVia the Gemini API: Developers on the paid tier of the Gemini API can build with Gemini 4 Argon in Android Studio.\n3. Google AI Studio: Google AI Ultra subscribers or developers on the paid tier of the Gemini API can build with Gemini 4 Argon via Playground and Build in Google AI Studio\n4.&nbsp;Firebase AI Logic:&nbsp;Starting today, developers globally on the paid tier of the Gemini API can use Gemini 4 Argon client-side to build intelligent features in their mobile and web apps via&nbsp;Firebase AI Logic.\nTo begin building with Argon in your local environment:\nChoose your path: Confirm you have an active Google AI Ultra subscription to use Antigravity, or ensure you are on the paid tier of the Gemini API to use standard API surfaces (with introductory pricing available through November 30, 2026).\nUpdate your tools: Download the latest version of the Antigravity desktop app or CLI, and install the official Android CLI plugin (agy plugin install android-cli-plugin) to connect your agentic workspace directly to your Android Studio build tools.\nWe are eager to see the high-craft Android experiences you build at the frontier. Share your projects and feedback with us on&nbsp;X&nbsp;(@AndroidDev) and&nbsp;LinkedIn!\n #Agentic Android development\n Written by:\n Jason Buchel\n Creative Technologist\n read_more\n View profile\n Continue reading\n 02\n Oct\n 2026\n 02\n Oct\n 2026\n Product News\n Device Streaming and Android skills - available in Android CLI\n arrow_forward\n As Android developers, you have many choices when it comes to the agents, LLMs, tools, and command-line interfaces (CLI) you use for app development. Our goal is to help you build beautiful, high-quality Android apps, no matter how you choose to build.\n Simona Milanovic \n •\n 4 min read\n #Agentic Android development\n 24\n Sep\n 2026\n 24\n Sep\n 2026\n Product News\n Build your way: Use any AI agent of your choice in Android Studio\n arrow_forward\n Last year, Android Studio opened up to any AI model. Today, we’re taking the next step by introducing support for your choice of coding agents. \n Matthew Warner \n •\n 3 min read\n #Agentic Android development\n 17\n Sep\n 2026\n 17\n Sep\n 2026\n Product News\n Android Bench 2.0: Pushing the frontier with challenging long-horizon tasks\n arrow_forward\n Today we’re releasing the first set of long-horizon tasks (LHT), which are tasks of great complexity that take an engineer multiple days or even a week to complete. We are also introducing agentic evaluation, starting with agents from corresponding model providers. \n Matthew McCullough \n •\n 3 min read\n #Agentic Android development\n #Android Bench\n Stay in the loop\n Get the latest Android development insights delivered to your inbox\n weekly.\n mail\n Subscribe",
+            "truncated": false
+          }
+        ]
+      },
+      "derived_editorial_hints": null,
+      "extraction_quality": null,
+      "datePrecision": "",
+      "date_precision": "",
+      "parentUrl": "",
+      "parent_url": "",
+      "in_reply_to": "",
+      "seriesId": null,
+      "series_id": null,
+      "seriesName": null,
+      "series_name": null,
+      "seriesVersion": null,
+      "series_version": null,
+      "camera_path_commit_count": null,
+      "camera_path_commit_count_is_lower_bound": null,
+      "gerrit_change_id": "",
+      "gerrit_change_number": null,
+      "gerrit_change_status": "",
+      "gerrit_commit_sha": "",
+      "gerrit_effective_date_field": "",
+      "covered_gerrit_change_ids": [],
+      "covered_commit_shas": [],
+      "parentTitle": "",
+      "parent_title": "",
+      "parentCanonicalUrl": "",
+      "parent_canonical_url": "",
+      "roundupItemIndex": null,
+      "roundup_item_index": null,
+      "anchorText": "",
+      "anchor_text": "",
+      "article_group_key": "android_native_tooling_workflow",
+      "tooling_workflow_type": "native_tooling_workflow",
+      "native_workflow_evidence_score": 3,
+      "outgoing_links": [],
+      "sourceMonth": "",
+      "source_month": "",
+      "has_published_date": true,
+      "has_version_or_release": false,
+      "has_api_or_component": true,
+      "has_behavior_change": true,
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "evidence_score": 6,
+      "version_or_release": "",
+      "api_or_component": "Android Studio",
+      "source_hint_api_or_component": "android",
+      "behavior_change": "Self-Healing Build Loops : When a local build fails, the Antigravity execution harness captures error streams directly from Gradle daemons and Kotlin compiler logs.",
+      "collector_template_sentence": "",
+      "selection_exclusion_reason": "Official dated Android native tooling workflow article; eligible only as cpp_ai_tooling_fallback supporting main context.",
+      "watchlist_reason": "",
+      "verification_hint": "Can be used directly if the collected item supports the claim.",
+      "title": "Bringing our latest frontier model to Android Developers",
+      "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "publishedAt": "2026-10-13",
+      "published_date": "2026-10-13",
+      "effective_date": "2026-10-13",
+      "date_source": "visible_date",
+      "date_confidence": 0,
+      "date_evidence_url": "",
+      "summary": "Bringing our latest frontier model to Android Developers 3 min read 13 Oct 2026 Jason Buchel Creative Technologist, Platform & Devices As agentic development accelerates, Android engineering is reaching an exciting new frontier: moving from assistive code completion to agents executing end-to-end under your direction. You have total choice and flexibility in the models and agents you use.",
+      "summary_truncated": true,
+      "relevanceScore": 96,
+      "relevance_score": 96,
+      "cameraHalRelevanceScore": 96,
+      "camera_hal_relevance_score": 96,
+      "editorial_priority": 2,
+      "relevance_bucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 3,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "evidence_origin": "article_text",
+      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
+      "scope_evidence_terms": [
+        "\\bAndroid\\s+Studio\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device|native|Android)\\b[^.\\n]{0,140}\\b(?:Gradle|AGP|Android Gradle Plugin|NDK|JNI|C\\+\\+|LLDB|Perfetto)\\b"
+      ],
+      "aospCameraStackBucket": "cpp_ai_tooling_fallback",
+      "aosp_camera_stack_bucket": "cpp_ai_tooling_fallback",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [
+        "\\bAndroid\\s+Studio\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device|native|Android)\\b[^.\\n]{0,140}\\b(?:Gradle|AGP|Android Gradle Plugin|NDK|JNI|C\\+\\+|LLDB|Perfetto)\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\bAndroid\\s+Studio\\b",
+        "\\b(?:build|test|debug|profil(?:e|ing)|run|device|native|Android)\\b[^.\\n]{0,140}\\b(?:Gradle|AGP|Android Gradle Plugin|NDK|JNI|C\\+\\+|LLDB|Perfetto)\\b"
+      ],
+      "aospCameraRelevanceReason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.",
+      "imageCandidates": [],
+      "image_candidates": [],
+      "candidateTier": "short-news",
+      "reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)",
+      "collection_reason": "Android Developers Blog (official, high, score 96): cpp_ai_tooling_fallback (C++, LLVM, Clang, GCC, sanitizer, native performance, build/test tooling, AI coding tools, on-device AI, or LLM agent workflow evidence. Matched 2 article-level signal(s) from article_text.)",
+      "decision": {
+        "topic": "cpp_ai_tooling_fallback",
+        "evidenceLevel": "primary",
+        "selection": "short",
+        "reason": "Official dated source with supporting evidence.",
+        "hasDate": true,
+        "hasConcreteChange": true
+      },
+      "selection": "short",
+      "decision_reason": "Official dated source with supporting evidence.",
+      "has_date": true,
+      "has_concrete_change": true,
+      "topic_bucket": "cpp_ai_tooling_fallback",
+      "headline": "Gemini 4 Argon, Android Studio와 CLI에서 개발 작업 지원",
+      "article_type": "tooling",
+      "public_article": {
+        "headline": "Gemini 4 Argon, Android Studio와 CLI에서 개발 작업 지원",
+        "lead": "AI에게 코드만 물어보는 것에서 빌드 도구를 연결해 작업시키는 방향으로 지원이 넓어졌습니다. Google은 10월 13일 Gemini 4 Argon의 Android 개발 환경 지원을 발표했습니다.",
+        "body_markdown": "### 무엇이 달라졌나요?\n\nGemini 4 Argon을 Android Studio와 Antigravity에서 사용할 수 있게 되었습니다. 공식 Android CLI 플러그인은 에이전트를 로컬 Android 도구에 연결합니다. 에이전트가 개발 도구를 실행하는 작업 흐름을 구성할 수 있다는 뜻입니다.\n\nGoogle은 빌드 실패 시 Gradle·Kotlin 컴파일러의 오류 로그를 받아 수정하는 사례를 소개했습니다. 공급사가 제시한 사례이며, 모든 프로젝트에서 자동으로 해결된다는 보장은 아닙니다.\n\n### 어떤 조건에서 사용할 수 있나요?\n\nAntigravity 앱·CLI와 Android Studio Canary 안의 Antigravity 경로는 Google AI Ultra 구독자를 대상으로 합니다. Android Studio에서는 유료 Gemini API를 사용하는 경로도 제공합니다. 지원 지역과 사용 환경을 확인해야 합니다.\n\n### 누가 무엇을 확인하면 되나요?\n\nAndroid 앱이나 개발 도구를 담당하는 팀이 살펴볼 소식입니다. 시험용 프로젝트에서 빌드 오류를 하나 재현하고, 에이전트가 실제 오류 로그를 읽는지와 수정 후 빌드가 통과하는지를 확인하는 방법을 제안합니다.\n\n이 발표는 Camera HAL이나 C++ 네이티브 빌드의 자동 수정 능력을 입증하지 않습니다. 기존에 소개한 BYOA는 외부 에이전트를 연결하는 기능이고, 이번 소식은 특정 모델의 이용 경로와 Android 개발 도구 연결을 다룹니다.",
+        "camera_hal_takeaway": "Android 개발 자동화를 시험하는 팀이 확인할 소식입니다. 구독·API 조건을 먼저 확인하고, 작은 프로젝트에서 오류 로그 확인과 빌드 재실행을 시험해 보세요.",
+        "reader_checkpoints": [
+          "이용 경로에 맞는 Google AI Ultra 또는 유료 Gemini API 조건을 확인합니다.",
+          "시험 프로젝트의 실제 오류 로그와 수정 후 빌드 결과를 대조합니다."
+        ],
+        "source_links": [
+          {
+            "title": "Bringing our latest frontier model to Android Developers",
+            "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+            "publisher": "Android Developers Blog",
+            "source_role": "primary",
+            "checked_at": "2026-10-18T16:38:17.885Z"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "Android Developers Blog (2026-10-13)",
+        "editorial_story": {
+          "not_to_overclaim": "Camera HAL 동작 변경이나 C++ 빌드 자동 수정 성능으로 확대 해석하지 않습니다.",
+          "editor_take": "실제 Android 도구를 연결하는 흐름을 제한된 시험 프로젝트에서 평가할 만합니다."
+        },
+        "decision_metadata": {
+          "impact": "Medium",
+          "scope": [
+            "Tooling",
+            "AI"
+          ],
+          "action": [
+            "Watch",
+            "Test"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "confirmed_facts": [
+        "Google은 2026년 10월 13일 Gemini 4 Argon을 Android 개발 환경에서 사용할 수 있다고 발표했습니다.",
+        "Antigravity 및 Android Studio Canary의 Antigravity 경로는 Google AI Ultra 구독자를 대상으로 합니다.",
+        "Android Studio에서는 유료 Gemini API를 통한 이용 경로도 제공합니다.",
+        "공식 Android CLI 플러그인은 에이전트를 로컬 Android 개발 도구에 연결합니다."
+      ],
+      "what_changed": "Google은 2026년 10월 13일 Gemini 4 Argon을 Android 개발 환경에서 사용할 수 있다고 발표했습니다. Antigravity 및 Android Studio Canary의 Antigravity 경로는 Google AI Ultra 구독자를 대상으로 합니다. Android Studio에서는 유료 Gemini API를 통한 이용 경로도 제공합니다. 공식 Android CLI 플러그인은 에이전트를 로컬 Android 개발 도구에 연결합니다.",
+      "evidence_summary": "Google은 2026년 10월 13일 Gemini 4 Argon을 Android 개발 환경에서 사용할 수 있다고 발표했습니다. Antigravity 및 Android Studio Canary의 Antigravity 경로는 Google AI Ultra 구독자를 대상으로 합니다. Android Studio에서는 유료 Gemini API를 통한 이용 경로도 제공합니다. 공식 Android CLI 플러그인은 에이전트를 로컬 Android 개발 도구에 연결합니다.",
+      "sources": [
+        {
+          "title": "Bringing our latest frontier model to Android Developers",
+          "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli"
+        }
+      ],
+      "source_candidate_url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "source_verification_notes": [
+        "공식 영문 본문과 헤더의 2026-10-13 게시일을 직접 확인했습니다. RSS 갱신일 2026-10-16과 구분했습니다."
+      ],
+      "claims": [
+        {
+          "claim_id": "c_argon_1",
+          "text": "Google은 2026년 10월 13일 Gemini 4 Argon을 Android 개발 환경에서 사용할 수 있다고 발표했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:42887d1e3dbba04ccf92"
+          ],
+          "source_urls": [
+            "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_argon_2",
+          "text": "Antigravity 및 Android Studio Canary의 Antigravity 경로는 Google AI Ultra 구독자를 대상으로 합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:40199010f34fb63b62bc"
+          ],
+          "source_urls": [
+            "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_argon_3",
+          "text": "Android Studio에서는 유료 Gemini API를 통한 이용 경로도 제공합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:40199010f34fb63b62bc"
+          ],
+          "source_urls": [
+            "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c_argon_4",
+          "text": "공식 Android CLI 플러그인은 에이전트를 로컬 Android 개발 도구에 연결합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:40199010f34fb63b62bc"
+          ],
+          "source_urls": [
+            "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        }
+      ],
+      "action_items": [],
+      "camera_hal_checks": [],
+      "is_ai_related": true,
+      "coverage_type": "fresh",
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "기사 본문에 집중하도록 기존 로컬 fallback 계약을 사용합니다."
     },
     {
       "category": "driver",
@@ -834,285 +1232,13 @@
         "outcome": "no_image_extracted"
       },
       "coverage_type": "fresh"
-    },
-    {
-      "category": "tooling",
-      "headline": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
-      "what_changed": "Android Studio에서 사용자가 선택한 코딩 AI 에이전트를 통합하여 사용할 수 있도록 지원이 추가되었습니다. 이 기능은 Bring Your Own Agent (BYOA)를 통해 Claude Agent, Codex, Antigravity와 같은 에이전트를 Android Studio에 연동하고, IDE의 코드베이스 인식 및 토큰 효율성, 워크플로 연속성, 에이전트 유연성, 네이티브 도구 주입 등의 이점을 제공합니다.",
-      "confirmed_facts": [
-        "Android Studio Canary 최신 버전에서 BYOA(Bring Your Own Agent) 기능이 프리뷰 형태로 도입되었습니다.",
-        "Agent Client Protocol(ACP)을 통해 IDE가 프로젝트 그래프, 빌드 구성, 플랫폼 세부정보를 에이전트에 직접 제공합니다.",
-        "Anthropic의 Claude Agent, OpenAI의 Codex, Google의 Antigravity 에이전트 연동이 지원됩니다.",
-        "빌드 문제 해결, Jetpack Compose Previews, Android SDK 도구, Android Emulator 제어 기능이 에이전트에 네이티브 도구로 주입됩니다."
-      ],
-      "evidence_summary": "2026년 9월 24일 Android Developers Blog 공식 게시글을 통해 Android Studio Canary 릴리스에서 BYOA 기능이 지원됨이 확인되었습니다. ACP 프로토콜을 사용하며 Claude, Codex, Antigravity 등의 에이전트 통합이 가능합니다.",
-      "specificity_checks": [
-        "Source: Android Developers Blog (2026-09-24)",
-        "Component: Android Studio Canary, BYOA (Bring Your Own Agent)",
-        "Protocol: Agent Client Protocol (ACP)",
-        "Behavior: 외부 에이전트 등록 및 IDE 컨텍스트 주입 지원"
-      ],
-      "source_verification_notes": [
-        "Source URL: https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-        "Evidence ID: source-body:fd86b97b9b3e3588c202",
-        "Primary source: 원문 블로그 게시물 전체 본문을 읽고 Android Studio Canary의 BYOA 기능 및 ACP 연동을 확인했습니다. Android 런타임/HAL 영향은 없습니다.",
-        "2026-10-19 재검토: 공식 페이지의 게시일 24 Sep 2026을 직접 확인했습니다. 기존 10월 15일 표기를 정정하고 이전 발표 참고로 구분합니다."
-      ],
-      "public_article": {
-        "headline": "짧은 참고: Android Studio에서 쓰던 AI 에이전트를 연결하는 BYOA",
-        "lead": "Android Studio Canary의 BYOA는 외부 AI 코딩 에이전트를 IDE 안에서 사용하게 해 주는 프리뷰 기능입니다. 9월 24일 발표된 내용을 개발 도구 참고 소식으로 소개합니다.",
-        "body_markdown": "### 무엇을 할 수 있나요?\n\nBYOA(Bring Your Own Agent)는 Claude Agent, Codex, Antigravity 같은 에이전트를 연결합니다. IDE와 에이전트가 대화하는 규약인 ACP(Agent Client Protocol)를 통해 프로젝트·빌드 정보와 IDE 도구를 제공합니다.\n\n### 누가 살펴보면 되나요?\n\n개발 보조 도구를 시험하는 팀이 참고할 기능입니다. 팀의 C++ 빌드·테스트 작업에 도움이 되는지는 직접 확인해야 합니다. Camera HAL의 실행 동작이나 성능을 바꾸는 기능은 아닙니다.\n\n공식 게시일은 2026년 9월 24일입니다. 이번 주에 새로 발표된 기능이 아니며, Canary의 프리뷰 기능이라는 점을 구분해 보세요.",
-        "camera_hal_takeaway": "개발 도구를 시험하는 팀을 위한 이전 발표 참고입니다. 정식 도입 전 현재 빌드·테스트 흐름에 맞는지 확인하세요.",
-        "reader_checkpoints": [
-          "Android Studio Canary 빌드에서 ACP 호환 에이전트 설정(설정 > 도구 > AI > 에이전트) 동작을 확인합니다.",
-          "C++ 네이티브 모듈 빌드 로그 파싱 및 단위 테스트 실행 환경에서 네이티브 도구 주입 기능의 유효성을 검토합니다."
-        ],
-        "source_links": [
-          {
-            "title": "Build your way: Use any AI agent of your choice in Android Studio",
-            "url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-            "publisher": "Android Developers Blog",
-            "source_role": "primary",
-            "checked_at": "2026-10-18T15:21:24.360Z"
-          }
-        ],
-        "story_contract_version": 2,
-        "source_subtitle": "Android Developers Blog (2026-09-24, 이전 발표)",
-        "editorial_story": {
-          "not_to_overclaim": "이 변경은 IDE 개발 워크플로 지원 기능이며 Camera HAL API, 드라이버 인터페이스 또는 CTS 검증에 영향을 주지 않습니다.",
-          "editor_take": "C++ 네이티브 라이브러리와 유닛 테스트를 다루는 엔지니어의 로컬 생산성 보조 수단으로 적합한 업데이트입니다."
-        },
-        "decision_metadata": {
-          "impact": "Medium",
-          "scope": [
-            "Tooling",
-            "AI"
-          ],
-          "action": [
-            "Watch",
-            "Test"
-          ],
-          "overclaim_risk": "High"
-        }
-      },
-      "article_sections": {
-        "verified_facts": [
-          "Android Studio Canary 최신 버전에서 BYOA(Bring Your Own Agent) 기능이 프리뷰 형태로 도입되었습니다.",
-          "Agent Client Protocol(ACP)을 통해 IDE가 프로젝트 그래프, 빌드 구성, 플랫폼 세부정보를 에이전트에 직접 제공합니다.",
-          "Anthropic의 Claude Agent, OpenAI의 Codex, Google의 Antigravity 에이전트 연동이 지원됩니다.",
-          "빌드 문제 해결, Jetpack Compose Previews, Android SDK 도구, Android Emulator 제어 기능이 에이전트에 네이티브 도구로 주입됩니다."
-        ],
-        "background_context": "AOSP 카메라 및 C++ 네이티브 환경에서는 대규모 빌드 그래프와 복잡한 디버깅 세션이 빈번하므로, IDE가 외부 코딩 에이전트에 제공하는 컨텍스트와 도구 주입 인터페이스가 개발 생산성에 직접적인 영향을 줄 수 있습니다.",
-        "hal_driver_impact": "Camera HAL, 드라이버, 프레임워크 런타임 동작에는 직접적인 영향이 없으며, 네이티브 코드 작성, 유닛 테스트 자동화, 정적 분석 피드백 루프 개선 등 개발 워크플로 차원의 간접적 영향에 국한됩니다.",
-        "action_items": [
-          "Android Studio Canary 환경에서 ACP 기반 코딩 에이전트 연동과 C++ 빌드 진단 도구 연계 동작을 점검합니다."
-        ],
-        "team_share_points": "Android Studio Canary에서 외부 코딩 에이전트(Claude, Codex 등)를 연결할 수 있는 BYOA가 추가되어 네이티브 C++ 및 빌드 스크립트 작성 보조 도구로 활용 가능합니다."
-      },
-      "hal_signal_capsule": {
-        "why_now": "2026년 9월 24일 공식 발표된 기능으로 IDE 기반 C++ 개발 및 디버깅 워크플로에 새로운 선택지를 제공합니다.",
-        "reader_owners": [
-          "native_tooling_owner"
-        ],
-        "check_within_2_weeks": "Android Studio Canary 환경에서 ACP 기반 에이전트 연동과 네이티브 빌드 진단 도구 연계 동작을 확인합니다.",
-        "impact_axes": [
-          "native_tooling_workflow"
-        ],
-        "do_not_overstate": [
-          "이 변경으로 Camera HAL 런타임 성능, 스트림 구성, 버퍼 관리가 개선된다고 설명하지 마세요."
-        ]
-      },
-      "claims": [
-        {
-          "claim_id": "c_tooling_1",
-          "text": "Android Studio Canary 최신 버전에서 BYOA(Bring Your Own Agent) 기능이 프리뷰 형태로 도입되었습니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "candidate:50009098fbc5bde9:source-summary"
-          ],
-          "source_urls": [
-            "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
-          ],
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "c_tooling_2",
-          "text": "Agent Client Protocol(ACP)을 통해 IDE가 프로젝트 그래프, 빌드 구성, 플랫폼 세부정보를 에이전트에 직접 제공합니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "source-body:fd86b97b9b3e3588c202"
-          ],
-          "source_urls": [
-            "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
-          ],
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "c_tooling_3",
-          "text": "Anthropic의 Claude Agent, OpenAI의 Codex, Google의 Antigravity 에이전트 연동이 지원됩니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "source-body:fd86b97b9b3e3588c202"
-          ],
-          "source_urls": [
-            "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
-          ],
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low"
-        },
-        {
-          "claim_id": "c_tooling_4",
-          "text": "빌드 문제 해결, Jetpack Compose Previews, Android SDK 도구, Android Emulator 제어 기능이 에이전트에 네이티브 도구로 주입됩니다.",
-          "claim_type": "fact",
-          "evidence_ids": [
-            "source-body:fd86b97b9b3e3588c202"
-          ],
-          "source_urls": [
-            "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
-          ],
-          "impact_level": "native_tooling_workflow",
-          "overclaim_risk": "low"
-        }
-      ],
-      "camera_hal_checks": [],
-      "action_hints": [],
-      "action_items": [],
-      "is_ai_related": true,
-      "article_type": "tooling",
-      "imageCandidates": [
-        {
-          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
-          "sourceUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-          "sourceKind": "og",
-          "width": null,
-          "height": null,
-          "alt": "",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "Build your way: Use any AI agent of your choice in Android Studio",
-          "validationStatus": "ok",
-          "contentLength": 16100
-        },
-        {
-          "url": "https://www.gstatic.com/devrel-devsite/prod/v9ce9cb5b22b62a465ff52c45061a0a6a2d86a80b685e9aa8a182b203fdfbf420/android/images/lockup.png",
-          "sourceUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-          "sourceKind": "article-img",
-          "width": null,
-          "height": null,
-          "alt": "Android Developers",
-          "contentType": "image/png",
-          "licenseStatus": "unknown",
-          "attribution": "Build your way: Use any AI agent of your choice in Android Studio",
-          "validationStatus": "ok",
-          "contentLength": 5562
-        },
-        {
-          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_Z1WI1Mt.webp",
-          "sourceUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-          "sourceKind": "article-img",
-          "width": 2001,
-          "height": 1001,
-          "alt": "",
-          "contentType": "image/webp",
-          "licenseStatus": "unknown",
-          "attribution": "Build your way: Use any AI agent of your choice in Android Studio",
-          "validationStatus": "ok",
-          "contentLength": 29696
-        },
-        {
-          "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
-          "sourceUrl": "https://android-developers.googleblog.com/",
-          "articleUrl": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-          "sourceKind": "og",
-          "licenseStatus": "unknown",
-          "attribution": "Android Developers Blog",
-          "validationStatus": "ok",
-          "contentType": "image/webp",
-          "width": null,
-          "height": null,
-          "alt": ""
-        }
-      ],
-      "selectedImage": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
-      "imageSource": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-      "imageAttribution": "Build your way: Use any AI agent of your choice in Android Studio",
-      "imageAlt": "Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입",
-      "imageLicenseStatus": "unknown",
-      "imageUsageDecisionReason": "라이선스 상태가 명확하지 않고 텍스트 레이아웃 무결성을 위해 이미지를 제외합니다.",
-      "sources": [
-        {
-          "title": "Build your way: Use any AI agent of your choice in Android Studio",
-          "url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
-        }
-      ],
-      "actionability_level": "low",
-      "camera_pipeline_link": "none",
-      "effective_actionability_level": "low",
-      "hal_impact_axes": [
-        "native_tooling_workflow"
-      ],
-      "reader_owners": [
-        "native_tooling_owner"
-      ],
-      "source_candidate_url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-      "source_candidate_hash": "50009098fbc5bde94f22b9f4389732f42447c65a7d908d804474ae97c5b3ca9a",
-      "article_group_key": "android_native_tooling_workflow",
-      "tooling_workflow_type": "native_tooling_workflow",
-      "relevance_bucket": "cpp_ai_tooling_fallback",
-      "editorial_priority": 2,
-      "aosp_camera_directness": 0,
-      "driver_stack_relevance": 0,
-      "soc_platform_relevance": 0,
-      "native_tooling_relevance": 3,
-      "counts_as_primary_camera_topic": false,
-      "counts_as_driver_topic": false,
-      "counts_as_soc_topic": false,
-      "finalSelectionEligibility": "short",
-      "source_gap_risk": false,
-      "main_article_readiness": null,
-      "do_not_claim": [],
-      "evidence_origin": "article_text",
-      "source_hint": "Android platform, Jetpack, CameraX, developer tooling 관련 공식 업데이트 확인",
-      "resolvedImage": {
-        "url": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
-        "src": "https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp",
-        "originalUrl": "",
-        "originalSrc": "",
-        "usedFallback": false,
-        "reason": ""
-      },
-      "image_recovery": {
-        "article_url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-        "page_attempts": [
-          {
-            "attempt": 1,
-            "ok": true,
-            "reason": "ok",
-            "status": 0
-          }
-        ],
-        "validation_failures": [],
-        "extracted_count": 10,
-        "valid_count": 3,
-        "outcome": "available"
-      },
-      "coverage_type": "catch_up"
     }
   ],
   "action_items": [
-    "카메라 앱의 8비트 HEIF 서피스 캡처 시나리오에서 블랙 레벨(RGB 0,0,0)의 인코딩 및 디코딩 루마 정합성을 확인합니다.",
-    "Android Studio Canary 환경에서 ACP 기반 에이전트 연동과 네이티브 빌드 진단 도구 연계 동작을 확인합니다."
+    "8비트 HEIF 저장 시 디코딩된 검은색과 VUI 색상 범위 표시를 함께 확인합니다.",
+    "Gemini 개발 도구의 이용 조건과 시험 프로젝트에서 오류 로그 확인·빌드 재실행을 검토합니다."
   ],
   "references": [
-    {
-      "title": "Build your way: Use any AI agent of your choice in Android Studio",
-      "url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio"
-    },
     {
       "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387"
@@ -1124,6 +1250,10 @@
     {
       "title": "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()",
       "url": "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/"
+    },
+    {
+      "title": "Bringing our latest frontier model to Android Developers",
+      "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli"
     }
   ],
   "explicitly_demoted_groups": [],
@@ -1133,16 +1263,16 @@
   "explicitly_demoted_group_count": 0,
   "hard_blocked_group_count": 0,
   "selected_representative_group_keys": [
-    "android_native_tooling_workflow",
     "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+    "android_native_tooling_workflow",
     "lore-series:20261013-hm1092-driver-v7-d81a9b152ffd@gmail.com",
     "lore-series:20261016105553.346322-a.karelin@ideco.ru"
   ],
   "rendered_group_keys": [
     "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+    "android_native_tooling_workflow",
     "lore-series:20261013-hm1092-driver-v7-d81a9b152ffd@gmail.com",
-    "lore-series:20261016105553.346322-a.karelin@ideco.ru",
-    "android_native_tooling_workflow"
+    "lore-series:20261016105553.346322-a.karelin@ideco.ru"
   ],
   "explicitly_demoted_group_keys": [],
   "hard_blocked_group_keys": [],
@@ -1175,6 +1305,13 @@
       "source": "libcamera Patchwork (patch review)",
       "published_date": "2026-10-16",
       "note": "오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고"
+    },
+    {
+      "title": "Android Studio BYOA: 외부 AI 에이전트 연결",
+      "url": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+      "source": "Android Developers Blog",
+      "published_date": "2026-09-24",
+      "note": "이전 발표 참고: 특정 모델 지원과 외부 에이전트 연결 기능은 구분해야 합니다."
     }
   ],
   "tags": [
@@ -1189,8 +1326,8 @@
   "coverage_end_date": "2026-10-18",
   "coverage_mode": "iso_week",
   "generation_anchor_date": "2026-10-19",
-  "intro_letter": "이번 호는 세 가지 카메라 문제를 살펴봅니다. 검은색이 회색으로 저장되는 HeifWriter 문제, 밝기를 높이다 검은 화면이 나오는 HM1092 게인 문제, atomisp에서 불필요한 오류 검사를 제거하는 이유입니다. 각 기사에서 원인과 변경점, 확인할 대상을 차례로 설명합니다. 마지막에는 이전에 발표된 Android Studio BYOA를 짧게 소개합니다.",
-  "intro_letter_source_hash": "sha256:43591ac756d146d1d09fca7235374758de9eb97557fb350c6ae4beaa95ae2d95",
+  "intro_letter": "이번 호는 저장 이미지의 검은색 문제를 고친 HeifWriter 소식으로 시작합니다. 이어서 Gemini 4 Argon을 Android 개발 도구에 연결하는 방법과 이용 조건을 살펴봅니다. HM1092의 게인 제한과 atomisp 오류 검사 정리 제안은 센서·드라이버 담당자가 확인할 내용입니다.",
+  "intro_letter_source_hash": "sha256:aa8f2e92167cd8f743f206601a5ce05f9809b16c2eba1917fe2e8fe5066fba3d",
   "weekly_key": "2026-W43",
   "week_start_date": "2026-10-19",
   "week_end_date": "2026-10-25"

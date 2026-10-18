@@ -8,11 +8,15 @@
 
 ## 1. 이번 주 핵심
 
-이번 호는 세 가지 카메라 문제를 살펴봅니다. 검은색이 회색으로 저장되는 HeifWriter 문제, 밝기를 높이다 검은 화면이 나오는 HM1092 게인 문제, atomisp에서 불필요한 오류 검사를 제거하는 이유입니다. 각 기사에서 원인과 변경점, 확인할 대상을 차례로 설명합니다. 마지막에는 이전에 발표된 Android Studio BYOA를 짧게 소개합니다.
+이번 호는 저장 이미지의 검은색 문제를 고친 HeifWriter 소식으로 시작합니다. 이어서 Gemini 4 Argon을 Android 개발 도구에 연결하는 방법과 이용 조건을 살펴봅니다. HM1092의 게인 제한과 atomisp 오류 검사 정리 제안은 센서·드라이버 담당자가 확인할 내용입니다.
 
 - [AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정](#article-androidx-heifwriter-8-heif)
 
   HEIF 저장 기능 담당자가 확인할 소식입니다. 특히 8비트 SDR Surface·Bitmap 입력을 살펴보세요. 직접 YUV를 넘기는 버퍼 입력과 10비트 HDR은 변경 대상이 아닙니다.
+
+- [Gemini 4 Argon, Android Studio와 CLI에서 개발 작업 지원](#article-gemini-4-argon-android-studio-cli)
+
+  Android 개발 자동화를 시험하는 팀이 확인할 소식입니다. 구독·API 조건을 먼저 확인하고, 작은 프로젝트에서 오류 로그 확인과 빌드 재실행을 시험해 보세요.
 
 - [Linux HM1092 드라이버 v7 제안: 밝기 조절로 검은 화면이 생기지 않도록 제한](#article-linux-hm1092-v7)
 
@@ -21,10 +25,6 @@
 - [Linux atomisp 패치 제안: 작동하지 않는 오류 검사를 제거하는 이유](#article-linux-atomisp)
 
   atomisp 유지보수 담당자가 확인할 소식입니다. 미리보기 정보가 없다는 결과와 캡처 스트림을 만들 수 없다는 오류를 구분해야 합니다.
-
-- [짧은 참고: Android Studio에서 쓰던 AI 에이전트를 연결하는 BYOA](#article-android-studio-ai-byoa)
-
-  개발 도구를 시험하는 팀을 위한 이전 발표 참고입니다. 정식 도입 전 현재 빌드·테스트 흐름에 맞는지 확인하세요.
 
 
 
@@ -75,9 +75,47 @@ HEIF 저장 기능을 담당한다면 검은색 테스트 이미지를 저장한
 
 ---
 
+<a id="article-gemini-4-argon-android-studio-cli"></a>
+
+## 3. Gemini 4 Argon, Android Studio와 CLI에서 개발 작업 지원
+
+_Android Developers Blog (2026-10-13)_
+
+AI에게 코드만 물어보는 것에서 빌드 도구를 연결해 작업시키는 방향으로 지원이 넓어졌습니다. Google은 10월 13일 Gemini 4 Argon의 Android 개발 환경 지원을 발표했습니다.
+
+### Camera HAL/Driver 관점에서의 의미
+
+Android 개발 자동화를 시험하는 팀이 확인할 소식입니다. 구독·API 조건을 먼저 확인하고, 작은 프로젝트에서 오류 로그 확인과 빌드 재실행을 시험해 보세요.
+
+
+
+### 무엇이 달라졌나요?
+
+Gemini 4 Argon을 Android Studio와 Antigravity에서 사용할 수 있게 되었습니다. 공식 Android CLI 플러그인은 에이전트를 로컬 Android 도구에 연결합니다. 에이전트가 개발 도구를 실행하는 작업 흐름을 구성할 수 있다는 뜻입니다.
+
+Google은 빌드 실패 시 Gradle·Kotlin 컴파일러의 오류 로그를 받아 수정하는 사례를 소개했습니다. 공급사가 제시한 사례이며, 모든 프로젝트에서 자동으로 해결된다는 보장은 아닙니다.
+
+### 어떤 조건에서 사용할 수 있나요?
+
+Antigravity 앱·CLI와 Android Studio Canary 안의 Antigravity 경로는 Google AI Ultra 구독자를 대상으로 합니다. Android Studio에서는 유료 Gemini API를 사용하는 경로도 제공합니다. 지원 지역과 사용 환경을 확인해야 합니다.
+
+### 누가 무엇을 확인하면 되나요?
+
+Android 앱이나 개발 도구를 담당하는 팀이 살펴볼 소식입니다. 시험용 프로젝트에서 빌드 오류를 하나 재현하고, 에이전트가 실제 오류 로그를 읽는지와 수정 후 빌드가 통과하는지를 확인하는 방법을 제안합니다.
+
+이 발표는 Camera HAL이나 C++ 네이티브 빌드의 자동 수정 능력을 입증하지 않습니다. 기존에 소개한 BYOA는 외부 에이전트를 연결하는 기능이고, 이번 소식은 특정 모델의 이용 경로와 Android 개발 도구 연결을 다룹니다.
+
+[이번 주 핵심으로](#issue-briefing)
+
+**출처**
+
+- [Bringing our latest frontier model to Android Developers](https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli)
+
+---
+
 <a id="article-linux-hm1092-v7"></a>
 
-## 3. Linux HM1092 드라이버 v7 제안: 밝기 조절로 검은 화면이 생기지 않도록 제한
+## 4. Linux HM1092 드라이버 v7 제안: 밝기 조절로 검은 화면이 생기지 않도록 제한
 
 _linux-media 메일링 리스트 (2026-10-13)_
 
@@ -123,7 +161,7 @@ NIR 센서를 연결하는 개발자는 게인 상한과 실제 화면을 함께
 
 <a id="article-linux-atomisp"></a>
 
-## 4. Linux atomisp 패치 제안: 작동하지 않는 오류 검사를 제거하는 이유
+## 5. Linux atomisp 패치 제안: 작동하지 않는 오류 검사를 제거하는 이유
 
 _linux-media 메일링 리스트 (2026-10-16)_
 
@@ -161,44 +199,6 @@ atomisp 유지보수 담당자는 미리보기 없는 RAW·BAYER 구성을 기�
 
 - [[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()](https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/T/#t)
 
----
-
-## 지난 소식 (Catch-up)
-
-<a id="article-android-studio-ai-byoa"></a>
-
-## 5. 짧은 참고: Android Studio에서 쓰던 AI 에이전트를 연결하는 BYOA
-
-_Android Developers Blog (2026-09-24, 이전 발표)_
-
-Android Studio Canary의 BYOA는 외부 AI 코딩 에이전트를 IDE 안에서 사용하게 해 주는 프리뷰 기능입니다. 9월 24일 발표된 내용을 개발 도구 참고 소식으로 소개합니다.
-
-### Camera HAL/Driver 관점에서의 의미
-
-개발 도구를 시험하는 팀을 위한 이전 발표 참고입니다. 정식 도입 전 현재 빌드·테스트 흐름에 맞는지 확인하세요.
-
-
-![Android Studio Canary, 외부 코딩 에이전트 연동 위한 BYOA 지원 도입](https://developer.android.com/static/blog/assets/BYOA_Backup_Strapi_1_5c3f94f766_sEPWb.webp)
-
-_이미지: [Build your way: Use any AI agent of your choice in Android Studio](https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio)_
-
-
-### 무엇을 할 수 있나요?
-
-BYOA(Bring Your Own Agent)는 Claude Agent, Codex, Antigravity 같은 에이전트를 연결합니다. IDE와 에이전트가 대화하는 규약인 ACP(Agent Client Protocol)를 통해 프로젝트·빌드 정보와 IDE 도구를 제공합니다.
-
-### 누가 살펴보면 되나요?
-
-개발 보조 도구를 시험하는 팀이 참고할 기능입니다. 팀의 C++ 빌드·테스트 작업에 도움이 되는지는 직접 확인해야 합니다. Camera HAL의 실행 동작이나 성능을 바꾸는 기능은 아닙니다.
-
-공식 게시일은 2026년 9월 24일입니다. 이번 주에 새로 발표된 기능이 아니며, Canary의 프리뷰 기능이라는 점을 구분해 보세요.
-
-[이번 주 핵심으로](#issue-briefing)
-
-**출처**
-
-- [Build your way: Use any AI agent of your choice in Android Studio](https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio)
-
 
 ## 참고 / 더 읽을거리
 
@@ -206,10 +206,11 @@ BYOA(Bring Your Own Agent)는 Claude Agent, Codex, Antigravity 같은 에이전�
 - [\[PATCH v3 0/6\] phy: qcom-mipi-csi2: C-PHY for X1E80100](<https://lore.kernel.org/linux-media/20261016-x1e-cphy-rfc-v3-0-40a346a72153@gmail.com/>) — lore.kernel.org linux-media list (2026-10-16) · 카메라 드라이버 / 이미지 파이프라인 참고
 - [\[PATCH v4 1/2\] media: dt-bindings: imx908: Add Sony IMX908 sensor](<https://lore.kernel.org/linux-media/20261016075918.19345-2-lachlan.michael@sony.com/>) — lore.kernel.org linux-media list (2026-10-16) · 카메라 드라이버 / 이미지 파이프라인 참고
 - [v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls](<https://patchwork.libcamera.org/patch/28471/>) — libcamera Patchwork (patch review) (2026-10-16) · 오픈소스 camera HAL 프로젝트 변경 · 기술 동향 참고
+- [Android Studio BYOA: 외부 AI 에이전트 연결](<https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio>) — Android Developers Blog (2026-09-24) · 이전 발표 참고: 특정 모델 지원과 외부 에이전트 연결 기능은 구분해야 합니다.
 
 ## 참고자료
 
-- [Build your way: Use any AI agent of your choice in Android Studio](https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio)
 - [heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support](https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387)
 - [[PATCH v7 0/3] media: Add Himax HM1092 mono NIR sensor driver](https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20261013-hm1092-driver-v7-0-d81a9b152ffd@gmail.com/T/#t)
 - [[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()](https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/) — [전체 패치 시리즈](https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/T/#t)
+- [Bringing our latest frontier model to Android Developers](https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli)

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "weekly_key": "2026-W43",
-  "source_hash": "sha256:51d2a8a59367601ea0bc939b914bfec5c0ebf00f383e56827ca8b1f4c729520e",
+  "source_hash": "sha256:4c4af4db3fdcc505fcc97035e8703a9cc328efe80a1880e579d7e4843e9e7a96",
   "title": "2026 W42 (10.12 ~ 10.18)",
-  "summary": "This issue explains three camera topics: gray-looking blacks in HeifWriter, black frames caused by out-of-range HM1092 gain, and why atomisp should remove an unnecessary error check. Each article walks through the cause, the change, and who should check it. We close with a brief reference to the earlier Android Studio BYOA announcement.",
+  "summary": "We start with HeifWriter’s fix for gray-looking blacks in saved images, then examine Gemini 4 Argon’s Android tool integration and access requirements. HM1092 gain limits and the atomisp error-check proposal follow for sensor and driver developers.",
   "sections": [
     {
       "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
@@ -14,6 +14,17 @@
       "source_subtitle": "AndroidX Gerrit (2026-10-16)",
       "source_titles": {
         "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support"
+      }
+    },
+    {
+      "id": "url:https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "headline": "Gemini 4 Argon supports Android development in Studio and the CLI",
+      "lead": "Support is expanding from asking AI about code to connecting development tools. On October 13, Google announced Gemini 4 Argon support across Android development environments.",
+      "body_markdown": "### What changed?\n\nGemini 4 Argon is available through Android Studio and Antigravity. The official Android CLI plugin connects agents to local Android tools, enabling workflows that run development commands.\n\nGoogle describes using Gradle and Kotlin compiler error logs to revise failed builds. This is a vendor example, not a guarantee of automatic fixes for every project.\n\n### What access is required?\n\nAntigravity’s app and CLI, including Antigravity inside Android Studio Canary, require Google AI Ultra. Android Studio also offers access through the paid Gemini API. Check supported regions and your environment.\n\n### Who should check it?\n\nTeams developing Android apps or tools can evaluate it. Our suggested check is to reproduce a build error in a test project, verify that the agent reads the actual error log, and check whether the revised build passes.\n\nThe announcement does not establish Camera HAL changes or automatic C++ native build repair. BYOA, covered previously, connects external agents; this announcement concerns a specific model’s access paths and Android tool integration.",
+      "why_it_matters": "This matters to teams evaluating Android development automation. Check subscription and API requirements, then try error-log inspection and build reruns in a small project.",
+      "source_subtitle": "Android Developers Blog (2026-10-13)",
+      "source_titles": {
+        "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli": "Bringing our latest frontier model to Android Developers"
       }
     },
     {
@@ -36,18 +47,6 @@
       "source_subtitle": "linux-media mailing list (2026-10-16)",
       "source_titles": {
         "https://lore.kernel.org/linux-media/20261016105553.346322-1-a.karelin@ideco.ru/": "[PATCH] media: atomisp: remove dead error check in ia_css_stream_create()"
-      }
-    },
-    {
-      "id": "url:https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
-      "headline": "Brief reference: Connect your AI agent to Android Studio with BYOA",
-      "body_markdown": "### What can it do?\n\nBYOA (Bring Your Own Agent) connects agents such as Claude Agent, Codex, and Antigravity. ACP (Agent Client Protocol), the communication protocol between the IDE and agents, provides project and build information along with IDE tools.\n\n### Who should look at it?\n\nTeams trying development assistants may find it useful. Test whether it helps your own C++ build and test tasks. It does not change Camera HAL execution behavior or performance.\n\nThe official publication date is September 24, 2026. This is an earlier announcement, not a new feature announcement this week, and it remains a Canary preview.",
-      "why_it_matters": "This earlier announcement is a reference for teams trying development tools. Check how it fits your build and test workflow before adopting it.",
-      "lead": "BYOA in Android Studio Canary is a preview feature for using external AI coding agents inside the IDE. We revisit the September 24 announcement as a development tool reference.",
-      "source_subtitle": "Android Developers Blog (2026-09-24; earlier announcement)",
-      "image_alt": "Android Studio Canary introduces BYOA support for integrating external coding agents",
-      "source_titles": {
-        "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio": "Build your way: Use any AI agent of your choice in Android Studio"
       }
     }
   ],
@@ -72,6 +71,11 @@
       "id": "https://patchwork.libcamera.org/patch/28471/",
       "title": "v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
       "note": "Open-source camera HAL project changes · Technology trends reference"
+    },
+    {
+      "id": "https://developer.android.com/blog/posts/build-your-way-use-any-ai-agent-of-your-choice-in-android-studio",
+      "title": "Android Studio BYOA: Connect external AI agents",
+      "note": "Earlier announcement: distinguish support for a specific model from connecting external agents."
     }
   ]
 }

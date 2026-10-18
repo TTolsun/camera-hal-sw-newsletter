@@ -42,7 +42,7 @@
       "id": "android-developers-blog",
       "name": "Android Developers Blog",
       "sourceUrl": "https://android-developers.googleblog.com/",
-      "rssUrl": "https://android-developers.googleblog.com/feeds/posts/default?alt=rss",
+      "rssUrl": "https://developer.android.com/static/blog/atom.xml",
       "collectionModeHint": "rss-source",
       "category": "android",
       "priority": "high",

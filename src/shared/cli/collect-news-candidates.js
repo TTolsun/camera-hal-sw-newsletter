@@ -2044,7 +2044,10 @@ async function collectFromSource(source, {
     : null;
   try {
     const text = await fetchSourceIndexText(target, fetchClient, onDiagnostic, fetchTextImpl);
-    const indexItems = parseSourceSpecificItems(text, source);
+    const indexItems = source.id === 'android-developers-blog' && feed
+      ? (text.match(/<item[\s\S]*?<\/item>/gi) || text.match(/<entry[\s\S]*?<\/entry>/gi) || [])
+        .map(block => rssParentRawItem(block, source))
+      : parseSourceSpecificItems(text, source);
     // 일부 공식 소스는 인덱스 페이지(월별/아카이브 링크)만 연결돼 있어 인덱스 파싱만으로는
     // dated 증거를 못 만든다(source-gap). 최신 상세 페이지를 따라가 dated 후보를 만들고,
     // 만들지 못하면 기존 인덱스 동작을 유지한다.
@@ -2065,7 +2068,8 @@ async function collectFromSource(source, {
         ? counts => onArticleCapCounts(source.id, counts)
         : undefined
     });
-    const sourceSpecificItems = followedItems.length > 0 ? followedItems : indexItems;
+    const sourceSpecificItems = source.id === 'android-developers-blog'
+      ? followedItems : followedItems.length > 0 ? followedItems : indexItems;
     const resolvedSourceSpecificItems = sourceSpecificItems.length > 0
       ? await resolveLinkedReleaseNoteEvidenceItems(sourceSpecificItems, source, { fetchTextImpl })
       : [];

@@ -705,5 +705,6 @@ async function resolveDatedArticleIndexItems({
 module.exports = {
   DATED_ARTICLE_DIAGNOSTIC_KINDS,
   FAIL_CLOSED_REASONS,
+  workflowEvidence,
   resolveDatedArticleIndexItems
 };
