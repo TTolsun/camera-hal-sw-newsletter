@@ -563,3 +563,83 @@ test('aggregate audit reports repairable dates and Korean Markdown labels', asyn
   assert.match(markdown, /\(`selected`\)|\(selected\)/);
   assert.doesNotMatch(markdown, /Generated from|Artifacts|valid image candidate|selectedImage 수|publish blocking issue|^none$/m);
 });
+
+// #1315: handwritten image inputs; no generated artifact is trusted as a PASS fixture.
+
+test('weekly-only image audit reads the weekly public output and preserves execution date', async () => {
+  const root = tempRoot('newsletter-image-audit-weekly-only-');
+  const date = '2026-10-22';
+  const draft = selectedImageDraft(date);
+  writeReviewDraft(root, draft);
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: draft });
+  const report = await buildNewsletterImageAuditReport({ root, date });
+  assert.equal(report.date, date);
+  assert.equal(report.public_artifacts.html, 'newsletters/2026-W43/index.html');
+  assert.equal(report.summary.selected_image_render_mismatch_count, 0);
+  assert.equal(report.summary.publish_blocking_issue_count, 0);
+});
+
+test('image audit does not hide a weekly defect behind an intact dated page', async () => {
+  const root = tempRoot('newsletter-image-audit-weekly-defect-');
+  const date = '2026-10-22';
+  const draft = selectedImageDraft(date);
+  writeIssue(root, draft);
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: draft });
+  writeText(path.join(root, 'articles/newsletters/2026-W43/index.html'), '<html>missing selected image</html>');
+  const report = await buildNewsletterImageAuditReport({ root, date });
+  assert.equal(report.summary.selected_image_render_mismatch_count, 1);
+  assert.equal(report.summary.publish_blocking_issue_count, 1);
+});
+
+test('missing weekly output blocks review publication even when no image is selected', async () => {
+  const root = tempRoot('newsletter-image-audit-weekly-missing-');
+  const date = '2026-10-22';
+  const draft = issue(date);
+  draft.publication_mode = 'review_only';
+  writeReviewDraft(root, draft);
+  writeJson(path.join(root, 'articles/data/newsletters-weekly.json'), [{ weeklyKey: '2026-W43' }]);
+  const report = await buildNewsletterImageAuditReport({ root, date });
+  assert.equal(report.errors.filter(item => item.type === 'missing_public_artifact').length, 2);
+  assert.ok(report.summary.publish_blocking_issue_count >= 2);
+});
+
+test('failed later execution does not inspect an already published week as new output', async () => {
+  const root = tempRoot('newsletter-image-audit-weekly-diagnostic-');
+  const date = '2026-10-22';
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-10-19', editor: issue('2026-10-19') });
+  writeReviewDraft(root, selectedImageDraft(date));
+  writeJson(path.join(root, 'articles/content/newsroom', date, 'generation-status.json'), {
+    date, public_output_expected: false, status: 'FAILED_REPAIR_REVIEWABLE'
+  });
+  const report = await buildNewsletterImageAuditReport({ root, date });
+  assert.equal(report.render_consistency_scope, 'not_applicable_no_public_output');
+  assert.equal(report.summary.publish_blocking_issue_count, 0);
+});
+
+test('weekly-only repair preserves earlier articles and never creates dated output', async () => {
+  const root = tempRoot('newsletter-image-repair-weekly-only-');
+  const prior = issue('2026-10-19');
+  prior.sections[0].headline = 'Earlier Camera HAL article';
+  prior.sections[0].sourceUrl = 'https://publisher.example.com/earlier-update';
+  prior.sections[0].sources = [{ title: 'Earlier source', url: prior.sections[0].sourceUrl }];
+  await writeWeeklyNewsletterArtifacts({ root, date: prior.date, editor: prior });
+  const date = '2026-10-22';
+  const draft = issue(date, { imageCandidates: [validImage()] });
+  writeReviewDraft(root, draft);
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: draft });
+  const weeklyPath = path.join(root, 'articles/newsletters/2026-W43/issue.json');
+  const before = JSON.parse(fs.readFileSync(weeklyPath, 'utf8'));
+  assert.equal(before.sections.length, 2);
+  const repairs = await repairNewsletterImages({ root, date });
+  const after = JSON.parse(fs.readFileSync(weeklyPath, 'utf8'));
+  assert.equal(after.sections.length, 2);
+  assert.deepEqual(after.sections.find(section => section.headline === prior.sections[0].headline),
+    before.sections.find(section => section.headline === prior.sections[0].headline));
+  assert.ok(after.sections.some(section => section.selectedImage === validImage().url));
+  assert.equal(repairs[0].report.summary.publish_blocking_issue_count, 0);
+  assert.equal(fs.existsSync(path.join(root, 'articles/newsletters', date)), false);
+  const repeated = await repairNewsletterImages({ root, date });
+  assert.equal(repeated[0].repairedArticleCount, 0);
+  assert.equal(repeated[0].report.summary.publish_blocking_issue_count, 0);
+  assert.equal(fs.existsSync(path.join(root, 'articles/newsletters', date)), false);
+});

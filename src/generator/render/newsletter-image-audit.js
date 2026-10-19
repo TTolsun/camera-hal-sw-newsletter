@@ -631,14 +631,35 @@ function reportPaths(root, date) {
   };
 }
 
+// Weekly output is the public source when it exists. A partially written weekly
+// output must not silently fall back to an intact dated copy.
+function auditPublicPaths(root, date, datedPaths, inspectWeekly) {
+  const weeklyKey = weeklyKeyForDate(date);
+  const weeklyDir = path.join(root, 'articles', 'newsletters', weeklyKey);
+  const weeklyIndex = readJsonIfExists(path.join(root, 'articles', 'data', 'newsletters-weekly.json'));
+  const weekly = inspectWeekly && (fs.existsSync(weeklyDir) || ensureArray(weeklyIndex).some(item => item.weeklyKey === weeklyKey));
+  const key = weekly ? weeklyKey : date;
+  return {
+    weekly,
+    markdown: 'newsletters/' + key + '/newsletter.md',
+    html: 'newsletters/' + key + '/index.html',
+    markdownPath: weekly ? path.join(weeklyDir, 'newsletter.md') : datedPaths.newsletterMarkdownPath,
+    htmlPath: weekly ? path.join(weeklyDir, 'index.html') : datedPaths.newsletterHtmlPath
+  };
+}
+
 async function buildNewsletterImageAuditReport(options = {}) {
   const root = options.root || process.cwd();
   const date = options.date;
   const paths = reportPaths(root, date);
   const editorIssue = readJsonIfExists(paths.editorPath);
-  const markdown = readTextIfExists(paths.newsletterMarkdownPath);
-  const html = readTextIfExists(paths.newsletterHtmlPath);
   const status = readJsonIfExists(paths.generationStatusPath) || {};
+  // A failed later run must not audit the previously published week as its own output.
+  const inspectWeekly = publishTarget(editorIssue || {}, status) || publicOutputExpected(status) ||
+    fs.existsSync(paths.newsletterMarkdownPath) || fs.existsSync(paths.newsletterHtmlPath);
+  const publicPaths = auditPublicPaths(root, date, paths, inspectWeekly);
+  const markdown = readTextIfExists(publicPaths.markdownPath);
+  const html = readTextIfExists(publicPaths.htmlPath);
   const publicArtifactScope = isRenderedPublicIssueScope(editorIssue || {}, status);
   const issue = editorIssue;
   const sourceOfTruth = `articles/content/newsroom/${date}/editor-draft.json`;
@@ -666,6 +687,12 @@ async function buildNewsletterImageAuditReport(options = {}) {
   // 진단 전용 PR을 손으로 발행 PR로 바꾼 경우처럼 페이지가 있으면 status와 무관하게 지금처럼 센다.
   // 발행 대상이면 상태와 모순이므로 역시 센다.
   const renderConsistencyApplicable = isPublishTarget || publicOutputExpected(status) || Boolean(markdown || html);
+  const missingWeeklyArtifacts = publicPaths.weekly && renderConsistencyApplicable
+    ? [['markdown', markdown], ['html', html]].filter(([, content]) => !content.trim())
+    : [];
+  for (const [kind] of missingWeeklyArtifacts) {
+    errors.push({ type: 'missing_public_artifact', artifact: publicPaths[kind] });
+  }
   const mismatches = issue && renderConsistencyApplicable ? renderConsistency(issue, markdown, html, {
     publicArtifactsOnly: publicArtifactScope
   }) : [];
@@ -718,18 +745,18 @@ async function buildNewsletterImageAuditReport(options = {}) {
       warnings.push(item);
     }
   }
-  const publishBlockingIssueCount = isPublishTarget
+  const publishBlockingIssueCount = missingWeeklyArtifacts.length + (isPublishTarget
     ? selectedMissingWithValidCandidates + selectedImageRenderMismatchCount
       + selectedImageWithoutValidCandidateArticles.length
-    : selectedImageRenderMismatchCount;
+    : selectedImageRenderMismatchCount);
 
   return {
     schemaVersion: 1,
     date,
     source_of_truth: sourceOfTruth,
     public_artifacts: {
-      markdown: `newsletters/${date}/newsletter.md`,
-      html: `newsletters/${date}/index.html`
+      markdown: publicPaths.markdown,
+      html: publicPaths.html
     },
     mode: isPublishTarget ? 'publish-target' : 'review-or-draft',
     render_consistency_scope: !renderConsistencyApplicable
@@ -1054,7 +1081,7 @@ function applySelectedCandidate(section, article) {
 
 // #1183: 공개 출력이 기대되지 않는 실행(진단 전용)의 수리는 검토용 초안에만 반영한다. 여기서
 // 공개 경로를 쓰면 그 파일이 진단 전용 PR에 실리고, 병합되면 그 날짜가 발행된 것으로 판정된다.
-// status가 없거나 true면 지금처럼 공개 페이지를 다시 쓴다(발행 경로와 과거 호 일괄 수리).
+// status가 없거나 true면 기존 공개 페이지를 수리한다(발행 경로와 과거 호 일괄 수리).
 // 감사 보고서의 렌더 일치 검사(#1188)도 같은 판정을 쓴다.
 function publicOutputExpected(status = {}) {
   return status.public_output_expected !== false;
@@ -1086,12 +1113,12 @@ async function repairNewsletterImagesForDate(options = {}) {
   const paths = reportPaths(root, date);
   const writePublic = publicOutputExpected(readJsonIfExists(paths.generationStatusPath) || {});
   if (before.summary.repairable_article_count === 0) {
-    await writeNewsletterImageAuditArtifacts({ ...options, root, date, failOnPublishBlocking: false });
     // 수리할 기사가 없어도 weekly는 이전 실행에서 stale 상태로 남아 있을 수 있으므로
     // 항상 daily editor-draft 기준으로 동기화한다(재실행 수렴 경로).
     const draft = readJsonIfExists(paths.editorPath);
     const weeklySync = syncPublicWeeklyArticleImages({ root, date, sections: draft && draft.sections, writePublic });
-    return { date, repairedArticleCount: 0, weeklySync, report: before };
+    const result = await writeNewsletterImageAuditArtifacts({ ...options, root, date, failOnPublishBlocking: false });
+    return { date, repairedArticleCount: 0, weeklySync, report: result.report };
   }
 
   const issue = readJsonIfExists(paths.editorPath);
@@ -1111,7 +1138,9 @@ async function repairNewsletterImagesForDate(options = {}) {
   const html = buildHtml(issue);
   writeJson(paths.editorPath, issue);
   writeText(paths.editorMarkdownPath, markdown);
-  if (writePublic) {
+  // Repair existing dated URLs, but never recreate a dated output for weekly-only runs.
+  // Weekly accumulation is updated by identity below, not overwritten with this run's draft.
+  if (writePublic && (fs.existsSync(paths.newsletterMarkdownPath) || fs.existsSync(paths.newsletterHtmlPath))) {
     writeText(paths.newsletterMarkdownPath, markdown);
     writeText(paths.newsletterHtmlPath, html);
   }
