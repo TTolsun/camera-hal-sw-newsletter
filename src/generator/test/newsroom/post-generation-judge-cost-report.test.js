@@ -20,11 +20,12 @@ const { LLM_STAGES } = require('../../../shared/llm/stage-catalog');
 
 const VALIDATOR_PATH = require.resolve('../../validate/validate-llm-publication-quality');
 const DATE = '2026-09-28';
+const { weeklyKeyForDate } = require('../../reporter/weekly-newsletter');
 const JUDGE_STAGE_ID = LLM_STAGES.POST_GENERATION_QUALITY_JUDGE.id;
 // cost-report.md의 Stage 칸은 사람이 읽는 label을 쓴다.
 const JUDGE_LABEL_PATTERN = /\| post-generation public quality judge \|/;
 
-function fakeProvider({ verdict, costUsd = 0.01, models = ['fake-judge-model'], rawText = null }) {
+function fakeProvider({ verdict, costUsd = 0.01, models = ['fake-judge-model'], rawText = null, onRequest = () => {} }) {
   return {
     id: 'fake',
     displayName: 'Fake',
@@ -34,7 +35,7 @@ function fakeProvider({ verdict, costUsd = 0.01, models = ['fake-judge-model'], 
     configuredModelsForGroup() { return models; },
     createModelContext() { return {}; },
     describeModelContext() { return ''; },
-    buildRequest({ model }) { return { request: { model }, thinkingBudget: null }; },
+    buildRequest(input) { onRequest(input); return { request: { model: input.model }, thinkingBudget: null }; },
     async execute() { return { text: rawText ?? JSON.stringify(verdict) }; },
     textFromResponse(response) { return response.text; },
     usageMetadataFromResponse() { return { usage_metadata_present: true }; },
@@ -88,13 +89,19 @@ function generateCall(stageKey, stageId, costUsd) {
   };
 }
 
-function setupRoot({ reportDate = DATE, writeReport = true, warnCostUsd = 0.15 } = {}) {
+function setupRoot({ runDate = DATE, reportDate = runDate, writeReport = true, warnCostUsd = 0.15 } = {}) {
   const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), 'judge-cost-'));
-  const newsletterDir = path.join(rootDir, 'articles', 'newsletters', DATE);
+  const weeklyKey = weeklyKeyForDate(runDate);
+  const newsletterDir = path.join(rootDir, 'articles', 'newsletters', weeklyKey);
   fs.mkdirSync(newsletterDir, { recursive: true });
   fs.writeFileSync(path.join(newsletterDir, 'newsletter.md'), '# Newsletter\n', 'utf8');
   fs.writeFileSync(path.join(newsletterDir, 'index.html'), '<html><body>Newsletter</body></html>', 'utf8');
-  fs.mkdirSync(path.join(rootDir, 'articles', 'content', 'newsroom', DATE), { recursive: true });
+  fs.writeFileSync(path.join(newsletterDir, 'issue.json'), JSON.stringify({ weekly_key: weeklyKey, coverage_week_key: '2026-W39' }));
+  fs.mkdirSync(path.join(rootDir, 'articles/data'), { recursive: true });
+  fs.writeFileSync(path.join(rootDir, 'articles/data/newsletters-weekly.json'), JSON.stringify([
+    { weeklyKey, date: runDate, html: 'newsletters/' + weeklyKey + '/index.html', md: 'newsletters/' + weeklyKey + '/newsletter.md' }
+  ]));
+  fs.mkdirSync(path.join(rootDir, 'articles', 'content', 'newsroom', runDate), { recursive: true });
   fs.mkdirSync(path.join(rootDir, '.tmp'), { recursive: true });
   if (writeReport) {
     const report = buildCostReport({
@@ -123,14 +130,14 @@ function readTmpReport(rootDir) {
 }
 
 // validator는 모듈 로드 시점의 cwd를 root로 쓴다. 테스트마다 cwd를 임시 root로 바꾸고 새로 읽는다.
-async function runJudge(rootDir, verdict, providerOptions = {}) {
+async function runJudge(rootDir, verdict, providerOptions = {}, runDate = DATE) {
   const previousCwd = process.cwd();
   process.chdir(rootDir);
   delete require.cache[VALIDATOR_PATH];
   llmClient.resetLlmDiagnostics();
   try {
     const { validateLlmPublicationQuality } = require(VALIDATOR_PATH);
-    return await validateLlmPublicationQuality({ date: DATE, provider: fakeProvider({ verdict, ...providerOptions }) });
+    return await validateLlmPublicationQuality({ date: runDate, provider: fakeProvider({ verdict, ...providerOptions }) });
   } finally {
     process.chdir(previousCwd);
     delete require.cache[VALIDATOR_PATH];
@@ -243,4 +250,76 @@ test('병합한 리포트는 generate의 threshold로 경고를 다시 계산해
   const expected = 'Estimated LLM cost 0.06 USD reached NEWSROOM_WARN_COST_USD 0.05 USD.';
   assert.ok(report.warnings.includes(expected), report.warnings.join('\n'));
   assert.ok(warnings().includes(`[cost] ${expected}`), warnings().join('\n'));
+});
+
+test('weekly-only judge binds actual execution, publication week and independent coverage week', async () => {
+  const runDate = '2026-10-22';
+  const rootDir = setupRoot({ runDate });
+  const indexPath = path.join(rootDir, 'articles/data/newsletters-weekly.json');
+  const entries = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+  entries[0].date = '2026-10-19';
+  fs.writeFileSync(indexPath, JSON.stringify(entries));
+  const statusPath = path.join(rootDir, 'articles/content/newsroom', runDate, 'generation-status.json');
+  fs.writeFileSync(statusPath, JSON.stringify({ publication_mode: 'fallback_public' }));
+  let input;
+  const report = await runJudge(rootDir, passVerdict, { onRequest(request) { input = JSON.parse(request.prompt.slice(request.prompt.indexOf('{'))); } }, runDate);
+  assert.equal(input.execution_date, runDate);
+  assert.equal(input.publication_week_key, '2026-W43');
+  assert.equal(input.coverage_week_key, '2026-W39');
+  assert.equal(input.newsletter_entry.date, '2026-10-19');
+  assert.equal(input.generation_status.publication_mode, 'fallback_public');
+  assert.match(input.markdown, /Newsletter/);
+  assert.equal(report.date, runDate);
+  assert.ok(fs.existsSync(path.join(path.dirname(statusPath), 'llm-publication-quality-report.json')));
+  assert.equal(fs.existsSync(path.join(rootDir, 'articles/newsletters', runDate)), false);
+});
+
+test('weekly judge handles ISO year boundary without deriving a week from coverage', async () => {
+  const runDate = '2027-01-01';
+  const rootDir = setupRoot({ runDate });
+  let input;
+  await runJudge(rootDir, passVerdict, { onRequest(request) { input = JSON.parse(request.prompt.slice(request.prompt.indexOf('{'))); } }, runDate);
+  assert.equal(input.publication_week_key, '2026-W53');
+  assert.equal(input.execution_date, runDate);
+});
+
+for (const defect of ['missing index', 'invalid index', 'missing entry', 'wrong route', 'missing issue', 'wrong issue week', 'missing markdown', 'empty html']) {
+  test('weekly judge rejects ' + defect + ' before calling provider despite stale dated files', async () => {
+    const rootDir = setupRoot();
+    const indexPath = path.join(rootDir, 'articles/data/newsletters-weekly.json');
+    const weeklyDir = path.join(rootDir, 'articles/newsletters', weeklyKeyForDate(DATE));
+    const datedDir = path.join(rootDir, 'articles/newsletters', DATE);
+    fs.mkdirSync(datedDir);
+    fs.writeFileSync(path.join(datedDir, 'index.html'), '<p>stale</p>');
+    fs.writeFileSync(path.join(datedDir, 'newsletter.md'), 'stale');
+    if (defect === 'missing index') fs.unlinkSync(indexPath);
+    if (defect === 'invalid index') fs.writeFileSync(indexPath, '{}');
+    if (defect === 'missing entry') fs.writeFileSync(indexPath, '[]');
+    if (defect === 'wrong route') {
+      const entries = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+      entries[0].html = 'newsletters/' + DATE + '/index.html';
+      fs.writeFileSync(indexPath, JSON.stringify(entries));
+    }
+    if (defect === 'missing issue') fs.unlinkSync(path.join(weeklyDir, 'issue.json'));
+    if (defect === 'wrong issue week') fs.writeFileSync(path.join(weeklyDir, 'issue.json'), '{"weekly_key":"2026-W01"}');
+    if (defect === 'missing markdown') fs.unlinkSync(path.join(weeklyDir, 'newsletter.md'));
+    if (defect === 'empty html') fs.writeFileSync(path.join(weeklyDir, 'index.html'), '  ');
+    let calls = 0;
+    await assert.rejects(() => runJudge(rootDir, passVerdict, { onRequest() { calls += 1; } }), /Invalid public weekly index|public weekly issue.json|Missing public/);
+    assert.equal(calls, 0);
+    assert.equal(judgeCalls(readTmpReport(rootDir)).length, 0);
+  });
+}
+
+test('weekly judge sees the accumulated issue tail beyond previous daily truncation limits', async () => {
+  const rootDir = setupRoot();
+  const weeklyDir = path.join(rootDir, 'articles/newsletters', weeklyKeyForDate(DATE));
+  fs.writeFileSync(path.join(weeklyDir, 'newsletter.md'), 'x'.repeat(21000) + ' FINAL_MARKDOWN_ARTICLE');
+  fs.writeFileSync(path.join(weeklyDir, 'index.html'), '<p>' + 'x'.repeat(13000) + ' FINAL_HTML_ARTICLE</p>');
+  let input;
+  const report = await runJudge(rootDir, passVerdict, { onRequest(request) { input = JSON.parse(request.prompt.slice(request.prompt.indexOf('{'))); } });
+  assert.ok(input.markdown.endsWith('FINAL_MARKDOWN_ARTICLE'));
+  assert.ok(input.html_text.endsWith('FINAL_HTML_ARTICLE'));
+  assert.equal(report.publication_week_key, '2026-W40');
+  assert.equal(report.coverage_week_key, '2026-W39');
 });
