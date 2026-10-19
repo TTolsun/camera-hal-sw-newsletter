@@ -140,3 +140,42 @@ for (const value of [null, {}]) {
     assert.match(result.stderr, /issue.json: sections must be an array/);
   });
 }
+
+test('weekly-only execution cannot bypass unresolved fact-check must_fix', t => {
+  const { root } = stage(t);
+  writeText(path.join(root, '.tmp/newsletter-date.txt'), '2026-10-22');
+  writeJson(path.join(root, 'articles/content/newsroom/2026-10-22/fact-check-report.json'), {
+    status: 'NEEDS_FIX', must_fix: ['출처와 본문의 날짜가 일치하지 않습니다.']
+  });
+  const result = run(root);
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /2026-10-22 has unresolved fact-check must_fix/);
+});
+
+test('a same-week execution checks its own facts instead of the first run anchor', t => {
+  const { root } = stage(t);
+  writeText(path.join(root, '.tmp/newsletter-date.txt'), '2026-10-22');
+  const file = path.join(root, 'articles/data/newsletters-weekly.json');
+  const entries = JSON.parse(fs.readFileSync(file, 'utf8'));
+  entries[0].generation_anchor_date = '2026-10-19';
+  writeJson(file, entries);
+  writeJson(path.join(root, 'articles/content/newsroom/2026-10-19/fact-check-report.json'), {
+    status: 'NEEDS_FIX', must_fix: ['이전 실행의 검토 항목']
+  });
+  writeJson(path.join(root, 'articles/content/newsroom/2026-10-22/fact-check-report.json'), { status: 'PASS', must_fix: [] });
+  const result = run(root);
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('diagnostic-only later execution does not make the previous published week a new fact target', t => {
+  const { root } = stage(t);
+  writeText(path.join(root, '.tmp/newsletter-date.txt'), '2026-10-22');
+  writeJson(path.join(root, 'articles/content/newsroom/2026-10-22/fact-check-report.json'), {
+    status: 'NEEDS_FIX', must_fix: ['발행하지 않은 초안의 검토 항목']
+  });
+  writeJson(path.join(root, 'articles/content/newsroom/2026-10-22/generation-status.json'), {
+    date: '2026-10-22', public_output_expected: false
+  });
+  const result = run(root);
+  assert.equal(result.status, 0, result.stderr);
+});

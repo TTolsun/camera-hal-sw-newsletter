@@ -46,6 +46,7 @@ const {
 } = require('../../shared/common/publication-mode');
 
 const { weeklyNewsletterStructureStatus, rootIndexContractErrors } = require('../publish/public-structure');
+const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
@@ -674,6 +675,22 @@ for (const weeklyKey of strictWeeklyKeys({ root, newsletterDatePath })) {
   if (result.dataIndex.entry) {
     const html = result.statuses.find(status => status.path.endsWith('/index.html'))?.text || '';
     validateNewsletterHtmlTags(result.dataIndex.entry, html, true, 'data/newsletters-weekly.json');
+    // Execution dates are independent of the week-start date stored in the index.
+    // Prefer explicit run targets; the anchor is only a fallback for edited weekly output.
+    const explicitDates = [...strictDates].filter(date => datePattern.test(date) && weeklyKeyForDate(date) === weeklyKey);
+    const anchor = result.dataIndex.entry.generation_anchor_date;
+    const runDates = explicitDates.length > 0 ? explicitDates : anchor ? [anchor] : [];
+    for (const date of runDates) {
+      if (!datePattern.test(date) || weeklyKeyForDate(date) !== weeklyKey) {
+        fail('Weekly newsletter ' + weeklyKey + ': invalid generation_anchor_date: ' + date);
+        continue;
+      }
+      if (seenDates.has(date)) continue; // Already inspected by the preserved dated lane.
+      const status = readJsonIfExists(path.join(newsroomDir(root, date), 'generation-status.json'));
+      // A failed later run does not publish the already existing accumulated week again.
+      if (status?.public_output_expected === false) continue;
+      validateSourceGapArtifact(date, true);
+    }
   }
 }
 
