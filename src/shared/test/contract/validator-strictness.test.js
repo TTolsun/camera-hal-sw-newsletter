@@ -1368,3 +1368,160 @@ test('stale generation status sha does not make validate-quality strict', () => 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stderr, /historical artifact outside current\/changed\/generated validation target, warning only/);
 });
+
+// Hand-authored weekly input through the real deterministic writer; no LLM calls.
+async function writeWeeklyOnlySiteFixture(t, { count = 1, fallback = false } = {}) {
+  const root = tempRoot('weekly-site-contract-');
+  t.after(() => {
+    assert.ok(path.resolve(root).startsWith(path.resolve(require('node:os').tmpdir()) + path.sep));
+    fs.rmSync(root, { recursive: true, force: true });
+  });
+  const date = '2026-10-22';
+  writeSiteFixture(root, { date, articleCount: 1, strict: true });
+  const datedDir = path.resolve(root, 'articles/newsletters', date);
+  assert.ok(datedDir.startsWith(path.resolve(root) + path.sep));
+  fs.rmSync(datedDir, { recursive: true, force: true });
+  writeJson(path.join(root, 'articles/data/newsletters.json'), []);
+  const { writeWeeklyNewsletterArtifacts } = require('../../../generator/render/weekly-newsletter-output');
+  const sections = Array.from({ length: count }, (_, index) => {
+    const source = validSections(1)[0];
+    const headline = '주간 카메라 검토 ' + index;
+    const url = 'https://example.com/weekly-source-' + index;
+    return { ...source, headline, url, source_candidate_url: url, relevance_bucket: fallback ? 'cpp_ai_tooling_fallback' : 'android',
+      public_article: { ...source.public_article, headline, source_links: [{ title: 'Source', url, source_role: 'primary' }] },
+      sources: [{ title: 'Source', url }] };
+  });
+  const editor = values => ({ date, title: '주간 소식', summary: '주간 카메라 검토 소식입니다.', briefing: ['주간 소식'], sections: values, action_items: ['호환성을 확인합니다.'], references: [],
+    ...(fallback ? { publication_mode: 'fallback_public', fallback_only: true, camera_anchor_count: 0 } : {}) });
+  if (count > 5) await writeWeeklyNewsletterArtifacts({ root, date: '2026-10-19', editor: editor(sections.slice(0, 5)) });
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: editor(count > 5 ? sections.slice(5) : sections) });
+  const status = { date, status: 'PASS', public_output_lane: 'weekly', legacy_dated_output_enabled: false,
+    public_output_expected: true, weekly_output_status: 'written', final_publish_ready: false,
+    public_newsletter_ready: true, review_publication_ready: true, diagnostics_only: false,
+    ...(fallback ? { publication_mode: 'fallback_public', fallback_public_ready: true, fallback_only: true, camera_anchor_count: 0, homepage_visibility: 'visible_with_fallback_badge', homepage_badge: 'Tooling Watch Edition' } : {}) };
+  writeJson(path.join(root, 'articles/content/newsroom', date, 'generation-status.json'), status);
+  return { root, date, status, dir: path.join(root, 'articles/newsletters/2026-W43') };
+}
+
+test('weekly-only site permits the accumulated weekly cap while run count remains separate', async t => {
+  const data = await writeWeeklyOnlySiteFixture(t, { count: 10 });
+  assert.equal(JSON.parse(fs.readFileSync(path.join(data.root, 'articles/data/newsletters-weekly.json'), 'utf8'))[0].article_count, 10);
+  writeJson(path.join(data.root, 'articles/content/newsroom', data.date, 'quality-report.json'), { metrics: { article_count: 5 } });
+  const result = runScript(validateSitePath, data.root);
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(fs.existsSync(path.join(data.root, 'articles/newsletters', data.date)), false);
+});
+
+test('weekly-only site rejects article count above the weekly cap', async t => {
+  const data = await writeWeeklyOnlySiteFixture(t, { count: 10 });
+  const mdPath = path.join(data.dir, 'newsletter.md');
+  const markdown = fs.readFileSync(mdPath, 'utf8');
+  const article = '\n## 12. 주간 상한 초과 기사\n\n실제 검토 제안의 적용 범위입니다.\n\n카메라 호환성 확인 조건을 검토합니다.\n\n이 제안은 아직 검토 중이며 배포 사실로 확대하지 않습니다.\n\n**출처**\n- [Source](https://example.com/overflow)\n';
+  writeText(mdPath, markdown + article);
+  const result = runScript(validateSitePath, data.root);
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /expected Newsletter Policy range 1-10/);
+});
+
+test('weekly-only fallback publication exposes matching metadata, tags and notices', async t => {
+  const data = await writeWeeklyOnlySiteFixture(t, { fallback: true });
+  const result = runScript(validateSitePath, data.root);
+  assert.equal(result.status, 0, result.stderr);
+});
+
+for (const defect of ['html notice', 'markdown notice', 'badge', 'mode', 'index issue mismatch', 'invalid status json']) {
+  test('weekly-only site rejects fallback/state defect: ' + defect, async t => {
+    const data = await writeWeeklyOnlySiteFixture(t, { fallback: true });
+    const indexPath = path.join(data.root, 'articles/data/newsletters-weekly.json');
+    const issuePath = path.join(data.dir, 'issue.json');
+    if (defect === 'html notice') {
+      const htmlPath = path.join(data.dir, 'index.html');
+      writeText(htmlPath, fs.readFileSync(htmlPath, 'utf8').replace(/<div class="publication-notice"[\s\S]*?<\/div>/, ''));
+    }
+    if (defect === 'markdown notice') {
+      const mdPath = path.join(data.dir, 'newsletter.md');
+      writeText(mdPath, fs.readFileSync(mdPath, 'utf8').replace(/^>.*Tooling Watch Edition.*$/gm, ''));
+    }
+    if (['badge', 'mode', 'index issue mismatch'].includes(defect)) {
+      const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+      const issue = JSON.parse(fs.readFileSync(issuePath, 'utf8'));
+      if (defect === 'badge') { index[0].homepage_badge = ''; issue.homepage_badge = ''; }
+      if (defect === 'mode') { index[0].publication_mode = 'normal_public'; issue.publication_mode = 'normal_public'; }
+      if (defect === 'index issue mismatch') index[0].fallback_only = false;
+      writeJson(indexPath, index); writeJson(issuePath, issue);
+    }
+    if (defect === 'invalid status json') writeText(path.join(data.root, 'articles/content/newsroom', data.date, 'generation-status.json'), '{ broken');
+    const result = runScript(validateSitePath, data.root);
+    assert.notEqual(result.status, 0, defect);
+    assert.match(result.stderr, /fallback|publication notice|does not authorize|differs between|Invalid weekly execution status/);
+  });
+}
+
+function commitWeeklySiteBaseline(root) {
+  const { execFileSync } = require('node:child_process');
+  const git = args => execFileSync('git', args, { cwd: root, stdio: 'ignore' });
+  git(['init']); git(['config', 'user.name', 'Synthetic test']); git(['config', 'user.email', 'synthetic@example.invalid']);
+  git(['add', '.']); git(['commit', '-m', 'Stage previously approved weekly']);
+  git(['update-ref', 'refs/remotes/origin/main', 'HEAD']);
+  return git;
+}
+
+test('failed same-date weekly-only run does not reclassify its preserved dated archive or approved weekly', async t => {
+  const data = await writeWeeklyOnlySiteFixture(t);
+  const entry = { date: data.date, title: '과거 날짜 보존', summary: '기존 날짜 화면입니다.', html: 'newsletters/' + data.date + '/index.html', md: 'newsletters/' + data.date + '/newsletter.md', tags: ['camera-hal'] };
+  writeJson(path.join(data.root, 'articles/data/newsletters.json'), [entry]);
+  writeText(path.join(data.root, 'articles', entry.html), newsletterHtml(data.date));
+  writeText(path.join(data.root, 'articles', entry.md), newsletterMarkdown(data.date, 1));
+  commitWeeklySiteBaseline(data.root);
+  writeJson(path.join(data.root, 'articles/content/newsroom', data.date, 'generation-status.json'), { ...data.status, status: 'FAILED', diagnostics_only: true, public_newsletter_ready: false, review_publication_ready: false, weekly_output_status: 'failed' });
+  const result = runScript(validateSitePath, data.root);
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('failed weekly-only run cannot leave changed exposure even when it was committed in the PR head', async t => {
+  const data = await writeWeeklyOnlySiteFixture(t);
+  const git = commitWeeklySiteBaseline(data.root);
+  writeText(path.join(data.dir, 'index.html'), fs.readFileSync(path.join(data.dir, 'index.html'), 'utf8').replace('</body>', '<p>unapproved failed run change</p></body>'));
+  writeJson(path.join(data.root, 'articles/content/newsroom', data.date, 'generation-status.json'), { ...data.status, status: 'FAILED', diagnostics_only: true, public_newsletter_ready: false, review_publication_ready: false, weekly_output_status: 'failed' });
+  git(['add', '.']); git(['commit', '-m', 'Stage unapproved failed exposure']);
+  const result = runScript(validateSitePath, data.root, { GITHUB_EVENT_NAME: 'pull_request', GITHUB_BASE_REF: 'main' });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /diagnostics-only execution.*changed or unmeasured public exposure/);
+});
+
+for (const defect of ['index tags only', 'archive html only']) {
+  test('weekly-only status cannot exempt changed preserved dated public input: ' + defect, async t => {
+    const data = await writeWeeklyOnlySiteFixture(t);
+    const entry = { date: data.date, title: '과거 날짜 보존', summary: '기존 날짜 화면입니다.', html: 'newsletters/' + data.date + '/index.html', md: 'newsletters/' + data.date + '/newsletter.md', tags: ['camera-hal'] };
+    const indexPath = path.join(data.root, 'articles/data/newsletters.json');
+    writeJson(indexPath, [entry]);
+    writeText(path.join(data.root, 'articles', entry.html), newsletterHtml(data.date));
+    writeText(path.join(data.root, 'articles', entry.md), newsletterMarkdown(data.date, 1));
+    commitWeeklySiteBaseline(data.root);
+    if (defect === 'index tags only') writeJson(indexPath, [{ ...entry, tags: ['Changed metadata without changing preserved HTML'] }]);
+    if (defect === 'archive html only') writeText(path.join(data.root, 'articles', entry.html), newsletterHtml(data.date, { tags: ['Changed HTML without changing metadata'] }));
+    const result = runScript(validateSitePath, data.root);
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /HTML issue tags/);
+  });
+}
+
+for (const defect of ['index count', 'issue section count', 'issue section count without optional index count']) {
+  test('weekly cumulative count metadata must match its public body: ' + defect, async t => {
+    const data = await writeWeeklyOnlySiteFixture(t, { count: 2 });
+    const file = path.join(data.root, defect === 'index count' ? 'articles/data/newsletters-weekly.json' : 'articles/newsletters/2026-W43/issue.json');
+    const value = JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (defect === 'index count') value[0].article_count = 999;
+    else value.sections = value.sections.slice(0, 1);
+    writeJson(file, value);
+    if (defect === 'issue section count without optional index count') {
+      const indexPath = path.join(data.root, 'articles/data/newsletters-weekly.json');
+      const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
+      delete index[0].article_count;
+      writeJson(indexPath, index);
+    }
+    const result = runScript(validateSitePath, data.root);
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /article_count must match/);
+  });
+}

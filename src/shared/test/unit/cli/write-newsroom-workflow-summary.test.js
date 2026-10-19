@@ -326,3 +326,19 @@ test('workflow env reaches the skip reasons through buildInputFromEnv (#1161)', 
   assert.match(md, /NEWSROOM_PR_TOKEN/);
   assert.match(md, /재발행으로 차단됐다\(check=published\)/);
 });
+
+test('workflow summary uses the supplied publication week and retains the actual newsroom execution date', () => {
+  const input = buildInputFromEnv({ profile: 'newsroom-final', status: require('node:path').join(__dirname, 'absent-summary-status.json') }, {
+    NEWSLETTER_DATE: '2026-10-26', PUBLICATION_WEEK_KEY: '2026-W44'
+  });
+  assert.deepEqual(input.artifact.key_paths, ['articles/content/newsroom/2026-10-26/', 'articles/newsletters/2026-W44/']);
+  const boundary = buildInputFromEnv({ profile: 'newsroom-final', status: require('node:path').join(__dirname, 'absent-summary-status.json') }, {
+    NEWSLETTER_DATE: '2027-01-01', PUBLICATION_WEEK_KEY: '2026-W53'
+  });
+  assert.equal(boundary.artifact.key_paths[1], 'articles/newsletters/2026-W53/');
+});
+
+test('workflow summary never invents a dated public path when the weekly identity is unavailable', () => {
+  const input = buildInputFromEnv({ profile: 'newsroom-final', status: require('node:path').join(__dirname, 'absent-summary-status.json') }, { NEWSLETTER_DATE: '2026-10-26' });
+  assert.deepEqual(input.artifact.key_paths, ['articles/content/newsroom/2026-10-26/']);
+});

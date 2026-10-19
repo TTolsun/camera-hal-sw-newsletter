@@ -17,11 +17,14 @@ const fs = require('fs');
 const path = require('path');
 
 const { newslettersDir } = require('../../shared/common/artifact-paths');
+const { articleIdentityKey } = require('../../shared/common/article-identity');
+const { weeklyKeyForDate } = require('./weekly-newsletter');
 const { mainArticleBlocks, sourceBlock } = require('../quality/rendered-issue-structure');
 
 const NEWSLETTERS_REL_PATH = path.join('articles', 'newsletters');
 const ISSUE_MARKDOWN_FILE = 'newsletter.md';
 const ISSUE_DATE_DIR = /^\d{4}-\d{2}-\d{2}$/;
+const ISSUE_WEEK_DIR = /^\d{4}-W\d{2}$/;
 
 // `[제목](<url>)`과 `[제목](url)` 둘 다 쓰인다. 꺾쇠는 URL에 괄호가 들어갈 때 렌더러가
 // 붙이므로 한쪽만 받으면 그 링크를 통째로 놓친다(실측: 2026-08-24의 CameraX 링크).
@@ -58,20 +61,61 @@ function publishedArticleUrlsFromMarkdown(markdown = '') {
   return urls;
 }
 
+// 주간호의 anchor/coverage/원문 날짜는 개별 기사의 발행일이 아니다. 실제 writer가
+// 기록한 newsletter_article_date만 쓴다. 이력이 없는 과거 주간 기사는 날짜를 추정하지
+// 않고 제외하며, 보존 dated 본문은 이력과 무관하게 계속 읽는다.
+function weeklyPublicationDates(root, weeklyKey, markdown) {
+  const historyPath = path.join(root, 'state', 'article-exposure-history.json');
+  const history = fs.existsSync(historyPath) ? JSON.parse(fs.readFileSync(historyPath, 'utf8')) : {};
+  const dates = new Map();
+  for (const record of Array.isArray(history.articles) ? history.articles : []) {
+    if (record?.exposure_type !== 'newsletter_article' &&
+      !(Array.isArray(record?.exposure_types) && record.exposure_types.includes('newsletter_article'))) continue;
+    if (record.newsletter_url !== 'newsletters/' + weeklyKey + '/index.html') continue;
+    const date = record.newsletter_article_date;
+    if (!ISSUE_DATE_DIR.test(String(date || ''))) continue;
+    try {
+      if (weeklyKeyForDate(date) !== weeklyKey) continue;
+    } catch (_) { continue; }
+    // source_url은 selected candidate의 normalized_url이나 후속 homepage 표기로 바뀐다.
+    // writer와 같은 정본 identity를 사용해 query/path 의미를 보존한다.
+    const identity = articleIdentityKey(record);
+    const previous = dates.get(identity);
+    if (!previous || date < previous) dates.set(identity, date);
+  }
+  const issuePath = path.join(newslettersDir(root, weeklyKey), 'issue.json');
+  const issue = fs.existsSync(issuePath) ? JSON.parse(fs.readFileSync(issuePath, 'utf8')) : null;
+  if (!issue) return new Map();
+  if (issue.weekly_key !== weeklyKey || !Array.isArray(issue.sections)) {
+    throw new Error('Invalid weekly publication issue: ' + weeklyKey);
+  }
+  const sections = issue.sections.map(section => ({
+    primary: section?.source_candidate_url || section?.sources?.[0]?.url,
+    sources: (Array.isArray(section?.sources) ? section.sources : []).map(source => source?.url).filter(Boolean)
+  })).filter(section => section.primary);
+  const published = new Map();
+  for (const block of mainArticleBlocks(markdown)) {
+    const urls = [...withinSection(sourceBlock(block.text)).matchAll(MARKDOWN_LINK)].map(match => match[1]);
+    // primary의 명시 발행일을 같은 공개 기사 Sources에만 결속한다. 다른 기사의 primary가
+    // 보조 출처로 들어온 모호한 조합에서는 secondary의 날짜를 추정하지 않는다.
+    const matches = sections.filter(section => urls.includes(section.primary));
+    const article = matches.length === 1 ? matches[0] : null;
+    const articleDate = article ? dates.get(articleIdentityKey({ url: article.primary })) : null;
+    for (const url of urls) {
+      const directDate = dates.get(articleIdentityKey({ url }));
+      const boundDate = article?.sources.includes(url) ? articleDate : null;
+      const date = boundDate && directDate ? (boundDate < directDate ? boundDate : directDate) : boundDate || directDate;
+      const previous = published.get(url);
+      if (date && (!previous || date < previous)) published.set(url, date);
+    }
+  }
+  return published;
+}
+
 /**
- * 발행된 모든 뉴스레터에서 기사 출처 URL과 그 발행일을 모은다.
- *
- * 디렉터리 레이아웃이 둘(`2026-08-17`과 `2026-W34`) 섞여 있고 같은 호가 양쪽에 다 있다.
- * 주 단위 이름에서는 발행일을 알 수 없으므로 날짜 디렉터리만 읽는다 - 날짜를 모르면 asOf로
- * 자를 수 없고, 자르지 못한 채 남기면 backfill이 미래 발행분을 보게 된다.
- *
- * @param {string} root 저장소 루트
- * @param {object} [options]
- * @param {string} [options.asOf] 이 날짜까지만 센다(YYYY-MM-DD). asOfExposureHistory와 같은
- *   역할이고 같은 이유로 필요하다 - 과거 주를 다시 돌릴 때 그 주가 몰랐던 발행을 알면 안 된다.
- * @returns {{issuesScanned: number, articles: {url: string, newsletter_date: string}[]}}
- *   articles는 URL당 가장 이른 발행일 하나. issuesScanned는 실제로 읽은 호 수다 - 0이면
- *   날짜 디렉터리를 하나도 못 찾았다는 뜻이라, 발행이 없는 것과 레이아웃이 바뀐 것을 가른다.
+ * 발행된 Markdown의 기사 출처 URL을 모은다. dated 호는 디렉터리 날짜, weekly 호는
+ * 공개 본문과 결속된 명시 발행 이력을 사용한다. asOf 이후 기록은 제외하고 URL당 가장
+ * 이른 확인 발행일을 남긴다. issuesScanned는 실제로 읽은 Markdown 파일 수다.
  */
 function readPublishedArticles(root, { asOf = '' } = {}) {
   const dir = path.join(root, NEWSLETTERS_REL_PATH);
@@ -80,17 +124,23 @@ function readPublishedArticles(root, { asOf = '' } = {}) {
   const firstPublished = new Map();
   let issuesScanned = 0;
   for (const name of fs.readdirSync(dir)) {
-    if (!ISSUE_DATE_DIR.test(name)) continue;
-    if (asOf && name > asOf) continue;
+    const dated = ISSUE_DATE_DIR.test(name);
+    if (!dated && !ISSUE_WEEK_DIR.test(name)) continue;
+    if (dated && asOf && name > asOf) continue;
     const file = path.join(newslettersDir(root, name), ISSUE_MARKDOWN_FILE);
     if (!fs.existsSync(file)) continue;
     issuesScanned += 1;
 
-    for (const url of publishedArticleUrlsFromMarkdown(fs.readFileSync(file, 'utf8'))) {
+    const markdown = fs.readFileSync(file, 'utf8');
+    const publications = dated
+      ? publishedArticleUrlsFromMarkdown(markdown).map(url => [url, name])
+      : weeklyPublicationDates(root, name, markdown);
+    for (const [url, date] of publications) {
+      if (asOf && date > asOf) continue;
       const previous = firstPublished.get(url);
       // 같은 URL이 여러 호에 실렸으면 가장 이른 발행일을 남긴다. 재심에 필요한 사실은
       // "언제부터 이미 실린 상태였나"이지 마지막으로 언급된 날이 아니다.
-      if (!previous || name < previous) firstPublished.set(url, name);
+      if (!previous || date < previous) firstPublished.set(url, date);
     }
   }
 

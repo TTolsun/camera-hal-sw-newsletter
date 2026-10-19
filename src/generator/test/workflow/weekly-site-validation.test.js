@@ -169,6 +169,10 @@ test('a same-week execution checks its own facts instead of the first run anchor
 
 test('diagnostic-only later execution does not make the previous published week a new fact target', t => {
   const { root } = stage(t);
+  const { execFileSync } = require('node:child_process');
+  const git = args => execFileSync('git', args, { cwd: root, stdio: 'ignore' });
+  git(['init']); git(['config', 'user.name', 'Synthetic test']); git(['config', 'user.email', 'synthetic@example.invalid']);
+  git(['add', '.']); git(['commit', '-m', 'Stage previously approved weekly']);
   writeText(path.join(root, '.tmp/newsletter-date.txt'), '2026-10-22');
   writeJson(path.join(root, 'articles/content/newsroom/2026-10-22/fact-check-report.json'), {
     status: 'NEEDS_FIX', must_fix: ['발행하지 않은 초안의 검토 항목']

@@ -292,6 +292,12 @@ function buildInputFromEnv(args, env) {
   const profile = args.profile || env.SUMMARY_PROFILE || 'newsroom-final';
   const statusPath = args.status || path.join(process.cwd(), '.tmp', 'newsletter-generation-status.json');
   const status = profile === 'newsroom-final' ? readStatusJson(statusPath) : {};
+  const date = env.NEWSLETTER_DATE || status.date || '';
+  const weeklyKey = env.PUBLICATION_WEEK_KEY || status.weekly_page_structure_key || '';
+  // The publisher supplies its identity. Do not recompute coverage weeks here or
+  // advertise a dated page when a weekly identity is unavailable after failure.
+  const publicKey = profile === 'newsroom-final' && status.public_output_lane !== 'daily'
+    ? (/^\d{4}-W(?:0[1-9]|[1-4]\d|5[0-3])$/.test(weeklyKey) ? weeklyKey : '') : date;
   return {
     profile,
     date: env.NEWSLETTER_DATE || status.date || '',
@@ -324,7 +330,7 @@ function buildInputFromEnv(args, env) {
       debug_name: env.DEBUG_ARTIFACT_NAME || '',
       key_paths: [
         (env.NEWSLETTER_DATE || status.date) ? `articles/content/newsroom/${env.NEWSLETTER_DATE || status.date}/` : '',
-        (env.NEWSLETTER_DATE || status.date) ? `articles/newsletters/${env.NEWSLETTER_DATE || status.date}/` : ''
+        publicKey ? `articles/newsletters/${publicKey}/` : ''
       ].filter(Boolean)
     }
   };

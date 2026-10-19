@@ -8,16 +8,17 @@
 
 ### Public artifact (공개 산출물)
 
-- [ ] `articles/newsletters/YYYY-MM-DD/newsletter.md`를 작성했다.
-- [ ] `articles/newsletters/YYYY-MM-DD/index.html`을 작성했다.
-- [ ] `articles/data/newsletters.json`을 업데이트했다.
+- [ ] `articles/newsletters/YYYY-Wnn/newsletter.md`를 작성했다.
+- [ ] `articles/newsletters/YYYY-Wnn/index.html`을 작성했다.
+- [ ] `articles/newsletters/YYYY-Wnn/issue.json`과 `articles/data/newsletters-weekly.json`을 업데이트했다.
 - [ ] HTML에서 Archive 링크가 동작한다.
 - [ ] HTML에서 Markdown 원본 링크가 동작한다.
 
 ### Editorial quality (편집 품질)
 
 - [ ] 주요 기사 구성이 `src/shared/config/newsletter-policy.json`을 따른다.
-- [ ] 3줄 브리핑은 정확히 3줄이다.
+- [ ] 주간 핵심 브리핑이 최종 기사 목록과 일치하며, 실행별 기사 수와 주간 누적 기사 수는 정책의 각 범위를 따른다.
+- [ ] 기존 날짜 URL과 날짜 인덱스를 보존했다.
 - [ ] 각 주요 기사에 `확인한 사실`이 있다.
 - [ ] 각 주요 기사에 `배경지식`이 있다.
 - [ ] 각 주요 기사에 `Camera HAL 관점`, `Camera HAL / Driver 관점`, 또는 이에 준하는 실무 연결 설명이 있다.

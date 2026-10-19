@@ -149,16 +149,182 @@ test('asOf 이후에 발행된 호는 세지 않는다', () => {
   assert.equal(readPublishedArticles(root, { asOf: '2026-08-17' }).articles.length, 1, '같은 날은 센다');
 });
 
-test('주 단위 디렉터리는 읽지 않는다', () => {
-  // `2026-W34`에서는 발행일을 알 수 없어 asOf로 자를 수 없다. 같은 호가 날짜 디렉터리에도
-  // 있으므로 실제로 잃는 발행분은 없다.
+test('발행 날짜 근거가 없는 주간호는 날짜를 추정하지 않는다', () => {
+  // anchor나 원문 날짜를 발행일로 추정하지 않는다.
   const root = tempRoot('published-article-urls-weekly');
   writeIssue(root, '2026-W34', issueMarkdown());
   const published = readPublishedArticles(root);
   assert.deepEqual(published.articles, []);
-  assert.equal(published.issuesScanned, 0, '읽은 호가 0이면 레이아웃이 바뀐 것과 발행이 없는 것을 가를 수 있다');
+  assert.equal(published.issuesScanned, 1);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-22' }).articles, []);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-23' }).articles, []);
 });
 
 test('뉴스레터 디렉터리가 없으면 빈 배열이다', () => {
   assert.deepEqual(readPublishedArticles(tempRoot('published-article-urls-empty')), { issuesScanned: 0, articles: [] });
+});
+
+function writeHistory(root, articles) {
+  const dir = path.join(root, 'state');
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'article-exposure-history.json'), JSON.stringify({ schemaVersion: 1, articles }), 'utf8');
+}
+
+function articleRecord(url, date, type = 'newsletter_article') {
+  return { source_url: url, newsletter_article_date: date, exposure_type: type, newsletter_url: 'newsletters/2026-W34/index.html' };
+}
+
+test('주간 누적 기사별 명시 발행일로 같은 주 asOf 이후 기사를 제외한다', () => {
+  const root = tempRoot('published-article-urls-weekly-asof');
+  const later = 'https://example.com/later-article';
+  writeIssue(root, '2026-W34', issueMarkdown() + '\n## 3. 후속 기사\n\n**Sources**\n\n- [later](' + later + ')\n');
+  writeHistory(root, [articleRecord(ARTICLE_URL, '2026-08-17'), articleRecord(later, '2026-08-20')]);
+  const dir = path.join(root, 'articles/newsletters/2026-W34');
+  fs.writeFileSync(path.join(dir, 'issue.json'), JSON.stringify({ weekly_key: '2026-W34', generation_anchor_date: '2026-08-17', sections: [{ source_candidate_url: ARTICLE_URL, sources: [{ url: ARTICLE_URL }] }, { source_candidate_url: later, sources: [{ url: later }] }] }));
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-19' }).articles, [{ url: ARTICLE_URL, newsletter_date: '2026-08-17' }]);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-20' }).articles, [
+    { url: ARTICLE_URL, newsletter_date: '2026-08-17' }, { url: later, newsletter_date: '2026-08-20' }
+  ]);
+});
+
+test('홈 헤드라인과 다른 주의 노출 기록은 주간 기사 발행일 근거가 아니다', () => {
+  const root = tempRoot('published-article-urls-weekly-history');
+  writeIssue(root, '2026-W34', issueMarkdown());
+  writeWeeklySource(root, [{ source_candidate_url: ARTICLE_URL, sources: [{ url: ARTICLE_URL }] }]);
+  writeHistory(root, [articleRecord(ARTICLE_URL, '2026-08-17', 'homepage_headline'), articleRecord(ARTICLE_URL, '2026-08-10')]);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-18' }).articles, []);
+  writeHistory(root, [{ ...articleRecord(ARTICLE_URL, '2026-08-18', 'homepage_headline'), exposure_types: ['newsletter_article', 'homepage_headline'] }]);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-18' }).articles, [{ url: ARTICLE_URL, newsletter_date: '2026-08-18' }]);
+});
+
+test('노출 이력만 있고 공개 본문에 없는 URL은 발행 기사로 세지 않는다', () => {
+  const root = tempRoot('published-article-urls-weekly-public');
+  writeIssue(root, '2026-W34', issueMarkdown());
+  writeHistory(root, [articleRecord(REFERENCE_URL, '2026-08-17')]);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-18' }).articles, []);
+});
+
+test('dated와 weekly 중복은 기존의 가장 이른 날짜와 URL 정렬을 보존한다', () => {
+  const root = tempRoot('published-article-urls-weekly-dedup');
+  const second = 'https://example.com/a';
+  writeIssue(root, '2026-08-17', issueMarkdown());
+  writeIssue(root, '2026-W34', issueMarkdown() + '\n## 3. 다른 기사\n\n**Sources**\n\n- [other](' + second + ')\n');
+  writeWeeklySource(root, [{ source_candidate_url: ARTICLE_URL, sources: [{ url: ARTICLE_URL }] }, { sources: [{ url: second }] }]);
+  writeHistory(root, [articleRecord(ARTICLE_URL, '2026-08-20'), articleRecord(second, '2026-08-17')]);
+  const result = readPublishedArticles(root);
+  assert.equal(result.issuesScanned, 2);
+  assert.deepEqual(result.articles, [{ url: ARTICLE_URL, newsletter_date: '2026-08-17' }, { url: second, newsletter_date: '2026-08-17' }].sort((a, b) => a.url.localeCompare(b.url)));
+});
+
+function writeWeeklySource(root, sections) {
+  const dir = path.join(root, 'articles/newsletters/2026-W34');
+  fs.writeFileSync(path.join(dir, 'issue.json'), JSON.stringify({ weekly_key: '2026-W34', generation_anchor_date: '2026-08-17', sections }), 'utf8');
+}
+
+test('명시 primary 발행일을 같은 공개 기사의 secondary Sources에 결속한다', () => {
+  const root = tempRoot('published-article-urls-weekly-secondary');
+  writeIssue(root, '2026-W34', issueMarkdown().replace('## 참고 / 더 읽을거리', '- [보조](https://example.com/secondary)\n\n## 참고 / 더 읽을거리'));
+  writeWeeklySource(root, [{ source_candidate_url: ARTICLE_URL, sources: [{ url: ARTICLE_URL }, { url: 'https://example.com/secondary' }] }]);
+  writeHistory(root, [articleRecord(ARTICLE_URL, '2026-08-20')]);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-19' }).articles, []);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-20' }).articles, [
+    { url: ARTICLE_URL, newsletter_date: '2026-08-20' }, { url: 'https://example.com/secondary', newsletter_date: '2026-08-20' }
+  ].sort((a, b) => a.url.localeCompare(b.url)));
+});
+
+test('여러 primary가 한 Sources에 있으면 미확인 secondary 날짜를 추정하지 않는다', () => {
+  const root = tempRoot('published-article-urls-weekly-ambiguous');
+  writeIssue(root, '2026-W34', issueMarkdown().replace('## 참고 / 더 읽을거리', '- [둘째](https://example.com/second)\n- [보조](https://example.com/secondary)\n\n## 참고 / 더 읽을거리'));
+  writeWeeklySource(root, [{ source_candidate_url: ARTICLE_URL }, { source_candidate_url: 'https://example.com/second' }]);
+  writeHistory(root, [articleRecord(ARTICLE_URL, '2026-08-17'), articleRecord('https://example.com/second', '2026-08-20')]);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-18' }).articles, [{ url: ARTICLE_URL, newsletter_date: '2026-08-17' }]);
+});
+
+test('기사 노출 날짜와 공개 weekly URL이 다른 주이면 발행일로 쓰지 않는다', () => {
+  const root = tempRoot('published-article-urls-weekly-url');
+  writeIssue(root, '2026-W34', issueMarkdown());
+  writeWeeklySource(root, [{ source_candidate_url: ARTICLE_URL, sources: [{ url: ARTICLE_URL }] }]);
+  writeHistory(root, [{ ...articleRecord(ARTICLE_URL, '2026-08-17'), newsletter_url: 'newsletters/2026-W35/index.html' }]);
+  assert.deepEqual(readPublishedArticles(root).articles, []);
+});
+
+test('실제 recordNewsletterArticles producer의 primary 기록으로 보조 출처도 포함한다', () => {
+  const { recordNewsletterArticles, emptyExposureHistory } = require('../../../reporter/article-exposure-history');
+  const root = tempRoot('published-article-urls-producer');
+  const secondary = 'https://example.com/secondary';
+  const section = { source_candidate_url: ARTICLE_URL, sources: [{ url: ARTICLE_URL }, { url: secondary }] };
+  writeIssue(root, '2026-W34', issueMarkdown().replace('## 참고 / 더 읽을거리', '- [보조](' + secondary + ')\n\n## 참고 / 더 읽을거리'));
+  writeWeeklySource(root, [section]);
+  const history = recordNewsletterArticles(emptyExposureHistory('2026-08-17'), [section], { date: '2026-08-17', newsletterUrl: 'newsletters/2026-W34/index.html' });
+  writeHistory(root, history.articles);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-17' }).articles, [
+    { url: ARTICLE_URL, newsletter_date: '2026-08-17' }, { url: secondary, newsletter_date: '2026-08-17' }
+  ].sort((a, b) => a.url.localeCompare(b.url)));
+});
+
+test('보조 Sources가 나중에 추가된 경우 primary의 마지막 명시 발행일보다 앞당기지 않는다', () => {
+  const root = tempRoot('published-article-urls-later-sources');
+  const secondary = 'https://example.com/later-source';
+  writeIssue(root, '2026-W34', issueMarkdown().replace('## 참고 / 더 읽을거리', '- [보조](' + secondary + ')\n\n## 참고 / 더 읽을거리'));
+  writeWeeklySource(root, [{ source_candidate_url: ARTICLE_URL, sources: [{ url: ARTICLE_URL }, { url: secondary }] }]);
+  writeHistory(root, [articleRecord(ARTICLE_URL, '2026-08-20')]);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-19' }).articles, []);
+});
+
+test('weekly issue 식별자 손상은 다른 주 근거로 조용히 읽지 않는다', () => {
+  const root = tempRoot('published-article-urls-weekly-identity');
+  writeIssue(root, '2026-W34', issueMarkdown());
+  const dir = path.join(root, 'articles/newsletters/2026-W34');
+  fs.writeFileSync(path.join(dir, 'issue.json'), JSON.stringify({ weekly_key: '2026-W35', sections: [] }));
+  writeHistory(root, [articleRecord(ARTICLE_URL, '2026-08-17')]);
+  assert.throws(() => readPublishedArticles(root), /Invalid weekly publication issue/);
+});
+
+test('명시 발행 이력이 없는 secondary만 별도로 날짜를 갖지 않는다', () => {
+  const root = tempRoot('published-article-urls-weekly-unbound');
+  writeIssue(root, '2026-W34', issueMarkdown().replace('## 참고 / 더 읽을거리', '- [추가](https://example.com/not-in-issue)\n\n## 참고 / 더 읽을거리'));
+  writeWeeklySource(root, [{ sources: [{ url: ARTICLE_URL }] }]);
+  writeHistory(root, [articleRecord(ARTICLE_URL, '2026-08-17')]);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-17' }).articles, [{ url: ARTICLE_URL, newsletter_date: '2026-08-17' }]);
+});
+
+test('실제 selectedArticles producer의 stable identity로 raw primary 발행일을 찾는다', () => {
+  const { articleIdentityKey } = require('../../../../shared/common/article-identity');
+  const { recordNewsletterArticles, emptyExposureHistory } = require('../../../reporter/article-exposure-history');
+  const root = tempRoot('published-article-urls-selected-identity');
+  const raw = 'https://developer.android.com/Media/Test?hl=en';
+  const candidate = { url: raw, normalized_url: 'https://developer.android.com/media/test', article_identity_key: articleIdentityKey({ url: raw }) };
+  const section = { source_candidate_url: raw, sources: [{ url: raw }] };
+  writeIssue(root, '2026-W34', issueMarkdown({ sourceUrl: raw }));
+  writeWeeklySource(root, [section]);
+  const history = recordNewsletterArticles(emptyExposureHistory('2026-08-17'), [section], {
+    date: '2026-08-17', newsletterUrl: 'newsletters/2026-W34/index.html', selectedArticles: [candidate]
+  });
+  assert.equal(history.articles[0].source_url, candidate.normalized_url);
+  assert.equal(history.articles[0].article_identity_key, articleIdentityKey({ url: raw }));
+  writeHistory(root, history.articles);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-17' }).articles, [{ url: raw, newsletter_date: '2026-08-17' }]);
+  // hl는 tracking parameter가 아니다. 같은 host/path라도 다른 query 기사로 넓혀 매칭하지 않는다.
+  const other = raw.replace('hl=en', 'hl=ko');
+  writeIssue(root, '2026-W34', issueMarkdown({ sourceUrl: other }));
+  writeWeeklySource(root, [{ source_candidate_url: other, sources: [{ url: other }] }]);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-17' }).articles, []);
+});
+
+test('후속 homepage가 source_url 표기를 바꿔도 stable article identity와 명시 발행일을 보존한다', () => {
+  const { articleIdentityKey } = require('../../../../shared/common/article-identity');
+  const { recordNewsletterArticles, recordArticleExposure, emptyExposureHistory } = require('../../../reporter/article-exposure-history');
+  const root = tempRoot('published-article-urls-homepage-identity');
+  const raw = 'https://developer.android.com/Media/Test?hl=en';
+  const key = articleIdentityKey({ url: raw });
+  const section = { source_candidate_url: raw, sources: [{ url: raw }] };
+  writeIssue(root, '2026-W34', issueMarkdown({ sourceUrl: raw }));
+  writeWeeklySource(root, [section]);
+  let history = recordNewsletterArticles(emptyExposureHistory('2026-08-17'), [section], { date: '2026-08-17', newsletterUrl: 'newsletters/2026-W34/index.html' });
+  history = recordArticleExposure(history, { article_identity_key: key, canonical_url: 'https://developer.android.com/media/test' }, { date: '2026-08-19', type: 'homepage_headline', newsletterUrl: 'newsletters/2026-W34/index.html' });
+  assert.equal(history.articles[0].exposure_type, 'homepage_headline');
+  assert.equal(history.articles[0].newsletter_article_date, '2026-08-17');
+  assert.notEqual(history.articles[0].source_url, raw);
+  writeHistory(root, history.articles);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-17' }).articles, [{ url: raw, newsletter_date: '2026-08-17' }]);
 });
