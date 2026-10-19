@@ -1,12 +1,27 @@
 const fs = require('fs');
 const path = require('path');
 const { randomUUID } = require('crypto');
+const { execFileSync } = require('child_process');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { translationArtifactPaths } = require('../render/translation-state');
 const { writeSitemap } = require('../render/generate-sitemap');
 
 const WEEKLY_INDEX = 'articles/data/newsletters-weekly.json';
 const DATED_INDEX = 'articles/data/newsletters.json';
+const UUID_PATTERN = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+
+function currentRevision(root) {
+  try {
+    return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8', timeout: 10000, stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  } catch (_) {
+    if (fs.existsSync(path.join(root, '.git'))) throw new Error('Cannot determine publication repository revision');
+    return null; // Standalone non-Git fixtures and tooling use the transaction pointer.
+  }
+}
+
+function assertCapturedRevision(root, snapshot) {
+  if (currentRevision(root) !== snapshot.baseRevision) throw new Error('Publication repository revision changed since capture');
+}
 
 function snapshotPath(root, date) {
   weeklyKeyForDate(date); // Validate before using the execution date in a path.
@@ -73,7 +88,8 @@ function readSnapshot(root, date) {
   const snapshot = JSON.parse(fs.readFileSync(file, 'utf8'));
   const weeklyKey = weeklyKeyForDate(date);
   const expectedFiles = publicationFiles(weeklyKey);
-  if (snapshot.schemaVersion !== 1 || snapshot.date !== date || snapshot.weeklyKey !== weeklyKey ||
+  if (snapshot.schemaVersion !== 2 || !UUID_PATTERN.test(snapshot.transactionId || '') ||
+    (snapshot.baseRevision !== null && !/^[0-9a-f]{40}$/i.test(snapshot.baseRevision || '')) || snapshot.date !== date || snapshot.weeklyKey !== weeklyKey ||
     !['pending', 'completed', 'rolled_back'].includes(snapshot.state) ||
     (snapshot.weeklyEntry !== null && snapshot.weeklyEntry?.weeklyKey !== weeklyKey) ||
     !Array.isArray(snapshot.datedTranslations) || !snapshot.files ||
@@ -86,6 +102,25 @@ function readSnapshot(root, date) {
   return snapshot;
 }
 
+// Headline and exposure state are shared across publication weeks. A newer
+// capture supersedes every earlier transaction, even when that earlier owner is
+// explicitly supplied later. A failed newer attempt restores its own baseline;
+// it never reactivates an older transaction's recovery authority.
+function frontierPath(root) {
+  return path.join(root, '.tmp', 'weekly-publication', 'active.json');
+}
+
+function assertCurrentTransaction(root, snapshot) {
+  const file = frontierPath(root);
+  if (!fs.existsSync(file)) throw new Error('Missing weekly publication transaction frontier');
+  const frontier = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if (frontier.schemaVersion !== 1 || typeof frontier.runKey !== 'string' || !frontier.runKey.trim() ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(frontier.date || '') ||
+    frontier.weeklyKey !== weeklyKeyForDate(frontier.date) ||
+    !UUID_PATTERN.test(frontier.transactionId || '')) throw new Error('Invalid weekly publication transaction frontier');
+  return ['date', 'weeklyKey', 'runKey', 'transactionId'].every(key => frontier[key] === snapshot[key]);
+}
+
 function ownedSnapshot(root, date, options) {
   const snapshot = readSnapshot(root, date);
   if (!snapshot) return { reason: 'no_snapshot' };
@@ -93,6 +128,7 @@ function ownedSnapshot(root, date, options) {
   if (!owner) throw new Error('Cannot recover weekly publication without an explicit run owner');
   if (snapshot.runKey !== owner) return { reason: 'owner_mismatch' };
   if (snapshot.state === 'completed') return { reason: 'completed' };
+  if (!assertCurrentTransaction(root, snapshot)) return { reason: 'snapshot_superseded' };
   return { snapshot };
 }
 
@@ -101,6 +137,8 @@ function completeWeeklyPublication(options = {}) {
   const owned = ownedSnapshot(root, date, options);
   if (!owned.snapshot) return { completed: false, reason: owned.reason };
   if (owned.snapshot.state === 'rolled_back') return { completed: false, reason: 'already_rolled_back' };
+  // PR creation legitimately commits the generated output before this finalization.
+  // Revision binding protects restoration/resume, not the successful close operation.
   owned.snapshot.state = 'completed';
   saveSnapshot(snapshotPath(root, date), owned.snapshot);
   return { completed: true, reason: 'publication_run_completed' };
@@ -116,7 +154,11 @@ function captureWeeklyPublication(options = {}) {
   if (fs.existsSync(file)) {
     const previous = readSnapshot(root, date);
     if (previous.runKey === runKey && previous.state === 'completed') throw new Error('Publication run is already completed');
-    if (previous.runKey === runKey && previous.state === 'pending') return previous;
+    if (previous.runKey === runKey && previous.state === 'pending') {
+      if (!assertCurrentTransaction(root, previous)) throw new Error('Cannot resume a superseded publication transaction');
+      assertCapturedRevision(root, previous);
+      return previous;
+    }
   }
   const weeklyEntry = readIndex(root, WEEKLY_INDEX).find(entry => entry.weeklyKey === weeklyKey) || null;
   const datedTranslations = readIndex(root, DATED_INDEX)
@@ -126,8 +168,9 @@ function captureWeeklyPublication(options = {}) {
     const full = path.join(root, relativePath);
     return [relativePath, fs.existsSync(full) ? fs.readFileSync(full).toString('base64') : null];
   }));
-  const snapshot = { schemaVersion: 1, date, weeklyKey, runKey, state: 'pending', weeklyEntry, datedTranslations, files };
+  const snapshot = { schemaVersion: 2, transactionId: randomUUID(), baseRevision: currentRevision(root), date, weeklyKey, runKey, state: 'pending', weeklyEntry, datedTranslations, files };
   saveSnapshot(file, snapshot);
+  saveSnapshot(frontierPath(root), { schemaVersion: 1, date, weeklyKey, runKey, transactionId: snapshot.transactionId });
   return snapshot;
 }
 
@@ -141,6 +184,7 @@ function rollbackWeeklyPublication(options = {}) {
   const weeklyKey = snapshot.weeklyKey;
   const expectedFiles = publicationFiles(weeklyKey);
   if (snapshot.state === 'rolled_back') return { applied: false, files: [], reason: 'already_rolled_back' };
+  assertCapturedRevision(root, snapshot);
   // Parse all shared indexes before restoring any files; broken state must fail closed.
   const currentWeekly = readIndex(root, WEEKLY_INDEX);
   const weekly = currentWeekly.filter(entry => entry.weeklyKey !== weeklyKey);

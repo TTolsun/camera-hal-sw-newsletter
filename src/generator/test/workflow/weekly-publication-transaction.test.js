@@ -289,3 +289,137 @@ test('missing recovery ownership fails closed at the actual unexpose boundary wi
   assert.match(result.error, /without an explicit run owner/);
   assertSuccessfulBytes(root);
 });
+
+
+function publishSharedBytes(root, entry, label) {
+  writeText(path.join(root, 'articles/newsletters', KEY, 'index.html'), label);
+  writeJson(path.join(root, WEEKLY), [{ ...entry, title: label }]);
+  writeText(path.join(root, 'articles/data/homepage-headline.json'), label + ' headline');
+  writeText(path.join(root, 'state/article-exposure-history.json'), label + ' exposure');
+}
+function assertSharedBytes(root, label) {
+  assert.equal(fs.readFileSync(path.join(root, 'articles/newsletters', KEY, 'index.html'), 'utf8'), label);
+  assert.equal(read(root, WEEKLY).find(entry => entry.weeklyKey === KEY).title, label);
+  assert.equal(fs.readFileSync(path.join(root, 'articles/data/homepage-headline.json'), 'utf8'), label + ' headline');
+  assert.equal(fs.readFileSync(path.join(root, 'state/article-exposure-history.json'), 'utf8'), label + ' exposure');
+}
+
+test('a stale explicit owner cannot undo a later successful same-week publication at either recovery boundary', t => {
+  const { root, entry } = stage(t);
+  const earlierDate = '2026-10-19';
+  transaction.captureWeeklyPublication({ root, date: earlierDate, runKey: 'owner-A' });
+  publishSharedBytes(root, entry, 'A-GOOD');
+  transaction.captureWeeklyPublication({ root, date: DATE, runKey: 'owner-B' });
+  publishSharedBytes(root, entry, 'B-GOOD');
+  assert.equal(completeWeeklyPublication({ root, date: DATE, runKey: 'owner-B' }).completed, true);
+  writeJson(path.join(root, DATED), [{ date: earlierDate, title: 'Existing dated publication' }]);
+  const result = unexposeFailedPublication(root, earlierDate, { runKey: 'owner-A' });
+  assert.equal(result.weeklyRollback.reason, 'snapshot_superseded');
+  assertSharedBytes(root, 'B-GOOD');
+  reconcilePublicState({ root, date: earlierDate, runKey: 'owner-A', status: { date: earlierDate, diagnostics_only: true } });
+  assertSharedBytes(root, 'B-GOOD');
+  assert.equal(read(root, DATED)[0].date, earlierDate);
+  assert.equal(read(root, SNAPSHOT).state, 'completed');
+});
+
+test('a newer pending publication supersedes older recovery, completion and resume authority', t => {
+  const { root, entry } = stage(t);
+  transaction.captureWeeklyPublication({ root, date: '2026-10-19', runKey: 'owner-A' });
+  publishSharedBytes(root, entry, 'A-GOOD');
+  transaction.captureWeeklyPublication({ root, date: DATE, runKey: 'owner-B' });
+  publishSharedBytes(root, entry, 'B-PENDING');
+  const older = { root, date: '2026-10-19', runKey: 'owner-A' };
+  assert.equal(transaction.rollbackWeeklyPublication(older).reason, 'snapshot_superseded');
+  assert.equal(completeWeeklyPublication(older).reason, 'snapshot_superseded');
+  assert.throws(() => transaction.captureWeeklyPublication(older), /superseded/);
+  assertSharedBytes(root, 'B-PENDING');
+});
+
+test('a later publication in another week protects the shared headline and exposure state from stale recovery', t => {
+  const { root, entry } = stage(t);
+  transaction.captureWeeklyPublication({ root, date: '2026-10-19', runKey: 'owner-A' });
+  publishSharedBytes(root, entry, 'A-GOOD');
+  transaction.captureWeeklyPublication({ root, date: '2026-10-26', runKey: 'owner-C' });
+  const later = { weeklyKey: '2026-W44', date: '2026-10-26', title: 'C-GOOD', html: 'newsletters/2026-W44/index.html' };
+  writeJson(path.join(root, WEEKLY), [later, { ...entry, title: 'A-GOOD' }]);
+  writeText(path.join(root, 'articles/newsletters/2026-W44/index.html'), 'C-GOOD');
+  writeText(path.join(root, 'articles/data/homepage-headline.json'), 'C-GOOD headline');
+  writeText(path.join(root, 'state/article-exposure-history.json'), 'C-GOOD exposure');
+  completeWeeklyPublication({ root, date: '2026-10-26', runKey: 'owner-C' });
+  const result = transaction.rollbackWeeklyPublication({ root, date: '2026-10-19', runKey: 'owner-A' });
+  assert.equal(result.reason, 'snapshot_superseded');
+  assert.equal(read(root, WEEKLY).length, 2);
+  assert.equal(fs.readFileSync(path.join(root, 'articles/newsletters', KEY, 'index.html'), 'utf8'), 'A-GOOD');
+  assert.equal(fs.readFileSync(path.join(root, 'articles/newsletters/2026-W44/index.html'), 'utf8'), 'C-GOOD');
+  assert.equal(fs.readFileSync(path.join(root, 'articles/data/homepage-headline.json'), 'utf8'), 'C-GOOD headline');
+  assert.equal(fs.readFileSync(path.join(root, 'state/article-exposure-history.json'), 'utf8'), 'C-GOOD exposure');
+});
+
+test('failure of the newest attempt restores its baseline without reactivating older recovery authority', t => {
+  const { root, entry } = stage(t);
+  transaction.captureWeeklyPublication({ root, date: '2026-10-19', runKey: 'owner-A' });
+  publishSharedBytes(root, entry, 'A-GOOD');
+  transaction.captureWeeklyPublication({ root, date: DATE, runKey: 'owner-B' });
+  publishSharedBytes(root, entry, 'B-FAILED');
+  const result = transaction.rollbackWeeklyPublication({ root, date: DATE, runKey: 'owner-B' });
+  assert.equal(result.applied, true);
+  assertSharedBytes(root, 'A-GOOD');
+  assert.equal(transaction.rollbackWeeklyPublication({ root, date: '2026-10-19', runKey: 'owner-A' }).reason, 'snapshot_superseded');
+  assertSharedBytes(root, 'A-GOOD');
+});
+
+test('a missing or malformed active transaction pointer fails closed for a matching owner', t => {
+  const { root, entry } = stage(t);
+  captureWeeklyPublication({ root, date: DATE });
+  publishSharedBytes(root, entry, 'A-GOOD');
+  const frontier = path.join(root, '.tmp/weekly-publication/active.json');
+  const original = fs.readFileSync(frontier);
+  fs.unlinkSync(frontier);
+  assert.throws(() => rollbackWeeklyPublication({ root, date: DATE }), /Missing weekly publication transaction frontier/);
+  writeText(frontier, '{}');
+  assert.throws(() => rollbackWeeklyPublication({ root, date: DATE }), /Invalid weekly publication transaction frontier/);
+  assertSharedBytes(root, 'A-GOOD');
+  fs.writeFileSync(frontier, original);
+  assert.equal(rollbackWeeklyPublication({ root, date: DATE }).applied, true);
+});
+
+
+function gitRevisionFixture(root, args) {
+  const { execFileSync } = require('node:child_process');
+  return execFileSync('git', ['-c', 'user.name=Weekly transaction test', '-c', 'user.email=weekly-transaction@example.invalid', '-c', 'core.hooksPath=', ...args],
+    { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+}
+
+test('a changed repository revision cannot be overwritten by a pending explicit-owner recovery', t => {
+  const { root, entry } = stage(t);
+  gitRevisionFixture(root, ['init', '-q']);
+  gitRevisionFixture(root, ['commit', '--allow-empty', '-m', 'baseline']);
+  captureWeeklyPublication({ root, date: DATE });
+  publishSharedBytes(root, entry, 'NEWER-PUBLISHED');
+  gitRevisionFixture(root, ['commit', '--allow-empty', '-m', 'later publication revision']);
+  const result = unexposeFailedPublication(root, DATE, { runKey: OWNER });
+  assert.match(result.error, /revision changed since capture/);
+  assertSharedBytes(root, 'NEWER-PUBLISHED');
+  assert.throws(() => captureWeeklyPublication({ root, date: DATE }), /revision changed since capture/);
+});
+
+test('successful finalization permits the normal PR-creation commit without restoring any bytes', t => {
+  const { root, entry } = stage(t);
+  gitRevisionFixture(root, ['init', '-q']);
+  gitRevisionFixture(root, ['commit', '--allow-empty', '-m', 'baseline']);
+  captureWeeklyPublication({ root, date: DATE });
+  publishSharedBytes(root, entry, 'PROPOSED-PUBLICATION');
+  gitRevisionFixture(root, ['commit', '--allow-empty', '-m', 'create publication PR commit']);
+  assert.equal(completeWeeklyPublication({ root, date: DATE, runKey: OWNER }).completed, true);
+  assertSharedBytes(root, 'PROPOSED-PUBLICATION');
+  assert.equal(rollbackWeeklyPublication({ root, date: DATE }).reason, 'completed');
+});
+
+
+test('an unreadable Git revision is not silently treated as a standalone non-Git publication', t => {
+  const { root } = stage(t);
+  fs.mkdirSync(path.join(root, '.git'));
+  assert.throws(() => captureWeeklyPublication({ root, date: DATE }), /Cannot determine publication repository revision/);
+  assert.equal(fs.existsSync(path.join(root, SNAPSHOT)), false);
+  assert.equal(fs.existsSync(path.join(root, '.tmp/weekly-publication/active.json')), false);
+});
