@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const { isTrue } = require('../../shared/common/value-coercion');
+const { publicOutputLane } = require('./publication-state-schema');
+const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 
 const {
   validateRenderedIssueStructure
@@ -207,8 +210,9 @@ function structureStatusForLane(root, date, lane) {
     const editorResult = readJsonResult(path.join(root, ...editorPath));
     if (editorResult.error) {
       errors.push(`invalid ${editorPath.join('/')}: ${editorResult.error.message}`);
-    } else if (lane.id === 'weekly' && !Array.isArray(editorResult.value?.sections)) {
-      errors.push(`invalid ${editorPath.join('/')}: sections must be an array`);
+    } else if (lane.id === 'weekly') {
+      if (!Array.isArray(editorResult.value?.sections)) errors.push('invalid ' + editorPath.join('/') + ': sections must be an array');
+      if (editorResult.value?.weekly_key !== date) errors.push('invalid ' + editorPath.join('/') + ': weekly_key must match ' + date);
     }
     const structural = validateRenderedIssueStructure({
       date,
@@ -261,7 +265,36 @@ function weeklyNewsletterStructureStatus(root, weeklyKey) {
   return structureStatusForLane(root, weeklyKey, WEEKLY_LANE);
 }
 
+// New generation runs declare their primary public lane. Missing declarations belong
+// to archived statuses; disk presence must never choose a fallback for a current run.
+function publicationTarget(date, status = {}) {
+  if (publicOutputLane(status) === 'daily') return { key: date, lane: DAILY_LANE };
+  return { key: weeklyKeyForDate(date), lane: WEEKLY_LANE };
+}
+
+function executionPublicStructureStatus(root, date, status = {}) {
+  const { key, lane } = publicationTarget(date, status);
+  // Root/home and both indexes were checked by the dated lane. Preserve these
+  // global guarantees when the current execution switches to weekly artifacts.
+  return structureStatusForLane(root, key, {
+    ...lane,
+    checksRootIndex: true,
+    validatesDataIndex: true
+  });
+}
+
+function executionWeeklyOutputWritten(root, date, status = {}) {
+  const canonical = readJsonResult(path.join(root, 'articles/content/newsroom', date, 'generation-status.json'));
+  if (canonical.error || !canonical.exists) return false;
+  return [status, canonical.value].every(value => value?.date === date &&
+    value.public_output_lane === 'weekly' && isTrue(value.public_output_expected) &&
+    value.weekly_output_status === 'written');
+}
+
 module.exports = {
+  executionWeeklyOutputWritten,
+  executionPublicStructureStatus,
+  publicationTarget,
   DAILY_LANE,
   REQUIRED_PUBLIC_NEWSLETTER_FILES,
   REQUIRED_PUBLIC_WEEKLY_FILES,

@@ -15,6 +15,9 @@ const {
 } = require('./write-generation-status-output');
 const {
   REQUIRED_PUBLIC_NEWSLETTER_FILES,
+  executionPublicStructureStatus,
+  executionWeeklyOutputWritten,
+  publicationTarget,
   newsletterIndexDateStatus,
   publicNewsletterStructureStatus,
   requiredPublicFiles,
@@ -156,7 +159,11 @@ function getChangedRepoVisibleArtifacts({ root = process.cwd(), date } = {}) {
         '--',
         `articles/content/newsroom/${date}`,
         `articles/newsletters/${date}`,
-        'articles/data/newsletters.json'
+        'articles/data/newsletters.json',
+        `articles/newsletters/${weeklyKeyForDate(date)}`,
+        'articles/data/newsletters-weekly.json',
+        'articles/data/homepage-headline.json',
+        'state/article-exposure-history.json'
       ],
       {
         cwd: root,
@@ -282,7 +289,11 @@ function relevantChangedArtifacts(changedArtifacts, date) {
     .filter(filePath =>
       filePath.startsWith(`articles/content/newsroom/${date}/`) ||
       filePath.startsWith(`articles/newsletters/${date}/`) ||
-      filePath === 'articles/data/newsletters.json'
+      filePath === 'articles/data/newsletters.json' ||
+      filePath.startsWith(`articles/newsletters/${weeklyKeyForDate(date)}/`) ||
+      filePath === 'articles/data/newsletters-weekly.json' ||
+      filePath === 'articles/data/homepage-headline.json' ||
+      filePath === 'state/article-exposure-history.json'
     ))].sort();
 }
 
@@ -340,9 +351,11 @@ function resolveReviewableArtifacts(options = {}) {
   const canonicalArtifacts = fs.existsSync(newsroomDir)
     ? CANONICAL_REVIEW_ARTIFACTS.filter(file => fs.existsSync(path.join(newsroomDir, file)))
     : [];
-  const requiredPublicArtifacts = requiredPublicFiles(date);
-  const publicArtifacts = existingArtifacts(root, date, REQUIRED_PUBLIC_NEWSLETTER_FILES);
-  const publicStructure = publicNewsletterStructureStatus(root, date);
+  const target = publicationTarget(date, status);
+  const weeklyPrimary = target.lane.id === 'weekly';
+  const requiredPublicArtifacts = requiredPublicFiles(target.key, target.lane);
+  const publicArtifacts = requiredPublicArtifacts.filter(file => fs.existsSync(path.join(root, file)));
+  const publicStructure = executionPublicStructureStatus(root, date, status);
   // 독자가 홈과 아카이브에서 실제로 여는 페이지는 주간호인데, 발행 시점에 그것을 검사하는
   // 경로가 없었다(#905). 이 자리는 repair 이후라 newsroom:repair-images가 이미 주간 3종과
   // article_images를 다시 쓴 상태다 — 그 전에 판정하면 임시 이미지 상태를 최종으로 오판한다.
@@ -359,7 +372,7 @@ function resolveReviewableArtifacts(options = {}) {
     weeklyStructure.status === 'check_failed';
   // 기존 주간 페이지가 정상이어도 이번 실행의 쓰기 실패를 가릴 수 없다.
   const weeklyOutputFailed = status.weekly_output_status === 'failed';
-  const newsletterIndex = newsletterIndexDateStatus(root, date);
+  const newsletterIndex = newsletterIndexDateStatus(root, target.key, target.lane);
   const changedArtifacts = Object.prototype.hasOwnProperty.call(options, 'changedArtifacts')
     ? relevantChangedArtifacts(options.changedArtifacts, date)
     : relevantChangedArtifacts(getChangedRepoVisibleArtifacts({ root, date }), date);
@@ -459,10 +472,14 @@ function resolveReviewableArtifacts(options = {}) {
     publicStructure.requiredFilesNonEmpty &&
     newsletterIndex.hasDate === true &&
     newsletterIndex.pathsMatch === true;
-  const missingChangedPublicArtifacts = requiredPublicArtifacts.filter(filePath => !changedArtifacts.includes(filePath));
+  // A same-week rerun can produce identical public bytes. Its explicit writer
+  // outcome and strict artifacts matter; requiring a git diff of all files does not.
+  const currentWeeklyWritten = executionWeeklyOutputWritten(root, date, status);
+  const missingChangedPublicArtifacts = weeklyPrimary ? [] : requiredPublicArtifacts.filter(filePath => !changedArtifacts.includes(filePath));
   const publicNewsletterReasons = [
     weeklyOutputFailed ? `weekly output failed: ${status.weekly_output_failure_reason || 'unknown'}` : '',
     ...publicStructure.errors,
+    weeklyPrimary && !currentWeeklyWritten ? 'current execution did not successfully write weekly public output' : '',
     missingChangedPublicArtifacts.length > 0
       ? `required public files not changed: ${missingChangedPublicArtifacts.join(',')}`
       : '',
@@ -472,6 +489,7 @@ function resolveReviewableArtifacts(options = {}) {
   ].filter(Boolean);
   const publicNewsletterReady =
     hasRequiredPublicNewsletterFiles &&
+    (!weeklyPrimary || currentWeeklyWritten) &&
     publicStructure.ok &&
     missingChangedPublicArtifacts.length === 0 &&
     !weeklyStructureBlocked &&
@@ -500,7 +518,8 @@ function resolveReviewableArtifacts(options = {}) {
   const diagnosticsOnly = reviewPrReady && !publicNewsletterReady;
   const reviewOnly = diagnosticsOnly;
   const publishCandidateReady = publicNewsletterReady;
-  const hasAiPublishReady = !weeklyOutputFailed && isTrue(status.final_publish_ready);
+  const publicReadyGuard = !weeklyOutputFailed && (!weeklyPrimary || publicNewsletterReady);
+  const hasAiPublishReady = publicReadyGuard && isTrue(status.final_publish_ready);
   const hasPublishCandidate = publicNewsletterReady;
   const reviewPublicationReady =
     publicNewsletterReady &&
@@ -511,10 +530,10 @@ function resolveReviewableArtifacts(options = {}) {
     publicNewsletterReady &&
     newsletterIndex.hasDate === true &&
     newsletterIndex.pathsMatch === true;
-  const fallbackPublicReady = !weeklyOutputFailed && isTrue(status.fallback_public_ready);
+  const fallbackPublicReady = publicReadyGuard && isTrue(status.fallback_public_ready);
   const fallbackOnly = isTrue(status.fallback_only);
   const cameraAnchorCount = numberOrNull(status.camera_anchor_count);
-  const publicationMode = (weeklyOutputFailed ? PUBLICATION_MODES.DIAGNOSTICS_ONLY : status.publication_mode) ||
+  const publicationMode = (!publicReadyGuard ? PUBLICATION_MODES.DIAGNOSTICS_ONLY : status.publication_mode) ||
     (diagnosticsOnly
       ? PUBLICATION_MODES.DIAGNOSTICS_ONLY
       : fallbackPublicReady
@@ -522,7 +541,7 @@ function resolveReviewableArtifacts(options = {}) {
         : hasAiPublishReady
           ? PUBLICATION_MODES.NORMAL_PUBLIC
           : PUBLICATION_MODES.REVIEW_ONLY);
-  const homepageVisibility = (weeklyOutputFailed ? HOMEPAGE_VISIBILITY.HIDDEN : status.homepage_visibility) ||
+  const homepageVisibility = (!publicReadyGuard ? HOMEPAGE_VISIBILITY.HIDDEN : status.homepage_visibility) ||
     (diagnosticsOnly
       ? HOMEPAGE_VISIBILITY.HIDDEN
       : publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC
@@ -530,9 +549,9 @@ function resolveReviewableArtifacts(options = {}) {
         : homepageVisibleAfterMerge
           ? HOMEPAGE_VISIBILITY.NORMAL
           : HOMEPAGE_VISIBILITY.HIDDEN);
-  const normalPublicReady = !weeklyOutputFailed && (isTrue(status.normal_public_ready) || (hasAiPublishReady && publicNewsletterReady));
-  const automaticPublishReady = !weeklyOutputFailed && (isTrue(status.automatic_publish_ready) || normalPublicReady);
-  const publicArtifactReady = !weeklyOutputFailed && (isTrue(status.public_artifact_ready) || publicNewsletterReady);
+  const normalPublicReady = publicReadyGuard && (isTrue(status.normal_public_ready) || (hasAiPublishReady && publicNewsletterReady));
+  const automaticPublishReady = publicReadyGuard && (isTrue(status.automatic_publish_ready) || normalPublicReady);
+  const publicArtifactReady = publicReadyGuard && (isTrue(status.public_artifact_ready) || publicNewsletterReady);
   const homepageBadge = status.homepage_badge || (publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC ? FALLBACK_HOMEPAGE_BADGE : '');
   const publicationContractErrors = [];
   if (publicationMode === PUBLICATION_MODES.FALLBACK_PUBLIC) {

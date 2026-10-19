@@ -5,7 +5,9 @@ const path = require('path');
 
 const {
   publicNewsletterPaths,
-  publicNewsletterStructureStatus
+  executionPublicStructureStatus,
+  executionWeeklyOutputWritten,
+  publicationTarget
 } = require('./public-structure');
 
 const {
@@ -15,6 +17,7 @@ const {
 const {
   PUBLIC_STATES,
   RUN_MODES,
+  legacyDatedOutputEnabled,
   PUBLIC_ARTIFACT_POLICIES,
   PUBLIC_ARTIFACT_SOURCES,
   RECONCILIATION_ACTIONS,
@@ -96,11 +99,12 @@ function sha256File(filePath) {
   return `sha256:${crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex')}`;
 }
 
-function publicStructureStatus(root, date) {
+function publicStructureStatus(root, date, status = {}) {
   // Public files may remain on disk for forensic/debug purposes.
   // This strict structure status only decides whether they are allowed to be homepage/archive visible.
-  const structure = publicNewsletterStructureStatus(root, date);
-  const publicFiles = structure.statuses.filter(status => status.path.startsWith(`articles/newsletters/${date}/`));
+  const target = publicationTarget(date, status);
+  const structure = executionPublicStructureStatus(root, date, status);
+  const publicFiles = structure.statuses.filter(status => status.path.startsWith(`articles/newsletters/${target.key}/`));
   return {
     ...structure,
     publicFiles,
@@ -203,10 +207,27 @@ function validateRetentionMetadata({ root = process.cwd(), date } = {}) {
 
 // 발행 후 reconcile 전용 wrapper: 디스크 구조·retention을 해석해(I/O)
 // 순수 분류기(publication-state-schema)에 넘긴다. 분류 규칙 자체는 schema가 정본.
+function retentionForExecution(status, retention) {
+  if (publicationTarget(status.date, status).lane.id !== 'weekly') return retention;
+  return {
+    ...retention,
+    valid: false,
+    error: retention.exists && retention.valid
+      ? 'same-date dated retention does not authorize weekly publication'
+      : retention.error
+  };
+}
+
 function classifyLatestPublicState({ root = process.cwd(), date, status = {}, publicStructure, retention } = {}) {
-  const structure = publicStructure || publicStructureStatus(root, date || status.date);
-  const retentionState = retention || validateRetentionMetadata({ root, date: date || status.date });
-  return classifyPublicState({ status, publicStructure: structure, retention: retentionState });
+  const structure = publicStructure || publicStructureStatus(root, date || status.date, status);
+  const recordedRetention = retention || validateRetentionMetadata({ root, date: date || status.date });
+  const retentionState = retentionForExecution(status, recordedRetention);
+  const weekly = publicationTarget(date || status.date, status).lane.id === 'weekly';
+  const currentOutputWritten = executionWeeklyOutputWritten(root, date || status.date, status);
+  const classifiedStatus = weekly && !currentOutputWritten
+    ? { ...status, final_publish_ready: false, public_newsletter_ready: false, review_publication_ready: false, diagnostics_only: true }
+    : status;
+  return classifyPublicState({ status: classifiedStatus, publicStructure: structure, retention: retentionState });
 }
 
 function unexposeFailedPublication(root, date, options = {}) {
@@ -215,7 +236,8 @@ function unexposeFailedPublication(root, date, options = {}) {
     if (['owner_mismatch', 'completed', 'snapshot_superseded'].includes(rollback.reason)) {
       return { changed: false, error: '', weeklyRollback: rollback };
     }
-    const dated = removeNewsletterIndexEntry(root, date);
+    const dated = legacyDatedOutputEnabled(options.status || {})
+      ? removeNewsletterIndexEntry(root, date) : { changed: false, error: '' };
     return { ...dated, changed: dated.changed || rollback.applied, weeklyRollback: rollback };
   } catch (error) {
     return { changed: false, error: error.message };
@@ -565,8 +587,8 @@ function reconcilePublicState(options = {}) {
   const date = options.date || status.date;
   if (!date) throw new Error('reconcilePublicState requires a date.');
 
-  const publicStructure = publicStructureStatus(root, date);
-  const retention = validateRetentionMetadata({ root, date });
+  const publicStructure = publicStructureStatus(root, date, status);
+  const retention = retentionForExecution(status, validateRetentionMetadata({ root, date }));
   const publicState = classifyLatestPublicState({ root, date, status, publicStructure, retention });
   const existingPublicArtifactDetected = publicStructure.publicFilesExist || publicStructure.dataIndex.hasDate;
   const fields = resolvePublicStateFields({
@@ -583,6 +605,7 @@ function reconcilePublicState(options = {}) {
     weeklyRollback = rollbackWeeklyPublication({ ...options, root, date });
   }
   const shouldRemoveIndexEntry =
+    legacyDatedOutputEnabled(status) &&
     !fields.effectiveHomepageVisible &&
     !['owner_mismatch', 'completed', 'snapshot_superseded'].includes(weeklyRollback.reason) &&
     (publicStructure.dataIndex.exists || publicStructure.publicFilesExist);
@@ -622,7 +645,7 @@ function reconcilePublicState(options = {}) {
 
   const changedArtifacts = uniqueArtifacts(options.changedArtifacts);
   const repoVisibleStatusPath = `articles/content/newsroom/${date}/generation-status.json`;
-  const archiveSync = options.write !== false
+  const archiveSync = options.write !== false && legacyDatedOutputEnabled(status)
     ? syncArchivePublicationState({ root, date, publicState })
     : { changedArtifacts: [] };
   const repoVisibleChangedArtifacts = uniqueArtifacts(changedArtifacts.concat(

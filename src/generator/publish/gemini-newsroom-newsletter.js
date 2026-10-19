@@ -1025,7 +1025,8 @@ async function main() {
   const reviewRunContext = {
     status: generationStatusArtifact.status,
     seedUsed: generationStatusArtifact.seed_used ?? generationStatusArtifact.candidate_input?.seed_used,
-    publicOutputExpected: shouldWritePublicArtifacts
+    publicOutputExpected: shouldWritePublicArtifacts,
+    publicOutputLane: generationStatusArtifact.public_output_lane
   };
   assertJsonArtifactsReadable([
     path.join(newsroomDir, 'generation-status.json')
@@ -1080,7 +1081,7 @@ async function main() {
     // 경로가 이미 쓴 newsletters.json 노출 항목을 되돌려서 일관된 diagnostics-only 리뷰
     // PR로 강등한다. 여기서 throw하면 terminal handler가 reviewable이 아닌 FAILED 상태로
     // 덮어써 리뷰 PR이 아예 안 생긴다.
-    const unexposeResult = unexposeFailedPublication(root, date);
+    const unexposeResult = unexposeFailedPublication(root, date, { status: generationStatusArtifact });
     // 노출 제거가 실제로 실패하면(파일 손상/쓰기 오류) diagnostics-only로 강등할 수 없다.
     // 노출된 채 graceful return하면 merge 시 검증 실패한 뉴스레터가 발행되므로, 이 경우엔
     // 안전하게 fail()로 종료한다(리뷰 PR은 못 만들지만 잘못된 발행보다 낫다). 항목이 이미

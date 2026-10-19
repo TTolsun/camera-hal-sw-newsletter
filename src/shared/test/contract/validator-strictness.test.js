@@ -561,7 +561,7 @@ test('strict validate-site article count drift allows explicit review publicatio
   writeJson(path.join(root, 'articles/data/newsletters-weekly.json'), [{ ...entry, weeklyKey, date: '2026-03-30', html, md }]);
   writeText(path.join(root, 'articles', html), fs.readFileSync(path.join(root, 'articles', entry.html), 'utf8'));
   writeText(path.join(root, 'articles', md), fs.readFileSync(path.join(root, 'articles', entry.md), 'utf8'));
-  writeJson(path.join(root, 'articles/newsletters', weeklyKey, 'issue.json'), { sections: [] });
+  writeJson(path.join(root, 'articles/newsletters', weeklyKey, 'issue.json'), { weekly_key: weeklyKey, sections: [] });
 
   const result = runScript(validateSitePath, root);
 
