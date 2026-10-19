@@ -54,14 +54,28 @@ function currentCanonicalGenerationStatusDates(items = []) {
   const currentSha = String(process.env.GITHUB_SHA || '').trim();
   if (!currentSha) return new Set();
   const dates = new Set();
-  for (const item of items) {
+  const newsroomRoot = path.join(root, 'articles', 'content', 'newsroom');
+  const canonicalDates = fs.existsSync(newsroomRoot)
+    ? fs.readdirSync(newsroomRoot, { withFileTypes: true })
+      .filter(entry => entry.isDirectory() && /^\d{4}-\d{2}-\d{2}$/.test(entry.name))
+      .map(entry => entry.name)
+    : [];
+  const candidateDates = new Set([...items.map(item => item.date), ...canonicalDates]);
+  for (const candidateDate of candidateDates) {
+    const item = { date: candidateDate };
     const filePath = path.join(newsroomDir(root, item.date), 'generation-status.json');
     if (!fs.existsSync(filePath)) continue;
     try {
       const parsed = readJson(filePath);
       const statusSha = String(parsed?.run_context?.github_sha || '').trim();
       const date = String(parsed?.date || item.date || '').trim();
-      if (statusSha === currentSha && /^\d{4}-\d{2}-\d{2}$/.test(date)) dates.add(date);
+      if (statusSha === currentSha) {
+        if (date !== candidateDate || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+          fail('Current canonical generation status date does not match newsroom directory: ' + candidateDate + ' / ' + date);
+        } else {
+          dates.add(date);
+        }
+      }
     } catch (error) {
       fail(`Invalid JSON in ${path.relative(root, filePath)}: ${error.message}`);
     }
@@ -157,8 +171,12 @@ function newsletterItems() {
   if (fs.existsSync(newsletterDatePath)) {
     const date = fs.readFileSync(newsletterDatePath, 'utf8').trim();
     const matches = items.filter(item => item.date === date);
-    if (matches.length === 0) fail(`No newsletter entry found for .tmp/newsletter-date.txt date: ${date}`);
-    return matches;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      fail('Invalid .tmp/newsletter-date.txt date: ' + date);
+      return [];
+    }
+    // The execution date owns reports even after dated public output stops (#1315).
+    return matches.length > 0 ? matches : [{ date }];
   }
 
   return items;
@@ -241,6 +259,13 @@ const currentGenerationDate = currentGenerationStatusDate(generationStatusPath);
 if (currentGenerationDate) strictDates.add(currentGenerationDate);
 const items = newsletterItems();
 for (const date of currentCanonicalGenerationStatusDates(items)) strictDates.add(date);
+const indexedDates = new Set(items.map(item => item.date));
+for (const date of strictDates) {
+  if (!indexedDates.has(date)) {
+    items.push({ date });
+    indexedDates.add(date);
+  }
+}
 const requireAllReports = process.env.REQUIRE_NEWSLETTER_QUALITY === '1';
 for (const item of items) {
   const strictPolicy = requireAllReports || strictDates.has(item.date);
