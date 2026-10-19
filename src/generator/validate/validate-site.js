@@ -20,7 +20,8 @@ const {
 } = require('../reporter/homepage-headline');
 const {
   historicalPolicyWarningReason,
-  strictTargetDates
+  strictTargetDates,
+  strictWeeklyKeys
 } = require('../reporter/validation-targets');
 const {
   mainArticleBlocks,
@@ -43,6 +44,8 @@ const {
   HOMEPAGE_VISIBILITY,
   FALLBACK_HOMEPAGE_BADGE
 } = require('../../shared/common/publication-mode');
+
+const { weeklyNewsletterStructureStatus, rootIndexContractErrors } = require('../publish/public-structure');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
@@ -212,12 +215,13 @@ function issueTagsFromHtml(html) {
     .filter(Boolean);
 }
 
-function validateNewsletterHtmlTags(item, html, strictArtifactValidation) {
+function validateNewsletterHtmlTags(item, html, strictArtifactValidation, indexLabel = 'data/newsletters.json') {
   const actualTags = issueTagsFromHtml(html);
   const expectedTags = ensureArray(item.tags).map(tag => String(tag));
+  const key = item.weeklyKey || item.date;
   const message = actualTags === null
-    ? `Newsletter ${item.date} HTML missing issue tag row for data/newsletters.json tags: ${expectedTags.join(', ') || 'none'}.`
-    : `Newsletter ${item.date} HTML issue tags [${actualTags.join(', ') || 'none'}] do not match articles/data/newsletters.json tags [${expectedTags.join(', ') || 'none'}].`;
+    ? `Newsletter ${key} HTML missing issue tag row for ${indexLabel} tags: ${expectedTags.join(', ') || 'none'}.`
+    : `Newsletter ${key} HTML issue tags [${actualTags.join(', ') || 'none'}] do not match articles/${indexLabel} tags [${expectedTags.join(', ') || 'none'}].`;
 
   if (actualTags !== null && sameOrderedValues(actualTags, expectedTags)) return;
   if (strictArtifactValidation) {
@@ -565,6 +569,7 @@ try {
 
 // #1315: public index checks must also run when the dated archive is empty.
 validateNewsletterIndexes(root, errors);
+errors.push(...rootIndexContractErrors(root));
 
 const seenDates = new Set();
 const strictDates = strictTargetDates({ root, newsletterDatePath });
@@ -657,6 +662,18 @@ for (const [index, item] of newsletters.entries()) {
       validateArticleQuality(item, md, isNewFormat(md), strictArtifactValidation);
       validateSourceGapArtifact(item.date, strictArtifactValidation);
     }
+  }
+}
+
+// #1315: current/changed weekly output must pass the same structural and content
+// contracts even when no dated entry was written. Historical schemas stay outside
+// this strict lane unless explicitly changed or selected for this run.
+for (const weeklyKey of strictWeeklyKeys({ root, newsletterDatePath })) {
+  const result = weeklyNewsletterStructureStatus(root, weeklyKey);
+  errors.push(...result.errors.map(error => 'Weekly newsletter ' + weeklyKey + ': ' + error));
+  if (result.dataIndex.entry) {
+    const html = result.statuses.find(status => status.path.endsWith('/index.html'))?.text || '';
+    validateNewsletterHtmlTags(result.dataIndex.entry, html, true, 'data/newsletters-weekly.json');
   }
 }
 
