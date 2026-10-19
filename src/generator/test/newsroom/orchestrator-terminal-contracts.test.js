@@ -145,3 +145,27 @@ test('persistHeadlineStateArtifacts: 발행 기록의 identity와 제목을 선�
     assert.equal(record.newsletter_article_date, '2026-05-08');
   });
 });
+
+
+test('weekly-only publication records exposure against the week URL and the actual execution date', () => {
+  const rootDir = tempRoot('terminal-contracts-weekly-');
+  const dir = path.join(rootDir, 'articles/newsletters/2026-W43');
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), '<html></html>', 'utf8');
+  const url = 'https://developer.android.com/camera-buffer-update';
+  withCwd(rootDir, contracts => {
+    contracts.persistHeadlineStateArtifacts({
+      date: '2026-10-22', shouldWritePublicArtifacts: true,
+      shortlistReport: {
+        homepage_headline_state: { schemaVersion: 1, current_headline: null, headline_history: [] },
+        selected_articles: [{ url, title: 'Camera buffer update' }]
+      },
+      editor: { sections: [{ headline: '버퍼 반환 제안', source_candidate_url: url, sources: [{ title: '공식 근거', url }] }] }
+    });
+    const history = JSON.parse(fs.readFileSync(path.join(rootDir, 'state/article-exposure-history.json'), 'utf8'));
+    const record = history.articles.find(item => item.exposure_type === 'newsletter_article');
+    assert.equal(record.newsletter_url, 'newsletters/2026-W43/index.html');
+    assert.equal(record.newsletter_article_date, '2026-10-22');
+    assert.equal(fs.existsSync(path.join(rootDir, 'articles/newsletters/2026-10-22')), false);
+  });
+});

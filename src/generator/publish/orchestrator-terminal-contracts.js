@@ -34,7 +34,8 @@ const {
   writeHomepageHeadlineState
 } = require('../reporter/homepage-headline');
 const {
-  renderedHeadlineState
+  renderedHeadlineState,
+  renderedNewsletterKey
 } = require('../reporter/headline-render-reconciliation');
 const { fail } = require('./orchestrator-shared-helpers');
 const {
@@ -116,7 +117,7 @@ function persistHeadlineStateArtifacts({ date, shortlistReport, shouldWritePubli
     // section만으로는 키가 상수 content: 해시 하나로 붕괴해 재게재 검사가 영영 매칭되지 않는다.
     history = recordNewsletterArticles(history, sections, {
       date,
-      newsletterUrl: `newsletters/${date}/index.html`,
+      newsletterUrl: `newsletters/${renderedNewsletterKey(root, date)}/index.html`,
       cooldownDays: NEWSLETTER_ARTICLE_COOLDOWN_DAYS,
       selectedArticles: ensureArray(shortlistReport.selected_articles)
     });

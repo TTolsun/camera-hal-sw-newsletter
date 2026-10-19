@@ -1,3 +1,4 @@
+const { weeklyKeyForDate } = require('./weekly-newsletter');
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { compareEditorialPriority } = require('../../shared/domain/aosp-camera-scope');
 const fs = require('fs');
@@ -493,7 +494,7 @@ function applyHomepageHeadlineSelection({
   eligibleCandidates = [],
   currentState = null,
   policy = getHeadlinePolicy(),
-  newsletterUrl = `newsletters/${date}/index.html`
+  newsletterUrl = `newsletters/${weeklyKeyForDate(date)}/index.html`
 } = {}) {
   const previousState = currentState || emptyHeadlineState({ date, policy });
   const current = previousState.current_headline || null;
