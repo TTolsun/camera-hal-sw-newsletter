@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
+const { applyTranslation } = require('../render/apply-translation');
 
 const {
   readJson,
@@ -9,7 +11,9 @@ const {
   publicAssetPath
 } = require('../../shared/common/artifact-paths');
 const {
+  changedFilesFromGit,
   historicalPolicyWarningReason,
+  readNewsletterDate,
   strictTargetDates,
   strictWeeklyKeys
 } = require('../reporter/validation-targets');
@@ -124,35 +128,111 @@ function isDiagnosticsOnlyNewsroomJson(filePath) {
   return /(?:invalid|validation-error|attempt|retry-history|repair-failure)/i.test(path.basename(filePath));
 }
 
-function validatePublicJsonFilesForDate(date) {
+function newsroomJsonIssues(date, changedFiles = null) {
   const errors = [];
-  const newsroomDir = path.join(root, 'articles', 'content', 'newsroom', date);
-  for (const filePath of readJsonFilesInDir(newsroomDir).filter(filePath => !isDiagnosticsOnlyNewsroomJson(filePath))) {
+  const dir = path.join(root, 'articles', 'content', 'newsroom', date);
+  for (const filePath of readJsonFilesInDir(dir).filter(file => !isDiagnosticsOnlyNewsroomJson(file))) {
     const rel = path.relative(root, filePath).replace(/\\/g, '/');
-    errors.push(...publicArticlePathIssues(readJson(filePath), rel));
+    if (changedFiles && !changedFiles.has(rel)) continue;
+    const value = readJson(filePath);
+    errors.push(...(path.basename(filePath) === 'editor-draft.json'
+      ? activeRenderedArticleIssues(value, rel) : publicArticlePathIssues(value, rel)));
   }
+  return errors;
+}
+
+function activeRenderedArticleIssues(issue, label) {
+  if (!Array.isArray(issue?.sections)) return [label + ': renderer sections must contain an array'];
+  // Only active renderer sections inherit this issue's contract marker. Archived
+  // metadata.legacySection/public_article values keep their original provenance.
+  return issue.sections.flatMap((section, index) => validatePublicArticle(section, index, { issue })
+    .map(error => label + ':sections[' + index + '].public_article failed: ' + error.type + (error.key ? ' ' + error.key : '') + (error.reason ? ' ' + error.reason : '') + (error.message ? ' ' + error.message : '')));
+}
+
+function weeklyRenderInputIssues(rootDir, weeklyKey) {
+  const errors = [];
+  const dir = path.join(rootDir, 'articles', 'newsletters', weeklyKey);
+  for (const filePath of readJsonFilesInDir(dir)) {
+    const rel = path.relative(rootDir, filePath).replace(/\\/g, '/');
+    const name = path.basename(filePath);
+    try {
+      const value = readJson(filePath);
+      if (!['issue.json', 'publication-source.json', 'translation.en.json'].includes(name)) {
+        errors.push(...validatePublicNewsletterArtifacts({ json: value, jsonLabel: rel }));
+        continue;
+      }
+      // Renderer/translation inputs carry required contract keys, not reader-facing
+      // JSON projections. Keep raw monitor state forbidden and validate active prose
+      // through its article contract rather than banning its schema field names.
+      const raw = JSON.stringify(value);
+      for (const term of ['processed_source_event_ids', 'processed_evidence_ids', 'previous_values', 'current_values', 'state/source-snapshots/', 'content/source-events/']) {
+        if (raw.includes(term)) errors.push(rel + ' contains raw source monitor state: ' + term);
+      }
+      if (name === 'translation.en.json') {
+        const sourceText = fs.readFileSync(path.join(dir, 'issue.json'), 'utf8');
+        errors.push(...activeRenderedArticleIssues(applyTranslation(JSON.parse(sourceText), value, { sourceText }), rel));
+      } else {
+        const issue = name === 'publication-source.json' ? value.issue : value;
+        errors.push(...activeRenderedArticleIssues(issue, rel));
+      }
+    } catch (error) {
+      errors.push(rel + ': invalid render input: ' + error.message);
+    }
+  }
+  return errors;
+}
+
+function validatePublicJsonFilesForDate(date) {
+  const errors = newsroomJsonIssues(date);
   const newsletterDir = path.join(root, 'articles', 'newsletters', date);
   for (const filePath of readJsonFilesInDir(newsletterDir)) {
     const rel = path.relative(root, filePath).replace(/\\/g, '/');
-    errors.push(...validatePublicNewsletterArtifacts({
-      json: readJson(filePath),
-      jsonLabel: rel
-    }));
+    errors.push(...validatePublicNewsletterArtifacts({ json: readJson(filePath), jsonLabel: rel }));
+  }
+  errors.push(...weeklyRenderInputIssues(root, weeklyKeyForDate(date)));
+  return errors;
+}
+
+function currentNewsroomJsonIssues() {
+  const errors = [];
+  const selectedDate = readNewsletterDate(newsletterDatePath);
+  const changed = new Set(changedFilesFromGit({ root }));
+  const dates = new Set([...changed].map(file => /^articles\/content\/newsroom\/(\d{4}-\d{2}-\d{2})\/[^/]+\.json$/.exec(file)?.[1]).filter(Boolean));
+  if (DATE_PATTERN.test(selectedDate)) dates.add(selectedDate);
+  for (const date of dates) {
+    const statusPath = path.join(root, 'articles/content/newsroom', date, 'generation-status.json');
+    const status = fs.existsSync(statusPath) ? readJson(statusPath) : {};
+    if (status.public_output_expected === false) continue; // Non-public review drafts are not publication inputs.
+    errors.push(...newsroomJsonIssues(date, date === selectedDate ? null : changed));
   }
   return errors;
 }
 
 function validateDateArtifacts(date) {
-  const item = newsletterItemForDate(date);
-  if (!item) return [`articles/data/newsletters.json is missing date entry: ${date}`];
-  const markdownPath = publicAssetPath(root, item.md || `newsletters/${date}/newsletter.md`);
-  const htmlPath = publicAssetPath(root, item.html || `newsletters/${date}/index.html`);
+  const datedItem = newsletterItemForDate(date);
+  const weeklyKey = weeklyKeyForDate(date);
+  const weeklyIndexPath = path.join(root, 'articles/data/newsletters-weekly.json');
+  const weeklyItems = fs.existsSync(weeklyIndexPath) ? readJson(weeklyIndexPath) : [];
+  if (!Array.isArray(weeklyItems)) return ['articles/data/newsletters-weekly.json must contain an array'];
+  const weeklyItem = weeklyItems.find(item => item?.weeklyKey === weeklyKey);
+  // Explicit archive validation keeps the dated fallback. A weekly-only execution
+  // must have its matching weekly entry; it cannot succeed by inspecting nothing.
+  const selectedRun = fs.existsSync(newsletterDatePath) && fs.readFileSync(newsletterDatePath, 'utf8').trim() === date;
+  const item = weeklyItem || (!selectedRun ? datedItem : null);
+  if (!item) return ['articles/data/newsletters-weekly.json is missing publish week entry: ' + weeklyKey + ' for execution ' + date];
+  if (weeklyItem && (weeklyItem.html !== 'newsletters/' + weeklyKey + '/index.html' || weeklyItem.md !== 'newsletters/' + weeklyKey + '/newsletter.md')) {
+    return ['weekly ' + weeklyKey + ': public newsletter index path mismatch'];
+  }
+  const key = weeklyItem ? weeklyKey : date;
+  const indexLabel = weeklyItem ? 'newsletters-weekly.json' : 'newsletters.json';
+  const markdownPath = publicAssetPath(root, item.md || `newsletters/${key}/newsletter.md`);
+  const htmlPath = publicAssetPath(root, item.html || `newsletters/${key}/index.html`);
   if (!markdownPath || !htmlPath || !fs.existsSync(markdownPath) || !fs.existsSync(htmlPath)) {
     return [`Public newsletter files are missing for ${date}.`];
   }
   const errors = validatePublicNewsletterFiles(markdownPath, htmlPath, {
     json: item,
-    jsonLabel: `data/newsletters.json:${date}`
+    jsonLabel: `data/${indexLabel}:${key}`
   });
   errors.push(...validatePublicJsonFilesForDate(date));
   return errors;
@@ -190,20 +270,32 @@ function validateIndexedNewsletters() {
 function validateIndexedWeeklyNewsletters({ rootDir = root, strictKeys = null } = {}) {
   const errors = [];
   const warnings = [];
-  const dataPath = path.join(rootDir, 'articles', 'data', 'newsletters-weekly.json');
-  if (!fs.existsSync(dataPath)) return { errors, warnings };
-  const items = readJson(dataPath);
-  if (!Array.isArray(items)) {
-    errors.push('data/newsletters-weekly.json must contain an array');
-    return { errors, warnings };
-  }
   const strict = strictKeys || strictWeeklyKeys({
     root: rootDir,
     newsletterDatePath: path.join(rootDir, '.tmp', 'newsletter-date.txt')
   });
   const requireAll = process.env.REQUIRE_PUBLIC_NEWSLETTER_CONTRACT === '1';
+  const dataPath = path.join(rootDir, 'articles', 'data', 'newsletters-weekly.json');
+  if (!fs.existsSync(dataPath)) {
+    if (strict.size > 0 || requireAll) errors.push('Missing data/newsletters-weekly.json for current public validation');
+    return { errors, warnings };
+  }
+  const items = readJson(dataPath);
+  if (!Array.isArray(items)) {
+    errors.push('data/newsletters-weekly.json must contain an array');
+    return { errors, warnings };
+  }
+  for (const weeklyKey of strict) {
+    if (!items.some(item => item?.weeklyKey === weeklyKey)) errors.push('weekly ' + weeklyKey + ': missing public newsletter index entry');
+  }
+  const latestKey = items.map(item => item?.weeklyKey).filter(key => /^\d{4}-W\d{2}$/.test(key || '')).sort().at(-1);
   for (const item of items) {
     const weeklyKey = item?.weeklyKey;
+    if (requireAll || strict.has(weeklyKey) || weeklyKey === latestKey) errors.push(...weeklyRenderInputIssues(rootDir, weeklyKey));
+    if ((requireAll || strict.has(weeklyKey)) &&
+      (item.html !== 'newsletters/' + weeklyKey + '/index.html' || item.md !== 'newsletters/' + weeklyKey + '/newsletter.md')) {
+      errors.push('weekly ' + weeklyKey + ': public newsletter index path mismatch');
+    }
     const markdownPath = publicAssetPath(rootDir, item?.md || '');
     const htmlPath = publicAssetPath(rootDir, item?.html || '');
     if (!markdownPath || !htmlPath || !fs.existsSync(markdownPath) || !fs.existsSync(htmlPath)) {
@@ -215,8 +307,10 @@ function validateIndexedWeeklyNewsletters({ rootDir = root, strictKeys = null } 
       }
       continue;
     }
-    const result = validatePublicNewsletterFiles(markdownPath, htmlPath)
-      .map(error => `weekly ${weeklyKey || 'entry'}: ${error}`);
+    const result = validatePublicNewsletterFiles(markdownPath, htmlPath, {
+      json: item,
+      jsonLabel: 'data/newsletters-weekly.json:' + (weeklyKey || 'entry')
+    }).map(error => `weekly ${weeklyKey || 'entry'}: ${error}`);
     if (result.length === 0) continue;
     if (requireAll || strict.has(weeklyKey)) {
       errors.push(...result);
@@ -239,6 +333,10 @@ function main(argv = process.argv.slice(2)) {
   }
 
   const { errors, warnings } = validateIndexedNewsletters();
+  errors.push(...currentNewsroomJsonIssues());
+  if (fs.existsSync(newsletterDatePath) && !DATE_PATTERN.test(fs.readFileSync(newsletterDatePath, 'utf8').trim())) {
+    errors.push('Invalid .tmp/newsletter-date.txt execution date');
+  }
   const weekly = validateIndexedWeeklyNewsletters();
   errors.push(...weekly.errors);
   warnings.push(...weekly.warnings);
