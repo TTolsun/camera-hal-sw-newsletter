@@ -48,6 +48,8 @@ function ledgerHeadingPattern(translations = LEDGER_HEADING_TRANSLATIONS) {
 
 const LEDGER_HEADING_PATTERN = ledgerHeadingPattern();
 
+const { rollbackWeeklyPublication } = require('./weekly-publication-transaction');
+
 const RETENTION_SCOPE = 'same_date_diagnostics_only';
 const ARCHIVE_SIDECAR_PATH = 'articles/content/audit/historical-archive-status.json';
 const ARCHIVE_LEDGER_PATH = AUDIT_LEDGER_PATH;
@@ -205,6 +207,16 @@ function classifyLatestPublicState({ root = process.cwd(), date, status = {}, pu
   const structure = publicStructure || publicStructureStatus(root, date || status.date);
   const retentionState = retention || validateRetentionMetadata({ root, date: date || status.date });
   return classifyPublicState({ status, publicStructure: structure, retention: retentionState });
+}
+
+function unexposeFailedPublication(root, date) {
+  try {
+    const rollback = rollbackWeeklyPublication({ root, date });
+    const dated = removeNewsletterIndexEntry(root, date);
+    return { ...dated, changed: dated.changed || rollback.applied, weeklyRollback: rollback };
+  } catch (error) {
+    return { changed: false, error: error.message };
+  }
 }
 
 function removeNewsletterIndexEntry(root, date) {
@@ -563,6 +575,10 @@ function reconcilePublicState(options = {}) {
   });
 
   let dataIndexChanged = false;
+  let weeklyRollback = { applied: false, files: [] };
+  if (options.write !== false && !fields.effectiveHomepageVisible) {
+    weeklyRollback = rollbackWeeklyPublication({ root, date });
+  }
   const shouldRemoveIndexEntry =
     !fields.effectiveHomepageVisible &&
     (publicStructure.dataIndex.exists || publicStructure.publicFilesExist);
@@ -608,6 +624,7 @@ function reconcilePublicState(options = {}) {
   const repoVisibleChangedArtifacts = uniqueArtifacts(changedArtifacts.concat(
     repoVisibleStatusPath,
     dataIndexChanged ? 'articles/data/newsletters.json' : [],
+    weeklyRollback.files,
     archiveSync.changedArtifacts
   ));
 
@@ -663,6 +680,7 @@ module.exports = {
   publicStructureStatus,
   reconcilePublicState,
   removeNewsletterIndexEntry,
+  unexposeFailedPublication,
   retentionMetadataPath,
   runModeForPublicState,
   syncArchivePublicationState,

@@ -52,6 +52,8 @@ const {
   writeSelectionDiagnosticsArtifact
 } = require('./orchestrator-recovery-writers');
 
+const { captureWeeklyPublication } = require('./weekly-publication-transaction');
+
 const root = process.cwd();
 // god-file과 동일하게 process.cwd()/readRuntimeConfig로 파생한다(orchestrator-artifact-writers.js
 // 등 이미 분리된 협력자와 같은 패턴). weekly upsert가 계산하는 대상 주(coverage)가 이번 실행의
@@ -98,6 +100,7 @@ async function decidePublishReadinessAndWriteStatus({
   let introLetterStatus = 'not_attempted';
   let introLetterReason = '';
   if (shouldWritePublicArtifacts) {
+    captureWeeklyPublication({ root, date });
     fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');
     fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
     updateNewsletterData(date, editor);
