@@ -372,7 +372,10 @@ const {
   decidePublishReadinessAndWriteStatus
 } = require('./orchestrator-publish-decision');
 
+const { initializePublicationRun } = require('./weekly-publication-transaction');
+
 async function main() {
+  initializePublicationRun();
   const date = runtimeConfig.newsletterDate || kstDate();
   generationRunState.date = date;
   writeNewsletterDate(date);

@@ -20,6 +20,7 @@ const STATUS_BUILDERS = '../../publish/orchestrator-status-builders';
 const ARTIFACT_WRITERS = '../../publish/orchestrator-artifact-writers';
 const RECOVERY_WRITERS = '../../publish/orchestrator-recovery-writers';
 const WEEKLY_OUTPUT = '../../render/weekly-newsletter-output';
+const PUBLICATION_TRANSACTION = '../../publish/weekly-publication-transaction';
 
 function stubModule(key, exports) {
   const resolved = require.resolve(key);
@@ -34,6 +35,7 @@ function stubModule(key, exports) {
 async function withStubbedCollaborators(run, options = {}) {
   const decisionKey = require.resolve(DECISION_MODULE);
   const calls = {
+    capturePublication: [],
     runValidate: 0,
     updateNewsletterData: [],
     persistHeadlineStateArtifacts: [],
@@ -48,6 +50,9 @@ async function withStubbedCollaborators(run, options = {}) {
   };
   const weeklyArticles = [{ headline: 'weekly final A' }, { headline: 'weekly final B' }];
   const stubs = [
+    stubModule(PUBLICATION_TRANSACTION, {
+      captureWeeklyPublication: args => calls.capturePublication.push({ args, weeklyCallsBefore: calls.weekly, headlineCallsBefore: calls.persistHeadlineStateArtifacts.length })
+    }),
     stubModule(VALIDATE_RUNNER, {
       // 비reviewable 경로에서만 호출되어야 한다. 호출 횟수로 그 분기를 검증한다.
       runValidate: () => {
@@ -192,6 +197,9 @@ test('비reviewable PASS 입력: 공개 산출물을 쓰고 validate를 돌리�
     assert.equal(calls.updateNewsletterData.length, 1);
     assert.equal(calls.persistHeadlineStateArtifacts.length, 1);
     assert.equal(calls.weekly, 1);
+    assert.equal(calls.capturePublication.length, 1);
+    assert.equal(calls.capturePublication[0].weeklyCallsBefore, 0);
+    assert.equal(calls.capturePublication[0].headlineCallsBefore, 0);
 
     // 비reviewable이므로 runValidate가 실제로 실행되고 그 결과가 흐른다.
     assert.equal(calls.runValidate, 1);
@@ -338,6 +346,7 @@ test('reviewable(NEEDS_FIX) 입력: 공개 산출물을 쓰지 않고 validate�
     assert.ok(!fs.existsSync(path.join(newsletterDir, 'index.html')));
     assert.equal(calls.updateNewsletterData.length, 0);
     assert.equal(calls.weekly, 0);
+    assert.equal(calls.capturePublication.length, 0);
 
     // reviewable이라 runValidate를 건너뛰고 skip 사유가 담긴다.
     assert.equal(calls.runValidate, 0);
