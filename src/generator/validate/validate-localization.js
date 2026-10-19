@@ -1,6 +1,8 @@
 const fs = require('fs');
 const { hasLongKoreanProse, validateEnglishEntry } = require('./english-locale');
 const path = require('path');
+const { strictWeeklyKeys } = require('../reporter/validation-targets');
+const { publicAssetPath } = require('../../shared/common/artifact-paths');
 
 const {
   rawEnglishProseRuns,
@@ -140,11 +142,16 @@ function checkHomepageHeadlineData() {
 
 function checkLatestPublicNewsletterArtifacts() {
   const items = readJson(path.join('articles', 'data', 'newsletters.json'));
-  const latest = items[0];
-  if (!latest) return;
-  for (const rel of [latest.md, latest.html].filter(Boolean)) {
-    const filePath = repoPath(rel);
-    if (!fs.existsSync(filePath)) continue;
+  const weekly = readJson(path.join('articles', 'data', 'newsletters-weekly.json'));
+  const latestWeekly = [...weekly].sort((left, right) =>
+    String(right.weeklyKey || '').localeCompare(String(left.weeklyKey || ''))
+  )[0];
+  const strictKeys = strictWeeklyKeys({ root });
+  const targets = [items[0], latestWeekly, ...weekly.filter(item => strictKeys.has(item.weeklyKey))];
+  const files = new Set(targets.flatMap(item => item ? [item.md, item.html].filter(Boolean) : []));
+  for (const rel of files) {
+    const filePath = publicAssetPath(root, rel);
+    if (!filePath || !fs.existsSync(filePath)) continue;
     const text = fs.readFileSync(filePath, 'utf8');
     const visible = rel.endsWith('.html') ? visibleHtmlText(text) : visibleMarkdownText(text);
     addLongEnglishProseErrors(rel, visible);

@@ -27,6 +27,7 @@ const {
   issueHighlightsCount,
   missingIssueClasses,
   validateArticleImages,
+  validateNewsletterIndexes,
   validateRenderedIssueStructure
 } = require('../quality/rendered-issue-structure');
 const {
@@ -552,9 +553,8 @@ if (!Array.isArray(newsletters)) {
 // 여기서는 읽기만 한다. 존재·JSON·배열 검사는 rendered-issue-structure.js 의
 // NEWSLETTER_INDEX_PATHS 가 두 인덱스에 대해 이미 같은 문장으로 하고 있어서, 여기에 또 두면
 // 한 번의 실패에 같은 말이 두 번 나온다(실제로 그렇게 짰다가 mutation 으로 확인하고 걷어냈다).
-// 다만 그 검사는 dated 호가 하나라도 있을 때만 돈다(`validateDataIndex: index === 0`) — dated
-// 인덱스가 비면 위클리 인덱스는 무검사가 된다. 현재 dated 33개가 있어 실제로는 항상 돌지만,
-// 그 상태에 기대고 있다는 것은 적어 둔다. 인덱스가 멀쩡한데 페이지가 없는 경우는 아래에서 잡는다.
+// 두 인덱스의 전수 검사는 아래에서 dated 루프와 독립적으로 한 번 수행한다(#1315).
+// 인덱스가 멀쩡한데 페이지가 없는 경우는 아래 공개 파일 검사에서 잡는다.
 let weeklyNewsletters = [];
 try {
   const parsed = readJson(weeklyDataPath);
@@ -562,6 +562,9 @@ try {
 } catch (error) {
   weeklyNewsletters = [];
 }
+
+// #1315: public index checks must also run when the dated archive is empty.
+validateNewsletterIndexes(root, errors);
 
 const seenDates = new Set();
 const strictDates = strictTargetDates({ root, newsletterDatePath });
@@ -646,7 +649,7 @@ for (const [index, item] of newsletters.entries()) {
         markdown: md,
         html,
         root,
-        validateDataIndex: index === 0
+        validateDataIndex: false
       });
       if (!structural.ok) {
         errors.push(...structural.errors);
