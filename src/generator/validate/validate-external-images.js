@@ -24,8 +24,11 @@ const {
   changedEntriesFromGit,
   generatedTargetDatesFromInputs,
   readNewsletterDate,
-  strictTargetDatesFromInputs
+  strictTargetDatesFromInputs,
+  strictWeeklyKeysFromInputs
 } = require('../reporter/validation-targets');
+
+const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
@@ -169,7 +172,20 @@ function isHttpsUrl(value) {
   }
 }
 
-function newsletterItems() {
+function weeklyNewsletterItems() {
+  const filePath = path.join(root, 'articles/data/newsletters-weekly.json');
+  if (!fs.existsSync(filePath)) return [];
+  try {
+    const entries = readJson(filePath);
+    if (!Array.isArray(entries)) throw new Error('must contain an array');
+    return entries;
+  } catch (error) {
+    fail('Invalid data/newsletters-weekly.json: ' + error.message);
+    return [];
+  }
+}
+
+function newsletterItems(weeklyItems = []) {
   if (!fs.existsSync(dataPath)) {
     fail('Missing data/newsletters.json');
     return [];
@@ -190,7 +206,13 @@ function newsletterItems() {
   if (fs.existsSync(newsletterDatePath)) {
     const date = read(newsletterDatePath).trim();
     const matches = newsletters.filter(item => item.date === date);
-    if (matches.length === 0) fail(`No newsletter entry found for .tmp/newsletter-date.txt date: ${date}`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      fail('Invalid .tmp/newsletter-date.txt date: ' + date);
+      return [];
+    }
+    if (matches.length === 0 && !weeklyItems.some(item => item.weeklyKey === weeklyKeyForDate(date))) {
+      fail('No public newsletter entry found for execution date ' + date);
+    }
     return matches;
   }
   return newsletters;
@@ -316,12 +338,37 @@ async function main() {
   const newsletterDate = readNewsletterDate(newsletterDatePath);
   const strictDates = strictTargetDatesFromInputs({ changedFiles, newsletterDate });
   const generatedDates = generatedTargetDatesFromInputs({ changedEntries, newsletterDate });
+  const strictWeeks = strictWeeklyKeysFromInputs({ changedFiles, newsletterDate });
+  const weeklyItems = weeklyNewsletterItems();
+  const datedItems = newsletterItems(weeklyItems);
+  // Prefer actual run targets over the first-run anchor of an accumulated week.
+  for (const item of weeklyItems) {
+    if (!strictWeeks.has(item.weeklyKey)) continue;
+    if ([...strictDates].some(date => weeklyKeyForDate(date) === item.weeklyKey)) continue;
+    const anchor = item.generation_anchor_date;
+    if (anchor === undefined) continue; // Legacy archive has no execution binding.
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(anchor) || weeklyKeyForDate(anchor) !== item.weeklyKey) {
+      fail('Invalid generation_anchor_date for weekly image audit: ' + item.weeklyKey);
+    } else {
+      strictDates.add(anchor);
+    }
+  }
+  const strictImageKeys = new Set([...strictDates, ...strictWeeks]);
   const committedPublicDates = changedPublicNewsletterDates(changedFiles);
+  const changedPublicWeeks = new Set(changedFiles.map(file =>
+    /^articles\/newsletters\/(\d{4}-W\d{2})\/(?:index\.html|newsletter\.md)$/.exec(file)?.[1]
+  ).filter(Boolean));
+  for (const date of generatedDates) {
+    if (changedPublicWeeks.has(weeklyKeyForDate(date))) committedPublicDates.add(date);
+  }
+  const runDates = new Set([...datedItems.map(item => item.date), ...strictDates, ...generatedDates]);
+  for (const date of runDates) {
+    fallbackWarningsFromEditor(date, readEditor(date));
+    failOnPublishBlockingImageAudit(date, strictDates, committedPublicDates, generatedDates);
+  }
   const validateLiveImage = createLiveImageValidator();
   const images = [];
-  for (const item of newsletterItems()) {
-    fallbackWarningsFromEditor(item.date, readEditor(item.date));
-    failOnPublishBlockingImageAudit(item.date, strictDates, committedPublicDates, generatedDates);
+  for (const item of [...datedItems, ...weeklyItems]) {
 
     for (const key of ['html', 'md']) {
       if (!item[key]) continue;
@@ -338,7 +385,7 @@ async function main() {
       }
       const content = read(absPath);
       const built = key === 'html' ? articleImages(relPath, content) : markdownImages(relPath, content);
-      for (const image of built) image.date = item.date;
+      for (const image of built) image.date = item.weeklyKey || item.date;
       images.push(...built);
     }
   }
@@ -369,7 +416,7 @@ async function main() {
 
     // 과거 발행물(strict target 아님)의 외부 이미지는 live 검증을 건너뛴다. 발행/변경되는 newsletter의
     // 외부 이미지만 live fetch해, 외부 호스트 link rot이 무관한 PR을 막거나 느리게 하지 않게 한다.
-    if (!shouldLiveValidate(image.date, strictDates)) continue;
+    if (!shouldLiveValidate(image.date, strictImageKeys)) continue;
 
     const result = await validateLiveImage(image.src);
     if (!result.ok) {
