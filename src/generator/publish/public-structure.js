@@ -203,7 +203,13 @@ function structureStatusForLane(root, date, lane) {
   }
 
   if (newsletterMd?.nonEmpty && newsletterHtml?.nonEmpty) {
-    const editorResult = readJsonResult(path.join(root, ...lane.editorPathSegments(date)));
+    const editorPath = lane.editorPathSegments(date);
+    const editorResult = readJsonResult(path.join(root, ...editorPath));
+    if (editorResult.error) {
+      errors.push(`invalid ${editorPath.join('/')}: ${editorResult.error.message}`);
+    } else if (lane.id === 'weekly' && !Array.isArray(editorResult.value?.sections)) {
+      errors.push(`invalid ${editorPath.join('/')}: sections must be an array`);
+    }
     const structural = validateRenderedIssueStructure({
       date,
       editor: editorResult.error ? null : editorResult.value,
