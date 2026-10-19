@@ -536,6 +536,13 @@ function validateSelectedImageContract(date, editor, root, errors) {
   }
 }
 
+function validateNewsletterIndexes(root = process.cwd(), errors = []) {
+  for (const relativePath of NEWSLETTER_INDEX_PATHS) {
+    validateNewsletterIndex(root, relativePath, errors);
+  }
+  return errors;
+}
+
 function validateRenderedIssueStructure({
   date,
   editor = null,
@@ -550,9 +557,7 @@ function validateRenderedIssueStructure({
   const issueDate = date || editor?.date || 'unknown';
 
   if (validateDataIndex) {
-    for (const relativePath of NEWSLETTER_INDEX_PATHS) {
-      validateNewsletterIndex(root, relativePath, errors);
-    }
+    validateNewsletterIndexes(root, errors);
   }
   validateMarkdownStructure(issueDate, markdown, errors, { briefingBulletCount });
   validateHtmlStructure(issueDate, html, root, errors);
@@ -571,6 +576,7 @@ module.exports = {
   hasAny,
   hasClassToken,
   validateArticleImages,
+  validateNewsletterIndexes,
   newsletterIndexContractVersion,
   mainArticleBlocks,
   issueHighlightsCount,
