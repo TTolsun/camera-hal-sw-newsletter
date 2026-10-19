@@ -6,6 +6,8 @@ const {
   getLlmCostCalls,
   getLlmDiagnostics
 } = require('../../shared/llm/llm-client');
+const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
+const { WEEKLY_LANE, newsletterIndexDateStatus } = require('../publish/public-structure');
 const { mergeStageCallsIntoCostReport } = require('../publish/cost-report-writer');
 const {
   newsroomDir,
@@ -84,12 +86,6 @@ function targetDate() {
   return normalizeDate(process.env.NEWSLETTER_DATE);
 }
 
-function truncate(value, maxLength = 20000) {
-  const text = String(value || '');
-  if (text.length <= maxLength) return text;
-  return `${text.slice(0, maxLength)}\n\n[truncated ${text.length - maxLength} chars]`;
-}
-
 function htmlText(value) {
   return String(value || '')
     .replace(/<script\b[\s\S]*?<\/script>/gi, ' ')
@@ -99,19 +95,16 @@ function htmlText(value) {
     .trim();
 }
 
-function newsletterEntry(date) {
-  const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
-  const entries = readJsonIfExists(dataPath);
-  if (!Array.isArray(entries)) return null;
-  return entries.find(item => item?.date === date) || null;
-}
-
 function promptFor(date, artifacts) {
   return [
     'Post-generation public newsletter quality judge input JSON:',
     JSON.stringify({
       date,
+      execution_date: date,
+      publication_week_key: artifacts.weeklyKey,
+      coverage_week_key: artifacts.coverageWeekKey,
       instruction: [
+        'Return date equal to execution_date. The publication week and coverage week are separate identities.',
         'Judge the final rendered public newsletter artifacts, not intermediate editor drafts.',
         'Do not fail solely because final_publish_ready=false, review_publication_ready=true, or publication_mode=fallback_public.',
         'For fallback_public / review_only_public output, pass when the public issue is clearly disclosed, source-linked, coherent, and does not overstate Camera HAL impact.',
@@ -119,8 +112,8 @@ function promptFor(date, artifacts) {
       ],
       newsletter_entry: artifacts.entry,
       generation_status: artifacts.statusSummary,
-      markdown: truncate(artifacts.markdown),
-      html_text: truncate(htmlText(artifacts.html), 12000)
+      markdown: String(artifacts.markdown || ''),
+      html_text: htmlText(artifacts.html)
     }, null, 2)
   ].join('\n');
 }
@@ -142,7 +135,7 @@ function normalizeSeverity(value) {
 function normalizeReport(raw = {}, date) {
   return {
     schemaVersion: 1,
-    date: normalizeDate(raw.date) || date,
+    date,
     overall_pass: raw.overall_pass === true,
     summary: String(raw.summary || '').trim(),
     issues: Array.isArray(raw.issues)
@@ -209,13 +202,20 @@ async function validateLlmPublicationQuality(options = {}) {
     return null;
   }
 
-  const markdownPath = path.join(root, 'articles', 'newsletters', date, 'newsletter.md');
-  const htmlPath = path.join(root, 'articles', 'newsletters', date, 'index.html');
+  const weeklyKey = weeklyKeyForDate(date);
+  const index = newsletterIndexDateStatus(root, weeklyKey, WEEKLY_LANE);
+  if (index.error || !index.exists || !index.hasDate || !index.pathsMatch) {
+    fail('Invalid public weekly index for ' + weeklyKey + ': ' + (index.error?.message || index.pathErrors.join('; ') || 'missing newsletters-weekly.json'));
+  }
+  const markdownPath = path.join(root, 'articles', 'newsletters', weeklyKey, 'newsletter.md');
+  const htmlPath = path.join(root, 'articles', 'newsletters', weeklyKey, 'index.html');
+  const issue = readJsonIfExists(path.join(root, 'articles', 'newsletters', weeklyKey, 'issue.json'));
+  if (!issue || issue.weekly_key !== weeklyKey) fail('Missing or mismatched public weekly issue.json for ' + weeklyKey);
   const statusPath = path.join(newsroomDir(root, date), 'generation-status.json');
   const markdown = readTextIfExists(markdownPath);
   const html = readTextIfExists(htmlPath);
-  if (!markdown) fail(`Missing public Markdown artifact: newsletters/${date}/newsletter.md`);
-  if (!html) fail(`Missing public HTML artifact: newsletters/${date}/index.html`);
+  if (!markdown.trim()) fail(`Missing public Markdown artifact: newsletters/${weeklyKey}/newsletter.md`);
+  if (!html.trim()) fail(`Missing public HTML artifact: newsletters/${weeklyKey}/index.html`);
 
   const status = readJsonIfExists(statusPath) || {};
   const statusSummary = {
@@ -237,7 +237,9 @@ async function validateLlmPublicationQuality(options = {}) {
       promptFor(date, {
         markdown,
         html,
-        entry: newsletterEntry(date),
+        entry: index.entry,
+        weeklyKey,
+        coverageWeekKey: issue.coverage_week_key || null,
         statusSummary
       }),
       publicationQualitySchema,
@@ -247,7 +249,11 @@ async function validateLlmPublicationQuality(options = {}) {
     // 판정 결과와 무관하게, 나간 judge 호출을 generate cost report에 합친다(#1203).
     recordJudgeCost(date);
   }
-  const report = normalizeReport(raw, date);
+  const report = {
+    ...normalizeReport(raw, date),
+    publication_week_key: weeklyKey,
+    coverage_week_key: issue.coverage_week_key || null
+  };
   const reportPath = path.join(newsroomDir(root, date), 'llm-publication-quality-report.json');
   const markdownReportPath = path.join(newsroomDir(root, date), 'llm-publication-quality-report.md');
   writeJson(reportPath, report);

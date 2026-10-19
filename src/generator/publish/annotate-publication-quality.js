@@ -1,6 +1,8 @@
-const { ensureArray } = require('../../shared/common/value-coercion');
+const { ensureArray, isTrue, isFalse } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
+const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
+const { WEEKLY_LANE, newsletterIndexDateStatus } = require('./public-structure');
 
 const {
   readJson
@@ -13,7 +15,8 @@ const {
   seedEvidencePackRelPath
 } = require('../../shared/common/artifact-paths');
 const {
-  strictTargetDates
+  strictTargetDates,
+  strictWeeklyKeys
 } = require('../reporter/validation-targets');
 const {
   buildNewsletterQualityReport
@@ -31,6 +34,8 @@ function usage() {
     '- --all inspects every historical public issue.',
     '- Changed public issue dates inspect matching public issue dates, even when --latest is present.',
     '- --latest permits fallback to the latest public issue only when no changed public issue date is detected.',
+    '- Current executions require their matching weekly entry; date archives remain historical fallback only.',
+    '- Changed weekly artifacts select their execution reports; --latest selects the newest public weekly run.',
     '- With no explicit target and no changed public issue date, the command fails instead of silently falling back.'
   ].join('\n');
 }
@@ -109,8 +114,7 @@ function readJsonOptional(root, relPath) {
   }
 }
 
-function readNewsletterItems(root) {
-  const relPath = 'articles/data/newsletters.json';
+function readNewsletterItems(root, relPath = 'articles/data/newsletters.json') {
   const filePath = path.join(root, relPath);
   if (!fs.existsSync(filePath)) {
     throw new Error(`Missing required file: ${relPath}`);
@@ -122,7 +126,7 @@ function readNewsletterItems(root) {
     throw new Error(`Invalid JSON in ${relPath}: ${error.message}`);
   }
   if (!Array.isArray(items)) {
-    throw new Error('data/newsletters.json must contain an array');
+    throw new Error(relPath + ' must contain an array');
   }
   return items;
 }
@@ -134,36 +138,93 @@ function latestPublicIssue(items) {
     .slice(0, 1);
 }
 
-function resolveTargetItems(root, options = {}) {
-  const items = readNewsletterItems(root);
-  if (options.all) return items;
+// Targets carry the actual newsroom run date; weekly index.date is only the week start.
+function weeklyTarget(root, entry, runDate, historicalItems = []) {
+  const key = entry.weeklyKey;
+  const index = newsletterIndexDateStatus(root, key, WEEKLY_LANE);
+  if (index.error || !index.pathsMatch) throw new Error('Invalid weekly annotation target ' + key + ': ' + (index.error?.message || index.pathErrors.join('; ')));
+  const issuePath = 'articles/newsletters/' + key + '/issue.json';
+  const issue = readJsonOptional(root, issuePath).value;
+  if (!issue || issue.weekly_key !== key) throw new Error('Missing or mismatched ' + issuePath);
+  if (!runDate) {
+    // A later public run in the same accumulated issue may leave its original anchor unchanged.
+    const base = path.join(root, 'articles/content/newsroom');
+    const dates = fs.existsSync(base) ? fs.readdirSync(base).filter(date => /^\d{4}-\d{2}-\d{2}$/.test(date) && weeklyKeyForDate(date) === key) : [];
+    const publicRuns = dates.filter(date => {
+      const status = readJsonOptional(root, 'articles/content/newsroom/' + date + '/generation-status.json').value;
+      return status?.public_output_expected === true &&
+        !isTrue(status.diagnostics_only) &&
+        !String(status.public_state || '').startsWith('DIAGNOSTICS_ONLY') &&
+        status.weekly_output_status !== 'failed' &&
+        !isFalse(status.public_newsletter_ready) &&
+        !isFalse(status.effective_homepage_visible) &&
+        [status.public_newsletter_ready, status.final_publish_ready, status.review_publication_ready].some(isTrue);
+    }).sort().reverse();
+    // Converted pre-weekly issues have no generation anchor. Their preserved date index
+    // records actual published runs; never fabricate a run date from the weekly start date.
+    const historicalDates = historicalItems.map(item => item?.date)
+      .filter(date => /^\d{4}-\d{2}-\d{2}$/.test(String(date || '')) && weeklyKeyForDate(date) === key)
+      .sort().reverse();
+    runDate = publicRuns[0] || issue.generation_anchor_date || historicalDates[0];
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(runDate || '')) || weeklyKeyForDate(runDate) !== key) {
+    throw new Error('Missing or mismatched execution date for weekly annotation target ' + key);
+  }
+  return { ...entry, date: runDate, publication_week_key: key };
+}
 
+function resolveTargetItems(root, options = {}) {
+  const datedPath = 'articles/data/newsletters.json';
+  const weeklyPath = 'articles/data/newsletters-weekly.json';
+  const dated = fs.existsSync(path.join(root, datedPath)) ? readNewsletterItems(root, datedPath) : [];
+  const weekly = fs.existsSync(path.join(root, weeklyPath)) ? readNewsletterItems(root, weeklyPath) : [];
+  if (!fs.existsSync(path.join(root, datedPath)) && !fs.existsSync(path.join(root, weeklyPath))) {
+    throw new Error('Missing required file: ' + weeklyPath);
+  }
+  const markerPath = path.join(root, '.tmp/newsletter-date.txt');
+  const marker = fs.existsSync(markerPath) ? fs.readFileSync(markerPath, 'utf8').trim() : '';
+  if (marker && !/^\d{4}-\d{2}-\d{2}$/.test(marker)) throw new Error('Invalid .tmp/newsletter-date.txt');
+  const forDate = date => {
+    const entry = weekly.find(item => item?.weeklyKey === weeklyKeyForDate(date));
+    if (entry) return weeklyTarget(root, entry, date);
+    // Only explicit historical targets without a matching current-run marker can use date archives.
+    return marker === date ? null : dated.find(item => item?.date === date);
+  };
+  if (options.all) {
+    const targets = [...dated, ...weekly.map(entry => weeklyTarget(root, entry, undefined, dated))];
+    return targets.filter((item, index) => targets.findIndex(other => other.date === item.date) === index);
+  }
+  const changedWeeks = options.weeklyKeys instanceof Set ? options.weeklyKeys
+    : options.targetDates instanceof Set ? new Set() : strictWeeklyKeys({ root });
+  const targetWeek = key => {
+    const entry = weekly.find(item => item?.weeklyKey === key);
+    if (!entry) throw new Error('Missing weekly annotation entry: ' + key);
+    return weeklyTarget(root, entry, undefined, dated);
+  };
   const explicitDates = new Set(options.dates || []);
-  if (explicitDates.size > 0) {
-    const selected = items.filter(item => explicitDates.has(item.date));
-    for (const date of explicitDates) {
-      if (!selected.some(item => item.date === date)) {
-        throw new Error(`No articles/data/newsletters.json entry found for target date: ${date}`);
+  const targetDates = explicitDates.size ? explicitDates : options.targetDates instanceof Set
+    ? options.targetDates : strictTargetDates({ root });
+  if (targetDates.size > 0) {
+    const selected = [...targetDates].map(forDate);
+    const missing = [...targetDates].filter((date, index) => !selected[index]);
+    if (missing.length) {
+      // Keep the historical CLI diagnostic while identifying the weekly replacement contract.
+      throw new Error('No articles/data/newsletters.json entry found for ' + (explicitDates.size ? 'target date: ' : 'detected target date(s): ') + missing.join(', ') + '; matching weekly entry is also required for a current execution');
+    }
+    if (!explicitDates.size) {
+      for (const key of changedWeeks) {
+        if (!selected.some(item => item.publication_week_key === key)) selected.push(targetWeek(key));
       }
     }
     return selected;
   }
-
-  const targetDates = options.targetDates instanceof Set
-    ? options.targetDates
-    : strictTargetDates({ root });
-
-  if (targetDates.size > 0) {
-    const selected = items.filter(item => targetDates.has(item.date));
-    const selectedDates = new Set(selected.map(item => item.date));
-    const missingDates = [...targetDates].filter(date => !selectedDates.has(date));
-    if (missingDates.length > 0) {
-      throw new Error(`No articles/data/newsletters.json entry found for detected target date(s): ${missingDates.join(', ')}`);
-    }
-    return selected;
+  if (changedWeeks.size) return [...changedWeeks].map(targetWeek);
+  if (options.latest) {
+    const latestWeekly = [...weekly].sort((a, b) => String(b.weeklyKey).localeCompare(String(a.weeklyKey)))[0];
+    const latestDated = latestPublicIssue(dated)[0];
+    if (latestWeekly && (!latestDated || String(latestWeekly.weeklyKey) >= weeklyKeyForDate(latestDated.date))) return [weeklyTarget(root, latestWeekly, undefined, dated)];
+    return latestDated ? [latestDated] : [];
   }
-
-  if (options.latest) return latestPublicIssue(items);
   throw new Error('No target public issue date detected. Pass --date YYYY-MM-DD, --all, or --latest.');
 }
 
