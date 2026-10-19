@@ -328,3 +328,22 @@ test('후속 homepage가 source_url 표기를 바꿔도 stable article identity�
   writeHistory(root, history.articles);
   assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-17' }).articles, [{ url: raw, newsletter_date: '2026-08-17' }]);
 });
+
+test('다음 주 homepage 노출 URL은 이전 주 공개 기사의 명시 발행일을 지우지 않는다', () => {
+  const { recordNewsletterArticles, recordArticleExposure, emptyExposureHistory } = require('../../../reporter/article-exposure-history');
+  const root = tempRoot('published-article-urls-next-week-homepage');
+  const section = { source_candidate_url: ARTICLE_URL, sources: [{ url: ARTICLE_URL }] };
+  writeIssue(root, '2026-W34', issueMarkdown());
+  writeWeeklySource(root, [section]);
+  let history = recordNewsletterArticles(emptyExposureHistory('2026-08-17'), [section], { date: '2026-08-17', newsletterUrl: 'newsletters/2026-W34/index.html' });
+  writeHistory(root, history.articles);
+  const before = readPublishedArticles(root, { asOf: '2026-08-17' });
+  assert.deepEqual(before.articles, [{ url: ARTICLE_URL, newsletter_date: '2026-08-17' }]);
+  history = recordArticleExposure(history, { url: ARTICLE_URL }, { date: '2026-08-24', type: 'homepage_headline', newsletterUrl: 'newsletters/2026-W35/index.html' });
+  assert.equal(history.articles[0].newsletter_url, 'newsletters/2026-W35/index.html');
+  assert.equal(history.articles[0].newsletter_article_date, '2026-08-17');
+  writeHistory(root, history.articles);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-17' }), before);
+  assert.deepEqual(readPublishedArticles(root).articles, before.articles);
+  assert.deepEqual(readPublishedArticles(root, { asOf: '2026-08-16' }).articles, []);
+});

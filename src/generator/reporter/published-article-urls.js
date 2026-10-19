@@ -71,7 +71,11 @@ function weeklyPublicationDates(root, weeklyKey, markdown) {
   for (const record of Array.isArray(history.articles) ? history.articles : []) {
     if (record?.exposure_type !== 'newsletter_article' &&
       !(Array.isArray(record?.exposure_types) && record.exposure_types.includes('newsletter_article'))) continue;
-    if (record.newsletter_url !== 'newsletters/' + weeklyKey + '/index.html') continue;
+    // A later homepage exposure overwrites newsletter_url, but does not change
+    // newsletter_article_date. For that producer, bind the explicit article date
+    // and stable identity to the actual public week below instead of its mutable URL.
+    if (record.newsletter_url !== 'newsletters/' + weeklyKey + '/index.html' &&
+      record.exposure_type !== 'homepage_headline') continue;
     const date = record.newsletter_article_date;
     if (!ISSUE_DATE_DIR.test(String(date || ''))) continue;
     try {
