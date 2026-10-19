@@ -209,9 +209,12 @@ function classifyLatestPublicState({ root = process.cwd(), date, status = {}, pu
   return classifyPublicState({ status, publicStructure: structure, retention: retentionState });
 }
 
-function unexposeFailedPublication(root, date) {
+function unexposeFailedPublication(root, date, options = {}) {
   try {
-    const rollback = rollbackWeeklyPublication({ root, date });
+    const rollback = rollbackWeeklyPublication({ ...options, root, date });
+    if (['owner_mismatch', 'completed'].includes(rollback.reason)) {
+      return { changed: false, error: '', weeklyRollback: rollback };
+    }
     const dated = removeNewsletterIndexEntry(root, date);
     return { ...dated, changed: dated.changed || rollback.applied, weeklyRollback: rollback };
   } catch (error) {
@@ -577,10 +580,11 @@ function reconcilePublicState(options = {}) {
   let dataIndexChanged = false;
   let weeklyRollback = { applied: false, files: [] };
   if (options.write !== false && !fields.effectiveHomepageVisible) {
-    weeklyRollback = rollbackWeeklyPublication({ root, date });
+    weeklyRollback = rollbackWeeklyPublication({ ...options, root, date });
   }
   const shouldRemoveIndexEntry =
     !fields.effectiveHomepageVisible &&
+    !['owner_mismatch', 'completed'].includes(weeklyRollback.reason) &&
     (publicStructure.dataIndex.exists || publicStructure.publicFilesExist);
   if (options.write !== false && shouldRemoveIndexEntry) {
     const result = removeNewsletterIndexEntry(root, date);

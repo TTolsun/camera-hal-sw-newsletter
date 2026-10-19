@@ -589,6 +589,9 @@ jobs:
               labels
             });
 
+      - name: Finalize successful weekly publication snapshot
+        if: steps.generate.outcome == 'success' && steps.ensure-public-newsletter.outcome == 'success' && steps.validate.outcome == 'success' && steps.audit-images.outcome == 'success' && steps.cpr.outcome == 'success' && steps.meta.outputs.public_newsletter_ready == 'true'
+        run: node src/generator/publish/weekly-publication-transaction.js --complete "${{ steps.meta.outputs.date }}"
       - name: Upload newsroom debug artifacts
         if: always()
         uses: actions/upload-artifact@v7
