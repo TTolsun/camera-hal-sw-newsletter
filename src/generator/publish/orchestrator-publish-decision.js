@@ -1,20 +1,19 @@
 // render/headline 기록 직후, terminal recovery routing 직전에 한 번만 실행되는 결정론적
 // 발행 가부 결정 + generation-status 기록 블록(#655).
 // generationStatus 분류 → editorial-reviewable 판정 → reviewable이 아니면 공개 산출물
-// (newsletter.md/index.html/newsletters.json/weekly)을 기록하고 npm validate를 실제로
+// (weekly newsletter.md/index.html/issue.json과 인덱스)를 기록하고 npm validate를 실제로
 // 실행한다(side effect). 그 뒤 finalPublishReady/finalCompositionMode/files를 계산하고
 // generation-status.json을 기록한다. early return/fail이 없는 순수 결정·기록 단계라
 // main()에서 통째로 떼어 함수로 만들 수 있다(이후 terminal routing의 early return/fail은
 // main()에 그대로 둔다).
 // main()의 reads(date/editor/factCheck/qualityReport/shortlistReport/retryHistory/
-// staleScrub/newsroomDir/newsletterDir/newsletterMarkdown/newsletterHtmlContent/
+// staleScrub/newsroomDir/
 // mustFixCount/todoFound/emptySourceSections/baseFiles)를 파라미터로 받아, 이후 main()의
 // terminal routing에서 실제로 쓰이는 값(editorialReviewable/shouldWritePublicArtifacts/
 // failureKind/validateResult/generationStatus/files/generationStatusArtifact)만 반환한다.
 // 협력자는 모두 이미 분리된 sibling/shared 모듈에서 직접 import하므로 god-file을 import하지
 // 않는다(순환 없음). root는 god-file과 동일하게 process.cwd()로, FAILURE_KIND_EDITORIAL_REVIEWABLE
 // 상수는 god-file과 동일한 리터럴로 load 시점에 한 번 파생한다.
-const fs = require('fs');
 const path = require('path');
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { writeJson } = require('../../shared/common/common');
@@ -32,7 +31,6 @@ const {
 } = require('./orchestrator-status-builders');
 const { runValidate } = require('./orchestrator-validate-runner');
 const {
-  updateNewsletterData,
   persistHeadlineStateArtifacts
 } = require('./orchestrator-terminal-contracts');
 const { buildWeeklyMergeResolver } = require('../editor/weekly-merge');
@@ -71,9 +69,6 @@ async function decidePublishReadinessAndWriteStatus({
   retryHistory,
   staleScrub,
   newsroomDir,
-  newsletterDir,
-  newsletterMarkdown,
-  newsletterHtmlContent,
   mustFixCount,
   todoFound,
   emptySourceSections,
@@ -87,8 +82,6 @@ async function decidePublishReadinessAndWriteStatus({
   });
   const editorialReviewable = isEditorialReviewableStatus(generationStatus);
   const failureKind = editorialReviewable ? FAILURE_KIND_EDITORIAL_REVIEWABLE : '';
-  const newsletterMd = path.join(newsletterDir, 'newsletter.md');
-  const newsletterHtml = path.join(newsletterDir, 'index.html');
   const shouldWritePublicArtifacts = !editorialReviewable;
   let weeklyArtifactFiles = [];
   // 주간 출력 실패는 사유를 기록한 뒤 발행 검증 실패로 처리한다.
@@ -101,10 +94,7 @@ async function decidePublishReadinessAndWriteStatus({
   let introLetterReason = '';
   if (shouldWritePublicArtifacts) {
     captureWeeklyPublication({ root, date });
-    fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');
-    fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');
-    updateNewsletterData(date, editor);
-    // 추가 weekly 출력(#486~#490): publish-ready일 때만 weekly 디렉터리 페이지/별도 인덱스를 생성하고,
+    // 공개 출력은 weekly writer 한 곳에서 생성한다. 보존 날짜 파일과 dated 인덱스는 쓰지 않는다.
     // 같은 주 안의 중복 기사는 LLM이 append/merge/reject로 결정하며 merge는 검증 통과 시에만 교체한다.
     // 실패 사유를 보존하고 아래 발행 검증에서 진단 전용 경로로 보낸다.
     try {
@@ -209,10 +199,7 @@ async function decidePublishReadinessAndWriteStatus({
         finalCompositionMode !== COMPOSITION_MODES.NORMAL);
   const files = shouldWritePublicArtifacts
     ? baseFiles.concat([
-        // changedArtifacts/review-inventory에 쓰이는 디스크-상대 경로(articles/ 아래).
-        `articles/newsletters/${date}/newsletter.md`,
-        `articles/newsletters/${date}/index.html`,
-        'articles/data/newsletters.json',
+        // changedArtifacts/review-inventory에는 실제 weekly writer가 보고한 공개 파일만 싣는다.
         ...headlineArtifactResult.files,
         ...weeklyArtifactFiles
       ])

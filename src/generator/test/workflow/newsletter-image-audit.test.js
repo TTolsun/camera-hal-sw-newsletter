@@ -643,3 +643,31 @@ test('weekly-only repair preserves earlier articles and never creates dated outp
   assert.equal(repeated[0].report.summary.publish_blocking_issue_count, 0);
   assert.equal(fs.existsSync(path.join(root, 'articles/newsletters', date)), false);
 });
+
+for (const archiveFiles of ['both', 'html-only']) {
+test('weekly-only repair preserves same-date archive files and never creates missing copies: ' + archiveFiles, async t => {
+  const prefix = path.join(os.tmpdir(), 'newsletter-image-repair-preserved-date-');
+  const root = fs.mkdtempSync(prefix);
+  t.after(() => { assert.ok(path.resolve(root).startsWith(prefix)); fs.rmSync(root, { recursive: true, force: true }); });
+  const date = '2026-10-19';
+  const draft = issue(date, { imageCandidates: [validImage()] });
+  writeReviewDraft(root, draft);
+  writeJson(path.join(root, 'articles/content/newsroom', date, 'generation-status.json'), {
+    date, public_output_lane: 'weekly', legacy_dated_output_enabled: false, public_output_expected: true, weekly_output_status: 'written'
+  });
+  await writeWeeklyNewsletterArtifacts({ root, date, editor: draft });
+  const markdownPath = 'articles/newsletters/' + date + '/newsletter.md';
+  const names = ['articles/newsletters/' + date + '/index.html', ...(archiveFiles === 'both' ? [markdownPath] : []), 'articles/data/newsletters.json'];
+  for (const name of names) writeText(path.join(root, name), name.endsWith('.json') ? '[]' : 'Preserved historical bytes: ' + name);
+  const before = names.map(name => fs.readFileSync(path.join(root, name)));
+  const repairs = await repairNewsletterImages({ root, date });
+  assert.equal(repairs[0].repairedArticleCount, 1);
+  assert.deepEqual(names.map(name => fs.readFileSync(path.join(root, name))), before);
+  const weekly = JSON.parse(fs.readFileSync(path.join(root, 'articles/newsletters/2026-W43/issue.json'), 'utf8'));
+  assert.equal(weekly.sections[0].selectedImage, validImage().url);
+  assert.equal(repairs[0].report.summary.publish_blocking_issue_count, 0);
+  await repairNewsletterImages({ root, date });
+  assert.deepEqual(names.map(name => fs.readFileSync(path.join(root, name))), before);
+  assert.equal(fs.existsSync(path.join(root, markdownPath)), archiveFiles === 'both');
+});
+}

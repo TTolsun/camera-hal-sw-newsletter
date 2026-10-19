@@ -24,7 +24,8 @@ const {
 } = require('../../shared/common/publication-mode');
 const {
   RUN_MODES,
-  PUBLIC_STATES
+  PUBLIC_STATES,
+  legacyDatedOutputEnabled
 } = require('../publish/publication-state-schema');
 
 const DIRECT_EXTRACTION_SOURCE_KINDS = new Set([
@@ -1111,7 +1112,8 @@ async function repairNewsletterImagesForDate(options = {}) {
     useEditorDraftForAudit: true
   });
   const paths = reportPaths(root, date);
-  const writePublic = publicOutputExpected(readJsonIfExists(paths.generationStatusPath) || {});
+  const status = readJsonIfExists(paths.generationStatusPath) || {};
+  const writePublic = publicOutputExpected(status);
   if (before.summary.repairable_article_count === 0) {
     // 수리할 기사가 없어도 weekly는 이전 실행에서 stale 상태로 남아 있을 수 있으므로
     // 항상 daily editor-draft 기준으로 동기화한다(재실행 수렴 경로).
@@ -1138,9 +1140,10 @@ async function repairNewsletterImagesForDate(options = {}) {
   const html = buildHtml(issue);
   writeJson(paths.editorPath, issue);
   writeText(paths.editorMarkdownPath, markdown);
-  // Repair existing dated URLs, but never recreate a dated output for weekly-only runs.
+  // Only legacy runs may repair dated URLs. A weekly-only rerun must preserve
+  // the historical dated body even when its execution date already has an archive.
   // Weekly accumulation is updated by identity below, not overwritten with this run's draft.
-  if (writePublic && (fs.existsSync(paths.newsletterMarkdownPath) || fs.existsSync(paths.newsletterHtmlPath))) {
+  if (writePublic && legacyDatedOutputEnabled(status) && (fs.existsSync(paths.newsletterMarkdownPath) || fs.existsSync(paths.newsletterHtmlPath))) {
     writeText(paths.newsletterMarkdownPath, markdown);
     writeText(paths.newsletterHtmlPath, html);
   }

@@ -46,9 +46,9 @@ function stage(t, runDate = '2026-10-22') {
 
 test('new generation statuses always declare the weekly lane, even on early failure', () => {
   for (const status of ['STARTED', 'FAILED', 'PASS']) {
-    const actual = buildGenerationStatus({ date: '2026-10-22', status, extra: { public_output_lane: 'daily', legacy_dated_output_enabled: false } });
+    const actual = buildGenerationStatus({ date: '2026-10-22', status, extra: { public_output_lane: 'daily', legacy_dated_output_enabled: true } });
     assert.equal(actual.public_output_lane, 'weekly');
-    assert.equal(actual.legacy_dated_output_enabled, true);
+    assert.equal(actual.legacy_dated_output_enabled, false);
   }
   assert.throws(() => publicationTarget('2026-10-22', { public_output_lane: 'unknown' }), /Unsupported/);
 });

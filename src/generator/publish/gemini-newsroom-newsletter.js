@@ -394,7 +394,6 @@ async function main() {
   const newsletterTemplatePath = path.join(root, 'docs', 'NEWSLETTER_TEMPLATE.md');
   const goldenExamplePath = path.join(root, 'docs', 'golden-examples', 'MANUAL_QUALITY_NEWSLETTER.md');
   const newsroomDir = artifactNewsroomDir(root, date);
-  const newsletterDir = path.join(root, 'articles', 'newsletters', date);
 
   if (!fs.existsSync(sourceRegistryPath) && !fs.existsSync(sourcesPath)) {
     fail('Missing src/shared/data/news-sources.json and docs/NEWS_SOURCES.md.');
@@ -408,7 +407,6 @@ async function main() {
   const sourceRegistry = fs.existsSync(sourceRegistryPath) ? readJson(sourceRegistryPath) : null;
   const seedEvidencePack = readSeedEvidencePackForDate(date);
   fs.mkdirSync(newsroomDir, { recursive: true });
-  fs.mkdirSync(newsletterDir, { recursive: true });
 
   const cacheDir = path.join(root, 'cache', 'news-summary');
   // root를 넘겨야 선정이 state/article-exposure-history.json을 읽는다. 없으면 exposureHistory가
@@ -1014,9 +1012,6 @@ async function main() {
     retryHistory,
     staleScrub,
     newsroomDir,
-    newsletterDir,
-    newsletterMarkdown,
-    newsletterHtmlContent,
     mustFixCount,
     todoFound,
     emptySourceSections,
@@ -1078,7 +1073,7 @@ async function main() {
     }
     // 품질/팩트체크는 통과(generationStatus === 'PASS')했지만 결정론적 발행 검증
     // (이미지 fallback, site retention 등)에 실패한 draft다. 발행 불가이므로, 발행 가능
-    // 경로가 이미 쓴 newsletters.json 노출 항목을 되돌려서 일관된 diagnostics-only 리뷰
+    // 경로가 쓴 weekly 공개본을 transaction baseline으로 되돌려 일관된 diagnostics-only 리뷰
     // PR로 강등한다. 여기서 throw하면 terminal handler가 reviewable이 아닌 FAILED 상태로
     // 덮어써 리뷰 PR이 아예 안 생긴다.
     const unexposeResult = unexposeFailedPublication(root, date, { status: generationStatusArtifact });
@@ -1087,7 +1082,7 @@ async function main() {
     // 안전하게 fail()로 종료한다(리뷰 PR은 못 만들지만 잘못된 발행보다 낫다). 항목이 이미
     // 없으면 error는 빈 문자열이라 안전하게 통과한다.
     if (unexposeResult.error) {
-      fail(`npm run validate failed and the newsletters.json entry could not be un-exposed (${unexposeResult.error}):\n${validateResult.text}`);
+      fail(`npm run validate failed and the weekly public state could not be rolled back (${unexposeResult.error}):\n${validateResult.text}`);
     }
     writeRecoveryPrompt(newsroomDir, { date, stage: 'validation', reason: `npm run validate failed:\n${validateResult.text}`, shortlistReport, selectedInputs: shortlistReport.selected_articles, qualityReport, factCheck });
     writeDateReviewPackage({
@@ -1100,7 +1095,7 @@ async function main() {
       qualityReport,
       runContext: reviewRunContext
     });
-    console.warn(`npm run validate failed:\n${validateResult.text}\nPublishable draft failed publish validation; un-exposed the newsletters.json entry and downgraded to a diagnostics-only review PR.`);
+    console.warn(`npm run validate failed:\n${validateResult.text}\nPublishable draft failed publish validation; rolled back the weekly public state and downgraded to a diagnostics-only review PR.`);
     return;
   }
   if (!validateResult.ok && shortlistReport.underfilled) {

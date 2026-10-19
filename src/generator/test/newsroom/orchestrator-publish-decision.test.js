@@ -188,13 +188,12 @@ test('비reviewable PASS 입력: 공개 산출물을 쓰고 validate를 돌리�
     assert.equal(out.shouldWritePublicArtifacts, true);
     assert.equal(out.failureKind, '');
 
-    // 공개 산출물(newsletter.md/index.html)이 디스크에 기록된다.
-    assert.ok(fs.existsSync(path.join(newsletterDir, 'newsletter.md')));
-    assert.ok(fs.existsSync(path.join(newsletterDir, 'index.html')));
-    assert.equal(fs.readFileSync(path.join(newsletterDir, 'newsletter.md'), 'utf8'), '# stub markdown');
+    // 공개 출력은 weekly writer만 소유하며 dated 사본을 만들지 않는다.
+    assert.equal(fs.existsSync(path.join(newsletterDir, 'newsletter.md')), false);
+    assert.equal(fs.existsSync(path.join(newsletterDir, 'index.html')), false);
 
     // 공개 경로에서만 호출되는 협력자가 실제로 호출된다.
-    assert.equal(calls.updateNewsletterData.length, 1);
+    assert.equal(calls.updateNewsletterData.length, 0);
     assert.equal(calls.persistHeadlineStateArtifacts.length, 1);
     assert.equal(calls.weekly, 1);
     assert.equal(calls.capturePublication.length, 1);
@@ -209,9 +208,9 @@ test('비reviewable PASS 입력: 공개 산출물을 쓰고 validate를 돌리�
     assert.equal(out.generationStatusArtifact.publish_gate_passed ?? out.generationStatusArtifact.public_output_expected, true);
 
     // files에 공개 산출물 상대경로가 들어간다.
-    assert.ok(out.files.includes('articles/newsletters/2026-05-08/newsletter.md'));
-    assert.ok(out.files.includes('articles/newsletters/2026-05-08/index.html'));
-    assert.ok(out.files.includes('articles/data/newsletters.json'));
+    assert.ok(out.files.includes('articles/newsletters/weekly/x/index.html'));
+    assert.equal(out.files.some(file => file.startsWith('articles/newsletters/2026-05-08/')), false);
+    assert.equal(out.files.includes('articles/data/newsletters.json'), false);
 
     // #873: 정상 주에는 성공 상태가 같은 필드에 남아야 "기록 실패"와 "애초에 안 씀"이 구분된다.
     assert.equal(out.generationStatusArtifact.weekly_output_status, 'written');
@@ -233,8 +232,8 @@ test('weekly 기록이 실패하면 진단용 산출물을 보존한다', async 
     assert.equal(calls.weekly, 1);
     assert.equal(out.validateResult.ok, false);
     assert.equal(calls.selectionStatusExtraOptions[0].finalPublishReady, false);
-    assert.ok(fs.existsSync(path.join(newsletterDir, 'newsletter.md')));
-    assert.ok(out.files.includes('articles/newsletters/2026-05-08/newsletter.md'));
+    assert.equal(fs.existsSync(path.join(newsletterDir, 'newsletter.md')), false);
+    assert.equal(out.files.includes('articles/newsletters/2026-05-08/newsletter.md'), false);
     assert.equal(out.files.some(file => /newsletters\/weekly/.test(file)), false);
   }, { weeklyThrows: new Error('weekly writer boom') });
 });
@@ -275,9 +274,6 @@ test('혼합 stamp로 거부된 weekly 기록의 사유가 generation-status에 
     assert.equal(recorded.public_output_expected, true);
     assert.deepEqual(out.files, [
       'articles/content/newsroom/2026-05-08/shortlisted-candidates.json',
-      'articles/newsletters/2026-05-08/newsletter.md',
-      'articles/newsletters/2026-05-08/index.html',
-      'articles/data/newsletters.json',
       'articles/state/article-exposure-history.json'
     ]);
   }, { weeklyThrows: new Error(mixedStampRejection) });
@@ -474,7 +470,8 @@ test('carry_forward_status가 overflow면 강한 PASS 입력에서도 editor_rev
     // finalPublishReady·공개 산출물 기록은 이 게이트가 손대지 않는다.
     assert.equal(options.finalPublishReady, true);
     assert.equal(out.shouldWritePublicArtifacts, true);
-    assert.ok(fs.existsSync(path.join(newsletterDir, 'newsletter.md')));
+    assert.ok(out.files.includes('articles/newsletters/weekly/x/index.html'));
+    assert.equal(fs.existsSync(path.join(newsletterDir, 'newsletter.md')), false);
   });
 });
 

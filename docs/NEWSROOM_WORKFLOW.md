@@ -243,9 +243,9 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 
 ## Role 5. Artifact Writer
 
-- `articles/newsletters/YYYY-MM-DD/newsletter.md`를 생성합니다.
-- `articles/newsletters/YYYY-MM-DD/index.html`을 생성합니다.
-- `articles/data/newsletters.json`을 갱신합니다.
+- 실행일을 발행 ISO 주로 해석해 `articles/newsletters/YYYY-Wnn/{newsletter.md,index.html,issue.json}`과 `articles/data/newsletters-weekly.json`을 기록합니다. 같은 주의 서로 다른 기사는 정책상 주간 상한 안에서 누적합니다.
+- 새 실행은 날짜 공개 폴더·HTML·Markdown을 만들거나 `articles/data/newsletters.json`에 항목을 추가하지 않습니다. 기존 날짜 파일·인덱스·제공 중인 영어 URL은 보존합니다. newsroom/수집·품질·비용·리뷰 산출물은 계속 실제 실행일 `YYYY-MM-DD`를 사용하며, 보도 대상 주인 `coverage_week_key`와 발행 주를 혼용하지 않습니다.
+- 새 상태는 `public_output_lane=weekly`, `legacy_dated_output_enabled=false`를 기록합니다. 품질·출처·이미지 계보·공개 LLM 판정은 날짜 인덱스 추가와 무관하게 실행일과 발행 주로 검사합니다. 실패 시 소유권과 Git revision이 일치하는 transaction baseline으로 주간 공개본·인덱스·헤드라인·노출 state를 복원하며, 새 주간호 누락을 이전 공개본이나 과거 날짜 retention으로 승인하지 않습니다.
 - `articles/content/newsroom/YYYY-MM-DD/editor-in-chief-brief.md`, `00-review-guide.md`, `release-qa-report.md`, `artifact-manifest.json`을 생성합니다.
 - `00-review-guide.md`는 아래 순서로 review artifact를 묶습니다.
   1. 편집장 브리프
@@ -265,7 +265,7 @@ editor는 deterministic final article input과 locked/retry context만 받습니
 
 ### 결정론적 이미지 바인딩 repair
 
-editor는 이미지의 권리나 관련성이 불확실하면 `selectedImage`를 비워 두고, renderer는 local fallback visual(로컬 대체 이미지)을 씁니다. 생성이 끝나면 workflow가 `npm run newsroom:repair-images -- --date <date>`를 실행합니다. 이 명령은 editor-draft의 유효한 `imageCandidates` 중 audit 규칙을 통과한 후보를 deterministic하게 binding하고 daily Markdown/HTML을 다시 만듭니다. local fallback visual은 유효한 candidate가 정말로 하나도 없는 기사에만 남습니다.
+editor는 이미지의 권리나 관련성이 불확실하면 `selectedImage`를 비워 두고, renderer는 local fallback visual(로컬 대체 이미지)을 씁니다. 생성이 끝나면 workflow가 `npm run newsroom:repair-images -- --date <date>`를 실행합니다. 이 명령은 실행일 editor-draft의 유효한 `imageCandidates` 중 audit 규칙을 통과한 후보를 deterministic하게 binding하고 주간 공개본을 동기화합니다. 새 주간 전용 실행은 같은 날짜의 과거 HTML/Markdown이 있어도 덮어쓰거나 누락된 사본을 만들지 않습니다. lane 선언이 없는 과거 실행이나 날짜 출력 capability가 있는 legacy 실행의 기존 날짜 repair 호환 경로는 유지합니다. local fallback visual은 유효한 candidate가 정말로 하나도 없는 기사에만 남습니다.
 
 repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. 동작은 다음과 같습니다.
 
@@ -299,7 +299,7 @@ repair는 같은 ISO week의 weekly 산출물도 함께 동기화합니다. 동�
 - `publish-ready`: AI가 자동으로 발행해도 되는 상태입니다. `has_ai_publish_ready=true`이고 **이미지 계보 감사 스텝(`audit-images`)이 성공했을 때만** 씁니다(#886). 감사 스텝은 실패해도 그 주 PR이 남도록 강등돼 있어서, 감사가 실패했거나 아예 돌지 않은 주에 이 label이 붙으면 강등이 곧 게이트 제거가 됩니다. 그래서 label 스크립트는 감사 outcome이 `success`인 경우만 통과로 봅니다 — `skipped`·`cancelled`는 통과가 아닙니다.
 - `review_publication_ready=true`: `public_newsletter_ready=true`인 검증된 public issue가 있지만 `final_publish_ready=false`라서, 편집장이 검토한 뒤 merge해야만 공개할 수 있다는 뜻입니다. 이 값은 파일이 존재하는지(raw file existence)가 아니라 `resolve-reviewable-artifacts`의 public newsletter readiness 결과에서만 파생합니다.
 - `diagnostics_only=true`: `review_pr_ready=true && public_newsletter_ready=false`인 진단 전용 PR입니다. merge해도 Newsletter 홈페이지에는 표시되지 않으며, public files가 왜 없는지를 PR body에 남겨야 합니다.
-- `homepage_visible_after_merge=true`: `articles/data/newsletters.json`의 date/html/md entry가 실제 `articles/newsletters/YYYY-MM-DD/index.html` 및 `newsletter.md`와 일치하는 public issue에만 설정합니다. 최종 판단은 `resolve-reviewable-artifacts`가 public files와 index entry를 다시 검증한 결과를 따릅니다.
+- `homepage_visible_after_merge=true`: 새 실행은 발행 주의 HTML·Markdown·issue.json, `newsletters-weekly.json`의 정규 주 키/경로, 홈과 두 인덱스 전역 계약 및 실제 실행일의 주간 쓰기 근거를 `resolve-reviewable-artifacts`가 재검증한 경우에만 설정합니다. 같은 주 재실행은 공개 바이트가 같아도 허용하지만, 다른 실행일의 성공 상태나 이전 주간호 존재만으로 준비를 승인하지 않습니다. lane 선언이 없는 과거 상태의 날짜 산출물·retention 검증은 유지합니다.
 - `needs-fix`: 편집장 검토 또는 수정이 필요한 상태입니다. label 부착 규칙은 다음과 같습니다.
   - 자동 발행 기준을 통과하지 못한 editor review PR에는 넓은 의미의 신호인 `review-only`를 붙입니다.
   - 그중 public files가 준비된 review publication PR에는 `review-only-publication`을, public files가 없는 진단 PR에는 `diagnostics-only`를 함께 붙입니다.
@@ -636,7 +636,7 @@ newsroom pipeline이 생성하는 artifact는 4가지 retention grade로 분류�
 
 `newsletters-03-editor-pr.yml`의 `peter-evans/create-pull-request` 스텝은 `add-paths` 허용목록을 써서 `public_source_of_truth`와 `review_required_compact` artifact만 커밋합니다. `debug_heavy`와 `transient_attempt` artifact는 커밋하지 않는 대신, full set을 `newsroom-final-debug-<run_id>` Actions artifact에 보존하고 `artifact-manifest.json`의 `retained_heavy_artifacts[]`에 path/size/sha256/retention_grade/retention_location을 기록합니다.
 
-허용목록은 `src/generator/publish/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 만듭니다. 그 날짜의 `generation-status.json`이 `public_output_expected: false`를 명시하는 진단 전용 실행이면 일간·주간 공개 페이지, `newsletters-weekly.json`, `sitemap.xml`을 목록에서 빼고, 뺀 경로를 로그와 run summary에 남깁니다(#1189). `newsletters.json`과 archive 상태 파일은 진단 전용 실행에서도 정당하게 바뀌므로 그대로 싣습니다. 그래서 PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 보세요.
+허용목록은 `src/generator/publish/print-retention-commit-allowlist.js`가 `retentionCommitAllowlist({root, date, runContext})`를 호출해 만듭니다. 그 날짜의 `generation-status.json`이 `public_output_expected: false`를 명시하는 진단 전용 실행이면 일간·주간 공개 페이지, `newsletters-weekly.json`, `sitemap.xml`을 목록에서 빼고, 뺀 경로를 로그와 run summary에 남깁니다(#1189). 보존 날짜 계약을 쓰는 과거 실행의 `newsletters.json`과 archive 상태 파일은 정당한 변경을 포함할 수 있어 목록에 남깁니다. 새 주간 전용 실행의 실패 정리는 보존 날짜 항목이나 archive 상태를 수정하지 않습니다. 그래서 PR diff에 `debug_heavy`/`transient_attempt` 파일이 보이지 않는 것은 의도된 동작입니다. heavy artifact를 확인하려면 Actions artifact `newsroom-final-debug-<run_id>`를 다운로드하거나 `artifact-manifest.json`의 `retained_heavy_artifacts`를 보세요.
 
 이 정책은 발행 안전성·source binding·image lineage·review-publication state 판정을 약화하지 않습니다. validate:post-generation, resolve-reviewable-artifacts, pr-body 생성은 commit 스텝보다 **먼저** in-run working tree에서 돌기 때문에, add-paths 허용목록의 영향을 받지 않습니다.
 

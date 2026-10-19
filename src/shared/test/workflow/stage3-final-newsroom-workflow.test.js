@@ -426,28 +426,25 @@ test('generation path guards public artifacts for editorial reviewable failures'
   );
   const shouldWriteIndex = decision.indexOf('const shouldWritePublicArtifacts = !editorialReviewable;', editorialReviewableIndex);
   const writeGuardIndex = decision.indexOf('if (shouldWritePublicArtifacts) {', shouldWriteIndex);
-  const markdownWriteIndex = decision.indexOf("fs.writeFileSync(newsletterMd, newsletterMarkdown, 'utf8');", writeGuardIndex);
-  const htmlWriteIndex = decision.indexOf("fs.writeFileSync(newsletterHtml, newsletterHtmlContent, 'utf8');", writeGuardIndex);
-  const dataWriteIndex = decision.indexOf('updateNewsletterData(date, editor);', writeGuardIndex);
-  const validateResultIndex = decision.indexOf('const validateResult = editorialReviewable', dataWriteIndex);
+  const captureIndex = decision.indexOf('captureWeeklyPublication({ root, date });', writeGuardIndex);
+  const weeklyWriteIndex = decision.indexOf('await writeWeeklyNewsletterArtifacts({', captureIndex);
+  const validateResultIndex = decision.indexOf('const validateResult = editorialReviewable', weeklyWriteIndex);
   const finalPublishReadyIndex = decision.indexOf('const finalPublishReady =', validateResultIndex);
 
   assert.notEqual(generationStatusIndex, -1);
   assert.notEqual(editorialReviewableIndex, -1);
   assert.notEqual(shouldWriteIndex, -1);
   assert.notEqual(writeGuardIndex, -1);
-  assert.notEqual(markdownWriteIndex, -1);
-  assert.notEqual(htmlWriteIndex, -1);
-  assert.notEqual(dataWriteIndex, -1);
+  assert.notEqual(captureIndex, -1);
+  assert.notEqual(weeklyWriteIndex, -1);
   assert.notEqual(validateResultIndex, -1);
   assert.notEqual(finalPublishReadyIndex, -1);
   assert.ok(generationStatusIndex < editorialReviewableIndex);
   assert.ok(editorialReviewableIndex < shouldWriteIndex);
   assert.ok(shouldWriteIndex < writeGuardIndex);
-  assert.ok(writeGuardIndex < markdownWriteIndex);
-  assert.ok(markdownWriteIndex < htmlWriteIndex);
-  assert.ok(htmlWriteIndex < dataWriteIndex);
-  assert.ok(dataWriteIndex < validateResultIndex);
+  assert.ok(writeGuardIndex < captureIndex);
+  assert.ok(captureIndex < weeklyWriteIndex);
+  assert.ok(weeklyWriteIndex < validateResultIndex);
   assert.ok(validateResultIndex < finalPublishReadyIndex);
 });
 
