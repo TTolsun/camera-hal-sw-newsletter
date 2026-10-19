@@ -1,4 +1,4 @@
-const { ensureArray } = require('../../shared/common/value-coercion');
+const { ensureArray, isTrue, isFalse } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
@@ -139,7 +139,7 @@ function latestPublicIssue(items) {
 }
 
 // Targets carry the actual newsroom run date; weekly index.date is only the week start.
-function weeklyTarget(root, entry, runDate) {
+function weeklyTarget(root, entry, runDate, historicalItems = []) {
   const key = entry.weeklyKey;
   const index = newsletterIndexDateStatus(root, key, WEEKLY_LANE);
   if (index.error || !index.pathsMatch) throw new Error('Invalid weekly annotation target ' + key + ': ' + (index.error?.message || index.pathErrors.join('; ')));
@@ -152,9 +152,20 @@ function weeklyTarget(root, entry, runDate) {
     const dates = fs.existsSync(base) ? fs.readdirSync(base).filter(date => /^\d{4}-\d{2}-\d{2}$/.test(date) && weeklyKeyForDate(date) === key) : [];
     const publicRuns = dates.filter(date => {
       const status = readJsonOptional(root, 'articles/content/newsroom/' + date + '/generation-status.json').value;
-      return status?.public_output_expected === true;
+      return status?.public_output_expected === true &&
+        !isTrue(status.diagnostics_only) &&
+        !String(status.public_state || '').startsWith('DIAGNOSTICS_ONLY') &&
+        status.weekly_output_status !== 'failed' &&
+        !isFalse(status.public_newsletter_ready) &&
+        !isFalse(status.effective_homepage_visible) &&
+        [status.public_newsletter_ready, status.final_publish_ready, status.review_publication_ready].some(isTrue);
     }).sort().reverse();
-    runDate = publicRuns[0] || issue.generation_anchor_date;
+    // Converted pre-weekly issues have no generation anchor. Their preserved date index
+    // records actual published runs; never fabricate a run date from the weekly start date.
+    const historicalDates = historicalItems.map(item => item?.date)
+      .filter(date => /^\d{4}-\d{2}-\d{2}$/.test(String(date || '')) && weeklyKeyForDate(date) === key)
+      .sort().reverse();
+    runDate = publicRuns[0] || issue.generation_anchor_date || historicalDates[0];
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(String(runDate || '')) || weeklyKeyForDate(runDate) !== key) {
     throw new Error('Missing or mismatched execution date for weekly annotation target ' + key);
@@ -180,7 +191,7 @@ function resolveTargetItems(root, options = {}) {
     return marker === date ? null : dated.find(item => item?.date === date);
   };
   if (options.all) {
-    const targets = [...dated, ...weekly.map(entry => weeklyTarget(root, entry))];
+    const targets = [...dated, ...weekly.map(entry => weeklyTarget(root, entry, undefined, dated))];
     return targets.filter((item, index) => targets.findIndex(other => other.date === item.date) === index);
   }
   const changedWeeks = options.weeklyKeys instanceof Set ? options.weeklyKeys
@@ -188,7 +199,7 @@ function resolveTargetItems(root, options = {}) {
   const targetWeek = key => {
     const entry = weekly.find(item => item?.weeklyKey === key);
     if (!entry) throw new Error('Missing weekly annotation entry: ' + key);
-    return weeklyTarget(root, entry);
+    return weeklyTarget(root, entry, undefined, dated);
   };
   const explicitDates = new Set(options.dates || []);
   const targetDates = explicitDates.size ? explicitDates : options.targetDates instanceof Set
@@ -211,7 +222,7 @@ function resolveTargetItems(root, options = {}) {
   if (options.latest) {
     const latestWeekly = [...weekly].sort((a, b) => String(b.weeklyKey).localeCompare(String(a.weeklyKey)))[0];
     const latestDated = latestPublicIssue(dated)[0];
-    if (latestWeekly && (!latestDated || String(latestWeekly.date) >= String(latestDated.date))) return [weeklyTarget(root, latestWeekly)];
+    if (latestWeekly && (!latestDated || String(latestWeekly.weeklyKey) >= weeklyKeyForDate(latestDated.date))) return [weeklyTarget(root, latestWeekly, undefined, dated)];
     return latestDated ? [latestDated] : [];
   }
   throw new Error('No target public issue date detected. Pass --date YYYY-MM-DD, --all, or --latest.');
