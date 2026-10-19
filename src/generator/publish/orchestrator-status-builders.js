@@ -59,8 +59,8 @@ function buildGenerationStatus({
     // Every newly executed generation uses the weekly public safety contract.
     // Historical status files are not rewritten or inferred from file existence.
     public_output_lane: 'weekly',
-    // The separate final cutover disables dated generation only after all safety consumers move.
-    legacy_dated_output_enabled: true
+    // New runs never write dated public copies; historical status files keep their legacy contract.
+    legacy_dated_output_enabled: false
   };
 }
 
