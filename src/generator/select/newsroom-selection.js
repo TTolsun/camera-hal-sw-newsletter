@@ -1,3 +1,4 @@
+const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
 const { ensureArray } = require('../../shared/common/value-coercion');
 const { compareEditorialPriority, hasDriverArticleCapacity } = require('../../shared/domain/aosp-camera-scope');
 const {
@@ -1280,7 +1281,7 @@ function buildShortlistReport(date, collectedCandidates, options = {}) {
     eligibleCandidates: selectionCandidatePool,
     currentState: homepageHeadlineState,
     policy: headlinePolicy,
-    newsletterUrl: options.newsletterUrl || `newsletters/${date}/index.html`
+    newsletterUrl: options.newsletterUrl || `newsletters/${weeklyKeyForDate(date)}/index.html`
   });
   selected = headlineSelection.selected_articles;
   const windowDiagnostics = selectionResult.diagnostics;

@@ -1,6 +1,7 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
+const { weeklyKeyForDate } = require('./weekly-newsletter');
 
 const {
   decodeHtml
@@ -36,8 +37,16 @@ function matchFirst(value, pattern) {
   return match ? match[1] : '';
 }
 
+// Existing dated pages remain readable for archive tooling. Once a weekly output
+// exists, a missing weekly HTML must not fall back to a stale dated copy.
+function renderedNewsletterKey(root, date) {
+  const weeklyKey = weeklyKeyForDate(date);
+  return fs.existsSync(path.join(root, 'articles', 'newsletters', weeklyKey)) ? weeklyKey : date;
+}
+
 function readRenderedNewsletterArticles(root, date) {
-  const htmlPath = path.join(root, 'articles', 'newsletters', date, 'index.html');
+  const key = renderedNewsletterKey(root, date);
+  const htmlPath = path.join(root, 'articles', 'newsletters', key, 'index.html');
   if (!fs.existsSync(htmlPath)) return [];
   const html = fs.readFileSync(htmlPath, 'utf8');
   const usedAnchors = new Set();
@@ -81,7 +90,7 @@ function readRenderedNewsletterArticles(root, date) {
         source_url: sourceUrl,
         source_name: sourceName || '출처',
         article_anchor: articleAnchor,
-        newsletter_article_url: `newsletters/${date}/index.html#${articleAnchor}`,
+        newsletter_article_url: `newsletters/${key}/index.html#${articleAnchor}`,
         image_url: imageUrl,
         image_alt: imageAlt || title
       };
@@ -94,7 +103,7 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
   if (rendered.length === 0 || !state?.current_headline) {
     return { state, reconciliation: null };
   }
-  const newsletterUrl = `newsletters/${date}/index.html`;
+  const newsletterUrl = `newsletters/${renderedNewsletterKey(root, date)}/index.html`;
   const selectedCandidates = ensureArray(shortlist?.selected_articles);
   const selectedByKey = new Map(selectedCandidates.map(candidate => [
     articleIdentityKey(candidate),
@@ -194,5 +203,6 @@ function renderedHeadlineState({ root, date, state, shortlist }) {
 
 module.exports = {
   readRenderedNewsletterArticles,
+  renderedNewsletterKey,
   renderedHeadlineState
 };

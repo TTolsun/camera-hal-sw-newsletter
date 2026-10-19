@@ -320,3 +320,11 @@ test('state validator explains how to refresh stale decayed headline state', () 
   assert.match(result.errors.join('\n'), /headline_score_below_minimum/);
   assert.match(result.errors.join('\n'), new RegExp(HEADLINE_STATE_REMEDIATION.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 });
+
+
+test('new headline selection uses the publication week URL while retaining the execution date', () => {
+  const candidate = headlineCandidate({ published_date: '2026-10-20' });
+  const result = applyHomepageHeadlineSelection({ date: '2026-10-22', selectedArticles: [candidate], policy });
+  assert.equal(result.homepage_headline_state.current_headline.newsletter_url, 'newsletters/2026-W43/index.html');
+  assert.equal(result.homepage_headline_state.current_headline.newsletter_date, '2026-10-22');
+});

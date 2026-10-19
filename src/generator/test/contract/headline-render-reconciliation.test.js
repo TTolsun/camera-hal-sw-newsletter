@@ -244,3 +244,38 @@ test('fallback headline recovers the shortlist candidate by url when the identit
   assert.ok(reconciliation?.applied, 'precondition: fallback 분기를 타야 한다');
   assert.equal(reconciled.current_headline.snapshot.source_name, 'lore.kernel.org linux-media list');
 });
+
+
+function stageWeeklyHeadline(root, html) {
+  const dir = path.join(root, 'articles/newsletters/2026-W43');
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), html, 'utf8');
+}
+
+// Minimal handwritten HTML locks the actual public anchor, not a generated PASS fixture.
+const WEEKLY_HEADLINE_HTML = '<section class="article-card" id="article-buffer-return"><h3 class="article-title">버퍼 반환 제안</h3><p class="article-lead">요청 종료 시 버퍼 반환 경로를 확인합니다.</p><div class="source-list"><a href="https://developer.android.com/camera-update">공식 근거</a></div></section>';
+
+test('same-week later execution reconciles its headline to the actual weekly anchor without dated output', () => {
+  const root = tempRoot();
+  stageWeeklyHeadline(root, WEEKLY_HEADLINE_HTML);
+  const state = staleHeadlineState();
+  state.current_headline.source_url = 'https://developer.android.com/camera-update';
+  state.current_headline.article_identity_key = 'url:https://developer.android.com/camera-update';
+  const result = renderedHeadlineState({ root, date: '2026-10-22', state, shortlist: {} });
+  assert.equal(result.state.current_headline.newsletter_url, 'newsletters/2026-W43/index.html');
+  assert.equal(result.state.current_headline.newsletter_article_url, 'newsletters/2026-W43/index.html#article-buffer-return');
+  assert.equal(result.state.current_headline.newsletter_date, DATE, 'stored selection date is not a publish-week key');
+});
+
+test('weekly headline parsing takes precedence over a stale dated copy', () => {
+  const root = tempRoot();
+  writePublicNewsletterArtifacts(root, DATE);
+  const weeklyDir = path.join(root, 'articles/newsletters/2026-W23');
+  fs.mkdirSync(weeklyDir, { recursive: true });
+  fs.writeFileSync(path.join(weeklyDir, 'index.html'), WEEKLY_HEADLINE_HTML, 'utf8');
+  const articles = readRenderedNewsletterArticles(root, DATE);
+  assert.equal(articles.length, 1);
+  assert.equal(articles[0].newsletter_article_url, 'newsletters/2026-W23/index.html#article-buffer-return');
+  fs.unlinkSync(path.join(weeklyDir, 'index.html'));
+  assert.deepEqual(readRenderedNewsletterArticles(root, DATE), [], 'partial weekly output cannot fall back to dated content');
+});
