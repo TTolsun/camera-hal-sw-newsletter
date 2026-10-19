@@ -672,6 +672,7 @@ function buildReviewableArtifactOutputs(resolved) {
   return {
     date: resolved.date,
     branch: resolved.branch,
+    publication_week_key: resolved.weeklyStructure?.weeklyKey || '',
     has_reviewable_artifacts: resolved.hasReviewableArtifacts ? 'true' : 'false',
     has_public_artifacts: resolved.hasPublicArtifacts ? 'true' : 'false',
     has_required_public_newsletter_files: resolved.hasRequiredPublicNewsletterFiles ? 'true' : 'false',

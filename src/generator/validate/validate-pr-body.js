@@ -870,7 +870,11 @@ function validateValidationCommands(section, label, errors) {
 }
 
 function validateNewsletterTemplateBodyText(text, options = {}) {
-  text = toText(text);
+  text = toText(text)
+    .replace(/^### Public artifact \(공개 산출물\)\s*$/gm, '### Public artifact')
+    .replace(/^### Editorial quality \(편집 품질\)\s*$/gm, '### Editorial quality')
+    .replace(/^### Source \/ fact-check \(출처 \/ 사실 확인\)\s*$/gm, '### Source / fact-check')
+    .replace(/^### 검증 \(Validation\)\s*$/gm, '### Validation');
   const errors = [];
   const sections = extractSections(text);
   const count = exactHeadingCount(text, 2, '뉴스레터 발행 PR');
@@ -889,9 +893,9 @@ function validateNewsletterTemplateBodyText(text, options = {}) {
     'Validation'
   ], '뉴스레터 발행 PR', errors);
   validateRequiredPatterns(body, [
-    { label: 'newsletters/YYYY-MM-DD/newsletter.md 또는 실제 날짜 newsletter.md', pattern: /newsletters\/(?:YYYY-MM-DD|\d{4}-\d{2}-\d{2})\/newsletter\.md/ },
-    { label: 'newsletters/YYYY-MM-DD/index.html 또는 실제 날짜 index.html', pattern: /newsletters\/(?:YYYY-MM-DD|\d{4}-\d{2}-\d{2})\/index\.html/ },
-    { label: 'data/newsletters.json', pattern: /data\/newsletters\.json/ },
+    { label: '주간 또는 보존 날짜 newsletter.md', pattern: /newsletters\/(?:YYYY-W(?:nn|NN)|\d{4}-W\d{2}|YYYY-MM-DD|\d{4}-\d{2}-\d{2})\/newsletter\.md/ },
+    { label: '주간 또는 보존 날짜 index.html', pattern: /newsletters\/(?:YYYY-W(?:nn|NN)|\d{4}-W\d{2}|YYYY-MM-DD|\d{4}-\d{2}-\d{2})\/index\.html/ },
+    { label: '공개 newsletter 인덱스', pattern: /data\/newsletters(?:-weekly)?\.json/ },
     { label: '기사 품질 정책 src/shared/config/newsletter-policy.json', pattern: /src\/shared\/config\/newsletter-policy\.json/ },
     { label: '확인한 사실', pattern: /확인한 사실/ },
     { label: '배경지식', pattern: /배경지식/ },
@@ -905,6 +909,12 @@ function validateNewsletterTemplateBodyText(text, options = {}) {
     { label: 'fact-check must_fix', pattern: /fact-check must_fix|must_fix/i },
     { label: 'watch/reference page dated evidence', pattern: /watch\/reference page|dated evidence/i }
   ], '뉴스레터 발행 PR', errors);
+  if (/newsletters\/(?:YYYY-W(?:nn|NN)|\d{4}-W\d{2})\//.test(body)) {
+    validateRequiredPatterns(body, [
+      { label: '주간 issue.json', pattern: /newsletters\/(?:YYYY-W(?:nn|NN)|\d{4}-W\d{2})\/issue\.json/ },
+      { label: 'data/newsletters-weekly.json', pattern: /data\/newsletters-weekly\.json/ }
+    ], '뉴스레터 발행 PR', errors);
+  }
   validateValidationCommands(extractSubsection(body, 'Validation'), '뉴스레터 발행 PR', errors);
   return {
     ok: errors.length === 0,

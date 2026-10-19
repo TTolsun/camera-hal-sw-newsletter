@@ -49,7 +49,7 @@ test('newsletter PR template keeps publication checklist guardrails', () => {
   assert.match(text, /### 작성 원칙/);
   assert.match(text, /PR body는 한글로 작성/);
   assert.match(text, /영어 식별자는 한국어 설명/);
-  assert.match(text, /articles\/newsletters\/YYYY-MM-DD\/newsletter\.md/);
+  assert.match(text, /articles\/newsletters\/YYYY-Wnn\/newsletter\.md/);
   assert.match(text, /fact-check must_fix|must_fix/);
   assert.match(text, /source gap/i);
   assert.match(text, /임시 Markdown, notes\/checkpoint 문서, one-off script가 PR에 남아 있지 않다/);

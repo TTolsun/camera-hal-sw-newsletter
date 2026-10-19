@@ -763,3 +763,16 @@ test('validate-pr-body accepts an image-audit demoted newsletter body', () => {
   assert.equal(result.ok, true, result.errors.join('\n'));
   assert.equal(result.bodyKind, 'generated-newsletter');
 });
+
+test('manual weekly publication template requires weekly issue JSON and index while dated archives remain compatible', () => {
+  const weekly = newsletterTemplateBody().replaceAll('newsletters/2026-05-08/', 'newsletters/2026-W19/')
+    .replace('data/newsletters.json', 'data/newsletters-weekly.json')
+    .replace('### Editorial quality', 'articles/newsletters/2026-W19/issue.json\n\n### Editorial quality');
+  const accepted = validatePrBodyText(weekly, { type: 'newsletter' });
+  assert.equal(accepted.ok, true, accepted.errors.join('\n'));
+  assert.equal(validatePrBodyText(weekly.replace('newsletters/2026-W19/issue.json', 'missing weekly source'), { type: 'newsletter' }).ok, false);
+  assert.equal(validatePrBodyText(weekly.replace('data/newsletters-weekly.json', 'data/newsletters.json'), { type: 'newsletter' }).ok, false);
+  const actual = fs.readFileSync(path.resolve(__dirname, '../../../../.github/PULL_REQUEST_TEMPLATE/newsletter.md'), 'utf8');
+  const templateResult = validatePrBodyText(actual, { type: 'newsletter' });
+  assert.equal(templateResult.ok, true, templateResult.errors.join('\n'));
+});

@@ -829,3 +829,37 @@ test('editor draft에 실려 온 intro_letter는 fallback 시 게이트 없이 �
   assert.equal(issue.intro_letter, undefined);
   assert.equal(issue.summary, '이번 주에는 ‘CameraX 1.7.0’ 소식을 다룹니다.');
 });
+
+test('weekly publication presentation follows the accumulated fallback and camera articles', async () => {
+  const root = tempRoot();
+  const tooling = { ...section('tooling', 'https://example.com/tooling'), relevance_bucket: 'cpp_ai_tooling_fallback' };
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: { ...draft([tooling]), publication_mode: 'fallback_public' } });
+  let issue = readIssue(root, '2026-W23');
+  let entry = readWeeklyIndexFile(root)[0];
+  assert.equal(issue.publication_mode, 'fallback_public');
+  assert.equal(issue.fallback_only, true);
+  assert.equal(issue.camera_anchor_count, 0);
+  assert.equal(entry.homepage_badge, 'Tooling Watch Edition');
+  assert.ok(issue.tags.includes('Tooling Watch Edition'));
+  for (const name of ['index.html', 'newsletter.md']) assert.match(fs.readFileSync(path.join(root, 'articles/newsletters/2026-W23', name), 'utf8'), /Tooling Watch Edition/);
+  const camera = { ...section('driver', 'https://example.com/driver'), relevance_bucket: 'camera_driver_image_pipeline' };
+  await writeWeeklyNewsletterArtifacts({ root, date: '2026-06-05', editor: { ...draft([camera]), publication_mode: 'normal_public' } });
+  issue = readIssue(root, '2026-W23');
+  entry = readWeeklyIndexFile(root)[0];
+  assert.equal(issue.sections.length, 2);
+  assert.equal(issue.publication_mode, 'normal_public');
+  assert.equal(issue.camera_anchor_count, 1);
+  assert.equal(issue.fallback_only, false);
+  assert.equal(entry.homepage_badge, '');
+  assert.equal(issue.tags.includes('Tooling Watch Edition'), false);
+  for (const field of ['publication_mode', 'homepage_visibility', 'fallback_only', 'camera_anchor_count', 'fallback_public_ready', 'homepage_badge']) assert.equal(entry[field], issue[field]);
+  for (const name of ['index.html', 'newsletter.md']) assert.doesNotMatch(fs.readFileSync(path.join(root, 'articles/newsletters/2026-W23', name), 'utf8'), /Tooling Watch Edition/);
+});
+
+test('diagnostics-only and unknown publication modes cannot write weekly public output', async () => {
+  for (const mode of ['diagnostics_only', 'unknown']) {
+    const root = tempRoot();
+    await assert.rejects(writeWeeklyNewsletterArtifacts({ root, date: '2026-06-04', editor: { ...draft([section('camera', 'https://example.com/camera')]), publication_mode: mode } }), /Unsupported weekly public publication_mode/);
+    assert.equal(fs.existsSync(path.join(root, 'articles/newsletters/2026-W23/index.html')), false);
+  }
+});

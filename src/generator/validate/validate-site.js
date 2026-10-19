@@ -12,6 +12,7 @@ const {
 } = require('../../shared/common/artifact-paths');
 const {
   articlePolicy,
+  weeklyArticlePolicy,
   articleCountRangeText
 } = require('../../shared/common/newsletter-policy');
 const {
@@ -45,8 +46,9 @@ const {
   FALLBACK_HOMEPAGE_BADGE
 } = require('../../shared/common/publication-mode');
 
-const { weeklyNewsletterStructureStatus, rootIndexContractErrors } = require('../publish/public-structure');
+const { weeklyNewsletterStructureStatus, rootIndexContractErrors, weeklyPublicMatchesBaseline, datedPublicMatchesBaseline } = require('../publish/public-structure');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
+const { publicOutputLane, legacyDatedOutputEnabled } = require('../publish/publication-state-schema');
 
 const root = process.cwd();
 const dataPath = path.join(root, 'articles', 'data', 'newsletters.json');
@@ -310,14 +312,15 @@ function isNewFormat(md) {
     !legacySectionHeadings.some(heading => md.includes(heading));
 }
 
-function validateArticleQuality(item, md, newFormat, strictArtifactValidation) {
+function validateArticleQuality(item, md, newFormat, strictArtifactValidation, options = {}) {
   const articles = mainArticleBlocks(md);
-  const articleCountOutOfRange = articles.length < articlePolicy.mainArticleCount.min ||
-    articles.length > articlePolicy.mainArticleCount.max;
+  const maximum = options.maximum ?? articlePolicy.mainArticleCount.max;
+  const range = options.maximum ? articlePolicy.mainArticleCount.min + '-' + maximum : articleCountRangeText();
+  const articleCountOutOfRange = articles.length < articlePolicy.mainArticleCount.min || articles.length > maximum;
   if (articleCountOutOfRange) {
-    const message = `Newsletter ${item.date} main article count is ${articles.length}; expected Newsletter Policy range ${articleCountRangeText()}.`;
+    const message = `Newsletter ${item.date} main article count is ${articles.length}; expected Newsletter Policy range ${range}.`;
     const exceptionReason = articles.length < articlePolicy.mainArticleCount.min
-      ? reviewPublicationExceptionFor(item.date, articles.length)
+      ? reviewPublicationExceptionFor(options.reviewDate || item.date, articles.length)
       : null;
     if (strictArtifactValidation && exceptionReason) {
       warn(`${message} review publication exception: ${exceptionReason}.`);
@@ -518,6 +521,7 @@ function validateAllRetentionFiles() {
 function validateLatestPublicState(item) {
   const status = readJsonIfExists(path.join(newsroomDir(root, item.date), 'generation-status.json'));
   if (!status) return;
+  if (publicOutputLane(status) === 'weekly' && !legacyDatedOutputEnabled(status)) return;
   const retention = validateRetentionForDate(item.date);
   if (latestDiagnosticsOnly(status) && !retention.valid) {
     fail([
@@ -641,11 +645,13 @@ for (const [index, item] of newsletters.entries()) {
         fail(`Newsletter ${item.date} markdown missing References/참고자료 section`);
       }
 
-      const strictArtifactValidation = strictDates.has(item.date);
+      const declaredStatus = readJsonIfExists(path.join(newsroomDir(root, item.date), 'generation-status.json')) || {};
+      const preservedDated = publicOutputLane(declaredStatus) === 'weekly' && !legacyDatedOutputEnabled(declaredStatus);
+      const strictArtifactValidation = preservedDated ? !datedPublicMatchesBaseline(root, item) : strictDates.has(item.date);
       const htmlPath = publicAssetPath(root, item.html || '');
       const html = htmlPath && fs.existsSync(htmlPath) ? read(htmlPath) : '';
-      const editor = readJsonIfExists(path.join(newsroomDir(root, item.date), 'editor-draft.json'));
-      const status = readJsonIfExists(path.join(newsroomDir(root, item.date), 'generation-status.json')) || {};
+      const editor = preservedDated ? null : readJsonIfExists(path.join(newsroomDir(root, item.date), 'editor-draft.json'));
+      const status = preservedDated ? {} : declaredStatus;
       validatePublicationModeInvariants(item, status);
       validateFallbackPublicPresentation(item, html, md, status);
       validateNewsletterHtmlTags(item, html, strictArtifactValidation);
@@ -661,7 +667,7 @@ for (const [index, item] of newsletters.entries()) {
         errors.push(...structural.errors);
       }
       validateArticleQuality(item, md, isNewFormat(md), strictArtifactValidation);
-      validateSourceGapArtifact(item.date, strictArtifactValidation);
+      if (!preservedDated) validateSourceGapArtifact(item.date, strictArtifactValidation);
     }
   }
 }
@@ -673,22 +679,40 @@ for (const weeklyKey of strictWeeklyKeys({ root, newsletterDatePath })) {
   const result = weeklyNewsletterStructureStatus(root, weeklyKey);
   errors.push(...result.errors.map(error => 'Weekly newsletter ' + weeklyKey + ': ' + error));
   if (result.dataIndex.entry) {
+    const entry = result.dataIndex.entry;
+    const item = { ...entry, date: weeklyKey };
     const html = result.statuses.find(status => status.path.endsWith('/index.html'))?.text || '';
-    validateNewsletterHtmlTags(result.dataIndex.entry, html, true, 'data/newsletters-weekly.json');
-    // Execution dates are independent of the week-start date stored in the index.
-    // Prefer explicit run targets; the anchor is only a fallback for edited weekly output.
+    const markdown = result.statuses.find(status => status.path.endsWith('/newsletter.md'))?.text || '';
+    const issue = readJsonIfExists(path.join(root, 'articles/newsletters', weeklyKey, 'issue.json')) || {};
+    validateNewsletterHtmlTags(item, html, true, 'data/newsletters-weekly.json');
+    validatePublicationModeInvariants(item, issue);
+    validateFallbackPublicPresentation(item, html, markdown, issue);
+    for (const field of ['publication_mode', 'homepage_visibility', 'fallback_only', 'camera_anchor_count', 'fallback_public_ready', 'homepage_badge']) {
+      if ((entry[field] !== undefined || issue[field] !== undefined) && entry[field] !== issue[field]) fail('Weekly newsletter ' + weeklyKey + ': ' + field + ' differs between issue.json and index');
+    }
     const explicitDates = [...strictDates].filter(date => datePattern.test(date) && weeklyKeyForDate(date) === weeklyKey);
-    const anchor = result.dataIndex.entry.generation_anchor_date;
+    const anchor = entry.generation_anchor_date || issue.generation_anchor_date;
     const runDates = explicitDates.length > 0 ? explicitDates : anchor ? [anchor] : [];
+    const renderedCount = mainArticleBlocks(markdown).length;
+    const sectionCount = ensureArray(issue.sections).filter(section => section && section.public_article !== false).length;
+    if (sectionCount !== renderedCount || (entry.article_count !== undefined && (!Number.isInteger(entry.article_count) || entry.article_count !== renderedCount))) {
+      fail('Weekly newsletter ' + weeklyKey + ': article_count must match public Markdown and issue sections');
+    }
+    validateArticleQuality(item, markdown, isNewFormat(markdown), true, { maximum: weeklyArticlePolicy.weeklyArticleLimit, reviewDate: runDates[0] });
     for (const date of runDates) {
       if (!datePattern.test(date) || weeklyKeyForDate(date) !== weeklyKey) {
         fail('Weekly newsletter ' + weeklyKey + ': invalid generation_anchor_date: ' + date);
         continue;
       }
-      if (seenDates.has(date)) continue; // Already inspected by the preserved dated lane.
-      const status = readJsonIfExists(path.join(newsroomDir(root, date), 'generation-status.json'));
-      // A failed later run does not publish the already existing accumulated week again.
-      if (status?.public_output_expected === false) continue;
+      const statusPath = path.join(newsroomDir(root, date), 'generation-status.json');
+      const status = readJsonIfExists(statusPath);
+      if ((!status && fs.existsSync(statusPath)) || (status?.public_output_lane === 'weekly' && status.date !== date)) fail('Invalid weekly execution status for ' + date);
+      const failed = status && (latestDiagnosticsOnly(status) || status.public_output_expected === false || status.weekly_output_status === 'failed');
+      if (failed) {
+        if (!weeklyPublicMatchesBaseline(root, weeklyKey)) fail('Weekly newsletter ' + weeklyKey + ': diagnostics-only execution ' + date + ' has changed or unmeasured public exposure');
+        continue;
+      }
+      if (status) validatePublicationModeInvariants({ ...status, date }, status);
       validateSourceGapArtifact(date, true);
     }
   }

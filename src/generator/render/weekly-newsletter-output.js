@@ -18,6 +18,7 @@
 const { ensureArray } = require('../../shared/common/value-coercion');
 const fs = require('fs');
 const path = require('path');
+const { PUBLICATION_MODES, publicationDecisionForSections, fallbackIssueTags } = require('../../shared/common/publication-mode');
 
 const { buildWeeklyNewsletterPage, orderedWeeklySections } = require('./weekly-newsletter-page');
 const { weeklyTopicTags } = require('./newsletter-renderer');
@@ -34,6 +35,22 @@ const {
   storyContractVersionFromPublicContractVersion
 } = require('../../shared/common/story-contract-version');
 const { coverageForAnchorDate } = require('../../shared/common/coverage-week');
+
+// Presentation is derived from the final accumulated set when a publication mode
+// was supplied. This does not grant AI/quality readiness before the later gates.
+function weeklyPublicationFields(editor, existingIssue, articles) {
+  const input = editor || {};
+  const previous = existingIssue || {};
+  const declared = input.publication_mode ?? previous.publication_mode;
+  const supplied = declared !== undefined || input.fallback_only !== undefined || previous.fallback_only !== undefined || input.camera_anchor_count !== undefined || previous.camera_anchor_count !== undefined;
+  if (!supplied) return {};
+  if (declared !== undefined && ![PUBLICATION_MODES.NORMAL_PUBLIC, PUBLICATION_MODES.REVIEW_ONLY, PUBLICATION_MODES.FALLBACK_PUBLIC].includes(declared)) throw new Error('Unsupported weekly public publication_mode: ' + declared);
+  const decision = publicationDecisionForSections(articles, {
+    publicNewsletterReady: true,
+    finalPublishReady: declared !== PUBLICATION_MODES.REVIEW_ONLY
+  });
+  return Object.fromEntries(['publication_mode', 'homepage_visibility', 'fallback_only', 'camera_anchor_count', 'fallback_public_ready', 'homepage_badge'].map(field => [field, decision[field]]));
+}
 
 // Browser-safe (https) image for a weekly article section, used to show one article image on the
 // homepage Latest card. Returns '' when the section has no usable https image.
@@ -333,7 +350,9 @@ async function writeWeeklyNewsletterArtifacts({
   // 아카이브/홈 카드의 주제 분류·kicker 는 위클리 tags 로 결정된다. 이슈 레벨 editor.tags(대개
   // ['Camera HAL','Android'] 기본값이라 분류가 단조롭고 Driver/Image Processing/AI/SoC Platform
   // 필터가 비어 버린다) 대신, 그 주 기사(section)들의 relevance bucket 을 topic 태그로 집계한다.
-  const mergedTags = weeklyTopicTags(articles);
+  const publicationFields = weeklyPublicationFields(editor, existingIssue, articles);
+  const topicTags = weeklyTopicTags(articles);
+  const mergedTags = publicationFields.fallback_only ? fallbackIssueTags(topicTags) : topicTags;
 
   // coverage(대상 주) 5필드: 새 draft(editor)가 가진 값을 우선하고, 없으면 기존 이슈에 이미
   // 실린 값을 보존하며(pass-through), 그마저 없으면 이 함수가 방금 계산한 coverage로 채운다.
@@ -354,6 +373,7 @@ async function writeWeeklyNewsletterArtifacts({
 
   const mergedDraft = {
     ...editor,
+    ...publicationFields,
     sections: articles,
     // 병합된 위클리 tags 를 렌더 **전에** draft 에 넣는다. 렌더 후 page.issue.tags 를 덮어쓰면
     // index.html(병합 전 editor tags)과 issue.json(병합 tags)이 서로 다른 tag 집합으로 커밋되어
@@ -418,6 +438,7 @@ async function writeWeeklyNewsletterArtifacts({
     md: page.markdownRoute,
     tags: mergedTags,
     article_count: articles.length,
+    ...publicationFields,
     // Distinct https article images (section order) so the homepage Latest card can show one
     // article image that is not the headline image.
     article_images: weeklyArticleImages(page.issue.sections),

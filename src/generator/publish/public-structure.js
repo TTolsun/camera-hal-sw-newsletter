@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const { isTrue } = require('../../shared/common/value-coercion');
 const { publicOutputLane } = require('./publication-state-schema');
 const { weeklyKeyForDate } = require('../reporter/weekly-newsletter');
@@ -291,7 +292,55 @@ function executionWeeklyOutputWritten(root, date, status = {}) {
     value.weekly_output_status === 'written');
 }
 
+// A failed run may leave the previously committed week visible only when its
+// public files, entry and shared exposure state still match the publication base.
+function publicationBaselineRevision(env) {
+  return env.GITHUB_EVENT_NAME === 'pull_request' && env.GITHUB_BASE_REF
+    ? 'origin/' + env.GITHUB_BASE_REF : env.GITHUB_EVENT_NAME === 'push' ? 'HEAD^' : 'HEAD';
+}
+
+function weeklyPublicMatchesBaseline(root, weeklyKey, env = process.env) {
+  const revision = publicationBaselineRevision(env);
+  const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8', timeout: 10000, stdio: ['ignore', 'pipe', 'ignore'] });
+  try {
+    git(['rev-parse', '--verify', revision]);
+    const files = ['index.html', 'newsletter.md', 'issue.json'].map(name => 'articles/newsletters/' + weeklyKey + '/' + name);
+    for (const file of [...files, 'articles/data/homepage-headline.json', 'state/article-exposure-history.json']) {
+      const existed = git(['ls-tree', '--name-only', revision, '--', file]).trim();
+      const disk = path.join(root, file);
+      if (!existed && !fs.existsSync(disk) && !files.includes(file)) continue;
+      if (!existed || !fs.existsSync(disk) || git(['show', revision + ':' + file]) !== fs.readFileSync(disk, 'utf8')) return false;
+    }
+    const relPath = 'articles/data/newsletters-weekly.json';
+    const before = JSON.parse(git(['show', revision + ':' + relPath]));
+    const after = JSON.parse(fs.readFileSync(path.join(root, relPath), 'utf8'));
+    if (!Array.isArray(before) || !Array.isArray(after)) return false;
+    const priorEntry = before.find(item => item?.weeklyKey === weeklyKey);
+    return Boolean(priorEntry) && JSON.stringify(priorEntry) === JSON.stringify(after.find(item => item?.weeklyKey === weeklyKey));
+  } catch (_) {
+    return false; // No measured committed baseline is never publication approval.
+  }
+}
+
+function datedPublicMatchesBaseline(root, item, env = process.env) {
+  const revision = publicationBaselineRevision(env);
+  const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8', timeout: 10000, stdio: ['ignore', 'pipe', 'ignore'] });
+  try {
+    const entries = JSON.parse(git(['show', revision + ':articles/data/newsletters.json']));
+    if (!Array.isArray(entries) || JSON.stringify(entries.find(entry => entry?.date === item.date)) !== JSON.stringify(item)) return false;
+    for (const [field, name] of [['html', 'index.html'], ['md', 'newsletter.md']]) {
+      const served = 'newsletters/' + item.date + '/' + name;
+      if (item[field] !== served) return false;
+      const file = 'articles/' + served;
+      if (git(['show', revision + ':' + file]) !== fs.readFileSync(path.join(root, file), 'utf8')) return false;
+    }
+    return true;
+  } catch (_) { return false; }
+}
+
 module.exports = {
+  datedPublicMatchesBaseline,
+  weeklyPublicMatchesBaseline,
   executionWeeklyOutputWritten,
   executionPublicStructureStatus,
   publicationTarget,
