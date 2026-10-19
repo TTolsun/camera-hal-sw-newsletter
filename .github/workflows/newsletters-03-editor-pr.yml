@@ -409,6 +409,10 @@ jobs:
             copy_tree_if_present "articles/content/newsroom/${DATE}"
             copy_if_present "articles/newsletters/${DATE}/newsletter.md"
             copy_if_present "articles/newsletters/${DATE}/index.html"
+            # Preserve date archives in the debug snapshot while weekly output is primary.
+            WEEKLY_KEY="$(node -e 'process.stdout.write(require("./src/generator/reporter/weekly-newsletter").weeklyKeyForDate(process.argv[1]))' "$DATE")"
+            copy_tree_if_present "articles/newsletters/${WEEKLY_KEY}"
+            copy_if_present "articles/data/newsletters-weekly.json"
             copy_if_present "articles/data/newsletters.json"
             copy_if_present "articles/data/homepage-headline.json"
             copy_if_present "state/article-exposure-history.json"

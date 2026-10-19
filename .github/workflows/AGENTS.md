@@ -26,7 +26,7 @@
 - `review-only-publication`은 public newsletter files가 준비되어 있고 editor merge 시 GitHub Pages에 표시될 수 있는 PR에만 사용합니다.
 - `diagnostics-only`는 public newsletter files가 없어 merge해도 GitHub Pages에 표시되지 않는 PR에만 사용합니다.
 - `review-only-publication`과 `diagnostics-only`는 동시에 붙이면 안 됩니다.
-- GitHub Pages 표시 여부는 PR label이나 `final_publish_ready` 단독 값이 아니라, merge된 `main`의 `articles/newsletters/YYYY-MM-DD/index.html`, `articles/newsletters/YYYY-MM-DD/newsletter.md`, `articles/data/newsletters.json` entry 기준으로 판단합니다.
+- 새 생성 실행의 GitHub Pages 표시 여부는 PR label이나 `final_publish_ready` 단독 값이 아니라, merge된 `main`의 발행 주 `articles/newsletters/YYYY-Wnn/index.html`, `newsletter.md`, `issue.json`과 `articles/data/newsletters-weekly.json` 정규 경로 항목을 검증한 결과로 판단합니다. 실행일 newsroom 산출물은 계속 `YYYY-MM-DD`를 사용합니다. 과거 날짜 URL/인덱스·retention 계약은 보존하고 새 실행의 주간 준비 판정을 대체하지 않습니다.
 
 ## 리뷰 체크리스트 (Review Checklist)
 

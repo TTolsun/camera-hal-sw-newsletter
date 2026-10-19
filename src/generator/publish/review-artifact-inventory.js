@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
+const { publicOutputLane } = require('./publication-state-schema');
 const { translationArtifactPaths } = require('../render/translation-state');
 
 const {
@@ -203,9 +204,9 @@ function entry({
   };
 }
 
-// Additive weekly public artifacts (#486). Present only on publish-ready runs that emitted a weekly
-// page; optional and non-blocking, but committed (public_output grade) so they land in the review PR.
-function weeklyPublicOutputEntries(date) {
+// Weekly public output is required for newly declared weekly runs. Undeclared historical
+// dated runs retain their original dated requirements and additive weekly compatibility.
+function weeklyPublicOutputEntries(date, weeklyPrimary = false) {
   let weeklyKey;
   try {
     weeklyKey = weeklyKeyForDate(date);
@@ -218,37 +219,37 @@ function weeklyPublicOutputEntries(date) {
       relPath: `articles/newsletters/${weeklyKey}/index.html`,
       group: 'public_output',
       role: 'weekly_public_html',
-      required: REQUIRED_OPTIONAL,
+      required: weeklyPrimary ? REQUIRED_WHEN_PUBLIC_OUTPUT : REQUIRED_OPTIONAL,
       reviewOrder: 33,
       humanReadable: true,
-      reviewBlocking: false
+      reviewBlocking: weeklyPrimary
     }),
     entry({
       relPath: `articles/newsletters/${weeklyKey}/newsletter.md`,
       group: 'public_output',
       role: 'weekly_public_markdown',
-      required: REQUIRED_OPTIONAL,
+      required: weeklyPrimary ? REQUIRED_WHEN_PUBLIC_OUTPUT : REQUIRED_OPTIONAL,
       reviewOrder: 34,
       humanReadable: true,
-      reviewBlocking: false
+      reviewBlocking: weeklyPrimary
     }),
     entry({
       relPath: `articles/newsletters/${weeklyKey}/issue.json`,
       group: 'public_output',
       role: 'weekly_public_issue',
-      required: REQUIRED_OPTIONAL,
+      required: weeklyPrimary ? REQUIRED_WHEN_PUBLIC_OUTPUT : REQUIRED_OPTIONAL,
       reviewOrder: 35,
       humanReadable: false,
-      reviewBlocking: false
+      reviewBlocking: weeklyPrimary
     }),
     entry({
       relPath: 'articles/data/newsletters-weekly.json',
       group: 'public_output',
       role: 'weekly_public_index',
-      required: REQUIRED_OPTIONAL,
+      required: weeklyPrimary ? REQUIRED_WHEN_PUBLIC_OUTPUT : REQUIRED_OPTIONAL,
       reviewOrder: 36,
       humanReadable: false,
-      reviewBlocking: false
+      reviewBlocking: weeklyPrimary
     }),
     // #51: sitemap.xml은 주간 발행 목록(newsletters-weekly.json)이 바뀔 때 함께 재생성되므로
     // 같은 public_output 등급으로 commit allowlist에 포함시켜 review PR에 실린다.
@@ -264,9 +265,10 @@ function weeklyPublicOutputEntries(date) {
   ];
 }
 
-function exactCatalog(date) {
+function exactCatalog(date, publicOutputLane = 'daily') {
+  const weeklyPrimary = publicOutputLane === 'weekly';
   return [
-    ...weeklyPublicOutputEntries(date),
+    ...weeklyPublicOutputEntries(date, weeklyPrimary),
     entry({
       relPath: newsroomRelPath(date, 'weekly-merge-report.json'),
       group: 'gate_reports',
@@ -316,28 +318,31 @@ function exactCatalog(date) {
       relPath: `articles/newsletters/${date}/newsletter.md`,
       group: 'public_output',
       role: 'public_markdown',
-      required: REQUIRED_WHEN_PUBLIC_OUTPUT,
+      required: weeklyPrimary ? REQUIRED_OPTIONAL : REQUIRED_WHEN_PUBLIC_OUTPUT,
       reviewOrder: 30,
       humanReadable: true,
-      reviewBlocking: true
+      reviewBlocking: true,
+      reviewBlockingWhenPresent: true
     }),
     entry({
       relPath: `articles/newsletters/${date}/index.html`,
       group: 'public_output',
       role: 'public_html',
-      required: REQUIRED_WHEN_PUBLIC_OUTPUT,
+      required: weeklyPrimary ? REQUIRED_OPTIONAL : REQUIRED_WHEN_PUBLIC_OUTPUT,
       reviewOrder: 31,
       humanReadable: true,
-      reviewBlocking: true
+      reviewBlocking: true,
+      reviewBlockingWhenPresent: true
     }),
     entry({
       relPath: 'articles/data/newsletters.json',
       group: 'public_output',
       role: 'public_index',
-      required: REQUIRED_WHEN_PUBLIC_OUTPUT,
+      required: weeklyPrimary ? REQUIRED_OPTIONAL : REQUIRED_WHEN_PUBLIC_OUTPUT,
       reviewOrder: 32,
       humanReadable: false,
-      reviewBlocking: true
+      reviewBlocking: true,
+      reviewBlockingWhenPresent: true
     }),
     entry({
       relPath: 'articles/data/homepage-headline.json',
@@ -714,13 +719,14 @@ function scannedReviewPaths(root, date) {
     repoPath('articles', 'content', 'newsroom', date),
     repoPath('articles', 'content', 'collected-news', date),
     repoPath('articles', 'content', 'source-events', date),
-    repoPath('articles', 'newsletters', date)
+    repoPath('articles', 'newsletters', date),
+    repoPath('articles', 'newsletters', weeklyKeyForDate(date))
   ];
   for (const dir of dirs) {
     walkFiles(root, path.join(root, ...dir.split('/')), paths);
   }
   // article-exposure-history.json은 서빙되지 않는 파이프라인 state라 state/에 남는다.
-  for (const relPath of ['articles/data/newsletters.json', 'articles/data/homepage-headline.json', 'state/article-exposure-history.json']) {
+  for (const relPath of ['articles/data/newsletters.json', 'articles/data/newsletters-weekly.json', 'articles/sitemap.xml', 'articles/data/homepage-headline.json', 'state/article-exposure-history.json']) {
     if (fileExists(root, relPath)) paths.push(relPath);
   }
   return [...new Set(paths.map(toPosix))]
@@ -869,14 +875,22 @@ function buildReviewArtifactInventory({
   if (!date) {
     throw new Error('buildReviewArtifactInventory requires date');
   }
+  const recordedStatus = readJsonIfExists(root, newsroomRelPath(date, 'generation-status.json')) ||
+    readJsonIfExists(root, '.tmp/newsletter-generation-status.json') || {};
+  const lane = publicOutputLane({
+    public_output_lane: runContext.publicOutputLane ?? recordedStatus.public_output_lane
+  });
   const context = {
+    publicOutputLane: lane,
     seedUsed: deriveSeedUsed(root, date, runContext),
-    publicOutputExpected: derivePublicOutputExpected(runContext),
+    publicOutputExpected: derivePublicOutputExpected({
+      publicOutputExpected: runContext.publicOutputExpected ?? (lane === 'weekly' ? recordedStatus.public_output_expected : undefined)
+    }),
     status: deriveStatusLabel(root, date, runContext),
     recoveryPromptExpected: booleanFrom(runContext.recoveryPromptExpected) === true
   };
   const changedSet = normalizeChangedArtifacts(changedArtifacts);
-  const exactEntries = exactCatalog(date);
+  const exactEntries = exactCatalog(date, context.publicOutputLane);
   const byPath = new Map(exactEntries.map(item => [item.path, item]));
   for (const relPath of scannedReviewPaths(root, date)) {
     if (byPath.has(relPath)) continue;
@@ -898,12 +912,14 @@ function buildReviewArtifactInventory({
     attentionRequired: reviewArtifacts.filter(artifact => artifact.review_attention_required).length,
     seedUsed: context.seedUsed,
     publicOutputExpected: context.publicOutputExpected,
+    publicOutputLane: context.publicOutputLane,
     status: context.status
   };
 
   return {
     schemaVersion: REVIEW_ARTIFACT_SCHEMA_VERSION,
     date,
+    publicOutputLane: context.publicOutputLane,
     seedUsed: context.seedUsed,
     publicOutputExpected: context.publicOutputExpected,
     status: context.status,

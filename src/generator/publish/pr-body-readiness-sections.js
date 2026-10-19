@@ -7,6 +7,7 @@ const {
   requiredPublicFiles,
   resolveReviewableArtifacts
 } = require('./resolve-reviewable-artifacts');
+const { publicationTarget } = require('./public-structure');
 const {
   PUBLICATION_MODES
 } = require('../../shared/common/publication-mode');
@@ -78,7 +79,8 @@ function renderReviewOnlyStatus(status, handoff, root, date) {
 
 function renderPublicNewsletterReadiness(root, date, handoff) {
   if (!handoff || (!handoff.diagnosticsOnly && !handoff.publicNewsletterReady)) return '';
-  const required = date ? requiredPublicFiles(date) : [];
+  const target = date ? publicationTarget(date, handoff.status) : null;
+  const required = handoff.requiredPublicArtifacts || (target ? requiredPublicFiles(target.key, target.lane) : []);
   return [
     '## Public Newsletter Readiness',
     '',

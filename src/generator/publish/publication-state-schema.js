@@ -192,7 +192,21 @@ function resolvePublicStateFields({
   };
 }
 
+// Missing lane declarations are retained archive statuses, not new execution input.
+function publicOutputLane(status = {}) {
+  const declared = status.public_output_lane;
+  if (declared === undefined || declared === 'daily') return 'daily';
+  if (declared === 'weekly') return 'weekly';
+  throw new Error('Unsupported public_output_lane: ' + declared);
+}
+
+function legacyDatedOutputEnabled(status = {}) {
+  return publicOutputLane(status) === 'daily' || status.legacy_dated_output_enabled === true;
+}
+
 module.exports = {
+  legacyDatedOutputEnabled,
+  publicOutputLane,
   PUBLIC_STATES,
   RUN_MODES,
   PUBLIC_ARTIFACT_POLICIES,

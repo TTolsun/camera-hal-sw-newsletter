@@ -54,7 +54,8 @@ function renderGeneratedArtifacts(date, status = {}, root = process.cwd(), chang
     runContext: {
       status: status.status || 'unknown',
       seedUsed: status.seed_used ?? status.candidate_input?.seed_used,
-      publicOutputExpected: publicOutputExpectedFromStatus(status)
+      publicOutputExpected: publicOutputExpectedFromStatus(status),
+      publicOutputLane: status.public_output_lane
     }
   });
   return renderGeneratedArtifactsSummary(inventory) + '\n\n' + renderHeavyRetentionNote(date);

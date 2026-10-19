@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { execFileSync } = require('child_process');
+const { publicationTarget, requiredPublicFiles } = require('./public-structure');
 const {
   collectedCandidatesRelPath,
   newsroomRelPath
@@ -25,7 +26,8 @@ function toPosix(value) {
   return value.split(path.sep).join('/');
 }
 
-function criticalFiles(date) {
+function criticalFiles(date, status = {}) {
+  const target = publicationTarget(date, status);
   return [
     '.tmp/newsletter-date.txt',
     '.tmp/newsletter-generation-status.json',
@@ -50,8 +52,7 @@ function criticalFiles(date) {
     newsroomRelPath(date, 'retry-history.md'),
     'articles/data/homepage-headline.json',
     'state/article-exposure-history.json',
-    `articles/newsletters/${date}/newsletter.md`,
-    `articles/newsletters/${date}/index.html`
+    ...requiredPublicFiles(target.key, target.lane)
   ];
 }
 
@@ -210,6 +211,7 @@ function runContextFromStatus(status) {
   const explicitPublicOutputExpected = status?.public_output_expected ?? status?.publicOutputExpected;
   return {
     status: status?.status || 'unknown',
+    publicOutputLane: status?.public_output_lane,
     seedUsed: status?.seed_used ?? status?.candidate_input?.seed_used,
     publicOutputExpected: explicitPublicOutputExpected === true ||
       explicitPublicOutputExpected === 'true' ||
@@ -271,7 +273,7 @@ function buildManifest(snapshotDir, date) {
     );
   }
 
-  const missingCriticalFiles = criticalFiles(date).filter(relPath => {
+  const missingCriticalFiles = criticalFiles(date, status || {}).filter(relPath => {
     return !fs.existsSync(path.join(resolvedSnapshotDir, ...relPath.split('/')));
   });
   const snapshotRelPaths = walkFiles(resolvedSnapshotDir).sort();
