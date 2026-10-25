@@ -2,7 +2,7 @@
   "schema_version": 1,
   "report_type": "seed_evidence_pack",
   "newsletter_date": "2026-10-26",
-  "generated_at": "2026-10-25T15:54:55.810Z",
+  "generated_at": "2026-10-25T17:10:25.931Z",
   "packs": [
     {
       "evidence_pack_id": "seed-01-b48d6968e3-pack",
@@ -19,7 +19,7 @@
           "published_at": "2026-10-22",
           "source_backed_items": [
             "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
-            "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+            "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure. Commit message: In Camera2, CaptureCallback.onCaptureFailed on a..."
           ],
           "source_role": "official_release_source",
           "evidence_granularity": "seed_page"
@@ -56,7 +56,7 @@
           "published_at": "2026-10-20",
           "source_backed_items": [
             "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
-            "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+            "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder. Commit message: Releasing a MediaCodec video encoder that was conf..."
           ],
           "source_role": "official_release_source",
           "evidence_granularity": "seed_page"

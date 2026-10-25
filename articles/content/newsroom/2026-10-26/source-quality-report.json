@@ -25,6 +25,24 @@
       "candidate_id": "a49cac6ab8e4e729",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
       "title": "Fix ZslControl ring buffer and ImageProxy leaks - platform/frameworks/support",
+      "source_quality_score": 0.968,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "6220b1582ee21a5e",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4357348",
+      "title": "Populate logical CameraCharacteristics in HighEndDeviceTemplate - platform/frameworks/support",
       "source_quality_score": 0.927,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
@@ -32,6 +50,24 @@
         "camera_relevance": 0.9,
         "android_hal_relevance": 0.9,
         "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "39b79935a19e9efe",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365754",
+      "title": "Fix Context and state callback leaks in camera2 - platform/frameworks/support",
+      "source_quality_score": 0.858,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.84,
+        "android_hal_relevance": 0.84,
+        "technical_depth": 0.55,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -58,16 +94,16 @@
       }
     },
     {
-      "candidate_id": "427c451491dde5c6",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
-      "title": "Fix SessionConfigAdapter.reportSurfaceInvalid race - platform/frameworks/support",
-      "source_quality_score": 0.835,
+      "candidate_id": "511d784d0e1d0de8",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
+      "source_quality_score": 0.927,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.78,
-        "android_hal_relevance": 0.78,
-        "technical_depth": 0.55,
+        "camera_relevance": 0.9,
+        "android_hal_relevance": 0.9,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -76,9 +112,9 @@
       }
     },
     {
-      "candidate_id": "bc6255769d07f9de",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4349748",
-      "title": "Make CameraMetadata a CameraCharacteristicsWrapper - platform/frameworks/support",
+      "candidate_id": "427c451491dde5c6",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+      "title": "Fix SessionConfigAdapter.reportSurfaceInvalid race - platform/frameworks/support",
       "source_quality_score": 0.879,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
@@ -97,13 +133,13 @@
       "candidate_id": "34393bef77ef1005",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381850",
       "title": "Align camera-testing with CAMERA atomic group - platform/frameworks/support",
-      "source_quality_score": 0.81,
+      "source_quality_score": 0.903,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.72,
-        "android_hal_relevance": 0.72,
-        "technical_depth": 0.55,
+        "camera_relevance": 0.84,
+        "android_hal_relevance": 0.84,
+        "technical_depth": 0.85,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -130,35 +166,17 @@
       }
     },
     {
-      "candidate_id": "e5f6162b42a53b1d",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
-      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
-      "source_quality_score": 0.597,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.46,
-        "android_hal_relevance": 0.46,
-        "technical_depth": 0.55,
-        "recency_score": 0.8,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "4b3e1c61e45c478c",
-      "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
-      "title": "Bringing our latest frontier model to Android Developers",
-      "source_quality_score": 0.884,
+      "candidate_id": "14487cfa6e274aa1",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4382437",
+      "title": "Disable AV1 recording on Pixel 5 and Samsung SM-A042M - platform/frameworks/support",
+      "source_quality_score": 0.903,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0.84,
         "android_hal_relevance": 0.84,
         "technical_depth": 0.85,
-        "recency_score": 0.8,
+        "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -166,54 +184,18 @@
       }
     },
     {
-      "candidate_id": "ed68e50665cd82c0",
-      "url": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
-      "title": "Device Streaming and Android skills - available in Android CLI",
-      "source_quality_score": 0.83,
+      "candidate_id": "98c9832f43603bc3",
+      "url": "https://lore.kernel.org/linux-media/20261025-hm1092-driver-v8-0-9cd575c366cf@gmail.com/",
+      "title": "[PATCH v8 0/3] media: Add Himax HM1092 mono NIR sensor driver",
+      "source_quality_score": 0.93,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.78,
-        "android_hal_relevance": 0.78,
+        "reliability_score": 0.85,
+        "camera_relevance": 1,
+        "android_hal_relevance": 1,
         "technical_depth": 0.85,
-        "recency_score": 0.5,
+        "recency_score": 1,
         "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "c4ed7c259746bedb",
-      "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available/",
-      "title": "MSVC Build Tools Version 14.52 Release Candidate Now Available",
-      "source_quality_score": 0.247,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.2,
-        "camera_relevance": 0.25,
-        "android_hal_relevance": 0.25,
-        "technical_depth": 0.55,
-        "recency_score": 0.15,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "56fc4a4b8beb573e",
-      "url": "https://openai.com/index/cloudflare-cyber",
-      "title": "Cloudflare links vulnerability discovery to defense with OpenAI",
-      "source_quality_score": 0.478,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.44,
-        "android_hal_relevance": 0.44,
-        "technical_depth": 0.25,
-        "recency_score": 0.15,
-        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -310,6 +292,78 @@
       }
     },
     {
+      "candidate_id": "3ef47f472c4eb396",
+      "url": "https://lore.kernel.org/linux-media/CABZx5LvZ29kUp2OEhLebLS5DRELRsh1LXH5-YDMEkvsG4c06mA@mail.gmail.com/",
+      "title": "[PATCH 1/2] media: ipu6: isys: use the port B 2-lane PHY settings for 1-lane sensors",
+      "source_quality_score": 0.764,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.81,
+        "android_hal_relevance": 0.81,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "77bc22ca791186a3",
+      "url": "https://lore.kernel.org/linux-media/20261021134959.2599575-1-hitesh@ebytelogic.com/",
+      "title": "[PATCH v6 0/4] media: qcom: camss: rebase fixes and SC7280 enablement for the streams API",
+      "source_quality_score": 0.83,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.75,
+        "android_hal_relevance": 0.75,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "5b37dbd621b57e67",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8618567",
+      "title": "camera: usb: Release V4L2 buffers on StreamOn() failure - chromiumos/platform2",
+      "source_quality_score": 0.887,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.8,
+        "android_hal_relevance": 0.8,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c42915ec5525af18",
+      "url": "https://patchwork.libcamera.org/patch/28600/",
+      "title": "[1/2] libcamera: software_isp: Add AllocCmaDmaBuffers constructor flag",
+      "source_quality_score": 0.806,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.69,
+        "android_hal_relevance": 0.69,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "db85ab44e1eba980",
       "url": "https://patchwork.libcamera.org/patch/28597/",
       "title": "[v2] libcamera: software_isp: Allow limiting output sizes",
@@ -346,6 +400,24 @@
       }
     },
     {
+      "candidate_id": "d46d6d82d9308b0f",
+      "url": "https://patchwork.libcamera.org/patch/28549/",
+      "title": "[v2] v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
+      "source_quality_score": 0.758,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 0.85,
+        "camera_relevance": 0.57,
+        "android_hal_relevance": 0.57,
+        "technical_depth": 0.85,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
       "candidate_id": "aa1a7e23a81f8c7b",
       "url": "https://patchwork.libcamera.org/patch/28558/",
       "title": "[v2,1/3] ipa: libipa: camera_sensor_helper: Match multiple sensors per helper",
@@ -367,24 +439,6 @@
       "candidate_id": "b2d73737f4796ba9",
       "url": "https://patchwork.libcamera.org/patch/28551/",
       "title": "[v16,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
-      "source_quality_score": 0.758,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "d46d6d82d9308b0f",
-      "url": "https://patchwork.libcamera.org/patch/28549/",
-      "title": "[v2] v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
       "source_quality_score": 0.758,
       "source_quality_bucket": "review_candidate",
       "breakdown": {
@@ -436,105 +490,15 @@
       }
     },
     {
-      "candidate_id": "5b37dbd621b57e67",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8618567",
-      "title": "camera: usb: Release V4L2 buffers on StreamOn() failure - chromiumos/platform2",
-      "source_quality_score": 0.887,
+      "candidate_id": "50445a8356e72b4c",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424688",
+      "title": "camera: Check overflow in Size::area() and validate thumbnail size - chromiumos/platform2",
+      "source_quality_score": 0.838,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0.8,
         "android_hal_relevance": 0.8,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "a470e73da7be1555",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
-      "title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
-      "source_quality_score": 0.742,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.56,
-        "android_hal_relevance": 0.56,
-        "technical_depth": 0.85,
-        "recency_score": 0.5,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "325dffdce8c1db73",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
-      "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
-      "source_quality_score": 0.742,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.56,
-        "android_hal_relevance": 0.56,
-        "technical_depth": 0.85,
-        "recency_score": 0.5,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "1b473ceac34eb92d",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
-      "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
-      "source_quality_score": 0.742,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.56,
-        "android_hal_relevance": 0.56,
-        "technical_depth": 0.85,
-        "recency_score": 0.5,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "51cf61e868482023",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
-      "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
-      "source_quality_score": 0.742,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.56,
-        "android_hal_relevance": 0.56,
-        "technical_depth": 0.85,
-        "recency_score": 0.5,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "50c77c259dc18a1e",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
-      "title": "camera: Prevent UAF on watcher callback in ReloadableConfigFile - chromiumos/platform2",
-      "source_quality_score": 0.742,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.56,
-        "android_hal_relevance": 0.56,
         "technical_depth": 0.85,
         "recency_score": 0.5,
         "evidence_strength": 0.9,
@@ -547,12 +511,48 @@
       "candidate_id": "04f18f4ec0b911ac",
       "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
       "title": "cros_camera_service: Fix UAF in StreamManipulatorHelper - chromiumos/platform2",
-      "source_quality_score": 0.742,
-      "source_quality_bucket": "review_candidate",
+      "source_quality_score": 0.838,
+      "source_quality_bucket": "strong_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.56,
-        "android_hal_relevance": 0.56,
+        "camera_relevance": 0.8,
+        "android_hal_relevance": 0.8,
+        "technical_depth": 0.85,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "a470e73da7be1555",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424692",
+      "title": "camera: Bounds-check APPn parsing and BLOB output buffer size - chromiumos/platform2",
+      "source_quality_score": 0.814,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.74,
+        "android_hal_relevance": 0.74,
+        "technical_depth": 0.85,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "51cf61e868482023",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
+      "source_quality_score": 0.814,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.74,
+        "android_hal_relevance": 0.74,
         "technical_depth": 0.85,
         "recency_score": 0.5,
         "evidence_strength": 0.9,
@@ -565,12 +565,48 @@
       "candidate_id": "6bdc7bf72ddbf00a",
       "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
       "title": "camera: Fix cross-thread UAF in HdrNetStreamManipulator options reload - chromiumos/platform2",
-      "source_quality_score": 0.742,
+      "source_quality_score": 0.814,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.74,
+        "android_hal_relevance": 0.74,
+        "technical_depth": 0.85,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "325dffdce8c1db73",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
+      "source_quality_score": 0.765,
       "source_quality_bucket": "review_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.56,
-        "android_hal_relevance": 0.56,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
+        "technical_depth": 0.85,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "1b473ceac34eb92d",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
+      "source_quality_score": 0.765,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.62,
+        "android_hal_relevance": 0.62,
         "technical_depth": 0.85,
         "recency_score": 0.5,
         "evidence_strength": 0.9,
@@ -598,17 +634,17 @@
       }
     },
     {
-      "candidate_id": "6b8ba60098ec8d3c",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4368895",
-      "title": "Reuse audio buffers in BufferedAudioStream - platform/frameworks/support",
-      "source_quality_score": 0.879,
+      "candidate_id": "4b3e1c61e45c478c",
+      "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "title": "Bringing our latest frontier model to Android Developers",
+      "source_quality_score": 0.884,
       "source_quality_bucket": "strong_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.78,
-        "android_hal_relevance": 0.78,
+        "camera_relevance": 0.84,
+        "android_hal_relevance": 0.84,
         "technical_depth": 0.85,
-        "recency_score": 1,
+        "recency_score": 0.8,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -616,15 +652,69 @@
       }
     },
     {
-      "candidate_id": "239ae1a406f24752",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4384477",
-      "title": "Add API files for heifwriter 1.2.0-rc02 - platform/frameworks/support",
-      "source_quality_score": 0.597,
+      "candidate_id": "ed68e50665cd82c0",
+      "url": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
+      "title": "Device Streaming and Android skills - available in Android CLI",
+      "source_quality_score": 0.83,
+      "source_quality_bucket": "strong_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.78,
+        "android_hal_relevance": 0.78,
+        "technical_depth": 0.85,
+        "recency_score": 0.5,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "56fc4a4b8beb573e",
+      "url": "https://openai.com/index/cloudflare-cyber",
+      "title": "Cloudflare links vulnerability discovery to defense with OpenAI",
+      "source_quality_score": 0.478,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.41,
-        "android_hal_relevance": 0.41,
+        "camera_relevance": 0.44,
+        "android_hal_relevance": 0.44,
+        "technical_depth": 0.25,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "c4ed7c259746bedb",
+      "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available/",
+      "title": "MSVC Build Tools Version 14.52 Release Candidate Now Available",
+      "source_quality_score": 0.247,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 0.2,
+        "camera_relevance": 0.25,
+        "android_hal_relevance": 0.25,
+        "technical_depth": 0.55,
+        "recency_score": 0.15,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "88e46aa580e94c3f",
+      "url": "https://developer.android.com/blog/posts/grab-r8-profile-guided-optimization-anr-startup-time",
+      "title": "Grab Reduces ANRs by 32% and improves startup time by 35% with R8 and Profile guided optimization",
+      "source_quality_score": 0.577,
+      "source_quality_bucket": "blocked_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.36,
+        "android_hal_relevance": 0.36,
         "technical_depth": 0.55,
         "recency_score": 1,
         "evidence_strength": 0,
@@ -634,15 +724,33 @@
       }
     },
     {
-      "candidate_id": "383d55b05104ca6e",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
-      "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
-      "source_quality_score": 0.715,
+      "candidate_id": "239ae1a406f24752",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4384477",
+      "title": "Add API files for heifwriter 1.2.0-rc02 - platform/frameworks/support",
+      "source_quality_score": 0.734,
       "source_quality_bucket": "review_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0.53,
         "android_hal_relevance": 0.53,
+        "technical_depth": 0.55,
+        "recency_score": 1,
+        "evidence_strength": 0.9,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "383d55b05104ca6e",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "title": "heifwriter: do not force COLOR_RANGE_FULL on 8-bit surface input - platform/frameworks/support",
+      "source_quality_score": 0.763,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.65,
+        "android_hal_relevance": 0.65,
         "technical_depth": 0.55,
         "recency_score": 0.8,
         "evidence_strength": 0.9,
@@ -670,24 +778,6 @@
       }
     },
     {
-      "candidate_id": "2a98ba3c99e3ee3f",
-      "url": "https://lore.kernel.org/linux-media/20261019-v4l2-add-nv12-v1-0-4a84736803b6@ragnatech.se/",
-      "title": "[PATCH 0/4] media: rcar-isp: Add NV12M support and fix stride",
-      "source_quality_score": 0.758,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
       "candidate_id": "1ee3503d663cb864",
       "url": "https://www.reddit.com/r/androiddev/comments/1x93m0w/obs_studio_running_on_android_via_termux_without/",
       "title": "OBS Studio running on android via termux without proot or root.",
@@ -697,24 +787,6 @@
         "reliability_score": 0.35,
         "camera_relevance": 0.72,
         "android_hal_relevance": 0.72,
-        "technical_depth": 0.85,
-        "recency_score": 0.8,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "9204a8b552c35c4b",
-      "url": "https://www.reddit.com/r/androiddev/comments/1x51u06/visited_the_zoute_grand_prix_in_knokke_found/",
-      "title": "Visited the Zoute Grand Prix in Knokke, found every car/parking app overly monetized, so I built my own free open-source car scanner in Kotlin / Jetpack Compose",
-      "source_quality_score": 0.463,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.35,
-        "camera_relevance": 0.42,
-        "android_hal_relevance": 0.42,
         "technical_depth": 0.85,
         "recency_score": 0.8,
         "evidence_strength": 0,
@@ -742,72 +814,18 @@
       }
     },
     {
-      "candidate_id": "467dd8f484fda64f",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4376630",
-      "title": "Refactor CameraX AGENTS.md into modular skills - platform/frameworks/support",
-      "source_quality_score": 0.855,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.72,
-        "android_hal_relevance": 0.72,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "3ef47f472c4eb396",
-      "url": "https://lore.kernel.org/linux-media/CABZx5LvZ29kUp2OEhLebLS5DRELRsh1LXH5-YDMEkvsG4c06mA@mail.gmail.com/",
-      "title": "[PATCH 1/2] media: ipu6: isys: use the port B 2-lane PHY settings for 1-lane sensors",
-      "source_quality_score": 0.764,
+      "candidate_id": "9204a8b552c35c4b",
+      "url": "https://www.reddit.com/r/androiddev/comments/1x51u06/visited_the_zoute_grand_prix_in_knokke_found/",
+      "title": "Visited the Zoute Grand Prix in Knokke, found every car/parking app overly monetized, so I built my own free open-source car scanner in Kotlin / Jetpack Compose",
+      "source_quality_score": 0.463,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.81,
-        "android_hal_relevance": 0.81,
+        "reliability_score": 0.35,
+        "camera_relevance": 0.42,
+        "android_hal_relevance": 0.42,
         "technical_depth": 0.85,
-        "recency_score": 1,
+        "recency_score": 0.8,
         "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "77bc22ca791186a3",
-      "url": "https://lore.kernel.org/linux-media/20261021134959.2599575-1-hitesh@ebytelogic.com/",
-      "title": "[PATCH v6 0/4] media: qcom: camss: rebase fixes and SC7280 enablement for the streams API",
-      "source_quality_score": 0.83,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.75,
-        "android_hal_relevance": 0.75,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "6f3cdbc250e1e38d",
-      "url": "https://patchwork.libcamera.org/patch/28532/",
-      "title": "libcamera: software_isp: Leave clipped pixels out of the colour sums",
-      "source_quality_score": 0.758,
-      "source_quality_bucket": "review_candidate",
-      "breakdown": {
-        "reliability_score": 0.85,
-        "camera_relevance": 0.57,
-        "android_hal_relevance": 0.57,
-        "technical_depth": 0.85,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -832,71 +850,35 @@
       }
     },
     {
-      "candidate_id": "88e46aa580e94c3f",
-      "url": "https://developer.android.com/blog/posts/grab-r8-profile-guided-optimization-anr-startup-time",
-      "title": "Grab Reduces ANRs by 32% and improves startup time by 35% with R8 and Profile guided optimization",
-      "source_quality_score": 0.577,
+      "candidate_id": "379d21d176e485e9",
+      "url": "https://developer.android.com/blog/posts/jetpack-compose-ai-native-ui-instagram-direct",
+      "title": "How Instagram Direct engineers built AI-native UI architecture with Jetpack Compose and reduced token cost per agent session by 33%",
+      "source_quality_score": 0.578,
       "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.36,
-        "android_hal_relevance": 0.36,
+        "camera_relevance": 0.6,
+        "android_hal_relevance": 0.6,
+        "technical_depth": 0.25,
+        "recency_score": 0.5,
+        "evidence_strength": 0,
+        "duplicate_penalty": 0,
+        "stale_claim_penalty": 0,
+        "marketing_only_penalty": 0
+      }
+    },
+    {
+      "candidate_id": "e5f6162b42a53b1d",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
+      "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+      "source_quality_score": 0.735,
+      "source_quality_bucket": "review_candidate",
+      "breakdown": {
+        "reliability_score": 1,
+        "camera_relevance": 0.58,
+        "android_hal_relevance": 0.58,
         "technical_depth": 0.55,
-        "recency_score": 1,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "138b3fed9e39ad09",
-      "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.12.0-alpha01",
-      "title": "Media3 Release Notes - Media3 1.12.0-alpha01",
-      "source_quality_score": 0.551,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.37,
-        "android_hal_relevance": 0.37,
-        "technical_depth": 0.85,
-        "recency_score": 0.25,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "27c77ee0361749b2",
-      "url": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
-      "title": "Blog Post: How Arm and Google are improving ML Drift performance on Arm GPUs",
-      "source_quality_score": 0.429,
-      "source_quality_bucket": "blocked_candidate",
-      "breakdown": {
-        "reliability_score": 0.2,
-        "camera_relevance": 0.59,
-        "android_hal_relevance": 0.59,
-        "technical_depth": 0.85,
-        "recency_score": 0.15,
-        "evidence_strength": 0,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "92ceb1dc73a5f0d4",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4369996",
-      "title": "Simulate onTotalCaptureResult for simulateAndCompleteNextFrame - platform/frameworks/support",
-      "source_quality_score": 0.835,
-      "source_quality_bucket": "strong_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0.78,
-        "android_hal_relevance": 0.78,
-        "technical_depth": 0.55,
-        "recency_score": 1,
+        "recency_score": 0.8,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
@@ -904,18 +886,18 @@
       }
     },
     {
-      "candidate_id": "seed-a64c2df57825915f",
-      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
-      "title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
-      "source_quality_score": 0.802,
-      "source_quality_bucket": "strong_candidate",
+      "candidate_id": "f0bbd0623c567fa1",
+      "url": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
+      "title": "Introducing the Googlebook Linux Terminal Preview: A VM-Backed Environment for AI and Development",
+      "source_quality_score": 0.584,
+      "source_quality_bucket": "blocked_candidate",
       "breakdown": {
         "reliability_score": 1,
-        "camera_relevance": 0.7,
-        "android_hal_relevance": 0.7,
-        "technical_depth": 0.55,
-        "recency_score": 1,
-        "evidence_strength": 0.9,
+        "camera_relevance": 0.54,
+        "android_hal_relevance": 0.54,
+        "technical_depth": 0.25,
+        "recency_score": 0.8,
+        "evidence_strength": 0,
         "duplicate_penalty": 0,
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
@@ -925,13 +907,13 @@
       "candidate_id": "seed-03bde853d267abdd",
       "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
       "title": "Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support",
-      "source_quality_score": 0.757,
-      "source_quality_bucket": "review_candidate",
+      "source_quality_score": 0.802,
+      "source_quality_bucket": "strong_candidate",
       "breakdown": {
         "reliability_score": 1,
         "camera_relevance": 0.7,
         "android_hal_relevance": 0.7,
-        "technical_depth": 0.25,
+        "technical_depth": 0.55,
         "recency_score": 1,
         "evidence_strength": 0.9,
         "duplicate_penalty": 0,
@@ -1262,48 +1244,12 @@
         "stale_claim_penalty": 0,
         "marketing_only_penalty": 0
       }
-    },
-    {
-      "candidate_id": "gemini-linked-f56e2a59b60f481d",
-      "url": "https://github.com/androidx/media/commits/1.12.0-alpha01",
-      "title": "commits",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
-    },
-    {
-      "candidate_id": "gemini-linked-c228700bf9c53a91",
-      "url": "https://github.com/androidx/media/issues/3396",
-      "title": "#3396",
-      "source_quality_score": 0.367,
-      "source_quality_bucket": "weak_candidate",
-      "breakdown": {
-        "reliability_score": 1,
-        "camera_relevance": 0,
-        "android_hal_relevance": 0,
-        "technical_depth": 0.25,
-        "recency_score": 0.25,
-        "evidence_strength": 0.55,
-        "duplicate_penalty": 0,
-        "stale_claim_penalty": 0,
-        "marketing_only_penalty": 0
-      }
     }
   ],
   "counts": {
-    "blocked_candidate": 20,
-    "strong_candidate": 16,
-    "review_candidate": 16,
-    "weak_candidate": 20
+    "blocked_candidate": 18,
+    "strong_candidate": 23,
+    "review_candidate": 10,
+    "weak_candidate": 18
   }
 }

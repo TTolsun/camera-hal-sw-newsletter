@@ -2,7 +2,7 @@
   "schema_version": 7,
   "date": "2026-10-26",
   "newsletter_date": "2026-10-26",
-  "generated_at": "2026-10-25T15:54:55.810Z",
+  "generated_at": "2026-10-25T17:10:25.931Z",
   "candidates": [
     {
       "schema_version": 7,
@@ -42,16 +42,16 @@
       "source_extraction_ref": "seed-evidence-pack.json#/packs/0",
       "source_backed_items": [
         "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
-        "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+        "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure. Commit message: In Camera2, CaptureCallback.onCaptureFailed on a..."
       ],
       "release_note_items": [
         "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
-        "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+        "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure. Commit message: In Camera2, CaptureCallback.onCaptureFailed on a..."
       ],
       "compact_evidence": {
         "primary_facts": [
           "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
-          "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+          "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure. Commit message: In Camera2, CaptureCallback.onCaptureFailed on a..."
         ],
         "linked_context": [],
         "do_not_claim": [
@@ -64,7 +64,7 @@
       },
       "evidence": [
         "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
-        "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+        "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure. Commit message: In Camera2, CaptureCallback.onCaptureFailed on a..."
       ],
       "summary": "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
       "publishedAt": "2026-10-22",
@@ -75,6 +75,7 @@
       "api_or_component": "platform/frameworks/support/camera/camera-camera2/src/test/java/androidx/camera/camera2/impl",
       "source_extraction": null,
       "extraction_quality": null,
+      "behavior_change": "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure. Commit message: In Camera2, CaptureCallback.onCaptureFailed on a repeating request reports a transient single-frame drop (CaptureFailure.REASON_ERROR or REASON_FLUSHED) while the repeating request continues streaming.",
       "gerrit_change_id": "Id382170ad5e76bfbb2631ce67518f8eff852e5d7",
       "gerrit_change_number": 4381410,
       "gerrit_change_status": "MERGED",
@@ -207,16 +208,16 @@
       "source_extraction_ref": "seed-evidence-pack.json#/packs/1",
       "source_backed_items": [
         "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
-        "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+        "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder. Commit message: Releasing a MediaCodec video encoder that was conf..."
       ],
       "release_note_items": [
         "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
-        "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+        "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder. Commit message: Releasing a MediaCodec video encoder that was conf..."
       ],
       "compact_evidence": {
         "primary_facts": [
           "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
-          "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+          "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder. Commit message: Releasing a MediaCodec video encoder that was conf..."
         ],
         "linked_context": [],
         "do_not_claim": [
@@ -229,7 +230,7 @@
       },
       "evidence": [
         "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
-        "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+        "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder. Commit message: Releasing a MediaCodec video encoder that was conf..."
       ],
       "summary": "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
       "publishedAt": "2026-10-20",
@@ -240,6 +241,7 @@
       "api_or_component": "platform/frameworks/support/camera/camera-video/src/main/java/androidx/camera/video/internal/compat/quirk",
       "source_extraction": null,
       "extraction_quality": null,
+      "behavior_change": "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder. Commit message: Releasing a MediaCodec video encoder that was configured with a surface input but never started leaks a native C2NodeImpl thread in the media framework, one per released encoder, for the lifetime of the process.",
       "gerrit_change_id": "If57302fe131c0771a60083be3a5128f99c1f5f77",
       "gerrit_change_number": 4375770,
       "gerrit_change_status": "MERGED",
@@ -255,11 +257,11 @@
       "relevance_score": 70,
       "cameraHalRelevanceScore": 70,
       "camera_hal_relevance_score": 70,
-      "editorial_priority": 4,
-      "relevance_bucket": "generic_tech_watchlist",
+      "editorial_priority": 3,
+      "relevance_bucket": "android",
       "aosp_camera_directness": 0,
       "driver_stack_relevance": 0,
-      "multimedia_camera_output_relevance": 0,
+      "multimedia_camera_output_relevance": 5,
       "soc_platform_relevance": 0,
       "native_tooling_relevance": 0,
       "counts_as_primary_camera_topic": false,
@@ -267,17 +269,41 @@
       "counts_as_soc_topic": false,
       "tooling_workflow_type": "",
       "native_workflow_evidence_score": 0,
-      "evidence_origin": "none",
+      "evidence_origin": "article_text",
       "source_hint": "AndroidX Gerrit Camera AndroidX Gerrit Camera android android android android",
-      "scope_evidence_terms": [],
-      "aospCameraStackBucket": "generic_tech_watchlist",
-      "aosp_camera_stack_bucket": "generic_tech_watchlist",
+      "scope_evidence_terms": [
+        "\\bMediaCodec\\b",
+        "\\bcamera\\b",
+        "\\bfix(?:ed|es)?\\b",
+        "\\bencode(?:r|d|s|ing)?\\b",
+        "\\bchange(?:d|s)?\\b",
+        "\\bsupport(?:ed|s)?\\b",
+        "\\bupdate(?:d|s)?\\b"
+      ],
+      "aospCameraStackBucket": "android",
+      "aosp_camera_stack_bucket": "android",
       "aospCameraDirect": false,
       "aosp_camera_direct": false,
-      "aospCameraEvidenceTerms": [],
-      "aosp_camera_evidence_terms": [],
-      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
-      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "aospCameraEvidenceTerms": [
+        "\\bMediaCodec\\b",
+        "\\bcamera\\b",
+        "\\bfix(?:ed|es)?\\b",
+        "\\bencode(?:r|d|s|ing)?\\b",
+        "\\bchange(?:d|s)?\\b",
+        "\\bsupport(?:ed|s)?\\b",
+        "\\bupdate(?:d|s)?\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\bMediaCodec\\b",
+        "\\bcamera\\b",
+        "\\bfix(?:ed|es)?\\b",
+        "\\bencode(?:r|d|s|ing)?\\b",
+        "\\bchange(?:d|s)?\\b",
+        "\\bsupport(?:ed|s)?\\b",
+        "\\bupdate(?:d|s)?\\b"
+      ],
+      "aospCameraRelevanceReason": "Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 7 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "Android platform evidence with a camera-impact path: compatibility, graphics buffer, Surface, media framework, power, thermal, scheduler, memory pressure, or security; Android camera-output and multimedia signals such as APV, Ultra HDR, HDR video, MediaCodec, Media3, MediaRecorder, MediaProvider, MediaStore, Photo Picker, preview output, gallery/media access, video call camera path, camera/audio sync, or captured image/video result behavior; and public SoC platform evidence with concrete ISP, image pipeline, camera performance, sensor, media pipeline, video capture, camera thermal, latency, or power impact. Matched 7 article-level signal(s) from article_text.",
       "source_quality": {
         "source_role": "project_mailing_list_source",
         "source_url_quality": "project_mailing_list_release",
