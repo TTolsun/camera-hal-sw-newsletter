@@ -21,6 +21,14 @@ const {
 const { readJsonFixture } = require('../helpers/fixture-loader');
 const { sourceQualityFieldDrift } = require('../../collect/source-quality-classifier');
 const { buildArticleCapsule } = require('../../../generator/select/article-capsules');
+const { reporterCandidateRejectionReason } = require('../../../generator/publish/orchestrator-reporter-normalize');
+const { normalizeCandidate } = require('../../cli/collect-news-candidates');
+const { resolveGerritChangeUrl } = require('../../collect/gerrit-camera-changes');
+
+function registrySources() {
+  const registry = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'data', 'news-sources.json'), 'utf8'));
+  return Array.isArray(registry) ? registry : registry.sources;
+}
 
 function policySeed(sourceOverrides = {}, candidateOverrides = {}) {
   return seedCandidateFromEvidence({
@@ -61,6 +69,38 @@ test('seed candidates honor registry source restrictions and retain the direct A
   const confirmed = policySeed({ requiresCrossCheck: true }, { primary_confirmation: true });
   assert.equal(confirmed.cross_check_status, 'required_satisfied');
   assert.equal(confirmed.main_article_source_allowed, true);
+});
+
+test('seed candidates claim main eligibility only when the collect evidence rule passes', () => {
+  // 날짜와 사실 문장이 있어도 컴포넌트·동작 변경 근거가 없으면 수집 후보와 같이 출처 공백이다.
+  // seed가 여기서 main 자격을 주장하면 선정은 통과하고 reporter 자격 검사에서 강등된다.
+  const weak = policySeed({}, { title: 'Quarterly community newsletter' });
+  assert.ok(weak.evidence_score < 6);
+  assert.equal(weak.source_gap_risk, true);
+  assert.equal(weak.main_eligible, false);
+  assert.equal(weak.final_selection_eligibility, 'watchlist');
+
+  // 파서 항목이 없는 seed 페이지는 등록부 감시 페이지(rolling_page)로 추론되지 않는다.
+  const strong = policySeed();
+  assert.equal(strong.source_kind, 'seed_page');
+  assert.ok(strong.evidence_score >= 6);
+  assert.equal(strong.source_gap_risk, false);
+  assert.equal(strong.main_eligible, true);
+});
+
+test('a weak seed does not demote a stronger candidate already collected for the same URL', () => {
+  // seed 근거가 약한 것은 seed 자신의 자격 문제다. 출처 제한처럼 병합 대상에 번지면 안 된다.
+  const weak = policySeed({}, { title: 'Quarterly community newsletter' });
+  assert.equal(weak.main_eligible, false);
+  assert.equal(weak.main_article_source_blockers.includes('source_gap_risk'), false);
+  const collected = {
+    url: weak.url, title: 'Collected article', evidence_score: 8, main_eligible: true,
+    source_gap_risk: false, finalSelectionEligibility: 'short'
+  };
+  const [merged] = mergeSeedCandidates([collected], [weak]).mergedCandidates;
+  assert.equal(merged.main_eligible, true);
+  assert.equal(merged.main_article_source_allowed, true);
+  assert.equal(merged.evidence_score, 8);
 });
 
 test('seed policy enrichment preserves explicit blockers and does not allow unknown sources', () => {
@@ -659,6 +699,19 @@ test('Gerrit change seeds are read through REST detail because the change page h
   // commit message 본문이 seed 후보의 behavior_change로 넘어와 범위 분류의 근거가 된다.
   assert.match(candidate.behavior_change, /Commit message: Recorder releases the encoder on every VideoCapture unbind\.$/);
   assert.ok(candidate.aosp_camera_evidence_terms.includes('\\bVideoCapture\\b'));
+  // 목록 수집기가 같은 변경을 수집했을 때와 같은 근거 판정을 받는다. 점수가 비면 reporter 자격
+  // 검사(evidence_score >= 6)에서 강등되어 선정 그룹이 빠진다(2026-10-26 4375770 실측).
+  const { candidate: listed } = await resolveGerritChangeUrl(
+    'https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410',
+    registrySources(),
+    { fetchTextImpl: async () => ")]}'\n" + JSON.stringify(detail(4381410)) }
+  );
+  const collected = normalizeCandidate(listed);
+  for (const field of ['source_kind', 'evidence_score', 'has_published_date', 'has_version_or_release',
+    'has_api_or_component', 'has_behavior_change', 'api_or_component', 'behavior_change', 'source_gap_risk']) {
+    assert.deepEqual(candidate[field], collected[field], field);
+  }
+  assert.doesNotMatch(reporterCandidateRejectionReason(candidate), /evidence_score|source_gap_risk|main_eligible/);
 
   // 사람 리뷰가 없는 미병합 제안은 seed여도 main 기사가 될 수 없다.
   assert.equal(proposal.gerrit_change_status, 'NEW');

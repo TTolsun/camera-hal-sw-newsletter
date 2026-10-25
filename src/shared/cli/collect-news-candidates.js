@@ -184,7 +184,10 @@ const WATCH_SOURCE_MODES = new Set(['release-note-watch', 'documentation-watch',
 const WATCH_CANDIDATE_MODES = new Set(['html-watch-page', 'release-note-page', 'homepage-watch']);
 const FINAL_SELECTION_ELIGIBILITIES = new Set(['main', 'short', 'watchlist', 'exclude']);
 const FALLBACK_INELIGIBLE_SOURCE_KINDS = new Set(['documentation_page', 'rolling_page', 'blog_index']);
-const ITEM_LEVEL_SOURCE_KINDS = new Set(['rss_item', 'release_note_item', 'blog_post_item']);
+// seed 레인에서 파서 항목 없이 seed 주소 자체를 후보로 삼을 때의 출처 종류. 사람이 고른 문서 한 건이므로
+// 등록부 감시 페이지(rolling_page 등)가 아니라 날짜 항목과 같은 근거(날짜·컴포넌트·동작 변경)를 요구한다.
+const SEED_PAGE_SOURCE_KIND = 'seed_page';
+const ITEM_LEVEL_SOURCE_KINDS = new Set(['rss_item', 'release_note_item', 'blog_post_item', SEED_PAGE_SOURCE_KIND]);
 const VERSION_OR_RELEASE_PATTERN = /\b(?:Android\s+\d+(?:\s+QPR\d+)?|Android\s+CLI\s+\d+(?:\.\d+){0,2}|CameraX\s+\d+\.\d+\.\d+(?:[-\w.]*)?|Media3\s+\d+\.\d+\.\d+(?:[-\w.]*)?|LLVM\s+\d+\.\d+(?:\.\d+)?|libcamera\s+v?\d+\.\d+(?:\.\d+)?|v?\d+\.\d+\.\d+(?:[-\w.]*)?|release notes?|security bulletin|stable\s+\d+(?:\.\d+)*)\b/i;
 const API_OR_COMPONENT_PATTERN = /\b(?:CameraX|androidx\.camera|Camera2|Camera HAL|AOSP Camera|CDD|CTS|VTS|Camera ITS|Android framework|Android Security Bulletin|MediaCodec|Media3|MediaRecorder|MediaStore|Photo\s+Picker|SurfaceView|TextureView|WebRTC|A\/V\s+Sync|AV\s+sync|Android Studio|Android CLI|Google AI Studio|Gemini in Android Studio|Android Gradle Plugin|AGP|Gradle|libcamera|V4L2|media controller|image sensor|ISP|MIPI\s*CSI-?2|DMA-?BUF|SoC|CPU|GPU|NPU|DSP|DVFS|EAS|LLVM|Clang|GCC|NDK|JNI|SDK|API)\b/i;
 // #976: revert는 커널·libcamera에서 흔한 변경 형태다. 이 어휘가 없으면 실제 동작 변경을 서술한
@@ -1077,14 +1080,29 @@ function communitySignalMarkers(source = {}) {
   };
 }
 
-function normalizeCandidate(raw) {
-  raw = sourceExtractionBackfill(raw);
-  const source = raw.source;
-  // 여기 들어오는 값은 파서나 소스별 수집기가 이미 entity를 푼 텍스트다. 남은 일은 그 해제로
-  // 리터럴이 된 마크업을 걷어내는 것뿐이라 stripMarkup만 건다(#975).
-  const title = stripMarkup(raw.title);
+// 여기 들어오는 값은 파서나 소스별 수집기가 이미 entity를 푼 텍스트다. 남은 일은 그 해제로
+// 리터럴이 된 마크업을 걷어내는 것뿐이라 stripMarkup만 건다(#975).
+function rawItemText(input) {
+  const raw = sourceExtractionBackfill(input);
   const strippedSummary = stripMarkup(raw.summary);
-  const summary = strippedSummary.slice(0, CANDIDATE_TEXT_MAX_LENGTH);
+  return {
+    raw,
+    title: stripMarkup(raw.title),
+    strippedSummary,
+    summary: strippedSummary.slice(0, CANDIDATE_TEXT_MAX_LENGTH)
+  };
+}
+
+// 파서 항목 하나의 근거 판정. seed 레인도 목록 수집과 같은 입력 정규화(backfill·마크업 제거·길이
+// 상한)를 거쳐 같은 점수를 받도록 normalizeCandidate와 같은 경로를 쓴다.
+function rawItemEvidenceMetadata(input, { score = 0, candidateOnly = false } = {}) {
+  const { raw, title, summary } = rawItemText(input);
+  return evidenceMetadata(raw, raw.source || {}, title, summary, score, candidateOnly);
+}
+
+function normalizeCandidate(input) {
+  const { raw, title, strippedSummary, summary } = rawItemText(input);
+  const source = raw.source;
   // 잘림 판정은 요약을 자르는 이 자리에서 한다(#1226). 기준은 shared/common/summary-truncation.js가
   // 정한다(capsule 쪽이 같은 함수로 필드 없는 후보를 유도한다). 표식 문자열을 요약 끝에 붙이지 않고
   // boolean으로 싣는 이유: 요약 길이, behavior_change 파생, news-summary-cache 키가 모두 요약 문자열에
@@ -2449,6 +2467,8 @@ module.exports = {
   decisionFromCandidate,
   dedupe,
   evidenceMetadata,
+  rawItemEvidenceMetadata,
+  SEED_PAGE_SOURCE_KIND,
   fetchUrlForContent,
   isSourceChangeEventCandidate,
   newsletterDateWindowEnd,
