@@ -599,6 +599,66 @@ test('seed expansion writes evidence pack, seed candidates, reports, and compact
   assert.equal(evidencePack.packs[0].extraction_quality.main_article_allowed, true);
 });
 
+test('Gerrit change seeds are read through REST detail because the change page has no content', async () => {
+  const root = tempRoot();
+  const date = '2026-10-26';
+  const sha = 'a'.repeat(40);
+  const detail = number => ({
+    _number: number,
+    project: 'platform/frameworks/support',
+    branch: 'androidx-main',
+    status: 'MERGED',
+    change_id: 'I' + 'b'.repeat(40),
+    subject: 'Keep UseCaseCameraState signals pending on repeating frame failure',
+    created: '2026-10-14 10:00:00.000000000',
+    submitted: '2026-10-22 04:56:56.000000000',
+    insertions: 40,
+    deletions: 8,
+    labels: {},
+    current_revision: sha,
+    revisions: { [sha]: { files: {
+      '/COMMIT_MSG': {},
+      [number === 4381410
+        ? 'camera/camera-camera2-pipe-integration/src/main/java/UseCaseCameraState.kt'
+        : 'compose/ui/ui/src/main/java/Foo.kt']: {}
+    } } }
+  });
+  const requested = [];
+  const result = await runSeedEvidenceExpansion({
+    root,
+    date,
+    manualPayload: { schema_version: 5, date, newsletter_date: date, candidates: [] },
+    collectionIntent: { payload: { schema_version: 1, newsletter_date: date, keyword_hints: [], seed_urls: [
+      { seed_id: 'seed-camera', url: 'https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410' },
+      { seed_id: 'seed-compose', url: 'https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770' }
+    ] } },
+    sourceRegistryPath: path.join(__dirname, '..', '..', 'data', 'news-sources.json'),
+    lookupImpl: publicLookup,
+    fetchImpl: async url => {
+      requested.push(url);
+      const number = Number(new URL(url).pathname.match(/^\/changes\/(\d+)\/detail$/)?.[1]);
+      // 변경 페이지 자체를 받으면 PolyGerrit 안내문만 온다(제목·날짜·본문 없음).
+      const body = number ? ")]}'\n" + JSON.stringify(detail(number)) : '<html><body>To use PolyGerrit, please enable JavaScript</body></html>';
+      return { ok: true, url, text: async () => body };
+    }
+  });
+
+  assert.equal(requested.some(url => url.includes('/c/')), false);
+  assert.equal(result.stats.seed_candidate_count, 1);
+  const [candidate] = result.seedCandidates;
+  assert.equal(candidate.source_id, 'androidx-gerrit-camera-changes');
+  assert.equal(candidate.publishedAt, '2026-10-22');
+  assert.equal(candidate.title, 'Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support');
+  assert.equal(candidate.final_selection_eligibility, 'short');
+  assert.match(candidate.summary, /Gerrit change 4381410 .* merged \(submitted 2026-10-22\)/);
+
+  // 후보를 만들지 못한 seed는 pass로 숨지 않고 이유와 함께 실패로 남는다.
+  const failed = result.fetchReport.seeds.find(row => row.seed_id === 'seed-compose');
+  assert.equal(failed.status, 'failed');
+  assert.equal(failed.reason, 'gerrit_change_not_camera_scoped');
+  assert.equal(result.stats.seed_fetch_failed_count, 1);
+});
+
 test('seed expansion source_extraction_ref uses actual pack index after blocked first seed', async () => {
   const root = tempRoot();
   const date = '2026-05-16';

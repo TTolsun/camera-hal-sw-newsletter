@@ -455,13 +455,77 @@ async function resolveGerritCameraChangeItems(text = '', source = {}, options = 
   return candidates;
 }
 
+const GERRIT_HOSTS = new Set(['android-review.googlesource.com', 'chromium-review.googlesource.com']);
+
+function parseGerritChangeUrl(value) {
+  try {
+    const url = new URL(String(value || ''));
+    const match = /^\/c\/(.+)\/\+\/([1-9]\d*)\/?$/.exec(url.pathname);
+    if (url.protocol !== 'https:' || !GERRIT_HOSTS.has(url.hostname) || !match) return null;
+    return { origin: url.origin, project: decodeURIComponent(match[1]), number: match[2] };
+  } catch {
+    return null;
+  }
+}
+
+// 개별 변경에 맞는 등록부 소스를 고른다. 같은 저장소를 보는 소스가 여럿이면(AndroidX camera·heifwriter)
+// 변경 파일이 그 소스 query의 directory: 경로 안에 있는 쪽을 쓴다. 맞는 소스가 없으면 출처 정책을
+// 확인할 수 없으므로 후보를 만들지 않는다.
+function registrySourceForChange(sources, origin, project, cameraFiles) {
+  const matching = (Array.isArray(sources) ? sources : []).filter(source => {
+    if (source.enabled === false || gerritOrigin(source) !== origin) return false;
+    const query = decodeURIComponent(String(source.sourceUrl || ''));
+    return query.includes(`project:${project}`);
+  });
+  const directoryMatch = matching.find(source => {
+    const directories = [...decodeURIComponent(String(source.sourceUrl)).matchAll(/directory:([\w.-]+)/g)].map(match => match[1]);
+    return cameraFiles.some(filePath => String(filePath).split('/').some(segment => directories.includes(segment)));
+  });
+  return directoryMatch || matching[0] || null;
+}
+
+/**
+ * 변경 URL 하나를 REST 상세로 읽어 후보 하나를 만든다(편집자가 지정한 seed URL용).
+ * Gerrit 변경 페이지는 클라이언트 렌더링이라 HTML에서 제목·날짜·본문을 얻을 수 없다(위 계약 2).
+ * 날짜·상태·카메라 범위·리뷰 판정은 목록 수집과 같은 함수로 정한다. 편집자가 고른 변경이므로
+ * 수집 창과 제목 noise 필터는 적용하지 않는다. 후보를 만들 수 없으면 그 이유를 돌려준다.
+ */
+async function resolveGerritChangeUrl(url, sources = [], { fetchTextImpl } = {}) {
+  const unresolved = reason => ({ candidate: null, reason });
+  const target = parseGerritChangeUrl(url);
+  if (!target) return unresolved('unsupported_gerrit_change_url');
+  let detail;
+  try {
+    detail = parseGerritDetail(await fetchTextImpl(detailUrl(target.origin, target.number), DETAIL_FETCH_TIMEOUT_MS));
+  } catch {
+    return unresolved('gerrit_detail_fetch_failed');
+  }
+  if (!detail || String(detail._number) !== target.number || detail.project !== target.project) {
+    return unresolved('gerrit_change_identity_mismatch');
+  }
+  const dateInfo = effectiveDate(detail);
+  if (!hasEligibleState(detail) || !dateInfo) return unresolved('gerrit_change_not_eligible');
+  const revision = currentRevision(detail);
+  if (!revision || !revision.info.files) return unresolved('gerrit_change_has_no_file_list');
+  const scope = cameraFileScope(detail.project, Object.keys(revision.info.files));
+  if (!scope.isCameraChange) return unresolved('gerrit_change_not_camera_scoped');
+  const source = registrySourceForChange(sources, target.origin, detail.project, scope.camera);
+  if (!source) return unresolved('gerrit_change_has_no_registry_source');
+  return {
+    candidate: buildCandidate(source, target.origin, detail, scope, reviewSignals(detail.labels), dateInfo, revision.sha),
+    reason: ''
+  };
+}
+
 module.exports = {
   MAX_DETAIL_FETCHES,
   MIN_LIST_PAGE_SIZE,
   cameraFileScope,
   effectiveDate,
   hasEligibleState,
+  parseGerritChangeUrl,
   resolveGerritCameraChangeItems,
+  resolveGerritChangeUrl,
   reviewSignals,
   subjectIsNoise
 };

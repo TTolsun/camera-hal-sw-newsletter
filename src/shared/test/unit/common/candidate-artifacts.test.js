@@ -675,6 +675,23 @@ test('Stage 2 disabled mode expands approved seed evidence without Gemini creden
   assert.match(report, /seed_candidate_artifact: articles\/content\/collected-news\/2026-05-16\/seed-candidates\.json/);
   assert.match(report, /seed_evidence_pack: articles\/content\/collected-news\/2026-05-16\/seed-evidence-pack\.json/);
   assert.doesNotMatch(report, /Priority Override \/ Legacy Compatibility/);
+
+  // generate는 main을 새로 checkout해 읽는다. .gitignore된 seed JSON 보고서 두 개가 없어도
+  // manifest가 그 파일을 가리키지 않으므로 strict 검증이 통과해야 한다(2026-10-26 실행 실패 재현).
+  assert.equal('seed_fetch_report' in result.manifest, false);
+  assert.equal('seed_merge_report' in result.manifest, false);
+  fs.rmSync(seedFetchReportPath(root, date));
+  fs.rmSync(seedMergeReportPath(root, date));
+  const validated = validateCandidateArtifact({
+    root,
+    date,
+    candidatePath: mergedCandidatesPath(root, date),
+    manifestPath: mergedCandidateManifestPath(root, date),
+    requireManifest: true,
+    validationMode: 'strict',
+    expectedManifestType: 'merged_candidate'
+  });
+  assert.equal(validated.validation_status, 'validated');
 });
 
 test('Stage 2 approved keyword-only intent keeps pass-through without empty seed artifacts', async () => {

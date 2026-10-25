@@ -239,9 +239,7 @@ function validateMergedManifestSchema(root, manifest, manifestRelPath, validatio
     'seed_candidate_artifact',
     'seed_evidence_pack',
     'seed_evidence_pack_markdown',
-    'seed_fetch_report',
     'seed_fetch_report_markdown',
-    'seed_merge_report',
     'seed_merge_report_markdown'
   ];
   const enabledDiscovery = manifest.llm_used === true || manifest.merge_mode === 'gemini_source_discovery';
@@ -575,9 +573,7 @@ function buildMergedCandidateManifest({
     manifest.seed_evidence_pack = seedUsed && fs.existsSync(seedEvidencePackFilePath) ? relPath(root, seedEvidencePackFilePath) : '';
     manifest.seed_evidence_pack_hash = seedUsed ? hashFileIfExists(seedEvidencePackFilePath) : '';
     manifest.seed_evidence_pack_markdown = reportRefs.seed_evidence_pack_markdown || '';
-    manifest.seed_fetch_report = reportRefs.seed_fetch_report || '';
     manifest.seed_fetch_report_markdown = reportRefs.seed_fetch_report_markdown || '';
-    manifest.seed_merge_report = reportRefs.seed_merge_report || '';
     manifest.seed_merge_report_markdown = reportRefs.seed_merge_report_markdown || '';
   }
   if (schemaVersion >= 3) {
