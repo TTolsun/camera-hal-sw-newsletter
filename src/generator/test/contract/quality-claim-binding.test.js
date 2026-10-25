@@ -833,6 +833,17 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
   }
   assert.equal(blocked({ ...article, confirmed_facts: [expandedClaim] }), false);
+  // 같은 사실을 대소문자·조사·어순만 바꿔 적어도 1차 변경의 상태로 인정한다(2026-10-26 실측 문구).
+  const reworded = 'Gerrit Change 123은 2026-01-02 main 브랜치에 병합(MERGED)되었습니다.';
+  for (const variant of [reworded, 'Gerrit change 123 (main, status=MERGED)',
+    'Gerrit 변경 123이 platform/example의 main 브랜치에 MERGED 상태입니다.']) {
+    assert.equal(blocked({ ...article, confirmed_facts: [variant] }), false, variant);
+  }
+  for (const invalid of [reworded.replace('123', '1234'), reworded.replace('01-02', '01-03'),
+    reworded.replace('main', 'release'), reworded.replace('main 브랜치에', 'main 브랜치에 b/42 버그와 함께'),
+    `${reworded} Linked evidence verified.`]) {
+    assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
+  }
   for (const invalid of [expandedClaim.replace('platform/example', 'platform/other'),
     expandedClaim.replace('01-02', '01-03'), expandedClaim + ' Linked evidence verified.']) {
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);

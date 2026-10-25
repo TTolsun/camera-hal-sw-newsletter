@@ -150,3 +150,25 @@ test('unsupported Gerrit paths and malformed project escapes do not fetch HTML',
   await readArticleSources(input, { fetchImpl: async () => { throw Error('must not fetch'); } });
   assert.ok(input.selected_articles.every(c => c.article_source_reading.error === 'unsupported_gerrit_change_url'));
 });
+
+test('seeded Gerrit changes pinned to a revision read the patch and keep seed provenance', async () => {
+  // seed로 들어왔거나 seed와 병합된 변경도 같은 리비전의 patch를 읽는다. 막으면 diff 없이 기사가 쓰인다.
+  const { input, seen, fetchImpl } = setup();
+  const seedFields = { manual_seed: true, seed_ids: ['seed-01'], source_extraction_ref: 'seed-evidence-pack.json#/packs/0',
+    compact_evidence: { primary_facts: ['Reviewed seed'] } };
+  for (const candidate of [...input.selected_articles, ...input.shortlisted_candidates]) Object.assign(candidate, seedFields);
+  await readArticleSources(input, { fetchImpl });
+  assert.equal(seen.length, 2);
+  const c = input.selected_articles[0];
+  assert.equal(c.article_source_reading.status, 'read');
+  assert.deepEqual(c.compact_evidence, seedFields.compact_evidence);
+  assert.equal(c.source_extraction_ref, seedFields.source_extraction_ref);
+
+  // 리비전이 고정되지 않은 seed는 여전히 다시 읽지 않는다.
+  const unpinned = setup();
+  for (const candidate of [...unpinned.input.selected_articles, ...unpinned.input.shortlisted_candidates]) {
+    Object.assign(candidate, seedFields, { gerrit_commit_sha: '' });
+  }
+  await readArticleSources(unpinned.input, { fetchImpl: async () => { throw Error('must not fetch'); } });
+  assert.equal(unpinned.input.selected_articles[0].article_source_reading, undefined);
+});

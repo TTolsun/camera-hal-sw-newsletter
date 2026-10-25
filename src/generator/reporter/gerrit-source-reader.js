@@ -57,4 +57,4 @@ async function readGerritSource(target, candidate, client) {
   return { status: 'read', error: '', body, fetched_from: [detailUrl, patchUrl], revision };
 }
 
-module.exports = { gerritTarget, readGerritSource };
+module.exports = { GERRIT_REVISION: SHA, gerritTarget, readGerritSource };

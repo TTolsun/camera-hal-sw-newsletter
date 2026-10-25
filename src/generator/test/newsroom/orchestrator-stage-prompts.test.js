@@ -87,3 +87,10 @@ test('writing and verification use original evidence without imposing one articl
     assert.match(prompt, /article_quality.publishable=false/);
   }
 });
+
+test('editorSystemPrompt는 구성 상한을 editor의 보류 사유로 주지 않는다', () => {
+  // 2026-10-26 실측: 보조 main 최대 1건을 editor 기준으로 주자 보조 기사 1건뿐인 구성에서 그 기사를 보류했다.
+  const prompt = editorSystemPrompt({ publishMode: 'NORMAL' });
+  assert.doesNotMatch(prompt, /supporting main articles max/);
+  assert.match(prompt, /구성 상한을 이유로 selected group을 demote하거나 explicit_editor_hold로 보류하지 마세요/);
+});

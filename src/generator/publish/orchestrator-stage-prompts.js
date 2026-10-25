@@ -5,7 +5,6 @@
 // 인자로 받는다. 각 빌더는 추출 전 main()과 동일하게 join한 문자열을 반환한다(byte-동등).
 const {
   articleCountRangeText,
-  publishGateCriteriaText,
   articlePolicy
 } = require('../../shared/common/newsletter-policy');
 const {
@@ -75,7 +74,11 @@ function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLocked
     dateFramingGuardrail(),
     'docs/EDITORIAL_POLICY.md와 docs/NEWSLETTER_TEMPLATE.md를 정확히 따르세요.',
     `중복되지 않는 source material이 충분하면 Newsletter Policy range (${articleCountRangeText()}) 안에서 main articles를 작성하세요.`,
-    `Final main article count는 ${publishGateCriteriaText()}를 만족해야 합니다.`,
+    // 2026-10-26 실측: 발행 조건 전체(보조 main 최대 1건 포함)를 editor가 만족시킬 기준으로 주자, editor가
+    // 보조 기사 1건뿐인 구성에서 "상한 때문"이라며 selected group을 보류했다. 구성 상한은 선정 단계가
+    // 이미 지켰고 quality gate가 다시 검사하며, editor가 기사를 빼서 상한을 넘을 수는 없다. 그래서 editor에는
+    // 기사 수 범위만 기준으로 주고 상한은 보류 사유가 아님을 명시한다.
+    `Final main article count는 Newsletter Policy range (${articleCountRangeText()}) 안이어야 합니다. 보조(supporting) main 기사 상한과 금지 bucket 같은 구성 상한은 deterministic selection이 selected group을 고를 때 이미 지켰고 quality gate가 다시 검사합니다. Selected group을 빼서 상한을 넘을 수는 없으므로, 구성 상한을 이유로 selected group을 demote하거나 explicit_editor_hold로 보류하지 마세요.`,
     'final-selected article capsules를 main article inputs로 사용하세요. final_selected=false, finalSelectionEligibility=watchlist/exclude, hasDatedEvidence 없는 isWatchPage=true, main_eligible=false, source_gap_risk=true, briefing_only, reference_only candidate를 main article로 만들지 마세요.',
     'related_context_candidates는 selected representative article 안에서만 사용하세요. related_context_candidates로 별도 main article을 만들지 마세요.',
     'context_usage_allowed=true인 related_context_candidates만 supporting context로 사용하세요. blocked_context_candidates, blocked_context_reference, parent_roundup_context_only, dedupe_shadow_context를 article source로 cite하지 마세요.',

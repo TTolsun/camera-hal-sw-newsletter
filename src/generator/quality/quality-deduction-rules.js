@@ -258,6 +258,30 @@ function linkedEvidenceNotesText(section) {
   return text(section?.source_verification_notes);
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// 기자가 1차 변경의 병합 상태를 옮겨 적은 구절. 이전에는 정확한 문구 5개만 인정해, 같은 사실을
+// `Gerrit Change`처럼 대소문자나 조사만 바꿔 적어도 linked evidence 확정 주장으로 차단했다
+// (2026-10-26 실측: 기사 3건이 각 8점 차단). 이제 구절을 메타데이터 값으로만 이루어진 구조로
+// 판정한다: 변경 번호 뒤에 제출일(UTC)·프로젝트·브랜치와 괄호·쉼표만 오고 MERGED 표기로 끝나야
+// 한다. 메타데이터와 다른 번호·날짜·브랜치·프로젝트나 그 밖의 낱말이 끼면 맞지 않아 차단이 남는다.
+function gerritMergedStatePattern(changeId, metadata) {
+  const slot = [
+    `${escapeRegExp(metadata.submitted.slice(0, 10))}(?:에|,)?`,
+    `${escapeRegExp(metadata.project)}(?:의|,)?`,
+    `${escapeRegExp(metadata.branch)}(?:\\s*브랜치(?:에|의|로)?)?`,
+    '\\(',
+    ','
+  ].join('|');
+  return new RegExp(
+    `Gerrit\\s+(?:change|변경)\\s+${changeId}(?!\\d)(?:은|는|이|가)?(?:\\s*(?:${slot}))*\\s*` +
+    '(?:status=MERGED\\)?|병합\\(MERGED\\)|MERGED\\)?)',
+    'gi'
+  );
+}
+
 function hasUnresolvedConfirmationClaim(section, candidate) {
   const documents = candidate?.article_source_reading?.status === 'read'
     ? ensureArray(candidate.article_source_reading.documents).filter(doc =>
@@ -291,8 +315,9 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     ...section, source_verification_notes: notes
   });
   // A primary change's fetched status is not the status of its linked bugs.
-  // Recognize only exact metadata-backed renderings; leave other assertions
-  // (including neighbouring confirmations) visible to the existing blocker.
+  // Recognize only metadata-backed renderings of that state; leave other
+  // assertions (including neighbouring confirmations) visible to the existing
+  // blocker.
   for (const document of documents) {
     const match = document.text.match(/^Official Gerrit metadata \(UTC timestamps\):\s*\n(\{[\s\S]*?\n\})\s*\n\nComplete revision patch/);
     if (!match) continue;
@@ -301,14 +326,7 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     const changeId = String(candidate.url || '').match(/^https:\/\/android-review\.googlesource\.com\/c\/.+\/\+\/(\d+)\/?$/)?.[1];
     if (!changeId || String(metadata.change_number) !== changeId || metadata.status !== 'MERGED' ||
       !metadata.project || !metadata.branch || !/^\d{4}-\d{2}-\d{2} /.test(metadata.submitted || '')) continue;
-    const date = metadata.submitted.slice(0, 10);
-    const phrases = [
-      `Gerrit change ${changeId} (${metadata.project}, status=MERGED`,
-      ...['이', '가'].map(particle => `Gerrit change ${changeId}${particle} ${date}에 ${metadata.project} ${metadata.branch} 브랜치에 status=MERGED`),
-      ...['은', '는'].map(particle => `Gerrit 변경 ${changeId}${particle} ${date}에 ${metadata.project}의 ${metadata.branch} 브랜치에 병합(MERGED)`),
-      ...['이', '가'].map(particle => `Gerrit change ${changeId}${particle} ${date} ${metadata.branch} 브랜치에 MERGED`)
-    ];
-    for (const phrase of phrases) articleText = articleText.split(phrase).join('Gerrit primary source state');
+    articleText = articleText.replace(gerritMergedStatePattern(changeId, metadata), 'Gerrit primary source state');
   }
   return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(articleText);
 }
