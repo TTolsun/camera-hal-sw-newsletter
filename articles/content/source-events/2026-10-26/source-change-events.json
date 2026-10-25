@@ -6,22 +6,20 @@
     "monitored_source_count": 4,
     "snapshot_page_count": 6,
     "new_page_count": 0,
-    "updated_page_count": 1,
-    "release_row_added_count": 1,
+    "updated_page_count": 0,
+    "release_row_added_count": 0,
     "release_row_changed_count": 0,
     "anchor_added_count": 0,
     "material_content_change_count": 0,
-    "no_meaningful_change_count": 3,
-    "generated_candidate_count": 1,
-    "candidate_allowed_count": 1,
-    "main_article_allowed_count": 1,
+    "no_meaningful_change_count": 6,
+    "generated_candidate_count": 0,
+    "candidate_allowed_count": 0,
+    "main_article_allowed_count": 0,
     "watchlist_only_count": 0,
     "duplicate_event_evidence_count": 0,
     "monitor_diagnostic_count": 0,
     "event_type_counts": {
-      "no_meaningful_change": 3,
-      "metadata_only_changed": 2,
-      "release_row_added": 1
+      "no_meaningful_change": 6
     }
   },
   "events": [
@@ -56,8 +54,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-10-19T00:00:00.000Z",
-        "seen_count": 119,
+        "last_seen_at": "2026-10-26T00:00:00.000Z",
+        "seen_count": 120,
         "status": 200
       },
       "current_values": {
@@ -136,8 +134,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-03T00:00:00.000Z",
-        "last_seen_at": "2026-10-19T00:00:00.000Z",
-        "seen_count": 18,
+        "last_seen_at": "2026-10-26T00:00:00.000Z",
+        "seen_count": 19,
         "status": 200
       },
       "current_values": {
@@ -259,8 +257,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-03T00:00:00.000Z",
-        "last_seen_at": "2026-10-19T00:00:00.000Z",
-        "seen_count": 18,
+        "last_seen_at": "2026-10-26T00:00:00.000Z",
+        "seen_count": 19,
         "status": 200
       },
       "current_values": {
@@ -350,10 +348,10 @@
       "reason": "No meaningful source change."
     },
     {
-      "source_event_id": "source-event-387d64d971c0d2a59a1a08e5958b2b08",
-      "evidence_id": "evidence-90e0612ce12357c0e3067068655a22be",
+      "source_event_id": "source-event-906b9545906d636ff0ba9c9b0e51b13e",
+      "evidence_id": "evidence-d2acaae66c261f5076c94620a249535f",
       "source_id": "android-version-features",
-      "event_type": "metadata_only_changed",
+      "event_type": "no_meaningful_change",
       "url": "https://developer.android.com/about/versions/17/features",
       "canonical_url": "https://developer.android.com/about/versions/17/features",
       "title": "Features and APIs | Android Developers",
@@ -363,12 +361,12 @@
         "canonical_url": "https://developer.android.com/about/versions/17/features",
         "title": "Features and APIs | Android Developers",
         "visible_date": "",
-        "visible_last_updated": "2026-10-16",
+        "visible_last_updated": "2026-10-23",
         "structured_date_published": "",
         "structured_date_modified": "",
         "sitemap_lastmod": "",
-        "http_last_modified": "2026-10-16",
-        "content_hash": "9cc9c385c10ac3ee34b209c37faef4c758d7b417c091b5115589949deb0105fe",
+        "http_last_modified": "2026-10-23",
+        "content_hash": "c0f37a8a8b1bd7093a4922dab533d33ff716e5fffb2b31a856b980468df0f8df",
         "normalized_content_hash": "fbbe02627f5b05b9b60dcc22e705de6bb98ffec62a5241c9128a1ac5b2d81f0e",
         "release_note_sections": [],
         "anchors": [],
@@ -378,8 +376,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-17T00:00:00.000Z",
-        "last_seen_at": "2026-10-19T00:00:00.000Z",
-        "seen_count": 16,
+        "last_seen_at": "2026-10-26T00:00:00.000Z",
+        "seen_count": 17,
         "status": 200
       },
       "current_values": {
@@ -409,9 +407,9 @@
       },
       "content_changed": false,
       "detected_at": "2026-10-26T00:00:00.000Z",
-      "effective_date": "2026-10-23",
-      "date_source": "visible_last_updated",
-      "date_confidence": 85,
+      "effective_date": "",
+      "date_source": "missing",
+      "date_confidence": 0,
       "candidate_allowed": false,
       "main_article_allowed": false,
       "release_note_evidence": null,
@@ -420,14 +418,14 @@
       "release_row_anchor": "",
       "release_row_hash": "",
       "duplicate_processed": false,
-      "needs_editor_date_review": false,
-      "reason": "Date/metadata changed with normalized content hash unchanged."
+      "needs_editor_date_review": true,
+      "reason": "No meaningful source change."
     },
     {
-      "source_event_id": "source-event-616985a4909249236da97a05bc272abc",
-      "evidence_id": "evidence-a90018d2f145a9c6736e0bd45f2462c8",
+      "source_event_id": "source-event-b700fe783a8fd44f2a7d8c48c3fca253",
+      "evidence_id": "evidence-ff80d7d2129b3d3bb44cd490baaac237",
       "source_id": "android-version-features",
-      "event_type": "metadata_only_changed",
+      "event_type": "no_meaningful_change",
       "url": "https://developer.android.com/about/versions/16/features",
       "canonical_url": "https://developer.android.com/about/versions/16/features",
       "title": "Features and APIs | Android Developers",
@@ -437,12 +435,12 @@
         "canonical_url": "https://developer.android.com/about/versions/16/features",
         "title": "Features and APIs | Android Developers",
         "visible_date": "",
-        "visible_last_updated": "2026-10-16",
+        "visible_last_updated": "2026-10-23",
         "structured_date_published": "",
         "structured_date_modified": "",
         "sitemap_lastmod": "",
-        "http_last_modified": "2026-10-16",
-        "content_hash": "7ee0f8282bb2da769c202871d6e31cf3ab6103e378ab38c8be455412b171bccc",
+        "http_last_modified": "2026-10-23",
+        "content_hash": "c675fb65bf8684485719eaabb027ee1208bd964034b82e7a50c4e882777b410e",
         "normalized_content_hash": "3687fcf33486d74a4bcb4b95a769048fb3d6d71b7ec90a0dcf4748b83dc7ca98",
         "release_note_sections": [
           {
@@ -479,8 +477,8 @@
         "release_row_hash": "",
         "release_rows": [],
         "first_seen_at": "2026-08-17T00:00:00.000Z",
-        "last_seen_at": "2026-10-19T00:00:00.000Z",
-        "seen_count": 16,
+        "last_seen_at": "2026-10-26T00:00:00.000Z",
+        "seen_count": 17,
         "status": 200
       },
       "current_values": {
@@ -537,9 +535,9 @@
       },
       "content_changed": false,
       "detected_at": "2026-10-26T00:00:00.000Z",
-      "effective_date": "2026-10-23",
-      "date_source": "visible_last_updated",
-      "date_confidence": 85,
+      "effective_date": "",
+      "date_source": "missing",
+      "date_confidence": 0,
       "candidate_allowed": false,
       "main_article_allowed": false,
       "release_note_evidence": null,
@@ -548,14 +546,14 @@
       "release_row_anchor": "",
       "release_row_hash": "",
       "duplicate_processed": false,
-      "needs_editor_date_review": false,
-      "reason": "Date/metadata changed with normalized content hash unchanged."
+      "needs_editor_date_review": true,
+      "reason": "No meaningful source change."
     },
     {
-      "source_event_id": "source-event-9e60deeb142705b95ac9b68874c1b35c",
-      "evidence_id": "evidence-b7dd4a8d13cfc9d3a08f96056e056580",
+      "source_event_id": "source-event-3476439886458dc491e09461b6c23bc3",
+      "evidence_id": "evidence-5c126c283ae0b58d0d2d4f7d23b91fa4",
       "source_id": "androidx-camerax-release-notes",
-      "event_type": "release_row_added",
+      "event_type": "no_meaningful_change",
       "url": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera",
       "title": "CameraX | Jetpack | Android Developers",
@@ -565,13 +563,13 @@
         "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera",
         "title": "CameraX | Jetpack | Android Developers",
         "visible_date": "2024-06-12",
-        "visible_last_updated": "2026-08-26",
+        "visible_last_updated": "2026-10-21",
         "structured_date_published": "",
         "structured_date_modified": "",
         "sitemap_lastmod": "",
-        "http_last_modified": "2026-08-27",
-        "content_hash": "9d42c88ad560491fc0b210dde9e9debdd097d3b063666bda0cefd308b79a8e05",
-        "normalized_content_hash": "afade6f1581b9cb83521aabd5f319281f6fc74eb6a1ce44579fdaf9e2334ae0e",
+        "http_last_modified": "2026-10-21",
+        "content_hash": "e8caac9546b0c72e1ef5b388164cd5688df4ee587f91a6947834fabba665bd6a",
+        "normalized_content_hash": "d626da2396cd2b97f08d2af6cf4378b2cf70f554610d05665272a95ca4c21f89",
         "release_note_sections": [],
         "anchors": [
           "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0",
@@ -678,6 +676,7 @@
           "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
           "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
           "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+          "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
           "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha07",
           "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha08",
           "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha09",
@@ -793,16 +792,23 @@
           "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha01",
           "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha02"
         ],
-        "release_row_date": "2026-08-27",
-        "release_row_version": "1.0.0-alpha01",
-        "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
-        "release_row_hash": "773a38c03fba9ea926395817ad2d2b78",
+        "release_row_date": "2026-10-21",
+        "release_row_version": "1.7.0-rc01",
+        "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+        "release_row_hash": "4bfed28e441534ce1b6294d0c5b26f7f",
         "release_rows": [
+          {
+            "version": "1.7.0-rc01",
+            "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+            "date": "2026-10-21",
+            "hash": "4bfed28e441534ce1b6294d0c5b26f7f",
+            "title": "Version 1.7.0-rc01"
+          },
           {
             "version": "1.0.0-alpha01",
             "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
-            "date": "2026-08-27",
-            "hash": "773a38c03fba9ea926395817ad2d2b78",
+            "date": "2026-10-21",
+            "hash": "53897af962aaea9b560b3e6db69d09de",
             "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha01"
           },
           {
@@ -2200,8 +2206,8 @@
           }
         ],
         "first_seen_at": "2026-05-22T00:00:00.000Z",
-        "last_seen_at": "2026-10-19T00:00:00.000Z",
-        "seen_count": 119,
+        "last_seen_at": "2026-10-26T00:00:00.000Z",
+        "seen_count": 120,
         "status": 200
       },
       "current_values": {
@@ -3857,53 +3863,21 @@
         "seen_count": 0,
         "status": 200
       },
-      "content_changed": true,
+      "content_changed": false,
       "detected_at": "2026-10-26T00:00:00.000Z",
-      "effective_date": "2026-10-21",
-      "date_source": "release_row_date",
-      "date_confidence": 95,
-      "candidate_allowed": true,
-      "main_article_allowed": true,
-      "release_note_evidence": {
-        "version_or_release": "1.7.0-rc01",
-        "api_or_component": "",
-        "behavior_change": "Version 1.7.0-rc01: October 21, 2026 androidx.camera:camera-*:1.7.0-rc01 is released. Camera-Extensions and Camera-View Version 1.0.0-alpha01: August 7, 2019 androidx.camera:camera-extensions:1.0.0-alpha01 and androidx.camera:camera-view:1.0.0-alpha01 are released. Camera-View Version 1.0.0-alpha12: June 10, 2020 androidx.camera:camera-view:1.0.0-alpha12 is released.",
-        "changed_section_headings": [
-          "Version 1.7.0-rc01",
-          "Camera-Extensions and Camera-View Version 1.0.0-alpha01",
-          "Camera-View Version 1.0.0-alpha12"
-        ],
-        "section_links": [
-          {
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
-            "text": "Version 1.7.0-rc01",
-            "source_field": "release_row",
-            "extraction_method": "heading_anchor",
-            "evidence_role": "unclassified"
-          },
-          {
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
-            "text": "Camera-Extensions and Camera-View Version 1.0.0-alpha01",
-            "source_field": "release_row",
-            "extraction_method": "heading_anchor",
-            "evidence_role": "unclassified"
-          },
-          {
-            "url": "https://developer.android.com/jetpack/androidx/releases/camera#camera-view-1.0.0-alpha12",
-            "text": "Camera-View Version 1.0.0-alpha12",
-            "source_field": "release_row",
-            "extraction_method": "heading_anchor",
-            "evidence_role": "unclassified"
-          }
-        ]
-      },
+      "effective_date": "",
+      "date_source": "missing",
+      "date_confidence": 0,
+      "candidate_allowed": false,
+      "main_article_allowed": false,
+      "release_note_evidence": null,
       "release_row_date": "2026-10-21",
       "release_row_version": "1.7.0-rc01",
       "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
       "release_row_hash": "4bfed28e441534ce1b6294d0c5b26f7f",
       "duplicate_processed": false,
-      "needs_editor_date_review": false,
-      "reason": "Release row/version added."
+      "needs_editor_date_review": true,
+      "reason": "No meaningful source change."
     }
   ],
   "diagnostics": []
