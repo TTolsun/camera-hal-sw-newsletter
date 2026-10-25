@@ -48,6 +48,7 @@ const {
   CANDIDATE_SCHEMA_VERSION
 } = require('../shared/common/candidate-artifacts');
 const { classifyAospCameraStackCandidate } = require('../shared/domain/aosp-camera-scope');
+const { evidenceMetadata } = require('../shared/cli/collect-news-candidates');
 const {
   classifySourceQuality,
   normalizeSourceQuality,
@@ -55,6 +56,7 @@ const {
 } = require('../shared/collect/source-quality-classifier');
 
 const SCHEMA_VERSION = 1;
+const SEED_PAGE_SOURCE_KIND = 'seed_page';
 const DEFAULT_LIMITS = Object.freeze({
   maxLinksPerSeedUrl: 8,
   maxTotalSeedLinksPerRun: 40,
@@ -411,26 +413,48 @@ function seedCandidateFromEvidence({
     source_extraction: candidate.source_extraction || null,
     extraction_quality: candidate.extraction_quality || candidate.source_extraction?.extraction_quality || null,
     // Gerrit seed는 목록 수집 후보와 같은 정체성 필드를 싣는다. reporter는 이 리비전으로 patch를 읽는다.
-    // behavior_change(commit message 본문 포함)도 목록 수집 후보처럼 아래 범위 분류의 입력이 된다.
     ...(candidate.gerrit_change_number ? {
-      behavior_change: candidate.behavior_change || '',
       gerrit_change_id: candidate.gerrit_change_id,
       gerrit_change_number: candidate.gerrit_change_number,
       gerrit_change_status: candidate.gerrit_change_status,
       gerrit_commit_sha: candidate.gerrit_commit_sha,
       gerrit_effective_date_field: candidate.gerrit_effective_date_field
     } : {}),
-    finalSelectionEligibility: facts.length > 0 && primaryEvidence.published_at ? 'short' : 'watchlist',
-    final_selection_eligibility: facts.length > 0 && primaryEvidence.published_at ? 'short' : 'watchlist',
-    source_gap_risk: !(facts.length > 0 && primaryEvidence.published_at),
-    main_eligible: facts.length > 0 && Boolean(primaryEvidence.published_at),
-    briefing_only: !(facts.length > 0 && primaryEvidence.published_at),
-    reference_only: !(facts.length > 0 && primaryEvidence.published_at),
     relevanceScore: facts.length > 0 ? 70 : 45,
     relevance_score: facts.length > 0 ? 70 : 45,
     cameraHalRelevanceScore: facts.length > 0 ? 70 : 45,
     camera_hal_relevance_score: facts.length > 0 ? 70 : 45
   };
+  // 근거 점수와 출처 공백 판정은 목록 수집 후보와 같은 정본(evidenceMetadata)으로 구한다. reporter
+  // 자격 검사는 evidence_score >= 6을 요구하는데, seed가 점수 없이 main 자격만 주장하면 선정은
+  // 통과하고 reporter에서 강등되어 선정 그룹 누락으로 생성 전체가 진단 전용이 된다(2026-10-26 실측).
+  // 출처 종류는 파서가 붙인 값을 넘긴다. 파서 항목이 없으면 seed 주소 자체가 사람이 고른 문서
+  // 한 건이므로 SEED_PAGE_SOURCE_KIND로 둔다. 정본의 추론(inferFallbackSourceKind)은 등록부 출처의
+  // 감시 페이지를 보고 rolling_page 등으로 판정하므로, 그대로 두면 모든 seed가 출처 공백이 된다.
+  const evidence = evidenceMetadata({
+    ...output,
+    sourceKind: candidate.sourceKind || candidate.source_kind || SEED_PAGE_SOURCE_KIND,
+    behavior_change: candidate.behavior_change || '',
+    collector_template_sentence: candidate.collector_template_sentence || ''
+  }, source, output.title, output.summary, output.relevanceScore, Boolean(source.candidateOnly));
+  const sourceGapRisk = !(facts.length > 0 && primaryEvidence.published_at) || evidence.source_gap_risk;
+  Object.assign(output, {
+    source_kind: evidence.source_kind,
+    version_or_release: evidence.version_or_release,
+    api_or_component: evidence.api_or_component,
+    behavior_change: evidence.behavior_change,
+    has_published_date: evidence.has_published_date,
+    has_version_or_release: evidence.has_version_or_release,
+    has_api_or_component: evidence.has_api_or_component,
+    has_behavior_change: evidence.has_behavior_change,
+    evidence_score: evidence.evidence_score,
+    finalSelectionEligibility: sourceGapRisk ? 'watchlist' : 'short',
+    final_selection_eligibility: sourceGapRisk ? 'watchlist' : 'short',
+    source_gap_risk: sourceGapRisk,
+    main_eligible: !sourceGapRisk,
+    briefing_only: sourceGapRisk,
+    reference_only: sourceGapRisk
+  });
   const scope = classifyAospCameraStackCandidate(output);
   const quality = classifySourceQuality({
     candidate: {
