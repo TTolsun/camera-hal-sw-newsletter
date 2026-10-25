@@ -67,7 +67,7 @@ function listChange(overrides = {}) {
   };
 }
 
-function detailFor(change, { files = ['services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc'], labels = {}, sha = 'f'.repeat(40) } = {}) {
+function detailFor(change, { files = ['services/camera/virtualcamera/VirtualCameraImagePassthroughHandler.cc'], labels = {}, sha = 'f'.repeat(40), message = '' } = {}) {
   const revisionFiles = { '/COMMIT_MSG': { status: 'A' } };
   for (const file of files) revisionFiles[file] = { lines_inserted: 6 };
   return {
@@ -77,7 +77,7 @@ function detailFor(change, { files = ['services/camera/virtualcamera/VirtualCame
     deletions: 1,
     labels,
     current_revision: sha,
-    revisions: { [sha]: { commit: sha, files: revisionFiles } }
+    revisions: { [sha]: { commit: message ? { message } : sha, files: revisionFiles } }
   };
 }
 
@@ -724,7 +724,7 @@ test('seed change URL resolves through REST detail with the registry source that
     files: ['camera/camera-camera2-pipe-integration/src/main/java/androidx/camera/camera2/pipe/integration/impl/UseCaseCameraState.kt']
   });
   assert.equal(camera.reason, '');
-  assert.deepEqual(camera.requested, ['https://android-review.googlesource.com/changes/4381410/detail?o=CURRENT_REVISION&o=CURRENT_FILES']);
+  assert.deepEqual(camera.requested, ['https://android-review.googlesource.com/changes/4381410/detail?o=CURRENT_REVISION&o=CURRENT_FILES&o=CURRENT_COMMIT']);
   assert.equal(camera.candidate.source.id, 'androidx-gerrit-camera-changes');
   assert.equal(camera.candidate.url, url);
   assert.equal(camera.candidate.publishedAt, '2026-10-22');
@@ -789,4 +789,37 @@ test('seed source matching compares whole project names, not prefixes', async ()
     files: ['camera/common/hal/Foo.cc']
   });
   assert.equal(result.reason, 'gerrit_change_has_no_registry_source');
+});
+
+// 제목만으로는 카메라 범위가 드러나지 않는 변경이 있다(2026-10-26 실측: 4375770). commit message
+// 본문을 behavior_change에 실어 범위 분류기가 같은 공식 텍스트를 보게 한다.
+test('commit message body reaches behavior_change without trailers and within the candidate text cap', async () => {
+  const { classifyAospCameraStackCandidate } = require('../../../domain/aosp-camera-scope');
+  const { CANDIDATE_TEXT_MAX_LENGTH } = require('../../../common/summary-truncation');
+  const url = 'https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770';
+  const change = seedChange({ _number: 4375770, subject: 'Fix native thread leak when releasing an unstarted video encoder' });
+  const files = ['camera/camera-video/src/main/java/androidx/camera/video/internal/compat/quirk/VideoEncoderLeaksThreadOnReleaseWithoutStartQuirk.java'];
+  const message = [
+    'Fix native thread leak when releasing an unstarted video encoder',
+    '',
+    'Releasing a MediaCodec video encoder that was configured with a surface',
+    'input but never started leaks a native C2NodeImpl thread. Recorder hits',
+    'this on every VideoCapture unbind.',
+    '',
+    'Bug: 123456',
+    'Test: ./gradlew camera:camera-video:test',
+    'Change-Id: If57302fe131c0771a60083be3a5128f99c1f5f77'
+  ].join('\n');
+
+  const withBody = (await resolveSeed(url, change, { files, message })).candidate;
+  assert.match(withBody.behavior_change, /: Fix native thread leak when releasing an unstarted video encoder\. Releasing a MediaCodec video encoder .* every VideoCapture unbind\.$/);
+  assert.doesNotMatch(withBody.behavior_change, /Change-Id|Bug: |Test: /);
+  assert.equal(classifyAospCameraStackCandidate(withBody).aosp_camera_stack_bucket, 'direct_aosp_camera');
+
+  const titleOnly = (await resolveSeed(url, change, { files })).candidate;
+  assert.equal(titleOnly.behavior_change.endsWith('unstarted video encoder.'), true);
+
+  const long = (await resolveSeed(url, change, { files, message: `${message.split('\n')[0]}\n\n${'VideoCapture encoder release path. '.repeat(40)}` })).candidate;
+  assert.ok(long.behavior_change.length <= CANDIDATE_TEXT_MAX_LENGTH);
+  assert.doesNotMatch(long.behavior_change, /\s$/);
 });

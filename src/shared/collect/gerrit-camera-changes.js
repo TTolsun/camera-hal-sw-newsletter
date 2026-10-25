@@ -25,6 +25,7 @@
 // watchlist다. 그것이 정답이다 - 리뷰가 붙지 않은 제안을 main 기사로 올리지 않는 것이 이 소스의 목적이다.
 
 const { parseGoogleJson } = require('./google-json');
+const { CANDIDATE_TEXT_MAX_LENGTH } = require('../common/summary-truncation');
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 // 수집 창을 못 받았을 때의 기본값(runtime-config의 lookbackDays 기본과 같다).
@@ -231,7 +232,7 @@ function changeUrl(origin, project, changeNumber) {
 }
 
 function detailUrl(origin, changeNumber) {
-  return `${origin}/changes/${changeNumber}/detail?o=CURRENT_REVISION&o=CURRENT_FILES`;
+  return `${origin}/changes/${changeNumber}/detail?o=CURRENT_REVISION&o=CURRENT_FILES&o=CURRENT_COMMIT`;
 }
 
 // 파일 경로는 저장소 경로를 붙여 트리 전체 경로로 적는다. Gerrit이 주는 경로는 저장소 기준이라
@@ -277,7 +278,28 @@ function behaviorChange(detail, scope) {
   const lead = detail.status === 'MERGED'
     ? 'Merged change updates'
     : 'Proposed change would update';
-  return `${lead} ${scope.camera.length} camera source file(s) in ${detail.project} ${counts}: ${changeSubject(detail)}.`;
+  const sentence = `${lead} ${scope.camera.length} camera source file(s) in ${detail.project} ${counts}: ${changeSubject(detail)}.`;
+  const body = commitMessageBody(currentRevision(detail)?.info?.commit?.message);
+  if (!body) return sentence;
+  const room = CANDIDATE_TEXT_MAX_LENGTH - sentence.length - 1;
+  if (room <= 0) return sentence;
+  const excerpt = body.length <= room ? body : body.slice(0, body.lastIndexOf(' ', room) > 0 ? body.lastIndexOf(' ', room) : room);
+  return `${sentence} ${excerpt}`;
+}
+
+/**
+ * commit message에서 제목 줄과 trailer(Change-Id:, Bug:, Test:, Signed-off-by: 등)를 뺀 본문.
+ * 제목만으로는 무엇이 왜 바뀌는지 알 수 없는 변경이 많다. 예: "Fix native thread leak when releasing
+ * an unstarted video encoder"에는 카메라 용어가 없어 범위 분류기가 일반 기술 후보로 떨어뜨렸지만,
+ * 본문은 VideoCapture·Recorder 경로라고 말한다(2026-10-26 실측). 본문도 같은 REST 응답의 공식 텍스트다.
+ */
+function commitMessageBody(message) {
+  const lines = String(message || '').split('\n').slice(1);
+  return lines
+    .filter(line => !/^[A-Za-z][\w-]*: \S/.test(line.trim()))
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 /**
