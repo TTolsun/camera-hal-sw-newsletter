@@ -2,7 +2,332 @@
   "schema_version": 7,
   "date": "2026-10-26",
   "newsletter_date": "2026-10-26",
-  "generated_at": "2026-10-25T15:28:32.093Z",
-  "candidates": [],
+  "generated_at": "2026-10-25T15:54:55.810Z",
+  "candidates": [
+    {
+      "schema_version": 7,
+      "id": "seed-a64c2df57825915f",
+      "source_candidate_id": "seed-a64c2df57825915f",
+      "title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "articleUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "source": "AndroidX Gerrit Camera",
+      "source_name": "AndroidX Gerrit Camera",
+      "sourceUrl": "https://android-review.googlesource.com/changes/?q=project%3Aplatform%2Fframeworks%2Fsupport%20AND%20directory%3Acamera%20AND%20status%3Amerged&n=100",
+      "source_url": "https://android-review.googlesource.com/changes/?q=project%3Aplatform%2Fframeworks%2Fsupport%20AND%20directory%3Acamera%20AND%20status%3Amerged&n=100",
+      "source_id": "androidx-gerrit-camera-changes",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "medium",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "seed_url_evidence",
+      "collectionStage": "seed_evidence",
+      "collection_stage": "seed_evidence",
+      "manualSeed": true,
+      "manual_seed": true,
+      "seed_ids": [
+        "seed-01-b48d6968e3"
+      ],
+      "evidence_pack_ids": [
+        "seed-01-b48d6968e3-pack"
+      ],
+      "primary_evidence_ids": [
+        "seed-01-b48d6968e3-primary-01"
+      ],
+      "linked_evidence_ids": [],
+      "source_extraction_ref": "seed-evidence-pack.json#/packs/0",
+      "source_backed_items": [
+        "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
+        "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+      ],
+      "release_note_items": [
+        "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
+        "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+      ],
+      "compact_evidence": {
+        "primary_facts": [
+          "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
+          "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+        ],
+        "linked_context": [],
+        "do_not_claim": [
+          "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+          "Keyword hints are discovery hints only and are not source-backed facts."
+        ],
+        "evidence_urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410"
+        ]
+      },
+      "evidence": [
+        "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
+        "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+      ],
+      "summary": "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
+      "publishedAt": "2026-10-22",
+      "published_date": "2026-10-22",
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "version_or_release": "",
+      "api_or_component": "platform/frameworks/support/camera/camera-camera2/src/test/java/androidx/camera/camera2/impl",
+      "source_extraction": null,
+      "extraction_quality": null,
+      "gerrit_change_id": "Id382170ad5e76bfbb2631ce67518f8eff852e5d7",
+      "gerrit_change_number": 4381410,
+      "gerrit_change_status": "MERGED",
+      "gerrit_commit_sha": "572e6b4ca3a7132b0e1466df4ef362eafb1de0e4",
+      "gerrit_effective_date_field": "submitted",
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "relevanceScore": 70,
+      "relevance_score": 70,
+      "cameraHalRelevanceScore": 70,
+      "camera_hal_relevance_score": 70,
+      "editorial_priority": 1,
+      "relevance_bucket": "direct_aosp_camera",
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "tooling_workflow_type": "",
+      "native_workflow_evidence_score": 0,
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX Gerrit Camera AndroidX Gerrit Camera android android android android",
+      "scope_evidence_terms": [
+        "\\bCamera2\\b"
+      ],
+      "aospCameraStackBucket": "direct_aosp_camera",
+      "aosp_camera_stack_bucket": "direct_aosp_camera",
+      "aospCameraDirect": true,
+      "aosp_camera_direct": true,
+      "aospCameraEvidenceTerms": [
+        "\\bCamera2\\b"
+      ],
+      "aosp_camera_evidence_terms": [
+        "\\bCamera2\\b"
+      ],
+      "aospCameraRelevanceReason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
+      "aosp_camera_relevance_reason": "AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.",
+      "source_quality": {
+        "source_role": "project_mailing_list_source",
+        "source_url_quality": "project_mailing_list_release",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "source_policy_review",
+        "evidence_granularity": "article_with_primary_confirmation",
+        "source_quality_notes": [
+          "Google이 운영하는 공식 Gerrit REST API이며 개별 변경의 날짜·상태·리비전을 보존합니다.",
+          "CameraX와 HeifWriter의 변경은 HAL 인터페이스 변경과 구분합니다. 파일 경로만으로 실무 영향이나 발행 자격을 확정하지 않습니다."
+        ]
+      },
+      "sourceRole": "project_mailing_list_source",
+      "source_role": "project_mailing_list_source",
+      "sourceUrlQuality": "project_mailing_list_release",
+      "source_url_quality": "project_mailing_list_release",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "source_policy_review",
+      "conditional_evidence_type": "source_policy_review",
+      "evidenceGranularity": "article_with_primary_confirmation",
+      "evidence_granularity": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "Google이 운영하는 공식 Gerrit REST API이며 개별 변경의 날짜·상태·리비전을 보존합니다.",
+        "CameraX와 HeifWriter의 변경은 HAL 인터페이스 변경과 구분합니다. 파일 경로만으로 실무 영향이나 발행 자격을 확정하지 않습니다."
+      ],
+      "source_quality_notes": [
+        "Google이 운영하는 공식 Gerrit REST API이며 개별 변경의 날짜·상태·리비전을 보존합니다.",
+        "CameraX와 HeifWriter의 변경은 HAL 인터페이스 변경과 구분합니다. 파일 경로만으로 실무 영향이나 발행 자격을 확정하지 않습니다."
+      ],
+      "blocked_linked_evidence_ids": [],
+      "blocked_linked_evidence_urls": []
+    },
+    {
+      "schema_version": 7,
+      "id": "seed-03bde853d267abdd",
+      "source_candidate_id": "seed-03bde853d267abdd",
+      "title": "Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "articleUrl": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "source": "AndroidX Gerrit Camera",
+      "source_name": "AndroidX Gerrit Camera",
+      "sourceUrl": "https://android-review.googlesource.com/changes/?q=project%3Aplatform%2Fframeworks%2Fsupport%20AND%20directory%3Acamera%20AND%20status%3Amerged&n=100",
+      "source_url": "https://android-review.googlesource.com/changes/?q=project%3Aplatform%2Fframeworks%2Fsupport%20AND%20directory%3Acamera%20AND%20status%3Amerged&n=100",
+      "source_id": "androidx-gerrit-camera-changes",
+      "category": "android",
+      "source_category": "android",
+      "section": "android",
+      "source_section": "android",
+      "priority": "medium",
+      "reliability": "official",
+      "source_reliability": "official",
+      "origin": "seed_url_evidence",
+      "collectionStage": "seed_evidence",
+      "collection_stage": "seed_evidence",
+      "manualSeed": true,
+      "manual_seed": true,
+      "seed_ids": [
+        "seed-02-02886b752f"
+      ],
+      "evidence_pack_ids": [
+        "seed-02-02886b752f-pack"
+      ],
+      "primary_evidence_ids": [
+        "seed-02-02886b752f-primary-01"
+      ],
+      "linked_evidence_ids": [],
+      "source_extraction_ref": "seed-evidence-pack.json#/packs/1",
+      "source_backed_items": [
+        "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
+        "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+      ],
+      "release_note_items": [
+        "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
+        "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+      ],
+      "compact_evidence": {
+        "primary_facts": [
+          "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
+          "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+        ],
+        "linked_context": [],
+        "do_not_claim": [
+          "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+          "Keyword hints are discovery hints only and are not source-backed facts."
+        ],
+        "evidence_urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770"
+        ]
+      },
+      "evidence": [
+        "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
+        "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+      ],
+      "summary": "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
+      "publishedAt": "2026-10-20",
+      "published_date": "2026-10-20",
+      "hasDatedEvidence": true,
+      "has_dated_evidence": true,
+      "version_or_release": "",
+      "api_or_component": "platform/frameworks/support/camera/camera-video/src/main/java/androidx/camera/video/internal/compat/quirk",
+      "source_extraction": null,
+      "extraction_quality": null,
+      "gerrit_change_id": "If57302fe131c0771a60083be3a5128f99c1f5f77",
+      "gerrit_change_number": 4375770,
+      "gerrit_change_status": "MERGED",
+      "gerrit_commit_sha": "de4479d17efdd2a23be6e53d405239e5c7ded926",
+      "gerrit_effective_date_field": "submitted",
+      "finalSelectionEligibility": "short",
+      "final_selection_eligibility": "short",
+      "source_gap_risk": false,
+      "main_eligible": true,
+      "briefing_only": false,
+      "reference_only": false,
+      "relevanceScore": 70,
+      "relevance_score": 70,
+      "cameraHalRelevanceScore": 70,
+      "camera_hal_relevance_score": 70,
+      "editorial_priority": 4,
+      "relevance_bucket": "generic_tech_watchlist",
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 0,
+      "multimedia_camera_output_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "tooling_workflow_type": "",
+      "native_workflow_evidence_score": 0,
+      "evidence_origin": "none",
+      "source_hint": "AndroidX Gerrit Camera AndroidX Gerrit Camera android android android android",
+      "scope_evidence_terms": [],
+      "aospCameraStackBucket": "generic_tech_watchlist",
+      "aosp_camera_stack_bucket": "generic_tech_watchlist",
+      "aospCameraDirect": false,
+      "aosp_camera_direct": false,
+      "aospCameraEvidenceTerms": [],
+      "aosp_camera_evidence_terms": [],
+      "aospCameraRelevanceReason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "aosp_camera_relevance_reason": "General technology news with weak camera, driver, SoC, or native-development connection; keep for briefing/watchlist rather than automatic main article promotion. Article-level evidence was weak; source hints alone do not make a main article.",
+      "source_quality": {
+        "source_role": "project_mailing_list_source",
+        "source_url_quality": "project_mailing_list_release",
+        "source_quality_status": "allowed",
+        "main_article_source_allowed": true,
+        "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+        "main_article_source_blockers": [],
+        "cross_check_status": "not_required",
+        "requires_cross_check": false,
+        "requires_conditional_evidence": true,
+        "conditional_evidence_type": "source_policy_review",
+        "evidence_granularity": "article_with_primary_confirmation",
+        "source_quality_notes": [
+          "Google이 운영하는 공식 Gerrit REST API이며 개별 변경의 날짜·상태·리비전을 보존합니다.",
+          "CameraX와 HeifWriter의 변경은 HAL 인터페이스 변경과 구분합니다. 파일 경로만으로 실무 영향이나 발행 자격을 확정하지 않습니다."
+        ]
+      },
+      "sourceRole": "project_mailing_list_source",
+      "source_role": "project_mailing_list_source",
+      "sourceUrlQuality": "project_mailing_list_release",
+      "source_url_quality": "project_mailing_list_release",
+      "sourceQualityStatus": "allowed",
+      "source_quality_status": "allowed",
+      "mainArticleSourceAllowed": true,
+      "main_article_source_allowed": true,
+      "mainArticleSourceAllowedReason": "Source policy allows this candidate with concrete source evidence.",
+      "main_article_source_allowed_reason": "Source policy allows this candidate with concrete source evidence.",
+      "mainArticleSourceBlockers": [],
+      "main_article_source_blockers": [],
+      "crossCheckStatus": "not_required",
+      "cross_check_status": "not_required",
+      "requiresCrossCheck": false,
+      "requires_cross_check": false,
+      "requiresConditionalEvidence": true,
+      "requires_conditional_evidence": true,
+      "conditionalEvidenceType": "source_policy_review",
+      "conditional_evidence_type": "source_policy_review",
+      "evidenceGranularity": "article_with_primary_confirmation",
+      "evidence_granularity": "article_with_primary_confirmation",
+      "sourceQualityNotes": [
+        "Google이 운영하는 공식 Gerrit REST API이며 개별 변경의 날짜·상태·리비전을 보존합니다.",
+        "CameraX와 HeifWriter의 변경은 HAL 인터페이스 변경과 구분합니다. 파일 경로만으로 실무 영향이나 발행 자격을 확정하지 않습니다."
+      ],
+      "source_quality_notes": [
+        "Google이 운영하는 공식 Gerrit REST API이며 개별 변경의 날짜·상태·리비전을 보존합니다.",
+        "CameraX와 HeifWriter의 변경은 HAL 인터페이스 변경과 구분합니다. 파일 경로만으로 실무 영향이나 발행 자격을 확정하지 않습니다."
+      ],
+      "blocked_linked_evidence_ids": [],
+      "blocked_linked_evidence_urls": []
+    }
+  ],
   "failures": []
 }

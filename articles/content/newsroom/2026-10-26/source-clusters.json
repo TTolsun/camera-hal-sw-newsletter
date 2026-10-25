@@ -8,8 +8,8 @@
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
       "canonical_title": "CameraX Release Notes - CameraX 1.7.0-rc01",
-      "candidate_count": 3,
-      "duplicate_count": 2,
+      "candidate_count": 2,
+      "duplicate_count": 1,
       "candidates": [
         {
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
@@ -22,30 +22,6 @@
           "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.4.0-alpha07",
           "title": "1.4.0-alpha07",
           "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        },
-        {
-          "url": "https://developer.android.com/jetpack/androidx/releases/camera",
-          "title": "CameraX | Jetpack | Android Developers",
-          "canonical": false,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "5c94d8c26869514d",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4357367",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4357367",
-      "canonical_title": "Add physical camera metadata to HighEndDeviceTemplate - platform/frameworks/support",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4357367",
-          "title": "Add physical camera metadata to HighEndDeviceTemplate - platform/frameworks/support",
-          "canonical": true,
           "reliability": "official",
           "manual_seed": false
         }
@@ -62,6 +38,23 @@
         {
           "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
           "title": "Fix ZslControl ring buffer and ImageProxy leaks - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5c94d8c26869514d",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4357367",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4357367",
+      "canonical_title": "Add physical camera metadata to HighEndDeviceTemplate - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4357367",
+          "title": "Add physical camera metadata to HighEndDeviceTemplate - platform/frameworks/support",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -120,40 +113,6 @@
       ]
     },
     {
-      "cluster_id": "5e252b8f8cf34b72",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4369996",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4369996",
-      "canonical_title": "Simulate onTotalCaptureResult for simulateAndCompleteNextFrame - platform/frameworks/support",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4369996",
-          "title": "Simulate onTotalCaptureResult for simulateAndCompleteNextFrame - platform/frameworks/support",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "f3db2555a0a91a73",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4376630",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4376630",
-      "canonical_title": "Refactor CameraX AGENTS.md into modular skills - platform/frameworks/support",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4376630",
-          "title": "Refactor CameraX AGENTS.md into modular skills - platform/frameworks/support",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "d584298342e95060",
       "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
       "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
@@ -164,6 +123,74 @@
         {
           "url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
           "title": "cameraserver: Mute camera on sensor privacy enable instead of unconditional block - platform/frameworks/av",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "9eae8d34a506c4ab",
+      "cluster_key": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "canonical_url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+      "canonical_title": "Bringing our latest frontier model to Android Developers",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
+          "title": "Bringing our latest frontier model to Android Developers",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "16c59b1eb0828bc2",
+      "cluster_key": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
+      "canonical_url": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
+      "canonical_title": "Device Streaming and Android skills - available in Android CLI",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
+          "title": "Device Streaming and Android skills - available in Android CLI",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "14a4f06b5942b2a9",
+      "cluster_key": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available",
+      "canonical_url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available/",
+      "canonical_title": "MSVC Build Tools Version 14.52 Release Candidate Now Available",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available/",
+          "title": "MSVC Build Tools Version 14.52 Release Candidate Now Available",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "3fe372fb2e8166f0",
+      "cluster_key": "https://openai.com/index/cloudflare-cyber",
+      "canonical_url": "https://openai.com/index/cloudflare-cyber",
+      "canonical_title": "Cloudflare links vulnerability discovery to defense with OpenAI",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://openai.com/index/cloudflare-cyber",
+          "title": "Cloudflare links vulnerability discovery to defense with OpenAI",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -256,40 +283,6 @@
       ]
     },
     {
-      "cluster_id": "4d144fb9e979a8bb",
-      "cluster_key": "https://lore.kernel.org/linux-media/cabzx5lvz29kup2oehlebls5drelrsh1lxh5-ydmekvsg4c06ma@mail.gmail.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/CABZx5LvZ29kUp2OEhLebLS5DRELRsh1LXH5-YDMEkvsG4c06mA@mail.gmail.com/",
-      "canonical_title": "[PATCH 1/2] media: ipu6: isys: use the port B 2-lane PHY settings for 1-lane sensors",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/CABZx5LvZ29kUp2OEhLebLS5DRELRsh1LXH5-YDMEkvsG4c06mA@mail.gmail.com/",
-          "title": "[PATCH 1/2] media: ipu6: isys: use the port B 2-lane PHY settings for 1-lane sensors",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "24c670b30c9b51b5",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261021134959.2599575-1-hitesh@ebytelogic.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261021134959.2599575-1-hitesh@ebytelogic.com/",
-      "canonical_title": "[PATCH v6 0/4] media: qcom: camss: rebase fixes and SC7280 enablement for the streams API",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20261021134959.2599575-1-hitesh@ebytelogic.com/",
-          "title": "[PATCH v6 0/4] media: qcom: camss: rebase fixes and SC7280 enablement for the streams API",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "eeb709637164278e",
       "cluster_key": "https://patchwork.libcamera.org/patch/28597",
       "canonical_url": "https://patchwork.libcamera.org/patch/28597/",
@@ -324,23 +317,6 @@
       ]
     },
     {
-      "cluster_id": "8e1f0c4d459f14d7",
-      "cluster_key": "https://patchwork.libcamera.org/patch/28549",
-      "canonical_url": "https://patchwork.libcamera.org/patch/28549/",
-      "canonical_title": "[v2] v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://patchwork.libcamera.org/patch/28549/",
-          "title": "[v2] v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "3f029e10d4743f67",
       "cluster_key": "https://patchwork.libcamera.org/patch/28558",
       "canonical_url": "https://patchwork.libcamera.org/patch/28558/",
@@ -368,6 +344,23 @@
         {
           "url": "https://patchwork.libcamera.org/patch/28551/",
           "title": "[v16,1/6] libcamera: software_isp: egl: Add filter parameter to createTexture2D()",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8e1f0c4d459f14d7",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28549",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28549/",
+      "canonical_title": "[v2] v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28549/",
+          "title": "[v2] v4l2: v4l2_camera_proxy: Handle 64-bit time_t buffer ioctls",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -562,86 +555,18 @@
       ]
     },
     {
-      "cluster_id": "9eae8d34a506c4ab",
-      "cluster_key": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
-      "canonical_url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
-      "canonical_title": "Bringing our latest frontier model to Android Developers",
+      "cluster_id": "a456ddc46118c168",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4368895",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4368895",
+      "canonical_title": "Reuse audio buffers in BufferedAudioStream - platform/frameworks/support",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://developer.android.com/blog/posts/bringing-gemini-4-argon-to-android-agentic-engineering-antigravity-cli",
-          "title": "Bringing our latest frontier model to Android Developers",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4368895",
+          "title": "Reuse audio buffers in BufferedAudioStream - platform/frameworks/support",
           "canonical": true,
           "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "16c59b1eb0828bc2",
-      "cluster_key": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
-      "canonical_url": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
-      "canonical_title": "Device Streaming and Android skills - available in Android CLI",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/blog/posts/android-cli-device-streaming-and-skills",
-          "title": "Device Streaming and Android skills - available in Android CLI",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "3fe372fb2e8166f0",
-      "cluster_key": "https://openai.com/index/cloudflare-cyber",
-      "canonical_url": "https://openai.com/index/cloudflare-cyber",
-      "canonical_title": "Cloudflare links vulnerability discovery to defense with OpenAI",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://openai.com/index/cloudflare-cyber",
-          "title": "Cloudflare links vulnerability discovery to defense with OpenAI",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "14a4f06b5942b2a9",
-      "cluster_key": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available",
-      "canonical_url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available/",
-      "canonical_title": "MSVC Build Tools Version 14.52 Release Candidate Now Available",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://devblogs.microsoft.com/cppblog/msvc-build-tools-version-14-52-release-candidate-now-available/",
-          "title": "MSVC Build Tools Version 14.52 Release Candidate Now Available",
-          "canonical": true,
-          "reliability": "vendor-blog",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "65810478d8da6521",
-      "cluster_key": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
-      "canonical_url": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
-      "canonical_title": "Blog Post: How Arm and Google are improving ML Drift performance on Arm GPUs",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
-          "title": "Blog Post: How Arm and Google are improving ML Drift performance on Arm GPUs",
-          "canonical": true,
-          "reliability": "vendor-blog",
           "manual_seed": false
         }
       ]
@@ -732,18 +657,103 @@
       ]
     },
     {
-      "cluster_id": "a456ddc46118c168",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4368895",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4368895",
-      "canonical_title": "Reuse audio buffers in BufferedAudioStream - platform/frameworks/support",
+      "cluster_id": "b6b9c093f6467344",
+      "cluster_key": "https://www.reddit.com/r/androiddev/comments/1x51u06/visited_the_zoute_grand_prix_in_knokke_found",
+      "canonical_url": "https://www.reddit.com/r/androiddev/comments/1x51u06/visited_the_zoute_grand_prix_in_knokke_found/",
+      "canonical_title": "Visited the Zoute Grand Prix in Knokke, found every car/parking app overly monetized, so I built my own free open-source car scanner in Kotlin / Jetpack Compose",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4368895",
-          "title": "Reuse audio buffers in BufferedAudioStream - platform/frameworks/support",
+          "url": "https://www.reddit.com/r/androiddev/comments/1x51u06/visited_the_zoute_grand_prix_in_knokke_found/",
+          "title": "Visited the Zoute Grand Prix in Knokke, found every car/parking app overly monetized, so I built my own free open-source car scanner in Kotlin / Jetpack Compose",
+          "canonical": true,
+          "reliability": "community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "eaa70eb128e994a9",
+      "cluster_key": "https://www.reddit.com/r/androiddev/comments/1x8sd2a/i_hate_camerax_so_i_made_it_a_one_liner",
+      "canonical_url": "https://www.reddit.com/r/androiddev/comments/1x8sd2a/i_hate_camerax_so_i_made_it_a_one_liner/",
+      "canonical_title": "I hate CameraX, so I made it a one liner :)",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://www.reddit.com/r/androiddev/comments/1x8sd2a/i_hate_camerax_so_i_made_it_a_one_liner/",
+          "title": "I hate CameraX, so I made it a one liner :)",
+          "canonical": true,
+          "reliability": "community",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f3db2555a0a91a73",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4376630",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4376630",
+      "canonical_title": "Refactor CameraX AGENTS.md into modular skills - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4376630",
+          "title": "Refactor CameraX AGENTS.md into modular skills - platform/frameworks/support",
           "canonical": true,
           "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "4d144fb9e979a8bb",
+      "cluster_key": "https://lore.kernel.org/linux-media/cabzx5lvz29kup2oehlebls5drelrsh1lxh5-ydmekvsg4c06ma@mail.gmail.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/CABZx5LvZ29kUp2OEhLebLS5DRELRsh1LXH5-YDMEkvsG4c06mA@mail.gmail.com/",
+      "canonical_title": "[PATCH 1/2] media: ipu6: isys: use the port B 2-lane PHY settings for 1-lane sensors",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/CABZx5LvZ29kUp2OEhLebLS5DRELRsh1LXH5-YDMEkvsG4c06mA@mail.gmail.com/",
+          "title": "[PATCH 1/2] media: ipu6: isys: use the port B 2-lane PHY settings for 1-lane sensors",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "24c670b30c9b51b5",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261021134959.2599575-1-hitesh@ebytelogic.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261021134959.2599575-1-hitesh@ebytelogic.com/",
+      "canonical_title": "[PATCH v6 0/4] media: qcom: camss: rebase fixes and SC7280 enablement for the streams API",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261021134959.2599575-1-hitesh@ebytelogic.com/",
+          "title": "[PATCH v6 0/4] media: qcom: camss: rebase fixes and SC7280 enablement for the streams API",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "80154f88a9536bf6",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28532",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28532/",
+      "canonical_title": "libcamera: software_isp: Leave clipped pixels out of the colour sums",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28532/",
+          "title": "libcamera: software_isp: Leave clipped pixels out of the colour sums",
+          "canonical": true,
+          "reliability": "project-official",
           "manual_seed": false
         }
       ]
@@ -783,16 +793,16 @@
       ]
     },
     {
-      "cluster_id": "3076fa5761466d20",
-      "cluster_key": "https://developer.android.com/blog/posts/jetpack-compose-ai-native-ui-instagram-direct",
-      "canonical_url": "https://developer.android.com/blog/posts/jetpack-compose-ai-native-ui-instagram-direct",
-      "canonical_title": "How Instagram Direct engineers built AI-native UI architecture with Jetpack Compose and reduced token cost per agent session by 33%",
+      "cluster_id": "5e9a33e9fbaae52e",
+      "cluster_key": "https://developer.android.com/jetpack/androidx/releases/media3",
+      "canonical_url": "https://developer.android.com/jetpack/androidx/releases/media3#1.12.0-alpha01",
+      "canonical_title": "Media3 Release Notes - Media3 1.12.0-alpha01",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://developer.android.com/blog/posts/jetpack-compose-ai-native-ui-instagram-direct",
-          "title": "How Instagram Direct engineers built AI-native UI architecture with Jetpack Compose and reduced token cost per agent session by 33%",
+          "url": "https://developer.android.com/jetpack/androidx/releases/media3#1.12.0-alpha01",
+          "title": "Media3 Release Notes - Media3 1.12.0-alpha01",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -800,16 +810,33 @@
       ]
     },
     {
-      "cluster_id": "227a219cfd1ce06b",
-      "cluster_key": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
-      "canonical_url": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
-      "canonical_title": "Introducing the Googlebook Linux Terminal Preview: A VM-Backed Environment for AI and Development",
+      "cluster_id": "65810478d8da6521",
+      "cluster_key": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
+      "canonical_url": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
+      "canonical_title": "Blog Post: How Arm and Google are improving ML Drift performance on Arm GPUs",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
-          "title": "Introducing the Googlebook Linux Terminal Preview: A VM-Backed Environment for AI and Development",
+          "url": "https://community.arm.com/arm-community-blogs/b/ai-blog/posts/how-arm-and-google-are-improving-ml-drift-performance-on-arm-gpus",
+          "title": "Blog Post: How Arm and Google are improving ML Drift performance on Arm GPUs",
+          "canonical": true,
+          "reliability": "vendor-blog",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5e252b8f8cf34b72",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4369996",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4369996",
+      "canonical_title": "Simulate onTotalCaptureResult for simulateAndCompleteNextFrame - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4369996",
+          "title": "Simulate onTotalCaptureResult for simulateAndCompleteNextFrame - platform/frameworks/support",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -817,19 +844,36 @@
       ]
     },
     {
-      "cluster_id": "c09077304de8be38",
-      "cluster_key": "https://developer.android.com/blog/posts/driving-growth-on-google-play-the-next-era-of-subscriptions",
-      "canonical_url": "https://developer.android.com/blog/posts/driving-growth-on-google-play-the-next-era-of-subscriptions",
-      "canonical_title": "Driving growth on Google Play: The next era of subscriptions",
+      "cluster_id": "b48d6968e36a7d24",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "canonical_title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://developer.android.com/blog/posts/driving-growth-on-google-play-the-next-era-of-subscriptions",
-          "title": "Driving growth on Google Play: The next era of subscriptions",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+          "title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
           "canonical": true,
           "reliability": "official",
-          "manual_seed": false
+          "manual_seed": true
+        }
+      ]
+    },
+    {
+      "cluster_id": "02886b752f445616",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "canonical_title": "Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+          "title": "Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": true
         }
       ]
     },
@@ -1133,6 +1177,40 @@
         {
           "url": "https://lore.kernel.org/r/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com",
           "title": "https://lore.kernel.org/r/20260911062213.195007-1-gjorgji.rosikopulos@oss.qualcomm.com",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "f56e2a59b60f481d",
+      "cluster_key": "https://github.com/androidx/media/commits/1.12.0-alpha01",
+      "canonical_url": "https://github.com/androidx/media/commits/1.12.0-alpha01",
+      "canonical_title": "commits",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/androidx/media/commits/1.12.0-alpha01",
+          "title": "commits",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "c228700bf9c53a91",
+      "cluster_key": "https://github.com/androidx/media/issues/3396",
+      "canonical_url": "https://github.com/androidx/media/issues/3396",
+      "canonical_title": "#3396",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/androidx/media/issues/3396",
+          "title": "#3396",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false

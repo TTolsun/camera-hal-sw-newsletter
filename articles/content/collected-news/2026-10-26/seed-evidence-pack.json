@@ -2,24 +2,27 @@
   "schema_version": 1,
   "report_type": "seed_evidence_pack",
   "newsletter_date": "2026-10-26",
-  "generated_at": "2026-10-25T15:28:32.093Z",
+  "generated_at": "2026-10-25T15:54:55.810Z",
   "packs": [
     {
       "evidence_pack_id": "seed-01-b48d6968e3-pack",
       "seed_id": "seed-01-b48d6968e3",
       "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
       "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
-      "title": "Android Developers Blog",
+      "title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
       "fetch_status": "pass",
       "primary_evidence": [
         {
           "evidence_id": "seed-01-b48d6968e3-primary-01",
           "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
-          "title": "Android Developers Blog",
-          "published_at": "",
-          "source_backed_items": [],
-          "source_role": "seed_page",
-          "evidence_granularity": "page_summary"
+          "title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
+          "published_at": "2026-10-22",
+          "source_backed_items": [
+            "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
+            "Merged change updates 2 camera source file(s) in platform/frameworks/support +195/-83: Keep UseCaseCameraState signals pending on repeating frame failure."
+          ],
+          "source_role": "official_release_source",
+          "evidence_granularity": "seed_page"
         }
       ],
       "linked_evidence": [],
@@ -33,9 +36,9 @@
       "extraction_quality": {
         "seed_fetch_status": "pass",
         "has_primary_evidence": true,
-        "has_concrete_facts": false,
+        "has_concrete_facts": true,
         "linked_evidence_followed": false,
-        "main_article_allowed": false
+        "main_article_allowed": true
       }
     },
     {
@@ -43,17 +46,20 @@
       "seed_id": "seed-02-02886b752f",
       "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
       "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
-      "title": "Android Developers Blog",
+      "title": "Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support",
       "fetch_status": "pass",
       "primary_evidence": [
         {
           "evidence_id": "seed-02-02886b752f-primary-01",
           "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
-          "title": "Android Developers Blog",
-          "published_at": "",
-          "source_backed_items": [],
-          "source_role": "seed_page",
-          "evidence_granularity": "page_summary"
+          "title": "Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support",
+          "published_at": "2026-10-20",
+          "source_backed_items": [
+            "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
+            "Merged change updates 4 camera source file(s) in platform/frameworks/support +143/-14: Fix native thread leak when releasing an unstarted video encoder."
+          ],
+          "source_role": "official_release_source",
+          "evidence_granularity": "seed_page"
         }
       ],
       "linked_evidence": [],
@@ -67,9 +73,9 @@
       "extraction_quality": {
         "seed_fetch_status": "pass",
         "has_primary_evidence": true,
-        "has_concrete_facts": false,
+        "has_concrete_facts": true,
         "linked_evidence_followed": false,
-        "main_article_allowed": false
+        "main_article_allowed": true
       }
     }
   ],
@@ -78,6 +84,6 @@
     "pack_count": 2,
     "primary_evidence_count": 2,
     "linked_evidence_count": 0,
-    "main_article_allowed_count": 0
+    "main_article_allowed_count": 2
   }
 }

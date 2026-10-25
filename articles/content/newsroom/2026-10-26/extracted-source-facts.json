@@ -36,7 +36,7 @@
       "claims": [
         {
           "claim": "Gerrit change 4365734 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-19). Change-Id I8d91eccb95f4fd658a27923fe4066a8e0977ae2e; current revision ab21e083238a. Reviewed: Code-Review carries an approving or recommending vote. It changes 6 file(s) +373/-38, of which 6 are camera paths: platform/frameworks/support/camera/camera-camera2/src/test/java/androidx/camera/camera2/adapter/ZslControlTest.kt, platform/frameworks/support/camera/camera-camera2/src/main/java/an",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"rVEbH3KR752PWv-gKxapIA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"uQGqCJZDfqNsW8bBoHbd3Q\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -59,7 +59,7 @@
       "claims": [
         {
           "claim": "Gerrit change 8618567 on chromiumos/platform2 (branch stabilize-cfm-16700.25.B) is merged (submitted 2026-10-22). Change-Id I0d61ad3181efbdc3b74c88dded305191d5bde0c2; current revision 44bc150f77cc. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +30/-11, of which 2 are camera paths: chromiumos/platform2/camera/hal/usb/v4l2_camera_device.h, chromiumos/platform2/camera/hal/usb/v4l2_camera_device.cc.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"l0iIDPrdFmW0dZ88fgNuGA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"Y5CfOFACAWfZIQz9okQe0A\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -105,7 +105,7 @@
       "claims": [
         {
           "claim": "Gerrit change 4357367 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id I7cf5dd56ae5967720bf2a1997b8058e80da0fa5e; current revision 3fe8c3d3ae8f. Reviewed: Code-Review carries an approving or recommending vote. It changes 7 file(s) +2347/-96, of which 7 are camera paths: platform/frameworks/support/camera/camera-camera2-pipe-testing/src/test/java/androidx/camera/camera2/pipe/testing/FakeMetadataTest.kt, platform/frameworks/support/camera/camera-cam",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"H7-7OOXV9xnJzOi8NnQg9w\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"4udOoeXOVWZZfnJSZoXI_A\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -128,7 +128,7 @@
       "claims": [
         {
           "claim": "Gerrit change 4349748 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-19). Change-Id I66da81e925d21dde1b04897b2a034e96b9bd1981; current revision 302475e77719. Reviewed: Code-Review carries an approving or recommending vote. It changes 9 file(s) +228/-33, of which 9 are camera paths: platform/frameworks/support/camera/camera-camera2/src/test/java/androidx/camera/camera2/compat/ZoomCompatTest.kt, platform/frameworks/support/camera/camera-camera2-pipe-testing/src/",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"Nq3CwNccSz-6KZ8FLKns-g\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"ykjtRVeJN0uGccXrAliTOA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -151,7 +151,7 @@
       "claims": [
         {
           "claim": "Gerrit change 4368895 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-19). Change-Id I8dca52b1e6ea23cdc7ce650e0bfefb3bf3205f05; current revision 7f03b06068f4. Reviewed: Code-Review carries an approving or recommending vote. It changes 3 file(s) +161/-3, of which 3 are camera paths: platform/frameworks/support/camera/camera-video/src/test/java/androidx/camera/video/internal/audio/FakeAudioStream.kt, platform/frameworks/support/camera/camera-video/src/main/java/a",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"_fWnnTB84M3qBnjCYdHjHQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"O9KuoHSAsMPyiUyoe6Fy-g\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -174,7 +174,7 @@
       "claims": [
         {
           "claim": "Gerrit change 4376630 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-21). Change-Id Ic47cd964468c2fd5c314ae92d4925688661e03e6; current revision 0693b70c9cd6. Reviewed: Code-Review carries an approving or recommending vote. It changes 5 file(s) +1984/-1676, of which 5 are camera paths: platform/frameworks/support/camera/AGENTS.md, platform/frameworks/support/camera/.agents/skills/camerax-testing/SKILL.md, platform/frameworks/support/camera/.agents/skills/camera",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"QYzC3fm5j1yBu4fZTze8IQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"v0gYCMhiACnCbPefPg_aAA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -197,7 +197,7 @@
       "claims": [
         {
           "claim": "Gerrit change 4372671 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-21). Change-Id Id811a798873c699ef631f81334eac6d3fd192f5a; current revision ee8e77a7ee61. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +160/-8, of which 2 are camera paths: platform/frameworks/support/camera/camera-camera2/src/main/java/androidx/camera/camera2/adapter/SessionConfigAdapter.kt, platform/frameworks/support/camera/camera-camera2/src/test/ja",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"LkUcosiluAfB-ppRvHpt4w\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"Yxwhreq9FwSpsxhQ9S3PgQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -220,7 +220,7 @@
       "claims": [
         {
           "claim": "Gerrit change 4369996 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-19). Change-Id Iedb0a24b5b47ab397711b6594cd3689a9ee6b4ec; current revision ab45b0092ae4. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +6/-0, of which 2 are camera paths: platform/frameworks/support/camera/camera-camera2-pipe-testing/src/test/java/androidx/camera/camera2/pipe/testing/CameraGraphSimulatorTest.kt, platform/frameworks/support/camera/camera",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"uCdrhR59U6WaWeHqXAVqKA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"6f8ivnahw8_zUjJEAiI5WA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -289,7 +289,7 @@
       "claims": [
         {
           "claim": "Device Streaming and Android skills - available in Android CLI 4 min read 02 Oct 2026 Simona Milanovic Developer Relations Engineer As Android developers, you have many choices when it comes to the agents, LLMs, tools, and command-line interfaces (CLI) you use for app development. Our goal is to help you build beautiful, high-quality Android apps, no matter how you choose to build.",
-          "evidence_text": "<!doctype html>\n<html \n      lang=\"pl-x-mtfrom-en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\"",
+          "evidence_text": "<!doctype html>\n<html \n      lang=\"en\"\n      dir=\"ltr\">\n  <head>\n    <meta name=\"google-signin-client-id\" content=\"721724668570-nbkv1cfusk7kk4eni4pjvepaus73b13t.apps.googleusercontent.com\"><meta name=\"google-signin-scope\"\n          content=\"profile email https://www.googleapis.com/auth/developerprofiles https://www.googleapis.com/auth/developerprofiles.award https://www.googleapis.com/auth/devprofiles.full_control.firstparty\"><meta property=\"og:site_name\" content=\"Android Developers\">\n    <meta ",
           "confidence": "medium"
         }
       ],
@@ -312,7 +312,7 @@
       "claims": [
         {
           "claim": "Gerrit change 4381850 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-23). Change-Id I5dc84eb6a905a1015ba95d4af7a54855f57627cb; current revision cebe4f2e9de7. Reviewed: Code-Review carries an approving or recommending vote. It changes 5 file(s) +20/-1772, of which 3 are camera paths: platform/frameworks/support/camera/camera-testing/api/restricted_current.txt, platform/frameworks/support/camera/camera-camera2-pipe-testing/build.gradle, platform/frameworks/suppo",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"zl5LonZ-bg0ovmwajtTn2g\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"bdQtzVxSmJtadiGKYn-AoA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
@@ -343,6 +343,29 @@
       "android_hal_relevance": 0.81,
       "ai_relevance": 0,
       "technical_depth": 0.809,
+      "warnings": []
+    },
+    {
+      "id": "seed-a64c2df57825915f",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
+      "published_at": "2026-10-22",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4381410 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-22). Change-Id Id382170ad5e76bfbb2631ce67518f8eff852e5d7; current revision 572e6b4ca3a7. Reviewed: Code-Review car...",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"avuOY7THKC1szxWjbOgYpg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.802,
       "warnings": []
     },
     {
@@ -438,6 +461,29 @@
       "warnings": []
     },
     {
+      "id": "6f3cdbc250e1e38d",
+      "url": "https://patchwork.libcamera.org/patch/28532/",
+      "title": "libcamera: software_isp: Leave clipped pixels out of the colour sums",
+      "published_at": "2026-10-20",
+      "source_type": "rss_item",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Patch under review on the project patch tracker (submitted by Geir); state rejected, a proposed change not yet landed.",
+          "evidence_text": "<!DOCTYPE html>\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n <head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n  <title>libcamera: software_isp: Leave clipped pixels out of the colour sums - Patchwork</title>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/bootstrap.min.1999ae14de69.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/selectize.bootstrap3.5d3fb8271165.css\"/>\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/css/style.e3eac",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.57,
+      "android_hal_relevance": 0.57,
+      "ai_relevance": 0,
+      "technical_depth": 0.758,
+      "warnings": []
+    },
+    {
       "id": "2a98ba3c99e3ee3f",
       "url": "https://lore.kernel.org/linux-media/20261019-v4l2-add-nv12-v1-0-4a84736803b6@ragnatech.se/",
       "title": "[PATCH 0/4] media: rcar-isp: Add NV12M support and fix stride",
@@ -461,6 +507,29 @@
       "warnings": []
     },
     {
+      "id": "seed-03bde853d267abdd",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "title": "Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support",
+      "published_at": "2026-10-20",
+      "source_type": "unknown",
+      "source_fetch_used": true,
+      "source_fetch_status": "success",
+      "source_fetch_error": "",
+      "validation_mode": "source_fetch",
+      "claims": [
+        {
+          "claim": "Gerrit change 4375770 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-20). Change-Id If57302fe131c0771a60083be3a5128f99c1f5f77; current revision de4479d17efd. Reviewed: Code-Review car...",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"L3b0g6_taaxte7RMEMfs8A\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "confidence": "medium"
+        }
+      ],
+      "camera_relevance": 0.7,
+      "android_hal_relevance": 0.7,
+      "ai_relevance": 0.5,
+      "technical_depth": 0.757,
+      "warnings": []
+    },
+    {
       "id": "04f18f4ec0b911ac",
       "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8247959",
       "title": "cros_camera_service: Fix UAF in StreamManipulatorHelper - chromiumos/platform2",
@@ -473,76 +542,7 @@
       "claims": [
         {
           "claim": "Gerrit change 8247959 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id I090804c2f0ee3d774de0a23bf75c6a407eb5805e; current revision 883b9e0b6fe1. Reviewed: Code-Review carries an approving or recommending vote. It changes 4 file(s) +25/-7, of which 4 are camera paths: chromiumos/platform2/camera/features/hdrnet/hdrnet_stream_manipulator.h, chromiumos/platform2/camera/common/stream_manipulator_helper.h, chromiumos/platform2/camera/common/stream_manipulator_helper.c",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"XNu1AYi48dvpLht_q6WrpA\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.56,
-      "android_hal_relevance": 0.56,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.742,
-      "warnings": []
-    },
-    {
-      "id": "6bdc7bf72ddbf00a",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8397354",
-      "title": "camera: Fix cross-thread UAF in HdrNetStreamManipulator options reload - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8397354 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id Iaf5d08ccfe86faf955089432cd2da53229e2ef88; current revision 45d90b0584e8. Reviewed: Code-Review carries an approving or recommending vote. It changes 2 file(s) +25/-2, of which 2 are camera paths: chromiumos/platform2/camera/features/hdrnet/hdrnet_stream_manipulator.h, chromiumos/platform2/camera/features/hdrnet/hdrnet_stream_manipulator.cc.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"14x2Q9h9JO__xxIrr1XeLQ\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.56,
-      "android_hal_relevance": 0.56,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.742,
-      "warnings": []
-    },
-    {
-      "id": "50c77c259dc18a1e",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424687",
-      "title": "camera: Prevent UAF on watcher callback in ReloadableConfigFile - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8424687 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id I711801da6b2e3735da777efc0e1939007c476b61; current revision abd360353a8c. Reviewed: Code-Review carries an approving or recommending vote. It changes 3 file(s) +37/-10, of which 3 are camera paths: chromiumos/platform2/camera/common/reloadable_config_file.cc, chromiumos/platform2/camera/common/reloadable_config_file.h, chromiumos/platform2/camera/features/hdrnet/hdrnet_stream_manipulator.cc.",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"J8f-IQZILmCPq8uLVH8iMg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
-          "confidence": "medium"
-        }
-      ],
-      "camera_relevance": 0.56,
-      "android_hal_relevance": 0.56,
-      "ai_relevance": 0.5,
-      "technical_depth": 0.742,
-      "warnings": []
-    },
-    {
-      "id": "51cf61e868482023",
-      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
-      "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
-      "published_at": "2026-09-30",
-      "source_type": "rss_item",
-      "source_fetch_used": true,
-      "source_fetch_status": "success",
-      "source_fetch_error": "",
-      "validation_mode": "source_fetch",
-      "claims": [
-        {
-          "claim": "Gerrit change 8424689 on chromiumos/platform2 (branch main) is merged (submitted 2026-09-30). Change-Id I1be554dc973fa299b11e0e64e2e9c18ea9bcfebf; current revision 4ef608370cf0. Reviewed: Code-Review carries an approving or recommending vote. It changes 5 file(s) +77/-31, of which 5 are camera paths: chromiumos/platform2/camera/features/portrait_mode/portrait_mode_stream_manipulator.cc, chromiumos/platform2/camera/features/portrait_mode/portrait_mode_effect.h, chromiumos/platform2/camera/feature",
-          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"qVBXqvKWifB7U3-SqX-SKg\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
+          "evidence_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<meta charset=\"utf-8\">\n<meta name=\"description\" content=\"Gerrit Code Review\">\n<meta name=\"referrer\" content=\"never\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0\">\n<noscript>To use PolyGerrit, please enable JavaScript in your browser settings, and then refresh this page.</noscript><script nonce=\"5Tjb3yF_NKP3nwUwSrCH6w\">window.polymerSkipLoadingFontRoboto = true; window.CLOSURE_NO_DEPS = true; window.DEFAULT_",
           "confidence": "medium"
         }
       ],
