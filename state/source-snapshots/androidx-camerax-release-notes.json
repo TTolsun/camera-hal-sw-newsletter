@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source_id": "androidx-camerax-release-notes",
-  "updated_at": "2026-10-19T00:00:00.000Z",
+  "updated_at": "2026-10-26T00:00:00.000Z",
   "pages": [
     {
       "source_identity_key": "androidx-camerax-release-notes:49d58944bd3ca26fc6929250597a6e3a",
@@ -9,13 +9,13 @@
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera",
       "title": "CameraX | Jetpack | Android Developers",
       "visible_date": "2024-06-12",
-      "visible_last_updated": "2026-08-26",
+      "visible_last_updated": "2026-10-21",
       "structured_date_published": "",
       "structured_date_modified": "",
       "sitemap_lastmod": "",
-      "http_last_modified": "2026-08-27",
-      "content_hash": "9d42c88ad560491fc0b210dde9e9debdd097d3b063666bda0cefd308b79a8e05",
-      "normalized_content_hash": "afade6f1581b9cb83521aabd5f319281f6fc74eb6a1ce44579fdaf9e2334ae0e",
+      "http_last_modified": "2026-10-21",
+      "content_hash": "e8caac9546b0c72e1ef5b388164cd5688df4ee587f91a6947834fabba665bd6a",
+      "normalized_content_hash": "d626da2396cd2b97f08d2af6cf4378b2cf70f554610d05665272a95ca4c21f89",
       "release_note_sections": [],
       "anchors": [
         "https://developer.android.com/jetpack/androidx/releases/camera#1.0.0",
@@ -122,6 +122,7 @@
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha01",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha02",
         "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-alpha03",
+        "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
         "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha07",
         "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha08",
         "https://developer.android.com/jetpack/androidx/releases/camera#camera-camera2-1.0.0-alpha09",
@@ -237,16 +238,23 @@
         "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha01",
         "https://developer.android.com/jetpack/androidx/releases/camera#viewfinder-compose-1.0.0-alpha02"
       ],
-      "release_row_date": "2026-08-27",
-      "release_row_version": "1.0.0-alpha01",
-      "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
-      "release_row_hash": "773a38c03fba9ea926395817ad2d2b78",
+      "release_row_date": "2026-10-21",
+      "release_row_version": "1.7.0-rc01",
+      "release_row_anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+      "release_row_hash": "4bfed28e441534ce1b6294d0c5b26f7f",
       "release_rows": [
+        {
+          "version": "1.7.0-rc01",
+          "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
+          "date": "2026-10-21",
+          "hash": "4bfed28e441534ce1b6294d0c5b26f7f",
+          "title": "Version 1.7.0-rc01"
+        },
         {
           "version": "1.0.0-alpha01",
           "anchor": "https://developer.android.com/jetpack/androidx/releases/camera#extensions-1.0.0-alpha01",
-          "date": "2026-08-27",
-          "hash": "773a38c03fba9ea926395817ad2d2b78",
+          "date": "2026-10-21",
+          "hash": "53897af962aaea9b560b3e6db69d09de",
           "title": "Camera-Extensions and Camera-View Version 1.0.0-alpha01"
         },
         {
@@ -1644,8 +1652,8 @@
         }
       ],
       "first_seen_at": "2026-05-22T00:00:00.000Z",
-      "last_seen_at": "2026-10-19T00:00:00.000Z",
-      "seen_count": 119,
+      "last_seen_at": "2026-10-26T00:00:00.000Z",
+      "seen_count": 120,
       "status": 200
     }
   ],
@@ -1655,7 +1663,8 @@
     "source-event-aafc952ea6e65f65d2cbacbfa9ee38c8",
     "source-event-da02771cf7d01aa9856b8802b7959b95",
     "source-event-27abf06628060e55e4157d18384410da",
-    "source-event-e519d508de58de336ce4a0642094c9de"
+    "source-event-e519d508de58de336ce4a0642094c9de",
+    "source-event-9e60deeb142705b95ac9b68874c1b35c"
   ],
   "processed_evidence_ids": [
     "evidence-d134d45807b498f036b07fa3d599ac42",
@@ -1663,6 +1672,7 @@
     "evidence-64bd9749c37789e74a4690ca8c029bfa",
     "evidence-e3847bbdd6a264f2cec103284d7e1ce3",
     "evidence-341c97370366bc210723f4c4e52a717d",
-    "evidence-257142e38b74dcff522b1abebb6c1ba4"
+    "evidence-257142e38b74dcff522b1abebb6c1ba4",
+    "evidence-b7dd4a8d13cfc9d3a08f96056e056580"
   ]
 }
