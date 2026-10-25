@@ -811,15 +811,44 @@ test('commit message body reaches behavior_change without trailers and within th
     'Change-Id: If57302fe131c0771a60083be3a5128f99c1f5f77'
   ].join('\n');
 
+  const bodyOf = async msg => (await resolveSeed(url, change, { files, message: msg })).candidate.behavior_change;
+
   const withBody = (await resolveSeed(url, change, { files, message })).candidate;
-  assert.match(withBody.behavior_change, /: Fix native thread leak when releasing an unstarted video encoder\. Releasing a MediaCodec video encoder .* every VideoCapture unbind\.$/);
+  assert.match(withBody.behavior_change, /: Fix native thread leak when releasing an unstarted video encoder\. Commit message: Releasing a MediaCodec video encoder .* every VideoCapture unbind\.$/);
   assert.doesNotMatch(withBody.behavior_change, /Change-Id|Bug: |Test: /);
   assert.equal(classifyAospCameraStackCandidate(withBody).aosp_camera_stack_bucket, 'direct_aosp_camera');
+  assert.equal(await bodyOf(message.replace(/\n/g, '\r\n')), withBody.behavior_change);
 
-  const titleOnly = (await resolveSeed(url, change, { files })).candidate;
-  assert.equal(titleOnly.behavior_change.endsWith('unstarted video encoder.'), true);
+  // 제목만 있거나 본문이 없으면 기존 문장 그대로다.
+  for (const msg of ['', message.split('\n')[0]]) {
+    assert.equal((await bodyOf(msg)).endsWith('unstarted video encoder.'), true);
+  }
 
-  const long = (await resolveSeed(url, change, { files, message: `${message.split('\n')[0]}\n\n${'VideoCapture encoder release path. '.repeat(40)}` })).candidate;
-  assert.ok(long.behavior_change.length <= CANDIDATE_TEXT_MAX_LENGTH);
-  assert.doesNotMatch(long.behavior_change, /\s$/);
+  // 본문 중간의 "Note:" 같은 한정 조건은 trailer가 아니다. 맨 끝 trailer 문단의 이어지는 줄과
+  // cherry-pick 표시는 본문이 아니다(테스트 이름이 Camera2로 분류되면 안 된다).
+  const qualified = await bodyOf([
+    'Fix native thread leak when releasing an unstarted video encoder',
+    '',
+    'Releasing an unstarted encoder leaks a thread.',
+    'Note: this only applies on API 29 and above',
+    '',
+    'Bug: 123456',
+    'Test: atest',
+    '    android.hardware.camera2.cts.Foo',
+    '(cherry picked from commit 0123abcd)'
+  ].join('\n'));
+  assert.match(qualified, /Commit message: Releasing an unstarted encoder leaks a thread\. Note: this only applies on API 29 and above\.$/);
+  assert.doesNotMatch(qualified, /camera2\.cts|cherry picked/);
+
+  // 문단·목록 경계는 마침표로 남는다(수집 단계가 줄바꿈을 접어도 근접 패턴이 경계를 넘지 않는다).
+  const bullets = await bodyOf('Subject\n\nRework release\n- start the codec first\n- then release it\n\nChange-Id: I1');
+  assert.match(bullets, /Commit message: Rework release\. - start the codec first\. - then release it\.$/);
+
+  // 상한을 넘으면 문장 경계에서만 자르고, 경계가 없으면 본문을 싣지 않는다.
+  const sentences = Array.from({ length: 40 }, (_, index) => `VideoCapture release step ${index} is done.`).join(' ');
+  const long = await bodyOf(`Subject\n\n${sentences}`);
+  assert.ok(long.length <= CANDIDATE_TEXT_MAX_LENGTH);
+  assert.match(long, /Commit message: VideoCapture release step 0 is done\..* is done\.$/);
+  const unbroken = await bodyOf(`Subject\n\n${'x'.repeat(900)}`);
+  assert.equal(unbroken.includes('Commit message'), false);
 });

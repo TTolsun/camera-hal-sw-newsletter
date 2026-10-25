@@ -616,7 +616,7 @@ test('Gerrit change seeds are read through REST detail because the change page h
     deletions: 8,
     labels: {},
     current_revision: sha,
-    revisions: { [sha]: { files: {
+    revisions: { [sha]: { commit: { message: 'Subject\n\nRecorder releases the encoder on every VideoCapture unbind.\n\nChange-Id: I1' }, files: {
       '/COMMIT_MSG': {},
       [number === 4375770
         ? 'compose/ui/ui/src/main/java/Foo.kt'
@@ -656,6 +656,9 @@ test('Gerrit change seeds are read through REST detail because the change page h
   // reporter가 같은 리비전의 patch를 읽도록 목록 수집 후보와 같은 정체성 필드를 싣는다.
   assert.equal(candidate.gerrit_commit_sha, sha);
   assert.equal(candidate.gerrit_change_status, 'MERGED');
+  // commit message 본문이 seed 후보의 behavior_change로 넘어와 범위 분류의 근거가 된다.
+  assert.match(candidate.behavior_change, /Commit message: Recorder releases the encoder on every VideoCapture unbind\.$/);
+  assert.ok(candidate.aosp_camera_evidence_terms.includes('\\bVideoCapture\\b'));
 
   // 사람 리뷰가 없는 미병합 제안은 seed여도 main 기사가 될 수 없다.
   assert.equal(proposal.gerrit_change_status, 'NEW');

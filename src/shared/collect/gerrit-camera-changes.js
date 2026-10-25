@@ -280,26 +280,46 @@ function behaviorChange(detail, scope) {
     : 'Proposed change would update';
   const sentence = `${lead} ${scope.camera.length} camera source file(s) in ${detail.project} ${counts}: ${changeSubject(detail)}.`;
   const body = commitMessageBody(currentRevision(detail)?.info?.commit?.message);
-  if (!body) return sentence;
-  const room = CANDIDATE_TEXT_MAX_LENGTH - sentence.length - 1;
-  if (room <= 0) return sentence;
-  const excerpt = body.length <= room ? body : body.slice(0, body.lastIndexOf(' ', room) > 0 ? body.lastIndexOf(' ', room) : room);
-  return `${sentence} ${excerpt}`;
+  const room = CANDIDATE_TEXT_MAX_LENGTH - sentence.length - ' Commit message: '.length;
+  const excerpt = wholeSentencesWithin(body, room);
+  // 작성자가 쓴 서술임을 표지로 남긴다. 미병합 제안의 본문은 리뷰 전 주장이다.
+  return excerpt ? `${sentence} Commit message: ${excerpt}` : sentence;
 }
 
 /**
- * commit message에서 제목 줄과 trailer(Change-Id:, Bug:, Test:, Signed-off-by: 등)를 뺀 본문.
+ * commit message에서 제목 줄, 맨 끝 trailer 문단(Change-Id:, Bug:, Test: 등과 그 이어지는 줄),
+ * cherry-pick 표시를 뺀 본문.
  * 제목만으로는 무엇이 왜 바뀌는지 알 수 없는 변경이 많다. 예: "Fix native thread leak when releasing
  * an unstarted video encoder"에는 카메라 용어가 없어 범위 분류기가 일반 기술 후보로 떨어뜨렸지만,
  * 본문은 VideoCapture·Recorder 경로라고 말한다(2026-10-26 실측). 본문도 같은 REST 응답의 공식 텍스트다.
+ *
+ * trailer는 git 규칙대로 마지막 문단 전체가 `Key: value`일 때만 뺀다. 본문 중간의 "Note: ..."는
+ * 한정 조건이라 지우면 주장만 남는다. 수집 단계가 공백을 하나로 접으므로 문단·목록 경계는 마침표로
+ * 남긴다. 경계가 없으면 범위 분류기의 근접 패턴이 다른 문단의 단어를 이어 붙여 읽는다(#1233).
  */
 function commitMessageBody(message) {
-  const lines = String(message || '').split('\n').slice(1);
-  return lines
-    .filter(line => !/^[A-Za-z][\w-]*: \S/.test(line.trim()))
-    .join(' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  const lines = String(message || '').replace(/\r\n?/g, '\n').split('\n').slice(1)
+    .filter(line => !/^\(cherry picked from commit [0-9a-f]+\)$/.test(line.trim()));
+  const paragraphs = lines.join('\n').split(/\n\s*\n/).map(paragraph => paragraph.trim()).filter(Boolean);
+  const last = paragraphs[paragraphs.length - 1] || '';
+  const isTrailer = line => /^[A-Za-z][\w-]*: \S/.test(line) || /^\s/.test(line);
+  if (last && /^[A-Za-z][\w-]*: \S/.test(last) && last.split('\n').every(isTrailer)) paragraphs.pop();
+  return paragraphs
+    .flatMap(paragraph => paragraph.split(/\n(?=\s*[-*] )/))
+    .map(segment => segment.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .map(segment => (/[.!?:;]$/.test(segment) ? segment : `${segment}.`))
+    .join(' ');
+}
+
+// 문장 중간에서 자르면 조건절이 떨어져 뜻이 뒤집힐 수 있다. 상한 안의 마지막 문장 경계에서 자르고,
+// 경계가 없으면 본문을 싣지 않는다.
+function wholeSentencesWithin(text, limit) {
+  if (!text || limit <= 0) return '';
+  if (text.length <= limit) return text;
+  const head = text.slice(0, limit + 1);
+  const end = Math.max(...['. ', '! ', '? '].map(mark => head.lastIndexOf(mark)));
+  return end > 0 ? text.slice(0, end + 1) : '';
 }
 
 /**
