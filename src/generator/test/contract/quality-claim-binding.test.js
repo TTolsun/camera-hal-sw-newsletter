@@ -837,6 +837,10 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
   // 그 구절을 차단하게 만들지 않는다.
   assert.equal(blocked({ ...article, confirmed_facts: [], specificity_checks: [],
     source_verification_notes: ['Linked evidence b/42 was not fetched (unsupported).'] }), false);
+  // 반대로 문장부호 없이 끝난 앞 필드(제목·라벨)는 뒤 내용을 이끄므로 그 주어를 같은 문장으로 본다.
+  assert.equal(blocked({ ...article, headline: 'GitHub issue #7 회귀 해결', what_changed: 'Gerrit change 123 main 브랜치에 MERGED.' }), true);
+  assert.equal(blocked({ ...article, confirmed_facts: ['Linked evidence b/42 상태:', 'Gerrit change 123 MERGED'] }), true);
+  assert.equal(blocked({ ...article, headline: 'GitHub 정리 노트.', what_changed: 'Gerrit change 123 main 브랜치에 MERGED.' }), false);
   // 같은 사실을 대소문자·조사·어순만 바꿔 적어도 1차 변경의 상태로 인정한다(2026-10-26 실측 문구).
   const reworded = 'Gerrit Change 123은 2026-01-02 main 브랜치에 병합(MERGED)되었습니다.';
   for (const variant of [reworded, 'Gerrit change 123 (main, status=MERGED)',

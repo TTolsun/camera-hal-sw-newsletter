@@ -302,19 +302,28 @@ function gerritMergedStatePattern(changeId, metadata) {
 const LINKED_EVIDENCE_SUBJECT = /\b(?:IssueTracker|Issue Tracker|GitHub|mailing list|CVE|linked evidence)\b/i;
 const SENTENCE_END = /[.!?](?=\s|$)|\n/g;
 
-function sentenceOutside(text, start, end) {
+// lead는 바로 앞 필드가 문장부호 없이 끝났을 때 그 마지막 문장이다(제목이나 'Linked evidence b/42 상태:'
+// 같은 라벨). 그런 앞 필드는 뒤 내용을 이끌므로 같은 문장으로 본다. 뒤 필드는 별개의 진술이라 보지 않는다.
+function sentenceOutside(text, start, end, lead = '') {
   let sentenceStart = 0;
   let sentenceEnd = text.length;
   for (const boundary of text.matchAll(SENTENCE_END)) {
     if (boundary.index < start) sentenceStart = boundary.index + 1;
     else if (boundary.index >= end) { sentenceEnd = boundary.index; break; }
   }
-  return `${text.slice(sentenceStart, start)} ${text.slice(end, sentenceEnd)}`;
+  const leading = sentenceStart === 0 ? `${lead} ` : '';
+  return `${leading}${text.slice(sentenceStart, start)} ${text.slice(end, sentenceEnd)}`;
 }
 
-function neutralizeGerritMergedState(articleText, changeId, metadata) {
+function unterminatedLastSentence(text) {
+  if (!text || /[.!?]\s*$/.test(text)) return '';
+  const boundaries = [...text.matchAll(SENTENCE_END)];
+  return boundaries.length ? text.slice(boundaries.at(-1).index + 1) : text;
+}
+
+function neutralizeGerritMergedState(articleText, changeId, metadata, lead = '') {
   return articleText.replace(gerritMergedStatePattern(changeId, metadata), (match, offset, whole) =>
-    LINKED_EVIDENCE_SUBJECT.test(sentenceOutside(whole, offset, offset + match.length))
+    LINKED_EVIDENCE_SUBJECT.test(sentenceOutside(whole, offset, offset + match.length, lead))
       ? match
       : 'Gerrit primary source state');
 }
@@ -350,7 +359,8 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
   });
   // 조각마다 지운다. 마침표 없이 끝난 상태 구절 바로 다음 필드에 linked evidence 한계 노트가 오면,
   // 이어 붙인 글에서는 그 노트의 주어가 같은 문장으로 보여 정상 구절까지 차단된다.
-  let pieces = linkedEvidenceArticleFields({ ...section, source_verification_notes: notes }).flatMap(textLeaves);
+  const leaves = linkedEvidenceArticleFields({ ...section, source_verification_notes: notes }).flatMap(textLeaves).filter(Boolean);
+  let pieces = leaves;
   // A primary change's fetched status is not the status of its linked bugs.
   // Recognize only metadata-backed renderings of that state; leave other
   // assertions (including neighbouring confirmations) visible to the existing
@@ -363,7 +373,8 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     const changeId = String(candidate.url || '').match(/^https:\/\/android-review\.googlesource\.com\/c\/.+\/\+\/(\d+)\/?$/)?.[1];
     if (!changeId || String(metadata.change_number) !== changeId || metadata.status !== 'MERGED' ||
       !metadata.project || !metadata.branch || !/^\d{4}-\d{2}-\d{2} /.test(metadata.submitted || '')) continue;
-    pieces = pieces.map(piece => neutralizeGerritMergedState(piece, changeId, metadata));
+    pieces = pieces.map((piece, index) =>
+      neutralizeGerritMergedState(piece, changeId, metadata, unterminatedLastSentence(leaves[index - 1])));
   }
   return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(pieces.join(' '));
 }
