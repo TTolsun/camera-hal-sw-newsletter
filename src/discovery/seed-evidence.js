@@ -14,11 +14,9 @@ const {
   seedFetchReportMarkdownPath,
   seedFetchReportMarkdownRelPath,
   seedFetchReportPath,
-  seedFetchReportRelPath,
   seedMergeReportMarkdownPath,
   seedMergeReportMarkdownRelPath,
-  seedMergeReportPath,
-  seedMergeReportRelPath
+  seedMergeReportPath
 } = require('../shared/common/artifact-paths');
 const {
   decodeHtml,
@@ -36,6 +34,10 @@ const {
 const {
   parseSourceSpecificItems
 } = require('../shared/collect/source-item-parsers');
+const {
+  isGerritUrl,
+  resolveGerritChangeUrl
+} = require('../shared/collect/gerrit-camera-changes');
 const {
   sourceForUrl,
   stableId,
@@ -408,6 +410,14 @@ function seedCandidateFromEvidence({
     api_or_component: candidate.api_or_component || candidate.source_extraction?.release?.component || '',
     source_extraction: candidate.source_extraction || null,
     extraction_quality: candidate.extraction_quality || candidate.source_extraction?.extraction_quality || null,
+    // Gerrit seed는 목록 수집 후보와 같은 정체성 필드를 싣는다. reporter는 이 리비전으로 patch를 읽는다.
+    ...(candidate.gerrit_change_number ? {
+      gerrit_change_id: candidate.gerrit_change_id,
+      gerrit_change_number: candidate.gerrit_change_number,
+      gerrit_change_status: candidate.gerrit_change_status,
+      gerrit_commit_sha: candidate.gerrit_commit_sha,
+      gerrit_effective_date_field: candidate.gerrit_effective_date_field
+    } : {}),
     finalSelectionEligibility: facts.length > 0 && primaryEvidence.published_at ? 'short' : 'watchlist',
     final_selection_eligibility: facts.length > 0 && primaryEvidence.published_at ? 'short' : 'watchlist',
     source_gap_risk: !(facts.length > 0 && primaryEvidence.published_at),
@@ -668,13 +678,28 @@ async function runSeedEvidenceExpansion({
   let followedLinkCount = 0;
 
   for (const seed of ensureArray(seedPayload.seed_urls)) {
+    const fetchOptions = {
+      lookupImpl,
+      timeoutMs: effectiveLimits.fetchTimeoutMs,
+      maxBytes: effectiveLimits.maxBytesPerPage
+    };
     let fetched;
+    let gerritCandidate = null;
     try {
-      fetched = await fetchPublicText(fetchImpl, seed.url, {
-        lookupImpl,
-        timeoutMs: effectiveLimits.fetchTimeoutMs,
-        maxBytes: effectiveLimits.maxBytesPerPage
-      });
+      if (isGerritUrl(seed.url)) {
+        // Gerrit 변경 페이지 HTML에는 제목·날짜·본문이 없다. 같은 SSRF 검사를 거쳐 REST 상세를 읽는다.
+        const resolved = await resolveGerritChangeUrl(seed.url, sourceRegistry.sources, {
+          fetchTextImpl: async url => (await fetchPublicText(fetchImpl, url, fetchOptions)).body
+        });
+        if (!resolved.candidate) {
+          fetchRows.push({ seed_id: seed.seed_id, url: seed.url, status: 'failed', reason: resolved.reason, details: {} });
+          continue;
+        }
+        gerritCandidate = resolved.candidate;
+        fetched = { url: seed.url, finalUrl: seed.url, body: '' };
+      } else {
+        fetched = await fetchPublicText(fetchImpl, seed.url, fetchOptions);
+      }
     } catch (error) {
       fetchRows.push({
         seed_id: seed.seed_id,
@@ -687,11 +712,11 @@ async function runSeedEvidenceExpansion({
     }
 
     const source = {
-      ...(sourceForUrl(sourceRegistry, fetched.finalUrl || seed.url) || {}),
+      ...((gerritCandidate ? gerritCandidate.source : sourceForUrl(sourceRegistry, fetched.finalUrl || seed.url)) || {}),
       url: fetched.finalUrl || seed.url
     };
     const sourceName = source.name || 'Seed URL evidence';
-    const pageTitle = titleFromHtml(fetched.body, seed.expected_topic || sourceName);
+    const pageTitle = gerritCandidate ? gerritCandidate.title : titleFromHtml(fetched.body, seed.expected_topic || sourceName);
     const pageDate = dateFromHtml(fetched.body);
     const outgoingLinks = extractOutgoingLinksFromHtml(fetched.body, {
       baseUrl: fetched.finalUrl || seed.url,
@@ -737,7 +762,7 @@ async function runSeedEvidenceExpansion({
       sourceUrl: source.sourceUrl || seed.url,
       url: fetched.finalUrl || seed.url
     };
-    const parsedItems = parseSourceSpecificItems(fetched.body, parserSource);
+    const parsedItems = gerritCandidate ? [gerritCandidate] : parseSourceSpecificItems(fetched.body, parserSource);
     const primaryEvidence = parsedItems.length > 0
       ? parsedItems.map((item, index) => buildPrimaryEvidence(seed, item, index, fetched.finalUrl || seed.url))
       : [{
@@ -892,9 +917,9 @@ async function runSeedEvidenceExpansion({
       seed_candidate_artifact: seedCandidatesRelPath(date),
       seed_evidence_pack: seedEvidencePackRelPath(date),
       seed_evidence_pack_markdown: seedEvidencePackMarkdownRelPath(date),
-      seed_fetch_report: seedFetchReportRelPath(date),
+      // seed-fetch-report.json·seed-merge-report.json은 커밋하지 않는 디버그 산출물이라(.gitignore, #1100)
+      // main을 새로 checkout하는 generate 단계에는 없다. manifest는 커밋되는 Markdown만 가리킨다.
       seed_fetch_report_markdown: seedFetchReportMarkdownRelPath(date),
-      seed_merge_report: seedMergeReportRelPath(date),
       seed_merge_report_markdown: seedMergeReportMarkdownRelPath(date)
     }
   };

@@ -8,6 +8,7 @@ const {
   effectiveDate,
   hasEligibleState,
   resolveGerritCameraChangeItems,
+  resolveGerritChangeUrl,
   reviewSignals,
   subjectIsNoise
 } = require('../../../collect/gerrit-camera-changes');
@@ -694,4 +695,98 @@ test('a list page that reaches past the window emits no truncation event (#1059)
     lookbackDays: LOOKBACK_DAYS
   });
   assert.deepEqual(events, [], 'a page whose oldest entry predates the window covered it');
+});
+
+// 편집자 seed URL 경로(#2026-10-26 실행): 변경 페이지 HTML 대신 REST 상세로 후보를 만든다.
+function seedChange(overrides = {}) {
+  return listChange({
+    _number: 4381410,
+    project: 'platform/frameworks/support',
+    branch: 'androidx-main',
+    status: 'MERGED',
+    subject: 'Keep UseCaseCameraState signals pending on repeating frame failure',
+    created: '2026-10-14 10:00:00.000000000',
+    submitted: '2026-10-22 04:56:56.000000000',
+    updated: '2026-10-22 04:56:56.000000000',
+    ...overrides
+  });
+}
+
+async function resolveSeed(url, change, detailOptions = {}) {
+  const stub = stubFetch({ [String(change._number)]: detailFor(change, detailOptions) });
+  const result = await resolveGerritChangeUrl(url, registry.sources, { fetchTextImpl: stub.fetchTextImpl });
+  return { ...result, requested: stub.requested };
+}
+
+test('seed change URL resolves through REST detail with the registry source that covers its files', async () => {
+  const url = 'https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410';
+  const camera = await resolveSeed(url, seedChange(), {
+    files: ['camera/camera-camera2-pipe-integration/src/main/java/androidx/camera/camera2/pipe/integration/impl/UseCaseCameraState.kt']
+  });
+  assert.equal(camera.reason, '');
+  assert.deepEqual(camera.requested, ['https://android-review.googlesource.com/changes/4381410/detail?o=CURRENT_REVISION&o=CURRENT_FILES']);
+  assert.equal(camera.candidate.source.id, 'androidx-gerrit-camera-changes');
+  assert.equal(camera.candidate.url, url);
+  assert.equal(camera.candidate.publishedAt, '2026-10-22');
+  assert.equal(camera.candidate.gerrit_effective_date_field, 'submitted');
+  assert.equal(camera.candidate.mainArticlePolicy, undefined);
+
+  const heif = await resolveSeed(url, seedChange(), { files: ['heifwriter/heifwriter/src/main/java/androidx/heifwriter/HeifEncoder.java'] });
+  assert.equal(heif.candidate.source.id, 'androidx-gerrit-heifwriter-changes');
+});
+
+test('seed change URL keeps the list resolver contracts and reports why no candidate was made', async () => {
+  const url = 'https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410';
+  assert.equal((await resolveSeed(url, seedChange(), { files: ['compose/ui/ui/src/main/Foo.kt'] })).reason,
+    'gerrit_change_not_camera_scoped');
+  assert.equal((await resolveSeed(url, seedChange({ project: 'platform/frameworks/av' }))).reason,
+    'gerrit_change_identity_mismatch');
+  assert.equal((await resolveSeed(url, seedChange({ status: 'ABANDONED' }))).reason, 'gerrit_change_not_eligible');
+  const unregistered = 'https://android-review.googlesource.com/c/platform/frameworks/base/+/4381410';
+  assert.equal((await resolveSeed(unregistered, seedChange({ project: 'platform/frameworks/base' }), {
+    files: ['core/java/android/hardware/camera2/CameraDevice.java']
+  })).reason, 'gerrit_change_has_no_registry_source');
+  assert.equal((await resolveSeed('https://example.com/c/platform/frameworks/support/+/4381410', seedChange())).reason,
+    'unsupported_gerrit_change_url');
+
+  // 승인 표가 없는 NEW 제안은 목록 수집과 똑같이 watchlist로 내린다.
+  const proposal = await resolveSeed(url, seedChange({ status: 'NEW', submitted: undefined }), {
+    files: ['camera/camera-core/src/main/java/androidx/camera/core/ImageCapture.java']
+  });
+  assert.equal(proposal.candidate.publishedAt, '2026-10-14');
+  assert.equal(proposal.candidate.mainArticlePolicy, 'watchlist_only');
+
+  // 병합된 변경만 수집하는 AndroidX 소스는 사람 리뷰가 붙은 NEW 제안도 보증하지 않는다.
+  const reviewed = await resolveSeed(url, seedChange({ status: 'NEW', submitted: undefined }), {
+    files: ['camera/camera-core/src/main/java/androidx/camera/core/ImageCapture.java'],
+    labels: { 'Code-Review': { approved: { _account_id: 1 } } }
+  });
+  assert.equal(reviewed.candidate.mainArticlePolicy, 'watchlist_only');
+
+  const garbled = await resolveGerritChangeUrl(url, registry.sources, { fetchTextImpl: async () => ")]}'\n{trunc" });
+  assert.equal(garbled.reason, 'gerrit_detail_unparseable');
+  // fetch 오류는 호출자가 차단과 실패를 가를 수 있도록 그대로 전파한다.
+  await assert.rejects(
+    resolveGerritChangeUrl(url, registry.sources, { fetchTextImpl: async () => { throw new Error('dns_resolved_private_address'); } }),
+    /dns_resolved_private_address/
+  );
+});
+
+test('seed change URL accepts patchset and file addresses copied from the Gerrit UI', async () => {
+  const files = { files: ['camera/camera-core/src/main/java/androidx/camera/core/ImageCapture.java'] };
+  for (const suffix of ['/', '/3', '/3/camera/camera-core/src/main/java/androidx/camera/core/ImageCapture.java']) {
+    const url = `https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410${suffix}`;
+    const result = await resolveSeed(url, seedChange(), files);
+    assert.equal(result.reason, '', url);
+    assert.equal(result.candidate.url, 'https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410');
+  }
+});
+
+test('seed source matching compares whole project names, not prefixes', async () => {
+  // platform/hardware/google는 등록부의 project:platform/hardware/google/camera와 접두사만 같다.
+  const url = 'https://android-review.googlesource.com/c/platform/hardware/google/+/4381410';
+  const result = await resolveSeed(url, seedChange({ project: 'platform/hardware/google' }), {
+    files: ['camera/common/hal/Foo.cc']
+  });
+  assert.equal(result.reason, 'gerrit_change_has_no_registry_source');
 });
