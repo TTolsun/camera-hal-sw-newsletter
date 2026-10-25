@@ -282,16 +282,29 @@ function gerritMergedStatePattern(changeId, metadata) {
   );
 }
 
-// 같은 문장 앞쪽에 linked evidence 주어(IssueTracker·GitHub·CVE 등)가 있으면 그 문장의 MERGED는 1차
-// 변경의 상태가 아니라 linked evidence에 대한 주장일 수 있으므로 지우지 않는다. 예: 'Linked evidence b/42 —
-// Gerrit change 123 MERGED.'는 MERGED 하나가 확인 동사라, 지우면 차단이 사라진다.
+// 같은 문장 안에 linked evidence 주어(IssueTracker·GitHub·CVE 등)가 있으면, 앞이든 뒤든 그 문장의
+// MERGED는 1차 변경의 상태가 아니라 linked evidence에 대한 주장일 수 있으므로 지우지 않는다.
+// 예: 'Linked evidence b/42 — Gerrit change 123 MERGED.', 'Gerrit change 123 MERGED로 CVE-… 반영.'
+// 문장 경계는 공백·끝이 뒤따르는 마침표·물음표·느낌표와 줄바꿈이다. v1.2나 URL 안의 마침표는
+// 경계가 아니다.
 const LINKED_EVIDENCE_SUBJECT = /\b(?:IssueTracker|Issue Tracker|GitHub|mailing list|CVE|linked evidence)\b/i;
+const SENTENCE_END = /[.!?](?=\s|$)|\n/g;
+
+function sentenceOutside(text, start, end) {
+  let sentenceStart = 0;
+  let sentenceEnd = text.length;
+  for (const boundary of text.matchAll(SENTENCE_END)) {
+    if (boundary.index < start) sentenceStart = boundary.index + 1;
+    else if (boundary.index >= end) { sentenceEnd = boundary.index; break; }
+  }
+  return `${text.slice(sentenceStart, start)} ${text.slice(end, sentenceEnd)}`;
+}
 
 function neutralizeGerritMergedState(articleText, changeId, metadata) {
-  return articleText.replace(gerritMergedStatePattern(changeId, metadata), (match, offset, whole) => {
-    const sentenceStart = Math.max(whole.lastIndexOf('.', offset - 1), whole.lastIndexOf('\n', offset - 1)) + 1;
-    return LINKED_EVIDENCE_SUBJECT.test(whole.slice(sentenceStart, offset)) ? match : 'Gerrit primary source state';
-  });
+  return articleText.replace(gerritMergedStatePattern(changeId, metadata), (match, offset, whole) =>
+    LINKED_EVIDENCE_SUBJECT.test(sentenceOutside(whole, offset, offset + match.length))
+      ? match
+      : 'Gerrit primary source state');
 }
 
 function hasUnresolvedConfirmationClaim(section, candidate) {

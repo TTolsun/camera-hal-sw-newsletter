@@ -845,7 +845,13 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
     `${reworded} Linked evidence verified.`,
     // 앞에 linked evidence 주어가 오면 MERGED는 그 주어에 대한 주장일 수 있어 지우지 않는다.
     'GitHub issue #7 is closed by Gerrit change 123 main 브랜치에 MERGED.',
-    'Linked evidence b/42 — Gerrit change 123 MERGED.', 'CVE-2026-0001 patch: Gerrit change 123 MERGED.']) {
+    'Linked evidence b/42 — Gerrit change 123 MERGED.', 'CVE-2026-0001 patch: Gerrit change 123 MERGED.',
+    // 주어와 구절 사이의 버전 번호·URL 마침표는 문장 경계가 아니다.
+    'GitHub issue #7 (v1.2 regression) is closed by Gerrit change 123 MERGED.',
+    'See https://github.com/x/y.git issue: Gerrit change 123 MERGED.',
+    // 주어가 같은 문장에서 MERGED 뒤에 와도 지우지 않는다.
+    'Gerrit change 123 MERGED, GitHub issue #7도 함께 닫힘.', 'Gerrit change 123 MERGED — linked evidence b/42 해결.',
+    'Gerrit change 123 MERGED로 CVE-2026-0001 패치 반영.']) {
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
   }
   for (const invalid of [expandedClaim.replace('platform/example', 'platform/other'),
