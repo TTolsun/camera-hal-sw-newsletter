@@ -833,6 +833,10 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
   }
   assert.equal(blocked({ ...article, confirmed_facts: [expandedClaim] }), false);
+  // 필드 경계는 문장 경계다. 마침표 없이 끝난 상태 구절 다음 필드의 linked evidence 한계 노트가
+  // 그 구절을 차단하게 만들지 않는다.
+  assert.equal(blocked({ ...article, confirmed_facts: [], specificity_checks: [],
+    source_verification_notes: ['Linked evidence b/42 was not fetched (unsupported).'] }), false);
   // 같은 사실을 대소문자·조사·어순만 바꿔 적어도 1차 변경의 상태로 인정한다(2026-10-26 실측 문구).
   const reworded = 'Gerrit Change 123은 2026-01-02 main 브랜치에 병합(MERGED)되었습니다.';
   for (const variant of [reworded, 'Gerrit change 123 (main, status=MERGED)',

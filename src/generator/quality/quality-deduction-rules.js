@@ -231,7 +231,7 @@ function boundedDeduct(state, category, points, reason, location = '', options =
   });
 }
 
-function linkedEvidenceArticleText(section) {
+function linkedEvidenceArticleFields(section) {
   const articleSections = normalizeArticleSections(section || {});
   return [
     section?.headline,
@@ -243,7 +243,19 @@ function linkedEvidenceArticleText(section) {
     section?.confirmed_facts,
     section?.source_verification_notes,
     section?.action_items
-  ].map(text).join(' ');
+  ];
+}
+
+function linkedEvidenceArticleText(section) {
+  return linkedEvidenceArticleFields(section).map(text).join(' ');
+}
+
+// text()와 같은 순서로 필드·배열 항목을 낱개 문자열로 편다. 필드 경계는 문장 경계이므로, 1차 변경
+// 상태 구절을 지우는 판정은 조각마다 한다.
+function textLeaves(value) {
+  if (Array.isArray(value)) return value.flatMap(textLeaves);
+  if (value && typeof value === 'object') return Object.values(value).flatMap(textLeaves);
+  return [String(value || '').trim()];
 }
 
 function linkedEvidenceEvidenceText(section) {
@@ -336,9 +348,9 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
       evidenceIds[0] === doc.evidence_id &&
       (urls.length === 0 || urls[0].replace(/[.,;]+$/, '') === doc.url)));
   });
-  let articleText = linkedEvidenceArticleText({
-    ...section, source_verification_notes: notes
-  });
+  // 조각마다 지운다. 마침표 없이 끝난 상태 구절 바로 다음 필드에 linked evidence 한계 노트가 오면,
+  // 이어 붙인 글에서는 그 노트의 주어가 같은 문장으로 보여 정상 구절까지 차단된다.
+  let pieces = linkedEvidenceArticleFields({ ...section, source_verification_notes: notes }).flatMap(textLeaves);
   // A primary change's fetched status is not the status of its linked bugs.
   // Recognize only metadata-backed renderings of that state; leave other
   // assertions (including neighbouring confirmations) visible to the existing
@@ -351,9 +363,9 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     const changeId = String(candidate.url || '').match(/^https:\/\/android-review\.googlesource\.com\/c\/.+\/\+\/(\d+)\/?$/)?.[1];
     if (!changeId || String(metadata.change_number) !== changeId || metadata.status !== 'MERGED' ||
       !metadata.project || !metadata.branch || !/^\d{4}-\d{2}-\d{2} /.test(metadata.submitted || '')) continue;
-    articleText = neutralizeGerritMergedState(articleText, changeId, metadata);
+    pieces = pieces.map(piece => neutralizeGerritMergedState(piece, changeId, metadata));
   }
-  return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(articleText);
+  return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(pieces.join(' '));
 }
 
 function linkedEvidenceDiagnostics(candidate = {}) {
