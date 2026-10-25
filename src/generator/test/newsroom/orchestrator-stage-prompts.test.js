@@ -10,6 +10,7 @@ const {
   editorCompletionSystemPrompt,
   factCheckCompletionSystemPrompt
 } = require('../../publish/orchestrator-stage-prompts');
+const { publishGateCriteriaText } = require('../../../shared/common/newsletter-policy');
 
 // 추출 전 main()의 인라인 시스템 프롬프트 배열을 빌더로 옮긴 것이다. 빌더의 책임은 단계별
 // 시스템 프롬프트 문자열을 조립하는 것이며, 정적 문단(import한 prompt/policy 헬퍼)은
@@ -86,4 +87,14 @@ test('writing and verification use original evidence without imposing one articl
     assert.match(prompt, /핵심 변화·중요한 조건을 생략/);
     assert.match(prompt, /article_quality.publishable=false/);
   }
+});
+
+test('editorSystemPrompt는 구성 상한을 editor의 보류 사유로 주지 않는다', () => {
+  // 2026-10-26 실측: 보조 main 최대 1건을 editor 기준으로 주자 보조 기사 1건뿐인 구성에서 그 기사를 보류했다.
+  const prompt = editorSystemPrompt({ publishMode: 'NORMAL' });
+  assert.equal(prompt.includes(publishGateCriteriaText()), false);
+  assert.doesNotMatch(prompt, /supporting main articles max/);
+  assert.match(prompt, /상한을 이유로 selected group을 demote하거나 explicit_editor_hold로 보류하지 마세요/);
+  // 금지 bucket은 상한이 아니라 자격 제외라 forbidden_bucket 강등 경로는 그대로 남는다.
+  assert.match(prompt, /reason_code=duplicate_or_near_duplicate\|forbidden_bucket\|explicit_editor_hold/);
 });

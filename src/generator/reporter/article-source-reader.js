@@ -2,7 +2,7 @@ const { createBoundedFetchClient } = require('../../shared/collect/bounded-fetch
 const { articleBody } = require('../../shared/collect/document-section-parsing');
 const { decodeHtml } = require('../../shared/common/common');
 const { createHash } = require('crypto');
-const { gerritTarget, readGerritSource } = require('./gerrit-source-reader');
+const { GERRIT_REVISION, gerritTarget, readGerritSource } = require('./gerrit-source-reader');
 
 const MAX_SOURCE_READS = 24;
 const MAX_DOCUMENT_CHARS = 16000;
@@ -56,6 +56,17 @@ function relatedPatchUrls(html, url) {
   return [...new Set([...related.matchAll(/href=["']([^"']+)["']/g)]
     .map(match => { try { return new URL(match[1], url).href; } catch { return ''; } })
     .filter(link => /^https:\/\/patchwork\.libcamera\.org\/(?:cover|patch)\/\d+\/$/.test(link) && link !== url))].slice(0, 5);
+}
+
+// Seed evidence has a separate reviewed provenance contract; do not refetch it.
+// 예외는 seed가 기록한 리비전으로 고정된 Gerrit 변경이다. Gerrit 경로는 seed와 같은 공식 REST에서
+// 그 리비전의 patch만 읽으므로 provenance가 바뀌지 않는다. 막으면 seed로 들어왔거나 seed와 병합된
+// 변경만 diff 없이 기사가 쓰이고, 1차 변경의 병합 상태도 원문 근거로 인정받지 못한다
+// (2026-10-26 실측: 4381410·4375770).
+function keepsSeedProvenance(candidate, url) {
+  const seeded = candidate.compact_evidence || candidate.source_extraction_ref || candidate.manual_seed || candidate.manualSeed;
+  if (!seeded) return false;
+  return !(url && gerritTarget(url) && GERRIT_REVISION.test(candidate.gerrit_commit_sha || ''));
 }
 
 async function readArticleSources(report, { fetchImpl = globalThis.fetch } = {}) {
@@ -120,9 +131,8 @@ async function readArticleSources(report, { fetchImpl = globalThis.fetch } = {})
   const enriched = new Map();
   const candidates = [...(report.selected_articles || []), ...(report.shortlisted_candidates || [])];
   for (const candidate of candidates) {
-    // Seed evidence has a separate reviewed provenance contract; do not refetch it.
-    if (candidate.compact_evidence || candidate.source_extraction_ref || candidate.manual_seed || candidate.manualSeed) continue;
     const url = publicSourceUrl(candidate.url || candidate.article_url || candidate.articleUrl);
+    if (keepsSeedProvenance(candidate, url)) continue;
     const key = `${url}\n${candidate.gerrit_commit_sha || ''}`;
     if (!url || enriched.has(key)) continue;
     const primary = await read(url, candidate);
@@ -134,9 +144,9 @@ async function readArticleSources(report, { fetchImpl = globalThis.fetch } = {})
   for (const value of Object.values(report)) {
     if (!Array.isArray(value)) continue;
     for (const candidate of value) {
-      if (!candidate || typeof candidate !== 'object' || attached.has(candidate) ||
-          candidate.compact_evidence || candidate.source_extraction_ref || candidate.manual_seed || candidate.manualSeed) continue;
+      if (!candidate || typeof candidate !== 'object' || attached.has(candidate)) continue;
       const url = publicSourceUrl(candidate.url || candidate.article_url || candidate.articleUrl);
+      if (keepsSeedProvenance(candidate, url)) continue;
       const read = enriched.get(`${url}\n${candidate.gerrit_commit_sha || ''}`);
       if (!read) continue;
       attached.add(candidate);

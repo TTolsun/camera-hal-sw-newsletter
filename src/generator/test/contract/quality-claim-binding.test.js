@@ -833,6 +833,35 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
   }
   assert.equal(blocked({ ...article, confirmed_facts: [expandedClaim] }), false);
+  // 필드 경계는 문장 경계다. 마침표 없이 끝난 상태 구절 다음 필드의 linked evidence 한계 노트가
+  // 그 구절을 차단하게 만들지 않는다.
+  assert.equal(blocked({ ...article, confirmed_facts: [], specificity_checks: [],
+    source_verification_notes: ['Linked evidence b/42 was not fetched (unsupported).'] }), false);
+  // 반대로 문장부호 없이 끝난 앞 필드(제목·라벨)는 뒤 내용을 이끄므로 그 주어를 같은 문장으로 본다.
+  assert.equal(blocked({ ...article, headline: 'GitHub issue #7 회귀 해결', what_changed: 'Gerrit change 123 main 브랜치에 MERGED.' }), true);
+  assert.equal(blocked({ ...article, confirmed_facts: ['Linked evidence b/42 상태:', 'Gerrit change 123 MERGED'] }), true);
+  assert.equal(blocked({ ...article, headline: 'GitHub 정리 노트.', what_changed: 'Gerrit change 123 main 브랜치에 MERGED.' }), false);
+  // 같은 사실을 대소문자·조사·어순만 바꿔 적어도 1차 변경의 상태로 인정한다(2026-10-26 실측 문구).
+  const reworded = 'Gerrit Change 123은 2026-01-02 main 브랜치에 병합(MERGED)되었습니다.';
+  for (const variant of [reworded, 'Gerrit change 123 (main, status=MERGED)',
+    'Gerrit 변경 123이 platform/example의 main 브랜치에 MERGED 상태입니다.']) {
+    assert.equal(blocked({ ...article, confirmed_facts: [variant] }), false, variant);
+  }
+  for (const invalid of [reworded.replace('123', '1234'), reworded.replace('01-02', '01-03'),
+    reworded.replace('main', 'release'), reworded.replace('main 브랜치에', 'main 브랜치에 b/42 버그와 함께'),
+    reworded.replace('2026-01-02', '2026-01-03'), // KST로 환산한 날짜는 메타데이터(UTC)와 달라 차단된다.
+    `${reworded} Linked evidence verified.`,
+    // 앞에 linked evidence 주어가 오면 MERGED는 그 주어에 대한 주장일 수 있어 지우지 않는다.
+    'GitHub issue #7 is closed by Gerrit change 123 main 브랜치에 MERGED.',
+    'Linked evidence b/42 — Gerrit change 123 MERGED.', 'CVE-2026-0001 patch: Gerrit change 123 MERGED.',
+    // 주어와 구절 사이의 버전 번호·URL 마침표는 문장 경계가 아니다.
+    'GitHub issue #7 (v1.2 regression) is closed by Gerrit change 123 MERGED.',
+    'See https://github.com/x/y.git issue: Gerrit change 123 MERGED.',
+    // 주어가 같은 문장에서 MERGED 뒤에 와도 지우지 않는다.
+    'Gerrit change 123 MERGED, GitHub issue #7도 함께 닫힘.', 'Gerrit change 123 MERGED — linked evidence b/42 해결.',
+    'Gerrit change 123 MERGED로 CVE-2026-0001 패치 반영.']) {
+    assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
+  }
   for (const invalid of [expandedClaim.replace('platform/example', 'platform/other'),
     expandedClaim.replace('01-02', '01-03'), expandedClaim + ' Linked evidence verified.']) {
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);

@@ -231,7 +231,7 @@ function boundedDeduct(state, category, points, reason, location = '', options =
   });
 }
 
-function linkedEvidenceArticleText(section) {
+function linkedEvidenceArticleFields(section) {
   const articleSections = normalizeArticleSections(section || {});
   return [
     section?.headline,
@@ -243,7 +243,19 @@ function linkedEvidenceArticleText(section) {
     section?.confirmed_facts,
     section?.source_verification_notes,
     section?.action_items
-  ].map(text).join(' ');
+  ];
+}
+
+function linkedEvidenceArticleText(section) {
+  return linkedEvidenceArticleFields(section).map(text).join(' ');
+}
+
+// text()와 같은 순서로 필드·배열 항목을 낱개 문자열로 편다. 필드 경계는 문장 경계이므로, 1차 변경
+// 상태 구절을 지우는 판정은 조각마다 한다.
+function textLeaves(value) {
+  if (Array.isArray(value)) return value.flatMap(textLeaves);
+  if (value && typeof value === 'object') return Object.values(value).flatMap(textLeaves);
+  return [String(value || '').trim()];
 }
 
 function linkedEvidenceEvidenceText(section) {
@@ -256,6 +268,64 @@ function linkedEvidenceEvidenceText(section) {
 
 function linkedEvidenceNotesText(section) {
   return text(section?.source_verification_notes);
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// 기자가 1차 변경의 병합 상태를 옮겨 적은 구절. 이전에는 정확한 문구 5개만 인정해, 같은 사실을
+// `Gerrit Change`처럼 대소문자나 조사만 바꿔 적어도 linked evidence 확정 주장으로 차단했다
+// (2026-10-26 실측: 기사 3건이 각 8점 차단). 이제 구절을 메타데이터 값으로만 이루어진 구조로
+// 판정한다: 변경 번호 뒤에 제출일(UTC)·프로젝트·브랜치와 괄호·쉼표만 오고 MERGED 표기로 끝나야
+// 한다. 메타데이터와 다른 번호·날짜·브랜치·프로젝트나 그 밖의 낱말이 끼면 맞지 않아 차단이 남는다.
+function gerritMergedStatePattern(changeId, metadata) {
+  const slot = [
+    `${escapeRegExp(metadata.submitted.slice(0, 10))}(?:에)?`,
+    `${escapeRegExp(metadata.project)}(?:의)?`,
+    `${escapeRegExp(metadata.branch)}(?:\\s*브랜치(?:에|의|로)?)?`,
+    '\\(',
+    ','
+  ].join('|');
+  return new RegExp(
+    `Gerrit\\s+(?:change|변경)\\s+${changeId}(?!\\d)(?:은|는|이|가)?(?:\\s*(?:${slot}))*\\s*` +
+    '(?:status=MERGED\\)?|병합\\(MERGED\\)|MERGED\\)?)',
+    'gi'
+  );
+}
+
+// 같은 문장 안에 linked evidence 주어(IssueTracker·GitHub·CVE 등)가 있으면, 앞이든 뒤든 그 문장의
+// MERGED는 1차 변경의 상태가 아니라 linked evidence에 대한 주장일 수 있으므로 지우지 않는다.
+// 예: 'Linked evidence b/42 — Gerrit change 123 MERGED.', 'Gerrit change 123 MERGED로 CVE-… 반영.'
+// 문장 경계는 공백·끝이 뒤따르는 마침표·물음표·느낌표와 줄바꿈이다. v1.2나 URL 안의 마침표는
+// 경계가 아니다.
+const LINKED_EVIDENCE_SUBJECT = /\b(?:IssueTracker|Issue Tracker|GitHub|mailing list|CVE|linked evidence)\b/i;
+const SENTENCE_END = /[.!?](?=\s|$)|\n/g;
+
+// lead는 바로 앞 필드가 문장부호 없이 끝났을 때 그 마지막 문장이다(제목이나 'Linked evidence b/42 상태:'
+// 같은 라벨). 그런 앞 필드는 뒤 내용을 이끌므로 같은 문장으로 본다. 뒤 필드는 별개의 진술이라 보지 않는다.
+function sentenceOutside(text, start, end, lead = '') {
+  let sentenceStart = 0;
+  let sentenceEnd = text.length;
+  for (const boundary of text.matchAll(SENTENCE_END)) {
+    if (boundary.index < start) sentenceStart = boundary.index + 1;
+    else if (boundary.index >= end) { sentenceEnd = boundary.index; break; }
+  }
+  const leading = sentenceStart === 0 ? `${lead} ` : '';
+  return `${leading}${text.slice(sentenceStart, start)} ${text.slice(end, sentenceEnd)}`;
+}
+
+function unterminatedLastSentence(text) {
+  if (!text || /[.!?]\s*$/.test(text)) return '';
+  const boundaries = [...text.matchAll(SENTENCE_END)];
+  return boundaries.length ? text.slice(boundaries.at(-1).index + 1) : text;
+}
+
+function neutralizeGerritMergedState(articleText, changeId, metadata, lead = '') {
+  return articleText.replace(gerritMergedStatePattern(changeId, metadata), (match, offset, whole) =>
+    LINKED_EVIDENCE_SUBJECT.test(sentenceOutside(whole, offset, offset + match.length, lead))
+      ? match
+      : 'Gerrit primary source state');
 }
 
 function hasUnresolvedConfirmationClaim(section, candidate) {
@@ -287,12 +357,14 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
       evidenceIds[0] === doc.evidence_id &&
       (urls.length === 0 || urls[0].replace(/[.,;]+$/, '') === doc.url)));
   });
-  let articleText = linkedEvidenceArticleText({
-    ...section, source_verification_notes: notes
-  });
+  // 조각마다 지운다. 마침표 없이 끝난 상태 구절 바로 다음 필드에 linked evidence 한계 노트가 오면,
+  // 이어 붙인 글에서는 그 노트의 주어가 같은 문장으로 보여 정상 구절까지 차단된다.
+  const leaves = linkedEvidenceArticleFields({ ...section, source_verification_notes: notes }).flatMap(textLeaves).filter(Boolean);
+  let pieces = leaves;
   // A primary change's fetched status is not the status of its linked bugs.
-  // Recognize only exact metadata-backed renderings; leave other assertions
-  // (including neighbouring confirmations) visible to the existing blocker.
+  // Recognize only metadata-backed renderings of that state; leave other
+  // assertions (including neighbouring confirmations) visible to the existing
+  // blocker.
   for (const document of documents) {
     const match = document.text.match(/^Official Gerrit metadata \(UTC timestamps\):\s*\n(\{[\s\S]*?\n\})\s*\n\nComplete revision patch/);
     if (!match) continue;
@@ -301,16 +373,10 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     const changeId = String(candidate.url || '').match(/^https:\/\/android-review\.googlesource\.com\/c\/.+\/\+\/(\d+)\/?$/)?.[1];
     if (!changeId || String(metadata.change_number) !== changeId || metadata.status !== 'MERGED' ||
       !metadata.project || !metadata.branch || !/^\d{4}-\d{2}-\d{2} /.test(metadata.submitted || '')) continue;
-    const date = metadata.submitted.slice(0, 10);
-    const phrases = [
-      `Gerrit change ${changeId} (${metadata.project}, status=MERGED`,
-      ...['이', '가'].map(particle => `Gerrit change ${changeId}${particle} ${date}에 ${metadata.project} ${metadata.branch} 브랜치에 status=MERGED`),
-      ...['은', '는'].map(particle => `Gerrit 변경 ${changeId}${particle} ${date}에 ${metadata.project}의 ${metadata.branch} 브랜치에 병합(MERGED)`),
-      ...['이', '가'].map(particle => `Gerrit change ${changeId}${particle} ${date} ${metadata.branch} 브랜치에 MERGED`)
-    ];
-    for (const phrase of phrases) articleText = articleText.split(phrase).join('Gerrit primary source state');
+    pieces = pieces.map((piece, index) =>
+      neutralizeGerritMergedState(piece, changeId, metadata, unterminatedLastSentence(leaves[index - 1])));
   }
-  return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(articleText);
+  return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(pieces.join(' '));
 }
 
 function linkedEvidenceDiagnostics(candidate = {}) {
