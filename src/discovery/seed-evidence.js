@@ -411,7 +411,9 @@ function seedCandidateFromEvidence({
     source_extraction: candidate.source_extraction || null,
     extraction_quality: candidate.extraction_quality || candidate.source_extraction?.extraction_quality || null,
     // Gerrit seed는 목록 수집 후보와 같은 정체성 필드를 싣는다. reporter는 이 리비전으로 patch를 읽는다.
+    // behavior_change(commit message 본문 포함)도 목록 수집 후보처럼 아래 범위 분류의 입력이 된다.
     ...(candidate.gerrit_change_number ? {
+      behavior_change: candidate.behavior_change || '',
       gerrit_change_id: candidate.gerrit_change_id,
       gerrit_change_number: candidate.gerrit_change_number,
       gerrit_change_status: candidate.gerrit_change_status,
