@@ -269,8 +269,8 @@ function escapeRegExp(value) {
 // 한다. 메타데이터와 다른 번호·날짜·브랜치·프로젝트나 그 밖의 낱말이 끼면 맞지 않아 차단이 남는다.
 function gerritMergedStatePattern(changeId, metadata) {
   const slot = [
-    `${escapeRegExp(metadata.submitted.slice(0, 10))}(?:에|,)?`,
-    `${escapeRegExp(metadata.project)}(?:의|,)?`,
+    `${escapeRegExp(metadata.submitted.slice(0, 10))}(?:에)?`,
+    `${escapeRegExp(metadata.project)}(?:의)?`,
     `${escapeRegExp(metadata.branch)}(?:\\s*브랜치(?:에|의|로)?)?`,
     '\\(',
     ','
@@ -280,6 +280,18 @@ function gerritMergedStatePattern(changeId, metadata) {
     '(?:status=MERGED\\)?|병합\\(MERGED\\)|MERGED\\)?)',
     'gi'
   );
+}
+
+// 같은 문장 앞쪽에 linked evidence 주어(IssueTracker·GitHub·CVE 등)가 있으면 그 문장의 MERGED는 1차
+// 변경의 상태가 아니라 linked evidence에 대한 주장일 수 있으므로 지우지 않는다. 예: 'Linked evidence b/42 —
+// Gerrit change 123 MERGED.'는 MERGED 하나가 확인 동사라, 지우면 차단이 사라진다.
+const LINKED_EVIDENCE_SUBJECT = /\b(?:IssueTracker|Issue Tracker|GitHub|mailing list|CVE|linked evidence)\b/i;
+
+function neutralizeGerritMergedState(articleText, changeId, metadata) {
+  return articleText.replace(gerritMergedStatePattern(changeId, metadata), (match, offset, whole) => {
+    const sentenceStart = Math.max(whole.lastIndexOf('.', offset - 1), whole.lastIndexOf('\n', offset - 1)) + 1;
+    return LINKED_EVIDENCE_SUBJECT.test(whole.slice(sentenceStart, offset)) ? match : 'Gerrit primary source state';
+  });
 }
 
 function hasUnresolvedConfirmationClaim(section, candidate) {
@@ -326,7 +338,7 @@ function hasUnresolvedConfirmationClaim(section, candidate) {
     const changeId = String(candidate.url || '').match(/^https:\/\/android-review\.googlesource\.com\/c\/.+\/\+\/(\d+)\/?$/)?.[1];
     if (!changeId || String(metadata.change_number) !== changeId || metadata.status !== 'MERGED' ||
       !metadata.project || !metadata.branch || !/^\d{4}-\d{2}-\d{2} /.test(metadata.submitted || '')) continue;
-    articleText = articleText.replace(gerritMergedStatePattern(changeId, metadata), 'Gerrit primary source state');
+    articleText = neutralizeGerritMergedState(articleText, changeId, metadata);
   }
   return LINKED_EVIDENCE_CONFIRMED_DETAIL_CLAIM.test(articleText);
 }

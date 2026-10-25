@@ -78,7 +78,7 @@ function editorSystemPrompt({ editorRetryContract = null, publishMode, hasLocked
     // 보조 기사 1건뿐인 구성에서 "상한 때문"이라며 selected group을 보류했다. 구성 상한은 선정 단계가
     // 이미 지켰고 quality gate가 다시 검사하며, editor가 기사를 빼서 상한을 넘을 수는 없다. 그래서 editor에는
     // 기사 수 범위만 기준으로 주고 상한은 보류 사유가 아님을 명시한다.
-    `Final main article count는 Newsletter Policy range (${articleCountRangeText()}) 안이어야 합니다. 보조(supporting) main 기사 상한과 금지 bucket 같은 구성 상한은 deterministic selection이 selected group을 고를 때 이미 지켰고 quality gate가 다시 검사합니다. Selected group을 빼서 상한을 넘을 수는 없으므로, 구성 상한을 이유로 selected group을 demote하거나 explicit_editor_hold로 보류하지 마세요.`,
+    `Final main article count는 Newsletter Policy range (${articleCountRangeText()}) 안이어야 합니다. 보조(supporting) main 기사 상한은 deterministic selection이 selected group을 고를 때 이미 지켰고 quality gate가 다시 검사합니다. Selected group을 빼서 상한을 넘을 수는 없으므로, 보조 main 기사 상한을 이유로 selected group을 demote하거나 explicit_editor_hold로 보류하지 마세요.`,
     'final-selected article capsules를 main article inputs로 사용하세요. final_selected=false, finalSelectionEligibility=watchlist/exclude, hasDatedEvidence 없는 isWatchPage=true, main_eligible=false, source_gap_risk=true, briefing_only, reference_only candidate를 main article로 만들지 마세요.',
     'related_context_candidates는 selected representative article 안에서만 사용하세요. related_context_candidates로 별도 main article을 만들지 마세요.',
     'context_usage_allowed=true인 related_context_candidates만 supporting context로 사용하세요. blocked_context_candidates, blocked_context_reference, parent_roundup_context_only, dedupe_shadow_context를 article source로 cite하지 마세요.',

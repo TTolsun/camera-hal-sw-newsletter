@@ -841,7 +841,11 @@ test('fetched primary Gerrit merge metadata never confirms unresolved linked evi
   }
   for (const invalid of [reworded.replace('123', '1234'), reworded.replace('01-02', '01-03'),
     reworded.replace('main', 'release'), reworded.replace('main 브랜치에', 'main 브랜치에 b/42 버그와 함께'),
-    `${reworded} Linked evidence verified.`]) {
+    reworded.replace('2026-01-02', '2026-01-03'), // KST로 환산한 날짜는 메타데이터(UTC)와 달라 차단된다.
+    `${reworded} Linked evidence verified.`,
+    // 앞에 linked evidence 주어가 오면 MERGED는 그 주어에 대한 주장일 수 있어 지우지 않는다.
+    'GitHub issue #7 is closed by Gerrit change 123 main 브랜치에 MERGED.',
+    'Linked evidence b/42 — Gerrit change 123 MERGED.', 'CVE-2026-0001 patch: Gerrit change 123 MERGED.']) {
     assert.equal(blocked({ ...article, confirmed_facts: [invalid] }), true, invalid);
   }
   for (const invalid of [expandedClaim.replace('platform/example', 'platform/other'),
