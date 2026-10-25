@@ -48,7 +48,10 @@ const {
   CANDIDATE_SCHEMA_VERSION
 } = require('../shared/common/candidate-artifacts');
 const { classifyAospCameraStackCandidate } = require('../shared/domain/aosp-camera-scope');
-const { evidenceMetadata } = require('../shared/cli/collect-news-candidates');
+const {
+  rawItemEvidenceMetadata,
+  SEED_PAGE_SOURCE_KIND
+} = require('../shared/cli/collect-news-candidates');
 const {
   classifySourceQuality,
   normalizeSourceQuality,
@@ -56,7 +59,6 @@ const {
 } = require('../shared/collect/source-quality-classifier');
 
 const SCHEMA_VERSION = 1;
-const SEED_PAGE_SOURCE_KIND = 'seed_page';
 const DEFAULT_LIMITS = Object.freeze({
   maxLinksPerSeedUrl: 8,
   maxTotalSeedLinksPerRun: 40,
@@ -300,9 +302,10 @@ function sourcePolicy(source = {}, seedUrl = '') {
 //    require하는 production 진입점은 src/shared/cli/collect-news-candidates.js:45 하나뿐이다.
 //    seed 레인은 runSeedEvidenceExpansion이 parseSourceSpecificItems
 //    (src/shared/collect/source-item-parsers.js)와 parseSourceWithAdapters
-//    (src/shared/sources/registry.js:7)로 후보를 만드는데, seed-evidence.js의 require 폐포
-//    14개 모듈 안에 그 resolver가 없다. 그래서 buildPrimaryEvidence가 받는 candidate는 오늘
-//    workflow 컨테이너를 가질 수 없다.
+//    (src/shared/sources/registry.js:7)와 Gerrit 변경 해석(resolveGerritChangeUrl)으로만 후보를
+//    만들고, 그 resolver를 부르는 호출 경로가 없다. 근거 판정을 위해 collect-news-candidates.js를
+//    require하지만 rawItemEvidenceMetadata도 resolver를 부르지 않는다. 그래서 buildPrimaryEvidence가
+//    받는 candidate는 오늘 workflow 컨테이너를 가질 수 없다.
 //
 // 2) 도달 가능해지더라도 그때 따로 판단해야 한다. 이 함수가 읽은 결과가 buildPrimaryEvidence의
 //    facts가 되고, facts가 비면 runSeedEvidenceExpansion의 primaryEvidence.forEach 가드가
@@ -425,19 +428,21 @@ function seedCandidateFromEvidence({
     cameraHalRelevanceScore: facts.length > 0 ? 70 : 45,
     camera_hal_relevance_score: facts.length > 0 ? 70 : 45
   };
-  // 근거 점수와 출처 공백 판정은 목록 수집 후보와 같은 정본(evidenceMetadata)으로 구한다. reporter
-  // 자격 검사는 evidence_score >= 6을 요구하는데, seed가 점수 없이 main 자격만 주장하면 선정은
-  // 통과하고 reporter에서 강등되어 선정 그룹 누락으로 생성 전체가 진단 전용이 된다(2026-10-26 실측).
-  // 출처 종류는 파서가 붙인 값을 넘긴다. 파서 항목이 없으면 seed 주소 자체가 사람이 고른 문서
-  // 한 건이므로 SEED_PAGE_SOURCE_KIND로 둔다. 정본의 추론(inferFallbackSourceKind)은 등록부 출처의
-  // 감시 페이지를 보고 rolling_page 등으로 판정하므로, 그대로 두면 모든 seed가 출처 공백이 된다.
-  const evidence = evidenceMetadata({
-    ...output,
-    sourceKind: candidate.sourceKind || candidate.source_kind || SEED_PAGE_SOURCE_KIND,
-    behavior_change: candidate.behavior_change || '',
-    collector_template_sentence: candidate.collector_template_sentence || ''
-  }, source, output.title, output.summary, output.relevanceScore, Boolean(source.candidateOnly));
-  const sourceGapRisk = !(facts.length > 0 && primaryEvidence.published_at) || evidence.source_gap_risk;
+  // 근거 점수와 출처 공백 판정은 목록 수집 후보와 같은 정본(rawItemEvidenceMetadata)으로 구한다.
+  // reporter 자격 검사는 evidence_score >= 6을 요구하는데, seed가 점수 없이 main 자격만 주장하면
+  // 선정은 통과하고 reporter에서 강등되어 선정 그룹 누락으로 생성 전체가 진단 전용이 된다
+  // (2026-10-26 실측). 판정 입력은 seed가 다듬은 요약이 아니라 파서 항목 그대로다. 파서 항목이 없는
+  // seed 페이지는 정본의 추론(inferFallbackSourceKind)이 등록부 감시 페이지로 보고 rolling_page 등으로
+  // 판정하므로, 사람이 고른 문서 한 건이라는 뜻의 SEED_PAGE_SOURCE_KIND를 붙인다.
+  const datedFacts = facts.length > 0 && Boolean(primaryEvidence.published_at);
+  const evidence = rawItemEvidenceMetadata({
+    ...candidate,
+    source,
+    title: candidate.title || output.title,
+    summary: candidate.summary || output.summary,
+    publishedAt: candidate.publishedAt || candidate.published_date || output.publishedAt,
+    sourceKind: candidate.sourceKind || candidate.source_kind || SEED_PAGE_SOURCE_KIND
+  }, { score: output.relevanceScore, candidateOnly: Boolean(source.candidateOnly) });
   Object.assign(output, {
     source_kind: evidence.source_kind,
     version_or_release: evidence.version_or_release,
@@ -448,12 +453,12 @@ function seedCandidateFromEvidence({
     has_api_or_component: evidence.has_api_or_component,
     has_behavior_change: evidence.has_behavior_change,
     evidence_score: evidence.evidence_score,
-    finalSelectionEligibility: sourceGapRisk ? 'watchlist' : 'short',
-    final_selection_eligibility: sourceGapRisk ? 'watchlist' : 'short',
-    source_gap_risk: sourceGapRisk,
-    main_eligible: !sourceGapRisk,
-    briefing_only: sourceGapRisk,
-    reference_only: sourceGapRisk
+    finalSelectionEligibility: datedFacts ? 'short' : 'watchlist',
+    final_selection_eligibility: datedFacts ? 'short' : 'watchlist',
+    source_gap_risk: !datedFacts,
+    main_eligible: datedFacts,
+    briefing_only: !datedFacts,
+    reference_only: !datedFacts
   });
   const scope = classifyAospCameraStackCandidate(output);
   const quality = classifySourceQuality({
@@ -468,7 +473,20 @@ function seedCandidateFromEvidence({
     },
     source
   });
-  return applySeedSourceQuality({ ...output, ...scope }, quality, candidate);
+  // source_quality에는 출처 수준의 제한만 싣고, seed 근거가 약해서 생긴 출처 공백은 그 뒤에 이 seed의
+  // 자격 필드에만 건다. source_quality에 실으면 mergeSeedCandidates가 그 blocker를 같은 URL의 수집
+  // 후보에 합쳐, 근거가 더 강한 그 후보까지 main 자격을 잃는다.
+  const seeded = applySeedSourceQuality({ ...output, ...scope }, quality, candidate);
+  if (!evidence.source_gap_risk) return seeded;
+  return {
+    ...seeded,
+    finalSelectionEligibility: 'watchlist',
+    final_selection_eligibility: 'watchlist',
+    source_gap_risk: true,
+    main_eligible: false,
+    briefing_only: true,
+    reference_only: true
+  };
 }
 
 // seed 근거는 빈 정보를 보강하지만, 이미 명시된 출처 제한을 해제하지 않는다.

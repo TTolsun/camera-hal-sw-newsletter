@@ -75,7 +75,7 @@ test('seed candidates claim main eligibility only when the collect evidence rule
   // 날짜와 사실 문장이 있어도 컴포넌트·동작 변경 근거가 없으면 수집 후보와 같이 출처 공백이다.
   // seed가 여기서 main 자격을 주장하면 선정은 통과하고 reporter 자격 검사에서 강등된다.
   const weak = policySeed({}, { title: 'Quarterly community newsletter' });
-  assert.equal(weak.evidence_score, 2);
+  assert.ok(weak.evidence_score < 6);
   assert.equal(weak.source_gap_risk, true);
   assert.equal(weak.main_eligible, false);
   assert.equal(weak.final_selection_eligibility, 'watchlist');
@@ -83,9 +83,24 @@ test('seed candidates claim main eligibility only when the collect evidence rule
   // 파서 항목이 없는 seed 페이지는 등록부 감시 페이지(rolling_page)로 추론되지 않는다.
   const strong = policySeed();
   assert.equal(strong.source_kind, 'seed_page');
-  assert.equal(strong.evidence_score >= 6, true);
+  assert.ok(strong.evidence_score >= 6);
   assert.equal(strong.source_gap_risk, false);
   assert.equal(strong.main_eligible, true);
+});
+
+test('a weak seed does not demote a stronger candidate already collected for the same URL', () => {
+  // seed 근거가 약한 것은 seed 자신의 자격 문제다. 출처 제한처럼 병합 대상에 번지면 안 된다.
+  const weak = policySeed({}, { title: 'Quarterly community newsletter' });
+  assert.equal(weak.main_eligible, false);
+  assert.equal(weak.main_article_source_blockers.includes('source_gap_risk'), false);
+  const collected = {
+    url: weak.url, title: 'Collected article', evidence_score: 8, main_eligible: true,
+    source_gap_risk: false, finalSelectionEligibility: 'short'
+  };
+  const [merged] = mergeSeedCandidates([collected], [weak]).mergedCandidates;
+  assert.equal(merged.main_eligible, true);
+  assert.equal(merged.main_article_source_allowed, true);
+  assert.equal(merged.evidence_score, 8);
 });
 
 test('seed policy enrichment preserves explicit blockers and does not allow unknown sources', () => {
@@ -696,7 +711,6 @@ test('Gerrit change seeds are read through REST detail because the change page h
     'has_api_or_component', 'has_behavior_change', 'api_or_component', 'behavior_change', 'source_gap_risk']) {
     assert.deepEqual(candidate[field], collected[field], field);
   }
-  assert.equal(candidate.evidence_score, 6);
   assert.doesNotMatch(reporterCandidateRejectionReason(candidate), /evidence_score|source_gap_risk|main_eligible/);
 
   // 사람 리뷰가 없는 미병합 제안은 seed여도 main 기사가 될 수 없다.
