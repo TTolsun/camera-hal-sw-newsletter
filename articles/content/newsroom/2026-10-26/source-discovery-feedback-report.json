@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "report_type": "source_discovery_feedback",
+  "date": "2026-10-26",
+  "status": "WARNING",
+  "parser_gap_count": 1,
+  "items": [
+    {
+      "severity": "warning",
+      "action": "PARSER_REPAIR_REQUIRED",
+      "reason": "missing_source_extraction",
+      "candidate_title": "1.7.0-rc01",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "source_id": "androidx-camerax-release-notes",
+      "adapter_hint": "android-developers-jetpack-release",
+      "source_gap_risk": false,
+      "evidence_validation_status": "not_checked",
+      "source_quality_bucket": "review_candidate",
+      "final_selection_eligibility": "main",
+      "confidence": "high",
+      "selector_exclusion_reason": "CameraX release-note candidate has no concrete source_extraction bullet",
+      "recommendation": "Check AndroidX Camera release-note block parser and source_extraction.release.sections extraction."
+    }
+  ]
+}

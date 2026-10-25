@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "report_type": "seed_evidence_pack",
+  "newsletter_date": "2026-10-26",
+  "generated_at": "2026-10-25T15:28:32.093Z",
+  "packs": [
+    {
+      "evidence_pack_id": "seed-01-b48d6968e3-pack",
+      "seed_id": "seed-01-b48d6968e3",
+      "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "title": "Android Developers Blog",
+      "fetch_status": "pass",
+      "primary_evidence": [
+        {
+          "evidence_id": "seed-01-b48d6968e3-primary-01",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+          "title": "Android Developers Blog",
+          "published_at": "",
+          "source_backed_items": [],
+          "source_role": "seed_page",
+          "evidence_granularity": "page_summary"
+        }
+      ],
+      "linked_evidence": [],
+      "noise_links": [],
+      "blocked_links": [],
+      "do_not_claim": [
+        "Do not claim Camera HAL API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Do not use failed, blocked, or noise links as factual support.",
+        "Keyword hints are discovery hints only, not source-backed facts."
+      ],
+      "extraction_quality": {
+        "seed_fetch_status": "pass",
+        "has_primary_evidence": true,
+        "has_concrete_facts": false,
+        "linked_evidence_followed": false,
+        "main_article_allowed": false
+      }
+    },
+    {
+      "evidence_pack_id": "seed-02-02886b752f-pack",
+      "seed_id": "seed-02-02886b752f",
+      "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "title": "Android Developers Blog",
+      "fetch_status": "pass",
+      "primary_evidence": [
+        {
+          "evidence_id": "seed-02-02886b752f-primary-01",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+          "title": "Android Developers Blog",
+          "published_at": "",
+          "source_backed_items": [],
+          "source_role": "seed_page",
+          "evidence_granularity": "page_summary"
+        }
+      ],
+      "linked_evidence": [],
+      "noise_links": [],
+      "blocked_links": [],
+      "do_not_claim": [
+        "Do not claim Camera HAL API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Do not use failed, blocked, or noise links as factual support.",
+        "Keyword hints are discovery hints only, not source-backed facts."
+      ],
+      "extraction_quality": {
+        "seed_fetch_status": "pass",
+        "has_primary_evidence": true,
+        "has_concrete_facts": false,
+        "linked_evidence_followed": false,
+        "main_article_allowed": false
+      }
+    }
+  ],
+  "summary": {
+    "seed_url_count": 2,
+    "pack_count": 2,
+    "primary_evidence_count": 2,
+    "linked_evidence_count": 0,
+    "main_article_allowed_count": 0
+  }
+}
