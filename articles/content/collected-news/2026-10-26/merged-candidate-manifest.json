@@ -8,9 +8,9 @@
   "status_detail": "",
   "merge_mode": "seed_evidence_plus_gemini_discovery",
   "candidate_artifact": "articles/content/collected-news/2026-10-26/merged-candidates.json",
-  "candidate_artifact_hash": "5aacb6072f2679f3e0f3fce6dc88e097790cbf040b5a2581b931c861bb938a31",
-  "artifact_hash": "5aacb6072f2679f3e0f3fce6dc88e097790cbf040b5a2581b931c861bb938a31",
-  "candidate_count": 69,
+  "candidate_artifact_hash": "c57e5115bdebd37eebbb09a4c3a334506aa421a6d38f3358c44d5002498c8f0e",
+  "artifact_hash": "c57e5115bdebd37eebbb09a4c3a334506aa421a6d38f3358c44d5002498c8f0e",
+  "candidate_count": 5,
   "source_candidate_artifact": "articles/content/collected-news/2026-10-26/manual-candidates.json",
   "source_candidate_artifact_hash": "172b3838f293383582bcb934b0d7b1e7868b4b378d619a4d6bd1a3ed2b30ab15",
   "source_manifest": "articles/content/collected-news/2026-10-26/raw-candidate-manifest.json",
@@ -21,8 +21,8 @@
   "github_sha": "704881e033b39d1596e3192d54e047df7bd648f9",
   "manual_candidate_count": 50,
   "manual_unique_url_count": 50,
-  "merged_candidate_count": 69,
-  "merged_unique_url_count": 69,
+  "merged_candidate_count": 5,
+  "merged_unique_url_count": 5,
   "seed_candidate_count": 2,
   "seed_unique_url_count": 2,
   "seed_new_unique_url_count": 1,
@@ -53,5 +53,16 @@
   "coverage_week_key": "2026-W43",
   "carry_forward_status": "missing_expected",
   "not_yet_eligible_count": 0,
-  "not_yet_eligible_overflow": false
+  "not_yet_eligible_overflow": false,
+  "editor_curation": {
+    "reason": "Owner selected the five articles for the 2026-W44 issue; other candidates were removed before generation.",
+    "kept_urls": [
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+      "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/",
+      "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770"
+    ],
+    "removed_candidate_count": 64
+  }
 }
