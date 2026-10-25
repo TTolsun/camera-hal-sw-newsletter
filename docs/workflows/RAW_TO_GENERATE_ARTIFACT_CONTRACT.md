@@ -75,7 +75,7 @@ Seed evidence가 만드는 artifact 목록:
 
 `seed-fetch-report.json`과 `seed-merge-report.json`은 커밋하지 않는 디버그 산출물(`.gitignore`)입니다. generate 단계는 main을 새로 checkout해 읽으므로, `merged-candidate-manifest.json`은 이 두 JSON을 가리키지 않고 같은 내용의 `.md`만 가리킵니다.
 
-Gerrit 변경 주소(`android-review.googlesource.com`, `chromium-review.googlesource.com`의 `/c/<project>/+/<번호>`)를 seed로 주면 변경 페이지 HTML 대신 REST 상세를 읽습니다. 변경 페이지는 클라이언트 렌더링이라 제목·날짜·본문이 없기 때문입니다. 날짜·카메라 범위·리뷰 판정은 Gerrit 목록 수집과 같은 규칙을 쓰고, 출처 정책은 그 저장소를 보는 등록부 소스에서 가져옵니다. 후보를 만들 수 없으면 seed fetch report에 `failed`와 이유가 남습니다.
+Gerrit 변경 주소(`android-review.googlesource.com`, `chromium-review.googlesource.com`의 `/c/<project>/+/<번호>`)를 seed로 주면 변경 페이지 HTML 대신 REST 상세를 읽습니다. 변경 페이지는 클라이언트 렌더링이라 제목·날짜·본문이 없기 때문입니다. 날짜·카메라 범위·리뷰 판정은 Gerrit 목록 수집과 같은 규칙을 쓰고, 출처 정책은 그 저장소를 보는 등록부 소스에서 가져옵니다. 병합된 변경만 수집하는 소스(`status:merged`)에 속한 미병합 제안은 main 후보가 되지 않습니다. UI에서 복사한 패치셋·파일 주소도 같은 변경으로 읽습니다. 후보를 만들 수 없으면 seed fetch report에 `failed`와 이유가 남습니다.
 
 `merge_mode` 값은 다음 중 하나입니다.
 

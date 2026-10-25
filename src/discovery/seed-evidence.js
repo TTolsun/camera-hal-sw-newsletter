@@ -35,7 +35,7 @@ const {
   parseSourceSpecificItems
 } = require('../shared/collect/source-item-parsers');
 const {
-  parseGerritChangeUrl,
+  isGerritUrl,
   resolveGerritChangeUrl
 } = require('../shared/collect/gerrit-camera-changes');
 const {
@@ -410,6 +410,14 @@ function seedCandidateFromEvidence({
     api_or_component: candidate.api_or_component || candidate.source_extraction?.release?.component || '',
     source_extraction: candidate.source_extraction || null,
     extraction_quality: candidate.extraction_quality || candidate.source_extraction?.extraction_quality || null,
+    // Gerrit seed는 목록 수집 후보와 같은 정체성 필드를 싣는다. reporter는 이 리비전으로 patch를 읽는다.
+    ...(candidate.gerrit_change_number ? {
+      gerrit_change_id: candidate.gerrit_change_id,
+      gerrit_change_number: candidate.gerrit_change_number,
+      gerrit_change_status: candidate.gerrit_change_status,
+      gerrit_commit_sha: candidate.gerrit_commit_sha,
+      gerrit_effective_date_field: candidate.gerrit_effective_date_field
+    } : {}),
     finalSelectionEligibility: facts.length > 0 && primaryEvidence.published_at ? 'short' : 'watchlist',
     final_selection_eligibility: facts.length > 0 && primaryEvidence.published_at ? 'short' : 'watchlist',
     source_gap_risk: !(facts.length > 0 && primaryEvidence.published_at),
@@ -678,7 +686,7 @@ async function runSeedEvidenceExpansion({
     let fetched;
     let gerritCandidate = null;
     try {
-      if (parseGerritChangeUrl(seed.url)) {
+      if (isGerritUrl(seed.url)) {
         // Gerrit 변경 페이지 HTML에는 제목·날짜·본문이 없다. 같은 SSRF 검사를 거쳐 REST 상세를 읽는다.
         const resolved = await resolveGerritChangeUrl(seed.url, sourceRegistry.sources, {
           fetchTextImpl: async url => (await fetchPublicText(fetchImpl, url, fetchOptions)).body

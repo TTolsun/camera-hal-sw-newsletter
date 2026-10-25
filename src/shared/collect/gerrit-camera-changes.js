@@ -457,10 +457,20 @@ async function resolveGerritCameraChangeItems(text = '', source = {}, options = 
 
 const GERRIT_HOSTS = new Set(['android-review.googlesource.com', 'chromium-review.googlesource.com']);
 
+function isGerritUrl(value) {
+  try {
+    return GERRIT_HOSTS.has(new URL(String(value || '')).hostname);
+  } catch {
+    return false;
+  }
+}
+
+// UI에서 복사한 패치셋·파일 주소(/+/<번호>/<패치셋>/<경로>)도 같은 변경으로 읽는다. 후보는 항상 현재
+// 리비전 기준이다.
 function parseGerritChangeUrl(value) {
   try {
     const url = new URL(String(value || ''));
-    const match = /^\/c\/(.+)\/\+\/([1-9]\d*)\/?$/.exec(url.pathname);
+    const match = /^\/c\/(.+?)\/\+\/([1-9]\d*)(?:\/[1-9]\d*(?:\/.*)?)?\/?$/.exec(url.pathname);
     if (url.protocol !== 'https:' || !GERRIT_HOSTS.has(url.hostname) || !match) return null;
     return { origin: url.origin, project: decodeURIComponent(match[1]), number: match[2] };
   } catch {
@@ -475,7 +485,7 @@ function registrySourceForChange(sources, origin, project, cameraFiles) {
   const matching = (Array.isArray(sources) ? sources : []).filter(source => {
     if (source.enabled === false || gerritOrigin(source) !== origin) return false;
     const query = decodeURIComponent(String(source.sourceUrl || ''));
-    return query.includes(`project:${project}`);
+    return query.split(/[\s()&=?]+/).includes(`project:${project}`);
   });
   const directoryMatch = matching.find(source => {
     const directories = [...decodeURIComponent(String(source.sourceUrl)).matchAll(/directory:([\w.-]+)/g)].map(match => match[1]);
@@ -488,19 +498,16 @@ function registrySourceForChange(sources, origin, project, cameraFiles) {
  * 변경 URL 하나를 REST 상세로 읽어 후보 하나를 만든다(편집자가 지정한 seed URL용).
  * Gerrit 변경 페이지는 클라이언트 렌더링이라 HTML에서 제목·날짜·본문을 얻을 수 없다(위 계약 2).
  * 날짜·상태·카메라 범위·리뷰 판정은 목록 수집과 같은 함수로 정한다. 편집자가 고른 변경이므로
- * 수집 창과 제목 noise 필터는 적용하지 않는다. 후보를 만들 수 없으면 그 이유를 돌려준다.
+ * 수집 창과 제목 noise 필터는 적용하지 않는다(오래된 변경은 select의 freshness 판정이 거른다).
+ * 후보를 만들 수 없으면 그 이유를 돌려준다. fetch 오류는 호출자가 차단·실패를 가르도록 그대로 던진다.
  */
 async function resolveGerritChangeUrl(url, sources = [], { fetchTextImpl } = {}) {
   const unresolved = reason => ({ candidate: null, reason });
   const target = parseGerritChangeUrl(url);
   if (!target) return unresolved('unsupported_gerrit_change_url');
-  let detail;
-  try {
-    detail = parseGerritDetail(await fetchTextImpl(detailUrl(target.origin, target.number), DETAIL_FETCH_TIMEOUT_MS));
-  } catch {
-    return unresolved('gerrit_detail_fetch_failed');
-  }
-  if (!detail || String(detail._number) !== target.number || detail.project !== target.project) {
+  const detail = parseGerritDetail(await fetchTextImpl(detailUrl(target.origin, target.number), DETAIL_FETCH_TIMEOUT_MS));
+  if (!detail) return unresolved('gerrit_detail_unparseable');
+  if (String(detail._number) !== target.number || detail.project !== target.project) {
     return unresolved('gerrit_change_identity_mismatch');
   }
   const dateInfo = effectiveDate(detail);
@@ -511,10 +518,13 @@ async function resolveGerritChangeUrl(url, sources = [], { fetchTextImpl } = {})
   if (!scope.isCameraChange) return unresolved('gerrit_change_not_camera_scoped');
   const source = registrySourceForChange(sources, target.origin, detail.project, scope.camera);
   if (!source) return unresolved('gerrit_change_has_no_registry_source');
-  return {
-    candidate: buildCandidate(source, target.origin, detail, scope, reviewSignals(detail.labels), dateInfo, revision.sha),
-    reason: ''
-  };
+  const candidate = buildCandidate(source, target.origin, detail, scope, reviewSignals(detail.labels), dateInfo, revision.sha);
+  // 병합된 변경만 수집하는 소스(status:merged)는 미병합 제안을 보증하지 않는다. 목록 수집이라면
+  // 들어오지 않았을 변경이므로 main으로 올리지 않는다.
+  if (detail.status !== 'MERGED' && /\bstatus:merged\b/.test(decodeURIComponent(String(source.sourceUrl)))) {
+    candidate.mainArticlePolicy = 'watchlist_only';
+  }
+  return { candidate, reason: '' };
 }
 
 module.exports = {
@@ -523,6 +533,7 @@ module.exports = {
   cameraFileScope,
   effectiveDate,
   hasEligibleState,
+  isGerritUrl,
   parseGerritChangeUrl,
   resolveGerritCameraChangeItems,
   resolveGerritChangeUrl,

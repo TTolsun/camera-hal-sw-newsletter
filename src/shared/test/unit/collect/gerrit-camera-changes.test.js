@@ -755,4 +755,38 @@ test('seed change URL keeps the list resolver contracts and reports why no candi
   });
   assert.equal(proposal.candidate.publishedAt, '2026-10-14');
   assert.equal(proposal.candidate.mainArticlePolicy, 'watchlist_only');
+
+  // 병합된 변경만 수집하는 AndroidX 소스는 사람 리뷰가 붙은 NEW 제안도 보증하지 않는다.
+  const reviewed = await resolveSeed(url, seedChange({ status: 'NEW', submitted: undefined }), {
+    files: ['camera/camera-core/src/main/java/androidx/camera/core/ImageCapture.java'],
+    labels: { 'Code-Review': { approved: { _account_id: 1 } } }
+  });
+  assert.equal(reviewed.candidate.mainArticlePolicy, 'watchlist_only');
+
+  const garbled = await resolveGerritChangeUrl(url, registry.sources, { fetchTextImpl: async () => ")]}'\n{trunc" });
+  assert.equal(garbled.reason, 'gerrit_detail_unparseable');
+  // fetch 오류는 호출자가 차단과 실패를 가를 수 있도록 그대로 전파한다.
+  await assert.rejects(
+    resolveGerritChangeUrl(url, registry.sources, { fetchTextImpl: async () => { throw new Error('dns_resolved_private_address'); } }),
+    /dns_resolved_private_address/
+  );
+});
+
+test('seed change URL accepts patchset and file addresses copied from the Gerrit UI', async () => {
+  const files = { files: ['camera/camera-core/src/main/java/androidx/camera/core/ImageCapture.java'] };
+  for (const suffix of ['/', '/3', '/3/camera/camera-core/src/main/java/androidx/camera/core/ImageCapture.java']) {
+    const url = `https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410${suffix}`;
+    const result = await resolveSeed(url, seedChange(), files);
+    assert.equal(result.reason, '', url);
+    assert.equal(result.candidate.url, 'https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410');
+  }
+});
+
+test('seed source matching compares whole project names, not prefixes', async () => {
+  // platform/hardware/google는 등록부의 project:platform/hardware/google/camera와 접두사만 같다.
+  const url = 'https://android-review.googlesource.com/c/platform/hardware/google/+/4381410';
+  const result = await resolveSeed(url, seedChange({ project: 'platform/hardware/google' }), {
+    files: ['camera/common/hal/Foo.cc']
+  });
+  assert.equal(result.reason, 'gerrit_change_has_no_registry_source');
 });
