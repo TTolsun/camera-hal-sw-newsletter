@@ -1,5 +1,117 @@
 [
   {
+    "weeklyKey": "2026-W44",
+    "weekStartDate": "2026-10-26",
+    "weekEndDate": "2026-11-01",
+    "date": "2026-10-26",
+    "title": "2026 W44",
+    "summary": "CameraX SessionConfigAdapter, 표면 교체 시 잘못된 세션 리셋을 유발하던 경쟁 조건 수정\nCameraX ZslControl, 플래시 전환 및 요청 취소 시 발생하는 그래픽 메모리 누수 수정\nCameraX UseCaseCameraState, 일시적 프레임 드롭 시 상태 업데이트 신호가 조기 실패하던 오류 수정\nCameraX VideoCapture, 비디오 인코더 조기 해제 시 발생하는 네이티브 스레드 누수 수정\nQualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+    "html": "newsletters/2026-W44/index.html",
+    "md": "newsletters/2026-W44/newsletter.md",
+    "tags": [
+      "Camera HAL",
+      "Android",
+      "Driver",
+      "Image Processing",
+      "SoC Platform"
+    ],
+    "article_count": 5,
+    "article_images": [
+      "assets/images/fallback/android.svg"
+    ],
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주 뉴스레터에서는 CameraX 관련 여러 개선 사항을 다룹니다. \"CameraX SessionConfigAdapter\"는 표면 교체 시 잘못된 세션 리셋을 유발하던 경쟁 조건을 수정했고, \"CameraX ZslControl\"은 플래시 전환 및 요청 취소 시 발생하는 그래픽 메모리 누수를 해결했습니다. 또한 \"CameraX UseCaseCameraState\"는 일시적 프레임 드롭 시 상태 업데이트 신호가 조기 실패하던 오류를 보완했으며, \"CameraX VideoCapture\"는 비디오 인코더 조기 해제 시 발생하는 네이티브 스레드 누수를 수정했습니다. 이와 함께 \"Qualcomm SM8450 플랫폼\"의 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안 소식도 전해드립니다.",
+      "items": [
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+          "href": "newsletters/2026-W44/index.html#article-camerax-sessionconfigadapter",
+          "headline": "CameraX SessionConfigAdapter, 표면 교체 시 잘못된 세션 리셋을 유발하던 경쟁 조건 수정",
+          "lead": "카메라 미리보기 도중 화면 회전이나 화면 전환으로 표면을 교체할 때 드물게 세션 리셋 에러가 발생하던 타이밍 오류가 해결되었습니다.",
+          "takeaway": "하위 Camera HAL 인터페이스 자체의 규격 변화는 없으나, 상위 프레임워크가 잘못된 에러 콜백으로 configureStreams와 요청 루프를 불필요하게 재시작하던 상위 레이스 컨디션을 줄여줍니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
+          "href": "newsletters/2026-W44/index.html#article-camerax-zslcontrol",
+          "headline": "CameraX ZslControl, 플래시 전환 및 요청 취소 시 발생하는 그래픽 메모리 누수 수정",
+          "lead": "셔터 지연 없는 촬영(ZSL) 기능이 켜져 있을 때 플래시를 사용하거나 촬영을 취소할 경우 수십 메가바이트의 그래픽 버퍼가 반환되지 않던 메모리 누수가 해결되었습니다.",
+          "takeaway": "하위 그래픽 메모리 할당 계층에서 버퍼가 고정되어 발생할 수 있는 메모리 압박 및 out-of-memory 킬을 방지하는 상위 버퍼 반환 경로 수정입니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+          "href": "newsletters/2026-W44/index.html#article-camerax-usecasecamerastate",
+          "headline": "CameraX UseCaseCameraState, 일시적 프레임 드롭 시 상태 업데이트 신호가 조기 실패하던 오류 수정",
+          "lead": "카메라 반복 촬영 도중 순간적으로 프레임 드롭이 발생해도 유스케이스 설정이나 초점 제어 작업이 비정상 종료되지 않도록 보완되었습니다.",
+          "takeaway": "드라이버나 ISP 단에서 발생하는 일시적 프레임 드롭이 상위 프레임워크의 파이프라인 전체 오류로 확산되지 않도록 완충해 줍니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+          "href": "newsletters/2026-W44/index.html#article-camerax-videocapture",
+          "headline": "CameraX VideoCapture, 비디오 인코더 조기 해제 시 발생하는 네이티브 스레드 누수 수정",
+          "lead": "비디오 촬영 유스케이스를 화면에서 바인드했다가 녹화 없이 해제할 때마다 미디어 프레임워크 스레드가 시스템에 계속 남던 누수 문제가 해결되었습니다.",
+          "takeaway": "Camera HAL 계약의 직접적인 변경은 아니지만, 카메라 프레임이 전달되는 다운스트림 비디오 인코더 계층의 스레드 자원 누수를 막아 앱의 장기 안정성을 개선합니다.",
+          "tags": [
+            "Android"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org",
+          "href": "newsletters/2026-W44/index.html#article-qualcomm-sm8450-camss-csi2-phy",
+          "headline": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+          "lead": "퀄컴 SM8450 플랫폼의 카메라 서브시스템을 업스트림 리눅스 커널에서 지원하기 위한 드라이버 추가 및 독립 CSI2 PHY 구성 패치 시리즈가 제안되었습니다.",
+          "takeaway": "커널 레벨의 V4L2 장치 노드 및 CSI2 수신 파이프라인이 정립되는 초기 단계이므로, 향후 AOSP CameraProvider 포팅 시 하위 미디어 토폴로지 참고 자료로 유용합니다.",
+          "tags": [
+            "Driver",
+            "Image Processing",
+            "SoC Platform"
+          ],
+          "image": {
+            "src": "assets/images/fallback/newsletter-default.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
+    },
+    "lead_article_image": "assets/images/fallback/android.svg",
+    "public_contract_version": "story-v2",
+    "coverage_week_key": "2026-W43",
+    "coverage_start_date": "2026-10-19",
+    "coverage_end_date": "2026-10-25",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-10-26"
+  },
+  {
     "weeklyKey": "2026-W43",
     "weekStartDate": "2026-10-19",
     "weekEndDate": "2026-10-25",

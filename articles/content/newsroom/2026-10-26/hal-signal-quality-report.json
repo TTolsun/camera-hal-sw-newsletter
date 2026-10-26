@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "report_type": "hal_signal_quality",
+  "date": "2026-10-26",
+  "generated_at": "2026-10-26T00:09:21.508Z",
+  "status": "WARN",
+  "input_completeness": "partial",
+  "input_statuses": {
+    "shortlisted_candidates": "loaded",
+    "editor_draft": "loaded",
+    "quality_report": "loaded",
+    "source_effectiveness_report": "input_unavailable",
+    "source_quality_report": "loaded",
+    "evidence_pack_summary": "input_unavailable",
+    "merged_candidate_manifest": "loaded"
+  },
+  "inputs": {
+    "required": {
+      "shortlisted_candidates": {
+        "path": "articles/content/newsroom/2026-10-26/shortlisted-candidates.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "editor_draft": {
+        "path": "articles/content/newsroom/2026-10-26/editor-draft.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "quality_report": {
+        "path": "articles/content/newsroom/2026-10-26/quality-report.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "optional": {
+      "source_effectiveness_report": {
+        "path": "articles/content/newsroom/2026-10-26/source-effectiveness-report.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "source_quality_report": {
+        "path": "articles/content/newsroom/2026-10-26/source-quality-report.json",
+        "status": "loaded",
+        "error": ""
+      },
+      "evidence_pack_summary": {
+        "path": "articles/content/newsroom/2026-10-26/evidence-pack-summary.json",
+        "status": "input_unavailable",
+        "error": ""
+      },
+      "merged_candidate_manifest": {
+        "path": "articles/content/collected-news/2026-10-26/merged-candidate-manifest.json",
+        "status": "loaded",
+        "error": ""
+      }
+    },
+    "missing_required": [],
+    "unavailable_optional": [
+      "source_effectiveness_report",
+      "evidence_pack_summary"
+    ]
+  },
+  "quality_status": "PASS",
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 5,
+    "strong_signal_count": 5,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 5,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 2,
+    "main_articles_with_concrete_action": 5,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "camerax_app_compatibility": 4,
+      "stream_buffer_metadata": 3,
+      "thermal_power_memory_pressure": 1,
+      "performance_latency_frame_drop": 2,
+      "driver_image_pipeline": 1
+    },
+    "actionability_level_counts": {
+      "measurable_test": 3,
+      "owner_metric_log": 2
+    },
+    "effective_actionability_level_counts": {
+      "measurable_test": 3,
+      "owner_metric_log": 2
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 5
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 2 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Camera HAL 계약이나 인터페이스 메서드가 직접 변경된 것으로 설명하지 마십시오."
+      ],
+      "soc_signal_type": "resource_budget",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "stream_buffer_metadata",
+        "thermal_power_memory_pressure",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "performance_thermal_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "V4L2 드라이버나 HAL3 버퍼 큐 규약 변경으로 기술하지 마십시오."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "performance_latency_frame_drop"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 90): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Camera HAL 계약이나 인터페이스 메서드가 직접 변경된 것으로 설명하지 마십시오.",
+        "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Keyword hints are discovery hints only and are not source-backed facts."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "relevance_bucket": "android",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "performance_latency_frame_drop"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "performance_thermal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "android counts toward supporting_main_article_count, not primary_camera_stack_count.",
+      "fallback_guard_notes": [
+        "Codec2 HAL 인터페이스나 카메라 드라이버의 직접 변경으로 기술하지 마십시오.",
+        "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Keyword hints are discovery hints only and are not source-backed facts."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 5,
+      "title": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_driver_engineer",
+        "soc_board_bringup_engineer"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 75): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "메인라인 병합 완료나 Android Camera HAL 계약 변경으로 단정하지 마십시오."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "selection_shortage_hint_details": [
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "No eligible Android candidate is available in this pool. Check collection results and selection exclusions; an empty bucket alone does not establish a parser defect."
+    },
+    {
+      "bucket": "unknown",
+      "severity": "medium",
+      "reason_code": "selection_shortage",
+      "affected_sources": [],
+      "recommended_fix": "Add public SoC ISP/GPU/NPU/power/thermal/performance sources only when article-level camera or image pipeline impact is present."
+    }
+  ],
+  "gate_boundary": {
+    "hal_signal_checks_are_observability_only": true,
+    "hal_signal_capsule_enforced_by_editor_output_contract": true,
+    "review_artifacts_preserved": true,
+    "optional_input_unavailable_is_not_pass": true
+  },
+  "close_criteria": {
+    "report_generated": true,
+    "main_article_capsule_validation": true,
+    "actionability_hard_blocker_reflected": true,
+    "generic_fallback_soc_overpromotion_tests_required": true,
+    "source_expansion_followups": [
+      "#55",
+      "#57"
+    ],
+    "historical_rewrite_followup": "#108"
+  },
+  "warnings": [
+    "Optional input_unavailable: source_effectiveness_report",
+    "Optional input_unavailable: evidence_pack_summary"
+  ]
+}

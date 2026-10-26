@@ -1,0 +1,2289 @@
+{
+  "schema_version": 5,
+  "date": "2026-10-26",
+  "generated_at": "2026-10-26T00:09:21.542Z",
+  "review_summary": {
+    "total": 102,
+    "present": 79,
+    "missing": 23,
+    "missingRequired": 0,
+    "reviewBlocking": 16,
+    "attentionRequired": 2,
+    "seedUsed": true,
+    "publicOutputExpected": true,
+    "publicOutputLane": "weekly",
+    "status": "PASS"
+  },
+  "files": [
+    {
+      "path": "articles/content/audit/historical-archive-status.json"
+    },
+    {
+      "path": "articles/content/audit/newsletter-provenance-ledger.md"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/candidates.json"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/collection-intent.json"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/manual-candidates.json"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/merged-candidate-manifest.json"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/merged-candidates.json"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/raw-candidate-manifest.json"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/seed-candidates.json"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/seed-evidence-pack.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/00-review-guide.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/article-capsules.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/background-context.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/cost-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/coverage-reconciliation.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-1.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-1.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-2.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-2.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-in-chief-brief.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-invalid-attempt-1.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-public-article-judge-attempt-1.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-public-article-judge-attempt-2.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-validation-error-attempt-1.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editorial-plan.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/evidence-validation-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/extracted-source-facts.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-1.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-1.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-2.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-2.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/gemini-source-discovery-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/gemini-usage-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/generation-status.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/hal-signal-quality-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/hal-signal-quality-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-1.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-1.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-2.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-2.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/release-qa-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/reporter-candidates-attempt-1.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/reporter-candidates-attempt-2.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/reporter-candidates.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/retry-history.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/retry-history.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-evidence-pack.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-fetch-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-merge-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/selection-diagnostics.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/selection-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/selection-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/shortlisted-candidates.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-clusters.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-discovery-feedback-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-discovery-feedback-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-quality-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-quality-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/stale-claim-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/stale-claim-report.md"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/summary-cache-report.json"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/summary-cache-report.md"
+    },
+    {
+      "path": "articles/content/source-events/2026-10-26/source-change-events.json"
+    },
+    {
+      "path": "articles/content/source-events/2026-10-26/source-change-events.md"
+    },
+    {
+      "path": "articles/data/homepage-headline.json"
+    },
+    {
+      "path": "articles/data/newsletters-weekly.json"
+    },
+    {
+      "path": "articles/data/newsletters.json"
+    },
+    {
+      "path": "articles/newsletters/2026-W44/index.html"
+    },
+    {
+      "path": "articles/newsletters/2026-W44/issue.json"
+    },
+    {
+      "path": "articles/newsletters/2026-W44/newsletter.md"
+    },
+    {
+      "path": "articles/sitemap.xml"
+    },
+    {
+      "path": "state/article-exposure-history.json"
+    }
+  ],
+  "review_artifacts": [
+    {
+      "path": "articles/content/newsroom/2026-10-26/00-review-guide.md",
+      "group": "editorial_brief",
+      "label": "편집장 브리프",
+      "role": "generated_summary",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 10,
+      "changed": true,
+      "derived": true,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-in-chief-brief.md",
+      "group": "editorial_brief",
+      "label": "편집장 브리프",
+      "role": "must_read",
+      "required": "always",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 11,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-evidence-pack.md",
+      "group": "seed_evidence",
+      "label": "Seed 근거 요약",
+      "role": "must_read",
+      "required": "when_seed_used",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 20,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-merge-report.md",
+      "group": "seed_evidence",
+      "label": "Seed 근거 요약",
+      "role": "must_read",
+      "required": "when_seed_used",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 21,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/newsletters/2026-10-26/newsletter.md",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "public_markdown",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 30,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/newsletters/2026-10-26/index.html",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "public_html",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 31,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/data/newsletters.json",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "public_index",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 32,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/data/homepage-headline.json",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "homepage_state",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 33,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/newsletters/2026-W44/index.html",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "weekly_public_html",
+      "required": "when_public_output",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 33,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/newsletters/2026-W44/newsletter.md",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "weekly_public_markdown",
+      "required": "when_public_output",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 34,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "state/article-exposure-history.json",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "exposure_state",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 34,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/content/audit/historical-archive-status.json",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "archive_status",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 35,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/newsletters/2026-W44/issue.json",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "weekly_public_issue",
+      "required": "when_public_output",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 35,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/content/audit/newsletter-provenance-ledger.md",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "archive_provenance",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 36,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/data/newsletters-weekly.json",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "weekly_public_index",
+      "required": "when_public_output",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 36,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/sitemap.xml",
+      "group": "public_output",
+      "label": "최종 기사 / 공개 출력",
+      "role": "sitemap",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 36,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/weekly-merge-report.json",
+      "group": "gate_reports",
+      "label": "사실성 / 품질 / HAL 게이트",
+      "role": "weekly_merge_report",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 37,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report.md",
+      "group": "gate_reports",
+      "label": "사실성 / 품질 / HAL 게이트",
+      "role": "fact_check",
+      "required": "always",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 40,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report.md",
+      "group": "gate_reports",
+      "label": "사실성 / 품질 / HAL 게이트",
+      "role": "quality_gate",
+      "required": "always",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 41,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/hal-signal-quality-report.md",
+      "group": "gate_reports",
+      "label": "사실성 / 품질 / HAL 게이트",
+      "role": "hal_signal_gate",
+      "required": "always",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 42,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/stale-claim-report.md",
+      "group": "gate_reports",
+      "label": "사실성 / 품질 / HAL 게이트",
+      "role": "stale_claim_gate",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 43,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/image-audit-report.md",
+      "group": "gate_reports",
+      "label": "사실성 / 품질 / HAL 게이트",
+      "role": "image_audit",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 44,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-quality-report.md",
+      "group": "gate_reports",
+      "label": "사실성 / 품질 / HAL 게이트",
+      "role": "source_quality",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 45,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/selection-diagnostics.md",
+      "group": "selection_diagnostics",
+      "label": "후보 선정 진단",
+      "role": "selection_diagnostics",
+      "required": "always",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 50,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/selection-report.md",
+      "group": "selection_diagnostics",
+      "label": "후보 선정 진단",
+      "role": "selection_report",
+      "required": "always",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": true,
+      "review_attention_required": false,
+      "review_order": 51,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-quality-diagnosis.md",
+      "group": "selection_diagnostics",
+      "label": "후보 선정 진단",
+      "role": "source_quality_diagnosis",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 52,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-followup-issues.md",
+      "group": "selection_diagnostics",
+      "label": "후보 선정 진단",
+      "role": "source_followup_issues",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 53,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-fetch-report.md",
+      "group": "check_when_needed",
+      "label": "필요 시 확인",
+      "role": "check_when_needed",
+      "required": "when_seed_used",
+      "requiredActive": true,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 60,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/recovery-prompt.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "recovery_prompt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 61,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/release-qa-report.md",
+      "group": "check_when_needed",
+      "label": "필요 시 확인",
+      "role": "release_qa",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 62,
+      "changed": true,
+      "derived": true,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/retry-history.md",
+      "group": "check_when_needed",
+      "label": "필요 시 확인",
+      "role": "retry_history",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 63,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/linked-evidence-diagnostics.md",
+      "group": "check_when_needed",
+      "label": "필요 시 확인",
+      "role": "linked_evidence_diagnostics",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 64,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/event-bundle-diagnostics.md",
+      "group": "check_when_needed",
+      "label": "필요 시 확인",
+      "role": "event_bundle_diagnostics",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 65,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-effectiveness-report.md",
+      "group": "check_when_needed",
+      "label": "필요 시 확인",
+      "role": "source_effectiveness",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 66,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-discovery-feedback-report.md",
+      "group": "check_when_needed",
+      "label": "필요 시 확인",
+      "role": "source_discovery_feedback",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 67,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/gemini-source-discovery-report.md",
+      "group": "check_when_needed",
+      "label": "필요 시 확인",
+      "role": "source_discovery_report",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 68,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/news-candidates.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "news_candidates_summary",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 69,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/collection-intent.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/manual-candidates.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.001,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/candidates.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.002,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/raw-candidate-manifest.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.003,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/merged-candidates.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.004,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/merged-candidate-manifest.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.005,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/seed-candidates.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.006,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/seed-evidence-pack.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.007,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-fetch-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.008,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-merge-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.009,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/generation-status.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.011,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/reporter-candidates.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.012,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.013,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.014,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.015,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.016,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/hal-signal-quality-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.017,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/stale-claim-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.018,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/retry-history.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.019,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/shortlisted-candidates.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.02,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/selection-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.021,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/linked-evidence-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.022,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/event-bundles.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.023,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/article-capsules.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.024,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/background-context.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.025,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/evidence-pack-summary.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.026,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/image-audit-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.027,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-quality-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.028,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-quality-diagnosis.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.029,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-followup-issues.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.03,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-effectiveness-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.031,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-discovery-feedback-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.032,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-clusters.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.033,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/gemini-source-proposals.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.034,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/gemini-source-proposal-validation-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.035,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/gemini-usage-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.036,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/extracted-source-facts.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.037,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/evidence-validation-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.038,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/cost-report.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.039,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/summary-cache-report.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.04,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/summary-cache-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.041,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/deep-dive-report.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": false,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.042,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/source-events/2026-10-26/source-change-events.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.043,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/source-events/2026-10-26/source-change-events.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_json",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 90.044,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-1.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-1.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-2.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-2.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-invalid-attempt-1.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-public-article-judge-attempt-1.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-public-article-judge-attempt-2.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": true,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-validation-error-attempt-1.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-1.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-1.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-2.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-2.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-1.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-1.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-2.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-2.md",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": true,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/reporter-candidates-attempt-1.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/reporter-candidates-attempt-2.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "debug_attempt",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 91,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "transient_attempt"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/artifact-manifest.json",
+      "group": "debug_evidence",
+      "label": "디버그 근거",
+      "role": "artifact_manifest",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": false,
+      "review_order": 92,
+      "changed": true,
+      "derived": true,
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/coverage-reconciliation.json",
+      "group": "unknown_artifacts",
+      "label": "미분류 산출물",
+      "role": "unclassified",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": true,
+      "review_order": 95,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editorial-plan.json",
+      "group": "unknown_artifacts",
+      "label": "미분류 산출물",
+      "role": "unclassified",
+      "required": "optional",
+      "requiredActive": false,
+      "present": true,
+      "human_readable": false,
+      "review_blocking": false,
+      "review_attention_required": true,
+      "review_order": 95,
+      "changed": false,
+      "derived": false,
+      "retention_grade": "debug_heavy"
+    }
+  ],
+  "missing_required_review_artifacts": [],
+  "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882",
+  "retention_summary": {
+    "review_required_compact": 43,
+    "public_source_of_truth": 10,
+    "debug_heavy": 8,
+    "transient_attempt": 18
+  },
+  "retained_heavy_artifacts": [
+    {
+      "path": "articles/content/newsroom/2026-10-26/reporter-candidates.json",
+      "size": 298249,
+      "sha256": "17d9bf667da86886383f6645d217d1272260d4e2153ae2dbf74d0024aee4768b",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft.json",
+      "size": 167122,
+      "sha256": "2fda6d463b0124c7fa556b1fd255dce6fc1c4092e84a9262f50d53e9fbefcdc0",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft.md",
+      "size": 15335,
+      "sha256": "d95676ebc6e94ff2eb474f5cf1e3df733c368f4cb7e2e5368a27057eda3b73ca",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/shortlisted-candidates.json",
+      "size": 892271,
+      "sha256": "90a3c3a35bf4f89a80383138c015ec50a1cb91a7bbb75bd425e738213c477fce",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/article-capsules.json",
+      "size": 338560,
+      "sha256": "bcb98f43aec6ba2024c3adc2e82251fe6139613b48b7ab916c776326f7cf844f",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/background-context.json",
+      "size": 6931,
+      "sha256": "25d45704e141b55a15b50a2bc5377e2d7ac7214395788ace56e3d5a7b9f10328",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-1.json",
+      "size": 72454,
+      "sha256": "1c6a29642fd8fe978bd996978d40cc97b59ae334d20592655c4e155e995c751d",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-1.md",
+      "size": 15098,
+      "sha256": "21fe6547f4b96723a4d5df70c37ea0ce81cee8db8dc7d24402611ec72b542bdb",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-2.json",
+      "size": 72184,
+      "sha256": "34ccb09522955d363283f393318c48c935cab52041981a2e5a6a282ebf17e97e",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-draft-attempt-2.md",
+      "size": 15335,
+      "sha256": "d95676ebc6e94ff2eb474f5cf1e3df733c368f4cb7e2e5368a27057eda3b73ca",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-invalid-attempt-1.json",
+      "size": 58700,
+      "sha256": "fe6aa4d7fb88ef39bbb6523d8b5b2986675f20202eafd0422a427cbf6fedbbaa",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-public-article-judge-attempt-1.json",
+      "size": 1805,
+      "sha256": "e4426fdd7c27adc1690314a9ec1459f8333a95e605b8f0386d74c84a5fb46fbf",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-public-article-judge-attempt-2.json",
+      "size": 1805,
+      "sha256": "000a980fe5c947aca8d0d6ed08a76e4deb99a0dc2286985eef79819e3ff6cb07",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-validation-error-attempt-1.json",
+      "size": 2194,
+      "sha256": "d5a0dabfa95e6c65e3e57314a91882886364239f8ee34b93bcade8d11de15cff",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-1.json",
+      "size": 34991,
+      "sha256": "69dcddb8c26dece3adae4a659fe2da12189863f26ca804db75501275c6230b7d",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-1.md",
+      "size": 742,
+      "sha256": "407898204019e9d208cee40c58644b0da1a0bf4e9ca56b37641b372194cd74f9",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-2.json",
+      "size": 35580,
+      "sha256": "6bb9190b0cb015fb7c11411f669984ba48ad984befab6b4d48be69735125f0dc",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report-attempt-2.md",
+      "size": 422,
+      "sha256": "6d4db5a82591c6afc06f5f581870e82ce75c8535e71546d7273fa52e347db0fd",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-1.json",
+      "size": 75793,
+      "sha256": "a07bc7bc25a1ac5a317f1b8d3b78fd92d7542bb21f6da879801e7a2fb20763fc",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-1.md",
+      "size": 22163,
+      "sha256": "96008ae88c56fa2b1ea6b338118ffabe1da2b93e74ce59d1a374f9b8c2f899dc",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-2.json",
+      "size": 73189,
+      "sha256": "6443fce6d1fc0145a70a78c68a9b773f16aa8b43ce261a0cc48810feb4a71ab6",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report-attempt-2.md",
+      "size": 20564,
+      "sha256": "e132c2efbd8eb941f141b9572c4c8be1e3eb6bc396a1cd892acb898d928650ad",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/reporter-candidates-attempt-1.json",
+      "size": 297635,
+      "sha256": "f2a931e14272d7fb4fe91e814fcf6d6956ce505bed327aedf0f66ff3ef499493",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/reporter-candidates-attempt-2.json",
+      "size": 298249,
+      "sha256": "17d9bf667da86886383f6645d217d1272260d4e2153ae2dbf74d0024aee4768b",
+      "retention_grade": "transient_attempt",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/coverage-reconciliation.json",
+      "size": 2990,
+      "sha256": "781e3d34b8aa605b0d88a11f7325a08e298bd7f455063bbcb094615fc4258c1f",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editorial-plan.json",
+      "size": 20278,
+      "sha256": "a17a24db85d2347539b06a92fe15adcb576be5b2ca6165efe4326dae6295fa7e",
+      "retention_grade": "debug_heavy",
+      "retention_location": "github-actions-artifact:newsroom-final-debug-40246749882"
+    }
+  ],
+  "committed_artifacts": [
+    {
+      "path": "articles/content/audit/historical-archive-status.json",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/content/audit/newsletter-provenance-ledger.md",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/candidates.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/collection-intent.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/manual-candidates.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/merged-candidate-manifest.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/merged-candidates.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/raw-candidate-manifest.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/seed-candidates.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/collected-news/2026-10-26/seed-evidence-pack.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/00-review-guide.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/cost-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/editor-in-chief-brief.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/evidence-validation-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/extracted-source-facts.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/fact-check-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/gemini-source-discovery-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/gemini-usage-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/generation-status.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/hal-signal-quality-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/hal-signal-quality-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/quality-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/release-qa-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/retry-history.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/retry-history.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-evidence-pack.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-fetch-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/seed-merge-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/selection-diagnostics.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/selection-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/selection-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-clusters.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-discovery-feedback-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-discovery-feedback-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-quality-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/source-quality-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/stale-claim-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/stale-claim-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/summary-cache-report.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/newsroom/2026-10-26/summary-cache-report.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/source-events/2026-10-26/source-change-events.json",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/content/source-events/2026-10-26/source-change-events.md",
+      "retention_grade": "review_required_compact"
+    },
+    {
+      "path": "articles/data/homepage-headline.json",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/data/newsletters-weekly.json",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/data/newsletters.json",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/newsletters/2026-W44/index.html",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/newsletters/2026-W44/issue.json",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/newsletters/2026-W44/newsletter.md",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "articles/sitemap.xml",
+      "retention_grade": "public_source_of_truth"
+    },
+    {
+      "path": "state/article-exposure-history.json",
+      "retention_grade": "public_source_of_truth"
+    }
+  ]
+}

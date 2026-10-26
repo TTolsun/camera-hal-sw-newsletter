@@ -1,0 +1,417 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "CameraX SessionConfigAdapter, 표면 교체 시 잘못된 세션 리셋을 유발하던 경쟁 조건 수정",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "SessionConfigAdapter.reportSurfaceInvalid 호출 시 백그라운드 스레드에서 세션 구성을 두 번 비동기 조회하던 경쟁 조건을 메인 스레드 디스패처 상의 단일 조회로 통합하고 보조 세션 및 포스트뷰 표면 검사를 추가함",
+        "article_explanation": "공개 본문은 프리뷰 표면 교체 시 SurfaceClosedException 처리 중 발생하던 두 번의 비동기 읽기 경쟁과 잘못된 리셋 에러 전달 문제를 설명하고, 메인 스레드 단일 조회 및 포스트뷰 검사로의 수정을 서술했습니다. 또한 프리뷰 표면 갱신 중 리셋 에러 유입 관찰 제안과 소스 병합 후 릴리스 미확인 한계를 명시했습니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:body_markdown:0",
+              "0:body_markdown:1",
+              "0:body_markdown:2"
+            ],
+            "reason": "표면 교체 시 백그라운드 비동기 조회로 인해 새 활성 구성에 SESSION_ERROR_SURFACE_NEEDS_RESET이 잘못 전달되던 기존 동작과 메인 스레드 단일 조회로 변경된 동작을 명확히 설명했습니다.",
+            "verified_passages": [
+              {
+                "id": "0:body_markdown:0",
+                "text": "카메라 앱이 프리뷰 표면 공급자를 교체하는 시점에 하위 스트림 표면이 닫히면 예기치 않은 재구성 에러가 발생하는 현상이 있었습니다."
+              },
+              {
+                "id": "0:body_markdown:1",
+                "text": "기존 동작에서는 백그라운드 코루틴에서 SurfaceClosedException을 감지했을 때 세션 구성 정보를 동기화 없이 두 차례 연달아 읽도록 되어 있었습니다. 첫 번째 읽기에서 기존 구성을 찾더라도, 메인 스레드가 거의 동시에 새로운 세션 구성으로 교체하면 두 번째 읽기에서 방금 연결된 활성 구성이 참조되었습니다. 이로 인해 정상적으로 연결된 새 구성에 불필요한 SESSION_ERROR_SURFACE_NEEDS_RESET 에러가 전달되어 세션 파이프라인이 엉키는 문제가 발생했습니다."
+              },
+              {
+                "id": "0:body_markdown:2",
+                "text": "이번 커밋 패치는 메인 스레드 디스패처 상에서 단 한 번의 호출로 대상 구성을 조회하도록 변경했습니다. 또한 기존에 누락되었던 보조 세션 구성 및 포스트뷰 표면 일치 여부까지 함께 검사하도록 보완했습니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:body_markdown:3"
+            ],
+            "reason": "프리뷰 표면을 반복 갱신하며 세션 재구성 중 활성 파이프라인에 리셋 에러 콜백이 유입되는지 관찰하는 구체적인 입력 조건과 관찰 대상을 제시했습니다.",
+            "verified_passages": [
+              {
+                "id": "0:body_markdown:3",
+                "text": "점검이 필요한 환경에서는 프리뷰 표면을 반복적으로 갱신하면서 세션 재구성이 진행될 때 활성 파이프라인에 리셋 에러 콜백이 유입되는지 관찰하는 방법을 검토할 수 있습니다. 다만 본 확인은 소스 트리 병합 단계이며, 배포 라이브러리 및 최종 제품 빌드 반영 여부는 별도로 확인해야 합니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:body_markdown:3"
+            ],
+            "reason": "현재 소스 트리 병합 단계이며 배포 라이브러리와 제품 빌드 포함 여부는 별도로 확인해야 한다는 한계를 공개 본문에 밝혔습니다.",
+            "verified_passages": [
+              {
+                "id": "0:body_markdown:3",
+                "text": "점검이 필요한 환경에서는 프리뷰 표면을 반복적으로 갱신하면서 세션 재구성이 진행될 때 활성 파이프라인에 리셋 에러 콜백이 유입되는지 관찰하는 방법을 검토할 수 있습니다. 다만 본 확인은 소스 트리 병합 단계이며, 배포 라이브러리 및 최종 제품 빌드 반영 여부는 별도로 확인해야 합니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:camera_hal_takeaway:0"
+            ],
+            "reason": "Camera HAL 인터페이스 변경이 아닌 상위 프레임워크의 잘못된 콜백으로 인한 불필요한 재시작 방지임을 명확히 구분하여 기술했습니다.",
+            "source_behavior": "SessionConfigAdapter.kt에서 메인 스레드 상의 단일 조회로 TOCTOU 레이스를 제거하고 isPrimary 및 postview 표면 매칭을 처리함",
+            "article_behavior": "HAL 규격 변경 없이 상위 프레임워크 레이스 컨디션 완화로 불필요한 configureStreams 및 요청 루프 재시작을 줄인다고 약속함",
+            "verified_passages": [
+              {
+                "id": "0:camera_hal_takeaway:0",
+                "text": "하위 Camera HAL 인터페이스 자체의 규격 변화는 없으나, 상위 프레임워크가 잘못된 에러 콜백으로 configureStreams와 요청 루프를 불필요하게 재시작하던 상위 레이스 컨디션을 줄여줍니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "CameraX 상위 세션 상태 머신에서 표면 교체 시 발생하는 불필요한 세션 리셋 레이스 컨디션을 방지하는 구체적이고 실무적인 버그 수정 브리핑입니다. / 버그 발생 원인과 수정 메커니즘, 점검 조건 및 관찰 대상, HAL 영향 범위와 소스 병합 한계가 왜곡 없이 정확하게 설명되었습니다. / 경쟁 조건의 발생 원인과 단일 메인 스레드 조회 수정 원리, 점검 방안 및 배포 미반영 한계를 원문 범위 내에서 정확하게 설명했습니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "CameraX ZslControl, 플래시 전환 및 요청 취소 시 발생하는 그래픽 메모리 누수 수정",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "플래시 모드 활성화로 ZSL이 비활성화되거나 유스케이스가 분리될 때 ZslRingBuffer를 드레인하고, 캡처 요청 매핑 실패나 onRequestSequenceAborted 발생 시 꺼내온 ImageProxy를 닫아 GraphicBuffer 및 프록시 누수를 방지함.",
+        "article_explanation": "공개 본문은 변경 전후(플래시 전환 및 요청 중단 시 3~6개 54~108MB 버퍼 고정 및 ImageProxy 미반환 문제와 명시적 버퍼 드레인/close 보장 수정), 적용 범위(CameraX ZslControl 및 CaptureConfigAdapter), 관찰 대상(플래시 전환 및 세션 재시작 시 GraphicBuffer 할당량 프로파일링), 반영 한계(패치 소스 분석 기반의 확인 방안이며 최종 배포 바이너리 반영 여부는 미확인)를 정확히 설명하고 있습니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:1",
+              "1:body_markdown:2"
+            ],
+            "reason": "플래시 전환, 유스케이스 해제, 요청 매핑 실패 및 시퀀스 중단 등 발생 조건과 수정 전 버퍼 미반환 및 수정 후 명시적 드레인과 close 처리를 구체적으로 설명했습니다.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:1",
+                "text": "기존 구현에서는 플래시 촬영이 활성화되어 ZSL이 비활성화되더라도 링 버퍼에 이미 들어 있던 프레임들이 비워지지 않았습니다. 이로 인해 3개에서 6개에 달하는 전체 해상도 PRIV 또는 YUV 그래픽 하드웨어 버퍼(약 54MB에서 108MB)가 해제되지 않고 메모리에 고정되는 문제가 있었습니다. 또한 캡처 요청 매핑 과정에서 결과 객체 변환에 실패하거나 요청 시퀀스가 중단되었을 때, 큐에서 꺼낸 ImageProxy 객체가 닫히지 않고 유실되는 누수 경로도 존재했습니다."
+              },
+              {
+                "id": "1:body_markdown:2",
+                "text": "이번 패치에서는 플래시 모드 설정이나 유스케이스 해제 시 ZslRingBuffer 내부 버퍼를 명시적으로 드레인하도록 개선했습니다. 아울러 캡처 요청 변환 실패나 onRequestSequenceAborted 콜백 유입 시 예외 블록을 통해 꺼내온 이미지 프록시가 반드시 close되도록 보장했습니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:3"
+            ],
+            "reason": "ZSL 활성화 상태에서 플래시 모드 전환 및 세션 재시작 조건과 GraphicBuffer 할당량 추이 프로파일링이라는 관찰 대상을 제시했습니다.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:3",
+                "text": "실무 환경에서는 ZSL이 활성화된 상태에서 플래시 모드를 켜고 끄거나 고해상도 연속 캡처 도중 세션을 재시작하면서 GraphicBuffer 할당량 추이를 프로파일링하여 개선 효과를 점검할 수 있습니다. 이는 패치 소스 분석에 기반한 확인 방안이며 최종 배포 바이너리 포함 여부는 확인이 필요합니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:3"
+            ],
+            "reason": "제시된 점검 방안이 소스 분석에 기반한 확인 제안이며 최종 배포 바이너리 포함 여부는 별도 확인이 필요함을 명시했습니다.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:3",
+                "text": "실무 환경에서는 ZSL이 활성화된 상태에서 플래시 모드를 켜고 끄거나 고해상도 연속 캡처 도중 세션을 재시작하면서 GraphicBuffer 할당량 추이를 프로파일링하여 개선 효과를 점검할 수 있습니다. 이는 패치 소스 분석에 기반한 확인 방안이며 최종 배포 바이너리 포함 여부는 확인이 필요합니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:2",
+              "1:camera_hal_takeaway:0"
+            ],
+            "reason": "하위 HAL 변경이 아닌 CameraX 상위 버퍼 반환 경로 수정임을 명확히 하고 근거 없는 기능 성공 보장을 하지 않았습니다.",
+            "source_behavior": "ZslControl이 플래시 모드 변경 및 분리 시 링 버퍼를 비우고, CaptureConfigAdapter가 매핑 예외 및 onRequestSequenceAborted 시 ImageProxy를 닫음.",
+            "article_behavior": "플래시 전환 및 요청 취소/실패 시 드레인과 close 처리를 통해 메모리 고정을 방지하는 상위 버퍼 반환 경로 수정으로 정확히 설명함.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:2",
+                "text": "이번 패치에서는 플래시 모드 설정이나 유스케이스 해제 시 ZslRingBuffer 내부 버퍼를 명시적으로 드레인하도록 개선했습니다. 아울러 캡처 요청 변환 실패나 onRequestSequenceAborted 콜백 유입 시 예외 블록을 통해 꺼내온 이미지 프록시가 반드시 close되도록 보장했습니다."
+              },
+              {
+                "id": "1:camera_hal_takeaway:0",
+                "text": "하위 그래픽 메모리 할당 계층에서 버퍼가 고정되어 발생할 수 있는 메모리 압박 및 out-of-memory 킬을 방지하는 상위 버퍼 반환 경로 수정입니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "ZSL 및 플래시 촬영, 유스케이스 생명주기 전환 시 발생하는 대용량 그래픽 버퍼(HardwareBuffer) 및 ImageProxy 누수를 예방하여 메모리 안정성을 직접 높이는 핵심 기술 분석입니다. / 버그 발생 조건과 수정 원리, 프레임워크 계층의 동작 범위, 프로파일링 관찰을 포함한 검증 제안 및 배포 바이너리 미확인 한계가 원문 근거 내에서 왜곡 없이 충실히 서술됨. / 원문의 핵심 버그 수정 내용과 발생 조건, 변경 전후 동작, 관찰 방안 및 배포 한계가 왜곡 없이 충실하게 설명되었습니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "CameraX UseCaseCameraState, 일시적 프레임 드롭 시 상태 업데이트 신호가 조기 실패하던 오류 수정",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "CameraX의 UseCaseCameraState에서 반복 요청의 일시적 프레임 드롭(onCaptureFailed) 시 대기 중인 상태 업데이트 신호(updateSignals)를 즉시 에러로 완료하던 동작을 제거하고, 동일하거나 이후 요청 번호의 프레임이 성공하거나 반복 요청이 정지될 때까지 대기열에 유지하도록 수정함.",
+        "article_explanation": "기사는 변경 전 UseCaseCameraState가 onCaptureFailed 수신 시 즉시 신호를 예외 완료하여 3A 제어나 유스케이스 전환이 실패하던 문제와, 변경 후 후속 프레임 수신 또는 반복 정지 시까지 신호를 유지하고 락 외부에서 처리하도록 한 수정 원리를 명확히 설명함. 또한 센서/표면 갱신 부하 시 Future 조기 중단 여부를 관찰하는 점검 제안과 소스 병합 외 라이브러리 릴리스 및 제품 반영 미확인 한계를 모두 제시함.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:1",
+              "2:body_markdown:2"
+            ],
+            "reason": "단일 프레임 누락 시 UseCaseCameraState가 즉시 에러 완료하던 이전 동작과, 동일/후속 요청 프레임 반환 시까지 신호를 대기열에 유지하도록 바뀐 수정 원리가 정확히 설명됨.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:1",
+                "text": "이전 구조에서는 하위 Camera2 프레임워크로부터 CaptureCallback.onCaptureFailed 콜백이 유입되면, 이것이 일시적인 프레임 누락에 불과하더라도 UseCaseCameraState가 모든 대기 중인 상태 업데이트 신호를 즉각 에러로 완료시켰습니다. 그 결과 유스케이스 활성화 제어나 3A 제어 로직이 정상적인 표면 전환 과정에서 불필요하게 예외를 일으키며 실패하는 결함이 있었습니다."
+              },
+              {
+                "id": "2:body_markdown:2",
+                "text": "수정된 로직은 단일 프레임 실패 시 신호를 즉시 취소하지 않고 대기열에 유지합니다. 동일하거나 더 큰 요청 번호를 가진 다음 프레임이 onTotalCaptureResult로 정상 반환되거나, 반복 요청이 완전히 정지될 때까지 신호 완료를 미룹니다. 또한 락 경합을 피하기 위해 신호의 인큐 및 드레인 작업을 락 내부에서 안전하게 분리했습니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:3"
+            ],
+            "reason": "높은 부하 상태에서 센서 모드 변경 또는 표면 갱신 중 프레임 드롭 발생 시 3A 및 유스케이스 전환 Future의 조기 중단 여부를 관찰하는 구체적 점검 조건과 관찰 대상이 제시됨.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:3",
+                "text": "점검 환경에서는 높은 부하 상태에서 센서 모드를 변경하거나 표면을 갱신할 때 단일 프레임 드롭 로그 발생 직후 3A 또는 유스케이스 전환 Future가 조기에 중단되는지 관찰하는 시나리오를 구성할 수 있습니다. 이는 병합된 소스 코드에 근거한 확인 방안이며 최종 라이브러리 릴리스 및 제품 반영 여부는 별도로 확인해야 합니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:3"
+            ],
+            "reason": "해당 내용이 병합된 소스 코드에 근거한 확인 제안이며 라이브러리 릴리스 및 실제 제품 반영 여부는 별도로 확인해야 한다는 한계를 명시함.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:3",
+                "text": "점검 환경에서는 높은 부하 상태에서 센서 모드를 변경하거나 표면을 갱신할 때 단일 프레임 드롭 로그 발생 직후 3A 또는 유스케이스 전환 Future가 조기에 중단되는지 관찰하는 시나리오를 구성할 수 있습니다. 이는 병합된 소스 코드에 근거한 확인 방안이며 최종 라이브러리 릴리스 및 제품 반영 여부는 별도로 확인해야 합니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:2",
+              "2:camera_hal_takeaway:0"
+            ],
+            "reason": "프레임 드롭 자체를 하드웨어/HAL 단에서 막는 것이 아니라 상위 프레임워크에서 신호를 대기시켜 불필요한 오류 확산을 방지하는 완충 역할임을 올바르게 기술함.",
+            "source_behavior": "단일 프레임 CaptureFailure 발생 시 pending updateSignals를 실패 처리하지 않고 onTotalCaptureResult에서 동일/상위 번호 요청이 완료되거나 반복이 중단될 때까지 유지하며 close() 시에는 취소함.",
+            "article_behavior": "일시적 프레임 누락 시 신호를 즉시 취소하지 않고 대기열에 유지하며 후속 프레임 정상 반환이나 반복 정지 시까지 완료를 미룬다고 설명함.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:2",
+                "text": "수정된 로직은 단일 프레임 실패 시 신호를 즉시 취소하지 않고 대기열에 유지합니다. 동일하거나 더 큰 요청 번호를 가진 다음 프레임이 onTotalCaptureResult로 정상 반환되거나, 반복 요청이 완전히 정지될 때까지 신호 완료를 미룹니다. 또한 락 경합을 피하기 위해 신호의 인큐 및 드레인 작업을 락 내부에서 안전하게 분리했습니다."
+              },
+              {
+                "id": "2:camera_hal_takeaway:0",
+                "text": "드라이버나 ISP 단에서 발생하는 일시적 프레임 드롭이 상위 프레임워크의 파이프라인 전체 오류로 확산되지 않도록 완충해 줍니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "Camera2 반복 요청 스트림의 일시적 프레임 드롭에 대한 상위 프레임워크의 내결함성을 개선하여 센서 전환 및 3A 업데이트의 견고성을 높이는 실무 가치가 있습니다. / 반복 요청 중 단일 프레임 드롭 시 신호 처리 개선 사항, 점검 조건 및 관찰 대상, 소스 병합과 배포 반영의 구분을 원문 근거에 맞춰 충실하고 왜곡 없이 기술했습니다. / 원문의 핵심 버그 수정 원리와 적용 조건, 공개 점검 방안 및 릴리스 한계가 과장 없이 충실히 기술되었습니다."
+    },
+    {
+      "section_index": 3,
+      "headline": "CameraX VideoCapture, 비디오 인코더 조기 해제 시 발생하는 네이티브 스레드 누수 수정",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "Android 10(API 29) 이상 Codec2 환경에서 표면 입력으로 구성된 미디어 인코더를 시작하지 않고 해제할 때 발생하는 C2NodeImpl/C2OMXNode 네이티브 스레드 누수를 방지하기 위해, release 직전 의도적으로 start()를 호출하여 자원 정리를 유도하는 VideoEncoderLeaksThreadOnReleaseWithoutStartQuirk 우회 로직을 추가했습니다.",
+        "article_explanation": "적용 조건(Android 10+ Codec2 환경, 표면 입력 구성 후 미시작 상태), 변경 전후(스레드 누수 발생에서 release 직전 start 호출로 정상 정리 유도), 확인 관찰 대상(반복 바인드/언바인드 후 /proc/self/task 내 스레드 수 증가 여부 확인), 반영 한계(Gerrit 병합 기준이며 라이브러리 릴리스 및 제품 빌드 반영은 미확인)를 본문에서 모두 설명했습니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:1",
+              "3:body_markdown:2"
+            ],
+            "reason": "Android 10 이상 Codec2 환경 및 표면 입력 미시작 해제 조건과, release 직전 start()를 호출하여 스레드 정리를 유도하는 변경 전후 원리를 상세히 기술했습니다.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:1",
+                "text": "Android 10(API 29)에서 도입된 Codec2 프레임워크에서는 표면 입력을 갖도록 구성된 미디어 코덱을 시작하지 않고 곧바로 release할 경우, C2NodeImpl 네이티브 스레드가 프로세스가 종료될 때까지 남아 있는 결함이 있었습니다. 이로 인해 앱에서 비디오 캡처 화면을 드나들 때마다 프로세스 내 네이티브 스레드가 계속해서 쌓이는 현상이 발생했습니다."
+              },
+              {
+                "id": "3:body_markdown:2",
+                "text": "이번 패치에서는 VideoEncoderLeaksThreadOnReleaseWithoutStartQuirk를 추가하여, 인코더가 구성된 후 시작되지 않은 상태라면 release 직전에 코덱을 의도적으로 start하도록 처리했습니다. 코덱을 시작함으로써 미디어 프레임워크가 입력 표면 연결을 정상적으로 정리하고 네이티브 스레드를 종료할 수 있게 유도하는 방식입니다. 이 추가 시작 과정은 인코더 백그라운드 스레드에서 수행되며 해제 시점에 약 9밀리초에서 24밀리초 정도의 추가 지연이 발생할 수 있습니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:3"
+            ],
+            "reason": "비디오 캡처 유스케이스를 바인드/언바인드하는 입력 조건과 /proc/self/task에서 C2NodeImpl 또는 C2OMXNode 스레드 수 증가 여부를 관찰하는 구체적 점검 방안을 제시했습니다.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:3",
+                "text": "점검 환경에서는 비디오 캡처 유스케이스를 반복해서 바인드 및 언바인드한 후 /proc/self/task 경로를 확인하여 C2NodeImpl 또는 C2OMXNode 스레드 수가 증가하는지 여부를 검증할 수 있습니다. 이 확인은 소스 트리 병합에 기반한 제안이며 정식 라이브러리 배포본 포함 여부는 추가 조사가 필요합니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:3"
+            ],
+            "reason": "소스 트리 병합 상태를 바탕으로 한 점검 제안이며 정식 배포 라이브러리 포함 여부는 추가 조사가 필요하다는 범위를 명확히 밝혔습니다.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:3",
+                "text": "점검 환경에서는 비디오 캡처 유스케이스를 반복해서 바인드 및 언바인드한 후 /proc/self/task 경로를 확인하여 C2NodeImpl 또는 C2OMXNode 스레드 수가 증가하는지 여부를 검증할 수 있습니다. 이 확인은 소스 트리 병합에 기반한 제안이며 정식 라이브러리 배포본 포함 여부는 추가 조사가 필요합니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:2",
+              "3:camera_hal_takeaway:0"
+            ],
+            "reason": "Camera HAL 계약의 직접 수정이 아닌 다운스트림 VideoCapture 인코더 계층의 네이티브 스레드 자원 누수 우회 조치이자 해제 지연 한계임을 분명히 구분했습니다.",
+            "source_behavior": "Codec2 환경에서 SurfaceInput으로 설정된 VideoEncoder가 한 번도 start되지 않고 release될 때 C2NodeImpl 네이티브 스레드가 누수되던 문제를 release 전 임시 start() 호출로 우회하며, start 시 발생하는 콜백은 무시하고 런타임 예외 발생 시 기존 release로 폴백합니다.",
+            "article_behavior": "비디오 캡처 화면 이탈 시 인코더 백그라운드 스레드에서 release 직전 의도적으로 start를 호출하여 프레임워크 스레드 정리를 유도하고 약 9~24ms의 추가 해제 지연이 발생할 수 있음을 설명하며 HAL 직접 변경이 아님을 명시했습니다.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:2",
+                "text": "이번 패치에서는 VideoEncoderLeaksThreadOnReleaseWithoutStartQuirk를 추가하여, 인코더가 구성된 후 시작되지 않은 상태라면 release 직전에 코덱을 의도적으로 start하도록 처리했습니다. 코덱을 시작함으로써 미디어 프레임워크가 입력 표면 연결을 정상적으로 정리하고 네이티브 스레드를 종료할 수 있게 유도하는 방식입니다. 이 추가 시작 과정은 인코더 백그라운드 스레드에서 수행되며 해제 시점에 약 9밀리초에서 24밀리초 정도의 추가 지연이 발생할 수 있습니다."
+              },
+              {
+                "id": "3:camera_hal_takeaway:0",
+                "text": "Camera HAL 계약의 직접적인 변경은 아니지만, 카메라 프레임이 전달되는 다운스트림 비디오 인코더 계층의 스레드 자원 누수를 막아 앱의 장기 안정성을 개선합니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "카메라 비디오 파이프라인의 다운스트림인 미디어 인코더 계층에서 발생하는 네이티브 스레드 누수 원인과 지연 트레이드오프를 명확히 제시하여 앱 안정성 확보에 기여합니다. / 원문의 적용 조건, 변경 전후 동작, 관찰 가능한 점검 제안 및 릴리스·계층 한계를 왜곡 없이 충실히 설명함. / 적용 조건, 수정 원리, 점검 방법의 관찰 지표, 라이브러리 배포본 미확인 한계 및 HAL 계층 분리가 원문과 부합하게 명시되었습니다."
+    },
+    {
+      "section_index": 4,
+      "headline": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "퀄컴 SM8450(Waipio) SoC 지원을 위해 CAMSS 드라이버에 레거시 CSIPHY 리소스 의존성을 제거하고, X1E80100과 호환되는 독립 CSI2 PHY 디바이스 트리 노드 및 드라이버 구성을 추가함.",
+        "article_explanation": "적용 범위는 SM8450 플랫폼 및 업스트림 리눅스 CAMSS 드라이버이며, CSIPHY를 독립 장치로 분리하는 구조적 변경과 TPG-CSID 스트리밍 검증 사실을 설명함. V4L2 커널 계층과 Camera HAL 인터페이스의 경계를 구분하고, linux-next 기반 메일링 리스트 제안 단계로 메인라인 병합 및 상용 반영이 미확인 상태임을 명시함.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "4:lead:0",
+              "4:body_markdown:1"
+            ],
+            "reason": "SM8450 SoC 적용 대상과 레거시 CSIPHY 리소스 구조 대신 X1E80100 호환 독립 장치로 분리하는 변경 전후 구조를 명확히 밝혔습니다.",
+            "verified_passages": [
+              {
+                "id": "4:lead:0",
+                "text": "퀄컴 SM8450 플랫폼의 카메라 서브시스템을 업스트림 리눅스 커널에서 지원하기 위한 드라이버 추가 및 독립 CSI2 PHY 구성 패치 시리즈가 제안되었습니다."
+              },
+              {
+                "id": "4:body_markdown:1",
+                "text": "이번에 제출된 7편의 패치 시리즈는 Qualcomm SM8450(Waipio) SoC의 CAMSS 드라이버 지원을 추가합니다. 물리 계층인 CSIPHY는 기존 레거시 리소스 구조 대신 X1E80100 플랫폼과 호환되는 독립적인 장치로 분리하여 디바이스 트리에 정의되었습니다. 제출자에 따르면 해당 CSIPHY IP는 Hamoa 플랫폼에 적용된 구조와 동일하며, 비공개 테스트 보드 환경에서 테스트 패턴 생성기(TPG)로부터 CSID로 이어지는 이미지 스트리밍 동작 검증을 거쳤습니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": false,
+            "satisfied": true,
+            "evidence_passage_ids": [],
+            "reason": "버그 수정이 아닌 신규 플랫폼 드라이버 및 디바이스 트리 지원을 위한 패치 제안이므로 버그 재현 및 관찰 절차는 직접 적용되지 않으며, 원문에 제시된 TPG 스트리밍 검증과 디바이스 트리 검토 방법이 충분히 기술되었습니다."
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "4:body_markdown:2"
+            ],
+            "reason": "해당 패치가 linux-next-20261023 기반 메일링 리스트 제안 상태이며 메인라인 병합 및 릴리스 반영 이력은 미확인 상태임을 분명히 구분했습니다.",
+            "verified_passages": [
+              {
+                "id": "4:body_markdown:2",
+                "text": "다만 이번 내용은 2026년 10월 23일 linux-next-20261023 트리를 기반으로 메일링 리스트에 제출된 패치 제안이며, 이후의 메인라인 커널 병합 여부나 실제 릴리스 반영 이력은 원문에서 확인되지 않았습니다. 또한 본 변경은 리눅스 V4L2 및 미디어 컨트롤러 수준의 커널 드라이버 구성이므로 안드로이드 Camera HAL 인터페이스 계약 자체를 직접 변경하지는 않습니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "4:body_markdown:2",
+              "4:camera_hal_takeaway:0"
+            ],
+            "reason": "V4L2 커널 드라이버 구성으로 안드로이드 Camera HAL 인터페이스를 직접 수정하지 않음을 명시하고 하위 토폴로지 참고용으로 효과 범위를 엄밀하게 제한했습니다.",
+            "source_behavior": "CAMSS 드라이버 및 독립 CSIPHY 디바이스 트리 노드를 추가하여 TPG에서 CSID로의 스트리밍을 지원하는 커널 레벨 패치 시리즈임.",
+            "article_behavior": "리눅스 V4L2 및 미디어 컨트롤러 수준 드라이버 변경으로 안드로이드 Camera HAL 계약을 변경하지 않는다고 설명함.",
+            "verified_passages": [
+              {
+                "id": "4:body_markdown:2",
+                "text": "다만 이번 내용은 2026년 10월 23일 linux-next-20261023 트리를 기반으로 메일링 리스트에 제출된 패치 제안이며, 이후의 메인라인 커널 병합 여부나 실제 릴리스 반영 이력은 원문에서 확인되지 않았습니다. 또한 본 변경은 리눅스 V4L2 및 미디어 컨트롤러 수준의 커널 드라이버 구성이므로 안드로이드 Camera HAL 인터페이스 계약 자체를 직접 변경하지는 않습니다."
+              },
+              {
+                "id": "4:camera_hal_takeaway:0",
+                "text": "커널 레벨의 V4L2 장치 노드 및 CSI2 수신 파이프라인이 정립되는 초기 단계이므로, 향후 AOSP CameraProvider 포팅 시 하위 미디어 토폴로지 참고 자료로 유용합니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "Qualcomm 최신 모바일 플랫폼의 카메라 CSI 수신 파이프라인 및 업스트림 리눅스 V4L2 CAMSS 지원 현황을 파악하는 데 필수적인 커널 드라이버 동향입니다. / 커널 드라이버 지원 및 독립 CSIPHY 구성의 변경 전후, 패치 제안 상태 및 HAL 계층과의 경계를 원문 범위 내에서 정확하게 기술함. / 퀄컴 SM8450 플랫폼의 CAMSS 드라이버 및 독립 CSIPHY 지원 패치 제안에 대해 설계 구조 변경, V4L2 계층 한계 및 미병합 상태를 왜곡 없이 충실하게 설명했습니다."
+    }
+  ],
+  "final_comment": "모든 기사가 원문 패치 커밋 및 메일링 리스트 원문과 완벽히 부합하며, 과장 없는 기술 계층(Layer) 분리와 구체적인 동작 변화, 점검 방안을 명확히 제시하고 있어 발행 기준을 충족합니다."
+}
