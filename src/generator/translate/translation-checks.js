@@ -33,24 +33,28 @@ function contractIssueSignature(item) {
   return [item.type, item.key, item.construct].map(value => value ?? '').join('|');
 }
 
-// 번역본은 validate:public이 쓰는 같은 기사 계약을 통과해야 한다. 프롬프트가 금지해도 LLM이 식별자에
-// 백틱을 붙이는 일이 있었고(2026-10-26 W44: 기사 5건 10곳), 이 검사가 없으면 1차 응답이 그대로 기록된 뒤
-// 워크플로 최종 검증에서야 실패해 재시도 기회를 잃는다. 원문이 이미 갖고 있던 위반은 번역의 잘못이 아니므로
-// 원문에 없던 위반만 거부한다.
+// 번역이 validate:public과 같은 기사 계약 검사기에서 원문에 없던 위반을 만들면 거부한다. 프롬프트가 금지해도
+// LLM이 식별자에 백틱을 붙이는 일이 있었고(2026-10-26 W44: 기사 5건 10곳), 이 검사가 없으면 1차 응답이
+// 그대로 기록된 뒤 워크플로 최종 검증에서야 실패해 재시도 기회를 잃는다. 원문이 이미 갖고 있던 위반은 번역의
+// 잘못이 아니므로 여기서 거부하지 않는다. 그 위반은 validate:public이 issue.json을 검사할 때 따로 막는다.
+// 재시도는 한 번뿐이므로 모든 기사의 위반을 위치와 함께 모아 한 번에 알린다.
 // 검사기는 정규화하면서 입력을 고칠 수 있으므로 사본을 넘긴다. 원본 issue가 바뀌면 다음 시도의
 // applyTranslation이 원문 바이트와 issue가 다르다며 거부한다.
 function assertNoNewContractIssues(sourceIssue, translatedIssue) {
   const issue = structuredClone(sourceIssue);
   const english = structuredClone(translatedIssue);
-  issue.sections.forEach((section, index) => {
+  const violations = issue.sections.flatMap((section, index) => {
     const existing = new Set(validatePublicArticle(section, index, { issue }).map(contractIssueSignature));
-    const added = validatePublicArticle(english.sections[index], index, { issue: english })
-      .filter(item => !existing.has(contractIssueSignature(item)));
-    if (added.length > 0) {
-      const detail = added.map(item => [item.type, item.key, item.construct].filter(Boolean).join(' ')).join('; ');
-      throw new Error(`Public article contract violation in translation: sections[${index}] ${detail}`);
-    }
+    return validatePublicArticle(english.sections[index], index, { issue: english })
+      .filter(item => !existing.has(contractIssueSignature(item)))
+      .map(item => {
+        const position = item.blockIndex !== undefined ? ` block ${item.blockIndex}` : item.line !== undefined ? ` line ${item.line}` : '';
+        return `sections[${index}] ${[item.type, item.key, item.construct].filter(Boolean).join(' ')}${position}`;
+      });
   });
+  if (violations.length > 0) {
+    throw new Error(`Public article contract violation in translation: ${violations.join('; ')}`);
+  }
 }
 
 function translationChecks(issue, overlay, sourceText) {

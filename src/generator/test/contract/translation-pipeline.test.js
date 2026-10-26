@@ -224,35 +224,37 @@ function storySample(t) {
   const root = tempRoot('translation-story-');
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const key = '2026-W39';
-  const source = { title: 'linux-media', url: 'https://lore.kernel.org/linux-media/example/' };
+  const urls = ['https://lore.kernel.org/linux-media/example/', 'https://lore.kernel.org/linux-media/example-2/'];
+  const storySection = url => ({
+    headline: 'HM1246 패치', category: 'Camera', tags: ['Camera HAL'], imageAlt: '카메라 이미지',
+    selectedImage: '../../assets/images/fallback/newsletter-default.svg',
+    resolvedImage: { url: '../../assets/images/fallback/newsletter-default.svg', usedFallback: true },
+    sources: [{ title: 'linux-media', url }], public_article: {
+      headline: 'HM1246 패치가 v10까지 온 이유', lead: '무엇이 걸렸는지 봅니다.',
+      body_markdown: ['HM1246 드라이버 패치가 v10까지 왔습니다.', '### 리뷰 지점', 'v4l2_subdev_format 협상 경로가 걸렸습니다.'].join('\n\n'),
+      camera_hal_takeaway: '포맷 협상 경로를 확인합니다.', reader_checkpoints: ['대표 기기에서 확인합니다.'],
+      source_links: [{ title: 'linux-media', url }], story_contract_version: 2, source_subtitle: 'linux-media · 2026-08-10',
+      editorial_story: { not_to_overclaim: '확대하지 않습니다.', editor_take: '범위 안에서만 봅니다.' },
+      decision_metadata: { impact: 'Medium', scope: ['HAL'], action: ['Watch'], overclaim_risk: 'Low' }
+    }
+  });
   const issue = {
     weekly_key: key, date: '2026-09-21', title: '주간 소식', summary: '카메라 소식입니다.',
     public_contract_version: 'story-v2', generation_contract_version: 2,
-    tags: ['Camera HAL'], briefing: ['카메라 패치'], watch_points: [], references: [source], reference_articles: [],
-    sections: [{
-      headline: 'HM1246 패치', category: 'Camera', tags: ['Camera HAL'], imageAlt: '카메라 이미지',
-      selectedImage: '../../assets/images/fallback/newsletter-default.svg',
-      resolvedImage: { url: '../../assets/images/fallback/newsletter-default.svg', usedFallback: true },
-      sources: [source], public_article: {
-        headline: 'HM1246 패치가 v10까지 온 이유', lead: '무엇이 걸렸는지 봅니다.',
-        body_markdown: 'HM1246 드라이버 패치가 v10까지 왔습니다.\n\n### 리뷰 지점\n\nv4l2_subdev_format 협상 경로가 걸렸습니다.',
-        camera_hal_takeaway: '포맷 협상 경로를 확인합니다.', reader_checkpoints: ['대표 기기에서 확인합니다.'],
-        source_links: [source], story_contract_version: 2, source_subtitle: 'linux-media · 2026-08-10',
-        editorial_story: { not_to_overclaim: '확대하지 않습니다.', editor_take: '범위 안에서만 봅니다.' },
-        decision_metadata: { impact: 'Medium', scope: ['HAL'], action: ['Watch'], overclaim_risk: 'Low' }
-      }
-    }]
+    tags: ['Camera HAL'], briefing: ['카메라 패치'], watch_points: [],
+    references: urls.map(url => ({ title: 'linux-media', url })), reference_articles: [],
+    sections: urls.map(storySection)
   };
   writeJson(path.join(root, 'articles/newsletters', key, 'issue.json'), issue);
   const target = readTarget(root, key);
   const overlay = translationInput(issue, target.sourceText);
   Object.assign(overlay, { title: 'Weekly camera news', summary: 'Camera changes.' });
-  Object.assign(overlay.sections[0], {
+  overlay.sections.forEach((section, index) => Object.assign(section, {
     headline: 'Why the HM1246 patch reached v10', lead: 'What held it up.',
-    body_markdown: 'The HM1246 driver patch has reached v10.\n\n### Review point\n\nThe v4l2_subdev_format negotiation path held it up.',
+    body_markdown: ['The HM1246 driver patch has reached v10.', '### Review point', 'The v4l2_subdev_format negotiation path held it up.'].join('\n\n'),
     why_it_matters: 'Check the format negotiation path.', source_subtitle: 'linux-media · 2026-08-10',
-    image_alt: 'Camera image', source_titles: { 'https://lore.kernel.org/linux-media/example/': 'linux-media' }
-  });
+    image_alt: 'Camera image', source_titles: { [urls[index]]: 'linux-media' }
+  }));
   return { target, overlay };
 }
 
@@ -268,7 +270,7 @@ test('checks reject public article contract violations that the translation adde
   const { target, overlay } = storySample(t);
   assert.deepEqual(translationChecks(target.issue, overlay, target.sourceText).checks, { ids: true, urls: true, english: true, tokens: true });
   assert.throws(() => translationChecks(target.issue, withBacktickedBody(overlay), target.sourceText),
-    /Public article contract violation in translation: sections\[0\] body_markdown_forbidden_construct body_markdown inline_code/);
+    /Public article contract violation in translation: sections\[0\] body_markdown_forbidden_construct body_markdown inline_code block \d+; sections\[1\] body_markdown_forbidden_construct body_markdown inline_code block \d+/);
 });
 
 test('a contract violation is retried with its feedback before anything is written', async t => {
@@ -277,9 +279,12 @@ test('a contract violation is retried with its feedback before anything is writt
   const result = await translateIssue(target, { call: async (run, system, prompt) => {
     calls++;
     if (calls === 1) return withBacktickedBody(overlay);
-    assert.match(prompt, /inline_code/);
+    // 재시도는 한 번뿐이라 위반한 기사 전부가 피드백에 실려야 한다.
+    assert.match(prompt, /sections\[0\][^;]*inline_code[^;]*; sections\[1\][^;]*inline_code/);
     return overlay;
   } });
   assert.equal(calls, 2);
   assert.deepEqual(result.overlay, overlay);
+  // 검사가 원본 issue를 바꾸면 2차 시도가 원문 바이트와 어긋난다.
+  assert.equal(JSON.stringify(target.issue), JSON.stringify(JSON.parse(target.sourceText)));
 });
