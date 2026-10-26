@@ -219,3 +219,67 @@ test('Korean publication allowlist carries tracked translation deletions but dia
   const diagnostic = retentionCommitPlan(options).paths;
   for (const file of translationArtifactPaths(key)) assert.ok(!diagnostic.includes(file), file);
 });
+
+function storySample(t) {
+  const root = tempRoot('translation-story-');
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const key = '2026-W39';
+  const source = { title: 'linux-media', url: 'https://lore.kernel.org/linux-media/example/' };
+  const issue = {
+    weekly_key: key, date: '2026-09-21', title: '주간 소식', summary: '카메라 소식입니다.',
+    public_contract_version: 'story-v2', generation_contract_version: 2,
+    tags: ['Camera HAL'], briefing: ['카메라 패치'], watch_points: [], references: [source], reference_articles: [],
+    sections: [{
+      headline: 'HM1246 패치', category: 'Camera', tags: ['Camera HAL'], imageAlt: '카메라 이미지',
+      selectedImage: '../../assets/images/fallback/newsletter-default.svg',
+      resolvedImage: { url: '../../assets/images/fallback/newsletter-default.svg', usedFallback: true },
+      sources: [source], public_article: {
+        headline: 'HM1246 패치가 v10까지 온 이유', lead: '무엇이 걸렸는지 봅니다.',
+        body_markdown: 'HM1246 드라이버 패치가 v10까지 왔습니다.\n\n### 리뷰 지점\n\nv4l2_subdev_format 협상 경로가 걸렸습니다.',
+        camera_hal_takeaway: '포맷 협상 경로를 확인합니다.', reader_checkpoints: ['대표 기기에서 확인합니다.'],
+        source_links: [source], story_contract_version: 2, source_subtitle: 'linux-media · 2026-08-10',
+        editorial_story: { not_to_overclaim: '확대하지 않습니다.', editor_take: '범위 안에서만 봅니다.' },
+        decision_metadata: { impact: 'Medium', scope: ['HAL'], action: ['Watch'], overclaim_risk: 'Low' }
+      }
+    }]
+  };
+  writeJson(path.join(root, 'articles/newsletters', key, 'issue.json'), issue);
+  const target = readTarget(root, key);
+  const overlay = translationInput(issue, target.sourceText);
+  Object.assign(overlay, { title: 'Weekly camera news', summary: 'Camera changes.' });
+  Object.assign(overlay.sections[0], {
+    headline: 'Why the HM1246 patch reached v10', lead: 'What held it up.',
+    body_markdown: 'The HM1246 driver patch has reached v10.\n\n### Review point\n\nThe v4l2_subdev_format negotiation path held it up.',
+    why_it_matters: 'Check the format negotiation path.', source_subtitle: 'linux-media · 2026-08-10',
+    image_alt: 'Camera image', source_titles: { 'https://lore.kernel.org/linux-media/example/': 'linux-media' }
+  });
+  return { target, overlay };
+}
+
+function withBacktickedBody(overlay) {
+  const sections = overlay.sections.map(section => ({
+    ...section, body_markdown: section.body_markdown.replace('v4l2_subdev_format', '`v4l2_subdev_format`')
+  }));
+  return { ...overlay, sections };
+}
+
+test('checks reject public article contract violations that the translation added', t => {
+  // 2026-10-26 W44: 프롬프트가 금지해도 LLM이 식별자에 백틱을 붙였고, 워크플로 최종 검증에서야 실패했다.
+  const { target, overlay } = storySample(t);
+  assert.deepEqual(translationChecks(target.issue, overlay, target.sourceText).checks, { ids: true, urls: true, english: true, tokens: true });
+  assert.throws(() => translationChecks(target.issue, withBacktickedBody(overlay), target.sourceText),
+    /Public article contract violation in translation: sections\[0\] body_markdown_forbidden_construct body_markdown inline_code/);
+});
+
+test('a contract violation is retried with its feedback before anything is written', async t => {
+  const { target, overlay } = storySample(t);
+  let calls = 0;
+  const result = await translateIssue(target, { call: async (run, system, prompt) => {
+    calls++;
+    if (calls === 1) return withBacktickedBody(overlay);
+    assert.match(prompt, /inline_code/);
+    return overlay;
+  } });
+  assert.equal(calls, 2);
+  assert.deepEqual(result.overlay, overlay);
+});

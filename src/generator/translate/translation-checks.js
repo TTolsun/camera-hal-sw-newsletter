@@ -3,6 +3,7 @@
 const { applyTranslation } = require('../render/apply-translation');
 const { translationInput } = require('./translation-schema');
 const { hasKoreanText } = require('../../shared/common/korean-text');
+const { validatePublicArticle } = require('../reporter/public-article-contract');
 
 function urls(text) {
   const matches = String(text || '').match(/https?:\/\/[^\s<>"\]가-힣]+/g) || [];
@@ -25,6 +26,31 @@ function protectedTokens(text) {
     ...Array.from(prose.matchAll(/`([^`\n]+)`/g), match => match[1]).filter(value => !hasKoreanText(value)),
     ...(prose.match(/\b[A-Za-z][A-Za-z0-9_-]*-v?\d+(?:\.\d+)+(?:[A-Za-z0-9.-]*)\b|\bv?\d+\.\d+(?:\.\d+)*(?:[-\w.]*)\b|\b[A-Z][A-Z0-9_]*\d[A-Z0-9_]*\b|\b[A-Za-z][A-Za-z0-9]*_[A-Za-z0-9_]+\b|\b[A-Za-z]+(?:[A-Z][a-z]+)+\w*\b/g) || [])
   ])];
+}
+
+function contractIssueSignature(item) {
+  // 위치는 빼고 종류만 본다. 번역은 문장을 나눌 수 있어 같은 위반의 블록 번호가 달라질 수 있다.
+  return [item.type, item.key, item.construct].map(value => value ?? '').join('|');
+}
+
+// 번역본은 validate:public이 쓰는 같은 기사 계약을 통과해야 한다. 프롬프트가 금지해도 LLM이 식별자에
+// 백틱을 붙이는 일이 있었고(2026-10-26 W44: 기사 5건 10곳), 이 검사가 없으면 1차 응답이 그대로 기록된 뒤
+// 워크플로 최종 검증에서야 실패해 재시도 기회를 잃는다. 원문이 이미 갖고 있던 위반은 번역의 잘못이 아니므로
+// 원문에 없던 위반만 거부한다.
+// 검사기는 정규화하면서 입력을 고칠 수 있으므로 사본을 넘긴다. 원본 issue가 바뀌면 다음 시도의
+// applyTranslation이 원문 바이트와 issue가 다르다며 거부한다.
+function assertNoNewContractIssues(sourceIssue, translatedIssue) {
+  const issue = structuredClone(sourceIssue);
+  const english = structuredClone(translatedIssue);
+  issue.sections.forEach((section, index) => {
+    const existing = new Set(validatePublicArticle(section, index, { issue }).map(contractIssueSignature));
+    const added = validatePublicArticle(english.sections[index], index, { issue: english })
+      .filter(item => !existing.has(contractIssueSignature(item)));
+    if (added.length > 0) {
+      const detail = added.map(item => [item.type, item.key, item.construct].filter(Boolean).join(' ')).join('; ');
+      throw new Error(`Public article contract violation in translation: sections[${index}] ${detail}`);
+    }
+  });
 }
 
 function translationChecks(issue, overlay, sourceText) {
@@ -58,6 +84,7 @@ function translationChecks(issue, overlay, sourceText) {
   compare(original, overlay, 'translation');
   // Optional extra prose must not provide a way around the Korean detector.
   compare(overlay, overlay, 'translation');
+  assertNoNewContractIssues(issue, english);
   return { issue: english, checks: { ids: true, urls: true, english: true, tokens: true } };
 }
 
