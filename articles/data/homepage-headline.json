@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-10-19T00:00:00+09:00",
+  "updated_at": "2026-10-26T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
-    "title": "AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정",
-    "summary": "검은색으로 저장한 부분이 회색처럼 보였다면, 픽셀 값과 파일의 색상 범위 표시가 어긋났을 수 있습니다. HeifWriter는 일부 8비트 입력에서 이 불일치를 없애는 수정을 병합했습니다.",
-    "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
-    "newsletter_date": "2026-10-19",
-    "newsletter_url": "newsletters/2026-W43/index.html",
-    "selected_at": "2026-10-19",
+    "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+    "title": "CameraX UseCaseCameraState, 일시적 프레임 드롭 시 상태 업데이트 신호가 조기 실패하던 오류 수정",
+    "summary": "카메라 반복 촬영 도중 순간적으로 프레임 드롭이 발생해도 유스케이스 설정이나 초점 제어 작업이 비정상 종료되지 않도록 보완되었습니다.",
+    "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+    "newsletter_date": "2026-10-26",
+    "newsletter_url": "newsletters/2026-W44/index.html",
+    "selected_at": "2026-10-26",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-10-19",
+    "last_scored_at": "2026-10-26",
     "date_evidence": {
-      "date": "2026-10-16",
+      "date": "2026-10-22",
       "date_field": "published_date",
-      "evidence_level": "primary",
+      "evidence_level": "watch",
       "publish_ready_date_evidence": true
     },
     "quality_flags": {
@@ -27,7 +27,7 @@
     "score_breakdown": {
       "base_score": 100,
       "official_source_bonus": 8,
-      "camera_bucket_bonus": 0,
+      "camera_bucket_bonus": 6,
       "driver_or_soc_bonus": 0,
       "fallback_penalty": 0,
       "generic_topic_penalty": 0,
@@ -37,14 +37,59 @@
       "total": 100
     },
     "snapshot": {
-      "category": "android",
-      "source_name": "AndroidX Gerrit"
+      "category": "direct_aosp_camera",
+      "source_name": "AndroidX Gerrit Camera"
     },
-    "newsletter_article_url": "newsletters/2026-W43/index.html#article-androidx-heifwriter-8-heif",
+    "newsletter_article_url": "newsletters/2026-W44/index.html#article-camerax-usecasecamerastate",
     "image_url": "assets/images/fallback/android.svg",
-    "image_alt": "AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정"
+    "image_alt": "CameraX UseCaseCameraState, 일시적 프레임 드롭 시 상태 업데이트 신호가 조기 실패하던 오류 수정 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "title": "AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정",
+      "summary": "검은색으로 저장한 부분이 회색처럼 보였다면, 픽셀 값과 파일의 색상 범위 표시가 어긋났을 수 있습니다. HeifWriter는 일부 8비트 입력에서 이 불일치를 없애는 수정을 병합했습니다.",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4370387",
+      "newsletter_date": "2026-10-19",
+      "newsletter_url": "newsletters/2026-W43/index.html",
+      "selected_at": "2026-10-19",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-10-19",
+      "date_evidence": {
+        "date": "2026-10-16",
+        "date_field": "published_date",
+        "evidence_level": "primary",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 0,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "android",
+        "source_name": "AndroidX Gerrit"
+      },
+      "newsletter_article_url": "newsletters/2026-W43/index.html#article-androidx-heifwriter-8-heif",
+      "image_url": "assets/images/fallback/android.svg",
+      "image_alt": "AndroidX HeifWriter, 8비트 HEIF에서 검은색이 회색으로 보이는 문제 수정",
+      "replaced_at": "2026-10-26",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4352209",
       "title": "Camera2CaptureSequenceProcessor의 부분 Surface 캡처 요청 거부 및 재시도 메커니즘 도입",

@@ -1,0 +1,1822 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "score": 92,
+  "max_score": 100,
+  "threshold": 60,
+  "status": "PASS",
+  "summary": "Safety checks passed and the fact-checker found every article useful to a Camera HAL SW engineer. Editor review is ready.",
+  "deductions": [
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: action_hint.",
+      "location": "briefing 1",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+      "location": "briefing 2",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "editorial-story",
+      "points": 1,
+      "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+      "location": "briefing 3",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    },
+    {
+      "category": "image-fallback",
+      "points": 1,
+      "reason": "Article image uses a local fallback visual.",
+      "location": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+      "blocking": false,
+      "severity": "soft",
+      "reason_code": "",
+      "dedupe_key": ""
+    }
+  ],
+  "unpublishable_articles": [],
+  "article_results": [
+    {
+      "index": 1,
+      "headline": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+      "category": "CameraX / Framework",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Fix SessionConfigAdapter.reportSurfaceInvalid race - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 1,
+        "headline": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+        "source_candidate_hash": "f63f5991cd9518ae353aee7d7398c4bb7210d468f7ef57615d2304abe48b6965",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "low",
+      "effective_actionability_level": "low",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "headline": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+      "category": "CameraX / Buffer",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Fix ZslControl ring buffer and ImageProxy leaks - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 2,
+        "headline": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
+        "source_candidate_hash": "a04cdca1df962a76930e32b19d6545bc4e4837e02a193446ed6d53de9eb8ca8c",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "stream_buffer_metadata",
+        "thermal_power_memory_pressure",
+        "camerax_app_compatibility"
+      ],
+      "actionability_level": "low",
+      "effective_actionability_level": "low",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "headline": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+      "category": "CameraX / Framework",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 3,
+        "headline": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+        "source_candidate_hash": "b48d6968e36a7d24823921c3772551e1a054b9063671d7330cd085eb4f08a97d",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "direct_hal_contract",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "performance_latency_frame_drop"
+      ],
+      "actionability_level": "low",
+      "effective_actionability_level": "low",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "headline": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+      "category": "Android Multimedia",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 4,
+        "headline": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+        "source_candidate_hash": "02886b752f4456164173721b2756186e781fdab743910a3ff9fe8fba84598bbe",
+        "relevance_bucket": "android",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      "guardrail_impact_class": "framework_adjacent",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "performance_latency_frame_drop"
+      ],
+      "actionability_level": "low",
+      "effective_actionability_level": "low",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "headline": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+      "category": "Linux Media / Kernel Driver",
+      "status": "PASS",
+      "repair_action": "preserve",
+      "sources": [
+        {
+          "title": "[PATCH 0/7] media: qcom: camss: Add Waipio CAMSS support",
+          "url": "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/"
+        }
+      ],
+      "section_contract": {
+        "complete": true,
+        "missing_keys": [],
+        "missing_required_keys": [],
+        "present_optional_keys": [],
+        "unexpected_keys": [],
+        "has_limitations": false,
+        "has_watch_items": false,
+        "has_do_not_claim": false,
+        "limitation_visibility": "none"
+      },
+      "scope_count": {
+        "index": 5,
+        "headline": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/",
+        "source_candidate_hash": "f8ace8c3b9eb59fb8658909997675a0946bddc980bdd783a6ffac2af0c655108",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      "guardrail_impact_class": "camera_stack_source",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata"
+      ],
+      "actionability_level": "",
+      "effective_actionability_level": "",
+      "hard_fail_reasons": [],
+      "soft_deductions": [
+        {
+          "category": "image-fallback",
+          "points": 1,
+          "reason": "Article image uses a local fallback visual."
+        }
+      ]
+    }
+  ],
+  "claim_validation_summary": {
+    "status": "available",
+    "bound_claims": 21,
+    "total_claims": 21,
+    "derived_evidence_mapping_count": 0,
+    "overclaim_risk": "low",
+    "available_article_count": 5,
+    "not_available_article_count": 0
+  },
+  "claim_results": [
+    {
+      "article_index": 1,
+      "article_headline": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+      "claim_id": "claim-4372671-01",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit change 4372671은 2026-10-21 androidx-main 브랜치에 MERGED되었습니다.",
+      "evidence_ids": [
+        "source-body:09649325d5905d4a6677"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:09649325d5905d4a6677"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:09649325d5905d4a6677",
+          "resolved_evidence_id": "source-body:09649325d5905d4a6677",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+      "claim_id": "claim-4372671-02",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "기존 코드는 백그라운드 코루틴에서 useCase.getSessionConfig(isPrimary)와 .sessionConfig를 동기화 없이 각각 읽었습니다.",
+      "evidence_ids": [
+        "source-body:09649325d5905d4a6677"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:09649325d5905d4a6677"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:09649325d5905d4a6677",
+          "resolved_evidence_id": "source-body:09649325d5905d4a6677",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+      "claim_id": "claim-4372671-03",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "메인 스레드에서 Preview.setSurfaceProvider 등으로 세션 구성을 교체할 때 새 세션 구성에 SESSION_ERROR_SURFACE_NEEDS_RESET이 전달되는 오류가 있었습니다.",
+      "evidence_ids": [
+        "source-body:09649325d5905d4a6677"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:09649325d5905d4a6677"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:09649325d5905d4a6677",
+          "resolved_evidence_id": "source-body:09649325d5905d4a6677",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 1,
+      "article_headline": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+      "claim_id": "claim-4372671-04",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "수정은 Dispatchers.Main.immediate 디스패처에서 useCases.firstNotNullOfOrNull로 단일 조회를 수행하며, isPrimary 플래그와 postviewOutputConfig.surface 매칭을 함께 검사합니다.",
+      "evidence_ids": [
+        "source-body:09649325d5905d4a6677"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:09649325d5905d4a6677"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:09649325d5905d4a6677",
+          "resolved_evidence_id": "source-body:09649325d5905d4a6677",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+      "claim_id": "claim-4365734-01",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit change 4365734는 2026-10-19 androidx-main 브랜치에 MERGED되었습니다.",
+      "evidence_ids": [
+        "source-body:f39e014ca365d1ceac43"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:f39e014ca365d1ceac43"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:f39e014ca365d1ceac43",
+          "resolved_evidence_id": "source-body:f39e014ca365d1ceac43",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+      "claim_id": "claim-4365734-02",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "플래시가 켜진 상태(setZslDisabledByFlashMode)에서 링 버퍼를 비워 3~6개의 풀 해상도 PRIV/YUV HardwareBuffer(약 54~108MB)가 메모리에 묶여 있는 문제를 수정했습니다.",
+      "evidence_ids": [
+        "source-body:f39e014ca365d1ceac43"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:f39e014ca365d1ceac43"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:f39e014ca365d1ceac43",
+          "resolved_evidence_id": "source-body:f39e014ca365d1ceac43",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+      "claim_id": "claim-4365734-03",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "UseCaseManager.closeCurrentUseCases() 호출 시 DeferrableSurface를 조기 종료하지 않고 zslControl.clearRingBuffer()를 호출해 대기 버퍼를 비웁니다.",
+      "evidence_ids": [
+        "source-body:f39e014ca365d1ceac43"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:f39e014ca365d1ceac43"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:f39e014ca365d1ceac43",
+          "resolved_evidence_id": "source-body:f39e014ca365d1ceac43",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 2,
+      "article_headline": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+      "claim_id": "claim-4365734-04",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "CaptureConfigAdapter.mapToRequest()에서 결과 파싱 실패 또는 onRequestSequenceAborted 발생 시 꺼내온 ImageProxy를 즉시 close() 하도록 변경했습니다.",
+      "evidence_ids": [
+        "source-body:f39e014ca365d1ceac43"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:f39e014ca365d1ceac43"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:f39e014ca365d1ceac43",
+          "resolved_evidence_id": "source-body:f39e014ca365d1ceac43",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+      "claim_id": "claim-4381410-01",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "Gerrit change 4381410은 2026-10-22 androidx-main 브랜치에 MERGED되었습니다.",
+      "evidence_ids": [
+        "source-body:21e3a2b19b05a28a767f"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:21e3a2b19b05a28a767f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:21e3a2b19b05a28a767f",
+          "resolved_evidence_id": "source-body:21e3a2b19b05a28a767f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+      "claim_id": "claim-4381410-02",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "기존에는 반복 요청에서 REASON_ERROR나 REASON_FLUSHED로 단일 프레임이 실패하면 RequestListener.onFailed가 모든 updateSignals를 예외적으로 완료했습니다.",
+      "evidence_ids": [
+        "source-body:21e3a2b19b05a28a767f"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:21e3a2b19b05a28a767f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:21e3a2b19b05a28a767f",
+          "resolved_evidence_id": "source-body:21e3a2b19b05a28a767f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+      "claim_id": "claim-4381410-03",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "이로 인해 센서나 표면 전환 도중 UseCaseManager.setEnabledUseCases 및 State3AControl 같은 상위 호출부가 조기에 실패하는 현상이 발생했습니다.",
+      "evidence_ids": [
+        "source-body:21e3a2b19b05a28a767f"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:21e3a2b19b05a28a767f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:21e3a2b19b05a28a767f",
+          "resolved_evidence_id": "source-body:21e3a2b19b05a28a767f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 3,
+      "article_headline": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+      "claim_id": "claim-4381410-04",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "camera_framework_behavior",
+      "overclaim_risk": "low",
+      "text": "수정 후에는 같거나 더 큰 요청 번호의 프레임이 onTotalCaptureResult에 도달하거나, 반복 요청이 정지되거나, 상태 객체가 닫힐 때까지 신호를 보류 상태로 유지합니다.",
+      "evidence_ids": [
+        "source-body:21e3a2b19b05a28a767f"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:21e3a2b19b05a28a767f"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:21e3a2b19b05a28a767f",
+          "resolved_evidence_id": "source-body:21e3a2b19b05a28a767f",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+      "claim_id": "claim-4375770-01",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Gerrit change 4375770은 2026-10-20 androidx-main 브랜치에 MERGED되었습니다.",
+      "evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "resolved_evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+      "claim_id": "claim-4375770-02",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Surface 입력을 사용해 구성되었으나 한 번도 start()되지 않은 MediaCodec 비디오 인코더를 해제하면 C2NodeImpl(구버전 C2OMXNode) 네이티브 스레드가 프로세스 수명 동안 누수됩니다.",
+      "evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "resolved_evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+      "claim_id": "claim-4375770-03",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "VideoCapture를 언바인드할 때 인코더가 미리 구성된 채 시작되지 않고 해제되므로 언바인드마다 스레드가 하나씩 누수되었습니다.",
+      "evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "resolved_evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+      "claim_id": "claim-4375770-04",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "Android 10(API 29) 이상 기기를 대상으로 VideoEncoderLeaksThreadOnReleaseWithoutStartQuirk를 활성화하여 해제 직전 코덱을 시작해 프레임워크가 표면을 정상 해제하도록 우회했습니다.",
+      "evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "resolved_evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 4,
+      "article_headline": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+      "claim_id": "claim-4375770-05",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "app_api_or_framework_adjacent",
+      "overclaim_risk": "low",
+      "text": "추가 start() 호출로 인해 인코더 스레드에서 해제 지연이 약 9~24ms(중앙값, 최대 약 90ms) 증가합니다.",
+      "evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:59ccec82cd2b0a447bb6"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "resolved_evidence_id": "source-body:59ccec82cd2b0a447bb6",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+      "claim_id": "c-sm8450-1",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "Qualcomm SM8450(Waipio) SoC의 CAMSS 드라이버 지원 및 디바이스 트리 노드를 추가하는 7편의 패치 시리즈가 제출되었습니다.",
+      "evidence_ids": [
+        "source-body:599951304132efa2f455"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:599951304132efa2f455"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:599951304132efa2f455",
+          "resolved_evidence_id": "source-body:599951304132efa2f455",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+      "claim_id": "c-sm8450-2",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "CSIPHY 장치는 레거시 리소스 대신 X1E80100과 호환되는 별도의 독립 장치로 분리 정의되었습니다.",
+      "evidence_ids": [
+        "source-body:599951304132efa2f455"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:599951304132efa2f455"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:599951304132efa2f455",
+          "resolved_evidence_id": "source-body:599951304132efa2f455",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+      "claim_id": "c-sm8450-3",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "해당 CSIPHY IP는 Hamoa 플랫폼에 탑재된 것과 동일하며 비공개 테스트 보드 환경에서 TPG에서 CSID로의 이미지 스트림 테스트를 거쳤습니다.",
+      "evidence_ids": [
+        "source-body:599951304132efa2f455"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:599951304132efa2f455"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:599951304132efa2f455",
+          "resolved_evidence_id": "source-body:599951304132efa2f455",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    },
+    {
+      "article_index": 5,
+      "article_headline": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+      "claim_id": "c-sm8450-4",
+      "claim_type": "fact",
+      "status": "bound",
+      "impact_level": "driver_image_pipeline",
+      "overclaim_risk": "low",
+      "text": "패치 시리즈는 linux-next-20261023 트리를 기반으로 테스트 및 제안되었습니다.",
+      "evidence_ids": [
+        "source-body:599951304132efa2f455"
+      ],
+      "resolved_evidence_ids": [
+        "source-body:599951304132efa2f455"
+      ],
+      "invalid_evidence_ids": [],
+      "blocked_evidence_ids": [],
+      "source_mismatched_evidence_ids": [],
+      "evidence_statuses": [
+        {
+          "evidence_id": "source-body:599951304132efa2f455",
+          "resolved_evidence_id": "source-body:599951304132efa2f455",
+          "status": "allowed",
+          "raw_status": "allowed",
+          "normalized_status": "allowed"
+        }
+      ],
+      "source_urls": [
+        "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/"
+      ],
+      "bound": true,
+      "derived_evidence_mapping": false,
+      "issues": []
+    }
+  ],
+  "uncovered_facts": [],
+  "hal_signal_quality_summary": {
+    "schema_version": 1,
+    "main_article_count": 5,
+    "strong_signal_count": 5,
+    "usable_signal_count": 0,
+    "weak_signal_count": 0,
+    "watchlist_only_count": 0,
+    "blocked_source_gap_count": 0,
+    "article_count_with_hal_signal_capsule": 5,
+    "article_count_without_hal_signal_capsule": 0,
+    "main_articles_with_owner_metric_log": 2,
+    "main_articles_with_concrete_action": 5,
+    "fallback_main_article_count": 0,
+    "android_multimedia_camera_output_count": 0,
+    "soc_platform_signal_count": 0,
+    "generic_signal_hard_blocker_count": 0,
+    "hal_signal_hard_blocker_count": 0,
+    "hard_blocker_reason_code_counts": {},
+    "hal_impact_axis_counts": {
+      "camerax_app_compatibility": 4,
+      "stream_buffer_metadata": 3,
+      "thermal_power_memory_pressure": 1,
+      "performance_latency_frame_drop": 2,
+      "driver_image_pipeline": 1
+    },
+    "actionability_level_counts": {
+      "measurable_test": 3,
+      "owner_metric_log": 2
+    },
+    "effective_actionability_level_counts": {
+      "measurable_test": 3,
+      "owner_metric_log": 2
+    },
+    "signal_quality_status_counts": {
+      "strong_signal": 5
+    }
+  },
+  "main_article_signal_checks": [
+    {
+      "index": 1,
+      "title": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 2 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Camera HAL 계약이나 인터페이스 메서드가 직접 변경된 것으로 설명하지 마십시오."
+      ],
+      "soc_signal_type": "resource_budget",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 2,
+      "title": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "stream_buffer_metadata",
+        "thermal_power_memory_pressure",
+        "camerax_app_compatibility"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "performance_thermal_owner"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "V4L2 드라이버나 HAL3 버퍼 큐 규약 변경으로 기술하지 마십시오."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 3,
+      "title": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "relevance_bucket": "direct_aosp_camera",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "performance_latency_frame_drop"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 90): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Keyword hints are discovery hints only and are not source-backed facts.",
+        "Camera HAL 계약이나 인터페이스 메서드가 직접 변경된 것으로 설명하지 마십시오."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 4,
+      "title": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "relevance_bucket": "android",
+      "hal_impact_axes": [
+        "camerax_app_compatibility",
+        "performance_latency_frame_drop"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner",
+        "performance_thermal_owner"
+      ],
+      "actionability_level": "owner_metric_log",
+      "effective_actionability_level": "owner_metric_log",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 5,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "",
+      "fallback_guard_notes": [
+        "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Keyword hints are discovery hints only and are not source-backed facts.",
+        "Codec2 HAL 인터페이스나 카메라 드라이버의 직접 변경으로 기술하지 마십시오."
+      ],
+      "soc_signal_type": "platform_signal",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    },
+    {
+      "index": 5,
+      "title": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+      "url": "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "hal_impact_axes": [
+        "driver_image_pipeline",
+        "stream_buffer_metadata"
+      ],
+      "reader_owners": [
+        "camera_driver_engineer",
+        "soc_board_bringup_engineer"
+      ],
+      "actionability_level": "measurable_test",
+      "effective_actionability_level": "measurable_test",
+      "actionability_upgrade_reason": "",
+      "signal_quality_status": "strong_signal",
+      "concrete_action_signal_count": 3,
+      "fallback_promotion_allowed": true,
+      "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 75): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+      "fallback_guard_notes": [
+        "메인라인 병합 완료나 Android Camera HAL 계약 변경으로 단정하지 마십시오."
+      ],
+      "soc_signal_type": "isp_image_pipeline",
+      "soc_signal_source_allowed": true,
+      "camera_pipeline_link": "",
+      "has_hal_signal_capsule": true,
+      "hal_signal_capsule_complete": true,
+      "hal_signal_capsule_missing_keys": [],
+      "hard_blockers": [],
+      "hard_blocker_reason_codes": []
+    }
+  ],
+  "metrics": {
+    "article_count": 5,
+    "briefing_count": 3,
+    "camera_article_count": 4,
+    "legacy_regex_camera_article_count": 5,
+    "expanded_scope_article_count": 5,
+    "direct_aosp_camera_count": 3,
+    "camera_driver_image_pipeline_count": 1,
+    "android_count": 0,
+    "android_multimedia_camera_output_count": 1,
+    "soc_platform_signal_count": 0,
+    "cpp_ai_tooling_fallback_count": 0,
+    "generic_tech_watchlist_count": 0,
+    "primary_camera_stack_count": 4,
+    "supporting_main_article_count": 1,
+    "forbidden_main_article_count": 0,
+    "fallback_relevance_count": 1,
+    "publishable_scope_count": 5,
+    "composition_mode": "FALLBACK_COMPOSITION",
+    "section_count_details": [
+      {
+        "index": 1,
+        "headline": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+        "source_candidate_hash": "f63f5991cd9518ae353aee7d7398c4bb7210d468f7ef57615d2304abe48b6965",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 2,
+        "headline": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
+        "source_candidate_hash": "a04cdca1df962a76930e32b19d6545bc4e4837e02a193446ed6d53de9eb8ca8c",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 3,
+        "headline": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+        "source_candidate_hash": "b48d6968e36a7d24823921c3772551e1a054b9063671d7330cd085eb4f08a97d",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "direct_hal_contract",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "direct_aosp_camera counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      },
+      {
+        "index": 4,
+        "headline": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+        "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+        "source_candidate_hash": "02886b752f4456164173721b2756186e781fdab743910a3ff9fe8fba84598bbe",
+        "relevance_bucket": "android",
+        "editorial_priority": 3,
+        "counts_as_primary_camera_topic": false,
+        "counts_as_driver_topic": false,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": true,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "framework_adjacent",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "android counts toward supporting_main_article_count, not primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": "Supporting bucket is allowed by Newsletter Policy but is not a Primary Camera Stack topic."
+      },
+      {
+        "index": 5,
+        "headline": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+        "source_candidate_url": "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/",
+        "source_candidate_hash": "f8ace8c3b9eb59fb8658909997675a0946bddc980bdd783a6ffac2af0c655108",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "counts_as_primary_camera_topic": true,
+        "counts_as_driver_topic": true,
+        "counts_as_soc_topic": false,
+        "counts_as_supporting_main_article": false,
+        "counts_as_forbidden_main_article": false,
+        "guardrail_impact_class": "camera_stack_source",
+        "evidence_origin": "article_text",
+        "metadata_source": "merged",
+        "binding_status": "bound",
+        "binding_source": "shortlist_selected",
+        "binding_reason": "",
+        "publishable_scope": true,
+        "missing_score_fields": [],
+        "count_reason": "camera_driver_image_pipeline counts toward primary_camera_stack_count.",
+        "exclusion_reason_if_not_counted": ""
+      }
+    ],
+    "relevance_bucket_counts": {
+      "direct_aosp_camera": 3,
+      "camera_driver_image_pipeline": 1,
+      "android": 0,
+      "android_supporting": 1,
+      "cpp_ai_tooling_fallback": 0,
+      "generic_tech_watchlist": 0
+    },
+    "topic_tier_distribution": {
+      "direct_camera": 4,
+      "supporting": 1,
+      "fallback": 0,
+      "watchlist": 0
+    },
+    "topic_tier_distribution_source": "relevance_bucket",
+    "topic_tier_bucket_map": {
+      "direct_camera": [
+        "direct_aosp_camera",
+        "camera_driver_image_pipeline",
+        "android"
+      ],
+      "supporting": [
+        "android_supporting"
+      ],
+      "fallback": [
+        "cpp_ai_tooling_fallback"
+      ],
+      "watchlist": [
+        "generic_tech_watchlist"
+      ]
+    },
+    "ai_article_count": 0,
+    "fact_check_status": "PASS",
+    "must_fix_count": 0,
+    "source_gap_count": 0,
+    "stale_claim_status": "PASS",
+    "stale_claim_removed_count": 0,
+    "stale_claim_hard_failure_count": 0,
+    "source_integrity_violation_count": 0,
+    "blocking_deduction_count": 0,
+    "blocking_deduction_categories": [],
+    "hard_fail_count": 0,
+    "soft_deduction_count": 8,
+    "article_gate_counts": {
+      "PASS": 5,
+      "DEMOTE": 0,
+      "FAIL": 0
+    },
+    "article_section_contract": {
+      "complete_count": 5,
+      "incomplete_count": 0,
+      "missing_key_counts": {
+        "verified_facts": 0,
+        "background_context": 0,
+        "hal_driver_impact": 0,
+        "action_items": 0,
+        "team_share_points": 0
+      },
+      "optional_key_counts": {},
+      "limitation_visibility_counts": {
+        "none": 5
+      },
+      "summaries": [
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        },
+        {
+          "complete": true,
+          "missing_keys": [],
+          "missing_required_keys": [],
+          "present_optional_keys": [],
+          "unexpected_keys": [],
+          "has_limitations": false,
+          "has_watch_items": false,
+          "has_do_not_claim": false,
+          "limitation_visibility": "none"
+        }
+      ]
+    },
+    "claim_validation_summary": {
+      "status": "available",
+      "bound_claims": 21,
+      "total_claims": 21,
+      "derived_evidence_mapping_count": 0,
+      "overclaim_risk": "low",
+      "available_article_count": 5,
+      "not_available_article_count": 0
+    },
+    "derived_evidence_mapping_count": 0,
+    "uncovered_fact_count": 0,
+    "hal_signal_quality_summary": {
+      "schema_version": 1,
+      "main_article_count": 5,
+      "strong_signal_count": 5,
+      "usable_signal_count": 0,
+      "weak_signal_count": 0,
+      "watchlist_only_count": 0,
+      "blocked_source_gap_count": 0,
+      "article_count_with_hal_signal_capsule": 5,
+      "article_count_without_hal_signal_capsule": 0,
+      "main_articles_with_owner_metric_log": 2,
+      "main_articles_with_concrete_action": 5,
+      "fallback_main_article_count": 0,
+      "android_multimedia_camera_output_count": 0,
+      "soc_platform_signal_count": 0,
+      "generic_signal_hard_blocker_count": 0,
+      "hal_signal_hard_blocker_count": 0,
+      "hard_blocker_reason_code_counts": {},
+      "hal_impact_axis_counts": {
+        "camerax_app_compatibility": 4,
+        "stream_buffer_metadata": 3,
+        "thermal_power_memory_pressure": 1,
+        "performance_latency_frame_drop": 2,
+        "driver_image_pipeline": 1
+      },
+      "actionability_level_counts": {
+        "measurable_test": 3,
+        "owner_metric_log": 2
+      },
+      "effective_actionability_level_counts": {
+        "measurable_test": 3,
+        "owner_metric_log": 2
+      },
+      "signal_quality_status_counts": {
+        "strong_signal": 5
+      }
+    },
+    "main_article_signal_checks": [
+      {
+        "index": 1,
+        "title": "CameraX SessionConfigAdapter, 동기화 없는 중복 읽기로 인한 표면 리셋 경쟁 조건 해결",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "camerax_app_compatibility",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 78): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 2 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Camera HAL 계약이나 인터페이스 메서드가 직접 변경된 것으로 설명하지 마십시오."
+        ],
+        "soc_signal_type": "resource_budget",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 2,
+        "title": "CameraX ZSL 버퍼 및 ImageProxy 누수 해결로 54~108MB 상당의 그래픽 메모리 고정 방지",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "stream_buffer_metadata",
+          "thermal_power_memory_pressure",
+          "camerax_app_compatibility"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "performance_thermal_owner"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 100): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "V4L2 드라이버나 HAL3 버퍼 큐 규약 변경으로 기술하지 마십시오."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 3,
+        "title": "단일 프레임 드롭 시 UseCaseCameraState 신호를 유지하여 3A 및 유스케이스 전환 조기 실패 방지",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+        "relevance_bucket": "direct_aosp_camera",
+        "hal_impact_axes": [
+          "camerax_app_compatibility",
+          "performance_latency_frame_drop"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "AndroidX Gerrit Camera (official, high, score 90): direct_aosp_camera (AOSP Camera Framework, Camera HAL, CameraProvider, CameraService, Camera2, CameraX, ImageReader, Surface, AHardwareBuffer, stream, buffer, metadata, request/result, or camera CTS/VTS/ITS/CDD evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+          "Keyword hints are discovery hints only and are not source-backed facts.",
+          "Camera HAL 계약이나 인터페이스 메서드가 직접 변경된 것으로 설명하지 마십시오."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 4,
+        "title": "미시작 상태의 MediaCodec 비디오 인코더 해제 시 발생하는 C2NodeImpl 네이티브 스레드 누수 우회책 적용",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+        "relevance_bucket": "android",
+        "hal_impact_axes": [
+          "camerax_app_compatibility",
+          "performance_latency_frame_drop"
+        ],
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner",
+          "performance_thermal_owner"
+        ],
+        "actionability_level": "owner_metric_log",
+        "effective_actionability_level": "owner_metric_log",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 5,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "",
+        "fallback_guard_notes": [
+          "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+          "Keyword hints are discovery hints only and are not source-backed facts.",
+          "Codec2 HAL 인터페이스나 카메라 드라이버의 직접 변경으로 기술하지 마십시오."
+        ],
+        "soc_signal_type": "platform_signal",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      },
+      {
+        "index": 5,
+        "title": "Qualcomm SM8450 플랫폼, 업스트림 CAMSS 드라이버 및 독립 CSI2 PHY 지원 패치 제안",
+        "url": "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "hal_impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata"
+        ],
+        "reader_owners": [
+          "camera_driver_engineer",
+          "soc_board_bringup_engineer"
+        ],
+        "actionability_level": "measurable_test",
+        "effective_actionability_level": "measurable_test",
+        "actionability_upgrade_reason": "",
+        "signal_quality_status": "strong_signal",
+        "concrete_action_signal_count": 3,
+        "fallback_promotion_allowed": true,
+        "fallback_promotion_reason": "lore.kernel.org linux-media list (project-official, high, score 75): camera_driver_image_pipeline (Linux camera driver, V4L2, media controller, libcamera, image sensor, ISP, MIPI CSI-2, DMA-BUF, video capture pipeline, or Linux media subsystem evidence. Matched 1 article-level signal(s) from article_text.)",
+        "fallback_guard_notes": [
+          "메인라인 병합 완료나 Android Camera HAL 계약 변경으로 단정하지 마십시오."
+        ],
+        "soc_signal_type": "isp_image_pipeline",
+        "soc_signal_source_allowed": true,
+        "camera_pipeline_link": "",
+        "has_hal_signal_capsule": true,
+        "hal_signal_capsule_complete": true,
+        "hal_signal_capsule_missing_keys": [],
+        "hard_blockers": [],
+        "hard_blocker_reason_codes": []
+      }
+    ],
+    "top_deduction_categories": [
+      {
+        "category": "image-fallback",
+        "count": 5
+      },
+      {
+        "category": "editorial-story",
+        "count": 3
+      }
+    ],
+    "candidate_exclusion_summary": []
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "generated_at": "2026-10-25T23:54:04.085Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 5,
+    "hit_count": 3,
+    "miss_count": 2,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 3,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "content-hash-hit",
+      "count": 3
+    },
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 2
+    }
+  ],
+  "entries": [
+    {
+      "title": "Fix SessionConfigAdapter.reportSurfaceInvalid race - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-21",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671",
+        "url_hash": "f63f5991cd9518ae353aee7d7398c4bb7210d468f7ef57615d2304abe48b6965",
+        "published_date": "2026-10-21",
+        "content_hash": "ff8587fc2298ee494dd35aeda0018177de6cef7abbc0a6c94dcc127d3bd1ce4c"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Fix ZslControl ring buffer and ImageProxy leaks - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-19",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734",
+        "url_hash": "a04cdca1df962a76930e32b19d6545bc4e4837e02a193446ed6d53de9eb8ca8c",
+        "published_date": "2026-10-19",
+        "content_hash": "11c9a6f1045fe0511cead947c389015c95a64a25213cbb56c03b239dd60739eb"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-22",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
+        "url_hash": "b48d6968e36a7d24823921c3772551e1a054b9063671d7330cd085eb4f08a97d",
+        "published_date": "2026-10-22",
+        "content_hash": "a3705672ed23c76a1976edd6e2aa0e58d7903e6455df9c20cac811b586ce4f72"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/a3705672ed23c76a1976edd6e2aa0e58d7903e6455df9c20cac811b586ce4f72.json"
+    },
+    {
+      "title": "Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-20",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770",
+        "url_hash": "02886b752f4456164173721b2756186e781fdab743910a3ff9fe8fba84598bbe",
+        "published_date": "2026-10-20",
+        "content_hash": "287a9b2de85bbea296aca22fa1e680c322afccecab583941e9911b27bb7104e0"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/287a9b2de85bbea296aca22fa1e680c322afccecab583941e9911b27bb7104e0.json"
+    },
+    {
+      "title": "[PATCH 0/7] media: qcom: camss: Add Waipio CAMSS support",
+      "url": "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/",
+      "source": "lore.kernel.org linux-media list",
+      "published_date": "2026-10-23T16:31:22Z",
+      "cache_key": {
+        "normalized_url": "https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org",
+        "url_hash": "f8ace8c3b9eb59fb8658909997675a0946bddc980bdd783a6ffac2af0c655108",
+        "published_date": "2026-10-23T16:31:22Z",
+        "content_hash": "8274ad04c120165bf485643bd0719f5496348d73967126abac5b0d8e809bd29a"
+      },
+      "hit": true,
+      "reason": "content-hash-hit",
+      "lookup_source": "by-content",
+      "cache_record_path": "cache/news-summary/by-content/8274ad04c120165bf485643bd0719f5496348d73967126abac5b0d8e809bd29a.json"
+    }
+  ]
+}
