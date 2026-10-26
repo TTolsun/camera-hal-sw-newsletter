@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W44/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W43 Camera SW Newsletter (Published W44)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W44/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W44/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W44/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week&#39;s newsletter covers several CameraX improvements. &quot;CameraX SessionConfigAdapter&quot; fixes a race condition that caused incorrect session resets when replacing surfaces. &quot;CameraX ZslControl&quot; resolves a graphics memory leak that occurred during flash transitions and request cancellations. &quot;CameraX UseCaseCameraState&quot; corrects an error where state update signals failed prematurely during temporary frame drops. &quot;CameraX VideoCapture&quot; fixes a native thread leak that happened when the video encoder was released too early. Additionally, we report on the proposed patches for upstream CAMSS driver and independent CSI2 PHY support for the Qualcomm SM8450 platform." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W44/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W43 Camera SW Newsletter (Published W44)" />
+  <meta property="og:description" content="This week&#39;s newsletter covers several CameraX improvements. &quot;CameraX SessionConfigAdapter&quot; fixes a race condition that caused incorrect session resets when replacing surfaces. &quot;CameraX ZslControl&quot; resolves a graphics memory leak that occurred during flash transitions and request cancellations. &quot;CameraX UseCaseCameraState&quot; corrects an error where state update signals failed prematurely during temporary frame drops. &quot;CameraX VideoCapture&quot; fixes a native thread leak that happened when the video encoder was released too early. Additionally, we report on the proposed patches for upstream CAMSS driver and independent CSI2 PHY support for the Qualcomm SM8450 platform." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W44/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W43 Camera SW Newsletter (Published W44)" />
+  <meta name="twitter:description" content="This week&#39;s newsletter covers several CameraX improvements. &quot;CameraX SessionConfigAdapter&quot; fixes a race condition that caused incorrect session resets when replacing surfaces. &quot;CameraX ZslControl&quot; resolves a graphics memory leak that occurred during flash transitions and request cancellations. &quot;CameraX UseCaseCameraState&quot; corrects an error where state update signals failed prematurely during temporary frame drops. &quot;CameraX VideoCapture&quot; fixes a native thread leak that happened when the video encoder was released too early. Additionally, we report on the proposed patches for upstream CAMSS driver and independent CSI2 PHY support for the Qualcomm SM8450 platform." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.10.19 – 10.25</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W43</span></h1>
+        <p class="issue-publish-badge">Published W44</p>
+        
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Android</span><span class="tag">Driver</span><span class="tag">Image Processing</span><span class="tag">SoC Platform</span></div>
+      </header>
+
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">This week’s highlights</h2>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-camerax-sessionconfigadapter-fixes-race-condition-causing-incorrect-session-rese">CameraX SessionConfigAdapter fixes race condition causing incorrect session resets during surface replacement</a>
+            <p class="reader-brief-takeaway">This reduces a higher-level race condition where the upstream framework unnecessarily restarted configureStreams and the request loop due to incorrect error callbacks, without changing the downstream Camera HAL interface specification itself.</p>
+          </li><li>
+            <a href="#article-camerax-zslcontrol-fixes-graphics-memory-leak-during-flash-transitions-and-reque">CameraX ZslControl fixes graphics memory leak during flash transitions and request cancellations</a>
+            <p class="reader-brief-takeaway">This fixes a higher-level buffer return path, preventing memory pressure and out-of-memory kills that can occur when buffers are fixed in the lower graphics memory allocation layer.</p>
+          </li><li>
+            <a href="#article-camerax-usecasecamerastate-fixes-premature-failure-of-state-update-signals-durin">CameraX UseCaseCameraState fixes premature failure of state update signals during temporary frame drops</a>
+            <p class="reader-brief-takeaway">This provides a buffer to prevent temporary frame drops occurring at the driver or ISP level from propagating as full pipeline errors in the higher-level framework.</p>
+          </li><li>
+            <a href="#article-camerax-videocapture-fixes-native-thread-leak-when-video-encoder-is-released-too">CameraX VideoCapture fixes native thread leak when video encoder is released too early</a>
+            <p class="reader-brief-takeaway">This is not a direct change to the Camera HAL contract, but it improves the long-term stability of the app by preventing thread resource leaks in the downstream video encoder layer where camera frames are delivered.</p>
+          </li><li>
+            <a href="#article-qualcomm-sm8450-platform-proposed-patches-for-upstream-camss-driver-and-independ">Qualcomm SM8450 platform: Proposed patches for upstream CAMSS driver and independent CSI2 PHY support</a>
+            <p class="reader-brief-takeaway">This is an early stage in establishing kernel-level V4L2 device nodes and the CSI2 reception pipeline, making it useful as a reference for downstream media topology when porting AOSP CameraProvider in the future.</p>
+          </li></ol><details class="reader-brief-context"><summary>About this issue</summary><p class="reader-brief-intro">This week&#39;s newsletter covers several CameraX improvements. &quot;CameraX SessionConfigAdapter&quot; fixes a race condition that caused incorrect session resets when replacing surfaces. &quot;CameraX ZslControl&quot; resolves a graphics memory leak that occurred during flash transitions and request cancellations. &quot;CameraX UseCaseCameraState&quot; corrects an error where state update signals failed prematurely during temporary frame drops. &quot;CameraX VideoCapture&quot; fixes a native thread leak that happened when the video encoder was released too early. Additionally, we report on the proposed patches for upstream CAMSS driver and independent CSI2 PHY support for the Qualcomm SM8450 platform.</p></details>
+        </div>
+        
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-sessionconfigadapter-fixes-race-condition-causing-incorrect-session-rese" tabindex="-1" aria-labelledby="article-camerax-sessionconfigadapter-fixes-race-condition-causing-incorrect-session-rese-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-sessionconfigadapter-fixes-race-condition-causing-incorrect-session-rese-title" class="article-title">CameraX SessionConfigAdapter fixes race condition causing incorrect session resets during surface replacement</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera (Change 4372671)</p>
+        <p class="article-lead">A timing error that rarely caused session reset errors when replacing surfaces during camera preview, such as during screen rotation or transitions, has been resolved.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This reduces a higher-level race condition where the upstream framework unnecessarily restarted configureStreams and the request loop due to incorrect error callbacks, without changing the downstream Camera HAL interface specification itself.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="CameraX SessionConfigAdapter fixes race condition causing incorrect session resets during surface replacement image" loading="lazy" decoding="async">
+        </figure>
+        <p>When a camera application replaced the preview surface provider, a race condition could cause an unexpected reconfiguration error if the downstream stream surface closed at the same time.</p>
+        <p>Previously, when a SurfaceClosedException was detected in a background coroutine, the session configuration information was read twice in a row without synchronization. If the first read found an existing configuration, but the main thread replaced it with a new session configuration almost simultaneously, the second read referenced the newly connected active configuration. This led to an unnecessary SESSION_ERROR_SURFACE_NEEDS_RESET error being delivered to a correctly connected new configuration, which tangled the session pipeline.</p>
+        <p>This commit patch changes the logic to query the target configuration with a single call on the main thread dispatcher. It also adds a check for auxiliary session configuration and post-view surface matching, which was previously missing.</p>
+        <p>In environments requiring inspection, you can observe whether reset error callbacks are delivered to the active pipeline when the preview surface is repeatedly updated and session reconfiguration is in progress. However, this verification is based on the source tree merge stage, and its inclusion in distributed libraries and final product builds requires separate confirmation.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671">Fix SessionConfigAdapter.reportSurfaceInvalid race - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-camerax-zslcontrol-fixes-graphics-memory-leak-during-flash-transitions-and-reque" aria-label="Next article: CameraX ZslControl fixes graphics memory leak during flash transitions and request cancellations">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-zslcontrol-fixes-graphics-memory-leak-during-flash-transitions-and-reque" tabindex="-1" aria-labelledby="article-camerax-zslcontrol-fixes-graphics-memory-leak-during-flash-transitions-and-reque-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-zslcontrol-fixes-graphics-memory-leak-during-flash-transitions-and-reque-title" class="article-title">CameraX ZslControl fixes graphics memory leak during flash transitions and request cancellations</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera (Change 4365734)</p>
+        <p class="article-lead">A memory leak that prevented tens of megabytes of graphic buffers from being returned when the Zero Shutter Lag (ZSL) feature was enabled and the flash was used or capture was canceled has been resolved.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This fixes a higher-level buffer return path, preventing memory pressure and out-of-memory kills that can occur when buffers are fixed in the lower graphics memory allocation layer.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="CameraX ZslControl fixes graphics memory leak during flash transitions and request cancellations image" loading="lazy" decoding="async">
+        </figure>
+        <p>The Zero Shutter Lag (ZSL) feature stores frames in a ring buffer before the shutter is pressed, making buffer lifecycle management critical.</p>
+        <p>In the previous implementation, frames already in the ring buffer were not cleared even when ZSL was disabled due to flash photography being activated. This caused 3 to 6 full-resolution PRIV or YUV graphics hardware buffers (approximately 54MB to 108MB) to remain unreleased and fixed in memory. Additionally, there was a leak path where ImageProxy objects retrieved from the queue were not closed and were lost if the result object conversion failed during the capture request mapping process or if the request sequence was aborted.</p>
+        <p>This patch improves the system by explicitly draining the internal buffers of ZslRingBuffer when flash mode is set or a use case is deactivated. It also ensures that retrieved image proxies are always closed through an exception block if capture request conversion fails or an onRequestSequenceAborted callback is received.</p>
+        <p>In a practical environment, you can verify the improvement by profiling GraphicBuffer allocation trends while ZSL is active, turning flash mode on and off, or restarting the session during high-resolution continuous capture. This verification method is based on source analysis, and its inclusion in the final distributed binary requires confirmation.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734">Fix ZslControl ring buffer and ImageProxy leaks - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-camerax-sessionconfigadapter-fixes-race-condition-causing-incorrect-session-rese" aria-label="Previous article: CameraX SessionConfigAdapter fixes race condition causing incorrect session resets during surface replacement">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-camerax-usecasecamerastate-fixes-premature-failure-of-state-update-signals-durin" aria-label="Next article: CameraX UseCaseCameraState fixes premature failure of state update signals during temporary frame drops">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-usecasecamerastate-fixes-premature-failure-of-state-update-signals-durin" tabindex="-1" aria-labelledby="article-camerax-usecasecamerastate-fixes-premature-failure-of-state-update-signals-durin-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-camerax-usecasecamerastate-fixes-premature-failure-of-state-update-signals-durin-title" class="article-title">CameraX UseCaseCameraState fixes premature failure of state update signals during temporary frame drops</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera (Change 4381409)</p>
+        <p class="article-lead">The system has been improved so that use case settings or focus control operations do not terminate abnormally even if a momentary frame drop occurs during continuous camera capture.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This provides a buffer to prevent temporary frame drops occurring at the driver or ISP level from propagating as full pipeline errors in the higher-level framework.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="CameraX UseCaseCameraState fixes premature failure of state update signals during temporary frame drops image" loading="lazy" decoding="async">
+        </figure>
+        <p>In environments that continuously request streams, such as previews, single frame drops can occur due to sensor or buffer timing.</p>
+        <p>Previously, when a CaptureCallback.onCaptureFailed callback was received from the lower Camera2 framework, UseCaseCameraState immediately completed all pending state update signals with an error, even if it was only a temporary frame loss. This caused control logic for use case activation or 3A control to unnecessarily throw exceptions and fail during normal surface transitions.</p>
+        <p>The revised logic does not immediately cancel signals upon a single frame failure but keeps them in the queue. It defers signal completion until the next frame with the same or a larger request number is successfully returned via onTotalCaptureResult, or until repeating requests are completely stopped. Additionally, to avoid lock contention, the enqueue and drain operations of signals have been safely separated within the lock.</p>
+        <p>In a test environment, you can set up a scenario to observe whether 3A or use case transition Futures are prematurely interrupted immediately after a single frame drop log occurs when changing sensor modes or updating surfaces under high load. This verification method is based on the merged source code, and its inclusion in the final library release and product requires separate confirmation.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410">Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-camerax-zslcontrol-fixes-graphics-memory-leak-during-flash-transitions-and-reque" aria-label="Previous article: CameraX ZslControl fixes graphics memory leak during flash transitions and request cancellations">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-camerax-videocapture-fixes-native-thread-leak-when-video-encoder-is-released-too" aria-label="Next article: CameraX VideoCapture fixes native thread leak when video encoder is released too early">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camerax-videocapture-fixes-native-thread-leak-when-video-encoder-is-released-too" tabindex="-1" aria-labelledby="article-camerax-videocapture-fixes-native-thread-leak-when-video-encoder-is-released-too-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Android Platform</span>
+        </div>
+        <h2 id="article-camerax-videocapture-fixes-native-thread-leak-when-video-encoder-is-released-too-title" class="article-title">CameraX VideoCapture fixes native thread leak when video encoder is released too early</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera (Change 4375770)</p>
+        <p class="article-lead">A leak issue has been resolved where media framework threads remained in the system every time the video capture use case was bound to the screen and then released without recording.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This is not a direct change to the Camera HAL contract, but it improves the long-term stability of the app by preventing thread resource leaks in the downstream video encoder layer where camera frames are delivered.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="CameraX VideoCapture fixes native thread leak when video encoder is released too early image" loading="lazy" decoding="async">
+        </figure>
+        <p>The video capture use case pre-configures the encoder for quick recording startup. However, if the screen is closed without pressing the record button, the encoder is released without ever being started.</p>
+        <p>In the Codec2 framework introduced in Android 10 (API 29), if a media codec configured with surface input was released directly without being started, the C2NodeImpl native thread would remain until the process terminated. This caused native threads to continuously accumulate within the process each time the app entered and exited the video capture screen.</p>
+        <p>This patch adds the VideoEncoderLeaksThreadOnReleaseWithoutStartQuirk, which intentionally starts the codec just before release if the encoder has been configured but not started. By starting the codec, the media framework can properly clean up the input surface connection and terminate the native thread. This additional startup process is performed on the encoder&#39;s background thread and may introduce an additional delay of approximately 9 to 24 milliseconds at the time of release.</p>
+        <p>In a test environment, you can verify whether the number of C2NodeImpl or C2OMXNode threads increases by repeatedly binding and unbinding the video capture use case and then checking the /proc/self/task path. This verification is a proposal based on the source tree merge, and its inclusion in the official library distribution requires further investigation.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770">Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-camerax-usecasecamerastate-fixes-premature-failure-of-state-update-signals-durin" aria-label="Previous article: CameraX UseCaseCameraState fixes premature failure of state update signals during temporary frame drops">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-qualcomm-sm8450-platform-proposed-patches-for-upstream-camss-driver-and-independ" aria-label="Next article: Qualcomm SM8450 platform: Proposed patches for upstream CAMSS driver and independent CSI2 PHY support">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-qualcomm-sm8450-platform-proposed-patches-for-upstream-camss-driver-and-independ" tabindex="-1" aria-labelledby="article-qualcomm-sm8450-platform-proposed-patches-for-upstream-camss-driver-and-independ-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 5">05</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-qualcomm-sm8450-platform-proposed-patches-for-upstream-camss-driver-and-independ-title" class="article-title">Qualcomm SM8450 platform: Proposed patches for upstream CAMSS driver and independent CSI2 PHY support</h2>
+        <p class="article-source-subtitle">lore.kernel.org linux-media list</p>
+        <p class="article-lead">A series of patches has been proposed to add driver support and independent CSI2 PHY configuration for the Qualcomm SM8450 platform&#39;s camera subsystem in the upstream Linux kernel.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This is an early stage in establishing kernel-level V4L2 device nodes and the CSI2 reception pipeline, making it useful as a reference for downstream media topology when porting AOSP CameraProvider in the future.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/newsletter-default.svg" alt="Qualcomm SM8450 platform: Proposed patches for upstream CAMSS driver and independent CSI2 PHY support image" loading="lazy" decoding="async">
+        </figure>
+        <p>Supporting the camera reception pipeline is a crucial prerequisite when running Qualcomm hardware on open-source Linux kernels in mobile and embedded devices.</p>
+        <p>This submitted series of 7 patches adds CAMSS driver support for the Qualcomm SM8450 (Waipio) SoC. The physical layer, CSIPHY, is defined in the device tree as an independent device compatible with the X1E80100 platform, instead of the existing legacy resource structure. According to the submitter, this CSIPHY IP has the same structure as applied to the Hamoa platform and has been verified for image streaming from a test pattern generator (TPG) to CSID in a private test board environment.</p>
+        <p>However, this content is a patch proposal submitted to the mailing list on October 23, 2026, based on the linux-next-20261023 tree. Subsequent mainline kernel merge status or actual release inclusion history is not confirmed in the original text. Additionally, this change involves kernel driver configuration at the Linux V4L2 and media controller level, so it does not directly alter the Android Camera HAL interface contract itself.</p>
+        <p>Engineers planning to port an AOSP board based on SM8450 or build a mainline kernel in the future can review the CAMSS device tree node configuration and MCLK pin description specifications in sm8450.dtsi in advance.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/">[PATCH 0/7] media: qcom: camss: Add Waipio CAMSS support</a> — <a href="https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/T/#t">Full patch series</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-camerax-videocapture-fixes-native-thread-leak-when-video-encoder-is-released-too" aria-label="Previous article: CameraX VideoCapture fixes native thread leak when video encoder is released too early">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          
+        </nav>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4372671">Fix SessionConfigAdapter.reportSurfaceInvalid race - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4365734">Fix ZslControl ring buffer and ImageProxy leaks - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410">Keep UseCaseCameraState signals pending on repeating frame failure - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4375770">Fix native thread leak when releasing an unstarted video encoder - platform/frameworks/support</a></li><li><a href="https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/">[PATCH 0/7] media: qcom: camss: Add Waipio CAMSS support</a> — <a href="https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org/T/#t">Full patch series</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
