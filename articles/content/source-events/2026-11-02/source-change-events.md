@@ -10,7 +10,7 @@
 - release row changed count: 0
 - anchor added count: 0
 - material content change count: 0
-- no meaningful change count: 4
+- no meaningful change count: 6
 
 ## Source Change Events
 
@@ -19,8 +19,8 @@
 | no_meaningful_change | aosp-camera-docs | no | missing | 0 | Camera \| Android OS core topics \| Android Open Source Project |
 | no_meaningful_change | aosp-camera-its-release-notes | no | missing | 0 | Camera ITS overview \| Android Open Source Project |
 | no_meaningful_change | aosp-camera-its-release-notes | no | missing | 0 | Android 17 Camera Image Test Suite release notes \| Android Open Source Project |
-| metadata_only_changed | android-version-features | no | visible_last_updated | 85 | Features and APIs \| Android Developers |
-| metadata_only_changed | android-version-features | no | visible_last_updated | 85 | Features and APIs \| Android Developers |
+| no_meaningful_change | android-version-features | no | missing | 0 | Features and APIs \| Android Developers |
+| no_meaningful_change | android-version-features | no | missing | 0 | Features and APIs \| Android Developers |
 | no_meaningful_change | androidx-camerax-release-notes | no | missing | 0 | CameraX \| Jetpack \| Android Developers |
 
 ## Evidence Identity / Duplicate Guard
@@ -41,6 +41,6 @@
 | source-event-3e861723887f29a6716059857d2954b6 | - | missing | 0 | yes | no |
 | source-event-95c2d4fa9d09040436e980b65e4e056b | - | missing | 0 | yes | no |
 | source-event-9d4641446c771b77009b987b52197aa9 | - | missing | 0 | yes | no |
-| source-event-eda010d94dd611eacb52dc6d1c2c5616 | 2026-10-28 | visible_last_updated | 85 | no | no |
-| source-event-55aba85f7229a83542a1ef1f8ac2ee0a | 2026-10-28 | visible_last_updated | 85 | no | no |
+| source-event-906b9545906d636ff0ba9c9b0e51b13e | - | missing | 0 | yes | no |
+| source-event-b700fe783a8fd44f2a7d8c48c3fca253 | - | missing | 0 | yes | no |
 | source-event-3476439886458dc491e09461b6c23bc3 | - | missing | 0 | yes | no |
