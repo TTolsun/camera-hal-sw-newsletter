@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "report_type": "source-followup-issues",
+  "date": "2026-11-02",
+  "minimum_consecutive_runs": 10,
+  "runs_examined": 37,
+  "actionable_recommendation_count": 26,
+  "items": [],
+  "warnings": []
+}

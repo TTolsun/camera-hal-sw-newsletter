@@ -1,0 +1,962 @@
+{
+  "date": "2026-11-02",
+  "public_contract_version": "story-v2",
+  "generation_contract_version": 2,
+  "title": "2026 W44 (10.26 ~ 11.01)",
+  "summary": "이번 주 뉴스레터에서는 카메라 파이프라인의 안정성과 호환성 개선 소식을 전해드립니다. 먼저, CameraX Recorder에서 Surface 해제 시 잔류 포인터 정리를 통해 녹화 멈춤을 방지하고, Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가로 버퍼링 오류를 막았습니다. 또한, Sony Xperia 1 V 기기에서 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 문제를 우회했으며, Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한하여 안정성을 높였습니다. 독자 여러분의 개발에 도움이 되기를 바랍니다.",
+  "briefing": [
+    "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+    "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+    "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+    "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한"
+  ],
+  "sections": [
+    {
+      "category": "Camera Framework",
+      "headline": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+      "what_changed": "Sony Xperia 1 V (xq-dq72) 기기에서 Preview, VideoCapture, ImageCapture, ImageAnalysis 4개 유스케이스가 StreamSharing으로 묶일 때 비디오 스냅샷이 멈추는 문제를 해결하기 위해, CONTROL_CAPTURE_INTENT_VIDEO_SNAPSHOT 대신 STILL_CAPTURE를 요청하도록 Quirk가 추가되었습니다.",
+      "confirmed_facts": [
+        "Gerrit 변경 4399967(androidx-main 브랜치)이 2026-10-30에 병합되었습니다.",
+        "Sony Xperia 1 V (xq-dq72)에서 StreamSharing 사용 시 Preview와 VideoCapture가 SurfaceTexture로 병합되며 세션에 GraphicBufferSource가 누락됩니다.",
+        "GraphicBufferSource가 없으면 Sony HAL이 미리보기/스틸 스트리밍 모드(0 0)로 진입하여 TEMPLATE_VIDEO_SNAPSHOT을 무시하고 JPEG 버퍼를 생성하지 않습니다.",
+        "ImageCaptureFailedForVideoSnapshotQuirk에 xq-dq72 기기를 추가하여 비디오 스냅샷 요청 인텐트를 STILL_CAPTURE로 대체했습니다."
+      ],
+      "evidence_summary": "AndroidX Gerrit 4399967 패치에 따르면 Sony Xperia 1 V (xq-dq72)에서 StreamSharing으로 4개 유스케이스를 구성할 때 HAL 모드 불일치로 비디오 스냅샷이 응답하지 않는 결함을 ImageCaptureFailedForVideoSnapshotQuirk로 우회했습니다.",
+      "specificity_checks": [
+        "플랫폼 및 브랜치: AndroidX platform/frameworks/support (androidx-main)",
+        "Gerrit Change-Id: Ief38f450ec485516069ca1c1f50c2aa1c904ad52 (Change 4399967)",
+        "병합 시점: 2026-10-30 03:38:29 UTC",
+        "대상 컴포넌트: androidx.camera.camera2.compat.quirk.ImageCaptureFailedForVideoSnapshotQuirk"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+        "Evidence ID: source-body:6fc830f91a5c87610e6e",
+        "Primary source: 원문 메타데이터 status=MERGED를 확인했습니다. 라이브러리 공식 릴리스 및 기기 상용 빌드 반영은 미확인 상태입니다.",
+        "Linked evidence: unresolved — 커밋 메시지에 명시된 버그 트래커 b/579151162 및 인코더 패치 b/579234725의 상세 내용은 비공개로 직접 열람하지 못했습니다."
+      ],
+      "public_article": {
+        "headline": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "lead": "Sony Xperia 1 V 기기에서 4가지 유스케이스를 동시에 묶을 때 비디오 녹화 중 스냅샷 촬영이 멈추던 문제가 CameraX 쿼크 적용으로 우회되었습니다.",
+        "body_markdown": "Sony Xperia 1 V (모델명 xq-dq72) 기기에서 Preview, VideoCapture, ImageCapture, ImageAnalysis 4개 유스케이스를 동시에 실행할 때 비디오 스냅샷 촬영이 완료되지 않고 멈추는 현상이 발생했습니다. CameraX의 StreamSharing 기능은 하드웨어 스트림 수 제한을 극복하기 위해 미리보기와 비디오 캡처를 OpenGL SurfaceTexture 단일 스트림으로 병합하고 세션 템플릿으로 TEMPLATE_RECORD를 전달합니다.\n\n이 과정에서 세션에 미디어 인코더 전용 GraphicBufferSource surface가 포함되지 않게 됩니다. Sony HAL 구현은 이를 미리보기와 스틸 스트리밍 모드(모드 0 0)로 인식하여, 세션 템플릿과 무관하게 전달되는 TEMPLATE_VIDEO_SNAPSHOT 요청을 무시하고 출력 JPEG 버퍼를 생산하지 않는 동작을 보였습니다.\n\n### 캡처 인텐트 대체와 검증 조건\n\n구글은 ImageCaptureFailedForVideoSnapshotQuirk 대상 기기 목록에 xq-dq72를 등록했습니다. 이를 통해 해당 환경에서는 캡처 인텐트를 CONTROL_CAPTURE_INTENT_VIDEO_SNAPSHOT 대신 CONTROL_CAPTURE_INTENT_STILL_CAPTURE로 재정의하여 HAL이 JPEG 처리를 수행하도록 유도합니다.\n\n이 변경은 현재 AndroidX 메인 브랜치에 병합된 단계이며 공식 라이브러리 버전으로 배포되거나 상용 제품 펌웨어에 반영된 것은 아닙니다. 유사한 증상을 검증할 때는 4개 유스케이스를 바인딩한 뒤 비디오 녹화 도중 스냅샷 촬영 콜백이 정상적으로 수신되는지, 프레임 지연이나 파이프라인 정체가 없는지 확인할 수 있습니다.",
+        "camera_hal_takeaway": "HAL이 세션 구성 스트림 유형에 따라 특정 요청 템플릿 처리를 거부하는 경우 프레임워크 수준에서 캡처 인텐트를 조정해 해결할 수 있음을 보여줍니다. 독자 환경에서 유사한 스트림 공유 세션을 다룰 때 템플릿 호환성과 버퍼 생성 흐름을 점검할 필요가 있습니다.",
+        "reader_checkpoints": [
+          "xq-dq72 기기에서 4개 유스케이스 바인딩 및 StreamSharing 활성화 환경에서 비디오 스냅샷 콜백 완료 여부 확인",
+          "세션 구성 시 GraphicBufferSource 부재 시 HAL 모드 전환 분기 검토"
+        ],
+        "source_links": [
+          {
+            "title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+            "publisher": "AndroidX Gerrit",
+            "source_role": "primary",
+            "checked_at": "2026-11-02"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "AndroidX Gerrit Camera 패치 4399967",
+        "editorial_story": {
+          "not_to_overclaim": "HAL 계약 자체가 변경된 것이 아니며 특정 모델에 대한 프레임워크 우회 패치입니다.",
+          "editor_take": "세션 구성 조합에 따라 HAL이 특정 템플릿을 드롭하는 동작에 대한 실무적인 우회 사례입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Gerrit 4399967 변경사항이 2026-10-30에 androidx-main 브랜치에 병합되었습니다.",
+          "Sony Xperia 1 V (xq-dq72) 기기에서 StreamSharing 사용 시 Preview와 VideoCapture가 SurfaceTexture로 병합됩니다.",
+          "세션에 GraphicBufferSource가 없으면 Sony HAL이 미리보기/스틸 스트리밍 모드로 동작하여 TEMPLATE_VIDEO_SNAPSHOT을 무시합니다.",
+          "ImageCaptureFailedForVideoSnapshotQuirk를 통해 인텐트를 STILL_CAPTURE로 변경하여 해결했습니다."
+        ],
+        "background_context": "Android CameraX는 기기별 하드웨어 제약을 극복하기 위해 다중 유스케이스를 단일 스트림으로 병합하는 StreamSharing을 제공합니다. 그러나 HAL 내부 상태 머신이 예상과 다른 모드로 전환될 경우 특정 캡처 템플릿 요청이 누락될 수 있습니다.",
+        "hal_driver_impact": "HAL 드라이버 인터페이스가 직접 수정된 것은 아니지만, 프레임워크가 특정 HAL 모드 판정 기준을 우회하기 위해 요청 메타데이터의 캡처 인텐트를 재정의하는 전형적인 기기별 대응 사례입니다.",
+        "action_items": [
+          "다중 스트림 병합 환경에서 비디오 스냅샷 동작 시 HAL 로그 및 JPEG 버퍼 수신 여부 확인"
+        ],
+        "team_share_points": "Sony Xperia 1 V에서 4개 유스케이스 스트림 공유 시 비디오 스냅샷 템플릿 대신 스틸 캡처 인텐트를 보내도록 Quirk가 적용되었습니다.",
+        "known_limitations": [
+          "해당 패치는 xq-dq72 모델을 대상으로 작성되었습니다."
+        ],
+        "watch_items": [
+          "향후 CameraX 릴리스에 포함되는 시점"
+        ],
+        "do_not_claim": [
+          "이 변경으로 Sony 기기의 모든 카메라 버그가 해결되었다고 주장하지 않습니다."
+        ]
+      },
+      "hal_signal_capsule": {
+        "why_now": "최근 병합된 AndroidX 카메라 커밋으로, 다중 유스케이스 바인딩 시 비디오 스냅샷 오류를 해결합니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "StreamSharing 환경에서 비디오 스냅샷 캡처 요청 시 인텐트 메타데이터 전파 상태 점검",
+        "impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "HAL 소스 코드 변경이나 카메라 표준 계약 자체의 수정으로 단정하지 마세요."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c1-fact-1",
+          "text": "Gerrit 4399967 변경사항이 2026-10-30에 androidx-main 브랜치에 병합되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:6fc830f91a5c87610e6e"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c1-fact-2",
+          "text": "Sony Xperia 1 V (xq-dq72) 기기에서 StreamSharing 사용 시 Preview와 VideoCapture가 SurfaceTexture로 병합됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:6fc830f91a5c87610e6e"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c1-fact-3",
+          "text": "세션에 GraphicBufferSource가 없으면 Sony HAL이 미리보기/스틸 스트리밍 모드로 동작하여 TEMPLATE_VIDEO_SNAPSHOT을 무시합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:6fc830f91a5c87610e6e"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c1-fact-4",
+          "text": "ImageCaptureFailedForVideoSnapshotQuirk를 통해 인텐트를 STILL_CAPTURE로 변경하여 해결했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:6fc830f91a5c87610e6e"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "4개 유스케이스 바인딩 시 비디오 스냅샷 콜백 정상 동작 확인"
+      ],
+      "action_hints": [
+        "기기별 특이 동작 Quirk 구현 시 템플릿 인텐트 재정의 영향 확인"
+      ],
+      "action_items": [
+        "StreamSharing 조합 테스트에 비디오 스냅샷 케이스 추가"
+      ],
+      "is_ai_related": false,
+      "article_type": "bug_fix",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "적절한 관련 이미지가 제공되지 않았습니다.",
+      "sources": [
+        {
+          "title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+        }
+      ],
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "source_candidate_hash": "0a06e25e54bfce2a978252605259d3e1aed3c7aef116e07908bd70a879af7cdf",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 4,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX CameraPipe·Camera Extensions의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Framework",
+      "headline": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+      "what_changed": "Camera2 Pipe의 FrameBufferImpl에서 Frame을 배포받을 때, 프레임의 요청 메타데이터 스트림 목록이 FrameBuffer가 요구하는 스트림 세트를 모두 포함하는지 확인하고 불일치 시 프레임을 무시하는 검증이 도입되었습니다.",
+      "confirmed_facts": [
+        "Gerrit 변경 4395726이 2026-10-28에 androidx-main 브랜치에 병합되었습니다.",
+        "FrameBufferImpl.kt의 onFrameStarted 메서드에 incoming 프레임의 requestMetadata.streams.keys가 buffer streams를 모두 포함하는지 확인하는 검사가 추가되었습니다.",
+        "프레임의 스트림 구성이 버퍼의 요구 스트림을 완전히 포함하지 않으면 onFrameStarted에서 조기 리턴되어 프레임이 버퍼에 적재되지 않습니다.",
+        "단위 테스트를 통해 특정 스트림 하위 집합만 요청된 프레임이 불일치 버퍼를 건너뛰고 일치하는 버퍼에만 적재됨이 검증되었습니다."
+      ],
+      "evidence_summary": "AndroidX Gerrit 4395726 변경에 따라 FrameBufferImpl은 요청 메타데이터의 스트림 목록이 FrameBuffer 스트림을 모두 포함하지 않는 프레임을 무시하도록 수정되었습니다.",
+      "specificity_checks": [
+        "플랫폼 및 브랜치: AndroidX platform/frameworks/support (androidx-main)",
+        "Gerrit Change-Id: Ide026de2207e9fbab753e1ca42dce77244a64d48 (Change 4395726)",
+        "병합 시점: 2026-10-28 13:38:34 UTC",
+        "대상 컴포넌트: androidx.camera.camera2.pipe.framegraph.FrameBufferImpl"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+        "Evidence ID: source-body:466013815ccd95dfa21b",
+        "Primary source: 원문 메타데이터 status=MERGED를 확인했습니다. 상용 릴리스 반영 여부는 확인되지 않았습니다.",
+        "Linked evidence: 별도 외부 링크 문서 없음."
+      ],
+      "public_article": {
+        "headline": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "lead": "Camera2 Pipe 파이프라인에서 버퍼가 필요로 하는 스트림을 완전히 포함하지 않는 프레임이 잘못 버퍼링되지 않도록 검증하는 로직이 추가되었습니다.",
+        "body_markdown": "Camera2 Pipe의 FrameGraph 내부에서는 프레임 생성 시 각 FrameBuffer로 프레임 참조를 배포합니다. 기존 구조에서는 프레임 요청 메타데이터에 포함된 스트림과 FrameBuffer가 요구하는 스트림 목록의 일치 여부를 온전히 확인하지 못해 부적절한 프레임이 대기열에 진입할 위험이 있었습니다.\n\n이번 변경을 통해 FrameBufferImpl의 onFrameStarted 콜백 내에 조건문이 추가되었습니다. 들어오는 FrameReference의 requestMetadata에 정의된 스트림 키 집합이 FrameBuffer가 구성된 streams 집합을 모두 포함하고 있는지 확인합니다. 만약 프레임이 요구 스트림을 전부 담고 있지 않다면 즉시 처리를 종료합니다.\n\n### 부분 스트림 요청 시의 프레임 격리\n\n이 변경으로 특정 스트림의 하위 집합만 타깃으로 하는 캡처 요청이 발생했을 때, 해당 스트림을 포함하지 않는 다른 FrameBuffer는 해당 프레임을 무시하고 기존 버퍼 상태를 그대로 보존합니다.\n\n해당 패치는 2026-10-28 소스 트리에 병합되었으며 라이브러리 릴리스 전 단계입니다. 동적 스트림 구성이나 부분 캡처 파이프라인을 테스트할 때 잘못된 프레임 참조가 버퍼 흐름에 섞이지 않는지 단위 검증을 참고할 수 있습니다.",
+        "camera_hal_takeaway": "프레임워크 내부 버퍼 관리 계층이 스트림 요청 메타데이터와의 정확한 매칭을 강제함으로써 메모리 누수와 잘못된 출력 수신을 차단합니다. HAL 개발 관점에서는 프레임워크가 단일 프레임별로 스트림 타깃을 엄격하게 필터링한다는 점을 인지할 필요가 있습니다.",
+        "reader_checkpoints": [
+          "하위 스트림 집합 요청 시 불일치 FrameBuffer의 프레임 무시 여부 확인",
+          "FrameBufferImpl의 onFrameStarted 메서드 분기 검토"
+        ],
+        "source_links": [
+          {
+            "title": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+            "publisher": "AndroidX Gerrit",
+            "source_role": "primary",
+            "checked_at": "2026-11-02"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "AndroidX Gerrit Camera 패치 4395726",
+        "editorial_story": {
+          "not_to_overclaim": "HAL 인터페이스나 드라이버 스트림 처리 변경이 아니며 Camera2 Pipe 내부 버퍼 필터링 로직 수정입니다.",
+          "editor_take": "다중 스트림 캡처 세션에서 불완전한 프레임 참조가 버퍼에 섞이는 위험을 방지하는 정밀한 버퍼 제어입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Gerrit 4395726 변경사항이 2026-10-28에 androidx-main 브랜치에 병합되었습니다.",
+          "FrameBufferImpl.kt의 onFrameStarted에 stream set 포함 여부 검증 조건문이 추가되었습니다.",
+          "요청 메타데이터 스트림이 버퍼 스트림을 모두 포함하지 않는 경우 프레임이 무시됩니다.",
+          "하위 스트림 집합 요청 시 일치하는 FrameBuffer에만 프레임이 적재됩니다."
+        ],
+        "background_context": "Camera2 Pipe의 FrameGraph는 요청에 따라 유연하게 스트림을 조합하고 프레임을 버퍼링하는 고성능 카메라 파이프라인 엔진입니다.",
+        "hal_driver_impact": "직접적인 HAL 계약 변경은 없으나, 프레임워크가 전달받은 프레임 메타데이터의 스트림 구성을 기반으로 내부 버퍼 라이프사이클을 엄격하게 통제합니다.",
+        "action_items": [
+          "다중 스트림 조합 시 부분 캡처 요청에 따른 버퍼 적재 동작 확인"
+        ],
+        "team_share_points": "FrameBufferImpl에 요청 메타데이터 스트림 포함 여부 검사가 추가되어 불일치 프레임이 무시되도록 개선되었습니다.",
+        "known_limitations": [
+          "Camera2 Pipe 내부 구현 한정 변경입니다."
+        ],
+        "watch_items": [
+          "향후 릴리스에 포함되는 시점"
+        ],
+        "do_not_claim": [
+          "이 변경이 HAL 드라이버의 스트림 구성 규격을 바꾼다고 주장하지 마세요."
+        ]
+      },
+      "hal_signal_capsule": {
+        "why_now": "최근 머지된 패치로 다중 스트림 파이프라인의 버퍼 오염을 방지합니다.",
+        "reader_owners": [
+          "camera_framework_owner",
+          "camera_hal_owner"
+        ],
+        "check_within_2_weeks": "Camera2 Pipe 스트림 버퍼링 테스트 케이스의 메타데이터 매칭 확인",
+        "impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "드라이버 계층이나 V4L2 스트림 계약 변경으로 확대하지 마세요."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c2-fact-1",
+          "text": "Gerrit 4395726 변경사항이 2026-10-28에 androidx-main 브랜치에 병합되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:466013815ccd95dfa21b"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c2-fact-2",
+          "text": "FrameBufferImpl.kt의 onFrameStarted에 stream set 포함 여부 검증 조건문이 추가되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:466013815ccd95dfa21b"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c2-fact-3",
+          "text": "요청 메타데이터 스트림이 버퍼 스트림을 모두 포함하지 않는 경우 프레임이 무시됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:466013815ccd95dfa21b"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c2-fact-4",
+          "text": "하위 스트림 집합 요청 시 일치하는 FrameBuffer에만 프레임이 적재됩니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:466013815ccd95dfa21b"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "스트림 하위 집합 캡처 요청 시 프레임 배포 로그 점검"
+      ],
+      "action_hints": [
+        "Camera2 Pipe 다중 버퍼 테스트 결과 확인"
+      ],
+      "action_items": [
+        "스트림 일치 검증 관련 단위 테스트 동작 확인"
+      ],
+      "is_ai_related": false,
+      "article_type": "framework_update",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "적절한 관련 이미지가 제공되지 않았습니다.",
+      "sources": [
+        {
+          "title": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+        }
+      ],
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+      "source_candidate_hash": "a9129f022d239b138cc2be53d5c249615cf4af591fff4f3b0c90b6a8675b8627",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX CameraPipe·Camera Extensions의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Pipeline",
+      "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+      "what_changed": "CameraX Video Recorder에서 VideoEncoderSession의 Surface가 종료될 때 getReadyToReleaseFuture 콜백에서 mActiveSurface를 즉시 null로 초기화하여, 빠른 수명 주기 전환 시 후속 녹화가 PENDING_RECORDING에 영구 고착되는 결함을 수정했습니다.",
+      "confirmed_facts": [
+        "Gerrit 변경 4399846이 2026-10-30에 androidx-main 브랜치에 병합되었습니다.",
+        "이전에는 getReadyToReleaseFuture()가 onSourceStateChangedInternal(INACTIVE)보다 먼저 완료될 때 mActiveSurface가 해제된 Surface를 참조한 채 유지되었습니다.",
+        "이로 인해 INACTIVE 상태 도달 시 CONFIGURING 상태에서 mNeedsResetBeforeNextStart가 true로 설정되어 후속 녹화가 PENDING_RECORDING 상태에 멈추는 문제가 있었습니다.",
+        "getReadyToReleaseFuture의 onSuccess 및 onFailure 콜백에서 mActiveSurface를 null로 초기화하도록 변경되었습니다."
+      ],
+      "evidence_summary": "AndroidX Gerrit 4399846에 따르면 비디오 인코더 Surface 종료 콜백에서 mActiveSurface를 명시적으로 해제하도록 하여 라이프사이클 변경 시 녹화 교착 상태를 해결했습니다.",
+      "specificity_checks": [
+        "플랫폼 및 브랜치: AndroidX platform/frameworks/support (androidx-main)",
+        "Gerrit Change-Id: I5d7ddb996106cc913ee2e3a726f3085fed60daed (Change 4399846)",
+        "병합 시점: 2026-10-30 04:12:36 UTC",
+        "대상 컴포넌트: androidx.camera.video.Recorder"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+        "Evidence ID: source-body:6acf8102be67f0b37c6d",
+        "Primary source: 원문 메타데이터 status=MERGED를 확인했습니다. 라이브러리 및 제품 빌드 배포는 미확인 상태입니다.",
+        "Linked evidence: unresolved — 버그 트래커 b/579212975 내용은 원문 인용 외에 별도 열람하지 못했습니다."
+      ],
+      "public_article": {
+        "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "lead": "비디오 인코더 세션의 Surface가 해제되는 시점에 잔류 포인터를 정리하여, 빠른 화면 전환 후 다음 녹화가 영구히 대기 상태에 머무는 문제를 해결했습니다.",
+        "body_markdown": "CameraX Recorder 모듈에서 앱 수명 주기가 빠르게 전환될 때 비디오 녹화가 시작되지 않는 교착 현상이 보고되었습니다. 이전에는 VideoEncoderSession의 Surface가 종료되고 getReadyToReleaseFuture가 완료되었을 때, 순차 실행기 상에서 onSourceStateChangedInternal(INACTIVE)가 실행되기 전에 인코더 리셋이 먼저 일어나면서 mActiveSurface가 이미 해제된 Surface를 가리킨 채 남아 있었습니다.\n\n이 상태에서 소스 비활성화(INACTIVE) 신호가 도착하면, 널이 아닌 mActiveSurface를 감지한 Recorder는 구성(CONFIGURING) 상태에서 다음 시작 전 리셋 플래그(mNeedsResetBeforeNextStart)를 참으로 설정했습니다. 이로 인해 다음 녹화 요청이 PENDING_RECORDING 상태에서 영구적으로 대기하는 문제가 발생했습니다.\n\n### 콜백 내부 정리 및 오디오 유지\n\n수정 사항은 getReadyToReleaseFuture의 성공(onSuccess) 및 실패(onFailure) 콜백에서 mActiveSurface를 null로 명시적으로 초기화하도록 했습니다. 또한 소스 비활성화 시 mActiveSurface가 null일 경우 영구 녹화(persistent recording)에서 오디오 소스를 유지할 수 있도록 변경했습니다.\n\n해당 변경은 2026-10-30 메인 브랜치에 병합되었으나, 공식 라이브러리 배포나 단말 제품 빌드 반영 여부는 아직 확인되지 않았습니다. 빠른 녹화 시작과 종료, 화면 회전 같은 수명 주기 전환 후 새 Surface 요청을 다시 연결했을 때 다음 녹화가 PENDING_RECORDING 상태에 갇히지 않고 정상 시작되는지 확인하는 것이 유용한 점검 사항입니다.",
+        "camera_hal_takeaway": "하위 인코더 Surface의 릴리스 완료 시점과 프레임워크 상태 머신 간의 비동기 레이스 컨디션을 해결한 사례입니다. HAL/드라이버 파이프라인 개발자에게도 비디오 스트림 정지 및 Surface 재바인딩 타이밍의 안정성 확보 방안을 제시합니다.",
+        "reader_checkpoints": [
+          "새 Surface 요청 재바인딩 후 다음 녹화가 PENDING_RECORDING에 고착되지 않고 정상 시작되는지 확인",
+          "Recorder 클래스의 getReadyToReleaseFuture 콜백 처리 검토"
+        ],
+        "source_links": [
+          {
+            "title": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+            "publisher": "AndroidX Gerrit",
+            "source_role": "primary",
+            "checked_at": "2026-11-02"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "AndroidX Gerrit Camera 패치 4399846",
+        "editorial_story": {
+          "not_to_overclaim": "미디어 코덱 및 HAL 인코더 인터페이스 자체의 버그 수정이 아니며 CameraX Recorder 상태 제어 수정입니다.",
+          "editor_take": "비디오 파이프라인의 Surface 수명 주기 종료 타이밍을 명확히 맞춘 안정성 패치입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Gerrit 4399846 변경사항이 2026-10-30에 androidx-main 브랜치에 병합되었습니다.",
+          "VideoEncoderSession 종료 시 getReadyToReleaseFuture 콜백에서 mActiveSurface를 null로 설정합니다.",
+          "기존에는 해제된 Surface 포인터가 잔류하여 다음 녹화가 PENDING_RECORDING에 고착되었습니다.",
+          "INACTIVE 상태 처리 시 shouldRetainRecording()을 전달하여 영구 녹화의 오디오를 보존합니다."
+        ],
+        "background_context": "CameraX Recorder는 비디오 인코더 세션과 카메라 스트림 Surface의 연결 상태를 관리하는 컴포넌트입니다.",
+        "hal_driver_impact": "직접적인 HAL 수정은 없으나 하위 비디오 인코더 버퍼/Surface 해제 이벤트가 프레임워크 상태 전이에 반영되는 과정을 다룹니다.",
+        "action_items": [
+          "수명 주기 전환 후 새 Surface 재바인딩 시 다음 녹화가 PENDING_RECORDING에 갇히지 않고 정상 시작되는지 확인"
+        ],
+        "team_share_points": "Recorder에서 인코더 Surface 릴리스 시 mActiveSurface를 즉시 정리하여 후속 녹화 고착 결함을 수정했습니다.",
+        "known_limitations": [
+          "CameraX Recorder 내부 상태 머신에 국한된 패치입니다."
+        ],
+        "watch_items": [
+          "상용 라이브러리 배포 일정"
+        ],
+        "do_not_claim": [
+          "MediaCodec 또는 HAL 인코더 드라이버의 변경으로 설명하지 마세요."
+        ]
+      },
+      "hal_signal_capsule": {
+        "why_now": "최근 머지된 버그 수정으로 비디오 녹화 라이프사이클 교착을 해결합니다.",
+        "reader_owners": [
+          "camera_framework_owner",
+          "camera_driver_owner"
+        ],
+        "check_within_2_weeks": "녹화 세션 종료 및 재시작 시점의 Surface 정리 상태 점검",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "V4L2 비디오 인코더 인터페이스 수정으로 과장하지 마세요."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c3-fact-1",
+          "text": "Gerrit 4399846 변경사항이 2026-10-30에 androidx-main 브랜치에 병합되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:6acf8102be67f0b37c6d"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c3-fact-2",
+          "text": "VideoEncoderSession 종료 시 getReadyToReleaseFuture 콜백에서 mActiveSurface를 null로 설정합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:6acf8102be67f0b37c6d"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c3-fact-3",
+          "text": "기존에는 해제된 Surface 포인터가 잔류하여 다음 녹화가 PENDING_RECORDING에 고착되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:6acf8102be67f0b37c6d"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c3-fact-4",
+          "text": "INACTIVE 상태 처리 시 shouldRetainRecording()을 전달하여 영구 녹화의 오디오를 보존합니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:6acf8102be67f0b37c6d"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "Recorder 빠른 재시작 시 Surface 릴리스 완료 확인"
+      ],
+      "action_hints": [
+        "비디오 세션 라이프사이클 반복 테스트 점검"
+      ],
+      "action_items": [
+        "CameraX 비디오 인코더 Surface 릴리스 타이밍 테스트"
+      ],
+      "is_ai_related": false,
+      "article_type": "bug_fix",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "적절한 관련 이미지가 제공되지 않았습니다.",
+      "sources": [
+        {
+          "title": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+        }
+      ],
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+      "source_candidate_hash": "7d74f4916c5398052a749670b7e9e30207dd917e0c3eba99f78a341b6c93dcfc",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [
+        "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Keyword hints are discovery hints only and are not source-backed facts."
+      ],
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX Gerrit Camera AndroidX Gerrit Camera android android android android",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Pipeline",
+      "headline": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+      "what_changed": "Camera2ExtensionsVendorExtender에서 JPEG_R 확장 크기 조회를 API 35(VANILLA_ICE_CREAM) 이상에서만 수행하도록 가드를 상향했습니다. 이전에는 API 34에서 IllegalArgumentException 예외가 발생하던 문제를 해결했습니다.",
+      "confirmed_facts": [
+        "Gerrit change 4402197이 androidx-main 브랜치에 2026-10-30 병합되었습니다.",
+        "ImageFormat.JPEG_R(정수값 4101) 상수는 Android 14(API 34)에 추가되었으나, 당시 플랫폼의 CameraExtensionCharacteristics 구현은 JPEG와 YUV_420_888만 허용하고 4101 포맷 질의 시 IllegalArgumentException을 던졌습니다.",
+        "카메라 확장에서의 공식적인 JPEG_R 지원은 Android 15(API 35)에 추가되었습니다.",
+        "수정은 still capture 및 postview 포맷 질의 가드를 Build.VERSION_CODES.VANILLA_ICE_CREAM 이상으로 상향하여 API 34에서는 JPEG와 YUV_420_888만 쿼리하도록 변경했습니다."
+      ],
+      "evidence_summary": "AndroidX Gerrit change 4402197 메타데이터 및 커밋 diff 분석 결과, Camera2ExtensionsVendorExtender에서 JPEG_R 쿼리 가드를 API 35로 상향하여 API 34 플랫폼의 런타임 크래시를 방지한 사실이 확인되었습니다.",
+      "specificity_checks": [
+        "Change number: 4402197, Branch: androidx-main, Status: MERGED (2026-10-30)",
+        "Component: androidx.camera.extensions.internal.Camera2ExtensionsVendorExtender",
+        "Format: ImageFormat.JPEG_R (4101)",
+        "API Level guard: Build.VERSION_CODES.VANILLA_ICE_CREAM (API 35)",
+        "Test: Camera2ExtensionsVendorExtenderTest"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+        "Evidence ID: seed-01-801f1676ef-primary-01",
+        "Evidence ID: source-body:66fd56e307fda1c763b1",
+        "Primary source: Gerrit change 4402197의 androidx-main 브랜치 MERGED 상태를 확인했습니다. 라이브러리 정식 릴리스 및 상용 단말 제품 빌드 반영 여부는 별도로 확인해야 합니다."
+      ],
+      "public_article": {
+        "headline": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+        "lead": "카메라 확장 기능에서 Ultra HDR(JPEG_R) 지원 해상도를 질의할 때 발생하던 비정상 종료를 방지하기 위해 쿼리 대상 API 레벨이 35 이상으로 상향 조정되었습니다.",
+        "body_markdown": "Camera2 Extensions 벤더 확장 계층에서 기기 지원 해상도를 질의할 때 예외가 발생하는 결함이 수정되었습니다. ImageFormat.JPEG_R(정수값 4101) 상수는 Android 14(API 34)에 처음 도입되었기 때문에, 기존 쿼리 로직은 API 34 이상일 경우 해당 포맷의 확장 지원 해상도를 함께 조회하도록 구성되어 있었습니다.\n\n그러나 API 34 플랫폼의 CameraExtensionCharacteristics 내부 구현인 getExtensionSupportedSizes 및 getPostviewSupportedSizes 메서드는 JPEG와 YUV_420_888 두 가지 형식만 허용하도록 하드코딩되어 있었습니다. 따라서 API 34 기기에서 JPEG_R을 쿼리하면 지원되지 않는 형식이라는 IllegalArgumentException 예외가 발생했습니다.\n\n### 확장 쿼리 가드 상향 및 검증\n\n카메라 확장에서의 JPEG_R 지원은 Android 15(API 35)에 이르러 공식 추가되었습니다. 이에 따라 Camera2ExtensionsVendorExtender의 still capture 및 postview 포맷 쿼리 가드를 Build.VERSION_CODES.VANILLA_ICE_CREAM(API 35) 이상으로 상향했습니다. 이제 API 34 환경에서는 JPEG와 YUV_420_888만 쿼리합니다.\n\n이 수정은 2026년 10월 30일 Gerrit androidx-main 브랜치에 병합된 소스 코드 변경입니다. 확인된 범위는 메인 개발 브랜치의 커밋 병합이며, 실제 배포 라이브러리인 CameraX 정식 릴리스 버전이나 특정 제조사의 상용 단말 제품 빌드에 포함되었는지는 아직 확인되지 않았습니다. Android 14 기기 환경에서 카메라 확장 초기화 시 4101 포맷 질의 단계의 충돌 여부를 사전 점검할 수 있습니다.",
+        "camera_hal_takeaway": "플랫폼 프레임워크와 하위 벤더 확장 구현 간의 버전별 포맷 지원 차이로 인한 런타임 충돌을 방어한 패치입니다. HAL 및 벤더 라이브러리 개발팀은 대상 안드로이드 버전별 지원 포맷 열거 규격을 준수하고 불필요한 예외가 발생하지 않도록 정합성을 유지해야 합니다.",
+        "reader_checkpoints": [
+          "API 34 기기에서 Camera2 Extensions 초기화 시 4101 포맷 질의 예외 발생 여부 확인",
+          "API 35 이상 환경에서 Ultra HDR 확장 해상도 쿼리 정상 반환 및 postview 연동 확인"
+        ],
+        "source_links": [
+          {
+            "title": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+            "publisher": "AndroidX Gerrit",
+            "source_role": "primary",
+            "checked_at": "2026-11-02"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "AndroidX Gerrit Camera 패치 4402197",
+        "editorial_story": {
+          "not_to_overclaim": "HAL 자체의 Ultra HDR 지원 스펙 변경이 아니며 CameraX 프레임워크의 플랫폼 버전별 쿼리 가드 상향 수정입니다.",
+          "editor_take": "API 34와 35 사이의 확장 규격 차이로 발생하던 런타임 예외를 프레임워크 레벨에서 방어하여 안정성을 높였습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Driver",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "Gerrit change 4402197이 2026-10-30 androidx-main 브랜치에 병합되었습니다.",
+          "ImageFormat.JPEG_R 상수는 API 34에 도입되었으나, API 34 플랫폼의 CameraExtensionCharacteristics 구현은 JPEG와 YUV_420_888만 허용하고 JPEG_R 질의 시 IllegalArgumentException을 던졌습니다.",
+          "Camera2ExtensionsVendorExtender의 still capture 및 postview 해상도 질의 가드를 Build.VERSION_CODES.VANILLA_ICE_CREAM(API 35) 이상으로 상향했습니다."
+        ],
+        "background_context": "Android 14에 도입된 Ultra HDR(JPEG_R)은 기본 카메라 캡처 파이프라인에서 지원되기 시작했으나, 벤더 확장 인터페이스(Extensions)를 통한 처리는 Android 15에 이르러 공식 규격화되었습니다. 프레임워크가 플랫폼 버전별 차이를 세밀하게 구분하지 못하면 확장 초기화 시점에 지원되지 않는 포맷 쿼리로 인한 크래시가 유발됩니다.",
+        "hal_driver_impact": "벤더 HAL 개발자는 확장 기능 구현체에서 지원 가능한 포맷 목록을 노출할 때, 상위 플랫폼 프레임워크의 버전별 질의 동작을 감안하여 비정상 포맷 요청에 대한 예외 처리 정책을 점검해야 합니다.",
+        "action_items": [
+          "API 34 기기 환경에서 Camera2 Extensions 초기화 시 포맷 질의 예외가 발생하는지 테스트 스위트를 통해 확인합니다."
+        ],
+        "team_share_points": "Camera2 Extensions에서 Ultra HDR 포맷 질의 가드가 API 35 이상으로 조정되어 Android 14 기기에서의 확장 초기화 크래시가 방어되었습니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "확장 기능 초기화 시 발생하는 플랫폼 버전 불일치 크래시 방어 패치가 메인 브랜치에 병합되었습니다.",
+        "reader_owners": [
+          "camera_hal"
+        ],
+        "check_within_2_weeks": "Android 14 및 15 환경에서 Extensions 초기화 시 4101 포맷 질의 동작과 예외 발생 여부 확인",
+        "impact_axes": [
+          "driver_image_pipeline",
+          "stream_buffer_metadata"
+        ],
+        "do_not_overstate": [
+          "HAL 자체의 Ultra HDR 인코딩 지원 여부나 벤더 라이브러리의 구현 규격 변경이 아니며 프레임워크 쿼리 가드 수정입니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "c-4402197-1",
+          "text": "Gerrit change 4402197이 2026-10-30 androidx-main 브랜치에 병합되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "seed-01-801f1676ef-primary-01",
+            "source-body:66fd56e307fda1c763b1"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c-4402197-2",
+          "text": "ImageFormat.JPEG_R 상수는 API 34에 도입되었으나, API 34 플랫폼의 CameraExtensionCharacteristics 구현은 JPEG와 YUV_420_888만 허용하고 JPEG_R 질의 시 IllegalArgumentException을 던졌습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "seed-01-801f1676ef-primary-01",
+            "source-body:66fd56e307fda1c763b1"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "c-4402197-3",
+          "text": "Camera2ExtensionsVendorExtender의 still capture 및 postview 해상도 질의 가드를 Build.VERSION_CODES.VANILLA_ICE_CREAM(API 35) 이상으로 상향했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "seed-01-801f1676ef-primary-01",
+            "source-body:66fd56e307fda1c763b1"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "Android 14 및 15 기기에서 Camera2 Extensions 초기화 시 포맷 질의 동작 확인"
+      ],
+      "action_hints": [
+        "API 34 기기에서 Extensions 초기화 시 IllegalArgumentException 발생 여부 점검"
+      ],
+      "action_items": [
+        "API 34 기기 환경에서 Camera2 Extensions 초기화 시 포맷 질의 예외가 발생하는지 테스트 스위트를 통해 확인합니다."
+      ],
+      "is_ai_related": false,
+      "article_type": "framework_pipeline_improvement",
+      "imageCandidates": [],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "단일 Gerrit 패치 분석 기사로 관련 다이어그램이나 직접 스크린샷이 제공되지 않았습니다.",
+      "sources": [
+        {
+          "title": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+        }
+      ],
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+      "source_candidate_hash": "801f1676efc6b5d5226442307c5b47776871579ad728a0d5a0ad65112ae04230",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "camera_driver_image_pipeline",
+      "editorial_priority": 5,
+      "aosp_camera_directness": 0,
+      "driver_stack_relevance": 3,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": false,
+      "counts_as_driver_topic": true,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [
+        "Do not claim HAL/API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Keyword hints are discovery hints only and are not source-backed facts."
+      ],
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX Gerrit Camera AndroidX Gerrit Camera android android android android",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "Sony Xperia 1 V 기기에서 4개 유스케이스 동시 바인딩 시 비디오 스냅샷 정상 완료 여부를 확인합니다.",
+    "Camera2 Pipe 스트림 동적 구성 변경 시 프레임 메타데이터 스트림 세트 포함 검증 동작을 점검합니다.",
+    "CameraX Recorder에서 연속적인 비디오 녹화 시작 및 중지 시 PENDING_RECORDING 정체가 발생하는지 검증합니다.",
+    "Android 14 기기 환경에서 Camera2 Extensions 초기화 시 Ultra HDR(JPEG_R) 포맷 질의 예외 발생 여부를 확인합니다."
+  ],
+  "references": [
+    {
+      "title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+    },
+    {
+      "title": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+    },
+    {
+      "title": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+    },
+    {
+      "title": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
+  "selected_group_count": 4,
+  "rendered_group_count": 4,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+  ],
+  "rendered_group_keys": [
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "Add default implementation for CameraMetadata#isExtensionSupported - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-30",
+      "note": "AOSP Camera 프레임워크 관련 참고"
+    }
+  ],
+  "tags": [
+    "Camera HAL",
+    "Driver",
+    "Image Processing"
+  ],
+  "coverage_week_key": "2026-W44",
+  "coverage_start_date": "2026-10-26",
+  "coverage_end_date": "2026-11-01",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-11-02",
+  "intro_letter": "이번 주 뉴스레터에서는 카메라 파이프라인의 안정성과 호환성 개선 소식을 전해드립니다. 먼저, CameraX Recorder에서 Surface 해제 시 잔류 포인터 정리를 통해 녹화 멈춤을 방지하고, Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가로 버퍼링 오류를 막았습니다. 또한, Sony Xperia 1 V 기기에서 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 문제를 우회했으며, Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한하여 안정성을 높였습니다. 독자 여러분의 개발에 도움이 되기를 바랍니다.",
+  "intro_letter_source_hash": "sha256:c9a4f453f4a8a1df08328862e25b436529b76395c3a5c5cd14769c77388d263f",
+  "weekly_key": "2026-W45",
+  "week_start_date": "2026-11-02",
+  "week_end_date": "2026-11-08"
+}

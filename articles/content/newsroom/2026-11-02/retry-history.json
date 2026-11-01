@@ -1,0 +1,932 @@
+[
+  {
+    "attempt": 1,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.8-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-3.8-flash",
+    "score": 92,
+    "threshold": 60,
+    "status": "NEEDS_FIX",
+    "rendered_main_article_count": 4,
+    "locked_article_count": 3,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+      "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+      "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+      "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한"
+    ],
+    "locked_article_headlines": [
+      "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+      "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+      "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+        ],
+        "source_titles": [
+          "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+        ],
+        "source_titles": [
+          "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "category": "Camera Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+        ],
+        "source_titles": [
+          "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support"
+        ]
+      }
+    ],
+    "failed_sections": [
+      {
+        "index": 1,
+        "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "category": "Camera Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+        ],
+        "source_titles": [
+          "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support"
+        ]
+      }
+    ],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [
+      "repair-section(patch): CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지"
+    ],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+        ],
+        "action": "repair-section",
+        "publication_blocked": true,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": {
+          "section_index": 2,
+          "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+          "publishable": false,
+          "confidence": "high",
+          "source_review": {
+            "core_change": "CameraX Recorder에서 VideoEncoderSession의 Surface가 해제된 후 getReadyToReleaseFuture의 onSuccess 및 onFailure 콜백에서 mActiveSurface를 null로 초기화하여, 후속 INACTIVE 소스 상태 수신 시 잘못된 리셋 플래그(mNeedsResetBeforeNextStart) 설정으로 다음 녹화가 PENDING_RECORDING에 멈추는 문제를 해결하고 persistent recording의 오디오 소스를 유지하도록 개선함.",
+            "article_explanation": "공개 본문은 VideoEncoderSession Surface 해제와 비활성화 신호 처리 순서 간 레이스로 인해 mNeedsResetBeforeNextStart가 설정되어 녹화가 교착되는 원인과 콜백 내 null 초기화 수정을 명시했습니다. 그러나 확인 점검 방법은 구체적인 판정/관찰 결과 없이 일반적인 안정성 확인으로 서술되었으며, 메인 브랜치 병합 사실만 제시할 뿐 실제 라이브러리 릴리스 및 제품 빌드 반영 여부의 미확인 한계를 설명하지 않았습니다.",
+            "material_omissions": [
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846: \"Official Gerrit metadata... status: MERGED\" — 소스 병합 상태 외에 CameraX 라이브러리 공식 릴리스 및 상위 제품 빌드 포함 여부는 확인되지 않았다는 반영 한계 명시 누락.",
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846: \"// Rebind with a new surface request and verify the next recording starts instead of remaining stuck in PENDING_RECORDING\" — 점검 시 빠른 전환 후 새 Surface 요청 재바인딩 단계에서 다음 녹화가 PENDING_RECORDING에 갇히지 않고 정상 시작되는지 여부를 관찰 결과로 명시해야 하는 동작 설명 누락.",
+              "public_verification: 스트레스 테스트를 제안했으나 후속 작업의 안정성 확인이라는 일반적 서술에 머물렀으며, Surface 해제 후 재바인딩 시 다음 녹화가 정상 시작되는지 관찰하는 구체적 결과 설명이 부족합니다.",
+              "release_limitations: 2026-10-30 메인 브랜치 병합 사실만 제시했을 뿐, 라이브러리 릴리스나 제품 빌드 반영 여부가 미확인 상태라는 한계를 본문에서 명시하지 않았습니다."
+            ],
+            "unaddressed_source_conflicts": [],
+            "briefing_checks": {
+              "scope_and_behavior": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "2:body_markdown:0",
+                  "2:body_markdown:1",
+                  "2:body_markdown:3"
+                ],
+                "reason": "CameraX Recorder에서 빠른 수명 주기 전환 시 mActiveSurface 잔류로 인해 다음 녹화가 PENDING_RECORDING에 고착되는 원인과 콜백 내 null 초기화 및 오디오 소스 유지 원리를 구체적으로 설명했습니다.",
+                "verified_passages": [
+                  {
+                    "id": "2:body_markdown:0",
+                    "text": "CameraX Recorder 모듈에서 앱 수명 주기가 빠르게 전환될 때 비디오 녹화가 시작되지 않는 교착 현상이 보고되었습니다. 이전에는 VideoEncoderSession의 Surface가 종료되고 getReadyToReleaseFuture가 완료되었을 때, 순차 실행기 상에서 onSourceStateChangedInternal(INACTIVE)가 실행되기 전에 인코더 리셋이 먼저 일어나면서 mActiveSurface가 이미 해제된 Surface를 가리킨 채 남아 있었습니다."
+                  },
+                  {
+                    "id": "2:body_markdown:1",
+                    "text": "이 상태에서 소스 비활성화(INACTIVE) 신호가 도착하면, 널이 아닌 mActiveSurface를 감지한 Recorder는 구성(CONFIGURING) 상태에서 다음 시작 전 리셋 플래그(mNeedsResetBeforeNextStart)를 참으로 설정했습니다. 이로 인해 다음 녹화 요청이 PENDING_RECORDING 상태에서 영구적으로 대기하는 문제가 발생했습니다."
+                  },
+                  {
+                    "id": "2:body_markdown:3",
+                    "text": "수정 사항은 getReadyToReleaseFuture의 성공(onSuccess) 및 실패(onFailure) 콜백에서 mActiveSurface를 null로 명시적으로 초기화하도록 했습니다. 또한 소스 비활성화 시 mActiveSurface가 null일 경우 영구 녹화(persistent recording)에서 오디오 소스를 유지할 수 있도록 변경했습니다."
+                  }
+                ]
+              },
+              "public_verification": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "스트레스 테스트를 제안했으나 후속 작업의 안정성 확인이라는 일반적 서술에 머물렀으며, Surface 해제 후 재바인딩 시 다음 녹화가 정상 시작되는지 관찰하는 구체적 결과 설명이 부족합니다."
+              },
+              "release_limitations": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "2026-10-30 메인 브랜치 병합 사실만 제시했을 뿐, 라이브러리 릴리스나 제품 빌드 반영 여부가 미확인 상태라는 한계를 본문에서 명시하지 않았습니다."
+              },
+              "effect_boundaries": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "2:body_markdown:3",
+                  "2:camera_hal_takeaway:0"
+                ],
+                "reason": "수정 대상이 Jetpack 프레임워크 계층임을 명확히 하고 하위 파이프라인 관점의 교훈으로 선을 그어 무리한 HAL 변경 단정이나 효과 과장을 피했습니다.",
+                "source_behavior": "VideoEncoderSession 종료 콜백에서 mActiveSurface를 null로 초기화하고, 소스 비활성화 시 mActiveSurface가 null이면 shouldRetainRecording()을 호출해 오디오 소스를 보존합니다.",
+                "article_behavior": "콜백에서 mActiveSurface를 null로 초기화하고 소스 비활성화 시 영구 녹화에서 오디오 소스를 유지한다고 정확히 설명했습니다.",
+                "verified_passages": [
+                  {
+                    "id": "2:body_markdown:3",
+                    "text": "수정 사항은 getReadyToReleaseFuture의 성공(onSuccess) 및 실패(onFailure) 콜백에서 mActiveSurface를 null로 명시적으로 초기화하도록 했습니다. 또한 소스 비활성화 시 mActiveSurface가 null일 경우 영구 녹화(persistent recording)에서 오디오 소스를 유지할 수 있도록 변경했습니다."
+                  },
+                  {
+                    "id": "2:camera_hal_takeaway:0",
+                    "text": "하위 인코더 Surface의 릴리스 완료 시점과 프레임워크 상태 머신 간의 비동기 레이스 컨디션을 해결한 사례입니다. HAL/드라이버 파이프라인 개발자에게도 비디오 스트림 정지 및 Surface 재바인딩 타이밍의 안정성 확보 방안을 제시합니다."
+                  }
+                ]
+              }
+            }
+          },
+          "reason": "빠른 라이프사이클 전환에서 발생하는 비디오 레코더 파이프라인 교착 버그를 Surface 해제 타이밍 관점에서 구체적으로 분석함. / 병합 일자만 제시하고 라이브러리 릴리스 및 제품 빌드 반영 한계를 밝히지 않았으며, 점검 절차에서도 구체적인 관찰 결과 대신 일반적인 안정성 확인으로 서술되었습니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846: \"Official Gerrit metadata... status: MERGED\" — 소스 병합 상태 외에 CameraX 라이브러리 공식 릴리스 및 상위 제품 빌드 포함 여부는 확인되지 않았다는 반영 한계 명시 누락. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846: \"// Rebind with a new surface request and verify the next recording starts instead of remaining stuck in PENDING_RECORDING\" — 점검 시 빠른 전환 후 새 Surface 요청 재바인딩 단계에서 다음 녹화가 PENDING_RECORDING에 갇히지 않고 정상 시작되는지 여부를 관찰 결과로 명시해야 하는 동작 설명 누락. / public_verification: 스트레스 테스트를 제안했으나 후속 작업의 안정성 확인이라는 일반적 서술에 머물렀으며, Surface 해제 후 재바인딩 시 다음 녹화가 정상 시작되는지 관찰하는 구체적 결과 설명이 부족합니다. / release_limitations: 2026-10-30 메인 브랜치 병합 사실만 제시했을 뿐, 라이브러리 릴리스나 제품 빌드 반영 여부가 미확인 상태라는 한계를 본문에서 명시하지 않았습니다."
+        }
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+        ],
+        "action": "repair-section",
+        "publication_blocked": true,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": {
+          "section_index": 3,
+          "headline": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+          "publishable": false,
+          "confidence": "high",
+          "source_review": {
+            "core_change": "Android 14(API 34)의 CameraExtensionCharacteristics 구현이 JPEG_R 질의 시 IllegalArgumentException을 던지는 결함을 방어하기 위해, Camera2ExtensionsVendorExtender의 still capture 및 postview 형식 조회 시 JPEG_R 가드를 API 35(VANILLA_ICE_CREAM) 이상으로 상향 조정한 변경입니다.",
+            "article_explanation": "공개 본문은 API 34 환경에서 JPEG_R 쿼리 시 발생하는 예외 원인과 API 35 이상으로 가드를 상향한 변경 전후 동작, Android 14 기기에서의 충돌 여부 점검 관찰 대상을 충실히 다루었으나, 병합 사실 외에 라이브러리 릴리스 및 제품 빌드 포함 여부가 미확인이라는 반영 한계는 설명하지 않았습니다.",
+            "material_omissions": [
+              "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197 ('status: \"MERGED\"'): 원문은 androidx-main 브랜치 병합만을 증명하므로, 실제 CameraX 라이브러리 정식 릴리스 배포 및 단말 완제품 빌드 포함 여부는 확인되지 않았다는 반영 한계가 공개 본문에 명시되어야 합니다.",
+              "release_limitations: 본문에 2026-10-30 메인 브랜치 병합 사실만 언급되었고, 실제 라이브러리 정식 릴리스 배포 및 단말 제품 빌드 포함 여부가 미확인이라는 구분이 누락되었습니다."
+            ],
+            "unaddressed_source_conflicts": [],
+            "briefing_checks": {
+              "scope_and_behavior": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "3:body_markdown:0",
+                  "3:body_markdown:1",
+                  "3:body_markdown:3"
+                ],
+                "reason": "Camera2 Extensions 계층에서 API 34의 하드코딩된 예외 발생 원인과 API 35 이상으로 쿼리 가드를 올린 변경 전후 동작이 명확히 기술되었습니다.",
+                "verified_passages": [
+                  {
+                    "id": "3:body_markdown:0",
+                    "text": "Camera2 Extensions 벤더 확장 계층에서 기기 지원 해상도를 질의할 때 예외가 발생하는 결함이 수정되었습니다. ImageFormat.JPEG_R(정수값 4101) 상수는 Android 14(API 34)에 처음 도입되었기 때문에, 기존 쿼리 로직은 API 34 이상일 경우 해당 포맷의 확장 지원 해상도를 함께 조회하도록 구성되어 있었습니다."
+                  },
+                  {
+                    "id": "3:body_markdown:1",
+                    "text": "그러나 API 34 플랫폼의 CameraExtensionCharacteristics 내부 구현인 getExtensionSupportedSizes 및 getPostviewSupportedSizes 메서드는 JPEG와 YUV_420_888 두 가지 형식만 허용하도록 하드코딩되어 있었습니다. 따라서 API 34 기기에서 JPEG_R을 쿼리하면 지원되지 않는 형식이라는 IllegalArgumentException 예외가 발생했습니다."
+                  },
+                  {
+                    "id": "3:body_markdown:3",
+                    "text": "카메라 확장에서의 JPEG_R 지원은 Android 15(API 35)에 이르러 공식 추가되었습니다. 이에 따라 Camera2ExtensionsVendorExtender의 still capture 및 postview 포맷 쿼리 가드를 Build.VERSION_CODES.VANILLA_ICE_CREAM(API 35) 이상으로 상향했습니다. 이제 API 34 환경에서는 JPEG와 YUV_420_888만 쿼리합니다."
+                  }
+                ]
+              },
+              "public_verification": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "3:body_markdown:4"
+                ],
+                "reason": "Android 14 기기에서 야간 모드나 HDR 같은 확장 기능 초기화 시 포맷 질의 단계의 충돌 여부를 관찰하라는 점검 조건과 결과를 제시했습니다.",
+                "verified_passages": [
+                  {
+                    "id": "3:body_markdown:4",
+                    "text": "이 수정은 2026-10-30 메인 브랜치에 병합된 코드 변경입니다. Android 14 기기에서 야간 모드나 HDR 같은 카메라 확장 기능을 초기화할 때 포맷 질의 단계에서 충돌이 발생하는지 여부를 점검할 수 있습니다."
+                  }
+                ]
+              },
+              "release_limitations": {
+                "applicable": true,
+                "satisfied": false,
+                "evidence_passage_ids": [],
+                "reason": "본문에 2026-10-30 메인 브랜치 병합 사실만 언급되었고, 실제 라이브러리 정식 릴리스 배포 및 단말 제품 빌드 포함 여부가 미확인이라는 구분이 누락되었습니다."
+              },
+              "effect_boundaries": {
+                "applicable": true,
+                "satisfied": true,
+                "evidence_passage_ids": [
+                  "3:body_markdown:0",
+                  "3:body_markdown:1",
+                  "3:body_markdown:3"
+                ],
+                "reason": "포맷 질의 단계의 쿼리 가드 상향에 따른 예외 방어 효과에 집중하였으며 원문 범위를 넘는 실행 성공을 단정하지 않았습니다.",
+                "source_behavior": "API 35 미만에서 getSupportedStillCaptureFormats가 JPEG와 YUV_420_888만 반환하여 CameraExtensionCharacteristics의 IllegalArgumentException 던짐을 회피함.",
+                "article_behavior": "API 34 기기에서 JPEG_R 쿼리를 배제하고 JPEG 및 YUV_420_888만 쿼리하도록 수정되었음을 정확하게 기술함.",
+                "verified_passages": [
+                  {
+                    "id": "3:body_markdown:0",
+                    "text": "Camera2 Extensions 벤더 확장 계층에서 기기 지원 해상도를 질의할 때 예외가 발생하는 결함이 수정되었습니다. ImageFormat.JPEG_R(정수값 4101) 상수는 Android 14(API 34)에 처음 도입되었기 때문에, 기존 쿼리 로직은 API 34 이상일 경우 해당 포맷의 확장 지원 해상도를 함께 조회하도록 구성되어 있었습니다."
+                  },
+                  {
+                    "id": "3:body_markdown:1",
+                    "text": "그러나 API 34 플랫폼의 CameraExtensionCharacteristics 내부 구현인 getExtensionSupportedSizes 및 getPostviewSupportedSizes 메서드는 JPEG와 YUV_420_888 두 가지 형식만 허용하도록 하드코딩되어 있었습니다. 따라서 API 34 기기에서 JPEG_R을 쿼리하면 지원되지 않는 형식이라는 IllegalArgumentException 예외가 발생했습니다."
+                  },
+                  {
+                    "id": "3:body_markdown:3",
+                    "text": "카메라 확장에서의 JPEG_R 지원은 Android 15(API 35)에 이르러 공식 추가되었습니다. 이에 따라 Camera2ExtensionsVendorExtender의 still capture 및 postview 포맷 쿼리 가드를 Build.VERSION_CODES.VANILLA_ICE_CREAM(API 35) 이상으로 상향했습니다. 이제 API 34 환경에서는 JPEG와 YUV_420_888만 쿼리합니다."
+                  }
+                ]
+              }
+            }
+          },
+          "reason": "플랫폼 API 레벨별 확장 포맷 지원 불일치로 인한 크래시를 방지하는 실무 가이드로서 가치가 높음. / 병합 일자만 제시되었을 뿐 라이브러리 릴리스 배포 및 상용 단말 제품 빌드 반영 여부가 확인되지 않았다는 반영 한계 설명이 공개 본문에서 누락되었습니다. / https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197 ('status: \"MERGED\"'): 원문은 androidx-main 브랜치 병합만을 증명하므로, 실제 CameraX 라이브러리 정식 릴리스 배포 및 단말 완제품 빌드 포함 여부는 확인되지 않았다는 반영 한계가 공개 본문에 명시되어야 합니다. / release_limitations: 본문에 2026-10-30 메인 브랜치 병합 사실만 언급되었고, 실제 라이브러리 정식 릴리스 배포 및 단말 제품 빌드 포함 여부가 미확인이라는 구분이 누락되었습니다."
+        }
+      },
+      {
+        "headline": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+        ],
+        "source_titles": [
+          "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+        ],
+        "source_titles": [
+          "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "category": "Camera Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+        ],
+        "source_titles": [
+          "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  },
+  {
+    "attempt": 2,
+    "model": "reporter=gemini-2.5-flash, editor=gemini-3.8-flash, public-article-judge=gemini-2.5-flash-lite, fact-checker=gemini-3.8-flash",
+    "score": 92,
+    "threshold": 60,
+    "status": "PASS",
+    "rendered_main_article_count": 4,
+    "locked_article_count": 4,
+    "demoted_article_count": 0,
+    "reserve_pool_opened": false,
+    "reserve_open_reason": "",
+    "reserve_candidates_used": [],
+    "candidate_rejections": [
+      {
+        "title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+        "source": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+        "source": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+        "source": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "underfilled_reason": "",
+    "completion_fallback_to_prepass": false,
+    "deductions": [
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: what_happened, reader_perspective, action_hint.",
+        "location": "briefing 1",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "editorial-story",
+        "points": 1,
+        "reason": "Briefing bullet misses story structure elements: action_hint.",
+        "location": "briefing 3",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "linked-evidence-limitation",
+        "points": 2,
+        "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+        "location": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      },
+      {
+        "category": "image-fallback",
+        "points": 1,
+        "reason": "Article image uses a local fallback visual.",
+        "location": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+        "blocking": false,
+        "severity": "soft",
+        "reason_code": "",
+        "dedupe_key": ""
+      }
+    ],
+    "selected_article_headlines": [
+      "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+      "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+      "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+      "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한"
+    ],
+    "locked_article_headlines": [
+      "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+      "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+      "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+      "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한"
+    ],
+    "source_gap_sections": [],
+    "demoted_sections": [],
+    "replaced_sections": [],
+    "locked_sections": [
+      {
+        "index": 1,
+        "headline": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+        ],
+        "source_titles": [
+          "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 2,
+        "headline": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+        ],
+        "source_titles": [
+          "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 3,
+        "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "category": "Camera Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+        ],
+        "source_titles": [
+          "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support"
+        ]
+      },
+      {
+        "index": 4,
+        "headline": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+        "category": "Camera Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+        ],
+        "source_titles": [
+          "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support"
+        ]
+      }
+    ],
+    "failed_sections": [],
+    "regenerated_sections": [],
+    "rejected_retry_outputs": [],
+    "repair_actions": [],
+    "max_section_repairs": 1,
+    "repair_plan": [
+      {
+        "headline": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "skipped_repair_sections": [
+      {
+        "headline": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "linked-evidence-limitation",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "linked-evidence-limitation",
+            "points": 2,
+            "reason": "Article source_verification_notes do not explain unresolved or limited linked evidence diagnostics.",
+            "reason_code": "",
+            "location": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가"
+          },
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      },
+      {
+        "headline": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+        "sources": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+        ],
+        "action": "repair-section",
+        "publication_blocked": false,
+        "failure_type": "image-fallback",
+        "allow_rewrite": true,
+        "policy_reason": "section-scoped repair is allowed",
+        "source_gap": false,
+        "reporter_eligibility_violations": [],
+        "deductions": [
+          {
+            "category": "image-fallback",
+            "points": 1,
+            "reason": "Article image uses a local fallback visual.",
+            "reason_code": "",
+            "location": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한"
+          }
+        ],
+        "recommended_fixes": [],
+        "article_quality_feedback": null
+      }
+    ],
+    "article_locks": [
+      {
+        "index": 1,
+        "headline": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967"
+        ],
+        "source_titles": [
+          "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 2,
+        "headline": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "category": "Camera Framework",
+        "relevance_bucket": "direct_aosp_camera",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726"
+        ],
+        "source_titles": [
+          "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 3,
+        "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "category": "Camera Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846"
+        ],
+        "source_titles": [
+          "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      },
+      {
+        "index": 4,
+        "headline": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+        "category": "Camera Pipeline",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "urls": [
+          "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197"
+        ],
+        "source_titles": [
+          "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support"
+        ],
+        "status": "PASS",
+        "reason": "",
+        "locked": true
+      }
+    ],
+    "final_article_slot_distribution": {
+      "android_camera_platform_api": 1,
+      "camerax_aosp_camera_compatibility": 1,
+      "linux_camera_libcamera_v4l2": 0,
+      "ai_camera_path_hal_workflow": 2,
+      "cpp_toolchain_fallback": 0,
+      "other": 0
+    },
+    "reporter_eligibility_blocked_sections": [],
+    "rejected_main_ineligible_candidates": [],
+    "lock_blockers": [],
+    "rejected_duplicate_headlines": [
+      {
+        "title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+        "source": "AndroidX Gerrit Camera",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+        "source": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+        "source": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support",
+        "relevance_bucket": "direct_aosp_camera",
+        "editorial_priority": 1,
+        "reason": "duplicate_locked_url"
+      },
+      {
+        "title": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+        "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+        "source": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+        "relevance_bucket": "camera_driver_image_pipeline",
+        "editorial_priority": 5,
+        "reason": "duplicate_locked_url"
+      }
+    ],
+    "source_gap_count": 0,
+    "must_fix_count": 0
+  }
+]
