@@ -50,6 +50,7 @@ const {
 const { classifyAospCameraStackCandidate } = require('../shared/domain/aosp-camera-scope');
 const {
   rawItemEvidenceMetadata,
+  rawItemText,
   SEED_PAGE_SOURCE_KIND
 } = require('../shared/cli/collect-news-candidates');
 const {
@@ -460,7 +461,15 @@ function seedCandidateFromEvidence({
     briefing_only: !datedFacts,
     reference_only: !datedFacts
   });
-  const scope = classifyAospCameraStackCandidate(output);
+  // 범위 분류도 같은 이유로 목록 수집과 같은 정규화(rawItemText: 마크업 제거·500자 상한)를 거친
+  // 파서 요약을 읽는다. output.summary는 220자로 다듬은 근거 문장이라 Gerrit 요약 뒤쪽의 camera 파일
+  // 경로가 잘려 나가고, 그러면 카메라 변경이 generic_tech_watchlist로 떨어져 main에 오를 수 없다
+  // (2026-11-02 4402197·4399846 실측). 파서 항목이 없는 HTML seed는 summary가 이미 근거 문장이라
+  // 결과가 같다.
+  const scope = classifyAospCameraStackCandidate({
+    ...output,
+    summary: rawItemText({ ...candidate, summary: candidate.summary || output.summary }).summary
+  });
   const quality = classifySourceQuality({
     candidate: {
       ...output,
