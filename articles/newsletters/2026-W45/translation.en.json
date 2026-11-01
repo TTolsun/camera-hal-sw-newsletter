@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "weekly_key": "2026-W45",
+  "source_hash": "sha256:274bae3ff0abbb3c84c91341747e0313f551ed19dbfffddbe1803b3ef5fa4104",
+  "title": "2026 W44 (10.26 ~ 11.01)",
+  "summary": "This week's newsletter brings news of improved stability and compatibility in the camera pipeline. First, CameraX Recorder prevents recording freezes by clearing residual pointers when releasing a Surface. Camera2 Pipe FrameBuffer now includes validation logic to check if a stream set is included, preventing buffering errors. Additionally, a workaround was implemented for the Sony Xperia 1 V device to prevent video snapshots from stopping when sharing four use case streams. Camera2 Extensions' Ultra HDR (JPEG_R) resolution query is now limited to API 35 and above to enhance stability. We hope this helps with your development.",
+  "sections": [
+    {
+      "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "headline": "Workaround for Sony Xperia 1 V video snapshot hang when sharing four use case streams",
+      "body_markdown": "On the Sony Xperia 1 V (model xq-dq72) device, video snapshot capture would hang and not complete when Preview, VideoCapture, ImageCapture, and ImageAnalysis use cases were run simultaneously. CameraX's StreamSharing feature merges preview and video capture into a single OpenGL SurfaceTexture stream and passes TEMPLATE_RECORD as the session template to overcome hardware stream limitations.\n\nDuring this process, the session does not include a GraphicBufferSource surface dedicated to the media encoder. The Sony HAL implementation interpreted this as preview and still streaming mode (mode 0 0). It then ignored TEMPLATE_VIDEO_SNAPSHOT requests, regardless of the session template, and did not produce output JPEG buffers.\n\n### Capture intent override and verification conditions\n\nGoogle has registered xq-dq72 in the ImageCaptureFailedForVideoSnapshotQuirk target device list. This change causes the capture intent to be redefined as CONTROL_CAPTURE_INTENT_STILL_CAPTURE instead of CONTROL_CAPTURE_INTENT_VIDEO_SNAPSHOT in this environment, prompting the HAL to perform JPEG processing.\n\nThis change is currently merged into the AndroidX main branch. It has not yet been distributed as an official library version or reflected in commercial product firmware. To verify similar symptoms, you can bind four use cases and then check if snapshot capture callbacks are received normally during video recording, and if there is no frame delay or pipeline congestion.",
+      "why_it_matters": "This shows that if a HAL refuses to process a specific request template based on the session configuration stream type, it can be resolved by adjusting the capture intent at the framework level. When dealing with similar stream sharing sessions in your environment, you need to check template compatibility and the buffer generation flow.",
+      "lead": "A problem where snapshot capture would hang during video recording when four use cases were bound simultaneously on the Sony Xperia 1 V device has been bypassed with a CameraX quirk.",
+      "source_subtitle": "AndroidX Gerrit Camera patch 4399967",
+      "source_titles": {
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support"
+      }
+    },
+    {
+      "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+      "headline": "Added validation logic for Camera2 Pipe FrameBuffer to check if stream set is included",
+      "body_markdown": "Inside Camera2 Pipe's FrameGraph, frame references are distributed to each FrameBuffer when frames are generated. In the previous structure, the system could not fully verify whether the streams included in the frame request metadata matched the list of streams required by the FrameBuffer. This created a risk of inappropriate frames entering the queue.\n\nWith this change, a conditional statement has been added within the FrameBufferImpl's onFrameStarted callback. It checks if the set of stream keys defined in the incoming FrameReference's requestMetadata fully contains the set of streams configured for the FrameBuffer. If the frame does not contain all required streams, processing is immediately terminated.\n\n### Frame isolation for partial stream requests\n\nThis change ensures that when a capture request targets only a subset of specific streams, other FrameBuffers that do not include those streams will ignore the frame and preserve their existing buffer state.\n\nThis patch was merged into the source tree on 2026-10-28 and is in the pre-library release stage. When testing dynamic stream configurations or partial capture pipelines, you can refer to unit verification to ensure that incorrect frame references are not mixed into the buffer flow.",
+      "why_it_matters": "The framework's internal buffer management layer enforces precise matching with stream request metadata, preventing memory leaks and incorrect output reception. From a HAL development perspective, it is important to be aware that the framework strictly filters stream targets on a per-frame basis.",
+      "lead": "Validation logic has been added to the Camera2 Pipe pipeline to prevent frames that do not fully contain the streams required by a buffer from being incorrectly buffered.",
+      "source_subtitle": "AndroidX Gerrit Camera patch 4395726",
+      "source_titles": {
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support"
+      }
+    },
+    {
+      "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+      "headline": "Prevent recording freezes by clearing residual pointers when CameraX Recorder's Surface is released",
+      "body_markdown": "A deadlock was reported in the CameraX Recorder module where video recording would not start when the app's lifecycle transitioned quickly. Previously, when the VideoEncoderSession's Surface was terminated and getReadyToReleaseFuture completed, the encoder would reset before onSourceStateChangedInternal(INACTIVE) executed on the sequential executor. This left mActiveSurface pointing to an already released Surface.\n\nIn this state, when the source deactivation (INACTIVE) signal arrived, the Recorder detected a non-null mActiveSurface. It then set the reset flag (mNeedsResetBeforeNextStart) to true before the next start, while in the CONFIGURING state. This caused the next recording request to permanently wait in the PENDING_RECORDING state.\n\n### In-callback cleanup and audio retention\n\nThe fix explicitly initializes mActiveSurface to null in the success (onSuccess) and failure (onFailure) callbacks of getReadyToReleaseFuture. Additionally, when mActiveSurface is null during source deactivation, the change allows the audio source to be retained for persistent recording.\n\nThis change was merged into the main branch on 2026-10-30. However, its inclusion in an official library distribution or device product build has not yet been confirmed. A useful check is to confirm that the next recording starts normally without getting stuck in the PENDING_RECORDING state after quick recording start and stop, screen rotation, or reconnecting a new Surface request after a lifecycle transition.",
+      "why_it_matters": "This is an example of resolving an asynchronous race condition between the completion of a lower-level encoder Surface release and the framework state machine. It also provides a method for HAL/driver pipeline developers to ensure stability in video stream stopping and Surface re-binding timing.",
+      "lead": "By clearing residual pointers when a video encoder session's Surface is released, a problem where the next recording would remain in a permanent pending state after a quick screen transition has been resolved.",
+      "source_subtitle": "AndroidX Gerrit Camera patch 4399846",
+      "source_titles": {
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support"
+      }
+    },
+    {
+      "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+      "headline": "Camera2 Extensions' Ultra HDR (JPEG_R) resolution query limited to API 35 and above",
+      "body_markdown": "A defect that caused an exception when querying device-supported resolutions in the Camera2 Extensions vendor extension layer has been fixed. The ImageFormat.JPEG_R constant (integer value 4101) was first introduced in Android 14 (API 34). Therefore, the existing query logic was configured to query the extended supported resolutions for this format if the API was 34 or higher.\n\nHowever, the getExtensionSupportedSizes and getPostviewSupportedSizes methods, which are internal implementations of CameraExtensionCharacteristics on the API 34 platform, were hardcoded to only allow two formats: JPEG and YUV_420_888. Consequently, querying JPEG_R on an API 34 device resulted in an IllegalArgumentException, indicating an unsupported format.\n\n### Elevated extension query guard and verification\n\nJPEG_R support in camera extensions was officially added in Android 15 (API 35). Accordingly, the still capture and postview format query guard in Camera2ExtensionsVendorExtender has been raised to Build.VERSION_CODES.VANILLA_ICE_CREAM (API 35) or higher. Now, in an API 34 environment, only JPEG and YUV_420_888 are queried.\n\nThis fix is a source code change merged into the Gerrit androidx-main branch on October 30, 2026. The confirmed scope is the commit merge in the main development branch. It has not yet been confirmed whether it is included in an actual distributed library, a formal CameraX release version, or a commercial device product build from a specific manufacturer. You can pre-check for conflicts in the 4101 format query stage during camera extension initialization in an Android 14 device environment.",
+      "why_it_matters": "This patch defends against runtime crashes caused by version-specific format support differences between the platform framework and lower-level vendor extension implementations. HAL and vendor library development teams must adhere to the enumerated format specifications for each target Android version and maintain consistency to prevent unnecessary exceptions.",
+      "lead": "To prevent abnormal termination when querying Ultra HDR (JPEG_R) supported resolutions in camera extension features, the target API level for queries has been raised to 35 or higher.",
+      "source_subtitle": "AndroidX Gerrit Camera patch 4402197",
+      "source_titles": {
+        "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support"
+      }
+    }
+  ],
+  "watch_points": [],
+  "reference_articles": [
+    {
+      "id": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805",
+      "title": "Add default implementation for CameraMetadata#isExtensionSupported - platform/frameworks/support",
+      "note": "Reference for AOSP Camera framework"
+    }
+  ]
+}

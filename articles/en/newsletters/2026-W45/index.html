@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" data-alternate-href="/camera-hal-sw-newsletter/newsletters/2026-W45/index.html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 W44 Camera SW Newsletter (Published W45)</title>
+  <link rel="alternate" hreflang="ko" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W45/index.html" />
+  <link rel="alternate" hreflang="en" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W45/index.html" />
+  <link rel="alternate" hreflang="x-default" href="https://ttolsun.github.io/camera-hal-sw-newsletter/newsletters/2026-W45/index.html" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="description" content="This week&#39;s newsletter brings news of improved stability and compatibility in the camera pipeline. First, CameraX Recorder prevents recording freezes by clearing residual pointers when releasing a Surface. Camera2 Pipe FrameBuffer now includes validation logic to check if a stream set is included, preventing buffering errors. Additionally, a workaround was implemented for the Sony Xperia 1 V device to prevent video snapshots from stopping when sharing four use case streams. Camera2 Extensions&#39; Ultra HDR (JPEG_R) resolution query is now limited to API 35 and above to enhance stability. We hope this helps with your development." />
+  <link rel="canonical" href="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W45/index.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Camera SW Newsletter" />
+  <meta property="og:title" content="2026 W44 Camera SW Newsletter (Published W45)" />
+  <meta property="og:description" content="This week&#39;s newsletter brings news of improved stability and compatibility in the camera pipeline. First, CameraX Recorder prevents recording freezes by clearing residual pointers when releasing a Surface. Camera2 Pipe FrameBuffer now includes validation logic to check if a stream set is included, preventing buffering errors. Additionally, a workaround was implemented for the Sony Xperia 1 V device to prevent video snapshots from stopping when sharing four use case streams. Camera2 Extensions&#39; Ultra HDR (JPEG_R) resolution query is now limited to API 35 and above to enhance stability. We hope this helps with your development." />
+  <meta property="og:url" content="https://ttolsun.github.io/camera-hal-sw-newsletter/en/newsletters/2026-W45/index.html" />
+  <meta property="og:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="2026 W44 Camera SW Newsletter (Published W45)" />
+  <meta name="twitter:description" content="This week&#39;s newsletter brings news of improved stability and compatibility in the camera pipeline. First, CameraX Recorder prevents recording freezes by clearing residual pointers when releasing a Surface. Camera2 Pipe FrameBuffer now includes validation logic to check if a stream set is included, preventing buffering errors. Additionally, a workaround was implemented for the Sony Xperia 1 V device to prevent video snapshots from stopping when sharing four use case streams. Camera2 Extensions&#39; Ultra HDR (JPEG_R) resolution query is now limited to API 35 and above to enhance stability. We hope this helps with your development." />
+  <meta name="twitter:image" content="https://ttolsun.github.io/camera-hal-sw-newsletter/assets/images/brand/HALley.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="../../../css/styles.css" />
+  <script src="../../../assets/js/site-header.js" defer></script>
+</head>
+<body class="homepage newsletter-issue-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header homepage-site-header">
+    <div class="homepage-nav content-wrap">
+      <a class="site-brand homepage-brand" href="../../../en/index.html" aria-label="Camera SW Newsroom">
+        <img class="brand-logo" src="../../../assets/images/brand/HALley-logo.png" alt="" width="30" height="30">
+        <span class="brand-name">Camera SW <span class="brand-subtitle">Newsroom</span></span>
+      </a>
+      <div class="nav-links homepage-nav-links" aria-label="Primary navigation">
+        <a href="../../../en/index.html">Home</a>
+        <a href="../../../en/archive.html">Archive</a>
+        <a href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1" class="site-main article-page newsletter-main">
+    <article class="wrap issue-wrap">
+      <header class="article-header issue-hero">
+        <a class="issue-back" href="../../index.html">← Newsroom</a>
+        <div class="article-meta issue-hero-meta">
+          <span class="issue-kicker">2026.10.26 – 11.01</span>
+        </div>
+        <h1 class="issue-title"><span>2026 W44</span></h1>
+        <p class="issue-publish-badge">Published W45</p>
+        
+        <div class="tag-row issue-tags"><span class="tag">Camera HAL</span><span class="tag">Driver</span><span class="tag">Image Processing</span></div>
+      </header>
+
+      <section class="section issue-briefing" id="issue-briefing" tabindex="-1" aria-labelledby="issue-briefing-title">
+        <div class="issue-briefing-card">
+          <h2 id="issue-briefing-title">This week’s highlights</h2>
+          <ol class="reader-brief-items"><li>
+            <a href="#article-workaround-for-sony-xperia-1-v-video-snapshot-hang-when-sharing-four-use-case-st">Workaround for Sony Xperia 1 V video snapshot hang when sharing four use case streams</a>
+            <p class="reader-brief-takeaway">This shows that if a HAL refuses to process a specific request template based on the session configuration stream type, it can be resolved by adjusting the capture intent at the framework level. When dealing with similar stream sharing sessions in your environment, you need to check template compatibility and the buffer generation flow.</p>
+          </li><li>
+            <a href="#article-added-validation-logic-for-camera2-pipe-framebuffer-to-check-if-stream-set-is-in">Added validation logic for Camera2 Pipe FrameBuffer to check if stream set is included</a>
+            <p class="reader-brief-takeaway">The framework&#39;s internal buffer management layer enforces precise matching with stream request metadata, preventing memory leaks and incorrect output reception. From a HAL development perspective, it is important to be aware that the framework strictly filters stream targets on a per-frame basis.</p>
+          </li><li>
+            <a href="#article-prevent-recording-freezes-by-clearing-residual-pointers-when-camerax-recorder-s-">Prevent recording freezes by clearing residual pointers when CameraX Recorder&#39;s Surface is released</a>
+            <p class="reader-brief-takeaway">This is an example of resolving an asynchronous race condition between the completion of a lower-level encoder Surface release and the framework state machine. It also provides a method for HAL/driver pipeline developers to ensure stability in video stream stopping and Surface re-binding timing.</p>
+          </li><li>
+            <a href="#article-camera2-extensions-ultra-hdr-jpeg-r-resolution-query-limited-to-api-35-and-above">Camera2 Extensions&#39; Ultra HDR (JPEG_R) resolution query limited to API 35 and above</a>
+            <p class="reader-brief-takeaway">This patch defends against runtime crashes caused by version-specific format support differences between the platform framework and lower-level vendor extension implementations. HAL and vendor library development teams must adhere to the enumerated format specifications for each target Android version and maintain consistency to prevent unnecessary exceptions.</p>
+          </li></ol><details class="reader-brief-context"><summary>About this issue</summary><p class="reader-brief-intro">This week&#39;s newsletter brings news of improved stability and compatibility in the camera pipeline. First, CameraX Recorder prevents recording freezes by clearing residual pointers when releasing a Surface. Camera2 Pipe FrameBuffer now includes validation logic to check if a stream set is included, preventing buffering errors. Additionally, a workaround was implemented for the Sony Xperia 1 V device to prevent video snapshots from stopping when sharing four use case streams. Camera2 Extensions&#39; Ultra HDR (JPEG_R) resolution query is now limited to API 35 and above to enhance stability. We hope this helps with your development.</p></details>
+        </div>
+        
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-workaround-for-sony-xperia-1-v-video-snapshot-hang-when-sharing-four-use-case-st" tabindex="-1" aria-labelledby="article-workaround-for-sony-xperia-1-v-video-snapshot-hang-when-sharing-four-use-case-st-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 1">01</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-workaround-for-sony-xperia-1-v-video-snapshot-hang-when-sharing-four-use-case-st-title" class="article-title">Workaround for Sony Xperia 1 V video snapshot hang when sharing four use case streams</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera patch 4399967</p>
+        <p class="article-lead">A problem where snapshot capture would hang during video recording when four use cases were bound simultaneously on the Sony Xperia 1 V device has been bypassed with a CameraX quirk.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This shows that if a HAL refuses to process a specific request template based on the session configuration stream type, it can be resolved by adjusting the capture intent at the framework level. When dealing with similar stream sharing sessions in your environment, you need to check template compatibility and the buffer generation flow.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Workaround for Sony Xperia 1 V video snapshot hang when sharing four use case streams image" loading="lazy" decoding="async">
+        </figure>
+        <p>On the Sony Xperia 1 V (model xq-dq72) device, video snapshot capture would hang and not complete when Preview, VideoCapture, ImageCapture, and ImageAnalysis use cases were run simultaneously. CameraX&#39;s StreamSharing feature merges preview and video capture into a single OpenGL SurfaceTexture stream and passes TEMPLATE_RECORD as the session template to overcome hardware stream limitations.</p>
+        <p>During this process, the session does not include a GraphicBufferSource surface dedicated to the media encoder. The Sony HAL implementation interpreted this as preview and still streaming mode (mode 0 0). It then ignored TEMPLATE_VIDEO_SNAPSHOT requests, regardless of the session template, and did not produce output JPEG buffers.</p>
+        <h3 class="article-subheading">Capture intent override and verification conditions</h3>
+        <p>Google has registered xq-dq72 in the ImageCaptureFailedForVideoSnapshotQuirk target device list. This change causes the capture intent to be redefined as CONTROL_CAPTURE_INTENT_STILL_CAPTURE instead of CONTROL_CAPTURE_INTENT_VIDEO_SNAPSHOT in this environment, prompting the HAL to perform JPEG processing.</p>
+        <p>This change is currently merged into the AndroidX main branch. It has not yet been distributed as an official library version or reflected in commercial product firmware. To verify similar symptoms, you can bind four use cases and then check if snapshot capture callbacks are received normally during video recording, and if there is no frame delay or pipeline congestion.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967">Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-added-validation-logic-for-camera2-pipe-framebuffer-to-check-if-stream-set-is-in" aria-label="Next article: Added validation logic for Camera2 Pipe FrameBuffer to check if stream set is included">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-added-validation-logic-for-camera2-pipe-framebuffer-to-check-if-stream-set-is-in" tabindex="-1" aria-labelledby="article-added-validation-logic-for-camera2-pipe-framebuffer-to-check-if-stream-set-is-in-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 2">02</span>
+          <span class="issue-story-category">AOSP Camera</span>
+        </div>
+        <h2 id="article-added-validation-logic-for-camera2-pipe-framebuffer-to-check-if-stream-set-is-in-title" class="article-title">Added validation logic for Camera2 Pipe FrameBuffer to check if stream set is included</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera patch 4395726</p>
+        <p class="article-lead">Validation logic has been added to the Camera2 Pipe pipeline to prevent frames that do not fully contain the streams required by a buffer from being incorrectly buffered.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>The framework&#39;s internal buffer management layer enforces precise matching with stream request metadata, preventing memory leaks and incorrect output reception. From a HAL development perspective, it is important to be aware that the framework strictly filters stream targets on a per-frame basis.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Added validation logic for Camera2 Pipe FrameBuffer to check if stream set is included image" loading="lazy" decoding="async">
+        </figure>
+        <p>Inside Camera2 Pipe&#39;s FrameGraph, frame references are distributed to each FrameBuffer when frames are generated. In the previous structure, the system could not fully verify whether the streams included in the frame request metadata matched the list of streams required by the FrameBuffer. This created a risk of inappropriate frames entering the queue.</p>
+        <p>With this change, a conditional statement has been added within the FrameBufferImpl&#39;s onFrameStarted callback. It checks if the set of stream keys defined in the incoming FrameReference&#39;s requestMetadata fully contains the set of streams configured for the FrameBuffer. If the frame does not contain all required streams, processing is immediately terminated.</p>
+        <h3 class="article-subheading">Frame isolation for partial stream requests</h3>
+        <p>This change ensures that when a capture request targets only a subset of specific streams, other FrameBuffers that do not include those streams will ignore the frame and preserve their existing buffer state.</p>
+        <p>This patch was merged into the source tree on 2026-10-28 and is in the pre-library release stage. When testing dynamic stream configurations or partial capture pipelines, you can refer to unit verification to ensure that incorrect frame references are not mixed into the buffer flow.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726">Check if buffer&#39;s stream set is contained in request metadata of the Frame - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-workaround-for-sony-xperia-1-v-video-snapshot-hang-when-sharing-four-use-case-st" aria-label="Previous article: Workaround for Sony Xperia 1 V video snapshot hang when sharing four use case streams">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-prevent-recording-freezes-by-clearing-residual-pointers-when-camerax-recorder-s-" aria-label="Next article: Prevent recording freezes by clearing residual pointers when CameraX Recorder&#39;s Surface is released">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-prevent-recording-freezes-by-clearing-residual-pointers-when-camerax-recorder-s-" tabindex="-1" aria-labelledby="article-prevent-recording-freezes-by-clearing-residual-pointers-when-camerax-recorder-s--title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 3">03</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-prevent-recording-freezes-by-clearing-residual-pointers-when-camerax-recorder-s--title" class="article-title">Prevent recording freezes by clearing residual pointers when CameraX Recorder&#39;s Surface is released</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera patch 4399846</p>
+        <p class="article-lead">By clearing residual pointers when a video encoder session&#39;s Surface is released, a problem where the next recording would remain in a permanent pending state after a quick screen transition has been resolved.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This is an example of resolving an asynchronous race condition between the completion of a lower-level encoder Surface release and the framework state machine. It also provides a method for HAL/driver pipeline developers to ensure stability in video stream stopping and Surface re-binding timing.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Prevent recording freezes by clearing residual pointers when CameraX Recorder&#39;s Surface is released image" loading="lazy" decoding="async">
+        </figure>
+        <p>A deadlock was reported in the CameraX Recorder module where video recording would not start when the app&#39;s lifecycle transitioned quickly. Previously, when the VideoEncoderSession&#39;s Surface was terminated and getReadyToReleaseFuture completed, the encoder would reset before onSourceStateChangedInternal(INACTIVE) executed on the sequential executor. This left mActiveSurface pointing to an already released Surface.</p>
+        <p>In this state, when the source deactivation (INACTIVE) signal arrived, the Recorder detected a non-null mActiveSurface. It then set the reset flag (mNeedsResetBeforeNextStart) to true before the next start, while in the CONFIGURING state. This caused the next recording request to permanently wait in the PENDING_RECORDING state.</p>
+        <h3 class="article-subheading">In-callback cleanup and audio retention</h3>
+        <p>The fix explicitly initializes mActiveSurface to null in the success (onSuccess) and failure (onFailure) callbacks of getReadyToReleaseFuture. Additionally, when mActiveSurface is null during source deactivation, the change allows the audio source to be retained for persistent recording.</p>
+        <p>This change was merged into the main branch on 2026-10-30. However, its inclusion in an official library distribution or device product build has not yet been confirmed. A useful check is to confirm that the next recording starts normally without getting stuck in the PENDING_RECORDING state after quick recording start and stop, screen rotation, or reconnecting a new Surface request after a lifecycle transition.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846">Clear Recorder.mActiveSurface on surface release - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-added-validation-logic-for-camera2-pipe-framebuffer-to-check-if-stream-set-is-in" aria-label="Previous article: Added validation logic for Camera2 Pipe FrameBuffer to check if stream set is included">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          <a href="#article-camera2-extensions-ultra-hdr-jpeg-r-resolution-query-limited-to-api-35-and-above" aria-label="Next article: Camera2 Extensions&#39; Ultra HDR (JPEG_R) resolution query limited to API 35 and above">Next article →</a>
+        </nav>
+      </section>
+
+      <section class="section issue-story issue-section article-card story-article has-image" id="article-camera2-extensions-ultra-hdr-jpeg-r-resolution-query-limited-to-api-35-and-above" tabindex="-1" aria-labelledby="article-camera2-extensions-ultra-hdr-jpeg-r-resolution-query-limited-to-api-35-and-above-title">
+        <div class="issue-story-eyebrow">
+          <span class="issue-story-number" aria-label="Article 4">04</span>
+          <span class="issue-story-category">Camera Driver · ISP</span>
+        </div>
+        <h2 id="article-camera2-extensions-ultra-hdr-jpeg-r-resolution-query-limited-to-api-35-and-above-title" class="article-title">Camera2 Extensions&#39; Ultra HDR (JPEG_R) resolution query limited to API 35 and above</h2>
+        <p class="article-source-subtitle">AndroidX Gerrit Camera patch 4402197</p>
+        <p class="article-lead">To prevent abnormal termination when querying Ultra HDR (JPEG_R) supported resolutions in camera extension features, the target API level for queries has been raised to 35 or higher.</p>
+        <div class="article-block camera-hal-takeaway"><strong class="article-block-title">Camera HAL · Driver perspective</strong><p>This patch defends against runtime crashes caused by version-specific format support differences between the platform framework and lower-level vendor extension implementations. HAL and vendor library development teams must adhere to the enumerated format specifications for each target Android version and maintain consistency to prevent unnecessary exceptions.</p></div>
+        <figure class="article-media article-media-decoration" aria-hidden="true">
+        <img class="article-image" src="../../../assets/images/fallback/android.svg" alt="Camera2 Extensions&#39; Ultra HDR (JPEG_R) resolution query limited to API 35 and above image" loading="lazy" decoding="async">
+        </figure>
+        <p>A defect that caused an exception when querying device-supported resolutions in the Camera2 Extensions vendor extension layer has been fixed. The ImageFormat.JPEG_R constant (integer value 4101) was first introduced in Android 14 (API 34). Therefore, the existing query logic was configured to query the extended supported resolutions for this format if the API was 34 or higher.</p>
+        <p>However, the getExtensionSupportedSizes and getPostviewSupportedSizes methods, which are internal implementations of CameraExtensionCharacteristics on the API 34 platform, were hardcoded to only allow two formats: JPEG and YUV_420_888. Consequently, querying JPEG_R on an API 34 device resulted in an IllegalArgumentException, indicating an unsupported format.</p>
+        <h3 class="article-subheading">Elevated extension query guard and verification</h3>
+        <p>JPEG_R support in camera extensions was officially added in Android 15 (API 35). Accordingly, the still capture and postview format query guard in Camera2ExtensionsVendorExtender has been raised to Build.VERSION_CODES.VANILLA_ICE_CREAM (API 35) or higher. Now, in an API 34 environment, only JPEG and YUV_420_888 are queried.</p>
+        <p>This fix is a source code change merged into the Gerrit androidx-main branch on October 30, 2026. The confirmed scope is the commit merge in the main development branch. It has not yet been confirmed whether it is included in an actual distributed library, a formal CameraX release version, or a commercial device product build from a specific manufacturer. You can pre-check for conflicts in the 4101 format query stage during camera extension initialization in an Android 14 device environment.</p>
+        <div class="source-list"><strong>Sources</strong><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197">Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support</a></li></ul></div>
+        <nav class="article-navigation" aria-label="Article navigation">
+          <a href="#article-prevent-recording-freezes-by-clearing-residual-pointers-when-camerax-recorder-s-" aria-label="Previous article: Prevent recording freezes by clearing residual pointers when CameraX Recorder&#39;s Surface is released">← Previous article</a>
+          <a href="#issue-briefing">Back to this week’s highlights</a>
+          
+        </nav>
+      </section>
+
+      <section class="section issue-reference-articles" aria-labelledby="issue-reference-articles-title">
+        <h2 id="issue-reference-articles-title">Further reading</h2>
+        <ul class="reference-articles-list"><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805">Add default implementation for CameraMetadata#isExtensionSupported - platform/frameworks/support</a><span class="reference-meta">AndroidX Gerrit Camera (2026-10-30) · Reference for AOSP Camera framework</span></li></ul>
+      </section>
+
+      <section class="section issue-references" aria-labelledby="issue-references-title">
+        <h2 id="issue-references-title">References</h2>
+        <div class="reference-list"><ul><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967">Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726">Check if buffer&#39;s stream set is contained in request metadata of the Frame - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846">Clear Recorder.mActiveSurface on surface release - platform/frameworks/support</a></li><li><a href="https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197">Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support</a></li></ul></div>
+      </section>
+
+      <nav class="issue-footer-navigation" aria-label="Issue navigation">
+        <a href="../../index.html">← Back to newsroom</a>
+        <span aria-hidden="true">·</span>
+        <a href="../../archive.html">View all issues →</a>
+      </nav>
+
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="content-wrap footer-inner">
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span class="footer-col-title">Newsletter</span>
+          <a class="footer-link" href="../../../en/index.html">Home</a>
+          <a class="footer-link" href="../../../en/archive.html">Archive</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Topics</span>
+          <span class="footer-note">Camera HAL · Android</span>
+          <span class="footer-note">Driver · Image Processing</span>
+          <span class="footer-note">AI · SoC Platform · C++</span>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Resources</span>
+          <a class="footer-link" href="../../../learning/ai-engineering/index.html">AI Engineering Lab</a>
+          <a class="footer-link" href="https://github.com/TTolsun/camera-hal-sw-newsletter">GitHub</a>
+          <span class="footer-note">RSS (coming soon)</span>
+          <span class="footer-note">Editorial policy (coming soon)</span>
+        </div>
+      </div>
+      <div class="footer-legal"><small>© 2026 Camera SW Newsletter · Collected by the Gemini newsroom, reviewed and published by people.</small></div>
+    </div>
+  </footer>
+</body>
+</html>
