@@ -92,7 +92,82 @@
     "coverage_start_date": "2026-10-26",
     "coverage_end_date": "2026-11-01",
     "coverage_mode": "iso_week",
-    "generation_anchor_date": "2026-11-02"
+    "generation_anchor_date": "2026-11-02",
+    "en": {
+      "title": "2026 W45",
+      "summary": "Workaround for Sony Xperia 1 V video snapshot hang when sharing four use case streams\nAdded validation logic for Camera2 Pipe FrameBuffer to check if stream set is included\nPrevent recording freezes by clearing residual pointers when CameraX Recorder's Surface is released\nCamera2 Extensions' Ultra HDR (JPEG_R) resolution query limited to API 35 and above",
+      "reader_brief": {
+        "schema_version": 1,
+        "locale": "en",
+        "intro": "This week's newsletter brings news of improved stability and compatibility in the camera pipeline. First, CameraX Recorder prevents recording freezes by clearing residual pointers when releasing a Surface. Camera2 Pipe FrameBuffer now includes validation logic to check if a stream set is included, preventing buffering errors. Additionally, a workaround was implemented for the Sony Xperia 1 V device to prevent video snapshots from stopping when sharing four use case streams. Camera2 Extensions' Ultra HDR (JPEG_R) resolution query is now limited to API 35 and above to enhance stability. We hope this helps with your development.",
+        "items": [
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+            "href": "en/newsletters/2026-W45/index.html#article-workaround-for-sony-xperia-1-v-video-snapshot-hang-when-sharing-four-use-case-st",
+            "headline": "Workaround for Sony Xperia 1 V video snapshot hang when sharing four use case streams",
+            "lead": "A problem where snapshot capture would hang during video recording when four use cases were bound simultaneously on the Sony Xperia 1 V device has been bypassed with a CameraX quirk.",
+            "takeaway": "This shows that if a HAL refuses to process a specific request template based on the session configuration stream type, it can be resolved by adjusting the capture intent at the framework level. When dealing with similar stream sharing sessions in your environment, you need to check template compatibility and the buffer generation flow.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+            "href": "en/newsletters/2026-W45/index.html#article-added-validation-logic-for-camera2-pipe-framebuffer-to-check-if-stream-set-is-in",
+            "headline": "Added validation logic for Camera2 Pipe FrameBuffer to check if stream set is included",
+            "lead": "Validation logic has been added to the Camera2 Pipe pipeline to prevent frames that do not fully contain the streams required by a buffer from being incorrectly buffered.",
+            "takeaway": "The framework's internal buffer management layer enforces precise matching with stream request metadata, preventing memory leaks and incorrect output reception. From a HAL development perspective, it is important to be aware that the framework strictly filters stream targets on a per-frame basis.",
+            "tags": [
+              "Camera HAL"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+            "href": "en/newsletters/2026-W45/index.html#article-prevent-recording-freezes-by-clearing-residual-pointers-when-camerax-recorder-s-",
+            "headline": "Prevent recording freezes by clearing residual pointers when CameraX Recorder's Surface is released",
+            "lead": "By clearing residual pointers when a video encoder session's Surface is released, a problem where the next recording would remain in a permanent pending state after a quick screen transition has been resolved.",
+            "takeaway": "This is an example of resolving an asynchronous race condition between the completion of a lower-level encoder Surface release and the framework state machine. It also provides a method for HAL/driver pipeline developers to ensure stability in video stream stopping and Surface re-binding timing.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          },
+          {
+            "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+            "href": "en/newsletters/2026-W45/index.html#article-camera2-extensions-ultra-hdr-jpeg-r-resolution-query-limited-to-api-35-and-above",
+            "headline": "Camera2 Extensions' Ultra HDR (JPEG_R) resolution query limited to API 35 and above",
+            "lead": "To prevent abnormal termination when querying Ultra HDR (JPEG_R) supported resolutions in camera extension features, the target API level for queries has been raised to 35 or higher.",
+            "takeaway": "This patch defends against runtime crashes caused by version-specific format support differences between the platform framework and lower-level vendor extension implementations. HAL and vendor library development teams must adhere to the enumerated format specifications for each target Android version and maintain consistency to prevent unnecessary exceptions.",
+            "tags": [
+              "Driver",
+              "Image Processing"
+            ],
+            "image": {
+              "src": "assets/images/fallback/android.svg",
+              "alt": "",
+              "is_fallback": true
+            }
+          }
+        ]
+      },
+      "html": "en/newsletters/2026-W45/index.html",
+      "md": "en/newsletters/2026-W45/newsletter.md"
+    }
   },
   {
     "weeklyKey": "2026-W44",
