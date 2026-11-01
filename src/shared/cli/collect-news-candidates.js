@@ -2468,6 +2468,7 @@ module.exports = {
   dedupe,
   evidenceMetadata,
   rawItemEvidenceMetadata,
+  rawItemText,
   SEED_PAGE_SOURCE_KIND,
   fetchUrlForContent,
   isSourceChangeEventCandidate,
