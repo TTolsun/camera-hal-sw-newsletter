@@ -38,40 +38,6 @@
       ]
     },
     {
-      "cluster_id": "0a06e25e54bfce2a",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
-      "canonical_title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
-          "title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "34671b4d070dc776",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393468",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393468",
-      "canonical_title": "Enable StreamSharing for Preview+VideoCapture+ImageCapture on Sony SO-52B - platform/frameworks/support",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393468",
-          "title": "Enable StreamSharing for Preview+VideoCapture+ImageCapture on Sony SO-52B - platform/frameworks/support",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "b2bb17a2944ca903",
       "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805",
       "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805",
@@ -106,6 +72,57 @@
       ]
     },
     {
+      "cluster_id": "0a06e25e54bfce2a",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "canonical_title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+          "title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "34671b4d070dc776",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393468",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393468",
+      "canonical_title": "Enable StreamSharing for Preview+VideoCapture+ImageCapture on Sony SO-52B - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393468",
+          "title": "Enable StreamSharing for Preview+VideoCapture+ImageCapture on Sony SO-52B - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "fce9a9fcadc8168f",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4397106",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4397106",
+      "canonical_title": "Add Zebra TC77 to ImageCaptureFlashNotFireQuirk - platform/frameworks/support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4397106",
+          "title": "Add Zebra TC77 to ImageCaptureFlashNotFireQuirk - platform/frameworks/support",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "49d58944bd3ca26f",
       "cluster_key": "https://developer.android.com/jetpack/androidx/releases/camera",
       "canonical_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc01",
@@ -130,23 +147,6 @@
       ]
     },
     {
-      "cluster_id": "fce9a9fcadc8168f",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4397106",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4397106",
-      "canonical_title": "Add Zebra TC77 to ImageCaptureFlashNotFireQuirk - platform/frameworks/support",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4397106",
-          "title": "Add Zebra TC77 to ImageCaptureFlashNotFireQuirk - platform/frameworks/support",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "d584298342e95060",
       "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
       "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/av/+/4348947",
@@ -164,33 +164,16 @@
       ]
     },
     {
-      "cluster_id": "1bff7254dcd7b771",
-      "cluster_key": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
-      "canonical_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
-      "canonical_title": "v0.8.0",
+      "cluster_id": "09cd41d724024cd5",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261029050002.3880-2-lachlan.michael@sony.com",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261029050002.3880-2-lachlan.michael@sony.com/",
+      "canonical_title": "[PATCH v6 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
-          "title": "v0.8.0",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "077288fdc05ac7ec",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261028093003.722745-1-xiaqinghuan@mail.ustc.edu.cn",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261028093003.722745-1-xiaqinghuan@mail.ustc.edu.cn/",
-      "canonical_title": "[PATCH v2 0/9] media: camss: add SM8750 support",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20261028093003.722745-1-xiaqinghuan@mail.ustc.edu.cn/",
-          "title": "[PATCH v2 0/9] media: camss: add SM8750 support",
+          "url": "https://lore.kernel.org/linux-media/20261029050002.3880-2-lachlan.michael@sony.com/",
+          "title": "[PATCH v6 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -215,6 +198,23 @@
       ]
     },
     {
+      "cluster_id": "077288fdc05ac7ec",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261028093003.722745-1-xiaqinghuan@mail.ustc.edu.cn",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261028093003.722745-1-xiaqinghuan@mail.ustc.edu.cn/",
+      "canonical_title": "[PATCH v2 0/9] media: camss: add SM8750 support",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://lore.kernel.org/linux-media/20261028093003.722745-1-xiaqinghuan@mail.ustc.edu.cn/",
+          "title": "[PATCH v2 0/9] media: camss: add SM8750 support",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
       "cluster_id": "515db6b451f6d26c",
       "cluster_key": "https://lore.kernel.org/linux-media/20261030-hawi-maili-camss-v3-0-9742bca8cef2@oss.qualcomm.com",
       "canonical_url": "https://lore.kernel.org/linux-media/20261030-hawi-maili-camss-v3-0-9742bca8cef2@oss.qualcomm.com/",
@@ -232,50 +232,16 @@
       ]
     },
     {
-      "cluster_id": "09cd41d724024cd5",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261029050002.3880-2-lachlan.michael@sony.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261029050002.3880-2-lachlan.michael@sony.com/",
-      "canonical_title": "[PATCH v6 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
+      "cluster_id": "1bff7254dcd7b771",
+      "cluster_key": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+      "canonical_url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+      "canonical_title": "v0.8.0",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://lore.kernel.org/linux-media/20261029050002.3880-2-lachlan.michael@sony.com/",
-          "title": "[PATCH v6 1/2] media: dt-bindings: imx908: Add Sony IMX908 sensor",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "d81732359f11f052",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261029123107.28705-1-xiaqinghuan@mail.ustc.edu.cn",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261029123107.28705-1-xiaqinghuan@mail.ustc.edu.cn/",
-      "canonical_title": "[PATCH 0/3] media: camss: three fixes for the CSID power and VFE streaming paths",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20261029123107.28705-1-xiaqinghuan@mail.ustc.edu.cn/",
-          "title": "[PATCH 0/3] media: camss: three fixes for the CSID power and VFE streaming paths",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "0743efa3b6551050",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261031041154.308030-1-xiaqinghuan@mail.ustc.edu.cn",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261031041154.308030-1-xiaqinghuan@mail.ustc.edu.cn/",
-      "canonical_title": "[PATCH v2 0/2] media: camss: CSID power-on unwind and VFE stream handling",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20261031041154.308030-1-xiaqinghuan@mail.ustc.edu.cn/",
-          "title": "[PATCH v2 0/2] media: camss: CSID power-on unwind and VFE stream handling",
+          "url": "https://gitlab.com/libcamera/libcamera/-/tags/v0.8.0",
+          "title": "v0.8.0",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -300,33 +266,33 @@
       ]
     },
     {
-      "cluster_id": "c778ff898d0a0c51",
-      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4333118",
-      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4333118",
-      "canonical_title": "Avoid SurfaceView with Extensions on API <= 33 - platform/frameworks/support",
+      "cluster_id": "0743efa3b6551050",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261031041154.308030-1-xiaqinghuan@mail.ustc.edu.cn",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261031041154.308030-1-xiaqinghuan@mail.ustc.edu.cn/",
+      "canonical_title": "[PATCH v2 0/2] media: camss: CSID power-on unwind and VFE stream handling",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4333118",
-          "title": "Avoid SurfaceView with Extensions on API <= 33 - platform/frameworks/support",
+          "url": "https://lore.kernel.org/linux-media/20261031041154.308030-1-xiaqinghuan@mail.ustc.edu.cn/",
+          "title": "[PATCH v2 0/2] media: camss: CSID power-on unwind and VFE stream handling",
           "canonical": true,
-          "reliability": "official",
+          "reliability": "project-official",
           "manual_seed": false
         }
       ]
     },
     {
-      "cluster_id": "d1ebf6ac4346ec99",
-      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20261009",
-      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20261009",
-      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20261009",
+      "cluster_id": "d81732359f11f052",
+      "cluster_key": "https://lore.kernel.org/linux-media/20261029123107.28705-1-xiaqinghuan@mail.ustc.edu.cn",
+      "canonical_url": "https://lore.kernel.org/linux-media/20261029123107.28705-1-xiaqinghuan@mail.ustc.edu.cn/",
+      "canonical_title": "[PATCH 0/3] media: camss: three fixes for the CSID power and VFE streaming paths",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20261009",
-          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20261009",
+          "url": "https://lore.kernel.org/linux-media/20261029123107.28705-1-xiaqinghuan@mail.ustc.edu.cn/",
+          "title": "[PATCH 0/3] media: camss: three fixes for the CSID power and VFE streaming paths",
           "canonical": true,
           "reliability": "project-official",
           "manual_seed": false
@@ -368,50 +334,16 @@
       ]
     },
     {
-      "cluster_id": "5383bfc0408ae81d",
-      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
-      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
-      "canonical_title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
+      "cluster_id": "d6a65774fdc1e001",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424688",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424688",
+      "canonical_title": "camera: Check overflow in Size::area() and validate thumbnail size - chromiumos/platform2",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
-          "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "8d28e7d3853c3aef",
-      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
-      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
-      "canonical_title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
-          "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "8c3e4fdd73ea0301",
-      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
-      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
-      "canonical_title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
-          "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424688",
+          "title": "camera: Check overflow in Size::area() and validate thumbnail size - chromiumos/platform2",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -436,16 +368,50 @@
       ]
     },
     {
-      "cluster_id": "d6a65774fdc1e001",
-      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424688",
-      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424688",
-      "canonical_title": "camera: Check overflow in Size::area() and validate thumbnail size - chromiumos/platform2",
+      "cluster_id": "8c3e4fdd73ea0301",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+      "canonical_title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424688",
-          "title": "camera: Check overflow in Size::area() and validate thumbnail size - chromiumos/platform2",
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424689",
+          "title": "camera: Prevent buffer UAF on PortraitModeEffect timeout - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "8d28e7d3853c3aef",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+      "canonical_title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424691",
+          "title": "camera: Validate plane offsets in RegisterBuffer - chromiumos/platform2",
+          "canonical": true,
+          "reliability": "official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "5383bfc0408ae81d",
+      "cluster_key": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "canonical_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+      "canonical_title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8424690",
+          "title": "camera: Validate plane sizes against dmabuf bounds in RegisterBuffer - chromiumos/platform2",
           "canonical": true,
           "reliability": "official",
           "manual_seed": false
@@ -487,35 +453,154 @@
       ]
     },
     {
-      "cluster_id": "f1ceeb4a768300a7",
-      "cluster_key": "https://www.reddit.com/r/androiddev/comments/1x93m0w/obs_studio_running_on_android_via_termux_without",
-      "canonical_url": "https://www.reddit.com/r/androiddev/comments/1x93m0w/obs_studio_running_on_android_via_termux_without/",
-      "canonical_title": "OBS Studio running on android via termux without proot or root.",
+      "cluster_id": "c778ff898d0a0c51",
+      "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4333118",
+      "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4333118",
+      "canonical_title": "Avoid SurfaceView with Extensions on API <= 33 - platform/frameworks/support",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://www.reddit.com/r/androiddev/comments/1x93m0w/obs_studio_running_on_android_via_termux_without/",
-          "title": "OBS Studio running on android via termux without proot or root.",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4333118",
+          "title": "Avoid SurfaceView with Extensions on API <= 33 - platform/frameworks/support",
           "canonical": true,
-          "reliability": "community",
+          "reliability": "official",
           "manual_seed": false
         }
       ]
     },
     {
-      "cluster_id": "eaa70eb128e994a9",
-      "cluster_key": "https://www.reddit.com/r/androiddev/comments/1x8sd2a/i_hate_camerax_so_i_made_it_a_one_liner",
-      "canonical_url": "https://www.reddit.com/r/androiddev/comments/1x8sd2a/i_hate_camerax_so_i_made_it_a_one_liner/",
-      "canonical_title": "I hate CameraX, so I made it a one liner :)",
+      "cluster_id": "48d150a21e3c2607",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28704",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28704/",
+      "canonical_title": "[v5,01/11] libcamera: software_isp: Centre the crop the GPU debayer applies",
       "candidate_count": 1,
       "duplicate_count": 0,
       "candidates": [
         {
-          "url": "https://www.reddit.com/r/androiddev/comments/1x8sd2a/i_hate_camerax_so_i_made_it_a_one_liner/",
-          "title": "I hate CameraX, so I made it a one liner :)",
+          "url": "https://patchwork.libcamera.org/patch/28704/",
+          "title": "[v5,01/11] libcamera: software_isp: Centre the crop the GPU debayer applies",
           "canonical": true,
-          "reliability": "community",
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "1f373f2da03cd2fd",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28693",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28693/",
+      "canonical_title": "[v4,1/9] libcamera: Document ScalerCrop in physical pixel-array coordinates",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28693/",
+          "title": "[v4,1/9] libcamera: Document ScalerCrop in physical pixel-array coordinates",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "975e114ab2d58137",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28726",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28726/",
+      "canonical_title": "[v2,1/8] libcamera: software_isp: Let a single point decide about computing stats",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28726/",
+          "title": "[v2,1/8] libcamera: software_isp: Let a single point decide about computing stats",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "0aea05105492cae6",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28720",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28720/",
+      "canonical_title": "[v2,1/2] libcamera: software_isp: Add AllocCmaDmaBuffers constructor flag",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28720/",
+          "title": "[v2,1/2] libcamera: software_isp: Add AllocCmaDmaBuffers constructor flag",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "074d9a2df91313b9",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28604",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28604/",
+      "canonical_title": "[v7,1/5] libcamera: software_isp: Add support for monochrome formats - Shaders",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28604/",
+          "title": "[v7,1/5] libcamera: software_isp: Add support for monochrome formats - Shaders",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "304c2d5573ba564a",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28702",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28702/",
+      "canonical_title": "libcamera: software_isp: debayer_egl: Fix texture sampling steps",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28702/",
+          "title": "libcamera: software_isp: debayer_egl: Fix texture sampling steps",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "7fa8007569c812d7",
+      "cluster_key": "https://patchwork.libcamera.org/patch/28691",
+      "canonical_url": "https://patchwork.libcamera.org/patch/28691/",
+      "canonical_title": "[v4,1/1] libcamera: v4l2_subdevice: Return optional selection rectangles",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://patchwork.libcamera.org/patch/28691/",
+          "title": "[v4,1/1] libcamera: v4l2_subdevice: Return optional selection rectangles",
+          "canonical": true,
+          "reliability": "project-official",
+          "manual_seed": false
+        }
+      ]
+    },
+    {
+      "cluster_id": "d1ebf6ac4346ec99",
+      "cluster_key": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2brpt20261009",
+      "canonical_url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20261009",
+      "canonical_title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20261009",
+      "candidate_count": 1,
+      "duplicate_count": 0,
+      "candidates": [
+        {
+          "url": "https://github.com/raspberrypi/libcamera/releases/tag/v0.7.2%2Brpt20261009",
+          "title": "Raspberry Pi libcamera Releases - v0.7.2+rpt20261009",
+          "canonical": true,
+          "reliability": "project-official",
           "manual_seed": false
         }
       ]
@@ -759,91 +844,6 @@
       ]
     },
     {
-      "cluster_id": "cd81f181e09678fd",
-      "cluster_key": "https://developer.android.com/blog/posts/ai-agents-android-studio-integration",
-      "canonical_url": "https://developer.android.com/blog/posts/ai-agents-android-studio-integration",
-      "canonical_title": "Your favorite agents are now integrated in Android Studio",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/blog/posts/ai-agents-android-studio-integration",
-          "title": "Your favorite agents are now integrated in Android Studio",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "227a219cfd1ce06b",
-      "cluster_key": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
-      "canonical_url": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
-      "canonical_title": "Introducing the Googlebook Linux Terminal Preview: A VM-Backed Environment for AI and Development",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/blog/posts/googlebook-linux-terminal-preview-vm",
-          "title": "Introducing the Googlebook Linux Terminal Preview: A VM-Backed Environment for AI and Development",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "00e55c99b31a2f0f",
-      "cluster_key": "https://developer.android.com/blog/posts/reliable-way-to-add-and-edit-contacts-android",
-      "canonical_url": "https://developer.android.com/blog/posts/reliable-way-to-add-and-edit-contacts-android",
-      "canonical_title": "A more reliable way to add and edit contacts on Android",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/blog/posts/reliable-way-to-add-and-edit-contacts-android",
-          "title": "A more reliable way to add and edit contacts on Android",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "17980be8470165b3",
-      "cluster_key": "https://developer.android.com/blog/posts/google-play-discovery-engagement-growth",
-      "canonical_url": "https://developer.android.com/blog/posts/google-play-discovery-engagement-growth",
-      "canonical_title": "New ways to drive smarter discovery, deeper engagement, and business growth on Google Play",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://developer.android.com/blog/posts/google-play-discovery-engagement-growth",
-          "title": "New ways to drive smarter discovery, deeper engagement, and business growth on Google Play",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "20a7e49d96747829",
-      "cluster_key": "https://lore.kernel.org/linux-media/20261028052047.2738893-1-anusha.nandi@oss.qualcomm.com",
-      "canonical_url": "https://lore.kernel.org/linux-media/20261028052047.2738893-1-anusha.nandi@oss.qualcomm.com/",
-      "canonical_title": "[PATCH v2] phy: qcom-mipi-csi2: Add support for single power-domain SoCs",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://lore.kernel.org/linux-media/20261028052047.2738893-1-anusha.nandi@oss.qualcomm.com/",
-          "title": "[PATCH v2] phy: qcom-mipi-csi2: Add support for single power-domain SoCs",
-          "canonical": true,
-          "reliability": "project-official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
       "cluster_id": "801f1676efc6b5d5",
       "cluster_key": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
       "canonical_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
@@ -874,108 +874,6 @@
           "canonical": true,
           "reliability": "official",
           "manual_seed": true
-        }
-      ]
-    },
-    {
-      "cluster_id": "7d1e67602b79321d",
-      "cluster_key": "https://issuetracker.google.com/issues/563673593",
-      "canonical_url": "https://issuetracker.google.com/issues/563673593",
-      "canonical_title": "b/563673593",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://issuetracker.google.com/issues/563673593",
-          "title": "b/563673593",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "f49dbaa66e94a444",
-      "cluster_key": "https://issuetracker.google.com/issues/558819242",
-      "canonical_url": "https://issuetracker.google.com/issues/558819242",
-      "canonical_title": "b/558819242",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://issuetracker.google.com/issues/558819242",
-          "title": "b/558819242",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "048720ba5ccda09d",
-      "cluster_key": "https://issuetracker.google.com/issues/556807521",
-      "canonical_url": "https://issuetracker.google.com/issues/556807521",
-      "canonical_title": "b/556807521",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://issuetracker.google.com/issues/556807521",
-          "title": "b/556807521",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "df43d076e6a8541c",
-      "cluster_key": "https://issuetracker.google.com/issues/551348846",
-      "canonical_url": "https://issuetracker.google.com/issues/551348846",
-      "canonical_title": "b/551348846",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://issuetracker.google.com/issues/551348846",
-          "title": "b/551348846",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "517f86acd1acb800",
-      "cluster_key": "https://issuetracker.google.com/issues/545866947",
-      "canonical_url": "https://issuetracker.google.com/issues/545866947",
-      "canonical_title": "b/545866947",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://issuetracker.google.com/issues/545866947",
-          "title": "b/545866947",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
-        }
-      ]
-    },
-    {
-      "cluster_id": "bc8bbcb9fe0bad4e",
-      "cluster_key": "https://issuetracker.google.com/issues/543937345",
-      "canonical_url": "https://issuetracker.google.com/issues/543937345",
-      "canonical_title": "b/543937345",
-      "candidate_count": 1,
-      "duplicate_count": 0,
-      "candidates": [
-        {
-          "url": "https://issuetracker.google.com/issues/543937345",
-          "title": "b/543937345",
-          "canonical": true,
-          "reliability": "official",
-          "manual_seed": false
         }
       ]
     },
