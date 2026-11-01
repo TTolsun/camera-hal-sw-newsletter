@@ -460,7 +460,10 @@ function seedCandidateFromEvidence({
     briefing_only: !datedFacts,
     reference_only: !datedFacts
   });
-  const scope = classifyAospCameraStackCandidate(output);
+  // 범위 분류도 같은 이유로 파서 요약 그대로를 읽는다. output.summary는 220자로 다듬은 근거 문장이라
+  // Gerrit 요약 뒤쪽의 camera 파일 경로가 잘려 나가고, 그러면 카메라 변경이 generic_tech_watchlist로
+  // 떨어져 main에 오를 수 없다(2026-11-02 4402197·4399846 실측).
+  const scope = classifyAospCameraStackCandidate({ ...output, summary: candidate.summary || output.summary });
   const quality = classifySourceQuality({
     candidate: {
       ...output,

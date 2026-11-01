@@ -730,6 +730,55 @@ test('Gerrit change seeds are read through REST detail because the change page h
   assert.equal(result.stats.seed_fetch_failed_count, 2);
 });
 
+test('Gerrit seed scope reads the full summary so camera file paths past 220 chars still count', async () => {
+  const root = tempRoot();
+  const date = '2026-11-02';
+  const sha = 'c'.repeat(40);
+  // 제목과 commit message에는 카메라 용어가 없고, 카메라 근거는 요약 뒤쪽의 파일 경로뿐이다.
+  const detail = {
+    _number: 4402197,
+    project: 'platform/frameworks/support',
+    branch: 'androidx-main',
+    status: 'MERGED',
+    change_id: 'I' + 'd'.repeat(40),
+    subject: 'Only query JPEG_R extension sizes on API 35+',
+    created: '2026-10-28 10:00:00.000000000',
+    submitted: '2026-10-30 06:11:10.000000000',
+    insertions: 86,
+    deletions: 40,
+    labels: { 'Code-Review': { approved: { _account_id: 1 } } },
+    current_revision: sha,
+    revisions: { [sha]: { commit: { message: 'Subject\n\nRaise the format guard to API 35.\n\nChange-Id: I2' }, files: {
+      '/COMMIT_MSG': {},
+      'camera/camera-extensions/src/main/java/androidx/camera/extensions/internal/VendorExtender.kt': {}
+    } } }
+  };
+  const fetchTextImpl = async () => ")]}'\n" + JSON.stringify(detail);
+  const result = await runSeedEvidenceExpansion({
+    root,
+    date,
+    manualPayload: { schema_version: 5, date, newsletter_date: date, candidates: [] },
+    collectionIntent: { payload: { schema_version: 1, newsletter_date: date, keyword_hints: [], seed_urls: [
+      { seed_id: 'seed-extensions', url: 'https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197' }
+    ] } },
+    sourceRegistryPath: path.join(__dirname, '..', '..', 'data', 'news-sources.json'),
+    lookupImpl: publicLookup,
+    fetchImpl: async url => ({ ok: true, url, text: fetchTextImpl })
+  });
+
+  const [candidate] = result.seedCandidates;
+  const { candidate: listed } = await resolveGerritChangeUrl(
+    'https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197',
+    registrySources(),
+    { fetchTextImpl }
+  );
+  const collected = normalizeCandidate(listed);
+  assert.ok(listed.summary.length > 220, 'fixture must push the camera path past the 220-char evidence cut');
+  assert.notEqual(candidate.aosp_camera_stack_bucket, 'generic_tech_watchlist');
+  assert.equal(candidate.aosp_camera_stack_bucket, collected.aosp_camera_stack_bucket);
+  assert.equal(candidate.relevance_bucket, collected.relevance_bucket);
+});
+
 test('seed expansion source_extraction_ref uses actual pack index after blocked first seed', async () => {
   const root = tempRoot();
   const date = '2026-05-16';
