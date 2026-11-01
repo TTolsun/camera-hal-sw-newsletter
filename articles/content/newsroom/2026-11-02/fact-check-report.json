@@ -1,0 +1,379 @@
+{
+  "status": "PASS",
+  "must_fix": [],
+  "recommended_fixes": [
+    "섹션 0 (Sony Xperia 1 V 비디오 스냅샷 우회): 커밋 메시지에 언급된 바와 같이, 해당 기기에서 4개 유스케이스 조합 테스트(UseCaseCombinationTest)의 모든 실패를 완전히 해결하기 위해서는 본 패치(b/579151162) 외에 EncoderImpl의 pre-start 버퍼 드레인 패치(b/579234725)가 함께 필요하다는 점을 본문에 짤막히 덧붙이면 실무 검증 관점에서 더욱 유용합니다."
+  ],
+  "source_gaps": [],
+  "source_gap_count": 0,
+  "article_quality": [
+    {
+      "section_index": 0,
+      "headline": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "AndroidX Camera2의 ImageCaptureFailedForVideoSnapshotQuirk 대상 기기에 Sony Xperia 1 V(xq-dq72)를 추가하여, StreamSharing 세션에서 TEMPLATE_VIDEO_SNAPSHOT 요청 시 인텐트를 CONTROL_CAPTURE_INTENT_STILL_CAPTURE로 재정의함으로써 캡처 중단을 우회하도록 수정함.",
+        "article_explanation": "공개 본문은 적용 기기(xq-dq72) 및 4개 유스케이스 바인딩 조건에서 GraphicBufferSource 부재로 인해 발생하는 HAL의 비디오 스냅샷 버퍼 미생산 문제를 설명하고, STILL_CAPTURE 인텐트로 대체하는 우회 원리와 확인 제안 및 라이브러리 미출시 한계를 모두 서술함.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:body_markdown:0",
+              "0:body_markdown:1",
+              "0:body_markdown:3"
+            ],
+            "reason": "적용 모델(xq-dq72)과 StreamSharing 4개 유스케이스 결합 조건, 그리고 변경 전의 스냅샷 멈춤 및 변경 후 STILL_CAPTURE 인텐트 대체 동작을 충실히 설명함.",
+            "verified_passages": [
+              {
+                "id": "0:body_markdown:0",
+                "text": "Sony Xperia 1 V (모델명 xq-dq72) 기기에서 Preview, VideoCapture, ImageCapture, ImageAnalysis 4개 유스케이스를 동시에 실행할 때 비디오 스냅샷 촬영이 완료되지 않고 멈추는 현상이 발생했습니다. CameraX의 StreamSharing 기능은 하드웨어 스트림 수 제한을 극복하기 위해 미리보기와 비디오 캡처를 OpenGL SurfaceTexture 단일 스트림으로 병합하고 세션 템플릿으로 TEMPLATE_RECORD를 전달합니다."
+              },
+              {
+                "id": "0:body_markdown:1",
+                "text": "이 과정에서 세션에 미디어 인코더 전용 GraphicBufferSource surface가 포함되지 않게 됩니다. Sony HAL 구현은 이를 미리보기와 스틸 스트리밍 모드(모드 0 0)로 인식하여, 세션 템플릿과 무관하게 전달되는 TEMPLATE_VIDEO_SNAPSHOT 요청을 무시하고 출력 JPEG 버퍼를 생산하지 않는 동작을 보였습니다."
+              },
+              {
+                "id": "0:body_markdown:3",
+                "text": "구글은 ImageCaptureFailedForVideoSnapshotQuirk 대상 기기 목록에 xq-dq72를 등록했습니다. 이를 통해 해당 환경에서는 캡처 인텐트를 CONTROL_CAPTURE_INTENT_VIDEO_SNAPSHOT 대신 CONTROL_CAPTURE_INTENT_STILL_CAPTURE로 재정의하여 HAL이 JPEG 처리를 수행하도록 유도합니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:body_markdown:4"
+            ],
+            "reason": "4개 유스케이스 바인딩 및 비디오 녹화 중 스냅샷 촬영이라는 입력 조건과 콜백 수신 및 파이프라인 정체 여부라는 관찰 결과를 제시함.",
+            "verified_passages": [
+              {
+                "id": "0:body_markdown:4",
+                "text": "이 변경은 현재 AndroidX 메인 브랜치에 병합된 단계이며 공식 라이브러리 버전으로 배포되거나 상용 제품 펌웨어에 반영된 것은 아닙니다. 유사한 증상을 검증할 때는 4개 유스케이스를 바인딩한 뒤 비디오 녹화 도중 스냅샷 촬영 콜백이 정상적으로 수신되는지, 프레임 지연이나 파이프라인 정체가 없는지 확인할 수 있습니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:body_markdown:4"
+            ],
+            "reason": "AndroidX 메인 브랜치 병합 상태와 공식 배포 버전 및 기기 펌웨어 미반영 범위를 명확히 구분하여 서술함.",
+            "verified_passages": [
+              {
+                "id": "0:body_markdown:4",
+                "text": "이 변경은 현재 AndroidX 메인 브랜치에 병합된 단계이며 공식 라이브러리 버전으로 배포되거나 상용 제품 펌웨어에 반영된 것은 아닙니다. 유사한 증상을 검증할 때는 4개 유스케이스를 바인딩한 뒤 비디오 녹화 도중 스냅샷 촬영 콜백이 정상적으로 수신되는지, 프레임 지연이나 파이프라인 정체가 없는지 확인할 수 있습니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "0:body_markdown:3",
+              "0:camera_hal_takeaway:0"
+            ],
+            "reason": "HAL 자체 수정이 아니라 프레임워크 수준에서 캡처 인텐트를 조정하는 쿼크 우회 조치임을 정확히 한정함.",
+            "source_behavior": "Sony xq-dq72에서 GraphicBufferSource가 없는 StreamSharing 환경 시 HAL이 비디오 스냅샷 요청을 무시하므로, STILL_CAPTURE 인텐트로 대체하도록 쿼크에 모델을 추가함.",
+            "article_behavior": "HAL이 비디오 스냅샷 요청을 무시하는 현상을 프레임워크 계층의 인텐트 재정의 쿼크를 통해 우회하도록 유도함을 정확히 서술함.",
+            "verified_passages": [
+              {
+                "id": "0:body_markdown:3",
+                "text": "구글은 ImageCaptureFailedForVideoSnapshotQuirk 대상 기기 목록에 xq-dq72를 등록했습니다. 이를 통해 해당 환경에서는 캡처 인텐트를 CONTROL_CAPTURE_INTENT_VIDEO_SNAPSHOT 대신 CONTROL_CAPTURE_INTENT_STILL_CAPTURE로 재정의하여 HAL이 JPEG 처리를 수행하도록 유도합니다."
+              },
+              {
+                "id": "0:camera_hal_takeaway:0",
+                "text": "HAL이 세션 구성 스트림 유형에 따라 특정 요청 템플릿 처리를 거부하는 경우 프레임워크 수준에서 캡처 인텐트를 조정해 해결할 수 있음을 보여줍니다. 독자 환경에서 유사한 스트림 공유 세션을 다룰 때 템플릿 호환성과 버퍼 생성 흐름을 점검할 필요가 있습니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "특정 기기에서 스트림 공유 및 GraphicBufferSource 부재 시 발생하는 HAL 모드 전환 특성과 프레임워크 쿼크 해결책을 실무적으로 명확히 전달함. / 원문의 적용 조건, 변경 전후의 동작 원리, 공개 본문 차원의 검증 제안 및 릴리스 한계가 왜곡이나 과장 없이 정확히 서술되었습니다. / 원문의 발생 조건, 쿼크 우회 원리, AndroidX 메인 브랜치 병합 상태 및 미배포 한계, 그리고 구체적인 관찰 확인 제안이 사실에 부합하게 설명되어 있습니다."
+    },
+    {
+      "section_index": 1,
+      "headline": "Camera2 Pipe FrameBuffer의 스트림 세트 포함 여부 검증 로직 추가",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "FrameBufferImpl.onFrameStarted 콜백에서 들어오는 FrameReference의 requestMetadata.streams.keys가 FrameBuffer에 구성된 streams를 모두 포함하고 있는지(containsAll) 확인하여, 포함하지 않으면 즉시 리턴하여 버퍼링을 건너뛰도록 처리함.",
+        "article_explanation": "공개 본문은 변경 전 프레임 메타데이터 스트림과 버퍼 요구 스트림의 불일치로 인한 오버퍼링 위험, FrameBufferImpl.onFrameStarted 내 containsAll 검증 분기 추가 및 조기 종료 원리, 부분 스트림 요청 시 프레임 무시 및 버퍼 상태 유지 관찰 방법, 2026-10-28 병합 및 라이브러리 릴리스 전 단계라는 반영 한계를 고루 설명함.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:lead:0",
+              "1:body_markdown:0",
+              "1:body_markdown:1"
+            ],
+            "reason": "Camera2 Pipe FrameBuffer 계층에서 프레임 스트림 목록 불일치 시 버퍼에 진입하던 기존 문제와, onFrameStarted 콜백 내 스트림 집합 포함 여부 검증 후 조기 종료하도록 바뀐 전후 동작을 설명했습니다.",
+            "verified_passages": [
+              {
+                "id": "1:lead:0",
+                "text": "Camera2 Pipe 파이프라인에서 버퍼가 필요로 하는 스트림을 완전히 포함하지 않는 프레임이 잘못 버퍼링되지 않도록 검증하는 로직이 추가되었습니다."
+              },
+              {
+                "id": "1:body_markdown:0",
+                "text": "Camera2 Pipe의 FrameGraph 내부에서는 프레임 생성 시 각 FrameBuffer로 프레임 참조를 배포합니다. 기존 구조에서는 프레임 요청 메타데이터에 포함된 스트림과 FrameBuffer가 요구하는 스트림 목록의 일치 여부를 온전히 확인하지 못해 부적절한 프레임이 대기열에 진입할 위험이 있었습니다."
+              },
+              {
+                "id": "1:body_markdown:1",
+                "text": "이번 변경을 통해 FrameBufferImpl의 onFrameStarted 콜백 내에 조건문이 추가되었습니다. 들어오는 FrameReference의 requestMetadata에 정의된 스트림 키 집합이 FrameBuffer가 구성된 streams 집합을 모두 포함하고 있는지 확인합니다. 만약 프레임이 요구 스트림을 전부 담고 있지 않다면 즉시 처리를 종료합니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:3",
+              "1:body_markdown:4"
+            ],
+            "reason": "특정 스트림의 하위 집합만 타깃으로 하는 캡처 요청 시 다른 FrameBuffer가 해당 프레임을 무시하고 버퍼 상태를 보존하는지 단위 검증을 통해 확인하도록 제안했습니다.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:3",
+                "text": "이 변경으로 특정 스트림의 하위 집합만 타깃으로 하는 캡처 요청이 발생했을 때, 해당 스트림을 포함하지 않는 다른 FrameBuffer는 해당 프레임을 무시하고 기존 버퍼 상태를 그대로 보존합니다."
+              },
+              {
+                "id": "1:body_markdown:4",
+                "text": "해당 패치는 2026-10-28 소스 트리에 병합되었으며 라이브러리 릴리스 전 단계입니다. 동적 스트림 구성이나 부분 캡처 파이프라인을 테스트할 때 잘못된 프레임 참조가 버퍼 흐름에 섞이지 않는지 단위 검증을 참고할 수 있습니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:4"
+            ],
+            "reason": "패치가 2026-10-28 소스 트리에 병합된 상태이며 라이브러리 릴리스 전 단계임을 명시하여 배포 범위를 한정했습니다.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:4",
+                "text": "해당 패치는 2026-10-28 소스 트리에 병합되었으며 라이브러리 릴리스 전 단계입니다. 동적 스트림 구성이나 부분 캡처 파이프라인을 테스트할 때 잘못된 프레임 참조가 버퍼 흐름에 섞이지 않는지 단위 검증을 참고할 수 있습니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "1:body_markdown:1",
+              "1:body_markdown:3",
+              "1:camera_hal_takeaway:0"
+            ],
+            "reason": "HAL 자체의 드라이버 수정이 아닌 Camera2 Pipe 프레임워크 버퍼 관리 계층의 필터링 로직임을 밝히고 원문 diff에 따른 프레임 무시 동작을 정확히 기술했습니다.",
+            "source_behavior": "FrameBufferImpl.onFrameStarted에서 frameReference.requestMetadata.streams.keys가 버퍼의 streams를 모두 포함하지 않으면 아무 동작 없이 return하여 큐 진입 및 emit을 차단함.",
+            "article_behavior": "요구 스트림을 전부 담고 있지 않은 프레임 수신 시 즉시 처리를 종료하여 해당 FrameBuffer가 프레임을 무시하고 기존 버퍼 상태를 보존함을 설명함.",
+            "verified_passages": [
+              {
+                "id": "1:body_markdown:1",
+                "text": "이번 변경을 통해 FrameBufferImpl의 onFrameStarted 콜백 내에 조건문이 추가되었습니다. 들어오는 FrameReference의 requestMetadata에 정의된 스트림 키 집합이 FrameBuffer가 구성된 streams 집합을 모두 포함하고 있는지 확인합니다. 만약 프레임이 요구 스트림을 전부 담고 있지 않다면 즉시 처리를 종료합니다."
+              },
+              {
+                "id": "1:body_markdown:3",
+                "text": "이 변경으로 특정 스트림의 하위 집합만 타깃으로 하는 캡처 요청이 발생했을 때, 해당 스트림을 포함하지 않는 다른 FrameBuffer는 해당 프레임을 무시하고 기존 버퍼 상태를 그대로 보존합니다."
+              },
+              {
+                "id": "1:camera_hal_takeaway:0",
+                "text": "프레임워크 내부 버퍼 관리 계층이 스트림 요청 메타데이터와의 정확한 매칭을 강제함으로써 메모리 누수와 잘못된 출력 수신을 차단합니다. HAL 개발 관점에서는 프레임워크가 단일 프레임별로 스트림 타깃을 엄격하게 필터링한다는 점을 인지할 필요가 있습니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "Camera2 Pipe FrameBuffer의 스트림 세트 사전 검증 로직과 다중 스트림 파이프라인 버퍼 격리 효과를 구체적이고 정확하게 서술함. / FrameBufferImpl의 스트림 포함 검증 조건, 부분 스트림 요청 시의 프레임 격리 동작, 검증 관찰 제안 및 릴리스 전 단계 한계가 정확하게 기술되었습니다. / 적용 조건, 변경 전후 동작 원리, 부분 스트림 캡처 조건에서의 관찰 대상 및 라이브러리 릴리스 전 한계가 원문 커밋과 단위 테스트에 부합하게 설명되었습니다."
+    },
+    {
+      "section_index": 2,
+      "headline": "CameraX Recorder의 Surface 해제 시 잔류 포인터 정리로 녹화 멈춤 방지",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "CameraX Recorder에서 VideoEncoderSession의 getReadyToReleaseFuture 완료 콜백(onSuccess/onFailure) 시 mActiveSurface를 null로 초기화하고, INACTIVE 수신 시 shouldRetainRecording()을 전달해 오디오를 유지하도록 수정한 패치입니다.",
+        "article_explanation": "적용 조건(빠른 수명 주기 전환 및 Surface 해제 선행), 변경 전후 동작(mActiveSurface 잔류로 인한 PENDING_RECORDING 교착 해제 및 콜백 초기화), 관찰 대상(새 Surface 재연결 후 녹화 정상 시작 여부), 반영 한계(메인 브랜치 병합 확인, 라이브러리 릴리스 및 제품 빌드 미확인)를 모두 충실히 설명했습니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:0",
+              "2:body_markdown:1",
+              "2:body_markdown:3"
+            ],
+            "reason": "공개 본문은 CameraX Recorder에서 Surface 해제와 소스 비활성화 신호 도착 순서에 따른 레이스 조건 및 버그 발생 과정과, getReadyToReleaseFuture 콜백 내 mActiveSurface 초기화 및 오디오 소스 유지 수정 내용을 명확히 설명합니다.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:0",
+                "text": "CameraX Recorder 모듈에서 앱 수명 주기가 빠르게 전환될 때 비디오 녹화가 시작되지 않는 교착 현상이 보고되었습니다. 이전에는 VideoEncoderSession의 Surface가 종료되고 getReadyToReleaseFuture가 완료되었을 때, 순차 실행기 상에서 onSourceStateChangedInternal(INACTIVE)가 실행되기 전에 인코더 리셋이 먼저 일어나면서 mActiveSurface가 이미 해제된 Surface를 가리킨 채 남아 있었습니다."
+              },
+              {
+                "id": "2:body_markdown:1",
+                "text": "이 상태에서 소스 비활성화(INACTIVE) 신호가 도착하면, 널이 아닌 mActiveSurface를 감지한 Recorder는 구성(CONFIGURING) 상태에서 다음 시작 전 리셋 플래그(mNeedsResetBeforeNextStart)를 참으로 설정했습니다. 이로 인해 다음 녹화 요청이 PENDING_RECORDING 상태에서 영구적으로 대기하는 문제가 발생했습니다."
+              },
+              {
+                "id": "2:body_markdown:3",
+                "text": "수정 사항은 getReadyToReleaseFuture의 성공(onSuccess) 및 실패(onFailure) 콜백에서 mActiveSurface를 null로 명시적으로 초기화하도록 했습니다. 또한 소스 비활성화 시 mActiveSurface가 null일 경우 영구 녹화(persistent recording)에서 오디오 소스를 유지할 수 있도록 변경했습니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:4"
+            ],
+            "reason": "공개 본문은 빠른 녹화 시작·종료 및 화면 회전 후 새 Surface 요청을 재연결했을 때 다음 녹화가 PENDING_RECORDING 상태에 머물지 않고 정상 시작되는지 관찰하는 구체적인 확인 조건을 제시합니다.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:4",
+                "text": "해당 변경은 2026-10-30 메인 브랜치에 병합되었으나, 공식 라이브러리 배포나 단말 제품 빌드 반영 여부는 아직 확인되지 않았습니다. 빠른 녹화 시작과 종료, 화면 회전 같은 수명 주기 전환 후 새 Surface 요청을 다시 연결했을 때 다음 녹화가 PENDING_RECORDING 상태에 갇히지 않고 정상 시작되는지 확인하는 것이 유용한 점검 사항입니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:4"
+            ],
+            "reason": "2026-10-30 메인 브랜치 병합 사실을 밝히면서도 공식 라이브러리 배포나 단말 제품 빌드 반영 여부는 확인되지 않았음을 명시적으로 구분했습니다.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:4",
+                "text": "해당 변경은 2026-10-30 메인 브랜치에 병합되었으나, 공식 라이브러리 배포나 단말 제품 빌드 반영 여부는 아직 확인되지 않았습니다. 빠른 녹화 시작과 종료, 화면 회전 같은 수명 주기 전환 후 새 Surface 요청을 다시 연결했을 때 다음 녹화가 PENDING_RECORDING 상태에 갇히지 않고 정상 시작되는지 확인하는 것이 유용한 점검 사항입니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "2:body_markdown:0",
+              "2:body_markdown:3",
+              "2:camera_hal_takeaway:0"
+            ],
+            "reason": "원문의 프레임워크 수명 주기 및 상태 머신 수정 범위 내에서 서술하였으며 무조건적인 동작 보장이나 왜곡이 없습니다.",
+            "source_behavior": "원문은 CameraX Recorder의 비동기 콜백에서 mActiveSurface를 null로 설정하고 INACTIVE 처리 시 오디오 리테인 플래그를 넘기도록 프레임워크 상태 머신을 수정합니다.",
+            "article_behavior": "기사는 프레임워크 계층의 Recorder 상태 머신 레이스 컨디션 해결과 Surface 해제 타이밍 문제로 한정하여 서술하며 하위 HAL이나 장치 전반의 무조건적 동작 성공으로 과장하지 않았습니다.",
+            "verified_passages": [
+              {
+                "id": "2:body_markdown:0",
+                "text": "CameraX Recorder 모듈에서 앱 수명 주기가 빠르게 전환될 때 비디오 녹화가 시작되지 않는 교착 현상이 보고되었습니다. 이전에는 VideoEncoderSession의 Surface가 종료되고 getReadyToReleaseFuture가 완료되었을 때, 순차 실행기 상에서 onSourceStateChangedInternal(INACTIVE)가 실행되기 전에 인코더 리셋이 먼저 일어나면서 mActiveSurface가 이미 해제된 Surface를 가리킨 채 남아 있었습니다."
+              },
+              {
+                "id": "2:body_markdown:3",
+                "text": "수정 사항은 getReadyToReleaseFuture의 성공(onSuccess) 및 실패(onFailure) 콜백에서 mActiveSurface를 null로 명시적으로 초기화하도록 했습니다. 또한 소스 비활성화 시 mActiveSurface가 null일 경우 영구 녹화(persistent recording)에서 오디오 소스를 유지할 수 있도록 변경했습니다."
+              },
+              {
+                "id": "2:camera_hal_takeaway:0",
+                "text": "하위 인코더 Surface의 릴리스 완료 시점과 프레임워크 상태 머신 간의 비동기 레이스 컨디션을 해결한 사례입니다. HAL/드라이버 파이프라인 개발자에게도 비디오 스트림 정지 및 Surface 재바인딩 타이밍의 안정성 확보 방안을 제시합니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "비디오 레코더와 인코더 세션 간 Surface 수명 주기 불일치로 인한 교착 버그의 원인과 수정 원리를 실무 엔지니어 관점에서 충실히 다룸. / 원문의 레이스 컨디션 발생 조건, 콜백 내 상태 초기화 원리, 구체적인 관찰 점검법 및 릴리스 한계가 과장 없이 정확히 서술되었습니다. / 원문의 버그 발생 원인, 콜백 초기화 수정 내용, 검증 관찰 대상 및 릴리스 한계를 정확하고 균형 있게 설명했습니다."
+    },
+    {
+      "section_index": 3,
+      "headline": "Camera2 Extensions의 Ultra HDR(JPEG_R) 해상도 쿼리를 API 35 이상으로 제한",
+      "publishable": true,
+      "confidence": "high",
+      "source_review": {
+        "core_change": "Camera2ExtensionsVendorExtender에서 CameraExtensionCharacteristics의 JPEG_R(4101) 지원 해상도 질의 가드를 기존 API 34(UPSIDE_DOWN_CAKE)에서 API 35(VANILLA_ICE_CREAM) 이상으로 상향하여, API 34 플랫폼에서 getExtensionSupportedSizes 및 getPostviewSupportedSizes 호출 시 IllegalArgumentException이 발생하는 문제를 방지함.",
+        "article_explanation": "공개 본문은 API 34에서 ImageFormat.JPEG_R 상수가 도입되었으나 프레임워크 메서드가 JPEG/YUV_420_888만 수용해 발생하던 예외(변경 전후 및 대상 계층), API 35 가드 상향 적용 범위, Android 14 환경에서 확장 초기화 시 4101 포맷 질의 단계 충돌 점검 제안(관찰 대상), Gerrit 브랜치 병합 확인 및 상용 릴리스/제품 빌드 미확인 한계를 충실히 설명했습니다.",
+        "material_omissions": [],
+        "unaddressed_source_conflicts": [],
+        "briefing_checks": {
+          "scope_and_behavior": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:0",
+              "3:body_markdown:1",
+              "3:body_markdown:3"
+            ],
+            "reason": "Camera2ExtensionsVendorExtender에서 API 34와 API 35 간의 JPEG_R 쿼리 동작 차이와 변경 전후 동작을 명확히 설명했습니다.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:0",
+                "text": "Camera2 Extensions 벤더 확장 계층에서 기기 지원 해상도를 질의할 때 예외가 발생하는 결함이 수정되었습니다. ImageFormat.JPEG_R(정수값 4101) 상수는 Android 14(API 34)에 처음 도입되었기 때문에, 기존 쿼리 로직은 API 34 이상일 경우 해당 포맷의 확장 지원 해상도를 함께 조회하도록 구성되어 있었습니다."
+              },
+              {
+                "id": "3:body_markdown:1",
+                "text": "그러나 API 34 플랫폼의 CameraExtensionCharacteristics 내부 구현인 getExtensionSupportedSizes 및 getPostviewSupportedSizes 메서드는 JPEG와 YUV_420_888 두 가지 형식만 허용하도록 하드코딩되어 있었습니다. 따라서 API 34 기기에서 JPEG_R을 쿼리하면 지원되지 않는 형식이라는 IllegalArgumentException 예외가 발생했습니다."
+              },
+              {
+                "id": "3:body_markdown:3",
+                "text": "카메라 확장에서의 JPEG_R 지원은 Android 15(API 35)에 이르러 공식 추가되었습니다. 이에 따라 Camera2ExtensionsVendorExtender의 still capture 및 postview 포맷 쿼리 가드를 Build.VERSION_CODES.VANILLA_ICE_CREAM(API 35) 이상으로 상향했습니다. 이제 API 34 환경에서는 JPEG와 YUV_420_888만 쿼리합니다."
+              }
+            ]
+          },
+          "public_verification": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:4"
+            ],
+            "reason": "Android 14 기기 환경에서 카메라 확장 초기화 시 4101 포맷 질의 단계 충돌 여부를 확인하는 구체적인 입력 조건과 관찰 대상을 제시했습니다.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:4",
+                "text": "이 수정은 2026년 10월 30일 Gerrit androidx-main 브랜치에 병합된 소스 코드 변경입니다. 확인된 범위는 메인 개발 브랜치의 커밋 병합이며, 실제 배포 라이브러리인 CameraX 정식 릴리스 버전이나 특정 제조사의 상용 단말 제품 빌드에 포함되었는지는 아직 확인되지 않았습니다. Android 14 기기 환경에서 카메라 확장 초기화 시 4101 포맷 질의 단계의 충돌 여부를 사전 점검할 수 있습니다."
+              }
+            ]
+          },
+          "release_limitations": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:4"
+            ],
+            "reason": "Gerrit androidx-main 브랜치 병합 상태임을 밝히고 정식 라이브러리 릴리스 및 상용 단말 빌드 미반영 범위를 정확히 명시했습니다.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:4",
+                "text": "이 수정은 2026년 10월 30일 Gerrit androidx-main 브랜치에 병합된 소스 코드 변경입니다. 확인된 범위는 메인 개발 브랜치의 커밋 병합이며, 실제 배포 라이브러리인 CameraX 정식 릴리스 버전이나 특정 제조사의 상용 단말 제품 빌드에 포함되었는지는 아직 확인되지 않았습니다. Android 14 기기 환경에서 카메라 확장 초기화 시 4101 포맷 질의 단계의 충돌 여부를 사전 점검할 수 있습니다."
+              }
+            ]
+          },
+          "effect_boundaries": {
+            "applicable": true,
+            "satisfied": true,
+            "evidence_passage_ids": [
+              "3:body_markdown:1",
+              "3:body_markdown:3"
+            ],
+            "reason": "쿼리 단계의 예외 회피와 지원 포맷 목록 조정에 한정하여 서술하였으며 과도한 동작 보장을 하지 않았습니다.",
+            "source_behavior": "CameraExtensionCharacteristics는 API 34에서 JPEG_R 쿼리 시 IllegalArgumentException을 던지며, 패치는 API 35 이상에서만 JPEG_R을 포맷 목록에 포함하도록 수정함.",
+            "article_behavior": "API 34에서 발생하던 IllegalArgumentException을 방지하기 위해 쿼리 가드를 API 35로 상향하여 API 34에서는 JPEG와 YUV만 질의하도록 제한함.",
+            "verified_passages": [
+              {
+                "id": "3:body_markdown:1",
+                "text": "그러나 API 34 플랫폼의 CameraExtensionCharacteristics 내부 구현인 getExtensionSupportedSizes 및 getPostviewSupportedSizes 메서드는 JPEG와 YUV_420_888 두 가지 형식만 허용하도록 하드코딩되어 있었습니다. 따라서 API 34 기기에서 JPEG_R을 쿼리하면 지원되지 않는 형식이라는 IllegalArgumentException 예외가 발생했습니다."
+              },
+              {
+                "id": "3:body_markdown:3",
+                "text": "카메라 확장에서의 JPEG_R 지원은 Android 15(API 35)에 이르러 공식 추가되었습니다. 이에 따라 Camera2ExtensionsVendorExtender의 still capture 및 postview 포맷 쿼리 가드를 Build.VERSION_CODES.VANILLA_ICE_CREAM(API 35) 이상으로 상향했습니다. 이제 API 34 환경에서는 JPEG와 YUV_420_888만 쿼리합니다."
+              }
+            ]
+          }
+        }
+      },
+      "reason": "Ultra HDR(JPEG_R) 확장 규격의 API 레벨별 지원 차이로 인한 런타임 예외와 프레임워크 쿼리 가드 수정 내용을 정확하게 짚어냄. / API 34 환경의 예외 발생 원인과 API 35 상향 수정 로직, 관찰할 확인 제안 및 라이브러리 릴리스 미확인 한계를 왜곡 없이 정확하게 설명하고 있습니다. / 원문의 예외 발생 원인, 분기 수정 내용, 테스트 기반 점검 조건 및 상용 릴리스 미확인 한계가 정확하고 객관적으로 서술되었습니다."
+    }
+  ],
+  "final_comment": "모든 기사가 AndroidX Gerrit 메인 브랜치에 병합된 공식 패치 원문(commit message 및 diff)을 기반으로 정확하게 작성되었습니다. HAL 인터페이스 계약 변경으로 과장하지 않고 프레임워크 쿼크 및 파이프라인 버퍼 제어 수준의 영향을 충실히 설명하고 있으며, Markdown 본문 린트 규칙과 날짜 근거를 완벽하게 준수하고 있어 발행에 적합합니다."
+}

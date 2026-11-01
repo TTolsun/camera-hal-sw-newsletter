@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-02",
+  "generated_at": "2026-11-01T16:55:40.226Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 5,
+    "hit_count": 1,
+    "miss_count": 4,
+    "by_url_hit_count": 1,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "count": 3
+    },
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 1
+    },
+    {
+      "reason": "url-hit",
+      "count": 1
+    }
+  ],
+  "entries": [
+    {
+      "title": "Fix video snapshot hang on Sony xq-dq72 - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-30",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+        "url_hash": "0a06e25e54bfce2a978252605259d3e1aed3c7aef116e07908bd70a879af7cdf",
+        "published_date": "2026-10-30",
+        "content_hash": "841869a0d5b0511f5237d020d4ff7db152e67b7fb17fbf948bac1a9a14c638a2"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Add default implementation for CameraMetadata#isExtensionSupported - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-30",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805",
+        "url_hash": "b2bb17a2944ca9032823dd9816d1dd9f631284f485f3bdb09c81a9bbbb0631e8",
+        "published_date": "2026-10-30",
+        "content_hash": "b23aeca4a8abe12f802e24d0f6d4ed2e457f8b97aaa661ea7faf2461a06ad34d"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-28",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+        "url_hash": "a9129f022d239b138cc2be53d5c249615cf4af591fff4f3b0c90b6a8675b8627",
+        "published_date": "2026-10-28",
+        "content_hash": "4a75d2b5020b0afcf6e79dbab96299b81fb17af06979c16dd22f304ef4dfd184"
+      },
+      "hit": false,
+      "reason": "by-url:content-hash-mismatch; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-30",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+        "url_hash": "7d74f4916c5398052a749670b7e9e30207dd917e0c3eba99f78a341b6c93dcfc",
+        "published_date": "2026-10-30",
+        "content_hash": "6fddcc63a8b68273c4d82a78d3052ad034861994048aaf48c2a58f6cb7a2a68a"
+      },
+      "hit": true,
+      "reason": "url-hit",
+      "lookup_source": "by-url",
+      "cache_record_path": "cache/news-summary/by-url/7d74f4916c5398052a749670b7e9e30207dd917e0c3eba99f78a341b6c93dcfc.json"
+    },
+    {
+      "title": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-10-30",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+        "url_hash": "801f1676efc6b5d5226442307c5b47776871579ad728a0d5a0ad65112ae04230",
+        "published_date": "2026-10-30",
+        "content_hash": "78726cec039edf7b0835961ad7303ce2f41976162fc32807a77d37a9a3aaf5a9"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

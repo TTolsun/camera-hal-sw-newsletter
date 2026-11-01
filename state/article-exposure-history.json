@@ -7,6 +7,83 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+      "title": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+      "newsletter_date": "2026-11-02",
+      "newsletter_url": "newsletters/2026-W45/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-02",
+      "newsletter_article_date": "2026-11-02",
+      "cooldown_until": "2026-11-23",
+      "first_exposed_at": "2026-11-02",
+      "last_exposed_at": "2026-11-02",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+      "title": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+      "newsletter_date": "2026-11-02",
+      "newsletter_url": "newsletters/2026-W45/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-02",
+      "newsletter_article_date": "2026-11-02",
+      "cooldown_until": "2026-11-23",
+      "first_exposed_at": "2026-11-02",
+      "last_exposed_at": "2026-11-02",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+      "title": "Check if buffer's stream set is contained in request metadata of the Frame - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4395726",
+      "newsletter_date": "2026-11-02",
+      "newsletter_url": "newsletters/2026-W45/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-02",
+      "newsletter_article_date": "2026-11-02",
+      "cooldown_until": "2026-11-23",
+      "first_exposed_at": "2026-11-02",
+      "last_exposed_at": "2026-11-02",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "title": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "newsletter_date": "2026-11-02",
+      "newsletter_url": "newsletters/2026-W45/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-11-02",
+      "first_exposed_at": "2026-11-02",
+      "last_exposed_at": "2026-11-02",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-11-02",
+      "cooldown_until": "2026-11-23"
+    },
+    {
       "article_identity_key": "url:https://lore.kernel.org/linux-media/20261023163057.775917-1-vz@kernel.org",
       "series_identity_key": "lore-series:20261023163057.775917-vz@kernel.org",
       "series_subject_key": "media qcom camss add waipio camss support",
