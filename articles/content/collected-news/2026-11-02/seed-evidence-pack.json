@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "report_type": "seed_evidence_pack",
+  "newsletter_date": "2026-11-02",
+  "generated_at": "2026-11-01T15:31:56.928Z",
+  "packs": [
+    {
+      "evidence_pack_id": "seed-01-801f1676ef-pack",
+      "seed_id": "seed-01-801f1676ef",
+      "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+      "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+      "title": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support",
+      "fetch_status": "pass",
+      "primary_evidence": [
+        {
+          "evidence_id": "seed-01-801f1676ef-primary-01",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
+          "title": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support",
+          "published_at": "2026-10-30",
+          "source_backed_items": [
+            "Gerrit change 4402197 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-30). Change-Id I3f836e5b3f4b42b16f91832f73feab69aba2c693; current revision 5548be5a5965. Reviewed: Code-Review car...",
+            "Merged change updates 2 camera source file(s) in platform/frameworks/support +86/-40: Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender. Commit message: The previous fix (I8c8d58a1c11630437..."
+          ],
+          "source_role": "official_release_source",
+          "evidence_granularity": "seed_page"
+        }
+      ],
+      "linked_evidence": [],
+      "noise_links": [],
+      "blocked_links": [],
+      "do_not_claim": [
+        "Do not claim Camera HAL API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Do not use failed, blocked, or noise links as factual support.",
+        "Keyword hints are discovery hints only, not source-backed facts."
+      ],
+      "extraction_quality": {
+        "seed_fetch_status": "pass",
+        "has_primary_evidence": true,
+        "has_concrete_facts": true,
+        "linked_evidence_followed": false,
+        "main_article_allowed": true
+      }
+    },
+    {
+      "evidence_pack_id": "seed-02-7d74f4916c-pack",
+      "seed_id": "seed-02-7d74f4916c",
+      "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+      "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+      "title": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+      "fetch_status": "pass",
+      "primary_evidence": [
+        {
+          "evidence_id": "seed-02-7d74f4916c-primary-01",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399846",
+          "title": "Clear Recorder.mActiveSurface on surface release - platform/frameworks/support",
+          "published_at": "2026-10-30",
+          "source_backed_items": [
+            "Gerrit change 4399846 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-30). Change-Id I5d7ddb996106cc913ee2e3a726f3085fed60daed; current revision 666ef7215884. Reviewed: Code-Review car...",
+            "Merged change updates 2 camera source file(s) in platform/frameworks/support +68/-5: Clear Recorder.mActiveSurface on surface release. Commit message: When VideoEncoderSession's surface terminates and getReadyToReleaseF..."
+          ],
+          "source_role": "official_release_source",
+          "evidence_granularity": "seed_page"
+        }
+      ],
+      "linked_evidence": [],
+      "noise_links": [],
+      "blocked_links": [],
+      "do_not_claim": [
+        "Do not claim Camera HAL API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Do not use failed, blocked, or noise links as factual support.",
+        "Keyword hints are discovery hints only, not source-backed facts."
+      ],
+      "extraction_quality": {
+        "seed_fetch_status": "pass",
+        "has_primary_evidence": true,
+        "has_concrete_facts": true,
+        "linked_evidence_followed": false,
+        "main_article_allowed": true
+      }
+    },
+    {
+      "evidence_pack_id": "seed-03-b2bb17a294-pack",
+      "seed_id": "seed-03-b2bb17a294",
+      "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805",
+      "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805",
+      "title": "Add default implementation for CameraMetadata#isExtensionSupported - platform/frameworks/support",
+      "fetch_status": "pass",
+      "primary_evidence": [
+        {
+          "evidence_id": "seed-03-b2bb17a294-primary-01",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4393805",
+          "title": "Add default implementation for CameraMetadata#isExtensionSupported - platform/frameworks/support",
+          "published_at": "2026-10-30",
+          "source_backed_items": [
+            "Gerrit change 4393805 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-10-30). Change-Id Ic3ee41593d6642761cedb98d98322512d396e0a6; current revision a892d1c949e0. Reviewed: Code-Review car...",
+            "Merged change updates 3 camera source file(s) in platform/frameworks/support +71/-4: Add default implementation for CameraMetadata#isExtensionSupported. Commit message: aosp/4192677 added isExtensionSupported(Int) to th..."
+          ],
+          "source_role": "official_release_source",
+          "evidence_granularity": "seed_page"
+        }
+      ],
+      "linked_evidence": [],
+      "noise_links": [],
+      "blocked_links": [],
+      "do_not_claim": [
+        "Do not claim Camera HAL API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Do not use failed, blocked, or noise links as factual support.",
+        "Keyword hints are discovery hints only, not source-backed facts."
+      ],
+      "extraction_quality": {
+        "seed_fetch_status": "pass",
+        "has_primary_evidence": true,
+        "has_concrete_facts": true,
+        "linked_evidence_followed": false,
+        "main_article_allowed": true
+      }
+    }
+  ],
+  "summary": {
+    "seed_url_count": 3,
+    "pack_count": 3,
+    "primary_evidence_count": 3,
+    "linked_evidence_count": 0,
+    "main_article_allowed_count": 3
+  }
+}
