@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "report_type": "seed_evidence_pack",
+  "newsletter_date": "2026-11-09",
+  "generated_at": "2026-11-08T16:47:50.875Z",
+  "packs": [
+    {
+      "evidence_pack_id": "seed-01-018a904786-pack",
+      "seed_id": "seed-01-018a904786",
+      "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+      "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+      "title": "Fix CapturePipeline and 3A indefinite waits - platform/frameworks/support",
+      "fetch_status": "pass",
+      "primary_evidence": [
+        {
+          "evidence_id": "seed-01-018a904786-primary-01",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4365755",
+          "title": "Fix CapturePipeline and 3A indefinite waits - platform/frameworks/support",
+          "published_at": "2026-11-03",
+          "source_backed_items": [
+            "Gerrit change 4365755 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-03). Change-Id Ic17d39c327081d32b5077981ac96a4af80a9d74a; current revision 4f9ce5f2b32a. Reviewed: Code-Review car...",
+            "Merged change updates 7 camera source file(s) in platform/frameworks/support +623/-155: Fix CapturePipeline and 3A indefinite waits. Commit message: 1. CapturePipeline#waitForResult: Remove the untracked sequentialScope..."
+          ],
+          "source_role": "official_release_source",
+          "evidence_granularity": "seed_page"
+        }
+      ],
+      "linked_evidence": [],
+      "noise_links": [],
+      "blocked_links": [],
+      "do_not_claim": [
+        "Do not claim Camera HAL API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Do not use failed, blocked, or noise links as factual support.",
+        "Keyword hints are discovery hints only, not source-backed facts."
+      ],
+      "extraction_quality": {
+        "seed_fetch_status": "pass",
+        "has_primary_evidence": true,
+        "has_concrete_facts": true,
+        "linked_evidence_followed": false,
+        "main_article_allowed": true
+      }
+    },
+    {
+      "evidence_pack_id": "seed-02-548166ca13-pack",
+      "seed_id": "seed-02-548166ca13",
+      "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+      "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+      "title": "Transition PlatformApiCompat usages in CameraPipe to Api37Compat - platform/frameworks/support",
+      "fetch_status": "pass",
+      "primary_evidence": [
+        {
+          "evidence_id": "seed-02-548166ca13-primary-01",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4423978",
+          "title": "Transition PlatformApiCompat usages in CameraPipe to Api37Compat - platform/frameworks/support",
+          "published_at": "2026-11-07",
+          "source_backed_items": [
+            "Gerrit change 4423978 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-07). Change-Id I47133b30eaa500147a59501993f25e631959ef3a; current revision 284b258a7a31. Reviewed: Code-Review car...",
+            "Merged change updates 6 camera source file(s) in platform/frameworks/support +275/-17: Transition PlatformApiCompat usages in CameraPipe to Api37Compat. Commit message: Now that compileSdk is raised to 37, replace usage..."
+          ],
+          "source_role": "official_release_source",
+          "evidence_granularity": "seed_page"
+        }
+      ],
+      "linked_evidence": [],
+      "noise_links": [],
+      "blocked_links": [],
+      "do_not_claim": [
+        "Do not claim Camera HAL API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Do not use failed, blocked, or noise links as factual support.",
+        "Keyword hints are discovery hints only, not source-backed facts."
+      ],
+      "extraction_quality": {
+        "seed_fetch_status": "pass",
+        "has_primary_evidence": true,
+        "has_concrete_facts": true,
+        "linked_evidence_followed": false,
+        "main_article_allowed": true
+      }
+    },
+    {
+      "evidence_pack_id": "seed-03-b81a6646e1-pack",
+      "seed_id": "seed-03-b81a6646e1",
+      "seed_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+      "final_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+      "title": "Add LowLightBoostEffect, surface processor and session manager - platform/frameworks/support",
+      "fetch_status": "pass",
+      "primary_evidence": [
+        {
+          "evidence_id": "seed-03-b81a6646e1-primary-01",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4223279",
+          "title": "Add LowLightBoostEffect, surface processor and session manager - platform/frameworks/support",
+          "published_at": "2026-11-03",
+          "source_backed_items": [
+            "Gerrit change 4223279 on platform/frameworks/support (branch androidx-main) is merged (submitted 2026-11-03). Change-Id I3c148275d5f7d0bb55da46982ae311d36e8e60f4; current revision c2408044709f. Reviewed: Code-Review car...",
+            "Merged change updates 8 camera source file(s) in platform/frameworks/support +2933/-2: Add LowLightBoostEffect, surface processor and session manager. Commit message: - Introduces LowLightBoostEffect extending CameraEff..."
+          ],
+          "source_role": "official_release_source",
+          "evidence_granularity": "seed_page"
+        }
+      ],
+      "linked_evidence": [],
+      "noise_links": [],
+      "blocked_links": [],
+      "do_not_claim": [
+        "Do not claim Camera HAL API/runtime/driver behavior unless source evidence explicitly says it.",
+        "Do not use failed, blocked, or noise links as factual support.",
+        "Keyword hints are discovery hints only, not source-backed facts."
+      ],
+      "extraction_quality": {
+        "seed_fetch_status": "pass",
+        "has_primary_evidence": true,
+        "has_concrete_facts": true,
+        "linked_evidence_followed": false,
+        "main_article_allowed": true
+      }
+    }
+  ],
+  "summary": {
+    "seed_url_count": 3,
+    "pack_count": 3,
+    "primary_evidence_count": 3,
+    "linked_evidence_count": 0,
+    "main_article_allowed_count": 3
+  }
+}
