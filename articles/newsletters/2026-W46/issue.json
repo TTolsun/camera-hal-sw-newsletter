@@ -1,0 +1,1571 @@
+{
+  "date": "2026-11-09",
+  "public_contract_version": "story-v2",
+  "generation_contract_version": 2,
+  "title": "2026 W45 (11.02 ~ 11.08)",
+  "summary": "이번 주 뉴스레터에서는 카메라 시스템의 안정성과 성능 향상을 위한 다양한 업데이트를 다룹니다. CameraX 1.7.0-rc02는 API 30 바인딩 크래시 및 비디오 녹화 스레드 누수를 차단하여 프레임워크 안정성을 강화했습니다. 또한, Tecno BF6 기기 대상 동영상 녹화 중 사진 촬영 HAL 타임아웃 회피 패치와 갤럭시 노트 10+ 스냅드래곤의 전면 줌 촬영 시 HAL 데드락 방지 패치는 특정 기기에서 발생하던 문제를 해결했습니다. 마지막으로, redfin 64비트 전용 랩 환경의 카메라 HAL 네이티브 충돌에 대응한 테스트 분기 추가는 특정 환경에서의 안정성을 높이는 데 기여했습니다.",
+  "briefing": [
+    "CameraX 1.7.0-rc02 공개, API 30 바인딩 크래시와 비디오 녹화 스레드 누수 차단",
+    "Tecno BF6 기기 대상 동영상 녹화 중 사진 촬영 HAL 타임아웃 회피 패치 병합",
+    "CameraX 엔지니어링 에이전트에 5-Gate 심층 근본 원인 분석 프로토콜 적용",
+    "redfin 64비트 전용 랩 환경의 카메라 HAL 네이티브 충돌에 대응한 테스트 분기 추가",
+    "갤럭시 노트 10+ 스냅드래곤, 전면 줌 촬영 시 HAL 데드락 방지 패치 병합"
+  ],
+  "sections": [
+    {
+      "category": "Camera Framework",
+      "headline": "CameraX 1.7.0-rc02 릴리스, API 30 바인딩 예외 및 VideoCapture 네이티브 스레드 누수 수정",
+      "what_changed": "CameraX 1.7.0-rc02에서 API 30 기기 내 SYSTEM_ALERT_WINDOW 권한을 가진 앱이 UseCase를 반복 바인딩할 때 발생하던 UnsupportedOperationException과 VideoCapture 언바인딩 시 바인딩당 미디어 프레임워크 스레드가 1개씩 잔존하던 네이티브 스레드 누수가 수정되었습니다.",
+      "confirmed_facts": [
+        "2026년 11월 4일 CameraX 1.7.0-rc02가 공식 릴리스되었습니다.",
+        "API 30 환경에서 SYSTEM_ALERT_WINDOW 권한을 가진 애플리케이션이 카메라 UseCase를 반복 바인딩할 때 UnsupportedOperationException이 발생하던 문제가 수정되었습니다 (I3235c, b/575161911).",
+        "VideoCapture UseCase 언바인딩 시 바인딩당 1개의 미디어 프레임워크 스레드가 해제되지 않고 남아있던 네이티브 스레드 누수가 수정되었습니다 (If5730, b/573671138)."
+      ],
+      "evidence_summary": "공식 AndroidX CameraX 릴리스 노트(1.7.0-rc02, 2026년 11월 4일자)에 명시된 Bug Fixes 항목에 기반합니다.",
+      "specificity_checks": [
+        "버전: CameraX 1.7.0-rc02",
+        "릴리스 날짜: 2026년 11월 4일",
+        "컴포넌트: androidx.camera (camera-core, camera-video 등)",
+        "동작 변화: SYSTEM_ALERT_WINDOW UseCase 반복 바인딩 예외 수정 및 VideoCapture 언바인딩 미디어 스레드 누수 수정"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+        "Evidence ID: sx:078d014afa60f8f6:85a4f3e8c923:a9f0451a1c1f535e",
+        "Evidence ID: sx:078d014afa60f8f6:85a4f3e8c923:5f0234d59bdd1849",
+        "Primary source: 원문 릴리스 노트 항목에서 API 30 예외 및 네이티브 스레드 누수 수정 사실을 확인했습니다.",
+        "Linked evidence: unresolved — 커밋 링크(I3235c, If5730) 및 버그 트래커 링크(b/575161911, b/573671138)의 세부 diff는 확인하지 못했습니다."
+      ],
+      "public_article": {
+        "headline": "CameraX 1.7.0-rc02 공개, API 30 바인딩 크래시와 비디오 녹화 스레드 누수 차단",
+        "lead": "화면 오버레이 권한을 쓰는 카메라 앱이나 비디오 녹화 기능을 자주 켜고 끄는 서비스에서 간헐적인 비정상 종료와 메모리 점유 누적이 발생했다면 이번 릴리스를 확인할 필요가 있습니다.",
+        "body_markdown": "구글이 2026년 11월 4일 CameraX 1.7.0-rc02를 출시했습니다. 이번 릴리스 후보 버전에서는 상위 프레임워크 수명 주기 관리와 관련된 두 가지 핵심 결함이 해결되었습니다.\n\n첫 번째 수정 사항은 안드로이드 11(API 30) 환경에서 시스템 경고 창(SYSTEM_ALERT_WINDOW) 권한을 부여받은 앱이 카메라 사용 사례(UseCase)를 반복해서 바인딩할 때 발생하던 지원되지 않는 연산 예외(UnsupportedOperationException)입니다. 플로팅 뷰나 오버레이 형태로 카메라 미리보기를 재시작하는 서비스에서 프레임워크 바인딩 충돌로 프로세스가 죽는 증상을 완화합니다.\n\n두 번째 수정 사항은 비디오 녹화 컴포넌트인 VideoCapture를 수명 주기에서 언바인딩할 때 미디어 프레임워크 네이티브 스레드가 정리되지 않던 문제입니다. 이전 버전에서는 바인딩이 일어날 때마다 미디어 프레임워크 스레드가 하나씩 남아 프로세스 스레드 수가 점진적으로 누적되는 스레드 누수가 존재했습니다.\n\n이번 변경은 Camera HAL 인터페이스 계약이나 드라이버 파이프라인의 직접적인 프로토콜 수정은 아닙니다. 그러나 반복적인 카메라 세션 바인딩과 비디오 스트림 해제 과정에서 상위 계층의 불필요한 스레드 잔존을 제거함으로써 런타임 안정성과 스케줄러 부하를 줄여줍니다. 실제 서비스 배포 시에는 API 30 기기 환경의 오버레이 반복 바인딩과 VideoCapture 언바인딩 시 스레드 수 추이를 프로파일러로 관찰하는 것이 유용합니다. 다만 1.7.0-rc02는 릴리스 후보 배포 단계이므로 최종 정식 배포나 실제 상용 제품 빌드 반영 여부는 별도로 확인해야 합니다.",
+        "camera_hal_takeaway": "CameraX 프레임워크 계층의 바인딩 및 스레드 수명 주기 결함 수정입니다. 공급업체 HAL 인터페이스나 메타데이터 계약 변경은 없으나, VideoCapture 반복 해제 시 네이티브 미디어 스레드 누적이 차단되어 장시간 카메라 운용 시 프로세스 스레드 고갈 및 리소스 경쟁 위험을 낮춥니다.",
+        "reader_checkpoints": [
+          "API 30 환경에서 플로팅 오버레이 뷰 기반 카메라 바인딩 시 UnsupportedOperationException 재현 여부 확인",
+          "VideoCapture 바인딩 및 언바인딩을 수십 회 반복한 후 시스템 프로파일러를 통해 프로세스 네이티브 스레드 수가 단조 증가하는지 점검"
+        ],
+        "source_links": [
+          {
+            "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+            "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+            "publisher": "Google AndroidX",
+            "source_role": "primary",
+            "checked_at": "2026-11-09"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "출처: CameraX Release Notes (2026-11-04)",
+        "editorial_story": {
+          "not_to_overclaim": "HAL API나 드라이버 버퍼 인터페이스 변경이 아닌 CameraX 프레임워크 계층의 바인딩 예외 및 네이티브 스레드 누수 수정입니다.",
+          "editor_take": "1.7.0 정식 릴리스 직전의 안정화 단계로, 백그라운드 오버레이 카메라 및 비디오 세션 회전이 많은 상용 서비스에서 즉시 점검할 가치가 있습니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Tooling",
+            "Framework"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "CameraX 1.7.0-rc02는 2026년 11월 4일에 배포되었습니다.",
+          "API 30에서 SYSTEM_ALERT_WINDOW 권한을 가진 앱이 카메라 사용 사례를 반복적으로 바인딩할 때 발생하던 UnsupportedOperationException이 수정되었습니다 (I3235c, b/575161911).",
+          "VideoCapture 언바인딩 시 바인딩당 하나의 미디어 프레임워크 스레드가 남게 되던 네이티브 스레드 누수 문제가 수정되었습니다 (If5730, b/573671138)."
+        ],
+        "background_context": "CameraX는 애플리케이션 수명 주기에 맞춰 카메라 디바이스를 연결하는 상위 Jetpack 라이브러리입니다. 오버레이 형태의 윈도우나 비디오 레코딩 세션이 잦은 앱에서는 프레임워크 계층의 스레드와 리소스가 적시에 반환되어야 하위 시스템의 불필요한 바인더 부하와 스케줄러 스레드 병목을 예방할 수 있습니다.",
+        "hal_driver_impact": "공급업체 Camera HAL 직접 변경은 없으며 상위 안드로이드 미디어 프레임워크 스레드 정리 작업입니다. 다만 비디오 레코딩 세션 해제 시 잔존 스레드가 제거되므로 장기 가동 세션에서의 스레드 경합 위험이 완화됩니다.",
+        "action_items": [
+          "API 30 기기에서 오버레이 뷰를 통한 UseCase 바인딩 및 언바인딩 테스트 수행",
+          "VideoCapture 언바인딩 후 adb shell debuggerd 또는 프로파일러를 통한 프로세스 스레드 수 안정성 확인"
+        ],
+        "team_share_points": "CameraX 1.7.0-rc02에서 API 30 오버레이 바인딩 크래시와 VideoCapture 언바인딩 시 네이티브 스레드가 누적되던 결함이 해결되었습니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 11월 4일 배포된 최신 릴리스 후보 버전으로, 정식 출시 전 비디오 녹화 스레드 누수와 바인딩 예외를 사전에 검증해야 합니다.",
+        "reader_owners": [
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "VideoCapture 세션 반복 바인딩/언바인딩 시 프로세스 네이티브 스레드 수 추이 모니터링",
+        "impact_axes": [
+          "framework_hal_contract",
+          "camerax_app_compatibility",
+          "native_tooling_workflow"
+        ],
+        "do_not_overstate": [
+          "Camera HAL 직접 API나 바인딩 인터페이스 명세가 변경된 것으로 확장하지 마십시오.",
+          "다른 API 레벨 전체에서 스레드 누수가 발생하거나 해결되었다고 단정하지 마십시오."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "cx_rc02_date",
+          "text": "CameraX 1.7.0-rc02는 2026년 11월 4일에 배포되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:078d014afa60f8f6:85a4f3e8c923:a9f0451a1c1f535e"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02"
+          ],
+          "impact_level": "app_api_or_framework_adjacent",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "cx_rc02_api30_fix",
+          "text": "API 30에서 SYSTEM_ALERT_WINDOW 권한을 가진 앱이 카메라 사용 사례를 반복적으로 바인딩할 때 발생하던 UnsupportedOperationException이 수정되었습니다 (I3235c, b/575161911).",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:078d014afa60f8f6:85a4f3e8c923:a9f0451a1c1f535e"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "cx_rc02_thread_leak_fix",
+          "text": "VideoCapture 언바인딩 시 바인딩당 하나의 미디어 프레임워크 스레드가 남게 되던 네이티브 스레드 누수 문제가 수정되었습니다 (If5730, b/573671138).",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "sx:078d014afa60f8f6:85a4f3e8c923:5f0234d59bdd1849"
+          ],
+          "source_urls": [
+            "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "API 30 환경에서 오버레이 윈도우 사용 시 반복 바인딩 로그 점검",
+        "비디오 레코딩 세션 해제 시 네이티브 스레드 정리 여부 점검"
+      ],
+      "action_hints": [
+        "CameraX 1.7.0-rc02 라이브러리 의존성 업데이트",
+        "비디오 녹화 언바인딩 반복 테스트 스크립트 실행"
+      ],
+      "action_items": [
+        "API 30 기기에서 SYSTEM_ALERT_WINDOW 기반 카메라 재바인딩 루프 테스트",
+        "VideoCapture 반복 언바인딩 시 네이티브 스레드 카운트 모니터링"
+      ],
+      "is_ai_related": false,
+      "article_type": "release_note",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=ja",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes - CameraX 1.7.0-rc02",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v0bdbebc1f01a38de21004f32be4e375582bd633675ce8e19f11ee677174d47b4/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes - CameraX 1.7.0-rc02",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=ja",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes - CameraX 1.7.0-rc02",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "og",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentType": "image/png",
+          "width": null,
+          "height": null,
+          "alt": ""
+        }
+      ],
+      "selectedImage": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+      "imageSource": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "imageAttribution": "CameraX Release Notes",
+      "imageAlt": "CameraX 1.7.0-rc02 릴리스, API 30 바인딩 예외 및 VideoCapture 네이티브 스레드 누수 수정",
+      "imageLicenseStatus": "unknown",
+      "imageUsageDecisionReason": "공식 소셜 메타 이미지(OG 이미지)로 기술적 기사 본문 내용에 특화된 다이어그램이 아니므로 제외했습니다.",
+      "sources": [
+        {
+          "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+          "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02"
+        }
+      ],
+      "hal_impact_axes": [
+        "framework_hal_contract",
+        "stream_buffer_metadata",
+        "camerax_app_compatibility",
+        "native_tooling_workflow"
+      ],
+      "reader_owners": [
+        "camera_framework_owner",
+        "camerax_app_compat_owner"
+      ],
+      "source_candidate_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "source_candidate_hash": "078d014afa60f8f602365184a283b979935a6530bc3489e9368f284de6798164",
+      "article_group_key": "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "short",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "CameraX API, compatibility workaround, app-side camera behavior change 확인",
+      "resolvedImage": {
+        "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+        "src": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": false,
+        "reason": ""
+      },
+      "image_recovery": {
+        "article_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 5,
+        "valid_count": 3,
+        "outcome": "available"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Framework",
+      "headline": "Tecno BF6 기기, VideoCapture 바인딩 시 스틸 캡처 타임아웃 회피 쿼크 추가",
+      "what_changed": "Tecno Mobile BF6 기기에서 VideoCapture가 바인딩된 상태로 사진을 찍을 때 카메라 HAL 내부에서 타임아웃이 발생하던 문제를 해결하기 위해 ImageCaptureFailedWhenVideoCaptureIsBoundQuirk에 기기 식별 조건을 추가하고 StreamSharing 및 반복 요청 템플릿 우회를 적용했습니다.",
+      "confirmed_facts": [
+        "2026년 11월 2일 Gerrit 변경번호 4399969가 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+        "Tecno Mobile BF6 기기에서 VideoCapture가 바인딩된 상태로 사진을 촬영하면 카메라 HAL에서 타임아웃이 발생했습니다.",
+        "StreamSharing 활성화 및 반복 요청의 TEMPLATE_RECORD를 CONTROL_CAPTURE_INTENT_PREVIEW로 재정의하는 ImageCaptureFailedWhenVideoCaptureIsBoundQuirk 대상에 Tecno BF6가 추가되었습니다.",
+        "workaroundBySurfaceProcessing 메서드가 isEnabled 호출에 위임하도록 단순화되었습니다."
+      ],
+      "evidence_summary": "Gerrit 4399969 패치를 통해 ImageCaptureFailedWhenVideoCaptureIsBoundQuirk에 Tecno Mobile BF6가 추가되어 VideoCapture 바인딩 시 스틸 캡처 타임아웃을 우회하도록 처리되었습니다.",
+      "specificity_checks": [
+        "소스 브랜치: androidx-main",
+        "변경 번호: Gerrit 4399969",
+        "대상 기기: Tecno Mobile BF6 (모델명 tecno mobile bf6, tecno bf6, 디바이스명 tecno-bf6)",
+        "동작 변화: StreamSharing 활성화 및 반복 요청 인텐트를 CONTROL_CAPTURE_INTENT_PREVIEW로 변경하여 HAL 타임아웃 우회"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+        "Evidence ID: source-body:08320b251a072a56f991",
+        "Primary source: 원문 메타데이터의 status=MERGED를 확인했습니다. 라이브러리 공식 릴리스 및 제품 빌드 반영은 미확인 상태입니다.",
+        "Linked evidence: unresolved - 커밋 메시지에 기재된 버그 번호 579150219의 세부 내용은 확인하지 못했습니다."
+      ],
+      "public_article": {
+        "headline": "Tecno BF6 기기 대상 동영상 녹화 중 사진 촬영 HAL 타임아웃 회피 패치 병합",
+        "lead": "동영상 촬영 모드가 켜진 상태에서 사진 캡처 버튼을 누를 때 특정 기기의 카메라가 완전히 멈춰버리는 현상을 방지하기 위한 프레임워크 우회 로직이 추가되었습니다.",
+        "body_markdown": "구글 안드로이드 오픈소스 프로젝트의 frameworks/support 저장소에 Tecno Mobile BF6 기기를 위한 카메라 쿼크 패치가 2026년 11월 2일 병합되었습니다.\n\nTecno BF6 기기에서는 VideoCapture 사용 사례가 바인딩된 상태에서 스틸 사진 촬영을 시도할 경우, 카메라 HAL 내부에서 타임아웃이 발생하며 프레임을 제때 반환하지 못하는 결함이 있었습니다. 이 문제를 우회하기 위해 프레임워크는 단일 스트림을 공유하는 StreamSharing을 켜고, 반복 요청의 템플릿 의도를 TEMPLATE_RECORD에서 CONTROL_CAPTURE_INTENT_PREVIEW로 재정의해야 정상적인 캡처 처리가 가능했습니다.\n\n이번 패치에서는 ImageCaptureFailedWhenVideoCaptureIsBoundQuirk 클래스에 Tecno BF6 판별 로직(모델명 tecno mobile bf6, tecno bf6 및 디바이스명 tecno-bf6)을 추가했습니다. 아울러 기존 코드에서 여러 기기 플래그를 개별 열거하던 workaroundBySurfaceProcessing 메서드를 isEnabled 판정으로 위임하도록 정리했습니다.\n\n해당 패치의 유효성을 점검하려면 Tecno BF6 기기 환경에서 VideoCapture와 ImageCapture를 함께 바인딩한 후 스틸 사진 캡처를 시도해 카메라 HAL 타임아웃 발생 여부를 관찰하는 편집 제안 점검을 진행할 수 있습니다. 정상 반영 상태라면 기존에 보고되던 HAL 타임아웃 없이 스트림 공유 및 프리뷰 인텐트 기반 요청이 전달되는지 확인할 수 있습니다. 이는 원문의 쿼크 분기에서 도출한 확인 제안이며, 실제 기기에서의 캡처 성공이나 특정 응답 시간을 보장하는 공인 테스트 결과는 아닙니다.\n\n이번 변경은 Tecno 사의 카메라 HAL 자체 소스코드를 수정한 것이 아니며, CameraX 상위 프레임워크가 문제 동작을 감지하고 요청 템플릿과 스트림 분기를 안전하게 우회하도록 지시하는 패치입니다. 현재 해당 커밋은 androidx-main 브랜치에 병합된 상태까지만 확인되었으며, 실제 상용 라이브러리 배포나 단말기 펌웨어 반영 여부는 별도로 확인해야 합니다.",
+        "camera_hal_takeaway": "공급업체 HAL 드라이버의 레코드 템플릿 처리 결함을 상위 CameraX에서 스트림 셰어링 및 CONTROL_CAPTURE_INTENT_PREVIEW 재정의로 우회하는 프레임워크 쿼크입니다. HAL 개발팀은 복합 스트림 상황에서 TEMPLATE_RECORD와 스틸 캡처 동시 처리 시의 타임아웃 방지 로직을 점검해야 합니다.",
+        "reader_checkpoints": [
+          "Tecno BF6 실기기에서 VideoCapture와 ImageCapture를 동시 바인딩한 후 스틸 사진 촬영 시 HAL 타임아웃 해소 여부 점검",
+          "반복 요청의 캡처 인텐트가 CONTROL_CAPTURE_INTENT_PREVIEW로 전달될 때 HAL 내부 3A 및 인코더 동작 관찰"
+        ],
+        "source_links": [
+          {
+            "title": "Add Tecno BF6 to ImageCaptureFailed quirk - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+            "source_role": "primary"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "출처: AndroidX Gerrit (2026-11-02)",
+        "editorial_story": {
+          "not_to_overclaim": "Tecno 기기 전용 프레임워크 쿼크 추가이며, 카메라 HAL 드라이버 바이너리가 직접 수정된 것은 아닙니다.",
+          "editor_take": "복합 스트림 구성에서 HAL이 특정 템플릿 요청을 거부하거나 멈추는 패턴을 프레임워크가 우회하는 방식을 보여주는 사례입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 11월 2일 Gerrit 변경번호 4399969가 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+          "Tecno Mobile BF6 기기에서 VideoCapture가 바인딩된 상태로 사진 촬영 시 카메라 HAL 타임아웃이 발생하던 문제가 보고되었습니다.",
+          "ImageCaptureFailedWhenVideoCaptureIsBoundQuirk에 Tecno Mobile BF6 기기(모델명 및 디바이스명)가 추가되었습니다.",
+          "workaroundBySurfaceProcessing 메서드가 isEnabled에 위임하도록 단순화되었습니다."
+        ],
+        "background_context": "일부 보급형 칩셋 및 기기 펌웨어의 카메라 HAL에서는 비디오 녹화용 반복 스트림(TEMPLATE_RECORD)이 활성화되어 있을 때 고해상도 스틸 캡처 요청이 들어오면 버퍼 파이프라인 동기화 실패로 타임아웃을 일으키는 경우가 있습니다. CameraX는 이러한 하드웨어 한계를 극복하기 위해 StreamSharing 표면 처리 쿼크 및 프리뷰 캡처 인텐트 재정의 기법을 활용합니다.",
+        "hal_driver_impact": "직접적인 HAL 인터페이스 변경은 없지만, CameraX가 TEMPLATE_RECORD 대신 CONTROL_CAPTURE_INTENT_PREVIEW를 반복 요청에 주입하고 단일 Surface 처리(StreamSharing)로 묶어 전달하므로 HAL이 수신하는 스트림 구성 파라미터가 크게 달라집니다.",
+        "action_items": [
+          "Tecno BF6 기기에서 VideoCapture와 ImageCapture 동시 바인딩 시 카메라 HAL 타임아웃 발생 여부를 확인합니다.",
+          "반복 스트림의 캡처 인텐트 변경 시 노출 및 화이트밸런스 수렴 지연이 발생하는지 검증합니다."
+        ],
+        "team_share_points": "Tecno BF6 동영상 촬영 중 사진 캡처 HAL 타임아웃 이슈가 CameraX 쿼크로 우회 처리되었음을 공유합니다."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 11월 2일 Tecno BF6 관련 HAL 타임아웃 우회 쿼크가 androidx-main 소스에 병합되었습니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "Tecno BF6 대상 복합 스트림 바인딩 후 스틸 캡처 호출 시 정상적인 프레임 출력 여부를 점검합니다.",
+        "impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "Tecno 사의 카메라 HAL 내부 코드나 벤더 드라이버가 직접 패치된 것으로 기술하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "tecno-bf6-fact-1",
+          "text": "2026년 11월 2일 Gerrit 변경번호 4399969가 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:08320b251a072a56f991"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "tecno-bf6-fact-2",
+          "text": "Tecno Mobile BF6 기기에서 VideoCapture가 바인딩된 상태로 사진 촬영 시 카메라 HAL 타임아웃이 발생하던 문제가 보고되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:08320b251a072a56f991"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "tecno-bf6-fact-3",
+          "text": "ImageCaptureFailedWhenVideoCaptureIsBoundQuirk에 Tecno Mobile BF6 기기(모델명 및 디바이스명)가 추가되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:08320b251a072a56f991"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "tecno-bf6-fact-4",
+          "text": "workaroundBySurfaceProcessing 메서드가 isEnabled에 위임하도록 단순화되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:08320b251a072a56f991"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "Tecno BF6 기기에서 VideoCapture 바인딩 시 ImageCapture 요청 타임아웃 해소 확인",
+        "반복 요청의 CONTROL_CAPTURE_INTENT_PREVIEW 전달 시 프리뷰 파이프라인 안정성 관찰"
+      ],
+      "action_hints": [
+        "Tecno 기기 호환성 테스트 케이스 업데이트 확인"
+      ],
+      "action_items": [
+        "Tecno BF6 단말에서 동영상 모드 진입 후 스틸 캡처 정상 동작 검증"
+      ],
+      "is_ai_related": false,
+      "article_type": "bug_fix",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v0bdbebc1f01a38de21004f32be4e375582bd633675ce8e19f11ee677174d47b4/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=hi",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        },
+        {
+          "url": "https://opengraph.githubassets.com/fb444ca8a63df3d86261007d4a1089268e36ab3f46a2ab0aacf2a9266caed703/anthropics/claude-code/releases/tag/v2.1.318",
+          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Code Changelog",
+          "validationStatus": "ok",
+          "contentLength": 49761
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "적절한 관련 이미지가 제공되지 않아 선택을 생략했습니다.",
+      "sources": [
+        {
+          "title": "Add Tecno BF6 to ImageCaptureFailed quirk - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969"
+        }
+      ],
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+      "source_candidate_hash": "f6cc99dc3a869e1f2f26ba3e3b8bbb6729609de6196dcad1854b33e01c8cfe97",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 4,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX CameraPipe·Camera Extensions의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Native Tooling & Architecture",
+      "headline": "CameraX 개발 환경에 5-Gate 심층 근본 원인 분석 프로토콜 적용",
+      "what_changed": "CameraX 문제 진단 및 코드 리뷰 스킬 전반에 텔레메트리 세분화, 시간 순서 원인 분리, 프로덕션 파이프라인 패리티 감사, 테스트 시맨틱스 보존, 온디바이스 가설 검증의 5-Gate 프로토콜을 의무화하는 규칙이 병합되었습니다.",
+      "confirmed_facts": [
+        "2026년 11월 6일 Gerrit 변경번호 4411322가 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+        "camerax-triage-and-quirks 및 camerax-code-review 스킬에 5-Gate Deep Root-Cause Protocol이 명문화되었습니다.",
+        "카메라 서브에이전트, 스웜, 워크플로 작업자를 위한 camera/AGENTS.md 가이드라인이 추가 및 개정되었습니다.",
+        "읽기 전용 감사 작업 시 3~5회 다중 라운드 반복 대신 1-Pass 종료를 적용하는 적응형 규칙이 신설되었습니다."
+      ],
+      "evidence_summary": "Gerrit 4411322 패치를 통해 CameraX 개발 및 코드 리뷰 워크플로에 5단계 심층 근본 원인 분석 프로토콜이 도입되었습니다.",
+      "specificity_checks": [
+        "소스 브랜치: androidx-main",
+        "변경 번호: Gerrit 4411322",
+        "적용 대상: camera/AGENTS.md, camerax-code-review/SKILL.md, camerax-triage-and-quirks/SKILL.md",
+        "동작 변화: 결함 분류 시 무분별한 광범위 Quirk 도입 금지 및 온디바이스 검증 의무화"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+        "Evidence ID: source-body:ad0828cf8985da24eb09",
+        "Primary source: 원문 메타데이터의 status=MERGED를 확인했습니다. 정식 라이브러리 배포나 상용 런타임 변경은 아닙니다.",
+        "Linked evidence: unresolved - 커밋 메시지에 기재된 버그 번호 581244809의 내부 내용은 확인하지 못했습니다."
+      ],
+      "public_article": {
+        "headline": "CameraX 엔지니어링 에이전트에 5-Gate 심층 근본 원인 분석 프로토콜 적용",
+        "lead": "카메라 결함을 분석할 때 단순 테스트 실패 로그만 보고 무분별하게 기기 전체 기능을 차단해버리던 관행을 막기 위한 엄격한 5단계 원인 규명 규칙이 제정되었습니다.",
+        "body_markdown": "구글 안드로이드 오픈소스 프로젝트의 frameworks/support 저장소에 CameraX 엔지니어링 및 리뷰 스킬을 고도화하는 5-Gate 심층 근본 원인 프로토콜 패치가 2026년 11월 6일 병합되었습니다.\n\n카메라 서브시스템은 하드웨어와 HAL 드라이버 그리고 프레임워크가 복잡하게 얽혀 있어, 특정 합성 테스트 환경의 실패만 보고 광범위한 기기 쿼크(DeviceQuirk)를 적용해 정상 동작하던 기능까지 꺼버리는 부작용이 종종 발생했습니다. 이를 방지하기 위해 CameraX 팀은 다섯 단계의 필수 감사 게이트를 도입했습니다.\n\n첫 번째 게이트는 상용 API와 합성 테스트의 텔레메트리 분리입니다. 두 번째는 종료 시점의 연쇄 오류와 초기 원인 에러의 시간순 분리이며, 세 번째는 상용 파이프라인 패리티 검사입니다. 네 번째는 단일 기기 결함을 가리기 위해 전체 기기의 테스트 검증 기준을 약화하지 않는 시맨틱스 보존이며, 다섯 번째는 실물 단말기에서의 경험적 가설 검증 의무화입니다. 또한 AGENTS.md 지침을 갱신하여 읽기 전용 분석 작업에서 불필요한 반복 검증을 줄이는 적응형 단일 패스 종료 규칙도 신설했습니다.\n\n이 변경은 Android 카메라 런타임이나 HAL 인터페이스의 C++ 코드를 직접 수정한 것이 아닙니다. CameraX 팀 내부의 AI 에이전트 지침과 엔지니어링 코드 리뷰 프로토콜을 규정한 문서 및 스킬 업데이트입니다. 다만 복잡한 카메라 스택 문제를 디버깅하고 벤더 드라이버 결함을 프레임워크 쿼크로 우회할 때 지켜야 할 체계적인 엔지니어링 가이드라인을 제공합니다.",
+        "camera_hal_takeaway": "HAL 직접 변경은 아니지만, 상위 프레임워크가 벤더 드라이버 결함을 판정할 때 준수해야 할 엄격한 5-Gate 규칙을 제시합니다. HAL 엔지니어는 드라이버 이슈 리포트 시 합성 테스트 실패와 실제 상용 파이프라인의 분기 영향을 명확히 분리하여 대응해야 합니다.",
+        "reader_checkpoints": [
+          "CameraX 쿼크 제안 시 5-Gate 프로토콜(상용 vs 합성 테스트 분리, 온디바이스 실증) 준수 여부 점검",
+          "테스트 실패 분석 시 tearDown 시점의 2차 타임아웃 대신 최초 원인 이벤트 로그 분리 관찰"
+        ],
+        "source_links": [
+          {
+            "title": "Enforce 5-Gate Deep Root-Cause Protocol in CameraX skills - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+            "source_role": "primary"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "출처: AndroidX Gerrit (2026-11-06)",
+        "editorial_story": {
+          "not_to_overclaim": "개발 워크플로 및 에이전트 스킬 지침 업데이트이며 안드로이드 카메라 HAL 바이너리 변경이 아닙니다.",
+          "editor_take": "카메라 쿼크 생성 시 흔히 발생하는 과잉 비활성화를 억제하고 정밀한 근본 원인 분석을 강제하는 체계적인 프로세스입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Tooling",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 11월 6일 Gerrit 변경번호 4411322가 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+          "camerax-triage-and-quirks 및 camerax-code-review 스킬에 5-Gate Deep Root-Cause Protocol이 추가되었습니다.",
+          "camera/AGENTS.md에 서브에이전트 온보딩 및 적응형 1-Pass 읽기 전용 종료 지침이 추가되었습니다."
+        ],
+        "background_context": "카메라 프레임워크 디버깅에서는 상위 애플리케이션의 설정 오류와 벤더 HAL 내부의 잠재적 드라이버 결함이 복잡하게 얽힙니다. 합성 테스트 하네스의 미비로 인한 실패를 실제 기기 HAL의 결함으로 오인하여 광범위한 쿼크를 생성하면, 정상적인 사용자 경험까지 훼손되는 문제가 발생하곤 했습니다.",
+        "hal_driver_impact": "Camera HAL API 규격을 바꾸지는 않으나, CameraX 팀이 벤더 드라이버 결함을 주장하기 전에 반드시 온디바이스 실증과 상용 파이프라인 패리티를 입증하도록 강제하므로 HAL 공급사 입장에서 무분별한 프레임워크 쿼크 전가를 방지하는 효과가 있습니다.",
+        "action_items": [
+          "카메라 이슈 트리아지 시 최초 발생 에러와 사후 세션 해제(teardown) 에러를 시간 순서대로 분리하는 로그 분석 절차를 수립합니다.",
+          "합성 테스트 하네스 실패 건이 상용 CameraX 파이프라인에서도 동일하게 발생하는지 사전 검증합니다."
+        ],
+        "team_share_points": "CameraX의 5-Gate 근본 원인 분석 프로토콜 도입 내용 공유 및 사내 디버깅 프로세스 벤치마킹."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 11월 6일 Gerrit 4411322를 통해 5-Gate 프로토콜이 공식 병합되었습니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_framework_owner",
+          "camera_test_owner",
+          "native_tooling_owner"
+        ],
+        "check_within_2_weeks": "카메라 결함 리포트 분석 시 5-Gate 절차에 따라 최초 원인과 세션 해제 캐스케이드를 분리하는 방식을 적용해 봅니다.",
+        "impact_axes": [
+          "framework_hal_contract",
+          "native_tooling_workflow"
+        ],
+        "do_not_overstate": [
+          "안드로이드 카메라 HAL 내부 아키텍처나 C++ 네이티브 바이너리가 수정된 것으로 과장하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "root-cause-fact-1",
+          "text": "2026년 11월 6일 Gerrit 변경번호 4411322가 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:ad0828cf8985da24eb09"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "root-cause-fact-2",
+          "text": "camerax-triage-and-quirks 및 camerax-code-review 스킬에 5-Gate Deep Root-Cause Protocol이 추가되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:ad0828cf8985da24eb09"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "root-cause-fact-3",
+          "text": "camera/AGENTS.md에 서브에이전트 온보딩 및 적응형 1-Pass 읽기 전용 종료 지침이 추가되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:ad0828cf8985da24eb09"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322"
+          ],
+          "impact_level": "native_tooling_workflow",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "결함 리포트 분석 시 5-Gate 프로토콜 준수 여부 검토",
+        "상용 파이프라인과 합성 테스트 하네스 간의 동작 차이 비교"
+      ],
+      "action_hints": [
+        "사내 카메라 트리아지 프로세스에 5-Gate 원칙 반영"
+      ],
+      "action_items": [
+        "카메라 디버깅 시 최초 원인 에러와 세션 정리 에러를 구분하여 기록"
+      ],
+      "is_ai_related": true,
+      "article_type": "engineering_guideline",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v0bdbebc1f01a38de21004f32be4e375582bd633675ce8e19f11ee677174d47b4/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=hi",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        },
+        {
+          "url": "https://opengraph.githubassets.com/fb444ca8a63df3d86261007d4a1089268e36ab3f46a2ab0aacf2a9266caed703/anthropics/claude-code/releases/tag/v2.1.318",
+          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Code Changelog",
+          "validationStatus": "ok",
+          "contentLength": 49761
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "적절한 관련 이미지가 제공되지 않아 선택을 생략했습니다.",
+      "sources": [
+        {
+          "title": "Enforce 5-Gate Deep Root-Cause Protocol in CameraX skills - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322"
+        }
+      ],
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+      "source_candidate_hash": "a7be6a0697d9864e34231d985818eb081ce5063bdb45582310ee9f02099648ee",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX CameraPipe·Camera Extensions의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/cpp.svg",
+        "src": "../../assets/images/fallback/cpp.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Testing",
+      "headline": "redfin 64비트 전용 랩 환경의 특정 카메라 HAL 네이티브 충돌 테스트 예외 처리",
+      "what_changed": "redfin(Pixel 5) 기기를 32비트 ABI가 없는 64비트 전용 빌드로 구동할 때 Preview + VideoCapture + ImageCapture 바인딩 시 live_rectiface_processor 종횡비 불일치로 발생하는 SIGABRT 및 UHD VideoCapture 프레임레이트 설정 시 camera.lito.so에서 발생하는 SIGSEGV 충돌을 회피하기 위해 테스트 스킵 로직이 추가되었습니다.",
+      "confirmed_facts": [
+        "2026년 11월 2일 Gerrit 변경번호 4403075가 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+        "redfin 64비트 전용 환경에서 Preview + VideoCapture + ImageCapture 바인딩 시 live_rectiface_processor.cc에서 종횡비 불일치([640,480] vs [640,360])로 SIGABRT 비정상 종료가 발생했습니다.",
+        "UHD VideoCapture에 명시적 목표 FPS를 설정할 때 camera.lito.so의 CamX::Session::QueryStreamHDRMode에서 SIGSEGV 충돌이 발생했습니다.",
+        "StressTestUtil에 assumeNotRedfin64BitOnly 검사가 추가되어 FrameRateTest 및 ImageCapture 관련 스트레스 테스트 케이스를 스킵하도록 변경되었습니다."
+      ],
+      "evidence_summary": "Gerrit 4403075 패치를 통해 64비트 전용 redfin 랩 환경에서 발생하는 특정 벤더 카메라 HAL 크래시 테스트를 건너뛰는 예외 처리가 반영되었습니다.",
+      "specificity_checks": [
+        "소스 브랜치: androidx-main",
+        "변경 번호: Gerrit 4403075",
+        "대상 기기: redfin 64-bit-only 빌드 (Build.SUPPORTED_32_BIT_ABIS.isEmpty())",
+        "동작 변화: live_rectiface_processor 및 camera.lito.so 네이티브 충돌 테스트 스킵"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+        "Evidence ID: source-body:4b633b4aa225c076f62f",
+        "Primary source: 원문 메타데이터의 status=MERGED를 확인했습니다. 라이브러리 정식 배포나 상용 단말기 펌웨어 반영은 미확인 상태입니다.",
+        "Linked evidence: unresolved - 커밋 메시지에 기재된 버그 번호 579704076의 세부 내용은 확인하지 못했습니다."
+      ],
+      "public_article": {
+        "headline": "redfin 64비트 전용 랩 환경의 카메라 HAL 네이티브 충돌에 대응한 테스트 분기 추가",
+        "lead": "구형 칩셋 기반 테스트 기기를 64비트 전용 이미지로 운용할 때 복합 카메라 스트림이나 UHD 프레임레이트 설정에서 발생하는 HAL 레벨 크래시의 원인이 드러났습니다.",
+        "body_markdown": "구글 안드로이드 오픈소스 프로젝트의 frameworks/support 저장소에 redfin(Pixel 5) 64비트 전용 환경의 카메라 HAL 충돌 테스트를 건너뛰는 패치가 2026년 11월 2일 병합되었습니다.\n\n구글 내부 랩에서 redfin 기기를 32비트 라이브러리가 제거된 64비트 전용 빌드로 구동할 때 두 가지 치명적인 공급업체 카메라 HAL 충돌이 관찰되었습니다. 첫 번째는 Preview, VideoCapture, ImageCapture를 동시에 바인딩할 때 발생했습니다. 공급업체 HAL 내부의 live_rectiface_processor 컴포넌트에서 프레임 종횡비가 640x480과 640x360으로 불일치하면서 SIGABRT 비정상 종료가 일어났습니다. 두 번째는 UHD 해상도의 VideoCapture에 명시적 목표 FPS를 설정할 때 발생했으며, 퀄컴 CamX 드라이버 바이너리인 camera.lito.so의 QueryStreamHDRMode 함수에서 SIGSEGV 세그멘테이션 폴트가 발생했습니다.\n\n이 문제를 회피하기 위해 테스트 유틸리티에 assumeNotRedfin64BitOnly 검사를 신설했습니다. 디바이스명이 redfin이고 시스템에서 지원하는 32비트 ABI 목록이 비어 있는 랩 환경에 한해 FrameRateTest 및 ImageCapture 관련 스트레스 테스트 케이스를 실행하지 않고 건너뜁니다.\n\n해당 패치의 유효성을 확인하려면 redfin 64비트 전용 이미지 단말에서 FrameRateTest 및 ImageCaptureLifecycleStatusChangeStressTest, ImageCaptureSwitchCameraStressTest를 직접 실행해보는 편집 제안 점검을 수행할 수 있습니다. 정상 반영 상태라면 기존에 발생하던 SIGABRT나 SIGSEGV 네이티브 크래시로 테스트 프로세스가 죽는 대신 해당 테스트 케이스들이 건너뜀(Skipped)으로 안전하게 통과하는 결과를 관찰할 수 있습니다. 이는 테스트 하네스의 동작을 점검하기 위한 제안이며 상용 환경의 결과는 아닙니다.\n\n이번 조치는 공급업체 드라이버 바이너리의 메모리 버그나 종횡비 계산 오류를 수정한 것이 아니라 프레임워크 CI 테스트 하네스에서 예외 처리를 추가한 것입니다. 일반 사용자에게 판매된 멀티라이브러리 Pixel 5 상용 펌웨어의 동작에는 영향이 없으며, 현재 확인된 범위는 androidx-main 소스 트리의 병합 상태까지입니다. 실제 라이브러리 배포판이나 상용 제품 빌드 반영 여부는 별도로 확인해야 합니다.",
+        "camera_hal_takeaway": "Qualcomm lito(SM7250) 기반 HAL 바이너리가 64비트 전용 런타임에서 특정 스트림 조합 및 UHD HDR 모드 쿼리 시 네이티브 크래시를 일으키는 현상을 명확히 보여줍니다. SoC 플랫폼 엔지니어는 64비트 마이그레이션 시 카메라 공급업체 라이브러리의 포맷 검증과 심볼 호출 안정성을 점검해야 합니다.",
+        "reader_checkpoints": [
+          "redfin 64비트 전용 빌드에서 FrameRateTest 실행 시 camera.lito.so 크래시 대신 건너뜀 처리 관찰",
+          "Preview + VideoCapture + ImageCapture 동시 스트림 시 HAL 내부 분석 종횡비(live_rectiface_processor) 매핑 점검"
+        ],
+        "source_links": [
+          {
+            "title": "Skip redfin 64-bit-only HAL crash test cases - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+            "source_role": "primary"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "출처: AndroidX Gerrit (2026-11-02)",
+        "editorial_story": {
+          "not_to_overclaim": "HAL 드라이버 크래시 자체의 수정이 아닌 테스트 케이스 예외 스킵 처리입니다.",
+          "editor_take": "레거시 32/64비트 혼합 플랫폼을 64비트 전용으로 전환할 때 카메라 HAL 바이너리가 겪는 호환성 한계를 기록한 자료입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 11월 2일 Gerrit 변경번호 4403075가 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+          "redfin 64비트 전용 랩 빌드에서 Preview + VideoCapture + ImageCapture 바인딩 시 live_rectiface_processor.cc 종횡비 불일치로 SIGABRT가 발생했습니다.",
+          "UHD VideoCapture 명시적 FPS 설정 시 camera.lito.so의 QueryStreamHDRMode에서 SIGSEGV가 발생했습니다.",
+          "StressTestUtil에 assumeNotRedfin64BitOnly 검사를 추가하여 FrameRateTest 및 ImageCapture 관련 스트레스 테스트를 건너뛰도록 처리했습니다."
+        ],
+        "background_context": "32비트와 64비트 라이브러리가 공존하던 레거시 칩셋 플랫폼을 순수 64비트 전용 OS 빌드로 전환할 때, 구형 벤더 HAL 바이너리의 내부 형변환이나 포인터 연산 결함으로 인해 예기치 못한 네이티브 크래시가 발생할 수 있습니다. 구글 내부 랩 환경에서는 이러한 레거시 호환성 문제를 격리하기 위해 테스트 스킵 로직을 적용합니다.",
+        "hal_driver_impact": "직접적인 HAL 바이너리 변경은 없으나, Qualcomm SM7250(lito) 기반 플랫폼에서 3개 이상의 복합 스트림 바인딩이나 UHD HDR 스트림 모드 질의 시 HAL 내부 컴포넌트가 세그멘테이션 폴트를 일으키는 구체적인 취약 지점을 드러냈습니다.",
+        "action_items": [
+          "퀄컴 lito 플랫폼 기반 64비트 펌웨어에서 UHD VideoCapture 구성 시 QueryStreamHDRMode 호출 안정성을 점검합니다.",
+          "복합 스트림 환경에서 프레임 종횡비 불일치 시 HAL 비정상 종료 여부를 확인합니다."
+        ],
+        "team_share_points": "redfin 64비트 환경의 퀄컴 CamX HAL 충돌 원인 및 CameraX 테스트 스킵 패치 내용 공유."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 11월 2일 Gerrit 4403075를 통해 64비트 redfin HAL 충돌 테스트 스킵이 병합되었습니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_driver_owner",
+          "camera_test_owner",
+          "performance_thermal_owner"
+        ],
+        "check_within_2_weeks": "SM7250 기반 기기의 64비트 빌드 환경에서 UHD 비디오 스트림 구성 시 camera.lito.so 안정성을 점검합니다.",
+        "impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "performance_latency_frame_drop"
+        ],
+        "do_not_overstate": [
+          "퀄컴 카메라 HAL 바이너리 자체의 메모리 버그가 수정된 것으로 기술하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "redfin-fact-1",
+          "text": "2026년 11월 2일 Gerrit 변경번호 4403075가 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:4b633b4aa225c076f62f"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "redfin-fact-2",
+          "text": "redfin 64비트 전용 랩 빌드에서 Preview + VideoCapture + ImageCapture 바인딩 시 live_rectiface_processor.cc 종횡비 불일치로 SIGABRT가 발생했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:4b633b4aa225c076f62f"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "redfin-fact-3",
+          "text": "UHD VideoCapture 명시적 FPS 설정 시 camera.lito.so의 QueryStreamHDRMode에서 SIGSEGV가 발생했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:4b633b4aa225c076f62f"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "redfin-fact-4",
+          "text": "StressTestUtil에 assumeNotRedfin64BitOnly 검사를 추가하여 FrameRateTest 및 ImageCapture 관련 스트레스 테스트를 건너뛰도록 처리했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:4b633b4aa225c076f62f"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "redfin 64비트 이미지에서 FrameRateTest 건너뜀 결과 확인",
+        "live_rectiface_processor 및 camera.lito.so 충돌 스택 분석"
+      ],
+      "action_hints": [
+        "64비트 전용 랩 테스트 하네스 분기 검토"
+      ],
+      "action_items": [
+        "64비트 전용 안드로이드 빌드에서 퀄컴 CamX 드라이버 심볼 호출 안정성 검증"
+      ],
+      "is_ai_related": false,
+      "article_type": "testing_infrastructure",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v0bdbebc1f01a38de21004f32be4e375582bd633675ce8e19f11ee677174d47b4/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=hi",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        },
+        {
+          "url": "https://opengraph.githubassets.com/fb444ca8a63df3d86261007d4a1089268e36ab3f46a2ab0aacf2a9266caed703/anthropics/claude-code/releases/tag/v2.1.318",
+          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Code Changelog",
+          "validationStatus": "ok",
+          "contentLength": 49761
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "적절한 관련 이미지가 제공되지 않아 선택을 생략했습니다.",
+      "sources": [
+        {
+          "title": "Skip redfin 64-bit-only HAL crash test cases - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075"
+        }
+      ],
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+      "source_candidate_hash": "792d83cd37fc8ab3199134e7942852a15150e715869099f4e6cdc701b9c2e200",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX CameraPipe·Camera Extensions의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    },
+    {
+      "category": "Camera Framework",
+      "headline": "갤럭시 노트 10+ 스냅드래곤, 전면 줌 촬영 시 HAL 멈춤 회피 패치 병합",
+      "what_changed": "삼성 갤럭시 노트 10+ 스냅드래곤 기기에서 다중 반복 스트림 활성화 및 전면 카메라 줌 촬영 시 Qualcomm CamX 노드 펜스 데드락으로 HAL이 멈추던 문제를 해결하기 위해, StillCaptureFlashStopRepeatingQuirk를 확장하여 스틸 캡처 직전 반복 요청을 일시 중단하고 완료 후 재개하도록 변경되었습니다.",
+      "confirmed_facts": [
+        "2026년 11월 2일 Gerrit 변경번호 4399968이 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+        "Samsung Galaxy Note 10+ Snapdragon(d2q, SM-N975U1) 전면 카메라(cameraId 1)에서 다중 스트림과 디지털 줌 적용 시 HAL이 멈춰 5초 후 ERROR_CAMERA_DEVICE(4)가 발생했습니다.",
+        "퀄컴 CamX 엔진 내부의 JPEGEncodeLiveSnapshotPreview IPE0 및 IPE1 노드가 출력 펜스에서 대기하며 데드락에 빠지는 것이 원인이었습니다.",
+        "StillCaptureFlashStopRepeatingQuirk와 StillCaptureFlow를 확장하여 전면 줌 스틸 캡처 제출 직전 stopRepeating을 호출하고 캡처 완료 후 반복 요청을 재개하도록 수정되었습니다."
+      ],
+      "evidence_summary": "Gerrit 4399968 패치를 통해 Galaxy Note 10+ 스냅드래곤 전면 카메라의 줌 스틸 캡처 시 발생하는 HAL 펜스 데드락을 상위 프레임워크 요청 시퀀스로 우회했습니다.",
+      "specificity_checks": [
+        "소스 브랜치: androidx-main",
+        "변경 번호: Gerrit 4399968",
+        "대상 기기: Samsung Galaxy Note 10+ Snapdragon (d2q, 예: SM-N975U1) 전면 카메라(카메라 ID 1)",
+        "동작 변화: 다중 반복 스트림 및 줌 상태에서 스틸 캡처 전 stopRepeating 호출 및 캡처 후 재개"
+      ],
+      "source_verification_notes": [
+        "Source URL: https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+        "Evidence ID: source-body:1777ed174a2110c7a20d",
+        "Primary source: 원문 메타데이터의 status=MERGED를 확인했습니다. 라이브러리 정식 배포판 및 상용 제품 빌드 반영은 미확인 상태입니다.",
+        "Linked evidence: unresolved - 커밋 메시지에 기재된 버그 번호 578857056의 세부 내용은 확인하지 못했습니다."
+      ],
+      "public_article": {
+        "headline": "갤럭시 노트 10+ 스냅드래곤, 전면 줌 촬영 시 HAL 데드락 방지 패치 병합",
+        "lead": "전면 카메라로 셀피를 찍을 때 화면을 확대하고 비디오나 분석 스트림이 동시에 돌아가면 카메라 디바이스 에러가 발생하던 현상의 원인이 밝혀졌습니다.",
+        "body_markdown": "구글 안드로이드 오픈소스 프로젝트의 frameworks/support 저장소에 삼성 갤럭시 노트 10+ 스냅드래곤 기기(d2q, 예: SM-N975U1)의 전면 카메라 줌 촬영 결함을 우회하는 패치가 2026년 11월 2일 병합되었습니다.\n\n해당 기기의 전면 카메라(카메라 ID 1)에서는 미리보기와 이미지 분석(Preview + ImageAnalysis) 등 두 개 이상의 반복 스트림이 켜진 상태에서 디지털 줌을 적용해 고해상도 스틸 사진(TEMPLATE_STILL_CAPTURE)을 요청할 경우 카메라 HAL이 멈춰버렸습니다. 이후 5초 동안 응답이 없어 카메라 디바이스 치명적 오류인 ERROR_CAMERA_DEVICE(에러 코드 4)가 발생했습니다. 조사 결과 퀄컴 CamX 엔진 내부의 JPEGEncodeLiveSnapshotPreview IPE0 및 IPE1 노드가 출력 펜스(output fence)에서 서로 대기하며 데드락에 빠지는 것이 원인이었습니다.\n\nCameraX 팀은 StillCaptureFlashStopRepeatingQuirk와 StillCaptureFlow 로직을 수정했습니다. 해당 조건(d2q 전면 카메라, 다중 스트림, SCALER_CROP_REGION 설정 또는 1.0배율 초과 줌)이 감지되면 캡처 파이프라인이 스틸 사진 요청을 제출하기 직전 반복 스트림을 잠시 중단(stopRepeating)하고, 캡처가 끝난 뒤 반복 요청을 재개하도록 워크어라운드를 구성했습니다.\n\n이 수정 사항의 효과를 점검하려면 SM-N975U1 실기기에서 전면 카메라를 열고 Preview와 ImageAnalysis를 동시에 바인딩한 후, 디지털 줌 배율을 1.0배율 초과(예: 2.0배율)로 설정한 상태에서 스틸 캡처를 트리거해보는 편집 제안 검증을 진행할 수 있습니다. 패치가 정상 반영된 환경이라면 5초 타임아웃이나 ERROR_CAMERA_DEVICE 종료 없이 전면 카메라 고유의 1000만 화소(3648x2736) 캡처 이미지가 온전히 전달되는 관찰 결과를 얻을 수 있습니다. 이는 동작 확인을 위한 제안 절차이며 공급사의 공인 CTS 시험 결과는 아닙니다.\n\n한편 엑시노스 프로세서가 탑재된 글로벌 모델(d2s, SM-N975F)은 퀄컴 CamX 파이프라인을 사용하지 않으므로 이번 쿼크 적용 대상에서 제외되었습니다. 이번 패치는 frameworks/support의 androidx-main 브랜치에 병합된 상태까지만 확인되었으며, 실제 배포 라이브러리나 단말기 상용 펌웨어에 포함되었는지는 별도로 확인해야 합니다.",
+        "camera_hal_takeaway": "Qualcomm CamX 드라이버 내부 IPE 노드의 출력 동기화 펜스 데드락 현상을 상위 프레임워크가 stopRepeating 및 재시작 시퀀스로 우회한 구현입니다. 퀄컴 플랫폼 HAL 개발자는 고배율 크롭 캡처와 다중 스트림 라이브 스냅샷 처리 시 노드 간 펜스 동기화 로직을 면밀히 점검해야 합니다.",
+        "reader_checkpoints": [
+          "Galaxy Note 10+ 스냅드래곤 기기에서 Preview + ImageAnalysis 구동 중 전면 줌 촬영 시 HAL 타임아웃 해소 관찰",
+          "스틸 캡처 전 stopRepeating 호출 시 미리보기 스트림의 일시 중단 및 재개 매끄러움 점검"
+        ],
+        "source_links": [
+          {
+            "title": "Stop repeating for front zoom capture on d2q - platform/frameworks/support",
+            "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+            "source_role": "primary"
+          }
+        ],
+        "story_contract_version": 2,
+        "source_subtitle": "출처: AndroidX Gerrit (2026-11-02)",
+        "editorial_story": {
+          "not_to_overclaim": "HAL 바이너리 자체가 패치된 것이 아니며 CameraX 상위 프레임워크의 요청 파이프라인 워크어라운드입니다.",
+          "editor_take": "SoC ISP 내부 IPE 노드의 펜스 데드락이라는 심층적인 HAL 결함을 프레임워크 요청 시퀀스 제어로 우회한 엔지니어링 사례입니다."
+        },
+        "decision_metadata": {
+          "impact": "High",
+          "scope": [
+            "HAL",
+            "Framework",
+            "SoC"
+          ],
+          "action": [
+            "Watch",
+            "Test",
+            "Adopt"
+          ],
+          "overclaim_risk": "Medium"
+        }
+      },
+      "article_sections": {
+        "verified_facts": [
+          "2026년 11월 2일 Gerrit 변경번호 4399968이 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+          "Samsung Galaxy Note 10+ Snapdragon(d2q, SM-N975U1) 전면 카메라(cameraId 1)에서 다중 스트림과 디지털 줌 적용 시 HAL이 멈춰 5초 후 ERROR_CAMERA_DEVICE(4)가 발생했습니다.",
+          "Qualcomm CamX 엔진 내부의 JPEGEncodeLiveSnapshotPreview IPE0 및 IPE1 노드가 출력 펜스에서 대기하며 데드락에 빠지는 현상이 확인되었습니다.",
+          "StillCaptureFlashStopRepeatingQuirk와 StillCaptureFlow를 수정하여 스틸 캡처 전 stopRepeating을 호출하고 완료 후 재개하도록 변경되었습니다."
+        ],
+        "background_context": "스마트폰 카메라 ISP 파이프라인에서 이미지 처리 엔진(IPE) 노드들은 여러 출력 스트림의 버퍼 동기화를 위해 동기화 펜스(sync fence)를 사용합니다. 다중 스트림과 디지털 크롭 줌이 동시에 걸릴 때 하드웨어 가속 노드 간 의존성이 꼬이면 펜스가 영원히 해제되지 않아 카메라 디바이스가 정지할 수 있습니다.",
+        "hal_driver_impact": "CameraX 상위 프레임워크가 스틸 캡처 요청 직전에 repeating request를 중지시킴으로써 하부 Qualcomm CamX HAL 파이프라인의 IPE0/IPE1 노드 펜스 경쟁을 원천 차단합니다. 10MP 풀 해상도 캡처를 보존하면서 디바이스 크래시를 회피합니다.",
+        "action_items": [
+          "Qualcomm CamX 기반 단말에서 전면 카메라 디지털 줌과 다중 스트림 동시 구동 시 펜스 타임아웃 여부를 확인합니다.",
+          "stopRepeating 적용에 따른 스틸 캡처 직후 미리보기 프레임 드롭이나 셔터 랙 변화를 측정합니다."
+        ],
+        "team_share_points": "갤럭시 노트 10+ 스냅드래곤 전면 카메라 줌 촬영 시 CamX IPE 노드 데드락 결함 및 프레임워크 우회 패치 내용 공유."
+      },
+      "hal_signal_capsule": {
+        "why_now": "2026년 11월 2일 Gerrit 4399968을 통해 전면 줌 스틸 캡처 데드락 우회 패치가 병합되었습니다.",
+        "reader_owners": [
+          "camera_hal_owner",
+          "camera_driver_owner",
+          "camera_framework_owner",
+          "camerax_app_compat_owner"
+        ],
+        "check_within_2_weeks": "SM-N975U1 기기에서 Preview+ImageAnalysis 구동 중 줌 캡처 시 에러 4 발생 여부를 확인합니다.",
+        "impact_axes": [
+          "framework_hal_contract",
+          "stream_buffer_metadata",
+          "camerax_app_compatibility"
+        ],
+        "do_not_overstate": [
+          "퀄컴 CamX 드라이버의 IPE 펜스 동기화 네이티브 버그 자체가 패치된 것으로 기술하지 않습니다."
+        ]
+      },
+      "claims": [
+        {
+          "claim_id": "d2q-zoom-fact-1",
+          "text": "2026년 11월 2일 Gerrit 변경번호 4399968이 platform/frameworks/support의 androidx-main 브랜치에 병합되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:1777ed174a2110c7a20d"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "d2q-zoom-fact-2",
+          "text": "Samsung Galaxy Note 10+ Snapdragon(d2q, SM-N975U1) 전면 카메라(cameraId 1)에서 다중 스트림과 디지털 줌 적용 시 HAL이 멈춰 5초 후 ERROR_CAMERA_DEVICE(4)가 발생했습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:1777ed174a2110c7a20d"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "d2q-zoom-fact-3",
+          "text": "Qualcomm CamX 엔진 내부의 JPEGEncodeLiveSnapshotPreview IPE0 및 IPE1 노드가 출력 펜스에서 대기하며 데드락에 빠지는 현상이 확인되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:1777ed174a2110c7a20d"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        },
+        {
+          "claim_id": "d2q-zoom-fact-4",
+          "text": "StillCaptureFlashStopRepeatingQuirk와 StillCaptureFlow를 수정하여 스틸 캡처 전 stopRepeating을 호출하고 완료 후 재개하도록 변경되었습니다.",
+          "claim_type": "fact",
+          "evidence_ids": [
+            "source-body:1777ed174a2110c7a20d"
+          ],
+          "source_urls": [
+            "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968"
+          ],
+          "impact_level": "camera_framework_behavior",
+          "overclaim_risk": "low"
+        }
+      ],
+      "camera_hal_checks": [
+        "전면 줌 스틸 캡처 시 HAL 데드락 해소 및 에러 코드 4 발생 여부 확인",
+        "stopRepeating 전후의 프리뷰 스트림 지연 및 버퍼 해제 동작 관찰"
+      ],
+      "action_hints": [
+        "Qualcomm IPE 노드 펜스 동기화 로직 리뷰"
+      ],
+      "action_items": [
+        "Snapdragon 플래그십 기기 대상 다중 스트림 줌 캡처 테스트 수행"
+      ],
+      "is_ai_related": false,
+      "article_type": "bug_fix",
+      "imageCandidates": [
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/devrel-devsite/prod/v0bdbebc1f01a38de21004f32be4e375582bd633675ce8e19f11ee677174d47b4/android/images/lockup.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "Android Developers",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 5562
+        },
+        {
+          "url": "https://developer.android.com/_static/images/translated.svg?hl=hi",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/svg+xml",
+          "licenseStatus": "unknown",
+          "attribution": "CameraX Release Notes",
+          "validationStatus": "ok",
+          "contentLength": 1760
+        },
+        {
+          "url": "https://developer.android.com/static/images/social/android-developers.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 31847
+        },
+        {
+          "url": "https://www.gstatic.com/images/icons/material/product/2x/youtube_48dp.png",
+          "sourceUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "articleUrl": "https://developer.android.com/jetpack/androidx/releases/camera",
+          "sourceKind": "article-img",
+          "width": null,
+          "height": null,
+          "alt": "YouTube",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "androidx-camerax-release-notes",
+          "validationStatus": "ok",
+          "contentLength": 2833
+        },
+        {
+          "url": "https://opengraph.githubassets.com/fb444ca8a63df3d86261007d4a1089268e36ab3f46a2ab0aacf2a9266caed703/anthropics/claude-code/releases/tag/v2.1.318",
+          "sourceUrl": "https://api.github.com/repos/anthropics/claude-code/releases?per_page=3&page=1",
+          "articleUrl": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
+          "sourceKind": "og",
+          "width": null,
+          "height": null,
+          "alt": "",
+          "contentType": "image/png",
+          "licenseStatus": "unknown",
+          "attribution": "Claude Code Changelog",
+          "validationStatus": "ok",
+          "contentLength": 49761
+        }
+      ],
+      "selectedImage": "",
+      "imageSource": "",
+      "imageAttribution": "",
+      "imageAlt": "",
+      "imageLicenseStatus": "none",
+      "imageUsageDecisionReason": "적절한 관련 이미지가 제공되지 않아 선택을 생략했습니다.",
+      "sources": [
+        {
+          "title": "Stop repeating for front zoom capture on d2q - platform/frameworks/support",
+          "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968"
+        }
+      ],
+      "source_candidate_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+      "source_candidate_hash": "01a8173ce8d310993f2858fa2db89c61ddcf609298f0f045224f3661c3feee02",
+      "article_group_key": "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+      "tooling_workflow_type": "",
+      "relevance_bucket": "direct_aosp_camera",
+      "editorial_priority": 1,
+      "aosp_camera_directness": 3,
+      "driver_stack_relevance": 0,
+      "soc_platform_relevance": 0,
+      "native_tooling_relevance": 0,
+      "counts_as_primary_camera_topic": true,
+      "counts_as_driver_topic": false,
+      "counts_as_soc_topic": false,
+      "finalSelectionEligibility": "main",
+      "source_gap_risk": false,
+      "main_article_readiness": null,
+      "do_not_claim": [],
+      "evidence_origin": "article_text",
+      "source_hint": "AndroidX CameraPipe·Camera Extensions의 병합된 변경을 수집합니다. submitted 날짜와 리비전별 원문으로 동작 변경을 확인하며, 라이브러리 릴리스나 제품 반영으로 해석하지 않습니다. 목록·상세 수집 상한에 걸리면 전체 기간을 조사했다고 표현하지 않습니다.",
+      "resolvedImage": {
+        "url": "../../assets/images/fallback/android.svg",
+        "src": "../../assets/images/fallback/android.svg",
+        "originalUrl": "",
+        "originalSrc": "",
+        "usedFallback": true,
+        "reason": "no selected image; local fallback visual used"
+      },
+      "image_recovery": {
+        "article_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+        "page_attempts": [
+          {
+            "attempt": 1,
+            "ok": true,
+            "reason": "ok",
+            "status": 0
+          }
+        ],
+        "validation_failures": [],
+        "extracted_count": 0,
+        "valid_count": 0,
+        "outcome": "no_image_extracted"
+      },
+      "coverage_type": "fresh"
+    }
+  ],
+  "action_items": [
+    "CameraX 1.7.0-rc02 릴리스 노트를 확인하고 오버레이 창 UseCase 바인딩 및 비디오 스레드 누수 수정 사항을 점검합니다.",
+    "Tecno BF6 기기에서 VideoCapture와 ImageCapture 동시 구동 시 발생하는 HAL 타임아웃 우회 쿼크 동작을 확인합니다.",
+    "64비트 전용 환경에서 레거시 칩셋 운용 시 발생할 수 있는 퀄컴 CamX 드라이버 바이너리 크래시 지점을 파악합니다.",
+    "갤럭시 노트 10+ 스냅드래곤 기기의 전면 카메라 다중 스트림 줌 캡처 시 발생하는 IPE 펜스 데드락 우회 시퀀스를 검토합니다.",
+    "카메라 결함 분석 시 최초 원인과 세션 해제 캐스케이드를 분리하는 5-Gate 디버깅 원칙을 적용합니다."
+  ],
+  "references": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02"
+    },
+    {
+      "title": "Add Tecno BF6 to ImageCaptureFailed quirk - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969"
+    },
+    {
+      "title": "Enforce 5-Gate Deep Root-Cause Protocol in CameraX skills - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322"
+    },
+    {
+      "title": "Skip redfin 64-bit-only HAL crash test cases - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075"
+    },
+    {
+      "title": "Stop repeating for front zoom capture on d2q - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968"
+    }
+  ],
+  "explicitly_demoted_groups": [],
+  "hard_blocked_groups": [],
+  "selected_group_count": 5,
+  "rendered_group_count": 5,
+  "explicitly_demoted_group_count": 0,
+  "hard_blocked_group_count": 0,
+  "selected_representative_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968"
+  ],
+  "rendered_group_keys": [
+    "article:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+    "article:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968"
+  ],
+  "explicitly_demoted_group_keys": [],
+  "hard_blocked_group_keys": [],
+  "publish_mode": "DEEP",
+  "reference_articles": [
+    {
+      "title": "Build for an expanding lineup of Android XR devices with production-ready tools from Android Developer Summit",
+      "url": "https://developer.android.com/blog/posts/build-android-xr-devices-tools",
+      "source": "Android Developers Blog",
+      "published_date": "2026-11-06",
+      "note": "C++ / AI 네이티브 툴링 참고"
+    },
+    {
+      "title": "Claude Code v2.1.318",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
+      "source": "Claude Code Changelog",
+      "published_date": "2026-11-04",
+      "note": "C++ / AI 네이티브 툴링 참고"
+    },
+    {
+      "title": "Map processed audio PTS to capture time - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418104",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-06",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    },
+    {
+      "title": "Use per-image metadata when saving DNG files - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4389385",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-05",
+      "note": "카메라 드라이버 / 이미지 파이프라인 참고"
+    }
+  ],
+  "tags": [
+    "Camera HAL"
+  ],
+  "coverage_week_key": "2026-W45",
+  "coverage_start_date": "2026-11-02",
+  "coverage_end_date": "2026-11-08",
+  "coverage_mode": "iso_week",
+  "generation_anchor_date": "2026-11-09",
+  "intro_letter": "이번 주 뉴스레터에서는 카메라 시스템의 안정성과 성능 향상을 위한 다양한 업데이트를 다룹니다. CameraX 1.7.0-rc02는 API 30 바인딩 크래시 및 비디오 녹화 스레드 누수를 차단하여 프레임워크 안정성을 강화했습니다. 또한, Tecno BF6 기기 대상 동영상 녹화 중 사진 촬영 HAL 타임아웃 회피 패치와 갤럭시 노트 10+ 스냅드래곤의 전면 줌 촬영 시 HAL 데드락 방지 패치는 특정 기기에서 발생하던 문제를 해결했습니다. 마지막으로, redfin 64비트 전용 랩 환경의 카메라 HAL 네이티브 충돌에 대응한 테스트 분기 추가는 특정 환경에서의 안정성을 높이는 데 기여했습니다.",
+  "intro_letter_source_hash": "sha256:3d04ab962e0b83f67bdbbc2c25d1f3a3a6bf0984c26e1c513e6b2af7bea7de21",
+  "weekly_key": "2026-W46",
+  "week_start_date": "2026-11-09",
+  "week_end_date": "2026-11-15"
+}

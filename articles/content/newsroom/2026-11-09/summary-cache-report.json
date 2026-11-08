@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-09",
+  "generated_at": "2026-11-08T15:31:07.844Z",
+  "cache_root": "cache/news-summary",
+  "totals": {
+    "candidate_count": 12,
+    "hit_count": 0,
+    "miss_count": 12,
+    "by_url_hit_count": 0,
+    "by_content_hit_count": 0,
+    "legacy_hit_count": 0
+  },
+  "reasons": [
+    {
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "count": 12
+    }
+  ],
+  "entries": [
+    {
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "source": "CameraX Release Notes",
+      "published_date": "November 04, 2026",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+        "url_hash": "078d014afa60f8f602365184a283b979935a6530bc3489e9368f284de6798164",
+        "published_date": "November 04, 2026",
+        "content_hash": "840e826bdef675f0eabe4e78b6851311a941512cca0b35f591cc8c470e1c0552"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "CameraX | Jetpack | Android Developers",
+      "url": "https://developer.android.com/jetpack/androidx/releases/camera",
+      "source": "androidx-camerax-release-notes",
+      "published_date": "",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/jetpack/androidx/releases/camera",
+        "url_hash": "49d58944bd3ca26fc6929250597a6e3ac743d90f600cd01698fcbefbe1b6c83f",
+        "published_date": "",
+        "content_hash": "dbd7e131fea63ef59f49369c116bb20fbf840273bfa268ca661b58001eca866b"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Add Tecno BF6 to ImageCaptureFailed quirk - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-02",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+        "url_hash": "f6cc99dc3a869e1f2f26ba3e3b8bbb6729609de6196dcad1854b33e01c8cfe97",
+        "published_date": "2026-11-02",
+        "content_hash": "e9ab638b556fa1b85f3cc18313a5b4fa63f3360e10e8a8d86d4d2f6ee3f2b6e5"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Enforce 5-Gate Deep Root-Cause Protocol in CameraX skills - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-06",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+        "url_hash": "a7be6a0697d9864e34231d985818eb081ce5063bdb45582310ee9f02099648ee",
+        "published_date": "2026-11-06",
+        "content_hash": "b5979cc562aa8362346d74d58a7bba09eb49f64a30424ac9c18434e00653f8fd"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Skip redfin 64-bit-only HAL crash test cases - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-02",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+        "url_hash": "792d83cd37fc8ab3199134e7942852a15150e715869099f4e6cdc701b9c2e200",
+        "published_date": "2026-11-02",
+        "content_hash": "89b4dcb4ff3f69e113fa2f21d5b240fbd6a4c1cc7d76df8a65cff314916fa6ad"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Stop repeating for front zoom capture on d2q - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-02",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+        "url_hash": "01a8173ce8d310993f2858fa2db89c61ddcf609298f0f045224f3661c3feee02",
+        "published_date": "2026-11-02",
+        "content_hash": "0243e7dad796873fb2fb8d5299832f263abd08672f46977fec8c6b1186dfde25"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Claude Code v2.1.318",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
+      "source": "Claude Code Changelog",
+      "published_date": "2026-11-04T00:01:03Z",
+      "cache_key": {
+        "normalized_url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.318",
+        "url_hash": "797aba84ba3e9103d89f53cc52c2b5a80f089c892d1148bf4c724a154835ae06",
+        "published_date": "2026-11-04T00:01:03Z",
+        "content_hash": "162c14b677d7fca4a74a8f4b337145ce62b59c1ef0dd28e135251e1084b5a2cf"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Build for an expanding lineup of Android XR devices with production-ready tools from Android Developer Summit",
+      "url": "https://developer.android.com/blog/posts/build-android-xr-devices-tools",
+      "source": "Android Developers Blog",
+      "published_date": "2026-11-06",
+      "cache_key": {
+        "normalized_url": "https://developer.android.com/blog/posts/build-android-xr-devices-tools",
+        "url_hash": "3fa6a4f132f493580e6a5f52a1c71082d92e1dec4c5dfca7b0014733cc61b797",
+        "published_date": "2026-11-06",
+        "content_hash": "ec1d1550c98d23455418ae588ae5ab77b9b32c5f4de6fc2bf5b50bc0b73b387e"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "camera: usb: Release V4L2 buffers on StreamOn() failure - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8609170",
+      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "published_date": "2026-11-04",
+      "cache_key": {
+        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8609170",
+        "url_hash": "abf0e040081e77186aa1dcfe52608d70382575d8395a4b3c80ef23e4a0221388",
+        "published_date": "2026-11-04",
+        "content_hash": "760569a015cef02f2f2231c635eedf488fb1dec234ed841ef85d7f2b3e99b19c"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "camera: diagnostics: Fix integer overflow and session poisoning - chromiumos/platform2",
+      "url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8680245",
+      "source": "ChromeOS Gerrit (platform2 camera merged changes)",
+      "published_date": "2026-11-03",
+      "cache_key": {
+        "normalized_url": "https://chromium-review.googlesource.com/c/chromiumos/platform2/+/8680245",
+        "url_hash": "dc273e956fabc96e96cf39bc385999a2919aeea6da7e8b6e1296ba51112713c6",
+        "published_date": "2026-11-03",
+        "content_hash": "47a1378c2d0401d0db4911863e835ed3773673028e29d58556df19d428c64cdf"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Map processed audio PTS to capture time - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418104",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-06",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4418104",
+        "url_hash": "ec633787c25dc4a4410344e2745f6fe805fc208d21a84fc06201e90a1afb6b1d",
+        "published_date": "2026-11-06",
+        "content_hash": "50eae57e21286424408e3eea191706756e94f4dbb6b4fe3db1970401adbdb226"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    },
+    {
+      "title": "Use per-image metadata when saving DNG files - platform/frameworks/support",
+      "url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4389385",
+      "source": "AndroidX Gerrit Camera",
+      "published_date": "2026-11-05",
+      "cache_key": {
+        "normalized_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4389385",
+        "url_hash": "21c38e3174da27be9e8deb5ee203c41e3d7b0903b356f4158806e24096294c68",
+        "published_date": "2026-11-05",
+        "content_hash": "7c24456077f9ea9857ad1473d3126305482f4be525e0f861b77b62e020712aa1"
+      },
+      "hit": false,
+      "reason": "by-url:missing-cache-record; by-content:missing-cache-record",
+      "lookup_source": "none",
+      "cache_record_path": ""
+    }
+  ]
+}

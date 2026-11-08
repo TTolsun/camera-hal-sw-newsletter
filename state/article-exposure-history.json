@@ -7,6 +7,102 @@
   },
   "articles": [
     {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+      "title": "Stop repeating for front zoom capture on d2q - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+      "newsletter_date": "2026-11-09",
+      "newsletter_url": "newsletters/2026-W46/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-09",
+      "newsletter_article_date": "2026-11-09",
+      "cooldown_until": "2026-11-30",
+      "first_exposed_at": "2026-11-09",
+      "last_exposed_at": "2026-11-09",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+      "title": "Skip redfin 64-bit-only HAL crash test cases - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+      "newsletter_date": "2026-11-09",
+      "newsletter_url": "newsletters/2026-W46/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-09",
+      "newsletter_article_date": "2026-11-09",
+      "cooldown_until": "2026-11-30",
+      "first_exposed_at": "2026-11-09",
+      "last_exposed_at": "2026-11-09",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+      "title": "Add Tecno BF6 to ImageCaptureFailed quirk - platform/frameworks/support",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+      "newsletter_date": "2026-11-09",
+      "newsletter_url": "newsletters/2026-W46/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-09",
+      "newsletter_article_date": "2026-11-09",
+      "cooldown_until": "2026-11-30",
+      "first_exposed_at": "2026-11-09",
+      "last_exposed_at": "2026-11-09",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "title": "CameraX Release Notes - CameraX 1.7.0-rc02",
+      "source_url": "https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+      "newsletter_date": "2026-11-09",
+      "newsletter_url": "newsletters/2026-W46/index.html",
+      "exposure_type": "newsletter_article",
+      "headline_score": null,
+      "reuse_reason": "",
+      "exposed_at": "2026-11-09",
+      "newsletter_article_date": "2026-11-09",
+      "cooldown_until": "2026-11-30",
+      "first_exposed_at": "2026-11-09",
+      "last_exposed_at": "2026-11-09",
+      "exposure_count": 1,
+      "exposure_types": [
+        "newsletter_article"
+      ]
+    },
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+      "title": "CameraX 엔지니어링 에이전트에 5-Gate 심층 근본 원인 분석 프로토콜 적용",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+      "newsletter_date": "2026-11-09",
+      "newsletter_url": "newsletters/2026-W46/index.html",
+      "exposure_type": "homepage_headline",
+      "headline_score": 100,
+      "reuse_reason": "latest_camera_hal_article",
+      "exposed_at": "2026-11-09",
+      "first_exposed_at": "2026-11-09",
+      "last_exposed_at": "2026-11-09",
+      "exposure_count": 2,
+      "exposure_types": [
+        "homepage_headline",
+        "newsletter_article"
+      ],
+      "newsletter_article_date": "2026-11-09",
+      "cooldown_until": "2026-11-30"
+    },
+    {
       "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",
       "title": "Only query JPEG_R extension sizes on API 35+ in Camera2ExtensionsVendorExtender - platform/frameworks/support",
       "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4402197",

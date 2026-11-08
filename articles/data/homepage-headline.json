@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "updated_at": "2026-11-02T00:00:00+09:00",
+  "updated_at": "2026-11-09T00:00:00+09:00",
   "current_headline": {
-    "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
-    "title": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
-    "summary": "Sony Xperia 1 V 기기에서 4가지 유스케이스를 동시에 묶을 때 비디오 녹화 중 스냅샷 촬영이 멈추던 문제가 CameraX 쿼크 적용으로 우회되었습니다.",
-    "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
-    "newsletter_date": "2026-11-02",
-    "newsletter_url": "newsletters/2026-W45/index.html",
-    "selected_at": "2026-11-02",
+    "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+    "title": "CameraX 엔지니어링 에이전트에 5-Gate 심층 근본 원인 분석 프로토콜 적용",
+    "summary": "카메라 결함을 분석할 때 단순 테스트 실패 로그만 보고 무분별하게 기기 전체 기능을 차단해버리던 관행을 막기 위한 엄격한 5단계 원인 규명 규칙이 제정되었습니다.",
+    "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+    "newsletter_date": "2026-11-09",
+    "newsletter_url": "newsletters/2026-W46/index.html",
+    "selected_at": "2026-11-09",
     "base_score": 100,
     "current_score": 100,
-    "last_scored_at": "2026-11-02",
+    "last_scored_at": "2026-11-09",
     "date_evidence": {
-      "date": "2026-10-30",
+      "date": "2026-11-06",
       "date_field": "published_date",
       "evidence_level": "watch",
       "publish_ready_date_evidence": true
@@ -40,11 +40,56 @@
       "category": "direct_aosp_camera",
       "source_name": "AndroidX Gerrit Camera"
     },
-    "newsletter_article_url": "newsletters/2026-W45/index.html#article-sony-xperia-1-v-4",
-    "image_url": "assets/images/fallback/android.svg",
-    "image_alt": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회 image"
+    "newsletter_article_url": "newsletters/2026-W46/index.html#article-camerax-5-gate",
+    "image_url": "assets/images/fallback/cpp.svg",
+    "image_alt": "CameraX 엔지니어링 에이전트에 5-Gate 심층 근본 원인 분석 프로토콜 적용 image"
   },
   "headline_history": [
+    {
+      "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "title": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회",
+      "summary": "Sony Xperia 1 V 기기에서 4가지 유스케이스를 동시에 묶을 때 비디오 녹화 중 스냅샷 촬영이 멈추던 문제가 CameraX 쿼크 적용으로 우회되었습니다.",
+      "source_url": "https://android-review.googlesource.com/c/platform/frameworks/support/+/4399967",
+      "newsletter_date": "2026-11-02",
+      "newsletter_url": "newsletters/2026-W45/index.html",
+      "selected_at": "2026-11-02",
+      "base_score": 100,
+      "current_score": 100,
+      "last_scored_at": "2026-11-02",
+      "date_evidence": {
+        "date": "2026-10-30",
+        "date_field": "published_date",
+        "evidence_level": "watch",
+        "publish_ready_date_evidence": true
+      },
+      "quality_flags": {
+        "source_gap_risk": false,
+        "fact_check_must_fix_unresolved": false,
+        "stale_claim_hard_failure": false,
+        "blocked_source": false
+      },
+      "score_breakdown": {
+        "base_score": 100,
+        "official_source_bonus": 8,
+        "camera_bucket_bonus": 6,
+        "driver_or_soc_bonus": 0,
+        "fallback_penalty": 0,
+        "generic_topic_penalty": 0,
+        "source_gap_penalty": 0,
+        "watch_page_penalty": 0,
+        "minimum_headline_score": 40,
+        "total": 100
+      },
+      "snapshot": {
+        "category": "direct_aosp_camera",
+        "source_name": "AndroidX Gerrit Camera"
+      },
+      "newsletter_article_url": "newsletters/2026-W45/index.html#article-sony-xperia-1-v-4",
+      "image_url": "assets/images/fallback/android.svg",
+      "image_alt": "Sony Xperia 1 V의 4개 유스케이스 스트림 공유 시 비디오 스냅샷 중단 우회 image",
+      "replaced_at": "2026-11-09",
+      "replacement_reason": "latest_camera_hal_article"
+    },
     {
       "article_identity_key": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4381410",
       "title": "CameraX UseCaseCameraState, 일시적 프레임 드롭 시 상태 업데이트 신호가 조기 실패하던 오류 수정",

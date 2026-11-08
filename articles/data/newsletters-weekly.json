@@ -1,5 +1,111 @@
 [
   {
+    "weeklyKey": "2026-W46",
+    "weekStartDate": "2026-11-09",
+    "weekEndDate": "2026-11-15",
+    "date": "2026-11-09",
+    "title": "2026 W46",
+    "summary": "CameraX 1.7.0-rc02 공개, API 30 바인딩 크래시와 비디오 녹화 스레드 누수 차단\nTecno BF6 기기 대상 동영상 녹화 중 사진 촬영 HAL 타임아웃 회피 패치 병합\nCameraX 엔지니어링 에이전트에 5-Gate 심층 근본 원인 분석 프로토콜 적용\nredfin 64비트 전용 랩 환경의 카메라 HAL 네이티브 충돌에 대응한 테스트 분기 추가\n갤럭시 노트 10+ 스냅드래곤, 전면 줌 촬영 시 HAL 데드락 방지 패치 병합",
+    "html": "newsletters/2026-W46/index.html",
+    "md": "newsletters/2026-W46/newsletter.md",
+    "tags": [
+      "Camera HAL"
+    ],
+    "article_count": 5,
+    "article_images": [
+      "https://developer.android.com/static/images/social/android-developers.png?hl=hi"
+    ],
+    "reader_brief": {
+      "schema_version": 1,
+      "locale": "ko",
+      "intro": "이번 주 뉴스레터에서는 카메라 시스템의 안정성과 성능 향상을 위한 다양한 업데이트를 다룹니다. CameraX 1.7.0-rc02는 API 30 바인딩 크래시 및 비디오 녹화 스레드 누수를 차단하여 프레임워크 안정성을 강화했습니다. 또한, Tecno BF6 기기 대상 동영상 녹화 중 사진 촬영 HAL 타임아웃 회피 패치와 갤럭시 노트 10+ 스냅드래곤의 전면 줌 촬영 시 HAL 데드락 방지 패치는 특정 기기에서 발생하던 문제를 해결했습니다. 마지막으로, redfin 64비트 전용 랩 환경의 카메라 HAL 네이티브 충돌에 대응한 테스트 분기 추가는 특정 환경에서의 안정성을 높이는 데 기여했습니다.",
+      "items": [
+        {
+          "id": "url:https://developer.android.com/jetpack/androidx/releases/camera#1.7.0-rc02",
+          "href": "newsletters/2026-W46/index.html#article-camerax-1-7-0-rc02-api-30",
+          "headline": "CameraX 1.7.0-rc02 공개, API 30 바인딩 크래시와 비디오 녹화 스레드 누수 차단",
+          "lead": "화면 오버레이 권한을 쓰는 카메라 앱이나 비디오 녹화 기능을 자주 켜고 끄는 서비스에서 간헐적인 비정상 종료와 메모리 점유 누적이 발생했다면 이번 릴리스를 확인할 필요가 있습니다.",
+          "takeaway": "CameraX 프레임워크 계층의 바인딩 및 스레드 수명 주기 결함 수정입니다. 공급업체 HAL 인터페이스나 메타데이터 계약 변경은 없으나, VideoCapture 반복 해제 시 네이티브 미디어 스레드 누적이 차단되어 장시간 카메라 운용 시 프로세스 스레드 고갈 및 리소스 경쟁 위험을 낮춥니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+            "alt": "CameraX 1.7.0-rc02 릴리스, API 30 바인딩 예외 및 VideoCapture 네이티브 스레드 누수 수정",
+            "is_fallback": false
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399969",
+          "href": "newsletters/2026-W46/index.html#article-tecno-bf6-hal",
+          "headline": "Tecno BF6 기기 대상 동영상 녹화 중 사진 촬영 HAL 타임아웃 회피 패치 병합",
+          "lead": "동영상 촬영 모드가 켜진 상태에서 사진 캡처 버튼을 누를 때 특정 기기의 카메라가 완전히 멈춰버리는 현상을 방지하기 위한 프레임워크 우회 로직이 추가되었습니다.",
+          "takeaway": "공급업체 HAL 드라이버의 레코드 템플릿 처리 결함을 상위 CameraX에서 스트림 셰어링 및 CONTROL_CAPTURE_INTENT_PREVIEW 재정의로 우회하는 프레임워크 쿼크입니다. HAL 개발팀은 복합 스트림 상황에서 TEMPLATE_RECORD와 스틸 캡처 동시 처리 시의 타임아웃 방지 로직을 점검해야 합니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4411322",
+          "href": "newsletters/2026-W46/index.html#article-camerax-5-gate",
+          "headline": "CameraX 엔지니어링 에이전트에 5-Gate 심층 근본 원인 분석 프로토콜 적용",
+          "lead": "카메라 결함을 분석할 때 단순 테스트 실패 로그만 보고 무분별하게 기기 전체 기능을 차단해버리던 관행을 막기 위한 엄격한 5단계 원인 규명 규칙이 제정되었습니다.",
+          "takeaway": "HAL 직접 변경은 아니지만, 상위 프레임워크가 벤더 드라이버 결함을 판정할 때 준수해야 할 엄격한 5-Gate 규칙을 제시합니다. HAL 엔지니어는 드라이버 이슈 리포트 시 합성 테스트 실패와 실제 상용 파이프라인의 분기 영향을 명확히 분리하여 대응해야 합니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/cpp.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4403075",
+          "href": "newsletters/2026-W46/index.html#article-redfin-64-hal",
+          "headline": "redfin 64비트 전용 랩 환경의 카메라 HAL 네이티브 충돌에 대응한 테스트 분기 추가",
+          "lead": "구형 칩셋 기반 테스트 기기를 64비트 전용 이미지로 운용할 때 복합 카메라 스트림이나 UHD 프레임레이트 설정에서 발생하는 HAL 레벨 크래시의 원인이 드러났습니다.",
+          "takeaway": "Qualcomm lito(SM7250) 기반 HAL 바이너리가 64비트 전용 런타임에서 특정 스트림 조합 및 UHD HDR 모드 쿼리 시 네이티브 크래시를 일으키는 현상을 명확히 보여줍니다. SoC 플랫폼 엔지니어는 64비트 마이그레이션 시 카메라 공급업체 라이브러리의 포맷 검증과 심볼 호출 안정성을 점검해야 합니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        },
+        {
+          "id": "url:https://android-review.googlesource.com/c/platform/frameworks/support/+/4399968",
+          "href": "newsletters/2026-W46/index.html#article-10-hal",
+          "headline": "갤럭시 노트 10+ 스냅드래곤, 전면 줌 촬영 시 HAL 데드락 방지 패치 병합",
+          "lead": "전면 카메라로 셀피를 찍을 때 화면을 확대하고 비디오나 분석 스트림이 동시에 돌아가면 카메라 디바이스 에러가 발생하던 현상의 원인이 밝혀졌습니다.",
+          "takeaway": "Qualcomm CamX 드라이버 내부 IPE 노드의 출력 동기화 펜스 데드락 현상을 상위 프레임워크가 stopRepeating 및 재시작 시퀀스로 우회한 구현입니다. 퀄컴 플랫폼 HAL 개발자는 고배율 크롭 캡처와 다중 스트림 라이브 스냅샷 처리 시 노드 간 펜스 동기화 로직을 면밀히 점검해야 합니다.",
+          "tags": [
+            "Camera HAL"
+          ],
+          "image": {
+            "src": "assets/images/fallback/android.svg",
+            "alt": "",
+            "is_fallback": true
+          }
+        }
+      ]
+    },
+    "lead_article_image": "https://developer.android.com/static/images/social/android-developers.png?hl=hi",
+    "public_contract_version": "story-v2",
+    "coverage_week_key": "2026-W45",
+    "coverage_start_date": "2026-11-02",
+    "coverage_end_date": "2026-11-08",
+    "coverage_mode": "iso_week",
+    "generation_anchor_date": "2026-11-09"
+  },
+  {
     "weeklyKey": "2026-W45",
     "weekStartDate": "2026-11-02",
     "weekEndDate": "2026-11-08",
